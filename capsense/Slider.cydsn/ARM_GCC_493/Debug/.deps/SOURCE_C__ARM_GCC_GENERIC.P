@@ -1,0 +1,4 @@
+C:/Bruno/Slider_WS.Bundle05/Slider/Slider.cydsn/ARM_GCC_493/Debug/main.o : C:/Bruno/Slider_WS.Bundle05/Slider/Slider.cydsn/main.c 
+
+C:/Bruno/Slider_WS.Bundle05/Slider/Slider.cydsn/main.c : 
+

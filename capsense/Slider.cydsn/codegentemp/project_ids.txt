@@ -1,0 +1,5 @@
+C:\Bruno\Slider_WS.Bundle05\Slider\Slider.cydsn\Slider.cyprj|0646a057-56c4-4c89-b037-c3763ed85c54
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|dcd2da31-ffa3-4148-b221-855a15b34f6f
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|6be51563-cacc-4df6-8c0d-efcf3622a4a9
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|1488830b-7bea-4ab6-8eed-14c321556958
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|5ff934a9-2833-44c5-9627-e5ae2fe96883

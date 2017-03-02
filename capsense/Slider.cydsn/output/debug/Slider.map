@@ -1,0 +1,2110 @@
+Archive member included to satisfy reference by file (symbol)
+
+output/debug/Slider.a(cyfitter_cfg.o)
+                              output/debug/Cm0plusStart.o (cyfitter_cfg)
+output/debug/Slider.a(CapSense_Control.o)
+                              output/debug/main.o (CapSense_Start)
+output/debug/Slider.a(CapSense_Processing.o)
+                              output/debug/Slider.a(CapSense_Control.o) (CapSense_DpInitialize)
+output/debug/Slider.a(CapSense_Structure.o)
+                              output/debug/Slider.a(CapSense_Control.o) (CapSense_DsInitialize)
+output/debug/Slider.a(CapSense_Tuner.o)
+                              output/debug/Slider.a(CapSense_Control.o) (CapSense_TuInitialize)
+output/debug/Slider.a(CapSense_Filter.o)
+                              output/debug/Slider.a(CapSense_Control.o) (CapSense_InitializeAllBaselines)
+output/debug/Slider.a(CapSense_Sensing.o)
+                              output/debug/main.o (CapSense_IsBusy)
+output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                              output/debug/Slider.a(CapSense_Sensing.o) (CapSense_SsCSDInitialize)
+output/debug/Slider.a(CapSense_Centroid_LL.o)
+                              output/debug/Slider.a(CapSense_Processing.o) (CapSense_DpFindLocalMaxSd)
+output/debug/Slider.a(CapSense_ISR.o)
+                              output/debug/Slider.a(CapSense_Sensing.o) (CapSense_ISR_StartEx)
+output/debug/Slider.a(CyLib.o)
+                              output/debug/Slider.a(CapSense_SensingCSD_LL.o) (CyIntEnable)
+output/debug/Slider.a(cyPm.o)
+                              output/debug/Slider.a(CapSense_Control.o) (CySysPmSleep)
+output/debug/Slider.a(CyLFClk.o)
+                              output/debug/Slider.a(CyLib.o) (CySysClkWcoEnabled)
+output/debug/Slider.a(Blank.o)
+                              output/debug/main.o (Blank_Write)
+output/debug/Slider.a(SPIM.o)
+                              output/debug/main.o (SPIM_Start)
+output/debug/Slider.a(SPIM_SPI_UART.o)
+                              output/debug/main.o (SPIM_SpiUartPutArray)
+output/debug/Slider.a(SPIM_SPI.o)
+                              output/debug/Slider.a(SPIM.o) (SPIM_SpiPostEnable)
+output/debug/Slider.a(SPIM_SPI_UART_INT.o)
+                              output/debug/Slider.a(SPIM_SPI.o) (SPIM_SPI_UART_ISR)
+output/debug/Slider.a(SPIM_sclk_m.o)
+                              output/debug/Slider.a(SPIM_SPI.o) (SPIM_sclk_m_Write)
+output/debug/Slider.a(Latch.o)
+                              output/debug/main.o (Latch_Write)
+output/debug/Slider.a(UART_1.o)
+                              output/debug/main.o (UART_1_Start)
+output/debug/Slider.a(UART_1_UART.o)
+                              output/debug/Slider.a(UART_1.o) (UART_1_UartInit)
+output/debug/Slider.a(CyBootAsmGnu.o)
+                              output/debug/Slider.a(CapSense_SensingCSD_LL.o) (CyDelayCycles)
+output/debug/Slider.a(CapSense_INT.o)
+                              output/debug/Slider.a(CapSense_SensingCSD_LL.o) (CapSense_CSDPostSingleScan)
+output/debug/Slider.a(CyFlash.o)
+                              output/debug/Slider.a(CyLib.o) (CySysFlashSetWaitCycles)
+output/debug/Slider.a(UART_1_SPI_UART.o)
+                              output/debug/Slider.a(UART_1_UART.o) (UART_1_SpiUartReadRxData)
+output/debug/Slider.a(UART_1_SPI_UART_INT.o)
+                              output/debug/Slider.a(UART_1_UART.o) (UART_1_SPI_UART_ISR)
+Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_LL_v3_10.o)
+                              output/debug/Slider.a(CapSense_Sensing.o) (SmartSense_TunePrescalers)
+Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_SL_v3_10.o)
+                              output/debug/Slider.a(CapSense_Processing.o) (SmartSense_UpdateThresholds)
+/usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_udivsi3.o)
+                              output/debug/main.o (__aeabi_uidiv)
+/usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_divsi3.o)
+                              output/debug/main.o (__aeabi_idiv)
+/usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_dvmd_tls.o)
+                              /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_udivsi3.o) (__aeabi_idiv0)
+/usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-atexit.o)
+                              /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/crt0.o (atexit)
+/usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-ctype_.o)
+                              output/debug/main.o (__ctype_ptr__)
+/usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-errno.o)
+                              output/debug/Cm0plusStart.o (__errno)
+/usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-exit.o)
+                              /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/crt0.o (exit)
+/usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-fini.o)
+                              /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/crt0.o (__libc_fini_array)
+/usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-impure.o)
+                              /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-exit.o) (_global_impure_ptr)
+/usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-init.o)
+                              /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/crt0.o (__libc_init_array)
+/usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memcpy.o)
+                              output/debug/main.o (memcpy)
+/usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memset.o)
+                              /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/crt0.o (memset)
+/usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strcat.o)
+                              output/debug/main.o (strcat)
+/usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strchr.o)
+                              output/debug/main.o (strchr)
+/usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strlen.o)
+                              output/debug/main.o (strlen)
+/usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strstr.o)
+                              output/debug/main.o (strstr)
+/usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__atexit.o)
+                              /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-atexit.o) (__register_exitproc)
+/usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__call_atexit.o)
+                              /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__atexit.o) (__call_exitprocs)
+
+Allocating common symbols
+Common symbol       size              file
+
+SPIM_txBufferTail   0x4               output/debug/Slider.a(SPIM_SPI_UART.o)
+UART_1_txBufferTail
+                    0x4               output/debug/Slider.a(UART_1_SPI_UART.o)
+SPIM_rxBufferOverflow
+                    0x1               output/debug/Slider.a(SPIM_SPI_UART.o)
+UART_1_rxBufferTail
+                    0x4               output/debug/Slider.a(UART_1_SPI_UART.o)
+SPIM_rxBufferInternal
+                    0x32              output/debug/Slider.a(SPIM_SPI_UART.o)
+UART_1_rxBufferHead
+                    0x4               output/debug/Slider.a(UART_1_SPI_UART.o)
+CapSense_dsRam      0xc0              output/debug/Slider.a(CapSense_Structure.o)
+SPIM_txBufferHead   0x4               output/debug/Slider.a(SPIM_SPI_UART.o)
+UART_1_txBufferHead
+                    0x4               output/debug/Slider.a(UART_1_SPI_UART.o)
+UART_1_txBufferInternal
+                    0x80              output/debug/Slider.a(UART_1_SPI_UART.o)
+SPIM_rxBufferTail   0x4               output/debug/Slider.a(SPIM_SPI_UART.o)
+SPIM_rxBufferHead   0x4               output/debug/Slider.a(SPIM_SPI_UART.o)
+SPIM_txBufferInternal
+                    0x30              output/debug/Slider.a(SPIM_SPI_UART.o)
+CapSense_curRamSnsPtr
+                    0x4               output/debug/Slider.a(CapSense_Sensing.o)
+CapSense_curSnsIOPtr
+                    0x4               output/debug/Slider.a(CapSense_Sensing.o)
+UART_1_rxBufferOverflow
+                    0x1               output/debug/Slider.a(UART_1_SPI_UART.o)
+UART_1_rxBufferInternal
+                    0x81              output/debug/Slider.a(UART_1_SPI_UART.o)
+
+Discarded input sections
+
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crti.o
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crti.o
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crti.o
+ .data          0x0000000000000000        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtbegin.o
+ .text          0x0000000000000000       0x6c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .ARM.extab     0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .ARM.exidx     0x0000000000000000        0x8 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .text          0x0000000000000000        0x0 output/debug/main.o
+ .text.animate_fix_led_14
+                0x0000000000000000       0x10 output/debug/main.o
+ .text.animate_color_intensity
+                0x0000000000000000       0x98 output/debug/main.o
+ .text.set_all_leds_intensity
+                0x0000000000000000      0x120 output/debug/main.o
+ .text          0x0000000000000000        0x0 output/debug/cymetadata.o
+ .data          0x0000000000000000        0x0 output/debug/cymetadata.o
+ .bss           0x0000000000000000        0x0 output/debug/cymetadata.o
+ .text          0x0000000000000000        0x0 output/debug/Cm0plusStart.o
+ .data          0x0000000000000000        0x4 output/debug/Cm0plusStart.o
+ .bss           0x0000000000000000        0x0 output/debug/Cm0plusStart.o
+ .text._exit    0x0000000000000000        0xc output/debug/Cm0plusStart.o
+ .text._sbrk    0x0000000000000000       0x30 output/debug/Cm0plusStart.o
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(cyfitter_cfg.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(cyfitter_cfg.o)
+ .bss           0x0000000000000000        0x0 output/debug/Slider.a(cyfitter_cfg.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(CapSense_Control.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(CapSense_Control.o)
+ .text.CapSense_Stop
+                0x0000000000000000       0x10 output/debug/Slider.a(CapSense_Control.o)
+ .text.CapSense_Resume
+                0x0000000000000000       0x24 output/debug/Slider.a(CapSense_Control.o)
+ .text.CapSense_ProcessWidget
+                0x0000000000000000       0x58 output/debug/Slider.a(CapSense_Control.o)
+ .text.CapSense_ProcessWidgetExt
+                0x0000000000000000       0x78 output/debug/Slider.a(CapSense_Control.o)
+ .text.CapSense_ProcessSensorExt
+                0x0000000000000000       0x64 output/debug/Slider.a(CapSense_Control.o)
+ .text.CapSense_Sleep
+                0x0000000000000000        0x4 output/debug/Slider.a(CapSense_Control.o)
+ .text.CapSense_Wakeup
+                0x0000000000000000        0x4 output/debug/Slider.a(CapSense_Control.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(CapSense_Processing.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(CapSense_Processing.o)
+ .bss           0x0000000000000000        0x0 output/debug/Slider.a(CapSense_Processing.o)
+ .text.CapSense_DpProcessCsdSensorRawCountsExt
+                0x0000000000000000       0x60 output/debug/Slider.a(CapSense_Processing.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(CapSense_Structure.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(CapSense_Structure.o)
+ .text.DsParseParamId
+                0x0000000000000000       0x74 output/debug/Slider.a(CapSense_Structure.o)
+ .text.CapSense_GetParam
+                0x0000000000000000       0x60 output/debug/Slider.a(CapSense_Structure.o)
+ .text.CapSense_SetParam
+                0x0000000000000000       0x58 output/debug/Slider.a(CapSense_Structure.o)
+ .text.CapSense_IsAnyWidgetActive
+                0x0000000000000000       0x20 output/debug/Slider.a(CapSense_Structure.o)
+ .text.CapSense_IsWidgetActive
+                0x0000000000000000       0x24 output/debug/Slider.a(CapSense_Structure.o)
+ .text.CapSense_IsSensorActive
+                0x0000000000000000       0x38 output/debug/Slider.a(CapSense_Structure.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(CapSense_Tuner.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(CapSense_Tuner.o)
+ .text.CapSense_RunTuner
+                0x0000000000000000       0xe8 output/debug/Slider.a(CapSense_Tuner.o)
+ .rodata        0x0000000000000000       0x18 output/debug/Slider.a(CapSense_Tuner.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(CapSense_Filter.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(CapSense_Filter.o)
+ .bss           0x0000000000000000        0x0 output/debug/Slider.a(CapSense_Filter.o)
+ .text.CapSense_FtInitializeBaseline
+                0x0000000000000000       0x20 output/debug/Slider.a(CapSense_Filter.o)
+ .text.CapSense_InitializeIIR
+                0x0000000000000000       0x38 output/debug/Slider.a(CapSense_Filter.o)
+ .text.CapSense_RunNoiseEnvelope
+                0x0000000000000000       0x34 output/debug/Slider.a(CapSense_Filter.o)
+ .text.CapSense_InitializeNoiseEnvelope
+                0x0000000000000000       0x34 output/debug/Slider.a(CapSense_Filter.o)
+ .text.CapSense_UpdateSensorBaseline
+                0x0000000000000000       0x2c output/debug/Slider.a(CapSense_Filter.o)
+ .text.CapSense_UpdateWidgetBaseline
+                0x0000000000000000       0x30 output/debug/Slider.a(CapSense_Filter.o)
+ .text.CapSense_UpdateAllBaselines
+                0x0000000000000000       0x1c output/debug/Slider.a(CapSense_Filter.o)
+ .text.CapSense_RunIIR
+                0x0000000000000000       0x38 output/debug/Slider.a(CapSense_Filter.o)
+ .text.CapSense_FtRunEnabledFilters
+                0x0000000000000000       0x38 output/debug/Slider.a(CapSense_Filter.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(CapSense_Sensing.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(CapSense_Sensing.o)
+ .text.CapSense_SetPinState
+                0x0000000000000000       0x90 output/debug/Slider.a(CapSense_Sensing.o)
+ .text.CapSense_SsIsrInitialize
+                0x0000000000000000        0x8 output/debug/Slider.a(CapSense_Sensing.o)
+ .text.CapSense_SsSetClockDividers
+                0x0000000000000000       0x14 output/debug/Slider.a(CapSense_Sensing.o)
+ .text.CapSense_CalibrateWidget
+                0x0000000000000000       0x1c output/debug/Slider.a(CapSense_Sensing.o)
+ .text.CapSense_CalibrateAllWidgets
+                0x0000000000000000       0x1c output/debug/Slider.a(CapSense_Sensing.o)
+ .text.CapSense_SsCSDGetColSnsClkDivider
+                0x0000000000000000       0x14 output/debug/Slider.a(CapSense_Sensing.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+ .text.CapSense_SsCSDDisconnectSnsExt
+                0x0000000000000000       0x28 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(CapSense_Centroid_LL.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(CapSense_Centroid_LL.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(CapSense_ISR.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(CapSense_ISR.o)
+ .bss           0x0000000000000000        0x0 output/debug/Slider.a(CapSense_ISR.o)
+ .text.CapSense_ISR_Interrupt
+                0x0000000000000000        0x4 output/debug/Slider.a(CapSense_ISR.o)
+ .text.CapSense_ISR_GetVector
+                0x0000000000000000        0xc output/debug/Slider.a(CapSense_ISR.o)
+ .text.CapSense_ISR_GetPriority
+                0x0000000000000000       0x10 output/debug/Slider.a(CapSense_ISR.o)
+ .text.CapSense_ISR_GetState
+                0x0000000000000000       0x14 output/debug/Slider.a(CapSense_ISR.o)
+ .text.CapSense_ISR_Start
+                0x0000000000000000       0x1c output/debug/Slider.a(CapSense_ISR.o)
+ .text.CapSense_ISR_Stop
+                0x0000000000000000       0x14 output/debug/Slider.a(CapSense_ISR.o)
+ .text.CapSense_ISR_SetPending
+                0x0000000000000000       0x10 output/debug/Slider.a(CapSense_ISR.o)
+ .text.CapSense_ISR_ClearPending
+                0x0000000000000000       0x10 output/debug/Slider.a(CapSense_ISR.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(CyLib.o)
+ .bss           0x0000000000000000       0x18 output/debug/Slider.a(CyLib.o)
+ .text.CySysClkImoStart
+                0x0000000000000000       0x14 output/debug/Slider.a(CyLib.o)
+ .text.CySysClkImoStop
+                0x0000000000000000       0x18 output/debug/Slider.a(CyLib.o)
+ .text.CySysClkWriteHfclkDirect
+                0x0000000000000000       0x20 output/debug/Slider.a(CyLib.o)
+ .text.CySysEnablePumpClock
+                0x0000000000000000       0x34 output/debug/Slider.a(CyLib.o)
+ .text.CySysClkGetSysclkSource
+                0x0000000000000000       0x1c output/debug/Slider.a(CyLib.o)
+ .text.CySysClkWriteSysclkDiv
+                0x0000000000000000       0x24 output/debug/Slider.a(CyLib.o)
+ .text.CySysClkWriteHfclkDiv
+                0x0000000000000000       0x24 output/debug/Slider.a(CyLib.o)
+ .text.CySysGetResetReason
+                0x0000000000000000       0x14 output/debug/Slider.a(CyLib.o)
+ .text.CyDisableInts
+                0x0000000000000000       0x10 output/debug/Slider.a(CyLib.o)
+ .text.CyEnableInts
+                0x0000000000000000        0xc output/debug/Slider.a(CyLib.o)
+ .text.CyIntGetState
+                0x0000000000000000       0x18 output/debug/Slider.a(CyLib.o)
+ .text.CyIntSetPending
+                0x0000000000000000       0x14 output/debug/Slider.a(CyLib.o)
+ .text.CyIntSetSysVector
+                0x0000000000000000       0x20 output/debug/Slider.a(CyLib.o)
+ .text.CyIntGetSysVector
+                0x0000000000000000       0x1c output/debug/Slider.a(CyLib.o)
+ .text.CyIntGetVector
+                0x0000000000000000       0x20 output/debug/Slider.a(CyLib.o)
+ .text.CyIntGetPriority
+                0x0000000000000000       0x2c output/debug/Slider.a(CyLib.o)
+ .text.CySoftwareReset
+                0x0000000000000000       0x18 output/debug/Slider.a(CyLib.o)
+ .text.CyDelayFreq
+                0x0000000000000000       0x4c output/debug/Slider.a(CyLib.o)
+ .text.CySysTickStop
+                0x0000000000000000       0x10 output/debug/Slider.a(CyLib.o)
+ .text.CySysTickEnableInterrupt
+                0x0000000000000000       0x10 output/debug/Slider.a(CyLib.o)
+ .text.CySysTickEnable
+                0x0000000000000000       0x18 output/debug/Slider.a(CyLib.o)
+ .text.CySysTickDisableInterrupt
+                0x0000000000000000       0x10 output/debug/Slider.a(CyLib.o)
+ .text.CySysTickSetReload
+                0x0000000000000000       0x10 output/debug/Slider.a(CyLib.o)
+ .text.CySysTickGetReload
+                0x0000000000000000       0x10 output/debug/Slider.a(CyLib.o)
+ .text.CySysTickGetValue
+                0x0000000000000000       0x10 output/debug/Slider.a(CyLib.o)
+ .text.CySysTickSetClockSource
+                0x0000000000000000       0x20 output/debug/Slider.a(CyLib.o)
+ .text.CySysTickGetClockSource
+                0x0000000000000000       0x10 output/debug/Slider.a(CyLib.o)
+ .text.CySysTickGetCountFlag
+                0x0000000000000000       0x10 output/debug/Slider.a(CyLib.o)
+ .text.CySysTickServiceCallbacks
+                0x0000000000000000       0x28 output/debug/Slider.a(CyLib.o)
+ .text.CySysTickClear
+                0x0000000000000000        0xc output/debug/Slider.a(CyLib.o)
+ .text.CySysTickInit
+                0x0000000000000000       0x4c output/debug/Slider.a(CyLib.o)
+ .text.CySysTickStart
+                0x0000000000000000       0x20 output/debug/Slider.a(CyLib.o)
+ .text.CySysTickSetCallback
+                0x0000000000000000       0x10 output/debug/Slider.a(CyLib.o)
+ .text.CySysTickGetCallback
+                0x0000000000000000        0xc output/debug/Slider.a(CyLib.o)
+ .text.CyGetUniqueId
+                0x0000000000000000       0x70 output/debug/Slider.a(CyLib.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(cyPm.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(cyPm.o)
+ .bss           0x0000000000000000        0x0 output/debug/Slider.a(cyPm.o)
+ .text.CySysPmDeepSleep
+                0x0000000000000000       0x30 output/debug/Slider.a(cyPm.o)
+ .text.CySysPmSetWakeupHoldoff
+                0x0000000000000000       0x18 output/debug/Slider.a(cyPm.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(CyLFClk.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(CyLFClk.o)
+ .bss           0x0000000000000000        0x8 output/debug/Slider.a(CyLFClk.o)
+ .text.CySysClkIloStart
+                0x0000000000000000       0x14 output/debug/Slider.a(CyLFClk.o)
+ .text.CySysClkIloStop
+                0x0000000000000000       0x10 output/debug/Slider.a(CyLFClk.o)
+ .text.CySysClkIloStartMeasurement
+                0x0000000000000000       0x34 output/debug/Slider.a(CyLFClk.o)
+ .text.CySysClkIloStopMeasurement
+                0x0000000000000000       0x28 output/debug/Slider.a(CyLFClk.o)
+ .text.CySysClkIloCompensate
+                0x0000000000000000      0x108 output/debug/Slider.a(CyLFClk.o)
+ .text.CySysClkWcoStart
+                0x0000000000000000       0x40 output/debug/Slider.a(CyLFClk.o)
+ .text.CySysClkWcoStop
+                0x0000000000000000       0x1c output/debug/Slider.a(CyLFClk.o)
+ .text.CySysClkWcoSetPowerMode
+                0x0000000000000000       0x4c output/debug/Slider.a(CyLFClk.o)
+ .text.CySysClkWcoClockOutSelect
+                0x0000000000000000       0x2c output/debug/Slider.a(CyLFClk.o)
+ .text.CySysWdtGetEnabledStatus
+                0x0000000000000000       0x1c output/debug/Slider.a(CyLFClk.o)
+ .text.CySysWdtEnable
+                0x0000000000000000        0xc output/debug/Slider.a(CyLFClk.o)
+ .text.CySysWdtSetMatch
+                0x0000000000000000       0x18 output/debug/Slider.a(CyLFClk.o)
+ .text.CySysWdtGetMatch
+                0x0000000000000000       0x10 output/debug/Slider.a(CyLFClk.o)
+ .text.CySysWdtGetCount
+                0x0000000000000000        0xc output/debug/Slider.a(CyLFClk.o)
+ .text.CySysWdtSetIgnoreBits
+                0x0000000000000000       0x20 output/debug/Slider.a(CyLFClk.o)
+ .text.CySysWdtGetIgnoreBits
+                0x0000000000000000       0x10 output/debug/Slider.a(CyLFClk.o)
+ .text.CySysWdtClearInterrupt
+                0x0000000000000000       0x10 output/debug/Slider.a(CyLFClk.o)
+ .text.CySysWdtMaskInterrupt
+                0x0000000000000000       0x10 output/debug/Slider.a(CyLFClk.o)
+ .text.CySysWdtUnmaskInterrupt
+                0x0000000000000000       0x10 output/debug/Slider.a(CyLFClk.o)
+ .text.CySysWdtSetInterruptCallback
+                0x0000000000000000       0x10 output/debug/Slider.a(CyLFClk.o)
+ .text.CySysWdtGetInterruptCallback
+                0x0000000000000000        0xc output/debug/Slider.a(CyLFClk.o)
+ .text.CySysWdtIsr
+                0x0000000000000000       0x18 output/debug/Slider.a(CyLFClk.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(Blank.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(Blank.o)
+ .bss           0x0000000000000000        0x0 output/debug/Slider.a(Blank.o)
+ .text.Blank_SetDriveMode
+                0x0000000000000000       0x18 output/debug/Slider.a(Blank.o)
+ .text.Blank_Read
+                0x0000000000000000       0x10 output/debug/Slider.a(Blank.o)
+ .text.Blank_ReadDataReg
+                0x0000000000000000       0x10 output/debug/Slider.a(Blank.o)
+ .text.Blank_SetInterruptMode
+                0x0000000000000000       0x14 output/debug/Slider.a(Blank.o)
+ .text.Blank_ClearInterrupt
+                0x0000000000000000       0x14 output/debug/Slider.a(Blank.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(SPIM.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(SPIM.o)
+ .text.SPIM_ScbModeStop
+                0x0000000000000000        0x8 output/debug/Slider.a(SPIM.o)
+ .text.SPIM_Stop
+                0x0000000000000000       0x2c output/debug/Slider.a(SPIM.o)
+ .text.SPIM_SetRxFifoLevel
+                0x0000000000000000       0x14 output/debug/Slider.a(SPIM.o)
+ .text.SPIM_SetTxFifoLevel
+                0x0000000000000000       0x14 output/debug/Slider.a(SPIM.o)
+ .text.SPIM_SetCustomInterruptHandler
+                0x0000000000000000        0xc output/debug/Slider.a(SPIM.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(SPIM_SPI_UART.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(SPIM_SPI_UART.o)
+ .bss           0x0000000000000000        0x0 output/debug/Slider.a(SPIM_SPI_UART.o)
+ .text.SPIM_SpiUartReadRxData
+                0x0000000000000000       0x38 output/debug/Slider.a(SPIM_SPI_UART.o)
+ .text.SPIM_SpiUartGetRxBufferSize
+                0x0000000000000000       0x28 output/debug/Slider.a(SPIM_SPI_UART.o)
+ .text.SPIM_SpiUartClearRxBuffer
+                0x0000000000000000       0x54 output/debug/Slider.a(SPIM_SPI_UART.o)
+ .text.SPIM_SpiUartGetTxBufferSize
+                0x0000000000000000       0x28 output/debug/Slider.a(SPIM_SPI_UART.o)
+ .text.SPIM_SpiUartClearTxBuffer
+                0x0000000000000000       0x58 output/debug/Slider.a(SPIM_SPI_UART.o)
+ .text.SPIM_SpiUartDisableIntRx
+                0x0000000000000000       0x10 output/debug/Slider.a(SPIM_SPI_UART.o)
+ .text.SPIM_SpiUartDisableIntTx
+                0x0000000000000000       0x10 output/debug/Slider.a(SPIM_SPI_UART.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(SPIM_SPI.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(SPIM_SPI.o)
+ .bss           0x0000000000000000        0x0 output/debug/Slider.a(SPIM_SPI.o)
+ .text.SPIM_SpiStop
+                0x0000000000000000       0x3c output/debug/Slider.a(SPIM_SPI.o)
+ .text.SPIM_SpiSetSlaveSelectPolarity
+                0x0000000000000000       0x2c output/debug/Slider.a(SPIM_SPI.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(SPIM_SPI_UART_INT.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(SPIM_SPI_UART_INT.o)
+ .bss           0x0000000000000000        0x0 output/debug/Slider.a(SPIM_SPI_UART_INT.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(SPIM_sclk_m.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(SPIM_sclk_m.o)
+ .bss           0x0000000000000000        0x0 output/debug/Slider.a(SPIM_sclk_m.o)
+ .text.SPIM_sclk_m_SetDriveMode
+                0x0000000000000000       0x18 output/debug/Slider.a(SPIM_sclk_m.o)
+ .text.SPIM_sclk_m_Write
+                0x0000000000000000       0x18 output/debug/Slider.a(SPIM_sclk_m.o)
+ .text.SPIM_sclk_m_Read
+                0x0000000000000000       0x10 output/debug/Slider.a(SPIM_sclk_m.o)
+ .text.SPIM_sclk_m_ReadDataReg
+                0x0000000000000000       0x10 output/debug/Slider.a(SPIM_sclk_m.o)
+ .text.SPIM_sclk_m_SetInterruptMode
+                0x0000000000000000       0x14 output/debug/Slider.a(SPIM_sclk_m.o)
+ .text.SPIM_sclk_m_ClearInterrupt
+                0x0000000000000000       0x14 output/debug/Slider.a(SPIM_sclk_m.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(Latch.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(Latch.o)
+ .bss           0x0000000000000000        0x0 output/debug/Slider.a(Latch.o)
+ .text.Latch_SetDriveMode
+                0x0000000000000000       0x18 output/debug/Slider.a(Latch.o)
+ .text.Latch_Read
+                0x0000000000000000       0x10 output/debug/Slider.a(Latch.o)
+ .text.Latch_ReadDataReg
+                0x0000000000000000       0x10 output/debug/Slider.a(Latch.o)
+ .text.Latch_SetInterruptMode
+                0x0000000000000000       0x14 output/debug/Slider.a(Latch.o)
+ .text.Latch_ClearInterrupt
+                0x0000000000000000       0x14 output/debug/Slider.a(Latch.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(UART_1.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(UART_1.o)
+ .text.UART_1_ScbModeStop
+                0x0000000000000000        0x8 output/debug/Slider.a(UART_1.o)
+ .text.UART_1_Stop
+                0x0000000000000000       0x2c output/debug/Slider.a(UART_1.o)
+ .text.UART_1_SetRxFifoLevel
+                0x0000000000000000       0x14 output/debug/Slider.a(UART_1.o)
+ .text.UART_1_SetTxFifoLevel
+                0x0000000000000000       0x14 output/debug/Slider.a(UART_1.o)
+ .text.UART_1_SetCustomInterruptHandler
+                0x0000000000000000        0xc output/debug/Slider.a(UART_1.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(UART_1_UART.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(UART_1_UART.o)
+ .bss           0x0000000000000000        0x0 output/debug/Slider.a(UART_1_UART.o)
+ .text.UART_1_UartStop
+                0x0000000000000000       0x28 output/debug/Slider.a(UART_1_UART.o)
+ .text.UART_1_UartSetRxAddress
+                0x0000000000000000       0x14 output/debug/Slider.a(UART_1_UART.o)
+ .text.UART_1_UartSetRxAddressMask
+                0x0000000000000000       0x18 output/debug/Slider.a(UART_1_UART.o)
+ .text.UART_1_UartGetByte
+                0x0000000000000000       0x48 output/debug/Slider.a(UART_1_UART.o)
+ .text.UART_1_UartSetRtsPolarity
+                0x0000000000000000       0x28 output/debug/Slider.a(UART_1_UART.o)
+ .text.UART_1_UartSetRtsFifoLevel
+                0x0000000000000000       0x14 output/debug/Slider.a(UART_1_UART.o)
+ .text.UART_1_UartPutCRLF
+                0x0000000000000000       0x14 output/debug/Slider.a(UART_1_UART.o)
+ .text.UART_1_UartEnableCts
+                0x0000000000000000       0x14 output/debug/Slider.a(UART_1_UART.o)
+ .text.UART_1_UartDisableCts
+                0x0000000000000000       0x14 output/debug/Slider.a(UART_1_UART.o)
+ .text.UART_1_UartSetCtsPolarity
+                0x0000000000000000       0x28 output/debug/Slider.a(UART_1_UART.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(CyBootAsmGnu.o)
+ .bss           0x0000000000000000        0x0 output/debug/Slider.a(CyBootAsmGnu.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(CapSense_INT.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(CapSense_INT.o)
+ .bss           0x0000000000000000        0x0 output/debug/Slider.a(CapSense_INT.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(CyFlash.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(CyFlash.o)
+ .bss           0x0000000000000000       0x18 output/debug/Slider.a(CyFlash.o)
+ .text.CySysFlashClockBackup
+                0x0000000000000000       0x54 output/debug/Slider.a(CyFlash.o)
+ .text.CySysFlashClockConfig
+                0x0000000000000000       0x44 output/debug/Slider.a(CyFlash.o)
+ .text.CySysFlashClockRestore
+                0x0000000000000000       0x54 output/debug/Slider.a(CyFlash.o)
+ .text.CySysFlashWriteRow
+                0x0000000000000000       0xf4 output/debug/Slider.a(CyFlash.o)
+ .text.CySysSFlashWriteUserRow
+                0x0000000000000000       0xec output/debug/Slider.a(CyFlash.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(UART_1_SPI_UART.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(UART_1_SPI_UART.o)
+ .bss           0x0000000000000000        0x0 output/debug/Slider.a(UART_1_SPI_UART.o)
+ .text.UART_1_SpiUartClearRxBuffer
+                0x0000000000000000       0x54 output/debug/Slider.a(UART_1_SPI_UART.o)
+ .text.UART_1_SpiUartPutArray
+                0x0000000000000000       0x18 output/debug/Slider.a(UART_1_SPI_UART.o)
+ .text.UART_1_SpiUartGetTxBufferSize
+                0x0000000000000000       0x28 output/debug/Slider.a(UART_1_SPI_UART.o)
+ .text.UART_1_SpiUartClearTxBuffer
+                0x0000000000000000       0x58 output/debug/Slider.a(UART_1_SPI_UART.o)
+ .text.UART_1_SpiUartDisableIntRx
+                0x0000000000000000       0x10 output/debug/Slider.a(UART_1_SPI_UART.o)
+ .text.UART_1_SpiUartDisableIntTx
+                0x0000000000000000       0x10 output/debug/Slider.a(UART_1_SPI_UART.o)
+ .text          0x0000000000000000        0x0 output/debug/Slider.a(UART_1_SPI_UART_INT.o)
+ .data          0x0000000000000000        0x0 output/debug/Slider.a(UART_1_SPI_UART_INT.o)
+ .bss           0x0000000000000000        0x0 output/debug/Slider.a(UART_1_SPI_UART_INT.o)
+ .text          0x0000000000000000        0x0 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_LL_v3_10.o)
+ .data          0x0000000000000000        0x0 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_LL_v3_10.o)
+ .bss           0x0000000000000000        0x0 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_LL_v3_10.o)
+ .text          0x0000000000000000        0x0 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_SL_v3_10.o)
+ .data          0x0000000000000000        0x0 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_SL_v3_10.o)
+ .bss           0x0000000000000000        0x0 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_SL_v3_10.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_udivsi3.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_udivsi3.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_divsi3.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_divsi3.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_dvmd_tls.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_dvmd_tls.o)
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-atexit.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-atexit.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-atexit.o)
+ .text.atexit   0x0000000000000000       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-atexit.o)
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-ctype_.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-ctype_.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-ctype_.o)
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-errno.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-errno.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-errno.o)
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-exit.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-exit.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-exit.o)
+ .text.exit     0x0000000000000000       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-exit.o)
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-fini.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-fini.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-fini.o)
+ .text.__libc_fini_array
+                0x0000000000000000       0x28 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-fini.o)
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-impure.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-impure.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-impure.o)
+ .rodata._global_impure_ptr
+                0x0000000000000000        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-impure.o)
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-init.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-init.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-init.o)
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memcpy.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memcpy.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memcpy.o)
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memset.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memset.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memset.o)
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strcat.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strcat.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strcat.o)
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strchr.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strchr.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strchr.o)
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strlen.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strlen.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strlen.o)
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strstr.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strstr.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strstr.o)
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__atexit.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__atexit.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__atexit.o)
+ .text.__register_exitproc
+                0x0000000000000000       0xb8 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__atexit.o)
+ .bss._global_atexit0
+                0x0000000000000000       0x8c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__atexit.o)
+ .data.__atexit_dummy
+                0x0000000000000000        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__atexit.o)
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__call_atexit.o)
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__call_atexit.o)
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__call_atexit.o)
+ .text.__call_exitprocs
+                0x0000000000000000       0xe8 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__call_atexit.o)
+ .bss._global_atexit
+                0x0000000000000000        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__call_atexit.o)
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtend.o
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtend.o
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtend.o
+ .text          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtn.o
+ .data          0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtn.o
+ .bss           0x0000000000000000        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtn.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+rom              0x0000000000000000 0x0000000000008000 xr
+ram              0x0000000020000000 0x0000000000001000 xrw
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+LOAD /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crti.o
+LOAD /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtbegin.o
+LOAD /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/crt0.o
+START GROUP
+LOAD output/debug/main.o
+LOAD output/debug/cymetadata.o
+LOAD output/debug/Cm0plusStart.o
+LOAD output/debug/Slider.a
+LOAD Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a
+END GROUP
+START GROUP
+LOAD /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a
+LOAD /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a
+LOAD /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libc_nano.a
+END GROUP
+START GROUP
+LOAD /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a
+LOAD /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libc_nano.a
+END GROUP
+LOAD /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtend.o
+LOAD /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtn.o
+START GROUP
+LOAD /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a
+LOAD /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libc.a
+LOAD /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libnosys.a
+END GROUP
+                0x0000000000000000                CY_APPL_ORIGIN = 0x0
+                0x0000000000000080                CY_FLASH_ROW_SIZE = 0x80
+                0x0000000000000001                CY_APPL_NUM = 0x1
+                0x0000000000000001                CY_APPL_MAX = 0x1
+                0x0000000000000040                CY_METADATA_SIZE = 0x40
+                0x0000000000000000                CY_APPL_LOADABLE = 0x0
+                0x0000000000000000                CY_CHECKSUM_EXCLUDE_SIZE = ALIGN (0x0, CY_FLASH_ROW_SIZE)
+                0x0000000000000000                CY_APP_FOR_STACK_AND_COPIER = 0x0
+                [!provide]                        PROVIDE (__cy_heap_start, _end)
+                0x0000000000000001                PROVIDE (__cy_region_num, ((__cy_regions_end - __cy_regions) / 0x10))
+                0x0000000020001000                PROVIDE (__cy_stack, (ORIGIN (ram) + LENGTH (ram)))
+                [!provide]                        PROVIDE (__cy_heap_end, (__cy_stack - 0x200))
+
+.cybootloader   0x0000000000000000        0x0
+ *(.cybootloader)
+                0x0000000000000000                appl1_start = CY_APPL_ORIGIN?CY_APPL_ORIGIN:ALIGN (CY_FLASH_ROW_SIZE)
+                0x0000000000003f80                appl2_start = (appl1_start + ALIGN ((((LENGTH (rom) - appl1_start) - (0x2 * CY_FLASH_ROW_SIZE)) / 0x2), CY_FLASH_ROW_SIZE))
+                0x0000000000000000                appl_start = (CY_APPL_NUM == 0x1)?appl1_start:appl2_start
+                0x0000000000000001                cy_project_type_bootloader = (appl_start == 0x0)?0x1:0x0
+                0x0000000000000000                cy_project_type_app_for_stack_and_copier = (CY_APP_FOR_STACK_AND_COPIER == 0x1)?0x1:0x0
+
+.text           0x0000000000000000     0x399c
+ CREATE_OBJECT_SYMBOLS
+                0x0000000000000000                PROVIDE (__cy_interrupt_vector, RomVectors)
+ *(.romvectors)
+ .romvectors    0x0000000000000000       0x10 output/debug/Cm0plusStart.o
+                0x0000000000000000                RomVectors
+                0x0000000000000001                ASSERT ((. != __cy_interrupt_vector), No interrupt vector)
+                0x0000000000000001                ASSERT (CY_APPL_ORIGIN?(SIZEOF (.cybootloader) <= CY_APPL_ORIGIN):0x1, Wrong image location)
+                0x0000000000000010                PROVIDE (__cy_reset, Reset)
+ *(.text.Reset)
+ .text.Reset    0x0000000000000010        0xc output/debug/Cm0plusStart.o
+                0x0000000000000010                Reset
+                0x0000000000000001                ASSERT ((. != __cy_reset), No reset code)
+ *(.psocinit)
+ .psocinit      0x000000000000001c      0x140 output/debug/Slider.a(cyfitter_cfg.o)
+                0x000000000000009c                cyfitter_cfg
+                0x000000000000015c                . = MAX (., 0x100)
+ *(.text .text.* .gnu.linkonce.t.*)
+ .text          0x000000000000015c       0xb4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtbegin.o
+ .text.itoa     0x0000000000000210       0x58 output/debug/main.o
+                0x0000000000000210                itoa
+ .text.atoi     0x0000000000000268       0x50 output/debug/main.o
+                0x0000000000000268                atoi
+ .text.get_cmd_id_from_cmd_string
+                0x00000000000002b8       0x38 output/debug/main.o
+                0x00000000000002b8                get_cmd_id_from_cmd_string
+ .text.get_tracker_cmd_id_from_cmd_string
+                0x00000000000002f0       0x3c output/debug/main.o
+                0x00000000000002f0                get_tracker_cmd_id_from_cmd_string
+ .text.get_anim_cmd_id_from_cmd_string
+                0x000000000000032c       0x3c output/debug/main.o
+                0x000000000000032c                get_anim_cmd_id_from_cmd_string
+ .text.get_anim_id_from_cmd_string
+                0x0000000000000368       0x3c output/debug/main.o
+                0x0000000000000368                get_anim_id_from_cmd_string
+ .text.get_led_cmd_id_from_cmd_string
+                0x00000000000003a4       0x3c output/debug/main.o
+                0x00000000000003a4                get_led_cmd_id_from_cmd_string
+ .text.send_telemetry
+                0x00000000000003e0        0x8 output/debug/main.o
+                0x00000000000003e0                send_telemetry
+ .text.send_alarm_telemetry
+                0x00000000000003e8       0xb0 output/debug/main.o
+                0x00000000000003e8                send_alarm_telemetry
+ .text.send_animation_telemetry
+                0x0000000000000498       0x84 output/debug/main.o
+                0x0000000000000498                send_animation_telemetry
+ .text.send_button_telemetry
+                0x000000000000051c       0x74 output/debug/main.o
+                0x000000000000051c                send_button_telemetry
+ .text.set_led_strip
+                0x0000000000000590      0x1a8 output/debug/main.o
+                0x0000000000000590                set_led_strip
+ .text.set_led  0x0000000000000738      0x1f0 output/debug/main.o
+                0x0000000000000738                set_led
+ .text.display_button
+                0x0000000000000928       0x3c output/debug/main.o
+                0x0000000000000928                display_button
+ .text.display_state
+                0x0000000000000964       0x88 output/debug/main.o
+                0x0000000000000964                display_state
+ .text.animate_all_colors
+                0x00000000000009ec      0x110 output/debug/main.o
+                0x00000000000009ec                animate_all_colors
+ .text.animate_fix_white
+                0x0000000000000afc       0x2c output/debug/main.o
+                0x0000000000000afc                animate_fix_white
+ .text.animate_red_intensity
+                0x0000000000000b28       0x3c output/debug/main.o
+                0x0000000000000b28                animate_red_intensity
+ .text.animate_green_intensity
+                0x0000000000000b64       0x3c output/debug/main.o
+                0x0000000000000b64                animate_green_intensity
+ .text.animate_blue_intensity
+                0x0000000000000ba0       0x3c output/debug/main.o
+                0x0000000000000ba0                animate_blue_intensity
+ .text.animate_rainbow_colors
+                0x0000000000000bdc       0xa4 output/debug/main.o
+                0x0000000000000bdc                animate_rainbow_colors
+ .text.animate_left_right
+                0x0000000000000c80       0x48 output/debug/main.o
+                0x0000000000000c80                animate_left_right
+ .text.animate_intensity
+                0x0000000000000cc8       0x58 output/debug/main.o
+                0x0000000000000cc8                animate_intensity
+ .text.clear_all_leds
+                0x0000000000000d20       0x40 output/debug/main.o
+                0x0000000000000d20                clear_all_leds
+ .text.parse_and_execute_command
+                0x0000000000000d60      0x5d0 output/debug/main.o
+                0x0000000000000d60                parse_and_execute_command
+ .text.main     0x0000000000001330      0x194 output/debug/main.o
+                0x0000000000001330                main
+ .text.animate_2_leds
+                0x00000000000014c4       0x74 output/debug/main.o
+                0x00000000000014c4                animate_2_leds
+ .text.IntDefaultHandler
+                0x0000000000001538       0x10 output/debug/Cm0plusStart.o
+                0x0000000000001538                IntDefaultHandler
+ .text.Start_c  0x0000000000001548       0x48 output/debug/Cm0plusStart.o
+                0x0000000000001548                Start_c
+ .text.initialize_psoc
+                0x0000000000001590       0x48 output/debug/Cm0plusStart.o
+                0x0000000000001590                initialize_psoc
+ .text.SetAnalogRoutingPumps
+                0x00000000000015d8       0x38 output/debug/Slider.a(cyfitter_cfg.o)
+                0x00000000000015d8                SetAnalogRoutingPumps
+ .text.AnalogSetDefault
+                0x0000000000001610       0x14 output/debug/Slider.a(cyfitter_cfg.o)
+ .text.CapSense_Initialize
+                0x0000000000001624       0x28 output/debug/Slider.a(CapSense_Control.o)
+                0x0000000000001624                CapSense_Initialize
+ .text.CapSense_Start
+                0x000000000000164c       0x50 output/debug/Slider.a(CapSense_Control.o)
+                0x000000000000164c                CapSense_Start
+ .text.CapSense_ProcessAllWidgets
+                0x000000000000169c       0x48 output/debug/Slider.a(CapSense_Control.o)
+                0x000000000000169c                CapSense_ProcessAllWidgets
+ .text.CapSense_DpInitialize
+                0x00000000000016e4       0x78 output/debug/Slider.a(CapSense_Processing.o)
+                0x00000000000016e4                CapSense_DpInitialize
+ .text.CapSense_DpUpdateThresholds
+                0x000000000000175c       0x34 output/debug/Slider.a(CapSense_Processing.o)
+                0x000000000000175c                CapSense_DpUpdateThresholds
+ .text.CapSense_DpUpdateDifferences
+                0x0000000000001790       0x14 output/debug/Slider.a(CapSense_Processing.o)
+                0x0000000000001790                CapSense_DpUpdateDifferences
+ .text.CapSense_DpProcessCsdWidgetRawCounts
+                0x00000000000017a4       0x90 output/debug/Slider.a(CapSense_Processing.o)
+                0x00000000000017a4                CapSense_DpProcessCsdWidgetRawCounts
+ .text.CapSense_DpProcessSlider
+                0x0000000000001834       0xdc output/debug/Slider.a(CapSense_Processing.o)
+                0x0000000000001834                CapSense_DpProcessSlider
+ .text.CapSense_DpProcessCsdWidgetStatus
+                0x0000000000001910       0x64 output/debug/Slider.a(CapSense_Processing.o)
+                0x0000000000001910                CapSense_DpProcessCsdWidgetStatus
+ .text.CapSense_DsInitialize
+                0x0000000000001974       0x68 output/debug/Slider.a(CapSense_Structure.o)
+                0x0000000000001974                CapSense_DsInitialize
+ .text.CapSense_GetCentroidPos
+                0x00000000000019dc       0x38 output/debug/Slider.a(CapSense_Structure.o)
+                0x00000000000019dc                CapSense_GetCentroidPos
+ .text.CapSense_TuInitialize
+                0x0000000000001a14       0x14 output/debug/Slider.a(CapSense_Tuner.o)
+                0x0000000000001a14                CapSense_TuInitialize
+ .text.CapSense_FtInitializeBaselineChannel
+                0x0000000000001a28       0x1c output/debug/Slider.a(CapSense_Filter.o)
+                0x0000000000001a28                CapSense_FtInitializeBaselineChannel
+ .text.CapSense_InitializeSensorBaseline
+                0x0000000000001a44       0x3c output/debug/Slider.a(CapSense_Filter.o)
+                0x0000000000001a44                CapSense_InitializeSensorBaseline
+ .text.CapSense_InitializeWidgetBaseline
+                0x0000000000001a80       0x28 output/debug/Slider.a(CapSense_Filter.o)
+                0x0000000000001a80                CapSense_InitializeWidgetBaseline
+ .text.CapSense_InitializeAllBaselines
+                0x0000000000001aa8       0x18 output/debug/Slider.a(CapSense_Filter.o)
+                0x0000000000001aa8                CapSense_InitializeAllBaselines
+ .text.CapSense_InitializeIIRInternal
+                0x0000000000001ac0       0x1c output/debug/Slider.a(CapSense_Filter.o)
+                0x0000000000001ac0                CapSense_InitializeIIRInternal
+ .text.CapSense_FtInitialize
+                0x0000000000001adc       0x74 output/debug/Slider.a(CapSense_Filter.o)
+                0x0000000000001adc                CapSense_FtInitialize
+ .text.CapSense_FtIIR1stOrder
+                0x0000000000001b50       0x14 output/debug/Slider.a(CapSense_Filter.o)
+                0x0000000000001b50                CapSense_FtIIR1stOrder
+ .text.CapSense_FtUpdateBaseline
+                0x0000000000001b64       0x84 output/debug/Slider.a(CapSense_Filter.o)
+                0x0000000000001b64                CapSense_FtUpdateBaseline
+ .text.CapSense_RunIIRInternal
+                0x0000000000001be8       0x38 output/debug/Slider.a(CapSense_Filter.o)
+                0x0000000000001be8                CapSense_RunIIRInternal
+ .text.CapSense_FtRunEnabledFiltersInternal
+                0x0000000000001c20        0x8 output/debug/Slider.a(CapSense_Filter.o)
+                0x0000000000001c20                CapSense_FtRunEnabledFiltersInternal
+ .text.CapSense_SsSetDirectClockMode
+                0x0000000000001c28       0x14 output/debug/Slider.a(CapSense_Sensing.o)
+ .text.CapSense_SsSetWidgetSenseClkSrc
+                0x0000000000001c3c        0x8 output/debug/Slider.a(CapSense_Sensing.o)
+ .text.CapSense_IsBusy
+                0x0000000000001c44       0x10 output/debug/Slider.a(CapSense_Sensing.o)
+                0x0000000000001c44                CapSense_IsBusy
+ .text.CapSense_SetupWidget
+                0x0000000000001c54       0x44 output/debug/Slider.a(CapSense_Sensing.o)
+                0x0000000000001c54                CapSense_SetupWidget
+ .text.CapSense_Scan
+                0x0000000000001c98       0x1c output/debug/Slider.a(CapSense_Sensing.o)
+                0x0000000000001c98                CapSense_Scan
+ .text.CapSense_ScanAllWidgets
+                0x0000000000001cb4       0x3c output/debug/Slider.a(CapSense_Sensing.o)
+                0x0000000000001cb4                CapSense_ScanAllWidgets
+ .text.CapSense_SsPostAllWidgetsScan
+                0x0000000000001cf0        0x4 output/debug/Slider.a(CapSense_Sensing.o)
+                0x0000000000001cf0                CapSense_SsPostAllWidgetsScan
+ .text.CapSense_SsSetModClkClockDivider
+                0x0000000000001cf4       0x30 output/debug/Slider.a(CapSense_Sensing.o)
+                0x0000000000001cf4                CapSense_SsSetModClkClockDivider
+ .text.CapSense_SsSetSnsClockDivider
+                0x0000000000001d24       0x14 output/debug/Slider.a(CapSense_Sensing.o)
+                0x0000000000001d24                CapSense_SsSetSnsClockDivider
+ .text.CapSense_SsAutoTune
+                0x0000000000001d38      0x120 output/debug/Slider.a(CapSense_Sensing.o)
+                0x0000000000001d38                CapSense_SsAutoTune
+ .text.CapSense_SsInitializeSourceSenseClk
+                0x0000000000001e58       0x24 output/debug/Slider.a(CapSense_Sensing.o)
+                0x0000000000001e58                CapSense_SsInitializeSourceSenseClk
+ .text.CapSense_SsInitialize
+                0x0000000000001e7c       0x10 output/debug/Slider.a(CapSense_Sensing.o)
+                0x0000000000001e7c                CapSense_SsInitialize
+ .text.CapSense_SsClearCSDSensors
+                0x0000000000001e8c       0x40 output/debug/Slider.a(CapSense_Sensing.o)
+                0x0000000000001e8c                CapSense_SsClearCSDSensors
+ .text.CapSense_SsCSDSetFilterDelay
+                0x0000000000001ecc       0x50 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+ .text.CapSense_SsCSDConfigIDACs
+                0x0000000000001f1c       0x1c output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+ .text.CapSense_SsCSDRestoreIdacMode
+                0x0000000000001f38       0x30 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+ .text.CapSense_SsCSDCalibrateCheck
+                0x0000000000001f68       0x44 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+ .text.CapSense_SsCSDSetModeSnsClockDivider
+                0x0000000000001fac       0x10 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                0x0000000000001fac                CapSense_SsCSDSetModeSnsClockDivider
+ .text.CapSense_SsCSDInitialize
+                0x0000000000001fbc      0x11c output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                0x0000000000001fbc                CapSense_SsCSDInitialize
+ .text.CapSense_SsCSDSetUpIdacs
+                0x00000000000020d8       0x44 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                0x00000000000020d8                CapSense_SsCSDSetUpIdacs
+ .text.CapSense_SsCSDGetNumberOfConversions
+                0x000000000000211c       0x24 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                0x000000000000211c                CapSense_SsCSDGetNumberOfConversions
+ .text.CapSense_SsCSDConfigClock
+                0x0000000000002140       0x3c output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                0x0000000000002140                CapSense_SsCSDConfigClock
+ .text.CapSense_SsCSDCalculateScanDuration
+                0x000000000000217c       0x1c output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                0x000000000000217c                CapSense_SsCSDCalculateScanDuration
+ .text.CapSense_SsCSDStartSample
+                0x0000000000002198      0x110 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                0x0000000000002198                CapSense_SsCSDStartSample
+ .text.CapSense_CSDScanExt
+                0x00000000000022a8       0x1c output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                0x00000000000022a8                CapSense_CSDScanExt
+ .text.CapSense_CSDConnectSns
+                0x00000000000022c4       0x34 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                0x00000000000022c4                CapSense_CSDConnectSns
+ .text.CapSense_CSDScan
+                0x00000000000022f8       0x78 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                0x00000000000022f8                CapSense_CSDScan
+ .text.CapSense_SsCSDConnectSensorExt
+                0x0000000000002370       0x28 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                0x0000000000002370                CapSense_SsCSDConnectSensorExt
+ .text.CapSense_CSDDisconnectSns
+                0x0000000000002398       0x40 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                0x0000000000002398                CapSense_CSDDisconnectSns
+ .text.CapSense_SsCSDElectrodeCheck
+                0x00000000000023d8       0x24 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                0x00000000000023d8                CapSense_SsCSDElectrodeCheck
+ .text.CapSense_CSDSetupWidget
+                0x00000000000023fc       0x58 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                0x00000000000023fc                CapSense_CSDSetupWidget
+ .text.CapSense_CSDSetupWidgetExt
+                0x0000000000002454       0x6c output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                0x0000000000002454                CapSense_CSDSetupWidgetExt
+ .text.CapSense_SsCSDSetSingleIdacMode
+                0x00000000000024c0       0x2c output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                0x00000000000024c0                CapSense_SsCSDSetSingleIdacMode
+ .text.CapSense_SsCSDCalibrateOneSensor
+                0x00000000000024ec       0xe8 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+ .text.CapSense_CSDCalibrateWidget
+                0x00000000000025d4      0x108 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                0x00000000000025d4                CapSense_CSDCalibrateWidget
+ .text.CapSense_DpFindLocalMaxSd
+                0x00000000000026dc       0x9c output/debug/Slider.a(CapSense_Centroid_LL.o)
+                0x00000000000026dc                CapSense_DpFindLocalMaxSd
+ .text.CapSense_DpCalcLinearCentroid
+                0x0000000000002778       0x80 output/debug/Slider.a(CapSense_Centroid_LL.o)
+                0x0000000000002778                CapSense_DpCalcLinearCentroid
+ .text.CapSense_ISR_SetVector
+                0x00000000000027f8        0xc output/debug/Slider.a(CapSense_ISR.o)
+                0x00000000000027f8                CapSense_ISR_SetVector
+ .text.CapSense_ISR_SetPriority
+                0x0000000000002804       0x24 output/debug/Slider.a(CapSense_ISR.o)
+                0x0000000000002804                CapSense_ISR_SetPriority
+ .text.CapSense_ISR_Enable
+                0x0000000000002828       0x10 output/debug/Slider.a(CapSense_ISR.o)
+                0x0000000000002828                CapSense_ISR_Enable
+ .text.CapSense_ISR_Disable
+                0x0000000000002838       0x10 output/debug/Slider.a(CapSense_ISR.o)
+                0x0000000000002838                CapSense_ISR_Disable
+ .text.CapSense_ISR_StartEx
+                0x0000000000002848       0x1c output/debug/Slider.a(CapSense_ISR.o)
+                0x0000000000002848                CapSense_ISR_StartEx
+ .text.CySysClkImoDisableWcoLock
+                0x0000000000002864       0x14 output/debug/Slider.a(CyLib.o)
+                0x0000000000002864                CySysClkImoDisableWcoLock
+ .text.CySysClkImoGetWcoLock
+                0x0000000000002878       0x14 output/debug/Slider.a(CyLib.o)
+                0x0000000000002878                CySysClkImoGetWcoLock
+ .text.CyIntEnable
+                0x000000000000288c       0x14 output/debug/Slider.a(CyLib.o)
+                0x000000000000288c                CyIntEnable
+ .text.CyIntDisable
+                0x00000000000028a0       0x14 output/debug/Slider.a(CyLib.o)
+                0x00000000000028a0                CyIntDisable
+ .text.CyIntClearPending
+                0x00000000000028b4       0x14 output/debug/Slider.a(CyLib.o)
+                0x00000000000028b4                CyIntClearPending
+ .text.CyHalt   0x00000000000028c8        0x4 output/debug/Slider.a(CyLib.o)
+                0x00000000000028c8                CyHalt
+ .text.CyIntSetVector
+                0x00000000000028cc       0x24 output/debug/Slider.a(CyLib.o)
+                0x00000000000028cc                CyIntSetVector
+ .text.CyIntSetPriority
+                0x00000000000028f0       0x4c output/debug/Slider.a(CyLib.o)
+                0x00000000000028f0                CyIntSetPriority
+ .text.CyDelay  0x000000000000293c       0x30 output/debug/Slider.a(CyLib.o)
+                0x000000000000293c                CyDelay
+ .text.CySysClkImoEnableWcoLock
+                0x000000000000296c       0xcc output/debug/Slider.a(CyLib.o)
+                0x000000000000296c                CySysClkImoEnableWcoLock
+ .text.CySysClkWriteImoFreq
+                0x0000000000002a38       0xd8 output/debug/Slider.a(CyLib.o)
+                0x0000000000002a38                CySysClkWriteImoFreq
+ .text.CyDelayUs
+                0x0000000000002b10       0x14 output/debug/Slider.a(CyLib.o)
+                0x0000000000002b10                CyDelayUs
+ .text.CySysPmSleep
+                0x0000000000002b24       0x1c output/debug/Slider.a(cyPm.o)
+                0x0000000000002b24                CySysPmSleep
+ .text.CySysClkWcoEnabled
+                0x0000000000002b40       0x14 output/debug/Slider.a(CyLFClk.o)
+                0x0000000000002b40                CySysClkWcoEnabled
+ .text.CySysWdtDisable
+                0x0000000000002b54       0x10 output/debug/Slider.a(CyLFClk.o)
+                0x0000000000002b54                CySysWdtDisable
+ .text.Blank_Write
+                0x0000000000002b64       0x18 output/debug/Slider.a(Blank.o)
+                0x0000000000002b64                Blank_Write
+ .text.SPIM_ScbEnableIntr
+                0x0000000000002b7c        0xc output/debug/Slider.a(SPIM.o)
+ .text.SPIM_ScbModePostEnable
+                0x0000000000002b88        0x8 output/debug/Slider.a(SPIM.o)
+ .text.SPIM_Init
+                0x0000000000002b90        0x8 output/debug/Slider.a(SPIM.o)
+                0x0000000000002b90                SPIM_Init
+ .text.SPIM_Enable
+                0x0000000000002b98       0x1c output/debug/Slider.a(SPIM.o)
+                0x0000000000002b98                SPIM_Enable
+ .text.SPIM_Start
+                0x0000000000002bb4       0x20 output/debug/Slider.a(SPIM.o)
+                0x0000000000002bb4                SPIM_Start
+ .text.SPIM_SpiUartWriteTxData
+                0x0000000000002bd4       0x74 output/debug/Slider.a(SPIM_SPI_UART.o)
+                0x0000000000002bd4                SPIM_SpiUartWriteTxData
+ .text.SPIM_SpiUartPutArray
+                0x0000000000002c48       0x1c output/debug/Slider.a(SPIM_SPI_UART.o)
+                0x0000000000002c48                SPIM_SpiUartPutArray
+ .text.SPIM_SpiPostEnable
+                0x0000000000002c64       0x24 output/debug/Slider.a(SPIM_SPI.o)
+                0x0000000000002c64                SPIM_SpiPostEnable
+ .text.SPIM_SpiSetActiveSlaveSelect
+                0x0000000000002c88       0x20 output/debug/Slider.a(SPIM_SPI.o)
+                0x0000000000002c88                SPIM_SpiSetActiveSlaveSelect
+ .text.SPIM_SpiInit
+                0x0000000000002ca8       0xd0 output/debug/Slider.a(SPIM_SPI.o)
+                0x0000000000002ca8                SPIM_SpiInit
+ .text.SPIM_SPI_UART_ISR
+                0x0000000000002d78       0xe8 output/debug/Slider.a(SPIM_SPI_UART_INT.o)
+                0x0000000000002d78                SPIM_SPI_UART_ISR
+ .text.Latch_Write
+                0x0000000000002e60       0x18 output/debug/Slider.a(Latch.o)
+                0x0000000000002e60                Latch_Write
+ .text.UART_1_ScbEnableIntr
+                0x0000000000002e78        0xc output/debug/Slider.a(UART_1.o)
+ .text.UART_1_ScbModePostEnable
+                0x0000000000002e84        0x8 output/debug/Slider.a(UART_1.o)
+ .text.UART_1_Init
+                0x0000000000002e8c        0x8 output/debug/Slider.a(UART_1.o)
+                0x0000000000002e8c                UART_1_Init
+ .text.UART_1_Enable
+                0x0000000000002e94       0x1c output/debug/Slider.a(UART_1.o)
+                0x0000000000002e94                UART_1_Enable
+ .text.UART_1_Start
+                0x0000000000002eb0       0x20 output/debug/Slider.a(UART_1.o)
+                0x0000000000002eb0                UART_1_Start
+ .text.UART_1_UartInit
+                0x0000000000002ed0       0xec output/debug/Slider.a(UART_1_UART.o)
+                0x0000000000002ed0                UART_1_UartInit
+ .text.UART_1_UartPostEnable
+                0x0000000000002fbc       0x24 output/debug/Slider.a(UART_1_UART.o)
+                0x0000000000002fbc                UART_1_UartPostEnable
+ .text.UART_1_UartGetChar
+                0x0000000000002fe0       0x2c output/debug/Slider.a(UART_1_UART.o)
+                0x0000000000002fe0                UART_1_UartGetChar
+ .text.UART_1_UartPutString
+                0x000000000000300c       0x18 output/debug/Slider.a(UART_1_UART.o)
+                0x000000000000300c                UART_1_UartPutString
+ *fill*         0x0000000000003024        0x4 
+ .text          0x0000000000003028       0x20 output/debug/Slider.a(CyBootAsmGnu.o)
+                0x0000000000003028                CyDelayCycles
+                0x000000000000303a                CyEnterCriticalSection
+                0x0000000000003042                CyExitCriticalSection
+ .text.CapSense_CSDPostSingleScan
+                0x0000000000003048       0x78 output/debug/Slider.a(CapSense_INT.o)
+                0x0000000000003048                CapSense_CSDPostSingleScan
+ .text.CapSense_CSDPostMultiScan
+                0x00000000000030c0      0x11c output/debug/Slider.a(CapSense_INT.o)
+                0x00000000000030c0                CapSense_CSDPostMultiScan
+ .text.CySysFlashSetWaitCycles
+                0x00000000000031dc       0x54 output/debug/Slider.a(CyFlash.o)
+                0x00000000000031dc                CySysFlashSetWaitCycles
+ .text.UART_1_SpiUartReadRxData
+                0x0000000000003230       0x34 output/debug/Slider.a(UART_1_SPI_UART.o)
+                0x0000000000003230                UART_1_SpiUartReadRxData
+ .text.UART_1_SpiUartGetRxBufferSize
+                0x0000000000003264       0x28 output/debug/Slider.a(UART_1_SPI_UART.o)
+                0x0000000000003264                UART_1_SpiUartGetRxBufferSize
+ .text.UART_1_SpiUartWriteTxData
+                0x000000000000328c       0x70 output/debug/Slider.a(UART_1_SPI_UART.o)
+                0x000000000000328c                UART_1_SpiUartWriteTxData
+ .text.UART_1_SPI_UART_ISR
+                0x00000000000032fc       0xe4 output/debug/Slider.a(UART_1_SPI_UART_INT.o)
+                0x00000000000032fc                UART_1_SPI_UART_ISR
+ .text.SmartSense_TunePrescalers
+                0x00000000000033e0       0x68 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_LL_v3_10.o)
+                0x00000000000033e0                SmartSense_TunePrescalers
+ .text.SmartSense_TuneSensitivity
+                0x0000000000003448       0x74 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_LL_v3_10.o)
+                0x0000000000003448                SmartSense_TuneSensitivity
+ .text.SmartSense_UpdateThresholds
+                0x00000000000034bc       0x40 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_SL_v3_10.o)
+                0x00000000000034bc                SmartSense_UpdateThresholds
+ .text.SmartSense_InitializeNoiseEnvelope
+                0x00000000000034fc       0x18 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_SL_v3_10.o)
+                0x00000000000034fc                SmartSense_InitializeNoiseEnvelope
+ .text.SmartSense_RunNoiseEnvelope
+                0x0000000000003514       0x8e Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_SL_v3_10.o)
+                0x0000000000003514                SmartSense_RunNoiseEnvelope
+ *fill*         0x00000000000035a2        0x2 
+ .text          0x00000000000035a4      0x120 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_udivsi3.o)
+                0x00000000000035a4                __udivsi3
+                0x00000000000035a4                __aeabi_uidiv
+                0x00000000000036b0                __aeabi_uidivmod
+ .text          0x00000000000036c4      0x1e0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_divsi3.o)
+                0x00000000000036c4                __aeabi_idiv
+                0x00000000000036c4                __divsi3
+                0x0000000000003890                __aeabi_idivmod
+ .text          0x00000000000038a4        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_dvmd_tls.o)
+                0x00000000000038a4                __aeabi_ldiv0
+                0x00000000000038a4                __aeabi_idiv0
+ .text.__errno  0x00000000000038a8        0xc /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-errno.o)
+                0x00000000000038a8                __errno
+ .text.__libc_init_array
+                0x00000000000038b4       0x4c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-init.o)
+                0x00000000000038b4                __libc_init_array
+ .text.memcpy   0x0000000000003900       0x12 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memcpy.o)
+                0x0000000000003900                memcpy
+ .text.memset   0x0000000000003912       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memset.o)
+                0x0000000000003912                memset
+ .text.strcat   0x0000000000003922       0x1a /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strcat.o)
+                0x0000000000003922                strcat
+ .text.strchr   0x000000000000393c       0x1c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strchr.o)
+                0x000000000000393c                strchr
+ .text.strlen   0x0000000000003958        0xe /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strlen.o)
+                0x0000000000003958                strlen
+ .text.strstr   0x0000000000003966       0x36 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strstr.o)
+                0x0000000000003966                strstr
+ *(.plt)
+ *(.gnu.warning)
+ *(.glue_7t)
+ .glue_7t       0x000000000000399c        0x0 linker stubs
+ *(.glue_7)
+ .glue_7        0x000000000000399c        0x0 linker stubs
+ *(.vfp11_veneer)
+ .vfp11_veneer  0x000000000000399c        0x0 linker stubs
+ *(.bootloader)
+ *(.ARM.extab* .gnu.linkonce.armextab.*)
+ *(.gcc_except_table)
+
+.v4_bx          0x000000000000399c        0x0
+ .v4_bx         0x000000000000399c        0x0 linker stubs
+
+.iplt           0x000000000000399c        0x0
+ .iplt          0x000000000000399c        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtbegin.o
+
+.eh_frame_hdr
+ *(.eh_frame_hdr)
+
+.eh_frame       0x000000000000399c        0x4
+ *(.eh_frame)
+ .eh_frame      0x000000000000399c        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtbegin.o
+ .eh_frame      0x000000000000399c        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtend.o
+                [!provide]                        PROVIDE (__exidx_start, .)
+
+.ARM.exidx
+ *(.ARM.exidx* .gnu.linkonce.armexidx.*)
+                0x00000000000039a0                __exidx_end = .
+
+.rodata         0x00000000000039a0      0xa68
+ *(.rodata .rodata.* .gnu.linkonce.r.*)
+ .rodata        0x00000000000039a0      0x1fc output/debug/main.o
+ .rodata.str1.4
+                0x0000000000003b9c      0x5b4 output/debug/main.o
+                                        0x5b7 (size before relaxing)
+ .rodata        0x0000000000004150      0x160 output/debug/Slider.a(CapSense_Structure.o)
+                0x000000000000415c                CapSense_dsFlash
+                0x0000000000004198                CapSense_ioList
+ .rodata        0x00000000000042b0        0x1 output/debug/Slider.a(CapSense_Sensing.o)
+                0x00000000000042b0                CapSense_scanFreqIndex
+ *fill*         0x00000000000042b1        0x3 
+ .rodata        0x00000000000042b4       0x17 output/debug/Slider.a(CyLib.o)
+                0x00000000000042b4                cyImoFreqMhz2DpllOffset
+ .rodata._ctype_
+                0x00000000000042cb      0x101 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-ctype_.o)
+                0x00000000000042cb                _ctype_
+ .rodata.str1.1
+                0x00000000000043cc        0x2 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-impure.o)
+                0x00000000000043d0                . = ALIGN (0x4)
+ *fill*         0x00000000000043ce        0x2 
+ *(.init)
+ .init          0x00000000000043d0        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crti.o
+                0x00000000000043d0                _init
+ .init          0x00000000000043d4        0x8 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtn.o
+                0x00000000000043dc                . = ALIGN (0x4)
+                0x00000000000043dc                __preinit_array_start = .
+ *(.preinit_array)
+                0x00000000000043dc                __preinit_array_end = .
+                0x00000000000043dc                . = ALIGN (0x4)
+                0x00000000000043dc                __init_array_start = .
+ *(SORT(.init_array.*))
+ *(.init_array)
+ .init_array    0x00000000000043dc        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtbegin.o
+ .init_array    0x00000000000043e0        0x4 output/debug/Cm0plusStart.o
+                0x00000000000043e4                __init_array_end = .
+                0x00000000000043e4                . = ALIGN (0x4)
+ *(.fini)
+ .fini          0x00000000000043e4        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crti.o
+                0x00000000000043e4                _fini
+ .fini          0x00000000000043e8        0x8 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtn.o
+                0x00000000000043f0                . = ALIGN (0x4)
+                0x00000000000043f0                __fini_array_start = .
+ *(.fini_array)
+ .fini_array    0x00000000000043f0        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtbegin.o
+ *(SORT(.fini_array.*))
+                0x00000000000043f4                __fini_array_end = .
+                0x00000000000043f4                . = ALIGN (0x4)
+ *crtbegin.o(.ctors)
+ *(EXCLUDE_FILE(*crtend.o) .ctors)
+ *(SORT(.ctors.*))
+ *crtend.o(.ctors)
+                0x00000000000043f4                . = ALIGN (0x4)
+ *crtbegin.o(.dtors)
+ *(EXCLUDE_FILE(*crtend.o) .dtors)
+ *(SORT(.dtors.*))
+ *crtend.o(.dtors)
+                0x00000000000043f4                . = ALIGN (0x4)
+                0x00000000000043f4                __cy_regions = .
+                0x00000000000043f4        0x4 LONG 0x4408 __cy_region_init_ram
+                0x00000000000043f8        0x4 LONG 0x20000088 __cy_region_start_data
+                0x00000000000043fc        0x4 LONG 0x98 __cy_region_init_size_ram
+                0x0000000000004400        0x4 LONG 0x398 __cy_region_zero_size_ram
+                0x0000000000004404                __cy_regions_end = .
+                0x0000000000004408                . = ALIGN (0x8)
+ *fill*         0x0000000000004404        0x4 
+                0x0000000000004408                _etext = .
+
+.cy_checksum_exclude
+                0x0000000000004408        0x0
+ *(.cy_checksum_exclude)
+
+.ramvectors     0x0000000020000000       0x80
+                0x0000000020000000                __cy_region_start_ram = .
+ *(.ramvectors)
+ .ramvectors    0x0000000020000000       0x80 output/debug/Cm0plusStart.o
+                0x0000000020000000                CyRamVectors
+
+.noinit         0x0000000020000080        0x4
+ *(.noinit)
+ .noinit        0x0000000020000080        0x4 output/debug/Cm0plusStart.o
+
+.data           0x0000000020000088       0x98 load address 0x0000000000004408
+                0x0000000020000088                __cy_region_start_data = .
+ *(.jcr)
+ .jcr           0x0000000020000088        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtbegin.o
+ .jcr           0x0000000020000088        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtend.o
+ *(.got.plt)
+ *(.got)
+ *(.shdata)
+ *(.data .data.* .gnu.linkonce.d.*)
+ .data          0x000000002000008c       0x13 output/debug/main.o
+ *fill*         0x000000002000009f        0x1 
+ .data          0x00000000200000a0        0x4 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                0x00000000200000a0                CapSense_configCsd
+ .data          0x00000000200000a4       0x14 output/debug/Slider.a(CyLib.o)
+                0x00000000200000a4                CySysClkPumpConfig
+                0x00000000200000a8                cydelay32kMs
+                0x00000000200000ac                cydelayFreqKhz
+                0x00000000200000b0                cydelayFreqMhz
+                0x00000000200000b4                cydelayFreqHz
+ .data.__ctype_ptr__
+                0x00000000200000b8        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-ctype_.o)
+                0x00000000200000b8                __ctype_ptr__
+ .data.impure_data
+                0x00000000200000bc       0x60 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-impure.o)
+ .data._impure_ptr
+                0x000000002000011c        0x4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-impure.o)
+                0x000000002000011c                _impure_ptr
+                0x0000000020000120                . = ALIGN (0x8)
+ *(.ram)
+                0x0000000020000120                _edata = .
+
+.tm_clone_table
+                0x0000000020000120        0x0 load address 0x00000000000044a0
+ .tm_clone_table
+                0x0000000020000120        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtbegin.o
+ .tm_clone_table
+                0x0000000020000120        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtend.o
+
+.igot.plt       0x0000000020000120        0x0 load address 0x00000000000044a0
+ .igot.plt      0x0000000020000120        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtbegin.o
+
+.bss            0x0000000020000120      0x398 load address 0x00000000000044a0
+                0x0000000020000120                PROVIDE (__bss_start__, .)
+ *(.shbss)
+ *(.bss .bss.* .gnu.linkonce.b.*)
+ .bss           0x0000000020000120       0x1c /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtbegin.o
+ .bss           0x000000002000013c       0x5a output/debug/main.o
+ .bss           0x0000000020000196        0x1 output/debug/Slider.a(CapSense_Control.o)
+ *fill*         0x0000000020000197        0x1 
+ .bss           0x0000000020000198       0x91 output/debug/Slider.a(CapSense_Structure.o)
+ *fill*         0x0000000020000229        0x3 
+ .bss           0x000000002000022c        0x4 output/debug/Slider.a(CapSense_Tuner.o)
+ .bss           0x0000000020000230        0x4 output/debug/Slider.a(CapSense_Sensing.o)
+                0x0000000020000230                CapSense_requestScanAllWidget
+                0x0000000020000231                CapSense_prescalersTuningDone
+                0x0000000020000232                CapSense_sensorIndex
+                0x0000000020000233                CapSense_widgetIndex
+ .bss           0x0000000020000234        0x1 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+ *fill*         0x0000000020000235        0x3 
+ .bss           0x0000000020000238        0xe output/debug/Slider.a(CapSense_Centroid_LL.o)
+ *fill*         0x0000000020000246        0x2 
+ .bss           0x0000000020000248        0xa output/debug/Slider.a(SPIM.o)
+                0x0000000020000248                SPIM_initVar
+                0x000000002000024c                SPIM_customIntrHandler
+                0x0000000020000250                SPIM_IntrTxMask
+ *fill*         0x0000000020000252        0x2 
+ .bss           0x0000000020000254        0xa output/debug/Slider.a(UART_1.o)
+                0x0000000020000254                UART_1_initVar
+                0x0000000020000258                UART_1_customIntrHandler
+                0x000000002000025c                UART_1_IntrTxMask
+ *(COMMON)
+ *fill*         0x000000002000025e        0x2 
+ COMMON         0x0000000020000260       0xc0 output/debug/Slider.a(CapSense_Structure.o)
+                0x0000000020000260                CapSense_dsRam
+ COMMON         0x0000000020000320        0x8 output/debug/Slider.a(CapSense_Sensing.o)
+                0x0000000020000320                CapSense_curRamSnsPtr
+                0x0000000020000324                CapSense_curSnsIOPtr
+ COMMON         0x0000000020000328       0x78 output/debug/Slider.a(SPIM_SPI_UART.o)
+                0x0000000020000328                SPIM_txBufferTail
+                0x000000002000032c                SPIM_rxBufferOverflow
+                0x0000000020000330                SPIM_rxBufferInternal
+                0x0000000020000364                SPIM_txBufferHead
+                0x0000000020000368                SPIM_rxBufferTail
+                0x000000002000036c                SPIM_rxBufferHead
+                0x0000000020000370                SPIM_txBufferInternal
+ COMMON         0x00000000200003a0      0x115 output/debug/Slider.a(UART_1_SPI_UART.o)
+                0x00000000200003a0                UART_1_txBufferTail
+                0x00000000200003a4                UART_1_rxBufferTail
+                0x00000000200003a8                UART_1_rxBufferHead
+                0x00000000200003ac                UART_1_txBufferHead
+                0x00000000200003b0                UART_1_txBufferInternal
+                0x0000000020000430                UART_1_rxBufferOverflow
+                0x0000000020000434                UART_1_rxBufferInternal
+                0x00000000200004b8                . = ALIGN (0x8)
+ *fill*         0x00000000200004b5        0x3 
+ *(.ram.b)
+                0x00000000200004b8                _end = .
+                0x00000000200004b8                __end = .
+                0x00000000200004b8                PROVIDE (end, .)
+                0x00000000200004b8                PROVIDE (__bss_end__, .)
+                0x0000000000004408                __cy_region_init_ram = LOADADDR (.data)
+                0x0000000000000098                __cy_region_init_size_ram = (_edata - ADDR (.data))
+                0x0000000000000398                __cy_region_zero_size_ram = (_end - _edata)
+
+.heap           0x00000000200004b8       0x80 load address 0x00000000000044a0
+                0x00000000200004b8                . = _end
+                0x0000000020000538                . = (. + 0x80)
+ *fill*         0x00000000200004b8       0x80 
+                0x0000000020000538                __cy_heap_limit = .
+
+.stack          0x0000000020000e00      0x200
+                0x0000000020000e00                __cy_stack_limit = .
+                0x0000000020001000                . = (. + 0x200)
+ *fill*         0x0000000020000e00      0x200 
+                0x0000000000000001                ASSERT ((__cy_stack_limit >= __cy_heap_limit), region RAM overflowed with stack)
+                0x0000000000000000                cy_checksum_exclude_size = (CY_APPL_LOADABLE == 0x1)?SIZEOF (.cy_checksum_exclude):0x0
+                0x0000000000000001                ASSERT ((cy_checksum_exclude_size <= CY_CHECKSUM_EXCLUDE_SIZE), CY_BOOT: Section .cy_checksum_exclude size exceedes specified limit.)
+                0x0000000000007fc0                cyloadermeta_start = (cy_project_type_bootloader || cy_project_type_app_for_stack_and_copier)?(LENGTH (rom) - CY_METADATA_SIZE):0xf0000000
+
+.cyloadermeta
+ *(.cyloadermeta)
+                0x0000000000007fc0                cyloadablemeta_start = cy_project_type_app_for_stack_and_copier?((LENGTH (rom) - CY_FLASH_ROW_SIZE) - CY_METADATA_SIZE):((LENGTH (rom) - (CY_FLASH_ROW_SIZE * (CY_APPL_NUM - 0x1))) - CY_METADATA_SIZE)
+
+.cyloadablemeta
+ *(.cyloadablemeta)
+
+.cyflashprotect
+                0x0000000090400000       0x20
+ *(.cyflashprotect)
+ .cyflashprotect
+                0x0000000090400000       0x20 output/debug/cymetadata.o
+                0x0000000090400000                cy_meta_flashprotect
+
+.cymeta         0x0000000090500000        0xc
+ *(.cymeta)
+ .cymeta        0x0000000090500000        0xc output/debug/cymetadata.o
+                0x0000000090500000                cy_metadata
+
+.cychipprotect  0x0000000090600000        0x1
+ *(.cychipprotect)
+ .cychipprotect
+                0x0000000090600000        0x1 output/debug/cymetadata.o
+                0x0000000090600000                cy_meta_chipprotect
+
+.rel.dyn        0x00000000000044a0        0x0 load address 0x0000000090600004
+ .rel.iplt      0x00000000000044a0        0x0 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtbegin.o
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x0000000000000000      0xef0
+ *(.debug_aranges)
+ .debug_aranges
+                0x0000000000000000       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .debug_aranges
+                0x0000000000000020      0x108 output/debug/main.o
+ .debug_aranges
+                0x0000000000000128       0x18 output/debug/cymetadata.o
+ .debug_aranges
+                0x0000000000000140       0x48 output/debug/Cm0plusStart.o
+ .debug_aranges
+                0x0000000000000188       0x38 output/debug/Slider.a(cyfitter_cfg.o)
+ .debug_aranges
+                0x00000000000001c0       0x68 output/debug/Slider.a(CapSense_Control.o)
+ .debug_aranges
+                0x0000000000000228       0x50 output/debug/Slider.a(CapSense_Processing.o)
+ .debug_aranges
+                0x0000000000000278       0x58 output/debug/Slider.a(CapSense_Structure.o)
+ .debug_aranges
+                0x00000000000002d0       0x28 output/debug/Slider.a(CapSense_Tuner.o)
+ .debug_aranges
+                0x00000000000002f8       0xb0 output/debug/Slider.a(CapSense_Filter.o)
+ .debug_aranges
+                0x00000000000003a8       0xb0 output/debug/Slider.a(CapSense_Sensing.o)
+ .debug_aranges
+                0x0000000000000458       0xd0 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+ .debug_aranges
+                0x0000000000000528       0x28 output/debug/Slider.a(CapSense_Centroid_LL.o)
+ .debug_aranges
+                0x0000000000000550       0x80 output/debug/Slider.a(CapSense_ISR.o)
+ .debug_aranges
+                0x00000000000005d0      0x190 output/debug/Slider.a(CyLib.o)
+ .debug_aranges
+                0x0000000000000760       0x30 output/debug/Slider.a(cyPm.o)
+ .debug_aranges
+                0x0000000000000790       0xd8 output/debug/Slider.a(CyLFClk.o)
+ .debug_aranges
+                0x0000000000000868       0x48 output/debug/Slider.a(Blank.o)
+ .debug_aranges
+                0x00000000000008b0       0x68 output/debug/Slider.a(SPIM.o)
+ .debug_aranges
+                0x0000000000000918       0x60 output/debug/Slider.a(SPIM_SPI_UART.o)
+ .debug_aranges
+                0x0000000000000978       0x40 output/debug/Slider.a(SPIM_SPI.o)
+ .debug_aranges
+                0x00000000000009b8       0x20 output/debug/Slider.a(SPIM_SPI_UART_INT.o)
+ .debug_aranges
+                0x00000000000009d8       0x48 output/debug/Slider.a(SPIM_sclk_m.o)
+ .debug_aranges
+                0x0000000000000a20       0x48 output/debug/Slider.a(Latch.o)
+ .debug_aranges
+                0x0000000000000a68       0x68 output/debug/Slider.a(UART_1.o)
+ .debug_aranges
+                0x0000000000000ad0       0x88 output/debug/Slider.a(UART_1_UART.o)
+ .debug_aranges
+                0x0000000000000b58       0x20 output/debug/Slider.a(CyBootAsmGnu.o)
+ .debug_aranges
+                0x0000000000000b78       0x28 output/debug/Slider.a(CapSense_INT.o)
+ .debug_aranges
+                0x0000000000000ba0       0x48 output/debug/Slider.a(CyFlash.o)
+ .debug_aranges
+                0x0000000000000be8       0x60 output/debug/Slider.a(UART_1_SPI_UART.o)
+ .debug_aranges
+                0x0000000000000c48       0x20 output/debug/Slider.a(UART_1_SPI_UART_INT.o)
+ .debug_aranges
+                0x0000000000000c68       0x28 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_LL_v3_10.o)
+ .debug_aranges
+                0x0000000000000c90       0x30 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_SL_v3_10.o)
+ .debug_aranges
+                0x0000000000000cc0       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_udivsi3.o)
+ .debug_aranges
+                0x0000000000000ce0       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_divsi3.o)
+ .debug_aranges
+                0x0000000000000d00       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_dvmd_tls.o)
+ .debug_aranges
+                0x0000000000000d20       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-atexit.o)
+ .debug_aranges
+                0x0000000000000d40       0x18 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-ctype_.o)
+ .debug_aranges
+                0x0000000000000d58       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-errno.o)
+ .debug_aranges
+                0x0000000000000d78       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-exit.o)
+ .debug_aranges
+                0x0000000000000d98       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-fini.o)
+ .debug_aranges
+                0x0000000000000db8       0x18 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-impure.o)
+ .debug_aranges
+                0x0000000000000dd0       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-init.o)
+ .debug_aranges
+                0x0000000000000df0       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memcpy.o)
+ .debug_aranges
+                0x0000000000000e10       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memset.o)
+ .debug_aranges
+                0x0000000000000e30       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strcat.o)
+ .debug_aranges
+                0x0000000000000e50       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strchr.o)
+ .debug_aranges
+                0x0000000000000e70       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strlen.o)
+ .debug_aranges
+                0x0000000000000e90       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strstr.o)
+ .debug_aranges
+                0x0000000000000eb0       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__atexit.o)
+ .debug_aranges
+                0x0000000000000ed0       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__call_atexit.o)
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info     0x0000000000000000     0xed6f
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x0000000000000000       0xa8 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .debug_info    0x00000000000000a8     0x2569 output/debug/main.o
+ .debug_info    0x0000000000002611       0xfe output/debug/cymetadata.o
+ .debug_info    0x000000000000270f      0x399 output/debug/Cm0plusStart.o
+ .debug_info    0x0000000000002aa8      0x163 output/debug/Slider.a(cyfitter_cfg.o)
+ .debug_info    0x0000000000002c0b      0xad5 output/debug/Slider.a(CapSense_Control.o)
+ .debug_info    0x00000000000036e0      0xdc6 output/debug/Slider.a(CapSense_Processing.o)
+ .debug_info    0x00000000000044a6      0xc0a output/debug/Slider.a(CapSense_Structure.o)
+ .debug_info    0x00000000000050b0      0x66d output/debug/Slider.a(CapSense_Tuner.o)
+ .debug_info    0x000000000000571d      0xdb7 output/debug/Slider.a(CapSense_Filter.o)
+ .debug_info    0x00000000000064d4      0xe24 output/debug/Slider.a(CapSense_Sensing.o)
+ .debug_info    0x00000000000072f8     0x1018 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+ .debug_info    0x0000000000008310      0x2b1 output/debug/Slider.a(CapSense_Centroid_LL.o)
+ .debug_info    0x00000000000085c1      0x300 output/debug/Slider.a(CapSense_ISR.o)
+ .debug_info    0x00000000000088c1      0xbe1 output/debug/Slider.a(CyLib.o)
+ .debug_info    0x00000000000094a2      0x17b output/debug/Slider.a(cyPm.o)
+ .debug_info    0x000000000000961d      0x43f output/debug/Slider.a(CyLFClk.o)
+ .debug_info    0x0000000000009a5c      0x19d output/debug/Slider.a(Blank.o)
+ .debug_info    0x0000000000009bf9      0x2e4 output/debug/Slider.a(SPIM.o)
+ .debug_info    0x0000000000009edd      0x37f output/debug/Slider.a(SPIM_SPI_UART.o)
+ .debug_info    0x000000000000a25c      0x276 output/debug/Slider.a(SPIM_SPI.o)
+ .debug_info    0x000000000000a4d2      0x18b output/debug/Slider.a(SPIM_SPI_UART_INT.o)
+ .debug_info    0x000000000000a65d      0x19d output/debug/Slider.a(SPIM_sclk_m.o)
+ .debug_info    0x000000000000a7fa      0x19d output/debug/Slider.a(Latch.o)
+ .debug_info    0x000000000000a997      0x2e4 output/debug/Slider.a(UART_1.o)
+ .debug_info    0x000000000000ac7b      0x48a output/debug/Slider.a(UART_1_UART.o)
+ .debug_info    0x000000000000b105       0x71 output/debug/Slider.a(CyBootAsmGnu.o)
+ .debug_info    0x000000000000b176      0x844 output/debug/Slider.a(CapSense_INT.o)
+ .debug_info    0x000000000000b9ba      0x435 output/debug/Slider.a(CyFlash.o)
+ .debug_info    0x000000000000bdef      0x373 output/debug/Slider.a(UART_1_SPI_UART.o)
+ .debug_info    0x000000000000c162      0x17f output/debug/Slider.a(UART_1_SPI_UART_INT.o)
+ .debug_info    0x000000000000c2e1      0x24c Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_LL_v3_10.o)
+ .debug_info    0x000000000000c52d      0x259 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_SL_v3_10.o)
+ .debug_info    0x000000000000c786       0xb9 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_udivsi3.o)
+ .debug_info    0x000000000000c83f       0xb9 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_divsi3.o)
+ .debug_info    0x000000000000c8f8       0xb9 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_dvmd_tls.o)
+ .debug_info    0x000000000000c9b1      0x10a /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-atexit.o)
+ .debug_info    0x000000000000cabb       0x6f /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-ctype_.o)
+ .debug_info    0x000000000000cb2a      0x735 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-errno.o)
+ .debug_info    0x000000000000d25f      0x7a6 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-exit.o)
+ .debug_info    0x000000000000da05       0xeb /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-fini.o)
+ .debug_info    0x000000000000daf0      0x7d3 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-impure.o)
+ .debug_info    0x000000000000e2c3      0x105 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-init.o)
+ .debug_info    0x000000000000e3c8      0x102 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memcpy.o)
+ .debug_info    0x000000000000e4ca       0xd3 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memset.o)
+ .debug_info    0x000000000000e59d       0xc8 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strcat.o)
+ .debug_info    0x000000000000e665       0xe3 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strchr.o)
+ .debug_info    0x000000000000e748       0xcd /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strlen.o)
+ .debug_info    0x000000000000e815       0xdd /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strstr.o)
+ .debug_info    0x000000000000e8f2      0x23b /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__atexit.o)
+ .debug_info    0x000000000000eb2d      0x242 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__call_atexit.o)
+
+.debug_abbrev   0x0000000000000000     0x3c3e
+ *(.debug_abbrev)
+ .debug_abbrev  0x0000000000000000       0x14 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .debug_abbrev  0x0000000000000014      0x34c output/debug/main.o
+ .debug_abbrev  0x0000000000000360       0x5d output/debug/cymetadata.o
+ .debug_abbrev  0x00000000000003bd      0x1df output/debug/Cm0plusStart.o
+ .debug_abbrev  0x000000000000059c       0xe2 output/debug/Slider.a(cyfitter_cfg.o)
+ .debug_abbrev  0x000000000000067e      0x257 output/debug/Slider.a(CapSense_Control.o)
+ .debug_abbrev  0x00000000000008d5      0x27b output/debug/Slider.a(CapSense_Processing.o)
+ .debug_abbrev  0x0000000000000b50      0x20a output/debug/Slider.a(CapSense_Structure.o)
+ .debug_abbrev  0x0000000000000d5a      0x17e output/debug/Slider.a(CapSense_Tuner.o)
+ .debug_abbrev  0x0000000000000ed8      0x2bb output/debug/Slider.a(CapSense_Filter.o)
+ .debug_abbrev  0x0000000000001193      0x2af output/debug/Slider.a(CapSense_Sensing.o)
+ .debug_abbrev  0x0000000000001442      0x2a3 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+ .debug_abbrev  0x00000000000016e5      0x11c output/debug/Slider.a(CapSense_Centroid_LL.o)
+ .debug_abbrev  0x0000000000001801      0x1b4 output/debug/Slider.a(CapSense_ISR.o)
+ .debug_abbrev  0x00000000000019b5      0x236 output/debug/Slider.a(CyLib.o)
+ .debug_abbrev  0x0000000000001beb       0xc6 output/debug/Slider.a(cyPm.o)
+ .debug_abbrev  0x0000000000001cb1      0x1b6 output/debug/Slider.a(CyLFClk.o)
+ .debug_abbrev  0x0000000000001e67       0xc8 output/debug/Slider.a(Blank.o)
+ .debug_abbrev  0x0000000000001f2f      0x143 output/debug/Slider.a(SPIM.o)
+ .debug_abbrev  0x0000000000002072      0x182 output/debug/Slider.a(SPIM_SPI_UART.o)
+ .debug_abbrev  0x00000000000021f4      0x134 output/debug/Slider.a(SPIM_SPI.o)
+ .debug_abbrev  0x0000000000002328       0x9a output/debug/Slider.a(SPIM_SPI_UART_INT.o)
+ .debug_abbrev  0x00000000000023c2       0xc8 output/debug/Slider.a(SPIM_sclk_m.o)
+ .debug_abbrev  0x000000000000248a       0xc8 output/debug/Slider.a(Latch.o)
+ .debug_abbrev  0x0000000000002552      0x143 output/debug/Slider.a(UART_1.o)
+ .debug_abbrev  0x0000000000002695      0x17d output/debug/Slider.a(UART_1_UART.o)
+ .debug_abbrev  0x0000000000002812       0x14 output/debug/Slider.a(CyBootAsmGnu.o)
+ .debug_abbrev  0x0000000000002826      0x191 output/debug/Slider.a(CapSense_INT.o)
+ .debug_abbrev  0x00000000000029b7      0x1dd output/debug/Slider.a(CyFlash.o)
+ .debug_abbrev  0x0000000000002b94      0x182 output/debug/Slider.a(UART_1_SPI_UART.o)
+ .debug_abbrev  0x0000000000002d16       0x9a output/debug/Slider.a(UART_1_SPI_UART_INT.o)
+ .debug_abbrev  0x0000000000002db0      0x112 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_LL_v3_10.o)
+ .debug_abbrev  0x0000000000002ec2       0xb0 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_SL_v3_10.o)
+ .debug_abbrev  0x0000000000002f72       0x14 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_udivsi3.o)
+ .debug_abbrev  0x0000000000002f86       0x14 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_divsi3.o)
+ .debug_abbrev  0x0000000000002f9a       0x14 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_dvmd_tls.o)
+ .debug_abbrev  0x0000000000002fae       0xb5 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-atexit.o)
+ .debug_abbrev  0x0000000000003063       0x4e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-ctype_.o)
+ .debug_abbrev  0x00000000000030b1      0x134 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-errno.o)
+ .debug_abbrev  0x00000000000031e5      0x18b /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-exit.o)
+ .debug_abbrev  0x0000000000003370       0xb8 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-fini.o)
+ .debug_abbrev  0x0000000000003428      0x136 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-impure.o)
+ .debug_abbrev  0x000000000000355e       0xba /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-init.o)
+ .debug_abbrev  0x0000000000003618       0xa4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memcpy.o)
+ .debug_abbrev  0x00000000000036bc       0x8e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memset.o)
+ .debug_abbrev  0x000000000000374a       0x72 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strcat.o)
+ .debug_abbrev  0x00000000000037bc       0x83 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strchr.o)
+ .debug_abbrev  0x000000000000383f       0x8c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strlen.o)
+ .debug_abbrev  0x00000000000038cb       0x86 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strstr.o)
+ .debug_abbrev  0x0000000000003951      0x180 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__atexit.o)
+ .debug_abbrev  0x0000000000003ad1      0x16d /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__call_atexit.o)
+
+.debug_line     0x0000000000000000     0x46d4
+ *(.debug_line)
+ .debug_line    0x0000000000000000       0x80 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .debug_line    0x0000000000000080      0x6cf output/debug/main.o
+ .debug_line    0x000000000000074f       0x51 output/debug/cymetadata.o
+ .debug_line    0x00000000000007a0      0x1bf output/debug/Cm0plusStart.o
+ .debug_line    0x000000000000095f       0xc4 output/debug/Slider.a(cyfitter_cfg.o)
+ .debug_line    0x0000000000000a23      0x24d output/debug/Slider.a(CapSense_Control.o)
+ .debug_line    0x0000000000000c70      0x292 output/debug/Slider.a(CapSense_Processing.o)
+ .debug_line    0x0000000000000f02      0x1fb output/debug/Slider.a(CapSense_Structure.o)
+ .debug_line    0x00000000000010fd      0x12f output/debug/Slider.a(CapSense_Tuner.o)
+ .debug_line    0x000000000000122c      0x2d3 output/debug/Slider.a(CapSense_Filter.o)
+ .debug_line    0x00000000000014ff      0x35d output/debug/Slider.a(CapSense_Sensing.o)
+ .debug_line    0x000000000000185c      0x3e0 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+ .debug_line    0x0000000000001c3c      0x121 output/debug/Slider.a(CapSense_Centroid_LL.o)
+ .debug_line    0x0000000000001d5d      0x158 output/debug/Slider.a(CapSense_ISR.o)
+ .debug_line    0x0000000000001eb5      0x4c7 output/debug/Slider.a(CyLib.o)
+ .debug_line    0x000000000000237c       0x98 output/debug/Slider.a(cyPm.o)
+ .debug_line    0x0000000000002414      0x284 output/debug/Slider.a(CyLFClk.o)
+ .debug_line    0x0000000000002698       0xbd output/debug/Slider.a(Blank.o)
+ .debug_line    0x0000000000002755      0x13e output/debug/Slider.a(SPIM.o)
+ .debug_line    0x0000000000002893      0x152 output/debug/Slider.a(SPIM_SPI_UART.o)
+ .debug_line    0x00000000000029e5      0x110 output/debug/Slider.a(SPIM_SPI.o)
+ .debug_line    0x0000000000002af5       0xae output/debug/Slider.a(SPIM_SPI_UART_INT.o)
+ .debug_line    0x0000000000002ba3       0xc3 output/debug/Slider.a(SPIM_sclk_m.o)
+ .debug_line    0x0000000000002c66       0xbd output/debug/Slider.a(Latch.o)
+ .debug_line    0x0000000000002d23      0x140 output/debug/Slider.a(UART_1.o)
+ .debug_line    0x0000000000002e63      0x1de output/debug/Slider.a(UART_1_UART.o)
+ .debug_line    0x0000000000003041       0x68 output/debug/Slider.a(CyBootAsmGnu.o)
+ .debug_line    0x00000000000030a9      0x139 output/debug/Slider.a(CapSense_INT.o)
+ .debug_line    0x00000000000031e2      0x1e1 output/debug/Slider.a(CyFlash.o)
+ .debug_line    0x00000000000033c3      0x154 output/debug/Slider.a(UART_1_SPI_UART.o)
+ .debug_line    0x0000000000003517       0xb4 output/debug/Slider.a(UART_1_SPI_UART_INT.o)
+ .debug_line    0x00000000000035cb       0xb2 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_LL_v3_10.o)
+ .debug_line    0x000000000000367d       0xe4 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_SL_v3_10.o)
+ .debug_line    0x0000000000003761       0x6c /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_udivsi3.o)
+ .debug_line    0x00000000000037cd       0x73 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_divsi3.o)
+ .debug_line    0x0000000000003840       0x5e /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_dvmd_tls.o)
+ .debug_line    0x000000000000389e       0xc3 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-atexit.o)
+ .debug_line    0x0000000000003961       0x72 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-ctype_.o)
+ .debug_line    0x00000000000039d3      0x10e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-errno.o)
+ .debug_line    0x0000000000003ae1      0x169 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-exit.o)
+ .debug_line    0x0000000000003c4a       0x9b /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-fini.o)
+ .debug_line    0x0000000000003ce5       0xf1 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-impure.o)
+ .debug_line    0x0000000000003dd6       0xb5 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-init.o)
+ .debug_line    0x0000000000003e8b       0xf1 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memcpy.o)
+ .debug_line    0x0000000000003f7c       0xed /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memset.o)
+ .debug_line    0x0000000000004069       0xc0 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strcat.o)
+ .debug_line    0x0000000000004129       0xc3 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strchr.o)
+ .debug_line    0x00000000000041ec       0xfa /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strlen.o)
+ .debug_line    0x00000000000042e6       0xfe /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strstr.o)
+ .debug_line    0x00000000000043e4      0x17e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__atexit.o)
+ .debug_line    0x0000000000004562      0x172 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__call_atexit.o)
+
+.debug_frame    0x0000000000000000     0x21d8
+ *(.debug_frame)
+ .debug_frame   0x0000000000000000      0x3e4 output/debug/main.o
+ .debug_frame   0x00000000000003e4       0xbc output/debug/Cm0plusStart.o
+ .debug_frame   0x00000000000004a0       0x74 output/debug/Slider.a(cyfitter_cfg.o)
+ .debug_frame   0x0000000000000514      0x130 output/debug/Slider.a(CapSense_Control.o)
+ .debug_frame   0x0000000000000644      0x100 output/debug/Slider.a(CapSense_Processing.o)
+ .debug_frame   0x0000000000000744       0xcc output/debug/Slider.a(CapSense_Structure.o)
+ .debug_frame   0x0000000000000810       0x40 output/debug/Slider.a(CapSense_Tuner.o)
+ .debug_frame   0x0000000000000850      0x274 output/debug/Slider.a(CapSense_Filter.o)
+ .debug_frame   0x0000000000000ac4      0x1ec output/debug/Slider.a(CapSense_Sensing.o)
+ .debug_frame   0x0000000000000cb0      0x2a8 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+ .debug_frame   0x0000000000000f58       0x60 output/debug/Slider.a(CapSense_Centroid_LL.o)
+ .debug_frame   0x0000000000000fb8      0x110 output/debug/Slider.a(CapSense_ISR.o)
+ .debug_frame   0x00000000000010c8      0x410 output/debug/Slider.a(CyLib.o)
+ .debug_frame   0x00000000000014d8       0x58 output/debug/Slider.a(cyPm.o)
+ .debug_frame   0x0000000000001530      0x1dc output/debug/Slider.a(CyLFClk.o)
+ .debug_frame   0x000000000000170c       0x70 output/debug/Slider.a(Blank.o)
+ .debug_frame   0x000000000000177c      0x104 output/debug/Slider.a(SPIM.o)
+ .debug_frame   0x0000000000001880       0xd4 output/debug/Slider.a(SPIM_SPI_UART.o)
+ .debug_frame   0x0000000000001954       0x78 output/debug/Slider.a(SPIM_SPI.o)
+ .debug_frame   0x00000000000019cc       0x2c output/debug/Slider.a(SPIM_SPI_UART_INT.o)
+ .debug_frame   0x00000000000019f8       0x70 output/debug/Slider.a(SPIM_sclk_m.o)
+ .debug_frame   0x0000000000001a68       0x70 output/debug/Slider.a(Latch.o)
+ .debug_frame   0x0000000000001ad8      0x104 output/debug/Slider.a(UART_1.o)
+ .debug_frame   0x0000000000001bdc      0x134 output/debug/Slider.a(UART_1_UART.o)
+ .debug_frame   0x0000000000001d10       0x40 output/debug/Slider.a(CapSense_INT.o)
+ .debug_frame   0x0000000000001d50       0xa8 output/debug/Slider.a(CyFlash.o)
+ .debug_frame   0x0000000000001df8       0xc8 output/debug/Slider.a(UART_1_SPI_UART.o)
+ .debug_frame   0x0000000000001ec0       0x2c output/debug/Slider.a(UART_1_SPI_UART_INT.o)
+ .debug_frame   0x0000000000001eec       0x50 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_LL_v3_10.o)
+ .debug_frame   0x0000000000001f3c       0x58 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_SL_v3_10.o)
+ .debug_frame   0x0000000000001f94       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_udivsi3.o)
+ .debug_frame   0x0000000000001fb4       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_divsi3.o)
+ .debug_frame   0x0000000000001fd4       0x28 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-atexit.o)
+ .debug_frame   0x0000000000001ffc       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-errno.o)
+ .debug_frame   0x000000000000201c       0x28 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-exit.o)
+ .debug_frame   0x0000000000002044       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-fini.o)
+ .debug_frame   0x0000000000002070       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-init.o)
+ .debug_frame   0x000000000000209c       0x28 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memcpy.o)
+ .debug_frame   0x00000000000020c4       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memset.o)
+ .debug_frame   0x00000000000020e4       0x28 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strcat.o)
+ .debug_frame   0x000000000000210c       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strchr.o)
+ .debug_frame   0x000000000000212c       0x20 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strlen.o)
+ .debug_frame   0x000000000000214c       0x28 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strstr.o)
+ .debug_frame   0x0000000000002174       0x34 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__atexit.o)
+ .debug_frame   0x00000000000021a8       0x30 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__call_atexit.o)
+
+.debug_str      0x0000000000000000     0x48e1
+ *(.debug_str)
+ .debug_str     0x0000000000000000      0xb94 output/debug/main.o
+                                        0xcf9 (size before relaxing)
+ .debug_str     0x0000000000000b94       0x59 output/debug/cymetadata.o
+                                        0x18e (size before relaxing)
+ .debug_str     0x0000000000000bed      0x156 output/debug/Cm0plusStart.o
+                                        0x2c3 (size before relaxing)
+ .debug_str     0x0000000000000d43       0x84 output/debug/Slider.a(cyfitter_cfg.o)
+                                        0x1cd (size before relaxing)
+ .debug_str     0x0000000000000dc7      0x7a8 output/debug/Slider.a(CapSense_Control.o)
+                                        0x954 (size before relaxing)
+ .debug_str     0x000000000000156f      0x283 output/debug/Slider.a(CapSense_Processing.o)
+                                        0x958 (size before relaxing)
+ .debug_str     0x00000000000017f2      0x26a output/debug/Slider.a(CapSense_Structure.o)
+                                        0x8ee (size before relaxing)
+ .debug_str     0x0000000000001a5c      0x11b output/debug/Slider.a(CapSense_Tuner.o)
+                                        0x66d (size before relaxing)
+ .debug_str     0x0000000000001b77      0x28f output/debug/Slider.a(CapSense_Filter.o)
+                                        0x8a3 (size before relaxing)
+ .debug_str     0x0000000000001e06      0x489 output/debug/Slider.a(CapSense_Sensing.o)
+                                        0xb05 (size before relaxing)
+ .debug_str     0x000000000000228f      0x397 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+                                        0xb34 (size before relaxing)
+ .debug_str     0x0000000000002626       0x91 output/debug/Slider.a(CapSense_Centroid_LL.o)
+                                        0x2bb (size before relaxing)
+ .debug_str     0x00000000000026b7      0x14b output/debug/Slider.a(CapSense_ISR.o)
+                                        0x300 (size before relaxing)
+ .debug_str     0x0000000000002802      0x4b6 output/debug/Slider.a(CyLib.o)
+                                        0x6d7 (size before relaxing)
+ .debug_str     0x0000000000002cb8       0x5f output/debug/Slider.a(cyPm.o)
+                                        0x1f1 (size before relaxing)
+ .debug_str     0x0000000000002d17      0x2d0 output/debug/Slider.a(CyLFClk.o)
+                                        0x46e (size before relaxing)
+ .debug_str     0x0000000000002fe7       0x96 output/debug/Slider.a(Blank.o)
+                                        0x1f6 (size before relaxing)
+ .debug_str     0x000000000000307d      0x13d output/debug/Slider.a(SPIM.o)
+                                        0x2c1 (size before relaxing)
+ .debug_str     0x00000000000031ba      0x1ba output/debug/Slider.a(SPIM_SPI_UART.o)
+                                        0x33c (size before relaxing)
+ .debug_str     0x0000000000003374       0x98 output/debug/Slider.a(SPIM_SPI.o)
+                                        0x2b6 (size before relaxing)
+ .debug_str     0x000000000000340c       0x3d output/debug/Slider.a(SPIM_SPI_UART_INT.o)
+                                        0x244 (size before relaxing)
+ .debug_str     0x0000000000003449       0x9f output/debug/Slider.a(SPIM_sclk_m.o)
+                                        0x220 (size before relaxing)
+ .debug_str     0x00000000000034e8       0x7b output/debug/Slider.a(Latch.o)
+                                        0x1f6 (size before relaxing)
+ .debug_str     0x0000000000003563      0x144 output/debug/Slider.a(UART_1.o)
+                                        0x2e6 (size before relaxing)
+ .debug_str     0x00000000000036a7      0x1f2 output/debug/Slider.a(UART_1_UART.o)
+                                        0x41c (size before relaxing)
+ .debug_str     0x0000000000003899       0xa4 output/debug/Slider.a(CapSense_INT.o)
+                                        0x70b (size before relaxing)
+ .debug_str     0x000000000000393d      0x11d output/debug/Slider.a(CyFlash.o)
+                                        0x2d6 (size before relaxing)
+ .debug_str     0x0000000000003a5a       0xfc output/debug/Slider.a(UART_1_SPI_UART.o)
+                                        0x357 (size before relaxing)
+ .debug_str     0x0000000000003b56       0x41 output/debug/Slider.a(UART_1_SPI_UART_INT.o)
+                                        0x251 (size before relaxing)
+ .debug_str     0x0000000000003b97      0x16d Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_LL_v3_10.o)
+                                        0x2b2 (size before relaxing)
+ .debug_str     0x0000000000003d04       0x73 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_SL_v3_10.o)
+                                        0x30e (size before relaxing)
+ .debug_str     0x0000000000003d77      0x178 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-atexit.o)
+                                        0x211 (size before relaxing)
+ .debug_str     0x0000000000003eef       0x9e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-ctype_.o)
+                                        0x156 (size before relaxing)
+ .debug_str     0x0000000000003f8d      0x3a6 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-errno.o)
+                                        0x525 (size before relaxing)
+ .debug_str     0x0000000000004333       0x55 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-exit.o)
+                                        0x546 (size before relaxing)
+ .debug_str     0x0000000000004388       0xce /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-fini.o)
+                                        0x209 (size before relaxing)
+ .debug_str     0x0000000000004456       0xe1 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-impure.o)
+                                        0x57c (size before relaxing)
+ .debug_str     0x0000000000004537       0x7e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-init.o)
+                                        0x233 (size before relaxing)
+ .debug_str     0x00000000000045b5       0xac /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memcpy.o)
+                                        0x1e8 (size before relaxing)
+ .debug_str     0x0000000000004661       0x2e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memset.o)
+                                        0x1d4 (size before relaxing)
+ .debug_str     0x000000000000468f       0x2e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strcat.o)
+                                        0x1cd (size before relaxing)
+ .debug_str     0x00000000000046bd       0x2e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strchr.o)
+                                        0x1cd (size before relaxing)
+ .debug_str     0x00000000000046eb       0xad /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strlen.o)
+                                        0x1e9 (size before relaxing)
+ .debug_str     0x0000000000004798       0x3f /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strstr.o)
+                                        0x1e5 (size before relaxing)
+ .debug_str     0x00000000000047d7       0xb4 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__atexit.o)
+                                        0x2b7 (size before relaxing)
+ .debug_str     0x000000000000488b       0x56 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__call_atexit.o)
+                                        0x27d (size before relaxing)
+
+.debug_loc      0x0000000000000000     0x613e
+ *(.debug_loc)
+ .debug_loc     0x0000000000000000     0x14a3 output/debug/main.o
+ .debug_loc     0x00000000000014a3      0x14f output/debug/Cm0plusStart.o
+ .debug_loc     0x00000000000015f2       0x35 output/debug/Slider.a(cyfitter_cfg.o)
+ .debug_loc     0x0000000000001627      0x421 output/debug/Slider.a(CapSense_Control.o)
+ .debug_loc     0x0000000000001a48      0x764 output/debug/Slider.a(CapSense_Processing.o)
+ .debug_loc     0x00000000000021ac      0x472 output/debug/Slider.a(CapSense_Structure.o)
+ .debug_loc     0x000000000000261e      0x13d output/debug/Slider.a(CapSense_Tuner.o)
+ .debug_loc     0x000000000000275b      0xba8 output/debug/Slider.a(CapSense_Filter.o)
+ .debug_loc     0x0000000000003303      0x4ed output/debug/Slider.a(CapSense_Sensing.o)
+ .debug_loc     0x00000000000037f0      0x805 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+ .debug_loc     0x0000000000003ff5      0x20a output/debug/Slider.a(CapSense_Centroid_LL.o)
+ .debug_loc     0x00000000000041ff       0x82 output/debug/Slider.a(CapSense_ISR.o)
+ .debug_loc     0x0000000000004281      0x5e3 output/debug/Slider.a(CyLib.o)
+ .debug_loc     0x0000000000004864       0x47 output/debug/Slider.a(cyPm.o)
+ .debug_loc     0x00000000000048ab      0x323 output/debug/Slider.a(CyLFClk.o)
+ .debug_loc     0x0000000000004bce       0xa2 output/debug/Slider.a(Blank.o)
+ .debug_loc     0x0000000000004c70       0x7e output/debug/Slider.a(SPIM.o)
+ .debug_loc     0x0000000000004cee      0x170 output/debug/Slider.a(SPIM_SPI_UART.o)
+ .debug_loc     0x0000000000004e5e       0xb5 output/debug/Slider.a(SPIM_SPI.o)
+ .debug_loc     0x0000000000004f13       0x3d output/debug/Slider.a(SPIM_SPI_UART_INT.o)
+ .debug_loc     0x0000000000004f50       0xa2 output/debug/Slider.a(SPIM_sclk_m.o)
+ .debug_loc     0x0000000000004ff2       0xa2 output/debug/Slider.a(Latch.o)
+ .debug_loc     0x0000000000005094       0x7e output/debug/Slider.a(UART_1.o)
+ .debug_loc     0x0000000000005112      0x1bd output/debug/Slider.a(UART_1_UART.o)
+ .debug_loc     0x00000000000052cf       0xe6 output/debug/Slider.a(CapSense_INT.o)
+ .debug_loc     0x00000000000053b5      0x1c8 output/debug/Slider.a(CyFlash.o)
+ .debug_loc     0x000000000000557d      0x170 output/debug/Slider.a(UART_1_SPI_UART.o)
+ .debug_loc     0x00000000000056ed       0x3d output/debug/Slider.a(UART_1_SPI_UART_INT.o)
+ .debug_loc     0x000000000000572a      0x229 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_LL_v3_10.o)
+ .debug_loc     0x0000000000005953      0x154 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_SL_v3_10.o)
+ .debug_loc     0x0000000000005aa7       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-atexit.o)
+ .debug_loc     0x0000000000005ad3       0x1e /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-exit.o)
+ .debug_loc     0x0000000000005af1       0x2b /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-fini.o)
+ .debug_loc     0x0000000000005b1c       0x3c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-init.o)
+ .debug_loc     0x0000000000005b58       0xcf /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memcpy.o)
+ .debug_loc     0x0000000000005c27       0x87 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memset.o)
+ .debug_loc     0x0000000000005cae       0x75 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strcat.o)
+ .debug_loc     0x0000000000005d23       0x60 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strchr.o)
+ .debug_loc     0x0000000000005d83       0x21 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strlen.o)
+ .debug_loc     0x0000000000005da4       0x76 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strstr.o)
+ .debug_loc     0x0000000000005e1a      0x198 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__atexit.o)
+ .debug_loc     0x0000000000005fb2      0x18c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__call_atexit.o)
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_ranges   0x0000000000000000      0xb78
+ *(.debug_ranges)
+ .debug_ranges  0x0000000000000000       0xf8 output/debug/main.o
+ .debug_ranges  0x00000000000000f8       0x38 output/debug/Cm0plusStart.o
+ .debug_ranges  0x0000000000000130       0x28 output/debug/Slider.a(cyfitter_cfg.o)
+ .debug_ranges  0x0000000000000158       0x58 output/debug/Slider.a(CapSense_Control.o)
+ .debug_ranges  0x00000000000001b0       0x40 output/debug/Slider.a(CapSense_Processing.o)
+ .debug_ranges  0x00000000000001f0       0x48 output/debug/Slider.a(CapSense_Structure.o)
+ .debug_ranges  0x0000000000000238       0x18 output/debug/Slider.a(CapSense_Tuner.o)
+ .debug_ranges  0x0000000000000250       0xa0 output/debug/Slider.a(CapSense_Filter.o)
+ .debug_ranges  0x00000000000002f0       0xa0 output/debug/Slider.a(CapSense_Sensing.o)
+ .debug_ranges  0x0000000000000390       0xc0 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+ .debug_ranges  0x0000000000000450       0x18 output/debug/Slider.a(CapSense_Centroid_LL.o)
+ .debug_ranges  0x0000000000000468       0x70 output/debug/Slider.a(CapSense_ISR.o)
+ .debug_ranges  0x00000000000004d8      0x180 output/debug/Slider.a(CyLib.o)
+ .debug_ranges  0x0000000000000658       0x20 output/debug/Slider.a(cyPm.o)
+ .debug_ranges  0x0000000000000678       0xc8 output/debug/Slider.a(CyLFClk.o)
+ .debug_ranges  0x0000000000000740       0x38 output/debug/Slider.a(Blank.o)
+ .debug_ranges  0x0000000000000778       0x58 output/debug/Slider.a(SPIM.o)
+ .debug_ranges  0x00000000000007d0       0x50 output/debug/Slider.a(SPIM_SPI_UART.o)
+ .debug_ranges  0x0000000000000820       0x30 output/debug/Slider.a(SPIM_SPI.o)
+ .debug_ranges  0x0000000000000850       0x10 output/debug/Slider.a(SPIM_SPI_UART_INT.o)
+ .debug_ranges  0x0000000000000860       0x38 output/debug/Slider.a(SPIM_sclk_m.o)
+ .debug_ranges  0x0000000000000898       0x38 output/debug/Slider.a(Latch.o)
+ .debug_ranges  0x00000000000008d0       0x58 output/debug/Slider.a(UART_1.o)
+ .debug_ranges  0x0000000000000928       0x78 output/debug/Slider.a(UART_1_UART.o)
+ .debug_ranges  0x00000000000009a0       0x18 output/debug/Slider.a(CapSense_INT.o)
+ .debug_ranges  0x00000000000009b8       0x38 output/debug/Slider.a(CyFlash.o)
+ .debug_ranges  0x00000000000009f0       0x50 output/debug/Slider.a(UART_1_SPI_UART.o)
+ .debug_ranges  0x0000000000000a40       0x10 output/debug/Slider.a(UART_1_SPI_UART_INT.o)
+ .debug_ranges  0x0000000000000a50       0x18 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_LL_v3_10.o)
+ .debug_ranges  0x0000000000000a68       0x20 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_SL_v3_10.o)
+ .debug_ranges  0x0000000000000a88       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-atexit.o)
+ .debug_ranges  0x0000000000000a98       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-errno.o)
+ .debug_ranges  0x0000000000000aa8       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-exit.o)
+ .debug_ranges  0x0000000000000ab8       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-fini.o)
+ .debug_ranges  0x0000000000000ac8       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-init.o)
+ .debug_ranges  0x0000000000000ad8       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memcpy.o)
+ .debug_ranges  0x0000000000000ae8       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memset.o)
+ .debug_ranges  0x0000000000000af8       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strcat.o)
+ .debug_ranges  0x0000000000000b08       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strchr.o)
+ .debug_ranges  0x0000000000000b18       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strlen.o)
+ .debug_ranges  0x0000000000000b28       0x30 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strstr.o)
+ .debug_ranges  0x0000000000000b58       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__atexit.o)
+ .debug_ranges  0x0000000000000b68       0x10 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__call_atexit.o)
+
+.comment        0x0000000000000000       0xe0
+ .comment       0x0000000000000000       0x38 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtbegin.o
+                                         0x39 (size before relaxing)
+ .comment       0x0000000000000038       0x39 output/debug/main.o
+ .comment       0x0000000000000038       0x39 output/debug/cymetadata.o
+ .comment       0x0000000000000038       0x39 output/debug/Cm0plusStart.o
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(cyfitter_cfg.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(CapSense_Control.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(CapSense_Processing.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(CapSense_Structure.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(CapSense_Tuner.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(CapSense_Filter.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(CapSense_Sensing.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(CapSense_Centroid_LL.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(CapSense_ISR.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(CyLib.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(cyPm.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(CyLFClk.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(Blank.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(SPIM.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(SPIM_SPI_UART.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(SPIM_SPI.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(SPIM_SPI_UART_INT.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(SPIM_sclk_m.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(Latch.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(UART_1.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(UART_1_UART.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(CapSense_INT.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(CyFlash.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(UART_1_SPI_UART.o)
+ .comment       0x0000000000000038       0x39 output/debug/Slider.a(UART_1_SPI_UART_INT.o)
+ .comment       0x0000000000000038       0x70 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_LL_v3_10.o)
+                                         0x71 (size before relaxing)
+ .comment       0x00000000000000a8       0x71 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_SL_v3_10.o)
+ .comment       0x00000000000000a8       0x38 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-atexit.o)
+                                         0x39 (size before relaxing)
+ .comment       0x00000000000000e0       0x39 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-ctype_.o)
+ .comment       0x00000000000000e0       0x39 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-errno.o)
+ .comment       0x00000000000000e0       0x39 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-exit.o)
+ .comment       0x00000000000000e0       0x39 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-fini.o)
+ .comment       0x00000000000000e0       0x39 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-impure.o)
+ .comment       0x00000000000000e0       0x39 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-init.o)
+ .comment       0x00000000000000e0       0x39 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memcpy.o)
+ .comment       0x00000000000000e0       0x39 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memset.o)
+ .comment       0x00000000000000e0       0x39 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strcat.o)
+ .comment       0x00000000000000e0       0x39 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strchr.o)
+ .comment       0x00000000000000e0       0x39 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strlen.o)
+ .comment       0x00000000000000e0       0x39 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strstr.o)
+ .comment       0x00000000000000e0       0x39 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__atexit.o)
+ .comment       0x00000000000000e0       0x39 /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__call_atexit.o)
+ .comment       0x00000000000000e0       0x39 /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtend.o
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+
+.note.gnu.arm.ident
+ *(.note.gnu.arm.ident)
+
+.ARM.attributes
+                0x0000000000000000       0x28
+ *(.ARM.attributes)
+ .ARM.attributes
+                0x0000000000000000       0x1e /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crti.o
+ .ARM.attributes
+                0x000000000000001e       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtbegin.o
+ .ARM.attributes
+                0x000000000000004a       0x1b /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/crt0.o
+ .ARM.attributes
+                0x0000000000000065       0x32 output/debug/main.o
+ .ARM.attributes
+                0x0000000000000097       0x32 output/debug/cymetadata.o
+ .ARM.attributes
+                0x00000000000000c9       0x32 output/debug/Cm0plusStart.o
+ .ARM.attributes
+                0x00000000000000fb       0x32 output/debug/Slider.a(cyfitter_cfg.o)
+ .ARM.attributes
+                0x000000000000012d       0x32 output/debug/Slider.a(CapSense_Control.o)
+ .ARM.attributes
+                0x000000000000015f       0x32 output/debug/Slider.a(CapSense_Processing.o)
+ .ARM.attributes
+                0x0000000000000191       0x32 output/debug/Slider.a(CapSense_Structure.o)
+ .ARM.attributes
+                0x00000000000001c3       0x32 output/debug/Slider.a(CapSense_Tuner.o)
+ .ARM.attributes
+                0x00000000000001f5       0x32 output/debug/Slider.a(CapSense_Filter.o)
+ .ARM.attributes
+                0x0000000000000227       0x32 output/debug/Slider.a(CapSense_Sensing.o)
+ .ARM.attributes
+                0x0000000000000259       0x32 output/debug/Slider.a(CapSense_SensingCSD_LL.o)
+ .ARM.attributes
+                0x000000000000028b       0x32 output/debug/Slider.a(CapSense_Centroid_LL.o)
+ .ARM.attributes
+                0x00000000000002bd       0x32 output/debug/Slider.a(CapSense_ISR.o)
+ .ARM.attributes
+                0x00000000000002ef       0x32 output/debug/Slider.a(CyLib.o)
+ .ARM.attributes
+                0x0000000000000321       0x32 output/debug/Slider.a(cyPm.o)
+ .ARM.attributes
+                0x0000000000000353       0x32 output/debug/Slider.a(CyLFClk.o)
+ .ARM.attributes
+                0x0000000000000385       0x32 output/debug/Slider.a(Blank.o)
+ .ARM.attributes
+                0x00000000000003b7       0x32 output/debug/Slider.a(SPIM.o)
+ .ARM.attributes
+                0x00000000000003e9       0x32 output/debug/Slider.a(SPIM_SPI_UART.o)
+ .ARM.attributes
+                0x000000000000041b       0x32 output/debug/Slider.a(SPIM_SPI.o)
+ .ARM.attributes
+                0x000000000000044d       0x32 output/debug/Slider.a(SPIM_SPI_UART_INT.o)
+ .ARM.attributes
+                0x000000000000047f       0x32 output/debug/Slider.a(SPIM_sclk_m.o)
+ .ARM.attributes
+                0x00000000000004b1       0x32 output/debug/Slider.a(Latch.o)
+ .ARM.attributes
+                0x00000000000004e3       0x32 output/debug/Slider.a(UART_1.o)
+ .ARM.attributes
+                0x0000000000000515       0x32 output/debug/Slider.a(UART_1_UART.o)
+ .ARM.attributes
+                0x0000000000000547       0x22 output/debug/Slider.a(CyBootAsmGnu.o)
+ .ARM.attributes
+                0x0000000000000569       0x32 output/debug/Slider.a(CapSense_INT.o)
+ .ARM.attributes
+                0x000000000000059b       0x32 output/debug/Slider.a(CyFlash.o)
+ .ARM.attributes
+                0x00000000000005cd       0x32 output/debug/Slider.a(UART_1_SPI_UART.o)
+ .ARM.attributes
+                0x00000000000005ff       0x32 output/debug/Slider.a(UART_1_SPI_UART_INT.o)
+ .ARM.attributes
+                0x0000000000000631       0x32 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_LL_v3_10.o)
+ .ARM.attributes
+                0x0000000000000663       0x32 Export/ARM_GCC_Generic/CapSense_P4_v3_10/Capsense_P4Library_GCCp.a(CapSense_SmartSense_SL_v3_10.o)
+ .ARM.attributes
+                0x0000000000000695       0x1e /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_udivsi3.o)
+ .ARM.attributes
+                0x00000000000006b3       0x1e /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_divsi3.o)
+ .ARM.attributes
+                0x00000000000006d1       0x1e /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/libgcc.a(_dvmd_tls.o)
+ .ARM.attributes
+                0x00000000000006ef       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-atexit.o)
+ .ARM.attributes
+                0x000000000000071b       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-ctype_.o)
+ .ARM.attributes
+                0x0000000000000747       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-errno.o)
+ .ARM.attributes
+                0x0000000000000773       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-exit.o)
+ .ARM.attributes
+                0x000000000000079f       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-fini.o)
+ .ARM.attributes
+                0x00000000000007cb       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-impure.o)
+ .ARM.attributes
+                0x00000000000007f7       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-init.o)
+ .ARM.attributes
+                0x0000000000000823       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memcpy.o)
+ .ARM.attributes
+                0x000000000000084f       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-memset.o)
+ .ARM.attributes
+                0x000000000000087b       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strcat.o)
+ .ARM.attributes
+                0x00000000000008a7       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strchr.o)
+ .ARM.attributes
+                0x00000000000008d3       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strlen.o)
+ .ARM.attributes
+                0x00000000000008ff       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-strstr.o)
+ .ARM.attributes
+                0x000000000000092b       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__atexit.o)
+ .ARM.attributes
+                0x0000000000000957       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/../../../arm-none-eabi/lib/armv6-m/libg_nano.a(lib_a-__call_atexit.o)
+ .ARM.attributes
+                0x0000000000000983       0x2c /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtend.o
+ .ARM.attributes
+                0x00000000000009af       0x1e /usr/lib/gcc/arm-none-eabi/4.9.3/armv6-m/crtn.o
+
+/DISCARD/
+ *(.note.GNU-stack)
+OUTPUT(output/debug/Slider.elf elf32-littlearm)
