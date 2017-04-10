@@ -1,6 +1,9 @@
 # Core module
-obj-$(CONFIG_FB_TFT)             += fbtft.o
-fbtft-y                          += fbtft-core.o fbtft-sysfs.o fbtft-bus.o fbtft-io.o
+obj-m             += fbtft-io.o
+obj-m             += fbtft-sysfs.o
+obj-m             += fbtft-core.o
+obj-m             += fbtft-bus.o
+fbtft-m                          += fbtft-core.o fbtft-sysfs.o fbtft-bus.o fbtft-io.o
 
 # drivers
 obj-$(CONFIG_FB_TFT_AGM1264K_FL) += fb_agm1264k-fl.o
@@ -27,7 +30,7 @@ obj-$(CONFIG_FB_TFT_SSD1305)     += fb_ssd1325.o
 obj-$(CONFIG_FB_TFT_SSD1331)     += fb_ssd1331.o
 obj-$(CONFIG_FB_TFT_SSD1351)     += fb_ssd1351.o
 obj-$(CONFIG_FB_TFT_ST7735R)     += fb_st7735r.o
-obj-$(CONFIG_FB_TFT_ST7789V)     += fb_st7789v.o
+obj-m     += fb_st7789v.o
 obj-$(CONFIG_FB_TFT_TINYLCD)     += fb_tinylcd.o
 obj-$(CONFIG_FB_TFT_TLS8204)     += fb_tls8204.o
 obj-$(CONFIG_FB_TFT_UC1611)      += fb_uc1611.o
@@ -37,4 +40,6 @@ obj-$(CONFIG_FB_TFT_WATTEROTT)   += fb_watterott.o
 obj-$(CONFIG_FB_FLEX)            += flexfb.o
 
 # Device modules
-obj-$(CONFIG_FB_TFT_FBTFT_DEVICE) += fbtft_device.o
+obj-m += fbtft_device.o
+
+ccflags-y += -DCONFIG_FB_DEFERRED_IO
