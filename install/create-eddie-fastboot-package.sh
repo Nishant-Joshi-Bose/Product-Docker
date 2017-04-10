@@ -56,11 +56,16 @@ CP="cp -PR --preserve=mode,timestamps,links"
 cd "$mydir"
 
 RIVIERA_HSP_CONFIG=$configdir/HSP-Version.txt
+
 LPM_CONFIG=$configdir/LPM-Version.txt
+
 SOUNDTOUCH_CONFIG=$configdir/SoundTouch-Version.txt
 # Read HSP Path
 HSP_PACKAGE=`cat $RIVIERA_HSP_CONFIG`
+
 LPM_PACKAGE=`cat $LPM_CONFIG`
+LPM_PACKAGE=$workspace/$LPM_PACKAGE
+
 SOUNDTOUCH_PACKAGE=`cat $SOUNDTOUCH_CONFIG`
 HSP_PACKAGE_FILES=Riviera-HSP-*/images/*
 
@@ -122,7 +127,7 @@ print "Using: "
 print "   HSP_Package: $HSP_PACKAGE"
 print "   SOUNDTOCH_Package: $SOUNDTOUCH_PACKAGE"
 if [ $with_lpm -eq 1 ]; then
-    print "   LPM_Package: $HSP_PACKAGE"
+    print "   LPM_Package: $LPM_PACKAGE"
 fi
 print "   Eddie_Package: $mydir/$EDDIE_PACKAGE_NAME"
 
