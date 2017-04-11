@@ -11,13 +11,21 @@
 function usage
 {
     cat <<EOF
-Usage: $this_script <configuration> <sdk> with_lpm
+Usage: $this_script <0 or more Options>
+Options: 
+-c=<configuration> 
+-s=<sdk> 
+--no_lpm
+-d / --debug
+--hsp-path=<Path to HSP Tar file - to overwrite default path>
+--lpm-path=<Path to LPM Firmware file - to overwrite default path>
+--soundtouch-path=<Path to Sound Touch IPK file - to overwrite default path>
 
-configuration = Release/Debug
-sdk = qc8017_32
-with_lpm - optional string, if not given, it is assumed not to include lpm package
+Example configuration = Release/Debug
+Example sdk = qc8017_32
+--no_lpm - optional string, if not given, it is assumed to include lpm package
 
-e.g. $this_script Release qc8017_32 with_lpm
+e.g. $this_script -c=Release -s=qc8017_32 --no_lpm
 EOF
 }
 
@@ -86,7 +94,7 @@ PERSIST_BUILTFILES_PATH=$EDDIE_PACKAGE_TEMPPATH/bose-persist
 cfg=Release
 sdk=qc8017_32
 debug=0
-with_lpm=0
+no_lpm=0
 
 for idx in "$@"
 do
@@ -101,8 +109,8 @@ case $idx in
     debug=1
     set -x
     ;;
-    --with-lpm)
-    with_lpm=1
+    --no-lpm)
+    no_lpm=1
     ;;
     --hsp-path=*)
     HSP_PACKAGE=`echo $idx | sed 's/[-a-zA-Z0-9]*=//'`
@@ -126,7 +134,7 @@ OUTPUT_SCRIPT=$mydir/../eddie_flash.py
 print "Using: "
 print "   HSP_Package: $HSP_PACKAGE"
 print "   SOUNDTOCH_Package: $SOUNDTOUCH_PACKAGE"
-if [ $with_lpm -eq 1 ]; then
+if [ $no_lpm -eq 1 ]; then
     print "   LPM_Package: $LPM_PACKAGE"
 fi
 print "   Eddie_Package: $mydir/$EDDIE_PACKAGE_NAME"
@@ -299,7 +307,7 @@ create_ext4_package $EDDIE_PACKAGE_TEMPPATH/$BOSEFS_EXT4_NAME $EDDIE_PACKAGE_TEM
 #create_ext4_package $EDDIE_PACKAGE_TEMPPATH/$PERSIST_EXT4_NAME $EDDIE_PACKAGE_TEMPPATH/$PERSIST_PARTITION_NAME $PERSIST_PARTITION_NAME $SOUNDTOUCH_PERSIST_PACKAGE
 
 #################### COPY LPM IMAGE AND FLASH utility ###################
-if [ $with_lpm -eq 1 ]; then
+if [ $no_lpm -eq 0 ]; then
  	print "Adding LPM Package."
  	create_lpm_package 
 fi
