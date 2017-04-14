@@ -31,7 +31,7 @@ int main( int argc, char** argv )
 
     BOSE_DEBUG( s_logger, "Eddie product v0.1" );
 
-    for( ;; );
+    //    for( ;; );
 
     return 0;
 }

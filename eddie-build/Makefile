@@ -7,11 +7,14 @@
 #########################################################################
 
 MKFILE_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
+TOPDIR := ${MKFILE_DIR}
 
 export # all make variables automatically exported to children's environment
 
 cfg ?= Release
 sdk ?= qc8017_32
+
+include Makedefs.mk
 
 .PHONY: default
 default: all
@@ -120,19 +123,21 @@ else
 #  ifeq(${BUILD_SHELBY},true)
 #  else
     # The SoundStouch-SDK tarball is identified in SoundTouch-link.txt
-    SOUNDTOUCH_SDK_TAR := $(shell cat ../config/SoundTouchSDK-Version.txt)
+    SOUNDTOUCH_SDK_TAR := $(shell cat ../config/SoundTouchSDK-Version-${sdk}.txt)
     ifndef SOUNDTOUCH_SDK_TAR
-      $(error Oops, something is wrong with SoundTouchSDK-Version.txt)
+      $(error Oops, something is wrong with SoundTouchSDK-Version-${sdk}.txt)
     endif
 #  endif
 endif
 
-SOUNDTOUCH_SDK_SENTINEL := SoundTouch-SDK/install-SoundTouch-SDK
+SOUNDTOUCH_SDK_SENTINEL := builds/SoundTouch-SDK-${sdk}/install-SoundTouch-SDK
 
 $(SOUNDTOUCH_SDK_SENTINEL): $(SOUNDTOUCH_SDK_TAR)
 	@echo -e "$(CYAN)Extracting SoundTouch-SDK$(RESET_COLOR)"
-	rm -rf SoundTouch-SDK
+	rm -rf builds/SoundTouch-SDK-${sdk}
 	tar -xmf $(SOUNDTOUCH_SDK_TAR)
+	-mkdir builds
+	mv SoundTouch-SDK builds/SoundTouch-SDK-${sdk}
 	test -f $@ # assert the file exists
 	touch $@
 
@@ -166,18 +171,18 @@ help:
 # CMAKE stuff
 CMAKE = cmake
 BUILDS_ROOT_DIR=$(MKFILE_DIR)/builds
-BUILDS_DIR=$(BUILDS_ROOT_DIR)/$(cfg)/$(TARGET_NAME)
+BUILDS_DIR=$(BUILDS_ROOT_DIR)/$(cfg)/$(sdk)
 
 # TODO make this build Eddie apps
 .PHONY: cmake_build
 cmake_build: $(SOUNDTOUCH_SDK_SENTINEL) #\
 #$(TARGET_LIBS_DIR) $(TARGET_BINS_DIR)
 	@echo -e "$(CYAN)Preparing the cmake build...$(RESET_COLOR)"
-#	-@echo "Building via CMAKE for $(sdk) on $(PLAT) with jobs=$(jobs)"
-#	mkdir -p $(BUILDS_DIR)
-#	cd $(BUILDS_DIR) && $(CMAKE) -DCFG=${cfg} -DSDK=$(sdk) -DCORE_TARGET=$(TARGET_NAME) -DCMAKE_C_COMPILER=$(CROSS_TOOL_CC) -DCMAKE_CXX_COMPILER=$(CROSS_TOOL_CPP) ../../../.
-#	@echo -e "$(CYAN)Starting the Eddie build...$(RESET_COLOR)"
-#	make -C $(BUILDS_DIR) -j $(jobs) install
+	-@echo "Building via CMAKE for $(sdk) with jobs=$(jobs)"
+	mkdir -p $(BUILDS_DIR)
+	cd $(BUILDS_DIR) && $(CMAKE) -DCFG=${cfg} -DSDK=${sdk} -DCORE_TARGET=$(TARGET_NAME) -DCMAKE_C_COMPILER=$(CROSS_TOOL_CC) -DCMAKE_CXX_COMPILER=$(CROSS_TOOL_CPP) -DEXTRA_FLAGS='$(EXTRA_FLAGS)' -DLINUX_DISTRO=$(LINUX_DISTRO) ../../../.
+	@echo -e "$(CYAN)Starting the Eddie build...$(RESET_COLOR)"
+	make -C $(BUILDS_DIR) -j $(jobs) install
 
 STAGE_DIR = builds/$(cfg)/$(sdk)/stage
 DIR_COPY=cp -RPfa
