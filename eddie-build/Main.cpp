@@ -10,7 +10,7 @@
 
 static DPrint s_logger( "Eddie" );
 
-using namespace Eddie;
+//using namespace Eddie;
 
 void SignalHandler( int signal )
 {

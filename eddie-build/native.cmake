@@ -13,3 +13,6 @@ IF( ${GLIB_215_NEEDED} )
   SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
   SET(CMAKE_SKIP_BUILD_RPATH FALSE)
 ENDIF( ${GLIB_215_NEEDED} )
+
+# TODO update this to point to the STSDK protobuf lib file once there is a native sdk tarball
+FIND_LIBRARY(PROTOBUF_LIB    NAMES libprotobuf.so  PATHS  ${LIB_PATH} NO_DEFAULT_PATH)
