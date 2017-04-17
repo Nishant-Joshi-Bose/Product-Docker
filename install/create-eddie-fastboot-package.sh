@@ -99,6 +99,10 @@ no_lpm=0
 for idx in "$@"
 do
 case $idx in
+    -h|--help)
+    usage
+    exit 0
+    ;;
     -c=*|--cfg=*)
     cfg=`echo $idx | sed 's/[-a-zA-Z0-9]*=//'`
     ;;

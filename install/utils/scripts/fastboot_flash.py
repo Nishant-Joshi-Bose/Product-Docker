@@ -51,7 +51,7 @@ class FastbootUpdater:
             out = None
             logging.info("\tExecuting: [%s]" %cmd)
             con = pexpect.spawn(cmd)
-            con.expect(pexpect.EOF)
+            con.expect(pexpect.EOF, timeout=600)
             out = con.before
             con.close()
             logging.debug("\t\t[%s]" %out)
@@ -352,9 +352,11 @@ def do_fastboot_flash(package_path, erase_persist=False, serial_port = None):
             logging.info("------------------------------------------------------------------------------------------")
             print("--- Erasing: [%s]" %partition)
             logging.info("--- Erasing: [%s]" %partition)
+            time.sleep(1)
             fastboot_updater.fastboot_erase(partition, assume_fastboot)
             logging.info("--- Flashing: [%s] with [%s]" %(partition, partitions[partition]))
             print("--- Flashing: [%s] with [%s]" %(partition, partitions[partition]))
+            time.sleep(1)
             fastboot_updater.fastboot_flash(partition, partitions[partition], assume_fastboot)            
             logging.info("------------------------------------------------------------------------------------------")
             assume_fastboot = True
