@@ -19,6 +19,7 @@ import subprocess
 import platform
 import fnmatch
 import logging
+import shutil
 from collections import OrderedDict
 
 ''' This class provides facility to perform update via fastboot utility for Qualcomm device.        
@@ -43,27 +44,64 @@ class FastbootUpdater:
                 raise Exception("Cannot find Fastboot binary [%s]. Exiting." %(self.fastboot_util))
             if not os.path.exists(self.adb_util):
                 raise Exception("Cannot find ADB binary [%s]. Exiting." %(self.adb_util))
+            #self.copy_binaries()
             self.port = port
             self.serial_controller = None
             self.restart_adb()
 
         def execute_cmd_on_host(self, cmd):
             out = None
-            logging.info("\tExecuting: [%s]" %cmd)
-            con = pexpect.spawn(cmd)
-            con.expect(pexpect.EOF, timeout=600)
-            out = con.before
-            con.close()
-            logging.debug("\t\t[%s]" %out)
+            if "Windows" in platform.system():
+                p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+                 
+                ## Talk with command i.e. read data from stdout and stderr. Store this info in tuple 
+                ## Read data from stdout and stderr, until end-of-file is reached. Wait for process to terminate. 
+                (out, err) = p.communicate()
+                 
+                ## Wait for command to terminate. Get return returncode ##
+                p_status = p.wait()
+                #print "Command output : ", output
+                #print "Command exit status/return code : ", p_status		
+                logging.info("\t\t[%s]" %out)
+            else:
+                logging.info("\tExecuting: [%s]" %cmd)
+                con = pexpect.spawn(cmd) 
+                con.expect(pexpect.EOF, timeout=600)
+                out = con.before
+                con.close()
+                logging.info("\t\t[%s]" %out)
             return out
+
+        def copy_binaries(self):
+            if "Windows" in platform.system():
+                try:
+                    destpath = os.path.abspath(os.path.join(self.package_path, '..'))
+                    logging.info("Trying to copy [%s] to [%s]" %(self.fastboot_util, destpath))
+                    shutil.copy(self.fastboot_util, destpath)
+                except:
+                    # Ignore and continue, operation may fail going further
+                    logging.debug("Ignoring copy error for fastboot EXE")
+                self.fastboot_util = destpath + "\\fastboot.exe"
+                self.fastboot_bin = self.fastboot_util
+
+                try:
+                    logging.info("Trying to copy [%s] to [%s]" %(self.adb_util, destpath))
+                    shutil.copy(self.adb_util, destpath)
+                except:
+                    # Ignore and continue, operation may fail going further
+                    logging.debug("Ignoring copy error for ADB EXE")
+                self.adb_util = self.package_path + "\\adb.exe"
+                self.adb_bin = self.adb_util
+            # else: nothing to do
+            return
 
         def init_binaries(self):
             if "Windows" in platform.system():
                 logging.info("On Windows System....")
                 print("On Windows System....")
-                self.fastboot_util = "fastboot.exe"
+                self.fastboot_util = self.package_path + "\utils\\win\\fastboot.exe"
                 self.fastboot_bin = self.fastboot_util
-                self.adb_util = "adb.exe"
+                self.adb_util = self.package_path + "\utils\\win\\adb.exe"
                 self.adb_bin = self.adb_util
                 self.is_windows = True
             else:            
@@ -73,14 +111,20 @@ class FastbootUpdater:
                 self.fastboot_bin = "sudo " + self.fastboot_util
                 self.adb_util = self.package_path + "/utils/lin/adb"
                 self.adb_bin = "sudo " + self.adb_util                
+            return
        
         def restart_adb(self):
-            if not self.is_windows:
-                cmd = self.adb_bin + " kill-server; " + self.adb_bin + " start-server"
-                self.execute_cmd_on_host(cmd)
+            cmd = self.adb_bin + " kill-server; " + self.adb_bin + " start-server"
+            self.execute_cmd_on_host(cmd)
             #else: TODO
             return
                     
+        def stop_adb(self):
+            cmd = self.adb_bin + " kill-server "
+            self.execute_cmd_on_host(cmd)
+            #else: TODO
+            return
+
         def find_adb_devices(self):           
             dev_list = []
             cmd = self.adb_bin + " devices -l"
@@ -333,6 +377,8 @@ def do_fastboot_flash(package_path, erase_persist=False, serial_port = None):
         if not os.path.isdir(package_path):
             raise Exception("Package directory [%s] not present. Exiting." %package_path)
         controller = None
+        fastboot_updater = None
+        
         if serial_port is not None:
             print("Opening serial port [%s]." % serial_port)
             logging.debug("Opening serial port [%s]." % serial_port)
@@ -391,6 +437,9 @@ def do_fastboot_flash(package_path, erase_persist=False, serial_port = None):
         if controller is not None:
             if controller.isOpen():
                 controller.close()                
+        if fastboot_updater is not None:
+            fastboot_updater.stop_adb()
+
         print("Fastboot Flash End.")
     return
     
