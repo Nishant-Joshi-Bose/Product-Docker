@@ -81,6 +81,8 @@ HSP_PACKAGE_FILES=Riviera-HSP-*/images/*
 EDDIE_PACKAGE_DIRNAME=eddie-package
 EDDIE_PACKAGE_TEMPPATH=/dev/shm/$EDDIE_PACKAGE_DIRNAME
 EDDIE_FLASH_SCRIPT=$utildir/scripts/eddie_flash.py
+EDDIE_FLASH_WIN=$utildir/win/eddie_flash*
+EDDIE_FLASH_LIN=$utildir/lin/eddie_flash*
 
 BOSEFS_PARTITION_NAME=bose
 BOSEFS_EXT4_NAME=bose.ext4
@@ -133,7 +135,10 @@ done
 
 EDDIE_PACKAGE_NAME=eddie_${sdk}_${cfg}.tar.gz
 OUTPUT_PACKAGE=$mydir/../$EDDIE_PACKAGE_NAME
+OUTPUT_PATH=$mydir/..
 OUTPUT_SCRIPT=$mydir/../eddie_flash.py
+OUTPUT_WIN=$mydir/../eddie_flash.exe
+OUTPUT_LIN=$mydir/../eddie_flash
 
 print "Using: "
 print "   HSP_Package: $HSP_PACKAGE"
@@ -282,6 +287,8 @@ function clean_package_space
 	rm -rf $EDDIE_PACKAGE_TEMPPATH > /dev/null 2>&1
 	rm -f $OUTPUT_PACKAGE > /dev/null 2>&1
 	rm -f $OUTPUT_SCRIPT > /dev/null 2>&1
+	rm -f $OUTPUT_LIN > /dev/null 2>&1
+	rm -f $OUTPUT_WIN > /dev/null 2>&1	
 }
 
 function create_final_package
@@ -293,9 +300,10 @@ function create_final_package
 	cd $EDDIE_PACKAGE_TEMPPATH/..
 	tar -cf $EDDIE_PACKAGE_NAME ./$EDDIE_PACKAGE_DIRNAME/*
 	mv $EDDIE_PACKAGE_TEMPPATH/../$EDDIE_PACKAGE_NAME $OUTPUT_PACKAGE
-	$CP $EDDIE_FLASH_SCRIPT $OUTPUT_SCRIPT
-	
-	print "Final Package created at $OUTPUT_PACKAGE with script $OUTPUT_SCRIPT"
+	$CP $EDDIE_FLASH_SCRIPT $OUTPUT_PATH/
+    $CP $EDDIE_FLASH_WIN $OUTPUT_PATH/	
+    $CP $EDDIE_FLASH_LIN $OUTPUT_PATH/    
+	print "Final Package created at $OUTPUT_PACKAGE, which can be used with script OR Windows / Linux executable copied at same path."
 }
 
 print "Cleaning Package Space."
