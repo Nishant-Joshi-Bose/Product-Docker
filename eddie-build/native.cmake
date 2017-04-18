@@ -15,4 +15,4 @@ IF( ${GLIB_215_NEEDED} )
 ENDIF( ${GLIB_215_NEEDED} )
 
 # TODO update this to point to the STSDK protobuf lib file once there is a native sdk tarball
-FIND_LIBRARY(PROTOBUF_LIB    NAMES libprotobuf.so  PATHS  ${LIB_PATH} NO_DEFAULT_PATH)
+FIND_LIBRARY(PROTOBUF_LIB    NAMES libprotobuf.so  PATHS  ${SOUNDTOUCH_SDK_DIR}/fs/usr/lib NO_DEFAULT_PATH)
