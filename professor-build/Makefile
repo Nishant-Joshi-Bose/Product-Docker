@@ -1,17 +1,20 @@
 #########################################################################
 #
-# Eddie top level makefile.
+# Professor top level makefile.
 #
 # Copyright 2016 Bose Corporation, Framingham, MA
 #
 #########################################################################
 
 MKFILE_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
+TOPDIR := ${MKFILE_DIR}
 
 export # all make variables automatically exported to children's environment
 
 cfg ?= Release
 sdk ?= qc8017_32
+
+include Makedefs.mk
 
 .PHONY: default
 default: all
@@ -44,7 +47,7 @@ endif
 #            ifeq ("https://svn.bose.com/hepd/Shelby","$(shell svn info .. 2>/dev/null | awk '/^Repository Root:/ {print $$NF}')")
 #                QC_HSP_DIST=
 #                SOUNDTOUCH_SDK_DIST=../../builds
-#                $(info $(MAGENTA)You are building Eddie in the context of the Shelby repo.$(RESET_COLOR))
+#                $(info $(MAGENTA)You are building Professor in the context of the Shelby repo.$(RESET_COLOR))
 #                $(info $(MAGENTA)Assuming you wish to use your local STSDK and HSP:$(RESET_COLOR))
 #                $(info $(MAGENTA)    SOUNDTOUCH_SDK_DIST: $(SOUNDTOUCH_SDK_DIST)/SoundTouch-SDK-qc8017_32.tar$(RESET_COLOR))
 ##                $(info $(MAGENTA)    TI_HSP_DIST: $(TI_HSP_DIST)/ti-sm2-hsp.tar$(RESET_COLOR))
@@ -120,19 +123,21 @@ else
 #  ifeq(${BUILD_SHELBY},true)
 #  else
     # The SoundStouch-SDK tarball is identified in SoundTouch-link.txt
-    SOUNDTOUCH_SDK_TAR := $(shell cat ../config/SoundTouchSDK-Version.txt)
+    SOUNDTOUCH_SDK_TAR := $(shell cat ../config/SoundTouchSDK-Version-${sdk}.txt)
     ifndef SOUNDTOUCH_SDK_TAR
-      $(error Oops, something is wrong with SoundTouchSDK-Version.txt)
+      $(error Oops, something is wrong with SoundTouchSDK-Version-${sdk}.txt)
     endif
 #  endif
 endif
 
-SOUNDTOUCH_SDK_SENTINEL := SoundTouch-SDK/install-SoundTouch-SDK
+SOUNDTOUCH_SDK_SENTINEL := builds/SoundTouch-SDK-${sdk}/install-SoundTouch-SDK
 
 $(SOUNDTOUCH_SDK_SENTINEL): $(SOUNDTOUCH_SDK_TAR)
 	@echo -e "$(CYAN)Extracting SoundTouch-SDK$(RESET_COLOR)"
-	rm -rf SoundTouch-SDK
+	rm -rf builds/SoundTouch-SDK-${sdk}
 	tar -xmf $(SOUNDTOUCH_SDK_TAR)
+	-mkdir builds
+	mv SoundTouch-SDK builds/SoundTouch-SDK-${sdk}
 	test -f $@ # assert the file exists
 	touch $@
 
@@ -166,26 +171,25 @@ help:
 # CMAKE stuff
 CMAKE = cmake
 BUILDS_ROOT_DIR=$(MKFILE_DIR)/builds
-BUILDS_DIR=$(BUILDS_ROOT_DIR)/$(cfg)/$(TARGET_NAME)
+BUILDS_DIR=$(BUILDS_ROOT_DIR)/$(cfg)/$(sdk)
 
-# TODO make this build Eddie apps
 .PHONY: cmake_build
 cmake_build: $(SOUNDTOUCH_SDK_SENTINEL) #\
 #$(TARGET_LIBS_DIR) $(TARGET_BINS_DIR)
 	@echo -e "$(CYAN)Preparing the cmake build...$(RESET_COLOR)"
-#	-@echo "Building via CMAKE for $(sdk) on $(PLAT) with jobs=$(jobs)"
-#	mkdir -p $(BUILDS_DIR)
-#	cd $(BUILDS_DIR) && $(CMAKE) -DCFG=${cfg} -DSDK=$(sdk) -DCORE_TARGET=$(TARGET_NAME) -DCMAKE_C_COMPILER=$(CROSS_TOOL_CC) -DCMAKE_CXX_COMPILER=$(CROSS_TOOL_CPP) ../../../.
-#	@echo -e "$(CYAN)Starting the Eddie build...$(RESET_COLOR)"
-#	make -C $(BUILDS_DIR) -j $(jobs) install
+	-@echo "Building via CMAKE for $(sdk) with jobs=$(jobs)"
+	mkdir -p $(BUILDS_DIR)
+	cd $(BUILDS_DIR) && $(CMAKE) -DCFG=${cfg} -DSDK=${sdk} -DCORE_TARGET=$(TARGET_NAME) -DINC_PATH=$(CROSS_INC_PATH) -DLIB_PATH=$(CROSS_LIB_PATH) -DUSR_LIB_PATH=$(CROSS_LIB_PATH) -DCMAKE_C_COMPILER=$(CROSS_TOOL_CC) -DCMAKE_CXX_COMPILER=$(CROSS_TOOL_CPP) -DCMAKE_C_FLAGS="${CROSS_TOOL_CFLAGS}" -DCMAKE_CXX_FLAGS="${CROSS_TOOL_CFLAGS}" -DTOOLPATH=$(TOOLPATH) -DCROSS_COMPILE=$(CROSS_COMPILE) -DEXTRA_FLAGS='$(EXTRA_FLAGS)' -DLINUX_DISTRO=$(LINUX_DISTRO) ../../../.
+	@echo -e "$(CYAN)Starting the Professor build...$(RESET_COLOR)"
+	make -C $(BUILDS_DIR) -j $(jobs) install
 
 STAGE_DIR = builds/$(cfg)/$(sdk)/stage
 DIR_COPY=cp -RPfa
 CP=/bin/cp -Pfa
 
 # TODO make this build an ipk
-.PHONY: package_eddie
-package_eddie: cmake_build
+.PHONY: package_professor
+package_professor: cmake_build
 #	@echo -e "$(CYAN)Building the filesystem$(RESET_COLOR)"
 #	rm -rf $(STAGE_DIR_SM2)
 #	mkdir -p $(STAGE_DIR_SM2)
@@ -205,7 +209,7 @@ package_eddie: cmake_build
 #	$(SM2_HSP)/utils/create-fs-image $(STAGE_DIR_SM2) builds/$(SM2_FS)
 
 .PHONY: all_packages
-all_packages: package_eddie
+all_packages: package_professor
 
 
 .PHONY: clean
