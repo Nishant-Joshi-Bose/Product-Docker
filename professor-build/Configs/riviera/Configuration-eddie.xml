@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <variantName>eddie</variantName>
+    <productName>SoundTouch 05</productName>
+    <swUpdateDeviceId>0x0939</swUpdateDeviceId>
+    <swUpdateXmlFilePath>/etc/opt/Bose/SCM_Update.xml</swUpdateXmlFilePath>
+    <defaultSetupSsid>Bose ST 05</defaultSetupSsid>
+
+    <isLegacy>false</isLegacy>
+    <hasStatusLed>false</hasStatusLed>
+    <hasWifiLed>false</hasWifiLed>
+    <isAudioNotificationSupported>true</isAudioNotificationSupported>
+    <isAvahiRequired>true</isAvahiRequired>
+    <isBluetoothAudioSourceSupported>false</isBluetoothAudioSourceSupported>
+    <isOutOfBoxAPSetupSupported>true</isOutOfBoxAPSetupSupported>
+    <hasKeys>false</hasKeys>
+    <isOutOfBoxEnabled>true</isOutOfBoxEnabled>
+    <isSsdpEnabled>true</isSsdpEnabled>
+
+    <volume thresholdLow="10" thresholdHigh="70" defaultValue="50"/>
+
+    <speakerType>05</speakerType>
+
+    <!-- AudioPath -->
+    <audioDeviceType>shelby-direct</audioDeviceType>
+    <audioSampleRate>46875</audioSampleRate>
+    <audioDelayCompensation>5500</audioDelayCompensation>
+    <hasAic>false</hasAic>
+    <audioLatency>0</audioLatency>
+    <hasAudioInputMux>true</hasAudioInputMux>
+    <asrc invFSamp="2.1333333333333341e-05"
+          invKi="1623464.1300039641"
+          ki="6.1596679687500002e-07"/>
+    <bass min="-9" max="0" defaultValue="0"/>
+    <stereoPairing leftDspImage="rhino_left_image.cfg"
+                   rightDspImage="rhino_right_image.cfg"/>
+
+    <moduleType>riviera</moduleType>
+    <isLRStereoEnabled>true</isLRStereoEnabled>
+
+</Configuration>
