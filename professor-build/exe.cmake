@@ -7,7 +7,7 @@ SET(PROFESSOR_SRCS
     #${PROFESSOR_SOURCE_DIR}/EddieSoundTouchInterface/EddieSoundTouchInterface.cpp
     )
 
-SET(PROFESSOR_EXE Eddie)
+SET(PROFESSOR_EXE Professor)
 
 ADD_EXECUTABLE(${PROFESSOR_EXE}
     ${PROFESSOR_SRCS}

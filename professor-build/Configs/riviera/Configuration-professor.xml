@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
-    <variantName>eddie</variantName>
+    <variantName>professor</variantName>
     <productName>SoundTouch 05</productName>
     <swUpdateDeviceId>0x0939</swUpdateDeviceId>
     <swUpdateXmlFilePath>/etc/opt/Bose/SCM_Update.xml</swUpdateXmlFilePath>
