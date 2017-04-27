@@ -78,12 +78,13 @@ endif
 
 # double basename because it's .tar.gz
 HSP_DIR = $(basename $(basename $(notdir $(QC_HSP_TAR))))
+$(info HSP_DIR is ${HSP_DIR})
+$(info QC_HSP_TAR is ${QC_HSP_TAR} )
 
 # Unpack the HSP
 $(HSP_DIR): $(QC_HSP_TAR)
 	@echo -e "$(CYAN)Extracting QC HSP tarball$(RESET_COLOR)"
-#	@echo "HSP_DIR = $(HSP_DIR)"
-	@rm -rf $(HSP_DIR)
+	-rm -rf $(HSP_DIR)
 	@tar -xmf $(QC_HSP_TAR)
 	@test -d $@ # assert the file exists
 	@touch $@
@@ -175,7 +176,7 @@ BUILDS_DIR=$(BUILDS_ROOT_DIR)/$(cfg)/$(sdk)
 
 # TODO make this build Eddie apps
 .PHONY: cmake_build
-cmake_build: $(SOUNDTOUCH_SDK_SENTINEL) #\
+cmake_build: $(SOUNDTOUCH_SDK_SENTINEL) $(QC_TOOLCHAIN_DIR) #\
 #$(TARGET_LIBS_DIR) $(TARGET_BINS_DIR)
 	@echo -e "$(CYAN)Preparing the cmake build...$(RESET_COLOR)"
 	-@echo "Building via CMAKE for $(sdk) with jobs=$(jobs)"
