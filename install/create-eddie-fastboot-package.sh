@@ -13,8 +13,8 @@ function usage
     cat <<EOF
 Usage: $this_script <0 or more Options>
 Options: 
--c=<configuration> 
--s=<sdk> 
+-c=<configuration. Default=Release> 
+-s=<sdk. Default=qc8017_32> 
 --no_lpm
 -d / --debug
 --hsp-path=<Path to HSP Tar file - to overwrite default path>
@@ -25,6 +25,8 @@ Example configuration = Release/Debug
 Example sdk = qc8017_32
 --no_lpm - optional string, if not given, it is assumed to include lpm package
 
+e.g. $this_script
+e.g. $this_script -c=Release -s=qc8017_32 --hsp-path=/scratch/mydirectorty/hsp/myhsp.tar.gz
 e.g. $this_script -c=Release -s=qc8017_32 --no_lpm
 EOF
 }
@@ -54,8 +56,6 @@ function print_error
 
 ############### INITALIZE
 this_script=$(basename "$0")
-cfg=$1
-sdk=$2
 workspace=$(cd "$(dirname "$0")"/.. && pwd) || exit
 mydir=$workspace/install
 configdir=$workspace/config
@@ -80,7 +80,7 @@ HSP_PACKAGE_FILES=Riviera-HSP-*/images/*
 # Modify later with version number
 EDDIE_PACKAGE_DIRNAME=eddie-package
 EDDIE_PACKAGE_TEMPPATH=/dev/shm/$EDDIE_PACKAGE_DIRNAME
-EDDIE_FLASH_SCRIPT=$utildir/scripts/eddie_flash.py
+#EDDIE_FLASH_SCRIPT=$utildir/scripts/eddie_flash.py
 EDDIE_FLASH_WIN=$utildir/win/eddie_flash*
 EDDIE_FLASH_LIN=$utildir/lin/eddie_flash*
 
@@ -136,7 +136,7 @@ done
 EDDIE_PACKAGE_NAME=eddie_${sdk}_${cfg}.tar.gz
 OUTPUT_PACKAGE=$mydir/../$EDDIE_PACKAGE_NAME
 OUTPUT_PATH=$mydir/..
-OUTPUT_SCRIPT=$mydir/../eddie_flash.py
+#OUTPUT_SCRIPT=$mydir/../eddie_flash.py
 OUTPUT_WIN=$mydir/../eddie_flash.exe
 OUTPUT_LIN=$mydir/../eddie_flash
 
@@ -286,7 +286,7 @@ function clean_package_space
 	# Delete fastboot output package if already present
 	rm -rf $EDDIE_PACKAGE_TEMPPATH > /dev/null 2>&1
 	rm -f $OUTPUT_PACKAGE > /dev/null 2>&1
-	rm -f $OUTPUT_SCRIPT > /dev/null 2>&1
+	#rm -f $OUTPUT_SCRIPT > /dev/null 2>&1
 	rm -f $OUTPUT_LIN > /dev/null 2>&1
 	rm -f $OUTPUT_WIN > /dev/null 2>&1	
 }
@@ -300,7 +300,7 @@ function create_final_package
 	cd $EDDIE_PACKAGE_TEMPPATH/..
 	tar -cf $EDDIE_PACKAGE_NAME ./$EDDIE_PACKAGE_DIRNAME/*
 	mv $EDDIE_PACKAGE_TEMPPATH/../$EDDIE_PACKAGE_NAME $OUTPUT_PACKAGE
-	$CP $EDDIE_FLASH_SCRIPT $OUTPUT_PATH/
+	#$CP $EDDIE_FLASH_SCRIPT $OUTPUT_PATH/
     $CP $EDDIE_FLASH_WIN $OUTPUT_PATH/	
     $CP $EDDIE_FLASH_LIN $OUTPUT_PATH/    
 	print "Final Package created at $OUTPUT_PACKAGE, which can be used with script OR Windows / Linux executable copied at same path."

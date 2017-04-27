@@ -289,7 +289,7 @@ def get_fastboot_scriptlist(package_path):
     return new_list
 '''
 
-def get_fasboot_partition_files(package_path, erase_persist=False):
+def get_fasboot_partition_files(package_path, partition_file=None, erase_persist=False):
     # Map of all partitions vs. their files. We potentially can parse all labels from rawprogram*.xml
     partition_list = OrderedDict()
     partition_list["PrimaryGPT"] = "*gpt_main0*.bin"
@@ -345,6 +345,12 @@ def get_fasboot_partition_files(package_path, erase_persist=False):
         partition_list["bose-persist"] = "*bose-persist*.ext4"
     partition_list["bose"] = "*bose.ext4"
     
+    partitions_to_flash = None
+    if partition_file is not None: 
+       if not os.path.isfile(partition_file):
+            raise Exception("Partition List File [%s] not present. Exiting." %partition_file)
+       partitions_to_flash = open(partition_file).read()
+     
     new_list = OrderedDict()   
 
     ''' Try to find files in package. If they are present, append path to actual file name.
@@ -352,24 +358,35 @@ def get_fasboot_partition_files(package_path, erase_persist=False):
         Later we can add version check, if we want to only update 
     '''
     for partition in partition_list:
+        use_current = True
         if partition_list[partition] != "": 
-            file_name = os.path.isfile(package_path + partition_list[partition])
-            files = fnmatch.filter(os.listdir(package_path), partition_list[partition])
-            # If more then one file match, warn user
-            if len(files) > 1:
-                print("Warn: Found more then one partition files matching [%s] at path [%s]" %(partition_list[partition], package_path))
-                logging.warning("Warn: Found more then one partition files matching [%s] at path [%s]" %(partition_list[partition], package_path))
+            if partitions_to_flash is not None:
+                if partition in partitions_to_flash:
+                    use_current = True
+                else:
+                    use_current = False
+            if use_current:
+                file_name = os.path.isfile(package_path + partition_list[partition])
+                files = fnmatch.filter(os.listdir(package_path), partition_list[partition])
+                # If more then one file match, warn user
+                if len(files) > 1:
+                    print("Warn: Found more then one partition files matching [%s] at path [%s]" %(partition_list[partition], package_path))
+                    logging.warning("Warn: Found more then one partition files matching [%s] at path [%s]" %(partition_list[partition], package_path))
+                else:
+                    if len(files) > 0:
+                        new_list[partition] = package_path + files[0]
+                    #Else no file found, do not update this partition
+            #Else partition not part of list, ignore it
             else:
-                if len(files) > 0:
-                    new_list[partition] = package_path + files[0]
-                #Else no file found, do not update this partition
+                print("Ignoring [%s]." %partition);
+        # Else blank partition - ignore    
     logging.info("Partitions to Flash----")
     for partition in new_list:
         logging.info("\t[%s]\t\t= [%s]" %(partition, new_list[partition]))        
 
     return new_list
     
-def do_fastboot_flash(package_path, erase_persist=False, serial_port = None):
+def do_fastboot_flash(package_path, partition_file=None, erase_persist=False, serial_port = None):
     try:
         print("Fastboot Flash Start.")
         
@@ -385,7 +402,7 @@ def do_fastboot_flash(package_path, erase_persist=False, serial_port = None):
             controller = serial_controller.SerialController(serial_port)
             controller.open()
             
-        partitions = get_fasboot_partition_files(package_path, erase_persist)
+        partitions = get_fasboot_partition_files(package_path, partition_file, erase_persist)
         fastboot_updater = FastbootUpdater(package_path, serial_port, controller)
         print("\n\n******************************************************************************************")
         print("\tWARNING: Starting Fastboot Flash in '15 seconds'. Ensure the power and USB connections to the device are secured.")
@@ -445,11 +462,12 @@ def do_fastboot_flash(package_path, erase_persist=False, serial_port = None):
     
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        #print ("  Usage: sudo fastboot_flash.py <Full path of extracted package> <Optional: Serial device name> <Optional: erase_persistence>")
-        print ("  Usage: sudo fastboot_flash.py <Full path of extracted package> <Optional: erase-persist>")
+        #print ("  Usage: sudo fastboot_flash.py <Full path of extracted package> <Optional: Serial device name> <Optional: erase_persistence> <Optional: partitions.list>")
+        print ("  Usage: sudo fastboot_flash.py <Full path of extracted package> <Optional: erase-persist> <Optional: partitions.list>")
         #print ("    e.g. sudo fastboot_flash.py /scratch/fastboot_package/ /dev/ttyUSB0")
         print ("      OR sudo fastboot_flash.py /scratch/fastboot_package/" )
         print ("      OR sudo fastboot_flash.py /scratch/fastboot_package/ erase-persist" )
+        print ("      OR sudo fastboot_flash.py /scratch/fastboot_package/ erase-persist partitions.list" )
     else:        
         if "Windows" not in platform.system():
             if os.getuid() != 0:
@@ -460,9 +478,11 @@ if __name__ == '__main__':
         if len(sys.argv) == 2:
             do_fastboot_flash(sys.argv[1])
         else:
+            erase_persist = True
+	    partition_file = "partitions.list"
             if sys.argv[1] == "erase-persist" or sys.argv[2] == "erase-persist":
-                do_fastboot_flash(sys.argv[1], erase_persist=True)
+                do_fastboot_flash(sys.argv[1], partition_file, erase_persist=True)
             else:
-                do_fastboot_flash(sys.argv[1])
+                do_fastboot_flash(sys.argv[1], partition_file)
 
 

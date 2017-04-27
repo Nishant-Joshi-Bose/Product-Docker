@@ -20,37 +20,37 @@ import fnmatch
 import shutil
 import logging
 
-def do_fastboot_update(package_path, erase_persist):
-    fastboot_flash_path = os.path.join(package_path, "utils/scripts/fastboot_flash.py")
-    fastboot_flash_dstpath = os.path.join(package_path, "../fastboot_flash.py")
+def do_fastboot_update(package_path, partition_file, erase_persist):
+    #fastboot_flash_path = os.path.join(package_path, "utils/scripts/fastboot_flash.py")
+    #fastboot_flash_dstpath = os.path.join(package_path, "../fastboot_flash.py")
      
-    if not os.path.exists(fastboot_flash_path):
-        raise Exception("Expected Extracted Package with file [%s]. Not Found. Cannot Continue update." %(fastboot_flash_path))
+    #if not os.path.exists(fastboot_flash_path):
+    #    raise Exception("Expected Extracted Package with file [%s]. Not Found. Cannot Continue update." %(fastboot_flash_path))
         
-    shutil.copy(fastboot_flash_path, fastboot_flash_dstpath)
-    sys.path.append(os.path.abspath(fastboot_flash_path))  
+    #shutil.copy(fastboot_flash_path, fastboot_flash_dstpath)
+    #sys.path.append(os.path.abspath(fastboot_flash_path))  
     from fastboot_flash import FastbootUpdater
     from fastboot_flash import do_fastboot_flash
-    do_fastboot_flash(package_path, erase_persist)
+    do_fastboot_flash(package_path, partition_file, erase_persist)
     
-    if os.path.exists(fastboot_flash_dstpath): 
-        os.remove(fastboot_flash_dstpath)
-        fastboot_flash_dstpath = os.path.join(package_path, "../fastboot_flash.pyc")
-        if os.path.exists(fastboot_flash_dstpath): 
-            os.remove(fastboot_flash_dstpath)
+    #if os.path.exists(fastboot_flash_dstpath): 
+    #    os.remove(fastboot_flash_dstpath)
+    #    fastboot_flash_dstpath = os.path.join(package_path, "../fastboot_flash.pyc")
+    #    if os.path.exists(fastboot_flash_dstpath): 
+    #        os.remove(fastboot_flash_dstpath)
     return
 
 def do_lpm_update(package_path, lpm_serial_dev):
-    lpm_flash_path = os.path.join(package_path, "utils/scripts/lpm_flash.py")
-    lpm_flash_dstpath = os.path.join(package_path, "../lpm_flash.py")
-    serial_path = os.path.join(package_path, "utils/scripts/serial_controller.py")
-    serial_dstpath = os.path.join(package_path, "../serial_controller.py")    
-    if not os.path.exists(lpm_flash_path):
-        raise Exception("Expected Extracted Package with file [%s]. Not Found. Cannot Continue update." %(lpm_flash_path))
+    #lpm_flash_path = os.path.join(package_path, "utils/scripts/lpm_flash.py")
+    #lpm_flash_dstpath = os.path.join(package_path, "../lpm_flash.py")
+    #serial_path = os.path.join(package_path, "utils/scripts/serial_controller.py")
+    #serial_dstpath = os.path.join(package_path, "../serial_controller.py")    
+    #if not os.path.exists(lpm_flash_path):
+    #    raise Exception("Expected Extracted Package with file [%s]. Not Found. Cannot Continue update." %(lpm_flash_path))
     
-    shutil.copy(lpm_flash_path, lpm_flash_dstpath)
-    shutil.copy(serial_path, serial_dstpath)
-    sys.path.append(os.path.abspath(lpm_flash_path))
+    #shutil.copy(lpm_flash_path, lpm_flash_dstpath)
+    #shutil.copy(serial_path, serial_dstpath)
+    #sys.path.append(os.path.abspath(lpm_flash_path))
     from lpm_flash import LpmUpdater
     from lpm_flash import do_lpm_flash
     
@@ -67,20 +67,20 @@ def do_lpm_update(package_path, lpm_serial_dev):
     print("Using [%s] for LPM Flash." %(lpm_file))
     do_lpm_flash(lpm_serial_dev, lpm_file)
     
-    if os.path.exists(serial_dstpath): 
-        os.remove(serial_dstpath)
-        serial_dstpath = os.path.join(package_path, "../serial_controller.pyc")
-        if os.path.exists(serial_dstpath): 
-            os.remove(serial_dstpath)
+    #if os.path.exists(serial_dstpath): 
+    #    os.remove(serial_dstpath)
+    #    serial_dstpath = os.path.join(package_path, "../serial_controller.pyc")
+    #    if os.path.exists(serial_dstpath): 
+    #        os.remove(serial_dstpath)
 
-    if os.path.exists(lpm_flash_dstpath): 
-        os.remove(lpm_flash_dstpath)
-        lpm_flash_dstpath = os.path.join(package_path, "../lpm_flash.pyc")
-        if os.path.exists(lpm_flash_dstpath): 
-            os.remove(lpm_flash_dstpath)
+    #if os.path.exists(lpm_flash_dstpath): 
+    #    os.remove(lpm_flash_dstpath)
+    #    lpm_flash_dstpath = os.path.join(package_path, "../lpm_flash.pyc")
+    #    if os.path.exists(lpm_flash_dstpath): 
+    #        os.remove(lpm_flash_dstpath)
     return
 
-def do_qc_flash(package, update_fastboot, erase_persist, update_lpm, lpm_serial_dev):
+def do_qc_flash(package, update_fastboot, partition_file, erase_persist, update_lpm, lpm_serial_dev):
     try:
         abs_package = os.path.abspath(package)
         logging.info("Using package: [%s] for update. Extracting..." %(abs_package)) 
@@ -102,7 +102,7 @@ def do_qc_flash(package, update_fastboot, erase_persist, update_lpm, lpm_serial_
         if update_fastboot:
             print("\n\n..... Fastboot update Start .....")
             logging.info("..... Fastboot update Start .....")  
-            do_fastboot_update(extracted_package, erase_persist)
+            do_fastboot_update(extracted_package, partition_file, erase_persist)
             print("..... Fastboot update Finish .....")
             logging.info("..... Fastboot update Finish .....")
             
@@ -129,6 +129,14 @@ def get_package_name(args):
             abs_package = os.path.abspath(arg)
             if os.path.exists(abs_package) and os.path.splitext(abs_package)[1] == ".gz":
                 return abs_package
+    return None
+
+def get_partition_list_file(args):
+    for arg in args:
+        if ".list" in arg:
+            partition_list_file = os.path.abspath(arg)
+            if os.path.exists(partition_list_file) and os.path.splitext(partition_list_file)[1] == ".list":
+                return partition_list_file
     return None
     
 def is_fastboot_enabled(args):
@@ -160,13 +168,15 @@ def get_lpm_serial(args):
     return None
     
 def print_usage():
-    print ("  Usage: qc_flash.py <Package TarBall Path> update_fastboot <Optional: erase-persist> update_lpm  <LPM Serial Device>")
-    print ("  Usage: qc_flash.py <Package TarBall Path> update_lpm <LPM Serial Device>")
-    print ("  Usage: qc_flash.py <Package TarBall Path> update_fastboot <Optional: erase-persist>")
-    print ("    e.g. qc_flash.py /scratch/eddie_qc8017_32_Release.tar.gz update_fastboot")
-    print ("      OR qc_flash.py /scratch/eddie_qc8017_32_Release.tar.gz update_lpm /dev/ttyUSB0")
-    print ("      OR qc_flash.py /scratch/eddie_qc8017_32_Release.tar.gz update_fastboot update_lpm /dev/ttyUSB0")
-    print ("      OR qc_flash.py /scratch/eddie_qc8017_32_Release.tar.gz update_fastboot erase-persist update_lpm /dev/ttyUSB0")
+    print ("  Usage: sudo eddie_flash <Package TarBall Path> update_fastboot <Optional: erase-persist> update_lpm  <LPM Serial Device>")
+    print ("  Usage: sudo eddie_flash <Package TarBall Path> update_lpm <LPM Serial Device>")
+    print ("  Usage: sudo eddie_flash <Package TarBall Path> update_fastboot <Optional: erase-persist>")
+    print ("  Usage: sudo eddie_flash <Package TarBall Path> update_fastboot <Optional: erase-persist> <file with name of partitions (Extension has to be .list>")
+    print ("    e.g. sudo eddie_flash /scratch/eddie_qc8017_32_Release.tar.gz update_fastboot")
+    print ("      OR sudo eddie_flash /scratch/eddie_qc8017_32_Release.tar.gz update_lpm /dev/ttyUSB0")
+    print ("      OR sudo eddie_flash /scratch/eddie_qc8017_32_Release.tar.gz update_fastboot update_lpm /dev/ttyUSB0")
+    print ("      OR sudo eddie_flash /scratch/eddie_qc8017_32_Release.tar.gz update_fastboot erase-persist update_lpm /dev/ttyUSB0")
+    print ("      OR sudo eddie_flash /scratch/eddie_qc8017_32_Release.tar.gz update_fastboot partition-list.list")
     
 # Required inputs: Package Path.
 # Optional: update_lpm --> if passed update lpm, else update APQ8017 only 
@@ -196,8 +206,12 @@ if __name__ == '__main__':
         if lpm_serial_dev==None:
             print_usage()
             sys.exit(-1)
+    
+    partition_file = None
+    if update_fastboot:
+        partition_file = get_partition_list_file(sys.argv[1:])
         
     logging.basicConfig(filename="flash_util.log", filemode='w', level=logging.INFO)
-    do_qc_flash(package, update_fastboot, erase_persist, update_lpm, lpm_serial_dev)
+    do_qc_flash(package, update_fastboot, partition_file, erase_persist, update_lpm, lpm_serial_dev)
     sys.exit(0) 
     
