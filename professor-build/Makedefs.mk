@@ -53,7 +53,6 @@ NULL  = /dev/null
 MD5SUM    = md5sum
 MKISOFS   = mkisofs
 TAR       = tar
-GZIP      = gzip
 
 ##############################################################################
 # Output paths

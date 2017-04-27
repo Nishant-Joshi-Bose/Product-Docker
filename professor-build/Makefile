@@ -174,7 +174,7 @@ BUILDS_ROOT_DIR=$(MKFILE_DIR)/builds
 BUILDS_DIR=$(BUILDS_ROOT_DIR)/$(cfg)/$(sdk)
 
 .PHONY: cmake_build
-cmake_build: $(SOUNDTOUCH_SDK_SENTINEL) #\
+cmake_build: $(SOUNDTOUCH_SDK_SENTINEL) $(QC_TOOLCHAIN_DIR) #\
 #$(TARGET_LIBS_DIR) $(TARGET_BINS_DIR)
 	@echo -e "$(CYAN)Preparing the cmake build...$(RESET_COLOR)"
 	-@echo "Building via CMAKE for $(sdk) with jobs=$(jobs)"
