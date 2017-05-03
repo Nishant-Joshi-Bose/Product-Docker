@@ -107,7 +107,7 @@ QC_TOOLCHAIN_DIR=/scratch/$(QC_TOOLCHAIN)
 
 # Install the toolchain (Note: this currently only deals with 32-bit host)
 # TBD make this work for 32/64 bit host when the HSP actually contains one
-$(QC_TOOLCHAIN_DIR): $(HSP_DIR)
+$(QC_TOOLCHAIN_DIR): $(QC_HSP_TAR)
 	@echo -e "$(CYAN)Installing QC toolchain $(RESET_COLOR)"
 	@rm -rf $(QC_TOOLCHAIN_DIR)
 	@yes | $(HSP_DIR)/sdk/install-sdk.sh -d $@
@@ -176,8 +176,7 @@ BUILDS_DIR=$(BUILDS_ROOT_DIR)/$(cfg)/$(sdk)
 
 # TODO make this build Eddie apps
 .PHONY: cmake_build
-cmake_build: $(SOUNDTOUCH_SDK_SENTINEL) $(QC_TOOLCHAIN_DIR) #\
-#$(TARGET_LIBS_DIR) $(TARGET_BINS_DIR)
+cmake_build: $(SOUNDTOUCH_SDK_SENTINEL) $(QC_TOOLCHAIN_DIR) $(HSP_DIR)
 	@echo -e "$(CYAN)Preparing the cmake build...$(RESET_COLOR)"
 	-@echo "Building via CMAKE for $(sdk) with jobs=$(jobs)"
 	mkdir -p $(BUILDS_DIR)
@@ -189,26 +188,9 @@ STAGE_DIR = builds/$(cfg)/$(sdk)/stage
 DIR_COPY=cp -RPfa
 CP=/bin/cp -Pfa
 
-# TODO make this build an ipk
 .PHONY: package_eddie
 package_eddie: cmake_build
-#	@echo -e "$(CYAN)Building the filesystem$(RESET_COLOR)"
-#	rm -rf $(STAGE_DIR_SM2)
-#	mkdir -p $(STAGE_DIR_SM2)
-#	$(SM2_HSP)/utils/install-hsp -Xir-sleep -Xamp-faults $(STAGE_DIR_SM2)
-#	$(CP) "SoundTouch-SDK/AudioConfig/sm2/APConfig-rhino.xml" $(STAGE_DIR_SM2)/etc/opt/Bose
-#	$(INSTALL_SOUNDTOUCH_SDK) -Sproduct-config=Shepherd.xml $(STAGE_DIR_SM2) $(SM2_CFG_DIR) rhino
-#
-## Copy Rhino binaries
-#	$(CROSS_TOOL_STRIP) builds/Release/arm-linux/Rhino -o $(STAGE_DIR_SM2)/opt/Bose/Rhino
-#
-## Copy Rhino config files
-#	$(CP) ./assets/rhino_*.cfg $(STAGE_DIR_SM2)/lib/firmware
-#	./create-rhino-update-file sm2 $(SM2_HSP)/update/SCM_Update.xml $(SM2_IDX_DEST_DIR)
-#	$(CP) $(SM2_IDX_DEST_DIR)/SCM_Update.xml $(STAGE_DIR_SM2)/etc/opt/Bose/SCM_Update.xml
-#
-## Create UBI image
-#	$(SM2_HSP)/utils/create-fs-image $(STAGE_DIR_SM2) builds/$(SM2_FS)
+	make -C $(BUILDS_DIR) package
 
 .PHONY: all_packages
 all_packages: package_eddie
