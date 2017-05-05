@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<!--#####################################################################-->
+	<!--################################################################ Head-->
+	<!--#####################################################################-->
+	<head>
+		<meta charset="utf-8" />
+		<title>PSoC/Capsense/Lightbar</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<!--#################################################################-->
+		<!--########################################################## Style -->
+		<!--#################################################################-->
+		<style type="text/css">
+
+			form  { display: table;		 }
+			p	  { display: table-row;  }
+			label { display: table-cell; }
+			input { display: table-cell; }
+
+			body {
+				background-color: #789; margin: 0;
+				padding: 0; font: 14px Helvetica, Arial, sans-serif;
+			}
+			div.content {
+				width: 900px; margin: 2em auto; padding: 20px 50px;
+				background-color: #fff; border-radius: 1em;
+			}
+			#telemetry_list {
+				border: 2px solid #fec; border-radius: 1em;
+				height: 10em; overflow: scroll; padding: 0.5em 1em;
+			}
+			a:link, a:visited { color: #69c; text-decoration: none; }
+			@media (max-width: 700px) {
+				body { background-color: #fff; }
+				div.content {
+					width: auto; margin: 0 auto; border-radius: 0;
+					padding: 1em;
+				}
+			}
+		</style>
+
+		<!--#################################################################-->
+		<!--########################################################## Script-->
+		<!--#################################################################-->
+		<script language="javascript" type="text/javascript">
+
+			//------------------------------------------------------------------
+			//----------------------------------------------------------- consts
+			//------------------------------------------------------------------
+			const WEB_SOCKET_URL	= 'ws://' + location.host + '/ws'
+			const MAX_FRAME_RATE	= 100 ;
+			const MAX_LED_INTENSITY = 4095;
+			const NUMBER_OF_WHITE	= 13;
+			const BUTTON_RADIUS		= 35;
+
+			//------------------------------------------------------------------
+			//-------------------------------------------------------- variables
+			//------------------------------------------------------------------
+			var ws				 = new WebSocket(WEB_SOCKET_URL );
+			var animation_worker = null;
+			var button_canvas	 = null; 
+			var button_context	 = null;
+			var button_font		 = null;
+
+			ws.onopen  = function(ev) { console.log(ev); };
+			ws.onerror = function(ev) { console.log(ev); };
+			ws.onclose = function(ev) { console.log(ev); };
+
+			if (!window.console) { window.console = { log: function() {} } };
+
+			//------------------------------------------------------------------
+			//--------------------------------------------------------- sleep_ms
+			//------------------------------------------------------------------
+			function sleep_ms(milliseconds) {
+				var start = new Date().getTime();
+				for (var i = 0; i < 1e7; i++) {
+					if ((new Date().getTime() - start) > milliseconds){
+						break;
+					}
+				}
+			}// sleep_ms
+
+			//------------------------------------------------------------------
+			//---------------------- javascript animation and LED strip commands
+			//------------------------------------------------------------------
+			function initialize_javascript_animation() {
+				if (animation_worker == null){
+					animation_worker = new Worker('animation.js');
+					animation_worker.onmessage = function (event) {
+						console.log("animation_worker event: " + event.data);
+						if (event.data == 'WORKER UNINITIALIZED'){
+							animation_worker.terminate();
+							animation_worker = null;
+						}
+					};
+				}
+
+				animation_worker.postMessage({'cmd': 'init', 'msg': WEB_SOCKET_URL});
+			}// initialize_javascript_animation
+
+			function uninitialize_javascript_animation() {
+				animation_worker.postMessage({'cmd': 'uninit'});
+			}// uninitialize_javascript_animation
+
+			function start_javascript_animation(frame_rate) {
+				animation_worker.postMessage({'cmd': 'start', 'msg': frame_rate});
+			}// start_javascript_animation
+
+			function stop_javascript_animation() {
+				animation_worker.postMessage({'cmd': 'stop'});
+			}// stop_javascript_animation
+
+			function set_javascript_animation_frame_rate(frame_rate) {
+				animation_worker.postMessage({'cmd': 'set frame rate', 'msg': frame_rate});
+			}// set_javascript_animation_frame_rate
+
+			function clear_led_strip() {
+				animation_worker.postMessage({'cmd': 'clear led strip'});
+			}// clear_led_strip
+
+			function set_led_strip(left, right, whites) {
+				animation_worker.postMessage({'cmd': 'set led strip', 'left': left, 'right': right, 'whites': whites});
+			}// set_led_strip
+
+			//------------------------------------------------------------------
+			//--------------------------------------- select_intrinsic_animation
+			//------------------------------------------------------------------
+			function select_intrinsic_animation(animation) {
+				clear_led_strip();
+				ws.send ('{"event":"cmd","type":"animation","action":"' + animation + '"}')
+			};// select_intrinsic_animation
+
+			//------------------------------------------------------------------
+			//--------------------------------------------------------- add_zero
+			//------------------------------------------------------------------
+			function add_zero(x,n) {
+				while (x.toString().length < n) {
+					x = "0" + x;
+				}
+
+				return x;
+			};// add_zero
+
+			//------------------------------------------------------------------
+			//------------------------------------------------------ get_time_ms
+			//------------------------------------------------------------------
+			function get_time_ms () {
+				var d  = new Date();
+				var h  = add_zero(d.getHours()		 , 2);
+				var m  = add_zero(d.getMinutes()	 , 2);
+				var s  = add_zero(d.getSeconds()	 , 2);
+				var ms = add_zero(d.getMilliseconds(), 3);
+				return h + ":" + m + ":" + s + ":" + ms;
+			};// get_time_ms
+
+			//------------------------------------------------------------------
+			//---------------------------------------------- parse_slider_button
+			//------------------------------------------------------------------
+			function parse_slider_button(telemetry){
+
+			}// parse_slider_button
+
+			function show_push_button(id, name, state) {
+
+				var center = {x: ((id - 1) * (BUTTON_RADIUS * 2)) + 70, y: 80};
+
+				if (state == 'up') {
+					button_context.fillStyle = "green"	;
+				}
+				else if (state == 'down') {
+					button_context.fillStyle = "yellow"  ;
+				}
+				else {
+					button_context.fillStyle = "red"  ;
+				}
+
+				button_context.beginPath();
+				button_context.arc		(center.x, center.y, BUTTON_RADIUS, 0, Math.PI * 2);
+				button_context.closePath();
+				button_context.fill	();
+				button_context.fillStyle	= "black"; 
+				button_context.font			= button_font;
+				button_context.textBaseline = "top";
+				button_context.fillText(name, center.x - BUTTON_RADIUS / 4, center.y - BUTTON_RADIUS / 2);
+			}// show_push_button
+
+			//------------------------------------------------------------------
+			//------------------------------------------------ parse_push_button
+			//------------------------------------------------------------------
+			function parse_push_button(telemetry){
+
+				console.log		("push button: " + telemetry.name + " is: " + telemetry.state);
+				show_push_button(telemetry.id, telemetry.name, telemetry.state);
+			}// parse_push_button
+
+			//------------------------------------------------------------------
+			//----------------------------------------------------- ws.onmessage
+			//------------------------------------------------------------------
+			ws.onmessage = function(ev) {
+				messageElem = document.getElementById('telemetry_list');
+
+				console.log(ev);
+				var div = document.createElement('div');
+
+				if (ev.data[0] == '{')
+				{
+					var telemetry = JSON.parse(ev.data);
+
+					switch (telemetry.event) {
+						case 'button'	  : parse_slider_button(telemetry);
+											break;
+						case 'push button': parse_push_button(telemetry);
+											break;
+						default			  : break; // nothing to do
+					}// switch on the telemetry
+				}
+
+				div.innerHTML = get_time_ms() + " " + ev.data;
+				messageElem.insertBefore(div, messageElem.childNodes[0]);
+			};// ws.onmessage
+
+			//------------------------------------------------------------------
+			//---------------------------------------------------- window.onload
+			//------------------------------------------------------------------
+			window.onload = function() {
+				//--------------------------------------------------------------
+				//------------------------------------- commands and telemetries
+				//--------------------------------------------------------------
+				document.getElementById('send_button').onclick = function(ev) {
+					var msg = document.getElementById('send_input').value;
+					document.getElementById('send_input').value = '';
+					ws.send(msg);
+				};// send_button.onclick
+
+				document.getElementById('send_input').onkeypress = function(ev) {
+					if (ev.keyCode == 13 || ev.which == 13) {
+						document.getElementById('send_button').click();
+					}
+				};// send_input.onkeypress
+
+				document.getElementById('send_button').onclick = function(ev) {
+					var msg = document.getElementById('send_input').value;
+					document.getElementById('send_input').value = '';
+					ws.send(msg);
+				};// send_button.onclick
+
+				//--------------------------------------------------------------
+				//------------------------------------------- moogoose animation
+				//--------------------------------------------------------------
+				document.getElementById('start_stop_mongoose_animation').onclick = function(ev) {
+					if (this.textContent == "Start") {
+						ws.send("start anim");
+						this.textContent = "Stop";
+					}
+					else if (this.textContent == "Stop") {
+						ws.send("stop anim");
+						this.textContent = "Start";
+						clear_led_strip();
+					}
+					else {
+						console.error("unsupported mongoose animation button value: " + this.textContent);
+					}
+				};// start_stop_mongoose_animation.onclick
+
+				document.getElementById('mongoose_animation_frame_rate').onchange = function(ev) {
+					ws.send("set rate anim " + this.value);
+				};// mongoose_animation_frame_rate.onchange
+
+				//--------------------------------------------------------------
+				//----------------------------------------- javascript animation
+				//--------------------------------------------------------------
+				document.getElementById('javascript_animation_frame_rate').onchange = function(ev) {
+					set_javascript_animation_frame_rate(this.value);
+				};// javascript_animation_frame_rate.onchange
+
+				document.getElementById('start_stop_javascript_animation').onclick = function(ev) {
+					if (this.textContent == "Start") {
+						this.textContent = "Stop";
+						start_javascript_animation(document.getElementById('javascript_animation_frame_rate').value);
+					}
+					else if (this.textContent == "Stop") {
+						this.textContent = "Start";
+						stop_javascript_animation();
+						clear_led_strip();
+					}
+					else {
+						console.error("unsupported JavaScript animation button value: " + this.textContent);
+						return;
+					}
+
+				};// start_stop_mongoose_animation.onclick
+
+				//--------------------------------------------------------------
+				//------------------------------------------- intrisic animation
+				//--------------------------------------------------------------
+				document.getElementById('start_stop_intrinsic_animation').onclick = function(ev) {
+					if (this.textContent == "Start") {
+						ws.send('{"event":"cmd","type":"animation","action":"resume"}');
+						this.textContent = "Stop";
+					}
+					else if (this.textContent == "Stop") {
+						ws.send('{"event":"cmd","type":"animation","action":"stop"}');
+						this.textContent = "Start";
+						clear_led_strip();
+					}
+					else {
+						console.error("unsupported intrinsic animation button value: " + this.textContent);
+					}
+				}// start_stop_intrinsic_animation
+
+				//--------------------------------------------------------------
+				//---------------------------------------------------- led strip
+				//--------------------------------------------------------------
+				document.getElementById('clear_led_strip').onclick = function(ev) {
+					clear_led_strip();
+				}// clear_led_strip.onclick
+
+				document.getElementById('set_led_strip').onclick = function(ev) {
+					var left   = {red: parseInt(led_left_red  .value), green: parseInt(led_left_green  .value), blue: parseInt(led_left_blue  .value)};
+					var right  = {red: parseInt(right_left_red.value), green: parseInt(right_left_green.value), blue: parseInt(right_left_blue.value)};
+					var whites = new Uint16Array(NUMBER_OF_WHITE);
+
+					whites[ 0] = W0 .value;
+					whites[ 1] = W1 .value;
+					whites[ 2] = W2 .value;
+					whites[ 3] = W3 .value;
+					whites[ 4] = W4 .value;
+					whites[ 5] = W5 .value;
+					whites[ 6] = W6 .value;
+					whites[ 7] = W7 .value;
+					whites[ 8] = W8 .value;
+					whites[ 9] = W9 .value;
+					whites[10] = W10.value;
+					whites[11] = W11.value;
+					whites[12] = W12.value;
+
+					set_led_strip(left, right, whites);
+				}// set_led_strip.onclick
+
+				button_canvas  = document.getElementById('canvas_push_button');
+				button_context = button_canvas.getContext('2d');
+				button_font    = "bold " + "px serif";
+
+				for (i = 1; i <= 7; i++) {
+					show_push_button(i, "unknown", "unknown");
+				}
+
+			}// window.onload
+
+			//------------------------------------------------------------------
+			//-------------------------------------- document.onreadystatechange
+			//------------------------------------------------------------------
+			document.onreadystatechange = function(){
+				if(document.readyState === 'complete'){
+					initialize_javascript_animation();
+				}
+			}// document.onreadystatechange
+
+			//------------------------------------------------------------------
+			//-------------------------------------------------- window.onunload
+			//------------------------------------------------------------------
+			window.onunload = function() {
+				uninitialize_javascript_animation();
+			}// window.onunload
+
+		</script>
+	</head>
+
+	<!--#####################################################################-->
+	<!--################################################################ Body-->
+	<!--#####################################################################-->
+	<body>
+		<div class="content">
+			<h1 align="center">Capsense/lightbar websocket interface</h1>
+
+			<p align="center">
+				For a description of the project on confluence
+				<a href="http://wiki.bose.com/display/WSSW/Capacitive+touch+pad+and+lightbar+management">click here!</a>
+			</p>
+
+			<p>
+				<fieldset>
+					<legend>Telemetries:</legend>
+					<div id="telemetry_list"></div>
+			   </fieldset>
+			</p>
+
+			<p>
+				<fieldset>
+					<legend>PSoC/Mongoose command:</legend>
+					command: <input type="text" size="80" id="send_input" />
+					<button id="send_button">Send</button>
+			   </fieldset>
+			</p>
+
+			<p>
+				<fieldset>
+					<legend>Mongoose animation:</legend>
+					frame rate: <input type="number" id="mongoose_animation_frame_rate" style="width: 3em" value="1" min="1" max=MAX_FRAME_RATE />
+					action: <button id="start_stop_mongoose_animation">Start</button>
+				</fieldset>
+			</p>
+
+			<p>
+				<fieldset>
+					<legend>Javascript animation:</legend>
+					frame rate: <input type="number" id="javascript_animation_frame_rate" style="width: 3em" value="1" min="1" max=MAX_FRAME_RATE />
+					action: <button id="start_stop_javascript_animation">Start</button>
+				</fieldset>
+			</p>
+
+			<p>
+				<fieldset>
+					<legend>PSoC intrisic animation:</legend>
+					action: <button id="start_stop_intrinsic_animation">Stop</button>
+					<br>
+					2 leds		   <input type="radio" onclick="select_intrinsic_animation('2 leds'			   )" name="intrinsic_animation">
+					progression    <input type="radio" onclick="select_intrinsic_animation('smooth progression')" name="intrinsic_animation">
+					white intensity<input type="radio" onclick="select_intrinsic_animation('white intensity'   )" name="intrinsic_animation">
+					red/white flash<input type="radio" onclick="select_intrinsic_animation('red-white flash'   )" name="intrinsic_animation">
+					all colors	   <input type="radio" onclick="select_intrinsic_animation('all colors'		   )" name="intrinsic_animation">
+					rainbow		   <input type="radio" onclick="select_intrinsic_animation('rainbow colors'    )" name="intrinsic_animation">
+					fix white	   <input type="radio" onclick="select_intrinsic_animation('all white'		   )" name="intrinsic_animation">
+					slow breather  <input type="radio" onclick="select_intrinsic_animation('slow breather'	   )" name="intrinsic_animation">
+				</fieldset>
+			</p>
+
+			<p>
+				<fieldset>
+					<legend>LED strip:</legend>
+					<p>
+						<label for="set_led_strip"></label>
+						<button style="width: 4em" id="set_led_strip">Set</button>
+						<button style="width: 4em" id="clear_led_strip">Clear</button>
+					<p>
+					<p>
+						<label for="led_left_red">Left RGB:</label>
+						<input type="number" id="led_left_red"	 style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
+						<input type="number" id="led_left_green" style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
+						<input type="number" id="led_left_blue"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
+					</p>
+
+					<p>
+						<label for="right_left_red">Right RGB:</label>
+						<input type="number" id="right_left_red"   style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
+						<input type="number" id="right_left_green" style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
+						<input type="number" id="right_left_blue"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
+					</p>
+					<p>
+						<label for="W0">Whites:</label>
+						<input type="number" id="W0"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
+						<input type="number" id="W1"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
+						<input type="number" id="W2"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
+						<input type="number" id="W3"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
+						<input type="number" id="W4"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
+						<input type="number" id="W5"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
+						<input type="number" id="W6"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
+						<input type="number" id="W7"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
+						<input type="number" id="W8"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
+						<input type="number" id="W9"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
+						<input type="number" id="W10" style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
+						<input type="number" id="W11" style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
+						<input type="number" id="W12" style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
+				</fieldset>
+
+				<fieldset>
+					<legend>push buttons:</legend>
+					<p>
+						<canvas id="canvas_push_button" width="700px" height: "70"></canvas>
+					</p>
+				</fieldset>
+
+			</p>
+		</div>
+	</body>
+</html>

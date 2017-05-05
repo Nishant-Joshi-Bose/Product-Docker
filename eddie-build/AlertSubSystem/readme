@@ -1,0 +1,47 @@
+state - working
+known issue
+1. multiple instance of AlertsManager thread due to multiple calls to systemclient. Code needs refactoring
+update >> now there is one extra thread which keeps running. This gets generated at the time when 1st alert is added and it doesn't go away once alert is notified.
+2. Need to add support for CAlertsMessage instead of sending separate schedule, tokens etc. It would be more aligned with design
+update >> done. Need to send whole message object across ITC because the request is queued and addAlert returns, the message goes out of scope when AlertManager comes around to callback addAlertAction with message. This gives a runtime error
+3. Refactoring done on main.cpp. Segregated parseMsg in 2 functions
+4: Updated Alerts.cpp, do not create new task for each timer. Instead the same task can be provided to receive notification of timer completion.
+5. new message created in main(), passed to addAlert. Added logic (not a good one) to add alert type. Need better implementation to ensure message received from client is parsed and populated in Message properly. The current way is not the way forward.
+03/23/2017
+6. Added support to deleteAlert. It works but needs a debug to characterize the behavior. It appears delete request gets queued up and is not responded by alerts manager in timely fashion. Needs lot of cleaning of messages, main.cpp needs attention for refactoring. Main.cpp using mongoose was an afterthought causing all sorts of global statics to ensure working of alerts subsystem.
+03/30/2017
+7. Added unit testing, and modified code in Alerts.cpp and AlertsScheduler.cpp. It seems delete is not working, multiple deletes with same id causes crash, unable to add 2nd alert. Seems need to find a working code before I can fix issues.
+3/31
+8. Fixed issues caused by unit test code changes. Added cases for AlertsManager
+04/03
+9. Saved tar file from previous week's work. Before that made some changes which are not verified. Changes are limited to AlertsSystemClient.cpp only.
+04/03
+10. AlertsManagerAPI.h updated to pass params by reference
+04/03
+11. Partially removed callback calling from manager to client when alert is active. Need to remove sending callback to addAlert in client, instead make it part of message
+04/04
+12. Added support for restoring missed alerts on power up. Basic testing done. it seems to be working. Need to add test cases for client to unit test the code
+04/05
+13. Demo showed to Jon, suggested following changes
+- add support for audio playback, preferrably beep beep kind of a file or something that ressemble alarm/timer
+- add support to playback using soundtouch sdk
+- 
+04/13
+14. modifying for registering source 
+- Added support to return alert id to source
+- need significant refactoring in main.cpp, move mongoose/ipc as part of AlertsSystemClient for communication with other processes
+- can add multiple alerts and delete alerts with web gui. Need to check following
+	- playback thread should not be more than 1
+	- more than 2 alerts active and then delete one after another should work
+	- it seems there is a timing issue in deleting, when a print is added in deleteAlertAction function, the issue of not calling notifyObserver is resolved. SHould not behave like this and timing issue has to be resolved
+Need to modify
+- make mongoose or IPC as part of ITC client object
+- playback using alsa should architected per standard cpp
+04/17
+15. Adding interface for communication with more than 1 client
+status - in progress
+04/26
+16. Added support for lib json, now alert subsystem takes message in json format. Need to finalize a common json format but should not take much time.
+17. Corrected main.cpp to expect alert time in UTC format. Earlier it was in some nos which what then converted to UTC to feed it to subsystem.
+04/27
+18. Removed std::get_time and put_time as they are not supported on gcc version 4.8 or 4.9
