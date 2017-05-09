@@ -4,7 +4,7 @@
 #include "BreakThread.h"
 
 static bool alert_in_progress=false;
-char alarm_file[100] = "/media/sf_ubuntuShare/chime.wav";
+char alarm_file[100] = "./chime.wav";
 
 
 void CAlsaAlertOutput :: onActiveAlert ()
