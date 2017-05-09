@@ -22,14 +22,16 @@ int parseMsg (char *);
 struct mg_mgr mgr;
 struct mg_connection *nc;
 
-//static 	struct tm *t_time = nullptr;
+static const char*  s_http_port            = "8010";
+static struct mg_serve_http_opts s_http_server_opts;
+
+static 	struct tm *t_time = nullptr;
 static  std::string a_type = "";
 static  std::string alert_command = "NONE";
 static  std::string alert_id = "";
 static  std::string a_schtime = "";
 
 static sig_atomic_t s_signal_received = 0;
-static const char *s_http_port = "8010";
 static void reply (struct mg_connection *nc, std::string a_id);
 
 static void broadcast(struct mg_connection *ncc, const struct mg_str msg) ;
@@ -53,7 +55,7 @@ static int is_websocket(const struct mg_connection *nc) {
 static void broadcast(struct mg_connection *ncc, const struct mg_str msg) {
   struct mg_connection *c;
   char buf[500];
-//  char addr[32];
+  char addr[32];
 
   snprintf(buf, sizeof(buf), "%.*s", (int) msg.len, msg.p);
   printf("%s\n", buf); /* Local echo. */
@@ -88,7 +90,18 @@ static void reply (struct mg_connection *ncc, std::string a_id)
 }
 
 static void ev_handler(struct mg_connection *ncc, int ev, void *ev_data) {
+
+  struct http_message* http_msg = (struct http_message*) ev_data;
+
   switch (ev) {
+       case MG_EV_HTTP_REQUEST:
+        {
+            // serve the index.html page
+            mg_serve_http(ncc, http_msg, s_http_server_opts);
+            break;
+        }// MG_EV_HTTP_REQUEST
+	break;
+
     case MG_EV_WEBSOCKET_HANDSHAKE_DONE: {
       /* New websocket connection. Tell everybody. */
       // broadcast(nc, mg_mk_str("++ joined"));
@@ -270,7 +283,9 @@ void deleteAlert (CAlertsSystemClient *client, std::string alert_id)
 	client->deleteAlert (alert_id);
 }
 
-int main(void) {
+int main(int argc, char ** argv) {
+
+  char*         dir_separator    = NULL;
 
   //read from command line to schedule a new time
   CAlertsSystemClient* m_pAlerts_client = new CAlertsSystemClient (IL::CreateTask("AlertsSystemClient"));
@@ -285,8 +300,15 @@ int main(void) {
   setvbuf(stderr, NULL, _IOLBF, 0);
 
   mg_mgr_init(&mgr, NULL);
+  if ((argc > 0) && ((dir_separator = strrchr(argv[0], DIRSEP)) != NULL))
+  {
+      *dir_separator                   = '\0';
+      s_http_server_opts.document_root = argv[0];// set the document root the application path
+  }// If we found a directory in the application path file name
+
 
   nc = mg_bind(&mgr, s_http_port, ev_handler);
+
   mg_set_protocol_http_websocket(nc);
 
   printf("Started on port %s\n", s_http_port);
