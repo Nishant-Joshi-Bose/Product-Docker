@@ -1,5 +1,0 @@
-C:\Users\tb1014481\Documents\#PROJECTS#\Eddie\Software\Cypress_PSoC\Eddie_DP0.0\Slider_WS.Bundle05.cywrk.Archive04_LEDs_DEMO\Eddie_DP0_Slider\Slider.cydsn\Slider.cyprj|604ba73c-b752-4df6-97d4-6f7f96381aaf
-C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|d9958569-f198-412c-9d39-097d52b36082
-C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|7f77b991-70c0-4fc8-80e0-629b259053b5
-C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|aabf5a7c-18d0-4df0-8b2a-575ebccb2533
-C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|aa67cb24-0570-4552-86c5-dbabcfc18cb5
