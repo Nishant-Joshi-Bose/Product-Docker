@@ -1,0 +1,3637 @@
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"led.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.set_led_buffer,"ax",%progbits
+  18              		.align	2
+  19              		.code	16
+  20              		.thumb_func
+  21              		.type	set_led_buffer, %function
+  22              	set_led_buffer:
+  23              	.LFB36:
+  24              		.file 1 "led.c"
+   1:led.c         **** /* ========================================
+   2:led.c         ****  *
+   3:led.c         ****  * Copyright YOUR COMPANY, THE YEAR
+   4:led.c         ****  * All Rights Reserved
+   5:led.c         ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:led.c         ****  *
+   7:led.c         ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:led.c         ****  * WHICH IS THE PROPERTY OF your company.
+   9:led.c         ****  *
+  10:led.c         ****  * ========================================
+  11:led.c         **** */
+  12:led.c         **** #include "led.h"
+  13:led.c         **** #include "util.h"
+  14:led.c         **** 
+  15:led.c         **** //=============================================================================
+  16:led.c         **** //======================================================== types and structures
+  17:led.c         **** //=============================================================================
+  18:led.c         **** typedef struct tlc_5947_led_driver 
+  19:led.c         **** {
+  20:led.c         ****     char8  dummy[12];
+  21:led.c         ****     uint16 led0 :12;
+  22:led.c         ****     uint16 led1 :12;
+  23:led.c         ****     uint16 led2 :12;
+  24:led.c         ****     uint16 led3 :12;
+  25:led.c         ****     uint16 led4 :12;
+  26:led.c         ****     uint16 led5 :12;
+  27:led.c         ****     uint16 led6 :12;
+  28:led.c         ****     uint16 led7 :12;
+  29:led.c         ****     uint16 led8 :12;
+  30:led.c         ****     uint16 led9 :12;
+  31:led.c         ****     uint16 led10:12;
+  32:led.c         ****     uint16 led11:12;
+  33:led.c         ****     uint16 led12:12;
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 2
+
+
+  34:led.c         ****     uint16 led13:12;
+  35:led.c         ****     uint16 led14:12;
+  36:led.c         ****     uint16 led15:12;
+  37:led.c         ****     uint16 led16:12;
+  38:led.c         ****     uint16 led17:12;
+  39:led.c         ****     uint16 led18:12;
+  40:led.c         ****     uint16 led19:12;
+  41:led.c         ****     uint16 led20:12;
+  42:led.c         ****     uint16 led21:12;
+  43:led.c         ****     uint16 led22:12;
+  44:led.c         ****     uint16 led23:12;
+  45:led.c         ****    }t_tlc_5947_led_driver;
+  46:led.c         **** 
+  47:led.c         **** //=============================================================================
+  48:led.c         **** //============================================================ static variables
+  49:led.c         **** //=============================================================================
+  50:led.c         **** static t_tlc_5947_led_driver led_buffer;
+  51:led.c         **** 
+  52:led.c         **** #if USE_LED
+  53:led.c         ****     static uint8 size_write = sizeof(led_buffer) / sizeof(uint16);
+  54:led.c         **** #endif // USE_LED
+  55:led.c         **** 
+  56:led.c         **** //=============================================================================
+  57:led.c         **** //============================================================= local funcitons
+  58:led.c         **** //=============================================================================
+  59:led.c         **** static void set_led_buffer   (char led, uint16 intensity);
+  60:led.c         **** static void update_led_buffer(void);
+  61:led.c         **** 
+  62:led.c         **** //=============================================================================
+  63:led.c         **** //=============================================================== set_led_strip 
+  64:led.c         **** //=============================================================================
+  65:led.c         **** void set_led_strip (uint16 led_vec[MAX_LEDS])
+  66:led.c         **** {
+  67:led.c         ****     led_buffer.led0  = led_vec[23];
+  68:led.c         ****     led_buffer.led1  = led_vec[22];
+  69:led.c         ****     led_buffer.led2  = led_vec[21];
+  70:led.c         ****     led_buffer.led3  = led_vec[20];
+  71:led.c         ****     led_buffer.led4  = led_vec[19];
+  72:led.c         ****     led_buffer.led5  = led_vec[18];
+  73:led.c         ****     led_buffer.led6  = led_vec[17];
+  74:led.c         ****     led_buffer.led7  = led_vec[16];
+  75:led.c         ****     led_buffer.led8  = led_vec[15];
+  76:led.c         ****     led_buffer.led9  = led_vec[14];
+  77:led.c         ****     led_buffer.led10 = led_vec[13];
+  78:led.c         ****     led_buffer.led11 = led_vec[12];
+  79:led.c         ****     led_buffer.led12 = led_vec[11];
+  80:led.c         ****     led_buffer.led13 = led_vec[10];
+  81:led.c         ****     led_buffer.led14 = led_vec[ 9];
+  82:led.c         ****     led_buffer.led15 = led_vec[ 8];
+  83:led.c         ****     led_buffer.led16 = led_vec[ 7];
+  84:led.c         ****     led_buffer.led17 = led_vec[ 6];
+  85:led.c         ****     led_buffer.led18 = led_vec[ 5];
+  86:led.c         ****     led_buffer.led19 = led_vec[ 4];
+  87:led.c         ****     led_buffer.led20 = led_vec[ 3];
+  88:led.c         ****     led_buffer.led21 = led_vec[ 2];
+  89:led.c         ****     led_buffer.led22 = led_vec[ 1];
+  90:led.c         ****     led_buffer.led23 = led_vec[ 0];
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 3
+
+
+  91:led.c         ****     
+  92:led.c         ****     update_led_buffer();
+  93:led.c         **** }// set_led_strip
+  94:led.c         **** 
+  95:led.c         **** //=============================================================================
+  96:led.c         **** //============================================================== set_led_buffer 
+  97:led.c         **** //=============================================================================
+  98:led.c         **** void set_led_buffer (char led, uint16 intensity)
+  99:led.c         **** {
+  25              		.loc 1 99 0
+  26              		.cfi_startproc
+  27              	.LVL0:
+ 100:led.c         ****     uint16  set_value = intensity; // min(intensity, MAX_INTENSITY);
+ 101:led.c         ****     uint16  led_min   = min(led, MAX_LEDS - 1);
+  28              		.loc 1 101 0
+  29 0000 1628     		cmp	r0, #22
+  30 0002 01D8     		bhi	.L29
+  31              		.loc 1 101 0 is_stmt 0 discriminator 1
+  32 0004 80B2     		uxth	r0, r0
+  33              	.LVL1:
+  34 0006 00E0     		b	.L2
+  35              	.LVL2:
+  36              	.L29:
+  37              		.loc 1 101 0
+  38 0008 1720     		mov	r0, #23
+  39              	.LVL3:
+  40              	.L2:
+ 102:led.c         **** 
+ 103:led.c         ****     switch (led_min)
+  41              		.loc 1 103 0 is_stmt 1 discriminator 4
+  42 000a 1728     		cmp	r0, #23
+  43 000c 00D9     		bls	.LCB22
+  44 000e DAE0     		b	.L1	@long jump
+  45              	.LCB22:
+  46 0010 8000     		lsl	r0, r0, #2
+  47              	.LVL4:
+  48 0012 6D4B     		ldr	r3, .L30
+  49 0014 1B58     		ldr	r3, [r3, r0]
+  50 0016 9F46     		mov	pc, r3
+  51              		.section	.rodata
+  52              		.align	2
+  53              	.L5:
+  54 0000 B6010000 		.word	.L4
+  55 0004 A4010000 		.word	.L6
+  56 0008 92010000 		.word	.L7
+  57 000c 80010000 		.word	.L8
+  58 0010 6E010000 		.word	.L9
+  59 0014 5C010000 		.word	.L10
+  60 0018 4A010000 		.word	.L11
+  61 001c 38010000 		.word	.L12
+  62 0020 26010000 		.word	.L13
+  63 0024 14010000 		.word	.L14
+  64 0028 02010000 		.word	.L15
+  65 002c F0000000 		.word	.L16
+  66 0030 DE000000 		.word	.L17
+  67 0034 CC000000 		.word	.L18
+  68 0038 BA000000 		.word	.L19
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 4
+
+
+  69 003c A8000000 		.word	.L20
+  70 0040 96000000 		.word	.L21
+  71 0044 84000000 		.word	.L22
+  72 0048 72000000 		.word	.L23
+  73 004c 60000000 		.word	.L24
+  74 0050 4E000000 		.word	.L25
+  75 0054 3C000000 		.word	.L26
+  76 0058 2A000000 		.word	.L27
+  77 005c 18000000 		.word	.L28
+  78              		.section	.text.set_led_buffer
+  79              	.L28:
+ 104:led.c         ****     {
+ 105:led.c         ****         case 23: led_buffer.led0  = set_value;  // E_LED_LEFT_BLUE
+  80              		.loc 1 105 0
+  81 0018 6C4A     		ldr	r2, .L30+4
+  82 001a 0905     		lsl	r1, r1, #20
+  83              	.LVL5:
+  84 001c 0B0D     		lsr	r3, r1, #20
+  85 001e 9189     		ldrh	r1, [r2, #12]
+  86 0020 090B     		lsr	r1, r1, #12
+  87 0022 0903     		lsl	r1, r1, #12
+  88 0024 1943     		orr	r1, r3
+  89 0026 9181     		strh	r1, [r2, #12]
+ 106:led.c         ****                  break;
+  90              		.loc 1 106 0
+  91 0028 CDE0     		b	.L1
+  92              	.LVL6:
+  93              	.L27:
+ 107:led.c         ****         case 22: led_buffer.led1  = set_value;  // E_LED_LEFT_GREEN
+  94              		.loc 1 107 0
+  95 002a 684A     		ldr	r2, .L30+4
+  96 002c 0905     		lsl	r1, r1, #20
+  97              	.LVL7:
+  98 002e 0B0D     		lsr	r3, r1, #20
+  99 0030 D189     		ldrh	r1, [r2, #14]
+ 100 0032 090B     		lsr	r1, r1, #12
+ 101 0034 0903     		lsl	r1, r1, #12
+ 102 0036 1943     		orr	r1, r3
+ 103 0038 D181     		strh	r1, [r2, #14]
+ 108:led.c         ****                  break;
+ 104              		.loc 1 108 0
+ 105 003a C4E0     		b	.L1
+ 106              	.LVL8:
+ 107              	.L26:
+ 109:led.c         ****         case 21: led_buffer.led2  = set_value;  // E_LED_LEFT_RED 
+ 108              		.loc 1 109 0
+ 109 003c 634A     		ldr	r2, .L30+4
+ 110 003e 0905     		lsl	r1, r1, #20
+ 111              	.LVL9:
+ 112 0040 0B0D     		lsr	r3, r1, #20
+ 113 0042 118A     		ldrh	r1, [r2, #16]
+ 114 0044 090B     		lsr	r1, r1, #12
+ 115 0046 0903     		lsl	r1, r1, #12
+ 116 0048 1943     		orr	r1, r3
+ 117 004a 1182     		strh	r1, [r2, #16]
+ 110:led.c         ****                  break;
+ 118              		.loc 1 110 0
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 5
+
+
+ 119 004c BBE0     		b	.L1
+ 120              	.LVL10:
+ 121              	.L25:
+ 111:led.c         ****         case 20: led_buffer.led3  = set_value;  // E_LED_RIGHT_BLUE  
+ 122              		.loc 1 111 0
+ 123 004e 5F4A     		ldr	r2, .L30+4
+ 124 0050 0905     		lsl	r1, r1, #20
+ 125              	.LVL11:
+ 126 0052 0B0D     		lsr	r3, r1, #20
+ 127 0054 518A     		ldrh	r1, [r2, #18]
+ 128 0056 090B     		lsr	r1, r1, #12
+ 129 0058 0903     		lsl	r1, r1, #12
+ 130 005a 1943     		orr	r1, r3
+ 131 005c 5182     		strh	r1, [r2, #18]
+ 112:led.c         ****                  break;
+ 132              		.loc 1 112 0
+ 133 005e B2E0     		b	.L1
+ 134              	.LVL12:
+ 135              	.L24:
+ 113:led.c         ****         case 19: led_buffer.led4  = set_value;  // E_LED_RIGHT_GREEN  
+ 136              		.loc 1 113 0
+ 137 0060 5A4A     		ldr	r2, .L30+4
+ 138 0062 0905     		lsl	r1, r1, #20
+ 139              	.LVL13:
+ 140 0064 0B0D     		lsr	r3, r1, #20
+ 141 0066 918A     		ldrh	r1, [r2, #20]
+ 142 0068 090B     		lsr	r1, r1, #12
+ 143 006a 0903     		lsl	r1, r1, #12
+ 144 006c 1943     		orr	r1, r3
+ 145 006e 9182     		strh	r1, [r2, #20]
+ 114:led.c         ****                  break;
+ 146              		.loc 1 114 0
+ 147 0070 A9E0     		b	.L1
+ 148              	.LVL14:
+ 149              	.L23:
+ 115:led.c         ****         case 18: led_buffer.led5  = set_value;  // E_LED_RIGHT_RED
+ 150              		.loc 1 115 0
+ 151 0072 564A     		ldr	r2, .L30+4
+ 152 0074 0905     		lsl	r1, r1, #20
+ 153              	.LVL15:
+ 154 0076 0B0D     		lsr	r3, r1, #20
+ 155 0078 D18A     		ldrh	r1, [r2, #22]
+ 156 007a 090B     		lsr	r1, r1, #12
+ 157 007c 0903     		lsl	r1, r1, #12
+ 158 007e 1943     		orr	r1, r3
+ 159 0080 D182     		strh	r1, [r2, #22]
+ 116:led.c         ****                  break;
+ 160              		.loc 1 116 0
+ 161 0082 A0E0     		b	.L1
+ 162              	.LVL16:
+ 163              	.L22:
+ 117:led.c         ****         case 17: led_buffer.led6  = set_value;  // not used 
+ 164              		.loc 1 117 0
+ 165 0084 514A     		ldr	r2, .L30+4
+ 166 0086 0905     		lsl	r1, r1, #20
+ 167              	.LVL17:
+ 168 0088 0B0D     		lsr	r3, r1, #20
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 6
+
+
+ 169 008a 118B     		ldrh	r1, [r2, #24]
+ 170 008c 090B     		lsr	r1, r1, #12
+ 171 008e 0903     		lsl	r1, r1, #12
+ 172 0090 1943     		orr	r1, r3
+ 173 0092 1183     		strh	r1, [r2, #24]
+ 118:led.c         ****                  break;
+ 174              		.loc 1 118 0
+ 175 0094 97E0     		b	.L1
+ 176              	.LVL18:
+ 177              	.L21:
+ 119:led.c         ****         case 16: led_buffer.led7  = set_value;  // not used
+ 178              		.loc 1 119 0
+ 179 0096 4D4A     		ldr	r2, .L30+4
+ 180 0098 0905     		lsl	r1, r1, #20
+ 181              	.LVL19:
+ 182 009a 0B0D     		lsr	r3, r1, #20
+ 183 009c 518B     		ldrh	r1, [r2, #26]
+ 184 009e 090B     		lsr	r1, r1, #12
+ 185 00a0 0903     		lsl	r1, r1, #12
+ 186 00a2 1943     		orr	r1, r3
+ 187 00a4 5183     		strh	r1, [r2, #26]
+ 120:led.c         ****                  break;
+ 188              		.loc 1 120 0
+ 189 00a6 8EE0     		b	.L1
+ 190              	.LVL20:
+ 191              	.L20:
+ 121:led.c         ****         case 15: led_buffer.led8  = set_value;  // not used
+ 192              		.loc 1 121 0
+ 193 00a8 484A     		ldr	r2, .L30+4
+ 194 00aa 0905     		lsl	r1, r1, #20
+ 195              	.LVL21:
+ 196 00ac 0B0D     		lsr	r3, r1, #20
+ 197 00ae 918B     		ldrh	r1, [r2, #28]
+ 198 00b0 090B     		lsr	r1, r1, #12
+ 199 00b2 0903     		lsl	r1, r1, #12
+ 200 00b4 1943     		orr	r1, r3
+ 201 00b6 9183     		strh	r1, [r2, #28]
+ 122:led.c         ****                  break;
+ 202              		.loc 1 122 0
+ 203 00b8 85E0     		b	.L1
+ 204              	.LVL22:
+ 205              	.L19:
+ 123:led.c         ****         case 14: led_buffer.led9  = set_value;  // WHITE 14
+ 206              		.loc 1 123 0
+ 207 00ba 444A     		ldr	r2, .L30+4
+ 208 00bc 0905     		lsl	r1, r1, #20
+ 209              	.LVL23:
+ 210 00be 0B0D     		lsr	r3, r1, #20
+ 211 00c0 D18B     		ldrh	r1, [r2, #30]
+ 212 00c2 090B     		lsr	r1, r1, #12
+ 213 00c4 0903     		lsl	r1, r1, #12
+ 214 00c6 1943     		orr	r1, r3
+ 215 00c8 D183     		strh	r1, [r2, #30]
+ 124:led.c         ****                  break;
+ 216              		.loc 1 124 0
+ 217 00ca 7CE0     		b	.L1
+ 218              	.LVL24:
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 7
+
+
+ 219              	.L18:
+ 125:led.c         ****         case 13: led_buffer.led10 = set_value;  // WHITE 13 
+ 220              		.loc 1 125 0
+ 221 00cc 3F4A     		ldr	r2, .L30+4
+ 222 00ce 0905     		lsl	r1, r1, #20
+ 223              	.LVL25:
+ 224 00d0 0B0D     		lsr	r3, r1, #20
+ 225 00d2 118C     		ldrh	r1, [r2, #32]
+ 226 00d4 090B     		lsr	r1, r1, #12
+ 227 00d6 0903     		lsl	r1, r1, #12
+ 228 00d8 1943     		orr	r1, r3
+ 229 00da 1184     		strh	r1, [r2, #32]
+ 126:led.c         ****                  break;
+ 230              		.loc 1 126 0
+ 231 00dc 73E0     		b	.L1
+ 232              	.LVL26:
+ 233              	.L17:
+ 127:led.c         ****         case 12: led_buffer.led11 = set_value;  // WHITE 12
+ 234              		.loc 1 127 0
+ 235 00de 3B4A     		ldr	r2, .L30+4
+ 236 00e0 0905     		lsl	r1, r1, #20
+ 237              	.LVL27:
+ 238 00e2 0B0D     		lsr	r3, r1, #20
+ 239 00e4 518C     		ldrh	r1, [r2, #34]
+ 240 00e6 090B     		lsr	r1, r1, #12
+ 241 00e8 0903     		lsl	r1, r1, #12
+ 242 00ea 1943     		orr	r1, r3
+ 243 00ec 5184     		strh	r1, [r2, #34]
+ 128:led.c         ****                  break;
+ 244              		.loc 1 128 0
+ 245 00ee 6AE0     		b	.L1
+ 246              	.LVL28:
+ 247              	.L16:
+ 129:led.c         ****         case 11: led_buffer.led12 = set_value;  // WHITE 11
+ 248              		.loc 1 129 0
+ 249 00f0 364A     		ldr	r2, .L30+4
+ 250 00f2 0905     		lsl	r1, r1, #20
+ 251              	.LVL29:
+ 252 00f4 0B0D     		lsr	r3, r1, #20
+ 253 00f6 918C     		ldrh	r1, [r2, #36]
+ 254 00f8 090B     		lsr	r1, r1, #12
+ 255 00fa 0903     		lsl	r1, r1, #12
+ 256 00fc 1943     		orr	r1, r3
+ 257 00fe 9184     		strh	r1, [r2, #36]
+ 130:led.c         ****                  break;
+ 258              		.loc 1 130 0
+ 259 0100 61E0     		b	.L1
+ 260              	.LVL30:
+ 261              	.L15:
+ 131:led.c         ****         case 10: led_buffer.led13 = set_value;  // WHITE 10
+ 262              		.loc 1 131 0
+ 263 0102 324A     		ldr	r2, .L30+4
+ 264 0104 0905     		lsl	r1, r1, #20
+ 265              	.LVL31:
+ 266 0106 0B0D     		lsr	r3, r1, #20
+ 267 0108 D18C     		ldrh	r1, [r2, #38]
+ 268 010a 090B     		lsr	r1, r1, #12
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 8
+
+
+ 269 010c 0903     		lsl	r1, r1, #12
+ 270 010e 1943     		orr	r1, r3
+ 271 0110 D184     		strh	r1, [r2, #38]
+ 132:led.c         ****                  break;
+ 272              		.loc 1 132 0
+ 273 0112 58E0     		b	.L1
+ 274              	.LVL32:
+ 275              	.L14:
+ 133:led.c         ****         case  9: led_buffer.led14 = set_value;  // WHITE 9
+ 276              		.loc 1 133 0
+ 277 0114 2D4A     		ldr	r2, .L30+4
+ 278 0116 0905     		lsl	r1, r1, #20
+ 279              	.LVL33:
+ 280 0118 0B0D     		lsr	r3, r1, #20
+ 281 011a 118D     		ldrh	r1, [r2, #40]
+ 282 011c 090B     		lsr	r1, r1, #12
+ 283 011e 0903     		lsl	r1, r1, #12
+ 284 0120 1943     		orr	r1, r3
+ 285 0122 1185     		strh	r1, [r2, #40]
+ 134:led.c         ****                  break;
+ 286              		.loc 1 134 0
+ 287 0124 4FE0     		b	.L1
+ 288              	.LVL34:
+ 289              	.L13:
+ 135:led.c         ****         case  8: led_buffer.led15 = set_value;  // WHITE 8
+ 290              		.loc 1 135 0
+ 291 0126 294A     		ldr	r2, .L30+4
+ 292 0128 0905     		lsl	r1, r1, #20
+ 293              	.LVL35:
+ 294 012a 0B0D     		lsr	r3, r1, #20
+ 295 012c 518D     		ldrh	r1, [r2, #42]
+ 296 012e 090B     		lsr	r1, r1, #12
+ 297 0130 0903     		lsl	r1, r1, #12
+ 298 0132 1943     		orr	r1, r3
+ 299 0134 5185     		strh	r1, [r2, #42]
+ 136:led.c         ****                  break;
+ 300              		.loc 1 136 0
+ 301 0136 46E0     		b	.L1
+ 302              	.LVL36:
+ 303              	.L12:
+ 137:led.c         ****         case  7: led_buffer.led16 = set_value;  // WHITE 7
+ 304              		.loc 1 137 0
+ 305 0138 244A     		ldr	r2, .L30+4
+ 306 013a 0905     		lsl	r1, r1, #20
+ 307              	.LVL37:
+ 308 013c 0B0D     		lsr	r3, r1, #20
+ 309 013e 918D     		ldrh	r1, [r2, #44]
+ 310 0140 090B     		lsr	r1, r1, #12
+ 311 0142 0903     		lsl	r1, r1, #12
+ 312 0144 1943     		orr	r1, r3
+ 313 0146 9185     		strh	r1, [r2, #44]
+ 138:led.c         ****                  break;
+ 314              		.loc 1 138 0
+ 315 0148 3DE0     		b	.L1
+ 316              	.LVL38:
+ 317              	.L11:
+ 139:led.c         ****         case  6: led_buffer.led17 = set_value;  // WHITE 6
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 9
+
+
+ 318              		.loc 1 139 0
+ 319 014a 204A     		ldr	r2, .L30+4
+ 320 014c 0905     		lsl	r1, r1, #20
+ 321              	.LVL39:
+ 322 014e 0B0D     		lsr	r3, r1, #20
+ 323 0150 D18D     		ldrh	r1, [r2, #46]
+ 324 0152 090B     		lsr	r1, r1, #12
+ 325 0154 0903     		lsl	r1, r1, #12
+ 326 0156 1943     		orr	r1, r3
+ 327 0158 D185     		strh	r1, [r2, #46]
+ 140:led.c         ****                  break;
+ 328              		.loc 1 140 0
+ 329 015a 34E0     		b	.L1
+ 330              	.LVL40:
+ 331              	.L10:
+ 141:led.c         ****         case  5: led_buffer.led18 = set_value;  // WHITE 5
+ 332              		.loc 1 141 0
+ 333 015c 1B4A     		ldr	r2, .L30+4
+ 334 015e 0905     		lsl	r1, r1, #20
+ 335              	.LVL41:
+ 336 0160 0B0D     		lsr	r3, r1, #20
+ 337 0162 118E     		ldrh	r1, [r2, #48]
+ 338 0164 090B     		lsr	r1, r1, #12
+ 339 0166 0903     		lsl	r1, r1, #12
+ 340 0168 1943     		orr	r1, r3
+ 341 016a 1186     		strh	r1, [r2, #48]
+ 142:led.c         ****                  break;
+ 342              		.loc 1 142 0
+ 343 016c 2BE0     		b	.L1
+ 344              	.LVL42:
+ 345              	.L9:
+ 143:led.c         ****         case  4: led_buffer.led19 = set_value;  // WHITE 4
+ 346              		.loc 1 143 0
+ 347 016e 174A     		ldr	r2, .L30+4
+ 348 0170 0905     		lsl	r1, r1, #20
+ 349              	.LVL43:
+ 350 0172 0B0D     		lsr	r3, r1, #20
+ 351 0174 518E     		ldrh	r1, [r2, #50]
+ 352 0176 090B     		lsr	r1, r1, #12
+ 353 0178 0903     		lsl	r1, r1, #12
+ 354 017a 1943     		orr	r1, r3
+ 355 017c 5186     		strh	r1, [r2, #50]
+ 144:led.c         ****                  break;
+ 356              		.loc 1 144 0
+ 357 017e 22E0     		b	.L1
+ 358              	.LVL44:
+ 359              	.L8:
+ 145:led.c         ****         case  3: led_buffer.led20 = set_value;  // WHITE 3
+ 360              		.loc 1 145 0
+ 361 0180 124A     		ldr	r2, .L30+4
+ 362 0182 0905     		lsl	r1, r1, #20
+ 363              	.LVL45:
+ 364 0184 0B0D     		lsr	r3, r1, #20
+ 365 0186 918E     		ldrh	r1, [r2, #52]
+ 366 0188 090B     		lsr	r1, r1, #12
+ 367 018a 0903     		lsl	r1, r1, #12
+ 368 018c 1943     		orr	r1, r3
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 10
+
+
+ 369 018e 9186     		strh	r1, [r2, #52]
+ 146:led.c         ****                  break;
+ 370              		.loc 1 146 0
+ 371 0190 19E0     		b	.L1
+ 372              	.LVL46:
+ 373              	.L7:
+ 147:led.c         ****         case  2: led_buffer.led21 = set_value;  // WHITE 2
+ 374              		.loc 1 147 0
+ 375 0192 0E4A     		ldr	r2, .L30+4
+ 376 0194 0905     		lsl	r1, r1, #20
+ 377              	.LVL47:
+ 378 0196 0B0D     		lsr	r3, r1, #20
+ 379 0198 D18E     		ldrh	r1, [r2, #54]
+ 380 019a 090B     		lsr	r1, r1, #12
+ 381 019c 0903     		lsl	r1, r1, #12
+ 382 019e 1943     		orr	r1, r3
+ 383 01a0 D186     		strh	r1, [r2, #54]
+ 148:led.c         ****                  break;
+ 384              		.loc 1 148 0
+ 385 01a2 10E0     		b	.L1
+ 386              	.LVL48:
+ 387              	.L6:
+ 149:led.c         ****         case  1: led_buffer.led22 = set_value;  // WHITE 1
+ 388              		.loc 1 149 0
+ 389 01a4 094A     		ldr	r2, .L30+4
+ 390 01a6 0905     		lsl	r1, r1, #20
+ 391              	.LVL49:
+ 392 01a8 0B0D     		lsr	r3, r1, #20
+ 393 01aa 118F     		ldrh	r1, [r2, #56]
+ 394 01ac 090B     		lsr	r1, r1, #12
+ 395 01ae 0903     		lsl	r1, r1, #12
+ 396 01b0 1943     		orr	r1, r3
+ 397 01b2 1187     		strh	r1, [r2, #56]
+ 150:led.c         ****                  break;
+ 398              		.loc 1 150 0
+ 399 01b4 07E0     		b	.L1
+ 400              	.LVL50:
+ 401              	.L4:
+ 151:led.c         ****         case  0: led_buffer.led23 = set_value;  // WHITE 0
+ 402              		.loc 1 151 0
+ 403 01b6 054A     		ldr	r2, .L30+4
+ 404 01b8 0905     		lsl	r1, r1, #20
+ 405              	.LVL51:
+ 406 01ba 0B0D     		lsr	r3, r1, #20
+ 407 01bc 518F     		ldrh	r1, [r2, #58]
+ 408 01be 090B     		lsr	r1, r1, #12
+ 409 01c0 0903     		lsl	r1, r1, #12
+ 410 01c2 1943     		orr	r1, r3
+ 411 01c4 5187     		strh	r1, [r2, #58]
+ 412              	.L1:
+ 152:led.c         ****                  break;
+ 153:led.c         ****         default: return;
+ 154:led.c         ****     }
+ 155:led.c         ****     
+ 156:led.c         ****     return;
+ 157:led.c         **** }// set_led_buffer
+ 413              		.loc 1 157 0
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 11
+
+
+ 414              		@ sp needed
+ 415 01c6 7047     		bx	lr
+ 416              	.L31:
+ 417              		.align	2
+ 418              	.L30:
+ 419 01c8 00000000 		.word	.L5
+ 420 01cc 00000000 		.word	.LANCHOR0
+ 421              		.cfi_endproc
+ 422              	.LFE36:
+ 423              		.size	set_led_buffer, .-set_led_buffer
+ 424              		.section	.text.update_led_buffer,"ax",%progbits
+ 425              		.align	2
+ 426              		.code	16
+ 427              		.thumb_func
+ 428              		.type	update_led_buffer, %function
+ 429              	update_led_buffer:
+ 430              	.LFB37:
+ 158:led.c         **** 
+ 159:led.c         **** //=============================================================================
+ 160:led.c         **** //=========================================================== update_led_buffer
+ 161:led.c         **** //=============================================================================
+ 162:led.c         **** void update_led_buffer()
+ 163:led.c         **** {
+ 431              		.loc 1 163 0
+ 432              		.cfi_startproc
+ 433 0000 08B5     		push	{r3, lr}
+ 434              		.cfi_def_cfa_offset 8
+ 435              		.cfi_offset 3, -8
+ 436              		.cfi_offset 14, -4
+ 164:led.c         ****  #if USE_LED    
+ 165:led.c         ****     CapSense_ISR_Disable(); 
+ 437              		.loc 1 165 0
+ 438 0002 FFF7FEFF 		bl	CapSense_ISR_Disable
+ 439              	.LVL52:
+ 166:led.c         ****     SPIM_SpiUartPutArray((const uint16*)&led_buffer, size_write);
+ 440              		.loc 1 166 0
+ 441 0006 0B48     		ldr	r0, .L33
+ 442 0008 1E21     		mov	r1, #30
+ 443 000a FFF7FEFF 		bl	SPIM_SpiUartPutArray
+ 444              	.LVL53:
+ 167:led.c         ****     Blank_Write(1);
+ 445              		.loc 1 167 0
+ 446 000e 0120     		mov	r0, #1
+ 447 0010 FFF7FEFF 		bl	Blank_Write
+ 448              	.LVL54:
+ 168:led.c         ****     Latch_Write(1);
+ 449              		.loc 1 168 0
+ 450 0014 0120     		mov	r0, #1
+ 451 0016 FFF7FEFF 		bl	Latch_Write
+ 452              	.LVL55:
+ 169:led.c         ****     CyDelayUs  (1);
+ 453              		.loc 1 169 0
+ 454 001a 0120     		mov	r0, #1
+ 455 001c FFF7FEFF 		bl	CyDelayUs
+ 456              	.LVL56:
+ 170:led.c         ****     Latch_Write(0);
+ 457              		.loc 1 170 0
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 12
+
+
+ 458 0020 0020     		mov	r0, #0
+ 459 0022 FFF7FEFF 		bl	Latch_Write
+ 460              	.LVL57:
+ 171:led.c         ****     Blank_Write(0);       
+ 461              		.loc 1 171 0
+ 462 0026 0020     		mov	r0, #0
+ 463 0028 FFF7FEFF 		bl	Blank_Write
+ 464              	.LVL58:
+ 172:led.c         ****     CapSense_ISR_Enable();
+ 465              		.loc 1 172 0
+ 466 002c FFF7FEFF 		bl	CapSense_ISR_Enable
+ 467              	.LVL59:
+ 173:led.c         **** #endif // USE_LED
+ 174:led.c         **** }// update_led_buffer
+ 468              		.loc 1 174 0
+ 469              		@ sp needed
+ 470 0030 08BD     		pop	{r3, pc}
+ 471              	.L34:
+ 472 0032 C046     		.align	2
+ 473              	.L33:
+ 474 0034 00000000 		.word	.LANCHOR0
+ 475              		.cfi_endproc
+ 476              	.LFE37:
+ 477              		.size	update_led_buffer, .-update_led_buffer
+ 478              		.section	.text.set_led_strip,"ax",%progbits
+ 479              		.align	2
+ 480              		.global	set_led_strip
+ 481              		.code	16
+ 482              		.thumb_func
+ 483              		.type	set_led_strip, %function
+ 484              	set_led_strip:
+ 485              	.LFB35:
+  66:led.c         ****     led_buffer.led0  = led_vec[23];
+ 486              		.loc 1 66 0
+ 487              		.cfi_startproc
+ 488              	.LVL60:
+ 489 0000 08B5     		push	{r3, lr}
+ 490              		.cfi_def_cfa_offset 8
+ 491              		.cfi_offset 3, -8
+ 492              		.cfi_offset 14, -4
+  67:led.c         ****     led_buffer.led1  = led_vec[22];
+ 493              		.loc 1 67 0
+ 494 0002 C28D     		ldrh	r2, [r0, #46]
+ 495 0004 614B     		ldr	r3, .L36
+ 496 0006 1205     		lsl	r2, r2, #20
+ 497 0008 110D     		lsr	r1, r2, #20
+ 498 000a 9A89     		ldrh	r2, [r3, #12]
+ 499 000c 120B     		lsr	r2, r2, #12
+ 500 000e 1203     		lsl	r2, r2, #12
+ 501 0010 0A43     		orr	r2, r1
+ 502 0012 9A81     		strh	r2, [r3, #12]
+  68:led.c         ****     led_buffer.led2  = led_vec[21];
+ 503              		.loc 1 68 0
+ 504 0014 828D     		ldrh	r2, [r0, #44]
+ 505 0016 1205     		lsl	r2, r2, #20
+ 506 0018 110D     		lsr	r1, r2, #20
+ 507 001a DA89     		ldrh	r2, [r3, #14]
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 13
+
+
+ 508 001c 120B     		lsr	r2, r2, #12
+ 509 001e 1203     		lsl	r2, r2, #12
+ 510 0020 0A43     		orr	r2, r1
+ 511 0022 DA81     		strh	r2, [r3, #14]
+  69:led.c         ****     led_buffer.led3  = led_vec[20];
+ 512              		.loc 1 69 0
+ 513 0024 428D     		ldrh	r2, [r0, #42]
+ 514 0026 1205     		lsl	r2, r2, #20
+ 515 0028 110D     		lsr	r1, r2, #20
+ 516 002a 1A8A     		ldrh	r2, [r3, #16]
+ 517 002c 120B     		lsr	r2, r2, #12
+ 518 002e 1203     		lsl	r2, r2, #12
+ 519 0030 0A43     		orr	r2, r1
+ 520 0032 1A82     		strh	r2, [r3, #16]
+  70:led.c         ****     led_buffer.led4  = led_vec[19];
+ 521              		.loc 1 70 0
+ 522 0034 028D     		ldrh	r2, [r0, #40]
+ 523 0036 1205     		lsl	r2, r2, #20
+ 524 0038 110D     		lsr	r1, r2, #20
+ 525 003a 5A8A     		ldrh	r2, [r3, #18]
+ 526 003c 120B     		lsr	r2, r2, #12
+ 527 003e 1203     		lsl	r2, r2, #12
+ 528 0040 0A43     		orr	r2, r1
+ 529 0042 5A82     		strh	r2, [r3, #18]
+  71:led.c         ****     led_buffer.led5  = led_vec[18];
+ 530              		.loc 1 71 0
+ 531 0044 C28C     		ldrh	r2, [r0, #38]
+ 532 0046 1205     		lsl	r2, r2, #20
+ 533 0048 110D     		lsr	r1, r2, #20
+ 534 004a 9A8A     		ldrh	r2, [r3, #20]
+ 535 004c 120B     		lsr	r2, r2, #12
+ 536 004e 1203     		lsl	r2, r2, #12
+ 537 0050 0A43     		orr	r2, r1
+ 538 0052 9A82     		strh	r2, [r3, #20]
+  72:led.c         ****     led_buffer.led6  = led_vec[17];
+ 539              		.loc 1 72 0
+ 540 0054 828C     		ldrh	r2, [r0, #36]
+ 541 0056 1205     		lsl	r2, r2, #20
+ 542 0058 110D     		lsr	r1, r2, #20
+ 543 005a DA8A     		ldrh	r2, [r3, #22]
+ 544 005c 120B     		lsr	r2, r2, #12
+ 545 005e 1203     		lsl	r2, r2, #12
+ 546 0060 0A43     		orr	r2, r1
+ 547 0062 DA82     		strh	r2, [r3, #22]
+  73:led.c         ****     led_buffer.led7  = led_vec[16];
+ 548              		.loc 1 73 0
+ 549 0064 428C     		ldrh	r2, [r0, #34]
+ 550 0066 1205     		lsl	r2, r2, #20
+ 551 0068 110D     		lsr	r1, r2, #20
+ 552 006a 1A8B     		ldrh	r2, [r3, #24]
+ 553 006c 120B     		lsr	r2, r2, #12
+ 554 006e 1203     		lsl	r2, r2, #12
+ 555 0070 0A43     		orr	r2, r1
+ 556 0072 1A83     		strh	r2, [r3, #24]
+  74:led.c         ****     led_buffer.led8  = led_vec[15];
+ 557              		.loc 1 74 0
+ 558 0074 028C     		ldrh	r2, [r0, #32]
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 14
+
+
+ 559 0076 1205     		lsl	r2, r2, #20
+ 560 0078 110D     		lsr	r1, r2, #20
+ 561 007a 5A8B     		ldrh	r2, [r3, #26]
+ 562 007c 120B     		lsr	r2, r2, #12
+ 563 007e 1203     		lsl	r2, r2, #12
+ 564 0080 0A43     		orr	r2, r1
+ 565 0082 5A83     		strh	r2, [r3, #26]
+  75:led.c         ****     led_buffer.led9  = led_vec[14];
+ 566              		.loc 1 75 0
+ 567 0084 C28B     		ldrh	r2, [r0, #30]
+ 568 0086 1205     		lsl	r2, r2, #20
+ 569 0088 110D     		lsr	r1, r2, #20
+ 570 008a 9A8B     		ldrh	r2, [r3, #28]
+ 571 008c 120B     		lsr	r2, r2, #12
+ 572 008e 1203     		lsl	r2, r2, #12
+ 573 0090 0A43     		orr	r2, r1
+ 574 0092 9A83     		strh	r2, [r3, #28]
+  76:led.c         ****     led_buffer.led10 = led_vec[13];
+ 575              		.loc 1 76 0
+ 576 0094 828B     		ldrh	r2, [r0, #28]
+ 577 0096 1205     		lsl	r2, r2, #20
+ 578 0098 110D     		lsr	r1, r2, #20
+ 579 009a DA8B     		ldrh	r2, [r3, #30]
+ 580 009c 120B     		lsr	r2, r2, #12
+ 581 009e 1203     		lsl	r2, r2, #12
+ 582 00a0 0A43     		orr	r2, r1
+ 583 00a2 DA83     		strh	r2, [r3, #30]
+  77:led.c         ****     led_buffer.led11 = led_vec[12];
+ 584              		.loc 1 77 0
+ 585 00a4 428B     		ldrh	r2, [r0, #26]
+ 586 00a6 1205     		lsl	r2, r2, #20
+ 587 00a8 110D     		lsr	r1, r2, #20
+ 588 00aa 1A8C     		ldrh	r2, [r3, #32]
+ 589 00ac 120B     		lsr	r2, r2, #12
+ 590 00ae 1203     		lsl	r2, r2, #12
+ 591 00b0 0A43     		orr	r2, r1
+ 592 00b2 1A84     		strh	r2, [r3, #32]
+  78:led.c         ****     led_buffer.led12 = led_vec[11];
+ 593              		.loc 1 78 0
+ 594 00b4 028B     		ldrh	r2, [r0, #24]
+ 595 00b6 1205     		lsl	r2, r2, #20
+ 596 00b8 110D     		lsr	r1, r2, #20
+ 597 00ba 5A8C     		ldrh	r2, [r3, #34]
+ 598 00bc 120B     		lsr	r2, r2, #12
+ 599 00be 1203     		lsl	r2, r2, #12
+ 600 00c0 0A43     		orr	r2, r1
+ 601 00c2 5A84     		strh	r2, [r3, #34]
+  79:led.c         ****     led_buffer.led13 = led_vec[10];
+ 602              		.loc 1 79 0
+ 603 00c4 C28A     		ldrh	r2, [r0, #22]
+ 604 00c6 1205     		lsl	r2, r2, #20
+ 605 00c8 110D     		lsr	r1, r2, #20
+ 606 00ca 9A8C     		ldrh	r2, [r3, #36]
+ 607 00cc 120B     		lsr	r2, r2, #12
+ 608 00ce 1203     		lsl	r2, r2, #12
+ 609 00d0 0A43     		orr	r2, r1
+ 610 00d2 9A84     		strh	r2, [r3, #36]
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 15
+
+
+  80:led.c         ****     led_buffer.led14 = led_vec[ 9];
+ 611              		.loc 1 80 0
+ 612 00d4 828A     		ldrh	r2, [r0, #20]
+ 613 00d6 1205     		lsl	r2, r2, #20
+ 614 00d8 110D     		lsr	r1, r2, #20
+ 615 00da DA8C     		ldrh	r2, [r3, #38]
+ 616 00dc 120B     		lsr	r2, r2, #12
+ 617 00de 1203     		lsl	r2, r2, #12
+ 618 00e0 0A43     		orr	r2, r1
+ 619 00e2 DA84     		strh	r2, [r3, #38]
+  81:led.c         ****     led_buffer.led15 = led_vec[ 8];
+ 620              		.loc 1 81 0
+ 621 00e4 428A     		ldrh	r2, [r0, #18]
+ 622 00e6 1205     		lsl	r2, r2, #20
+ 623 00e8 110D     		lsr	r1, r2, #20
+ 624 00ea 1A8D     		ldrh	r2, [r3, #40]
+ 625 00ec 120B     		lsr	r2, r2, #12
+ 626 00ee 1203     		lsl	r2, r2, #12
+ 627 00f0 0A43     		orr	r2, r1
+ 628 00f2 1A85     		strh	r2, [r3, #40]
+  82:led.c         ****     led_buffer.led16 = led_vec[ 7];
+ 629              		.loc 1 82 0
+ 630 00f4 028A     		ldrh	r2, [r0, #16]
+ 631 00f6 1205     		lsl	r2, r2, #20
+ 632 00f8 110D     		lsr	r1, r2, #20
+ 633 00fa 5A8D     		ldrh	r2, [r3, #42]
+ 634 00fc 120B     		lsr	r2, r2, #12
+ 635 00fe 1203     		lsl	r2, r2, #12
+ 636 0100 0A43     		orr	r2, r1
+ 637 0102 5A85     		strh	r2, [r3, #42]
+  83:led.c         ****     led_buffer.led17 = led_vec[ 6];
+ 638              		.loc 1 83 0
+ 639 0104 C289     		ldrh	r2, [r0, #14]
+ 640 0106 1205     		lsl	r2, r2, #20
+ 641 0108 110D     		lsr	r1, r2, #20
+ 642 010a 9A8D     		ldrh	r2, [r3, #44]
+ 643 010c 120B     		lsr	r2, r2, #12
+ 644 010e 1203     		lsl	r2, r2, #12
+ 645 0110 0A43     		orr	r2, r1
+ 646 0112 9A85     		strh	r2, [r3, #44]
+  84:led.c         ****     led_buffer.led18 = led_vec[ 5];
+ 647              		.loc 1 84 0
+ 648 0114 8289     		ldrh	r2, [r0, #12]
+ 649 0116 1205     		lsl	r2, r2, #20
+ 650 0118 110D     		lsr	r1, r2, #20
+ 651 011a DA8D     		ldrh	r2, [r3, #46]
+ 652 011c 120B     		lsr	r2, r2, #12
+ 653 011e 1203     		lsl	r2, r2, #12
+ 654 0120 0A43     		orr	r2, r1
+ 655 0122 DA85     		strh	r2, [r3, #46]
+  85:led.c         ****     led_buffer.led19 = led_vec[ 4];
+ 656              		.loc 1 85 0
+ 657 0124 4289     		ldrh	r2, [r0, #10]
+ 658 0126 1205     		lsl	r2, r2, #20
+ 659 0128 110D     		lsr	r1, r2, #20
+ 660 012a 1A8E     		ldrh	r2, [r3, #48]
+ 661 012c 120B     		lsr	r2, r2, #12
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 16
+
+
+ 662 012e 1203     		lsl	r2, r2, #12
+ 663 0130 0A43     		orr	r2, r1
+ 664 0132 1A86     		strh	r2, [r3, #48]
+  86:led.c         ****     led_buffer.led20 = led_vec[ 3];
+ 665              		.loc 1 86 0
+ 666 0134 0289     		ldrh	r2, [r0, #8]
+ 667 0136 1205     		lsl	r2, r2, #20
+ 668 0138 110D     		lsr	r1, r2, #20
+ 669 013a 5A8E     		ldrh	r2, [r3, #50]
+ 670 013c 120B     		lsr	r2, r2, #12
+ 671 013e 1203     		lsl	r2, r2, #12
+ 672 0140 0A43     		orr	r2, r1
+ 673 0142 5A86     		strh	r2, [r3, #50]
+  87:led.c         ****     led_buffer.led21 = led_vec[ 2];
+ 674              		.loc 1 87 0
+ 675 0144 C288     		ldrh	r2, [r0, #6]
+ 676 0146 1205     		lsl	r2, r2, #20
+ 677 0148 110D     		lsr	r1, r2, #20
+ 678 014a 9A8E     		ldrh	r2, [r3, #52]
+ 679 014c 120B     		lsr	r2, r2, #12
+ 680 014e 1203     		lsl	r2, r2, #12
+ 681 0150 0A43     		orr	r2, r1
+ 682 0152 9A86     		strh	r2, [r3, #52]
+  88:led.c         ****     led_buffer.led22 = led_vec[ 1];
+ 683              		.loc 1 88 0
+ 684 0154 8288     		ldrh	r2, [r0, #4]
+ 685 0156 1205     		lsl	r2, r2, #20
+ 686 0158 110D     		lsr	r1, r2, #20
+ 687 015a DA8E     		ldrh	r2, [r3, #54]
+ 688 015c 120B     		lsr	r2, r2, #12
+ 689 015e 1203     		lsl	r2, r2, #12
+ 690 0160 0A43     		orr	r2, r1
+ 691 0162 DA86     		strh	r2, [r3, #54]
+  89:led.c         ****     led_buffer.led23 = led_vec[ 0];
+ 692              		.loc 1 89 0
+ 693 0164 4288     		ldrh	r2, [r0, #2]
+ 694 0166 1205     		lsl	r2, r2, #20
+ 695 0168 110D     		lsr	r1, r2, #20
+ 696 016a 1A8F     		ldrh	r2, [r3, #56]
+ 697 016c 120B     		lsr	r2, r2, #12
+ 698 016e 1203     		lsl	r2, r2, #12
+ 699 0170 0A43     		orr	r2, r1
+ 700 0172 1A87     		strh	r2, [r3, #56]
+  90:led.c         ****     
+ 701              		.loc 1 90 0
+ 702 0174 0288     		ldrh	r2, [r0]
+ 703 0176 1205     		lsl	r2, r2, #20
+ 704 0178 110D     		lsr	r1, r2, #20
+ 705 017a 5A8F     		ldrh	r2, [r3, #58]
+ 706 017c 120B     		lsr	r2, r2, #12
+ 707 017e 1203     		lsl	r2, r2, #12
+ 708 0180 0A43     		orr	r2, r1
+ 709 0182 5A87     		strh	r2, [r3, #58]
+  92:led.c         **** }// set_led_strip
+ 710              		.loc 1 92 0
+ 711 0184 FFF7FEFF 		bl	update_led_buffer
+ 712              	.LVL61:
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 17
+
+
+  93:led.c         **** 
+ 713              		.loc 1 93 0
+ 714              		@ sp needed
+ 715 0188 08BD     		pop	{r3, pc}
+ 716              	.L37:
+ 717 018a C046     		.align	2
+ 718              	.L36:
+ 719 018c 00000000 		.word	.LANCHOR0
+ 720              		.cfi_endproc
+ 721              	.LFE35:
+ 722              		.size	set_led_strip, .-set_led_strip
+ 723              		.section	.text.set_led,"ax",%progbits
+ 724              		.align	2
+ 725              		.global	set_led
+ 726              		.code	16
+ 727              		.thumb_func
+ 728              		.type	set_led, %function
+ 729              	set_led:
+ 730              	.LFB38:
+ 175:led.c         **** 
+ 176:led.c         **** //=============================================================================
+ 177:led.c         **** //===================================================================== set_led
+ 178:led.c         **** //=============================================================================
+ 179:led.c         **** void set_led (char led, uint16 intensity)
+ 180:led.c         **** {
+ 731              		.loc 1 180 0
+ 732              		.cfi_startproc
+ 733              	.LVL62:
+ 734 0000 08B5     		push	{r3, lr}
+ 735              		.cfi_def_cfa_offset 8
+ 736              		.cfi_offset 3, -8
+ 737              		.cfi_offset 14, -4
+ 181:led.c         ****     set_led_buffer(led, intensity);
+ 738              		.loc 1 181 0
+ 739 0002 FFF7FEFF 		bl	set_led_buffer
+ 740              	.LVL63:
+ 182:led.c         ****     update_led_buffer();
+ 741              		.loc 1 182 0
+ 742 0006 FFF7FEFF 		bl	update_led_buffer
+ 743              	.LVL64:
+ 183:led.c         **** }// set_led
+ 744              		.loc 1 183 0
+ 745              		@ sp needed
+ 746 000a 08BD     		pop	{r3, pc}
+ 747              		.cfi_endproc
+ 748              	.LFE38:
+ 749              		.size	set_led, .-set_led
+ 750              		.section	.text.set_led_pair,"ax",%progbits
+ 751              		.align	2
+ 752              		.global	set_led_pair
+ 753              		.code	16
+ 754              		.thumb_func
+ 755              		.type	set_led_pair, %function
+ 756              	set_led_pair:
+ 757              	.LFB39:
+ 184:led.c         **** 
+ 185:led.c         **** void set_led_pair (char left_led, uint16 intensity_left, uint16 intensity_center)
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 18
+
+
+ 186:led.c         **** {
+ 758              		.loc 1 186 0
+ 759              		.cfi_startproc
+ 760              	.LVL65:
+ 761 0000 38B5     		push	{r3, r4, r5, lr}
+ 762              		.cfi_def_cfa_offset 16
+ 763              		.cfi_offset 3, -16
+ 764              		.cfi_offset 4, -12
+ 765              		.cfi_offset 5, -8
+ 766              		.cfi_offset 14, -4
+ 767 0002 041C     		mov	r4, r0
+ 768 0004 151C     		mov	r5, r2
+ 187:led.c         ****     set_led_buffer(left_led    , intensity_left  );
+ 769              		.loc 1 187 0
+ 770 0006 FFF7FEFF 		bl	set_led_buffer
+ 771              	.LVL66:
+ 188:led.c         ****     set_led_buffer(left_led + 1, intensity_center);  
+ 772              		.loc 1 188 0
+ 773 000a 0134     		add	r4, r4, #1
+ 774 000c E0B2     		uxtb	r0, r4
+ 775 000e 291C     		mov	r1, r5
+ 776 0010 FFF7FEFF 		bl	set_led_buffer
+ 777              	.LVL67:
+ 189:led.c         ****     update_led_buffer();
+ 778              		.loc 1 189 0
+ 779 0014 FFF7FEFF 		bl	update_led_buffer
+ 780              	.LVL68:
+ 190:led.c         **** }// set_led_triplet
+ 781              		.loc 1 190 0
+ 782              		@ sp needed
+ 783 0018 38BD     		pop	{r3, r4, r5, pc}
+ 784              		.cfi_endproc
+ 785              	.LFE39:
+ 786              		.size	set_led_pair, .-set_led_pair
+ 787 001a C046     		.section	.text.set_led_triplet,"ax",%progbits
+ 788              		.align	2
+ 789              		.global	set_led_triplet
+ 790              		.code	16
+ 791              		.thumb_func
+ 792              		.type	set_led_triplet, %function
+ 793              	set_led_triplet:
+ 794              	.LFB40:
+ 191:led.c         **** 
+ 192:led.c         **** void set_led_triplet (char left_led, uint16 intensity_left, uint16 intensity_center, uint16 intensi
+ 193:led.c         **** { 
+ 795              		.loc 1 193 0
+ 796              		.cfi_startproc
+ 797              	.LVL69:
+ 798 0000 70B5     		push	{r4, r5, r6, lr}
+ 799              		.cfi_def_cfa_offset 16
+ 800              		.cfi_offset 4, -16
+ 801              		.cfi_offset 5, -12
+ 802              		.cfi_offset 6, -8
+ 803              		.cfi_offset 14, -4
+ 804 0002 041C     		mov	r4, r0
+ 805 0004 161C     		mov	r6, r2
+ 806 0006 1D1C     		mov	r5, r3
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 19
+
+
+ 194:led.c         ****     set_led_buffer(left_led    , intensity_left  );
+ 807              		.loc 1 194 0
+ 808 0008 FFF7FEFF 		bl	set_led_buffer
+ 809              	.LVL70:
+ 195:led.c         ****     set_led_buffer(left_led + 1, intensity_center);  
+ 810              		.loc 1 195 0
+ 811 000c 601C     		add	r0, r4, #1
+ 812 000e C0B2     		uxtb	r0, r0
+ 813 0010 311C     		mov	r1, r6
+ 814 0012 FFF7FEFF 		bl	set_led_buffer
+ 815              	.LVL71:
+ 196:led.c         ****     set_led_buffer(left_led + 2, intensity_right );
+ 816              		.loc 1 196 0
+ 817 0016 0234     		add	r4, r4, #2
+ 818 0018 E0B2     		uxtb	r0, r4
+ 819 001a 291C     		mov	r1, r5
+ 820 001c FFF7FEFF 		bl	set_led_buffer
+ 821              	.LVL72:
+ 197:led.c         **** 
+ 198:led.c         ****     update_led_buffer();
+ 822              		.loc 1 198 0
+ 823 0020 FFF7FEFF 		bl	update_led_buffer
+ 824              	.LVL73:
+ 199:led.c         **** }// set_led_triplet
+ 825              		.loc 1 199 0
+ 826              		@ sp needed
+ 827 0024 70BD     		pop	{r4, r5, r6, pc}
+ 828              		.cfi_endproc
+ 829              	.LFE40:
+ 830              		.size	set_led_triplet, .-set_led_triplet
+ 831 0026 C046     		.section	.text.set_all_leds_intensity,"ax",%progbits
+ 832              		.align	2
+ 833              		.global	set_all_leds_intensity
+ 834              		.code	16
+ 835              		.thumb_func
+ 836              		.type	set_all_leds_intensity, %function
+ 837              	set_all_leds_intensity:
+ 838              	.LFB41:
+ 200:led.c         **** 
+ 201:led.c         **** //=============================================================================
+ 202:led.c         **** //====================================================== set_all_leds_intensity
+ 203:led.c         **** //=============================================================================
+ 204:led.c         **** void set_all_leds_intensity (uint16 intensity)
+ 205:led.c         **** {
+ 839              		.loc 1 205 0
+ 840              		.cfi_startproc
+ 841              	.LVL74:
+ 842 0000 38B5     		push	{r3, r4, r5, lr}
+ 843              		.cfi_def_cfa_offset 16
+ 844              		.cfi_offset 3, -16
+ 845              		.cfi_offset 4, -12
+ 846              		.cfi_offset 5, -8
+ 847              		.cfi_offset 14, -4
+ 848 0002 051C     		mov	r5, r0
+ 849              	.LVL75:
+ 206:led.c         ****     int i;
+ 207:led.c         ****     
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 20
+
+
+ 208:led.c         ****     for (i = 0; i < MAX_LEDS; i++)
+ 850              		.loc 1 208 0
+ 851 0004 0024     		mov	r4, #0
+ 852 0006 04E0     		b	.L42
+ 853              	.LVL76:
+ 854              	.L43:
+ 209:led.c         ****     {
+ 210:led.c         ****         set_led_buffer(i, intensity);  
+ 855              		.loc 1 210 0 discriminator 3
+ 856 0008 E0B2     		uxtb	r0, r4
+ 857 000a 291C     		mov	r1, r5
+ 858 000c FFF7FEFF 		bl	set_led_buffer
+ 859              	.LVL77:
+ 208:led.c         ****     {
+ 860              		.loc 1 208 0 discriminator 3
+ 861 0010 0134     		add	r4, r4, #1
+ 862              	.LVL78:
+ 863              	.L42:
+ 208:led.c         ****     {
+ 864              		.loc 1 208 0 is_stmt 0 discriminator 1
+ 865 0012 172C     		cmp	r4, #23
+ 866 0014 F8DD     		ble	.L43
+ 211:led.c         ****     }
+ 212:led.c         ****         
+ 213:led.c         ****     update_led_buffer();
+ 867              		.loc 1 213 0 is_stmt 1
+ 868 0016 FFF7FEFF 		bl	update_led_buffer
+ 869              	.LVL79:
+ 214:led.c         **** }// set_all_leds_intensity
+ 870              		.loc 1 214 0
+ 871              		@ sp needed
+ 872              	.LVL80:
+ 873 001a 38BD     		pop	{r3, r4, r5, pc}
+ 874              		.cfi_endproc
+ 875              	.LFE41:
+ 876              		.size	set_all_leds_intensity, .-set_all_leds_intensity
+ 877              		.section	.text.set_all_white_leds,"ax",%progbits
+ 878              		.align	2
+ 879              		.global	set_all_white_leds
+ 880              		.code	16
+ 881              		.thumb_func
+ 882              		.type	set_all_white_leds, %function
+ 883              	set_all_white_leds:
+ 884              	.LFB42:
+ 215:led.c         **** 
+ 216:led.c         **** //=============================================================================
+ 217:led.c         **** //========================================================== set_all_white_leds
+ 218:led.c         **** //=============================================================================
+ 219:led.c         **** void set_all_white_leds(uint16 intensity)
+ 220:led.c         **** {  
+ 885              		.loc 1 220 0
+ 886              		.cfi_startproc
+ 887              	.LVL81:
+ 888 0000 38B5     		push	{r3, r4, r5, lr}
+ 889              		.cfi_def_cfa_offset 16
+ 890              		.cfi_offset 3, -16
+ 891              		.cfi_offset 4, -12
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 21
+
+
+ 892              		.cfi_offset 5, -8
+ 893              		.cfi_offset 14, -4
+ 894 0002 051C     		mov	r5, r0
+ 895              	.LVL82:
+ 221:led.c         ****     int i;
+ 222:led.c         ****     
+ 223:led.c         ****     for (i = 0; i < NUMBER_OF_WHITE_LEDS; i++)
+ 896              		.loc 1 223 0
+ 897 0004 0024     		mov	r4, #0
+ 898 0006 04E0     		b	.L45
+ 899              	.LVL83:
+ 900              	.L46:
+ 224:led.c         ****     {
+ 225:led.c         ****         set_led_buffer(i, intensity);  
+ 901              		.loc 1 225 0 discriminator 3
+ 902 0008 E0B2     		uxtb	r0, r4
+ 903 000a 291C     		mov	r1, r5
+ 904 000c FFF7FEFF 		bl	set_led_buffer
+ 905              	.LVL84:
+ 223:led.c         ****     {
+ 906              		.loc 1 223 0 discriminator 3
+ 907 0010 0134     		add	r4, r4, #1
+ 908              	.LVL85:
+ 909              	.L45:
+ 223:led.c         ****     {
+ 910              		.loc 1 223 0 is_stmt 0 discriminator 1
+ 911 0012 0E2C     		cmp	r4, #14
+ 912 0014 F8DD     		ble	.L46
+ 226:led.c         ****     }
+ 227:led.c         ****         
+ 228:led.c         ****     update_led_buffer();
+ 913              		.loc 1 228 0 is_stmt 1
+ 914 0016 FFF7FEFF 		bl	update_led_buffer
+ 915              	.LVL86:
+ 229:led.c         **** }// set_all_white_leds
+ 916              		.loc 1 229 0
+ 917              		@ sp needed
+ 918              	.LVL87:
+ 919 001a 38BD     		pop	{r3, r4, r5, pc}
+ 920              		.cfi_endproc
+ 921              	.LFE42:
+ 922              		.size	set_all_white_leds, .-set_all_white_leds
+ 923              		.section	.text.set_all_colored_leds,"ax",%progbits
+ 924              		.align	2
+ 925              		.global	set_all_colored_leds
+ 926              		.code	16
+ 927              		.thumb_func
+ 928              		.type	set_all_colored_leds, %function
+ 929              	set_all_colored_leds:
+ 930              	.LFB43:
+ 230:led.c         **** 
+ 231:led.c         **** //=============================================================================
+ 232:led.c         **** //======================================================== set_all_colored_leds
+ 233:led.c         **** //=============================================================================
+ 234:led.c         **** void set_all_colored_leds(uint16 intensity)
+ 235:led.c         **** {  
+ 931              		.loc 1 235 0
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 22
+
+
+ 932              		.cfi_startproc
+ 933              	.LVL88:
+ 934 0000 38B5     		push	{r3, r4, r5, lr}
+ 935              		.cfi_def_cfa_offset 16
+ 936              		.cfi_offset 3, -16
+ 937              		.cfi_offset 4, -12
+ 938              		.cfi_offset 5, -8
+ 939              		.cfi_offset 14, -4
+ 940 0002 051C     		mov	r5, r0
+ 941              	.LVL89:
+ 236:led.c         ****     int i;
+ 237:led.c         ****     
+ 238:led.c         ****     for (i = NUMBER_OF_WHITE_LEDS; i < MAX_LEDS; i++)
+ 942              		.loc 1 238 0
+ 943 0004 0F24     		mov	r4, #15
+ 944 0006 04E0     		b	.L48
+ 945              	.LVL90:
+ 946              	.L49:
+ 239:led.c         ****     {
+ 240:led.c         ****         set_led_buffer(i, intensity);  
+ 947              		.loc 1 240 0 discriminator 3
+ 948 0008 E0B2     		uxtb	r0, r4
+ 949 000a 291C     		mov	r1, r5
+ 950 000c FFF7FEFF 		bl	set_led_buffer
+ 951              	.LVL91:
+ 238:led.c         ****     {
+ 952              		.loc 1 238 0 discriminator 3
+ 953 0010 0134     		add	r4, r4, #1
+ 954              	.LVL92:
+ 955              	.L48:
+ 238:led.c         ****     {
+ 956              		.loc 1 238 0 is_stmt 0 discriminator 1
+ 957 0012 172C     		cmp	r4, #23
+ 958 0014 F8DD     		ble	.L49
+ 241:led.c         ****     }
+ 242:led.c         ****         
+ 243:led.c         ****     update_led_buffer();
+ 959              		.loc 1 243 0 is_stmt 1
+ 960 0016 FFF7FEFF 		bl	update_led_buffer
+ 961              	.LVL93:
+ 244:led.c         **** }// set_all_colored_leds
+ 962              		.loc 1 244 0
+ 963              		@ sp needed
+ 964              	.LVL94:
+ 965 001a 38BD     		pop	{r3, r4, r5, pc}
+ 966              		.cfi_endproc
+ 967              	.LFE43:
+ 968              		.size	set_all_colored_leds, .-set_all_colored_leds
+ 969              		.section	.text.initialize_leds,"ax",%progbits
+ 970              		.align	2
+ 971              		.global	initialize_leds
+ 972              		.code	16
+ 973              		.thumb_func
+ 974              		.type	initialize_leds, %function
+ 975              	initialize_leds:
+ 976              	.LFB44:
+ 245:led.c         **** 
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 23
+
+
+ 246:led.c         **** //=============================================================================
+ 247:led.c         **** //============================================================= initialize_leds
+ 248:led.c         **** //=============================================================================
+ 249:led.c         **** void initialize_leds()
+ 250:led.c         **** {
+ 977              		.loc 1 250 0
+ 978              		.cfi_startproc
+ 979 0000 08B5     		push	{r3, lr}
+ 980              		.cfi_def_cfa_offset 8
+ 981              		.cfi_offset 3, -8
+ 982              		.cfi_offset 14, -4
+ 251:led.c         **** #if USE_LED
+ 252:led.c         ****     SPIM_Start      ( );
+ 983              		.loc 1 252 0
+ 984 0002 FFF7FEFF 		bl	SPIM_Start
+ 985              	.LVL95:
+ 253:led.c         ****     set_all_leds_intensity(0x00);
+ 986              		.loc 1 253 0
+ 987 0006 0020     		mov	r0, #0
+ 988 0008 FFF7FEFF 		bl	set_all_leds_intensity
+ 989              	.LVL96:
+ 254:led.c         **** #endif // USE_LED
+ 255:led.c         **** }// initialize_leds
+ 990              		.loc 1 255 0
+ 991              		@ sp needed
+ 992 000c 08BD     		pop	{r3, pc}
+ 993              		.cfi_endproc
+ 994              	.LFE44:
+ 995              		.size	initialize_leds, .-initialize_leds
+ 996 000e C046     		.bss
+ 997              		.align	2
+ 998              		.set	.LANCHOR0,. + 0
+ 999              		.type	led_buffer, %object
+ 1000              		.size	led_buffer, 60
+ 1001              	led_buffer:
+ 1002 0000 00000000 		.space	60
+ 1002      00000000 
+ 1002      00000000 
+ 1002      00000000 
+ 1002      00000000 
+ 1003              		.text
+ 1004              	.Letext0:
+ 1005              		.file 2 "Generated_Source\\PSoC4/cytypes.h"
+ 1006              		.file 3 "Generated_Source\\PSoC4/SPIM_SPI_UART.h"
+ 1007              		.file 4 "Generated_Source\\PSoC4/Blank.h"
+ 1008              		.file 5 "Generated_Source\\PSoC4/Latch.h"
+ 1009              		.file 6 "Generated_Source\\PSoC4/CyLib.h"
+ 1010              		.file 7 "Generated_Source\\PSoC4/CapSense_ISR.h"
+ 1011              		.file 8 "Generated_Source\\PSoC4/SPIM.h"
+ 1012              		.section	.debug_info,"",%progbits
+ 1013              	.Ldebug_info0:
+ 1014 0000 95060000 		.4byte	0x695
+ 1015 0004 0400     		.2byte	0x4
+ 1016 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 1017 000a 04       		.byte	0x4
+ 1018 000b 01       		.uleb128 0x1
+ 1019 000c 0B010000 		.4byte	.LASF69
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 24
+
+
+ 1020 0010 01       		.byte	0x1
+ 1021 0011 D7010000 		.4byte	.LASF70
+ 1022 0015 00000000 		.4byte	.LASF71
+ 1023 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 1024 001d 00000000 		.4byte	0
+ 1025 0021 00000000 		.4byte	.Ldebug_line0
+ 1026 0025 02       		.uleb128 0x2
+ 1027 0026 01       		.byte	0x1
+ 1028 0027 06       		.byte	0x6
+ 1029 0028 9C020000 		.4byte	.LASF0
+ 1030 002c 02       		.uleb128 0x2
+ 1031 002d 01       		.byte	0x1
+ 1032 002e 08       		.byte	0x8
+ 1033 002f 83020000 		.4byte	.LASF1
+ 1034 0033 02       		.uleb128 0x2
+ 1035 0034 02       		.byte	0x2
+ 1036 0035 05       		.byte	0x5
+ 1037 0036 EC000000 		.4byte	.LASF2
+ 1038 003a 02       		.uleb128 0x2
+ 1039 003b 02       		.byte	0x2
+ 1040 003c 07       		.byte	0x7
+ 1041 003d 00030000 		.4byte	.LASF3
+ 1042 0041 02       		.uleb128 0x2
+ 1043 0042 04       		.byte	0x4
+ 1044 0043 05       		.byte	0x5
+ 1045 0044 45020000 		.4byte	.LASF4
+ 1046 0048 02       		.uleb128 0x2
+ 1047 0049 04       		.byte	0x4
+ 1048 004a 07       		.byte	0x7
+ 1049 004b 3D030000 		.4byte	.LASF5
+ 1050 004f 02       		.uleb128 0x2
+ 1051 0050 08       		.byte	0x8
+ 1052 0051 05       		.byte	0x5
+ 1053 0052 37020000 		.4byte	.LASF6
+ 1054 0056 02       		.uleb128 0x2
+ 1055 0057 08       		.byte	0x8
+ 1056 0058 07       		.byte	0x7
+ 1057 0059 B9020000 		.4byte	.LASF7
+ 1058 005d 03       		.uleb128 0x3
+ 1059 005e 04       		.byte	0x4
+ 1060 005f 05       		.byte	0x5
+ 1061 0060 696E7400 		.ascii	"int\000"
+ 1062 0064 02       		.uleb128 0x2
+ 1063 0065 04       		.byte	0x4
+ 1064 0066 07       		.byte	0x7
+ 1065 0067 D6020000 		.4byte	.LASF8
+ 1066 006b 04       		.uleb128 0x4
+ 1067 006c E4010000 		.4byte	.LASF9
+ 1068 0070 02       		.byte	0x2
+ 1069 0071 B901     		.2byte	0x1b9
+ 1070 0073 2C000000 		.4byte	0x2c
+ 1071 0077 04       		.uleb128 0x4
+ 1072 0078 DD010000 		.4byte	.LASF10
+ 1073 007c 02       		.byte	0x2
+ 1074 007d BA01     		.2byte	0x1ba
+ 1075 007f 3A000000 		.4byte	0x3a
+ 1076 0083 04       		.uleb128 0x4
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 25
+
+
+ 1077 0084 36030000 		.4byte	.LASF11
+ 1078 0088 02       		.byte	0x2
+ 1079 0089 BB01     		.2byte	0x1bb
+ 1080 008b 48000000 		.4byte	0x48
+ 1081 008f 02       		.uleb128 0x2
+ 1082 0090 04       		.byte	0x4
+ 1083 0091 04       		.byte	0x4
+ 1084 0092 31020000 		.4byte	.LASF12
+ 1085 0096 02       		.uleb128 0x2
+ 1086 0097 08       		.byte	0x8
+ 1087 0098 04       		.byte	0x4
+ 1088 0099 4F030000 		.4byte	.LASF13
+ 1089 009d 04       		.uleb128 0x4
+ 1090 009e AD010000 		.4byte	.LASF14
+ 1091 00a2 02       		.byte	0x2
+ 1092 00a3 CA01     		.2byte	0x1ca
+ 1093 00a5 A9000000 		.4byte	0xa9
+ 1094 00a9 02       		.uleb128 0x2
+ 1095 00aa 01       		.byte	0x1
+ 1096 00ab 08       		.byte	0x8
+ 1097 00ac 31030000 		.4byte	.LASF15
+ 1098 00b0 02       		.uleb128 0x2
+ 1099 00b1 04       		.byte	0x4
+ 1100 00b2 07       		.byte	0x7
+ 1101 00b3 02010000 		.4byte	.LASF16
+ 1102 00b7 05       		.uleb128 0x5
+ 1103 00b8 6B000000 		.4byte	0x6b
+ 1104 00bc 06       		.uleb128 0x6
+ 1105 00bd 04       		.byte	0x4
+ 1106 00be 77000000 		.4byte	0x77
+ 1107 00c2 07       		.uleb128 0x7
+ 1108 00c3 1D030000 		.4byte	.LASF72
+ 1109 00c7 3C       		.byte	0x3c
+ 1110 00c8 01       		.byte	0x1
+ 1111 00c9 12       		.byte	0x12
+ 1112 00ca 43020000 		.4byte	0x243
+ 1113 00ce 08       		.uleb128 0x8
+ 1114 00cf 5E020000 		.4byte	.LASF73
+ 1115 00d3 01       		.byte	0x1
+ 1116 00d4 14       		.byte	0x14
+ 1117 00d5 43020000 		.4byte	0x243
+ 1118 00d9 00       		.byte	0
+ 1119 00da 09       		.uleb128 0x9
+ 1120 00db BB030000 		.4byte	.LASF17
+ 1121 00df 01       		.byte	0x1
+ 1122 00e0 15       		.byte	0x15
+ 1123 00e1 77000000 		.4byte	0x77
+ 1124 00e5 02       		.byte	0x2
+ 1125 00e6 0C       		.byte	0xc
+ 1126 00e7 04       		.byte	0x4
+ 1127 00e8 0C       		.byte	0xc
+ 1128 00e9 09       		.uleb128 0x9
+ 1129 00ea C0030000 		.4byte	.LASF18
+ 1130 00ee 01       		.byte	0x1
+ 1131 00ef 16       		.byte	0x16
+ 1132 00f0 77000000 		.4byte	0x77
+ 1133 00f4 02       		.byte	0x2
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 26
+
+
+ 1134 00f5 0C       		.byte	0xc
+ 1135 00f6 04       		.byte	0x4
+ 1136 00f7 0E       		.byte	0xe
+ 1137 00f8 09       		.uleb128 0x9
+ 1138 00f9 C5030000 		.4byte	.LASF19
+ 1139 00fd 01       		.byte	0x1
+ 1140 00fe 17       		.byte	0x17
+ 1141 00ff 77000000 		.4byte	0x77
+ 1142 0103 02       		.byte	0x2
+ 1143 0104 0C       		.byte	0xc
+ 1144 0105 04       		.byte	0x4
+ 1145 0106 10       		.byte	0x10
+ 1146 0107 09       		.uleb128 0x9
+ 1147 0108 CA030000 		.4byte	.LASF20
+ 1148 010c 01       		.byte	0x1
+ 1149 010d 18       		.byte	0x18
+ 1150 010e 77000000 		.4byte	0x77
+ 1151 0112 02       		.byte	0x2
+ 1152 0113 0C       		.byte	0xc
+ 1153 0114 04       		.byte	0x4
+ 1154 0115 12       		.byte	0x12
+ 1155 0116 09       		.uleb128 0x9
+ 1156 0117 CF030000 		.4byte	.LASF21
+ 1157 011b 01       		.byte	0x1
+ 1158 011c 19       		.byte	0x19
+ 1159 011d 77000000 		.4byte	0x77
+ 1160 0121 02       		.byte	0x2
+ 1161 0122 0C       		.byte	0xc
+ 1162 0123 04       		.byte	0x4
+ 1163 0124 14       		.byte	0x14
+ 1164 0125 09       		.uleb128 0x9
+ 1165 0126 D4030000 		.4byte	.LASF22
+ 1166 012a 01       		.byte	0x1
+ 1167 012b 1A       		.byte	0x1a
+ 1168 012c 77000000 		.4byte	0x77
+ 1169 0130 02       		.byte	0x2
+ 1170 0131 0C       		.byte	0xc
+ 1171 0132 04       		.byte	0x4
+ 1172 0133 16       		.byte	0x16
+ 1173 0134 09       		.uleb128 0x9
+ 1174 0135 D9030000 		.4byte	.LASF23
+ 1175 0139 01       		.byte	0x1
+ 1176 013a 1B       		.byte	0x1b
+ 1177 013b 77000000 		.4byte	0x77
+ 1178 013f 02       		.byte	0x2
+ 1179 0140 0C       		.byte	0xc
+ 1180 0141 04       		.byte	0x4
+ 1181 0142 18       		.byte	0x18
+ 1182 0143 09       		.uleb128 0x9
+ 1183 0144 DE030000 		.4byte	.LASF24
+ 1184 0148 01       		.byte	0x1
+ 1185 0149 1C       		.byte	0x1c
+ 1186 014a 77000000 		.4byte	0x77
+ 1187 014e 02       		.byte	0x2
+ 1188 014f 0C       		.byte	0xc
+ 1189 0150 04       		.byte	0x4
+ 1190 0151 1A       		.byte	0x1a
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 27
+
+
+ 1191 0152 09       		.uleb128 0x9
+ 1192 0153 E3030000 		.4byte	.LASF25
+ 1193 0157 01       		.byte	0x1
+ 1194 0158 1D       		.byte	0x1d
+ 1195 0159 77000000 		.4byte	0x77
+ 1196 015d 02       		.byte	0x2
+ 1197 015e 0C       		.byte	0xc
+ 1198 015f 04       		.byte	0x4
+ 1199 0160 1C       		.byte	0x1c
+ 1200 0161 09       		.uleb128 0x9
+ 1201 0162 E8030000 		.4byte	.LASF26
+ 1202 0166 01       		.byte	0x1
+ 1203 0167 1E       		.byte	0x1e
+ 1204 0168 77000000 		.4byte	0x77
+ 1205 016c 02       		.byte	0x2
+ 1206 016d 0C       		.byte	0xc
+ 1207 016e 04       		.byte	0x4
+ 1208 016f 1E       		.byte	0x1e
+ 1209 0170 09       		.uleb128 0x9
+ 1210 0171 56030000 		.4byte	.LASF27
+ 1211 0175 01       		.byte	0x1
+ 1212 0176 1F       		.byte	0x1f
+ 1213 0177 77000000 		.4byte	0x77
+ 1214 017b 02       		.byte	0x2
+ 1215 017c 0C       		.byte	0xc
+ 1216 017d 04       		.byte	0x4
+ 1217 017e 20       		.byte	0x20
+ 1218 017f 09       		.uleb128 0x9
+ 1219 0180 5C030000 		.4byte	.LASF28
+ 1220 0184 01       		.byte	0x1
+ 1221 0185 20       		.byte	0x20
+ 1222 0186 77000000 		.4byte	0x77
+ 1223 018a 02       		.byte	0x2
+ 1224 018b 0C       		.byte	0xc
+ 1225 018c 04       		.byte	0x4
+ 1226 018d 22       		.byte	0x22
+ 1227 018e 09       		.uleb128 0x9
+ 1228 018f 62030000 		.4byte	.LASF29
+ 1229 0193 01       		.byte	0x1
+ 1230 0194 21       		.byte	0x21
+ 1231 0195 77000000 		.4byte	0x77
+ 1232 0199 02       		.byte	0x2
+ 1233 019a 0C       		.byte	0xc
+ 1234 019b 04       		.byte	0x4
+ 1235 019c 24       		.byte	0x24
+ 1236 019d 09       		.uleb128 0x9
+ 1237 019e 68030000 		.4byte	.LASF30
+ 1238 01a2 01       		.byte	0x1
+ 1239 01a3 22       		.byte	0x22
+ 1240 01a4 77000000 		.4byte	0x77
+ 1241 01a8 02       		.byte	0x2
+ 1242 01a9 0C       		.byte	0xc
+ 1243 01aa 04       		.byte	0x4
+ 1244 01ab 26       		.byte	0x26
+ 1245 01ac 09       		.uleb128 0x9
+ 1246 01ad 9B000000 		.4byte	.LASF31
+ 1247 01b1 01       		.byte	0x1
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 28
+
+
+ 1248 01b2 23       		.byte	0x23
+ 1249 01b3 77000000 		.4byte	0x77
+ 1250 01b7 02       		.byte	0x2
+ 1251 01b8 0C       		.byte	0xc
+ 1252 01b9 04       		.byte	0x4
+ 1253 01ba 28       		.byte	0x28
+ 1254 01bb 09       		.uleb128 0x9
+ 1255 01bc 76030000 		.4byte	.LASF32
+ 1256 01c0 01       		.byte	0x1
+ 1257 01c1 24       		.byte	0x24
+ 1258 01c2 77000000 		.4byte	0x77
+ 1259 01c6 02       		.byte	0x2
+ 1260 01c7 0C       		.byte	0xc
+ 1261 01c8 04       		.byte	0x4
+ 1262 01c9 2A       		.byte	0x2a
+ 1263 01ca 09       		.uleb128 0x9
+ 1264 01cb B6000000 		.4byte	.LASF33
+ 1265 01cf 01       		.byte	0x1
+ 1266 01d0 25       		.byte	0x25
+ 1267 01d1 77000000 		.4byte	0x77
+ 1268 01d5 02       		.byte	0x2
+ 1269 01d6 0C       		.byte	0xc
+ 1270 01d7 04       		.byte	0x4
+ 1271 01d8 2C       		.byte	0x2c
+ 1272 01d9 09       		.uleb128 0x9
+ 1273 01da 7C030000 		.4byte	.LASF34
+ 1274 01de 01       		.byte	0x1
+ 1275 01df 26       		.byte	0x26
+ 1276 01e0 77000000 		.4byte	0x77
+ 1277 01e4 02       		.byte	0x2
+ 1278 01e5 0C       		.byte	0xc
+ 1279 01e6 04       		.byte	0x4
+ 1280 01e7 2E       		.byte	0x2e
+ 1281 01e8 09       		.uleb128 0x9
+ 1282 01e9 82030000 		.4byte	.LASF35
+ 1283 01ed 01       		.byte	0x1
+ 1284 01ee 27       		.byte	0x27
+ 1285 01ef 77000000 		.4byte	0x77
+ 1286 01f3 02       		.byte	0x2
+ 1287 01f4 0C       		.byte	0xc
+ 1288 01f5 04       		.byte	0x4
+ 1289 01f6 30       		.byte	0x30
+ 1290 01f7 09       		.uleb128 0x9
+ 1291 01f8 88030000 		.4byte	.LASF36
+ 1292 01fc 01       		.byte	0x1
+ 1293 01fd 28       		.byte	0x28
+ 1294 01fe 77000000 		.4byte	0x77
+ 1295 0202 02       		.byte	0x2
+ 1296 0203 0C       		.byte	0xc
+ 1297 0204 04       		.byte	0x4
+ 1298 0205 32       		.byte	0x32
+ 1299 0206 09       		.uleb128 0x9
+ 1300 0207 BC000000 		.4byte	.LASF37
+ 1301 020b 01       		.byte	0x1
+ 1302 020c 29       		.byte	0x29
+ 1303 020d 77000000 		.4byte	0x77
+ 1304 0211 02       		.byte	0x2
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 29
+
+
+ 1305 0212 0C       		.byte	0xc
+ 1306 0213 04       		.byte	0x4
+ 1307 0214 34       		.byte	0x34
+ 1308 0215 09       		.uleb128 0x9
+ 1309 0216 D0020000 		.4byte	.LASF38
+ 1310 021a 01       		.byte	0x1
+ 1311 021b 2A       		.byte	0x2a
+ 1312 021c 77000000 		.4byte	0x77
+ 1313 0220 02       		.byte	0x2
+ 1314 0221 0C       		.byte	0xc
+ 1315 0222 04       		.byte	0x4
+ 1316 0223 36       		.byte	0x36
+ 1317 0224 09       		.uleb128 0x9
+ 1318 0225 D2000000 		.4byte	.LASF39
+ 1319 0229 01       		.byte	0x1
+ 1320 022a 2B       		.byte	0x2b
+ 1321 022b 77000000 		.4byte	0x77
+ 1322 022f 02       		.byte	0x2
+ 1323 0230 0C       		.byte	0xc
+ 1324 0231 04       		.byte	0x4
+ 1325 0232 38       		.byte	0x38
+ 1326 0233 09       		.uleb128 0x9
+ 1327 0234 D8000000 		.4byte	.LASF40
+ 1328 0238 01       		.byte	0x1
+ 1329 0239 2C       		.byte	0x2c
+ 1330 023a 77000000 		.4byte	0x77
+ 1331 023e 02       		.byte	0x2
+ 1332 023f 0C       		.byte	0xc
+ 1333 0240 04       		.byte	0x4
+ 1334 0241 3A       		.byte	0x3a
+ 1335 0242 00       		.byte	0
+ 1336 0243 0A       		.uleb128 0xa
+ 1337 0244 9D000000 		.4byte	0x9d
+ 1338 0248 53020000 		.4byte	0x253
+ 1339 024c 0B       		.uleb128 0xb
+ 1340 024d B0000000 		.4byte	0xb0
+ 1341 0251 0B       		.byte	0xb
+ 1342 0252 00       		.byte	0
+ 1343 0253 0C       		.uleb128 0xc
+ 1344 0254 A5030000 		.4byte	.LASF41
+ 1345 0258 01       		.byte	0x1
+ 1346 0259 2D       		.byte	0x2d
+ 1347 025a C2000000 		.4byte	0xc2
+ 1348 025e 0D       		.uleb128 0xd
+ 1349 025f ED030000 		.4byte	.LASF45
+ 1350 0263 01       		.byte	0x1
+ 1351 0264 62       		.byte	0x62
+ 1352 0265 00000000 		.4byte	.LFB36
+ 1353 0269 D0010000 		.4byte	.LFE36-.LFB36
+ 1354 026d 01       		.uleb128 0x1
+ 1355 026e 9C       		.byte	0x9c
+ 1356 026f B0020000 		.4byte	0x2b0
+ 1357 0273 0E       		.uleb128 0xe
+ 1358 0274 6C656400 		.ascii	"led\000"
+ 1359 0278 01       		.byte	0x1
+ 1360 0279 62       		.byte	0x62
+ 1361 027a A9000000 		.4byte	0xa9
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 30
+
+
+ 1362 027e 00000000 		.4byte	.LLST0
+ 1363 0282 0F       		.uleb128 0xf
+ 1364 0283 13030000 		.4byte	.LASF42
+ 1365 0287 01       		.byte	0x1
+ 1366 0288 62       		.byte	0x62
+ 1367 0289 77000000 		.4byte	0x77
+ 1368 028d 3A000000 		.4byte	.LLST1
+ 1369 0291 10       		.uleb128 0x10
+ 1370 0292 64020000 		.4byte	.LASF43
+ 1371 0296 01       		.byte	0x1
+ 1372 0297 64       		.byte	0x64
+ 1373 0298 77000000 		.4byte	0x77
+ 1374 029c 3A000000 		.4byte	.LLST1
+ 1375 02a0 10       		.uleb128 0x10
+ 1376 02a1 FC030000 		.4byte	.LASF44
+ 1377 02a5 01       		.byte	0x1
+ 1378 02a6 65       		.byte	0x65
+ 1379 02a7 77000000 		.4byte	0x77
+ 1380 02ab 9A020000 		.4byte	.LLST3
+ 1381 02af 00       		.byte	0
+ 1382 02b0 0D       		.uleb128 0xd
+ 1383 02b1 12020000 		.4byte	.LASF46
+ 1384 02b5 01       		.byte	0x1
+ 1385 02b6 A2       		.byte	0xa2
+ 1386 02b7 00000000 		.4byte	.LFB37
+ 1387 02bb 38000000 		.4byte	.LFE37-.LFB37
+ 1388 02bf 01       		.uleb128 0x1
+ 1389 02c0 9C       		.byte	0x9c
+ 1390 02c1 53030000 		.4byte	0x353
+ 1391 02c5 11       		.uleb128 0x11
+ 1392 02c6 06000000 		.4byte	.LVL52
+ 1393 02ca 2E060000 		.4byte	0x62e
+ 1394 02ce 12       		.uleb128 0x12
+ 1395 02cf 0E000000 		.4byte	.LVL53
+ 1396 02d3 35060000 		.4byte	0x635
+ 1397 02d7 EA020000 		.4byte	0x2ea
+ 1398 02db 13       		.uleb128 0x13
+ 1399 02dc 01       		.uleb128 0x1
+ 1400 02dd 51       		.byte	0x51
+ 1401 02de 01       		.uleb128 0x1
+ 1402 02df 4E       		.byte	0x4e
+ 1403 02e0 13       		.uleb128 0x13
+ 1404 02e1 01       		.uleb128 0x1
+ 1405 02e2 50       		.byte	0x50
+ 1406 02e3 05       		.uleb128 0x5
+ 1407 02e4 03       		.byte	0x3
+ 1408 02e5 00000000 		.4byte	.LANCHOR0
+ 1409 02e9 00       		.byte	0
+ 1410 02ea 12       		.uleb128 0x12
+ 1411 02eb 14000000 		.4byte	.LVL54
+ 1412 02ef 57060000 		.4byte	0x657
+ 1413 02f3 FD020000 		.4byte	0x2fd
+ 1414 02f7 13       		.uleb128 0x13
+ 1415 02f8 01       		.uleb128 0x1
+ 1416 02f9 50       		.byte	0x50
+ 1417 02fa 01       		.uleb128 0x1
+ 1418 02fb 31       		.byte	0x31
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 31
+
+
+ 1419 02fc 00       		.byte	0
+ 1420 02fd 12       		.uleb128 0x12
+ 1421 02fe 1A000000 		.4byte	.LVL55
+ 1422 0302 68060000 		.4byte	0x668
+ 1423 0306 10030000 		.4byte	0x310
+ 1424 030a 13       		.uleb128 0x13
+ 1425 030b 01       		.uleb128 0x1
+ 1426 030c 50       		.byte	0x50
+ 1427 030d 01       		.uleb128 0x1
+ 1428 030e 31       		.byte	0x31
+ 1429 030f 00       		.byte	0
+ 1430 0310 12       		.uleb128 0x12
+ 1431 0311 20000000 		.4byte	.LVL56
+ 1432 0315 79060000 		.4byte	0x679
+ 1433 0319 23030000 		.4byte	0x323
+ 1434 031d 13       		.uleb128 0x13
+ 1435 031e 01       		.uleb128 0x1
+ 1436 031f 50       		.byte	0x50
+ 1437 0320 01       		.uleb128 0x1
+ 1438 0321 31       		.byte	0x31
+ 1439 0322 00       		.byte	0
+ 1440 0323 12       		.uleb128 0x12
+ 1441 0324 26000000 		.4byte	.LVL57
+ 1442 0328 68060000 		.4byte	0x668
+ 1443 032c 36030000 		.4byte	0x336
+ 1444 0330 13       		.uleb128 0x13
+ 1445 0331 01       		.uleb128 0x1
+ 1446 0332 50       		.byte	0x50
+ 1447 0333 01       		.uleb128 0x1
+ 1448 0334 30       		.byte	0x30
+ 1449 0335 00       		.byte	0
+ 1450 0336 12       		.uleb128 0x12
+ 1451 0337 2C000000 		.4byte	.LVL58
+ 1452 033b 57060000 		.4byte	0x657
+ 1453 033f 49030000 		.4byte	0x349
+ 1454 0343 13       		.uleb128 0x13
+ 1455 0344 01       		.uleb128 0x1
+ 1456 0345 50       		.byte	0x50
+ 1457 0346 01       		.uleb128 0x1
+ 1458 0347 30       		.byte	0x30
+ 1459 0348 00       		.byte	0
+ 1460 0349 11       		.uleb128 0x11
+ 1461 034a 30000000 		.4byte	.LVL59
+ 1462 034e 8A060000 		.4byte	0x68a
+ 1463 0352 00       		.byte	0
+ 1464 0353 14       		.uleb128 0x14
+ 1465 0354 DE000000 		.4byte	.LASF48
+ 1466 0358 01       		.byte	0x1
+ 1467 0359 41       		.byte	0x41
+ 1468 035a 00000000 		.4byte	.LFB35
+ 1469 035e 90010000 		.4byte	.LFE35-.LFB35
+ 1470 0362 01       		.uleb128 0x1
+ 1471 0363 9C       		.byte	0x9c
+ 1472 0364 81030000 		.4byte	0x381
+ 1473 0368 0F       		.uleb128 0xf
+ 1474 0369 6E030000 		.4byte	.LASF47
+ 1475 036d 01       		.byte	0x1
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 32
+
+
+ 1476 036e 41       		.byte	0x41
+ 1477 036f BC000000 		.4byte	0xbc
+ 1478 0373 AD020000 		.4byte	.LLST4
+ 1479 0377 11       		.uleb128 0x11
+ 1480 0378 88010000 		.4byte	.LVL61
+ 1481 037c B0020000 		.4byte	0x2b0
+ 1482 0380 00       		.byte	0
+ 1483 0381 14       		.uleb128 0x14
+ 1484 0382 0A020000 		.4byte	.LASF49
+ 1485 0386 01       		.byte	0x1
+ 1486 0387 B3       		.byte	0xb3
+ 1487 0388 00000000 		.4byte	.LFB38
+ 1488 038c 0C000000 		.4byte	.LFE38-.LFB38
+ 1489 0390 01       		.uleb128 0x1
+ 1490 0391 9C       		.byte	0x9c
+ 1491 0392 C7030000 		.4byte	0x3c7
+ 1492 0396 0E       		.uleb128 0xe
+ 1493 0397 6C656400 		.ascii	"led\000"
+ 1494 039b 01       		.byte	0x1
+ 1495 039c B3       		.byte	0xb3
+ 1496 039d A9000000 		.4byte	0xa9
+ 1497 03a1 CE020000 		.4byte	.LLST5
+ 1498 03a5 0F       		.uleb128 0xf
+ 1499 03a6 13030000 		.4byte	.LASF42
+ 1500 03aa 01       		.byte	0x1
+ 1501 03ab B3       		.byte	0xb3
+ 1502 03ac 77000000 		.4byte	0x77
+ 1503 03b0 EF020000 		.4byte	.LLST6
+ 1504 03b4 11       		.uleb128 0x11
+ 1505 03b5 06000000 		.4byte	.LVL63
+ 1506 03b9 5E020000 		.4byte	0x25e
+ 1507 03bd 11       		.uleb128 0x11
+ 1508 03be 0A000000 		.4byte	.LVL64
+ 1509 03c2 B0020000 		.4byte	0x2b0
+ 1510 03c6 00       		.byte	0
+ 1511 03c7 14       		.uleb128 0x14
+ 1512 03c8 24020000 		.4byte	.LASF50
+ 1513 03cc 01       		.byte	0x1
+ 1514 03cd B9       		.byte	0xb9
+ 1515 03ce 00000000 		.4byte	.LFB39
+ 1516 03d2 1A000000 		.4byte	.LFE39-.LFB39
+ 1517 03d6 01       		.uleb128 0x1
+ 1518 03d7 9C       		.byte	0x9c
+ 1519 03d8 41040000 		.4byte	0x441
+ 1520 03dc 0F       		.uleb128 0xf
+ 1521 03dd E3020000 		.4byte	.LASF51
+ 1522 03e1 01       		.byte	0x1
+ 1523 03e2 B9       		.byte	0xb9
+ 1524 03e3 A9000000 		.4byte	0xa9
+ 1525 03e7 10030000 		.4byte	.LLST7
+ 1526 03eb 0F       		.uleb128 0xf
+ 1527 03ec C8010000 		.4byte	.LASF52
+ 1528 03f0 01       		.byte	0x1
+ 1529 03f1 B9       		.byte	0xb9
+ 1530 03f2 77000000 		.4byte	0x77
+ 1531 03f6 31030000 		.4byte	.LLST8
+ 1532 03fa 0F       		.uleb128 0xf
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 33
+
+
+ 1533 03fb A8020000 		.4byte	.LASF53
+ 1534 03ff 01       		.byte	0x1
+ 1535 0400 B9       		.byte	0xb9
+ 1536 0401 77000000 		.4byte	0x77
+ 1537 0405 52030000 		.4byte	.LLST9
+ 1538 0409 12       		.uleb128 0x12
+ 1539 040a 0A000000 		.4byte	.LVL66
+ 1540 040e 5E020000 		.4byte	0x25e
+ 1541 0412 1D040000 		.4byte	0x41d
+ 1542 0416 13       		.uleb128 0x13
+ 1543 0417 01       		.uleb128 0x1
+ 1544 0418 50       		.byte	0x50
+ 1545 0419 02       		.uleb128 0x2
+ 1546 041a 74       		.byte	0x74
+ 1547 041b 00       		.sleb128 0
+ 1548 041c 00       		.byte	0
+ 1549 041d 12       		.uleb128 0x12
+ 1550 041e 14000000 		.4byte	.LVL67
+ 1551 0422 5E020000 		.4byte	0x25e
+ 1552 0426 37040000 		.4byte	0x437
+ 1553 042a 13       		.uleb128 0x13
+ 1554 042b 01       		.uleb128 0x1
+ 1555 042c 51       		.byte	0x51
+ 1556 042d 02       		.uleb128 0x2
+ 1557 042e 75       		.byte	0x75
+ 1558 042f 00       		.sleb128 0
+ 1559 0430 13       		.uleb128 0x13
+ 1560 0431 01       		.uleb128 0x1
+ 1561 0432 50       		.byte	0x50
+ 1562 0433 02       		.uleb128 0x2
+ 1563 0434 74       		.byte	0x74
+ 1564 0435 00       		.sleb128 0
+ 1565 0436 00       		.byte	0
+ 1566 0437 11       		.uleb128 0x11
+ 1567 0438 18000000 		.4byte	.LVL68
+ 1568 043c B0020000 		.4byte	0x2b0
+ 1569 0440 00       		.byte	0
+ 1570 0441 14       		.uleb128 0x14
+ 1571 0442 4E020000 		.4byte	.LASF54
+ 1572 0446 01       		.byte	0x1
+ 1573 0447 C0       		.byte	0xc0
+ 1574 0448 00000000 		.4byte	.LFB40
+ 1575 044c 26000000 		.4byte	.LFE40-.LFB40
+ 1576 0450 01       		.uleb128 0x1
+ 1577 0451 9C       		.byte	0x9c
+ 1578 0452 E4040000 		.4byte	0x4e4
+ 1579 0456 0F       		.uleb128 0xf
+ 1580 0457 E3020000 		.4byte	.LASF51
+ 1581 045b 01       		.byte	0x1
+ 1582 045c C0       		.byte	0xc0
+ 1583 045d A9000000 		.4byte	0xa9
+ 1584 0461 73030000 		.4byte	.LLST10
+ 1585 0465 0F       		.uleb128 0xf
+ 1586 0466 C8010000 		.4byte	.LASF52
+ 1587 046a 01       		.byte	0x1
+ 1588 046b C0       		.byte	0xc0
+ 1589 046c 77000000 		.4byte	0x77
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 34
+
+
+ 1590 0470 94030000 		.4byte	.LLST11
+ 1591 0474 0F       		.uleb128 0xf
+ 1592 0475 A8020000 		.4byte	.LASF53
+ 1593 0479 01       		.byte	0x1
+ 1594 047a C0       		.byte	0xc0
+ 1595 047b 77000000 		.4byte	0x77
+ 1596 047f B5030000 		.4byte	.LLST12
+ 1597 0483 0F       		.uleb128 0xf
+ 1598 0484 9D010000 		.4byte	.LASF55
+ 1599 0488 01       		.byte	0x1
+ 1600 0489 C0       		.byte	0xc0
+ 1601 048a 77000000 		.4byte	0x77
+ 1602 048e D6030000 		.4byte	.LLST13
+ 1603 0492 12       		.uleb128 0x12
+ 1604 0493 0C000000 		.4byte	.LVL70
+ 1605 0497 5E020000 		.4byte	0x25e
+ 1606 049b A6040000 		.4byte	0x4a6
+ 1607 049f 13       		.uleb128 0x13
+ 1608 04a0 01       		.uleb128 0x1
+ 1609 04a1 50       		.byte	0x50
+ 1610 04a2 02       		.uleb128 0x2
+ 1611 04a3 74       		.byte	0x74
+ 1612 04a4 00       		.sleb128 0
+ 1613 04a5 00       		.byte	0
+ 1614 04a6 12       		.uleb128 0x12
+ 1615 04a7 16000000 		.4byte	.LVL71
+ 1616 04ab 5E020000 		.4byte	0x25e
+ 1617 04af C0040000 		.4byte	0x4c0
+ 1618 04b3 13       		.uleb128 0x13
+ 1619 04b4 01       		.uleb128 0x1
+ 1620 04b5 51       		.byte	0x51
+ 1621 04b6 02       		.uleb128 0x2
+ 1622 04b7 76       		.byte	0x76
+ 1623 04b8 00       		.sleb128 0
+ 1624 04b9 13       		.uleb128 0x13
+ 1625 04ba 01       		.uleb128 0x1
+ 1626 04bb 50       		.byte	0x50
+ 1627 04bc 02       		.uleb128 0x2
+ 1628 04bd 74       		.byte	0x74
+ 1629 04be 01       		.sleb128 1
+ 1630 04bf 00       		.byte	0
+ 1631 04c0 12       		.uleb128 0x12
+ 1632 04c1 20000000 		.4byte	.LVL72
+ 1633 04c5 5E020000 		.4byte	0x25e
+ 1634 04c9 DA040000 		.4byte	0x4da
+ 1635 04cd 13       		.uleb128 0x13
+ 1636 04ce 01       		.uleb128 0x1
+ 1637 04cf 51       		.byte	0x51
+ 1638 04d0 02       		.uleb128 0x2
+ 1639 04d1 75       		.byte	0x75
+ 1640 04d2 00       		.sleb128 0
+ 1641 04d3 13       		.uleb128 0x13
+ 1642 04d4 01       		.uleb128 0x1
+ 1643 04d5 50       		.byte	0x50
+ 1644 04d6 02       		.uleb128 0x2
+ 1645 04d7 74       		.byte	0x74
+ 1646 04d8 00       		.sleb128 0
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 35
+
+
+ 1647 04d9 00       		.byte	0
+ 1648 04da 11       		.uleb128 0x11
+ 1649 04db 24000000 		.4byte	.LVL73
+ 1650 04df B0020000 		.4byte	0x2b0
+ 1651 04e3 00       		.byte	0
+ 1652 04e4 14       		.uleb128 0x14
+ 1653 04e5 8E030000 		.4byte	.LASF56
+ 1654 04e9 01       		.byte	0x1
+ 1655 04ea CC       		.byte	0xcc
+ 1656 04eb 00000000 		.4byte	.LFB41
+ 1657 04ef 1C000000 		.4byte	.LFE41-.LFB41
+ 1658 04f3 01       		.uleb128 0x1
+ 1659 04f4 9C       		.byte	0x9c
+ 1660 04f5 39050000 		.4byte	0x539
+ 1661 04f9 0F       		.uleb128 0xf
+ 1662 04fa 13030000 		.4byte	.LASF42
+ 1663 04fe 01       		.byte	0x1
+ 1664 04ff CC       		.byte	0xcc
+ 1665 0500 77000000 		.4byte	0x77
+ 1666 0504 F7030000 		.4byte	.LLST14
+ 1667 0508 15       		.uleb128 0x15
+ 1668 0509 6900     		.ascii	"i\000"
+ 1669 050b 01       		.byte	0x1
+ 1670 050c CE       		.byte	0xce
+ 1671 050d 5D000000 		.4byte	0x5d
+ 1672 0511 18040000 		.4byte	.LLST15
+ 1673 0515 12       		.uleb128 0x12
+ 1674 0516 10000000 		.4byte	.LVL77
+ 1675 051a 5E020000 		.4byte	0x25e
+ 1676 051e 2F050000 		.4byte	0x52f
+ 1677 0522 13       		.uleb128 0x13
+ 1678 0523 01       		.uleb128 0x1
+ 1679 0524 51       		.byte	0x51
+ 1680 0525 02       		.uleb128 0x2
+ 1681 0526 75       		.byte	0x75
+ 1682 0527 00       		.sleb128 0
+ 1683 0528 13       		.uleb128 0x13
+ 1684 0529 01       		.uleb128 0x1
+ 1685 052a 50       		.byte	0x50
+ 1686 052b 02       		.uleb128 0x2
+ 1687 052c 74       		.byte	0x74
+ 1688 052d 00       		.sleb128 0
+ 1689 052e 00       		.byte	0
+ 1690 052f 11       		.uleb128 0x11
+ 1691 0530 1A000000 		.4byte	.LVL79
+ 1692 0534 B0020000 		.4byte	0x2b0
+ 1693 0538 00       		.byte	0
+ 1694 0539 14       		.uleb128 0x14
+ 1695 053a 04040000 		.4byte	.LASF57
+ 1696 053e 01       		.byte	0x1
+ 1697 053f DB       		.byte	0xdb
+ 1698 0540 00000000 		.4byte	.LFB42
+ 1699 0544 1C000000 		.4byte	.LFE42-.LFB42
+ 1700 0548 01       		.uleb128 0x1
+ 1701 0549 9C       		.byte	0x9c
+ 1702 054a 8E050000 		.4byte	0x58e
+ 1703 054e 0F       		.uleb128 0xf
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 36
+
+
+ 1704 054f 13030000 		.4byte	.LASF42
+ 1705 0553 01       		.byte	0x1
+ 1706 0554 DB       		.byte	0xdb
+ 1707 0555 77000000 		.4byte	0x77
+ 1708 0559 37040000 		.4byte	.LLST16
+ 1709 055d 15       		.uleb128 0x15
+ 1710 055e 6900     		.ascii	"i\000"
+ 1711 0560 01       		.byte	0x1
+ 1712 0561 DD       		.byte	0xdd
+ 1713 0562 5D000000 		.4byte	0x5d
+ 1714 0566 58040000 		.4byte	.LLST17
+ 1715 056a 12       		.uleb128 0x12
+ 1716 056b 10000000 		.4byte	.LVL84
+ 1717 056f 5E020000 		.4byte	0x25e
+ 1718 0573 84050000 		.4byte	0x584
+ 1719 0577 13       		.uleb128 0x13
+ 1720 0578 01       		.uleb128 0x1
+ 1721 0579 51       		.byte	0x51
+ 1722 057a 02       		.uleb128 0x2
+ 1723 057b 75       		.byte	0x75
+ 1724 057c 00       		.sleb128 0
+ 1725 057d 13       		.uleb128 0x13
+ 1726 057e 01       		.uleb128 0x1
+ 1727 057f 50       		.byte	0x50
+ 1728 0580 02       		.uleb128 0x2
+ 1729 0581 74       		.byte	0x74
+ 1730 0582 00       		.sleb128 0
+ 1731 0583 00       		.byte	0
+ 1732 0584 11       		.uleb128 0x11
+ 1733 0585 1A000000 		.4byte	.LVL86
+ 1734 0589 B0020000 		.4byte	0x2b0
+ 1735 058d 00       		.byte	0
+ 1736 058e 14       		.uleb128 0x14
+ 1737 058f B3010000 		.4byte	.LASF58
+ 1738 0593 01       		.byte	0x1
+ 1739 0594 EA       		.byte	0xea
+ 1740 0595 00000000 		.4byte	.LFB43
+ 1741 0599 1C000000 		.4byte	.LFE43-.LFB43
+ 1742 059d 01       		.uleb128 0x1
+ 1743 059e 9C       		.byte	0x9c
+ 1744 059f E3050000 		.4byte	0x5e3
+ 1745 05a3 0F       		.uleb128 0xf
+ 1746 05a4 13030000 		.4byte	.LASF42
+ 1747 05a8 01       		.byte	0x1
+ 1748 05a9 EA       		.byte	0xea
+ 1749 05aa 77000000 		.4byte	0x77
+ 1750 05ae 77040000 		.4byte	.LLST18
+ 1751 05b2 15       		.uleb128 0x15
+ 1752 05b3 6900     		.ascii	"i\000"
+ 1753 05b5 01       		.byte	0x1
+ 1754 05b6 EC       		.byte	0xec
+ 1755 05b7 5D000000 		.4byte	0x5d
+ 1756 05bb 98040000 		.4byte	.LLST19
+ 1757 05bf 12       		.uleb128 0x12
+ 1758 05c0 10000000 		.4byte	.LVL91
+ 1759 05c4 5E020000 		.4byte	0x25e
+ 1760 05c8 D9050000 		.4byte	0x5d9
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 37
+
+
+ 1761 05cc 13       		.uleb128 0x13
+ 1762 05cd 01       		.uleb128 0x1
+ 1763 05ce 51       		.byte	0x51
+ 1764 05cf 02       		.uleb128 0x2
+ 1765 05d0 75       		.byte	0x75
+ 1766 05d1 00       		.sleb128 0
+ 1767 05d2 13       		.uleb128 0x13
+ 1768 05d3 01       		.uleb128 0x1
+ 1769 05d4 50       		.byte	0x50
+ 1770 05d5 02       		.uleb128 0x2
+ 1771 05d6 74       		.byte	0x74
+ 1772 05d7 00       		.sleb128 0
+ 1773 05d8 00       		.byte	0
+ 1774 05d9 11       		.uleb128 0x11
+ 1775 05da 1A000000 		.4byte	.LVL93
+ 1776 05de B0020000 		.4byte	0x2b0
+ 1777 05e2 00       		.byte	0
+ 1778 05e3 14       		.uleb128 0x14
+ 1779 05e4 C2000000 		.4byte	.LASF59
+ 1780 05e8 01       		.byte	0x1
+ 1781 05e9 F9       		.byte	0xf9
+ 1782 05ea 00000000 		.4byte	.LFB44
+ 1783 05ee 0E000000 		.4byte	.LFE44-.LFB44
+ 1784 05f2 01       		.uleb128 0x1
+ 1785 05f3 9C       		.byte	0x9c
+ 1786 05f4 11060000 		.4byte	0x611
+ 1787 05f8 11       		.uleb128 0x11
+ 1788 05f9 06000000 		.4byte	.LVL95
+ 1789 05fd 91060000 		.4byte	0x691
+ 1790 0601 16       		.uleb128 0x16
+ 1791 0602 0C000000 		.4byte	.LVL96
+ 1792 0606 E4040000 		.4byte	0x4e4
+ 1793 060a 13       		.uleb128 0x13
+ 1794 060b 01       		.uleb128 0x1
+ 1795 060c 50       		.byte	0x50
+ 1796 060d 01       		.uleb128 0x1
+ 1797 060e 30       		.byte	0x30
+ 1798 060f 00       		.byte	0
+ 1799 0610 00       		.byte	0
+ 1800 0611 17       		.uleb128 0x17
+ 1801 0612 6E020000 		.4byte	.LASF60
+ 1802 0616 01       		.byte	0x1
+ 1803 0617 32       		.byte	0x32
+ 1804 0618 53020000 		.4byte	0x253
+ 1805 061c 05       		.uleb128 0x5
+ 1806 061d 03       		.byte	0x3
+ 1807 061e 00000000 		.4byte	led_buffer
+ 1808 0622 18       		.uleb128 0x18
+ 1809 0623 FF010000 		.4byte	.LASF61
+ 1810 0627 01       		.byte	0x1
+ 1811 0628 35       		.byte	0x35
+ 1812 0629 B7000000 		.4byte	0xb7
+ 1813 062d 1E       		.byte	0x1e
+ 1814 062e 19       		.uleb128 0x19
+ 1815 062f A1000000 		.4byte	.LASF66
+ 1816 0633 07       		.byte	0x7
+ 1817 0634 25       		.byte	0x25
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 38
+
+
+ 1818 0635 1A       		.uleb128 0x1a
+ 1819 0636 EA010000 		.4byte	.LASF62
+ 1820 063a 03       		.byte	0x3
+ 1821 063b 3B03     		.2byte	0x33b
+ 1822 063d 4C060000 		.4byte	0x64c
+ 1823 0641 1B       		.uleb128 0x1b
+ 1824 0642 4C060000 		.4byte	0x64c
+ 1825 0646 1B       		.uleb128 0x1b
+ 1826 0647 83000000 		.4byte	0x83
+ 1827 064b 00       		.byte	0
+ 1828 064c 06       		.uleb128 0x6
+ 1829 064d 04       		.byte	0x4
+ 1830 064e 52060000 		.4byte	0x652
+ 1831 0652 05       		.uleb128 0x5
+ 1832 0653 77000000 		.4byte	0x77
+ 1833 0657 1C       		.uleb128 0x1c
+ 1834 0658 F6000000 		.4byte	.LASF63
+ 1835 065c 04       		.byte	0x4
+ 1836 065d 33       		.byte	0x33
+ 1837 065e 68060000 		.4byte	0x668
+ 1838 0662 1B       		.uleb128 0x1b
+ 1839 0663 6B000000 		.4byte	0x6b
+ 1840 0667 00       		.byte	0
+ 1841 0668 1C       		.uleb128 0x1c
+ 1842 0669 17040000 		.4byte	.LASF64
+ 1843 066d 05       		.byte	0x5
+ 1844 066e 33       		.byte	0x33
+ 1845 066f 79060000 		.4byte	0x679
+ 1846 0673 1B       		.uleb128 0x1b
+ 1847 0674 6B000000 		.4byte	0x6b
+ 1848 0678 00       		.byte	0
+ 1849 0679 1C       		.uleb128 0x1c
+ 1850 067a 79020000 		.4byte	.LASF65
+ 1851 067e 06       		.byte	0x6
+ 1852 067f DA       		.byte	0xda
+ 1853 0680 8A060000 		.4byte	0x68a
+ 1854 0684 1B       		.uleb128 0x1b
+ 1855 0685 77000000 		.4byte	0x77
+ 1856 0689 00       		.byte	0
+ 1857 068a 19       		.uleb128 0x19
+ 1858 068b EC020000 		.4byte	.LASF67
+ 1859 068f 07       		.byte	0x7
+ 1860 0690 23       		.byte	0x23
+ 1861 0691 19       		.uleb128 0x19
+ 1862 0692 91020000 		.4byte	.LASF68
+ 1863 0696 08       		.byte	0x8
+ 1864 0697 6E       		.byte	0x6e
+ 1865 0698 00       		.byte	0
+ 1866              		.section	.debug_abbrev,"",%progbits
+ 1867              	.Ldebug_abbrev0:
+ 1868 0000 01       		.uleb128 0x1
+ 1869 0001 11       		.uleb128 0x11
+ 1870 0002 01       		.byte	0x1
+ 1871 0003 25       		.uleb128 0x25
+ 1872 0004 0E       		.uleb128 0xe
+ 1873 0005 13       		.uleb128 0x13
+ 1874 0006 0B       		.uleb128 0xb
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 39
+
+
+ 1875 0007 03       		.uleb128 0x3
+ 1876 0008 0E       		.uleb128 0xe
+ 1877 0009 1B       		.uleb128 0x1b
+ 1878 000a 0E       		.uleb128 0xe
+ 1879 000b 55       		.uleb128 0x55
+ 1880 000c 17       		.uleb128 0x17
+ 1881 000d 11       		.uleb128 0x11
+ 1882 000e 01       		.uleb128 0x1
+ 1883 000f 10       		.uleb128 0x10
+ 1884 0010 17       		.uleb128 0x17
+ 1885 0011 00       		.byte	0
+ 1886 0012 00       		.byte	0
+ 1887 0013 02       		.uleb128 0x2
+ 1888 0014 24       		.uleb128 0x24
+ 1889 0015 00       		.byte	0
+ 1890 0016 0B       		.uleb128 0xb
+ 1891 0017 0B       		.uleb128 0xb
+ 1892 0018 3E       		.uleb128 0x3e
+ 1893 0019 0B       		.uleb128 0xb
+ 1894 001a 03       		.uleb128 0x3
+ 1895 001b 0E       		.uleb128 0xe
+ 1896 001c 00       		.byte	0
+ 1897 001d 00       		.byte	0
+ 1898 001e 03       		.uleb128 0x3
+ 1899 001f 24       		.uleb128 0x24
+ 1900 0020 00       		.byte	0
+ 1901 0021 0B       		.uleb128 0xb
+ 1902 0022 0B       		.uleb128 0xb
+ 1903 0023 3E       		.uleb128 0x3e
+ 1904 0024 0B       		.uleb128 0xb
+ 1905 0025 03       		.uleb128 0x3
+ 1906 0026 08       		.uleb128 0x8
+ 1907 0027 00       		.byte	0
+ 1908 0028 00       		.byte	0
+ 1909 0029 04       		.uleb128 0x4
+ 1910 002a 16       		.uleb128 0x16
+ 1911 002b 00       		.byte	0
+ 1912 002c 03       		.uleb128 0x3
+ 1913 002d 0E       		.uleb128 0xe
+ 1914 002e 3A       		.uleb128 0x3a
+ 1915 002f 0B       		.uleb128 0xb
+ 1916 0030 3B       		.uleb128 0x3b
+ 1917 0031 05       		.uleb128 0x5
+ 1918 0032 49       		.uleb128 0x49
+ 1919 0033 13       		.uleb128 0x13
+ 1920 0034 00       		.byte	0
+ 1921 0035 00       		.byte	0
+ 1922 0036 05       		.uleb128 0x5
+ 1923 0037 26       		.uleb128 0x26
+ 1924 0038 00       		.byte	0
+ 1925 0039 49       		.uleb128 0x49
+ 1926 003a 13       		.uleb128 0x13
+ 1927 003b 00       		.byte	0
+ 1928 003c 00       		.byte	0
+ 1929 003d 06       		.uleb128 0x6
+ 1930 003e 0F       		.uleb128 0xf
+ 1931 003f 00       		.byte	0
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 40
+
+
+ 1932 0040 0B       		.uleb128 0xb
+ 1933 0041 0B       		.uleb128 0xb
+ 1934 0042 49       		.uleb128 0x49
+ 1935 0043 13       		.uleb128 0x13
+ 1936 0044 00       		.byte	0
+ 1937 0045 00       		.byte	0
+ 1938 0046 07       		.uleb128 0x7
+ 1939 0047 13       		.uleb128 0x13
+ 1940 0048 01       		.byte	0x1
+ 1941 0049 03       		.uleb128 0x3
+ 1942 004a 0E       		.uleb128 0xe
+ 1943 004b 0B       		.uleb128 0xb
+ 1944 004c 0B       		.uleb128 0xb
+ 1945 004d 3A       		.uleb128 0x3a
+ 1946 004e 0B       		.uleb128 0xb
+ 1947 004f 3B       		.uleb128 0x3b
+ 1948 0050 0B       		.uleb128 0xb
+ 1949 0051 01       		.uleb128 0x1
+ 1950 0052 13       		.uleb128 0x13
+ 1951 0053 00       		.byte	0
+ 1952 0054 00       		.byte	0
+ 1953 0055 08       		.uleb128 0x8
+ 1954 0056 0D       		.uleb128 0xd
+ 1955 0057 00       		.byte	0
+ 1956 0058 03       		.uleb128 0x3
+ 1957 0059 0E       		.uleb128 0xe
+ 1958 005a 3A       		.uleb128 0x3a
+ 1959 005b 0B       		.uleb128 0xb
+ 1960 005c 3B       		.uleb128 0x3b
+ 1961 005d 0B       		.uleb128 0xb
+ 1962 005e 49       		.uleb128 0x49
+ 1963 005f 13       		.uleb128 0x13
+ 1964 0060 38       		.uleb128 0x38
+ 1965 0061 0B       		.uleb128 0xb
+ 1966 0062 00       		.byte	0
+ 1967 0063 00       		.byte	0
+ 1968 0064 09       		.uleb128 0x9
+ 1969 0065 0D       		.uleb128 0xd
+ 1970 0066 00       		.byte	0
+ 1971 0067 03       		.uleb128 0x3
+ 1972 0068 0E       		.uleb128 0xe
+ 1973 0069 3A       		.uleb128 0x3a
+ 1974 006a 0B       		.uleb128 0xb
+ 1975 006b 3B       		.uleb128 0x3b
+ 1976 006c 0B       		.uleb128 0xb
+ 1977 006d 49       		.uleb128 0x49
+ 1978 006e 13       		.uleb128 0x13
+ 1979 006f 0B       		.uleb128 0xb
+ 1980 0070 0B       		.uleb128 0xb
+ 1981 0071 0D       		.uleb128 0xd
+ 1982 0072 0B       		.uleb128 0xb
+ 1983 0073 0C       		.uleb128 0xc
+ 1984 0074 0B       		.uleb128 0xb
+ 1985 0075 38       		.uleb128 0x38
+ 1986 0076 0B       		.uleb128 0xb
+ 1987 0077 00       		.byte	0
+ 1988 0078 00       		.byte	0
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 41
+
+
+ 1989 0079 0A       		.uleb128 0xa
+ 1990 007a 01       		.uleb128 0x1
+ 1991 007b 01       		.byte	0x1
+ 1992 007c 49       		.uleb128 0x49
+ 1993 007d 13       		.uleb128 0x13
+ 1994 007e 01       		.uleb128 0x1
+ 1995 007f 13       		.uleb128 0x13
+ 1996 0080 00       		.byte	0
+ 1997 0081 00       		.byte	0
+ 1998 0082 0B       		.uleb128 0xb
+ 1999 0083 21       		.uleb128 0x21
+ 2000 0084 00       		.byte	0
+ 2001 0085 49       		.uleb128 0x49
+ 2002 0086 13       		.uleb128 0x13
+ 2003 0087 2F       		.uleb128 0x2f
+ 2004 0088 0B       		.uleb128 0xb
+ 2005 0089 00       		.byte	0
+ 2006 008a 00       		.byte	0
+ 2007 008b 0C       		.uleb128 0xc
+ 2008 008c 16       		.uleb128 0x16
+ 2009 008d 00       		.byte	0
+ 2010 008e 03       		.uleb128 0x3
+ 2011 008f 0E       		.uleb128 0xe
+ 2012 0090 3A       		.uleb128 0x3a
+ 2013 0091 0B       		.uleb128 0xb
+ 2014 0092 3B       		.uleb128 0x3b
+ 2015 0093 0B       		.uleb128 0xb
+ 2016 0094 49       		.uleb128 0x49
+ 2017 0095 13       		.uleb128 0x13
+ 2018 0096 00       		.byte	0
+ 2019 0097 00       		.byte	0
+ 2020 0098 0D       		.uleb128 0xd
+ 2021 0099 2E       		.uleb128 0x2e
+ 2022 009a 01       		.byte	0x1
+ 2023 009b 03       		.uleb128 0x3
+ 2024 009c 0E       		.uleb128 0xe
+ 2025 009d 3A       		.uleb128 0x3a
+ 2026 009e 0B       		.uleb128 0xb
+ 2027 009f 3B       		.uleb128 0x3b
+ 2028 00a0 0B       		.uleb128 0xb
+ 2029 00a1 27       		.uleb128 0x27
+ 2030 00a2 19       		.uleb128 0x19
+ 2031 00a3 11       		.uleb128 0x11
+ 2032 00a4 01       		.uleb128 0x1
+ 2033 00a5 12       		.uleb128 0x12
+ 2034 00a6 06       		.uleb128 0x6
+ 2035 00a7 40       		.uleb128 0x40
+ 2036 00a8 18       		.uleb128 0x18
+ 2037 00a9 9742     		.uleb128 0x2117
+ 2038 00ab 19       		.uleb128 0x19
+ 2039 00ac 01       		.uleb128 0x1
+ 2040 00ad 13       		.uleb128 0x13
+ 2041 00ae 00       		.byte	0
+ 2042 00af 00       		.byte	0
+ 2043 00b0 0E       		.uleb128 0xe
+ 2044 00b1 05       		.uleb128 0x5
+ 2045 00b2 00       		.byte	0
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 42
+
+
+ 2046 00b3 03       		.uleb128 0x3
+ 2047 00b4 08       		.uleb128 0x8
+ 2048 00b5 3A       		.uleb128 0x3a
+ 2049 00b6 0B       		.uleb128 0xb
+ 2050 00b7 3B       		.uleb128 0x3b
+ 2051 00b8 0B       		.uleb128 0xb
+ 2052 00b9 49       		.uleb128 0x49
+ 2053 00ba 13       		.uleb128 0x13
+ 2054 00bb 02       		.uleb128 0x2
+ 2055 00bc 17       		.uleb128 0x17
+ 2056 00bd 00       		.byte	0
+ 2057 00be 00       		.byte	0
+ 2058 00bf 0F       		.uleb128 0xf
+ 2059 00c0 05       		.uleb128 0x5
+ 2060 00c1 00       		.byte	0
+ 2061 00c2 03       		.uleb128 0x3
+ 2062 00c3 0E       		.uleb128 0xe
+ 2063 00c4 3A       		.uleb128 0x3a
+ 2064 00c5 0B       		.uleb128 0xb
+ 2065 00c6 3B       		.uleb128 0x3b
+ 2066 00c7 0B       		.uleb128 0xb
+ 2067 00c8 49       		.uleb128 0x49
+ 2068 00c9 13       		.uleb128 0x13
+ 2069 00ca 02       		.uleb128 0x2
+ 2070 00cb 17       		.uleb128 0x17
+ 2071 00cc 00       		.byte	0
+ 2072 00cd 00       		.byte	0
+ 2073 00ce 10       		.uleb128 0x10
+ 2074 00cf 34       		.uleb128 0x34
+ 2075 00d0 00       		.byte	0
+ 2076 00d1 03       		.uleb128 0x3
+ 2077 00d2 0E       		.uleb128 0xe
+ 2078 00d3 3A       		.uleb128 0x3a
+ 2079 00d4 0B       		.uleb128 0xb
+ 2080 00d5 3B       		.uleb128 0x3b
+ 2081 00d6 0B       		.uleb128 0xb
+ 2082 00d7 49       		.uleb128 0x49
+ 2083 00d8 13       		.uleb128 0x13
+ 2084 00d9 02       		.uleb128 0x2
+ 2085 00da 17       		.uleb128 0x17
+ 2086 00db 00       		.byte	0
+ 2087 00dc 00       		.byte	0
+ 2088 00dd 11       		.uleb128 0x11
+ 2089 00de 898201   		.uleb128 0x4109
+ 2090 00e1 00       		.byte	0
+ 2091 00e2 11       		.uleb128 0x11
+ 2092 00e3 01       		.uleb128 0x1
+ 2093 00e4 31       		.uleb128 0x31
+ 2094 00e5 13       		.uleb128 0x13
+ 2095 00e6 00       		.byte	0
+ 2096 00e7 00       		.byte	0
+ 2097 00e8 12       		.uleb128 0x12
+ 2098 00e9 898201   		.uleb128 0x4109
+ 2099 00ec 01       		.byte	0x1
+ 2100 00ed 11       		.uleb128 0x11
+ 2101 00ee 01       		.uleb128 0x1
+ 2102 00ef 31       		.uleb128 0x31
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 43
+
+
+ 2103 00f0 13       		.uleb128 0x13
+ 2104 00f1 01       		.uleb128 0x1
+ 2105 00f2 13       		.uleb128 0x13
+ 2106 00f3 00       		.byte	0
+ 2107 00f4 00       		.byte	0
+ 2108 00f5 13       		.uleb128 0x13
+ 2109 00f6 8A8201   		.uleb128 0x410a
+ 2110 00f9 00       		.byte	0
+ 2111 00fa 02       		.uleb128 0x2
+ 2112 00fb 18       		.uleb128 0x18
+ 2113 00fc 9142     		.uleb128 0x2111
+ 2114 00fe 18       		.uleb128 0x18
+ 2115 00ff 00       		.byte	0
+ 2116 0100 00       		.byte	0
+ 2117 0101 14       		.uleb128 0x14
+ 2118 0102 2E       		.uleb128 0x2e
+ 2119 0103 01       		.byte	0x1
+ 2120 0104 3F       		.uleb128 0x3f
+ 2121 0105 19       		.uleb128 0x19
+ 2122 0106 03       		.uleb128 0x3
+ 2123 0107 0E       		.uleb128 0xe
+ 2124 0108 3A       		.uleb128 0x3a
+ 2125 0109 0B       		.uleb128 0xb
+ 2126 010a 3B       		.uleb128 0x3b
+ 2127 010b 0B       		.uleb128 0xb
+ 2128 010c 27       		.uleb128 0x27
+ 2129 010d 19       		.uleb128 0x19
+ 2130 010e 11       		.uleb128 0x11
+ 2131 010f 01       		.uleb128 0x1
+ 2132 0110 12       		.uleb128 0x12
+ 2133 0111 06       		.uleb128 0x6
+ 2134 0112 40       		.uleb128 0x40
+ 2135 0113 18       		.uleb128 0x18
+ 2136 0114 9742     		.uleb128 0x2117
+ 2137 0116 19       		.uleb128 0x19
+ 2138 0117 01       		.uleb128 0x1
+ 2139 0118 13       		.uleb128 0x13
+ 2140 0119 00       		.byte	0
+ 2141 011a 00       		.byte	0
+ 2142 011b 15       		.uleb128 0x15
+ 2143 011c 34       		.uleb128 0x34
+ 2144 011d 00       		.byte	0
+ 2145 011e 03       		.uleb128 0x3
+ 2146 011f 08       		.uleb128 0x8
+ 2147 0120 3A       		.uleb128 0x3a
+ 2148 0121 0B       		.uleb128 0xb
+ 2149 0122 3B       		.uleb128 0x3b
+ 2150 0123 0B       		.uleb128 0xb
+ 2151 0124 49       		.uleb128 0x49
+ 2152 0125 13       		.uleb128 0x13
+ 2153 0126 02       		.uleb128 0x2
+ 2154 0127 17       		.uleb128 0x17
+ 2155 0128 00       		.byte	0
+ 2156 0129 00       		.byte	0
+ 2157 012a 16       		.uleb128 0x16
+ 2158 012b 898201   		.uleb128 0x4109
+ 2159 012e 01       		.byte	0x1
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 44
+
+
+ 2160 012f 11       		.uleb128 0x11
+ 2161 0130 01       		.uleb128 0x1
+ 2162 0131 31       		.uleb128 0x31
+ 2163 0132 13       		.uleb128 0x13
+ 2164 0133 00       		.byte	0
+ 2165 0134 00       		.byte	0
+ 2166 0135 17       		.uleb128 0x17
+ 2167 0136 34       		.uleb128 0x34
+ 2168 0137 00       		.byte	0
+ 2169 0138 03       		.uleb128 0x3
+ 2170 0139 0E       		.uleb128 0xe
+ 2171 013a 3A       		.uleb128 0x3a
+ 2172 013b 0B       		.uleb128 0xb
+ 2173 013c 3B       		.uleb128 0x3b
+ 2174 013d 0B       		.uleb128 0xb
+ 2175 013e 49       		.uleb128 0x49
+ 2176 013f 13       		.uleb128 0x13
+ 2177 0140 02       		.uleb128 0x2
+ 2178 0141 18       		.uleb128 0x18
+ 2179 0142 00       		.byte	0
+ 2180 0143 00       		.byte	0
+ 2181 0144 18       		.uleb128 0x18
+ 2182 0145 34       		.uleb128 0x34
+ 2183 0146 00       		.byte	0
+ 2184 0147 03       		.uleb128 0x3
+ 2185 0148 0E       		.uleb128 0xe
+ 2186 0149 3A       		.uleb128 0x3a
+ 2187 014a 0B       		.uleb128 0xb
+ 2188 014b 3B       		.uleb128 0x3b
+ 2189 014c 0B       		.uleb128 0xb
+ 2190 014d 49       		.uleb128 0x49
+ 2191 014e 13       		.uleb128 0x13
+ 2192 014f 1C       		.uleb128 0x1c
+ 2193 0150 0B       		.uleb128 0xb
+ 2194 0151 00       		.byte	0
+ 2195 0152 00       		.byte	0
+ 2196 0153 19       		.uleb128 0x19
+ 2197 0154 2E       		.uleb128 0x2e
+ 2198 0155 00       		.byte	0
+ 2199 0156 3F       		.uleb128 0x3f
+ 2200 0157 19       		.uleb128 0x19
+ 2201 0158 03       		.uleb128 0x3
+ 2202 0159 0E       		.uleb128 0xe
+ 2203 015a 3A       		.uleb128 0x3a
+ 2204 015b 0B       		.uleb128 0xb
+ 2205 015c 3B       		.uleb128 0x3b
+ 2206 015d 0B       		.uleb128 0xb
+ 2207 015e 27       		.uleb128 0x27
+ 2208 015f 19       		.uleb128 0x19
+ 2209 0160 3C       		.uleb128 0x3c
+ 2210 0161 19       		.uleb128 0x19
+ 2211 0162 00       		.byte	0
+ 2212 0163 00       		.byte	0
+ 2213 0164 1A       		.uleb128 0x1a
+ 2214 0165 2E       		.uleb128 0x2e
+ 2215 0166 01       		.byte	0x1
+ 2216 0167 3F       		.uleb128 0x3f
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 45
+
+
+ 2217 0168 19       		.uleb128 0x19
+ 2218 0169 03       		.uleb128 0x3
+ 2219 016a 0E       		.uleb128 0xe
+ 2220 016b 3A       		.uleb128 0x3a
+ 2221 016c 0B       		.uleb128 0xb
+ 2222 016d 3B       		.uleb128 0x3b
+ 2223 016e 05       		.uleb128 0x5
+ 2224 016f 27       		.uleb128 0x27
+ 2225 0170 19       		.uleb128 0x19
+ 2226 0171 3C       		.uleb128 0x3c
+ 2227 0172 19       		.uleb128 0x19
+ 2228 0173 01       		.uleb128 0x1
+ 2229 0174 13       		.uleb128 0x13
+ 2230 0175 00       		.byte	0
+ 2231 0176 00       		.byte	0
+ 2232 0177 1B       		.uleb128 0x1b
+ 2233 0178 05       		.uleb128 0x5
+ 2234 0179 00       		.byte	0
+ 2235 017a 49       		.uleb128 0x49
+ 2236 017b 13       		.uleb128 0x13
+ 2237 017c 00       		.byte	0
+ 2238 017d 00       		.byte	0
+ 2239 017e 1C       		.uleb128 0x1c
+ 2240 017f 2E       		.uleb128 0x2e
+ 2241 0180 01       		.byte	0x1
+ 2242 0181 3F       		.uleb128 0x3f
+ 2243 0182 19       		.uleb128 0x19
+ 2244 0183 03       		.uleb128 0x3
+ 2245 0184 0E       		.uleb128 0xe
+ 2246 0185 3A       		.uleb128 0x3a
+ 2247 0186 0B       		.uleb128 0xb
+ 2248 0187 3B       		.uleb128 0x3b
+ 2249 0188 0B       		.uleb128 0xb
+ 2250 0189 27       		.uleb128 0x27
+ 2251 018a 19       		.uleb128 0x19
+ 2252 018b 3C       		.uleb128 0x3c
+ 2253 018c 19       		.uleb128 0x19
+ 2254 018d 01       		.uleb128 0x1
+ 2255 018e 13       		.uleb128 0x13
+ 2256 018f 00       		.byte	0
+ 2257 0190 00       		.byte	0
+ 2258 0191 00       		.byte	0
+ 2259              		.section	.debug_loc,"",%progbits
+ 2260              	.Ldebug_loc0:
+ 2261              	.LLST0:
+ 2262 0000 00000000 		.4byte	.LVL0
+ 2263 0004 06000000 		.4byte	.LVL1
+ 2264 0008 0100     		.2byte	0x1
+ 2265 000a 50       		.byte	0x50
+ 2266 000b 06000000 		.4byte	.LVL1
+ 2267 000f 08000000 		.4byte	.LVL2
+ 2268 0013 0400     		.2byte	0x4
+ 2269 0015 F3       		.byte	0xf3
+ 2270 0016 01       		.uleb128 0x1
+ 2271 0017 50       		.byte	0x50
+ 2272 0018 9F       		.byte	0x9f
+ 2273 0019 08000000 		.4byte	.LVL2
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 46
+
+
+ 2274 001d 0A000000 		.4byte	.LVL3
+ 2275 0021 0100     		.2byte	0x1
+ 2276 0023 50       		.byte	0x50
+ 2277 0024 0A000000 		.4byte	.LVL3
+ 2278 0028 D0010000 		.4byte	.LFE36
+ 2279 002c 0400     		.2byte	0x4
+ 2280 002e F3       		.byte	0xf3
+ 2281 002f 01       		.uleb128 0x1
+ 2282 0030 50       		.byte	0x50
+ 2283 0031 9F       		.byte	0x9f
+ 2284 0032 00000000 		.4byte	0
+ 2285 0036 00000000 		.4byte	0
+ 2286              	.LLST1:
+ 2287 003a 00000000 		.4byte	.LVL0
+ 2288 003e 1C000000 		.4byte	.LVL5
+ 2289 0042 0100     		.2byte	0x1
+ 2290 0044 51       		.byte	0x51
+ 2291 0045 1C000000 		.4byte	.LVL5
+ 2292 0049 2A000000 		.4byte	.LVL6
+ 2293 004d 0400     		.2byte	0x4
+ 2294 004f F3       		.byte	0xf3
+ 2295 0050 01       		.uleb128 0x1
+ 2296 0051 51       		.byte	0x51
+ 2297 0052 9F       		.byte	0x9f
+ 2298 0053 2A000000 		.4byte	.LVL6
+ 2299 0057 2E000000 		.4byte	.LVL7
+ 2300 005b 0100     		.2byte	0x1
+ 2301 005d 51       		.byte	0x51
+ 2302 005e 2E000000 		.4byte	.LVL7
+ 2303 0062 3C000000 		.4byte	.LVL8
+ 2304 0066 0400     		.2byte	0x4
+ 2305 0068 F3       		.byte	0xf3
+ 2306 0069 01       		.uleb128 0x1
+ 2307 006a 51       		.byte	0x51
+ 2308 006b 9F       		.byte	0x9f
+ 2309 006c 3C000000 		.4byte	.LVL8
+ 2310 0070 40000000 		.4byte	.LVL9
+ 2311 0074 0100     		.2byte	0x1
+ 2312 0076 51       		.byte	0x51
+ 2313 0077 40000000 		.4byte	.LVL9
+ 2314 007b 4E000000 		.4byte	.LVL10
+ 2315 007f 0400     		.2byte	0x4
+ 2316 0081 F3       		.byte	0xf3
+ 2317 0082 01       		.uleb128 0x1
+ 2318 0083 51       		.byte	0x51
+ 2319 0084 9F       		.byte	0x9f
+ 2320 0085 4E000000 		.4byte	.LVL10
+ 2321 0089 52000000 		.4byte	.LVL11
+ 2322 008d 0100     		.2byte	0x1
+ 2323 008f 51       		.byte	0x51
+ 2324 0090 52000000 		.4byte	.LVL11
+ 2325 0094 60000000 		.4byte	.LVL12
+ 2326 0098 0400     		.2byte	0x4
+ 2327 009a F3       		.byte	0xf3
+ 2328 009b 01       		.uleb128 0x1
+ 2329 009c 51       		.byte	0x51
+ 2330 009d 9F       		.byte	0x9f
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 47
+
+
+ 2331 009e 60000000 		.4byte	.LVL12
+ 2332 00a2 64000000 		.4byte	.LVL13
+ 2333 00a6 0100     		.2byte	0x1
+ 2334 00a8 51       		.byte	0x51
+ 2335 00a9 64000000 		.4byte	.LVL13
+ 2336 00ad 72000000 		.4byte	.LVL14
+ 2337 00b1 0400     		.2byte	0x4
+ 2338 00b3 F3       		.byte	0xf3
+ 2339 00b4 01       		.uleb128 0x1
+ 2340 00b5 51       		.byte	0x51
+ 2341 00b6 9F       		.byte	0x9f
+ 2342 00b7 72000000 		.4byte	.LVL14
+ 2343 00bb 76000000 		.4byte	.LVL15
+ 2344 00bf 0100     		.2byte	0x1
+ 2345 00c1 51       		.byte	0x51
+ 2346 00c2 76000000 		.4byte	.LVL15
+ 2347 00c6 84000000 		.4byte	.LVL16
+ 2348 00ca 0400     		.2byte	0x4
+ 2349 00cc F3       		.byte	0xf3
+ 2350 00cd 01       		.uleb128 0x1
+ 2351 00ce 51       		.byte	0x51
+ 2352 00cf 9F       		.byte	0x9f
+ 2353 00d0 84000000 		.4byte	.LVL16
+ 2354 00d4 88000000 		.4byte	.LVL17
+ 2355 00d8 0100     		.2byte	0x1
+ 2356 00da 51       		.byte	0x51
+ 2357 00db 88000000 		.4byte	.LVL17
+ 2358 00df 96000000 		.4byte	.LVL18
+ 2359 00e3 0400     		.2byte	0x4
+ 2360 00e5 F3       		.byte	0xf3
+ 2361 00e6 01       		.uleb128 0x1
+ 2362 00e7 51       		.byte	0x51
+ 2363 00e8 9F       		.byte	0x9f
+ 2364 00e9 96000000 		.4byte	.LVL18
+ 2365 00ed 9A000000 		.4byte	.LVL19
+ 2366 00f1 0100     		.2byte	0x1
+ 2367 00f3 51       		.byte	0x51
+ 2368 00f4 9A000000 		.4byte	.LVL19
+ 2369 00f8 A8000000 		.4byte	.LVL20
+ 2370 00fc 0400     		.2byte	0x4
+ 2371 00fe F3       		.byte	0xf3
+ 2372 00ff 01       		.uleb128 0x1
+ 2373 0100 51       		.byte	0x51
+ 2374 0101 9F       		.byte	0x9f
+ 2375 0102 A8000000 		.4byte	.LVL20
+ 2376 0106 AC000000 		.4byte	.LVL21
+ 2377 010a 0100     		.2byte	0x1
+ 2378 010c 51       		.byte	0x51
+ 2379 010d AC000000 		.4byte	.LVL21
+ 2380 0111 BA000000 		.4byte	.LVL22
+ 2381 0115 0400     		.2byte	0x4
+ 2382 0117 F3       		.byte	0xf3
+ 2383 0118 01       		.uleb128 0x1
+ 2384 0119 51       		.byte	0x51
+ 2385 011a 9F       		.byte	0x9f
+ 2386 011b BA000000 		.4byte	.LVL22
+ 2387 011f BE000000 		.4byte	.LVL23
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 48
+
+
+ 2388 0123 0100     		.2byte	0x1
+ 2389 0125 51       		.byte	0x51
+ 2390 0126 BE000000 		.4byte	.LVL23
+ 2391 012a CC000000 		.4byte	.LVL24
+ 2392 012e 0400     		.2byte	0x4
+ 2393 0130 F3       		.byte	0xf3
+ 2394 0131 01       		.uleb128 0x1
+ 2395 0132 51       		.byte	0x51
+ 2396 0133 9F       		.byte	0x9f
+ 2397 0134 CC000000 		.4byte	.LVL24
+ 2398 0138 D0000000 		.4byte	.LVL25
+ 2399 013c 0100     		.2byte	0x1
+ 2400 013e 51       		.byte	0x51
+ 2401 013f D0000000 		.4byte	.LVL25
+ 2402 0143 DE000000 		.4byte	.LVL26
+ 2403 0147 0400     		.2byte	0x4
+ 2404 0149 F3       		.byte	0xf3
+ 2405 014a 01       		.uleb128 0x1
+ 2406 014b 51       		.byte	0x51
+ 2407 014c 9F       		.byte	0x9f
+ 2408 014d DE000000 		.4byte	.LVL26
+ 2409 0151 E2000000 		.4byte	.LVL27
+ 2410 0155 0100     		.2byte	0x1
+ 2411 0157 51       		.byte	0x51
+ 2412 0158 E2000000 		.4byte	.LVL27
+ 2413 015c F0000000 		.4byte	.LVL28
+ 2414 0160 0400     		.2byte	0x4
+ 2415 0162 F3       		.byte	0xf3
+ 2416 0163 01       		.uleb128 0x1
+ 2417 0164 51       		.byte	0x51
+ 2418 0165 9F       		.byte	0x9f
+ 2419 0166 F0000000 		.4byte	.LVL28
+ 2420 016a F4000000 		.4byte	.LVL29
+ 2421 016e 0100     		.2byte	0x1
+ 2422 0170 51       		.byte	0x51
+ 2423 0171 F4000000 		.4byte	.LVL29
+ 2424 0175 02010000 		.4byte	.LVL30
+ 2425 0179 0400     		.2byte	0x4
+ 2426 017b F3       		.byte	0xf3
+ 2427 017c 01       		.uleb128 0x1
+ 2428 017d 51       		.byte	0x51
+ 2429 017e 9F       		.byte	0x9f
+ 2430 017f 02010000 		.4byte	.LVL30
+ 2431 0183 06010000 		.4byte	.LVL31
+ 2432 0187 0100     		.2byte	0x1
+ 2433 0189 51       		.byte	0x51
+ 2434 018a 06010000 		.4byte	.LVL31
+ 2435 018e 14010000 		.4byte	.LVL32
+ 2436 0192 0400     		.2byte	0x4
+ 2437 0194 F3       		.byte	0xf3
+ 2438 0195 01       		.uleb128 0x1
+ 2439 0196 51       		.byte	0x51
+ 2440 0197 9F       		.byte	0x9f
+ 2441 0198 14010000 		.4byte	.LVL32
+ 2442 019c 18010000 		.4byte	.LVL33
+ 2443 01a0 0100     		.2byte	0x1
+ 2444 01a2 51       		.byte	0x51
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 49
+
+
+ 2445 01a3 18010000 		.4byte	.LVL33
+ 2446 01a7 26010000 		.4byte	.LVL34
+ 2447 01ab 0400     		.2byte	0x4
+ 2448 01ad F3       		.byte	0xf3
+ 2449 01ae 01       		.uleb128 0x1
+ 2450 01af 51       		.byte	0x51
+ 2451 01b0 9F       		.byte	0x9f
+ 2452 01b1 26010000 		.4byte	.LVL34
+ 2453 01b5 2A010000 		.4byte	.LVL35
+ 2454 01b9 0100     		.2byte	0x1
+ 2455 01bb 51       		.byte	0x51
+ 2456 01bc 2A010000 		.4byte	.LVL35
+ 2457 01c0 38010000 		.4byte	.LVL36
+ 2458 01c4 0400     		.2byte	0x4
+ 2459 01c6 F3       		.byte	0xf3
+ 2460 01c7 01       		.uleb128 0x1
+ 2461 01c8 51       		.byte	0x51
+ 2462 01c9 9F       		.byte	0x9f
+ 2463 01ca 38010000 		.4byte	.LVL36
+ 2464 01ce 3C010000 		.4byte	.LVL37
+ 2465 01d2 0100     		.2byte	0x1
+ 2466 01d4 51       		.byte	0x51
+ 2467 01d5 3C010000 		.4byte	.LVL37
+ 2468 01d9 4A010000 		.4byte	.LVL38
+ 2469 01dd 0400     		.2byte	0x4
+ 2470 01df F3       		.byte	0xf3
+ 2471 01e0 01       		.uleb128 0x1
+ 2472 01e1 51       		.byte	0x51
+ 2473 01e2 9F       		.byte	0x9f
+ 2474 01e3 4A010000 		.4byte	.LVL38
+ 2475 01e7 4E010000 		.4byte	.LVL39
+ 2476 01eb 0100     		.2byte	0x1
+ 2477 01ed 51       		.byte	0x51
+ 2478 01ee 4E010000 		.4byte	.LVL39
+ 2479 01f2 5C010000 		.4byte	.LVL40
+ 2480 01f6 0400     		.2byte	0x4
+ 2481 01f8 F3       		.byte	0xf3
+ 2482 01f9 01       		.uleb128 0x1
+ 2483 01fa 51       		.byte	0x51
+ 2484 01fb 9F       		.byte	0x9f
+ 2485 01fc 5C010000 		.4byte	.LVL40
+ 2486 0200 60010000 		.4byte	.LVL41
+ 2487 0204 0100     		.2byte	0x1
+ 2488 0206 51       		.byte	0x51
+ 2489 0207 60010000 		.4byte	.LVL41
+ 2490 020b 6E010000 		.4byte	.LVL42
+ 2491 020f 0400     		.2byte	0x4
+ 2492 0211 F3       		.byte	0xf3
+ 2493 0212 01       		.uleb128 0x1
+ 2494 0213 51       		.byte	0x51
+ 2495 0214 9F       		.byte	0x9f
+ 2496 0215 6E010000 		.4byte	.LVL42
+ 2497 0219 72010000 		.4byte	.LVL43
+ 2498 021d 0100     		.2byte	0x1
+ 2499 021f 51       		.byte	0x51
+ 2500 0220 72010000 		.4byte	.LVL43
+ 2501 0224 80010000 		.4byte	.LVL44
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 50
+
+
+ 2502 0228 0400     		.2byte	0x4
+ 2503 022a F3       		.byte	0xf3
+ 2504 022b 01       		.uleb128 0x1
+ 2505 022c 51       		.byte	0x51
+ 2506 022d 9F       		.byte	0x9f
+ 2507 022e 80010000 		.4byte	.LVL44
+ 2508 0232 84010000 		.4byte	.LVL45
+ 2509 0236 0100     		.2byte	0x1
+ 2510 0238 51       		.byte	0x51
+ 2511 0239 84010000 		.4byte	.LVL45
+ 2512 023d 92010000 		.4byte	.LVL46
+ 2513 0241 0400     		.2byte	0x4
+ 2514 0243 F3       		.byte	0xf3
+ 2515 0244 01       		.uleb128 0x1
+ 2516 0245 51       		.byte	0x51
+ 2517 0246 9F       		.byte	0x9f
+ 2518 0247 92010000 		.4byte	.LVL46
+ 2519 024b 96010000 		.4byte	.LVL47
+ 2520 024f 0100     		.2byte	0x1
+ 2521 0251 51       		.byte	0x51
+ 2522 0252 96010000 		.4byte	.LVL47
+ 2523 0256 A4010000 		.4byte	.LVL48
+ 2524 025a 0400     		.2byte	0x4
+ 2525 025c F3       		.byte	0xf3
+ 2526 025d 01       		.uleb128 0x1
+ 2527 025e 51       		.byte	0x51
+ 2528 025f 9F       		.byte	0x9f
+ 2529 0260 A4010000 		.4byte	.LVL48
+ 2530 0264 A8010000 		.4byte	.LVL49
+ 2531 0268 0100     		.2byte	0x1
+ 2532 026a 51       		.byte	0x51
+ 2533 026b A8010000 		.4byte	.LVL49
+ 2534 026f B6010000 		.4byte	.LVL50
+ 2535 0273 0400     		.2byte	0x4
+ 2536 0275 F3       		.byte	0xf3
+ 2537 0276 01       		.uleb128 0x1
+ 2538 0277 51       		.byte	0x51
+ 2539 0278 9F       		.byte	0x9f
+ 2540 0279 B6010000 		.4byte	.LVL50
+ 2541 027d BA010000 		.4byte	.LVL51
+ 2542 0281 0100     		.2byte	0x1
+ 2543 0283 51       		.byte	0x51
+ 2544 0284 BA010000 		.4byte	.LVL51
+ 2545 0288 D0010000 		.4byte	.LFE36
+ 2546 028c 0400     		.2byte	0x4
+ 2547 028e F3       		.byte	0xf3
+ 2548 028f 01       		.uleb128 0x1
+ 2549 0290 51       		.byte	0x51
+ 2550 0291 9F       		.byte	0x9f
+ 2551 0292 00000000 		.4byte	0
+ 2552 0296 00000000 		.4byte	0
+ 2553              	.LLST3:
+ 2554 029a 0A000000 		.4byte	.LVL3
+ 2555 029e 12000000 		.4byte	.LVL4
+ 2556 02a2 0100     		.2byte	0x1
+ 2557 02a4 50       		.byte	0x50
+ 2558 02a5 00000000 		.4byte	0
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 51
+
+
+ 2559 02a9 00000000 		.4byte	0
+ 2560              	.LLST4:
+ 2561 02ad 00000000 		.4byte	.LVL60
+ 2562 02b1 87010000 		.4byte	.LVL61-1
+ 2563 02b5 0100     		.2byte	0x1
+ 2564 02b7 50       		.byte	0x50
+ 2565 02b8 87010000 		.4byte	.LVL61-1
+ 2566 02bc 90010000 		.4byte	.LFE35
+ 2567 02c0 0400     		.2byte	0x4
+ 2568 02c2 F3       		.byte	0xf3
+ 2569 02c3 01       		.uleb128 0x1
+ 2570 02c4 50       		.byte	0x50
+ 2571 02c5 9F       		.byte	0x9f
+ 2572 02c6 00000000 		.4byte	0
+ 2573 02ca 00000000 		.4byte	0
+ 2574              	.LLST5:
+ 2575 02ce 00000000 		.4byte	.LVL62
+ 2576 02d2 05000000 		.4byte	.LVL63-1
+ 2577 02d6 0100     		.2byte	0x1
+ 2578 02d8 50       		.byte	0x50
+ 2579 02d9 05000000 		.4byte	.LVL63-1
+ 2580 02dd 0C000000 		.4byte	.LFE38
+ 2581 02e1 0400     		.2byte	0x4
+ 2582 02e3 F3       		.byte	0xf3
+ 2583 02e4 01       		.uleb128 0x1
+ 2584 02e5 50       		.byte	0x50
+ 2585 02e6 9F       		.byte	0x9f
+ 2586 02e7 00000000 		.4byte	0
+ 2587 02eb 00000000 		.4byte	0
+ 2588              	.LLST6:
+ 2589 02ef 00000000 		.4byte	.LVL62
+ 2590 02f3 05000000 		.4byte	.LVL63-1
+ 2591 02f7 0100     		.2byte	0x1
+ 2592 02f9 51       		.byte	0x51
+ 2593 02fa 05000000 		.4byte	.LVL63-1
+ 2594 02fe 0C000000 		.4byte	.LFE38
+ 2595 0302 0400     		.2byte	0x4
+ 2596 0304 F3       		.byte	0xf3
+ 2597 0305 01       		.uleb128 0x1
+ 2598 0306 51       		.byte	0x51
+ 2599 0307 9F       		.byte	0x9f
+ 2600 0308 00000000 		.4byte	0
+ 2601 030c 00000000 		.4byte	0
+ 2602              	.LLST7:
+ 2603 0310 00000000 		.4byte	.LVL65
+ 2604 0314 09000000 		.4byte	.LVL66-1
+ 2605 0318 0100     		.2byte	0x1
+ 2606 031a 50       		.byte	0x50
+ 2607 031b 09000000 		.4byte	.LVL66-1
+ 2608 031f 1A000000 		.4byte	.LFE39
+ 2609 0323 0400     		.2byte	0x4
+ 2610 0325 F3       		.byte	0xf3
+ 2611 0326 01       		.uleb128 0x1
+ 2612 0327 50       		.byte	0x50
+ 2613 0328 9F       		.byte	0x9f
+ 2614 0329 00000000 		.4byte	0
+ 2615 032d 00000000 		.4byte	0
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 52
+
+
+ 2616              	.LLST8:
+ 2617 0331 00000000 		.4byte	.LVL65
+ 2618 0335 09000000 		.4byte	.LVL66-1
+ 2619 0339 0100     		.2byte	0x1
+ 2620 033b 51       		.byte	0x51
+ 2621 033c 09000000 		.4byte	.LVL66-1
+ 2622 0340 1A000000 		.4byte	.LFE39
+ 2623 0344 0400     		.2byte	0x4
+ 2624 0346 F3       		.byte	0xf3
+ 2625 0347 01       		.uleb128 0x1
+ 2626 0348 51       		.byte	0x51
+ 2627 0349 9F       		.byte	0x9f
+ 2628 034a 00000000 		.4byte	0
+ 2629 034e 00000000 		.4byte	0
+ 2630              	.LLST9:
+ 2631 0352 00000000 		.4byte	.LVL65
+ 2632 0356 09000000 		.4byte	.LVL66-1
+ 2633 035a 0100     		.2byte	0x1
+ 2634 035c 52       		.byte	0x52
+ 2635 035d 09000000 		.4byte	.LVL66-1
+ 2636 0361 1A000000 		.4byte	.LFE39
+ 2637 0365 0400     		.2byte	0x4
+ 2638 0367 F3       		.byte	0xf3
+ 2639 0368 01       		.uleb128 0x1
+ 2640 0369 52       		.byte	0x52
+ 2641 036a 9F       		.byte	0x9f
+ 2642 036b 00000000 		.4byte	0
+ 2643 036f 00000000 		.4byte	0
+ 2644              	.LLST10:
+ 2645 0373 00000000 		.4byte	.LVL69
+ 2646 0377 0B000000 		.4byte	.LVL70-1
+ 2647 037b 0100     		.2byte	0x1
+ 2648 037d 50       		.byte	0x50
+ 2649 037e 0B000000 		.4byte	.LVL70-1
+ 2650 0382 26000000 		.4byte	.LFE40
+ 2651 0386 0400     		.2byte	0x4
+ 2652 0388 F3       		.byte	0xf3
+ 2653 0389 01       		.uleb128 0x1
+ 2654 038a 50       		.byte	0x50
+ 2655 038b 9F       		.byte	0x9f
+ 2656 038c 00000000 		.4byte	0
+ 2657 0390 00000000 		.4byte	0
+ 2658              	.LLST11:
+ 2659 0394 00000000 		.4byte	.LVL69
+ 2660 0398 0B000000 		.4byte	.LVL70-1
+ 2661 039c 0100     		.2byte	0x1
+ 2662 039e 51       		.byte	0x51
+ 2663 039f 0B000000 		.4byte	.LVL70-1
+ 2664 03a3 26000000 		.4byte	.LFE40
+ 2665 03a7 0400     		.2byte	0x4
+ 2666 03a9 F3       		.byte	0xf3
+ 2667 03aa 01       		.uleb128 0x1
+ 2668 03ab 51       		.byte	0x51
+ 2669 03ac 9F       		.byte	0x9f
+ 2670 03ad 00000000 		.4byte	0
+ 2671 03b1 00000000 		.4byte	0
+ 2672              	.LLST12:
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 53
+
+
+ 2673 03b5 00000000 		.4byte	.LVL69
+ 2674 03b9 0B000000 		.4byte	.LVL70-1
+ 2675 03bd 0100     		.2byte	0x1
+ 2676 03bf 52       		.byte	0x52
+ 2677 03c0 0B000000 		.4byte	.LVL70-1
+ 2678 03c4 26000000 		.4byte	.LFE40
+ 2679 03c8 0400     		.2byte	0x4
+ 2680 03ca F3       		.byte	0xf3
+ 2681 03cb 01       		.uleb128 0x1
+ 2682 03cc 52       		.byte	0x52
+ 2683 03cd 9F       		.byte	0x9f
+ 2684 03ce 00000000 		.4byte	0
+ 2685 03d2 00000000 		.4byte	0
+ 2686              	.LLST13:
+ 2687 03d6 00000000 		.4byte	.LVL69
+ 2688 03da 0B000000 		.4byte	.LVL70-1
+ 2689 03de 0100     		.2byte	0x1
+ 2690 03e0 53       		.byte	0x53
+ 2691 03e1 0B000000 		.4byte	.LVL70-1
+ 2692 03e5 26000000 		.4byte	.LFE40
+ 2693 03e9 0400     		.2byte	0x4
+ 2694 03eb F3       		.byte	0xf3
+ 2695 03ec 01       		.uleb128 0x1
+ 2696 03ed 53       		.byte	0x53
+ 2697 03ee 9F       		.byte	0x9f
+ 2698 03ef 00000000 		.4byte	0
+ 2699 03f3 00000000 		.4byte	0
+ 2700              	.LLST14:
+ 2701 03f7 00000000 		.4byte	.LVL74
+ 2702 03fb 08000000 		.4byte	.LVL76
+ 2703 03ff 0100     		.2byte	0x1
+ 2704 0401 50       		.byte	0x50
+ 2705 0402 08000000 		.4byte	.LVL76
+ 2706 0406 1C000000 		.4byte	.LFE41
+ 2707 040a 0400     		.2byte	0x4
+ 2708 040c F3       		.byte	0xf3
+ 2709 040d 01       		.uleb128 0x1
+ 2710 040e 50       		.byte	0x50
+ 2711 040f 9F       		.byte	0x9f
+ 2712 0410 00000000 		.4byte	0
+ 2713 0414 00000000 		.4byte	0
+ 2714              	.LLST15:
+ 2715 0418 04000000 		.4byte	.LVL75
+ 2716 041c 08000000 		.4byte	.LVL76
+ 2717 0420 0200     		.2byte	0x2
+ 2718 0422 30       		.byte	0x30
+ 2719 0423 9F       		.byte	0x9f
+ 2720 0424 08000000 		.4byte	.LVL76
+ 2721 0428 1A000000 		.4byte	.LVL80
+ 2722 042c 0100     		.2byte	0x1
+ 2723 042e 54       		.byte	0x54
+ 2724 042f 00000000 		.4byte	0
+ 2725 0433 00000000 		.4byte	0
+ 2726              	.LLST16:
+ 2727 0437 00000000 		.4byte	.LVL81
+ 2728 043b 08000000 		.4byte	.LVL83
+ 2729 043f 0100     		.2byte	0x1
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 54
+
+
+ 2730 0441 50       		.byte	0x50
+ 2731 0442 08000000 		.4byte	.LVL83
+ 2732 0446 1C000000 		.4byte	.LFE42
+ 2733 044a 0400     		.2byte	0x4
+ 2734 044c F3       		.byte	0xf3
+ 2735 044d 01       		.uleb128 0x1
+ 2736 044e 50       		.byte	0x50
+ 2737 044f 9F       		.byte	0x9f
+ 2738 0450 00000000 		.4byte	0
+ 2739 0454 00000000 		.4byte	0
+ 2740              	.LLST17:
+ 2741 0458 04000000 		.4byte	.LVL82
+ 2742 045c 08000000 		.4byte	.LVL83
+ 2743 0460 0200     		.2byte	0x2
+ 2744 0462 30       		.byte	0x30
+ 2745 0463 9F       		.byte	0x9f
+ 2746 0464 08000000 		.4byte	.LVL83
+ 2747 0468 1A000000 		.4byte	.LVL87
+ 2748 046c 0100     		.2byte	0x1
+ 2749 046e 54       		.byte	0x54
+ 2750 046f 00000000 		.4byte	0
+ 2751 0473 00000000 		.4byte	0
+ 2752              	.LLST18:
+ 2753 0477 00000000 		.4byte	.LVL88
+ 2754 047b 08000000 		.4byte	.LVL90
+ 2755 047f 0100     		.2byte	0x1
+ 2756 0481 50       		.byte	0x50
+ 2757 0482 08000000 		.4byte	.LVL90
+ 2758 0486 1C000000 		.4byte	.LFE43
+ 2759 048a 0400     		.2byte	0x4
+ 2760 048c F3       		.byte	0xf3
+ 2761 048d 01       		.uleb128 0x1
+ 2762 048e 50       		.byte	0x50
+ 2763 048f 9F       		.byte	0x9f
+ 2764 0490 00000000 		.4byte	0
+ 2765 0494 00000000 		.4byte	0
+ 2766              	.LLST19:
+ 2767 0498 04000000 		.4byte	.LVL89
+ 2768 049c 08000000 		.4byte	.LVL90
+ 2769 04a0 0200     		.2byte	0x2
+ 2770 04a2 3F       		.byte	0x3f
+ 2771 04a3 9F       		.byte	0x9f
+ 2772 04a4 08000000 		.4byte	.LVL90
+ 2773 04a8 1A000000 		.4byte	.LVL94
+ 2774 04ac 0100     		.2byte	0x1
+ 2775 04ae 54       		.byte	0x54
+ 2776 04af 00000000 		.4byte	0
+ 2777 04b3 00000000 		.4byte	0
+ 2778              		.section	.debug_aranges,"",%progbits
+ 2779 0000 64000000 		.4byte	0x64
+ 2780 0004 0200     		.2byte	0x2
+ 2781 0006 00000000 		.4byte	.Ldebug_info0
+ 2782 000a 04       		.byte	0x4
+ 2783 000b 00       		.byte	0
+ 2784 000c 0000     		.2byte	0
+ 2785 000e 0000     		.2byte	0
+ 2786 0010 00000000 		.4byte	.LFB36
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 55
+
+
+ 2787 0014 D0010000 		.4byte	.LFE36-.LFB36
+ 2788 0018 00000000 		.4byte	.LFB37
+ 2789 001c 38000000 		.4byte	.LFE37-.LFB37
+ 2790 0020 00000000 		.4byte	.LFB35
+ 2791 0024 90010000 		.4byte	.LFE35-.LFB35
+ 2792 0028 00000000 		.4byte	.LFB38
+ 2793 002c 0C000000 		.4byte	.LFE38-.LFB38
+ 2794 0030 00000000 		.4byte	.LFB39
+ 2795 0034 1A000000 		.4byte	.LFE39-.LFB39
+ 2796 0038 00000000 		.4byte	.LFB40
+ 2797 003c 26000000 		.4byte	.LFE40-.LFB40
+ 2798 0040 00000000 		.4byte	.LFB41
+ 2799 0044 1C000000 		.4byte	.LFE41-.LFB41
+ 2800 0048 00000000 		.4byte	.LFB42
+ 2801 004c 1C000000 		.4byte	.LFE42-.LFB42
+ 2802 0050 00000000 		.4byte	.LFB43
+ 2803 0054 1C000000 		.4byte	.LFE43-.LFB43
+ 2804 0058 00000000 		.4byte	.LFB44
+ 2805 005c 0E000000 		.4byte	.LFE44-.LFB44
+ 2806 0060 00000000 		.4byte	0
+ 2807 0064 00000000 		.4byte	0
+ 2808              		.section	.debug_ranges,"",%progbits
+ 2809              	.Ldebug_ranges0:
+ 2810 0000 00000000 		.4byte	.LFB36
+ 2811 0004 D0010000 		.4byte	.LFE36
+ 2812 0008 00000000 		.4byte	.LFB37
+ 2813 000c 38000000 		.4byte	.LFE37
+ 2814 0010 00000000 		.4byte	.LFB35
+ 2815 0014 90010000 		.4byte	.LFE35
+ 2816 0018 00000000 		.4byte	.LFB38
+ 2817 001c 0C000000 		.4byte	.LFE38
+ 2818 0020 00000000 		.4byte	.LFB39
+ 2819 0024 1A000000 		.4byte	.LFE39
+ 2820 0028 00000000 		.4byte	.LFB40
+ 2821 002c 26000000 		.4byte	.LFE40
+ 2822 0030 00000000 		.4byte	.LFB41
+ 2823 0034 1C000000 		.4byte	.LFE41
+ 2824 0038 00000000 		.4byte	.LFB42
+ 2825 003c 1C000000 		.4byte	.LFE42
+ 2826 0040 00000000 		.4byte	.LFB43
+ 2827 0044 1C000000 		.4byte	.LFE43
+ 2828 0048 00000000 		.4byte	.LFB44
+ 2829 004c 0E000000 		.4byte	.LFE44
+ 2830 0050 00000000 		.4byte	0
+ 2831 0054 00000000 		.4byte	0
+ 2832              		.section	.debug_line,"",%progbits
+ 2833              	.Ldebug_line0:
+ 2834 0000 E2010000 		.section	.debug_str,"MS",%progbits,1
+ 2834      02009000 
+ 2834      00000201 
+ 2834      FB0E0D00 
+ 2834      01010101 
+ 2835              	.LASF71:
+ 2836 0000 433A5C55 		.ascii	"C:\\Users\\tb1014481\\Documents\\#PROJECTS#\\Eddie\\"
+ 2836      73657273 
+ 2836      5C746231 
+ 2836      30313434 
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 56
+
+
+ 2836      38315C44 
+ 2837 002e 536F6674 		.ascii	"Software\\Cypress_PSoC\\Eddie_DP0.0\\Slider_WS.Bund"
+ 2837      77617265 
+ 2837      5C437970 
+ 2837      72657373 
+ 2837      5F50536F 
+ 2838 005e 6C653035 		.ascii	"le05.cywrk.Archive04_LEDs_DEMO\\Eddie_DP0_Slider\\S"
+ 2838      2E637977 
+ 2838      726B2E41 
+ 2838      72636869 
+ 2838      76653034 
+ 2839 008f 6C696465 		.ascii	"lider.cydsn\000"
+ 2839      722E6379 
+ 2839      64736E00 
+ 2840              	.LASF31:
+ 2841 009b 6C656431 		.ascii	"led14\000"
+ 2841      3400
+ 2842              	.LASF66:
+ 2843 00a1 43617053 		.ascii	"CapSense_ISR_Disable\000"
+ 2843      656E7365 
+ 2843      5F495352 
+ 2843      5F446973 
+ 2843      61626C65 
+ 2844              	.LASF33:
+ 2845 00b6 6C656431 		.ascii	"led16\000"
+ 2845      3600
+ 2846              	.LASF37:
+ 2847 00bc 6C656432 		.ascii	"led20\000"
+ 2847      3000
+ 2848              	.LASF59:
+ 2849 00c2 696E6974 		.ascii	"initialize_leds\000"
+ 2849      69616C69 
+ 2849      7A655F6C 
+ 2849      65647300 
+ 2850              	.LASF39:
+ 2851 00d2 6C656432 		.ascii	"led22\000"
+ 2851      3200
+ 2852              	.LASF40:
+ 2853 00d8 6C656432 		.ascii	"led23\000"
+ 2853      3300
+ 2854              	.LASF48:
+ 2855 00de 7365745F 		.ascii	"set_led_strip\000"
+ 2855      6C65645F 
+ 2855      73747269 
+ 2855      7000
+ 2856              	.LASF2:
+ 2857 00ec 73686F72 		.ascii	"short int\000"
+ 2857      7420696E 
+ 2857      7400
+ 2858              	.LASF63:
+ 2859 00f6 426C616E 		.ascii	"Blank_Write\000"
+ 2859      6B5F5772 
+ 2859      69746500 
+ 2860              	.LASF16:
+ 2861 0102 73697A65 		.ascii	"sizetype\000"
+ 2861      74797065 
+ 2861      00
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 57
+
+
+ 2862              	.LASF69:
+ 2863 010b 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 2863      4320342E 
+ 2863      392E3320 
+ 2863      32303135 
+ 2863      30333033 
+ 2864 013e 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0plus -mthumb -"
+ 2864      20726576 
+ 2864      6973696F 
+ 2864      6E203232 
+ 2864      31323230 
+ 2865 0171 67202D4F 		.ascii	"g -Og -ffunction-sections -ffat-lto-objects\000"
+ 2865      67202D66 
+ 2865      66756E63 
+ 2865      74696F6E 
+ 2865      2D736563 
+ 2866              	.LASF55:
+ 2867 019d 696E7465 		.ascii	"intensity_right\000"
+ 2867      6E736974 
+ 2867      795F7269 
+ 2867      67687400 
+ 2868              	.LASF14:
+ 2869 01ad 63686172 		.ascii	"char8\000"
+ 2869      3800
+ 2870              	.LASF58:
+ 2871 01b3 7365745F 		.ascii	"set_all_colored_leds\000"
+ 2871      616C6C5F 
+ 2871      636F6C6F 
+ 2871      7265645F 
+ 2871      6C656473 
+ 2872              	.LASF52:
+ 2873 01c8 696E7465 		.ascii	"intensity_left\000"
+ 2873      6E736974 
+ 2873      795F6C65 
+ 2873      667400
+ 2874              	.LASF70:
+ 2875 01d7 6C65642E 		.ascii	"led.c\000"
+ 2875      6300
+ 2876              	.LASF10:
+ 2877 01dd 75696E74 		.ascii	"uint16\000"
+ 2877      313600
+ 2878              	.LASF9:
+ 2879 01e4 75696E74 		.ascii	"uint8\000"
+ 2879      3800
+ 2880              	.LASF62:
+ 2881 01ea 5350494D 		.ascii	"SPIM_SpiUartPutArray\000"
+ 2881      5F537069 
+ 2881      55617274 
+ 2881      50757441 
+ 2881      72726179 
+ 2882              	.LASF61:
+ 2883 01ff 73697A65 		.ascii	"size_write\000"
+ 2883      5F777269 
+ 2883      746500
+ 2884              	.LASF49:
+ 2885 020a 7365745F 		.ascii	"set_led\000"
+ 2885      6C656400 
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 58
+
+
+ 2886              	.LASF46:
+ 2887 0212 75706461 		.ascii	"update_led_buffer\000"
+ 2887      74655F6C 
+ 2887      65645F62 
+ 2887      75666665 
+ 2887      7200
+ 2888              	.LASF50:
+ 2889 0224 7365745F 		.ascii	"set_led_pair\000"
+ 2889      6C65645F 
+ 2889      70616972 
+ 2889      00
+ 2890              	.LASF12:
+ 2891 0231 666C6F61 		.ascii	"float\000"
+ 2891      7400
+ 2892              	.LASF6:
+ 2893 0237 6C6F6E67 		.ascii	"long long int\000"
+ 2893      206C6F6E 
+ 2893      6720696E 
+ 2893      7400
+ 2894              	.LASF4:
+ 2895 0245 6C6F6E67 		.ascii	"long int\000"
+ 2895      20696E74 
+ 2895      00
+ 2896              	.LASF54:
+ 2897 024e 7365745F 		.ascii	"set_led_triplet\000"
+ 2897      6C65645F 
+ 2897      74726970 
+ 2897      6C657400 
+ 2898              	.LASF73:
+ 2899 025e 64756D6D 		.ascii	"dummy\000"
+ 2899      7900
+ 2900              	.LASF43:
+ 2901 0264 7365745F 		.ascii	"set_value\000"
+ 2901      76616C75 
+ 2901      6500
+ 2902              	.LASF60:
+ 2903 026e 6C65645F 		.ascii	"led_buffer\000"
+ 2903      62756666 
+ 2903      657200
+ 2904              	.LASF65:
+ 2905 0279 43794465 		.ascii	"CyDelayUs\000"
+ 2905      6C617955 
+ 2905      7300
+ 2906              	.LASF1:
+ 2907 0283 756E7369 		.ascii	"unsigned char\000"
+ 2907      676E6564 
+ 2907      20636861 
+ 2907      7200
+ 2908              	.LASF68:
+ 2909 0291 5350494D 		.ascii	"SPIM_Start\000"
+ 2909      5F537461 
+ 2909      727400
+ 2910              	.LASF0:
+ 2911 029c 7369676E 		.ascii	"signed char\000"
+ 2911      65642063 
+ 2911      68617200 
+ 2912              	.LASF53:
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 59
+
+
+ 2913 02a8 696E7465 		.ascii	"intensity_center\000"
+ 2913      6E736974 
+ 2913      795F6365 
+ 2913      6E746572 
+ 2913      00
+ 2914              	.LASF7:
+ 2915 02b9 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 2915      206C6F6E 
+ 2915      6720756E 
+ 2915      7369676E 
+ 2915      65642069 
+ 2916              	.LASF38:
+ 2917 02d0 6C656432 		.ascii	"led21\000"
+ 2917      3100
+ 2918              	.LASF8:
+ 2919 02d6 756E7369 		.ascii	"unsigned int\000"
+ 2919      676E6564 
+ 2919      20696E74 
+ 2919      00
+ 2920              	.LASF51:
+ 2921 02e3 6C656674 		.ascii	"left_led\000"
+ 2921      5F6C6564 
+ 2921      00
+ 2922              	.LASF67:
+ 2923 02ec 43617053 		.ascii	"CapSense_ISR_Enable\000"
+ 2923      656E7365 
+ 2923      5F495352 
+ 2923      5F456E61 
+ 2923      626C6500 
+ 2924              	.LASF3:
+ 2925 0300 73686F72 		.ascii	"short unsigned int\000"
+ 2925      7420756E 
+ 2925      7369676E 
+ 2925      65642069 
+ 2925      6E7400
+ 2926              	.LASF42:
+ 2927 0313 696E7465 		.ascii	"intensity\000"
+ 2927      6E736974 
+ 2927      7900
+ 2928              	.LASF72:
+ 2929 031d 746C635F 		.ascii	"tlc_5947_led_driver\000"
+ 2929      35393437 
+ 2929      5F6C6564 
+ 2929      5F647269 
+ 2929      76657200 
+ 2930              	.LASF15:
+ 2931 0331 63686172 		.ascii	"char\000"
+ 2931      00
+ 2932              	.LASF11:
+ 2933 0336 75696E74 		.ascii	"uint32\000"
+ 2933      333200
+ 2934              	.LASF5:
+ 2935 033d 6C6F6E67 		.ascii	"long unsigned int\000"
+ 2935      20756E73 
+ 2935      69676E65 
+ 2935      6420696E 
+ 2935      7400
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 60
+
+
+ 2936              	.LASF13:
+ 2937 034f 646F7562 		.ascii	"double\000"
+ 2937      6C6500
+ 2938              	.LASF27:
+ 2939 0356 6C656431 		.ascii	"led10\000"
+ 2939      3000
+ 2940              	.LASF28:
+ 2941 035c 6C656431 		.ascii	"led11\000"
+ 2941      3100
+ 2942              	.LASF29:
+ 2943 0362 6C656431 		.ascii	"led12\000"
+ 2943      3200
+ 2944              	.LASF30:
+ 2945 0368 6C656431 		.ascii	"led13\000"
+ 2945      3300
+ 2946              	.LASF47:
+ 2947 036e 6C65645F 		.ascii	"led_vec\000"
+ 2947      76656300 
+ 2948              	.LASF32:
+ 2949 0376 6C656431 		.ascii	"led15\000"
+ 2949      3500
+ 2950              	.LASF34:
+ 2951 037c 6C656431 		.ascii	"led17\000"
+ 2951      3700
+ 2952              	.LASF35:
+ 2953 0382 6C656431 		.ascii	"led18\000"
+ 2953      3800
+ 2954              	.LASF36:
+ 2955 0388 6C656431 		.ascii	"led19\000"
+ 2955      3900
+ 2956              	.LASF56:
+ 2957 038e 7365745F 		.ascii	"set_all_leds_intensity\000"
+ 2957      616C6C5F 
+ 2957      6C656473 
+ 2957      5F696E74 
+ 2957      656E7369 
+ 2958              	.LASF41:
+ 2959 03a5 745F746C 		.ascii	"t_tlc_5947_led_driver\000"
+ 2959      635F3539 
+ 2959      34375F6C 
+ 2959      65645F64 
+ 2959      72697665 
+ 2960              	.LASF17:
+ 2961 03bb 6C656430 		.ascii	"led0\000"
+ 2961      00
+ 2962              	.LASF18:
+ 2963 03c0 6C656431 		.ascii	"led1\000"
+ 2963      00
+ 2964              	.LASF19:
+ 2965 03c5 6C656432 		.ascii	"led2\000"
+ 2965      00
+ 2966              	.LASF20:
+ 2967 03ca 6C656433 		.ascii	"led3\000"
+ 2967      00
+ 2968              	.LASF21:
+ 2969 03cf 6C656434 		.ascii	"led4\000"
+ 2969      00
+ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\cc2O9Zrf.s 			page 61
+
+
+ 2970              	.LASF22:
+ 2971 03d4 6C656435 		.ascii	"led5\000"
+ 2971      00
+ 2972              	.LASF23:
+ 2973 03d9 6C656436 		.ascii	"led6\000"
+ 2973      00
+ 2974              	.LASF24:
+ 2975 03de 6C656437 		.ascii	"led7\000"
+ 2975      00
+ 2976              	.LASF25:
+ 2977 03e3 6C656438 		.ascii	"led8\000"
+ 2977      00
+ 2978              	.LASF26:
+ 2979 03e8 6C656439 		.ascii	"led9\000"
+ 2979      00
+ 2980              	.LASF45:
+ 2981 03ed 7365745F 		.ascii	"set_led_buffer\000"
+ 2981      6C65645F 
+ 2981      62756666 
+ 2981      657200
+ 2982              	.LASF44:
+ 2983 03fc 6C65645F 		.ascii	"led_min\000"
+ 2983      6D696E00 
+ 2984              	.LASF57:
+ 2985 0404 7365745F 		.ascii	"set_all_white_leds\000"
+ 2985      616C6C5F 
+ 2985      77686974 
+ 2985      655F6C65 
+ 2985      647300
+ 2986              	.LASF64:
+ 2987 0417 4C617463 		.ascii	"Latch_Write\000"
+ 2987      685F5772 
+ 2987      69746500 
+ 2988              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br
