@@ -33,7 +33,6 @@
 
 #define FOR_COLIN                    0 // will stop R, G, B animations to change intensity
 #define FORCE_BUTTON_WIDTH_TO_1      1 // will force the display of button to 1 LED to avoid glare
-#define USE_UART                     1 // will enable the UART, otherwise, the I2C bus will in use
 #define USE_TUNER                    0 // will enable the Cypress capsense tuner
 #define USE_BOOTLOADER               0 // will enable the bootloader usage
 #define USE_128_POINTS_FOR_BREATHING 0 // will use 128 points for the LED breathing algo, default is 256

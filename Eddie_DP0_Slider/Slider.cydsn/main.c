@@ -14,6 +14,7 @@
 #include "led.h"
 #include "animation.h"
 #include "command_telemetry.h"
+#include "comms.h"
 
 //=============================================================================
 //=================================================================== constants
@@ -48,8 +49,6 @@ uint16 get_led_pos                 (uint32 centroid_pos);
 void   reset_timer                 (void);
 void   push_button_scan            (void);
                   
-char receive_string[512];
- 
 //=============================================================================
 //======================================================================== main
 //=============================================================================
@@ -62,7 +61,6 @@ int main()
     uint16                  led_pos                 = CapSense_SLIDER_NO_TOUCH;
     uint16                  new_led_pos             = CapSense_SLIDER_NO_TOUCH;
     static t_enum_direction finger_direction        = DIRECT_STOP;
-    char                    uart_char_in            = 0;
     int                     receive_pos             = 0;
     char*                   command                 = NULL;
     uint16                  tmp                     = 0;
@@ -73,64 +71,42 @@ int main()
     //TimerISR_StartEx(clock_interrupt_handler);
     //Timer_1_Start   ();
     initialize_leds ();
-    
-#ifdef Bootloader_1_CHECK_ROW_NUMBER
-#endif 
-    
-#if USE_UART
-    UART_1_Start();
-#else
-    EZI2C_Start();
-    EZI2C_EzI2CSetBuffer1(sizeof(CapSense_dsRam), sizeof(CapSense_dsRam), (uint8 *)&CapSense_dsRam);
-#endif // USE_UART
+
+    CommsInit();
 
     CapSense_Start();
 
-    memset(receive_string, '\0', sizeof(receive_string));
-
     for(;;)
     {
-#if USE_UART
-        // get, parse and execute the commands
 
-        CapSense_ISR_Disable();
-            uart_char_in = UART_1_UartGetChar();
-        CapSense_ISR_Enable();      
-
-        if((uart_char_in >= 0x20) && (uart_char_in <= 0x7F))
+        if (CommsIsInputBufferReady())
         {
             if (get_is_telemetry_enable() == FALSE)
             {
                 set_is_telemetry_enable(TRUE);
-            }// the telemetry were disabled but we received something on the UART
-            
-            receive_string[receive_pos++] = uart_char_in;
-            if ((uart_char_in == END_OF_CMD) || (receive_pos == sizeof(receive_string)))
+            }// the telemetry were disabled but we received something from the client
+
+            char *receive_string = CommsGetInputBuffer();
+
+            if ((receive_string[0] != START_OF_CMD) || (receive_string[strlen(receive_string) - 1] != END_OF_CMD))
             {
-                if ((receive_string[0] != START_OF_CMD) || (receive_string[strlen(receive_string) - 1] != END_OF_CMD))
+                send_alarm_telemetry(ALARM_WARNING, "", "invalid start-end character(s)");
+            }// if the command is not well formed
+            else
+            {
+                receive_string[strlen(receive_string) - 1] = '\0';
+                if (parse_and_execute_command(&(receive_string[1])) == FALSE)
                 {
-                    send_alarm_telemetry(ALARM_WARNING, "", "invalid start-end character(s)");
-                }// if the command is not well formed
+                    send_alarm_telemetry(ALARM_WARNING, command, "failed to execute the command");
+                }// If we failed to execute the command
                 else
                 {
-                    receive_string[strlen(receive_string) - 1] = '\0';
-                    if (parse_and_execute_command(&(receive_string[1])) == FALSE)
-                    {
-                        send_alarm_telemetry(ALARM_WARNING, command, "failed to execute the command");
-                    }// If we failed to execute the command
-                    else
-                    {
-                        send_alarm_telemetry(ALARM_LOG, command, "executed");
-                    }
-                }// else, the command seems well formed
-                
-                memset (receive_string, '\0', sizeof(receive_string));
-                receive_pos = 0;
-            }// If we detect the end of the command
-        }// If we got a character
-#else
-        // FIXME: use I2C
-#endif // USE_UART
+                    send_alarm_telemetry(ALARM_LOG, command, "executed");
+                }
+            }// else, the command seems well formed
+
+            CommsResetInputBuffer();
+        }
         
         if (cap_sense_is_untouched && get_is_anim_on_button_up_enable())
         {
@@ -215,45 +191,6 @@ int main()
             cap_old_pos = cap_cur_pos;
         }// else, capsense is touched
         cap_sense_was_untouched = cap_sense_is_untouched;
-
-#if USE_UART
-        // get, parse and execute the commands
-        uart_char_in = UART_1_UartGetChar();
-        
-        if((uart_char_in >= 0x20) && (uart_char_in <= 0x7F))
-        {
-            if (get_is_telemetry_enable() == FALSE)
-            {
-                set_is_telemetry_enable(TRUE);
-            }// the telemetry were disabled but we received something on the UART
-            
-            receive_string[receive_pos++] = uart_char_in;
-            if ((uart_char_in == END_OF_CMD) || (receive_pos == sizeof(receive_string)))
-            {
-                if ((receive_string[0] != START_OF_CMD) || (receive_string[strlen(receive_string) - 1] != END_OF_CMD))
-                {
-                    send_alarm_telemetry(ALARM_WARNING, receive_string, "invalid start-end character(s)");
-                }// if the command is not well formed
-                else
-                {
-                    receive_string[strlen(receive_string) - 1] = '\0';
-                    if (parse_and_execute_command(&(receive_string[1])) == FALSE)
-                    {
-                        send_alarm_telemetry(ALARM_WARNING, command, "failed to execute the command");
-                    }// If we failed to execute the command
-                    else
-                    {
-                        send_alarm_telemetry(ALARM_LOG, command, "executed");
-                    }
-                }// else, the command seems well formed
-                
-                memset (receive_string, '\0', sizeof(receive_string));
-                receive_pos = 0;
-            }// If we detect the end of the command
-        }// If we got a character
-#else
-        // FIXME: use I2C
-#endif // USE_UART
 
 #if USE_TUNER
         CapSense_RunTuner(); // sync capsense parameters via tuner before the beginning of new capsense scan
