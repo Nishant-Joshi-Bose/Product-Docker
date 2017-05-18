@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CyXmlSerializer>
+<!--This file is machine generated and read. It is not intended to be edited by hand.-->
+<!--Due to this, there is no schema for this file.-->
+<CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21 type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWrkspcCustomData" version="4">
+<CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997 type_name="CyDesigner.Common.Base.CyCustomData" version="2">
+<userData>
+<dataGuid v="1b906a0f-a7b6-4e4d-a428-82f98b53cb35">
+<CyGuid_1b906a0f-a7b6-4e4d-a428-82f98b53cb35 type_name="CyDesigner.Common.ProjMgmt.GUI.CyExplorerWindow+CyExplorerWindowState" version="3" SelectedTab="Source">
+<TreeKeys>
+<v>Source</v>
+<v>Components</v>
+<v>Output</v>
+</TreeKeys>
+<TreeStates>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="SCB_I2cCommSlave01\SCB_I2cCommSlave01">
+<ExpandedNodeIds>
+<v>SCB_I2cCommSlave01</v>
+<v>SCB_I2cCommSlave01\Bootloader</v>
+<v>SCB_I2cCommSlave01\Bootloader\TopDesign</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.cydwr</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.cydwr\Pins</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.cydwr\Analog</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.cydwr\Clocks</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.cydwr\Interrupts</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.cydwr\System</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.cydwr\Directives</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.cydwr\Flash Security</v>
+<v>SCB_I2cCommSlave01\Bootloader\Header Files</v>
+<v>SCB_I2cCommSlave01\Bootloader\Header Files\cyapicallbacks.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Source Files</v>
+<v>SCB_I2cCommSlave01\Bootloader\Source Files\main.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\Bootloader_1</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\Bootloader_1\Bootloader_1.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\Bootloader_1\Bootloader_1.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\Bootloader_1\Bootloader_1_PVT.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\cm0plusgcc.ld</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\Cm0plusIar.icf</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\Cm0plusRealView.scat</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\Cm0plusStart.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\cmsis_armcc.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\cmsis_gcc.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\core_cm0plus.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\core_cm0plus_psoc4.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\core_cmFunc.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\core_cmInstr.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\CyBootAsmGnu.s</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\CyBootAsmIar.s</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\CyBootAsmRv.s</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\CyFlash.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\CyFlash.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\CyLib.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\CyLib.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\cypins.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\cyPm.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\cyPm.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\cytypes.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_boot\cyutils.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_lfclk</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_lfclk\CyLFClk.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cy_lfclk\CyLFClk.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS\I2CS.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS\I2CS.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS\I2CS_BOOT.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS\I2CS_BOOT.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS\I2CS_I2C.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS\I2CS_I2C.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS\I2CS_I2C_BOOT.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS\I2CS_I2C_INT.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS\I2CS_I2C_PVT.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS\I2CS_I2C_SLAVE.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS\I2CS_PINS.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS\I2CS_PM.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS\I2CS_PVT.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS_SCB_IRQ</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS_SCB_IRQ\I2CS_SCB_IRQ.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS_SCB_IRQ\I2CS_SCB_IRQ.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS_SCBCLK</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS_SCBCLK\I2CS_SCBCLK.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS_SCBCLK\I2CS_SCBCLK.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS_scl</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS_scl\I2CS_scl.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS_scl\I2CS_scl.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS_scl\I2CS_scl_aliases.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS_scl\I2CS_scl_PM.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS_sda</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS_sda\I2CS_sda.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS_sda\I2CS_sda.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS_sda\I2CS_sda_aliases.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\I2CS_sda\I2CS_sda_PM.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cycodeshareexport.ld</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cycodeshareimport.ld</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cycodeshareimport.scat</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cydevice_trm.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cydevicegnu_trm.inc</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cydeviceiar_trm.inc</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cydevicerv_trm.inc</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cydisabledsheets.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cyfitter.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cyfitter_cfg.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cyfitter_cfg.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cyfittergnu.inc</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cyfitteriar.inc</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cyfitterrv.inc</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\cymetadata.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source\PSoC4\project.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave01.cydwr</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave01.cydwr\Pins</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave01.cydwr\Analog</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave01.cydwr\Clocks</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave01.cydwr\Interrupts</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave01.cydwr\System</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave01.cydwr\Directives</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave01.cydwr\Flash Security</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Header Files</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Header Files\cyapicallbacks.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Header Files\main.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Source Files</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Source Files\main.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\BCP_Master_I2cCmd.iic</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\Bootloadable_1</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\Bootloadable_1\Bootloadable_1.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\Bootloadable_1\Bootloadable_1.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cap_int</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cap_int\cap_int.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cap_int\cap_int.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cap_int\cap_int_aliases.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cap_int\cap_int_PM.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\cm0plusgcc.ld</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\Cm0plusIar.icf</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\Cm0plusRealView.scat</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\Cm0plusStart.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\cmsis_armcc.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\cmsis_gcc.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\core_cm0plus.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\core_cm0plus_psoc4.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\core_cmFunc.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\core_cmInstr.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\CyBootAsmGnu.s</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\CyBootAsmIar.s</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\CyBootAsmRv.s</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\CyFlash.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\CyFlash.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\CyLib.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\CyLib.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\cypins.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\cyPm.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\cyPm.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\cytypes.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\cyutils.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_lfclk</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_lfclk\CyLFClk.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_lfclk\CyLFClk.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS\I2CS.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS\I2CS.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS\I2CS_BOOT.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS\I2CS_BOOT.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS\I2CS_I2C.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS\I2CS_I2C.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS\I2CS_I2C_BOOT.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS\I2CS_I2C_INT.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS\I2CS_I2C_PVT.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS\I2CS_I2C_SLAVE.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS\I2CS_PINS.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS\I2CS_PM.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS\I2CS_PVT.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS_SCB_IRQ</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS_SCB_IRQ\I2CS_SCB_IRQ.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS_SCB_IRQ\I2CS_SCB_IRQ.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS_SCBCLK</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS_SCBCLK\I2CS_SCBCLK.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS_SCBCLK\I2CS_SCBCLK.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS_scl</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS_scl\I2CS_scl.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS_scl\I2CS_scl.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS_scl\I2CS_scl_aliases.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS_scl\I2CS_scl_PM.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS_sda</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS_sda\I2CS_sda.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS_sda\I2CS_sda.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS_sda\I2CS_sda_aliases.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\I2CS_sda\I2CS_sda_PM.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cybootloader.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cybootloader.icf</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cycodeshareexport.ld</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cycodeshareimport.ld</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cycodeshareimport.scat</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cydevice_trm.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cydevicegnu_trm.inc</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cydeviceiar_trm.inc</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cydevicerv_trm.inc</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cydisabledsheets.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cyfitter.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cyfitter_cfg.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cyfitter_cfg.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cyfittergnu.inc</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cyfitteriar.inc</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cyfitterrv.inc</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cymetadata.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\project.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave.pdf</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>SCB_I2cCommSlave01</v>
+<v>SCB_I2cCommSlave01\Bootloader</v>
+<v>SCB_I2cCommSlave01\Bootloader\TopDesign</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.cydwr</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.cydwr\Pins</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.cydwr\Analog</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.cydwr\Clocks</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.cydwr\Interrupts</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.cydwr\System</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.cydwr\Directives</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.cydwr\Flash Security</v>
+<v>SCB_I2cCommSlave01\Bootloader\Header Files</v>
+<v>SCB_I2cCommSlave01\Bootloader\Header Files\cyapicallbacks.h</v>
+<v>SCB_I2cCommSlave01\Bootloader\Source Files</v>
+<v>SCB_I2cCommSlave01\Bootloader\Source Files\main.c</v>
+<v>SCB_I2cCommSlave01\Bootloader\Generated_Source</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave01.cydwr</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave01.cydwr\Pins</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave01.cydwr\Analog</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave01.cydwr\Clocks</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave01.cydwr\Interrupts</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave01.cydwr\System</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave01.cydwr\Directives</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave01.cydwr\Flash Security</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Header Files</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Header Files\cyapicallbacks.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Header Files\main.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Source Files</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Source Files\main.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\BCP_Master_I2cCmd.iic</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\Bootloadable_1</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\Bootloadable_1\Bootloadable_1.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\Bootloadable_1\Bootloadable_1.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cap_int</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cap_int\cap_int.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cap_int\cap_int.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cap_int\cap_int_aliases.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cap_int\cap_int_PM.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\cm0plusgcc.ld</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\Cm0plusIar.icf</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\Cm0plusRealView.scat</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\Cm0plusStart.c</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\cmsis_armcc.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\cmsis_gcc.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\core_cm0plus.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\core_cm0plus_psoc4.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\core_cmFunc.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\core_cmInstr.h</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Generated_Source\PSoC4\cy_boot\CyBootAsmGnu.s</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>SCB_I2cCommSlave01</v>
+<v>SCB_I2cCommSlave01\Bootloader</v>
+<v>SCB_I2cCommSlave01\Bootloader\TopDesign</v>
+<v>SCB_I2cCommSlave01\Bootloader\TopDesign\TopDesign.cysch</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4000</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4000\TopDesign.ctl</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4000S</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4000S\TopDesign.ctl</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4100S</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4100S\TopDesign.ctl</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4200</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4200\TopDesign.ctl</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4200 BLE</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4200 BLE\TopDesign.ctl</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4200L</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4200L\TopDesign.ctl</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4200M</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4200M\TopDesign.ctl</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC Analog Coprocessor</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC Analog Coprocessor\TopDesign.ctl</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\TopDesign.cysch</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>SCB_I2cCommSlave01</v>
+<v>SCB_I2cCommSlave01\Bootloader</v>
+<v>SCB_I2cCommSlave01\Bootloader\TopDesign</v>
+<v>SCB_I2cCommSlave01\Bootloader\TopDesign\TopDesign.cysch</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4000</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4000\TopDesign.ctl</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4000S</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4000S\TopDesign.ctl</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4100S</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4100S\TopDesign.ctl</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4200</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4200\TopDesign.ctl</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4200 BLE</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4200 BLE\TopDesign.ctl</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4200L</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4200L\TopDesign.ctl</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4200M</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC 4200M\TopDesign.ctl</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC Analog Coprocessor</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\PSoC4\PSoC Analog Coprocessor\TopDesign.ctl</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\TopDesign\TopDesign.cysch</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>SCB_I2cCommSlave01</v>
+<v>SCB_I2cCommSlave01\Bootloader</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\Bootloader_1.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\Cm0plusStart.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\CyBootAsmGnu.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\cyfitter_cfg.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\CyFlash.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\CyLFClk.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\CyLib.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\cymetadata.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\cyPm.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\cyutils.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_BOOT.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_I2C.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_I2C_BOOT.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_I2C_INT.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_I2C_SLAVE.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_PM.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_SCB_IRQ.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_SCBCLK.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_scl.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_scl_PM.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_sda.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_sda_PM.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\main.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Bootloader.elf</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Bootloader.hex</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Bootloader.map</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.gpdsc</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.rpt</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader_timing.html</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\Bootloadable_1.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\cap_int.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\cap_int_PM.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\Cm0plusStart.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\CyBootAsmGnu.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\cybootloader.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\cyfitter_cfg.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\CyFlash.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\CyLFClk.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\CyLib.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\cymetadata.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\cyPm.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\cyutils.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_BOOT.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_I2C.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_I2C_BOOT.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_I2C_INT.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_I2C_SLAVE.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_PM.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_SCB_IRQ.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_SCBCLK.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_scl.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_scl_PM.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_sda.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_sda_PM.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\main.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\SCB_I2cCommSlave01.cyacd</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\SCB_I2cCommSlave01.elf</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\SCB_I2cCommSlave01.hex</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\SCB_I2cCommSlave01.map</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave01.gpdsc</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave01.rpt</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_I2cCommSlave01_timing.html</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>SCB_I2cCommSlave01</v>
+<v>SCB_I2cCommSlave01\Bootloader</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\Bootloader_1.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\Cm0plusStart.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\CyBootAsmGnu.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\cyfitter_cfg.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\CyFlash.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\CyLFClk.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\CyLib.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\cymetadata.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\cyPm.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\cyutils.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_BOOT.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_I2C.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_I2C_BOOT.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_I2C_INT.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_I2C_SLAVE.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_PM.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_SCB_IRQ.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_SCBCLK.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_scl.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_scl_PM.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_sda.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\I2CS_sda_PM.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Listing Files\main.lst</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Bootloader.elf</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Bootloader.hex</v>
+<v>SCB_I2cCommSlave01\Bootloader\CortexM0p\ARM_GCC_493\Debug\Bootloader.map</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.gpdsc</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader.rpt</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader_timing.html</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\Bootloadable_1.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\cap_int.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\cap_int_PM.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\Cm0plusStart.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\CyBootAsmGnu.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\cybootloader.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\cyfitter_cfg.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\CyFlash.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\CyLFClk.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\CyLib.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\cymetadata.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\cyPm.lst</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\CortexM0p\ARM_GCC_493\Debug\Listing Files\cyutils.lst</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+</TreeStates>
+<TreeKeysV2>
+<v>Datasheet</v>
+</TreeKeysV2>
+<TreeStatesV2>
+<CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237 type_name="CyDesigner.Common.Base.Controls.CyTreeViewState" version="1" SelectedNodeId="">
+<ExpandedNodeIds>
+<v>SCB_I2cCommSlave01</v>
+<v>SCB_I2cCommSlave01\Bootloader</v>
+<v>SCB_I2cCommSlave01\Bootloader\PSoC 4 Architecture TRM</v>
+<v>SCB_I2cCommSlave01\Bootloader\PSoC 4000S Family Datasheet</v>
+<v>SCB_I2cCommSlave01\Bootloader\System Reference Guides</v>
+<v>SCB_I2cCommSlave01\Bootloader\System Reference Guides\cy_boot_v5_50</v>
+<v>SCB_I2cCommSlave01\Bootloader\System Reference Guides\cy_lfclk_v1_10</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader_v1_50.pdf</v>
+<v>SCB_I2cCommSlave01\Bootloader\SCB_P4_v3_20.pdf</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\PSoC 4 Architecture TRM</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\PSoC 4000S Family Datasheet</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\System Reference Guides</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\System Reference Guides\cy_boot_v5_50</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\System Reference Guides\cy_lfclk_v1_10</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Bootloadable_v1_50.pdf</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\cy_pins_v2_20.pdf</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_P4_v3_20.pdf</v>
+</ExpandedNodeIds>
+<VisibleNodeIds>
+<v>SCB_I2cCommSlave01</v>
+<v>SCB_I2cCommSlave01\Bootloader</v>
+<v>SCB_I2cCommSlave01\Bootloader\PSoC 4 Architecture TRM</v>
+<v>SCB_I2cCommSlave01\Bootloader\PSoC 4000S Family Datasheet</v>
+<v>SCB_I2cCommSlave01\Bootloader\System Reference Guides</v>
+<v>SCB_I2cCommSlave01\Bootloader\System Reference Guides\cy_boot_v5_50</v>
+<v>SCB_I2cCommSlave01\Bootloader\System Reference Guides\cy_lfclk_v1_10</v>
+<v>SCB_I2cCommSlave01\Bootloader\Bootloader_v1_50.pdf</v>
+<v>SCB_I2cCommSlave01\Bootloader\SCB_P4_v3_20.pdf</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\PSoC 4 Architecture TRM</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\PSoC 4000S Family Datasheet</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\System Reference Guides</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\System Reference Guides\cy_boot_v5_50</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\System Reference Guides\cy_lfclk_v1_10</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\Bootloadable_v1_50.pdf</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\cy_pins_v2_20.pdf</v>
+<v>SCB_I2cCommSlave01\SCB_I2cCommSlave01\SCB_P4_v3_20.pdf</v>
+</VisibleNodeIds>
+</CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
+</TreeStatesV2>
+</CyGuid_1b906a0f-a7b6-4e4d-a428-82f98b53cb35>
+</dataGuid>
+<dataGuid v="5f2be1a5-0687-4501-bb8c-cf21cb8211bf">
+<CyGuid_5f2be1a5-0687-4501-bb8c-cf21cb8211bf type_name="CyDesigner.Common.ProjMgmt.GUI.CyBookmarkData" version="1">
+<indicators />
+</CyGuid_5f2be1a5-0687-4501-bb8c-cf21cb8211bf>
+</dataGuid>
+</userData>
+</CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997>
+<Unloaded />
+<OpenDocs>
+<name v=".\SCB_I2cCommSlave01.cydsn\TopDesign\TopDesign.cysch" />
+<name v=".\SCB_I2cCommSlave01.cydsn\SCB_I2cCommSlave01.cydwr" />
+<name v=".\SCB_I2cCommSlave01.cydsn\main.h" />
+<name v=".\SCB_I2cCommSlave01.cydsn\main.c" />
+<name v=".\SCB_I2cCommSlave01.cydsn\Generated_Source\PSoC4\cypins.h" />
+<name v="..\Bootloader.cydsn\TopDesign\TopDesign.cysch" />
+<name v=".\SCB_I2cCommSlave01.cydsn\Generated_Source\PSoC4\I2CS_I2C_SLAVE.c" />
+<name v="..\Bootloader.cydsn\Generated_Source\PSoC4\CyBootAsmGnu.s" />
+<name v="..\Bootloader.cydsn\main.c" />
+<name v="..\Bootloader.cydsn\Generated_Source\PSoC4\Bootloader_1.c" />
+<name v="..\Bootloader.cydsn\Bootloader.cydwr" />
+</OpenDocs>
+<OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
+
+  Actipro Docking/MDI for WinForms
+  Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
+  http://www.actiprosoftware.com
+
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1416, 799" SelectedTabbedMdiWindow="aa8396ea-0c05-4b85-8592-03e941ce0edd"><DocumentWindow Key="db5184a1-a089-4338-b037-027f47c1cbaf" Guid="4f16d59d-77d7-45ed-9379-cc4c01bcfc4f" /><DocumentWindow Key="d32c46f7-2945-4577-8594-e5949e3e6c53" Guid="835639ab-ffb4-47e5-8e6a-9a8257289294" /><DocumentWindow Key="a95069f4-dbdf-47bb-8ae0-33a29695217c" Guid="2329b14e-9140-4bcc-ad9a-a8c8fc60ee43" /><DocumentWindow Key="da883c58-1819-4607-a522-165cfe0200cd" Guid="aa8396ea-0c05-4b85-8592-03e941ce0edd" /><DocumentWindow Key="3fbc3199-07f6-4527-9bf5-907f2bebcbf5" Guid="9549fd98-7008-494c-95cf-989dbeebce54" /><DocumentWindow Key="a6985704-1c75-4a8a-a567-7b6ad5af321e" Guid="6c33a07f-86eb-4208-97ae-174da4b6e9ee" /><DocumentWindow Key="4d1b95e9-2cba-4d79-b4b0-13d85f59df3c" Guid="a5ff6a06-32c8-442d-8f81-4e764b706387" /><DocumentWindow Key="38c2e49f-e64d-48a4-862e-44bcaad89434" Guid="77610cb0-34be-4164-aaa3-73a80399b82f" /><DocumentWindow Key="c26ef07b-2c53-43cf-a9b3-4197dc7d2f54" Guid="a3cf103e-2203-416e-9da8-4205baba317d" /><DocumentWindow Key="88dba978-7b22-4f88-bd36-6f120e0b2918" Guid="75e7414f-6205-4ffc-849a-95746b6f157e" /><DocumentWindow Key="14147345-5e14-4863-9c94-7d3d41a4a599" Guid="9e241dc1-390d-436c-9884-4fbda4ab7541" /><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="c3614a79-093d-4419-a2db-c7c7abac73b1" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
+<config v="" />
+<AutoUpdate v="true" />
+</CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>
+</CyXmlSerializer>

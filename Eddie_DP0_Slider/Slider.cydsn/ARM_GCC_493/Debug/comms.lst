@@ -1,0 +1,1338 @@
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"comms.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.CommsInit,"ax",%progbits
+  18              		.align	2
+  19              		.global	CommsInit
+  20              		.code	16
+  21              		.thumb_func
+  22              		.type	CommsInit, %function
+  23              	CommsInit:
+  24              	.LFB35:
+  25              		.file 1 "comms.c"
+   1:comms.c       **** /**
+   2:comms.c       ****  * @file comms.c
+   3:comms.c       ****  * @author 
+   4:comms.c       ****  *
+   5:comms.c       ****  * 
+   6:comms.c       ****  */
+   7:comms.c       **** 
+   8:comms.c       **** #include <project.h>
+   9:comms.c       **** #include "util.h"
+  10:comms.c       **** 
+  11:comms.c       **** #define I2C_BUFFER_SIZE 512
+  12:comms.c       **** static uint8 i2cRxBuffer[I2C_BUFFER_SIZE];
+  13:comms.c       **** static uint8 i2cTxBuffer[I2C_BUFFER_SIZE];
+  14:comms.c       **** 
+  15:comms.c       **** void CommsInit(void)
+  16:comms.c       **** {
+  26              		.loc 1 16 0
+  27              		.cfi_startproc
+  28 0000 10B5     		push	{r4, lr}
+  29              		.cfi_def_cfa_offset 8
+  30              		.cfi_offset 4, -8
+  31              		.cfi_offset 14, -4
+  17:comms.c       ****     I2CS_I2CSlaveInitReadBuf (i2cTxBuffer,  I2C_BUFFER_SIZE);
+  32              		.loc 1 17 0
+  33 0002 8024     		mov	r4, #128
+  34 0004 A400     		lsl	r4, r4, #2
+  35 0006 0548     		ldr	r0, .L2
+  36 0008 211C     		mov	r1, r4
+  37 000a FFF7FEFF 		bl	I2CS_I2CSlaveInitReadBuf
+  38              	.LVL0:
+  18:comms.c       ****     I2CS_I2CSlaveInitWriteBuf(i2cRxBuffer, I2C_BUFFER_SIZE);
+  39              		.loc 1 18 0
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 2
+
+
+  40 000e 0448     		ldr	r0, .L2+4
+  41 0010 211C     		mov	r1, r4
+  42 0012 FFF7FEFF 		bl	I2CS_I2CSlaveInitWriteBuf
+  43              	.LVL1:
+  19:comms.c       ****     I2CS_Start();
+  44              		.loc 1 19 0
+  45 0016 FFF7FEFF 		bl	I2CS_Start
+  46              	.LVL2:
+  20:comms.c       **** }
+  47              		.loc 1 20 0
+  48              		@ sp needed
+  49 001a 10BD     		pop	{r4, pc}
+  50              	.L3:
+  51              		.align	2
+  52              	.L2:
+  53 001c 00000000 		.word	.LANCHOR0
+  54 0020 00020000 		.word	.LANCHOR1
+  55              		.cfi_endproc
+  56              	.LFE35:
+  57              		.size	CommsInit, .-CommsInit
+  58              		.section	.text.CommsIsInputBufferReady,"ax",%progbits
+  59              		.align	2
+  60              		.global	CommsIsInputBufferReady
+  61              		.code	16
+  62              		.thumb_func
+  63              		.type	CommsIsInputBufferReady, %function
+  64              	CommsIsInputBufferReady:
+  65              	.LFB36:
+  21:comms.c       **** 
+  22:comms.c       **** BOOL CommsIsInputBufferReady(void)
+  23:comms.c       **** {
+  66              		.loc 1 23 0
+  67              		.cfi_startproc
+  68 0000 08B5     		push	{r3, lr}
+  69              		.cfi_def_cfa_offset 8
+  70              		.cfi_offset 3, -8
+  71              		.cfi_offset 14, -4
+  24:comms.c       ****     return (0u != (I2CS_I2CSlaveStatus() & I2CS_I2C_SSTAT_WR_CMPLT));
+  72              		.loc 1 24 0
+  73 0002 FFF7FEFF 		bl	I2CS_I2CSlaveStatus
+  74              	.LVL3:
+  75 0006 C006     		lsl	r0, r0, #27
+  76 0008 C00F     		lsr	r0, r0, #31
+  25:comms.c       **** }
+  77              		.loc 1 25 0
+  78              		@ sp needed
+  79 000a 08BD     		pop	{r3, pc}
+  80              		.cfi_endproc
+  81              	.LFE36:
+  82              		.size	CommsIsInputBufferReady, .-CommsIsInputBufferReady
+  83              		.section	.text.CommsResetInputBuffer,"ax",%progbits
+  84              		.align	2
+  85              		.global	CommsResetInputBuffer
+  86              		.code	16
+  87              		.thumb_func
+  88              		.type	CommsResetInputBuffer, %function
+  89              	CommsResetInputBuffer:
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 3
+
+
+  90              	.LFB37:
+  26:comms.c       **** 
+  27:comms.c       **** void CommsResetInputBuffer(void)
+  28:comms.c       **** {
+  91              		.loc 1 28 0
+  92              		.cfi_startproc
+  93 0000 08B5     		push	{r3, lr}
+  94              		.cfi_def_cfa_offset 8
+  95              		.cfi_offset 3, -8
+  96              		.cfi_offset 14, -4
+  29:comms.c       ****     I2CS_I2CSlaveClearWriteBuf();
+  97              		.loc 1 29 0
+  98 0002 FFF7FEFF 		bl	I2CS_I2CSlaveClearWriteBuf
+  99              	.LVL4:
+  30:comms.c       ****     (void) I2CS_I2CSlaveClearWriteStatus();
+ 100              		.loc 1 30 0
+ 101 0006 FFF7FEFF 		bl	I2CS_I2CSlaveClearWriteStatus
+ 102              	.LVL5:
+  31:comms.c       **** }
+ 103              		.loc 1 31 0
+ 104              		@ sp needed
+ 105 000a 08BD     		pop	{r3, pc}
+ 106              		.cfi_endproc
+ 107              	.LFE37:
+ 108              		.size	CommsResetInputBuffer, .-CommsResetInputBuffer
+ 109              		.section	.text.CommsGetInputBuffer,"ax",%progbits
+ 110              		.align	2
+ 111              		.global	CommsGetInputBuffer
+ 112              		.code	16
+ 113              		.thumb_func
+ 114              		.type	CommsGetInputBuffer, %function
+ 115              	CommsGetInputBuffer:
+ 116              	.LFB38:
+  32:comms.c       **** 
+  33:comms.c       **** uint8 *CommsGetInputBuffer(void)
+  34:comms.c       **** {
+ 117              		.loc 1 34 0
+ 118              		.cfi_startproc
+  35:comms.c       ****     return(i2cRxBuffer);
+  36:comms.c       **** }
+ 119              		.loc 1 36 0
+ 120 0000 0048     		ldr	r0, .L7
+ 121              		@ sp needed
+ 122 0002 7047     		bx	lr
+ 123              	.L8:
+ 124              		.align	2
+ 125              	.L7:
+ 126 0004 00020000 		.word	.LANCHOR1
+ 127              		.cfi_endproc
+ 128              	.LFE38:
+ 129              		.size	CommsGetInputBuffer, .-CommsGetInputBuffer
+ 130              		.section	.text.CommsSendData,"ax",%progbits
+ 131              		.align	2
+ 132              		.global	CommsSendData
+ 133              		.code	16
+ 134              		.thumb_func
+ 135              		.type	CommsSendData, %function
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 4
+
+
+ 136              	CommsSendData:
+ 137              	.LFB39:
+  37:comms.c       **** 
+  38:comms.c       **** void CommsSendData(const char *buffer)
+  39:comms.c       **** {
+ 138              		.loc 1 39 0
+ 139              		.cfi_startproc
+ 140              	.LVL6:
+ 141 0000 10B5     		push	{r4, lr}
+ 142              		.cfi_def_cfa_offset 8
+ 143              		.cfi_offset 4, -8
+ 144              		.cfi_offset 14, -4
+ 145 0002 041C     		mov	r4, r0
+  40:comms.c       ****     memcpy(i2cTxBuffer, buffer, strlen(buffer));
+ 146              		.loc 1 40 0
+ 147 0004 FFF7FEFF 		bl	strlen
+ 148              	.LVL7:
+ 149 0008 021C     		mov	r2, r0
+ 150 000a 0948     		ldr	r0, .L11
+ 151 000c 211C     		mov	r1, r4
+ 152 000e FFF7FEFF 		bl	memcpy
+ 153              	.LVL8:
+  41:comms.c       ****     // Interrupt the client to let it know it has to read now
+  42:comms.c       ****     CAPINT_Write(1u);
+ 154              		.loc 1 42 0
+ 155 0012 0120     		mov	r0, #1
+ 156 0014 FFF7FEFF 		bl	CAPINT_Write
+ 157              	.LVL9:
+ 158              	.L10:
+  43:comms.c       ****     // Wait until master is done reading
+  44:comms.c       ****     while (0u == (I2CS_I2CSlaveStatus() & I2CS_I2C_SSTAT_RD_CMPLT))
+ 159              		.loc 1 44 0 discriminator 1
+ 160 0018 FFF7FEFF 		bl	I2CS_I2CSlaveStatus
+ 161              	.LVL10:
+ 162 001c C307     		lsl	r3, r0, #31
+ 163 001e FBD5     		bpl	.L10
+  45:comms.c       ****     {
+  46:comms.c       ****         // TODO do a timeout here in case there's a failure
+  47:comms.c       ****     }
+  48:comms.c       ****     /* Clear slave read buffer and status */
+  49:comms.c       ****     I2CS_I2CSlaveClearReadBuf();
+ 164              		.loc 1 49 0
+ 165 0020 FFF7FEFF 		bl	I2CS_I2CSlaveClearReadBuf
+ 166              	.LVL11:
+  50:comms.c       ****     (void) I2CS_I2CSlaveClearReadStatus();
+ 167              		.loc 1 50 0
+ 168 0024 FFF7FEFF 		bl	I2CS_I2CSlaveClearReadStatus
+ 169              	.LVL12:
+  51:comms.c       ****     // Reset client interrupt
+  52:comms.c       ****     CAPINT_Write(0u);
+ 170              		.loc 1 52 0
+ 171 0028 0020     		mov	r0, #0
+ 172 002a FFF7FEFF 		bl	CAPINT_Write
+ 173              	.LVL13:
+  53:comms.c       **** }
+ 174              		.loc 1 53 0
+ 175              		@ sp needed
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 5
+
+
+ 176              	.LVL14:
+ 177 002e 10BD     		pop	{r4, pc}
+ 178              	.L12:
+ 179              		.align	2
+ 180              	.L11:
+ 181 0030 00000000 		.word	.LANCHOR0
+ 182              		.cfi_endproc
+ 183              	.LFE39:
+ 184              		.size	CommsSendData, .-CommsSendData
+ 185              		.bss
+ 186              		.align	2
+ 187              		.set	.LANCHOR0,. + 0
+ 188              		.set	.LANCHOR1,. + 512
+ 189              		.type	i2cTxBuffer, %object
+ 190              		.size	i2cTxBuffer, 512
+ 191              	i2cTxBuffer:
+ 192 0000 00000000 		.space	512
+ 192      00000000 
+ 192      00000000 
+ 192      00000000 
+ 192      00000000 
+ 193              		.type	i2cRxBuffer, %object
+ 194              		.size	i2cRxBuffer, 512
+ 195              	i2cRxBuffer:
+ 196 0200 00000000 		.space	512
+ 196      00000000 
+ 196      00000000 
+ 196      00000000 
+ 196      00000000 
+ 197              		.text
+ 198              	.Letext0:
+ 199              		.file 2 "Generated_Source\\PSoC4/cytypes.h"
+ 200              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+ 201              		.file 4 "Generated_Source\\PSoC4/I2CS_I2C.h"
+ 202              		.file 5 "Generated_Source\\PSoC4/I2CS.h"
+ 203              		.file 6 "Generated_Source\\PSoC4/CAPINT.h"
+ 204              		.file 7 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+ 205              		.section	.debug_info,"",%progbits
+ 206              	.Ldebug_info0:
+ 207 0000 EC020000 		.4byte	0x2ec
+ 208 0004 0400     		.2byte	0x4
+ 209 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 210 000a 04       		.byte	0x4
+ 211 000b 01       		.uleb128 0x1
+ 212 000c 31020000 		.4byte	.LASF31
+ 213 0010 01       		.byte	0x1
+ 214 0011 A4010000 		.4byte	.LASF32
+ 215 0015 4D000000 		.4byte	.LASF33
+ 216 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 217 001d 00000000 		.4byte	0
+ 218 0021 00000000 		.4byte	.Ldebug_line0
+ 219 0025 02       		.uleb128 0x2
+ 220 0026 01       		.byte	0x1
+ 221 0027 06       		.byte	0x6
+ 222 0028 C3020000 		.4byte	.LASF0
+ 223 002c 02       		.uleb128 0x2
+ 224 002d 01       		.byte	0x1
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 6
+
+
+ 225 002e 08       		.byte	0x8
+ 226 002f BA000000 		.4byte	.LASF1
+ 227 0033 02       		.uleb128 0x2
+ 228 0034 02       		.byte	0x2
+ 229 0035 05       		.byte	0x5
+ 230 0036 06020000 		.4byte	.LASF2
+ 231 003a 02       		.uleb128 0x2
+ 232 003b 02       		.byte	0x2
+ 233 003c 07       		.byte	0x7
+ 234 003d D6000000 		.4byte	.LASF3
+ 235 0041 02       		.uleb128 0x2
+ 236 0042 04       		.byte	0x4
+ 237 0043 05       		.byte	0x5
+ 238 0044 79000000 		.4byte	.LASF4
+ 239 0048 02       		.uleb128 0x2
+ 240 0049 04       		.byte	0x4
+ 241 004a 07       		.byte	0x7
+ 242 004b 1F010000 		.4byte	.LASF5
+ 243 004f 02       		.uleb128 0x2
+ 244 0050 08       		.byte	0x8
+ 245 0051 05       		.byte	0x5
+ 246 0052 B5010000 		.4byte	.LASF6
+ 247 0056 02       		.uleb128 0x2
+ 248 0057 08       		.byte	0x8
+ 249 0058 07       		.byte	0x7
+ 250 0059 8D010000 		.4byte	.LASF7
+ 251 005d 03       		.uleb128 0x3
+ 252 005e 04       		.byte	0x4
+ 253 005f 05       		.byte	0x5
+ 254 0060 696E7400 		.ascii	"int\000"
+ 255 0064 02       		.uleb128 0x2
+ 256 0065 04       		.byte	0x4
+ 257 0066 07       		.byte	0x7
+ 258 0067 82000000 		.4byte	.LASF8
+ 259 006b 04       		.uleb128 0x4
+ 260 006c 2B020000 		.4byte	.LASF9
+ 261 0070 02       		.byte	0x2
+ 262 0071 B901     		.2byte	0x1b9
+ 263 0073 2C000000 		.4byte	0x2c
+ 264 0077 04       		.uleb128 0x4
+ 265 0078 31010000 		.4byte	.LASF10
+ 266 007c 02       		.byte	0x2
+ 267 007d BB01     		.2byte	0x1bb
+ 268 007f 48000000 		.4byte	0x48
+ 269 0083 02       		.uleb128 0x2
+ 270 0084 04       		.byte	0x4
+ 271 0085 04       		.byte	0x4
+ 272 0086 B4000000 		.4byte	.LASF11
+ 273 008a 02       		.uleb128 0x2
+ 274 008b 08       		.byte	0x8
+ 275 008c 04       		.byte	0x4
+ 276 008d 8F000000 		.4byte	.LASF12
+ 277 0091 02       		.uleb128 0x2
+ 278 0092 01       		.byte	0x1
+ 279 0093 08       		.byte	0x8
+ 280 0094 E0010000 		.4byte	.LASF13
+ 281 0098 05       		.uleb128 0x5
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 7
+
+
+ 282 0099 21000000 		.4byte	.LASF14
+ 283 009d 03       		.byte	0x3
+ 284 009e D4       		.byte	0xd4
+ 285 009f 64000000 		.4byte	0x64
+ 286 00a3 02       		.uleb128 0x2
+ 287 00a4 04       		.byte	0x4
+ 288 00a5 07       		.byte	0x7
+ 289 00a6 AC010000 		.4byte	.LASF15
+ 290 00aa 06       		.uleb128 0x6
+ 291 00ab 04       		.byte	0x4
+ 292 00ac 07       		.uleb128 0x7
+ 293 00ad 04       		.byte	0x4
+ 294 00ae B2000000 		.4byte	0xb2
+ 295 00b2 08       		.uleb128 0x8
+ 296 00b3 91000000 		.4byte	0x91
+ 297 00b7 07       		.uleb128 0x7
+ 298 00b8 04       		.byte	0x4
+ 299 00b9 6B000000 		.4byte	0x6b
+ 300 00bd 07       		.uleb128 0x7
+ 301 00be 04       		.byte	0x4
+ 302 00bf C3000000 		.4byte	0xc3
+ 303 00c3 09       		.uleb128 0x9
+ 304 00c4 0A       		.uleb128 0xa
+ 305 00c5 E9000000 		.4byte	.LASF16
+ 306 00c9 01       		.byte	0x1
+ 307 00ca 0F       		.byte	0xf
+ 308 00cb 00000000 		.4byte	.LFB35
+ 309 00cf 24000000 		.4byte	.LFE35-.LFB35
+ 310 00d3 01       		.uleb128 0x1
+ 311 00d4 9C       		.byte	0x9c
+ 312 00d5 1D010000 		.4byte	0x11d
+ 313 00d9 0B       		.uleb128 0xb
+ 314 00da 0E000000 		.4byte	.LVL0
+ 315 00de 43020000 		.4byte	0x243
+ 316 00e2 F6000000 		.4byte	0xf6
+ 317 00e6 0C       		.uleb128 0xc
+ 318 00e7 01       		.uleb128 0x1
+ 319 00e8 51       		.byte	0x51
+ 320 00e9 02       		.uleb128 0x2
+ 321 00ea 74       		.byte	0x74
+ 322 00eb 00       		.sleb128 0
+ 323 00ec 0C       		.uleb128 0xc
+ 324 00ed 01       		.uleb128 0x1
+ 325 00ee 50       		.byte	0x50
+ 326 00ef 05       		.uleb128 0x5
+ 327 00f0 03       		.byte	0x3
+ 328 00f1 00000000 		.4byte	.LANCHOR0
+ 329 00f5 00       		.byte	0
+ 330 00f6 0B       		.uleb128 0xb
+ 331 00f7 16000000 		.4byte	.LVL1
+ 332 00fb 5A020000 		.4byte	0x25a
+ 333 00ff 13010000 		.4byte	0x113
+ 334 0103 0C       		.uleb128 0xc
+ 335 0104 01       		.uleb128 0x1
+ 336 0105 51       		.byte	0x51
+ 337 0106 02       		.uleb128 0x2
+ 338 0107 74       		.byte	0x74
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 8
+
+
+ 339 0108 00       		.sleb128 0
+ 340 0109 0C       		.uleb128 0xc
+ 341 010a 01       		.uleb128 0x1
+ 342 010b 50       		.byte	0x50
+ 343 010c 05       		.uleb128 0x5
+ 344 010d 03       		.byte	0x3
+ 345 010e 00020000 		.4byte	.LANCHOR1
+ 346 0112 00       		.byte	0
+ 347 0113 0D       		.uleb128 0xd
+ 348 0114 1A000000 		.4byte	.LVL2
+ 349 0118 71020000 		.4byte	0x271
+ 350 011c 00       		.byte	0
+ 351 011d 0E       		.uleb128 0xe
+ 352 011e F3000000 		.4byte	.LASF34
+ 353 0122 01       		.byte	0x1
+ 354 0123 16       		.byte	0x16
+ 355 0124 6B000000 		.4byte	0x6b
+ 356 0128 00000000 		.4byte	.LFB36
+ 357 012c 0C000000 		.4byte	.LFE36-.LFB36
+ 358 0130 01       		.uleb128 0x1
+ 359 0131 9C       		.byte	0x9c
+ 360 0132 40010000 		.4byte	0x140
+ 361 0136 0D       		.uleb128 0xd
+ 362 0137 06000000 		.4byte	.LVL3
+ 363 013b 78020000 		.4byte	0x278
+ 364 013f 00       		.byte	0
+ 365 0140 0A       		.uleb128 0xa
+ 366 0141 0B000000 		.4byte	.LASF17
+ 367 0145 01       		.byte	0x1
+ 368 0146 1B       		.byte	0x1b
+ 369 0147 00000000 		.4byte	.LFB37
+ 370 014b 0C000000 		.4byte	.LFE37-.LFB37
+ 371 014f 01       		.uleb128 0x1
+ 372 0150 9C       		.byte	0x9c
+ 373 0151 68010000 		.4byte	0x168
+ 374 0155 0D       		.uleb128 0xd
+ 375 0156 06000000 		.4byte	.LVL4
+ 376 015a 84020000 		.4byte	0x284
+ 377 015e 0D       		.uleb128 0xd
+ 378 015f 0A000000 		.4byte	.LVL5
+ 379 0163 8C020000 		.4byte	0x28c
+ 380 0167 00       		.byte	0
+ 381 0168 0F       		.uleb128 0xf
+ 382 0169 10020000 		.4byte	.LASF35
+ 383 016d 01       		.byte	0x1
+ 384 016e 21       		.byte	0x21
+ 385 016f B7000000 		.4byte	0xb7
+ 386 0173 00000000 		.4byte	.LFB38
+ 387 0177 08000000 		.4byte	.LFE38-.LFB38
+ 388 017b 01       		.uleb128 0x1
+ 389 017c 9C       		.byte	0x9c
+ 390 017d 0A       		.uleb128 0xa
+ 391 017e C8000000 		.4byte	.LASF18
+ 392 0182 01       		.byte	0x1
+ 393 0183 26       		.byte	0x26
+ 394 0184 00000000 		.4byte	.LFB39
+ 395 0188 34000000 		.4byte	.LFE39-.LFB39
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 9
+
+
+ 396 018c 01       		.uleb128 0x1
+ 397 018d 9C       		.byte	0x9c
+ 398 018e 10020000 		.4byte	0x210
+ 399 0192 10       		.uleb128 0x10
+ 400 0193 24020000 		.4byte	.LASF36
+ 401 0197 01       		.byte	0x1
+ 402 0198 26       		.byte	0x26
+ 403 0199 AC000000 		.4byte	0xac
+ 404 019d 00000000 		.4byte	.LLST0
+ 405 01a1 0B       		.uleb128 0xb
+ 406 01a2 08000000 		.4byte	.LVL7
+ 407 01a6 98020000 		.4byte	0x298
+ 408 01aa B5010000 		.4byte	0x1b5
+ 409 01ae 0C       		.uleb128 0xc
+ 410 01af 01       		.uleb128 0x1
+ 411 01b0 50       		.byte	0x50
+ 412 01b1 02       		.uleb128 0x2
+ 413 01b2 74       		.byte	0x74
+ 414 01b3 00       		.sleb128 0
+ 415 01b4 00       		.byte	0
+ 416 01b5 0B       		.uleb128 0xb
+ 417 01b6 12000000 		.4byte	.LVL8
+ 418 01ba AD020000 		.4byte	0x2ad
+ 419 01be D2010000 		.4byte	0x1d2
+ 420 01c2 0C       		.uleb128 0xc
+ 421 01c3 01       		.uleb128 0x1
+ 422 01c4 51       		.byte	0x51
+ 423 01c5 02       		.uleb128 0x2
+ 424 01c6 74       		.byte	0x74
+ 425 01c7 00       		.sleb128 0
+ 426 01c8 0C       		.uleb128 0xc
+ 427 01c9 01       		.uleb128 0x1
+ 428 01ca 50       		.byte	0x50
+ 429 01cb 05       		.uleb128 0x5
+ 430 01cc 03       		.byte	0x3
+ 431 01cd 00000000 		.4byte	.LANCHOR0
+ 432 01d1 00       		.byte	0
+ 433 01d2 0B       		.uleb128 0xb
+ 434 01d3 18000000 		.4byte	.LVL9
+ 435 01d7 CA020000 		.4byte	0x2ca
+ 436 01db E5010000 		.4byte	0x1e5
+ 437 01df 0C       		.uleb128 0xc
+ 438 01e0 01       		.uleb128 0x1
+ 439 01e1 50       		.byte	0x50
+ 440 01e2 01       		.uleb128 0x1
+ 441 01e3 31       		.byte	0x31
+ 442 01e4 00       		.byte	0
+ 443 01e5 0D       		.uleb128 0xd
+ 444 01e6 1C000000 		.4byte	.LVL10
+ 445 01ea 78020000 		.4byte	0x278
+ 446 01ee 0D       		.uleb128 0xd
+ 447 01ef 24000000 		.4byte	.LVL11
+ 448 01f3 DB020000 		.4byte	0x2db
+ 449 01f7 0D       		.uleb128 0xd
+ 450 01f8 28000000 		.4byte	.LVL12
+ 451 01fc E3020000 		.4byte	0x2e3
+ 452 0200 11       		.uleb128 0x11
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 10
+
+
+ 453 0201 2E000000 		.4byte	.LVL13
+ 454 0205 CA020000 		.4byte	0x2ca
+ 455 0209 0C       		.uleb128 0xc
+ 456 020a 01       		.uleb128 0x1
+ 457 020b 50       		.byte	0x50
+ 458 020c 01       		.uleb128 0x1
+ 459 020d 30       		.byte	0x30
+ 460 020e 00       		.byte	0
+ 461 020f 00       		.byte	0
+ 462 0210 12       		.uleb128 0x12
+ 463 0211 6B000000 		.4byte	0x6b
+ 464 0215 21020000 		.4byte	0x221
+ 465 0219 13       		.uleb128 0x13
+ 466 021a A3000000 		.4byte	0xa3
+ 467 021e FF01     		.2byte	0x1ff
+ 468 0220 00       		.byte	0
+ 469 0221 14       		.uleb128 0x14
+ 470 0222 41000000 		.4byte	.LASF19
+ 471 0226 01       		.byte	0x1
+ 472 0227 0C       		.byte	0xc
+ 473 0228 10020000 		.4byte	0x210
+ 474 022c 05       		.uleb128 0x5
+ 475 022d 03       		.byte	0x3
+ 476 022e 00020000 		.4byte	i2cRxBuffer
+ 477 0232 14       		.uleb128 0x14
+ 478 0233 81010000 		.4byte	.LASF20
+ 479 0237 01       		.byte	0x1
+ 480 0238 0D       		.byte	0xd
+ 481 0239 10020000 		.4byte	0x210
+ 482 023d 05       		.uleb128 0x5
+ 483 023e 03       		.byte	0x3
+ 484 023f 00000000 		.4byte	i2cTxBuffer
+ 485 0243 15       		.uleb128 0x15
+ 486 0244 28000000 		.4byte	.LASF21
+ 487 0248 04       		.byte	0x4
+ 488 0249 2E01     		.2byte	0x12e
+ 489 024b 5A020000 		.4byte	0x25a
+ 490 024f 16       		.uleb128 0x16
+ 491 0250 B7000000 		.4byte	0xb7
+ 492 0254 16       		.uleb128 0x16
+ 493 0255 77000000 		.4byte	0x77
+ 494 0259 00       		.byte	0
+ 495 025a 15       		.uleb128 0x15
+ 496 025b 53010000 		.4byte	.LASF22
+ 497 025f 04       		.byte	0x4
+ 498 0260 2F01     		.2byte	0x12f
+ 499 0262 71020000 		.4byte	0x271
+ 500 0266 16       		.uleb128 0x16
+ 501 0267 B7000000 		.4byte	0xb7
+ 502 026b 16       		.uleb128 0x16
+ 503 026c 77000000 		.4byte	0x77
+ 504 0270 00       		.byte	0
+ 505 0271 17       		.uleb128 0x17
+ 506 0272 00000000 		.4byte	.LASF23
+ 507 0276 05       		.byte	0x5
+ 508 0277 6E       		.byte	0x6e
+ 509 0278 18       		.uleb128 0x18
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 11
+
+
+ 510 0279 0B010000 		.4byte	.LASF25
+ 511 027d 04       		.byte	0x4
+ 512 027e 2501     		.2byte	0x125
+ 513 0280 77000000 		.4byte	0x77
+ 514 0284 19       		.uleb128 0x19
+ 515 0285 38010000 		.4byte	.LASF24
+ 516 0289 04       		.byte	0x4
+ 517 028a 3301     		.2byte	0x133
+ 518 028c 18       		.uleb128 0x18
+ 519 028d 96000000 		.4byte	.LASF26
+ 520 0291 04       		.byte	0x4
+ 521 0292 2701     		.2byte	0x127
+ 522 0294 77000000 		.4byte	0x77
+ 523 0298 1A       		.uleb128 0x1a
+ 524 0299 6D010000 		.4byte	.LASF37
+ 525 029d 07       		.byte	0x7
+ 526 029e 21       		.byte	0x21
+ 527 029f 98000000 		.4byte	0x98
+ 528 02a3 AD020000 		.4byte	0x2ad
+ 529 02a7 16       		.uleb128 0x16
+ 530 02a8 AC000000 		.4byte	0xac
+ 531 02ac 00       		.byte	0
+ 532 02ad 1B       		.uleb128 0x1b
+ 533 02ae FF010000 		.4byte	.LASF27
+ 534 02b2 AA000000 		.4byte	0xaa
+ 535 02b6 CA020000 		.4byte	0x2ca
+ 536 02ba 16       		.uleb128 0x16
+ 537 02bb AA000000 		.4byte	0xaa
+ 538 02bf 16       		.uleb128 0x16
+ 539 02c0 BD000000 		.4byte	0xbd
+ 540 02c4 16       		.uleb128 0x16
+ 541 02c5 A3000000 		.4byte	0xa3
+ 542 02c9 00       		.byte	0
+ 543 02ca 1C       		.uleb128 0x1c
+ 544 02cb 74010000 		.4byte	.LASF28
+ 545 02cf 06       		.byte	0x6
+ 546 02d0 33       		.byte	0x33
+ 547 02d1 DB020000 		.4byte	0x2db
+ 548 02d5 16       		.uleb128 0x16
+ 549 02d6 6B000000 		.4byte	0x6b
+ 550 02da 00       		.byte	0
+ 551 02db 19       		.uleb128 0x19
+ 552 02dc E5010000 		.4byte	.LASF29
+ 553 02e0 04       		.byte	0x4
+ 554 02e1 3201     		.2byte	0x132
+ 555 02e3 18       		.uleb128 0x18
+ 556 02e4 C3010000 		.4byte	.LASF30
+ 557 02e8 04       		.byte	0x4
+ 558 02e9 2601     		.2byte	0x126
+ 559 02eb 77000000 		.4byte	0x77
+ 560 02ef 00       		.byte	0
+ 561              		.section	.debug_abbrev,"",%progbits
+ 562              	.Ldebug_abbrev0:
+ 563 0000 01       		.uleb128 0x1
+ 564 0001 11       		.uleb128 0x11
+ 565 0002 01       		.byte	0x1
+ 566 0003 25       		.uleb128 0x25
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 12
+
+
+ 567 0004 0E       		.uleb128 0xe
+ 568 0005 13       		.uleb128 0x13
+ 569 0006 0B       		.uleb128 0xb
+ 570 0007 03       		.uleb128 0x3
+ 571 0008 0E       		.uleb128 0xe
+ 572 0009 1B       		.uleb128 0x1b
+ 573 000a 0E       		.uleb128 0xe
+ 574 000b 55       		.uleb128 0x55
+ 575 000c 17       		.uleb128 0x17
+ 576 000d 11       		.uleb128 0x11
+ 577 000e 01       		.uleb128 0x1
+ 578 000f 10       		.uleb128 0x10
+ 579 0010 17       		.uleb128 0x17
+ 580 0011 00       		.byte	0
+ 581 0012 00       		.byte	0
+ 582 0013 02       		.uleb128 0x2
+ 583 0014 24       		.uleb128 0x24
+ 584 0015 00       		.byte	0
+ 585 0016 0B       		.uleb128 0xb
+ 586 0017 0B       		.uleb128 0xb
+ 587 0018 3E       		.uleb128 0x3e
+ 588 0019 0B       		.uleb128 0xb
+ 589 001a 03       		.uleb128 0x3
+ 590 001b 0E       		.uleb128 0xe
+ 591 001c 00       		.byte	0
+ 592 001d 00       		.byte	0
+ 593 001e 03       		.uleb128 0x3
+ 594 001f 24       		.uleb128 0x24
+ 595 0020 00       		.byte	0
+ 596 0021 0B       		.uleb128 0xb
+ 597 0022 0B       		.uleb128 0xb
+ 598 0023 3E       		.uleb128 0x3e
+ 599 0024 0B       		.uleb128 0xb
+ 600 0025 03       		.uleb128 0x3
+ 601 0026 08       		.uleb128 0x8
+ 602 0027 00       		.byte	0
+ 603 0028 00       		.byte	0
+ 604 0029 04       		.uleb128 0x4
+ 605 002a 16       		.uleb128 0x16
+ 606 002b 00       		.byte	0
+ 607 002c 03       		.uleb128 0x3
+ 608 002d 0E       		.uleb128 0xe
+ 609 002e 3A       		.uleb128 0x3a
+ 610 002f 0B       		.uleb128 0xb
+ 611 0030 3B       		.uleb128 0x3b
+ 612 0031 05       		.uleb128 0x5
+ 613 0032 49       		.uleb128 0x49
+ 614 0033 13       		.uleb128 0x13
+ 615 0034 00       		.byte	0
+ 616 0035 00       		.byte	0
+ 617 0036 05       		.uleb128 0x5
+ 618 0037 16       		.uleb128 0x16
+ 619 0038 00       		.byte	0
+ 620 0039 03       		.uleb128 0x3
+ 621 003a 0E       		.uleb128 0xe
+ 622 003b 3A       		.uleb128 0x3a
+ 623 003c 0B       		.uleb128 0xb
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 13
+
+
+ 624 003d 3B       		.uleb128 0x3b
+ 625 003e 0B       		.uleb128 0xb
+ 626 003f 49       		.uleb128 0x49
+ 627 0040 13       		.uleb128 0x13
+ 628 0041 00       		.byte	0
+ 629 0042 00       		.byte	0
+ 630 0043 06       		.uleb128 0x6
+ 631 0044 0F       		.uleb128 0xf
+ 632 0045 00       		.byte	0
+ 633 0046 0B       		.uleb128 0xb
+ 634 0047 0B       		.uleb128 0xb
+ 635 0048 00       		.byte	0
+ 636 0049 00       		.byte	0
+ 637 004a 07       		.uleb128 0x7
+ 638 004b 0F       		.uleb128 0xf
+ 639 004c 00       		.byte	0
+ 640 004d 0B       		.uleb128 0xb
+ 641 004e 0B       		.uleb128 0xb
+ 642 004f 49       		.uleb128 0x49
+ 643 0050 13       		.uleb128 0x13
+ 644 0051 00       		.byte	0
+ 645 0052 00       		.byte	0
+ 646 0053 08       		.uleb128 0x8
+ 647 0054 26       		.uleb128 0x26
+ 648 0055 00       		.byte	0
+ 649 0056 49       		.uleb128 0x49
+ 650 0057 13       		.uleb128 0x13
+ 651 0058 00       		.byte	0
+ 652 0059 00       		.byte	0
+ 653 005a 09       		.uleb128 0x9
+ 654 005b 26       		.uleb128 0x26
+ 655 005c 00       		.byte	0
+ 656 005d 00       		.byte	0
+ 657 005e 00       		.byte	0
+ 658 005f 0A       		.uleb128 0xa
+ 659 0060 2E       		.uleb128 0x2e
+ 660 0061 01       		.byte	0x1
+ 661 0062 3F       		.uleb128 0x3f
+ 662 0063 19       		.uleb128 0x19
+ 663 0064 03       		.uleb128 0x3
+ 664 0065 0E       		.uleb128 0xe
+ 665 0066 3A       		.uleb128 0x3a
+ 666 0067 0B       		.uleb128 0xb
+ 667 0068 3B       		.uleb128 0x3b
+ 668 0069 0B       		.uleb128 0xb
+ 669 006a 27       		.uleb128 0x27
+ 670 006b 19       		.uleb128 0x19
+ 671 006c 11       		.uleb128 0x11
+ 672 006d 01       		.uleb128 0x1
+ 673 006e 12       		.uleb128 0x12
+ 674 006f 06       		.uleb128 0x6
+ 675 0070 40       		.uleb128 0x40
+ 676 0071 18       		.uleb128 0x18
+ 677 0072 9742     		.uleb128 0x2117
+ 678 0074 19       		.uleb128 0x19
+ 679 0075 01       		.uleb128 0x1
+ 680 0076 13       		.uleb128 0x13
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 14
+
+
+ 681 0077 00       		.byte	0
+ 682 0078 00       		.byte	0
+ 683 0079 0B       		.uleb128 0xb
+ 684 007a 898201   		.uleb128 0x4109
+ 685 007d 01       		.byte	0x1
+ 686 007e 11       		.uleb128 0x11
+ 687 007f 01       		.uleb128 0x1
+ 688 0080 31       		.uleb128 0x31
+ 689 0081 13       		.uleb128 0x13
+ 690 0082 01       		.uleb128 0x1
+ 691 0083 13       		.uleb128 0x13
+ 692 0084 00       		.byte	0
+ 693 0085 00       		.byte	0
+ 694 0086 0C       		.uleb128 0xc
+ 695 0087 8A8201   		.uleb128 0x410a
+ 696 008a 00       		.byte	0
+ 697 008b 02       		.uleb128 0x2
+ 698 008c 18       		.uleb128 0x18
+ 699 008d 9142     		.uleb128 0x2111
+ 700 008f 18       		.uleb128 0x18
+ 701 0090 00       		.byte	0
+ 702 0091 00       		.byte	0
+ 703 0092 0D       		.uleb128 0xd
+ 704 0093 898201   		.uleb128 0x4109
+ 705 0096 00       		.byte	0
+ 706 0097 11       		.uleb128 0x11
+ 707 0098 01       		.uleb128 0x1
+ 708 0099 31       		.uleb128 0x31
+ 709 009a 13       		.uleb128 0x13
+ 710 009b 00       		.byte	0
+ 711 009c 00       		.byte	0
+ 712 009d 0E       		.uleb128 0xe
+ 713 009e 2E       		.uleb128 0x2e
+ 714 009f 01       		.byte	0x1
+ 715 00a0 3F       		.uleb128 0x3f
+ 716 00a1 19       		.uleb128 0x19
+ 717 00a2 03       		.uleb128 0x3
+ 718 00a3 0E       		.uleb128 0xe
+ 719 00a4 3A       		.uleb128 0x3a
+ 720 00a5 0B       		.uleb128 0xb
+ 721 00a6 3B       		.uleb128 0x3b
+ 722 00a7 0B       		.uleb128 0xb
+ 723 00a8 27       		.uleb128 0x27
+ 724 00a9 19       		.uleb128 0x19
+ 725 00aa 49       		.uleb128 0x49
+ 726 00ab 13       		.uleb128 0x13
+ 727 00ac 11       		.uleb128 0x11
+ 728 00ad 01       		.uleb128 0x1
+ 729 00ae 12       		.uleb128 0x12
+ 730 00af 06       		.uleb128 0x6
+ 731 00b0 40       		.uleb128 0x40
+ 732 00b1 18       		.uleb128 0x18
+ 733 00b2 9742     		.uleb128 0x2117
+ 734 00b4 19       		.uleb128 0x19
+ 735 00b5 01       		.uleb128 0x1
+ 736 00b6 13       		.uleb128 0x13
+ 737 00b7 00       		.byte	0
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 15
+
+
+ 738 00b8 00       		.byte	0
+ 739 00b9 0F       		.uleb128 0xf
+ 740 00ba 2E       		.uleb128 0x2e
+ 741 00bb 00       		.byte	0
+ 742 00bc 3F       		.uleb128 0x3f
+ 743 00bd 19       		.uleb128 0x19
+ 744 00be 03       		.uleb128 0x3
+ 745 00bf 0E       		.uleb128 0xe
+ 746 00c0 3A       		.uleb128 0x3a
+ 747 00c1 0B       		.uleb128 0xb
+ 748 00c2 3B       		.uleb128 0x3b
+ 749 00c3 0B       		.uleb128 0xb
+ 750 00c4 27       		.uleb128 0x27
+ 751 00c5 19       		.uleb128 0x19
+ 752 00c6 49       		.uleb128 0x49
+ 753 00c7 13       		.uleb128 0x13
+ 754 00c8 11       		.uleb128 0x11
+ 755 00c9 01       		.uleb128 0x1
+ 756 00ca 12       		.uleb128 0x12
+ 757 00cb 06       		.uleb128 0x6
+ 758 00cc 40       		.uleb128 0x40
+ 759 00cd 18       		.uleb128 0x18
+ 760 00ce 9742     		.uleb128 0x2117
+ 761 00d0 19       		.uleb128 0x19
+ 762 00d1 00       		.byte	0
+ 763 00d2 00       		.byte	0
+ 764 00d3 10       		.uleb128 0x10
+ 765 00d4 05       		.uleb128 0x5
+ 766 00d5 00       		.byte	0
+ 767 00d6 03       		.uleb128 0x3
+ 768 00d7 0E       		.uleb128 0xe
+ 769 00d8 3A       		.uleb128 0x3a
+ 770 00d9 0B       		.uleb128 0xb
+ 771 00da 3B       		.uleb128 0x3b
+ 772 00db 0B       		.uleb128 0xb
+ 773 00dc 49       		.uleb128 0x49
+ 774 00dd 13       		.uleb128 0x13
+ 775 00de 02       		.uleb128 0x2
+ 776 00df 17       		.uleb128 0x17
+ 777 00e0 00       		.byte	0
+ 778 00e1 00       		.byte	0
+ 779 00e2 11       		.uleb128 0x11
+ 780 00e3 898201   		.uleb128 0x4109
+ 781 00e6 01       		.byte	0x1
+ 782 00e7 11       		.uleb128 0x11
+ 783 00e8 01       		.uleb128 0x1
+ 784 00e9 31       		.uleb128 0x31
+ 785 00ea 13       		.uleb128 0x13
+ 786 00eb 00       		.byte	0
+ 787 00ec 00       		.byte	0
+ 788 00ed 12       		.uleb128 0x12
+ 789 00ee 01       		.uleb128 0x1
+ 790 00ef 01       		.byte	0x1
+ 791 00f0 49       		.uleb128 0x49
+ 792 00f1 13       		.uleb128 0x13
+ 793 00f2 01       		.uleb128 0x1
+ 794 00f3 13       		.uleb128 0x13
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 16
+
+
+ 795 00f4 00       		.byte	0
+ 796 00f5 00       		.byte	0
+ 797 00f6 13       		.uleb128 0x13
+ 798 00f7 21       		.uleb128 0x21
+ 799 00f8 00       		.byte	0
+ 800 00f9 49       		.uleb128 0x49
+ 801 00fa 13       		.uleb128 0x13
+ 802 00fb 2F       		.uleb128 0x2f
+ 803 00fc 05       		.uleb128 0x5
+ 804 00fd 00       		.byte	0
+ 805 00fe 00       		.byte	0
+ 806 00ff 14       		.uleb128 0x14
+ 807 0100 34       		.uleb128 0x34
+ 808 0101 00       		.byte	0
+ 809 0102 03       		.uleb128 0x3
+ 810 0103 0E       		.uleb128 0xe
+ 811 0104 3A       		.uleb128 0x3a
+ 812 0105 0B       		.uleb128 0xb
+ 813 0106 3B       		.uleb128 0x3b
+ 814 0107 0B       		.uleb128 0xb
+ 815 0108 49       		.uleb128 0x49
+ 816 0109 13       		.uleb128 0x13
+ 817 010a 02       		.uleb128 0x2
+ 818 010b 18       		.uleb128 0x18
+ 819 010c 00       		.byte	0
+ 820 010d 00       		.byte	0
+ 821 010e 15       		.uleb128 0x15
+ 822 010f 2E       		.uleb128 0x2e
+ 823 0110 01       		.byte	0x1
+ 824 0111 3F       		.uleb128 0x3f
+ 825 0112 19       		.uleb128 0x19
+ 826 0113 03       		.uleb128 0x3
+ 827 0114 0E       		.uleb128 0xe
+ 828 0115 3A       		.uleb128 0x3a
+ 829 0116 0B       		.uleb128 0xb
+ 830 0117 3B       		.uleb128 0x3b
+ 831 0118 05       		.uleb128 0x5
+ 832 0119 27       		.uleb128 0x27
+ 833 011a 19       		.uleb128 0x19
+ 834 011b 3C       		.uleb128 0x3c
+ 835 011c 19       		.uleb128 0x19
+ 836 011d 01       		.uleb128 0x1
+ 837 011e 13       		.uleb128 0x13
+ 838 011f 00       		.byte	0
+ 839 0120 00       		.byte	0
+ 840 0121 16       		.uleb128 0x16
+ 841 0122 05       		.uleb128 0x5
+ 842 0123 00       		.byte	0
+ 843 0124 49       		.uleb128 0x49
+ 844 0125 13       		.uleb128 0x13
+ 845 0126 00       		.byte	0
+ 846 0127 00       		.byte	0
+ 847 0128 17       		.uleb128 0x17
+ 848 0129 2E       		.uleb128 0x2e
+ 849 012a 00       		.byte	0
+ 850 012b 3F       		.uleb128 0x3f
+ 851 012c 19       		.uleb128 0x19
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 17
+
+
+ 852 012d 03       		.uleb128 0x3
+ 853 012e 0E       		.uleb128 0xe
+ 854 012f 3A       		.uleb128 0x3a
+ 855 0130 0B       		.uleb128 0xb
+ 856 0131 3B       		.uleb128 0x3b
+ 857 0132 0B       		.uleb128 0xb
+ 858 0133 27       		.uleb128 0x27
+ 859 0134 19       		.uleb128 0x19
+ 860 0135 3C       		.uleb128 0x3c
+ 861 0136 19       		.uleb128 0x19
+ 862 0137 00       		.byte	0
+ 863 0138 00       		.byte	0
+ 864 0139 18       		.uleb128 0x18
+ 865 013a 2E       		.uleb128 0x2e
+ 866 013b 00       		.byte	0
+ 867 013c 3F       		.uleb128 0x3f
+ 868 013d 19       		.uleb128 0x19
+ 869 013e 03       		.uleb128 0x3
+ 870 013f 0E       		.uleb128 0xe
+ 871 0140 3A       		.uleb128 0x3a
+ 872 0141 0B       		.uleb128 0xb
+ 873 0142 3B       		.uleb128 0x3b
+ 874 0143 05       		.uleb128 0x5
+ 875 0144 27       		.uleb128 0x27
+ 876 0145 19       		.uleb128 0x19
+ 877 0146 49       		.uleb128 0x49
+ 878 0147 13       		.uleb128 0x13
+ 879 0148 3C       		.uleb128 0x3c
+ 880 0149 19       		.uleb128 0x19
+ 881 014a 00       		.byte	0
+ 882 014b 00       		.byte	0
+ 883 014c 19       		.uleb128 0x19
+ 884 014d 2E       		.uleb128 0x2e
+ 885 014e 00       		.byte	0
+ 886 014f 3F       		.uleb128 0x3f
+ 887 0150 19       		.uleb128 0x19
+ 888 0151 03       		.uleb128 0x3
+ 889 0152 0E       		.uleb128 0xe
+ 890 0153 3A       		.uleb128 0x3a
+ 891 0154 0B       		.uleb128 0xb
+ 892 0155 3B       		.uleb128 0x3b
+ 893 0156 05       		.uleb128 0x5
+ 894 0157 27       		.uleb128 0x27
+ 895 0158 19       		.uleb128 0x19
+ 896 0159 3C       		.uleb128 0x3c
+ 897 015a 19       		.uleb128 0x19
+ 898 015b 00       		.byte	0
+ 899 015c 00       		.byte	0
+ 900 015d 1A       		.uleb128 0x1a
+ 901 015e 2E       		.uleb128 0x2e
+ 902 015f 01       		.byte	0x1
+ 903 0160 3F       		.uleb128 0x3f
+ 904 0161 19       		.uleb128 0x19
+ 905 0162 03       		.uleb128 0x3
+ 906 0163 0E       		.uleb128 0xe
+ 907 0164 3A       		.uleb128 0x3a
+ 908 0165 0B       		.uleb128 0xb
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 18
+
+
+ 909 0166 3B       		.uleb128 0x3b
+ 910 0167 0B       		.uleb128 0xb
+ 911 0168 27       		.uleb128 0x27
+ 912 0169 19       		.uleb128 0x19
+ 913 016a 49       		.uleb128 0x49
+ 914 016b 13       		.uleb128 0x13
+ 915 016c 3C       		.uleb128 0x3c
+ 916 016d 19       		.uleb128 0x19
+ 917 016e 01       		.uleb128 0x1
+ 918 016f 13       		.uleb128 0x13
+ 919 0170 00       		.byte	0
+ 920 0171 00       		.byte	0
+ 921 0172 1B       		.uleb128 0x1b
+ 922 0173 2E       		.uleb128 0x2e
+ 923 0174 01       		.byte	0x1
+ 924 0175 3F       		.uleb128 0x3f
+ 925 0176 19       		.uleb128 0x19
+ 926 0177 03       		.uleb128 0x3
+ 927 0178 0E       		.uleb128 0xe
+ 928 0179 27       		.uleb128 0x27
+ 929 017a 19       		.uleb128 0x19
+ 930 017b 49       		.uleb128 0x49
+ 931 017c 13       		.uleb128 0x13
+ 932 017d 34       		.uleb128 0x34
+ 933 017e 19       		.uleb128 0x19
+ 934 017f 3C       		.uleb128 0x3c
+ 935 0180 19       		.uleb128 0x19
+ 936 0181 01       		.uleb128 0x1
+ 937 0182 13       		.uleb128 0x13
+ 938 0183 00       		.byte	0
+ 939 0184 00       		.byte	0
+ 940 0185 1C       		.uleb128 0x1c
+ 941 0186 2E       		.uleb128 0x2e
+ 942 0187 01       		.byte	0x1
+ 943 0188 3F       		.uleb128 0x3f
+ 944 0189 19       		.uleb128 0x19
+ 945 018a 03       		.uleb128 0x3
+ 946 018b 0E       		.uleb128 0xe
+ 947 018c 3A       		.uleb128 0x3a
+ 948 018d 0B       		.uleb128 0xb
+ 949 018e 3B       		.uleb128 0x3b
+ 950 018f 0B       		.uleb128 0xb
+ 951 0190 27       		.uleb128 0x27
+ 952 0191 19       		.uleb128 0x19
+ 953 0192 3C       		.uleb128 0x3c
+ 954 0193 19       		.uleb128 0x19
+ 955 0194 01       		.uleb128 0x1
+ 956 0195 13       		.uleb128 0x13
+ 957 0196 00       		.byte	0
+ 958 0197 00       		.byte	0
+ 959 0198 00       		.byte	0
+ 960              		.section	.debug_loc,"",%progbits
+ 961              	.Ldebug_loc0:
+ 962              	.LLST0:
+ 963 0000 00000000 		.4byte	.LVL6
+ 964 0004 07000000 		.4byte	.LVL7-1
+ 965 0008 0100     		.2byte	0x1
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 19
+
+
+ 966 000a 50       		.byte	0x50
+ 967 000b 07000000 		.4byte	.LVL7-1
+ 968 000f 2E000000 		.4byte	.LVL14
+ 969 0013 0100     		.2byte	0x1
+ 970 0015 54       		.byte	0x54
+ 971 0016 2E000000 		.4byte	.LVL14
+ 972 001a 34000000 		.4byte	.LFE39
+ 973 001e 0400     		.2byte	0x4
+ 974 0020 F3       		.byte	0xf3
+ 975 0021 01       		.uleb128 0x1
+ 976 0022 50       		.byte	0x50
+ 977 0023 9F       		.byte	0x9f
+ 978 0024 00000000 		.4byte	0
+ 979 0028 00000000 		.4byte	0
+ 980              		.section	.debug_aranges,"",%progbits
+ 981 0000 3C000000 		.4byte	0x3c
+ 982 0004 0200     		.2byte	0x2
+ 983 0006 00000000 		.4byte	.Ldebug_info0
+ 984 000a 04       		.byte	0x4
+ 985 000b 00       		.byte	0
+ 986 000c 0000     		.2byte	0
+ 987 000e 0000     		.2byte	0
+ 988 0010 00000000 		.4byte	.LFB35
+ 989 0014 24000000 		.4byte	.LFE35-.LFB35
+ 990 0018 00000000 		.4byte	.LFB36
+ 991 001c 0C000000 		.4byte	.LFE36-.LFB36
+ 992 0020 00000000 		.4byte	.LFB37
+ 993 0024 0C000000 		.4byte	.LFE37-.LFB37
+ 994 0028 00000000 		.4byte	.LFB38
+ 995 002c 08000000 		.4byte	.LFE38-.LFB38
+ 996 0030 00000000 		.4byte	.LFB39
+ 997 0034 34000000 		.4byte	.LFE39-.LFB39
+ 998 0038 00000000 		.4byte	0
+ 999 003c 00000000 		.4byte	0
+ 1000              		.section	.debug_ranges,"",%progbits
+ 1001              	.Ldebug_ranges0:
+ 1002 0000 00000000 		.4byte	.LFB35
+ 1003 0004 24000000 		.4byte	.LFE35
+ 1004 0008 00000000 		.4byte	.LFB36
+ 1005 000c 0C000000 		.4byte	.LFE36
+ 1006 0010 00000000 		.4byte	.LFB37
+ 1007 0014 0C000000 		.4byte	.LFE37
+ 1008 0018 00000000 		.4byte	.LFB38
+ 1009 001c 08000000 		.4byte	.LFE38
+ 1010 0020 00000000 		.4byte	.LFB39
+ 1011 0024 34000000 		.4byte	.LFE39
+ 1012 0028 00000000 		.4byte	0
+ 1013 002c 00000000 		.4byte	0
+ 1014              		.section	.debug_line,"",%progbits
+ 1015              	.Ldebug_line0:
+ 1016 0000 C2010000 		.section	.debug_str,"MS",%progbits,1
+ 1016      02005C01 
+ 1016      00000201 
+ 1016      FB0E0D00 
+ 1016      01010101 
+ 1017              	.LASF23:
+ 1018 0000 49324353 		.ascii	"I2CS_Start\000"
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 20
+
+
+ 1018      5F537461 
+ 1018      727400
+ 1019              	.LASF17:
+ 1020 000b 436F6D6D 		.ascii	"CommsResetInputBuffer\000"
+ 1020      73526573 
+ 1020      6574496E 
+ 1020      70757442 
+ 1020      75666665 
+ 1021              	.LASF14:
+ 1022 0021 73697A65 		.ascii	"size_t\000"
+ 1022      5F7400
+ 1023              	.LASF21:
+ 1024 0028 49324353 		.ascii	"I2CS_I2CSlaveInitReadBuf\000"
+ 1024      5F493243 
+ 1024      536C6176 
+ 1024      65496E69 
+ 1024      74526561 
+ 1025              	.LASF19:
+ 1026 0041 69326352 		.ascii	"i2cRxBuffer\000"
+ 1026      78427566 
+ 1026      66657200 
+ 1027              	.LASF33:
+ 1028 004d 433A5C77 		.ascii	"C:\\work\\Eddie\\Eddie_DP0_Slider\\Slider.cydsn\000"
+ 1028      6F726B5C 
+ 1028      45646469 
+ 1028      655C4564 
+ 1028      6469655F 
+ 1029              	.LASF4:
+ 1030 0079 6C6F6E67 		.ascii	"long int\000"
+ 1030      20696E74 
+ 1030      00
+ 1031              	.LASF8:
+ 1032 0082 756E7369 		.ascii	"unsigned int\000"
+ 1032      676E6564 
+ 1032      20696E74 
+ 1032      00
+ 1033              	.LASF12:
+ 1034 008f 646F7562 		.ascii	"double\000"
+ 1034      6C6500
+ 1035              	.LASF26:
+ 1036 0096 49324353 		.ascii	"I2CS_I2CSlaveClearWriteStatus\000"
+ 1036      5F493243 
+ 1036      536C6176 
+ 1036      65436C65 
+ 1036      61725772 
+ 1037              	.LASF11:
+ 1038 00b4 666C6F61 		.ascii	"float\000"
+ 1038      7400
+ 1039              	.LASF1:
+ 1040 00ba 756E7369 		.ascii	"unsigned char\000"
+ 1040      676E6564 
+ 1040      20636861 
+ 1040      7200
+ 1041              	.LASF18:
+ 1042 00c8 436F6D6D 		.ascii	"CommsSendData\000"
+ 1042      7353656E 
+ 1042      64446174 
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 21
+
+
+ 1042      6100
+ 1043              	.LASF3:
+ 1044 00d6 73686F72 		.ascii	"short unsigned int\000"
+ 1044      7420756E 
+ 1044      7369676E 
+ 1044      65642069 
+ 1044      6E7400
+ 1045              	.LASF16:
+ 1046 00e9 436F6D6D 		.ascii	"CommsInit\000"
+ 1046      73496E69 
+ 1046      7400
+ 1047              	.LASF34:
+ 1048 00f3 436F6D6D 		.ascii	"CommsIsInputBufferReady\000"
+ 1048      73497349 
+ 1048      6E707574 
+ 1048      42756666 
+ 1048      65725265 
+ 1049              	.LASF25:
+ 1050 010b 49324353 		.ascii	"I2CS_I2CSlaveStatus\000"
+ 1050      5F493243 
+ 1050      536C6176 
+ 1050      65537461 
+ 1050      74757300 
+ 1051              	.LASF5:
+ 1052 011f 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1052      20756E73 
+ 1052      69676E65 
+ 1052      6420696E 
+ 1052      7400
+ 1053              	.LASF10:
+ 1054 0131 75696E74 		.ascii	"uint32\000"
+ 1054      333200
+ 1055              	.LASF24:
+ 1056 0138 49324353 		.ascii	"I2CS_I2CSlaveClearWriteBuf\000"
+ 1056      5F493243 
+ 1056      536C6176 
+ 1056      65436C65 
+ 1056      61725772 
+ 1057              	.LASF22:
+ 1058 0153 49324353 		.ascii	"I2CS_I2CSlaveInitWriteBuf\000"
+ 1058      5F493243 
+ 1058      536C6176 
+ 1058      65496E69 
+ 1058      74577269 
+ 1059              	.LASF37:
+ 1060 016d 7374726C 		.ascii	"strlen\000"
+ 1060      656E00
+ 1061              	.LASF28:
+ 1062 0174 43415049 		.ascii	"CAPINT_Write\000"
+ 1062      4E545F57 
+ 1062      72697465 
+ 1062      00
+ 1063              	.LASF20:
+ 1064 0181 69326354 		.ascii	"i2cTxBuffer\000"
+ 1064      78427566 
+ 1064      66657200 
+ 1065              	.LASF7:
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 22
+
+
+ 1066 018d 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1066      206C6F6E 
+ 1066      6720756E 
+ 1066      7369676E 
+ 1066      65642069 
+ 1067              	.LASF32:
+ 1068 01a4 636F6D6D 		.ascii	"comms.c\000"
+ 1068      732E6300 
+ 1069              	.LASF15:
+ 1070 01ac 73697A65 		.ascii	"sizetype\000"
+ 1070      74797065 
+ 1070      00
+ 1071              	.LASF6:
+ 1072 01b5 6C6F6E67 		.ascii	"long long int\000"
+ 1072      206C6F6E 
+ 1072      6720696E 
+ 1072      7400
+ 1073              	.LASF30:
+ 1074 01c3 49324353 		.ascii	"I2CS_I2CSlaveClearReadStatus\000"
+ 1074      5F493243 
+ 1074      536C6176 
+ 1074      65436C65 
+ 1074      61725265 
+ 1075              	.LASF13:
+ 1076 01e0 63686172 		.ascii	"char\000"
+ 1076      00
+ 1077              	.LASF29:
+ 1078 01e5 49324353 		.ascii	"I2CS_I2CSlaveClearReadBuf\000"
+ 1078      5F493243 
+ 1078      536C6176 
+ 1078      65436C65 
+ 1078      61725265 
+ 1079              	.LASF27:
+ 1080 01ff 6D656D63 		.ascii	"memcpy\000"
+ 1080      707900
+ 1081              	.LASF2:
+ 1082 0206 73686F72 		.ascii	"short int\000"
+ 1082      7420696E 
+ 1082      7400
+ 1083              	.LASF35:
+ 1084 0210 436F6D6D 		.ascii	"CommsGetInputBuffer\000"
+ 1084      73476574 
+ 1084      496E7075 
+ 1084      74427566 
+ 1084      66657200 
+ 1085              	.LASF36:
+ 1086 0224 62756666 		.ascii	"buffer\000"
+ 1086      657200
+ 1087              	.LASF9:
+ 1088 022b 75696E74 		.ascii	"uint8\000"
+ 1088      3800
+ 1089              	.LASF31:
+ 1090 0231 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 1090      4320342E 
+ 1090      392E3320 
+ 1090      32303135 
+ 1090      30333033 
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccRjszCL.s 			page 23
+
+
+ 1091 0264 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0plus -mthumb -"
+ 1091      20726576 
+ 1091      6973696F 
+ 1091      6E203232 
+ 1091      31323230 
+ 1092 0297 67202D4F 		.ascii	"g -Og -ffunction-sections -ffat-lto-objects\000"
+ 1092      67202D66 
+ 1092      66756E63 
+ 1092      74696F6E 
+ 1092      2D736563 
+ 1093              	.LASF0:
+ 1094 02c3 7369676E 		.ascii	"signed char\000"
+ 1094      65642063 
+ 1094      68617200 
+ 1095              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

@@ -1,0 +1,1474 @@
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.ExecuteCommand,"ax",%progbits
+  18              		.align	2
+  19              		.global	ExecuteCommand
+  20              		.code	16
+  21              		.thumb_func
+  22              		.type	ExecuteCommand, %function
+  23              	ExecuteCommand:
+  24              	.LFB36:
+  25              		.file 1 "main.c"
+   1:main.c        **** /*******************************************************************************
+   2:main.c        **** * File Name: main.c
+   3:main.c        **** *
+   4:main.c        **** * Version: 1.20
+   5:main.c        **** *
+   6:main.c        **** * Description:
+   7:main.c        **** *  This example project demonstrates the basic operation of the I2C slave
+   8:main.c        **** *  (SCB mode) component. The I2C slave accepts a packet with a command from
+   9:main.c        **** *  the I2C master to control the RGB LED color. The I2C slave updates its
+  10:main.c        **** *  buffer with a status packet in response to the accepted command.
+  11:main.c        **** *  For more information refer to the example project datasheet.
+  12:main.c        **** *
+  13:main.c        **** ********************************************************************************
+  14:main.c        **** * Copyright 2014-2015, Cypress Semiconductor Corporation. All rights reserved.
+  15:main.c        **** * This software is owned by Cypress Semiconductor Corporation and is protected
+  16:main.c        **** * by and subject to worldwide patent and copyright laws and treaties.
+  17:main.c        **** * Therefore, you may use this software only as provided in the license agreement
+  18:main.c        **** * accompanying the software package from which you obtained this software.
+  19:main.c        **** * CYPRESS AND ITS SUPPLIERS MAKE NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+  20:main.c        **** * WITH REGARD TO THIS SOFTWARE, INCLUDING, BUT NOT LIMITED TO, NONINFRINGEMENT,
+  21:main.c        **** * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+  22:main.c        **** *******************************************************************************/
+  23:main.c        **** 
+  24:main.c        **** #include <main.h>
+  25:main.c        **** 
+  26:main.c        **** /* I2C slave read and write buffers */
+  27:main.c        **** uint8 i2cReadBuffer [BUFFER_SIZE] = {PACKET_SOP, STS_CMD_FAIL, PACKET_EOP};
+  28:main.c        **** uint8 i2cWriteBuffer[BUFFER_SIZE];
+  29:main.c        **** 
+  30:main.c        **** 
+  31:main.c        **** /*******************************************************************************
+  32:main.c        **** * Function Name: main
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 2
+
+
+  33:main.c        **** ********************************************************************************
+  34:main.c        **** * Summary:
+  35:main.c        **** *  Main function performs following actions:
+  36:main.c        **** *   1. Turns off status RGB LED
+  37:main.c        **** *   2. Sets up I2C slave write and read buffers.
+  38:main.c        **** *   3. Starts I2C slave (SCB mode) component.
+  39:main.c        **** *   4. Enables global interrupts.
+  40:main.c        **** *   5. Waits for command from the I2C master to control the RGB LED.
+  41:main.c        **** *
+  42:main.c        **** * Parameters:
+  43:main.c        **** *  None
+  44:main.c        **** *
+  45:main.c        **** * Return:
+  46:main.c        **** *  None
+  47:main.c        **** *
+  48:main.c        **** *******************************************************************************/
+  49:main.c        **** int main()
+  50:main.c        **** {
+  51:main.c        ****     uint8 status = STS_CMD_FAIL;
+  52:main.c        **** 
+  53:main.c        ****     cap_int_Write(0);
+  54:main.c        **** 
+  55:main.c        ****     /* Start I2C slave (SCB mode) */
+  56:main.c        ****     I2CS_I2CSlaveInitReadBuf (i2cReadBuffer,  BUFFER_SIZE);
+  57:main.c        ****     I2CS_I2CSlaveInitWriteBuf(i2cWriteBuffer, BUFFER_SIZE);
+  58:main.c        ****     I2CS_Start();
+  59:main.c        **** 
+  60:main.c        ****     CyGlobalIntEnable;
+  61:main.c        **** 
+  62:main.c        ****     int i = 0;
+  63:main.c        ****     /***************************************************************************
+  64:main.c        ****     * Main polling loop
+  65:main.c        ****     ***************************************************************************/
+  66:main.c        ****     for (;;)
+  67:main.c        ****     {
+  68:main.c        ****         /* Write complete: parse command packet */
+  69:main.c        ****         if (0u != (I2CS_I2CSlaveStatus() & I2CS_I2C_SSTAT_WR_CMPLT))
+  70:main.c        ****         {
+  71:main.c        ****             /* Check packet length */
+  72:main.c        ****             if (PACKET_SIZE == I2CS_I2CSlaveGetWriteBufSize())
+  73:main.c        ****             {
+  74:main.c        ****                 /* Check start and end of packet markers */
+  75:main.c        ****                 if ((i2cWriteBuffer[PACKET_SOP_POS] == PACKET_SOP) &&
+  76:main.c        ****                     (i2cWriteBuffer[PACKET_EOP_POS] == PACKET_EOP))
+  77:main.c        ****                 {
+  78:main.c        ****                     status = ExecuteCommand(i2cWriteBuffer[PACKET_CMD_POS]);
+  79:main.c        ****                 }
+  80:main.c        ****             }
+  81:main.c        **** 
+  82:main.c        ****             /* Clear slave write buffer and status */
+  83:main.c        ****             I2CS_I2CSlaveClearWriteBuf();
+  84:main.c        ****             (void) I2CS_I2CSlaveClearWriteStatus();
+  85:main.c        **** 
+  86:main.c        ****             /* Update read buffer */
+  87:main.c        ****             i2cReadBuffer[PACKET_STS_POS] = status;
+  88:main.c        ****             status = STS_CMD_FAIL;
+  89:main.c        ****         }
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 3
+
+
+  90:main.c        **** 
+  91:main.c        ****         i++;
+  92:main.c        **** 
+  93:main.c        ****         // Fake that we have data to read (every 100th cycle)
+  94:main.c        ****         if (i >= 1000000) {
+  95:main.c        ****             i = 0;
+  96:main.c        ****             memset(i2cReadBuffer, 0xB0, BUFFER_SIZE);
+  97:main.c        ****             i2cReadBuffer[1] = 0x0B;
+  98:main.c        ****             cap_int_Write(1u);
+  99:main.c        ****             // Wait until read is done
+ 100:main.c        ****             while (0u == (I2CS_I2CSlaveStatus() & I2CS_I2C_SSTAT_RD_CMPLT))
+ 101:main.c        ****             {
+ 102:main.c        ****             }
+ 103:main.c        ****             /* Clear slave read buffer and status */
+ 104:main.c        ****             I2CS_I2CSlaveClearReadBuf();
+ 105:main.c        ****             (void) I2CS_I2CSlaveClearReadStatus();
+ 106:main.c        ****             cap_int_Write(0u);
+ 107:main.c        ****         }
+ 108:main.c        ****     }
+ 109:main.c        **** }
+ 110:main.c        **** 
+ 111:main.c        **** 
+ 112:main.c        **** /*******************************************************************************
+ 113:main.c        **** * Function Name: ExecuteCommand
+ 114:main.c        **** ********************************************************************************
+ 115:main.c        **** * Summary:
+ 116:main.c        **** *  Executes received command to control the LED color and returns status.
+ 117:main.c        **** *  If the command is unknown, the LED color is not changed.
+ 118:main.c        **** *
+ 119:main.c        **** * Parameters:
+ 120:main.c        **** *  cmd: command to execute. Available commands:
+ 121:main.c        **** *   - CMD_SET_RED:   set red color of the LED.
+ 122:main.c        **** *   - CMD_SET_GREEN: set green color of the LED.
+ 123:main.c        **** *   - CMD_SET_BLUE:  set blue color of the LED.
+ 124:main.c        **** *   - CMD_SET_OFF:   turn off the LED.
+ 125:main.c        **** *
+ 126:main.c        **** * Return:
+ 127:main.c        **** *  Returns status of command execution. There are two statuses
+ 128:main.c        **** *  - STS_CMD_DONE: command is executed successfully.
+ 129:main.c        **** *  - STS_CMD_FAIL: unknown command
+ 130:main.c        **** *
+ 131:main.c        **** *******************************************************************************/
+ 132:main.c        **** uint8 ExecuteCommand(uint32 cmd)
+ 133:main.c        **** {
+  26              		.loc 1 133 0
+  27              		.cfi_startproc
+  28              	.LVL0:
+ 134:main.c        ****     uint8 status;
+ 135:main.c        **** 
+ 136:main.c        ****     status = STS_CMD_DONE;
+ 137:main.c        **** 
+ 138:main.c        ****     /* Execute received command */
+ 139:main.c        ****     /*
+ 140:main.c        ****     switch (cmd)
+ 141:main.c        ****     {
+ 142:main.c        ****         case CMD_SET_RED:
+ 143:main.c        ****             RGB_LED_ON_RED;
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 4
+
+
+ 144:main.c        ****             break;
+ 145:main.c        **** 
+ 146:main.c        ****         case CMD_SET_GREEN:
+ 147:main.c        ****             RGB_LED_ON_GREEN;
+ 148:main.c        ****             break;
+ 149:main.c        **** 
+ 150:main.c        ****         case CMD_SET_BLUE:
+ 151:main.c        ****             RGB_LED_ON_BLUE;
+ 152:main.c        ****             break;
+ 153:main.c        **** 
+ 154:main.c        ****         case CMD_SET_OFF:
+ 155:main.c        ****             RGB_LED_OFF;
+ 156:main.c        ****             break;
+ 157:main.c        **** 
+ 158:main.c        ****         default:
+ 159:main.c        ****             status = STS_CMD_FAIL;
+ 160:main.c        ****             break;
+ 161:main.c        ****     }
+ 162:main.c        **** */
+ 163:main.c        ****     return (status);
+ 164:main.c        **** }
+  29              		.loc 1 164 0
+  30 0000 0020     		mov	r0, #0
+  31              	.LVL1:
+  32              		@ sp needed
+  33 0002 7047     		bx	lr
+  34              		.cfi_endproc
+  35              	.LFE36:
+  36              		.size	ExecuteCommand, .-ExecuteCommand
+  37              		.section	.text.main,"ax",%progbits
+  38              		.align	2
+  39              		.global	main
+  40              		.code	16
+  41              		.thumb_func
+  42              		.type	main, %function
+  43              	main:
+  44              	.LFB35:
+  50:main.c        ****     uint8 status = STS_CMD_FAIL;
+  45              		.loc 1 50 0
+  46              		.cfi_startproc
+  47 0000 38B5     		push	{r3, r4, r5, lr}
+  48              		.cfi_def_cfa_offset 16
+  49              		.cfi_offset 3, -16
+  50              		.cfi_offset 4, -12
+  51              		.cfi_offset 5, -8
+  52              		.cfi_offset 14, -4
+  53              	.LVL2:
+  53:main.c        **** 
+  54              		.loc 1 53 0
+  55 0002 0020     		mov	r0, #0
+  56 0004 FFF7FEFF 		bl	cap_int_Write
+  57              	.LVL3:
+  56:main.c        ****     I2CS_I2CSlaveInitWriteBuf(i2cWriteBuffer, BUFFER_SIZE);
+  58              		.loc 1 56 0
+  59 0008 2348     		ldr	r0, .L11
+  60 000a 8021     		mov	r1, #128
+  61 000c FFF7FEFF 		bl	I2CS_I2CSlaveInitReadBuf
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 5
+
+
+  62              	.LVL4:
+  57:main.c        ****     I2CS_Start();
+  63              		.loc 1 57 0
+  64 0010 2248     		ldr	r0, .L11+4
+  65 0012 8021     		mov	r1, #128
+  66 0014 FFF7FEFF 		bl	I2CS_I2CSlaveInitWriteBuf
+  67              	.LVL5:
+  58:main.c        **** 
+  68              		.loc 1 58 0
+  69 0018 FFF7FEFF 		bl	I2CS_Start
+  70              	.LVL6:
+  60:main.c        **** 
+  71              		.loc 1 60 0
+  72              	@ 60 "main.c" 1
+  73 001c 62B6     		CPSIE   i
+  74              	@ 0 "" 2
+  75              	.LVL7:
+  76              		.code	16
+  77              	.L7:
+  50:main.c        ****     uint8 status = STS_CMD_FAIL;
+  78              		.loc 1 50 0
+  79 001e 0024     		mov	r4, #0
+  80              	.LVL8:
+  81              	.L5:
+  69:main.c        ****         {
+  82              		.loc 1 69 0
+  83 0020 FFF7FEFF 		bl	I2CS_I2CSlaveStatus
+  84              	.LVL9:
+  85 0024 C306     		lsl	r3, r0, #27
+  86 0026 1CD5     		bpl	.L3
+  72:main.c        ****             {
+  87              		.loc 1 72 0
+  88 0028 FFF7FEFF 		bl	I2CS_I2CSlaveGetWriteBufSize
+  89              	.LVL10:
+  90 002c 8028     		cmp	r0, #128
+  91 002e 0DD1     		bne	.L8
+  75:main.c        ****                     (i2cWriteBuffer[PACKET_EOP_POS] == PACKET_EOP))
+  92              		.loc 1 75 0
+  93 0030 1A4B     		ldr	r3, .L11+4
+  94 0032 1B78     		ldrb	r3, [r3]
+  95 0034 012B     		cmp	r3, #1
+  96 0036 0BD1     		bne	.L9
+  76:main.c        ****                 {
+  97              		.loc 1 76 0 discriminator 1
+  98 0038 184B     		ldr	r3, .L11+4
+  99 003a 9B78     		ldrb	r3, [r3, #2]
+  75:main.c        ****                     (i2cWriteBuffer[PACKET_EOP_POS] == PACKET_EOP))
+ 100              		.loc 1 75 0 discriminator 1
+ 101 003c 172B     		cmp	r3, #23
+ 102 003e 09D1     		bne	.L10
+  78:main.c        ****                 }
+ 103              		.loc 1 78 0
+ 104 0040 164B     		ldr	r3, .L11+4
+ 105 0042 5878     		ldrb	r0, [r3, #1]
+ 106 0044 FFF7FEFF 		bl	ExecuteCommand
+ 107              	.LVL11:
+ 108 0048 051C     		mov	r5, r0
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 6
+
+
+ 109              	.LVL12:
+ 110 004a 04E0     		b	.L4
+ 111              	.LVL13:
+ 112              	.L8:
+ 113 004c FF25     		mov	r5, #255
+ 114 004e 02E0     		b	.L4
+ 115              	.L9:
+ 116 0050 FF25     		mov	r5, #255
+ 117 0052 00E0     		b	.L4
+ 118              	.L10:
+ 119 0054 FF25     		mov	r5, #255
+ 120              	.LVL14:
+ 121              	.L4:
+  83:main.c        ****             (void) I2CS_I2CSlaveClearWriteStatus();
+ 122              		.loc 1 83 0
+ 123 0056 FFF7FEFF 		bl	I2CS_I2CSlaveClearWriteBuf
+ 124              	.LVL15:
+  84:main.c        **** 
+ 125              		.loc 1 84 0
+ 126 005a FFF7FEFF 		bl	I2CS_I2CSlaveClearWriteStatus
+ 127              	.LVL16:
+  87:main.c        ****             status = STS_CMD_FAIL;
+ 128              		.loc 1 87 0
+ 129 005e 0E4B     		ldr	r3, .L11
+ 130 0060 5D70     		strb	r5, [r3, #1]
+ 131              	.LVL17:
+ 132              	.L3:
+  91:main.c        **** 
+ 133              		.loc 1 91 0
+ 134 0062 0134     		add	r4, r4, #1
+ 135              	.LVL18:
+  94:main.c        ****             i = 0;
+ 136              		.loc 1 94 0
+ 137 0064 0E4B     		ldr	r3, .L11+8
+ 138 0066 9C42     		cmp	r4, r3
+ 139 0068 DADD     		ble	.L5
+ 140              	.LVL19:
+  96:main.c        ****             i2cReadBuffer[1] = 0x0B;
+ 141              		.loc 1 96 0
+ 142 006a 0B4C     		ldr	r4, .L11
+ 143 006c 201C     		mov	r0, r4
+ 144 006e B021     		mov	r1, #176
+ 145 0070 8022     		mov	r2, #128
+ 146 0072 FFF7FEFF 		bl	memset
+ 147              	.LVL20:
+  97:main.c        ****             cap_int_Write(1u);
+ 148              		.loc 1 97 0
+ 149 0076 0B23     		mov	r3, #11
+ 150 0078 6370     		strb	r3, [r4, #1]
+  98:main.c        ****             // Wait until read is done
+ 151              		.loc 1 98 0
+ 152 007a 0120     		mov	r0, #1
+ 153 007c FFF7FEFF 		bl	cap_int_Write
+ 154              	.LVL21:
+ 155              	.L6:
+ 100:main.c        ****             {
+ 156              		.loc 1 100 0 discriminator 1
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 7
+
+
+ 157 0080 FFF7FEFF 		bl	I2CS_I2CSlaveStatus
+ 158              	.LVL22:
+ 159 0084 C307     		lsl	r3, r0, #31
+ 160 0086 FBD5     		bpl	.L6
+ 104:main.c        ****             (void) I2CS_I2CSlaveClearReadStatus();
+ 161              		.loc 1 104 0
+ 162 0088 FFF7FEFF 		bl	I2CS_I2CSlaveClearReadBuf
+ 163              	.LVL23:
+ 105:main.c        ****             cap_int_Write(0u);
+ 164              		.loc 1 105 0
+ 165 008c FFF7FEFF 		bl	I2CS_I2CSlaveClearReadStatus
+ 166              	.LVL24:
+ 106:main.c        ****         }
+ 167              		.loc 1 106 0
+ 168 0090 0020     		mov	r0, #0
+ 169 0092 FFF7FEFF 		bl	cap_int_Write
+ 170              	.LVL25:
+ 171 0096 C2E7     		b	.L7
+ 172              	.L12:
+ 173              		.align	2
+ 174              	.L11:
+ 175 0098 00000000 		.word	.LANCHOR0
+ 176 009c 00000000 		.word	i2cWriteBuffer
+ 177 00a0 3F420F00 		.word	999999
+ 178              		.cfi_endproc
+ 179              	.LFE35:
+ 180              		.size	main, .-main
+ 181              		.comm	i2cWriteBuffer,128,4
+ 182              		.global	i2cReadBuffer
+ 183              		.data
+ 184              		.align	2
+ 185              		.set	.LANCHOR0,. + 0
+ 186              		.type	i2cReadBuffer, %object
+ 187              		.size	i2cReadBuffer, 128
+ 188              	i2cReadBuffer:
+ 189 0000 01       		.byte	1
+ 190 0001 FF       		.byte	-1
+ 191 0002 17       		.byte	23
+ 192 0003 00000000 		.space	125
+ 192      00000000 
+ 192      00000000 
+ 192      00000000 
+ 192      00000000 
+ 193              		.text
+ 194              	.Letext0:
+ 195              		.file 2 "Generated_Source\\PSoC4/cytypes.h"
+ 196              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+ 197              		.file 4 "Generated_Source\\PSoC4/cap_int.h"
+ 198              		.file 5 "Generated_Source\\PSoC4/I2CS_I2C.h"
+ 199              		.file 6 "Generated_Source\\PSoC4/I2CS.h"
+ 200              		.file 7 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+ 201              		.section	.debug_info,"",%progbits
+ 202              	.Ldebug_info0:
+ 203 0000 D1020000 		.4byte	0x2d1
+ 204 0004 0400     		.2byte	0x4
+ 205 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 206 000a 04       		.byte	0x4
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 8
+
+
+ 207 000b 01       		.uleb128 0x1
+ 208 000c A8010000 		.4byte	.LASF29
+ 209 0010 01       		.byte	0x1
+ 210 0011 82010000 		.4byte	.LASF30
+ 211 0015 3A020000 		.4byte	.LASF31
+ 212 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 213 001d 00000000 		.4byte	0
+ 214 0021 00000000 		.4byte	.Ldebug_line0
+ 215 0025 02       		.uleb128 0x2
+ 216 0026 01       		.byte	0x1
+ 217 0027 06       		.byte	0x6
+ 218 0028 AB020000 		.4byte	.LASF0
+ 219 002c 02       		.uleb128 0x2
+ 220 002d 01       		.byte	0x1
+ 221 002e 08       		.byte	0x8
+ 222 002f 69000000 		.4byte	.LASF1
+ 223 0033 02       		.uleb128 0x2
+ 224 0034 02       		.byte	0x2
+ 225 0035 05       		.byte	0x5
+ 226 0036 CE000000 		.4byte	.LASF2
+ 227 003a 02       		.uleb128 0x2
+ 228 003b 02       		.byte	0x2
+ 229 003c 07       		.byte	0x7
+ 230 003d 2B000000 		.4byte	.LASF3
+ 231 0041 02       		.uleb128 0x2
+ 232 0042 04       		.byte	0x4
+ 233 0043 05       		.byte	0x5
+ 234 0044 A2020000 		.4byte	.LASF4
+ 235 0048 02       		.uleb128 0x2
+ 236 0049 04       		.byte	0x4
+ 237 004a 07       		.byte	0x7
+ 238 004b 94000000 		.4byte	.LASF5
+ 239 004f 02       		.uleb128 0x2
+ 240 0050 08       		.byte	0x8
+ 241 0051 05       		.byte	0x5
+ 242 0052 57010000 		.4byte	.LASF6
+ 243 0056 02       		.uleb128 0x2
+ 244 0057 08       		.byte	0x8
+ 245 0058 07       		.byte	0x7
+ 246 0059 23010000 		.4byte	.LASF7
+ 247 005d 03       		.uleb128 0x3
+ 248 005e 04       		.byte	0x4
+ 249 005f 05       		.byte	0x5
+ 250 0060 696E7400 		.ascii	"int\000"
+ 251 0064 02       		.uleb128 0x2
+ 252 0065 04       		.byte	0x4
+ 253 0066 07       		.byte	0x7
+ 254 0067 16010000 		.4byte	.LASF8
+ 255 006b 04       		.uleb128 0x4
+ 256 006c A6000000 		.4byte	.LASF9
+ 257 0070 02       		.byte	0x2
+ 258 0071 B901     		.2byte	0x1b9
+ 259 0073 2C000000 		.4byte	0x2c
+ 260 0077 04       		.uleb128 0x4
+ 261 0078 D8000000 		.4byte	.LASF10
+ 262 007c 02       		.byte	0x2
+ 263 007d BB01     		.2byte	0x1bb
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 9
+
+
+ 264 007f 48000000 		.4byte	0x48
+ 265 0083 02       		.uleb128 0x2
+ 266 0084 04       		.byte	0x4
+ 267 0085 04       		.byte	0x4
+ 268 0086 63000000 		.4byte	.LASF11
+ 269 008a 02       		.uleb128 0x2
+ 270 008b 08       		.byte	0x8
+ 271 008c 04       		.byte	0x4
+ 272 008d C7000000 		.4byte	.LASF12
+ 273 0091 02       		.uleb128 0x2
+ 274 0092 01       		.byte	0x1
+ 275 0093 08       		.byte	0x8
+ 276 0094 89010000 		.4byte	.LASF13
+ 277 0098 05       		.uleb128 0x5
+ 278 0099 0B000000 		.4byte	.LASF14
+ 279 009d 03       		.byte	0x3
+ 280 009e D4       		.byte	0xd4
+ 281 009f 64000000 		.4byte	0x64
+ 282 00a3 02       		.uleb128 0x2
+ 283 00a4 04       		.byte	0x4
+ 284 00a5 07       		.byte	0x7
+ 285 00a6 4E010000 		.4byte	.LASF15
+ 286 00aa 06       		.uleb128 0x6
+ 287 00ab 04       		.byte	0x4
+ 288 00ac 07       		.uleb128 0x7
+ 289 00ad 77000000 		.4byte	.LASF32
+ 290 00b1 01       		.byte	0x1
+ 291 00b2 84       		.byte	0x84
+ 292 00b3 6B000000 		.4byte	0x6b
+ 293 00b7 00000000 		.4byte	.LFB36
+ 294 00bb 04000000 		.4byte	.LFE36-.LFB36
+ 295 00bf 01       		.uleb128 0x1
+ 296 00c0 9C       		.byte	0x9c
+ 297 00c1 E1000000 		.4byte	0xe1
+ 298 00c5 08       		.uleb128 0x8
+ 299 00c6 636D6400 		.ascii	"cmd\000"
+ 300 00ca 01       		.byte	0x1
+ 301 00cb 84       		.byte	0x84
+ 302 00cc 77000000 		.4byte	0x77
+ 303 00d0 00000000 		.4byte	.LLST0
+ 304 00d4 09       		.uleb128 0x9
+ 305 00d5 3E000000 		.4byte	.LASF16
+ 306 00d9 01       		.byte	0x1
+ 307 00da 86       		.byte	0x86
+ 308 00db 6B000000 		.4byte	0x6b
+ 309 00df 00       		.byte	0
+ 310 00e0 00       		.byte	0
+ 311 00e1 0A       		.uleb128 0xa
+ 312 00e2 49010000 		.4byte	.LASF33
+ 313 00e6 01       		.byte	0x1
+ 314 00e7 31       		.byte	0x31
+ 315 00e8 5D000000 		.4byte	0x5d
+ 316 00ec 00000000 		.4byte	.LFB35
+ 317 00f0 A4000000 		.4byte	.LFE35-.LFB35
+ 318 00f4 01       		.uleb128 0x1
+ 319 00f5 9C       		.byte	0x9c
+ 320 00f6 F7010000 		.4byte	0x1f7
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 10
+
+
+ 321 00fa 0B       		.uleb128 0xb
+ 322 00fb 3E000000 		.4byte	.LASF16
+ 323 00ff 01       		.byte	0x1
+ 324 0100 33       		.byte	0x33
+ 325 0101 6B000000 		.4byte	0x6b
+ 326 0105 21000000 		.4byte	.LLST1
+ 327 0109 0C       		.uleb128 0xc
+ 328 010a 6900     		.ascii	"i\000"
+ 329 010c 01       		.byte	0x1
+ 330 010d 3E       		.byte	0x3e
+ 331 010e 5D000000 		.4byte	0x5d
+ 332 0112 66000000 		.4byte	.LLST2
+ 333 0116 0D       		.uleb128 0xd
+ 334 0117 08000000 		.4byte	.LVL3
+ 335 011b 29020000 		.4byte	0x229
+ 336 011f 29010000 		.4byte	0x129
+ 337 0123 0E       		.uleb128 0xe
+ 338 0124 01       		.uleb128 0x1
+ 339 0125 50       		.byte	0x50
+ 340 0126 01       		.uleb128 0x1
+ 341 0127 30       		.byte	0x30
+ 342 0128 00       		.byte	0
+ 343 0129 0D       		.uleb128 0xd
+ 344 012a 10000000 		.4byte	.LVL4
+ 345 012e 3A020000 		.4byte	0x23a
+ 346 0132 46010000 		.4byte	0x146
+ 347 0136 0E       		.uleb128 0xe
+ 348 0137 01       		.uleb128 0x1
+ 349 0138 51       		.byte	0x51
+ 350 0139 02       		.uleb128 0x2
+ 351 013a 08       		.byte	0x8
+ 352 013b 80       		.byte	0x80
+ 353 013c 0E       		.uleb128 0xe
+ 354 013d 01       		.uleb128 0x1
+ 355 013e 50       		.byte	0x50
+ 356 013f 05       		.uleb128 0x5
+ 357 0140 03       		.byte	0x3
+ 358 0141 00000000 		.4byte	.LANCHOR0
+ 359 0145 00       		.byte	0
+ 360 0146 0D       		.uleb128 0xd
+ 361 0147 18000000 		.4byte	.LVL5
+ 362 014b 57020000 		.4byte	0x257
+ 363 014f 63010000 		.4byte	0x163
+ 364 0153 0E       		.uleb128 0xe
+ 365 0154 01       		.uleb128 0x1
+ 366 0155 51       		.byte	0x51
+ 367 0156 02       		.uleb128 0x2
+ 368 0157 08       		.byte	0x8
+ 369 0158 80       		.byte	0x80
+ 370 0159 0E       		.uleb128 0xe
+ 371 015a 01       		.uleb128 0x1
+ 372 015b 50       		.byte	0x50
+ 373 015c 05       		.uleb128 0x5
+ 374 015d 03       		.byte	0x3
+ 375 015e 00000000 		.4byte	i2cWriteBuffer
+ 376 0162 00       		.byte	0
+ 377 0163 0F       		.uleb128 0xf
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 11
+
+
+ 378 0164 1C000000 		.4byte	.LVL6
+ 379 0168 6E020000 		.4byte	0x26e
+ 380 016c 0F       		.uleb128 0xf
+ 381 016d 24000000 		.4byte	.LVL9
+ 382 0171 75020000 		.4byte	0x275
+ 383 0175 0F       		.uleb128 0xf
+ 384 0176 2C000000 		.4byte	.LVL10
+ 385 017a 81020000 		.4byte	0x281
+ 386 017e 0F       		.uleb128 0xf
+ 387 017f 48000000 		.4byte	.LVL11
+ 388 0183 AC000000 		.4byte	0xac
+ 389 0187 0F       		.uleb128 0xf
+ 390 0188 5A000000 		.4byte	.LVL15
+ 391 018c 8D020000 		.4byte	0x28d
+ 392 0190 0F       		.uleb128 0xf
+ 393 0191 5E000000 		.4byte	.LVL16
+ 394 0195 95020000 		.4byte	0x295
+ 395 0199 0D       		.uleb128 0xd
+ 396 019a 76000000 		.4byte	.LVL20
+ 397 019e A1020000 		.4byte	0x2a1
+ 398 01a2 B9010000 		.4byte	0x1b9
+ 399 01a6 0E       		.uleb128 0xe
+ 400 01a7 01       		.uleb128 0x1
+ 401 01a8 52       		.byte	0x52
+ 402 01a9 02       		.uleb128 0x2
+ 403 01aa 08       		.byte	0x8
+ 404 01ab 80       		.byte	0x80
+ 405 01ac 0E       		.uleb128 0xe
+ 406 01ad 01       		.uleb128 0x1
+ 407 01ae 51       		.byte	0x51
+ 408 01af 02       		.uleb128 0x2
+ 409 01b0 08       		.byte	0x8
+ 410 01b1 B0       		.byte	0xb0
+ 411 01b2 0E       		.uleb128 0xe
+ 412 01b3 01       		.uleb128 0x1
+ 413 01b4 50       		.byte	0x50
+ 414 01b5 02       		.uleb128 0x2
+ 415 01b6 74       		.byte	0x74
+ 416 01b7 00       		.sleb128 0
+ 417 01b8 00       		.byte	0
+ 418 01b9 0D       		.uleb128 0xd
+ 419 01ba 80000000 		.4byte	.LVL21
+ 420 01be 29020000 		.4byte	0x229
+ 421 01c2 CC010000 		.4byte	0x1cc
+ 422 01c6 0E       		.uleb128 0xe
+ 423 01c7 01       		.uleb128 0x1
+ 424 01c8 50       		.byte	0x50
+ 425 01c9 01       		.uleb128 0x1
+ 426 01ca 31       		.byte	0x31
+ 427 01cb 00       		.byte	0
+ 428 01cc 0F       		.uleb128 0xf
+ 429 01cd 84000000 		.4byte	.LVL22
+ 430 01d1 75020000 		.4byte	0x275
+ 431 01d5 0F       		.uleb128 0xf
+ 432 01d6 8C000000 		.4byte	.LVL23
+ 433 01da C0020000 		.4byte	0x2c0
+ 434 01de 0F       		.uleb128 0xf
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 12
+
+
+ 435 01df 90000000 		.4byte	.LVL24
+ 436 01e3 C8020000 		.4byte	0x2c8
+ 437 01e7 10       		.uleb128 0x10
+ 438 01e8 96000000 		.4byte	.LVL25
+ 439 01ec 29020000 		.4byte	0x229
+ 440 01f0 0E       		.uleb128 0xe
+ 441 01f1 01       		.uleb128 0x1
+ 442 01f2 50       		.byte	0x50
+ 443 01f3 01       		.uleb128 0x1
+ 444 01f4 30       		.byte	0x30
+ 445 01f5 00       		.byte	0
+ 446 01f6 00       		.byte	0
+ 447 01f7 11       		.uleb128 0x11
+ 448 01f8 6B000000 		.4byte	0x6b
+ 449 01fc 07020000 		.4byte	0x207
+ 450 0200 12       		.uleb128 0x12
+ 451 0201 A3000000 		.4byte	0xa3
+ 452 0205 7F       		.byte	0x7f
+ 453 0206 00       		.byte	0
+ 454 0207 13       		.uleb128 0x13
+ 455 0208 86000000 		.4byte	.LASF17
+ 456 020c 01       		.byte	0x1
+ 457 020d 1B       		.byte	0x1b
+ 458 020e F7010000 		.4byte	0x1f7
+ 459 0212 05       		.uleb128 0x5
+ 460 0213 03       		.byte	0x3
+ 461 0214 00000000 		.4byte	i2cReadBuffer
+ 462 0218 13       		.uleb128 0x13
+ 463 0219 3A010000 		.4byte	.LASF18
+ 464 021d 01       		.byte	0x1
+ 465 021e 1C       		.byte	0x1c
+ 466 021f F7010000 		.4byte	0x1f7
+ 467 0223 05       		.uleb128 0x5
+ 468 0224 03       		.byte	0x3
+ 469 0225 00000000 		.4byte	i2cWriteBuffer
+ 470 0229 14       		.uleb128 0x14
+ 471 022a B7020000 		.4byte	.LASF19
+ 472 022e 04       		.byte	0x4
+ 473 022f 33       		.byte	0x33
+ 474 0230 3A020000 		.4byte	0x23a
+ 475 0234 15       		.uleb128 0x15
+ 476 0235 6B000000 		.4byte	0x6b
+ 477 0239 00       		.byte	0
+ 478 023a 16       		.uleb128 0x16
+ 479 023b 12000000 		.4byte	.LASF20
+ 480 023f 05       		.byte	0x5
+ 481 0240 2E01     		.2byte	0x12e
+ 482 0242 51020000 		.4byte	0x251
+ 483 0246 15       		.uleb128 0x15
+ 484 0247 51020000 		.4byte	0x251
+ 485 024b 15       		.uleb128 0x15
+ 486 024c 77000000 		.4byte	0x77
+ 487 0250 00       		.byte	0
+ 488 0251 17       		.uleb128 0x17
+ 489 0252 04       		.byte	0x4
+ 490 0253 6B000000 		.4byte	0x6b
+ 491 0257 16       		.uleb128 0x16
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 13
+
+
+ 492 0258 FC000000 		.4byte	.LASF21
+ 493 025c 05       		.byte	0x5
+ 494 025d 2F01     		.2byte	0x12f
+ 495 025f 6E020000 		.4byte	0x26e
+ 496 0263 15       		.uleb128 0x15
+ 497 0264 51020000 		.4byte	0x251
+ 498 0268 15       		.uleb128 0x15
+ 499 0269 77000000 		.4byte	0x77
+ 500 026d 00       		.byte	0
+ 501 026e 18       		.uleb128 0x18
+ 502 026f 00000000 		.4byte	.LASF24
+ 503 0273 06       		.byte	0x6
+ 504 0274 6E       		.byte	0x6e
+ 505 0275 19       		.uleb128 0x19
+ 506 0276 AC000000 		.4byte	.LASF22
+ 507 027a 05       		.byte	0x5
+ 508 027b 2501     		.2byte	0x125
+ 509 027d 77000000 		.4byte	0x77
+ 510 0281 19       		.uleb128 0x19
+ 511 0282 DF000000 		.4byte	.LASF23
+ 512 0286 05       		.byte	0x5
+ 513 0287 3101     		.2byte	0x131
+ 514 0289 77000000 		.4byte	0x77
+ 515 028d 1A       		.uleb128 0x1a
+ 516 028e 87020000 		.4byte	.LASF25
+ 517 0292 05       		.byte	0x5
+ 518 0293 3301     		.2byte	0x133
+ 519 0295 19       		.uleb128 0x19
+ 520 0296 45000000 		.4byte	.LASF26
+ 521 029a 05       		.byte	0x5
+ 522 029b 2701     		.2byte	0x127
+ 523 029d 77000000 		.4byte	0x77
+ 524 02a1 1B       		.uleb128 0x1b
+ 525 02a2 C0000000 		.4byte	.LASF34
+ 526 02a6 07       		.byte	0x7
+ 527 02a7 19       		.byte	0x19
+ 528 02a8 AA000000 		.4byte	0xaa
+ 529 02ac C0020000 		.4byte	0x2c0
+ 530 02b0 15       		.uleb128 0x15
+ 531 02b1 AA000000 		.4byte	0xaa
+ 532 02b5 15       		.uleb128 0x15
+ 533 02b6 5D000000 		.4byte	0x5d
+ 534 02ba 15       		.uleb128 0x15
+ 535 02bb 98000000 		.4byte	0x98
+ 536 02bf 00       		.byte	0
+ 537 02c0 1A       		.uleb128 0x1a
+ 538 02c1 8E010000 		.4byte	.LASF27
+ 539 02c5 05       		.byte	0x5
+ 540 02c6 3201     		.2byte	0x132
+ 541 02c8 19       		.uleb128 0x19
+ 542 02c9 65010000 		.4byte	.LASF28
+ 543 02cd 05       		.byte	0x5
+ 544 02ce 2601     		.2byte	0x126
+ 545 02d0 77000000 		.4byte	0x77
+ 546 02d4 00       		.byte	0
+ 547              		.section	.debug_abbrev,"",%progbits
+ 548              	.Ldebug_abbrev0:
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 14
+
+
+ 549 0000 01       		.uleb128 0x1
+ 550 0001 11       		.uleb128 0x11
+ 551 0002 01       		.byte	0x1
+ 552 0003 25       		.uleb128 0x25
+ 553 0004 0E       		.uleb128 0xe
+ 554 0005 13       		.uleb128 0x13
+ 555 0006 0B       		.uleb128 0xb
+ 556 0007 03       		.uleb128 0x3
+ 557 0008 0E       		.uleb128 0xe
+ 558 0009 1B       		.uleb128 0x1b
+ 559 000a 0E       		.uleb128 0xe
+ 560 000b 55       		.uleb128 0x55
+ 561 000c 17       		.uleb128 0x17
+ 562 000d 11       		.uleb128 0x11
+ 563 000e 01       		.uleb128 0x1
+ 564 000f 10       		.uleb128 0x10
+ 565 0010 17       		.uleb128 0x17
+ 566 0011 00       		.byte	0
+ 567 0012 00       		.byte	0
+ 568 0013 02       		.uleb128 0x2
+ 569 0014 24       		.uleb128 0x24
+ 570 0015 00       		.byte	0
+ 571 0016 0B       		.uleb128 0xb
+ 572 0017 0B       		.uleb128 0xb
+ 573 0018 3E       		.uleb128 0x3e
+ 574 0019 0B       		.uleb128 0xb
+ 575 001a 03       		.uleb128 0x3
+ 576 001b 0E       		.uleb128 0xe
+ 577 001c 00       		.byte	0
+ 578 001d 00       		.byte	0
+ 579 001e 03       		.uleb128 0x3
+ 580 001f 24       		.uleb128 0x24
+ 581 0020 00       		.byte	0
+ 582 0021 0B       		.uleb128 0xb
+ 583 0022 0B       		.uleb128 0xb
+ 584 0023 3E       		.uleb128 0x3e
+ 585 0024 0B       		.uleb128 0xb
+ 586 0025 03       		.uleb128 0x3
+ 587 0026 08       		.uleb128 0x8
+ 588 0027 00       		.byte	0
+ 589 0028 00       		.byte	0
+ 590 0029 04       		.uleb128 0x4
+ 591 002a 16       		.uleb128 0x16
+ 592 002b 00       		.byte	0
+ 593 002c 03       		.uleb128 0x3
+ 594 002d 0E       		.uleb128 0xe
+ 595 002e 3A       		.uleb128 0x3a
+ 596 002f 0B       		.uleb128 0xb
+ 597 0030 3B       		.uleb128 0x3b
+ 598 0031 05       		.uleb128 0x5
+ 599 0032 49       		.uleb128 0x49
+ 600 0033 13       		.uleb128 0x13
+ 601 0034 00       		.byte	0
+ 602 0035 00       		.byte	0
+ 603 0036 05       		.uleb128 0x5
+ 604 0037 16       		.uleb128 0x16
+ 605 0038 00       		.byte	0
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 15
+
+
+ 606 0039 03       		.uleb128 0x3
+ 607 003a 0E       		.uleb128 0xe
+ 608 003b 3A       		.uleb128 0x3a
+ 609 003c 0B       		.uleb128 0xb
+ 610 003d 3B       		.uleb128 0x3b
+ 611 003e 0B       		.uleb128 0xb
+ 612 003f 49       		.uleb128 0x49
+ 613 0040 13       		.uleb128 0x13
+ 614 0041 00       		.byte	0
+ 615 0042 00       		.byte	0
+ 616 0043 06       		.uleb128 0x6
+ 617 0044 0F       		.uleb128 0xf
+ 618 0045 00       		.byte	0
+ 619 0046 0B       		.uleb128 0xb
+ 620 0047 0B       		.uleb128 0xb
+ 621 0048 00       		.byte	0
+ 622 0049 00       		.byte	0
+ 623 004a 07       		.uleb128 0x7
+ 624 004b 2E       		.uleb128 0x2e
+ 625 004c 01       		.byte	0x1
+ 626 004d 3F       		.uleb128 0x3f
+ 627 004e 19       		.uleb128 0x19
+ 628 004f 03       		.uleb128 0x3
+ 629 0050 0E       		.uleb128 0xe
+ 630 0051 3A       		.uleb128 0x3a
+ 631 0052 0B       		.uleb128 0xb
+ 632 0053 3B       		.uleb128 0x3b
+ 633 0054 0B       		.uleb128 0xb
+ 634 0055 27       		.uleb128 0x27
+ 635 0056 19       		.uleb128 0x19
+ 636 0057 49       		.uleb128 0x49
+ 637 0058 13       		.uleb128 0x13
+ 638 0059 11       		.uleb128 0x11
+ 639 005a 01       		.uleb128 0x1
+ 640 005b 12       		.uleb128 0x12
+ 641 005c 06       		.uleb128 0x6
+ 642 005d 40       		.uleb128 0x40
+ 643 005e 18       		.uleb128 0x18
+ 644 005f 9742     		.uleb128 0x2117
+ 645 0061 19       		.uleb128 0x19
+ 646 0062 01       		.uleb128 0x1
+ 647 0063 13       		.uleb128 0x13
+ 648 0064 00       		.byte	0
+ 649 0065 00       		.byte	0
+ 650 0066 08       		.uleb128 0x8
+ 651 0067 05       		.uleb128 0x5
+ 652 0068 00       		.byte	0
+ 653 0069 03       		.uleb128 0x3
+ 654 006a 08       		.uleb128 0x8
+ 655 006b 3A       		.uleb128 0x3a
+ 656 006c 0B       		.uleb128 0xb
+ 657 006d 3B       		.uleb128 0x3b
+ 658 006e 0B       		.uleb128 0xb
+ 659 006f 49       		.uleb128 0x49
+ 660 0070 13       		.uleb128 0x13
+ 661 0071 02       		.uleb128 0x2
+ 662 0072 17       		.uleb128 0x17
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 16
+
+
+ 663 0073 00       		.byte	0
+ 664 0074 00       		.byte	0
+ 665 0075 09       		.uleb128 0x9
+ 666 0076 34       		.uleb128 0x34
+ 667 0077 00       		.byte	0
+ 668 0078 03       		.uleb128 0x3
+ 669 0079 0E       		.uleb128 0xe
+ 670 007a 3A       		.uleb128 0x3a
+ 671 007b 0B       		.uleb128 0xb
+ 672 007c 3B       		.uleb128 0x3b
+ 673 007d 0B       		.uleb128 0xb
+ 674 007e 49       		.uleb128 0x49
+ 675 007f 13       		.uleb128 0x13
+ 676 0080 1C       		.uleb128 0x1c
+ 677 0081 0B       		.uleb128 0xb
+ 678 0082 00       		.byte	0
+ 679 0083 00       		.byte	0
+ 680 0084 0A       		.uleb128 0xa
+ 681 0085 2E       		.uleb128 0x2e
+ 682 0086 01       		.byte	0x1
+ 683 0087 3F       		.uleb128 0x3f
+ 684 0088 19       		.uleb128 0x19
+ 685 0089 03       		.uleb128 0x3
+ 686 008a 0E       		.uleb128 0xe
+ 687 008b 3A       		.uleb128 0x3a
+ 688 008c 0B       		.uleb128 0xb
+ 689 008d 3B       		.uleb128 0x3b
+ 690 008e 0B       		.uleb128 0xb
+ 691 008f 49       		.uleb128 0x49
+ 692 0090 13       		.uleb128 0x13
+ 693 0091 11       		.uleb128 0x11
+ 694 0092 01       		.uleb128 0x1
+ 695 0093 12       		.uleb128 0x12
+ 696 0094 06       		.uleb128 0x6
+ 697 0095 40       		.uleb128 0x40
+ 698 0096 18       		.uleb128 0x18
+ 699 0097 9742     		.uleb128 0x2117
+ 700 0099 19       		.uleb128 0x19
+ 701 009a 01       		.uleb128 0x1
+ 702 009b 13       		.uleb128 0x13
+ 703 009c 00       		.byte	0
+ 704 009d 00       		.byte	0
+ 705 009e 0B       		.uleb128 0xb
+ 706 009f 34       		.uleb128 0x34
+ 707 00a0 00       		.byte	0
+ 708 00a1 03       		.uleb128 0x3
+ 709 00a2 0E       		.uleb128 0xe
+ 710 00a3 3A       		.uleb128 0x3a
+ 711 00a4 0B       		.uleb128 0xb
+ 712 00a5 3B       		.uleb128 0x3b
+ 713 00a6 0B       		.uleb128 0xb
+ 714 00a7 49       		.uleb128 0x49
+ 715 00a8 13       		.uleb128 0x13
+ 716 00a9 02       		.uleb128 0x2
+ 717 00aa 17       		.uleb128 0x17
+ 718 00ab 00       		.byte	0
+ 719 00ac 00       		.byte	0
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 17
+
+
+ 720 00ad 0C       		.uleb128 0xc
+ 721 00ae 34       		.uleb128 0x34
+ 722 00af 00       		.byte	0
+ 723 00b0 03       		.uleb128 0x3
+ 724 00b1 08       		.uleb128 0x8
+ 725 00b2 3A       		.uleb128 0x3a
+ 726 00b3 0B       		.uleb128 0xb
+ 727 00b4 3B       		.uleb128 0x3b
+ 728 00b5 0B       		.uleb128 0xb
+ 729 00b6 49       		.uleb128 0x49
+ 730 00b7 13       		.uleb128 0x13
+ 731 00b8 02       		.uleb128 0x2
+ 732 00b9 17       		.uleb128 0x17
+ 733 00ba 00       		.byte	0
+ 734 00bb 00       		.byte	0
+ 735 00bc 0D       		.uleb128 0xd
+ 736 00bd 898201   		.uleb128 0x4109
+ 737 00c0 01       		.byte	0x1
+ 738 00c1 11       		.uleb128 0x11
+ 739 00c2 01       		.uleb128 0x1
+ 740 00c3 31       		.uleb128 0x31
+ 741 00c4 13       		.uleb128 0x13
+ 742 00c5 01       		.uleb128 0x1
+ 743 00c6 13       		.uleb128 0x13
+ 744 00c7 00       		.byte	0
+ 745 00c8 00       		.byte	0
+ 746 00c9 0E       		.uleb128 0xe
+ 747 00ca 8A8201   		.uleb128 0x410a
+ 748 00cd 00       		.byte	0
+ 749 00ce 02       		.uleb128 0x2
+ 750 00cf 18       		.uleb128 0x18
+ 751 00d0 9142     		.uleb128 0x2111
+ 752 00d2 18       		.uleb128 0x18
+ 753 00d3 00       		.byte	0
+ 754 00d4 00       		.byte	0
+ 755 00d5 0F       		.uleb128 0xf
+ 756 00d6 898201   		.uleb128 0x4109
+ 757 00d9 00       		.byte	0
+ 758 00da 11       		.uleb128 0x11
+ 759 00db 01       		.uleb128 0x1
+ 760 00dc 31       		.uleb128 0x31
+ 761 00dd 13       		.uleb128 0x13
+ 762 00de 00       		.byte	0
+ 763 00df 00       		.byte	0
+ 764 00e0 10       		.uleb128 0x10
+ 765 00e1 898201   		.uleb128 0x4109
+ 766 00e4 01       		.byte	0x1
+ 767 00e5 11       		.uleb128 0x11
+ 768 00e6 01       		.uleb128 0x1
+ 769 00e7 31       		.uleb128 0x31
+ 770 00e8 13       		.uleb128 0x13
+ 771 00e9 00       		.byte	0
+ 772 00ea 00       		.byte	0
+ 773 00eb 11       		.uleb128 0x11
+ 774 00ec 01       		.uleb128 0x1
+ 775 00ed 01       		.byte	0x1
+ 776 00ee 49       		.uleb128 0x49
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 18
+
+
+ 777 00ef 13       		.uleb128 0x13
+ 778 00f0 01       		.uleb128 0x1
+ 779 00f1 13       		.uleb128 0x13
+ 780 00f2 00       		.byte	0
+ 781 00f3 00       		.byte	0
+ 782 00f4 12       		.uleb128 0x12
+ 783 00f5 21       		.uleb128 0x21
+ 784 00f6 00       		.byte	0
+ 785 00f7 49       		.uleb128 0x49
+ 786 00f8 13       		.uleb128 0x13
+ 787 00f9 2F       		.uleb128 0x2f
+ 788 00fa 0B       		.uleb128 0xb
+ 789 00fb 00       		.byte	0
+ 790 00fc 00       		.byte	0
+ 791 00fd 13       		.uleb128 0x13
+ 792 00fe 34       		.uleb128 0x34
+ 793 00ff 00       		.byte	0
+ 794 0100 03       		.uleb128 0x3
+ 795 0101 0E       		.uleb128 0xe
+ 796 0102 3A       		.uleb128 0x3a
+ 797 0103 0B       		.uleb128 0xb
+ 798 0104 3B       		.uleb128 0x3b
+ 799 0105 0B       		.uleb128 0xb
+ 800 0106 49       		.uleb128 0x49
+ 801 0107 13       		.uleb128 0x13
+ 802 0108 3F       		.uleb128 0x3f
+ 803 0109 19       		.uleb128 0x19
+ 804 010a 02       		.uleb128 0x2
+ 805 010b 18       		.uleb128 0x18
+ 806 010c 00       		.byte	0
+ 807 010d 00       		.byte	0
+ 808 010e 14       		.uleb128 0x14
+ 809 010f 2E       		.uleb128 0x2e
+ 810 0110 01       		.byte	0x1
+ 811 0111 3F       		.uleb128 0x3f
+ 812 0112 19       		.uleb128 0x19
+ 813 0113 03       		.uleb128 0x3
+ 814 0114 0E       		.uleb128 0xe
+ 815 0115 3A       		.uleb128 0x3a
+ 816 0116 0B       		.uleb128 0xb
+ 817 0117 3B       		.uleb128 0x3b
+ 818 0118 0B       		.uleb128 0xb
+ 819 0119 27       		.uleb128 0x27
+ 820 011a 19       		.uleb128 0x19
+ 821 011b 3C       		.uleb128 0x3c
+ 822 011c 19       		.uleb128 0x19
+ 823 011d 01       		.uleb128 0x1
+ 824 011e 13       		.uleb128 0x13
+ 825 011f 00       		.byte	0
+ 826 0120 00       		.byte	0
+ 827 0121 15       		.uleb128 0x15
+ 828 0122 05       		.uleb128 0x5
+ 829 0123 00       		.byte	0
+ 830 0124 49       		.uleb128 0x49
+ 831 0125 13       		.uleb128 0x13
+ 832 0126 00       		.byte	0
+ 833 0127 00       		.byte	0
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 19
+
+
+ 834 0128 16       		.uleb128 0x16
+ 835 0129 2E       		.uleb128 0x2e
+ 836 012a 01       		.byte	0x1
+ 837 012b 3F       		.uleb128 0x3f
+ 838 012c 19       		.uleb128 0x19
+ 839 012d 03       		.uleb128 0x3
+ 840 012e 0E       		.uleb128 0xe
+ 841 012f 3A       		.uleb128 0x3a
+ 842 0130 0B       		.uleb128 0xb
+ 843 0131 3B       		.uleb128 0x3b
+ 844 0132 05       		.uleb128 0x5
+ 845 0133 27       		.uleb128 0x27
+ 846 0134 19       		.uleb128 0x19
+ 847 0135 3C       		.uleb128 0x3c
+ 848 0136 19       		.uleb128 0x19
+ 849 0137 01       		.uleb128 0x1
+ 850 0138 13       		.uleb128 0x13
+ 851 0139 00       		.byte	0
+ 852 013a 00       		.byte	0
+ 853 013b 17       		.uleb128 0x17
+ 854 013c 0F       		.uleb128 0xf
+ 855 013d 00       		.byte	0
+ 856 013e 0B       		.uleb128 0xb
+ 857 013f 0B       		.uleb128 0xb
+ 858 0140 49       		.uleb128 0x49
+ 859 0141 13       		.uleb128 0x13
+ 860 0142 00       		.byte	0
+ 861 0143 00       		.byte	0
+ 862 0144 18       		.uleb128 0x18
+ 863 0145 2E       		.uleb128 0x2e
+ 864 0146 00       		.byte	0
+ 865 0147 3F       		.uleb128 0x3f
+ 866 0148 19       		.uleb128 0x19
+ 867 0149 03       		.uleb128 0x3
+ 868 014a 0E       		.uleb128 0xe
+ 869 014b 3A       		.uleb128 0x3a
+ 870 014c 0B       		.uleb128 0xb
+ 871 014d 3B       		.uleb128 0x3b
+ 872 014e 0B       		.uleb128 0xb
+ 873 014f 27       		.uleb128 0x27
+ 874 0150 19       		.uleb128 0x19
+ 875 0151 3C       		.uleb128 0x3c
+ 876 0152 19       		.uleb128 0x19
+ 877 0153 00       		.byte	0
+ 878 0154 00       		.byte	0
+ 879 0155 19       		.uleb128 0x19
+ 880 0156 2E       		.uleb128 0x2e
+ 881 0157 00       		.byte	0
+ 882 0158 3F       		.uleb128 0x3f
+ 883 0159 19       		.uleb128 0x19
+ 884 015a 03       		.uleb128 0x3
+ 885 015b 0E       		.uleb128 0xe
+ 886 015c 3A       		.uleb128 0x3a
+ 887 015d 0B       		.uleb128 0xb
+ 888 015e 3B       		.uleb128 0x3b
+ 889 015f 05       		.uleb128 0x5
+ 890 0160 27       		.uleb128 0x27
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 20
+
+
+ 891 0161 19       		.uleb128 0x19
+ 892 0162 49       		.uleb128 0x49
+ 893 0163 13       		.uleb128 0x13
+ 894 0164 3C       		.uleb128 0x3c
+ 895 0165 19       		.uleb128 0x19
+ 896 0166 00       		.byte	0
+ 897 0167 00       		.byte	0
+ 898 0168 1A       		.uleb128 0x1a
+ 899 0169 2E       		.uleb128 0x2e
+ 900 016a 00       		.byte	0
+ 901 016b 3F       		.uleb128 0x3f
+ 902 016c 19       		.uleb128 0x19
+ 903 016d 03       		.uleb128 0x3
+ 904 016e 0E       		.uleb128 0xe
+ 905 016f 3A       		.uleb128 0x3a
+ 906 0170 0B       		.uleb128 0xb
+ 907 0171 3B       		.uleb128 0x3b
+ 908 0172 05       		.uleb128 0x5
+ 909 0173 27       		.uleb128 0x27
+ 910 0174 19       		.uleb128 0x19
+ 911 0175 3C       		.uleb128 0x3c
+ 912 0176 19       		.uleb128 0x19
+ 913 0177 00       		.byte	0
+ 914 0178 00       		.byte	0
+ 915 0179 1B       		.uleb128 0x1b
+ 916 017a 2E       		.uleb128 0x2e
+ 917 017b 01       		.byte	0x1
+ 918 017c 3F       		.uleb128 0x3f
+ 919 017d 19       		.uleb128 0x19
+ 920 017e 03       		.uleb128 0x3
+ 921 017f 0E       		.uleb128 0xe
+ 922 0180 3A       		.uleb128 0x3a
+ 923 0181 0B       		.uleb128 0xb
+ 924 0182 3B       		.uleb128 0x3b
+ 925 0183 0B       		.uleb128 0xb
+ 926 0184 27       		.uleb128 0x27
+ 927 0185 19       		.uleb128 0x19
+ 928 0186 49       		.uleb128 0x49
+ 929 0187 13       		.uleb128 0x13
+ 930 0188 3C       		.uleb128 0x3c
+ 931 0189 19       		.uleb128 0x19
+ 932 018a 01       		.uleb128 0x1
+ 933 018b 13       		.uleb128 0x13
+ 934 018c 00       		.byte	0
+ 935 018d 00       		.byte	0
+ 936 018e 00       		.byte	0
+ 937              		.section	.debug_loc,"",%progbits
+ 938              	.Ldebug_loc0:
+ 939              	.LLST0:
+ 940 0000 00000000 		.4byte	.LVL0
+ 941 0004 02000000 		.4byte	.LVL1
+ 942 0008 0100     		.2byte	0x1
+ 943 000a 50       		.byte	0x50
+ 944 000b 02000000 		.4byte	.LVL1
+ 945 000f 04000000 		.4byte	.LFE36
+ 946 0013 0400     		.2byte	0x4
+ 947 0015 F3       		.byte	0xf3
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 21
+
+
+ 948 0016 01       		.uleb128 0x1
+ 949 0017 50       		.byte	0x50
+ 950 0018 9F       		.byte	0x9f
+ 951 0019 00000000 		.4byte	0
+ 952 001d 00000000 		.4byte	0
+ 953              	.LLST1:
+ 954 0021 02000000 		.4byte	.LVL2
+ 955 0025 4A000000 		.4byte	.LVL12
+ 956 0029 0300     		.2byte	0x3
+ 957 002b 09       		.byte	0x9
+ 958 002c FF       		.byte	0xff
+ 959 002d 9F       		.byte	0x9f
+ 960 002e 4A000000 		.4byte	.LVL12
+ 961 0032 4C000000 		.4byte	.LVL13
+ 962 0036 0100     		.2byte	0x1
+ 963 0038 50       		.byte	0x50
+ 964 0039 4C000000 		.4byte	.LVL13
+ 965 003d 56000000 		.4byte	.LVL14
+ 966 0041 0300     		.2byte	0x3
+ 967 0043 09       		.byte	0x9
+ 968 0044 FF       		.byte	0xff
+ 969 0045 9F       		.byte	0x9f
+ 970 0046 56000000 		.4byte	.LVL14
+ 971 004a 62000000 		.4byte	.LVL17
+ 972 004e 0100     		.2byte	0x1
+ 973 0050 55       		.byte	0x55
+ 974 0051 62000000 		.4byte	.LVL17
+ 975 0055 A4000000 		.4byte	.LFE35
+ 976 0059 0300     		.2byte	0x3
+ 977 005b 09       		.byte	0x9
+ 978 005c FF       		.byte	0xff
+ 979 005d 9F       		.byte	0x9f
+ 980 005e 00000000 		.4byte	0
+ 981 0062 00000000 		.4byte	0
+ 982              	.LLST2:
+ 983 0066 1E000000 		.4byte	.LVL7
+ 984 006a 20000000 		.4byte	.LVL8
+ 985 006e 0200     		.2byte	0x2
+ 986 0070 30       		.byte	0x30
+ 987 0071 9F       		.byte	0x9f
+ 988 0072 20000000 		.4byte	.LVL8
+ 989 0076 6A000000 		.4byte	.LVL19
+ 990 007a 0100     		.2byte	0x1
+ 991 007c 54       		.byte	0x54
+ 992 007d 6A000000 		.4byte	.LVL19
+ 993 0081 A4000000 		.4byte	.LFE35
+ 994 0085 0200     		.2byte	0x2
+ 995 0087 30       		.byte	0x30
+ 996 0088 9F       		.byte	0x9f
+ 997 0089 00000000 		.4byte	0
+ 998 008d 00000000 		.4byte	0
+ 999              		.section	.debug_aranges,"",%progbits
+ 1000 0000 24000000 		.4byte	0x24
+ 1001 0004 0200     		.2byte	0x2
+ 1002 0006 00000000 		.4byte	.Ldebug_info0
+ 1003 000a 04       		.byte	0x4
+ 1004 000b 00       		.byte	0
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 22
+
+
+ 1005 000c 0000     		.2byte	0
+ 1006 000e 0000     		.2byte	0
+ 1007 0010 00000000 		.4byte	.LFB36
+ 1008 0014 04000000 		.4byte	.LFE36-.LFB36
+ 1009 0018 00000000 		.4byte	.LFB35
+ 1010 001c A4000000 		.4byte	.LFE35-.LFB35
+ 1011 0020 00000000 		.4byte	0
+ 1012 0024 00000000 		.4byte	0
+ 1013              		.section	.debug_ranges,"",%progbits
+ 1014              	.Ldebug_ranges0:
+ 1015 0000 00000000 		.4byte	.LFB36
+ 1016 0004 04000000 		.4byte	.LFE36
+ 1017 0008 00000000 		.4byte	.LFB35
+ 1018 000c A4000000 		.4byte	.LFE35
+ 1019 0010 00000000 		.4byte	0
+ 1020 0014 00000000 		.4byte	0
+ 1021              		.section	.debug_line,"",%progbits
+ 1022              	.Ldebug_line0:
+ 1023 0000 AC010000 		.section	.debug_str,"MS",%progbits,1
+ 1023      02005C01 
+ 1023      00000201 
+ 1023      FB0E0D00 
+ 1023      01010101 
+ 1024              	.LASF24:
+ 1025 0000 49324353 		.ascii	"I2CS_Start\000"
+ 1025      5F537461 
+ 1025      727400
+ 1026              	.LASF14:
+ 1027 000b 73697A65 		.ascii	"size_t\000"
+ 1027      5F7400
+ 1028              	.LASF20:
+ 1029 0012 49324353 		.ascii	"I2CS_I2CSlaveInitReadBuf\000"
+ 1029      5F493243 
+ 1029      536C6176 
+ 1029      65496E69 
+ 1029      74526561 
+ 1030              	.LASF3:
+ 1031 002b 73686F72 		.ascii	"short unsigned int\000"
+ 1031      7420756E 
+ 1031      7369676E 
+ 1031      65642069 
+ 1031      6E7400
+ 1032              	.LASF16:
+ 1033 003e 73746174 		.ascii	"status\000"
+ 1033      757300
+ 1034              	.LASF26:
+ 1035 0045 49324353 		.ascii	"I2CS_I2CSlaveClearWriteStatus\000"
+ 1035      5F493243 
+ 1035      536C6176 
+ 1035      65436C65 
+ 1035      61725772 
+ 1036              	.LASF11:
+ 1037 0063 666C6F61 		.ascii	"float\000"
+ 1037      7400
+ 1038              	.LASF1:
+ 1039 0069 756E7369 		.ascii	"unsigned char\000"
+ 1039      676E6564 
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 23
+
+
+ 1039      20636861 
+ 1039      7200
+ 1040              	.LASF32:
+ 1041 0077 45786563 		.ascii	"ExecuteCommand\000"
+ 1041      75746543 
+ 1041      6F6D6D61 
+ 1041      6E6400
+ 1042              	.LASF17:
+ 1043 0086 69326352 		.ascii	"i2cReadBuffer\000"
+ 1043      65616442 
+ 1043      75666665 
+ 1043      7200
+ 1044              	.LASF5:
+ 1045 0094 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1045      20756E73 
+ 1045      69676E65 
+ 1045      6420696E 
+ 1045      7400
+ 1046              	.LASF9:
+ 1047 00a6 75696E74 		.ascii	"uint8\000"
+ 1047      3800
+ 1048              	.LASF22:
+ 1049 00ac 49324353 		.ascii	"I2CS_I2CSlaveStatus\000"
+ 1049      5F493243 
+ 1049      536C6176 
+ 1049      65537461 
+ 1049      74757300 
+ 1050              	.LASF34:
+ 1051 00c0 6D656D73 		.ascii	"memset\000"
+ 1051      657400
+ 1052              	.LASF12:
+ 1053 00c7 646F7562 		.ascii	"double\000"
+ 1053      6C6500
+ 1054              	.LASF2:
+ 1055 00ce 73686F72 		.ascii	"short int\000"
+ 1055      7420696E 
+ 1055      7400
+ 1056              	.LASF10:
+ 1057 00d8 75696E74 		.ascii	"uint32\000"
+ 1057      333200
+ 1058              	.LASF23:
+ 1059 00df 49324353 		.ascii	"I2CS_I2CSlaveGetWriteBufSize\000"
+ 1059      5F493243 
+ 1059      536C6176 
+ 1059      65476574 
+ 1059      57726974 
+ 1060              	.LASF21:
+ 1061 00fc 49324353 		.ascii	"I2CS_I2CSlaveInitWriteBuf\000"
+ 1061      5F493243 
+ 1061      536C6176 
+ 1061      65496E69 
+ 1061      74577269 
+ 1062              	.LASF8:
+ 1063 0116 756E7369 		.ascii	"unsigned int\000"
+ 1063      676E6564 
+ 1063      20696E74 
+ 1063      00
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 24
+
+
+ 1064              	.LASF7:
+ 1065 0123 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1065      206C6F6E 
+ 1065      6720756E 
+ 1065      7369676E 
+ 1065      65642069 
+ 1066              	.LASF18:
+ 1067 013a 69326357 		.ascii	"i2cWriteBuffer\000"
+ 1067      72697465 
+ 1067      42756666 
+ 1067      657200
+ 1068              	.LASF33:
+ 1069 0149 6D61696E 		.ascii	"main\000"
+ 1069      00
+ 1070              	.LASF15:
+ 1071 014e 73697A65 		.ascii	"sizetype\000"
+ 1071      74797065 
+ 1071      00
+ 1072              	.LASF6:
+ 1073 0157 6C6F6E67 		.ascii	"long long int\000"
+ 1073      206C6F6E 
+ 1073      6720696E 
+ 1073      7400
+ 1074              	.LASF28:
+ 1075 0165 49324353 		.ascii	"I2CS_I2CSlaveClearReadStatus\000"
+ 1075      5F493243 
+ 1075      536C6176 
+ 1075      65436C65 
+ 1075      61725265 
+ 1076              	.LASF30:
+ 1077 0182 6D61696E 		.ascii	"main.c\000"
+ 1077      2E6300
+ 1078              	.LASF13:
+ 1079 0189 63686172 		.ascii	"char\000"
+ 1079      00
+ 1080              	.LASF27:
+ 1081 018e 49324353 		.ascii	"I2CS_I2CSlaveClearReadBuf\000"
+ 1081      5F493243 
+ 1081      536C6176 
+ 1081      65436C65 
+ 1081      61725265 
+ 1082              	.LASF29:
+ 1083 01a8 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 1083      4320342E 
+ 1083      392E3320 
+ 1083      32303135 
+ 1083      30333033 
+ 1084 01db 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0plus -mthumb -"
+ 1084      20726576 
+ 1084      6973696F 
+ 1084      6E203232 
+ 1084      31323230 
+ 1085 020e 67202D4F 		.ascii	"g -Og -ffunction-sections -ffat-lto-objects\000"
+ 1085      67202D66 
+ 1085      66756E63 
+ 1085      74696F6E 
+ 1085      2D736563 
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccpu22T1.s 			page 25
+
+
+ 1086              	.LASF31:
+ 1087 023a 433A5C77 		.ascii	"C:\\work\\Eddie\\capsense\\i2csimple\\SCB_I2cCommSl"
+ 1087      6F726B5C 
+ 1087      45646469 
+ 1087      655C6361 
+ 1087      7073656E 
+ 1088 0268 61766530 		.ascii	"ave01\\SCB_I2cCommSlave01.cydsn\000"
+ 1088      315C5343 
+ 1088      425F4932 
+ 1088      63436F6D 
+ 1088      6D536C61 
+ 1089              	.LASF25:
+ 1090 0287 49324353 		.ascii	"I2CS_I2CSlaveClearWriteBuf\000"
+ 1090      5F493243 
+ 1090      536C6176 
+ 1090      65436C65 
+ 1090      61725772 
+ 1091              	.LASF4:
+ 1092 02a2 6C6F6E67 		.ascii	"long int\000"
+ 1092      20696E74 
+ 1092      00
+ 1093              	.LASF0:
+ 1094 02ab 7369676E 		.ascii	"signed char\000"
+ 1094      65642063 
+ 1094      68617200 
+ 1095              	.LASF19:
+ 1096 02b7 6361705F 		.ascii	"cap_int_Write\000"
+ 1096      696E745F 
+ 1096      57726974 
+ 1096      6500
+ 1097              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

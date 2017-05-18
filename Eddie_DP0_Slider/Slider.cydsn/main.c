@@ -61,7 +61,6 @@ int main()
     uint16                  led_pos                 = CapSense_SLIDER_NO_TOUCH;
     uint16                  new_led_pos             = CapSense_SLIDER_NO_TOUCH;
     static t_enum_direction finger_direction        = DIRECT_STOP;
-    int                     receive_pos             = 0;
     char*                   command                 = NULL;
     uint16                  tmp                     = 0;
     uint16                  current_callback_anim   = 0;
@@ -86,7 +85,7 @@ int main()
                 set_is_telemetry_enable(TRUE);
             }// the telemetry were disabled but we received something from the client
 
-            char *receive_string = CommsGetInputBuffer();
+            char *receive_string = (char *)CommsGetInputBuffer();
 
             if ((receive_string[0] != START_OF_CMD) || (receive_string[strlen(receive_string) - 1] != END_OF_CMD))
             {

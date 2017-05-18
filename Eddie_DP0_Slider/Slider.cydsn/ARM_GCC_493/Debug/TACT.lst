@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 1
 
 
    1              		.cpu cortex-m0plus
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
   30:Generated_Source\PSoC4/TACT.c ****         #define TACT_SetP4PinDriveMode(shift, mode)  \
   31:Generated_Source\PSoC4/TACT.c ****         do { \
   32:Generated_Source\PSoC4/TACT.c ****             TACT_USBIO_CTRL_REG = (TACT_USBIO_CTRL_REG & \
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 2
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 2
 
 
   33:Generated_Source\PSoC4/TACT.c ****                                     (uint32)(~(uint32)(TACT_DRIVE_MODE_IND_MASK << \
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
   75:Generated_Source\PSoC4/TACT.c ****     }
   38              		.loc 1 75 0
   39              		@ sp needed
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 3
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 3
 
 
   40 000e 7047     		bx	lr
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
   57              		.cfi_startproc
   58              	.LVL2:
  113:Generated_Source\PSoC4/TACT.c ****     uint8 drVal = (uint8)(TACT_DR & (uint8)(~TACT_MASK));
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 4
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 4
 
 
   59              		.loc 1 113 0
@@ -238,7 +238,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  135:Generated_Source\PSoC4/TACT.c **** *******************************************************************************/
  136:Generated_Source\PSoC4/TACT.c **** uint8 TACT_Read(void)
  137:Generated_Source\PSoC4/TACT.c **** {
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 5
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 5
 
 
   92              		.loc 1 137 0
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  118              		.cfi_startproc
  166:Generated_Source\PSoC4/TACT.c ****     return (uint8)((TACT_DR & TACT_MASK) >> TACT_SHIFT);
  119              		.loc 1 166 0
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 6
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 6
 
 
  120 0000 024B     		ldr	r3, .L11
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  199:Generated_Source\PSoC4/TACT.c **** *  It is recommended that the interrupt be disabled before calling this 
  200:Generated_Source\PSoC4/TACT.c **** *  function to avoid unintended interrupt requests. Note that the interrupt
  201:Generated_Source\PSoC4/TACT.c **** *  type is port wide, and therefore will trigger for any enabled pin on the 
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 7
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 7
 
 
  202:Generated_Source\PSoC4/TACT.c **** *  port.
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  225:Generated_Source\PSoC4/TACT.c **** *  The right-shifted current value of the interrupt status register. Each pin 
  226:Generated_Source\PSoC4/TACT.c **** *  has one bit set if it generated an interrupt event. For example, bit 0 is 
  227:Generated_Source\PSoC4/TACT.c **** *  for pin 0 and bit 1 is for pin 1 of the Pins component.
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 8
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 8
 
 
  228:Generated_Source\PSoC4/TACT.c **** *  
@@ -469,48 +469,48 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  204 0006 00000000 		.4byte	.Ldebug_abbrev0
  205 000a 04       		.byte	0x4
  206 000b 01       		.uleb128 0x1
- 207 000c CE010000 		.4byte	.LASF28
+ 207 000c 69010000 		.4byte	.LASF28
  208 0010 01       		.byte	0x1
- 209 0011 10000000 		.4byte	.LASF29
- 210 0015 27010000 		.4byte	.LASF30
+ 209 0011 3C000000 		.4byte	.LASF29
+ 210 0015 10000000 		.4byte	.LASF30
  211 0019 00000000 		.4byte	.Ldebug_ranges0+0
  212 001d 00000000 		.4byte	0
  213 0021 00000000 		.4byte	.Ldebug_line0
  214 0025 02       		.uleb128 0x2
  215 0026 01       		.byte	0x1
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 9
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 9
 
 
  216 0027 06       		.byte	0x6
- 217 0028 60020000 		.4byte	.LASF0
+ 217 0028 FB010000 		.4byte	.LASF0
  218 002c 02       		.uleb128 0x2
  219 002d 01       		.byte	0x1
  220 002e 08       		.byte	0x8
- 221 002f 51000000 		.4byte	.LASF1
+ 221 002f 7D000000 		.4byte	.LASF1
  222 0033 02       		.uleb128 0x2
  223 0034 02       		.byte	0x2
  224 0035 05       		.byte	0x5
- 225 0036 BE010000 		.4byte	.LASF2
+ 225 0036 59010000 		.4byte	.LASF2
  226 003a 02       		.uleb128 0x2
  227 003b 02       		.byte	0x2
  228 003c 07       		.byte	0x7
- 229 003d 77000000 		.4byte	.LASF3
+ 229 003d A3000000 		.4byte	.LASF3
  230 0041 02       		.uleb128 0x2
  231 0042 04       		.byte	0x4
  232 0043 05       		.byte	0x5
- 233 0044 2E000000 		.4byte	.LASF4
+ 233 0044 5A000000 		.4byte	.LASF4
  234 0048 02       		.uleb128 0x2
  235 0049 04       		.byte	0x4
  236 004a 07       		.byte	0x7
- 237 004b 65000000 		.4byte	.LASF5
+ 237 004b 91000000 		.4byte	.LASF5
  238 004f 02       		.uleb128 0x2
  239 0050 08       		.byte	0x8
  240 0051 05       		.byte	0x5
- 241 0052 07010000 		.4byte	.LASF6
+ 241 0052 33010000 		.4byte	.LASF6
  242 0056 02       		.uleb128 0x2
  243 0057 08       		.byte	0x8
  244 0058 07       		.byte	0x7
- 245 0059 CE000000 		.4byte	.LASF7
+ 245 0059 FA000000 		.4byte	.LASF7
  246 005d 03       		.uleb128 0x3
  247 005e 04       		.byte	0x4
  248 005f 05       		.byte	0x5
@@ -518,37 +518,37 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  250 0064 02       		.uleb128 0x2
  251 0065 04       		.byte	0x4
  252 0066 07       		.byte	0x7
- 253 0067 C1000000 		.4byte	.LASF8
+ 253 0067 ED000000 		.4byte	.LASF8
  254 006b 04       		.uleb128 0x4
- 255 006c C8010000 		.4byte	.LASF9
+ 255 006c 63010000 		.4byte	.LASF9
  256 0070 02       		.byte	0x2
  257 0071 B901     		.2byte	0x1b9
  258 0073 2C000000 		.4byte	0x2c
  259 0077 04       		.uleb128 0x4
- 260 0078 A2000000 		.4byte	.LASF10
+ 260 0078 CE000000 		.4byte	.LASF10
  261 007c 02       		.byte	0x2
  262 007d BA01     		.2byte	0x1ba
  263 007f 3A000000 		.4byte	0x3a
  264 0083 04       		.uleb128 0x4
- 265 0084 B2000000 		.4byte	.LASF11
+ 265 0084 DE000000 		.4byte	.LASF11
  266 0088 02       		.byte	0x2
  267 0089 BB01     		.2byte	0x1bb
  268 008b 48000000 		.4byte	0x48
  269 008f 02       		.uleb128 0x2
  270 0090 04       		.byte	0x4
  271 0091 04       		.byte	0x4
- 272 0092 4B000000 		.4byte	.LASF12
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 10
+ 272 0092 77000000 		.4byte	.LASF12
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 10
 
 
  273 0096 02       		.uleb128 0x2
  274 0097 08       		.byte	0x8
  275 0098 04       		.byte	0x4
- 276 0099 9B000000 		.4byte	.LASF13
+ 276 0099 C7000000 		.4byte	.LASF13
  277 009d 02       		.uleb128 0x2
  278 009e 01       		.byte	0x1
  279 009f 08       		.byte	0x8
- 280 00a0 22010000 		.4byte	.LASF14
+ 280 00a0 4E010000 		.4byte	.LASF14
  281 00a4 04       		.uleb128 0x4
  282 00a5 00000000 		.4byte	.LASF15
  283 00a9 02       		.byte	0x2
@@ -557,7 +557,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  286 00b0 05       		.uleb128 0x5
  287 00b1 83000000 		.4byte	0x83
  288 00b5 06       		.uleb128 0x6
- 289 00b6 F5000000 		.4byte	.LASF16
+ 289 00b6 21010000 		.4byte	.LASF16
  290 00ba 01       		.byte	0x1
  291 00bb 48       		.byte	0x48
  292 00bc 00000000 		.4byte	.LFB0
@@ -566,14 +566,14 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  295 00c5 9C       		.byte	0x9c
  296 00c6 DA000000 		.4byte	0xda
  297 00ca 07       		.uleb128 0x7
- 298 00cb E5000000 		.4byte	.LASF18
+ 298 00cb 11010000 		.4byte	.LASF18
  299 00cf 01       		.byte	0x1
  300 00d0 48       		.byte	0x48
  301 00d1 6B000000 		.4byte	0x6b
  302 00d5 00000000 		.4byte	.LLST0
  303 00d9 00       		.byte	0
  304 00da 06       		.uleb128 0x6
- 305 00db EA000000 		.4byte	.LASF17
+ 305 00db 16010000 		.4byte	.LASF17
  306 00df 01       		.byte	0x1
  307 00e0 6F       		.byte	0x6f
  308 00e1 00000000 		.4byte	.LFB1
@@ -582,13 +582,13 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  311 00ea 9C       		.byte	0x9c
  312 00eb 0E010000 		.4byte	0x10e
  313 00ef 07       		.uleb128 0x7
- 314 00f0 B8010000 		.4byte	.LASF19
+ 314 00f0 53010000 		.4byte	.LASF19
  315 00f4 01       		.byte	0x1
  316 00f5 6F       		.byte	0x6f
  317 00f6 6B000000 		.4byte	0x6b
  318 00fa 21000000 		.4byte	.LLST1
  319 00fe 08       		.uleb128 0x8
- 320 00ff 5F000000 		.4byte	.LASF24
+ 320 00ff 8B000000 		.4byte	.LASF24
  321 0103 01       		.byte	0x1
  322 0104 71       		.byte	0x71
  323 0105 6B000000 		.4byte	0x6b
@@ -598,7 +598,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  327 010f 06000000 		.4byte	.LASF20
  328 0113 01       		.byte	0x1
  329 0114 88       		.byte	0x88
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 11
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 11
 
 
  330 0115 6B000000 		.4byte	0x6b
@@ -607,7 +607,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  333 0121 01       		.uleb128 0x1
  334 0122 9C       		.byte	0x9c
  335 0123 09       		.uleb128 0x9
- 336 0124 8A000000 		.4byte	.LASF21
+ 336 0124 B6000000 		.4byte	.LASF21
  337 0128 01       		.byte	0x1
  338 0129 A4       		.byte	0xa4
  339 012a 6B000000 		.4byte	0x6b
@@ -616,7 +616,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  342 0136 01       		.uleb128 0x1
  343 0137 9C       		.byte	0x9c
  344 0138 06       		.uleb128 0x6
- 345 0139 6C020000 		.4byte	.LASF22
+ 345 0139 07020000 		.4byte	.LASF22
  346 013d 01       		.byte	0x1
  347 013e CF       		.byte	0xcf
  348 013f 00000000 		.4byte	.LFB4
@@ -625,20 +625,20 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  351 0148 9C       		.byte	0x9c
  352 0149 77010000 		.4byte	0x177
  353 014d 0A       		.uleb128 0xa
- 354 014e A9000000 		.4byte	.LASF23
+ 354 014e D5000000 		.4byte	.LASF23
  355 0152 01       		.byte	0x1
  356 0153 CF       		.byte	0xcf
  357 0154 77000000 		.4byte	0x77
  358 0158 01       		.uleb128 0x1
  359 0159 50       		.byte	0x50
  360 015a 07       		.uleb128 0x7
- 361 015b E5000000 		.4byte	.LASF18
+ 361 015b 11010000 		.4byte	.LASF18
  362 015f 01       		.byte	0x1
  363 0160 CF       		.byte	0xcf
  364 0161 77000000 		.4byte	0x77
  365 0165 60000000 		.4byte	.LLST3
  366 0169 0B       		.uleb128 0xb
- 367 016a B9000000 		.4byte	.LASF25
+ 367 016a E5000000 		.4byte	.LASF25
  368 016e 01       		.byte	0x1
  369 016f D1       		.byte	0xd1
  370 0170 83000000 		.4byte	0x83
@@ -646,7 +646,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  372 0175 53       		.byte	0x53
  373 0176 00       		.byte	0
  374 0177 0C       		.uleb128 0xc
- 375 0178 37000000 		.4byte	.LASF26
+ 375 0178 63000000 		.4byte	.LASF26
  376 017c 01       		.byte	0x1
  377 017d EC       		.byte	0xec
  378 017e 6B000000 		.4byte	0x6b
@@ -655,10 +655,10 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  381 018a 01       		.uleb128 0x1
  382 018b 9C       		.byte	0x9c
  383 018c 08       		.uleb128 0x8
- 384 018d 15010000 		.4byte	.LASF27
+ 384 018d 41010000 		.4byte	.LASF27
  385 0191 01       		.byte	0x1
  386 0192 EE       		.byte	0xee
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 12
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 12
 
 
  387 0193 6B000000 		.4byte	0x6b
@@ -718,7 +718,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  441 0030 3B       		.uleb128 0x3b
  442 0031 05       		.uleb128 0x5
  443 0032 49       		.uleb128 0x49
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 13
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 13
 
 
  444 0033 13       		.uleb128 0x13
@@ -778,7 +778,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  498 006a 0E       		.uleb128 0xe
  499 006b 3A       		.uleb128 0x3a
  500 006c 0B       		.uleb128 0xb
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 14
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 14
 
 
  501 006d 3B       		.uleb128 0x3b
@@ -838,7 +838,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  555 00a4 0B       		.uleb128 0xb
  556 00a5 3B       		.uleb128 0x3b
  557 00a6 0B       		.uleb128 0xb
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 15
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 15
 
 
  558 00a7 49       		.uleb128 0x49
@@ -898,7 +898,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  612 0030 18000000 		.4byte	.LFE1
  613 0034 0400     		.2byte	0x4
  614 0036 F3       		.byte	0xf3
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 16
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 16
 
 
  615 0037 01       		.uleb128 0x1
@@ -958,7 +958,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  669 0018 00000000 		.4byte	.LFB1
  670 001c 18000000 		.4byte	.LFE1-.LFB1
  671 0020 00000000 		.4byte	.LFB2
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 17
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 17
 
 
  672 0024 10000000 		.4byte	.LFE2-.LFB2
@@ -1000,164 +1000,153 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 1
  703 0006 54414354 		.ascii	"TACT_Read\000"
  703      5F526561 
  703      6400
- 704              	.LASF29:
- 705 0010 47656E65 		.ascii	"Generated_Source\\PSoC4\\TACT.c\000"
- 705      72617465 
- 705      645F536F 
- 705      75726365 
- 705      5C50536F 
- 706              	.LASF4:
- 707 002e 6C6F6E67 		.ascii	"long int\000"
- 707      20696E74 
- 707      00
- 708              	.LASF26:
- 709 0037 54414354 		.ascii	"TACT_ClearInterrupt\000"
- 709      5F436C65 
- 709      6172496E 
- 709      74657272 
- 709      75707400 
- 710              	.LASF12:
- 711 004b 666C6F61 		.ascii	"float\000"
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 18
+ 704              	.LASF30:
+ 705 0010 433A5C77 		.ascii	"C:\\work\\Eddie\\Eddie_DP0_Slider\\Slider.cydsn\000"
+ 705      6F726B5C 
+ 705      45646469 
+ 705      655C4564 
+ 705      6469655F 
+ 706              	.LASF29:
+ 707 003c 47656E65 		.ascii	"Generated_Source\\PSoC4\\TACT.c\000"
+ 707      72617465 
+ 707      645F536F 
+ 707      75726365 
+ 707      5C50536F 
+ 708              	.LASF4:
+ 709 005a 6C6F6E67 		.ascii	"long int\000"
+ 709      20696E74 
+ 709      00
+ 710              	.LASF26:
+ 711 0063 54414354 		.ascii	"TACT_ClearInterrupt\000"
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 18
 
 
- 711      7400
- 712              	.LASF1:
- 713 0051 756E7369 		.ascii	"unsigned char\000"
- 713      676E6564 
- 713      20636861 
- 713      7200
- 714              	.LASF24:
- 715 005f 64725661 		.ascii	"drVal\000"
- 715      6C00
- 716              	.LASF5:
- 717 0065 6C6F6E67 		.ascii	"long unsigned int\000"
- 717      20756E73 
- 717      69676E65 
- 717      6420696E 
- 717      7400
- 718              	.LASF3:
- 719 0077 73686F72 		.ascii	"short unsigned int\000"
- 719      7420756E 
- 719      7369676E 
- 719      65642069 
- 719      6E7400
- 720              	.LASF21:
- 721 008a 54414354 		.ascii	"TACT_ReadDataReg\000"
- 721      5F526561 
- 721      64446174 
- 721      61526567 
- 721      00
- 722              	.LASF13:
- 723 009b 646F7562 		.ascii	"double\000"
- 723      6C6500
- 724              	.LASF10:
- 725 00a2 75696E74 		.ascii	"uint16\000"
- 725      313600
- 726              	.LASF23:
- 727 00a9 706F7369 		.ascii	"position\000"
- 727      74696F6E 
- 727      00
- 728              	.LASF11:
- 729 00b2 75696E74 		.ascii	"uint32\000"
- 729      333200
- 730              	.LASF25:
- 731 00b9 696E7472 		.ascii	"intrCfg\000"
- 731      43666700 
- 732              	.LASF8:
- 733 00c1 756E7369 		.ascii	"unsigned int\000"
- 733      676E6564 
- 733      20696E74 
- 733      00
- 734              	.LASF7:
- 735 00ce 6C6F6E67 		.ascii	"long long unsigned int\000"
- 735      206C6F6E 
- 735      6720756E 
- 735      7369676E 
- 735      65642069 
- 736              	.LASF18:
- 737 00e5 6D6F6465 		.ascii	"mode\000"
- 737      00
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 19
+ 711      5F436C65 
+ 711      6172496E 
+ 711      74657272 
+ 711      75707400 
+ 712              	.LASF12:
+ 713 0077 666C6F61 		.ascii	"float\000"
+ 713      7400
+ 714              	.LASF1:
+ 715 007d 756E7369 		.ascii	"unsigned char\000"
+ 715      676E6564 
+ 715      20636861 
+ 715      7200
+ 716              	.LASF24:
+ 717 008b 64725661 		.ascii	"drVal\000"
+ 717      6C00
+ 718              	.LASF5:
+ 719 0091 6C6F6E67 		.ascii	"long unsigned int\000"
+ 719      20756E73 
+ 719      69676E65 
+ 719      6420696E 
+ 719      7400
+ 720              	.LASF3:
+ 721 00a3 73686F72 		.ascii	"short unsigned int\000"
+ 721      7420756E 
+ 721      7369676E 
+ 721      65642069 
+ 721      6E7400
+ 722              	.LASF21:
+ 723 00b6 54414354 		.ascii	"TACT_ReadDataReg\000"
+ 723      5F526561 
+ 723      64446174 
+ 723      61526567 
+ 723      00
+ 724              	.LASF13:
+ 725 00c7 646F7562 		.ascii	"double\000"
+ 725      6C6500
+ 726              	.LASF10:
+ 727 00ce 75696E74 		.ascii	"uint16\000"
+ 727      313600
+ 728              	.LASF23:
+ 729 00d5 706F7369 		.ascii	"position\000"
+ 729      74696F6E 
+ 729      00
+ 730              	.LASF11:
+ 731 00de 75696E74 		.ascii	"uint32\000"
+ 731      333200
+ 732              	.LASF25:
+ 733 00e5 696E7472 		.ascii	"intrCfg\000"
+ 733      43666700 
+ 734              	.LASF8:
+ 735 00ed 756E7369 		.ascii	"unsigned int\000"
+ 735      676E6564 
+ 735      20696E74 
+ 735      00
+ 736              	.LASF7:
+ 737 00fa 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 737      206C6F6E 
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 19
 
 
- 738              	.LASF17:
- 739 00ea 54414354 		.ascii	"TACT_Write\000"
- 739      5F577269 
- 739      746500
- 740              	.LASF16:
- 741 00f5 54414354 		.ascii	"TACT_SetDriveMode\000"
- 741      5F536574 
- 741      44726976 
- 741      654D6F64 
- 741      6500
- 742              	.LASF6:
- 743 0107 6C6F6E67 		.ascii	"long long int\000"
- 743      206C6F6E 
- 743      6720696E 
- 743      7400
- 744              	.LASF27:
- 745 0115 6D61736B 		.ascii	"maskedStatus\000"
- 745      65645374 
- 745      61747573 
- 745      00
- 746              	.LASF14:
- 747 0122 63686172 		.ascii	"char\000"
+ 737      6720756E 
+ 737      7369676E 
+ 737      65642069 
+ 738              	.LASF18:
+ 739 0111 6D6F6465 		.ascii	"mode\000"
+ 739      00
+ 740              	.LASF17:
+ 741 0116 54414354 		.ascii	"TACT_Write\000"
+ 741      5F577269 
+ 741      746500
+ 742              	.LASF16:
+ 743 0121 54414354 		.ascii	"TACT_SetDriveMode\000"
+ 743      5F536574 
+ 743      44726976 
+ 743      654D6F64 
+ 743      6500
+ 744              	.LASF6:
+ 745 0133 6C6F6E67 		.ascii	"long long int\000"
+ 745      206C6F6E 
+ 745      6720696E 
+ 745      7400
+ 746              	.LASF27:
+ 747 0141 6D61736B 		.ascii	"maskedStatus\000"
+ 747      65645374 
+ 747      61747573 
  747      00
- 748              	.LASF30:
- 749 0127 433A5C55 		.ascii	"C:\\Users\\tb1014481\\Documents\\#PROJECTS#\\Eddie\\"
- 749      73657273 
- 749      5C746231 
- 749      30313434 
- 749      38315C44 
- 750 0155 536F6674 		.ascii	"Software\\Cypress_PSoC\\Eddie_DP0.0\\Slider_WS.Bund"
- 750      77617265 
- 750      5C437970 
- 750      72657373 
- 750      5F50536F 
- 751 0185 6C653035 		.ascii	"le05.cywrk.Archive04\\Eddie_DP0_Slider\\Slider.cyds"
- 751      2E637977 
- 751      726B2E41 
- 751      72636869 
- 751      76653034 
- 752 01b6 6E00     		.ascii	"n\000"
- 753              	.LASF19:
- 754 01b8 76616C75 		.ascii	"value\000"
- 754      6500
- 755              	.LASF2:
- 756 01be 73686F72 		.ascii	"short int\000"
- 756      7420696E 
- 756      7400
- 757              	.LASF9:
- 758 01c8 75696E74 		.ascii	"uint8\000"
- 758      3800
- 759              	.LASF28:
- 760 01ce 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
- 760      4320342E 
- 760      392E3320 
- 760      32303135 
- 760      30333033 
- 761 0201 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0plus -mthumb -"
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccMo78kE.s 			page 20
+ 748              	.LASF14:
+ 749 014e 63686172 		.ascii	"char\000"
+ 749      00
+ 750              	.LASF19:
+ 751 0153 76616C75 		.ascii	"value\000"
+ 751      6500
+ 752              	.LASF2:
+ 753 0159 73686F72 		.ascii	"short int\000"
+ 753      7420696E 
+ 753      7400
+ 754              	.LASF9:
+ 755 0163 75696E74 		.ascii	"uint8\000"
+ 755      3800
+ 756              	.LASF28:
+ 757 0169 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 757      4320342E 
+ 757      392E3320 
+ 757      32303135 
+ 757      30333033 
+ 758 019c 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0plus -mthumb -"
+ 758      20726576 
+ 758      6973696F 
+ 758      6E203232 
+ 758      31323230 
+ 759 01cf 67202D4F 		.ascii	"g -Og -ffunction-sections -ffat-lto-objects\000"
+ 759      67202D66 
+ 759      66756E63 
+ 759      74696F6E 
+ 759      2D736563 
+ 760              	.LASF0:
+ 761 01fb 7369676E 		.ascii	"signed char\000"
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccLM1Hhd.s 			page 20
 
 
- 761      20726576 
- 761      6973696F 
- 761      6E203232 
- 761      31323230 
- 762 0234 67202D4F 		.ascii	"g -Og -ffunction-sections -ffat-lto-objects\000"
- 762      67202D66 
- 762      66756E63 
- 762      74696F6E 
- 762      2D736563 
- 763              	.LASF0:
- 764 0260 7369676E 		.ascii	"signed char\000"
- 764      65642063 
- 764      68617200 
- 765              	.LASF22:
- 766 026c 54414354 		.ascii	"TACT_SetInterruptMode\000"
- 766      5F536574 
- 766      496E7465 
- 766      72727570 
- 766      744D6F64 
- 767              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br
+ 761      65642063 
+ 761      68617200 
+ 762              	.LASF22:
+ 763 0207 54414354 		.ascii	"TACT_SetInterruptMode\000"
+ 763      5F536574 
+ 763      496E7465 
+ 763      72727570 
+ 763      744D6F64 
+ 764              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

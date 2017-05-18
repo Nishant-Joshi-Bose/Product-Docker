@@ -8,6 +8,7 @@
 <files />
 <projects>
 <v>.\Slider.cydsn\Slider.cyprj</v>
+<v>.\Bootloader.cydsn\Bootloader.cyprj</v>
 </projects>
 <workspace_id v="55d1bf3e-1525-424c-ac36-6300b2813093" />
 <WriteAppVersionLastSavedWith v="4.0.0.432" />

@@ -2041,7 +2041,7 @@
       </registers>
     </peripheral>
     <peripheral>
-      <name>UART_1</name>
+      <name>I2CS</name>
       <description>Serial Communication Block</description>
       <baseAddress>0x0</baseAddress>
       <addressBlock>

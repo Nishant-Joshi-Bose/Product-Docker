@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 1
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 1
 
 
    1              		.cpu cortex-m0plus
@@ -58,7 +58,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 1
   31:Generated_Source\PSoC4/cyfitter_cfg.c ****     #ifndef CY_CFG_SECTION
   32:Generated_Source\PSoC4/cyfitter_cfg.c ****         #define CY_CFG_SECTION __attribute__ ((section(".psocinit")))
   33:Generated_Source\PSoC4/cyfitter_cfg.c ****     #endif
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 2
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 2
 
 
   34:Generated_Source\PSoC4/cyfitter_cfg.c ****     
@@ -118,7 +118,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 1
   88:Generated_Source\PSoC4/cyfitter_cfg.c **** 
   89:Generated_Source\PSoC4/cyfitter_cfg.c **** #ifdef CY_NEED_CYCLOCKSTARTUPERROR
   90:Generated_Source\PSoC4/cyfitter_cfg.c **** /*******************************************************************************
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 3
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 3
 
 
   91:Generated_Source\PSoC4/cyfitter_cfg.c **** * Function Name: CyClockStartupError
@@ -178,7 +178,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 1
  145:Generated_Source\PSoC4/cyfitter_cfg.c **** *   clocks and setting the necessary dividers to produce the desired frequency. 
  146:Generated_Source\PSoC4/cyfitter_cfg.c **** *
  147:Generated_Source\PSoC4/cyfitter_cfg.c **** * Parameters:
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 4
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 4
 
 
  148:Generated_Source\PSoC4/cyfitter_cfg.c **** *   void
@@ -233,12 +233,12 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 1
   53              		.loc 1 168 0
   54 0024 104A     		ldr	r2, .L2+20
   55 0026 1A60     		str	r2, [r3]
- 169:Generated_Source\PSoC4/cyfitter_cfg.c **** 	CY_SET_REG32((void *)CYREG_PERI_DIV_16_CTL2, 0x00000C00u);
+ 169:Generated_Source\PSoC4/cyfitter_cfg.c **** 	CY_SET_REG32((void *)CYREG_PERI_DIV_16_CTL2, 0x00000E00u);
   56              		.loc 1 169 0
-  57 0028 C021     		mov	r1, #192
+  57 0028 E021     		mov	r1, #224
   58 002a 0901     		lsl	r1, r1, #4
   59 002c 0F4A     		ldr	r2, .L2+24
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 5
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 5
 
 
   60 002e 1160     		str	r1, [r2]
@@ -298,7 +298,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 1
   97 0074 28000340 		.word	1073938472
   98 0078 0C010140 		.word	1073807628
   99 007c 08010140 		.word	1073807624
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 6
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 6
 
 
  100 0080 00010140 		.word	1073807616
@@ -358,7 +358,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 1
  229:Generated_Source\PSoC4/cyfitter_cfg.c **** *  void
  230:Generated_Source\PSoC4/cyfitter_cfg.c **** *
  231:Generated_Source\PSoC4/cyfitter_cfg.c **** *******************************************************************************/
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 7
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 7
 
 
  232:Generated_Source\PSoC4/cyfitter_cfg.c **** void SetAnalogRoutingPumps(uint8 enabled)
@@ -418,7 +418,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 1
  150 0024 01E0     		b	.L8
  151              	.L7:
  248:Generated_Source\PSoC4/cyfitter_cfg.c **** 	}
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 8
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 8
 
 
  249:Generated_Source\PSoC4/cyfitter_cfg.c **** 	else
@@ -478,7 +478,7 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 1
  196              	.LVL10:
  213:Generated_Source\PSoC4/cyfitter_cfg.c **** 
  197              		.loc 1 213 0
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 9
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 9
 
 
  198              		@ sp needed
@@ -538,25 +538,25 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 1
  281:Generated_Source\PSoC4/cyfitter_cfg.c **** 	{
  282:Generated_Source\PSoC4/cyfitter_cfg.c **** 		/* HSIOM Starting address: CYDEV_HSIOM_BASE */
  283:Generated_Source\PSoC4/cyfitter_cfg.c **** 		CY_SET_XTND_REG32((void CYFAR *)(CYDEV_HSIOM_BASE), 0x06600000u);
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 10
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 10
 
 
  226              		.loc 1 283 0
  227              		.code	16
  228 0088 CC22     		mov	r2, #204
  229 008a D204     		lsl	r2, r2, #19
- 230 008c 154B     		ldr	r3, .L15
+ 230 008c 174B     		ldr	r3, .L15
  231 008e 1A60     		str	r2, [r3]
- 284:Generated_Source\PSoC4/cyfitter_cfg.c **** 		CY_SET_XTND_REG32((void CYFAR *)(CYREG_HSIOM_PORT_SEL1), 0x00000099u);
+ 284:Generated_Source\PSoC4/cyfitter_cfg.c **** 		CY_SET_XTND_REG32((void CYFAR *)(CYREG_HSIOM_PORT_SEL1), 0x000000EEu);
  232              		.loc 1 284 0
- 233 0090 9922     		mov	r2, #153
- 234 0092 154B     		ldr	r3, .L15+4
+ 233 0090 EE22     		mov	r2, #238
+ 234 0092 174B     		ldr	r3, .L15+4
  235 0094 1A60     		str	r2, [r3]
  285:Generated_Source\PSoC4/cyfitter_cfg.c **** 		CY_SET_XTND_REG32((void CYFAR *)(CYREG_HSIOM_PORT_SEL3), 0x0000EE00u);
  236              		.loc 1 285 0
  237 0096 EE22     		mov	r2, #238
  238 0098 1202     		lsl	r2, r2, #8
- 239 009a 144B     		ldr	r3, .L15+8
+ 239 009a 164B     		ldr	r3, .L15+8
  240 009c 1A60     		str	r2, [r3]
  286:Generated_Source\PSoC4/cyfitter_cfg.c **** 
  287:Generated_Source\PSoC4/cyfitter_cfg.c **** 	}
@@ -566,725 +566,721 @@ ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 1
  291:Generated_Source\PSoC4/cyfitter_cfg.c **** 	CY_SET_XTND_REG32((void CYFAR *)(CYDEV_GPIO_PRT0_BASE), 0x0000002Fu);
  241              		.loc 1 291 0
  242 009e 2F22     		mov	r2, #47
- 243 00a0 134B     		ldr	r3, .L15+12
+ 243 00a0 154B     		ldr	r3, .L15+12
  244 00a2 1A60     		str	r2, [r3]
  292:Generated_Source\PSoC4/cyfitter_cfg.c **** 	CY_SET_XTND_REG32((void CYFAR *)(CYREG_GPIO_PRT0_PC2), 0x0000007Fu);
  245              		.loc 1 292 0
  246 00a4 5032     		add	r2, r2, #80
- 247 00a6 134B     		ldr	r3, .L15+16
+ 247 00a6 154B     		ldr	r3, .L15+16
  248 00a8 1A60     		str	r2, [r3]
  293:Generated_Source\PSoC4/cyfitter_cfg.c **** 
  294:Generated_Source\PSoC4/cyfitter_cfg.c **** 	/* IOPINS0_1 Starting address: CYDEV_GPIO_PRT1_BASE */
- 295:Generated_Source\PSoC4/cyfitter_cfg.c **** 	CY_SET_XTND_REG32((void CYFAR *)(CYDEV_GPIO_PRT1_BASE), 0x0000008Eu);
+ 295:Generated_Source\PSoC4/cyfitter_cfg.c **** 	CY_SET_XTND_REG32((void CYFAR *)(CYDEV_GPIO_PRT1_BASE), 0x0000008Fu);
  249              		.loc 1 295 0
- 250 00aa 8E23     		mov	r3, #142
- 251 00ac 124A     		ldr	r2, .L15+20
- 252 00ae 1360     		str	r3, [r2]
- 296:Generated_Source\PSoC4/cyfitter_cfg.c **** 	CY_SET_XTND_REG32((void CYFAR *)(CYREG_GPIO_PRT1_PC), 0x00000031u);
+ 250 00aa 1032     		add	r2, r2, #16
+ 251 00ac 144B     		ldr	r3, .L15+20
+ 252 00ae 1A60     		str	r2, [r3]
+ 296:Generated_Source\PSoC4/cyfitter_cfg.c **** 	CY_SET_XTND_REG32((void CYFAR *)(CYREG_GPIO_PRT1_PC), 0x00000024u);
  253              		.loc 1 296 0
- 254 00b0 3121     		mov	r1, #49
- 255 00b2 124A     		ldr	r2, .L15+24
- 256 00b4 1160     		str	r1, [r2]
- 297:Generated_Source\PSoC4/cyfitter_cfg.c **** 	CY_SET_XTND_REG32((void CYFAR *)(CYREG_GPIO_PRT1_PC2), 0x0000008Eu);
+ 254 00b0 6B3A     		sub	r2, r2, #107
+ 255 00b2 144B     		ldr	r3, .L15+24
+ 256 00b4 1A60     		str	r2, [r3]
+ 297:Generated_Source\PSoC4/cyfitter_cfg.c **** 	CY_SET_XTND_REG32((void CYFAR *)(CYREG_GPIO_PRT1_PC2), 0x0000008Cu);
  257              		.loc 1 297 0
- 258 00b6 124A     		ldr	r2, .L15+28
- 259 00b8 1360     		str	r3, [r2]
+ 258 00b6 6832     		add	r2, r2, #104
+ 259 00b8 134B     		ldr	r3, .L15+28
+ 260 00ba 1A60     		str	r2, [r3]
  298:Generated_Source\PSoC4/cyfitter_cfg.c **** 
  299:Generated_Source\PSoC4/cyfitter_cfg.c **** 	/* IOPINS0_2 Starting address: CYDEV_GPIO_PRT2_BASE */
  300:Generated_Source\PSoC4/cyfitter_cfg.c **** 	CY_SET_XTND_REG32((void CYFAR *)(CYDEV_GPIO_PRT2_BASE), 0x000000EAu);
- 260              		.loc 1 300 0
- 261 00ba EA22     		mov	r2, #234
- 262 00bc 114B     		ldr	r3, .L15+32
- 263 00be 1A60     		str	r2, [r3]
+ 261              		.loc 1 300 0
+ 262 00bc 5E32     		add	r2, r2, #94
+ 263 00be 134B     		ldr	r3, .L15+32
+ 264 00c0 1A60     		str	r2, [r3]
  301:Generated_Source\PSoC4/cyfitter_cfg.c **** 	CY_SET_XTND_REG32((void CYFAR *)(CYREG_GPIO_PRT2_PC), 0x00000010u);
- 264              		.loc 1 301 0
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 11
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 11
 
 
- 265 00c0 DA3A     		sub	r2, r2, #218
- 266 00c2 114B     		ldr	r3, .L15+36
- 267 00c4 1A60     		str	r2, [r3]
+ 265              		.loc 1 301 0
+ 266 00c2 DA3A     		sub	r2, r2, #218
+ 267 00c4 124B     		ldr	r3, .L15+36
+ 268 00c6 1A60     		str	r2, [r3]
  302:Generated_Source\PSoC4/cyfitter_cfg.c **** 	CY_SET_XTND_REG32((void CYFAR *)(CYREG_GPIO_PRT2_PC2), 0x000000ECu);
- 268              		.loc 1 302 0
- 269 00c6 DC32     		add	r2, r2, #220
- 270 00c8 104B     		ldr	r3, .L15+40
- 271 00ca 1A60     		str	r2, [r3]
+ 269              		.loc 1 302 0
+ 270 00c8 DC32     		add	r2, r2, #220
+ 271 00ca 124B     		ldr	r3, .L15+40
+ 272 00cc 1A60     		str	r2, [r3]
  303:Generated_Source\PSoC4/cyfitter_cfg.c **** 
  304:Generated_Source\PSoC4/cyfitter_cfg.c **** 	/* IOPINS0_3 Starting address: CYDEV_GPIO_PRT3_BASE */
  305:Generated_Source\PSoC4/cyfitter_cfg.c **** 	CY_SET_XTND_REG32((void CYFAR *)(CYREG_GPIO_PRT3_PC), 0x00000D80u);
- 272              		.loc 1 305 0
- 273 00cc D822     		mov	r2, #216
- 274 00ce 1201     		lsl	r2, r2, #4
- 275 00d0 0F4B     		ldr	r3, .L15+44
- 276 00d2 1A60     		str	r2, [r3]
+ 273              		.loc 1 305 0
+ 274 00ce D822     		mov	r2, #216
+ 275 00d0 1201     		lsl	r2, r2, #4
+ 276 00d2 114B     		ldr	r3, .L15+44
+ 277 00d4 1A60     		str	r2, [r3]
  306:Generated_Source\PSoC4/cyfitter_cfg.c **** 
  307:Generated_Source\PSoC4/cyfitter_cfg.c **** 	/* IOPINS0_4 Starting address: CYDEV_GPIO_PRT4_BASE */
- 308:Generated_Source\PSoC4/cyfitter_cfg.c **** 	CY_SET_XTND_REG32((void CYFAR *)(CYREG_GPIO_PRT4_PC2), 0x0000000Eu);
- 277              		.loc 1 308 0
- 278 00d4 0E22     		mov	r2, #14
- 279 00d6 0F4B     		ldr	r3, .L15+48
- 280 00d8 1A60     		str	r2, [r3]
- 309:Generated_Source\PSoC4/cyfitter_cfg.c **** 
+ 308:Generated_Source\PSoC4/cyfitter_cfg.c **** 	CY_SET_XTND_REG32((void CYFAR *)(CYREG_GPIO_PRT4_PC), 0x00000006u);
+ 278              		.loc 1 308 0
+ 279 00d6 0622     		mov	r2, #6
+ 280 00d8 104B     		ldr	r3, .L15+48
+ 281 00da 1A60     		str	r2, [r3]
+ 309:Generated_Source\PSoC4/cyfitter_cfg.c **** 	CY_SET_XTND_REG32((void CYFAR *)(CYREG_GPIO_PRT4_PC2), 0x0000000Eu);
+ 282              		.loc 1 309 0
+ 283 00dc 0832     		add	r2, r2, #8
+ 284 00de 104B     		ldr	r3, .L15+52
+ 285 00e0 1A60     		str	r2, [r3]
  310:Generated_Source\PSoC4/cyfitter_cfg.c **** 
- 311:Generated_Source\PSoC4/cyfitter_cfg.c **** 	/* Setup clocks based on selections from Clock DWR */
- 312:Generated_Source\PSoC4/cyfitter_cfg.c **** 	ClockSetup();
- 281              		.loc 1 312 0
- 282 00da FFF791FF 		bl	ClockSetup
- 283              	.LVL11:
- 313:Generated_Source\PSoC4/cyfitter_cfg.c **** 
- 314:Generated_Source\PSoC4/cyfitter_cfg.c **** 	/* Perform basic analog initialization to defaults */
- 315:Generated_Source\PSoC4/cyfitter_cfg.c **** 	AnalogSetDefault();
- 284              		.loc 1 315 0
- 285 00de FFF7FEFF 		bl	AnalogSetDefault
- 286              	.LVL12:
- 316:Generated_Source\PSoC4/cyfitter_cfg.c **** 
- 317:Generated_Source\PSoC4/cyfitter_cfg.c **** }
- 287              		.loc 1 317 0
- 288              		@ sp needed
- 289 00e2 08BD     		pop	{r3, pc}
- 290              	.L16:
- 291              		.align	2
- 292              	.L15:
- 293 00e4 00000240 		.word	1073872896
- 294 00e8 00010240 		.word	1073873152
- 295 00ec 00030240 		.word	1073873664
- 296 00f0 00000440 		.word	1074003968
- 297 00f4 18000440 		.word	1074003992
- 298 00f8 00010440 		.word	1074004224
- 299 00fc 08010440 		.word	1074004232
- 300 0100 18010440 		.word	1074004248
- 301 0104 00020440 		.word	1074004480
- 302 0108 08020440 		.word	1074004488
- 303 010c 18020440 		.word	1074004504
- 304 0110 08030440 		.word	1074004744
- 305 0114 18040440 		.word	1074005016
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 12
+ 311:Generated_Source\PSoC4/cyfitter_cfg.c **** 
+ 312:Generated_Source\PSoC4/cyfitter_cfg.c **** 	/* Setup clocks based on selections from Clock DWR */
+ 313:Generated_Source\PSoC4/cyfitter_cfg.c **** 	ClockSetup();
+ 286              		.loc 1 313 0
+ 287 00e2 FFF78DFF 		bl	ClockSetup
+ 288              	.LVL11:
+ 314:Generated_Source\PSoC4/cyfitter_cfg.c **** 
+ 315:Generated_Source\PSoC4/cyfitter_cfg.c **** 	/* Perform basic analog initialization to defaults */
+ 316:Generated_Source\PSoC4/cyfitter_cfg.c **** 	AnalogSetDefault();
+ 289              		.loc 1 316 0
+ 290 00e6 FFF7FEFF 		bl	AnalogSetDefault
+ 291              	.LVL12:
+ 317:Generated_Source\PSoC4/cyfitter_cfg.c **** 
+ 318:Generated_Source\PSoC4/cyfitter_cfg.c **** }
+ 292              		.loc 1 318 0
+ 293              		@ sp needed
+ 294 00ea 08BD     		pop	{r3, pc}
+ 295              	.L16:
+ 296              		.align	2
+ 297              	.L15:
+ 298 00ec 00000240 		.word	1073872896
+ 299 00f0 00010240 		.word	1073873152
+ 300 00f4 00030240 		.word	1073873664
+ 301 00f8 00000440 		.word	1074003968
+ 302 00fc 18000440 		.word	1074003992
+ 303 0100 00010440 		.word	1074004224
+ 304 0104 08010440 		.word	1074004232
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 12
 
 
- 306              		.cfi_endproc
- 307              	.LFE7:
- 308              		.size	cyfitter_cfg, .-cyfitter_cfg
- 309              		.text
- 310              	.Letext0:
- 311              		.file 2 "Generated_Source\\PSoC4\\cytypes.h"
- 312              		.file 3 "Generated_Source\\PSoC4\\CyLib.h"
- 313              		.section	.debug_info,"",%progbits
- 314              	.Ldebug_info0:
- 315 0000 5F010000 		.4byte	0x15f
- 316 0004 0400     		.2byte	0x4
- 317 0006 00000000 		.4byte	.Ldebug_abbrev0
- 318 000a 04       		.byte	0x4
- 319 000b 01       		.uleb128 0x1
- 320 000c 19010000 		.4byte	.LASF20
- 321 0010 01       		.byte	0x1
- 322 0011 15000000 		.4byte	.LASF21
- 323 0015 B3010000 		.4byte	.LASF22
- 324 0019 00000000 		.4byte	.Ldebug_ranges0+0
- 325 001d 00000000 		.4byte	0
- 326 0021 00000000 		.4byte	.Ldebug_line0
- 327 0025 02       		.uleb128 0x2
- 328 0026 04       		.byte	0x4
- 329 0027 05       		.byte	0x5
- 330 0028 696E7400 		.ascii	"int\000"
- 331 002c 03       		.uleb128 0x3
- 332 002d 04       		.byte	0x4
- 333 002e 07       		.byte	0x7
- 334 002f 3B000000 		.4byte	.LASF0
- 335 0033 03       		.uleb128 0x3
- 336 0034 01       		.byte	0x1
- 337 0035 06       		.byte	0x6
- 338 0036 0D010000 		.4byte	.LASF1
- 339 003a 03       		.uleb128 0x3
- 340 003b 01       		.byte	0x1
- 341 003c 08       		.byte	0x8
- 342 003d B5000000 		.4byte	.LASF2
- 343 0041 03       		.uleb128 0x3
- 344 0042 02       		.byte	0x2
- 345 0043 05       		.byte	0x5
- 346 0044 4D020000 		.4byte	.LASF3
- 347 0048 03       		.uleb128 0x3
- 348 0049 02       		.byte	0x2
- 349 004a 07       		.byte	0x7
- 350 004b FA000000 		.4byte	.LASF4
- 351 004f 03       		.uleb128 0x3
- 352 0050 04       		.byte	0x4
- 353 0051 05       		.byte	0x5
- 354 0052 C8000000 		.4byte	.LASF5
- 355 0056 03       		.uleb128 0x3
- 356 0057 04       		.byte	0x4
- 357 0058 07       		.byte	0x7
- 358 0059 4E000000 		.4byte	.LASF6
- 359 005d 03       		.uleb128 0x3
- 360 005e 08       		.byte	0x8
- 361 005f 05       		.byte	0x5
- 362 0060 00000000 		.4byte	.LASF7
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 13
+ 305 0108 18010440 		.word	1074004248
+ 306 010c 00020440 		.word	1074004480
+ 307 0110 08020440 		.word	1074004488
+ 308 0114 18020440 		.word	1074004504
+ 309 0118 08030440 		.word	1074004744
+ 310 011c 08040440 		.word	1074005000
+ 311 0120 18040440 		.word	1074005016
+ 312              		.cfi_endproc
+ 313              	.LFE7:
+ 314              		.size	cyfitter_cfg, .-cyfitter_cfg
+ 315              		.text
+ 316              	.Letext0:
+ 317              		.file 2 "Generated_Source\\PSoC4\\cytypes.h"
+ 318              		.file 3 "Generated_Source\\PSoC4\\CyLib.h"
+ 319              		.section	.debug_info,"",%progbits
+ 320              	.Ldebug_info0:
+ 321 0000 5F010000 		.4byte	0x15f
+ 322 0004 0400     		.2byte	0x4
+ 323 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 324 000a 04       		.byte	0x4
+ 325 000b 01       		.uleb128 0x1
+ 326 000c 45010000 		.4byte	.LASF20
+ 327 0010 01       		.byte	0x1
+ 328 0011 15000000 		.4byte	.LASF21
+ 329 0015 48000000 		.4byte	.LASF22
+ 330 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 331 001d 00000000 		.4byte	0
+ 332 0021 00000000 		.4byte	.Ldebug_line0
+ 333 0025 02       		.uleb128 0x2
+ 334 0026 04       		.byte	0x4
+ 335 0027 05       		.byte	0x5
+ 336 0028 696E7400 		.ascii	"int\000"
+ 337 002c 03       		.uleb128 0x3
+ 338 002d 04       		.byte	0x4
+ 339 002e 07       		.byte	0x7
+ 340 002f 3B000000 		.4byte	.LASF0
+ 341 0033 03       		.uleb128 0x3
+ 342 0034 01       		.byte	0x1
+ 343 0035 06       		.byte	0x6
+ 344 0036 39010000 		.4byte	.LASF1
+ 345 003a 03       		.uleb128 0x3
+ 346 003b 01       		.byte	0x1
+ 347 003c 08       		.byte	0x8
+ 348 003d E1000000 		.4byte	.LASF2
+ 349 0041 03       		.uleb128 0x3
+ 350 0042 02       		.byte	0x2
+ 351 0043 05       		.byte	0x5
+ 352 0044 E8010000 		.4byte	.LASF3
+ 353 0048 03       		.uleb128 0x3
+ 354 0049 02       		.byte	0x2
+ 355 004a 07       		.byte	0x7
+ 356 004b 26010000 		.4byte	.LASF4
+ 357 004f 03       		.uleb128 0x3
+ 358 0050 04       		.byte	0x4
+ 359 0051 05       		.byte	0x5
+ 360 0052 F4000000 		.4byte	.LASF5
+ 361 0056 03       		.uleb128 0x3
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 13
 
 
- 363 0064 03       		.uleb128 0x3
- 364 0065 08       		.byte	0x8
- 365 0066 07       		.byte	0x7
- 366 0067 6D000000 		.4byte	.LASF8
- 367 006b 03       		.uleb128 0x3
- 368 006c 04       		.byte	0x4
- 369 006d 07       		.byte	0x7
- 370 006e 57020000 		.4byte	.LASF9
- 371 0072 03       		.uleb128 0x3
- 372 0073 01       		.byte	0x1
- 373 0074 08       		.byte	0x8
- 374 0075 C3000000 		.4byte	.LASF10
- 375 0079 04       		.uleb128 0x4
- 376 007a 48000000 		.4byte	.LASF11
- 377 007e 02       		.byte	0x2
- 378 007f B901     		.2byte	0x1b9
- 379 0081 3A000000 		.4byte	0x3a
- 380 0085 04       		.uleb128 0x4
- 381 0086 0E000000 		.4byte	.LASF12
- 382 008a 02       		.byte	0x2
- 383 008b BB01     		.2byte	0x1bb
- 384 008d 56000000 		.4byte	0x56
- 385 0091 03       		.uleb128 0x3
- 386 0092 04       		.byte	0x4
- 387 0093 04       		.byte	0x4
- 388 0094 84000000 		.4byte	.LASF13
- 389 0098 03       		.uleb128 0x3
- 390 0099 08       		.byte	0x8
- 391 009a 04       		.byte	0x4
- 392 009b ED000000 		.4byte	.LASF14
- 393 009f 04       		.uleb128 0x4
- 394 00a0 F4000000 		.4byte	.LASF15
- 395 00a4 02       		.byte	0x2
- 396 00a5 6502     		.2byte	0x265
- 397 00a7 AB000000 		.4byte	0xab
- 398 00ab 05       		.uleb128 0x5
- 399 00ac 85000000 		.4byte	0x85
- 400 00b0 06       		.uleb128 0x6
- 401 00b1 E2000000 		.4byte	.LASF16
- 402 00b5 01       		.byte	0x1
- 403 00b6 9C       		.byte	0x9c
- 404 00b7 00000000 		.4byte	.LFB4
- 405 00bb 84000000 		.4byte	.LFE4-.LFB4
- 406 00bf 01       		.uleb128 0x1
- 407 00c0 9C       		.byte	0x9c
- 408 00c1 D5000000 		.4byte	0xd5
- 409 00c5 07       		.uleb128 0x7
- 410 00c6 0E000000 		.4byte	.LVL0
- 411 00ca 55010000 		.4byte	0x155
- 412 00ce 08       		.uleb128 0x8
- 413 00cf 01       		.uleb128 0x1
- 414 00d0 50       		.byte	0x50
- 415 00d1 01       		.uleb128 0x1
- 416 00d2 48       		.byte	0x48
- 417 00d3 00       		.byte	0
- 418 00d4 00       		.byte	0
- 419 00d5 09       		.uleb128 0x9
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 14
+ 362 0057 04       		.byte	0x4
+ 363 0058 07       		.byte	0x7
+ 364 0059 7A000000 		.4byte	.LASF6
+ 365 005d 03       		.uleb128 0x3
+ 366 005e 08       		.byte	0x8
+ 367 005f 05       		.byte	0x5
+ 368 0060 00000000 		.4byte	.LASF7
+ 369 0064 03       		.uleb128 0x3
+ 370 0065 08       		.byte	0x8
+ 371 0066 07       		.byte	0x7
+ 372 0067 99000000 		.4byte	.LASF8
+ 373 006b 03       		.uleb128 0x3
+ 374 006c 04       		.byte	0x4
+ 375 006d 07       		.byte	0x7
+ 376 006e F2010000 		.4byte	.LASF9
+ 377 0072 03       		.uleb128 0x3
+ 378 0073 01       		.byte	0x1
+ 379 0074 08       		.byte	0x8
+ 380 0075 EF000000 		.4byte	.LASF10
+ 381 0079 04       		.uleb128 0x4
+ 382 007a 74000000 		.4byte	.LASF11
+ 383 007e 02       		.byte	0x2
+ 384 007f B901     		.2byte	0x1b9
+ 385 0081 3A000000 		.4byte	0x3a
+ 386 0085 04       		.uleb128 0x4
+ 387 0086 0E000000 		.4byte	.LASF12
+ 388 008a 02       		.byte	0x2
+ 389 008b BB01     		.2byte	0x1bb
+ 390 008d 56000000 		.4byte	0x56
+ 391 0091 03       		.uleb128 0x3
+ 392 0092 04       		.byte	0x4
+ 393 0093 04       		.byte	0x4
+ 394 0094 B0000000 		.4byte	.LASF13
+ 395 0098 03       		.uleb128 0x3
+ 396 0099 08       		.byte	0x8
+ 397 009a 04       		.byte	0x4
+ 398 009b 19010000 		.4byte	.LASF14
+ 399 009f 04       		.uleb128 0x4
+ 400 00a0 20010000 		.4byte	.LASF15
+ 401 00a4 02       		.byte	0x2
+ 402 00a5 6502     		.2byte	0x265
+ 403 00a7 AB000000 		.4byte	0xab
+ 404 00ab 05       		.uleb128 0x5
+ 405 00ac 85000000 		.4byte	0x85
+ 406 00b0 06       		.uleb128 0x6
+ 407 00b1 0E010000 		.4byte	.LASF16
+ 408 00b5 01       		.byte	0x1
+ 409 00b6 9C       		.byte	0x9c
+ 410 00b7 00000000 		.4byte	.LFB4
+ 411 00bb 84000000 		.4byte	.LFE4-.LFB4
+ 412 00bf 01       		.uleb128 0x1
+ 413 00c0 9C       		.byte	0x9c
+ 414 00c1 D5000000 		.4byte	0xd5
+ 415 00c5 07       		.uleb128 0x7
+ 416 00c6 0E000000 		.4byte	.LVL0
+ 417 00ca 55010000 		.4byte	0x155
+ 418 00ce 08       		.uleb128 0x8
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 14
 
 
- 420 00d6 8A000000 		.4byte	.LASF18
- 421 00da 01       		.byte	0x1
- 422 00db E8       		.byte	0xe8
- 423 00dc 00000000 		.4byte	.LFB6
- 424 00e0 38000000 		.4byte	.LFE6-.LFB6
- 425 00e4 01       		.uleb128 0x1
- 426 00e5 9C       		.byte	0x9c
- 427 00e6 07010000 		.4byte	0x107
- 428 00ea 0A       		.uleb128 0xa
- 429 00eb AB010000 		.4byte	.LASF23
- 430 00ef 01       		.byte	0x1
- 431 00f0 E8       		.byte	0xe8
- 432 00f1 79000000 		.4byte	0x79
- 433 00f5 01       		.uleb128 0x1
- 434 00f6 50       		.byte	0x50
- 435 00f7 0B       		.uleb128 0xb
- 436 00f8 44020000 		.4byte	.LASF24
- 437 00fc 01       		.byte	0x1
- 438 00fd EA       		.byte	0xea
- 439 00fe 85000000 		.4byte	0x85
- 440 0102 00000000 		.4byte	.LLST0
- 441 0106 00       		.byte	0
- 442 0107 06       		.uleb128 0x6
- 443 0108 D1000000 		.4byte	.LASF17
- 444 010c 01       		.byte	0x1
- 445 010d D0       		.byte	0xd0
- 446 010e 00000000 		.4byte	.LFB5
- 447 0112 20000000 		.4byte	.LFE5-.LFB5
- 448 0116 01       		.uleb128 0x1
- 449 0117 9C       		.byte	0x9c
- 450 0118 2C010000 		.4byte	0x12c
- 451 011c 07       		.uleb128 0x7
- 452 011d 16000000 		.4byte	.LVL10
- 453 0121 D5000000 		.4byte	0xd5
- 454 0125 08       		.uleb128 0x8
- 455 0126 01       		.uleb128 0x1
- 456 0127 50       		.byte	0x50
- 457 0128 01       		.uleb128 0x1
- 458 0129 31       		.byte	0x31
- 459 012a 00       		.byte	0
- 460 012b 00       		.byte	0
- 461 012c 0C       		.uleb128 0xc
- 462 012d 60000000 		.4byte	.LASF19
- 463 0131 01       		.byte	0x1
- 464 0132 1401     		.2byte	0x114
- 465 0134 84000000 		.4byte	.LFB7
- 466 0138 94000000 		.4byte	.LFE7-.LFB7
- 467 013c 01       		.uleb128 0x1
- 468 013d 9C       		.byte	0x9c
- 469 013e 55010000 		.4byte	0x155
- 470 0142 0D       		.uleb128 0xd
- 471 0143 DE000000 		.4byte	.LVL11
- 472 0147 B0000000 		.4byte	0xb0
- 473 014b 0D       		.uleb128 0xd
- 474 014c E2000000 		.4byte	.LVL12
- 475 0150 07010000 		.4byte	0x107
- 476 0154 00       		.byte	0
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 15
+ 419 00cf 01       		.uleb128 0x1
+ 420 00d0 50       		.byte	0x50
+ 421 00d1 01       		.uleb128 0x1
+ 422 00d2 48       		.byte	0x48
+ 423 00d3 00       		.byte	0
+ 424 00d4 00       		.byte	0
+ 425 00d5 09       		.uleb128 0x9
+ 426 00d6 B6000000 		.4byte	.LASF18
+ 427 00da 01       		.byte	0x1
+ 428 00db E8       		.byte	0xe8
+ 429 00dc 00000000 		.4byte	.LFB6
+ 430 00e0 38000000 		.4byte	.LFE6-.LFB6
+ 431 00e4 01       		.uleb128 0x1
+ 432 00e5 9C       		.byte	0x9c
+ 433 00e6 07010000 		.4byte	0x107
+ 434 00ea 0A       		.uleb128 0xa
+ 435 00eb D7010000 		.4byte	.LASF23
+ 436 00ef 01       		.byte	0x1
+ 437 00f0 E8       		.byte	0xe8
+ 438 00f1 79000000 		.4byte	0x79
+ 439 00f5 01       		.uleb128 0x1
+ 440 00f6 50       		.byte	0x50
+ 441 00f7 0B       		.uleb128 0xb
+ 442 00f8 DF010000 		.4byte	.LASF24
+ 443 00fc 01       		.byte	0x1
+ 444 00fd EA       		.byte	0xea
+ 445 00fe 85000000 		.4byte	0x85
+ 446 0102 00000000 		.4byte	.LLST0
+ 447 0106 00       		.byte	0
+ 448 0107 06       		.uleb128 0x6
+ 449 0108 FD000000 		.4byte	.LASF17
+ 450 010c 01       		.byte	0x1
+ 451 010d D0       		.byte	0xd0
+ 452 010e 00000000 		.4byte	.LFB5
+ 453 0112 20000000 		.4byte	.LFE5-.LFB5
+ 454 0116 01       		.uleb128 0x1
+ 455 0117 9C       		.byte	0x9c
+ 456 0118 2C010000 		.4byte	0x12c
+ 457 011c 07       		.uleb128 0x7
+ 458 011d 16000000 		.4byte	.LVL10
+ 459 0121 D5000000 		.4byte	0xd5
+ 460 0125 08       		.uleb128 0x8
+ 461 0126 01       		.uleb128 0x1
+ 462 0127 50       		.byte	0x50
+ 463 0128 01       		.uleb128 0x1
+ 464 0129 31       		.byte	0x31
+ 465 012a 00       		.byte	0
+ 466 012b 00       		.byte	0
+ 467 012c 0C       		.uleb128 0xc
+ 468 012d 8C000000 		.4byte	.LASF19
+ 469 0131 01       		.byte	0x1
+ 470 0132 1401     		.2byte	0x114
+ 471 0134 84000000 		.4byte	.LFB7
+ 472 0138 A0000000 		.4byte	.LFE7-.LFB7
+ 473 013c 01       		.uleb128 0x1
+ 474 013d 9C       		.byte	0x9c
+ 475 013e 55010000 		.4byte	0x155
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 15
 
 
- 477 0155 0E       		.uleb128 0xe
- 478 0156 A0000000 		.4byte	.LASF25
- 479 015a 03       		.byte	0x3
- 480 015b 6C       		.byte	0x6c
- 481 015c 0F       		.uleb128 0xf
- 482 015d 85000000 		.4byte	0x85
- 483 0161 00       		.byte	0
- 484 0162 00       		.byte	0
- 485              		.section	.debug_abbrev,"",%progbits
- 486              	.Ldebug_abbrev0:
- 487 0000 01       		.uleb128 0x1
- 488 0001 11       		.uleb128 0x11
- 489 0002 01       		.byte	0x1
- 490 0003 25       		.uleb128 0x25
- 491 0004 0E       		.uleb128 0xe
- 492 0005 13       		.uleb128 0x13
- 493 0006 0B       		.uleb128 0xb
- 494 0007 03       		.uleb128 0x3
- 495 0008 0E       		.uleb128 0xe
- 496 0009 1B       		.uleb128 0x1b
- 497 000a 0E       		.uleb128 0xe
- 498 000b 55       		.uleb128 0x55
- 499 000c 17       		.uleb128 0x17
- 500 000d 11       		.uleb128 0x11
- 501 000e 01       		.uleb128 0x1
- 502 000f 10       		.uleb128 0x10
- 503 0010 17       		.uleb128 0x17
- 504 0011 00       		.byte	0
- 505 0012 00       		.byte	0
- 506 0013 02       		.uleb128 0x2
- 507 0014 24       		.uleb128 0x24
- 508 0015 00       		.byte	0
- 509 0016 0B       		.uleb128 0xb
- 510 0017 0B       		.uleb128 0xb
- 511 0018 3E       		.uleb128 0x3e
- 512 0019 0B       		.uleb128 0xb
- 513 001a 03       		.uleb128 0x3
- 514 001b 08       		.uleb128 0x8
- 515 001c 00       		.byte	0
- 516 001d 00       		.byte	0
- 517 001e 03       		.uleb128 0x3
- 518 001f 24       		.uleb128 0x24
- 519 0020 00       		.byte	0
- 520 0021 0B       		.uleb128 0xb
- 521 0022 0B       		.uleb128 0xb
- 522 0023 3E       		.uleb128 0x3e
- 523 0024 0B       		.uleb128 0xb
- 524 0025 03       		.uleb128 0x3
- 525 0026 0E       		.uleb128 0xe
- 526 0027 00       		.byte	0
- 527 0028 00       		.byte	0
- 528 0029 04       		.uleb128 0x4
- 529 002a 16       		.uleb128 0x16
- 530 002b 00       		.byte	0
- 531 002c 03       		.uleb128 0x3
- 532 002d 0E       		.uleb128 0xe
- 533 002e 3A       		.uleb128 0x3a
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 16
+ 476 0142 0D       		.uleb128 0xd
+ 477 0143 E6000000 		.4byte	.LVL11
+ 478 0147 B0000000 		.4byte	0xb0
+ 479 014b 0D       		.uleb128 0xd
+ 480 014c EA000000 		.4byte	.LVL12
+ 481 0150 07010000 		.4byte	0x107
+ 482 0154 00       		.byte	0
+ 483 0155 0E       		.uleb128 0xe
+ 484 0156 CC000000 		.4byte	.LASF25
+ 485 015a 03       		.byte	0x3
+ 486 015b 6C       		.byte	0x6c
+ 487 015c 0F       		.uleb128 0xf
+ 488 015d 85000000 		.4byte	0x85
+ 489 0161 00       		.byte	0
+ 490 0162 00       		.byte	0
+ 491              		.section	.debug_abbrev,"",%progbits
+ 492              	.Ldebug_abbrev0:
+ 493 0000 01       		.uleb128 0x1
+ 494 0001 11       		.uleb128 0x11
+ 495 0002 01       		.byte	0x1
+ 496 0003 25       		.uleb128 0x25
+ 497 0004 0E       		.uleb128 0xe
+ 498 0005 13       		.uleb128 0x13
+ 499 0006 0B       		.uleb128 0xb
+ 500 0007 03       		.uleb128 0x3
+ 501 0008 0E       		.uleb128 0xe
+ 502 0009 1B       		.uleb128 0x1b
+ 503 000a 0E       		.uleb128 0xe
+ 504 000b 55       		.uleb128 0x55
+ 505 000c 17       		.uleb128 0x17
+ 506 000d 11       		.uleb128 0x11
+ 507 000e 01       		.uleb128 0x1
+ 508 000f 10       		.uleb128 0x10
+ 509 0010 17       		.uleb128 0x17
+ 510 0011 00       		.byte	0
+ 511 0012 00       		.byte	0
+ 512 0013 02       		.uleb128 0x2
+ 513 0014 24       		.uleb128 0x24
+ 514 0015 00       		.byte	0
+ 515 0016 0B       		.uleb128 0xb
+ 516 0017 0B       		.uleb128 0xb
+ 517 0018 3E       		.uleb128 0x3e
+ 518 0019 0B       		.uleb128 0xb
+ 519 001a 03       		.uleb128 0x3
+ 520 001b 08       		.uleb128 0x8
+ 521 001c 00       		.byte	0
+ 522 001d 00       		.byte	0
+ 523 001e 03       		.uleb128 0x3
+ 524 001f 24       		.uleb128 0x24
+ 525 0020 00       		.byte	0
+ 526 0021 0B       		.uleb128 0xb
+ 527 0022 0B       		.uleb128 0xb
+ 528 0023 3E       		.uleb128 0x3e
+ 529 0024 0B       		.uleb128 0xb
+ 530 0025 03       		.uleb128 0x3
+ 531 0026 0E       		.uleb128 0xe
+ 532 0027 00       		.byte	0
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 16
 
 
- 534 002f 0B       		.uleb128 0xb
- 535 0030 3B       		.uleb128 0x3b
- 536 0031 05       		.uleb128 0x5
- 537 0032 49       		.uleb128 0x49
- 538 0033 13       		.uleb128 0x13
- 539 0034 00       		.byte	0
- 540 0035 00       		.byte	0
- 541 0036 05       		.uleb128 0x5
- 542 0037 35       		.uleb128 0x35
- 543 0038 00       		.byte	0
- 544 0039 49       		.uleb128 0x49
- 545 003a 13       		.uleb128 0x13
- 546 003b 00       		.byte	0
- 547 003c 00       		.byte	0
- 548 003d 06       		.uleb128 0x6
- 549 003e 2E       		.uleb128 0x2e
- 550 003f 01       		.byte	0x1
- 551 0040 03       		.uleb128 0x3
- 552 0041 0E       		.uleb128 0xe
- 553 0042 3A       		.uleb128 0x3a
- 554 0043 0B       		.uleb128 0xb
- 555 0044 3B       		.uleb128 0x3b
- 556 0045 0B       		.uleb128 0xb
- 557 0046 27       		.uleb128 0x27
- 558 0047 19       		.uleb128 0x19
- 559 0048 11       		.uleb128 0x11
- 560 0049 01       		.uleb128 0x1
- 561 004a 12       		.uleb128 0x12
- 562 004b 06       		.uleb128 0x6
- 563 004c 40       		.uleb128 0x40
- 564 004d 18       		.uleb128 0x18
- 565 004e 9742     		.uleb128 0x2117
- 566 0050 19       		.uleb128 0x19
- 567 0051 01       		.uleb128 0x1
- 568 0052 13       		.uleb128 0x13
- 569 0053 00       		.byte	0
- 570 0054 00       		.byte	0
- 571 0055 07       		.uleb128 0x7
- 572 0056 898201   		.uleb128 0x4109
- 573 0059 01       		.byte	0x1
- 574 005a 11       		.uleb128 0x11
- 575 005b 01       		.uleb128 0x1
- 576 005c 31       		.uleb128 0x31
- 577 005d 13       		.uleb128 0x13
- 578 005e 00       		.byte	0
- 579 005f 00       		.byte	0
- 580 0060 08       		.uleb128 0x8
- 581 0061 8A8201   		.uleb128 0x410a
- 582 0064 00       		.byte	0
- 583 0065 02       		.uleb128 0x2
- 584 0066 18       		.uleb128 0x18
- 585 0067 9142     		.uleb128 0x2111
- 586 0069 18       		.uleb128 0x18
- 587 006a 00       		.byte	0
- 588 006b 00       		.byte	0
- 589 006c 09       		.uleb128 0x9
- 590 006d 2E       		.uleb128 0x2e
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 17
+ 533 0028 00       		.byte	0
+ 534 0029 04       		.uleb128 0x4
+ 535 002a 16       		.uleb128 0x16
+ 536 002b 00       		.byte	0
+ 537 002c 03       		.uleb128 0x3
+ 538 002d 0E       		.uleb128 0xe
+ 539 002e 3A       		.uleb128 0x3a
+ 540 002f 0B       		.uleb128 0xb
+ 541 0030 3B       		.uleb128 0x3b
+ 542 0031 05       		.uleb128 0x5
+ 543 0032 49       		.uleb128 0x49
+ 544 0033 13       		.uleb128 0x13
+ 545 0034 00       		.byte	0
+ 546 0035 00       		.byte	0
+ 547 0036 05       		.uleb128 0x5
+ 548 0037 35       		.uleb128 0x35
+ 549 0038 00       		.byte	0
+ 550 0039 49       		.uleb128 0x49
+ 551 003a 13       		.uleb128 0x13
+ 552 003b 00       		.byte	0
+ 553 003c 00       		.byte	0
+ 554 003d 06       		.uleb128 0x6
+ 555 003e 2E       		.uleb128 0x2e
+ 556 003f 01       		.byte	0x1
+ 557 0040 03       		.uleb128 0x3
+ 558 0041 0E       		.uleb128 0xe
+ 559 0042 3A       		.uleb128 0x3a
+ 560 0043 0B       		.uleb128 0xb
+ 561 0044 3B       		.uleb128 0x3b
+ 562 0045 0B       		.uleb128 0xb
+ 563 0046 27       		.uleb128 0x27
+ 564 0047 19       		.uleb128 0x19
+ 565 0048 11       		.uleb128 0x11
+ 566 0049 01       		.uleb128 0x1
+ 567 004a 12       		.uleb128 0x12
+ 568 004b 06       		.uleb128 0x6
+ 569 004c 40       		.uleb128 0x40
+ 570 004d 18       		.uleb128 0x18
+ 571 004e 9742     		.uleb128 0x2117
+ 572 0050 19       		.uleb128 0x19
+ 573 0051 01       		.uleb128 0x1
+ 574 0052 13       		.uleb128 0x13
+ 575 0053 00       		.byte	0
+ 576 0054 00       		.byte	0
+ 577 0055 07       		.uleb128 0x7
+ 578 0056 898201   		.uleb128 0x4109
+ 579 0059 01       		.byte	0x1
+ 580 005a 11       		.uleb128 0x11
+ 581 005b 01       		.uleb128 0x1
+ 582 005c 31       		.uleb128 0x31
+ 583 005d 13       		.uleb128 0x13
+ 584 005e 00       		.byte	0
+ 585 005f 00       		.byte	0
+ 586 0060 08       		.uleb128 0x8
+ 587 0061 8A8201   		.uleb128 0x410a
+ 588 0064 00       		.byte	0
+ 589 0065 02       		.uleb128 0x2
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 17
 
 
- 591 006e 01       		.byte	0x1
- 592 006f 3F       		.uleb128 0x3f
- 593 0070 19       		.uleb128 0x19
- 594 0071 03       		.uleb128 0x3
- 595 0072 0E       		.uleb128 0xe
- 596 0073 3A       		.uleb128 0x3a
- 597 0074 0B       		.uleb128 0xb
- 598 0075 3B       		.uleb128 0x3b
- 599 0076 0B       		.uleb128 0xb
- 600 0077 27       		.uleb128 0x27
- 601 0078 19       		.uleb128 0x19
- 602 0079 11       		.uleb128 0x11
- 603 007a 01       		.uleb128 0x1
- 604 007b 12       		.uleb128 0x12
- 605 007c 06       		.uleb128 0x6
- 606 007d 40       		.uleb128 0x40
- 607 007e 18       		.uleb128 0x18
- 608 007f 9742     		.uleb128 0x2117
- 609 0081 19       		.uleb128 0x19
- 610 0082 01       		.uleb128 0x1
- 611 0083 13       		.uleb128 0x13
- 612 0084 00       		.byte	0
- 613 0085 00       		.byte	0
- 614 0086 0A       		.uleb128 0xa
- 615 0087 05       		.uleb128 0x5
- 616 0088 00       		.byte	0
- 617 0089 03       		.uleb128 0x3
- 618 008a 0E       		.uleb128 0xe
- 619 008b 3A       		.uleb128 0x3a
- 620 008c 0B       		.uleb128 0xb
- 621 008d 3B       		.uleb128 0x3b
- 622 008e 0B       		.uleb128 0xb
- 623 008f 49       		.uleb128 0x49
- 624 0090 13       		.uleb128 0x13
- 625 0091 02       		.uleb128 0x2
- 626 0092 18       		.uleb128 0x18
- 627 0093 00       		.byte	0
- 628 0094 00       		.byte	0
- 629 0095 0B       		.uleb128 0xb
- 630 0096 34       		.uleb128 0x34
- 631 0097 00       		.byte	0
- 632 0098 03       		.uleb128 0x3
- 633 0099 0E       		.uleb128 0xe
- 634 009a 3A       		.uleb128 0x3a
- 635 009b 0B       		.uleb128 0xb
- 636 009c 3B       		.uleb128 0x3b
- 637 009d 0B       		.uleb128 0xb
- 638 009e 49       		.uleb128 0x49
- 639 009f 13       		.uleb128 0x13
- 640 00a0 02       		.uleb128 0x2
- 641 00a1 17       		.uleb128 0x17
- 642 00a2 00       		.byte	0
- 643 00a3 00       		.byte	0
- 644 00a4 0C       		.uleb128 0xc
- 645 00a5 2E       		.uleb128 0x2e
- 646 00a6 01       		.byte	0x1
- 647 00a7 3F       		.uleb128 0x3f
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 18
+ 590 0066 18       		.uleb128 0x18
+ 591 0067 9142     		.uleb128 0x2111
+ 592 0069 18       		.uleb128 0x18
+ 593 006a 00       		.byte	0
+ 594 006b 00       		.byte	0
+ 595 006c 09       		.uleb128 0x9
+ 596 006d 2E       		.uleb128 0x2e
+ 597 006e 01       		.byte	0x1
+ 598 006f 3F       		.uleb128 0x3f
+ 599 0070 19       		.uleb128 0x19
+ 600 0071 03       		.uleb128 0x3
+ 601 0072 0E       		.uleb128 0xe
+ 602 0073 3A       		.uleb128 0x3a
+ 603 0074 0B       		.uleb128 0xb
+ 604 0075 3B       		.uleb128 0x3b
+ 605 0076 0B       		.uleb128 0xb
+ 606 0077 27       		.uleb128 0x27
+ 607 0078 19       		.uleb128 0x19
+ 608 0079 11       		.uleb128 0x11
+ 609 007a 01       		.uleb128 0x1
+ 610 007b 12       		.uleb128 0x12
+ 611 007c 06       		.uleb128 0x6
+ 612 007d 40       		.uleb128 0x40
+ 613 007e 18       		.uleb128 0x18
+ 614 007f 9742     		.uleb128 0x2117
+ 615 0081 19       		.uleb128 0x19
+ 616 0082 01       		.uleb128 0x1
+ 617 0083 13       		.uleb128 0x13
+ 618 0084 00       		.byte	0
+ 619 0085 00       		.byte	0
+ 620 0086 0A       		.uleb128 0xa
+ 621 0087 05       		.uleb128 0x5
+ 622 0088 00       		.byte	0
+ 623 0089 03       		.uleb128 0x3
+ 624 008a 0E       		.uleb128 0xe
+ 625 008b 3A       		.uleb128 0x3a
+ 626 008c 0B       		.uleb128 0xb
+ 627 008d 3B       		.uleb128 0x3b
+ 628 008e 0B       		.uleb128 0xb
+ 629 008f 49       		.uleb128 0x49
+ 630 0090 13       		.uleb128 0x13
+ 631 0091 02       		.uleb128 0x2
+ 632 0092 18       		.uleb128 0x18
+ 633 0093 00       		.byte	0
+ 634 0094 00       		.byte	0
+ 635 0095 0B       		.uleb128 0xb
+ 636 0096 34       		.uleb128 0x34
+ 637 0097 00       		.byte	0
+ 638 0098 03       		.uleb128 0x3
+ 639 0099 0E       		.uleb128 0xe
+ 640 009a 3A       		.uleb128 0x3a
+ 641 009b 0B       		.uleb128 0xb
+ 642 009c 3B       		.uleb128 0x3b
+ 643 009d 0B       		.uleb128 0xb
+ 644 009e 49       		.uleb128 0x49
+ 645 009f 13       		.uleb128 0x13
+ 646 00a0 02       		.uleb128 0x2
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 18
 
 
- 648 00a8 19       		.uleb128 0x19
- 649 00a9 03       		.uleb128 0x3
- 650 00aa 0E       		.uleb128 0xe
- 651 00ab 3A       		.uleb128 0x3a
- 652 00ac 0B       		.uleb128 0xb
- 653 00ad 3B       		.uleb128 0x3b
- 654 00ae 05       		.uleb128 0x5
- 655 00af 27       		.uleb128 0x27
- 656 00b0 19       		.uleb128 0x19
- 657 00b1 11       		.uleb128 0x11
- 658 00b2 01       		.uleb128 0x1
- 659 00b3 12       		.uleb128 0x12
- 660 00b4 06       		.uleb128 0x6
- 661 00b5 40       		.uleb128 0x40
- 662 00b6 18       		.uleb128 0x18
- 663 00b7 9742     		.uleb128 0x2117
- 664 00b9 19       		.uleb128 0x19
- 665 00ba 01       		.uleb128 0x1
- 666 00bb 13       		.uleb128 0x13
- 667 00bc 00       		.byte	0
- 668 00bd 00       		.byte	0
- 669 00be 0D       		.uleb128 0xd
- 670 00bf 898201   		.uleb128 0x4109
- 671 00c2 00       		.byte	0
- 672 00c3 11       		.uleb128 0x11
- 673 00c4 01       		.uleb128 0x1
- 674 00c5 31       		.uleb128 0x31
- 675 00c6 13       		.uleb128 0x13
- 676 00c7 00       		.byte	0
- 677 00c8 00       		.byte	0
- 678 00c9 0E       		.uleb128 0xe
- 679 00ca 2E       		.uleb128 0x2e
- 680 00cb 01       		.byte	0x1
- 681 00cc 3F       		.uleb128 0x3f
- 682 00cd 19       		.uleb128 0x19
- 683 00ce 03       		.uleb128 0x3
- 684 00cf 0E       		.uleb128 0xe
- 685 00d0 3A       		.uleb128 0x3a
- 686 00d1 0B       		.uleb128 0xb
- 687 00d2 3B       		.uleb128 0x3b
- 688 00d3 0B       		.uleb128 0xb
- 689 00d4 27       		.uleb128 0x27
- 690 00d5 19       		.uleb128 0x19
- 691 00d6 3C       		.uleb128 0x3c
- 692 00d7 19       		.uleb128 0x19
- 693 00d8 00       		.byte	0
- 694 00d9 00       		.byte	0
- 695 00da 0F       		.uleb128 0xf
- 696 00db 05       		.uleb128 0x5
- 697 00dc 00       		.byte	0
- 698 00dd 49       		.uleb128 0x49
- 699 00de 13       		.uleb128 0x13
- 700 00df 00       		.byte	0
- 701 00e0 00       		.byte	0
- 702 00e1 00       		.byte	0
- 703              		.section	.debug_loc,"",%progbits
- 704              	.Ldebug_loc0:
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 19
+ 647 00a1 17       		.uleb128 0x17
+ 648 00a2 00       		.byte	0
+ 649 00a3 00       		.byte	0
+ 650 00a4 0C       		.uleb128 0xc
+ 651 00a5 2E       		.uleb128 0x2e
+ 652 00a6 01       		.byte	0x1
+ 653 00a7 3F       		.uleb128 0x3f
+ 654 00a8 19       		.uleb128 0x19
+ 655 00a9 03       		.uleb128 0x3
+ 656 00aa 0E       		.uleb128 0xe
+ 657 00ab 3A       		.uleb128 0x3a
+ 658 00ac 0B       		.uleb128 0xb
+ 659 00ad 3B       		.uleb128 0x3b
+ 660 00ae 05       		.uleb128 0x5
+ 661 00af 27       		.uleb128 0x27
+ 662 00b0 19       		.uleb128 0x19
+ 663 00b1 11       		.uleb128 0x11
+ 664 00b2 01       		.uleb128 0x1
+ 665 00b3 12       		.uleb128 0x12
+ 666 00b4 06       		.uleb128 0x6
+ 667 00b5 40       		.uleb128 0x40
+ 668 00b6 18       		.uleb128 0x18
+ 669 00b7 9742     		.uleb128 0x2117
+ 670 00b9 19       		.uleb128 0x19
+ 671 00ba 01       		.uleb128 0x1
+ 672 00bb 13       		.uleb128 0x13
+ 673 00bc 00       		.byte	0
+ 674 00bd 00       		.byte	0
+ 675 00be 0D       		.uleb128 0xd
+ 676 00bf 898201   		.uleb128 0x4109
+ 677 00c2 00       		.byte	0
+ 678 00c3 11       		.uleb128 0x11
+ 679 00c4 01       		.uleb128 0x1
+ 680 00c5 31       		.uleb128 0x31
+ 681 00c6 13       		.uleb128 0x13
+ 682 00c7 00       		.byte	0
+ 683 00c8 00       		.byte	0
+ 684 00c9 0E       		.uleb128 0xe
+ 685 00ca 2E       		.uleb128 0x2e
+ 686 00cb 01       		.byte	0x1
+ 687 00cc 3F       		.uleb128 0x3f
+ 688 00cd 19       		.uleb128 0x19
+ 689 00ce 03       		.uleb128 0x3
+ 690 00cf 0E       		.uleb128 0xe
+ 691 00d0 3A       		.uleb128 0x3a
+ 692 00d1 0B       		.uleb128 0xb
+ 693 00d2 3B       		.uleb128 0x3b
+ 694 00d3 0B       		.uleb128 0xb
+ 695 00d4 27       		.uleb128 0x27
+ 696 00d5 19       		.uleb128 0x19
+ 697 00d6 3C       		.uleb128 0x3c
+ 698 00d7 19       		.uleb128 0x19
+ 699 00d8 00       		.byte	0
+ 700 00d9 00       		.byte	0
+ 701 00da 0F       		.uleb128 0xf
+ 702 00db 05       		.uleb128 0x5
+ 703 00dc 00       		.byte	0
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 19
 
 
- 705              	.LLST0:
- 706 0000 04000000 		.4byte	.LVL2
- 707 0004 12000000 		.4byte	.LVL4
- 708 0008 0100     		.2byte	0x1
- 709 000a 53       		.byte	0x53
- 710 000b 14000000 		.4byte	.LVL5
- 711 000f 1A000000 		.4byte	.LVL6
- 712 0013 0100     		.2byte	0x1
- 713 0015 53       		.byte	0x53
- 714 0016 1A000000 		.4byte	.LVL6
- 715 001a 1C000000 		.4byte	.LVL7
- 716 001e 0200     		.2byte	0x2
- 717 0020 72       		.byte	0x72
- 718 0021 00       		.sleb128 0
- 719 0022 1C000000 		.4byte	.LVL7
- 720 0026 38000000 		.4byte	.LFE6
- 721 002a 0100     		.2byte	0x1
- 722 002c 53       		.byte	0x53
- 723 002d 00000000 		.4byte	0
- 724 0031 00000000 		.4byte	0
- 725              		.section	.debug_aranges,"",%progbits
- 726 0000 34000000 		.4byte	0x34
- 727 0004 0200     		.2byte	0x2
- 728 0006 00000000 		.4byte	.Ldebug_info0
- 729 000a 04       		.byte	0x4
- 730 000b 00       		.byte	0
- 731 000c 0000     		.2byte	0
- 732 000e 0000     		.2byte	0
- 733 0010 00000000 		.4byte	.LFB4
- 734 0014 84000000 		.4byte	.LFE4-.LFB4
- 735 0018 00000000 		.4byte	.LFB6
- 736 001c 38000000 		.4byte	.LFE6-.LFB6
- 737 0020 00000000 		.4byte	.LFB5
- 738 0024 20000000 		.4byte	.LFE5-.LFB5
- 739 0028 84000000 		.4byte	.LFB7
- 740 002c 94000000 		.4byte	.LFE7-.LFB7
- 741 0030 00000000 		.4byte	0
- 742 0034 00000000 		.4byte	0
- 743              		.section	.debug_ranges,"",%progbits
- 744              	.Ldebug_ranges0:
- 745 0000 00000000 		.4byte	.LFB4
- 746 0004 84000000 		.4byte	.LFE4
- 747 0008 00000000 		.4byte	.LFB6
- 748 000c 38000000 		.4byte	.LFE6
- 749 0010 00000000 		.4byte	.LFB5
- 750 0014 20000000 		.4byte	.LFE5
- 751 0018 84000000 		.4byte	.LFB7
- 752 001c 18010000 		.4byte	.LFE7
- 753 0020 00000000 		.4byte	0
- 754 0024 00000000 		.4byte	0
- 755              		.section	.debug_line,"",%progbits
- 756              	.Ldebug_line0:
- 757 0000 BD000000 		.section	.debug_str,"MS",%progbits,1
- 757      02005400 
- 757      00000201 
- 757      FB0E0D00 
- 757      01010101 
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 20
+ 704 00dd 49       		.uleb128 0x49
+ 705 00de 13       		.uleb128 0x13
+ 706 00df 00       		.byte	0
+ 707 00e0 00       		.byte	0
+ 708 00e1 00       		.byte	0
+ 709              		.section	.debug_loc,"",%progbits
+ 710              	.Ldebug_loc0:
+ 711              	.LLST0:
+ 712 0000 04000000 		.4byte	.LVL2
+ 713 0004 12000000 		.4byte	.LVL4
+ 714 0008 0100     		.2byte	0x1
+ 715 000a 53       		.byte	0x53
+ 716 000b 14000000 		.4byte	.LVL5
+ 717 000f 1A000000 		.4byte	.LVL6
+ 718 0013 0100     		.2byte	0x1
+ 719 0015 53       		.byte	0x53
+ 720 0016 1A000000 		.4byte	.LVL6
+ 721 001a 1C000000 		.4byte	.LVL7
+ 722 001e 0200     		.2byte	0x2
+ 723 0020 72       		.byte	0x72
+ 724 0021 00       		.sleb128 0
+ 725 0022 1C000000 		.4byte	.LVL7
+ 726 0026 38000000 		.4byte	.LFE6
+ 727 002a 0100     		.2byte	0x1
+ 728 002c 53       		.byte	0x53
+ 729 002d 00000000 		.4byte	0
+ 730 0031 00000000 		.4byte	0
+ 731              		.section	.debug_aranges,"",%progbits
+ 732 0000 34000000 		.4byte	0x34
+ 733 0004 0200     		.2byte	0x2
+ 734 0006 00000000 		.4byte	.Ldebug_info0
+ 735 000a 04       		.byte	0x4
+ 736 000b 00       		.byte	0
+ 737 000c 0000     		.2byte	0
+ 738 000e 0000     		.2byte	0
+ 739 0010 00000000 		.4byte	.LFB4
+ 740 0014 84000000 		.4byte	.LFE4-.LFB4
+ 741 0018 00000000 		.4byte	.LFB6
+ 742 001c 38000000 		.4byte	.LFE6-.LFB6
+ 743 0020 00000000 		.4byte	.LFB5
+ 744 0024 20000000 		.4byte	.LFE5-.LFB5
+ 745 0028 84000000 		.4byte	.LFB7
+ 746 002c A0000000 		.4byte	.LFE7-.LFB7
+ 747 0030 00000000 		.4byte	0
+ 748 0034 00000000 		.4byte	0
+ 749              		.section	.debug_ranges,"",%progbits
+ 750              	.Ldebug_ranges0:
+ 751 0000 00000000 		.4byte	.LFB4
+ 752 0004 84000000 		.4byte	.LFE4
+ 753 0008 00000000 		.4byte	.LFB6
+ 754 000c 38000000 		.4byte	.LFE6
+ 755 0010 00000000 		.4byte	.LFB5
+ 756 0014 20000000 		.4byte	.LFE5
+ 757 0018 84000000 		.4byte	.LFB7
+ 758 001c 24010000 		.4byte	.LFE7
+ 759 0020 00000000 		.4byte	0
+ 760 0024 00000000 		.4byte	0
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 20
 
 
- 758              	.LASF7:
- 759 0000 6C6F6E67 		.ascii	"long long int\000"
- 759      206C6F6E 
- 759      6720696E 
- 759      7400
- 760              	.LASF12:
- 761 000e 75696E74 		.ascii	"uint32\000"
- 761      333200
- 762              	.LASF21:
- 763 0015 47656E65 		.ascii	"Generated_Source\\PSoC4\\cyfitter_cfg.c\000"
- 763      72617465 
- 763      645F536F 
- 763      75726365 
- 763      5C50536F 
- 764              	.LASF0:
- 765 003b 756E7369 		.ascii	"unsigned int\000"
- 765      676E6564 
- 765      20696E74 
- 765      00
- 766              	.LASF11:
- 767 0048 75696E74 		.ascii	"uint8\000"
- 767      3800
- 768              	.LASF6:
- 769 004e 6C6F6E67 		.ascii	"long unsigned int\000"
- 769      20756E73 
- 769      69676E65 
- 769      6420696E 
- 769      7400
- 770              	.LASF19:
- 771 0060 63796669 		.ascii	"cyfitter_cfg\000"
- 771      74746572 
- 771      5F636667 
+ 761              		.section	.debug_line,"",%progbits
+ 762              	.Ldebug_line0:
+ 763 0000 BE000000 		.section	.debug_str,"MS",%progbits,1
+ 763      02005400 
+ 763      00000201 
+ 763      FB0E0D00 
+ 763      01010101 
+ 764              	.LASF7:
+ 765 0000 6C6F6E67 		.ascii	"long long int\000"
+ 765      206C6F6E 
+ 765      6720696E 
+ 765      7400
+ 766              	.LASF12:
+ 767 000e 75696E74 		.ascii	"uint32\000"
+ 767      333200
+ 768              	.LASF21:
+ 769 0015 47656E65 		.ascii	"Generated_Source\\PSoC4\\cyfitter_cfg.c\000"
+ 769      72617465 
+ 769      645F536F 
+ 769      75726365 
+ 769      5C50536F 
+ 770              	.LASF0:
+ 771 003b 756E7369 		.ascii	"unsigned int\000"
+ 771      676E6564 
+ 771      20696E74 
  771      00
- 772              	.LASF8:
- 773 006d 6C6F6E67 		.ascii	"long long unsigned int\000"
- 773      206C6F6E 
- 773      6720756E 
- 773      7369676E 
- 773      65642069 
- 774              	.LASF13:
- 775 0084 666C6F61 		.ascii	"float\000"
- 775      7400
- 776              	.LASF18:
- 777 008a 53657441 		.ascii	"SetAnalogRoutingPumps\000"
- 777      6E616C6F 
- 777      67526F75 
- 777      74696E67 
- 777      50756D70 
- 778              	.LASF25:
- 779 00a0 43795379 		.ascii	"CySysClkWriteImoFreq\000"
- 779      73436C6B 
- 779      57726974 
- 779      65496D6F 
- 779      46726571 
- 780              	.LASF2:
- 781 00b5 756E7369 		.ascii	"unsigned char\000"
- 781      676E6564 
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 21
+ 772              	.LASF22:
+ 773 0048 433A5C77 		.ascii	"C:\\work\\Eddie\\Eddie_DP0_Slider\\Slider.cydsn\000"
+ 773      6F726B5C 
+ 773      45646469 
+ 773      655C4564 
+ 773      6469655F 
+ 774              	.LASF11:
+ 775 0074 75696E74 		.ascii	"uint8\000"
+ 775      3800
+ 776              	.LASF6:
+ 777 007a 6C6F6E67 		.ascii	"long unsigned int\000"
+ 777      20756E73 
+ 777      69676E65 
+ 777      6420696E 
+ 777      7400
+ 778              	.LASF19:
+ 779 008c 63796669 		.ascii	"cyfitter_cfg\000"
+ 779      74746572 
+ 779      5F636667 
+ 779      00
+ 780              	.LASF8:
+ 781 0099 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 781      206C6F6E 
+ 781      6720756E 
+ 781      7369676E 
+ 781      65642069 
+ 782              	.LASF13:
+ 783 00b0 666C6F61 		.ascii	"float\000"
+ 783      7400
+ 784              	.LASF18:
+ 785 00b6 53657441 		.ascii	"SetAnalogRoutingPumps\000"
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 21
 
 
- 781      20636861 
- 781      7200
- 782              	.LASF10:
- 783 00c3 63686172 		.ascii	"char\000"
- 783      00
- 784              	.LASF5:
- 785 00c8 6C6F6E67 		.ascii	"long int\000"
- 785      20696E74 
- 785      00
- 786              	.LASF17:
- 787 00d1 416E616C 		.ascii	"AnalogSetDefault\000"
- 787      6F675365 
- 787      74446566 
- 787      61756C74 
- 787      00
- 788              	.LASF16:
- 789 00e2 436C6F63 		.ascii	"ClockSetup\000"
- 789      6B536574 
- 789      757000
- 790              	.LASF14:
- 791 00ed 646F7562 		.ascii	"double\000"
- 791      6C6500
- 792              	.LASF15:
- 793 00f4 72656733 		.ascii	"reg32\000"
- 793      3200
- 794              	.LASF4:
- 795 00fa 73686F72 		.ascii	"short unsigned int\000"
- 795      7420756E 
- 795      7369676E 
- 795      65642069 
- 795      6E7400
- 796              	.LASF1:
- 797 010d 7369676E 		.ascii	"signed char\000"
- 797      65642063 
- 797      68617200 
- 798              	.LASF20:
- 799 0119 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
- 799      4320342E 
- 799      392E3320 
- 799      32303135 
- 799      30333033 
- 800 014c 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0plus -mthumb -"
- 800      20726576 
- 800      6973696F 
- 800      6E203232 
- 800      31323230 
- 801 017f 67202D4F 		.ascii	"g -Og -ffunction-sections -ffat-lto-objects\000"
- 801      67202D66 
- 801      66756E63 
- 801      74696F6E 
- 801      2D736563 
- 802              	.LASF23:
- 803 01ab 656E6162 		.ascii	"enabled\000"
- 803      6C656400 
- 804              	.LASF22:
- 805 01b3 433A5C55 		.ascii	"C:\\Users\\tb1014481\\Documents\\#PROJECTS#\\Eddie\\"
- 805      73657273 
-ARM GAS  C:\Users\TB1014~1\AppData\Local\Temp\ccGg68kE.s 			page 22
+ 785      6E616C6F 
+ 785      67526F75 
+ 785      74696E67 
+ 785      50756D70 
+ 786              	.LASF25:
+ 787 00cc 43795379 		.ascii	"CySysClkWriteImoFreq\000"
+ 787      73436C6B 
+ 787      57726974 
+ 787      65496D6F 
+ 787      46726571 
+ 788              	.LASF2:
+ 789 00e1 756E7369 		.ascii	"unsigned char\000"
+ 789      676E6564 
+ 789      20636861 
+ 789      7200
+ 790              	.LASF10:
+ 791 00ef 63686172 		.ascii	"char\000"
+ 791      00
+ 792              	.LASF5:
+ 793 00f4 6C6F6E67 		.ascii	"long int\000"
+ 793      20696E74 
+ 793      00
+ 794              	.LASF17:
+ 795 00fd 416E616C 		.ascii	"AnalogSetDefault\000"
+ 795      6F675365 
+ 795      74446566 
+ 795      61756C74 
+ 795      00
+ 796              	.LASF16:
+ 797 010e 436C6F63 		.ascii	"ClockSetup\000"
+ 797      6B536574 
+ 797      757000
+ 798              	.LASF14:
+ 799 0119 646F7562 		.ascii	"double\000"
+ 799      6C6500
+ 800              	.LASF15:
+ 801 0120 72656733 		.ascii	"reg32\000"
+ 801      3200
+ 802              	.LASF4:
+ 803 0126 73686F72 		.ascii	"short unsigned int\000"
+ 803      7420756E 
+ 803      7369676E 
+ 803      65642069 
+ 803      6E7400
+ 804              	.LASF1:
+ 805 0139 7369676E 		.ascii	"signed char\000"
+ 805      65642063 
+ 805      68617200 
+ 806              	.LASF20:
+ 807 0145 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 807      4320342E 
+ 807      392E3320 
+ 807      32303135 
+ 807      30333033 
+ 808 0178 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0plus -mthumb -"
+ 808      20726576 
+ 808      6973696F 
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccGeGvkW.s 			page 22
 
 
- 805      5C746231 
- 805      30313434 
- 805      38315C44 
- 806 01e1 536F6674 		.ascii	"Software\\Cypress_PSoC\\Eddie_DP0.0\\Slider_WS.Bund"
- 806      77617265 
- 806      5C437970 
- 806      72657373 
- 806      5F50536F 
- 807 0211 6C653035 		.ascii	"le05.cywrk.Archive04\\Eddie_DP0_Slider\\Slider.cyds"
- 807      2E637977 
- 807      726B2E41 
- 807      72636869 
- 807      76653034 
- 808 0242 6E00     		.ascii	"n\000"
- 809              	.LASF24:
- 810 0244 72656756 		.ascii	"regValue\000"
- 810      616C7565 
- 810      00
- 811              	.LASF3:
- 812 024d 73686F72 		.ascii	"short int\000"
- 812      7420696E 
- 812      7400
- 813              	.LASF9:
- 814 0257 73697A65 		.ascii	"sizetype\000"
- 814      74797065 
- 814      00
- 815              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br
+ 808      6E203232 
+ 808      31323230 
+ 809 01ab 67202D4F 		.ascii	"g -Og -ffunction-sections -ffat-lto-objects\000"
+ 809      67202D66 
+ 809      66756E63 
+ 809      74696F6E 
+ 809      2D736563 
+ 810              	.LASF23:
+ 811 01d7 656E6162 		.ascii	"enabled\000"
+ 811      6C656400 
+ 812              	.LASF24:
+ 813 01df 72656756 		.ascii	"regValue\000"
+ 813      616C7565 
+ 813      00
+ 814              	.LASF3:
+ 815 01e8 73686F72 		.ascii	"short int\000"
+ 815      7420696E 
+ 815      7400
+ 816              	.LASF9:
+ 817 01f2 73697A65 		.ascii	"sizetype\000"
+ 817      74797065 
+ 817      00
+ 818              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

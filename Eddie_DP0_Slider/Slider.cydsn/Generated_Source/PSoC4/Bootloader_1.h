@@ -27,7 +27,7 @@
 #define Bootloader_1_PACKET_CHECKSUM_CRC        (0u)
 #define Bootloader_1_WAIT_FOR_COMMAND           (1u)
 #define Bootloader_1_WAIT_FOR_COMMAND_TIME      (20u)
-#define Bootloader_1_BOOTLOADER_APP_VALIDATION  (0u)
+#define Bootloader_1_BOOTLOADER_APP_VALIDATION  (1u)
 
 #define Bootloader_1_CMD_GET_FLASH_SIZE_AVAIL   (1u)
 #define Bootloader_1_CMD_ERASE_ROW_AVAIL        (1u)
@@ -35,7 +35,7 @@
 #define Bootloader_1_CMD_SYNC_BOOTLOADER_AVAIL  (1u)
 #define Bootloader_1_CMD_SEND_DATA_AVAIL        (1u)
 #define Bootloader_1_CMD_VERIFY_APP_CHKSUM_AVAIL (1u)
-#define Bootloader_1_CMD_GET_METADATA           (1u)
+#define Bootloader_1_CMD_GET_METADATA           (0u)
 #define Bootloader_1_CMD_VERIFY_FLS_ROW_AVAIL   (1u)
 #define Bootloader_1_GOLDEN_IMAGE_AVAIL         (0u)
 #define Bootloader_1_SECURITY_KEY_AVAIL         (0u)
