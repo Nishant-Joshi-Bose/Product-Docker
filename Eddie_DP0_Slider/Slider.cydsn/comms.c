@@ -11,6 +11,7 @@
 #define I2C_BUFFER_SIZE 512
 static uint8 i2cRxBuffer[I2C_BUFFER_SIZE];
 static uint8 i2cTxBuffer[I2C_BUFFER_SIZE];
+#define I2C_MASTER_READ_TIMEOUT 16 // 1s/16 timer interrupt ticks
 
 void CommsInit(void)
 {
@@ -38,12 +39,17 @@ uint8 *CommsGetInputBuffer(void)
 void CommsSendData(const char *buffer)
 {
     memcpy(i2cTxBuffer, buffer, strlen(buffer));
+    uint_fast64_t startTime = get_timer_interrrupt_count();
     // Interrupt the client to let it know it has to read now
     CAPINT_Write(1u);
     // Wait until master is done reading
     while (0u == (I2CS_I2CSlaveStatus() & I2CS_I2C_SSTAT_RD_CMPLT))
     {
-        // TODO do a timeout here in case there's a failure
+        // Timeout here in case there's a failure
+        if (get_timer_interrrupt_count() > startTime+I2C_MASTER_READ_TIMEOUT)
+        {
+            break; // the master will have to deal with garbled stuff since they bagged out of reading in the first place
+        }
     }
     /* Clear slave read buffer and status */
     I2CS_I2CSlaveClearReadBuf();
