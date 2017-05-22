@@ -22,7 +22,7 @@
 #define SLIDER_RESOLUTION 600
 #define START_OF_CMD      '{'
 #define END_OF_CMD        '}'
-#define NUMBER_OF_BUTTONS (CapSense_TOTAL_WIDGETS - 1)
+#define NUMBER_OF_BUTTONS (CapSense_TOTAL_WIDGETS)
 
 typedef struct {
     uint8 capsense_id   ; 
@@ -30,13 +30,16 @@ typedef struct {
     char* name          ;
 }t_push_button_struct;
 
-t_push_button_struct push_button_vec[NUMBER_OF_BUTTONS] = { {CapSense_BUT0_WDGT_ID, FALSE, "BT0"},
-                                                            {CapSense_BUT1_WDGT_ID, FALSE, "BT1"},
+t_push_button_struct push_button_vec[] = { {CapSense_BUT0_WDGT_ID, FALSE, "BT0"}
+#ifndef PROFESSOR
+                                                            ,{CapSense_BUT1_WDGT_ID, FALSE, "BT1"},
                                                             {CapSense_BUT3_WDGT_ID, FALSE, "BT3"   }, 
                                                             {CapSense_BUT4_WDGT_ID, FALSE, "BT4"   }, 
                                                             {CapSense_BUT5_WDGT_ID, FALSE, "BT5"   }, 
                                                             {CapSense_BUT6_WDGT_ID, FALSE, "BT6"   }, 
-                                                            {CapSense_BUT8_WDGT_ID, FALSE, "BT8"   }};
+                                                            {CapSense_BUT8_WDGT_ID, FALSE, "BT8"   }
+#endif
+};
                                                  
 //=============================================================================
 //========================================================= function prototypes
@@ -125,6 +128,7 @@ int main()
         
         push_button_scan();
 
+#ifndef PROFESSOR
         cap_cur_pos            = CapSense_GetCentroidPos(0);
         cap_sense_is_untouched = ((cap_cur_pos == CapSense_SLIDER_NO_TOUCH) && (cap_old_pos == CapSense_SLIDER_NO_TOUCH));
         
@@ -190,6 +194,7 @@ int main()
             cap_old_pos = cap_cur_pos;
         }// else, capsense is touched
         cap_sense_was_untouched = cap_sense_is_untouched;
+#endif
 
 #if USE_TUNER
         CapSense_RunTuner(); // sync capsense parameters via tuner before the beginning of new capsense scan

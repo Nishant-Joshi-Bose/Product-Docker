@@ -863,6 +863,7 @@ void send_animation_telemetry(t_enum_animation animation_index, const char* acti
 //=============================================================================
 void send_telemetry_capsense(void)
 {
+#ifndef PROFESSOR
     uint16 i;
     uint16 nb_sensors = CapSense_GET_SENSOR_COUNT(0);
    
@@ -886,6 +887,7 @@ void send_telemetry_capsense(void)
         strcat(telemetry, "\"}");
         send_telemetry(telemetry);
     }// for all the sensors
+#endif
 }// send_telemetry_capsense
 
 //=============================================================================

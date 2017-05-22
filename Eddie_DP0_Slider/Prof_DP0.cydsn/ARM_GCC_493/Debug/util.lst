@@ -1,0 +1,1641 @@
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 1
+
+
+   1              		.cpu cortex-m0plus
+   2              		.fpu softvfp
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 0
+  11              		.eabi_attribute 18, 4
+  12              		.code	16
+  13              		.file	"util.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.atoi,"ax",%progbits
+  18              		.align	2
+  19              		.global	atoi
+  20              		.code	16
+  21              		.thumb_func
+  22              		.type	atoi, %function
+  23              	atoi:
+  24              	.LFB35:
+  25              		.file 1 "..\\Slider.cydsn\\util.c"
+   1:..\Slider.cydsn/util.c **** /* ========================================
+   2:..\Slider.cydsn/util.c ****  *
+   3:..\Slider.cydsn/util.c ****  * Copyright YOUR COMPANY, THE YEAR
+   4:..\Slider.cydsn/util.c ****  * All Rights Reserved
+   5:..\Slider.cydsn/util.c ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:..\Slider.cydsn/util.c ****  *
+   7:..\Slider.cydsn/util.c ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:..\Slider.cydsn/util.c ****  * WHICH IS THE PROPERTY OF your company.
+   9:..\Slider.cydsn/util.c ****  *
+  10:..\Slider.cydsn/util.c ****  * ========================================
+  11:..\Slider.cydsn/util.c **** */
+  12:..\Slider.cydsn/util.c **** #include "util.h"
+  13:..\Slider.cydsn/util.c **** 
+  14:..\Slider.cydsn/util.c **** //=============================================================================
+  15:..\Slider.cydsn/util.c **** //=================================================================== constants
+  16:..\Slider.cydsn/util.c **** //=============================================================================
+  17:..\Slider.cydsn/util.c **** #define INT_DIGITS                20 // enough for 64 bits int
+  18:..\Slider.cydsn/util.c **** #define DEFAULT_NUMBER_OF_BUTTONS 6  // [1..NUMBER_OF_WHITE_LEDS]
+  19:..\Slider.cydsn/util.c **** 
+  20:..\Slider.cydsn/util.c **** //=============================================================================
+  21:..\Slider.cydsn/util.c **** //============================================================ static variables
+  22:..\Slider.cydsn/util.c **** //=============================================================================
+  23:..\Slider.cydsn/util.c **** static BOOL          is_tracker_enable      = TRUE; // when enable: the finger tracker lightbar ani
+  24:..\Slider.cydsn/util.c **** static uint16        number_of_buttons      = DEFAULT_NUMBER_OF_BUTTONS;
+  25:..\Slider.cydsn/util.c **** static uint_fast64_t timer_interrrupt_count = 0;
+  26:..\Slider.cydsn/util.c **** static const char*   software_version       = "0.07";
+  27:..\Slider.cydsn/util.c **** 
+  28:..\Slider.cydsn/util.c **** //=============================================================================
+  29:..\Slider.cydsn/util.c **** //======================================================================== atoi
+  30:..\Slider.cydsn/util.c **** //=============================================================================
+  31:..\Slider.cydsn/util.c **** int atoi(register char* string)
+  32:..\Slider.cydsn/util.c **** {
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 2
+
+
+  26              		.loc 1 32 0
+  27              		.cfi_startproc
+  28              	.LVL0:
+  29 0000 10B5     		push	{r4, lr}
+  30              		.cfi_def_cfa_offset 8
+  31              		.cfi_offset 4, -8
+  32              		.cfi_offset 14, -4
+  33              	.LVL1:
+  33:..\Slider.cydsn/util.c ****     register int          result = 0;
+  34:..\Slider.cydsn/util.c ****     register unsigned int digit  = 0;
+  35:..\Slider.cydsn/util.c ****     int                   sign   = 0;
+  36:..\Slider.cydsn/util.c **** 
+  37:..\Slider.cydsn/util.c ****     while (*string == ' ') 
+  34              		.loc 1 37 0
+  35 0002 00E0     		b	.L2
+  36              	.L3:
+  38:..\Slider.cydsn/util.c ****     {
+  39:..\Slider.cydsn/util.c ****         string++;
+  37              		.loc 1 39 0
+  38 0004 0130     		add	r0, r0, #1
+  39              	.LVL2:
+  40              	.L2:
+  37:..\Slider.cydsn/util.c ****     {
+  41              		.loc 1 37 0
+  42 0006 0378     		ldrb	r3, [r0]
+  43 0008 202B     		cmp	r3, #32
+  44 000a FBD0     		beq	.L3
+  40:..\Slider.cydsn/util.c ****     }// skip all white space on left
+  41:..\Slider.cydsn/util.c **** 
+  42:..\Slider.cydsn/util.c ****     if (*string == '-') 
+  45              		.loc 1 42 0
+  46 000c 2D2B     		cmp	r3, #45
+  47 000e 02D1     		bne	.L4
+  48              	.LVL3:
+  43:..\Slider.cydsn/util.c ****     {
+  44:..\Slider.cydsn/util.c ****     	sign = 1;
+  45:..\Slider.cydsn/util.c ****     	string++;
+  49              		.loc 1 45 0
+  50 0010 0130     		add	r0, r0, #1
+  51              	.LVL4:
+  44:..\Slider.cydsn/util.c ****     	string++;
+  52              		.loc 1 44 0
+  53 0012 0124     		mov	r4, #1
+  54 0014 05E0     		b	.L5
+  55              	.LVL5:
+  56              	.L4:
+  46:..\Slider.cydsn/util.c ****     } 
+  47:..\Slider.cydsn/util.c ****     else 
+  48:..\Slider.cydsn/util.c ****     {
+  49:..\Slider.cydsn/util.c ****     	sign = 0;
+  50:..\Slider.cydsn/util.c ****     	if (*string == '+') 
+  57              		.loc 1 50 0
+  58 0016 2B2B     		cmp	r3, #43
+  59 0018 02D1     		bne	.L10
+  51:..\Slider.cydsn/util.c ****         {
+  52:..\Slider.cydsn/util.c ****     	    string++;
+  60              		.loc 1 52 0
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 3
+
+
+  61 001a 0130     		add	r0, r0, #1
+  62              	.LVL6:
+  49:..\Slider.cydsn/util.c ****     	if (*string == '+') 
+  63              		.loc 1 49 0
+  64 001c 0024     		mov	r4, #0
+  65 001e 00E0     		b	.L5
+  66              	.L10:
+  67 0020 0024     		mov	r4, #0
+  68              	.LVL7:
+  69              	.L5:
+  70 0022 0023     		mov	r3, #0
+  71              	.LVL8:
+  72              	.L7:
+  53:..\Slider.cydsn/util.c ****     	}
+  54:..\Slider.cydsn/util.c ****     }
+  55:..\Slider.cydsn/util.c **** 
+  56:..\Slider.cydsn/util.c ****     for ( ; ; string++) 
+  57:..\Slider.cydsn/util.c ****     {
+  58:..\Slider.cydsn/util.c ****     	digit = *string - '0';
+  73              		.loc 1 58 0
+  74 0024 0278     		ldrb	r2, [r0]
+  75 0026 303A     		sub	r2, r2, #48
+  76              	.LVL9:
+  59:..\Slider.cydsn/util.c ****     	if (digit > 9) 
+  77              		.loc 1 59 0
+  78 0028 092A     		cmp	r2, #9
+  79 002a 05D8     		bhi	.L6
+  60:..\Slider.cydsn/util.c ****         {
+  61:..\Slider.cydsn/util.c ****     	    break;
+  62:..\Slider.cydsn/util.c ****     	}
+  63:..\Slider.cydsn/util.c ****     	result = (10 * result) + digit;
+  80              		.loc 1 63 0
+  81 002c 9900     		lsl	r1, r3, #2
+  82 002e CB18     		add	r3, r1, r3
+  83              	.LVL10:
+  84 0030 5B00     		lsl	r3, r3, #1
+  85 0032 9B18     		add	r3, r3, r2
+  86              	.LVL11:
+  56:..\Slider.cydsn/util.c ****     {
+  87              		.loc 1 56 0
+  88 0034 0130     		add	r0, r0, #1
+  89              	.LVL12:
+  64:..\Slider.cydsn/util.c ****     }
+  90              		.loc 1 64 0
+  91 0036 F5E7     		b	.L7
+  92              	.L6:
+  65:..\Slider.cydsn/util.c **** 
+  66:..\Slider.cydsn/util.c ****     return sign ? -result : result;
+  93              		.loc 1 66 0
+  94 0038 002C     		cmp	r4, #0
+  95 003a 01D0     		beq	.L8
+  96              		.loc 1 66 0 is_stmt 0 discriminator 1
+  97 003c 5842     		neg	r0, r3
+  98              	.LVL13:
+  99 003e 00E0     		b	.L9
+ 100              	.LVL14:
+ 101              	.L8:
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 4
+
+
+ 102              		.loc 1 66 0 discriminator 2
+ 103 0040 181C     		mov	r0, r3
+ 104              	.LVL15:
+ 105              	.L9:
+  67:..\Slider.cydsn/util.c **** }// atoi
+ 106              		.loc 1 67 0 is_stmt 1 discriminator 4
+ 107              		@ sp needed
+ 108              	.LVL16:
+ 109 0042 10BD     		pop	{r4, pc}
+ 110              		.cfi_endproc
+ 111              	.LFE35:
+ 112              		.size	atoi, .-atoi
+ 113              		.global	__aeabi_ldivmod
+ 114              		.section	.text.itoa,"ax",%progbits
+ 115              		.align	2
+ 116              		.global	itoa
+ 117              		.code	16
+ 118              		.thumb_func
+ 119              		.type	itoa, %function
+ 120              	itoa:
+ 121              	.LFB36:
+  68:..\Slider.cydsn/util.c **** 
+  69:..\Slider.cydsn/util.c **** //=============================================================================
+  70:..\Slider.cydsn/util.c **** //======================================================================== itoa
+  71:..\Slider.cydsn/util.c **** //=============================================================================
+  72:..\Slider.cydsn/util.c **** char* itoa(long long int i)
+  73:..\Slider.cydsn/util.c **** {
+ 122              		.loc 1 73 0
+ 123              		.cfi_startproc
+ 124              	.LVL17:
+ 125 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 126              		.cfi_def_cfa_offset 24
+ 127              		.cfi_offset 3, -24
+ 128              		.cfi_offset 4, -20
+ 129              		.cfi_offset 5, -16
+ 130              		.cfi_offset 6, -12
+ 131              		.cfi_offset 7, -8
+ 132              		.cfi_offset 14, -4
+ 133 0002 0E1C     		mov	r6, r1
+ 134              	.LVL18:
+ 135              		.loc 1 73 0
+ 136 0004 041C     		mov	r4, r0
+ 137 0006 0D1C     		mov	r5, r1
+  74:..\Slider.cydsn/util.c ****     static char buf[INT_DIGITS + 2];                    // room for INT_DIGITS digits, sign and '\0
+  75:..\Slider.cydsn/util.c ****     char*       p              = buf + INT_DIGITS + 1;  // points to terminating '\0'
+ 138              		.loc 1 75 0
+ 139 0008 0E4F     		ldr	r7, .L15
+ 140 000a 1537     		add	r7, r7, #21
+ 141              	.LVL19:
+ 142              	.L12:
+  76:..\Slider.cydsn/util.c ****     BOOL        negative_value = (i < 0) ? TRUE : FALSE;
+  77:..\Slider.cydsn/util.c ****   
+  78:..\Slider.cydsn/util.c ****     do 
+  79:..\Slider.cydsn/util.c ****     {
+  80:..\Slider.cydsn/util.c ****         *--p  = '0' + (i % 10);
+ 143              		.loc 1 80 0 discriminator 1
+ 144 000c 013F     		sub	r7, r7, #1
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 5
+
+
+ 145              	.LVL20:
+ 146 000e 201C     		mov	r0, r4
+ 147 0010 291C     		mov	r1, r5
+ 148 0012 0A22     		mov	r2, #10
+ 149 0014 0023     		mov	r3, #0
+ 150 0016 FFF7FEFF 		bl	__aeabi_ldivmod
+ 151              	.LVL21:
+ 152 001a 3032     		add	r2, r2, #48
+ 153 001c 3A70     		strb	r2, [r7]
+  81:..\Slider.cydsn/util.c ****         i    /= 10;
+ 154              		.loc 1 81 0 discriminator 1
+ 155 001e 201C     		mov	r0, r4
+ 156 0020 291C     		mov	r1, r5
+ 157 0022 0A22     		mov	r2, #10
+ 158 0024 0023     		mov	r3, #0
+ 159 0026 FFF7FEFF 		bl	__aeabi_ldivmod
+ 160              	.LVL22:
+ 161 002a 041C     		mov	r4, r0
+ 162              	.LVL23:
+ 163 002c 0D1C     		mov	r5, r1
+ 164              	.LVL24:
+  82:..\Slider.cydsn/util.c ****     } while (i != 0);
+ 165              		.loc 1 82 0 discriminator 1
+ 166 002e 0B1C     		mov	r3, r1
+ 167 0030 0343     		orr	r3, r0
+ 168 0032 EBD1     		bne	.L12
+  83:..\Slider.cydsn/util.c ****     
+  84:..\Slider.cydsn/util.c ****     if (negative_value) {
+ 169              		.loc 1 84 0
+ 170 0034 002E     		cmp	r6, #0
+ 171 0036 02DA     		bge	.L13
+  85:..\Slider.cydsn/util.c ****         *--p = '-';
+ 172              		.loc 1 85 0
+ 173 0038 013F     		sub	r7, r7, #1
+ 174              	.LVL25:
+ 175 003a 2D33     		add	r3, r3, #45
+ 176 003c 3B70     		strb	r3, [r7]
+ 177              	.L13:
+  86:..\Slider.cydsn/util.c ****     }
+  87:..\Slider.cydsn/util.c ****     
+  88:..\Slider.cydsn/util.c ****     return p;
+  89:..\Slider.cydsn/util.c **** }// itoa
+ 178              		.loc 1 89 0
+ 179 003e 381C     		mov	r0, r7
+ 180              	.LVL26:
+ 181              		@ sp needed
+ 182              	.LVL27:
+ 183              	.LVL28:
+ 184 0040 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 185              	.L16:
+ 186 0042 C046     		.align	2
+ 187              	.L15:
+ 188 0044 00000000 		.word	.LANCHOR0
+ 189              		.cfi_endproc
+ 190              	.LFE36:
+ 191              		.size	itoa, .-itoa
+ 192              		.section	.text.get_is_tracker_enable,"ax",%progbits
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 6
+
+
+ 193              		.align	2
+ 194              		.global	get_is_tracker_enable
+ 195              		.code	16
+ 196              		.thumb_func
+ 197              		.type	get_is_tracker_enable, %function
+ 198              	get_is_tracker_enable:
+ 199              	.LFB37:
+  90:..\Slider.cydsn/util.c **** 
+  91:..\Slider.cydsn/util.c **** //=============================================================================
+  92:..\Slider.cydsn/util.c **** //======================================================= get_is_tracker_enable
+  93:..\Slider.cydsn/util.c **** //=============================================================================
+  94:..\Slider.cydsn/util.c **** BOOL get_is_tracker_enable()
+  95:..\Slider.cydsn/util.c **** {
+ 200              		.loc 1 95 0
+ 201              		.cfi_startproc
+  96:..\Slider.cydsn/util.c ****     return is_tracker_enable;
+ 202              		.loc 1 96 0
+ 203 0000 014B     		ldr	r3, .L18
+ 204 0002 1878     		ldrb	r0, [r3]
+  97:..\Slider.cydsn/util.c ****     
+  98:..\Slider.cydsn/util.c **** }// get_is_tracker_enable
+ 205              		.loc 1 98 0
+ 206              		@ sp needed
+ 207 0004 7047     		bx	lr
+ 208              	.L19:
+ 209 0006 C046     		.align	2
+ 210              	.L18:
+ 211 0008 00000000 		.word	.LANCHOR1
+ 212              		.cfi_endproc
+ 213              	.LFE37:
+ 214              		.size	get_is_tracker_enable, .-get_is_tracker_enable
+ 215              		.section	.text.set_is_tracker_enable,"ax",%progbits
+ 216              		.align	2
+ 217              		.global	set_is_tracker_enable
+ 218              		.code	16
+ 219              		.thumb_func
+ 220              		.type	set_is_tracker_enable, %function
+ 221              	set_is_tracker_enable:
+ 222              	.LFB38:
+  99:..\Slider.cydsn/util.c **** 
+ 100:..\Slider.cydsn/util.c **** //=============================================================================
+ 101:..\Slider.cydsn/util.c **** //======================================================= set_is_tracker_enable
+ 102:..\Slider.cydsn/util.c **** //=============================================================================
+ 103:..\Slider.cydsn/util.c **** void set_is_tracker_enable(BOOL the_is_tracker_enable)
+ 104:..\Slider.cydsn/util.c **** {
+ 223              		.loc 1 104 0
+ 224              		.cfi_startproc
+ 225              	.LVL29:
+ 105:..\Slider.cydsn/util.c ****     is_tracker_enable = the_is_tracker_enable;
+ 226              		.loc 1 105 0
+ 227 0000 014B     		ldr	r3, .L21
+ 228 0002 1870     		strb	r0, [r3]
+ 106:..\Slider.cydsn/util.c **** }// set_is_tracker_enable
+ 229              		.loc 1 106 0
+ 230              		@ sp needed
+ 231 0004 7047     		bx	lr
+ 232              	.L22:
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 7
+
+
+ 233 0006 C046     		.align	2
+ 234              	.L21:
+ 235 0008 00000000 		.word	.LANCHOR1
+ 236              		.cfi_endproc
+ 237              	.LFE38:
+ 238              		.size	set_is_tracker_enable, .-set_is_tracker_enable
+ 239              		.section	.text.get_number_of_buttons,"ax",%progbits
+ 240              		.align	2
+ 241              		.global	get_number_of_buttons
+ 242              		.code	16
+ 243              		.thumb_func
+ 244              		.type	get_number_of_buttons, %function
+ 245              	get_number_of_buttons:
+ 246              	.LFB39:
+ 107:..\Slider.cydsn/util.c **** 
+ 108:..\Slider.cydsn/util.c **** //=============================================================================
+ 109:..\Slider.cydsn/util.c **** //======================================================= get_number_of_buttons
+ 110:..\Slider.cydsn/util.c **** //=============================================================================
+ 111:..\Slider.cydsn/util.c **** uint16 get_number_of_buttons()
+ 112:..\Slider.cydsn/util.c **** {
+ 247              		.loc 1 112 0
+ 248              		.cfi_startproc
+ 113:..\Slider.cydsn/util.c ****     return number_of_buttons;
+ 114:..\Slider.cydsn/util.c **** }// get_number_of_buttons
+ 249              		.loc 1 114 0
+ 250 0000 0620     		mov	r0, #6
+ 251              		@ sp needed
+ 252 0002 7047     		bx	lr
+ 253              		.cfi_endproc
+ 254              	.LFE39:
+ 255              		.size	get_number_of_buttons, .-get_number_of_buttons
+ 256              		.section	.text.set_number_of_buttons,"ax",%progbits
+ 257              		.align	2
+ 258              		.global	set_number_of_buttons
+ 259              		.code	16
+ 260              		.thumb_func
+ 261              		.type	set_number_of_buttons, %function
+ 262              	set_number_of_buttons:
+ 263              	.LFB40:
+ 115:..\Slider.cydsn/util.c **** 
+ 116:..\Slider.cydsn/util.c **** //=============================================================================
+ 117:..\Slider.cydsn/util.c **** //======================================================= set_number_of_buttons 
+ 118:..\Slider.cydsn/util.c **** //=============================================================================
+ 119:..\Slider.cydsn/util.c **** void set_number_of_buttons(uint16 the_number_of_buttons)
+ 120:..\Slider.cydsn/util.c **** {
+ 264              		.loc 1 120 0
+ 265              		.cfi_startproc
+ 266              	.LVL30:
+ 121:..\Slider.cydsn/util.c ****     the_number_of_buttons = number_of_buttons;
+ 122:..\Slider.cydsn/util.c **** }// set_number_of_buttons
+ 267              		.loc 1 122 0
+ 268              		@ sp needed
+ 269 0000 7047     		bx	lr
+ 270              		.cfi_endproc
+ 271              	.LFE40:
+ 272              		.size	set_number_of_buttons, .-set_number_of_buttons
+ 273 0002 C046     		.section	.text.get_timer_interrrupt_count,"ax",%progbits
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 8
+
+
+ 274              		.align	2
+ 275              		.global	get_timer_interrrupt_count
+ 276              		.code	16
+ 277              		.thumb_func
+ 278              		.type	get_timer_interrrupt_count, %function
+ 279              	get_timer_interrrupt_count:
+ 280              	.LFB41:
+ 123:..\Slider.cydsn/util.c **** 
+ 124:..\Slider.cydsn/util.c **** //=============================================================================
+ 125:..\Slider.cydsn/util.c **** //================================================== get_timer_interrrupt_count
+ 126:..\Slider.cydsn/util.c **** //=============================================================================
+ 127:..\Slider.cydsn/util.c **** uint_fast64_t get_timer_interrrupt_count()
+ 128:..\Slider.cydsn/util.c **** {
+ 281              		.loc 1 128 0
+ 282              		.cfi_startproc
+ 129:..\Slider.cydsn/util.c ****     return timer_interrrupt_count;
+ 283              		.loc 1 129 0
+ 284 0000 014B     		ldr	r3, .L26
+ 285 0002 9869     		ldr	r0, [r3, #24]
+ 286 0004 D969     		ldr	r1, [r3, #28]
+ 130:..\Slider.cydsn/util.c **** }// get_timer_interrrupt_count
+ 287              		.loc 1 130 0
+ 288              		@ sp needed
+ 289 0006 7047     		bx	lr
+ 290              	.L27:
+ 291              		.align	2
+ 292              	.L26:
+ 293 0008 00000000 		.word	.LANCHOR0
+ 294              		.cfi_endproc
+ 295              	.LFE41:
+ 296              		.size	get_timer_interrrupt_count, .-get_timer_interrrupt_count
+ 297              		.section	.text.set_timer_interrrupt_count,"ax",%progbits
+ 298              		.align	2
+ 299              		.global	set_timer_interrrupt_count
+ 300              		.code	16
+ 301              		.thumb_func
+ 302              		.type	set_timer_interrrupt_count, %function
+ 303              	set_timer_interrrupt_count:
+ 304              	.LFB42:
+ 131:..\Slider.cydsn/util.c **** 
+ 132:..\Slider.cydsn/util.c **** //=============================================================================
+ 133:..\Slider.cydsn/util.c **** //================================================== set_timer_interrrupt_count
+ 134:..\Slider.cydsn/util.c **** //=============================================================================
+ 135:..\Slider.cydsn/util.c **** void set_timer_interrrupt_count(uint_fast64_t the_timer_interrrupt_count)
+ 136:..\Slider.cydsn/util.c **** {
+ 305              		.loc 1 136 0
+ 306              		.cfi_startproc
+ 307              	.LVL31:
+ 137:..\Slider.cydsn/util.c ****     timer_interrrupt_count = the_timer_interrrupt_count;
+ 308              		.loc 1 137 0
+ 309 0000 014B     		ldr	r3, .L29
+ 310 0002 9861     		str	r0, [r3, #24]
+ 311 0004 D961     		str	r1, [r3, #28]
+ 138:..\Slider.cydsn/util.c **** }// set_timer_interrrupt_count
+ 312              		.loc 1 138 0
+ 313              		@ sp needed
+ 314 0006 7047     		bx	lr
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 9
+
+
+ 315              	.L30:
+ 316              		.align	2
+ 317              	.L29:
+ 318 0008 00000000 		.word	.LANCHOR0
+ 319              		.cfi_endproc
+ 320              	.LFE42:
+ 321              		.size	set_timer_interrrupt_count, .-set_timer_interrrupt_count
+ 322              		.section	.text.get_software_version,"ax",%progbits
+ 323              		.align	2
+ 324              		.global	get_software_version
+ 325              		.code	16
+ 326              		.thumb_func
+ 327              		.type	get_software_version, %function
+ 328              	get_software_version:
+ 329              	.LFB43:
+ 139:..\Slider.cydsn/util.c **** 
+ 140:..\Slider.cydsn/util.c **** //=============================================================================
+ 141:..\Slider.cydsn/util.c **** //======================================================== get_software_version
+ 142:..\Slider.cydsn/util.c **** //=============================================================================
+ 143:..\Slider.cydsn/util.c **** const char* get_software_version()
+ 144:..\Slider.cydsn/util.c **** {
+ 330              		.loc 1 144 0
+ 331              		.cfi_startproc
+ 145:..\Slider.cydsn/util.c ****     return software_version;    
+ 146:..\Slider.cydsn/util.c **** }// get_software_version
+ 332              		.loc 1 146 0
+ 333 0000 0048     		ldr	r0, .L32
+ 334              		@ sp needed
+ 335 0002 7047     		bx	lr
+ 336              	.L33:
+ 337              		.align	2
+ 338              	.L32:
+ 339 0004 00000000 		.word	.LC5
+ 340              		.cfi_endproc
+ 341              	.LFE43:
+ 342              		.size	get_software_version, .-get_software_version
+ 343              		.data
+ 344              		.set	.LANCHOR1,. + 0
+ 345              		.type	is_tracker_enable, %object
+ 346              		.size	is_tracker_enable, 1
+ 347              	is_tracker_enable:
+ 348 0000 01       		.byte	1
+ 349              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 350              		.align	2
+ 351              	.LC5:
+ 352 0000 302E3037 		.ascii	"0.07\000"
+ 352      00
+ 353 0005 000000   		.bss
+ 354              		.align	3
+ 355              		.set	.LANCHOR0,. + 0
+ 356              		.type	buf.5937, %object
+ 357              		.size	buf.5937, 22
+ 358              	buf.5937:
+ 359 0000 00000000 		.space	22
+ 359      00000000 
+ 359      00000000 
+ 359      00000000 
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 10
+
+
+ 359      00000000 
+ 360 0016 0000     		.space	2
+ 361              		.type	timer_interrrupt_count, %object
+ 362              		.size	timer_interrrupt_count, 8
+ 363              	timer_interrrupt_count:
+ 364 0018 00000000 		.space	8
+ 364      00000000 
+ 365              		.text
+ 366              	.Letext0:
+ 367              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.
+ 368              		.file 3 "Generated_Source\\PSoC4/cytypes.h"
+ 369              		.section	.debug_info,"",%progbits
+ 370              	.Ldebug_info0:
+ 371 0000 86020000 		.4byte	0x286
+ 372 0004 0400     		.2byte	0x4
+ 373 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 374 000a 04       		.byte	0x4
+ 375 000b 01       		.uleb128 0x1
+ 376 000c 45020000 		.4byte	.LASF37
+ 377 0010 01       		.byte	0x1
+ 378 0011 7F000000 		.4byte	.LASF38
+ 379 0015 FE000000 		.4byte	.LASF39
+ 380 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 381 001d 00000000 		.4byte	0
+ 382 0021 00000000 		.4byte	.Ldebug_line0
+ 383 0025 02       		.uleb128 0x2
+ 384 0026 01       		.byte	0x1
+ 385 0027 06       		.byte	0x6
+ 386 0028 ED020000 		.4byte	.LASF0
+ 387 002c 02       		.uleb128 0x2
+ 388 002d 01       		.byte	0x1
+ 389 002e 08       		.byte	0x8
+ 390 002f 60000000 		.4byte	.LASF1
+ 391 0033 02       		.uleb128 0x2
+ 392 0034 02       		.byte	0x2
+ 393 0035 05       		.byte	0x5
+ 394 0036 1F020000 		.4byte	.LASF2
+ 395 003a 02       		.uleb128 0x2
+ 396 003b 02       		.byte	0x2
+ 397 003c 07       		.byte	0x7
+ 398 003d AD000000 		.4byte	.LASF3
+ 399 0041 02       		.uleb128 0x2
+ 400 0042 04       		.byte	0x4
+ 401 0043 05       		.byte	0x5
+ 402 0044 00000000 		.4byte	.LASF4
+ 403 0048 02       		.uleb128 0x2
+ 404 0049 04       		.byte	0x4
+ 405 004a 07       		.byte	0x7
+ 406 004b EC000000 		.4byte	.LASF5
+ 407 004f 02       		.uleb128 0x2
+ 408 0050 08       		.byte	0x8
+ 409 0051 05       		.byte	0x5
+ 410 0052 F6010000 		.4byte	.LASF6
+ 411 0056 02       		.uleb128 0x2
+ 412 0057 08       		.byte	0x8
+ 413 0058 07       		.byte	0x7
+ 414 0059 7C010000 		.4byte	.LASF7
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 11
+
+
+ 415 005d 03       		.uleb128 0x3
+ 416 005e 04       		.byte	0x4
+ 417 005f 05       		.byte	0x5
+ 418 0060 696E7400 		.ascii	"int\000"
+ 419 0064 02       		.uleb128 0x2
+ 420 0065 04       		.byte	0x4
+ 421 0066 07       		.byte	0x7
+ 422 0067 69010000 		.4byte	.LASF8
+ 423 006b 04       		.uleb128 0x4
+ 424 006c B5010000 		.4byte	.LASF9
+ 425 0070 02       		.byte	0x2
+ 426 0071 69       		.byte	0x69
+ 427 0072 56000000 		.4byte	0x56
+ 428 0076 05       		.uleb128 0x5
+ 429 0077 3F020000 		.4byte	.LASF10
+ 430 007b 03       		.byte	0x3
+ 431 007c B901     		.2byte	0x1b9
+ 432 007e 2C000000 		.4byte	0x2c
+ 433 0082 05       		.uleb128 0x5
+ 434 0083 2C010000 		.4byte	.LASF11
+ 435 0087 03       		.byte	0x3
+ 436 0088 BA01     		.2byte	0x1ba
+ 437 008a 3A000000 		.4byte	0x3a
+ 438 008e 02       		.uleb128 0x2
+ 439 008f 04       		.byte	0x4
+ 440 0090 04       		.byte	0x4
+ 441 0091 55000000 		.4byte	.LASF12
+ 442 0095 02       		.uleb128 0x2
+ 443 0096 08       		.byte	0x8
+ 444 0097 04       		.byte	0x4
+ 445 0098 1F000000 		.4byte	.LASF13
+ 446 009c 02       		.uleb128 0x2
+ 447 009d 01       		.byte	0x1
+ 448 009e 08       		.byte	0x8
+ 449 009f 04020000 		.4byte	.LASF14
+ 450 00a3 02       		.uleb128 0x2
+ 451 00a4 04       		.byte	0x4
+ 452 00a5 07       		.byte	0x7
+ 453 00a6 C3010000 		.4byte	.LASF15
+ 454 00aa 06       		.uleb128 0x6
+ 455 00ab 04       		.byte	0x4
+ 456 00ac 9C000000 		.4byte	0x9c
+ 457 00b0 06       		.uleb128 0x6
+ 458 00b1 04       		.byte	0x4
+ 459 00b2 B6000000 		.4byte	0xb6
+ 460 00b6 07       		.uleb128 0x7
+ 461 00b7 9C000000 		.4byte	0x9c
+ 462 00bb 08       		.uleb128 0x8
+ 463 00bc B0010000 		.4byte	.LASF19
+ 464 00c0 01       		.byte	0x1
+ 465 00c1 1F       		.byte	0x1f
+ 466 00c2 5D000000 		.4byte	0x5d
+ 467 00c6 00000000 		.4byte	.LFB35
+ 468 00ca 44000000 		.4byte	.LFE35-.LFB35
+ 469 00ce 01       		.uleb128 0x1
+ 470 00cf 9C       		.byte	0x9c
+ 471 00d0 11010000 		.4byte	0x111
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 12
+
+
+ 472 00d4 09       		.uleb128 0x9
+ 473 00d5 3C000000 		.4byte	.LASF21
+ 474 00d9 01       		.byte	0x1
+ 475 00da 1F       		.byte	0x1f
+ 476 00db AA000000 		.4byte	0xaa
+ 477 00df 00000000 		.4byte	.LLST0
+ 478 00e3 0A       		.uleb128 0xa
+ 479 00e4 A9010000 		.4byte	.LASF16
+ 480 00e8 01       		.byte	0x1
+ 481 00e9 21       		.byte	0x21
+ 482 00ea 5D000000 		.4byte	0x5d
+ 483 00ee 29000000 		.4byte	.LLST1
+ 484 00f2 0A       		.uleb128 0xa
+ 485 00f3 76010000 		.4byte	.LASF17
+ 486 00f7 01       		.byte	0x1
+ 487 00f8 22       		.byte	0x22
+ 488 00f9 64000000 		.4byte	0x64
+ 489 00fd 53000000 		.4byte	.LLST2
+ 490 0101 0A       		.uleb128 0xa
+ 491 0102 A8000000 		.4byte	.LASF18
+ 492 0106 01       		.byte	0x1
+ 493 0107 23       		.byte	0x23
+ 494 0108 5D000000 		.4byte	0x5d
+ 495 010c 72000000 		.4byte	.LLST3
+ 496 0110 00       		.byte	0
+ 497 0111 0B       		.uleb128 0xb
+ 498 0112 5B000000 		.4byte	.LASF20
+ 499 0116 01       		.byte	0x1
+ 500 0117 48       		.byte	0x48
+ 501 0118 AA000000 		.4byte	0xaa
+ 502 011c 00000000 		.4byte	.LFB36
+ 503 0120 48000000 		.4byte	.LFE36-.LFB36
+ 504 0124 01       		.uleb128 0x1
+ 505 0125 9C       		.byte	0x9c
+ 506 0126 62010000 		.4byte	0x162
+ 507 012a 0C       		.uleb128 0xc
+ 508 012b 6900     		.ascii	"i\000"
+ 509 012d 01       		.byte	0x1
+ 510 012e 48       		.byte	0x48
+ 511 012f 4F000000 		.4byte	0x4f
+ 512 0133 A9000000 		.4byte	.LLST4
+ 513 0137 0D       		.uleb128 0xd
+ 514 0138 62756600 		.ascii	"buf\000"
+ 515 013c 01       		.byte	0x1
+ 516 013d 4A       		.byte	0x4a
+ 517 013e 62010000 		.4byte	0x162
+ 518 0142 05       		.uleb128 0x5
+ 519 0143 03       		.byte	0x3
+ 520 0144 00000000 		.4byte	buf.5937
+ 521 0148 0E       		.uleb128 0xe
+ 522 0149 7000     		.ascii	"p\000"
+ 523 014b 01       		.byte	0x1
+ 524 014c 4B       		.byte	0x4b
+ 525 014d AA000000 		.4byte	0xaa
+ 526 0151 F1000000 		.4byte	.LLST5
+ 527 0155 0F       		.uleb128 0xf
+ 528 0156 E7010000 		.4byte	.LASF22
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 13
+
+
+ 529 015a 01       		.byte	0x1
+ 530 015b 4C       		.byte	0x4c
+ 531 015c 76000000 		.4byte	0x76
+ 532 0160 00       		.byte	0
+ 533 0161 00       		.byte	0
+ 534 0162 10       		.uleb128 0x10
+ 535 0163 9C000000 		.4byte	0x9c
+ 536 0167 72010000 		.4byte	0x172
+ 537 016b 11       		.uleb128 0x11
+ 538 016c A3000000 		.4byte	0xa3
+ 539 0170 15       		.byte	0x15
+ 540 0171 00       		.byte	0
+ 541 0172 12       		.uleb128 0x12
+ 542 0173 09000000 		.4byte	.LASF24
+ 543 0177 01       		.byte	0x1
+ 544 0178 5E       		.byte	0x5e
+ 545 0179 76000000 		.4byte	0x76
+ 546 017d 00000000 		.4byte	.LFB37
+ 547 0181 0C000000 		.4byte	.LFE37-.LFB37
+ 548 0185 01       		.uleb128 0x1
+ 549 0186 9C       		.byte	0x9c
+ 550 0187 13       		.uleb128 0x13
+ 551 0188 D7020000 		.4byte	.LASF26
+ 552 018c 01       		.byte	0x1
+ 553 018d 67       		.byte	0x67
+ 554 018e 00000000 		.4byte	.LFB38
+ 555 0192 0C000000 		.4byte	.LFE38-.LFB38
+ 556 0196 01       		.uleb128 0x1
+ 557 0197 9C       		.byte	0x9c
+ 558 0198 AA010000 		.4byte	0x1aa
+ 559 019c 14       		.uleb128 0x14
+ 560 019d 93010000 		.4byte	.LASF23
+ 561 01a1 01       		.byte	0x1
+ 562 01a2 67       		.byte	0x67
+ 563 01a3 76000000 		.4byte	0x76
+ 564 01a7 01       		.uleb128 0x1
+ 565 01a8 50       		.byte	0x50
+ 566 01a9 00       		.byte	0
+ 567 01aa 12       		.uleb128 0x12
+ 568 01ab 26000000 		.4byte	.LASF25
+ 569 01af 01       		.byte	0x1
+ 570 01b0 6F       		.byte	0x6f
+ 571 01b1 82000000 		.4byte	0x82
+ 572 01b5 00000000 		.4byte	.LFB39
+ 573 01b9 04000000 		.4byte	.LFE39-.LFB39
+ 574 01bd 01       		.uleb128 0x1
+ 575 01be 9C       		.byte	0x9c
+ 576 01bf 13       		.uleb128 0x13
+ 577 01c0 29020000 		.4byte	.LASF27
+ 578 01c4 01       		.byte	0x1
+ 579 01c5 77       		.byte	0x77
+ 580 01c6 00000000 		.4byte	.LFB40
+ 581 01ca 02000000 		.4byte	.LFE40-.LFB40
+ 582 01ce 01       		.uleb128 0x1
+ 583 01cf 9C       		.byte	0x9c
+ 584 01d0 E4010000 		.4byte	0x1e4
+ 585 01d4 09       		.uleb128 0x9
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 14
+
+
+ 586 01d5 09020000 		.4byte	.LASF28
+ 587 01d9 01       		.byte	0x1
+ 588 01da 77       		.byte	0x77
+ 589 01db 82000000 		.4byte	0x82
+ 590 01df 1F010000 		.4byte	.LLST6
+ 591 01e3 00       		.byte	0
+ 592 01e4 12       		.uleb128 0x12
+ 593 01e5 4E010000 		.4byte	.LASF29
+ 594 01e9 01       		.byte	0x1
+ 595 01ea 7F       		.byte	0x7f
+ 596 01eb 6B000000 		.4byte	0x6b
+ 597 01ef 00000000 		.4byte	.LFB41
+ 598 01f3 0C000000 		.4byte	.LFE41-.LFB41
+ 599 01f7 01       		.uleb128 0x1
+ 600 01f8 9C       		.byte	0x9c
+ 601 01f9 13       		.uleb128 0x13
+ 602 01fa CC010000 		.4byte	.LASF30
+ 603 01fe 01       		.byte	0x1
+ 604 01ff 87       		.byte	0x87
+ 605 0200 00000000 		.4byte	.LFB42
+ 606 0204 0C000000 		.4byte	.LFE42-.LFB42
+ 607 0208 01       		.uleb128 0x1
+ 608 0209 9C       		.byte	0x9c
+ 609 020a 21020000 		.4byte	0x221
+ 610 020e 14       		.uleb128 0x14
+ 611 020f 33010000 		.4byte	.LASF31
+ 612 0213 01       		.byte	0x1
+ 613 0214 87       		.byte	0x87
+ 614 0215 6B000000 		.4byte	0x6b
+ 615 0219 06       		.uleb128 0x6
+ 616 021a 50       		.byte	0x50
+ 617 021b 93       		.byte	0x93
+ 618 021c 04       		.uleb128 0x4
+ 619 021d 51       		.byte	0x51
+ 620 021e 93       		.byte	0x93
+ 621 021f 04       		.uleb128 0x4
+ 622 0220 00       		.byte	0
+ 623 0221 12       		.uleb128 0x12
+ 624 0222 C0000000 		.4byte	.LASF32
+ 625 0226 01       		.byte	0x1
+ 626 0227 8F       		.byte	0x8f
+ 627 0228 B0000000 		.4byte	0xb0
+ 628 022c 00000000 		.4byte	.LFB43
+ 629 0230 08000000 		.4byte	.LFE43-.LFB43
+ 630 0234 01       		.uleb128 0x1
+ 631 0235 9C       		.byte	0x9c
+ 632 0236 15       		.uleb128 0x15
+ 633 0237 96000000 		.4byte	.LASF33
+ 634 023b 01       		.byte	0x1
+ 635 023c 17       		.byte	0x17
+ 636 023d 76000000 		.4byte	0x76
+ 637 0241 05       		.uleb128 0x5
+ 638 0242 03       		.byte	0x3
+ 639 0243 00000000 		.4byte	is_tracker_enable
+ 640 0247 0F       		.uleb128 0xf
+ 641 0248 43000000 		.4byte	.LASF34
+ 642 024c 01       		.byte	0x1
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 15
+
+
+ 643 024d 18       		.byte	0x18
+ 644 024e 53020000 		.4byte	0x253
+ 645 0252 06       		.byte	0x6
+ 646 0253 07       		.uleb128 0x7
+ 647 0254 82000000 		.4byte	0x82
+ 648 0258 15       		.uleb128 0x15
+ 649 0259 D5000000 		.4byte	.LASF35
+ 650 025d 01       		.byte	0x1
+ 651 025e 19       		.byte	0x19
+ 652 025f 6B000000 		.4byte	0x6b
+ 653 0263 05       		.uleb128 0x5
+ 654 0264 03       		.byte	0x3
+ 655 0265 18000000 		.4byte	timer_interrrupt_count
+ 656 0269 15       		.uleb128 0x15
+ 657 026a 6E000000 		.4byte	.LASF36
+ 658 026e 01       		.byte	0x1
+ 659 026f 1A       		.byte	0x1a
+ 660 0270 7B020000 		.4byte	0x27b
+ 661 0274 06       		.uleb128 0x6
+ 662 0275 F2       		.byte	0xf2
+ 663 0276 80020000 		.4byte	.Ldebug_info0+640
+ 664 027a 00       		.sleb128 0
+ 665 027b 07       		.uleb128 0x7
+ 666 027c B0000000 		.4byte	0xb0
+ 667 0280 16       		.uleb128 0x16
+ 668 0281 07       		.uleb128 0x7
+ 669 0282 9E       		.byte	0x9e
+ 670 0283 05       		.uleb128 0x5
+ 671 0284 30       		.byte	0x30
+ 672 0285 2E       		.byte	0x2e
+ 673 0286 30       		.byte	0x30
+ 674 0287 37       		.byte	0x37
+ 675 0288 00       		.byte	0
+ 676 0289 00       		.byte	0
+ 677              		.section	.debug_abbrev,"",%progbits
+ 678              	.Ldebug_abbrev0:
+ 679 0000 01       		.uleb128 0x1
+ 680 0001 11       		.uleb128 0x11
+ 681 0002 01       		.byte	0x1
+ 682 0003 25       		.uleb128 0x25
+ 683 0004 0E       		.uleb128 0xe
+ 684 0005 13       		.uleb128 0x13
+ 685 0006 0B       		.uleb128 0xb
+ 686 0007 03       		.uleb128 0x3
+ 687 0008 0E       		.uleb128 0xe
+ 688 0009 1B       		.uleb128 0x1b
+ 689 000a 0E       		.uleb128 0xe
+ 690 000b 55       		.uleb128 0x55
+ 691 000c 17       		.uleb128 0x17
+ 692 000d 11       		.uleb128 0x11
+ 693 000e 01       		.uleb128 0x1
+ 694 000f 10       		.uleb128 0x10
+ 695 0010 17       		.uleb128 0x17
+ 696 0011 00       		.byte	0
+ 697 0012 00       		.byte	0
+ 698 0013 02       		.uleb128 0x2
+ 699 0014 24       		.uleb128 0x24
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 16
+
+
+ 700 0015 00       		.byte	0
+ 701 0016 0B       		.uleb128 0xb
+ 702 0017 0B       		.uleb128 0xb
+ 703 0018 3E       		.uleb128 0x3e
+ 704 0019 0B       		.uleb128 0xb
+ 705 001a 03       		.uleb128 0x3
+ 706 001b 0E       		.uleb128 0xe
+ 707 001c 00       		.byte	0
+ 708 001d 00       		.byte	0
+ 709 001e 03       		.uleb128 0x3
+ 710 001f 24       		.uleb128 0x24
+ 711 0020 00       		.byte	0
+ 712 0021 0B       		.uleb128 0xb
+ 713 0022 0B       		.uleb128 0xb
+ 714 0023 3E       		.uleb128 0x3e
+ 715 0024 0B       		.uleb128 0xb
+ 716 0025 03       		.uleb128 0x3
+ 717 0026 08       		.uleb128 0x8
+ 718 0027 00       		.byte	0
+ 719 0028 00       		.byte	0
+ 720 0029 04       		.uleb128 0x4
+ 721 002a 16       		.uleb128 0x16
+ 722 002b 00       		.byte	0
+ 723 002c 03       		.uleb128 0x3
+ 724 002d 0E       		.uleb128 0xe
+ 725 002e 3A       		.uleb128 0x3a
+ 726 002f 0B       		.uleb128 0xb
+ 727 0030 3B       		.uleb128 0x3b
+ 728 0031 0B       		.uleb128 0xb
+ 729 0032 49       		.uleb128 0x49
+ 730 0033 13       		.uleb128 0x13
+ 731 0034 00       		.byte	0
+ 732 0035 00       		.byte	0
+ 733 0036 05       		.uleb128 0x5
+ 734 0037 16       		.uleb128 0x16
+ 735 0038 00       		.byte	0
+ 736 0039 03       		.uleb128 0x3
+ 737 003a 0E       		.uleb128 0xe
+ 738 003b 3A       		.uleb128 0x3a
+ 739 003c 0B       		.uleb128 0xb
+ 740 003d 3B       		.uleb128 0x3b
+ 741 003e 05       		.uleb128 0x5
+ 742 003f 49       		.uleb128 0x49
+ 743 0040 13       		.uleb128 0x13
+ 744 0041 00       		.byte	0
+ 745 0042 00       		.byte	0
+ 746 0043 06       		.uleb128 0x6
+ 747 0044 0F       		.uleb128 0xf
+ 748 0045 00       		.byte	0
+ 749 0046 0B       		.uleb128 0xb
+ 750 0047 0B       		.uleb128 0xb
+ 751 0048 49       		.uleb128 0x49
+ 752 0049 13       		.uleb128 0x13
+ 753 004a 00       		.byte	0
+ 754 004b 00       		.byte	0
+ 755 004c 07       		.uleb128 0x7
+ 756 004d 26       		.uleb128 0x26
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 17
+
+
+ 757 004e 00       		.byte	0
+ 758 004f 49       		.uleb128 0x49
+ 759 0050 13       		.uleb128 0x13
+ 760 0051 00       		.byte	0
+ 761 0052 00       		.byte	0
+ 762 0053 08       		.uleb128 0x8
+ 763 0054 2E       		.uleb128 0x2e
+ 764 0055 01       		.byte	0x1
+ 765 0056 3F       		.uleb128 0x3f
+ 766 0057 19       		.uleb128 0x19
+ 767 0058 03       		.uleb128 0x3
+ 768 0059 0E       		.uleb128 0xe
+ 769 005a 3A       		.uleb128 0x3a
+ 770 005b 0B       		.uleb128 0xb
+ 771 005c 3B       		.uleb128 0x3b
+ 772 005d 0B       		.uleb128 0xb
+ 773 005e 27       		.uleb128 0x27
+ 774 005f 19       		.uleb128 0x19
+ 775 0060 49       		.uleb128 0x49
+ 776 0061 13       		.uleb128 0x13
+ 777 0062 11       		.uleb128 0x11
+ 778 0063 01       		.uleb128 0x1
+ 779 0064 12       		.uleb128 0x12
+ 780 0065 06       		.uleb128 0x6
+ 781 0066 40       		.uleb128 0x40
+ 782 0067 18       		.uleb128 0x18
+ 783 0068 9742     		.uleb128 0x2117
+ 784 006a 19       		.uleb128 0x19
+ 785 006b 01       		.uleb128 0x1
+ 786 006c 13       		.uleb128 0x13
+ 787 006d 00       		.byte	0
+ 788 006e 00       		.byte	0
+ 789 006f 09       		.uleb128 0x9
+ 790 0070 05       		.uleb128 0x5
+ 791 0071 00       		.byte	0
+ 792 0072 03       		.uleb128 0x3
+ 793 0073 0E       		.uleb128 0xe
+ 794 0074 3A       		.uleb128 0x3a
+ 795 0075 0B       		.uleb128 0xb
+ 796 0076 3B       		.uleb128 0x3b
+ 797 0077 0B       		.uleb128 0xb
+ 798 0078 49       		.uleb128 0x49
+ 799 0079 13       		.uleb128 0x13
+ 800 007a 02       		.uleb128 0x2
+ 801 007b 17       		.uleb128 0x17
+ 802 007c 00       		.byte	0
+ 803 007d 00       		.byte	0
+ 804 007e 0A       		.uleb128 0xa
+ 805 007f 34       		.uleb128 0x34
+ 806 0080 00       		.byte	0
+ 807 0081 03       		.uleb128 0x3
+ 808 0082 0E       		.uleb128 0xe
+ 809 0083 3A       		.uleb128 0x3a
+ 810 0084 0B       		.uleb128 0xb
+ 811 0085 3B       		.uleb128 0x3b
+ 812 0086 0B       		.uleb128 0xb
+ 813 0087 49       		.uleb128 0x49
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 18
+
+
+ 814 0088 13       		.uleb128 0x13
+ 815 0089 02       		.uleb128 0x2
+ 816 008a 17       		.uleb128 0x17
+ 817 008b 00       		.byte	0
+ 818 008c 00       		.byte	0
+ 819 008d 0B       		.uleb128 0xb
+ 820 008e 2E       		.uleb128 0x2e
+ 821 008f 01       		.byte	0x1
+ 822 0090 3F       		.uleb128 0x3f
+ 823 0091 19       		.uleb128 0x19
+ 824 0092 03       		.uleb128 0x3
+ 825 0093 0E       		.uleb128 0xe
+ 826 0094 3A       		.uleb128 0x3a
+ 827 0095 0B       		.uleb128 0xb
+ 828 0096 3B       		.uleb128 0x3b
+ 829 0097 0B       		.uleb128 0xb
+ 830 0098 27       		.uleb128 0x27
+ 831 0099 19       		.uleb128 0x19
+ 832 009a 49       		.uleb128 0x49
+ 833 009b 13       		.uleb128 0x13
+ 834 009c 11       		.uleb128 0x11
+ 835 009d 01       		.uleb128 0x1
+ 836 009e 12       		.uleb128 0x12
+ 837 009f 06       		.uleb128 0x6
+ 838 00a0 40       		.uleb128 0x40
+ 839 00a1 18       		.uleb128 0x18
+ 840 00a2 9642     		.uleb128 0x2116
+ 841 00a4 19       		.uleb128 0x19
+ 842 00a5 01       		.uleb128 0x1
+ 843 00a6 13       		.uleb128 0x13
+ 844 00a7 00       		.byte	0
+ 845 00a8 00       		.byte	0
+ 846 00a9 0C       		.uleb128 0xc
+ 847 00aa 05       		.uleb128 0x5
+ 848 00ab 00       		.byte	0
+ 849 00ac 03       		.uleb128 0x3
+ 850 00ad 08       		.uleb128 0x8
+ 851 00ae 3A       		.uleb128 0x3a
+ 852 00af 0B       		.uleb128 0xb
+ 853 00b0 3B       		.uleb128 0x3b
+ 854 00b1 0B       		.uleb128 0xb
+ 855 00b2 49       		.uleb128 0x49
+ 856 00b3 13       		.uleb128 0x13
+ 857 00b4 02       		.uleb128 0x2
+ 858 00b5 17       		.uleb128 0x17
+ 859 00b6 00       		.byte	0
+ 860 00b7 00       		.byte	0
+ 861 00b8 0D       		.uleb128 0xd
+ 862 00b9 34       		.uleb128 0x34
+ 863 00ba 00       		.byte	0
+ 864 00bb 03       		.uleb128 0x3
+ 865 00bc 08       		.uleb128 0x8
+ 866 00bd 3A       		.uleb128 0x3a
+ 867 00be 0B       		.uleb128 0xb
+ 868 00bf 3B       		.uleb128 0x3b
+ 869 00c0 0B       		.uleb128 0xb
+ 870 00c1 49       		.uleb128 0x49
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 19
+
+
+ 871 00c2 13       		.uleb128 0x13
+ 872 00c3 02       		.uleb128 0x2
+ 873 00c4 18       		.uleb128 0x18
+ 874 00c5 00       		.byte	0
+ 875 00c6 00       		.byte	0
+ 876 00c7 0E       		.uleb128 0xe
+ 877 00c8 34       		.uleb128 0x34
+ 878 00c9 00       		.byte	0
+ 879 00ca 03       		.uleb128 0x3
+ 880 00cb 08       		.uleb128 0x8
+ 881 00cc 3A       		.uleb128 0x3a
+ 882 00cd 0B       		.uleb128 0xb
+ 883 00ce 3B       		.uleb128 0x3b
+ 884 00cf 0B       		.uleb128 0xb
+ 885 00d0 49       		.uleb128 0x49
+ 886 00d1 13       		.uleb128 0x13
+ 887 00d2 02       		.uleb128 0x2
+ 888 00d3 17       		.uleb128 0x17
+ 889 00d4 00       		.byte	0
+ 890 00d5 00       		.byte	0
+ 891 00d6 0F       		.uleb128 0xf
+ 892 00d7 34       		.uleb128 0x34
+ 893 00d8 00       		.byte	0
+ 894 00d9 03       		.uleb128 0x3
+ 895 00da 0E       		.uleb128 0xe
+ 896 00db 3A       		.uleb128 0x3a
+ 897 00dc 0B       		.uleb128 0xb
+ 898 00dd 3B       		.uleb128 0x3b
+ 899 00de 0B       		.uleb128 0xb
+ 900 00df 49       		.uleb128 0x49
+ 901 00e0 13       		.uleb128 0x13
+ 902 00e1 1C       		.uleb128 0x1c
+ 903 00e2 0B       		.uleb128 0xb
+ 904 00e3 00       		.byte	0
+ 905 00e4 00       		.byte	0
+ 906 00e5 10       		.uleb128 0x10
+ 907 00e6 01       		.uleb128 0x1
+ 908 00e7 01       		.byte	0x1
+ 909 00e8 49       		.uleb128 0x49
+ 910 00e9 13       		.uleb128 0x13
+ 911 00ea 01       		.uleb128 0x1
+ 912 00eb 13       		.uleb128 0x13
+ 913 00ec 00       		.byte	0
+ 914 00ed 00       		.byte	0
+ 915 00ee 11       		.uleb128 0x11
+ 916 00ef 21       		.uleb128 0x21
+ 917 00f0 00       		.byte	0
+ 918 00f1 49       		.uleb128 0x49
+ 919 00f2 13       		.uleb128 0x13
+ 920 00f3 2F       		.uleb128 0x2f
+ 921 00f4 0B       		.uleb128 0xb
+ 922 00f5 00       		.byte	0
+ 923 00f6 00       		.byte	0
+ 924 00f7 12       		.uleb128 0x12
+ 925 00f8 2E       		.uleb128 0x2e
+ 926 00f9 00       		.byte	0
+ 927 00fa 3F       		.uleb128 0x3f
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 20
+
+
+ 928 00fb 19       		.uleb128 0x19
+ 929 00fc 03       		.uleb128 0x3
+ 930 00fd 0E       		.uleb128 0xe
+ 931 00fe 3A       		.uleb128 0x3a
+ 932 00ff 0B       		.uleb128 0xb
+ 933 0100 3B       		.uleb128 0x3b
+ 934 0101 0B       		.uleb128 0xb
+ 935 0102 49       		.uleb128 0x49
+ 936 0103 13       		.uleb128 0x13
+ 937 0104 11       		.uleb128 0x11
+ 938 0105 01       		.uleb128 0x1
+ 939 0106 12       		.uleb128 0x12
+ 940 0107 06       		.uleb128 0x6
+ 941 0108 40       		.uleb128 0x40
+ 942 0109 18       		.uleb128 0x18
+ 943 010a 9742     		.uleb128 0x2117
+ 944 010c 19       		.uleb128 0x19
+ 945 010d 00       		.byte	0
+ 946 010e 00       		.byte	0
+ 947 010f 13       		.uleb128 0x13
+ 948 0110 2E       		.uleb128 0x2e
+ 949 0111 01       		.byte	0x1
+ 950 0112 3F       		.uleb128 0x3f
+ 951 0113 19       		.uleb128 0x19
+ 952 0114 03       		.uleb128 0x3
+ 953 0115 0E       		.uleb128 0xe
+ 954 0116 3A       		.uleb128 0x3a
+ 955 0117 0B       		.uleb128 0xb
+ 956 0118 3B       		.uleb128 0x3b
+ 957 0119 0B       		.uleb128 0xb
+ 958 011a 27       		.uleb128 0x27
+ 959 011b 19       		.uleb128 0x19
+ 960 011c 11       		.uleb128 0x11
+ 961 011d 01       		.uleb128 0x1
+ 962 011e 12       		.uleb128 0x12
+ 963 011f 06       		.uleb128 0x6
+ 964 0120 40       		.uleb128 0x40
+ 965 0121 18       		.uleb128 0x18
+ 966 0122 9742     		.uleb128 0x2117
+ 967 0124 19       		.uleb128 0x19
+ 968 0125 01       		.uleb128 0x1
+ 969 0126 13       		.uleb128 0x13
+ 970 0127 00       		.byte	0
+ 971 0128 00       		.byte	0
+ 972 0129 14       		.uleb128 0x14
+ 973 012a 05       		.uleb128 0x5
+ 974 012b 00       		.byte	0
+ 975 012c 03       		.uleb128 0x3
+ 976 012d 0E       		.uleb128 0xe
+ 977 012e 3A       		.uleb128 0x3a
+ 978 012f 0B       		.uleb128 0xb
+ 979 0130 3B       		.uleb128 0x3b
+ 980 0131 0B       		.uleb128 0xb
+ 981 0132 49       		.uleb128 0x49
+ 982 0133 13       		.uleb128 0x13
+ 983 0134 02       		.uleb128 0x2
+ 984 0135 18       		.uleb128 0x18
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 21
+
+
+ 985 0136 00       		.byte	0
+ 986 0137 00       		.byte	0
+ 987 0138 15       		.uleb128 0x15
+ 988 0139 34       		.uleb128 0x34
+ 989 013a 00       		.byte	0
+ 990 013b 03       		.uleb128 0x3
+ 991 013c 0E       		.uleb128 0xe
+ 992 013d 3A       		.uleb128 0x3a
+ 993 013e 0B       		.uleb128 0xb
+ 994 013f 3B       		.uleb128 0x3b
+ 995 0140 0B       		.uleb128 0xb
+ 996 0141 49       		.uleb128 0x49
+ 997 0142 13       		.uleb128 0x13
+ 998 0143 02       		.uleb128 0x2
+ 999 0144 18       		.uleb128 0x18
+ 1000 0145 00       		.byte	0
+ 1001 0146 00       		.byte	0
+ 1002 0147 16       		.uleb128 0x16
+ 1003 0148 36       		.uleb128 0x36
+ 1004 0149 00       		.byte	0
+ 1005 014a 02       		.uleb128 0x2
+ 1006 014b 18       		.uleb128 0x18
+ 1007 014c 00       		.byte	0
+ 1008 014d 00       		.byte	0
+ 1009 014e 00       		.byte	0
+ 1010              		.section	.debug_loc,"",%progbits
+ 1011              	.Ldebug_loc0:
+ 1012              	.LLST0:
+ 1013 0000 00000000 		.4byte	.LVL0
+ 1014 0004 06000000 		.4byte	.LVL2
+ 1015 0008 0100     		.2byte	0x1
+ 1016 000a 50       		.byte	0x50
+ 1017 000b 06000000 		.4byte	.LVL2
+ 1018 000f 3E000000 		.4byte	.LVL13
+ 1019 0013 0100     		.2byte	0x1
+ 1020 0015 50       		.byte	0x50
+ 1021 0016 40000000 		.4byte	.LVL14
+ 1022 001a 42000000 		.4byte	.LVL15
+ 1023 001e 0100     		.2byte	0x1
+ 1024 0020 50       		.byte	0x50
+ 1025 0021 00000000 		.4byte	0
+ 1026 0025 00000000 		.4byte	0
+ 1027              	.LLST1:
+ 1028 0029 02000000 		.4byte	.LVL1
+ 1029 002d 24000000 		.4byte	.LVL8
+ 1030 0031 0200     		.2byte	0x2
+ 1031 0033 30       		.byte	0x30
+ 1032 0034 9F       		.byte	0x9f
+ 1033 0035 24000000 		.4byte	.LVL8
+ 1034 0039 30000000 		.4byte	.LVL10
+ 1035 003d 0100     		.2byte	0x1
+ 1036 003f 53       		.byte	0x53
+ 1037 0040 34000000 		.4byte	.LVL11
+ 1038 0044 44000000 		.4byte	.LFE35
+ 1039 0048 0100     		.2byte	0x1
+ 1040 004a 53       		.byte	0x53
+ 1041 004b 00000000 		.4byte	0
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 22
+
+
+ 1042 004f 00000000 		.4byte	0
+ 1043              	.LLST2:
+ 1044 0053 02000000 		.4byte	.LVL1
+ 1045 0057 24000000 		.4byte	.LVL8
+ 1046 005b 0200     		.2byte	0x2
+ 1047 005d 30       		.byte	0x30
+ 1048 005e 9F       		.byte	0x9f
+ 1049 005f 28000000 		.4byte	.LVL9
+ 1050 0063 44000000 		.4byte	.LFE35
+ 1051 0067 0100     		.2byte	0x1
+ 1052 0069 52       		.byte	0x52
+ 1053 006a 00000000 		.4byte	0
+ 1054 006e 00000000 		.4byte	0
+ 1055              	.LLST3:
+ 1056 0072 02000000 		.4byte	.LVL1
+ 1057 0076 10000000 		.4byte	.LVL3
+ 1058 007a 0200     		.2byte	0x2
+ 1059 007c 30       		.byte	0x30
+ 1060 007d 9F       		.byte	0x9f
+ 1061 007e 10000000 		.4byte	.LVL3
+ 1062 0082 16000000 		.4byte	.LVL5
+ 1063 0086 0200     		.2byte	0x2
+ 1064 0088 31       		.byte	0x31
+ 1065 0089 9F       		.byte	0x9f
+ 1066 008a 16000000 		.4byte	.LVL5
+ 1067 008e 22000000 		.4byte	.LVL7
+ 1068 0092 0200     		.2byte	0x2
+ 1069 0094 30       		.byte	0x30
+ 1070 0095 9F       		.byte	0x9f
+ 1071 0096 24000000 		.4byte	.LVL8
+ 1072 009a 42000000 		.4byte	.LVL16
+ 1073 009e 0100     		.2byte	0x1
+ 1074 00a0 54       		.byte	0x54
+ 1075 00a1 00000000 		.4byte	0
+ 1076 00a5 00000000 		.4byte	0
+ 1077              	.LLST4:
+ 1078 00a9 00000000 		.4byte	.LVL17
+ 1079 00ad 0C000000 		.4byte	.LVL19
+ 1080 00b1 0600     		.2byte	0x6
+ 1081 00b3 50       		.byte	0x50
+ 1082 00b4 93       		.byte	0x93
+ 1083 00b5 04       		.uleb128 0x4
+ 1084 00b6 51       		.byte	0x51
+ 1085 00b7 93       		.byte	0x93
+ 1086 00b8 04       		.uleb128 0x4
+ 1087 00b9 0C000000 		.4byte	.LVL19
+ 1088 00bd 2C000000 		.4byte	.LVL23
+ 1089 00c1 0600     		.2byte	0x6
+ 1090 00c3 54       		.byte	0x54
+ 1091 00c4 93       		.byte	0x93
+ 1092 00c5 04       		.uleb128 0x4
+ 1093 00c6 55       		.byte	0x55
+ 1094 00c7 93       		.byte	0x93
+ 1095 00c8 04       		.uleb128 0x4
+ 1096 00c9 2E000000 		.4byte	.LVL24
+ 1097 00cd 40000000 		.4byte	.LVL26
+ 1098 00d1 0600     		.2byte	0x6
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 23
+
+
+ 1099 00d3 50       		.byte	0x50
+ 1100 00d4 93       		.byte	0x93
+ 1101 00d5 04       		.uleb128 0x4
+ 1102 00d6 51       		.byte	0x51
+ 1103 00d7 93       		.byte	0x93
+ 1104 00d8 04       		.uleb128 0x4
+ 1105 00d9 40000000 		.4byte	.LVL26
+ 1106 00dd 40000000 		.4byte	.LVL27
+ 1107 00e1 0600     		.2byte	0x6
+ 1108 00e3 54       		.byte	0x54
+ 1109 00e4 93       		.byte	0x93
+ 1110 00e5 04       		.uleb128 0x4
+ 1111 00e6 51       		.byte	0x51
+ 1112 00e7 93       		.byte	0x93
+ 1113 00e8 04       		.uleb128 0x4
+ 1114 00e9 00000000 		.4byte	0
+ 1115 00ed 00000000 		.4byte	0
+ 1116              	.LLST5:
+ 1117 00f1 04000000 		.4byte	.LVL18
+ 1118 00f5 0C000000 		.4byte	.LVL19
+ 1119 00f9 0600     		.2byte	0x6
+ 1120 00fb 03       		.byte	0x3
+ 1121 00fc 15000000 		.4byte	buf.5937+21
+ 1122 0100 9F       		.byte	0x9f
+ 1123 0101 0C000000 		.4byte	.LVL19
+ 1124 0105 40000000 		.4byte	.LVL28
+ 1125 0109 0100     		.2byte	0x1
+ 1126 010b 57       		.byte	0x57
+ 1127 010c 40000000 		.4byte	.LVL28
+ 1128 0110 48000000 		.4byte	.LFE36
+ 1129 0114 0100     		.2byte	0x1
+ 1130 0116 50       		.byte	0x50
+ 1131 0117 00000000 		.4byte	0
+ 1132 011b 00000000 		.4byte	0
+ 1133              	.LLST6:
+ 1134 011f 00000000 		.4byte	.LVL30
+ 1135 0123 00000000 		.4byte	.LVL30
+ 1136 0127 0100     		.2byte	0x1
+ 1137 0129 50       		.byte	0x50
+ 1138 012a 00000000 		.4byte	0
+ 1139 012e 00000000 		.4byte	0
+ 1140              		.section	.debug_aranges,"",%progbits
+ 1141 0000 5C000000 		.4byte	0x5c
+ 1142 0004 0200     		.2byte	0x2
+ 1143 0006 00000000 		.4byte	.Ldebug_info0
+ 1144 000a 04       		.byte	0x4
+ 1145 000b 00       		.byte	0
+ 1146 000c 0000     		.2byte	0
+ 1147 000e 0000     		.2byte	0
+ 1148 0010 00000000 		.4byte	.LFB35
+ 1149 0014 44000000 		.4byte	.LFE35-.LFB35
+ 1150 0018 00000000 		.4byte	.LFB36
+ 1151 001c 48000000 		.4byte	.LFE36-.LFB36
+ 1152 0020 00000000 		.4byte	.LFB37
+ 1153 0024 0C000000 		.4byte	.LFE37-.LFB37
+ 1154 0028 00000000 		.4byte	.LFB38
+ 1155 002c 0C000000 		.4byte	.LFE38-.LFB38
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 24
+
+
+ 1156 0030 00000000 		.4byte	.LFB39
+ 1157 0034 04000000 		.4byte	.LFE39-.LFB39
+ 1158 0038 00000000 		.4byte	.LFB40
+ 1159 003c 02000000 		.4byte	.LFE40-.LFB40
+ 1160 0040 00000000 		.4byte	.LFB41
+ 1161 0044 0C000000 		.4byte	.LFE41-.LFB41
+ 1162 0048 00000000 		.4byte	.LFB42
+ 1163 004c 0C000000 		.4byte	.LFE42-.LFB42
+ 1164 0050 00000000 		.4byte	.LFB43
+ 1165 0054 08000000 		.4byte	.LFE43-.LFB43
+ 1166 0058 00000000 		.4byte	0
+ 1167 005c 00000000 		.4byte	0
+ 1168              		.section	.debug_ranges,"",%progbits
+ 1169              	.Ldebug_ranges0:
+ 1170 0000 00000000 		.4byte	.LFB35
+ 1171 0004 44000000 		.4byte	.LFE35
+ 1172 0008 00000000 		.4byte	.LFB36
+ 1173 000c 48000000 		.4byte	.LFE36
+ 1174 0010 00000000 		.4byte	.LFB37
+ 1175 0014 0C000000 		.4byte	.LFE37
+ 1176 0018 00000000 		.4byte	.LFB38
+ 1177 001c 0C000000 		.4byte	.LFE38
+ 1178 0020 00000000 		.4byte	.LFB39
+ 1179 0024 04000000 		.4byte	.LFE39
+ 1180 0028 00000000 		.4byte	.LFB40
+ 1181 002c 02000000 		.4byte	.LFE40
+ 1182 0030 00000000 		.4byte	.LFB41
+ 1183 0034 0C000000 		.4byte	.LFE41
+ 1184 0038 00000000 		.4byte	.LFB42
+ 1185 003c 0C000000 		.4byte	.LFE42
+ 1186 0040 00000000 		.4byte	.LFB43
+ 1187 0044 08000000 		.4byte	.LFE43
+ 1188 0048 00000000 		.4byte	0
+ 1189 004c 00000000 		.4byte	0
+ 1190              		.section	.debug_line,"",%progbits
+ 1191              	.Ldebug_line0:
+ 1192 0000 9D010000 		.section	.debug_str,"MS",%progbits,1
+ 1192      0200C500 
+ 1192      00000201 
+ 1192      FB0E0D00 
+ 1192      01010101 
+ 1193              	.LASF4:
+ 1194 0000 6C6F6E67 		.ascii	"long int\000"
+ 1194      20696E74 
+ 1194      00
+ 1195              	.LASF24:
+ 1196 0009 6765745F 		.ascii	"get_is_tracker_enable\000"
+ 1196      69735F74 
+ 1196      7261636B 
+ 1196      65725F65 
+ 1196      6E61626C 
+ 1197              	.LASF13:
+ 1198 001f 646F7562 		.ascii	"double\000"
+ 1198      6C6500
+ 1199              	.LASF25:
+ 1200 0026 6765745F 		.ascii	"get_number_of_buttons\000"
+ 1200      6E756D62 
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 25
+
+
+ 1200      65725F6F 
+ 1200      665F6275 
+ 1200      74746F6E 
+ 1201              	.LASF21:
+ 1202 003c 73747269 		.ascii	"string\000"
+ 1202      6E6700
+ 1203              	.LASF34:
+ 1204 0043 6E756D62 		.ascii	"number_of_buttons\000"
+ 1204      65725F6F 
+ 1204      665F6275 
+ 1204      74746F6E 
+ 1204      7300
+ 1205              	.LASF12:
+ 1206 0055 666C6F61 		.ascii	"float\000"
+ 1206      7400
+ 1207              	.LASF20:
+ 1208 005b 69746F61 		.ascii	"itoa\000"
+ 1208      00
+ 1209              	.LASF1:
+ 1210 0060 756E7369 		.ascii	"unsigned char\000"
+ 1210      676E6564 
+ 1210      20636861 
+ 1210      7200
+ 1211              	.LASF36:
+ 1212 006e 736F6674 		.ascii	"software_version\000"
+ 1212      77617265 
+ 1212      5F766572 
+ 1212      73696F6E 
+ 1212      00
+ 1213              	.LASF38:
+ 1214 007f 2E2E5C53 		.ascii	"..\\Slider.cydsn\\util.c\000"
+ 1214      6C696465 
+ 1214      722E6379 
+ 1214      64736E5C 
+ 1214      7574696C 
+ 1215              	.LASF33:
+ 1216 0096 69735F74 		.ascii	"is_tracker_enable\000"
+ 1216      7261636B 
+ 1216      65725F65 
+ 1216      6E61626C 
+ 1216      6500
+ 1217              	.LASF18:
+ 1218 00a8 7369676E 		.ascii	"sign\000"
+ 1218      00
+ 1219              	.LASF3:
+ 1220 00ad 73686F72 		.ascii	"short unsigned int\000"
+ 1220      7420756E 
+ 1220      7369676E 
+ 1220      65642069 
+ 1220      6E7400
+ 1221              	.LASF32:
+ 1222 00c0 6765745F 		.ascii	"get_software_version\000"
+ 1222      736F6674 
+ 1222      77617265 
+ 1222      5F766572 
+ 1222      73696F6E 
+ 1223              	.LASF35:
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 26
+
+
+ 1224 00d5 74696D65 		.ascii	"timer_interrrupt_count\000"
+ 1224      725F696E 
+ 1224      74657272 
+ 1224      72757074 
+ 1224      5F636F75 
+ 1225              	.LASF5:
+ 1226 00ec 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1226      20756E73 
+ 1226      69676E65 
+ 1226      6420696E 
+ 1226      7400
+ 1227              	.LASF39:
+ 1228 00fe 433A5C77 		.ascii	"C:\\work\\Eddie\\Eddie_DP0_Slider\\Prof_DP0.cydsn\000"
+ 1228      6F726B5C 
+ 1228      45646469 
+ 1228      655C4564 
+ 1228      6469655F 
+ 1229              	.LASF11:
+ 1230 012c 75696E74 		.ascii	"uint16\000"
+ 1230      313600
+ 1231              	.LASF31:
+ 1232 0133 7468655F 		.ascii	"the_timer_interrrupt_count\000"
+ 1232      74696D65 
+ 1232      725F696E 
+ 1232      74657272 
+ 1232      72757074 
+ 1233              	.LASF29:
+ 1234 014e 6765745F 		.ascii	"get_timer_interrrupt_count\000"
+ 1234      74696D65 
+ 1234      725F696E 
+ 1234      74657272 
+ 1234      72757074 
+ 1235              	.LASF8:
+ 1236 0169 756E7369 		.ascii	"unsigned int\000"
+ 1236      676E6564 
+ 1236      20696E74 
+ 1236      00
+ 1237              	.LASF17:
+ 1238 0176 64696769 		.ascii	"digit\000"
+ 1238      7400
+ 1239              	.LASF7:
+ 1240 017c 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1240      206C6F6E 
+ 1240      6720756E 
+ 1240      7369676E 
+ 1240      65642069 
+ 1241              	.LASF23:
+ 1242 0193 7468655F 		.ascii	"the_is_tracker_enable\000"
+ 1242      69735F74 
+ 1242      7261636B 
+ 1242      65725F65 
+ 1242      6E61626C 
+ 1243              	.LASF16:
+ 1244 01a9 72657375 		.ascii	"result\000"
+ 1244      6C7400
+ 1245              	.LASF19:
+ 1246 01b0 61746F69 		.ascii	"atoi\000"
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 27
+
+
+ 1246      00
+ 1247              	.LASF9:
+ 1248 01b5 75696E74 		.ascii	"uint_fast64_t\000"
+ 1248      5F666173 
+ 1248      7436345F 
+ 1248      7400
+ 1249              	.LASF15:
+ 1250 01c3 73697A65 		.ascii	"sizetype\000"
+ 1250      74797065 
+ 1250      00
+ 1251              	.LASF30:
+ 1252 01cc 7365745F 		.ascii	"set_timer_interrrupt_count\000"
+ 1252      74696D65 
+ 1252      725F696E 
+ 1252      74657272 
+ 1252      72757074 
+ 1253              	.LASF22:
+ 1254 01e7 6E656761 		.ascii	"negative_value\000"
+ 1254      74697665 
+ 1254      5F76616C 
+ 1254      756500
+ 1255              	.LASF6:
+ 1256 01f6 6C6F6E67 		.ascii	"long long int\000"
+ 1256      206C6F6E 
+ 1256      6720696E 
+ 1256      7400
+ 1257              	.LASF14:
+ 1258 0204 63686172 		.ascii	"char\000"
+ 1258      00
+ 1259              	.LASF28:
+ 1260 0209 7468655F 		.ascii	"the_number_of_buttons\000"
+ 1260      6E756D62 
+ 1260      65725F6F 
+ 1260      665F6275 
+ 1260      74746F6E 
+ 1261              	.LASF2:
+ 1262 021f 73686F72 		.ascii	"short int\000"
+ 1262      7420696E 
+ 1262      7400
+ 1263              	.LASF27:
+ 1264 0229 7365745F 		.ascii	"set_number_of_buttons\000"
+ 1264      6E756D62 
+ 1264      65725F6F 
+ 1264      665F6275 
+ 1264      74746F6E 
+ 1265              	.LASF10:
+ 1266 023f 75696E74 		.ascii	"uint8\000"
+ 1266      3800
+ 1267              	.LASF37:
+ 1268 0245 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 1268      4320342E 
+ 1268      392E3320 
+ 1268      32303135 
+ 1268      30333033 
+ 1269 0278 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m0plus -mthumb -"
+ 1269      20726576 
+ 1269      6973696F 
+ARM GAS  C:\Users\MM1005~1\AppData\Local\Temp\ccegshiY.s 			page 28
+
+
+ 1269      6E203232 
+ 1269      31323230 
+ 1270 02ab 67202D4F 		.ascii	"g -Og -ffunction-sections -ffat-lto-objects\000"
+ 1270      67202D66 
+ 1270      66756E63 
+ 1270      74696F6E 
+ 1270      2D736563 
+ 1271              	.LASF26:
+ 1272 02d7 7365745F 		.ascii	"set_is_tracker_enable\000"
+ 1272      69735F74 
+ 1272      7261636B 
+ 1272      65725F65 
+ 1272      6E61626C 
+ 1273              	.LASF0:
+ 1274 02ed 7369676E 		.ascii	"signed char\000"
+ 1274      65642063 
+ 1274      68617200 
+ 1275              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

@@ -1,0 +1,9 @@
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyReferenceLibrary\CyReferenceLibrary.cylib\CyReferenceLibrary.cyprj|ce20e4c4-53dc-4d55-a151-fb0f96110e61
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|4182c42b-8b36-4ef3-9c7f-13cf730265bc
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|afe81ef1-de6b-4db3-ab66-1a54af83187a
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|a13b3bdd-8d59-485e-a2b1-ae464a72ed22
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|4d754325-d656-4972-99a1-fbd5becab557
+C:\work\Eddie\Eddie_DP0_Slider\Slider.cydsn\Slider.cyprj|a14eabc5-056b-4d50-9567-f37b147367c2
+C:\work\Eddie\Eddie_DP0_Slider\Bootloader.cydsn\Bootloader.cyprj|384a1f0b-c4e4-4435-8113-012970e5e259
+C:\work\Eddie\Eddie_DP0_Slider\Prof_DP0.cydsn\Prof_DP0.cyprj|4759b2a6-1761-4f15-aa3c-4830ffcdcff5
+C:\work\Eddie\Eddie_DP0_Slider\Bootloader_Prof.cydsn\Bootloader_Prof.cyprj|96a0be3f-0ad0-4f98-9c53-9a99135c1efb
