@@ -35,8 +35,8 @@
 #define I2CS_I2C_ACCEPT_ADDRESS         (0u)
 #define I2CS_I2C_ACCEPT_GENERAL_CALL    (0u)
 #define I2CS_I2C_WAKE_ENABLE            (0u)
-#define I2CS_I2C_DATA_RATE              (100u)
-#define I2CS_I2C_DATA_RATE_ACTUAL       (100u)
+#define I2CS_I2C_DATA_RATE              (400u)
+#define I2CS_I2C_DATA_RATE_ACTUAL       (381u)
 #define I2CS_I2C_CLOCK_FROM_TERM        (0u)
 #define I2CS_I2C_EXTERN_INTR_HANDLER    (0u)
 #define I2CS_I2C_BYTE_MODE_ENABLE       (0u)
@@ -139,7 +139,7 @@
 
     /* Select oversampling factor low and high */
     #define I2CS_I2C_OVS_FACTOR_LOW_MIN     ((0u != I2CS_I2C_MANUAL_OVS_CONTROL) ? \
-                                                            (8u) : (8u))
+                                                            (8u) : (13u))
 
     #define I2CS_I2C_OVS_FACTOR_HIGH_MIN    ((0u != I2CS_I2C_MANUAL_OVS_CONTROL) ? \
                                                             (8u) : (8u))

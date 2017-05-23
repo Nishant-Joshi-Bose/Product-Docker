@@ -161,7 +161,7 @@ static void ClockSetup(void)
 	CySysClkWriteImoFreq(24u);
 
 	/* Setup phase aligned clocks */
-	CY_SET_REG32((void *)CYREG_PERI_DIV_16_CTL0, 0x00000E00u);
+	CY_SET_REG32((void *)CYREG_PERI_DIV_16_CTL0, 0x00000200u);
 	CY_SET_REG32((void *)CYREG_PERI_DIV_CMD, 0x8000FF40u);
 
 	/* CYDEV_CLK_SELECT Starting address: CYDEV_CLK_SELECT */
