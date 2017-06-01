@@ -1,37 +1,50 @@
 /*
-  Eddie SoundTouch product.
+  Eddie application.
 
-  This is the main file of the current Product Eddie project.
+  This is the main file of Eddie application process.
  */
 
-#include <signal.h>
-
+#include "Daemon.h"
 #include "DPrint.h"
 
-static DPrint s_logger( "Eddie" );
+static DPrint s_logger( "EddieApplication" );
 
 //using namespace Eddie;
 
-void SignalHandler( int signal )
+
+class EddieApplication : public Daemon
 {
-    exit( signal );
+
+public:
+
+    EddieApplication();
+    void PrepareToLive() override;
+    void PrepareToDie() override;
+
+public:
+
+    //ControllerTask m_controllerTask;
+    //ControllerITC m_controllerItc;
+    //EddieSoundTouchInterface m_SoundTouchInterface;
+    //EddieCliClient m_eddieCliClient;
+};
+
+EddieApplication::EddieApplication()  : Daemon()
+{
 }
 
-int main( int argc, char** argv )
+void EddieApplication::PrepareToLive()
 {
-    DPrint::Initialize( );
-    signal( SIGINT,  SignalHandler );
-    signal( SIGTERM, SignalHandler );
-
-    //ControllerTask controllerTask;
-
-    //ControllerITC controllerItc( controllerTask );
-
-    //SoundTouchsdkInterface.Start();
-
-    BOSE_DEBUG( s_logger, "Eddie product v0.1" );
-
-    //    for( ;; );
-
-    return 0;
+    BOSE_INFO( s_logger, __func__ );
 }
+
+void EddieApplication::PrepareToDie()
+{
+    BOSE_INFO( s_logger, __func__ );
+}
+
+std::unique_ptr<Daemon> Daemon::Factory()
+{
+    return std::unique_ptr<Daemon> { new EddieApplication{} };
+}
+
