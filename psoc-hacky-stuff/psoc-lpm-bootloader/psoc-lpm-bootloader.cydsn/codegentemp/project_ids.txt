@@ -1,0 +1,6 @@
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|9005951c-7e1e-4b0d-8061-61c6bf415ba8
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|9077e8ad-464a-41fb-aa88-f1aa584e0c72
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|bba47f10-b504-4174-972d-d92a859dbcd2
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|392bef13-3acf-4396-b964-248ad7fd66b1
+C:\Users\mike\Documents\PSoC Creator\psoc-lpm-bootloader\bootloader.cydsn\bootloader.cyprj|d525414b-853c-4a93-8869-1d42fdd3c8a5
+C:\Users\mike\Documents\PSoC Creator\psoc-lpm-bootloader\psoc-lpm-bootloader.cydsn\psoc-lpm-bootloader.cyprj|b2ee6175-f2cd-4cc6-915f-195ac91c90ee

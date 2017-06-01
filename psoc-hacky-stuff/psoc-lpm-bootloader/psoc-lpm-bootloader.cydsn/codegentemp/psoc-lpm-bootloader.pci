@@ -1,0 +1,10 @@
+# psoc-lpm-bootloader
+# 2017-05-31 15:20:38Z
+
+# IO_2@[IOP=(3)][IoId=(2)] is reserved: SWDDebugEnabled
+dont_use_io iocell 3 2
+# IO_3@[IOP=(3)][IoId=(3)] is reserved: SWDDebugEnabled
+dont_use_io iocell 3 3
+set_location "ClockGenBlock" m0s8clockgenblockcell -1 -1 0
+set_io "\I2CS:sda(0)\" iocell 4 1
+set_io "\I2CS:scl(0)\" iocell 4 0
