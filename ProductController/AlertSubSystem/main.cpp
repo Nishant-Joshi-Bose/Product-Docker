@@ -25,7 +25,7 @@ struct mg_connection *nc;
 static const char*  s_http_port            = "8010";
 static struct mg_serve_http_opts s_http_server_opts;
 
-static 	struct tm *t_time = nullptr;
+//static 	struct tm *t_time = nullptr;
 static  std::string a_type = "";
 static  std::string alert_command = "NONE";
 static  std::string alert_id = "";
@@ -55,7 +55,7 @@ static int is_websocket(const struct mg_connection *nc) {
 static void broadcast(struct mg_connection *ncc, const struct mg_str msg) {
   struct mg_connection *c;
   char buf[500];
-  char addr[32];
+  //char addr[32];
 
   snprintf(buf, sizeof(buf), "%.*s", (int) msg.len, msg.p);
   printf("%s\n", buf); /* Local echo. */

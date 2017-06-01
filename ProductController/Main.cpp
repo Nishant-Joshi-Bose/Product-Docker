@@ -19,7 +19,7 @@ void SignalHandler( int signal )
 
 int main( int argc, char** argv )
 {
-    DPrint::Initialize( "Eddie" );
+    DPrint::Initialize( );
     signal( SIGINT,  SignalHandler );
     signal( SIGTERM, SignalHandler );
 
