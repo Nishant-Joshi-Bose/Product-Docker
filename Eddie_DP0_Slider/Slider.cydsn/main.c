@@ -59,8 +59,10 @@ int main()
 {
     BOOL                    cap_sense_is_untouched  = TRUE;
     BOOL                    cap_sense_was_untouched = FALSE;
+#ifndef PROFESSOR
     uint16                  cap_cur_pos             = CapSense_SLIDER_NO_TOUCH;
     uint16                  cap_old_pos             = CapSense_SLIDER_NO_TOUCH;
+#endif
     uint16                  led_pos                 = CapSense_SLIDER_NO_TOUCH;
     uint16                  new_led_pos             = CapSense_SLIDER_NO_TOUCH;
     static t_enum_direction finger_direction        = DIRECT_STOP;
