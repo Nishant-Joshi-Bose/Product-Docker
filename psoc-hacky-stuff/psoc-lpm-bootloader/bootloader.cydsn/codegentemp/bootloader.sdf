@@ -1,0 +1,25 @@
+(DELAYFILE
+ (SDFVERSION "IEEE 1497 4.0")
+ (DATE "2017-05-31T15:00:28Z")
+ (DESIGN "bootloader")
+ (VENDOR "Cypress Semiconductor")
+ (PROGRAM "PSoC Creator")
+ (VERSION " 4.0 Update 1")
+ (DIVIDER .)
+ (TIMESCALE 1 ns)
+ (CELL
+  (CELLTYPE "bootloader")
+  (INSTANCE *)
+  (DELAY
+   (ABSOLUTE
+    (INTERCONNECT ClockBlock.hfclk \\I2C_1\:SCB_IRQ\\.clock (0.000:0.000:0.000))
+    (INTERCONNECT \\I2C_1\:SCB\\.interrupt \\I2C_1\:SCB_IRQ\\.interrupt (0.000:0.000:0.000))
+    (INTERCONNECT ClockBlock.ff_div_2 \\I2C_1\:SCB\\.clock (0.000:0.000:0.000))
+    (INTERCONNECT \\I2C_1\:scl\(0\)\\.fb \\I2C_1\:SCB\\.scl (0.000:0.000:0.000))
+    (INTERCONNECT \\I2C_1\:sda\(0\)\\.fb \\I2C_1\:SCB\\.sda (0.000:0.000:0.000))
+    (INTERCONNECT \\I2C_1\:sda\(0\)_PAD\\ \\I2C_1\:sda\(0\)\\.pad_in (0.000:0.000:0.000))
+    (INTERCONNECT \\I2C_1\:scl\(0\)_PAD\\ \\I2C_1\:scl\(0\)\\.pad_in (0.000:0.000:0.000))
+   )
+  )
+ )
+)

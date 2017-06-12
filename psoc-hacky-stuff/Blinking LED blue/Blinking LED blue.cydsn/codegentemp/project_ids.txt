@@ -1,0 +1,6 @@
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|9005951c-7e1e-4b0d-8061-61c6bf415ba8
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|9077e8ad-464a-41fb-aa88-f1aa584e0c72
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|bba47f10-b504-4174-972d-d92a859dbcd2
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|392bef13-3acf-4396-b964-248ad7fd66b1
+C:\Users\mike\Clients\Bose\Eddie\psoc\CY8CKIT-042-examples\PSoC4\Blinking LED\Blinking LED.cydsn\Blinking LED.cyprj|b266be0a-8be7-4ee8-8c84-06609605237a
+C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyReferenceLibrary\CyReferenceLibrary.cylib\CyReferenceLibrary.cyprj|dcd3033d-dd9f-49e3-b6dc-e5657e35e26c

@@ -3,11 +3,14 @@
 <!--This file is machine generated and read. It is not intended to be edited by hand.-->
 <!--Due to this, there is no schema for this file.-->
 <CyGuid_2867d519-54d2-4c01-9830-c51cb08bc3dd type_name="CyDesigner.Common.ProjMgmt.Model.CyPrjMgmtWorkspaceSerialize" version="5" xml_contents_version="3" name="Slider_WS.Bundle05" persistent="Slider_WS.Bundle05.cywrk" platform="NOT_USED">
-<current_project name=".\Slider.cydsn\Slider.cyprj" />
+<current_project name=".\Prof_DP0.cydsn\Prof_DP0.cyprj" />
 <wrkspc_folders />
 <files />
 <projects>
 <v>.\Slider.cydsn\Slider.cyprj</v>
+<v>.\Bootloader.cydsn\Bootloader.cyprj</v>
+<v>.\Prof_DP0.cydsn\Prof_DP0.cyprj</v>
+<v>.\Bootloader_Prof.cydsn\Bootloader_Prof.cyprj</v>
 </projects>
 <workspace_id v="55d1bf3e-1525-424c-ac36-6300b2813093" />
 <WriteAppVersionLastSavedWith v="4.0.0.432" />

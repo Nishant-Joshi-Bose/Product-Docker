@@ -1,0 +1,9 @@
+C:\work\psoc-lpm-bootloader\psoc-lpm-bootloader.cydsn\psoc-lpm-bootloader.cyprj|6dcbde85-61b5-483a-8ce8-b2161e7a6936
+C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|6d56b07f-578c-4bd0-8a2d-faf05a6bd454
+C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|218fa82f-352a-4907-bc6d-9034331568f3
+C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|c799cebd-f8aa-4367-aa58-9e3565d66618
+C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|ab459b07-e1b9-4618-b44b-1aa3008c2167
+C:\work\psoc-lpm-bootloader\bootloader.cydsn\bootloader.cyprj|bba20158-38f2-4102-9f87-19f94de324f2
+C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyReferenceLibrary\CyReferenceLibrary.cylib\CyReferenceLibrary.cyprj|d581a447-0546-45ab-896b-8cb94dd5dca4
+C:\work\Blinking LED blue\Blinking LED blue.cydsn\Blinking LED blue.cyprj|c7ee8a20-acc1-46f9-bf2f-1591ea01d92f
+C:\work\Blinking LED red\Blinking LED red.cydsn\Blinking LED red.cyprj|80ad790d-590e-4b7b-9e65-b01eb001e7cb

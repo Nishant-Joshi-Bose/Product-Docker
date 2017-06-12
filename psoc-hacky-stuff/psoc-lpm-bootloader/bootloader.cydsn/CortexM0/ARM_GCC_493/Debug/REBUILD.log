@@ -1,0 +1,57 @@
+--------------- Rebuild Started: 05/31/2017 10:58:11 Project: bootloader, Configuration: ARM GCC 4.9-2015-q1-update Debug ---------------
+Deleting file ".\CortexM0\ARM_GCC_493\Debug\main.o"
+Deleting file ".\CortexM0\ARM_GCC_493\Debug\cyfitter_cfg.o"
+Deleting file ".\CortexM0\ARM_GCC_493\Debug\cymetadata.o"
+Deleting file ".\CortexM0\ARM_GCC_493\Debug\Bootloader_1.o"
+Deleting file ".\CortexM0\ARM_GCC_493\Debug\Cm0Start.o"
+Deleting file ".\CortexM0\ARM_GCC_493\Debug\CyBootAsmGnu.o"
+Deleting file ".\CortexM0\ARM_GCC_493\Debug\CyFlash.o"
+Deleting file ".\CortexM0\ARM_GCC_493\Debug\CyLib.o"
+Deleting file ".\CortexM0\ARM_GCC_493\Debug\cyPm.o"
+Deleting file ".\CortexM0\ARM_GCC_493\Debug\cyutils.o"
+Deleting file ".\CortexM0\ARM_GCC_493\Debug\CyLFClk.o"
+Deleting file ".\CortexM0\ARM_GCC_493\Debug\bootloader.map"
+Deleting file ".\bootloader.cycdx"
+Deleting file ".\bootloader.rpt"
+Deleting file ".\bootloader_timing.html"
+Deleting file ".\CortexM0\ARM_GCC_493\Debug\.deps\SOURCE_C__ARM_GCC_GENERIC.P"
+Deleting file ".\CortexM0\ARM_GCC_493\Debug\.deps\SOURCE_ASM__ARM_GCC_GENERIC.P"
+cydsfit.exe -.appdatapath "C:\Users\mike\AppData\Local\Cypress Semiconductor\PSoC Creator\4.0" -.fdsnotice -.fdswarpdepfile=warp_dependencies.txt -.fdselabdepfile=elab_dependencies.txt -.fdsbldfile=generated_files.txt -.fdsreffile=referenced_files.txt -p "C:\Users\mike\Documents\PSoC Creator\psoc-lpm-bootloader\bootloader.cydsn\bootloader.cyprj" -d CY8C4245AXI-483 -s "C:\Users\mike\Documents\PSoC Creator\psoc-lpm-bootloader\bootloader.cydsn\Generated_Source\PSoC4" -- -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE
+Elaborating Design...
+HDL Generation...
+Synthesis...
+Tech Mapping...
+Analog Placement...
+Analog Routing...
+Analog Code Generation...
+Digital Placement...
+Digital Routing...
+Bitstream Generation...
+Bitstream Verification...
+Static timing analysis...
+API Generation...
+Dependency Generation...
+Cleanup...
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_493\Debug/main.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects -c main.c -o .\CortexM0\ARM_GCC_493\Debug\main.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_493\Debug/cyfitter_cfg.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects -c Generated_Source\PSoC4\cyfitter_cfg.c -o .\CortexM0\ARM_GCC_493\Debug\cyfitter_cfg.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_493\Debug/cymetadata.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects -c Generated_Source\PSoC4\cymetadata.c -o .\CortexM0\ARM_GCC_493\Debug\cymetadata.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_493\Debug/Bootloader_1.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects -c Generated_Source\PSoC4\Bootloader_1.c -o .\CortexM0\ARM_GCC_493\Debug\Bootloader_1.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_493\Debug/Cm0Start.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects -c Generated_Source\PSoC4\Cm0Start.c -o .\CortexM0\ARM_GCC_493\Debug\Cm0Start.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_493\Debug/CyFlash.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects -c Generated_Source\PSoC4\CyFlash.c -o .\CortexM0\ARM_GCC_493\Debug\CyFlash.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_493\Debug/CyLib.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects -c Generated_Source\PSoC4\CyLib.c -o .\CortexM0\ARM_GCC_493\Debug\CyLib.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_493\Debug/cyPm.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects -c Generated_Source\PSoC4\cyPm.c -o .\CortexM0\ARM_GCC_493\Debug\cyPm.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_493\Debug/cyutils.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects -c Generated_Source\PSoC4\cyutils.c -o .\CortexM0\ARM_GCC_493\Debug\cyutils.o
+arm-none-eabi-gcc.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=.\CortexM0\ARM_GCC_493\Debug/CyLFClk.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects -c Generated_Source\PSoC4\CyLFClk.c -o .\CortexM0\ARM_GCC_493\Debug\CyLFClk.o
+arm-none-eabi-as.exe -mcpu=cortex-m0 -mthumb -I. -IGenerated_Source\PSoC4 -alh=.\CortexM0\ARM_GCC_493\Debug/CyBootAsmGnu.lst -g -W -o .\CortexM0\ARM_GCC_493\Debug\CyBootAsmGnu.o Generated_Source\PSoC4\CyBootAsmGnu.s
+arm-none-eabi-ar.exe -rs .\CortexM0\ARM_GCC_493\Debug\bootloader.a .\CortexM0\ARM_GCC_493\Debug\cyfitter_cfg.o .\CortexM0\ARM_GCC_493\Debug\Bootloader_1.o .\CortexM0\ARM_GCC_493\Debug\CyFlash.o .\CortexM0\ARM_GCC_493\Debug\CyLib.o .\CortexM0\ARM_GCC_493\Debug\cyPm.o .\CortexM0\ARM_GCC_493\Debug\cyutils.o .\CortexM0\ARM_GCC_493\Debug\CyLFClk.o .\CortexM0\ARM_GCC_493\Debug\CyBootAsmGnu.o
+arm-none-eabi-ar.exe: creating .\CortexM0\ARM_GCC_493\Debug\bootloader.a
+arm-none-eabi-gcc.exe -Wl,--start-group -o .\CortexM0\ARM_GCC_493\Debug\bootloader.elf .\CortexM0\ARM_GCC_493\Debug\main.o .\CortexM0\ARM_GCC_493\Debug\cymetadata.o .\CortexM0\ARM_GCC_493\Debug\Cm0Start.o .\CortexM0\ARM_GCC_493\Debug\bootloader.a "C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CortexM0\ARM_GCC_493\Debug\CyComponentLibrary.a" -mcpu=cortex-m0 -mthumb -g -ffunction-sections -Og -ffat-lto-objects -L Generated_Source\PSoC4 -Wl,-Map,.\CortexM0\ARM_GCC_493\Debug/bootloader.map -T "C:\Users\mike\Documents\PSoC Creator\psoc-lpm-bootloader\bootloader.cydsn\Generated_Source\PSoC4\cm0gcc.ld" -specs=nano.specs -Wl,--gc-sections -Wl,--end-group
+.\CortexM0\ARM_GCC_493\Debug\bootloader.a(Bootloader_1.o): In function `Bootloader_1_WritePacket':
+C:\Users\mike\Documents\PSoC Creator\psoc-lpm-bootloader\bootloader.cydsn/Generated_Source\PSoC4/Bootloader_1.c:2772: undefined reference to `CyBtldrCommWrite'
+.\CortexM0\ARM_GCC_493\Debug\bootloader.a(Bootloader_1.o): In function `Bootloader_1_HostLink':
+C:\Users\mike\Documents\PSoC Creator\psoc-lpm-bootloader\bootloader.cydsn/Generated_Source\PSoC4/Bootloader_1.c:1691: undefined reference to `CyBtldrCommStart'
+C:\Users\mike\Documents\PSoC Creator\psoc-lpm-bootloader\bootloader.cydsn/Generated_Source\PSoC4/Bootloader_1.c:1702: undefined reference to `CyBtldrCommRead'
+C:\Users\mike\Documents\PSoC Creator\psoc-lpm-bootloader\bootloader.cydsn/Generated_Source\PSoC4/Bootloader_1.c:2671: undefined reference to `CyBtldrCommStop'
+collect2.exe: error: ld returned 1 exit status
+The command 'arm-none-eabi-gcc.exe' failed with exit code '1'.
+--------------- Rebuild Failed: 05/31/2017 10:58:23 ---------------

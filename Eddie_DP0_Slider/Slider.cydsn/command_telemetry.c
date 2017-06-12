@@ -10,6 +10,7 @@
  * ========================================
 */
 #include "command_telemetry.h"
+#include "comms.h"
 
 //=============================================================================
 //============================================================ static variables
@@ -43,7 +44,7 @@ static t_struct_command vec_commands[CMD_UNKNOWN]                     = {{CMD_AN
                                                                          {CMD_TRACKER            , "tracker"        , "set/get the tracker configuration" },
                                                                          {CMD_VERSION            , "version"        , "get the actual version"            }};
 
-static BOOL is_telemetry_enable        = FALSE; // enable/disable the telemetry, this avoid the PSoC to hang on an UART buffer overflow if noone is reading the UART.
+static BOOL is_telemetry_enable        = FALSE; // enable/disable the telemetry
 static BOOL is_sensor_telemetry_enable = FALSE; // when enable: send the sensors status on each capacitive touch pad activities.
 static char telemetry[512];
 
@@ -862,6 +863,7 @@ void send_animation_telemetry(t_enum_animation animation_index, const char* acti
 //=============================================================================
 void send_telemetry_capsense(void)
 {
+#ifndef PROFESSOR
     uint16 i;
     uint16 nb_sensors = CapSense_GET_SENSOR_COUNT(0);
    
@@ -885,6 +887,7 @@ void send_telemetry_capsense(void)
         strcat(telemetry, "\"}");
         send_telemetry(telemetry);
     }// for all the sensors
+#endif
 }// send_telemetry_capsense
 
 //=============================================================================
@@ -989,13 +992,9 @@ void send_telemetry(const char *telemetry)
 {
     if (get_is_telemetry_enable())
     {
-#if USE_UART
         CapSense_ISR_Disable();
-        UART_1_UartPutString(telemetry);
+        CommsSendData(telemetry);
         CapSense_ISR_Enable();
-#else
-    // FIXME: use I2C
-#endif //USE_UART
     }// If the telemetry are enable
 }// send_button_telemetry
 

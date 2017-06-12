@@ -1,0 +1,23 @@
+(DELAYFILE
+ (SDFVERSION "IEEE 1497 4.0")
+ (DATE "2017-06-01T13:39:39Z")
+ (DESIGN "Blinking LED red")
+ (VENDOR "Cypress Semiconductor")
+ (PROGRAM "PSoC Creator")
+ (VERSION " 4.0 Update 1")
+ (DIVIDER .)
+ (TIMESCALE 1 ns)
+ (CELL
+  (CELLTYPE "Blinking LED red")
+  (INSTANCE *)
+  (DELAY
+   (ABSOLUTE
+    (INTERCONNECT ClockBlock.ff_div_8 \\PWM\:cy_m0s8_tcpwm_1\\.clock (0.000:0.000:0.000))
+    (INTERCONNECT \\PWM\:cy_m0s8_tcpwm_1\\.line_out Pin_BlueLED\(0\).pin_input (5.695:5.695:5.695))
+    (INTERCONNECT Pin_BlueLED\(0\).pad_out Pin_BlueLED\(0\).pad_in (0.000:0.000:0.000))
+    (INTERCONNECT Pin_BlueLED\(0\).pad_out Pin_BlueLED\(0\)_PAD (0.000:0.000:0.000))
+    (INTERCONNECT Pin_BlueLED\(0\)_PAD Pin_BlueLED\(0\).pad_in (0.000:0.000:0.000))
+   )
+  )
+ )
+)
