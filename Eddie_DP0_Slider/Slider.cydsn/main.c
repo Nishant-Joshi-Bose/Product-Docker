@@ -22,12 +22,7 @@
 #define SLIDER_RESOLUTION 600
 #define START_OF_CMD      '{'
 #define END_OF_CMD        '}'
-<<<<<<< HEAD
-
-#define NUMBER_OF_BUTTONS (CapSense_TOTAL_WIDGETS - 1)
-=======
 #define NUMBER_OF_BUTTONS (CapSense_TOTAL_WIDGETS)
->>>>>>> origin/psoc-switch-to-i2c
 
 typedef struct {
     uint8 capsense_id   ;
@@ -35,16 +30,6 @@ typedef struct {
     char* name          ;
 }t_push_button_struct;
 
-<<<<<<< HEAD
-t_push_button_struct push_button_vec[NUMBER_OF_BUTTONS] = { {CapSense_BUT0_WDGT_ID, FALSE, "DUAL-0"},
-                                                            {CapSense_BUT1_WDGT_ID, FALSE, "DUAL-1"},
-                                                            {CapSense_BUT3_WDGT_ID, FALSE, "BT3"   },
-                                                            {CapSense_BUT4_WDGT_ID, FALSE, "BT4"   },
-                                                            {CapSense_BUT5_WDGT_ID, FALSE, "BT5"   },
-                                                            {CapSense_BUT6_WDGT_ID, FALSE, "BT6"   },
-                                                            {CapSense_BUT8_WDGT_ID, FALSE, "BT8"   }};
-
-=======
 t_push_button_struct push_button_vec[] = { {CapSense_BUT0_WDGT_ID, FALSE, "BT0"}
 #ifndef PROFESSOR
                                                             ,{CapSense_BUT1_WDGT_ID, FALSE, "BT1"},
@@ -56,7 +41,6 @@ t_push_button_struct push_button_vec[] = { {CapSense_BUT0_WDGT_ID, FALSE, "BT0"}
 #endif
 };
                                                  
->>>>>>> origin/psoc-switch-to-i2c
 //=============================================================================
 //========================================================= function prototypes
 //=============================================================================
@@ -67,25 +51,14 @@ uint16 get_capsense_touched_sensors(void);
 uint16 get_led_pos                 (uint32 centroid_pos);
 void   reset_timer                 (void);
 void   push_button_scan            (void);
-<<<<<<< HEAD
-
-char receive_string[512];
-
-=======
-                  
->>>>>>> origin/psoc-switch-to-i2c
 //=============================================================================
 //======================================================================== main
 //=============================================================================
 int main()
 {
     BOOL                    cap_sense_is_untouched  = TRUE;
-<<<<<<< HEAD
-    BOOL                    cap_sense_was_untouched = TRUE;
-=======
     BOOL                    cap_sense_was_untouched = FALSE;
 #ifndef PROFESSOR
->>>>>>> origin/psoc-switch-to-i2c
     uint16                  cap_cur_pos             = CapSense_SLIDER_NO_TOUCH;
     uint16                  cap_old_pos             = CapSense_SLIDER_NO_TOUCH;
 #endif
@@ -101,19 +74,6 @@ int main()
     TimerISR_StartEx(clock_interrupt_handler);
     Timer_1_Start   ();
     initialize_leds ();
-<<<<<<< HEAD
-
-#ifdef Bootloader_1_CHECK_ROW_NUMBER
-#endif
-
-#if USE_UART
-    UART_1_Start();
-#else
-    EZI2C_Start();
-    EZI2C_EzI2CSetBuffer1(sizeof(CapSense_dsRam), sizeof(CapSense_dsRam), (uint8 *)&CapSense_dsRam);
-#endif // USE_UART
-=======
->>>>>>> origin/psoc-switch-to-i2c
 
     CommsInit();
 
@@ -122,25 +82,11 @@ int main()
     for(;;)
     {
 
-<<<<<<< HEAD
-        CapSense_ISR_Disable();
-            uart_char_in = UART_1_UartGetChar();
-        CapSense_ISR_Enable();
-
-        if((uart_char_in >= 0x20) && (uart_char_in <= 0x7F))
-=======
         if (CommsIsInputBufferReady())
->>>>>>> origin/psoc-switch-to-i2c
         {
             if (get_is_telemetry_enable() == FALSE)
             {
                 set_is_telemetry_enable(TRUE);
-<<<<<<< HEAD
-            }// the telemetry were disabled but we received something on the UART
-
-            receive_string[receive_pos++] = uart_char_in;
-            if ((uart_char_in == END_OF_CMD) || (receive_pos >= (int) sizeof(receive_string)))
-=======
             }// the telemetry were disabled but we received something from the client
 
             char *receive_string = (char *)CommsGetInputBuffer();
@@ -150,7 +96,6 @@ int main()
                 send_alarm_telemetry(ALARM_WARNING, "", "invalid start-end character(s)");
             }// if the command is not well formed
             else
->>>>>>> origin/psoc-switch-to-i2c
             {
                 receive_string[strlen(receive_string) - 1] = '\0';
                 if (parse_and_execute_command(&(receive_string[1])) == FALSE)
@@ -159,27 +104,6 @@ int main()
                 }// If we failed to execute the command
                 else
                 {
-<<<<<<< HEAD
-                    receive_string[strlen(receive_string) - 1] = '\0';
-                    if (parse_and_execute_command(&(receive_string[1])) == FALSE)
-                    {
-                        send_alarm_telemetry(ALARM_WARNING, command, "failed to execute the command");
-                    }// If we failed to execute the command
-                    else
-                    {
-                        send_alarm_telemetry(ALARM_LOG, command, "executed");
-                    }
-                }// else, the command seems well formed
-
-                memset (receive_string, '\0', sizeof(receive_string));
-                receive_pos = 0;
-            }// If we detect the end of the command
-        }// If we got a character
-#else
-        // FIXME: use I2C
-#endif // USE_UART
-
-=======
                     send_alarm_telemetry(ALARM_LOG, command, "executed");
                 }
             }// else, the command seems well formed
@@ -187,7 +111,6 @@ int main()
             CommsResetInputBuffer();
         }
         
->>>>>>> origin/psoc-switch-to-i2c
         if (cap_sense_is_untouched && get_is_anim_on_button_up_enable())
         {
             run_current_animation(TRUE);
@@ -272,10 +195,7 @@ int main()
             cap_old_pos = cap_cur_pos;
         }// else, capsense is touched
         cap_sense_was_untouched = cap_sense_is_untouched;
-<<<<<<< HEAD
-=======
 #endif
->>>>>>> origin/psoc-switch-to-i2c
 
 #if USE_TUNER
         CapSense_RunTuner(); // sync capsense parameters via tuner before the beginning of new capsense scan
