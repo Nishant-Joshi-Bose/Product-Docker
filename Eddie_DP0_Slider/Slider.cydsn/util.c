@@ -23,7 +23,7 @@
 static BOOL          is_tracker_enable      = TRUE; // when enable: the finger tracker lightbar animation will be follow the finger motion.
 static uint16        number_of_buttons      = DEFAULT_NUMBER_OF_BUTTONS;
 static uint_fast64_t timer_interrrupt_count = 0;
-static const char*   software_version       = "0.08";
+static const char*   software_version       = "0.07";
 
 //=============================================================================
 //======================================================================== atoi
