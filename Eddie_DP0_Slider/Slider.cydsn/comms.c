@@ -8,7 +8,7 @@
 #include <project.h>
 #include "util.h"
 
-#define I2C_BUFFER_SIZE 512
+#define I2C_BUFFER_SIZE 96 // Bootloader uses about 64; just be safe
 static uint8 i2cRxBuffer[I2C_BUFFER_SIZE];
 static uint8 i2cTxBuffer[I2C_BUFFER_SIZE];
 #define I2C_MASTER_READ_TIMEOUT 16 // 1s/16 timer interrupt ticks
@@ -36,9 +36,9 @@ uint8 *CommsGetInputBuffer(void)
     return(i2cRxBuffer);
 }
 
-void CommsSendData(const char *buffer)
+void CommsSendData(uint8_t count, const char *buffer)
 {
-    memcpy(i2cTxBuffer, buffer, strlen(buffer));
+    memcpy(i2cTxBuffer, buffer, count);
     uint_fast64_t startTime = get_timer_interrrupt_count();
     // Interrupt the client to let it know it has to read now
     CAPINT_Write(1u);
