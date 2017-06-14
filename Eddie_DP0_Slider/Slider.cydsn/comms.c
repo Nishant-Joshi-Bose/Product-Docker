@@ -13,7 +13,7 @@
 #include "slider.h"
 #include "capsensehdlr.h"
 
-#define COMMS_RCV_BUFFER_SIZE 64 // Max incoming buffer is around 48
+#define COMMS_RCV_BUFFER_SIZE 64 // Max incoming buffer is around 49
 static uint8 i2cRxBuffer[COMMS_RCV_BUFFER_SIZE];
 static uint8 i2cTxBuffer[COMMS_TX_BUFFER_SIZE];
 #define I2C_MASTER_READ_TIMEOUT 16 // 1s/16 timer interrupt ticks
@@ -103,7 +103,7 @@ void CommsHandleIncoming(void)
         case COMMS_COMMAND_GETVERSION:
             CommsSendVersion();
             break;
-        case COMMS_COMMAND_LEDS_SETUP:
+//        case COMMS_COMMAND_LEDS_SETUP:
         case COMMS_COMMAND_LEDS_CLEARALL:
         case COMMS_COMMAND_LEDS_SETALL:
         case COMMS_COMMAND_LEDS_SETONE:

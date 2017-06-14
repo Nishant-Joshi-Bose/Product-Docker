@@ -16,7 +16,8 @@
 #include "util.h"
 
 #define MAX_LEDS               24 
-    
+
+#ifdef OLDSTUFF
 void set_led               (char led, uint16 intensity);
 void set_led_triplet       (char left_led, uint16 intensity_left, uint16 intensity_center, uint16 intensity_right);
 void set_led_pair          (char left_led, uint16 intensity_left, uint16 intensity_center);
@@ -25,7 +26,9 @@ void set_led_strip         (uint16 led_vec[MAX_LEDS]);
 void set_all_white_leds    (uint16 intensity);
 void set_all_colored_leds  (uint16 intensity);
 void initialize_leds       (void);
+#endif
 
+void LedsInit(void);
 BOOL LedsHandleCommand(const uint8_t *buff);
 
 #endif // LED_H

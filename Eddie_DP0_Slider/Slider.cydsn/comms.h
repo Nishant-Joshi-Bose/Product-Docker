@@ -22,7 +22,7 @@ void CommsSendStatus(BOOL status);
 
 typedef enum {
     COMMS_COMMAND_GETVERSION = 0,
-    COMMS_COMMAND_LEDS_SETUP,
+//    COMMS_COMMAND_LEDS_SETUP, // We always have 24 leds; don't need this
     COMMS_COMMAND_LEDS_CLEARALL,
     COMMS_COMMAND_LEDS_SETALL,
     COMMS_COMMAND_LEDS_SETONE,
