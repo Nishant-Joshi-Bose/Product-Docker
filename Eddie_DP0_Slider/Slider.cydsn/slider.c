@@ -8,6 +8,7 @@
 #include <project.h>
 #include "util.h"
 #include "slider.h"
+#include "comms.h"
 
 // Only compile slider stuff in if sliders were configured in PSoC creator
 #if defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)
@@ -37,7 +38,18 @@ void SlidersInit(void)
 BOOL SlidersSetup(const uint8_t *buff)
 {
 #if defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)
-    return FALSE;
+    if (buff[1] > MAX_CAPSENSE_SLIDERS)
+    {
+        return FALSE;
+    }
+    nSliders = buff[1];
+    // We just have to expect they're going to give us proper data
+    // We don't really have any good way to validate
+    for (uint8_t i = 0; i < nSliders; i++)
+    {
+        sliders[i].id = buff[1+i];
+    }
+    return TRUE;
 #else
     return FALSE;
 #endif
@@ -46,7 +58,14 @@ BOOL SlidersSetup(const uint8_t *buff)
 #if defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)
 static void SendSliderEvent(const Slider_t *slider, SliderState_t state)
 {
-
+    uint8_t buff[COMMS_TX_BUFFER_SIZE];
+    memset(buff, 0, COMMS_TX_BUFFER_SIZE);
+    buff[0] = COMMS_RESPONSE_SLIDER;
+    buff[1] = slider->id;
+    buff[2] = (uint8_t)(slider->lastPos & 0xFF); // LSB first
+    buff[3] = (uint8_t)((slider->lastPos >> 8) & 0xFF);
+    buff[4] = (uint8_t)state;
+    CommsSendData(buff);
 }
 #endif
 
@@ -59,6 +78,7 @@ void SlidersScan(void)
 
         if (curPos != sliders[i].lastPos)
         {
+            // If we did this outside the PSoC we could save a couple bytes in the comms protocol
             SliderState_t state = SLIDER_MOVE; // Default
             // Up
             if (curPos == CapSense_SLIDER_NO_TOUCH)
@@ -71,9 +91,9 @@ void SlidersScan(void)
                 state = SLIDER_DOWN;
             }
 
-            SendSliderEvent(&sliders[i], state);
-
             sliders[i].lastPos = curPos;
+
+            SendSliderEvent(&sliders[i], state);
         }
     }
 #endif

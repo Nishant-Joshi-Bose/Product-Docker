@@ -35,11 +35,14 @@ typedef enum {
 
 typedef enum {
     COMMS_RESPONSE_STATUS = 0,
+    COMMS_RESPONSE_VERSION,
     COMMS_RESPONSE_SLIDER,
     COMMS_RESPONSE_BUTTON,
 } CommsResponse_t;
 
 #define COMMS_STATUS_FAILURE 0
 #define COMMS_STATUS_SUCCESS 1
+
+#define COMMS_TX_BUFFER_SIZE 6 // Outgoing buffer size is fixed
 
 #endif /* COMMS_H_ */

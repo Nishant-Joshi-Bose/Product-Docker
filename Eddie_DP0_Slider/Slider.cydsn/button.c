@@ -8,6 +8,7 @@
 #include <project.h>
 #include "util.h"
 #include "button.h"
+#include "comms.h"
 
 #define MAX_CAPSENSE_BUTTONS 24
 
@@ -26,12 +27,28 @@ void ButtonsInit(void)
 
 BOOL ButtonsSetup(const uint8_t *buff)
 {
-    return FALSE;
+    if (buff[1] > MAX_CAPSENSE_BUTTONS)
+    {
+        return FALSE;
+    }
+    nButtons = buff[1];
+    // We just have to expect they're going to give us proper data
+    // We don't really have any good way to validate
+    for (uint8_t i = 0; i < nButtons; i++)
+    {
+        buttons[i].id = buff[1+i];
+    }
+    return TRUE;
 }
 
 static void SendButtonEvent(const Button_t *button)
 {
-
+    uint8_t buff[COMMS_TX_BUFFER_SIZE];
+    memset(buff, 0, COMMS_TX_BUFFER_SIZE);
+    buff[0] = COMMS_RESPONSE_BUTTON;
+    buff[1] = button->id;
+    buff[2] = button->pressed ? TRUE : FALSE;
+    CommsSendData(buff);
 }
 
 void ButtonsScan(void)
