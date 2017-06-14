@@ -36,7 +36,7 @@ uint8 *CommsGetInputBuffer(void)
     return(i2cRxBuffer);
 }
 
-void CommsSendData(uint8_t count, const char *buffer)
+void CommsSendData(uint8_t count, const uint8_t *buffer)
 {
     memcpy(i2cTxBuffer, buffer, count);
     uint_fast64_t startTime = get_timer_interrrupt_count();
@@ -56,4 +56,36 @@ void CommsSendData(uint8_t count, const char *buffer)
     (void) I2CS_I2CSlaveClearReadStatus();
     // Reset client interrupt
     CAPINT_Write(0u);
+}
+
+void CommsHandleIncoming(void)
+{
+    if (CommsIsInputBufferReady())
+    {
+        if (get_is_telemetry_enable() == FALSE)
+        {
+            set_is_telemetry_enable(TRUE);
+        }// the telemetry were disabled but we received something from the client
+
+        char *receive_string = (char *)CommsGetInputBuffer();
+
+        if ((receive_string[0] != START_OF_CMD) || (receive_string[strlen(receive_string) - 1] != END_OF_CMD))
+        {
+            send_alarm_telemetry(ALARM_WARNING, "", "invalid start-end character(s)");
+        }// if the command is not well formed
+        else
+        {
+            receive_string[strlen(receive_string) - 1] = '\0';
+            if (parse_and_execute_command(&(receive_string[1])) == FALSE)
+            {
+                send_alarm_telemetry(ALARM_WARNING, command, "failed to execute the command");
+            }// If we failed to execute the command
+            else
+            {
+                send_alarm_telemetry(ALARM_LOG, command, "executed");
+            }
+        }// else, the command seems well formed
+
+        CommsResetInputBuffer();
+    }
 }

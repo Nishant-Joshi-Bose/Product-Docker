@@ -9,6 +9,6 @@
 #define CAPSENSEHDLR_H_
 
 void CapsenseHandlerInit(void);
-void CapsenseHandlerScanButtons(void);
+void CapsenseHandlerScan(void);
 
 #endif /* CAPSENSEHDLR_H_ */

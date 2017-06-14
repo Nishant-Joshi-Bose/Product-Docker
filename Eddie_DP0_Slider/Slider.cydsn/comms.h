@@ -14,7 +14,8 @@
 void CommsInit(void);
 BOOL CommsIsInputBufferReady(void);
 uint8 *CommsGetInputBuffer(void);
-void CommsSendData(uint8_t count, const char *buffer);
+void CommsSendData(uint8_t count, const uint8_t *buffer);
 void CommsResetInputBuffer(void);
+void CommsHandleIncoming(void);
 
 #endif /* COMMS_H_ */
