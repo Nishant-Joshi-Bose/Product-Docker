@@ -98,5 +98,3 @@ void SlidersScan(void)
     }
 #endif
 }
-
-
