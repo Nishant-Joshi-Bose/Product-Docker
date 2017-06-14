@@ -24,6 +24,11 @@ void ButtonsInit(void)
     memset(buttons, 0, sizeof(buttons));
 }
 
+BOOL ButtonsSetup(const uint8_t *buff)
+{
+    return FALSE;
+}
+
 static void SendButtonEvent(const Button_t *button)
 {
 

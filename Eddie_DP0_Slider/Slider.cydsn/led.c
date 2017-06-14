@@ -256,4 +256,9 @@ void initialize_leds()
 
 }// initialize_leds
 
+BOOL LedsHandleCommand(const uint8_t *buff)
+{
+    return FALSE;
+}
+
 /* [] END OF FILE */

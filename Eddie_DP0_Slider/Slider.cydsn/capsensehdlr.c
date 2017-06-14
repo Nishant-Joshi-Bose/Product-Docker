@@ -40,3 +40,12 @@ void CapsenseHandlerScan(void)
    CapSense_ScanAllWidgets();
 }
 
+BOOL CapsenseHandlerEnable(void)
+{
+    return FALSE;
+}
+
+BOOL CapsenseHandlerDisable(void)
+{
+    return FALSE;
+}

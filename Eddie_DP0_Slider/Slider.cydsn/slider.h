@@ -16,5 +16,6 @@ typedef enum {
 
 void SlidersInit(void);
 void SlidersScan(void);
+BOOL SlidersSetup(const uint8_t *buff);
 
 #endif /* SLIDER_CYDSN_SLIDER_H_ */

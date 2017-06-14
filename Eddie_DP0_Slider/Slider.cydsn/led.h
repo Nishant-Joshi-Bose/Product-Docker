@@ -13,6 +13,7 @@
 #define LED_H
 
 #include <project.h>
+#include "util.h"
 
 //=============================================================================
 //=================================================================== constants
@@ -62,6 +63,8 @@ void set_led_strip         (uint16 led_vec[MAX_LEDS]);
 void set_all_white_leds    (uint16 intensity);
 void set_all_colored_leds  (uint16 intensity);
 void initialize_leds       (void);
+
+BOOL LedsHandleCommand(const uint8_t *buff);
 
 #endif // LED_H
 /* [] END OF FILE */

@@ -7,16 +7,22 @@
 
 #include <project.h>
 #include "util.h"
+#include "comms.h"
+#include "led.h"
+#include "button.h"
+#include "slider.h"
+#include "capsensehdlr.h"
 
-#define I2C_BUFFER_SIZE 96 // Bootloader uses about 64; just be safe
-static uint8 i2cRxBuffer[I2C_BUFFER_SIZE];
-static uint8 i2cTxBuffer[I2C_BUFFER_SIZE];
+#define I2C_RCV_BUFFER_SIZE 64 // Max incoming buffer is around 48
+#define I2C_TX_BUFFER_SIZE 4 // Outgoing buffer is always 4
+static uint8 i2cRxBuffer[I2C_RCV_BUFFER_SIZE];
+static uint8 i2cTxBuffer[I2C_TX_BUFFER_SIZE];
 #define I2C_MASTER_READ_TIMEOUT 16 // 1s/16 timer interrupt ticks
 
 void CommsInit(void)
 {
-    I2CS_I2CSlaveInitReadBuf (i2cTxBuffer,  I2C_BUFFER_SIZE);
-    I2CS_I2CSlaveInitWriteBuf(i2cRxBuffer, I2C_BUFFER_SIZE);
+    I2CS_I2CSlaveInitReadBuf (i2cTxBuffer,  I2C_TX_BUFFER_SIZE);
+    I2CS_I2CSlaveInitWriteBuf(i2cRxBuffer, I2C_RCV_BUFFER_SIZE);
     I2CS_Start();
 }
 
@@ -36,10 +42,10 @@ uint8 *CommsGetInputBuffer(void)
     return(i2cRxBuffer);
 }
 
-// TODO circular buffer and batch up instead of turning off capsense
-void CommsSendData(uint8_t count, const uint8_t *buffer)
+// TODO maybe circular buffer and batch up instead of turning off capsense but we may not have the ram
+void CommsSendData(const uint8_t *buffer)
 {
-    memcpy(i2cTxBuffer, buffer, count);
+    memcpy(i2cTxBuffer, buffer, I2C_TX_BUFFER_SIZE);
     uint_fast64_t startTime = get_timer_interrrupt_count();
     // Interrupt the client to let it know it has to read now
     CAPINT_Write(1u);
@@ -59,7 +65,7 @@ void CommsSendData(uint8_t count, const uint8_t *buffer)
     CAPINT_Write(0u);
 }
 
-void CommsSendStatus(CommsStatus_t success)
+void CommsSendStatus(BOOL success)
 {
 }
 
@@ -89,19 +95,22 @@ void CommsHandleIncoming(void)
         case COMMS_COMMAND_LEDS_CLEARALL:
         case COMMS_COMMAND_LEDS_SETALL:
         case COMMS_COMMAND_LEDS_SETONE:
+            CommsSendStatus(LedsHandleCommand(buff));
             break;
         case COMMS_COMMAND_SENSOR_ENABLE:
+            CommsSendStatus(CapsenseHandlerEnable());
             break;
         case COMMS_COMMAND_SENSOR_DISABLE:
+            CommsSendStatus(CapsenseHandlerDisable());
             break;
         case COMMS_COMMAND_BUTTONS_SETUP:
+            CommsSendStatus(ButtonsSetup(buff));
             break;
         case COMMS_COMMAND_SLIDERS_SETUP:
+            CommsSendStatus(SlidersSetup(buff));
             break;
         // NO DEFAULT! if we add commands we want the compiler to barf if we forget to check here
         }
-
-        CommsSendStatus(COMMS_STATUS_SUCCESS);
 
         CommsResetInputBuffer();
     }

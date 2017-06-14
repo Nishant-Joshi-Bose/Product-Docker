@@ -11,4 +11,7 @@
 void CapsenseHandlerInit(void);
 void CapsenseHandlerScan(void);
 
+BOOL CapsenseHandlerEnable(void);
+BOOL CapsenseHandlerDisable(void);
+
 #endif /* CAPSENSEHDLR_H_ */

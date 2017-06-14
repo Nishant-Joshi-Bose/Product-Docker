@@ -10,13 +10,15 @@
 
 #include <project.h>
 #include "util.h"
-    
+
+// TODO remove any non-global funcs and static-ize them in the c file
 void CommsInit(void);
 BOOL CommsIsInputBufferReady(void);
 uint8 *CommsGetInputBuffer(void);
-void CommsSendData(uint8_t count, const uint8_t *buffer);
+void CommsSendData(const uint8_t *buffer);
 void CommsResetInputBuffer(void);
 void CommsHandleIncoming(void);
+void CommsSendStatus(BOOL success);
 
 typedef enum {
     COMMS_COMMAND_GETVERSION = 0,
@@ -37,9 +39,7 @@ typedef enum {
     COMMS_RESPONSE_BUTTON,
 } CommsResponse_t;
 
-typedef enum {
-    COMMS_STATUS_SUCCESS = 0,
-    COMMS_STATUS_FAILURE = 1,
-} CommsStatus_t;
+#define COMMS_STATUS_FAILURE 0
+#define COMMS_STATUS_SUCCESS 1
 
 #endif /* COMMS_H_ */

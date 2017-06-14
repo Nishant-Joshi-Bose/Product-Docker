@@ -34,6 +34,15 @@ void SlidersInit(void)
 #endif
 }
 
+BOOL SlidersSetup(const uint8_t *buff)
+{
+#if defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)
+    return FALSE;
+#else
+    return FALSE;
+#endif
+}
+
 #if defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)
 static void SendSliderEvent(const Slider_t *slider, SliderState_t state)
 {
