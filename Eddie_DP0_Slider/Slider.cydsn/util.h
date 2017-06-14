@@ -35,7 +35,7 @@
 
 uint_fast64_t get_timer_interrrupt_count();
 void          set_timer_interrrupt_count(uint_fast64_t timer_interrrupt_count);
-const char*   get_software_version      ();
+uint8_t   get_software_version      ();
 
 #endif // UTIL_H
 /* [] END OF FILE */

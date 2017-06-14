@@ -36,6 +36,7 @@ uint8 *CommsGetInputBuffer(void)
     return(i2cRxBuffer);
 }
 
+// TODO circular buffer and batch up instead of turning off capsense
 void CommsSendData(uint8_t count, const uint8_t *buffer)
 {
     memcpy(i2cTxBuffer, buffer, count);
@@ -58,33 +59,49 @@ void CommsSendData(uint8_t count, const uint8_t *buffer)
     CAPINT_Write(0u);
 }
 
+void CommsSendStatus(CommsStatus_t success)
+{
+}
+
+static void CommsSendVersion(void)
+{
+
+}
+
 void CommsHandleIncoming(void)
 {
     if (CommsIsInputBufferReady())
     {
-        if (get_is_telemetry_enable() == FALSE)
-        {
-            set_is_telemetry_enable(TRUE);
-        }// the telemetry were disabled but we received something from the client
+        uint8_t *buff = CommsGetInputBuffer();
 
-        char *receive_string = (char *)CommsGetInputBuffer();
+        if (buff[0] >= COMMS_COMMAND_INVALID)
+        {
+            CommsSendStatus(COMMS_STATUS_FAILURE);
+            return;
+        }
 
-        if ((receive_string[0] != START_OF_CMD) || (receive_string[strlen(receive_string) - 1] != END_OF_CMD))
+        switch ((CommsCommand_t) buff[0])
         {
-            send_alarm_telemetry(ALARM_WARNING, "", "invalid start-end character(s)");
-        }// if the command is not well formed
-        else
-        {
-            receive_string[strlen(receive_string) - 1] = '\0';
-            if (parse_and_execute_command(&(receive_string[1])) == FALSE)
-            {
-                send_alarm_telemetry(ALARM_WARNING, command, "failed to execute the command");
-            }// If we failed to execute the command
-            else
-            {
-                send_alarm_telemetry(ALARM_LOG, command, "executed");
-            }
-        }// else, the command seems well formed
+        case COMMS_COMMAND_GETVERSION:
+            CommsSendVersion();
+            break;
+        case COMMS_COMMAND_LEDS_SETUP:
+        case COMMS_COMMAND_LEDS_CLEARALL:
+        case COMMS_COMMAND_LEDS_SETALL:
+        case COMMS_COMMAND_LEDS_SETONE:
+            break;
+        case COMMS_COMMAND_SENSOR_ENABLE:
+            break;
+        case COMMS_COMMAND_SENSOR_DISABLE:
+            break;
+        case COMMS_COMMAND_BUTTONS_SETUP:
+            break;
+        case COMMS_COMMAND_SLIDERS_SETUP:
+            break;
+        // NO DEFAULT! if we add commands we want the compiler to barf if we forget to check here
+        }
+
+        CommsSendStatus(COMMS_STATUS_SUCCESS);
 
         CommsResetInputBuffer();
     }

@@ -11,8 +11,9 @@
 */
 #include "util.h"
 
+static uint8_t   software_version       = 0x10;
+
 static uint_fast64_t timer_interrrupt_count = 0;
-static const char*   software_version       = "0.1";
 
 //=============================================================================
 //================================================== get_timer_interrrupt_count
@@ -33,7 +34,7 @@ void set_timer_interrrupt_count(uint_fast64_t the_timer_interrrupt_count)
 //=============================================================================
 //======================================================== get_software_version
 //=============================================================================
-const char* get_software_version()
+uint8_t get_software_version()
 {
     return software_version;    
 }// get_software_version
