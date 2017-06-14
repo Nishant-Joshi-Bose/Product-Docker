@@ -18,7 +18,7 @@ uint8 *CommsGetInputBuffer(void);
 void CommsSendData(const uint8_t *buffer);
 void CommsResetInputBuffer(void);
 void CommsHandleIncoming(void);
-void CommsSendStatus(BOOL success);
+void CommsSendStatus(BOOL status);
 
 typedef enum {
     COMMS_COMMAND_GETVERSION = 0,

@@ -65,8 +65,15 @@ void CommsSendData(const uint8_t *buffer)
     CAPINT_Write(0u);
 }
 
-void CommsSendStatus(BOOL success)
+void CommsSendStatus(BOOL status)
 {
+    uint8_t buff[I2C_TX_BUFFER_SIZE];
+
+    memset(buff, 0, sizeof(buff));
+    buff[0] = COMMS_RESPONSE_STATUS;
+    buff[1] = status;
+
+    CommsSendData(buff);
 }
 
 static void CommsSendVersion(void)
