@@ -121,6 +121,9 @@ void CommsHandleIncoming(void)
         case COMMS_COMMAND_SLIDERS_SETUP:
             CommsSendStatus(SlidersSetup(buff));
             break;
+        case COMMS_COMMAND_INVALID:
+            CommsSendStatus(COMMS_STATUS_FAILURE);
+            break;
         // NO DEFAULT! if we add commands we want the compiler to barf if we forget to check here
         }
 

@@ -21,13 +21,13 @@ void CapsenseHandlerScan(void)
 {
     if (CapSense_IsBusy() != CapSense_NOT_BUSY)
     {
-        continue;
+        return;
     }
 
     // process data for previous scan and initiate new scan only when the capsense hardware is idle
     if (CapSense_ProcessAllWidgets() == CYRET_INVALID_STATE)
     {
-        continue;
+        return;
     }
 
     ButtonsScan();

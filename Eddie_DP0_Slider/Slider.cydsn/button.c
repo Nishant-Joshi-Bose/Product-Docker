@@ -59,7 +59,7 @@ void ButtonsScan(void)
         if (buttonActive != buttons[i].pressed)
         {
             buttons[i].pressed = buttonActive;
-            SendButtonEvent((const)&buttons[i]);
+            SendButtonEvent(&buttons[i]);
         }
     }
 }

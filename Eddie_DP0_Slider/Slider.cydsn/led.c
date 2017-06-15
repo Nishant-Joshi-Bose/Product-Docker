@@ -45,15 +45,6 @@ static void LedsUpdate(void)
     CapSense_ISR_Enable();
 }// update_led_buffer
 
-void LedsInit(void)
-{
-    // Datasheet says set this high on bootup or get random leds
-    Blank_Write(1);
-
-    SPIM_Start();
-    LedsClear();
-}
-
 static void LedsSetLed(uint8_t led, uint16_t ledValue, BOOL update)
 {
     uint8_t ledBuffPos = (led/2)*3;
@@ -110,6 +101,16 @@ BOOL LedsHandleCommand(const uint8_t *buff)
     }
     return FALSE;
 }
+
+void LedsInit(void)
+{
+    // Datasheet says set this high on bootup or get random leds
+    Blank_Write(1);
+
+    SPIM_Start();
+    LedsClear();
+}
+
 
 #ifdef OLDSTUFF
 typedef struct tlc_5947_led_driver 

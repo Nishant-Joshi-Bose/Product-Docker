@@ -1,12 +1,12 @@
-Loading plugins phase: Elapsed time ==> 0s.468ms
+Loading plugins phase: Elapsed time ==> 0s.483ms
 <CYPRESSTAG name="CyDsfit arguments...">
-cydsfit arguments: -.fdsnotice -.fdswarpdepfile=warp_dependencies.txt -.fdselabdepfile=elab_dependencies.txt -.fdsbldfile=generated_files.txt -.fdsreffile=referenced_files.txt -p C:\work\Eddie\Eddie_DP0_Slider\Bootloader_Prof.cydsn\Bootloader_Prof.cyprj -d CY8C4045LQI-S411 -s C:\work\Eddie\Eddie_DP0_Slider\Bootloader_Prof.cydsn\Generated_Source\PSoC4 -- -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE</CYPRESSTAG>
+cydsfit arguments: -.fdsnotice -.fdswarpdepfile=warp_dependencies.txt -.fdselabdepfile=elab_dependencies.txt -.fdsbldfile=generated_files.txt -.fdsreffile=referenced_files.txt -p C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader_Prof.cydsn\Bootloader_Prof.cyprj -d CY8C4045LQI-S411 -s C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader_Prof.cydsn\Generated_Source\PSoC4 -- -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE</CYPRESSTAG>
 <CYPRESSTAG name="Design elaboration results...">
 </CYPRESSTAG>
-Elaboration phase: Elapsed time ==> 3s.141ms
+Elaboration phase: Elapsed time ==> 2s.562ms
 <CYPRESSTAG name="HDL generation results...">
 </CYPRESSTAG>
-HDL generation phase: Elapsed time ==> 0s.125ms
+HDL generation phase: Elapsed time ==> 0s.093ms
 <CYPRESSTAG name="Synthesis results...">
 
      | | | | | | |
@@ -24,23 +24,23 @@ HDL generation phase: Elapsed time ==> 0s.125ms
 ======================================================================
 Compiling:  Bootloader_Prof.v
 Program  :   C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\warp\bin\warp.exe
-Options  :    -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE -ya -.fftprj=C:\work\Eddie\Eddie_DP0_Slider\Bootloader_Prof.cydsn\Bootloader_Prof.cyprj -dcpsoc3 Bootloader_Prof.v -verilog
+Options  :    -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE -ya -.fftprj=C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader_Prof.cydsn\Bootloader_Prof.cyprj -dcpsoc3 Bootloader_Prof.v -verilog
 ======================================================================
 
 ======================================================================
 Compiling:  Bootloader_Prof.v
 Program  :   C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\warp\bin\warp.exe
-Options  :    -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE -ya -.fftprj=C:\work\Eddie\Eddie_DP0_Slider\Bootloader_Prof.cydsn\Bootloader_Prof.cyprj -dcpsoc3 Bootloader_Prof.v -verilog
+Options  :    -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE -ya -.fftprj=C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader_Prof.cydsn\Bootloader_Prof.cyprj -dcpsoc3 Bootloader_Prof.v -verilog
 ======================================================================
 
 ======================================================================
 Compiling:  Bootloader_Prof.v
 Program  :   vlogfe
-Options  :    -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE -ya -.fftprj=C:\work\Eddie\Eddie_DP0_Slider\Bootloader_Prof.cydsn\Bootloader_Prof.cyprj -dcpsoc3 -verilog Bootloader_Prof.v
+Options  :    -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE -ya -.fftprj=C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader_Prof.cydsn\Bootloader_Prof.cyprj -dcpsoc3 -verilog Bootloader_Prof.v
 ======================================================================
 
 vlogfe V6.3 IR 41:  Verilog parser
-Mon Jun 12 08:08:36 2017
+Thu Jun 15 04:41:06 2017
 
 
 ======================================================================
@@ -50,7 +50,7 @@ Options  :    -yv2 -q10 Bootloader_Prof.v
 ======================================================================
 
 vpp V6.3 IR 41:  Verilog Pre-Processor
-Mon Jun 12 08:08:36 2017
+Thu Jun 15 04:41:06 2017
 
 Flattening file 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\cy_virtualmux_v1_0\cy_virtualmux_v1_0.v'
 Flattening file 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\ZeroTerminal\ZeroTerminal.v'
@@ -78,11 +78,11 @@ vlogfe:  No errors.
 ======================================================================
 Compiling:  Bootloader_Prof.v
 Program  :   tovif
-Options  :    -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE -ya -.fftprj=C:\work\Eddie\Eddie_DP0_Slider\Bootloader_Prof.cydsn\Bootloader_Prof.cyprj -dcpsoc3 -verilog Bootloader_Prof.v
+Options  :    -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE -ya -.fftprj=C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader_Prof.cydsn\Bootloader_Prof.cyprj -dcpsoc3 -verilog Bootloader_Prof.v
 ======================================================================
 
 tovif V6.3 IR 41:  High-level synthesis
-Mon Jun 12 08:08:36 2017
+Thu Jun 15 04:41:06 2017
 
 Linking 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\warp\lib\common\std.vhd'.
 Linking 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\warp\lib\common\cypress.vhd'.
@@ -93,9 +93,9 @@ Linking 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\warp\lib\common\
 Linking 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\warp\lib\common\stdlogic\mod_cnst.vif'.
 Linking 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\warp\lib\common\stdlogic\mod_mthv.vif'.
 Linking 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\warp\lib\common\stdlogic\mod_genv.vif'.
-Linking 'C:\work\Eddie\Eddie_DP0_Slider\Bootloader_Prof.cydsn\codegentemp\Bootloader_Prof.ctl'.
+Linking 'C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader_Prof.cydsn\codegentemp\Bootloader_Prof.ctl'.
 Linking 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\cy_virtualmux_v1_0\cy_virtualmux_v1_0.v'.
-Linking 'C:\work\Eddie\Eddie_DP0_Slider\Bootloader_Prof.cydsn\codegentemp\Bootloader_Prof.v'.
+Linking 'C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader_Prof.cydsn\codegentemp\Bootloader_Prof.v'.
 Linking 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\ZeroTerminal\ZeroTerminal.v'.
 Linking 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\or_v1_0\or_v1_0.v'.
 
@@ -105,11 +105,11 @@ tovif:  No errors.
 ======================================================================
 Compiling:  Bootloader_Prof.v
 Program  :   topld
-Options  :    -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE -ya -.fftprj=C:\work\Eddie\Eddie_DP0_Slider\Bootloader_Prof.cydsn\Bootloader_Prof.cyprj -dcpsoc3 -verilog Bootloader_Prof.v
+Options  :    -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE -ya -.fftprj=C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader_Prof.cydsn\Bootloader_Prof.cyprj -dcpsoc3 -verilog Bootloader_Prof.v
 ======================================================================
 
 topld V6.3 IR 41:  Synthesis and optimization
-Mon Jun 12 08:08:37 2017
+Thu Jun 15 04:41:06 2017
 
 Linking 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\warp\lib\common\std.vhd'.
 Linking 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\warp\lib\common\cypress.vhd'.
@@ -120,9 +120,9 @@ Linking 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\warp\lib\common\
 Linking 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\warp\lib\common\stdlogic\mod_cnst.vif'.
 Linking 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\warp\lib\common\stdlogic\mod_mthv.vif'.
 Linking 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\warp\lib\common\stdlogic\mod_genv.vif'.
-Linking 'C:\work\Eddie\Eddie_DP0_Slider\Bootloader_Prof.cydsn\codegentemp\Bootloader_Prof.ctl'.
+Linking 'C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader_Prof.cydsn\codegentemp\Bootloader_Prof.ctl'.
 Linking 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\cy_virtualmux_v1_0\cy_virtualmux_v1_0.v'.
-Linking 'C:\work\Eddie\Eddie_DP0_Slider\Bootloader_Prof.cydsn\codegentemp\Bootloader_Prof.v'.
+Linking 'C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader_Prof.cydsn\codegentemp\Bootloader_Prof.v'.
 Linking 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\ZeroTerminal\ZeroTerminal.v'.
 Linking 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\or_v1_0\or_v1_0.v'.
 Linking 'C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\warp\lib\lcpsoc3\stdlogic\cpsoc3.vif'.
@@ -193,16 +193,16 @@ topld:  No errors.
 
 CYPRESS_DIR    : C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\warp
 Warp Program   : C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\warp\bin\warp.exe
-Warp Arguments : -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE -ya -.fftprj=C:\work\Eddie\Eddie_DP0_Slider\Bootloader_Prof.cydsn\Bootloader_Prof.cyprj -dcpsoc3 Bootloader_Prof.v -verilog
+Warp Arguments : -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE -ya -.fftprj=C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader_Prof.cydsn\Bootloader_Prof.cyprj -dcpsoc3 Bootloader_Prof.v -verilog
 </CYPRESSTAG>
-Warp synthesis phase: Elapsed time ==> 0s.578ms
+Warp synthesis phase: Elapsed time ==> 0s.421ms
 <CYPRESSTAG name="Fitter results...">
 <CYPRESSTAG name="Fitter startup details...">
-cyp3fit: V4.0.0.432, Family: PSoC3, Started at: Monday, 12 June 2017 08:08:37
-Options: -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE -ya -.fftprj=C:\work\Eddie\Eddie_DP0_Slider\Bootloader_Prof.cydsn\Bootloader_Prof.cyprj -d CY8C4045LQI-S411 Bootloader_Prof.v -verilog
+cyp3fit: V4.0.0.432, Family: PSoC3, Started at: Thursday, 15 June 2017 04:41:06
+Options: -yv2 -q10 -ygs -o2 -v3 -.fftcfgtype=LE -ya -.fftprj=C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader_Prof.cydsn\Bootloader_Prof.cyprj -d CY8C4045LQI-S411 Bootloader_Prof.v -verilog
 </CYPRESSTAG>
 <CYPRESSTAG name="Design parsing">
-Design parsing phase: Elapsed time ==> 0s.016ms
+Design parsing phase: Elapsed time ==> 0s.000ms
 </CYPRESSTAG>
 <CYPRESSTAG name="Tech Mapping">
 <CYPRESSTAG name="Initial Mapping" icon="FILE_RPT_TECHM">
@@ -362,18 +362,18 @@ LP Comparator                 :    0 :    2 :    2 :  0.00 %
 DAC                           :      :      :      :        
   7-bit IDAC                  :    0 :    2 :    2 :  0.00 %
 </CYPRESSTAG>
-Technology Mapping: Elapsed time ==> 0s.000ms
-Tech Mapping phase: Elapsed time ==> 0s.014ms
+Technology Mapping: Elapsed time ==> 0s.015ms
+Tech Mapping phase: Elapsed time ==> 0s.031ms
 </CYPRESSTAG>
 <CYPRESSTAG name="Analog Placement">
 <CYPRESSTAG name="Analog Placement">
-Elapsed time ==> 0.0988508s
+Elapsed time ==> 0.1344628s
 </CYPRESSTAG>
-Analog Placement phase: Elapsed time ==> 0s.234ms
+Analog Placement phase: Elapsed time ==> 0s.265ms
 </CYPRESSTAG>
 <CYPRESSTAG name="Analog Routing">
 <CYPRESSTAG name="Analog Routing">
-Route success=True, Iterations=1 Elapsed=0.0010791 secs
+Route success=True, Iterations=1 Elapsed=0.0018401 secs
 </CYPRESSTAG>
 Analog Routing phase: Elapsed time ==> 0s.000ms
 </CYPRESSTAG>
@@ -386,7 +386,7 @@ Map of item to net {
 }
 Mux Info {
 }
-Analog Code Generation phase: Elapsed time ==> 0s.062ms
+Analog Code Generation phase: Elapsed time ==> 0s.031ms
 </CYPRESSTAG>
 <CYPRESSTAG name="Digital Placement">
 <CYPRESSTAG name="Detailed placement messages">
@@ -592,18 +592,18 @@ Port | Pin | Fixed |      Type |       Drive Mode |          Name | Connections
 </CYPRESSTAG>
 </CYPRESSTAG>
 Digital component placer commit/Report: Elapsed time ==> 0s.000ms
-Digital Placement phase: Elapsed time ==> 0s.265ms
+Digital Placement phase: Elapsed time ==> 0s.203ms
 </CYPRESSTAG>
 <CYPRESSTAG name="Digital Routing">
 Info: pft.M0077: There is no timing information available for the selected device. Static timing checks will not be applied and digital routing will not be timing-driven. (App=cydsfit)
 Routing successful.
-Digital Routing phase: Elapsed time ==> 0s.265ms
+Digital Routing phase: Elapsed time ==> 0s.218ms
 </CYPRESSTAG>
 <CYPRESSTAG name="Bitstream Generation">
-Bitstream Generation phase: Elapsed time ==> 0s.328ms
+Bitstream Generation phase: Elapsed time ==> 0s.234ms
 </CYPRESSTAG>
 <CYPRESSTAG name="Bitstream Verification">
-Bitstream Verification phase: Elapsed time ==> 0s.015ms
+Bitstream Verification phase: Elapsed time ==> 0s.000ms
 </CYPRESSTAG>
 <CYPRESSTAG name="Static timing analysis">
 No timing parameter file available for CY8C4045LQI-S411
@@ -613,11 +613,11 @@ Static timing analysis phase: Elapsed time ==> 0s.000ms
 Data reporting phase: Elapsed time ==> 0s.000ms
 </CYPRESSTAG>
 <CYPRESSTAG name="Database update...">
-Design database save phase: Elapsed time ==> 0s.515ms
+Design database save phase: Elapsed time ==> 0s.375ms
 </CYPRESSTAG>
-cydsfit: Elapsed time ==> 1s.875ms
+cydsfit: Elapsed time ==> 1s.422ms
 </CYPRESSTAG>
-Fitter phase: Elapsed time ==> 1s.875ms
-API generation phase: Elapsed time ==> 4s.344ms
-Dependency generation phase: Elapsed time ==> 0s.082ms
+Fitter phase: Elapsed time ==> 1s.422ms
+API generation phase: Elapsed time ==> 1s.858ms
+Dependency generation phase: Elapsed time ==> 0s.031ms
 Cleanup phase: Elapsed time ==> 0s.000ms
