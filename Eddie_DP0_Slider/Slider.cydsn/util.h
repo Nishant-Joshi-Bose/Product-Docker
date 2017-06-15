@@ -36,7 +36,7 @@
 #define USE_TUNER                    0 // will enable the Cypress capsense tuner
 #define USE_BOOTLOADER               0 // will enable the bootloader usage
 #define USE_128_POINTS_FOR_BREATHING 0 // will use 128 points for the LED breathing algo, default is 256
-#define USE_LED                      0 // will disable the LED SPI access, for debugging prupose only
+#define USE_LED                      1 // will disable the LED SPI access, for debugging prupose only
 #define USE_ALL_BUTTON_TELE          0 // ....
 #define TED_TEST_BUTTON              1
 
