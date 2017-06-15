@@ -115,12 +115,14 @@ void CommsHandleIncoming(void)
         case COMMS_COMMAND_SENSOR_DISABLE:
             CommsSendStatus(CapsenseHandlerDisable());
             break;
+#ifdef CONFIG_VIA_COMMS
         case COMMS_COMMAND_BUTTONS_SETUP:
             CommsSendStatus(ButtonsSetup(buff));
             break;
         case COMMS_COMMAND_SLIDERS_SETUP:
             CommsSendStatus(SlidersSetup(buff));
             break;
+#endif
         case COMMS_COMMAND_INVALID:
             CommsSendStatus(COMMS_STATUS_FAILURE);
             break;

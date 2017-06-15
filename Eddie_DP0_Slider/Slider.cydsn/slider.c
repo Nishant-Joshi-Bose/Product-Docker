@@ -24,17 +24,31 @@ static Slider_t sliders[MAX_CAPSENSE_SLIDERS];
 static uint8_t nSliders = 0;
 #endif
 
+// Automatically configure sliders based on PSoC configuration
 void SlidersInit(void)
 {
 #if defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)
+#ifdef CONFIG_VIA_COMMS
     for (uint8_t i = 0; i < MAX_CAPSENSE_SLIDERS; i++)
     {
         sliders[i].id = 0;
         sliders[i].lastPos = CapSense_SLIDER_NO_TOUCH;
     }
 #endif
+#ifdef CapSense_LINEARSLIDER0_WDGT_ID
+    sliders[nSliders].id = CapSense_LINEARSLIDER0_WDGT_ID;
+    sliders[nSliders].lastPos = 0;
+    nSliders++;
+#endif
+#ifdef CapSense_LINEARSLIDER1_WDGT_ID
+    sliders[nSliders].id = CapSense_LINEARSLIDER1_WDGT_ID;
+    sliders[nSliders].lastPos = 0;
+    nSliders++;
+#endif
+#endif
 }
 
+#ifdef CONFIG_VIA_COMMS
 BOOL SlidersSetup(const uint8_t *buff)
 {
 #if defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)
@@ -54,6 +68,7 @@ BOOL SlidersSetup(const uint8_t *buff)
     return FALSE;
 #endif
 }
+#endif
 
 #if defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)
 static void SendSliderEvent(const Slider_t *slider, SliderState_t state)

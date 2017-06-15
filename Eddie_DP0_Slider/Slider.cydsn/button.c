@@ -20,11 +20,85 @@ typedef struct {
 static Button_t buttons[MAX_CAPSENSE_BUTTONS];
 static uint8_t nButtons = 0;
 
+// Automatically determine buttons to scan based on PSoC configuration
 void ButtonsInit(void)
 {
     memset(buttons, 0, sizeof(buttons));
+#ifdef CapSense_BUT0_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT0_WDGT_ID;
+#endif
+#ifdef CapSense_BUT1_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT1_WDGT_ID;
+#endif
+#ifdef CapSense_BUT2_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT2_WDGT_ID;
+#endif
+#ifdef CapSense_BUT3_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT3_WDGT_ID;
+#endif
+#ifdef CapSense_BUT4_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT4_WDGT_ID;
+#endif
+#ifdef CapSense_BUT5_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT5_WDGT_ID;
+#endif
+#ifdef CapSense_BUT6_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT6_WDGT_ID;
+#endif
+#ifdef CapSense_BUT7_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT7_WDGT_ID;
+#endif
+#ifdef CapSense_BUT8_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT8_WDGT_ID;
+#endif
+#ifdef CapSense_BUT9_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT9_WDGT_ID;
+#endif
+#ifdef CapSense_BUT10_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT10_WDGT_ID;
+#endif
+#ifdef CapSense_BUT11_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT11_WDGT_ID;
+#endif
+#ifdef CapSense_BUT12_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT12_WDGT_ID;
+#endif
+#ifdef CapSense_BUT13_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT13_WDGT_ID;
+#endif
+#ifdef CapSense_BUT14_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT14_WDGT_ID;
+#endif
+#ifdef CapSense_BUT15_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT15_WDGT_ID;
+#endif
+#ifdef CapSense_BUT16_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT16_WDGT_ID;
+#endif
+#ifdef CapSense_BUT17_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT17_WDGT_ID;
+#endif
+#ifdef CapSense_BUT18_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT18_WDGT_ID;
+#endif
+#ifdef CapSense_BUT19_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT19_WDGT_ID;
+#endif
+#ifdef CapSense_BUT20_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT20_WDGT_ID;
+#endif
+#ifdef CapSense_BUT21_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT21_WDGT_ID;
+#endif
+#ifdef CapSense_BUT22_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT22_WDGT_ID;
+#endif
+#ifdef CapSense_BUT23_WDGT_ID
+    buttons[nButtons++].id = CapSense_BUT23_WDGT_ID;
+#endif
 }
 
+#ifdef CONFIG_VIA_COMMS
 BOOL ButtonsSetup(const uint8_t *buff)
 {
     if (buff[1] > MAX_CAPSENSE_BUTTONS)
@@ -40,6 +114,7 @@ BOOL ButtonsSetup(const uint8_t *buff)
     }
     return TRUE;
 }
+#endif
 
 static void SendButtonEvent(const Button_t *button)
 {
