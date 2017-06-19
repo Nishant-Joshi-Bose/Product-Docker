@@ -890,6 +890,7 @@
 <name_val_pair name="Generated_Source\PSoC4\cyutils.c" v="-mcpu=cortex-m0plus -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects" />
 <name_val_pair name="Generated_Source\PSoC4\CyLFClk.c" v="-mcpu=cortex-m0plus -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects" />
 <name_val_pair name="C:\work\Eddie\Eddie_DP0_Slider\Bootloader.cydsn\CortexM0p\ARM_GCC_493\Debug\Bootloader.hex" v="-mcpu=cortex-m0plus -mthumb -g -ffunction-sections -Og -ffat-lto-objects -L Generated_Source\PSoC4 -Wl,-Map,${OutputDir}/${ProjectShortName}.map -T C:\work\Eddie\Eddie_DP0_Slider\Bootloader.cydsn\Generated_Source\PSoC4\cm0plusgcc.ld -specs=nano.specs -Wl,--gc-sections" />
+<name_val_pair name="C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader.cydsn\CortexM0p\ARM_GCC_493\Debug\Bootloader.hex" v="-mcpu=cortex-m0plus -mthumb -g -ffunction-sections -Og -ffat-lto-objects -L Generated_Source\PSoC4 -Wl,-Map,${OutputDir}/${ProjectShortName}.map -T C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader.cydsn\Generated_Source\PSoC4\cm0plusgcc.ld -specs=nano.specs -Wl,--gc-sections" />
 </name>
 <name v="c9323d49-d323-40b8-9b59-cc008d68a989@Release@CortexM0p">
 <name_val_pair name="main.c" v="-mcpu=cortex-m0plus -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -D NDEBUG -Wall -ffunction-sections -Os -ffat-lto-objects" />
@@ -1334,7 +1335,7 @@
 </dataGuid>
 <dataGuid v="769d31ea-68b1-4f0c-b90a-7c10a43ee563">
 <CyGuid_769d31ea-68b1-4f0c-b90a-7c10a43ee563 type_name="CyDesigner.Common.ProjMgmt.Model.CyLinkCustomData" version="1">
-<deps_time v="131419991067837838" />
+<deps_time v="131420987473603456" />
 </CyGuid_769d31ea-68b1-4f0c-b90a-7c10a43ee563>
 </dataGuid>
 <dataGuid v="504337dd-7d07-4bc7-9057-90e60cf6c469">

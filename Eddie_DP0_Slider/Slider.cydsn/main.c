@@ -22,6 +22,8 @@
 // http://www.cypress.com/documentation/component-datasheets/debouncer
 // See Ted's PIN_LED example for gpio banks (we may want to use that for all the tact buttons if there's more than one)
 
+#define USE_CLOCK_CRAP
+#ifdef USE_CLOCK_CRAP
 void clock_interrupt_handler(void)
 {
     uint8 enableInterrupts = CyEnterCriticalSection();
@@ -49,7 +51,7 @@ void reset_timer(void)
 
     CyExitCriticalSection(enableInterrupts);
 }
-
+#endif
 
 int main()
 {
@@ -60,8 +62,10 @@ int main()
 
     CapsenseHandlerInit();
 
+#ifdef USE_CLOCK_CRAP
     TimerISR_StartEx(clock_interrupt_handler);
     Timer_1_Start   ();
+#endif
 
     for(;;)
     {

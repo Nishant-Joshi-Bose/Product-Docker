@@ -37,12 +37,12 @@ void SlidersInit(void)
 #endif
 #ifdef CapSense_LINEARSLIDER0_WDGT_ID
     sliders[nSliders].id = CapSense_LINEARSLIDER0_WDGT_ID;
-    sliders[nSliders].lastPos = 0;
+    sliders[nSliders].lastPos = CapSense_SLIDER_NO_TOUCH;
     nSliders++;
 #endif
 #ifdef CapSense_LINEARSLIDER1_WDGT_ID
     sliders[nSliders].id = CapSense_LINEARSLIDER1_WDGT_ID;
-    sliders[nSliders].lastPos = 0;
+    sliders[nSliders].lastPos = CapSense_SLIDER_NO_TOUCH;
     nSliders++;
 #endif
 #endif

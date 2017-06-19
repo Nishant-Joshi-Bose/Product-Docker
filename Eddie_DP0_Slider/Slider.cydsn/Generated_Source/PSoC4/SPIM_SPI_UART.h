@@ -32,8 +32,8 @@
 #define SPIM_SPI_OVS_FACTOR             (8u)
 #define SPIM_SPI_MEDIAN_FILTER_ENABLE   (0u)
 #define SPIM_SPI_LATE_MISO_SAMPLE_ENABLE (0u)
-#define SPIM_SPI_RX_DATA_BITS_NUM       (12u)
-#define SPIM_SPI_TX_DATA_BITS_NUM       (12u)
+#define SPIM_SPI_RX_DATA_BITS_NUM       (8u)
+#define SPIM_SPI_TX_DATA_BITS_NUM       (8u)
 #define SPIM_SPI_WAKE_ENABLE            (0u)
 #define SPIM_SPI_BITS_ORDER             (1u)
 #define SPIM_SPI_TRANSFER_SEPARATION    (1u)
@@ -824,7 +824,7 @@ typedef struct
 /* Common APIs TX direction */
 #if(SPIM_TX_DIRECTION)
     void   SPIM_SpiUartWriteTxData(uint32 txData);
-    void   SPIM_SpiUartPutArray(const uint16 wrBuf[], uint32 count);
+    void   SPIM_SpiUartPutArray(const uint8 wrBuf[], uint32 count);
     uint32 SPIM_SpiUartGetTxBufferSize(void);
     void   SPIM_SpiUartClearTxBuffer(void);
 #endif /* (SPIM_TX_DIRECTION) */
@@ -855,7 +855,7 @@ CY_ISR_PROTO(SPIM_SPI_UART_ISR);
     #if(SPIM_INTERNAL_RX_SW_BUFFER_CONST)
         #define SPIM_PutWordInRxBuffer(idx, rxDataByte) \
                 do{                                                 \
-                    SPIM_rxBufferInternal[(idx)] = ((uint16) (rxDataByte)); \
+                    SPIM_rxBufferInternal[(idx)] = ((uint8) (rxDataByte)); \
                 }while(0)
 
         #define SPIM_GetWordFromRxBuffer(idx) SPIM_rxBufferInternal[(idx)]
@@ -866,7 +866,7 @@ CY_ISR_PROTO(SPIM_SPI_UART_ISR);
     #if(SPIM_INTERNAL_TX_SW_BUFFER_CONST)
         #define SPIM_PutWordInTxBuffer(idx, txDataByte) \
                     do{                                             \
-                        SPIM_txBufferInternal[(idx)] = ((uint16) (txDataByte)); \
+                        SPIM_txBufferInternal[(idx)] = ((uint8) (txDataByte)); \
                     }while(0)
 
         #define SPIM_GetWordFromTxBuffer(idx) SPIM_txBufferInternal[(idx)]
