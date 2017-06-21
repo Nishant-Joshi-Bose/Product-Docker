@@ -5,6 +5,84 @@
  * 
  */
 
+/*
+ * Comms protocol
+@startuml
+title PSoC API
+note "Every command sends back its response asynchronously.\nEvery command except GetVersion sends back a StatusResponse\nIntensities are 12-bit values sent as 16-bits" as n1
+package Commands {
+
+class StatusResponse << (R, #FF7700) >> {
+0x00
+..
+status: Fail = 0, Success = 1
+}
+
+class GetVersion {
+0x00
+}
+class VersionResponse << (R, #FF7700) >> {
+0x01
+..
+version
+}
+
+StatusResponse -[hidden]down-> GetVersion
+
+GetVersion -[hidden]down-> VersionResponse
+
+class LEDsClearAll {
+0x01
+}
+
+VersionResponse -[hidden]down-> LEDsClearAll
+
+class LEDsSetAll {
+0x02
+..
+0x00: UNUSED
+0x0xyz: 12-bit intensity 1
+...
+0x0xyz: 12-bit intensity 24
+}
+
+LEDsClearAll -[hidden]down-> LEDsSetAll
+
+class LEDsSetOne {
+0x03
+..
+led: 1 byte
+0x0xyz: 12-bit intensity
+}
+}
+
+LEDsSetAll -[hidden]down-> LEDsSetOne
+
+package Events {
+class SliderEvent << (R, #FF7700) >> {
+0x02
+..
+slider id: 1 byte
+slider position: 16 bits
+state: 1 byte; down=0, up=1, move=2
+}
+
+class ButtonEvent << (R, #FF7700) >> {
+0x03
+..
+button id: 1 byte
+pressed: 1 byte; pressed=1, released=0
+}
+
+SliderEvent -[hidden]down-> ButtonEvent
+}
+
+n1 --[hidden]down-> Commands
+Commands -[hidden]down-> Events
+@enduml
+
+ */
+
 #include <project.h>
 #include "util.h"
 #include "comms.h"
