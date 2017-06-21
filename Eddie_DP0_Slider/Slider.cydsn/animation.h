@@ -11,5 +11,6 @@
 */
 
 void AnimationInit(void);
+BOOL AnimationHandleCommand(const uint8_t *buff);
 
 /* [] END OF FILE */
