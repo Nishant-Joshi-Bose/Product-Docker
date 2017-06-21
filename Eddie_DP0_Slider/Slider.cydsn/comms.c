@@ -119,14 +119,13 @@ uint8 *CommsGetInputBuffer(void)
     return(i2cRxBuffer);
 }
 
-// TODO maybe circular buffer and batch up instead of turning off capsense but we may not have the ram
+// TODO maybe circular buffer and batch up if we have the ram for it
 void CommsSendData(const uint8_t *buffer)
 {
     memcpy(i2cTxBuffer, buffer, COMMS_TX_BUFFER_SIZE);
     uint_fast64_t startTime = get_timer_interrrupt_count();
     // Interrupt the client to let it know it has to read now
     CAPINT_Write(1u);
-    CapSense_ISR_Disable();
 
     // Wait until master is done reading
     while (0u == (I2CS_I2CSlaveStatus() & I2CS_I2C_SSTAT_RD_CMPLT))
@@ -140,7 +139,6 @@ void CommsSendData(const uint8_t *buffer)
     /* Clear slave read buffer and status */
     I2CS_I2CSlaveClearReadBuf();
     (void) I2CS_I2CSlaveClearReadStatus();
-    CapSense_ISR_Enable();
     // Reset client interrupt
     CAPINT_Write(0u);
 }
