@@ -13,24 +13,6 @@
 
 static uint8_t   software_version       = 0x10;
 
-static uint_fast64_t timer_interrrupt_count = 0;
-
-//=============================================================================
-//================================================== get_timer_interrrupt_count
-//=============================================================================
-uint_fast64_t get_timer_interrrupt_count()
-{
-    return timer_interrrupt_count;
-}// get_timer_interrrupt_count
-
-//=============================================================================
-//================================================== set_timer_interrrupt_count
-//=============================================================================
-void set_timer_interrrupt_count(uint_fast64_t the_timer_interrrupt_count)
-{
-    timer_interrrupt_count = the_timer_interrrupt_count;
-}// set_timer_interrrupt_count
-
 //=============================================================================
 //======================================================== get_software_version
 //=============================================================================

@@ -11,6 +11,7 @@
 */
 #include <project.h>
 #include "util.h"
+#include "animation.h"
 #include "led.h"
 #include "comms.h"
 #include "capsensehdlr.h"
@@ -73,50 +74,15 @@ p -> l: clear gpio
 // http://www.cypress.com/documentation/component-datasheets/debouncer
 // See Ted's PIN_LED example for gpio banks (we may want to use that for all the tact buttons if there's more than one)
 
-#define USE_CLOCK_CRAP
-#ifdef USE_CLOCK_CRAP
-void clock_interrupt_handler(void)
-{
-    uint8 enableInterrupts = CyEnterCriticalSection();
-        /* Check interrupt source */
-        if (Timer_1_INTR_MASK_CC_MATCH == Timer_1_GetInterruptSourceMasked())
-        {
-            /* Clear interrupt and then process Capture interrupt */
-            Timer_1_ClearInterrupt(Timer_1_INTR_MASK_CC_MATCH);
-        }
-        else
-        {
-            /* Clear interrupt and then process Terminal Count interrupt */
-            Timer_1_ClearInterrupt(Timer_1_INTR_MASK_TC);
-        }
-        set_timer_interrrupt_count(get_timer_interrrupt_count() + 1);
-    CyExitCriticalSection(enableInterrupts);
-}
-
-void reset_timer(void)
-{
-    uint8 enableInterrupts = CyEnterCriticalSection();
-
-        Timer_1_WriteCounter(0);
-        set_timer_interrrupt_count(0);
-
-    CyExitCriticalSection(enableInterrupts);
-}
-#endif
-
 int main()
 {
     CyGlobalIntEnable; // enable global interrupts before starting capsense and I2C blocks
 
     LedsInit();
+    AnimationInit();
     CommsInit();
 
     CapsenseHandlerInit();
-
-#ifdef USE_CLOCK_CRAP
-    TimerISR_StartEx(clock_interrupt_handler);
-    Timer_1_Start   ();
-#endif
 
     for(;;)
     {
