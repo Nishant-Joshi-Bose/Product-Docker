@@ -46,6 +46,12 @@ static void LedsUpdate(void)
     CapSense_ISR_Enable();
 }// update_led_buffer
 
+void LedsShowPattern(uint8_t *pattern)
+{
+    memcpy(ledBuffer, pattern, LED_BUFFER_SIZE);
+    LedsUpdate();
+}
+
 static void LedsSetLed(uint8_t led, uint16_t ledValue, BOOL update)
 {
     uint8_t ledBuffPos = (led/2)*3;

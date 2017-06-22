@@ -88,5 +88,6 @@ int main()
     {
         CommsHandleIncoming();
         CapsenseHandlerScan();
+        AnimationRun();
     }
 }

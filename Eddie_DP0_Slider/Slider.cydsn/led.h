@@ -19,6 +19,7 @@
 
 void LedsInit(void);
 BOOL LedsHandleCommand(const uint8_t *buff);
+void LedsShowPattern(uint8_t *pattern);
 
 #endif // LED_H
 /* [] END OF FILE */

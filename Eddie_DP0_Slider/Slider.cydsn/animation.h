@@ -12,5 +12,6 @@
 
 void AnimationInit(void);
 BOOL AnimationHandleCommand(const uint8_t *buff);
+void AnimationRun(void);
 
 /* [] END OF FILE */
