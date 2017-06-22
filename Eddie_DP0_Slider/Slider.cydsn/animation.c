@@ -29,6 +29,7 @@ static uint8_t animationLength = 0;
 static BOOL autoStart = FALSE;
 static BOOL loop = FALSE;
 static BOOL loading = FALSE;
+static uint8_t lastPattern = 0xff;
 
 CY_ISR(AnimationTimerHandler)
 {
@@ -64,11 +65,10 @@ void AnimationRun(void)
         return;
     }
 
-    uint8_t lastPattern = currentPattern;
-
     if (patternDurationReached)
     {
         currentPattern++;
+        patternDurationReached = FALSE;
     }
 
     if (currentPattern >= animationLength)
@@ -79,6 +79,7 @@ void AnimationRun(void)
             animationRunning = FALSE;
             uint8_t buff[COMMS_TX_BUFFER_SIZE] = {COMMS_RESPONSE_ANIMATION_STOPPED};
             CommsSendData(buff);
+            lastPattern = 0xff;
             return;
         }
     }
@@ -87,6 +88,8 @@ void AnimationRun(void)
     {
         RunPattern(currentPattern);
     }
+
+    lastPattern = currentPattern;
 }
 
 BOOL AnimationHandleCommand(const uint8_t *buff)
@@ -111,7 +114,7 @@ BOOL AnimationHandleCommand(const uint8_t *buff)
             CommsSendStatus(COMMS_STATUS_FAILURE);
             return FALSE;
         }
-        uint16_t duration = buff[2];
+        uint16_t duration = *((uint16_t *)(&buff[2]));
         // Pack the pattern's 16-bit intensities into 12-bits
         uint8_t *animBufferPos = &animationBuffer[currentPattern * PATTERN_ROW_SIZE];
         uint8_t const *inBufferPos = &buff[4];
@@ -129,6 +132,7 @@ BOOL AnimationHandleCommand(const uint8_t *buff)
         {
             loading = FALSE;
             currentPattern = 0;
+            lastPattern = 0xff;
             if (autoStart)
             {
                 animationRunning = TRUE;
@@ -146,6 +150,8 @@ BOOL AnimationHandleCommand(const uint8_t *buff)
             return FALSE;
         }
         animationRunning = TRUE;
+        currentPattern = 0;
+        lastPattern = 0xff;
         uint8_t buff[COMMS_TX_BUFFER_SIZE] = {COMMS_RESPONSE_ANIMATION_STARTED};
         CommsSendData(buff);
         return TRUE;
@@ -167,7 +173,8 @@ BOOL AnimationHandleCommand(const uint8_t *buff)
         // TBD
     }
 
-    CommsSendStatus(COMMS_STATUS_SUCCESS);
+    uint8_t respBuff[COMMS_TX_BUFFER_SIZE] = {buff[0], 0x01};
+    CommsSendData(respBuff);
     return FALSE;
 }
 

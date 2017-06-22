@@ -128,9 +128,15 @@ void CommsSendData(const uint8_t *buffer)
     // Interrupt the client to let it know it has to read now
     CAPINT_Write(1u);
 
+    uint32_t timeout = 0x100000;
     // Wait until master is done reading
     while (0u == (I2CS_I2CSlaveStatus() & I2CS_I2C_SSTAT_RD_CMPLT))
     {
+        timeout--;
+        if (timeout == 0)
+        {
+            break;
+        }
         // Timeout here in case there's a failure
 //        if (get_timer_interrrupt_count() > startTime+I2C_MASTER_READ_TIMEOUT)
 //        {
