@@ -41,13 +41,15 @@ CY_ISR(AnimationTimerHandler)
 void AnimationInit(void)
 {
     TimerISR_StartEx(AnimationTimerHandler);
+    Timer_1_Stop();
 }
 
 static void RunPattern(uint8_t patternIdx)
 {
     patternDurationReached = FALSE;
     uint8_t *pattern = &(animationBuffer[patternIdx * PATTERN_ROW_SIZE]);
-    uint16_t duration = *((uint16_t*)pattern[PATTERN_SIZE]);
+    uint8_t *durationPtr = &pattern[PATTERN_SIZE];
+    uint16_t duration = *((uint16_t*)durationPtr);
     Timer_1_Stop();
     Timer_1_WriteCounter(duration * 10); // Timer clock is set to 10KHz
     // The timer could expire by the time the pattern is loaded but we still need to show it
@@ -112,10 +114,11 @@ BOOL AnimationHandleCommand(const uint8_t *buff)
         uint16_t duration = buff[2];
         // Pack the pattern's 16-bit intensities into 12-bits
         uint8_t *animBufferPos = &animationBuffer[currentPattern * PATTERN_ROW_SIZE];
-        uint8_t inBufferPos = &buff[4];
+        uint8_t const *inBufferPos = &buff[4];
         for (uint8_t i = 0; i < MAX_LEDS; i++) {
             *animBufferPos++ = (*inBufferPos++ >> 4) & 0xFF;
-            *animBufferPos++ = ((*inBufferPos++ << 4) & 0xF0) | ((*inBufferPos++ >> 8) & 0x0F);
+            *animBufferPos++ = ((*inBufferPos << 4) & 0xF0) | ((*(inBufferPos+1) >> 8) & 0x0F);
+            inBufferPos++; inBufferPos++;
             *animBufferPos++ = *inBufferPos++;
         }
         // Stick the duration at the end

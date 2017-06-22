@@ -43,12 +43,14 @@
           <File BuildType="BUILD" Toolchain="">..\Slider.cydsn\button.c</File>
           <File BuildType="BUILD" Toolchain="">..\Slider.cydsn\capsensehdlr.c</File>
           <File BuildType="BUILD" Toolchain="">..\Slider.cydsn\slider.c</File>
+          <File BuildType="BUILD" Toolchain="">..\Slider.cydsn\animation.c</File>
           <File BuildType="BUILD" Toolchain="">..\Slider.cydsn\comms.h</File>
           <File BuildType="BUILD" Toolchain="">..\Slider.cydsn\led.h</File>
           <File BuildType="BUILD" Toolchain="">..\Slider.cydsn\util.h</File>
           <File BuildType="BUILD" Toolchain="">..\Slider.cydsn\button.h</File>
           <File BuildType="BUILD" Toolchain="">..\Slider.cydsn\capsensehdlr.h</File>
           <File BuildType="BUILD" Toolchain="">..\Slider.cydsn\slider.h</File>
+          <File BuildType="BUILD" Toolchain="">..\Slider.cydsn\animation.h</File>
         </Files>
       </Folder>
       <Folder BuildType="STRICT" Path="C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Prof_DP0.cydsn\Generated_Source\PSoC4">

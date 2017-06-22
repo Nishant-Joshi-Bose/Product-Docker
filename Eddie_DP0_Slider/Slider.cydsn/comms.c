@@ -90,6 +90,7 @@ Commands -[hidden]down-> Events
 #include "button.h"
 #include "slider.h"
 #include "capsensehdlr.h"
+#include "animation.h"
 
 #define COMMS_RCV_BUFFER_SIZE 64 // Max incoming buffer is around 49
 static uint8 i2cRxBuffer[COMMS_RCV_BUFFER_SIZE];
@@ -123,7 +124,7 @@ uint8 *CommsGetInputBuffer(void)
 void CommsSendData(const uint8_t *buffer)
 {
     memcpy(i2cTxBuffer, buffer, COMMS_TX_BUFFER_SIZE);
-    uint_fast64_t startTime = get_timer_interrrupt_count();
+//    uint_fast64_t startTime = get_timer_interrrupt_count();
     // Interrupt the client to let it know it has to read now
     CAPINT_Write(1u);
 
@@ -131,10 +132,10 @@ void CommsSendData(const uint8_t *buffer)
     while (0u == (I2CS_I2CSlaveStatus() & I2CS_I2C_SSTAT_RD_CMPLT))
     {
         // Timeout here in case there's a failure
-        if (get_timer_interrrupt_count() > startTime+I2C_MASTER_READ_TIMEOUT)
-        {
-            break; // the master will have to deal with garbled stuff since they bagged out of reading in the first place
-        }
+//        if (get_timer_interrrupt_count() > startTime+I2C_MASTER_READ_TIMEOUT)
+//        {
+//            break; // the master will have to deal with garbled stuff since they bagged out of reading in the first place
+//        }
     }
     /* Clear slave read buffer and status */
     I2CS_I2CSlaveClearReadBuf();
