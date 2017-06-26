@@ -54,8 +54,8 @@ static void RunPattern(uint8_t patternIdx)
     Timer_1_Stop();
     Timer_1_WriteCounter(duration * 10); // Timer clock is set to 10KHz
     // The timer could expire by the time the pattern is loaded but we still need to show it
-    Timer_1_Start();
     LedsShowPattern(pattern);
+    Timer_1_Start();
 }
 
 void AnimationRun(void)
@@ -71,7 +71,7 @@ void AnimationRun(void)
         patternDurationReached = FALSE;
     }
 
-    if (currentPattern > animationLength)
+    if (currentPattern >= animationLength)
     {
         currentPattern = 0;
         if (!loop)
@@ -105,6 +105,9 @@ BOOL AnimationHandleCommand(const uint8_t *buff)
         animationLength = buff[1];
         autoStart = buff[2];
         loop = buff[3];
+        lastPattern = 0xff;
+        animationRunning = FALSE;
+        patternDurationReached = FALSE;
         loading = TRUE;
     }
     else if (buff[0] == COMMS_COMMAND_ANIMATION_LOADPATTERN)
