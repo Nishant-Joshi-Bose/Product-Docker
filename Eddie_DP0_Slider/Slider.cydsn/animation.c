@@ -124,10 +124,10 @@ BOOL AnimationHandleCommand(const uint8_t *buff)
         animBufferPos += 2;
         
         for (uint8_t i = 0; i < MAX_LEDS; i++) {
-            *animBufferPos++ = (*inBufferPos++ >> 4) & 0xFF;
-            *animBufferPos++ = ((*inBufferPos << 4) & 0xF0) | ((*(inBufferPos+1) >> 8) & 0x0F);
-            inBufferPos++; inBufferPos++;
-            *animBufferPos++ = *inBufferPos++;
+            *animBufferPos++ = ((inBufferPos[1] & 0x0F) << 4) | (*inBufferPos & 0xF0 >> 4);
+            *animBufferPos++ = ((*inBufferPos & 0x0F) << 4) | (inBufferPos[3] & 0x0F);
+            *animBufferPos++ = inBufferPos[2];
+            inBufferPos += 4;
         }
 
         currentPattern++;
