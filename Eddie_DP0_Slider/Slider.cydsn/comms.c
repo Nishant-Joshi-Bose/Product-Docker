@@ -192,13 +192,14 @@ static void CommsHandleSend(void)
     }
 }
 
-void CommsSendStatus(BOOL status)
+void CommsSendStatus(BOOL status, uint8_t cmd)
 {
     uint8_t buff[COMMS_TX_BUFFER_SIZE];
 
     memset(buff, 0, sizeof(buff));
     buff[0] = COMMS_RESPONSE_STATUS;
     buff[1] = status;
+    buff[2] = cmd;
 
     CommsSendData(buff);
 }
@@ -232,7 +233,7 @@ void CommsHandler(void)
         // Process incoming commands
         if (i2cRxBufferCopy[0] >= COMMS_COMMAND_INVALID)
         {
-            CommsSendStatus(COMMS_STATUS_FAILURE);
+            CommsSendStatus(COMMS_STATUS_FAILURE, i2cRxBufferCopy[0]);
             return;
         }
 
@@ -244,7 +245,7 @@ void CommsHandler(void)
         case COMMS_COMMAND_LEDS_CLEARALL:
         case COMMS_COMMAND_LEDS_SETALL:
         case COMMS_COMMAND_LEDS_SETONE:
-            CommsSendStatus(LedsHandleCommand(i2cRxBufferCopy));
+            CommsSendStatus(LedsHandleCommand(i2cRxBufferCopy), i2cRxBufferCopy[0]);
             break;
         case COMMS_COMMAND_ANIMATION_LOADSTART:
         case COMMS_COMMAND_ANIMATION_LOADPATTERN:
@@ -255,7 +256,7 @@ void CommsHandler(void)
             AnimationHandleCommand(i2cRxBufferCopy);
             break;
         case COMMS_COMMAND_INVALID:
-            CommsSendStatus(COMMS_STATUS_FAILURE);
+            CommsSendStatus(COMMS_STATUS_FAILURE, i2cRxBufferCopy[0]);
             break;
         // NO DEFAULT! if we add commands we want the compiler to barf if we forget to check here
         }

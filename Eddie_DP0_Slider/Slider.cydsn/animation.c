@@ -103,7 +103,7 @@ BOOL AnimationHandleCommand(const uint8_t *buff)
     {
         if (animationRunning || loading)
         {
-            CommsSendStatus(COMMS_STATUS_FAILURE);
+            CommsSendStatus(COMMS_STATUS_FAILURE, buff[0]);
             return FALSE;
         }
         currentPattern = 0;
@@ -119,7 +119,7 @@ BOOL AnimationHandleCommand(const uint8_t *buff)
     {
         if (!loading)
         {
-            CommsSendStatus(COMMS_STATUS_FAILURE);
+            CommsSendStatus(COMMS_STATUS_FAILURE, buff[0]);
             return FALSE;
         }
         uint16_t duration = *((uint16_t *)(&buff[2]));
@@ -157,7 +157,7 @@ BOOL AnimationHandleCommand(const uint8_t *buff)
     {
         if (loading || currentPattern != 0 || animationLength == 0)
         {
-            CommsSendStatus(COMMS_STATUS_FAILURE);
+            CommsSendStatus(COMMS_STATUS_FAILURE, buff[0]);
             return FALSE;
         }
         animationRunning = TRUE;
@@ -184,7 +184,7 @@ BOOL AnimationHandleCommand(const uint8_t *buff)
         // TBD
     }
 
-    uint8_t respBuff[COMMS_TX_BUFFER_SIZE] = {buff[0], 0x01};
+    uint8_t respBuff[COMMS_TX_BUFFER_SIZE] = {COMMS_RESPONSE_STATUS, COMMS_STATUS_SUCCESS, buff[0]};
     CommsSendData(respBuff);
     return FALSE;
 }

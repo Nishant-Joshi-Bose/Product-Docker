@@ -24,7 +24,7 @@
 void CommsInit(void);
 void CommsSendData(const uint8_t *buffer);
 void CommsHandler(void);
-void CommsSendStatus(BOOL status);
+void CommsSendStatus(BOOL status, uint8_t cmd);
 
 typedef enum {
     COMMS_COMMAND_GETVERSION = 0,
