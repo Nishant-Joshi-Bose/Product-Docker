@@ -13,11 +13,8 @@
 
 // TODO remove any non-global funcs and static-ize them in the c file
 void CommsInit(void);
-BOOL CommsIsInputBufferReady(void);
-uint8 *CommsGetInputBuffer(void);
 void CommsSendData(const uint8_t *buffer);
-void CommsResetInputBuffer(void);
-void CommsHandleIncoming(void);
+void CommsHandler(void);
 void CommsSendStatus(BOOL status);
 
 typedef enum {

@@ -94,8 +94,15 @@ Commands -[hidden]down-> Events
 
 #define COMMS_RCV_BUFFER_SIZE 64 // Max incoming buffer is around 49
 static uint8 i2cRxBuffer[COMMS_RCV_BUFFER_SIZE];
-static uint8 i2cTxBuffer[COMMS_TX_BUFFER_SIZE];
-#define I2C_MASTER_READ_TIMEOUT 16 // 1s/16 timer interrupt ticks
+static uint8 i2cRxBufferCopy[COMMS_RCV_BUFFER_SIZE];
+
+// Circular buffer for outgoing comms
+#define TX_QUEUE_SIZE 24
+static uint8 i2cTxBuffer[TX_QUEUE_SIZE * COMMS_TX_BUFFER_SIZE];
+// What we've sent
+static uint8 i2cTxSentIdx = 0;
+// What's still left to send
+static uint8 i2cTxToSendIdx = 0;
 
 void CommsInit(void)
 {
@@ -104,50 +111,56 @@ void CommsInit(void)
     I2CS_Start();
 }
 
-BOOL CommsIsInputBufferReady(void)
+void CommsSendData(const uint8 *buff)
 {
-    return (0u != (I2CS_I2CSlaveStatus() & I2CS_I2C_SSTAT_WR_CMPLT));
-}
-
-void CommsResetInputBuffer(void)
-{
-    I2CS_I2CSlaveClearWriteBuf();
-    (void) I2CS_I2CSlaveClearWriteStatus();
-}
-
-uint8 *CommsGetInputBuffer(void)
-{
-    return(i2cRxBuffer);
-}
-
-// TODO maybe circular buffer and batch up if we have the ram for it
-void CommsSendData(const uint8_t *buffer)
-{
-    memcpy(i2cTxBuffer, buffer, COMMS_TX_BUFFER_SIZE);
-//    uint_fast64_t startTime = get_timer_interrrupt_count();
-    // Interrupt the client to let it know it has to read now
-    CAPINT_Write(1u);
-
-    uint32_t timeout = 0x100000;
-    // Wait until master is done reading
-    while (0u == (I2CS_I2CSlaveStatus() & I2CS_I2C_SSTAT_RD_CMPLT))
+    // Rather than let someone poop directly into the tx buffer, we have them send
+    // their own buffer in that we copy.  This way we don't have to worry about
+    // any kind of race conditions between any interrupts and user code that may
+    // call this.
+    uint8 interruptState = CyEnterCriticalSection();
+    memcpy(&i2cTxBuffer[i2cTxToSendIdx * COMMS_TX_BUFFER_SIZE], buff, COMMS_TX_BUFFER_SIZE);
+    i2cTxToSendIdx += COMMS_TX_BUFFER_SIZE;
+    // Circular buffer, rotate
+    if (i2cTxToSendIdx >= COMMS_TX_BUFFER_SIZE * TX_QUEUE_SIZE)
     {
-        timeout--;
-        if (timeout == 0)
-        {
-            break;
-        }
-        // Timeout here in case there's a failure
-//        if (get_timer_interrrupt_count() > startTime+I2C_MASTER_READ_TIMEOUT)
-//        {
-//            break; // the master will have to deal with garbled stuff since they bagged out of reading in the first place
-//        }
+        i2cTxToSendIdx = 0;
     }
-    /* Clear slave read buffer and status */
-    I2CS_I2CSlaveClearReadBuf();
-    (void) I2CS_I2CSlaveClearReadStatus();
-    // Reset client interrupt
+    CyExitCriticalSection(interruptState);
+    // Interrupt the master to let it know it has to read now
     CAPINT_Write(0u);
+    CAPINT_Write(1u);
+}
+
+static void CommsHandleSent(void)
+{
+    if (0u == (I2CS_I2CSlaveStatus() & I2CS_I2C_SSTAT_RD_CMPLT))
+    {
+        // TODO come up with a way to do timeout here
+        // not sure what we would do with the outbound queue
+        return;
+    }
+
+    // Clear master interrupt
+    CAPINT_Write(0u);
+
+    (void) I2CS_I2CSlaveClearReadStatus();
+
+    uint8 interruptState = CyEnterCriticalSection();
+    i2cTxSentIdx += COMMS_TX_BUFFER_SIZE;
+    if (i2cTxSentIdx >= COMMS_TX_BUFFER_SIZE * TX_QUEUE_SIZE)
+    {
+        i2cTxSentIdx = 0;
+    }
+
+    // Re-point the outgoing i2c buffer to the next thing to send
+    I2CS_I2CSlaveInitReadBuf (&i2cTxBuffer[i2cTxSentIdx * COMMS_TX_BUFFER_SIZE],  COMMS_TX_BUFFER_SIZE);
+
+    // If there's more to send, interrupt the master again
+    if (i2cTxSentIdx != i2cTxToSendIdx)
+    {
+        CAPINT_Write(1u);
+    }
+    CyExitCriticalSection(interruptState);
 }
 
 void CommsSendStatus(BOOL status)
@@ -172,28 +185,36 @@ static void CommsSendVersion(void)
     CommsSendData(buff);
 }
 
-void CommsHandleIncoming(void)
+void CommsHandler(void)
 {
-    if (CommsIsInputBufferReady())
-    {
-        uint8_t *buff = CommsGetInputBuffer();
+    CommsHandleSent();
 
-        if (buff[0] >= COMMS_COMMAND_INVALID)
+    if (0u != (I2CS_I2CSlaveStatus() & I2CS_I2C_SSTAT_WR_CMPLT))
+    {
+        // When i2c incoming is done we copy the buffer so that i2c can continue receiving
+        // in the background (its interrupt routine) rather than stall it to process the command
+        uint8 interruptState = CyEnterCriticalSection();
+        memcpy(i2cRxBufferCopy, i2cRxBuffer, COMMS_RCV_BUFFER_SIZE);
+        I2CS_I2CSlaveClearWriteBuf();
+        CyExitCriticalSection(interruptState);
+        I2CS_I2CSlaveClearWriteStatus();
+
+        // Process incoming commands
+        if (i2cRxBufferCopy[0] >= COMMS_COMMAND_INVALID)
         {
             CommsSendStatus(COMMS_STATUS_FAILURE);
             return;
         }
 
-        switch ((CommsCommand_t) buff[0])
+        switch ((CommsCommand_t) i2cRxBufferCopy[0])
         {
         case COMMS_COMMAND_GETVERSION:
             CommsSendVersion();
             break;
-//        case COMMS_COMMAND_LEDS_SETUP:
         case COMMS_COMMAND_LEDS_CLEARALL:
         case COMMS_COMMAND_LEDS_SETALL:
         case COMMS_COMMAND_LEDS_SETONE:
-            CommsSendStatus(LedsHandleCommand(buff));
+            CommsSendStatus(LedsHandleCommand(i2cRxBufferCopy));
             break;
         case COMMS_COMMAND_SENSOR_ENABLE:
             CommsSendStatus(CapsenseHandlerEnable());
@@ -207,14 +228,12 @@ void CommsHandleIncoming(void)
         case COMMS_COMMAND_ANIMATION_STOPATEND:
         case COMMS_COMMAND_ANIMATION_STOPIMMEDIATE:
         case COMMS_COMMAND_ANIMATION_RESUME:
-            AnimationHandleCommand(buff);
+            AnimationHandleCommand(i2cRxBufferCopy);
             break;
         case COMMS_COMMAND_INVALID:
             CommsSendStatus(COMMS_STATUS_FAILURE);
             break;
         // NO DEFAULT! if we add commands we want the compiler to barf if we forget to check here
         }
-
-        CommsResetInputBuffer();
     }
 }
