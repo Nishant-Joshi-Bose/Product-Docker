@@ -890,6 +890,7 @@
 <name_val_pair name="Generated_Source\PSoC4\cyutils.c" v="-mcpu=cortex-m0plus -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects" />
 <name_val_pair name="Generated_Source\PSoC4\CyLFClk.c" v="-mcpu=cortex-m0plus -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -g -D DEBUG -Wall -ffunction-sections -Og -ffat-lto-objects" />
 <name_val_pair name="C:\work\Eddie\Eddie_DP0_Slider\Bootloader.cydsn\CortexM0p\ARM_GCC_493\Debug\Bootloader.hex" v="-mcpu=cortex-m0plus -mthumb -g -ffunction-sections -Og -ffat-lto-objects -L Generated_Source\PSoC4 -Wl,-Map,${OutputDir}/${ProjectShortName}.map -T C:\work\Eddie\Eddie_DP0_Slider\Bootloader.cydsn\Generated_Source\PSoC4\cm0plusgcc.ld -specs=nano.specs -Wl,--gc-sections" />
+<name_val_pair name="C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader.cydsn\CortexM0p\ARM_GCC_493\Debug\Bootloader.hex" v="-mcpu=cortex-m0plus -mthumb -g -ffunction-sections -Og -ffat-lto-objects -L Generated_Source\PSoC4 -Wl,-Map,${OutputDir}/${ProjectShortName}.map -T C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader.cydsn\Generated_Source\PSoC4\cm0plusgcc.ld -specs=nano.specs -Wl,--gc-sections" />
 </name>
 <name v="c9323d49-d323-40b8-9b59-cc008d68a989@Release@CortexM0p">
 <name_val_pair name="main.c" v="-mcpu=cortex-m0plus -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -D NDEBUG -Wall -ffunction-sections -Os -ffat-lto-objects" />
@@ -917,9 +918,10 @@
 <name_val_pair name="Generated_Source\PSoC4\cyutils.c" v="-mcpu=cortex-m0plus -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -D NDEBUG -Wall -ffunction-sections -Os -ffat-lto-objects" />
 <name_val_pair name="Generated_Source\PSoC4\CyLFClk.c" v="-mcpu=cortex-m0plus -mthumb -I. -IGenerated_Source\PSoC4 -Wa,-alh=${OutputDir}/${CompileFile}.lst -D NDEBUG -Wall -ffunction-sections -Os -ffat-lto-objects" />
 <name_val_pair name="C:\work\Eddie\Eddie_DP0_Slider\Bootloader.cydsn\CortexM0p\ARM_GCC_493\Release\Bootloader.hex" v="-mcpu=cortex-m0plus -mthumb -ffunction-sections -Os -ffat-lto-objects -L Generated_Source\PSoC4 -Wl,-Map,${OutputDir}/${ProjectShortName}.map -T C:\work\Eddie\Eddie_DP0_Slider\Bootloader.cydsn\Generated_Source\PSoC4\cm0plusgcc.ld -specs=nano.specs -Wl,--gc-sections" />
+<name_val_pair name="C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader.cydsn\CortexM0p\ARM_GCC_493\Release\Bootloader.hex" v="-mcpu=cortex-m0plus -mthumb -ffunction-sections -Os -ffat-lto-objects -L Generated_Source\PSoC4 -Wl,-Map,${OutputDir}/${ProjectShortName}.map -T C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader.cydsn\Generated_Source\PSoC4\cm0plusgcc.ld -specs=nano.specs -Wl,--gc-sections" />
 </name>
 </genericCmdLineData>
-<codeGenCmdLineTag v="-.appdatapath &quot;C:\Users\mm1005301\AppData\Local\Cypress Semiconductor\PSoC Creator\4.0&quot; -.fdsnotice -.fdswarpdepfile=warp_dependencies.txt -.fdselabdepfile=elab_dependencies.txt -.fdsbldfile=generated_files.txt -.fdsreffile=referenced_files.txt -p C:\work\Eddie\Eddie_DP0_Slider\Bootloader.cydsn\Bootloader.cyprj -d CY8C4025LQI-S412 -s C:\work\Eddie\Eddie_DP0_Slider\Bootloader.cydsn\Generated_Source\PSoC4 -- -yv2 -q10 -yga -o2 -v3 -.fftcfgtype=LE" />
+<codeGenCmdLineTag v="-.appdatapath &quot;C:\Users\mm1005301\AppData\Local\Cypress Semiconductor\PSoC Creator\4.0&quot; -.fdsnotice -.fdswarpdepfile=warp_dependencies.txt -.fdselabdepfile=elab_dependencies.txt -.fdsbldfile=generated_files.txt -.fdsreffile=referenced_files.txt -p C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader.cydsn\Bootloader.cyprj -d CY8C4025LQI-S412 -s C:\work\eddie-psoc-comms\Eddie_DP0_Slider\Bootloader.cydsn\Generated_Source\PSoC4 -- -yv2 -q10 -yga -o2 -v3 -.fftcfgtype=LE" />
 </CyGuid_b0374e30-ce3a-47f2-ad85-821643292c68>
 </dataGuid>
 <dataGuid v="597c5b74-0c46-4204-8b7f-96f3570671dc">
@@ -1325,7 +1327,7 @@
 <v>C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\warp\lib\common\stdlogic\mod_genv.vif</v>
 <v>C:\Program Files\Cypress\PSoC Creator\4.0\PSoC Creator\warp\lib\common\stdlogic\rtlpkg.vif</v>
 </warp_dep>
-<deps_time v="131407918465504866" />
+<deps_time v="131419991020494176" />
 <top_block v="TopDesign" />
 <last_generation v="0" />
 <pdl_path v="C:\Users\mm1005301\Documents\Cypress\PDL\2.1.0" />
@@ -1333,7 +1335,7 @@
 </dataGuid>
 <dataGuid v="769d31ea-68b1-4f0c-b90a-7c10a43ee563">
 <CyGuid_769d31ea-68b1-4f0c-b90a-7c10a43ee563 type_name="CyDesigner.Common.ProjMgmt.Model.CyLinkCustomData" version="1">
-<deps_time v="131407918525817305" />
+<deps_time v="131420987473603456" />
 </CyGuid_769d31ea-68b1-4f0c-b90a-7c10a43ee563>
 </dataGuid>
 <dataGuid v="504337dd-7d07-4bc7-9057-90e60cf6c469">

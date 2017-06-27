@@ -15,17 +15,9 @@
  *         Framingham, MA 01701-9168
  */
 
-#include "util.h"
+#ifndef SLIDER_CYDSN_BUTTON_H_
+#define SLIDER_CYDSN_BUTTON_H_
 
-static uint8_t   software_version_major       = 0x01;
-static uint8_t   software_version_minor       = 0x00;
+void ButtonsScan(void);
 
-uint8_t get_software_version_major(void)
-{
-    return software_version_major;
-}
-
-uint8_t get_software_version_minor(void)
-{
-    return software_version_minor;
-}
+#endif /* SLIDER_CYDSN_BUTTON_H_ */

@@ -48,11 +48,11 @@
 
 #if(SPIM_INTERNAL_RX_SW_BUFFER)
     /* Add one element to the buffer to receive full packet. One byte in receive buffer is always empty */
-    volatile uint16 SPIM_rxBufferInternal[SPIM_INTERNAL_RX_BUFFER_SIZE];
+    volatile uint8 SPIM_rxBufferInternal[SPIM_INTERNAL_RX_BUFFER_SIZE];
 #endif /* (SPIM_INTERNAL_RX_SW_BUFFER) */
 
 #if(SPIM_INTERNAL_TX_SW_BUFFER)
-    volatile uint16 SPIM_txBufferInternal[SPIM_TX_BUFFER_SIZE];
+    volatile uint8 SPIM_txBufferInternal[SPIM_TX_BUFFER_SIZE];
 #endif /* (SPIM_INTERNAL_TX_SW_BUFFER) */
 
 
@@ -337,7 +337,7 @@
     *  transmit buffer.
     *
     *******************************************************************************/
-    void SPIM_SpiUartPutArray(const uint16 wrBuf[], uint32 count)
+    void SPIM_SpiUartPutArray(const uint8 wrBuf[], uint32 count)
     {
         uint32 i;
 

@@ -15,17 +15,16 @@
  *         Framingham, MA 01701-9168
  */
 
-#include "util.h"
+#ifndef SLIDER_CYDSN_SLIDER_H_
+#define SLIDER_CYDSN_SLIDER_H_
 
-static uint8_t   software_version_major       = 0x01;
-static uint8_t   software_version_minor       = 0x00;
+typedef enum {
+    SLIDER_DOWN = 0,
+    SLIDER_UP,
+    SLIDER_MOVE,
+} SliderState_t;
 
-uint8_t get_software_version_major(void)
-{
-    return software_version_major;
-}
+void SlidersInit(void);
+void SlidersScan(void);
 
-uint8_t get_software_version_minor(void)
-{
-    return software_version_minor;
-}
+#endif /* SLIDER_CYDSN_SLIDER_H_ */

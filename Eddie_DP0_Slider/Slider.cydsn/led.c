@@ -1,258 +1,142 @@
-/* ========================================
+/*
+ * @file
  *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
+ * @brief
  *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
+ * @author Shelby Apps Team
  *
- * ========================================
-*/
+ * @attention
+ *     BOSE CORPORATION.
+ *     COPYRIGHT 2017 BOSE CORPORATION ALL RIGHTS RESERVED.
+ *     This program may not be reproduced, in whole or in part in any
+ *     form or any means whatsoever without the written permission of:
+ *         BOSE CORPORATION
+ *         The Mountain,
+ *         Framingham, MA 01701-9168
+ */
+
+#include <project.h>
 #include "led.h"
 #include "util.h"
+#include "comms.h"
 
-//=============================================================================
-//======================================================== types and structures
-//=============================================================================
-typedef struct tlc_5947_led_driver 
+/*
+ * The TLC5947 comms protocol is:
+ * Blank turns off the pwm when ON and should be set to on at the start of your program
+ * LED intensity data is sent as a stream of 24 12-bit values msb..lsb
+ * Set Latch ON before writing and turn it OFF when done
+ * This is basically just bit-banged SPI with chip select
+ * See the TODO below about using CS as Latch
+ *
+ * The external API allows passing the 12-bit intensities as 16-bit and converts them internally
+ * to make it easier for the outside to send data.  (i.e. instead of every client of the API
+ * having to have code that converts to 12-bit and send that somehow).
+ */
+
+/*
+ * Buffer contains 12bit values in bytes
+ * nibbleAlsb nibbleAmid, nibbleAmsb nibbleBlsb, nibbleBmid nibbleBmsb, ...
+ *  0 aa ab bb  0,1
+ *  3 cc cd dd  2,3
+ *  6 ee ef ff  4,5
+ *  9 gg gh hh  6,7
+ * 12 ii ij jj  8,9
+ * 15 kk kl ll  10,11
+ * 18 mm mn nn  12,13
+ * 21 oo op pp  14,15
+ * 24 qq qr rr  16,17
+ * 27 ss st tt  18,19
+ * 30 uu uv vv  20,21
+ * 33 ww wx xx  22,23
+ */
+#define LED_BUFFER_SIZE (MAX_LEDS * 12 / 8)
+static uint8_t ledBuffer[LED_BUFFER_SIZE];
+
+// TODO see if we can swap blank and latch pins and use spi cs as latch; it will remove the need to turn off interrupts
+static void LedsUpdate(void)
 {
-    uint16 led0 :12;
-    uint16 led1 :12;
-    uint16 led2 :12;
-    uint16 led3 :12;
-    uint16 led4 :12;
-    uint16 led5 :12;
-    uint16 led6 :12;
-    uint16 led7 :12;
-    uint16 led8 :12;
-    uint16 led9 :12;
-    uint16 led10:12;
-    uint16 led11:12;
-    uint16 led12:12;
-    uint16 led13:12;
-    uint16 led14:12;
-    uint16 led15:12;
-    uint16 led16:12;
-    uint16 led17:12;
-    uint16 led18:12;
-    uint16 led19:12;
-    uint16 led20:12;
-    uint16 led21:12;
-    uint16 led22:12;
-    uint16 led23:12;
-}t_tlc_5947_led_driver;
-
-//=============================================================================
-//============================================================ static variables
-//=============================================================================
-t_tlc_5947_led_driver led_buffer;
-
-#if USE_LED
-    static uint8 size_write = sizeof(led_buffer) / sizeof(uint16);
-#endif // USE_LED
-
-//=============================================================================
-//============================================================= local funcitons
-//=============================================================================
-static void set_led_buffer   (char led, uint16 intensity);
-static void update_led_buffer(void);
-
-//=============================================================================
-//=============================================================== set_led_strip 
-//=============================================================================
-void set_led_strip (uint16 led_vec[MAX_LEDS])
-{
-    led_buffer.led0  = led_vec[23];
-    led_buffer.led1  = led_vec[22];
-    led_buffer.led2  = led_vec[21];
-    led_buffer.led3  = led_vec[20];
-    led_buffer.led4  = led_vec[19];
-    led_buffer.led5  = led_vec[18];
-    led_buffer.led6  = led_vec[17];
-    led_buffer.led7  = led_vec[16];
-    led_buffer.led8  = led_vec[15];
-    led_buffer.led9  = led_vec[14];
-    led_buffer.led10 = led_vec[13];
-    led_buffer.led11 = led_vec[12];
-    led_buffer.led12 = led_vec[11];
-    led_buffer.led13 = led_vec[10];
-    led_buffer.led14 = led_vec[ 9];
-    led_buffer.led15 = led_vec[ 8];
-    led_buffer.led16 = led_vec[ 7];
-    led_buffer.led17 = led_vec[ 6];
-    led_buffer.led18 = led_vec[ 5];
-    led_buffer.led19 = led_vec[ 4];
-    led_buffer.led20 = led_vec[ 3];
-    led_buffer.led21 = led_vec[ 2];
-    led_buffer.led22 = led_vec[ 1];
-    led_buffer.led23 = led_vec[ 0];
-    
-    update_led_buffer();
-}// set_led_strip
-
-//=============================================================================
-//============================================================== set_led_buffer 
-//=============================================================================
-void set_led_buffer (char led, uint16 intensity)
-{
-    uint16  set_value = intensity; // min(intensity, MAX_INTENSITY);
-    uint16  led_min   = min(led, MAX_LEDS - 1);
-
-    switch (led_min)
-    {
-        case 23: led_buffer.led0  = set_value;  // E_LED_LEFT_BLUE
-                 break;
-        case 22: led_buffer.led1  = set_value;  // E_LED_LEFT_GREEN
-                 break;
-        case 21: led_buffer.led2  = set_value;  // E_LED_LEFT_RED 
-                 break;
-        case 20: led_buffer.led3  = set_value;  // E_LED_RIGHT_BLUE  
-                 break;
-        case 19: led_buffer.led4  = set_value;  // E_LED_RIGHT_GREEN  
-                 break;
-        case 18: led_buffer.led5  = set_value;  // E_LED_RIGHT_RED
-                 break;
-        case 17: led_buffer.led6  = set_value;  // not used 
-                 break;
-        case 16: led_buffer.led7  = set_value;  // not used
-                 break;
-        case 15: led_buffer.led8  = set_value;  // not used
-                 break;
-        case 14: led_buffer.led9  = set_value;  // WHITE 14
-                 break;
-        case 13: led_buffer.led10 = set_value;  // WHITE 13 
-                 break;
-        case 12: led_buffer.led11 = set_value;  // WHITE 12
-                 break;
-        case 11: led_buffer.led12 = set_value;  // WHITE 11
-                 break;
-        case 10: led_buffer.led13 = set_value;  // WHITE 10
-                 break;
-        case  9: led_buffer.led14 = set_value;  // WHITE 9
-                 break;
-        case  8: led_buffer.led15 = set_value;  // WHITE 8
-                 break;
-        case  7: led_buffer.led16 = set_value;  // WHITE 7
-                 break;
-        case  6: led_buffer.led17 = set_value;  // WHITE 6
-                 break;
-        case  5: led_buffer.led18 = set_value;  // WHITE 5
-                 break;
-        case  4: led_buffer.led19 = set_value;  // WHITE 4
-                 break;
-        case  3: led_buffer.led20 = set_value;  // WHITE 3
-                 break;
-        case  2: led_buffer.led21 = set_value;  // WHITE 2
-                 break;
-        case  1: led_buffer.led22 = set_value;  // WHITE 1
-                 break;
-        case  0: led_buffer.led23 = set_value;  // WHITE 0
-                 break;
-        default: return;
-    }
-    
-    return;
-}// set_led_buffer
-
-//=============================================================================
-//=========================================================== update_led_buffer
-//=============================================================================
-void update_led_buffer()
-{
-#if USE_LED  
     CapSense_ISR_Disable();
-    SPIM_SpiUartPutArray((const uint16*)&led_buffer, size_write);
+    SPIM_SpiUartPutArray(ledBuffer, sizeof(ledBuffer));
     Blank_Write(1);
     Latch_Write(1);
     CyDelayUs  (1);
     Latch_Write(0);
-    Blank_Write(0);       
+    Blank_Write(0);
     CapSense_ISR_Enable();
-#endif // USE_LED
-}// update_led_buffer
+}
 
-//=============================================================================
-//===================================================================== set_led
-//=============================================================================
-void set_led (char led, uint16 intensity)
+// Used by the animator
+void LedsShowPattern(uint8_t *pattern)
 {
-    //memset(&led_buffer, 0, sizeof(led_buffer));
-    set_led_buffer(led, intensity);
-    update_led_buffer();
-}// set_led
+    memcpy(ledBuffer, pattern, LED_BUFFER_SIZE);
+    LedsUpdate();
+}
 
-void set_led_pair (char left_led, uint16 intensity_left, uint16 intensity_center)
+// Set one LED
+static void LedsSetLed(uint8_t led, uint16_t ledValue, BOOL update)
 {
-    set_led_buffer(left_led    , intensity_left  );
-    set_led_buffer(left_led + 1, intensity_center);  
-    update_led_buffer();
-}// set_led_triplet
-
-void set_led_triplet (char left_led, uint16 intensity_left, uint16 intensity_center, uint16 intensity_right)
-{ 
-    set_led_buffer(left_led    , intensity_left  );
-    set_led_buffer(left_led + 1, intensity_center);  
-    set_led_buffer(left_led + 2, intensity_right );
-
-    update_led_buffer();
-}// set_led_triplet
-
-//=============================================================================
-//====================================================== set_all_leds_intensity
-//=============================================================================
-void set_all_leds_intensity (uint16 intensity)
-{
-    int i;
-    
-    for (i = 0; i < MAX_LEDS; i++)
+    uint8_t ledBuffPos = (led/2)*3;
+    if (led % 2 == 0)
     {
-        set_led_buffer(i, intensity);  
+        // Even led -> aa aX (X is untouched)
+        ledBuffer[ledBuffPos] = (ledValue >> 4) & 0xFF;
+        ledBuffer[ledBuffPos+1] = (ledBuffer[ledBuffPos+1] & 0x0F) | ((ledValue << 4) & 0xF0);
     }
-        
-    update_led_buffer();
-}// set_all_leds_intensity
-
-//=============================================================================
-//========================================================== set_all_white_leds
-//=============================================================================
-void set_all_white_leds(uint16 intensity)
-{  
-    int i;
-    
-    for (i = 0; i < NUMBER_OF_WHITE_LEDS; i++)
+    else
     {
-        set_led_buffer(i, intensity);  
+        // Odd led -> XX Xa aa (X is untouched)
+        ledBuffer[ledBuffPos+1] = (ledBuffer[ledBuffPos+1] & 0xF0) | ((ledValue >> 8) & 0x0F);
+        ledBuffer[ledBuffPos+2] = ledValue & 0xFF;
     }
-        
-    update_led_buffer();
-}// set_all_white_leds
-
-//=============================================================================
-//======================================================== set_all_colored_leds
-//=============================================================================
-void set_all_colored_leds(uint16 intensity)
-{  
-    int i;
-    
-    for (i = NUMBER_OF_WHITE_LEDS; i < MAX_LEDS; i++)
+    if (update)
     {
-        set_led_buffer(i, intensity);  
+        LedsUpdate();
     }
-        
-    update_led_buffer();
-}// set_all_colored_leds
+}
 
-//=============================================================================
-//============================================================= initialize_leds
-//=============================================================================
-void initialize_leds()
+// Set the entire set all at once with 24 different intensities
+static void LedsSetAll(const uint16_t *ledValues)
 {
-#if USE_LED
+    for (uint8_t i = 0; i < MAX_LEDS; i++)
+    {
+        LedsSetLed(i, ledValues[i], FALSE);
+    }
+    LedsUpdate();
+}
+
+// Syntactic sugar; it's so sweet
+static void LedsClear(void)
+{
+    for (uint8_t i = 0; i < MAX_LEDS; i++)
+    {
+        LedsSetLed(i, 0x00, FALSE);
+    }
+    LedsUpdate();
+}
+
+BOOL LedsHandleCommand(const uint8_t *buff)
+{
+    if (buff[0] == COMMS_COMMAND_LEDS_CLEARALL)
+    {
+        LedsClear();
+    }
+    else if (buff[0] == COMMS_COMMAND_LEDS_SETALL)
+    {
+        LedsSetAll((uint16_t *)&buff[2]);
+    }
+    else // COMMS_COMMAND_LEDS_SETONE
+    {
+        uint16_t ledValue = buff[2] | (buff[3] << 8);
+        LedsSetLed(buff[1], ledValue, TRUE);
+    }
+    return TRUE;
+}
+
+void LedsInit(void)
+{
+    // Datasheet says set this high on bootup or get random leds
+    Blank_Write(1);
+
     SPIM_Start();
-    set_all_leds_intensity(0x00);
-#endif // USE_LED
-
-}// initialize_leds
-
-/* [] END OF FILE */
+    LedsClear();
+}

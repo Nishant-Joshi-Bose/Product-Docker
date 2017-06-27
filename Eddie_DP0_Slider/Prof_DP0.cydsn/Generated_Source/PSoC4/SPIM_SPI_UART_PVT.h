@@ -49,11 +49,11 @@
 #endif /* (SPIM_INTERNAL_TX_SW_BUFFER_CONST) */
 
 #if (SPIM_INTERNAL_RX_SW_BUFFER)
-    extern volatile uint16 SPIM_rxBufferInternal[SPIM_INTERNAL_RX_BUFFER_SIZE];
+    extern volatile uint8 SPIM_rxBufferInternal[SPIM_INTERNAL_RX_BUFFER_SIZE];
 #endif /* (SPIM_INTERNAL_RX_SW_BUFFER) */
 
 #if (SPIM_INTERNAL_TX_SW_BUFFER)
-    extern volatile uint16 SPIM_txBufferInternal[SPIM_TX_BUFFER_SIZE];
+    extern volatile uint8 SPIM_txBufferInternal[SPIM_TX_BUFFER_SIZE];
 #endif /* (SPIM_INTERNAL_TX_SW_BUFFER) */
 
 
