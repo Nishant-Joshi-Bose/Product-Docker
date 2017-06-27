@@ -1,8 +1,18 @@
-/**
- * @file button.c
- * @author 
+/*
+ * @file
  *
- * 
+ * @brief
+ *
+ * @author Shelby Apps Team
+ *
+ * @attention
+ *     BOSE CORPORATION.
+ *     COPYRIGHT 2017 BOSE CORPORATION ALL RIGHTS RESERVED.
+ *     This program may not be reproduced, in whole or in part in any
+ *     form or any means whatsoever without the written permission of:
+ *         BOSE CORPORATION
+ *         The Mountain,
+ *         Framingham, MA 01701-9168
  */
 
 #include <project.h>
@@ -10,111 +20,88 @@
 #include "button.h"
 #include "comms.h"
 
-#define MAX_CAPSENSE_BUTTONS 24
-
 typedef struct {
     uint8_t id;
     uint32_t pressed;
 } Button_t;
 
-static Button_t buttons[MAX_CAPSENSE_BUTTONS];
-static uint8_t nButtons = 0;
-
 // Automatically determine buttons to scan based on PSoC configuration
-void ButtonsInit(void)
+// We currently only support 24 max
+static Button_t buttons[] =
 {
-    memset(buttons, 0, sizeof(buttons));
 #ifdef CapSense_BUT0_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT0_WDGT_ID;
+        {CapSense_BUT0_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT1_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT1_WDGT_ID;
+        {CapSense_BUT1_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT2_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT2_WDGT_ID;
+        {CapSense_BUT2_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT3_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT3_WDGT_ID;
+        {CapSense_BUT3_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT4_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT4_WDGT_ID;
+        {CapSense_BUT4_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT5_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT5_WDGT_ID;
+        {CapSense_BUT5_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT6_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT6_WDGT_ID;
+        {CapSense_BUT6_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT7_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT7_WDGT_ID;
+        {CapSense_BUT7_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT8_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT8_WDGT_ID;
+        {CapSense_BUT8_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT9_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT9_WDGT_ID;
+        {CapSense_BUT9_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT10_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT10_WDGT_ID;
+        {CapSense_BUT10_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT11_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT11_WDGT_ID;
+        {CapSense_BUT11_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT12_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT12_WDGT_ID;
+        {CapSense_BUT12_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT13_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT13_WDGT_ID;
+        {CapSense_BUT13_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT14_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT14_WDGT_ID;
+        {CapSense_BUT14_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT15_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT15_WDGT_ID;
+        {CapSense_BUT15_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT16_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT16_WDGT_ID;
+        {CapSense_BUT16_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT17_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT17_WDGT_ID;
+        {CapSense_BUT17_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT18_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT18_WDGT_ID;
+        {CapSense_BUT18_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT19_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT19_WDGT_ID;
+        {CapSense_BUT19_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT20_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT20_WDGT_ID;
+        {CapSense_BUT20_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT21_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT21_WDGT_ID;
+        {CapSense_BUT21_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT22_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT22_WDGT_ID;
+        {CapSense_BUT22_WDGT_ID, 0},
 #endif
 #ifdef CapSense_BUT23_WDGT_ID
-    buttons[nButtons++].id = CapSense_BUT23_WDGT_ID;
+        {CapSense_BUT23_WDGT_ID, 0},
 #endif
-}
-
-#ifdef CONFIG_VIA_COMMS
-BOOL ButtonsSetup(const uint8_t *buff)
-{
-    if (buff[1] > MAX_CAPSENSE_BUTTONS)
-    {
-        return FALSE;
-    }
-    nButtons = buff[1];
-    // We just have to expect they're going to give us proper data
-    // We don't really have any good way to validate
-    for (uint8_t i = 0; i < nButtons; i++)
-    {
-        buttons[i].id = buff[1+i];
-    }
-    return TRUE;
-}
-#endif
+};
 
 static void SendButtonEvent(const Button_t *button)
 {
@@ -128,7 +115,7 @@ static void SendButtonEvent(const Button_t *button)
 
 void ButtonsScan(void)
 {
-    for (uint8_t i = 0; i < nButtons; i++)
+    for (volatile uint8_t i = 0; i < sizeof(buttons); i++)
     {
         uint32_t buttonActive = CapSense_IsWidgetActive(buttons[i].id);
         if (buttonActive != buttons[i].pressed)

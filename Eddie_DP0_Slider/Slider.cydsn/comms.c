@@ -1,8 +1,18 @@
-/**
- * @file comms.c
- * @author 
+/*
+ * @file
  *
- * 
+ * @brief
+ *
+ * @author Shelby Apps Team
+ *
+ * @attention
+ *     BOSE CORPORATION.
+ *     COPYRIGHT 2017 BOSE CORPORATION ALL RIGHTS RESERVED.
+ *     This program may not be reproduced, in whole or in part in any
+ *     form or any means whatsoever without the written permission of:
+ *         BOSE CORPORATION
+ *         The Mountain,
+ *         Framingham, MA 01701-9168
  */
 
 /*
@@ -24,7 +34,8 @@ class GetVersion {
 class VersionResponse << (R, #FF7700) >> {
 0x01
 ..
-version
+version-major
+version-minor
 }
 
 StatusResponse -[hidden]down-> GetVersion
@@ -198,7 +209,8 @@ static void CommsSendVersion(void)
 
     memset(buff, 0, sizeof(buff));
     buff[0] = COMMS_RESPONSE_VERSION;
-    buff[1] = get_software_version();
+    buff[1] = get_software_version_major();
+    buff[2] = get_software_version_minor();
 
     CommsSendData(buff);
 }
@@ -233,12 +245,6 @@ void CommsHandler(void)
         case COMMS_COMMAND_LEDS_SETALL:
         case COMMS_COMMAND_LEDS_SETONE:
             CommsSendStatus(LedsHandleCommand(i2cRxBufferCopy));
-            break;
-        case COMMS_COMMAND_SENSOR_ENABLE:
-            CommsSendStatus(CapsenseHandlerEnable());
-            break;
-        case COMMS_COMMAND_SENSOR_DISABLE:
-            CommsSendStatus(CapsenseHandlerDisable());
             break;
         case COMMS_COMMAND_ANIMATION_LOADSTART:
         case COMMS_COMMAND_ANIMATION_LOADPATTERN:

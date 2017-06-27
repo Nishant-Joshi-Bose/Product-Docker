@@ -1,8 +1,18 @@
-/**
- * @file comms.h
- * @author 
+/*
+ * @file
  *
- * 
+ * @brief
+ *
+ * @author Shelby Apps Team
+ *
+ * @attention
+ *     BOSE CORPORATION.
+ *     COPYRIGHT 2017 BOSE CORPORATION ALL RIGHTS RESERVED.
+ *     This program may not be reproduced, in whole or in part in any
+ *     form or any means whatsoever without the written permission of:
+ *         BOSE CORPORATION
+ *         The Mountain,
+ *         Framingham, MA 01701-9168
  */
 
 #ifndef COMMS_H_
@@ -11,7 +21,6 @@
 #include <project.h>
 #include "util.h"
 
-// TODO remove any non-global funcs and static-ize them in the c file
 void CommsInit(void);
 void CommsSendData(const uint8_t *buffer);
 void CommsHandler(void);
@@ -23,8 +32,6 @@ typedef enum {
     COMMS_COMMAND_LEDS_CLEARALL,
     COMMS_COMMAND_LEDS_SETALL,
     COMMS_COMMAND_LEDS_SETONE,
-    COMMS_COMMAND_SENSOR_ENABLE,
-    COMMS_COMMAND_SENSOR_DISABLE,
     COMMS_COMMAND_ANIMATION_LOADSTART,
     COMMS_COMMAND_ANIMATION_LOADPATTERN,
     COMMS_COMMAND_ANIMATION_START,

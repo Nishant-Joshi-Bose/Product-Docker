@@ -1,18 +1,37 @@
-/* ========================================
+/*
+ * @file
  *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
+ * @brief
  *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
+ * @author Shelby Apps Team
  *
- * ========================================
-*/
+ * @attention
+ *     BOSE CORPORATION.
+ *     COPYRIGHT 2017 BOSE CORPORATION ALL RIGHTS RESERVED.
+ *     This program may not be reproduced, in whole or in part in any
+ *     form or any means whatsoever without the written permission of:
+ *         BOSE CORPORATION
+ *         The Mountain,
+ *         Framingham, MA 01701-9168
+ */
+
 #include <project.h>
 #include "led.h"
 #include "util.h"
 #include "comms.h"
+
+/*
+ * The TLC5947 comms protocol is:
+ * Blank turns off the pwm when ON and should be set to on at the start of your program
+ * LED intensity data is sent as a stream of 24 12-bit values msb..lsb
+ * Set Latch ON before writing and turn it OFF when done
+ * This is basically just bit-banged SPI with chip select
+ * See the TODO below about using CS as Latch
+ *
+ * The external API allows passing the 12-bit intensities as 16-bit and converts them internally
+ * to make it easier for the outside to send data.  (i.e. instead of every client of the API
+ * having to have code that converts to 12-bit and send that somehow).
+ */
 
 /*
  * Buffer contains 12bit values in bytes
@@ -31,12 +50,12 @@
  * 33 ww wx xx  22,23
  */
 #define LED_BUFFER_SIZE (MAX_LEDS * 12 / 8)
-uint8_t ledBuffer[LED_BUFFER_SIZE];
+static uint8_t ledBuffer[LED_BUFFER_SIZE];
 
+// TODO see if we can swap blank and latch pins and use spi cs as latch; it will remove the need to turn off interrupts
 static void LedsUpdate(void)
 {
     CapSense_ISR_Disable();
-//    SPIM_SpiUartPutArray((const uint16*)ledBuffer, sizeof(ledBuffer) / 2);
     SPIM_SpiUartPutArray(ledBuffer, sizeof(ledBuffer));
     Blank_Write(1);
     Latch_Write(1);
@@ -44,14 +63,16 @@ static void LedsUpdate(void)
     Latch_Write(0);
     Blank_Write(0);
     CapSense_ISR_Enable();
-}// update_led_buffer
+}
 
+// Used by the animator
 void LedsShowPattern(uint8_t *pattern)
 {
     memcpy(ledBuffer, pattern, LED_BUFFER_SIZE);
     LedsUpdate();
 }
 
+// Set one LED
 static void LedsSetLed(uint8_t led, uint16_t ledValue, BOOL update)
 {
     uint8_t ledBuffPos = (led/2)*3;
@@ -73,6 +94,7 @@ static void LedsSetLed(uint8_t led, uint16_t ledValue, BOOL update)
     }
 }
 
+// Set the entire set all at once with 24 different intensities
 static void LedsSetAll(const uint16_t *ledValues)
 {
     for (uint8_t i = 0; i < MAX_LEDS; i++)
@@ -82,6 +104,7 @@ static void LedsSetAll(const uint16_t *ledValues)
     LedsUpdate();
 }
 
+// Syntactic sugar; it's so sweet
 static void LedsClear(void)
 {
     for (uint8_t i = 0; i < MAX_LEDS; i++)

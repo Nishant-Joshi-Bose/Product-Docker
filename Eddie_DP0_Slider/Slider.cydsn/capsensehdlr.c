@@ -1,8 +1,18 @@
 /*
- * capsensehdlr.c
+ * @file
  *
- *  Created on: Jun 13, 2017
- *      Author: mm1005301
+ * @brief
+ *
+ * @author Shelby Apps Team
+ *
+ * @attention
+ *     BOSE CORPORATION.
+ *     COPYRIGHT 2017 BOSE CORPORATION ALL RIGHTS RESERVED.
+ *     This program may not be reproduced, in whole or in part in any
+ *     form or any means whatsoever without the written permission of:
+ *         BOSE CORPORATION
+ *         The Mountain,
+ *         Framingham, MA 01701-9168
  */
 
 #include <project.h>
@@ -13,8 +23,6 @@
 void CapsenseHandlerInit(void)
 {
     CapSense_Start();
-    ButtonsInit();
-    SlidersInit();
 }
 
 void CapsenseHandlerScan(void)
@@ -38,14 +46,4 @@ void CapsenseHandlerScan(void)
 #endif // USE_TUNER
 
    CapSense_ScanAllWidgets();
-}
-
-BOOL CapsenseHandlerEnable(void)
-{
-    return FALSE;
-}
-
-BOOL CapsenseHandlerDisable(void)
-{
-    return FALSE;
 }

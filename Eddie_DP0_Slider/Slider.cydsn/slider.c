@@ -1,8 +1,18 @@
-/**
- * @file slider.c
- * @author 
+/*
+ * @file
  *
- * 
+ * @brief
+ *
+ * @author Shelby Apps Team
+ *
+ * @attention
+ *     BOSE CORPORATION.
+ *     COPYRIGHT 2017 BOSE CORPORATION ALL RIGHTS RESERVED.
+ *     This program may not be reproduced, in whole or in part in any
+ *     form or any means whatsoever without the written permission of:
+ *         BOSE CORPORATION
+ *         The Mountain,
+ *         Framingham, MA 01701-9168
  */
 
 #include <project.h>
@@ -13,61 +23,22 @@
 // Only compile slider stuff in if sliders were configured in PSoC creator
 #if defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)
 
-#define MAX_CAPSENSE_SLIDERS 2
-
 typedef struct {
     uint8_t id;
     uint32_t lastPos;
 } Slider_t;
 
-static Slider_t sliders[MAX_CAPSENSE_SLIDERS];
-static uint8_t nSliders = 0;
-#endif
-
 // Automatically configure sliders based on PSoC configuration
-void SlidersInit(void)
+// We currently only support 2
+static Slider_t sliders[] =
 {
-#if defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)
-#ifdef CONFIG_VIA_COMMS
-    for (uint8_t i = 0; i < MAX_CAPSENSE_SLIDERS; i++)
-    {
-        sliders[i].id = 0;
-        sliders[i].lastPos = CapSense_SLIDER_NO_TOUCH;
-    }
-#endif
 #ifdef CapSense_LINEARSLIDER0_WDGT_ID
-    sliders[nSliders].id = CapSense_LINEARSLIDER0_WDGT_ID;
-    sliders[nSliders].lastPos = CapSense_SLIDER_NO_TOUCH;
-    nSliders++;
+        { CapSense_LINEARSLIDER0_WDGT_ID, CapSense_SLIDER_NO_TOUCH },
 #endif
 #ifdef CapSense_LINEARSLIDER1_WDGT_ID
-    sliders[nSliders].id = CapSense_LINEARSLIDER1_WDGT_ID;
-    sliders[nSliders].lastPos = CapSense_SLIDER_NO_TOUCH;
-    nSliders++;
+        { CapSense_LINEARSLIDER1_WDGT_ID, CapSense_SLIDER_NO_TOUCH },
 #endif
-#endif
-}
-
-#ifdef CONFIG_VIA_COMMS
-BOOL SlidersSetup(const uint8_t *buff)
-{
-#if defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)
-    if (buff[1] > MAX_CAPSENSE_SLIDERS)
-    {
-        return FALSE;
-    }
-    nSliders = buff[1];
-    // We just have to expect they're going to give us proper data
-    // We don't really have any good way to validate
-    for (uint8_t i = 0; i < nSliders; i++)
-    {
-        sliders[i].id = buff[1+i];
-    }
-    return TRUE;
-#else
-    return FALSE;
-#endif
-}
+};
 #endif
 
 #if defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)
@@ -87,7 +58,7 @@ static void SendSliderEvent(const Slider_t *slider, SliderState_t state)
 void SlidersScan(void)
 {
 #if defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)
-    for (uint8_t i = 0; i < nSliders; i++)
+    for (volatile uint8_t i = 0; i < sizeof(sliders); i++)
     {
         uint32_t curPos = CapSense_GetCentroidPos(sliders[i].id);
 
