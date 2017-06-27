@@ -97,12 +97,15 @@ static uint8 i2cRxBuffer[COMMS_RCV_BUFFER_SIZE];
 static uint8 i2cRxBufferCopy[COMMS_RCV_BUFFER_SIZE];
 
 // Circular buffer for outgoing comms
-#define TX_QUEUE_SIZE 24
+#define TX_QUEUE_SIZE 64
 static uint8 i2cTxBuffer[TX_QUEUE_SIZE * COMMS_TX_BUFFER_SIZE];
 // What we've sent
 static uint8 i2cTxSentIdx = 0;
 // What's still left to send
 static uint8 i2cTxToSendIdx = 0;
+
+#define MASTER_INTERRUPT_TIMEOUT_DEFAULT 0x10000
+static uint32_t readTimeout = MASTER_INTERRUPT_TIMEOUT_DEFAULT;
 
 void CommsInit(void)
 {
@@ -119,48 +122,63 @@ void CommsSendData(const uint8 *buff)
     // call this.
     uint8 interruptState = CyEnterCriticalSection();
     memcpy(&i2cTxBuffer[i2cTxToSendIdx * COMMS_TX_BUFFER_SIZE], buff, COMMS_TX_BUFFER_SIZE);
-    i2cTxToSendIdx += COMMS_TX_BUFFER_SIZE;
+    i2cTxToSendIdx++;
     // Circular buffer, rotate
-    if (i2cTxToSendIdx >= COMMS_TX_BUFFER_SIZE * TX_QUEUE_SIZE)
+    if (i2cTxToSendIdx >= TX_QUEUE_SIZE)
     {
         i2cTxToSendIdx = 0;
     }
     CyExitCriticalSection(interruptState);
-    // Interrupt the master to let it know it has to read now
-    CAPINT_Write(0u);
-    CAPINT_Write(1u);
 }
 
-static void CommsHandleSent(void)
+static void CommsHandleSend(void)
 {
-    if (0u == (I2CS_I2CSlaveStatus() & I2CS_I2C_SSTAT_RD_CMPLT))
+    volatile uint32 i2cStatus = I2CS_I2CSlaveStatus();
+
+    // If reading, just let it continue reading
+    if (0u != (i2cStatus & I2CS_I2C_SSTAT_RD_BUSY))
     {
-        // TODO come up with a way to do timeout here
-        // not sure what we would do with the outbound queue
         return;
     }
 
-    // Clear master interrupt
-    CAPINT_Write(0u);
-
-    (void) I2CS_I2CSlaveClearReadStatus();
-
-    uint8 interruptState = CyEnterCriticalSection();
-    i2cTxSentIdx += COMMS_TX_BUFFER_SIZE;
-    if (i2cTxSentIdx >= COMMS_TX_BUFFER_SIZE * TX_QUEUE_SIZE)
+    // Handle done reading
+    if (0u != (i2cStatus & I2CS_I2C_SSTAT_RD_CMPLT))
     {
-        i2cTxSentIdx = 0;
+        // Clear master interrupt
+        CAPINT_Write(0u);
+
+        (void) I2CS_I2CSlaveClearReadStatus();
+
+        uint8 interruptState = CyEnterCriticalSection();
+        i2cTxSentIdx++;
+        if (i2cTxSentIdx >= TX_QUEUE_SIZE)
+        {
+            i2cTxSentIdx = 0;
+        }
+
+        // Re-point the outgoing i2c buffer to the next thing to send
+        I2CS_I2CSlaveInitReadBuf (&i2cTxBuffer[i2cTxSentIdx * COMMS_TX_BUFFER_SIZE],  COMMS_TX_BUFFER_SIZE);
+
+        CyExitCriticalSection(interruptState);
     }
 
-    // Re-point the outgoing i2c buffer to the next thing to send
-    I2CS_I2CSlaveInitReadBuf (&i2cTxBuffer[i2cTxSentIdx * COMMS_TX_BUFFER_SIZE],  COMMS_TX_BUFFER_SIZE);
-
-    // If there's more to send, interrupt the master again
+    // If there's stuff left to send, interrupt the master
     if (i2cTxSentIdx != i2cTxToSendIdx)
     {
+        // If we're already interrupting the master, give it some time to start the read
+        if (CAPINT_Read() == 1u)
+        {
+            readTimeout--;
+            if (readTimeout != 0)
+            {
+                return;
+            }
+        }
+
+        readTimeout = MASTER_INTERRUPT_TIMEOUT_DEFAULT;
+        CAPINT_Write(0u); // In case it was set before and the master ignored it/timed out
         CAPINT_Write(1u);
     }
-    CyExitCriticalSection(interruptState);
 }
 
 void CommsSendStatus(BOOL status)
@@ -187,7 +205,7 @@ static void CommsSendVersion(void)
 
 void CommsHandler(void)
 {
-    CommsHandleSent();
+    CommsHandleSend();
 
     if (0u != (I2CS_I2CSlaveStatus() & I2CS_I2C_SSTAT_WR_CMPLT))
     {
