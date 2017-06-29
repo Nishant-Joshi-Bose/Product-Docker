@@ -103,13 +103,13 @@ static Button_t buttons[] =
 #endif
 };
 
-static void SendButtonEvent(const Button_t *button)
+void SendButtonEvent(uint8_t buttonId, uint8_t pressed)
 {
     uint8_t buff[COMMS_TX_BUFFER_SIZE];
     memset(buff, 0, COMMS_TX_BUFFER_SIZE);
     buff[0] = COMMS_RESPONSE_BUTTON;
-    buff[1] = button->id;
-    buff[2] = button->pressed ? TRUE : FALSE;
+    buff[1] = buttonId;
+    buff[2] = pressed ? TRUE : FALSE;
     CommsSendData(buff);
 }
 
@@ -121,7 +121,7 @@ void ButtonsScan(void)
         if (buttonActive != buttons[i].pressed)
         {
             buttons[i].pressed = buttonActive;
-            SendButtonEvent(&buttons[i]);
+            SendButtonEvent(buttons[i].id, buttons[i].pressed);
         }
     }
 }

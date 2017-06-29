@@ -55,6 +55,8 @@
 #include "SPIM_SPI_UART_PVT.h"
 #include "SPIM_PVT.h"
 #include "SPIM_BOOT.h"
+#include "DebugPin.h"
+#include "DebugPin_aliases.h"
 #include "CapSense_ISR.h"
 #include "I2CS_SCBCLK.h"
 #include "I2CS_sda.h"

@@ -34,4 +34,8 @@
 uint8_t get_software_version_major(void);
 uint8_t get_software_version_minor(void);
 
+#ifndef NDEBUG
+void DebugTell(uint16_t data);
+#endif
+
 #endif // UTIL_H

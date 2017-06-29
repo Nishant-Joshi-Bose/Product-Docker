@@ -21,6 +21,7 @@
 #include "led.h"
 #include "comms.h"
 #include "capsensehdlr.h"
+#include "button.h"
 
 /*
  * The PSoC controls up to 24 buttons, 24 leds, and 2 sliders.
@@ -80,12 +81,18 @@ p -> l: clear gpio
 // http://www.cypress.com/documentation/component-datasheets/debouncer
 // See Ted's PIN_LED example for gpio banks (we may want to use that for all the tact buttons if there's more than one)
 
+#ifdef TACT__PC
+#define TACT_DEBOUNCE_TIME 20
+static uint16_t tactDebounceCount = 0;
+static uint8_t tactLastRead = 1;
+#endif
+
 int main()
 {
     CyGlobalIntEnable; // enable global interrupts before starting capsense and I2C blocks
 
     LedsInit();
-    AnimationInit();
+//    AnimationInit();
     CommsInit();
 
     CapsenseHandlerInit();
@@ -94,6 +101,26 @@ int main()
     {
         CommsHandler();
         CapsenseHandlerScan();
-        AnimationRun();
+//        AnimationRun();
+
+        // Hack for tact button that should've been connected to the LPM
+#ifdef TACT__PC
+        uint8_t tact = TACT_Read();
+        if ((tact == tactLastRead) && tactDebounceCount > 0)
+        {
+            tactDebounceCount--;
+        }
+        if (tact != tactLastRead)
+        {
+            tactDebounceCount++;
+        }
+        if (tactDebounceCount >= TACT_DEBOUNCE_TIME)
+        {
+            tactDebounceCount = 0;
+            tactLastRead = tact;
+            // TACT button id is just ff, who cares, it's a hack
+            SendButtonEvent(0xFF, tact);
+        }
+#endif
     }
 }

@@ -18,6 +18,9 @@
 #ifndef SLIDER_CYDSN_BUTTON_H_
 #define SLIDER_CYDSN_BUTTON_H_
 
+#include "project.h"
+    
 void ButtonsScan(void);
+void SendButtonEvent(uint8_t buttonId, uint8_t pressed);
 
 #endif /* SLIDER_CYDSN_BUTTON_H_ */
