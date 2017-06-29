@@ -115,7 +115,7 @@ static void SendButtonEvent(const Button_t *button)
 
 void ButtonsScan(void)
 {
-    for (volatile uint8_t i = 0; i < sizeof(buttons); i++)
+    for (volatile uint8_t i = 0; i < sizeof(buttons) / sizeof(Button_t); i++)
     {
         uint32_t buttonActive = CapSense_IsWidgetActive(buttons[i].id);
         if (buttonActive != buttons[i].pressed)

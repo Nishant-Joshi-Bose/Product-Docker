@@ -58,7 +58,7 @@ static void SendSliderEvent(const Slider_t *slider, SliderState_t state)
 void SlidersScan(void)
 {
 #if defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)
-    for (volatile uint8_t i = 0; i < sizeof(sliders); i++)
+    for (volatile uint8_t i = 0; i < sizeof(sliders) / sizeof(Slider_t); i++)
     {
         uint32_t curPos = CapSense_GetCentroidPos(sliders[i].id);
 
