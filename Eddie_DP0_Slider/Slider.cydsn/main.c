@@ -74,13 +74,6 @@ p -> l: clear gpio
  *
  */
 
-// TODO handle the tactile button for Eddie
-// Try to genericize it like the capsense stuff
-// Debounce:
-// See http://www.cypress.com/documentation/application-notes/an60024-psoc-3-psoc-4-psoc-5lp-switch-debouncer-and-glitch-filter
-// http://www.cypress.com/documentation/component-datasheets/debouncer
-// See Ted's PIN_LED example for gpio banks (we may want to use that for all the tact buttons if there's more than one)
-
 #ifdef TACT__PC
 #define TACT_DEBOUNCE_TIME 20
 static uint16_t tactDebounceCount = 0;
@@ -92,7 +85,7 @@ int main()
     CyGlobalIntEnable; // enable global interrupts before starting capsense and I2C blocks
 
     LedsInit();
-//    AnimationInit();
+    AnimationInit();
     CommsInit();
 
     CapsenseHandlerInit();
@@ -101,10 +94,10 @@ int main()
     {
         CommsHandler();
         CapsenseHandlerScan();
-//        AnimationRun();
+        AnimationRun();
 
-        // Hack for tact button that should've been connected to the LPM
 #ifdef TACT__PC
+        // Hack for tact button that should've been connected to the LPM
         uint8_t tact = TACT_Read();
         if ((tact == tactLastRead) && tactDebounceCount > 0)
         {

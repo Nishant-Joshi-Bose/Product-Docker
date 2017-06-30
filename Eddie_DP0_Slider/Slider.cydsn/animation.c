@@ -36,18 +36,22 @@ static BOOL loop = FALSE;
 static BOOL loading = FALSE;
 static uint8_t lastPattern = 0xff;
 
+// For some weird reason, if you stop the timer, the first time it takes 6s to time out
+// So, we never stop it.
 CY_ISR(AnimationTimerHandler)
 {
     Timer_1_ClearInterrupt(Timer_1_INTR_MASK_TC);
-    Timer_1_Stop();
 
-    patternDurationReached = TRUE;
+    if (animationRunning)
+    {
+        patternDurationReached = TRUE;
+    }
 }
 
 void AnimationInit(void)
 {
     TimerISR_StartEx(AnimationTimerHandler);
-    Timer_1_Stop();
+    Timer_1_Start();
 }
 
 static void RunPattern(uint8_t patternIdx)
@@ -56,11 +60,9 @@ static void RunPattern(uint8_t patternIdx)
     uint8_t *pattern = &(animationBuffer[patternIdx * PATTERN_ROW_SIZE]);
     uint16_t duration = *((uint16_t*)pattern);
     pattern += 2;
-    Timer_1_Stop();
     Timer_1_WriteCounter(duration * 10); // Timer clock is set to 10KHz
     // The timer could expire by the time the pattern is loaded but we still need to show it
     LedsShowPattern(pattern);
-    Timer_1_Start();
 }
 
 void AnimationRun(void)
