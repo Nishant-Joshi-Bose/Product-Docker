@@ -266,29 +266,6 @@
 
 			}// parse_slider_button
 
-			function show_push_button(id, name, state) {
-
-				var center = {x: ((id - 1) * (BUTTON_RADIUS * 2)) + 70, y: 80};
-
-				if (state == 'up') {
-					button_context.fillStyle = "green"	;
-				}
-				else if (state == 'down') {
-					button_context.fillStyle = "yellow"  ;
-				}
-				else {
-					button_context.fillStyle = "red"  ;
-				}
-
-				button_context.beginPath();
-				button_context.arc		(center.x, center.y, BUTTON_RADIUS, 0, Math.PI * 2);
-				button_context.closePath();
-				button_context.fill	();
-				button_context.fillStyle	= "black"; 
-				button_context.font			= button_font;
-				button_context.textBaseline = "top";
-				button_context.fillText(name, center.x - BUTTON_RADIUS / 4, center.y - BUTTON_RADIUS / 2);
-			}// show_push_button
 
 			//------------------------------------------------------------------
 			//------------------------------------------------ parse_push_button
@@ -361,6 +338,7 @@
 			    pattern_format              = config.Configuration["lightbar_config"];
                 var div_selected_animation  = document.getElementById("selected_animation_pattern");
                 var div_create_animation    = document.getElementById ("create_animation");
+                var div_config_pattern_params   = document.getElementById ("config_pattern_params");
 
    		        //get all animation
 			    ws.send("get animation");
@@ -388,11 +366,14 @@
                     
 				    var ip = document.createElement("input");
                     ip.setAttribute('type','number');
-                    ip.setAttribute('style','width:3em');
+                    ip.setAttribute('style','width:2.5em;fontSize:50%');
                     ip.setAttribute('value','0');
                     ip.setAttribute('id','Led'+i.toString());
 					ip.setAttribute('max',MAX_LED_INTENSITY);
 					ip.setAttribute('min','0');
+                    if (led_array[i] == 'N' || led_array[i] == 'n')
+                        ip.setAttribute('disabled','true');
+                        
                     td.appendChild(ip);
                     tr.appendChild(td);
 
@@ -423,11 +404,13 @@
 
 				    var ip = document.createElement("input");
 				    ip.setAttribute('type','number');
-				    ip.setAttribute('style','width:3em');
+				    ip.setAttribute('style','width:2.5em');
 				    ip.setAttribute('value','0');
 					ip.setAttribute('id','Pattern_Led'+i.toString());
 					ip.setAttribute('max',MAX_LED_INTENSITY);
 					ip.setAttribute('min','0');
+                    if (led_array[i] == 'N' || led_array[i] == 'n')
+                        ip.setAttribute('disabled','true');
                     td.appendChild(ip);
                     tr.appendChild(td);
 				}
@@ -438,7 +421,7 @@
 					var lbl = document.createElement("Label");
 					lbl.setAttribute ('for','active');
 					lbl.innerHTML = 'Pattern Active Time:';
-					div_create_animation.appendChild(lbl);
+					div_config_pattern_params.appendChild(lbl);
 
 					var active_time_input = document.createElement("input");
 					active_time_input.setAttribute('type','number');
@@ -447,27 +430,26 @@
 					active_time_input.setAttribute('value','0');
 					active_time_input.setAttribute('min','0');
 					active_time_input.setAttribute('max','9999');
-					div_create_animation.appendChild(active_time_input);
+					div_config_pattern_params.appendChild(active_time_input);
 
 					lbl = document.createElement("Label");
 					lbl.setAttribute ('for','pattern_name');
 					lbl.innerHTML = 'Pattern Name:';
-					div_create_animation.appendChild(lbl);
+					div_config_pattern_params.appendChild(lbl);
 
 					var animation_name_input = document.createElement("input");
 					animation_name_input.setAttribute('type','text');
 					animation_name_input.setAttribute('id','pattern_name');
 					animation_name_input.setAttribute('style','width: 10em');
 					animation_name_input.setAttribute('value','0');
-					div_create_animation.appendChild(animation_name_input);
+					div_config_pattern_params.appendChild(animation_name_input);
 
 					var btn_save_anim = document.createElement("button");
 					btn_save_anim.setAttribute('style','auto');
 					btn_save_anim.setAttribute('id','save_pattern_server');
 					btn_save_anim.setAttribute('onclick','save_pattern_onserver()');
 					btn_save_anim.innerHTML = 'Save';
-					div_create_animation.appendChild(btn_save_anim);
-
+					div_config_pattern_params.appendChild(btn_save_anim);
             }
 		
 			//------------------------------------------------------------------
@@ -498,7 +480,8 @@
 			    {
 				case 'add animation':
 				    alert('Animation added sucessfully!');
-				    //add to the list of available patterns. Assumption is pattern will be written on file successfully
+				    
+                    //add to the list of available patterns. Assumption is pattern will be written on file successfully
 				    var anim = document.getElementById("animation_list");
 				    var anim_name = document.getElementById("animation_name");
 				    anim.options[anim.options.length] = new Option(anim_name.value,anim_name.value);
@@ -526,7 +509,8 @@
 			    document.getElementById(cityName).style.display = "block";
 			    evt.currentTarget.className += " active";
 			    //get lightbar configuration, it should be selected by user but time being hard coded
-                ws.send( "get configuration,Configuration-demo.json," );
+                //ws.send( "get configuration,Configuration-demo.json," );
+                ws.send( "get configuration,Configuration-Eddie.json," );
 
 			    //get all animation
 			    //ws.send("get animation");
@@ -536,7 +520,7 @@
 			};
 
 			//----------------------------------------------------------------
-			//pattern object constructor
+			//-------------------------------------pattern object constructor
 			//---------------------------------------------------------------
 			function pattern (name, time, pattern) {
 			    this.name = name;
@@ -551,6 +535,9 @@
 				return this.active_time;
 			    }
 			};
+			//----------------------------------------------------------------
+			//----------------------------------------------------toggleCheck
+			//---------------------------------------------------------------
 			function toggleCheck () {
 			    //check whole table, get checkbox state and reflect it on patter_array
 			    var tab = document.getElementById("pattern_table");
@@ -581,9 +568,9 @@
 			}
 
             //------------------------------------------------------------------
-            //--------------------------------------------deleteRow 
+            //--------------------------------------------deleteAllRows 
             //------------------------------------------------------------------
-			function deleteRow(name,time) {
+			function deleteAllRows(name,time) {
 			    var tab = document.getElementById("pattern_table");
                 var rows = tab.rows.length; //get row count
                 for (i = rows-1;i >= 0;i--)
@@ -668,7 +655,7 @@
 			//-----------------------------------------------clear_pattern_table
 			//------------------------------------------------------------------
             function clear_pattern_table () {
-                deleteRow();
+                deleteAllRows();
                 pattern_array.length = 0;
                 pattern_array_selected.length = 0;
             }
@@ -957,9 +944,6 @@
 				button_context = button_canvas.getContext('2d');
 				button_font    = "bold " + "px serif";
 
-				for (i = 1; i <= 7; i++) {
-					show_push_button(i, "unknown", "unknown");
-				}
 
 			}// window.onload
 
@@ -1071,6 +1055,8 @@
 						<legend>Create Pattern</legend>
 						<div id="create_animation">
 						</div>
+                        <div id="config_pattern_params">
+                        </div>
 					    </fieldset>
 					    <fieldset>
 						<legend>Create Animation</legend>
