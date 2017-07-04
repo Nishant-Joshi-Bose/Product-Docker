@@ -41,18 +41,25 @@ var frame_rate         = 1;
 //                                                          LR-LG-LB-W0-W1-W2-W3-W4-W5-W6-W7-W8-W9-10-11-12-RR-RG-RB
 //{"event":"cmd","type":"led","action":"set strip","strip":"22-88-33-00-11-22-33-44-55-66-77-88-99-00-11-22-99-00-99"}
 //------------------------------------------------------------------
-function set_led_strip(ws, left_colored_led, white_leds, right_colored_led) {
+//function set_led_strip(ws, left_colored_led, white_leds, right_colored_led) {
+function set_led_strip(ws, leds) {
     var cmd_header        = '{"event":"cmd","type":"led","action":"set strip","strip":"';
     var cmd_trailer       = '"}';
-    var cmd_left_colored  = left_colored_led .red + '-' + left_colored_led .green + '-' + left_colored_led .blue;
-    var cmd_right_colored = right_colored_led.red + '-' + right_colored_led.green + '-' + right_colored_led.blue;
-    var cmd_white         = "";
+    //var cmd_left_colored  = left_colored_led .red + '-' + left_colored_led .green + '-' + left_colored_led .blue;
+    //var cmd_right_colored = right_colored_led.red + '-' + right_colored_led.green + '-' + right_colored_led.blue;
+    //var cmd_white         = "";
+    var cmd_leds	    = "";
 
-    for (i = 0; i <  NUMBER_OF_WHITE; i++) {
-        cmd_white += white_leds[i] + '-';
+    //for (i = 0; i <  NUMBER_OF_WHITE; i++) {
+        //cmd_white += white_leds[i] + '-';
+    //}// for all the whites
+    //PJ - <TBD> may need to rework on this logic
+    for (i = 0; i <  leds.length; i++) {
+        cmd_leds += leds[i] + '-';
     }// for all the whites
 
-    var cmd = cmd_header + cmd_left_colored + '-' + cmd_white + cmd_right_colored + cmd_trailer;
+    //var cmd = cmd_header + cmd_left_colored + '-' + cmd_white + cmd_right_colored + cmd_trailer;
+    var cmd = cmd_header + cmd_leds + cmd_trailer;
 
     ws.send(cmd);
 }// set_led_strip
@@ -99,21 +106,15 @@ function set_left_right_color(left_colored_led, color, right_colored_led) {
 //------------------------------------------------------------------------------
 //-------------------------------------------------------------- clear_led_strip
 //------------------------------------------------------------------------------
-function clear_led_strip(ws, left_colored_led, white_leds, right_colored_led, send_cmd) {
-    left_colored_led.red   = 0;
-    left_colored_led.green = 0;
-    left_colored_led.blue  = 0;
+function clear_led_strip(ws, leds, send_cmd) {
 
-    for (i = 0; i < NUMBER_OF_WHITE; i++) {
-        white_leds[i] = 0;
+    for (i = 0; i < leds.length; i++) {
+        leds[i] = 0;
     }
 
-    right_colored_led.red   = 0;
-    right_colored_led.green = 0;
-    right_colored_led.blue  = 0;
 
     if (send_cmd) {
-        set_led_strip(ws, left_colored_led, white_leds, right_colored_led);
+        set_led_strip(ws, leds);
     }
 }// clear_led_strip
 
@@ -529,13 +530,13 @@ self.addEventListener('message', function(e) {
         }// set frame rate
 
         case 'clear led strip' : {
-            clear_led_strip(web_socket, left_colored_led, white_leds, right_colored_led, true);
+            clear_led_strip(web_socket, leds, true);
             self.postMessage('WORKER LED STRIP CLEARED');
             break;
         }// clear led strip
 
         case 'set led strip' : {
-            set_led_strip(web_socket, data.left, data.whites, data.right, true);
+            set_led_strip(web_socket, data.leds, true);
             self.postMessage('WORKER LED STRIP SET');
             break;
         }// clear led strip

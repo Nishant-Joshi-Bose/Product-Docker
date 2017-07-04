@@ -14,17 +14,28 @@
 using namespace rapidjson;
 const std::string PATTERN = "pattern";
 
+//this function returns configuration file content for client to parse
+std::string CLightBarAnimation::getLightBarConfig(std::string config_name)
+{
+    std::fstream ifs ("./"+config_name);
+    std::string data="";
+    if (ifs.is_open())
+    {
+	getline(ifs,data);
+        ifs.close();
+    }
+    std::cout << "config file - " << data << std::endl;
+    return data;
+}
 //PJ - Ideally this method should parse config file and return all the animations
-//listed in config file. :w
-
+//listed in config file. 
 bool CLightBarAnimation::getAnimation (std::string anim_name)
 {
 	//std::string anim_path = anim_name+".ptrn";
 	std::string anim_path = anim_name+".anim";
 	std::cout << "animation path = " << anim_path << std::endl;
-#if 1 
+ 
 	//open animation file
-	//FILE* fd_anim = fopen(anim_path+"/"+anim_name+".ptrn", "r");
 	FILE* fd_anim = fopen(anim_path.c_str(), "r");
 	//return emptry string if file not found
         if (fd_anim == NULL)
@@ -51,9 +62,6 @@ bool CLightBarAnimation::getAnimation (std::string anim_name)
 	std::string anim_json_data = static_cast <std::string>(anim_data);
 
 	//need to find a better way to conver such that string can be access as char
-	//char buf[10000];
-	//memset(buf,0,sizeof(buf));
- 	//memcpy(buf,anim_json_data.c_str(),anim_json_data.length()+1);	
 	Document doc_anim;
 
 	if(doc_anim.ParseInsitu(anim_data).HasParseError())
@@ -64,29 +72,8 @@ bool CLightBarAnimation::getAnimation (std::string anim_name)
 
 	assert(doc_anim.IsObject());
 	int i = 1;
-#if 0
-	for (;;)
-	{
-		std::string key_json = PATTERN + std::to_string(i);
-		//std::cout << "looking for key - " << key_json << std::endl;
-		Value::MemberIterator doc_it_anim = doc_anim.FindMember(key_json.c_str());
-		if(doc_it_anim == doc_anim.MemberEnd()) break;
-		//std::cout << "key-" <<key_json << "value - " << doc_it_anim->value["pattern"].GetString() << std::endl;
-		//write /GetString() data to serial port from here
-		int activetime = doc_it_anim->value["active_time"].GetInt();
-		pattern_vec tmp_vec;
-		
-		tmp_vec.name 		= doc_it_anim->value["name"].GetString();
-		tmp_vec.pattern 	= doc_it_anim->value["pattern"].GetString();
-		tmp_vec.active_time 	= activetime;
-		
-		lb_patterns.push_back(tmp_vec);
-		i++;
-	}
-#endif	
 
         const Value& a = doc_anim["patterns"];
-
 
          // rapidjson uses SizeType instead of size_t.
         for (rapidjson::SizeType i = 0; i < a.Size(); i++)
@@ -109,16 +96,6 @@ bool CLightBarAnimation::getAnimation (std::string anim_name)
 
 	delete [] anim_data;
 	return true;
-#else
-	//PJ - <TBD> below code should be able to replace above code
-	//std::ifstream ifs(anim_path);
-	std::ifstream ifs("test.json");
-	IStreamWrapper isw(ifs);
-	Document d;
-	d.ParseStream(isw);
-	assert(d.IsObject());
-	assert(d.HasMember("pattern1"));
-#endif
 }
 
 //this function will extract all the pattern data from the file and create a map/vector
@@ -190,16 +167,43 @@ bool CLightBarAnimation :: saveAnimation (char* anim_data)
 			return false;
 		//opn file wiht name anim_name and save patterns in it
 		std::ofstream anim_file;
-		//anim_file.open ("test.anim");
 		anim_file.open (anim_name+".anim");
 		anim_file << patterns ;
 		anim_file.close();
 
 	}
  	return true;
-
 }
 
+bool CLightBarAnimation :: saveExistingAnimation (char* anim_data)
+{
+	Document doc;
+
+	std::cout << "in save existing animation - " << anim_data << std::endl;
+	if(doc.Parse(anim_data).HasParseError())
+	{
+		std::cout << anim_data << std::endl;
+		std::cout << "unable to save animation data" << std::endl;
+		return false;
+	}
+
+	assert(doc.IsObject());
+
+	if (doc.HasMember("animation"))
+	{
+		//std::string patterns = doc["patterns"].GetString();
+		std::string patterns = static_cast <std::string> (anim_data);
+		std::string anim_name = doc["animation"].GetString();
+
+		//open file with name anim_name and save patterns in it
+		std::ofstream anim_file;
+		anim_file.open (anim_name+".anim");
+		anim_file << patterns ;
+		anim_file.close();
+
+	}
+ 	return true;
+}
 std::string CLightBarAnimation :: getAllAnimations () 
 {
 	//open all files with .anim extension and read the file content, send it to client
@@ -247,12 +251,15 @@ std::string CLightBarAnimation :: getAllAnimations ()
 		std::string data;
 		if (ifs.is_open())
 		{
+			//PJ - <TBD>this will not work if json has CR. In that case need to read 
+			//multiple lines to get all json data
 			getline(ifs,data);
 			ifs.close();
 			anim_array.push_back(data);
 		}
 	}
 
+	//PJ - <TBD> creating json message for client from here is not correct. Move this to somewhere else
 	rapidjson::StringBuffer strbuf;
 	rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
 	writer.StartObject();               // Between StartObject()/EndObject(), 

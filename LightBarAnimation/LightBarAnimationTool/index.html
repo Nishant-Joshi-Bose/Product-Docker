@@ -113,18 +113,59 @@
 			var pattern_array_selected = [];
 			var animation_array = [];
 			var pattern_obj_array = [] // used in view/edit animation for loading patterns for individual animation
+
 			//pattern format should be used to validate animations created from tool 
 			//and accordingly components should be displayed on page
 			//in future, when there are multiple types of lightbar page
 			//will have option to create and play patterns for different version of
 			//lightbar
-			var pattern_format = "R-G-B-W-W-W-W-W-W-W-W-W-W-W-W-W-R-G-B";
+			var pattern_format = "";
 
 			ws.onopen  = function(ev) { console.log(ev); };
 			ws.onerror = function(ev) { console.log(ev); };
 			ws.onclose = function(ev) { console.log(ev); };
 
+			//------------------------------------------------------------------
+			//----------------------------------------------------- ws.onmessage
+			//------------------------------------------------------------------
+			ws.onmessage = function(ev) {
+				//messageElem = document.getElementById('telemetry_list');
+
+                                var opt = document.createElement('option');
+
+				console.log(ev);
+				var div = document.createElement('div');
+
+				if (ev.data[0] == '{')
+				{
+ 					try{
+						var telemetry = JSON.parse(ev.data);
+					}
+					catch (err) {
+						console.log(err);
+					}
+
+					switch (telemetry.event) {
+						case 'button'	  : parse_slider_button(telemetry);
+											break;
+						case 'push button': parse_push_button(telemetry);
+											break;
+						case 'animation list': 	parse_animation_list(telemetry);
+								      	break;
+						case 'action error'  : parse_action_error(telemetry);
+									break;
+						case 'action success': parse_action_success(telemetry);
+									break;
+						case 'Configuration' : parse_lightbar_config(telemetry);
+						default			  : break; // nothing to do
+					}// switch on the telemetry
+				}
+
+				//div.innerHTML = get_time_ms() + " " + ev.data;
+				//messageElem.insertBefore(div, messageElem.childNodes[0]);
+			};// ws.onmessage
 			if (!window.console) { window.console = { log: function() {} } };
+
 
 			//------------------------------------------------------------------
 			//--------------------------------------------------------- sleep_ms
@@ -174,11 +215,17 @@
 			}// set_javascript_animation_frame_rate
 
 			function clear_led_strip() {
-				animation_worker.postMessage({'cmd': 'clear led strip'});
+                var led_array = pattern_format.split('-');
+
+                for (var i = 0;i < led_array.length;i++)
+                    led_array[i] = 0;
+				//animation_worker.postMessage({'cmd': 'clear led strip'});
+				animation_worker.postMessage({'cmd': 'set led strip', 'leds': led_array});
 			}// clear_led_strip
 
-			function set_led_strip(left, right, whites) {
-				animation_worker.postMessage({'cmd': 'set led strip', 'left': left, 'right': right, 'whites': whites});
+			//function set_led_strip(left, right, whites) {
+			function set_led_strip(leds) {
+				animation_worker.postMessage({'cmd': 'set led strip', 'leds': leds});
 			}// set_led_strip
 
 			//------------------------------------------------------------------
@@ -289,6 +336,7 @@
 					anim.options[anim.options.length] = new Option(anim_name,anim_name);
 					animation_array[anim_indx++] = anim_.patterns;
 				}
+
 				/*
 				//sort the list in alphabetical order
 				var tmpAry = new Array();
@@ -307,44 +355,120 @@
 				}
 				*/
 			}
-			//------------------------------------------------------------------
-			//----------------------------------------------------- ws.onmessage
-			//------------------------------------------------------------------
-			ws.onmessage = function(ev) {
-				//messageElem = document.getElementById('telemetry_list');
+            
+            function parse_lightbar_config (telemetry) {
+		        var config                  = telemetry.Config;
+			    pattern_format              = config.Configuration["lightbar_config"];
+                var div_selected_animation  = document.getElementById("selected_animation_pattern");
+                var div_create_animation    = document.getElementById ("create_animation");
 
-                                var opt = document.createElement('option');
+   		        //get all animation
+			    ws.send("get animation");
 
-				console.log(ev);
-				var div = document.createElement('div');
+			    //create input objects to display LED brightness values
+                //PJ - <TBD> revisit when individual pattern is replaced with pattern table
+			    var led_array = pattern_format.split('-'); 
+                var table = document.createElement ('table');
+                var tr = document.createElement ('tr');
+                for (var i=0;i <led_array.length;i++){
+                    var td = document.createElement('td');
+                    var hd = document.createTextNode(led_array[i]);
+                    td.appendChild(hd);
+                    td.setAttribute('align','center');
+                    tr.appendChild(td);
+                    tr.setAttribute('style','color:white;background-color:grey');
 
-				if (ev.data[0] == '{')
-				{
- 					try{
-						var telemetry = JSON.parse(ev.data);
-					}
-					catch (err) {
-						console.log(err);
-					}
+                }
+                table.appendChild(tr);
+                
+                var tr = document.createElement ('tr');
+                for (var i=0;i <led_array.length;i++)
+                {
+                    var td = document.createElement('td');
+                    
+				    var ip = document.createElement("input");
+                    ip.setAttribute('type','number');
+                    ip.setAttribute('style','width:3em');
+                    ip.setAttribute('value','0');
+                    ip.setAttribute('id','Led'+i.toString());
+					ip.setAttribute('max',MAX_LED_INTENSITY);
+					ip.setAttribute('min','0');
+                    td.appendChild(ip);
+                    tr.appendChild(td);
 
-					switch (telemetry.event) {
-						case 'button'	  : parse_slider_button(telemetry);
-											break;
-						case 'push button': parse_push_button(telemetry);
-											break;
-						case 'animation list': 	parse_animation_list(telemetry);
-								      	break;
-						case 'action error'  : parse_action_error(telemetry);
-									break;
-						case 'action success': parse_action_success(telemetry);
-									break;
-						default			  : break; // nothing to do
-					}// switch on the telemetry
+                } 
+                table.appendChild(tr);
+                div_selected_animation.appendChild(table);
+                div_selected_animation.setAttribute('style','width:800px;overflow:auto'); 
+
+                /////////New animation/create pattern//////
+                var table = document.createElement ('table');
+                var tr = document.createElement ('tr');
+                for (var i=0;i <led_array.length;i++){
+                    var td = document.createElement('td');
+                    var hd = document.createTextNode(led_array[i]);
+                    td.appendChild(hd);
+                    td.setAttribute('align','center');
+                    tr.appendChild(td);
+                    tr.setAttribute('style','color:white;background-color:grey');
+
+                }
+                table.appendChild(tr);
+
+
+                var tr = document.createElement ('tr');
+                for (var i = 0; i < led_array.length;i++)
+                {
+                    var td = document.createElement('td');
+
+				    var ip = document.createElement("input");
+				    ip.setAttribute('type','number');
+				    ip.setAttribute('style','width:3em');
+				    ip.setAttribute('value','0');
+					ip.setAttribute('id','Pattern_Led'+i.toString());
+					ip.setAttribute('max',MAX_LED_INTENSITY);
+					ip.setAttribute('min','0');
+                    td.appendChild(ip);
+                    tr.appendChild(td);
 				}
+                table.appendChild(tr);
+                div_create_animation.appendChild(table);
+                div_create_animation.setAttribute('style','width:800px;overflow:auto');
 
-				//div.innerHTML = get_time_ms() + " " + ev.data;
-				//messageElem.insertBefore(div, messageElem.childNodes[0]);
-			};// ws.onmessage
+					var lbl = document.createElement("Label");
+					lbl.setAttribute ('for','active');
+					lbl.innerHTML = 'Pattern Active Time:';
+					div_create_animation.appendChild(lbl);
+
+					var active_time_input = document.createElement("input");
+					active_time_input.setAttribute('type','number');
+					active_time_input.setAttribute('id','active');
+					active_time_input.setAttribute('style','width: 4em');
+					active_time_input.setAttribute('value','0');
+					active_time_input.setAttribute('min','0');
+					active_time_input.setAttribute('max','9999');
+					div_create_animation.appendChild(active_time_input);
+
+					lbl = document.createElement("Label");
+					lbl.setAttribute ('for','pattern_name');
+					lbl.innerHTML = 'Pattern Name:';
+					div_create_animation.appendChild(lbl);
+
+					var animation_name_input = document.createElement("input");
+					animation_name_input.setAttribute('type','text');
+					animation_name_input.setAttribute('id','pattern_name');
+					animation_name_input.setAttribute('style','width: 10em');
+					animation_name_input.setAttribute('value','0');
+					div_create_animation.appendChild(animation_name_input);
+
+					var btn_save_anim = document.createElement("button");
+					btn_save_anim.setAttribute('style','auto');
+					btn_save_anim.setAttribute('id','save_pattern_server');
+					btn_save_anim.setAttribute('onclick','save_pattern_onserver()');
+					btn_save_anim.innerHTML = 'Save';
+					div_create_animation.appendChild(btn_save_anim);
+
+            }
 		
 			//------------------------------------------------------------------
 			//------------------------------------------------parse_action_error 
@@ -401,7 +525,11 @@
 			    }
 			    document.getElementById(cityName).style.display = "block";
 			    evt.currentTarget.className += " active";
-			    ws.send("get animation");
+			    //get lightbar configuration, it should be selected by user but time being hard coded
+                ws.send( "get configuration,Configuration-demo.json," );
+
+			    //get all animation
+			    //ws.send("get animation");
 
 			    ws.send('{"event":"cmd","type":"animation","action":"stop"}');
                             clear_led_strip();
@@ -437,22 +565,33 @@
 
 			    }
 			};
-
+            //------------------------------------------------------------------
+            //--------------------------------------------insertRow 
+            //------------------------------------------------------------------
 			function insertRow(name,time) {
 
-			 var tab = document.getElementById("pattern_table");
-			  //var tabRow = tab.insertRow(tab.rows.length-1);
-			  var tabRow = tab.insertRow(tab.rows.length);
-			  var col1html = "<input type=\"checkbox\" checked onclick=\"toggleCheck ()\"/>";
+			    var tab = document.getElementById("pattern_table");
+			    //var tabRow = tab.insertRow(tab.rows.length-1);
+			    var tabRow = tab.insertRow(tab.rows.length);
+			    var col1html = "<input type=\"checkbox\" checked onclick=\"toggleCheck ()\"/>";
 
-			  var col1 = tabRow.insertCell(0); col1.innerHTML=col1html;
-			  var col2 = tabRow.insertCell(1); col2.innerHTML=name;
-			  var col3 = tabRow.insertCell(2); col3.innerHTML=time;
+                var col1 = tabRow.insertCell(0); col1.innerHTML=col1html;
+			    var col2 = tabRow.insertCell(1); col2.innerHTML=name;
+			    var col3 = tabRow.insertCell(2); col3.innerHTML=time;
 			}
+
+            //------------------------------------------------------------------
+            //--------------------------------------------deleteRow 
+            //------------------------------------------------------------------
+			function deleteRow(name,time) {
+			    var tab = document.getElementById("pattern_table");
+                var rows = tab.rows.length; //get row count
+                for (i = rows-1;i >= 0;i--)
+                    tab.deleteRow(i); //delete row 
+            }
 
 			//------------------------------------------------------------------
 			//--------------------------------------------save_pattern_onserver 
-
 			//------------------------------------------------------------------
 			function save_pattern_onserver() {
 			    var active_time = document.getElementById("active");
@@ -464,20 +603,26 @@
 				return;
 			    }
 
-			    var pattern_str = left_red.value+"-" + left_green.value +"-"+ left_blue.value;
-			    pattern_str = pattern_str+"-" + Wh0.value+"-"  + Wh1.value+"-"  + Wh2.value+"-"  + Wh3.value+"-"  + Wh4.value+"-"  + Wh5.value+"-"  + Wh6.value+"-"  + Wh7.value+"-"  + Wh8.value+"-"  + Wh9.value+"-"  + Wh10.value+"-"  + Wh11.value+"-"  + Wh12.value;
-			    pattern_str = pattern_str+"-" + right_red.value+"-" + right_green.value+"-" + right_blue.value;
+			    //PJ - commenting hardcoding of RGBW and prelace it with generic code
+			    var led_array = pattern_format.split('-');
+                var pattern_str = "";
+			    for (var i=0;i < led_array.length-1;i++) {
+					var led = 'Pattern_Led'+i.toString();
+					pattern_str += document.getElementById(led).value;
+					pattern_str += '-';
+			    }
+		   	    var led = 'Pattern_Led'+i.toString();
+			    pattern_str += document.getElementById(led).value;
 			    
-			    //var new_pattern = new pattern (pattern_name.value,active_time.value,pattern_str,true);
-			    var new_pattern = new pattern (pattern_name.value,active_time.value,pattern_str);
-			    var pattern_index = pattern_array.length;
-			    var duplicate_pattern = false;
+			    var new_pattern 		= new pattern (pattern_name.value,active_time.value,pattern_str);
+			    var pattern_index 		= pattern_array.length;
+			    var duplicate_pattern 	= false;
 			    for (;pattern_index >0 ; pattern_index--)
 			    {
-				if (pattern_name.value == pattern_array[pattern_index-1].name)
-				    duplicate_pattern = true;
-
+					if (pattern_name.value == pattern_array[pattern_index-1].name)
+				    	duplicate_pattern = true;
 			    }
+
 			    if (!duplicate_pattern)
 			    {
 			        pattern_array.push(new_pattern);
@@ -486,18 +631,20 @@
 			        insertRow(pattern_name.value,active_time.value);
 			    }
 			    else
-				alert ('Duplicate pattern name');
+					alert ('Duplicate pattern name');
                             //ws.send("save pattern," + msg+","); 
 			    document.getElementById("pattern_name").value = "";
 			};
+
 			//------------------------------------------------------------------			
 			//-------------------------------------------animate 
 			//------------------------------------------------------------------
 			function animate_pattern () {
 			    //animate newly created animation, use checked patterns only
-		            recur_set_pattern(0);
+		        recur_set_pattern(0);
 
 			};
+
 			//------------------------------------------------------------------
 			//--------------------------------------------recur_set_pattern 
 			//------------------------------------------------------------------
@@ -505,38 +652,27 @@
 			{
 			    if (pattern_index < pattern_array_selected.length)
 			    {
-                                //var pattern_to_play = pattern_array[pattern_index-1];
-                                var pattern_to_play = pattern_array_selected[pattern_index];
-                                var pattern_str = pattern_to_play.getPattern();
-                                var active_time = pattern_to_play.getActiveTime ();
-                                var led_array = pattern_str.split("-");
-
-                                var left  = {red:parseInt(led_array[0]),green:parseInt(led_array[1]),blue:parseInt(led_array[2])};
-                                var right = {red:parseInt(led_array[16]),green:parseInt(led_array[17]),blue:parseInt(led_array[18])};
-                                var whites = new Uint16Array(NUMBER_OF_WHITE);
-
-                                whites[ 0] = parseInt(led_array[3]);
-                                whites[ 1] = parseInt(led_array[4]);
-                                whites[ 2] = parseInt(led_array[5]);
-                                whites[ 3] = parseInt(led_array[6]);
-                                whites[ 4] = parseInt(led_array[7]);
-                                whites[ 5] = parseInt(led_array[8]);
-                                whites[ 6] = parseInt(led_array[9]);
-                                whites[ 7] = parseInt(led_array[10]);
-                                whites[ 8] = parseInt(led_array[11]);
-                                whites[ 9] = parseInt(led_array[12]);
-                                whites[10] = parseInt(led_array[13]);
-                                whites[11] = parseInt(led_array[14]);
-                                whites[12] = parseInt(led_array[15]);
-
-                                //PJ - Need to correct logic of timeout, for time being it is what it is
-                                set_led_strip(left,right,whites);
-				pattern_index = pattern_index + 1;
-				setTimeout(recur_set_pattern,active_time,pattern_index);
-
+                    //var pattern_to_play = pattern_array[pattern_index-1];
+                    var pattern_to_play = pattern_array_selected[pattern_index];
+                    var pattern_str = pattern_to_play.getPattern();
+                    var active_time = pattern_to_play.getActiveTime ();
+                    var led_array = pattern_str.split("-");
+                    //PJ - Need to correct logic of timeout, for time being it is what it is
+                    set_led_strip(led_array);
+				 	pattern_index = pattern_index + 1;
+					setTimeout(recur_set_pattern,active_time,pattern_index);
 			    }
 
 			};
+			//------------------------------------------------------------------
+			//-----------------------------------------------clear_pattern_table
+			//------------------------------------------------------------------
+            function clear_pattern_table () {
+                deleteRow();
+                pattern_array.length = 0;
+                pattern_array_selected.length = 0;
+            }
+
 			//------------------------------------------------------------------
 			//--------------------------------------------save_animation_onserver
 			//------------------------------------------------------------------
@@ -559,11 +695,6 @@
 			    //used & so that command "save animation" can be identified from the data string uniquely 
 			    ws.send("save animation"+"&"+msg_str+"&");
 
-			    //add to the list of available patterns. Assumption is pattern will be written on file successfully
-			    //var anim = document.getElementById("animation_list");
-			    //anim.options[anim.options.length] = new Option(anim_name.value,anim_name.value);
-			
-			    //animation_array[animation_array.length] = pattern_array_selected;
 			};
 			//------------------------------------------------------------------
 			//--------------------------------------------get_pattern_list 
@@ -591,48 +722,6 @@
 			};
  
 			//------------------------------------------------------------------
-			//--------------------------------------------save_animation 
-			// this function saves animaition pattern under animation folder
-			//on server side.
-			//------------------------------------------------------------------
-			function save_animation (){
-				//PJ - may need to save all modified patterns
-				console.log("save animation");
-			    //var active_time = document.getElementById("active");
-			    var pattern_name = document.getElementById("pattern_name");
-			    //get all led values 
-
-			    var msgObj = new Object ();
-			    msgObj.name = pattern_name.value;  //pattern name
-			    //msgObj.active_time = parseInt(active_time.value);
-			    //create json equivalent of all led data
-
-			    var left   = {red: parseInt(led_left_red  .value), green: parseInt(led_left_green  .value), blue: parseInt(led_left_blue  .value)};
-			    var right  = {red: parseInt(right_left_red.value), green: parseInt(right_left_green.value), blue: parseInt(right_left_blue.value)};
-		            var whites = new Uint16Array(NUMBER_OF_WHITE);
-
-				whites[ 0] = W0 .value;
-				whites[ 1] = W1 .value;
-				whites[ 2] = W2 .value;
-				whites[ 3] = W3 .value;
-				whites[ 4] = W4 .value;
-				whites[ 5] = W5 .value;
-				whites[ 6] = W6 .value;
-				whites[ 7] = W7 .value;
-				whites[ 8] = W8 .value;
-				whites[ 9] = W9 .value;
-				whites[10] = W10.value;
-				whites[11] = W11.value;
-				whites[12] = W12.value;
-                            msgObj.leftRGB = left;
-                            msgObj.rightRGB = right;
-                            msgObj.white = whites;
-                            var msg = JSON.stringify(msgObj);
-                            ws.send("save pattern,pattern_name.value," + msg+","); 
-
-			};
-
-			//------------------------------------------------------------------
 			//----------------------------------------------------play_animation 
 			//------------------------------------------------------------------
 			function play_animation() {
@@ -642,19 +731,36 @@
 
 
 			}
+
+			//------------------------------------------------------------------
+			//-------------------------------------------save_modified_animation 
+			//------------------------------------------------------------------
 			function save_modified_animation () {
 				var anim = document.getElementById("animation_list");
 				var pattern = document.getElementById("pattern_list");
 				var animation = animation_array[anim.selectedIndex];
 				var pattern_indx = pattern.selectedIndex;
 				var mod_pattern = pattern_obj_array[pattern_indx];
-				mod_pattern.pattern = document.getElementById("led_left_red").value+'-' + document.getElementById("led_left_green").value+'-' + document.getElementById("led_left_blue").value+'-';
-				mod_pattern.pattern += document.getElementById("W0").value+'-' + document.getElementById("W1").value+'-' + document.getElementById("W2").value +'-'+
-						       document.getElementById("W3").value+'-' + document.getElementById("W4").value+'-' + document.getElementById("W5").value +'-'+
-						       document.getElementById("W6").value+'-' + document.getElementById("W7").value+'-' + document.getElementById("W8").value +'-'+
-						       document.getElementById("W9").value+'-' + document.getElementById("W10").value+'-' + document.getElementById("W11").value +'-'+
-						       document.getElementById("W12").value+'-';
-				mod_pattern.pattern += document.getElementById("right_left_red").value+'-' + document.getElementById("right_left_green").value+'-' + document.getElementById("right_left_blue").value;
+				//create '-' separate led array
+				var pattern_length = mod_pattern.pattern.split('-').length;
+				mod_pattern.pattern = "";
+
+				for (var i=0;i < (pattern_length-1);i++)
+				{
+				    //put this in try, this may fail
+				    try 
+				    {	
+					//PJ - we may have to see if the value is valid, check valid values
+				        mod_pattern.pattern += document.getElementById("Led"+i.toString()).value;    
+					mod_pattern.pattern += '-';
+ 				    }
+				    catch(err) {
+					console.log(err);
+				    }
+				}
+				//last value in array
+				mod_pattern.pattern += document.getElementById("Led"+i.toString()).value;    
+
 				mod_pattern.active_time = document.getElementById("active_time").value;
 				pattern_obj_array[pattern_indx] = mod_pattern;	
 
@@ -664,8 +770,6 @@
 
 			    //used & so that command "save animation" can be identified from the data string uniquely 
 			    ws.send("save animation"+"&"+msg_str+"&");
-
-
 			}
 
 			//------------------------------------------------------------------
@@ -721,25 +825,16 @@
 					var led_array = pattern.split('-');
 					var a_time = pattern_obj_array[indx].active_time;
 					//assign led valueds to each RGBW and active time for editing 
-					document.getElementById("led_left_red").value = led_array[0];
-					document.getElementById("led_left_green").value = led_array[1];
-					document.getElementById("led_left_blue").value = led_array[2];
-					document.getElementById("right_left_red").value = led_array[16];
-					document.getElementById("right_left_green").value = led_array[17];
-					document.getElementById("right_left_blue").value = led_array[18];
-					document.getElementById("W0").value = led_array[3];
-					document.getElementById("W1").value = led_array[4];
-					document.getElementById("W2").value = led_array[5];
-					document.getElementById("W3").value = led_array[6];
-					document.getElementById("W4").value = led_array[7];
-					document.getElementById("W5").value = led_array[8];
-					document.getElementById("W6").value = led_array[9];
-					document.getElementById("W7").value = led_array[10];
-					document.getElementById("W8").value = led_array[11];
-					document.getElementById("W9").value = led_array[12];
-					document.getElementById("W10").value = led_array[13];
-					document.getElementById("W11").value = led_array[14];
-					document.getElementById("W12").value = led_array[15];
+					//PJ - <TBD> need to replacd hard coded ids to dynamically created to get values
+					for (var i=0;i< led_array.length;i++)
+					{
+						try {
+						    document.getElementById("Led"+i.toString()).value = led_array[i];
+						}
+						catch(err) {
+						    console.log(err);
+						}
+					}
 					document.getElementById("active_time").value = a_time;
 				}
 				//--------------------------------------------------------------
@@ -907,6 +1002,7 @@
 						<legend>View/Edit Animation</legend>
 						<fieldset>
 					            <legend>View Animation</legend>
+                                                      <div id="view_animation">
 							Available Animations <br>
 							<select name="animation_list" id="animation_list" size=3 >
 							</select>
@@ -916,14 +1012,17 @@
 							<button style="width: auto" id="play_pattern" onclick="play_animation()">Play</button>
 							<button style="width: auto" id="save_pattern" onclick="save_modified_animation()">Save</button>
 							<button style="width: auto" id="delete_pattern" onclick="delete_animation ()">Delete</button><br>
+						      </div>
 						</fieldset>	
 						<fieldset >
 					            <legend>Edit Animation Pattern</legend>
+ 						      <div id="edit_animation">
 							<p>
 								Patterns<br> 
 								<select name="pattern_list" id="pattern_list" size=3 >
 								</select>
 							</p><br>
+<!--
 						<p>
 							<label for="led_left_red">Left RGB:</label>
 							<input type="number" id="led_left_red"	 style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
@@ -953,10 +1052,15 @@
 							<input type="number" id="W11" style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
 							<input type="number" id="W12" style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
 						</p><br>
-							<p>
-								<label for="Active time">Pattern Active Time:</label>
-								<input type="text" id="active_time"  style="width: 4em"  value="0" pattern="[0-9]" />
-							</p><br>
+-->
+                        <div styl='display:none' id="selected_animation_pattern">
+
+                        </div>
+						<p>
+							<label for="Active time">Pattern Active Time:</label>
+							<input type="text" id="active_time"  style="width: 4em"  value="0" pattern="[0-9]" />
+						</p><br>
+                        </div>
 						</fieldset>
 					</fieldset>
 				</p>
@@ -965,47 +1069,8 @@
 					    <legend>New Animation</legend>
 					    <fieldset>
 						<legend>Create Pattern</legend>
-						<p>
-							<label for="led_left_red">Left RGB:</label>
-							<input type="number" id="left_red"	 style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="left_green" style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="left_blue"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-						</p>
-
-						<p>
-							<label for="right_left_red">Right RGB:</label>
-							<input type="number" id="right_red"   style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="right_green" style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="right_blue"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-						</p>
-						<p>
-							<label for="W0">Whites:</label>
-							<input type="number" id="Wh0"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="Wh1"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="Wh2"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="Wh3"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="Wh4"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="Wh5"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="Wh6"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="Wh7"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="Wh8"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="Wh9"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="Wh10" style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="Wh11" style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="Wh12" style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-						</p><br>
-						<p>
-							<label for="active">Pattern Active Time:</label>
-							<input type="number" id="active"  style="width: 4em" value="80" min="0" max=9999 />
-						<!--	<button style:"width :4em" id="set_pattern">Set</button>-->
-
-						</p>
-						<p>
-							<label for="Pattern Name">Pattern Name:</label>
-							<input type="text" id="pattern_name"  style="width: 10em" pattern="[A-Za-z0-9_\-]{255}" />
-							<button style:"width :auto" id="save_pattern_server" onclick="save_pattern_onserver()">Save</button>
-
-						</p><br>
+						<div id="create_animation">
+						</div>
 					    </fieldset>
 					    <fieldset>
 						<legend>Create Animation</legend>
@@ -1039,125 +1104,22 @@
 						</table>
 						</p><br>
 						<p>
+                            <div id='created_patterns_control'>
 							<button style:"width :auto" id="play_animation" onclick="animate_pattern()">Animate</button>
+							<button style:"width :auto" id="clear_table" onclick="clear_pattern_table()">Clear</button>
+                            </div>
 							<p>
+                            <div id='input_save_animation'>
 							<label for="Save Animation">Save Animation:</label>
 							<input type="text" id="animation_name"  style="width: 10em" pattern="[A-Za-z0-9_\-]{255}" />
 							<button style:"width :auto" id="save_animation_server" onclick="save_animation_onserver()">Save Animation</button>
+                            </div>
 							</p>
 						</p>
 					    </fieldset>
 					</fieldset>
 
 				</p>
-			</div>
-<!--
-			<div id="LightBar" class="tabcontent">
-				<p>
-					<fieldset>
-						<legend>Telemetries:</legend>
-						<div id="telemetry_list"></div>
-				   </fieldset>
-				</p>
-
-				<p>
-					<fieldset>
-						<legend>PSoC/Mongoose command:</legend>
-						command: <input type="text" size="80" id="send_input" />
-						<button id="send_button">Send</button>
-				   </fieldset>
-				</p>
-
-				<p>
-					<fieldset>
-						<legend>Mongoose animation:</legend>
-						frame rate: <input type="number" id="mongoose_animation_frame_rate" style="width: 3em" value="1" min="1" max=MAX_FRAME_RATE />
-						action: <button id="start_stop_mongoose_animation">Start</button>
-					</fieldset>
-				</p>
-
-				<p>
-					<fieldset>
-						<legend>Javascript animation:</legend>
-						Alexa LED Animations: <br><br>
-						<select name="animation_list" id="animation_list" size=3 >
-							<option selected="selected">Alexa Listening </option>
-							<option>Alexa Active Listening </option>
-							<option>Alexa Thinking </option>
-							<option>Alexa Speaking </option>
-						</select>
-						<br>
-						<br>
-						frame rate: <input type="number" id="javascript_animation_frame_rate" style="width: 3em" value="1" min="1" max=MAX_FRAME_RATE />
-						action: <button id="start_stop_javascript_animation">Start</button>
-					</fieldset>
-				</p>
-
-				<p>
-					<fieldset>
-						<legend>PSoC intrisic animation:</legend>
-						action: <button id="start_stop_intrinsic_animation">Stop</button>
-						<br>
-						2 leds		   <input type="radio" onclick="select_intrinsic_animation('2 leds'			   )" name="intrinsic_animation">
-						progression    <input type="radio" onclick="select_intrinsic_animation('smooth progression')" name="intrinsic_animation">
-						white intensity<input type="radio" onclick="select_intrinsic_animation('white intensity'   )" name="intrinsic_animation">
-						red/white flash<input type="radio" onclick="select_intrinsic_animation('red-white flash'   )" name="intrinsic_animation">
-						all colors	   <input type="radio" onclick="select_intrinsic_animation('all colors'		   )" name="intrinsic_animation">
-						rainbow		   <input type="radio" onclick="select_intrinsic_animation('rainbow colors'    )" name="intrinsic_animation">
-						fix white	   <input type="radio" onclick="select_intrinsic_animation('all white'		   )" name="intrinsic_animation">
-						slow breather  <input type="radio" onclick="select_intrinsic_animation('slow breather'	   )" name="intrinsic_animation">
-					</fieldset>
-				</p>
-
-				<p>
-					<fieldset>
-						<legend>LED strip:</legend>
-						<p>
-							<label for="set_led_strip"></label>
-							<button style="width: 4em" id="set_led_strip">Set</button>
-							<button style="width: 4em" id="clear_led_strip">Clear</button>
-						<p>
-						<p>
-							<label for="led_left_red">Left RGB:</label>
-							<input type="number" id="led_left_red"	 style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="led_left_green" style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="led_left_blue"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-						</p>
-
-						<p>
-							<label for="right_left_red">Right RGB:</label>
-							<input type="number" id="right_left_red"   style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="right_left_green" style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="right_left_blue"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-						</p>
-						<p>
-							<label for="W0">Whites:</label>
-							<input type="number" id="W0"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="W1"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="W2"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="W3"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="W4"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="W5"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="W6"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="W7"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="W8"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="W9"  style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="W10" style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="W11" style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-							<input type="number" id="W12" style="width: 4em" value="0" min="0" max=MAX_LED_INTENSITY />
-					</fieldset>
-
-					<fieldset>
-						<legend>push buttons:</legend>
-						<p>
-							<canvas id="canvas_push_button" width="700px" height: "70"></canvas>
-						</p>
-					</fieldset>
-					</p>
-			</div>
-
--->
-
 			</p>
 		</div>
 	</body>

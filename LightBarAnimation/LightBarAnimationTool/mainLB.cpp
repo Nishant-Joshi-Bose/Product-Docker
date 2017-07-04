@@ -77,6 +77,8 @@ static const char*               s_get_animation              = "get animation";
 static const char*               s_play_animation             = "play animation";
 static const char*               s_delete_animation           = "delete animation";
 static const char*               s_save_animation             = "save";
+static const char*               s_get_configuration          = "get configuration";
+
 
 static sig_atomic_t              s_signal_received             = 0;
 static const char*               s_http_port                   = "8001";
@@ -628,6 +630,23 @@ static void event_handler(struct mg_connection* network_connection, int event, v
                     //search for existing file name, if exists, clear it and replace data with new data or else create a new file and update data
                      
                 }// if command is to save pattern
+		else if (strstr (msg_str.p,s_get_configuration) != 0)
+		{
+		    printf("%s:%d, log: get lightbar configuration \n", __FUNCTION__,__LINE__);
+		    char *config_name = strtok(msg_str.p,",");
+		    std::string name;
+		    if (config_name == NULL)
+			return;
+		    config_name = strtok(NULL,",");
+		    if (config_name == NULL)
+			return;
+                    printf("config file name = %s",config_name);
+		    std::string config = CLightBarAnimation::getLightBarConfig (static_cast<std::string>(config_name));
+                    std::string json_msg = "{\"event\":\"Configuration\",\"Config\":"+config+"}";
+		    printf("json msg = %s\n",json_msg.c_str());
+		    broadcast (network_connection,mg_mk_str(json_msg.c_str()));
+		
+		}// get light bar composition i.e. RGBW configuration and postion
                 else if (strstr (msg_str.p,s_get_animation) != 0)
                 {
                     printf("%s:%d, log: get animation \n", __FUNCTION__, __LINE__);
@@ -672,7 +691,7 @@ static void event_handler(struct mg_connection* network_connection, int event, v
 		    //anim_name = static_cast <std::string> (anim);
 		    
 		    std::cout << "saving animation - " << anim << std::endl;
-		    bool success = CLightBarAnimation::saveAnimation (anim);
+		    bool success = CLightBarAnimation::saveExistingAnimation (anim);
 		    if (success)
 			broadcast(s_network_connection, mg_mk_str("{\"event\":\"action success\", \"id\":\"\", \"action\":\"\",\"message\":\"add animation\"}"));
 		    else

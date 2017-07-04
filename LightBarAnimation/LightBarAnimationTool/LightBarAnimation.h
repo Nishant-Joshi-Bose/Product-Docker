@@ -17,6 +17,9 @@ public:
 
 
 	//this functin goes through all ./Animation folder and gets list of animations
+	static std::string getLightBarConfig (std::string);
+
+	//this functin goes through all ./Animation folder and gets list of animations
 	bool getAnimation (std::string anim_name);
 
 
@@ -35,6 +38,9 @@ public:
 
 	//this function saves animations by saving all patterns under animation folder
 	static bool saveAnimation (char* anim_data);
+
+	//this function saves animations by saving all patterns under animation folder
+	static bool saveExistingAnimation (char* anim_data);
 
 	//this function assigns serial port file descriptor
 	bool setCommunicationfd(int s_fd);
