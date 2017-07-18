@@ -1,204 +1,84 @@
-#########################################################################
-#
-# Eddie top level makefile.
-#
-# Copyright 2016 Bose Corporation, Framingham, MA
-#
-#########################################################################
+WORKSPACE := $(abspath $(CURDIR)/..)
+$(info WORKSPACE is $(WORKSPACE))
 
-MKFILE_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
-TOPDIR := ${MKFILE_DIR}
-
-export # all make variables automatically exported to children's environment
-
-cfg ?= Release
-sdk ?= qc8017_32
-
-include Makedefs.mk
-
-.PHONY: default
-default: all
-
-ifdef TERM
-  RED:=$(shell tput setaf 1)
-  GREEN:=$(shell tput setaf 2)
-  YELLOW:=$(shell tput setaf 3)
-  BLUE:=$(shell tput setaf 4)
-  MAGENTA:=$(shell tput setaf 5)
-  CYAN:=$(shell tput setaf 6)
-  WHITE:=$(shell tput setaf 7)
-  RESET_COLOR:=$(shell tput sgr0)
-endif
-
-ifeq (,$(filter '' 'true' 'false','$(LINKS)'))
-    $(error $(RED)If you use the LINKS option it must be set to "true" or "false". See 'make help' for more info.$(RESET_COLOR))
-endif
-ifeq (,$(filter '' 'true' 'false','$(PRODUCTION)'))
-    $(error $(RED)If you use the PRODUCTION option it must be set to "true" or "false". See 'make help' for more info.$(RESET_COLOR))
-endif
-ifeq (,$(filter '' 'true' 'false','$(BUILD_SHELBY)'))
-    $(error $(RED)If you use the BUILD_SHELBY option it must be set to "true" or "false". See 'make help' for more info.$(RESET_COLOR))
-endif
-
-#ifneq ($(MAKECMDGOALS),clean)
-#    ifneq (true,$(LINKS))
-#        ifeq (,$(QC_HSP_DIST)$(SOUNDTOUCH_SDK_DIST))
-#            # If we are in the Shelby repo assume the user wants to build against the locally built tarballs.
-#            ifeq ("https://svn.bose.com/hepd/Shelby","$(shell svn info .. 2>/dev/null | awk '/^Repository Root:/ {print $$NF}')")
-#                QC_HSP_DIST=
-#                SOUNDTOUCH_SDK_DIST=../../builds
-#                $(info $(MAGENTA)You are building Eddie in the context of the Shelby repo.$(RESET_COLOR))
-#                $(info $(MAGENTA)Assuming you wish to use your local STSDK and HSP:$(RESET_COLOR))
-#                $(info $(MAGENTA)    SOUNDTOUCH_SDK_DIST: $(SOUNDTOUCH_SDK_DIST)/SoundTouch-SDK-qc8017_32.tar$(RESET_COLOR))
-##                $(info $(MAGENTA)    TI_HSP_DIST: $(TI_HSP_DIST)/ti-sm2-hsp.tar$(RESET_COLOR))
-##                $(info $(MAGENTA)                 $(TI_HSP_DIST)/ti-sm1-hsp.tar$(RESET_COLOR))
-##                $(info $(MAGENTA)                 $(TI_HSP_DIST)/ti-sm1-noap-hsp.tar$(RESET_COLOR))
-#                $(info $(MAGENTA)If this is not what you wanted, do a 'make clean' and use one of the SOUNDTOUCH, QC-HSP, or LINKS options.$(RESET_COLOR))
-#             endif
-#        endif
-#    endif
-#endif
-
-#
-# QC-HSP
-#
-ifdef QC_HSP_DIST
-  # The user doesn't want to use the QC-HSP tarball pointed to from
-  # QC-HSP-link.txt, they specified it on the command line with the
-  # QC_HSP_DIST variable.
-  QC_HSP_TAR := $(QC_HSP_DIST)
+sdk = qc8017_32
+ifeq ($(sdk),native)
+  cfg = Debug
 else
-  # The QC-HSP tarballs are identified in QC-HSP-link.txt
-  QC_HSP_TAR := $(shell cat ../config/HSP-Version.txt)
-
-  ifndef QC_HSP_TAR
-    $(error Oops, something is wrong with HSP-Version.txt)
-  endif
+  cfg = Release
 endif
+jobs = 1
 
-# double basename because it's .tar.gz
-HSP_DIR = $(basename $(basename $(notdir $(QC_HSP_TAR))))
-$(info HSP_DIR is ${HSP_DIR})
-$(info QC_HSP_TAR is ${QC_HSP_TAR} )
+BUILDS_DIR := $(WORKSPACE)/builds/$(cfg)/$(sdk)
 
-# Unpack the HSP
-$(HSP_DIR): $(QC_HSP_TAR)
-	@echo -e "$(CYAN)Extracting QC HSP tarball$(RESET_COLOR)"
-	-rm -rf $(HSP_DIR)
-	@tar -xmf $(QC_HSP_TAR)
-	@test -d $@ # assert the file exists
-	@touch $@
+SOUNDTOUCH_SDK_DIR := $(shell components get SoundTouch-SDK-$(sdk) installed_location)
+$(info SOUNDTOUCH_SDK_DIR is $(SOUNDTOUCH_SDK_DIR))
 
-#ifneq ($(MAKECMDGOALS),clean)
-#  -include sm2-HSP/SampleMakefile/Makedefs.mk
-#endif
+# -----------------------------------------------------------------------------
 
-#
-# Toolchain install
-#
-ifndef QC_TOOLCHAIN
-  QC_TOOLCHAIN = $(shell cat ../config/Toolchain-Version.txt)
-  ifndef QC_TOOLCHAIN
-    $(error Oops, something is wrong with Toolchain-Version.txt)
-  endif
-endif
+ifeq ($(sdk),native)
+  TARGET := x86-unknown-linux
+  CROSS_COMPILE :=
+  CROSS_TOOL :=
+  CROSS_TOOL_PATH := /usr
+  CROSS_OS_PATH := /usr
+  CROSS_SYSROOT :=
+  CROSS_LIB_PATH :=
+  CROSS_INC_PATH :=
+  TOOLPATH := /opt/centos/glibc-2.15-toolchain/bin/
+  CROSS_TOOL_CC := $(TOOLPATH)gcc
+  CROSS_TOOL_CPP := $(TOOLPATH)g++
+endif # native
 
-QC_TOOLCHAIN_DIR=/scratch/$(QC_TOOLCHAIN)
+ifeq ($(sdk),qc8017_32)
+  RIVIERA_HSP_DIR := $(shell components get Riviera-HSP installed_location)
+  $(info RIVIERA_HSP_DIR is $(RIVIERA_HSP_DIR))
+  TARGET := arm-oemllib32-linux
+  CROSS_COMPILE := arm-oemllib32-linux-
+  CROSS_TOOL := arm-oemllib32-linux/$(CROSS_COMPILE)
+  CROSS_TOOL_PATH := $(RIVIERA_HSP_DIR)/sdk/sysroots/i686-oesdk-linux/usr
+  CROSS_OS_PATH := $(RIVIERA_HSP_DIR)/sdk/sysroots/aarch64-oe-linux
+  CROSS_SYSROOT := --sysroot $(CROSS_OS_PATH)
+  CROSS_LIB_PATH := $(CROSS_OS_PATH)/usr/lib;$(CROSS_OS_PATH)/lib
+  CROSS_INC_PATH := $(CROSS_OS_PATH)/usr/include
+  CROSS_TOOL_CC := $(CROSS_TOOL_PATH)/bin/$(CROSS_TOOL)gcc
+  CROSS_TOOL_CPP := $(CROSS_TOOL_PATH)/bin/$(CROSS_TOOL)g++
+endif # qc8017_32
 
-# Install the toolchain (Note: this currently only deals with 32-bit host)
-# TBD make this work for 32/64 bit host when the HSP actually contains one
-$(QC_TOOLCHAIN_DIR): $(QC_HSP_TAR)
-	@echo -e "$(CYAN)Installing QC toolchain $(RESET_COLOR)"
-	@rm -rf $(QC_TOOLCHAIN_DIR)
-	@yes | $(HSP_DIR)/sdk/install-sdk.sh -d $@
-	@test -d $@
-	@touch $@
-
-#
-# SoundTouch-SDK
-#
-ifdef SOUNDTOUCH_SDK_DIST
-  SOUNDTOUCH_SDK_TAR := $(SOUNDTOUCH_SDK_DIST)
-else
-#  # If they specify building from shelby sources, do that
-#  ifeq(${BUILD_SHELBY},true)
-#  else
-    # The SoundStouch-SDK tarball is identified in SoundTouch-link.txt
-    SOUNDTOUCH_SDK_TAR := $(shell cat ../config/SoundTouchSDK-Version-${sdk}.txt)
-    ifndef SOUNDTOUCH_SDK_TAR
-      $(error Oops, something is wrong with SoundTouchSDK-Version-${sdk}.txt)
-    endif
-#  endif
-endif
-
-SOUNDTOUCH_SDK_SENTINEL := builds/SoundTouch-SDK-${sdk}/install-SoundTouch-SDK
-
-$(SOUNDTOUCH_SDK_SENTINEL): $(SOUNDTOUCH_SDK_TAR)
-	@echo -e "$(CYAN)Extracting SoundTouch-SDK$(RESET_COLOR)"
-	rm -rf builds/SoundTouch-SDK-${sdk}
-	tar -xmf $(SOUNDTOUCH_SDK_TAR)
-	-mkdir builds
-	mv SoundTouch-SDK builds/SoundTouch-SDK-${sdk}
-	test -f $@ # assert the file exists
-	touch $@
-
-# TODO make any "install-SoundTouch-SDK" mods for qc and run it here (if we even need to)
-
+# -----------------------------------------------------------------------------
 
 .PHONY: all
-all:: all_packages
+all: check_tools package
 
-.PHONY: rebuild
-rebuild: clean all
+.PHONY: check_tools
+check_tools:
+	components install
 
-.PHONY: help
-help:
-	@echo
-	@echo "Make targets :"
-	@echo "  all (default)         - compile and package everything"
-	@echo "  clean                 - remove all the generated files"
-	@echo
-	@echo "Make Variables :"
-#	@echo "  PRODUCTION=[true|false]                 - create a production file system (streaming)"
-	@echo "  SOUNDTOUCH_SDK_DIST=[tarballfile]       - points to the SoundTouch-SDK's tarball"
-	@echo "  QC_HSP_DIST=[tarballfile]               - points to the QC-HSP tarball"
-#	@echo "  LINKS=[true|false]                      - use the tarballs pointed to in SoundTouch-link.txt and QC-HSP-link.txt"
-	@echo
-#	@echo "For builds performed from the Shelby repo the default directory for the SoundTouch-SDK and QC-HSP tarballs are ../../builds."
-#	@echo "For builds performed independently form the Shelby repo the default locations are defined by SoundTouch-link.txt and QC-HSP-link.txt."
-#	@echo "If you wish to override one or both, you can use the LINKS, SOUNDTOUCH_SDK_DIST and QC_HSP_DIST variables on the command line."
+.PHONY: package
+package: cmake_build
+	$(MAKE) -C $(BUILDS_DIR) package
 
+cmake_flags := \
+-DCFG=$(cfg) \
+-DSDK=$(sdk) \
+-DCORE_TARGET=$(TARGET) \
+-DINC_PATH='$(CROSS_INC_PATH)' \
+-DLIB_PATH='$(CROSS_LIB_PATH)' \
+-DUSR_LIB_PATH='$(CROSS_LIB_PATH)' \
+-DCMAKE_C_COMPILER=$(CROSS_TOOL_CC) \
+-DCMAKE_CXX_COMPILER=$(CROSS_TOOL_CPP) \
+-DCMAKE_C_FLAGS='$(CROSS_SYSROOT)' \
+-DCMAKE_CXX_FLAGS='$(CROSS_SYSROOT)' \
+-DCROSS_COMPILE=$(CROSS_COMPILE) \
+-DEXTRA_FLAGS='$(EXTRA_FLAGS)' \
+-DSOUNDTOUCH_SDK_DIR=$(SOUNDTOUCH_SDK_DIR) \
 
-# CMAKE stuff
-CMAKE = cmake
-BUILDS_ROOT_DIR=$(MKFILE_DIR)/builds
-BUILDS_DIR=$(BUILDS_ROOT_DIR)/$(cfg)/$(sdk)
-
-# TODO make this build Eddie apps
 .PHONY: cmake_build
-cmake_build: $(SOUNDTOUCH_SDK_SENTINEL) $(QC_TOOLCHAIN_DIR) $(HSP_DIR)
-	@echo -e "$(CYAN)Preparing the cmake build...$(RESET_COLOR)"
-	-@echo "Building via CMAKE for $(sdk) with jobs=$(jobs)"
+cmake_build:
 	mkdir -p $(BUILDS_DIR)
-	cd $(BUILDS_DIR) && $(CMAKE) -DCFG=${cfg} -DSDK=${sdk} -DCORE_TARGET=$(TARGET_NAME) -DINC_PATH=$(CROSS_INC_PATH) -DLIB_PATH=$(CROSS_LIB_PATH) -DUSR_LIB_PATH=$(CROSS_LIB_PATH) -DCMAKE_C_COMPILER=$(CROSS_TOOL_CC) -DCMAKE_CXX_COMPILER=$(CROSS_TOOL_CPP) -DCMAKE_C_FLAGS="${CROSS_TOOL_CFLAGS}" -DCMAKE_CXX_FLAGS="${CROSS_TOOL_CFLAGS}" -DTOOLPATH=$(TOOLPATH) -DCROSS_COMPILE=$(CROSS_COMPILE) -DEXTRA_FLAGS='$(EXTRA_FLAGS)' -DLINUX_DISTRO=$(LINUX_DISTRO) ../../../.
-	@echo -e "$(CYAN)Starting the Eddie build...$(RESET_COLOR)"
-	make -C $(BUILDS_DIR) -j $(jobs) install
-
-STAGE_DIR = builds/$(cfg)/$(sdk)/stage
-DIR_COPY=cp -RPfa
-CP=/bin/cp -Pfa
-
-.PHONY: package_eddie
-package_eddie: cmake_build
-	make -C $(BUILDS_DIR) package
-
-.PHONY: all_packages
-all_packages: package_eddie
-
+	cd $(BUILDS_DIR) && cmake $(cmake_flags) $(CURDIR)
+	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
 
 .PHONY: clean
 clean:
-	rm -rf builds output $(HSP_DIR) SoundTouch-SDK
-
-.PHONY: cmake_clean
-cmake_clean: clean
+	rm -rf $(BUILDS_DIR)
