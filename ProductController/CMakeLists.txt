@@ -1,74 +1,22 @@
-cmake_minimum_required(VERSION 2.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 PROJECT(Eddie)
 
-MESSAGE("SDK is ${SDK}")
-MESSAGE("CFG is ${CFG}")
-
-if(NOT DEFINED EDDIE_SOURCE_DIR)
-        SET(EDDIE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/)
-endif(NOT DEFINED EDDIE_SOURCE_DIR)
-
-SET(CMAKE_INSTALL_PREFIX output/${CFG}/${CORE_TARGET}/bin)
-if(NOT DEFINED OUTPUT_BIN_DIR)
-        SET(OUTPUT_BIN_DIR bin)
-endif(NOT DEFINED OUTPUT_BIN_DIR)
-
-if(NOT DEFINED OUTPUT_LIB_DIR)
-        SET(OUTPUT_LIB_DIR lib)
-endif(NOT DEFINED OUTPUT_LIB_DIR)
+INCLUDE(../Settings.cmake)
 
 INCLUDE_DIRECTORIES(
-    ${SOUNDTOUCH_SDK_DIR}/prebuilt/include
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include
 )
 
-INCLUDE( ${SDK}.cmake )
-
-SET(SOUNDTOUCH_SDK_LIB_DIR ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs)
 SET(SOUNDTOUCH_SDK_LIBS
-    ${SOUNDTOUCH_SDK_LIB_DIR}/libSoundTouchClient.a
-    ${SOUNDTOUCH_SDK_LIB_DIR}/libSTS.a
-    ${SOUNDTOUCH_SDK_LIB_DIR}/libShelbyUtils.a
-    ${PROTOBUF_LIB}
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libSoundTouchClient.a
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libSTS.a
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libShelbyUtils.a
+  ${PROTOBUF_LIB}
 )
 
-# Platform independent compiler flags for Release/Debug
-SET(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
+INCLUDE(exe.cmake)
+INCLUDE(package.cmake)
 
-IF( ${CFG} STREQUAL "Release" )
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os -g2 -DNDEBUG ${COMMON_CXX_FLAGS} ${DISABLE_UNUSED_WARNING_FLAGS} ${PLATFORM_COMPILER_FLAGS}" CACHE STRING
-  "Flags used by the C++ compiler during Release builds."
-  FORCE )
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Os -g2 ${COMMON_C_FLAGS} ${DISABLE_UNUSED_WARNING_FLAGS} ${PLATFORM_COMPILER_FLAGS}" CACHE STRING
-  "Flags used by the C compiler during Debug builds."
-  FORCE )
-  SET( CMAKE_EXE_LINKER_FLAGS " " CACHE STRING
-  "Flags used for linking binaries during Release builds."
-  FORCE )
-ENDIF ( ${CFG} STREQUAL "Release" )
-
-IF( ${CFG} STREQUAL "Debug" )
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3 -fno-inline ${COMMON_CXX_FLAGS} ${DISABLE_UNUSED_WARNING_FLAGS} ${PLATFORM_COMPILER_FLAGS}" CACHE STRING
-  "Flags used by the C++ compiler during Debug builds."
-  FORCE )
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g3 ${COMMON_C_FLAGS} ${DISABLE_UNUSED_WARNING_FLAGS} ${PLATFORM_COMPILER_FLAGS}" CACHE STRING
-  "Flags used by the C compiler during Debug builds."
-  FORCE )
-  SET( CMAKE_EXE_LINKER_FLAGS " " CACHE STRING
-  "Flags used for linking binaries during Debug builds."
-  FORCE )
-  ADD_DEFINITIONS("-DDISABLE_WD_PANIC")
-ENDIF ( ${CFG} STREQUAL "Debug" )
-
-MESSAGE("CMAKE_CXX_FLAGS is ${CMAKE_CXX_FLAGS}")
-MESSAGE("CMAKE_C_FLAGS is ${CMAKE_C_FLAGS}")
-
-#SET(BUILD_CFG_DIR ${EDDIE_SOURCE_DIR}/BuildConfig)
-INCLUDE( exe.cmake )
-INCLUDE( package.cmake )
-
-ADD_SUBDIRECTORY( AlertSubSystem )
-ADD_SUBDIRECTORY( LocalUI )
-
-MESSAGE("SOUNDTOUCH_SDK_DIR is ${SOUNDTOUCH_SDK_DIR}")
-MESSAGE("OUTPUT_BIN_DIR is ${OUTPUT_BIN_DIR}")
+ADD_SUBDIRECTORY(AlertSubSystem)
+ADD_SUBDIRECTORY(LocalUI)

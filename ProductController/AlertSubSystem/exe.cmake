@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
 
-add_compile_options("-std=gnu++11" "-g" "-Wformat=0" )
-
 ADD_EXECUTABLE(AlertsSubsystem
     ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Alerts.cpp
