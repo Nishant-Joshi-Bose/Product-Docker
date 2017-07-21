@@ -1,14 +1,24 @@
-subdirs = ProductController
-
-.PHONY: $(subdirs)
+WORKSPACE := $(abspath $(CURDIR))
+include Settings.mk
 
 .PHONY: default
-default: $(subdirs)
+default: eddie-ipk
+
+.PHONY: version-files
+version-files: | $(BUILDS_DIR)
+	gen-version-files version.txt $(BUILDS_DIR)
+
+$(BUILDS_DIR):
+	mkdir -p $@
 
 .PHONY: ProductController
-ProductController: install-components
+ProductController: install-components version-files
 	$(MAKE) -C $@
 
 .PHONY: install-components
 install-components:
 	components install
+
+.PHONY: eddie-ipk
+eddie-ipk: ProductController
+	./scripts/create-eddie-ipk

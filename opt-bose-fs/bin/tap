@@ -1,0 +1,2 @@
+#!/bin/bash
+exec rlwrap --history-filename /mnt/nv/tap_history telnet localhost 17000 "$@"

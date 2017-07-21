@@ -1,28 +1,14 @@
 WORKSPACE := $(abspath $(CURDIR)/..)
-$(info WORKSPACE is $(WORKSPACE))
-
-sdk = qc8017_32
-ifeq ($(sdk),native)
-  cfg = Debug
-else
-  cfg = Release
-endif
-jobs = 1
+include $(WORKSPACE)/Settings.mk
 
 CMAKE_FLAGS := -DCFG=$(cfg) -DSDK=$(sdk)
 
-BUILDS_DIR := $(WORKSPACE)/builds/$(cfg)/$(sdk)
-
 .PHONY: all
-all: check_tools package
+all: check_tools cmake_build
 
 .PHONY: check_tools
 check_tools:
 	components install
-
-.PHONY: package
-package: cmake_build
-	$(MAKE) -C $(BUILDS_DIR) package
 
 .PHONY: cmake_build
 cmake_build:

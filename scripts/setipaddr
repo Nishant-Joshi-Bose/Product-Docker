@@ -1,0 +1,72 @@
+#!/usr/bin/python2.7
+#
+# When a unit's IP address changes, update /etc/hosts to match and delete any
+# old entries from ~/.ssh/known_hosts.
+#
+# Example: setipaddr 10.60.1.99 myriviera
+#
+# Needs write access to /etc/hosts.
+# So run via sudo or `chmod a+w /etc/hosts`.
+#
+import sys
+import os
+import re
+
+_, ipaddr, hostname = sys.argv
+
+if not re.match(r'\d+\.\d+\.\d+\.\d+$', ipaddr):
+    raise Exception("Malformed IPv4 address '{}'".format(ipaddr))
+
+# ----------------------------------------------------------------------------
+# Update /etc/hosts
+
+hosts = "/etc/hosts"
+matched = False
+changed = False
+with open(hosts) as f:
+    lines = []
+    for line in f:
+        line = line.rstrip("\n\r")
+        a = line.split()
+        if len(a) >= 2 and a[1] == hostname:
+            matched = True
+            a[0] = ipaddr
+            t = " ".join(a)
+            if t != line:
+                changed = True
+                print "<", line
+                print ">", t
+                line = t
+        lines.append(line + "\n")
+if not matched:
+    t = ipaddr + " " + hostname
+    print ">", t
+    lines.append(t + "\n")
+    changed = True
+if changed:
+    with open(hosts, "w") as f:
+        for line in lines:
+            f.write(line)
+    print "Wrote", hosts
+else:
+    print "Unchanged", hosts
+
+# ----------------------------------------------------------------------------
+# Delete any entries for hostname in ~/.ssh/known_hosts
+
+known = os.environ["HOME"] + "/.ssh/known_hosts"
+changed = False
+with open(known) as f:
+    lines = []
+    for line in f:
+        if line.startswith(hostname + ","):
+            changed = True
+        else:
+            lines.append(line)
+if changed:
+    with open(known, "w") as f:
+        for line in lines:
+            f.write(line)
+    print "Wrote", known
+else:
+    print "Unchanged", known
