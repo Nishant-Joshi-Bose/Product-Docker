@@ -58,9 +58,11 @@ Installed Riviera-HSP: 0.5-7-g856bf73
 
 To reflash the Riviera HSP:
 ```shell session
+$ cd /scratch/Eddie
+$ components install
 $ adb shell reboot bootloader       # reboot the Eddie unit into the fastboot bootloader
 $ adb fastboot devices              # make sure the unit is in the bootloader
-$ cd /scratch/Eddie/components/Riviera-HSP/images/
+$ cd components/Riviera-HSP/images
 $ sudo ./fastboot.sh
 $ sudo fastboot reboot
 ```
