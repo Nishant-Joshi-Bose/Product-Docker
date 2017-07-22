@@ -42,7 +42,7 @@ $
 
 Install the .ipk file you built.
 ```shell session
-$ adb shell /opt/Bose/bin stop      # generally it's okay if this fails
+$ adb shell /opt/Bose/bin/stop      # generally it's okay if this fails
 $ adb push /scratch/Eddie/builds/Release/eddie.ipk /tmp/eddie.ipk
 $ adb shell opkg install -d bose --force-reinstall /tmp/eddie.ipk
 $ adb shell reboot
