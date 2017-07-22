@@ -22,3 +22,11 @@ install-components:
 .PHONY: eddie-ipk
 eddie-ipk: ProductController
 	./scripts/create-eddie-ipk
+
+.PHONY: clean
+clean:
+	rm -rf $(BUILDS_DIR)
+
+.PHONY: distclean
+distclean:
+	git clean -f
