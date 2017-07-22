@@ -207,7 +207,7 @@ $production
 EOF
 
 package_version=$(python2.7 -c 'import sys, json
-print "{major}.{minor}.{patch}.{abbrev_commit}.{minutes2013}".\
+print "{major}.{minor}.{patch}.{minutes2013}.{abbrev_commit}".\
 format(**json.loads(open(sys.argv[1]).read()))
 ' "$version_json") || exit
 echo "Package version \"$package_version\""
