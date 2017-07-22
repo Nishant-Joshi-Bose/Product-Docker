@@ -1,8 +1,13 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
+INCLUDE(../Settings.cmake)
+
 PROJECT(Eddie)
 
-INCLUDE(../Settings.cmake)
+FIND_LIBRARY(PROTOBUF_LIB NAMES libprotobuf.so
+  PATHS ${SOUNDTOUCH_SDK_DIR}/fs/opt/Bose/lib
+  NO_DEFAULT_PATH
+)
 
 INCLUDE_DIRECTORIES(
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include

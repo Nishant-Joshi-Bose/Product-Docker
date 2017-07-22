@@ -25,17 +25,14 @@ IF(${SDK} STREQUAL "qc8017_32")
   ENDIF()
   MESSAGE(STATUS "RIVIERA_HSP_DIR is '${RIVIERA_HSP_DIR}'")
 
-  SET(CMAKE_C_COMPILER_FORCED TRUE)
-  SET(CMAKE_CXX_COMPILER_FORCED TRUE)
-
   SET(SYSROOT ${RIVIERA_HSP_DIR}/sdk/sysroots/aarch64-oe-linux)
 
   SET(CMAKE_C_COMPILER ${RIVIERA_HSP_DIR}/sdk/sysroots/i686-oesdk-linux/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-gcc)
   SET(CMAKE_CXX_COMPILER ${RIVIERA_HSP_DIR}/sdk/sysroots/i686-oesdk-linux/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-g++)
 
   SET(COMMON_FLAGS "--sysroot=${SYSROOT} -Wall -Werror -Wno-psabi -Wno-maybe-uninitialized -Wno-unused-but-set-variable -mtune=cortex-a53 -ftree-vectorize -DPLATFORM_QC8017_32")
-  SET(CMAKE_CXX_FLAGS "-std=c++1y ${COMMON_FLAGS}")
-  SET(CMAKE_C_FLAGS "-std=gnu99 ${COMMON_FLAGS}")
+  SET(CMAKE_CXX_FLAGS "-std=c++1y ${COMMON_FLAGS}" CACHE INTERNAL - FORCE)
+  SET(CMAKE_C_FLAGS "-std=gnu99 ${COMMON_FLAGS}" CACHE INTERNAL - FORCE)
 
   SET(CMAKE_INSTALL_RPATH "/opt/Bose/lib")
   SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
@@ -43,12 +40,7 @@ IF(${SDK} STREQUAL "qc8017_32")
 
 ENDIF(${SDK} STREQUAL "qc8017_32")
 
-FIND_LIBRARY(PROTOBUF_LIB NAMES libprotobuf.so
-  PATHS ${SOUNDTOUCH_SDK_DIR}/fs/opt/Bose/lib
-  NO_DEFAULT_PATH
-)
-
-SET(CMAKE_INSTALL_PREFIX output/${CFG}/${CORE_TARGET}/bin)
+SET(CMAKE_INSTALL_PREFIX . CACHE INTERNAL - FORCE)
 SET(OUTPUT_BIN_DIR bin)
 SET(OUTPUT_LIB_DIR lib)
 
