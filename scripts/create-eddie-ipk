@@ -102,7 +102,7 @@ opt_dir=$stage/Bose
 
 mkdir -p "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" || exit
 
-rsync -a --exclude='*~' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
+rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 
 "$soundtouch_sdk/config-shepherd" \
     --without-eco1-software-udpate \
