@@ -136,7 +136,7 @@ gen_config "$u/APConfig.xslt" "$c" APConfig-eddie.xml
 
 components list >"$opt_dir/etc/components.txt" || exit
 
-version_json=$wspace/builds/$cfg/qc8017_32/version.json
+version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
 cp "$version_json" "$opt_dir/etc" || exit
 
 cp "$wspace/ProductController/Shepherd.xml" "$opt_dir/etc/Shepherd-product.xml" || exit

@@ -6,7 +6,7 @@
 
 #include "Daemon.h"
 #include "DPrint.h"
-#include "version.h"
+#include "BoseVersion.h"
 
 static DPrint s_logger( "EddieApp" );
 
