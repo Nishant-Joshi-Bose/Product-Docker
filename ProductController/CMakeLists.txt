@@ -10,6 +10,7 @@ FIND_LIBRARY(PROTOBUF_LIB NAMES libprotobuf.so
 )
 
 INCLUDE_DIRECTORIES(
+  ${CMAKE_BINARY_DIR}
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include
 )
 

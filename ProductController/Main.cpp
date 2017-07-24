@@ -6,11 +6,9 @@
 
 #include "Daemon.h"
 #include "DPrint.h"
+#include "version.h"
 
-static DPrint s_logger( "EddieApplication" );
-
-//using namespace Eddie;
-
+static DPrint s_logger( "EddieApp" );
 
 class EddieApplication : public Daemon
 {
@@ -35,7 +33,10 @@ EddieApplication::EddieApplication()  : Daemon()
 
 void EddieApplication::PrepareToLive()
 {
-    BOSE_INFO( s_logger, __func__ );
+    BOSE_INFO( s_logger, "Version: " VERSION_MAJOR "." VERSION_MINOR "."
+               VERSION_PATCH "." VERSION_BUILD_NUMBER " "
+               VERSION_BUILD_DEVELOPER "@" VERSION_BUILD_MACHINE " "
+               VERSION_BUILD_TIME );
 }
 
 void EddieApplication::PrepareToDie()

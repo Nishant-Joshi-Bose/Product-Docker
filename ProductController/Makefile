@@ -2,6 +2,7 @@ WORKSPACE := $(abspath $(CURDIR)/..)
 include $(WORKSPACE)/Settings.mk
 
 CMAKE_FLAGS := -DCFG=$(cfg) -DSDK=$(sdk)
+# BUILDS_DIR here becomes CMAKE_BINARY_DIR in CMake.
 
 .PHONY: all
 all: check_tools cmake_build
