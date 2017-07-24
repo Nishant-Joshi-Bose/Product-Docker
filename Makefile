@@ -29,4 +29,4 @@ clean:
 
 .PHONY: distclean
 distclean:
-	git clean -f
+	git clean -fdX
