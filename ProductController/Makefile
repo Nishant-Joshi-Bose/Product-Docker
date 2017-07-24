@@ -14,6 +14,7 @@ check_tools:
 .PHONY: cmake_build
 cmake_build:
 	mkdir -p $(BUILDS_DIR)
+	rm -fv $(BUILDS_DIR)/CMakeCache.txt
 	cd $(BUILDS_DIR) && cmake $(CMAKE_FLAGS) $(CURDIR)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
 
