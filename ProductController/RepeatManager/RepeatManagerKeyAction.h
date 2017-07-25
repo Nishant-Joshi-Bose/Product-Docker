@@ -4,7 +4,7 @@
 **************************************************************************/
 
 #pragma once
-#include "KeyEventAction.pb.h"
+#include "RepeatManagerKeyAction.pb.h"
 
 static const std::map<std::string, int> keyEventActionMap = {
             {"BUTTON_EVENT_PLAY",                                                          BUTTON_EVENT_PLAY},

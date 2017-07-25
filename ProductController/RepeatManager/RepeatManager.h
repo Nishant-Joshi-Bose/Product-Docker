@@ -18,6 +18,8 @@
 #include "APTimer.h"
 #include "RepeatManager.pb.h"
 
+#define MAXIMUM_KEYS        10
+
 enum RAW_KEY_VALUE {
     KEY_VAL_PLAY = 0,
     KEY_VAL_PAUSE = 1,
@@ -55,10 +57,38 @@ enum {
     KEY_STATE_PRESSED = 1,
     KEY_STATE_RELEASED = 2
 };
-#define MAXIMUM_KEYS        10
 
-
-
+static std::map<std::string, int> keyMap = {
+                                        {"play",            KEY_VAL_PLAY},
+                                        {"pause",           KEY_VAL_PAUSE},
+                                        {"stop",            KEY_VAL_STOP},
+                                        {"prev_track",      KEY_VAL_PREV_TRACK},
+                                        {"next_track",      KEY_VAL_NEXT_TRACK},
+                                        {"thumbs_up",       KEY_VAL_THUMBS_UP},
+                                        {"thumbs_down",     KEY_VAL_THUMBS_DOWN},
+                                        {"bookmark",        KEY_VAL_BOOKMARK},
+                                        {"power",           KEY_VAL_POWER},
+                                        {"mute",            KEY_VAL_MUTE},
+                                        {"volume_up",       KEY_VAL_VOLUME_UP},
+                                        {"volume_down",     KEY_VAL_VOLUME_DOWN},
+                                        {"preset_1",        KEY_VAL_PRESET_1},
+                                        {"preset_2",        KEY_VAL_PRESET_2},
+                                        {"preset_3",        KEY_VAL_PRESET_3},
+                                        {"preset_4",        KEY_VAL_PRESET_4},
+                                        {"preset_5",        KEY_VAL_PRESET_5},
+                                        {"preset_6",        KEY_VAL_PRESET_6},
+                                        {"aux_input",       KEY_VAL_AUX_INPUT},
+                                        {"shuffel_off",     KEY_VAL_SHUFFLE_OFF},
+                                        {"shuffel_on",      KEY_VAL_SHUFFLE_ON},
+                                        {"repeat_off",      KEY_VAL_REPEAT_OFF},
+                                        {"repeat_one",      KEY_VAL_REPEAT_ONE},
+                                        {"repeat_all",      KEY_VAL_REPEAT_ALL},
+                                        {"play_pause",      KEY_VAL_PLAY_PAUSE},
+                                        {"add_favorite",    KEY_VAL_ADD_FAVORITE},
+                                        {"remove_favorite", KEY_VAL_REMOVE_FAVORITE},
+                                        {"bluetooth",       KEY_VAL_BLUETOOTH},
+                                        {"invalid",         INVALID_KEY_VAL},
+                                        } ;
 
 class CRepeatManager
 {
