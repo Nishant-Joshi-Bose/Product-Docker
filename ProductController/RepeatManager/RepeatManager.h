@@ -1,0 +1,104 @@
+///////////////////////////////////////////////////////////////////////////////
+/// @file RepeatManager.h
+///
+/// @brief Implementation of ButtonHandler
+///
+/// @attention
+///    BOSE CORPORATION.
+///    COPYRIGHT 2017 BOSE CORPORATION ALL RIGHTS RESERVED.
+///    This program may not be reproduced, in whole or in part in any
+///    form or any means whatsoever without the written permission of:
+///        BOSE CORPORATION
+///        The Mountain
+///        Framingham, MA 01701-9168
+///
+///////////////////////////////////////////////////////////////////////////////
+#pragma once
+
+#include "APTimer.h"
+#include "RepeatManager.pb.h"
+
+enum RAW_KEY_VALUE {
+    KEY_VAL_PLAY = 0,
+    KEY_VAL_PAUSE = 1,
+    KEY_VAL_STOP = 2,
+    KEY_VAL_PREV_TRACK = 3,
+    KEY_VAL_NEXT_TRACK = 4,
+    KEY_VAL_THUMBS_UP = 5,
+    KEY_VAL_THUMBS_DOWN = 6,
+    KEY_VAL_BOOKMARK = 7,
+    KEY_VAL_POWER = 8,
+    KEY_VAL_MUTE = 9,
+    KEY_VAL_VOLUME_UP = 10,
+    KEY_VAL_VOLUME_DOWN = 11,
+    KEY_VAL_PRESET_1 = 12,
+    KEY_VAL_PRESET_2 = 13,
+    KEY_VAL_PRESET_3 = 14,
+    KEY_VAL_PRESET_4 = 15,
+    KEY_VAL_PRESET_5 = 16,
+    KEY_VAL_PRESET_6 = 17,
+    KEY_VAL_AUX_INPUT = 18,
+    KEY_VAL_SHUFFLE_OFF = 19,
+    KEY_VAL_SHUFFLE_ON = 20,
+    KEY_VAL_REPEAT_OFF = 21,
+    KEY_VAL_REPEAT_ONE = 22,
+    KEY_VAL_REPEAT_ALL = 23,
+    KEY_VAL_PLAY_PAUSE = 24,
+    KEY_VAL_ADD_FAVORITE = 25,
+    KEY_VAL_REMOVE_FAVORITE = 26,
+    KEY_VAL_BLUETOOTH = 27,
+    INVALID_KEY_VAL = 28
+};
+
+enum {
+    KEY_STATE_INVALID = -1,
+    KEY_STATE_PRESSED = 1,
+    KEY_STATE_RELEASED = 2
+};
+#define MAXIMUM_KEYS        10
+
+
+
+
+class CRepeatManager
+{
+public:
+    CRepeatManager( NotifyTargetTaskIF* task );
+    ~CRepeatManager();
+
+    typedef void RepeatManagerResultsCb( const int result, void *context);
+    void HandleKeys( const RepeatManager::Repeat & keyEvent );
+    void SetRepeatManagerResultsCb( RepeatManagerResultsCb *cb, void *ctx);
+
+private:
+    typedef struct
+    {
+        int                 FirstKey;
+        int                 SecondKey;
+        int                 Keys[MAXIMUM_KEYS];
+        int                 KeyTimeout;
+        int                 EventAction;
+        bool                Repeat;
+    } _KeyTableEntry;
+
+    CRepeatManager( const CRepeatManager& ) = delete;
+    const CRepeatManager& operator= ( const CRepeatManager& ) = delete;
+
+    void DeInitializeVariables();
+    void CallBackFunction( int keyState, int keyNumber );
+    int GetKeyTableIndexNumber( int keyNo, int index, int keyComboCounter );
+
+private:
+    int m_keyTrack[MAXIMUM_KEYS];
+    int m_keyTableSize;
+    int m_keyTableIndex;
+    int m_keyComboCounter;
+    int m_previousTableIndex;
+
+    void *ResultCbContext;
+    RepeatManagerResultsCb *ResultCb;
+    APTimerPtr m_keyTimer;
+    _KeyTableEntry *m_keyTableEntry;
+};
+
+

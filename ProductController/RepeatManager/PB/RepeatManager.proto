@@ -1,0 +1,7 @@
+package RepeatManager;
+
+message Repeat
+{
+    optional uint32 keyNumber = 1;
+    optional uint32 keyState = 2;
+}

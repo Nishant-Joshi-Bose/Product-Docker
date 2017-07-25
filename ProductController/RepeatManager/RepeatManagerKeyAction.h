@@ -1,0 +1,58 @@
+/**************************************************************************
+* This file is auto generated, DO NOT EDIT!
+* To generate this file execute creat_keyaction_header.sh file
+**************************************************************************/
+
+#pragma once
+#include "KeyEventAction.pb.h"
+
+static const std::map<std::string, int> keyEventActionMap = {
+            {"BUTTON_EVENT_PLAY",                                                          BUTTON_EVENT_PLAY},
+            {"BUTTON_EVENT_PAUSE",                                                         BUTTON_EVENT_PAUSE},
+            {"BUTTON_EVENT_STOP",                                                          BUTTON_EVENT_STOP},
+            {"BUTTON_EVENT_PREVIOUS_TRACK",                                                BUTTON_EVENT_PREVIOUS_TRACK},
+            {"BUTTON_EVENT_NEXT_TRACK",                                                    BUTTON_EVENT_NEXT_TRACK},
+            {"BUTTON_EVENT_THUMBS_UP",                                                     BUTTON_EVENT_THUMBS_UP},
+            {"BUTTON_EVENT_THUMBS_DOWN",                                                   BUTTON_EVENT_THUMBS_DOWN},
+            {"BUTTON_EVENT_POWER",                                                         BUTTON_EVENT_POWER},
+            {"BUTTON_EVENT_BOOKMARK",                                                      BUTTON_EVENT_BOOKMARK},
+            {"BUTTON_EVENT_MUTE",                                                          BUTTON_EVENT_MUTE},
+            {"BUTTON_EVENT_VOLUME_UP",                                                     BUTTON_EVENT_VOLUME_UP},
+            {"BUTTON_EVENT_VOLUME_DOWN",                                                   BUTTON_EVENT_VOLUME_DOWN},
+            {"BUTTON_EVENT_PRESET_1",                                                      BUTTON_EVENT_PRESET_1},
+            {"BUTTON_EVENT_PRESET_2",                                                      BUTTON_EVENT_PRESET_2},
+            {"BUTTON_EVENT_PRESET_3",                                                      BUTTON_EVENT_PRESET_3},
+            {"BUTTON_EVENT_PRESET_4",                                                      BUTTON_EVENT_PRESET_4},
+            {"BUTTON_EVENT_PRESET_5",                                                      BUTTON_EVENT_PRESET_5},
+            {"BUTTON_EVENT_PRESET_6",                                                      BUTTON_EVENT_PRESET_6},
+            {"BUTTON_EVENT_AUX_INPUT",                                                     BUTTON_EVENT_AUX_INPUT},
+            {"BUTTON_EVENT_SHUFFEL_ON",                                                    BUTTON_EVENT_SHUFFEL_ON},
+            {"BUTTON_EVENT_SHUFFEL_OFF",                                                   BUTTON_EVENT_SHUFFEL_OFF},
+            {"BUTTON_EVENT_REPEAT_OFF",                                                    BUTTON_EVENT_REPEAT_OFF},
+            {"BUTTON_EVENT_REPEAT_ONE",                                                    BUTTON_EVENT_REPEAT_ONE},
+            {"BUTTON_EVENT_REPEAT_ALL",                                                    BUTTON_EVENT_REPEAT_ALL},
+            {"BUTTON_EVENT_PLAY_PAUSE",                                                    BUTTON_EVENT_PLAY_PAUSE},
+            {"BUTTON_EVENT_ADD_FAVORITE",                                                  BUTTON_EVENT_ADD_FAVORITE},
+            {"BUTTON_EVENT_REMOVE_FAVORITE",                                               BUTTON_EVENT_REMOVE_FAVORITE},
+            {"BUTTON_EVENT_BLUETOOTH",                                                     BUTTON_EVENT_BLUETOOTH},
+            {"BUTTON_EVENT_VOLUME_DOWN_PRESET_1",                                          BUTTON_EVENT_VOLUME_DOWN_PRESET_1},
+            {"BUTTON_EVENT_VOLUME_DOWN_PRESET_2",                                          BUTTON_EVENT_VOLUME_DOWN_PRESET_2},
+            {"BUTTON_EVENT_PRESET_1_VOLUME_DOWN",                                          BUTTON_EVENT_PRESET_1_VOLUME_DOWN},
+            {"BUTTON_EVENT_PRESET_2_VOLUME_DOWN",                                          BUTTON_EVENT_PRESET_2_VOLUME_DOWN},
+            {"BUTTON_EVENT_PRESET_3_VOLUME_DOWN",                                          BUTTON_EVENT_PRESET_3_VOLUME_DOWN},
+            {"BUTTON_EVENT_PRESET_4_VOLUME_DOWN",                                          BUTTON_EVENT_PRESET_4_VOLUME_DOWN},
+            {"BUTTON_EVENT_PRESET_5_VOLUME_DOWN",                                          BUTTON_EVENT_PRESET_5_VOLUME_DOWN},
+            {"BUTTON_EVENT_PRESET_6_VOLUME_DOWN",                                          BUTTON_EVENT_PRESET_6_VOLUME_DOWN},
+            {"BUTTON_EVENT_PRESET_1_VOLUME_UP",                                            BUTTON_EVENT_PRESET_1_VOLUME_UP},
+            {"BUTTON_EVENT_PRESET_2_VOLUME_UP",                                            BUTTON_EVENT_PRESET_2_VOLUME_UP},
+            {"BUTTON_EVENT_PRESET_3_VOLUME_UP",                                            BUTTON_EVENT_PRESET_3_VOLUME_UP},
+            {"BUTTON_EVENT_PRESET_4_VOLUME_UP",                                            BUTTON_EVENT_PRESET_4_VOLUME_UP},
+            {"BUTTON_EVENT_PRESET_5_VOLUME_UP",                                            BUTTON_EVENT_PRESET_5_VOLUME_UP},
+            {"BUTTON_EVENT_PRESET_6_VOLUME_UP",                                            BUTTON_EVENT_PRESET_6_VOLUME_UP},
+            {"BUTTON_EVENT_PRESET_1_2_3_4",                                                BUTTON_EVENT_PRESET_1_2_3_4},
+            {"BUTTON_EVENT_LONG_PRESET_5",                                                 BUTTON_EVENT_LONG_PRESET_5},
+            {"BUTTON_EVENT_EXTRA_LONG_PRESET5",                                            BUTTON_EVENT_EXTRA_LONG_PRESET5},
+            {"BUTTON_EVENT_PLAY_PRESET_1_2",                                               BUTTON_EVENT_PLAY_PRESET_1_2},
+            {"BUTTON_EVENT_LONG_PLAY_PRESET_1_2",                                          BUTTON_EVENT_LONG_PLAY_PRESET_1_2},
+            {"BUTTON_EVENT_LONGEST_PRESET_5",                                              BUTTON_EVENT_LONGEST_PRESET_5},
+};
