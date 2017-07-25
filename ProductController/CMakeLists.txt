@@ -22,7 +22,6 @@ SET(SOUNDTOUCH_SDK_LIBS
 )
 
 INCLUDE(exe.cmake)
-INCLUDE(package.cmake)
 
 ADD_SUBDIRECTORY(AlertSubSystem)
 ADD_SUBDIRECTORY(LocalUI)
