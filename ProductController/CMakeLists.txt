@@ -11,13 +11,13 @@ FIND_LIBRARY(PROTOBUF_LIB NAMES libprotobuf.so
 
 INCLUDE_DIRECTORIES(
   ${CMAKE_BINARY_DIR}
+  ${BOSELIBS_DIR}/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include
 )
 
 SET(SOUNDTOUCH_SDK_LIBS
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libSoundTouchClient.a
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libSTS.a
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libShelbyUtils.a
+  ${BOSELIBS_DIR}/libBoseLibs.a
   ${PROTOBUF_LIB}
 )
 
