@@ -1,6 +1,6 @@
 /**************************************************************************
 * ABSOLUTELY UNDER NO CONDITION SHOULD YOU INCLUDE THIS FILE DIRECTLY
-* INSTEAD; YOU SHOULD INCLUDE KeyEventAction.pb.h, WHICH IS ITS
+* INSTEAD; YOU SHOULD INCLUDE RepeatManagerKeyAction.pb.h
 *
 * This file is auto generated, DO NOT EDIT!
 **************************************************************************/
