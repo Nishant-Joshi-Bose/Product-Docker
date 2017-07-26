@@ -1,6 +1,10 @@
 #!/usr/bin/python2.7
 # -*- python -*-
+# This script will generate RepeatManagerKeyAction.proto and RepeatManagerKeyAction.h files
+# RepeatManagerKeyAction.proto file contains all the enums which are related to EventAction field in KeyConfiguration.json
+# RepeatManagerKeyAction.h file contains the map variable based ont he string and the enum values for the EventAction field
 #
+
 import os, sys, imp, json, io
 
 configuration = "../RepeatManagerKeyAction.h"
@@ -10,12 +14,12 @@ string = '/*********************************************************************
 string += '* This file is auto generated, DO NOT EDIT!\r\n'
 string += '* To generate this file execute creat_keyaction_header.sh file\r\n'
 string += '**************************************************************************/\r\n\r\n'
-string += '#pragma once\r\n#include "KeyEventAction.pb.h"\r\n\r\n'
+string += '#pragma once\r\n#include "RepeatManagerKeyAction.pb.h"\r\n\r\n'
 string += 'static const std::map<std::string, int> keyEventActionMap = {\r\n'
 
 protostring = '/**************************************************************************\r\n'
 protostring += '* ABSOLUTELY UNDER NO CONDITION SHOULD YOU INCLUDE THIS FILE DIRECTLY\r\n'
-protostring += '* INSTEAD; YOU SHOULD INCLUDE KeyEventAction.pb.h, WHICH IS ITS\r\n*\r\n'
+protostring += '* INSTEAD; YOU SHOULD INCLUDE RepeatManagerKeyAction.pb.h\r\n*\r\n'
 protostring += '* This file is auto generated, DO NOT EDIT!\r\n'
 protostring += '**************************************************************************/\r\n\r\n'
 protostring += 'enum KEY_EVENT_ACTION\r\n{\r\n    INVALID_BUTTON_EVENT_ACTION = -1;'
@@ -40,7 +44,7 @@ protostring += '\r\n};\r\n'
 with io.FileIO(protoconfig, "w") as file:
     file.write(protostring)
 
-# Command to execute protoc for proto file to generate pb.cc and pb.h file
+# TODO: remove the below two lines, Command to generate pb.cc and pb.h files based on the proto file.
 cmd = './../../builds/SoundTouch-SDK-qc8017_32/prebuilt/Release/native/bin/protoc --proto_path=./../PB/ --cpp_out=../ ./../PB/RepeatManagerKeyAction.proto'
 os.system(cmd)
 
