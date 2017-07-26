@@ -1,0 +1,1 @@
+ectool setProperty /myJob/Version "$(cat $[buildDir]/version.txt)-$[buildNumber]+$[gitHashShort]"
