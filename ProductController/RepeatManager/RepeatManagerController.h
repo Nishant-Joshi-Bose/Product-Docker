@@ -15,8 +15,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-#ifndef REPEATMANAGERCONTROLLER_H
-#define REPEATMANAGERCONTROLLER_H
 #include "RepeatManagerCliClient.h"
 #include "RepeatManager.h"
 #include "CliClient.h"
@@ -40,15 +38,14 @@ private:
     {
         CLI_BUTTON_PRESS,
         CLI_BUTTON_RELEASE,
+        CLI_BUTTON_MOVE,
         CLI_LOG_LEVEL
     };
     RepeatManagerCliClient m_CliClient;
     bool m_CliStarted;
-    CRepeatManager m_RepeatMgr;
+    KeyRepeatManager m_RepeatMgr;
 
 private:
     void StartCliClient();
     std::string HandleCliCmd( u_int16_t cmdKey, CLIClient::StringListType &args );
 };
-
-#endif // REPEATMANAGERCONTROLLER_H

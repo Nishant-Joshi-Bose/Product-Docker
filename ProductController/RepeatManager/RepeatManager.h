@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// @file RepeatManager.h
 ///
-/// @brief Implementation of ButtonHandler
+/// @brief Implementation of RepeatManager
 ///
 /// @attention
 ///    BOSE CORPORATION.
@@ -55,7 +55,8 @@ enum RAW_KEY_VALUE {
 enum {
     KEY_STATE_INVALID = -1,
     KEY_STATE_PRESSED = 1,
-    KEY_STATE_RELEASED = 2
+    KEY_STATE_RELEASED = 2,
+    KEY_STATE_MOVED = 3,
 };
 
 static std::map<std::string, int> keyMap = {
@@ -90,11 +91,11 @@ static std::map<std::string, int> keyMap = {
                                         {"invalid",         INVALID_KEY_VAL},
                                         } ;
 
-class CRepeatManager
+class KeyRepeatManager
 {
 public:
-    CRepeatManager( NotifyTargetTaskIF* task );
-    ~CRepeatManager();
+    KeyRepeatManager( NotifyTargetTaskIF* task );
+    ~KeyRepeatManager();
 
     typedef void RepeatManagerResultsCb( const int result, void *context);
     void HandleKeys( const RepeatManager::Repeat & keyEvent );
@@ -103,18 +104,18 @@ public:
 private:
     typedef struct
     {
-        int                 FirstKey;
-        int                 SecondKey;
         int                 Keys[MAXIMUM_KEYS];
         int                 KeyTimeout;
         int                 EventAction;
+        bool                ActionOnTimeout;
         bool                Repeat;
     } _KeyTableEntry;
 
-    CRepeatManager( const CRepeatManager& ) = delete;
-    const CRepeatManager& operator= ( const CRepeatManager& ) = delete;
+    KeyRepeatManager( const KeyRepeatManager& ) = delete;
+    const KeyRepeatManager& operator= ( const KeyRepeatManager& ) = delete;
 
     void DeInitializeVariables();
+    int GetKeyNumberForPosition( int xPos );
     void CallBackFunction( int keyState, int keyNumber );
     int GetKeyTableIndexNumber( int keyNo, int index, int keyComboCounter );
 
@@ -125,8 +126,8 @@ private:
     int m_keyComboCounter;
     int m_previousTableIndex;
 
-    void *ResultCbContext;
-    RepeatManagerResultsCb *ResultCb;
+    void *m_keyCallBackbContext;
+    RepeatManagerResultsCb *m_keyResultCallBack;
     APTimerPtr m_keyTimer;
     _KeyTableEntry *m_keyTableEntry;
 };

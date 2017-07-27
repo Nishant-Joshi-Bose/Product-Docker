@@ -21,7 +21,6 @@
 #include "AsyncCallback.h"
 #include "DPrint.h"
 #include "RepeatManager.pb.h"
-//#include "RepeatManagerConfiguration.h"
 
 static DPrint s_logger( "RepeatManagerController" );
 
@@ -43,6 +42,7 @@ void RepeatManagerController::StartCliClient()
     {
         m_CliClient.RegisterCliCmd( CLI_BUTTON_PRESS, "press", "simulate the key press ", "press [first_key_value second_key_value (volume_up, volume_down, preset_1, ..., preset_6)]" );
         m_CliClient.RegisterCliCmd( CLI_BUTTON_RELEASE, "release", "simulate the key release ", "release [first_key_value second_key_value (volume_up, volume_down, preset_1, ..., preset_6)]" );
+        m_CliClient.RegisterCliCmd( CLI_BUTTON_MOVE, "move", "simulate the move ", "move [x-coordinate(1 - 600)]" );
 
         RepeatManagerCliClient::CliHandlerFunc func = std::bind( &RepeatManagerController::HandleCliCmd, this,
                                                               std::placeholders::_1,
@@ -66,23 +66,46 @@ std::string RepeatManagerController::HandleCliCmd( u_int16_t cmdKey, CLIClient::
     case CLI_BUTTON_PRESS:
     case CLI_BUTTON_RELEASE:
         {
-            int keyType = (cmdKey == CLI_BUTTON_PRESS) ? KEY_STATE_PRESSED: KEY_STATE_RELEASED;
+            int keyType;
             CLIClient::StringListType::const_iterator argit = args.begin();
             int count = args.size();
             RepeatManager::Repeat repeat;
             std::string key_string;
 
+            switch ( cmdKey )
+            {
+            case CLI_BUTTON_PRESS:
+                keyType = KEY_STATE_PRESSED;
+                break;
+            case CLI_BUTTON_MOVE:
+                keyType = KEY_STATE_MOVED;
+                break;
+            case CLI_BUTTON_RELEASE:
+                keyType = KEY_STATE_RELEASED;
+                break;
+            }
+
             for ( int i = 0; i < count; ++i )
             {
                 key_string = *argit++;
-                auto keyEntry = keyMap.find(key_string);
-                if ( keyEntry == keyMap.end() )
-                    return "Invalid Key entered";
-                if ( INVALID_KEY_VAL == keyEntry->second )
-                    return "Invalid Key entered";
-                repeat.set_keynumber(keyEntry->second);
-                repeat.set_keystate(keyType);
-                m_RepeatMgr.HandleKeys(repeat);
+
+                if ( keyType == KEY_STATE_MOVED )
+                {
+                    repeat.set_xposition(atoi(key_string.c_str()));
+                    m_RepeatMgr.HandleKeys(repeat);
+                    break;
+                }
+                else
+                {
+                    auto keyEntry = keyMap.find(key_string);
+                    if ( keyEntry == keyMap.end() )
+                        return "Invalid Key entered";
+                    if ( INVALID_KEY_VAL == keyEntry->second )
+                        return "Invalid Key entered";
+                    repeat.set_keynumber(keyEntry->second);
+                    repeat.set_keystate(keyType);
+                    m_RepeatMgr.HandleKeys(repeat);
+                }
             }
         }
         break;
@@ -127,5 +150,5 @@ void RepeatManagerController::SessionCreated()
 
 void RepeatManagerController::RepeatManagerCallback(const int result, void *context)
 {
-    static_cast<RepeatManagerController*>( context )->m_CliClient.AsyncResponse("Button Event :" + std::to_string(result));
+    static_cast<RepeatManagerController*>( context )->m_CliClient.AsyncResponse("Key action event number --> " + std::to_string(result));
 }

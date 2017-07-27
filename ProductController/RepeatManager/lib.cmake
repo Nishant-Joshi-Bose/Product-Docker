@@ -5,6 +5,7 @@ RepeatManagerController.cpp
 RepeatManagerCliClient.cpp
 RepeatManager.cpp
 RepeatManager.pb.cc
+RepeatManagerKeyAction.pb.cc
 )
 
 ADD_LIBRARY(${LIB_NAME} STATIC
