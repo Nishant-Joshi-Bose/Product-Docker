@@ -174,7 +174,6 @@ cp "$stfs"/opt/Bose/etc/services.json "$opt_dir/etc" || exit
 cp -a "$stfs"/opt/Bose/Xml "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/html "$opt_dir" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
-cp -a "$soundtouch_sdk/prebuilt/$cfg/qc8017_32/lib"/libprotobuf*.so* "$opt_dir/lib" || exit
 
 if $production; then
     marge_url=https://streaming.bose.com
