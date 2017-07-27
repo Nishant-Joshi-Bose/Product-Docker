@@ -147,7 +147,7 @@ done
 
 # Historical FS_VERSION file.
 v=$(python2.7 -c 'import sys, json
-print "{user}@{host} {localtime} {branch} {major}.{minor}.{patch}-{buildNumber}+{abbrev_commit}".\
+print "{user}@{host} {localtime} {branch} {major}.{minor}.{patch}-{build_number}+{abbrev_commit}".\
 format(**json.loads(open(sys.argv[1]).read()))
 ' "$version_json") || exit
 echo "$v" > "$opt_dir/etc/FS_VERSION" || exit
@@ -207,7 +207,7 @@ $production
 EOF
 
 package_version=$(python2.7 -c 'import sys, json
-print "{major}.{minor}.{patch}.{buildNumber}.{abbrev_commit}".\
+print "{major}.{minor}.{patch}.{build_number}.{abbrev_commit}".\
 format(**json.loads(open(sys.argv[1]).read()))
 ' "$version_json") || exit
 echo "Package version \"$package_version\""
