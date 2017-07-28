@@ -1,0 +1,14 @@
+[
+  {
+    "name": "BoseLibs-qc8017_32", 
+    "selected_version": "Castle-Fork/2017-07-26_0807"
+  }, 
+  {
+    "name": "Riviera-HSP", 
+    "selected_version": "0.5-10-g12f96a5"
+  }, 
+  {
+    "name": "SoundTouch-SDK-qc8017_32", 
+    "selected_version": "Castle-Fork/2017-07-26_0807"
+  }
+]

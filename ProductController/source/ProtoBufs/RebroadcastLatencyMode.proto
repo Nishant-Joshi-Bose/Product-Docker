@@ -1,0 +1,34 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @file RebroadcastLatencyMode.proto
+///
+/// @brief Controls the Rebroadcast Latency Mode, between SyncToRoom and SyncToZone
+///
+/// @author Yishai Sered
+/// @date   March 2017
+///
+/// Copyright 2017 Bose Corporation
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+///
+/// The options selected by the control
+///
+////////////////////////////////////////////////////////////////////////////////
+enum REBROADCAST_LATENCY_MODE
+{
+    SYNC_TO_ROOM = 0;   // Playback in the Master room will be with low latency (matching local video if any); the rest of the zone will play with additional delay
+    SYNC_TO_ZONE = 1;   // Playback in the Master room will be synchronized to the rest of the zone, even though the in-room video will be out of sync
+}
+
+////////////////////////////////////////////////////////////////////////////////
+///
+/// This is the main message that carries all the tone settings
+///
+////////////////////////////////////////////////////////////////////////////////
+message rebroadcastlatencymode
+{
+    optional REBROADCAST_LATENCY_MODE mode         = 1;
+    optional bool                     controllable = 2;   // reported as false if a Product doesn't allow the setting to be changed
+}
+

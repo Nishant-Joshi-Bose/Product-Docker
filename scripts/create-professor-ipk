@@ -1,0 +1,274 @@
+#!/bin/bash
+#
+# Create an IPK file for installing SoundTouch/Professor with opkg.
+#
+# To install:
+#   opkg install -d bose professor.ipk
+#
+# The file /etc/opkg/opkg.conf should contain this line:
+#   dest bose /opt/Bose
+#
+# To uninstall:
+#   opkg remove professor
+#
+this=${0##*/} # this script's name
+
+production=false
+stripped=true
+cfg=Release
+
+tryhelp () {
+    echo >&2 "Try '$this --help' for more information."
+    exit 1
+}
+opts=$(getopt --name "$this" --shell sh \
+    -o puh \
+    -l "production,
+        unstripped,
+        help" \
+    -- "$@") || tryhelp
+eval set -- "$opts"
+while :; do
+    arg="$1"; shift
+    case "$arg" in
+	(--production | -p) production=true ;;
+	(--unstripped | -u) stripped=false ;;
+	(--help | -h)
+	    cat <<EOF
+Usage: $this [options]
+
+Create an IPK file for installing SoundTouch with opkg.
+
+Options:
+--production (-p)    Generate a production installation.  Production
+                     installations may have different run-time behavior.
+                     The differences are typically minor.  See uses of the
+                     is-production script and SystemUtils::IsProduction.
+
+--unstripped (-u)    Don't strip symbols from the executables.
+EOF
+	    exit 0
+	    ;;
+
+	(--) break ;;
+	(*)  echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
+    esac
+done
+
+if (( $# != 0 )); then
+    echo >&2 "$this: unexpected argument '$1'"
+    tryhelp
+fi
+
+function put_script {
+    local file="$1"; shift
+    cat "$@" >"$file" || exit
+    chmod 755 "$file" || exit
+}
+
+here=$(cd "$(dirname $0)" && echo "$PWD") || exit
+wspace=$(cd "$here/.." && echo "$PWD") || exit
+
+riviera_hsp=$(components get Riviera-HSP installed_location) || exit
+soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
+
+arch=arm-oemllib32-linux
+sysroot=$riviera_hsp/sdk/sysroots/i686-oesdk-linux
+tool_prefix=$sysroot/usr/bin/$arch/$arch-
+
+function do_strip {
+    local src="$1"; shift
+    local dst="$1"; shift
+
+    if ! $stripped; then
+        cp "$src" "$dst" || exit
+        return
+    fi
+
+    # `strip` just fails without an error message if the file is empty.
+    # Give a better error message.
+    set -- "${tool_prefix}strip" -o "$dst" "$src"
+    if ! "$@"; then
+        echo >&2 "$0: command failed: $*"
+        exit 1
+    fi
+}
+
+stage=$wspace/builds/$cfg/professor-ipk-stage
+rm -rf "$stage"
+echo "Stage directory $stage"
+
+opt_dir=$stage/Bose
+
+mkdir -p "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" || exit
+
+rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
+
+"$soundtouch_sdk/config-shepherd" \
+    --without-eco1-software-udpate \
+    --without-bluetooth \
+    --dir="$opt_dir/etc" professor || exit
+
+# -----------------------------------------------------------------------------
+# SoundTouch-SDK daemon configuration.
+
+u=$soundtouch_sdk/util
+function gen_config {
+    local xslt="$1"; shift
+    local inf="$1"; shift
+    local outf="$opt_dir/etc/$1"; shift
+
+    local tmpf="$outf~"
+    rm -f "$outf" "$tmpf"
+    "$u/xsltproc-chk" "$xslt" "$inf" >"$tmpf" || exit 1
+    xmllint --format "$tmpf" >"$outf" || exit 1
+    echo "Wrote $outf"
+    rm -f "$tmpf"
+}
+c=$wspace/ProductController/Configuration.xml
+xmllint --noout --schema "$u/validate-config.xsd" "$c" || exit
+gen_config "$u/BoseApp.xslt" "$c" BoseApp-professor.xml
+gen_config "$u/UpnpSource.xslt" "$c" UpnpSource-professor.xml
+gen_config "$u/WebServer.xslt" "$c" WebServer-professor.xml
+gen_config "$u/APConfig.xslt" "$c" APConfig-professor.xml
+
+# -----------------------------------------------------------------------------
+
+components list >"$opt_dir/etc/components.txt" || exit
+
+version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
+cp "$version_json" "$opt_dir/etc" || exit
+
+cp "$wspace/ProductController/Shepherd.xml" "$opt_dir/etc/Shepherd-product.xml" || exit
+
+for i in "$wspace/builds/$cfg/qc8017_32/bin"/*[!~]; do
+    do_strip "$i" "$opt_dir/bin/${i##*/}"
+done
+
+# Historical FS_VERSION file.
+v=$(python2.7 -c 'import sys, json
+print "{user}@{host} {localtime} {branch} {major}.{minor}.{patch}-{build_number}+{abbrev_commit}".\
+format(**json.loads(open(sys.argv[1]).read()))
+' "$version_json") || exit
+echo "$v" > "$opt_dir/etc/FS_VERSION" || exit
+echo "FS_VERSION \"$v\""
+
+stfs=$soundtouch_sdk/fs
+cp "$stfs"/opt/Bose/APServer "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BoseApp "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/CLIServer "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/NetManager "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/PlatformReset "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/STSCertified "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/UpnpSource "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/WebServer "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/shepherdd "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/etc/HandCraftedWebServer-SoundTouch.xml "$opt_dir/etc" || exit
+cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
+cp "$stfs"/opt/Bose/etc/WebServer-SoundTouch.xml "$opt_dir/etc" || exit
+cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
+cp "$stfs"/opt/Bose/etc/init.d/SoundTouch "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/etc/services.json "$opt_dir/etc" || exit
+cp -a "$stfs"/opt/Bose/Xml "$opt_dir/bin" || exit
+cp -a "$stfs"/opt/Bose/html "$opt_dir" || exit
+cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
+cp -a "$soundtouch_sdk/prebuilt/$cfg/qc8017_32/lib"/libprotobuf*.so* "$opt_dir/lib" || exit
+
+if $production; then
+    marge_url=https://streaming.bose.com
+    stats_url=https://events.api.bosecm.com
+    sw_update_url=https://worldwide.bose.com/updates/soundtouch
+else
+    marge_url=https://streamingint.bose.com
+    stats_url=https://eventsdev.api.bosecm.com
+    sw_update_url=https://worldwide.bose.com/updates/soundtouch-test
+fi
+
+"$u/simple-xml-edit" \
+    "$opt_dir/etc/SoundTouchSdkPrivateCfg.xml" \
+    SoundTouchSdkPrivateCfg.margeServerUrl="$marge_url" \
+    SoundTouchSdkPrivateCfg.statsServerUrl="$stats_url" \
+    SoundTouchSdkPrivateCfg.swUpdateUrl="$sw_update_url" \
+    || exit
+
+# Edit the version information into update.html.
+v=$(python2.7 -c 'import sys, json
+print "{major}.{minor}.{patch}".\
+format(**json.loads(open(sys.argv[1]).read()))
+' "$version_json") || exit
+echo "HTML version \"$v\""
+sed -i "s/%FROMVERSION%/From: $v/" "$opt_dir/html/update.html" || exit
+
+put_script "$opt_dir/bin/is-production" <<EOF
+#!/bin/sh
+$production
+EOF
+
+package_version=$(python2.7 -c 'import sys, json
+print "{major}.{minor}.{patch}.{build_number}.{abbrev_commit}".\
+format(**json.loads(open(sys.argv[1]).read()))
+' "$version_json") || exit
+echo "Package version \"$package_version\""
+
+cat >"$stage/control" <<EOF || exit
+Package: SoundTouch
+Version: $package_version
+Description: SoundTouch Professor version $package_version
+ The SoundTouch app
+Section: soundtouch
+Priority: optional
+Maintainer: SoundTouch Team <SSG-Professor@bose.com>
+License: Commercial
+Architecture: armv7a-vfp-neon
+OE: soundtouch
+Homepage: http://www.bose.com/
+#Depends: libc6 (>= 2.21)
+Source: None
+EOF
+
+# Installer scripts
+put_script "$stage/postinst" <<EOF
+#!/bin/sh
+echo "SoundTouch postinst"
+EOF
+
+put_script "$stage/postrm" <<EOF
+#!/bin/sh
+echo "SoundTouch postrm"
+EOF
+
+riviera_hsp_ver=$(components list | awk '$1 == "Riviera-HSP" {print $2}')
+put_script "$stage/preinst" <<EOF
+#!/bin/sh
+echo "SoundTouch preinst"
+b="$riviera_hsp_ver"
+i="\$(awk '\$1 == "HSP" {print \$2}' /etc/riviera-version)"
+if [ "\$b" = "\$i" ]; then
+    echo "Riviera-HSP: \$i"
+else
+    echo "Built for Riviera-HSP: \$b"
+    echo "Installed Riviera-HSP: \$i"
+fi
+EOF
+
+put_script "$stage/prerm" <<EOF
+#!/bin/sh
+echo "SoundTouch prerm"
+EOF
+
+# -----------------------------------------------------------------------------
+# Stage area is complete.  Package it into a *.ipk file.
+
+cd "$stage" || exit
+tar czf control.tar.gz control pre* post* || exit
+tar czf data.tar.gz -C "$opt_dir" . || exit
+echo "2.0" > debian-binary || exit
+
+ipk_dir=$wspace/builds/$cfg
+ipk=$ipk_dir/professor.ipk
+mkdir -p "$ipk_dir" || exit
+rm -f "$ipk"
+ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
+echo "Created $ipk"
