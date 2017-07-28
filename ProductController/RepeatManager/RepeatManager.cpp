@@ -217,6 +217,7 @@ void KeyRepeatManager :: CallBackFunction( int keyState, int keyNumber )
     {
         if ( m_keyTableEntry[m_keyTableIndex].ActionOnTimeout )
             m_keyResultCallBack( m_keyTableEntry[m_keyTableIndex].Event, m_keyCallBackbContext );
+
         m_previousTableIndex = m_keyTableIndex;
         m_keyTableIndex = index;
         m_keyTimer->Stop();
@@ -265,6 +266,10 @@ void KeyRepeatManager::HandleKeys( const RepeatManager::Repeat & keyEvent )
                 if ( INVALID_TABLE_INDEX == m_keyTableIndex )
                     return;
             }
+
+            m_keyComboCounter++;
+            m_keyTrack[m_keyComboCounter] = keyNumber;
+
             /*
              * Processing key which require immediate action as soon as the key is pressed, this is based on the timeout value as 0 in config table
              */
@@ -283,8 +288,7 @@ void KeyRepeatManager::HandleKeys( const RepeatManager::Repeat & keyEvent )
                 }
             }
 
-            m_keyComboCounter++;
-            m_keyTrack[m_keyComboCounter] = keyNumber;
+
             m_keyTimer->Stop();
 
             /*
@@ -316,7 +320,7 @@ void KeyRepeatManager::HandleKeys( const RepeatManager::Repeat & keyEvent )
             }
             else if ( m_keyTableEntry[m_keyTableIndex].TimeOut > 0 )
             {
-                if ( !m_keyTableEntry[m_keyTableIndex].Repeat && INVALID_TABLE_INDEX != m_previousTableIndex )
+                if ( !m_keyTableEntry[m_keyTableIndex].Repeat && !m_keyTableEntry[m_keyTableIndex].ActionOnTimeout && INVALID_TABLE_INDEX != m_previousTableIndex )
                 {
                     BOSE_DEBUG( s_logger, "Key is released before timeout and send event to perform Event : %d", m_keyTableEntry[m_previousTableIndex].Event);
                     m_keyResultCallBack( m_keyTableEntry[m_previousTableIndex].Event, m_keyCallBackbContext );
