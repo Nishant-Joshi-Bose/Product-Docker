@@ -8,14 +8,14 @@ import os, sys, imp, json, io
 
 protofilename = "../PB/RepeatManagerKeyAction.proto"
 
-protostring =  '/*************************************************************************\r\n'
-protostring += '* ABSOLUTELY UNDER NO CONDITION SHOULD YOU INCLUDE THIS FILE DIRECTLY    *\r\n'
-protostring += '* INSTEAD; YOU SHOULD INCLUDE RepeatManagerKeyAction.pb.h                *\r\n'
-protostring += '*                                                                        *\r\n'
-protostring += '* This file is auto generated, DO NOT EDIT!                              *\r\n'
-protostring += '* To Generate this file, execute create_keyaction_dependencies file      *\r\n'
-protostring += '**************************************************************************/\r\n\r\n'
-protostring += 'enum KEY_EVENT_ACTION\r\n{\r\n    INVALID_BUTTON_EVENT_ACTION = -1;'
+protostring =  '/*************************************************************************\n'
+protostring += '* ABSOLUTELY UNDER NO CONDITION SHOULD YOU INCLUDE THIS FILE DIRECTLY    *\n'
+protostring += '* INSTEAD; YOU SHOULD INCLUDE RepeatManagerKeyAction.pb.h                *\n'
+protostring += '*                                                                        *\n'
+protostring += '* This file is auto generated, DO NOT EDIT!                              *\n'
+protostring += '* To Generate this file, execute create_keyaction_dependencies file      *\n'
+protostring += '*************************************************************************/\n\r\n'
+protostring += 'enum KEY_EVENT_ACTION\r\n{\r\n    INVALID_KEY_EVENT_ACTION = -1;'
 
 index = 0
 
@@ -23,10 +23,10 @@ with open('KeyConfiguration.json') as data_file:
     data = json.load(data_file)
 
 for item in data["keyTable"]:
-    protostring += '\r\n    ' + item["EventAction"] + ' = ' + str(index) + ';'
+    protostring += '\n    ' + item["Event"] + ' = ' + str(index) + ';'
     index += 1
 
-protostring += '\r\n}\r\n'
+protostring += '\n}\n'
 
 # Creating proto file with enum values after reading from json config file
 with io.FileIO(protofilename, "w") as file:

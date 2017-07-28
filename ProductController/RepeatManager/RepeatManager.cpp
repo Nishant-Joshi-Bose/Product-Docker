@@ -46,7 +46,7 @@ KeyRepeatManager :: KeyRepeatManager( NotifyTargetTaskIF* task ) :
     for (int i = 0; i < MAXIMUM_KEYS; i++ )
         m_keyTrack[i] = INVALID_KEY_VAL;
 
-    std::map<std::string, int> keyEventActionMap;
+    std::map<std::string, int> keyEventMap;
 
     /*
      * Initially generating map for event action string and the value corresponding.
@@ -54,7 +54,7 @@ KeyRepeatManager :: KeyRepeatManager( NotifyTargetTaskIF* task ) :
     for ( int i = (int)KEY_EVENT_ACTION_MIN; i <= KEY_EVENT_ACTION_MAX; i++ )
     {
         if ( KEY_EVENT_ACTION_IsValid(i) )
-            keyEventActionMap.insert(std::pair<std::string, int>(KEY_EVENT_ACTION_Name((KEY_EVENT_ACTION)i), i));
+            keyEventMap.insert(std::pair<std::string, int>(KEY_EVENT_ACTION_Name((KEY_EVENT_ACTION)i), i));
     }
 
     auto config = SystemUtils::ReadFile( KEY_CONFIG_FILE );
@@ -88,8 +88,8 @@ KeyRepeatManager :: KeyRepeatManager( NotifyTargetTaskIF* task ) :
             else
                 m_keyTableEntry[index].Keys[j] = INVALID_KEY_VAL;
         }
-        m_keyTableEntry[index].KeyTimeout = root["keyTable"][index]["KeyTimeout"].asInt();
-        m_keyTableEntry[index].EventAction = keyEventActionMap.find(root["keyTable"][index]["EventAction"].asString())->second;
+        m_keyTableEntry[index].TimeOut = root["keyTable"][index]["TimeOut"].asInt();
+        m_keyTableEntry[index].Event = keyEventMap.find(root["keyTable"][index]["Event"].asString())->second;
         m_keyTableEntry[index].Repeat = root["keyTable"][index]["Repeat"].asBool();
         m_keyTableEntry[index].ActionOnTimeout = root["keyTable"][index]["ActionOnTimeout"].asBool();
     }
@@ -198,15 +198,15 @@ void KeyRepeatManager :: CallBackFunction( int keyState, int keyNumber )
     if ( m_keyTableEntry[m_keyTableIndex].Repeat )
     {
         m_keyTimer->Stop();
-        (m_keyTimer)->SetTimeouts(m_keyTableEntry[m_keyTableIndex].KeyTimeout, 0);
+        (m_keyTimer)->SetTimeouts(m_keyTableEntry[m_keyTableIndex].TimeOut, 0);
         (m_keyTimer)->Start (std::bind (&KeyRepeatManager::CallBackFunction, this, keyState, keyNumber));
-        m_keyResultCallBack( m_keyTableEntry[m_keyTableIndex].EventAction, m_keyCallBackbContext );
-        BOSE_DEBUG( s_logger, "Key is pressed and held for continuois action, send event to perform EventAction : %d", m_keyTableEntry[m_keyTableIndex].KeyTimeout);
+        m_keyResultCallBack( m_keyTableEntry[m_keyTableIndex].Event, m_keyCallBackbContext );
+        BOSE_DEBUG( s_logger, "Key is pressed and held for continuois action, send event to perform Event : %d", m_keyTableEntry[m_keyTableIndex].TimeOut);
         return;
     }
 
     int index = INVALID_TABLE_INDEX;
-    int previousTimeOut = m_keyTableEntry[m_keyTableIndex].KeyTimeout;
+    int previousTimeOut = m_keyTableEntry[m_keyTableIndex].TimeOut;
 
     /*
      * Checking for any other row with same key comibination in the config file, starting timer for the longer duration
@@ -216,23 +216,23 @@ void KeyRepeatManager :: CallBackFunction( int keyState, int keyNumber )
     if ( INVALID_TABLE_INDEX != index )
     {
         if ( m_keyTableEntry[m_keyTableIndex].ActionOnTimeout )
-            m_keyResultCallBack( m_keyTableEntry[m_keyTableIndex].EventAction, m_keyCallBackbContext );
+            m_keyResultCallBack( m_keyTableEntry[m_keyTableIndex].Event, m_keyCallBackbContext );
         m_previousTableIndex = m_keyTableIndex;
         m_keyTableIndex = index;
         m_keyTimer->Stop();
         if ( m_keyTableEntry[m_keyTableIndex].Repeat )
-            (m_keyTimer)->SetTimeouts(abs(m_keyTableEntry[m_keyTableIndex].KeyTimeout), 0);
+            (m_keyTimer)->SetTimeouts(abs(m_keyTableEntry[m_keyTableIndex].TimeOut), 0);
         else
-            (m_keyTimer)->SetTimeouts(abs(m_keyTableEntry[m_keyTableIndex].KeyTimeout-previousTimeOut), 0);
+            (m_keyTimer)->SetTimeouts(abs(m_keyTableEntry[m_keyTableIndex].TimeOut-previousTimeOut), 0);
         (m_keyTimer)->Start (std::bind (&KeyRepeatManager::CallBackFunction, this, keyState, keyNumber));
-        BOSE_DEBUG( s_logger, "Long is pressed Remaining timeout = : %d", abs(m_keyTableEntry[m_keyTableIndex].KeyTimeout-previousTimeOut));
+        BOSE_DEBUG( s_logger, "Long is pressed Remaining timeout = : %d", abs(m_keyTableEntry[m_keyTableIndex].TimeOut-previousTimeOut));
         return;
     }
     /*
      * Send event action for the index from the key config file to process the key/keycombo based on the timeout.
      */
-    m_keyResultCallBack( m_keyTableEntry[m_keyTableIndex].EventAction, m_keyCallBackbContext );
-    BOSE_DEBUG( s_logger, "Long key press action EventAction : %d", m_keyTableEntry[m_keyTableIndex].EventAction);
+    m_keyResultCallBack( m_keyTableEntry[m_keyTableIndex].Event, m_keyCallBackbContext );
+    BOSE_DEBUG( s_logger, "Long key press action Event : %d", m_keyTableEntry[m_keyTableIndex].Event);
 
     DeInitializeVariables();
 }
@@ -268,10 +268,10 @@ void KeyRepeatManager::HandleKeys( const RepeatManager::Repeat & keyEvent )
             /*
              * Processing key which require immediate action as soon as the key is pressed, this is based on the timeout value as 0 in config table
              */
-            if ( !m_keyTableEntry[m_keyTableIndex].KeyTimeout )
+            if ( !m_keyTableEntry[m_keyTableIndex].TimeOut )
             {
-                BOSE_DEBUG( s_logger, "Perform immediate action, m_keyTableIndex = %d, KeyTimeout = %d, EventAction = %d ", m_keyTableIndex, m_keyTableEntry[m_keyTableIndex].KeyTimeout, m_keyTableEntry[m_keyTableIndex].EventAction);
-                m_keyResultCallBack( m_keyTableEntry[m_keyTableIndex].EventAction, m_keyCallBackbContext );
+                BOSE_DEBUG( s_logger, "Perform immediate action, m_keyTableIndex = %d, TimeOut = %d, Event = %d ", m_keyTableIndex, m_keyTableEntry[m_keyTableIndex].TimeOut, m_keyTableEntry[m_keyTableIndex].Event);
+                m_keyResultCallBack( m_keyTableEntry[m_keyTableIndex].Event, m_keyCallBackbContext );
                 /*
                  * Checking for any other action to be performed on the same key with timeout of for release
                  */
@@ -291,12 +291,12 @@ void KeyRepeatManager::HandleKeys( const RepeatManager::Repeat & keyEvent )
              * Starting timer for those which require timeout processing and has a valid number in the timeout field of key configuration file
              * If the timeout value is KEY_RELEASE_ACTION_TIMEOUT(-1) then processing should happen only on the key release event.
              */
-            if ( KEY_RELEASE_ACTION_TIMEOUT != m_keyTableEntry[m_keyTableIndex].KeyTimeout )
+            if ( KEY_RELEASE_ACTION_TIMEOUT != m_keyTableEntry[m_keyTableIndex].TimeOut )
             {
-                m_keyTimer->SetTimeouts(m_keyTableEntry[m_keyTableIndex].KeyTimeout, 0);
+                m_keyTimer->SetTimeouts(m_keyTableEntry[m_keyTableIndex].TimeOut, 0);
                 m_keyTimer->Start (std::bind (&KeyRepeatManager::CallBackFunction, this, keyState, keyNumber));
             }
-            BOSE_DEBUG( s_logger, "m_keyTableIndex = %d, KeyTimeout = %d", m_keyTableIndex, m_keyTableEntry[m_keyTableIndex].KeyTimeout);
+            BOSE_DEBUG( s_logger, "m_keyTableIndex = %d, TimeOut = %d", m_keyTableIndex, m_keyTableEntry[m_keyTableIndex].TimeOut);
         }
         break;
 
@@ -309,17 +309,17 @@ void KeyRepeatManager::HandleKeys( const RepeatManager::Repeat & keyEvent )
                 return;
             }
 
-            if ( KEY_RELEASE_ACTION_TIMEOUT == m_keyTableEntry[m_keyTableIndex].KeyTimeout )
+            if ( KEY_RELEASE_ACTION_TIMEOUT == m_keyTableEntry[m_keyTableIndex].TimeOut )
             {
-                BOSE_DEBUG( s_logger, "Key is released perform action only for the key release event item EventAction : %d", m_keyTableEntry[m_keyTableIndex].EventAction);
-                m_keyResultCallBack( m_keyTableEntry[m_keyTableIndex].EventAction, m_keyCallBackbContext );
+                BOSE_DEBUG( s_logger, "Key is released perform action only for the key release event item Event : %d", m_keyTableEntry[m_keyTableIndex].Event);
+                m_keyResultCallBack( m_keyTableEntry[m_keyTableIndex].Event, m_keyCallBackbContext );
             }
-            else if ( m_keyTableEntry[m_keyTableIndex].KeyTimeout > 0 )
+            else if ( m_keyTableEntry[m_keyTableIndex].TimeOut > 0 )
             {
                 if ( !m_keyTableEntry[m_keyTableIndex].Repeat && INVALID_TABLE_INDEX != m_previousTableIndex )
                 {
-                    BOSE_DEBUG( s_logger, "Key is released before timeout and send event to perform EventAction : %d", m_keyTableEntry[m_previousTableIndex].EventAction);
-                    m_keyResultCallBack( m_keyTableEntry[m_previousTableIndex].EventAction, m_keyCallBackbContext );
+                    BOSE_DEBUG( s_logger, "Key is released before timeout and send event to perform Event : %d", m_keyTableEntry[m_previousTableIndex].Event);
+                    m_keyResultCallBack( m_keyTableEntry[m_previousTableIndex].Event, m_keyCallBackbContext );
                 }
             }
             else

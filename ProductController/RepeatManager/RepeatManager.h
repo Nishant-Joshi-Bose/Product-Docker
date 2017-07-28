@@ -105,8 +105,8 @@ private:
     typedef struct
     {
         int                 Keys[MAXIMUM_KEYS];
-        int                 KeyTimeout;
-        int                 EventAction;
+        int                 TimeOut;
+        int                 Event;
         bool                ActionOnTimeout;
         bool                Repeat;
     } _KeyTableEntry;
