@@ -1,8 +1,9 @@
-/**************************************************************************
-* ABSOLUTELY UNDER NO CONDITION SHOULD YOU INCLUDE THIS FILE DIRECTLY
-* INSTEAD; YOU SHOULD INCLUDE RepeatManagerKeyAction.pb.h
-*
-* This file is auto generated, DO NOT EDIT!
+/*************************************************************************
+* ABSOLUTELY UNDER NO CONDITION SHOULD YOU INCLUDE THIS FILE DIRECTLY    *
+* INSTEAD; YOU SHOULD INCLUDE RepeatManagerKeyAction.pb.h                *
+*                                                                        *
+* This file is auto generated, DO NOT EDIT!                              *
+* To Generate this file, execute create_keyaction_dependencies file      *
 **************************************************************************/
 
 enum KEY_EVENT_ACTION

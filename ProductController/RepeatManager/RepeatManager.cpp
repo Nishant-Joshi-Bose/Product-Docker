@@ -36,8 +36,6 @@ static DPrint s_logger( "RepeatManager" );
 #define MAX_CAPSENCE_PIXELS         600
 #define MAX_BUTTON_PIXELS           100
 
-#define GET_EVENT_ACTION_NAME(X)    #X
-
 KeyRepeatManager :: KeyRepeatManager( NotifyTargetTaskIF* task ) :
     m_keyTableSize(0),
     m_keyTableIndex(INVALID_TABLE_INDEX),

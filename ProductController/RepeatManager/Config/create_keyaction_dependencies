@@ -1,18 +1,19 @@
 #!/usr/bin/python2.7
 # -*- python -*-
-# This script will generate RepeatManagerKeyAction.proto and RepeatManagerKeyAction.h files
+# This script will generate RepeatManagerKeyAction.proto file and execute protoc to generate pb.c and pb.h file
 # RepeatManagerKeyAction.proto file contains all the enums which are related to EventAction field in KeyConfiguration.json
-# RepeatManagerKeyAction.h file contains the map variable based ont he string and the enum values for the EventAction field
 #
 
 import os, sys, imp, json, io
 
 protofilename = "../PB/RepeatManagerKeyAction.proto"
 
-protostring = '/**************************************************************************\r\n'
-protostring += '* ABSOLUTELY UNDER NO CONDITION SHOULD YOU INCLUDE THIS FILE DIRECTLY\r\n'
-protostring += '* INSTEAD; YOU SHOULD INCLUDE RepeatManagerKeyAction.pb.h\r\n*\r\n'
-protostring += '* This file is auto generated, DO NOT EDIT!\r\n'
+protostring =  '/*************************************************************************\r\n'
+protostring += '* ABSOLUTELY UNDER NO CONDITION SHOULD YOU INCLUDE THIS FILE DIRECTLY    *\r\n'
+protostring += '* INSTEAD; YOU SHOULD INCLUDE RepeatManagerKeyAction.pb.h                *\r\n'
+protostring += '*                                                                        *\r\n'
+protostring += '* This file is auto generated, DO NOT EDIT!                              *\r\n'
+protostring += '* To Generate this file, execute create_keyaction_dependencies file      *\r\n'
 protostring += '**************************************************************************/\r\n\r\n'
 protostring += 'enum KEY_EVENT_ACTION\r\n{\r\n    INVALID_BUTTON_EVENT_ACTION = -1;'
 
@@ -30,3 +31,7 @@ protostring += '\r\n}\r\n'
 # Creating proto file with enum values after reading from json config file
 with io.FileIO(protofilename, "w") as file:
     file.write(protostring)
+
+# TODO: remove the below two lines. Command to generate pb.cc and pb.h files based on the proto file.
+cmd = './../../builds/SoundTouch-SDK-qc8017_32/prebuilt/Release/native/bin/protoc --proto_path=./../PB/ --cpp_out=../ ./../PB/RepeatManagerKeyAction.proto'
+os.system(cmd)
