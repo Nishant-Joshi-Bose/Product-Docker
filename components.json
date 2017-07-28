@@ -1,7 +1,11 @@
 [
   {
+    "name": "Shepherd-qc8017_32", 
+    "selected_version": "Continuous/master/1.0.0-1+f5325b0"
+  }, 
+  {
     "name": "BoseLibs-qc8017_32", 
-    "selected_version": "Castle-Fork/2017-07-27_1727"
+    "selected_version": "Castle-Fork/2017-07-28_1532"
   }, 
   {
     "name": "Riviera-HSP", 
@@ -9,6 +13,6 @@
   }, 
   {
     "name": "SoundTouch-SDK-qc8017_32", 
-    "selected_version": "Castle-Fork/2017-07-27_1727"
+    "selected_version": "Castle-Fork/2017-07-28_1532"
   }
 ]
