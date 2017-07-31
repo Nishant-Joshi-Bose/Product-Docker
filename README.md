@@ -5,6 +5,7 @@ This repo contains the source code and tools specific to the SoundTouch Eddie pr
 
 ##### Table of Contents  
 [Getting Started](#start)  
+[More...](#more)  
 
 <a name="start"/>
 
@@ -66,4 +67,12 @@ $ sudo fastboot devices             # make sure the unit is in the bootloader
 $ cd components/Riviera-HSP/images
 $ sudo ./fastboot.sh
 $ sudo fastboot reboot
+```
+
+### More...
+
+To rebuild the .ipk file and install via adb in one step:
+
+```shell session
+$ ./scripts/putipk
 ```
