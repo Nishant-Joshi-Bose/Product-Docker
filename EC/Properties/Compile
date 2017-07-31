@@ -8,4 +8,5 @@ if ! [ -d "$dir" ]; then
     $CastleToolsDir/components/Riviera-HSP/install "$ver" "$dir"
 fi
 components set-location Riviera-HSP "$dir"
-make
+
+make DONT_UPDATE_CASTLETOOLS=1
