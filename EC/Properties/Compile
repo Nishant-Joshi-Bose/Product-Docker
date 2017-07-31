@@ -1,10 +1,11 @@
 cd $[buildDir]
-export PATH=$(dirname $[buildDir])/CastleTools/bin:$PATH
+CastleToolsDir=/home/epd/srcref/CastleTools
+export PATH=$CastleToolsDir/bin:$PATH
 
 ver=$(components get Riviera-HSP selected_version)
 dir=/scratch/Riviera-HSP-cache/$ver
 if ! [ -d "$dir" ]; then
-    ../CastleTools/components/Riviera-HSP/install "$ver" "$dir"
+    $CastleToolsDir/components/Riviera-HSP/install "$ver" "$dir"
 fi
 components set-location Riviera-HSP "$dir"
 make
