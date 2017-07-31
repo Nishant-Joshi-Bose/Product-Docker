@@ -17,6 +17,9 @@ ProductController: install-components version-files
 
 .PHONY: install-components
 install-components:
+ifndef DONT_UPDATE_CASTLETOOLS
+	castletools-update
+endif
 	components install
 
 .PHONY: eddie-ipk
