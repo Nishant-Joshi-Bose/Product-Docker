@@ -10,7 +10,7 @@ PROTOC := ../components/SoundTouch-SDK-qc8017_32/prebuilt/Release/native/bin/pro
 PROTO_DIRS = \
  source/ProtoBufs
 
-PROTO_CC_DEST = /scratch/Professor/ProductController/source
+PROTO_CC_DEST = $(BUILDS_DIR)/proto
 
 define build-proto
 for dir in $(PROTO_DIRS); do make -C $$dir PROTO_CC_DEST=$(PROTO_CC_DEST) $1; done

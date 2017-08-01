@@ -6,11 +6,10 @@ ADD_EXECUTABLE(Professor
     source/ProductDeviceManager.cpp
     source/ProductSystemInterface.cpp
     source/ProductUserInterface.cpp
-    source/ProductMessage.pb.cc
-    source/A4VSystemTimeout.pb.cc
-    source/AudioControls.pb.cc
-    source/ProductMessage.pb.cc
-    source/RebroadcastLatencyMode.pb.cc
+    ${PROTO_CC_DEST}/A4VSystemTimeout.pb.cc
+    ${PROTO_CC_DEST}/AudioControls.pb.cc
+    ${PROTO_CC_DEST}/ProductMessage.pb.cc
+    ${PROTO_CC_DEST}/RebroadcastLatencyMode.pb.cc
 )
 
 TARGET_LINK_LIBRARIES(Professor

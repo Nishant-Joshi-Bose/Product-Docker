@@ -4,6 +4,8 @@ INCLUDE(../Settings.cmake)
 
 PROJECT(Professor)
 
+SET(PROTO_CC_DEST ${CMAKE_BINARY_DIR}/proto)
+
 FIND_LIBRARY(PROTOBUF_LIB NAMES libprotobuf.so
   PATHS ${SOUNDTOUCH_SDK_DIR}/fs/opt/Bose/lib
   NO_DEFAULT_PATH
