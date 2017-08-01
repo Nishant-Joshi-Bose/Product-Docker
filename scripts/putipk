@@ -1,0 +1,29 @@
+#!/bin/bash
+#
+# Update the Professor unit via adb with the latest .ipk build.
+#
+cd "$(dirname "$0")/.." || exit
+
+ipk=builds/Release/professor.ipk
+rm -f "$ipk"
+
+make "$@" || exit
+
+ls -sh "$ipk" || exit
+
+echo Stop...
+adb shell /opt/Bose/bin/stop      # ok if this fails
+
+echo Uninstall...
+adb shell opkg remove SoundTouch  # ok if this fails
+
+echo Copy...
+adb push "$ipk" /tmp/new.ipk || exit
+
+echo Install...
+adb shell opkg install -d bose /tmp/new.ipk || exit
+
+echo Cleanup...
+adb shell rm -v /tmp/new.ipk || exit
+
+echo Done
