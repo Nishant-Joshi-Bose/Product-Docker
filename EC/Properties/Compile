@@ -1,3 +1,7 @@
+# -*- sh -*-
+# This is an Electric Commander script which is mostly like Shell but allows
+# certain non-Shell constructs like $[buildDir].
+
 cd $[buildDir]
 CastleToolsDir=/home/epd/srcref/CastleTools
 export PATH=$CastleToolsDir/bin:$PATH
