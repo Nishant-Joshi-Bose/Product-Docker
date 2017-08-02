@@ -9,7 +9,7 @@
 #   dest bose /opt/Bose
 #
 # To uninstall:
-#   opkg remove professor
+#   opkg remove SoundTouch
 #
 this=${0##*/} # this script's name
 
@@ -71,7 +71,8 @@ wspace=$(cd "$here/.." && echo "$PWD") || exit
 
 riviera_hsp=$(components get Riviera-HSP installed_location) || exit
 soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
-boselib=$(components get BoseLibs-qc8017_32 installed_location) || exit
+shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
+boselib_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 
 arch=arm-oemllib32-linux
 sysroot=$riviera_hsp/sdk/sysroots/i686-oesdk-linux
@@ -95,7 +96,7 @@ function do_strip {
     fi
 }
 
-stage=$wspace/builds/$cfg/professor-ipk-stage
+stage=$wspace/builds/$cfg/product-ipk-stage
 rm -rf "$stage"
 echo "Stage directory $stage"
 
@@ -164,18 +165,17 @@ cp "$stfs"/opt/Bose/PlatformReset "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/STSCertified "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/UpnpSource "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/WebServer "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/bin/shepherdd "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/etc/HandCraftedWebServer-SoundTouch.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/WebServer-SoundTouch.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
-cp "$stfs"/opt/Bose/etc/init.d/SoundTouch "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/etc/services.json "$opt_dir/etc" || exit
 cp -a "$stfs"/opt/Bose/Xml "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/html "$opt_dir" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
-cp -a "$boselib/lib"/libprotobuf*.so* "$opt_dir/lib" || exit
+cp -a "$boselib_dir/lib" "$opt_dir" || exit
+cp "$shepherd_dir/shepherdd" "$opt_dir/bin" || exit
 
 if $production; then
     marge_url=https://streaming.bose.com
