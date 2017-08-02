@@ -24,7 +24,7 @@ endif
 
 .PHONY: eddie-ipk
 eddie-ipk: ProductController
-	./scripts/create-eddie-ipk
+	./scripts/create-product-ipk
 
 .PHONY: clean
 clean:
