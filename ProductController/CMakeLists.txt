@@ -7,7 +7,7 @@ PROJECT(Professor)
 SET(PROTO_CC_DEST ${CMAKE_BINARY_DIR}/proto)
 
 FIND_LIBRARY(PROTOBUF_LIB NAMES libprotobuf.so
-  PATHS ${SOUNDTOUCH_SDK_DIR}/fs/opt/Bose/lib
+  PATHS ${BOSELIBS_DIR}/lib
   NO_DEFAULT_PATH
 )
 
@@ -22,7 +22,7 @@ INCLUDE_DIRECTORIES(
 SET(SOUNDTOUCH_SDK_LIBS
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libSoundTouchClient.a
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libShelbyUtils.a
-  ${BOSELIBS_DIR}/libBoseLibs.a
+  ${BOSELIBS_DIR}/lib/libBoseLibs.a
   ${PROTOBUF_LIB}
 )
 

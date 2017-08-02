@@ -19,8 +19,8 @@ PROTO_SOURCES = \
 .PHONY: all
 all: build-proto
 
-#PROTOC := ${PWD}/builds/SoundTouch-SDK-qc8017_32/prebuilt/Debug/native/bin/protoc
-PROTOC := ../../../components/SoundTouch-SDK-qc8017_32/prebuilt/Debug/native/bin/protoc
+BOSELIB := $(shell components get BoseLibs-qc8017_32 installed_location)
+PROTOC := $(BOSELIB)/native/bin/protoc
 
 # Where to search for imported *.proto files.
 PROTO_IMPORT_DIRS ?= \
