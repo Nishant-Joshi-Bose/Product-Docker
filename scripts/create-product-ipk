@@ -9,7 +9,7 @@
 #   dest bose /opt/Bose
 #
 # To uninstall:
-#   opkg remove eddie
+#   opkg remove SoundTouch
 #
 this=${0##*/} # this script's name
 
@@ -96,7 +96,7 @@ function do_strip {
     fi
 }
 
-stage=$wspace/builds/$cfg/eddie-ipk-stage
+stage=$wspace/builds/$cfg/product-ipk-stage
 rm -rf "$stage"
 echo "Stage directory $stage"
 
