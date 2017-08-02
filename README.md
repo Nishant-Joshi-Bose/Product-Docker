@@ -62,7 +62,7 @@ To reflash the Riviera HSP:
 ```shell session
 $ cd /scratch/Professor
 $ components install
-$ adb shell reboot bootloader       # reboot the Professor unit into the fastboot bootloader
+$ adb shell reboot bootloader        # reboot the Professor unit into the fastboot bootloader
 $ sudo fastboot devices              # make sure the unit is in the bootloader
 $ cd components/Riviera-HSP/images
 $ sudo ./fastboot.sh
