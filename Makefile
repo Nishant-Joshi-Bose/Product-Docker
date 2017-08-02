@@ -28,7 +28,7 @@ LpmService: install-components
 
 .PHONY: professor-ipk
 professor-ipk: ProductController LpmService
-	./scripts/create-professor-ipk
+	./scripts/create-product-ipk
 
 .PHONY: clean
 clean:
