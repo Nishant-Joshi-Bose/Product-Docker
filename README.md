@@ -5,6 +5,7 @@ This repo contains the source code and tools specific to the SoundTouch Eddie pr
 
 ##### Table of Contents  
 [Getting Started](#start)  
+[More...](#more)  
 
 <a name="start"/>
 
@@ -43,8 +44,9 @@ $
 Install the .ipk file you built.
 ```shell session
 $ adb shell /opt/Bose/bin/stop      # generally it's okay if this fails
+$ adb shell opkg remove SoundTouch  # this too may fail
 $ adb push /scratch/Eddie/builds/Release/eddie.ipk /tmp/eddie.ipk
-$ adb shell opkg install -d bose --force-reinstall /tmp/eddie.ipk
+$ adb shell opkg install -d bose /tmp/eddie.ipk
 $ adb shell reboot
 ```
 
@@ -61,8 +63,16 @@ To reflash the Riviera HSP:
 $ cd /scratch/Eddie
 $ components install
 $ adb shell reboot bootloader       # reboot the Eddie unit into the fastboot bootloader
-$ adb fastboot devices              # make sure the unit is in the bootloader
+$ sudo fastboot devices             # make sure the unit is in the bootloader
 $ cd components/Riviera-HSP/images
 $ sudo ./fastboot.sh
 $ sudo fastboot reboot
+```
+
+### More...
+
+To rebuild the .ipk file and install via adb in one step:
+
+```shell session
+$ ./scripts/putipk
 ```

@@ -4,21 +4,15 @@ INCLUDE(../Settings.cmake)
 
 PROJECT(Eddie)
 
-FIND_LIBRARY(PROTOBUF_LIB NAMES libprotobuf.so
-  PATHS ${SOUNDTOUCH_SDK_DIR}/fs/opt/Bose/lib
-  NO_DEFAULT_PATH
-)
-
 INCLUDE_DIRECTORIES(
   ${CMAKE_BINARY_DIR}
+  ${BOSELIBS_DIR}/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include
 )
 
 SET(SOUNDTOUCH_SDK_LIBS
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libSoundTouchClient.a
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libSTS.a
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libShelbyUtils.a
-  ${PROTOBUF_LIB}
+  ${BOSELIBS_DIR}/lib/libBoseLibs.a
 )
 
 INCLUDE(exe.cmake)

@@ -1,0 +1,7 @@
+# Source						Destination										Rule
+./builds/Release/eddie.ipk		<DEPLOY_DIR>/eddie_<VERSION_STRING>.ipk			file
+
+# EMACS
+# Local Variables:
+# tab-width:4
+# End:

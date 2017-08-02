@@ -17,6 +17,8 @@
     <isAvahiRequired>true</isAvahiRequired>
     <!-- hasKeys is set to false here to prevent SDK(BoseApp) from handling key events. -->
     <hasKeys>false</hasKeys>
+    <!-- isLegacy is set to true until Product Controller code gets ready. -->
+    <isLegacy>true</isLegacy>
     <hasDemo>false</hasDemo>
     <isSsdpEnabled>true</isSsdpEnabled>
     <speakerType>5</speakerType>
