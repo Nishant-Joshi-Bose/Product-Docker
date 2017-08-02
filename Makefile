@@ -19,8 +19,12 @@ ProductController: install-components version-files
 install-components:
 	components install
 
+.PHONY: LpmService
+LpmService: install-components
+	$(MAKE) -C components/RivieraLpmService
+
 .PHONY: professor-ipk
-professor-ipk: ProductController
+professor-ipk: ProductController LpmService
 	./scripts/create-professor-ipk
 
 .PHONY: clean
