@@ -47,7 +47,7 @@
 /// in this source code file.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-static const DPrint s_logger    { "Product Start" };
+static const DPrint s_logger    { "Product" };
 static const char   s_logName[] = "Product Start";
 
 DPrint s_webExLogger( "Product" );
@@ -69,23 +69,23 @@ void ProcessShutDown( int signal )
 {
      if( signal == SIGTERM )
      {
-         s_logger.LogInfo( "%s: The Product Controller is shutting down.                    ", s_logName );
-         s_logger.LogInfo( "%s: The Product Controller received a system termination signal.", s_logName );
+         s_logger.LogInfo( "%-18s : The Product Controller is shutting down.                    ", s_logName );
+         s_logger.LogInfo( "%-18s : The Product Controller received a system termination signal.", s_logName );
 
          exit( EXIT_SUCCESS );
      }
      else
      if( signal == SIGINT )
      {
-         s_logger.LogInfo( "%s: The Product Controller is shutting down.                  ", s_logName );
-         s_logger.LogInfo( "%s: The Product Controller received a user termination signal.", s_logName );
+         s_logger.LogInfo( "%-18s : The Product Controller is shutting down.                  ", s_logName );
+         s_logger.LogInfo( "%-18s : The Product Controller received a user termination signal.", s_logName );
 
          exit( EXIT_SUCCESS );
      }
      else
      {
-         s_logger.LogInfo( "%s: The Product Controller is shutting down.             ", s_logName );
-         s_logger.LogInfo( "%s: The Product Controller received an unknown signal %d.", s_logName, signal );
+         s_logger.LogInfo( "%-18s : The Product Controller is shutting down.             ", s_logName );
+         s_logger.LogInfo( "%-18s : The Product Controller received an unknown signal %d.", s_logName, signal );
 
          exit( EXIT_FAILURE );
      }
@@ -129,16 +129,21 @@ int main( int argumentCount, char** argumentValue )
 
            SystemUtils::ThereCanBeOnlyOne( );
 
-           s_logger.LogInfo( "%s: The Product Controller is starting up.", s_logName );
+           s_logger.LogInfo( "%-18s : The Product Controller is starting up.", s_logName );
 
-           ProductController::GetInstance( )->Run( );
+           /////////////////////////////////////////////////////////////////////////////////////////
+           /// @brief The Product Controller is now ran and the main task is suspended until the
+           ///        task associated with the Product Controller is ended.
+           /////////////////////////////////////////////////////////////////////////////////////////
+           ProductController::GetInstance( )->Run ( );
+           ProductController::GetInstance( )->Wait( );
 
            return( EXIT_SUCCESS );
     }
     catch( std::exception const& error )
     {
-           s_logger.LogError( "%s: The Product Controller is shutting down.", s_logName );
-           s_logger.LogError( "%s: An exception %s was caught.             ", s_logName, error.what( ) );
+           s_logger.LogError( "%-18s : The Product Controller is shutting down.", s_logName );
+           s_logger.LogError( "%-18s : An exception %-18s was caught.          ", s_logName, error.what( ) );
 
            return( EXIT_FAILURE );
     }

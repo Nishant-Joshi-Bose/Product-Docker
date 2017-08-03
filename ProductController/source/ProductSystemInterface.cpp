@@ -58,8 +58,8 @@ typedef CLIClient::CLICmdDescriptor             CommandDescription ;
 /// in this source code file.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-static const DPrint s_logger    { "Product System" };
-static const char   s_logName[] = "Product System"  ;
+static const DPrint s_logger    { "Product" };
+static const char   s_logName[] = "Product Interface";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -78,6 +78,10 @@ ProductSystemInterface* ProductSystemInterface::GetInstance( )
 {
        static ProductSystemInterface* instance = new ProductSystemInterface( );
 
+       s_logger.LogInfo( "%-18s : The instance %8p of the Product System Interface was returned. ",
+                         s_logName,
+                         instance );
+
        return instance;
 }
 
@@ -95,11 +99,7 @@ ProductSystemInterface* ProductSystemInterface::GetInstance( )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductSystemInterface::ProductSystemInterface( )
-                      : APTask( "ProductSystemInterfaceMainTask" ),
-                        m_ProductHardwareManager ( ProductHardwareManager::GetInstance( ) ),
-                        m_ProductDeviceManager   ( ProductDeviceManager  ::GetInstance( ) ),
-                        m_ProductUserInterface   ( ProductUserInterface  ::GetInstance( ) ),
-                        m_ProductController      ( ProductController     ::GetInstance( ) )
+                      : APTask( "ProductSystemInterfaceMainTask" )
 {
        return;
 }
@@ -139,6 +139,13 @@ ProductSystemInterface::~ProductSystemInterface( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::Run( )
 {
+     m_ProductController      =   ProductController::GetInstance( );
+     m_ProductHardwareManager = m_ProductController->GetHardwareManagerInstance( );
+     m_ProductUserInterface   = m_ProductController->GetUserInterfaceInstance  ( );
+     m_ProductDeviceManager   = m_ProductController->GetDeviceManagerInstance ( );
+
+     s_logger.LogInfo( "%-18s : The system interface is starting. ", s_logName );
+
      m_running  = true;
      m_mainTask = this;
 
@@ -172,6 +179,8 @@ void ProductSystemInterface::OnEntry( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::Process( void )
 {
+     s_logger.LogInfo( "%-18s : The system interface is now running. ", s_logName );
+
      while( m_running )
      {
         ProductSystemInterface::GetInstance( )->ClientSocket::Run( );
@@ -203,7 +212,7 @@ void ProductSystemInterface::End( void )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_VolumeUpdate message )
 {
-     s_logger.LogInfo("%s: An Sound Touch volume update message was sent. ", s_logName);
+     s_logger.LogInfo("%-18s : An Sound Touch volume update message was sent. ", s_logName);
 
      bool        hasTargetVolumeValue = false;
      bool        hasActualVolumeValue = false;
@@ -252,12 +261,13 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_VolumeUpdat
          }
      }
 
-     s_logger.LogInfo("%s:The volume update has occurred with the following parameters:", s_logName);
-     s_logger.LogInfo("%s:                                                             ", s_logName);
-     s_logger.LogInfo("%s:    Actual Volume : %s ", s_logName, hasTargetVolumeValue ? std::to_string( targetVolumeValue ).c_str( ) : "Unspecified");
-     s_logger.LogInfo("%s:    Target Volume : %s ", s_logName, hasActualVolumeValue ? std::to_string( actualVolumeValue ).c_str( ) : "Unspecified");
-     s_logger.LogInfo("%s:    Mute Setting  : %s ", s_logName, hasMuteSettingValue  ? ( muteSettingValue ? "On" : "Off" ) : "Unspecified");
-     s_logger.LogInfo("%s:    Device ID     : %s ", s_logName, hasDeviceIdValue     ? ( deviceIdValue.c_str( ) ): "Unspecified");
+     s_logger.LogInfo("%-18s : The volume update has occurred with the following parameters:", s_logName);
+     s_logger.LogInfo("%-18s :                                                              ", s_logName);
+     s_logger.LogInfo("%-18s :     Actual Volume : %s ", s_logName, hasTargetVolumeValue ? std::to_string( targetVolumeValue ).c_str( ) : "Unspecified");
+     s_logger.LogInfo("%-18s :     Target Volume : %s ", s_logName, hasActualVolumeValue ? std::to_string( actualVolumeValue ).c_str( ) : "Unspecified");
+     s_logger.LogInfo("%-18s :     Mute Setting  : %s ", s_logName, hasMuteSettingValue  ? ( muteSettingValue ? "On" : "Off" ) : "Unspecified");
+     s_logger.LogInfo("%-18s :     Device ID     : %s ", s_logName, hasDeviceIdValue     ? ( deviceIdValue.c_str( ) ): "Unspecified");
+     s_logger.LogInfo("%-18s :                                                              ", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -269,7 +279,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_VolumeUpdat
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::criticalErrorUpdate message )
 {
-     s_logger.LogInfo("%s: A Sound Touch critical error update message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch critical error update message was sent.", s_logName);
 
      ///////////////////////////////////////////////////////////////////////////////////////////////
      /// The critical error is just output at this point. Handling of these errors are to be
@@ -282,31 +292,31 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::criticalErrorUpdate
              switch( message.criticalerror( ).type( ) )
              {
                 case SoundTouchInterface::CriticalErrorType::ERROR_NONE:
-                     s_logger.LogInfo("%s: There was no critical error.",
+                     s_logger.LogInfo("%-18s : There was no critical error.",
                                       s_logName);
                      break;
                 case SoundTouchInterface::CriticalErrorType::ERROR_BATTERY_EXTREME_TEMP:
-                     s_logger.LogInfo("%s: The battery is at an extreme temperature.",
+                     s_logger.LogInfo("%-18s : The battery is at an extreme temperature.",
                                       s_logName);
                      break;
                 case SoundTouchInterface::CriticalErrorType::ERROR_BATTERY_PRECHARGE:
-                     s_logger.LogInfo("%s: The battery is in a precharge state.",
+                     s_logger.LogInfo("%-18s : The battery is in a precharge state.",
                                       s_logName);
                      break;
                 case SoundTouchInterface::CriticalErrorType::ERROR_AMP_FAULT:
-                     s_logger.LogInfo("%s: An amp fault has occurred.",
+                     s_logger.LogInfo("%-18s : An amp fault has occurred.",
                                       s_logName);
                      break;
                 case SoundTouchInterface::CriticalErrorType::ERROR_FACTORY_RESET:
-                     s_logger.LogInfo("%s: A factory reset is taking place.",
+                     s_logger.LogInfo("%-18s : A factory reset is taking place.",
                                       s_logName);
                      break;
                 case SoundTouchInterface::CriticalErrorType::ERROR_PRODUCT_UPDATE_REQUIRED:
-                     s_logger.LogInfo("%s: A product update is required.",
+                     s_logger.LogInfo("%-18s : A product update is required.",
                                       s_logName);
                      break;
                 default:
-                     s_logger.LogInfo("%s: An unknown critical error %d has occurred.",
+                     s_logger.LogInfo("%-18s : An unknown critical error %d has occurred.",
                                       s_logName,
                                       message.criticalerror( ).type( ) );
                      break;
@@ -314,12 +324,12 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::criticalErrorUpdate
          }
          else
          {
-             s_logger.LogInfo("%s: No critical error type was specified.", s_logName);
+             s_logger.LogInfo("%-18s : No critical error type was specified.", s_logName);
          }
      }
      else
      {
-         s_logger.LogInfo("%s: No critical error was specified.", s_logName);
+         s_logger.LogInfo("%-18s : No critical error was specified.", s_logName);
      }
 }
 
@@ -332,7 +342,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::criticalErrorUpdate
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_NowPlayingUpdate message )
 {
-     s_logger.LogInfo("%s: A Sound Touch now playing update message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch now playing update message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -344,7 +354,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_NowPlayingU
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_PresetsUpdate message )
 {
-     s_logger.LogInfo("%s: A Sound Touch presets update message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch presets update message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -356,7 +366,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_PresetsUpda
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_RecentsUpdate message )
 {
-     s_logger.LogInfo("%s: A Sound Touch recent update message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch recent update message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -368,7 +378,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_RecentsUpda
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_BrowseUpdate message )
 {
-     s_logger.LogInfo("%s: A Sound Touch browse update message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch browse update message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -380,7 +390,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_BrowseUpdat
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_NowSelectionUpdate message )
 {
-     s_logger.LogInfo("%s: A Sound Touch now selection update message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch now selection update message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -392,7 +402,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_NowSelectio
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_SourcesUpdate message )
 {
-     s_logger.LogInfo("%s: A Sound Touch sources update message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch sources update message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -404,7 +414,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_SourcesUpda
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_SwUpdateStatusUpdate message )
 {
-     s_logger.LogInfo("%s: A Sound Touch software update status message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch software update status message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -416,7 +426,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_SwUpdateSta
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_ConnectionStateUpdate message )
 {
-     s_logger.LogInfo("%s: A Sound Touch connection state update message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch connection state update message was sent.", s_logName);
 
      ///////////////////////////////////////////////////////////////////////////////////////////////
      /// The following call into the SoundTouch::Client class method, which this class inherits
@@ -434,7 +444,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_ConnectionS
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_GroupUpdate message )
 {
-     s_logger.LogInfo("%s: A Sound Touch group update message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch group update message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -446,7 +456,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_GroupUpdate
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_LanguageUpdate message )
 {
-     s_logger.LogInfo("%s: A Sound Touch language update message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch language update message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -461,11 +471,11 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_LanguageUpd
 void ProductSystemInterface::OnMessage( SoundTouchInterface::BluetoothInfo message,
                                         int32_t                            requestId )
 {
-     s_logger.LogInfo("%s: A Sound Touch Bluetooth information message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch Bluetooth information message was sent.", s_logName);
 
      if( message.has_bluetoothmacaddress( ) )
      {
-         s_logger.LogError("%s: The Bluetooth MAC Address is %s.",
+         s_logger.LogError("%-18s : The Bluetooth MAC Address is %s.",
                            s_logName,
                            message.bluetoothmacaddress( ).c_str( ) );
 
@@ -473,7 +483,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::BluetoothInfo messa
      }
      else
      {
-         s_logger.LogError("%s: The Bluetooth message has no MAC Address specified.", s_logName );
+         s_logger.LogError("%-18s : The Bluetooth message has no MAC Address specified.", s_logName );
 
          return;
      }
@@ -488,17 +498,17 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::BluetoothInfo messa
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_NameUpdate message )
 {
-     s_logger.LogInfo("%s: A Bluetooth device name update message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Bluetooth device name update message was sent.", s_logName);
 
      if( message.has_text( ) )
      {
-         s_logger.LogInfo("%s: The Bluetooth device name is %s.", s_logName, message.text( ).c_str( ) );
+         s_logger.LogInfo("%-18s : The Bluetooth device name is %s.", s_logName, message.text( ).c_str( ) );
 
          m_ProductDeviceManager->SetBlueToothDeviceName( message.text( ) );
      }
      else
      {
-         s_logger.LogInfo("%s: The Bluetooth device name was not specified.", s_logName);
+         s_logger.LogInfo("%-18s : The Bluetooth device name was not specified.", s_logName);
      }
 }
 
@@ -514,17 +524,17 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_NameUpdate 
 void ProductSystemInterface::OnMessage( SoundTouchInterface::name message,
                                         int32_t                   requestId )
 {
-     s_logger.LogInfo("%s: A Bluetooth device name message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Bluetooth device name message was sent.", s_logName);
 
      if( message.has_text( ) )
      {
-         s_logger.LogInfo("%s: The Bluetooth device name is %s.", s_logName, message.text( ).c_str( ) );
+         s_logger.LogInfo("%-18s : The Bluetooth device name is %s.", s_logName, message.text( ).c_str( ) );
 
          m_ProductDeviceManager->SetBlueToothDeviceName( message.text( ) );
      }
      else
      {
-         s_logger.LogInfo("%s :The Bluetooth device name was not specified.", s_logName);
+         s_logger.LogInfo("%-18s :The Bluetooth device name was not specified.", s_logName);
      }
 }
 
@@ -537,7 +547,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::name message,
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_SetupAPUpdate message )
 {
-     s_logger.LogInfo("%s: A Sound Touch AP update message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch AP update message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -549,7 +559,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_SetupAPUpda
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_SoundTouchConfigurationUpdate message )
 {
-     s_logger.LogInfo("%s:An Sound Touch configuration update message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch configuration update message was sent.", s_logName);
 
      if( message.has_soundtouchconfigurationstatus( ) )
      {
@@ -560,16 +570,16 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_SoundTouchC
              switch( configurationStatus.status( ) )
              {
                 case SoundTouchInterface::SoundTouchConfigurationState::SOUNDTOUCH_CONFIGURED:
-                     s_logger.LogInfo("%s: The Sound Touch is in a configured state.", s_logName);
+                     s_logger.LogInfo("%-18s : The Sound Touch is in a configured state.", s_logName);
                      break;
                 case SoundTouchInterface::SoundTouchConfigurationState::SOUNDTOUCH_NOT_CONFIGURED:
-                     s_logger.LogInfo("%s: The Sound Touch is not in a configured state.", s_logName);
+                     s_logger.LogInfo("%-18s : The Sound Touch is not in a configured state.", s_logName);
                      break;
                 case SoundTouchInterface::SoundTouchConfigurationState::SOUNDTOUCH_CONFIGURING:
-                     s_logger.LogInfo("%s: The Sound Touch is in a configuring state.", s_logName);
+                     s_logger.LogInfo("%-18s : The Sound Touch is in a configuring state.", s_logName);
                      break;
                 default:
-                     s_logger.LogInfo("%s: The Sound Touch is in an unknown %d state.", s_logName,
+                     s_logger.LogInfo("%-18s : The Sound Touch is in an unknown %d state.", s_logName,
                                        configurationStatus.status( ));
                      break;
              }
@@ -577,7 +587,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_SoundTouchC
      }
      else
      {
-         s_logger.LogError("%s: The Sound Touch state is not specified.", s_logName);
+         s_logger.LogError("%-18s : The Sound Touch state is not specified.", s_logName);
      }
 }
 
@@ -590,7 +600,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_SoundTouchC
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::userActivityUpdate message )
 {
-     s_logger.LogInfo("%s: A Sound Touch user activity update message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch user activity update message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -602,7 +612,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::userActivityUpdate 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::userInactivityUpdate message )
 {
-     s_logger.LogInfo("%s: A Sound Touch user inactivity update message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch user inactivity update message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -614,17 +624,17 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::userInactivityUpdat
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::LowPowerStandbyUpdate message )
 {
-     s_logger.LogInfo("%s: A Sound Touch low power standby update message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch low power standby update message was sent.", s_logName);
 
      if( message.has_deviceid( ) )
      {
-         s_logger.LogInfo("%s: A Sound Touch low power standby was sent for the device %s.",
+         s_logger.LogInfo("%-18s : A Sound Touch low power standby was sent for the device %s.",
                           s_logName,
                           message.deviceid( ).c_str( ) );
      }
      else
      {
-         s_logger.LogInfo("%s: A Sound Touch low power standby was sent for an unspecified device.",
+         s_logger.LogInfo("%-18s : A Sound Touch low power standby was sent for an unspecified device.",
                           s_logName);
      }
 
@@ -640,7 +650,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::LowPowerStandbyUpda
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::SoftwareUpdateStatus message )
 {
-     s_logger.LogInfo("%s: A SoftwareUpdateStatus message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A SoftwareUpdateStatus message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -652,7 +662,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::SoftwareUpdateStatu
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::errorUpdate message )
 {
-     s_logger.LogInfo("%s: A Sound Touch error update message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch error update message was sent.", s_logName);
 
      ///////////////////////////////////////////////////////////////////////////////////////////////
      /// Handling of these errors are to be developed later.
@@ -668,7 +678,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::errorUpdate message
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::SoundTouchSdkInfo message )
 {
-     s_logger.LogInfo("%s: A SoundTouch SDK information message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A SoundTouch SDK information message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -680,7 +690,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::SoundTouchSdkInfo m
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::reboot message )
 {
-     s_logger.LogInfo("%s: A Sound Touch reboot message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch reboot message was sent.", s_logName);
 
      m_ProductDeviceManager->SendRebootRequest( 0 );
 }
@@ -698,7 +708,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::reboot message )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_ZoneUpdate message )
 {
-     s_logger.LogInfo("%s: A Sound Touch zone update message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch zone update message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -710,7 +720,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_ZoneUpdate 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_InfoUpdate message )
 {
-     s_logger.LogInfo("%s: A Sound Touch information update message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch information update message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -725,7 +735,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::updates_InfoUpdate 
 void ProductSystemInterface::OnMessage( SoundTouchInterface::nowPlaying message,
                                         int32_t                         requestId )
 {
-     s_logger.LogInfo("%s: A Sound Touch now playing message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch now playing message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -740,7 +750,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::nowPlaying message,
 void ProductSystemInterface::OnMessage( SoundTouchInterface::presets message,
                                         int32_t                      requestId )
 {
-     s_logger.LogInfo("%s: A Sound Touch presets message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch presets message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -755,7 +765,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::presets message,
 void ProductSystemInterface::OnMessage( SoundTouchInterface::recents message,
                                         int32_t                      requestId )
 {
-     s_logger.LogInfo("%s: A Sound Touch recents message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch recents message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -770,7 +780,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::recents message,
 void ProductSystemInterface::OnMessage( SoundTouchInterface::sources message,
                                         int32_t                      requestId )
 {
-     s_logger.LogInfo("%s: A Sound Touch sources message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch sources message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -785,7 +795,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::sources message,
 void ProductSystemInterface::OnMessage( SoundTouchInterface::zone message,
                                         int32_t                   requestId )
 {
-     s_logger.LogInfo("%s: A Sound Touch zone message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch zone message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -800,7 +810,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::zone message,
 void ProductSystemInterface::OnMessage( SoundTouchInterface::status message,
                                         int32_t                     requestId )
 {
-     s_logger.LogInfo("%s: A Sound Touch status message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch status message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -815,7 +825,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::status message,
 void ProductSystemInterface::OnMessage( SoundTouchInterface::errors message,
                                         int32_t                     requestId )
 {
-     s_logger.LogInfo("%s: A Sound Touch error message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch error message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -830,7 +840,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::errors message,
 void ProductSystemInterface::OnMessage( SoundTouchInterface::networkInfo message,
                                         int32_t                          requestId )
 {
-     s_logger.LogInfo("%s: A Sound Touch network information message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch network information message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -845,7 +855,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::networkInfo message
 void ProductSystemInterface::OnMessage( SoundTouchInterface::GetActiveWirelessProfileResponse message,
                                         int32_t                                               requestId )
 {
-     s_logger.LogInfo("%s: A Sound Touch active wireless profile response message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch active wireless profile response message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -860,7 +870,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::GetActiveWirelessPr
 void ProductSystemInterface::OnMessage( SoundTouchInterface::sysLanguage message,
                                         int32_t                          requestId )
 {
-     s_logger.LogInfo("%s: A Sound Touch system language message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch system language message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -875,7 +885,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::sysLanguage message
 void ProductSystemInterface::OnMessage( SoundTouchInterface::volume message,
                                         int32_t                     requestId )
 {
-     s_logger.LogInfo("%s: A Sound Touch volume message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch volume message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -890,7 +900,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::volume message,
 void ProductSystemInterface::OnMessage( SoundTouchInterface::setupStateResponse message,
                                         int32_t                                 requestId )
 {
-     s_logger.LogInfo("%s: A Sound Touch setup state response message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch setup state response message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -905,7 +915,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::setupStateResponse 
 void ProductSystemInterface::OnMessage( SoundTouchInterface::setupState message,
                                         int32_t                         requestId )
 {
-     s_logger.LogInfo("%s: A Sound Touch setup state message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch setup state message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -920,7 +930,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::setupState message,
 void ProductSystemInterface::OnMessage( SoundTouchInterface::SoundTouchConfigurationStatus message,
                                         int32_t                                            requestId )
 {
-     s_logger.LogInfo("%s: A Sound Touch configuration status message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch configuration status message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -935,7 +945,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::SoundTouchConfigura
 void ProductSystemInterface::OnMessage( WebInterface::pingRequest message,
                                         int32_t                   requestId )
 {
-     s_logger.LogInfo("%s: A Sound Touch ping request message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch ping request message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -950,7 +960,7 @@ void ProductSystemInterface::OnMessage( WebInterface::pingRequest message,
 void ProductSystemInterface::OnMessage( SoundTouchInterface::activateProductRequest request,
                                         SoundTouchInterface::msg                    message )
 {
-     s_logger.LogInfo("%s: A Sound Touch activate product request message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch activate product request message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -965,7 +975,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::activateProductRequ
 void ProductSystemInterface::OnMessage( SoundTouchInterface::initializationCompleteRequest request,
                                         SoundTouchInterface::msg                           message )
 {
-     s_logger.LogInfo("%s: A Sound Touch initialization complete request message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch initialization complete request message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -980,7 +990,7 @@ void ProductSystemInterface::OnMessage( SoundTouchInterface::initializationCompl
 void ProductSystemInterface::OnMessage( SoundTouchInterface::toggleStandbyRequest request,
                                         SoundTouchInterface::msg                  message )
 {
-     s_logger.LogInfo("%s: A Sound Touch toggle standby request message was sent.", s_logName);
+     s_logger.LogInfo("%-18s : A Sound Touch toggle standby request message was sent.", s_logName);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

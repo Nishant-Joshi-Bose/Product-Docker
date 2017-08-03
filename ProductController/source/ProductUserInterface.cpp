@@ -55,8 +55,8 @@ typedef CLIClient::CLICmdDescriptor             CommandDescription ;
 /// in this source code file.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-static const DPrint s_logger    { "Product System" };
-static const char   s_logName[] = "Product System"  ;
+static const DPrint s_logger    { "Product" };
+static const char   s_logName[] = "Product User";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -75,6 +75,10 @@ ProductUserInterface* ProductUserInterface::GetInstance( )
 {
        static ProductUserInterface* instance = new ProductUserInterface( );
 
+       s_logger.LogInfo( "%-18s : The instance %8p of the Product User Interface has been obtained. ",
+                         s_logName,
+                         instance );
+
        return instance;
 }
 
@@ -92,10 +96,6 @@ ProductUserInterface* ProductUserInterface::GetInstance( )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductUserInterface::ProductUserInterface( )
-                    : m_ProductHardwareManager ( ProductHardwareManager::GetInstance( ) ),
-                      m_ProductDeviceManager   ( ProductDeviceManager  ::GetInstance( ) ),
-                      m_ProductSystemInterface ( ProductSystemInterface::GetInstance( ) ),
-                      m_ProductController      ( ProductController     ::GetInstance( ) )
 {
        return;
 }
@@ -114,6 +114,8 @@ ProductUserInterface::ProductUserInterface( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductUserInterface::~ProductUserInterface( )
 {
+       s_logger.LogInfo( "%-18s : The Product User Interface instance is being destroyed. ", s_logName );
+
        m_running = false;
 }
 
@@ -133,8 +135,17 @@ ProductUserInterface::~ProductUserInterface( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductUserInterface::Run( )
 {
+     m_ProductController      =   ProductController::GetInstance( );
+     m_ProductHardwareManager = m_ProductController->GetHardwareManagerInstance( );
+     m_ProductSystemInterface = m_ProductController->GetSystemInterfaceInstance( );
+     m_ProductDeviceManager   = m_ProductController->GetDeviceManagerInstance ( );
+
+     s_logger.LogInfo( "%-18s : The user interface is starting. ", s_logName );
+
      m_running  = true;
      m_mainTask = m_ProductController->GetMainTask( );
+
+     s_logger.LogInfo( "%-18s : The system interface is now running. ", s_logName );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

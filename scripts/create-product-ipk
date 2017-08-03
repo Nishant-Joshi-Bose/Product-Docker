@@ -241,7 +241,6 @@ echo "SoundTouch postrm"
 EOF
 
 riviera_hsp_ver=$(components list | awk '$1 == "Riviera-HSP" {print $2}')
-riviera_hsp_ver=${riviera_hsp_ver##*/}
 put_script "$stage/preinst" <<EOF
 #!/bin/sh
 echo "SoundTouch preinst"

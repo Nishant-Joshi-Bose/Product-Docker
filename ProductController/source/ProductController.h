@@ -104,16 +104,18 @@ class ProductController : public APTask
       //////////////////////////////////////////////////////////////////////////////////////////////
       ///
       /// @brief  The following public methods are used to start the ProductController instance
-      ///         task, set up processing before this task runs, and end the task respectively.
+      ///         task, set up processing before this task runs, and wait for the task to end, and
+      ///         end the task respectively.
       ///
       //////////////////////////////////////////////////////////////////////////////////////////////
       void Run    ( void );
       void OnEntry( void );
-      void End   ( void );
+      void Wait   ( void );
+      void End    ( void );
 
       //////////////////////////////////////////////////////////////////////////////////////////////
       ///
-      /// The following method is used to handle messaging for the product state machine.
+      /// @brief The following method is used to handle messaging for the product state machine.
       ///
       //////////////////////////////////////////////////////////////////////////////////////////////
       void HandleMessage( ProductControllerMessage message );
@@ -128,7 +130,19 @@ class ProductController : public APTask
              return m_lock;
       }
 
-  private:
+      //////////////////////////////////////////////////////////////////////////////////////////////
+      ///
+      /// @brief The following methods return singleton instances of all the Product Controller
+      ///        subclasses.
+      ///
+      //////////////////////////////////////////////////////////////////////////////////////////////
+      ProductHardwareManager* GetHardwareManagerInstance( );
+      ProductDeviceManager*   GetDeviceManagerInstance  ( );
+      ProductUserInterface*   GetUserInterfaceInstance  ( );
+      ProductSystemInterface* GetSystemInterfaceInstance( );
+      ProductCommandLine*     GetCommandLineInstance    ( );
+
+private:
 
       //////////////////////////////////////////////////////////////////////////////////////////////
       ///
@@ -162,6 +176,7 @@ class ProductController : public APTask
       ///
       //////////////////////////////////////////////////////////////////////////////////////////////
       CThreadMutex m_lock;
+      bool         m_running;
 
       //////////////////////////////////////////////////////////////////////////////////////////////
       ///

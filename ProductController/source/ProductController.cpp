@@ -41,6 +41,13 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+///            Definitions
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS (5)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief The following aliases refer to the Bose Sound Touch class utilities for inter-process and
 ///        inter-thread communications.
 ///
@@ -58,7 +65,7 @@ typedef CLIClient::CLICmdDescriptor             CommandDescription ;
 /// in this source code file.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-static const DPrint s_logger    { "Product Controller" };
+static const DPrint s_logger    { "Product" };
 static const char   s_logName[] = "Product Controller";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,6 +85,10 @@ ProductController* ProductController::GetInstance( )
 {
        static ProductController* instance = new ProductController( );
 
+       s_logger.LogInfo( "%-18s : The instance %8p of the Product Controller was returned. ",
+                         s_logName,
+                         instance );
+
        return instance;
 }
 
@@ -95,14 +106,124 @@ ProductController* ProductController::GetInstance( )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductController::ProductController( )
-                 : APTask( "ProductControllerMainTask" ),
-                   m_ProductHardwareManager ( ProductHardwareManager::GetInstance( ) ),
-                   m_ProductDeviceManager   ( ProductDeviceManager  ::GetInstance( ) ),
-                   m_ProductUserInterface   ( ProductUserInterface  ::GetInstance( ) ),
-                   m_ProductSystemInterface ( ProductSystemInterface::GetInstance( ) ),
-                   m_ProductCommandLine     ( ProductCommandLine    ::GetInstance( ) )
+                 : APTask( "ProductControllerMainTask" )
 {
        return;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductController::GetHardwareManagerInstance
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method returns a pointer to a ProductHardwareManager class instance.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+ProductHardwareManager* ProductController::GetHardwareManagerInstance( )
+{
+       if( m_ProductHardwareManager != nullptr )
+       {
+           return m_ProductHardwareManager;
+       }
+       else
+       {
+           m_ProductHardwareManager = ProductHardwareManager::GetInstance( );
+
+           return m_ProductHardwareManager;
+       }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductController::ProductDeviceManager
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method returns a pointer to a ProductDeviceManager class instance.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+ProductDeviceManager* ProductController::GetDeviceManagerInstance( )
+{
+       if( m_ProductDeviceManager != nullptr )
+       {
+           return m_ProductDeviceManager;
+       }
+       else
+       {
+           m_ProductDeviceManager = ProductDeviceManager::GetInstance( );
+
+           return m_ProductDeviceManager;
+       }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductController::ProductUserInterface
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method returns a pointer to a ProductUserInterface class instance.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+ProductUserInterface* ProductController::GetUserInterfaceInstance( )
+{
+       if( m_ProductUserInterface != nullptr )
+       {
+           return m_ProductUserInterface;
+       }
+       else
+       {
+           m_ProductUserInterface = ProductUserInterface::GetInstance( );
+
+           return m_ProductUserInterface;
+       }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductController::ProductSystemInterface
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method returns a pointer to a ProductSystemInterface class instance.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+ProductSystemInterface* ProductController::GetSystemInterfaceInstance( )
+{
+       if( m_ProductSystemInterface != nullptr )
+       {
+           return m_ProductSystemInterface;
+       }
+       else
+       {
+           m_ProductSystemInterface = ProductSystemInterface::GetInstance( );
+
+           return m_ProductSystemInterface;
+       }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductController::ProductCommandLine
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method returns a pointer to a ProductCommandLine class instance.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+ProductCommandLine* ProductController::GetCommandLineInstance( )
+{
+       if( m_ProductCommandLine != nullptr )
+       {
+           return m_ProductCommandLine;
+       }
+       else
+       {
+           m_ProductCommandLine = ProductCommandLine::GetInstance( );
+
+           return m_ProductCommandLine;
+       }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,7 +242,11 @@ ProductController::ProductController( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductController::Run( )
 {
-     this->Start( );
+     m_running = true;
+
+     s_logger.LogInfo( "%-18s : The Product Controller main task is starting. ", s_logName );
+
+     Start( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,11 +263,52 @@ void ProductController::Run( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductController::OnEntry( )
 {
-     m_ProductHardwareManager->Run( );
-     m_ProductDeviceManager  ->Run( );
-     m_ProductUserInterface  ->Run( );
-     m_ProductSystemInterface->Run( );
-     m_ProductCommandLine    ->Run( );
+     s_logger.LogInfo( "%-18s : The Product Controller is starting up its processes. ", s_logName );
+
+     m_ProductHardwareManager = ProductHardwareManager::GetInstance( );
+     m_ProductDeviceManager   = ProductDeviceManager  ::GetInstance( );
+     m_ProductUserInterface   = ProductUserInterface  ::GetInstance( );
+     m_ProductSystemInterface = ProductSystemInterface::GetInstance( );
+     m_ProductCommandLine     = ProductCommandLine    ::GetInstance( );
+
+     if( m_ProductHardwareManager != nullptr &&
+         m_ProductUserInterface   != nullptr &&
+         m_ProductSystemInterface != nullptr &&
+         m_ProductCommandLine     != nullptr &&
+         m_ProductHardwareManager != nullptr    )
+     {
+         m_ProductHardwareManager->Run( );
+         m_ProductDeviceManager  ->Run( );
+         m_ProductUserInterface  ->Run( );
+         m_ProductSystemInterface->Run( );
+         m_ProductCommandLine    ->Run( );
+
+         s_logger.LogInfo( "%-18s : All the processes have now been started and are running. ", s_logName );
+     }
+     else
+     {
+         s_logger.LogError( "%-18s : A process could not be created. ", s_logName );
+     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductController::Wait
+///
+/// @brief  This method is called from a calling task to wait until the Product Controller process
+///         ends.
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductController::Wait( )
+{
+     while( m_running )
+     {
+           sleep( PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS );
+     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -159,6 +325,10 @@ void ProductController::OnEntry( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductController::End( )
 {
+     s_logger.LogInfo( "%-18s : The Product Controller main task is stopping. ", s_logName );
+
+     m_running = false;
+
      Stop( );
 }
 

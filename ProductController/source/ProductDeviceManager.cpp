@@ -27,27 +27,26 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "SystemUtils.h"               /// This file contains system utility declarations.
-#include "DPrint.h"                    /// This file contains the DPrint class used for logging.
-#include "Services.h"                  /// This file declares application server names.
-#include "LpmService.pb.h"             /// This file declares LPM hardware Protocol Buffer data.
-#include "CliClient.h"              /// This file declares functionality for a command line interface.
-#include "APProductIF.h"
-#include "APProductFactory.h"
-#include "AudioControls.pb.h"
-#include "BoseLinkServerMsgReboot.pb.h"
-#include "BoseLinkServerMsgIds.pb.h"
-#include "IPCDirectory.h"
-#include "IPCDirectoryIF.h"
-#include "A4VSystemTimeout.pb.h"
-#include "A4VPersistence.pb.h"
-#include "RebroadcastLatencyMode.pb.h" /// This file contains latency data in Protocol Buffer format.
-#include "NetworkPortDefines.h"
-#include "ProductController.h"         /// This file declares the ProductController class.
-#include "ProductHardwareManager.h"    /// This file declares the ProductHardwareManager class.
-#include "ProductDeviceManager.h"      /// This file declares the ProductDeviceManager class.
-#include "ProductUserInterface.h"      /// This file declares the ProductUserInterface class.
-#include "ProductSystemInterface.h"    /// This file declares the ProductSystemInterface class.
+#include "SystemUtils.h"                /// This file contains system utility declarations.
+#include "DPrint.h"                     /// This file contains the DPrint class used for logging.
+#include "Services.h"                   /// This file declares application server names.
+#include "CliClient.h"                  /// This file declares functionality for a command line interface.
+#include "APProductIF.h"                /// This file declares functionality for audio event registration.
+#include "APProductFactory.h"           /// This file declares functionality for audio event registration.
+#include "AudioControls.pb.h"           /// This file declares data structures for audio events.
+#include "BoseLinkServerMsgReboot.pb.h" /// This file declares reboot information.
+#include "BoseLinkServerMsgIds.pb.h"    /// This file declares reboot information.
+#include "IPCDirectory.h"               /// This file contains classes to determin service information.
+#include "IPCDirectoryIF.h"             /// This file contains classes to determin service information.
+#include "A4VSystemTimeout.pb.h"        /// This file declares time out information.
+#include "A4VPersistence.pb.h"          /// This file declares persistence data for non-volatile storage.
+#include "RebroadcastLatencyMode.pb.h"  /// This file contains latency data in Protocol Buffer format.
+#include "NetworkPortDefines.h"         /// This file declares application server names.
+#include "ProductController.h"          /// This file declares the ProductController class.
+#include "ProductHardwareManager.h"     /// This file declares the ProductHardwareManager class.
+#include "ProductDeviceManager.h"       /// This file declares the ProductDeviceManager class.
+#include "ProductUserInterface.h"       /// This file declares the ProductUserInterface class.
+#include "ProductSystemInterface.h"     /// This file declares the ProductSystemInterface class.
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -70,7 +69,7 @@ typedef CLIClient::CLICmdDescriptor             CommandDescription;
 /// in this source code file.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-static const DPrint s_logger    { "Product Device" };
+static const DPrint s_logger    { "Product" };
 static const char   s_logName[] = "Product Device"  ;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,6 +89,10 @@ ProductDeviceManager* ProductDeviceManager::GetInstance( )
 {
        static ProductDeviceManager* instance = new ProductDeviceManager( );
 
+       s_logger.LogInfo( "%-18s : The instance %8p of the Product Device Manager was returned. ",
+                         s_logName,
+                         instance );
+
        return instance;
 }
 
@@ -107,10 +110,6 @@ ProductDeviceManager* ProductDeviceManager::GetInstance( )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductDeviceManager::ProductDeviceManager( )
-                    : m_ProductHardwareManager ( ProductHardwareManager::GetInstance( ) ),
-                      m_ProductUserInterface   ( ProductUserInterface  ::GetInstance( ) ),
-                      m_ProductSystemInterface ( ProductSystemInterface::GetInstance( ) ),
-                      m_ProductController      ( ProductController     ::GetInstance( ) )
 {
        return;
 }
@@ -129,11 +128,18 @@ ProductDeviceManager::ProductDeviceManager( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDeviceManager::Run( )
 {
+     m_ProductController      =   ProductController::GetInstance( );
+     m_ProductHardwareManager = m_ProductController->GetHardwareManagerInstance( );
+     m_ProductUserInterface   = m_ProductController->GetUserInterfaceInstance  ( );
+     m_ProductSystemInterface = m_ProductController->GetSystemInterfaceInstance( );
+
      m_mainTask = m_ProductController->GetMainTask( );
 
      this->RegisterForProductEvents  ( );
      this->RegisterForProductRequests( );
      this->RegisterForRebootRequests ( );
+
+     s_logger.LogInfo( "%-18s : Registration for device events and requests has been made. ", s_logName );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -254,7 +260,7 @@ void ProductDeviceManager::SelectCallback( uint32_t source )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDeviceManager::SelectCallbackAction( uint32_t source )
 {
-     s_logger.LogInfo( "%s: Selection of source %d has been made.", s_logName, source );
+     s_logger.LogInfo( "%-18s : Selection of source %d has been made.", s_logName, source );
 
      m_ProductPointer->SetSelectionStatus( APProductIF::SELECTED, source );
 }
@@ -292,7 +298,7 @@ void ProductDeviceManager::DeselectCallback( uint32_t source )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDeviceManager::DeselectCallbackAction( uint32_t source )
 {
-     s_logger.LogInfo( "%s: Deselection of source %d has been sent.", s_logName, source );
+     s_logger.LogInfo( "%-18s : Deselection of source %d has been sent.", s_logName, source );
 
      m_ProductPointer->SetSelectionStatus( APProductIF::DESELECTED, source );
 }
@@ -331,7 +337,7 @@ void ProductDeviceManager::VolumeCallback( uint32_t volume )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDeviceManager::VolumeCallbackAction( uint32_t volume )
 {
-     s_logger.LogInfo( "%s: A volume level of %d will be set.", s_logName, volume );
+     s_logger.LogInfo( "%-18s : A volume level of %d will be set.", s_logName, volume );
 
      m_currentVolume = volume;
 
@@ -374,7 +380,7 @@ void ProductDeviceManager::UserMuteCallback( bool mute )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDeviceManager::UserMuteCallbackAction( bool mute )
 {
-     s_logger.LogInfo( "%s: A user mute %s will be set.", s_logName, ( mute ? "on" : "off" ) );
+     s_logger.LogInfo( "%-18s : A user mute %s will be set.", s_logName, ( mute ? "on" : "off" ) );
 
      m_userMute = mute;
 
@@ -417,7 +423,7 @@ void ProductDeviceManager::InternalMuteCallback( bool mute )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDeviceManager::InternalMuteCallbackAction( bool mute )
 {
-     s_logger.LogInfo( "%s: An internal mute %s has been sent.", s_logName, ( mute ? "on" : "off" ) );
+     s_logger.LogInfo( "%-18s : An internal mute %s has been sent.", s_logName, ( mute ? "on" : "off" ) );
 
      m_internalMute = mute;
 
@@ -458,7 +464,7 @@ void ProductDeviceManager::RebroadcastLatencyCallback( uint32_t latency )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDeviceManager::RebroadcastLatencyCallbackAction( uint32_t latency )
 {
-     s_logger.LogInfo( "%s: A latency value of %d will be set.", s_logName, latency);
+     s_logger.LogInfo( "%-18s : A latency value of %d will be set.", s_logName, latency);
 
      m_zonePresentationLatency = latency;
 
@@ -504,7 +510,7 @@ void ProductDeviceManager::ConnectCallback( bool connect )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDeviceManager::ConnectCallbackAction( bool connect )
 {
-     s_logger.LogInfo( "%s: A connection %s event has been sent.", s_logName, ( connect ? "on" : "off" ) );
+     s_logger.LogInfo( "%-18s : A connection %s event has been sent.", s_logName, ( connect ? "on" : "off" ) );
 
      m_ProductPointer->SetVolume  ( m_currentVolume );
      m_ProductPointer->SetUserMute( m_userMute      );
@@ -668,7 +674,7 @@ void ProductDeviceManager::SendDSPAudioControls( )
              break;
      }
 
-     s_logger.LogInfo( "%s: Audio mode is to be set to %s and audio delay to %d.",
+     s_logger.LogInfo( "%-18s : Audio mode is to be set to %s and audio delay to %d.",
                        s_logName,
                        audioModeString.c_str( ),
                        audioDelay );
@@ -828,12 +834,12 @@ void ProductDeviceManager::SendToneAndLevelControls( )
      controls.centerSpeaker   = audioSpeakerLevel.frontcenterspeakerlevel  ( ).value( );
      controls.surroundSpeaker = audioSpeakerLevel.rearsurroundspeakerslevel( ).value( );
 
-     s_logger.LogInfo( "%s: Audio tone and level settings are as follows: ", s_logName );
-     s_logger.LogInfo( "%s:                ", s_logName );
-     s_logger.LogInfo( "%s: Bass      : %d ", s_logName, controls.bass );
-     s_logger.LogInfo( "%s: Treble    : %d ", s_logName, controls.treble );
-     s_logger.LogInfo( "%s: Center    : %d ", s_logName, controls.centerSpeaker );
-     s_logger.LogInfo( "%s: Surround  : %d ", s_logName, controls.surroundSpeaker );
+     s_logger.LogInfo( "%-18s : Audio tone and level settings are as follows: ", s_logName );
+     s_logger.LogInfo( "%-18s :                ", s_logName );
+     s_logger.LogInfo( "%-18s : Bass      : %d ", s_logName, controls.bass );
+     s_logger.LogInfo( "%-18s : Treble    : %d ", s_logName, controls.treble );
+     s_logger.LogInfo( "%-18s : Center    : %d ", s_logName, controls.centerSpeaker );
+     s_logger.LogInfo( "%-18s : Surround  : %d ", s_logName, controls.surroundSpeaker );
 
      m_ProductHardwareManager->SendToneAndLevelControl( controls );
 }
@@ -854,7 +860,7 @@ void ProductDeviceManager::SendToneAndLevelControls( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductDeviceManager::SanitizeSpeakerAttributeAndSetting( audiospeakerattributeandsetting& protobuf )
 {
-     s_logger.LogInfo( "%s: Validation of the Speaker settings are to be checked.", s_logName );
+     s_logger.LogInfo( "%-18s : Validation of the Speaker settings are to be checked.", s_logName );
 
      ////////////////////////////////////////////////////////////////////////////////////////////////
      /// The following code is commented out until a hardware interface with the LPM is complete.
@@ -920,7 +926,7 @@ bool ProductDeviceManager::SanitizeSpeakerAttributeAndSetting( audiospeakerattri
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDeviceManager::SendSpeakerSettings( )
 {
-     s_logger.LogInfo( "%s: Validation of the Speaker settings are to be checked.", s_logName );
+     s_logger.LogInfo( "%-18s : Validation of the Speaker settings are to be checked.", s_logName );
 
      ////////////////////////////////////////////////////////////////////////////////////////////////
      /// The following code is commented out until a hardware interface with the LPM is complete.
@@ -941,11 +947,11 @@ void ProductDeviceManager::SendSpeakerSettings( )
      accessoryList.accessory[ ACCESSORY_POSITION_RIGHT_REAR ].active =
      speakerAttributeAndSetting.rear( ).active( ) ? ACCESSORY_ACTIVATED : ACCESSORY_DEACTIVATED;
 
-     s_logger.LogInfo( "%s: Speaker activation settings are as follows: ", s_logName );
-     s_logger.LogInfo( "%s:                                             ", s_logName );
-     s_logger.LogInfo( "%s: Left  Speaker : %d ", s_logName, ( uint32_t )accessoryList.accessory[ACCESSORY_POSITION_LEFT_REAR].active );
-     s_logger.LogInfo( "%s: Right Speaker : %d ", s_logName, ( uint32_t )accessoryList.accessory[ACCESSORY_POSITION_RIGHT_REAR].active );
-     s_logger.LogInfo( "%s: Sub   Speaker : %d ", s_logName, ( uint32_t )accessoryList.accessory[ACCESSORY_POSITION_SUB].active );
+     s_logger.LogInfo( "%-18s : Speaker activation settings are as follows: ", s_logName );
+     s_logger.LogInfo( "%-18s :                                             ", s_logName );
+     s_logger.LogInfo( "%-18s : Left  Speaker : %d ", s_logName, ( uint32_t )accessoryList.accessory[ACCESSORY_POSITION_LEFT_REAR].active );
+     s_logger.LogInfo( "%-18s : Right Speaker : %d ", s_logName, ( uint32_t )accessoryList.accessory[ACCESSORY_POSITION_RIGHT_REAR].active );
+     s_logger.LogInfo( "%-18s : Sub   Speaker : %d ", s_logName, ( uint32_t )accessoryList.accessory[ACCESSORY_POSITION_SUB].active );
 
      m_ProductHardwareManager->SendSpeakerList( accessoryList );
 }
@@ -963,14 +969,13 @@ void ProductDeviceManager::SendSpeakerSettings( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDeviceManager::SendSystemTimeoutEnableBits( )
 {
-
      Ipc_TimeoutControl_t timeoutControl;
 
      timeoutControl.cmd     = ( Ipc_TimeoutCommand_t )( TIMEOUT_CMD_SET_ENABLED );
      timeoutControl.enable  = GetSystemTimeoutEnableBits( ).autopowerdown( );
      timeoutControl.timeout = IPC_TIMEOUT_USER_TIMEOUTS;
 
-     s_logger.LogInfo( "%s: Auto power down will be set to %s.", s_logName, timeoutControl.enable ? "on" : "off" );
+     s_logger.LogInfo( "%-18s : Auto power down will be set to %s.", s_logName, timeoutControl.enable ? "on" : "off" );
 
      m_ProductHardwareManager->SendSetSystemTimeoutEnableBits( timeoutControl );
 }
@@ -1015,7 +1020,7 @@ void ProductDeviceManager::SendRebroadcastLatencyMode( )
 {
      std::string latencyMode = REBROADCAST_LATENCY_MODE_Name( GetRebroadcastLatencyModeStore( ).mode( ) );
 
-     s_logger.LogInfo( "%s: A latency value of %u is being set based on a %s mode.",
+     s_logger.LogInfo( "%-18s : A latency value of %u is being set based on a %s mode.",
                        s_logName,
                        m_zonePresentationLatency,
                        latencyMode.c_str( ) );
@@ -1069,7 +1074,7 @@ void ProductDeviceManager::AcceptClient( ServerSocket client )
      RouterPointer messageRouter = IPCMessageRouterFactory::CreateRouter( "ServerRouter" + clientName,
                                                                            m_mainTask );
 
-     s_logger.LogInfo( "%s: A client connection %s for reboot requests has been established.",
+     s_logger.LogInfo( "%-18s : A client connection %s for reboot requests has been established.",
                        s_logName,
                        clientName.c_str( ) );
 
@@ -1112,7 +1117,7 @@ void ProductDeviceManager::AcceptClient( ServerSocket client )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDeviceManager::HandleClientDisconnect( )
 {
-     s_logger.LogInfo( "%s: A client connection for reboot requests has been disconnected.", s_logName );
+     s_logger.LogInfo( "%-18s : A client connection for reboot requests has been disconnected.", s_logName );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1131,7 +1136,7 @@ void ProductDeviceManager::HandleClientDisconnect( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDeviceManager::SendRebootRequestHandler( BoseLinkServerMsgReboot rebootRequest)
 {
-     s_logger.LogInfo( "%s: A reboot after a %d delay has been requested.", s_logName, rebootRequest.delay( ) );
+     s_logger.LogInfo( "%-18s : A reboot after a %d delay has been requested.", s_logName, rebootRequest.delay( ) );
 
      unsigned int delay = rebootRequest.delay( );
 
@@ -1151,7 +1156,7 @@ void ProductDeviceManager::SendRebootRequestHandler( BoseLinkServerMsgReboot reb
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDeviceManager::SendRebootRequest( unsigned int delay )
 {
-     s_logger.LogInfo( "%s: A reboot after a %d delay is being processed.", s_logName, delay );
+     s_logger.LogInfo( "%-18s : A reboot after a %d delay is being processed.", s_logName, delay );
 
      sleep( delay );
 

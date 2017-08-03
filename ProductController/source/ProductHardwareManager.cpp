@@ -29,7 +29,6 @@
 #include "SystemUtils.h"               /// This file contains system utility declarations.
 #include "DPrint.h"                    /// This file contains the DPrint class used for logging.
 #include "Services.h"                  /// This file declares application server names.
-#include "LpmService.pb.h"             /// This file declares LPM hardware Protocol Buffer data.
 #include "RebroadcastLatencyMode.pb.h" /// This file contains latency data in Protocol Buffer format.
 #include "ProductHardwareManager.h"    /// This file declares the ProductHardwareManager class.
 #include "ProductDeviceManager.h"      /// This file declares the ProductDeviceManager class.
@@ -56,7 +55,7 @@ typedef CLIClient::CLICmdDescriptor             CommandDescription ;
 /// in this source code file.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-static const DPrint s_logger    { "Product Hardware" };
+static const DPrint s_logger    { "Product" };
 static const char   s_logName[] = "Product Hardware"  ;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,7 +73,11 @@ static const char   s_logName[] = "Product Hardware"  ;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductHardwareManager* ProductHardwareManager::GetInstance( )
 {
-       static ProductHardwareManager* instance = new    ProductHardwareManager( );
+       static ProductHardwareManager* instance = new ProductHardwareManager( );
+
+       s_logger.LogInfo( "%-18s : The instance %8p of the Product Hardware Manager was returned. ",
+                         s_logName,
+                         instance );
 
        return instance;
 }
@@ -93,10 +96,6 @@ ProductHardwareManager* ProductHardwareManager::GetInstance( )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductHardwareManager::ProductHardwareManager( )
-                      : m_ProductDeviceManager  ( ProductDeviceManager  ::GetInstance( ) ),
-                        m_ProductUserInterface  ( ProductUserInterface  ::GetInstance( ) ),
-                        m_ProductSystemInterface( ProductSystemInterface::GetInstance( ) ),
-                        m_ProductController     ( ProductController     ::GetInstance( ) )
 {
        return;
 }
@@ -114,7 +113,16 @@ ProductHardwareManager::ProductHardwareManager( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductHardwareManager::Run( )
 {
+     m_ProductController      =   ProductController::GetInstance( );
+     m_ProductUserInterface   = m_ProductController->GetUserInterfaceInstance  ( );
+     m_ProductSystemInterface = m_ProductController->GetSystemInterfaceInstance( );
+     m_ProductDeviceManager   = m_ProductController->GetDeviceManagerInstance ( );
+
+     s_logger.LogInfo( "%-18s : The hardware manager is starting. ", s_logName );
+
      m_mainTask = m_ProductController->GetMainTask( );
+
+     s_logger.LogInfo( "%-18s : The hardware interface is now running. ", s_logName );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,7 +136,7 @@ void ProductHardwareManager::Run( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductHardwareManager::SendSetVolume( uint32_t volume )
 {
-     s_logger.LogInfo( "%s: A volume level of %d is being set.", s_logName, volume );
+     s_logger.LogInfo( "%-18s : A volume level of %d is being set.", s_logName, volume );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -142,7 +150,7 @@ void ProductHardwareManager::SendSetVolume( uint32_t volume )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductHardwareManager::SendUserMute( bool mute )
 {
-     s_logger.LogInfo( "%s: A user mute %s is being set.", s_logName, mute ? "on" : "off" );
+     s_logger.LogInfo( "%-18s : A user mute %s is being set.", s_logName, mute ? "on" : "off" );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -156,7 +164,7 @@ void ProductHardwareManager::SendUserMute( bool mute )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductHardwareManager::SendInternalMute( bool mute )
 {
-    s_logger.LogInfo( "%s: An internal mute %s is being set.", s_logName, mute ? "on" : "off" );
+    s_logger.LogInfo( "%-18s : An internal mute %s is being set.", s_logName, mute ? "on" : "off" );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -170,7 +178,7 @@ void ProductHardwareManager::SendInternalMute( bool mute )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductHardwareManager::SendAudioPathPresentationLatency( uint32_t latency )
 {
-     s_logger.LogInfo( "%s: Audio path latency of %d is being set.", s_logName, latency );
+     s_logger.LogInfo( "%-18s : Audio path latency of %d is being set.", s_logName, latency );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -208,7 +216,7 @@ void ProductHardwareManager::SendSetDSPAudioMode( IpcAudioMode_t audioMode )
             break;
     }
 
-    s_logger.LogInfo( "%s: Audio mode is to be set to %s.",
+    s_logger.LogInfo( "%-18s : Audio mode is to be set to %s.",
                       s_logName,
                       audioModeString.c_str( ) );
 }
@@ -224,7 +232,7 @@ void ProductHardwareManager::SendSetDSPAudioMode( IpcAudioMode_t audioMode )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductHardwareManager::SendLipSyncDelay( uint32_t audioDelay )
 {
-     s_logger.LogInfo( "%s: Audio lip sync delay is to be set to %d.", s_logName, audioDelay );
+     s_logger.LogInfo( "%-18s : Audio lip sync delay is to be set to %d.", s_logName, audioDelay );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -238,12 +246,12 @@ void ProductHardwareManager::SendLipSyncDelay( uint32_t audioDelay )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductHardwareManager::SendToneAndLevelControl( IpcToneControl_t& controls )
 {
-     s_logger.LogInfo( "%s: Audio tone and level settings are to be set as follows: ", s_logName );
-     s_logger.LogInfo( "%s:                ", s_logName );
-     s_logger.LogInfo( "%s: Bass      : %d ", s_logName, controls.bass );
-     s_logger.LogInfo( "%s: Treble    : %d ", s_logName, controls.treble );
-     s_logger.LogInfo( "%s: Center    : %d ", s_logName, controls.centerSpeaker );
-     s_logger.LogInfo( "%s: Surround  : %d ", s_logName, controls.surroundSpeaker );
+     s_logger.LogInfo( "%-18s : Audio tone and level settings are to be set as follows: ", s_logName );
+     s_logger.LogInfo( "%-18s :                ", s_logName );
+     s_logger.LogInfo( "%-18s : Bass      : %d ", s_logName, controls.bass );
+     s_logger.LogInfo( "%-18s : Treble    : %d ", s_logName, controls.treble );
+     s_logger.LogInfo( "%-18s : Center    : %d ", s_logName, controls.centerSpeaker );
+     s_logger.LogInfo( "%-18s : Surround  : %d ", s_logName, controls.surroundSpeaker );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -257,11 +265,11 @@ void ProductHardwareManager::SendToneAndLevelControl( IpcToneControl_t& controls
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductHardwareManager::SendSpeakerList( IpcAccessoryList_t& accessoryList )
 {
-     s_logger.LogInfo( "%s: Speaker activation settings are tManagero be set as follows: ", s_logName );
-     s_logger.LogInfo( "%s:                                                       ", s_logName );
-     s_logger.LogInfo( "%s: Left  Speaker : %d ", s_logName, ( uint32_t )accessoryList.accessory[ACCESSORY_POSITION_LEFT_REAR].active );
-     s_logger.LogInfo( "%s: Right Speaker : %d ", s_logName, ( uint32_t )accessoryList.accessory[ACCESSORY_POSITION_RIGHT_REAR].active );
-     s_logger.LogInfo( "%s: Sub   Speaker : %d ", s_logName, ( uint32_t )accessoryList.accessory[ACCESSORY_POSITION_SUB].active );
+     s_logger.LogInfo( "%-18s : Speaker activation settings are tManagero be set as follows: ", s_logName );
+     s_logger.LogInfo( "%-18s :                                                       ", s_logName );
+     s_logger.LogInfo( "%-18s : Left  Speaker : %d ", s_logName, ( uint32_t )accessoryList.accessory[ACCESSORY_POSITION_LEFT_REAR].active );
+     s_logger.LogInfo( "%-18s : Right Speaker : %d ", s_logName, ( uint32_t )accessoryList.accessory[ACCESSORY_POSITION_RIGHT_REAR].active );
+     s_logger.LogInfo( "%-18s : Sub   Speaker : %d ", s_logName, ( uint32_t )accessoryList.accessory[ACCESSORY_POSITION_SUB].active );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -277,7 +285,7 @@ void ProductHardwareManager::SendSpeakerList( IpcAccessoryList_t& accessoryList 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductHardwareManager::SendSetSystemTimeoutEnableBits( Ipc_TimeoutControl_t& timeoutControl )
 {
-     s_logger.LogInfo( "%s: Auto power down will be set to %s.", s_logName, timeoutControl.enable ? "on" : "off" );
+     s_logger.LogInfo( "%-18s : Auto power down will be set to %s.", s_logName, timeoutControl.enable ? "on" : "off" );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -293,7 +301,7 @@ void ProductHardwareManager::SendSetSystemTimeoutEnableBits( Ipc_TimeoutControl_
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductHardwareManager::RebootRequest( )
 {
-     s_logger.LogInfo( "%s: A reboot request is being sent.", s_logName );
+     s_logger.LogInfo( "%-18s : A reboot request is being sent.", s_logName );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -309,7 +317,7 @@ void ProductHardwareManager::RebootRequest( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductHardwareManager::HandleLowPowerStandby( )
 {
-     s_logger.LogInfo( "%s: Low Power standby is being set.", s_logName );
+     s_logger.LogInfo( "%-18s : Low Power standby is being set.", s_logName );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -326,7 +334,7 @@ void ProductHardwareManager::HandleLowPowerStandby( )
 void ProductHardwareManager::SendBlueToothDeviceData( const std::string&       bluetoothDeviceName,
                                                       const unsigned long long bluetoothMacAddress )
 {
-    s_logger.LogInfo( "%s: Bluetooth data is being set to the Device %s with MAC Address 0x%016llX.",
+    s_logger.LogInfo( "%-18s : Bluetooth data is being set to the Device %s with MAC Address 0x%016llX.",
                       s_logName,
                       bluetoothDeviceName.c_str( ),
                       bluetoothMacAddress );
@@ -345,7 +353,7 @@ void ProductHardwareManager::SendBlueToothDeviceData( const std::string&       b
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductHardwareManager::SendSourceSelection( const IPCSource_t& sourceSelect )
 {
-    s_logger.LogInfo( "%s: The source selection will be set to the value %d with status %d",
+    s_logger.LogInfo( "%-18s : The source selection will be set to the value %d with status %d",
                       s_logName,
                       sourceSelect.source,
                       sourceSelect.status );

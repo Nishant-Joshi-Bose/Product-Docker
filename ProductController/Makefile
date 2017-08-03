@@ -30,9 +30,10 @@ check_tools:
 
 .PHONY: cmake_build
 cmake_build:
+	@echo "Building Product Controller Code. . ."
+	@echo BOSELIBS_DIR       : $(BOSELIBS_DIR)
+	@echo SOUNDTOUCH_SDK_DIR : $(SOUNDTOUCH_SDK_DIR)
 	@echo cmake_build
-	@echo "Building Protocol Buffers from Makefile. . ."
-	#build_proto_sources $(SOUNDTOUCH_SDK_SENTINEL) $(HSP_DIR) $(QC_TOOLCHAIN_DIR)
 	@echo making directory $(BUILDS_DIR)
 	mkdir -p $(BUILDS_DIR)
 	rm -fv $(BUILDS_DIR)/CMakeCache.txt
@@ -42,8 +43,7 @@ cmake_build:
 
 .PHONY: build_proto_sources
 build_proto_sources: $(SOUNDTOUCH_SDK_SENTINEL) $(HSP_DIR) $(QC_TOOLCHAIN_DIR)
-	@echo build_proto_sources
-	@echo Building protocol buffer sources from proto files
+	@echo "Building Product Controller Protocol Buffers. . ."
 	$(call build-proto, all)
 
 .PHONY: clean

@@ -1,0 +1,17 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @file A4VProductPersistence.proto
+///
+/// @brief Persistence data for A4V product (cloned from teh Legacy Product equivalent)
+///
+/// @author Yishai Sered
+/// @date   April 2017
+///
+/// Copyright 2017 Bose Corporation
+////////////////////////////////////////////////////////////////////////////////
+
+import "RebroadcastLatencyMode.proto";
+
+message a4vpersistence
+{
+    optional rebroadcastlatencymode rebroadcastLatencyMode     = 1;
+}

@@ -31,7 +31,7 @@
 #include "CliClient.h"              /// This file declares functionality for a command line interface.
 #include "APTaskFactory.h"          /// This file declares functionality for a setting up tasks.
 #include "APProductIF.h"            /// This file declares functionality for product events.
-#include "A4V_IpcProtocol.h"
+#include "A4V_IpcProtocol.h"        /// This file declares data structures for a hardware interface.
 #include "ProductHardwareManager.h" /// This file declares the ProductHardwareManager class.
 #include "ProductDeviceManager.h"   /// This file declares the ProductDeviceManager class.
 #include "ProductUserInterface.h"   /// This file declares the ProductDeviceManager class.
@@ -54,8 +54,8 @@ typedef CLIClient::CLICmdDescriptor CommandDescription;
 /// in this source code file.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-static const DPrint      s_logger { "Product Controller" };
-static const std::string s_logName{ "Product Controller" };
+static const DPrint s_logger    { "Product" };
+static const char   s_logName[] = "Product Command";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -73,6 +73,10 @@ static const std::string s_logName{ "Product Controller" };
 ProductCommandLine* ProductCommandLine::GetInstance( )
 {
        static ProductCommandLine* instance = new ProductCommandLine( );
+
+       s_logger.LogInfo( "%-18s : The instance %8p of the Product Command Line was returned. ",
+                         s_logName,
+                         instance );
 
        return instance;
 }
@@ -92,12 +96,6 @@ ProductCommandLine* ProductCommandLine::GetInstance( )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductCommandLine::ProductCommandLine( )
-                  : m_ProductHardwareManager ( ProductHardwareManager::GetInstance( ) ),
-                    m_ProductDeviceManager   ( ProductDeviceManager  ::GetInstance( ) ),
-                    m_ProductUserInterface   ( ProductUserInterface  ::GetInstance( ) ),
-                    m_ProductSystemInterface ( ProductSystemInterface::GetInstance( ) ),
-                    m_ProductController      ( ProductController     ::GetInstance( ) ),
-                    m_ProductCommandLine     ( ProductCommandLine    ::GetInstance( ) )
 {
        return;
 }
@@ -118,6 +116,12 @@ ProductCommandLine::ProductCommandLine( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCommandLine::Run( )
 {
+     m_ProductController      =   ProductController::GetInstance( );
+     m_ProductHardwareManager = m_ProductController->GetHardwareManagerInstance( );
+     m_ProductDeviceManager   = m_ProductController->GetDeviceManagerInstance  ( );
+     m_ProductUserInterface   = m_ProductController->GetUserInterfaceInstance  ( );
+     m_ProductSystemInterface = m_ProductController->GetSystemInterfaceInstance( );
+
      m_CommandLineInterface = new CLIClient ( "ProductCommandLineInterface" );
      m_CommandLineTask      = IL::CreateTask( "ProductCommandLineTask"      );
 
@@ -128,6 +132,8 @@ void ProductCommandLine::Run( )
                                                     std::placeholders::_1,
                                                     std::placeholders::_2,
                                                     std::placeholders::_3  ) );
+
+     s_logger.LogInfo( "%-18s : A command line has been established. ", s_logName );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,25 +167,26 @@ std::vector< CommandPointer > ProductCommandLine::CommandsList( )
 
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product volume",
                                                                              "This command set the volume to a specified level.",
-                                                                             "product volume [integer from 0 to 100] \n" ) ) );
+                                                                             "product volume [integer from 0 to 100]" ) ) );
 
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product mute",
                                                                              "This command mutes or unmutes the volume",
-                                                                             "product mute [on | off] \n" ) ) );
+                                                                             "product mute [on | off]" ) ) );
 
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product source",
-                                                                             "This command selects the audio source.",
-                                                                             "product source [integer | string] \n"
-                                                                             "               <hdmi1>            \n"
-                                                                             "               <hdmi2>            \n"
-                                                                             "               <hdmi3>            \n"
-                                                                             "               <hdmi4>            \n"
-                                                                             "               <tv>               \n"
-                                                                             "               <aux>              \n"
-                                                                             "               <optical1>         \n"
-                                                                             "               <optical2>         \n"
-                                                                             "               <coax1>            \n"
-                                                                             "               <coax2>            \n" ) ) );
+                                                                             "",
+                                                                             "product source [integer | string] "
+                                                                             "[This command selects the audio source.] \r\n"
+                                                                             "               <hdmi1>                   \r\n"
+                                                                             "               <hdmi2>                   \r\n"
+                                                                             "               <hdmi3>                   \r\n"
+                                                                             "               <hdmi4>                   \r\n"
+                                                                             "               <tv>                      \r\n"
+                                                                             "               <aux>                     \r\n"
+                                                                             "               <optical1>                \r\n"
+                                                                             "               <optical2>                \r\n"
+                                                                             "               <coax1>                   \r\n"
+                                                                             "               <coax2>                   \r\n" ) ) );
 
     return commands;
 
@@ -295,7 +302,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     {
         if( arguments.size( ) != 1 )
         {
-            response = "Incorrect Usage: product volume [integer from 0 to 100] \n";
+            response = "Incorrect Usage: product volume [integer from 0 to 100] \r\n";
 
             return -1;
         }
@@ -307,13 +314,13 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         {
             response  = "The volume will be changed to the level ";
             response +=  volumeLevelString;
-            response += ". \n";
+            response += ". \r\n";
 
             m_ProductHardwareManager->SendSetVolume( volumeLevelValue );
         }
         else
         {
-            response = "Incorrect Usage: product volume [integer from 0 to 100] \n";
+            response = "Incorrect Usage: product volume [integer from 0 to 100] \r\n";
 
             return -1;
         }
@@ -323,7 +330,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     {
         if( arguments.size( ) != 1 )
         {
-            response = "Incorrect Usage: product mute [on | off] \n";
+            response = "Incorrect Usage: product mute [on | off] \r\n";
 
             return -1;
         }
@@ -332,20 +339,20 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 
         if( muteState == "on" )
         {
-            response = "The mute will be turned on. \n";
+            response = "The mute will be turned on. \r\n";
 
             m_ProductHardwareManager->SendInternalMute( true );
         }
         else
         if( muteState == "off" )
         {
-            response = "The mute will be turned off. \n";
+            response = "The mute will be turned off. \r\n";
 
             m_ProductHardwareManager->SendInternalMute( false );
         }
         else
         {
-            response = "Incorrect Usage: product mute [on | off] \n";
+            response = "Incorrect Usage: product mute [on | off] \r\n";
 
             return -1;
         }
@@ -355,17 +362,17 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     {
         if( arguments.size( ) != 1 )
         {
-            response  = "Incorrect Usage: product source [integer | string] \n";
-            response += "                                <hdmi1>            \n";
-            response += "                                <hdmi2>            \n";
-            response += "                                <hdmi3>            \n";
-            response += "                                <hdmi4>            \n";
-            response += "                                <tv>               \n";
-            response += "                                <aux>              \n";
-            response += "                                <optical1>         \n";
-            response += "                                <optical2>         \n";
-            response += "                                <coax1>            \n";
-            response += "                                <coax2>            \n";
+            response  = "Incorrect Usage: product source [integer | string] \r\n";
+            response += "                                <hdmi1>            \r\n";
+            response += "                                <hdmi2>            \r\n";
+            response += "                                <hdmi3>            \r\n";
+            response += "                                <hdmi4>            \r\n";
+            response += "                                <tv>               \r\n";
+            response += "                                <aux>              \r\n";
+            response += "                                <optical1>         \r\n";
+            response += "                                <optical2>         \r\n";
+            response += "                                <coax1>            \r\n";
+            response += "                                <coax2>            \r\n";
 
             return -1;
         }
@@ -430,8 +437,8 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         if( 0 <= sourceValue.source && sourceValue.source <= A4V_IPC_NUM_SOURCES )
         {
             response  = "The source will be changed to the value ";
-            response +=  sourceValue.source;
-            response += ". \n";
+            response +=  sourceString.c_str( );
+            response += ". \r\n";
 
             sourceValue.open_field = 0;
             sourceValue.status     = 0;
@@ -440,17 +447,17 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         }
         else
         {
-            response  = "Incorrect Usage: product source [integer | string] \n";
-            response += "                                <hdmi1>            \n";
-            response += "                                <hdmi2>            \n";
-            response += "                                <hdmi3>            \n";
-            response += "                                <hdmi4>            \n";
-            response += "                                <tv>               \n";
-            response += "                                <aux>              \n";
-            response += "                                <optical1>         \n";
-            response += "                                <optical2>         \n";
-            response += "                                <coax1>            \n";
-            response += "                                <coax2>            \n";
+            response  = "Incorrect Usage: product source [integer | string] \r\n";
+            response += "                                <hdmi1>            \r\n";
+            response += "                                <hdmi2>            \r\n";
+            response += "                                <hdmi3>            \r\n";
+            response += "                                <hdmi4>            \r\n";
+            response += "                                <tv>               \r\n";
+            response += "                                <aux>              \r\n";
+            response += "                                <optical1>         \r\n";
+            response += "                                <optical2>         \r\n";
+            response += "                                <coax1>            \r\n";
+            response += "                                <coax2>            \r\n";
 
             return -1;
         }

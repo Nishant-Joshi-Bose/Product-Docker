@@ -1,10 +1,10 @@
 # ToDo Have CMakeLists.txt file instead of this Makefile.
 PROTO_SOURCES = \
-      ProductMessage.proto          \
-      A4VSystemTimeout.proto        \
       AudioControls.proto           \
       ProductMessage.proto          \
-      RebroadcastLatencyMode.proto
+      RebroadcastLatencyMode.proto  \
+      A4VPersistence.proto          \
+      A4VSystemTimeout.proto
 
 # Where to write the *.pb.cc and *.pb.h files.
 #ifndef PROTO_CC_DEST

@@ -16,6 +16,8 @@ INCLUDE_DIRECTORIES(
   ${BOSELIBS_DIR}/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/STS
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/SoundTouchInterface
+  ${PROTO_CC_DEST}
   include
 )
 

@@ -6,6 +6,7 @@ ADD_EXECUTABLE(Professor
     source/ProductDeviceManager.cpp
     source/ProductSystemInterface.cpp
     source/ProductUserInterface.cpp
+    ${PROTO_CC_DEST}/A4VPersistence.pb.cc
     ${PROTO_CC_DEST}/A4VSystemTimeout.pb.cc
     ${PROTO_CC_DEST}/AudioControls.pb.cc
     ${PROTO_CC_DEST}/ProductMessage.pb.cc
