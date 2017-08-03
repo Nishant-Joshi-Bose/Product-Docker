@@ -22,8 +22,12 @@ ifndef DONT_UPDATE_CASTLETOOLS
 endif
 	components install
 
+.PHONY: LpmService
+LpmService: install-components
+	$(MAKE) -C components/RivieraLpmService
+
 .PHONY: eddie-ipk
-eddie-ipk: ProductController
+eddie-ipk: ProductController LpmService
 	./scripts/create-product-ipk
 
 .PHONY: clean
