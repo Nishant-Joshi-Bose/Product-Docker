@@ -6,9 +6,9 @@
 ///
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////
+#pragma once
 
 #include <string>
-
 #include "ProductAppHsm.h"
 #include "ProductAppState.h"
 #include "ProductAppStates.h"
