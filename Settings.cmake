@@ -36,8 +36,12 @@ IF(${SDK} STREQUAL "qc8017_32")
 
   SET(SYSROOT ${RIVIERA_HSP_DIR}/sdk/sysroots/aarch64-oe-linux)
 
-  SET(CMAKE_C_COMPILER ${RIVIERA_HSP_DIR}/sdk/sysroots/i686-oesdk-linux/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-gcc)
-  SET(CMAKE_CXX_COMPILER ${RIVIERA_HSP_DIR}/sdk/sysroots/i686-oesdk-linux/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-g++)
+  EXECUTE_PROCESS( COMMAND uname -m COMMAND tr -d '\n' OUTPUT_VARIABLE ARCHITECTURE )
+  MESSAGE( STATUS "Architecture: <${ARCHITECTURE}>" )
+
+  SET(CMAKE_C_COMPILER ${RIVIERA_HSP_DIR}/sdk/sysroots/${ARCHITECTURE}-oesdk-linux/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-gcc)
+  SET(CMAKE_CXX_COMPILER ${RIVIERA_HSP_DIR}/sdk/sysroots/${ARCHITECTURE}-oesdk-linux/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-g++)
+
 
   SET(COMMON_FLAGS "--sysroot=${SYSROOT} -Wall -Werror -Wno-psabi -Wno-maybe-uninitialized -Wno-unused-but-set-variable -mtune=cortex-a53 -ftree-vectorize -DPLATFORM_QC8017_32")
   SET(CMAKE_CXX_FLAGS "-std=c++1y ${COMMON_FLAGS}" CACHE INTERNAL - FORCE)
