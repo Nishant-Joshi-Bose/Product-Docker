@@ -1,0 +1,46 @@
+@startuml
+
+title Product Application HSM
+
+[*] --> Booting
+
+state Top {
+	
+	state StdOp {
+
+		
+		state On {
+
+		}
+		
+		state LowPower {
+
+		}
+
+		state Standby {
+		
+		}
+		
+		state Idle {
+		
+		}
+		
+		state Setup {
+		}
+
+	}
+
+	state CriticalError {
+
+	}
+
+	state Booting {
+
+	}
+
+	state SoftwareUpdating {
+
+	}
+}
+
+@enduml

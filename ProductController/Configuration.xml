@@ -38,4 +38,6 @@
         </outputDriverParameterSet>
     </AudioPathParameters>
 
+	<!-- Registrations for product URLs -->
+	<operation name="setup" handler="eddie" />
 </Configuration>

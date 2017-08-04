@@ -4,13 +4,15 @@
   This is the main file of Eddie application process.
  */
 
-#include "DPrint.h"
-#include "BoseVersion.h"
-#include "SystemUtils.h"
 #include <unistd.h>
 #include <signal.h>
 #include <iostream>
 #include <stdexcept>
+
+#include "DPrint.h"
+#include "BoseVersion.h"
+#include "SystemUtils.h"
+#include "ProductController.h"
 
 namespace
 {
@@ -20,10 +22,7 @@ DPrint s_logger( "EddieApp" );
 struct EddieApp
 {
     void Initialize();
-    //ControllerTask m_controllerTask;
-    //ControllerITC m_controllerItc;
-    //EddieSoundTouchInterface m_SoundTouchInterface;
-    //EddieCliClient m_eddieCliClient;
+    ProductApp::ProductController m_ProductController;
 };
 
 void EddieApp::Initialize()

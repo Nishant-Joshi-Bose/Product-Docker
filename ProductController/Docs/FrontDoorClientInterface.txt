@@ -1,0 +1,73 @@
+@startuml
+' This is a PlantUML class diagram describing product controller and FrontDoorClientInterface for Riviera based products.
+' Created 07/24/2017
+' Copyright 2017 Bose Corporation
+'
+title Product controller and FrontDoor client interface class diagram\n
+
+Main *-- ProductControllerTask :own
+note left of Main:    ProductApp process. Main.cpp instantiate the ProductControllerTask.
+note left of ProductControllerTask:ProductControllerTask instantiate the FrontDoorClientInterface by passing task object.This task object\nwill be used to breakthread any request from FrontDoorClientInterface into ProductControllerTask context.
+
+'ProductControllerTask *-- ProductController :own
+
+FrontDoorClientInterface --|> SoundTouch::Client :inherits
+SoundTouch::Client --|> SoundTouch::ClientSocket :inherits
+FrontDoorClientInterface --|> APTask :inherits
+ProductControllerTask *-- FrontDoorClientInterface :own
+note left:FrontDoorClientInterface class needs to be running in its own thread since it has a infinite loop running to monitor the request\nqueue from FrontDoorClient.To deliver the incoming message to ProductControllerTask we have two option, either use break thread\nin OnMessage(..) function or ProductController class regsiter the callback with FrontDoorClientInterface class during construction\nof FrontDoorClientInterface object. FrontDoorClientInterface will invoke the callback function for each OnMessage(..).
+
+note left of  SoundTouch::ClientSocket: Provides websocket wrapper interface to communicate with front door(a.k.a WebServer).
+
+class Main {
+    m_ProductControllerTask:ProductControllerTask
+}
+
+interface SoundTouch::Client {
+    Run()
+    OnOpen()
+    OnClose()
+    void OnMessage(std::string msg )
+    void OnMessage( SoundTouchInterface::activateProductRequest req, SoundTouchInterface::msg msg ) override;
+    void OnMessage( SoundTouchInterface::updates_NowPlayingUpdate msg ) override;
+    void OnMessage( SoundTouchInterface::initializationCompleteRequest msg ) override;
+}
+
+class SoundTouch::ClientSocket {
+    Run()
+    OnOpen()
+    OnClose()
+    virtual void OnMessage( std::string msg );
+    m_port :int
+    m_host : std::string 
+    m_productName:std::string 
+    m_messages:std::list<std::string> 
+    m_maxQueued:size_t;
+}
+
+class APTask {
+    OnEntry()
+}
+
+class ProductControllerTask {
+    void HandleNowPlayingUpdate( nowPlaying& pb ) ;
+    void HandleInitializationCompleteRequest( initializationCompleteRequest& pb ) ;
+    m_FrontDoorClientInterface:FrontDoorClientInterface
+    m_Task:NotifyTargetTaskIF
+    m_hsm:ProductHsm
+
+}
+
+class FrontDoorClientInterface {
+    FrontDoorClientInterface(NotifyTargetTaskIF*)
+    OnEntry()
+    OnOpen()
+    OnClose()
+    void OnMessage( SoundTouchInterface::activateProductRequest req, SoundTouchInterface::msg msg ) override;
+    void OnMessage( SoundTouchInterface::updates_NowPlayingUpdate msg ) override;
+    void OnMessage( SoundTouchInterface::initializationCompleteRequest msg ) override;
+    void RegisterForFrontDoorRequest(cb1);
+    m_Task:NotifyTargetTaskIF
+    m_wifiSetupRequestCallback:AsyncCallback
+}
+
