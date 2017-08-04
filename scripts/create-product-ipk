@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Create an IPK file for installing SoundTouch/Professor with opkg.
+# Create an IPK file for installing SoundTouch with opkg.
 #
 # To install:
 #   opkg install -d bose professor.ipk
@@ -75,10 +75,7 @@ shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselib_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 
 arch=arm-oemllib32-linux
-
-MACHINE_TYPE=`uname -m`
-sysroot=$riviera_hsp/sdk/sysroots/${MACHINE_TYPE}-oesdk-linux
-
+sysroot=$riviera_hsp/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/$arch/$arch-
 
 function do_strip {
@@ -211,7 +208,7 @@ $production
 EOF
 
 package_version=$(python2.7 -c 'import sys, json
-print "{major}.{minor}.{patch}.{build_number}.{abbrev_commit}".\
+print "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}".\
 format(**json.loads(open(sys.argv[1]).read()))
 ' "$version_json") || exit
 echo "Package version \"$package_version\""
