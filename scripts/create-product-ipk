@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Create an IPK file for installing SoundTouch/Eddie with opkg.
+# Create an IPK file for installing SoundTouch with opkg.
 #
 # To install:
 #   opkg install -d bose eddie.ipk
@@ -75,7 +75,7 @@ shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselib_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 
 arch=arm-oemllib32-linux
-sysroot=$riviera_hsp/sdk/sysroots/i686-oesdk-linux
+sysroot=$riviera_hsp/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/$arch/$arch-
 
 function do_strip {
