@@ -5,6 +5,7 @@ This repo contains the source code and tools specific to the SoundTouch Professo
 
 ##### Table of Contents  
 [Getting Started](#start)  
+[Reflash Riviera-HSP](#hsp)  
 [More...](#more)  
 
 <a name="start"/>
@@ -58,12 +59,18 @@ Installed Riviera-HSP: 0.5-7-g856bf73
 ...
 ```
 
+To update the HSP, see the next section.
+
+<a name="hsp"/>
+
+### Reflashing the Riviera HSP
+
 To reflash the Riviera HSP:
 ```shell session
 $ cd /scratch/Professor
 $ components install
-$ adb shell reboot bootloader        # reboot the Professor unit into the fastboot bootloader
-$ sudo fastboot devices              # make sure the unit is in the bootloader
+$ adb shell reboot bootloader       # reboot the Professor unit into the fastboot bootloader
+$ sudo fastboot devices             # make sure the unit is in the bootloader
 $ cd components/Riviera-HSP/images
 $ sudo ./fastboot.sh
 $ sudo fastboot reboot

@@ -253,6 +253,7 @@ if [ "\$b" = "\$i" ]; then
 else
     echo "Built for Riviera-HSP: \$b"
     echo "Installed Riviera-HSP: \$i"
+    echo "See https://github.com/BoseCorp/Eddie/blob/master/README.md#hsp"
 fi
 EOF
 
