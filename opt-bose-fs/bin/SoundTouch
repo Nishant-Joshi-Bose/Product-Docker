@@ -63,6 +63,19 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
         mkdir -p "$rundir" || exit
         rm -f "$rundir"/*.xml
         ln -s /opt/Bose/etc/Shepherd-*.xml "$rundir" || exit
+
+        if ! is-production; then
+            cat >"$rundir/Debug.xml" <<\EOF
+<ShepherdConfig>
+  <daemon name="Telnet"
+          exe="/sbin/telnetd">
+    <arg>-l/bin/bash</arg>
+    <arg>-S</arg> <!-- log to syslog -->
+    <arg>-F</arg> <!-- run in foreground -->
+  </daemon>
+</ShepherdConfig>
+EOF
+        fi
     fi
 
     set -- ./shepherdd "$@" "$rundir"
