@@ -5,6 +5,7 @@ This repo contains the source code and tools specific to the SoundTouch Eddie pr
 
 ##### Table of Contents  
 [Getting Started](#start)  
+[Reflash Riviera-HSP](#hsp)  
 [More...](#more)  
 
 <a name="start"/>
@@ -57,6 +58,12 @@ Built for Riviera-HSP: 0.5-9-geee2c72
 Installed Riviera-HSP: 0.5-7-g856bf73
 ...
 ```
+
+To update the HSP, see the next section.
+
+<a name="hsp"/>
+
+### Reflashing the Riviera HSP
 
 To reflash the Riviera HSP:
 ```shell session
