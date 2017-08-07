@@ -5,15 +5,15 @@
   }, 
   {
     "name": "BoseLibs-qc8017_32", 
-    "selected_version": "Continuous/Castle-Fork/2017-08-01_1516"
+    "selected_version": "Continuous/Castle-Fork/2017-08-04_1142"
   }, 
   {
     "name": "Riviera-HSP", 
-    "selected_version": "Continuous/dev/0.5-10-g12f96a5"
+    "selected_version": "Continuous/dev/0.5-12-gfec49e1"
   }, 
   {
     "name": "SoundTouch-SDK-qc8017_32", 
-    "selected_version": "Continuous/Castle-Fork/2017-08-01_1516"
+    "selected_version": "Continuous/Castle-Fork/2017-08-04_1142"
   }, 
   {
     "name": "RivieraLpmService", 
