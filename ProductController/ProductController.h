@@ -9,7 +9,6 @@
 
 #include "NotifyTargetTaskIF.h"
 #include "FrontDoorClientInterface.h"
-#include "ProductAppHsm.h"
 #include "ProductAppStateTop.h"
 #include "ProductAppStateBooting.h"
 #include "ProductAppStateStdOp.h"

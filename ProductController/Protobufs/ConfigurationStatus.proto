@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file ConfigurationStatus.proto
 ///
-/// @brief ConfigurationStatus to persist in nv.
+/// @brief Product ConfigurationStatus to persist in nv.
 ///
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////
@@ -16,6 +16,6 @@ message CongiguationStatus
         optional bool language = 2;
         optional bool account = 3;
     }
-    optional bool isConfigured = 2;
-    optional Status status = 1;
+    optional bool isConfigured = 1;
+    optional Status status = 2;
 }
