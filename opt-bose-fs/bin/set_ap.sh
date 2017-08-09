@@ -6,7 +6,17 @@ if (( $# > 0 )); then
     exit 1
 fi
 
-amixer cset name="SLIMBUS_6_RX Audio Mixer MultiMedia1" "1"
+# Hack to work around a systemd boot ordering dependency (CASTLE-2106).
+i=0
+while ! amixer cset name="SLIMBUS_6_RX Audio Mixer MultiMedia1" "1"; do
+    if (( ( i += 1 ) == 10 )); then
+        echo "$0: giving up"
+        break
+    fi
+    echo "$0: amixer failed, will retry"
+    sleep 1
+done
+
 amixer cset name="SLIM RX2 MUX" "AIF4_PB"
 amixer cset name="SLIM RX3 MUX" "AIF4_PB"
 amixer cset name="SLIM_6_RX Channels" "Two"
