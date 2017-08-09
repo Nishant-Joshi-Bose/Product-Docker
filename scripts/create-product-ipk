@@ -202,6 +202,9 @@ format(**json.loads(open(sys.argv[1]).read()))
 echo "HTML version \"$v\""
 sed -i "s/%FROMVERSION%/From: $v/" "$opt_dir/html/update.html" || exit
 
+avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
+"$avs_dir/stage" "$opt_dir" || exit
+
 put_script "$opt_dir/bin/is-production" <<EOF
 #!/bin/sh
 $production
