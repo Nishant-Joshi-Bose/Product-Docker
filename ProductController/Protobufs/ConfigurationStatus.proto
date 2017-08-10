@@ -8,14 +8,13 @@
 
 package ProductPb;
 
-message CongiguationStatus
+message ConfigurationStatus
 {
     message Status
     {
-        optional bool network = 1;
-        optional bool language = 2;
-        optional bool account = 3;
+        optional bool network  = 1 [default = false];
+        optional bool language = 2 [default = false];
+        optional bool account  = 3 [default = false];
     }
-    optional bool isConfigured = 1;
     optional Status status = 2;
 }
