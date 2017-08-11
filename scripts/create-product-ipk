@@ -141,8 +141,6 @@ components list >"$opt_dir/etc/components.txt" || exit
 version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
 cp "$version_json" "$opt_dir/etc" || exit
 
-cp "$wspace/ProductController/Shepherd.xml" "$opt_dir/etc/Shepherd-product.xml" || exit
-
 for i in "$wspace/builds/$cfg/qc8017_32/bin"/*[!~]; do
     do_strip "$i" "$opt_dir/bin/${i##*/}"
 done
