@@ -3,7 +3,7 @@
 # Create an IPK file for installing SoundTouch with opkg.
 #
 # To install:
-#   opkg install -d bose professor.ipk
+#   opkg install -d bose $variant.ipk
 #
 # The file /etc/opkg/opkg.conf should contain this line:
 #   dest bose /opt/Bose
@@ -13,6 +13,7 @@
 #
 this=${0##*/} # this script's name
 
+variant=professor
 production=false
 stripped=true
 cfg=Release
@@ -109,7 +110,7 @@ rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_d
 "$soundtouch_sdk/config-shepherd" \
     --without-eco1-software-udpate \
     --without-bluetooth \
-    --dir="$opt_dir/etc" professor || exit
+    --dir="$opt_dir/etc" "$variant" || exit
 
 # -----------------------------------------------------------------------------
 # SoundTouch-SDK daemon configuration.
@@ -129,10 +130,10 @@ function gen_config {
 }
 c=$wspace/ProductController/Configuration.xml
 xmllint --noout --schema "$u/validate-config.xsd" "$c" || exit
-gen_config "$u/BoseApp.xslt" "$c" BoseApp-professor.xml
-gen_config "$u/UpnpSource.xslt" "$c" UpnpSource-professor.xml
-gen_config "$u/WebServer.xslt" "$c" WebServer-professor.xml
-gen_config "$u/APConfig.xslt" "$c" APConfig-professor.xml
+gen_config "$u/BoseApp.xslt" "$c" "BoseApp-$variant.xml"
+gen_config "$u/UpnpSource.xslt" "$c" "UpnpSource-$variant.xml"
+gen_config "$u/WebServer.xslt" "$c" "WebServer-$variant.xml"
+gen_config "$u/APConfig.xslt" "$c" "APConfig-$variant.xml"
 
 # -----------------------------------------------------------------------------
 
@@ -214,11 +215,11 @@ echo "Package version \"$package_version\""
 cat >"$stage/control" <<EOF || exit
 Package: SoundTouch
 Version: $package_version
-Description: SoundTouch Professor version $package_version
+Description: SoundTouch $variant version $package_version
  The SoundTouch app
 Section: soundtouch
 Priority: optional
-Maintainer: SoundTouch Team <SSG-Professor@bose.com>
+Maintainer: SoundTouch Team <SSG-$variant@bose.com>
 License: Commercial
 Architecture: armv7a-vfp-neon
 OE: soundtouch
@@ -268,7 +269,7 @@ tar --owner=0 --group=0 -czf data.tar.gz -C "$opt_dir" . || exit
 echo "2.0" > debian-binary || exit
 
 ipk_dir=$wspace/builds/$cfg
-ipk=$ipk_dir/professor.ipk
+ipk=$ipk_dir/$variant.ipk
 mkdir -p "$ipk_dir" || exit
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
