@@ -1,3 +1,8 @@
 <ShepherdConfig>
   <daemon name="Eddie"/>
+<!-- not quite ready
+  <daemon name="SoftwareUpdateService">
+    <arg>-c/opt/Bose/etc/SoftwareUpdateService.xml</arg>
+  </daemon>
+-->
 </ShepherdConfig>
