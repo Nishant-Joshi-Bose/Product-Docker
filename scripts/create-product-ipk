@@ -265,8 +265,8 @@ EOF
 # Stage area is complete.  Package it into a *.ipk file.
 
 cd "$stage" || exit
-tar czf control.tar.gz control pre* post* || exit
-tar czf data.tar.gz -C "$opt_dir" . || exit
+tar --owner=0 --group=0 -czf control.tar.gz control pre* post* || exit
+tar --owner=0 --group=0 -czf data.tar.gz -C "$opt_dir" . || exit
 echo "2.0" > debian-binary || exit
 
 ipk_dir=$wspace/builds/$cfg
