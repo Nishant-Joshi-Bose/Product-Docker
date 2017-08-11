@@ -1,8 +1,0 @@
-C:/work/Blinking\ LED\ red/Blinking\ LED\ red.cydsn/CortexM0/ARM_GCC_493/Debug/CyBootAsmGnu.o : C:/work/Blinking\ LED\ red/Blinking\ LED\ red.cydsn/Generated_Source/PSoC4/CyBootAsmGnu.s C:/work/Blinking\ LED\ red/Blinking\ LED\ red.cydsn/Generated_Source/PSoC4/cydevicegnu_trm.inc C:/work/Blinking\ LED\ red/Blinking\ LED\ red.cydsn/Generated_Source/PSoC4/cyfittergnu.inc 
-
-C:/work/Blinking\ LED\ red/Blinking\ LED\ red.cydsn/Generated_Source/PSoC4/CyBootAsmGnu.s : 
-
-C:/work/Blinking\ LED\ red/Blinking\ LED\ red.cydsn/Generated_Source/PSoC4/cydevicegnu_trm.inc : 
-
-C:/work/Blinking\ LED\ red/Blinking\ LED\ red.cydsn/Generated_Source/PSoC4/cyfittergnu.inc : 
-

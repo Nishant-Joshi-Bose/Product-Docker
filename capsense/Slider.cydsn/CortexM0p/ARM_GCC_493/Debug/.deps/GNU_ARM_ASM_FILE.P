@@ -1,8 +1,0 @@
-C:/Users/RD/Documents/Data_RD/FAE\ Content/D2/Bose/New\ Capsense\ Board\ 9\ 2016/Slider/Slider.cydsn/CortexM0p/ARM_GCC_493/Debug/CyBootAsmGnu.o : C:/Users/RD/Documents/Data_RD/FAE\ Content/D2/Bose/New\ Capsense\ Board\ 9\ 2016/Slider/Slider.cydsn/Generated_Source/PSoC4/CyBootAsmGnu.s C:/Users/RD/Documents/Data_RD/FAE\ Content/D2/Bose/New\ Capsense\ Board\ 9\ 2016/Slider/Slider.cydsn/Generated_Source/PSoC4/cydevicegnu_trm.inc C:/Users/RD/Documents/Data_RD/FAE\ Content/D2/Bose/New\ Capsense\ Board\ 9\ 2016/Slider/Slider.cydsn/Generated_Source/PSoC4/cyfittergnu.inc 
-
-C:/Users/RD/Documents/Data_RD/FAE\ Content/D2/Bose/New\ Capsense\ Board\ 9\ 2016/Slider/Slider.cydsn/Generated_Source/PSoC4/CyBootAsmGnu.s : 
-
-C:/Users/RD/Documents/Data_RD/FAE\ Content/D2/Bose/New\ Capsense\ Board\ 9\ 2016/Slider/Slider.cydsn/Generated_Source/PSoC4/cydevicegnu_trm.inc : 
-
-C:/Users/RD/Documents/Data_RD/FAE\ Content/D2/Bose/New\ Capsense\ Board\ 9\ 2016/Slider/Slider.cydsn/Generated_Source/PSoC4/cyfittergnu.inc : 
-

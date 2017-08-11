@@ -1,6 +1,0 @@
-C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|7683bb57-bbbb-49aa-bf4e-dc8365f5861c
-C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyReferenceLibrary\CyReferenceLibrary.cylib\CyReferenceLibrary.cyprj|be700c86-15f6-475c-ac1e-f6548fa3dde7
-C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|85d5d28e-5ba7-42aa-98e6-a4763a63e4d5
-C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|cf592ecc-6910-4ae9-acd2-bdaef3e5469d
-C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|4d19ff6c-b25b-4152-b9e1-a896a1553406
-C:\Users\mm1005301\Documents\PSoC Creator\SCB_I2cCommSlave01\SCB_I2cCommSlave01.cydsn\SCB_I2cCommSlave01.cyprj|aabb0e2a-a4d9-498a-9808-5d64c4593846

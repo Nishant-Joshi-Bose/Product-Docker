@@ -1,1 +1,0 @@
-.\Export\ARM_GCC_Generic\CapSense_P4_v3_10\Capsense_P4Library_GCCp.a

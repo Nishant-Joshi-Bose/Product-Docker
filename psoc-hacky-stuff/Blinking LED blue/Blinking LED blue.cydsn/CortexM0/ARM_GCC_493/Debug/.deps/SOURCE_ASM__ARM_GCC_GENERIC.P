@@ -1,8 +1,0 @@
-C:/Users/mike/Clients/Bose/Eddie/psoc/CY8CKIT-042-examples/PSoC4/Blinking\ LED/Blinking\ LED.cydsn/CortexM0/ARM_GCC_493/Debug/CyBootAsmGnu.o : C:/Users/mike/Clients/Bose/Eddie/psoc/CY8CKIT-042-examples/PSoC4/Blinking\ LED/Blinking\ LED.cydsn/Generated_Source/PSoC4/CyBootAsmGnu.s C:/Users/mike/Clients/Bose/Eddie/psoc/CY8CKIT-042-examples/PSoC4/Blinking\ LED/Blinking\ LED.cydsn/Generated_Source/PSoC4/cydevicegnu_trm.inc C:/Users/mike/Clients/Bose/Eddie/psoc/CY8CKIT-042-examples/PSoC4/Blinking\ LED/Blinking\ LED.cydsn/Generated_Source/PSoC4/cyfittergnu.inc 
-
-C:/Users/mike/Clients/Bose/Eddie/psoc/CY8CKIT-042-examples/PSoC4/Blinking\ LED/Blinking\ LED.cydsn/Generated_Source/PSoC4/CyBootAsmGnu.s : 
-
-C:/Users/mike/Clients/Bose/Eddie/psoc/CY8CKIT-042-examples/PSoC4/Blinking\ LED/Blinking\ LED.cydsn/Generated_Source/PSoC4/cydevicegnu_trm.inc : 
-
-C:/Users/mike/Clients/Bose/Eddie/psoc/CY8CKIT-042-examples/PSoC4/Blinking\ LED/Blinking\ LED.cydsn/Generated_Source/PSoC4/cyfittergnu.inc : 
-

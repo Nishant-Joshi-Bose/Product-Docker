@@ -1,7 +1,0 @@
-C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyReferenceLibrary\CyReferenceLibrary.cylib\CyReferenceLibrary.cyprj|ce20e4c4-53dc-4d55-a151-fb0f96110e61
-C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|4182c42b-8b36-4ef3-9c7f-13cf730265bc
-C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|afe81ef1-de6b-4db3-ab66-1a54af83187a
-C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|a13b3bdd-8d59-485e-a2b1-ae464a72ed22
-C:\Program Files (x86)\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|4d754325-d656-4972-99a1-fbd5becab557
-C:\work\Eddie\capsense\i2csimple\Bootloader.cydsn\Bootloader.cyprj|b4035c88-7f53-40b0-b028-b559c52ec04b
-C:\work\Eddie\capsense\i2csimple\SCB_I2cCommSlave01\SCB_I2cCommSlave01.cydsn\SCB_I2cCommSlave01.cyprj|afe02ded-ab4d-464e-99ae-bafc91ffcef1
