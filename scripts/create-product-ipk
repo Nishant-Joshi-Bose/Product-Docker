@@ -74,7 +74,6 @@ riviera_hsp=$(components get Riviera-HSP installed_location) || exit
 soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselib_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
-swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 
 arch=arm-oemllib32-linux
 sysroot=$riviera_hsp/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -204,6 +203,10 @@ sed -i "s/%FROMVERSION%/From: $v/" "$opt_dir/html/update.html" || exit
 
 avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
 "$avs_dir/stage" "$opt_dir" || exit
+
+# TODO: uncomment this when we're ready
+#swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
+#"$swup_dir/stage" "$opt_dir" || exit
 
 put_script "$opt_dir/bin/is-production" <<EOF
 #!/bin/sh
