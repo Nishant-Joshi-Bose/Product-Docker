@@ -30,6 +30,10 @@ LpmService: install-components
 eddie-ipk: ProductController LpmService
 	./scripts/create-product-ipk
 
+.PHONY: eddie-package
+eddie-package: eddie-ipk
+	./scripts/create-eddie-package
+
 .PHONY: clean
 clean:
 	rm -rf $(BUILDS_DIR)
