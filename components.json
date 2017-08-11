@@ -17,10 +17,10 @@
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@396c1b7380e80cc4b087bdb154e57f5660e607e1"
+    "selected_version": "master@f01b274bb3680256634bba76173d11ac9c627a01"
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@552"
+    "selected_version": "trunk@603"
   }
 ]
