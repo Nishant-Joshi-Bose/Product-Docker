@@ -31,9 +31,9 @@ product-ipk: ProductController LpmService
 	rm -fv builds/$(cfg)/*.ipk
 	./scripts/create-product-ipk
 
-.PHONY: eddie-package
-eddie-package: product-ipk
-	./scripts/create-eddie-package
+.PHONY: package
+package: product-ipk
+	./scripts/create-package
 
 .PHONY: clean
 clean:

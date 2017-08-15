@@ -1,10 +1,10 @@
 #!/bin/bash
-# Create complete package for eddie, that can be used to flash all partitions including Bose.
+## Create complete package for eddie, that can be used to flash all partitions including Bose.
 #
 # To flash Eddie using generated package from Eddie root directory
-#   -   ./scripts/create-eddie-package
+#   -   ./scripts/create-package
 # To see help
-#   - ./scripts/create-eddie-package --help
+#   - ./scripts/create-package --help
 
 this=${0##*/} # this script's name
 cfg=Release
