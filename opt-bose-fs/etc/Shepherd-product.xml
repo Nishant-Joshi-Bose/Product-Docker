@@ -1,4 +1,0 @@
-<ShepherdConfig>
-  <daemon name="LPMService"/>
-  <daemon name="Professor"/>
-</ShepherdConfig>

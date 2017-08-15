@@ -1,10 +1,10 @@
 #!/bin/bash
 #
-# Update the Professor unit via adb with the latest .ipk build.
+# Update the Riviera unit via adb with the latest .ipk build.
 #
 cd "$(dirname "$0")/.." || exit
 
-ipk=builds/Release/professor.ipk
+ipk=builds/Release/product.ipk
 rm -f "$ipk"
 
 make "$@" || exit

@@ -2,7 +2,7 @@ WORKSPACE := $(abspath $(CURDIR))
 include Settings.mk
 
 .PHONY: default
-default: professor-ipk
+default: product-ipk
 
 .PHONY: version-files
 version-files: | $(BUILDS_DIR)
@@ -26,9 +26,14 @@ endif
 LpmService: install-components
 	$(MAKE) -C components/RivieraLpmService
 
-.PHONY: professor-ipk
-professor-ipk: ProductController LpmService
+.PHONY: product-ipk
+product-ipk: ProductController LpmService
+	rm -fv builds/$(cfg)/*.ipk
 	./scripts/create-product-ipk
+
+.PHONY: package
+package: product-ipk
+	./scripts/create-package
 
 .PHONY: clean
 clean:

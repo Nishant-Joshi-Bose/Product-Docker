@@ -62,7 +62,7 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
     if ! $override; then
         mkdir -p "$rundir" || exit
         rm -f "$rundir"/*.xml
-        ln -s /opt/Bose/etc/Shepherd-*.xml "$rundir" || exit
+        ln -s /opt/Bose/etc/Shepherd*.xml "$rundir" || exit
 
         if ! is-production; then
             cat >"$rundir/Debug.xml" <<\EOF

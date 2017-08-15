@@ -1,5 +1,5 @@
 # Source						Destination										Rule
-./builds/Release/professor.ipk	<DEPLOY_DIR>/professor_<VERSION_STRING>.ipk		file
+./builds/Release/product.ipk	<DEPLOY_DIR>/professor_<VERSION_STRING>.ipk		file
 
 # EMACS
 # Local Variables:

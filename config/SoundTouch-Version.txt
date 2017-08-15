@@ -1,1 +1,0 @@
-/home/softlib/verisoft/Lisa/Continuous/trunk/latest/SoundTouch_arm-oemllib32-linux.ipk
