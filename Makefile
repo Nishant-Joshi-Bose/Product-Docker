@@ -2,7 +2,7 @@ WORKSPACE := $(abspath $(CURDIR))
 include Settings.mk
 
 .PHONY: default
-default: eddie-ipk
+default: product-ipk
 
 .PHONY: version-files
 version-files: | $(BUILDS_DIR)
@@ -26,12 +26,13 @@ endif
 LpmService: install-components
 	$(MAKE) -C components/RivieraLpmService
 
-.PHONY: eddie-ipk
-eddie-ipk: ProductController LpmService
+.PHONY: product-ipk
+product-ipk: ProductController LpmService
+	rm -fv builds/$(cfg)/*.ipk
 	./scripts/create-product-ipk
 
 .PHONY: eddie-package
-eddie-package: eddie-ipk
+eddie-package: product-ipk
 	./scripts/create-eddie-package
 
 .PHONY: clean

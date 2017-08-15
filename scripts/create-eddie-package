@@ -1,6 +1,6 @@
 #!/bin/bash
 # Create complete package for eddie, that can be used to flash all partitions including Bose.
-# 
+#
 # To flash Eddie using generated package from Eddie root directory
 #   -   ./scripts/create-eddie-package
 # To see help
@@ -15,8 +15,7 @@ try_help () {
     exit 1
 }
 
-
-error_exit () {	
+error_exit () {
     echo >&2 "$0 failed: $*. "
 	#rm -rf "$stage"
 	exit 1
@@ -66,7 +65,7 @@ cfg=Release
 here=$(cd "$(dirname $0)" && echo "$PWD") || error_exit ${FUNCNAME[0]}
 wspace=$(cd "$here/.." && echo "$PWD") || error_exit ${FUNCNAME[0]}
 riviera_hsp=$(components get Riviera-HSP installed_location) || error_exit ${FUNCNAME[0]}
-eddie_ipk=$wspace/builds/$cfg/eddie.ipk 
+product_ipk=$wspace/builds/$cfg/product.ipk
 utils_dir=$wspace/install/utils
 version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
 CP="cp -PR --preserve=mode,timestamps,links"
@@ -74,7 +73,7 @@ bose_partition=bose
 bose_ext4=bose.ext4
 
 # -----------------------------------------------------------------------------
-# Stage area is start. 
+# Stage area is start.
 
 stage=$wspace/builds/$cfg/eddie-package-stage
 stage_package_dir="$stage"/eddie
@@ -83,12 +82,12 @@ rm -rf "$stage"
 echo "Stage directory $stage"
 mkdir -p "$stage_package_dir" || error_exit ${FUNCNAME[0]}
 # make / replace bose.ext4 using IPK
-extract_eddie_ipk () {
+extract_product_ipk () {
     extract_path="$stage_package_dir"/"$bose_partition"
     mkdir -p "$extract_path" || error_exit ${FUNCNAME[0]}
-    $CP "$eddie_ipk" "$extract_path"  || error_exit ${FUNCNAME[0]}
+    $CP "$product_ipk" "$extract_path"  || error_exit ${FUNCNAME[0]}
     cd "$extract_path" || error_exit ${FUNCNAME[0]}
-    ar x $eddie_ipk || error_exit ${FUNCNAME[0]}
+    ar x $product_ipk || error_exit ${FUNCNAME[0]}
     rm -f "$extract_path"/*.ipk || error_exit ${FUNCNAME[0]}
     tar xzf "$extract_path"/data.tar.gz -C "$extract_path" || error_exit ${FUNCNAME[0]}
     rm -f $extract_path/control.tar.gz $extract_path/data.tar.gz $extract_path/debian-binary || error_exit ${FUNCNAME[0]}
@@ -105,7 +104,7 @@ create_eddie_ext4 () {
 	echo " Generating Bose partition "
 	# extract HSP's bose partition
         $utils_dir/lin/simg2img $bose_ext4 $bose_ext4.raw > /dev/null 2>&1
-	#find size in bytes of $ext4_full.raw to be used during rebuilding EXT4	=33554432 
+	#find size in bytes of $ext4_full.raw to be used during rebuilding EXT4	=33554432
 	if ! [ -f  $bose_ext4.raw ]; then
 	    error_exit ${FUNCNAME[0]} " Not able to create intermediate RAW file $bose_ext4.raw, using simg2img."
 	fi
@@ -113,9 +112,9 @@ create_eddie_ext4 () {
 	if ! fs_size=$(stat -c%s "$bose_ext4.raw"); then
 		error_exit ${FUNCNAME[0]} " Not able to find size of $bose_ext4 from $bose_ext4.raw."
 	fi
-	mv $bose_ext4 $bose_ext4.orig 
-	#copy and extract eddie IPK to make new EXT4 fs
-	extract_eddie_ipk
+	mv $bose_ext4 $bose_ext4.orig
+	#copy and extract product IPK to make new EXT4 fs
+	extract_product_ipk
         # copy lpm - if enabled
     if ! [ $no_lpm ]; then
        	echo " Adding LPM IPK to bose partition "
@@ -129,8 +128,8 @@ create_eddie_ext4 () {
 	fi
 	# remove intermediate files
 	rm -rf "$extract_path"
-	rm -f $bose_ext4.raw  
-	rm -f $bose_ext4.orig 
+	rm -f $bose_ext4.raw
+	rm -f $bose_ext4.orig
 	cd $here
 }
 

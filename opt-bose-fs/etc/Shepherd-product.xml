@@ -1,7 +1,0 @@
-<ShepherdConfig>
-  <daemon name="Eddie"/>
-  <daemon name="SoftwareUpdateService">
-    <arg>--configuration</arg>
-    <arg>/opt/Bose/etc/SoftwareUpdateConfiguration.xml</arg>
-  </daemon>
-</ShepherdConfig>

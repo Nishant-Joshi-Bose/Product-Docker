@@ -46,12 +46,12 @@ Install the .ipk file you built.
 ```shell session
 $ adb shell /opt/Bose/bin/stop      # generally it's okay if this fails
 $ adb shell opkg remove SoundTouch  # this too may fail
-$ adb push /scratch/Eddie/builds/Release/eddie.ipk /tmp/eddie.ipk
-$ adb shell opkg install -d bose /tmp/eddie.ipk
+$ adb push builds/Release/product.ipk /tmp/product.ipk
+$ adb shell opkg install -d bose /tmp/product.ipk
 $ adb shell reboot
 ```
 
-You'll get a notification if your Eddie unit is running old Riviera software:
+You'll get a notification if your Riviera unit is running old Riviera software:
 ```shell session
 ...
 Built for Riviera-HSP: 0.5-9-geee2c72
@@ -69,7 +69,7 @@ To reflash the Riviera HSP:
 ```shell session
 $ cd /scratch/Eddie
 $ components install
-$ adb shell reboot bootloader       # reboot the Eddie unit into the fastboot bootloader
+$ adb shell reboot bootloader       # reboot the Riviera unit into the fastboot bootloader
 $ sudo fastboot devices             # make sure the unit is in the bootloader
 $ cd components/Riviera-HSP/images
 $ sudo ./fastboot.sh
