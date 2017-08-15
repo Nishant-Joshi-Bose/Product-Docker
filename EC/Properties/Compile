@@ -6,11 +6,6 @@ cd $[buildDir]
 CastleToolsDir=/home/epd/srcref/CastleTools
 export PATH=$CastleToolsDir/bin:$PATH
 
-ver=$(components get Riviera-HSP selected_version)
-dir=/scratch/Riviera-HSP-cache/$ver
-if ! [ -d "$dir" ]; then
-    $CastleToolsDir/components/Riviera-HSP/install "$ver" "$dir"
-fi
-components set-location Riviera-HSP "$dir"
+components cache
 
-make DONT_UPDATE_CASTLETOOLS=1
+make DONT_UPDATE_CASTLETOOLS=1 default package
