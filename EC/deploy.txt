@@ -1,5 +1,7 @@
 # Source						Destination										Rule
-./builds/Release/product.ipk	<DEPLOY_DIR>/eddie_<VERSION_STRING>.ipk			file
+./builds/Release/product.ipk		<DEPLOY_DIR>/eddie_<VERSION_STRING>.ipk			file
+./builds/Release/package/product.tar	<DEPLOY_DIR>/eddie_<VERSION_STRING>.tar			file
+./builds/Release/package/product_flash	<DEPLOY_DIR>/eddie_flash				file
 
 # EMACS
 # Local Variables:
