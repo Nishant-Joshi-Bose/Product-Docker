@@ -32,6 +32,4 @@
   </daemon>
 
   <daemon name="STSCertified"/>
-
-  <daemon name="AVS"/>
 </ShepherdConfig>
