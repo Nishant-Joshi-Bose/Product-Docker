@@ -14,10 +14,11 @@
 #include "ProductAppStateStdOp.h"
 #include "ProductAppStateSetup.h"
 #include "ProductAppStateStandby.h"
+#include "ProductCliClient.h"
 
 namespace ProductApp
 {
-class ProductAppHsm;
+
 class ProductController
 {
 public:
@@ -30,6 +31,8 @@ public:
     /// Handle requests from Front door client and hands it over to Product application HSM for further processing.
     void HandleFrontDoorRequest( SoundTouchInterface::msg_Header const& cookie, std::string const& body, std::string const& operation );
 
+    void Initialize();
+
 private:
     /// Disable copies
     ProductController( const ProductController& ) = delete;
@@ -38,14 +41,16 @@ private:
     void RegisterCallbacks();
 
 private:
-    NotifyTargetTaskIF*         m_ProductControllerTask;
-    ProductAppHsm               m_ProductAppHsm;
-    FrontDoorClientInterface    m_FrontDoorClientInterface;
+    NotifyTargetTaskIF* m_ProductControllerTask;
+    ProductAppHsm m_ProductAppHsm;
+    FrontDoorClientInterface m_FrontDoorClientInterface;
+    ProductCliClient m_productCliClient;
 
-    ProductAppStateTop          m_ProductAppStateTop;
-    ProductAppStateBooting      m_ProductAppStateBooting;
-    ProductAppStateStdOp        m_ProductAppStateStdOp;
-    ProductAppStateSetup        m_ProductAppStateSetup;
-    ProductAppStateStandby      m_ProductAppStateStandby;
+    ProductAppStateTop m_ProductAppStateTop;
+    ProductAppStateBooting m_ProductAppStateBooting;
+    ProductAppStateStdOp m_ProductAppStateStdOp;
+    ProductAppStateSetup m_ProductAppStateSetup;
+    ProductAppStateStandby m_ProductAppStateStandby;
 };
-} // namespace ProductApp
+
+} // namespace

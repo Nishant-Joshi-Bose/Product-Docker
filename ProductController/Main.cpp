@@ -8,7 +8,6 @@
 #include <signal.h>
 #include <iostream>
 #include <stdexcept>
-
 #include "DPrint.h"
 #include "BoseVersion.h"
 #include "SystemUtils.h"
@@ -17,18 +16,7 @@
 namespace
 {
 
-DPrint s_logger( "EddieApp" );
-
-struct EddieApp
-{
-    void Initialize();
-    ProductApp::ProductController m_ProductController;
-};
-
-void EddieApp::Initialize()
-{
-    BOSE_INFO( s_logger, __func__ );
-}
+DPrint s_logger( "Main" );
 
 } // namespace
 
@@ -45,8 +33,8 @@ try
 
     ::signal( SIGPIPE, SIG_IGN );
 
-    EddieApp app;
-    app.Initialize();
+    ProductApp::ProductController productController;
+    productController.Initialize();
     while( true )
         ::pause();
 }

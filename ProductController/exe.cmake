@@ -1,6 +1,7 @@
 ADD_EXECUTABLE(Eddie
   Main.cpp
   ProductController.cpp
+  ProductCliClient.cpp
   FrontDoorClientInterface/FrontDoorClientInterface.cpp
   Hsm/ProductAppState.cpp
   Hsm/ProductAppHsm.cpp

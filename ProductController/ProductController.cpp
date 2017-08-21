@@ -44,6 +44,11 @@ ProductController::~ProductController()
 {
 }
 
+void ProductController::Initialize()
+{
+    m_productCliClient.Initialize( m_ProductControllerTask );
+}
+
 void ProductController::RegisterCallbacks()
 {
     BOSE_INFO( s_logger, __func__ );
