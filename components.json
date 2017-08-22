@@ -1,4 +1,8 @@
 [
+   {
+    "name": "googletest-qc8017_32",
+    "selected_version": "branches/googletest@2280"
+  },
   {
     "name": "SoftwareUpdate-qc8017_32",
     "selected_version": "Continuous/master/0.0.1-6+b51c64f"
@@ -21,7 +25,7 @@
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@f01b274bb3680256634bba76173d11ac9c627a01"
+    "selected_version": "master@a59a7d38c50e0c96dfa936d650a66e16e1813225"
   },
   {
     "name": "RivieraLPM",
