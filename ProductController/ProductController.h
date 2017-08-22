@@ -7,18 +7,20 @@
 
 #pragma once
 
+#include "FrontDoorClientIF.h"
 #include "NotifyTargetTaskIF.h"
-#include "FrontDoorClientInterface.h"
+#include "ProtoPersistenceIF.h"
 #include "ProductAppStateTop.h"
 #include "ProductAppStateBooting.h"
 #include "ProductAppStateStdOp.h"
 #include "ProductAppStateSetup.h"
 #include "ProductAppStateStandby.h"
+#include "ConfigurationStatus.pb.h"
+#include "Language.pb.h"
 #include "ProductCliClient.h"
 
 namespace ProductApp
 {
-
 class ProductController
 {
 public:
@@ -28,8 +30,6 @@ public:
     {
         return m_ProductControllerTask;
     }
-    /// Handle requests from Front door client and hands it over to Product application HSM for further processing.
-    void HandleFrontDoorRequest( SoundTouchInterface::msg_Header const& cookie, std::string const& body, std::string const& operation );
 
     void Initialize();
 
@@ -38,12 +38,97 @@ private:
     ProductController( const ProductController& ) = delete;
     ProductController& operator=( const ProductController& ) = delete;
 
-    void RegisterCallbacks();
+private:
+    void RegisterEndPoints();
+///////////////////////////////////////////////////////////////////////////////
+/// @name  ReadSystemLanguageFromPersistence
+/// @brief Function to read persisted language code from /mnt/nv/product-persistence.
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void ReadSystemLanguageFromPersistence();
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  PersistSystemLanguageCode
+/// @brief Function to persist language code in /mnt/nv/product-persistence.
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void PersistSystemLanguageCode();
+
+public:
+///////////////////////////////////////////////////////////////////////////////
+/// @name  IsAllModuleReady
+/// @brief true if all the dependent modules are up and ready.
+/// Modules like- LPM, CAPS, SW Update etc.
+/// @return bool
+////////////////////////////////////////////////////////////////////////////////
+    bool IsAllModuleReady();
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  HandleLPMReady
+/// @brief Function to call when LPM client is ready to send/receive request.
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void HandleLPMReady();
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  HandleLPMReady
+/// @brief Function to call when CAPS is ready to send/receive request.
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void HandleCAPSReady();
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  IsLanguageSet
+/// @brief true if system language is initialized
+/// @return bool
+////////////////////////////////////////////////////////////////////////////////
+    bool IsLanguageSet();
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  IsNetworkSetupDone
+/// @brief true if system is conencted to ethernet or number of wifi profiles are nonzero
+/// @return bool
+////////////////////////////////////////////////////////////////////////////////
+    bool IsNetworkSetupDone();
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  GetSystemLanguageCode
+/// @brief returns system language code.
+/// @return std::string
+////////////////////////////////////////////////////////////////////////////////
+    std::string GetSystemLanguageCode();
+
+    void SendActivateAccessPointCmd();
+    void SendDeActivateAccessPointCmd();
+///////////////////////////////////////////////////////////////////////////////
+/// @name  HandleGetLanguageRequest
+/// @brief Handles GET request for "system/language" endpoint.
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  HandleGetLanguageRequest
+/// @brief Handles POST request for "system/language" endpoint.
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void HandlePostLanguageRequest( const ProductPb::Language &lang, const Callback<ProductPb::Language> &resp );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  HandleConfigurationStatusRequest
+/// @brief "system/configuration/status" endpoint request handler.
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void HandleConfigurationStatusRequest( const Callback<ProductPb::ConfigurationStatus> &resp );
 
 private:
     NotifyTargetTaskIF* m_ProductControllerTask;
     ProductAppHsm m_ProductAppHsm;
-    FrontDoorClientInterface m_FrontDoorClientInterface;
+    ProtoPersistenceIF::ProtoPersistencePtr m_ConfigurationStatusPersistence = nullptr;
+    ProtoPersistenceIF::ProtoPersistencePtr m_LanguagePersistence = nullptr;
+    ProductPb::ConfigurationStatus m_ConfigurationStatus;
+    ProductPb::Language m_systemLanguage;
+    std::shared_ptr<FrontDoorClientIF> m_FrontDoorClientIF;
     ProductCliClient m_productCliClient;
 
     ProductAppStateTop m_ProductAppStateTop;
@@ -51,6 +136,7 @@ private:
     ProductAppStateStdOp m_ProductAppStateStdOp;
     ProductAppStateSetup m_ProductAppStateSetup;
     ProductAppStateStandby m_ProductAppStateStandby;
+    bool m_isCapsReady = false;
+    bool m_isLPMReady  = false;
 };
-
 } // namespace

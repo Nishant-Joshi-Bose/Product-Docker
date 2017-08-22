@@ -4,6 +4,8 @@ INCLUDE(../Settings.cmake)
 
 PROJECT(Eddie)
 
+SET(PROTO_CC_DEST ${CMAKE_BINARY_DIR}/proto)
+
 INCLUDE_DIRECTORIES(
   ${CMAKE_BINARY_DIR}
   ${CMAKE_BINARY_DIR}/proto
@@ -12,14 +14,14 @@ INCLUDE_DIRECTORIES(
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/STS
   ${RIVIERA_LPM_SERVICE_DIR}/source/Client
   ${RIVIERA_LPM_SERVICE_DIR}/source/LPMIPC
-  ${RIVIERA_LPM_DIR}/include
-  FrontDoorClientInterface
+  ${RIVIERA_LPM_DIR}/include  
   Hsm
+  ${PROTO_CC_DEST}
   .
 )
 
 SET(SOUNDTOUCH_SDK_LIBS
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libSoundTouchClient.a
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libFrontDoorClient.a
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libShelbyUtils.a
   ${BOSELIBS_DIR}/lib/libBoseLibs.a
 )

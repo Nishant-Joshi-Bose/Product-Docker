@@ -16,5 +16,5 @@ message ConfigurationStatus
         optional bool language = 2 [default = false];
         optional bool account  = 3 [default = false];
     }
-    optional Status status = 2;
+    optional Status status = 1;
 }

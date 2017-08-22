@@ -37,12 +37,4 @@ void ProductAppStateStdOp::HandleStateExit()
     BOSE_INFO( s_logger, __func__ );
 }
 
-bool ProductAppStateStdOp::HandleSetupEndPoint( SoundTouchInterface::msg_Header const& cookie, std::string const& body, std::string const& operation )
-{
-    BOSE_INFO( s_logger, "%s, %s", __func__, operation.c_str() );
-
-    ChangeState( PRODUCT_APP_STATE_SETUP );
-
-    return true;
-}
 } // namespace ProductApp

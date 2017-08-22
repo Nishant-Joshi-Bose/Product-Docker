@@ -7,6 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "ProductAppStateBooting.h"
+#include "ProductController.h"
 #include "DPrint.h"
 
 static DPrint s_logger( "ProductAppStateBooting" );
@@ -30,6 +31,7 @@ void ProductAppStateBooting::HandleStateEnter()
 void ProductAppStateBooting::HandleStateStart()
 {
     BOSE_INFO( s_logger, __func__ );
+    HandleModulesReady();
 }
 
 void ProductAppStateBooting::HandleStateExit()
@@ -37,12 +39,19 @@ void ProductAppStateBooting::HandleStateExit()
     BOSE_INFO( s_logger, __func__ );
 }
 
-bool ProductAppStateBooting::HandleSetupEndPoint( SoundTouchInterface::msg_Header const& cookie, std::string const& body, std::string const& operation )
+bool ProductAppStateBooting::HandleModulesReady()
 {
-    BOSE_INFO( s_logger, "%s, %s", __func__, operation.c_str() );
-
-    ChangeState( PRODUCT_APP_STATE_STDOP );
-
+    if( GetProductController().IsAllModuleReady() )
+    {
+        if( GetHsm().NeedsToBeSetup() )
+        {
+            ChangeState( PRODUCT_APP_STATE_SETUP );
+        }
+        else
+        {
+            ChangeState( PRODUCT_APP_STATE_STANDBY );
+        }
+    }
     return true;
 }
 

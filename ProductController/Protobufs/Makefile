@@ -2,7 +2,8 @@ WORKSPACE := $(abspath $(CURDIR)/../../)
 include $(WORKSPACE)/Settings.mk
 
 PROTO_SOURCES = \
-	ConfigurationStatus.proto
+	ConfigurationStatus.proto \
+	Language.proto
 
 # Where to write the *.pb.cc and *.pb.h files.
 ifndef PROTO_CC_DEST

@@ -9,7 +9,6 @@
 #include "Hsm.h"
 #include "HsmState.h"
 #include "ProductAppHsm.h"
-#include "SoundTouchInterface/Msg.pb.h"
 
 namespace ProductApp
 {
@@ -38,10 +37,7 @@ public:
     {
     }
 
-    //ToDo: Add HandleSomething() functions and callbacks here.
-
-    //This function demonstrates how websocket request triggers product application's state machine.
-    virtual bool HandleSetupEndPoint( SoundTouchInterface::msg_Header const& cookie, std::string const& body, std::string const& operation )
+    virtual bool HandleModulesReady( )
     {
         return false;
     }
@@ -51,6 +47,11 @@ protected:
     {
         return m_hsm;
     }
+    ProductController& GetProductController()
+    {
+        return m_productController;
+    }
+
 private:
     ProductAppHsm& m_hsm;
     ProductController& m_productController;

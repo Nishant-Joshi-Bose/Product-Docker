@@ -7,6 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "ProductAppStateTop.h"
+#include "ProductController.h"
 #include "DPrint.h"
 
 static DPrint s_logger( "ProductAppStateTop" );
@@ -23,10 +24,9 @@ ProductAppStateTop::ProductAppStateTop( ProductAppHsm& hsm,
     BOSE_INFO( s_logger,  __func__ );
 }
 
-bool ProductAppStateTop::HandleSetupEndPoint( SoundTouchInterface::msg_Header const& cookie, std::string const& body, std::string const& operation )
+bool ProductAppStateTop::HandleModulesReady()
 {
-    BOSE_INFO( s_logger, "%s, %s", __func__, operation.c_str() );
-
+    BOSE_INFO( s_logger, "%s, %d", __func__, GetProductController().IsAllModuleReady() );
     return true;
 }
 } // namespace ProductApp

@@ -22,11 +22,11 @@ private:
 
     CLIClient m_cliClient;
 
+
     LpmClientIF::LpmClientPtr m_lpmClient;
 
     bool HandleCommand( std::string const&, CLIClient::StringListType&,
                         std::string& );
 
     void CliCmdLpmEcho( CLIClient::StringListType&, std::string& );
-
 };

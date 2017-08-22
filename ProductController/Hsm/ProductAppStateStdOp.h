@@ -33,7 +33,5 @@ public:
     void HandleStateEnter() override;
     void HandleStateStart() override;
     void HandleStateExit() override;
-
-    bool HandleSetupEndPoint( SoundTouchInterface::msg_Header const& cookie, std::string const& body, std::string const& operation ) override;
 };
 } // namespace ProductApp

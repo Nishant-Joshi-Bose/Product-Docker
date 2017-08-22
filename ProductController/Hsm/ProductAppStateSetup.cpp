@@ -7,6 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "ProductAppStateSetup.h"
+#include "ProductController.h"
 #include "DPrint.h"
 
 static DPrint s_logger( "ProductAppStateSetup" );
@@ -30,10 +31,14 @@ void ProductAppStateSetup::HandleStateEnter()
 void ProductAppStateSetup::HandleStateStart()
 {
     BOSE_INFO( s_logger, __func__ );
+    /// TO Do-
+    ///GetProductController().SendActivateAccessPointCmd();
 }
 
 void ProductAppStateSetup::HandleStateExit()
 {
     BOSE_INFO( s_logger, __func__ );
+    /// TO Do-
+    ///GetProductController().SendDeActivateAccessPointCmd();
 }
 } // namespace ProductApp

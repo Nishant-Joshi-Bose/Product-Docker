@@ -29,6 +29,6 @@ public:
     {
     }
 
-    bool HandleSetupEndPoint( SoundTouchInterface::msg_Header const& cookie, std::string const& body, std::string const& operation ) override;
+    bool HandleModulesReady() override;
 };
 } // namespace ProductApp

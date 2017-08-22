@@ -55,20 +55,20 @@ void ProductCliClient::Initialize( NotifyTargetTaskIF* task )
                          "lpm echo [count]" ) );
 
     m_cliClient.Initialize( task, cmds,
-                            [this]( std::string const& cmd,
-                                    CLIClient::StringListType& argList,
-                                    std::string& response ) {
-                                return HandleCommand( cmd, argList, response );
-                            } );
-
+                            [this]( std::string const & cmd,
+                                    CLIClient::StringListType & argList,
+                                    std::string & response )
+    {
+        return HandleCommand( cmd, argList, response );
+    } );
     m_lpmClient = LpmClientFactory::Create( "ProductCliLpmClient", task );
-    m_lpmClient->Connect( [](bool connected)
-                          {
-                              if( connected )
-                                  BOSE_INFO( s_logger, "lpmClient connected" );
-                              else
-                                  BOSE_WARNING( s_logger, "lpmClient not connected" );
-                          } );
+    m_lpmClient->Connect( []( bool connected )
+    {
+        if( connected )
+            BOSE_INFO( s_logger, "lpmClient connected" );
+        else
+            BOSE_WARNING( s_logger, "lpmClient not connected" );
+    } );
 }
 
 bool ProductCliClient::HandleCommand( std::string const& cmd,
@@ -90,7 +90,7 @@ bool ProductCliClient::HandleCommand( std::string const& cmd,
 void ProductCliClient::CliCmdLpmEcho( CLIClient::StringListType& argList,
                                       std::string& response )
 {
-    decltype(IpcProtocol::IpcEcho_t::count) count {};
+    decltype( IpcProtocol::IpcEcho_t::count ) count {};
     if( argList.size() == 1 )
     {
         auto& arg = argList.front();
@@ -108,12 +108,12 @@ void ProductCliClient::CliCmdLpmEcho( CLIClient::StringListType& argList,
     BOSE_LOG( INFO, "Send lpm echo request count=" << count );
     IpcEcho_t param;
     param.set_count( count );
-    m_lpmClient->RequestEcho( param, [this]( IpcEcho_t const& rsp )
-        {
-            std::ostringstream ss;
-            ss << "Got lpm echo response count=" << rsp.count();
-            BOSE_LOG( INFO, ss.str() );
-            m_cliClient.SendAsyncResponse( ss.str() );
-        } );
+    m_lpmClient->RequestEcho( param, [this]( IpcEcho_t const & rsp )
+    {
+        std::ostringstream ss;
+        ss << "Got lpm echo response count=" << rsp.count();
+        BOSE_LOG( INFO, ss.str() );
+        m_cliClient.SendAsyncResponse( ss.str() );
+    } );
     response = "echo sent";
 }

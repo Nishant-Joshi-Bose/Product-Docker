@@ -6,6 +6,7 @@
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////
 #include "ProductAppState.h"
+#include "ProductController.h"
 
 namespace ProductApp
 {

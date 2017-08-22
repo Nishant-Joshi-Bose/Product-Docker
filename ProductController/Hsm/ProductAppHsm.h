@@ -27,6 +27,7 @@ public:
     {
         return m_pTask;
     }
+    bool NeedsToBeSetup();
 
 private:
     NotifyTargetTaskIF* m_pTask;
