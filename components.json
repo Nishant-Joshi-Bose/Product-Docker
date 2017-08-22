@@ -21,11 +21,11 @@
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@cbc71fe97dd4dcc229150405e3da25902446bd7a"
+    "selected_version": "master@2e1595ec6fc96bd21b4936bb16e24784fb31684b"
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@632"
+    "selected_version": "trunk@662"
   },
   {
     "name": "AVS-qc8017_32",

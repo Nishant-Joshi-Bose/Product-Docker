@@ -10,6 +10,11 @@ ADD_EXECUTABLE(Eddie
   Hsm/ProductAppStateStdOp.cpp
   Hsm/ProductAppStateSetup.cpp
   Hsm/ProductAppStateStandby.cpp
+  ${CMAKE_BINARY_DIR}/proto/AutoLpmServiceMessages.pb.cc
+  ${CMAKE_BINARY_DIR}/proto/LpmServiceMessages.pb.cc
+  ${RIVIERA_LPM_SERVICE_DIR}/source/Client/LpmClientFactory.cpp
+  ${RIVIERA_LPM_SERVICE_DIR}/source/Client/LpmClient.cpp
+  ${RIVIERA_LPM_SERVICE_DIR}/source/Client/AutoLpmClient.cpp
 )
 
 TARGET_LINK_LIBRARIES(Eddie

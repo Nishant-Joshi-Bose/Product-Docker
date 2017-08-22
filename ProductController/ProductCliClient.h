@@ -4,8 +4,9 @@
 
 #pragma once
 
-#include "CliClient.h"
 #include <string>
+#include "CliClient.h"
+#include "LpmClientIF.h"
 
 class NotifyTargetTaskIF;
 
@@ -21,9 +22,11 @@ private:
 
     CLIClient m_cliClient;
 
+    LpmClientIF::LpmClientPtr m_lpmClient;
+
     bool HandleCommand( std::string const&, CLIClient::StringListType&,
                         std::string& );
 
-    void WahooOne( CLIClient::StringListType&, std::string& );
+    void CliCmdLpmEcho( CLIClient::StringListType&, std::string& );
 
 };

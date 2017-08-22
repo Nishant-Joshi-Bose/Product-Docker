@@ -4,11 +4,34 @@
 
 #include "ProductCliClient.h"
 #include "DPrint.h"
+#include "LpmClientFactory.h"
+#include "RivieraLPM_IpcProtocol.h"
 
 namespace
 {
 
 DPrint s_logger{ "ProductCliClient" };
+
+template <typename UINT>
+bool ToInteger( std::string const& str, UINT& result )
+{
+    // Return true if 'str' is a well-formed string representation of an
+    // integer whose value will fit in 'result'.
+    try
+    {
+        size_t end = 0;
+        auto v = std::stoull( str, &end );
+        result = v;
+        if( result != v )
+            return false;           // truncation/overflow
+        return end == str.size();
+    }
+    catch( std::invalid_argument const& )
+    {
+        result = 0;
+        return false;
+    }
+}
 
 } // namespace
 
@@ -27,24 +50,9 @@ void ProductCliClient::Initialize( NotifyTargetTaskIF* task )
     using Cmd = CLIClient::CLICmdDescriptor;
 
     cmds.emplace_back( std::make_shared<Cmd>
-                       ( "wahoo one",
-                         "Wahoo one",
-                         "wahoo one args..." ) );
-
-    cmds.emplace_back( std::make_shared<Cmd>
-                       ( "wahoo two",
-                         "Wahoo two",
-                         "wahoo two args..." ) );
-
-    cmds.emplace_back( std::make_shared<Cmd>
-                       ( "wahoo three",
-                         "Wahoo three",
-                         "wahoo three args..." ) );
-
-    cmds.emplace_back( std::make_shared<Cmd>
-                       ( "wahoo four",
-                         "Wahoo four",
-                         "wahoo four args..." ) );
+                       ( "lpm echo",
+                         "Send an echo request to the LPM",
+                         "lpm echo [count]" ) );
 
     m_cliClient.Initialize( task, cmds,
                             [this]( std::string const& cmd,
@@ -52,6 +60,15 @@ void ProductCliClient::Initialize( NotifyTargetTaskIF* task )
                                     std::string& response ) {
                                 return HandleCommand( cmd, argList, response );
                             } );
+
+    m_lpmClient = LpmClientFactory::Create( "ProductCliLpmClient", task );
+    m_lpmClient->Connect( [](bool connected)
+                          {
+                              if( connected )
+                                  BOSE_INFO( s_logger, "lpmClient connected" );
+                              else
+                                  BOSE_WARNING( s_logger, "lpmClient not connected" );
+                          } );
 }
 
 bool ProductCliClient::HandleCommand( std::string const& cmd,
@@ -60,40 +77,43 @@ bool ProductCliClient::HandleCommand( std::string const& cmd,
 {
     BOSE_INFO( s_logger, "HandleCommand '%s'", cmd.c_str() );
 
-    if( cmd == "wahoo one" )
+    if( cmd == "lpm echo" )
     {
-        WahooOne( argList, response );
+        CliCmdLpmEcho( argList, response );
         return true;
     }
 
-    if( cmd == "wahoo two" )
-    {
-        //WahooTwo( argList, response );
-        return true;
-    }
-
-    if( cmd == "wahoo three" )
-    {
-        //WahooThree( argList, response );
-        return true;
-    }
-
-    if( cmd == "wahoo four" )
-    {
-        //WahooFour( argList, response );
-        return true;
-    }
-
-    response = "Unknown command: " + cmd;
+    response = "Internal error: " + cmd;
     return false;
 }
 
-void ProductCliClient::WahooOne( CLIClient::StringListType& argList,
-                                 std::string& response )
+void ProductCliClient::CliCmdLpmEcho( CLIClient::StringListType& argList,
+                                      std::string& response )
 {
-    std::ostringstream ss;
-    ss << "args [" << argList.size() << ']';
-    for( auto const& arg : argList )
-        ss << " '" << arg << '\'';
-    response = ss.str();
+    decltype(IpcProtocol::IpcEcho_t::count) count {};
+    if( argList.size() == 1 )
+    {
+        auto& arg = argList.front();
+        if( !ToInteger( arg, count ) )
+        {
+            response = "Malformed integer: " + arg;
+            return;
+        }
+    }
+    else if( !argList.empty() )
+    {
+        response = "Wrong usage";
+        return;
+    }
+    BOSE_LOG( INFO, "Send lpm echo request count=" << count );
+    IpcEcho_t param;
+    param.set_count( count );
+    m_lpmClient->RequestEcho( param, [this]( IpcEcho_t const& rsp )
+        {
+            std::ostringstream ss;
+            ss << "Got lpm echo response count=" << rsp.count();
+            BOSE_LOG( INFO, ss.str() );
+            m_cliClient.SendAsyncResponse( ss.str() );
+        } );
+    response = "echo sent";
 }

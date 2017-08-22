@@ -1,6 +1,8 @@
 <ShepherdConfig>
   <daemon name="Eddie"/>
 
+  <daemon name="LPMService"/>
+
   <daemon name="avahi-daemon"
           exe="start-avahi"/>
 
