@@ -24,6 +24,8 @@
     <arg>-c/opt/Bose/etc/UpnpSource.xml</arg>
   </daemon>
 
+  <daemon name="FrontDoor"/>
+
   <daemon name="WebServer">
     <arg>-c/opt/Bose/etc/WebServer.xml</arg>
   </daemon>
