@@ -81,5 +81,5 @@ $ sudo fastboot reboot
 To rebuild the .ipk file and install via adb in one step:
 
 ```shell session
-$ ./scripts/putipk
+$ ./scripts/putipk jobs=4
 ```

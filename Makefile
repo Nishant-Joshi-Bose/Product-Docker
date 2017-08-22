@@ -12,7 +12,7 @@ $(BUILDS_DIR):
 	mkdir -p $@
 
 .PHONY: ProductController
-ProductController: install-components version-files
+ProductController: LpmService version-files
 	$(MAKE) -C $@
 
 .PHONY: install-components

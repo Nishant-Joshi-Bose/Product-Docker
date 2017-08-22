@@ -1,5 +1,7 @@
-# Source						Destination										Rule
-./builds/Release/product.ipk	<DEPLOY_DIR>/professor_<VERSION_STRING>.ipk		file
+# Source								Destination										Rule
+./builds/Release/product.ipk			<DEPLOY_DIR>/professor_<VERSION_STRING>.ipk		file
+./builds/Release/package/product.tar	<DEPLOY_DIR>/professor_<VERSION_STRING>.tar		file
+./builds/Release/package/product_flash	<DEPLOY_DIR>/professor_flash					file
 
 # EMACS
 # Local Variables:
