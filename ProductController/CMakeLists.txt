@@ -1,8 +1,8 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-INCLUDE(../Settings.cmake)
-
 PROJECT(Professor)
+
+INCLUDE(../Settings.cmake)
 
 SET(PROTO_CC_DEST ${CMAKE_BINARY_DIR}/proto)
 

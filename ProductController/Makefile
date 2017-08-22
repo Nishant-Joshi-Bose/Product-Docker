@@ -4,7 +4,7 @@ include $(WORKSPACE)/Settings.mk
 CMAKE_FLAGS := -DCFG=$(cfg) -DSDK=$(sdk)
 # BUILDS_DIR here becomes CMAKE_BINARY_DIR in CMake.
 
-PROTOC := ../components/SoundTouch-SDK-qc8017_32/prebuilt/Release/native/bin/protoc
+PROTOC := ../components/SoundTouch-SDK-$(sdk)/prebuilt/Release/native/bin/protoc
 
 # TODO make any "install-SoundTouch-SDK" mods for qc and run it here (if we even need to)
 PROTO_DIRS = \
@@ -13,7 +13,7 @@ PROTO_DIRS = \
 PROTO_CC_DEST = $(BUILDS_DIR)/proto
 
 define build-proto
-for dir in $(PROTO_DIRS); do make -C $$dir PROTO_CC_DEST=$(PROTO_CC_DEST) $1; done
+for dir in $(PROTO_DIRS); do make -C $$dir PROTO_CC_DEST=$(PROTO_CC_DEST) SDK=$(sdk) $1; done
 endef
 
 .PHONY: all

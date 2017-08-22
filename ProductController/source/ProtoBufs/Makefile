@@ -19,7 +19,7 @@ PROTO_SOURCES = \
 .PHONY: all
 all: build-proto
 
-BOSELIB := $(shell components get BoseLibs-qc8017_32 installed_location)
+BOSELIB := $(shell components get BoseLibs-$(SDK) installed_location)
 PROTOC := $(BOSELIB)/native/bin/protoc
 
 # Where to search for imported *.proto files.
