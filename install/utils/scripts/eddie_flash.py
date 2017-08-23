@@ -21,10 +21,10 @@ import shutil
 import logging
 import argparse
 
-def do_fastboot_update(package_path, all_partitions, userspace_only, partition_list_file, erase_persist):
+def do_fastboot_update(package_path, full_update, all_partitions, userspace_only, partition_list_file, erase_persist):
     from fastboot_flash import FastbootUpdater
     from fastboot_flash import do_fastboot_flash
-    do_fastboot_flash(package_path, all_partitions, userspace_only, partition_list_file, erase_persist)
+    do_fastboot_flash(package_path, full_update, all_partitions, userspace_only, partition_list_file, erase_persist)
     return
 
 # This needs change after discussion on how to do LPM update
@@ -45,7 +45,7 @@ def do_lpm_update(package_path, lpm_serial_dev):
     do_lpm_flash(lpm_serial_dev, lpm_file)
     return
 
-def do_qc_flash(package, update_fastboot, all_partitions, userspace_only, partition_list_file, erase_persist, update_lpm, lpm_serial_dev):
+def do_qc_flash(package, update_fastboot, full_update, all_partitions, userspace_only, partition_list_file, erase_persist, update_lpm, lpm_serial_dev):
     try:
         abs_package = os.path.abspath(package)
         logging.info("Using package: [%s] for update. Extracting..." %(abs_package)) 
@@ -63,7 +63,7 @@ def do_qc_flash(package, update_fastboot, all_partitions, userspace_only, partit
         # Perform Fastboot update if enabled
         if update_fastboot:
             logging.info("..... Fastboot update Start .....")  
-            do_fastboot_update(extracted_package, all_partitions, userspace_only, partition_list_file, erase_persist)
+            do_fastboot_update(extracted_package, full_update, all_partitions, userspace_only, partition_list_file, erase_persist)
             logging.info("..... Fastboot update Finish .....")
             
         # Perform LPM update if enabled
@@ -99,18 +99,31 @@ if __name__ == '__main__':
             logging.info("The flash script requires root priviledge. Please try and rerun in sudo mode.")
             sys.exit(-1)
             
-    parser = argparse.ArgumentParser(description='Flash Eddie and LPM using Fastboot/Serial.')
+    parser = argparse.ArgumentParser(description='Flash Eddie and LPM using Fastboot Flash.')
     parser.add_argument('package', action='store', help="Full path of package TAR file")
     subparsers = parser.add_subparsers(help='commands')
     
     fastboot_parser = subparsers.add_parser("fastboot", help="Perform fastboot update")
-    fastboot_parser.add_argument('-a', '--all', default=False, action='store_true', required=False, help="Flash all partitions (except persist)")
-    fastboot_parser.add_argument('-u', '--userspace-only', default=False, action='store_true', required=False, help="Flash only userspace (bose) partition")
-    fastboot_parser.add_argument('-e', '--erase-persist', default=False, action='store_true', required=False, help="Erase persistent partition")    
-    fastboot_parser.add_argument('-l', '--partition-list', default="", action='store', required=False, help="Name of partition list file")    
-
-    lpm_parser = subparsers.add_parser("lpm", help="Perform LPM update")
-    lpm_parser.add_argument('-s', '--serial', default="", required=True, action='store', help="Serial port for LPM connection")
+    fastboot_parser.add_argument('-f', '--full-update', 
+                                 default=False, 
+                                 action='store_true', 
+                                 required=False, 
+                                 help="Erase All partitions including Partition table")       
+    fastboot_parser.add_argument('-a', '--all', 
+                                 default=False, 
+                                 action='store_true', 
+                                 required=False, 
+                                 help="Flash all partitions (except usrfs, persist, bose-persist & partition table)")
+    fastboot_parser.add_argument('-u', '--userspace-only', 
+                                 default=False, 
+                                 action='store_true', 
+                                 required=False, 
+                                 help="Flash only userspace (bose) partition")
+    fastboot_parser.add_argument('-e', '--erase-persist', 
+                                 default=False, 
+                                 action='store_true', 
+                                 required=False, 
+                                 help="Erase only bose-persist partition") 
 
     args = parser.parse_args()
     abs_package = os.path.abspath(args.package)
@@ -120,36 +133,30 @@ if __name__ == '__main__':
          logging.info("Package Cannot be found / not TAR file: " %abs_package)
          sys.exit(-1)
     
+    full_update = True
     userspace_only = False
     all_partitions = False
     erase_persist = False
     partition_list_file = None
     update_lpm = False
-    update_fastboot = False
+    update_fastboot = True
     lpm_serial_dev = None
-    if args.erase_persist:
-        erase_persist = True
-
-    if ('userspace_only' in args.__dict__) and args.userspace_only:
-        userspace_only = True
-    elif ('all' in args.__dict__) and args.all:
-        all_partitions = True
-    elif ('partition_list' in args.__dict__) and args.partition_list != "":
-        partition_list_file = os.path.abspath(args.partition_list)
-        if os.path.exists(partition_list_file):
-            logging.info("Partitions to be flashed from: [%s]" %partition_list_file)
-        else:
-            logging.info("Partition list file invalid: [%s]" %partition_list_file)
-            sys.exit(-1)
-            
-    if userspace_only or all_partitions or erase_persist or partition_list_file != "":
-        update_fastboot = True
     
-    if ('serial' in args.__dict__) and args.serial != "":
-        update_lpm = True
-        lpm_serial_dev = args.serial
+    # if user says full update, do so
+    if ('full_update' in args.__dict__) and args.full_update:
+        full_update = True
+    else:
+        # erase persist can coexist with other options
+        if args.erase_persist:
+            erase_persist = True            
+        if ('userspace_only' in args.__dict__) and args.userspace_only:
+            userspace_only = True
+        elif ('all' in args.__dict__) and args.all:
+            all_partitions = True
 
-    
-    do_qc_flash(abs_package, update_fastboot, all_partitions, userspace_only, partition_list_file, erase_persist, update_lpm, lpm_serial_dev)
+    if userspace_only or all_partitions or erase_persist:
+        full_update = False
+
+    do_qc_flash(abs_package, update_fastboot, full_update, all_partitions, userspace_only, partition_list_file, erase_persist, update_lpm, lpm_serial_dev)
     sys.exit(0) 
     
