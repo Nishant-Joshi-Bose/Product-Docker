@@ -1,6 +1,8 @@
 SET( PROTOBUFS_SRCS
     ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
     ${PROTO_CC_DEST}/Language.pb.cc
+    ${PROTO_CC_DEST}/DeviceInfo.pb.cc
+    ${PROTO_CC_DEST}/DeviceState.pb.cc
 )
 
 ADD_EXECUTABLE(Eddie
@@ -14,6 +16,7 @@ ADD_EXECUTABLE(Eddie
   Hsm/ProductAppStateStdOp.cpp
   Hsm/ProductAppStateSetup.cpp
   Hsm/ProductAppStateStandby.cpp
+  DeviceManager/DeviceManager.cpp
   ${PROTOBUFS_SRCS}
   ${CMAKE_BINARY_DIR}/proto/AutoLpmServiceMessages.pb.cc
   ${CMAKE_BINARY_DIR}/proto/LpmServiceMessages.pb.cc

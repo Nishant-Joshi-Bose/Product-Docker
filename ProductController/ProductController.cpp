@@ -26,7 +26,8 @@ ProductController::ProductController():
     m_ProductAppStateBooting( m_ProductAppHsm, &m_ProductAppStateTop, *this ),
     m_ProductAppStateStdOp( m_ProductAppHsm, &m_ProductAppStateTop, *this ),
     m_ProductAppStateSetup( m_ProductAppHsm, &m_ProductAppStateStdOp, *this ),
-    m_ProductAppStateStandby( m_ProductAppHsm, &m_ProductAppStateStdOp, *this )
+    m_ProductAppStateStandby( m_ProductAppHsm, &m_ProductAppStateStdOp, *this ),
+    m_deviceManager (m_ProductControllerTask, *this)
 {
     BOSE_INFO( s_logger, __func__ );
     m_LanguagePersistence = ProtoPersistenceFactory::Create( "ProductLanguage", g_ProductPersistenceDir );
@@ -86,11 +87,22 @@ void ProductController::RegisterEndPoints()
 
     AsyncCallback<Callback<ProductPb::ConfigurationStatus>> getConfigurationStatusReqCb( std::bind( &ProductController::HandleConfigurationStatusRequest ,
                                                          this, std::placeholders::_1 ) , m_ProductControllerTask );
+    //DeviceInfo async callback
+    AsyncCallback <Callback<DeviceInfoPb :: DeviceInfo>> getDeviceInfoReqCb (std::bind(&ProductController :: HandleGetDeviceInfoRequest, 
+                                                            this, std::placeholders::_1),m_ProductControllerTask);
+    //Device State async callback
+    AsyncCallback <Callback<DeviceStatePb :: DeviceState >> getDeviceStateReqCb (std::bind(&ProductController :: HandleGetDeviceStateRequest, 
+                                                            this, std::placeholders::_1),m_ProductControllerTask);
+
     /// Registration of endpoints to the frontdoor client.
     m_FrontDoorClientIF->RegisterGet( "system/language" , getLanguageReqCb );
     m_FrontDoorClientIF->RegisterGet( "system/configuration/status" , getConfigurationStatusReqCb );
 
     m_FrontDoorClientIF->RegisterPost<ProductPb::Language>( "system/language" , postLanguageReqCb );
+    //Device info get request handler
+    m_FrontDoorClientIF->RegisterGet ("system/info", getDeviceInfoReqCb);
+    //Device state get request handler
+    m_FrontDoorClientIF->RegisterGet ("system/state", getDeviceStateReqCb);
 }
 
 void ProductController::HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp )
@@ -217,4 +229,24 @@ void ProductController::SendDeActivateAccessPointCmd()
 {
     BOSE_INFO( s_logger, __func__ );
 }
+
+void ProductController :: HandleGetDeviceInfoRequest ( const Callback<DeviceInfoPb::DeviceInfo>& resp)
+{
+    DeviceInfoPb::DeviceInfo devInfo;
+
+    devInfo = m_deviceManager.getDeviceInfo ();
+
+    BOSE_INFO( s_logger, "%s:Reponse: %s", __func__, ProtoToMarkup::ToJson( devInfo, false ).c_str() );
+
+    resp.Send (devInfo);
+}
+
+void ProductController :: HandleGetDeviceStateRequest ( const Callback<DeviceStatePb::DeviceState>& resp)
+{
+    DeviceStatePb :: DeviceState currentState;
+    currentState.set_state( m_ProductAppHsm.GetCurrentState()->GetName());
+    BOSE_INFO( s_logger, "%s:Reponse: %s", __func__, ProtoToMarkup::ToJson(currentState,false).c_str() );
+    resp.Send (currentState);
+}
+
 } // namespace ProductApp

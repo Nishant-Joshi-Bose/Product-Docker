@@ -15,8 +15,11 @@
 #include "ProductAppStateStdOp.h"
 #include "ProductAppStateSetup.h"
 #include "ProductAppStateStandby.h"
+#include "DeviceManager.h"
 #include "ConfigurationStatus.pb.h"
 #include "Language.pb.h"
+#include "DeviceInfo.pb.h"
+#include "DeviceState.pb.h"
 #include "ProductCliClient.h"
 
 namespace ProductApp
@@ -121,6 +124,20 @@ public:
 ////////////////////////////////////////////////////////////////////////////////
     void HandleConfigurationStatusRequest( const Callback<ProductPb::ConfigurationStatus> &resp );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @name  HandleDeviceInfoRequest
+    /// @brief "system/info" endpoint request handler.
+    /// @return void
+    ////////////////////////////////////////////////////////////////////////////////
+    void HandleGetDeviceInfoRequest (const Callback<DeviceInfoPb :: DeviceInfo>& resp);
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @name  HandleGetDeviceStateRequest
+    /// @brief "system/state" endpoint request handler.
+    /// @return void
+    ////////////////////////////////////////////////////////////////////////////////
+    void HandleGetDeviceStateRequest (const Callback<DeviceStatePb::DeviceState>& resp);
+
 private:
     NotifyTargetTaskIF* m_ProductControllerTask;
     ProductAppHsm m_ProductAppHsm;
@@ -136,6 +153,10 @@ private:
     ProductAppStateStdOp m_ProductAppStateStdOp;
     ProductAppStateSetup m_ProductAppStateSetup;
     ProductAppStateStandby m_ProductAppStateStandby;
+
+    ///Device manager instance
+    DeviceManager               m_deviceManager;
+
     bool m_isCapsReady = false;
     bool m_isLPMReady  = false;
 };

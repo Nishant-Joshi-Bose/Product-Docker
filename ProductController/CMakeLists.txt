@@ -16,6 +16,7 @@ INCLUDE_DIRECTORIES(
   ${RIVIERA_LPM_SERVICE_DIR}/source/LPMIPC
   ${RIVIERA_LPM_DIR}/include  
   Hsm
+  DeviceManager
   ${PROTO_CC_DEST}
   .
 )
