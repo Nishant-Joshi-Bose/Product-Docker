@@ -20,12 +20,6 @@ $ PATH=$PATH:/scratch/CastleTools/bin   # add this to your ~/.profile, ~/.bash_p
 $ git clone git@github.com:BoseCorp/Eddie.git
 ```
 
-You should update your CastleTools workspace on a regular basis.
-```shell session
-$ cd /scratch/CastleTools
-$ git pull
-```
-
 Build the .ipk package file containing the SoundTouch software.
 ```shell session
 $ cd /scratch/Eddie
