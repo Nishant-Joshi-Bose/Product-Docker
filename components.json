@@ -5,7 +5,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-12+5c1bdc6"
+    "selected_version": "Continuous/master/0.0.1-15+bde3547"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -13,7 +13,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-08-24_1017"
+    "selected_version": "Continuous/Castle-Fork/2017-08-24_1302"
   },
   {
     "name": "Riviera-HSP",
@@ -21,11 +21,11 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-08-24_1017"
+    "selected_version": "Continuous/Castle-Fork/2017-08-24_1302"
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@dfbdc682e1bc030bfaea10462ea19595965e6e83"
+    "selected_version": "master@f1f1daf09d8b50fb2af7e3930aac3ffb2c52938d"
   },
   {
     "name": "RivieraLPM",
@@ -33,6 +33,6 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-08-24_1017"
+    "selected_version": "Continuous/Castle-Fork/2017-08-24_1302"
   }
 ]
