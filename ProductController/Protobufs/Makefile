@@ -1,5 +1,4 @@
-WORKSPACE := $(abspath $(CURDIR)/../../)
-include $(WORKSPACE)/Settings.mk
+include $(BOSE_WORKSPACE)/Settings.mk
 
 PROTO_SOURCES = \
 	ConfigurationStatus.proto \
@@ -16,7 +15,7 @@ PROTOC := $(BOSELIB_DIR)/native/bin/protoc
 PROTOC_DEPEND := $(BOSELIB_DIR)/native/bin/protoc-depend
 
 # Where to search for imported *.proto files.
-PROTO_IMPORT_DIRS ?= \
+PROTO_IMPORT_DIRS := \
  . \
  $(PROTO_CC_DEST)\
  $(BOSELIB_DIR)/protobufs \
@@ -36,9 +35,7 @@ PROTO_CC_DEPENDS := $(foreach f,$(PROTO_SOURCES),$(PROTO_CC_DEST)/$f.d)
 
 $(call proto-cc,%.proto): %.proto
 	mkdir -p $(dir $@)
-	@echo vikram Building protocol buffer sources from proto files
-	$(PROTOC_DEPEND) $(PROTO_CC_DEST)/$<.d $(PROTOC) $(patsubst %,--proto_path=%, $(PROTO_IMPORT_DIRS)) --cpp_out=$(PROTO_CC_DEST) $<
-
+	$(PROTOC) $(--proto_path=%, $(PROTO_IMPORT_DIRS)) --cpp_out=$(PROTO_CC_DEST) $<
 
 #
 # Rules for compiling *.proto files into C++.
@@ -52,5 +49,3 @@ clean:
 
 .PHONY: build-proto
 build-proto: $(PROTO_CC)
-
-
