@@ -1,4 +1,5 @@
-# ToDo Have CMakeLists.txt file instead of this Makefile.
+include $(BOSE_WORKSPACE)/Settings.mk
+
 PROTO_SOURCES = \
       AudioControls.proto           \
       ProductMessage.proto          \
@@ -7,28 +8,23 @@ PROTO_SOURCES = \
       A4VSystemTimeout.proto
 
 # Where to write the *.pb.cc and *.pb.h files.
-#ifndef PROTO_CC_DEST
-#  $(error No PROTO_CC_DEST)
-#endif
-#PROTO_CC_DEST := ..
+ifndef PROTO_CC_DEST
+  $(error No PROTO_CC_DEST)
+endif
 
-#
-# Rules for compiling *.proto files into C++.
-#
-
-.PHONY: all
-all: build-proto
-
-BOSELIB := $(shell components get BoseLibs-$(SDK) installed_location)
-PROTOC := $(BOSELIB)/native/bin/protoc
+BOSELIB_DIR := $(shell components get BoseLibs-$(sdk) installed_location)
+SOUNDTOUCH_SDK_DIR := $(shell components get SoundTouch-SDK-$(sdk) installed_location)
+PROTOC := $(BOSELIB_DIR)/native/bin/protoc
+PROTOC_DEPEND := $(BOSELIB_DIR)/native/bin/protoc-depend
 
 # Where to search for imported *.proto files.
-PROTO_IMPORT_DIRS ?= \
+PROTO_IMPORT_DIRS := \
+ . \
  $(PROTO_CC_DEST)\
+ $(BOSELIB_DIR)/protobufs \
+ $(BOSELIB_DIR)/include \
  $(SOUNDTOUCH_SDK_DIR)/protobufs \
  $(SOUNDTOUCH_SDK_DIR)/prebuilt/include \
- ProductController/source/ProtoBufs
-
 
 # $1 - one or more *.proto file names.
 # returns the set of *.pb.cc and *.pb.h file names
@@ -40,15 +36,16 @@ PROTO_CC := $(call proto-cc,$(PROTO_SOURCES))
 PROTO_CC_DEPENDS := $(foreach f,$(PROTO_SOURCES),$(PROTO_CC_DEST)/$f.d)
 -include $(PROTO_CC_DEPENDS)
 
-#$(call proto-cc,%.proto): %.proto
-#	mkdir -p $(dir $@)
-#	@echo "Building Protocol Buffers..."
-#	$(PROTOC) $(--proto_path=%, $(PROTO_IMPORT_DIRS)) --cpp_out=$(PROTO_CC_DEST) $<
-
 $(call proto-cc,%.proto): %.proto
 	mkdir -p $(dir $@)
 	@echo "Building Protocol Buffers Now..."
 	$(PROTOC) $(--proto_path=%, $(PROTO_IMPORT_DIRS)) --cpp_out=$(PROTO_CC_DEST) $<
+
+#
+# Rules for compiling *.proto files into C++.
+#
+.PHONY: all
+all: build-proto
 
 .PHONY: clean
 clean:

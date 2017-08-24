@@ -1,0 +1,5 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+PROJECT(Product)
+INCLUDE(Settings.cmake)
+ADD_SUBDIRECTORY(builds/RivieraLpmService)
+ADD_SUBDIRECTORY(ProductController)

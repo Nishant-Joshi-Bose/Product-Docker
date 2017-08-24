@@ -1,4 +1,4 @@
-WORKSPACE := $(abspath $(CURDIR))
+export BOSE_WORKSPACE := $(abspath $(CURDIR))
 include Settings.mk
 
 .PHONY: default
@@ -11,24 +11,30 @@ version-files: | $(BUILDS_DIR)
 $(BUILDS_DIR):
 	mkdir -p $@
 
-.PHONY: ProductController
-ProductController: LpmService version-files
-	$(MAKE) -C $@
-
-.PHONY: install-components
-install-components:
+.PHONY: check_tools
+check_tools:
 ifndef DONT_UPDATE_CASTLETOOLS
 	castletools-update
 endif
 	components install
 
-.PHONY: LpmService
-LpmService: install-components
-	$(MAKE) -C components/RivieraLpmService
+RIVIERALPMSERVICE_DIR = $(shell components get RivieraLpmService installed_location)
+
+.PHONY: generated_sources
+generated_sources: check_tools version-files
+	$(MAKE) -C ProductController $@
+	$(MAKE) -C $(RIVIERALPMSERVICE_DIR) $@
+
+.PHONY: cmake_build
+cmake_build: generated_sources | $(BUILDS_DIR)
+	rm -fv $(BUILDS_DIR)/CMakeCache.txt
+# Symlink to placate cmake's add_directory which doesn't like absolute paths.
+	ln -nsf $(RIVIERALPMSERVICE_DIR) builds/RivieraLpmService
+	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR)
+	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
 
 .PHONY: product-ipk
-product-ipk: ProductController LpmService
-	rm -fv builds/$(cfg)/*.ipk
+product-ipk: cmake_build
 	./scripts/create-product-ipk
 
 .PHONY: package
