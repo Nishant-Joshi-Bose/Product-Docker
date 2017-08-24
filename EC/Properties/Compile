@@ -8,8 +8,4 @@ export PATH=$CastleToolsDir/bin:$PATH
 
 components cache /scratch/components-cache
 
-# This component doesn't honor the set-location mechanism, so restore the
-# default location.
-components set-location RivieraLpmService
-
 make DONT_UPDATE_CASTLETOOLS=1 default package
