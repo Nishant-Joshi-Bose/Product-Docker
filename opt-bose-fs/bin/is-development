@@ -1,0 +1,11 @@
+#!/bin/sh
+#
+# True if development mode is enabled.
+#
+# Example:
+#
+#   if is-development; then
+#      echo Development mode is enabled.
+#   fi
+#
+[ "$(mfgdata get development false)" = true ]

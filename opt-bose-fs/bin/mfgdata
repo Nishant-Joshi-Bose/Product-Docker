@@ -1,0 +1,94 @@
+#!/usr/bin/python2.7
+#
+# mfgdata set KEY VALUE
+# mfgdata get KEY [DEFAULT]
+# mfgdata del KEY         -- delete this key, ok if it doesn't exist
+# mfgdata clear           -- delete all keys
+#
+import os
+import sys
+import json
+import md5
+import time
+
+os.chdir(os.environ.get("BOSE_PERSIST_DIR", "/persist"))
+
+data_file = "mfg_data.json"
+signature_file = "mfg_data.md5"
+
+data = {}
+
+def md5sig(text):
+    m = md5.new()
+    m.update(text)
+    return m.hexdigest()
+
+def load():
+    global data
+
+    with open(data_file) as fh:
+        json_text = fh.read()
+
+    with open(signature_file) as fh:
+        expected_signature = fh.read().split()[0]
+
+    actual_signature = md5sig(json_text)
+    if expected_signature != actual_signature:
+        raise Exception("Signature mismatch '{}' != '{}'".\
+                            format(expected_signature, actual_signature))
+
+    data = json.loads(json_text)
+
+def store():
+    global data
+
+    data["modified"] = time.strftime("%a, %d %b %Y %H:%M:%S %z")
+    new_json_text = json.dumps(data, indent=2, sort_keys=True).\
+        replace(" \n", "\n") + "\n"
+    new_signature = md5sig(new_json_text)
+
+    with open(signature_file, "w") as fh:
+        fh.write("{}  {}\n".format(new_signature, data_file))
+
+    with open(data_file, "w") as fh:
+        fh.write(new_json_text)
+
+sys.argv.pop(0)
+
+op = sys.argv.pop(0)
+
+if op == "set":
+    key, value = sys.argv
+    load()
+    if key not in data or data[key] != value:
+        data[key] = value
+        store()
+
+elif op == "get":
+    if len(sys.argv) == 1:
+        key, = sys.argv
+        load()
+        print data[key]
+    else:
+        key, default = sys.argv
+        try:
+            load()
+            print data[key]
+        except:
+            print default
+
+elif op == "del":
+    key, = sys.argv
+    load()
+    if key in data:
+        del data[key]
+        store()
+
+elif op == "clear":
+    if sys.argv:
+        raise Exception("unexpected argument")
+    data = {}
+    store()
+
+else:
+    raise Exception("invalid operation '{}'".format(op))

@@ -41,13 +41,28 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
         exit 1
     fi
 
-    if is-production; then
+    if ! cat /persist/mfg_data.json; then
+        log warning "No manufacturing data, won't start SoundTouch"
+        cat >&2 <<\EOF
+To set manufacturing data:
+
+  mount -oremount,rw /persist
+  mfgdata clear
+  mfgdata set development true
+  mfgdata set country_code US
+  mount -oremount,ro /persist
+
+EOF
+        exit 1
+    fi
+
+    if ! is-development; then
         set -- "$@" --recovery
         ulimit -c 0
         log info "Production mode (core files disabled, recovery enabled)"
     else
         ulimit -c unlimited
-        log info "Non-production mode (core files enabled, recovery disabled)"
+        log info "Development mode (core files enabled, recovery disabled)"
         echo "/mnt/nv/BoseLog/core-%e-%u-%g-%p-%t-%s" > \
             /proc/sys/kernel/core_pattern
     fi
@@ -64,7 +79,7 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
         rm -f "$rundir"/*.xml
         ln -s /opt/Bose/etc/Shepherd*.xml "$rundir" || exit
 
-        if ! is-production; then
+        if is-development; then
             cat >"$rundir/Debug.xml" <<\EOF
 <ShepherdConfig>
   <daemon name="Telnet"
