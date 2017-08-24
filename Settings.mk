@@ -1,5 +1,5 @@
-ifndef WORKSPACE
-  $(error No WORKSPACE)
+ifndef BOSE_WORKSPACE
+  $(error No BOSE_WORKSPACE)
 endif
 
 sdk = qc8017_32
@@ -10,4 +10,6 @@ else
 endif
 jobs = 1
 
-BUILDS_DIR := $(WORKSPACE)/builds/$(cfg)/$(sdk)
+BUILDS_DIR := $(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)
+
+PROTO_CC_DEST := $(BUILDS_DIR)/proto
