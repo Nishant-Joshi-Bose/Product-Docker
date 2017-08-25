@@ -87,10 +87,10 @@ void ProductController::RegisterEndPoints()
     AsyncCallback<Callback<ProductPb::ConfigurationStatus>> getConfigurationStatusReqCb( std::bind( &ProductController::HandleConfigurationStatusRequest ,
                                                          this, std::placeholders::_1 ) , m_ProductControllerTask );
     /// Registration of endpoints to the frontdoor client.
-    m_FrontDoorClientIF->RegisterGet( "system/language" , getLanguageReqCb );
-    m_FrontDoorClientIF->RegisterGet( "system/configuration/status" , getConfigurationStatusReqCb );
+    m_FrontDoorClientIF->RegisterGet( "/system/language" , getLanguageReqCb );
+    m_FrontDoorClientIF->RegisterGet( "/system/configuration/status" , getConfigurationStatusReqCb );
 
-    m_FrontDoorClientIF->RegisterPost<ProductPb::Language>( "system/language" , postLanguageReqCb );
+    m_FrontDoorClientIF->RegisterPost<ProductPb::Language>( "/system/language" , postLanguageReqCb );
 }
 
 void ProductController::HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp )

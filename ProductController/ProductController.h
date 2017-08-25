@@ -102,21 +102,21 @@ public:
     void SendDeActivateAccessPointCmd();
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  HandleGetLanguageRequest
-/// @brief Handles GET request for "system/language" endpoint.
+/// @brief Handles GET request for "/system/language" endpoint.
 /// @return void
 ////////////////////////////////////////////////////////////////////////////////
     void HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  HandleGetLanguageRequest
-/// @brief Handles POST request for "system/language" endpoint.
+/// @brief Handles POST request for "/system/language" endpoint.
 /// @return void
 ////////////////////////////////////////////////////////////////////////////////
     void HandlePostLanguageRequest( const ProductPb::Language &lang, const Callback<ProductPb::Language> &resp );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  HandleConfigurationStatusRequest
-/// @brief "system/configuration/status" endpoint request handler.
+/// @brief "/system/configuration/status" endpoint request handler.
 /// @return void
 ////////////////////////////////////////////////////////////////////////////////
     void HandleConfigurationStatusRequest( const Callback<ProductPb::ConfigurationStatus> &resp );
