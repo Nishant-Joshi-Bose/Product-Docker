@@ -2,7 +2,11 @@ export BOSE_WORKSPACE := $(abspath $(CURDIR))
 include Settings.mk
 
 .PHONY: default
+ifeq ($(sdk),native)
+default: cmake_build
+else
 default: product-ipk
+endif
 
 .PHONY: version-files
 version-files: | $(BUILDS_DIR)
