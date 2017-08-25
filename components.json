@@ -13,7 +13,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-08-24_1302"
+    "selected_version": "Continuous/Castle-Fork/2017-08-25_1656"
   },
   {
     "name": "Riviera-HSP",
@@ -25,11 +25,11 @@
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@f1f1daf09d8b50fb2af7e3930aac3ffb2c52938d"
+    "selected_version": "master@5812e6317acaef0fcd1e21ca7802926037e8f1c5"
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@693"
+    "selected_version": "trunk@716"
   },
   {
     "name": "AVS-qc8017_32",
