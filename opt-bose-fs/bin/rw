@@ -1,0 +1,9 @@
+#!/bin/bash
+#
+# Make all file systems read/write.
+#
+exit=0
+for fs in / /persist; do
+    mount -oremount,rw "$@" "$fs" || exit=1
+done
+exit $exit
