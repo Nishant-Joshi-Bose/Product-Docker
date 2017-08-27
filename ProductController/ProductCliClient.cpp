@@ -4,6 +4,7 @@
 
 #include "ProductCliClient.h"
 #include "DPrint.h"
+#include "SystemUtils.h"
 #include "LpmClientFactory.h"
 #include "RivieraLPM_IpcProtocol.h"
 
@@ -54,6 +55,11 @@ void ProductCliClient::Initialize( NotifyTargetTaskIF* task )
                          "Send an echo request to the LPM",
                          "lpm echo [count]" ) );
 
+    cmds.emplace_back( std::make_shared<Cmd>
+                       ( "mfgdata",
+                         "Show the manufacturing data",
+                         "mfgdata" ) );
+
     m_cliClient.Initialize( task, cmds,
                             [this]( std::string const & cmd,
                                     CLIClient::StringListType & argList,
@@ -80,6 +86,12 @@ bool ProductCliClient::HandleCommand( std::string const& cmd,
     if( cmd == "lpm echo" )
     {
         CliCmdLpmEcho( argList, response );
+        return true;
+    }
+
+    if( cmd == "mfgdata" )
+    {
+        CliCmdMfgData( argList, response );
         return true;
     }
 
@@ -116,4 +128,23 @@ void ProductCliClient::CliCmdLpmEcho( CLIClient::StringListType& argList,
         m_cliClient.SendAsyncResponse( ss.str() );
     } );
     response = "echo sent";
+}
+
+void ProductCliClient::CliCmdMfgData( CLIClient::StringListType& argList,
+                                      std::string& response )
+{
+    if( !argList.empty() )
+    {
+        response = "Wrong usage";
+        return;
+    }
+    auto f = SystemUtils::ReadFile( "/persist/mfg_data.json" );
+    if( f )
+    {
+        response = *f;
+    }
+    else
+    {
+        response = "No manufacturing data";
+    }
 }

@@ -29,4 +29,5 @@ private:
                         std::string& );
 
     void CliCmdLpmEcho( CLIClient::StringListType&, std::string& );
+    void CliCmdMfgData( CLIClient::StringListType&, std::string& );
 };
