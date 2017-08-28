@@ -38,7 +38,7 @@ endif
 .PHONY: cmake_build
 cmake_build: generated_sources | $(BUILDS_DIR) astyle
 	rm -fv $(BUILDS_DIR)/CMakeCache.txt
-# Symlink to placate cmake's add_directory which doesn't like absolute paths.
+# Symlink to placate cmake's add_subdirectory which doesn't like absolute paths.
 	ln -nsf $(RIVIERALPMSERVICE_DIR) builds/RivieraLpmService
 	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
