@@ -1,6 +1,5 @@
 INCLUDE_DIRECTORIES(
   ${CMAKE_BINARY_DIR}
-  ${CMAKE_BINARY_DIR}/proto
   ${BOSELIBS_DIR}/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/STS
