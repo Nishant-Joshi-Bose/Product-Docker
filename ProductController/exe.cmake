@@ -1,8 +1,7 @@
 SET( PROTOBUFS_SRCS
     ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
     ${PROTO_CC_DEST}/Language.pb.cc
-    ${PROTO_CC_DEST}/DeviceInfo.pb.cc
-    ${PROTO_CC_DEST}/DeviceState.pb.cc
+    ${PROTO_CC_DEST}/DeviceManager.pb.cc
 )
 
 ADD_EXECUTABLE(Eddie
