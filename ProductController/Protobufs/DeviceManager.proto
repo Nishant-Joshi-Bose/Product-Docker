@@ -1,0 +1,30 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @file DeviceInfo.proto
+///
+/// @brief Device specific information
+///
+/// Copyright 2017 Bose Corporation
+////////////////////////////////////////////////////////////////////////////////
+package DeviceManager.Protobuf;
+
+message DeviceName
+{
+    optional string devName        = 1;
+}
+
+message DeviceInfo
+{
+    optional DeviceName  name        = 1;
+    optional string type        = 2;
+    optional string variant     = 3;
+    optional string guid        = 4;
+    optional string serialNumber= 5;
+    optional string moduleType  = 6;
+    optional string countryCode = 7;
+    optional string regionCode  = 8;
+}
+
+message DeviceState
+{
+    optional string state       = 1;
+}

@@ -7,6 +7,7 @@ INCLUDE_DIRECTORIES(
   ${RIVIERA_LPM_SERVICE_DIR}/source/LPMIPC
   ${RIVIERA_LPM_DIR}/include
   Hsm
+  DeviceManager
   ${PROTO_CC_DEST}
   .
 )
@@ -31,8 +32,10 @@ ADD_EXECUTABLE(Eddie
   Hsm/ProductAppStateStdOp.cpp
   Hsm/ProductAppStateSetup.cpp
   Hsm/ProductAppStateStandby.cpp
+  DeviceManager/DeviceManager.cpp
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
   ${PROTO_CC_DEST}/Language.pb.cc
+  ${PROTO_CC_DEST}/DeviceManager.pb.cc
 )
 
 TARGET_LINK_LIBRARIES(Eddie
