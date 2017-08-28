@@ -4,8 +4,7 @@ include $(WORKSPACE)/Settings.mk
 PROTO_SOURCES = \
 	ConfigurationStatus.proto \
 	Language.proto \
-    DeviceInfo.proto \
-    DeviceState.proto
+	DeviceManager.proto 
 
 # Where to write the *.pb.cc and *.pb.h files.
 ifndef PROTO_CC_DEST
