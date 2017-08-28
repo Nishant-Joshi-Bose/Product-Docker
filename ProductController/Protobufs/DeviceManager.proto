@@ -5,12 +5,16 @@
 ///
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////
-package DeviceInfoPb;
+package DeviceManager.Protobuf;
 
-
-message DeviceInfo 
+message DeviceName
 {
-    optional string name        = 1;
+    optional string devName        = 1;
+}
+
+message DeviceInfo
+{
+    optional DeviceName  name        = 1;
     optional string type        = 2;
     optional string variant     = 3;
     optional string guid        = 4;
@@ -18,4 +22,9 @@ message DeviceInfo
     optional string moduleType  = 6;
     optional string countryCode = 7;
     optional string regionCode  = 8;
+}
+
+message DeviceState
+{
+    optional string state       = 1;
 }

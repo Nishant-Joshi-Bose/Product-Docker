@@ -18,8 +18,7 @@
 #include "DeviceManager.h"
 #include "ConfigurationStatus.pb.h"
 #include "Language.pb.h"
-#include "DeviceInfo.pb.h"
-#include "DeviceState.pb.h"
+#include "DeviceManager.pb.h"
 #include "ProductCliClient.h"
 
 namespace ProductApp
@@ -129,14 +128,14 @@ public:
     /// @brief "system/info" endpoint request handler.
     /// @return void
     ////////////////////////////////////////////////////////////////////////////////
-    void HandleGetDeviceInfoRequest (const Callback<DeviceInfoPb :: DeviceInfo>& resp);
+    void HandleGetDeviceInfoRequest (const Callback<::DeviceManager::Protobuf::DeviceInfo>& resp);
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @name  HandleGetDeviceStateRequest
     /// @brief "system/state" endpoint request handler.
     /// @return void
     ////////////////////////////////////////////////////////////////////////////////
-    void HandleGetDeviceStateRequest (const Callback<DeviceStatePb::DeviceState>& resp);
+    void HandleGetDeviceStateRequest (const Callback<::DeviceManager::Protobuf::DeviceState>& resp);
 
 private:
     NotifyTargetTaskIF* m_ProductControllerTask;
