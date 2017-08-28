@@ -72,6 +72,8 @@ EOF
     fi
     mkdir -p /mnt/nv/BoseLog /mnt/nv/IoTCerts /mnt/nv/BoseApp-Persistence/1 /mnt/nv/product-persistence
 
+    rw --read-only
+
     set_ap.sh
 
     if ! $override; then
