@@ -20,9 +20,10 @@ IF(${SDK} STREQUAL "native")
   SET(CMAKE_INSTALL_RPATH "/opt/centos/glibc-2.15-toolchain/lib")
   SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
   SET(CMAKE_SKIP_BUILD_RPATH FALSE)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32 -std=c++0x")
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
-  MESSAGE(STATUS "Native builds may work on Centos systems")
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -m32 -std=c++0x"
+    CACHE INTERNAL - FORCE)
+  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32"
+    CACHE INTERNAL - FORCE)
 ENDIF(${SDK} STREQUAL "native")
 
 IF(${SDK} STREQUAL "qc8017_32")
@@ -35,12 +36,16 @@ IF(${SDK} STREQUAL "qc8017_32")
     OUTPUT_STRIP_TRAILING_WHITESPACE)
   MESSAGE(STATUS "Architecture is ${ARCHITECTURE}")
 
-  SET(CMAKE_C_COMPILER ${RIVIERA_HSP_DIR}/sdk/sysroots/${ARCHITECTURE}-oesdk-linux/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-gcc)
-  SET(CMAKE_CXX_COMPILER ${RIVIERA_HSP_DIR}/sdk/sysroots/${ARCHITECTURE}-oesdk-linux/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-g++)
+  SET(CMAKE_C_COMPILER ${RIVIERA_HSP_DIR}/sdk/sysroots/${ARCHITECTURE}-oesdk-linux/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-gcc
+    CACHE INTERNAL - FORCE)
+  SET(CMAKE_CXX_COMPILER ${RIVIERA_HSP_DIR}/sdk/sysroots/${ARCHITECTURE}-oesdk-linux/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-g++
+    CACHE INTERNAL - FORCE)
 
   SET(COMMON_FLAGS "--sysroot=${SYSROOT} -Wall -Werror -Wno-psabi -Wno-maybe-uninitialized -Wno-unused-but-set-variable -mtune=cortex-a53 -ftree-vectorize -DPLATFORM_QC8017_32")
-  SET(CMAKE_CXX_FLAGS "-std=c++1y ${COMMON_FLAGS}" CACHE INTERNAL - FORCE)
-  SET(CMAKE_C_FLAGS "-std=gnu99 ${COMMON_FLAGS}" CACHE INTERNAL - FORCE)
+  SET(CMAKE_CXX_FLAGS "-std=c++1y ${COMMON_FLAGS}"
+    CACHE INTERNAL - FORCE)
+  SET(CMAKE_C_FLAGS "-std=gnu99 ${COMMON_FLAGS}"
+    CACHE INTERNAL - FORCE)
 
   SET(CMAKE_INSTALL_RPATH "/opt/Bose/lib")
   SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
