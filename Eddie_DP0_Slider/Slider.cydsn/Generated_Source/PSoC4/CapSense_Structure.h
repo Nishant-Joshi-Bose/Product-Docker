@@ -280,7 +280,7 @@ typedef struct
 } CapSense_RAM_WD_SLIDER_STRUCT;
 
 /***************************************************************************//**
-* \brief Declare RAM parameters for the CSX Button
+* \brief Declare RAM parameters for the CSD Button
 *******************************************************************************/
 typedef struct
 {
@@ -369,39 +369,34 @@ typedef struct
     CapSense_RAM_WD_SLIDER_STRUCT linearslider0;
 
     /**
-     *  BUT0 widget RAM structure
+     *  BT_BUTTON widget RAM structure
      */
-    CapSense_RAM_WD_BUTTON_STRUCT but0;
+    CapSense_RAM_WD_BUTTON_STRUCT bt_button;
 
     /**
-     *  BUT1 widget RAM structure
+     *  AUX_BUTTON widget RAM structure
      */
-    CapSense_RAM_WD_BUTTON_STRUCT but1;
+    CapSense_RAM_WD_BUTTON_STRUCT aux_button;
 
     /**
-     *  BUT3 widget RAM structure
+     *  VOL_P_BUTTON widget RAM structure
      */
-    CapSense_RAM_WD_BUTTON_STRUCT but3;
+    CapSense_RAM_WD_BUTTON_STRUCT vol_p_button;
 
     /**
-     *  BUT4 widget RAM structure
+     *  MULTI_BUTTON widget RAM structure
      */
-    CapSense_RAM_WD_BUTTON_STRUCT but4;
+    CapSense_RAM_WD_BUTTON_STRUCT multi_button;
 
     /**
-     *  BUT5 widget RAM structure
+     *  VOL_N_BUTTON widget RAM structure
      */
-    CapSense_RAM_WD_BUTTON_STRUCT but5;
+    CapSense_RAM_WD_BUTTON_STRUCT vol_n_button;
 
     /**
-     *  BUT6 widget RAM structure
+     *  ACTION_BUTTON widget RAM structure
      */
-    CapSense_RAM_WD_BUTTON_STRUCT but6;
-
-    /**
-     *  BUT8 widget RAM structure
-     */
-    CapSense_RAM_WD_BUTTON_STRUCT but8;
+    CapSense_RAM_WD_BUTTON_STRUCT action_button;
 } CapSense_RAM_WD_LIST_STRUCT;
 
 
@@ -455,39 +450,34 @@ typedef struct
     CapSense_RAM_SNS_STRUCT linearslider0 [CapSense_LINEARSLIDER0_NUM_SENSORS];
 
     /**
-     *  BUT0 sensors RAM structures array
+     *  BT_BUTTON sensors RAM structures array
      */
-    CapSense_RAM_SNS_STRUCT but0          [CapSense_BUT0_NUM_SENSORS];
+    CapSense_RAM_SNS_STRUCT bt_button     [CapSense_BT_BUTTON_NUM_SENSORS];
 
     /**
-     *  BUT1 sensors RAM structures array
+     *  AUX_BUTTON sensors RAM structures array
      */
-    CapSense_RAM_SNS_STRUCT but1          [CapSense_BUT1_NUM_SENSORS];
+    CapSense_RAM_SNS_STRUCT aux_button    [CapSense_AUX_BUTTON_NUM_SENSORS];
 
     /**
-     *  BUT3 sensors RAM structures array
+     *  VOL_P_BUTTON sensors RAM structures array
      */
-    CapSense_RAM_SNS_STRUCT but3          [CapSense_BUT3_NUM_SENSORS];
+    CapSense_RAM_SNS_STRUCT vol_p_button  [CapSense_VOL_P_BUTTON_NUM_SENSORS];
 
     /**
-     *  BUT4 sensors RAM structures array
+     *  MULTI_BUTTON sensors RAM structures array
      */
-    CapSense_RAM_SNS_STRUCT but4          [CapSense_BUT4_NUM_SENSORS];
+    CapSense_RAM_SNS_STRUCT multi_button  [CapSense_MULTI_BUTTON_NUM_SENSORS];
 
     /**
-     *  BUT5 sensors RAM structures array
+     *  VOL_N_BUTTON sensors RAM structures array
      */
-    CapSense_RAM_SNS_STRUCT but5          [CapSense_BUT5_NUM_SENSORS];
+    CapSense_RAM_SNS_STRUCT vol_n_button  [CapSense_VOL_N_BUTTON_NUM_SENSORS];
 
     /**
-     *  BUT6 sensors RAM structures array
+     *  ACTION_BUTTON sensors RAM structures array
      */
-    CapSense_RAM_SNS_STRUCT but6          [CapSense_BUT6_NUM_SENSORS];
-
-    /**
-     *  BUT8 sensors RAM structures array
-     */
-    CapSense_RAM_SNS_STRUCT but8          [CapSense_BUT8_NUM_SENSORS];
+    CapSense_RAM_SNS_STRUCT action_button [CapSense_ACTION_BUTTON_NUM_SENSORS];
 } CapSense_RAM_SNS_LIST_STRUCT;
 
 
@@ -557,11 +547,6 @@ typedef struct
      *  The modulator clock divider for the CSD widgets.
      */
     uint8  modCsdClk;
-
-    /**
-     *  The modulator clock divider for the CSX widgets.
-     */
-    uint8  modCsxClk;
 
     /**
      *  RAM Widget Objects.
@@ -746,24 +731,12 @@ typedef struct
     uint8  wdgtType;
 
     /**
-     *  Specifies the widget sensing method that could be either WD_CSD_SENSE_METHOD or WD_CSX_SENSE_METHOD
-     */
-    uint8  senseMethod;
-
-    /**
      *  For CSD Button and Proximity Widgets, the number of sensors.
      *  For CSD Slider Widget, the number of segments.
      *  For CSD Touchpad and Matrix Button, the number of the column sensors.
      *  For CSX Button, Touchpad and Matrix Button, the number of the Rx electrodes.
      */
     uint8  numCols;
-
-    /**
-     *  For CSD Touchpad and Matrix Buttons, the number of the row sensors.
-     *  For the CSX Button, the number of the Tx electrodes (constant 1u).
-     *  For CSX Touchpad and Matrix Button, the number of the Tx  electrodes.
-     */
-    uint8  numRows;
 
     /**
      *  Sliders: The Linear/Angular resolution.

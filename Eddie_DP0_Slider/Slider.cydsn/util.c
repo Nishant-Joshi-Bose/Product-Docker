@@ -30,6 +30,7 @@ uint8_t get_software_version_minor(void)
     return software_version_minor;
 }
 
+#ifdef DONTINCLUDEDEBUGPIN
 #ifndef NDEBUG
 // Funky 1-wire debug thingy
 #define DELAYZ 158 // 60us on this chip
@@ -57,4 +58,5 @@ void DebugTell(uint16_t data)
     }
     CyExitCriticalSection(interrupts);
 }
+#endif
 #endif
