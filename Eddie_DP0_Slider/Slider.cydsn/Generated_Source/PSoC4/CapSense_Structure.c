@@ -71,36 +71,35 @@ CapSense_RAM_STRUCT CapSense_dsRam;
 * Declare Widget's De-bounce Counters
 *******************************************************************************/
 static uint8 CapSense_debounceLinearSlider0[1u];
-static uint8 CapSense_debounceBUT0[CapSense_BUT0_NUM_SENSORS];
-static uint8 CapSense_debounceBUT1[CapSense_BUT1_NUM_SENSORS];
-static uint8 CapSense_debounceBUT3[CapSense_BUT3_NUM_SENSORS];
-static uint8 CapSense_debounceBUT4[CapSense_BUT4_NUM_SENSORS];
-static uint8 CapSense_debounceBUT5[CapSense_BUT5_NUM_SENSORS];
-static uint8 CapSense_debounceBUT6[CapSense_BUT6_NUM_SENSORS];
-static uint8 CapSense_debounceBUT8[CapSense_BUT8_NUM_SENSORS];
+static uint8 CapSense_debounceBT_BUTTON[CapSense_BT_BUTTON_NUM_SENSORS];
+static uint8 CapSense_debounceAUX_BUTTON[CapSense_AUX_BUTTON_NUM_SENSORS];
+static uint8 CapSense_debounceVOL_P_BUTTON[CapSense_VOL_P_BUTTON_NUM_SENSORS];
+static uint8 CapSense_debounceMULTI_BUTTON[CapSense_MULTI_BUTTON_NUM_SENSORS];
+static uint8 CapSense_debounceVOL_N_BUTTON[CapSense_VOL_N_BUTTON_NUM_SENSORS];
+static uint8 CapSense_debounceACTION_BUTTON[CapSense_ACTION_BUTTON_NUM_SENSORS];
 
 
 /***************************************************************************//**
 * Declare Noise Envelope data structures
 *******************************************************************************/
 static SMARTSENSE_CSD_NOISE_ENVELOPE_STRUCT CapSense_noiseEnvlpLinearSlider0[CapSense_LINEARSLIDER0_NUM_SENSORS];
-static SMARTSENSE_CSD_NOISE_ENVELOPE_STRUCT CapSense_noiseEnvlpBUT3[CapSense_BUT3_NUM_SENSORS];
-static SMARTSENSE_CSD_NOISE_ENVELOPE_STRUCT CapSense_noiseEnvlpBUT4[CapSense_BUT4_NUM_SENSORS];
-static SMARTSENSE_CSD_NOISE_ENVELOPE_STRUCT CapSense_noiseEnvlpBUT5[CapSense_BUT5_NUM_SENSORS];
-static SMARTSENSE_CSD_NOISE_ENVELOPE_STRUCT CapSense_noiseEnvlpBUT6[CapSense_BUT6_NUM_SENSORS];
-static SMARTSENSE_CSD_NOISE_ENVELOPE_STRUCT CapSense_noiseEnvlpBUT8[CapSense_BUT8_NUM_SENSORS];
+static SMARTSENSE_CSD_NOISE_ENVELOPE_STRUCT CapSense_noiseEnvlpBT_BUTTON[CapSense_BT_BUTTON_NUM_SENSORS];
+static SMARTSENSE_CSD_NOISE_ENVELOPE_STRUCT CapSense_noiseEnvlpAUX_BUTTON[CapSense_AUX_BUTTON_NUM_SENSORS];
+static SMARTSENSE_CSD_NOISE_ENVELOPE_STRUCT CapSense_noiseEnvlpVOL_P_BUTTON[CapSense_VOL_P_BUTTON_NUM_SENSORS];
+static SMARTSENSE_CSD_NOISE_ENVELOPE_STRUCT CapSense_noiseEnvlpMULTI_BUTTON[CapSense_MULTI_BUTTON_NUM_SENSORS];
+static SMARTSENSE_CSD_NOISE_ENVELOPE_STRUCT CapSense_noiseEnvlpVOL_N_BUTTON[CapSense_VOL_N_BUTTON_NUM_SENSORS];
+static SMARTSENSE_CSD_NOISE_ENVELOPE_STRUCT CapSense_noiseEnvlpACTION_BUTTON[CapSense_ACTION_BUTTON_NUM_SENSORS];
 
 /***************************************************************************//**
 * Declare Filter History Objects
 *******************************************************************************/
 static CapSense_REGULAR_FLTR_STRUCT CapSense_fltrHistoryLinearSlider0[CapSense_LINEARSLIDER0_NUM_SENSORS];
-static CapSense_REGULAR_FLTR_STRUCT CapSense_fltrHistoryBUT0[CapSense_BUT0_NUM_SENSORS];
-static CapSense_REGULAR_FLTR_STRUCT CapSense_fltrHistoryBUT1[CapSense_BUT1_NUM_SENSORS];
-static CapSense_REGULAR_FLTR_STRUCT CapSense_fltrHistoryBUT3[CapSense_BUT3_NUM_SENSORS];
-static CapSense_REGULAR_FLTR_STRUCT CapSense_fltrHistoryBUT4[CapSense_BUT4_NUM_SENSORS];
-static CapSense_REGULAR_FLTR_STRUCT CapSense_fltrHistoryBUT5[CapSense_BUT5_NUM_SENSORS];
-static CapSense_REGULAR_FLTR_STRUCT CapSense_fltrHistoryBUT6[CapSense_BUT6_NUM_SENSORS];
-static CapSense_REGULAR_FLTR_STRUCT CapSense_fltrHistoryBUT8[CapSense_BUT8_NUM_SENSORS];
+static CapSense_REGULAR_FLTR_STRUCT CapSense_fltrHistoryBT_BUTTON[CapSense_BT_BUTTON_NUM_SENSORS];
+static CapSense_REGULAR_FLTR_STRUCT CapSense_fltrHistoryAUX_BUTTON[CapSense_AUX_BUTTON_NUM_SENSORS];
+static CapSense_REGULAR_FLTR_STRUCT CapSense_fltrHistoryVOL_P_BUTTON[CapSense_VOL_P_BUTTON_NUM_SENSORS];
+static CapSense_REGULAR_FLTR_STRUCT CapSense_fltrHistoryMULTI_BUTTON[CapSense_MULTI_BUTTON_NUM_SENSORS];
+static CapSense_REGULAR_FLTR_STRUCT CapSense_fltrHistoryVOL_N_BUTTON[CapSense_VOL_N_BUTTON_NUM_SENSORS];
+static CapSense_REGULAR_FLTR_STRUCT CapSense_fltrHistoryACTION_BUTTON[CapSense_ACTION_BUTTON_NUM_SENSORS];
 
 /***************************************************************************//**
 * Centroid positions history
@@ -133,131 +132,100 @@ const CapSense_FLASH_STRUCT CapSense_dsFlash =
             CapSense_LINEARSLIDER0_STATIC_CONFIG,
             CapSense_LINEARSLIDER0_NUM_SENSORS,
             (uint8)CapSense_WD_LINEAR_SLIDER_E,
-            (uint8)CapSense_SENSE_METHOD_CSD_E,
             CapSense_LINEARSLIDER0_NUM_SENSORS,
-            0u,
             CapSense_LINEARSLIDER0_X_RESOLUTION,
             CapSense_LINEARSLIDER0_X_CENT_MULT,
             CapSense_noiseEnvlpLinearSlider0,
             (void *)&CapSense_posHistoryLinearSlider0,
         },
-        { /* BUT0 */
+        { /* BT_BUTTON */
             &CapSense_ioList[7u],
-            (void *)&CapSense_dsRam.wdgtList.but0,
-            CapSense_dsRam.snsList.but0,
-            (void *)CapSense_fltrHistoryBUT0,
-            CapSense_debounceBUT0,
-            CapSense_BUT0_STATIC_CONFIG,
-            CapSense_BUT0_NUM_SENSORS,
+            (void *)&CapSense_dsRam.wdgtList.bt_button,
+            CapSense_dsRam.snsList.bt_button,
+            (void *)CapSense_fltrHistoryBT_BUTTON,
+            CapSense_debounceBT_BUTTON,
+            CapSense_BT_BUTTON_STATIC_CONFIG,
+            CapSense_BT_BUTTON_NUM_SENSORS,
             (uint8)CapSense_WD_BUTTON_E,
-            (uint8)CapSense_SENSE_METHOD_CSX_E,
-            CapSense_BUT0_NUM_SENSORS,
-            1u,
+            CapSense_BT_BUTTON_NUM_SENSORS,
             0u,
             0u,
-            (SMARTSENSE_CSD_NOISE_ENVELOPE_STRUCT *)0u,
+            CapSense_noiseEnvlpBT_BUTTON,
             (void *)0u,
         },
-        { /* BUT1 */
+        { /* AUX_BUTTON */
+            &CapSense_ioList[8u],
+            (void *)&CapSense_dsRam.wdgtList.aux_button,
+            CapSense_dsRam.snsList.aux_button,
+            (void *)CapSense_fltrHistoryAUX_BUTTON,
+            CapSense_debounceAUX_BUTTON,
+            CapSense_AUX_BUTTON_STATIC_CONFIG,
+            CapSense_AUX_BUTTON_NUM_SENSORS,
+            (uint8)CapSense_WD_BUTTON_E,
+            CapSense_AUX_BUTTON_NUM_SENSORS,
+            0u,
+            0u,
+            CapSense_noiseEnvlpAUX_BUTTON,
+            (void *)0u,
+        },
+        { /* VOL_P_BUTTON */
             &CapSense_ioList[9u],
-            (void *)&CapSense_dsRam.wdgtList.but1,
-            CapSense_dsRam.snsList.but1,
-            (void *)CapSense_fltrHistoryBUT1,
-            CapSense_debounceBUT1,
-            CapSense_BUT1_STATIC_CONFIG,
-            CapSense_BUT1_NUM_SENSORS,
+            (void *)&CapSense_dsRam.wdgtList.vol_p_button,
+            CapSense_dsRam.snsList.vol_p_button,
+            (void *)CapSense_fltrHistoryVOL_P_BUTTON,
+            CapSense_debounceVOL_P_BUTTON,
+            CapSense_VOL_P_BUTTON_STATIC_CONFIG,
+            CapSense_VOL_P_BUTTON_NUM_SENSORS,
             (uint8)CapSense_WD_BUTTON_E,
-            (uint8)CapSense_SENSE_METHOD_CSX_E,
-            CapSense_BUT1_NUM_SENSORS,
-            1u,
+            CapSense_VOL_P_BUTTON_NUM_SENSORS,
             0u,
             0u,
-            (SMARTSENSE_CSD_NOISE_ENVELOPE_STRUCT *)0u,
+            CapSense_noiseEnvlpVOL_P_BUTTON,
             (void *)0u,
         },
-        { /* BUT3 */
+        { /* MULTI_BUTTON */
+            &CapSense_ioList[10u],
+            (void *)&CapSense_dsRam.wdgtList.multi_button,
+            CapSense_dsRam.snsList.multi_button,
+            (void *)CapSense_fltrHistoryMULTI_BUTTON,
+            CapSense_debounceMULTI_BUTTON,
+            CapSense_MULTI_BUTTON_STATIC_CONFIG,
+            CapSense_MULTI_BUTTON_NUM_SENSORS,
+            (uint8)CapSense_WD_BUTTON_E,
+            CapSense_MULTI_BUTTON_NUM_SENSORS,
+            0u,
+            0u,
+            CapSense_noiseEnvlpMULTI_BUTTON,
+            (void *)0u,
+        },
+        { /* VOL_N_BUTTON */
             &CapSense_ioList[11u],
-            (void *)&CapSense_dsRam.wdgtList.but3,
-            CapSense_dsRam.snsList.but3,
-            (void *)CapSense_fltrHistoryBUT3,
-            CapSense_debounceBUT3,
-            CapSense_BUT3_STATIC_CONFIG,
-            CapSense_BUT3_NUM_SENSORS,
+            (void *)&CapSense_dsRam.wdgtList.vol_n_button,
+            CapSense_dsRam.snsList.vol_n_button,
+            (void *)CapSense_fltrHistoryVOL_N_BUTTON,
+            CapSense_debounceVOL_N_BUTTON,
+            CapSense_VOL_N_BUTTON_STATIC_CONFIG,
+            CapSense_VOL_N_BUTTON_NUM_SENSORS,
             (uint8)CapSense_WD_BUTTON_E,
-            (uint8)CapSense_SENSE_METHOD_CSD_E,
-            CapSense_BUT3_NUM_SENSORS,
+            CapSense_VOL_N_BUTTON_NUM_SENSORS,
             0u,
             0u,
-            0u,
-            CapSense_noiseEnvlpBUT3,
+            CapSense_noiseEnvlpVOL_N_BUTTON,
             (void *)0u,
         },
-        { /* BUT4 */
+        { /* ACTION_BUTTON */
             &CapSense_ioList[12u],
-            (void *)&CapSense_dsRam.wdgtList.but4,
-            CapSense_dsRam.snsList.but4,
-            (void *)CapSense_fltrHistoryBUT4,
-            CapSense_debounceBUT4,
-            CapSense_BUT4_STATIC_CONFIG,
-            CapSense_BUT4_NUM_SENSORS,
+            (void *)&CapSense_dsRam.wdgtList.action_button,
+            CapSense_dsRam.snsList.action_button,
+            (void *)CapSense_fltrHistoryACTION_BUTTON,
+            CapSense_debounceACTION_BUTTON,
+            CapSense_ACTION_BUTTON_STATIC_CONFIG,
+            CapSense_ACTION_BUTTON_NUM_SENSORS,
             (uint8)CapSense_WD_BUTTON_E,
-            (uint8)CapSense_SENSE_METHOD_CSD_E,
-            CapSense_BUT4_NUM_SENSORS,
+            CapSense_ACTION_BUTTON_NUM_SENSORS,
             0u,
             0u,
-            0u,
-            CapSense_noiseEnvlpBUT4,
-            (void *)0u,
-        },
-        { /* BUT5 */
-            &CapSense_ioList[13u],
-            (void *)&CapSense_dsRam.wdgtList.but5,
-            CapSense_dsRam.snsList.but5,
-            (void *)CapSense_fltrHistoryBUT5,
-            CapSense_debounceBUT5,
-            CapSense_BUT5_STATIC_CONFIG,
-            CapSense_BUT5_NUM_SENSORS,
-            (uint8)CapSense_WD_BUTTON_E,
-            (uint8)CapSense_SENSE_METHOD_CSD_E,
-            CapSense_BUT5_NUM_SENSORS,
-            0u,
-            0u,
-            0u,
-            CapSense_noiseEnvlpBUT5,
-            (void *)0u,
-        },
-        { /* BUT6 */
-            &CapSense_ioList[14u],
-            (void *)&CapSense_dsRam.wdgtList.but6,
-            CapSense_dsRam.snsList.but6,
-            (void *)CapSense_fltrHistoryBUT6,
-            CapSense_debounceBUT6,
-            CapSense_BUT6_STATIC_CONFIG,
-            CapSense_BUT6_NUM_SENSORS,
-            (uint8)CapSense_WD_BUTTON_E,
-            (uint8)CapSense_SENSE_METHOD_CSD_E,
-            CapSense_BUT6_NUM_SENSORS,
-            0u,
-            0u,
-            0u,
-            CapSense_noiseEnvlpBUT6,
-            (void *)0u,
-        },
-        { /* BUT8 */
-            &CapSense_ioList[15u],
-            (void *)&CapSense_dsRam.wdgtList.but8,
-            CapSense_dsRam.snsList.but8,
-            (void *)CapSense_fltrHistoryBUT8,
-            CapSense_debounceBUT8,
-            CapSense_BUT8_STATIC_CONFIG,
-            CapSense_BUT8_NUM_SENSORS,
-            (uint8)CapSense_WD_BUTTON_E,
-            (uint8)CapSense_SENSE_METHOD_CSD_E,
-            CapSense_BUT8_NUM_SENSORS,
-            0u,
-            0u,
-            0u,
-            CapSense_noiseEnvlpBUT8,
+            CapSense_noiseEnvlpACTION_BUTTON,
             (void *)0u,
         },
     },
@@ -346,51 +314,7 @@ const CapSense_FLASH_IO_STRUCT CapSense_ioList[CapSense_TOTAL_ELECTRODES] =
         (uint8)CapSense_Sns__6__SHIFT,
         (uint8)CapSense_Sns__6__SHIFT * 3u,
     },
-    { /* 7: BUT0_Rx0 */
-        (reg32 *)CapSense_Rx__0__HSIOM,
-        (reg32 *)CapSense_Rx__0__PC,
-        (reg32 *)CapSense_Rx__0__DR,
-        (reg32 *)CapSense_Rx__0__PS,
-        CapSense_Rx__0__HSIOM_MASK,
-        CapSense_Rx__0__MASK,
-        CapSense_Rx__0__HSIOM_SHIFT,
-        (uint8)CapSense_Rx__0__SHIFT,
-        (uint8)CapSense_Rx__0__SHIFT * 3u,
-    },
-    { /* 8: BUT0_Tx */
-        (reg32 *)CapSense_Tx__0__HSIOM,
-        (reg32 *)CapSense_Tx__0__PC,
-        (reg32 *)CapSense_Tx__0__DR,
-        (reg32 *)CapSense_Tx__0__PS,
-        CapSense_Tx__0__HSIOM_MASK,
-        CapSense_Tx__0__MASK,
-        CapSense_Tx__0__HSIOM_SHIFT,
-        (uint8)CapSense_Tx__0__SHIFT,
-        (uint8)CapSense_Tx__0__SHIFT * 3u,
-    },
-    { /* 9: BUT1_Rx0 */
-        (reg32 *)CapSense_Rx__1__HSIOM,
-        (reg32 *)CapSense_Rx__1__PC,
-        (reg32 *)CapSense_Rx__1__DR,
-        (reg32 *)CapSense_Rx__1__PS,
-        CapSense_Rx__1__HSIOM_MASK,
-        CapSense_Rx__1__MASK,
-        CapSense_Rx__1__HSIOM_SHIFT,
-        (uint8)CapSense_Rx__1__SHIFT,
-        (uint8)CapSense_Rx__1__SHIFT * 3u,
-    },
-    { /* 10: BUT0_Tx ganged to BUT1_Tx */
-        (reg32 *)CapSense_Tx__0__HSIOM,
-        (reg32 *)CapSense_Tx__0__PC,
-        (reg32 *)CapSense_Tx__0__DR,
-        (reg32 *)CapSense_Tx__0__PS,
-        CapSense_Tx__0__HSIOM_MASK,
-        CapSense_Tx__0__MASK,
-        CapSense_Tx__0__HSIOM_SHIFT,
-        (uint8)CapSense_Tx__0__SHIFT,
-        (uint8)CapSense_Tx__0__SHIFT * 3u,
-    },
-    { /* 11: BUT3_Sns0 */
+    { /* 7: BT_BUTTON_Sns0 */
         (reg32 *)CapSense_Sns__7__HSIOM,
         (reg32 *)CapSense_Sns__7__PC,
         (reg32 *)CapSense_Sns__7__DR,
@@ -401,7 +325,7 @@ const CapSense_FLASH_IO_STRUCT CapSense_ioList[CapSense_TOTAL_ELECTRODES] =
         (uint8)CapSense_Sns__7__SHIFT,
         (uint8)CapSense_Sns__7__SHIFT * 3u,
     },
-    { /* 12: BUT4_Sns0 */
+    { /* 8: AUX_BUTTON_Sns0 */
         (reg32 *)CapSense_Sns__8__HSIOM,
         (reg32 *)CapSense_Sns__8__PC,
         (reg32 *)CapSense_Sns__8__DR,
@@ -412,7 +336,7 @@ const CapSense_FLASH_IO_STRUCT CapSense_ioList[CapSense_TOTAL_ELECTRODES] =
         (uint8)CapSense_Sns__8__SHIFT,
         (uint8)CapSense_Sns__8__SHIFT * 3u,
     },
-    { /* 13: BUT5_Sns0 */
+    { /* 9: VOL_P_BUTTON_Sns0 */
         (reg32 *)CapSense_Sns__9__HSIOM,
         (reg32 *)CapSense_Sns__9__PC,
         (reg32 *)CapSense_Sns__9__DR,
@@ -423,7 +347,7 @@ const CapSense_FLASH_IO_STRUCT CapSense_ioList[CapSense_TOTAL_ELECTRODES] =
         (uint8)CapSense_Sns__9__SHIFT,
         (uint8)CapSense_Sns__9__SHIFT * 3u,
     },
-    { /* 14: BUT6_Sns0 */
+    { /* 10: MULTI_BUTTON_Sns0 */
         (reg32 *)CapSense_Sns__10__HSIOM,
         (reg32 *)CapSense_Sns__10__PC,
         (reg32 *)CapSense_Sns__10__DR,
@@ -434,7 +358,7 @@ const CapSense_FLASH_IO_STRUCT CapSense_ioList[CapSense_TOTAL_ELECTRODES] =
         (uint8)CapSense_Sns__10__SHIFT,
         (uint8)CapSense_Sns__10__SHIFT * 3u,
     },
-    { /* 15: BUT8_Sns0 */
+    { /* 11: VOL_N_BUTTON_Sns0 */
         (reg32 *)CapSense_Sns__11__HSIOM,
         (reg32 *)CapSense_Sns__11__PC,
         (reg32 *)CapSense_Sns__11__DR,
@@ -444,6 +368,17 @@ const CapSense_FLASH_IO_STRUCT CapSense_ioList[CapSense_TOTAL_ELECTRODES] =
         CapSense_Sns__11__HSIOM_SHIFT,
         (uint8)CapSense_Sns__11__SHIFT,
         (uint8)CapSense_Sns__11__SHIFT * 3u,
+    },
+    { /* 12: ACTION_BUTTON_Sns0 */
+        (reg32 *)CapSense_Sns__12__HSIOM,
+        (reg32 *)CapSense_Sns__12__PC,
+        (reg32 *)CapSense_Sns__12__DR,
+        (reg32 *)CapSense_Sns__12__PS,
+        CapSense_Sns__12__HSIOM_MASK,
+        CapSense_Sns__12__MASK,
+        CapSense_Sns__12__HSIOM_SHIFT,
+        (uint8)CapSense_Sns__12__SHIFT,
+        (uint8)CapSense_Sns__12__SHIFT * 3u,
     },
 };
 
@@ -475,124 +410,107 @@ static const CapSense_RAM_WD_LIST_STRUCT CapSense_ramWidgetInit =
             CapSense_LINEARSLIDER0_POSITION,
         },
     },
-    { /* BUT0 */
-        CapSense_BUT0_RESOLUTION,
-        CapSense_BUT0_FINGER_TH,
-        CapSense_BUT0_NOISE_TH,
-        CapSense_BUT0_NNOISE_TH,
-        CapSense_BUT0_HYSTERESIS,
-        CapSense_BUT0_ON_DEBOUNCE,
-        CapSense_BUT0_LOW_BSLN_RST,
-        CapSense_BUT0_BSLN_COEFF,
+    { /* BT_BUTTON */
+        CapSense_BT_BUTTON_RESOLUTION,
+        CapSense_BT_BUTTON_FINGER_TH,
+        CapSense_BT_BUTTON_NOISE_TH,
+        CapSense_BT_BUTTON_NNOISE_TH,
+        CapSense_BT_BUTTON_HYSTERESIS,
+        CapSense_BT_BUTTON_ON_DEBOUNCE,
+        CapSense_BT_BUTTON_LOW_BSLN_RST,
+        CapSense_BT_BUTTON_BSLN_COEFF,
         {
-            CapSense_BUT0_IDAC_MOD0,
+            CapSense_BT_BUTTON_IDAC_MOD0,
         },
-        CapSense_BUT0_SNS_CLK,
-        CapSense_BUT0_SNS_CLK_SOURCE,
-        CapSense_BUT0_FINGER_CAP,
-        CapSense_BUT0_SIGPFC,
+        CapSense_BT_BUTTON_SNS_CLK,
+        CapSense_BT_BUTTON_SNS_CLK_SOURCE,
+        CapSense_BT_BUTTON_FINGER_CAP,
+        CapSense_BT_BUTTON_SIGPFC,
     },
-    { /* BUT1 */
-        CapSense_BUT1_RESOLUTION,
-        CapSense_BUT1_FINGER_TH,
-        CapSense_BUT1_NOISE_TH,
-        CapSense_BUT1_NNOISE_TH,
-        CapSense_BUT1_HYSTERESIS,
-        CapSense_BUT1_ON_DEBOUNCE,
-        CapSense_BUT1_LOW_BSLN_RST,
-        CapSense_BUT1_BSLN_COEFF,
+    { /* AUX_BUTTON */
+        CapSense_AUX_BUTTON_RESOLUTION,
+        CapSense_AUX_BUTTON_FINGER_TH,
+        CapSense_AUX_BUTTON_NOISE_TH,
+        CapSense_AUX_BUTTON_NNOISE_TH,
+        CapSense_AUX_BUTTON_HYSTERESIS,
+        CapSense_AUX_BUTTON_ON_DEBOUNCE,
+        CapSense_AUX_BUTTON_LOW_BSLN_RST,
+        CapSense_AUX_BUTTON_BSLN_COEFF,
         {
-            CapSense_BUT1_IDAC_MOD0,
+            CapSense_AUX_BUTTON_IDAC_MOD0,
         },
-        CapSense_BUT1_SNS_CLK,
-        CapSense_BUT1_SNS_CLK_SOURCE,
-        CapSense_BUT1_FINGER_CAP,
-        CapSense_BUT1_SIGPFC,
+        CapSense_AUX_BUTTON_SNS_CLK,
+        CapSense_AUX_BUTTON_SNS_CLK_SOURCE,
+        CapSense_AUX_BUTTON_FINGER_CAP,
+        CapSense_AUX_BUTTON_SIGPFC,
     },
-    { /* BUT3 */
-        CapSense_BUT3_RESOLUTION,
-        CapSense_BUT3_FINGER_TH,
-        CapSense_BUT3_NOISE_TH,
-        CapSense_BUT3_NNOISE_TH,
-        CapSense_BUT3_HYSTERESIS,
-        CapSense_BUT3_ON_DEBOUNCE,
-        CapSense_BUT3_LOW_BSLN_RST,
-        CapSense_BUT3_BSLN_COEFF,
+    { /* VOL_P_BUTTON */
+        CapSense_VOL_P_BUTTON_RESOLUTION,
+        CapSense_VOL_P_BUTTON_FINGER_TH,
+        CapSense_VOL_P_BUTTON_NOISE_TH,
+        CapSense_VOL_P_BUTTON_NNOISE_TH,
+        CapSense_VOL_P_BUTTON_HYSTERESIS,
+        CapSense_VOL_P_BUTTON_ON_DEBOUNCE,
+        CapSense_VOL_P_BUTTON_LOW_BSLN_RST,
+        CapSense_VOL_P_BUTTON_BSLN_COEFF,
         {
-            CapSense_BUT3_IDAC_MOD0,
+            CapSense_VOL_P_BUTTON_IDAC_MOD0,
         },
-        CapSense_BUT3_SNS_CLK,
-        CapSense_BUT3_SNS_CLK_SOURCE,
-        CapSense_BUT3_FINGER_CAP,
-        CapSense_BUT3_SIGPFC,
+        CapSense_VOL_P_BUTTON_SNS_CLK,
+        CapSense_VOL_P_BUTTON_SNS_CLK_SOURCE,
+        CapSense_VOL_P_BUTTON_FINGER_CAP,
+        CapSense_VOL_P_BUTTON_SIGPFC,
     },
-    { /* BUT4 */
-        CapSense_BUT4_RESOLUTION,
-        CapSense_BUT4_FINGER_TH,
-        CapSense_BUT4_NOISE_TH,
-        CapSense_BUT4_NNOISE_TH,
-        CapSense_BUT4_HYSTERESIS,
-        CapSense_BUT4_ON_DEBOUNCE,
-        CapSense_BUT4_LOW_BSLN_RST,
-        CapSense_BUT4_BSLN_COEFF,
+    { /* MULTI_BUTTON */
+        CapSense_MULTI_BUTTON_RESOLUTION,
+        CapSense_MULTI_BUTTON_FINGER_TH,
+        CapSense_MULTI_BUTTON_NOISE_TH,
+        CapSense_MULTI_BUTTON_NNOISE_TH,
+        CapSense_MULTI_BUTTON_HYSTERESIS,
+        CapSense_MULTI_BUTTON_ON_DEBOUNCE,
+        CapSense_MULTI_BUTTON_LOW_BSLN_RST,
+        CapSense_MULTI_BUTTON_BSLN_COEFF,
         {
-            CapSense_BUT4_IDAC_MOD0,
+            CapSense_MULTI_BUTTON_IDAC_MOD0,
         },
-        CapSense_BUT4_SNS_CLK,
-        CapSense_BUT4_SNS_CLK_SOURCE,
-        CapSense_BUT4_FINGER_CAP,
-        CapSense_BUT4_SIGPFC,
+        CapSense_MULTI_BUTTON_SNS_CLK,
+        CapSense_MULTI_BUTTON_SNS_CLK_SOURCE,
+        CapSense_MULTI_BUTTON_FINGER_CAP,
+        CapSense_MULTI_BUTTON_SIGPFC,
     },
-    { /* BUT5 */
-        CapSense_BUT5_RESOLUTION,
-        CapSense_BUT5_FINGER_TH,
-        CapSense_BUT5_NOISE_TH,
-        CapSense_BUT5_NNOISE_TH,
-        CapSense_BUT5_HYSTERESIS,
-        CapSense_BUT5_ON_DEBOUNCE,
-        CapSense_BUT5_LOW_BSLN_RST,
-        CapSense_BUT5_BSLN_COEFF,
+    { /* VOL_N_BUTTON */
+        CapSense_VOL_N_BUTTON_RESOLUTION,
+        CapSense_VOL_N_BUTTON_FINGER_TH,
+        CapSense_VOL_N_BUTTON_NOISE_TH,
+        CapSense_VOL_N_BUTTON_NNOISE_TH,
+        CapSense_VOL_N_BUTTON_HYSTERESIS,
+        CapSense_VOL_N_BUTTON_ON_DEBOUNCE,
+        CapSense_VOL_N_BUTTON_LOW_BSLN_RST,
+        CapSense_VOL_N_BUTTON_BSLN_COEFF,
         {
-            CapSense_BUT5_IDAC_MOD0,
+            CapSense_VOL_N_BUTTON_IDAC_MOD0,
         },
-        CapSense_BUT5_SNS_CLK,
-        CapSense_BUT5_SNS_CLK_SOURCE,
-        CapSense_BUT5_FINGER_CAP,
-        CapSense_BUT5_SIGPFC,
+        CapSense_VOL_N_BUTTON_SNS_CLK,
+        CapSense_VOL_N_BUTTON_SNS_CLK_SOURCE,
+        CapSense_VOL_N_BUTTON_FINGER_CAP,
+        CapSense_VOL_N_BUTTON_SIGPFC,
     },
-    { /* BUT6 */
-        CapSense_BUT6_RESOLUTION,
-        CapSense_BUT6_FINGER_TH,
-        CapSense_BUT6_NOISE_TH,
-        CapSense_BUT6_NNOISE_TH,
-        CapSense_BUT6_HYSTERESIS,
-        CapSense_BUT6_ON_DEBOUNCE,
-        CapSense_BUT6_LOW_BSLN_RST,
-        CapSense_BUT6_BSLN_COEFF,
+    { /* ACTION_BUTTON */
+        CapSense_ACTION_BUTTON_RESOLUTION,
+        CapSense_ACTION_BUTTON_FINGER_TH,
+        CapSense_ACTION_BUTTON_NOISE_TH,
+        CapSense_ACTION_BUTTON_NNOISE_TH,
+        CapSense_ACTION_BUTTON_HYSTERESIS,
+        CapSense_ACTION_BUTTON_ON_DEBOUNCE,
+        CapSense_ACTION_BUTTON_LOW_BSLN_RST,
+        CapSense_ACTION_BUTTON_BSLN_COEFF,
         {
-            CapSense_BUT6_IDAC_MOD0,
+            CapSense_ACTION_BUTTON_IDAC_MOD0,
         },
-        CapSense_BUT6_SNS_CLK,
-        CapSense_BUT6_SNS_CLK_SOURCE,
-        CapSense_BUT6_FINGER_CAP,
-        CapSense_BUT6_SIGPFC,
-    },
-    { /* BUT8 */
-        CapSense_BUT8_RESOLUTION,
-        CapSense_BUT8_FINGER_TH,
-        CapSense_BUT8_NOISE_TH,
-        CapSense_BUT8_NNOISE_TH,
-        CapSense_BUT8_HYSTERESIS,
-        CapSense_BUT8_ON_DEBOUNCE,
-        CapSense_BUT8_LOW_BSLN_RST,
-        CapSense_BUT8_BSLN_COEFF,
-        {
-            CapSense_BUT8_IDAC_MOD0,
-        },
-        CapSense_BUT8_SNS_CLK,
-        CapSense_BUT8_SNS_CLK_SOURCE,
-        CapSense_BUT8_FINGER_CAP,
-        CapSense_BUT8_SIGPFC,
+        CapSense_ACTION_BUTTON_SNS_CLK,
+        CapSense_ACTION_BUTTON_SNS_CLK_SOURCE,
+        CapSense_ACTION_BUTTON_FINGER_CAP,
+        CapSense_ACTION_BUTTON_SIGPFC,
     },
 };
 
@@ -609,26 +527,23 @@ static const uint8 CapSense_ramIdacInit[CapSense_TOTAL_SENSORS] =
     CapSense_LINEARSLIDER0_SNS5_IDAC_COMP0,
     CapSense_LINEARSLIDER0_SNS6_IDAC_COMP0,
 
-    /* BUT0 */
-    CapSense_BUT0_RX0_IDAC_COMP0,
+    /* BT_BUTTON */
+    CapSense_BT_BUTTON_SNS0_IDAC_COMP0,
 
-    /* BUT1 */
-    CapSense_BUT1_RX0_IDAC_COMP0,
+    /* AUX_BUTTON */
+    CapSense_AUX_BUTTON_SNS0_IDAC_COMP0,
 
-    /* BUT3 */
-    CapSense_BUT3_SNS0_IDAC_COMP0,
+    /* VOL_P_BUTTON */
+    CapSense_VOL_P_BUTTON_SNS0_IDAC_COMP0,
 
-    /* BUT4 */
-    CapSense_BUT4_SNS0_IDAC_COMP0,
+    /* MULTI_BUTTON */
+    CapSense_MULTI_BUTTON_SNS0_IDAC_COMP0,
 
-    /* BUT5 */
-    CapSense_BUT5_SNS0_IDAC_COMP0,
+    /* VOL_N_BUTTON */
+    CapSense_VOL_N_BUTTON_SNS0_IDAC_COMP0,
 
-    /* BUT6 */
-    CapSense_BUT6_SNS0_IDAC_COMP0,
-
-    /* BUT8 */
-    CapSense_BUT8_SNS0_IDAC_COMP0,
+    /* ACTION_BUTTON */
+    CapSense_ACTION_BUTTON_SNS0_IDAC_COMP0,
 };
 
 
