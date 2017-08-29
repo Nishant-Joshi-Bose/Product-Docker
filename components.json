@@ -1,5 +1,9 @@
 [
   {
+    "name": "CastleProductControllerCommon",
+    "selected_version": "master@2fc52dc4f3161bbe0c75009308586132c60bea35"
+  },
+  {
     "name": "googletest-qc8017_32",
     "selected_version": "branches/googletest@2290"
   },
