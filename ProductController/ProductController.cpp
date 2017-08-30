@@ -94,7 +94,12 @@ void ProductController::RegisterEndPoints()
     AsyncCallback <Callback<::DeviceManager::Protobuf::DeviceState >> getDeviceStateReqCb( std::bind( &ProductController :: HandleGetDeviceStateRequest,
                                                                    this, std::placeholders::_1 ), m_ProductControllerTask );
 
+    AsyncCallback<SoundTouchInterface::CapsInitializationUpdate> capsInitializationCb( std::bind( &ProductController::HandleCapsInitializationUpdate ,
+            this, std::placeholders::_1 ) , m_ProductControllerTask );
+
     /// Registration of endpoints to the frontdoor client.
+
+    m_FrontDoorClientIF->RegisterNotification<SoundTouchInterface::CapsInitializationUpdate>( "CapsInitializationUpdate", capsInitializationCb );
     m_FrontDoorClientIF->RegisterGet( "/system/language" , getLanguageReqCb );
     m_FrontDoorClientIF->RegisterGet( "/system/configuration/status" , getConfigurationStatusReqCb );
 
@@ -103,6 +108,12 @@ void ProductController::RegisterEndPoints()
     m_FrontDoorClientIF->RegisterGet( "/system/info", getDeviceInfoReqCb );
     //Device state get request handler
     m_FrontDoorClientIF->RegisterGet( "/system/state", getDeviceStateReqCb );
+}
+
+void ProductController::HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationUpdate &resp )
+{
+    BOSE_DEBUG( s_logger, "%s:notification: %s", __func__, ProtoToMarkup::ToJson( resp, false ).c_str() );
+    HandleCAPSReady( resp.capsinitialized() );
 }
 
 void ProductController::HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp )
@@ -153,10 +164,9 @@ void ProductController::HandleConfigurationStatusRequest( const Callback<Product
     resp.Send( m_ConfigurationStatus );
 }
 
-void ProductController::HandleCAPSReady()
+void ProductController::HandleCAPSReady( bool capsReady )
 {
-    BOSE_INFO( s_logger, __func__ );
-    m_isCapsReady = true;
+    m_isCapsReady = capsReady;
     m_ProductAppHsm.Handle<>( &ProductAppState::HandleModulesReady );
 }
 
@@ -175,13 +185,11 @@ bool ProductController::IsAllModuleReady()
 
 bool ProductController::IsLanguageSet()
 {
-    BOSE_INFO( s_logger, __func__ );
     return not m_systemLanguage.code().empty();
 }
 
 bool ProductController::IsNetworkSetupDone()
 {
-    BOSE_INFO( s_logger, __func__ );
     return m_ConfigurationStatus.status().network();
 }
 

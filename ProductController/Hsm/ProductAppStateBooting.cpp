@@ -31,7 +31,6 @@ void ProductAppStateBooting::HandleStateEnter()
 void ProductAppStateBooting::HandleStateStart()
 {
     BOSE_INFO( s_logger, __func__ );
-    HandleModulesReady();
 }
 
 void ProductAppStateBooting::HandleStateExit()
@@ -41,6 +40,7 @@ void ProductAppStateBooting::HandleStateExit()
 
 bool ProductAppStateBooting::HandleModulesReady()
 {
+    BOSE_INFO( s_logger, __func__ );
     if( GetProductController().IsAllModuleReady() )
     {
         if( GetHsm().NeedsToBeSetup() )
