@@ -42,5 +42,9 @@
   {
     "name": "RivieraLpmUpdater",
     "selected_version": "BuildAsComponent@f0fc6003eabfb453c375e77a5896ad956869a811"
+  },
+  {
+    "name": "EddieLPM-Package",
+    "selected_version": "Continuous/trunk/2017-08-30_1250"
   }
 ]
