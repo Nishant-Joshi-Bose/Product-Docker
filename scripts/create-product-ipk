@@ -160,6 +160,7 @@ cp "$stfs"/opt/Bose/etc/services.json "$opt_dir/etc" || exit
 cp -a "$stfs"/opt/Bose/Xml "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/html "$opt_dir" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
+cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
 cp -a "$boselib_dir/lib" "$opt_dir" || exit
 cp "$shepherd_dir/shepherdd" "$opt_dir/bin" || exit
 
