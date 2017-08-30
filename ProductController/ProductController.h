@@ -19,6 +19,7 @@
 #include "ConfigurationStatus.pb.h"
 #include "Language.pb.h"
 #include "DeviceManager.pb.h"
+#include "SoundTouchInterface/SystemService.pb.h"
 #include "ProductCliClient.h"
 
 namespace ProductApp
@@ -77,7 +78,7 @@ public:
 /// @brief Function to call when CAPS is ready to send/receive request.
 /// @return void
 ////////////////////////////////////////////////////////////////////////////////
-    void HandleCAPSReady();
+    void HandleCAPSReady( bool capsReady );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  IsLanguageSet
@@ -123,20 +124,26 @@ public:
 ////////////////////////////////////////////////////////////////////////////////
     void HandleConfigurationStatusRequest( const Callback<ProductPb::ConfigurationStatus> &resp );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @name  HandleDeviceInfoRequest
-    /// @brief "system/info" endpoint request handler.
-    /// @return void
-    ////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/// @name  HandleDeviceInfoRequest
+/// @brief "system/info" endpoint request handler.
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
     void HandleGetDeviceInfoRequest( const Callback<::DeviceManager::Protobuf::DeviceInfo>& resp );
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @name  HandleGetDeviceStateRequest
-    /// @brief "system/state" endpoint request handler.
-    /// @return void
-    ////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/// @name  HandleGetDeviceStateRequest
+/// @brief "system/state" endpoint request handler.
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
     void HandleGetDeviceStateRequest( const Callback<::DeviceManager::Protobuf::DeviceState>& resp );
 
+///////////////////////////////////////////////////////////////////////////////
+/// @name   HandleCapsInitializationUpdate
+/// @brief- Handles CapsInitializationUpdate notification
+/// @return void
+///////////////////////////////////////////////////////////////////////////////
+    void HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationUpdate &resp );
 private:
     NotifyTargetTaskIF* m_ProductControllerTask;
     ProductAppHsm m_ProductAppHsm;
@@ -157,6 +164,6 @@ private:
     DeviceManager               m_deviceManager;
 
     bool m_isCapsReady = false;
-    bool m_isLPMReady  = false;
+    bool m_isLPMReady  = true;
 };
 } // namespace
