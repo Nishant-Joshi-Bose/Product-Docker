@@ -38,6 +38,8 @@ if [ "${PS1-}" ]; then # interactive shells
     bind "set completion-ignore-case on"
 fi
 
+alias ll="ls -Al"
+
 if [ -e /mnt/nv/bashrc ] ; then
     source /mnt/nv/bashrc
 fi
