@@ -14,6 +14,6 @@ message Language
     {
         repeated string supported_language_codes  = 1;
     }
-    optional string code = 1;
+    optional string code = 1[ default = "en" ];
     optional Properties properties = 2;
 }
