@@ -33,10 +33,18 @@
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@735"
+    "selected_version": "trunk@728"
   },
   {
     "name": "AVS-qc8017_32",
     "selected_version": "Continuous/Castle-Fork/2017-08-29_1942"
+  },
+  {
+    "name": "RivieraLpmUpdater",
+    "selected_version": "master@397c36a1b4dff54c92dadb45b070cbbbf09c7178"
+  },
+  {
+    "name": "EddieLPM-Package",
+    "selected_version": "Continuous/trunk/2017-08-30_1250"
   }
 ]
