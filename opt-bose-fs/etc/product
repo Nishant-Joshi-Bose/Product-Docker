@@ -3,5 +3,5 @@
 # This script is invoke by systemd.
 # See: /etc/systemd/system/bose.service
 #
-
+exec btproperty&
 exec /opt/Bose/bin/SoundTouch "$@"
