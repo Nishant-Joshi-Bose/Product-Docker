@@ -73,6 +73,7 @@ riviera_hsp=$(components get Riviera-HSP installed_location) || exit
 soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselib_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
+professorlpm_package_dir=$(components get ProfessorLPM-Package installed_location) || exit
 
 arch=arm-oemllib32-linux
 sysroot=$riviera_hsp/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -169,6 +170,7 @@ cp -a "$stfs"/opt/Bose/html "$opt_dir" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$boselib_dir/lib" "$opt_dir" || exit
 cp "$shepherd_dir/shepherdd" "$opt_dir/bin" || exit
+cp -t "$opt_dir/etc" "$professorlpm_package_dir"/*.bos "$professorlpm_package_dir/configuration.xml" || exit
 
 if $production; then
     marge_url=https://streaming.bose.com

@@ -25,14 +25,22 @@
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@5812e6317acaef0fcd1e21ca7802926037e8f1c5"
+    "selected_version": "master@497f21c6127895e981b6a6ab8b5aa0b7374f2029"
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@716"
+    "selected_version": "trunk@728"
   },
   {
     "name": "AVS-qc8017_32",
     "selected_version": "Continuous/Castle-Fork/2017-08-24_1302"
+  },
+  {
+    "name": "RivieraLpmUpdater",
+    "selected_version": "master@71b02063480ebd8e94082ab8ebe5a6e27448722e"
+  },
+  {
+    "name": "ProfessorLPM-Package",
+    "selected_version": "Continuous/trunk/2017-08-30_1620"
   }
 ]
