@@ -49,7 +49,7 @@ DeviceManager :: ~DeviceManager()
 
     }
 
-    devInfo.mutable_name()->set_devname( s );
+    devInfo.set_name( s );
 
     //Name should be from persisten data and if don't find the name then
     //default to "Bose SoundTouch mac-id"
