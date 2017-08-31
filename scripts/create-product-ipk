@@ -13,7 +13,6 @@
 #
 this=${0##*/} # this script's name
 
-production=false
 stripped=true
 cfg=Release
 
@@ -22,16 +21,14 @@ tryhelp () {
     exit 1
 }
 opts=$(getopt --name "$this" --shell sh \
-    -o puh \
-    -l "production,
-        unstripped,
+    -o uh \
+    -l "unstripped,
         help" \
     -- "$@") || tryhelp
 eval set -- "$opts"
 while :; do
     arg="$1"; shift
     case "$arg" in
-	(--production | -p) production=true ;;
 	(--unstripped | -u) stripped=false ;;
 	(--help | -h)
 	    cat <<EOF
@@ -40,11 +37,6 @@ Usage: $this [options]
 Create an IPK file for installing SoundTouch with opkg.
 
 Options:
---production (-p)    Generate a production installation.  Production
-                     installations may have different run-time behavior.
-                     The differences are typically minor.  See uses of the
-                     is-production script and SystemUtils::IsProduction.
-
 --unstripped (-u)    Don't strip symbols from the executables.
 EOF
 	    exit 0
@@ -170,15 +162,9 @@ cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$boselib_dir/lib" "$opt_dir" || exit
 cp "$shepherd_dir/shepherdd" "$opt_dir/bin" || exit
 
-if $production; then
-    marge_url=https://streaming.bose.com
-    stats_url=https://events.api.bosecm.com
-    sw_update_url=https://worldwide.bose.com/updates/soundtouch
-else
-    marge_url=https://streamingint.bose.com
-    stats_url=https://eventsdev.api.bosecm.com
-    sw_update_url=https://worldwide.bose.com/updates/soundtouch-test
-fi
+marge_url=https://streamingint.bose.com
+stats_url=https://eventsdev.api.bosecm.com
+sw_update_url=https://worldwide.bose.com/updates/soundtouch-test
 
 "$u/simple-xml-edit" \
     "$opt_dir/etc/SoundTouchSdkPrivateCfg.xml" \
@@ -200,11 +186,6 @@ avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
 
 swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 "$swup_dir/stage" "$opt_dir" || exit
-
-put_script "$opt_dir/bin/is-production" <<EOF
-#!/bin/sh
-$production
-EOF
 
 package_version=$(python2.7 -c 'import sys, json
 print "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}".\
