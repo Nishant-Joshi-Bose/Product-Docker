@@ -71,6 +71,7 @@ arch=arm-oemllib32-linux
 sysroot=$riviera_hsp/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/$arch/$arch-
 
+
 function do_strip {
     local src="$1"; shift
     local dst="$1"; shift
@@ -165,6 +166,24 @@ cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
 cp -a "$boselib_dir/lib" "$opt_dir" || exit
 cp "$shepherd_dir/shepherdd" "$opt_dir/bin" || exit
 cp -t "$opt_dir/etc" "$eddielpm_package_dir"/*.bos "$eddielpm_package_dir/configuration.xml" || exit
+
+
+#@todo: WebToolkit Start
+# This is strictly temporary way of adding WebToolkit 
+#        to eddie.ipk. It should be a component in CastleTools 
+function get_webtoolkit  {
+    cd "$wspace" || exit
+    rm -rf "$wspace"/CastleWebkit || exit
+    git clone git@github.com:BoseCorp/CastleWebkit.git || exit
+    mkdir -p "$opt_dir"/webkit/ || exit
+    cp "$wspace"/CastleWebkit/mime.tar "$opt_dir"/webkit/ || exit
+    cp "$wspace"/CastleWebkit/wpe.tar "$opt_dir"/webkit/ || exit
+    cp "$wspace"/CastleWebkit/monaco.tar.gz "$opt_dir"/webkit/ || exit
+    cp -arf "$wspace"/CastleWebkit/target_scripts "$opt_dir"/webkit/ || exit
+    rm -rf "$wspace"/CastleWebkit || exit
+}
+#@todo: WebToolkit Finish
+get_webtoolkit
 
 marge_url=https://streamingint.bose.com
 stats_url=https://eventsdev.api.bosecm.com
