@@ -46,5 +46,9 @@
   {
     "name": "EddieLPM-Package",
     "selected_version": "Continuous/trunk/2017-08-30_1250"
+  },
+  {
+    "name": "CastleNetworkService-qc8017_32",
+    "selected_version": "Continuous/master/0.0.1-17+4d7574b"
   }
 ]
