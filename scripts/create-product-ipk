@@ -66,6 +66,7 @@ soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || 
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselib_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 eddielpm_package_dir=$(components get EddieLPM-Package installed_location) || exit
+castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
 
 arch=arm-oemllib32-linux
 sysroot=$riviera_hsp/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -147,7 +148,6 @@ cp "$stfs"/opt/Bose/APServer "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BoseApp "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/CLIServer "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/NetManager "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/PlatformReset "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/STSCertified "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/UpnpSource "$opt_dir/bin" || exit
@@ -165,6 +165,7 @@ cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
 cp -a "$boselib_dir/lib" "$opt_dir" || exit
 cp "$shepherd_dir/shepherdd" "$opt_dir/bin" || exit
+cp "$castlenetworkservice_dir/bin/NetManager" "$opt_dir/bin" || exit
 cp -t "$opt_dir/etc" "$eddielpm_package_dir"/*.bos "$eddielpm_package_dir/configuration.xml" || exit
 
 
