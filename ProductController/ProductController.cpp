@@ -280,9 +280,9 @@ void ProductController :: HandleGetDeviceInfoRequest( const Callback<::DeviceMan
 void ProductController :: HandleGetDeviceStateRequest( const Callback<::DeviceManager::Protobuf::DeviceState>& resp )
 {
     ::DeviceManager::Protobuf::DeviceState currentState;
-    //currentState.set_state( m_ProductAppHsm.GetCurrentState()->GetName() );
+
     int state_index = m_ProductAppHsm.GetCurrentStateId();
-    currentState.set_state( hsm_states[static_cast<ProductAppStates> ( state_index )] );
+    currentState.set_state( m_ProductAppHsm.GetHsmStateName( state_index ) );
     BOSE_INFO( s_logger, "%s:Reponse: %s", __func__, ProtoToMarkup::ToJson( currentState, false ).c_str() );
     resp.Send( currentState );
 }
