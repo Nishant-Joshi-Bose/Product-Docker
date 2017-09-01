@@ -19,7 +19,7 @@
 #include "ConfigurationStatus.pb.h"
 #include "Language.pb.h"
 #include "DeviceManager.pb.h"
-#include "SoundTouchInterface/SystemService.pb.h"
+#include "SoundTouchInterface/CapsInitializationStatus.pb.h"
 #include "ProductCliClient.h"
 
 namespace ProductApp
@@ -141,11 +141,18 @@ public:
     void HandleGetDeviceStateRequest( const Callback<::DeviceManager::Protobuf::DeviceState>& resp );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @name  SendInitialRequests
+/// @brief Function to send initial endpoint request to the front door like "/system/capsInitializationStatus".
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void SendInitialRequests();
+///////////////////////////////////////////////////////////////////////////////
 /// @name   HandleCapsInitializationUpdate
 /// @brief- Handles CapsInitializationUpdate notification
 /// @return void
 ///////////////////////////////////////////////////////////////////////////////
-    void HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationUpdate &resp );
+    void HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationStatus &status );
+    void CapsInitializationStatusCallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
 private:
     NotifyTargetTaskIF* m_ProductControllerTask;
     ProductAppHsm m_ProductAppHsm;
@@ -155,15 +162,13 @@ private:
     ProductPb::Language m_systemLanguage;
     std::shared_ptr<FrontDoorClientIF> m_FrontDoorClientIF;
     ProductCliClient m_productCliClient;
-
     ProductAppStateTop m_ProductAppStateTop;
     ProductAppStateBooting m_ProductAppStateBooting;
     ProductAppStateStdOp m_ProductAppStateStdOp;
     ProductAppStateSetup m_ProductAppStateSetup;
     ProductAppStateStandby m_ProductAppStateStandby;
-
     ///Device manager instance
-    DeviceManager               m_deviceManager;
+    DeviceManager  m_deviceManager;
 
     bool m_isCapsReady = false;
     bool m_isLPMReady  = true;

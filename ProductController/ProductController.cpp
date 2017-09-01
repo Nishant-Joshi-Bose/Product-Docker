@@ -45,8 +45,6 @@ ProductController::ProductController():
     m_ProductAppHsm.Init( PRODUCT_APP_STATE_BOOTING );
     /// Create an instance of the front door client, providing it with a unique name.
     m_FrontDoorClientIF = FrontDoorClient::Create( "eddie" );
-
-    RegisterEndPoints();
 }
 
 ProductController::~ProductController()
@@ -56,6 +54,8 @@ ProductController::~ProductController()
 void ProductController::Initialize()
 {
     m_productCliClient.Initialize( m_ProductControllerTask );
+    RegisterEndPoints();
+    SendInitialRequests();
 }
 
 void ProductController::RegisterEndPoints()
@@ -77,12 +77,12 @@ void ProductController::RegisterEndPoints()
     AsyncCallback <Callback<::DeviceManager::Protobuf::DeviceState >> getDeviceStateReqCb( std::bind( &ProductController :: HandleGetDeviceStateRequest,
                                                                    this, std::placeholders::_1 ), m_ProductControllerTask );
 
-    AsyncCallback<SoundTouchInterface::CapsInitializationUpdate> capsInitializationCb( std::bind( &ProductController::HandleCapsInitializationUpdate ,
+    AsyncCallback<SoundTouchInterface::CapsInitializationStatus> capsInitializationCb( std::bind( &ProductController::HandleCapsInitializationUpdate ,
             this, std::placeholders::_1 ) , m_ProductControllerTask );
 
     /// Registration of endpoints to the frontdoor client.
 
-    m_FrontDoorClientIF->RegisterNotification<SoundTouchInterface::CapsInitializationUpdate>( "CapsInitializationUpdate", capsInitializationCb );
+    m_FrontDoorClientIF->RegisterNotification<SoundTouchInterface::CapsInitializationStatus>( "CapsInitializationUpdate", capsInitializationCb );
     m_FrontDoorClientIF->RegisterGet( "/system/language" , getLanguageReqCb );
     m_FrontDoorClientIF->RegisterGet( "/system/configuration/status" , getConfigurationStatusReqCb );
 
@@ -93,7 +93,23 @@ void ProductController::RegisterEndPoints()
     m_FrontDoorClientIF->RegisterGet( "/system/state", getDeviceStateReqCb );
 }
 
-void ProductController::HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationUpdate &resp )
+void ProductController::SendInitialRequests()
+{
+    BOSE_INFO( s_logger, __func__ );
+    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errorCb( std::bind( &ProductController::CapsInitializationStatusCallbackError ,
+                                                                this, std::placeholders::_1 ) , m_ProductControllerTask );
+
+    AsyncCallback<SoundTouchInterface::CapsInitializationStatus> capsInitializationCb( std::bind( &ProductController::HandleCapsInitializationUpdate ,
+            this, std::placeholders::_1 ) , m_ProductControllerTask );
+    m_FrontDoorClientIF->SendGet<SoundTouchInterface::CapsInitializationStatus>( "/system/capsInitializationStatus", capsInitializationCb, errorCb );
+}
+
+void ProductController::CapsInitializationStatusCallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode )
+{
+    BOSE_ERROR( s_logger, "%s:error code- %d", __func__, errorCode );
+}
+
+void ProductController::HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationStatus &resp )
 {
     BOSE_DEBUG( s_logger, "%s:notification: %s", __func__, ProtoToMarkup::ToJson( resp, false ).c_str() );
     HandleCAPSReady( resp.capsinitialized() );
