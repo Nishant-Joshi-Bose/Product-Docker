@@ -11,6 +11,7 @@
 #include "AsyncCallback.h"
 #include "ProtoToMarkup.h"
 #include "ProtoPersistenceFactory.h"
+#include "LpmClientFactory.h"
 
 static DPrint s_logger( "ProductController" );
 
@@ -21,6 +22,7 @@ const std::string g_ProductPersistenceDir = "product-persistence/";
 
 ProductController::ProductController():
     m_ProductControllerTask( IL::CreateTask( "ProductControllerTask" ) ),
+    m_LpmClient(),
     m_ProductAppHsm( m_ProductControllerTask, "ProductApplicationHsm", *this ),
     m_ProductAppStateTop( m_ProductAppHsm, NULL,  *this ),
     m_ProductAppStateBooting( m_ProductAppHsm, &m_ProductAppStateTop, *this ),
@@ -30,6 +32,7 @@ ProductController::ProductController():
     m_deviceManager( m_ProductControllerTask, *this )
 {
     BOSE_INFO( s_logger, __func__ );
+    InitializeLpmClient();
     m_LanguagePersistence = ProtoPersistenceFactory::Create( "ProductLanguage", g_ProductPersistenceDir );
     m_ConfigurationStatusPersistence = ProtoPersistenceFactory::Create( "ConfigurationStatus", g_ProductPersistenceDir );
     ReadSystemLanguageFromPersistence();
@@ -43,6 +46,8 @@ ProductController::ProductController():
     m_ProductAppHsm.AddState( &m_ProductAppStateStandby );
 
     m_ProductAppHsm.Init( PRODUCT_APP_STATE_BOOTING );
+
+
     /// Create an instance of the front door client, providing it with a unique name.
     m_FrontDoorClientIF = FrontDoorClient::Create( "eddie" );
 }
@@ -53,10 +58,33 @@ ProductController::~ProductController()
 
 void ProductController::Initialize()
 {
+    RegisterLpmEvents();
     m_productCliClient.Initialize( m_ProductControllerTask );
     RegisterEndPoints();
     SendInitialRequests();
 }
+
+void ProductController::InitializeLpmClient()
+{
+    BOSE_INFO( s_logger, __func__ );
+
+    // Connect/Initialize the LPM Client
+    m_LpmClient = LpmClientFactory::Create( "EddieLpmClient", GetTask() );
+
+    auto func = std::bind( &ProductController::HandleLPMReady, this );
+    AsyncCallback<bool> connectCb( func, GetTask() );
+    m_LpmClient->Connect( connectCb );
+}
+
+void ProductController::RegisterLpmEvents()
+{
+    BOSE_INFO( s_logger, __func__ );
+
+    auto func = std::bind( &ProductController::HandleLpmKeyInformation, this, std::placeholders::_1 );
+    AsyncCallback<IpcKeyInformation_t>response_cb( func, m_ProductControllerTask );
+    m_LpmClient->RegisterEvent<IpcKeyInformation_t>( IPC_KEY, response_cb );
+}
+
 
 void ProductController::RegisterEndPoints()
 {
@@ -91,6 +119,30 @@ void ProductController::RegisterEndPoints()
     m_FrontDoorClientIF->RegisterGet( "/system/info", getDeviceInfoReqCb );
     //Device state get request handler
     m_FrontDoorClientIF->RegisterGet( "/system/state", getDeviceStateReqCb );
+}
+
+// This function will handle key information coming from LPM and give it to
+// KeyHandler for repeat Manager to handle.
+void ProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInformation )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+
+    if( keyInformation.has_keyorigin() && keyInformation.has_keystate() && keyInformation.has_keyid() )
+    {
+        BOSE_DEBUG( s_logger, "Received key Information : keyorigin:%d,"
+                    " keystate:%d, keyid:%d",
+                    keyInformation.keyorigin(),
+                    keyInformation.keystate(), keyInformation.keyid() );
+        // Feed it into the keyHandler : Coming soon.
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "One or more of the parameters are not present"
+                    " in the message: keyorigin_P:%d, keystate_P:%d, keyid_P:%d",
+                    keyInformation.has_keyorigin(),
+                    keyInformation.has_keystate(),
+                    keyInformation.has_keyid() );
+    }
 }
 
 void ProductController::SendInitialRequests()
