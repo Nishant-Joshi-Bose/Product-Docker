@@ -64,7 +64,8 @@ wspace=$(cd "$here/.." && echo "$PWD") || exit
 riviera_hsp=$(components get Riviera-HSP installed_location) || exit
 soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
-boselib_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
+boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
+protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
 eddielpm_package_dir=$(components get EddieLPM-Package installed_location) || exit
 castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
 
@@ -163,25 +164,27 @@ cp -a "$stfs"/opt/Bose/Xml "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/html "$opt_dir" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
-cp -a "$boselib_dir/lib" "$opt_dir" || exit
+cp -a "$boselibs_dir/lib" "$opt_dir" || exit
+cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp "$shepherd_dir/shepherdd" "$opt_dir/bin" || exit
 cp "$castlenetworkservice_dir/bin/NetManager" "$opt_dir/bin" || exit
 cp -t "$opt_dir/etc" "$eddielpm_package_dir"/*.bos "$eddielpm_package_dir/lpm_blob_configuration.xml" || exit
-
 
 #@todo: WebToolkit Start
 # This is strictly temporary way of adding WebToolkit 
 #        to eddie.ipk. It should be a component in CastleTools 
 function get_webtoolkit  {
-    cd "$wspace" || exit
-    rm -rf "$wspace"/CastleWebkit || exit
-    git clone git@github.com:BoseCorp/CastleWebkit.git || exit
+    local dir="$wspace/components/CastleWebkit"
+    if [ -e "$dir" ]; then
+        echo "Using existing $dir"
+    else
+        git clone git@github.com:BoseCorp/CastleWebkit.git "$dir" || exit
+    fi
     mkdir -p "$opt_dir"/webkit/ || exit
-    cp "$wspace"/CastleWebkit/mime.tar "$opt_dir"/webkit/ || exit
-    cp "$wspace"/CastleWebkit/wpe.tar "$opt_dir"/webkit/ || exit
-    cp "$wspace"/CastleWebkit/monaco.tar.gz "$opt_dir"/webkit/ || exit
-    cp -arf "$wspace"/CastleWebkit/target_scripts "$opt_dir"/webkit/ || exit
-    rm -rf "$wspace"/CastleWebkit || exit
+    cp "$dir"/mime.tar "$opt_dir"/webkit/ || exit
+    cp "$dir"/wpe.tar "$opt_dir"/webkit/ || exit
+    cp "$dir"/monaco.tar.gz "$opt_dir"/webkit/ || exit
+    cp -arf "$dir"/target_scripts "$opt_dir"/webkit/ || exit
 }
 #@todo: WebToolkit Finish
 get_webtoolkit
@@ -205,11 +208,25 @@ format(**json.loads(open(sys.argv[1]).read()))
 echo "HTML version \"$v\""
 sed -i "s/%FROMVERSION%/From: $v/" "$opt_dir/html/update.html" || exit
 
+# ----------------------------------------------------------------------------
+# Allow components to add to the staging area.
+
 avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
 "$avs_dir/stage" "$opt_dir" || exit
 
 swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 "$swup_dir/stage" "$opt_dir" || exit
+
+# ----------------------------------------------------------------------------
+
+cd "$opt_dir"/lib || exit
+rm -f *.a
+if $stripped; then
+    for i in *.so*; do
+        [ -L "$i" ] && continue # skip symlinks
+        "${tool_prefix}strip" "$i"
+    done
+fi
 
 package_version=$(python2.7 -c 'import sys, json
 print "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}".\

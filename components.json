@@ -1,11 +1,23 @@
 [
   {
+    "name": "CastleLibs-qc8017_32",
+    "selected_version": "branches/castle-libs@2312"
+  },
+  {
+    "name": "protobuf-qc8017_32",
+    "selected_version": "branches/protobuf@2312"
+  },
+  {
+    "name": "protobuf-native",
+    "selected_version": "branches/protobuf@2312"
+  },
+  {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@46050cfb3c905e8efcfe590851eb69a3d470b151"
+    "selected_version": "master@4c5aa53b332c5edb42635a8b623bec36c1f842de"
   },
   {
     "name": "googletest-qc8017_32",
-    "selected_version": "branches/googletest@2303"
+    "selected_version": "branches/googletest@2312"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -17,7 +29,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-09-01_2031"
+    "selected_version": "Continuous/Castle-Fork/2017-09-05_1026"
   },
   {
     "name": "Riviera-HSP",
@@ -25,23 +37,23 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-09-01_2031"
+    "selected_version": "Continuous/Castle-Fork/2017-09-05_1026"
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@497f21c6127895e981b6a6ab8b5aa0b7374f2029"
+    "selected_version": "master@eb4f45e9b92f7e1a5b5ec92f7b8874a9b37cf05c"
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@737"
+    "selected_version": "trunk@765"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-09-01_2031"
+    "selected_version": "Continuous/Castle-Fork/2017-09-05_1026"
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "master@bc3327c9e95ecc767a178a1048d99f2744680db3"
+    "selected_version": "master@dc7afb863b391078086e0cda9e914026baaf3b04"
   },
   {
     "name": "EddieLPM-Package",
@@ -49,6 +61,6 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-17+4d7574b"
+    "selected_version": "Continuous/master/0.0.1-18+e797bb0"
   }
 ]

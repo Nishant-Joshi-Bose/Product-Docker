@@ -10,6 +10,8 @@ MACRO(COMPONENT VARIABLE_NAME COMPONENT_NAME)
 ENDMACRO()
 
 COMPONENT(BOSELIBS_DIR BoseLibs-${SDK})
+COMPONENT(CASTLELIBS_DIR CastleLibs-${SDK})
+COMPONENT(PROTOBUF_DIR protobuf-${SDK})
 COMPONENT(SOUNDTOUCH_SDK_DIR SoundTouch-SDK-${SDK})
 COMPONENT(RIVIERA_LPM_DIR RivieraLPM)
 COMPONENT(RIVIERA_LPM_SERVICE_DIR RivieraLpmService)
@@ -41,8 +43,8 @@ IF(${SDK} STREQUAL "qc8017_32")
   SET(CMAKE_CXX_COMPILER ${RIVIERA_HSP_DIR}/sdk/sysroots/${ARCHITECTURE}-oesdk-linux/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-g++
     CACHE INTERNAL - FORCE)
 
-  SET(COMMON_FLAGS "--sysroot=${SYSROOT} -Wall -Werror -Wno-psabi -Wno-maybe-uninitialized -Wno-unused-but-set-variable -mtune=cortex-a53 -ftree-vectorize -DPLATFORM_QC8017_32")
-  SET(CMAKE_CXX_FLAGS "-std=c++1y ${COMMON_FLAGS}"
+  SET(COMMON_FLAGS "--sysroot=${SYSROOT} -Wall -Werror -Wno-psabi -Wno-maybe-uninitialized -Wno-unused-but-set-variable -mtune=cortex-a53 -ftree-vectorize")
+  SET(CMAKE_CXX_FLAGS "-std=c++11 ${COMMON_FLAGS}"
     CACHE INTERNAL - FORCE)
   SET(CMAKE_C_FLAGS "-std=gnu99 ${COMMON_FLAGS}"
     CACHE INTERNAL - FORCE)
@@ -65,3 +67,10 @@ ENDIF(${CFG} STREQUAL "Release")
 IF(${CFG} STREQUAL "Debug")
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3 -fno-inline")
 ENDIF(${CFG} STREQUAL "Debug")
+
+LINK_DIRECTORIES(
+  ${BOSELIBS_DIR}/lib
+  ${CASTLELIBS_DIR}/lib
+  ${PROTOBUF_DIR}/lib
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs
+)
