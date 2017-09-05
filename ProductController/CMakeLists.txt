@@ -1,6 +1,9 @@
 INCLUDE_DIRECTORIES(
   ${CMAKE_BINARY_DIR}
   ${BOSELIBS_DIR}/include
+  ${BOSELIBS_DIR}/protobufs
+  ${PROTOBUF_DIR}/include
+  ${CASTLELIBS_DIR}/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/STS
   ${RIVIERA_LPM_SERVICE_DIR}/source/Client
@@ -13,9 +16,9 @@ INCLUDE_DIRECTORIES(
 )
 
 SET(SOUNDTOUCH_SDK_LIBS
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libFrontDoorClient.a
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libShelbyUtils.a
-  ${BOSELIBS_DIR}/lib/libBoseLibs.a
+  FrontDoorClient
+  ShelbyUtils
+  BoseLibs
 )
 
 # -----------------------------------------------------------------------------
@@ -41,6 +44,8 @@ ADD_EXECUTABLE(Eddie
 TARGET_LINK_LIBRARIES(Eddie
   ${SOUNDTOUCH_SDK_LIBS}
   LpmClient
+  jsoncpp
+  protobuf
   -lpthread
   -lrt
   -ltinyxml
