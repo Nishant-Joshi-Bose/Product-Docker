@@ -17,7 +17,7 @@
   },
   {
     "name": "Riviera-HSP",
-    "selected_version": "Continuous/dev/0.5-15-g248fbd5"
+    "selected_version": "Continuous/dev/0.5-10-g12f96a5"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -37,7 +37,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "master@71b02063480ebd8e94082ab8ebe5a6e27448722e"
+    "selected_version": "master@5e5826fbc1ac2853d33a0b056b47e8266139c98c"
   },
   {
     "name": "ProfessorLPM-Package",

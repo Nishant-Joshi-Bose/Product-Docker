@@ -1,43 +1,12 @@
 <ShepherdConfig>
   <daemon name="Professor"/>
 
+  <daemon name="CLIServer"/>
+
   <daemon name="LPMService"/>
 
   <daemon name="LPMUpdater">
-    <arg>/opt/Bose/etc</arg>
+    <arg>/opt/Bose/etc/</arg>
   </daemon>
 
-  <daemon name="avahi-daemon"
-          exe="start-avahi"/>
-
-  <daemon name="NetManager"
-          recovery="reboot"/>
-
-  <daemon name="CLIServer"/>
-
-  <daemon name="IoT"/>
-
-  <daemon name="APServer"
-          recovery="reboot"
-          nice="-6">
-    <arg>-c</arg>
-    <arg>/opt/Bose/etc/APConfig.xml</arg>
-  </daemon>
-
-  <daemon name="UpnpSource">
-    <arg>-c/opt/Bose/etc/UpnpSource.xml</arg>
-  </daemon>
-
-  <daemon name="FrontDoor"/>
-
-  <daemon name="WebServer">
-    <arg>-c/opt/Bose/etc/WebServer.xml</arg>
-  </daemon>
-
-  <daemon name="BoseApp"
-          recovery="reboot">
-    <arg>-c/opt/Bose/etc/BoseApp.xml</arg>
-  </daemon>
-
-  <daemon name="STSCertified"/>
 </ShepherdConfig>

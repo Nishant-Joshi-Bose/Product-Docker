@@ -170,7 +170,7 @@ cp -a "$stfs"/opt/Bose/html "$opt_dir" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$boselib_dir/lib" "$opt_dir" || exit
 cp "$shepherd_dir/shepherdd" "$opt_dir/bin" || exit
-cp -t "$opt_dir/etc" "$professorlpm_package_dir"/*.bos "$professorlpm_package_dir/configuration.xml" || exit
+cp -t "$opt_dir/etc" "$professorlpm_package_dir"/*.bos "$professorlpm_package_dir/lpm_blob_configuration.xml" || exit
 
 if $production; then
     marge_url=https://streaming.bose.com
