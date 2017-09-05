@@ -1,5 +1,17 @@
 [
   {
+    "name": "CastleLibs-qc8017_32",
+    "selected_version": "branches/castle-libs@2312"
+  },
+  {
+    "name": "protobuf-qc8017_32",
+    "selected_version": "branches/protobuf@2312"
+  },
+  {
+    "name": "protobuf-native",
+    "selected_version": "branches/protobuf@2312"
+  },
+  {
     "name": "googletest-qc8017_32",
     "selected_version": "branches/googletest@2286"
   },
@@ -13,7 +25,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-08-25_1656"
+    "selected_version": "Continuous/Castle-Fork/2017-09-05_1026"
   },
   {
     "name": "Riviera-HSP",
@@ -21,7 +33,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-08-24_1302"
+    "selected_version": "Continuous/Castle-Fork/2017-09-05_1026"
   },
   {
     "name": "RivieraLpmService",
