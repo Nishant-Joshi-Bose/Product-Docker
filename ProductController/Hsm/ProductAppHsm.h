@@ -7,6 +7,7 @@
 #pragma once
 
 #include "Hsm.h"
+#include "ProductAppStates.h"
 #include "ProductAppState.h"
 #include "NotifyTargetTaskIF.h"
 
@@ -29,7 +30,25 @@ public:
     }
     bool NeedsToBeSetup();
 
+///////////////////////////////////////////////////////////////////////////////
+///// @name GetHsmStateName
+///// @brief Function returns HSM state name for a passed state id
+///// @return Hsm state name string
+///////////////////////////////////////////////////////////////////////////////
+    std::string GetHsmStateName( int state_id );
 private:
+
+///////////////////////////////////////////////////////////////////////////////
+///// @name InitializeHsmStateNameMap
+///// @brief Function initializes Product states to names that per WSSAPI
+/////        Since ProductAppHsm doesn't exactly have the names that match the
+////         specification this translation is required
+///// @return void
+///////////////////////////////////////////////////////////////////////////////
+    void InitializeHsmStateNameMap();
+private:
+    //maps state id to state string
+    std::map <ProductAppStates, std::string> m_hsmState;
     NotifyTargetTaskIF* m_pTask;
     ProductController& m_productController;
 };

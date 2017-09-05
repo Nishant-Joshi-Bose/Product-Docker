@@ -31,27 +31,10 @@ ProductController::ProductController():
 {
     BOSE_INFO( s_logger, __func__ );
     m_LanguagePersistence = ProtoPersistenceFactory::Create( "ProductLanguage", g_ProductPersistenceDir );
-    ReadSystemLanguageFromPersistence();
     m_ConfigurationStatusPersistence = ProtoPersistenceFactory::Create( "ConfigurationStatus", g_ProductPersistenceDir );
-    try
-    {
-        std::string s = m_ConfigurationStatusPersistence->Load();
-        ProtoToMarkup::FromJson( s, &m_ConfigurationStatus );
-    }
-    catch( ... )
-    {
-        try
-        {
-            BOSE_LOG( ERROR, "Loading configuration status from persistence failed" );
-            m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
-            m_ConfigurationStatusPersistence->Remove();
-            m_ConfigurationStatusPersistence->Store( ProtoToMarkup::ToJson( m_ConfigurationStatus, false ) );
-        }
-        catch( ... )
-        {
-            BOSE_LOG( ERROR, "Storing configuration status from persistence failed" );
-        }
-    }
+    ReadSystemLanguageFromPersistence();
+    m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
+    ReadConfigurationStatusFromPersistence();
 
     m_ProductAppHsm.AddState( &m_ProductAppStateTop );
     m_ProductAppHsm.AddState( &m_ProductAppStateBooting );
@@ -62,8 +45,6 @@ ProductController::ProductController():
     m_ProductAppHsm.Init( PRODUCT_APP_STATE_BOOTING );
     /// Create an instance of the front door client, providing it with a unique name.
     m_FrontDoorClientIF = FrontDoorClient::Create( "eddie" );
-
-    RegisterEndPoints();
 }
 
 ProductController::~ProductController()
@@ -73,6 +54,8 @@ ProductController::~ProductController()
 void ProductController::Initialize()
 {
     m_productCliClient.Initialize( m_ProductControllerTask );
+    RegisterEndPoints();
+    SendInitialRequests();
 }
 
 void ProductController::RegisterEndPoints()
@@ -94,12 +77,12 @@ void ProductController::RegisterEndPoints()
     AsyncCallback <Callback<::DeviceManager::Protobuf::DeviceState >> getDeviceStateReqCb( std::bind( &ProductController :: HandleGetDeviceStateRequest,
                                                                    this, std::placeholders::_1 ), m_ProductControllerTask );
 
-    AsyncCallback<SoundTouchInterface::CapsInitializationUpdate> capsInitializationCb( std::bind( &ProductController::HandleCapsInitializationUpdate ,
+    AsyncCallback<SoundTouchInterface::CapsInitializationStatus> capsInitializationCb( std::bind( &ProductController::HandleCapsInitializationUpdate ,
             this, std::placeholders::_1 ) , m_ProductControllerTask );
 
     /// Registration of endpoints to the frontdoor client.
 
-    m_FrontDoorClientIF->RegisterNotification<SoundTouchInterface::CapsInitializationUpdate>( "CapsInitializationUpdate", capsInitializationCb );
+    m_FrontDoorClientIF->RegisterNotification<SoundTouchInterface::CapsInitializationStatus>( "CapsInitializationUpdate", capsInitializationCb );
     m_FrontDoorClientIF->RegisterGet( "/system/language" , getLanguageReqCb );
     m_FrontDoorClientIF->RegisterGet( "/system/configuration/status" , getConfigurationStatusReqCb );
 
@@ -110,7 +93,23 @@ void ProductController::RegisterEndPoints()
     m_FrontDoorClientIF->RegisterGet( "/system/state", getDeviceStateReqCb );
 }
 
-void ProductController::HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationUpdate &resp )
+void ProductController::SendInitialRequests()
+{
+    BOSE_INFO( s_logger, __func__ );
+    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errorCb( std::bind( &ProductController::CapsInitializationStatusCallbackError ,
+                                                                this, std::placeholders::_1 ) , m_ProductControllerTask );
+
+    AsyncCallback<SoundTouchInterface::CapsInitializationStatus> capsInitializationCb( std::bind( &ProductController::HandleCapsInitializationUpdate ,
+            this, std::placeholders::_1 ) , m_ProductControllerTask );
+    m_FrontDoorClientIF->SendGet<SoundTouchInterface::CapsInitializationStatus>( "/system/capsInitializationStatus", capsInitializationCb, errorCb );
+}
+
+void ProductController::CapsInitializationStatusCallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode )
+{
+    BOSE_ERROR( s_logger, "%s:error code- %d", __func__, errorCode );
+}
+
+void ProductController::HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationStatus &resp )
 {
     BOSE_DEBUG( s_logger, "%s:notification: %s", __func__, ProtoToMarkup::ToJson( resp, false ).c_str() );
     HandleCAPSReady( resp.capsinitialized() );
@@ -193,6 +192,23 @@ bool ProductController::IsNetworkSetupDone()
     return m_ConfigurationStatus.status().network();
 }
 
+void ProductController::ReadConfigurationStatusFromPersistence()
+{
+    try
+    {
+        std::string s = m_ConfigurationStatusPersistence->Load();
+        ProtoToMarkup::FromJson( s, &m_ConfigurationStatus );
+    }
+    catch( const ProtoToMarkup::MarkupError &e )
+    {
+        BOSE_LOG( ERROR, "Configuration status from persistence failed markup error - " << e.what() );
+    }
+    catch( ProtoPersistenceIF::ProtoPersistenceException& e )
+    {
+        BOSE_LOG( ERROR, "Loading configuration status from persistence failed - " << e.what() );
+    }
+}
+
 void ProductController::ReadSystemLanguageFromPersistence()
 {
     try
@@ -200,12 +216,13 @@ void ProductController::ReadSystemLanguageFromPersistence()
         std::string s = m_LanguagePersistence->Load();
         ProtoToMarkup::FromJson( s, &m_systemLanguage );
     }
-    catch( ... )
+    catch( const ProtoToMarkup::MarkupError &e )
     {
-        BOSE_LOG( ERROR, "Loading system language from persistence failed" );
-        /// Store English as default language.
-        m_systemLanguage.set_code( "en" );
-        PersistSystemLanguageCode();
+        BOSE_LOG( ERROR, "ReadSystemLanguageFromPersistence- markup error - " << e.what() );
+    }
+    catch( ProtoPersistenceIF::ProtoPersistenceException& e )
+    {
+        BOSE_LOG( ERROR, "ReadSystemLanguageFromPersistence failed - " << e.what() );
     }
 }
 
@@ -220,11 +237,38 @@ void ProductController::PersistSystemLanguageCode()
     try
     {
         m_LanguagePersistence->Remove();
-        m_LanguagePersistence->Store( ProtoToMarkup::ToJson( m_systemLanguage, false ) );
+        m_LanguagePersistence->Store( ProtoToMarkup::ToJson( m_systemLanguage ) );
+        /// Persist configuration status everytime language gets
+        /// changed.
+        PersistSystemConfigurationStatus();
     }
     catch( ... )
     {
         BOSE_LOG( ERROR, "Storing language in persistence failed" );
+    }
+}
+
+void ProductController::PersistSystemConfigurationStatus()
+{
+    BOSE_INFO( s_logger, __func__ );
+    ///Persist configuration status only if it changes.
+    if( m_ConfigurationStatus.status().language() not_eq IsLanguageSet() )
+        ///To_Do- add condition to Check for network and Account too
+    {
+        m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
+
+        try
+        {
+            m_ConfigurationStatusPersistence->Store( ProtoToMarkup::ToJson( m_ConfigurationStatus ) );
+        }
+        catch( const ProtoToMarkup::MarkupError &e )
+        {
+            BOSE_LOG( ERROR, "Configuration status from persistence failed markup error - " << e.what() );
+        }
+        catch( ProtoPersistenceIF::ProtoPersistenceException& e )
+        {
+            BOSE_LOG( ERROR, "Loading configuration status from persistence failed - " << e.what() );
+        }
     }
 }
 
@@ -252,7 +296,9 @@ void ProductController :: HandleGetDeviceInfoRequest( const Callback<::DeviceMan
 void ProductController :: HandleGetDeviceStateRequest( const Callback<::DeviceManager::Protobuf::DeviceState>& resp )
 {
     ::DeviceManager::Protobuf::DeviceState currentState;
-    currentState.set_state( m_ProductAppHsm.GetCurrentState()->GetName() );
+
+    int state_index = m_ProductAppHsm.GetCurrentStateId();
+    currentState.set_state( m_ProductAppHsm.GetHsmStateName( state_index ) );
     BOSE_INFO( s_logger, "%s:Reponse: %s", __func__, ProtoToMarkup::ToJson( currentState, false ).c_str() );
     resp.Send( currentState );
 }

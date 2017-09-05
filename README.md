@@ -77,3 +77,40 @@ To rebuild the .ipk file and install via adb in one step:
 ```shell session
 $ ./scripts/putipk jobs=4
 ```
+
+Access the APQ console via the tap cable.
+
+```shell session
+$ cat /etc/minirc.usb0
+pr port             /dev/ttyUSB0
+pu baudrate         115200
+pu bits             8
+pu parity           N
+pu stopbits         1
+pu minit
+pu mreset
+pu mhangup
+pu rtscts           No
+pu logfname         /dev/null
+$ minicom -w -C minicom.cap usb0
+```
+
+Use `dmesg` to see if your tap cable is actually USB0.
+
+If you use `adb shell` to login, you won't have the usual environment by default.
+To setup the usual environment:
+
+```shell session
+$ adb shell
+/ # HOME=/opt/Bose exec bash -login
+Sat Sep  2 12:10:12 UTC 2017
+Device name: "Bose SoundTouch C7E3A2"
+mc1014468@hepdsw64.bose.com 2017-08-31T08:40:21 master 0.0.1-1+3e07c68
+#
+# type start
+start is /opt/Bose/bin/start
+#
+```
+
+Certain important error and status messages go only to the console.
+You generally won't see this information via `adb shell`.

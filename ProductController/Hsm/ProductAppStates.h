@@ -6,7 +6,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
-
+#include <map>
 // Important Note: HsmState framework reserves '0' as top state. DO NOT USE!
 
 enum ProductAppStates
@@ -21,3 +21,4 @@ enum ProductAppStates
     PRODUCT_APP_STATE_LOW_POWER,
     PRODUCT_APP_CRITICAL_ERROR
 };
+

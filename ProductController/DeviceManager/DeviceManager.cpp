@@ -44,18 +44,18 @@ DeviceManager :: ~DeviceManager()
     catch( ... )
     {
         //this can happen for OOB or factory reset. In that case, give a default name
-        s = "default_device";
+        s = "Bose SoundTouch 1234";
         SetDeviceName( s );
 
     }
 
-    devInfo.mutable_name()->set_devname( s );
+    devInfo.set_name( s );
 
     //Name should be from persisten data and if don't find the name then
     //default to "Bose SoundTouch mac-id"
     //devInfo.set_name        ("Bose SoundTouch xxxx");
     //TODO - Below parameters will be available through HSP APIs
-    devInfo.set_type( "SoundTouch 10" );
+    devInfo.set_type( "SoundTouch 05" );
     devInfo.set_variant( "Eddie" );
     devInfo.set_guid( "xxxx-xxxx-xx" );
     devInfo.set_serialnumber( "1234567890" );
