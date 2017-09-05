@@ -41,11 +41,11 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "master@71b02063480ebd8e94082ab8ebe5a6e27448722e"
+    "selected_version": "master@5e5826fbc1ac2853d33a0b056b47e8266139c98c"
   },
   {
     "name": "EddieLPM-Package",
-    "selected_version": "Continuous/trunk/2017-08-30_1250"
+    "selected_version": "Continuous/trunk/2017-09-05_1048"
   },
   {
     "name": "CastleNetworkService-qc8017_32",

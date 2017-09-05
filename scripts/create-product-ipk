@@ -166,7 +166,7 @@ cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
 cp -a "$boselib_dir/lib" "$opt_dir" || exit
 cp "$shepherd_dir/shepherdd" "$opt_dir/bin" || exit
 cp "$castlenetworkservice_dir/bin/NetManager" "$opt_dir/bin" || exit
-cp -t "$opt_dir/etc" "$eddielpm_package_dir"/*.bos "$eddielpm_package_dir/configuration.xml" || exit
+cp -t "$opt_dir/etc" "$eddielpm_package_dir"/*.bos "$eddielpm_package_dir/lpm_blob_configuration.xml" || exit
 
 
 #@todo: WebToolkit Start
