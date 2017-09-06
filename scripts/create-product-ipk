@@ -73,7 +73,6 @@ arch=arm-oemllib32-linux
 sysroot=$riviera_hsp/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/$arch/$arch-
 
-
 function do_strip {
     local src="$1"; shift
     local dst="$1"; shift
