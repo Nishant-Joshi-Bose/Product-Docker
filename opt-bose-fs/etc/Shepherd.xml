@@ -3,7 +3,8 @@
 
   <daemon name="LPMService"/>
 
-  <daemon name="LPMUpdater">
+  <daemon name="LPMUpdater"
+          recovery="ignore">
     <arg>/opt/Bose/etc/</arg>
   </daemon>
 
