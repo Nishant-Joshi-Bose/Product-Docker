@@ -184,6 +184,7 @@ function get_webtoolkit  {
     cp "$dir"/mime.tar "$opt_dir"/webkit/ || exit
     cp "$dir"/wpe.tar "$opt_dir"/webkit/ || exit
     cp "$dir"/monaco.tar.gz "$opt_dir"/webkit/ || exit
+    cp "$dir"/run_wpe.sh "$opt_dir"/webkit/ || exit
     cp -arf "$dir"/target_scripts "$opt_dir"/webkit/ || exit
 }
 #@todo: WebToolkit Finish
