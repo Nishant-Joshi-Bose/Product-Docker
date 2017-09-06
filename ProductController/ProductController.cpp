@@ -80,6 +80,7 @@ void ProductController::RegisterLpmEvents()
 {
     BOSE_INFO( s_logger, __func__ );
 
+    // Register keys coming from the LPM.
     auto func = std::bind( &ProductController::HandleLpmKeyInformation, this, std::placeholders::_1 );
     AsyncCallback<IpcKeyInformation_t>response_cb( func, m_ProductControllerTask );
     m_LpmClient->RegisterEvent<IpcKeyInformation_t>( IPC_KEY, response_cb );
