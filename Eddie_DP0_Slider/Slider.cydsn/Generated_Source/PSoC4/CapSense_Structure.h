@@ -369,34 +369,34 @@ typedef struct
     CapSense_RAM_WD_SLIDER_STRUCT linearslider0;
 
     /**
-     *  BT_BUTTON widget RAM structure
+     *  BUT0 widget RAM structure
      */
-    CapSense_RAM_WD_BUTTON_STRUCT bt_button;
+    CapSense_RAM_WD_BUTTON_STRUCT but0;
 
     /**
-     *  AUX_BUTTON widget RAM structure
+     *  BUT1 widget RAM structure
      */
-    CapSense_RAM_WD_BUTTON_STRUCT aux_button;
+    CapSense_RAM_WD_BUTTON_STRUCT but1;
 
     /**
-     *  VOL_P_BUTTON widget RAM structure
+     *  BUT2 widget RAM structure
      */
-    CapSense_RAM_WD_BUTTON_STRUCT vol_p_button;
+    CapSense_RAM_WD_BUTTON_STRUCT but2;
 
     /**
-     *  MULTI_BUTTON widget RAM structure
+     *  BUT3 widget RAM structure
      */
-    CapSense_RAM_WD_BUTTON_STRUCT multi_button;
+    CapSense_RAM_WD_BUTTON_STRUCT but3;
 
     /**
-     *  VOL_N_BUTTON widget RAM structure
+     *  BUT4 widget RAM structure
      */
-    CapSense_RAM_WD_BUTTON_STRUCT vol_n_button;
+    CapSense_RAM_WD_BUTTON_STRUCT but4;
 
     /**
-     *  ACTION_BUTTON widget RAM structure
+     *  BUT5 widget RAM structure
      */
-    CapSense_RAM_WD_BUTTON_STRUCT action_button;
+    CapSense_RAM_WD_BUTTON_STRUCT but5;
 } CapSense_RAM_WD_LIST_STRUCT;
 
 
@@ -450,34 +450,34 @@ typedef struct
     CapSense_RAM_SNS_STRUCT linearslider0 [CapSense_LINEARSLIDER0_NUM_SENSORS];
 
     /**
-     *  BT_BUTTON sensors RAM structures array
+     *  BUT0 sensors RAM structures array
      */
-    CapSense_RAM_SNS_STRUCT bt_button     [CapSense_BT_BUTTON_NUM_SENSORS];
+    CapSense_RAM_SNS_STRUCT but0          [CapSense_BUT0_NUM_SENSORS];
 
     /**
-     *  AUX_BUTTON sensors RAM structures array
+     *  BUT1 sensors RAM structures array
      */
-    CapSense_RAM_SNS_STRUCT aux_button    [CapSense_AUX_BUTTON_NUM_SENSORS];
+    CapSense_RAM_SNS_STRUCT but1          [CapSense_BUT1_NUM_SENSORS];
 
     /**
-     *  VOL_P_BUTTON sensors RAM structures array
+     *  BUT2 sensors RAM structures array
      */
-    CapSense_RAM_SNS_STRUCT vol_p_button  [CapSense_VOL_P_BUTTON_NUM_SENSORS];
+    CapSense_RAM_SNS_STRUCT but2          [CapSense_BUT2_NUM_SENSORS];
 
     /**
-     *  MULTI_BUTTON sensors RAM structures array
+     *  BUT3 sensors RAM structures array
      */
-    CapSense_RAM_SNS_STRUCT multi_button  [CapSense_MULTI_BUTTON_NUM_SENSORS];
+    CapSense_RAM_SNS_STRUCT but3          [CapSense_BUT3_NUM_SENSORS];
 
     /**
-     *  VOL_N_BUTTON sensors RAM structures array
+     *  BUT4 sensors RAM structures array
      */
-    CapSense_RAM_SNS_STRUCT vol_n_button  [CapSense_VOL_N_BUTTON_NUM_SENSORS];
+    CapSense_RAM_SNS_STRUCT but4          [CapSense_BUT4_NUM_SENSORS];
 
     /**
-     *  ACTION_BUTTON sensors RAM structures array
+     *  BUT5 sensors RAM structures array
      */
-    CapSense_RAM_SNS_STRUCT action_button [CapSense_ACTION_BUTTON_NUM_SENSORS];
+    CapSense_RAM_SNS_STRUCT but5          [CapSense_BUT5_NUM_SENSORS];
 } CapSense_RAM_SNS_LIST_STRUCT;
 
 
