@@ -52,4 +52,8 @@
 
   <daemon name="Bluetooth"/>
 
+  <!-- The Bluetooth daemon depends on the btproperty daemon -->
+  <daemon name="btproperty"
+          exe="/usr/bin/btproperty"/>
+
 </ShepherdConfig>
