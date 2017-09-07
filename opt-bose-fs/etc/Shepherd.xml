@@ -3,6 +3,14 @@
 
   <daemon name="LPMService"/>
 
+  <!-- The LPMUpdater will ultimately be consumed and launched by
+       CastleSoftwareUpdate.  But since that team did not want to
+       integrate/consume us for DP1/IP1 due to too little time to integrate
+       the LpmUpdater must spawn on its own and preform an update if need be.
+       Launching the LpmUpdater using Shepherd is just a temporary solution to
+       meet the IP1/DP1 requirements.  The LPMUpdater exits if either (1) the
+       LPM is already up to date or(2) the software installed on the LPM is
+       old and doesn’t support the update over IPC.  -->
   <daemon name="LPMUpdater"
           recovery="ignore">
     <arg>/opt/Bose/etc/</arg>
