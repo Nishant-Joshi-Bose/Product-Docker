@@ -1,17 +1,9 @@
 INCLUDE_DIRECTORIES(
-  ${CMAKE_BINARY_DIR}
-  ${BOSELIBS_DIR}/include
-  ${BOSELIBS_DIR}/protobufs
-  ${PROTOBUF_DIR}/include
-  ${CASTLELIBS_DIR}/include
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/STS
   ${RIVIERA_LPM_SERVICE_DIR}/source/Client
   ${RIVIERA_LPM_SERVICE_DIR}/source/LPMIPC
   ${RIVIERA_LPM_DIR}/include
   Hsm
   DeviceManager
-  ${PROTO_CC_DEST}
   .
 )
 
