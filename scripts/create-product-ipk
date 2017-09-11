@@ -219,13 +219,6 @@ avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
 swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 "$swup_dir/stage" "$opt_dir" || exit
 
-# SoftwareUpdateService crashes, "due to invalid libcurl and libssl that is
-# referred by opkg I am using. I need to build opkg against CastleLibs and
-# read only FS as mentioned in JIRA" -- Dharati
-# https://jirapro.bose.com/browse/CASTLE-2777
-# https://jirapro.bose.com/browse/CASTLE-2832
-rm -fv "$opt_dir/etc/Shepherd-swup.xml"
-
 # ----------------------------------------------------------------------------
 
 cd "$opt_dir"/lib || exit
