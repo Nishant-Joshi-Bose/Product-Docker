@@ -71,9 +71,9 @@ void ProductController::InitializeLpmClient()
     // Connect/Initialize the LPM Client
     m_LpmClient = LpmClientFactory::Create( "EddieLpmClient", GetTask() );
 
-    auto func = std::bind( &ProductController::HandleLPMReady, this );
-    AsyncCallback<bool> connectCb( func, GetTask() );
-    m_LpmClient->Connect( connectCb );
+   auto func = std::bind( &ProductController::HandleLPMReady, this );
+   AsyncCallback<bool> connectCb( func, GetTask() );
+   m_LpmClient->Connect( connectCb );
 }
 
 void ProductController::RegisterLpmEvents()
