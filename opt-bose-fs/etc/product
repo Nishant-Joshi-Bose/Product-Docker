@@ -3,5 +3,8 @@
 # This script is invoke by systemd.
 # See: /etc/systemd/system/bose.service
 #
-exec btproperty&
+# This script's only purpose is for systemd to invoke the SoundTouch script.
+# If you're thinking about having this script do something more, you're almost
+# certainly wrong.
+#
 exec /opt/Bose/bin/SoundTouch "$@"

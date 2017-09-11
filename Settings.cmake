@@ -68,6 +68,17 @@ IF(${CFG} STREQUAL "Debug")
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3 -fno-inline")
 ENDIF(${CFG} STREQUAL "Debug")
 
+INCLUDE_DIRECTORIES(
+  ${CMAKE_BINARY_DIR}
+  ${PROTO_CC_DEST}
+  ${BOSELIBS_DIR}/include
+  ${BOSELIBS_DIR}/protobufs
+  ${PROTOBUF_DIR}/include
+  ${CASTLELIBS_DIR}/include
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/STS
+)
+
 LINK_DIRECTORIES(
   ${BOSELIBS_DIR}/lib
   ${CASTLELIBS_DIR}/lib
