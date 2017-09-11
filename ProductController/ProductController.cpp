@@ -71,19 +71,9 @@ void ProductController::InitializeLpmClient()
     // Connect/Initialize the LPM Client
     m_LpmClient = LpmClientFactory::Create( "EddieLpmClient", GetTask() );
 
-    // Callback for Connect.
-    {
-        auto func = std::bind( &ProductController::HandleLPMReady, this );
-        AsyncCallback<bool> connectCb( func, GetTask() );
-        m_LpmClient->Connect( connectCb );
-    }
-
-    // Callback for Disconnect.
-    {
-        auto func = std::bind( &ProductController::HandleLPMNotReady, this );
-        AsyncCallback<bool> disconnectCb( func, GetTask() );
-        m_LpmClient->Disconnect( disconnectCb );
-    }
+   auto func = std::bind( &ProductController::HandleLPMReady, this );
+   AsyncCallback<bool> connectCb( func, GetTask() );
+   m_LpmClient->Connect( connectCb );
 }
 
 void ProductController::RegisterLpmEvents()
@@ -237,13 +227,6 @@ void ProductController::HandleLPMReady()
     BOSE_INFO( s_logger, __func__ );
     m_isLPMReady = true;
     m_ProductAppHsm.Handle<>( &ProductAppState::HandleModulesReady );
-}
-
-void ProductController::HandleLPMNotReady()
-{
-    BOSE_INFO( s_logger, __func__ );
-    m_isLPMReady = false;
-    //TBD: Need to handle in HSM.
 }
 
 bool ProductController::IsAllModuleReady()
