@@ -21,7 +21,7 @@
 #include "comms.h"
 
 // Only compile slider stuff in if sliders were configured in PSoC creator
-#if defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)
+#if (defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)) || (defined(CapSense_CSD_EN) && (CapSense_CSD_EN == CapSense_ENABLE))
 
 typedef struct {
     uint8_t id;
@@ -41,7 +41,7 @@ static Slider_t sliders[] =
 };
 #endif
 
-#if defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)
+#if (defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)) || (defined(CapSense_CSD_EN) && (CapSense_CSD_EN == CapSense_ENABLE))
 static void SendSliderEvent(const Slider_t *slider, SliderState_t state)
 {
     uint8_t buff[COMMS_TX_BUFFER_SIZE];
@@ -57,7 +57,7 @@ static void SendSliderEvent(const Slider_t *slider, SliderState_t state)
 
 void SlidersScan(void)
 {
-#if defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)
+#if (defined(CapSense_CSX_EN) && (CapSense_CSX_EN == CapSense_ENABLE)) || (defined(CapSense_CSD_EN) && (CapSense_CSD_EN == CapSense_ENABLE))
     for (volatile uint8_t i = 0; i < sizeof(sliders) / sizeof(Slider_t); i++)
     {
         uint32_t curPos = CapSense_GetCentroidPos(sliders[i].id);
