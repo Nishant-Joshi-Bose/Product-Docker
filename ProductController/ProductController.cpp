@@ -58,7 +58,6 @@ ProductController::~ProductController()
 
 void ProductController::Initialize()
 {
-    RegisterLpmEvents();
     m_productCliClient.Initialize( m_ProductControllerTask );
     RegisterEndPoints();
     SendInitialRequests();
@@ -71,9 +70,9 @@ void ProductController::InitializeLpmClient()
     // Connect/Initialize the LPM Client
     m_LpmClient = LpmClientFactory::Create( "EddieLpmClient", GetTask() );
 
-   auto func = std::bind( &ProductController::HandleLPMReady, this );
-   AsyncCallback<bool> connectCb( func, GetTask() );
-   m_LpmClient->Connect( connectCb );
+    auto func = std::bind( &ProductController::HandleLPMReady, this );
+    AsyncCallback<bool> connectCb( func, GetTask() );
+    m_LpmClient->Connect( connectCb );
 }
 
 void ProductController::RegisterLpmEvents()
@@ -225,6 +224,7 @@ void ProductController::HandleCAPSReady( bool capsReady )
 void ProductController::HandleLPMReady()
 {
     BOSE_INFO( s_logger, __func__ );
+    RegisterLpmEvents();
     m_isLPMReady = true;
     m_ProductAppHsm.Handle<>( &ProductAppState::HandleModulesReady );
 }
