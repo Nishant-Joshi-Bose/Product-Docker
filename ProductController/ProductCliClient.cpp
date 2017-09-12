@@ -60,6 +60,11 @@ void ProductCliClient::Initialize( NotifyTargetTaskIF* task )
                          "Show the manufacturing data",
                          "mfgdata" ) );
 
+    cmds.emplace_back( std::make_shared<Cmd>
+                       ( "backlight",
+                         "Adjust the LCD back light level",
+                         "backlight [level]" ) );
+
     m_cliClient.Initialize( task, cmds,
                             [this]( std::string const & cmd,
                                     CLIClient::StringListType & argList,
@@ -92,6 +97,12 @@ bool ProductCliClient::HandleCommand( std::string const& cmd,
     if( cmd == "mfgdata" )
     {
         CliCmdMfgData( argList, response );
+        return true;
+    }
+
+    if( cmd == "backlight" )
+    {
+        CliCmdBackLight( argList, response );
         return true;
     }
 
@@ -148,3 +159,38 @@ void ProductCliClient::CliCmdMfgData( CLIClient::StringListType& argList,
         response = "No manufacturing data";
     }
 }
+
+void ProductCliClient::CliCmdBackLight( CLIClient::StringListType& argList,
+                                        std::string& response )
+{
+    unsigned int intensity = 0;
+
+    if( argList.size() == 0 )
+    {
+        // TODO: get intensity
+        response = "back light intensity: " + intensity;
+        return;
+    }// If there is no argument
+
+    if( argList.size() == 1 )
+    {
+        auto& arg = argList.front();
+        if( !ToInteger( arg, intensity ) )
+        {
+            response = "Malformed integer: " + arg;
+            return;
+        }
+
+        if( ( intensity < 0 ) || ( intensity > 100 ) )
+        {
+            response = "back light intensity must between 1..100";
+            return;
+        }
+
+        // TODO: set intensity
+        return;
+    }// If there is 1 argument
+
+    response = "usage: backlight [0..100]";
+    return;
+}// ProductCliClient::CliBackLight
