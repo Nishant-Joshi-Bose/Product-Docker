@@ -30,4 +30,5 @@ private:
 
     void CliCmdLpmEcho( CLIClient::StringListType&, std::string& );
     void CliCmdMfgData( CLIClient::StringListType&, std::string& );
+    void CliCmdLcd    ( CLIClient::StringListType&, std::string& );
 };
