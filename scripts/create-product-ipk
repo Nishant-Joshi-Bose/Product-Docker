@@ -178,6 +178,8 @@ function get_webtoolkit  {
     local dir="$wspace/components/CastleWebkit"
     if [ -e "$dir" ]; then
         echo "Using existing $dir"
+        cd "$dir" || exit
+        git pull || exit
     else
         git clone git@github.com:BoseCorp/CastleWebkit.git "$dir" || exit
     fi
