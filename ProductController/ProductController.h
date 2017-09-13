@@ -21,6 +21,7 @@
 #include "DeviceManager.pb.h"
 #include "SoundTouchInterface/CapsInitializationStatus.pb.h"
 #include "ProductCliClient.h"
+#include "LpmClientIF.h"
 
 namespace ProductApp
 {
@@ -42,7 +43,12 @@ private:
     ProductController& operator=( const ProductController& ) = delete;
 
 private:
+    // Initialize and Register with LPM for events notifications
+    void InitializeLpmClient();
+    void RegisterLpmEvents();
+
     void RegisterEndPoints();
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  ReadSystemLanguageFromPersistence
 /// @brief Function to read persisted language code from /mnt/nv/product-persistence.
@@ -60,6 +66,8 @@ private:
     void PersistSystemConfigurationStatus();
 
 public:
+    // Handle Key Information received from LPM
+    void HandleLpmKeyInformation( IpcKeyInformation_t keyInformation );
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  IsAllModuleReady
 /// @brief true if all the dependent modules are up and ready.
@@ -155,11 +163,16 @@ public:
     void CapsInitializationStatusCallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
 private:
     NotifyTargetTaskIF* m_ProductControllerTask;
+    // LPM Client handle
+    LpmClientIF::LpmClientPtr          m_LpmClient;
+
     ProductAppHsm m_ProductAppHsm;
+
     ProtoPersistenceIF::ProtoPersistencePtr m_ConfigurationStatusPersistence = nullptr;
     ProtoPersistenceIF::ProtoPersistencePtr m_LanguagePersistence = nullptr;
     ProductPb::ConfigurationStatus m_ConfigurationStatus;
     ProductPb::Language m_systemLanguage;
+
     std::shared_ptr<FrontDoorClientIF> m_FrontDoorClientIF;
     ProductCliClient m_productCliClient;
     ProductAppStateTop m_ProductAppStateTop;
