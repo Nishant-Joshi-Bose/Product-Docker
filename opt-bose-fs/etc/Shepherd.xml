@@ -27,6 +27,7 @@
   <daemon name="FrontDoor"/>
 
   <daemon name="WebServer">
+    <arg>--disable-setup-port</arg>
     <arg>-c/opt/Bose/etc/WebServer.xml</arg>
   </daemon>
 
@@ -41,5 +42,9 @@
 
   <!-- The Bluetooth daemon depends on the btproperty daemon -->
   <daemon name="btproperty"/>
+
+  <daemon name="PtsServer">
+    <arg>/opt/Bose/etc/pts-handler</arg>
+  </daemon>
 
 </ShepherdConfig>

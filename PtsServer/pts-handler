@@ -1,0 +1,106 @@
+#!/usr/bin/python2.7
+#
+# Invoked by PtsServer for each HTTP client connection.
+# HTTP request headers and payload are to be read from stdin.
+# HTTP response headers and payload are to be written to stdout.
+#
+import os
+import sys
+
+debug = False
+
+def log(*args):
+    print >>sys.stderr, "pts-handler:", " ".join(map(lambda a: str(a), args))
+
+if len(sys.argv) != 1:
+    raise Exception("wrong usage " + str(sys.argv))
+
+line = sys.stdin.readline()
+if not line:
+    log("No header")
+    sys.exit(0)
+
+# `line` is like: "GET /hello/world.zip HTTP/1.1\r\n"
+line = line.rstrip("\r\n")
+fields = line.split(" ")
+if len(fields) != 3:
+    log("Malformed first header line", repr(fields))
+    sys.exit()
+op, path, version = fields
+
+if debug:
+    log("op '{}', path '{}', version '{}'".format(op, path, version))
+
+# Read the HTTP headers
+while True:
+    line = sys.stdin.readline()
+    if line is None:
+        if debug:
+            log("EOF")
+        sys.exit()
+    line = line.rstrip("\r\n")
+    if line == "":
+        break
+    if debug:
+        log("header '{}'".format(line))
+
+if op == "GET":
+
+    if path == "/logread.txt":
+        print """\
+HTTP/1.1 200 OK\r
+Content-Type: text/plain\r
+Cache-Control: no-cache\r
+\r"""
+        os.execl("/sbin/logread", "logread")
+
+    if path == "/logread.txt.gz":
+        print """\
+HTTP/1.1 200 OK\r
+Content-Type: application/x-gzip\r
+Cache-Control: no-cache\r
+\r"""
+        os.execl("/bin/sh", "-c", "logread | gzip")
+
+    # Avoid possible security issues with paths like ../../etc/passwd
+    if ".." not in path:
+        if path == "/":
+            path = "/index.html"
+        file_name = "/opt/Bose/html" + path
+
+        content_types = {
+            ".html": "text/html",
+            ".jpg": "image/jpeg",
+            ".js": "text/plain",
+            ".pdf": "application/pdf",
+            ".svg": "image/svg+xml",
+            ".txt": "text/plain",
+        }
+        content_type = None
+        for ext, ctype in content_types.iteritems():
+            if file_name.endswith(ext):
+                content_type = ctype
+                break
+
+        try:
+            with open(file_name) as fh:
+                print "HTTP/1.1 200 OK\r"
+                if content_type:
+                    print "Content-Type: " + content_type + "\r"
+                print "\r"
+
+                while True:
+                    buf = fh.read(4096)
+                    if not buf:
+                        break
+                    sys.stdout.write(buf)
+            log("Sent {} ({})".format(file_name, content_type))
+            sys.exit(0)
+        except IOError, exc:
+            log("open " + file_name + ": " + exc.strerror)
+
+print """\
+HTTP/1.1 404 Not Found\r
+Content-Type: text/plain\r
+\r
+404 Not Found\r"""
