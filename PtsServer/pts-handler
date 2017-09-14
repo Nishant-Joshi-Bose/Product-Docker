@@ -34,7 +34,7 @@ if debug:
 # Read the HTTP headers
 while True:
     line = sys.stdin.readline()
-    if line is None:
+    if not line:
         if debug:
             log("EOF")
         sys.exit()
