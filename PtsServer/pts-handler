@@ -17,8 +17,9 @@ if len(sys.argv) != 1:
 
 line = sys.stdin.readline()
 if not line:
-    log("No header")
-    sys.exit(0)
+    if debug:
+        log("No header")
+    sys.exit()
 
 # `line` is like: "GET /hello/world.zip HTTP/1.1\r\n"
 line = line.rstrip("\r\n")
@@ -95,7 +96,7 @@ Cache-Control: no-cache\r
                         break
                     sys.stdout.write(buf)
             log("Sent {} ({})".format(file_name, content_type))
-            sys.exit(0)
+            sys.exit()
         except IOError, exc:
             log("open " + file_name + ": " + exc.strerror)
 
