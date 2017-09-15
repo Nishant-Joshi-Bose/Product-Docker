@@ -17,6 +17,21 @@ if [ "${PS1-}" ]; then # interactive shells
         fi
         cat /opt/Bose/etc/FS_VERSION*
     ) 2>/dev/null
+
+    if ! [ -e /persist/mfg_data.json ]; then
+        cat >&2 <<\EOF
+
+No manufacturing data, won't start SoundTouch.
+To set manufacturing data:
+
+  mount -oremount,rw /persist
+  mfgdata clear
+  mfgdata set country_code US
+  mfgdata set development true # enable debug features
+  mount -oremount,ro /persist
+
+EOF
+    fi
 fi
 
 if [ -e /mnt/nv/bash_profile ] ; then

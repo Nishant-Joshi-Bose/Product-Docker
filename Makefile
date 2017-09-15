@@ -33,6 +33,7 @@ generated_sources: check_tools version-files
 	$(MAKE) -C $(CASTLEPRODUCTCONTROLLERCOMMON_DIR) $@
 	$(MAKE) -C $(RIVIERALPMUPDATER_DIR) $@
 
+
 .PHONY: astyle
 astyle:
 ifndef DONT_RUN_ASTYLE

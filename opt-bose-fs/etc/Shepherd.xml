@@ -3,6 +3,10 @@
 
   <daemon name="LPMService"/>
 
+  <daemon name="LPMUpdater">
+    <arg>/opt/Bose/etc/</arg>
+  </daemon>
+
   <daemon name="avahi-daemon"
           exe="start-avahi"/>
 
@@ -36,11 +40,4 @@
   </daemon>
 
   <daemon name="STSCertified"/>
-
-  <daemon name="AVS"/>
-
-  <daemon name="SoftwareUpdateService">
-    <arg>--configuration</arg>
-    <arg>/opt/Bose/etc/SoftwareUpdateConfiguration.xml</arg>
-  </daemon>
 </ShepherdConfig>
