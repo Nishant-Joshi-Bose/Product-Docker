@@ -1,7 +1,27 @@
 [
   {
+    "name": "CastleLibs-qc8017_32",
+    "selected_version": "branches/castle-libs@2312"
+  },
+  {
+    "name": "protobuf-qc8017_32",
+    "selected_version": "branches/protobuf@2312"
+  },
+  {
+    "name": "protobuf-native",
+    "selected_version": "branches/protobuf@2312"
+  },
+  {
+    "name": "CastleProductControllerCommon",
+    "selected_version": "master@4c5aa53b332c5edb42635a8b623bec36c1f842de"
+  },
+  {
+    "name": "googletest-qc8017_32",
+    "selected_version": "branches/googletest@2286"
+  },
+  {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-6+b51c64f"
+    "selected_version": "Continuous/master/0.0.1-15+bde3547"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -9,26 +29,38 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-08-14_0906"
+    "selected_version": "Continuous/Castle-Fork/2017-09-05_1026"
   },
   {
     "name": "Riviera-HSP",
-    "selected_version": "Continuous/dev/0.5-10-g12f96a5"
+    "selected_version": "Release/master/0.6"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-08-14_0906"
+    "selected_version": "Continuous/Castle-Fork/2017-09-05_1026"
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@f01b274bb3680256634bba76173d11ac9c627a01"
+    "selected_version": "master@c0384cec689ff179f1a8639d5f4b294467515b60"
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@603"
+    "selected_version": "trunk@728"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-08-09_0806"
+    "selected_version": "Continuous/Castle-Fork/2017-08-24_1302"
+  },
+  {
+    "name": "RivieraLpmUpdater",
+    "selected_version": "master@5e5826fbc1ac2853d33a0b056b47e8266139c98c"
+  },
+  {
+    "name": "ProfessorLPM-Package",
+    "selected_version": "Release/trunk/0.1.0.2469153"
+  },
+  {
+    "name": "CastleNetworkService-qc8017_32",
+    "selected_version": "Continuous/master/0.1.0-26+72e8b30"
   }
 ]

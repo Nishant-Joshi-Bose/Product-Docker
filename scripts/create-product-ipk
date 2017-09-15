@@ -22,9 +22,8 @@ tryhelp () {
     exit 1
 }
 opts=$(getopt --name "$this" --shell sh \
-    -o puh \
-    -l "production,
-        unstripped,
+    -o uh \
+    -l "unstripped,
         help" \
     -- "$@") || tryhelp
 eval set -- "$opts"
@@ -72,7 +71,11 @@ wspace=$(cd "$here/.." && echo "$PWD") || exit
 riviera_hsp=$(components get Riviera-HSP installed_location) || exit
 soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
-boselib_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
+boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
+protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
+professorlpm_package_dir=$(components get ProfessorLPM-Package installed_location) || exit
+castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
+
 
 arch=arm-oemllib32-linux
 sysroot=$riviera_hsp/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -151,13 +154,14 @@ echo "FS_VERSION \"$v\""
 stfs=$soundtouch_sdk/fs
 cp "$stfs"/opt/Bose/APServer "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BoseApp "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/Bluetooth "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/CLIServer "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/NetManager "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/PlatformReset "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/STSCertified "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/UpnpSource "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/WebServer "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/FrontDoor "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/etc/HandCraftedWebServer-SoundTouch.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
@@ -167,8 +171,13 @@ cp "$stfs"/opt/Bose/etc/services.json "$opt_dir/etc" || exit
 cp -a "$stfs"/opt/Bose/Xml "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/html "$opt_dir" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
-cp -a "$boselib_dir/lib" "$opt_dir" || exit
+cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
+cp -a "$boselibs_dir/lib" "$opt_dir" || exit
+cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp "$shepherd_dir/shepherdd" "$opt_dir/bin" || exit
+cp "$castlenetworkservice_dir/bin/NetManager" "$opt_dir/bin" || exit
+cp -t "$opt_dir/etc" "$professorlpm_package_dir"/*.bos "$professorlpm_package_dir/lpm_blob_configuration.xml" || exit
+
 
 if $production; then
     marge_url=https://streaming.bose.com
@@ -195,11 +204,25 @@ format(**json.loads(open(sys.argv[1]).read()))
 echo "HTML version \"$v\""
 sed -i "s/%FROMVERSION%/From: $v/" "$opt_dir/html/update.html" || exit
 
+# ----------------------------------------------------------------------------
+# Allow components to add to the staging area.
+
 avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
 "$avs_dir/stage" "$opt_dir" || exit
 
 swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 "$swup_dir/stage" "$opt_dir" || exit
+
+# ----------------------------------------------------------------------------
+
+cd "$opt_dir"/lib || exit
+rm -f *.a
+if $stripped; then
+    for i in *.so*; do
+        [ -L "$i" ] && continue # skip symlinks
+        "${tool_prefix}strip" "$i"
+    done
+fi
 
 put_script "$opt_dir/bin/is-production" <<EOF
 #!/bin/sh
@@ -250,7 +273,7 @@ if [ "\$b" = "\$i" ]; then
 else
     echo "Built for Riviera-HSP: \$b"
     echo "Installed Riviera-HSP: \$i"
-    echo "See https://github.com/BoseCorp/Eddie/blob/master/README.md#hsp"
+    echo "See https://github.com/BoseCorp/Professor/blob/master/README.md#hsp"
 fi
 EOF
 
