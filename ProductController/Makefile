@@ -1,3 +1,3 @@
 .PHONY: generated_sources
 generated_sources:
-	make -C source/ProtoBufs
+	make -C Protobufs

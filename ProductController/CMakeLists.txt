@@ -1,40 +1,38 @@
 INCLUDE_DIRECTORIES(
-  ${CMAKE_BINARY_DIR}
-  ${CMAKE_BINARY_DIR}/proto
-  ${BOSELIBS_DIR}/include
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/STS
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/SoundTouchInterface
-  ${PROTO_CC_DEST}
-  include
+  ${RIVIERA_LPM_SERVICE_DIR}/source/Client
+  ${RIVIERA_LPM_SERVICE_DIR}/source/LPMIPC
+  ${RIVIERA_LPM_DIR}/include
+  ${CASTLE_PRODUCT_CONTROLLER_COMMON_DIR}
+  ${CASTLE_PRODUCT_CONTROLLER_COMMON_DIR}/Hsm
+  CustomHsm
+  DeviceManager
+  .
 )
 
 SET(SOUNDTOUCH_SDK_LIBS
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libSoundTouchClient.a
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libShelbyUtils.a
-  ${BOSELIBS_DIR}/lib/libBoseLibs.a
+  FrontDoorClient
+  ShelbyUtils
+  BoseLibs
 )
 
 # -----------------------------------------------------------------------------
 # Professor daemon.
 
 ADD_EXECUTABLE(Professor
-  source/ProductStart.cpp
-  source/ProductCommandLine.cpp
-  source/ProductHardwareManager.cpp
-  source/ProductController.cpp
-  source/ProductDeviceManager.cpp
-  source/ProductSystemInterface.cpp
-  source/ProductUserInterface.cpp
-  ${PROTO_CC_DEST}/A4VPersistence.pb.cc
-  ${PROTO_CC_DEST}/A4VSystemTimeout.pb.cc
-  ${PROTO_CC_DEST}/AudioControls.pb.cc
-  ${PROTO_CC_DEST}/ProductMessage.pb.cc
-  ${PROTO_CC_DEST}/RebroadcastLatencyMode.pb.cc
+  CustomHsm/CustomProductControllerState.cpp
+  CustomHsm/CustomProductControllerStateBooting.cpp
+  CustomHsm/CustomProductControllerStateSwUpdating.cpp
+  HelloWorldProductController.cpp
+  Main.cpp
+  ${PROTO_CC_DEST}/Language.pb.cc
 )
 
 TARGET_LINK_LIBRARIES(Professor
+  CastleProductControllerCommon
   ${SOUNDTOUCH_SDK_LIBS}
+  LpmClient
+  jsoncpp
+  protobuf
   -lpthread
   -lrt
   -ltinyxml
@@ -42,4 +40,3 @@ TARGET_LINK_LIBRARIES(Professor
 
 INSTALL(TARGETS Professor DESTINATION ${OUTPUT_BIN_DIR})
 
-# -----------------------------------------------------------------------------

@@ -15,6 +15,7 @@ COMPONENT(PROTOBUF_DIR protobuf-${SDK})
 COMPONENT(SOUNDTOUCH_SDK_DIR SoundTouch-SDK-${SDK})
 COMPONENT(RIVIERA_LPM_DIR RivieraLPM)
 COMPONENT(RIVIERA_LPM_SERVICE_DIR RivieraLpmService)
+COMPONENT(CASTLE_PRODUCT_CONTROLLER_COMMON_DIR CastleProductControllerCommon)
 COMPONENT(GOOGLETEST_DIR googletest-${SDK})
 
 IF(${SDK} STREQUAL "native")
@@ -59,6 +60,8 @@ SET(PROTO_CC_DEST "${CMAKE_BINARY_DIR}/proto")
 SET(CMAKE_INSTALL_PREFIX . CACHE INTERNAL - FORCE)
 SET(OUTPUT_BIN_DIR bin)
 SET(OUTPUT_LIB_DIR lib)
+#Custom Hsm directory path needs set before building CastleProductControllerCommon library. 
+SET(CUSTOM_HSM_DIR ${CMAKE_SOURCE_DIR}/ProductController/CustomHsm)
 
 IF(${CFG} STREQUAL "Release")
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os -g2 -DNDEBUG")
@@ -67,6 +70,17 @@ ENDIF(${CFG} STREQUAL "Release")
 IF(${CFG} STREQUAL "Debug")
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g3 -fno-inline")
 ENDIF(${CFG} STREQUAL "Debug")
+
+INCLUDE_DIRECTORIES(
+  ${CMAKE_BINARY_DIR}
+  ${PROTO_CC_DEST}
+  ${BOSELIBS_DIR}/include
+  ${BOSELIBS_DIR}/protobufs
+  ${PROTOBUF_DIR}/include
+  ${CASTLELIBS_DIR}/include
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/STS
+)
 
 LINK_DIRECTORIES(
   ${BOSELIBS_DIR}/lib

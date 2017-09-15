@@ -1,0 +1,4 @@
+This directory has custom product controller state class files and
+    optional custom product controller hsm files.
+    This directory has a header file that enumerates both common product
+    controller and custom product controller states.
