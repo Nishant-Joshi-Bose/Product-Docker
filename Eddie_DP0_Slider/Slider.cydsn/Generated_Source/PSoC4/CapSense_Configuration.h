@@ -511,7 +511,7 @@ typedef uint16 CapSense_THRESHOLD_TYPE;
 *******************************************************************************/
 
 /* RAM Global Parameters Definitions */
-#define CapSense_CONFIG_ID                      (0x3F90u)
+#define CapSense_CONFIG_ID                      (0xEAC0u)
 #define CapSense_DEVICE_ID                      (0x0160u)
 #define CapSense_CSD0_CONFIG                    (0x0008u)
 
@@ -520,7 +520,7 @@ typedef uint16 CapSense_THRESHOLD_TYPE;
 *******************************************************************************/
 #define CapSense_LINEARSLIDER0_STATIC_CONFIG    (1u)
 #define CapSense_LINEARSLIDER0_NUM_SENSORS      (7u)
-#define CapSense_LINEARSLIDER0_X_RESOLUTION     (600u)
+#define CapSense_LINEARSLIDER0_X_RESOLUTION     (120u)
 #define CapSense_LINEARSLIDER0_X_CENT_MULT      ((CapSense_LINEARSLIDER0_X_RESOLUTION * 256u) / \
                                                  (CapSense_LINEARSLIDER0_NUM_SENSORS - 1u))
 
