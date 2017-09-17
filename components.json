@@ -1,15 +1,15 @@
 [
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2312"
+    "selected_version": "branches/castle-libs@2311"
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "branches/protobuf@2312"
+    "selected_version": "branches/protobuf@2304"
   },
   {
     "name": "protobuf-native",
-    "selected_version": "branches/protobuf@2312"
+    "selected_version": "branches/protobuf@2304"
   },
   {
     "name": "CastleProductControllerCommon",
@@ -17,7 +17,7 @@
   },
   {
     "name": "googletest-qc8017_32",
-    "selected_version": "branches/googletest@2286"
+    "selected_version": "branches/googletest@2287"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
