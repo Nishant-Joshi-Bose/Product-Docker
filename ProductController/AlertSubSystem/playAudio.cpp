@@ -296,7 +296,7 @@ static void free_wave_data( void )
 int playAlert( char *wavefile )
 {
     unsigned char ret;
-    snd_pcm_format_t fmt;
+    snd_pcm_format_t fmt {};
 
     // No wave data loaded yet
     WavePtr = 0;

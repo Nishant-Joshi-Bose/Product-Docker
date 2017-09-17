@@ -91,6 +91,7 @@ bool CAlertsSystemClient :: addAlertAction( CAlertsMessage alertMessage )
 {
 
     auto func = std::bind( &CAlertsSystemClient::alertActiveCbk, this, std::placeholders::_1 );
+    ( void ) func;          // TODO: unused
     if( m_alert_manager->addAlert( alertMessage ) )
     {
         std::cout << "alert added successfully" << std::endl;
