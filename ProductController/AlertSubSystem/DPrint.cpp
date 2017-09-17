@@ -86,7 +86,7 @@ struct SysLog
 
     /*! Protect modifications of m_socket.  It's not necessary to protect use
         of the socket, only changing the value of m_socket. */
-   // CThreadMutex m_mutex;
+    // CThreadMutex m_mutex;
 
     /*! Label to prefix to all log messages.  If not empty, then it also
         contains a trailing separator, e.g., ": ". */
@@ -158,10 +158,10 @@ bool SysLog::open()
                  sizeof( a ) ) == -1 )
     {
 //        if( failed == 0 )
- //           std::clog << "connect: " << ERR << std::endl;
+//           std::clog << "connect: " << ERR << std::endl;
         ++failed;
 //        if( ::close( m_socket ) == -1 )
- //           std::clog << "close " << m_socket << ": " << ERR << std::endl;
+//           std::clog << "close " << m_socket << ": " << ERR << std::endl;
         m_socket = -1;
         return false; // not ok to send
     }
@@ -183,7 +183,7 @@ void SysLog::close()
     if( m_socket == -1 )
         return;
 //    if( ::close( m_socket ) == -1 )
- //       std::clog << "close " << m_socket << ": " << ERR << std::endl;
+//       std::clog << "close " << m_socket << ": " << ERR << std::endl;
     m_socket = -1;
 }
 
@@ -1162,7 +1162,7 @@ void DPrintImpl::LoadConfigFile( const char* confFileName )
     if( !confFile.is_open() )
     {
 //        if( errno != ENOENT )
- //           std::clog << "open " << confFileName << ": " << ERR << std::endl;
+//           std::clog << "open " << confFileName << ": " << ERR << std::endl;
         return;
     }
     LoadConfigFile( confFile, confFileName );
