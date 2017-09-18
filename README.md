@@ -67,7 +67,7 @@ $ cd /scratch/Eddie
 $ components install
 $ adb shell reboot bootloader       # reboot the Riviera unit into the fastboot bootloader
 $ sudo fastboot devices             # make sure the unit is in the bootloader
-$ cd components/Riviera-HSP/images
+$ cd `components get Riviera-HSP installed_location`/images
 $ sudo ./fastboot.sh
 $ sudo fastboot reboot
 ```

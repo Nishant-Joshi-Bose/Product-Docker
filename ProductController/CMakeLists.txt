@@ -3,14 +3,7 @@ INCLUDE_DIRECTORIES(
   ${RIVIERA_LPM_SERVICE_DIR}/source/LPMIPC
   ${RIVIERA_LPM_DIR}/include
   Hsm
-  DeviceManager
   .
-)
-
-SET(SOUNDTOUCH_SDK_LIBS
-  FrontDoorClient
-  ShelbyUtils
-  BoseLibs
 )
 
 # -----------------------------------------------------------------------------
@@ -27,25 +20,26 @@ ADD_EXECUTABLE(Eddie
   Hsm/ProductAppStateStdOp.cpp
   Hsm/ProductAppStateSetup.cpp
   Hsm/ProductAppStateStandby.cpp
-  DeviceManager/DeviceManager.cpp
+  DeviceManager.cpp
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
   ${PROTO_CC_DEST}/Language.pb.cc
   ${PROTO_CC_DEST}/DeviceManager.pb.cc
 )
 
 TARGET_LINK_LIBRARIES(Eddie
-  ${SOUNDTOUCH_SDK_LIBS}
   LpmClient
+  FrontDoorClient
+  ShelbyUtils
+  BoseLibs
   jsoncpp
   protobuf
-  -lpthread
-  -lrt
-  -ltinyxml
+  tinyxml
+  pthread
+  rt
 )
 
 INSTALL(TARGETS Eddie DESTINATION ${OUTPUT_BIN_DIR})
 
 # -----------------------------------------------------------------------------
 
-ADD_SUBDIRECTORY(AlertSubSystem)
 ADD_SUBDIRECTORY(LocalUI)
