@@ -144,7 +144,6 @@ echo "$v" > "$opt_dir/etc/FS_VERSION" || exit
 echo "FS_VERSION \"$v\""
 
 stfs=$soundtouch_sdk/fs
-cp "$stfs"/opt/Bose/APServer "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BoseApp "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/Bluetooth "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/CLIServer "$opt_dir/bin" || exit
@@ -222,6 +221,9 @@ avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
 
 swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 "$swup_dir/stage" "$opt_dir" || exit
+
+audiopath_dir=$(components get CastleAudioPath-qc8017_32 installed_location) || exit
+"$audiopath_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 
