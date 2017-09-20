@@ -66,6 +66,10 @@ soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || 
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
+avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
+swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
+audiopath_dir=$(components get CastleAudioPath-qc8017_32 installed_location) || exit
+castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
 eddielpm_package_dir=$(components get EddieLPM-Package installed_location) || exit
 
 arch=arm-oemllib32-linux
@@ -214,16 +218,9 @@ sed -i "s/%FROMVERSION%/From: $v/" "$opt_dir/html/update.html" || exit
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
 
-avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
 "$avs_dir/stage" "$opt_dir" || exit
-
-swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 "$swup_dir/stage" "$opt_dir" || exit
-
-audiopath_dir=$(components get CastleAudioPath-qc8017_32 installed_location) || exit
 "$audiopath_dir/stage" "$opt_dir" || exit
-
-castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
