@@ -11,6 +11,7 @@
 #include "AsyncCallback.h"
 #include "ProtoToMarkup.h"
 #include "DPrint.h"
+#include "LpmClientFactory.h"
 
 static DPrint s_logger( "HelloWorldProductController" );
 using namespace FrontDoor;
@@ -37,7 +38,7 @@ HelloWorldProductController::HelloWorldProductController( std::string const& Pro
     m_CustomProductControllerStateSwUpdating( m_ProductControllerHsm, &m_ProductControllerStateTop, *this )
 {
     BOSE_INFO( s_logger, __func__ );
-    BOSE_INFO( s_logger, "Product name is %s" , GetProductName().c_str() );
+    BOSE_INFO( s_logger, "Product name is %s", GetProductName().c_str() );
 
     //Add common and custom states here
     m_ProductControllerHsm.AddState( &m_ProductControllerStateTop );
@@ -74,7 +75,7 @@ void HelloWorldProductController::RegisterEndPoints()
                                                                               this, std::placeholders::_1 ), GetTask() );
 
     // Registration of /system/language endpoint to the front door client.
-    m_FrontDoorClientIF->RegisterGet( "/system/language" , getLanguageReqCb );
+    m_FrontDoorClientIF->RegisterGet( "/system/language", getLanguageReqCb );
 }
 
 void HelloWorldProductController::HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp )
@@ -114,6 +115,57 @@ void HelloWorldProductController::HandleGetLanguageRequest( const Callback<Produ
 
     BOSE_INFO( s_logger, "%s:Response: %s", __func__, ProtoToMarkup::ToJson( lang, false ).c_str() );
     resp.Send( lang );
+}
+
+void HelloWorldProductController::InitializeLpmClient()
+{
+    BOSE_INFO( s_logger, __func__ );
+
+    // Connect/Initialize the LPM Client
+    m_LpmClient = LpmClientFactory::Create( "ProfessorLpmClient", GetTask() );
+
+    auto func = std::bind( &HelloWorldProductController::HandleLPMReady, this );
+    AsyncCallback<bool> connectCb( func, GetTask() );
+    m_LpmClient->Connect( connectCb );
+}
+
+void HelloWorldProductController::RegisterLpmEvents()
+{
+    BOSE_INFO( s_logger, __func__ );
+
+    // Register keys coming from the LPM.
+    auto func = std::bind( &HelloWorldProductController::HandleLpmKeyInformation, this, std::placeholders::_1 );
+    AsyncCallback<IpcKeyInformation_t>response_cb( func, GetTask() );
+    m_LpmClient->RegisterEvent<IpcKeyInformation_t>( IPC_KEY, response_cb );
+}
+
+
+void HelloWorldProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInformation )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+
+    if( keyInformation.has_keyorigin() && keyInformation.has_keystate() && keyInformation.has_keyid() )
+    {
+        BOSE_DEBUG( s_logger, "Received key Information : keyorigin:%d,"
+                    " keystate:%d, keyid:%d",
+                    keyInformation.keyorigin(),
+                    keyInformation.keystate(), keyInformation.keyid() );
+        // Feed it into the keyHandler : Coming soon.
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "One or more of the parameters are not present"
+                    " in the message: keyorigin_P:%d, keystate_P:%d, keyid_P:%d",
+                    keyInformation.has_keyorigin(),
+                    keyInformation.has_keystate(),
+                    keyInformation.has_keyid() );
+    }
+}
+
+void HelloWorldProductController::HandleLPMReady()
+{
+    BOSE_INFO( s_logger, __func__ );
+    RegisterLpmEvents();
 }
 
 } // namespace ProductApp

@@ -17,6 +17,7 @@
 #include "ProductControllerStateIdle.h"
 #include "CustomProductControllerStateSwUpdating.h"
 #include "FrontDoorClientIF.h"
+#include "LpmClientIF.h"
 #include "Language.pb.h"
 
 namespace ProductApp
@@ -43,6 +44,13 @@ private:
     CustomProductControllerStateSwUpdating  m_CustomProductControllerStateSwUpdating;
 
     std::shared_ptr<FrontDoorClientIF>      m_FrontDoorClientIF;
+
+    LpmClientIF::LpmClientPtr               m_LpmClient;
+
+    void HandleLpmKeyInformation( IpcKeyInformation_t keyInformation );
+    void InitializeLpmClient();
+    void RegisterLpmEvents();
+    void HandleLPMReady();
 
 public:
     void HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp );
