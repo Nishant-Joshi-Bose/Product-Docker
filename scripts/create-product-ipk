@@ -67,7 +67,6 @@ shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
 eddielpm_package_dir=$(components get EddieLPM-Package installed_location) || exit
-castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
 
 arch=arm-oemllib32-linux
 sysroot=$riviera_hsp/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -166,7 +165,6 @@ cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
 cp -a "$boselibs_dir/lib" "$opt_dir" || exit
 cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp "$shepherd_dir/shepherdd" "$opt_dir/bin" || exit
-cp "$castlenetworkservice_dir/bin/NetManager" "$opt_dir/bin" || exit
 cp -t "$opt_dir/etc" "$eddielpm_package_dir"/*.bos "$eddielpm_package_dir/lpm_blob_configuration.xml" || exit
 cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
 
@@ -224,6 +222,9 @@ swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 
 audiopath_dir=$(components get CastleAudioPath-qc8017_32 installed_location) || exit
 "$audiopath_dir/stage" "$opt_dir" || exit
+
+castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
+"$castlenetworkservice_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 
