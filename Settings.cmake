@@ -56,12 +56,22 @@ IF(${SDK} STREQUAL "qc8017_32")
 
 ENDIF(${SDK} STREQUAL "qc8017_32")
 
+SET(PRODUCT_STATE_COMMON_SOURCE  "${CMAKE_CURRENT_SOURCE_DIR}/components/CastleProductControllerCommon")
+SET(PRODUCT_STATE_COMMON_INCLUDE "${CMAKE_CURRENT_SOURCE_DIR}/components/CastleProductControllerCommon")
+SET(LPM_STATE_COMMON_SOURCE      "${CMAKE_CURRENT_SOURCE_DIR}/components/RivieraLpmService")
+SET(LPM_STATE_COMMON_INCLUDE     "${CMAKE_CURRENT_SOURCE_DIR}/components/RivieraLpmService/source/Client")
+SET(NETWORK_COMMON_INCLUDE       "${CMAKE_CURRENT_SOURCE_DIR}/components/CastleNetworkService-qc8017_32/include")
+SET(NETWORK_COMMON_LIBS          "${CMAKE_CURRENT_SOURCE_DIR}/components/CastleNetworkService-qc8017_32/lib")
+
 SET(PROTO_CC_DEST "${CMAKE_BINARY_DIR}/proto")
 SET(CMAKE_INSTALL_PREFIX . CACHE INTERNAL - FORCE)
 SET(OUTPUT_BIN_DIR bin)
 SET(OUTPUT_LIB_DIR lib)
-#Custom Hsm directory path needs set before building CastleProductControllerCommon library. 
-SET(CUSTOM_HSM_DIR ${CMAKE_SOURCE_DIR}/ProductController/CustomHsm)
+
+#Custom Hsm directory path needs set before building CastleProductControllerCommon library.
+SET(CUSTOM_HSM_DIR ${CMAKE_SOURCE_DIR}/ProductController/source/CustomStateMachine)
+
+MESSAGE( STATUS "Settings.cmake NETWORK_COMMON_LIBS: " ${NETWORK_COMMON_LIBS} )
 
 IF(${CFG} STREQUAL "Release")
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os -g2 -DNDEBUG")
