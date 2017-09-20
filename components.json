@@ -1,5 +1,9 @@
 [
   {
+    "name": "CastleAudioPath-qc8017_32",
+    "selected_version": "Continuous/Castle-Fork/2017-09-19_1721"
+  },
+  {
     "name": "CastleLibs-qc8017_32",
     "selected_version": "branches/castle-libs@2311"
   },
@@ -25,11 +29,11 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Continuous/master/1.0.0-12+9e37fb5"
+    "selected_version": "Continuous/master/1.0.0-13+a414226"
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-22+40c08d6"
+    "selected_version": "Continuous/master/0.1.0-25+5a8dede"
   },
   {
     "name": "Riviera-HSP",
@@ -37,7 +41,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-09-19_0221"
+    "selected_version": "Continuous/Castle-Fork/2017-09-19_1856"
   },
   {
     "name": "RivieraLpmService",
@@ -61,6 +65,6 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-33+e23b1df"
+    "selected_version": "Continuous/master/0.1.0-37+41809b1"
   }
 ]

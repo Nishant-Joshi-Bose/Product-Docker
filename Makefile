@@ -5,7 +5,7 @@ include Settings.mk
 ifeq ($(sdk),native)
 default: cmake_build
 else
-default: product-ipk
+default: graph
 endif
 
 .PHONY: version-files
@@ -33,7 +33,6 @@ generated_sources: check_tools version-files
 	$(MAKE) -C $(CASTLEPRODUCTCONTROLLERCOMMON_DIR) $@
 	$(MAKE) -C $(RIVIERALPMUPDATER_DIR) $@
 
-
 .PHONY: astyle
 astyle:
 ifndef DONT_RUN_ASTYLE
@@ -53,6 +52,11 @@ cmake_build: generated_sources | $(BUILDS_DIR) astyle
 .PHONY: product-ipk
 product-ipk: cmake_build
 	./scripts/create-product-ipk
+
+.PHONY: graph
+graph: product-ipk
+	graph-components --exclude='-(native|ti)$$' Professor builds/$(cfg)/product-ipk-stage/component-info >builds/$(cfg)/components.dot
+	dot -Tsvgz builds/$(cfg)/components.dot -o builds/$(cfg)/components.svgz
 
 .PHONY: package
 package: product-ipk

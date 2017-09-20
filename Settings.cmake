@@ -44,7 +44,7 @@ IF(${SDK} STREQUAL "qc8017_32")
   SET(CMAKE_CXX_COMPILER ${RIVIERA_HSP_DIR}/sdk/sysroots/${ARCHITECTURE}-oesdk-linux/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-g++
     CACHE INTERNAL - FORCE)
 
-  SET(COMMON_FLAGS "--sysroot=${SYSROOT} -Wall -Werror -Wno-psabi -Wno-maybe-uninitialized -Wno-unused-but-set-variable -mtune=cortex-a53 -ftree-vectorize")
+  SET(COMMON_FLAGS "--sysroot=${SYSROOT} -Wall -Werror -mtune=cortex-a53 -ftree-vectorize")
   SET(CMAKE_CXX_FLAGS "-std=c++11 ${COMMON_FLAGS}"
     CACHE INTERNAL - FORCE)
   SET(CMAKE_C_FLAGS "-std=gnu99 ${COMMON_FLAGS}"
