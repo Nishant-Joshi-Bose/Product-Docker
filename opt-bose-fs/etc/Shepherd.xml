@@ -13,13 +13,6 @@
 
   <daemon name="IoT"/>
 
-  <daemon name="APServer"
-          recovery="reboot"
-          nice="-6">
-    <arg>-c</arg>
-    <arg>/opt/Bose/etc/APConfig.xml</arg>
-  </daemon>
-
   <daemon name="UpnpSource">
     <arg>-c/opt/Bose/etc/UpnpSource.xml</arg>
   </daemon>
