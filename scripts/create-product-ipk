@@ -126,7 +126,7 @@ gen_config "$u/APConfig.xslt" "$c" "APConfig.xml"
 
 # -----------------------------------------------------------------------------
 
-components list >"$opt_dir/etc/components.txt" || exit
+components record "$stage" || exit
 
 version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
 cp "$version_json" "$opt_dir/etc" || exit
@@ -268,7 +268,7 @@ put_script "$stage/postrm" <<EOF
 echo "SoundTouch postrm"
 EOF
 
-riviera_hsp_ver=$(awk '$1 == "Riviera-HSP" {print $2}' "$opt_dir/etc/components.txt")
+riviera_hsp_ver=$(components get Riviera-HSP selected_version) || exit
 riviera_hsp_ver=${riviera_hsp_ver##*/}
 put_script "$stage/preinst" <<EOF
 #!/bin/sh
@@ -303,3 +303,7 @@ mkdir -p "$ipk_dir" || exit
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
 echo "Created $ipk"
+
+ci=$wspace/builds/$cfg/component-info.tar.gz
+tar --owner=0 --group=0 -czf "$ci" component-info || exit
+echo "Created $ci"
