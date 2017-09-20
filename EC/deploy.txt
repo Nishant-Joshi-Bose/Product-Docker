@@ -1,6 +1,7 @@
 # Source									Destination												Rule
 ./builds/Release/product.ipk				<DEPLOY_DIR>/eddie_<VERSION_STRING>.ipk					file
 ./builds/Release/component-info.tar.gz		<DEPLOY_DIR>/eddie_cinfo_<VERSION_STRING>.tar.gz		file
+./builds/Release/components.svgz			<DEPLOY_DIR>/eddie_cgraph_<VERSION_STRING>.svgz			file
 ./builds/Release/package/product.tar		<DEPLOY_DIR>/eddie_<VERSION_STRING>.tar					file
 ./builds/Release/package/product_flash		<DEPLOY_DIR>/eddie_flash								file
 
