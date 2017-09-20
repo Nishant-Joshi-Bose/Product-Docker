@@ -2,6 +2,7 @@
 #include "ProtoPersistenceFactory.h"
 #include "DeviceManager.h"
 #include "ProductController.h"
+#include "ProtoToMarkup.h"
 
 static DPrint s_logger( "DeviceManager" );
 namespace ProductApp

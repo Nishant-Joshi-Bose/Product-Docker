@@ -1,20 +1,21 @@
 ////////////////////////////////////////////////////////////////////////////////
-/// @file   ProductController.h
-/// @brief  Generic Product controller class for Riviera based product
+/// @file   EddieProductController.h
+/// @brief  Eddie Product controller class.
 ///
 /// @attention Copyright 2017 Bose Corporation, Framingham, MA
 ////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
 
+#include "ProductController.h"
+#include "EddieProductControllerHsm.h"
 #include "FrontDoorClientIF.h"
 #include "NotifyTargetTaskIF.h"
 #include "ProtoPersistenceIF.h"
-#include "ProductAppStateTop.h"
-#include "ProductAppStateBooting.h"
-#include "ProductAppStateStdOp.h"
-#include "ProductAppStateSetup.h"
-#include "ProductAppStateStandby.h"
+#include "EddieProductControllerStateTop.h"
+#include "EddieProductControllerStateBooting.h"
+#include "EddieProductControllerStateSetup.h"
+#include "EddieProductControllerStateNetworkStandby.h"
 #include "DeviceManager.h"
 #include "ConfigurationStatus.pb.h"
 #include "Language.pb.h"
@@ -25,22 +26,18 @@
 
 namespace ProductApp
 {
-class ProductController
+class EddieProductController : public ProductController
 {
 public:
-    ProductController();
-    virtual ~ProductController();
-    inline NotifyTargetTaskIF* GetTask() const
-    {
-        return m_ProductControllerTask;
-    }
+    EddieProductController( std::string const& ProductName = "eddie" );
+    virtual ~EddieProductController();
 
     void Initialize();
 
 private:
     /// Disable copies
-    ProductController( const ProductController& ) = delete;
-    ProductController& operator=( const ProductController& ) = delete;
+    EddieProductController( const EddieProductController& ) = delete;
+    EddieProductController& operator=( const EddieProductController& ) = delete;
 
 private:
     // Initialize and Register with LPM for events notifications
@@ -161,29 +158,29 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
     void HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationStatus &status );
     void CapsInitializationStatusCallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
+
 private:
-    NotifyTargetTaskIF* m_ProductControllerTask;
     // LPM Client handle
-    LpmClientIF::LpmClientPtr          m_LpmClient;
+    LpmClientIF::LpmClientPtr                   m_LpmClient;
 
-    ProductAppHsm m_ProductAppHsm;
+    EddieProductControllerHsm                   m_EddieProductControllerHsm;
 
-    ProtoPersistenceIF::ProtoPersistencePtr m_ConfigurationStatusPersistence = nullptr;
-    ProtoPersistenceIF::ProtoPersistencePtr m_LanguagePersistence = nullptr;
-    ProductPb::ConfigurationStatus m_ConfigurationStatus;
-    ProductPb::Language m_systemLanguage;
+    ProtoPersistenceIF::ProtoPersistencePtr     m_ConfigurationStatusPersistence = nullptr;
+    ProtoPersistenceIF::ProtoPersistencePtr     m_LanguagePersistence = nullptr;
+    ProductPb::ConfigurationStatus              m_ConfigurationStatus;
+    ProductPb::Language                         m_systemLanguage;
 
-    std::shared_ptr<FrontDoorClientIF> m_FrontDoorClientIF;
-    ProductCliClient m_productCliClient;
-    ProductAppStateTop m_ProductAppStateTop;
-    ProductAppStateBooting m_ProductAppStateBooting;
-    ProductAppStateStdOp m_ProductAppStateStdOp;
-    ProductAppStateSetup m_ProductAppStateSetup;
-    ProductAppStateStandby m_ProductAppStateStandby;
+    std::shared_ptr<FrontDoorClientIF>          m_FrontDoorClientIF;
+    ProductCliClient                            m_productCliClient;
+    EddieProductControllerStateTop              m_EddieProductControllerStateTop;
+    EddieProductControllerStateBooting          m_EddieProductControllerStateBooting;
+    EddieProductControllerStateSetup            m_EddieProductControllerStateSetup;
+    EddieProductControllerStateNetworkStandby   m_EddieProductControllerStateNetworkStandby;
+
     ///Device manager instance
-    DeviceManager  m_deviceManager;
+    DeviceManager                               m_deviceManager;
 
-    bool m_isCapsReady = false;
-    bool m_isLPMReady  = true;
+    bool                                        m_isCapsReady = false;
+    bool                                        m_isLPMReady  = true;
 };
 } // namespace

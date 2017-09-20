@@ -1,35 +1,36 @@
 ////////////////////////////////////////////////////////////////////////////////
-/// @file   ProductController.cpp
-/// @brief  Generic Product controller class for Riviera based products.
+/// @file   EddieProductController.cpp
+/// @brief  Eddiec Product controller class.
 ///
 /// @attention Copyright 2017 Bose Corporation, Framingham, MA
 ////////////////////////////////////////////////////////////////////////////////
 
+#include "EddieProductController.h"
+#include "ProductControllerStates.h"
+#include "CustomProductControllerState.h"
 #include "FrontDoorClient.h"
-#include "ProductController.h"
 #include "APTaskFactory.h"
 #include "AsyncCallback.h"
 #include "ProtoToMarkup.h"
 #include "ProtoPersistenceFactory.h"
 #include "LpmClientFactory.h"
 
-static DPrint s_logger( "ProductController" );
+static DPrint s_logger( "EddieProductController" );
 
 using namespace FrontDoor;
 namespace ProductApp
 {
 const std::string g_ProductPersistenceDir = "product-persistence/";
 
-ProductController::ProductController():
-    m_ProductControllerTask( IL::CreateTask( "ProductControllerTask" ) ),
+EddieProductController::EddieProductController( std::string const& ProductName ):
+    ProductController( ProductName ),
     m_LpmClient(),
-    m_ProductAppHsm( m_ProductControllerTask, "ProductApplicationHsm", *this ),
-    m_ProductAppStateTop( m_ProductAppHsm, NULL,  *this ),
-    m_ProductAppStateBooting( m_ProductAppHsm, &m_ProductAppStateTop, *this ),
-    m_ProductAppStateStdOp( m_ProductAppHsm, &m_ProductAppStateTop, *this ),
-    m_ProductAppStateSetup( m_ProductAppHsm, &m_ProductAppStateStdOp, *this ),
-    m_ProductAppStateStandby( m_ProductAppHsm, &m_ProductAppStateStdOp, *this ),
-    m_deviceManager( m_ProductControllerTask, *this )
+    m_EddieProductControllerHsm( GetTask(), ProductName + "ProductHsm", *this ),
+    m_EddieProductControllerStateTop( m_EddieProductControllerHsm, nullptr,  *this ),
+    m_EddieProductControllerStateBooting( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop, *this ),
+    m_EddieProductControllerStateSetup( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop, *this ),
+    m_EddieProductControllerStateNetworkStandby( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop, *this ),
+    m_deviceManager( GetTask(), *this )
 {
     BOSE_INFO( s_logger, __func__ );
     InitializeLpmClient();
@@ -39,74 +40,72 @@ ProductController::ProductController():
     m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
     ReadConfigurationStatusFromPersistence();
 
-    m_ProductAppHsm.AddState( &m_ProductAppStateTop );
-    m_ProductAppHsm.AddState( &m_ProductAppStateBooting );
-    m_ProductAppHsm.AddState( &m_ProductAppStateStdOp );
-    m_ProductAppHsm.AddState( &m_ProductAppStateSetup );
-    m_ProductAppHsm.AddState( &m_ProductAppStateStandby );
+    m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateTop );
+    m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateBooting );
+    m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateSetup );
+    m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateNetworkStandby );
 
-    m_ProductAppHsm.Init( PRODUCT_APP_STATE_BOOTING );
-
+    m_EddieProductControllerHsm.Init( CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING );
 
     /// Create an instance of the front door client, providing it with a unique name.
-    m_FrontDoorClientIF = FrontDoorClient::Create( "eddie" );
+    m_FrontDoorClientIF = FrontDoorClient::Create( ProductName );
 }
 
-ProductController::~ProductController()
+EddieProductController::~EddieProductController()
 {
 }
 
-void ProductController::Initialize()
+void EddieProductController::Initialize()
 {
-    m_productCliClient.Initialize( m_ProductControllerTask );
+    m_productCliClient.Initialize( GetTask() );
     RegisterEndPoints();
     SendInitialRequests();
 }
 
-void ProductController::InitializeLpmClient()
+void EddieProductController::InitializeLpmClient()
 {
     BOSE_INFO( s_logger, __func__ );
 
     // Connect/Initialize the LPM Client
     m_LpmClient = LpmClientFactory::Create( "EddieLpmClient", GetTask() );
 
-    auto func = std::bind( &ProductController::HandleLPMReady, this );
+    auto func = std::bind( &EddieProductController::HandleLPMReady, this );
     AsyncCallback<bool> connectCb( func, GetTask() );
     m_LpmClient->Connect( connectCb );
 }
 
-void ProductController::RegisterLpmEvents()
+void EddieProductController::RegisterLpmEvents()
 {
     BOSE_INFO( s_logger, __func__ );
 
     // Register keys coming from the LPM.
-    auto func = std::bind( &ProductController::HandleLpmKeyInformation, this, std::placeholders::_1 );
-    AsyncCallback<IpcKeyInformation_t>response_cb( func, m_ProductControllerTask );
+    auto func = std::bind( &EddieProductController::HandleLpmKeyInformation, this, std::placeholders::_1 );
+    AsyncCallback<IpcKeyInformation_t>response_cb( func, GetTask() );
     m_LpmClient->RegisterEvent<IpcKeyInformation_t>( IPC_KEY, response_cb );
 }
 
 
-void ProductController::RegisterEndPoints()
+void EddieProductController::RegisterEndPoints()
 {
     BOSE_INFO( s_logger, __func__ );
 
-    AsyncCallback<Callback<ProductPb::Language>> getLanguageReqCb( std::bind( &ProductController::HandleGetLanguageRequest ,
-                                                                              this, std::placeholders::_1 ) , m_ProductControllerTask );
+    AsyncCallback<Callback<ProductPb::Language>> getLanguageReqCb( std::bind( &EddieProductController::HandleGetLanguageRequest ,
+                                                                              this, std::placeholders::_1 ) , GetTask() );
 
-    AsyncCallback<ProductPb::Language , Callback< ProductPb::Language>> postLanguageReqCb( std::bind( &ProductController::HandlePostLanguageRequest,
-                                                                     this, std::placeholders::_1, std::placeholders::_2 ) , m_ProductControllerTask );
+    AsyncCallback<ProductPb::Language , Callback< ProductPb::Language>> postLanguageReqCb( std::bind( &EddieProductController::HandlePostLanguageRequest,
+                                                                     this, std::placeholders::_1, std::placeholders::_2 ) , GetTask() );
 
-    AsyncCallback<Callback<ProductPb::ConfigurationStatus>> getConfigurationStatusReqCb( std::bind( &ProductController::HandleConfigurationStatusRequest ,
-                                                         this, std::placeholders::_1 ) , m_ProductControllerTask );
+    AsyncCallback<Callback<ProductPb::ConfigurationStatus>> getConfigurationStatusReqCb( std::bind( &EddieProductController::HandleConfigurationStatusRequest ,
+                                                         this, std::placeholders::_1 ) , GetTask() );
     //DeviceInfo async callback
-    AsyncCallback <Callback<::DeviceManager::Protobuf::DeviceInfo>> getDeviceInfoReqCb( std::bind( &ProductController :: HandleGetDeviceInfoRequest,
-                                                                 this, std::placeholders::_1 ), m_ProductControllerTask );
+    AsyncCallback <Callback<::DeviceManager::Protobuf::DeviceInfo>> getDeviceInfoReqCb( std::bind( &EddieProductController :: HandleGetDeviceInfoRequest,
+                                                                 this, std::placeholders::_1 ), GetTask() );
     //Device State async callback
-    AsyncCallback <Callback<::DeviceManager::Protobuf::DeviceState >> getDeviceStateReqCb( std::bind( &ProductController :: HandleGetDeviceStateRequest,
-                                                                   this, std::placeholders::_1 ), m_ProductControllerTask );
+    AsyncCallback <Callback<::DeviceManager::Protobuf::DeviceState >> getDeviceStateReqCb( std::bind( &EddieProductController :: HandleGetDeviceStateRequest,
+                                                                   this, std::placeholders::_1 ), GetTask() );
 
-    AsyncCallback<SoundTouchInterface::CapsInitializationStatus> capsInitializationCb( std::bind( &ProductController::HandleCapsInitializationUpdate ,
-            this, std::placeholders::_1 ) , m_ProductControllerTask );
+    AsyncCallback<SoundTouchInterface::CapsInitializationStatus> capsInitializationCb( std::bind( &EddieProductController::HandleCapsInitializationUpdate ,
+            this, std::placeholders::_1 ) , GetTask() );
 
     /// Registration of endpoints to the frontdoor client.
 
@@ -123,7 +122,7 @@ void ProductController::RegisterEndPoints()
 
 // This function will handle key information coming from LPM and give it to
 // KeyHandler for repeat Manager to handle.
-void ProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInformation )
+void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInformation )
 {
     BOSE_DEBUG( s_logger, __func__ );
 
@@ -145,29 +144,29 @@ void ProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInformat
     }
 }
 
-void ProductController::SendInitialRequests()
+void EddieProductController::SendInitialRequests()
 {
     BOSE_INFO( s_logger, __func__ );
-    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errorCb( std::bind( &ProductController::CapsInitializationStatusCallbackError ,
-                                                                this, std::placeholders::_1 ) , m_ProductControllerTask );
+    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errorCb( std::bind( &EddieProductController::CapsInitializationStatusCallbackError ,
+                                                                this, std::placeholders::_1 ) , GetTask() );
 
-    AsyncCallback<SoundTouchInterface::CapsInitializationStatus> capsInitializationCb( std::bind( &ProductController::HandleCapsInitializationUpdate ,
-            this, std::placeholders::_1 ) , m_ProductControllerTask );
+    AsyncCallback<SoundTouchInterface::CapsInitializationStatus> capsInitializationCb( std::bind( &EddieProductController::HandleCapsInitializationUpdate ,
+            this, std::placeholders::_1 ) , GetTask() );
     m_FrontDoorClientIF->SendGet<SoundTouchInterface::CapsInitializationStatus>( "/system/capsInitializationStatus", capsInitializationCb, errorCb );
 }
 
-void ProductController::CapsInitializationStatusCallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode )
+void EddieProductController::CapsInitializationStatusCallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode )
 {
     BOSE_ERROR( s_logger, "%s:error code- %d", __func__, errorCode );
 }
 
-void ProductController::HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationStatus &resp )
+void EddieProductController::HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationStatus &resp )
 {
     BOSE_DEBUG( s_logger, "%s:notification: %s", __func__, ProtoToMarkup::ToJson( resp, false ).c_str() );
     HandleCAPSReady( resp.capsinitialized() );
 }
 
-void ProductController::HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp )
+void EddieProductController::HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp )
 {
     ProductPb::Language lang;
     lang.set_code( GetSystemLanguageCode() );
@@ -201,7 +200,7 @@ void ProductController::HandleGetLanguageRequest( const Callback<ProductPb::Lang
     resp.Send( lang );
 }
 
-void ProductController::HandlePostLanguageRequest( const ProductPb::Language &lang, const Callback<ProductPb::Language> &resp )
+void EddieProductController::HandlePostLanguageRequest( const ProductPb::Language &lang, const Callback<ProductPb::Language> &resp )
 {
     m_systemLanguage.set_code( lang.code() );
     PersistSystemLanguageCode();
@@ -209,43 +208,43 @@ void ProductController::HandlePostLanguageRequest( const ProductPb::Language &la
     resp.Send( lang );
 }
 
-void ProductController::HandleConfigurationStatusRequest( const Callback<ProductPb::ConfigurationStatus> &resp )
+void EddieProductController::HandleConfigurationStatusRequest( const Callback<ProductPb::ConfigurationStatus> &resp )
 {
     BOSE_INFO( s_logger, "%s:Response: %s", __func__, ProtoToMarkup::ToJson( m_ConfigurationStatus, false ).c_str() );
     resp.Send( m_ConfigurationStatus );
 }
 
-void ProductController::HandleCAPSReady( bool capsReady )
+void EddieProductController::HandleCAPSReady( bool capsReady )
 {
     m_isCapsReady = capsReady;
-    m_ProductAppHsm.Handle<>( &ProductAppState::HandleModulesReady );
+    m_EddieProductControllerHsm.Handle<>( &CustomProductControllerState::HandleModulesReady );
 }
 
-void ProductController::HandleLPMReady()
+void EddieProductController::HandleLPMReady()
 {
     BOSE_INFO( s_logger, __func__ );
     RegisterLpmEvents();
     m_isLPMReady = true;
-    m_ProductAppHsm.Handle<>( &ProductAppState::HandleModulesReady );
+    m_EddieProductControllerHsm.Handle<>( &CustomProductControllerState::HandleModulesReady );
 }
 
-bool ProductController::IsAllModuleReady()
+bool EddieProductController::IsAllModuleReady()
 {
     BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|", __func__, m_isCapsReady , m_isLPMReady );
     return ( m_isCapsReady and m_isLPMReady );
 }
 
-bool ProductController::IsLanguageSet()
+bool EddieProductController::IsLanguageSet()
 {
     return not m_systemLanguage.code().empty();
 }
 
-bool ProductController::IsNetworkSetupDone()
+bool EddieProductController::IsNetworkSetupDone()
 {
     return m_ConfigurationStatus.status().network();
 }
 
-void ProductController::ReadConfigurationStatusFromPersistence()
+void EddieProductController::ReadConfigurationStatusFromPersistence()
 {
     try
     {
@@ -262,7 +261,7 @@ void ProductController::ReadConfigurationStatusFromPersistence()
     }
 }
 
-void ProductController::ReadSystemLanguageFromPersistence()
+void EddieProductController::ReadSystemLanguageFromPersistence()
 {
     try
     {
@@ -279,12 +278,12 @@ void ProductController::ReadSystemLanguageFromPersistence()
     }
 }
 
-std::string ProductController::GetSystemLanguageCode()
+std::string EddieProductController::GetSystemLanguageCode()
 {
     return m_systemLanguage.code();
 }
 
-void ProductController::PersistSystemLanguageCode()
+void EddieProductController::PersistSystemLanguageCode()
 {
     BOSE_INFO( s_logger, __func__ );
     try
@@ -301,7 +300,7 @@ void ProductController::PersistSystemLanguageCode()
     }
 }
 
-void ProductController::PersistSystemConfigurationStatus()
+void EddieProductController::PersistSystemConfigurationStatus()
 {
     BOSE_INFO( s_logger, __func__ );
     ///Persist configuration status only if it changes.
@@ -325,17 +324,17 @@ void ProductController::PersistSystemConfigurationStatus()
     }
 }
 
-void ProductController::SendActivateAccessPointCmd()
+void EddieProductController::SendActivateAccessPointCmd()
 {
     BOSE_INFO( s_logger, __func__ );
 }
 
-void ProductController::SendDeActivateAccessPointCmd()
+void EddieProductController::SendDeActivateAccessPointCmd()
 {
     BOSE_INFO( s_logger, __func__ );
 }
 
-void ProductController :: HandleGetDeviceInfoRequest( const Callback<::DeviceManager::Protobuf::DeviceInfo>& resp )
+void EddieProductController :: HandleGetDeviceInfoRequest( const Callback<::DeviceManager::Protobuf::DeviceInfo>& resp )
 {
     ::DeviceManager::Protobuf::DeviceInfo devInfo;
 
@@ -346,12 +345,10 @@ void ProductController :: HandleGetDeviceInfoRequest( const Callback<::DeviceMan
     resp.Send( devInfo );
 }
 
-void ProductController :: HandleGetDeviceStateRequest( const Callback<::DeviceManager::Protobuf::DeviceState>& resp )
+void EddieProductController :: HandleGetDeviceStateRequest( const Callback<::DeviceManager::Protobuf::DeviceState>& resp )
 {
     ::DeviceManager::Protobuf::DeviceState currentState;
-
-    int state_index = m_ProductAppHsm.GetCurrentStateId();
-    currentState.set_state( m_ProductAppHsm.GetHsmStateName( state_index ) );
+    currentState.set_state( m_EddieProductControllerHsm.GetCurrentState()->GetName() );
     BOSE_INFO( s_logger, "%s:Reponse: %s", __func__, ProtoToMarkup::ToJson( currentState, false ).c_str() );
     resp.Send( currentState );
 }
