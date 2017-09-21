@@ -6,6 +6,4 @@ cd $[buildDir]
 CastleToolsDir=/home/epd/srcref/CastleTools
 export PATH=$CastleToolsDir/bin:$PATH
 
-components cache /scratch/components-cache
-
 make DONT_UPDATE_CASTLETOOLS=1 default package
