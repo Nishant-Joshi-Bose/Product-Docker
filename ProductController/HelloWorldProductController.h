@@ -18,6 +18,7 @@
 #include "CustomProductControllerStateSwUpdating.h"
 #include "FrontDoorClientIF.h"
 #include "LpmClientIF.h"
+#include "KeyHandler.h"
 #include "Language.pb.h"
 
 namespace ProductApp

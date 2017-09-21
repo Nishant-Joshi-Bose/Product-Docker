@@ -60,6 +60,8 @@ HelloWorldProductController::HelloWorldProductController( std::string const& Pro
 
     //Register endpoints to the front door client.
     RegisterEndPoints();
+
+    InitializeLpmClient();
 }
 
 HelloWorldProductController::~HelloWorldProductController()

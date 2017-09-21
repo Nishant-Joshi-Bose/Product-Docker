@@ -31,6 +31,7 @@ ENDIF(${SDK} STREQUAL "native")
 
 IF(${SDK} STREQUAL "qc8017_32")
   COMPONENT(RIVIERA_HSP_DIR Riviera-HSP)
+  COMPONENT(KEYHANDLER_DIR KeyHandler-qc8017_32)
 
   SET(SYSROOT ${RIVIERA_HSP_DIR}/sdk/sysroots/aarch64-oe-linux)
 
