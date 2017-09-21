@@ -160,10 +160,19 @@ public:
     void CapsInitializationStatusCallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
 
 private:
+
+    EddieProductControllerHsm                   m_EddieProductControllerHsm;
+
+    EddieProductControllerStateTop              m_EddieProductControllerStateTop;
+    EddieProductControllerStateBooting          m_EddieProductControllerStateBooting;
+    EddieProductControllerStateSetup            m_EddieProductControllerStateSetup;
+    EddieProductControllerStateNetworkStandby   m_EddieProductControllerStateNetworkStandby;
+
     // LPM Client handle
     LpmClientIF::LpmClientPtr                   m_LpmClient;
 
-    EddieProductControllerHsm                   m_EddieProductControllerHsm;
+    ///Device manager instance
+    DeviceManager                               m_deviceManager;
 
     ProtoPersistenceIF::ProtoPersistencePtr     m_ConfigurationStatusPersistence = nullptr;
     ProtoPersistenceIF::ProtoPersistencePtr     m_LanguagePersistence = nullptr;
@@ -172,15 +181,9 @@ private:
 
     std::shared_ptr<FrontDoorClientIF>          m_FrontDoorClientIF;
     ProductCliClient                            m_productCliClient;
-    EddieProductControllerStateTop              m_EddieProductControllerStateTop;
-    EddieProductControllerStateBooting          m_EddieProductControllerStateBooting;
-    EddieProductControllerStateSetup            m_EddieProductControllerStateSetup;
-    EddieProductControllerStateNetworkStandby   m_EddieProductControllerStateNetworkStandby;
-
-    ///Device manager instance
-    DeviceManager                               m_deviceManager;
 
     bool                                        m_isCapsReady = false;
     bool                                        m_isLPMReady  = true;
 };
-} // namespace
+}
+// namespace

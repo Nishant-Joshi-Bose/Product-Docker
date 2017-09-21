@@ -24,28 +24,28 @@ const std::string g_ProductPersistenceDir = "product-persistence/";
 
 EddieProductController::EddieProductController( std::string const& ProductName ):
     ProductController( ProductName ),
-    m_LpmClient(),
     m_EddieProductControllerHsm( GetTask(), ProductName + "ProductHsm", *this ),
     m_EddieProductControllerStateTop( m_EddieProductControllerHsm, nullptr,  *this ),
     m_EddieProductControllerStateBooting( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop, *this ),
     m_EddieProductControllerStateSetup( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop, *this ),
     m_EddieProductControllerStateNetworkStandby( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop, *this ),
+    m_LpmClient(),
     m_deviceManager( GetTask(), *this )
 {
     BOSE_INFO( s_logger, __func__ );
+    /// Add States to HSM object and initialize HSM before doing anything else.
+    m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateTop );
+    m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateBooting );
+    m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateSetup );
+    m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateNetworkStandby );
+    m_EddieProductControllerHsm.Init( CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING );
+
     InitializeLpmClient();
     m_LanguagePersistence = ProtoPersistenceFactory::Create( "ProductLanguage", g_ProductPersistenceDir );
     m_ConfigurationStatusPersistence = ProtoPersistenceFactory::Create( "ConfigurationStatus", g_ProductPersistenceDir );
     ReadSystemLanguageFromPersistence();
     m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
     ReadConfigurationStatusFromPersistence();
-
-    m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateTop );
-    m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateBooting );
-    m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateSetup );
-    m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateNetworkStandby );
-
-    m_EddieProductControllerHsm.Init( CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING );
 
     /// Create an instance of the front door client, providing it with a unique name.
     m_FrontDoorClientIF = FrontDoorClient::Create( ProductName );
