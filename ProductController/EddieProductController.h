@@ -23,6 +23,7 @@
 #include "SoundTouchInterface/CapsInitializationStatus.pb.h"
 #include "ProductCliClient.h"
 #include "LpmClientIF.h"
+#include "KeyHandler.h"
 
 namespace ProductApp
 {
@@ -43,6 +44,7 @@ private:
     // Initialize and Register with LPM for events notifications
     void InitializeLpmClient();
     void RegisterLpmEvents();
+    void RegisterKeyHandler();
 
     void RegisterEndPoints();
 
@@ -65,6 +67,10 @@ private:
 public:
     // Handle Key Information received from LPM
     void HandleLpmKeyInformation( IpcKeyInformation_t keyInformation );
+
+    static void KeyInformationCallBack( const int result, void *context );
+
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  IsAllModuleReady
 /// @brief true if all the dependent modules are up and ready.
@@ -170,6 +176,9 @@ private:
 
     // LPM Client handle
     LpmClientIF::LpmClientPtr                   m_LpmClient;
+
+    // Key Handler
+    KeyHandlerUtil::KeyHandler                  m_KeyHandler;
 
     ///Device manager instance
     DeviceManager                               m_deviceManager;

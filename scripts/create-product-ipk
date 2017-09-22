@@ -168,6 +168,7 @@ cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp "$shepherd_dir/shepherdd" "$opt_dir/bin" || exit
 cp -t "$opt_dir/etc" "$eddielpm_package_dir"/*.bos "$eddielpm_package_dir/lpm_blob_configuration.xml" || exit
 cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
+cp "$wspace/Config/KeyConfiguration.json" "$opt_dir/etc"|| exit
 
 # ----------------------------------------------------------------------------
 #@todo: WebToolkit Start
