@@ -5,6 +5,8 @@
 #include <fstream>
 
 
+#include <endian.h>
+
 #include "ProductCliClient.h"
 #include "DPrint.h"
 #include "SystemUtils.h"
@@ -64,9 +66,21 @@ void ProductCliClient::Initialize( NotifyTargetTaskIF* task )
                          "mfgdata" ) );
 
     cmds.emplace_back( std::make_shared<Cmd>
+
+                       ( "backlight",
+                         "Adjust the LCD back light level",
+                         "backlight [level]" ) );
+
+    cmds.emplace_back( std::make_shared<Cmd>
+                       ( "lightsensor",
+                         "Get the light sensor LUX value",
+                         "light sensor" ) );
+  
+    cmds.emplace_back( std::make_shared<Cmd>
                        ( "lcd",
                          "Manage the lcd hardware",
                          "lcd" ) );
+
 
     m_cliClient.Initialize( task, cmds,
                             [this]( std::string const & cmd,
@@ -100,6 +114,18 @@ bool ProductCliClient::HandleCommand( std::string const& cmd,
     if( cmd == "mfgdata" )
     {
         CliCmdMfgData( argList, response );
+        return true;
+    }
+
+    if( cmd == "backlight" )
+    {
+        CliCmdBackLight( argList, response );
+        return true;
+    }
+
+    if( cmd == "lightsensor" )
+    {
+        CliCmdLightSensor( argList, response );
         return true;
     }
 
@@ -163,6 +189,76 @@ void ProductCliClient::CliCmdMfgData( CLIClient::StringListType& argList,
     }
 }
 
+
+void ProductCliClient::CliCmdBackLight( CLIClient::StringListType& argList,
+                                        std::string& response )
+{
+    if( argList.size() == 0 )
+    {
+        m_lpmClient->GetBackLight( [this]( IpcBackLight_t const & rsp )
+        {
+            std::ostringstream ss;
+            ss << rsp.value() << "%";
+            BOSE_LOG( INFO, ss.str() );
+            m_cliClient.SendAsyncResponse( ss.str() );
+
+        } );
+
+        return;
+    }// If there is no argument
+
+    if( argList.size() == 1 )
+    {
+        uint8_t intensity = 0;
+        auto&   arg       = argList.front();
+
+        if( !ToInteger( arg, intensity ) )
+        {
+            response = "Malformed integer: " + arg;
+            return;
+        }
+
+        if( intensity > 100 )
+        {
+            response = "back light intensity must between 0..100";
+            return;
+        }
+
+        IpcBackLight_t backlight;
+        backlight.set_value( intensity );
+        m_lpmClient->SetBackLight( backlight );
+
+        return;
+    }// If there is 1 argument
+
+    response = "usage: backlight [0..100]";
+    return;
+}// ProductCliClient::CliBackLight
+
+void ProductCliClient::CliCmdLightSensor( CLIClient::StringListType& argList,
+                                          std::string& response )
+{
+    if( argList.size() == 0 )
+    {
+        m_lpmClient->GetLightSensor( [this]( IpcLightSensor_t const & rsp )
+        {
+            std::ostringstream ss;
+            int                lux_decimal    = ( int )( be16toh( rsp.lux_decimal_value() ) );
+            int                lux_fractional = ( int )( be16toh( rsp.lux_fractional_value() ) );
+
+            ss << lux_decimal << "." << lux_fractional << " LUX";
+            BOSE_LOG( INFO, ss.str() );
+            m_cliClient.SendAsyncResponse( ss.str() );
+
+        } );
+
+        return;
+    }// If there is no argument
+
+    response = "usage: lightsensor";
+    return;
+}// ProductCliClient::CliLightSensor
+
 void ProductCliClient::CliCmdLcd( CLIClient::StringListType& argList,
                                   std::string& response )
 {
@@ -203,3 +299,4 @@ void ProductCliClient::CliCmdLcd( CLIClient::StringListType& argList,
 
     return;
 }// ProductCliClient::CliCmdLcd
+
