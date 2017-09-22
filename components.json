@@ -1,5 +1,9 @@
 [
   {
+    "name": "CastleAudioPath-qc8017_32",
+    "selected_version": "Continuous/Castle-Fork/2017-09-20_1011"
+  },
+  {
     "name": "CastleLibs-qc8017_32",
     "selected_version": "branches/castle-libs@2311"
   },
@@ -13,7 +17,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@4c5aa53b332c5edb42635a8b623bec36c1f842de"
+    "selected_version": "master@151b9859c54b5ea0406d17be8ae46fa4bc2e0fbe"
   },
   {
     "name": "googletest-qc8017_32",
@@ -21,46 +25,46 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-40+4cb91f4"
+    "selected_version": "Continuous/master/0.1.0-48+1c7701c"
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Continuous/master/1.0.0-9+3cbe38c"
+    "selected_version": "Continuous/master/1.0.0-13+a414226"
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-12+d0618a3"
+    "selected_version": "Continuous/master/0.1.0-28+429ff0c"
   },
   {
     "name": "Riviera-HSP",
-    "selected_version": "Continuous/dev/0.6-4-g719e58d"
+    "selected_version": "Continuous/dev/1.0"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-09-06_2055"
+    "selected_version": "Continuous/Castle-Fork/2017-09-20_1122"
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@eb4f45e9b92f7e1a5b5ec92f7b8874a9b37cf05c"
+    "selected_version": "master@bb6c4c132e67eb7ef277f3936bfecb2b85257c3a"
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@728"
+    "selected_version": "trunk@796"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-09-06_2055"
+    "selected_version": "Continuous/Castle-Fork/2017-09-20_1122"
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "master@dc7afb863b391078086e0cda9e914026baaf3b04"
+    "selected_version": "master@63b71cf7530603087501d6121494fba5385bdb04"
   },
   {
     "name": "EddieLPM-Package",
-    "selected_version": "Continuous/trunk/2017-09-05_1048"
+    "selected_version": "Nightly/trunk/2017-09-12_2330"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-20+f518ec5"
+    "selected_version": "Continuous/master/0.1.0-39+2320fbd"
   }
 ]

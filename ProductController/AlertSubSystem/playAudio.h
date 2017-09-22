@@ -11,5 +11,5 @@
 #include <sys/time.h>
 #include <math.h>
 
-extern "C" int playAlert (char *);
-extern "C" int stopAlert ();
+extern "C" int playAlert( char * );
+extern "C" int stopAlert();

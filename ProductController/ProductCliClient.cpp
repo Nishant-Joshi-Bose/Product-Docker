@@ -1,6 +1,9 @@
 /*
  * The ProductCliClient class implements the Product's CLI commands.
  */
+#include <iostream>
+#include <fstream>
+
 
 #include <endian.h>
 
@@ -63,6 +66,7 @@ void ProductCliClient::Initialize( NotifyTargetTaskIF* task )
                          "mfgdata" ) );
 
     cmds.emplace_back( std::make_shared<Cmd>
+
                        ( "backlight",
                          "Adjust the LCD back light level",
                          "backlight [level]" ) );
@@ -71,6 +75,12 @@ void ProductCliClient::Initialize( NotifyTargetTaskIF* task )
                        ( "lightsensor",
                          "Get the light sensor LUX value",
                          "light sensor" ) );
+  
+    cmds.emplace_back( std::make_shared<Cmd>
+                       ( "lcd",
+                         "Manage the lcd hardware",
+                         "lcd" ) );
+
 
     m_cliClient.Initialize( task, cmds,
                             [this]( std::string const & cmd,
@@ -116,6 +126,12 @@ bool ProductCliClient::HandleCommand( std::string const& cmd,
     if( cmd == "lightsensor" )
     {
         CliCmdLightSensor( argList, response );
+        return true;
+    }
+
+    if( cmd == "lcd" )
+    {
+        CliCmdLcd( argList, response );
         return true;
     }
 
@@ -172,6 +188,7 @@ void ProductCliClient::CliCmdMfgData( CLIClient::StringListType& argList,
         response = "No manufacturing data";
     }
 }
+
 
 void ProductCliClient::CliCmdBackLight( CLIClient::StringListType& argList,
                                         std::string& response )
@@ -241,3 +258,45 @@ void ProductCliClient::CliCmdLightSensor( CLIClient::StringListType& argList,
     response = "usage: lightsensor";
     return;
 }// ProductCliClient::CliLightSensor
+
+void ProductCliClient::CliCmdLcd( CLIClient::StringListType& argList,
+                                  std::string& response )
+{
+    const std::string str_usage                    = "usage";
+    const std::string display_controller_file_name = "/sys/devices/soc/7af6000.spi/spi_master/spi6/spi6.1/graphics/fb1/send_command";
+    auto& arg                                      = ( argList.size() == 1 ) ? argList.front() : str_usage;
+    std::ifstream     display_controller_exist( display_controller_file_name );
+
+    if( std::ifstream( display_controller_file_name ).good() == false )
+    {
+        response = "error: can't find file: " + display_controller_file_name + " - " + strerror( errno );
+        BOSE_LOG( ERROR, response );
+        return;
+    }
+
+    std::ofstream display_controller_stream( display_controller_file_name );
+    if( ! display_controller_stream )
+    {
+        response = "error: failed to open file: " + display_controller_file_name + " - " + strerror( errno );
+        BOSE_LOG( ERROR, response );
+        return;
+    }
+
+    if( arg == "off" )
+    {
+        display_controller_stream << "28"; // see ST7789VI_SPEC_V1.4.pdf
+        response = "lcd turned on";
+    }
+    else if( arg == "on" )
+    {
+        display_controller_stream << "29"; // see ST7789VI_SPEC_V1.4.pdf
+        response = "lcd turned on";
+    }
+    else
+    {
+        response = "usage: lcd [on | off]";
+    }
+
+    return;
+}// ProductCliClient::CliCmdLcd
+

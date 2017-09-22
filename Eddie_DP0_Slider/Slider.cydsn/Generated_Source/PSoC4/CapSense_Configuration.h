@@ -51,17 +51,17 @@
 * Creator-global defines
 *******************************************************************************/
 #ifdef CYIPBLOCK_m0s8csdv2_VERSION
-    #define CapSense_CSDV2                              (1u)
+#define CapSense_CSDV2                              (1u)
 #else
-    #define CapSense_CSDV2                              (0u)
+#define CapSense_CSDV2                              (0u)
 #endif  /* CYIPBLOCK_m0s8csdv2_VERSION */
 
 #define CapSense_2000_MV                            (2000u)
 
 #ifdef CYDEV_VDDA_MV
-    #define CapSense_CYDEV_VDDA_MV                  (CYDEV_VDDA_MV)
+#define CapSense_CYDEV_VDDA_MV                  (CYDEV_VDDA_MV)
 #else
-    #define CapSense_CYDEV_VDDA_MV                  (CYDEV_VDD_MV)
+#define CapSense_CYDEV_VDDA_MV                  (CYDEV_VDD_MV)
 #endif  /* #ifdef CYDEV_VDDA_MV */
 
 #define CapSense_BAD_CONVERSIONS_NUM                (1u)
@@ -89,7 +89,7 @@
 * Total number of CSD sensors + CSX nodes
 *******************************************************************************/
 #define CapSense_TOTAL_SENSORS            (CapSense_TOTAL_CSD_SENSORS + \
-                                                   CapSense_TOTAL_CSX_NODES)
+                                           CapSense_TOTAL_CSX_NODES)
 
 /*******************************************************************************
 * Total number of scan slots (used only when dual-channel scan is enabled)
@@ -199,7 +199,7 @@
 * Array length for widget status registers
 *******************************************************************************/
 #define CapSense_WDGT_STATUS_WORDS        \
-                        (((uint8)((CapSense_TOTAL_WIDGETS - 1u) / 32u)) + 1u)
+    (((uint8)((CapSense_TOTAL_WIDGETS - 1u) / 32u)) + 1u)
 
 
 /*******************************************************************************
@@ -209,7 +209,7 @@
 #define CapSense_CSD_SS_HW_EN       (0x01ul)
 #define CapSense_CSD_SS_TH_EN       (0x02ul)
 #define CapSense_CSD_SS_HWTH_EN     (CapSense_CSD_SS_HW_EN | \
-                                             CapSense_CSD_SS_TH_EN)
+                                     CapSense_CSD_SS_TH_EN)
 
 #define CapSense_CSD_AUTOTUNE       CapSense_CSD_SS_HWTH_EN
 
@@ -232,9 +232,9 @@
 
 /* Define number of scan frequencies */
 #if (CapSense_DISABLE != CapSense_MULTI_FREQ_SCAN_EN)
-    #define CapSense_NUM_SCAN_FREQS       (3u)
+#define CapSense_NUM_SCAN_FREQS       (3u)
 #else
-    #define CapSense_NUM_SCAN_FREQS       (1u)
+#define CapSense_NUM_SCAN_FREQS       (1u)
 #endif /* #if (CapSense_DISABLE != CapSense_MULTI_FREQ_SCAN_EN) */
 
 /* Data size for thresholds / low baseline reset */
@@ -245,11 +245,11 @@
 typedef uint16 CapSense_THRESHOLD_TYPE;
 
 #if (CapSense_AUTO_RESET_METHOD_LEGACY == CapSense_SENSOR_AUTO_RESET_METHOD)
-    #define CapSense_LOW_BSLN_RST_SIZE        CapSense_SIZE_8BITS
-    typedef uint8 CapSense_LOW_BSLN_RST_TYPE;
+#define CapSense_LOW_BSLN_RST_SIZE        CapSense_SIZE_8BITS
+typedef uint8 CapSense_LOW_BSLN_RST_TYPE;
 #else
-    #define CapSense_LOW_BSLN_RST_SIZE    (16u)
-    typedef uint16 CapSense_LOW_BSLN_RST_TYPE;
+#define CapSense_LOW_BSLN_RST_SIZE    (16u)
+typedef uint16 CapSense_LOW_BSLN_RST_TYPE;
 #endif /* #if (CapSense_AUTO_RESET_METHOD_LEGACY == CapSense_SENSOR_AUTO_RESET_METHOD) */
 
 /* Coefficient to define touch threshold for proximity sensors */
@@ -381,9 +381,9 @@ typedef uint16 CapSense_THRESHOLD_TYPE;
 
 /* Sense clock selection options */
 #if defined(CapSense_TAPEOUT_STAR_USED)
-    #define CapSense_CSDV2_REF9P6UA_EN            (0u)
+#define CapSense_CSDV2_REF9P6UA_EN            (0u)
 #else
-    #define CapSense_CSDV2_REF9P6UA_EN            (1u)
+#define CapSense_CSDV2_REF9P6UA_EN            (1u)
 #endif /* defined(CapSense_TAPEOUT_A_USED) */
 
 #define CapSense_CLK_SOURCE_DIRECT            (0x00000000Lu)
@@ -511,7 +511,7 @@ typedef uint16 CapSense_THRESHOLD_TYPE;
 *******************************************************************************/
 
 /* RAM Global Parameters Definitions */
-#define CapSense_CONFIG_ID                      (0x3F90u)
+#define CapSense_CONFIG_ID                      (0xEAC0u)
 #define CapSense_DEVICE_ID                      (0x0160u)
 #define CapSense_CSD0_CONFIG                    (0x0008u)
 
@@ -520,7 +520,7 @@ typedef uint16 CapSense_THRESHOLD_TYPE;
 *******************************************************************************/
 #define CapSense_LINEARSLIDER0_STATIC_CONFIG    (1u)
 #define CapSense_LINEARSLIDER0_NUM_SENSORS      (7u)
-#define CapSense_LINEARSLIDER0_X_RESOLUTION     (600u)
+#define CapSense_LINEARSLIDER0_X_RESOLUTION     (120u)
 #define CapSense_LINEARSLIDER0_X_CENT_MULT      ((CapSense_LINEARSLIDER0_X_RESOLUTION * 256u) / \
                                                  (CapSense_LINEARSLIDER0_NUM_SENSORS - 1u))
 

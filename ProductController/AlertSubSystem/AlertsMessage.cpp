@@ -3,99 +3,99 @@
 #include "AlertsMessage.h"
 
 
-std::string CAlertsMessage :: getScheduledTime ()
+std::string CAlertsMessage :: getScheduledTime()
 {
-	return sch_time;
+    return sch_time;
 }
 
-std::string CAlertsMessage :: getAlertType ()
+std::string CAlertsMessage :: getAlertType()
 {
-	return alert_type;
-}
-
-
-std::string CAlertsMessage :: getAlertId ()
-{
-	return alert_id;
-}
-
-std::string CAlertsMessage :: getAlertSource ()
-{
-	return alert_source;
-}
-
-alert_state CAlertsMessage :: getAlertState ()
-{
-	return state;
-}
-
-void CAlertsMessage :: setScheduledTime (std::string schedule_time)
-{
-	sch_time = schedule_time;
-}
-
-void CAlertsMessage :: setAlertType (std::string a_type)
-{
-	alert_type = a_type;
+    return alert_type;
 }
 
 
-void CAlertsMessage :: setAlertId (std::string a_id)
+std::string CAlertsMessage :: getAlertId()
 {
-	alert_id = a_id;
+    return alert_id;
 }
 
-void CAlertsMessage :: setAlertSource (std::string a_source)
+std::string CAlertsMessage :: getAlertSource()
 {
-	alert_source = a_source;
+    return alert_source;
 }
 
-void CAlertsMessage :: setAlertState (alert_state st)
+alert_state CAlertsMessage :: getAlertState()
 {
-	state = st;
+    return state;
 }
 
-std::string CAlertsMessage:: MessagetoJSON ()
+void CAlertsMessage :: setScheduledTime( std::string schedule_time )
 {
-    return std::string("");
+    sch_time = schedule_time;
 }
 
-std::string CAlertsMessage:: MessagetoCSV ()
+void CAlertsMessage :: setAlertType( std::string a_type )
 {
-	std::string str ;
-	str = getScheduledTime () + ","+
-		getAlertType () + "," + 
-		getAlertSource () + ","+ 
-		getAlertId () + "\n";
-
-	return str;
+    alert_type = a_type;
 }
 
-bool CAlertsMessage:: CSVtoMessage (std::string message)
+
+void CAlertsMessage :: setAlertId( std::string a_id )
 {
-	//PJ - very un cpp way of doing...
-	char tmp[100]; 
-	strcpy(tmp,message.c_str());
-
-	//char *tok = strtok (message,",");
-	char *tok = strtok (tmp,",");
-	if (tok != nullptr)
-	{
-		sch_time = static_cast <std::string> (tok);
-		tok = strtok(NULL,",");
-		if (tok != nullptr)
-		{
-			alert_type = static_cast <std::string> (tok);
-			tok = strtok (NULL,",");
-			if (tok != nullptr)
-				alert_source = static_cast<std::string> (tok);
-		}
-
-	}
-	return true;
+    alert_id = a_id;
 }
 
-CAlertsMessage CAlertsMessage:: JSONtoMessage ()
+void CAlertsMessage :: setAlertSource( std::string a_source )
 {
-return CAlertsMessage();
+    alert_source = a_source;
+}
+
+void CAlertsMessage :: setAlertState( alert_state st )
+{
+    state = st;
+}
+
+std::string CAlertsMessage:: MessagetoJSON()
+{
+    return std::string( "" );
+}
+
+std::string CAlertsMessage:: MessagetoCSV()
+{
+    std::string str ;
+    str = getScheduledTime() + "," +
+          getAlertType() + "," +
+          getAlertSource() + "," +
+          getAlertId() + "\n";
+
+    return str;
+}
+
+bool CAlertsMessage:: CSVtoMessage( std::string message )
+{
+    //PJ - very un cpp way of doing...
+    char tmp[100];
+    strcpy( tmp, message.c_str() );
+
+    //char *tok = strtok (message,",");
+    char *tok = strtok( tmp, "," );
+    if( tok != nullptr )
+    {
+        sch_time = static_cast <std::string>( tok );
+        tok = strtok( NULL, "," );
+        if( tok != nullptr )
+        {
+            alert_type = static_cast <std::string>( tok );
+            tok = strtok( NULL, "," );
+            if( tok != nullptr )
+                alert_source = static_cast<std::string>( tok );
+        }
+
+    }
+    return true;
+}
+
+CAlertsMessage CAlertsMessage:: JSONtoMessage()
+{
+    return CAlertsMessage();
 }

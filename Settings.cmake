@@ -15,6 +15,7 @@ COMPONENT(PROTOBUF_DIR protobuf-${SDK})
 COMPONENT(SOUNDTOUCH_SDK_DIR SoundTouch-SDK-${SDK})
 COMPONENT(RIVIERA_LPM_DIR RivieraLPM)
 COMPONENT(RIVIERA_LPM_SERVICE_DIR RivieraLpmService)
+COMPONENT(CASTLE_PRODUCT_CONTROLLER_COMMON_DIR CastleProductControllerCommon)
 COMPONENT(GOOGLETEST_DIR googletest-${SDK})
 
 IF(${SDK} STREQUAL "native")
@@ -43,7 +44,7 @@ IF(${SDK} STREQUAL "qc8017_32")
   SET(CMAKE_CXX_COMPILER ${RIVIERA_HSP_DIR}/sdk/sysroots/${ARCHITECTURE}-oesdk-linux/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-g++
     CACHE INTERNAL - FORCE)
 
-  SET(COMMON_FLAGS "--sysroot=${SYSROOT} -Wall -Werror -Wno-psabi -Wno-maybe-uninitialized -Wno-unused-but-set-variable -mtune=cortex-a53 -ftree-vectorize")
+  SET(COMMON_FLAGS "--sysroot=${SYSROOT} -Wall -Werror -mtune=cortex-a53 -ftree-vectorize")
   SET(CMAKE_CXX_FLAGS "-std=c++11 ${COMMON_FLAGS}"
     CACHE INTERNAL - FORCE)
   SET(CMAKE_C_FLAGS "-std=gnu99 ${COMMON_FLAGS}"
@@ -59,6 +60,8 @@ SET(PROTO_CC_DEST "${CMAKE_BINARY_DIR}/proto")
 SET(CMAKE_INSTALL_PREFIX . CACHE INTERNAL - FORCE)
 SET(OUTPUT_BIN_DIR bin)
 SET(OUTPUT_LIB_DIR lib)
+#Custom Hsm directory path needs set before building CastleProductControllerCommon library. 
+SET(CUSTOM_HSM_DIR ${CMAKE_SOURCE_DIR}/ProductController/CustomHsm)
 
 IF(${CFG} STREQUAL "Release")
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os -g2 -DNDEBUG")
