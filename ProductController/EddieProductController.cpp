@@ -30,6 +30,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_EddieProductControllerStateSetup( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop, *this ),
     m_EddieProductControllerStateNetworkStandby( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop, *this ),
     m_LpmClient(),
+    m_KeyHandler( *GetTask(), m_CliClientMT ),
     m_deviceManager( GetTask(), *this )
 {
     BOSE_INFO( s_logger, __func__ );
@@ -84,6 +85,10 @@ void EddieProductController::RegisterLpmEvents()
     m_LpmClient->RegisterEvent<IpcKeyInformation_t>( IPC_KEY, response_cb );
 }
 
+void EddieProductController::RegisterKeyHandler()
+{
+    m_KeyHandler.RegisterKeyHandler( EddieProductController::KeyInformationCallBack, this );
+}
 
 void EddieProductController::RegisterEndPoints()
 {
@@ -133,6 +138,18 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
                     keyInformation.keyorigin(),
                     keyInformation.keystate(), keyInformation.keyid() );
         // Feed it into the keyHandler : Coming soon.
+        if( KeyHandlerUtil::KeyRepeatManager *ptrRepeatMgr = m_KeyHandler.RepeatMgr( keyInformation.keyorigin() ) )
+        {
+            m_CliClientMT.SendAsyncResponse( "Received from LPM, KeySource: CONSOLE, State " + \
+                                             std::to_string( keyInformation.keystate() ) + " KeyId " + \
+                                             std::to_string( keyInformation.keyid() ) );
+            ptrRepeatMgr->HandleKeys( keyInformation.keyorigin(),
+                                      keyInformation.keystate(), keyInformation.keyid() );
+        }
+        else
+        {
+            s_logger.LogError( "Source %d not registered", keyInformation.has_keyorigin() );
+        }
     }
     else
     {
@@ -224,6 +241,7 @@ void EddieProductController::HandleLPMReady()
 {
     BOSE_INFO( s_logger, __func__ );
     RegisterLpmEvents();
+    RegisterKeyHandler();
     m_isLPMReady = true;
     m_EddieProductControllerHsm.Handle<>( &CustomProductControllerState::HandleModulesReady );
 }
@@ -351,6 +369,11 @@ void EddieProductController :: HandleGetDeviceStateRequest( const Callback<::Dev
     currentState.set_state( m_EddieProductControllerHsm.GetCurrentState()->GetName() );
     BOSE_INFO( s_logger, "%s:Reponse: %s", __func__, ProtoToMarkup::ToJson( currentState, false ).c_str() );
     resp.Send( currentState );
+}
+
+void EddieProductController :: KeyInformationCallBack( const int result, void *context )
+{
+    s_logger.LogInfo( "Keys have been translated to intend = %d", result );
 }
 
 } // namespace ProductApp

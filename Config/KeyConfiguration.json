@@ -1,0 +1,9 @@
+{ "keyTable": [
+        {"Keys": [1],                                           "TimeOut": 300,      "Repeat": false,    "ActionOnTimeout": false,    "Event": 100},
+        {"Keys": [2],                                           "TimeOut": 300,      "Repeat": false,    "ActionOnTimeout": false,    "Event": 200},
+        {"Keys": [3],                                           "TimeOut": 300,      "Repeat": false,    "ActionOnTimeout": false,    "Event": 300},
+        {"Keys": [4],                                           "TimeOut": 300,      "Repeat": false,    "ActionOnTimeout": false,    "Event": 400},
+        {"Keys": [5],                                           "TimeOut": 300,      "Repeat": false,    "ActionOnTimeout": false,    "Event": 500},
+        {"Keys": [6],                                           "TimeOut": 300,      "Repeat": false,    "ActionOnTimeout": false,    "Event": 600},
+        {"Keys": [7],                                           "TimeOut": 300,      "Repeat": false,    "ActionOnTimeout": false,    "Event": 700}
+    ]}
