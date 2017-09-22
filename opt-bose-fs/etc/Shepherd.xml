@@ -17,13 +17,6 @@
 
   <daemon name="IoT"/>
 
-  <daemon name="APServer"
-          recovery="reboot"
-          nice="-6">
-    <arg>-c</arg>
-    <arg>/opt/Bose/etc/APConfig.xml</arg>
-  </daemon>
-
   <daemon name="UpnpSource">
     <arg>-c/opt/Bose/etc/UpnpSource.xml</arg>
   </daemon>
@@ -31,6 +24,7 @@
   <daemon name="FrontDoor"/>
 
   <daemon name="WebServer">
+    <arg>--disable-setup-port</arg>
     <arg>-c/opt/Bose/etc/WebServer.xml</arg>
   </daemon>
 
@@ -40,4 +34,9 @@
   </daemon>
 
   <daemon name="STSCertified"/>
+
+  <daemon name="PtsServer">
+    <arg>/opt/Bose/etc/pts-handler</arg>
+  </daemon>
+
 </ShepherdConfig>

@@ -66,9 +66,11 @@ soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || 
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
-professorlpm_package_dir=$(components get ProfessorLPM-Package installed_location) || exit
+avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
+swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
+audiopath_dir=$(components get CastleAudioPath-qc8017_32 installed_location) || exit
 castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
-
+professorlpm_package_dir=$(components get ProfessorLPM-Package installed_location) || exit
 
 arch=arm-oemllib32-linux
 sysroot=$riviera_hsp/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -127,7 +129,7 @@ gen_config "$u/APConfig.xslt" "$c" "APConfig.xml"
 
 # -----------------------------------------------------------------------------
 
-components list >"$opt_dir/etc/components.txt" || exit
+components record "$stage" || exit
 
 version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
 cp "$version_json" "$opt_dir/etc" || exit
@@ -137,15 +139,11 @@ for i in "$wspace/builds/$cfg/qc8017_32/bin"/*[!~]; do
 done
 
 # Historical FS_VERSION file.
-v=$(python2.7 -c 'import sys, json
-print "{user}@{host} {localtime} {branch} {major}.{minor}.{patch}-{build_number}+{abbrev_commit}".\
-format(**json.loads(open(sys.argv[1]).read()))
-' "$version_json") || exit
+v=$(make-version-string "$version_json" "{user}@{host} {localtime} {branch} {major}.{minor}.{patch}-{build_number}+{abbrev_commit}") || exit
 echo "$v" > "$opt_dir/etc/FS_VERSION" || exit
 echo "FS_VERSION \"$v\""
 
 stfs=$soundtouch_sdk/fs
-cp "$stfs"/opt/Bose/APServer "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BoseApp "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/CLIServer "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
@@ -166,8 +164,8 @@ cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$boselibs_dir/lib" "$opt_dir" || exit
 cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp "$shepherd_dir/shepherdd" "$opt_dir/bin" || exit
-cp "$castlenetworkservice_dir/bin/NetManager" "$opt_dir/bin" || exit
 cp -t "$opt_dir/etc" "$professorlpm_package_dir"/*.bos "$professorlpm_package_dir/lpm_blob_configuration.xml" || exit
+cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
 
 marge_url=https://streamingint.bose.com
 stats_url=https://eventsdev.api.bosecm.com
@@ -181,21 +179,17 @@ sw_update_url=https://worldwide.bose.com/updates/soundtouch-test
     || exit
 
 # Edit the version information into update.html.
-v=$(python2.7 -c 'import sys, json
-print "{major}.{minor}.{patch}".\
-format(**json.loads(open(sys.argv[1]).read()))
-' "$version_json") || exit
+v=$(make-version-string "$version_json" "{major}.{minor}.{patch}") || exit
 echo "HTML version \"$v\""
 sed -i "s/%FROMVERSION%/From: $v/" "$opt_dir/html/update.html" || exit
 
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
 
-avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
 "$avs_dir/stage" "$opt_dir" || exit
-
-swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 "$swup_dir/stage" "$opt_dir" || exit
+"$audiopath_dir/stage" "$opt_dir" || exit
+"$castlenetworkservice_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 
@@ -208,10 +202,7 @@ if $stripped; then
     done
 fi
 
-package_version=$(python2.7 -c 'import sys, json
-print "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}".\
-format(**json.loads(open(sys.argv[1]).read()))
-' "$version_json") || exit
+package_version=$(make-version-string "$version_json" "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}") || exit
 echo "Package version \"$package_version\""
 
 cat >"$stage/control" <<EOF || exit
@@ -240,7 +231,7 @@ put_script "$stage/postrm" <<EOF
 echo "SoundTouch postrm"
 EOF
 
-riviera_hsp_ver=$(awk '$1 == "Riviera-HSP" {print $2}' "$opt_dir/etc/components.txt")
+riviera_hsp_ver=$(components get Riviera-HSP selected_version) || exit
 riviera_hsp_ver=${riviera_hsp_ver##*/}
 put_script "$stage/preinst" <<EOF
 #!/bin/sh
@@ -275,3 +266,7 @@ mkdir -p "$ipk_dir" || exit
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
 echo "Created $ipk"
+
+ci=$wspace/builds/$cfg/component-info.tar.gz
+tar --owner=0 --group=0 -czf "$ci" component-info || exit
+echo "Created $ci"
