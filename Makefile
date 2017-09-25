@@ -60,7 +60,7 @@ graph: product-ipk
 
 .PHONY: package
 package: product-ipk
-	./scripts/create-package
+	./scripts/create-product-tarball
 
 .PHONY: clean
 clean:

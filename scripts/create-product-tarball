@@ -2,9 +2,9 @@
 ## Create complete package for eddie, that can be used to flash all partitions including Bose.
 #
 # To flash Eddie using generated package from Eddie root directory
-#   -   ./scripts/create-package
+#   -   ./scripts/create-product-tarball
 # To see help
-#   - ./scripts/create-package --help
+#   - ./scripts/create-product-tarball --help
 
 this=${0##*/} # this script's name
 cfg=Release
@@ -31,7 +31,6 @@ eval set -- "$opts"
 while :; do
     arg="$1"; shift
     case "$arg" in
-	(--nolpm | -n) no_lpm=true ;;
 	(--help | -h)
 	    cat <<EOF
 Usage: $this [options]
@@ -39,8 +38,6 @@ Usage: $this [options]
 Create Eddie Package to cleanly erase and flash all partitions using fastboot.
 
 Options:
---nolpm (-n)         Generate package without LPM firmware. This will cause
-                     LPM to not be updated when Eddie is updated using this package.
 EOF
 	    exit 0
 	    ;;
@@ -55,16 +52,11 @@ if (( $# != 0 )); then
     tryhelp
 fi
 
-function put_script {
-    local file="$1"; shift
-    cat "$@" >"$file" || error_exit ${FUNCNAME[0]}
-    chmod 755 "$file" || error_exit ${FUNCNAME[0]}
-}
-
 cfg=Release
 here=$(cd "$(dirname $0)" && echo "$PWD") || error_exit ${FUNCNAME[0]}
 wspace=$(cd "$here/.." && echo "$PWD") || error_exit ${FUNCNAME[0]}
 riviera_hsp=$(components get Riviera-HSP installed_location) || error_exit ${FUNCNAME[0]}
+lpm_bos=$(components get EddieLPM-Package installed_location) || error_exit ${FUNCNAME[0]}
 product_ipk=$wspace/builds/$cfg/product.ipk
 utils_dir=$wspace/install/utils
 version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
