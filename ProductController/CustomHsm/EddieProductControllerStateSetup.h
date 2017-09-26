@@ -22,8 +22,8 @@ public:
     EddieProductControllerStateSetup( EddieProductControllerHsm& hsm,
                                       CHsmState* pSuperState,
                                       EddieProductController& eddieProductController,
-                                      STATE stateId = CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP,
-									  //Don't change below state name. This is mapped with Madrid's requirement.
+                                      Hsm::STATE stateId = CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP,
+                                      //Don't change below state name. This is mapped with Madrid's requirement.
                                       const std::string& name = "SETUP" );
 
     virtual ~EddieProductControllerStateSetup()

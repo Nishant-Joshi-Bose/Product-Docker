@@ -15,7 +15,7 @@ namespace ProductApp
 {
 CustomProductControllerState::CustomProductControllerState( ProductControllerHsm& hsm,
                                                             CHsmState* pSuperState,
-                                                            STATE stateId,
+                                                            Hsm::STATE stateId,
                                                             const std::string& name ) :
     CHsmState( stateId, &hsm, name, pSuperState )
 {

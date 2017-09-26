@@ -15,10 +15,10 @@ static DPrint s_logger( "EddieProductControllerStateBooting" );
 namespace ProductApp
 {
 EddieProductControllerStateBooting::EddieProductControllerStateBooting( EddieProductControllerHsm& hsm,
-                                                                          CHsmState* pSuperState,
-                                                                          EddieProductController& eddieProductController,
-                                                                          STATE stateId,
-                                                                          const std::string& name ) :
+                                                                        CHsmState* pSuperState,
+                                                                        EddieProductController& eddieProductController,
+                                                                        Hsm::STATE stateId,
+                                                                        const std::string& name ) :
     ProductControllerStateBooting( hsm, pSuperState, eddieProductController, stateId, name )
 {
     BOSE_INFO( s_logger, __func__ );

@@ -22,7 +22,7 @@ class CustomProductControllerState : public CHsmState
 {
 public:
     CustomProductControllerState( ProductControllerHsm& hsm, CHsmState* pSuperState,
-                                  STATE stateId = 0, const std::string& name = "Top" );
+                                  Hsm::STATE stateId = 0, const std::string& name = "Top" );
 
     virtual ~CustomProductControllerState()
     {

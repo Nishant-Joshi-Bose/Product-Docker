@@ -15,10 +15,10 @@ static DPrint s_logger( "EddieProductControllerStateNetworkStandby" );
 namespace ProductApp
 {
 EddieProductControllerStateNetworkStandby::EddieProductControllerStateNetworkStandby( EddieProductControllerHsm& hsm,
-                                                                                      CHsmState* pSuperState,
-                                                                                      EddieProductController& eddieProductController,
-                                                                                      STATE stateId,
-                                                                                      const std::string& name ) :
+        CHsmState* pSuperState,
+        EddieProductController& eddieProductController,
+        Hsm::STATE stateId,
+        const std::string& name ) :
     ProductControllerStateNetworkStandby( hsm, pSuperState, eddieProductController, stateId, name )
 {
     BOSE_INFO( s_logger, __func__ );

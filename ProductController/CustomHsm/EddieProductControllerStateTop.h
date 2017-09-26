@@ -23,7 +23,7 @@ public:
     EddieProductControllerStateTop( EddieProductControllerHsm& hsm,
                                     CHsmState* pSuperState,
                                     EddieProductController& eddieProductController,
-                                    STATE stateId = 0,
+                                    Hsm::STATE stateId = 0,
                                     const std::string& name = "TOP" );
 
     virtual ~EddieProductControllerStateTop()

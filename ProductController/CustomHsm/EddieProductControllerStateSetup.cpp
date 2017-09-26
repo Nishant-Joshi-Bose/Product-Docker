@@ -15,10 +15,10 @@ static DPrint s_logger( "EddieProductControllerStateSetup" );
 namespace ProductApp
 {
 EddieProductControllerStateSetup::EddieProductControllerStateSetup( EddieProductControllerHsm& hsm,
-                                                                      CHsmState* pSuperState,
-                                                                      EddieProductController& eddieProductController,
-                                                                      STATE stateId,
-                                                                      const std::string& name ) :
+                                                                    CHsmState* pSuperState,
+                                                                    EddieProductController& eddieProductController,
+                                                                    Hsm::STATE stateId,
+                                                                    const std::string& name ) :
     ProductControllerStateSetup( hsm, pSuperState, eddieProductController, stateId, name )
 {
 }
