@@ -32,6 +32,7 @@ TARGET_LINK_LIBRARIES(Professor
   CastleProductControllerCommon
   ${SOUNDTOUCH_SDK_LIBS}
   LpmClient
+  KeyHandler
   jsoncpp
   protobuf
   -lpthread

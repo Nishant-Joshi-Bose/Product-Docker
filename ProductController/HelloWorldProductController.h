@@ -47,11 +47,13 @@ private:
     std::shared_ptr<FrontDoorClientIF>      m_FrontDoorClientIF;
 
     LpmClientIF::LpmClientPtr               m_LpmClient;
+    KeyHandlerUtil::KeyHandler              m_KeyHandler;
 
-    void HandleLpmKeyInformation( IpcKeyInformation_t keyInformation );
     void InitializeLpmClient();
-    void RegisterLpmEvents();
     void HandleLPMReady();
+    void RegisterLpmEvents();
+    void RegisterKeyHandler();
+    void HandleLpmKeyInformation( IpcKeyInformation_t keyInformation );
 
 public:
     void HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp );

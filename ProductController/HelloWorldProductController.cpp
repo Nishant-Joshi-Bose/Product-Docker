@@ -35,7 +35,9 @@ HelloWorldProductController::HelloWorldProductController( std::string const& Pro
     m_ProductControllerStateNetworkStandby( m_ProductControllerHsm, &m_ProductControllerStateTop, *this ),
     m_ProductControllerStateOn( m_ProductControllerHsm, &m_ProductControllerStateTop, *this ),
     m_ProductControllerStateIdle( m_ProductControllerHsm, &m_ProductControllerStateTop, *this ),
-    m_CustomProductControllerStateSwUpdating( m_ProductControllerHsm, &m_ProductControllerStateTop, *this )
+    m_CustomProductControllerStateSwUpdating( m_ProductControllerHsm, &m_ProductControllerStateTop, *this ),
+    m_LpmClient(),
+    m_KeyHandler( *GetTask(), m_CliClientMT )
 {
     BOSE_INFO( s_logger, __func__ );
     BOSE_INFO( s_logger, "Product name is %s", GetProductName().c_str() );
