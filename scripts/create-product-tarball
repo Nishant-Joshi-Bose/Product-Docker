@@ -8,7 +8,6 @@
 
 this=${0##*/} # this script's name
 cfg=Release
-no_lpm=false
 
 try_help () {
     echo >&2 "Try '$this --help' for more information."
@@ -56,7 +55,8 @@ cfg=Release
 here=$(cd "$(dirname $0)" && echo "$PWD") || error_exit ${FUNCNAME[0]}
 wspace=$(cd "$here/.." && echo "$PWD") || error_exit ${FUNCNAME[0]}
 riviera_hsp=$(components get Riviera-HSP installed_location) || error_exit ${FUNCNAME[0]}
-lpm_bos=$(components get EddieLPM-Package installed_location) || error_exit ${FUNCNAME[0]}
+#lpm_bos=$(components get EddieLPM-Package installed_location) || error_exit ${FUNCNAME[0]}
+#lpm_bin_path="/home/softlib/verisoft/EddieLPM-App/Release/trunk/latest/EDDIE_DP1"
 product_ipk=$wspace/builds/$cfg/product.ipk
 utils_dir=$wspace/install/utils
 version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
@@ -107,13 +107,6 @@ create_eddie_ext4 () {
 	mv $bose_ext4 $bose_ext4.orig
 	#copy and extract product IPK to make new EXT4 fs
 	extract_product_ipk
-        # copy lpm - if enabled
-    if ! [ $no_lpm ]; then
-       	echo " Adding LPM IPK to bose partition "
-        lpm_path=$(components get LPM installed_location) || error_exit ${FUNCNAME[0]}
-        mkdir -p "$extract_path"/ipks || error_exit ${FUNCNAME[0]}
-        $CP "$lpm_path"/lpm.ipk "$extract_path"/ipks || error_exit ${FUNCNAME[0]}
-    fi
 	$utils_dir/lin/make_ext4fs -s -l $fs_size -a $bose_partition $bose_ext4 $extract_path/ > /dev/null || error_exit ${FUNCNAME[0]}
 	if ! [ -f  $bose_ext4 ]; then
 		error_exit ${FUNCNAME[0]} " Updated EXT4 $bose_ext4 not found - make_ext4fs failed. Check if total size of package exceeds MAX EXT4 Size: $fs_size."
@@ -135,12 +128,8 @@ $CP "$version_json" "$stage_package_dir"/  || error_exit ${FUNCNAME[0]} " Adding
 # crate bose.ext4
 echo " Adding bose.ext4 to package "
 create_eddie_ext4
-# copy lpm - if enabled
-if ! [ $no_lpm ]; then
-    echo " Adding lpm.ipk to package "
-    lpm_path=$(components get LPM installed_location) || error_exit ${FUNCNAME[0]} " Adding lpm.ipk to package "
-    $CP "$lpm_path"/lpm.ipk "$stage_package_dir"/
-fi
+# Adding lpm*.bin from $lpm_bin_path
+#$CP "$lpm_bin_path"/lpm*.bin "$stage_package_dir/"  || error_exit " Adding LPM*.bin to package "
 
 # -----------------------------------------------------------------------------
 # Stage area is complete.  Make final package .tar

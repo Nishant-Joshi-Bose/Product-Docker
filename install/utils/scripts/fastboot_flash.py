@@ -14,7 +14,6 @@ import sys
 import time
 import os
 import pexpect
-import serial
 import subprocess
 import platform
 import fnmatch
@@ -32,13 +31,13 @@ class FastbootUpdater:
         adb_util = "./utils/lin/adb"
         adb_bin = "sudo  " + adb_util
         is_windows = False
-        device_of_interest = "apq8017"
+        device_of_interest = "device "
         adb_device_list =  []
         fastboot_device_list =  []
         adb_reboot_delay = 10
         fastboot_reboot_delay = 60
                 
-        def __init__(self, package_path = ".", port = "/dev/ttyUSB0", serial_controller = None):
+        def __init__(self, package_path = "."):
             self.package_path = package_path
             self.init_binaries()
             #if not os.path.exists(self.fastboot_util):
@@ -46,8 +45,6 @@ class FastbootUpdater:
             #if not os.path.exists(self.adb_util):
             #    raise Exception("Cannot find ADB binary [%s]. Exiting." %(self.adb_util))
             #self.copy_binaries()
-            self.port = port
-            self.serial_controller = None
             self.restart_adb()
 
         def execute_cmd_on_host(self, cmd):
@@ -126,8 +123,10 @@ class FastbootUpdater:
             #else: TODO
             return
 
-        def find_adb_devices(self):
+        def find_adb_devices(self, restartAdb=True):
             dev_list = []
+            if restartAdb:
+                self.restart_adb()
             cmd = self.adb_bin + " devices -l"
             result = self.execute_cmd_on_host(cmd)
             if result is not None:
@@ -159,7 +158,7 @@ class FastbootUpdater:
                     provide error saying no valid device is found
             '''
             logging.info("Boot to Fastboot.")
-            self.adb_device_list = self.find_adb_devices()
+            self.adb_device_list = self.find_adb_devices(False)
             if len(self.adb_device_list) > 0:
                 cmd = self.adb_bin + " -s " + self.adb_device_list[0] + " reboot bootloader"
                 self.execute_cmd_on_host(cmd)
@@ -191,25 +190,20 @@ class FastbootUpdater:
                     provide error saying no valid device is found
             '''
             self.fastboot_device_list = self.find_fastboot_devices()
-            if len(self.fastboot_device_list) == 0:
-                self.adb_device_list = self.find_adb_devices()
-                if len(self.adb_device_list) == 0:
-                    raise("No device found in fastboot mode or adb mode.")
-                else:
-                    logging.warning("No device in fastboot mode. Found device in Normal mode.")
-            else:
+            if len(self.fastboot_device_list) > 0:
                 self.execute_cmd_on_host(self.fastboot_bin + " reboot")
-                logging.info("Waiting for device to boot for [%s] seconds." %str(self.fastboot_reboot_delay))
-                count = 0
-                while count < self.fastboot_reboot_delay:
-                    time.sleep(1)
-                    self.adb_device_list = self.find_adb_devices()
-                    if len(self.adb_device_list) > 0:
-                        break
-                    sys.stdout.write('.')
-                    sys.stdout.flush()
-                    count = count + 1
-                sys.stdout.write('\n')
+             
+            logging.info("Waiting for device to boot for [%s] seconds." %str(self.fastboot_reboot_delay))
+            count = 0
+            while count < self.fastboot_reboot_delay:
+                time.sleep(1)
+                self.adb_device_list = self.find_adb_devices(True)
+                if len(self.adb_device_list) > 0:
+                    break
+                sys.stdout.write('.')
+                sys.stdout.flush()
+                count = count + 1
+            sys.stdout.write('\n')
             if len(self.adb_device_list) == 0:
                 raise Exception("Not able to reboot device to Normal mode.")                    
             return
@@ -245,15 +239,6 @@ class FastbootUpdater:
     
         # Put file to device via adb from given src to device destination
         def put_file(self,src, dest):
-            return
-
-        # Run fastboot script - This is risky. 
-        def update_from_script(self, fastboot_script_path_name, reboot_back=False):
-            if not os.path.exists(fastboot_script_path_name):
-                raise Exception("Fastboot script [%s] does not exist." %fastboot_script_path_name)
-            self.boot_to_fastboot()
-            if reboot_back:
-                self.reboot_from_fastboot()
             return
 
 def get_fasboot_partition_files(package_path, full_update=False, 
@@ -362,7 +347,7 @@ def get_fasboot_partition_files(package_path, full_update=False,
     
 def do_fastboot_flash(package_path, full_update=False,
                       all_partitions=False,  userspace_only=False, 
-                      partition_file=None, erase_persist=False, serial_port = None):
+                      partition_file=None, erase_persist=False):
     try:
         logging.info("Fastboot Flash Start.")
         abs_package_path = os.path.normpath(os.path.abspath(package_path)) + os.sep
@@ -370,14 +355,9 @@ def do_fastboot_flash(package_path, full_update=False,
             raise Exception("Package directory [%s] not present. Exiting." %abs_package_path)
         controller = None
         fastboot_updater = None
-        
-        if serial_port is not None:
-            logging.debug("Opening serial port [%s]." % serial_port)
-            controller = serial_controller.SerialController(serial_port)
-            controller.open()
             
         partitions = get_fasboot_partition_files(abs_package_path, full_update, all_partitions, userspace_only, partition_file, erase_persist)
-        fastboot_updater = FastbootUpdater(abs_package_path, serial_port, controller)
+        fastboot_updater = FastbootUpdater(abs_package_path)
         logging.info("******************************************************************************************")
         logging.info("\tWARNING: Starting Fastboot Flash. Ensure the power and USB connections to the device are secured.")
         logging.info("\tWARNING: Power failure or any disruption in connection may damage the device completely.")
@@ -427,7 +407,7 @@ if __name__ == '__main__':
             print("The flash script requires root priviledge. Please try and rerun in sudo mode.")
             sys.exit(-1)
             
-    parser = argparse.ArgumentParser(description='Flash Eddie and LPM using Fastboot/Serial.')
+    parser = argparse.ArgumentParser(description='Flash Eddie and LPM using Fastboot.')
     parser.add_argument('package', 
                         action='store', 
                         help="Full path of package Folder")
@@ -470,7 +450,6 @@ if __name__ == '__main__':
     erase_persist = False
     partition_list_file = None
     update_fastboot = False
-    lpm_serial_dev = ""
     if args.full_update:
         full_update = True
     else:

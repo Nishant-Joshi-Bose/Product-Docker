@@ -20,32 +20,54 @@ import fnmatch
 import shutil
 import logging
 import argparse
+import subprocess
 
-def do_fastboot_update(package_path, full_update, all_partitions, userspace_only, partition_list_file, erase_persist):
+def run_cmd(command, print_output=True):
+    """
+    To run any command on host machine. (Wrap shell execute command in-between prints)
+    """
+    logging.info(command)
+    output = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
+    if print_output:
+		logging.debug(output)
+    return output
+
+def do_fastboot_update(package_path, full_update, all_partitions, userspace_only, partition_list_file, erase_persist, update_lpm):
     from fastboot_flash import FastbootUpdater
     from fastboot_flash import do_fastboot_flash
     do_fastboot_flash(package_path, full_update, all_partitions, userspace_only, partition_list_file, erase_persist)
+    fbUpdater = FastbootUpdater(package_path)
+    logging.info("******************************************************************************************");
+    fs_version = run_cmd("%s shell cat /opt/Bose/etc/FS_VERSION" %fbUpdater.adb_util)
+    logging.info("FS Version Installed: [%s]" %(fs_version))
+    bose_version = run_cmd("%s shell cat /opt/Bose/etc/BoseVersion.json" %fbUpdater.adb_util)
+    logging.info("Bose Version Installed: [%s]" %(bose_version))
+    
+    if update_lpm:
+        from lpm_updater import LpmUpdater
+        logging.info("..... LPM update Start .....")
+        lpmUpdater = LpmUpdater(fbUpdater.adb_util)
+        lpmUpdater.update(True)
+        count = 0
+        while count < lpmUpdater.total_update_timeout_sec:
+            adb_device_list = fbUpdater.find_adb_devices()
+            if len(adb_device_list) > 0:
+                break
+            sys.stdout.write('.')
+            sys.stdout.flush()
+            count = count + 1
+            time.sleep(1)
+        sys.stdout.write('\n')
+        sys.stdout.flush()
+        logging.info("Available LPM Version: [%s]" %lpmUpdater.current_version)
+        logging.info("Actual LPM Version: [%s]" %lpmUpdater.target_version)
+        if lpmUpdater.is_version_current:
+            logging.info("LPM Firmware updated Succssfully")    
+        else:
+            logging.error("LPM Firmware not updated")
     return
 
-# This needs change after discussion on how to do LPM update
-def do_lpm_update(package_path, lpm_serial_dev):
-    from lpm_flash import LpmUpdater
-    from lpm_flash import do_lpm_flash
-    
-    lpm_dir = package_path
-    lpm_flash_files = fnmatch.filter(os.listdir(lpm_dir), "lpm*.bin")
-    if len(lpm_flash_files)==0:
-        raise Exception("Expected Extracted Package with any file matching [%s]. Not Found. Cannot Continue LPM Update." %(lpm_dir + "/lpm*.bin")) 
-    
-    if len(lpm_flash_files) > 1:
-        print("Found multiple LPM Files at [%s]." %(lpm_dir))
-    
-    lpm_file = os.path.join(lpm_dir, lpm_flash_files[0])
-    logging.info("Using [%s] for LPM Flash." %(lpm_file))
-    do_lpm_flash(lpm_serial_dev, lpm_file)
-    return
-
-def do_qc_flash(package, update_fastboot, full_update, all_partitions, userspace_only, partition_list_file, erase_persist, update_lpm, lpm_serial_dev):
+def do_qc_flash(package, update_fastboot, full_update, all_partitions, userspace_only, partition_list_file, erase_persist, update_lpm):
     try:
         abs_package = os.path.abspath(package)
         logging.info("Using package: [%s] for update. Extracting..." %(abs_package)) 
@@ -63,14 +85,8 @@ def do_qc_flash(package, update_fastboot, full_update, all_partitions, userspace
         # Perform Fastboot update if enabled
         if update_fastboot:
             logging.info("..... Fastboot update Start .....")  
-            do_fastboot_update(extracted_package, full_update, all_partitions, userspace_only, partition_list_file, erase_persist)
+            do_fastboot_update(extracted_package, full_update, all_partitions, userspace_only, partition_list_file, erase_persist, update_lpm)
             logging.info("..... Fastboot update Finish .....")
-            
-        # Perform LPM update if enabled
-        if update_lpm:
-            logging.info("..... LPM update Start .....")              
-            do_lpm_update(extracted_package, lpm_serial_dev)
-            logging.info("..... LPM update Finish .....")
     except Exception as e:
         logging.error(type(e))
         logging.error('Error: %s %s' %(e.args,  sys.exc_info()[0]))
@@ -79,10 +95,8 @@ def do_qc_flash(package, update_fastboot, full_update, all_partitions, userspace
     return
 
 # Required inputs: Package Path.
-# Optional: update_lpm --> if passed update lpm, else update APQ8017 only 
-#   if update_lpm is given, Required: <Serial device name>
 if __name__ == '__main__':
-    logging.basicConfig(filename="flash_util.log", format='%(asctime)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
+    logging.basicConfig(filename="flash_util.log", format='%(asctime)s - %(levelname)s - %(message)s', filemode='w', level=logging.INFO)
     #define a new Handler to log to console as well
     console = logging.StreamHandler()
     # optional, set the logging level
@@ -101,6 +115,7 @@ if __name__ == '__main__':
             
     parser = argparse.ArgumentParser(description='Flash Eddie and LPM using Fastboot Flash.')
     parser.add_argument('package', action='store', help="Full path of package TAR file")
+    #parser.add_argument('serial', action='store', required=False, help="LPM Debug Serial port - e.g. /dev/ttyUSB1")
     subparsers = parser.add_subparsers(help='commands')
     
     fastboot_parser = subparsers.add_parser("fastboot", help="Perform fastboot update")
@@ -124,7 +139,12 @@ if __name__ == '__main__':
                                  action='store_true', 
                                  required=False, 
                                  help="Erase only bose-persist partition") 
-
+    fastboot_parser.add_argument('-l', '--lpm-update', 
+                                 default=False, 
+                                 action='store_true', 
+                                 required=False,
+                                 help="Peform LPM update.") 
+    
     args = parser.parse_args()
     abs_package = os.path.abspath(args.package)
     if os.path.exists(abs_package) and os.path.splitext(abs_package)[1] == ".tar":
@@ -140,8 +160,13 @@ if __name__ == '__main__':
     partition_list_file = None
     update_lpm = False
     update_fastboot = True
-    lpm_serial_dev = None
-    
+    #serial_port = None
+    #if args.serial:
+    #    serial_port = args.serial
+
+    if ('lpm_update' in args.__dict__) and args.lpm_update:
+        update_lpm = True
+
     # if user says full update, do so
     if ('full_update' in args.__dict__) and args.full_update:
         full_update = True
@@ -157,6 +182,6 @@ if __name__ == '__main__':
     if userspace_only or all_partitions or erase_persist:
         full_update = False
 
-    do_qc_flash(abs_package, update_fastboot, full_update, all_partitions, userspace_only, partition_list_file, erase_persist, update_lpm, lpm_serial_dev)
+    do_qc_flash(abs_package, update_fastboot, full_update, all_partitions, userspace_only, partition_list_file, erase_persist, update_lpm)
     sys.exit(0) 
     
