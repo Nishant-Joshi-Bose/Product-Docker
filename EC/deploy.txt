@@ -4,6 +4,8 @@
 ./builds/Release/components.svgz			<DEPLOY_DIR>/eddie_cgraph_<VERSION_STRING>.svgz			file
 ./builds/Release/package/product.tar		<DEPLOY_DIR>/eddie_<VERSION_STRING>.tar					file
 ./builds/Release/package/product_flash		<DEPLOY_DIR>/eddie_flash								file
+./builds/Release/package/product_flash.exe	<DEPLOY_DIR>/eddie_flash.exe							file
+./builds/Release/package/product_flash_mac	<DEPLOY_DIR>/eddie_flash_mac							file
 
 # EMACS
 # Local Variables:
