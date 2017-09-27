@@ -41,7 +41,12 @@ public:
 
     //Add your HandleCustomXXX() functions here that implements product specific event handlers.
     // This function should be overridden in the product specific state derived class
-    // that executes product specific event handler.
+    // that executes product specific event handler.l
     virtual bool HandleCustomEvent();
+
+    virtual bool HandleLanguageRequest()
+    {
+        return false;
+    }
 };
 } //namespace ProductApp

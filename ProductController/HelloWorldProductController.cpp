@@ -86,7 +86,7 @@ void HelloWorldProductController::HandleGetLanguageRequest( const Callback<Produ
 {
     BOSE_INFO( s_logger,  __func__ );
     //Pass it on to product controller HSM. The request will be dropped if HSM is not in right state to handle.
-    m_ProductControllerHsm.Handle<ProductControllerState>( &CustomProductControllerState::HandleLanguageRequest );
+    m_ProductControllerHsm.Handle<>( &CustomProductControllerState::HandleLanguageRequest );
 
     ProductPb::Language lang;
     lang.set_code( "en" );
