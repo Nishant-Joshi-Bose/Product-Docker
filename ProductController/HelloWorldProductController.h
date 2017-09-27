@@ -54,6 +54,7 @@ private:
     void RegisterLpmEvents();
     void RegisterKeyHandler();
     void HandleLpmKeyInformation( IpcKeyInformation_t keyInformation );
+    static void KeyInformationCallBack( const int result, void *context );
 
 public:
     void HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp );
