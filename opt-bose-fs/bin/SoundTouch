@@ -41,8 +41,8 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
         exit 1
     fi
 
-    if ! cat /persist/mfg_data.json; then
-        log warning "No manufacturing data, won't start SoundTouch"
+    if ! mfgdata get country_code >/dev/null; then
+        log warning "Missing or invalid manufacturing data, won't start SoundTouch"
         cat >&2 <<\EOF
 To set manufacturing data:
 
