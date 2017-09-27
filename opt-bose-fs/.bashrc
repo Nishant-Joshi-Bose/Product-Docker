@@ -11,6 +11,7 @@ if [ "${PS1-}" ]; then # interactive shells
     alias g="grep -E"
     alias lf="ls -F"
     alias j=jobs
+    alias d3="dmesg -n3" # reduce logging to console
     function h { history "$@" | less; }
     function resize { eval $(command resize -u); }
     function ll { ls -la "$@" | less -ME; }
