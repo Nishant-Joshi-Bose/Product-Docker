@@ -163,7 +163,6 @@ void HelloWorldProductController::HandleLpmKeyInformation( IpcKeyInformation_t k
         // Feed it into the keyHandler
         if( KeyHandlerUtil::KeyRepeatManager *ptrRepeatMgr = m_KeyHandler.RepeatMgr( keyInformation.keyorigin() ) )
         {
-            BOSE_INFO( s_logger, "%s %s %d\n", __FILE__, __func__, __LINE__ );
             m_CliClientMT.SendAsyncResponse( "Received from LPM, KeySource: CONSOLE, State " + \
                                              std::to_string( keyInformation.keystate() ) + " KeyId " + \
                                              std::to_string( keyInformation.keyid() ) );
@@ -172,7 +171,6 @@ void HelloWorldProductController::HandleLpmKeyInformation( IpcKeyInformation_t k
         }
         else
         {
-            BOSE_INFO( s_logger, "%s %s %d\n", __FILE__, __func__, __LINE__ );
             s_logger.LogError( "Source %d not registered", keyInformation.has_keyorigin() );
         }
     }
