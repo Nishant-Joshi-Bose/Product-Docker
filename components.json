@@ -1,7 +1,7 @@
 [
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-09-20_1011"
+    "selected_version": "Continuous/Castle-Fork/2017-09-25_1523"
   },
   {
     "name": "CastleLibs-qc8017_32",
@@ -41,7 +41,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-09-26_1447"
+    "selected_version": "Continuous/Castle-Fork/2017-09-26_1901"
   },
   {
     "name": "RivieraLpmService",
@@ -53,7 +53,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-09-26_1447"
+    "selected_version": "Continuous/Castle-Fork/2017-09-26_1901"
   },
   {
     "name": "RivieraLpmUpdater",
