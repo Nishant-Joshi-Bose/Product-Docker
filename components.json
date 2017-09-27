@@ -66,5 +66,9 @@
   {
     "name": "CastleNetworkService-qc8017_32",
     "selected_version": "Continuous/master/0.1.0-37+41809b1"
+  },
+  {
+    "name": "A4VVideoManagerService",
+    "selected_version": "dev@c313049e4de751c512e9cd198bab40e0c949a565"
   }
 ]
