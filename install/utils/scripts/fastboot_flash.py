@@ -112,9 +112,10 @@ class FastbootUpdater:
             return
        
         def restart_adb(self):
-            cmd = self.adb_bin + " kill-server; " + self.adb_bin + " start-server"
+            cmd = self.adb_bin + " kill-server "
             self.execute_cmd_on_host(cmd)
-            #else: TODO
+            cmd =  self.adb_bin + " start-server"
+            self.execute_cmd_on_host(cmd)
             return
                     
         def stop_adb(self):

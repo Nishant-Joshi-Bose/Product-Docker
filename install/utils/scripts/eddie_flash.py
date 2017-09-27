@@ -46,6 +46,7 @@ def do_fastboot_update(package_path, full_update, all_partitions, userspace_only
     if update_lpm:
         from lpm_updater import LpmUpdater
         logging.info("..... LPM update Start .....")
+        logging.info("PATH: [%s]" %fbUpdater.adb_util)
         lpmUpdater = LpmUpdater(fbUpdater.adb_util)
         lpmUpdater.update(True)
         count = 0
@@ -64,7 +65,11 @@ def do_fastboot_update(package_path, full_update, all_partitions, userspace_only
         if lpmUpdater.is_version_current:
             logging.info("LPM Firmware updated Succssfully")    
         else:
-            logging.error("LPM Firmware not updated")
+            logging.error("LPM Firmware not updated")    
+        if fbUpdater.is_windows:
+            fbUpdater.stop_adb()
+            shutil.rmtree(package_path, ignore_errors=True)
+        
     return
 
 def do_qc_flash(package, update_fastboot, full_update, all_partitions, userspace_only, partition_list_file, erase_persist, update_lpm):
@@ -96,7 +101,7 @@ def do_qc_flash(package, update_fastboot, full_update, all_partitions, userspace
 
 # Required inputs: Package Path.
 if __name__ == '__main__':
-    logging.basicConfig(filename="flash_util.log", format='%(asctime)s - %(levelname)s - %(message)s', filemode='w', level=logging.INFO)
+    logging.basicConfig(filename="flash_util.log", format='%(asctime)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
     #define a new Handler to log to console as well
     console = logging.StreamHandler()
     # optional, set the logging level
