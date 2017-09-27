@@ -67,10 +67,11 @@ EOF
             /proc/sys/kernel/core_pattern
     fi
 
-    if [ -d /mnt/nv/BoseLog ]; then
-        clean_logs
+    if ! [ -e /mnt/nv/BoseLog ]; then
+        ln -s /data/logs /mnt/nv/BoseLog
     fi
-    mkdir -p /mnt/nv/BoseLog /mnt/nv/IoTCerts /mnt/nv/BoseApp-Persistence/1 /mnt/nv/product-persistence
+    clean_logs
+    mkdir -p /mnt/nv/IoTCerts /mnt/nv/BoseApp-Persistence/1 /mnt/nv/product-persistence
 
     rw --read-only
 
