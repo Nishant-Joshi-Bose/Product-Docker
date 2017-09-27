@@ -10,7 +10,7 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      07/15/2017
+/// @date      09/22/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -201,6 +201,7 @@ void ProfessorProductController::Run( )
 {
      m_running = true;
 
+     BOSE_DEBUG( s_logger, "------------- Product Controller Starting Modules ------------" );
      BOSE_DEBUG( s_logger, "The Professor Product Controller is starting up its processes." );
 
      ///
@@ -225,21 +226,23 @@ void ProfessorProductController::Run( )
 
      m_ProductHardwareInterface = ProductHardwareInterface::GetInstance( GetTask( ),
                                                                          CallbackForMessages );
-     m_ProductFrontDoorNetwork  = ProductFrontDoorNetwork ::GetInstance( GetTask( ),
+
+     m_ProductFrontDoorNetwork  = ProductFrontDoorNetwork::GetInstance ( GetTask( ),
                                                                          CallbackForMessages );
-     m_ProductAudioServices     = ProductAudioServices    ::GetInstance( GetTask( ),
+
+     m_ProductAudioServices     = ProductAudioServices::GetInstance    ( GetTask( ),
                                                                          CallbackForMessages,
                                                                          m_ProductHardwareInterface );
-     m_ProductDeviceSettings    = ProductDeviceSettings   ::GetInstance( GetTask( ),
+     m_ProductDeviceSettings    = ProductDeviceSettings::GetInstance   ( GetTask( ),
                                                                          CallbackForMessages,
                                                                          m_ProductHardwareInterface );
-     m_ProductSoftwareServices  = ProductSoftwareServices ::GetInstance( GetTask( ),
+     m_ProductSoftwareServices  = ProductSoftwareServices::GetInstance ( GetTask( ),
                                                                          CallbackForMessages,
                                                                          m_ProductHardwareInterface );
-     m_ProductUserInterface     = ProductUserInterface    ::GetInstance( GetTask( ),
+     m_ProductUserInterface     = ProductUserInterface::GetInstance    ( GetTask( ),
                                                                          CallbackForMessages,
                                                                          m_ProductHardwareInterface );
-     m_ProductCommandLine       = ProductCommandLine      ::GetInstance( GetTask( ),
+     m_ProductCommandLine       = ProductCommandLine::GetInstance      ( GetTask( ),
                                                                          m_ProductHardwareInterface );
 
      ///
@@ -441,8 +444,8 @@ void ProfessorProductController::ReadConfigurationStatusFromPersistentStorage( )
      {
          try
          {
-             BOSE_LOG( ERROR, "Reading the configuration status from persistent storage failed."      );
-             BOSE_LOG( ERROR, "A default configuration status will be written to persistent storage." );
+             BOSE_LOG( DEBUG, "Reading the configuration status from persistent storage failed."      );
+             BOSE_LOG( DEBUG, "A default configuration status will be written to persistent storage." );
 
              if( GetSystemLanguageCode( ).empty( ) )
              {
@@ -504,6 +507,8 @@ void ProfessorProductController::WriteConfigurationStatusToPersistentStorage( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::HandleMessage( const ProductMessage& message )
 {
+     BOSE_DEBUG( s_logger, "----------- Product Controller Message Handler -------------" );
+
      if( message.has_id( ) )
      {
          switch( message.id( ) )
@@ -583,7 +588,29 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
                  break;
 
             case KEY_PRESS:
-                 BOSE_DEBUG( s_logger, "A key press message was received." );
+                 {
+                     auto keyData = message.data( ).keydata( );
+
+                     switch( keyData.state( ) )
+                     {
+                        case DOWN:
+                             BOSE_DEBUG( s_logger, "A down key press message was received with value %d.",
+                                         keyData.value( ) );
+
+                             break;
+                        case UP:
+                             BOSE_DEBUG( s_logger, "An up key press message was received with value %d.",
+                                         keyData.value( ) );
+
+                             break;
+
+                        default:
+                             BOSE_DEBUG( s_logger, "A key press message in an unknown state was received with value %d.",
+                                         keyData.value( ) );
+
+                             break;
+                     }
+                 }
                  break;
 
             case AUDIO_LEVEL:

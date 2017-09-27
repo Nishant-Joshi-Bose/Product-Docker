@@ -7,7 +7,7 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      07/15/2017
+/// @date      09/22/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -38,10 +38,14 @@
 #include "NotifyTargetTaskIF.h"
 #include "CliClient.h"
 #include "APTask.h"
+#include "BreakThread.h"
+#include "APTaskFactory.h"
 #include "APClientSocketListenerIF.h"
 #include "APServerSocketListenerIF.h"
 #include "IPCMessageRouterIF.h"
 #include "APProductIF.h"
+#include "ProductMessage.pb.h"
+#include "LpmClientIF.h"
 
 namespace ProductApp
 {
@@ -67,7 +71,7 @@ namespace ProductApp
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     class ProductUserInterface
     {
-    public:
+      public:
 
         //////////////////////////////////////////////////////////////////////////////////////////////
         ///
@@ -95,7 +99,7 @@ namespace ProductApp
         void Run ( void );
         void Stop( void );
 
-    private:
+      private:
 
         //////////////////////////////////////////////////////////////////////////////////////////////
         ///
@@ -127,12 +131,22 @@ namespace ProductApp
 
         //////////////////////////////////////////////////////////////////////////////////////////////
         ///
+        /// @brief The following method is used to register for and receive key events from the LPM
+        ///        hardware interface.
+        ///
+        //////////////////////////////////////////////////////////////////////////////////////////////
+        void RegisterForKeyEvents( void );
+        void HandleKeyEvent      ( LpmServiceMessages::IpcKeyInformation_t keyEvent );
+
+        //////////////////////////////////////////////////////////////////////////////////////////////
+        ///
         /// @brief The following subclass instances are used to manage the lower level hardware and
         ///        the device, as well as to interface with the user and higher level system
         ///        applications, respectively.
         ///
         //////////////////////////////////////////////////////////////////////////////////////////////
         NotifyTargetTaskIF*         m_mainTask;
+        NotifyTargetTaskIF*         m_keyEventTask;
         Callback< ProductMessage >  m_ProductNotify;
         ProductHardwareInterface*   m_ProductHardwareInterface = nullptr;
         bool                        m_running;

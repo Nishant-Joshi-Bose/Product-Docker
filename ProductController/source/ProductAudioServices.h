@@ -101,13 +101,13 @@ namespace ProductApp
         //////////////////////////////////////////////////////////////////////////////////////////////
         /// These declarations are used to handle audio path events on the product.
         //////////////////////////////////////////////////////////////////////////////////////////////
+        void ConnectCallbackAction           ( bool          connect );
         void SelectCallbackAction            ( uint32_t      source );
         void DeselectCallbackAction          ( uint32_t      source );
         void VolumeCallbackAction            ( uint32_t      volume );
         void UserMuteCallbackAction          ( bool          mute );
         void InternalMuteCallbackAction      ( bool          mute );
         void RebroadcastLatencyCallbackAction( uint32_t      latency );
-        void ConnectCallbackAction           ( bool          connect );
 
     private:
 
@@ -150,6 +150,7 @@ namespace ProductApp
         //////////////////////////////////////////////////////////////////////////////////////////////
         ProductPointer m_ProductPointer = nullptr;
 
+        void ConnectCallback           ( bool          connect );
         void RegisterForProductEvents  ( void );
         void SelectCallback            ( uint32_t      source );
         void DeselectCallback          ( uint32_t      source );
@@ -157,13 +158,10 @@ namespace ProductApp
         void UserMuteCallback          ( bool          mute );
         void InternalMuteCallback      ( bool          mute );
         void RebroadcastLatencyCallback( uint32_t      latency );
-        void ConnectCallback           ( bool          connect );
 
         //////////////////////////////////////////////////////////////////////////////////////////////
         /// The following declarations are for handling audio path specific requests.
         //////////////////////////////////////////////////////////////////////////////////////////////
-        void RegisterForProductRequests( void );
-
         uint32_t m_currentVolume      = 0;
         uint32_t m_rebroadcastLatency = 0;
         bool     m_userMute           = true;

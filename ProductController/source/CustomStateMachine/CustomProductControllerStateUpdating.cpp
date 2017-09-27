@@ -7,7 +7,7 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/008/2017
+/// @date      09/22/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -37,7 +37,7 @@
 /// in this source code file.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-static DPrint s_logger( "CustomProductControllerStateSoftwareUpdating" );
+static DPrint s_logger( "Product" );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             Start of Product Namespace                                       ///

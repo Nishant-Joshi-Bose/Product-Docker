@@ -8,7 +8,7 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      08/28/2017
+/// @date      09/22/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///

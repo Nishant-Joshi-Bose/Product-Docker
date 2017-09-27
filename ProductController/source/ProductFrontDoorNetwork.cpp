@@ -8,7 +8,7 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      08/30/2017
+/// @date      09/22/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -483,7 +483,7 @@ void ProductFrontDoorNetwork::ProcessNetworkStatus( const NetManager::Protobuf::
 
          auto networkData = productMessage.mutable_data( )->mutable_networkdata( );
 
-         networkData->set_type     ( UNKNOWN );
+         networkData->set_type     ( UNKNOWN_NETWORK_TYPE );
          networkData->set_frequency( 0 );
 
          productMessage.set_id( NETWORK_DOWN );
@@ -521,7 +521,7 @@ void ProductFrontDoorNetwork::ProcessNetworkStatus( const NetManager::Protobuf::
          {
              BOSE_ERROR( s_logger, "The primary network has an unknown type." );
 
-             networkData->set_type     ( UNKNOWN );
+             networkData->set_type     ( UNKNOWN_NETWORK_TYPE );
              networkData->set_frequency( 0 );
          }
 

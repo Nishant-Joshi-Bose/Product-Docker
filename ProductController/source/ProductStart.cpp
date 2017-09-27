@@ -14,7 +14,7 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      07/15/2017
+/// @date      09/22/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -117,7 +117,8 @@ int main( int argumentCount, char** argumentValue )
 
         SystemUtils::ThereCanBeOnlyOne( );
 
-        BOSE_DEBUG( s_logger, "The Product Controller is starting up." );
+        BOSE_DEBUG( s_logger, "----------------- Product Controller Start -----------------" );
+        BOSE_DEBUG( s_logger, "The Product Controller is starting up from the main function." );
 
         /////////////////////////////////////////////////////////////////////////////////////////
         /// @brief The Product Controller is now ran and the main task is suspended until the

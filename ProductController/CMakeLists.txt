@@ -1,6 +1,12 @@
-MESSAGE( STATUS "ProductController CMakeLists.txt CUSTOM_HSM_DIR     : " ${CUSTOM_HSM_DIR} )
-MESSAGE( STATUS "ProductController CMakeLists.txt PROTO_CC_DEST      : " ${PROTO_CC_DEST} )
-MESSAGE( STATUS "ProductController CMakeLists.txt NETWORK_COMMON_LIBS: " ${NETWORK_COMMON_LIBS} )
+MESSAGE( STATUS "ProductController CMakeLists.txt CUSTOM_HSM_DIR                       : " ${CUSTOM_HSM_DIR} )
+MESSAGE( STATUS "ProductController CMakeLists.txt PROTO_CC_DEST                        : " ${PROTO_CC_DEST} )
+MESSAGE( STATUS "ProductController CMakeLists.txt NETWORK_COMMON_LIBS                  : " ${NETWORK_COMMON_LIBS} )
+MESSAGE( STATUS "ProductController CMakeLists.txt NETWORK_COMMON_INCLUDE               : " ${NETWORK_COMMON_INCLUDE} )
+MESSAGE( STATUS "ProductController CMakeLists.txt SOUNDTOUCH_SDK_DIR                   : " ${SOUNDTOUCH_SDK_DIR} )
+MESSAGE( STATUS "ProductController CMakeLists.txt RIVIERA_LPM_DIR                      : " ${RIVIERA_LPM_DIR} )
+MESSAGE( STATUS "ProductController CMakeLists.txt RIVIERA_LPM_SERVICE_DIR              : " ${RIVIERA_LPM_SERVICE_DIR} )
+MESSAGE( STATUS "ProductController CMakeLists.txt OUTPUT_BIN_DIR                       : " ${OUTPUT_BIN_DIR} )
+MESSAGE( STATUS "ProductController CMakeLists.txt CASTLE_PRODUCT_CONTROLLER_COMMON_DIR : " ${CASTLE_PRODUCT_CONTROLLER_COMMON_DIR} )
 
 INCLUDE_DIRECTORIES(
   ${NETWORK_COMMON_INCLUDE}

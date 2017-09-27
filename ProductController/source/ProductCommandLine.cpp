@@ -7,7 +7,7 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      07/15/2017
+/// @date      09/22/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -62,7 +62,7 @@ typedef CLIClient::CLICmdDescriptor             CommandDescription;
 /// file.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-static const DPrint s_logger    { "Product" };
+static const DPrint s_logger { "Product" };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

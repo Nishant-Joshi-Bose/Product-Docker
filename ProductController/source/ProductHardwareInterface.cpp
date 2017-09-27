@@ -3,11 +3,11 @@
 /// @file      ProductHardwareInterface.cpp
 ///
 /// @brief     This header file contains declarations for managing the hardware, which interfaces
-///            with the Low Power Microprocessor or LPM.
+///            primarily with the Low Power Microprocessor or LPM.
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      07/15/2017
+/// @date      09/22/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -36,9 +36,11 @@
 #include "LpmClientIF.h"
 #include "LpmClientFactory.h"
 #include "BreakThread.h"
+#include "RivieraLPM_IpcProtocol.h"
+#include "AutoLpmServiceMessages.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             Start of Product Namespace                                       ///
+///                                Start of ProductApp Namespace                                 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
@@ -64,19 +66,19 @@ typedef IPCMessageRouterIF::IPCMessageRouterPtr MessageRouter;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// The following declares a DPrint class type object and a standard string for logging information
-/// in this source code file.
+/// The following declares a DPrint class type object for logging information in this source code
+/// file.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-static const DPrint s_logger { "Product" };
+static DPrint s_logger { "Product" };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProductHardwareInterface::GetInstance
 ///
-/// @brief  This static method creates the one and only instance of a ProductHardwareInterface object.
-///         The C++ Version 11 compiler guarantees that only one instance is created in a thread
-///         safe way.
+/// @brief  This static method creates the one and only instance of a ProductHardwareInterface
+///         object. The C++ Version 11 compiler guarantees that only one instance is created in a
+///         thread safe way, whenever a pointer is defined as being static.
 ///
 /// @return This method returns a pointer to a ProductHardwareInterface object.
 ///
@@ -105,7 +107,7 @@ ProductHardwareInterface* ProductHardwareInterface::GetInstance( NotifyTargetTas
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductHardwareInterface::ProductHardwareInterface( NotifyTargetTaskIF*        task,
                                                     Callback< ProductMessage > ProductNotify )
-     : m_task         ( task          ),
+     : m_mainTask     ( task          ),
        m_ProductNotify( ProductNotify ),
        m_connected    ( false         )
 {
@@ -125,9 +127,9 @@ ProductHardwareInterface::ProductHardwareInterface( NotifyTargetTaskIF*        t
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductHardwareInterface::Run( )
 {
-    BOSE_DEBUG( s_logger, "The hardware connection to the LPM being established." );
+    BOSE_DEBUG( s_logger, "The hardware connection to the LPM is being established." );
 
-    m_LpmClient = LpmClientFactory::Create( "ProductLpmClient", m_task );
+    m_LpmClient = LpmClientFactory::Create( "ProductLpmClient", m_mainTask );
 
     Callback< bool > ConnectedCallback( std::bind( &ProductHardwareInterface::Connected,
                                                    this,
@@ -151,66 +153,82 @@ bool ProductHardwareInterface::Run( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductHardwareInterface::Connected( bool connected )
 {
-     BOSE_DEBUG( s_logger, "A hardware connection to the LPM has been established." );
-
-     ///
-     /// This method returns if there is no LPM server connection.
-     ///
      if( !connected )
      {
+         BOSE_DEBUG( s_logger, "A hardware connection to the LPM could not be established." );
+         BOSE_DEBUG( s_logger, "An attempt to reconnect to the LPM will be made." );
+
          m_connected = false;
 
-         IL::BreakThread( std::bind( &ProductHardwareInterface::Run, this ), m_task );
+         ProductMessage productMessage;
+         productMessage.set_id( LPM_HARDWARE_DOWN );
+
+         IL::BreakThread( std::bind( m_ProductNotify, productMessage ),      m_mainTask );
+         IL::BreakThread( std::bind( &ProductHardwareInterface::Run, this ), m_mainTask );
 
          return;
      }
      else
      {
-         m_connected = true;
-     }
+         BOSE_DEBUG( s_logger, "A hardware connection to the LPM has been established." );
+         BOSE_DEBUG( s_logger, "An attempt to obtain the LPM status will now be made." );
 
-     ///
-     /// An internal callback is created to receive the LPM status.
-     ///
-     Callback< IpcLpmHealthStatusPayload_t > CallbackForLpmStatus( std::bind( &ProductHardwareInterface::HandleLpmStatus,
-                                                                              this,
-                                                                              std::placeholders::_1 ) );
-     RequestLpmStatus( CallbackForLpmStatus );
+         m_connected = true;
+
+         ProductMessage productMessage;
+         productMessage.set_id( LPM_HARDWARE_UP );
+
+         IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_mainTask );
+
+         Callback< LpmServiceMessages::IpcLpmHealthStatusPayload_t >
+         CallbackForLpmStatus( std::bind( &ProductHardwareInterface::HandleLpmStatus,
+                                          this,
+                                          std::placeholders::_1 ) );
+
+         RequestLpmStatus( CallbackForLpmStatus );
+     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief ProductHardwareInterface::RequestLpmStatus
+///
 /// @return
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductHardwareInterface::RequestLpmStatus( Callback< IpcLpmHealthStatusPayload_t >& callback )
+bool ProductHardwareInterface::RequestLpmStatus( Callback< LpmServiceMessages::IpcLpmHealthStatusPayload_t >
+                                                 callback )
 {
-     if( m_connected )
+     if( m_connected == false || m_LpmClient == nullptr )
      {
-         BOSE_LOG( ERROR, "An LPM status request could not be made, as no connection is available." );
+         BOSE_ERROR( s_logger, "An LPM status request could not be made, as no connection is available." );
 
          return false;
      }
      else
      {
          BOSE_DEBUG( s_logger, "An LPM status request will be made." );
+
+         DeviceStatusReq_t statusRequestType;
+
+         statusRequestType.set_requesttype( LPM_STATUS );
+
+         m_LpmClient->RequestStatus( statusRequestType, callback );
+
+         return true;
      }
-
-     DeviceStatusReq_t statusRequestType;
-
-     statusRequestType.set_requesttype( LPM_STATUS );
-
-     m_LpmClient->RequestStatus( statusRequestType, callback);
-
-     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief ProductHardwareInterface::HandleLpmStatus
+///
 /// @param status
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductHardwareInterface::HandleLpmStatus( IpcLpmHealthStatusPayload_t status )
+void ProductHardwareInterface::HandleLpmStatus( LpmServiceMessages::IpcLpmHealthStatusPayload_t status )
 {
-     BOSE_DEBUG( s_logger, "An LPM status was received with the following values: .");
+     BOSE_DEBUG( s_logger, "An LPM status was received with the following values: ");
      BOSE_DEBUG( s_logger, "                      ");
      BOSE_DEBUG( s_logger, "Image             : %s", status.has_image( )                            ?
                                                 std::to_string( status.image( ) ).c_str( )          :
@@ -284,10 +302,37 @@ void ProductHardwareInterface::HandleLpmStatus( IpcLpmHealthStatusPayload_t stat
      BOSE_DEBUG( s_logger, "Minimum Latency   : %s", status.has_minimumoutputlatencyms( )                   ?
                                                 std::to_string( status.minimumoutputlatencyms( ) ).c_str( ) :
                                                 "Unknown" );
-     ProductMessage productMessage;
-     productMessage.set_id( LPM_HARDWARE_UP );
+}
 
-     IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductHardwareInterface::RegisterForKeyEvents
+///
+/// @brief  This method is used to register for key events through the LPM hardware client.
+///
+/// @param  CallbackForKeyEvents [ inputs ] This arguments specifies the callback method or function
+///                                         to which key enents are to be sent by the LPM.
+///
+/// @return This method does not return anything.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProductHardwareInterface::RegisterForKeyEvents( Callback< LpmServiceMessages::IpcKeyInformation_t >
+                                                     callback )
+{
+     if( m_connected == false || m_LpmClient == nullptr )
+     {
+         BOSE_ERROR( s_logger, "An LPM request for key events could not be made, as no connection is available." );
+
+         return false;
+     }
+     else
+     {
+         BOSE_DEBUG( s_logger, "An LPM request for key events will be made." );
+
+         m_LpmClient->RegisterEvent( IPC_KEY, callback );
+
+         return true;
+     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -303,24 +348,24 @@ bool ProductHardwareInterface::SendSetVolume( uint32_t volume )
 {
      BOSE_DEBUG( s_logger, "A volume level of %d is being set.", volume );
 
-     if( m_connected )
+     if( m_connected == false || m_LpmClient == nullptr )
      {
-         BOSE_LOG( ERROR, "An LPM set volume request could not be made, as no connection is available." );
+         BOSE_ERROR( s_logger, "An LPM set volume request could not be made, as no connection is available." );
 
          return false;
      }
      else
      {
          BOSE_DEBUG( s_logger, "An LPM set volume request will be made." );
+
+         IpcAudioSetVolume_t volumeSetting;
+
+         volumeSetting.set_volume( volume );
+
+         m_LpmClient->SetVolume( volumeSetting );
+
+         return true;
      }
-
-     IpcAudioSetVolume_t volumeSetting;
-
-     volumeSetting.set_volume( volume );
-
-     m_LpmClient->SetVolume( volumeSetting );
-
-     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -336,33 +381,33 @@ bool ProductHardwareInterface::SendUserMute( bool mute )
 {
      BOSE_DEBUG( s_logger, "A user mute %s is being set.", mute ? "on" : "off" );
 
-     if( m_connected )
+     if( m_connected == false || m_LpmClient == nullptr )
      {
-         BOSE_LOG( ERROR, "An LPM user mute request could not be made, as no connection is available." );
+         BOSE_ERROR( s_logger, "An LPM user mute request could not be made, as no connection is available." );
 
          return false;
      }
      else
      {
          BOSE_DEBUG( s_logger, "An LPM user mute request will be made." );
+
+         IpcAudioMute_t muteSetting;
+
+         if( mute )
+         {
+             muteSetting.set_internalmute( 1 );
+             muteSetting.set_unifymute   ( 1 );
+         }
+         else
+         {
+             muteSetting.set_internalmute( 0 );
+             muteSetting.set_unifymute   ( 1 );
+         }
+
+         m_LpmClient->SetMute( muteSetting );
+
+         return true;
      }
-
-     IpcAudioMute_t muteSetting;
-
-     if( mute )
-     {
-         muteSetting.set_internalmute( 1 );
-         muteSetting.set_unifymute   ( 1 );
-     }
-     else
-     {
-         muteSetting.set_internalmute( 0 );
-         muteSetting.set_unifymute   ( 1 );
-     }
-
-     m_LpmClient->SetMute( muteSetting );
-
-     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -378,33 +423,33 @@ bool ProductHardwareInterface::SendInternalMute( bool mute )
 {
     BOSE_DEBUG( s_logger, "An internal mute %s is being set.", mute ? "on" : "off" );
 
-    if( m_connected )
+    if( m_connected == false || m_LpmClient == nullptr )
     {
-        BOSE_LOG( ERROR, "An LPM internal mute request could not be made, as no connection is available." );
+        BOSE_ERROR( s_logger, "An LPM internal mute request could not be made, as no connection is available." );
 
         return false;
     }
     else
     {
         BOSE_DEBUG( s_logger, "An LPM internal mute request will be made." );
+
+        IpcAudioMute_t muteSetting;
+
+        if( mute )
+        {
+            muteSetting.set_internalmute( 1 );
+            muteSetting.set_unifymute   ( 0 );
+        }
+        else
+        {
+            muteSetting.set_internalmute( 0 );
+            muteSetting.set_unifymute   ( 0 );
+        }
+
+        m_LpmClient->SetMute( muteSetting );
+
+        return true;
     }
-
-    IpcAudioMute_t muteSetting;
-
-    if( mute )
-    {
-        muteSetting.set_internalmute( 1 );
-        muteSetting.set_unifymute   ( 0 );
-    }
-    else
-    {
-        muteSetting.set_internalmute( 0 );
-        muteSetting.set_unifymute   ( 0 );
-    }
-
-    m_LpmClient->SetMute( muteSetting );
-
-    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -420,9 +465,9 @@ bool ProductHardwareInterface::SendAudioPathPresentationLatency( uint32_t latenc
 {
      BOSE_DEBUG( s_logger, "Audio path latency of %d is being set.", latency );
 
-     if( m_connected )
+     if( m_connected == false || m_LpmClient == nullptr )
      {
-         BOSE_LOG( ERROR, "An LPM set latency request could not be made, as no connection is available." );
+         BOSE_ERROR( s_logger, "An LPM set latency request could not be made, as no connection is available." );
 
          return false;
      }
@@ -471,9 +516,9 @@ bool ProductHardwareInterface::SendSetDSPAudioMode( IpcAudioMode_t audioMode )
 
      BOSE_DEBUG( s_logger, "Audio mode is to be set to %s.", audioModeString.c_str( ) );
 
-     if( m_connected )
+     if( m_connected == false || m_LpmClient == nullptr )
      {
-         BOSE_LOG( ERROR, "An LPM set latency request could not be made, as no connection is available." );
+         BOSE_ERROR( s_logger, "An LPM set latency request could not be made, as no connection is available." );
 
          return false;
      }
@@ -498,9 +543,9 @@ bool ProductHardwareInterface::SendLipSyncDelay( uint32_t audioDelay )
 {
      BOSE_DEBUG( s_logger, "Audio lip sync delay is to be set to %d.", audioDelay );
 
-     if( m_connected )
+     if( m_connected == false || m_LpmClient == nullptr )
      {
-         BOSE_LOG( ERROR, "An LPM set latency request could not be made, as no connection is available." );
+         BOSE_ERROR( s_logger, "An LPM set latency request could not be made, as no connection is available." );
 
          return false;
      }
@@ -531,7 +576,7 @@ bool ProductHardwareInterface::SendToneAndLevelControl( IpcToneControl_t& contro
      BOSE_DEBUG( s_logger, "Surround  : %d ", controls.surroundspeaker( ) );
      BOSE_DEBUG( s_logger, "               " );
 
-     if( m_connected )
+     if( m_connected == false || m_LpmClient == nullptr )
      {
          BOSE_ERROR( s_logger, "An LPM audio and tone level request could not be made, as no connection is available." );
 
@@ -558,9 +603,9 @@ bool ProductHardwareInterface::SendSpeakerList( IpcAccessoryList_t& accessoryLis
 {
      BOSE_DEBUG( s_logger, "Speaker activation settings are to be set as follows: " );
 
-     if( m_connected )
+     if( m_connected == false || m_LpmClient == nullptr )
      {
-         BOSE_LOG( ERROR, "An LPM speaker activation settings request could not be made, as no connection is available." );
+         BOSE_ERROR( s_logger, "An LPM speaker activation settings request could not be made, as no connection is available." );
 
          return false;
      }
@@ -587,9 +632,9 @@ bool ProductHardwareInterface::SendSetSystemTimeoutEnableBits( Ipc_TimeoutContro
 {
      BOSE_DEBUG( s_logger, "Auto power down will be set to %s.", timeoutControl.enable( ) ? "on" : "off" );
 
-     if( m_connected )
+     if( m_connected == false || m_LpmClient == nullptr )
      {
-         BOSE_LOG( ERROR, "An LPM speaker activation settings request could not be made, as no connection is available." );
+         BOSE_ERROR( s_logger, "An LPM speaker activation settings request could not be made, as no connection is available." );
 
          return false;
      }
@@ -616,9 +661,9 @@ bool ProductHardwareInterface::RebootRequest( )
 {
      BOSE_DEBUG( s_logger, "A reboot request is being sent." );
 
-     if( m_connected )
+     if( m_connected == false || m_LpmClient == nullptr )
      {
-         BOSE_LOG( ERROR, "An LPM reboot request could not be made, as no connection is available." );
+         BOSE_ERROR( s_logger, "An LPM reboot request could not be made, as no connection is available." );
 
          return false;
      }
@@ -647,9 +692,9 @@ bool ProductHardwareInterface::HandleLowPowerStandby( )
 {
      BOSE_DEBUG( s_logger, "Low Power standby is being set." );
 
-     if( m_connected )
+     if( m_connected == false || m_LpmClient == nullptr )
      {
-         BOSE_LOG( ERROR, "An LPM low power standby request could not be made, as no connection is available." );
+         BOSE_ERROR( s_logger, "An LPM low power standby request could not be made, as no connection is available." );
 
          return false;
      }
@@ -756,12 +801,12 @@ bool ProductHardwareInterface::SendBlueToothDeviceData( const std::string&      
                                                         const unsigned long long bluetoothMacAddress )
 {
      BOSE_DEBUG( s_logger, "Bluetooth data is being set to the Device %s with MAC Address 0x%016llX.",
-                      bluetoothDeviceName.c_str( ),
-                      bluetoothMacAddress );
+                            bluetoothDeviceName.c_str( ),
+                            bluetoothMacAddress );
 
-     if( m_connected )
+     if( m_connected == false || m_LpmClient == nullptr )
      {
-         BOSE_LOG( ERROR, "An LPM bluetooth data request could not be made, as no connection is available." );
+         BOSE_ERROR( s_logger, "An LPM bluetooth data request could not be made, as no connection is available." );
 
          return false;
      }
@@ -790,9 +835,9 @@ bool ProductHardwareInterface::SendSourceSelection( const IPCSource_t& sourceSel
                        sourceSelect.source( ),
                        sourceSelect.status( ) );
 
-     if( m_connected )
+     if( m_connected == false || m_LpmClient == nullptr )
      {
-         BOSE_LOG( ERROR, "An LPM source selection request could not be made, as no connection is available." );
+         BOSE_ERROR( s_logger, "An LPM source selection request could not be made, as no connection is available." );
 
          return false;
      }

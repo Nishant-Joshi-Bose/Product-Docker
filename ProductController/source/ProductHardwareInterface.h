@@ -7,7 +7,7 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      07/15/2017
+/// @date      09/22/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -96,6 +96,17 @@ namespace ProductApp
           bool Run( void );
 
           //////////////////////////////////////////////////////////////////////////////////////////////
+          /// These methods handle LPM status requests.
+          //////////////////////////////////////////////////////////////////////////////////////////////
+          bool RequestLpmStatus( Callback< LpmServiceMessages::IpcLpmHealthStatusPayload_t > callback );
+          void HandleLpmStatus ( LpmServiceMessages::IpcLpmHealthStatusPayload_t             status   );
+
+          //////////////////////////////////////////////////////////////////////////////////////////////
+          /// This method is used to set a callback to receive key events from the LPM hardware.
+          //////////////////////////////////////////////////////////////////////////////////////////////
+          bool RegisterForKeyEvents( Callback< LpmServiceMessages::IpcKeyInformation_t > callback );
+
+          //////////////////////////////////////////////////////////////////////////////////////////////
           /// These declarations are utility calls used mostly by the ProductDevice class, which send
           /// messages to the LPM hardware manager process as a client.
           //////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,7 +160,7 @@ namespace ProductApp
         /// These declarations store the main task for processing LPM hardware events and requests. It
         /// is passed by the ProductController instance.
         //////////////////////////////////////////////////////////////////////////////////////////////
-        NotifyTargetTaskIF*        m_task          = nullptr;
+        NotifyTargetTaskIF*        m_mainTask      = nullptr;
         Callback< ProductMessage > m_ProductNotify = nullptr;
         LpmClientIF::LpmClientPtr  m_LpmClient     = nullptr;
 
@@ -169,12 +180,6 @@ namespace ProductApp
         /// This method is called when an LPM server connection is established.
         //////////////////////////////////////////////////////////////////////////////////////////////
         void Connected ( bool  connected );
-
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        /// These methods handle LPM status requests.
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        bool RequestLpmStatus( Callback< IpcLpmHealthStatusPayload_t >& callback );
-        void HandleLpmStatus ( IpcLpmHealthStatusPayload_t              status   );
     };
 }
 
