@@ -37,7 +37,7 @@
   },
   {
     "name": "Riviera-HSP",
-    "selected_version": "Continuous/dev/1.0-3-g5ebd768"
+    "selected_version": "Continuous/dev/1.0-5-g4d51833"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -45,11 +45,11 @@
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@bb6c4c132e67eb7ef277f3936bfecb2b85257c3a"
+    "selected_version": "master@2cf9489e3432c030e820d9066176108946df63d0"
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@796"
+    "selected_version": "trunk@903"
   },
   {
     "name": "AVS-qc8017_32",
