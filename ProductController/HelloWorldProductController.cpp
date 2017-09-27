@@ -86,7 +86,7 @@ void HelloWorldProductController::HandleGetLanguageRequest( const Callback<Produ
 {
     BOSE_INFO( s_logger,  __func__ );
     //Pass it on to product controller HSM. The request will be dropped if HSM is not in right state to handle.
-    m_ProductControllerHsm.Handle<>( &ProductControllerState::HandleLanguageRequest );
+    m_ProductControllerHsm.Handle<ProductControllerState>( &CustomProductControllerState::HandleLanguageRequest );
 
     ProductPb::Language lang;
     lang.set_code( "en" );
@@ -133,6 +133,7 @@ void HelloWorldProductController::InitializeLpmClient()
     m_LpmClient->Connect( connectCb );
 }
 
+
 void HelloWorldProductController::RegisterLpmEvents()
 {
     BOSE_INFO( s_logger, __func__ );
@@ -141,6 +142,11 @@ void HelloWorldProductController::RegisterLpmEvents()
     auto func = std::bind( &HelloWorldProductController::HandleLpmKeyInformation, this, std::placeholders::_1 );
     AsyncCallback<IpcKeyInformation_t>response_cb( func, GetTask() );
     m_LpmClient->RegisterEvent<IpcKeyInformation_t>( IPC_KEY, response_cb );
+}
+
+void HelloWorldProductController::RegisterKeyHandler()
+{
+    m_KeyHandler.RegisterKeyHandler( HelloWorldProductController::KeyInformationCallBack, this );
 }
 
 
@@ -154,7 +160,21 @@ void HelloWorldProductController::HandleLpmKeyInformation( IpcKeyInformation_t k
                     " keystate:%d, keyid:%d",
                     keyInformation.keyorigin(),
                     keyInformation.keystate(), keyInformation.keyid() );
-        // Feed it into the keyHandler : Coming soon.
+        // Feed it into the keyHandler
+        if( KeyHandlerUtil::KeyRepeatManager *ptrRepeatMgr = m_KeyHandler.RepeatMgr( keyInformation.keyorigin() ) )
+        {
+            BOSE_INFO( s_logger, "%s %s %d\n", __FILE__, __func__, __LINE__ );
+            m_CliClientMT.SendAsyncResponse( "Received from LPM, KeySource: CONSOLE, State " + \
+                                             std::to_string( keyInformation.keystate() ) + " KeyId " + \
+                                             std::to_string( keyInformation.keyid() ) );
+            ptrRepeatMgr->HandleKeys( keyInformation.keyorigin(),
+                                      keyInformation.keystate(), keyInformation.keyid() );
+        }
+        else
+        {
+            BOSE_INFO( s_logger, "%s %s %d\n", __FILE__, __func__, __LINE__ );
+            s_logger.LogError( "Source %d not registered", keyInformation.has_keyorigin() );
+        }
     }
     else
     {
@@ -170,6 +190,15 @@ void HelloWorldProductController::HandleLPMReady()
 {
     BOSE_INFO( s_logger, __func__ );
     RegisterLpmEvents();
+    RegisterKeyHandler();
 }
+
+void HelloWorldProductController:: KeyInformationCallBack( const int result, void *context )
+{
+    BOSE_INFO( s_logger, "%s %s %d\n", __FILE__, __func__, __LINE__ );
+    s_logger.LogInfo( "Keys have been translated to intend = %d", result );
+}
+
+
 
 } // namespace ProductApp
