@@ -1,0 +1,104 @@
+@startuml
+
+box "NetworkManager Process"
+participant NetworkManager
+end box
+
+box "CAPS Process"
+participant CAPSApplication
+end box
+
+box "AudioPath Process"
+participant APProduct
+end box
+
+box "FrontDoor Process"
+participant FrontDoorApplication
+end box
+
+box "ProductController Process"
+participant ProductStart
+participant ProfessorProductController
+participant ProductHardwareInterface
+participant ProductFrontDoorNetwork
+participant ProductAudioServices
+participant ProductDeviceSettings
+participant ProductSoftwareServices
+participant ProductUserInterface
+participant ProductCommandLine
+participant ProductStateMachine
+participant CustomProductStateBooting
+participant CustomProductStateNetworkStandby
+participant CustomProductStateIdle
+end box
+
+box "LPMServer Process"
+participant LPMServer
+end box
+
+ProductStart                     -> ProfessorProductController       : GetInstance
+ProductStart                     -> ProfessorProductController       : Run
+ProfessorProductController       -> ProductHardwareInterface         : GetInstance
+ProfessorProductController       -> ProductFrontDoorNetwork          : GetInstance
+ProfessorProductController       -> ProductAudioServices             : GetInstance
+ProfessorProductController       -> ProductDeviceSettings            : GetInstance
+ProfessorProductController       -> ProductSoftwareServices          : GetInstance
+ProfessorProductController       -> ProductUserInterface             : GetInstance
+ProfessorProductController       -> ProductCommandLine               : GetInstance
+ProfessorProductController       -> ProductHardwareInterface         : Run
+ProductHardwareInterface         -> LPMServer                        : Connect( ConnectedCallback )
+LPMServer                        -> ProductHardwareInterface         : Connected( false )
+ProductHardwareInterface         -> ProductHardwareInterface         : Run
+ProductHardwareInterface         -> LPMServer                        : Connect( ConnectedCallback )
+LPMServer                        -> ProductHardwareInterface         : Connected( true )
+ProductHardwareInterface         -> LPMServer                        : RequestLpmStatus( CallbackForLpmStatus )
+LPMServer                        -> ProductHardwareInterface         : HandleLpmStatus
+ProductHardwareInterface         -> ProfessorProductController       : HandleMessage( LPM_HARDWARE_UP )
+ProfessorProductController       -> ProductStateMachine              : HandleLpmState( active = true )
+ProductStateMachine              -> CustomProductStateBooting        : HandleLpmState( active = true )
+CustomProductStateBooting        -> ProfessorProductController       : IsBooted
+ProfessorProductController       -> CustomProductStateBooting        : false
+CustomProductStateBooting        -> ProfessorProductController       : GetNetworkStatus
+ProfessorProductController       -> CustomProductStateBooting        : false
+ProfessorProductController       -> ProductFrontDoorNetwork          : Run
+ProductFrontDoorNetwork          -> ProductFrontDoorNetwork          : ServeRequests
+ProductFrontDoorNetwork          -> FrontDoorApplication             : RegisterGet( HandleGetConfigurationStatusRequest )
+ProductFrontDoorNetwork          -> FrontDoorApplication             : RegisterGet( HandleGetLanguageRequest )
+ProductFrontDoorNetwork          -> FrontDoorApplication             : RegisterPost( HandlePostLanguageRequest )
+ProductFrontDoorNetwork          -> FrontDoorApplication             : RegisterNotification( HandleGetCapsNotification )
+FrontDoorApplication             -> CAPSApplication
+CAPSApplication                  -> FrontDoorApplication
+FrontDoorApplication             -> ProductFrontDoorNetwork          : HandleGetCapsNotification
+ProductFrontDoorNetwork          -> ProfessorProductController       : HandleMessage( CAPS_UP )
+ProfessorProductController       -> ProductStateMachine              : HandleCapsState( active = true )
+ProductStateMachine              -> CustomProductStateBooting        : HandleCapsState( active = true )
+CustomProductStateBooting        -> ProfessorProductController       : IsBooted
+ProfessorProductController       -> CustomProductStateBooting        : true
+CustomProductStateBooting        -> ProfessorProductController       : GetNetworkStatus
+ProfessorProductController       -> CustomProductStateBooting        : false
+CustomProductStateBooting        -> CustomProductStateNetworkStandby : ChangeState
+ProductFrontDoorNetwork          -> ProductFrontDoorNetwork          : MonitorNetwork
+ProductFrontDoorNetwork          -> FrontDoorApplication             : SendGet( GetNetworkStatusSuccess, GetNetworkStatusFailed )
+FrontDoorApplication             -> NetworkManager
+NetworkManager                   -> FrontDoorApplication
+FrontDoorApplication             -> ProductFrontDoorNetwork          : GetNetworkStatusFailed
+ProductFrontDoorNetwork          -> ProductFrontDoorNetwork          : Sleep( ONE_SECOND )
+ProductFrontDoorNetwork          -> FrontDoorApplication             : SendGet("/network/status", CallbackForSuccess, CallbackForFailure)
+FrontDoorApplication             -> NetworkManager
+NetworkManager                   -> FrontDoorApplication
+FrontDoorApplication             -> ProductFrontDoorNetwork          : GetNetworkStatusSuccess
+ProductFrontDoorNetwork          -> ProfessorProductController       : HandleMessage( NETWORK_UP )
+ProfessorProductController       -> ProductStateMachine              : HandleNetworkState( active = true )
+ProductStateMachine              -> CustomProductStateNetworkStandby : HandleNetworkState( active = true )
+CustomProductStateNetworkStandby -> ProfessorProductController       : IsBooted
+ProfessorProductController       -> CustomProductStateNetworkStandby : true
+CustomProductStateNetworkStandby -> ProfessorProductController       : GetNetworkStatus
+ProfessorProductController       -> CustomProductStateNetworkStandby : false
+CustomProductStateNetworkStandby -> CustomProductStateIdle           : ChangeState
+ProfessorProductController       -> ProductAudioServices             : Run
+ProfessorProductController       -> ProductDeviceSettings            : Run
+ProfessorProductController       -> ProductSoftwareServices          : Run
+ProfessorProductController       -> ProductUserInterface             : Run
+ProfessorProductController       -> ProductCommandLine               : Run
+
+@enduml
