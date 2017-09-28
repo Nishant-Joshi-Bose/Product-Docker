@@ -63,7 +63,7 @@ EOF
     else
         ulimit -c unlimited
         log info "Development mode (core files enabled, recovery disabled)"
-        echo "/mnt/nv/BoseLog/core-%e-%u-%g-%p-%t-%s" > \
+        echo "|/opt/Bose/etc/store-core %e-%u-%g-%p-%t-%s" > \
             /proc/sys/kernel/core_pattern
     fi
 
