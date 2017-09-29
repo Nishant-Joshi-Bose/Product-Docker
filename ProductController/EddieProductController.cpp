@@ -14,6 +14,7 @@
 #include "ProtoToMarkup.h"
 #include "ProtoPersistenceFactory.h"
 #include "LpmClientFactory.h"
+#include "CLICmdsKeys.h"
 
 static DPrint s_logger( "EddieProductController" );
 
@@ -59,6 +60,7 @@ EddieProductController::~EddieProductController()
 void EddieProductController::Initialize()
 {
     m_productCliClient.Initialize( GetTask() );
+    RegisterCliClientCmds();
     RegisterEndPoints();
     SendInitialRequests();
 }
@@ -112,17 +114,38 @@ void EddieProductController::RegisterEndPoints()
     AsyncCallback<SoundTouchInterface::CapsInitializationStatus> capsInitializationCb( std::bind( &EddieProductController::HandleCapsInitializationUpdate ,
             this, std::placeholders::_1 ) , GetTask() );
 
+    AsyncCallback<Callback<SoundTouchInterface::AllowSourceSelect>> getallowSourceSelectReqCb( std::bind( &EddieProductController::HandleAllowSourceSelectRequest ,
+                                                                 this, std::placeholders::_1 ) , GetTask() );
     /// Registration of endpoints to the frontdoor client.
 
     m_FrontDoorClientIF->RegisterNotification<SoundTouchInterface::CapsInitializationStatus>( "CapsInitializationUpdate", capsInitializationCb );
     m_FrontDoorClientIF->RegisterGet( "/system/language" , getLanguageReqCb );
     m_FrontDoorClientIF->RegisterGet( "/system/configuration/status" , getConfigurationStatusReqCb );
 
+    m_FrontDoorClientIF->RegisterGet( "/content/allowSourceSelect" , getallowSourceSelectReqCb );
+
     m_FrontDoorClientIF->RegisterPost<ProductPb::Language>( "/system/language" , postLanguageReqCb );
     //Device info get request handler
     m_FrontDoorClientIF->RegisterGet( "/system/info", getDeviceInfoReqCb );
     //Device state get request handler
     m_FrontDoorClientIF->RegisterGet( "/system/state", getDeviceStateReqCb );
+    SendAllowSourceSelectNotification( true );
+}
+
+void EddieProductController::SendAllowSourceSelectNotification( bool isSourceSelectAllowed )
+{
+    BOSE_INFO( s_logger, __func__ );
+    SoundTouchInterface::AllowSourceSelect pb;
+    pb.set_sourceselectallowed( isSourceSelectAllowed );
+    m_FrontDoorClientIF->SendNotification( "allowSourceSelectUpdate", pb );
+}
+
+void EddieProductController::HandleAllowSourceSelectRequest( const Callback<SoundTouchInterface::AllowSourceSelect> &resp )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    SoundTouchInterface::AllowSourceSelect pb;
+    pb.set_sourceselectallowed( true );
+    resp.Send( pb );
 }
 
 // This function will handle key information coming from LPM and give it to
@@ -374,6 +397,66 @@ void EddieProductController :: HandleGetDeviceStateRequest( const Callback<::Dev
 void EddieProductController :: KeyInformationCallBack( const int result, void *context )
 {
     s_logger.LogInfo( "Keys have been translated to intend = %d", result );
+}
+
+void EddieProductController::RegisterCliClientCmds()
+{
+    BOSE_INFO( s_logger, __func__ );
+    auto cb = [this]( uint16_t cmdKey, const std::list<std::string> & argList, AsyncCallback<std::string, int32_t> respCb, int32_t transact_id )
+    {
+        HandleCliCmd( cmdKey, argList, respCb, transact_id );
+    };
+
+    m_CliClientMT.RegisterCLIServerCommands( "allowSourceSelect",
+                                             "allowSourceSelect yes|no", "command to send allow/disallow source selection by Caps",
+                                             GetTask(), cb , static_cast<int>( CLICmdKeys::ALLOW_SOURCE_SELECT ) );
+}
+
+void EddieProductController::HandleCliCmd( uint16_t cmdKey,
+                                           const std::list<std::string> & argList,
+                                           AsyncCallback<std::string, int32_t> respCb,
+                                           int32_t transact_id )
+{
+    std::string response( "Success" );
+
+    std::ostringstream ss;
+    ss << "Received " << cmdKey << std::endl;
+    switch( static_cast<CLICmdKeys>( cmdKey ) )
+    {
+    case CLICmdKeys::ALLOW_SOURCE_SELECT:
+    {
+        HandleAllowSourceSelectCliCmd( argList, response );
+    }
+    break;
+    default:
+        response = "Command not found";
+        break;
+    }
+    respCb( response, transact_id );
+}
+
+void EddieProductController::HandleAllowSourceSelectCliCmd( const std::list<std::string> & argList, std::string& response )
+{
+    if( argList.size() != 1 )
+    {
+        response = "command requires one argument\n" ;
+        response += "Usage: allowSourceSelect yes|no";
+        return;
+    }
+    std::string arg = argList.front();
+    if( arg == "yes" )
+    {
+        SendAllowSourceSelectNotification( true );
+    }
+    else if( arg == "no" )
+    {
+        SendAllowSourceSelectNotification( false );
+    }
+    else
+    {
+        response = "Unknown argument.\n";
+        response += "Usage: allowSourceSelect yes|no";
+    }
 }
 
 } // namespace ProductApp
