@@ -26,6 +26,7 @@ RIVIERALPMSERVICE_DIR = $(shell components get RivieraLpmService installed_locat
 CASTLEPRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 A4VVIDEOMANAGERSERVICE_DIR = $(shell components get A4VVideoManagerService installed_location)
+#A4VREMOTECOMMUNICATIONSERVICE_DIR = $(shell components get A4VRemoteCommunicationService installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools version-files
@@ -34,6 +35,7 @@ generated_sources: check_tools version-files
 	$(MAKE) -C $(CASTLEPRODUCTCONTROLLERCOMMON_DIR) $@
 	$(MAKE) -C $(RIVIERALPMUPDATER_DIR) $@
 	$(MAKE) -C $(A4VVIDEOMANAGERSERVICE_DIR) $@
+#	$(MAKE) -C $(A4VREMOTECOMMUNICATIONSERVICE_DIR) $@
 
 #.PHONY: astyle
 #astyle:
@@ -49,6 +51,7 @@ cmake_build: generated_sources | $(BUILDS_DIR)
 	ln -nsf $(CASTLEPRODUCTCONTROLLERCOMMON_DIR) builds/CastleProductControllerCommon
 	ln -nsf $(RIVIERALPMUPDATER_DIR) builds/RivieraLpmUpdater
 	ln -nsf $(A4VVIDEOMANAGERSERVICE_DIR) builds/A4VVideoManagerService
+#	ln -nsf $(A4VREMOTECOMMUNICATIONSERVICE_DIR) builds/A4VRemoteCommunicationService
 	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
 
