@@ -1,0 +1,149 @@
+#!/bin/bash
+## Create complete package for professor, that can be used to flash all partitions including Bose.
+#
+# To flash Eddie using generated package from Eddie root directory
+#   -   ./scripts/create-product-tarball
+# To see help
+#   - ./scripts/create-product-tarball --help
+
+this=${0##*/} # this script's name
+cfg=Release
+
+try_help () {
+    echo >&2 "Try '$this --help' for more information."
+    exit 1
+}
+
+error_exit () {
+    echo >&2 "$0 failed: $*. "
+    #rm -rf "$stage"
+    exit 1
+}
+
+opts=$(getopt --name "$this" --shell sh \
+    -o puh \
+    -l "production,
+        unstripped,
+        help" \
+    -- "$@") || try_help
+eval set -- "$opts"
+while :; do
+    arg="$1"; shift
+    case "$arg" in
+    (--help | -h)
+        cat <<EOF
+Usage: $this [options]
+
+Create Professor Package to cleanly erase and flash all partitions using fastboot.
+
+Options:
+EOF
+        exit 0
+        ;;
+
+    (--) break ;;
+    (*)  echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
+    esac
+done
+
+if (( $# != 0 )); then
+    echo >&2 "$this: unexpected argument '$1'"
+    tryhelp
+fi
+
+cfg=Release
+here=$(cd "$(dirname $0)" && echo "$PWD") || error_exit ${FUNCNAME[0]}
+wspace=$(cd "$here/.." && echo "$PWD") || error_exit ${FUNCNAME[0]}
+riviera_hsp=$(components get Riviera-HSP installed_location) || error_exit ${FUNCNAME[0]}
+product_ipk=$wspace/builds/$cfg/product.ipk
+utils_dir=$wspace/install/utils
+version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
+CP="cp -PR --preserve=mode,timestamps,links"
+bose_partition=bose
+bose_ext4=bose.ext4
+
+# -----------------------------------------------------------------------------
+# Stage area is start.
+
+stage=$wspace/builds/$cfg/eddie-package-stage
+stage_package_dir="$stage"/eddie
+
+rm -rf "$stage"
+echo "Stage directory $stage"
+mkdir -p "$stage_package_dir" || error_exit ${FUNCNAME[0]}
+# make / replace bose.ext4 using IPK
+extract_product_ipk () {
+    extract_path="$stage_package_dir"/"$bose_partition"
+    mkdir -p "$extract_path" || error_exit ${FUNCNAME[0]}
+    $CP "$product_ipk" "$extract_path"  || error_exit ${FUNCNAME[0]}
+    cd "$extract_path" || error_exit ${FUNCNAME[0]}
+    ar x $product_ipk || error_exit ${FUNCNAME[0]}
+    rm -f "$extract_path"/*.ipk || error_exit ${FUNCNAME[0]}
+    tar xzf "$extract_path"/data.tar.gz -C "$extract_path" || error_exit ${FUNCNAME[0]}
+    rm -f $extract_path/control.tar.gz $extract_path/data.tar.gz $extract_path/debian-binary || error_exit ${FUNCNAME[0]}
+    cd - || error_exit ${FUNCNAME[0]}
+}
+
+# $ext4_name (fullpath), $fs_extract_path, $partition_name, $newfiles
+create_eddie_ext4 () {
+    extract_path="$stage_package_dir"/"$bose_partition"
+    cd "$stage_package_dir" || error_exit ${FUNCNAME[0]}
+    if ! [ -f "$stage_package_dir"/$bose_ext4 ]; then
+        error_exit ${FUNCNAME[0]} " Not found \"$stage_package_dir/$bose_ext4\""
+    fi
+    echo " Generating Bose partition "
+    # extract HSP's bose partition
+        $utils_dir/lin/simg2img $bose_ext4 $bose_ext4.raw > /dev/null 2>&1
+    #find size in bytes of $ext4_full.raw to be used during rebuilding EXT4 =33554432
+    if ! [ -f  $bose_ext4.raw ]; then
+        error_exit ${FUNCNAME[0]} " Not able to create intermediate RAW file $bose_ext4.raw, using simg2img."
+    fi
+    fs_size=$(stat -c%s $bose_ext4.raw)
+    if ! fs_size=$(stat -c%s "$bose_ext4.raw"); then
+        error_exit ${FUNCNAME[0]} " Not able to find size of $bose_ext4 from $bose_ext4.raw."
+    fi
+    mv $bose_ext4 $bose_ext4.orig
+    #copy and extract product IPK to make new EXT4 fs
+    extract_product_ipk
+    $utils_dir/lin/make_ext4fs -s -l $fs_size -a $bose_partition $bose_ext4 $extract_path/ > /dev/null || error_exit ${FUNCNAME[0]}
+    if ! [ -f  $bose_ext4 ]; then
+        error_exit ${FUNCNAME[0]} " Updated EXT4 $bose_ext4 not found - make_ext4fs failed. Check if total size of package exceeds MAX EXT4 Size: $fs_size."
+    fi
+    # remove intermediate files
+    rm -rf "$extract_path"
+    rm -f $bose_ext4.raw
+    rm -f $bose_ext4.orig
+    cd $here
+}
+
+# copy HSP, utilities, version, lpm firmware
+echo " Adding Riviera-HSP to package "
+$CP "$riviera_hsp"/images/* "$stage_package_dir/" || error_exit " Adding Riviera-HSP to package "
+echo " Adding utilities to package "
+$CP "$utils_dir" "$stage_package_dir"/  || error_exit ${FUNCNAME[0]} " Adding utilities to package "
+echo " Adding version to package "
+$CP "$version_json" "$stage_package_dir"/  || error_exit ${FUNCNAME[0]} " Adding version to package "
+# crate bose.ext4
+echo " Adding bose.ext4 to package "
+create_eddie_ext4
+# Adding lpm*.bin from $lpm_bin_path
+#$CP "$lpm_bin_path"/lpm*.bin "$stage_package_dir/"  || error_exit " Adding LPM*.bin to package "
+
+# -----------------------------------------------------------------------------
+# Stage area is complete.  Make final package .tar
+output_dir=$wspace/builds/$cfg/package
+output_package=$output_dir/product.tar
+
+rm -rf "$output_dir"
+echo "Create $output_package"
+# Stage area is complete.  Make final package .tar
+mkdir -p "$output_dir" || error_exit " Creating output directory $output_dir"
+# create final package tar
+cd "$stage" || error_exit " cd $stage "
+tar -cf $output_package ./*  || error_exit " Creating tar "
+$CP "$utils_dir"/lin/product_flash $output_dir  || error_exit " Copying product_flash utility "
+$CP "$utils_dir"/win/product_flash.exe $output_dir  || error_exit " Copying product_flash.exe utility "
+$CP "$utils_dir"/mac/product_flash_mac $output_dir  || error_exit " Copying product_flash_mac utility "
+rm -rf "$stage"
+echo "$0 Complete. "
+exit 0

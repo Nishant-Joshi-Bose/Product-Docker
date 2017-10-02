@@ -37,16 +37,16 @@ generated_sources: check_tools version-files
 	$(MAKE) -C $(A4VVIDEOMANAGERSERVICE_DIR) $@
 #	$(MAKE) -C $(A4VREMOTECOMMUNICATIONSERVICE_DIR) $@
 
-#.PHONY: astyle
-#astyle:
-#ifndef DONT_RUN_ASTYLE
-#	run-astyle
-#endif
+.PHONY: astyle
+astyle:
+ifndef DONT_RUN_ASTYLE
+	run-astyle
+endif
 
 .PHONY: cmake_build
-cmake_build: generated_sources | $(BUILDS_DIR)
-	rm -fv $(BUILDS_DIR)/CMakeCache.txt
-# Symlink to placate cmake's add_subdirectory which doesn't like absolute paths.
+cmake_build: generated_sources | $(BUILDS_DIR) astyle
+	rm -rf $(BUILDS_DIR)/CMakeCache.txt $(BUILDS_DIR)/CMakeFiles
+# Symlinks to placate cmake's add_subdirectory which doesn't like absolute paths.
 	ln -nsf $(RIVIERALPMSERVICE_DIR) builds/RivieraLpmService
 	ln -nsf $(CASTLEPRODUCTCONTROLLERCOMMON_DIR) builds/CastleProductControllerCommon
 	ln -nsf $(RIVIERALPMUPDATER_DIR) builds/RivieraLpmUpdater
@@ -66,7 +66,7 @@ graph: product-ipk
 
 .PHONY: package
 package: product-ipk
-	./scripts/create-package
+	./scripts/create-product-tarball
 
 .PHONY: clean
 clean:
