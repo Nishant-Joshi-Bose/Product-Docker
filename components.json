@@ -70,9 +70,5 @@
   {
     "name": "A4VVideoManagerService",
     "selected_version": "dev@c313049e4de751c512e9cd198bab40e0c949a565"
-  },
-  {
-    "name": "A4VRemoteCommunicationService",
-    "selected_version": "dev@HEAD"
   }
 ]
