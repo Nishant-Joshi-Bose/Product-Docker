@@ -34,7 +34,6 @@
 #include "Services.h"
 #include "APProductIF.h"
 #include "APProductFactory.h"
-#include "AudioControls.pb.h"
 #include "BoseLinkServerMsgReboot.pb.h"
 #include "BoseLinkServerMsgIds.pb.h"
 #include "IPCServerListener.h"
@@ -152,7 +151,7 @@ void ProductSoftwareServices::Run( )
                                                        std::placeholders::_1 ),
                                             m_mainTask );
 
-    m_serverListener->Serve( IPCDirectory::Get( )->DefaultAddress( A4V_SERVER ), callback );
+    m_serverListener->Serve( IPCDirectory::Get( )->DefaultAddress( IPCDirectory::A4V_SERVER ), callback );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

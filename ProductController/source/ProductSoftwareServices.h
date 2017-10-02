@@ -44,7 +44,6 @@
 #include "IPCDirectoryIF.h"
 #include "IPCMessageRouterIF.h"
 #include "IPCDirectoryIF.h"
-#include "AudioControls.pb.h"
 #include "BoseLinkServerMsgReboot.pb.h"
 #include "BoseLinkServerMsgIds.pb.h"
 #include "NetworkPortDefines.h"

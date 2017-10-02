@@ -30,7 +30,6 @@
 #include "SystemUtils.h"
 #include "DPrint.h"
 #include "Services.h"
-#include "AudioControls.pb.h"
 #include "BoseLinkServerMsgReboot.pb.h"
 #include "BoseLinkServerMsgIds.pb.h"
 #include "IPCDirectory.h"

@@ -1,0 +1,67 @@
+
+////////////////////////////////////////////////////////////////////////
+/// This file was automatically generated.
+///
+/// Copyright 2017 Bose Corporation
+////////////////////////////////////////////////////////////////////////
+
+import "ProtoToMarkup/MarkupOptions.proto";
+
+//package SoundTouchInterface;
+
+enum PresetID
+{
+     UNDEFINED_PRESET = 0;
+     P1 = 1;
+     P2 = 2;
+     P3 = 3;
+     P4 = 4;
+     P5 = 5;
+     P6 = 6;
+     
+}
+
+message ContentItem
+{
+    option (ignore_unexpected_markup) = true;
+    
+message Preset
+{
+    option (ignore_unexpected_markup) = true;
+    required PresetID id = 1 [(enum_by_number)= true] ;
+                
+}
+
+message ItemName
+{
+    option (ignore_unexpected_markup) = true;
+    optional string text = 1;
+   
+}
+
+message ContainerArt
+{
+    option (ignore_unexpected_markup) = true;
+    optional string text = 1;
+   
+}
+optional uint32 unusedField = 1;
+   optional string source = 2 [ default = "INVALID_SOURCE" ] ;
+   optional string type = 3;
+   optional string location = 4;
+   optional string sourceAccount = 5;
+   optional Preset preset = 6;
+   optional ItemName itemName = 7;
+   optional uint32 offset = 8;
+   optional bool isNavigate = 9;
+   optional bool isPresetable = 10 [ default = true ] ;
+   optional ContainerArt containerArt = 11;
+   
+}
+
+message ContentItems
+{
+    option (ignore_unexpected_markup) = true;
+    repeated ContentItem ContentItem = 1;
+                
+}

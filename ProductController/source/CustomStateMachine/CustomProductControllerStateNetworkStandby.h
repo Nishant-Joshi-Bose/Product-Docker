@@ -54,7 +54,7 @@ namespace ProductApp
           CustomProductControllerStateNetworkStandby( ProductControllerHsm&       hsm,
                                                       CHsmState*                  pSuperState,
                                                       ProfessorProductController& productController,
-                                                      STATE                       stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY,
+                                                      Hsm::STATE                       stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY,
                                                       const std::string&          name    = "CustomProductControllerStateNetworkStandby" );
 
           virtual ~CustomProductControllerStateNetworkStandby( )

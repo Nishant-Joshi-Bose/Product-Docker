@@ -65,11 +65,10 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductHardwareInterface;
-class ProductDeviceSettings;
 class ProductUserInterface;
 class ProductCommandLine;
 class ProductSystemInterface;
-class ProductAudioServices;
+class ProductAudioService;
 class ProductSoftwareServices;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -189,8 +188,7 @@ class ProfessorProductController : public ProductController
       ///
       //////////////////////////////////////////////////////////////////////////////////////////////
       ProductHardwareInterface*  m_ProductHardwareInterface = nullptr;
-      ProductAudioServices*      m_ProductAudioServices     = nullptr;
-      ProductDeviceSettings*     m_ProductDeviceSettings    = nullptr;
+      ProductAudioService*       m_ProductAudioService      = nullptr;
       ProductSoftwareServices*   m_ProductSoftwareServices  = nullptr;
       ProductFrontDoorNetwork*   m_ProductFrontDoorNetwork  = nullptr;
       ProductCommandLine*        m_ProductCommandLine       = nullptr;

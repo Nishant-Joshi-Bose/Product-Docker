@@ -64,7 +64,7 @@ CustomProductControllerStateUpdatingSoftware::CustomProductControllerStateUpdati
                                             ( ProductControllerHsm&       hsm,
                                               CHsmState*                  pSuperState,
                                               ProfessorProductController& productController,
-                                              STATE                       stateId,
+                                              Hsm::STATE                       stateId,
                                               const std::string&          name )
 
     : ProductControllerState( hsm, pSuperState, productController, stateId, name )

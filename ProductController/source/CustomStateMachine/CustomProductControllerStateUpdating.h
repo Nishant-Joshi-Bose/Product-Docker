@@ -54,7 +54,7 @@ namespace ProductApp
           CustomProductControllerStateUpdatingSoftware( ProductControllerHsm&       hsm,
                                                         CHsmState*                  pSuperState,
                                                         ProfessorProductController& productController,
-                                                        STATE                       stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING,
+                                                        Hsm::STATE                       stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING,
                                                         const std::string&          name    = "CustomProductControllerStateSoftwareUpdating" );
 
           virtual ~CustomProductControllerStateUpdatingSoftware( )

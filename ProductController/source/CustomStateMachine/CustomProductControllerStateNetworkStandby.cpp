@@ -64,7 +64,7 @@ CustomProductControllerStateNetworkStandby::CustomProductControllerStateNetworkS
                                           ( ProductControllerHsm&       hsm,
                                             CHsmState*                  pSuperState,
                                             ProfessorProductController& productController,
-                                            STATE                       stateId,
+                                            Hsm::STATE                       stateId,
                                             const std::string&          name )
 
     : ProductControllerStateNetworkStandby( hsm, pSuperState, productController, stateId, name )
