@@ -216,7 +216,7 @@ sed -i "s/%FROMVERSION%/From: $v/" "$opt_dir/html/update.html" || exit
 
 "$avs_dir/stage" "$opt_dir" || exit
 "$swup_dir/stage" "$opt_dir" || exit
-"$audiopath_dir/stage" "$opt_dir" || exit
+"$audiopath_dir/stage" "$opt_dir" --with-vfe || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------

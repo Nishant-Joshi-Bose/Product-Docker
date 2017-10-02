@@ -1,0 +1,101 @@
+@startuml
+
+class iHsm {
+	ChangeState()
+}
+
+class CHsm {
+	m_pTask : NotifyTargetTaskIF*
+}
+
+class ProductControllerHsm {
+	HandleEvent()
+}
+
+class EddieProductControllerHsm {
+	IsProductNeedsSetup()
+}
+note bottom: Custom and optional. \nClass for helper functions in Hsm.
+
+class ProductController {
+	inline NotifTargetTaskIF* GetTask() const
+	inline std::string const& GetProductName() const
+}
+
+class EddieProductController {
+	Initialize()
+	HandleLPMReady()
+	HandleCAPSReady()
+}
+
+class CHsmState {
+	HandleStateEnter()
+	HandleStateStart()
+	HandleStateExit()
+}
+
+class CustomProductControllerState {
+	CustomExecuteAction()
+}
+note left: Custom and Mandatory. \nThis class is needed at compile time.
+
+class ProductControllerState {
+	ExecuteAction()
+}
+note right: More states can be inherited from this class in future.
+
+class ProductControllerSubstate {
+	CustomExecuteAction()
+}
+note bottom: Optional
+
+class ProductControllerStateBooting {
+	ExecuteAction()
+}
+
+class ProductControllerStateSetup {
+	ExecuteAction()
+}
+
+class ProductControllerStateNetworkStandby {
+	ExecuteAction()
+}
+
+class EddieProductControllerStateBooting {
+}
+note bottom: Custom
+
+class EddieProductControllerStateSetup {
+}
+note bottom: Custom
+
+class EddieProductControllerStateNetworkStandby {
+}
+note bottom: Custom
+
+iHsm <|-- CHsm
+CHsm <|-- ProductControllerHsm
+ProductControllerHsm <|-- EddieProductControllerHsm
+
+ProductController <|-- EddieProductController
+ProductControllerHsm o-- ProductController
+EddieProductControllerHsm o-- EddieProductController
+EddieProductController *-- EddieProductControllerHsm
+EddieProductController *-- EddieProductControllerStateBooting
+EddieProductController *-- EddieProductControllerStateSetup
+EddieProductController *-- EddieProductControllerStateNetworkStandby
+
+CHsmState <|-- CustomProductControllerState 
+CustomProductControllerState <|-- ProductControllerState
+ProductControllerState <|-- ProductControllerStateBooting
+ProductControllerState <|-- ProductControllerStateSetup
+ProductControllerState <|-- ProductControllerStateNetworkStandby
+ProductControllerState <|-- ProductControllerSubstate
+
+ProductControllerStateBooting <|-- EddieProductControllerStateBooting
+ProductControllerStateSetup <|-- EddieProductControllerStateSetup
+ProductControllerStateNetworkStandby <|-- EddieProductControllerStateNetworkStandby
+
+ProductControllerHsm ..> CustomProductControllerState
+
+@enduml

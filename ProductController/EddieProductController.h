@@ -18,6 +18,7 @@
 #include "EddieProductControllerStateNetworkStandby.h"
 #include "DeviceManager.h"
 #include "ConfigurationStatus.pb.h"
+#include "SoundTouchInterface/AllowSourceSelect.pb.h"
 #include "Language.pb.h"
 #include "DeviceManager.pb.h"
 #include "SoundTouchInterface/CapsInitializationStatus.pb.h"
@@ -45,8 +46,12 @@ private:
     void InitializeLpmClient();
     void RegisterLpmEvents();
     void RegisterKeyHandler();
-
     void RegisterEndPoints();
+    void HandleCliCmd( uint16_t cmdKey,
+                       const std::list<std::string> & argList,
+                       AsyncCallback<std::string, int32_t> rspAndRspCmplt,
+                       int32_t transact_id );
+    void RegisterCliClientCmds() override;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  ReadSystemLanguageFromPersistence
@@ -63,6 +68,7 @@ private:
 ////////////////////////////////////////////////////////////////////////////////
     void PersistSystemLanguageCode();
     void PersistSystemConfigurationStatus();
+    void HandleAllowSourceSelectCliCmd( const std::list<std::string> & argList, std::string& response );
 
 public:
     // Handle Key Information received from LPM
@@ -70,6 +76,12 @@ public:
 
     static void KeyInformationCallBack( const int result, void *context );
 
+///////////////////////////////////////////////////////////////////////////////
+/// @name  SendAllowSourceSelectNotification
+/// @brief function to send Send allowSourceSelectUpdate Notification Msg to the subscriber.
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void SendAllowSourceSelectNotification( bool isSourceSelectAllowed );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  IsAllModuleReady
@@ -164,6 +176,7 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
     void HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationStatus &status );
     void CapsInitializationStatusCallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
+    void HandleAllowSourceSelectRequest( const Callback<SoundTouchInterface::AllowSourceSelect> &resp );
 
 private:
 
