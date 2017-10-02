@@ -375,7 +375,7 @@ void EddieProductController::SendDeActivateAccessPointCmd()
     BOSE_INFO( s_logger, __func__ );
 }
 
-void EddieProductController :: HandleGetDeviceInfoRequest( const Callback<::DeviceManager::Protobuf::DeviceInfo>& resp )
+void EddieProductController::HandleGetDeviceInfoRequest( const Callback<::DeviceManager::Protobuf::DeviceInfo>& resp )
 {
     ::DeviceManager::Protobuf::DeviceInfo devInfo;
 
@@ -386,7 +386,7 @@ void EddieProductController :: HandleGetDeviceInfoRequest( const Callback<::Devi
     resp.Send( devInfo );
 }
 
-void EddieProductController :: HandleGetDeviceStateRequest( const Callback<::DeviceManager::Protobuf::DeviceState>& resp )
+void EddieProductController::HandleGetDeviceStateRequest( const Callback<::DeviceManager::Protobuf::DeviceState>& resp )
 {
     ::DeviceManager::Protobuf::DeviceState currentState;
     currentState.set_state( m_EddieProductControllerHsm.GetCurrentState()->GetName() );
@@ -394,7 +394,7 @@ void EddieProductController :: HandleGetDeviceStateRequest( const Callback<::Dev
     resp.Send( currentState );
 }
 
-void EddieProductController :: KeyInformationCallBack( const int result, void *context )
+void EddieProductController::KeyInformationCallBack( const int result, void *context )
 {
     s_logger.LogInfo( "Keys have been translated to intend = %d", result );
 }
