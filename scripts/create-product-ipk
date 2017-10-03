@@ -147,6 +147,7 @@ stfs=$soundtouch_sdk/fs
 cp "$stfs"/opt/Bose/BoseApp "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/Bluetooth "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BTSource "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BTLESetup "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/CLIServer "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/PlatformReset "$opt_dir/bin" || exit
