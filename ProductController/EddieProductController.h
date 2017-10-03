@@ -20,6 +20,7 @@
 #include "SoundTouchInterface/AllowSourceSelect.pb.h"
 #include "Language.pb.h"
 #include "DeviceManager.pb.h"
+#include "NetManager.pb.h"
 #include "SoundTouchInterface/CapsInitializationStatus.pb.h"
 #include "ProductCliClient.h"
 #include "LpmClientIF.h"
@@ -68,6 +69,7 @@ private:
     void PersistSystemLanguageCode();
     void PersistSystemConfigurationStatus();
     void HandleAllowSourceSelectCliCmd( const std::list<std::string> & argList, std::string& response );
+    void HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus );
 
 public:
     // Handle Key Information received from LPM
@@ -103,6 +105,13 @@ public:
 /// @return void
 ////////////////////////////////////////////////////////////////////////////////
     void HandleCAPSReady( bool capsReady );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  HandleNetworkModuleReady
+/// @brief Function to call when NetworkService is ready to send/receive request.
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void HandleNetworkModuleReady( bool networkModuleReady );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  IsLanguageSet
@@ -199,11 +208,13 @@ private:
     ProtoPersistenceIF::ProtoPersistencePtr     m_LanguagePersistence = nullptr;
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
     ProductPb::Language                         m_systemLanguage;
+    NetManager::Protobuf::NetworkStatus         m_cachedStatus;
 
     ProductCliClient                            m_productCliClient;
 
     bool                                        m_isCapsReady = false;
     bool                                        m_isLPMReady  = true;
+    bool                                        m_isNetworkModuleReady  = false;
 };
 }
 // namespace

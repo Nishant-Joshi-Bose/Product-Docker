@@ -42,6 +42,7 @@ TARGET_LINK_LIBRARIES(Eddie
   pthread
   rt
   KeyHandler
+  NetworkServiceClient
 )
 
 INSTALL(TARGETS Eddie DESTINATION ${OUTPUT_BIN_DIR})
