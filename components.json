@@ -45,15 +45,15 @@
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@10f75ff8c68dcef6de7e5f51829eb74747ae2685"
+    "selected_version": "master@a970bf041144c3d0a2b945fbbf6379ae7a608392"
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@906"
+    "selected_version": "trunk@911"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-08-24_1302"
+    "selected_version": "Continuous/Castle-Fork/2017-09-06_2055"
   },
   {
     "name": "RivieraLpmUpdater",

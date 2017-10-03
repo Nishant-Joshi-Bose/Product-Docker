@@ -1,0 +1,21 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @file ConfigurationStatus.proto
+///
+/// @brief Product ConfigurationStatus to persist in nv.
+///
+/// Copyright 2017 Bose Corporation
+////////////////////////////////////////////////////////////////////////////////
+
+package ProductPb;
+
+message ConfigurationStatus
+{
+    message Status
+    {
+        optional bool network  = 1 [default = false];
+        optional bool language = 2 [default = false];
+        optional bool account  = 3 [default = false];
+    }
+
+    optional Status status = 1;
+}

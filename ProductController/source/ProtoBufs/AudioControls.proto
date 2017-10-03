@@ -1,0 +1,101 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @file ProductAudioControls.proto
+///
+/// @brief Audio Controls that a product might change, such as Treble and Bass
+///
+/// @author Michael Balma
+/// @date   February 2016
+///
+/// Copyright 2016 Bose Corporation
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+///
+/// This is the generic tone control for treble, bass, and other controls.
+///
+////////////////////////////////////////////////////////////////////////////////
+message GenericAudioControl
+{
+    optional sint32  value      = 1 [default = 0];
+    optional sint32  minValue   = 2 [default = 0];
+    optional sint32  maxValue   = 3 [default = 0];
+    optional sint32  step       = 4 [default = 1];
+}
+
+////////////////////////////////////////////////////////////////////////////////
+///
+/// This is the generic speaker available, send the active to turn speaker on/off
+///
+////////////////////////////////////////////////////////////////////////////////
+message SpeakerAttributeAndSetting
+{
+    optional bool   available         = 1;
+    optional bool   active            = 2;
+    optional bool   wireless          = 3;
+/// controllable defaults to true, indicating the expected behavior taken by the API client if the field is absent
+    optional bool   controllable      = 4 [default = true];
+}
+
+////////////////////////////////////////////////////////////////////////////////
+///
+/// This is to handle the Dynamic Range Options that may be set by stockholm.
+/// These exist in the Triode Capabilities and are expected to eventually be
+/// used in A4V Systems
+///
+////////////////////////////////////////////////////////////////////////////////
+enum IPC_AUDIO_MODE
+{
+    AUDIO_MODE_UNSPECIFIED = 0;
+    AUDIO_MODE_DIRECT      = 1;
+    AUDIO_MODE_NORMAL      = 2;
+    AUDIO_MODE_DIALOG      = 3;
+    AUDIO_MODE_NIGHT       = 4;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+///
+/// This is the main message that carries all the tone settings
+///
+////////////////////////////////////////////////////////////////////////////////
+message audioproducttonecontrols
+{
+    optional GenericAudioControl   bass                = 1;
+    optional GenericAudioControl   treble              = 2;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+///
+/// This is the main message that carries all the speaker settings
+///
+////////////////////////////////////////////////////////////////////////////////
+message audioproductlevelcontrols
+{
+    optional GenericAudioControl   frontCenterSpeakerLevel       = 1;
+    optional GenericAudioControl   rearSurroundSpeakersLevel     = 2;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+///
+/// This is the main message that carries all the DSP settings
+///
+////////////////////////////////////////////////////////////////////////////////
+message audiodspcontrols
+{
+    optional IPC_AUDIO_MODE        audiomode           = 1 [default = AUDIO_MODE_UNSPECIFIED];
+    optional int32                 videosyncaudiodelay = 2 [default = 0];
+    optional string                supportedaudiomodes = 3;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+///
+/// This is the main message that carries SpeakerAttributeAndSetting for all speakers
+/// This message obsoleted audiospeakeravailability, see PAELLA-6859
+///
+////////////////////////////////////////////////////////////////////////////////
+message audiospeakerattributeandsetting
+{
+    optional SpeakerAttributeAndSetting rear = 1;
+    optional SpeakerAttributeAndSetting subwoofer01 = 2;
+    optional SpeakerAttributeAndSetting subwoofer02 = 3;
+}
