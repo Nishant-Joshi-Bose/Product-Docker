@@ -165,7 +165,6 @@ cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
 cp -a "$boselibs_dir/lib" "$opt_dir" || exit
 cp -a "$protobuf_dir/lib" "$opt_dir" || exit
-cp "$shepherd_dir/shepherdd" "$opt_dir/bin" || exit
 cp -t "$opt_dir/etc" "$eddielpm_package_dir"/*.bos "$eddielpm_package_dir/lpm_blob_configuration.xml" || exit
 cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
 
@@ -216,6 +215,7 @@ sed -i "s/%FROMVERSION%/From: $v/" "$opt_dir/html/update.html" || exit
 "$swup_dir/stage" "$opt_dir" || exit
 "$audiopath_dir/stage" "$opt_dir" --with-vfe || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
+"$shepherd_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 
