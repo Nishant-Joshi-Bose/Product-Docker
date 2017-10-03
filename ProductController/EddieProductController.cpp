@@ -8,7 +8,6 @@
 #include "EddieProductController.h"
 #include "ProductControllerStates.h"
 #include "CustomProductControllerState.h"
-#include "FrontDoorClient.h"
 #include "APTaskFactory.h"
 #include "AsyncCallback.h"
 #include "ProtoToMarkup.h"
@@ -18,7 +17,6 @@
 
 static DPrint s_logger( "EddieProductController" );
 
-using namespace FrontDoor;
 namespace ProductApp
 {
 const std::string g_ProductPersistenceDir = "product-persistence/";
@@ -48,9 +46,6 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     ReadSystemLanguageFromPersistence();
     m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
     ReadConfigurationStatusFromPersistence();
-
-    /// Create an instance of the front door client, providing it with a unique name.
-    m_FrontDoorClientIF = FrontDoorClient::Create( ProductName );
 }
 
 EddieProductController::~EddieProductController()
