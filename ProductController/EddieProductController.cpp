@@ -47,6 +47,8 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     ReadSystemLanguageFromPersistence();
     m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
     ReadConfigurationStatusFromPersistence();
+
+    m_lightbarController = std::unique_ptr<LightBarController>( new LightBarController( *this , m_FrontDoorClientIF, m_LpmClient ) );
 }
 
 EddieProductController::~EddieProductController()
@@ -59,6 +61,8 @@ void EddieProductController::Initialize()
     RegisterCliClientCmds();
     RegisterEndPoints();
     SendInitialRequests();
+    //Register lpm events that lightbar will handle
+    m_lightbarController->Initialize();
 }
 
 void EddieProductController::InitializeLpmClient()

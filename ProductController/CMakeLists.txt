@@ -7,6 +7,7 @@ INCLUDE_DIRECTORIES(
   ${CUSTOM_HSM_DIR}
   ${KEYHANDLER_DIR}/include
   DeviceManager
+  LightBarController
   .
 )
 
@@ -21,12 +22,14 @@ ADD_EXECUTABLE(Eddie
   ${CUSTOM_HSM_DIR}/EddieProductControllerStateSetup.cpp
   ${CUSTOM_HSM_DIR}/EddieProductControllerStateNetworkStandby.cpp
   DeviceManager.cpp
+  LightBarController/LightBarController.cpp
   ProductCliClient.cpp
   EddieProductController.cpp
   Main.cpp
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
   ${PROTO_CC_DEST}/Language.pb.cc
   ${PROTO_CC_DEST}/DeviceManager.pb.cc
+  ${PROTO_CC_DEST}/LightBarController.pb.cc
 )
 
 TARGET_LINK_LIBRARIES(Eddie

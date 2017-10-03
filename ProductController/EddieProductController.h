@@ -16,6 +16,7 @@
 #include "EddieProductControllerStateSetup.h"
 #include "EddieProductControllerStateNetworkStandby.h"
 #include "DeviceManager.h"
+#include "LightBarController.h"
 #include "ConfigurationStatus.pb.h"
 #include "SoundTouchInterface/AllowSourceSelect.pb.h"
 #include "Language.pb.h"
@@ -212,6 +213,8 @@ private:
 
     ProductCliClient                            m_productCliClient;
 
+    //LightBarController* m_lightbarController;
+    std::unique_ptr<LightBarController>         m_lightbarController;
     bool                                        m_isCapsReady = false;
     bool                                        m_isLPMReady  = true;
     bool                                        m_isNetworkModuleReady  = false;
