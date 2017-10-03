@@ -61,11 +61,11 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateNetworkStandby::CustomProductControllerStateNetworkStandby
-( ProductControllerHsm&       hsm,
-  CHsmState*                  pSuperState,
-  ProfessorProductController& productController,
-  STATE                       stateId,
-  const std::string&          name )
+                                          ( ProductControllerHsm&       hsm,
+                                            CHsmState*                  pSuperState,
+                                            ProfessorProductController& productController,
+                                            STATE                       stateId,
+                                            const std::string&          name )
 
     : ProductControllerStateNetworkStandby( hsm, pSuperState, productController, stateId, name )
 {
@@ -77,7 +77,7 @@ CustomProductControllerStateNetworkStandby::CustomProductControllerStateNetworkS
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateNetworkStandby::HandleStateEnter()
 {
-    BOSE_DEBUG( s_logger, "The Product Network Standby State is being entered." );
+     BOSE_DEBUG( s_logger, "The Product Network Standby State is being entered." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ void CustomProductControllerStateNetworkStandby::HandleStateEnter()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateNetworkStandby::HandleStateStart()
 {
-    BOSE_DEBUG( s_logger, "The Product Network Standby State is being started." );
+     BOSE_DEBUG( s_logger, "The Product Network Standby State is being started." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,7 +93,7 @@ void CustomProductControllerStateNetworkStandby::HandleStateStart()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateNetworkStandby::HandleStateExit()
 {
-    BOSE_DEBUG( s_logger, "The Product Network Standby State is being exited." );
+     BOSE_DEBUG( s_logger, "The Product Network Standby State is being exited." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,35 +103,35 @@ void CustomProductControllerStateNetworkStandby::HandleStateExit()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateNetworkStandby::HandleLpmState( bool active )
 {
-    BOSE_DEBUG( s_logger, "The Product Network Standby State is handling an LPM state change." );
+     BOSE_DEBUG( s_logger, "The Product Network Standby State is handling an LPM state change." );
 
-    if( active )
-    {
-        if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
-        {
-            if( static_cast< ProfessorProductController& >( GetProductController( ) ).GetNetworkStatus( ) )
-            {
-                BOSE_DEBUG( s_logger, "The Product Network Standby State is changing to the Idle state." );
-                ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
-            }
-            else
-            {
-                BOSE_DEBUG( s_logger, "The Product Network Standby State is to remain in this state." );
-            }
-        }
-        else
-        {
-            BOSE_DEBUG( s_logger, "The Product Network Standby State is changing to a booting state." );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
-        }
-    }
-    else
-    {
-        BOSE_DEBUG( s_logger, "The Product Network Standby State is changing to a booting state." );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
-    }
+     if( active )
+     {
+         if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
+         {
+             if( static_cast< ProfessorProductController& >( GetProductController( ) ).GetNetworkStatus( ) )
+             {
+                 BOSE_DEBUG( s_logger, "The Product Network Standby State is changing to the Idle state." );
+                 ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
+             }
+             else
+             {
+                 BOSE_DEBUG( s_logger, "The Product Network Standby State is to remain in this state." );
+             }
+         }
+         else
+         {
+             BOSE_DEBUG( s_logger, "The Product Network Standby State is changing to a booting state." );
+             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
+         }
+     }
+     else
+     {
+         BOSE_DEBUG( s_logger, "The Product Network Standby State is changing to a booting state." );
+         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
+     }
 
-    return true;
+     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,35 +141,35 @@ bool CustomProductControllerStateNetworkStandby::HandleLpmState( bool active )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateNetworkStandby::HandleCapsState( bool active )
 {
-    BOSE_DEBUG( s_logger, "The Product Network Standby State is handling a CAPS state change." );
+     BOSE_DEBUG( s_logger, "The Product Network Standby State is handling a CAPS state change." );
 
-    if( active )
-    {
-        if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
-        {
-            if( static_cast< ProfessorProductController& >( GetProductController( ) ).GetNetworkStatus( ) )
-            {
-                BOSE_DEBUG( s_logger, "The Product Network Standby State is changing to the Idle state." );
-                ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
-            }
-            else
-            {
-                BOSE_DEBUG( s_logger, "The Product Network Standby State is to remain in this state." );
-            }
-        }
-        else
-        {
-            BOSE_DEBUG( s_logger, "The Product Network Standby State is changing to a booting state." );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
-        }
-    }
-    else
-    {
-        BOSE_DEBUG( s_logger, "The Product Network Standby State is changing to a booting state." );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
-    }
+     if( active )
+     {
+         if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
+         {
+             if( static_cast< ProfessorProductController& >( GetProductController( ) ).GetNetworkStatus( ) )
+             {
+                 BOSE_DEBUG( s_logger, "The Product Network Standby State is changing to the Idle state." );
+                 ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
+             }
+             else
+             {
+                 BOSE_DEBUG( s_logger, "The Product Network Standby State is to remain in this state." );
+             }
+         }
+         else
+         {
+             BOSE_DEBUG( s_logger, "The Product Network Standby State is changing to a booting state." );
+             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
+         }
+     }
+     else
+     {
+         BOSE_DEBUG( s_logger, "The Product Network Standby State is changing to a booting state." );
+         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
+     }
 
-    return true;
+     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -179,35 +179,35 @@ bool CustomProductControllerStateNetworkStandby::HandleCapsState( bool active )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateNetworkStandby::HandleNetworkState( bool active )
 {
-    BOSE_DEBUG( s_logger, "The Product Network Standby State is handling a network state change." );
+     BOSE_DEBUG( s_logger, "The Product Network Standby State is handling a network state change." );
 
-    if( active )
-    {
-        if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
-        {
-            BOSE_DEBUG( s_logger, "The Product Network Standby State is reamining in the Idle state." );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
-        }
-        else
-        {
-            BOSE_DEBUG( s_logger, "The Product Network Standby State is changing to a booting state." );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
-        }
-    }
-    else
-    {
-        if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
-        {
-            BOSE_DEBUG( s_logger, "The Product Network Standby State is reamining in this state." );
-        }
-        else
-        {
-            BOSE_DEBUG( s_logger, "The Product Network Standby State is changing to a booting state." );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
-        }
-    }
+     if( active )
+     {
+         if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
+         {
+             BOSE_DEBUG( s_logger, "The Product Network Standby State is reamining in the Idle state." );
+             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
+         }
+         else
+         {
+             BOSE_DEBUG( s_logger, "The Product Network Standby State is changing to a booting state." );
+             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
+         }
+     }
+     else
+     {
+         if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
+         {
+             BOSE_DEBUG( s_logger, "The Product Network Standby State is reamining in this state." );
+         }
+         else
+         {
+             BOSE_DEBUG( s_logger, "The Product Network Standby State is changing to a booting state." );
+             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
+         }
+     }
 
-    return true;
+     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

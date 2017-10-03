@@ -48,48 +48,48 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
-///
-/// Forward Class Declarations
-///
-class ProductControllerHsm;
-
-class CustomProductControllerState : public CHsmState
-{
-public:
-
-    CustomProductControllerState( ProductControllerHsm& productStateMachine,
-                                  CHsmState*            pSuperState,
-                                  STATE                 stateId = 0,
-                                  const std::string&    name    = "Top" );
-
-    virtual ~CustomProductControllerState()
-    {
-    }
-
-    void HandleStateEnter( ) override
-    {
-
-    }
-
-    void HandleStateStart( ) override
-    {
-
-    }
-
-    void HandleStateExit( ) override
-    {
-
-    }
-
     ///
-    /// Methods are to be added at this point to implement product specific actions. These methods
-    /// should be overridden in the product specific state derived class that actually executes
-    /// product specific action.
+    /// Forward Class Declarations
     ///
-    virtual bool HandleLpmState( bool active );
-    virtual bool HandleCapsState( bool active );
-    virtual bool HandleNetworkState( bool active );
-};
+    class ProductControllerHsm;
+
+    class CustomProductControllerState : public CHsmState
+    {
+      public:
+
+          CustomProductControllerState( ProductControllerHsm& productStateMachine,
+                                        CHsmState*            pSuperState,
+                                        STATE                 stateId = 0,
+                                        const std::string&    name    = "Top" );
+
+	  virtual ~CustomProductControllerState()
+    	  {
+          }
+
+          void HandleStateEnter( ) override
+          {
+
+          }
+
+          void HandleStateStart( ) override
+          {
+
+          }
+
+          void HandleStateExit( ) override
+          {
+
+          }
+
+          ///
+          /// Methods are to be added at this point to implement product specific actions. These methods
+          /// should be overridden in the product specific state derived class that actually executes
+          /// product specific action.
+          ///
+          virtual bool HandleLpmState     ( bool active );
+          virtual bool HandleCapsState    ( bool active );
+          virtual bool HandleNetworkState ( bool active );
+    };
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -41,35 +41,35 @@
 
 namespace ProductApp
 {
-///
-/// Forward Class Declarations
-///
-class ProductControllerHsm;
-class ProfessorProductController;
+    ///
+    /// Forward Class Declarations
+    ///
+    class ProductControllerHsm;
+    class ProfessorProductController;
 
-class CustomProductControllerStateIdle : public ProductControllerStateIdle
-{
-public:
-
-    CustomProductControllerStateIdle( ProductControllerHsm&       hsm,
-                                      CHsmState*                  pSuperState,
-                                      ProfessorProductController& productController,
-                                      STATE                       stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE,
-                                      const std::string&          name    = "CustomProductControllerStateIdle" );
-
-    virtual ~CustomProductControllerStateIdle()
+    class CustomProductControllerStateIdle : public ProductControllerStateIdle
     {
+      public:
 
-    }
+          CustomProductControllerStateIdle( ProductControllerHsm&       hsm,
+                                            CHsmState*                  pSuperState,
+                                            ProfessorProductController& productController,
+                                            STATE                       stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE,
+                                            const std::string&          name    = "CustomProductControllerStateIdle" );
 
-    void HandleStateEnter( ) override;
-    void HandleStateStart( ) override;
-    void HandleStateExit( ) override;
+         virtual ~CustomProductControllerStateIdle()
+         {
 
-    bool HandleLpmState( bool active )  override;
-    bool HandleCapsState( bool active )  override;
-    bool HandleNetworkState( bool active )  override;
-};
+         }
+
+         void HandleStateEnter( ) override;
+         void HandleStateStart( ) override;
+         void HandleStateExit ( ) override;
+
+         bool HandleLpmState     ( bool active )  override;
+         bool HandleCapsState    ( bool active )  override;
+         bool HandleNetworkState ( bool active )  override;
+    };
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
