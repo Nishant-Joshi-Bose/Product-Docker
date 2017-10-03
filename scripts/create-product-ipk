@@ -158,7 +158,7 @@ cp "$stfs"/opt/Bose/etc/HandCraftedWebServer-SoundTouch.xml "$opt_dir/etc" || ex
 cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/WebServer-SoundTouch.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
-cp "$stfs"/opt/Bose/etc/services.json "$opt_dir/etc" || exit
+cp "$boselibs_dir"/services.json "$opt_dir/etc" || exit
 cp -a "$stfs"/opt/Bose/Xml "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/html "$opt_dir" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
