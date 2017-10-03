@@ -194,11 +194,8 @@ void ProductUserInterface::RegisterForKeyEvents( void )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductUserInterface:: KeyInformationCallBack( const int result, void *context )
 {
-    BOSE_INFO( s_logger, "%s %s %d\n", __FILE__, __func__, __LINE__ );
-    s_logger.LogInfo( "Keys have been translated to intend = %d", result );
+    BOSE_INFO( s_logger, "Keys have been translated to intend = %d", result );
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -263,7 +260,7 @@ void ProductUserInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInformation
 
         break;
     default:
-        keyStateString = "UNKNOWN " + std::to_string( keyEvent.keyorigin( ) );
+        keyStateString = "UNKNOWN " + std::to_string( keyEvent.keystate( ) );
 
         keyData->set_state( UNKNOWN_KEY_STATE );
         keyData->set_value( keyEvent.keyid( ) );
@@ -280,6 +277,33 @@ void ProductUserInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInformation
     BOSE_INFO( s_logger, "  Key State  : %s ", keyStateString.c_str( ) );
     BOSE_INFO( s_logger, "  Key ID     : %s ", keyIdString.c_str( ) );
     BOSE_INFO( s_logger, " " );
+
+    // Message is incomplete, dump it
+    if( !keyEvent.has_keyorigin() || !keyEvent.has_keystate() || !keyEvent.has_keyid() )
+    {
+        BOSE_INFO( s_logger, "Can't process keys with missing information: keyorigin:%d, keystate:%d, keyid:%d",
+                   keyEvent.keyorigin(), keyEvent.keystate(), keyEvent.keyid() );
+        return;
+    }
+
+    KeyHandlerUtil::KeyRepeatManager *ptrRepeatMgr = m_KeyHandler.RepeatMgr( keyEvent.keyorigin() );
+
+    if( !ptrRepeatMgr )
+    {
+        s_logger.LogError( "Source %d not registered", keyEvent.has_keyorigin() );
+        return;
+    }
+
+    // Feed it into the keyHandler
+
+#if 0
+    // TODO - reenable
+    m_CliClientMT.SendAsyncResponse( "Received from LPM, KeySource: CONSOLE, State " + \
+                                     std::to_string( keyEvent.keystate() ) + " KeyId " + \
+                                     std::to_string( keyEvent.keyid() ) );
+#endif
+    ptrRepeatMgr->HandleKeys( keyEvent.keyorigin(),
+                              keyEvent.keystate(), keyEvent.keyid() );
 
     IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_mainTask );
 }
