@@ -21,6 +21,7 @@ ifndef DONT_UPDATE_CASTLETOOLS
 	castletools-update
 endif
 	components install
+	$(MAKE) -C $(RIVIERALPMSERVICE_DIR) check_tools
 
 RIVIERALPMSERVICE_DIR = $(shell components get RivieraLpmService installed_location)
 CASTLEPRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
