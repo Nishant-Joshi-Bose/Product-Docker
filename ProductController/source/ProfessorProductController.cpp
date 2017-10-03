@@ -33,6 +33,7 @@
 #include <thread>
 #include <unistd.h>
 #include "SystemUtils.h"
+#include "Callback.h"
 #include "DPrint.h"
 #include "CliClient.h"
 #include "ProductController.h"
@@ -181,7 +182,8 @@ ProfessorProductController::ProfessorProductController( ) :
     m_IsLpmReady      ( false ),
     m_IsCapsReady     ( false ),
     m_IsAudioPathReady( false ),
-    m_IsNetworkReady  ( false )
+    m_IsNetworkReady  ( false ),
+    m_IsSTSReady      ( false )
 {
     return;
 }
@@ -263,6 +265,11 @@ void ProfessorProductController::Run( )
      ReadConfigurationStatusFromPersistentStorage( );
 
      ///
+     /// Set up the STSProductController
+     ///
+     SetupProductSTSConntroller();
+
+     ///
      /// Send the language settings and configuration status to the Front Door Network.
      ///
      ProductMessage productMessage;
@@ -293,7 +300,7 @@ void ProfessorProductController::Run( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProfessorProductController::IsBooted( )
 {
-     return ( m_IsLpmReady and m_IsCapsReady and m_IsAudioPathReady );
+     return ( m_IsLpmReady and m_IsCapsReady and m_IsAudioPathReady and m_IsSTSReady );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -641,6 +648,23 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
                  BOSE_DEBUG( s_logger, "A source deselection message was received." );
                  break;
 
+            case STS_SOURCES_INIT_DONE:
+                 BOSE_DEBUG( s_logger, "An STS Sources Initialized message was received." );
+
+                 m_IsSTSReady = true;
+
+                 m_ProductControllerStateMachine.Handle<>
+                ( &CustomProductControllerState::HandleSTSSourcesInit );
+
+                 break;
+
+            case SOURCE_SLOT_SELECTED:
+            {
+                 const auto& slot = message.data().selectsourceslot().slot();
+                 BOSE_DEBUG( s_logger, "An STS Select message was received for slot %s.", ProductSourceSlot_Name( slot ).c_str() );
+                 break;
+            }
+
             default:
                  BOSE_DEBUG( s_logger, "An unknown message %d was received.", message.id( ) );
                  break;
@@ -687,6 +711,79 @@ void ProfessorProductController::End( )
      BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
 
      m_running = false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::SetupProductSTSConntroller
+///
+/// @brief  This method is called to perform the needed initialization of the ProductSTSController,
+///         specifically, provide the set of sources to be created initially
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::SetupProductSTSConntroller( void )
+{
+    std::vector<ProductSTSController::SourceDescriptor> sources;
+    ProductSTSController::SourceDescriptor descriptor_AiQ{ ProductSTS::SLOT_AIQ, "ADAPTiQ", false }; // AiQ is not available as a normal source
+    sources.push_back( descriptor_AiQ );
+    ProductSTSController::SourceDescriptor descriptor_TV{ ProductSTS::SLOT_TV, "TV", true }; // TV is always available
+    sources.push_back( descriptor_TV );
+    Callback<void> cb_STSInitWasComplete( std::bind( &ProfessorProductController::HandleSTSInitWasComplete, this ) );
+    Callback<ProductSTS::ProductSourceSlot> cb_HandleSelectSourceSlot( std::bind( &ProfessorProductController::HandleSelectSourceSlot, this, std::placeholders::_1 ) );
+    m_ProductSTSController.Initialize( sources, cb_STSInitWasComplete, cb_HandleSelectSourceSlot );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::HandleSTSInitWasComplete
+///
+/// @brief  This method is called from the ProductSTSController when all the initially-created 
+///         sources have been created with CAPS/STS
+///
+/// @note   THIS METHOD IS CALLED ON THE ProductSTSController THREAD
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::HandleSTSInitWasComplete( void )
+{
+    ProductMessage message;
+    message.set_id( STS_SOURCES_INIT_DONE );
+    IL::BreakThread( std::bind( &ProfessorProductController::HandleMessage,
+                                this,
+                                message ),
+                     GetTask( ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::HandleSelectSourceSlot
+///
+/// @brief  This method is called from the ProductSTSController when one of our sources is 
+///         activated by CAPS/STS
+///
+/// @note   THIS METHOD IS CALLED ON THE ProductSTSController THREAD
+///
+/// @param  ProductSTS::ProductSourceSlot sourceSlot - identifies the activated slot
+///
+/// @return This method does not return anything.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::HandleSelectSourceSlot( ProductSTS::ProductSourceSlot sourceSlot )
+{
+    ProductMessage message;
+    message.set_id( SOURCE_SLOT_SELECTED );
+    message.mutable_data()->mutable_selectsourceslot()->set_slot( sourceSlot );
+    IL::BreakThread( std::bind( &ProfessorProductController::HandleMessage,
+                                this,
+                                message ),
+                     GetTask( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

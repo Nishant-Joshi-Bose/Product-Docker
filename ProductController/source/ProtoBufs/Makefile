@@ -15,6 +15,7 @@ PROTO_SOURCES = \
 # Where to search for imported *.proto files.
 PROTO_IMPORT_DIRS := \
  . \
+ ../../../ProductSTSController/Protobufs \
  $(PROTO_CC_DEST) \
  $(BOSELIBS_DIR)/protobufs \
  $(BOSELIBS_DIR)/include \
