@@ -1,6 +1,5 @@
-//package ProductPb;
+package ProductPb;
 
-//syntax = "proto3";
 import "ContentItem.proto";
 
 enum PERSISTENCE_LEVEL

@@ -38,7 +38,8 @@
 #include "ProductController.h"
 #include "ProfessorProductController.h"
 #include "ProductHardwareInterface.h"
-#include "ProductAudioService.h"
+#include "ProductDeviceSettings.h"
+#include "ProductAudioServices.h"
 #include "ProductSoftwareServices.h"
 #include "ProductUserInterface.h"
 #include "ProductFrontDoorNetwork.h"
@@ -110,11 +111,11 @@ static const DPrint s_logger { "Product" };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProfessorProductController* ProfessorProductController::GetInstance( )
 {
-       static ProfessorProductController* instance = new ProfessorProductController( );
+    static ProfessorProductController* instance = new ProfessorProductController( );
 
-       BOSE_DEBUG( s_logger, "The instance %8p of the Product Controller was returned.", instance );
+    BOSE_DEBUG( s_logger, "The instance %8p of the Product Controller was returned.", instance );
 
-       return instance;
+    return instance;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -142,45 +143,45 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     m_ProductControllerStateMachine( GetTask( ),
                                      "ProfessorStateMachine",
-                                     static_cast< ProductController& >( *this ) ),
+                                     static_cast< ProductController & >( *this ) ),
     ///
     /// Construction of the Common States
     ///
-    m_ProductControllerStateTop                (  m_ProductControllerStateMachine,
-                                                  nullptr,
-                                                  static_cast< ProductApp::ProductController& >( *this ) ),
-    m_ProductControllerStateSetup              (  m_ProductControllerStateMachine,
-                                                 &m_ProductControllerStateTop,
-                                                 static_cast< ProductApp::ProductController& >( *this ) ),
-    m_ProductControllerStateOn                 (  m_ProductControllerStateMachine,
-                                                 &m_ProductControllerStateTop,
-                                                 static_cast< ProductController& >( *this ) ),
+    m_ProductControllerStateTop( m_ProductControllerStateMachine,
+                                 nullptr,
+                                 static_cast< ProductApp::ProductController & >( *this ) ),
+    m_ProductControllerStateSetup( m_ProductControllerStateMachine,
+                                   &m_ProductControllerStateTop,
+                                   static_cast< ProductApp::ProductController & >( *this ) ),
+    m_ProductControllerStateOn( m_ProductControllerStateMachine,
+                                &m_ProductControllerStateTop,
+                                static_cast< ProductController & >( *this ) ),
     ///
     /// Construction of the Custom Professor States
     ///
-    m_CustomProductControllerStateBooting       ( m_ProductControllerStateMachine,
-                                                  &m_ProductControllerStateTop,
-                                                  *this ),
+    m_CustomProductControllerStateBooting( m_ProductControllerStateMachine,
+                                           &m_ProductControllerStateTop,
+                                           *this ),
     m_CustomProductControllerStateNetworkStandby( m_ProductControllerStateMachine,
                                                   &m_ProductControllerStateTop,
                                                   *this ),
-    m_CustomProductControllerStateIdle          ( m_ProductControllerStateMachine,
-                                                  &m_ProductControllerStateTop,
-                                                  *this ),
-    m_CustomProductControllerStateUpdating      ( m_ProductControllerStateMachine,
-                                                  &m_ProductControllerStateTop,
-                                                  *this ),
+    m_CustomProductControllerStateIdle( m_ProductControllerStateMachine,
+                                        &m_ProductControllerStateTop,
+                                        *this ),
+    m_CustomProductControllerStateUpdating( m_ProductControllerStateMachine,
+                                            &m_ProductControllerStateTop,
+                                            *this ),
     ///
     /// Member Variable Initialization
     ///
-    m_LanguageSettingsPersistentStorage   ( ProtoPersistenceFactory::Create( "ProductLanguage",
-                                                                              g_ProductDirectory ) ),
+    m_LanguageSettingsPersistentStorage( ProtoPersistenceFactory::Create( "ProductLanguage",
+                                                                          g_ProductDirectory ) ),
     m_ConfigurationStatusPersistentStorage( ProtoPersistenceFactory::Create( "ConfigurationStatus",
-                                                                              g_ProductDirectory ) ),
-    m_IsLpmReady      ( false ),
-    m_IsCapsReady     ( false ),
+                                                                             g_ProductDirectory ) ),
+    m_IsLpmReady( false ),
+    m_IsCapsReady( false ),
     m_IsAudioPathReady( false ),
-    m_IsNetworkReady  ( false )
+    m_IsNetworkReady( false )
 {
     return;
 }
@@ -198,84 +199,89 @@ ProfessorProductController::ProfessorProductController( ) :
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::Run( )
 {
-     m_running = true;
+    m_running = true;
 
-     BOSE_DEBUG( s_logger, "------------- Product Controller Starting Modules ------------" );
-     BOSE_DEBUG( s_logger, "The Professor Product Controller is starting up its processes." );
+    BOSE_DEBUG( s_logger, "------------- Product Controller Starting Modules ------------" );
+    BOSE_DEBUG( s_logger, "The Professor Product Controller is starting up its processes." );
 
-     ///
-     /// Start the Product Controller state machine.
-     ///
-     m_ProductControllerStateMachine.AddState( &m_ProductControllerStateTop                  );
-     m_ProductControllerStateMachine.AddState( &m_ProductControllerStateSetup                );
-     m_ProductControllerStateMachine.AddState( &m_ProductControllerStateOn                   );
-     m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateBooting        );
-     m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateNetworkStandby );
-     m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateIdle           );
-     m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateUpdating       );
+    ///
+    /// Start the Product Controller state machine.
+    ///
+    m_ProductControllerStateMachine.AddState( &m_ProductControllerStateTop );
+    m_ProductControllerStateMachine.AddState( &m_ProductControllerStateSetup );
+    m_ProductControllerStateMachine.AddState( &m_ProductControllerStateOn );
+    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateBooting );
+    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateNetworkStandby );
+    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateIdle );
+    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateUpdating );
 
-     m_ProductControllerStateMachine.Init( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
+    m_ProductControllerStateMachine.Init( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
-     ///
-     /// Get instances of all the subprocesses.
-     ///
-     Callback < ProductMessage > CallbackForMessages( std::bind( &ProfessorProductController::HandleMessage,
-                                                                 this,
-                                                                 std::placeholders::_1 ) );
+    ///
+    /// Get instances of all the subprocesses.
+    ///
+    Callback < ProductMessage > CallbackForMessages( std::bind( &ProfessorProductController::HandleMessage,
+                                                                this,
+                                                                std::placeholders::_1 ) );
 
-     m_ProductHardwareInterface = ProductHardwareInterface::GetInstance( GetTask( ),
-                                                                         CallbackForMessages );
+    m_ProductHardwareInterface = ProductHardwareInterface::GetInstance( GetTask( ),
+                                                                        CallbackForMessages );
 
-     m_ProductFrontDoorNetwork  = ProductFrontDoorNetwork::GetInstance ( GetTask( ),
-                                                                         CallbackForMessages );
+    m_ProductFrontDoorNetwork  = ProductFrontDoorNetwork::GetInstance( GetTask( ),
+                                                                       CallbackForMessages );
 
-     m_ProductAudioService      = ProductAudioService::GetInstance      ( GetTask( ),
-                                                                         CallbackForMessages );
-     m_ProductSoftwareServices  = ProductSoftwareServices::GetInstance ( GetTask( ),
-                                                                         CallbackForMessages,
-                                                                         m_ProductHardwareInterface );
-     m_ProductUserInterface     = ProductUserInterface::GetInstance    ( GetTask( ),
-                                                                         CallbackForMessages,
-                                                                         m_ProductHardwareInterface );
-     m_ProductCommandLine       = ProductCommandLine::GetInstance      ( GetTask( ),
-                                                                         m_ProductHardwareInterface );
+    m_ProductAudioServices     = ProductAudioServices::GetInstance( GetTask( ),
+                                                                    CallbackForMessages,
+                                                                    m_ProductHardwareInterface );
+    m_ProductDeviceSettings    = ProductDeviceSettings::GetInstance( GetTask( ),
+                                                                     CallbackForMessages,
+                                                                     m_ProductHardwareInterface );
+    m_ProductSoftwareServices  = ProductSoftwareServices::GetInstance( GetTask( ),
+                                                                       CallbackForMessages,
+                                                                       m_ProductHardwareInterface );
+    m_ProductUserInterface     = ProductUserInterface::GetInstance( GetTask( ),
+                                                                    CallbackForMessages,
+                                                                    m_ProductHardwareInterface );
+    m_ProductCommandLine       = ProductCommandLine::GetInstance( GetTask( ),
+                                                                  m_ProductHardwareInterface );
 
-     ///
-     /// Run all the submodules.
-     ///
-     m_ProductHardwareInterface->Run( );
-     m_ProductAudioService    ->Run( );
-     m_ProductSoftwareServices ->Run( );
-     m_ProductUserInterface    ->Run( );
-     m_ProductCommandLine      ->Run( );
-     m_ProductFrontDoorNetwork ->Run( );
+    ///
+    /// Run all the submodules.
+    ///
+    m_ProductHardwareInterface->Run( );
+    m_ProductAudioServices    ->Run( );
+    m_ProductDeviceSettings   ->Run( );
+    m_ProductSoftwareServices ->Run( );
+    m_ProductUserInterface    ->Run( );
+    m_ProductCommandLine      ->Run( );
+    m_ProductFrontDoorNetwork ->Run( );
 
-     ///
-     /// Read the language settings and configuration status from persistent storage.
-     ///
-     ReadLanguageSettingsFromPersistentStorage   ( );
-     ReadConfigurationStatusFromPersistentStorage( );
+    ///
+    /// Read the language settings and configuration status from persistent storage.
+    ///
+    ReadLanguageSettingsFromPersistentStorage( );
+    ReadConfigurationStatusFromPersistentStorage( );
 
-     ///
-     /// Send the language settings and configuration status to the Front Door Network.
-     ///
-     ProductMessage productMessage;
+    ///
+    /// Send the language settings and configuration status to the Front Door Network.
+    ///
+    ProductMessage productMessage;
 
-     productMessage.set_id( SYSTEM_LANGUAGE_CHANGE );
-     productMessage.mutable_data( )->mutable_languagedata( )->set_systemlanguage( GetSystemLanguageCode( ) );
+    productMessage.set_id( SYSTEM_LANGUAGE_CHANGE );
+    productMessage.mutable_data( )->mutable_languagedata( )->set_systemlanguage( GetSystemLanguageCode( ) );
 
-     m_ProductFrontDoorNetwork->HandleMessage( productMessage );
+    m_ProductFrontDoorNetwork->HandleMessage( productMessage );
 
-     bool networkStatus  = m_ConfigurationStatus.mutable_status( )->network ( );
-     bool languageStatus = m_ConfigurationStatus.mutable_status( )->language( );
-     bool accountStatus  = m_ConfigurationStatus.mutable_status( )->account ( );
+    bool networkStatus  = m_ConfigurationStatus.mutable_status( )->network( );
+    bool languageStatus = m_ConfigurationStatus.mutable_status( )->language( );
+    bool accountStatus  = m_ConfigurationStatus.mutable_status( )->account( );
 
-     productMessage.set_id( CONFIGURATION_STATUS );
-     productMessage.mutable_data( )->mutable_configurationstatus( )->set_network ( networkStatus  );
-     productMessage.mutable_data( )->mutable_configurationstatus( )->set_language( languageStatus );
-     productMessage.mutable_data( )->mutable_configurationstatus( )->set_account ( accountStatus  );
+    productMessage.set_id( CONFIGURATION_STATUS );
+    productMessage.mutable_data( )->mutable_configurationstatus( )->set_network( networkStatus );
+    productMessage.mutable_data( )->mutable_configurationstatus( )->set_language( languageStatus );
+    productMessage.mutable_data( )->mutable_configurationstatus( )->set_account( accountStatus );
 
-     m_ProductFrontDoorNetwork->HandleMessage( productMessage );
+    m_ProductFrontDoorNetwork->HandleMessage( productMessage );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -287,7 +293,7 @@ void ProfessorProductController::Run( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProfessorProductController::IsBooted( )
 {
-     return ( m_IsLpmReady and m_IsCapsReady and m_IsAudioPathReady );
+    return ( m_IsLpmReady and m_IsCapsReady and m_IsAudioPathReady );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -298,14 +304,14 @@ bool ProfessorProductController::IsBooted( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProfessorProductController::GetNetworkStatus( )
 {
-     if( m_ConfigurationStatus.mutable_status( )->has_network ( ) )
-     {
-         return m_ConfigurationStatus.mutable_status( )->network ( );
-     }
-     else
-     {
-         return false;
-     }
+    if( m_ConfigurationStatus.mutable_status( )->has_network( ) )
+    {
+        return m_ConfigurationStatus.mutable_status( )->network( );
+    }
+    else
+    {
+        return false;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -316,14 +322,14 @@ bool ProfessorProductController::GetNetworkStatus( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 std::string ProfessorProductController::GetSystemLanguageCode( )
 {
-     if( m_LanguageSettings.has_code( ) )
-     {
-         return m_LanguageSettings.code( );
-     }
-     else
-     {
-         return std::string( );
-     }
+    if( m_LanguageSettings.has_code( ) )
+    {
+        return m_LanguageSettings.code( );
+    }
+    else
+    {
+        return std::string( );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -331,11 +337,11 @@ std::string ProfessorProductController::GetSystemLanguageCode( )
 /// @brief ProfessorProductController::SetSystemLanguageCode
 /// @param systemLanguageString
 ///
-////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////ProductDeviceSettings.cpp/////////////////////////////////////////
 void ProfessorProductController::SetSystemLanguageCode( std::string systemLanguageString )
 {
-     m_LanguageSettings.set_code( systemLanguageString );
-     WriteLanguageSettingsToPersistentStorage( );
+    m_LanguageSettings.set_code( systemLanguageString );
+    WriteLanguageSettingsToPersistentStorage( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -345,57 +351,57 @@ void ProfessorProductController::SetSystemLanguageCode( std::string systemLangua
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::ReadLanguageSettingsFromPersistentStorage( )
 {
-     try
-     {
-         BOSE_DEBUG( s_logger, "Language settings are being read from persistent storage." );
+    try
+    {
+        BOSE_DEBUG( s_logger, "Language settings are being read from persistent storage." );
 
-         std::string storageString = m_LanguageSettingsPersistentStorage->Load( );
-         ProtoToMarkup::FromJson( storageString, &m_LanguageSettings );
-     }
-     catch( ... )
-     {
-         BOSE_LOG( ERROR, "Reading language settings from persistent storage failed."        );
-         BOSE_LOG( ERROR, "Default language settings will be written to persistent storage." );
+        std::string storageString = m_LanguageSettingsPersistentStorage->Load( );
+        ProtoToMarkup::FromJson( storageString, &m_LanguageSettings );
+    }
+    catch( ... )
+    {
+        BOSE_LOG( ERROR, "Reading language settings from persistent storage failed." );
+        BOSE_LOG( ERROR, "Default language settings will be written to persistent storage." );
 
-         ///
-         /// Set the default language to English and add the supported languages if this data has not
-         /// been set in storage.
-         ///
-         m_LanguageSettings.set_code( "en" );
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "da" ); /// Danish
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "de" ); /// German
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "en" ); /// English
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "es" ); /// Spanish
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "fr" ); /// French
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "it" ); /// Italian
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "nl" ); /// Dutch
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "sv" ); /// Swedish
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "ja" ); /// Japanese
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "zh" ); /// Chinese
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "ko" ); /// Korean
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "th" ); /// Thai
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "cs" ); /// Czechoslovakian
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "fi" ); /// Finnish
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "el" ); /// Greek
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "no" ); /// Norwegian
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "pl" ); /// Polish
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "pt" ); /// Portuguese
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "ro" ); /// Romanian
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "ru" ); /// Russian
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "sl" ); /// Slovenian
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "tr" ); /// Turkish
-         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "hu" ); /// Hungarian
+        ///
+        /// Set the default language to English and add the supported languages if this data has not
+        /// been set in storage.
+        ///
+        m_LanguageSettings.set_code( "en" );
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "da" ); /// Danish
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "de" ); /// German
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "en" ); /// English
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "es" ); /// Spanish
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "fr" ); /// French
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "it" ); /// Italian
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "nl" ); /// Dutch
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "sv" ); /// Swedish
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "ja" ); /// Japanese
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "zh" ); /// Chinese
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "ko" ); /// Korean
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "th" ); /// Thai
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "cs" ); /// Czechoslovakian
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "fi" ); /// Finnish
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "el" ); /// Greek
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "no" ); /// Norwegian
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "pl" ); /// Polish
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "pt" ); /// Portuguese
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "ro" ); /// Romanian
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "ru" ); /// Russian
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "sl" ); /// Slovenian
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "tr" ); /// Turkish
+        m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "hu" ); /// Hungarian
 
-         try
-         {
-             m_LanguageSettingsPersistentStorage->Remove( );
-             m_LanguageSettingsPersistentStorage->Store( ProtoToMarkup::ToJson( m_LanguageSettings,
-                                                                              false ) );
-         }
-         catch( ... )
-         {
-             BOSE_LOG( ERROR, "Writing default language settings to persistent storage failed." );
-         }
+        try
+        {
+            m_LanguageSettingsPersistentStorage->Remove( );
+            m_LanguageSettingsPersistentStorage->Store( ProtoToMarkup::ToJson( m_LanguageSettings,
+                                                                               false ) );
+        }
+        catch( ... )
+        {
+            BOSE_LOG( ERROR, "Writing default language settings to persistent storage failed." );
+        }
     }
 }
 
@@ -406,18 +412,18 @@ void ProfessorProductController::ReadLanguageSettingsFromPersistentStorage( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::WriteLanguageSettingsToPersistentStorage( )
 {
-     try
-     {
-         BOSE_LOG( ERROR, "Language settings are being written to persistent storage." );
+    try
+    {
+        BOSE_LOG( ERROR, "Language settings are being written to persistent storage." );
 
-         m_LanguageSettingsPersistentStorage->Remove( );
-         m_LanguageSettingsPersistentStorage->Store ( ProtoToMarkup::ToJson( m_LanguageSettings,
-                                                                             false ) );
-     }
-     catch( ... )
-     {
-         BOSE_LOG( ERROR, "Writing language settings to persistent storage failed." );
-     }
+        m_LanguageSettingsPersistentStorage->Remove( );
+        m_LanguageSettingsPersistentStorage->Store( ProtoToMarkup::ToJson( m_LanguageSettings,
+                                                                           false ) );
+    }
+    catch( ... )
+    {
+        BOSE_LOG( ERROR, "Writing language settings to persistent storage failed." );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -427,40 +433,40 @@ void ProfessorProductController::WriteLanguageSettingsToPersistentStorage( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::ReadConfigurationStatusFromPersistentStorage( )
 {
-     try
-     {
-         BOSE_DEBUG( s_logger, "The configuration status is being read from persistent storage." );
+    try
+    {
+        BOSE_DEBUG( s_logger, "The configuration status is being read from persistent storage." );
 
-         std::string storageString = m_ConfigurationStatusPersistentStorage->Load( );
-         ProtoToMarkup::FromJson( storageString, &m_ConfigurationStatus );
-     }
-     catch( ... )
-     {
-         try
-         {
-             BOSE_LOG( DEBUG, "Reading the configuration status from persistent storage failed."      );
-             BOSE_LOG( DEBUG, "A default configuration status will be written to persistent storage." );
+        std::string storageString = m_ConfigurationStatusPersistentStorage->Load( );
+        ProtoToMarkup::FromJson( storageString, &m_ConfigurationStatus );
+    }
+    catch( ... )
+    {
+        try
+        {
+            BOSE_LOG( DEBUG, "Reading the configuration status from persistent storage failed." );
+            BOSE_LOG( DEBUG, "A default configuration status will be written to persistent storage." );
 
-             if( GetSystemLanguageCode( ).empty( ) )
-             {
-                 m_ConfigurationStatus.mutable_status( )->set_language( false );
-             }
-             else
-             {
-                 m_ConfigurationStatus.mutable_status( )->set_language( true );
-             }
+            if( GetSystemLanguageCode( ).empty( ) )
+            {
+                m_ConfigurationStatus.mutable_status( )->set_language( false );
+            }
+            else
+            {
+                m_ConfigurationStatus.mutable_status( )->set_language( true );
+            }
 
-             m_ConfigurationStatus.mutable_status( )->set_network ( false );
-             m_ConfigurationStatus.mutable_status( )->set_account ( false );
+            m_ConfigurationStatus.mutable_status( )->set_network( false );
+            m_ConfigurationStatus.mutable_status( )->set_account( false );
 
-             m_ConfigurationStatusPersistentStorage->Remove( );
-             m_ConfigurationStatusPersistentStorage->Store ( ProtoToMarkup::ToJson( m_ConfigurationStatus,
-                                                                                    false ) );
-         }
-         catch( ... )
-         {
-             BOSE_LOG( ERROR, "Writing a default configuration status to persistent storage failed." );
-         }
+            m_ConfigurationStatusPersistentStorage->Remove( );
+            m_ConfigurationStatusPersistentStorage->Store( ProtoToMarkup::ToJson( m_ConfigurationStatus,
+                                                                                  false ) );
+        }
+        catch( ... )
+        {
+            BOSE_LOG( ERROR, "Writing a default configuration status to persistent storage failed." );
+        }
     }
 }
 
@@ -476,8 +482,8 @@ void ProfessorProductController::WriteConfigurationStatusToPersistentStorage( )
         BOSE_DEBUG( s_logger, "The configuration status is being written to persistent storage." );
 
         m_ConfigurationStatusPersistentStorage->Remove( );
-        m_ConfigurationStatusPersistentStorage->Store ( ProtoToMarkup::ToJson( m_LanguageSettings,
-                                                                               false ) );
+        m_ConfigurationStatusPersistentStorage->Store( ProtoToMarkup::ToJson( m_LanguageSettings,
+                                                                              false ) );
     }
     catch( ... )
     {
@@ -501,147 +507,147 @@ void ProfessorProductController::WriteConfigurationStatusToPersistentStorage( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::HandleMessage( const ProductMessage& message )
 {
-     BOSE_DEBUG( s_logger, "----------- Product Controller Message Handler -------------" );
+    BOSE_DEBUG( s_logger, "----------- Product Controller Message Handler -------------" );
 
-     if( message.has_id( ) )
-     {
-         switch( message.id( ) )
-         {
-            case LPM_HARDWARE_DOWN:
-                 BOSE_DEBUG( s_logger, "An LPM Hardware down message was received." );
+    if( message.has_id( ) )
+    {
+        switch( message.id( ) )
+        {
+        case LPM_HARDWARE_DOWN:
+            BOSE_DEBUG( s_logger, "An LPM Hardware down message was received." );
 
-                 m_IsLpmReady = false;
+            m_IsLpmReady = false;
 
-                 m_ProductControllerStateMachine.Handle< bool >
-                ( &CustomProductControllerState::HandleLpmState, false );
+            m_ProductControllerStateMachine.Handle< bool >
+            ( &CustomProductControllerState::HandleLpmState, false );
 
-                 break;
+            break;
 
-            case LPM_HARDWARE_UP:
-                 BOSE_DEBUG( s_logger, "An LPM Hardware up message was received." );
+        case LPM_HARDWARE_UP:
+            BOSE_DEBUG( s_logger, "An LPM Hardware up message was received." );
 
-                 m_IsLpmReady = true;
+            m_IsLpmReady = true;
 
-                 m_ProductControllerStateMachine.Handle< bool >
-                ( &CustomProductControllerState::HandleLpmState, true );
+            m_ProductControllerStateMachine.Handle< bool >
+            ( &CustomProductControllerState::HandleLpmState, true );
 
-                 break;
+            break;
 
-            case CAPS_DOWN:
-                 BOSE_DEBUG( s_logger, "A CAPS Content Audio Playback Services down message was received." );
+        case CAPS_DOWN:
+            BOSE_DEBUG( s_logger, "A CAPS Content Audio Playback Services down message was received." );
 
-                 m_IsCapsReady = false;
+            m_IsCapsReady = false;
 
-                 m_ProductControllerStateMachine.Handle< bool >
-                ( &CustomProductControllerState::HandleCapsState, false );
+            m_ProductControllerStateMachine.Handle< bool >
+            ( &CustomProductControllerState::HandleCapsState, false );
 
-                 break;
+            break;
 
-            case CAPS_UP:
-                 BOSE_DEBUG( s_logger, "A CAPS Content Audio Playback Services up message was received." );
+        case CAPS_UP:
+            BOSE_DEBUG( s_logger, "A CAPS Content Audio Playback Services up message was received." );
 
-                 m_IsCapsReady = true;
+            m_IsCapsReady = true;
 
-                 m_ProductControllerStateMachine.Handle< bool >
-                ( &CustomProductControllerState::HandleCapsState, true );
+            m_ProductControllerStateMachine.Handle< bool >
+            ( &CustomProductControllerState::HandleCapsState, true );
 
-                  break;
+            break;
 
-            case NETWORK_DOWN:
-                 BOSE_DEBUG( s_logger, "A network down message was received." );
+        case NETWORK_DOWN:
+            BOSE_DEBUG( s_logger, "A network down message was received." );
 
-                 m_ConfigurationStatus.mutable_status( )->set_network ( false );
-                 WriteConfigurationStatusToPersistentStorage( );
+            m_ConfigurationStatus.mutable_status( )->set_network( false );
+            WriteConfigurationStatusToPersistentStorage( );
 
-                 m_IsNetworkReady = false;
+            m_IsNetworkReady = false;
 
-                 m_ProductControllerStateMachine.Handle< bool >
-                ( &CustomProductControllerState::HandleNetworkState, false );
+            m_ProductControllerStateMachine.Handle< bool >
+            ( &CustomProductControllerState::HandleNetworkState, false );
 
-                 break;
+            break;
 
-            case NETWORK_UP:
-                 BOSE_DEBUG( s_logger, "A network up message was received." );
+        case NETWORK_UP:
+            BOSE_DEBUG( s_logger, "A network up message was received." );
 
-                 m_ConfigurationStatus.mutable_status( )->set_network ( true );
-                 WriteConfigurationStatusToPersistentStorage( );
+            m_ConfigurationStatus.mutable_status( )->set_network( true );
+            WriteConfigurationStatusToPersistentStorage( );
 
-                 m_IsNetworkReady = true;
+            m_IsNetworkReady = true;
 
-                 m_ProductControllerStateMachine.Handle< bool >
-                ( &CustomProductControllerState::HandleNetworkState, true );
+            m_ProductControllerStateMachine.Handle< bool >
+            ( &CustomProductControllerState::HandleNetworkState, true );
 
-                 break;
+            break;
 
-            case SYSTEM_LANGUAGE_CHANGE:
-                 BOSE_DEBUG( s_logger, "A system language change message was received." );
+        case SYSTEM_LANGUAGE_CHANGE:
+            BOSE_DEBUG( s_logger, "A system language change message was received." );
 
-                 m_ConfigurationStatus.mutable_status( )->set_network ( true );
-                 WriteLanguageSettingsToPersistentStorage( );
+            m_ConfigurationStatus.mutable_status( )->set_network( true );
+            WriteLanguageSettingsToPersistentStorage( );
 
-                 break;
+            break;
 
-            case KEY_PRESS:
-                 {
-                     auto keyData = message.data( ).keydata( );
+        case KEY_PRESS:
+        {
+            auto keyData = message.data( ).keydata( );
 
-                     switch( keyData.state( ) )
-                     {
-                        case DOWN:
-                             BOSE_DEBUG( s_logger, "A down key press message was received with value %d.",
-                                         keyData.value( ) );
+            switch( keyData.state( ) )
+            {
+            case DOWN:
+                BOSE_DEBUG( s_logger, "A down key press message was received with value %d.",
+                            keyData.value( ) );
 
-                             break;
-                        case UP:
-                             BOSE_DEBUG( s_logger, "An up key press message was received with value %d.",
-                                         keyData.value( ) );
+                break;
+            case UP:
+                BOSE_DEBUG( s_logger, "An up key press message was received with value %d.",
+                            keyData.value( ) );
 
-                             break;
-
-                        default:
-                             BOSE_DEBUG( s_logger, "A key press message in an unknown state was received with value %d.",
-                                         keyData.value( ) );
-
-                             break;
-                     }
-                 }
-                 break;
-
-            case AUDIO_LEVEL:
-                 BOSE_DEBUG( s_logger, "An audio level message was received." );
-                 break;
-
-            case AUDIO_TONE:
-                 BOSE_DEBUG( s_logger, "An audio tone message was received." );
-                 break;
-
-            case USER_MUTE:
-                 BOSE_DEBUG( s_logger, "A user mute message was received." );
-                 break;
-
-            case INTERNAL_MUTE:
-                 BOSE_DEBUG( s_logger, "An internal mute message was received." );
-                 break;
-
-            case SPEAKER_SETTING:
-                 BOSE_DEBUG( s_logger, "A speaker setting message was received." );
-                 break;
-
-            case SOURCE_SELECTION:
-                 BOSE_DEBUG( s_logger, "A source selection message was received." );
-                 break;
-
-            case SOURCE_DESELECTION:
-                 BOSE_DEBUG( s_logger, "A source deselection message was received." );
-                 break;
+                break;
 
             default:
-                 BOSE_DEBUG( s_logger, "An unknown message %d was received.", message.id( ) );
-                 break;
-         }
-     }
+                BOSE_DEBUG( s_logger, "A key press message in an unknown state was received with value %d.",
+                            keyData.value( ) );
 
-     return;
+                break;
+            }
+        }
+        break;
+
+        case AUDIO_LEVEL:
+            BOSE_DEBUG( s_logger, "An audio level message was received." );
+            break;
+
+        case AUDIO_TONE:
+            BOSE_DEBUG( s_logger, "An audio tone message was received." );
+            break;
+
+        case USER_MUTE:
+            BOSE_DEBUG( s_logger, "A user mute message was received." );
+            break;
+
+        case INTERNAL_MUTE:
+            BOSE_DEBUG( s_logger, "An internal mute message was received." );
+            break;
+
+        case SPEAKER_SETTING:
+            BOSE_DEBUG( s_logger, "A speaker setting message was received." );
+            break;
+
+        case SOURCE_SELECTION:
+            BOSE_DEBUG( s_logger, "A source selection message was received." );
+            break;
+
+        case SOURCE_DESELECTION:
+            BOSE_DEBUG( s_logger, "A source deselection message was received." );
+            break;
+
+        default:
+            BOSE_DEBUG( s_logger, "An unknown message %d was received.", message.id( ) );
+            break;
+        }
+    }
+
+    return;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -658,10 +664,10 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::Wait( )
 {
-     while( m_running )
-     {
-            sleep( PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS );
-     }
+    while( m_running )
+    {
+        sleep( PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -678,9 +684,9 @@ void ProfessorProductController::Wait( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::End( )
 {
-     BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
+    BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
 
-     m_running = false;
+    m_running = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

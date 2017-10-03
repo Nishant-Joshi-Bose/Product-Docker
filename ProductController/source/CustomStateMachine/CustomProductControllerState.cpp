@@ -32,30 +32,30 @@
 
 namespace ProductApp
 {
-    CustomProductControllerState::CustomProductControllerState( ProductControllerHsm& productStateMachine,
-                                                                CHsmState*            pSuperState,
-                                                                Hsm::STATE                 stateId,
-                                                                const std::string&    name )
+CustomProductControllerState::CustomProductControllerState( ProductControllerHsm& productStateMachine,
+                                                            CHsmState*            pSuperState,
+                                                            STATE                 stateId,
+                                                            const std::string&    name )
 
-                                : CHsmState( stateId, &productStateMachine, name, pSuperState )
-    {
-         /// return;
-    }
+    : CHsmState( stateId, &productStateMachine, name, pSuperState )
+{
+    /// return;
+}
 
-    bool CustomProductControllerState::HandleLpmState( bool active )
-    {
-         return true;
-    }
+bool CustomProductControllerState::HandleLpmState( bool active )
+{
+    return true;
+}
 
-    bool CustomProductControllerState::HandleCapsState( bool active )
-    {
-         return true;
-    }
+bool CustomProductControllerState::HandleCapsState( bool active )
+{
+    return true;
+}
 
-    bool CustomProductControllerState::HandleNetworkState( bool active )
-    {
-         return true;
-    }
+bool CustomProductControllerState::HandleNetworkState( bool active )
+{
+    return true;
+}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                         End of File                                          ///

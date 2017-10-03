@@ -120,8 +120,8 @@ ProductSoftwareServices::ProductSoftwareServices( NotifyTargetTaskIF*        mai
                                                   Callback< ProductMessage > ProductNotify,
                                                   ProductHardwareInterface*  HardwareInterface )
 
-    : m_mainTask                ( mainTask          ),
-      m_ProductNotify           ( ProductNotify     ),
+    : m_mainTask( mainTask ),
+      m_ProductNotify( ProductNotify ),
       m_ProductHardwareInterface( HardwareInterface )
 {
     return;
@@ -151,7 +151,7 @@ void ProductSoftwareServices::Run( )
                                                        std::placeholders::_1 ),
                                             m_mainTask );
 
-    m_serverListener->Serve( IPCDirectory::Get( )->DefaultAddress( IPCDirectory::A4V_SERVER ), callback );
+    m_serverListener->Serve( IPCDirectory::Get( )->DefaultAddress( A4V_SERVER ), callback );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
