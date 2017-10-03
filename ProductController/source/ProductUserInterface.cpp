@@ -178,8 +178,27 @@ void ProductUserInterface::RegisterForKeyEvents( void )
         sleep( PRODUCT_USER_INTERFACE_RETRY_IN_SECONDS );
     }
 
+    // Register with the key handler / repeat management code (this is how raw lpm keys get translated to "intents")
+    m_KeyHandler.RegisterKeyHandler( ProductUserInterface::KeyInformationCallBack, this );
+
     BOSE_INFO( s_logger, "%s: The user interface has registered for key events.", __FUNCTION__ );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductUserInterface::KeyInformationCallBack
+///
+/// @param result
+/// @param context
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductUserInterface:: KeyInformationCallBack( const int result, void *context )
+{
+    BOSE_INFO( s_logger, "%s %s %d\n", __FILE__, __func__, __LINE__ );
+    s_logger.LogInfo( "Keys have been translated to intend = %d", result );
+}
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -282,6 +301,8 @@ void ProductUserInterface::Stop( )
 
     m_running = false;
 }
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                               End of ProductApp Namespace                                    ///

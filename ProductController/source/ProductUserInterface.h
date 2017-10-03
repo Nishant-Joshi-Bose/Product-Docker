@@ -143,6 +143,14 @@ private:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
+    /// @brief The following method receives intents as a result of the key handler processing
+    /// "raw" keys events.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    static void KeyInformationCallBack( const int result, void *context );
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
     /// @brief The following subclass instances are used to manage the lower level hardware and
     ///        the device, as well as to interface with the user and higher level system
     ///        applications, respectively.
