@@ -46,6 +46,7 @@
 #include "APProductIF.h"
 #include "ProductMessage.pb.h"
 #include "LpmClientIF.h"
+#include "KeyHandler.h"
 
 namespace ProductApp
 {
@@ -88,7 +89,8 @@ public:
     //////////////////////////////////////////////////////////////////////////////////////////////
     static ProductUserInterface* GetInstance( NotifyTargetTaskIF*         mainTask,
                                               Callback< ProductMessage >  ProductNotify,
-                                              ProductHardwareInterface*   HardwareInterface );
+                                              ProductHardwareInterface*   HardwareInterface,
+                                              CliClientMT                 &cliClienMT );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -116,7 +118,8 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     ProductUserInterface( NotifyTargetTaskIF*         mainTask,
                           Callback< ProductMessage >  ProductNotify,
-                          ProductHardwareInterface*   HardwareInterface );
+                          ProductHardwareInterface*   HardwareInterface,
+                          CliClientMT                 &cliClientMT );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -150,6 +153,7 @@ private:
     Callback< ProductMessage >  m_ProductNotify;
     ProductHardwareInterface*   m_ProductHardwareInterface = nullptr;
     bool                        m_running;
+    KeyHandlerUtil::KeyHandler  m_KeyHandler;
 };
 }
 

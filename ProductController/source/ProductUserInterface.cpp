@@ -88,13 +88,15 @@ static DPrint s_logger { "Product" };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductUserInterface* ProductUserInterface::GetInstance( NotifyTargetTaskIF*         mainTask,
                                                          Callback< ProductMessage >  ProductNotify,
-                                                         ProductHardwareInterface*   HardwareInterface )
+                                                         ProductHardwareInterface*   HardwareInterface,
+                                                         CliClientMT                 &cliClientMT )
 {
     static ProductUserInterface* instance = new ProductUserInterface( mainTask,
                                                                       ProductNotify,
-                                                                      HardwareInterface );
+                                                                      HardwareInterface,
+                                                                      cliClientMT );
 
-    BOSE_DEBUG( s_logger, "The instance %8p of the Product User Interface has been obtained.", instance );
+    BOSE_INFO( s_logger, "The instance %8p of the Product User Interface has been obtained.", instance );
 
     return instance;
 }
@@ -116,12 +118,14 @@ ProductUserInterface* ProductUserInterface::GetInstance( NotifyTargetTaskIF*    
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductUserInterface::ProductUserInterface( NotifyTargetTaskIF*         mainTask,
                                             Callback< ProductMessage >  ProductNotify,
-                                            ProductHardwareInterface*   HardwareInterface )
+                                            ProductHardwareInterface*   HardwareInterface,
+                                            CliClientMT                 &cliClientMT )
     : m_mainTask( mainTask ),
       m_keyEventTask( IL::CreateTask( "ProductMonitorNetworkTask" ) ),
       m_ProductNotify( ProductNotify ),
       m_ProductHardwareInterface( HardwareInterface ),
-      m_running( false )
+      m_running( false ),
+      m_KeyHandler( *mainTask, cliClientMT )
 
 {
     return;
@@ -140,7 +144,7 @@ ProductUserInterface::ProductUserInterface( NotifyTargetTaskIF*         mainTask
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductUserInterface::Run( )
 {
-    BOSE_DEBUG( s_logger, "%s: The user interface is starting.", __FUNCTION__ );
+    BOSE_INFO( s_logger, "%s: The user interface is starting.", __FUNCTION__ );
 
     ///
     /// Attempt to register for key events in a separate task.
@@ -157,7 +161,7 @@ void ProductUserInterface::Run( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductUserInterface::RegisterForKeyEvents( void )
 {
-    BOSE_DEBUG( s_logger, "%s: The user interface is attempting to register for key events.", __FUNCTION__ );
+    BOSE_INFO( s_logger, "%s: The user interface is attempting to register for key events.", __FUNCTION__ );
 
     ///
     /// Repeated attempts are made to sucessfully pass a callback to the hardware interface to
@@ -174,7 +178,7 @@ void ProductUserInterface::RegisterForKeyEvents( void )
         sleep( PRODUCT_USER_INTERFACE_RETRY_IN_SECONDS );
     }
 
-    BOSE_DEBUG( s_logger, "%s: The user interface has registered for key events.", __FUNCTION__ );
+    BOSE_INFO( s_logger, "%s: The user interface has registered for key events.", __FUNCTION__ );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -250,13 +254,13 @@ void ProductUserInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInformation
 
     keyIdString.assign( std::to_string( keyEvent.keyid( ) ) );
 
-    BOSE_DEBUG( s_logger, "----------- Product Controller Key Event ------------" );
-    BOSE_DEBUG( s_logger, "A key event from the hardware interface was received: " );
-    BOSE_DEBUG( s_logger, " " );
-    BOSE_DEBUG( s_logger, "  Key Origin : %s ", keyOriginString.c_str( ) );
-    BOSE_DEBUG( s_logger, "  Key State  : %s ", keyStateString.c_str( ) );
-    BOSE_DEBUG( s_logger, "  Key ID     : %s ", keyIdString.c_str( ) );
-    BOSE_DEBUG( s_logger, " " );
+    BOSE_INFO( s_logger, "----------- Product Controller Key Event ------------" );
+    BOSE_INFO( s_logger, "A key event from the hardware interface was received: " );
+    BOSE_INFO( s_logger, " " );
+    BOSE_INFO( s_logger, "  Key Origin : %s ", keyOriginString.c_str( ) );
+    BOSE_INFO( s_logger, "  Key State  : %s ", keyStateString.c_str( ) );
+    BOSE_INFO( s_logger, "  Key ID     : %s ", keyIdString.c_str( ) );
+    BOSE_INFO( s_logger, " " );
 
     IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_mainTask );
 }
@@ -274,7 +278,7 @@ void ProductUserInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInformation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductUserInterface::Stop( )
 {
-    BOSE_DEBUG( s_logger, "The user interface is starting, but has not been implemented." );
+    BOSE_INFO( s_logger, "The user interface is starting, but has not been implemented." );
 
     m_running = false;
 }

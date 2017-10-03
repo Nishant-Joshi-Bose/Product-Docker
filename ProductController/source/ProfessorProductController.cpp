@@ -241,7 +241,8 @@ void ProfessorProductController::Run( )
                                                                        m_ProductHardwareInterface );
     m_ProductUserInterface     = ProductUserInterface::GetInstance( GetTask( ),
                                                                     CallbackForMessages,
-                                                                    m_ProductHardwareInterface );
+                                                                    m_ProductHardwareInterface,
+                                                                    m_CliClientMT );
     m_ProductCommandLine       = ProductCommandLine::GetInstance( GetTask( ),
                                                                   m_ProductHardwareInterface );
 
