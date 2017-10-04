@@ -33,18 +33,19 @@ IF(${SDK} STREQUAL "native")
 ENDIF(${SDK} STREQUAL "native")
 
 IF(${SDK} STREQUAL "qc8017_32")
-  COMPONENT(RIVIERA_HSP_DIR Riviera-HSP)
+  COMPONENT(RIVIERA_HSP_IMAGES_DIR Riviera-HSP-Images)
+  COMPONENT(RIVIERA_TOOLCHAIN_DIR Riviera-Toolchain)
 
-  SET(SYSROOT ${RIVIERA_HSP_DIR}/sdk/sysroots/aarch64-oe-linux)
+  SET(SYSROOT ${RIVIERA_TOOLCHAIN_DIR}/sdk/sysroots/aarch64-oe-linux)
 
   EXECUTE_PROCESS(COMMAND uname -m
     OUTPUT_VARIABLE ARCHITECTURE
     OUTPUT_STRIP_TRAILING_WHITESPACE)
   MESSAGE(STATUS "Architecture is ${ARCHITECTURE}")
 
-  SET(CMAKE_C_COMPILER ${RIVIERA_HSP_DIR}/sdk/sysroots/${ARCHITECTURE}-oesdk-linux/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-gcc
+  SET(CMAKE_C_COMPILER ${RIVIERA_TOOLCHAIN_DIR}/sdk/sysroots/${ARCHITECTURE}-oesdk-linux/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-gcc
     CACHE INTERNAL - FORCE)
-  SET(CMAKE_CXX_COMPILER ${RIVIERA_HSP_DIR}/sdk/sysroots/${ARCHITECTURE}-oesdk-linux/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-g++
+  SET(CMAKE_CXX_COMPILER ${RIVIERA_TOOLCHAIN_DIR}/sdk/sysroots/${ARCHITECTURE}-oesdk-linux/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-g++
     CACHE INTERNAL - FORCE)
 
   SET(COMMON_FLAGS "--sysroot=${SYSROOT} -Wall -Werror -mtune=cortex-a53 -ftree-vectorize")

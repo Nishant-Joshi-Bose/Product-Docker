@@ -61,7 +61,8 @@ function put_script {
 here=$(cd "$(dirname $0)" && echo "$PWD") || exit
 wspace=$(cd "$here/.." && echo "$PWD") || exit
 
-riviera_hsp=$(components get Riviera-HSP installed_location) || exit
+riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || exit
+riviera_toolchain_dir=$(components get Riviera-Toolchain installed_location) || exit
 soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
@@ -73,7 +74,7 @@ castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 install
 eddielpm_package_dir=$(components get EddieLPM-Package installed_location) || exit
 
 arch=arm-oemllib32-linux
-sysroot=$riviera_hsp/sdk/sysroots/$(uname -m)-oesdk-linux
+sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/$arch/$arch-
 
 function do_strip {
@@ -257,7 +258,7 @@ put_script "$stage/postrm" <<EOF
 echo "SoundTouch postrm"
 EOF
 
-riviera_hsp_ver=$(components get Riviera-HSP selected_version) || exit
+riviera_hsp_ver=$(components get Riviera-HSP-Images selected_version) || exit
 riviera_hsp_ver=${riviera_hsp_ver##*/}
 put_script "$stage/preinst" <<EOF
 #!/bin/sh

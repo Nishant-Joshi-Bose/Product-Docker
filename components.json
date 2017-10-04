@@ -13,11 +13,11 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-03_1231"
+    "selected_version": "Continuous/Castle-Fork/2017-10-03_1541"
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2371"
+    "selected_version": "branches/castle-libs@2414"
   },
   {
     "name": "protobuf-qc8017_32",
@@ -41,15 +41,19 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Continuous/master/1.0.0-16+3d1dfec"
+    "selected_version": "Continuous/master/1.0.0-17+9d9c0bf"
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-44+9c23331"
+    "selected_version": "Continuous/master/0.1.0-46+a2f89e3"
   },
   {
-    "name": "Riviera-HSP",
-    "selected_version": "Continuous/dev/1.1-1-ga38c2b7"
+    "name": "Riviera-HSP-Images",
+    "selected_version": "Continuous/dev/1.1-2-g18cc7a9"
+  },
+  {
+    "name": "Riviera-Toolchain",
+    "selected_version": "Release/master/1.1"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -61,11 +65,11 @@
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@943"
+    "selected_version": "trunk@911"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-03_1202"
+    "selected_version": "Continuous/Castle-Fork/2017-10-04_1511"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -77,14 +81,14 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-47+907120e"
+    "selected_version": "Continuous/master/0.1.0-48+55b0979"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-3+2f41306"
+    "selected_version": "Continuous/master/0.0.1-7+334b357"
   },
   {
     "name": "KeyHandler-native",
-    "selected_version": "Continuous/master/0.0.1-3+2f41306"
+    "selected_version": "Continuous/master/0.0.1-7+334b357"
   }
 ]

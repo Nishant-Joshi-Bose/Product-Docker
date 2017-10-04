@@ -54,7 +54,7 @@ fi
 cfg=Release
 here=$(cd "$(dirname $0)" && echo "$PWD") || error_exit ${FUNCNAME[0]}
 wspace=$(cd "$here/.." && echo "$PWD") || error_exit ${FUNCNAME[0]}
-riviera_hsp=$(components get Riviera-HSP installed_location) || error_exit ${FUNCNAME[0]}
+riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || error_exit ${FUNCNAME[0]}
 #lpm_bos=$(components get EddieLPM-Package installed_location) || error_exit ${FUNCNAME[0]}
 #lpm_bin_path="/home/softlib/verisoft/EddieLPM-App/Release/trunk/latest/EDDIE_DP1"
 product_ipk=$wspace/builds/$cfg/product.ipk
@@ -120,7 +120,7 @@ create_eddie_ext4 () {
 
 # copy HSP, utilities, version, lpm firmware
 echo " Adding Riviera-HSP to package "
-$CP "$riviera_hsp"/images/* "$stage_package_dir/" || error_exit " Adding Riviera-HSP to package "
+$CP "$riviera_hsp_images_dir"/images/* "$stage_package_dir/" || error_exit " Adding Riviera-HSP to package "
 echo " Adding utilities to package "
 $CP "$utils_dir" "$stage_package_dir"/  || error_exit ${FUNCNAME[0]} " Adding utilities to package "
 echo " Adding version to package "
