@@ -41,35 +41,35 @@
 
 namespace ProductApp
 {
-///
-/// Forward Class Declarations
-///
-class ProductControllerHsm;
-class ProfessorProductController;
+    ///
+    /// Forward Class Declarations
+    ///
+    class ProductControllerHsm;
+    class ProfessorProductController;
 
-class CustomProductControllerStateUpdatingSoftware : public ProductControllerState
-{
-public:
-
-    CustomProductControllerStateUpdatingSoftware( ProductControllerHsm&       hsm,
-                                                  CHsmState*                  pSuperState,
-                                                  ProfessorProductController& productController,
-                                                  Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING,
-                                                  const std::string&          name    = "CustomProductControllerStateSoftwareUpdating" );
-
-    virtual ~CustomProductControllerStateUpdatingSoftware( )
+    class CustomProductControllerStateUpdatingSoftware : public ProductControllerState
     {
+      public:
 
-    }
+          CustomProductControllerStateUpdatingSoftware( ProductControllerHsm&       hsm,
+                                                        CHsmState*                  pSuperState,
+                                                        ProfessorProductController& productController,
+                                                        Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING,
+                                                        const std::string&          name    = "CustomProductControllerStateSoftwareUpdating" );
 
-    void HandleStateEnter( ) override;
-    void HandleStateStart( ) override;
-    void HandleStateExit( ) override;
+          virtual ~CustomProductControllerStateUpdatingSoftware( )
+          {
 
-    bool HandleLpmState( bool active )  override;
-    bool HandleCapsState( bool active )  override;
-    bool HandleNetworkState( bool active )  override;
-};
+          }
+
+          void HandleStateEnter( ) override;
+          void HandleStateStart( ) override;
+          void HandleStateExit ( ) override;
+
+          bool HandleLpmState     ( bool active )  override;
+          bool HandleCapsState    ( bool active )  override;
+          bool HandleNetworkState ( bool active )  override;
+    };
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
