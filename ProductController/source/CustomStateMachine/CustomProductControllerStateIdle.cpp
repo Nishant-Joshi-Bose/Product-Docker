@@ -58,7 +58,7 @@ namespace ProductApp
 CustomProductControllerStateIdle::CustomProductControllerStateIdle( ProductControllerHsm&       hsm,
                                                                     CHsmState*                  pSuperState,
                                                                     ProfessorProductController& productController,
-                                                                    STATE                       stateId,
+                                                                    Hsm::STATE                  stateId,
                                                                     const std::string&          name )
 
     : ProductControllerStateIdle( hsm, pSuperState, productController, stateId, name )

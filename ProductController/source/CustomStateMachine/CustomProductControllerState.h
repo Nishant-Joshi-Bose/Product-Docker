@@ -59,7 +59,7 @@ namespace ProductApp
 
           CustomProductControllerState( ProductControllerHsm& productStateMachine,
                                         CHsmState*            pSuperState,
-                                        STATE                 stateId = 0,
+                                        Hsm::STATE            stateId = 0,
                                         const std::string&    name    = "Top" );
 
 	  virtual ~CustomProductControllerState()

@@ -54,7 +54,7 @@ namespace ProductApp
           CustomProductControllerStateIdle( ProductControllerHsm&       hsm,
                                             CHsmState*                  pSuperState,
                                             ProfessorProductController& productController,
-                                            STATE                       stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE,
+                                            Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE,
                                             const std::string&          name    = "CustomProductControllerStateIdle" );
 
          virtual ~CustomProductControllerStateIdle()

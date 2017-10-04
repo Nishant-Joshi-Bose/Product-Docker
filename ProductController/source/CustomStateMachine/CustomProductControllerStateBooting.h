@@ -54,7 +54,7 @@ namespace ProductApp
           CustomProductControllerStateBooting( ProductControllerHsm&       hsm,
                                                CHsmState*                  pSuperState,
                                                ProfessorProductController& productController,
-                                               STATE                       stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING,
+                                               Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING,
                                                const std::string&          name    = "CustomProductControllerStateBooting" );
 
           virtual ~CustomProductControllerStateBooting( )
