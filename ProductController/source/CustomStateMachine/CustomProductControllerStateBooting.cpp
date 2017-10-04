@@ -189,6 +189,32 @@ bool CustomProductControllerStateBooting::HandleNetworkState( bool active )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief CustomProductControllerStateBooting::HandleSTSSourcesInit
+/// @param none
+/// @return true - the event was handled
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateBooting::HandleSTSSourcesInit     ( void )
+{
+     BOSE_DEBUG( s_logger, "The Product Booting State is handling the STSSourcesInit event." );
+
+     if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
+     {
+         if( static_cast< ProfessorProductController& >( GetProductController( ) ).GetNetworkStatus( ) )
+         {
+             BOSE_DEBUG( s_logger, "The Product Booting State is changing to the Idle state." );
+             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
+         }
+         else
+         {
+             BOSE_DEBUG( s_logger, "The Product Booting State is changing to the Network Standby state." );
+             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
+         }
+     }
+
+     return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                       End of Namespace                                       ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }

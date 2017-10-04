@@ -55,6 +55,7 @@
 #include "CustomProductControllerStateNetworkStandby.h"
 #include "CustomProductControllerStateIdle.h"
 #include "CustomProductControllerStateUpdating.h"
+#include "ProductSTSController.h"
 
 namespace ProductApp
 {
@@ -234,6 +235,18 @@ class ProfessorProductController : public ProductController
       bool m_IsCapsReady      = false;
       bool m_IsAudioPathReady = false;
       bool m_IsNetworkReady   = false;
+
+      //////////////////////////////////////////////////////////////////////////////////////////////
+      ///
+      /// @brief Interfaces to the ProductSTSController, which implements the interactions
+      ///        between the Professor Product Controller and the STS source proxies.
+      ///
+      //////////////////////////////////////////////////////////////////////////////////////////////
+      void SetupProductSTSConntroller( void );
+      void HandleSTSInitWasComplete( void );
+      void HandleSelectSourceSlot( ProductSTS::ProductSourceSlot sourceSlot );
+      bool                       m_IsSTSReady;
+      ProductSTSController       m_ProductSTSController;
 };
 
 }

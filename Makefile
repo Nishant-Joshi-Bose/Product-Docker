@@ -30,6 +30,7 @@ A4VVIDEOMANAGERSERVICE_DIR = $(shell components get A4VVideoManagerService insta
 
 .PHONY: generated_sources
 generated_sources: check_tools version-files
+	$(MAKE) -C ProductSTSController $@
 	$(MAKE) -C ProductController $@
 	$(MAKE) -C $(RIVIERALPMSERVICE_DIR) $@
 	$(MAKE) -C $(CASTLEPRODUCTCONTROLLERCOMMON_DIR) $@
