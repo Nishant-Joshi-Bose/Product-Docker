@@ -39,8 +39,7 @@
 #include "ProductController.h"
 #include "ProfessorProductController.h"
 #include "ProductHardwareInterface.h"
-#include "ProductDeviceSettings.h"
-#include "ProductAudioServices.h"
+#include "ProductAudioService.h"
 #include "ProductSoftwareServices.h"
 #include "ProductUserInterface.h"
 #include "ProductFrontDoorNetwork.h"
@@ -228,16 +227,10 @@ void ProfessorProductController::Run( )
 
      m_ProductHardwareInterface = ProductHardwareInterface::GetInstance( GetTask( ),
                                                                          CallbackForMessages );
-
      m_ProductFrontDoorNetwork  = ProductFrontDoorNetwork::GetInstance ( GetTask( ),
                                                                          CallbackForMessages );
-
-     m_ProductAudioServices     = ProductAudioServices::GetInstance    ( GetTask( ),
-                                                                         CallbackForMessages,
-                                                                         m_ProductHardwareInterface );
-     m_ProductDeviceSettings    = ProductDeviceSettings::GetInstance   ( GetTask( ),
-                                                                         CallbackForMessages,
-                                                                         m_ProductHardwareInterface );
+     m_ProductAudioService      = ProductAudioService::GetInstance     ( GetTask( ),
+                                                                         CallbackForMessages);
      m_ProductSoftwareServices  = ProductSoftwareServices::GetInstance ( GetTask( ),
                                                                          CallbackForMessages,
                                                                          m_ProductHardwareInterface );
@@ -252,8 +245,7 @@ void ProfessorProductController::Run( )
      /// Run all the submodules.
      ///
      m_ProductHardwareInterface->Run( );
-     m_ProductAudioServices    ->Run( );
-     m_ProductDeviceSettings   ->Run( );
+     m_ProductAudioService     ->Run( );
      m_ProductSoftwareServices ->Run( );
      m_ProductUserInterface    ->Run( );
      m_ProductCommandLine      ->Run( );
@@ -345,7 +337,7 @@ std::string ProfessorProductController::GetSystemLanguageCode( )
 /// @brief ProfessorProductController::SetSystemLanguageCode
 /// @param systemLanguageString
 ///
-///////////////////////////////////////////////////////////ProductDeviceSettings.cpp/////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::SetSystemLanguageCode( std::string systemLanguageString )
 {
      m_LanguageSettings.set_code( systemLanguageString );

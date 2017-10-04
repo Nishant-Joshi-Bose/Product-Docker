@@ -61,15 +61,15 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateUpdatingSoftware::CustomProductControllerStateUpdatingSoftware
-( ProductControllerHsm&       hsm,
-  CHsmState*                  pSuperState,
-  ProfessorProductController& productController,
-  STATE                       stateId,
-  const std::string&          name )
+                                            ( ProductControllerHsm&       hsm,
+                                              CHsmState*                  pSuperState,
+                                              ProfessorProductController& productController,
+                                              Hsm::STATE                  stateId,
+                                              const std::string&          name )
 
     : ProductControllerState( hsm, pSuperState, productController, stateId, name )
 {
-    BOSE_DEBUG( s_logger, "The Product Software Update State is being constructed." );
+     BOSE_DEBUG( s_logger, "The Product Software Update State is being constructed." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -113,7 +113,7 @@ void CustomProductControllerStateUpdatingSoftware::HandleStateExit()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateUpdatingSoftware::HandleLpmState( bool active )
 {
-    return true;
+     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

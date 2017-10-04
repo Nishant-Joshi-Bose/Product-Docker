@@ -18,9 +18,8 @@ INCLUDE_DIRECTORIES(
   ${CASTLE_PRODUCT_CONTROLLER_COMMON_DIR}
   ${CASTLE_PRODUCT_CONTROLLER_COMMON_DIR}/Hsm
   ${KEYHANDLER_DIR}/include
-  CustomHsm
-  DeviceManager
   .
+  ${CASTLE_PRODUCT_CONTROLLER_COMMON_DIR}/ProductAudioService 
   include
   source
   source/CustomStateMachine
@@ -43,16 +42,15 @@ SET(SOUNDTOUCH_SDK_LIBS
 ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/A4VPersistence.pb.cc
   ${PROTO_CC_DEST}/A4VSystemTimeout.pb.cc
-  ${PROTO_CC_DEST}/AudioControls.pb.cc
+  ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/RebroadcastLatencyMode.pb.cc
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
   ${PROTO_CC_DEST}/Language.pb.cc
+  ${PROTO_CC_DEST}/ContentItem.pb.cc
   source/ProductStart.cpp
   source/ProductCommandLine.cpp
   source/ProductHardwareInterface.cpp
-  source/ProductAudioServices.cpp
-  source/ProductDeviceSettings.cpp
   source/ProductSoftwareServices.cpp
   source/ProductFrontDoorNetwork.cpp
   source/ProductUserInterface.cpp
