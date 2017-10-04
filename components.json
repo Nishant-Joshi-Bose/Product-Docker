@@ -1,5 +1,17 @@
 [
   {
+    "name": "UnitTest++-ti",
+    "selected_version": "branches/UnitTest++@2312"
+  },
+  {
+    "name": "UnitTest++-qc8017_32",
+    "selected_version": "branches/UnitTest++@2312"
+  },
+  {
+    "name": "UnitTest++-native",
+    "selected_version": "branches/UnitTest++@2312"
+  },
+  {
     "name": "CastleAudioPath-qc8017_32",
     "selected_version": "Continuous/Castle-Fork/2017-10-03_1231"
   },
@@ -41,11 +53,11 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-03_1202"
+    "selected_version": "Continuous/Castle-Fork/2017-10-04_0826"
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@3b0052541648f7b56dd9b7cc4c6789c179dff70c"
+    "selected_version": "master@a58a5eca30d0a12c66b3bca1126b5a3176f3ee10"
   },
   {
     "name": "RivieraLPM",
