@@ -56,6 +56,11 @@ namespace ProductApp
     {
          return true;
     }
+
+    bool CustomProductControllerState::HandleSTSSourcesInit ( void )
+    {
+         return true;
+    }
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                         End of File                                          ///

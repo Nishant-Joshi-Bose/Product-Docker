@@ -21,15 +21,17 @@ INCLUDE_DIRECTORIES(
   include
   source
   source/CustomStateMachine
+  ../ProductSTSController
 )
 
 SET(SOUNDTOUCH_SDK_LIBS
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libSoundTouchClient.a
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libFrontDoorClient.a
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/Libs/libShelbyUtils.a
-  ${BOSELIBS_DIR}/lib/libBoseLibs.a
+  SoundTouchClient
+  FrontDoorClient
+  ShelbyUtils
+  BoseLibs
   ${NETWORK_COMMON_LIBS}/libNetworkServiceUtils.a
   ${NETWORK_COMMON_LIBS}/libNetworkServiceClient.a
+  STS
 )
 
 # -----------------------------------------------------------------------------
@@ -56,10 +58,19 @@ ADD_EXECUTABLE(Professor
   source/CustomStateMachine/CustomProductControllerStateIdle.cpp
   source/CustomStateMachine/CustomProductControllerStateNetworkStandby.cpp
   source/CustomStateMachine/CustomProductControllerStateUpdating.cpp
+  ../ProductSTSController/ProductSTSStateTop.cpp
+  ../ProductSTSController/ProductSTSController.cpp
+  ../ProductSTSController/ProductSTSAccount.cpp
+  ${PROTO_CC_DEST}/ProductSTSIntrospect.pb.cc
+  ${PROTO_CC_DEST}/ProductSTS.pb.cc
 )
 
+#
+# lines duplicated on purpose, otherwise the linker complains
+#
 TARGET_LINK_LIBRARIES(Professor
   CastleProductControllerCommon
+  ${SOUNDTOUCH_SDK_LIBS}
   ${SOUNDTOUCH_SDK_LIBS}
   LpmClient
   jsoncpp

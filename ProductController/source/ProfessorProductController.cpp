@@ -33,6 +33,7 @@
 #include <thread>
 #include <unistd.h>
 #include "SystemUtils.h"
+#include "Callback.h"
 #include "DPrint.h"
 #include "CliClient.h"
 #include "ProductController.h"
@@ -180,7 +181,8 @@ ProfessorProductController::ProfessorProductController( ) :
     m_IsLpmReady( false ),
     m_IsCapsReady( false ),
     m_IsAudioPathReady( false ),
-    m_IsNetworkReady( false )
+    m_IsNetworkReady  ( false ),
+    m_IsSTSReady      ( false )
 {
     return;
 }
@@ -198,84 +200,88 @@ ProfessorProductController::ProfessorProductController( ) :
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::Run( )
 {
-    m_running = true;
+     m_running = true;
 
-    BOSE_DEBUG( s_logger, "------------- Product Controller Starting Modules ------------" );
-    BOSE_DEBUG( s_logger, "The Professor Product Controller is starting up its processes." );
+     BOSE_DEBUG( s_logger, "------------- Product Controller Starting Modules ------------" );
+     BOSE_DEBUG( s_logger, "The Professor Product Controller is starting up its processes." );
 
-    ///
-    /// Start the Product Controller state machine.
-    ///
-    m_ProductControllerStateMachine.AddState( &m_ProductControllerStateTop );
-    m_ProductControllerStateMachine.AddState( &m_ProductControllerStateSetup );
-    m_ProductControllerStateMachine.AddState( &m_ProductControllerStateOn );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateBooting );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateNetworkStandby );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateIdle );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateUpdating );
+     ///
+     /// Start the Product Controller state machine.
+     ///
+     m_ProductControllerStateMachine.AddState( &m_ProductControllerStateTop                  );
+     m_ProductControllerStateMachine.AddState( &m_ProductControllerStateSetup                );
+     m_ProductControllerStateMachine.AddState( &m_ProductControllerStateOn                   );
+     m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateBooting        );
+     m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateNetworkStandby );
+     m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateIdle           );
+     m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateUpdating       );
 
-    m_ProductControllerStateMachine.Init( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
+     m_ProductControllerStateMachine.Init( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
-    ///
-    /// Get instances of all the subprocesses.
-    ///
-    Callback < ProductMessage > CallbackForMessages( std::bind( &ProfessorProductController::HandleMessage,
-                                                                this,
-                                                                std::placeholders::_1 ) );
+     ///
+     /// Get instances of all the subprocesses.
+     ///
+     Callback < ProductMessage > CallbackForMessages( std::bind( &ProfessorProductController::HandleMessage,
+                                                                 this,
+                                                                 std::placeholders::_1 ) );
 
-    m_ProductHardwareInterface = ProductHardwareInterface::GetInstance( GetTask( ),
-                                                                        CallbackForMessages );
-
-    m_ProductFrontDoorNetwork  = ProductFrontDoorNetwork::GetInstance( GetTask( ),
-                                                                       CallbackForMessages );
-
-    m_ProductAudioService      = ProductAudioServices::GetInstance( GetTask( ),
+     m_ProductHardwareInterface = ProductHardwareInterface::GetInstance( GetTask( ),
+                                                                         CallbackForMessages );
+     m_ProductFrontDoorNetwork  = ProductFrontDoorNetwork::GetInstance ( GetTask( ),
+                                                                         CallbackForMessages );
+     m_ProductAudioService      = ProductAudioServices::GetInstance( GetTask( ),
                                                                     CallbackForMessages );
-    m_ProductSoftwareServices  = ProductSoftwareServices::GetInstance( GetTask( ),
-                                                                       CallbackForMessages,
-                                                                       m_ProductHardwareInterface );
-    m_ProductUserInterface     = ProductUserInterface::GetInstance( GetTask( ),
-                                                                    CallbackForMessages,
-                                                                    m_ProductHardwareInterface );
-    m_ProductCommandLine       = ProductCommandLine::GetInstance( GetTask( ),
-                                                                  m_ProductHardwareInterface );
+     m_ProductSoftwareServices  = ProductSoftwareServices::GetInstance ( GetTask( ),
+                                                                         CallbackForMessages,
+                                                                         m_ProductHardwareInterface );
+     m_ProductUserInterface     = ProductUserInterface::GetInstance    ( GetTask( ),
+                                                                         CallbackForMessages,
+                                                                         m_ProductHardwareInterface );
+     m_ProductCommandLine       = ProductCommandLine::GetInstance      ( GetTask( ),
+                                                                         m_ProductHardwareInterface );
+     
+     ///
+     /// Run all the submodules.
+     ///
+     m_ProductHardwareInterface->Run( );
+     m_ProductAudioServices    ->Run( );
+     m_ProductDeviceSettings   ->Run( );
+     m_ProductSoftwareServices ->Run( );
+     m_ProductUserInterface    ->Run( );
+     m_ProductCommandLine      ->Run( );
+     m_ProductFrontDoorNetwork ->Run( );
+     
+     ///
+     /// Read the language settings and configuration status from persistent storage.
+     ///
+     ReadLanguageSettingsFromPersistentStorage   ( );
+     ReadConfigurationStatusFromPersistentStorage( );
+     
+     ///
+     /// Set up the STSProductController
+     ///
+     SetupProductSTSConntroller();
 
-    ///
-    /// Run all the submodules.
-    ///
-    m_ProductHardwareInterface->Run( );
-    m_ProductAudioService     ->Run( );
-    m_ProductSoftwareServices ->Run( );
-    m_ProductUserInterface    ->Run( );
-    m_ProductCommandLine      ->Run( );
-    m_ProductFrontDoorNetwork ->Run( );
+     ///
+     /// Send the language settings and configuration status to the Front Door Network.
+     ///
+     ProductMessage productMessage;
 
-    ///
-    /// Read the language settings and configuration status from persistent storage.
-    ///
-    ReadLanguageSettingsFromPersistentStorage( );
-    ReadConfigurationStatusFromPersistentStorage( );
+     productMessage.set_id( SYSTEM_LANGUAGE_CHANGE );
+     productMessage.mutable_data( )->mutable_languagedata( )->set_systemlanguage( GetSystemLanguageCode( ) );
 
-    ///
-    /// Send the language settings and configuration status to the Front Door Network.
-    ///
-    ProductMessage productMessage;
+     m_ProductFrontDoorNetwork->HandleMessage( productMessage );
 
-    productMessage.set_id( SYSTEM_LANGUAGE_CHANGE );
-    productMessage.mutable_data( )->mutable_languagedata( )->set_systemlanguage( GetSystemLanguageCode( ) );
+     bool networkStatus  = m_ConfigurationStatus.mutable_status( )->network ( );
+     bool languageStatus = m_ConfigurationStatus.mutable_status( )->language( );
+     bool accountStatus  = m_ConfigurationStatus.mutable_status( )->account ( );
 
-    m_ProductFrontDoorNetwork->HandleMessage( productMessage );
+     productMessage.set_id( CONFIGURATION_STATUS );
+     productMessage.mutable_data( )->mutable_configurationstatus( )->set_network ( networkStatus  );
+     productMessage.mutable_data( )->mutable_configurationstatus( )->set_language( languageStatus );
+     productMessage.mutable_data( )->mutable_configurationstatus( )->set_account ( accountStatus  );
 
-    bool networkStatus  = m_ConfigurationStatus.mutable_status( )->network( );
-    bool languageStatus = m_ConfigurationStatus.mutable_status( )->language( );
-    bool accountStatus  = m_ConfigurationStatus.mutable_status( )->account( );
-
-    productMessage.set_id( CONFIGURATION_STATUS );
-    productMessage.mutable_data( )->mutable_configurationstatus( )->set_network( networkStatus );
-    productMessage.mutable_data( )->mutable_configurationstatus( )->set_language( languageStatus );
-    productMessage.mutable_data( )->mutable_configurationstatus( )->set_account( accountStatus );
-
-    m_ProductFrontDoorNetwork->HandleMessage( productMessage );
+     m_ProductFrontDoorNetwork->HandleMessage( productMessage );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -287,7 +293,11 @@ void ProfessorProductController::Run( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProfessorProductController::IsBooted( )
 {
+<<<<<<< HEAD
     return ( m_IsLpmReady and m_IsCapsReady and m_IsAudioPathReady );
+=======
+     return ( m_IsLpmReady and m_IsCapsReady and m_IsAudioPathReady and m_IsSTSReady );
+>>>>>>> e67791317d5b5fca1b7f1a3efd7ca03990062541
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -598,6 +608,23 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
 
                 break;
 
+            case STS_SOURCES_INIT_DONE:
+                 BOSE_DEBUG( s_logger, "An STS Sources Initialized message was received." );
+
+                 m_IsSTSReady = true;
+
+                 m_ProductControllerStateMachine.Handle<>
+                ( &CustomProductControllerState::HandleSTSSourcesInit );
+
+                 break;
+
+            case SOURCE_SLOT_SELECTED:
+            {
+                 const auto& slot = message.data().selectsourceslot().slot();
+                 BOSE_DEBUG( s_logger, "An STS Select message was received for slot %s.", ProductSourceSlot_Name( slot ).c_str() );
+                 break;
+            }
+
             default:
                 BOSE_DEBUG( s_logger, "A key press message in an unknown state was received with value %d.",
                             keyData.value( ) );
@@ -681,6 +708,79 @@ void ProfessorProductController::End( )
     BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
 
     m_running = false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::SetupProductSTSConntroller
+///
+/// @brief  This method is called to perform the needed initialization of the ProductSTSController,
+///         specifically, provide the set of sources to be created initially
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::SetupProductSTSConntroller( void )
+{
+    std::vector<ProductSTSController::SourceDescriptor> sources;
+    ProductSTSController::SourceDescriptor descriptor_AiQ{ ProductSTS::SLOT_AIQ, "ADAPTiQ", false }; // AiQ is not available as a normal source
+    sources.push_back( descriptor_AiQ );
+    ProductSTSController::SourceDescriptor descriptor_TV{ ProductSTS::SLOT_TV, "TV", true }; // TV is always available
+    sources.push_back( descriptor_TV );
+    Callback<void> cb_STSInitWasComplete( std::bind( &ProfessorProductController::HandleSTSInitWasComplete, this ) );
+    Callback<ProductSTS::ProductSourceSlot> cb_HandleSelectSourceSlot( std::bind( &ProfessorProductController::HandleSelectSourceSlot, this, std::placeholders::_1 ) );
+    m_ProductSTSController.Initialize( sources, cb_STSInitWasComplete, cb_HandleSelectSourceSlot );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::HandleSTSInitWasComplete
+///
+/// @brief  This method is called from the ProductSTSController when all the initially-created 
+///         sources have been created with CAPS/STS
+///
+/// @note   THIS METHOD IS CALLED ON THE ProductSTSController THREAD
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::HandleSTSInitWasComplete( void )
+{
+    ProductMessage message;
+    message.set_id( STS_SOURCES_INIT_DONE );
+    IL::BreakThread( std::bind( &ProfessorProductController::HandleMessage,
+                                this,
+                                message ),
+                     GetTask( ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::HandleSelectSourceSlot
+///
+/// @brief  This method is called from the ProductSTSController when one of our sources is 
+///         activated by CAPS/STS
+///
+/// @note   THIS METHOD IS CALLED ON THE ProductSTSController THREAD
+///
+/// @param  ProductSTS::ProductSourceSlot sourceSlot - identifies the activated slot
+///
+/// @return This method does not return anything.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::HandleSelectSourceSlot( ProductSTS::ProductSourceSlot sourceSlot )
+{
+    ProductMessage message;
+    message.set_id( SOURCE_SLOT_SELECTED );
+    message.mutable_data()->mutable_selectsourceslot()->set_slot( sourceSlot );
+    IL::BreakThread( std::bind( &ProfessorProductController::HandleMessage,
+                                this,
+                                message ),
+                     GetTask( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

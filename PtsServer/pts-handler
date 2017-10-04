@@ -63,6 +63,32 @@ Cache-Control: no-cache\r
 \r"""
         os.execl("/bin/sh", "-c", "logread | gzip")
 
+    if path == "/pts.txt":
+        import subprocess
+
+        def call(*args):
+            print ">", " ".join(args)
+            sys.stdout.flush()
+            subprocess.call(args, stderr=subprocess.STDOUT)
+
+        print """\
+HTTP/1.1 200 OK\r
+Content-Type: text/plain\r
+Cache-Control: no-cache\r
+\r"""
+        os.dup2(sys.stdout.fileno(), sys.stderr.fileno()) # redirect stderr to stdout
+        call("date")
+        call("cat", "/opt/Bose/etc/FS_VERSION")
+        call("free", "-m")
+        call("ifconfig", "-a")
+        call("ip", "route", "list")
+        call("wpa_cli", "status")
+        call("wpa_cli", "scan_results")
+        call("sh", "-c", "head -100 /mnt/nv/BoseApp-Persistence/1/*.xml")
+        call("ls", "-l", "/mnt/nv/BoseLog")
+        call("ps")
+        sys.exit()
+
     # Avoid possible security issues with paths like ../../etc/passwd
     if ".." not in path:
         if path == "/":
