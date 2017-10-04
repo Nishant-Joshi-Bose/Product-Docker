@@ -1,9 +1,1214 @@
-{ "keyTable": [
-        {"Keys": [1],                                           "TimeOut": 300,      "Repeat": false,    "ActionOnTimeout": false,    "Event": 100},
-        {"Keys": [2],                                           "TimeOut": 300,      "Repeat": false,    "ActionOnTimeout": false,    "Event": 200},
-        {"Keys": [3],                                           "TimeOut": 300,      "Repeat": false,    "ActionOnTimeout": false,    "Event": 300},
-        {"Keys": [4],                                           "TimeOut": 300,      "Repeat": false,    "ActionOnTimeout": false,    "Event": 400},
-        {"Keys": [5],                                           "TimeOut": 300,      "Repeat": false,    "ActionOnTimeout": false,    "Event": 500},
-        {"Keys": [6],                                           "TimeOut": 300,      "Repeat": false,    "ActionOnTimeout": false,    "Event": 600},
-        {"Keys": [7],                                           "TimeOut": 300,      "Repeat": false,    "ActionOnTimeout": false,    "Event": 700}
-    ]}
+{
+    "keyTable": [
+        {
+            "Keys": [
+                1
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 1, 
+            "Description": "mute"
+        }, 
+        {
+            "Keys": [
+                2
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 2, 
+            "Description": "volume_down"
+        }, 
+        {
+            "Keys": [
+                3
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 3, 
+            "Description": "volume_up"
+        }, 
+        {
+            "Keys": [
+                6
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 6, 
+            "Description": "game_source"
+        }, 
+        {
+            "Keys": [
+                7
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 7, 
+            "Description": "special_feature_2"
+        }, 
+        {
+            "Keys": [
+                12
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 12, 
+            "Description": "special_feature_1"
+        }, 
+        {
+            "Keys": [
+                13
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 13, 
+            "Description": "aux_source"
+        }, 
+        {
+            "Keys": [
+                14
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 14, 
+            "Description": "tv_source"
+        }, 
+        {
+            "Keys": [
+                15
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 15, 
+            "Description": "321_aux_source"
+        }, 
+        {
+            "Keys": [
+                16
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 16, 
+            "Description": "unify source"
+        }, 
+        {
+            "Keys": [
+                20
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 20, 
+            "Description": "last_channel"
+        }, 
+        {
+            "Keys": [
+                21
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 21, 
+            "Description": "cbl_sat_source"
+        }, 
+        {
+            "Keys": [
+                24
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 24, 
+            "Description": "channel_down"
+        }, 
+        {
+            "Keys": [
+                25
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 25, 
+            "Description": "channel_up"
+        }, 
+        {
+            "Keys": [
+                26
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 26, 
+            "Description": "stop"
+        }, 
+        {
+            "Keys": [
+                32
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 32, 
+            "Description": "down"
+        }, 
+        {
+            "Keys": [
+                33
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 33, 
+            "Description": "shuffle"
+        }, 
+        {
+            "Keys": [
+                34
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 34, 
+            "Description": "source_cycle"
+        }, 
+        {
+            "Keys": [
+                35
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 35, 
+            "Description": "more_buttons"
+        }, 
+        {
+            "Keys": [
+                36
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 36, 
+            "Description": "tv_power"
+        }, 
+        {
+            "Keys": [
+                44
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 44, 
+            "Description": "source_power"
+        }, 
+        {
+            "Keys": [
+                48
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 48, 
+            "Description": "exit"
+        }, 
+        {
+            "Keys": [
+                49
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 49, 
+            "Description": "menu_exit"
+        }, 
+        {
+            "Keys": [
+                60
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 60, 
+            "Description": "tv_input"
+        }, 
+        {
+            "Keys": [
+                64
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 64, 
+            "Description": "number_0"
+        }, 
+        {
+            "Keys": [
+                65
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 65, 
+            "Description": "number_1"
+        }, 
+        {
+            "Keys": [
+                66
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 66, 
+            "Description": "number_2"
+        }, 
+        {
+            "Keys": [
+                67
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 67, 
+            "Description": "number_3"
+        }, 
+        {
+            "Keys": [
+                68
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 68, 
+            "Description": "number_4"
+        }, 
+        {
+            "Keys": [
+                69
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 69, 
+            "Description": "number_5"
+        }, 
+        {
+            "Keys": [
+                70
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 70, 
+            "Description": "number_6"
+        }, 
+        {
+            "Keys": [
+                71
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 71, 
+            "Description": "number_7"
+        }, 
+        {
+            "Keys": [
+                72
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 72, 
+            "Description": "number_8"
+        }, 
+        {
+            "Keys": [
+                73
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 73, 
+            "Description": "number_9"
+        }, 
+        {
+            "Keys": [
+                76
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 76, 
+            "Description": "on_off"
+        }, 
+        {
+            "Keys": [
+                83
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 83, 
+            "Description": "bd_dvd_source"
+        }, 
+        {
+            "Keys": [
+                85
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 85, 
+            "Description": "play"
+        }, 
+        {
+            "Keys": [
+                86
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 86, 
+            "Description": "pause"
+        }, 
+        {
+            "Keys": [
+                87
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 87, 
+            "Description": "fast_reverse"
+        }, 
+        {
+            "Keys": [
+                88
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 88, 
+            "Description": "fast_forward"
+        }, 
+        {
+            "Keys": [
+                89
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 89, 
+            "Description": "quick_replay"
+        }, 
+        {
+            "Keys": [
+                90
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 90, 
+            "Description": "quick_skip"
+        }, 
+        {
+            "Keys": [
+                92
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 92, 
+            "Description": "dash"
+        }, 
+        {
+            "Keys": [
+                93
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 93, 
+            "Description": "auto_wake_toggle"
+        }, 
+        {
+            "Keys": [
+                96
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 96, 
+            "Description": "right"
+        }, 
+        {
+            "Keys": [
+                100
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 100, 
+            "Description": "info"
+        }, 
+        {
+            "Keys": [
+                104
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 104, 
+            "Description": "page_down"
+        }, 
+        {
+            "Keys": [
+                105
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 105, 
+            "Description": "page_up"
+        }, 
+        {
+            "Keys": [
+                106
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 106, 
+            "Description": "thumbs_down"
+        }, 
+        {
+            "Keys": [
+                107
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 107, 
+            "Description": "thumbs_up"
+        }, 
+        {
+            "Keys": [
+                112
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 112, 
+            "Description": "HDMI_1"
+        }, 
+        {
+            "Keys": [
+                113
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 113, 
+            "Description": "HDMI_2"
+        }, 
+        {
+            "Keys": [
+                114
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 114, 
+            "Description": "HDMI_3"
+        }, 
+        {
+            "Keys": [
+                115
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 115, 
+            "Description": "HDMI_4"
+        }, 
+        {
+            "Keys": [
+                116
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 116, 
+            "Description": "HDMI_5"
+        }, 
+        {
+            "Keys": [
+                117
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 117, 
+            "Description": "HDMI_FRONT"
+        }, 
+        {
+            "Keys": [
+                128
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 128, 
+            "Description": "system"
+        }, 
+        {
+            "Keys": [
+                129
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 129, 
+            "Description": "blue_tooth_source"
+        }, 
+        {
+            "Keys": [
+                130
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 130, 
+            "Description": "bass"
+        }, 
+        {
+            "Keys": [
+                131
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 131, 
+            "Description": "dialog"
+        }, 
+        {
+            "Keys": [
+                132
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 132, 
+            "Description": "softkey_live"
+        }, 
+        {
+            "Keys": [
+                133
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 133, 
+            "Description": "softkey_favorite"
+        }, 
+        {
+            "Keys": [
+                134
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 134, 
+            "Description": "softkey_format"
+        }, 
+        {
+            "Keys": [
+                135
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 135, 
+            "Description": "softkey_sap"
+        }, 
+        {
+            "Keys": [
+                136
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 136, 
+            "Description": "softkey_pip"
+        }, 
+        {
+            "Keys": [
+                137
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 137, 
+            "Description": "softkey_pip_off"
+        }, 
+        {
+            "Keys": [
+                138
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 138, 
+            "Description": "softkey_pandora"
+        }, 
+        {
+            "Keys": [
+                139
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 139, 
+            "Description": "softkey_youtube"
+        }, 
+        {
+            "Keys": [
+                140
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 140, 
+            "Description": "assert_on"
+        }, 
+        {
+            "Keys": [
+                141
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 141, 
+            "Description": "softkey_roku"
+        }, 
+        {
+            "Keys": [
+                142
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 142, 
+            "Description": "softkey_yahoo"
+        }, 
+        {
+            "Keys": [
+                143
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 143, 
+            "Description": "softkey_spotify"
+        }, 
+        {
+            "Keys": [
+                144
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 144, 
+            "Description": "dvd_menu"
+        }, 
+        {
+            "Keys": [
+                145
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 145, 
+            "Description": "softkey_web_internet"
+        }, 
+        {
+            "Keys": [
+                146
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 146, 
+            "Description": "softkey_widgets_apps"
+        }, 
+        {
+            "Keys": [
+                147
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 147, 
+            "Description": "softkey_picture_mode"
+        }, 
+        {
+            "Keys": [
+                148
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 148, 
+            "Description": "softkey_sound_mode"
+        }, 
+        {
+            "Keys": [
+                149
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 149, 
+            "Description": "softkey_clear"
+        }, 
+        {
+            "Keys": [
+                150
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 150, 
+            "Description": "softkey_pwr_on"
+        }, 
+        {
+            "Keys": [
+                151
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 151, 
+            "Description": "softkey_subtitle"
+        }, 
+        {
+            "Keys": [
+                152
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 152, 
+            "Description": "softkey_slow"
+        }, 
+        {
+            "Keys": [
+                153
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 153, 
+            "Description": "softkey_pwr_off"
+        }, 
+        {
+            "Keys": [
+                154
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 154, 
+            "Description": "softkey_delimiter"
+        }, 
+        {
+            "Keys": [
+                155
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 155, 
+            "Description": "softkey_last_channel"
+        }, 
+        {
+            "Keys": [
+                156
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 156, 
+            "Description": "record"
+        }, 
+        {
+            "Keys": [
+                157
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 157, 
+            "Description": "softkey_back"
+        }, 
+        {
+            "Keys": [
+                158
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 158, 
+            "Description": "softkey_channel_list"
+        }, 
+        {
+            "Keys": [
+                159
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 159, 
+            "Description": "softkey_eject"
+        }, 
+        {
+            "Keys": [
+                160
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 160, 
+            "Description": "left"
+        }, 
+        {
+            "Keys": [
+                161
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 161, 
+            "Description": "softkey_quick_skip"
+        }, 
+        {
+            "Keys": [
+                162
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 162, 
+            "Description": "softkey_recordings"
+        }, 
+        {
+            "Keys": [
+                163
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 163, 
+            "Description": "softkey_netflix"
+        }, 
+        {
+            "Keys": [
+                164
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 164, 
+            "Description": "softkey_amazon"
+        }, 
+        {
+            "Keys": [
+                165
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 165, 
+            "Description": "softkey_3dvideo"
+        }, 
+        {
+            "Keys": [
+                166
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 166, 
+            "Description": "softkey_standby"
+        }, 
+        {
+            "Keys": [
+                167
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 167, 
+            "Description": "softkey_hulu"
+        }, 
+        {
+            "Keys": [
+                168
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 168, 
+            "Description": "softkey_options"
+        }, 
+        {
+            "Keys": [
+                169
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 169, 
+            "Description": "softkey_tools"
+        }, 
+        {
+            "Keys": [
+                170
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 170, 
+            "Description": "softkey_pwrtoggle"
+        }, 
+        {
+            "Keys": [
+                171
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 171, 
+            "Description": "softkey_popupmenu"
+        }, 
+        {
+            "Keys": [
+                172
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 172, 
+            "Description": "softkey_titlemenu"
+        }, 
+        {
+            "Keys": [
+                173
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 173, 
+            "Description": "softkey_help"
+        }, 
+        {
+            "Keys": [
+                175
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 175, 
+            "Description": "bose internet"
+        }, 
+        {
+            "Keys": [
+                178
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 178, 
+            "Description": "closed_caption"
+        }, 
+        {
+            "Keys": [
+                179
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 179, 
+            "Description": "soundtouch_source"
+        }, 
+        {
+            "Keys": [
+                182
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 182, 
+            "Description": "dvr"
+        }, 
+        {
+            "Keys": [
+                183
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 183, 
+            "Description": "teletext"
+        }, 
+        {
+            "Keys": [
+                192
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 192, 
+            "Description": "up"
+        }, 
+        {
+            "Keys": [
+                193
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 193, 
+            "Description": "i_tv"
+        }, 
+        {
+            "Keys": [
+                197
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 197, 
+            "Description": "red"
+        }, 
+        {
+            "Keys": [
+                198
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 198, 
+            "Description": "green"
+        }, 
+        {
+            "Keys": [
+                199
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 199, 
+            "Description": "yellow"
+        }, 
+        {
+            "Keys": [
+                200
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 200, 
+            "Description": "blue"
+        }, 
+        {
+            "Keys": [
+                204
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 204, 
+            "Description": "assert_off"
+        }, 
+        {
+            "Keys": [
+                205
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 205, 
+            "Description": "assert_unmute"
+        }, 
+        {
+            "Keys": [
+                208
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 208, 
+            "Description": "epg_guide"
+        }, 
+        {
+            "Keys": [
+                220
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 220, 
+            "Description": "aspect_ratio"
+        }, 
+        {
+            "Keys": [
+                224
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 224, 
+            "Description": "enter"
+        }, 
+        {
+            "Keys": [
+                240
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 240, 
+            "Description": "special_feature_3"
+        }, 
+        {
+            "Keys": [
+                247
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 247, 
+            "Description": "special_feature_4"
+        }, 
+        {
+            "Keys": [
+                254
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 254, 
+            "Description": "assert_mute"
+        }
+    ]
+}
