@@ -10,8 +10,8 @@ PROTO_SOURCES = \
       A4VPersistence.proto          \
       A4VSystemTimeout.proto        \
       ConfigurationStatus.proto     \
-      Language.proto				\
-      ContentItem.proto 			\
+      Language.proto                \
+      ContentItem.proto  			\
 
 # Where to search for imported *.proto files.
 PROTO_IMPORT_DIRS := \
