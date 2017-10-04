@@ -34,7 +34,6 @@
 #include "Services.h"
 #include "APProductIF.h"
 #include "APProductFactory.h"
-#include "AudioControls.pb.h"
 #include "BoseLinkServerMsgReboot.pb.h"
 #include "BoseLinkServerMsgIds.pb.h"
 #include "IPCServerListener.h"
