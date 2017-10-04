@@ -40,10 +40,12 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/A4VPersistence.pb.cc
   ${PROTO_CC_DEST}/A4VSystemTimeout.pb.cc
   ${PROTO_CC_DEST}/AudioControls.pb.cc
+  ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/RebroadcastLatencyMode.pb.cc
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
   ${PROTO_CC_DEST}/Language.pb.cc
+  ${PROTO_CC_DEST}/ContentItem.pb.cc
   source/ProductStart.cpp
   source/ProductCommandLine.cpp
   source/ProductHardwareInterface.cpp

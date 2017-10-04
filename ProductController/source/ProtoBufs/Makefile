@@ -5,12 +5,14 @@ SOUNDTOUCH_SDK_DIR := $(shell components get SoundTouch-SDK-$(sdk) installed_loc
 
 PROTO_SOURCES = \
       AudioControls.proto           \
+      AudioSettings.proto           \
       ProductMessage.proto          \
       RebroadcastLatencyMode.proto  \
       A4VPersistence.proto          \
       A4VSystemTimeout.proto        \
       ConfigurationStatus.proto     \
-      Language.proto
+      Language.proto                \
+      ContentItem.proto  			\
 
 # Where to search for imported *.proto files.
 PROTO_IMPORT_DIRS := \
