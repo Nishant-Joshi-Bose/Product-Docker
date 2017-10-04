@@ -87,166 +87,166 @@ class ProductSoftwareServices;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProfessorProductController : public ProductController
 {
-  public:
+public:
 
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      ///
-      /// @name   ProfessorProductController::GetInstance
-      ///
-      /// @brief  This static method creates the one and only instance of a ProfessorProductController
-      ///         object. That only one instance is created in a thread safe way is guaranteed by
-      ///         the C++ Version 11 compiler.
-      ///
-      /// @param  void This method does not take any arguments.
-      ///
-      /// @return This method returns a reference to a ProfessorProductController object.
-      ///
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      static ProfessorProductController* GetInstance( );
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @name   ProfessorProductController::GetInstance
+    ///
+    /// @brief  This static method creates the one and only instance of a ProfessorProductController
+    ///         object. That only one instance is created in a thread safe way is guaranteed by
+    ///         the C++ Version 11 compiler.
+    ///
+    /// @param  void This method does not take any arguments.
+    ///
+    /// @return This method returns a reference to a ProfessorProductController object.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    static ProfessorProductController* GetInstance( );
 
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      ///
-      /// @brief  The following public methods are used to start the ProfessorProductController
-      ///         instance task, set up processing before this task runs, and wait for the task to
-      ///         end, and end the task resCustomProductControllerStateBootingpectively.
-      ///
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      void Run    ( void );
-      void OnEntry( void );
-      void Wait   ( void );
-      void End    ( void );
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief  The following public methods are used to start the ProfessorProductController
+    ///         instance task, set up processing before this task runs, and wait for the task to
+    ///         end, and end the task resCustomProductControllerStateBootingpectively.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    void Run( void );
+    void OnEntry( void );
+    void Wait( void );
+    void End( void );
 
-      inline CThreadMutex& GetLock( )
-      {
-             return m_lock;
-      }
+    inline CThreadMutex& GetLock( )
+    {
+        return m_lock;
+    }
 
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      ///
-      /// @brief The following method is called to handle product controller messages, which are
-      ///        sent from the more product specific class instances, and is used to process the
-      ///        state machine for the product.
-      ///
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      void HandleMessage( const ProductMessage& message );
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method is called to handle product controller messages, which are
+    ///        sent from the more product specific class instances, and is used to process the
+    ///        state machine for the product.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    void HandleMessage( const ProductMessage& message );
 
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      ///
-      /// @name   ProfessorProductController
-      ///
-      /// @brief  The constructor for this class is set to be private. This definition prevents this
-      ///         class from being instantiated directly, so that only the static method GetInstance
-      ///         to this class can be used to get the one sole instance of it.
-      ///
-      /// @param  void This method does not take any arguments.
-      ///
-      /// @return This method does not return anything.
-      ///
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      ProfessorProductController( );
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @name   ProfessorProductController
+    ///
+    /// @brief  The constructor for this class is set to be private. This definition prevents this
+    ///         class from being instantiated directly, so that only the static method GetInstance
+    ///         to this class can be used to get the one sole instance of it.
+    ///
+    /// @param  void This method does not take any arguments.
+    ///
+    /// @return This method does not return anything.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ProfessorProductController( );
 
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      ///
-      /// @brief The following copy constructor and equality operator for this class are private
-      ///        and are set to be undefined through the delete keyword. This prevents this class
-      ///        from being copied directly, so that only the static method GetInstance to this
-      ///        class can be used to get the one sole instance of it.
-      ///
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      ProfessorProductController( ProfessorProductController const& ) = delete;
-      void operator      =      ( ProfessorProductController const& ) = delete;
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following copy constructor and equality operator for this class are private
+    ///        and are set to be undefined through the delete keyword. This prevents this class
+    ///        from being copied directly, so that only the static method GetInstance to this
+    ///        class can be used to get the one sole instance of it.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ProfessorProductController( ProfessorProductController const& ) = delete;
+    void operator      = ( ProfessorProductController const& ) = delete;
 
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      ///
-      /// The following member is a mutual exclusion object used to prevent race conditions.
-      ///
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      CThreadMutex m_lock;
-      bool         m_running;
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// The following member is a mutual exclusion object used to prevent race conditions.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    CThreadMutex m_lock;
+    bool         m_running;
 
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      ///
-      /// The following members are used to provide functionality for a common product controller
-      /// state machine, along with custom states for the Professor platform. The source code and
-      /// associated header files to include are found in the CastleProductControllerCommon
-      /// Repository, which is imported as a library when this application is built.
-      ///
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      ProductControllerHsm             m_ProductControllerStateMachine;
-      ProductControllerStateTop        m_ProductControllerStateTop;
-      ProductControllerStateSetup      m_ProductControllerStateSetup;
-      ProductControllerStateOn         m_ProductControllerStateOn;
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// The following members are used to provide functionality for a common product controller
+    /// state machine, along with custom states for the Professor platform. The source code and
+    /// associated header files to include are found in the CastleProductControllerCommon
+    /// Repository, which is imported as a library when this application is built.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ProductControllerHsm             m_ProductControllerStateMachine;
+    ProductControllerStateTop        m_ProductControllerStateTop;
+    ProductControllerStateSetup      m_ProductControllerStateSetup;
+    ProductControllerStateOn         m_ProductControllerStateOn;
 
-      CustomProductControllerStateBooting          m_CustomProductControllerStateBooting;
-      CustomProductControllerStateNetworkStandby   m_CustomProductControllerStateNetworkStandby;
-      CustomProductControllerStateIdle             m_CustomProductControllerStateIdle;
-      CustomProductControllerStateUpdatingSoftware m_CustomProductControllerStateUpdating;
+    CustomProductControllerStateBooting          m_CustomProductControllerStateBooting;
+    CustomProductControllerStateNetworkStandby   m_CustomProductControllerStateNetworkStandby;
+    CustomProductControllerStateIdle             m_CustomProductControllerStateIdle;
+    CustomProductControllerStateUpdatingSoftware m_CustomProductControllerStateUpdating;
 
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      ///
-      /// @brief The following subclass instances are used to manage the lower level hardware and
-      ///        the device, as well as to interface with the user and higher level system
-      ///        applications and command line, respectively.
-      ///
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      ProductHardwareInterface*  m_ProductHardwareInterface = nullptr;
-      ProductAudioServices*      m_ProductAudioServices     = nullptr;
-      ProductDeviceSettings*     m_ProductDeviceSettings    = nullptr;
-      ProductSoftwareServices*   m_ProductSoftwareServices  = nullptr;
-      ProductFrontDoorNetwork*   m_ProductFrontDoorNetwork  = nullptr;
-      ProductCommandLine*        m_ProductCommandLine       = nullptr;
-      ProductUserInterface*      m_ProductUserInterface     = nullptr;
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following subclass instances are used to manage the lower level hardware and
+    ///        the device, as well as to interface with the user and higher level system
+    ///        applications and command line, respectively.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ProductHardwareInterface*  m_ProductHardwareInterface = nullptr;
+    ProductAudioServices*      m_ProductAudioServices     = nullptr;
+    ProductDeviceSettings*     m_ProductDeviceSettings    = nullptr;
+    ProductSoftwareServices*   m_ProductSoftwareServices  = nullptr;
+    ProductFrontDoorNetwork*   m_ProductFrontDoorNetwork  = nullptr;
+    ProductCommandLine*        m_ProductCommandLine       = nullptr;
+    ProductUserInterface*      m_ProductUserInterface     = nullptr;
 
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      ///
-      /// @brief The following member variables and methods are used to store the language settings
-      ///        and the configuration status.
-      ///
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      ProductPb::Language                     m_LanguageSettings;
-      ProtoPersistenceIF::ProtoPersistencePtr m_LanguageSettingsPersistentStorage;
-      ProductPb::ConfigurationStatus          m_ConfigurationStatus;
-      ProtoPersistenceIF::ProtoPersistencePtr m_ConfigurationStatusPersistentStorage;
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following member variables and methods are used to store the language settings
+    ///        and the configuration status.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ProductPb::Language                     m_LanguageSettings;
+    ProtoPersistenceIF::ProtoPersistencePtr m_LanguageSettingsPersistentStorage;
+    ProductPb::ConfigurationStatus          m_ConfigurationStatus;
+    ProtoPersistenceIF::ProtoPersistencePtr m_ConfigurationStatusPersistentStorage;
 
-      void ReadLanguageSettingsFromPersistentStorage   ( void );
-      void ReadConfigurationStatusFromPersistentStorage( void );
-      void WriteLanguageSettingsToPersistentStorage    ( void );
-      void WriteConfigurationStatusToPersistentStorage ( void );
+    void ReadLanguageSettingsFromPersistentStorage( void );
+    void ReadConfigurationStatusFromPersistentStorage( void );
+    void WriteLanguageSettingsToPersistentStorage( void );
+    void WriteConfigurationStatusToPersistentStorage( void );
 
-      std::string GetSystemLanguageCode( void );
-      void        SetSystemLanguageCode( std::string systemLanguageString );
+    std::string GetSystemLanguageCode( void );
+    void        SetSystemLanguageCode( std::string systemLanguageString );
 
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      ///
-      /// @brief The following method are used by the state machine to determine the status of the
-      ///        product controller.
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      bool IsBooted        ( void );
-      bool GetNetworkStatus( void );
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method are used by the state machine to determine the status of the
+    ///        product controller.
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    bool IsBooted( void );
+    bool GetNetworkStatus( void );
 
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      ///
-      /// @brief The following member variables are used to determined whether certain required
-      ///        processes or connections are ready for setting the various Product Controller state
-      ///        machine states.
-      ///
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      bool m_IsLpmReady       = false;
-      bool m_IsCapsReady      = false;
-      bool m_IsAudioPathReady = false;
-      bool m_IsNetworkReady   = false;
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following member variables are used to determined whether certain required
+    ///        processes or connections are ready for setting the various Product Controller state
+    ///        machine states.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    bool m_IsLpmReady       = false;
+    bool m_IsCapsReady      = false;
+    bool m_IsAudioPathReady = false;
+    bool m_IsNetworkReady   = false;
 
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      ///
-      /// @brief Interfaces to the ProductSTSController, which implements the interactions
-      ///        between the Professor Product Controller and the STS source proxies.
-      ///
-      //////////////////////////////////////////////////////////////////////////////////////////////
-      void SetupProductSTSConntroller( void );
-      void HandleSTSInitWasComplete( void );
-      void HandleSelectSourceSlot( ProductSTS::ProductSourceSlot sourceSlot );
-      bool                       m_IsSTSReady;
-      ProductSTSController       m_ProductSTSController;
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief Interfaces to the ProductSTSController, which implements the interactions
+    ///        between the Professor Product Controller and the STS source proxies.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    void SetupProductSTSConntroller( void );
+    void HandleSTSInitWasComplete( void );
+    void HandleSelectSourceSlot( ProductSTS::ProductSourceSlot sourceSlot );
+    bool                       m_IsSTSReady;
+    ProductSTSController       m_ProductSTSController;
 };
 
 }

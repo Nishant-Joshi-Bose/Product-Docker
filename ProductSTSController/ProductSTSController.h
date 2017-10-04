@@ -28,8 +28,8 @@ public:
         bool                        enabled;
     } SourceDescriptor;
     void Initialize( const std::vector<SourceDescriptor>& sources, const Callback<void> & HandleSTSInitWasComplete,
-        const Callback<ProductSTS::ProductSourceSlot> & HandleSelectSourceSlot,
-        const std::string& ip = "127.0.0.1", const int port = STS_SERVICE_PORT );
+                     const Callback<ProductSTS::ProductSourceSlot> & HandleSelectSourceSlot,
+                     const std::string& ip = "127.0.0.1", const int port = STS_SERVICE_PORT );
     void UpdateSources( const std::vector<SourceDescriptor>& sources );
     bool SourceHasAnAccount( ProductSTS::ProductSourceSlot source ) const;
     void SetSourceEnabled( ProductSTS::ProductSourceSlot source, bool enabled );
@@ -37,7 +37,7 @@ public:
     const ProductSTSAccount* FindAccountForSource( ProductSTS::ProductSourceSlot source ) const;
     ProductSTS::ProductSourceSlot FindSourceIDForSourceName( const std::string& sourceName ) const;
 
-    void HandleSelectSourceSlot( ProductSTS::ProductSourceSlot source  );
+    void HandleSelectSourceSlot( ProductSTS::ProductSourceSlot source );
 
 private:
     ProductSTSController( const ProductSTSController & ) = delete;
@@ -63,9 +63,9 @@ private:
     {
     public:
         ProductSTSServiceDelegate( DPrint& logger,
-                            ProductSTSController& controller,
-                            STSService& stsService,
-                            const std::map<ProductSTS::ProductSourceSlot, ProductSTSAccount*>& accounts );
+                                   ProductSTSController& controller,
+                                   STSService& stsService,
+                                   const std::map<ProductSTS::ProductSourceSlot, ProductSTSAccount*>& accounts );
 
         /// @brief This function is called when service is connected to BoseApp
         void Connected() override;

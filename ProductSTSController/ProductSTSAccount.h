@@ -52,7 +52,7 @@ public:
     {
         s_ProductSTSController = ProductSTSController;
     };
-    static void HandleSelectSourceSlot( ProductSTS::ProductSourceSlot source  );
+    static void HandleSelectSourceSlot( ProductSTS::ProductSourceSlot source );
 
     static ProductSTSController* s_ProductSTSController;
 

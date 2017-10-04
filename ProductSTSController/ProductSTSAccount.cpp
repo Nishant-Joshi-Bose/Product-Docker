@@ -24,7 +24,7 @@ ProductSTSAccount::ProductSTSAccount( const std::string& name, ProductSTS::Produ
     m_enabled( enabled )
 {
     BOSE_INFO( m_logger, "ProductSTSAccount::ProductSTSAccount - account name=%s, source=%d, %s",
-                      GetSourceName().c_str(), GetSourceID(), GetEnabled() ? "enabled" : "disabled" );
+               GetSourceName().c_str(), GetSourceID(), GetEnabled() ? "enabled" : "disabled" );
     m_hsm.AddState( &m_state );
     m_hsm.Init( 0 );
     m_contentItem.set_source( SHELBY_SOURCE::PRODUCT );
@@ -102,7 +102,7 @@ void ProductSTSAccount::PlayProductAudioAction()
 }
 
 //////////////////////////////////////////////////////////////
-void ProductSTSAccount::HandleSelectSourceSlot( ProductSTS::ProductSourceSlot source  )
+void ProductSTSAccount::HandleSelectSourceSlot( ProductSTS::ProductSourceSlot source )
 {
     s_ProductSTSController->HandleSelectSourceSlot( source );
 }

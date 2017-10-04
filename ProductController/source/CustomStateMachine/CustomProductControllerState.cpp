@@ -57,7 +57,7 @@ bool CustomProductControllerState::HandleNetworkState( bool active )
     return true;
 }
 
-bool CustomProductControllerState::HandleSTSSourcesInit ( void )
+bool CustomProductControllerState::HandleSTSSourcesInit( void )
 {
     return true;
 }

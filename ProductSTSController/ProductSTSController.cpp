@@ -25,19 +25,19 @@ ProductSTSController::ProductSTSController() :
 }
 
 ////////////////////////////////////////////////////////////////////////
-void ProductSTSController::Initialize( const std::vector<SourceDescriptor>& sources, 
-                                          const Callback<void> & HandleSTSInitWasComplete,
-                                          const Callback<ProductSTS::ProductSourceSlot> & HandleSelectSourceSlot,
-                                          const std::string& ip, const int port )
+void ProductSTSController::Initialize( const std::vector<SourceDescriptor>& sources,
+                                       const Callback<void> & HandleSTSInitWasComplete,
+                                       const Callback<ProductSTS::ProductSourceSlot> & HandleSelectSourceSlot,
+                                       const std::string& ip, const int port )
 {
     m_HandleSTSInitWasComplete = HandleSTSInitWasComplete;
     m_HandleSelectSourceSlot = HandleSelectSourceSlot;
     ProductSTSAccount::SetProductSTSController( this );
-    BOSE_INFO( m_logger, "%s %d sources", __func__ , sources.size() );
+    BOSE_INFO( m_logger, "%s %d sources", __func__, sources.size() );
     for( const auto& source : sources )
     {
         ProductSTSAccount* account = new ProductSTSAccount{ source.sourceName, source.sourceID, source.enabled };
-        BOSE_INFO( m_logger, "%s account name=%s, source=%d, %sabled", __func__ ,
+        BOSE_INFO( m_logger, "%s account name=%s, source=%d, %sabled", __func__,
                    account->GetSourceName().c_str(), account->GetSourceID(),
                    account->GetEnabled() ? "en" : "dis" );
         m_accounts[source.sourceID] = account;
@@ -56,9 +56,9 @@ void ProductSTSController::UpdateSources( const std::vector<SourceDescriptor>& s
 
 //////////////////////////////////////////////////////////////////
 ProductSTSController::ProductSTSServiceDelegate::ProductSTSServiceDelegate( DPrint& logger,
-                                                              ProductSTSController& controller,
-                                                              STSService& stsService,
-                                                              const std::map<ProductSTS::ProductSourceSlot, ProductSTSAccount*>& accounts ) :
+                                                                            ProductSTSController& controller,
+                                                                            STSService& stsService,
+                                                                            const std::map<ProductSTS::ProductSourceSlot, ProductSTSAccount*>& accounts ) :
     m_logger( logger ),
     m_controller( controller ),
     m_stsService( stsService ),
@@ -83,7 +83,7 @@ void ProductSTSController::ProductSTSServiceDelegate::HandleProtocolVersionRespo
     const STS::ProtocolVersionResponse& res )
 {
     BOSE_INFO( m_logger, "ProductSTSServiceDelegate::HandleProtocolVersionResponse(%d.%d)",
-                      res.major(), res.minor() );
+               res.major(), res.minor() );
     STS::RegisterServiceRequest req;
     req.set_source( SHELBY_SOURCE::PRODUCT );
     m_stsService.SendRegisterServiceRequest( req );
@@ -121,7 +121,7 @@ void ProductSTSController::ProductSTSServiceDelegate::HandleCreateAccountProxyRe
 
 //////////////////////////////////////////////////////////////////
 void ProductSTSController::ProductSTSServiceDelegate::HandleFlexUIRequest( const STS::Void&,
-                                                                    const uint32_t seq )
+                                                                           const uint32_t seq )
 {
     STS::FlexUIResponse res;
     m_stsService.SendFlexUIResponse( res, seq );
@@ -150,7 +150,7 @@ void ProductSTSController::ProductSTSServiceDelegate::RegisterNextAccount()
 //////////////////////////////////////////////////////////////////
 void ProductSTSController::ProductSTSServiceDelegate::HandleIntrospectRequest( const STS::Void& req, uint32_t seq )
 {
-    m_stsService.SendIntrospectResponse( ProtoToMarkup::ToXML( m_controller.Introspect() ) , seq );
+    m_stsService.SendIntrospectResponse( ProtoToMarkup::ToXML( m_controller.Introspect() ), seq );
 }
 
 //////////////////////////////////////////////////////////////////
@@ -200,7 +200,7 @@ ProductSTS::ProductSourceSlot ProductSTSController::FindSourceIDForSourceName( c
 }
 
 //////////////////////////////////////////////////////////////
-void ProductSTSController::HandleSelectSourceSlot( ProductSTS::ProductSourceSlot source  )
+void ProductSTSController::HandleSelectSourceSlot( ProductSTS::ProductSourceSlot source )
 {
     m_HandleSelectSourceSlot( source );
 }
