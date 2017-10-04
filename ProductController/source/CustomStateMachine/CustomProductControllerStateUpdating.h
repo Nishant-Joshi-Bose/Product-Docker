@@ -51,19 +51,11 @@ class CustomProductControllerStateUpdatingSoftware : public ProductControllerSta
 {
 public:
 
-<<<<<<< HEAD
     CustomProductControllerStateUpdatingSoftware( ProductControllerHsm&       hsm,
                                                   CHsmState*                  pSuperState,
                                                   ProfessorProductController& productController,
                                                   Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING,
                                                   const std::string&          name    = "CustomProductControllerStateSoftwareUpdating" );
-=======
-          CustomProductControllerStateUpdatingSoftware( ProductControllerHsm&       hsm,
-                                                        CHsmState*                  pSuperState,
-                                                        ProfessorProductController& productController,
-                                                        Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING,
-                                                        const std::string&          name    = "CustomProductControllerStateSoftwareUpdating" );
->>>>>>> cf507c15fc965e2f757dd4cf1d697d72a5f43949
 
     virtual ~CustomProductControllerStateUpdatingSoftware( )
     {
