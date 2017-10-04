@@ -151,7 +151,7 @@ void ProductSoftwareServices::Run( )
                                                        std::placeholders::_1 ),
                                             m_mainTask );
 
-    m_serverListener->Serve( IPCDirectory::Get( )->DefaultAddress( A4V_SERVER ), callback );
+    m_serverListener->Serve( IPCDirectory::Get( )->DefaultAddress( IPCDirectory::A4V_SERVER ), callback );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

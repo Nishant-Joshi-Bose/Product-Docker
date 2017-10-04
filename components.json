@@ -17,7 +17,7 @@
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2311"
+    "selected_version": "branches/castle-libs@2371"
   },
   {
     "name": "protobuf-qc8017_32",
@@ -29,7 +29,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@151b9859c54b5ea0406d17be8ae46fa4bc2e0fbe"
+    "selected_version": "master@9650ab0f98cd68e60b3c2dc1d08f2f9ffb5edfe0"
   },
   {
     "name": "googletest-qc8017_32",
@@ -45,7 +45,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-25+5a8dede"
+    "selected_version": "Continuous/master/0.1.0-37+d3b6602"
   },
   {
     "name": "Riviera-HSP",
@@ -53,11 +53,11 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-09-19_1856"
+    "selected_version": "Continuous/Castle-Fork/2017-10-04_0826"
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@d982bd12ac870e737ebb0f6d6eeafafae62cb3dc"
+    "selected_version": "master@a58a5eca30d0a12c66b3bca1126b5a3176f3ee10"
   },
   {
     "name": "AVS-qc8017_32",
