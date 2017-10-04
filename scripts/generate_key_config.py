@@ -50,15 +50,16 @@ def main():
             #print("e {} {}".format(e.name, v.name))
             val = cur_val
         else:
-          print("e {} {}".format(e.name, cur_val))
+          #print("e {} {}".format(e.name, cur_val))
           val = cur_val
 
         keymap['keyTable'].append(OrderedDict([
-          ('Keys', [e.name]),
+          ('Keys', [val]),
           ('TimeOut', 300),  
           ('Repeat', False), 
           ('ActionOnTimeout', False), 
-          ('Event', val)
+          ('Event', val),
+          ('Description', e.name),
         ]))
 
         cur_val += 1

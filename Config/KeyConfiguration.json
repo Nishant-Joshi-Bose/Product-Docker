@@ -2,13 +2,23 @@
     "keyTable": [
         {
             "Keys": [
+                0
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 0, 
+            "Description": "KEY_VAL_AVAIL_00"
+        }, 
+        {
+            "Keys": [
                 1
             ], 
             "TimeOut": 300, 
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 1, 
-            "Description": "mute"
+            "Description": "BOSE_MUTE"
         }, 
         {
             "Keys": [
@@ -18,7 +28,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 2, 
-            "Description": "volume_down"
+            "Description": "BOSE_VOLUME_DOWN"
         }, 
         {
             "Keys": [
@@ -28,7 +38,27 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 3, 
-            "Description": "volume_up"
+            "Description": "BOSE_VOLUME_UP"
+        }, 
+        {
+            "Keys": [
+                4
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 4, 
+            "Description": "KEY_VAL_AVAIL_04"
+        }, 
+        {
+            "Keys": [
+                5
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 5, 
+            "Description": "KEY_VAL_AVAIL_05"
         }, 
         {
             "Keys": [
@@ -38,7 +68,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 6, 
-            "Description": "game_source"
+            "Description": "BOSE_GAME_SOURCE"
         }, 
         {
             "Keys": [
@@ -48,7 +78,47 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 7, 
-            "Description": "special_feature_2"
+            "Description": "BOSE_SPECIAL_FEATURE_2"
+        }, 
+        {
+            "Keys": [
+                8
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 8, 
+            "Description": "KEY_VAL_AVAIL_08"
+        }, 
+        {
+            "Keys": [
+                9
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 9, 
+            "Description": "KEY_VAL_AVAIL_09"
+        }, 
+        {
+            "Keys": [
+                10
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 10, 
+            "Description": "KEY_VAL_AVAIL_0A"
+        }, 
+        {
+            "Keys": [
+                11
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 11, 
+            "Description": "KEY_VAL_AVAIL_0B"
         }, 
         {
             "Keys": [
@@ -58,7 +128,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 12, 
-            "Description": "special_feature_1"
+            "Description": "BOSE_SPECIAL_FEATURE_1"
         }, 
         {
             "Keys": [
@@ -68,7 +138,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 13, 
-            "Description": "aux_source"
+            "Description": "BOSE_AUX_SOURCE"
         }, 
         {
             "Keys": [
@@ -78,7 +148,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 14, 
-            "Description": "tv_source"
+            "Description": "BOSE_TV_SOURCE"
         }, 
         {
             "Keys": [
@@ -88,7 +158,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 15, 
-            "Description": "321_aux_source"
+            "Description": "BOSE_321_AUX_SOURCE"
         }, 
         {
             "Keys": [
@@ -98,7 +168,37 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 16, 
-            "Description": "unify source"
+            "Description": "BOSE_SETUP"
+        }, 
+        {
+            "Keys": [
+                17
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 17, 
+            "Description": "KEY_VAL_AVAIL_11"
+        }, 
+        {
+            "Keys": [
+                18
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 18, 
+            "Description": "KEY_VAL_AVAIL_12"
+        }, 
+        {
+            "Keys": [
+                19
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 19, 
+            "Description": "KEY_VAL_AVAIL_13"
         }, 
         {
             "Keys": [
@@ -108,7 +208,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 20, 
-            "Description": "last_channel"
+            "Description": "BOSE_LAST_CHANNEL"
         }, 
         {
             "Keys": [
@@ -118,7 +218,27 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 21, 
-            "Description": "cbl_sat_source"
+            "Description": "BOSE_CBL_SAT_SOURCE"
+        }, 
+        {
+            "Keys": [
+                22
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 22, 
+            "Description": "KEY_VAL_AVAIL_16"
+        }, 
+        {
+            "Keys": [
+                23
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 23, 
+            "Description": "KEY_VAL_AVAIL_17"
         }, 
         {
             "Keys": [
@@ -128,7 +248,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 24, 
-            "Description": "channel_down"
+            "Description": "BOSE_CHANNEL_PRESET_DOWN"
         }, 
         {
             "Keys": [
@@ -138,7 +258,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 25, 
-            "Description": "channel_up"
+            "Description": "BOSE_CHANNEL_PRESET_UP"
         }, 
         {
             "Keys": [
@@ -148,7 +268,57 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 26, 
-            "Description": "stop"
+            "Description": "BOSE_STOP"
+        }, 
+        {
+            "Keys": [
+                27
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 27, 
+            "Description": "KEY_VAL_AVAIL_1B"
+        }, 
+        {
+            "Keys": [
+                28
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 28, 
+            "Description": "KEY_VAL_AVAIL_1C"
+        }, 
+        {
+            "Keys": [
+                29
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 29, 
+            "Description": "KEY_VAL_AVAIL_1D"
+        }, 
+        {
+            "Keys": [
+                30
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 30, 
+            "Description": "KEY_VAL_AVAIL_1E"
+        }, 
+        {
+            "Keys": [
+                31
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 31, 
+            "Description": "KEY_VAL_AVAIL_1F"
         }, 
         {
             "Keys": [
@@ -158,7 +328,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 32, 
-            "Description": "down"
+            "Description": "BOSE_DOWN_ARROW"
         }, 
         {
             "Keys": [
@@ -168,7 +338,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 33, 
-            "Description": "shuffle"
+            "Description": "BOSE_SHUFFLE"
         }, 
         {
             "Keys": [
@@ -178,7 +348,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 34, 
-            "Description": "source_cycle"
+            "Description": "BOSE_SOURCE_CYCLE"
         }, 
         {
             "Keys": [
@@ -188,7 +358,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 35, 
-            "Description": "more_buttons"
+            "Description": "BOSE_MORE_BUTTONS"
         }, 
         {
             "Keys": [
@@ -198,7 +368,77 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 36, 
-            "Description": "tv_power"
+            "Description": "BOSE_TV_POWER"
+        }, 
+        {
+            "Keys": [
+                37
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 37, 
+            "Description": "KEY_VAL_AVAIL_25"
+        }, 
+        {
+            "Keys": [
+                38
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 38, 
+            "Description": "KEY_VAL_AVAIL_26"
+        }, 
+        {
+            "Keys": [
+                39
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 39, 
+            "Description": "KEY_VAL_AVAIL_27"
+        }, 
+        {
+            "Keys": [
+                40
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 40, 
+            "Description": "KEY_VAL_AVAIL_28"
+        }, 
+        {
+            "Keys": [
+                41
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 41, 
+            "Description": "KEY_VAL_AVAIL_29"
+        }, 
+        {
+            "Keys": [
+                42
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 42, 
+            "Description": "KEY_VAL_AVAIL_2A"
+        }, 
+        {
+            "Keys": [
+                43
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 43, 
+            "Description": "KEY_VAL_AVAIL_2B"
         }, 
         {
             "Keys": [
@@ -208,7 +448,37 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 44, 
-            "Description": "source_power"
+            "Description": "BOSE_SOURCE_POWER"
+        }, 
+        {
+            "Keys": [
+                45
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 45, 
+            "Description": "KEY_VAL_AVAIL_2D"
+        }, 
+        {
+            "Keys": [
+                46
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 46, 
+            "Description": "KEY_VAL_AVAIL_2E"
+        }, 
+        {
+            "Keys": [
+                47
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 47, 
+            "Description": "KEY_VAL_AVAIL_2F"
         }, 
         {
             "Keys": [
@@ -218,7 +488,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 48, 
-            "Description": "exit"
+            "Description": "BOSE_EXIT"
         }, 
         {
             "Keys": [
@@ -228,7 +498,107 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 49, 
-            "Description": "menu_exit"
+            "Description": "BOSE_MENU_EXIT"
+        }, 
+        {
+            "Keys": [
+                50
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 50, 
+            "Description": "KEY_VAL_AVAIL_32"
+        }, 
+        {
+            "Keys": [
+                51
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 51, 
+            "Description": "KEY_VAL_AVAIL_33"
+        }, 
+        {
+            "Keys": [
+                52
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 52, 
+            "Description": "KEY_VAL_AVAIL_34"
+        }, 
+        {
+            "Keys": [
+                53
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 53, 
+            "Description": "KEY_VAL_AVAIL_35"
+        }, 
+        {
+            "Keys": [
+                54
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 54, 
+            "Description": "KEY_VAL_AVAIL_36"
+        }, 
+        {
+            "Keys": [
+                55
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 55, 
+            "Description": "KEY_VAL_AVAIL_37"
+        }, 
+        {
+            "Keys": [
+                56
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 56, 
+            "Description": "KEY_VAL_AVAIL_38"
+        }, 
+        {
+            "Keys": [
+                57
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 57, 
+            "Description": "KEY_VAL_AVAIL_39"
+        }, 
+        {
+            "Keys": [
+                58
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 58, 
+            "Description": "KEY_VAL_AVAIL_3A"
+        }, 
+        {
+            "Keys": [
+                59
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 59, 
+            "Description": "KEY_VAL_AVAIL_3B"
         }, 
         {
             "Keys": [
@@ -238,7 +608,37 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 60, 
-            "Description": "tv_input"
+            "Description": "BOSE_TV_INPUT"
+        }, 
+        {
+            "Keys": [
+                61
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 61, 
+            "Description": "KEY_VAL_AVAIL_3D"
+        }, 
+        {
+            "Keys": [
+                62
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 62, 
+            "Description": "KEY_VAL_AVAIL_3E"
+        }, 
+        {
+            "Keys": [
+                63
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 63, 
+            "Description": "KEY_VAL_AVAIL_3F"
         }, 
         {
             "Keys": [
@@ -248,7 +648,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 64, 
-            "Description": "number_0"
+            "Description": "BOSE_NUMBER_0"
         }, 
         {
             "Keys": [
@@ -258,7 +658,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 65, 
-            "Description": "number_1"
+            "Description": "BOSE_NUMBER_1"
         }, 
         {
             "Keys": [
@@ -268,7 +668,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 66, 
-            "Description": "number_2"
+            "Description": "BOSE_NUMBER_2"
         }, 
         {
             "Keys": [
@@ -278,7 +678,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 67, 
-            "Description": "number_3"
+            "Description": "BOSE_NUMBER_3"
         }, 
         {
             "Keys": [
@@ -288,7 +688,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 68, 
-            "Description": "number_4"
+            "Description": "BOSE_NUMBER_4"
         }, 
         {
             "Keys": [
@@ -298,7 +698,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 69, 
-            "Description": "number_5"
+            "Description": "BOSE_NUMBER_5"
         }, 
         {
             "Keys": [
@@ -308,7 +708,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 70, 
-            "Description": "number_6"
+            "Description": "BOSE_NUMBER_6"
         }, 
         {
             "Keys": [
@@ -318,7 +718,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 71, 
-            "Description": "number_7"
+            "Description": "BOSE_NUMBER_7"
         }, 
         {
             "Keys": [
@@ -328,7 +728,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 72, 
-            "Description": "number_8"
+            "Description": "BOSE_NUMBER_8"
         }, 
         {
             "Keys": [
@@ -338,7 +738,27 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 73, 
-            "Description": "number_9"
+            "Description": "BOSE_NUMBER_9"
+        }, 
+        {
+            "Keys": [
+                74
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 74, 
+            "Description": "KEY_VAL_AVAIL_4A"
+        }, 
+        {
+            "Keys": [
+                75
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 75, 
+            "Description": "KEY_VAL_AVAIL_4B"
         }, 
         {
             "Keys": [
@@ -348,7 +768,67 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 76, 
-            "Description": "on_off"
+            "Description": "BOSE_ON_OFF"
+        }, 
+        {
+            "Keys": [
+                77
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 77, 
+            "Description": "KEY_VAL_AVAIL_4D"
+        }, 
+        {
+            "Keys": [
+                78
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 78, 
+            "Description": "KEY_VAL_AVAIL_4E"
+        }, 
+        {
+            "Keys": [
+                79
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 79, 
+            "Description": "KEY_VAL_AVAIL_4F"
+        }, 
+        {
+            "Keys": [
+                80
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 80, 
+            "Description": "KEY_VAL_AVAIL_50"
+        }, 
+        {
+            "Keys": [
+                81
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 81, 
+            "Description": "KEY_VAL_AVAIL_51"
+        }, 
+        {
+            "Keys": [
+                82
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 82, 
+            "Description": "KEY_VAL_AVAIL_52"
         }, 
         {
             "Keys": [
@@ -358,7 +838,17 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 83, 
-            "Description": "bd_dvd_source"
+            "Description": "BOSE_BD_DVD_SOURCE"
+        }, 
+        {
+            "Keys": [
+                84
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 84, 
+            "Description": "KEY_VAL_AVAIL_54"
         }, 
         {
             "Keys": [
@@ -368,7 +858,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 85, 
-            "Description": "play"
+            "Description": "BOSE_PLAY"
         }, 
         {
             "Keys": [
@@ -378,7 +868,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 86, 
-            "Description": "pause"
+            "Description": "BOSE_PAUSE"
         }, 
         {
             "Keys": [
@@ -388,7 +878,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 87, 
-            "Description": "fast_reverse"
+            "Description": "BOSE_FAST_REVERSE"
         }, 
         {
             "Keys": [
@@ -398,7 +888,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 88, 
-            "Description": "fast_forward"
+            "Description": "BOSE_FAST_FORWARD"
         }, 
         {
             "Keys": [
@@ -408,7 +898,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 89, 
-            "Description": "quick_replay"
+            "Description": "BOSE_QUICK_REPLAY"
         }, 
         {
             "Keys": [
@@ -418,7 +908,17 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 90, 
-            "Description": "quick_skip"
+            "Description": "BOSE_QUICK_SKIP"
+        }, 
+        {
+            "Keys": [
+                91
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 91, 
+            "Description": "KEY_VAL_AVAIL_5B"
         }, 
         {
             "Keys": [
@@ -428,7 +928,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 92, 
-            "Description": "dash"
+            "Description": "BOSE_DASH"
         }, 
         {
             "Keys": [
@@ -438,7 +938,27 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 93, 
-            "Description": "auto_wake_toggle"
+            "Description": "BOSE_AUTO_WAKE_TOGGLE"
+        }, 
+        {
+            "Keys": [
+                94
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 94, 
+            "Description": "KEY_VAL_AVAIL_5E"
+        }, 
+        {
+            "Keys": [
+                95
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 95, 
+            "Description": "KEY_VAL_AVAIL_5F"
         }, 
         {
             "Keys": [
@@ -448,7 +968,37 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 96, 
-            "Description": "right"
+            "Description": "BOSE_RIGHT_ARROW"
+        }, 
+        {
+            "Keys": [
+                97
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 97, 
+            "Description": "KEY_VAL_AVAIL_61"
+        }, 
+        {
+            "Keys": [
+                98
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 98, 
+            "Description": "KEY_VAL_AVAIL_62"
+        }, 
+        {
+            "Keys": [
+                99
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 99, 
+            "Description": "KEY_VAL_AVAIL_63"
         }, 
         {
             "Keys": [
@@ -458,7 +1008,37 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 100, 
-            "Description": "info"
+            "Description": "BOSE_INFO"
+        }, 
+        {
+            "Keys": [
+                101
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 101, 
+            "Description": "KEY_VAL_AVAIL_65"
+        }, 
+        {
+            "Keys": [
+                102
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 102, 
+            "Description": "KEY_VAL_AVAIL_66"
+        }, 
+        {
+            "Keys": [
+                103
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 103, 
+            "Description": "KEY_VAL_AVAIL_67"
         }, 
         {
             "Keys": [
@@ -468,7 +1048,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 104, 
-            "Description": "page_down"
+            "Description": "BOSE_PAGE_DOWN"
         }, 
         {
             "Keys": [
@@ -478,7 +1058,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 105, 
-            "Description": "page_up"
+            "Description": "BOSE_PAGE_UP"
         }, 
         {
             "Keys": [
@@ -488,7 +1068,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 106, 
-            "Description": "thumbs_down"
+            "Description": "BOSE_PAGE_THUMBS_DOWN"
         }, 
         {
             "Keys": [
@@ -498,7 +1078,47 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 107, 
-            "Description": "thumbs_up"
+            "Description": "BOSE_PAGE_THUMBS_UP"
+        }, 
+        {
+            "Keys": [
+                108
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 108, 
+            "Description": "KEY_VAL_AVAIL_6C"
+        }, 
+        {
+            "Keys": [
+                109
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 109, 
+            "Description": "KEY_VAL_AVAIL_6D"
+        }, 
+        {
+            "Keys": [
+                110
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 110, 
+            "Description": "KEY_VAL_AVAIL_6E"
+        }, 
+        {
+            "Keys": [
+                111
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 111, 
+            "Description": "KEY_VAL_AVAIL_6F"
         }, 
         {
             "Keys": [
@@ -562,13 +1182,113 @@
         }, 
         {
             "Keys": [
+                118
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 118, 
+            "Description": "KEY_VAL_AVAIL_76"
+        }, 
+        {
+            "Keys": [
+                119
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 119, 
+            "Description": "KEY_VAL_AVAIL_77"
+        }, 
+        {
+            "Keys": [
+                120
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 120, 
+            "Description": "KEY_VAL_AVAIL_78"
+        }, 
+        {
+            "Keys": [
+                121
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 121, 
+            "Description": "KEY_VAL_AVAIL_79"
+        }, 
+        {
+            "Keys": [
+                122
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 122, 
+            "Description": "KEY_VAL_AVAIL_7A"
+        }, 
+        {
+            "Keys": [
+                123
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 123, 
+            "Description": "KEY_VAL_AVAIL_7B"
+        }, 
+        {
+            "Keys": [
+                124
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 124, 
+            "Description": "KEY_VAL_AVAIL_7C"
+        }, 
+        {
+            "Keys": [
+                125
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 125, 
+            "Description": "KEY_VAL_AVAIL_7D"
+        }, 
+        {
+            "Keys": [
+                126
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 126, 
+            "Description": "KEY_VAL_AVAIL_7E"
+        }, 
+        {
+            "Keys": [
+                127
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 127, 
+            "Description": "KEY_VAL_AVAIL_7F"
+        }, 
+        {
+            "Keys": [
                 128
             ], 
             "TimeOut": 300, 
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 128, 
-            "Description": "system"
+            "Description": "BOSE_SYSTEM"
         }, 
         {
             "Keys": [
@@ -578,7 +1298,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 129, 
-            "Description": "blue_tooth_source"
+            "Description": "BOSE_BLUETOOTH_SOURCE"
         }, 
         {
             "Keys": [
@@ -588,7 +1308,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 130, 
-            "Description": "bass"
+            "Description": "BOSE_BASS_ADJUST"
         }, 
         {
             "Keys": [
@@ -598,7 +1318,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 131, 
-            "Description": "dialog"
+            "Description": "BOSE_DIALOG_ADJUST"
         }, 
         {
             "Keys": [
@@ -608,7 +1328,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 132, 
-            "Description": "softkey_live"
+            "Description": "BOSE_MORE_SOFTKEY_LIVE"
         }, 
         {
             "Keys": [
@@ -618,7 +1338,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 133, 
-            "Description": "softkey_favorite"
+            "Description": "BOSE_MORE_SOFTKEY_FAVORITE"
         }, 
         {
             "Keys": [
@@ -628,7 +1348,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 134, 
-            "Description": "softkey_format"
+            "Description": "BOSE_MORE_SOFTKEY_FORMAT"
         }, 
         {
             "Keys": [
@@ -638,7 +1358,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 135, 
-            "Description": "softkey_sap"
+            "Description": "BOSE_MORE_SOFTKEY_SAP"
         }, 
         {
             "Keys": [
@@ -648,7 +1368,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 136, 
-            "Description": "softkey_pip"
+            "Description": "BOSE_MORE_SOFTKEY_PIP"
         }, 
         {
             "Keys": [
@@ -658,7 +1378,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 137, 
-            "Description": "softkey_pip_off"
+            "Description": "BOSE_MORE_SOFTKEY_PIP_OFF"
         }, 
         {
             "Keys": [
@@ -668,7 +1388,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 138, 
-            "Description": "softkey_pandora"
+            "Description": "BOSE_MORE_SOFTKEY_PANDORA"
         }, 
         {
             "Keys": [
@@ -678,7 +1398,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 139, 
-            "Description": "softkey_youtube"
+            "Description": "BOSE_MORE_SOFTKEY_YOUTUBE"
         }, 
         {
             "Keys": [
@@ -688,7 +1408,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 140, 
-            "Description": "assert_on"
+            "Description": "BOSE_ASSERT_ON"
         }, 
         {
             "Keys": [
@@ -698,7 +1418,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 141, 
-            "Description": "softkey_roku"
+            "Description": "BOSE_MORE_SOFTKEY_ROKU"
         }, 
         {
             "Keys": [
@@ -708,7 +1428,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 142, 
-            "Description": "softkey_yahoo"
+            "Description": "BOSE_MORE_SOFTKEY_YAHOO"
         }, 
         {
             "Keys": [
@@ -718,7 +1438,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 143, 
-            "Description": "softkey_spotify"
+            "Description": "BOSE_MORE_SOFTKEY_SPOTIFY"
         }, 
         {
             "Keys": [
@@ -728,7 +1448,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 144, 
-            "Description": "dvd_menu"
+            "Description": "BOSE_DVD_MENU"
         }, 
         {
             "Keys": [
@@ -738,7 +1458,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 145, 
-            "Description": "softkey_web_internet"
+            "Description": "BOSE_MORE_SOFTKEY_WEB_INTERNET"
         }, 
         {
             "Keys": [
@@ -748,7 +1468,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 146, 
-            "Description": "softkey_widgets_apps"
+            "Description": "BOSE_MORE_SOFTKEY_WIDGETS_APPS"
         }, 
         {
             "Keys": [
@@ -758,7 +1478,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 147, 
-            "Description": "softkey_picture_mode"
+            "Description": "BOSE_MORE_SOFTKEY_PICTURE_MODE"
         }, 
         {
             "Keys": [
@@ -768,7 +1488,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 148, 
-            "Description": "softkey_sound_mode"
+            "Description": "BOSE_MORE_SOFTKEY_SOUND_MODE"
         }, 
         {
             "Keys": [
@@ -778,7 +1498,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 149, 
-            "Description": "softkey_clear"
+            "Description": "BOSE_MORE_SOFTKEY_CLEAR"
         }, 
         {
             "Keys": [
@@ -788,7 +1508,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 150, 
-            "Description": "softkey_pwr_on"
+            "Description": "BOSE_MORE_SOFTKEY_PWR_ON"
         }, 
         {
             "Keys": [
@@ -798,7 +1518,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 151, 
-            "Description": "softkey_subtitle"
+            "Description": "BOSE_MORE_SOFTKEY_SUBTITLE"
         }, 
         {
             "Keys": [
@@ -808,7 +1528,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 152, 
-            "Description": "softkey_slow"
+            "Description": "BOSE_MORE_SOFTKEY_SLOW"
         }, 
         {
             "Keys": [
@@ -818,7 +1538,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 153, 
-            "Description": "softkey_pwr_off"
+            "Description": "BOSE_MORE_SOFTKEY_PWR_OFF"
         }, 
         {
             "Keys": [
@@ -828,7 +1548,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 154, 
-            "Description": "softkey_delimiter"
+            "Description": "BOSE_MORE_SOFTKEY_DELIMITER"
         }, 
         {
             "Keys": [
@@ -838,7 +1558,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 155, 
-            "Description": "softkey_last_channel"
+            "Description": "BOSE_MORE_SOFTKEY_LAST_CHANNEL"
         }, 
         {
             "Keys": [
@@ -848,7 +1568,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 156, 
-            "Description": "record"
+            "Description": "BOSE_RECORD"
         }, 
         {
             "Keys": [
@@ -858,7 +1578,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 157, 
-            "Description": "softkey_back"
+            "Description": "BOSE_MORE_SOFTKEY_BACK"
         }, 
         {
             "Keys": [
@@ -868,7 +1588,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 158, 
-            "Description": "softkey_channel_list"
+            "Description": "BOSE_MORE_SOFTKEY_CHANNEL_LIST"
         }, 
         {
             "Keys": [
@@ -878,7 +1598,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 159, 
-            "Description": "softkey_eject"
+            "Description": "BOSE_MORE_SOFTKEY_EJECT"
         }, 
         {
             "Keys": [
@@ -888,7 +1608,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 160, 
-            "Description": "left"
+            "Description": "BOSE_LEFT_ARROW"
         }, 
         {
             "Keys": [
@@ -898,7 +1618,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 161, 
-            "Description": "softkey_quick_skip"
+            "Description": "BOSE_MORE_SOFTKEY_QUICK_SKIP"
         }, 
         {
             "Keys": [
@@ -908,7 +1628,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 162, 
-            "Description": "softkey_recordings"
+            "Description": "BOSE_MORE_SOFTKEY_RECORDINGS"
         }, 
         {
             "Keys": [
@@ -918,7 +1638,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 163, 
-            "Description": "softkey_netflix"
+            "Description": "BOSE_MORE_SOFTKEY_NETFLIX"
         }, 
         {
             "Keys": [
@@ -928,7 +1648,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 164, 
-            "Description": "softkey_amazon"
+            "Description": "BOSE_MORE_SOFTKEY_AMAZON"
         }, 
         {
             "Keys": [
@@ -938,7 +1658,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 165, 
-            "Description": "softkey_3dvideo"
+            "Description": "BOSE_MORE_SOFTKEY_3DVIDEO"
         }, 
         {
             "Keys": [
@@ -948,7 +1668,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 166, 
-            "Description": "softkey_standby"
+            "Description": "BOSE_MORE_SOFTKEY_STANDBY"
         }, 
         {
             "Keys": [
@@ -958,7 +1678,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 167, 
-            "Description": "softkey_hulu"
+            "Description": "BOSE_MORE_SOFTKEY_HULU"
         }, 
         {
             "Keys": [
@@ -968,7 +1688,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 168, 
-            "Description": "softkey_options"
+            "Description": "BOSE_MORE_SOFTKEY_OPTIONS"
         }, 
         {
             "Keys": [
@@ -978,7 +1698,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 169, 
-            "Description": "softkey_tools"
+            "Description": "BOSE_MORE_SOFTKEY_TOOLS"
         }, 
         {
             "Keys": [
@@ -988,7 +1708,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 170, 
-            "Description": "softkey_pwrtoggle"
+            "Description": "BOSE_MORE_SOFTKEY_PWRTOGGLE"
         }, 
         {
             "Keys": [
@@ -998,7 +1718,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 171, 
-            "Description": "softkey_popupmenu"
+            "Description": "BOSE_MORE_SOFTKEY_POPUPMENU"
         }, 
         {
             "Keys": [
@@ -1008,7 +1728,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 172, 
-            "Description": "softkey_titlemenu"
+            "Description": "BOSE_MORE_SOFTKEY_TITLEMENU"
         }, 
         {
             "Keys": [
@@ -1018,7 +1738,17 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 173, 
-            "Description": "softkey_help"
+            "Description": "BOSE_MORE_SOFTKEY_HELP"
+        }, 
+        {
+            "Keys": [
+                174
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 174, 
+            "Description": "KEY_VAL_AVAIL_AE"
         }, 
         {
             "Keys": [
@@ -1028,7 +1758,27 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 175, 
-            "Description": "bose internet"
+            "Description": "BOSE_INTERNET"
+        }, 
+        {
+            "Keys": [
+                176
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 176, 
+            "Description": "BOSE_MORE_BT_PAIR_DEVICE"
+        }, 
+        {
+            "Keys": [
+                177
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 177, 
+            "Description": "BOSE_MORE_BT_CLEAR_DEVICES"
         }, 
         {
             "Keys": [
@@ -1038,7 +1788,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 178, 
-            "Description": "closed_caption"
+            "Description": "BOSE_CLOSED_CAPTION"
         }, 
         {
             "Keys": [
@@ -1048,7 +1798,27 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 179, 
-            "Description": "soundtouch_source"
+            "Description": "BOSE_SOUND_TOUCH_SOURCE"
+        }, 
+        {
+            "Keys": [
+                180
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 180, 
+            "Description": "KEY_VAL_AVAIL_B4"
+        }, 
+        {
+            "Keys": [
+                181
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 181, 
+            "Description": "KEY_VAL_AVAIL_B5"
         }, 
         {
             "Keys": [
@@ -1058,7 +1828,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 182, 
-            "Description": "dvr"
+            "Description": "BOSE_DVR"
         }, 
         {
             "Keys": [
@@ -1068,7 +1838,87 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 183, 
-            "Description": "teletext"
+            "Description": "BOSE_TELETEXT"
+        }, 
+        {
+            "Keys": [
+                184
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 184, 
+            "Description": "BOSE_OPTICAL_1_SOURCE"
+        }, 
+        {
+            "Keys": [
+                185
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 185, 
+            "Description": "BOSE_OPTICAL_2_SOURCE"
+        }, 
+        {
+            "Keys": [
+                186
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 186, 
+            "Description": "BOSE_ANLG_FRONT_SOURCE"
+        }, 
+        {
+            "Keys": [
+                187
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 187, 
+            "Description": "BOSE_ANLG_1_SOURCE"
+        }, 
+        {
+            "Keys": [
+                188
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 188, 
+            "Description": "BOSE_ANLG_2_SOURCE"
+        }, 
+        {
+            "Keys": [
+                189
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 189, 
+            "Description": "BOSE_COAX_1_SOURCE"
+        }, 
+        {
+            "Keys": [
+                190
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 190, 
+            "Description": "BOSE_COAX_2_SOURCE"
+        }, 
+        {
+            "Keys": [
+                191
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 191, 
+            "Description": "KEY_VAL_AVAIL_BF"
         }, 
         {
             "Keys": [
@@ -1078,7 +1928,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 192, 
-            "Description": "up"
+            "Description": "BOSE_UP_ARROW"
         }, 
         {
             "Keys": [
@@ -1088,7 +1938,37 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 193, 
-            "Description": "i_tv"
+            "Description": "BOSE_I_TV"
+        }, 
+        {
+            "Keys": [
+                194
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 194, 
+            "Description": "KEY_VAL_AVAIL_C2"
+        }, 
+        {
+            "Keys": [
+                195
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 195, 
+            "Description": "KEY_VAL_AVAIL_C3"
+        }, 
+        {
+            "Keys": [
+                196
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 196, 
+            "Description": "KEY_VAL_AVAIL_C4"
         }, 
         {
             "Keys": [
@@ -1098,7 +1978,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 197, 
-            "Description": "red"
+            "Description": "BOSE_RED"
         }, 
         {
             "Keys": [
@@ -1108,7 +1988,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 198, 
-            "Description": "green"
+            "Description": "BOSE_GREEN"
         }, 
         {
             "Keys": [
@@ -1118,7 +1998,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 199, 
-            "Description": "yellow"
+            "Description": "BOSE_YELLOW"
         }, 
         {
             "Keys": [
@@ -1128,7 +2008,37 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 200, 
-            "Description": "blue"
+            "Description": "BOSE_BLUE"
+        }, 
+        {
+            "Keys": [
+                201
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 201, 
+            "Description": "KEY_VAL_AVAIL_C9"
+        }, 
+        {
+            "Keys": [
+                202
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 202, 
+            "Description": "KEY_VAL_AVAIL_CA"
+        }, 
+        {
+            "Keys": [
+                203
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 203, 
+            "Description": "KEY_VAL_AVAIL_CB"
         }, 
         {
             "Keys": [
@@ -1138,7 +2048,7 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 204, 
-            "Description": "assert_off"
+            "Description": "BOSE_ASSERT_OFF"
         }, 
         {
             "Keys": [
@@ -1148,7 +2058,27 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 205, 
-            "Description": "assert_unmute"
+            "Description": "BOSE_ASSERT_UNMUTE"
+        }, 
+        {
+            "Keys": [
+                206
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 206, 
+            "Description": "KEY_VAL_AVAIL_CE"
+        }, 
+        {
+            "Keys": [
+                207
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 207, 
+            "Description": "KEY_VAL_AVAIL_CF"
         }, 
         {
             "Keys": [
@@ -1158,7 +2088,117 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 208, 
-            "Description": "epg_guide"
+            "Description": "BOSE_EPG"
+        }, 
+        {
+            "Keys": [
+                209
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 209, 
+            "Description": "KEY_VAL_AVAIL_D1"
+        }, 
+        {
+            "Keys": [
+                210
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 210, 
+            "Description": "KEY_VAL_AVAIL_D2"
+        }, 
+        {
+            "Keys": [
+                211
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 211, 
+            "Description": "KEY_VAL_AVAIL_D3"
+        }, 
+        {
+            "Keys": [
+                212
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 212, 
+            "Description": "KEY_VAL_AVAIL_D4"
+        }, 
+        {
+            "Keys": [
+                213
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 213, 
+            "Description": "KEY_VAL_AVAIL_D5"
+        }, 
+        {
+            "Keys": [
+                214
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 214, 
+            "Description": "KEY_VAL_AVAIL_D6"
+        }, 
+        {
+            "Keys": [
+                215
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 215, 
+            "Description": "KEY_VAL_AVAIL_D7"
+        }, 
+        {
+            "Keys": [
+                216
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 216, 
+            "Description": "KEY_VAL_AVAIL_D8"
+        }, 
+        {
+            "Keys": [
+                217
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 217, 
+            "Description": "KEY_VAL_AVAIL_D9"
+        }, 
+        {
+            "Keys": [
+                218
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 218, 
+            "Description": "KEY_VAL_AVAIL_DA"
+        }, 
+        {
+            "Keys": [
+                219
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 219, 
+            "Description": "KEY_VAL_AVAIL_DB"
         }, 
         {
             "Keys": [
@@ -1168,7 +2208,37 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 220, 
-            "Description": "aspect_ratio"
+            "Description": "BOSE_ASPECT_RATIO"
+        }, 
+        {
+            "Keys": [
+                221
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 221, 
+            "Description": "KEY_VAL_AVAIL_DD"
+        }, 
+        {
+            "Keys": [
+                222
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 222, 
+            "Description": "KEY_VAL_AVAIL_DE"
+        }, 
+        {
+            "Keys": [
+                223
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 223, 
+            "Description": "KEY_VAL_AVAIL_DF"
         }, 
         {
             "Keys": [
@@ -1178,7 +2248,157 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 224, 
-            "Description": "enter"
+            "Description": "BOSE_ENTER"
+        }, 
+        {
+            "Keys": [
+                225
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 225, 
+            "Description": "KEY_VAL_AVAIL_E1"
+        }, 
+        {
+            "Keys": [
+                226
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 226, 
+            "Description": "KEY_VAL_AVAIL_E2"
+        }, 
+        {
+            "Keys": [
+                227
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 227, 
+            "Description": "KEY_VAL_AVAIL_E3"
+        }, 
+        {
+            "Keys": [
+                228
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 228, 
+            "Description": "KEY_VAL_AVAIL_E4"
+        }, 
+        {
+            "Keys": [
+                229
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 229, 
+            "Description": "KEY_VAL_AVAIL_E5"
+        }, 
+        {
+            "Keys": [
+                230
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 230, 
+            "Description": "KEY_VAL_AVAIL_E6"
+        }, 
+        {
+            "Keys": [
+                231
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 231, 
+            "Description": "KEY_VAL_AVAIL_E7"
+        }, 
+        {
+            "Keys": [
+                232
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 232, 
+            "Description": "KEY_VAL_AVAIL_E8"
+        }, 
+        {
+            "Keys": [
+                233
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 233, 
+            "Description": "KEY_VAL_AVAIL_E9"
+        }, 
+        {
+            "Keys": [
+                234
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 234, 
+            "Description": "KEY_VAL_AVAIL_EA"
+        }, 
+        {
+            "Keys": [
+                235
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 235, 
+            "Description": "KEY_VAL_AVAIL_EB"
+        }, 
+        {
+            "Keys": [
+                236
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 236, 
+            "Description": "KEY_VAL_AVAIL_EC"
+        }, 
+        {
+            "Keys": [
+                237
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 237, 
+            "Description": "KEY_VAL_AVAIL_ED"
+        }, 
+        {
+            "Keys": [
+                238
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 238, 
+            "Description": "KEY_VAL_AVAIL_EE"
+        }, 
+        {
+            "Keys": [
+                239
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 239, 
+            "Description": "KEY_VAL_AVAIL_EF"
         }, 
         {
             "Keys": [
@@ -1188,7 +2408,67 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 240, 
-            "Description": "special_feature_3"
+            "Description": "BOSE_SPECIAL_FEATURE_3"
+        }, 
+        {
+            "Keys": [
+                241
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 241, 
+            "Description": "BOSE_RFREMOTE_BACK_TRIGGER"
+        }, 
+        {
+            "Keys": [
+                242
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 242, 
+            "Description": "BOSE_RFREMOTE_REPAIR"
+        }, 
+        {
+            "Keys": [
+                243
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 243, 
+            "Description": "BOSE_RFREMOTE_PTS"
+        }, 
+        {
+            "Keys": [
+                244
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 244, 
+            "Description": "BOSE_RFREMOTE_FD"
+        }, 
+        {
+            "Keys": [
+                245
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 245, 
+            "Description": "KEY_VAL_AVAIL_F5"
+        }, 
+        {
+            "Keys": [
+                246
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 246, 
+            "Description": "KEY_VAL_AVAIL_F6"
         }, 
         {
             "Keys": [
@@ -1198,7 +2478,67 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 247, 
-            "Description": "special_feature_4"
+            "Description": "BOSE_SPECIAL_FEATURE_4"
+        }, 
+        {
+            "Keys": [
+                248
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 248, 
+            "Description": "KEY_VAL_AVAIL_F8"
+        }, 
+        {
+            "Keys": [
+                249
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 249, 
+            "Description": "KEY_VAL_AVAIL_F9"
+        }, 
+        {
+            "Keys": [
+                250
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 250, 
+            "Description": "KEY_VAL_AVAIL_FA"
+        }, 
+        {
+            "Keys": [
+                251
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 251, 
+            "Description": "KEY_VAL_AVAIL_FB"
+        }, 
+        {
+            "Keys": [
+                252
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 252, 
+            "Description": "KEY_VAL_AVAIL_FC"
+        }, 
+        {
+            "Keys": [
+                253
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 253, 
+            "Description": "KEY_VAL_AVAIL_FD"
         }, 
         {
             "Keys": [
@@ -1208,7 +2548,27 @@
             "Repeat": false, 
             "ActionOnTimeout": false, 
             "Event": 254, 
-            "Description": "assert_mute"
+            "Description": "BOSE_ASSERT_MUTE"
+        }, 
+        {
+            "Keys": [
+                255
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 255, 
+            "Description": "BOSE_INVALID_KEY"
+        }, 
+        {
+            "Keys": [
+                256
+            ], 
+            "TimeOut": 300, 
+            "Repeat": false, 
+            "ActionOnTimeout": false, 
+            "Event": 256, 
+            "Description": "NUM_BOSE_KEYS"
         }
     ]
 }
