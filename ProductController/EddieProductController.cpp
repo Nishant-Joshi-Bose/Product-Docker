@@ -149,8 +149,7 @@ void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::Ne
     }
     if( not m_isNetworkModuleReady )
     {
-        m_isNetworkModuleReady = true;
-        HandleNetworkModuleReady( isCurrPrimaryUp );
+        HandleNetworkModuleReady( true );
     }
     m_cachedStatus = networkStatus;
 }
