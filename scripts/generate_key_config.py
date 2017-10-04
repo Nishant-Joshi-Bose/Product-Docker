@@ -50,6 +50,12 @@ def main():
         else:
           val = cur_val
 
+        if re.compile(r'NUM_BOSE_KEYS').match(e.name):
+          continue
+
+        if re.compile(r'BOSE_INVALID_KEY').match(e.name):
+          continue
+
         pat = re.compile(r'KEY_VAL_AVAIL_')
         match = pat.match(e.name)
         if match:

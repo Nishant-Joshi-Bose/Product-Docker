@@ -2549,26 +2549,6 @@
             "ActionOnTimeout": false, 
             "Event": 254, 
             "Description": "BOSE_ASSERT_MUTE"
-        }, 
-        {
-            "Keys": [
-                255
-            ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 255, 
-            "Description": "BOSE_INVALID_KEY"
-        }, 
-        {
-            "Keys": [
-                256
-            ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 256, 
-            "Description": "NUM_BOSE_KEYS"
         }
     ]
 }
