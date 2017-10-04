@@ -1,0 +1,28 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @file ProductSTSIntrospect.proto
+///
+/// @brief Product STS Introspect response
+///
+/// @author Yishai Sered
+/// @date   2-2-2017
+///
+/// Copyright 2017 Bose Corporation
+////////////////////////////////////////////////////////////////////////////////
+
+import "ProtoToMarkup/MarkupOptions.proto";
+
+package ProductSTSIntrospect;
+
+
+message ProductSTSIntrospectResponse
+{
+  optional string SystemName = 1;
+  repeated string Accounts = 2;
+}
+
+message ProductSTSAccountIntrospectResponse
+{
+  optional string Account = 1;
+  optional bool   Enabled = 2;
+  optional bool   Active  = 3;
+}

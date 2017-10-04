@@ -1,0 +1,18 @@
+#!/bin/sh
+# Helper script for `/proc/sys/kernel/core_pattern`.
+# Launched by the Linux kernel to store a core file.
+# core_pattern is set in `/opt/Bose/bin/SoundTouch`.
+PATH=/bin:/usr/bin
+
+core=/mnt/nv/BoseLog/core-$1.gz
+
+warn () {
+    logger -s -t "store-core[$$]" -p warning "$*"
+}
+
+warn "Creating core file '$core'..."
+if gzip > "$core"; then
+    warn "Creating core file...done"
+else
+    warn "Creating core file...failed"
+fi

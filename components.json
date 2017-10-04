@@ -1,5 +1,17 @@
 [
   {
+    "name": "UnitTest++-ti",
+    "selected_version": "branches/UnitTest++@2312"
+  },
+  {
+    "name": "UnitTest++-qc8017_32",
+    "selected_version": "branches/UnitTest++@2312"
+  },
+  {
+    "name": "UnitTest++-native",
+    "selected_version": "branches/UnitTest++@2312"
+  },
+  {
     "name": "CastleAudioPath-qc8017_32",
     "selected_version": "Continuous/Castle-Fork/2017-09-19_1721"
   },
@@ -29,7 +41,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Continuous/master/1.0.0-13+a414226"
+    "selected_version": "Continuous/master/1.0.0-16+3d1dfec"
   },
   {
     "name": "BoseLibs-qc8017_32",
@@ -45,11 +57,7 @@
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@a970bf041144c3d0a2b945fbbf6379ae7a608392"
-  },
-  {
-    "name": "RivieraLPM",
-    "selected_version": "trunk@911"
+    "selected_version": "master@d982bd12ac870e737ebb0f6d6eeafafae62cb3dc"
   },
   {
     "name": "AVS-qc8017_32",

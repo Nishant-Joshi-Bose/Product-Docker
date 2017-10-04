@@ -21,6 +21,8 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+import "ProductSTS.proto";
+
 enum ProductMessageId
 {
      LPM_HARDWARE_DOWN      =  1;
@@ -40,6 +42,8 @@ enum ProductMessageId
      SOURCE_SELECTION       = 15;
      SOURCE_DESELECTION     = 16;
      CONFIGURATION_STATUS   = 17;
+     STS_SOURCES_INIT_DONE  = 18;
+     SOURCE_SLOT_SELECTED   = 19;
 }
 
 enum ProductNetworkType
@@ -88,12 +92,18 @@ message ProductKeyEvent
         optional int32 id    = 2;
 }
 
+message ProductSelectSourceSlot
+{
+        optional ProductSTS.ProductSourceSlot slot = 1;
+}
+
 message ProductMessageData
 {
         optional ProductNetworkData         networkdata         = 1;
         optional ProductKeyData             keydata             = 2;
         optional ProductLanguageData        languagedata        = 3;
         optional ProductConfigurationStatus configurationstatus = 4;
+        optional ProductSelectSourceSlot    selectsourceslot    = 5;
 }
 
 message ProductMessage
