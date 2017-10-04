@@ -44,21 +44,25 @@ def main():
           v = e.value
           if v.__class__.__name__ == 'Constant':
             cur_val = int(v.value)
-            #print("e {} {}".format(e.name, cur_val))
             val = cur_val
           elif v.__class__.__name__ == 'ID':
-            #print("e {} {}".format(e.name, v.name))
             val = cur_val
         else:
-          #print("e {} {}".format(e.name, cur_val))
           val = cur_val
 
+        pat = re.compile(r'KEY_VAL_AVAIL_')
+        match = pat.match(e.name)
+        if match:
+          event = 255
+        else:
+          event = val
+        
         keymap['keyTable'].append(OrderedDict([
           ('Keys', [val]),
           ('TimeOut', 300),  
           ('Repeat', False), 
           ('ActionOnTimeout', False), 
-          ('Event', val),
+          ('Event', event),
           ('Description', e.name),
         ]))
 
