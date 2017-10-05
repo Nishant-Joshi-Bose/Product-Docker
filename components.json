@@ -17,7 +17,7 @@
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2414"
+    "selected_version": "branches/castle-libs@2416"
   },
   {
     "name": "protobuf-qc8017_32",
@@ -46,14 +46,14 @@
   {
     "name": "CastlePassport-native",
     "selected_version": "Continuous/master/0.0.2-24+275e57e"
-  },    
+  },
   {
     "name": "Shepherd-qc8017_32",
     "selected_version": "Continuous/master/1.0.0-17+9d9c0bf"
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-46+a2f89e3"
+    "selected_version": "Continuous/master/0.1.0-50+a919b10"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -65,7 +65,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-04_1511"
+    "selected_version": "Release/Castle-Fork/16.1.4.39354.2503267"
   },
   {
     "name": "RivieraLpmService",
