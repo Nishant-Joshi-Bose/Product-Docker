@@ -93,7 +93,7 @@ create_eddie_ext4 () {
 	if ! [ -f "$stage_package_dir"/$bose_ext4 ]; then
 	    error_exit ${FUNCNAME[0]} " Not found \"$stage_package_dir/$bose_ext4\""
 	fi
-	echo " Generating Bose partition "
+	echo " Generating Bose partition"
 	# extract HSP's bose partition
         $utils_dir/lin/simg2img $bose_ext4 $bose_ext4.raw > /dev/null 2>&1
 	#find size in bytes of $ext4_full.raw to be used during rebuilding EXT4	=33554432
@@ -119,14 +119,14 @@ create_eddie_ext4 () {
 }
 
 # copy HSP, utilities, version, lpm firmware
-echo " Adding Riviera-HSP to package "
-$CP "$riviera_hsp_images_dir"/images/* "$stage_package_dir/" || error_exit " Adding Riviera-HSP to package "
-echo " Adding utilities to package "
+echo " Adding Riviera-HSP to package"
+$CP "$riviera_hsp_images_dir"/* "$stage_package_dir/" || error_exit " Adding Riviera-HSP to package "
+echo " Adding utilities to package"
 $CP "$utils_dir" "$stage_package_dir"/  || error_exit ${FUNCNAME[0]} " Adding utilities to package "
-echo " Adding version to package "
+echo " Adding version to package"
 $CP "$version_json" "$stage_package_dir"/  || error_exit ${FUNCNAME[0]} " Adding version to package "
 # crate bose.ext4
-echo " Adding bose.ext4 to package "
+echo " Adding bose.ext4 to package"
 create_eddie_ext4
 # Adding lpm*.bin from $lpm_bin_path
 #$CP "$lpm_bin_path"/lpm*.bin "$stage_package_dir/"  || error_exit " Adding LPM*.bin to package "
@@ -147,5 +147,5 @@ $CP "$utils_dir"/lin/product_flash $output_dir  || error_exit " Copying product_
 $CP "$utils_dir"/win/product_flash.exe $output_dir  || error_exit " Copying product_flash.exe utility "
 $CP "$utils_dir"/mac/product_flash_mac $output_dir  || error_exit " Copying product_flash_mac utility "
 rm -rf "$stage"
-echo "$0 Complete. "
+echo "$0 Complete."
 exit 0
