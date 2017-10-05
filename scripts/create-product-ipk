@@ -73,6 +73,7 @@ audiopath_dir=$(components get CastleAudioPath-qc8017_32 installed_location) || 
 castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
 castlepassport_dir=$(components get CastlePassport-qc8017_32 installed_location) || exit
 eddielpm_package_dir=$(components get EddieLPM-Package installed_location) || exit
+wifi_setup_webpage_dir=$(components get WiFi-Setup-Webpage installed_location) || exit
 
 arch=arm-oemllib32-linux
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -162,7 +163,6 @@ cp "$stfs"/opt/Bose/etc/WebServer-SoundTouch.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
 cp "$boselibs_dir"/services.json "$opt_dir/etc" || exit
 cp -a "$stfs"/opt/Bose/Xml "$opt_dir/bin" || exit
-cp -a "$stfs"/opt/Bose/html "$opt_dir" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
 cp -a "$boselibs_dir/lib" "$opt_dir" || exit
@@ -205,11 +205,6 @@ sw_update_url=https://worldwide.bose.com/updates/soundtouch-test
     SoundTouchSdkPrivateCfg.swUpdateUrl="$sw_update_url" \
     || exit
 
-# Edit the version information into update.html.
-v=$(make-version-string "$version_json" "{major}.{minor}.{patch}") || exit
-echo "HTML version \"$v\""
-sed -i "s/%FROMVERSION%/From: $v/" "$opt_dir/html/update.html" || exit
-
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
 
@@ -219,6 +214,7 @@ sed -i "s/%FROMVERSION%/From: $v/" "$opt_dir/html/update.html" || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlepassport_dir/stage" "$opt_dir" || exit
 "$shepherd_dir/stage" "$opt_dir" || exit
+"$wifi_setup_webpage_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 

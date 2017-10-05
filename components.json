@@ -98,5 +98,9 @@
   {
     "name": "KeyHandler-native",
     "selected_version": "Continuous/master/0.0.1-7+334b357"
+  },
+  {
+    "name": "WiFi-Setup-Webpage",
+    "selected_version": "master@ca12a2b2ac0110efb26e0e0e187daff6c2384dd9"
   }
 ]
