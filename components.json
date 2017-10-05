@@ -41,11 +41,11 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/latest"
+    "selected_version": "Continuous/master/0.0.2-24+275e57e"
   },
   {
     "name": "CastlePassport-native",
-    "selected_version": "Continuous/master/latest"
+    "selected_version": "Continuous/master/0.0.2-24+275e57e"
   },    
   {
     "name": "Shepherd-qc8017_32",
