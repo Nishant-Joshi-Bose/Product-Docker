@@ -88,13 +88,15 @@ static DPrint s_logger { "Product" };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductUserInterface* ProductUserInterface::GetInstance( NotifyTargetTaskIF*         mainTask,
                                                          Callback< ProductMessage >  ProductNotify,
-                                                         ProductHardwareInterface*   HardwareInterface )
+                                                         ProductHardwareInterface*   HardwareInterface,
+                                                         CliClientMT                 &cliClientMT )
 {
     static ProductUserInterface* instance = new ProductUserInterface( mainTask,
                                                                       ProductNotify,
-                                                                      HardwareInterface );
+                                                                      HardwareInterface,
+                                                                      cliClientMT );
 
-    BOSE_DEBUG( s_logger, "The instance %8p of the Product User Interface has been obtained.", instance );
+    BOSE_INFO( s_logger, "The instance %8p of the Product User Interface has been obtained.", instance );
 
     return instance;
 }
@@ -116,12 +118,14 @@ ProductUserInterface* ProductUserInterface::GetInstance( NotifyTargetTaskIF*    
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductUserInterface::ProductUserInterface( NotifyTargetTaskIF*         mainTask,
                                             Callback< ProductMessage >  ProductNotify,
-                                            ProductHardwareInterface*   HardwareInterface )
-    : m_mainTask                ( mainTask          ),
-      m_keyEventTask            ( IL::CreateTask( "ProductMonitorNetworkTask" ) ),
-      m_ProductNotify           ( ProductNotify     ),
+                                            ProductHardwareInterface*   HardwareInterface,
+                                            CliClientMT                 &cliClientMT )
+    : m_mainTask( mainTask ),
+      m_keyEventTask( IL::CreateTask( "ProductMonitorNetworkTask" ) ),
+      m_ProductNotify( ProductNotify ),
       m_ProductHardwareInterface( HardwareInterface ),
-      m_running                  ( false            )
+      m_running( false ),
+      m_KeyHandler( *mainTask, cliClientMT )
 
 {
     return;
@@ -140,14 +144,14 @@ ProductUserInterface::ProductUserInterface( NotifyTargetTaskIF*         mainTask
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductUserInterface::Run( )
 {
-    BOSE_DEBUG( s_logger, "%s: The user interface is starting.", __FUNCTION__ );
+    BOSE_INFO( s_logger, "%s: The user interface is starting.", __FUNCTION__ );
 
-     ///
-     /// Attempt to register for key events in a separate task.
-     ///
-     IL::BreakThread( std::bind( &ProductUserInterface::RegisterForKeyEvents,
-                                 this ),
-                      m_keyEventTask );
+    ///
+    /// Attempt to register for key events in a separate task.
+    ///
+    IL::BreakThread( std::bind( &ProductUserInterface::RegisterForKeyEvents,
+                                this ),
+                     m_keyEventTask );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,24 +161,54 @@ void ProductUserInterface::Run( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductUserInterface::RegisterForKeyEvents( void )
 {
-     BOSE_DEBUG( s_logger, "%s: The user interface is attempting to register for key events.", __FUNCTION__ );
+    BOSE_INFO( s_logger, "%s: The user interface is attempting to register for key events.", __FUNCTION__ );
 
-     ///
-     /// Repeated attempts are made to sucessfully pass a callback to the hardware interface to
-     /// receive key events from the LPM. This callback when invoked will send a message to the
-     /// ProductController class that handles the state machine.
-     ///
-     Callback< LpmServiceMessages::IpcKeyInformation_t >
-     CallbackForKeyEvents( std::bind( &ProductUserInterface::HandleKeyEvent,
-                                      this,
-                                      std::placeholders::_1 ) );
+    ///
+    /// Repeated attempts are made to sucessfully pass a callback to the hardware interface to
+    /// receive key events from the LPM. This callback when invoked will send a message to the
+    /// ProductController class that handles the state machine.
+    ///
+    Callback< LpmServiceMessages::IpcKeyInformation_t >
+    CallbackForKeyEvents( std::bind( &ProductUserInterface::HandleKeyEvent,
+                                     this,
+                                     std::placeholders::_1 ) );
 
-     while( !m_ProductHardwareInterface->RegisterForKeyEvents( CallbackForKeyEvents ) )
-     {
-           sleep( PRODUCT_USER_INTERFACE_RETRY_IN_SECONDS );
-     }
+    while( !m_ProductHardwareInterface->RegisterForKeyEvents( CallbackForKeyEvents ) )
+    {
+        sleep( PRODUCT_USER_INTERFACE_RETRY_IN_SECONDS );
+    }
 
-     BOSE_DEBUG( s_logger, "%s: The user interface has registered for key events.", __FUNCTION__ );
+    // Register with the key handler / repeat management code (this is how raw lpm keys get translated to "intents")
+    m_KeyHandler.RegisterKeyHandler( ProductUserInterface::KeyInformationCallBack, this );
+
+    BOSE_INFO( s_logger, "%s: The user interface has registered for key events.", __FUNCTION__ );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductUserInterface::KeyInformationCallBack
+///
+/// @param result
+/// @param context
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductUserInterface:: KeyInformationCallBack( const int result, void *context )
+{
+    ProductMessage productMessage;
+    auto keyData = productMessage.mutable_data( )->mutable_keydata( );
+    ProductUserInterface *ui = ( ProductUserInterface * )context;
+
+    // the division of labor still seems a bit murky atm; pb messages are defined for
+    // for sending key_state + key_value as if UI will be handling raw keys from the LPM,
+    // but this is what the keyhandler logic is all about; for now just send the intent
+    // generated by the keyhandler as a "key down"
+    productMessage.set_id( KEY_PRESS );
+    keyData->set_state( DOWN );
+    keyData->set_value( result );
+
+    BOSE_INFO( s_logger, "Keys have been translated to intent %d", result );
+
+    IL::BreakThread( std::bind( ui->m_ProductNotify, productMessage ), ui->m_mainTask );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -186,79 +220,80 @@ void ProductUserInterface::RegisterForKeyEvents( void )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductUserInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInformation_t keyEvent )
 {
-     ProductMessage productMessage;
-     std::string    keyOriginString;
-     std::string    keyStateString;
-     std::string    keyIdString;
+    std::string    keyOriginString;
+    std::string    keyStateString;
+    std::string    keyIdString;
 
-     auto keyData = productMessage.mutable_data( )->mutable_keydata( );
+    switch( keyEvent.keyorigin( ) )
+    {
+    case KEY_ORIGIN_CONSOLE_BUTTON:
+        keyOriginString.assign( "CONSOLE_BUTTON" );
+        break;
+    case KEY_ORIGIN_CAPSENSE:
+        keyOriginString.assign( "CAPSENSE" );
+        break;
+    case KEY_ORIGIN_IR:
+        keyOriginString.assign( "IR" );
+        break;
+    case KEY_ORIGIN_RF:
+        keyOriginString.assign( "RF" );
+        break;
+    case KEY_ORIGIN_CEC:
+        keyOriginString.assign( "CEC" );
+        break;
+    case KEY_ORIGIN_NETWORK:
+        keyOriginString.assign( "NETWORK" );
+        break;
+    case KEY_ORIGIN_TAP:
+        keyOriginString.assign( "TAP" );
+        break;
+    default:
+        keyOriginString = "UNKNOWN " + std::to_string( keyEvent.keyorigin( ) );
+        break;
+    }
 
-     productMessage.set_id( KEY_PRESS );
+    switch( keyEvent.keystate( ) )
+    {
+    case KEY_RELEASED:
+        keyStateString.assign( "RELEASED" );
+        break;
+    case KEY_PRESSED:
+        keyStateString.assign( "PRESSED" );
+        break;
+    default:
+        keyStateString = "UNKNOWN " + std::to_string( keyEvent.keystate( ) );
+        break;
+    }
 
-     switch( keyEvent.keyorigin( ) )
-     {
-        case KEY_ORIGIN_CONSOLE_BUTTON:
-             keyOriginString.assign( "CONSOLE_BUTTON" );
-             break;
-        case KEY_ORIGIN_CAPSENSE:
-             keyOriginString.assign( "CAPSENSE" );
-             break;
-        case KEY_ORIGIN_IR:
-             keyOriginString.assign( "IR" );
-             break;
-        case KEY_ORIGIN_RF:
-             keyOriginString.assign( "RF" );
-             break;
-        case KEY_ORIGIN_CEC:
-             keyOriginString.assign( "CEC" );
-             break;
-        case KEY_ORIGIN_NETWORK:
-             keyOriginString.assign( "NETWORK" );
-             break;
-        case KEY_ORIGIN_TAP:
-             keyOriginString.assign( "TAP" );
-             break;
-        default:
-             keyOriginString = "UNKNOWN " + std::to_string( keyEvent.keyorigin( ) );
-             break;
-     }
+    keyIdString.assign( std::to_string( keyEvent.keyid( ) ) );
 
-     switch( keyEvent.keystate( ) )
-     {
-        case KEY_RELEASED:
-             keyStateString.assign( "RELEASED" );
+    BOSE_INFO( s_logger, "----------- Product Controller Key Event ------------" );
+    BOSE_INFO( s_logger, "A key event from the hardware interface was received: " );
+    BOSE_INFO( s_logger, " " );
+    BOSE_INFO( s_logger, "  Key Origin : %s ", keyOriginString.c_str( ) );
+    BOSE_INFO( s_logger, "  Key State  : %s ", keyStateString.c_str( ) );
+    BOSE_INFO( s_logger, "  Key ID     : %s ", keyIdString.c_str( ) );
+    BOSE_INFO( s_logger, " " );
 
-             keyData->set_state( UP );
-             keyData->set_value( keyEvent.keyid( ) );
+    // Message is incomplete, dump it
+    if( !keyEvent.has_keyorigin() || !keyEvent.has_keystate() || !keyEvent.has_keyid() )
+    {
+        BOSE_INFO( s_logger, "Can't process keys with missing information: keyorigin:%d, keystate:%d, keyid:%d",
+                   keyEvent.keyorigin(), keyEvent.keystate(), keyEvent.keyid() );
+        return;
+    }
 
-             break;
-        case KEY_PRESSED:
-             keyStateString.assign( "PRESSED" );
+    KeyHandlerUtil::KeyRepeatManager *ptrRepeatMgr = m_KeyHandler.RepeatMgr( keyEvent.keyorigin() );
 
-             keyData->set_state( DOWN );
-             keyData->set_value( keyEvent.keyid( ) );
+    if( !ptrRepeatMgr )
+    {
+        s_logger.LogError( "Source %d not registered", keyEvent.has_keyorigin() );
+        return;
+    }
 
-             break;
-        default:
-             keyStateString = "UNKNOWN " + std::to_string( keyEvent.keyorigin( ) );
-
-             keyData->set_state( UNKNOWN_KEY_STATE );
-             keyData->set_value( keyEvent.keyid( ) );
-
-             break;
-     }
-
-     keyIdString.assign( std::to_string( keyEvent.keyid( ) ) );
-
-     BOSE_DEBUG( s_logger, "----------- Product Controller Key Event ------------" );
-     BOSE_DEBUG( s_logger, "A key event from the hardware interface was received: ");
-     BOSE_DEBUG( s_logger, " ");
-     BOSE_DEBUG( s_logger, "  Key Origin : %s ", keyOriginString.c_str( ) );
-     BOSE_DEBUG( s_logger, "  Key State  : %s ", keyStateString.c_str( ) );
-     BOSE_DEBUG( s_logger, "  Key ID     : %s ", keyIdString.c_str( ) );
-     BOSE_DEBUG( s_logger, " ");
-
-     IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_mainTask );
+    // Feed it into the keyHandler
+    ptrRepeatMgr->HandleKeys( keyEvent.keyorigin(),
+                              keyEvent.keystate(), keyEvent.keyid() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -274,10 +309,12 @@ void ProductUserInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInformation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductUserInterface::Stop( )
 {
-    BOSE_DEBUG( s_logger, "The user interface is starting, but has not been implemented." );
+    BOSE_INFO( s_logger, "The user interface is starting, but has not been implemented." );
 
     m_running = false;
 }
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                               End of ProductApp Namespace                                    ///

@@ -166,6 +166,7 @@ cp -a "$boselibs_dir/lib" "$opt_dir" || exit
 cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp -t "$opt_dir/etc" "$professorlpm_package_dir"/*.bos "$professorlpm_package_dir/lpm_blob_configuration.xml" || exit
 cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
+cp "$wspace/Config/KeyConfiguration.json" "$opt_dir/etc"|| exit
 
 marge_url=https://streamingint.bose.com
 stats_url=https://eventsdev.api.bosecm.com

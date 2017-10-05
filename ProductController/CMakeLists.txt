@@ -17,6 +17,8 @@ INCLUDE_DIRECTORIES(
   ${RIVIERA_LPM_DIR}/include
   ${CASTLE_PRODUCT_CONTROLLER_COMMON_DIR}
   ${CASTLE_PRODUCT_CONTROLLER_COMMON_DIR}/Hsm
+  ${KEYHANDLER_DIR}/include
+  .
   ${CASTLE_PRODUCT_CONTROLLER_COMMON_DIR}/ProductAudioService 
   include
   source
@@ -73,6 +75,7 @@ TARGET_LINK_LIBRARIES(Professor
   ${SOUNDTOUCH_SDK_LIBS}
   ${SOUNDTOUCH_SDK_LIBS}
   LpmClient
+  KeyHandler
   jsoncpp
   protobuf
   -lpthread
