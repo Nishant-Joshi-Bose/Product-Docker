@@ -55,7 +55,7 @@ bool ProductSTSStateTop::HandleActivateRequest( const STS::Void &, uint32_t seq 
 bool ProductSTSStateTop::HandleNowPlayingRequest( const STS::Void &, uint32_t seq )
 {
     BOSE_INFO( m_logger, "HandleNowPlayingRequest( %s ) while %sactive", m_account.GetSourceName().c_str(),
-                      m_active ? "" : "in" );
+               m_active ? "" : "in" );
     if( m_active )
     {
         STS::NowPlayingResponse npr;

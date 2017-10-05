@@ -84,14 +84,14 @@ static DPrint s_logger { "Product" };
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductHardwareInterface* ProductHardwareInterface::GetInstance( NotifyTargetTaskIF*        task,
-                                                                 Callback< ProductMessage > ProductNotify )
+        Callback< ProductMessage > ProductNotify )
 {
-       static ProductHardwareInterface* instance = new ProductHardwareInterface( task,
-                                                                                 ProductNotify );
+    static ProductHardwareInterface* instance = new ProductHardwareInterface( task,
+            ProductNotify );
 
-       BOSE_DEBUG( s_logger, "The instance %8p of the Product Hardware Manager was returned.", instance );
+    BOSE_DEBUG( s_logger, "The instance %8p of the Product Hardware Manager was returned.", instance );
 
-       return instance;
+    return instance;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,12 +106,12 @@ ProductHardwareInterface* ProductHardwareInterface::GetInstance( NotifyTargetTas
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductHardwareInterface::ProductHardwareInterface( NotifyTargetTaskIF*        task,
-                                                    Callback< ProductMessage > ProductNotify )
-     : m_mainTask     ( task          ),
-       m_ProductNotify( ProductNotify ),
-       m_connected    ( false         )
+        Callback< ProductMessage > ProductNotify )
+    : m_mainTask     ( task          ),
+      m_ProductNotify( ProductNotify ),
+      m_connected    ( false         )
 {
-       return;
+    return;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -132,8 +132,8 @@ bool ProductHardwareInterface::Run( )
     m_LpmClient = LpmClientFactory::Create( "ProductLpmClient", m_mainTask );
 
     Callback< bool > ConnectedCallback( std::bind( &ProductHardwareInterface::Connected,
-                                                   this,
-                                                   std::placeholders::_1 ) );
+                                        this,
+                                        std::placeholders::_1 ) );
 
     m_LpmClient->Connect( ConnectedCallback );
 
@@ -153,40 +153,40 @@ bool ProductHardwareInterface::Run( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductHardwareInterface::Connected( bool connected )
 {
-     if( !connected )
-     {
-         BOSE_DEBUG( s_logger, "A hardware connection to the LPM could not be established." );
-         BOSE_DEBUG( s_logger, "An attempt to reconnect to the LPM will be made." );
+    if( !connected )
+    {
+        BOSE_DEBUG( s_logger, "A hardware connection to the LPM could not be established." );
+        BOSE_DEBUG( s_logger, "An attempt to reconnect to the LPM will be made." );
 
-         m_connected = false;
+        m_connected = false;
 
-         ProductMessage productMessage;
-         productMessage.set_id( LPM_HARDWARE_DOWN );
+        ProductMessage productMessage;
+        productMessage.set_id( LPM_HARDWARE_DOWN );
 
-         IL::BreakThread( std::bind( m_ProductNotify, productMessage ),      m_mainTask );
-         IL::BreakThread( std::bind( &ProductHardwareInterface::Run, this ), m_mainTask );
+        IL::BreakThread( std::bind( m_ProductNotify, productMessage ),      m_mainTask );
+        IL::BreakThread( std::bind( &ProductHardwareInterface::Run, this ), m_mainTask );
 
-         return;
-     }
-     else
-     {
-         BOSE_DEBUG( s_logger, "A hardware connection to the LPM has been established." );
-         BOSE_DEBUG( s_logger, "An attempt to obtain the LPM status will now be made." );
+        return;
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "A hardware connection to the LPM has been established." );
+        BOSE_DEBUG( s_logger, "An attempt to obtain the LPM status will now be made." );
 
-         m_connected = true;
+        m_connected = true;
 
-         ProductMessage productMessage;
-         productMessage.set_id( LPM_HARDWARE_UP );
+        ProductMessage productMessage;
+        productMessage.set_id( LPM_HARDWARE_UP );
 
-         IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_mainTask );
+        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_mainTask );
 
-         Callback< LpmServiceMessages::IpcLpmHealthStatusPayload_t >
-         CallbackForLpmStatus( std::bind( &ProductHardwareInterface::HandleLpmStatus,
-                                          this,
-                                          std::placeholders::_1 ) );
+        Callback< LpmServiceMessages::IpcLpmHealthStatusPayload_t >
+        CallbackForLpmStatus( std::bind( &ProductHardwareInterface::HandleLpmStatus,
+                                         this,
+                                         std::placeholders::_1 ) );
 
-         RequestLpmStatus( CallbackForLpmStatus );
-     }
+        RequestLpmStatus( CallbackForLpmStatus );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -197,26 +197,26 @@ void ProductHardwareInterface::Connected( bool connected )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductHardwareInterface::RequestLpmStatus( Callback< LpmServiceMessages::IpcLpmHealthStatusPayload_t >
-                                                 callback )
+        callback )
 {
-     if( m_connected == false || m_LpmClient == nullptr )
-     {
-         BOSE_ERROR( s_logger, "An LPM status request could not be made, as no connection is available." );
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM status request could not be made, as no connection is available." );
 
-         return false;
-     }
-     else
-     {
-         BOSE_DEBUG( s_logger, "An LPM status request will be made." );
+        return false;
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "An LPM status request will be made." );
 
-         DeviceStatusReq_t statusRequestType;
+        DeviceStatusReq_t statusRequestType;
 
-         statusRequestType.set_requesttype( LPM_STATUS );
+        statusRequestType.set_requesttype( LPM_STATUS );
 
-         m_LpmClient->RequestStatus( statusRequestType, callback );
+        m_LpmClient->RequestStatus( statusRequestType, callback );
 
-         return true;
-     }
+        return true;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -228,80 +228,80 @@ bool ProductHardwareInterface::RequestLpmStatus( Callback< LpmServiceMessages::I
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductHardwareInterface::HandleLpmStatus( LpmServiceMessages::IpcLpmHealthStatusPayload_t status )
 {
-     BOSE_DEBUG( s_logger, "An LPM status was received with the following values: ");
-     BOSE_DEBUG( s_logger, "                      ");
-     BOSE_DEBUG( s_logger, "Image             : %s", status.has_image( )                            ?
-                                                std::to_string( status.image( ) ).c_str( )          :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Software Version  : %s", status.has_swversion( )                        ?
-                                                status.swversion( ).c_str( )                        :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Power State       : %s", status.has_power( )                            ?
-                                                std::to_string( status.power( ) ).c_str( )          :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Source            : %s", status.has_source( )                           ?
-                                                std::to_string( status.source( ) ).c_str( )         :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Volume            : %s", status.has_volume( )                           ?
-                                                std::to_string( status.volume( ) ).c_str( )         :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Mute Status       : %s", status.has_mute( )                             ?
-                                                std::to_string( status.mute( ) ).c_str( )           :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Up Time           : %s", status.has_uptime( )                           ?
-                                                std::to_string( status.uptime( ) ).c_str( )         :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Region Code       : %s", status.has_regioncode( )                       ?
-                                                std::to_string( status.regioncode( ) ).c_str( )     :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Country Code      : %s", status.has_countrycode( )                      ?
-                                                std::to_string( status.countrycode( ) ).c_str( )    :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Speaker Package   : %s", status.has_speakerpackage( )                   ?
-                                                std::to_string( status.speakerpackage( ) ).c_str( ) :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Audio Mode        : %s", status.has_audiomode( )                        ?
-                                                std::to_string( status.audiomode( ) ).c_str( )      :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Base              : %s", status.has_bass( )                             ?
-                                                std::to_string( status.bass( ) ).c_str( )           :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Treble            : %s", status.has_treble( )                           ?
-                                                std::to_string( status.treble( ) ).c_str( )         :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Center            : %s", status.has_center( )                           ?
-                                                std::to_string( status.center( ) ).c_str( )         :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Surround          : %s", status.has_surround( )                         ?
-                                                std::to_string( status.surround( ) ).c_str( )       :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Lip Sync Delay    : %s", status.has_lipsyncdelayms( )                   ?
-                                                std::to_string( status.lipsyncdelayms( ) ).c_str( ) :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "System Color      : %s", status.has_systemcolor( )                      ?
-                                                std::to_string( status.systemcolor( ) ).c_str( )    :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Language          : %s", status.has_language( )                         ?
-                                                std::to_string( status.language( ) ).c_str( )       :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Serial            : %s", status.has_serial( )                           ?
-                                                status.serial( ).c_str( )                           :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Status            : %s", status.has_status( )                           ?
-                                                std::to_string( status.status( ) ).c_str( )         :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Out of Box Status : %s", status.has_outofboxstatus( )                   ?
-                                                std::to_string( status.outofboxstatus( ) ).c_str( ) :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Network Status    : %s", status.has_networkstatus( )                    ?
-                                                std::to_string( status.networkstatus( ) ).c_str( )  :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Total Latency     : %s", status.has_totallatencyms( )                   ?
-                                                std::to_string( status.totallatencyms( ) ).c_str( ) :
-                                                "Unknown" );
-     BOSE_DEBUG( s_logger, "Minimum Latency   : %s", status.has_minimumoutputlatencyms( )                   ?
-                                                std::to_string( status.minimumoutputlatencyms( ) ).c_str( ) :
-                                                "Unknown" );
+    BOSE_DEBUG( s_logger, "An LPM status was received with the following values: ");
+    BOSE_DEBUG( s_logger, "                      ");
+    BOSE_DEBUG( s_logger, "Image             : %s", status.has_image( )                            ?
+                std::to_string( status.image( ) ).c_str( )          :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Software Version  : %s", status.has_swversion( )                        ?
+                status.swversion( ).c_str( )                        :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Power State       : %s", status.has_power( )                            ?
+                std::to_string( status.power( ) ).c_str( )          :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Source            : %s", status.has_source( )                           ?
+                std::to_string( status.source( ) ).c_str( )         :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Volume            : %s", status.has_volume( )                           ?
+                std::to_string( status.volume( ) ).c_str( )         :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Mute Status       : %s", status.has_mute( )                             ?
+                std::to_string( status.mute( ) ).c_str( )           :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Up Time           : %s", status.has_uptime( )                           ?
+                std::to_string( status.uptime( ) ).c_str( )         :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Region Code       : %s", status.has_regioncode( )                       ?
+                std::to_string( status.regioncode( ) ).c_str( )     :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Country Code      : %s", status.has_countrycode( )                      ?
+                std::to_string( status.countrycode( ) ).c_str( )    :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Speaker Package   : %s", status.has_speakerpackage( )                   ?
+                std::to_string( status.speakerpackage( ) ).c_str( ) :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Audio Mode        : %s", status.has_audiomode( )                        ?
+                std::to_string( status.audiomode( ) ).c_str( )      :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Base              : %s", status.has_bass( )                             ?
+                std::to_string( status.bass( ) ).c_str( )           :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Treble            : %s", status.has_treble( )                           ?
+                std::to_string( status.treble( ) ).c_str( )         :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Center            : %s", status.has_center( )                           ?
+                std::to_string( status.center( ) ).c_str( )         :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Surround          : %s", status.has_surround( )                         ?
+                std::to_string( status.surround( ) ).c_str( )       :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Lip Sync Delay    : %s", status.has_lipsyncdelayms( )                   ?
+                std::to_string( status.lipsyncdelayms( ) ).c_str( ) :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "System Color      : %s", status.has_systemcolor( )                      ?
+                std::to_string( status.systemcolor( ) ).c_str( )    :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Language          : %s", status.has_language( )                         ?
+                std::to_string( status.language( ) ).c_str( )       :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Serial            : %s", status.has_serial( )                           ?
+                status.serial( ).c_str( )                           :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Status            : %s", status.has_status( )                           ?
+                std::to_string( status.status( ) ).c_str( )         :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Out of Box Status : %s", status.has_outofboxstatus( )                   ?
+                std::to_string( status.outofboxstatus( ) ).c_str( ) :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Network Status    : %s", status.has_networkstatus( )                    ?
+                std::to_string( status.networkstatus( ) ).c_str( )  :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Total Latency     : %s", status.has_totallatencyms( )                   ?
+                std::to_string( status.totallatencyms( ) ).c_str( ) :
+                "Unknown" );
+    BOSE_DEBUG( s_logger, "Minimum Latency   : %s", status.has_minimumoutputlatencyms( )                   ?
+                std::to_string( status.minimumoutputlatencyms( ) ).c_str( ) :
+                "Unknown" );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -317,22 +317,22 @@ void ProductHardwareInterface::HandleLpmStatus( LpmServiceMessages::IpcLpmHealth
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductHardwareInterface::RegisterForKeyEvents( Callback< LpmServiceMessages::IpcKeyInformation_t >
-                                                     callback )
+        callback )
 {
-     if( m_connected == false || m_LpmClient == nullptr )
-     {
-         BOSE_ERROR( s_logger, "An LPM request for key events could not be made, as no connection is available." );
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM request for key events could not be made, as no connection is available." );
 
-         return false;
-     }
-     else
-     {
-         BOSE_DEBUG( s_logger, "An LPM request for key events will be made." );
+        return false;
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "An LPM request for key events will be made." );
 
-         m_LpmClient->RegisterEvent( IPC_KEY, callback );
+        m_LpmClient->RegisterEvent( IPC_KEY, callback );
 
-         return true;
-     }
+        return true;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -346,26 +346,26 @@ bool ProductHardwareInterface::RegisterForKeyEvents( Callback< LpmServiceMessage
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductHardwareInterface::SendSetVolume( uint32_t volume )
 {
-     BOSE_DEBUG( s_logger, "A volume level of %d is being set.", volume );
+    BOSE_DEBUG( s_logger, "A volume level of %d is being set.", volume );
 
-     if( m_connected == false || m_LpmClient == nullptr )
-     {
-         BOSE_ERROR( s_logger, "An LPM set volume request could not be made, as no connection is available." );
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM set volume request could not be made, as no connection is available." );
 
-         return false;
-     }
-     else
-     {
-         BOSE_DEBUG( s_logger, "An LPM set volume request will be made." );
+        return false;
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "An LPM set volume request will be made." );
 
-         IpcAudioSetVolume_t volumeSetting;
+        IpcAudioSetVolume_t volumeSetting;
 
-         volumeSetting.set_volume( volume );
+        volumeSetting.set_volume( volume );
 
-         m_LpmClient->SetVolume( volumeSetting );
+        m_LpmClient->SetVolume( volumeSetting );
 
-         return true;
-     }
+        return true;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -379,35 +379,35 @@ bool ProductHardwareInterface::SendSetVolume( uint32_t volume )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductHardwareInterface::SendUserMute( bool mute )
 {
-     BOSE_DEBUG( s_logger, "A user mute %s is being set.", mute ? "on" : "off" );
+    BOSE_DEBUG( s_logger, "A user mute %s is being set.", mute ? "on" : "off" );
 
-     if( m_connected == false || m_LpmClient == nullptr )
-     {
-         BOSE_ERROR( s_logger, "An LPM user mute request could not be made, as no connection is available." );
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM user mute request could not be made, as no connection is available." );
 
-         return false;
-     }
-     else
-     {
-         BOSE_DEBUG( s_logger, "An LPM user mute request will be made." );
+        return false;
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "An LPM user mute request will be made." );
 
-         IpcAudioMute_t muteSetting;
+        IpcAudioMute_t muteSetting;
 
-         if( mute )
-         {
-             muteSetting.set_internalmute( 1 );
-             muteSetting.set_unifymute   ( 1 );
-         }
-         else
-         {
-             muteSetting.set_internalmute( 0 );
-             muteSetting.set_unifymute   ( 1 );
-         }
+        if( mute )
+        {
+            muteSetting.set_internalmute( 1 );
+            muteSetting.set_unifymute   ( 1 );
+        }
+        else
+        {
+            muteSetting.set_internalmute( 0 );
+            muteSetting.set_unifymute   ( 1 );
+        }
 
-         m_LpmClient->SetMute( muteSetting );
+        m_LpmClient->SetMute( muteSetting );
 
-         return true;
-     }
+        return true;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -463,20 +463,20 @@ bool ProductHardwareInterface::SendInternalMute( bool mute )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductHardwareInterface::SendAudioPathPresentationLatency( uint32_t latency )
 {
-     BOSE_DEBUG( s_logger, "Audio path latency of %d is being set.", latency );
+    BOSE_DEBUG( s_logger, "Audio path latency of %d is being set.", latency );
 
-     if( m_connected == false || m_LpmClient == nullptr )
-     {
-         BOSE_ERROR( s_logger, "An LPM set latency request could not be made, as no connection is available." );
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM set latency request could not be made, as no connection is available." );
 
-         return false;
-     }
-     else
-     {
-         BOSE_DEBUG( s_logger, "An LPM set latency request is currently not supported." );
+        return false;
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "An LPM set latency request is currently not supported." );
 
-         return true;
-     }
+        return true;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -490,44 +490,44 @@ bool ProductHardwareInterface::SendAudioPathPresentationLatency( uint32_t latenc
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductHardwareInterface::SendSetDSPAudioMode( IpcAudioMode_t audioMode )
 {
-     std::string audioModeString;
+    std::string audioModeString;
 
-     switch( audioMode )
-     {
-        case IPC_AUDIO_MODE_UNSPECIFIED:
-             audioModeString.assign( "Unspecified" );
-             break;
-        case IPC_AUDIO_MODE_DIRECT:
-             audioModeString.assign( "Direct" );
-             break;
-        case IPC_AUDIO_MODE_NORMAL:
-             audioModeString.assign( "Normal" );
-             break;
-        case IPC_AUDIO_MODE_DIALOG:
-             audioModeString.assign( "Dialog" );
-             break;
-        case IPC_AUDIO_MODE_NIGHT:
-             audioModeString.assign( "Night" );
-             break;
-        default:
-             audioModeString.assign( "Unknown" );
-             break;
-     }
+    switch( audioMode )
+    {
+    case IPC_AUDIO_MODE_UNSPECIFIED:
+        audioModeString.assign( "Unspecified" );
+        break;
+    case IPC_AUDIO_MODE_DIRECT:
+        audioModeString.assign( "Direct" );
+        break;
+    case IPC_AUDIO_MODE_NORMAL:
+        audioModeString.assign( "Normal" );
+        break;
+    case IPC_AUDIO_MODE_DIALOG:
+        audioModeString.assign( "Dialog" );
+        break;
+    case IPC_AUDIO_MODE_NIGHT:
+        audioModeString.assign( "Night" );
+        break;
+    default:
+        audioModeString.assign( "Unknown" );
+        break;
+    }
 
-     BOSE_DEBUG( s_logger, "Audio mode is to be set to %s.", audioModeString.c_str( ) );
+    BOSE_DEBUG( s_logger, "Audio mode is to be set to %s.", audioModeString.c_str( ) );
 
-     if( m_connected == false || m_LpmClient == nullptr )
-     {
-         BOSE_ERROR( s_logger, "An LPM set latency request could not be made, as no connection is available." );
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM set latency request could not be made, as no connection is available." );
 
-         return false;
-     }
-     else
-     {
-         BOSE_DEBUG( s_logger, "An LPM set latency request is currently not supported." );
+        return false;
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "An LPM set latency request is currently not supported." );
 
         return true;
-     }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -541,20 +541,20 @@ bool ProductHardwareInterface::SendSetDSPAudioMode( IpcAudioMode_t audioMode )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductHardwareInterface::SendLipSyncDelay( uint32_t audioDelay )
 {
-     BOSE_DEBUG( s_logger, "Audio lip sync delay is to be set to %d.", audioDelay );
+    BOSE_DEBUG( s_logger, "Audio lip sync delay is to be set to %d.", audioDelay );
 
-     if( m_connected == false || m_LpmClient == nullptr )
-     {
-         BOSE_ERROR( s_logger, "An LPM set latency request could not be made, as no connection is available." );
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM set latency request could not be made, as no connection is available." );
 
-         return false;
-     }
-     else
-     {
-         BOSE_DEBUG( s_logger, "An LPM set latency request is currently not supported." );
+        return false;
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "An LPM set latency request is currently not supported." );
 
-         return true;
-     }
+        return true;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -568,26 +568,26 @@ bool ProductHardwareInterface::SendLipSyncDelay( uint32_t audioDelay )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductHardwareInterface::SendToneAndLevelControl( IpcToneControl_t& controls )
 {
-     BOSE_DEBUG( s_logger, "Audio tone and level settings are to be set as follows: " );
-     BOSE_DEBUG( s_logger, "               " );
-     BOSE_DEBUG( s_logger, "Bass      : %d ", controls.bass( ) );
-     BOSE_DEBUG( s_logger, "Treble    : %d ", controls.treble( ) );
-     BOSE_DEBUG( s_logger, "Center    : %d ", controls.centerspeaker( ) );
-     BOSE_DEBUG( s_logger, "Surround  : %d ", controls.surroundspeaker( ) );
-     BOSE_DEBUG( s_logger, "               " );
+    BOSE_DEBUG( s_logger, "Audio tone and level settings are to be set as follows: " );
+    BOSE_DEBUG( s_logger, "               " );
+    BOSE_DEBUG( s_logger, "Bass      : %d ", controls.bass( ) );
+    BOSE_DEBUG( s_logger, "Treble    : %d ", controls.treble( ) );
+    BOSE_DEBUG( s_logger, "Center    : %d ", controls.centerspeaker( ) );
+    BOSE_DEBUG( s_logger, "Surround  : %d ", controls.surroundspeaker( ) );
+    BOSE_DEBUG( s_logger, "               " );
 
-     if( m_connected == false || m_LpmClient == nullptr )
-     {
-         BOSE_ERROR( s_logger, "An LPM audio and tone level request could not be made, as no connection is available." );
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM audio and tone level request could not be made, as no connection is available." );
 
-         return false;
-     }
-     else
-     {
-         BOSE_DEBUG( s_logger, "An LPM audio and tone level request is currently not supported." );
+        return false;
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "An LPM audio and tone level request is currently not supported." );
 
-         return true;
-     }
+        return true;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -601,20 +601,20 @@ bool ProductHardwareInterface::SendToneAndLevelControl( IpcToneControl_t& contro
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductHardwareInterface::SendSpeakerList( IpcAccessoryList_t& accessoryList )
 {
-     BOSE_DEBUG( s_logger, "Speaker activation settings are to be set as follows: " );
+    BOSE_DEBUG( s_logger, "Speaker activation settings are to be set as follows: " );
 
-     if( m_connected == false || m_LpmClient == nullptr )
-     {
-         BOSE_ERROR( s_logger, "An LPM speaker activation settings request could not be made, as no connection is available." );
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM speaker activation settings request could not be made, as no connection is available." );
 
-         return false;
-     }
-     else
-     {
-         BOSE_DEBUG( s_logger, "An LPM activation settings request is currently not supported." );
+        return false;
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "An LPM activation settings request is currently not supported." );
 
-         return true;
-     }
+        return true;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -630,20 +630,20 @@ bool ProductHardwareInterface::SendSpeakerList( IpcAccessoryList_t& accessoryLis
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductHardwareInterface::SendSetSystemTimeoutEnableBits( Ipc_TimeoutControl_t& timeoutControl )
 {
-     BOSE_DEBUG( s_logger, "Auto power down will be set to %s.", timeoutControl.enable( ) ? "on" : "off" );
+    BOSE_DEBUG( s_logger, "Auto power down will be set to %s.", timeoutControl.enable( ) ? "on" : "off" );
 
-     if( m_connected == false || m_LpmClient == nullptr )
-     {
-         BOSE_ERROR( s_logger, "An LPM speaker activation settings request could not be made, as no connection is available." );
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM speaker activation settings request could not be made, as no connection is available." );
 
-         return false;
-     }
-     else
-     {
-         BOSE_DEBUG( s_logger, "An LPM activation settings request is currently not supported." );
+        return false;
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "An LPM activation settings request is currently not supported." );
 
-         return true;
-     }
+        return true;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -659,22 +659,22 @@ bool ProductHardwareInterface::SendSetSystemTimeoutEnableBits( Ipc_TimeoutContro
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductHardwareInterface::RebootRequest( )
 {
-     BOSE_DEBUG( s_logger, "A reboot request is being sent." );
+    BOSE_DEBUG( s_logger, "A reboot request is being sent." );
 
-     if( m_connected == false || m_LpmClient == nullptr )
-     {
-         BOSE_ERROR( s_logger, "An LPM reboot request could not be made, as no connection is available." );
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM reboot request could not be made, as no connection is available." );
 
-         return false;
-     }
-     else
-     {
-         BOSE_DEBUG( s_logger, "An LPM reboot request is being sent." );
-     }
+        return false;
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "An LPM reboot request is being sent." );
+    }
 
-     m_LpmClient->Reboot( );
+    m_LpmClient->Reboot( );
 
-     return true;
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -690,20 +690,20 @@ bool ProductHardwareInterface::RebootRequest( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductHardwareInterface::HandleLowPowerStandby( )
 {
-     BOSE_DEBUG( s_logger, "Low Power standby is being set." );
+    BOSE_DEBUG( s_logger, "Low Power standby is being set." );
 
-     if( m_connected == false || m_LpmClient == nullptr )
-     {
-         BOSE_ERROR( s_logger, "An LPM low power standby request could not be made, as no connection is available." );
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM low power standby request could not be made, as no connection is available." );
 
-         return false;
-     }
-     else
-     {
-         BOSE_DEBUG( s_logger, "An LPM low power standby request is currently not supported." );
+        return false;
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "An LPM low power standby request is currently not supported." );
 
-         return true;
-     }
+        return true;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -798,24 +798,24 @@ void ProductHardwareInterface::SetBlueToothDeviceName( const std::string& blueto
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductHardwareInterface::SendBlueToothDeviceData( const std::string&       bluetoothDeviceName,
-                                                        const unsigned long long bluetoothMacAddress )
+        const unsigned long long bluetoothMacAddress )
 {
-     BOSE_DEBUG( s_logger, "Bluetooth data is being set to the Device %s with MAC Address 0x%016llX.",
-                            bluetoothDeviceName.c_str( ),
-                            bluetoothMacAddress );
+    BOSE_DEBUG( s_logger, "Bluetooth data is being set to the Device %s with MAC Address 0x%016llX.",
+                bluetoothDeviceName.c_str( ),
+                bluetoothMacAddress );
 
-     if( m_connected == false || m_LpmClient == nullptr )
-     {
-         BOSE_ERROR( s_logger, "An LPM bluetooth data request could not be made, as no connection is available." );
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM bluetooth data request could not be made, as no connection is available." );
 
-         return false;
-     }
-     else
-     {
-         BOSE_DEBUG( s_logger, "An LPM bluetooth data request is currently not supported." );
+        return false;
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "An LPM bluetooth data request is currently not supported." );
 
-         return true;
-     }
+        return true;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -831,22 +831,22 @@ bool ProductHardwareInterface::SendBlueToothDeviceData( const std::string&      
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductHardwareInterface::SendSourceSelection( const IPCSource_t& sourceSelect )
 {
-     BOSE_DEBUG( s_logger, "The source selection will be set to the value %d with status %d",
-                       sourceSelect.source( ),
-                       sourceSelect.status( ) );
+    BOSE_DEBUG( s_logger, "The source selection will be set to the value %d with status %d",
+                sourceSelect.source( ),
+                sourceSelect.status( ) );
 
-     if( m_connected == false || m_LpmClient == nullptr )
-     {
-         BOSE_ERROR( s_logger, "An LPM source selection request could not be made, as no connection is available." );
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM source selection request could not be made, as no connection is available." );
 
-         return false;
-     }
-     else
-     {
-         BOSE_DEBUG( s_logger, "An LPM source selection request is currently not supported." );
+        return false;
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "An LPM source selection request is currently not supported." );
 
-         return true;
-     }
+        return true;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

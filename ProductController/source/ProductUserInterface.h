@@ -88,9 +88,9 @@ public:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     static ProductUserInterface* GetInstance( NotifyTargetTaskIF*         mainTask,
-                                              Callback< ProductMessage >  ProductNotify,
-                                              ProductHardwareInterface*   HardwareInterface,
-                                              CliClientMT                 &cliClienMT );
+            Callback< ProductMessage >  ProductNotify,
+            ProductHardwareInterface*   HardwareInterface,
+            CliClientMT                 &cliClienMT );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
