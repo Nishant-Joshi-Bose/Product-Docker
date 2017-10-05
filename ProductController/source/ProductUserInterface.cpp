@@ -87,14 +87,14 @@ static DPrint s_logger { "Product" };
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductUserInterface* ProductUserInterface::GetInstance( NotifyTargetTaskIF*         mainTask,
-                                                         Callback< ProductMessage >  ProductNotify,
-                                                         ProductHardwareInterface*   HardwareInterface,
-                                                         CliClientMT                 &cliClientMT )
+        Callback< ProductMessage >  ProductNotify,
+        ProductHardwareInterface*   HardwareInterface,
+        CliClientMT                 &cliClientMT )
 {
     static ProductUserInterface* instance = new ProductUserInterface( mainTask,
-                                                                      ProductNotify,
-                                                                      HardwareInterface,
-                                                                      cliClientMT );
+            ProductNotify,
+            HardwareInterface,
+            cliClientMT );
 
     BOSE_INFO( s_logger, "The instance %8p of the Product User Interface has been obtained.", instance );
 
@@ -117,9 +117,9 @@ ProductUserInterface* ProductUserInterface::GetInstance( NotifyTargetTaskIF*    
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductUserInterface::ProductUserInterface( NotifyTargetTaskIF*         mainTask,
-                                            Callback< ProductMessage >  ProductNotify,
-                                            ProductHardwareInterface*   HardwareInterface,
-                                            CliClientMT                 &cliClientMT )
+        Callback< ProductMessage >  ProductNotify,
+        ProductHardwareInterface*   HardwareInterface,
+        CliClientMT                 &cliClientMT )
     : m_mainTask( mainTask ),
       m_keyEventTask( IL::CreateTask( "ProductMonitorNetworkTask" ) ),
       m_ProductNotify( ProductNotify ),

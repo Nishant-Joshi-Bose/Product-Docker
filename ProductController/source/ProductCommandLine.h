@@ -46,130 +46,130 @@
 
 namespace ProductApp
 {
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief The following aliases refer to the Bose Sound Touch class utilities for inter-process and
+///        inter-thread communications.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+typedef APProductIF::APProductPtr               ProductPointer;
+typedef APClientSocketListenerIF::ListenerPtr  ClientPointer;
+typedef APServerSocketListenerIF::ListenerPtr  ServerPointer;
+typedef IPCMessageRouterIF::IPCMessageRouterPtr RouterPointer;
+typedef CLIClient::CmdPtr                       CommandPointer;
+typedef CLIClient::CLICmdDescriptor             CommandDescription ;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+///            Forward Class Declarations
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+class ProductHardwareInterface;
+class ProductController;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @class ProductCommandLine
+///
+/// @brief This class is used to set up a command line interface through the product controller
+///        class. Note that only one instantiation of this class is to be created through its
+///        GetInstance static method, which returns a single static reference to an instance of this
+///        class.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+class ProductCommandLine
+{
+public:
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following aliases refer to the Bose Sound Touch class utilities for inter-process and
-    ///        inter-thread communications.
+    /// @name   ProductCommandLine::GetInstance
     ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    typedef APProductIF::APProductPtr               ProductPointer;
-    typedef APClientSocketListenerIF::ListenerPtr  ClientPointer;
-    typedef APServerSocketListenerIF::ListenerPtr  ServerPointer;
-    typedef IPCMessageRouterIF::IPCMessageRouterPtr RouterPointer;
-    typedef CLIClient::CmdPtr                       CommandPointer;
-    typedef CLIClient::CLICmdDescriptor             CommandDescription ;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// @brief  This static method creates the one and only instance of a ProductCommandLine
+    ///         object. That only one instance is created in a thread safe way is guaranteed by
+    ///         the C++ Version 11 compiler.
     ///
-    ///            Forward Class Declarations
+    /// @param  mainTask
     ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    class ProductHardwareInterface;
-    class ProductController;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// @param  HardwareInterface
     ///
-    /// @class ProductCommandLine
+    /// @return This method returns a reference to a ProductCommandLine object.
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    static ProductCommandLine* GetInstance( NotifyTargetTaskIF*        mainTask,
+                                            ProductHardwareInterface*  HardwareInterface );
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief This class is used to set up a command line interface through the product controller
-    ///        class. Note that only one instantiation of this class is to be created through its
-    ///        GetInstance static method, which returns a single static reference to an instance of this
-    ///        class.
+    /// @brief  The following public methods are used to run and stop the ProductCommandLine
+    ///         instance, respectively.
     ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    class ProductCommandLine
-    {
-      public:
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    void Run( void );
+    void Stop( void );
 
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        ///
-        /// @name   ProductCommandLine::GetInstance
-        ///
-        /// @brief  This static method creates the one and only instance of a ProductCommandLine
-        ///         object. That only one instance is created in a thread safe way is guaranteed by
-        ///         the C++ Version 11 compiler.
-        ///
-        /// @param  mainTask
-        ///
-        /// @param  HardwareInterface
-        ///
-        /// @return This method returns a reference to a ProductCommandLine object.
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        static ProductCommandLine* GetInstance( NotifyTargetTaskIF*        mainTask,
-                                                ProductHardwareInterface*  HardwareInterface );
+private:
 
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        ///
-        /// @brief  The following public methods are used to run and stop the ProductCommandLine
-        ///         instance, respectively.
-        ///
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        void Run( void );
-        void Stop( void );
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @name   ProductCommandLine
+    ///
+    /// @brief  The constructor for this class is set to be private. This definition prevents this
+    ///         class from being instantiated directly, so that only the static method GetInstance
+    ///         to this class can be used to get the one sole instance of it.
+    ///
+    /// @param  mainTask
+    ///
+    /// @param  HardwareInterface
+    ///
+    /// @return This method does not return anything.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ProductCommandLine( NotifyTargetTaskIF*        mainTask,
+                        ProductHardwareInterface*  HardwareInterface );
 
-      private:
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following copy constructor and equality operator for this class are private
+    ///        and are set to be undefined through the delete keyword. This prevents this class
+    ///        from being copied directly, so that only the static method GetInstance to this
+    ///        class can be used to get the one sole instance of it.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ProductCommandLine( ProductCommandLine const& ) = delete;
+    void operator = ( ProductCommandLine const& ) = delete;
 
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        ///
-        /// @name   ProductCommandLine
-        ///
-        /// @brief  The constructor for this class is set to be private. This definition prevents this
-        ///         class from being instantiated directly, so that only the static method GetInstance
-        ///         to this class can be used to get the one sole instance of it.
-        ///
-        /// @param  mainTask
-        ///
-        /// @param  HardwareInterface
-        ///
-        /// @return This method does not return anything.
-        ///
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        ProductCommandLine( NotifyTargetTaskIF*        mainTask,
-                            ProductHardwareInterface*  HardwareInterface );
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following member stores a pointer to a command line interface class object.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    CLIClient * m_CommandLineInterface;
 
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        ///
-        /// @brief The following copy constructor and equality operator for this class are private
-        ///        and are set to be undefined through the delete keyword. This prevents this class
-        ///        from being copied directly, so that only the static method GetInstance to this
-        ///        class can be used to get the one sole instance of it.
-        ///
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        ProductCommandLine( ProductCommandLine const& ) = delete;
-        void operator = ( ProductCommandLine const& ) = delete;
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following member stores a pointer to the main task for the command line.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    NotifyTargetTaskIF* m_CommandLineTask;
 
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        ///
-        /// @brief The following member stores a pointer to a command line interface class object.
-        ///
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        CLIClient * m_CommandLineInterface;
+    std::vector< CommandPointer > CommandsList( void );
 
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        ///
-        /// @brief The following member stores a pointer to the main task for the command line.
-        ///
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        NotifyTargetTaskIF* m_CommandLineTask;
+    int  HandleCommand( const std::string&              command,
+                        const std::list< std::string >& arguments,
+                        std::string&                    response ) const;
 
-        std::vector< CommandPointer > CommandsList( void );
+    void ProcessCommand( const std::list< std::string >& arguments,
+                         std::string&                    response ) const;
 
-        int  HandleCommand( const std::string&              command,
-                            const std::list< std::string >& arguments,
-                            std::string&                    response ) const;
-
-        void ProcessCommand( const std::list< std::string >& arguments,
-                             std::string&                    response ) const;
-
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        ///
-        /// @brief The following subclass instances are used to manage the lower level hardware and
-        ///        the device.
-        ///
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        ProductHardwareInterface* m_ProductHardwareInterface = nullptr;
-        ProductCommandLine*       m_ProductCommandLine       = nullptr;
-    };
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following subclass instances are used to manage the lower level hardware and
+    ///        the device.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ProductHardwareInterface* m_ProductHardwareInterface = nullptr;
+    ProductCommandLine*       m_ProductCommandLine       = nullptr;
+};
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

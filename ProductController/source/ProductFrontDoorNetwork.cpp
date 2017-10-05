@@ -82,14 +82,14 @@ static const DPrint s_logger { "Product" };
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductFrontDoorNetwork* ProductFrontDoorNetwork::GetInstance( NotifyTargetTaskIF*        mainTask,
-                                                               Callback< ProductMessage > ProductNotify )
+        Callback< ProductMessage > ProductNotify )
 {
-       static ProductFrontDoorNetwork* instance = new ProductFrontDoorNetwork( mainTask,
-                                                                               ProductNotify );
+    static ProductFrontDoorNetwork* instance = new ProductFrontDoorNetwork( mainTask,
+            ProductNotify );
 
-       BOSE_DEBUG( s_logger, "The instance %8p of the Product Front Door Network was returned.", instance );
+    BOSE_DEBUG( s_logger, "The instance %8p of the Product Front Door Network was returned.", instance );
 
-       return instance;
+    return instance;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,14 +106,14 @@ ProductFrontDoorNetwork* ProductFrontDoorNetwork::GetInstance( NotifyTargetTaskI
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductFrontDoorNetwork::ProductFrontDoorNetwork( NotifyTargetTaskIF*        mainTask,
-                                                  Callback< ProductMessage > ProductNotify )
+        Callback< ProductMessage > ProductNotify )
 
-                        : m_mainTask       ( mainTask ),
-                          m_ProductNotify  ( ProductNotify ),
-                          m_networkTask    ( IL::CreateTask( "ProductMonitorNetworkTask" ) ),
-                          m_FrontDoorClient( FrontDoor::FrontDoorClient::Create( "ProductFrontDoorNetwork" ) )
+    : m_mainTask       ( mainTask ),
+      m_ProductNotify  ( ProductNotify ),
+      m_networkTask    ( IL::CreateTask( "ProductMonitorNetworkTask" ) ),
+      m_FrontDoorClient( FrontDoor::FrontDoorClient::Create( "ProductFrontDoorNetwork" ) )
 {
-       return;
+    return;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -127,10 +127,10 @@ ProductFrontDoorNetwork::ProductFrontDoorNetwork( NotifyTargetTaskIF*        mai
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductFrontDoorNetwork::Run( )
 {
-     ServeRequests ( );
-     MonitorNetwork( );
+    ServeRequests ( );
+    MonitorNetwork( );
 
-     return true;
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -221,20 +221,20 @@ void ProductFrontDoorNetwork::ServeRequests( void )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductFrontDoorNetwork::GetCapsNotification( const SoundTouchInterface::CapsInitializationStatus& status )
 {
-     ProductMessage productMessage;
+    ProductMessage productMessage;
 
-     BOSE_DEBUG( s_logger, "A CAPS initialization message has been received." );
+    BOSE_DEBUG( s_logger, "A CAPS initialization message has been received." );
 
-     if( status.capsinitialized( ) )
-     {
-         productMessage.set_id( CAPS_UP );
-         SendMessage          ( productMessage );
-     }
-     else
-     {
-         productMessage.set_id( CAPS_DOWN );
-         SendMessage          ( productMessage );
-     }
+    if( status.capsinitialized( ) )
+    {
+        productMessage.set_id( CAPS_UP );
+        SendMessage          ( productMessage );
+    }
+    else
+    {
+        productMessage.set_id( CAPS_DOWN );
+        SendMessage          ( productMessage );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -246,39 +246,39 @@ void ProductFrontDoorNetwork::GetCapsNotification( const SoundTouchInterface::Ca
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductFrontDoorNetwork::HandleGetLanguageRequest( const Callback< ProductPb::Language >& response )
 {
-     ProductPb::Language language;
+    ProductPb::Language language;
 
-     BOSE_DEBUG( s_logger, "A request for system language settings has been received." );
+    BOSE_DEBUG( s_logger, "A request for system language settings has been received." );
 
-     language.set_code( GetSystemLanguageCode( ) );
+    language.set_code( GetSystemLanguageCode( ) );
 
-     language.mutable_properties()->add_supported_language_codes( "da" ); /// Danish
-     language.mutable_properties()->add_supported_language_codes( "de" ); /// German
-     language.mutable_properties()->add_supported_language_codes( "en" ); /// English
-     language.mutable_properties()->add_supported_language_codes( "es" ); /// Spanish
-     language.mutable_properties()->add_supported_language_codes( "fr" ); /// French
-     language.mutable_properties()->add_supported_language_codes( "it" ); /// Italian
-     language.mutable_properties()->add_supported_language_codes( "nl" ); /// Dutch
-     language.mutable_properties()->add_supported_language_codes( "sv" ); /// Swedish
-     language.mutable_properties()->add_supported_language_codes( "ja" ); /// Japanese
-     language.mutable_properties()->add_supported_language_codes( "zh" ); /// Chinese
-     language.mutable_properties()->add_supported_language_codes( "ko" ); /// Korean
-     language.mutable_properties()->add_supported_language_codes( "th" ); /// Thai
-     language.mutable_properties()->add_supported_language_codes( "cs" ); /// Czechoslovakian
-     language.mutable_properties()->add_supported_language_codes( "fi" ); /// Finnish
-     language.mutable_properties()->add_supported_language_codes( "el" ); /// Greek
-     language.mutable_properties()->add_supported_language_codes( "no" ); /// Norwegian
-     language.mutable_properties()->add_supported_language_codes( "pl" ); /// Polish
-     language.mutable_properties()->add_supported_language_codes( "pt" ); /// Portuguese
-     language.mutable_properties()->add_supported_language_codes( "ro" ); /// Romanian
-     language.mutable_properties()->add_supported_language_codes( "ru" ); /// Russian
-     language.mutable_properties()->add_supported_language_codes( "sl" ); /// Slovenian
-     language.mutable_properties()->add_supported_language_codes( "tr" ); /// Turkish
-     language.mutable_properties()->add_supported_language_codes( "hu" ); /// Hungarian
+    language.mutable_properties()->add_supported_language_codes( "da" ); /// Danish
+    language.mutable_properties()->add_supported_language_codes( "de" ); /// German
+    language.mutable_properties()->add_supported_language_codes( "en" ); /// English
+    language.mutable_properties()->add_supported_language_codes( "es" ); /// Spanish
+    language.mutable_properties()->add_supported_language_codes( "fr" ); /// French
+    language.mutable_properties()->add_supported_language_codes( "it" ); /// Italian
+    language.mutable_properties()->add_supported_language_codes( "nl" ); /// Dutch
+    language.mutable_properties()->add_supported_language_codes( "sv" ); /// Swedish
+    language.mutable_properties()->add_supported_language_codes( "ja" ); /// Japanese
+    language.mutable_properties()->add_supported_language_codes( "zh" ); /// Chinese
+    language.mutable_properties()->add_supported_language_codes( "ko" ); /// Korean
+    language.mutable_properties()->add_supported_language_codes( "th" ); /// Thai
+    language.mutable_properties()->add_supported_language_codes( "cs" ); /// Czechoslovakian
+    language.mutable_properties()->add_supported_language_codes( "fi" ); /// Finnish
+    language.mutable_properties()->add_supported_language_codes( "el" ); /// Greek
+    language.mutable_properties()->add_supported_language_codes( "no" ); /// Norwegian
+    language.mutable_properties()->add_supported_language_codes( "pl" ); /// Polish
+    language.mutable_properties()->add_supported_language_codes( "pt" ); /// Portuguese
+    language.mutable_properties()->add_supported_language_codes( "ro" ); /// Romanian
+    language.mutable_properties()->add_supported_language_codes( "ru" ); /// Russian
+    language.mutable_properties()->add_supported_language_codes( "sl" ); /// Slovenian
+    language.mutable_properties()->add_supported_language_codes( "tr" ); /// Turkish
+    language.mutable_properties()->add_supported_language_codes( "hu" ); /// Hungarian
 
-     BOSE_DEBUG( s_logger, "The request to get the system and supported languages has been made.");
+    BOSE_DEBUG( s_logger, "The request to get the system and supported languages has been made.");
 
-     response.Send( language );
+    response.Send( language );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -291,18 +291,18 @@ void ProductFrontDoorNetwork::HandleGetLanguageRequest( const Callback< ProductP
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductFrontDoorNetwork::HandlePostLanguageRequest( const ProductPb::Language&             language,
-                                                         const Callback< ProductPb::Language >& response )
+        const Callback< ProductPb::Language >& response )
 {
-     ProductMessage productMessage;
+    ProductMessage productMessage;
 
-     BOSE_DEBUG( s_logger, "The request to set the system language to \"%s\" has been made.", language.code( ).c_str( ) );
+    BOSE_DEBUG( s_logger, "The request to set the system language to \"%s\" has been made.", language.code( ).c_str( ) );
 
-     m_LanguageSettings.set_code( language.code( ) );
+    m_LanguageSettings.set_code( language.code( ) );
 
-     productMessage.set_id( SYSTEM_LANGUAGE_CHANGE );
-     SendMessage          ( productMessage );
+    productMessage.set_id( SYSTEM_LANGUAGE_CHANGE );
+    SendMessage          ( productMessage );
 
-     response.Send( language );
+    response.Send( language );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -314,7 +314,7 @@ void ProductFrontDoorNetwork::HandlePostLanguageRequest( const ProductPb::Langua
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 std::string ProductFrontDoorNetwork::GetSystemLanguageCode( )
 {
-     return m_LanguageSettings.code( );
+    return m_LanguageSettings.code( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -326,7 +326,7 @@ std::string ProductFrontDoorNetwork::GetSystemLanguageCode( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductFrontDoorNetwork::SetSystemLanguageCode( std::string& systemLanguage )
 {
-     m_LanguageSettings.set_code( systemLanguage );
+    m_LanguageSettings.set_code( systemLanguage );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -338,9 +338,9 @@ void ProductFrontDoorNetwork::SetSystemLanguageCode( std::string& systemLanguage
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductFrontDoorNetwork::HandleGetConfigurationStatusRequest( const Callback< ProductPb::ConfigurationStatus >& response )
 {
-     BOSE_DEBUG( s_logger, "Sending the configuration status for a get request.");
+    BOSE_DEBUG( s_logger, "Sending the configuration status for a get request.");
 
-     response.Send( m_ConfigurationStatus );
+    response.Send( m_ConfigurationStatus );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -352,37 +352,37 @@ void ProductFrontDoorNetwork::HandleGetConfigurationStatusRequest( const Callbac
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductFrontDoorNetwork::MonitorNetwork( )
 {
-     ////////////////////////////////////////////////////////////////////////////////////////////////
-     /// Registration as a client for getting the network status is made through the Front Door
-     /// network router. The callbacks GetNetworkStatusSuccess and GetNetworkStatusFailed are used
-     /// if the network status could be obtained or not, respectively.
-     ////////////////////////////////////////////////////////////////////////////////////////////////
-     AsyncCallback< NetManager::Protobuf::NetworkStatus >
-     CallbackForSuccess( std::bind( &ProductFrontDoorNetwork::GetNetworkStatusSuccess,
-                                    this,
-                                    std::placeholders::_1 ),
-                         m_networkTask );
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Registration as a client for getting the network status is made through the Front Door
+    /// network router. The callbacks GetNetworkStatusSuccess and GetNetworkStatusFailed are used
+    /// if the network status could be obtained or not, respectively.
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    AsyncCallback< NetManager::Protobuf::NetworkStatus >
+    CallbackForSuccess( std::bind( &ProductFrontDoorNetwork::GetNetworkStatusSuccess,
+                                   this,
+                                   std::placeholders::_1 ),
+                        m_networkTask );
 
-     AsyncCallback< FRONT_DOOR_CLIENT_ERRORS >
-     CallbackForFailure( std::bind( &ProductFrontDoorNetwork::GetNetworkStatusFailed,
-                                    this,
-                                    std::placeholders::_1 ),
-                         m_networkTask );
+    AsyncCallback< FRONT_DOOR_CLIENT_ERRORS >
+    CallbackForFailure( std::bind( &ProductFrontDoorNetwork::GetNetworkStatusFailed,
+                                   this,
+                                   std::placeholders::_1 ),
+                        m_networkTask );
 
-     AsyncCallback< NetManager::Protobuf::NetworkStatus >
-     CallbackForNotification( std::bind( &ProductFrontDoorNetwork::GetNetworkStatusNotification,
-                                         this,
-                                         std::placeholders::_1 ),
-                              m_networkTask );
+    AsyncCallback< NetManager::Protobuf::NetworkStatus >
+    CallbackForNotification( std::bind( &ProductFrontDoorNetwork::GetNetworkStatusNotification,
+                                        this,
+                                        std::placeholders::_1 ),
+                             m_networkTask );
 
-     BOSE_DEBUG( s_logger, "A notification request for network status changes has been made." );
-     BOSE_DEBUG( s_logger, "A request for getting the network status has been made."          );
+    BOSE_DEBUG( s_logger, "A notification request for network status changes has been made." );
+    BOSE_DEBUG( s_logger, "A request for getting the network status has been made."          );
 
-     m_FrontDoorClient->SendGet< NetManager::Protobuf::NetworkStatus >
-     ( "/network/status", CallbackForSuccess, CallbackForFailure );
+    m_FrontDoorClient->SendGet< NetManager::Protobuf::NetworkStatus >
+    ( "/network/status", CallbackForSuccess, CallbackForFailure );
 
-     m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::NetworkStatus>
-     ( "/network/status", CallbackForNotification );
+    m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::NetworkStatus>
+    ( "/network/status", CallbackForNotification );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -398,11 +398,11 @@ void ProductFrontDoorNetwork::MonitorNetwork( )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductFrontDoorNetwork::GetNetworkStatusSuccess( const NetManager::Protobuf::NetworkStatus&
-                                                       networkStatus )
+        networkStatus )
 {
-     BOSE_DEBUG( s_logger, "A network status message was received." );
+    BOSE_DEBUG( s_logger, "A network status message was received." );
 
-     ProcessNetworkStatus( networkStatus, false );
+    ProcessNetworkStatus( networkStatus, false );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -418,11 +418,11 @@ void ProductFrontDoorNetwork::GetNetworkStatusSuccess( const NetManager::Protobu
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductFrontDoorNetwork::GetNetworkStatusNotification( const NetManager::Protobuf::NetworkStatus&
-                                                            networkStatus )
+        networkStatus )
 {
-     BOSE_DEBUG( s_logger, "A network status notification message was received." );
+    BOSE_DEBUG( s_logger, "A network status notification message was received." );
 
-     ProcessNetworkStatus( networkStatus, true );
+    ProcessNetworkStatus( networkStatus, true );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -438,16 +438,16 @@ void ProductFrontDoorNetwork::GetNetworkStatusNotification( const NetManager::Pr
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductFrontDoorNetwork::GetNetworkStatusFailed( const FRONT_DOOR_CLIENT_ERRORS error )
 {
-     ProductMessage productMessage;
+    ProductMessage productMessage;
 
-     BOSE_ERROR( s_logger, "The network status was not received." );
-     BOSE_ERROR( s_logger, "An error %d has occurred.           ", error );
+    BOSE_ERROR( s_logger, "The network status was not received." );
+    BOSE_ERROR( s_logger, "An error %d has occurred.           ", error );
 
-     productMessage.set_id( NETWORK_DOWN   );
-     SendMessage          ( productMessage );
+    productMessage.set_id( NETWORK_DOWN   );
+    SendMessage          ( productMessage );
 
-     sleep( PRODUCT_NETWORK_MONITOR_CHECK_IN_SECONDS );
-     MonitorNetwork( );
+    sleep( PRODUCT_NETWORK_MONITOR_CHECK_IN_SECONDS );
+    MonitorNetwork( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -472,63 +472,62 @@ void ProductFrontDoorNetwork::GetNetworkStatusFailed( const FRONT_DOOR_CLIENT_ER
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductFrontDoorNetwork::ProcessNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus,
-                                                    bool                                       networkChanged )
+        bool                                       networkChanged )
 {
-     ProductMessage productMessage;
+    ProductMessage productMessage;
 
-     if( networkStatus.interfaces_size( ) < 0 )
-     {
-         BOSE_ERROR( s_logger, "No networks are currently available." );
+    if( networkStatus.interfaces_size( ) < 0 )
+    {
+        BOSE_ERROR( s_logger, "No networks are currently available." );
 
-         auto networkData = productMessage.mutable_data( )->mutable_networkdata( );
+        auto networkData = productMessage.mutable_data( )->mutable_networkdata( );
 
-         networkData->set_type     ( UNKNOWN_NETWORK_TYPE );
-         networkData->set_frequency( 0 );
+        networkData->set_type     ( UNKNOWN_NETWORK_TYPE );
+        networkData->set_frequency( 0 );
 
-         productMessage.set_id( NETWORK_DOWN );
-         SendMessage          ( productMessage );
+        productMessage.set_id( NETWORK_DOWN );
+        SendMessage          ( productMessage );
 
-         sleep( PRODUCT_NETWORK_MONITOR_CHECK_IN_SECONDS );
-         MonitorNetwork( );
+        sleep( PRODUCT_NETWORK_MONITOR_CHECK_IN_SECONDS );
+        MonitorNetwork( );
 
-         return;
-     }
-     else
-     {
-         BOSE_ERROR( s_logger, "There are %d networks currently available.", networkStatus.interfaces_size( ) );
+        return;
+    }
+    else
+    {
+        BOSE_ERROR( s_logger, "There are %d networks currently available.", networkStatus.interfaces_size( ) );
 
-         auto networkData = productMessage.mutable_data( )->mutable_networkdata( );
+        auto networkData = productMessage.mutable_data( )->mutable_networkdata( );
 
-         if( networkStatus.primary( ) == NetManager::Protobuf::NetworkType::WIRED_ETH ||
-             networkStatus.primary( ) == NetManager::Protobuf::NetworkType::WIRED_USB   )
-         {
-             BOSE_ERROR( s_logger, "The primary network is wired." );
+        if( networkStatus.primary( ) == NetManager::Protobuf::NetworkType::WIRED_ETH ||
+                networkStatus.primary( ) == NetManager::Protobuf::NetworkType::WIRED_USB   )
+        {
+            BOSE_ERROR( s_logger, "The primary network is wired." );
 
-             networkData->set_type     ( WIRED );
-             networkData->set_frequency( 0 );
-         }
-         else
-         if( networkStatus.primary( ) == NetManager::Protobuf::NetworkType::WIRELESS    ||
-             networkStatus.primary( ) == NetManager::Protobuf::NetworkType::WIRELESS_AP   )
-         {
-             BOSE_ERROR( s_logger, "The primary network is wireless." );
+            networkData->set_type     ( WIRED );
+            networkData->set_frequency( 0 );
+        }
+        else if( networkStatus.primary( ) == NetManager::Protobuf::NetworkType::WIRELESS    ||
+                 networkStatus.primary( ) == NetManager::Protobuf::NetworkType::WIRELESS_AP   )
+        {
+            BOSE_ERROR( s_logger, "The primary network is wireless." );
 
-             networkData->set_type     ( WIRELESS );
-             networkData->set_frequency( 0 );
-         }
-         else
-         {
-             BOSE_ERROR( s_logger, "The primary network has an unknown type." );
+            networkData->set_type     ( WIRELESS );
+            networkData->set_frequency( 0 );
+        }
+        else
+        {
+            BOSE_ERROR( s_logger, "The primary network has an unknown type." );
 
-             networkData->set_type     ( UNKNOWN_NETWORK_TYPE );
-             networkData->set_frequency( 0 );
-         }
+            networkData->set_type     ( UNKNOWN_NETWORK_TYPE );
+            networkData->set_frequency( 0 );
+        }
 
-         productMessage.set_id( NETWORK_UP );
-         SendMessage          ( productMessage );
+        productMessage.set_id( NETWORK_UP );
+        SendMessage          ( productMessage );
 
-         return;
-     }
+        return;
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -546,39 +545,39 @@ void ProductFrontDoorNetwork::HandleMessage( ProductMessage& message )
     {
         switch( message.id( ) )
         {
-           case SYSTEM_LANGUAGE_CHANGE:
-                {
-                    auto        languageData = message.mutable_data( )->mutable_languagedata( );
-                    std::string systemLanguage;
+        case SYSTEM_LANGUAGE_CHANGE:
+        {
+            auto        languageData = message.mutable_data( )->mutable_languagedata( );
+            std::string systemLanguage;
 
-                    systemLanguage.assign( languageData->systemlanguage( ) );
-                    SetSystemLanguageCode( systemLanguage );
+            systemLanguage.assign( languageData->systemlanguage( ) );
+            SetSystemLanguageCode( systemLanguage );
 
-                    BOSE_DEBUG( s_logger, "A language setting message was received." );
-                    BOSE_DEBUG( s_logger, "The system language is now set to %s.   ",
-                                           systemLanguage.c_str( ) );
-                }
-                break;
+            BOSE_DEBUG( s_logger, "A language setting message was received." );
+            BOSE_DEBUG( s_logger, "The system language is now set to %s.   ",
+                        systemLanguage.c_str( ) );
+        }
+        break;
 
-           case CONFIGURATION_STATUS:
-                {
-                    bool networkStatus  = message.mutable_data( )->mutable_configurationstatus( )->network ( );
-                    bool languageStatus = message.mutable_data( )->mutable_configurationstatus( )->language( );
-                    bool accountStatus  = message.mutable_data( )->mutable_configurationstatus( )->account ( );
+        case CONFIGURATION_STATUS:
+        {
+            bool networkStatus  = message.mutable_data( )->mutable_configurationstatus( )->network ( );
+            bool languageStatus = message.mutable_data( )->mutable_configurationstatus( )->language( );
+            bool accountStatus  = message.mutable_data( )->mutable_configurationstatus( )->account ( );
 
-                    m_ConfigurationStatus.mutable_status( )->set_network ( networkStatus  );
-                    m_ConfigurationStatus.mutable_status( )->set_language( languageStatus );
-                    m_ConfigurationStatus.mutable_status( )->set_account ( accountStatus  );
+            m_ConfigurationStatus.mutable_status( )->set_network ( networkStatus  );
+            m_ConfigurationStatus.mutable_status( )->set_language( languageStatus );
+            m_ConfigurationStatus.mutable_status( )->set_account ( accountStatus  );
 
-                    BOSE_DEBUG( s_logger, "A configuration status message was received." );
-                }
-                break;
+            BOSE_DEBUG( s_logger, "A configuration status message was received." );
+        }
+        break;
 
-           default:
-                {
-                    BOSE_DEBUG( s_logger, "An unknown message %d was received.", message.id( ) );
-                }
-                break;
+        default:
+        {
+            BOSE_DEBUG( s_logger, "An unknown message %d was received.", message.id( ) );
+        }
+        break;
         }
     }
 
@@ -596,7 +595,7 @@ void ProductFrontDoorNetwork::HandleMessage( ProductMessage& message )
 //////////////////////////////////////////////////////////////////////////////////////////////
 void ProductFrontDoorNetwork::SendMessage( ProductMessage& message )
 {
-     IL::BreakThread( std::bind( m_ProductNotify, message ), m_mainTask );
+    IL::BreakThread( std::bind( m_ProductNotify, message ), m_mainTask );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

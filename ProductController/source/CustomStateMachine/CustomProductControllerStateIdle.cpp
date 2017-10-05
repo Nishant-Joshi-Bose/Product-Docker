@@ -56,10 +56,10 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateIdle::CustomProductControllerStateIdle( ProductControllerHsm&       hsm,
-                                                                    CHsmState*                  pSuperState,
-                                                                    ProfessorProductController& productController,
-                                                                    Hsm::STATE                  stateId,
-                                                                    const std::string&          name )
+        CHsmState*                  pSuperState,
+        ProfessorProductController& productController,
+        Hsm::STATE                  stateId,
+        const std::string&          name )
 
     : ProductControllerStateIdle( hsm, pSuperState, productController, stateId, name )
 {
@@ -103,35 +103,35 @@ void CustomProductControllerStateIdle::HandleStateExit( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateIdle::HandleLpmState( bool active )
 {
-     BOSE_DEBUG( s_logger, "The Product Idle State is handling an LPM state change." );
+    BOSE_DEBUG( s_logger, "The Product Idle State is handling an LPM state change." );
 
-     if( active )
-     {
-         if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
-         {
-             if( static_cast< ProfessorProductController& >( GetProductController( ) ).GetNetworkStatus( ) )
-             {
-                 BOSE_DEBUG( s_logger, "The Product Idle State is to remain in the Idle state." );
-             }
-             else
-             {
-                 BOSE_DEBUG( s_logger, "The Product Idle State is changing to the Network Standby state." );
-                 ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
-             }
-         }
-         else
-         {
-             BOSE_DEBUG( s_logger, "The Product Idle State is changing to a booting state." );
-             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
-         }
-     }
-     else
-     {
-         BOSE_DEBUG( s_logger, "The Product Idle State is changing to a booting state." );
-         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
-     }
+    if( active )
+    {
+        if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
+        {
+            if( static_cast< ProfessorProductController& >( GetProductController( ) ).GetNetworkStatus( ) )
+            {
+                BOSE_DEBUG( s_logger, "The Product Idle State is to remain in the Idle state." );
+            }
+            else
+            {
+                BOSE_DEBUG( s_logger, "The Product Idle State is changing to the Network Standby state." );
+                ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
+            }
+        }
+        else
+        {
+            BOSE_DEBUG( s_logger, "The Product Idle State is changing to a booting state." );
+            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
+        }
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "The Product Idle State is changing to a booting state." );
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
+    }
 
-     return true;
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,35 +141,35 @@ bool CustomProductControllerStateIdle::HandleLpmState( bool active )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateIdle::HandleCapsState( bool active )
 {
-     BOSE_DEBUG( s_logger, "The Product Idle State is handling a CAPS state change." );
+    BOSE_DEBUG( s_logger, "The Product Idle State is handling a CAPS state change." );
 
-     if( active )
-     {
-         if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
-         {
-             if( static_cast< ProfessorProductController& >( GetProductController( ) ).GetNetworkStatus( ) )
-             {
-                 BOSE_DEBUG( s_logger, "The Product Idle State is to remain in the Idle state." );
-             }
-             else
-             {
-                 BOSE_DEBUG( s_logger, "The Product Idle State is changing to the Network Standby state." );
-                 ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
-             }
-         }
-         else
-         {
-             BOSE_DEBUG( s_logger, "The Product Idle State is changing to a booting state." );
-             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
-         }
-     }
-     else
-     {
-         BOSE_DEBUG( s_logger, "The Product Idle State is changing to a booting state." );
-         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
-     }
+    if( active )
+    {
+        if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
+        {
+            if( static_cast< ProfessorProductController& >( GetProductController( ) ).GetNetworkStatus( ) )
+            {
+                BOSE_DEBUG( s_logger, "The Product Idle State is to remain in the Idle state." );
+            }
+            else
+            {
+                BOSE_DEBUG( s_logger, "The Product Idle State is changing to the Network Standby state." );
+                ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
+            }
+        }
+        else
+        {
+            BOSE_DEBUG( s_logger, "The Product Idle State is changing to a booting state." );
+            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
+        }
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "The Product Idle State is changing to a booting state." );
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
+    }
 
-     return true;
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -179,35 +179,35 @@ bool CustomProductControllerStateIdle::HandleCapsState( bool active )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateIdle::HandleNetworkState( bool active )
 {
-     BOSE_DEBUG( s_logger, "The Product Idle State is handling a network state change." );
+    BOSE_DEBUG( s_logger, "The Product Idle State is handling a network state change." );
 
-     if( active )
-     {
-         if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
-         {
-             BOSE_DEBUG( s_logger, "The Product Idle State is reamining in the Idle state." );
-         }
-         else
-         {
-             BOSE_DEBUG( s_logger, "The Product Idle State is changing to a booting state." );
-             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
-         }
-     }
-     else
-     {
-         if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
-         {
-             BOSE_DEBUG( s_logger, "The Product Idle State is reamining in the Idle state." );
-             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
-         }
-         else
-         {
-             BOSE_DEBUG( s_logger, "The Product Idle State is changing to a booting state." );
-             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
-         }
-     }
+    if( active )
+    {
+        if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
+        {
+            BOSE_DEBUG( s_logger, "The Product Idle State is reamining in the Idle state." );
+        }
+        else
+        {
+            BOSE_DEBUG( s_logger, "The Product Idle State is changing to a booting state." );
+            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
+        }
+    }
+    else
+    {
+        if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
+        {
+            BOSE_DEBUG( s_logger, "The Product Idle State is reamining in the Idle state." );
+            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
+        }
+        else
+        {
+            BOSE_DEBUG( s_logger, "The Product Idle State is changing to a booting state." );
+            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
+        }
+    }
 
-     return true;
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

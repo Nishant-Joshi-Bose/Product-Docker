@@ -25,10 +25,10 @@ ProductSTSController::ProductSTSController() :
 }
 
 ////////////////////////////////////////////////////////////////////////
-void ProductSTSController::Initialize( const std::vector<SourceDescriptor>& sources, 
-                                          const Callback<void> & HandleSTSInitWasComplete,
-                                          const Callback<ProductSTS::ProductSourceSlot> & HandleSelectSourceSlot,
-                                          const std::string& ip, const int port )
+void ProductSTSController::Initialize( const std::vector<SourceDescriptor>& sources,
+                                       const Callback<void> & HandleSTSInitWasComplete,
+                                       const Callback<ProductSTS::ProductSourceSlot> & HandleSelectSourceSlot,
+                                       const std::string& ip, const int port )
 {
     m_HandleSTSInitWasComplete = HandleSTSInitWasComplete;
     m_HandleSelectSourceSlot = HandleSelectSourceSlot;
@@ -56,9 +56,9 @@ void ProductSTSController::UpdateSources( const std::vector<SourceDescriptor>& s
 
 //////////////////////////////////////////////////////////////////
 ProductSTSController::ProductSTSServiceDelegate::ProductSTSServiceDelegate( DPrint& logger,
-                                                              ProductSTSController& controller,
-                                                              STSService& stsService,
-                                                              const std::map<ProductSTS::ProductSourceSlot, ProductSTSAccount*>& accounts ) :
+        ProductSTSController& controller,
+        STSService& stsService,
+        const std::map<ProductSTS::ProductSourceSlot, ProductSTSAccount*>& accounts ) :
     m_logger( logger ),
     m_controller( controller ),
     m_stsService( stsService ),
@@ -83,7 +83,7 @@ void ProductSTSController::ProductSTSServiceDelegate::HandleProtocolVersionRespo
     const STS::ProtocolVersionResponse& res )
 {
     BOSE_INFO( m_logger, "ProductSTSServiceDelegate::HandleProtocolVersionResponse(%d.%d)",
-                      res.major(), res.minor() );
+               res.major(), res.minor() );
     STS::RegisterServiceRequest req;
     req.set_source( SHELBY_SOURCE::PRODUCT );
     m_stsService.SendRegisterServiceRequest( req );
@@ -121,7 +121,7 @@ void ProductSTSController::ProductSTSServiceDelegate::HandleCreateAccountProxyRe
 
 //////////////////////////////////////////////////////////////////
 void ProductSTSController::ProductSTSServiceDelegate::HandleFlexUIRequest( const STS::Void&,
-                                                                    const uint32_t seq )
+        const uint32_t seq )
 {
     STS::FlexUIResponse res;
     m_stsService.SendFlexUIResponse( res, seq );

@@ -37,24 +37,24 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 enum ProductControllerStates
 {
-     ///
-     /// Common product controller states are defined below.
-     ///
-     PRODUCT_CONTROLLER_STATE_BOOTING                     =  1,
-     PRODUCT_CONTROLLER_STATE_SETUP                       =  2,
-     PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY             =  3,
-     PRODUCT_CONTROLLER_STATE_ON                          =  4,
-     PRODUCT_CONTROLLER_STATE_IDLE                        =  5,
+    ///
+    /// Common product controller states are defined below.
+    ///
+    PRODUCT_CONTROLLER_STATE_BOOTING                     =  1,
+    PRODUCT_CONTROLLER_STATE_SETUP                       =  2,
+    PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY             =  3,
+    PRODUCT_CONTROLLER_STATE_ON                          =  4,
+    PRODUCT_CONTROLLER_STATE_IDLE                        =  5,
 
-     ///
-     /// Custom product controller states are defined below.
-     ///
-     PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING           =  6,
-     PROFESSOR_PRODUCT_CONTROLLER_STATE_UPDATING          =  7,
-     PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY   =  8,
-     PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE              =  9,
-     PROFESSOR_PRODUCT_CONTROLLER_STATE_ON                = 10,
-     PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING = 11
+    ///
+    /// Custom product controller states are defined below.
+    ///
+    PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING           =  6,
+    PROFESSOR_PRODUCT_CONTROLLER_STATE_UPDATING          =  7,
+    PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY   =  8,
+    PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE              =  9,
+    PROFESSOR_PRODUCT_CONTROLLER_STATE_ON                = 10,
+    PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING = 11
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
