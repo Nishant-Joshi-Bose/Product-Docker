@@ -52,10 +52,10 @@ class CustomProductControllerStateUpdatingSoftware : public ProductControllerSta
 public:
 
     CustomProductControllerStateUpdatingSoftware( ProductControllerHsm&       hsm,
-            CHsmState*                  pSuperState,
-            ProfessorProductController& productController,
-            Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING,
-            const std::string&          name    = "CustomProductControllerStateSoftwareUpdating" );
+                                                  CHsmState*                  pSuperState,
+                                                  ProfessorProductController& productController,
+                                                  Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING,
+                                                  const std::string&          name    = "CustomProductControllerStateSoftwareUpdating" );
 
     virtual ~CustomProductControllerStateUpdatingSoftware( )
     {
@@ -64,11 +64,11 @@ public:
 
     void HandleStateEnter( ) override;
     void HandleStateStart( ) override;
-    void HandleStateExit ( ) override;
+    void HandleStateExit( ) override;
 
-    bool HandleLpmState     ( bool active )  override;
-    bool HandleCapsState    ( bool active )  override;
-    bool HandleNetworkState ( bool active )  override;
+    bool HandleLpmState( bool active )  override;
+    bool HandleCapsState( bool active )  override;
+    bool HandleNetworkState( bool active )  override;
 };
 }
 

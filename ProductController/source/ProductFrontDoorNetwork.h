@@ -80,12 +80,12 @@ public:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////
     static ProductFrontDoorNetwork* GetInstance( NotifyTargetTaskIF*        mainTask,
-            Callback< ProductMessage > ProductNotify );
+                                                 Callback< ProductMessage > ProductNotify );
 
     //////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration is used to start and run an instance of the Front Door Network.
     //////////////////////////////////////////////////////////////////////////////////////////
-    bool Run          ( void );
+    bool Run( void );
     void HandleMessage( ProductMessage& message );
 
 private:
@@ -115,8 +115,8 @@ private:
     /// used to get the one sole instance of it.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////
-    ProductFrontDoorNetwork ( ProductFrontDoorNetwork const& ) = delete;
-    void operator =         ( ProductFrontDoorNetwork const& ) = delete;
+    ProductFrontDoorNetwork( ProductFrontDoorNetwork const& ) = delete;
+    void operator = ( ProductFrontDoorNetwork const& ) = delete;
 
     //////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -139,19 +139,19 @@ private:
     ProductPb::ConfigurationStatus          m_ConfigurationStatus;
     ProductPb::Language                     m_LanguageSettings;
 
-    bool Run                             ( NotifyTargetTaskIF*        mainTask,
-                                           Callback< ProductMessage > ProductNotify );
+    bool Run( NotifyTargetTaskIF*        mainTask,
+              Callback< ProductMessage > ProductNotify );
 
-    void ServeRequests                   ( void );
-    void GetCapsNotification             ( const SoundTouchInterface::CapsInitializationStatus& status );
-    void HandleGetLanguageRequest        ( const Callback< ProductPb::Language >&  response );
-    void HandlePostLanguageRequest       ( const ProductPb::Language&              language,
-                                           const Callback< ProductPb::Language >&  response );
+    void ServeRequests( void );
+    void GetCapsNotification( const SoundTouchInterface::CapsInitializationStatus& status );
+    void HandleGetLanguageRequest( const Callback< ProductPb::Language >&  response );
+    void HandlePostLanguageRequest( const ProductPb::Language&              language,
+                                    const Callback< ProductPb::Language >&  response );
 
-    void        SetSystemLanguageCode       ( std::string& systemLanguage );
-    std::string GetSystemLanguageCode       ( void );
+    void        SetSystemLanguageCode( std::string& systemLanguage );
+    std::string GetSystemLanguageCode( void );
     void        HandleGetConfigurationStatusRequest( const Callback< ProductPb::ConfigurationStatus >&
-            response );
+                                                     response );
 
     //////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -160,14 +160,14 @@ private:
     /// @return
     ///
     //////////////////////////////////////////////////////////////////////////////////////////
-    void MonitorNetwork              ( void );
-    void GetNetworkStatusSuccess     ( const NetManager::Protobuf::NetworkStatus& networkStatus );
+    void MonitorNetwork( void );
+    void GetNetworkStatusSuccess( const NetManager::Protobuf::NetworkStatus& networkStatus );
     void GetNetworkStatusNotification( const NetManager::Protobuf::NetworkStatus& networkStatus );
-    void GetNetworkStatusFailed      ( const FRONT_DOOR_CLIENT_ERRORS             error );
-    void ProcessNetworkStatus        ( const NetManager::Protobuf::NetworkStatus& networkStatus,
-                                       bool                                       networkChanged );
+    void GetNetworkStatusFailed( const FRONT_DOOR_CLIENT_ERRORS             error );
+    void ProcessNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus,
+                               bool                                       networkChanged );
 
-    void SendMessage  ( ProductMessage& message );
+    void SendMessage( ProductMessage& message );
 };
 }
 

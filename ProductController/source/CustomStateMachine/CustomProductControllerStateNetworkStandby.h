@@ -52,10 +52,10 @@ class CustomProductControllerStateNetworkStandby : public ProductControllerState
 public:
 
     CustomProductControllerStateNetworkStandby( ProductControllerHsm&       hsm,
-            CHsmState*                  pSuperState,
-            ProfessorProductController& productController,
-            Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY,
-            const std::string&          name    = "CustomProductControllerStateNetworkStandby" );
+                                                CHsmState*                  pSuperState,
+                                                ProfessorProductController& productController,
+                                                Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY,
+                                                const std::string&          name    = "CustomProductControllerStateNetworkStandby" );
 
     virtual ~CustomProductControllerStateNetworkStandby( )
     {
@@ -64,11 +64,11 @@ public:
 
     void HandleStateEnter( ) override;
     void HandleStateStart( ) override;
-    void HandleStateExit ( ) override;
+    void HandleStateExit( ) override;
 
-    bool HandleLpmState     ( bool active )  override;
-    bool HandleCapsState    ( bool active )  override;
-    bool HandleNetworkState ( bool active )  override;
+    bool HandleLpmState( bool active )  override;
+    bool HandleCapsState( bool active )  override;
+    bool HandleNetworkState( bool active )  override;
 };
 }
 

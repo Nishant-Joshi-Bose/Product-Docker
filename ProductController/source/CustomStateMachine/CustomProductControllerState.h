@@ -86,10 +86,10 @@ public:
     /// should be overridden in the product specific state derived class that actually executes
     /// product specific action.
     ///
-    virtual bool HandleLpmState       ( bool active );
-    virtual bool HandleCapsState      ( bool active );
-    virtual bool HandleNetworkState   ( bool active );
-    virtual bool HandleSTSSourcesInit ( void );
+    virtual bool HandleLpmState( bool active );
+    virtual bool HandleCapsState( bool active );
+    virtual bool HandleNetworkState( bool active );
+    virtual bool HandleSTSSourcesInit( void );
 };
 }
 

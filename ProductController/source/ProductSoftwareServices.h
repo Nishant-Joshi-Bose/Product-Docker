@@ -89,8 +89,8 @@ public:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     static ProductSoftwareServices* GetInstance( NotifyTargetTaskIF*         mainTask,
-            Callback< ProductMessage >  ProductNotify,
-            ProductHardwareInterface*   HardwareInterface );
+                                                 Callback< ProductMessage >  ProductNotify,
+                                                 ProductHardwareInterface*   HardwareInterface );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration is used to start and run the product software services.
@@ -128,7 +128,7 @@ private:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     ProductSoftwareServices( ProductSoftwareServices const& ) = delete;
-    void operator     =    ( ProductSoftwareServices const& ) = delete;
+    void operator     = ( ProductSoftwareServices const& ) = delete;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration stores the main task for processing software events and requests. It is
@@ -145,9 +145,9 @@ private:
     ServerPointer m_serverListener = nullptr;
 
     void RegisterForRebootRequests( void );
-    void AcceptClient             ( ServerSocket client );
-    void HandleClientDisconnect   ( void );
-    void SendRebootRequestHandler ( BoseLinkServerMsgReboot rebootRequest );
+    void AcceptClient( ServerSocket client );
+    void HandleClientDisconnect( void );
+    void SendRebootRequestHandler( BoseLinkServerMsgReboot rebootRequest );
 };
 }
 

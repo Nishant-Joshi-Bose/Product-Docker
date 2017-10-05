@@ -102,7 +102,7 @@ void ProductSTSAccount::PlayProductAudioAction()
 }
 
 //////////////////////////////////////////////////////////////
-void ProductSTSAccount::HandleSelectSourceSlot( ProductSTS::ProductSourceSlot source  )
+void ProductSTSAccount::HandleSelectSourceSlot( ProductSTS::ProductSourceSlot source )
 {
     s_ProductSTSController->HandleSelectSourceSlot( source );
 }

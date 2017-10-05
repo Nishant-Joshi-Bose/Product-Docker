@@ -37,7 +37,7 @@ public:
     const ProductSTSAccount* FindAccountForSource( ProductSTS::ProductSourceSlot source ) const;
     ProductSTS::ProductSourceSlot FindSourceIDForSourceName( const std::string& sourceName ) const;
 
-    void HandleSelectSourceSlot( ProductSTS::ProductSourceSlot source  );
+    void HandleSelectSourceSlot( ProductSTS::ProductSourceSlot source );
 
 private:
     ProductSTSController( const ProductSTSController & ) = delete;

@@ -143,46 +143,46 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     m_ProductControllerStateMachine( GetTask( ),
                                      "ProfessorStateMachine",
-                                     static_cast< ProductController& >( *this ) ),
+                                     static_cast< ProductController & >( *this ) ),
     ///
     /// Construction of the Common States
     ///
-    m_ProductControllerStateTop                (  m_ProductControllerStateMachine,
-            nullptr,
-            static_cast< ProductApp::ProductController& >( *this ) ),
-    m_ProductControllerStateSetup              (  m_ProductControllerStateMachine,
-            &m_ProductControllerStateTop,
-            static_cast< ProductApp::ProductController& >( *this ) ),
-    m_ProductControllerStateOn                 (  m_ProductControllerStateMachine,
-            &m_ProductControllerStateTop,
-            static_cast< ProductController& >( *this ) ),
+    m_ProductControllerStateTop( m_ProductControllerStateMachine,
+                                 nullptr,
+                                 static_cast< ProductApp::ProductController & >( *this ) ),
+    m_ProductControllerStateSetup( m_ProductControllerStateMachine,
+                                   &m_ProductControllerStateTop,
+                                   static_cast< ProductApp::ProductController & >( *this ) ),
+    m_ProductControllerStateOn( m_ProductControllerStateMachine,
+                                &m_ProductControllerStateTop,
+                                static_cast< ProductController & >( *this ) ),
     ///
     /// Construction of the Custom Professor States
     ///
-    m_CustomProductControllerStateBooting       ( m_ProductControllerStateMachine,
-            &m_ProductControllerStateTop,
-            *this ),
+    m_CustomProductControllerStateBooting( m_ProductControllerStateMachine,
+                                           &m_ProductControllerStateTop,
+                                           *this ),
     m_CustomProductControllerStateNetworkStandby( m_ProductControllerStateMachine,
-            &m_ProductControllerStateTop,
-            *this ),
-    m_CustomProductControllerStateIdle          ( m_ProductControllerStateMachine,
-            &m_ProductControllerStateTop,
-            *this ),
-    m_CustomProductControllerStateUpdating      ( m_ProductControllerStateMachine,
-            &m_ProductControllerStateTop,
-            *this ),
+                                                  &m_ProductControllerStateTop,
+                                                  *this ),
+    m_CustomProductControllerStateIdle( m_ProductControllerStateMachine,
+                                        &m_ProductControllerStateTop,
+                                        *this ),
+    m_CustomProductControllerStateUpdating( m_ProductControllerStateMachine,
+                                            &m_ProductControllerStateTop,
+                                            *this ),
     ///
     /// Member Variable Initialization
     ///
-    m_LanguageSettingsPersistentStorage   ( ProtoPersistenceFactory::Create( "ProductLanguage",
-                                            g_ProductDirectory ) ),
+    m_LanguageSettingsPersistentStorage( ProtoPersistenceFactory::Create( "ProductLanguage",
+                                                                          g_ProductDirectory ) ),
     m_ConfigurationStatusPersistentStorage( ProtoPersistenceFactory::Create( "ConfigurationStatus",
-                                            g_ProductDirectory ) ),
-    m_IsLpmReady      ( false ),
-    m_IsCapsReady     ( false ),
+                                                                             g_ProductDirectory ) ),
+    m_IsLpmReady( false ),
+    m_IsCapsReady( false ),
     m_IsAudioPathReady( false ),
-    m_IsNetworkReady  ( false ),
-    m_IsSTSReady      ( false )
+    m_IsNetworkReady( false ),
+    m_IsSTSReady( false )
 {
     return;
 }
@@ -208,13 +208,13 @@ void ProfessorProductController::Run( )
     ///
     /// Start the Product Controller state machine.
     ///
-    m_ProductControllerStateMachine.AddState( &m_ProductControllerStateTop                  );
-    m_ProductControllerStateMachine.AddState( &m_ProductControllerStateSetup                );
-    m_ProductControllerStateMachine.AddState( &m_ProductControllerStateOn                   );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateBooting        );
+    m_ProductControllerStateMachine.AddState( &m_ProductControllerStateTop );
+    m_ProductControllerStateMachine.AddState( &m_ProductControllerStateSetup );
+    m_ProductControllerStateMachine.AddState( &m_ProductControllerStateOn );
+    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateBooting );
     m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateNetworkStandby );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateIdle           );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateUpdating       );
+    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateIdle );
+    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateUpdating );
 
     m_ProductControllerStateMachine.Init( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
@@ -222,24 +222,24 @@ void ProfessorProductController::Run( )
     /// Get instances of all the subprocesses.
     ///
     Callback < ProductMessage > CallbackForMessages( std::bind( &ProfessorProductController::HandleMessage,
-            this,
-            std::placeholders::_1 ) );
+                                                                this,
+                                                                std::placeholders::_1 ) );
 
     m_ProductHardwareInterface = ProductHardwareInterface::GetInstance( GetTask( ),
-                                 CallbackForMessages );
-    m_ProductFrontDoorNetwork  = ProductFrontDoorNetwork::GetInstance ( GetTask( ),
-                                 CallbackForMessages );
-    m_ProductAudioService      = ProductAudioService::GetInstance     ( GetTask( ),
-                                 CallbackForMessages);
-    m_ProductSoftwareServices  = ProductSoftwareServices::GetInstance ( GetTask( ),
-                                 CallbackForMessages,
-                                 m_ProductHardwareInterface );
-    m_ProductUserInterface     = ProductUserInterface::GetInstance    ( GetTask( ),
-                                 CallbackForMessages,
-                                 m_ProductHardwareInterface,
-                                 m_CliClientMT );
-    m_ProductCommandLine       = ProductCommandLine::GetInstance      ( GetTask( ),
-                                 m_ProductHardwareInterface );
+                                                                        CallbackForMessages );
+    m_ProductFrontDoorNetwork  = ProductFrontDoorNetwork::GetInstance( GetTask( ),
+                                                                       CallbackForMessages );
+    m_ProductAudioService      = ProductAudioService::GetInstance( GetTask( ),
+                                                                   CallbackForMessages );
+    m_ProductSoftwareServices  = ProductSoftwareServices::GetInstance( GetTask( ),
+                                                                       CallbackForMessages,
+                                                                       m_ProductHardwareInterface );
+    m_ProductUserInterface     = ProductUserInterface::GetInstance( GetTask( ),
+                                                                    CallbackForMessages,
+                                                                    m_ProductHardwareInterface,
+                                                                    m_CliClientMT );
+    m_ProductCommandLine       = ProductCommandLine::GetInstance( GetTask( ),
+                                                                  m_ProductHardwareInterface );
 
     ///
     /// Run all the submodules.
@@ -254,7 +254,7 @@ void ProfessorProductController::Run( )
     ///
     /// Read the language settings and configuration status from persistent storage.
     ///
-    ReadLanguageSettingsFromPersistentStorage   ( );
+    ReadLanguageSettingsFromPersistentStorage( );
     ReadConfigurationStatusFromPersistentStorage( );
 
     ///
@@ -272,14 +272,14 @@ void ProfessorProductController::Run( )
 
     m_ProductFrontDoorNetwork->HandleMessage( productMessage );
 
-    bool networkStatus  = m_ConfigurationStatus.mutable_status( )->network ( );
+    bool networkStatus  = m_ConfigurationStatus.mutable_status( )->network( );
     bool languageStatus = m_ConfigurationStatus.mutable_status( )->language( );
-    bool accountStatus  = m_ConfigurationStatus.mutable_status( )->account ( );
+    bool accountStatus  = m_ConfigurationStatus.mutable_status( )->account( );
 
     productMessage.set_id( CONFIGURATION_STATUS );
-    productMessage.mutable_data( )->mutable_configurationstatus( )->set_network ( networkStatus  );
+    productMessage.mutable_data( )->mutable_configurationstatus( )->set_network( networkStatus );
     productMessage.mutable_data( )->mutable_configurationstatus( )->set_language( languageStatus );
-    productMessage.mutable_data( )->mutable_configurationstatus( )->set_account ( accountStatus  );
+    productMessage.mutable_data( )->mutable_configurationstatus( )->set_account( accountStatus );
 
     m_ProductFrontDoorNetwork->HandleMessage( productMessage );
 }
@@ -304,9 +304,9 @@ bool ProfessorProductController::IsBooted( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProfessorProductController::GetNetworkStatus( )
 {
-    if( m_ConfigurationStatus.mutable_status( )->has_network ( ) )
+    if( m_ConfigurationStatus.mutable_status( )->has_network( ) )
     {
-        return m_ConfigurationStatus.mutable_status( )->network ( );
+        return m_ConfigurationStatus.mutable_status( )->network( );
     }
     else
     {
@@ -360,7 +360,7 @@ void ProfessorProductController::ReadLanguageSettingsFromPersistentStorage( )
     }
     catch( ... )
     {
-        BOSE_LOG( ERROR, "Reading language settings from persistent storage failed."        );
+        BOSE_LOG( ERROR, "Reading language settings from persistent storage failed." );
         BOSE_LOG( ERROR, "Default language settings will be written to persistent storage." );
 
         ///
@@ -396,7 +396,7 @@ void ProfessorProductController::ReadLanguageSettingsFromPersistentStorage( )
         {
             m_LanguageSettingsPersistentStorage->Remove( );
             m_LanguageSettingsPersistentStorage->Store( ProtoToMarkup::ToJson( m_LanguageSettings,
-                    false ) );
+                                                                               false ) );
         }
         catch( ... )
         {
@@ -417,8 +417,8 @@ void ProfessorProductController::WriteLanguageSettingsToPersistentStorage( )
         BOSE_LOG( ERROR, "Language settings are being written to persistent storage." );
 
         m_LanguageSettingsPersistentStorage->Remove( );
-        m_LanguageSettingsPersistentStorage->Store ( ProtoToMarkup::ToJson( m_LanguageSettings,
-                false ) );
+        m_LanguageSettingsPersistentStorage->Store( ProtoToMarkup::ToJson( m_LanguageSettings,
+                                                                           false ) );
     }
     catch( ... )
     {
@@ -444,7 +444,7 @@ void ProfessorProductController::ReadConfigurationStatusFromPersistentStorage( )
     {
         try
         {
-            BOSE_LOG( DEBUG, "Reading the configuration status from persistent storage failed."      );
+            BOSE_LOG( DEBUG, "Reading the configuration status from persistent storage failed." );
             BOSE_LOG( DEBUG, "A default configuration status will be written to persistent storage." );
 
             if( GetSystemLanguageCode( ).empty( ) )
@@ -456,12 +456,12 @@ void ProfessorProductController::ReadConfigurationStatusFromPersistentStorage( )
                 m_ConfigurationStatus.mutable_status( )->set_language( true );
             }
 
-            m_ConfigurationStatus.mutable_status( )->set_network ( false );
-            m_ConfigurationStatus.mutable_status( )->set_account ( false );
+            m_ConfigurationStatus.mutable_status( )->set_network( false );
+            m_ConfigurationStatus.mutable_status( )->set_account( false );
 
             m_ConfigurationStatusPersistentStorage->Remove( );
-            m_ConfigurationStatusPersistentStorage->Store ( ProtoToMarkup::ToJson( m_ConfigurationStatus,
-                    false ) );
+            m_ConfigurationStatusPersistentStorage->Store( ProtoToMarkup::ToJson( m_ConfigurationStatus,
+                                                                                  false ) );
         }
         catch( ... )
         {
@@ -482,8 +482,8 @@ void ProfessorProductController::WriteConfigurationStatusToPersistentStorage( )
         BOSE_DEBUG( s_logger, "The configuration status is being written to persistent storage." );
 
         m_ConfigurationStatusPersistentStorage->Remove( );
-        m_ConfigurationStatusPersistentStorage->Store ( ProtoToMarkup::ToJson( m_LanguageSettings,
-                false ) );
+        m_ConfigurationStatusPersistentStorage->Store( ProtoToMarkup::ToJson( m_LanguageSettings,
+                                                                              false ) );
     }
     catch( ... )
     {
@@ -556,7 +556,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         case NETWORK_DOWN:
             BOSE_DEBUG( s_logger, "A network down message was received." );
 
-            m_ConfigurationStatus.mutable_status( )->set_network ( false );
+            m_ConfigurationStatus.mutable_status( )->set_network( false );
             WriteConfigurationStatusToPersistentStorage( );
 
             m_IsNetworkReady = false;
@@ -569,7 +569,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         case NETWORK_UP:
             BOSE_DEBUG( s_logger, "A network up message was received." );
 
-            m_ConfigurationStatus.mutable_status( )->set_network ( true );
+            m_ConfigurationStatus.mutable_status( )->set_network( true );
             WriteConfigurationStatusToPersistentStorage( );
 
             m_IsNetworkReady = true;
@@ -582,7 +582,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         case SYSTEM_LANGUAGE_CHANGE:
             BOSE_DEBUG( s_logger, "A system language change message was received." );
 
-            m_ConfigurationStatus.mutable_status( )->set_network ( true );
+            m_ConfigurationStatus.mutable_status( )->set_network( true );
             WriteLanguageSettingsToPersistentStorage( );
 
             break;
