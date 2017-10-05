@@ -91,12 +91,12 @@ static DPrint s_logger { "Product" };
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductSoftwareServices* ProductSoftwareServices::GetInstance( NotifyTargetTaskIF*        mainTask,
-        Callback< ProductMessage > ProductNotify,
-        ProductHardwareInterface*  HardwareInterface )
+                                                               Callback< ProductMessage > ProductNotify,
+                                                               ProductHardwareInterface*  HardwareInterface )
 {
     static ProductSoftwareServices* instance = new ProductSoftwareServices( mainTask,
-            ProductNotify,
-            HardwareInterface );
+                                                                            ProductNotify,
+                                                                            HardwareInterface );
 
     BOSE_DEBUG( s_logger, "The instance %8p of the Product Software Services was returned.", instance );
 
@@ -117,8 +117,8 @@ ProductSoftwareServices* ProductSoftwareServices::GetInstance( NotifyTargetTaskI
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductSoftwareServices::ProductSoftwareServices( NotifyTargetTaskIF*        mainTask,
-        Callback< ProductMessage > ProductNotify,
-        ProductHardwareInterface*  HardwareInterface )
+                                                  Callback< ProductMessage > ProductNotify,
+                                                  ProductHardwareInterface*  HardwareInterface )
 
     : m_mainTask( mainTask ),
       m_ProductNotify( ProductNotify ),
@@ -147,8 +147,8 @@ void ProductSoftwareServices::Run( )
 
 
     AsyncCallback< ServerSocket > callback( std::bind( &ProductSoftwareServices::AcceptClient,
-                                            this,
-                                            std::placeholders::_1 ),
+                                                       this,
+                                                       std::placeholders::_1 ),
                                             m_mainTask );
 
     m_serverListener->Serve( IPCDirectory::Get( )->DefaultAddress( IPCDirectory::A4V_SERVER ), callback );
@@ -170,7 +170,7 @@ void ProductSoftwareServices::AcceptClient( ServerSocket client )
 {
     std::string   clientName   = client->GetPeerAddrInfo( ).ToString( );
     RouterPointer messageRouter = IPCMessageRouterFactory::CreateRouter( "ServerRouter" + clientName,
-                                  m_mainTask );
+                                                                         m_mainTask );
 
     BOSE_DEBUG( s_logger, "A client connection %s for reboot requests has been established.",
                 clientName.c_str( ) );
@@ -181,9 +181,9 @@ void ProductSoftwareServices::AcceptClient( ServerSocket client )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     {
         AsyncCallback< BoseLinkServerMsgReboot > callback( std::bind( &ProductSoftwareServices::SendRebootRequestHandler,
-                this,
-                std::placeholders::_1 ),
-                m_mainTask );
+                                                                      this,
+                                                                      std::placeholders::_1 ),
+                                                           m_mainTask );
 
         messageRouter->Attach< BoseLinkServerMsgReboot >( BOSELINK_SERVER_MSG_ID_REBOOT, callback );
     }
@@ -194,7 +194,7 @@ void ProductSoftwareServices::AcceptClient( ServerSocket client )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     {
         AsyncCallback< void > callback( std::bind( &ProductSoftwareServices::HandleClientDisconnect,
-                                        this ),
+                                                   this ),
                                         m_mainTask );
 
         messageRouter->Serve( std::move( client ), callback );

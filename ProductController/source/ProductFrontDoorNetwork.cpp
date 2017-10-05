@@ -82,10 +82,10 @@ static const DPrint s_logger { "Product" };
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductFrontDoorNetwork* ProductFrontDoorNetwork::GetInstance( NotifyTargetTaskIF*        mainTask,
-        Callback< ProductMessage > ProductNotify )
+                                                               Callback< ProductMessage > ProductNotify )
 {
     static ProductFrontDoorNetwork* instance = new ProductFrontDoorNetwork( mainTask,
-            ProductNotify );
+                                                                            ProductNotify );
 
     BOSE_DEBUG( s_logger, "The instance %8p of the Product Front Door Network was returned.", instance );
 
@@ -106,11 +106,11 @@ ProductFrontDoorNetwork* ProductFrontDoorNetwork::GetInstance( NotifyTargetTaskI
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductFrontDoorNetwork::ProductFrontDoorNetwork( NotifyTargetTaskIF*        mainTask,
-        Callback< ProductMessage > ProductNotify )
+                                                  Callback< ProductMessage > ProductNotify )
 
-    : m_mainTask       ( mainTask ),
-      m_ProductNotify  ( ProductNotify ),
-      m_networkTask    ( IL::CreateTask( "ProductMonitorNetworkTask" ) ),
+    : m_mainTask( mainTask ),
+      m_ProductNotify( ProductNotify ),
+      m_networkTask( IL::CreateTask( "ProductMonitorNetworkTask" ) ),
       m_FrontDoorClient( FrontDoor::FrontDoorClient::Create( "ProductFrontDoorNetwork" ) )
 {
     return;
@@ -127,7 +127,7 @@ ProductFrontDoorNetwork::ProductFrontDoorNetwork( NotifyTargetTaskIF*        mai
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductFrontDoorNetwork::Run( )
 {
-    ServeRequests ( );
+    ServeRequests( );
     MonitorNetwork( );
 
     return true;
@@ -228,12 +228,12 @@ void ProductFrontDoorNetwork::GetCapsNotification( const SoundTouchInterface::Ca
     if( status.capsinitialized( ) )
     {
         productMessage.set_id( CAPS_UP );
-        SendMessage          ( productMessage );
+        SendMessage( productMessage );
     }
     else
     {
         productMessage.set_id( CAPS_DOWN );
-        SendMessage          ( productMessage );
+        SendMessage( productMessage );
     }
 }
 
@@ -276,7 +276,7 @@ void ProductFrontDoorNetwork::HandleGetLanguageRequest( const Callback< ProductP
     language.mutable_properties()->add_supported_language_codes( "tr" ); /// Turkish
     language.mutable_properties()->add_supported_language_codes( "hu" ); /// Hungarian
 
-    BOSE_DEBUG( s_logger, "The request to get the system and supported languages has been made.");
+    BOSE_DEBUG( s_logger, "The request to get the system and supported languages has been made." );
 
     response.Send( language );
 }
@@ -291,7 +291,7 @@ void ProductFrontDoorNetwork::HandleGetLanguageRequest( const Callback< ProductP
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductFrontDoorNetwork::HandlePostLanguageRequest( const ProductPb::Language&             language,
-        const Callback< ProductPb::Language >& response )
+                                                         const Callback< ProductPb::Language >& response )
 {
     ProductMessage productMessage;
 
@@ -300,7 +300,7 @@ void ProductFrontDoorNetwork::HandlePostLanguageRequest( const ProductPb::Langua
     m_LanguageSettings.set_code( language.code( ) );
 
     productMessage.set_id( SYSTEM_LANGUAGE_CHANGE );
-    SendMessage          ( productMessage );
+    SendMessage( productMessage );
 
     response.Send( language );
 }
@@ -338,7 +338,7 @@ void ProductFrontDoorNetwork::SetSystemLanguageCode( std::string& systemLanguage
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductFrontDoorNetwork::HandleGetConfigurationStatusRequest( const Callback< ProductPb::ConfigurationStatus >& response )
 {
-    BOSE_DEBUG( s_logger, "Sending the configuration status for a get request.");
+    BOSE_DEBUG( s_logger, "Sending the configuration status for a get request." );
 
     response.Send( m_ConfigurationStatus );
 }
@@ -376,7 +376,7 @@ void ProductFrontDoorNetwork::MonitorNetwork( )
                              m_networkTask );
 
     BOSE_DEBUG( s_logger, "A notification request for network status changes has been made." );
-    BOSE_DEBUG( s_logger, "A request for getting the network status has been made."          );
+    BOSE_DEBUG( s_logger, "A request for getting the network status has been made." );
 
     m_FrontDoorClient->SendGet< NetManager::Protobuf::NetworkStatus >
     ( "/network/status", CallbackForSuccess, CallbackForFailure );
@@ -398,7 +398,7 @@ void ProductFrontDoorNetwork::MonitorNetwork( )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductFrontDoorNetwork::GetNetworkStatusSuccess( const NetManager::Protobuf::NetworkStatus&
-        networkStatus )
+                                                       networkStatus )
 {
     BOSE_DEBUG( s_logger, "A network status message was received." );
 
@@ -418,7 +418,7 @@ void ProductFrontDoorNetwork::GetNetworkStatusSuccess( const NetManager::Protobu
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductFrontDoorNetwork::GetNetworkStatusNotification( const NetManager::Protobuf::NetworkStatus&
-        networkStatus )
+                                                            networkStatus )
 {
     BOSE_DEBUG( s_logger, "A network status notification message was received." );
 
@@ -443,8 +443,8 @@ void ProductFrontDoorNetwork::GetNetworkStatusFailed( const FRONT_DOOR_CLIENT_ER
     BOSE_ERROR( s_logger, "The network status was not received." );
     BOSE_ERROR( s_logger, "An error %d has occurred.           ", error );
 
-    productMessage.set_id( NETWORK_DOWN   );
-    SendMessage          ( productMessage );
+    productMessage.set_id( NETWORK_DOWN );
+    SendMessage( productMessage );
 
     sleep( PRODUCT_NETWORK_MONITOR_CHECK_IN_SECONDS );
     MonitorNetwork( );
@@ -472,7 +472,7 @@ void ProductFrontDoorNetwork::GetNetworkStatusFailed( const FRONT_DOOR_CLIENT_ER
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductFrontDoorNetwork::ProcessNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus,
-        bool                                       networkChanged )
+                                                    bool                                       networkChanged )
 {
     ProductMessage productMessage;
 
@@ -482,11 +482,11 @@ void ProductFrontDoorNetwork::ProcessNetworkStatus( const NetManager::Protobuf::
 
         auto networkData = productMessage.mutable_data( )->mutable_networkdata( );
 
-        networkData->set_type     ( UNKNOWN_NETWORK_TYPE );
+        networkData->set_type( UNKNOWN_NETWORK_TYPE );
         networkData->set_frequency( 0 );
 
         productMessage.set_id( NETWORK_DOWN );
-        SendMessage          ( productMessage );
+        SendMessage( productMessage );
 
         sleep( PRODUCT_NETWORK_MONITOR_CHECK_IN_SECONDS );
         MonitorNetwork( );
@@ -500,31 +500,31 @@ void ProductFrontDoorNetwork::ProcessNetworkStatus( const NetManager::Protobuf::
         auto networkData = productMessage.mutable_data( )->mutable_networkdata( );
 
         if( networkStatus.primary( ) == NetManager::Protobuf::NetworkType::WIRED_ETH ||
-                networkStatus.primary( ) == NetManager::Protobuf::NetworkType::WIRED_USB   )
+            networkStatus.primary( ) == NetManager::Protobuf::NetworkType::WIRED_USB )
         {
             BOSE_ERROR( s_logger, "The primary network is wired." );
 
-            networkData->set_type     ( WIRED );
+            networkData->set_type( WIRED );
             networkData->set_frequency( 0 );
         }
         else if( networkStatus.primary( ) == NetManager::Protobuf::NetworkType::WIRELESS    ||
-                 networkStatus.primary( ) == NetManager::Protobuf::NetworkType::WIRELESS_AP   )
+                 networkStatus.primary( ) == NetManager::Protobuf::NetworkType::WIRELESS_AP )
         {
             BOSE_ERROR( s_logger, "The primary network is wireless." );
 
-            networkData->set_type     ( WIRELESS );
+            networkData->set_type( WIRELESS );
             networkData->set_frequency( 0 );
         }
         else
         {
             BOSE_ERROR( s_logger, "The primary network has an unknown type." );
 
-            networkData->set_type     ( UNKNOWN_NETWORK_TYPE );
+            networkData->set_type( UNKNOWN_NETWORK_TYPE );
             networkData->set_frequency( 0 );
         }
 
         productMessage.set_id( NETWORK_UP );
-        SendMessage          ( productMessage );
+        SendMessage( productMessage );
 
         return;
     }
@@ -561,13 +561,13 @@ void ProductFrontDoorNetwork::HandleMessage( ProductMessage& message )
 
         case CONFIGURATION_STATUS:
         {
-            bool networkStatus  = message.mutable_data( )->mutable_configurationstatus( )->network ( );
+            bool networkStatus  = message.mutable_data( )->mutable_configurationstatus( )->network( );
             bool languageStatus = message.mutable_data( )->mutable_configurationstatus( )->language( );
-            bool accountStatus  = message.mutable_data( )->mutable_configurationstatus( )->account ( );
+            bool accountStatus  = message.mutable_data( )->mutable_configurationstatus( )->account( );
 
-            m_ConfigurationStatus.mutable_status( )->set_network ( networkStatus  );
+            m_ConfigurationStatus.mutable_status( )->set_network( networkStatus );
             m_ConfigurationStatus.mutable_status( )->set_language( languageStatus );
-            m_ConfigurationStatus.mutable_status( )->set_account ( accountStatus  );
+            m_ConfigurationStatus.mutable_status( )->set_account( accountStatus );
 
             BOSE_DEBUG( s_logger, "A configuration status message was received." );
         }

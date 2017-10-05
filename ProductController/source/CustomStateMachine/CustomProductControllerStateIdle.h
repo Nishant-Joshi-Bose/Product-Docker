@@ -64,11 +64,11 @@ public:
 
     void HandleStateEnter( ) override;
     void HandleStateStart( ) override;
-    void HandleStateExit ( ) override;
+    void HandleStateExit( ) override;
 
-    bool HandleLpmState     ( bool active )  override;
-    bool HandleCapsState    ( bool active )  override;
-    bool HandleNetworkState ( bool active )  override;
+    bool HandleLpmState( bool active )  override;
+    bool HandleCapsState( bool active )  override;
+    bool HandleNetworkState( bool active )  override;
 };
 }
 

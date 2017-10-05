@@ -88,7 +88,7 @@ public:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     static ProductHardwareInterface* GetInstance( NotifyTargetTaskIF*        task,
-            Callback< ProductMessage > ProductNotifyCallback);
+                                                  Callback< ProductMessage > ProductNotifyCallback );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration is used to start and run the hardware manager.
@@ -99,7 +99,7 @@ public:
     /// These methods handle LPM status requests.
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool RequestLpmStatus( Callback< LpmServiceMessages::IpcLpmHealthStatusPayload_t > callback );
-    void HandleLpmStatus ( LpmServiceMessages::IpcLpmHealthStatusPayload_t             status   );
+    void HandleLpmStatus( LpmServiceMessages::IpcLpmHealthStatusPayload_t             status );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This method is used to set a callback to receive key events from the LPM hardware.
@@ -110,22 +110,22 @@ public:
     /// These declarations are utility calls used mostly by the ProductDevice class, which send
     /// messages to the LPM hardware manager process as a client.
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool SendSetVolume                   ( uint32_t              volume );
-    bool SendUserMute                    ( bool                  mute );
-    bool SendInternalMute                ( bool                  mute );
+    bool SendSetVolume( uint32_t              volume );
+    bool SendUserMute( bool                  mute );
+    bool SendInternalMute( bool                  mute );
     bool SendAudioPathPresentationLatency( uint32_t              latency );
-    bool SendSetDSPAudioMode             ( IpcAudioMode_t        audioMode );
-    bool SendLipSyncDelay                ( uint32_t              audioDelay );
-    bool SendToneAndLevelControl         ( IpcToneControl_t&     controls );
-    bool SendSpeakerList                 ( IpcAccessoryList_t&   accessoryList );
-    bool SendSetSystemTimeoutEnableBits  ( Ipc_TimeoutControl_t& timeoutControl );
-    bool RebootRequest                   ( void );
-    bool HandleLowPowerStandby           ( void );
-    void SetBlueToothMacAddress          ( const std::string&       bluetoothMacAddress );
-    void SetBlueToothDeviceName          ( const std::string&       bluetoothDeviceName );
-    bool SendBlueToothDeviceData         ( const std::string&       bluetoothDeviceName,
-                                           const unsigned long long bluetoothMacAddress );
-    bool SendSourceSelection             ( const IPCSource_t&       sourceSelect );
+    bool SendSetDSPAudioMode( IpcAudioMode_t        audioMode );
+    bool SendLipSyncDelay( uint32_t              audioDelay );
+    bool SendToneAndLevelControl( IpcToneControl_t&     controls );
+    bool SendSpeakerList( IpcAccessoryList_t&   accessoryList );
+    bool SendSetSystemTimeoutEnableBits( Ipc_TimeoutControl_t& timeoutControl );
+    bool RebootRequest( void );
+    bool HandleLowPowerStandby( void );
+    void SetBlueToothMacAddress( const std::string&       bluetoothMacAddress );
+    void SetBlueToothDeviceName( const std::string&       bluetoothDeviceName );
+    bool SendBlueToothDeviceData( const std::string&       bluetoothDeviceName,
+                                  const unsigned long long bluetoothMacAddress );
+    bool SendSourceSelection( const IPCSource_t&       sourceSelect );
 
 private:
 
@@ -154,7 +154,7 @@ private:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     ProductHardwareInterface( ProductHardwareInterface const& ) = delete;
-    void operator     =     ( ProductHardwareInterface const& ) = delete;
+    void operator     = ( ProductHardwareInterface const& ) = delete;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These declarations store the main task for processing LPM hardware events and requests. It
@@ -179,7 +179,7 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This method is called when an LPM server connection is established.
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void Connected ( bool  connected );
+    void Connected( bool  connected );
 };
 }
 

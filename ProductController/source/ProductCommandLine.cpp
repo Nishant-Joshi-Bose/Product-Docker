@@ -80,7 +80,7 @@ static const DPrint s_logger { "Product" };
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductCommandLine* ProductCommandLine::GetInstance( NotifyTargetTaskIF*        mainTask,
-        ProductHardwareInterface*  HardwareInterface )
+                                                     ProductHardwareInterface*  HardwareInterface )
 {
     static ProductCommandLine* instance = new ProductCommandLine( mainTask, HardwareInterface );
 
@@ -132,10 +132,10 @@ void ProductCommandLine::Run( )
     m_CommandLineInterface->Initialize( m_CommandLineTask,
                                         CommandsList( ),
                                         std::bind( &ProductCommandLine::HandleCommand,
-                                                this,
-                                                std::placeholders::_1,
-                                                std::placeholders::_2,
-                                                std::placeholders::_3 ) );
+                                                   this,
+                                                   std::placeholders::_1,
+                                                   std::placeholders::_2,
+                                                   std::placeholders::_3 ) );
 
     BOSE_DEBUG( s_logger, "A command line has been established." );
 }
@@ -170,27 +170,27 @@ std::vector< CommandPointer > ProductCommandLine::CommandsList( )
     std::vector< CommandPointer > commands;
 
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product volume",
-                        "This command set the volume to a specified level.",
-                        "product volume [integer from 0 to 100]" ) ) );
+                                                                             "This command set the volume to a specified level.",
+                                                                             "product volume [integer from 0 to 100]" ) ) );
 
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product mute",
-                        "This command mutes or unmutes the volume",
-                        "product mute [on | off]" ) ) );
+                                                                             "This command mutes or unmutes the volume",
+                                                                             "product mute [on | off]" ) ) );
 
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product source",
-                        "",
-                        "product source [integer | string] "
-                        "[This command selects the audio source.] \r\n"
-                        "               <hdmi1>                   \r\n"
-                        "               <hdmi2>                   \r\n"
-                        "               <hdmi3>                   \r\n"
-                        "               <hdmi4>                   \r\n"
-                        "               <tv>                      \r\n"
-                        "               <aux>                     \r\n"
-                        "               <optical1>                \r\n"
-                        "               <optical2>                \r\n"
-                        "               <coax1>                   \r\n"
-                        "               <coax2>                   \r\n" ) ) );
+                                                                             "",
+                                                                             "product source [integer | string] "
+                                                                             "[This command selects the audio source.] \r\n"
+                                                                             "               <hdmi1>                   \r\n"
+                                                                             "               <hdmi2>                   \r\n"
+                                                                             "               <hdmi3>                   \r\n"
+                                                                             "               <hdmi4>                   \r\n"
+                                                                             "               <tv>                      \r\n"
+                                                                             "               <aux>                     \r\n"
+                                                                             "               <optical1>                \r\n"
+                                                                             "               <optical2>                \r\n"
+                                                                             "               <coax1>                   \r\n"
+                                                                             "               <coax2>                   \r\n" ) ) );
 
     return commands;
 
@@ -468,7 +468,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCommandLine::ProcessCommand( const std::list< std::string >& arguments,
-        std::string&                    response ) const
+                                         std::string&                    response ) const
 {
     return;
 }

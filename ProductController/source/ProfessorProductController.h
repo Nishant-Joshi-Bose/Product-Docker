@@ -110,10 +110,10 @@ public:
     ///         end, and end the task resCustomProductControllerStateBootingpectively.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void Run    ( void );
+    void Run( void );
     void OnEntry( void );
-    void Wait   ( void );
-    void End    ( void );
+    void Wait( void );
+    void End( void );
 
     inline CThreadMutex& GetLock( )
     {
@@ -153,7 +153,7 @@ public:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     ProfessorProductController( ProfessorProductController const& ) = delete;
-    void operator      =      ( ProfessorProductController const& ) = delete;
+    void operator      = ( ProfessorProductController const& ) = delete;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -206,10 +206,10 @@ public:
     ProductPb::ConfigurationStatus          m_ConfigurationStatus;
     ProtoPersistenceIF::ProtoPersistencePtr m_ConfigurationStatusPersistentStorage;
 
-    void ReadLanguageSettingsFromPersistentStorage   ( void );
+    void ReadLanguageSettingsFromPersistentStorage( void );
     void ReadConfigurationStatusFromPersistentStorage( void );
-    void WriteLanguageSettingsToPersistentStorage    ( void );
-    void WriteConfigurationStatusToPersistentStorage ( void );
+    void WriteLanguageSettingsToPersistentStorage( void );
+    void WriteConfigurationStatusToPersistentStorage( void );
 
     std::string GetSystemLanguageCode( void );
     void        SetSystemLanguageCode( std::string systemLanguageString );
@@ -219,7 +219,7 @@ public:
     /// @brief The following method are used by the state machine to determine the status of the
     ///        product controller.
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool IsBooted        ( void );
+    bool IsBooted( void );
     bool GetNetworkStatus( void );
 
     //////////////////////////////////////////////////////////////////////////////////////////////

@@ -33,9 +33,9 @@
 namespace ProductApp
 {
 CustomProductControllerState::CustomProductControllerState( ProductControllerHsm& productStateMachine,
-        CHsmState*            pSuperState,
-        Hsm::STATE            stateId,
-        const std::string&    name )
+                                                            CHsmState*            pSuperState,
+                                                            Hsm::STATE            stateId,
+                                                            const std::string&    name )
 
     : CHsmState( stateId, &productStateMachine, name, pSuperState )
 {
@@ -57,7 +57,7 @@ bool CustomProductControllerState::HandleNetworkState( bool active )
     return true;
 }
 
-bool CustomProductControllerState::HandleSTSSourcesInit ( void )
+bool CustomProductControllerState::HandleSTSSourcesInit( void )
 {
     return true;
 }

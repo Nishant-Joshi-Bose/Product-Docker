@@ -84,10 +84,10 @@ static DPrint s_logger { "Product" };
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductHardwareInterface* ProductHardwareInterface::GetInstance( NotifyTargetTaskIF*        task,
-        Callback< ProductMessage > ProductNotify )
+                                                                 Callback< ProductMessage > ProductNotify )
 {
     static ProductHardwareInterface* instance = new ProductHardwareInterface( task,
-            ProductNotify );
+                                                                              ProductNotify );
 
     BOSE_DEBUG( s_logger, "The instance %8p of the Product Hardware Manager was returned.", instance );
 
@@ -106,10 +106,10 @@ ProductHardwareInterface* ProductHardwareInterface::GetInstance( NotifyTargetTas
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductHardwareInterface::ProductHardwareInterface( NotifyTargetTaskIF*        task,
-        Callback< ProductMessage > ProductNotify )
-    : m_mainTask     ( task          ),
+                                                    Callback< ProductMessage > ProductNotify )
+    : m_mainTask( task ),
       m_ProductNotify( ProductNotify ),
-      m_connected    ( false         )
+      m_connected( false )
 {
     return;
 }
@@ -132,8 +132,8 @@ bool ProductHardwareInterface::Run( )
     m_LpmClient = LpmClientFactory::Create( "ProductLpmClient", m_mainTask );
 
     Callback< bool > ConnectedCallback( std::bind( &ProductHardwareInterface::Connected,
-                                        this,
-                                        std::placeholders::_1 ) );
+                                                   this,
+                                                   std::placeholders::_1 ) );
 
     m_LpmClient->Connect( ConnectedCallback );
 
@@ -197,7 +197,7 @@ void ProductHardwareInterface::Connected( bool connected )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductHardwareInterface::RequestLpmStatus( Callback< LpmServiceMessages::IpcLpmHealthStatusPayload_t >
-        callback )
+                                                 callback )
 {
     if( m_connected == false || m_LpmClient == nullptr )
     {
@@ -228,8 +228,8 @@ bool ProductHardwareInterface::RequestLpmStatus( Callback< LpmServiceMessages::I
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductHardwareInterface::HandleLpmStatus( LpmServiceMessages::IpcLpmHealthStatusPayload_t status )
 {
-    BOSE_DEBUG( s_logger, "An LPM status was received with the following values: ");
-    BOSE_DEBUG( s_logger, "                      ");
+    BOSE_DEBUG( s_logger, "An LPM status was received with the following values: " );
+    BOSE_DEBUG( s_logger, "                      " );
     BOSE_DEBUG( s_logger, "Image             : %s", status.has_image( )                            ?
                 std::to_string( status.image( ) ).c_str( )          :
                 "Unknown" );
@@ -317,7 +317,7 @@ void ProductHardwareInterface::HandleLpmStatus( LpmServiceMessages::IpcLpmHealth
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductHardwareInterface::RegisterForKeyEvents( Callback< LpmServiceMessages::IpcKeyInformation_t >
-        callback )
+                                                     callback )
 {
     if( m_connected == false || m_LpmClient == nullptr )
     {
@@ -396,12 +396,12 @@ bool ProductHardwareInterface::SendUserMute( bool mute )
         if( mute )
         {
             muteSetting.set_internalmute( 1 );
-            muteSetting.set_unifymute   ( 1 );
+            muteSetting.set_unifymute( 1 );
         }
         else
         {
             muteSetting.set_internalmute( 0 );
-            muteSetting.set_unifymute   ( 1 );
+            muteSetting.set_unifymute( 1 );
         }
 
         m_LpmClient->SetMute( muteSetting );
@@ -438,12 +438,12 @@ bool ProductHardwareInterface::SendInternalMute( bool mute )
         if( mute )
         {
             muteSetting.set_internalmute( 1 );
-            muteSetting.set_unifymute   ( 0 );
+            muteSetting.set_unifymute( 0 );
         }
         else
         {
             muteSetting.set_internalmute( 0 );
-            muteSetting.set_unifymute   ( 0 );
+            muteSetting.set_unifymute( 0 );
         }
 
         m_LpmClient->SetMute( muteSetting );
@@ -798,7 +798,7 @@ void ProductHardwareInterface::SetBlueToothDeviceName( const std::string& blueto
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductHardwareInterface::SendBlueToothDeviceData( const std::string&       bluetoothDeviceName,
-        const unsigned long long bluetoothMacAddress )
+                                                        const unsigned long long bluetoothMacAddress )
 {
     BOSE_DEBUG( s_logger, "Bluetooth data is being set to the Device %s with MAC Address 0x%016llX.",
                 bluetoothDeviceName.c_str( ),

@@ -61,10 +61,10 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateBooting::CustomProductControllerStateBooting( ProductControllerHsm&       hsm,
-        CHsmState*                  pSuperState,
-        ProfessorProductController& productController,
-        Hsm::STATE                  stateId,
-        const std::string&          name )
+                                                                          CHsmState*                  pSuperState,
+                                                                          ProfessorProductController& productController,
+                                                                          Hsm::STATE                  stateId,
+                                                                          const std::string&          name )
 
     : ProductControllerStateBooting( hsm, pSuperState, productController, stateId, name )
 {
@@ -193,7 +193,7 @@ bool CustomProductControllerStateBooting::HandleNetworkState( bool active )
 /// @param none
 /// @return true - the event was handled
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateBooting::HandleSTSSourcesInit     ( void )
+bool CustomProductControllerStateBooting::HandleSTSSourcesInit( void )
 {
     BOSE_DEBUG( s_logger, "The Product Booting State is handling the STSSourcesInit event." );
 
