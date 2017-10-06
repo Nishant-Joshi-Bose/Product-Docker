@@ -13,7 +13,7 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-03_1541"
+    "selected_version": "Continuous/Castle-Fork/2017-10-05_1101"
   },
   {
     "name": "CastleLibs-qc8017_32",
@@ -49,11 +49,11 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Continuous/master/1.0.0-17+9d9c0bf"
+    "selected_version": "Release/master/1.0.0-19+c824dfc"
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-50+a919b10"
+    "selected_version": "Release/master/0.1.0-51+a919b10"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -89,15 +89,15 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-48+55b0979"
+    "selected_version": "Continuous/master/0.1.0-53+59580a5"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-7+334b357"
+    "selected_version": "Continuous/master/0.0.1-8+6f48006"
   },
   {
     "name": "KeyHandler-native",
-    "selected_version": "Continuous/master/0.0.1-7+334b357"
+    "selected_version": "Continuous/master/0.0.1-8+6f48006"
   },
   {
     "name": "WiFi-Setup-Webpage",
