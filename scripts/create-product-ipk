@@ -268,7 +268,3 @@ mkdir -p "$ipk_dir" || exit
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
 echo "Created $ipk"
-
-ci=$wspace/builds/$cfg/component-info.tar.gz
-tar --owner=0 --group=0 -czf "$ci" component-info || exit
-echo "Created $ci"
