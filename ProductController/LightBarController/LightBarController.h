@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-///// @file   LightBarController.cpp
+///// @file   LightBarController.h
 ///// @brief  Eddie LightBar controller declaration
 /////
 ///// @attention Copyright 2017 Bose Corporation, Framingham, MA

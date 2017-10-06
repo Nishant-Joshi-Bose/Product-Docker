@@ -1,0 +1,51 @@
+@startuml
+scale 0.96
+title AUX Product Source Playback Activation
+box "ProductController Process"
+   participant KeyHandler
+   participant ProductController
+   participant ProductSource
+   participant ProductControllerFrontDoorClient
+end box 
+box "FrontDoor Process"
+   participant FrontDoor
+end box
+box "CAPS Process"
+  participant CAPSFrontDoorClient
+  participant CAPS
+end box
+
+ProductController -> ProductControllerFrontDoorClient: Create()
+ProductController -> KeyHandler: Create()
+ProductController -> ProductSource: Create()
+
+CAPS -> CAPSFrontDoorClient: Create()
+CAPS -> CAPSFrontDoorClient: RegisterPost("/content/playbackRequest")
+CAPSFrontDoorClient -> FrontDoor: RegisterPost("/content/playbackRequest")
+CAPS -> CAPSFrontDoorClient: RegisterGet("/content/nowPlaying")
+CAPSFrontDoorClient -> FrontDoor: RegisterGet("/content/nowPlaying")
+
+KeyHandler -> ProductController: AUXSourceKeyPressed()
+note left
+	User presses AUX source key
+end note
+note over ProductController
+	If ProductController is in right state to handle, 
+	process it. Else drop it.
+end note
+ProductController -> ProductSource: HandleAUXSourceKeyPress()
+ProductSource -> ProductControllerFrontDoorClient: SendPost("/content/playbackRequest", AUX)
+ProductControllerFrontDoorClient -> FrontDoor: SendPost("/content/playbackRequest", AUX)
+FrontDoor -> CAPSFrontDoorClient: SendPost("/content/playbackRequest", AUX)
+CAPSFrontDoorClient -> CAPS: HandlePlaybackRequest()
+note over CAPS
+	AUX source selected and activated.
+	Set URL to AUX and send it to APServer.
+end note
+
+CAPS -> CAPSFrontDoorClient: SendPOSTResponse(/content/nowPlaying)
+CAPSFrontDoorClient -> FrontDoor: SendPOSTResponse(/content/nowPlaying)
+FrontDoor -> ProductControllerFrontDoorClient: SendPOSTResponse(/content/nowPlaying)
+ProductControllerFrontDoorClient -> ProductSource: HandlePOSTResponse(/content/nowPlaying)
+
+@enduml

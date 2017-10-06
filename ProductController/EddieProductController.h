@@ -23,9 +23,12 @@
 #include "DeviceManager.pb.h"
 #include "NetManager.pb.h"
 #include "SoundTouchInterface/CapsInitializationStatus.pb.h"
+#include "SoundTouchInterface/ContentSelectionService.pb.h"
+#include "SoundTouchInterface/PlayerService.pb.h"
 #include "ProductCliClient.h"
 #include "LpmClientIF.h"
 #include "KeyHandler.h"
+#include "ProductSource.h"
 
 namespace ProductApp
 {
@@ -75,6 +78,8 @@ private:
 public:
     // Handle Key Information received from LPM
     void HandleLpmKeyInformation( IpcKeyInformation_t keyInformation );
+
+    void HandleAUXSourceKeyPress();
 
     static void KeyInformationCallBack( const int result, void *context );
 
@@ -145,7 +150,7 @@ public:
     void HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @name  HandleGetLanguageRequest
+/// @name  HandlePostLanguageRequest
 /// @brief Handles POST request for "/system/language" endpoint.
 /// @return void
 ////////////////////////////////////////////////////////////////////////////////
@@ -213,8 +218,8 @@ private:
 
     ProductCliClient                            m_productCliClient;
 
-    //LightBarController* m_lightbarController;
     std::unique_ptr<LightBarController>         m_lightbarController;
+    ProductSource                               m_productSource;
     bool                                        m_isCapsReady = false;
     bool                                        m_isLPMReady  = true;
     bool                                        m_isNetworkModuleReady  = false;

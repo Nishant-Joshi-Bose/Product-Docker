@@ -31,7 +31,8 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_LpmClient(),
     m_KeyHandler( *GetTask(), m_CliClientMT ),
     m_deviceManager( GetTask(), *this ),
-    m_cachedStatus()
+    m_cachedStatus(),
+    m_productSource( m_FrontDoorClientIF, *GetTask() )
 {
     BOSE_INFO( s_logger, __func__ );
     /// Add States to HSM object and initialize HSM before doing anything else.
@@ -63,6 +64,7 @@ void EddieProductController::Initialize()
     SendInitialRequests();
     //Register lpm events that lightbar will handle
     m_lightbarController->Initialize();
+    m_productSource.Initialize();
 }
 
 void EddieProductController::InitializeLpmClient()
@@ -111,11 +113,12 @@ void EddieProductController::RegisterEndPoints()
     AsyncCallback <Callback<::DeviceManager::Protobuf::DeviceState >> getDeviceStateReqCb( std::bind( &EddieProductController :: HandleGetDeviceStateRequest,
                                                                    this, std::placeholders::_1 ), GetTask() );
 
-    AsyncCallback<SoundTouchInterface::CapsInitializationStatus> capsInitializationCb( std::bind( &EddieProductController::HandleCapsInitializationUpdate ,
+    AsyncCallback<SoundTouchInterface::CapsInitializationStatus> capsInitializationCb( std::bind( &EddieProductController::HandleCapsInitializationUpdate,
             this, std::placeholders::_1 ) , GetTask() );
 
     AsyncCallback<Callback<SoundTouchInterface::AllowSourceSelect>> getallowSourceSelectReqCb( std::bind( &EddieProductController::HandleAllowSourceSelectRequest ,
                                                                  this, std::placeholders::_1 ) , GetTask() );
+
     /// Registration of endpoints to the frontdoor client.
 
     m_FrontDoorClientIF->RegisterNotification<SoundTouchInterface::CapsInitializationStatus>( "CapsInitializationUpdate", capsInitializationCb );
@@ -195,6 +198,14 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
         {
             s_logger.LogError( "Source %d not registered", keyInformation.has_keyorigin() );
         }
+        //Work around code since we can't call non-static functions from within static EddieProductController::KeyInformationCallBack function.
+        //This will be fixed in new KeyHandler component.
+        if( ( keyInformation.keystate() == 1 ) &&
+            ( keyInformation.keyid() == ProductSource::KEY_ID::SELECT_AUX_SOURCE ) )
+        {
+            BOSE_DEBUG( s_logger, "AUX Source key pressed..." );
+            HandleAUXSourceKeyPress();
+        }
     }
     else
     {
@@ -204,6 +215,13 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
                     keyInformation.has_keystate(),
                     keyInformation.has_keyid() );
     }
+}
+
+void EddieProductController::HandleAUXSourceKeyPress()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+
+    m_productSource.SendPostAUXPlaybackRequest();
 }
 
 void EddieProductController::SendInitialRequests()

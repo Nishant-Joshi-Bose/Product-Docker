@@ -24,6 +24,7 @@ ADD_EXECUTABLE(Eddie
   DeviceManager.cpp
   LightBarController/LightBarController.cpp
   ProductCliClient.cpp
+  ProductSource.cpp
   EddieProductController.cpp
   Main.cpp
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
