@@ -88,9 +88,9 @@ public:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     static ProductUserInterface* GetInstance( NotifyTargetTaskIF*         mainTask,
-            Callback< ProductMessage >  ProductNotify,
-            ProductHardwareInterface*   HardwareInterface,
-            CliClientMT                 &cliClienMT );
+                                              Callback< ProductMessage >  ProductNotify,
+                                              ProductHardwareInterface*   HardwareInterface,
+                                              CliClientMT                 &cliClienMT );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -148,7 +148,7 @@ private:
     /// "raw" keys events.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    static void KeyInformationCallBack( const int result, void *context );
+    void KeyInformationCallBack( const int result );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -163,6 +163,7 @@ private:
     ProductHardwareInterface*   m_ProductHardwareInterface = nullptr;
     bool                        m_running;
     KeyHandlerUtil::KeyHandler  m_KeyHandler;
+    static constexpr const char *m_keyConfigFileName = "KeyConfiguration.json";
 };
 }
 

@@ -87,14 +87,14 @@ static DPrint s_logger { "Product" };
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductUserInterface* ProductUserInterface::GetInstance( NotifyTargetTaskIF*         mainTask,
-        Callback< ProductMessage >  ProductNotify,
-        ProductHardwareInterface*   HardwareInterface,
-        CliClientMT                 &cliClientMT )
+                                                         Callback< ProductMessage >  ProductNotify,
+                                                         ProductHardwareInterface*   HardwareInterface,
+                                                         CliClientMT                 &cliClientMT )
 {
     static ProductUserInterface* instance = new ProductUserInterface( mainTask,
-            ProductNotify,
-            HardwareInterface,
-            cliClientMT );
+                                                                      ProductNotify,
+                                                                      HardwareInterface,
+                                                                      cliClientMT );
 
     BOSE_INFO( s_logger, "The instance %8p of the Product User Interface has been obtained.", instance );
 
@@ -117,15 +117,15 @@ ProductUserInterface* ProductUserInterface::GetInstance( NotifyTargetTaskIF*    
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductUserInterface::ProductUserInterface( NotifyTargetTaskIF*         mainTask,
-        Callback< ProductMessage >  ProductNotify,
-        ProductHardwareInterface*   HardwareInterface,
-        CliClientMT                 &cliClientMT )
+                                            Callback< ProductMessage >  ProductNotify,
+                                            ProductHardwareInterface*   HardwareInterface,
+                                            CliClientMT                 &cliClientMT )
     : m_mainTask( mainTask ),
       m_keyEventTask( IL::CreateTask( "ProductMonitorNetworkTask" ) ),
       m_ProductNotify( ProductNotify ),
       m_ProductHardwareInterface( HardwareInterface ),
       m_running( false ),
-      m_KeyHandler( *mainTask, cliClientMT )
+      m_KeyHandler( *mainTask, cliClientMT, m_keyConfigFileName )
 
 {
     return;
@@ -179,7 +179,12 @@ void ProductUserInterface::RegisterForKeyEvents( void )
     }
 
     // Register with the key handler / repeat management code (this is how raw lpm keys get translated to "intents")
-    m_KeyHandler.RegisterKeyHandler( ProductUserInterface::KeyInformationCallBack, this );
+    auto afunc = [this]( uint32_t result )
+    {
+        KeyInformationCallBack( result );
+    };
+    auto cb = std::make_shared<AsyncCallback<uint32_t> > ( afunc, m_mainTask );
+    m_KeyHandler.RegisterKeyHandler( cb );
 
     BOSE_INFO( s_logger, "%s: The user interface has registered for key events.", __FUNCTION__ );
 }
@@ -192,11 +197,10 @@ void ProductUserInterface::RegisterForKeyEvents( void )
 /// @param context
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductUserInterface:: KeyInformationCallBack( const int result, void *context )
+void ProductUserInterface:: KeyInformationCallBack( const int result )
 {
     ProductMessage productMessage;
     auto keyData = productMessage.mutable_data( )->mutable_keydata( );
-    ProductUserInterface *ui = ( ProductUserInterface * )context;
 
     // the division of labor still seems a bit murky atm; pb messages are defined for
     // for sending key_state + key_value as if UI will be handling raw keys from the LPM,
@@ -208,7 +212,7 @@ void ProductUserInterface:: KeyInformationCallBack( const int result, void *cont
 
     BOSE_INFO( s_logger, "Keys have been translated to intent %d", result );
 
-    IL::BreakThread( std::bind( ui->m_ProductNotify, productMessage ), ui->m_mainTask );
+    IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_mainTask );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -283,17 +287,8 @@ void ProductUserInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInformation
         return;
     }
 
-    KeyHandlerUtil::KeyRepeatManager *ptrRepeatMgr = m_KeyHandler.RepeatMgr( keyEvent.keyorigin() );
-
-    if( !ptrRepeatMgr )
-    {
-        s_logger.LogError( "Source %d not registered", keyEvent.has_keyorigin() );
-        return;
-    }
-
     // Feed it into the keyHandler
-    ptrRepeatMgr->HandleKeys( keyEvent.keyorigin(),
-                              keyEvent.keystate(), keyEvent.keyid() );
+    m_KeyHandler.HandleKeys( keyEvent.keyorigin(), keyEvent.keystate(), keyEvent.keyid() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
