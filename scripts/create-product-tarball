@@ -91,15 +91,10 @@ install_offline () {
     rm -rf "$offline_dir" 
     mkdir -p "$offline_dir"  || error_exit ${FUNCNAME[0]}
     cd "$stage_package_dir" || error_exit ${FUNCNAME[0]}
-    local opkg_cmd=(fakeroot "$opkg_dir"/opkg
-                    -f "$opkg_dir"/opkg.conf
-                    --offline-root="$offline_dir"
-                    --volatile-cache
-                    --add-arch armv7a-vfp-neon:100
-                    install "$product_ipk")
+    local opkg_cmd=(fakeroot "$opkg_dir"/opkg -f "$opkg_dir"/opkg.conf --offline-root="$offline_dir" --volatile-cache --add-arch armv7a-vfp-neon:100 install "$product_ipk")
     echo "Executing ${opkg_cmd[*]}"	
     # Not throwing error as opkg command on Normal linux 
-    (export LD_LIBRARY_PATH="$opkg_dir" && $opkg_cmd) || error_exit ${FUNCNAME[0]}
+    (export LD_LIBRARY_PATH="$opkg_dir" && ${opkg_cmd[*]}) || error_exit ${FUNCNAME[0]}
     mkdir -p "$stage_package_dir"/"$bose_partition"/ || error_exit ${FUNCNAME[0]}
     mv "$offline_dir"/opt/Bose/* "$stage_package_dir"/"$bose_partition"/  || error_exit ${FUNCNAME[0]}
     sed -i -- 's/Status: install user unpacked/Status: install user installed/g' "$stage_package_dir"/"$bose_partition"/update/status  || error_exit ${FUNCNAME[0]}
