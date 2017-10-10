@@ -1,31 +1,31 @@
 [
   {
     "name": "UnitTest++-ti",
-    "selected_version": "branches/UnitTest++@2312"
+    "selected_version": "branches/UnitTest++@2424"
   },
   {
     "name": "UnitTest++-qc8017_32",
-    "selected_version": "branches/UnitTest++@2312"
+    "selected_version": "branches/UnitTest++@2424"
   },
   {
     "name": "UnitTest++-native",
-    "selected_version": "branches/UnitTest++@2312"
+    "selected_version": "branches/UnitTest++@2424"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-05_1101"
+    "selected_version": "Continuous/Castle-Fork/2017-10-09_0926"
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2416"
+    "selected_version": "branches/castle-libs@2427"
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "branches/protobuf@2304"
+    "selected_version": "branches/protobuf@2423"
   },
   {
     "name": "protobuf-native",
-    "selected_version": "branches/protobuf@2304"
+    "selected_version": "branches/protobuf@2423"
   },
   {
     "name": "CastleProductControllerCommon",
@@ -37,15 +37,15 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.1.1-58+c7c5bc3"
+    "selected_version": "Continuous/master/0.1.1-63+6908071"
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/0.0.2-24+275e57e"
+    "selected_version": "Continuous/master/0.0.2-37+242e485"
   },
   {
     "name": "CastlePassport-native",
-    "selected_version": "Continuous/master/0.0.2-24+275e57e"
+    "selected_version": "Continuous/master/0.0.2-37+242e485"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -57,7 +57,7 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Continuous/dev/1.1-2-g18cc7a9"
+    "selected_version": "Continuous/dev/1.1-4-ga7b4026"
   },
   {
     "name": "Riviera-Toolchain",
@@ -65,19 +65,19 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/16.1.4.39354.2503267"
+    "selected_version": "Release/Castle-Fork/16.1.4.39393.2504888"
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@a58a5eca30d0a12c66b3bca1126b5a3176f3ee10"
+    "selected_version": "master@4e4c6c1742bf13f1a06deb06865b5ad95cae7801"
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@911"
+    "selected_version": "trunk@994"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-04_1511"
+    "selected_version": "Continuous/Castle-Fork/2017-10-10_1124"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -89,15 +89,15 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-53+59580a5"
+    "selected_version": "Continuous/master/0.1.0-56+588b12a"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-8+6f48006"
+    "selected_version": "Continuous/master/0.0.1-10+ca86b0f"
   },
   {
     "name": "KeyHandler-native",
-    "selected_version": "Continuous/master/0.0.1-8+6f48006"
+    "selected_version": "Continuous/master/0.0.1-10+ca86b0f"
   },
   {
     "name": "WiFi-Setup-Webpage",
