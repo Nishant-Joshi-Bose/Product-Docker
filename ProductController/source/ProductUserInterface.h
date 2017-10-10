@@ -47,6 +47,7 @@
 #include "ProductMessage.pb.h"
 #include "LpmClientIF.h"
 #include "KeyHandler.h"
+#include "SoundTouchSdkPaths.h"
 
 namespace ProductApp
 {
@@ -163,7 +164,7 @@ private:
     ProductHardwareInterface*   m_ProductHardwareInterface = nullptr;
     bool                        m_running;
     KeyHandlerUtil::KeyHandler  m_KeyHandler;
-    static constexpr const char *m_keyConfigFileName = "KeyConfiguration.json";
+    static constexpr const char *m_keyConfigFileName = SHELBY_CONFIG_DIR "KeyConfiguration.json";
 };
 }
 
