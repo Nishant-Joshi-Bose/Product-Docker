@@ -12,6 +12,23 @@ Generate a default key file from the RivieraLPM_KeyValues.h (or similar)
 header file
 """
 
+ORIGIN_NAMES = {
+  0 : "CONSOLE_BUTTON", 
+  1 : "CAPSENSE", 
+  2 : "IR", 
+  3 : "RF", 
+  4 : "CEC", 
+  5 : "NETWORK",
+  6 : "TAP"}
+
+EVENT_NAMES = {
+  0 : "PRESS", 
+  1 : "RELEASE", 
+  2 : "PRESS_HOLD", 
+  3 : "PRESS_HOLD_REPEAT",
+  4 : "RELEASE_BURST"
+}
+
 def lookfor(node, target):
   ret = None
 
@@ -72,12 +89,13 @@ def main():
         event_name = pat.sub('KEY_EVENT_', event_name)
         
         keymap['keyTable'].append(OrderedDict([
-          ('Keys', [val]),
-          ('TimeOut', 300),  
-          ('Repeat', False), 
-          ('ActionOnTimeout', False), 
-          ('Event', event_id),
-          ('EventName', event_name),
+          ('Origin', 2),
+          ('OriginName', ORIGIN_NAMES[2]),
+          ('KeyEvent', val),
+          ('KeyList', [val]),
+          ('TimeOutList', 300),  
+          ('Action', event_id),
+          ('ActionName', event_name),
           ('KeyName', e.name),
         ]))
         header_string += '    {} = {},\n'.format(event_name, event_id)

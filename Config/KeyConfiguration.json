@@ -1,2808 +1,3063 @@
 {
     "keyTable": [
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 0, 
+            "KeyList": [
                 0
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 0, 
-            "EventName": "KEY_EVENT_AVAIL_00", 
+            "TimeOutList": 300, 
+            "Action": 0, 
+            "ActionName": "KEY_EVENT_AVAIL_00", 
             "KeyName": "KEY_VAL_AVAIL_00"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 1, 
+            "KeyList": [
                 1
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 1, 
-            "EventName": "KEY_EVENT_MUTE", 
+            "TimeOutList": 300, 
+            "Action": 1, 
+            "ActionName": "KEY_EVENT_MUTE", 
             "KeyName": "BOSE_MUTE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 2, 
+            "KeyList": [
                 2
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 2, 
-            "EventName": "KEY_EVENT_VOLUME_DOWN", 
+            "TimeOutList": 300, 
+            "Action": 2, 
+            "ActionName": "KEY_EVENT_VOLUME_DOWN", 
             "KeyName": "BOSE_VOLUME_DOWN"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 3, 
+            "KeyList": [
                 3
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 3, 
-            "EventName": "KEY_EVENT_VOLUME_UP", 
+            "TimeOutList": 300, 
+            "Action": 3, 
+            "ActionName": "KEY_EVENT_VOLUME_UP", 
             "KeyName": "BOSE_VOLUME_UP"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 4, 
+            "KeyList": [
                 4
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 4, 
-            "EventName": "KEY_EVENT_AVAIL_04", 
+            "TimeOutList": 300, 
+            "Action": 4, 
+            "ActionName": "KEY_EVENT_AVAIL_04", 
             "KeyName": "KEY_VAL_AVAIL_04"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 5, 
+            "KeyList": [
                 5
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 5, 
-            "EventName": "KEY_EVENT_AVAIL_05", 
+            "TimeOutList": 300, 
+            "Action": 5, 
+            "ActionName": "KEY_EVENT_AVAIL_05", 
             "KeyName": "KEY_VAL_AVAIL_05"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 6, 
+            "KeyList": [
                 6
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 6, 
-            "EventName": "KEY_EVENT_GAME_SOURCE", 
+            "TimeOutList": 300, 
+            "Action": 6, 
+            "ActionName": "KEY_EVENT_GAME_SOURCE", 
             "KeyName": "BOSE_GAME_SOURCE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 7, 
+            "KeyList": [
                 7
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 7, 
-            "EventName": "KEY_EVENT_SPECIAL_FEATURE_2", 
+            "TimeOutList": 300, 
+            "Action": 7, 
+            "ActionName": "KEY_EVENT_SPECIAL_FEATURE_2", 
             "KeyName": "BOSE_SPECIAL_FEATURE_2"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 8, 
+            "KeyList": [
                 8
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 8, 
-            "EventName": "KEY_EVENT_AVAIL_08", 
+            "TimeOutList": 300, 
+            "Action": 8, 
+            "ActionName": "KEY_EVENT_AVAIL_08", 
             "KeyName": "KEY_VAL_AVAIL_08"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 9, 
+            "KeyList": [
                 9
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 9, 
-            "EventName": "KEY_EVENT_AVAIL_09", 
+            "TimeOutList": 300, 
+            "Action": 9, 
+            "ActionName": "KEY_EVENT_AVAIL_09", 
             "KeyName": "KEY_VAL_AVAIL_09"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 10, 
+            "KeyList": [
                 10
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 10, 
-            "EventName": "KEY_EVENT_AVAIL_0A", 
+            "TimeOutList": 300, 
+            "Action": 10, 
+            "ActionName": "KEY_EVENT_AVAIL_0A", 
             "KeyName": "KEY_VAL_AVAIL_0A"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 11, 
+            "KeyList": [
                 11
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 11, 
-            "EventName": "KEY_EVENT_AVAIL_0B", 
+            "TimeOutList": 300, 
+            "Action": 11, 
+            "ActionName": "KEY_EVENT_AVAIL_0B", 
             "KeyName": "KEY_VAL_AVAIL_0B"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 12, 
+            "KeyList": [
                 12
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 12, 
-            "EventName": "KEY_EVENT_SPECIAL_FEATURE_1", 
+            "TimeOutList": 300, 
+            "Action": 12, 
+            "ActionName": "KEY_EVENT_SPECIAL_FEATURE_1", 
             "KeyName": "BOSE_SPECIAL_FEATURE_1"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 13, 
+            "KeyList": [
                 13
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 13, 
-            "EventName": "KEY_EVENT_AUX_SOURCE", 
+            "TimeOutList": 300, 
+            "Action": 13, 
+            "ActionName": "KEY_EVENT_AUX_SOURCE", 
             "KeyName": "BOSE_AUX_SOURCE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 14, 
+            "KeyList": [
                 14
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 14, 
-            "EventName": "KEY_EVENT_TV_SOURCE", 
+            "TimeOutList": 300, 
+            "Action": 14, 
+            "ActionName": "KEY_EVENT_TV_SOURCE", 
             "KeyName": "BOSE_TV_SOURCE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 15, 
+            "KeyList": [
                 15
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 15, 
-            "EventName": "KEY_EVENT_321_AUX_SOURCE", 
+            "TimeOutList": 300, 
+            "Action": 15, 
+            "ActionName": "KEY_EVENT_321_AUX_SOURCE", 
             "KeyName": "BOSE_321_AUX_SOURCE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 16, 
+            "KeyList": [
                 16
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 16, 
-            "EventName": "KEY_EVENT_SETUP", 
+            "TimeOutList": 300, 
+            "Action": 16, 
+            "ActionName": "KEY_EVENT_SETUP", 
             "KeyName": "BOSE_SETUP"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 17, 
+            "KeyList": [
                 17
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 17, 
-            "EventName": "KEY_EVENT_AVAIL_11", 
+            "TimeOutList": 300, 
+            "Action": 17, 
+            "ActionName": "KEY_EVENT_AVAIL_11", 
             "KeyName": "KEY_VAL_AVAIL_11"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 18, 
+            "KeyList": [
                 18
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 18, 
-            "EventName": "KEY_EVENT_AVAIL_12", 
+            "TimeOutList": 300, 
+            "Action": 18, 
+            "ActionName": "KEY_EVENT_AVAIL_12", 
             "KeyName": "KEY_VAL_AVAIL_12"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 19, 
+            "KeyList": [
                 19
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 19, 
-            "EventName": "KEY_EVENT_AVAIL_13", 
+            "TimeOutList": 300, 
+            "Action": 19, 
+            "ActionName": "KEY_EVENT_AVAIL_13", 
             "KeyName": "KEY_VAL_AVAIL_13"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 20, 
+            "KeyList": [
                 20
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 20, 
-            "EventName": "KEY_EVENT_LAST_CHANNEL", 
+            "TimeOutList": 300, 
+            "Action": 20, 
+            "ActionName": "KEY_EVENT_LAST_CHANNEL", 
             "KeyName": "BOSE_LAST_CHANNEL"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 21, 
+            "KeyList": [
                 21
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 21, 
-            "EventName": "KEY_EVENT_CBL_SAT_SOURCE", 
+            "TimeOutList": 300, 
+            "Action": 21, 
+            "ActionName": "KEY_EVENT_CBL_SAT_SOURCE", 
             "KeyName": "BOSE_CBL_SAT_SOURCE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 22, 
+            "KeyList": [
                 22
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 22, 
-            "EventName": "KEY_EVENT_AVAIL_16", 
+            "TimeOutList": 300, 
+            "Action": 22, 
+            "ActionName": "KEY_EVENT_AVAIL_16", 
             "KeyName": "KEY_VAL_AVAIL_16"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 23, 
+            "KeyList": [
                 23
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 23, 
-            "EventName": "KEY_EVENT_AVAIL_17", 
+            "TimeOutList": 300, 
+            "Action": 23, 
+            "ActionName": "KEY_EVENT_AVAIL_17", 
             "KeyName": "KEY_VAL_AVAIL_17"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 24, 
+            "KeyList": [
                 24
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 24, 
-            "EventName": "KEY_EVENT_CHANNEL_PRESET_DOWN", 
+            "TimeOutList": 300, 
+            "Action": 24, 
+            "ActionName": "KEY_EVENT_CHANNEL_PRESET_DOWN", 
             "KeyName": "BOSE_CHANNEL_PRESET_DOWN"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 25, 
+            "KeyList": [
                 25
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 25, 
-            "EventName": "KEY_EVENT_CHANNEL_PRESET_UP", 
+            "TimeOutList": 300, 
+            "Action": 25, 
+            "ActionName": "KEY_EVENT_CHANNEL_PRESET_UP", 
             "KeyName": "BOSE_CHANNEL_PRESET_UP"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 26, 
+            "KeyList": [
                 26
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 26, 
-            "EventName": "KEY_EVENT_STOP", 
+            "TimeOutList": 300, 
+            "Action": 26, 
+            "ActionName": "KEY_EVENT_STOP", 
             "KeyName": "BOSE_STOP"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 27, 
+            "KeyList": [
                 27
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 27, 
-            "EventName": "KEY_EVENT_AVAIL_1B", 
+            "TimeOutList": 300, 
+            "Action": 27, 
+            "ActionName": "KEY_EVENT_AVAIL_1B", 
             "KeyName": "KEY_VAL_AVAIL_1B"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 28, 
+            "KeyList": [
                 28
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 28, 
-            "EventName": "KEY_EVENT_AVAIL_1C", 
+            "TimeOutList": 300, 
+            "Action": 28, 
+            "ActionName": "KEY_EVENT_AVAIL_1C", 
             "KeyName": "KEY_VAL_AVAIL_1C"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 29, 
+            "KeyList": [
                 29
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 29, 
-            "EventName": "KEY_EVENT_AVAIL_1D", 
+            "TimeOutList": 300, 
+            "Action": 29, 
+            "ActionName": "KEY_EVENT_AVAIL_1D", 
             "KeyName": "KEY_VAL_AVAIL_1D"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 30, 
+            "KeyList": [
                 30
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 30, 
-            "EventName": "KEY_EVENT_AVAIL_1E", 
+            "TimeOutList": 300, 
+            "Action": 30, 
+            "ActionName": "KEY_EVENT_AVAIL_1E", 
             "KeyName": "KEY_VAL_AVAIL_1E"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 31, 
+            "KeyList": [
                 31
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 31, 
-            "EventName": "KEY_EVENT_AVAIL_1F", 
+            "TimeOutList": 300, 
+            "Action": 31, 
+            "ActionName": "KEY_EVENT_AVAIL_1F", 
             "KeyName": "KEY_VAL_AVAIL_1F"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 32, 
+            "KeyList": [
                 32
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 32, 
-            "EventName": "KEY_EVENT_DOWN_ARROW", 
+            "TimeOutList": 300, 
+            "Action": 32, 
+            "ActionName": "KEY_EVENT_DOWN_ARROW", 
             "KeyName": "BOSE_DOWN_ARROW"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 33, 
+            "KeyList": [
                 33
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 33, 
-            "EventName": "KEY_EVENT_SHUFFLE", 
+            "TimeOutList": 300, 
+            "Action": 33, 
+            "ActionName": "KEY_EVENT_SHUFFLE", 
             "KeyName": "BOSE_SHUFFLE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 34, 
+            "KeyList": [
                 34
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 34, 
-            "EventName": "KEY_EVENT_SOURCE_CYCLE", 
+            "TimeOutList": 300, 
+            "Action": 34, 
+            "ActionName": "KEY_EVENT_SOURCE_CYCLE", 
             "KeyName": "BOSE_SOURCE_CYCLE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 35, 
+            "KeyList": [
                 35
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 35, 
-            "EventName": "KEY_EVENT_MORE_BUTTONS", 
+            "TimeOutList": 300, 
+            "Action": 35, 
+            "ActionName": "KEY_EVENT_MORE_BUTTONS", 
             "KeyName": "BOSE_MORE_BUTTONS"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 36, 
+            "KeyList": [
                 36
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 36, 
-            "EventName": "KEY_EVENT_TV_POWER", 
+            "TimeOutList": 300, 
+            "Action": 36, 
+            "ActionName": "KEY_EVENT_TV_POWER", 
             "KeyName": "BOSE_TV_POWER"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 37, 
+            "KeyList": [
                 37
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 37, 
-            "EventName": "KEY_EVENT_AVAIL_25", 
+            "TimeOutList": 300, 
+            "Action": 37, 
+            "ActionName": "KEY_EVENT_AVAIL_25", 
             "KeyName": "KEY_VAL_AVAIL_25"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 38, 
+            "KeyList": [
                 38
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 38, 
-            "EventName": "KEY_EVENT_AVAIL_26", 
+            "TimeOutList": 300, 
+            "Action": 38, 
+            "ActionName": "KEY_EVENT_AVAIL_26", 
             "KeyName": "KEY_VAL_AVAIL_26"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 39, 
+            "KeyList": [
                 39
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 39, 
-            "EventName": "KEY_EVENT_AVAIL_27", 
+            "TimeOutList": 300, 
+            "Action": 39, 
+            "ActionName": "KEY_EVENT_AVAIL_27", 
             "KeyName": "KEY_VAL_AVAIL_27"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 40, 
+            "KeyList": [
                 40
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 40, 
-            "EventName": "KEY_EVENT_AVAIL_28", 
+            "TimeOutList": 300, 
+            "Action": 40, 
+            "ActionName": "KEY_EVENT_AVAIL_28", 
             "KeyName": "KEY_VAL_AVAIL_28"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 41, 
+            "KeyList": [
                 41
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 41, 
-            "EventName": "KEY_EVENT_AVAIL_29", 
+            "TimeOutList": 300, 
+            "Action": 41, 
+            "ActionName": "KEY_EVENT_AVAIL_29", 
             "KeyName": "KEY_VAL_AVAIL_29"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 42, 
+            "KeyList": [
                 42
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 42, 
-            "EventName": "KEY_EVENT_AVAIL_2A", 
+            "TimeOutList": 300, 
+            "Action": 42, 
+            "ActionName": "KEY_EVENT_AVAIL_2A", 
             "KeyName": "KEY_VAL_AVAIL_2A"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 43, 
+            "KeyList": [
                 43
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 43, 
-            "EventName": "KEY_EVENT_AVAIL_2B", 
+            "TimeOutList": 300, 
+            "Action": 43, 
+            "ActionName": "KEY_EVENT_AVAIL_2B", 
             "KeyName": "KEY_VAL_AVAIL_2B"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 44, 
+            "KeyList": [
                 44
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 44, 
-            "EventName": "KEY_EVENT_SOURCE_POWER", 
+            "TimeOutList": 300, 
+            "Action": 44, 
+            "ActionName": "KEY_EVENT_SOURCE_POWER", 
             "KeyName": "BOSE_SOURCE_POWER"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 45, 
+            "KeyList": [
                 45
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 45, 
-            "EventName": "KEY_EVENT_AVAIL_2D", 
+            "TimeOutList": 300, 
+            "Action": 45, 
+            "ActionName": "KEY_EVENT_AVAIL_2D", 
             "KeyName": "KEY_VAL_AVAIL_2D"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 46, 
+            "KeyList": [
                 46
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 46, 
-            "EventName": "KEY_EVENT_AVAIL_2E", 
+            "TimeOutList": 300, 
+            "Action": 46, 
+            "ActionName": "KEY_EVENT_AVAIL_2E", 
             "KeyName": "KEY_VAL_AVAIL_2E"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 47, 
+            "KeyList": [
                 47
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 47, 
-            "EventName": "KEY_EVENT_AVAIL_2F", 
+            "TimeOutList": 300, 
+            "Action": 47, 
+            "ActionName": "KEY_EVENT_AVAIL_2F", 
             "KeyName": "KEY_VAL_AVAIL_2F"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 48, 
+            "KeyList": [
                 48
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 48, 
-            "EventName": "KEY_EVENT_EXIT", 
+            "TimeOutList": 300, 
+            "Action": 48, 
+            "ActionName": "KEY_EVENT_EXIT", 
             "KeyName": "BOSE_EXIT"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 49, 
+            "KeyList": [
                 49
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 49, 
-            "EventName": "KEY_EVENT_MENU_EXIT", 
+            "TimeOutList": 300, 
+            "Action": 49, 
+            "ActionName": "KEY_EVENT_MENU_EXIT", 
             "KeyName": "BOSE_MENU_EXIT"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 50, 
+            "KeyList": [
                 50
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 50, 
-            "EventName": "KEY_EVENT_AVAIL_32", 
+            "TimeOutList": 300, 
+            "Action": 50, 
+            "ActionName": "KEY_EVENT_AVAIL_32", 
             "KeyName": "KEY_VAL_AVAIL_32"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 51, 
+            "KeyList": [
                 51
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 51, 
-            "EventName": "KEY_EVENT_AVAIL_33", 
+            "TimeOutList": 300, 
+            "Action": 51, 
+            "ActionName": "KEY_EVENT_AVAIL_33", 
             "KeyName": "KEY_VAL_AVAIL_33"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 52, 
+            "KeyList": [
                 52
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 52, 
-            "EventName": "KEY_EVENT_AVAIL_34", 
+            "TimeOutList": 300, 
+            "Action": 52, 
+            "ActionName": "KEY_EVENT_AVAIL_34", 
             "KeyName": "KEY_VAL_AVAIL_34"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 53, 
+            "KeyList": [
                 53
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 53, 
-            "EventName": "KEY_EVENT_AVAIL_35", 
+            "TimeOutList": 300, 
+            "Action": 53, 
+            "ActionName": "KEY_EVENT_AVAIL_35", 
             "KeyName": "KEY_VAL_AVAIL_35"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 54, 
+            "KeyList": [
                 54
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 54, 
-            "EventName": "KEY_EVENT_AVAIL_36", 
+            "TimeOutList": 300, 
+            "Action": 54, 
+            "ActionName": "KEY_EVENT_AVAIL_36", 
             "KeyName": "KEY_VAL_AVAIL_36"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 55, 
+            "KeyList": [
                 55
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 55, 
-            "EventName": "KEY_EVENT_AVAIL_37", 
+            "TimeOutList": 300, 
+            "Action": 55, 
+            "ActionName": "KEY_EVENT_AVAIL_37", 
             "KeyName": "KEY_VAL_AVAIL_37"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 56, 
+            "KeyList": [
                 56
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 56, 
-            "EventName": "KEY_EVENT_AVAIL_38", 
+            "TimeOutList": 300, 
+            "Action": 56, 
+            "ActionName": "KEY_EVENT_AVAIL_38", 
             "KeyName": "KEY_VAL_AVAIL_38"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 57, 
+            "KeyList": [
                 57
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 57, 
-            "EventName": "KEY_EVENT_AVAIL_39", 
+            "TimeOutList": 300, 
+            "Action": 57, 
+            "ActionName": "KEY_EVENT_AVAIL_39", 
             "KeyName": "KEY_VAL_AVAIL_39"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 58, 
+            "KeyList": [
                 58
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 58, 
-            "EventName": "KEY_EVENT_AVAIL_3A", 
+            "TimeOutList": 300, 
+            "Action": 58, 
+            "ActionName": "KEY_EVENT_AVAIL_3A", 
             "KeyName": "KEY_VAL_AVAIL_3A"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 59, 
+            "KeyList": [
                 59
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 59, 
-            "EventName": "KEY_EVENT_AVAIL_3B", 
+            "TimeOutList": 300, 
+            "Action": 59, 
+            "ActionName": "KEY_EVENT_AVAIL_3B", 
             "KeyName": "KEY_VAL_AVAIL_3B"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 60, 
+            "KeyList": [
                 60
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 60, 
-            "EventName": "KEY_EVENT_TV_INPUT", 
+            "TimeOutList": 300, 
+            "Action": 60, 
+            "ActionName": "KEY_EVENT_TV_INPUT", 
             "KeyName": "BOSE_TV_INPUT"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 61, 
+            "KeyList": [
                 61
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 61, 
-            "EventName": "KEY_EVENT_AVAIL_3D", 
+            "TimeOutList": 300, 
+            "Action": 61, 
+            "ActionName": "KEY_EVENT_AVAIL_3D", 
             "KeyName": "KEY_VAL_AVAIL_3D"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 62, 
+            "KeyList": [
                 62
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 62, 
-            "EventName": "KEY_EVENT_AVAIL_3E", 
+            "TimeOutList": 300, 
+            "Action": 62, 
+            "ActionName": "KEY_EVENT_AVAIL_3E", 
             "KeyName": "KEY_VAL_AVAIL_3E"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 63, 
+            "KeyList": [
                 63
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 63, 
-            "EventName": "KEY_EVENT_AVAIL_3F", 
+            "TimeOutList": 300, 
+            "Action": 63, 
+            "ActionName": "KEY_EVENT_AVAIL_3F", 
             "KeyName": "KEY_VAL_AVAIL_3F"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 64, 
+            "KeyList": [
                 64
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 64, 
-            "EventName": "KEY_EVENT_NUMBER_0", 
+            "TimeOutList": 300, 
+            "Action": 64, 
+            "ActionName": "KEY_EVENT_NUMBER_0", 
             "KeyName": "BOSE_NUMBER_0"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 65, 
+            "KeyList": [
                 65
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 65, 
-            "EventName": "KEY_EVENT_NUMBER_1", 
+            "TimeOutList": 300, 
+            "Action": 65, 
+            "ActionName": "KEY_EVENT_NUMBER_1", 
             "KeyName": "BOSE_NUMBER_1"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 66, 
+            "KeyList": [
                 66
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 66, 
-            "EventName": "KEY_EVENT_NUMBER_2", 
+            "TimeOutList": 300, 
+            "Action": 66, 
+            "ActionName": "KEY_EVENT_NUMBER_2", 
             "KeyName": "BOSE_NUMBER_2"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 67, 
+            "KeyList": [
                 67
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 67, 
-            "EventName": "KEY_EVENT_NUMBER_3", 
+            "TimeOutList": 300, 
+            "Action": 67, 
+            "ActionName": "KEY_EVENT_NUMBER_3", 
             "KeyName": "BOSE_NUMBER_3"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 68, 
+            "KeyList": [
                 68
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 68, 
-            "EventName": "KEY_EVENT_NUMBER_4", 
+            "TimeOutList": 300, 
+            "Action": 68, 
+            "ActionName": "KEY_EVENT_NUMBER_4", 
             "KeyName": "BOSE_NUMBER_4"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 69, 
+            "KeyList": [
                 69
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 69, 
-            "EventName": "KEY_EVENT_NUMBER_5", 
+            "TimeOutList": 300, 
+            "Action": 69, 
+            "ActionName": "KEY_EVENT_NUMBER_5", 
             "KeyName": "BOSE_NUMBER_5"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 70, 
+            "KeyList": [
                 70
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 70, 
-            "EventName": "KEY_EVENT_NUMBER_6", 
+            "TimeOutList": 300, 
+            "Action": 70, 
+            "ActionName": "KEY_EVENT_NUMBER_6", 
             "KeyName": "BOSE_NUMBER_6"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 71, 
+            "KeyList": [
                 71
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 71, 
-            "EventName": "KEY_EVENT_NUMBER_7", 
+            "TimeOutList": 300, 
+            "Action": 71, 
+            "ActionName": "KEY_EVENT_NUMBER_7", 
             "KeyName": "BOSE_NUMBER_7"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 72, 
+            "KeyList": [
                 72
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 72, 
-            "EventName": "KEY_EVENT_NUMBER_8", 
+            "TimeOutList": 300, 
+            "Action": 72, 
+            "ActionName": "KEY_EVENT_NUMBER_8", 
             "KeyName": "BOSE_NUMBER_8"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 73, 
+            "KeyList": [
                 73
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 73, 
-            "EventName": "KEY_EVENT_NUMBER_9", 
+            "TimeOutList": 300, 
+            "Action": 73, 
+            "ActionName": "KEY_EVENT_NUMBER_9", 
             "KeyName": "BOSE_NUMBER_9"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 74, 
+            "KeyList": [
                 74
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 74, 
-            "EventName": "KEY_EVENT_AVAIL_4A", 
+            "TimeOutList": 300, 
+            "Action": 74, 
+            "ActionName": "KEY_EVENT_AVAIL_4A", 
             "KeyName": "KEY_VAL_AVAIL_4A"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 75, 
+            "KeyList": [
                 75
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 75, 
-            "EventName": "KEY_EVENT_AVAIL_4B", 
+            "TimeOutList": 300, 
+            "Action": 75, 
+            "ActionName": "KEY_EVENT_AVAIL_4B", 
             "KeyName": "KEY_VAL_AVAIL_4B"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 76, 
+            "KeyList": [
                 76
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 76, 
-            "EventName": "KEY_EVENT_ON_OFF", 
+            "TimeOutList": 300, 
+            "Action": 76, 
+            "ActionName": "KEY_EVENT_ON_OFF", 
             "KeyName": "BOSE_ON_OFF"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 77, 
+            "KeyList": [
                 77
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 77, 
-            "EventName": "KEY_EVENT_AVAIL_4D", 
+            "TimeOutList": 300, 
+            "Action": 77, 
+            "ActionName": "KEY_EVENT_AVAIL_4D", 
             "KeyName": "KEY_VAL_AVAIL_4D"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 78, 
+            "KeyList": [
                 78
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 78, 
-            "EventName": "KEY_EVENT_AVAIL_4E", 
+            "TimeOutList": 300, 
+            "Action": 78, 
+            "ActionName": "KEY_EVENT_AVAIL_4E", 
             "KeyName": "KEY_VAL_AVAIL_4E"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 79, 
+            "KeyList": [
                 79
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 79, 
-            "EventName": "KEY_EVENT_AVAIL_4F", 
+            "TimeOutList": 300, 
+            "Action": 79, 
+            "ActionName": "KEY_EVENT_AVAIL_4F", 
             "KeyName": "KEY_VAL_AVAIL_4F"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 80, 
+            "KeyList": [
                 80
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 80, 
-            "EventName": "KEY_EVENT_AVAIL_50", 
+            "TimeOutList": 300, 
+            "Action": 80, 
+            "ActionName": "KEY_EVENT_AVAIL_50", 
             "KeyName": "KEY_VAL_AVAIL_50"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 81, 
+            "KeyList": [
                 81
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 81, 
-            "EventName": "KEY_EVENT_AVAIL_51", 
+            "TimeOutList": 300, 
+            "Action": 81, 
+            "ActionName": "KEY_EVENT_AVAIL_51", 
             "KeyName": "KEY_VAL_AVAIL_51"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 82, 
+            "KeyList": [
                 82
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 82, 
-            "EventName": "KEY_EVENT_AVAIL_52", 
+            "TimeOutList": 300, 
+            "Action": 82, 
+            "ActionName": "KEY_EVENT_AVAIL_52", 
             "KeyName": "KEY_VAL_AVAIL_52"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 83, 
+            "KeyList": [
                 83
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 83, 
-            "EventName": "KEY_EVENT_BD_DVD_SOURCE", 
+            "TimeOutList": 300, 
+            "Action": 83, 
+            "ActionName": "KEY_EVENT_BD_DVD_SOURCE", 
             "KeyName": "BOSE_BD_DVD_SOURCE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 84, 
+            "KeyList": [
                 84
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 84, 
-            "EventName": "KEY_EVENT_AVAIL_54", 
+            "TimeOutList": 300, 
+            "Action": 84, 
+            "ActionName": "KEY_EVENT_AVAIL_54", 
             "KeyName": "KEY_VAL_AVAIL_54"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 85, 
+            "KeyList": [
                 85
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 85, 
-            "EventName": "KEY_EVENT_PLAY", 
+            "TimeOutList": 300, 
+            "Action": 85, 
+            "ActionName": "KEY_EVENT_PLAY", 
             "KeyName": "BOSE_PLAY"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 86, 
+            "KeyList": [
                 86
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 86, 
-            "EventName": "KEY_EVENT_PAUSE", 
+            "TimeOutList": 300, 
+            "Action": 86, 
+            "ActionName": "KEY_EVENT_PAUSE", 
             "KeyName": "BOSE_PAUSE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 87, 
+            "KeyList": [
                 87
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 87, 
-            "EventName": "KEY_EVENT_FAST_REVERSE", 
+            "TimeOutList": 300, 
+            "Action": 87, 
+            "ActionName": "KEY_EVENT_FAST_REVERSE", 
             "KeyName": "BOSE_FAST_REVERSE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 88, 
+            "KeyList": [
                 88
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 88, 
-            "EventName": "KEY_EVENT_FAST_FORWARD", 
+            "TimeOutList": 300, 
+            "Action": 88, 
+            "ActionName": "KEY_EVENT_FAST_FORWARD", 
             "KeyName": "BOSE_FAST_FORWARD"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 89, 
+            "KeyList": [
                 89
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 89, 
-            "EventName": "KEY_EVENT_QUICK_REPLAY", 
+            "TimeOutList": 300, 
+            "Action": 89, 
+            "ActionName": "KEY_EVENT_QUICK_REPLAY", 
             "KeyName": "BOSE_QUICK_REPLAY"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 90, 
+            "KeyList": [
                 90
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 90, 
-            "EventName": "KEY_EVENT_QUICK_SKIP", 
+            "TimeOutList": 300, 
+            "Action": 90, 
+            "ActionName": "KEY_EVENT_QUICK_SKIP", 
             "KeyName": "BOSE_QUICK_SKIP"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 91, 
+            "KeyList": [
                 91
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 91, 
-            "EventName": "KEY_EVENT_AVAIL_5B", 
+            "TimeOutList": 300, 
+            "Action": 91, 
+            "ActionName": "KEY_EVENT_AVAIL_5B", 
             "KeyName": "KEY_VAL_AVAIL_5B"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 92, 
+            "KeyList": [
                 92
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 92, 
-            "EventName": "KEY_EVENT_DASH", 
+            "TimeOutList": 300, 
+            "Action": 92, 
+            "ActionName": "KEY_EVENT_DASH", 
             "KeyName": "BOSE_DASH"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 93, 
+            "KeyList": [
                 93
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 93, 
-            "EventName": "KEY_EVENT_AUTO_WAKE_TOGGLE", 
+            "TimeOutList": 300, 
+            "Action": 93, 
+            "ActionName": "KEY_EVENT_AUTO_WAKE_TOGGLE", 
             "KeyName": "BOSE_AUTO_WAKE_TOGGLE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 94, 
+            "KeyList": [
                 94
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 94, 
-            "EventName": "KEY_EVENT_AVAIL_5E", 
+            "TimeOutList": 300, 
+            "Action": 94, 
+            "ActionName": "KEY_EVENT_AVAIL_5E", 
             "KeyName": "KEY_VAL_AVAIL_5E"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 95, 
+            "KeyList": [
                 95
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 95, 
-            "EventName": "KEY_EVENT_AVAIL_5F", 
+            "TimeOutList": 300, 
+            "Action": 95, 
+            "ActionName": "KEY_EVENT_AVAIL_5F", 
             "KeyName": "KEY_VAL_AVAIL_5F"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 96, 
+            "KeyList": [
                 96
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 96, 
-            "EventName": "KEY_EVENT_RIGHT_ARROW", 
+            "TimeOutList": 300, 
+            "Action": 96, 
+            "ActionName": "KEY_EVENT_RIGHT_ARROW", 
             "KeyName": "BOSE_RIGHT_ARROW"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 97, 
+            "KeyList": [
                 97
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 97, 
-            "EventName": "KEY_EVENT_AVAIL_61", 
+            "TimeOutList": 300, 
+            "Action": 97, 
+            "ActionName": "KEY_EVENT_AVAIL_61", 
             "KeyName": "KEY_VAL_AVAIL_61"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 98, 
+            "KeyList": [
                 98
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 98, 
-            "EventName": "KEY_EVENT_AVAIL_62", 
+            "TimeOutList": 300, 
+            "Action": 98, 
+            "ActionName": "KEY_EVENT_AVAIL_62", 
             "KeyName": "KEY_VAL_AVAIL_62"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 99, 
+            "KeyList": [
                 99
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 99, 
-            "EventName": "KEY_EVENT_AVAIL_63", 
+            "TimeOutList": 300, 
+            "Action": 99, 
+            "ActionName": "KEY_EVENT_AVAIL_63", 
             "KeyName": "KEY_VAL_AVAIL_63"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 100, 
+            "KeyList": [
                 100
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 100, 
-            "EventName": "KEY_EVENT_INFO", 
+            "TimeOutList": 300, 
+            "Action": 100, 
+            "ActionName": "KEY_EVENT_INFO", 
             "KeyName": "BOSE_INFO"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 101, 
+            "KeyList": [
                 101
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 101, 
-            "EventName": "KEY_EVENT_AVAIL_65", 
+            "TimeOutList": 300, 
+            "Action": 101, 
+            "ActionName": "KEY_EVENT_AVAIL_65", 
             "KeyName": "KEY_VAL_AVAIL_65"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 102, 
+            "KeyList": [
                 102
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 102, 
-            "EventName": "KEY_EVENT_AVAIL_66", 
+            "TimeOutList": 300, 
+            "Action": 102, 
+            "ActionName": "KEY_EVENT_AVAIL_66", 
             "KeyName": "KEY_VAL_AVAIL_66"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 103, 
+            "KeyList": [
                 103
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 103, 
-            "EventName": "KEY_EVENT_AVAIL_67", 
+            "TimeOutList": 300, 
+            "Action": 103, 
+            "ActionName": "KEY_EVENT_AVAIL_67", 
             "KeyName": "KEY_VAL_AVAIL_67"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 104, 
+            "KeyList": [
                 104
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 104, 
-            "EventName": "KEY_EVENT_PAGE_DOWN", 
+            "TimeOutList": 300, 
+            "Action": 104, 
+            "ActionName": "KEY_EVENT_PAGE_DOWN", 
             "KeyName": "BOSE_PAGE_DOWN"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 105, 
+            "KeyList": [
                 105
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 105, 
-            "EventName": "KEY_EVENT_PAGE_UP", 
+            "TimeOutList": 300, 
+            "Action": 105, 
+            "ActionName": "KEY_EVENT_PAGE_UP", 
             "KeyName": "BOSE_PAGE_UP"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 106, 
+            "KeyList": [
                 106
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 106, 
-            "EventName": "KEY_EVENT_PAGE_THUMBS_DOWN", 
+            "TimeOutList": 300, 
+            "Action": 106, 
+            "ActionName": "KEY_EVENT_PAGE_THUMBS_DOWN", 
             "KeyName": "BOSE_PAGE_THUMBS_DOWN"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 107, 
+            "KeyList": [
                 107
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 107, 
-            "EventName": "KEY_EVENT_PAGE_THUMBS_UP", 
+            "TimeOutList": 300, 
+            "Action": 107, 
+            "ActionName": "KEY_EVENT_PAGE_THUMBS_UP", 
             "KeyName": "BOSE_PAGE_THUMBS_UP"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 108, 
+            "KeyList": [
                 108
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 108, 
-            "EventName": "KEY_EVENT_AVAIL_6C", 
+            "TimeOutList": 300, 
+            "Action": 108, 
+            "ActionName": "KEY_EVENT_AVAIL_6C", 
             "KeyName": "KEY_VAL_AVAIL_6C"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 109, 
+            "KeyList": [
                 109
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 109, 
-            "EventName": "KEY_EVENT_AVAIL_6D", 
+            "TimeOutList": 300, 
+            "Action": 109, 
+            "ActionName": "KEY_EVENT_AVAIL_6D", 
             "KeyName": "KEY_VAL_AVAIL_6D"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 110, 
+            "KeyList": [
                 110
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 110, 
-            "EventName": "KEY_EVENT_AVAIL_6E", 
+            "TimeOutList": 300, 
+            "Action": 110, 
+            "ActionName": "KEY_EVENT_AVAIL_6E", 
             "KeyName": "KEY_VAL_AVAIL_6E"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 111, 
+            "KeyList": [
                 111
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 111, 
-            "EventName": "KEY_EVENT_AVAIL_6F", 
+            "TimeOutList": 300, 
+            "Action": 111, 
+            "ActionName": "KEY_EVENT_AVAIL_6F", 
             "KeyName": "KEY_VAL_AVAIL_6F"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 112, 
+            "KeyList": [
                 112
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 112, 
-            "EventName": "HDMI_1", 
+            "TimeOutList": 300, 
+            "Action": 112, 
+            "ActionName": "HDMI_1", 
             "KeyName": "HDMI_1"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 113, 
+            "KeyList": [
                 113
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 113, 
-            "EventName": "HDMI_2", 
+            "TimeOutList": 300, 
+            "Action": 113, 
+            "ActionName": "HDMI_2", 
             "KeyName": "HDMI_2"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 114, 
+            "KeyList": [
                 114
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 114, 
-            "EventName": "HDMI_3", 
+            "TimeOutList": 300, 
+            "Action": 114, 
+            "ActionName": "HDMI_3", 
             "KeyName": "HDMI_3"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 115, 
+            "KeyList": [
                 115
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 115, 
-            "EventName": "HDMI_4", 
+            "TimeOutList": 300, 
+            "Action": 115, 
+            "ActionName": "HDMI_4", 
             "KeyName": "HDMI_4"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 116, 
+            "KeyList": [
                 116
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 116, 
-            "EventName": "HDMI_5", 
+            "TimeOutList": 300, 
+            "Action": 116, 
+            "ActionName": "HDMI_5", 
             "KeyName": "HDMI_5"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 117, 
+            "KeyList": [
                 117
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 117, 
-            "EventName": "HDMI_FRONT", 
+            "TimeOutList": 300, 
+            "Action": 117, 
+            "ActionName": "HDMI_FRONT", 
             "KeyName": "HDMI_FRONT"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 118, 
+            "KeyList": [
                 118
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 118, 
-            "EventName": "KEY_EVENT_AVAIL_76", 
+            "TimeOutList": 300, 
+            "Action": 118, 
+            "ActionName": "KEY_EVENT_AVAIL_76", 
             "KeyName": "KEY_VAL_AVAIL_76"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 119, 
+            "KeyList": [
                 119
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 119, 
-            "EventName": "KEY_EVENT_AVAIL_77", 
+            "TimeOutList": 300, 
+            "Action": 119, 
+            "ActionName": "KEY_EVENT_AVAIL_77", 
             "KeyName": "KEY_VAL_AVAIL_77"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 120, 
+            "KeyList": [
                 120
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 120, 
-            "EventName": "KEY_EVENT_AVAIL_78", 
+            "TimeOutList": 300, 
+            "Action": 120, 
+            "ActionName": "KEY_EVENT_AVAIL_78", 
             "KeyName": "KEY_VAL_AVAIL_78"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 121, 
+            "KeyList": [
                 121
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 121, 
-            "EventName": "KEY_EVENT_AVAIL_79", 
+            "TimeOutList": 300, 
+            "Action": 121, 
+            "ActionName": "KEY_EVENT_AVAIL_79", 
             "KeyName": "KEY_VAL_AVAIL_79"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 122, 
+            "KeyList": [
                 122
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 122, 
-            "EventName": "KEY_EVENT_AVAIL_7A", 
+            "TimeOutList": 300, 
+            "Action": 122, 
+            "ActionName": "KEY_EVENT_AVAIL_7A", 
             "KeyName": "KEY_VAL_AVAIL_7A"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 123, 
+            "KeyList": [
                 123
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 123, 
-            "EventName": "KEY_EVENT_AVAIL_7B", 
+            "TimeOutList": 300, 
+            "Action": 123, 
+            "ActionName": "KEY_EVENT_AVAIL_7B", 
             "KeyName": "KEY_VAL_AVAIL_7B"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 124, 
+            "KeyList": [
                 124
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 124, 
-            "EventName": "KEY_EVENT_AVAIL_7C", 
+            "TimeOutList": 300, 
+            "Action": 124, 
+            "ActionName": "KEY_EVENT_AVAIL_7C", 
             "KeyName": "KEY_VAL_AVAIL_7C"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 125, 
+            "KeyList": [
                 125
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 125, 
-            "EventName": "KEY_EVENT_AVAIL_7D", 
+            "TimeOutList": 300, 
+            "Action": 125, 
+            "ActionName": "KEY_EVENT_AVAIL_7D", 
             "KeyName": "KEY_VAL_AVAIL_7D"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 126, 
+            "KeyList": [
                 126
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 126, 
-            "EventName": "KEY_EVENT_AVAIL_7E", 
+            "TimeOutList": 300, 
+            "Action": 126, 
+            "ActionName": "KEY_EVENT_AVAIL_7E", 
             "KeyName": "KEY_VAL_AVAIL_7E"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 127, 
+            "KeyList": [
                 127
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 127, 
-            "EventName": "KEY_EVENT_AVAIL_7F", 
+            "TimeOutList": 300, 
+            "Action": 127, 
+            "ActionName": "KEY_EVENT_AVAIL_7F", 
             "KeyName": "KEY_VAL_AVAIL_7F"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 128, 
+            "KeyList": [
                 128
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 128, 
-            "EventName": "KEY_EVENT_SYSTEM", 
+            "TimeOutList": 300, 
+            "Action": 128, 
+            "ActionName": "KEY_EVENT_SYSTEM", 
             "KeyName": "BOSE_SYSTEM"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 129, 
+            "KeyList": [
                 129
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 129, 
-            "EventName": "KEY_EVENT_BLUETOOTH_SOURCE", 
+            "TimeOutList": 300, 
+            "Action": 129, 
+            "ActionName": "KEY_EVENT_BLUETOOTH_SOURCE", 
             "KeyName": "BOSE_BLUETOOTH_SOURCE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 130, 
+            "KeyList": [
                 130
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 130, 
-            "EventName": "KEY_EVENT_BASS_ADJUST", 
+            "TimeOutList": 300, 
+            "Action": 130, 
+            "ActionName": "KEY_EVENT_BASS_ADJUST", 
             "KeyName": "BOSE_BASS_ADJUST"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 131, 
+            "KeyList": [
                 131
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 131, 
-            "EventName": "KEY_EVENT_DIALOG_ADJUST", 
+            "TimeOutList": 300, 
+            "Action": 131, 
+            "ActionName": "KEY_EVENT_DIALOG_ADJUST", 
             "KeyName": "BOSE_DIALOG_ADJUST"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 132, 
+            "KeyList": [
                 132
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 132, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_LIVE", 
+            "TimeOutList": 300, 
+            "Action": 132, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_LIVE", 
             "KeyName": "BOSE_MORE_SOFTKEY_LIVE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 133, 
+            "KeyList": [
                 133
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 133, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_FAVORITE", 
+            "TimeOutList": 300, 
+            "Action": 133, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_FAVORITE", 
             "KeyName": "BOSE_MORE_SOFTKEY_FAVORITE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 134, 
+            "KeyList": [
                 134
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 134, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_FORMAT", 
+            "TimeOutList": 300, 
+            "Action": 134, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_FORMAT", 
             "KeyName": "BOSE_MORE_SOFTKEY_FORMAT"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 135, 
+            "KeyList": [
                 135
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 135, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_SAP", 
+            "TimeOutList": 300, 
+            "Action": 135, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_SAP", 
             "KeyName": "BOSE_MORE_SOFTKEY_SAP"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 136, 
+            "KeyList": [
                 136
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 136, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_PIP", 
+            "TimeOutList": 300, 
+            "Action": 136, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_PIP", 
             "KeyName": "BOSE_MORE_SOFTKEY_PIP"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 137, 
+            "KeyList": [
                 137
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 137, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_PIP_OFF", 
+            "TimeOutList": 300, 
+            "Action": 137, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_PIP_OFF", 
             "KeyName": "BOSE_MORE_SOFTKEY_PIP_OFF"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 138, 
+            "KeyList": [
                 138
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 138, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_PANDORA", 
+            "TimeOutList": 300, 
+            "Action": 138, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_PANDORA", 
             "KeyName": "BOSE_MORE_SOFTKEY_PANDORA"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 139, 
+            "KeyList": [
                 139
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 139, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_YOUTUBE", 
+            "TimeOutList": 300, 
+            "Action": 139, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_YOUTUBE", 
             "KeyName": "BOSE_MORE_SOFTKEY_YOUTUBE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 140, 
+            "KeyList": [
                 140
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 140, 
-            "EventName": "KEY_EVENT_ASSERT_ON", 
+            "TimeOutList": 300, 
+            "Action": 140, 
+            "ActionName": "KEY_EVENT_ASSERT_ON", 
             "KeyName": "BOSE_ASSERT_ON"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 141, 
+            "KeyList": [
                 141
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 141, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_ROKU", 
+            "TimeOutList": 300, 
+            "Action": 141, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_ROKU", 
             "KeyName": "BOSE_MORE_SOFTKEY_ROKU"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 142, 
+            "KeyList": [
                 142
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 142, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_YAHOO", 
+            "TimeOutList": 300, 
+            "Action": 142, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_YAHOO", 
             "KeyName": "BOSE_MORE_SOFTKEY_YAHOO"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 143, 
+            "KeyList": [
                 143
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 143, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_SPOTIFY", 
+            "TimeOutList": 300, 
+            "Action": 143, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_SPOTIFY", 
             "KeyName": "BOSE_MORE_SOFTKEY_SPOTIFY"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 144, 
+            "KeyList": [
                 144
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 144, 
-            "EventName": "KEY_EVENT_DVD_MENU", 
+            "TimeOutList": 300, 
+            "Action": 144, 
+            "ActionName": "KEY_EVENT_DVD_MENU", 
             "KeyName": "BOSE_DVD_MENU"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 145, 
+            "KeyList": [
                 145
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 145, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_WEB_INTERNET", 
+            "TimeOutList": 300, 
+            "Action": 145, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_WEB_INTERNET", 
             "KeyName": "BOSE_MORE_SOFTKEY_WEB_INTERNET"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 146, 
+            "KeyList": [
                 146
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 146, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_WIDGETS_APPS", 
+            "TimeOutList": 300, 
+            "Action": 146, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_WIDGETS_APPS", 
             "KeyName": "BOSE_MORE_SOFTKEY_WIDGETS_APPS"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 147, 
+            "KeyList": [
                 147
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 147, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_PICTURE_MODE", 
+            "TimeOutList": 300, 
+            "Action": 147, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_PICTURE_MODE", 
             "KeyName": "BOSE_MORE_SOFTKEY_PICTURE_MODE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 148, 
+            "KeyList": [
                 148
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 148, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_SOUND_MODE", 
+            "TimeOutList": 300, 
+            "Action": 148, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_SOUND_MODE", 
             "KeyName": "BOSE_MORE_SOFTKEY_SOUND_MODE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 149, 
+            "KeyList": [
                 149
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 149, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_CLEAR", 
+            "TimeOutList": 300, 
+            "Action": 149, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_CLEAR", 
             "KeyName": "BOSE_MORE_SOFTKEY_CLEAR"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 150, 
+            "KeyList": [
                 150
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 150, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_PWR_ON", 
+            "TimeOutList": 300, 
+            "Action": 150, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_PWR_ON", 
             "KeyName": "BOSE_MORE_SOFTKEY_PWR_ON"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 151, 
+            "KeyList": [
                 151
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 151, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_SUBTITLE", 
+            "TimeOutList": 300, 
+            "Action": 151, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_SUBTITLE", 
             "KeyName": "BOSE_MORE_SOFTKEY_SUBTITLE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 152, 
+            "KeyList": [
                 152
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 152, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_SLOW", 
+            "TimeOutList": 300, 
+            "Action": 152, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_SLOW", 
             "KeyName": "BOSE_MORE_SOFTKEY_SLOW"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 153, 
+            "KeyList": [
                 153
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 153, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_PWR_OFF", 
+            "TimeOutList": 300, 
+            "Action": 153, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_PWR_OFF", 
             "KeyName": "BOSE_MORE_SOFTKEY_PWR_OFF"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 154, 
+            "KeyList": [
                 154
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 154, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_DELIMITER", 
+            "TimeOutList": 300, 
+            "Action": 154, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_DELIMITER", 
             "KeyName": "BOSE_MORE_SOFTKEY_DELIMITER"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 155, 
+            "KeyList": [
                 155
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 155, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_LAST_CHANNEL", 
+            "TimeOutList": 300, 
+            "Action": 155, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_LAST_CHANNEL", 
             "KeyName": "BOSE_MORE_SOFTKEY_LAST_CHANNEL"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 156, 
+            "KeyList": [
                 156
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 156, 
-            "EventName": "KEY_EVENT_RECORD", 
+            "TimeOutList": 300, 
+            "Action": 156, 
+            "ActionName": "KEY_EVENT_RECORD", 
             "KeyName": "BOSE_RECORD"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 157, 
+            "KeyList": [
                 157
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 157, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_BACK", 
+            "TimeOutList": 300, 
+            "Action": 157, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_BACK", 
             "KeyName": "BOSE_MORE_SOFTKEY_BACK"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 158, 
+            "KeyList": [
                 158
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 158, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_CHANNEL_LIST", 
+            "TimeOutList": 300, 
+            "Action": 158, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_CHANNEL_LIST", 
             "KeyName": "BOSE_MORE_SOFTKEY_CHANNEL_LIST"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 159, 
+            "KeyList": [
                 159
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 159, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_EJECT", 
+            "TimeOutList": 300, 
+            "Action": 159, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_EJECT", 
             "KeyName": "BOSE_MORE_SOFTKEY_EJECT"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 160, 
+            "KeyList": [
                 160
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 160, 
-            "EventName": "KEY_EVENT_LEFT_ARROW", 
+            "TimeOutList": 300, 
+            "Action": 160, 
+            "ActionName": "KEY_EVENT_LEFT_ARROW", 
             "KeyName": "BOSE_LEFT_ARROW"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 161, 
+            "KeyList": [
                 161
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 161, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_QUICK_SKIP", 
+            "TimeOutList": 300, 
+            "Action": 161, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_QUICK_SKIP", 
             "KeyName": "BOSE_MORE_SOFTKEY_QUICK_SKIP"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 162, 
+            "KeyList": [
                 162
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 162, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_RECORDINGS", 
+            "TimeOutList": 300, 
+            "Action": 162, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_RECORDINGS", 
             "KeyName": "BOSE_MORE_SOFTKEY_RECORDINGS"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 163, 
+            "KeyList": [
                 163
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 163, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_NETFLIX", 
+            "TimeOutList": 300, 
+            "Action": 163, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_NETFLIX", 
             "KeyName": "BOSE_MORE_SOFTKEY_NETFLIX"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 164, 
+            "KeyList": [
                 164
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 164, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_AMAZON", 
+            "TimeOutList": 300, 
+            "Action": 164, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_AMAZON", 
             "KeyName": "BOSE_MORE_SOFTKEY_AMAZON"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 165, 
+            "KeyList": [
                 165
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 165, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_3DVIDEO", 
+            "TimeOutList": 300, 
+            "Action": 165, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_3DVIDEO", 
             "KeyName": "BOSE_MORE_SOFTKEY_3DVIDEO"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 166, 
+            "KeyList": [
                 166
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 166, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_STANDBY", 
+            "TimeOutList": 300, 
+            "Action": 166, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_STANDBY", 
             "KeyName": "BOSE_MORE_SOFTKEY_STANDBY"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 167, 
+            "KeyList": [
                 167
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 167, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_HULU", 
+            "TimeOutList": 300, 
+            "Action": 167, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_HULU", 
             "KeyName": "BOSE_MORE_SOFTKEY_HULU"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 168, 
+            "KeyList": [
                 168
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 168, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_OPTIONS", 
+            "TimeOutList": 300, 
+            "Action": 168, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_OPTIONS", 
             "KeyName": "BOSE_MORE_SOFTKEY_OPTIONS"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 169, 
+            "KeyList": [
                 169
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 169, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_TOOLS", 
+            "TimeOutList": 300, 
+            "Action": 169, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_TOOLS", 
             "KeyName": "BOSE_MORE_SOFTKEY_TOOLS"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 170, 
+            "KeyList": [
                 170
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 170, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_PWRTOGGLE", 
+            "TimeOutList": 300, 
+            "Action": 170, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_PWRTOGGLE", 
             "KeyName": "BOSE_MORE_SOFTKEY_PWRTOGGLE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 171, 
+            "KeyList": [
                 171
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 171, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_POPUPMENU", 
+            "TimeOutList": 300, 
+            "Action": 171, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_POPUPMENU", 
             "KeyName": "BOSE_MORE_SOFTKEY_POPUPMENU"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 172, 
+            "KeyList": [
                 172
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 172, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_TITLEMENU", 
+            "TimeOutList": 300, 
+            "Action": 172, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_TITLEMENU", 
             "KeyName": "BOSE_MORE_SOFTKEY_TITLEMENU"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 173, 
+            "KeyList": [
                 173
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 173, 
-            "EventName": "KEY_EVENT_MORE_SOFTKEY_HELP", 
+            "TimeOutList": 300, 
+            "Action": 173, 
+            "ActionName": "KEY_EVENT_MORE_SOFTKEY_HELP", 
             "KeyName": "BOSE_MORE_SOFTKEY_HELP"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 174, 
+            "KeyList": [
                 174
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 174, 
-            "EventName": "KEY_EVENT_AVAIL_AE", 
+            "TimeOutList": 300, 
+            "Action": 174, 
+            "ActionName": "KEY_EVENT_AVAIL_AE", 
             "KeyName": "KEY_VAL_AVAIL_AE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 175, 
+            "KeyList": [
                 175
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 175, 
-            "EventName": "KEY_EVENT_INTERNET", 
+            "TimeOutList": 300, 
+            "Action": 175, 
+            "ActionName": "KEY_EVENT_INTERNET", 
             "KeyName": "BOSE_INTERNET"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 176, 
+            "KeyList": [
                 176
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 176, 
-            "EventName": "KEY_EVENT_MORE_BT_PAIR_DEVICE", 
-            "KeyName": "BOSE_MORE_BT_PAIR_DEVICE"
+            "TimeOutList": 300, 
+            "Action": 176, 
+            "ActionName": "KEY_EVENT_AVAIL_B0", 
+            "KeyName": "KEY_VAL_AVAIL_B0"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 177, 
+            "KeyList": [
                 177
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 177, 
-            "EventName": "KEY_EVENT_MORE_BT_CLEAR_DEVICES", 
-            "KeyName": "BOSE_MORE_BT_CLEAR_DEVICES"
+            "TimeOutList": 300, 
+            "Action": 177, 
+            "ActionName": "KEY_EVENT_AVAIL_B1", 
+            "KeyName": "KEY_VAL_AVAIL_B1"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 178, 
+            "KeyList": [
                 178
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 178, 
-            "EventName": "KEY_EVENT_CLOSED_CAPTION", 
+            "TimeOutList": 300, 
+            "Action": 178, 
+            "ActionName": "KEY_EVENT_CLOSED_CAPTION", 
             "KeyName": "BOSE_CLOSED_CAPTION"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 179, 
+            "KeyList": [
                 179
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 179, 
-            "EventName": "KEY_EVENT_SOUND_TOUCH_SOURCE", 
+            "TimeOutList": 300, 
+            "Action": 179, 
+            "ActionName": "KEY_EVENT_SOUND_TOUCH_SOURCE", 
             "KeyName": "BOSE_SOUND_TOUCH_SOURCE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 180, 
+            "KeyList": [
                 180
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 180, 
-            "EventName": "KEY_EVENT_AVAIL_B4", 
+            "TimeOutList": 300, 
+            "Action": 180, 
+            "ActionName": "KEY_EVENT_AVAIL_B4", 
             "KeyName": "KEY_VAL_AVAIL_B4"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 181, 
+            "KeyList": [
                 181
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 181, 
-            "EventName": "KEY_EVENT_AVAIL_B5", 
+            "TimeOutList": 300, 
+            "Action": 181, 
+            "ActionName": "KEY_EVENT_AVAIL_B5", 
             "KeyName": "KEY_VAL_AVAIL_B5"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 182, 
+            "KeyList": [
                 182
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 182, 
-            "EventName": "KEY_EVENT_DVR", 
+            "TimeOutList": 300, 
+            "Action": 182, 
+            "ActionName": "KEY_EVENT_DVR", 
             "KeyName": "BOSE_DVR"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 183, 
+            "KeyList": [
                 183
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 183, 
-            "EventName": "KEY_EVENT_TELETEXT", 
+            "TimeOutList": 300, 
+            "Action": 183, 
+            "ActionName": "KEY_EVENT_TELETEXT", 
             "KeyName": "BOSE_TELETEXT"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 184, 
+            "KeyList": [
                 184
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 184, 
-            "EventName": "KEY_EVENT_OPTICAL_1_SOURCE", 
-            "KeyName": "BOSE_OPTICAL_1_SOURCE"
+            "TimeOutList": 300, 
+            "Action": 184, 
+            "ActionName": "KEY_EVENT_AVAIL_B8", 
+            "KeyName": "KEY_VAL_AVAIL_B8"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 185, 
+            "KeyList": [
                 185
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 185, 
-            "EventName": "KEY_EVENT_OPTICAL_2_SOURCE", 
-            "KeyName": "BOSE_OPTICAL_2_SOURCE"
+            "TimeOutList": 300, 
+            "Action": 185, 
+            "ActionName": "KEY_EVENT_AVAIL_B9", 
+            "KeyName": "KEY_VAL_AVAIL_B9"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 186, 
+            "KeyList": [
                 186
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 186, 
-            "EventName": "KEY_EVENT_ANLG_FRONT_SOURCE", 
-            "KeyName": "BOSE_ANLG_FRONT_SOURCE"
+            "TimeOutList": 300, 
+            "Action": 186, 
+            "ActionName": "KEY_EVENT_AVAIL_BA", 
+            "KeyName": "KEY_VAL_AVAIL_BA"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 187, 
+            "KeyList": [
                 187
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 187, 
-            "EventName": "KEY_EVENT_ANLG_1_SOURCE", 
-            "KeyName": "BOSE_ANLG_1_SOURCE"
+            "TimeOutList": 300, 
+            "Action": 187, 
+            "ActionName": "KEY_EVENT_AVAIL_BB", 
+            "KeyName": "KEY_VAL_AVAIL_BB"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 188, 
+            "KeyList": [
                 188
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 188, 
-            "EventName": "KEY_EVENT_ANLG_2_SOURCE", 
-            "KeyName": "BOSE_ANLG_2_SOURCE"
+            "TimeOutList": 300, 
+            "Action": 188, 
+            "ActionName": "KEY_EVENT_AVAIL_BC", 
+            "KeyName": "KEY_VAL_AVAIL_BC"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 189, 
+            "KeyList": [
                 189
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 189, 
-            "EventName": "KEY_EVENT_COAX_1_SOURCE", 
-            "KeyName": "BOSE_COAX_1_SOURCE"
+            "TimeOutList": 300, 
+            "Action": 189, 
+            "ActionName": "KEY_EVENT_AVAIL_BD", 
+            "KeyName": "KEY_VAL_AVAIL_BD"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 190, 
+            "KeyList": [
                 190
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 190, 
-            "EventName": "KEY_EVENT_COAX_2_SOURCE", 
-            "KeyName": "BOSE_COAX_2_SOURCE"
+            "TimeOutList": 300, 
+            "Action": 190, 
+            "ActionName": "KEY_EVENT_AVAIL_BE", 
+            "KeyName": "KEY_VAL_AVAIL_BE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 191, 
+            "KeyList": [
                 191
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 191, 
-            "EventName": "KEY_EVENT_AVAIL_BF", 
+            "TimeOutList": 300, 
+            "Action": 191, 
+            "ActionName": "KEY_EVENT_AVAIL_BF", 
             "KeyName": "KEY_VAL_AVAIL_BF"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 192, 
+            "KeyList": [
                 192
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 192, 
-            "EventName": "KEY_EVENT_UP_ARROW", 
+            "TimeOutList": 300, 
+            "Action": 192, 
+            "ActionName": "KEY_EVENT_UP_ARROW", 
             "KeyName": "BOSE_UP_ARROW"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 193, 
+            "KeyList": [
                 193
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 193, 
-            "EventName": "KEY_EVENT_I_TV", 
+            "TimeOutList": 300, 
+            "Action": 193, 
+            "ActionName": "KEY_EVENT_I_TV", 
             "KeyName": "BOSE_I_TV"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 194, 
+            "KeyList": [
                 194
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 194, 
-            "EventName": "KEY_EVENT_AVAIL_C2", 
+            "TimeOutList": 300, 
+            "Action": 194, 
+            "ActionName": "KEY_EVENT_AVAIL_C2", 
             "KeyName": "KEY_VAL_AVAIL_C2"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 195, 
+            "KeyList": [
                 195
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 195, 
-            "EventName": "KEY_EVENT_AVAIL_C3", 
+            "TimeOutList": 300, 
+            "Action": 195, 
+            "ActionName": "KEY_EVENT_AVAIL_C3", 
             "KeyName": "KEY_VAL_AVAIL_C3"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 196, 
+            "KeyList": [
                 196
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 196, 
-            "EventName": "KEY_EVENT_AVAIL_C4", 
+            "TimeOutList": 300, 
+            "Action": 196, 
+            "ActionName": "KEY_EVENT_AVAIL_C4", 
             "KeyName": "KEY_VAL_AVAIL_C4"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 197, 
+            "KeyList": [
                 197
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 197, 
-            "EventName": "KEY_EVENT_RED", 
+            "TimeOutList": 300, 
+            "Action": 197, 
+            "ActionName": "KEY_EVENT_RED", 
             "KeyName": "BOSE_RED"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 198, 
+            "KeyList": [
                 198
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 198, 
-            "EventName": "KEY_EVENT_GREEN", 
+            "TimeOutList": 300, 
+            "Action": 198, 
+            "ActionName": "KEY_EVENT_GREEN", 
             "KeyName": "BOSE_GREEN"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 199, 
+            "KeyList": [
                 199
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 199, 
-            "EventName": "KEY_EVENT_YELLOW", 
+            "TimeOutList": 300, 
+            "Action": 199, 
+            "ActionName": "KEY_EVENT_YELLOW", 
             "KeyName": "BOSE_YELLOW"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 200, 
+            "KeyList": [
                 200
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 200, 
-            "EventName": "KEY_EVENT_BLUE", 
+            "TimeOutList": 300, 
+            "Action": 200, 
+            "ActionName": "KEY_EVENT_BLUE", 
             "KeyName": "BOSE_BLUE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 201, 
+            "KeyList": [
                 201
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 201, 
-            "EventName": "KEY_EVENT_AVAIL_C9", 
+            "TimeOutList": 300, 
+            "Action": 201, 
+            "ActionName": "KEY_EVENT_AVAIL_C9", 
             "KeyName": "KEY_VAL_AVAIL_C9"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 202, 
+            "KeyList": [
                 202
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 202, 
-            "EventName": "KEY_EVENT_AVAIL_CA", 
+            "TimeOutList": 300, 
+            "Action": 202, 
+            "ActionName": "KEY_EVENT_AVAIL_CA", 
             "KeyName": "KEY_VAL_AVAIL_CA"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 203, 
+            "KeyList": [
                 203
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 203, 
-            "EventName": "KEY_EVENT_AVAIL_CB", 
+            "TimeOutList": 300, 
+            "Action": 203, 
+            "ActionName": "KEY_EVENT_AVAIL_CB", 
             "KeyName": "KEY_VAL_AVAIL_CB"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 204, 
+            "KeyList": [
                 204
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 204, 
-            "EventName": "KEY_EVENT_ASSERT_OFF", 
+            "TimeOutList": 300, 
+            "Action": 204, 
+            "ActionName": "KEY_EVENT_ASSERT_OFF", 
             "KeyName": "BOSE_ASSERT_OFF"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 205, 
+            "KeyList": [
                 205
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 205, 
-            "EventName": "KEY_EVENT_ASSERT_UNMUTE", 
+            "TimeOutList": 300, 
+            "Action": 205, 
+            "ActionName": "KEY_EVENT_ASSERT_UNMUTE", 
             "KeyName": "BOSE_ASSERT_UNMUTE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 206, 
+            "KeyList": [
                 206
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 206, 
-            "EventName": "KEY_EVENT_AVAIL_CE", 
+            "TimeOutList": 300, 
+            "Action": 206, 
+            "ActionName": "KEY_EVENT_AVAIL_CE", 
             "KeyName": "KEY_VAL_AVAIL_CE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 207, 
+            "KeyList": [
                 207
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 207, 
-            "EventName": "KEY_EVENT_AVAIL_CF", 
+            "TimeOutList": 300, 
+            "Action": 207, 
+            "ActionName": "KEY_EVENT_AVAIL_CF", 
             "KeyName": "KEY_VAL_AVAIL_CF"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 208, 
+            "KeyList": [
                 208
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 208, 
-            "EventName": "KEY_EVENT_EPG", 
+            "TimeOutList": 300, 
+            "Action": 208, 
+            "ActionName": "KEY_EVENT_EPG", 
             "KeyName": "BOSE_EPG"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 209, 
+            "KeyList": [
                 209
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 209, 
-            "EventName": "KEY_EVENT_AVAIL_D1", 
+            "TimeOutList": 300, 
+            "Action": 209, 
+            "ActionName": "KEY_EVENT_AVAIL_D1", 
             "KeyName": "KEY_VAL_AVAIL_D1"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 210, 
+            "KeyList": [
                 210
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 210, 
-            "EventName": "KEY_EVENT_AVAIL_D2", 
+            "TimeOutList": 300, 
+            "Action": 210, 
+            "ActionName": "KEY_EVENT_AVAIL_D2", 
             "KeyName": "KEY_VAL_AVAIL_D2"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 211, 
+            "KeyList": [
                 211
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 211, 
-            "EventName": "KEY_EVENT_AVAIL_D3", 
+            "TimeOutList": 300, 
+            "Action": 211, 
+            "ActionName": "KEY_EVENT_AVAIL_D3", 
             "KeyName": "KEY_VAL_AVAIL_D3"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 212, 
+            "KeyList": [
                 212
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 212, 
-            "EventName": "KEY_EVENT_AVAIL_D4", 
+            "TimeOutList": 300, 
+            "Action": 212, 
+            "ActionName": "KEY_EVENT_AVAIL_D4", 
             "KeyName": "KEY_VAL_AVAIL_D4"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 213, 
+            "KeyList": [
                 213
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 213, 
-            "EventName": "KEY_EVENT_AVAIL_D5", 
+            "TimeOutList": 300, 
+            "Action": 213, 
+            "ActionName": "KEY_EVENT_AVAIL_D5", 
             "KeyName": "KEY_VAL_AVAIL_D5"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 214, 
+            "KeyList": [
                 214
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 214, 
-            "EventName": "KEY_EVENT_AVAIL_D6", 
+            "TimeOutList": 300, 
+            "Action": 214, 
+            "ActionName": "KEY_EVENT_AVAIL_D6", 
             "KeyName": "KEY_VAL_AVAIL_D6"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 215, 
+            "KeyList": [
                 215
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 215, 
-            "EventName": "KEY_EVENT_AVAIL_D7", 
+            "TimeOutList": 300, 
+            "Action": 215, 
+            "ActionName": "KEY_EVENT_AVAIL_D7", 
             "KeyName": "KEY_VAL_AVAIL_D7"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 216, 
+            "KeyList": [
                 216
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 216, 
-            "EventName": "KEY_EVENT_AVAIL_D8", 
+            "TimeOutList": 300, 
+            "Action": 216, 
+            "ActionName": "KEY_EVENT_AVAIL_D8", 
             "KeyName": "KEY_VAL_AVAIL_D8"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 217, 
+            "KeyList": [
                 217
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 217, 
-            "EventName": "KEY_EVENT_AVAIL_D9", 
+            "TimeOutList": 300, 
+            "Action": 217, 
+            "ActionName": "KEY_EVENT_AVAIL_D9", 
             "KeyName": "KEY_VAL_AVAIL_D9"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 218, 
+            "KeyList": [
                 218
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 218, 
-            "EventName": "KEY_EVENT_AVAIL_DA", 
+            "TimeOutList": 300, 
+            "Action": 218, 
+            "ActionName": "KEY_EVENT_AVAIL_DA", 
             "KeyName": "KEY_VAL_AVAIL_DA"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 219, 
+            "KeyList": [
                 219
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 219, 
-            "EventName": "KEY_EVENT_AVAIL_DB", 
+            "TimeOutList": 300, 
+            "Action": 219, 
+            "ActionName": "KEY_EVENT_AVAIL_DB", 
             "KeyName": "KEY_VAL_AVAIL_DB"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 220, 
+            "KeyList": [
                 220
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 220, 
-            "EventName": "KEY_EVENT_ASPECT_RATIO", 
+            "TimeOutList": 300, 
+            "Action": 220, 
+            "ActionName": "KEY_EVENT_ASPECT_RATIO", 
             "KeyName": "BOSE_ASPECT_RATIO"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 221, 
+            "KeyList": [
                 221
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 221, 
-            "EventName": "KEY_EVENT_AVAIL_DD", 
+            "TimeOutList": 300, 
+            "Action": 221, 
+            "ActionName": "KEY_EVENT_AVAIL_DD", 
             "KeyName": "KEY_VAL_AVAIL_DD"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 222, 
+            "KeyList": [
                 222
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 222, 
-            "EventName": "KEY_EVENT_AVAIL_DE", 
+            "TimeOutList": 300, 
+            "Action": 222, 
+            "ActionName": "KEY_EVENT_AVAIL_DE", 
             "KeyName": "KEY_VAL_AVAIL_DE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 223, 
+            "KeyList": [
                 223
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 223, 
-            "EventName": "KEY_EVENT_AVAIL_DF", 
+            "TimeOutList": 300, 
+            "Action": 223, 
+            "ActionName": "KEY_EVENT_AVAIL_DF", 
             "KeyName": "KEY_VAL_AVAIL_DF"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 224, 
+            "KeyList": [
                 224
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 224, 
-            "EventName": "KEY_EVENT_ENTER", 
+            "TimeOutList": 300, 
+            "Action": 224, 
+            "ActionName": "KEY_EVENT_ENTER", 
             "KeyName": "BOSE_ENTER"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 225, 
+            "KeyList": [
                 225
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 225, 
-            "EventName": "KEY_EVENT_AVAIL_E1", 
+            "TimeOutList": 300, 
+            "Action": 225, 
+            "ActionName": "KEY_EVENT_AVAIL_E1", 
             "KeyName": "KEY_VAL_AVAIL_E1"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 226, 
+            "KeyList": [
                 226
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 226, 
-            "EventName": "KEY_EVENT_AVAIL_E2", 
+            "TimeOutList": 300, 
+            "Action": 226, 
+            "ActionName": "KEY_EVENT_AVAIL_E2", 
             "KeyName": "KEY_VAL_AVAIL_E2"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 227, 
+            "KeyList": [
                 227
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 227, 
-            "EventName": "KEY_EVENT_AVAIL_E3", 
+            "TimeOutList": 300, 
+            "Action": 227, 
+            "ActionName": "KEY_EVENT_AVAIL_E3", 
             "KeyName": "KEY_VAL_AVAIL_E3"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 228, 
+            "KeyList": [
                 228
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 228, 
-            "EventName": "KEY_EVENT_AVAIL_E4", 
+            "TimeOutList": 300, 
+            "Action": 228, 
+            "ActionName": "KEY_EVENT_AVAIL_E4", 
             "KeyName": "KEY_VAL_AVAIL_E4"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 229, 
+            "KeyList": [
                 229
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 229, 
-            "EventName": "KEY_EVENT_AVAIL_E5", 
+            "TimeOutList": 300, 
+            "Action": 229, 
+            "ActionName": "KEY_EVENT_AVAIL_E5", 
             "KeyName": "KEY_VAL_AVAIL_E5"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 230, 
+            "KeyList": [
                 230
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 230, 
-            "EventName": "KEY_EVENT_AVAIL_E6", 
+            "TimeOutList": 300, 
+            "Action": 230, 
+            "ActionName": "KEY_EVENT_AVAIL_E6", 
             "KeyName": "KEY_VAL_AVAIL_E6"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 231, 
+            "KeyList": [
                 231
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 231, 
-            "EventName": "KEY_EVENT_AVAIL_E7", 
+            "TimeOutList": 300, 
+            "Action": 231, 
+            "ActionName": "KEY_EVENT_AVAIL_E7", 
             "KeyName": "KEY_VAL_AVAIL_E7"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 232, 
+            "KeyList": [
                 232
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 232, 
-            "EventName": "KEY_EVENT_AVAIL_E8", 
+            "TimeOutList": 300, 
+            "Action": 232, 
+            "ActionName": "KEY_EVENT_AVAIL_E8", 
             "KeyName": "KEY_VAL_AVAIL_E8"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 233, 
+            "KeyList": [
                 233
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 233, 
-            "EventName": "KEY_EVENT_AVAIL_E9", 
+            "TimeOutList": 300, 
+            "Action": 233, 
+            "ActionName": "KEY_EVENT_AVAIL_E9", 
             "KeyName": "KEY_VAL_AVAIL_E9"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 234, 
+            "KeyList": [
                 234
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 234, 
-            "EventName": "KEY_EVENT_AVAIL_EA", 
+            "TimeOutList": 300, 
+            "Action": 234, 
+            "ActionName": "KEY_EVENT_AVAIL_EA", 
             "KeyName": "KEY_VAL_AVAIL_EA"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 235, 
+            "KeyList": [
                 235
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 235, 
-            "EventName": "KEY_EVENT_AVAIL_EB", 
+            "TimeOutList": 300, 
+            "Action": 235, 
+            "ActionName": "KEY_EVENT_AVAIL_EB", 
             "KeyName": "KEY_VAL_AVAIL_EB"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 236, 
+            "KeyList": [
                 236
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 236, 
-            "EventName": "KEY_EVENT_AVAIL_EC", 
+            "TimeOutList": 300, 
+            "Action": 236, 
+            "ActionName": "KEY_EVENT_AVAIL_EC", 
             "KeyName": "KEY_VAL_AVAIL_EC"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 237, 
+            "KeyList": [
                 237
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 237, 
-            "EventName": "KEY_EVENT_AVAIL_ED", 
+            "TimeOutList": 300, 
+            "Action": 237, 
+            "ActionName": "KEY_EVENT_AVAIL_ED", 
             "KeyName": "KEY_VAL_AVAIL_ED"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 238, 
+            "KeyList": [
                 238
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 238, 
-            "EventName": "KEY_EVENT_AVAIL_EE", 
+            "TimeOutList": 300, 
+            "Action": 238, 
+            "ActionName": "KEY_EVENT_AVAIL_EE", 
             "KeyName": "KEY_VAL_AVAIL_EE"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 239, 
+            "KeyList": [
                 239
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 239, 
-            "EventName": "KEY_EVENT_AVAIL_EF", 
+            "TimeOutList": 300, 
+            "Action": 239, 
+            "ActionName": "KEY_EVENT_AVAIL_EF", 
             "KeyName": "KEY_VAL_AVAIL_EF"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 240, 
+            "KeyList": [
                 240
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 240, 
-            "EventName": "KEY_EVENT_SPECIAL_FEATURE_3", 
+            "TimeOutList": 300, 
+            "Action": 240, 
+            "ActionName": "KEY_EVENT_SPECIAL_FEATURE_3", 
             "KeyName": "BOSE_SPECIAL_FEATURE_3"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 241, 
+            "KeyList": [
                 241
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 241, 
-            "EventName": "KEY_EVENT_RFREMOTE_BACK_TRIGGER", 
+            "TimeOutList": 300, 
+            "Action": 241, 
+            "ActionName": "KEY_EVENT_RFREMOTE_BACK_TRIGGER", 
             "KeyName": "BOSE_RFREMOTE_BACK_TRIGGER"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 242, 
+            "KeyList": [
                 242
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 242, 
-            "EventName": "KEY_EVENT_RFREMOTE_REPAIR", 
+            "TimeOutList": 300, 
+            "Action": 242, 
+            "ActionName": "KEY_EVENT_RFREMOTE_REPAIR", 
             "KeyName": "BOSE_RFREMOTE_REPAIR"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 243, 
+            "KeyList": [
                 243
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 243, 
-            "EventName": "KEY_EVENT_RFREMOTE_PTS", 
+            "TimeOutList": 300, 
+            "Action": 243, 
+            "ActionName": "KEY_EVENT_RFREMOTE_PTS", 
             "KeyName": "BOSE_RFREMOTE_PTS"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 244, 
+            "KeyList": [
                 244
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 244, 
-            "EventName": "KEY_EVENT_RFREMOTE_FD", 
+            "TimeOutList": 300, 
+            "Action": 244, 
+            "ActionName": "KEY_EVENT_RFREMOTE_FD", 
             "KeyName": "BOSE_RFREMOTE_FD"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 245, 
+            "KeyList": [
                 245
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 245, 
-            "EventName": "KEY_EVENT_AVAIL_F5", 
+            "TimeOutList": 300, 
+            "Action": 245, 
+            "ActionName": "KEY_EVENT_AVAIL_F5", 
             "KeyName": "KEY_VAL_AVAIL_F5"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 246, 
+            "KeyList": [
                 246
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 246, 
-            "EventName": "KEY_EVENT_AVAIL_F6", 
+            "TimeOutList": 300, 
+            "Action": 246, 
+            "ActionName": "KEY_EVENT_AVAIL_F6", 
             "KeyName": "KEY_VAL_AVAIL_F6"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 247, 
+            "KeyList": [
                 247
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 247, 
-            "EventName": "KEY_EVENT_SPECIAL_FEATURE_4", 
+            "TimeOutList": 300, 
+            "Action": 247, 
+            "ActionName": "KEY_EVENT_SPECIAL_FEATURE_4", 
             "KeyName": "BOSE_SPECIAL_FEATURE_4"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 248, 
+            "KeyList": [
                 248
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 248, 
-            "EventName": "KEY_EVENT_AVAIL_F8", 
+            "TimeOutList": 300, 
+            "Action": 248, 
+            "ActionName": "KEY_EVENT_AVAIL_F8", 
             "KeyName": "KEY_VAL_AVAIL_F8"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 249, 
+            "KeyList": [
                 249
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 249, 
-            "EventName": "KEY_EVENT_AVAIL_F9", 
+            "TimeOutList": 300, 
+            "Action": 249, 
+            "ActionName": "KEY_EVENT_AVAIL_F9", 
             "KeyName": "KEY_VAL_AVAIL_F9"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 250, 
+            "KeyList": [
                 250
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 250, 
-            "EventName": "KEY_EVENT_AVAIL_FA", 
+            "TimeOutList": 300, 
+            "Action": 250, 
+            "ActionName": "KEY_EVENT_AVAIL_FA", 
             "KeyName": "KEY_VAL_AVAIL_FA"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 251, 
+            "KeyList": [
                 251
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 251, 
-            "EventName": "KEY_EVENT_AVAIL_FB", 
+            "TimeOutList": 300, 
+            "Action": 251, 
+            "ActionName": "KEY_EVENT_AVAIL_FB", 
             "KeyName": "KEY_VAL_AVAIL_FB"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 252, 
+            "KeyList": [
                 252
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 252, 
-            "EventName": "KEY_EVENT_AVAIL_FC", 
+            "TimeOutList": 300, 
+            "Action": 252, 
+            "ActionName": "KEY_EVENT_AVAIL_FC", 
             "KeyName": "KEY_VAL_AVAIL_FC"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 253, 
+            "KeyList": [
                 253
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 253, 
-            "EventName": "KEY_EVENT_AVAIL_FD", 
+            "TimeOutList": 300, 
+            "Action": 253, 
+            "ActionName": "KEY_EVENT_AVAIL_FD", 
             "KeyName": "KEY_VAL_AVAIL_FD"
         }, 
         {
-            "Keys": [
+            "Origin": 2, 
+            "OriginName": "IR", 
+            "KeyEvent": 254, 
+            "KeyList": [
                 254
             ], 
-            "TimeOut": 300, 
-            "Repeat": false, 
-            "ActionOnTimeout": false, 
-            "Event": 254, 
-            "EventName": "KEY_EVENT_ASSERT_MUTE", 
+            "TimeOutList": 300, 
+            "Action": 254, 
+            "ActionName": "KEY_EVENT_ASSERT_MUTE", 
             "KeyName": "BOSE_ASSERT_MUTE"
         }
     ]
