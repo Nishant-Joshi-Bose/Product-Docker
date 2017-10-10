@@ -1,0 +1,89 @@
+{
+  "KeyTable": [
+    {
+      "Origin": "CONSOLE_BUTTON",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "CONSOLE_KEY_0" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_0",
+      "Comment": "Immediate action processing on key 0 Press."
+    },
+
+    {
+      "Origin": "CONSOLE_BUTTON",
+      "KeyEvent": "RELEASE",
+      "KeyList": [ "CONSOLE_KEY_1" ],
+      "TimeOutList": [ 0 ],
+      "Action": "KEY_ACTION_1",
+      "Comment": "Action processing on release of key 1, TimeOutList value equal/greater than hold time before the release, hold time closest to TimeOutList, if multiple entries found."
+    },
+
+    {
+      "Origin": "CONSOLE_BUTTON",
+      "KeyEvent": "RELEASE",
+      "KeyList": [ "CONSOLE_KEY_2" ],
+      "TimeOutList": [ 500 ],
+      "Action": "KEY_ACTION_2",
+      "Comment": "Action processing on release of key 1, TimeOutList value equal/greater than hold time before the release, hold time closest to TimeOutList, if multiple entries found."
+    },    
+ 
+    {
+      "Origin": "CONSOLE_BUTTON",
+      "KeyEvent": "RELEASE",
+      "KeyList": [ "CONSOLE_KEY_2" ],
+      "TimeOutList": [ 1000 ],
+      "Action": "KEY_ACTION_3",
+      "Comment": "Action processing on release of key 1, TimeOutList value equal/greater than hold time before the release, hold time closest to TimeOutList, if multiple entries found."
+    },
+    {
+      "Origin": "CONSOLE_BUTTON",
+      "KeyEvent": "PRESS_HOLD",
+      "KeyList": [ "CONSOLE_KEY_3" ],
+      "TimeOutList": [ 500 ],
+      "Action": "KEY_ACTION_4",
+      "Comment": "Single buttone press and hold: Press and hold key 3 with hold time mentioned in TimeOutList."
+    },
+    {
+      "Origin": "CONSOLE_BUTTON",
+      "KeyEvent": "PRESS_HOLD",
+      "KeyList": [ "CONSOLE_KEY_1", "CONSOLE_KEY_3" ],
+      "TimeOutList": [ 5000 ],
+      "Action": "KEY_ACTION_5",
+      "Comment": "MultiButton support: Press and hold key 1 and 3 with hold time mentioned in TimeOutList."
+    },
+
+    {
+      "Origin": "CONSOLE_BUTTON",
+      "KeyEvent": "PRESS_HOLD",
+      "KeyList": [ "CONSOLE_KEY_1", "CONSOLE_KEY_2", "CONSOLE_KEY_3" ],
+      "TimeOutList": [ 10000 ],
+      "Action": "KEY_ACTION_6",
+      "Comment": "MultiButton support: Press and hold key 1 and 3 with hold time mentioned in TimeOutList."
+    },
+
+    {
+      "Origin": "CONSOLE_BUTTON",
+      "KeyEvent": "PRESS_HOLD_REPEAT",
+      "KeyList": [ "CONSOLE_KEY_4" ],
+      "TimeOutList": [ 400, 200 ],
+      "Action": "KEY_ACTION_7",
+      "Comment": "Repetitive action: Press and hold key 4 with hold time mentioned in TimeOutList[0] to trigger action, repetitive actions are triggered after every TimeOutList[1] if the button is still pressed."
+    },
+    {
+      "Origin": "CONSOLE_BUTTON",
+      "KeyEvent": "RELEASE_BURST",
+      "KeyList": [ "CONSOLE_KEY_5", "CONSOLE_KEY_5" ],
+      "TimeOutList": [ 500 ],
+      "Action": "KEY_ACTION_8",
+      "Comment": "Burst Key support: Release of key 5 (2 times) in time between key releases less than TimeOutList value between  to trigger action"
+    },
+    {
+      "Origin": "CONSOLE_BUTTON",
+      "KeyEvent": "RELEASE_BURST",
+      "KeyList": [ "CONSOLE_KEY_5", "CONSOLE_KEY_5", "CONSOLE_KEY_5" ],
+      "TimeOutList": [ 500 ],
+      "Action": "KEY_ACTION_9",
+      "Comment": "Burst Key support: Release of key 5 (3 times) in time between key releases less than TimeOutList value between  to trigger action"
+    }
+  ]
+}
