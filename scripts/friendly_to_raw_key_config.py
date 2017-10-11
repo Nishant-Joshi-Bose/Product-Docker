@@ -7,7 +7,7 @@ from pycparser import c_parser, c_ast, parse_file
 import argparse
 
 """
-Given a key list enumeration file, an events enumeration file, and a 
+Given a key list enumeration file, an actions enumeration file, and a 
 "friendly" configuration file, generate a key configuration file suitable 
 for parsing by the CastleKeyHandler component
 """
@@ -68,16 +68,13 @@ def build_enum_map(ast, name):
         cur_val += 1
   return ret
 
-def build_events_table():
-  pass
-
 def main():
   argparser = argparse.ArgumentParser('generate key config')
   # friendly input file
   argparser.add_argument('--inputcfg', dest='inputcfg', required = True,
     help='\"Friendly\" json config file')
   # input header file with action enumeration
-  argparser.add_argument('--events', dest='events_file', required = True,
+  argparser.add_argument('--actions', dest='actions_file', required = True,
     help='Event values output header file')
   # key definitions for different origins, all optional
   argparser.add_argument('--console', dest='console_file',
@@ -109,7 +106,7 @@ def main():
       ast_keys.append(parse_file(f, use_cpp=True))
     else:
       ast_keys.append(None)
-  ast_events = parse_file(args.events_file, use_cpp=True)
+  ast_actions = parse_file(args.actions_file, use_cpp=True)
 
   # build enum maps from ASTs
   key_maps = []
@@ -120,7 +117,7 @@ def main():
       key_maps.append(None)
 
   # and one for the events
-  event_map = build_enum_map(ast_events, 'KEY_EVENT')
+  action_map = build_enum_map(ast_actions, 'KEY_ACTION')
 
   ifile = open(args.inputcfg).read()
   j = json.loads(ifile)
@@ -140,7 +137,7 @@ def main():
     if not event_name in EVENT_NAMES:
       print('Entry {}, Unknown event {}, skipping'.format(i, event_name))
       continue
-    if not action_name in event_map:
+    if not action_name in action_map:
       print('Entry {}, Unknown action {}, skipping'.format(i, action_name))
       continue
 
@@ -149,7 +146,7 @@ def main():
     event = EVENT_NAMES[event_name]
     e['Origin'] = origin
     e['KeyEvent'] = event
-    e['Action'] = event_map[action_name]
+    e['Action'] = action_map[action_name]
  
     key_map = key_maps[origin]
     if key_map is None:
