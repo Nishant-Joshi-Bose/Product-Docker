@@ -1,7 +1,7 @@
 Key Configuration Generator
 ===========================
 
-The key configuration generator script (friendly_to_raw_key_config.py) simplifies maintenance of the .json configuration file for the CastleKeyHandler component by allowing the user to specify keys and actions by their symbolic names from enumerations in the source code.  The script takes as input a "friendly" .json configuration file, a C/C++ header file containing key value enumerations, and a header file containing key action enumerations.  The script outputs a .json configuration file suitable for use with the CastleKeyHandler component (enumerations converted to numeric values).
+The key configuration generator script (friendly_to_raw_key_config.py) simplifies maintenance of the .json configuration file for the CastleKeyHandler component by allowing the user to specify keys and actions by their symbolic names from enumerations in the source code.  The script takes as input a "friendly" .json configuration file, C/C++ header files containing key value enumerations (one per possible source, each source is optional), and a header file containing key action enumerations.  The script outputs a .json configuration file suitable for use with the CastleKeyHandler component (enumerations converted to numeric values).
 
 # Configuration fields
 
@@ -9,7 +9,7 @@ The following fields can be specified in a "friendly" format which will then be 
 
 ## KeyList
 
-The values in the "KeyList" array must be of type KEY_VALUE (see KeyValue.h).  
+The values in the "KeyList" array must be of type KEY_VALUE.  The key list header file for each source must contain define keys for each source as "typedef enum { ... } KEY_VALUE;"
 
 ## Action
 
@@ -37,16 +37,23 @@ The "KeyEvent" can be any of the following strings
 
 # Generating the configuration file
 
-The following files are input to the configuration generator.
+Run the sript without any arguments for help.
 
-* Config/TestKeyConfig.json 
-* ProductController/include/KeyValue.h 
-* ProductController/include/KeyEvents.h 
+./scripts/friendly_to_raw_key_config.py 
+usage: generate key config [-h] --inputcfg INPUTCFG --events EVENTS_FILE
+                           [--console CONSOLE_FILE] [--cap CAP_FILE]
+                           [--ir IR_FILE] [--rf RF_FILE] [--cec CEC_FILE]
+                           [--net NET_FILE] [--tap TAP_FILE] --outputcfg
+                           OUTPUTCFG
+
+* inputcfg -  "friendly" .json configuration file
+* outputcfg - "raw" .json confiugration file
+* events - header file containing list of actions ("typedef enum { ... } KEY_EVENT;") 
+* console/cap/ir/rf/cec/net/tap - header file containing list of keys for corresponding origin ("typedef enum KEY_VALUE;"); only required if you have keys defined from the corresponding origin
 
 TestKeyConfig.json contains a sample "friendly" configuration.  
 
 Run the configuration generator as follows (KeyConfiguration.json will be the output).
 
-```./scripts/friendly_to_raw_key_config.py Config/TestKeyConfig.json ProductController/include/KeyValue.h ProductController/include/KeyEvents.h Config/KeyConfiguration.json
 
 
