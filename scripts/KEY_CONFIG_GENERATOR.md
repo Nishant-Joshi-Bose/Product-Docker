@@ -55,5 +55,6 @@ TestKeyConfig.json contains a sample "friendly" configuration.
 
 Run the configuration generator as follows (KeyConfiguration.json will be the output).
 
+```./scripts/friendly_to_raw_key_config.py --inputcfg=./Config/TestKeyConfig.json --ir=./ProductController/include/IRKeyValues.h --console=./ProductController/include/ConsoleKeyValues.h --events=./ProductController/include/KeyEvents.h --outputcfg=./Config/KeyConfiguration.json
 
 
