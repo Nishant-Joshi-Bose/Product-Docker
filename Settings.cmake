@@ -47,9 +47,11 @@ COMPONENT(NETWORK_SERVICE_DIR CastleNetworkService-${SDK})
 COMPONENT(A4VVIDEOMANAGER_DIR A4VVideoManagerService)
 
 find_program(CCACHE_EXE ccache)
-if(CCACHE_EXE)
-  MESSAGE(STATUS "ccache is available, using it")
+if(CCACHE_EXE AND USE_CCACHE)
+  MESSAGE(STATUS "ccache is available and enabled, using it")
   set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_EXE}")
+else()
+  MESSAGE(STATUS "ccache not found or not enabled (install ccache and set USE_CCACHE=1 to enable)")
 endif()
 
 IF(${SDK} STREQUAL "native")
