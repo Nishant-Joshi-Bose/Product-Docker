@@ -123,7 +123,7 @@
     {
       "Origin": "IR",
       "KeyEvent": "PRESS",
-      "KeyList": [ "KEY_VAL_AVAIL_11" ],
+      "KeyList": [ "BOSE_CONNECT" ],
       "TimeOutList": [],
       "Action": "KEY_ACTION_CONNECT",
       "Comment": "connect"
@@ -131,7 +131,7 @@
     {
       "Origin": "IR",
       "KeyEvent": "PRESS",
-      "KeyList": [ "KEY_VAL_AVAIL_12" ],
+      "KeyList": [ "BOSE_ACTION" ],
       "TimeOutList": [],
       "Action": "KEY_ACTION_ACTION",
       "Comment": "vpa"
@@ -167,7 +167,7 @@
     {
       "Origin": "IR",
       "KeyEvent": "PRESS_HOLD",
-      "KeyList": [ "BOSE_ON_OFF", "BOSE_QUICK_SKIP" ],
+      "KeyList": [ "BOSE_FD" ],
       "TimeOutList": [ 5000 ],
       "Action": "KEY_ACTION_FACTORY_DEFAULT",
       "Comment": "factory default"
@@ -175,7 +175,7 @@
     {
       "Origin": "IR",
       "KeyEvent": "PRESS_HOLD",
-      "KeyList": [ "BOSE_SOUND_TOUCH_SOURCE", "BOSE_QUICK_SKIP" ],
+      "KeyList": [ "BOSE_WIFI_OFF" ],
       "TimeOutList": [ 3000 ],
       "Action": "KEY_ACTION_WIFI_OFF",
       "Comment": "wifi off"
@@ -183,7 +183,7 @@
     {
       "Origin": "IR",
       "KeyEvent": "PRESS_HOLD",
-      "KeyList": [ "BOSE_TV_SOURCE", "BOSE_QUICK_REPLAY" ],
+      "KeyList": [ "BOSE_AP_SETUP" ],
       "TimeOutList": [ 3000 ],
       "Action": "KEY_ACTION_AP_SETUP",
       "Comment": "ap setup"
@@ -191,12 +191,11 @@
     {
       "Origin": "IR",
       "KeyEvent": "PRESS_HOLD",
-      "KeyList": [ "BOSE_BLUETOOTH_SOURCE", "BOSE_PLAY" ],
+      "KeyList": [ "BOSE_PAIR_SPKR" ],
       "TimeOutList": [ 3000 ],
       "Action": "KEY_ACTION_PAIR_SPEAKERS",
       "Comment": "pair speakers"
     },
-
 
 
 
@@ -212,7 +211,7 @@
     {
       "Origin": "CAPSENSE",
       "KeyEvent": "PRESS",
-      "KeyList": [ "KEY_VAL_AVAIL_12" ],
+      "KeyList": [ "BOSE_ACTION" ],
       "TimeOutList": [],
       "Action": "KEY_ACTION_ACTION",
       "Comment": "vpa"
