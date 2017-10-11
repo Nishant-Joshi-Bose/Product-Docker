@@ -1,253 +1,275 @@
 {
     "KeyTable": [
         {
-            "Origin": 0, 
-            "Comment": "Immediate action processing on key 0 Press.", 
+            "Origin": 2, 
+            "Comment": "power toggle", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 9000, 
+            "Action": 0, 
             "KeyList": [
-                1234
-            ]
-        }, 
-        {
-            "Origin": 0, 
-            "Comment": "Action processing on release of key 1, TimeOutList value equal/greater than hold time before the release, hold time closest to TimeOutList, if multiple entries found.", 
-            "KeyEvent": 1, 
-            "TimeOutList": [
-                0
-            ], 
-            "Action": 9001, 
-            "KeyList": [
-                1235
-            ]
-        }, 
-        {
-            "Origin": 0, 
-            "Comment": "Action processing on release of key 1, TimeOutList value equal/greater than hold time before the release, hold time closest to TimeOutList, if multiple entries found.", 
-            "KeyEvent": 1, 
-            "TimeOutList": [
-                500
-            ], 
-            "Action": 9002, 
-            "KeyList": [
-                1236
-            ]
-        }, 
-        {
-            "Origin": 0, 
-            "Comment": "Action processing on release of key 1, TimeOutList value equal/greater than hold time before the release, hold time closest to TimeOutList, if multiple entries found.", 
-            "KeyEvent": 1, 
-            "TimeOutList": [
-                1000
-            ], 
-            "Action": 9003, 
-            "KeyList": [
-                1236
-            ]
-        }, 
-        {
-            "Origin": 0, 
-            "Comment": "Single buttone press and hold: Press and hold key 3 with hold time mentioned in TimeOutList.", 
-            "KeyEvent": 2, 
-            "TimeOutList": [
-                500
-            ], 
-            "Action": 9004, 
-            "KeyList": [
-                1237
-            ]
-        }, 
-        {
-            "Origin": 0, 
-            "Comment": "MultiButton support: Press and hold key 1 and 3 with hold time mentioned in TimeOutList.", 
-            "KeyEvent": 2, 
-            "TimeOutList": [
-                5000
-            ], 
-            "Action": 9005, 
-            "KeyList": [
-                1235, 
-                1237
-            ]
-        }, 
-        {
-            "Origin": 0, 
-            "Comment": "MultiButton support: Press and hold key 1 and 3 with hold time mentioned in TimeOutList.", 
-            "KeyEvent": 2, 
-            "TimeOutList": [
-                10000
-            ], 
-            "Action": 9006, 
-            "KeyList": [
-                1235, 
-                1236, 
-                1237
-            ]
-        }, 
-        {
-            "Origin": 0, 
-            "Comment": "Repetitive action: Press and hold key 4 with hold time mentioned in TimeOutList[0] to trigger action, repetitive actions are triggered after every TimeOutList[1] if the button is still pressed.", 
-            "KeyEvent": 3, 
-            "TimeOutList": [
-                400, 
-                200
-            ], 
-            "Action": 9007, 
-            "KeyList": [
-                1238
-            ]
-        }, 
-        {
-            "Origin": 0, 
-            "Comment": "Burst Key support: Release of key 5 (2 times) in time between key releases less than TimeOutList value between  to trigger action", 
-            "KeyEvent": 4, 
-            "TimeOutList": [
-                500
-            ], 
-            "Action": 9008, 
-            "KeyList": [
-                1239, 
-                1239
-            ]
-        }, 
-        {
-            "Origin": 0, 
-            "Comment": "Burst Key support: Release of key 5 (3 times) in time between key releases less than TimeOutList value between  to trigger action", 
-            "KeyEvent": 4, 
-            "TimeOutList": [
-                500
-            ], 
-            "Action": 9009, 
-            "KeyList": [
-                1239, 
-                1239, 
-                1239
+                76
             ]
         }, 
         {
             "Origin": 2, 
-            "Comment": "Immediate action processing on key 0 Press.", 
+            "Comment": "source select", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 9000, 
+            "Action": 1, 
             "KeyList": [
-                0
+                129
             ]
         }, 
         {
             "Origin": 2, 
-            "Comment": "Action processing on release of key 1, TimeOutList value equal/greater than hold time before the release, hold time closest to TimeOutList, if multiple entries found.", 
-            "KeyEvent": 1, 
-            "TimeOutList": [
-                0
-            ], 
-            "Action": 9001, 
+            "Comment": "preset 1", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 2, 
+            "KeyList": [
+                65
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "preset 2", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 3, 
+            "KeyList": [
+                66
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "preset 3", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 4, 
+            "KeyList": [
+                67
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "preset 4", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 5, 
+            "KeyList": [
+                68
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "preset 5", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 6, 
+            "KeyList": [
+                69
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "preset 6", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 7, 
+            "KeyList": [
+                70
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "volume up", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 8, 
+            "KeyList": [
+                3
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "volume down", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 9, 
+            "KeyList": [
+                2
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "play/pause", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 10, 
+            "KeyList": [
+                85
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "skip forward", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 11, 
+            "KeyList": [
+                90
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "skip back", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 12, 
+            "KeyList": [
+                89
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "mute toggle", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 13, 
             "KeyList": [
                 1
             ]
         }, 
         {
             "Origin": 2, 
-            "Comment": "Action processing on release of key 1, TimeOutList value equal/greater than hold time before the release, hold time closest to TimeOutList, if multiple entries found.", 
-            "KeyEvent": 1, 
-            "TimeOutList": [
-                500
-            ], 
-            "Action": 9002, 
+            "Comment": "select soundtouch", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 14, 
             "KeyList": [
-                2
+                179
             ]
         }, 
         {
             "Origin": 2, 
-            "Comment": "Action processing on release of key 1, TimeOutList value equal/greater than hold time before the release, hold time closest to TimeOutList, if multiple entries found.", 
-            "KeyEvent": 1, 
-            "TimeOutList": [
-                1000
-            ], 
-            "Action": 9003, 
+            "Comment": "connect", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 15, 
             "KeyList": [
-                2
+                17
             ]
         }, 
         {
             "Origin": 2, 
-            "Comment": "Single buttone press and hold: Press and hold key 3 with hold time mentioned in TimeOutList.", 
-            "KeyEvent": 2, 
-            "TimeOutList": [
-                500
-            ], 
-            "Action": 9004, 
+            "Comment": "vpa", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 16, 
             "KeyList": [
-                3
+                18
             ]
         }, 
         {
             "Origin": 2, 
-            "Comment": "MultiButton support: Press and hold key 1 and 3 with hold time mentioned in TimeOutList.", 
+            "Comment": "select tv", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 17, 
+            "KeyList": [
+                14
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "thumbs up", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 18, 
+            "KeyList": [
+                107
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "thumbs down", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 19, 
+            "KeyList": [
+                106
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "factory default", 
             "KeyEvent": 2, 
             "TimeOutList": [
                 5000
             ], 
-            "Action": 9005, 
+            "Action": 20, 
             "KeyList": [
-                1, 
-                3
+                76, 
+                90
             ]
         }, 
         {
             "Origin": 2, 
-            "Comment": "MultiButton support: Press and hold key 1 and 3 with hold time mentioned in TimeOutList.", 
+            "Comment": "wifi off", 
             "KeyEvent": 2, 
             "TimeOutList": [
-                10000
+                3000
             ], 
-            "Action": 9006, 
+            "Action": 21, 
             "KeyList": [
-                1, 
-                2, 
-                3
+                179, 
+                90
             ]
         }, 
         {
             "Origin": 2, 
-            "Comment": "Repetitive action: Press and hold key 4 with hold time mentioned in TimeOutList[0] to trigger action, repetitive actions are triggered after every TimeOutList[1] if the button is still pressed.", 
-            "KeyEvent": 3, 
+            "Comment": "ap setup", 
+            "KeyEvent": 2, 
             "TimeOutList": [
-                400, 
-                200
+                3000
             ], 
-            "Action": 9007, 
+            "Action": 22, 
             "KeyList": [
-                4
+                14, 
+                89
             ]
         }, 
         {
             "Origin": 2, 
-            "Comment": "Burst Key support: Release of key 5 (2 times) in time between key releases less than TimeOutList value between  to trigger action", 
-            "KeyEvent": 4, 
+            "Comment": "pair speakers", 
+            "KeyEvent": 2, 
             "TimeOutList": [
-                500
+                3000
             ], 
-            "Action": 9008, 
+            "Action": 23, 
             "KeyList": [
-                5, 
-                5
+                129, 
+                85
             ]
         }, 
         {
-            "Origin": 2, 
-            "Comment": "Burst Key support: Release of key 5 (3 times) in time between key releases less than TimeOutList value between  to trigger action", 
-            "KeyEvent": 4, 
-            "TimeOutList": [
-                500
-            ], 
-            "Action": 9009, 
+            "Origin": 1, 
+            "Comment": "mute toggle", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 13, 
             "KeyList": [
-                5, 
-                5, 
-                5
+                1
+            ]
+        }, 
+        {
+            "Origin": 1, 
+            "Comment": "vpa", 
+            "KeyEvent": 0, 
+            "TimeOutList": [], 
+            "Action": 16, 
+            "KeyList": [
+                18
             ]
         }
     ]
