@@ -17,7 +17,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@c7595fc9e696f633e2c8faa396f2a8ec96c7037a"
+    "selected_version": "master@6dca54a2fddd2c7d5ec8dc26533ca5ce3f938a85"
   },
   {
     "name": "googletest-qc8017_32",
@@ -25,23 +25,23 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-48+1c7701c"
+    "selected_version": "Continuous/master/0.1.1-58+c7c5bc3"
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Continuous/master/1.0.0-14+942fdc2"
+    "selected_version": "Continuous/master/1.0.0-16+3d1dfec"
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-37+d3b6602"
+    "selected_version": "Continuous/master/0.1.0-44+9c23331"
   },
   {
     "name": "Riviera-HSP",
-    "selected_version": "Continuous/dev/1.0-5-g4d51833"
+    "selected_version": "Continuous/dev/1.1-1-ga38c2b7"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-Bluetooth/2017-10-02_1442"
+    "selected_version": "Continuous/Castle-Fork-Bluetooth/2017-10-11_1011"
   },
   {
     "name": "RivieraLpmService",
@@ -53,7 +53,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-09-26_1901"
+    "selected_version": "Continuous/Castle-Fork/2017-10-03_1202"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -65,14 +65,14 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-43+046662f"
+    "selected_version": "Continuous/master/0.1.0-47+907120e"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-2+313e046"
+    "selected_version": "Continuous/master/0.0.1-3+2f41306"
   },
   {
     "name": "KeyHandler-native",
-    "selected_version": "Continuous/master/0.0.1-2+313e046"
+    "selected_version": "Continuous/master/0.0.1-3+2f41306"
   }
 ]

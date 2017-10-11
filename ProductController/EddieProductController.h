@@ -9,7 +9,6 @@
 
 #include "ProductController.h"
 #include "EddieProductControllerHsm.h"
-#include "FrontDoorClientIF.h"
 #include "NotifyTargetTaskIF.h"
 #include "ProtoPersistenceIF.h"
 #include "EddieProductControllerStateTop.h"
@@ -201,7 +200,6 @@ private:
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
     ProductPb::Language                         m_systemLanguage;
 
-    std::shared_ptr<FrontDoorClientIF>          m_FrontDoorClientIF;
     ProductCliClient                            m_productCliClient;
 
     bool                                        m_isCapsReady = false;
