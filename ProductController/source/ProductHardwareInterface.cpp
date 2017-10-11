@@ -672,7 +672,9 @@ bool ProductHardwareInterface::RebootRequest( )
         BOSE_DEBUG( s_logger, "An LPM reboot request is being sent." );
     }
 
-    m_LpmClient->Reboot( );
+    IpcRebootRequest_t reboot;
+    reboot.set_type( REBOOT_TYPE_SYSTEM );
+    m_LpmClient->Reboot( reboot );
 
     return true;
 }
