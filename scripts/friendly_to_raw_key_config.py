@@ -73,38 +73,103 @@ def build_events_table():
 
 def main():
   argparser = argparse.ArgumentParser('generate key config')
-  argparser.add_argument('config_file', help='\"friendly\" json config file')
-  argparser.add_argument('lpm_key_file', help='LPM key values header')
-  argparser.add_argument('events_file', help='Event values output')
-  argparser.add_argument('key_config_file', help='Key config json output')
+  # friendly input file
+  argparser.add_argument('--inputcfg', dest='inputcfg', required = True,
+    help='\"Friendly\" json config file')
+  # input header file with action enumeration
+  argparser.add_argument('--events', dest='events_file', required = True,
+    help='Event values output header file')
+  # key definitions for different origins, all optional
+  argparser.add_argument('--console', dest='console_file',
+    help='Console key values header')
+  argparser.add_argument('--cap', dest='cap_file',
+    help='Capsense key values header')
+  argparser.add_argument('--ir', dest='ir_file',
+    help='IR key values header')
+  argparser.add_argument('--rf', dest='rf_file',
+    help='RF key values header')
+  argparser.add_argument('--cec', dest='cec_file',
+    help='CEC key values header')
+  argparser.add_argument('--net', dest='net_file',
+    help='Net key values header')
+  argparser.add_argument('--tap', dest='tap_file',
+    help='TAP key values header')
+  # output configuration to generate
+  argparser.add_argument('--outputcfg', dest='outputcfg', required = True,
+    help='Key config json output')
   args = argparser.parse_args()
 
+  key_files = (args.console_file, args.cap_file, args.ir_file, args.rf_file,
+      args.cec_file, args.net_file, args.tap_file)
+
   # build ASTs from the header files
-  ast_keys = parse_file(args.lpm_key_file, use_cpp=True)
+  ast_keys = []
+  for f in key_files:
+    if f is not None:
+      ast_keys.append(parse_file(f, use_cpp=True))
+    else:
+      ast_keys.append(None)
   ast_events = parse_file(args.events_file, use_cpp=True)
 
-  # harvest the useful information from the ASTs
-  key_map = build_enum_map(ast_keys, 'KEY_VALUE')
+  # build enum maps from ASTs
+  key_maps = []
+  for a in ast_keys:
+    if a is not None:
+      key_maps.append(build_enum_map(a, 'KEY_VALUE'))
+    else:
+      key_maps.append(None)
+
+  # and one for the events
   event_map = build_enum_map(ast_events, 'KEY_EVENT')
 
-  ifile = open(args.config_file).read()
+  ifile = open(args.inputcfg).read()
   j = json.loads(ifile)
 
   # transmogrify the key table
   keymap = {'KeyTable' : []}
 
-  for e in j['KeyTable']:
-    e['Origin'] = ORIGIN_NAMES[e['Origin']]
-    e['KeyEvent'] = EVENT_NAMES[e['KeyEvent']]
-    e['Action'] = event_map[e['Action']]
-  
-    for k in range(len(e['KeyList'])):
-      e['KeyList'][k] = key_map[e['KeyList'][k]] 
+  for i, e in enumerate(j['KeyTable']):
+    discard = 0
+    # sanity-check entry
+    origin_name = e['Origin']
+    event_name = e['KeyEvent']
+    action_name = e['Action']
+    if not origin_name in ORIGIN_NAMES:
+      print('Entry {}, Unknown origin {}, skipping'.format(i, origin_name))
+      continue
+    if not event_name in EVENT_NAMES:
+      print('Entry {}, Unknown event {}, skipping'.format(i, event_name))
+      continue
+    if not action_name in event_map:
+      print('Entry {}, Unknown action {}, skipping'.format(i, action_name))
+      continue
 
-    keymap['KeyTable'].append(e)
+    # replace with numeric values
+    origin = ORIGIN_NAMES[origin_name]
+    event = EVENT_NAMES[event_name]
+    e['Origin'] = origin
+    e['KeyEvent'] = event
+    e['Action'] = event_map[action_name]
+ 
+    key_map = key_maps[origin]
+    if key_map is None:
+      print('Entry {}, No key file supplied for origin {}, skipping'.format(i, origin_name))
+      continue
+
+    for k in range(len(e['KeyList'])):
+      key = e['KeyList'][k]
+      if not key in key_map:
+        print('Entry {} / {}, Unknown key {}, skipping entry'.format(i, k, key))
+        discard = 1
+        break
+      else:
+        e['KeyList'][k] = key_map[key]
+  
+    if discard == 0:
+      keymap['KeyTable'].append(e)
 
   s = json.dumps(keymap, indent=4)
-  with io.FileIO(args.key_config_file, "w") as file:
+  with io.FileIO(args.outputcfg, "w") as file:
     file.write(s)
   
 if __name__ == '__main__':
