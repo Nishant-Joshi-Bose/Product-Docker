@@ -1,176 +1,222 @@
 {
   "KeyTable": [
     {
-      "Origin": "CONSOLE_BUTTON",
+      "Origin": "IR",
       "KeyEvent": "PRESS",
-      "KeyList": [ "CONSOLE_KEY_0" ],
+      "KeyList": [ "BOSE_ON_OFF" ],
       "TimeOutList": [],
-      "Action": "KEY_ACTION_0",
-      "Comment": "Immediate action processing on key 0 Press."
-    },
-
-    {
-      "Origin": "CONSOLE_BUTTON",
-      "KeyEvent": "RELEASE",
-      "KeyList": [ "CONSOLE_KEY_1" ],
-      "TimeOutList": [ 0 ],
-      "Action": "KEY_ACTION_1",
-      "Comment": "Action processing on release of key 1, TimeOutList value equal/greater than hold time before the release, hold time closest to TimeOutList, if multiple entries found."
-    },
-
-    {
-      "Origin": "CONSOLE_BUTTON",
-      "KeyEvent": "RELEASE",
-      "KeyList": [ "CONSOLE_KEY_2" ],
-      "TimeOutList": [ 500 ],
-      "Action": "KEY_ACTION_2",
-      "Comment": "Action processing on release of key 1, TimeOutList value equal/greater than hold time before the release, hold time closest to TimeOutList, if multiple entries found."
-    },    
- 
-    {
-      "Origin": "CONSOLE_BUTTON",
-      "KeyEvent": "RELEASE",
-      "KeyList": [ "CONSOLE_KEY_2" ],
-      "TimeOutList": [ 1000 ],
-      "Action": "KEY_ACTION_3",
-      "Comment": "Action processing on release of key 1, TimeOutList value equal/greater than hold time before the release, hold time closest to TimeOutList, if multiple entries found."
-    },
-    {
-      "Origin": "CONSOLE_BUTTON",
-      "KeyEvent": "PRESS_HOLD",
-      "KeyList": [ "CONSOLE_KEY_3" ],
-      "TimeOutList": [ 500 ],
-      "Action": "KEY_ACTION_4",
-      "Comment": "Single buttone press and hold: Press and hold key 3 with hold time mentioned in TimeOutList."
-    },
-    {
-      "Origin": "CONSOLE_BUTTON",
-      "KeyEvent": "PRESS_HOLD",
-      "KeyList": [ "CONSOLE_KEY_1", "CONSOLE_KEY_3" ],
-      "TimeOutList": [ 5000 ],
-      "Action": "KEY_ACTION_5",
-      "Comment": "MultiButton support: Press and hold key 1 and 3 with hold time mentioned in TimeOutList."
-    },
-
-    {
-      "Origin": "CONSOLE_BUTTON",
-      "KeyEvent": "PRESS_HOLD",
-      "KeyList": [ "CONSOLE_KEY_1", "CONSOLE_KEY_2", "CONSOLE_KEY_3" ],
-      "TimeOutList": [ 10000 ],
-      "Action": "KEY_ACTION_6",
-      "Comment": "MultiButton support: Press and hold key 1 and 3 with hold time mentioned in TimeOutList."
-    },
-
-    {
-      "Origin": "CONSOLE_BUTTON",
-      "KeyEvent": "PRESS_HOLD_REPEAT",
-      "KeyList": [ "CONSOLE_KEY_4" ],
-      "TimeOutList": [ 400, 200 ],
-      "Action": "KEY_ACTION_7",
-      "Comment": "Repetitive action: Press and hold key 4 with hold time mentioned in TimeOutList[0] to trigger action, repetitive actions are triggered after every TimeOutList[1] if the button is still pressed."
-    },
-    {
-      "Origin": "CONSOLE_BUTTON",
-      "KeyEvent": "RELEASE_BURST",
-      "KeyList": [ "CONSOLE_KEY_5", "CONSOLE_KEY_5" ],
-      "TimeOutList": [ 500 ],
-      "Action": "KEY_ACTION_8",
-      "Comment": "Burst Key support: Release of key 5 (2 times) in time between key releases less than TimeOutList value between  to trigger action"
-    },
-    {
-      "Origin": "CONSOLE_BUTTON",
-      "KeyEvent": "RELEASE_BURST",
-      "KeyList": [ "CONSOLE_KEY_5", "CONSOLE_KEY_5", "CONSOLE_KEY_5" ],
-      "TimeOutList": [ 500 ],
-      "Action": "KEY_ACTION_9",
-      "Comment": "Burst Key support: Release of key 5 (3 times) in time between key releases less than TimeOutList value between  to trigger action"
+      "Action": "KEY_ACTION_POWER",
+      "Comment": "power toggle"
     },
     {
       "Origin": "IR",
       "KeyEvent": "PRESS",
-      "KeyList": [ "IR_KEY_0" ],
+      "KeyList": [ "BOSE_BLUETOOTH_SOURCE" ],
       "TimeOutList": [],
-      "Action": "KEY_ACTION_0",
-      "Comment": "Immediate action processing on key 0 Press."
+      "Action": "KEY_ACTION_SOURCE",
+      "Comment": "source select"
     },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "BOSE_NUMBER_1" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_PRESET_1",
+      "Comment": "preset 1"
+    },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "BOSE_NUMBER_2" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_PRESET_2",
+      "Comment": "preset 2"
+    },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "BOSE_NUMBER_3" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_PRESET_3",
+      "Comment": "preset 3"
+    },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "BOSE_NUMBER_4" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_PRESET_4",
+      "Comment": "preset 4"
+    },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "BOSE_NUMBER_5" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_PRESET_5",
+      "Comment": "preset 5"
+    },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "BOSE_NUMBER_6" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_PRESET_6",
+      "Comment": "preset 6"
+    },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "BOSE_VOLUME_UP" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_VOLUME_UP",
+      "Comment": "volume up"
+    },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "BOSE_VOLUME_DOWN" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_VOLUME_DOWN",
+      "Comment": "volume down"
+    },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "BOSE_PLAY" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_PLAY_PAUSE",
+      "Comment": "play/pause"
+    },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "BOSE_QUICK_SKIP" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_SKIP_FORWARD",
+      "Comment": "skip forward"
+    },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "BOSE_QUICK_REPLAY" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_SKIP_BACK",
+      "Comment": "skip back"
+    },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "BOSE_MUTE" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_MUTE",
+      "Comment": "mute toggle"
+    },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "BOSE_SOUND_TOUCH_SOURCE" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_SOUNDTOUCH",
+      "Comment": "select soundtouch"
+    },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "KEY_VAL_AVAIL_11" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_CONNECT",
+      "Comment": "connect"
+    },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "KEY_VAL_AVAIL_12" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_ACTION",
+      "Comment": "vpa"
+    },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "BOSE_TV_SOURCE" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_TV",
+      "Comment": "select tv"
+    },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "BOSE_PAGE_THUMBS_UP" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_THUMB_UP",
+      "Comment": "thumbs up"
+    },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "BOSE_PAGE_THUMBS_DOWN" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_THUMB_DOWN",
+      "Comment": "thumbs down"
+    },
+
+
+
 
     {
       "Origin": "IR",
-      "KeyEvent": "RELEASE",
-      "KeyList": [ "IR_KEY_1" ],
-      "TimeOutList": [ 0 ],
-      "Action": "KEY_ACTION_1",
-      "Comment": "Action processing on release of key 1, TimeOutList value equal/greater than hold time before the release, hold time closest to TimeOutList, if multiple entries found."
-    },
-
-    {
-      "Origin": "IR",
-      "KeyEvent": "RELEASE",
-      "KeyList": [ "IR_KEY_2" ],
-      "TimeOutList": [ 500 ],
-      "Action": "KEY_ACTION_2",
-      "Comment": "Action processing on release of key 1, TimeOutList value equal/greater than hold time before the release, hold time closest to TimeOutList, if multiple entries found."
-    },    
- 
-    {
-      "Origin": "IR",
-      "KeyEvent": "RELEASE",
-      "KeyList": [ "IR_KEY_2" ],
-      "TimeOutList": [ 1000 ],
-      "Action": "KEY_ACTION_3",
-      "Comment": "Action processing on release of key 1, TimeOutList value equal/greater than hold time before the release, hold time closest to TimeOutList, if multiple entries found."
-    },
-    {
-      "Origin": "IR",
       "KeyEvent": "PRESS_HOLD",
-      "KeyList": [ "IR_KEY_3" ],
-      "TimeOutList": [ 500 ],
-      "Action": "KEY_ACTION_4",
-      "Comment": "Single buttone press and hold: Press and hold key 3 with hold time mentioned in TimeOutList."
-    },
-    {
-      "Origin": "IR",
-      "KeyEvent": "PRESS_HOLD",
-      "KeyList": [ "IR_KEY_1", "IR_KEY_3" ],
+      "KeyList": [ "BOSE_ON_OFF", "BOSE_QUICK_SKIP" ],
       "TimeOutList": [ 5000 ],
-      "Action": "KEY_ACTION_5",
-      "Comment": "MultiButton support: Press and hold key 1 and 3 with hold time mentioned in TimeOutList."
+      "Action": "KEY_ACTION_FACTORY_DEFAULT",
+      "Comment": "factory default"
     },
-
     {
       "Origin": "IR",
       "KeyEvent": "PRESS_HOLD",
-      "KeyList": [ "IR_KEY_1", "IR_KEY_2", "IR_KEY_3" ],
-      "TimeOutList": [ 10000 ],
-      "Action": "KEY_ACTION_6",
-      "Comment": "MultiButton support: Press and hold key 1 and 3 with hold time mentioned in TimeOutList."
+      "KeyList": [ "BOSE_SOUND_TOUCH_SOURCE", "BOSE_QUICK_SKIP" ],
+      "TimeOutList": [ 3000 ],
+      "Action": "KEY_ACTION_WIFI_OFF",
+      "Comment": "wifi off"
+    },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS_HOLD",
+      "KeyList": [ "BOSE_TV_SOURCE", "BOSE_QUICK_REPLAY" ],
+      "TimeOutList": [ 3000 ],
+      "Action": "KEY_ACTION_AP_SETUP",
+      "Comment": "ap setup"
+    },
+    {
+      "Origin": "IR",
+      "KeyEvent": "PRESS_HOLD",
+      "KeyList": [ "BOSE_BLUETOOTH_SOURCE", "BOSE_PLAY" ],
+      "TimeOutList": [ 3000 ],
+      "Action": "KEY_ACTION_PAIR_SPEAKERS",
+      "Comment": "pair speakers"
     },
 
-    {
-      "Origin": "IR",
-      "KeyEvent": "PRESS_HOLD_REPEAT",
-      "KeyList": [ "IR_KEY_4" ],
-      "TimeOutList": [ 400, 200 ],
-      "Action": "KEY_ACTION_7",
-      "Comment": "Repetitive action: Press and hold key 4 with hold time mentioned in TimeOutList[0] to trigger action, repetitive actions are triggered after every TimeOutList[1] if the button is still pressed."
-    },
-    {
-      "Origin": "IR",
-      "KeyEvent": "RELEASE_BURST",
-      "KeyList": [ "IR_KEY_5", "IR_KEY_5" ],
-      "TimeOutList": [ 500 ],
-      "Action": "KEY_ACTION_8",
-      "Comment": "Burst Key support: Release of key 5 (2 times) in time between key releases less than TimeOutList value between  to trigger action"
-    },
-    {
-      "Origin": "IR",
-      "KeyEvent": "RELEASE_BURST",
-      "KeyList": [ "IR_KEY_5", "IR_KEY_5", "IR_KEY_5" ],
-      "TimeOutList": [ 500 ],
-      "Action": "KEY_ACTION_9",
-      "Comment": "Burst Key support: Release of key 5 (3 times) in time between key releases less than TimeOutList value between  to trigger action"
-    }
 
+
+
+
+    {
+      "Origin": "CAPSENSE",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "BOSE_MUTE" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_MUTE",
+      "Comment": "mute toggle"
+    },
+    {
+      "Origin": "CAPSENSE",
+      "KeyEvent": "PRESS",
+      "KeyList": [ "KEY_VAL_AVAIL_12" ],
+      "TimeOutList": [],
+      "Action": "KEY_ACTION_ACTION",
+      "Comment": "vpa"
+    },
 
   ]
 }
