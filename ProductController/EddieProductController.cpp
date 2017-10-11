@@ -20,6 +20,7 @@ static DPrint s_logger( "EddieProductController" );
 namespace ProductApp
 {
 const std::string g_ProductPersistenceDir = "product-persistence/";
+const std::string CONFIG_FILE = "/opt/Bose/etc/KeyConfiguration.json";
 
 EddieProductController::EddieProductController( std::string const& ProductName ):
     ProductController( ProductName ),
@@ -29,7 +30,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_EddieProductControllerStateSetup( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop, *this ),
     m_EddieProductControllerStateNetworkStandby( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop, *this ),
     m_LpmClient(),
-    m_KeyHandler( *GetTask(), m_CliClientMT ),
+    m_KeyHandler( *GetTask(), m_CliClientMT, CONFIG_FILE ),
     m_deviceManager( GetTask(), *this ),
     m_cachedStatus(),
     m_productSource( m_FrontDoorClientIF, *GetTask() )
@@ -91,7 +92,12 @@ void EddieProductController::RegisterLpmEvents()
 
 void EddieProductController::RegisterKeyHandler()
 {
-    m_KeyHandler.RegisterKeyHandler( EddieProductController::KeyInformationCallBack, this );
+    auto func = [this]( KeyHandlerUtil::ActionType_t result )
+    {
+        HandleIntends( result );
+    };
+    auto cb = std::make_shared<AsyncCallback<KeyHandlerUtil::ActionType_t> > ( func, GetTask() );
+    m_KeyHandler.RegisterKeyHandler( cb );
 }
 
 void EddieProductController::RegisterEndPoints()
@@ -179,25 +185,21 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
 {
     BOSE_DEBUG( s_logger, __func__ );
 
-    if( keyInformation.has_keyorigin() && keyInformation.has_keystate() && keyInformation.has_keyid() )
+    if( keyInformation.has_keyorigin() &&
+        keyInformation.has_keystate() &&
+        keyInformation.has_keyid() )
     {
         BOSE_DEBUG( s_logger, "Received key Information : keyorigin:%d,"
                     " keystate:%d, keyid:%d",
                     keyInformation.keyorigin(),
                     keyInformation.keystate(), keyInformation.keyid() );
-        // Feed it into the keyHandler : Coming soon.
-        if( KeyHandlerUtil::KeyRepeatManager *ptrRepeatMgr = m_KeyHandler.RepeatMgr( keyInformation.keyorigin() ) )
-        {
-            m_CliClientMT.SendAsyncResponse( "Received from LPM, KeySource: CONSOLE, State " + \
-                                             std::to_string( keyInformation.keystate() ) + " KeyId " + \
-                                             std::to_string( keyInformation.keyid() ) );
-            ptrRepeatMgr->HandleKeys( keyInformation.keyorigin(),
-                                      keyInformation.keystate(), keyInformation.keyid() );
-        }
-        else
-        {
-            s_logger.LogError( "Source %d not registered", keyInformation.has_keyorigin() );
-        }
+
+        m_CliClientMT.SendAsyncResponse( "Received from LPM, KeySource: CONSOLE, State " + \
+                                         std::to_string( keyInformation.keystate() ) + " KeyId " + \
+                                         std::to_string( keyInformation.keyid() ) );
+        m_KeyHandler.HandleKeys( keyInformation.keyorigin(),
+                                 keyInformation.keystate(),
+                                 keyInformation.keyid() );
         //Work around code since we can't call non-static functions from within static EddieProductController::KeyInformationCallBack function.
         //This will be fixed in new KeyHandler component.
         if( ( keyInformation.keystate() == 1 ) &&
@@ -209,7 +211,7 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
     }
     else
     {
-        BOSE_DEBUG( s_logger, "One or more of the parameters are not present"
+        BOSE_ERROR( s_logger, "One or more of the parameters are not present"
                     " in the message: keyorigin_P:%d, keystate_P:%d, keyid_P:%d",
                     keyInformation.has_keyorigin(),
                     keyInformation.has_keystate(),
@@ -447,9 +449,12 @@ void EddieProductController::HandleGetDeviceStateRequest( const Callback<::Devic
     resp.Send( currentState );
 }
 
-void EddieProductController::KeyInformationCallBack( const int result, void *context )
+void EddieProductController::HandleIntends( KeyHandlerUtil::ActionType_t result )
 {
-    s_logger.LogInfo( "Keys have been translated to intend = %d", result );
+    BOSE_INFO( s_logger, "Translated Intend %d", result );
+    m_CliClientMT.SendAsyncResponse( "Translated intend = " + \
+                                     std::to_string( result ) );
+    return;
 }
 
 void EddieProductController::RegisterCliClientCmds()
