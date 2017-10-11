@@ -4,9 +4,10 @@
 // the #ifdef-style of include guard here is just to play nice
 // with the key generator script, as pycparser doesn't like pragmas
 
-typedef enum 
+typedef enum
 {
-    KEY_ACTION_POWER,
+    // start at 1, CastleKeyHandler appears to reserve action 0
+    KEY_ACTION_POWER = 1,
     KEY_ACTION_SOURCE,
     KEY_ACTION_PRESET_1,
     KEY_ACTION_PRESET_2,
