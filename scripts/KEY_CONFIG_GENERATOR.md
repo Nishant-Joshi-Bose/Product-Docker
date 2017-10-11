@@ -13,7 +13,7 @@ The values in the "KeyList" array must be of type KEY_VALUE.  The key list heade
 
 ## Action
 
-The "Action" must be of type KEY_EVENT (see KeyEvents.h).  Generate the "raw" configuration file with the following command:
+The "Action" must be of type KEY_ACTION (see KeyActions.h).  Generate the "raw" configuration file with the following command:
 
 ## Origin
 
@@ -27,7 +27,7 @@ The "Origin" can be any of the following strings
 * "TAP"
 
 ## KeyEvent
-
+S
 The "KeyEvent" can be any of the following strings
 * "PRESS"
 * "RELEASE"
@@ -40,7 +40,7 @@ The "KeyEvent" can be any of the following strings
 Run the sript without any arguments for help.
 
 ./scripts/friendly_to_raw_key_config.py 
-usage: generate key config [-h] --inputcfg INPUTCFG --events EVENTS_FILE
+usage: generate key config [-h] --inputcfg INPUTCFG --actions ACTION_FILE
                            [--console CONSOLE_FILE] [--cap CAP_FILE]
                            [--ir IR_FILE] [--rf RF_FILE] [--cec CEC_FILE]
                            [--net NET_FILE] [--tap TAP_FILE] --outputcfg
@@ -48,13 +48,13 @@ usage: generate key config [-h] --inputcfg INPUTCFG --events EVENTS_FILE
 
 * inputcfg -  "friendly" .json configuration file
 * outputcfg - "raw" .json confiugration file
-* events - header file containing list of actions ("typedef enum { ... } KEY_EVENT;") 
+* actions - header file containing list of actions ("typedef enum { ... } KEY_ACTION;") 
 * console/cap/ir/rf/cec/net/tap - header file containing list of keys for corresponding origin ("typedef enum KEY_VALUE;"); only required if you have keys defined from the corresponding origin
 
 TestKeyConfig.json contains a sample "friendly" configuration.  
 
 Run the configuration generator as follows (KeyConfiguration.json will be the output).
 
-```./scripts/friendly_to_raw_key_config.py --inputcfg=./Config/TestKeyConfig.json --ir=./ProductController/include/IRKeyValues.h --console=./ProductController/include/ConsoleKeyValues.h --events=./ProductController/include/KeyEvents.h --outputcfg=./Config/KeyConfiguration.json
 
+```./scripts/friendly_to_raw_key_config.py  --inputcfg=./Config/UserKeyConfig.json --actions=./ProductController/include/KeyActions.h --cap=/scratch/components-cache/trunk@911/RivieraLPM/include/RivieraLPM_KeyValues.h --ir=/scratch/components-cache/trunk@911/RivieraLPM/include/RivieraLPM_KeyValues.h --outputcfg=./Config/KeyConfiguration.json
 
