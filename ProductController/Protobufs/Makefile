@@ -7,6 +7,7 @@ PROTO_SOURCES = \
   ConfigurationStatus.proto \
   Language.proto \
   DeviceManager.proto \
+  LightBarController.proto \
 
 # Where to search for imported *.proto files.
 PROTO_IMPORT_DIRS := \

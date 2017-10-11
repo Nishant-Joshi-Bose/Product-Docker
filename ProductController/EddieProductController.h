@@ -16,14 +16,19 @@
 #include "EddieProductControllerStateSetup.h"
 #include "EddieProductControllerStateNetworkStandby.h"
 #include "DeviceManager.h"
+#include "LightBarController.h"
 #include "ConfigurationStatus.pb.h"
 #include "SoundTouchInterface/AllowSourceSelect.pb.h"
 #include "Language.pb.h"
 #include "DeviceManager.pb.h"
+#include "NetManager.pb.h"
 #include "SoundTouchInterface/CapsInitializationStatus.pb.h"
+#include "SoundTouchInterface/ContentSelectionService.pb.h"
+#include "SoundTouchInterface/PlayerService.pb.h"
 #include "ProductCliClient.h"
 #include "LpmClientIF.h"
 #include "KeyHandler.h"
+#include "ProductSource.h"
 
 namespace ProductApp
 {
@@ -68,10 +73,13 @@ private:
     void PersistSystemLanguageCode();
     void PersistSystemConfigurationStatus();
     void HandleAllowSourceSelectCliCmd( const std::list<std::string> & argList, std::string& response );
+    void HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus );
 
 public:
     // Handle Key Information received from LPM
     void HandleLpmKeyInformation( IpcKeyInformation_t keyInformation );
+
+    void HandleAUXSourceKeyPress();
 
     static void KeyInformationCallBack( const int result, void *context );
 
@@ -105,6 +113,13 @@ public:
     void HandleCAPSReady( bool capsReady );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @name  HandleNetworkModuleReady
+/// @brief Function to call when NetworkService is ready to send/receive request.
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void HandleNetworkModuleReady( bool networkModuleReady );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @name  IsLanguageSet
 /// @brief true if system language is initialized
 /// @return bool
@@ -135,7 +150,7 @@ public:
     void HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @name  HandleGetLanguageRequest
+/// @name  HandlePostLanguageRequest
 /// @brief Handles POST request for "/system/language" endpoint.
 /// @return void
 ////////////////////////////////////////////////////////////////////////////////
@@ -199,11 +214,15 @@ private:
     ProtoPersistenceIF::ProtoPersistencePtr     m_LanguagePersistence = nullptr;
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
     ProductPb::Language                         m_systemLanguage;
+    NetManager::Protobuf::NetworkStatus         m_cachedStatus;
 
     ProductCliClient                            m_productCliClient;
 
+    std::unique_ptr<LightBarController>         m_lightbarController;
+    ProductSource                               m_productSource;
     bool                                        m_isCapsReady = false;
     bool                                        m_isLPMReady  = true;
+    bool                                        m_isNetworkModuleReady  = false;
 };
 }
 // namespace
