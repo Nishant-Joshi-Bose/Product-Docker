@@ -46,6 +46,12 @@ COMPONENT(KEYHANDLER_DIR KeyHandler-${SDK})
 COMPONENT(NETWORK_SERVICE_DIR CastleNetworkService-${SDK})
 COMPONENT(A4VVIDEOMANAGER_DIR A4VVideoManagerService)
 
+find_program(CCACHE_EXE ccache)
+if(CCACHE_EXE)
+  MESSAGE(STATUS "ccache is available, using it")
+  set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_EXE}")
+endif()
+
 IF(${SDK} STREQUAL "native")
   ADD_DEFINITIONS("-DENABLE_HOST_AUDIO_OUT -DNATIVE_BUILD")
   SET(CMAKE_INSTALL_RPATH "/opt/centos/glibc-2.15-toolchain/lib")
