@@ -83,7 +83,6 @@ INCLUDE_DIRECTORIES(
   ${PROTOBUF_DIR}/include
   ${CASTLELIBS_DIR}/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/STS
   ${CASTLE_NETWORK_SERVICE_DIR}/include
 )
 
