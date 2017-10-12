@@ -49,7 +49,3 @@ TARGET_LINK_LIBRARIES(Eddie
 )
 
 INSTALL(TARGETS Eddie DESTINATION ${OUTPUT_BIN_DIR})
-
-# -----------------------------------------------------------------------------
-
-ADD_SUBDIRECTORY(LocalUI)
