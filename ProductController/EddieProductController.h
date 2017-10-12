@@ -81,7 +81,7 @@ public:
 
     void HandleAUXSourceKeyPress();
 
-    static void KeyInformationCallBack( const int result, void *context );
+    void HandleIntends( KeyHandlerUtil::ActionType_t result );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  SendAllowSourceSelectNotification
