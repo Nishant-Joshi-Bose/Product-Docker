@@ -54,7 +54,7 @@ fi
 cfg=Release
 here=$(cd "$(dirname $0)" && echo "$PWD") || error_exit ${FUNCNAME[0]}
 wspace=$(cd "$here/.." && echo "$PWD") || error_exit ${FUNCNAME[0]}
-riviera_hsp=$(components get Riviera-HSP installed_location) || error_exit ${FUNCNAME[0]}
+riviera_hsp_images=$(components get Riviera-HSP-Images installed_location) || error_exit ${FUNCNAME[0]}
 product_ipk=$wspace/builds/$cfg/product.ipk
 utils_dir=$wspace/install/utils
 version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
@@ -118,7 +118,7 @@ create_eddie_ext4 () {
 
 # copy HSP, utilities, version, lpm firmware
 echo " Adding Riviera-HSP to package "
-$CP "$riviera_hsp"/images/* "$stage_package_dir/" || error_exit " Adding Riviera-HSP to package "
+$CP "$riviera_hsp_images"/* "$stage_package_dir/" || error_exit " Adding Riviera-HSP to package "
 echo " Adding utilities to package "
 $CP "$utils_dir" "$stage_package_dir"/  || error_exit ${FUNCNAME[0]} " Adding utilities to package "
 echo " Adding version to package "
