@@ -48,7 +48,11 @@
     "selected_version": "Release/master/0.1.0-51+a919b10"
   },
   {
-    "name": "Riviera-HSP",
+    "name": "Riviera-HSP-Images",
+    "selected_version": "Continuous/dev/1.1-5-g2fee9b7"
+  },
+  {
+    "name": "Riviera-Toolchain",
     "selected_version": "Release/master/1.1"
   },
   {
@@ -81,6 +85,6 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@2d6c132ad"
+    "selected_version": "dev@20431ae"
   }
 ]
