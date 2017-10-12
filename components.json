@@ -41,11 +41,11 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/0.0.2-37+242e485"
+    "selected_version": "Continuous/master/0.0.2-48+ec28fa8"
   },
   {
     "name": "CastlePassport-native",
-    "selected_version": "Continuous/master/0.0.2-37+242e485"
+    "selected_version": "Continuous/master/0.0.2-48+ec28fa8"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -65,7 +65,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-12_0936"
+    "selected_version": "Continuous/Castle-Fork/2017-10-12_1646"
   },
   {
     "name": "RivieraLpmService",
