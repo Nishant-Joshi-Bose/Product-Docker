@@ -35,18 +35,17 @@ ADD_EXECUTABLE(Eddie
 
 TARGET_LINK_LIBRARIES(Eddie
   CastleProductControllerCommon
-  ${SOUNDTOUCH_SDK_LIBS}
   LpmClient
   FrontDoorClient
+  NetworkServiceClient
+  KeyHandler
   ShelbyUtils
   BoseLibs
-  jsoncpp
-  protobuf
-  tinyxml
+  libjsoncpp.a
+  libprotobuf.a
+  libTinyXml.a
   pthread
   rt
-  KeyHandler
-  NetworkServiceClient
 )
 
 INSTALL(TARGETS Eddie DESTINATION ${OUTPUT_BIN_DIR})
