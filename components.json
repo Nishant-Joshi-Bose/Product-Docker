@@ -57,7 +57,7 @@
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@7082fb0363ec4b0829b5105bed1389869618c2d0"
+    "selected_version": "master@651a3be12def815a56b4f83c1a8f6762d3e2765d"
   },
   {
     "name": "AVS-qc8017_32",
@@ -77,7 +77,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-2+313e046"
+    "selected_version": "Continuous/master/0.0.1-12+8427a6f"
   },
   {
     "name": "A4VVideoManagerService",
