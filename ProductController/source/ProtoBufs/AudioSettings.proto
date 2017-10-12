@@ -1,146 +1,77 @@
 package ProductPb;
-
 import "ContentItem.proto";
 
-enum PERSISTENCE_LEVEL
+message AudioProperties
 {
-        PERSISTENCE_SESSION = 0;
-        PERSISTENCE_GLOBAL = 1;
-        PERSISTENCE_CONTENT_ITEM = 2;
+    optional int32 min = 1;
+    optional int32 max = 2;
+    optional uint32 step = 3;
+    repeated string supportedPersistence = 4;
 }
 
-enum CONTENT_TYPE
-{
-        AUDIO_CONTENT_UNSPECIFIED = 0;
-        AUDIO_CONTENT_VIDEO = 1;
-        AUDIO_CONTENT_AUDIO = 2;
-}
-enum AUDIO_MODE
-{
-    AUDIO_MODE_UNSPECIFIED = 0;
-    AUDIO_MODE_DIRECT      = 1;
-    AUDIO_MODE_NORMAL      = 2;
-    AUDIO_MODE_DIALOG      = 3;
-    AUDIO_MODE_NIGHT       = 4;
-}
-
-/*
-enum AUDIO_SETTING_NAME
-{
-        AUDIO_CONTENT_TYPE = 0;
-        AUDIO_AV_SYNC_DELAY = 1;
-        AUDIO_MODES = 2;
-        AUDIO_TONE = 3;
-        AUDIO_LEVEL = 4;
-        AUDIO_OFFSET_ADJUSTMENT = 5;
-}
-*/
-
-message AudioContentType
-{
-        message PROPERTIES
-        {
-                repeated CONTENT_TYPE supportedTypes = 1;
-                repeated PERSISTENCE_LEVEL supportedPersistence = 2;
-        }
-        optional CONTENT_TYPE value = 1;
-        optional PERSISTENCE_LEVEL persistence = 2;
-        optional ContentItem contentItem = 3;	// only needed when persistence == PERSISTENCE_CONTENT_ITEM
-        optional PROPERTIES properties = 4;
-}
-message AudioModes
-{
-        message PROPERTIES
-        {
-                repeated AUDIO_MODE supportedAudioModes = 1;
-                repeated PERSISTENCE_LEVEL supportedPersistence = 2;
-        }
-        optional AUDIO_MODE value = 1;
-        optional PERSISTENCE_LEVEL persistence = 2;
-        optional ContentItem contentItem = 3;	// only needed when persistence == PERSISTENCE_CONTENT_ITEM
-        optional PROPERTIES properties = 4;
-}
 message AudioBassLevel
 {
-        message PROPERTIES
-        {
-                optional uint32 min = 1;
-                optional uint32 max = 2;
-                optional uint32 step = 3;
-                repeated PERSISTENCE_LEVEL supportedPersistence = 4;
-        }
-        optional uint32 value = 1;
-        optional PERSISTENCE_LEVEL persistence = 2;
-        optional ContentItem contentItem = 3;	// only needed when persistence == PERSISTENCE_CONTENT_ITEM
-        optional PROPERTIES properties = 4;
+    optional int32 value = 1;
+    optional string persistence = 2;
+    optional ContentItem contentItem = 3;
+    optional AudioProperties properties = 4;
 }
 message AudioTrebleLevel
 {
-        message PROPERTIES
-        {
-                optional uint32 min = 1;
-                optional uint32 max = 2;
-                optional uint32 step = 3;
-                repeated PERSISTENCE_LEVEL supportedPersistence = 4;
-        }
-        optional uint32 value = 1;
-        optional PERSISTENCE_LEVEL persistence = 2;
-        optional ContentItem contentItem = 3;	// only needed when persistence == PERSISTENCE_CONTENT_ITEM
-        optional PROPERTIES properties = 4;
+    optional int32 value = 1;
+    optional string persistence = 2;
+    optional ContentItem contentItem = 3;
+    optional AudioProperties properties = 4;
 }
 message AudioCenterLevel
 {
-        message PROPERTIES
-        {
-                optional uint32 min = 1;
-                optional uint32 max = 2;
-                optional uint32 step = 3;
-                repeated PERSISTENCE_LEVEL supportedPersistence = 4;
-        }
-        optional uint32 value = 1;
-        optional PERSISTENCE_LEVEL persistence = 2;
-        optional ContentItem contentItem = 3;	// only needed when persistence == PERSISTENCE_CONTENT_ITEM
-        optional PROPERTIES properties = 4;
+    optional int32 value = 1;
+    optional string persistence = 2;
+    optional ContentItem contentItem = 3;
+    optional AudioProperties properties = 4;
 }
 message AudioSurroundLevel
 {
-        message PROPERTIES
-        {
-                optional uint32 min = 1;
-                optional uint32 max = 2;
-                optional uint32 step = 3;
-                repeated PERSISTENCE_LEVEL supportedPersistence = 4;
-        }
-        optional uint32 value = 1;
-        optional PERSISTENCE_LEVEL persistence = 2;
-        optional ContentItem contentItem = 3;	// only needed when persistence == PERSISTENCE_CONTENT_ITEM
-        optional PROPERTIES properties = 4;
+    optional int32 value = 1;
+    optional string persistence = 2;
+    optional ContentItem contentItem = 3;
+    optional AudioProperties properties = 4;
 }
-message AudioOffsetAdjustment
+message AudioVolumeOffset
 {
-        message PROPERTIES
-        {
-                optional uint32 min = 1;
-                optional uint32 max = 2;
-                optional uint32 step = 3;
-                repeated PERSISTENCE_LEVEL supportedPersistence = 4;
-        }
-        optional uint32 value = 1;
-        optional PERSISTENCE_LEVEL persistence = 2;
-        optional ContentItem contentItem = 3;	// only needed when persistence == PERSISTENCE_CONTENT_ITEM
-        optional PROPERTIES properties = 4;
+    optional int32 value = 1;
+    optional string persistence = 2;
+    optional ContentItem contentItem = 3;
+    optional AudioProperties properties = 4;
 }
-message AudioAVSyncDelay
+message AudioAvSync
 {
-        message PROPERTIES
-        {
-                optional uint32 min = 1;
-                optional uint32 max = 2;
-                optional uint32 step = 3;
-                repeated PERSISTENCE_LEVEL supportedPersistence = 4;
-        }
-        optional CONTENT_TYPE value = 1;
-        optional PERSISTENCE_LEVEL persistence = 2;
-        optional ContentItem contentItem = 3;	// only needed when persistence == PERSISTENCE_CONTENT_ITEM
-        optional PROPERTIES properties = 4;
+    optional int32 value = 1;
+    optional string persistence = 2;
+    optional ContentItem contentItem = 3;
+    optional AudioProperties properties = 4;
+}
+message AudioMode
+{
+    message AudioModeProperties
+    {
+        repeated string supportedValues = 1;
+        repeated string supportedPersistence = 2;
+    }
+    optional string value = 1;
+    optional string persistence = 2;
+    optional ContentItem contentItem = 3;
+    optional AudioModeProperties properties = 4;
+}
+message AudioContentType
+{
+    message ContentTypeProperties
+    {
+        repeated string supportedValues = 1;
+        repeated string supportedPersistence = 2;
+    }
+    optional string value = 1;
+    optional string persistence = 2;
+    optional ContentItem contentItem = 3;
+    optional ContentTypeProperties properties = 4;
 }

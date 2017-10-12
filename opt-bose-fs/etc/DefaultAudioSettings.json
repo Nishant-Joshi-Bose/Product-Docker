@@ -1,0 +1,128 @@
+{
+	"version": {
+		"major": 0,
+		"minor": 1
+	},
+	"configurations": {
+		"audioBassLevel": {
+			"currentPersistenceLevel": "global",
+			"persistenceSession": false,
+			"properties": {
+				"min": -100,
+				"max": 100,
+				"step": 20,
+				"supportedPersistence": ["session", "global", "contentItem"]
+			}
+		},
+		"audioTrebleLevel": {
+			"currentPersistenceLevel": "global",
+			"persistenceSession": false,
+			"properties": {
+				"min": -100,
+				"max": 100,
+				"step": 20,
+				"supportedPersistence": ["session", "global", "contentItem"]
+			}
+		},
+		"audioCenterLevel": {
+			"currentPersistenceLevel": "global",
+			"persistenceSession": false,
+			"properties": {
+				"min": -100,
+				"max": 100,
+				"step": 20,
+				"supportedPersistence": ["session", "global", "contentItem"]
+			}
+		},
+		"audioSurroundLevel": {
+			"currentPersistenceLevel": "global",
+			"persistenceSession": false,
+			"properties": {
+				"min": -100,
+				"max": 100,
+				"step": 20,
+				"supportedPersistence": ["session", "global", "contentItem"]
+			}
+		},
+		"audioVolumeOffset": {
+			"currentPersistenceLevel": "global",
+			"persistenceSession": false,
+			"properties": {
+				"min": -100,
+				"max": 100,
+				"step": 20,
+				"supportedPersistence": ["session", "global", "contentItem"]
+			}
+		},
+		"audioAvSync": {
+			"currentPersistenceLevel": "global",
+			"persistenceSession": false,
+			"properties": {
+				"min": -100,
+				"max": 100,
+				"step": 20,
+				"supportedPersistence": ["session", "global", "contentItem"]
+			}
+		},
+		"audioMode": {
+			"currentPersistenceLevel": "global",
+			"persistenceSession": false,
+			"properties": {
+				"supportedValues": ["night", "direct", "dialog", "film"],
+				"supportedPersistence": ["session", "global", "contentItem"]
+			}
+		},
+		"audioContentType": {
+			"currentPersistenceLevel": "global",
+			"persistenceSession": false,
+			"properties": {
+				"supportedValues": ["unspecified", "audio", "video"],
+				"supportedPersistence": ["session", "global", "contentItem"]
+			}
+		}	
+	},
+	"values": {
+		"global": {
+			"audioBassLevel": 0,
+			"audioTrebleLevel": 0,
+			"audioCenterLevel": 0,
+			"audioSurroundLevel": 0,
+			"audioVolumeOffset": 0,
+			"audioAvSync": 0,
+			"audioMode": "direct",
+			"audioContentType": "unspecified"
+		},
+		"session": {
+			"audioBassLevel": 0,
+			"audioTrebleLevel": 0,
+			"audioCenterLevel": 0,
+			"audioSurroundLevel": 0,
+			"audioVolumeOffset": 0,
+			"audioAvSync": 0,
+			"audioMode": "direct",
+			"audioContentType": "unspecified"
+		},
+		"contentItem": {
+			"tv": {
+				"audioBassLevel": 0,
+				"audioTrebleLevel": 0,
+				"audioCenterLevel": 0,
+				"audioSurroundLevel": 0,
+				"audioVolumeOffset": 0,
+				"audioAvSync": 0,
+				"audioMode": "direct",
+				"audioContentType": "unspecified"
+			}
+		}
+	},
+	"defaultValues": {
+		"audioBassLevel": 0,
+		"audioTrebleLevel": 0,
+		"audioCenterLevel": 0,
+		"audioSurroundLevel": 0,
+		"audioVolumeOffset": 0,
+		"audioAvSync": 0,
+		"audioMode": "direct",
+		"audioContentType": "unspecified"
+	}
+}
