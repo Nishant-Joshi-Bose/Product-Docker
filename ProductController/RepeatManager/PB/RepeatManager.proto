@@ -1,8 +1,0 @@
-package RepeatManager;
-
-message Repeat
-{
-    optional uint32 keyNumber = 1  [default = 1000];
-    optional uint32 keyState = 2;
-    optional uint32 xPosition = 3;
-}
