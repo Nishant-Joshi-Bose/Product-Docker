@@ -20,7 +20,7 @@ static DPrint s_logger( "EddieProductController" );
 namespace ProductApp
 {
 const std::string g_ProductPersistenceDir = "product-persistence/";
-const std::string CONFIG_FILE = "/opt/Bose/etc/KeyConfiguration.json";
+const std::string KEY_CONFIG_FILE = "/opt/Bose/etc/KeyConfiguration.json";
 
 EddieProductController::EddieProductController( std::string const& ProductName ):
     ProductController( ProductName ),
@@ -30,7 +30,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_EddieProductControllerStateSetup( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop, *this ),
     m_EddieProductControllerStateNetworkStandby( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop, *this ),
     m_LpmClient(),
-    m_KeyHandler( *GetTask(), m_CliClientMT, CONFIG_FILE ),
+    m_KeyHandler( *GetTask(), m_CliClientMT, KEY_CONFIG_FILE ),
     m_deviceManager( GetTask(), *this ),
     m_cachedStatus(),
     m_productSource( m_FrontDoorClientIF, *GetTask() )
