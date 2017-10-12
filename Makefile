@@ -27,6 +27,7 @@ CASTLEPRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControll
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 A4VVIDEOMANAGERSERVICE_DIR = $(shell components get A4VVideoManagerService installed_location)
 #A4VREMOTECOMMUNICATIONSERVICE_DIR = $(shell components get A4VRemoteCommunicationService installed_location)
+CMAKE_USE_CCACHE := $(USE_CCACHE)
 
 .PHONY: generated_sources
 generated_sources: check_tools version-files
@@ -47,7 +48,7 @@ endif
 .PHONY: cmake_build
 cmake_build: generated_sources | $(BUILDS_DIR) astyle
 	rm -rf $(BUILDS_DIR)/CMakeCache.txt $(BUILDS_DIR)/CMakeFiles
-	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR)
+	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
 
 .PHONY: product-ipk
