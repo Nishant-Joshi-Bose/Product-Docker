@@ -8,6 +8,7 @@ INCLUDE_DIRECTORIES(
   ${KEYHANDLER_DIR}/include
   DeviceManager
   LightBarController
+  IntendHandler
   .
 )
 
@@ -31,6 +32,7 @@ ADD_EXECUTABLE(Eddie
   ${PROTO_CC_DEST}/Language.pb.cc
   ${PROTO_CC_DEST}/DeviceManager.pb.cc
   ${PROTO_CC_DEST}/LightBarController.pb.cc
+  IntendHandler/IntendHandler.cpp
 )
 
 TARGET_LINK_LIBRARIES(Eddie
