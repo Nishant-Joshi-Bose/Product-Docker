@@ -26,6 +26,7 @@ RIVIERALPMSERVICE_DIR = $(shell components get RivieraLpmService installed_locat
 CASTLEPRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 A4VVIDEOMANAGERSERVICE_DIR = $(shell components get A4VVideoManagerService installed_location)
+PROFESSORLPMPACKAGE_DIR = $(shell components get ProfessorLPM-Package installed_location)
 #A4VREMOTECOMMUNICATIONSERVICE_DIR = $(shell components get A4VRemoteCommunicationService installed_location)
 CMAKE_USE_CCACHE := $(USE_CCACHE)
 
@@ -35,7 +36,6 @@ generated_sources: check_tools version-files
 	$(MAKE) -C ProductController $@
 	$(MAKE) -C $(RIVIERALPMSERVICE_DIR) $@
 	$(MAKE) -C $(CASTLEPRODUCTCONTROLLERCOMMON_DIR) $@
-	$(MAKE) -C $(RIVIERALPMUPDATER_DIR) $@
 	$(MAKE) -C $(A4VVIDEOMANAGERSERVICE_DIR) $@
 #	$(MAKE) -C $(A4VREMOTECOMMUNICATIONSERVICE_DIR) $@
 
@@ -54,6 +54,7 @@ cmake_build: generated_sources | $(BUILDS_DIR) astyle
 .PHONY: product-ipk
 product-ipk: cmake_build
 	./scripts/create-product-ipk
+	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage $(PROFESSORLPMPACKAGE_DIR) ./builds/$(cfg)/
 
 .PHONY: graph
 graph: product-ipk
