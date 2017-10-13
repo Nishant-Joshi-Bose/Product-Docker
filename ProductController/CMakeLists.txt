@@ -42,7 +42,7 @@ TARGET_LINK_LIBRARIES(Eddie
   FrontDoorClient
   NetworkServiceClient
   KeyHandler
-  ShelbyUtils
+  CliClient
   BoseLibs
   libjsoncpp.a
   libprotobuf.a
