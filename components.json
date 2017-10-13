@@ -80,10 +80,6 @@
     "selected_version": "Continuous/Castle-Fork/2017-10-10_1124"
   },
   {
-    "name": "RivieraLpmUpdater",
-    "selected_version": "master@2790380213425d2b3feabcfb738935a0ff6ed3c1"
-  },
-  {
     "name": "EddieLPM-Package",
     "selected_version": "Release/trunk/0.1.0.2509512/DP1"
   },
