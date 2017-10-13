@@ -1,0 +1,119 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @file      ProductMessage.proto
+///
+/// @brief     This header file declares a Protocol Buffer for creating messages to send as events
+///            to the Product Controller state machine.
+///
+/// @author    Stuart J. Lumby
+///
+/// @date      09/22/2017
+///
+/// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
+///
+///            Bose Corporation
+///            The Mountain Road,
+///            Framingham, MA 01701-9168
+///            U.S.A.
+///
+///            This program may not be reproduced, in whole or in part, in any form by any means
+///            whatsoever without the written permission of Bose Corporation.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//import "ProductSTS.proto";
+
+enum ProductMessageId
+{
+     LPM_HARDWARE_DOWN      =  1;
+     LPM_HARDWARE_UP        =  2;
+     CAPS_DOWN              =  3;
+     CAPS_UP                =  4;
+     NETWORK_DOWN           =  5;
+     NETWORK_CHANGE         =  6;
+     NETWORK_UP             =  7;
+     SYSTEM_LANGUAGE_CHANGE =  8;
+     KEY_PRESS              =  9;
+     AUDIO_LEVEL            = 10;
+     AUDIO_TONE             = 11;
+     USER_MUTE              = 12;
+     INTERNAL_MUTE          = 13;
+     SPEAKER_SETTING        = 14;
+     SOURCE_SELECTION       = 15;
+     SOURCE_DESELECTION     = 16;
+     CONFIGURATION_STATUS   = 17;
+     STS_SOURCES_INIT_DONE  = 18;
+     SOURCE_SLOT_SELECTED   = 19;
+}
+
+enum ProductNetworkType
+{
+     LOCAL                 = 1;
+     WIRED                 = 2;
+     WIRELESS              = 3;
+     UNKNOWN_NETWORK_TYPE  = 4;
+}
+
+enum ProductKeyState
+{
+     DOWN               = 1;
+     UP                 = 2;
+     UNKNOWN_KEY_STATE  = 3;
+}
+
+message ProductNetworkData
+{
+        optional ProductNetworkType type      = 1;
+        optional string             ipaddress = 2;
+        optional int32              frequency = 3;
+}
+
+message ProductKeyData
+{
+        optional ProductKeyState state = 1;
+        optional int32           value = 2;
+}
+
+message ProductLanguageData
+{
+        optional string systemlanguage = 1;
+}
+
+message ProductConfigurationStatus
+{
+        optional bool network  = 1 [default = false];
+        optional bool language = 2 [default = false];
+        optional bool account  = 3 [default = false];
+}
+
+message ProductKeyEvent
+{
+        optional int32 state = 1;
+        optional int32 id    = 2;
+}
+
+/*
+message ProductSelectSourceSlot
+{
+        optional ProductSTS.ProductSourceSlot slot = 1;
+}
+*/
+
+message ProductMessageData
+{
+        optional ProductNetworkData         networkdata         = 1;
+        optional ProductKeyData             keydata             = 2;
+        optional ProductLanguageData        languagedata        = 3;
+        optional ProductConfigurationStatus configurationstatus = 4;
+        //optional ProductSelectSourceSlot    selectsourceslot    = 5;
+}
+
+message ProductMessage
+{
+        optional ProductMessageId   id   = 1;
+        optional ProductMessageData data = 2;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                        End of File                                           ///
+////////////////////////////////////////////////////////////////////////////////////////////////////

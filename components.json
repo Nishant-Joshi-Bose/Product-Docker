@@ -29,7 +29,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@6dca54a2fddd2c7d5ec8dc26533ca5ce3f938a85"
+    "selected_version": "master@2ee2eefe4875da217968d6a9ed4aaf48a3c62eb0"
   },
   {
     "name": "googletest-qc8017_32",
@@ -41,11 +41,11 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/0.0.2-37+242e485"
+    "selected_version": "Continuous/master/0.0.2-48+ec28fa8"
   },
   {
     "name": "CastlePassport-native",
-    "selected_version": "Continuous/master/0.0.2-37+242e485"
+    "selected_version": "Continuous/master/0.0.2-48+ec28fa8"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -53,11 +53,11 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.1.0-51+a919b10"
+    "selected_version": "Continuous/master/0.1.0-63+f42f3ce"
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Continuous/dev/1.1-4-ga7b4026"
+    "selected_version": "Continuous/dev/1.1-5-g2fee9b7"
   },
   {
     "name": "Riviera-Toolchain",
@@ -68,20 +68,20 @@
     "selected_version": "Continuous/Castle-Fork-Bluetooth/2017-10-11_1748"
   },
   {
+    "name": "CastleCli-qc8017_32",
+    "selected_version": "Continuous/master/0.0.1-2+2477ac3"
+  },
+  {
     "name": "RivieraLpmService",
-    "selected_version": "master@4e4c6c1742bf13f1a06deb06865b5ad95cae7801"
+    "selected_version": "master@62d58812b037e46aae101dcf91e7f28a2a0d2a26"
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@994"
+    "selected_version": "trunk@1007"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-10_1124"
-  },
-  {
-    "name": "RivieraLpmUpdater",
-    "selected_version": "master@2790380213425d2b3feabcfb738935a0ff6ed3c1"
+    "selected_version": "Continuous/Castle-Fork/2017-10-13_1041"
   },
   {
     "name": "EddieLPM-Package",
@@ -89,18 +89,18 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-56+588b12a"
+    "selected_version": "Continuous/master/0.1.0-58+8c1a987"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-10+ca86b0f"
+    "selected_version": "Continuous/master/0.0.1-13+3a84fa7"
   },
   {
     "name": "KeyHandler-native",
-    "selected_version": "Continuous/master/0.0.1-10+ca86b0f"
+    "selected_version": "Continuous/master/0.0.1-13+3a84fa7"
   },
   {
     "name": "WiFi-Setup-Webpage",
-    "selected_version": "master@ca12a2b2ac0110efb26e0e0e187daff6c2384dd9"
+    "selected_version": "master@22bf74d7595c5f08292ea6a67dcd27f961b112e0"
   }
 ]

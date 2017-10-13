@@ -31,26 +31,24 @@ ADD_EXECUTABLE(Eddie
   ${PROTO_CC_DEST}/Language.pb.cc
   ${PROTO_CC_DEST}/DeviceManager.pb.cc
   ${PROTO_CC_DEST}/LightBarController.pb.cc
+  ${PROTO_CC_DEST}/ProductMessage.pb.cc
+  ${PROTO_CC_DEST}/AudioSettings.pb.cc
+  ${PROTO_CC_DEST}/ContentItem.pb.cc
 )
 
 TARGET_LINK_LIBRARIES(Eddie
   CastleProductControllerCommon
-  ${SOUNDTOUCH_SDK_LIBS}
   LpmClient
   FrontDoorClient
-  ShelbyUtils
+  NetworkServiceClient
+  KeyHandler
+  CliClient
   BoseLibs
-  jsoncpp
-  protobuf
-  tinyxml
+  libjsoncpp.a
+  libprotobuf.a
+  libTinyXml.a
   pthread
   rt
-  KeyHandler
-  NetworkServiceClient
 )
 
 INSTALL(TARGETS Eddie DESTINATION ${OUTPUT_BIN_DIR})
-
-# -----------------------------------------------------------------------------
-
-ADD_SUBDIRECTORY(LocalUI)
