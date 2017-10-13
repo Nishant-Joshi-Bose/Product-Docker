@@ -4,7 +4,7 @@
 ./builds/Release/components.svgz		<DEPLOY_DIR>/professor_cgraph_<VERSION_STRING>.svgz			file
 ./builds/Release/package/product.tar	<DEPLOY_DIR>/professor_<VERSION_STRING>.tar					file
 ./builds/Release/package/product_flash	<DEPLOY_DIR>/professor_flash								file
-./builds/Release/lpm_updater.ipk		<DEPLOY_DIR>/professor_lpm_updater_<version_string>.ipk		file
+./builds/Release/lpm_updater.ipk		<DEPLOY_DIR>/professor_lpm_updater_<VERSION_STRING>.ipk		file
 
 # EMACS
 # Local Variables:
