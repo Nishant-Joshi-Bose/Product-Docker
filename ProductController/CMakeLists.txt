@@ -10,6 +10,7 @@ MESSAGE( STATUS "ProductController CMakeLists.txt CASTLE_PRODUCT_CONTROLLER_COMM
 
 INCLUDE_DIRECTORIES(
   ${NETWORK_COMMON_INCLUDE}
+  ${CASTLECLI_DIR}/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/SoundTouchInterface
   ${RIVIERA_LPM_DIR}/include
   ${RIVIERA_LPM_SERVICE_DIR}/source/Client
@@ -29,6 +30,7 @@ INCLUDE_DIRECTORIES(
 SET(SOUNDTOUCH_SDK_LIBS
   SoundTouchClient
   FrontDoorClient
+  CliClient
   ShelbyUtils
   BoseLibs
   ${NETWORK_COMMON_LIBS}/libNetworkServiceUtils.a

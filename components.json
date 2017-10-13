@@ -1,15 +1,15 @@
 [
   {
     "name": "UnitTest++-ti",
-    "selected_version": "branches/UnitTest++@2312"
+    "selected_version": "branches/UnitTest++@2424"
   },
   {
     "name": "UnitTest++-qc8017_32",
-    "selected_version": "branches/UnitTest++@2312"
+    "selected_version": "branches/UnitTest++@2424"
   },
   {
     "name": "UnitTest++-native",
-    "selected_version": "branches/UnitTest++@2312"
+    "selected_version": "branches/UnitTest++@2424"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -17,15 +17,15 @@
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2416"
+    "selected_version": "branches/castle-libs@2427"
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "branches/protobuf@2304"
+    "selected_version": "branches/protobuf@2423"
   },
   {
     "name": "protobuf-native",
-    "selected_version": "branches/protobuf@2304"
+    "selected_version": "branches/protobuf@2423"
   },
   {
     "name": "CastleProductControllerCommon",
@@ -45,7 +45,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.1.0-51+a919b10"
+    "selected_version": "Continuous/master/0.1.0-63+f42f3ce"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -57,15 +57,19 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-04_0826"
+    "selected_version": "Continuous/Castle-Fork/2017-10-13_1041"
+  },
+  {
+    "name": "CastleCli-qc8017_32",
+    "selected_version": "Continuous/master/0.0.1-2+2477ac3"
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@651a3be12def815a56b4f83c1a8f6762d3e2765d"
+    "selected_version": "master@62d58812b037e46aae101dcf91e7f28a2a0d2a26"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-03_1202"
+    "selected_version": "Continuous/Castle-Fork/2017-10-13_1041"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -85,6 +89,6 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "dev@20431ae"
+    "selected_version": "dev@12be0f0144b363052d19466e28cba55b762c81e5"
   }
 ]
