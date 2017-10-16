@@ -67,7 +67,7 @@ $ cd /scratch/Professor
 $ components install
 $ adb shell reboot bootloader       # reboot the Riviera unit into the fastboot bootloader
 $ sudo fastboot devices             # make sure the unit is in the bootloader
-$ cd `components get Riviera-HSP installed_location`/images
+$ cd `components get Riviera-HSP-Images installed_location`
 $ sudo ./fastboot.sh
 $ sudo fastboot reboot
 ```
