@@ -1,8 +1,9 @@
 {
 	"version": {
-		"major": 0,
+		"major": 1,
 		"minor": 1
 	},
+	"supportedAudioSettings": ["audioBassLevel", "audioTrebleLevel", "audioCenterLevel", "audioSurroundLevel", "audioGainOffset", "audioAvSync", "audioMode", "audioContentType"],
 	"configurations": {
 		"audioBassLevel": {
 			"currentPersistenceLevel": "global",
@@ -44,7 +45,7 @@
 				"supportedPersistence": ["session", "global", "contentItem"]
 			}
 		},
-		"audioVolumeOffset": {
+		"audioGainOffset": {
 			"currentPersistenceLevel": "global",
 			"persistenceSession": false,
 			"properties": {
@@ -87,7 +88,7 @@
 			"audioTrebleLevel": 0,
 			"audioCenterLevel": 0,
 			"audioSurroundLevel": 0,
-			"audioVolumeOffset": 0,
+			"audioGainOffset": 0,
 			"audioAvSync": 0,
 			"audioMode": "direct",
 			"audioContentType": "unspecified"
@@ -97,18 +98,18 @@
 			"audioTrebleLevel": 0,
 			"audioCenterLevel": 0,
 			"audioSurroundLevel": 0,
-			"audioVolumeOffset": 0,
+			"audioGainOffset": 0,
 			"audioAvSync": 0,
 			"audioMode": "direct",
 			"audioContentType": "unspecified"
 		},
 		"contentItem": {
-			"tv": {
+			"default": {
 				"audioBassLevel": 0,
 				"audioTrebleLevel": 0,
 				"audioCenterLevel": 0,
 				"audioSurroundLevel": 0,
-				"audioVolumeOffset": 0,
+				"audioGainOffset": 0,
 				"audioAvSync": 0,
 				"audioMode": "direct",
 				"audioContentType": "unspecified"
@@ -120,7 +121,7 @@
 		"audioTrebleLevel": 0,
 		"audioCenterLevel": 0,
 		"audioSurroundLevel": 0,
-		"audioVolumeOffset": 0,
+		"audioGainOffset": 0,
 		"audioAvSync": 0,
 		"audioMode": "direct",
 		"audioContentType": "unspecified"
