@@ -18,13 +18,13 @@ INCLUDE_DIRECTORIES(
   ${RIVIERA_LPM_DIR}/include
   ${CASTLE_PRODUCT_CONTROLLER_COMMON_DIR}
   ${CASTLE_PRODUCT_CONTROLLER_COMMON_DIR}/Hsm
+  ${CASTLE_PRODUCT_CONTROLLER_COMMON_DIR}/ProductSTSController
+  ${CASTLE_PRODUCT_CONTROLLER_COMMON_DIR}/ProductAudioService 
   ${KEYHANDLER_DIR}/include
   .
-  ${CASTLE_PRODUCT_CONTROLLER_COMMON_DIR}/ProductAudioService 
   include
   source
   source/CustomStateMachine
-  ../ProductSTSController
 )
 
 SET(SOUNDTOUCH_SDK_LIBS
@@ -50,6 +50,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
   ${PROTO_CC_DEST}/Language.pb.cc
   ${PROTO_CC_DEST}/ContentItem.pb.cc
+  ${PROTO_CC_DEST}/ProductSTS.pb.cc
   source/ProductStart.cpp
   source/ProductCommandLine.cpp
   source/ProductHardwareInterface.cpp
@@ -62,11 +63,6 @@ ADD_EXECUTABLE(Professor
   source/CustomStateMachine/CustomProductControllerStateIdle.cpp
   source/CustomStateMachine/CustomProductControllerStateNetworkStandby.cpp
   source/CustomStateMachine/CustomProductControllerStateUpdating.cpp
-  ../ProductSTSController/ProductSTSStateTop.cpp
-  ../ProductSTSController/ProductSTSController.cpp
-  ../ProductSTSController/ProductSTSAccount.cpp
-  ${PROTO_CC_DEST}/ProductSTSIntrospect.pb.cc
-  ${PROTO_CC_DEST}/ProductSTS.pb.cc
 )
 
 #
