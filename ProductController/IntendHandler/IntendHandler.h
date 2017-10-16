@@ -58,8 +58,8 @@ enum class Action
 class IntendHandler
 {
 public:
-    IntendHandler(NotifyTargetTaskIF& task, CliClientMT& cliClient,
-                  const FrontDoorClientIF_t& fd_client);
+    IntendHandler( NotifyTargetTaskIF& task, CliClientMT& cliClient,
+                   const FrontDoorClientIF_t& fd_client );
     virtual ~IntendHandler() { }
 
     // Initialization will include adding various IntendManagers that are
@@ -67,18 +67,18 @@ public:
     void Initialize();
 
     // Public function to Handle intends
-    bool Handle(KeyHandlerUtil::ActionType_t arg);
+    bool Handle( KeyHandlerUtil::ActionType_t arg );
 
     // Public function to register any call backs back into Product HSM
     // Intend Managers will not do any state transistion, it is only expected
     // to valid,build and send messages (through frontdoor or IPC).
-    bool RegisterCallBack(KeyHandlerUtil::ActionType_t intend, CbPtr_t cb);
-    
-    const NotifyTargetTaskIF& GetTask() const 
+    void RegisterCallBack( KeyHandlerUtil::ActionType_t intend, CbPtr_t cb );
+
+    const NotifyTargetTaskIF& GetTask() const
     {
         return m_task;
     }
-    const CliClientMT& GetCli() const 
+    const CliClientMT& GetCli() const
     {
         return m_cliClient;
     }

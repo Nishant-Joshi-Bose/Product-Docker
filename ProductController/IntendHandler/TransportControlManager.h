@@ -14,12 +14,12 @@ namespace ProductApp
 class TransportControlManager: public IntendManager
 {
 public:
-    TransportControlManager(NotifyTargetTaskIF& task, CliClientMT& cliClient,
-                            const FrontDoorClientIF_t& frontDoorClient):
-                  IntendManager(task, cliClient, frontDoorClient)
+    TransportControlManager( NotifyTargetTaskIF& task, CliClientMT& cliClient,
+                             const FrontDoorClientIF_t& frontDoorClient ):
+        IntendManager( task, cliClient, frontDoorClient )
     {
-    }   
-    virtual ~TransportControlManager() { } 
+    }
+    virtual ~TransportControlManager() { }
 
     // Public function to Handle intends
     // This function will build and send message either through FrontDoor
@@ -28,7 +28,7 @@ public:
     // If cb is not null, the call back will return control to HSM in
     // desired function for desired state change
     //
-    bool Handle(KeyHandlerUtil::ActionType_t arg);
+    bool Handle( KeyHandlerUtil::ActionType_t arg );
 
 };
 } // namespace ProductApp
