@@ -34,7 +34,9 @@ Cross compile rlwrap:
 $ autoreconf --install
 $ ./configure --host=arm-linux CC="$cc"
 $ make
-$ ${cross}strip rlwrap
+$ cd src
+$ mv rlwrap rlwrap.unstripped
+$ ${cross}strip -o rlwrap rlwrap.unstripped
 $
 $ file rlwrap
 rlwrap: ELF 32-bit LSB executable, ARM, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.32, stripped
