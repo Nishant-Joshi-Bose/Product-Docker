@@ -32,8 +32,8 @@ ADD_EXECUTABLE(Eddie
   ${PROTO_CC_DEST}/Language.pb.cc
   ${PROTO_CC_DEST}/DeviceManager.pb.cc
   ${PROTO_CC_DEST}/LightBarController.pb.cc
-  IntendHandler/IntendHandler.cpp
-  IntendHandler/TransportControlManager.cpp
+  IntentHandler/IntentHandler.cpp
+  IntentHandler/TransportControlManager.cpp
 )
 
 TARGET_LINK_LIBRARIES(Eddie

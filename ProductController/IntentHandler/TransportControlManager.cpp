@@ -22,19 +22,21 @@ static DPrint s_logger( "TransportControlManager" );
 namespace ProductApp
 {
 
-bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intend )
+bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
 {
     // This function will build and send message either through FrontDoor
     // Return control to ProductController through callback
 
-    //Build Transport Control protobuf based on intend and its state
+    //Build Transport Control protobuf based on intent and its state
+    // TBD
 
     //Send GET/PUT/Post/DELETE through Frontdoor
+    // TBD
 
     //Fire the cb so the control goes back to the ProductController
     if( cb() != nullptr )
     {
-        ( *cb() )( intend );
+        ( *cb() )( intent );
     }
     return true;
 }

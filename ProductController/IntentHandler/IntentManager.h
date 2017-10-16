@@ -1,6 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////////
-///// @file   IntendManager.h
-///// @brief  Eddie specific IntendManager class for Riviera based product
+///// @file   IntentManager.h
+///// @brief  Eddie specific IntentManager class for Riviera based product
+//            This is a base class and any Specific IntentManager like 
+//            TransportControlManager needs to inherit from this class.
 /////
 ///// @attention Copyright 2017 Bose Corporation, Framingham, MA
 //////////////////////////////////////////////////////////////////////////////////
@@ -16,21 +18,21 @@ namespace ProductApp
 using FrontDoorClientIF_t = std::shared_ptr<FrontDoorClientIF>;
 using CbPtr_t  = std::shared_ptr<AsyncCallback<KeyHandlerUtil::ActionType_t&> >;
 
-class IntendManager
+class IntentManager
 {
 public:
-    IntendManager( NotifyTargetTaskIF& task, CliClientMT& cliClient,
+    IntentManager( NotifyTargetTaskIF& task, CliClientMT& cliClient,
                    const FrontDoorClientIF_t& frontDoorClient ):
         m_task( task ),
         m_cliClient( cliClient ),
         m_frontDoorClient( frontDoorClient )
     {
     }
-    ~IntendManager() { }
+    ~IntentManager() { }
 
-    // Public function to Handle intends
+    // Public function to Handle intents
     // This function will build and send message either through FrontDoor
-    // or through IPC for action based on the intend received.
+    // or through IPC for action based on the intent received.
     //
     // If cb is not null, the call back will return control to HSM in
     // desired function for desired state change
@@ -38,11 +40,11 @@ public:
     virtual bool Handle( KeyHandlerUtil::ActionType_t arg ) = 0;
 
     // Public function to register any call backs back into Product HSM
-    // Intend Managers will not do any state transistion, it is only expected
+    // Intent Managers will not do any state transistion, it is only expected
     // to valid,build and send messages (through frontdoor or IPC).
-    void RegisterCallBack( KeyHandlerUtil::ActionType_t intend, CbPtr_t cb )
+    void RegisterCallBack( KeyHandlerUtil::ActionType_t intent, CbPtr_t cb )
     {
-        m_intend = intend;
+        m_intent = intent;
         m_cb     = cb;
         return;
     }
@@ -68,9 +70,9 @@ protected:
         return m_cb;
     }
 
-    const KeyHandlerUtil::ActionType_t& intend() const
+    const KeyHandlerUtil::ActionType_t& intent() const
     {
-        return m_intend;
+        return m_intent;
     }
 
 private:
@@ -79,6 +81,6 @@ private:
     CliClientMT&                      m_cliClient;
     FrontDoorClientIF_t               m_frontDoorClient;
     CbPtr_t                           m_cb;
-    KeyHandlerUtil::ActionType_t      m_intend;
+    KeyHandlerUtil::ActionType_t      m_intent;
 };
 } // namespace ProductApp

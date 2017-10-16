@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
-///// @file   IntendHandler.h
-///// @brief  Eddie specific IntendHandler class for Riviera based product
+///// @file   IntentHandler.h
+///// @brief  Eddie specific IntentHandler class for Riviera based product
 /////
 ///// @attention Copyright 2017 Bose Corporation, Framingham, MA
 //////////////////////////////////////////////////////////////////////////////////
@@ -10,12 +10,12 @@
 #include "CliClientMT.h"
 #include "FrontDoorClientIF.h"
 #include "KeyHandler.h"
-#include "IntendManager.h"
+#include "IntentManager.h"
 
 namespace ProductApp
 {
-using IntendManagerPtr_t  = std::shared_ptr<IntendManager>;
-using IntendManagerMap_t  = std::unordered_map<uint16_t, IntendManagerPtr_t>;
+using IntentManagerPtr_t  = std::shared_ptr<IntentManager>;
+using IntentManagerMap_t  = std::unordered_map<uint16_t, IntentManagerPtr_t>;
 
 enum class Action
 {
@@ -55,24 +55,24 @@ enum class Action
     //- ALEXA
 };
 
-class IntendHandler
+class IntentHandler
 {
 public:
-    IntendHandler( NotifyTargetTaskIF& task, CliClientMT& cliClient,
+    IntentHandler( NotifyTargetTaskIF& task, CliClientMT& cliClient,
                    const FrontDoorClientIF_t& fd_client );
-    virtual ~IntendHandler() { }
+    virtual ~IntentHandler() { }
 
-    // Initialization will include adding various IntendManagers that are
-    // associated with intend Values
+    // Initialization will include adding various IntentManagers that are
+    // associated with intent Values
     void Initialize();
 
-    // Public function to Handle intends
+    // Public function to Handle intents
     bool Handle( KeyHandlerUtil::ActionType_t arg );
 
     // Public function to register any call backs back into Product HSM
-    // Intend Managers will not do any state transistion, it is only expected
+    // Intent Managers will not do any state transistion, it is only expected
     // to valid,build and send messages (through frontdoor or IPC).
-    void RegisterCallBack( KeyHandlerUtil::ActionType_t intend, CbPtr_t cb );
+    void RegisterCallBack( KeyHandlerUtil::ActionType_t intent, CbPtr_t cb );
 
     const NotifyTargetTaskIF& GetTask() const
     {
@@ -91,6 +91,6 @@ private:
     NotifyTargetTaskIF&      m_task;
     CliClientMT&             m_cliClient;
     FrontDoorClientIF_t      m_frontDoorClient;
-    IntendManagerMap_t       m_IntendManagerMap;
+    IntentManagerMap_t       m_IntentManagerMap;
 };
 } // namespace ProductApp
