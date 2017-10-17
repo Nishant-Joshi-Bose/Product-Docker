@@ -13,7 +13,7 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-13_1401"
+    "selected_version": "Continuous/Castle-Fork/2017-10-16_1518"
   },
   {
     "name": "CastleLibs-qc8017_32",
@@ -29,7 +29,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@ee26eb54843631dee988605cebf12bd8819e7afd"
+    "selected_version": "master@a364f605e3d49983bb05b2c64a524f3bc6e0836b"
   },
   {
     "name": "googletest-qc8017_32",
@@ -37,15 +37,15 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.1.1-63+6908071"
+    "selected_version": "Continuous/master/0.1.1-67+b83469d"
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/0.0.2-55+294f59f"
+    "selected_version": "Continuous/master/0.0.2-69+61332b6"
   },
   {
     "name": "CastlePassport-native",
-    "selected_version": "Continuous/master/0.0.2-55+294f59f"
+    "selected_version": "Continuous/master/0.0.2-69+61332b6"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -65,7 +65,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-15_1631"
+    "selected_version": "Continuous/Castle-Fork/2017-10-16_1401"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -73,15 +73,15 @@
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@62d58812b037e46aae101dcf91e7f28a2a0d2a26"
+    "selected_version": "master@cb84f2c87f581967debddb4a1bbc626d265ddbcf"
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@1016"
+    "selected_version": "trunk@1021"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-13_1720"
+    "selected_version": "Continuous/Castle-Fork/2017-10-16_1401"
   },
   {
     "name": "EddieLPM-Package",
@@ -89,15 +89,15 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-62+32d91be"
+    "selected_version": "Continuous/master/0.1.0-63+3c25ddf"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-13+3a84fa7"
+    "selected_version": "Continuous/master/0.0.1-14+14ad38c"
   },
   {
     "name": "KeyHandler-native",
-    "selected_version": "Continuous/master/0.0.1-13+3a84fa7"
+    "selected_version": "Continuous/master/0.0.1-14+14ad38c"
   },
   {
     "name": "WiFi-Setup-Webpage",
