@@ -6,14 +6,15 @@
 //  and build LAN API or IPC messages to perform actions of various Intents
 //  It also lets the Product Controller get control back in an Async way, so
 //  the HSM can perform state changes if it needs to.
-//  This Handler should not perform state transistions
+//  This Handler should not perform state transistions.
+//  It is intentional that the hsm or productController access is not given
+//  to this module.
 //  The Handler in-turn would delegate its work to customized Intent 
 //  Managers based on the ActionType that is passed to it.
 //  These customized IntentManager will be taking actions based on
-//  1. State of HSM
-//  2. State of its own subsystem, based on what was processed for the same 
+//  1. State of its own subsystem, based on what was processed for the same 
 //  action before, like a play or pause would have to toggle the actions.
-//  3. The IntentHandler will call various IntentManagers that are registered 
+//  2. The IntentHandler will call various IntentManagers that are registered 
 //  for specific intents. The initializing of IntentManagers needs to be done
 //  in IntentHandler::Initialize() for all intents that needs to be handled
 //  by this module.
