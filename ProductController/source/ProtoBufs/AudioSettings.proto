@@ -37,7 +37,7 @@ message AudioSurroundLevel
     optional ContentItem contentItem = 3;
     optional AudioProperties properties = 4;
 }
-message AudioVolumeOffset
+message AudioGainOffset
 {
     optional int32 value = 1;
     optional string persistence = 2;

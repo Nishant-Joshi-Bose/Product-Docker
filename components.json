@@ -13,7 +13,7 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-03_1231"
+    "selected_version": "Continuous/Castle-Fork/2017-10-13_1401"
   },
   {
     "name": "CastleLibs-qc8017_32",
@@ -29,7 +29,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@553c058b21a3406611e69fb88412c7b5b24bbb9e"
+    "selected_version": "master@6219f809686614aa13a35f1581ea8df766baec74"
   },
   {
     "name": "googletest-qc8017_32",
@@ -41,11 +41,11 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/1.0.0-19+c824dfc"
+    "selected_version": "Release/master/1.0.1-20+2d50016"
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-63+f42f3ce"
+    "selected_version": "Release/master/0.1.1-65+f652603"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -81,11 +81,11 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-47+907120e"
+    "selected_version": "Continuous/master/0.1.0-62+32d91be"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-12+8427a6f"
+    "selected_version": "Continuous/master/0.0.1-13+3a84fa7"
   },
   {
     "name": "A4VVideoManagerService",
