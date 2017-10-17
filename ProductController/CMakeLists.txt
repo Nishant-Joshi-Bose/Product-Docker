@@ -34,6 +34,8 @@ ADD_EXECUTABLE(Eddie
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/ContentItem.pb.cc
+  IntentHandler/IntentHandler.cpp
+  IntentHandler/TransportControlManager.cpp
 )
 
 TARGET_LINK_LIBRARIES(Eddie
