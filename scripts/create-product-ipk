@@ -249,6 +249,9 @@ EOF
 put_script "$stage/postinst" <<EOF
 #!/bin/sh
 echo "SoundTouch postinst"
+if [ -x /mnt/nv/postinst ]; then
+    /mnt/nv/postinst
+fi
 EOF
 
 put_script "$stage/postrm" <<EOF
