@@ -31,6 +31,9 @@ ADD_EXECUTABLE(Eddie
   ${PROTO_CC_DEST}/Language.pb.cc
   ${PROTO_CC_DEST}/DeviceManager.pb.cc
   ${PROTO_CC_DEST}/LightBarController.pb.cc
+  ${PROTO_CC_DEST}/ProductMessage.pb.cc
+  ${PROTO_CC_DEST}/AudioSettings.pb.cc
+  ${PROTO_CC_DEST}/ContentItem.pb.cc
   IntentHandler/IntentHandler.cpp
   IntentHandler/TransportControlManager.cpp
 )
@@ -41,7 +44,7 @@ TARGET_LINK_LIBRARIES(Eddie
   FrontDoorClient
   NetworkServiceClient
   KeyHandler
-  ShelbyUtils
+  CliClient
   BoseLibs
   libjsoncpp.a
   libprotobuf.a

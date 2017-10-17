@@ -31,14 +31,12 @@ void EddieProductControllerStateSetup::HandleStateEnter()
 void EddieProductControllerStateSetup::HandleStateStart()
 {
     BOSE_INFO( s_logger, __func__ );
-    // ToDo
-    // GetProductController().SendActivateAccessPointCmd();
+    SetupNetworkAccessPoint();
 }
 
 void EddieProductControllerStateSetup::HandleStateExit()
 {
     BOSE_INFO( s_logger, __func__ );
-    // ToDo
-    //GetProductController().SendDeActivateAccessPointCmd();
+    DisableNetworkAccessPoint();
 }
 } // namespace ProductApp

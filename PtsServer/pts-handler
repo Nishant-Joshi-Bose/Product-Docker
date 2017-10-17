@@ -61,7 +61,7 @@ HTTP/1.1 200 OK\r
 Content-Type: application/x-gzip\r
 Cache-Control: no-cache\r
 \r"""
-        os.execl("/bin/sh", "-c", "logread | gzip")
+        os.execl("/bin/sh", "sh", "-c", "logread | gzip")
 
     if path == "/pts.txt":
         import subprocess
