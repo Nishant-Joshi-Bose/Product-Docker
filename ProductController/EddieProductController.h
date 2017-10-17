@@ -73,6 +73,24 @@ private:
     void PersistSystemLanguageCode();
     void PersistSystemConfigurationStatus();
     void HandleAllowSourceSelectCliCmd( const std::list<std::string> & argList, std::string& response );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name HandleSetProductControllerStateCliCmd
+/// @brief Function to change the state of EddieProductController
+///        Usage: setProductState boot|on|standby|setup|idle
+/// @return void
+///////////////////////////////////////////////////////////////////////////////
+    void HandleSetProductControllerStateCliCmd( const std::list<std::string> & argList,
+                                                std::string& response );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name HandleGetProductControllerStateCliCmd
+/// @brief Function to get the state of EddieProductController
+///        Usage: getProductState
+///////////////////////////////////////////////////////////////////////////////
+    void HandleGetProductControllerStateCliCmd( const std::list<std::string> & argList,
+                                                std::string& response );
+
     void HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus );
 
 public:
@@ -97,6 +115,13 @@ public:
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
     bool IsAllModuleReady();
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  IsCAPSReady
+/// @brief true if CAPS module is ready.
+/// @return bool
+////////////////////////////////////////////////////////////////////////////////
+    bool IsCAPSReady() const;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  HandleLPMReady

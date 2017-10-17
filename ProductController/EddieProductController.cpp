@@ -330,6 +330,12 @@ bool EddieProductController::IsAllModuleReady()
              m_isNetworkModuleReady );
 }
 
+bool EddieProductController::IsCAPSReady() const
+{
+    BOSE_INFO( s_logger, "%s:CAPS Ready=%d", __func__, m_isCapsReady );
+    return m_isCapsReady;
+}
+
 bool EddieProductController::IsLanguageSet()
 {
     return not m_systemLanguage.code().empty();
@@ -468,6 +474,12 @@ void EddieProductController::RegisterCliClientCmds()
     m_CliClientMT.RegisterCLIServerCommands( "allowSourceSelect",
                                              "allowSourceSelect yes|no", "command to send allow/disallow source selection by Caps",
                                              GetTask(), cb , static_cast<int>( CLICmdKeys::ALLOW_SOURCE_SELECT ) );
+    m_CliClientMT.RegisterCLIServerCommands( "setProductState",
+                                             "setProductState boot|standby|setup", "command to set Product Controller state",
+                                             GetTask(), cb , static_cast<int>( CLICmdKeys::SET_PRODUCT_CONTROLLER_STATE ) );
+    m_CliClientMT.RegisterCLIServerCommands( "getProductState",
+                                             "getProductState", "command to get Product Controller state",
+                                             GetTask(), cb , static_cast<int>( CLICmdKeys::GET_PRODUCT_CONTROLLER_STATE ) );
 }
 
 void EddieProductController::HandleCliCmd( uint16_t cmdKey,
@@ -484,6 +496,16 @@ void EddieProductController::HandleCliCmd( uint16_t cmdKey,
     case CLICmdKeys::ALLOW_SOURCE_SELECT:
     {
         HandleAllowSourceSelectCliCmd( argList, response );
+    }
+    break;
+    case CLICmdKeys::SET_PRODUCT_CONTROLLER_STATE:
+    {
+        HandleSetProductControllerStateCliCmd( argList, response );
+    }
+    break;
+    case CLICmdKeys::GET_PRODUCT_CONTROLLER_STATE:
+    {
+        HandleGetProductControllerStateCliCmd( argList, response );
     }
     break;
     default:
@@ -516,5 +538,63 @@ void EddieProductController::HandleAllowSourceSelectCliCmd( const std::list<std:
         response += "Usage: allowSourceSelect yes|no";
     }
 }
+
+void EddieProductController::HandleSetProductControllerStateCliCmd( const std::list<std::string> & argList,
+                                                                    std::string& response )
+{
+    std::string usage;
+    usage = "Usage: setProductState boot|on|standby|setup|idle";
+
+    if( argList.size() != 1 )
+    {
+        response = "Incorrect usage\n" + usage;
+        return;
+    }
+
+    std::string arg = argList.front();
+
+    if( arg == "boot" )
+    {
+        response = "Setting Product Controller state to BOOT";
+        m_EddieProductControllerHsm.ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING );
+    }
+    else if( arg == "on" )
+    {
+        response = "Will be implemented in future";
+    }
+    else if( arg == "standby" )
+    {
+        response = "Setting Product Controller state to NETWORK_STANDBY";
+        m_EddieProductControllerHsm.ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
+    }
+    else if( arg == "setup" )
+    {
+        response = "Setting Product Controller state to SETUP";
+        m_EddieProductControllerHsm.ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP );
+    }
+    else if( arg == "idle" )
+    {
+        response = "Will be implemented in future";
+    }
+    else
+    {
+        response = "Unknown argument\n" + usage;
+    }
+}
+
+void EddieProductController::HandleGetProductControllerStateCliCmd( const std::list<std::string> & argList,
+                                                                    std::string& response )
+{
+    if( argList.size() > 0 )
+    {
+        response = "Incorrect usage \nUsage: getProductState";
+        return;
+    }
+    response = "-------------------------------------\n";
+    response += "Product Controller State Information\n";
+    response += "-------------------------------------\n";
+    response += "Current State: " + m_EddieProductControllerHsm.GetCurrentState()->GetName();
+}
+
 
 } // namespace ProductApp
