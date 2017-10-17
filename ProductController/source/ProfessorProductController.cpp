@@ -55,6 +55,7 @@
 #include "CustomProductControllerStateIdle.h"
 #include "CustomProductControllerStateUpdating.h"
 #include "CustomProductControllerState.h"
+#include "ProductSTS.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             Start of Product Namespace                                       ///
@@ -726,7 +727,7 @@ void ProfessorProductController::SetupProductSTSConntroller( void )
     ProductSTSController::SourceDescriptor descriptor_TV{ ProductSTS::SLOT_TV, "TV", true }; // TV is always available
     sources.push_back( descriptor_TV );
     Callback<void> cb_STSInitWasComplete( std::bind( &ProfessorProductController::HandleSTSInitWasComplete, this ) );
-    Callback<ProductSTS::ProductSourceSlot> cb_HandleSelectSourceSlot( std::bind( &ProfessorProductController::HandleSelectSourceSlot, this, std::placeholders::_1 ) );
+    Callback<ProductSTSAccount::ProductSourceSlot> cb_HandleSelectSourceSlot( std::bind( &ProfessorProductController::HandleSelectSourceSlot, this, std::placeholders::_1 ) );
     m_ProductSTSController.Initialize( sources, cb_STSInitWasComplete, cb_HandleSelectSourceSlot );
 }
 
@@ -763,16 +764,16 @@ void ProfessorProductController::HandleSTSInitWasComplete( void )
 ///
 /// @note   THIS METHOD IS CALLED ON THE ProductSTSController THREAD
 ///
-/// @param  ProductSTS::ProductSourceSlot sourceSlot - identifies the activated slot
+/// @param  ProductSTSAccount::ProductSourceSlot sourceSlot - identifies the activated slot
 ///
 /// @return This method does not return anything.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::HandleSelectSourceSlot( ProductSTS::ProductSourceSlot sourceSlot )
+void ProfessorProductController::HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot )
 {
     ProductMessage message;
     message.set_id( SOURCE_SLOT_SELECTED );
-    message.mutable_data()->mutable_selectsourceslot()->set_slot( sourceSlot );
+    message.mutable_data()->mutable_selectsourceslot()->set_slot( static_cast<ProductSTS::ProductSourceSlot>( sourceSlot ) );
     IL::BreakThread( std::bind( &ProfessorProductController::HandleMessage,
                                 this,
                                 message ),

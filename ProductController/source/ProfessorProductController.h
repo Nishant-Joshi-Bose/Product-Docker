@@ -242,7 +242,7 @@ public:
     //////////////////////////////////////////////////////////////////////////////////////////////
     void SetupProductSTSConntroller( void );
     void HandleSTSInitWasComplete( void );
-    void HandleSelectSourceSlot( ProductSTS::ProductSourceSlot sourceSlot );
+    void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
     bool                       m_IsSTSReady;
     ProductSTSController       m_ProductSTSController;
 };
