@@ -5,6 +5,7 @@
 ./builds/Release/package/product.tar	<DEPLOY_DIR>/professor_<VERSION_STRING>.tar					file
 ./builds/Release/package/product_flash	<DEPLOY_DIR>/professor_flash								file
 ./builds/Release/lpm_updater.ipk		<DEPLOY_DIR>/professor_lpm_updater_<VERSION_STRING>.ipk		file
+./components.json						<DEPLOY_DIR>/components_<VERSION_STRING>.json				file
 
 # EMACS
 # Local Variables:
