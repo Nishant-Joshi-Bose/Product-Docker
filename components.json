@@ -90,5 +90,9 @@
   {
     "name": "A4VVideoManagerService",
     "selected_version": "dev@12be0f0144b363052d19466e28cba55b762c81e5"
+  },
+  {
+    "name": "A4VQuickSetService",
+    "selected_version": "dev@12be0f0144b363052d19466e28cba55b762c81e5"
   }
 ]

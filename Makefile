@@ -26,6 +26,7 @@ RIVIERALPMSERVICE_DIR = $(shell components get RivieraLpmService installed_locat
 CASTLEPRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 A4VVIDEOMANAGERSERVICE_DIR = $(shell components get A4VVideoManagerService installed_location)
+A4VQUICKSETSERVICE_DIR = $(shell components get A4VQuickSetService installed_location)
 PROFESSORLPMPACKAGE_DIR = $(shell components get ProfessorLPM-Package installed_location)
 #A4VREMOTECOMMUNICATIONSERVICE_DIR = $(shell components get A4VRemoteCommunicationService installed_location)
 CMAKE_USE_CCACHE := $(USE_CCACHE)
