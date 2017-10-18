@@ -3,10 +3,6 @@
 
   <daemon name="LPMService"/>
 
-  <daemon name="LPMUpdater">
-    <arg>/opt/Bose/etc/</arg>
-  </daemon>
-
   <daemon name="avahi-daemon"
           exe="start-avahi"/>
 
