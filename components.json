@@ -13,7 +13,7 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-16_1518"
+    "selected_version": "Continuous/Castle-Fork/2017-10-18_1556"
   },
   {
     "name": "CastleLibs-qc8017_32",
@@ -41,11 +41,11 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/0.0.2-69+61332b6"
+    "selected_version": "Continuous/master/0.0.2-89+63a66fc"
   },
   {
     "name": "CastlePassport-native",
-    "selected_version": "Continuous/master/0.0.2-69+61332b6"
+    "selected_version": "Continuous/master/0.0.2-89+63a66fc"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -53,7 +53,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.1.1-65+f652603"
+    "selected_version": "Release/master/0.1.1-72+0b6fa36"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -65,7 +65,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-16_1401"
+    "selected_version": "Continuous/Castle-Fork/2017-10-18_1556"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -81,7 +81,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-16_1401"
+    "selected_version": "Continuous/Castle-Fork/2017-10-18_1556"
   },
   {
     "name": "EddieLPM-Package",
