@@ -71,6 +71,7 @@ class ProductCommandLine;
 class ProductSystemInterface;
 class ProductAudioService;
 class ProductSoftwareServices;
+class ProductEdidInterface;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -194,6 +195,7 @@ public:
     ProductFrontDoorNetwork*   m_ProductFrontDoorNetwork  = nullptr;
     ProductCommandLine*        m_ProductCommandLine       = nullptr;
     ProductUserInterface*      m_ProductUserInterface     = nullptr;
+    ProductEdidInterface*      m_ProductEdidInterface     = nullptr;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

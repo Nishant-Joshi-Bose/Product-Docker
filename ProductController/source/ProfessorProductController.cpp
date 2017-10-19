@@ -56,6 +56,7 @@
 #include "CustomProductControllerStateUpdating.h"
 #include "CustomProductControllerState.h"
 #include "ProductSTS.pb.h"
+#include "ProductEdidInterface.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             Start of Product Namespace                                       ///
@@ -241,6 +242,8 @@ void ProfessorProductController::Run( )
                                                                     m_CliClientMT );
     m_ProductCommandLine       = ProductCommandLine::GetInstance( GetTask( ),
                                                                   m_ProductHardwareInterface );
+    m_ProductEdidInterface     = ProductEdidInterface::GetInstance( GetTask( ),
+                                                                    CallbackForMessages );
 
     ///
     /// Run all the submodules.
@@ -251,6 +254,7 @@ void ProfessorProductController::Run( )
     m_ProductUserInterface    ->Run( );
     m_ProductCommandLine      ->Run( );
     m_ProductFrontDoorNetwork ->Run( );
+    m_ProductEdidInterface    ->Run( );
 
     ///
     /// Read the language settings and configuration status from persistent storage.

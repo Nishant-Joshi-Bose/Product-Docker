@@ -5,6 +5,7 @@ MESSAGE( STATUS "ProductController CMakeLists.txt NETWORK_COMMON_INCLUDE        
 MESSAGE( STATUS "ProductController CMakeLists.txt SOUNDTOUCH_SDK_DIR                   : " ${SOUNDTOUCH_SDK_DIR} )
 MESSAGE( STATUS "ProductController CMakeLists.txt RIVIERA_LPM_DIR                      : " ${RIVIERA_LPM_DIR} )
 MESSAGE( STATUS "ProductController CMakeLists.txt RIVIERA_LPM_SERVICE_DIR              : " ${RIVIERA_LPM_SERVICE_DIR} )
+MESSAGE( STATUS "ProductController CMakeLists.txt A4VVIDEOMANAGER_DIR                  : " ${A4VVIDEOMANAGER_DIR} )
 MESSAGE( STATUS "ProductController CMakeLists.txt OUTPUT_BIN_DIR                       : " ${OUTPUT_BIN_DIR} )
 MESSAGE( STATUS "ProductController CMakeLists.txt CASTLE_PRODUCT_CONTROLLER_COMMON_DIR : " ${CASTLE_PRODUCT_CONTROLLER_COMMON_DIR} )
 
@@ -25,6 +26,7 @@ INCLUDE_DIRECTORIES(
   include
   source
   source/CustomStateMachine
+  ${A4VVIDEOMANAGER_DIR}/source/Client
 )
 
 SET(SOUNDTOUCH_SDK_LIBS
@@ -58,6 +60,7 @@ ADD_EXECUTABLE(Professor
   source/ProductFrontDoorNetwork.cpp
   source/ProductUserInterface.cpp
   source/ProfessorProductController.cpp
+  source/ProductEdidInterface.cpp
   source/CustomStateMachine/CustomProductControllerStateBooting.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateIdle.cpp
@@ -76,9 +79,10 @@ TARGET_LINK_LIBRARIES(Professor
   KeyHandler
   jsoncpp
   protobuf
+  A4VVideoManagerClient
   -lpthread
   -lrt
-  -ltinyxml
+  -lTinyXml
 )
 
 INSTALL(TARGETS Professor DESTINATION ${OUTPUT_BIN_DIR})
