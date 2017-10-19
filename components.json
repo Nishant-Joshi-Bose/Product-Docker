@@ -45,7 +45,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.1.1-65+f652603"
+    "selected_version": "Continuous/master/0.1.1-72+0b6fa36"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -57,7 +57,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-13_1041"
+    "selected_version": "Continuous/Castle-Fork/2017-10-18_1556"
   },
   {
     "name": "CastleCli-qc8017_32",
