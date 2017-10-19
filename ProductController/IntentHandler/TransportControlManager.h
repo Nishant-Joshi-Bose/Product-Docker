@@ -28,7 +28,7 @@ public:
     // If cb is not null, the call back will return control to HSM in
     // desired function for desired state change
     //
-    bool Handle( KeyHandlerUtil::ActionType_t arg );
+    bool Handle( KeyHandlerUtil::ActionType_t arg ) override;
 
 };
 } // namespace ProductApp

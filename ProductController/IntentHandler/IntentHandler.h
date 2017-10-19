@@ -60,7 +60,10 @@ class IntentHandler
 public:
     IntentHandler( NotifyTargetTaskIF& task, CliClientMT& cliClient,
                    const FrontDoorClientIF_t& fd_client );
-    virtual ~IntentHandler() { }
+    virtual ~IntentHandler()
+    {
+        m_IntentManagerMap.clear();
+    }
 
     // Initialization will include adding various IntentManagers that are
     // associated with intent Values
@@ -70,8 +73,8 @@ public:
     bool Handle( KeyHandlerUtil::ActionType_t arg );
 
     // Public function to register any call backs back into Product HSM
-    // Intent Managers will not do any state transistion, it is only expected
-    // to valid,build and send messages (through frontdoor or IPC).
+    // Intent Managers will not do any state transition, it is only expected
+    // to validate,build and send messages (through frontdoor or IPC).
     void RegisterCallBack( KeyHandlerUtil::ActionType_t intent, CbPtr_t cb );
 
     const NotifyTargetTaskIF& GetTask() const

@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 ///// @file   IntentManager.h
 ///// @brief  Eddie specific IntentManager class for Riviera based product
-//            This is a base class and any Specific IntentManager like 
+//            This is a base class and any Specific IntentManager like
 //            TransportControlManager needs to inherit from this class.
 /////
 ///// @attention Copyright 2017 Bose Corporation, Framingham, MA
