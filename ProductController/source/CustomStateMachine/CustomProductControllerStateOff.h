@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateIdle.h
+/// @file      CustomProductControllerStateOff.h
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product idle state.
+///            product off state.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -35,7 +35,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerStateIdle.h"
+#include "ProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
 
@@ -55,22 +55,22 @@ class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class CustomProductControllerStateIdle
+/// @class CustomProductControllerStateOff
 ///
-/// @brief This class is used for executing produce specific actions when in an idle state.
+/// @brief This class is used for executing produce specific actions when in an on state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateIdle : public ProductControllerStateIdle
+class CustomProductControllerStateOff : public ProductControllerState
 {
 public:
 
-    CustomProductControllerStateIdle( ProductControllerHsm&       hsm,
+    CustomProductControllerStateOff( ProductControllerHsm&        hsm,
                                       CHsmState*                  pSuperState,
                                       ProfessorProductController& productController,
-                                      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE,
-                                      const std::string&          name    = "CustomProductControllerStateIdle" );
+                                      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_OFF,
+                                      const std::string&          name    = "CustomProductControllerStateOff" );
 
-    virtual ~CustomProductControllerStateIdle()
+    virtual ~CustomProductControllerStateOff()
     {
 
     }
@@ -78,6 +78,7 @@ public:
     void HandleStateEnter( ) override;
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
+    bool HandlePowerState( ) override;
 
 private:
 

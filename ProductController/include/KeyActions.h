@@ -1,12 +1,37 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @file      KeyActions.h
+///
+/// @brief     This file declares an enumeration and array of strings that are indexed according to
+///            the action of the key returned from the key handler.
+///
+/// @date      10/18/2017
+///
+/// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
+///
+///            Bose Corporation
+///            The Mountain Road,
+///            Framingham, MA 01701-9168
+///            U.S.A.
+///
+///            This program may not be reproduced, in whole or in part, in any form by any means
+///            whatsoever without the written permission of Bose Corporation.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// The ifdef-style of include guard here is just to play nice with the key generator script, as
+/// the pycparser does not like pragmas.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifndef __KEYACTION_H__
 #define __KEYACTION_H__
 
-// the #ifdef-style of include guard here is just to play nice
-// with the key generator script, as pycparser doesn't like pragmas
-
 typedef enum
 {
-    // start at 1, CastleKeyHandler appears to reserve action 0
+    ///
+    /// This enumeration starts at 1, since the CastleKeyHandler appears to reserve action for 0.
+    ///
     KEY_ACTION_POWER = 1,
     KEY_ACTION_SOURCE,
     KEY_ACTION_PRESET_1,
@@ -31,7 +56,11 @@ typedef enum
     KEY_ACTION_WIFI_OFF,
     KEY_ACTION_AP_SETUP,
     KEY_ACTION_PAIR_SPEAKERS,
-} KEY_ACTION;
+}
+KEY_ACTION;
 
 #endif
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                         End of File                                          ///
+////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateIdle.h
+/// @file      CustomProductControllerStateNetworkStandbyConfigured.h
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product idle state.
+///            product network standby configured state.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -35,7 +35,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerStateIdle.h"
+#include "ProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
 
@@ -55,22 +55,24 @@ class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class CustomProductControllerStateIdle
+/// @class CustomProductControllerStateNetworkStandbyConfigured
 ///
-/// @brief This class is used for executing produce specific actions when in an idle state.
+/// @brief This class is used for executing produce specific actions when in an network standby
+///        configured state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateIdle : public ProductControllerStateIdle
+class CustomProductControllerStateNetworkStandbyConfigured : public ProductControllerState
 {
 public:
 
-    CustomProductControllerStateIdle( ProductControllerHsm&       hsm,
-                                      CHsmState*                  pSuperState,
-                                      ProfessorProductController& productController,
-                                      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE,
-                                      const std::string&          name    = "CustomProductControllerStateIdle" );
+    CustomProductControllerStateNetworkStandbyConfigured
+    ( ProductControllerHsm&       hsm,
+      CHsmState*                  pSuperState,
+      ProfessorProductController& productController,
+      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED,
+      const std::string&          name    = "CustomProductControllerStateNetworkStandbyConfigured" );
 
-    virtual ~CustomProductControllerStateIdle()
+    virtual ~CustomProductControllerStateNetworkStandbyConfigured( )
     {
 
     }
@@ -78,6 +80,9 @@ public:
     void HandleStateEnter( ) override;
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
+
+    bool HandleNetworkState( bool configured, bool connected ) override;
+    bool HandleVoiceState( bool configured )                   override;
 
 private:
 

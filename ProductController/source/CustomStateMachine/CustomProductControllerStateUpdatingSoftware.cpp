@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateIdle.cpp
+/// @file      CustomProductControllerStateUpdatingSoftware.h
 ///
-/// @brief     This source code file contains functionality to process events that occur during the
-///            product idle state.
+/// @brief     This source code file contains functionality to process events that occur during a
+///            software updating state.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -27,11 +27,9 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "DPrint.h"
-#include "CustomProductControllerStateIdle.h"
 #include "ProductControllerHsm.h"
-#include "ProductControllerStateIdle.h"
-#include "ProductHardwareInterface.h"
 #include "ProfessorProductController.h"
+#include "CustomProductControllerStateUpdatingSoftware.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -49,7 +47,7 @@ static DPrint s_logger( "Product" );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateIdle::CustomProductControllerStateIdle
+/// @brief CustomProductControllerStateUpdatingSoftware::CustomProductControllerStateUpdatingSoftware
 ///
 /// @param hsm
 ///
@@ -62,71 +60,46 @@ static DPrint s_logger( "Product" );
 /// @param name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductControllerStateIdle::CustomProductControllerStateIdle( ProductControllerHsm&       hsm,
-                                                                    CHsmState*                  pSuperState,
-                                                                    ProfessorProductController& productController,
-                                                                    Hsm::STATE                  stateId,
-                                                                    const std::string&          name )
+CustomProductControllerStateUpdatingSoftware::CustomProductControllerStateUpdatingSoftware
+( ProductControllerHsm&       hsm,
+  CHsmState*                  pSuperState,
+  ProfessorProductController& productController,
+  Hsm::STATE                  stateId,
+  const std::string&          name )
 
-    : ProductControllerStateIdle( hsm, pSuperState, productController, stateId, name ),
-      m_productController( productController )
+    : ProductControllerState( hsm, pSuperState, productController, stateId, name )
 {
-    BOSE_DEBUG( s_logger, "The product idle state is being constructed." );
+    BOSE_DEBUG( s_logger, "The Product software updating state is being constructed." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateIdle::HandleStateEnter
+/// @brief CustomProductControllerStateUpdatingSoftware::HandleStateEnter
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateIdle::HandleStateEnter( )
+void CustomProductControllerStateUpdatingSoftware::HandleStateEnter()
 {
-    BOSE_DEBUG( s_logger, "The product idle state is being entered by the state machine." );
-    BOSE_DEBUG( s_logger, "An attempt to set an autowake power state is now being made." );
-
-    ProductHardwareInterface* HardwareInterface = m_productController.GetHardwareInterface( );
-
-    if( HardwareInterface != nullptr )
-    {
-        HardwareInterface->RequestPowerStateAutowake( );
-    }
+    BOSE_DEBUG( s_logger, "The Product software updating state is being entered." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateIdle::HandleStateStart
+/// @brief CustomProductControllerStateUpdatingSoftware::HandleStateStart
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateIdle::HandleStateStart( )
+void CustomProductControllerStateUpdatingSoftware::HandleStateStart()
 {
-    BOSE_DEBUG( s_logger, "The product idle state is being started." );
-
-    bool networkConnected;
-    bool voiceConfigured;
-
-    networkConnected = m_productController.IsNetworkConfigured( );
-    voiceConfigured = m_productController.IsVoiceConfigured( );
-
-    if( networkConnected and voiceConfigured )
-    {
-        BOSE_DEBUG( s_logger, "The product idle state is changing to a voice configured state." );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
-    }
-    else
-    {
-        BOSE_DEBUG( s_logger, "The product idle state is changing to a voice unconfigured state." );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED );
-    }
+    BOSE_DEBUG( s_logger, "The Product software updating state is being started." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateIdle::HandleStateExit
+/// @brief CustomProductControllerStateUpdatingSoftware::HandleStateExit
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateIdle::HandleStateExit( )
+void CustomProductControllerStateUpdatingSoftware::HandleStateExit()
 {
-    BOSE_DEBUG( s_logger, "The product idle state is being exited." );
+    BOSE_DEBUG( s_logger, "The Product software updating state is being exited." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,5 +108,5 @@ void CustomProductControllerStateIdle::HandleStateExit( )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -39,14 +39,27 @@
 #include "ProductControllerStates.h"
 #include "HsmState.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                            Start of Product Application Namespace                            ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// Forward Class Declarations
+///            Forward Class Declarations
 ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductControllerHsm;
 class ProfessorProductController;
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @class CustomProductControllerStateBooting
+///
+/// @brief This class is used for executing produce specific actions when in a booting state.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 class CustomProductControllerStateBooting : public ProductControllerStateBooting
 {
 public:
@@ -64,13 +77,23 @@ public:
 
     void HandleStateEnter( ) override;
     void HandleStateStart( ) override;
-    void HandleStateExit( ) override;
+    void HandleStateExit( )  override;
 
-    bool HandleLpmState( bool active )  override;
-    bool HandleCapsState( bool active )  override;
-    bool HandleNetworkState( bool active )  override;
-    bool HandleSTSSourcesInit( void )         override;
+    bool HandleLpmState( bool active )       override;
+    bool HandleCapsState( bool active )      override;
+    bool HandleAudioPathState( bool active ) override;
+    bool HandleSTSSourcesInit( void )        override;
+
+private:
+
+    void HandlePotentialStateChange( void );
+
+    ProfessorProductController& m_productController;
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                             End of Product Application Namespace                             ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

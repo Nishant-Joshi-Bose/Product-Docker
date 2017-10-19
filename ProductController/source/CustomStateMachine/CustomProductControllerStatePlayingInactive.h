@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateIdle.h
+/// @file      CustomProductControllerStatePlayingInactive.h
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product idle state.
+///            product playing state.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -35,9 +35,10 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerStateIdle.h"
+#include "ProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
+#include "APTimer.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -55,22 +56,24 @@ class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class CustomProductControllerStateIdle
+/// @class CustomProductControllerStatePlayingInactive
 ///
-/// @brief This class is used for executing produce specific actions when in an idle state.
+/// @brief This class is used for executing produce specific actions when in an playing inactive state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateIdle : public ProductControllerStateIdle
+class CustomProductControllerStatePlayingInactive : public ProductControllerState
 {
 public:
 
-    CustomProductControllerStateIdle( ProductControllerHsm&       hsm,
-                                      CHsmState*                  pSuperState,
-                                      ProfessorProductController& productController,
-                                      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE,
-                                      const std::string&          name    = "CustomProductControllerStateIdle" );
+    CustomProductControllerStatePlayingInactive
 
-    virtual ~CustomProductControllerStateIdle()
+    ( ProductControllerHsm&       hsm,
+      CHsmState*                  pSuperState,
+      ProfessorProductController& productController,
+      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE,
+      const std::string&          name    = "CustomProductControllerStatePlayingInactive" );
+
+    virtual ~CustomProductControllerStatePlayingInactive()
     {
 
     }
@@ -79,9 +82,30 @@ public:
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
 
+    bool HandlePlaybackRequest( ProductPlaybackRequest_ProductPlaybackState state ) override;
+    bool HandleKeyAction( int action ) override;
+
 private:
 
     ProfessorProductController& m_productController;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief This timer is used to monitor the amount of time the device is in this state. It is
+    ///        armed on entry to this state and stopped on exit to this state. If it expires in
+    ///        20 minutes, the HandleTimeOut method declared below will be invoked.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    APTimerPtr m_timer;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief This method will be invoked by an expired timer, which is defined above and armed on
+    ///        entry to this state, if the device has remained in a inactive playing state for 20
+    ///        minutes with no active audio or user interaction through a key action.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    void HandleTimeOut( void );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

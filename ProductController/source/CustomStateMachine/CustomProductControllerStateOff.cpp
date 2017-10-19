@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateIdle.cpp
+/// @file      CustomProductControllerStateOff.cpp
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product idle state.
+///            product off state.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -27,7 +27,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "DPrint.h"
-#include "CustomProductControllerStateIdle.h"
+#include "CustomProductControllerStateOff.h"
 #include "ProductControllerHsm.h"
 #include "ProductControllerStateIdle.h"
 #include "ProductHardwareInterface.h"
@@ -49,7 +49,7 @@ static DPrint s_logger( "Product" );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateIdle::CustomProductControllerStateIdle
+/// @brief CustomProductControllerStateOff::CustomProductControllerStateOff
 ///
 /// @param hsm
 ///
@@ -62,71 +62,76 @@ static DPrint s_logger( "Product" );
 /// @param name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductControllerStateIdle::CustomProductControllerStateIdle( ProductControllerHsm&       hsm,
-                                                                    CHsmState*                  pSuperState,
-                                                                    ProfessorProductController& productController,
-                                                                    Hsm::STATE                  stateId,
-                                                                    const std::string&          name )
+CustomProductControllerStateOff::CustomProductControllerStateOff( ProductControllerHsm&       hsm,
+                                                                  CHsmState*                  pSuperState,
+                                                                  ProfessorProductController& productController,
+                                                                  Hsm::STATE                  stateId,
+                                                                  const std::string&          name )
 
-    : ProductControllerStateIdle( hsm, pSuperState, productController, stateId, name ),
+    : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
       m_productController( productController )
 {
-    BOSE_DEBUG( s_logger, "The product idle state is being constructed." );
+    BOSE_DEBUG( s_logger, "The product off state is being constructed." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateIdle::HandleStateEnter
+/// @brief CustomProductControllerStateOff::HandleStateEnter
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateIdle::HandleStateEnter( )
+void CustomProductControllerStateOff::HandleStateEnter( )
 {
-    BOSE_DEBUG( s_logger, "The product idle state is being entered by the state machine." );
-    BOSE_DEBUG( s_logger, "An attempt to set an autowake power state is now being made." );
+    BOSE_DEBUG( s_logger, "The product off state is being entered." );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStateOff::HandleStateStart
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStateOff::HandleStateStart( )
+{
+    BOSE_DEBUG( s_logger, "The product off state is being started." );
 
     ProductHardwareInterface* HardwareInterface = m_productController.GetHardwareInterface( );
 
     if( HardwareInterface != nullptr )
     {
-        HardwareInterface->RequestPowerStateAutowake( );
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateIdle::HandleStateStart
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateIdle::HandleStateStart( )
-{
-    BOSE_DEBUG( s_logger, "The product idle state is being started." );
-
-    bool networkConnected;
-    bool voiceConfigured;
-
-    networkConnected = m_productController.IsNetworkConfigured( );
-    voiceConfigured = m_productController.IsVoiceConfigured( );
-
-    if( networkConnected and voiceConfigured )
-    {
-        BOSE_DEBUG( s_logger, "The product idle state is changing to a voice configured state." );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
+        HardwareInterface->RequestPowerStateOff( );
     }
     else
     {
-        BOSE_DEBUG( s_logger, "The product idle state is changing to a voice unconfigured state." );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED );
+        BOSE_ERROR( s_logger, "The product off state is unable to request a power off." );
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateIdle::HandleStateExit
+/// @brief CustomProductControllerStateOff::HandleStateExit
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateIdle::HandleStateExit( )
+void CustomProductControllerStateOff::HandleStateExit( )
 {
-    BOSE_DEBUG( s_logger, "The product idle state is being exited." );
+    BOSE_DEBUG( s_logger, "The product off state is being exited." );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateOff::HandlePowerState
+///
+/// @param  bool power
+///
+/// @return This method returns a true Boolean value indicating that it has handled the power
+///         state changed and no futher processing will be required by any of its superstates.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateOff::HandlePowerState( )
+{
+    BOSE_DEBUG( s_logger, "The product off state is changing to playable to power the device." );
+
+    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE );
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

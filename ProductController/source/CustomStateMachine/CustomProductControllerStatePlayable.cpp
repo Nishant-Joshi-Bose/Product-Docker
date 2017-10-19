@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateIdle.cpp
+/// @file      CustomProductControllerStatePlayable.cpp
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product idle state.
+///            product playable state.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -27,11 +27,10 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "DPrint.h"
-#include "CustomProductControllerStateIdle.h"
+#include "CustomProductControllerStatePlaying.h"
 #include "ProductControllerHsm.h"
-#include "ProductControllerStateIdle.h"
-#include "ProductHardwareInterface.h"
 #include "ProfessorProductController.h"
+#include "ProductControllerState.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -49,7 +48,7 @@ static DPrint s_logger( "Product" );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateIdle::CustomProductControllerStateIdle
+/// @brief CustomProductControllerStatePlayable::CustomProductControllerStatePlayable
 ///
 /// @param hsm
 ///
@@ -62,71 +61,91 @@ static DPrint s_logger( "Product" );
 /// @param name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductControllerStateIdle::CustomProductControllerStateIdle( ProductControllerHsm&       hsm,
-                                                                    CHsmState*                  pSuperState,
-                                                                    ProfessorProductController& productController,
-                                                                    Hsm::STATE                  stateId,
-                                                                    const std::string&          name )
+CustomProductControllerStatePlayable::CustomProductControllerStatePlayable
+( ProductControllerHsm&       hsm,
+  CHsmState*                  pSuperState,
+  ProfessorProductController& productController,
+  Hsm::STATE                  stateId,
+  const std::string&          name )
 
-    : ProductControllerStateIdle( hsm, pSuperState, productController, stateId, name ),
+    : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
       m_productController( productController )
 {
-    BOSE_DEBUG( s_logger, "The product idle state is being constructed." );
+    BOSE_DEBUG( s_logger, "The product playable state is being constructed." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateIdle::HandleStateEnter
+/// @brief CustomProductControllerStatePlayable::HandleStateEnter
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateIdle::HandleStateEnter( )
+void CustomProductControllerStatePlayable::HandleStateEnter( )
 {
-    BOSE_DEBUG( s_logger, "The product idle state is being entered by the state machine." );
-    BOSE_DEBUG( s_logger, "An attempt to set an autowake power state is now being made." );
-
-    ProductHardwareInterface* HardwareInterface = m_productController.GetHardwareInterface( );
-
-    if( HardwareInterface != nullptr )
-    {
-        HardwareInterface->RequestPowerStateAutowake( );
-    }
+    BOSE_DEBUG( s_logger, "The product playable state is being entered." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateIdle::HandleStateStart
+/// @brief CustomProductControllerStatePlayable::HandleStateStart
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateIdle::HandleStateStart( )
+void CustomProductControllerStatePlayable::HandleStateStart( )
 {
-    BOSE_DEBUG( s_logger, "The product idle state is being started." );
+    BOSE_DEBUG( s_logger, "The product playable state is being started." );
 
-    bool networkConnected;
-    bool voiceConfigured;
-
-    networkConnected = m_productController.IsNetworkConfigured( );
-    voiceConfigured = m_productController.IsVoiceConfigured( );
-
-    if( networkConnected and voiceConfigured )
+    if( m_productController.IsNetworkConfigured( ) )
     {
-        BOSE_DEBUG( s_logger, "The product idle state is changing to a voice configured state." );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
+        BOSE_DEBUG( s_logger, "The product playable state is changing to the idle state." );
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
     }
     else
     {
-        BOSE_DEBUG( s_logger, "The product idle state is changing to a voice unconfigured state." );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED );
+        if( m_productController.IsAutoWakeEnabled( ) )
+        {
+            BOSE_DEBUG( s_logger, "The product playable state is changing to the idle state." );
+            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
+        }
+        else
+        {
+            BOSE_DEBUG( s_logger, "The product playable state is changing to the network standby state." );
+            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
+        }
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateIdle::HandleStateExit
+/// @brief CustomProductControllerStatePlayable::HandleStateExit
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateIdle::HandleStateExit( )
+void CustomProductControllerStatePlayable::HandleStateExit( )
 {
-    BOSE_DEBUG( s_logger, "The product idle state is being exited." );
+    BOSE_DEBUG( s_logger, "The product playable state is being exited." );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStatePlayable::HandlePlaybackRequest
+///
+/// @return This method returns a true Boolean value indicating that it has handled the power
+///         state changed and no futher processing will be required by any of its superstates.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayable::HandlePlaybackRequest( ProductPlaybackRequest_ProductPlaybackState
+                                                                  state )
+{
+    if( state == ProductPlaybackRequest_ProductPlaybackState_Play )
+    {
+        BOSE_DEBUG( s_logger, "The product playable state is changing to a playing active state." );
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE );
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "The product playable state is changing to a playing inactive state." );
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
+    }
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

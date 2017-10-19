@@ -44,19 +44,35 @@
 #include "APServerSocketListenerIF.h"
 #include "IPCMessageRouterIF.h"
 #include "ProductMessage.pb.h"
-#include "ProductFrontDoorNetwork.h"
+#include "ProductNetworkManager.h"
+#include "ProductSystemManager.h"
+#include "KeyActions.h"
 #include "NetManager.pb.h"
 #include "ProductController.h"
 #include "ProductControllerHsm.h"
 #include "ProductControllerStateTop.h"
-#include "ProductControllerStateOn.h"
 #include "ProductControllerStateSetup.h"
-#include "CustomProductControllerStateBooting.h"
-#include "CustomProductControllerStateNetworkStandby.h"
-#include "CustomProductControllerStateIdle.h"
-#include "CustomProductControllerStateUpdating.h"
+#include "ProductControllerStates.h"
 #include "ProductSTSController.h"
+#include "CustomProductControllerState.h"
+#include "CustomProductControllerStateBooting.h"
+#include "CustomProductControllerStateUpdatingSoftware.h"
+#include "CustomProductControllerStateOff.h"
+#include "CustomProductControllerStateOn.h"
+#include "CustomProductControllerStatePlayable.h"
+#include "CustomProductControllerStateNetworkStandby.h"
+#include "CustomProductControllerStateNetworkStandbyConfigured.h"
+#include "CustomProductControllerStateNetworkStandbyUnconfigured.h"
+#include "CustomProductControllerStateIdle.h"
+#include "CustomProductControllerStateIdleVoiceConfigured.h"
+#include "CustomProductControllerStateIdleVoiceUnconfigured.h"
+#include "CustomProductControllerStatePlayingActive.h"
+#include "CustomProductControllerStatePlaying.h"
+#include "CustomProductControllerStatePlayingInactive.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                            Start of Product Application Namespace                            ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
 
@@ -66,11 +82,27 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductHardwareInterface;
-class ProductUserInterface;
-class ProductCommandLine;
-class ProductSystemInterface;
+class ProductSystemManager;
+class ProductNetworkManager;
 class ProductAudioService;
 class ProductSoftwareServices;
+class ProductCommandLine;
+class ProductUserInterface;
+class CustomProductControllerStateBooting;
+class CustomProductControllerStateUpdatingSoftware;
+class CustomProductControllerStateOff;
+class CustomProductControllerStateOn;
+class CustomProductControllerStatePlayable;
+class CustomProductControllerStateNetworkStandby;
+class CustomProductControllerStateNetworkStandbyConfigured;
+class CustomProductControllerStateNetworkStandbyUnconfigured;
+class CustomProductControllerStateIdle;
+class CustomProductControllerStateIdleVoiceConfigured;
+class CustomProductControllerStateIdleVoiceUnconfigured;
+class CustomProductControllerStatePlaying;
+class CustomProductControllerStatePlayingActive;
+class CustomProductControllerStatePlayingInactive;
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -115,10 +147,27 @@ public:
     void Wait( void );
     void End( void );
 
-    inline CThreadMutex& GetLock( )
-    {
-        return m_lock;
-    }
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method is used to get a pointer to the hardware interface instance
+    ///        from the product controller.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+
+    ProductHardwareInterface* GetHardwareInterface( void );
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following methods are used by the state machine to determine the status of the
+    ///        product controller.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    bool IsBooted( void );
+    bool IsNetworkConfigured( void );
+    bool IsNetworkConnected( void );
+    bool IsAutoWakeEnabled( void );
+    bool IsVoiceConfigured( void );
+    bool IsSoftwareUpdateRequired( void );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -128,6 +177,8 @@ public:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     void HandleMessage( const ProductMessage& message );
+
+private:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -153,15 +204,7 @@ public:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     ProfessorProductController( ProfessorProductController const& ) = delete;
-    void operator      = ( ProfessorProductController const& ) = delete;
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// The following member is a mutual exclusion object used to prevent race conditions.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    CThreadMutex m_lock;
-    bool         m_running;
+    ProfessorProductController operator = ( ProfessorProductController const& ) = delete;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -171,15 +214,24 @@ public:
     /// Repository, which is imported as a library when this application is built.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductControllerHsm             m_ProductControllerStateMachine;
-    ProductControllerStateTop        m_ProductControllerStateTop;
-    ProductControllerStateSetup      m_ProductControllerStateSetup;
-    ProductControllerStateOn         m_ProductControllerStateOn;
+    ProductControllerHsm        m_ProductControllerStateMachine;
+    ProductControllerStateTop   m_ProductControllerStateTop;
+    ProductControllerStateSetup m_ProductControllerStateSetup;
 
-    CustomProductControllerStateBooting          m_CustomProductControllerStateBooting;
-    CustomProductControllerStateNetworkStandby   m_CustomProductControllerStateNetworkStandby;
-    CustomProductControllerStateIdle             m_CustomProductControllerStateIdle;
-    CustomProductControllerStateUpdatingSoftware m_CustomProductControllerStateUpdating;
+    CustomProductControllerStateBooting                    m_CustomProductControllerStateBooting;
+    CustomProductControllerStateUpdatingSoftware           m_CustomProductControllerStateUpdatingSoftware;
+    CustomProductControllerStateOff                        m_CustomProductControllerStateOff;
+    CustomProductControllerStateOn                         m_CustomProductControllerStateOn;
+    CustomProductControllerStatePlayable                   m_CustomProductControllerStatePlayable;
+    CustomProductControllerStateNetworkStandby             m_CustomProductControllerStateNetworkStandby;
+    CustomProductControllerStateNetworkStandbyConfigured   m_CustomProductControllerStateNetworkStandbyConfigured;
+    CustomProductControllerStateNetworkStandbyUnconfigured m_CustomProductControllerStateNetworkStandbyUnconfigured;
+    CustomProductControllerStateIdle                       m_CustomProductControllerStateIdle;
+    CustomProductControllerStateIdleVoiceConfigured        m_CustomProductControllerStateIdleVoiceConfigured;
+    CustomProductControllerStateIdleVoiceUnconfigured      m_CustomProductControllerStateIdleVoiceUnconfigured;
+    CustomProductControllerStatePlaying                    m_CustomProductControllerStatePlaying;
+    CustomProductControllerStatePlayingActive              m_CustomProductControllerStatePlayingActive;
+    CustomProductControllerStatePlayingInactive            m_CustomProductControllerStatePlayingInactive;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -188,39 +240,13 @@ public:
     ///        applications and command line, respectively.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductHardwareInterface*  m_ProductHardwareInterface = nullptr;
-    ProductAudioService*       m_ProductAudioService      = nullptr;
-    ProductSoftwareServices*   m_ProductSoftwareServices  = nullptr;
-    ProductFrontDoorNetwork*   m_ProductFrontDoorNetwork  = nullptr;
-    ProductCommandLine*        m_ProductCommandLine       = nullptr;
-    ProductUserInterface*      m_ProductUserInterface     = nullptr;
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following member variables and methods are used to store the language settings
-    ///        and the configuration status.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductPb::Language                     m_LanguageSettings;
-    ProtoPersistenceIF::ProtoPersistencePtr m_LanguageSettingsPersistentStorage;
-    ProductPb::ConfigurationStatus          m_ConfigurationStatus;
-    ProtoPersistenceIF::ProtoPersistencePtr m_ConfigurationStatusPersistentStorage;
-
-    void ReadLanguageSettingsFromPersistentStorage( void );
-    void ReadConfigurationStatusFromPersistentStorage( void );
-    void WriteLanguageSettingsToPersistentStorage( void );
-    void WriteConfigurationStatusToPersistentStorage( void );
-
-    std::string GetSystemLanguageCode( void );
-    void        SetSystemLanguageCode( std::string systemLanguageString );
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following method are used by the state machine to determine the status of the
-    ///        product controller.
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    bool IsBooted( void );
-    bool GetNetworkStatus( void );
+    ProductHardwareInterface* m_ProductHardwareInterface;
+    ProductSystemManager*     m_ProductSystemManager;
+    ProductNetworkManager*    m_ProductNetworkManager;
+    ProductAudioService*      m_ProductAudioService;
+    ProductSoftwareServices*  m_ProductSoftwareServices;
+    ProductCommandLine*       m_ProductCommandLine;
+    ProductUserInterface*     m_ProductUserInterface;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -229,10 +255,17 @@ public:
     ///        machine states.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool m_IsLpmReady       = false;
-    bool m_IsCapsReady      = false;
-    bool m_IsAudioPathReady = false;
-    bool m_IsNetworkReady   = false;
+    bool m_IsLpmReady;
+    bool m_IsCapsReady;
+    bool m_IsAudioPathReady;
+    bool m_IsSTSReady;
+    bool m_IsNetworkConfigured;
+    bool m_IsNetworkConnected;
+    bool m_IsAutoWakeEnabled;
+    bool m_IsAccountConfigured;
+    bool m_IsMicrophoneEnabled;
+    bool m_IsSoftwareUpdateRequired;
+    bool m_Running;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -240,13 +273,16 @@ public:
     ///        between the Professor Product Controller and the STS source proxies.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
+    ProductSTSController m_ProductSTSController;
+
     void SetupProductSTSConntroller( void );
     void HandleSTSInitWasComplete( void );
     void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
-    bool                       m_IsSTSReady;
-    ProductSTSController       m_ProductSTSController;
 };
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                             End of Product Application Namespace                             ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
