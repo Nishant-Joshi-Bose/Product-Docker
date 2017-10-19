@@ -76,14 +76,7 @@ void ShowBacktrace( int sig )
     BOSE_INFO( s_logger, "************************************************" );
     for( auto f : backtrace() )
     {
-        if( f.length() )
-        {
-            BOSE_INFO( s_logger, f.c_str() );
-        }
-        else
-        {
-            BOSE_INFO( s_logger, "<unresolved>" );
-        }
+        BOSE_INFO( s_logger, f.length() ? f.c_str() : "<unresolved>" );
     }
     BOSE_INFO( s_logger, "*** backtrace complete ***" );
 }
