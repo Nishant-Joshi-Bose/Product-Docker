@@ -31,10 +31,12 @@
 
   <daemon name="STSCertified"/>
 
-  <daemon name="Bluetooth"/>
-
   <!-- The Bluetooth daemon depends on the btproperty daemon -->
   <daemon name="btproperty"/>
+
+  <daemon name="Bluetooth"/>
+
+  <daemon name="BTLESetup"/>
 
   <daemon name="PtsServer">
     <arg>/opt/Bose/etc/pts-handler</arg>
