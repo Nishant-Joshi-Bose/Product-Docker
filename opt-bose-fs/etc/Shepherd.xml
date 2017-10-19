@@ -3,10 +3,6 @@
 
   <daemon name="LPMService"/>
 
-  <daemon name="LPMUpdater">
-    <arg>/opt/Bose/etc/</arg>
-  </daemon>
-
   <daemon name="avahi-daemon"
           exe="start-avahi"/>
 
@@ -14,6 +10,10 @@
           recovery="reboot"/>
 
   <daemon name="CLIServer"/>
+
+  <daemon name="A4VVideoManagerService"/>
+
+  <daemon name="A4VRemoteCommunicationService"/>
 
   <daemon name="IoT"/>
 
