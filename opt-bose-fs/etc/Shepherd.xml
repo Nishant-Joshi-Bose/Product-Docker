@@ -13,6 +13,8 @@
 
   <daemon name="A4VVideoManagerService"/>
 
+  <daemon name="A4VRemoteCommunicationService"/>
+
   <daemon name="IoT"/>
 
   <daemon name="UpnpSource">
