@@ -49,9 +49,11 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     InitializeLpmClient();
     m_LanguagePersistence = ProtoPersistenceFactory::Create( "ProductLanguage", g_ProductPersistenceDir );
     m_ConfigurationStatusPersistence = ProtoPersistenceFactory::Create( "ConfigurationStatus", g_ProductPersistenceDir );
+    m_nowPlayingPersistence = ProtoPersistenceFactory::Create( "NowPlaying", g_ProductPersistenceDir );
     ReadSystemLanguageFromPersistence();
     m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
     ReadConfigurationStatusFromPersistence();
+    ReadNowPlayingFromPersistence();
 
     m_lightbarController = std::unique_ptr<LightBarController>( new LightBarController( *this , m_FrontDoorClientIF, m_LpmClient ) );
 }
@@ -145,8 +147,18 @@ void EddieProductController::RegisterEndPoints()
     AsyncCallback<NetManager::Protobuf::NetworkStatus> networkStatusCb( std::bind( &EddieProductController::HandleNetworkStatus ,
                                                                                    this, std::placeholders::_1 ), GetTask() );
     m_FrontDoorClientIF->RegisterNotification<NetManager::Protobuf::NetworkStatus>( "/network/status", networkStatusCb );
+
+    AsyncCallback<SoundTouchInterface::NowPlayingJson> nowPlayingCb( std::bind( &EddieProductController::HandleCapsNowPlaying ,
+                                                                                this, std::placeholders::_1 ), GetTask() );
+
+    m_FrontDoorClientIF->RegisterNotification<SoundTouchInterface::NowPlayingJson>( "/content/nowPlaying", nowPlayingCb );
 }
 
+void EddieProductController::HandleCapsNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingPb )
+{
+    BOSE_INFO( s_logger, "%s,np- (%s)", __func__,  ProtoToMarkup::ToJson( nowPlayingPb, false ).c_str() );
+    PersistCapsNowPlaying( nowPlayingPb );
+}
 void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus )
 {
     BOSE_INFO( s_logger, "%s,N/w status- (%s)", __func__,  ProtoToMarkup::ToJson( networkStatus, false ).c_str() );
@@ -369,6 +381,23 @@ void EddieProductController::ReadConfigurationStatusFromPersistence()
     }
 }
 
+void EddieProductController::ReadNowPlayingFromPersistence()
+{
+    try
+    {
+        std::string s = m_nowPlayingPersistence->Load();
+        ProtoToMarkup::FromJson( s, &m_nowPlaying );
+    }
+    catch( const ProtoToMarkup::MarkupError &e )
+    {
+        BOSE_LOG( ERROR, "Configuration status from persistence failed markup error - " << e.what() );
+    }
+    catch( ProtoPersistenceIF::ProtoPersistenceException& e )
+    {
+        BOSE_LOG( ERROR, "Loading configuration status from persistence failed - " << e.what() );
+    }
+}
+
 void EddieProductController::ReadSystemLanguageFromPersistence()
 {
     try
@@ -428,6 +457,36 @@ void EddieProductController::PersistSystemConfigurationStatus()
         catch( ProtoPersistenceIF::ProtoPersistenceException& e )
         {
             BOSE_LOG( ERROR, "Loading configuration status from persistence failed - " << e.what() );
+        }
+    }
+}
+
+///
+///Return true if nowPlaying protobuf has changed.
+///
+bool EddieProductController::IsNowPlayingChanged( const SoundTouchInterface::NowPlayingJson& nowPlayingPb )
+{
+    return ( ( m_nowPlaying.source().sourcedisplayname() not_eq nowPlayingPb.source().sourcedisplayname() )
+             or ( m_nowPlaying.container().contentitem().sourceaccount() not_eq nowPlayingPb.container().contentitem().sourceaccount() )
+             or ( m_nowPlaying.container().contentitem().source() not_eq nowPlayingPb.container().contentitem().source() ) );
+}
+void EddieProductController::PersistCapsNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingPb, bool forcePersist )
+{
+    BOSE_INFO( s_logger, __func__ );
+    if( forcePersist or IsNowPlayingChanged( nowPlayingPb ) )
+    {
+        m_nowPlaying.CopyFrom( nowPlayingPb );
+        try
+        {
+            m_nowPlayingPersistence->Store( ProtoToMarkup::ToJson( m_nowPlaying ) );
+        }
+        catch( const ProtoToMarkup::MarkupError &e )
+        {
+            BOSE_LOG( ERROR, "Storing nowplaying failed markup error - " << e.what() );
+        }
+        catch( ProtoPersistenceIF::ProtoPersistenceException& e )
+        {
+            BOSE_LOG( ERROR, "Storing nowplaying in persistence failed - " << e.what() );
         }
     }
 }

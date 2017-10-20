@@ -65,6 +65,7 @@ private:
 ////////////////////////////////////////////////////////////////////////////////
     void ReadSystemLanguageFromPersistence();
     void ReadConfigurationStatusFromPersistence();
+    void ReadNowPlayingFromPersistence();
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  PersistSystemLanguageCode
@@ -73,6 +74,14 @@ private:
 ////////////////////////////////////////////////////////////////////////////////
     void PersistSystemLanguageCode();
     void PersistSystemConfigurationStatus();
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  PersistCapsNowPlaying
+/// @brief Function to persist nowPlaying information in /mnt/nv/product-persistence/.
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void PersistCapsNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingPb, bool force = false );
+    bool IsNowPlayingChanged( const SoundTouchInterface::NowPlayingJson& nowPlayingPb );
     void HandleAllowSourceSelectCliCmd( const std::list<std::string> & argList, std::string& response );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -93,6 +102,12 @@ private:
                                                 std::string& response );
 
     void HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name HandleCapsNowPlaying
+/// @brief Function to Handle "/content/nowPlaying" notification from Caps.
+///////////////////////////////////////////////////////////////////////////////
+    void HandleCapsNowPlaying( const SoundTouchInterface::NowPlayingJson& );
 
 public:
     // Handle Key Information received from LPM
@@ -237,9 +252,11 @@ private:
     DeviceManager                               m_deviceManager;
 
     ProtoPersistenceIF::ProtoPersistencePtr     m_ConfigurationStatusPersistence = nullptr;
+    ProtoPersistenceIF::ProtoPersistencePtr     m_nowPlayingPersistence = nullptr;
     ProtoPersistenceIF::ProtoPersistencePtr     m_LanguagePersistence = nullptr;
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
     ProductPb::Language                         m_systemLanguage;
+    SoundTouchInterface::NowPlayingJson         m_nowPlaying;
     NetManager::Protobuf::NetworkStatus         m_cachedStatus;
 
     ProductCliClient                            m_productCliClient;
