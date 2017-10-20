@@ -1,9 +1,9 @@
-﻿////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateNetworkStandby.cpp
+/// @file      CustomProductControllerStateNetworkStandbyConfigured.cpp
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product network standby state.
+///            product network standby configured state.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -26,11 +26,10 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "DPrint.h"
+#include "CustomProductControllerStateNetworkStandbyConfigured.h"
 #include "ProductControllerHsm.h"
-#include "ProductHardwareInterface.h"
 #include "ProfessorProductController.h"
-#include "CustomProductControllerStateNetworkStandby.h"
+#include "DPrint.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -48,7 +47,8 @@ static DPrint s_logger( "Product" );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateNetworkStandby::CustomProductControllerStateNetworkStandby
+/// @brief CustomProductControllerStateNetworkStandbyConfigured::
+///        CustomProductControllerStateNetworkStandbyConfigured
 ///
 /// @param hsm
 ///
@@ -61,7 +61,8 @@ static DPrint s_logger( "Product" );
 /// @param name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductControllerStateNetworkStandby::CustomProductControllerStateNetworkStandby
+CustomProductControllerStateNetworkStandbyConfigured::
+CustomProductControllerStateNetworkStandbyConfigured
 
 ( ProductControllerHsm&       hsm,
   CHsmState*                  pSuperState,
@@ -69,81 +70,116 @@ CustomProductControllerStateNetworkStandby::CustomProductControllerStateNetworkS
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerStateNetworkStandby( hsm, pSuperState, productController, stateId, name ),
+    : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
       m_productController( productController )
 {
-    BOSE_DEBUG( s_logger, "The product network standby state is being constructed." );
+    BOSE_DEBUG( s_logger, "The product network standby configured state is being constructed." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateNetworkStandby::HandleStateEnter
+/// @brief CustomProductControllerStateNetworkStandbyConfigured::HandleStateEnter
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateNetworkStandby::HandleStateEnter()
+void CustomProductControllerStateNetworkStandbyConfigured::HandleStateEnter()
 {
-    BOSE_DEBUG( s_logger, "The product network standby state is being entered." );
-    BOSE_DEBUG( s_logger, "An attempt to set a standby power state is being made." );
-
-    ProductHardwareInterface* HardwareInterface = m_productController.GetHardwareInterface( );
-
-    if( HardwareInterface != nullptr )
-    {
-        HardwareInterface->RequestPowerStateStandby( );
-    }
+    BOSE_DEBUG( s_logger, "The product network standby configured state is being entered." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateNetworkStandby::HandleStateStart
+/// @brief CustomProductControllerStateNetworkStandbyConfigured::HandleStateStart
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateNetworkStandby::HandleStateStart()
+void CustomProductControllerStateNetworkStandbyConfigured::HandleStateStart()
 {
-    BOSE_DEBUG( s_logger, "The product network standby state is being started." );
+    BOSE_DEBUG( s_logger, "The product network standby configured state is being started." );
+}
 
-    bool networkConfigured = m_productController.IsNetworkConfigured( );
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStateNetworkStandbyConfigured::HandleStateExit
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStateNetworkStandbyConfigured::HandleStateExit()
+{
+    BOSE_DEBUG( s_logger, "The product network standby configured state is being exited." );
+}
 
-    if( networkConfigured )
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateNetworkStandbyConfigured::HandleNetworkState
+///
+/// @param  bool configured
+///
+/// @param  bool connected
+///
+/// @return This method returns a true Boolean value indicating that it has handled the network
+///         state change and no futher processing will be required by any of its superstates.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateNetworkStandbyConfigured::HandleNetworkState( bool configured,
+                                                                               bool connected )
+{
+    BOSE_DEBUG( s_logger, "The product network standby configured state is handling a network state change." );
+
+    if( not configured )
     {
-        BOSE_DEBUG( s_logger, "The product network standby state is changing to a configured state." );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED );
+        BOSE_DEBUG( s_logger, "The state is changing to a network standby unconfigured state." );
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
+
+        return true;
     }
     else
     {
-        BOSE_DEBUG( s_logger, "The product network standby state is changing to an unconfigured state." );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
+        bool networkConnected;
+        bool voiceConfigured;
+
+        networkConnected = connected;
+        voiceConfigured = m_productController.IsVoiceConfigured( );
+
+        if( networkConnected and voiceConfigured )
+        {
+            BOSE_DEBUG( s_logger, "The product network standby configured state is changing to an idle state." );
+            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
+        }
+        else
+        {
+            BOSE_DEBUG( s_logger, "The product network standby configured state is not changing state." );
+        }
+
+        return true;
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateNetworkStandby::HandleStateExit
+/// @brief  CustomProductControllerStateNetworkStandbyConfigured::HandleVoiceState
 ///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateNetworkStandby::HandleStateExit()
-{
-    BOSE_DEBUG( s_logger, "The product network standby state is being exited." );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief  CustomProductControllerStateNetworkStandby::HandleAutowakeStatus
-///
-/// @param  bool active
+/// @param  bool configured
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the voice
 ///         state change and no futher processing will be required by any of its superstates.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateNetworkStandby::HandleAutowakeStatus( bool active )
+bool CustomProductControllerStateNetworkStandbyConfigured::HandleVoiceState( bool configured )
 {
-    BOSE_DEBUG( s_logger, "The product network standby state is handling a change in autowake status." );
+    BOSE_DEBUG( s_logger, "The product network standby configured state is handling a voice state change." );
 
-    if( active )
+    bool voiceConfigured;
+    bool networkConnected;
+
+    voiceConfigured = configured;
+    networkConnected = m_productController.IsNetworkConfigured( );
+
+    if( voiceConfigured and networkConnected )
     {
-        BOSE_DEBUG( s_logger, "The product network standby state is changing to an idle state." );
+        BOSE_DEBUG( s_logger, "The product state is changing to an idle state." );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "The product network standby configured state is not changing." );
     }
 
     return true;

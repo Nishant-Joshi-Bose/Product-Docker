@@ -1,9 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateIdle.h
+/// @file      CustomProductControllerStateIdleVoiceUnconfigured.h
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product idle state.
+///            product idle state when the voice for a Virtual Personal Assistant (VPA) is
+///            unconfigured.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -35,9 +36,10 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerStateIdle.h"
+#include "ProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
+#include "APTimer.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -55,22 +57,25 @@ class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class CustomProductControllerStateIdle
+/// @class CustomProductControllerStateIdleVoiceUnconfigured
 ///
-/// @brief This class is used for executing produce specific actions when in an idle state.
+/// @brief This class is used for executing produce specific actions when in an idle voice
+///        unconfigured state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateIdle : public ProductControllerStateIdle
+class CustomProductControllerStateIdleVoiceUnconfigured : public ProductControllerState
 {
 public:
 
-    CustomProductControllerStateIdle( ProductControllerHsm&       hsm,
-                                      CHsmState*                  pSuperState,
-                                      ProfessorProductController& productController,
-                                      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE,
-                                      const std::string&          name    = "CustomProductControllerStateIdle" );
+    CustomProductControllerStateIdleVoiceUnconfigured
 
-    virtual ~CustomProductControllerStateIdle()
+    ( ProductControllerHsm&       hsm,
+      CHsmState*                  pSuperState,
+      ProfessorProductController& productController,
+      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED,
+      const std::string&          name    = "CustomProductControllerStateIdleVoiceUnconfigured" );
+
+    virtual ~CustomProductControllerStateIdleVoiceUnconfigured()
     {
 
     }
@@ -79,9 +84,30 @@ public:
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
 
+    bool HandleNetworkState( bool configured, bool connected ) override;
+    bool HandleVoiceState( bool configured )                   override;
+
 private:
 
     ProfessorProductController& m_productController;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief This timer is used to monitor the amount of time the device is in this state. It is
+    ///        armed on entry to this state and stopped on exit to this state. If it expires in
+    ///        20 minutes, the HandleTimeOut method declared below will be invoked.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    APTimerPtr m_timer;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief This method will be invoked by an expired timer, which is defined above and armed on
+    ///        entry to this state, if the device has remained in a voice unconfigured state for 20
+    ///        minutes.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    void HandleTimeOut( void );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

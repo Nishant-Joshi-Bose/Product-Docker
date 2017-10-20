@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateIdle.h
+/// @file      CustomProductControllerStateUpdatingSoftware.h
 ///
-/// @brief     This source code file contains functionality to process events that occur during the
-///            product idle state.
+/// @brief     This header file contains functionality to process events that occur during the
+///            product software update state.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -35,7 +35,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerStateIdle.h"
+#include "ProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
 
@@ -60,17 +60,17 @@ class ProfessorProductController;
 /// @brief This class is used for executing produce specific actions when in an idle state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateIdle : public ProductControllerStateIdle
+class CustomProductControllerStateUpdatingSoftware : public ProductControllerState
 {
 public:
 
-    CustomProductControllerStateIdle( ProductControllerHsm&       hsm,
-                                      CHsmState*                  pSuperState,
-                                      ProfessorProductController& productController,
-                                      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE,
-                                      const std::string&          name    = "CustomProductControllerStateIdle" );
+    CustomProductControllerStateUpdatingSoftware( ProductControllerHsm&       hsm,
+                                                  CHsmState*                  pSuperState,
+                                                  ProfessorProductController& productController,
+                                                  Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING,
+                                                  const std::string&          name    = "CustomProductControllerStateSoftwareUpdating" );
 
-    virtual ~CustomProductControllerStateIdle()
+    virtual ~CustomProductControllerStateUpdatingSoftware( )
     {
 
     }
@@ -78,10 +78,6 @@ public:
     void HandleStateEnter( ) override;
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
-
-private:
-
-    ProfessorProductController& m_productController;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,5 +86,5 @@ private:
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

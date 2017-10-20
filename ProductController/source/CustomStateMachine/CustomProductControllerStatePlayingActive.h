@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateIdle.h
+/// @file      CustomProductControllerStatePlayingActive.h
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product idle state.
+///            product playing state.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -35,7 +35,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerStateIdle.h"
+#include "ProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
 
@@ -55,22 +55,23 @@ class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class CustomProductControllerStateIdle
+/// @class CustomProductControllerStatePlayingActive
 ///
-/// @brief This class is used for executing produce specific actions when in an idle state.
+/// @brief This class is used for executing produce specific actions when in an playing active state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateIdle : public ProductControllerStateIdle
+class CustomProductControllerStatePlayingActive : public ProductControllerState
 {
 public:
 
-    CustomProductControllerStateIdle( ProductControllerHsm&       hsm,
-                                      CHsmState*                  pSuperState,
-                                      ProfessorProductController& productController,
-                                      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE,
-                                      const std::string&          name    = "CustomProductControllerStateIdle" );
+    CustomProductControllerStatePlayingActive
+    ( ProductControllerHsm&       hsm,
+      CHsmState*                  pSuperState,
+      ProfessorProductController& productController,
+      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE,
+      const std::string&          name    = "CustomProductControllerStatePlayingActive" );
 
-    virtual ~CustomProductControllerStateIdle()
+    virtual ~CustomProductControllerStatePlayingActive()
     {
 
     }
@@ -79,9 +80,31 @@ public:
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
 
+    bool HandlePlaybackRequest( ProductPlaybackRequest_ProductPlaybackState state ) override;
+    bool HandleKeyAction( int action ) override;
+
 private:
 
     ProfessorProductController& m_productController;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief This timer is used to monitor the amount of time the device is in this state. It is
+    ///        armed on entry to this state and stopped on exit to this state. If it expires in
+    ///        4 hours, where no user activity has taken place, the HandleTimeOut method declared
+    ///        below will be invoked.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    APTimerPtr m_timer;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief This method will be invoked by an expired timer, which is defined above and armed on
+    ///        entry to this state, if the device has remained in an active playing state with no
+    ///        user activitey through a key action for 4 hours.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    void HandleTimeOut( void );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

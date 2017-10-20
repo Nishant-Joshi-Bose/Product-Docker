@@ -44,6 +44,9 @@
 #include "ProductMessage.pb.h"
 #include "LpmClientIF.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                Start of ProductApp Namespace                                 ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,6 +97,7 @@ public:
     /// This declaration is used to start and run the hardware manager.
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool Run( void );
+    void Stop( void );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These methods handle LPM status requests.
@@ -107,20 +111,39 @@ public:
     bool RegisterForKeyEvents( Callback< LpmServiceMessages::IpcKeyInformation_t > callback );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
-    /// These declarations are utility calls used mostly by the ProductDevice class, which send
-    /// messages to the LPM hardware manager process as a client.
+    /// These declarations are calls used to set the power state of the hardware.
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool SendSetVolume( uint32_t              volume );
-    bool SendUserMute( bool                  mute );
-    bool SendInternalMute( bool                  mute );
-    bool SendAudioPathPresentationLatency( uint32_t              latency );
-    bool SendSetDSPAudioMode( IpcAudioMode_t        audioMode );
-    bool SendLipSyncDelay( uint32_t              audioDelay );
-    bool SendToneAndLevelControl( IpcToneControl_t&     controls );
-    bool SendSpeakerList( IpcAccessoryList_t&   accessoryList );
+    bool RequestNormalOperations( void );
+    void RequestNormalOperationsFailed( uint32_t operationCode );
+    void RequestNormalOperationsPassed( const LpmServiceMessages::IpcLpmStateResponse_t stateResponse );
+    bool RequestPowerStateOff( void );
+    void RequestPowerStateOffFailed( uint32_t operationCode );
+    void RequestPowerStateOffPassed( const LpmServiceMessages::IpcLpmStateResponse_t stateResponse );
+    bool RequestPowerStateStandby( void );
+    void RequestPowerStateStandbyFailed( uint32_t operationCode );
+    void RequestPowerStateStandbyPassed( const LpmServiceMessages::IpcLpmStateResponse_t stateResponse );
+    bool RequestPowerStateAutowake( void );
+    void RequestPowerStateAutowakeFailed( uint32_t operationCode );
+    void RequestPowerStateAutowakePassed( const LpmServiceMessages::IpcLpmStateResponse_t stateResponse );
+    bool RequestPowerStateFull( void );
+    void RequestPowerStateFullFailed( uint32_t operationCode );
+    void RequestPowerStateFullPassed( const LpmServiceMessages::IpcLpmStateResponse_t stateResponse );
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    /// These declarations are utility calls, which send messages to the LPM hardware manager
+    /// process as a client.
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    bool SendSetVolume( uint32_t volume );
+    bool SendUserMute( bool      mute );
+    bool SendInternalMute( bool  mute );
+    bool SendAudioPathPresentationLatency( uint32_t  latency );
+    bool SendSetDSPAudioMode( IpcAudioMode_t         audioMode );
+    bool SendLipSyncDelay( uint32_t                  audioDelay );
+    bool SendToneAndLevelControl( IpcToneControl_t&  controls );
+    bool SendSpeakerList( IpcAccessoryList_t&        accessoryList );
     bool SendSetSystemTimeoutEnableBits( Ipc_TimeoutControl_t& timeoutControl );
-    bool RebootRequest( void );
-    bool HandleLowPowerStandby( void );
+    bool SendWiFiRadioStatus( uint32_t frequencyInKhz );
+    bool SendRebootRequest( void );
     void SetBlueToothMacAddress( const std::string&       bluetoothMacAddress );
     void SetBlueToothDeviceName( const std::string&       bluetoothDeviceName );
     bool SendBlueToothDeviceData( const std::string&       bluetoothDeviceName,
@@ -154,7 +177,7 @@ private:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     ProductHardwareInterface( ProductHardwareInterface const& ) = delete;
-    void operator     = ( ProductHardwareInterface const& ) = delete;
+    ProductHardwareInterface operator = ( ProductHardwareInterface const& ) = delete;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These declarations store the main task for processing LPM hardware events and requests. It
@@ -181,8 +204,12 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     void Connected( bool  connected );
 };
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///                               End of ProductApp Namespace                                    ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

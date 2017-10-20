@@ -1,10 +1,21 @@
-////////////////////////////////////////////////////////////////////////////////
-/// @file ConfigurationStatus.proto
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief Product ConfigurationStatus to persist in nv.
+/// @file      ConfigurationStatus.proto
 ///
-/// Copyright 2017 Bose Corporation
-////////////////////////////////////////////////////////////////////////////////
+/// @brief     This Protocol Buffer contains configuration status information to persist in non-
+///            volatile memory.
+///
+/// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
+///
+///            Bose Corporation
+///            The Mountain Road,
+///            Framingham, MA 01701-9168
+///            U.S.A.
+///
+///            This program may not be reproduced, in whole or in part, in any form by any means
+///            whatsoever without the written permission of Bose Corporation.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 package ProductPb;
 
@@ -19,3 +30,7 @@ message ConfigurationStatus
 
     optional Status status = 1;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                        End of File                                           ///
+////////////////////////////////////////////////////////////////////////////////////////////////////

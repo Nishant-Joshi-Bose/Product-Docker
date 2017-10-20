@@ -27,4 +27,3 @@ enum ProductSourceSlot
     SLOT_2 = 4;
     SLOT_INVALID = 255;
 }
-

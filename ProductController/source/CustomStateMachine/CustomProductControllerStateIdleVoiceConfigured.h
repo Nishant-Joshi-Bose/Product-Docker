@@ -1,9 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateIdle.h
+/// @file      CustomProductControllerStateIdleVoiceConfigured.h
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product idle state.
+///            product idle state when the voice for a Virtual Personal Assistant (VPA) is
+///            configured.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -35,7 +36,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerStateIdle.h"
+#include "ProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
 
@@ -55,29 +56,34 @@ class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class CustomProductControllerStateIdle
+/// @class CustomProductControllerStateIdleVoiceConfigured
 ///
-/// @brief This class is used for executing produce specific actions when in an idle state.
+/// @brief This class is used for executing produce specific actions when in an idle voice
+///        configured state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateIdle : public ProductControllerStateIdle
+class CustomProductControllerStateIdleVoiceConfigured : public ProductControllerState
 {
 public:
 
-    CustomProductControllerStateIdle( ProductControllerHsm&       hsm,
-                                      CHsmState*                  pSuperState,
-                                      ProfessorProductController& productController,
-                                      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE,
-                                      const std::string&          name    = "CustomProductControllerStateIdle" );
+    CustomProductControllerStateIdleVoiceConfigured
+    ( ProductControllerHsm&       hsm,
+      CHsmState*                  pSuperState,
+      ProfessorProductController& productController,
+      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED,
+      const std::string&          name    = "CustomProductControllerStateIdleVoiceConfigured" );
 
-    virtual ~CustomProductControllerStateIdle()
+    virtual ~CustomProductControllerStateIdleVoiceConfigured()
     {
 
     }
 
     void HandleStateEnter( ) override;
     void HandleStateStart( ) override;
-    void HandleStateExit( )  override;
+    void HandleStateExit( ) override;
+
+    bool HandleNetworkState( bool configured, bool connected ) override;
+    bool HandleVoiceState( bool configured )                   override;
 
 private:
 

@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateIdle.h
+/// @file      CustomProductControllerStateNetworkStandbyUnconfigured.h
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product idle state.
+///            product network standby unconfigured state.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -35,9 +35,10 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerStateIdle.h"
+#include "ProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
+#include "APTimer.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -55,22 +56,24 @@ class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class CustomProductControllerStateIdle
+/// @class CustomProductControllerStateNetworkStandbyUnconfigured
 ///
-/// @brief This class is used for executing produce specific actions when in an idle state.
+/// @brief This class is used for executing produce specific actions when in an network standby
+///        unconfigured state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateIdle : public ProductControllerStateIdle
+class CustomProductControllerStateNetworkStandbyUnconfigured : public ProductControllerState
 {
 public:
 
-    CustomProductControllerStateIdle( ProductControllerHsm&       hsm,
-                                      CHsmState*                  pSuperState,
-                                      ProfessorProductController& productController,
-                                      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE,
-                                      const std::string&          name    = "CustomProductControllerStateIdle" );
+    CustomProductControllerStateNetworkStandbyUnconfigured
+    ( ProductControllerHsm&       hsm,
+      CHsmState*                  pSuperState,
+      ProfessorProductController& productController,
+      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED,
+      const std::string&          name    = "CustomProductControllerStateNetworkStandbyUnconfigured" );
 
-    virtual ~CustomProductControllerStateIdle()
+    virtual ~CustomProductControllerStateNetworkStandbyUnconfigured( )
     {
 
     }
@@ -79,9 +82,30 @@ public:
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
 
+    bool HandleNetworkState( bool configured, bool connected ) override;
+    bool HandleVoiceState( bool configured )                   override;
+
 private:
 
     ProfessorProductController& m_productController;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief This timer is used to monitor the amount of time the device is in this state. It is
+    ///        armed on entry to this state and stopped on exit to this state. If it expires in
+    ///        2 hours, the HandleTimeOut method declared below will be invoked.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    APTimerPtr m_timer;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief This method will be invoked by an expired timer, which is defined above and armed on
+    ///        entry to this state, if the device has remained in a network standby unconfigured
+    ///        state for 2 hours.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    void HandleTimeOut( void );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
