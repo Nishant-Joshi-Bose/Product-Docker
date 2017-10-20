@@ -44,6 +44,7 @@
 #include "ProductMessage.pb.h"
 #include "A4VVideoManagerClientFactory.h"
 #include "A4V_VideoManagerClientIF.h"
+#include "ProductHardwareInterface.h"
 
 namespace ProductApp
 {
@@ -52,7 +53,7 @@ namespace ProductApp
 ///            Included Subclasses
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProductCommandLine;
+class ProductHardwareInterface;
 class ProductController;
 
 class ProductEdidInterface
@@ -70,6 +71,7 @@ public:
     typedef APServerSocketListenerIF::ListenerPtr   ServerListener;
     typedef APServerSocketListenerIF::SocketPtr     ServerSocket;
     typedef IPCMessageRouterIF::IPCMessageRouterPtr MessageRouter;
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -89,14 +91,15 @@ public:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     static ProductEdidInterface* GetInstance( NotifyTargetTaskIF*        task,
-                                                  Callback< ProductMessage > ProductNotifyCallback );
+                                              Callback< ProductMessage > ProductNotifyCallback,
+                                              ProductHardwareInterface*  HardwareInterface );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration is used to start and run the hardware manager.
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool Run( void );
-    
-    private:
+
+private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -112,7 +115,8 @@ public:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ProductEdidInterface( NotifyTargetTaskIF*        task,
-                              Callback< ProductMessage > ProductNotifyCallback );
+                          Callback< ProductMessage > ProductNotifyCallback,
+                          ProductHardwareInterface*  HardwareInterface );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -142,17 +146,25 @@ public:
     /// This method is called when an A4VVM server connection is established.
     //////////////////////////////////////////////////////////////////////////////////////////////
     void Connected( bool  connected );
-    
+
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following method is used to register for and receive key events from the 
+    /// @brief The following method is used to register for and receive key events from the
     ///        A4VVideoManager interface.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     void HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMIMsg_t hpdEvent );
-    void HandleRawEDIDResponse(const A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid );
-    void HandlePhyAddrResponse(const A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t cecPhysicalAddress );
-    
+    void HandleRawEDIDResponse( const A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid );
+    void HandlePhyAddrResponse( const A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t cecPhysicalAddress );
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following subclass instances are used to manage the lower level hardware and
+    ///        the device.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ProductHardwareInterface* m_ProductHardwareInterface = nullptr;
+
 };
 }
 

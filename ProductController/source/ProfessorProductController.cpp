@@ -243,7 +243,8 @@ void ProfessorProductController::Run( )
     m_ProductCommandLine       = ProductCommandLine::GetInstance( GetTask( ),
                                                                   m_ProductHardwareInterface );
     m_ProductEdidInterface     = ProductEdidInterface::GetInstance( GetTask( ),
-                                                                    CallbackForMessages );
+                                                                    CallbackForMessages,
+                                                                    m_ProductHardwareInterface );
 
     ///
     /// Run all the submodules.

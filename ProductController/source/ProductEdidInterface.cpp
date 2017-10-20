@@ -40,6 +40,7 @@
 
 
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             Start of Product Namespace                                       ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,9 +84,10 @@ static const DPrint s_logger { "Product" };
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductEdidInterface* ProductEdidInterface::GetInstance( NotifyTargetTaskIF*        mainTask,
-        Callback< ProductMessage > ProductNotify )
+                                                         Callback< ProductMessage > ProductNotify,
+                                                         ProductHardwareInterface*  HardwareInterface )
 {
-    static ProductEdidInterface* instance = new ProductEdidInterface( mainTask, ProductNotify );
+    static ProductEdidInterface* instance = new ProductEdidInterface( mainTask, ProductNotify, HardwareInterface );
 
     BOSE_DEBUG( s_logger, "The instance %8p of the Product Command Line was returned.", instance );
     return instance;
@@ -105,10 +107,12 @@ ProductEdidInterface* ProductEdidInterface::GetInstance( NotifyTargetTaskIF*    
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductEdidInterface::ProductEdidInterface( NotifyTargetTaskIF*        mainTask,
-                                        Callback< ProductMessage > ProductNotify )
+                                            Callback< ProductMessage > ProductNotify,
+                                            ProductHardwareInterface*  HardwareInterface )
     : m_mainTask( mainTask ),
       m_ProductNotify( ProductNotify ),
-      m_connected( false )
+      m_connected( false ),
+      m_ProductHardwareInterface( HardwareInterface )
 
 {
     return;
@@ -154,7 +158,7 @@ bool ProductEdidInterface::Run( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductEdidInterface::Connected( bool connected )
 {
-    
+
     if( !connected )
     {
         BOSE_DEBUG( s_logger, "Connection to A4VVideoManager could not be established." );
@@ -175,8 +179,8 @@ void ProductEdidInterface::Connected( bool connected )
 
         Callback< A4VVideoManagerServiceMessages::EventHDMIMsg_t >
         CallbackForKeyEvents( std::bind( &ProductEdidInterface::HandleHpdEvent,
-                                     this,
-                                     std::placeholders::_1 ) );
+                                         this,
+                                         std::placeholders::_1 ) );
 
         m_EdidClient->RegisterForHotplugEvent( CallbackForKeyEvents );
 
@@ -193,27 +197,28 @@ void ProductEdidInterface::Connected( bool connected )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductEdidInterface::HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMIMsg_t hpdEvent )
 {
-    BOSE_LOG(DEBUG, __PRETTY_FUNCTION__);
-    BOSE_LOG(INFO, "Got HDMI event : " << hpdEvent.event());
-    
-    if (hpdEvent.event() == A4VVideoManagerServiceMessages::EventsHDMI_t::EHDMI_Connected) {
+    BOSE_LOG( DEBUG, __PRETTY_FUNCTION__ );
+    BOSE_LOG( INFO, "Got HDMI event : " << hpdEvent.event() );
+
+    if( hpdEvent.event() == A4VVideoManagerServiceMessages::EventsHDMI_t::EHDMI_Connected )
+    {
         {
-            BOSE_LOG(INFO, "Sending edid raw Request");
+            BOSE_LOG( INFO, "Sending edid raw Request" );
             auto func = std::bind(
-                    &ProductEdidInterface::HandleRawEDIDResponse,
-                    this,
-                    std::placeholders::_1);
-            AsyncCallback<A4VVideoManagerServiceMessages::EDIDRawMsg_t> cb(func, m_mainTask);
-            m_EdidClient->RequestRawEDID(cb);
+                            &ProductEdidInterface::HandleRawEDIDResponse,
+                            this,
+                            std::placeholders::_1 );
+            AsyncCallback<A4VVideoManagerServiceMessages::EDIDRawMsg_t> cb( func, m_mainTask );
+            m_EdidClient->RequestRawEDID( cb );
         }
         {
-            BOSE_LOG(INFO, "Sending Phy addr Request");
+            BOSE_LOG( INFO, "Sending Phy addr Request" );
             auto func = std::bind(
-                    &ProductEdidInterface::HandlePhyAddrResponse,
-                    this,
-                    std::placeholders::_1);
-            AsyncCallback<A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t> cb(func, m_mainTask);
-            m_EdidClient->RequestPhyAddr(cb);
+                            &ProductEdidInterface::HandlePhyAddrResponse,
+                            this,
+                            std::placeholders::_1 );
+            AsyncCallback<A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t> cb( func, m_mainTask );
+            m_EdidClient->RequestPhyAddr( cb );
         }
 
     }
@@ -226,10 +231,10 @@ void ProductEdidInterface::HandleHpdEvent( A4VVideoManagerServiceMessages::Event
 /// @param keyEvent
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductEdidInterface::HandleRawEDIDResponse(const A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid )
+void ProductEdidInterface::HandleRawEDIDResponse( const A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid )
 {
     //TBD - Mano
-    
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -239,7 +244,7 @@ void ProductEdidInterface::HandleRawEDIDResponse(const A4VVideoManagerServiceMes
 /// @param keyEvent
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductEdidInterface::HandlePhyAddrResponse(const A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t cecPhysicalAddress )
+void ProductEdidInterface::HandlePhyAddrResponse( const A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t cecPhysicalAddress )
 {
     BOSE_DEBUG( s_logger, "CEC Physical address 0x%x is being set.", cecPhysicalAddress.addr() );
 
@@ -253,7 +258,7 @@ void ProductEdidInterface::HandlePhyAddrResponse(const A4VVideoManagerServiceMes
     {
         BOSE_DEBUG( s_logger, "A send CEC PA request will be made." );
 
-        //TBD - Mano
+        m_ProductHardwareInterface->CECSetPhysicalAddress( cecPhysicalAddress.addr() );
 
         return;
     }
