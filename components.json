@@ -65,7 +65,7 @@
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@62d58812b037e46aae101dcf91e7f28a2a0d2a26"
+    "selected_version": "master@9c005999b6b9816a38af8f44e68458056cde72db"
   },
   {
     "name": "AVS-qc8017_32",
@@ -73,11 +73,11 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Continuous/master/0.0.1-5+c62d835"
+    "selected_version": "Release/master/0.0.1-8+2555d9a"
   },
   {
     "name": "ProfessorLPM-Package",
-    "selected_version": "Release/trunk/0.1.2.2490595"
+    "selected_version": "Release/trunk/0.1.4.2523830"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
