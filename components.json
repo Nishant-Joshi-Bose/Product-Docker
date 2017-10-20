@@ -32,6 +32,10 @@
     "selected_version": "master@6219f809686614aa13a35f1581ea8df766baec74"
   },
   {
+    "name": "CastleDemoController",
+    "selected_version": "master@21e2b92eca38bb4377e709ae05a831c577338d26"
+  },
+  {
     "name": "googletest-qc8017_32",
     "selected_version": "branches/googletest@2287"
   },

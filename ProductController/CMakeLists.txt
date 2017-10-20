@@ -3,6 +3,7 @@ INCLUDE_DIRECTORIES(
   ${RIVIERA_LPM_SERVICE_DIR}/source/LPMIPC
   ${RIVIERA_LPM_DIR}/include
   ${CASTLE_PRODUCT_CONTROLLER_COMMON_DIR}
+  ${CASTLE_DEMO_CONTROLLER_DIR}
   ${CASTLE_PRODUCT_CONTROLLER_COMMON_DIR}/Hsm
   ${CUSTOM_HSM_DIR}
   ${KEYHANDLER_DIR}/include
@@ -40,6 +41,7 @@ ADD_EXECUTABLE(Eddie
 
 TARGET_LINK_LIBRARIES(Eddie
   CastleProductControllerCommon
+  CastleDemoController
   LpmClient
   FrontDoorClient
   NetworkServiceClient

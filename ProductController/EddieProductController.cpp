@@ -17,6 +17,8 @@
 
 static DPrint s_logger( "EddieProductController" );
 
+using namespace DemoApp;
+
 namespace ProductApp
 {
 const std::string g_ProductPersistenceDir = "product-persistence/";
@@ -33,7 +35,8 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_KeyHandler( *GetTask(), m_CliClientMT, KEY_CONFIG_FILE ),
     m_deviceManager( GetTask(), *this ),
     m_cachedStatus(),
-    m_productSource( m_FrontDoorClientIF, *GetTask() )
+    m_productSource( m_FrontDoorClientIF, *GetTask() ),
+    m_demoController( m_ProductControllerTask )
 {
     BOSE_INFO( s_logger, __func__ );
     /// Add States to HSM object and initialize HSM before doing anything else.
@@ -66,6 +69,7 @@ void EddieProductController::Initialize()
     //Register lpm events that lightbar will handle
     m_lightbarController->Initialize();
     m_productSource.Initialize();
+    m_demoController.RegisterEndPoints();
 }
 
 void EddieProductController::InitializeLpmClient()

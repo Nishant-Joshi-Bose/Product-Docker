@@ -17,6 +17,7 @@
 #include "EddieProductControllerStateNetworkStandby.h"
 #include "DeviceManager.h"
 #include "LightBarController.h"
+#include "DemoController.h"
 #include "ConfigurationStatus.pb.h"
 #include "SoundTouchInterface/AllowSourceSelect.pb.h"
 #include "Language.pb.h"
@@ -248,6 +249,9 @@ private:
     bool                                        m_isCapsReady = false;
     bool                                        m_isLPMReady  = true;
     bool                                        m_isNetworkModuleReady  = false;
+
+    /// Demonstration Controller instance
+    DemoApp::DemoController m_demoController;
 };
 }
 // namespace
