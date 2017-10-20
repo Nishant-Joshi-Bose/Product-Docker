@@ -141,26 +141,27 @@ void EddieProductController::RegisterEndPoints()
     AsyncCallback<NetManager::Protobuf::NetworkStatus> networkStatusCb( std::bind( &EddieProductController::HandleNetworkStatus ,
                                                                                    this, std::placeholders::_1 ), GetTask() );
     m_FrontDoorClientIF->RegisterNotification<NetManager::Protobuf::NetworkStatus>( "/network/status", networkStatusCb );
-
-    SendAllowSourceSelectNotification( true );
 }
 
 void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus )
 {
     BOSE_INFO( s_logger, "%s,N/w status- (%s)", __func__,  ProtoToMarkup::ToJson( networkStatus, false ).c_str() );
-    bool isCurrPrimaryUp = ( networkStatus.has_isprimaryup() && networkStatus.isprimaryup() );
-    bool isPrevPrimaryUp = ( m_cachedStatus.has_isprimaryup() && m_cachedStatus.isprimaryup() );
-    if( isCurrPrimaryUp not_eq isPrevPrimaryUp )
+    if( networkStatus.has_primary() )
     {
-        BOSE_INFO( s_logger, "%s, IsPrimary up=%s", __func__, isCurrPrimaryUp ? "Up" : "Down" );
-        // Store the network status when changes.
-        m_ConfigurationStatus.mutable_status()->set_network( isCurrPrimaryUp );
+        bool isCurrPrimaryUp = ( networkStatus.has_isprimaryup() && networkStatus.isprimaryup() );
+        bool isPrevPrimaryUp = ( m_cachedStatus.has_isprimaryup() && m_cachedStatus.isprimaryup() );
+        if( isCurrPrimaryUp not_eq isPrevPrimaryUp )
+        {
+            BOSE_INFO( s_logger, "%s, IsPrimary up=%s", __func__, isCurrPrimaryUp ? "Up" : "Down" );
+            // Store the network status when changes.
+            m_ConfigurationStatus.mutable_status()->set_network( isCurrPrimaryUp );
+        }
+        if( not m_isNetworkModuleReady )
+        {
+            HandleNetworkModuleReady( true );
+        }
+        m_cachedStatus = networkStatus;
     }
-    if( not m_isNetworkModuleReady )
-    {
-        HandleNetworkModuleReady( true );
-    }
-    m_cachedStatus = networkStatus;
 }
 
 void EddieProductController::SendAllowSourceSelectNotification( bool isSourceSelectAllowed )
@@ -168,7 +169,7 @@ void EddieProductController::SendAllowSourceSelectNotification( bool isSourceSel
     BOSE_INFO( s_logger, __func__ );
     SoundTouchInterface::AllowSourceSelect pb;
     pb.set_sourceselectallowed( isSourceSelectAllowed );
-    m_FrontDoorClientIF->SendNotification( "allowSourceSelectUpdate", pb );
+    m_FrontDoorClientIF->SendNotification( "/content/allowSourceSelectUpdate", pb );
 }
 
 void EddieProductController::HandleAllowSourceSelectRequest( const Callback<SoundTouchInterface::AllowSourceSelect> &resp )
@@ -251,6 +252,7 @@ void EddieProductController::HandleCapsInitializationUpdate( const SoundTouchInt
 {
     BOSE_DEBUG( s_logger, "%s:notification: %s", __func__, ProtoToMarkup::ToJson( resp, false ).c_str() );
     HandleCAPSReady( resp.capsinitialized() );
+    SendAllowSourceSelectNotification( true );
 }
 
 void EddieProductController::HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp )
