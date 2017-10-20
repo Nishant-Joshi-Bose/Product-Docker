@@ -55,8 +55,12 @@ graph: product-ipk
 	graph-components --exclude='-(native|ti)$$' Eddie builds/$(cfg)/product-ipk-stage/component-info.gz >builds/$(cfg)/components.dot
 	dot -Tsvgz builds/$(cfg)/components.dot -o builds/$(cfg)/components.svgz
 
+.PHONY: hsp-ipk
+hsp-ipk: cmake_build
+	./scripts/create-hsp-ipk
+
 .PHONY: package
-package: product-ipk
+package: product-ipk hsp-ipk
 	./scripts/create-product-tarball
 
 .PHONY: clean

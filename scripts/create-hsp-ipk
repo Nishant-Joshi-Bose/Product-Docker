@@ -1,0 +1,112 @@
+#!/bin/bash
+#
+# Create an IPK file for installing Rivera HSP with opkg.
+#
+# To install:
+#   opkg install -d bose hsp.ipk
+#
+# The file /etc/opkg/opkg.conf should contain this line:
+#   dest bose /opt/Bose
+#
+# To uninstall:
+#   opkg remove hsp
+#
+# CAUTION: HSP IPK, if interrupted / have issues, 
+#          can corrupt the device. 
+#          Please have it QFILed if this happen
+#
+this=${0##*/} # this script's name
+
+stripped=true
+cfg=Release
+
+if (( $# != 0 )); then
+    echo >&2 "$this: unexpected argument '$1'"
+    tryhelp
+fi
+
+function put_script {
+    local file="$1"; shift
+    cat "$@" >"$file" || exit
+    chmod 755 "$file" || exit
+}
+
+here=$(cd "$(dirname $0)" && echo "$PWD") || exit
+wspace=$(cd "$here/.." && echo "$PWD") || exit
+
+riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || exit
+riviera_hsp_ver=$(components get Riviera-HSP-Images selected_version) || exit
+riviera_hsp_ver=${riviera_hsp_ver##*/}
+
+arch=arm-oemllib32-linux
+sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
+tool_prefix=$sysroot/usr/bin/$arch/$arch-
+
+stage=$wspace/builds/$cfg/hsp-ipk-stage
+rm -rf "$stage"
+echo "Stage directory $stage"
+
+opt_dir=$stage/Bose
+mkdir -p "$opt_dir/hsp" || exit
+
+echo "$riviera_hsp_ver" > "$opt_dir"/hsp/HSP_VERSION || exit
+echo "Package version \"$riviera_hsp_ver\""
+cp "$riviera_hsp_images_dir"/update_ext4.zip "$opt_dir/hsp/" || exit
+
+cat >"$stage/control" <<EOF || exit
+Package: hsp
+Version: $riviera_hsp_ver
+Description: Hardware Support Package version $riviera_hsp_ver
+ The Riviera HSP
+Section: soundtouch
+Priority: required
+License: Commercial
+Architecture: armv7a-vfp-neon
+OE: soundtouch
+Homepage: http://www.bose.com/
+#Depends: libc6 (>= 2.21)
+Source: None
+EOF
+
+# Installer scripts
+put_script "$stage/postinst" <<EOF
+#!/bin/sh
+echo "hsp postinst"
+mount /dev/mmcblk0p26 /cache
+mkdir -p /cache/recovery/
+echo "--update_package=/opt/Bose/hsp/update_ext4.zip" > /cache/recovery/command
+echo "Stopping LPM"
+killall LPMServer
+echo "Rebooting to Recovery"
+reboot recovery
+EOF
+
+put_script "$stage/postrm" <<EOF
+#!/bin/sh
+echo "hsp postrm"
+EOF
+
+put_script "$stage/preinst" <<EOF
+#!/bin/sh
+echo "hsp preinst"
+EOF
+
+put_script "$stage/prerm" <<EOF
+#!/bin/sh
+echo "hsp prerm"
+EOF
+
+# -----------------------------------------------------------------------------
+# Stage area is complete.  Package it into a *.ipk file.
+
+cd "$stage" || exit
+tar --owner=0 --group=0 -czf control.tar.gz control pre* post* || exit
+tar --owner=0 --group=0 -czf data.tar.gz -C "$opt_dir" . || exit
+echo "2.0" > debian-binary || exit
+
+ipk_dir=$wspace/builds/$cfg
+ipk=$ipk_dir/hsp.ipk
+mkdir -p "$ipk_dir" || exit
+rm -f "$ipk"
+ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
+echo "Created $ipk"
