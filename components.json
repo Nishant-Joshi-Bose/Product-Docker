@@ -106,5 +106,9 @@
   {
     "name": "WiFi-Setup-Webpage",
     "selected_version": "master@19f561f91af118db5439955e4d85bc0a914964eb"
+  },
+  {
+    "name": "CastleTestUtils",
+    "selected_version": "master@f49aa0bba9d7502b806db59c33c71cefa8648f3a"
   }
 ]
