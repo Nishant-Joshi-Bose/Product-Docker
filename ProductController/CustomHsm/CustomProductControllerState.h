@@ -13,6 +13,7 @@
 
 #include "Hsm.h"
 #include "HsmState.h"
+#include "KeyHandler.h"
 
 namespace ProductApp
 {
@@ -41,6 +42,11 @@ public:
     }
 
     virtual bool HandleModulesReady( )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntents( KeyHandlerUtil::ActionType_t result )
     {
         return false;
     }

@@ -8,6 +8,7 @@ INCLUDE_DIRECTORIES(
   ${KEYHANDLER_DIR}/include
   DeviceManager
   LightBarController
+  IntentHandler
   .
 )
 

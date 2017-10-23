@@ -38,4 +38,21 @@ void EddieProductControllerStateNetworkStandby::HandleStateExit()
 {
     BOSE_INFO( s_logger, __func__ );
 }
+
+bool EddieProductControllerStateNetworkStandby::HandleIntents( KeyHandlerUtil::ActionType_t result )
+{
+    BOSE_DEBUG( s_logger, "%s, %d", __func__, ( uint16_t ) result );
+
+    IntentHandler& IHandle =
+        static_cast<EddieProductController&>( GetProductController() ).IntentHandle();
+    if( ( IHandle.isIntentPlayControl( result ) ) ||
+        ( IHandle.IsIntentBlueTooth( result ) )   ||
+        ( IHandle.IsIntentAlexa( result ) )        ||
+        ( IHandle.IsIntentVolumeControl( result ) ) )
+    {
+        IHandle.Handle( result );
+    }
+    return false;
+}
+
 } // namespace ProductApp

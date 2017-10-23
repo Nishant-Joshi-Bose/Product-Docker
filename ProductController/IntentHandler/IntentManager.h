@@ -12,6 +12,7 @@
 #include "CliClientMT.h"
 #include "FrontDoorClientIF.h"
 #include "KeyHandler.h"
+#include "AsyncCallback.h"
 
 namespace ProductApp
 {
@@ -23,9 +24,10 @@ class IntentManager
 public:
     IntentManager( NotifyTargetTaskIF& task, CliClientMT& cliClient,
                    const FrontDoorClientIF_t& frontDoorClient ):
+        m_frontDoorClient( frontDoorClient ),
         m_task( task ),
         m_cliClient( cliClient ),
-        m_frontDoorClient( frontDoorClient )
+        m_errorCb( nullptr, &task )
     {
     }
     ~IntentManager() { }
@@ -75,12 +77,18 @@ protected:
         return m_intent;
     }
 
-private:
+    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>& errorCb()
+    {
+        return m_errorCb;
+    }
+    virtual void CallBackError( const FRONT_DOOR_CLIENT_ERRORS errorCode ) = 0;
 
-    NotifyTargetTaskIF&               m_task;
-    CliClientMT&                      m_cliClient;
-    FrontDoorClientIF_t               m_frontDoorClient;
-    CbPtr_t                           m_cb;
-    KeyHandlerUtil::ActionType_t      m_intent;
+    FrontDoorClientIF_t                     m_frontDoorClient;
+    NotifyTargetTaskIF&                     m_task;
+private:
+    CliClientMT&                            m_cliClient;
+    CbPtr_t                                 m_cb;
+    KeyHandlerUtil::ActionType_t            m_intent;
+    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> m_errorCb;
 };
 } // namespace ProductApp

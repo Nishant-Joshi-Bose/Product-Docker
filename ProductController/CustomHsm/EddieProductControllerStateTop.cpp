@@ -30,4 +30,10 @@ bool EddieProductControllerStateTop::HandleModulesReady()
     BOSE_INFO( s_logger, "%s, %d", __func__, static_cast<EddieProductController&>( GetProductController() ).IsAllModuleReady() );
     return true;
 }
+
+bool EddieProductControllerStateTop::HandleIntents( KeyHandlerUtil::ActionType_t result )
+{
+    return true;
+}
+
 } // namespace ProductApp

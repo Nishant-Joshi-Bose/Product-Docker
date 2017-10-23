@@ -41,11 +41,15 @@ static DPrint s_logger( "IntentHandler" );
 namespace ProductApp
 {
 IntentHandler::IntentHandler( NotifyTargetTaskIF& task, CliClientMT& cliClient,
-                              const FrontDoorClientIF_t& frontDoorClient ):
+                              FrontDoorClientIF_t& frontDoorClient,
+                              ProductController& controller
+                            ):
     m_task( task ),
     m_cliClient( cliClient ),
-    m_frontDoorClient( frontDoorClient )
+    m_frontDoorClient( frontDoorClient ),
+    m_controller( controller )
 {
+    BOSE_DEBUG( s_logger, "%s: ", __func__ );
 }
 
 void IntentHandler::Initialize()

@@ -29,6 +29,7 @@
 #include "LpmClientIF.h"
 #include "KeyHandler.h"
 #include "ProductSource.h"
+#include "IntentHandler.h"
 
 namespace ProductApp
 {
@@ -99,7 +100,7 @@ public:
 
     void HandleAUXSourceKeyPress();
 
-    void HandleIntends( KeyHandlerUtil::ActionType_t result );
+    void HandleIntents( KeyHandlerUtil::ActionType_t result );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  SendAllowSourceSelectNotification
@@ -217,6 +218,11 @@ public:
     void CapsInitializationStatusCallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
     void HandleAllowSourceSelectRequest( const Callback<SoundTouchInterface::AllowSourceSelect> &resp );
 
+    IntentHandler& IntentHandle()
+    {
+        return m_IntentHandler;
+    }
+
 private:
 
     EddieProductControllerHsm                   m_EddieProductControllerHsm;
@@ -245,6 +251,7 @@ private:
 
     std::unique_ptr<LightBarController>         m_lightbarController;
     ProductSource                               m_productSource;
+    IntentHandler                               m_IntentHandler;
     bool                                        m_isCapsReady = false;
     bool                                        m_isLPMReady  = true;
     bool                                        m_isNetworkModuleReady  = false;

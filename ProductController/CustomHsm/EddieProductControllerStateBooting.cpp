@@ -56,4 +56,9 @@ bool EddieProductControllerStateBooting::HandleModulesReady()
     return true;
 }
 
+bool EddieProductControllerStateBooting::HandleIntents( KeyHandlerUtil::ActionType_t result )
+{
+    return false;
+}
+
 } // namespace ProductApp

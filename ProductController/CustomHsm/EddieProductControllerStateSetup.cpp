@@ -39,4 +39,10 @@ void EddieProductControllerStateSetup::HandleStateExit()
     BOSE_INFO( s_logger, __func__ );
     DisableNetworkAccessPoint();
 }
+
+bool EddieProductControllerStateSetup::HandleIntents( KeyHandlerUtil::ActionType_t result )
+{
+    return false;
+}
+
 } // namespace ProductApp
