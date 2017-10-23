@@ -1,31 +1,39 @@
 [
   {
-    "name": "UnitTest++-ti",
-    "selected_version": "branches/UnitTest++@2424"
+    "name": "A4VQuickSetService",
+    "selected_version": "master@f6d204e1599a92f9fcaf36fad6a1dc8d5e833063"
   },
   {
-    "name": "UnitTest++-qc8017_32",
-    "selected_version": "branches/UnitTest++@2424"
+    "name": "A4VRemoteCommunicationService",
+    "selected_version": "dev@9d40811086a0cc9f4a5840ba0801e4b6ab373d25"
   },
   {
-    "name": "UnitTest++-native",
-    "selected_version": "branches/UnitTest++@2424"
+    "name": "A4VVideoManagerService",
+    "selected_version": "master@b2e2fb52fd3dfd09d13218a6a059c452d846d463"
+  },
+  {
+    "name": "AVS-qc8017_32",
+    "selected_version": "Continuous/Castle-Fork/2017-10-19_1911"
+  },
+  {
+    "name": "BoseLibs-qc8017_32",
+    "selected_version": "Release/master/0.1.1-78+bafea07"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
     "selected_version": "Continuous/Castle-Fork/2017-10-18_1656"
   },
   {
+    "name": "CastleCli-qc8017_32",
+    "selected_version": "Release/master/0.0.2-4+368de6e"
+  },
+  {
     "name": "CastleLibs-qc8017_32",
     "selected_version": "branches/castle-libs@2427"
   },
   {
-    "name": "protobuf-qc8017_32",
-    "selected_version": "branches/protobuf@2423"
-  },
-  {
-    "name": "protobuf-native",
-    "selected_version": "branches/protobuf@2423"
+    "name": "CastleNetworkService-qc8017_32",
+    "selected_version": "Release/pre-IP2/0.1.0-73+50fd024"
   },
   {
     "name": "CastleProductControllerCommon",
@@ -36,16 +44,20 @@
     "selected_version": "branches/googletest@2287"
   },
   {
-    "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.1.1-67+b83469d"
+    "name": "KeyHandler-qc8017_32",
+    "selected_version": "Continuous/master/0.0.1-14+14ad38c"
   },
   {
-    "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/1.0.1-20+2d50016"
+    "name": "ProfessorLPM-Package",
+    "selected_version": "Release/trunk/0.1.4.2523830"
   },
   {
-    "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.1.1-78+bafea07"
+    "name": "protobuf-native",
+    "selected_version": "branches/protobuf@2423"
+  },
+  {
+    "name": "protobuf-qc8017_32",
+    "selected_version": "branches/protobuf@2423"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -56,47 +68,35 @@
     "selected_version": "Release/master/1.1"
   },
   {
-    "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/16.1.4.39669.2525290"
-  },
-  {
-    "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/0.0.2-4+368de6e"
-  },
-  {
     "name": "RivieraLpmService",
     "selected_version": "master@9c005999b6b9816a38af8f44e68458056cde72db"
-  },
-  {
-    "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-19_1911"
   },
   {
     "name": "RivieraLpmUpdater",
     "selected_version": "Release/master/0.0.1-8+2555d9a"
   },
   {
-    "name": "ProfessorLPM-Package",
-    "selected_version": "Release/trunk/0.1.4.2523830"
+    "name": "Shepherd-qc8017_32",
+    "selected_version": "Release/master/1.0.1-20+2d50016"
   },
   {
-    "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/pre-IP2/0.1.0-73+50fd024"
+    "name": "SoftwareUpdate-qc8017_32",
+    "selected_version": "Continuous/master/0.1.1-67+b83469d"
   },
   {
-    "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-14+14ad38c"
+    "name": "SoundTouch-SDK-qc8017_32",
+    "selected_version": "Release/Castle-Fork/16.1.4.39669.2525290"
   },
   {
-    "name": "A4VVideoManagerService",
-    "selected_version": "master@b2e2fb52fd3dfd09d13218a6a059c452d846d463"
+    "name": "UnitTest++-native",
+    "selected_version": "branches/UnitTest++@2424"
   },
   {
-    "name": "A4VQuickSetService",
-    "selected_version": "master@f6d204e1599a92f9fcaf36fad6a1dc8d5e833063"
+    "name": "UnitTest++-qc8017_32",
+    "selected_version": "branches/UnitTest++@2424"
   },
   {
-    "name": "A4VRemoteCommunicationService",
-    "selected_version": "dev@9d40811086a0cc9f4a5840ba0801e4b6ab373d25"
+    "name": "UnitTest++-ti",
+    "selected_version": "branches/UnitTest++@2424"
   }
 ]
