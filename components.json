@@ -57,7 +57,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-19_1911"
+    "selected_version": "Release/Castle-Fork/16.1.4.39669.2525290"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -81,7 +81,7 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/pre-IP2/0.1.0-67+262ea37"
+    "selected_version": "Release/pre-IP2/0.1.0-73+50fd024"
   },
   {
     "name": "KeyHandler-qc8017_32",
