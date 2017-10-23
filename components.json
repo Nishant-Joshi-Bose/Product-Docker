@@ -94,5 +94,9 @@
   {
     "name": "A4VQuickSetService",
     "selected_version": "master@f6d204e1599a92f9fcaf36fad6a1dc8d5e833063"
+  },
+  {
+    "name": "A4VRemoteCommunicationService",
+    "selected_version": "dev@9d40811086a0cc9f4a5840ba0801e4b6ab373d25"
   }
 ]

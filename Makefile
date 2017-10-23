@@ -28,7 +28,7 @@ RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_locat
 A4VVIDEOMANAGERSERVICE_DIR = $(shell components get A4VVideoManagerService installed_location)
 A4VQUICKSETSERVICE_DIR = $(shell components get A4VQuickSetService installed_location)
 PROFESSORLPMPACKAGE_DIR = $(shell components get ProfessorLPM-Package installed_location)
-#A4VREMOTECOMMUNICATIONSERVICE_DIR = $(shell components get A4VRemoteCommunicationService installed_location)
+A4VREMOTECOMMUNICATIONSERVICE_DIR = $(shell components get A4VRemoteCommunicationService installed_location)
 CMAKE_USE_CCACHE := $(USE_CCACHE)
 
 .PHONY: generated_sources
@@ -38,7 +38,7 @@ generated_sources: check_tools version-files
 	$(MAKE) -C $(CASTLEPRODUCTCONTROLLERCOMMON_DIR) $@
 	$(MAKE) -C $(A4VVIDEOMANAGERSERVICE_DIR) $@
 	$(MAKE) -C $(A4VQUICKSETSERVICE_DIR) $@
-#	$(MAKE) -C $(A4VREMOTECOMMUNICATIONSERVICE_DIR) $@
+	$(MAKE) -C $(A4VREMOTECOMMUNICATIONSERVICE_DIR) $@
 
 .PHONY: astyle
 astyle:
