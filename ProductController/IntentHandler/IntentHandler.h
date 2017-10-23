@@ -122,11 +122,6 @@ public:
         return ( ( arg == ( uint16_t ) Action::VOLUME_UP ) ||
                  ( arg == ( uint16_t ) Action::VOLUME_DOWN ) );
     }
-#if 0
-    virtual void CallBackError( const FRONT_DOOR_CLIENT_ERRORS errorCode )
-    {
-    }
-#endif
 private:
     NotifyTargetTaskIF&   m_task;
     CliClientMT&          m_cliClient;
