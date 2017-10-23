@@ -72,13 +72,18 @@ EOF
 put_script "$stage/postinst" <<EOF
 #!/bin/sh
 echo "hsp postinst"
-mount /dev/mmcblk0p26 /cache
-mkdir -p /cache/recovery/
-echo "--update_package=/opt/Bose/hsp/update_ext4.zip" > /cache/recovery/command
-echo "Stopping LPM"
-killall LPMServer
-echo "Rebooting to Recovery"
-reboot recovery
+if [ ! -f /opt/Bose/hsp/update_ext4.zip ]; then
+    echo "/opt/Bose/hsp/update_ext4.zip not found"
+    exit 1
+fi
+if ! grep -q /cache /proc/mounts; then
+    echo "Mounting Cache"
+    mount /dev/mmcblk0p26 /cache || exit 1
+fi
+mkdir -p /cache/recovery/ || exit 1
+echo "--update_package=/opt/Bose/hsp/update_ext4.zip" > /cache/recovery/command || exit 1
+echo "Rebooting to Recovery" 
+reboot recovery || exit 1
 EOF
 
 put_script "$stage/postrm" <<EOF
@@ -89,6 +94,11 @@ EOF
 put_script "$stage/preinst" <<EOF
 #!/bin/sh
 echo "hsp preinst"
+# This is temporary for IP2. 
+# Should be removed in IP3, when stopping services is 
+# taken care of by Shepherd / Product / SoftwareUpdateService. 
+echo "Stopping LPM"
+killall LPMServer
 EOF
 
 put_script "$stage/prerm" <<EOF
