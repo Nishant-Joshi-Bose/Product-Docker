@@ -25,6 +25,9 @@ endif
 RIVIERALPMSERVICE_DIR = $(shell components get RivieraLpmService installed_location)
 CASTLEPRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
 CASTLEDEMOCONTROLLER_DIR = $(shell components get CastleDemoController installed_location)
+RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
+EDDIELPMPACKAGE_DIR = $(shell components get EddieLPM-Package installed_location)
+CMAKE_USE_CCACHE := $(USE_CCAHCE)
 
 .PHONY: generated_sources
 generated_sources: check_tools version-files
@@ -43,10 +46,7 @@ endif
 cmake_build: generated_sources | $(BUILDS_DIR) astyle
 	rm -rf $(BUILDS_DIR)/CMakeCache.txt $(BUILDS_DIR)/CMakeFiles
 # Symlinks to placate cmake's add_subdirectory which doesn't like absolute paths.
-	ln -nsf $(RIVIERALPMSERVICE_DIR) builds/RivieraLpmService
-	ln -nsf $(CASTLEPRODUCTCONTROLLERCOMMON_DIR) builds/CastleProductControllerCommon
-	ln -nsf $(CASTLEDEMOCONTROLLER_DIR) builds/CastleDemoController
-	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR)
+	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
 
 .PHONY: product-ipk
@@ -63,8 +63,12 @@ hsp-ipk: cmake_build
 	./scripts/create-hsp-ipk
 
 .PHONY: package
-package: product-ipk hsp-ipk
+package: product-ipk hsp-ipk lpmupdater-ipk
 	./scripts/create-product-tarball
+
+.PHONY: lpmupdater-ipk
+lpmupdater-ipk:
+	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage $(EDDIELPMPACKAGE_DIR) ./builds/$(cfg)/
 
 .PHONY: clean
 clean:

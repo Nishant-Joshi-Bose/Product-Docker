@@ -76,12 +76,12 @@
     "selected_version": "Release/master/1.1"
   },
   {
-    "name": "RivieraLPM",
-    "selected_version": "trunk@1080"
-  },
-  {
     "name": "RivieraLpmService",
     "selected_version": "master@de59afb49267fb1d8c0f80a87585c9a4f582638d"
+  },
+  {
+    "name": "RivieraLpmUpdater",
+    "selected_version": "Release/master/0.0.1-8+2555d9a"
   },
   {
     "name": "Shepherd-qc8017_32",
