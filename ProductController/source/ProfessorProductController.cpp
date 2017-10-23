@@ -165,19 +165,19 @@ ProfessorProductController::ProfessorProductController( ) :
                                      "ProfessorStateMachine",
                                      static_cast< ProductController & >( *this ) ),
     ///
-    /// Construction of the Common States
+    /// Create the top state for the product controller, which all other states are sub-states.
     ///
     m_ProductControllerStateTop( m_ProductControllerStateMachine,
                                  nullptr,
                                  static_cast< ProductApp::ProductController & >( *this ) ),
 
+    ///
+    /// The following states are all immediate sub-states of the top state.
+    ///
     m_ProductControllerStateSetup( m_ProductControllerStateMachine,
                                    &m_ProductControllerStateTop,
                                    static_cast< ProductApp::ProductController & >( *this ) ),
 
-    ///
-    /// Construction of the Custom Professor States
-    ///
     m_CustomProductControllerStateBooting( m_ProductControllerStateMachine,
                                            &m_ProductControllerStateTop,
                                            *this ),
@@ -194,6 +194,10 @@ ProfessorProductController::ProfessorProductController( ) :
                                       &m_ProductControllerStateTop,
                                       *this ),
 
+    ///
+    /// The following playable state is a sub-state of the on state. Substates to the playable
+    /// state include the network standby and idle state, along with their lower sub-states.
+    ///
     m_CustomProductControllerStatePlayable( m_ProductControllerStateMachine,
                                             &m_CustomProductControllerStateOn,
                                             *this ),
@@ -222,6 +226,10 @@ ProfessorProductController::ProfessorProductController( ) :
                                                          &m_CustomProductControllerStateIdle,
                                                          *this ),
 
+    ///
+    /// The following playing state is a sub-state of the on state. Substates to the playable
+    /// state include the playing active and inactive state.
+    ///
     m_CustomProductControllerStatePlaying( m_ProductControllerStateMachine,
                                            &m_CustomProductControllerStateOn,
                                            *this ),
