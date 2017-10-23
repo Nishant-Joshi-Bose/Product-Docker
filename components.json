@@ -21,11 +21,11 @@
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2427"
+    "selected_version": "branches/castle-libs@2457"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-76+c7e151b"
+    "selected_version": "Continuous/master/0.1.0-77+6b945e7"
   },
   {
     "name": "CastlePassport-native",
@@ -57,11 +57,11 @@
   },
   {
     "name": "protobuf-native",
-    "selected_version": "branches/protobuf@2423"
+    "selected_version": "branches/protobuf@2458"
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "branches/protobuf@2423"
+    "selected_version": "branches/protobuf@2458"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -85,7 +85,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.1.1-72+6bd8b0c"
+    "selected_version": "Continuous/master/0.1.1-73+c0cd458"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -93,15 +93,15 @@
   },
   {
     "name": "UnitTest++-native",
-    "selected_version": "branches/UnitTest++@2424"
+    "selected_version": "branches/UnitTest++@2456"
   },
   {
     "name": "UnitTest++-qc8017_32",
-    "selected_version": "branches/UnitTest++@2424"
+    "selected_version": "branches/UnitTest++@2456"
   },
   {
     "name": "UnitTest++-ti",
-    "selected_version": "branches/UnitTest++@2424"
+    "selected_version": "branches/UnitTest++@2456"
   },
   {
     "name": "WiFi-Setup-Webpage",
