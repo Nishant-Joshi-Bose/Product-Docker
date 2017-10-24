@@ -22,12 +22,13 @@ ifndef DONT_UPDATE_CASTLETOOLS
 endif
 	components install
 
+CMAKE_USE_CCACHE := $(USE_CCACHE)
+
+EDDIELPMPACKAGE_DIR = $(shell components get EddieLPM-Package installed_location)
 RIVIERALPMSERVICE_DIR = $(shell components get RivieraLpmService installed_location)
 PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
 DEMOCONTROLLER_DIR = $(shell components get CastleDemoController installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
-EDDIELPMPACKAGE_DIR = $(shell components get EddieLPM-Package installed_location)
-CMAKE_USE_CCACHE := $(USE_CCACHE)
 
 .PHONY: generated_sources
 generated_sources: check_tools version-files
@@ -45,7 +46,6 @@ endif
 .PHONY: cmake_build
 cmake_build: generated_sources | $(BUILDS_DIR) astyle
 	rm -rf $(BUILDS_DIR)/CMakeCache.txt $(BUILDS_DIR)/CMakeFiles
-# Symlinks to placate cmake's add_subdirectory which doesn't like absolute paths.
 	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
 
