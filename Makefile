@@ -68,7 +68,7 @@ package: product-ipk hsp-ipk lpmupdater-ipk
 
 .PHONY: lpmupdater-ipk
 lpmupdater-ipk:
-	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage $(EDDIELPMPACKAGE_DIR) ./builds/$(cfg)/
+	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage $(EDDIELPMPACKAGE_DIR) ./builds/$(cfg)/ eddie
 
 .PHONY: clean
 clean:
