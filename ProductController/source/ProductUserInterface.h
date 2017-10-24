@@ -47,6 +47,7 @@
 #include "ProductMessage.pb.h"
 #include "LpmClientIF.h"
 #include "KeyHandler.h"
+#include "KeyActions.h"
 
 namespace ProductApp
 {
@@ -90,7 +91,7 @@ public:
     static ProductUserInterface* GetInstance( NotifyTargetTaskIF*         mainTask,
                                               Callback< ProductMessage >  ProductNotify,
                                               ProductHardwareInterface*   HardwareInterface,
-                                              CliClientMT                 &cliClienMT );
+                                              CliClientMT&                CommandLineInterface );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -116,10 +117,10 @@ private:
     /// @return This method does not return anything.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductUserInterface( NotifyTargetTaskIF*         mainTask,
-                          Callback< ProductMessage >  ProductNotify,
-                          ProductHardwareInterface*   HardwareInterface,
-                          CliClientMT                 &cliClientMT );
+    ProductUserInterface( NotifyTargetTaskIF*        mainTask,
+                          Callback< ProductMessage > ProductNotify,
+                          ProductHardwareInterface*  HardwareInterface,
+                          CliClientMT&               CommandLineInterface );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -130,25 +131,24 @@ private:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     ProductUserInterface( ProductUserInterface const& ) = delete;
-    void operator = ( ProductUserInterface const& ) = delete;
+    ProductUserInterface operator = ( ProductUserInterface const& ) = delete;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following method is used to register for and receive key events from the LPM
-    ///        hardware interface.
+    /// @brief The following methods are used to register for and receive key events from the LPM
+    ///        hardware interface and the key handler.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     void RegisterForKeyEvents( void );
     void HandleKeyEvent( LpmServiceMessages::IpcKeyInformation_t keyEvent );
-    void HandleLpmKeyInformation( LpmServiceMessages::IpcKeyInformation_t keyInformation );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following method receives intents as a result of the key handler processing
-    /// "raw" keys events.
+    /// @brief The following method receives actions as a result of the key handler processing
+    ///         raw keys events.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void KeyInformationCallBack( const int result );
+    void KeyInformationCallBack( const int keyAction );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -157,13 +157,19 @@ private:
     ///        applications, respectively.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF*         m_mainTask;
-    NotifyTargetTaskIF*         m_keyEventTask;
-    Callback< ProductMessage >  m_ProductNotify;
-    ProductHardwareInterface*   m_ProductHardwareInterface = nullptr;
-    bool                        m_running;
-    KeyHandlerUtil::KeyHandler  m_KeyHandler;
-    static constexpr const char *m_keyConfigFileName = "/opt/Bose/etc/KeyConfiguration.json";
+    NotifyTargetTaskIF*          m_mainTask;
+    NotifyTargetTaskIF*          m_keyEventTask;
+    Callback< ProductMessage >   m_ProductNotify;
+    ProductHardwareInterface*    m_ProductHardwareInterface;
+    bool                         m_running;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following declaration are used for handling key presses.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    KeyHandlerUtil::KeyHandler   m_KeyHandler;
+    static constexpr const char* m_keyConfigFileName = "/opt/Bose/etc/KeyConfiguration.json";
 };
 }
 

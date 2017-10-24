@@ -43,9 +43,14 @@
 #include "APServerSocketListenerIF.h"
 #include "IPCMessageRouterIF.h"
 #include "AutoLpmServiceMessages.pb.h"
+#include "ProductMessage.pb.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                         Start of Product Application Namespace                               ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief The following aliases refer to the Bose Sound Touch class utilities for inter-process and
@@ -89,13 +94,16 @@ public:
     ///         object. That only one instance is created in a thread safe way is guaranteed by
     ///         the C++ Version 11 compiler.
     ///
-    /// @param  mainTask
+    /// @param  NotifyTargetTaskIF* mainTask
     ///
-    /// @param  HardwareInterface
+    /// @param  Callback< ProductMessage > ProductNotify
+    ///
+    /// @param  ProductHardwareInterface* HardwareInterface
     ///
     /// @return This method returns a reference to a ProductCommandLine object.
     //////////////////////////////////////////////////////////////////////////////////////////////
     static ProductCommandLine* GetInstance( NotifyTargetTaskIF*        mainTask,
+                                            Callback< ProductMessage > ProductNotify,
                                             ProductHardwareInterface*  HardwareInterface );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -117,14 +125,15 @@ private:
     ///         class from being instantiated directly, so that only the static method GetInstance
     ///         to this class can be used to get the one sole instance of it.
     ///
-    /// @param  mainTask
+    /// @param  NotifyTargetTaskIF* mainTask
     ///
-    /// @param  HardwareInterface
+    /// @param  Callback< ProductMessage > ProductNotify
     ///
-    /// @return This method does not return anything.
+    /// @param  ProductHardwareInterface* HardwareInterface
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     ProductCommandLine( NotifyTargetTaskIF*        mainTask,
+                        Callback< ProductMessage > ProductNotify,
                         ProductHardwareInterface*  HardwareInterface );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -136,7 +145,7 @@ private:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     ProductCommandLine( ProductCommandLine const& ) = delete;
-    void operator = ( ProductCommandLine const& ) = delete;
+    ProductCommandLine operator = ( ProductCommandLine const& ) = delete;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -150,7 +159,7 @@ private:
     /// @brief The following member stores a pointer to the main task for the command line.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF* m_CommandLineTask;
+    NotifyTargetTaskIF* m_task;
 
     std::vector< CommandPointer > CommandsList( void );
 
@@ -163,13 +172,17 @@ private:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following subclass instances are used to manage the lower level hardware and
-    ///        the device.
+    /// @brief The following subclass instances are used to interface with the product controller
+    ///        state machine and the lower level hardware.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductHardwareInterface* m_ProductHardwareInterface = nullptr;
-    ProductCommandLine*       m_ProductCommandLine       = nullptr;
+    Callback< ProductMessage >  m_ProductNotify;
+    ProductHardwareInterface*   m_ProductHardwareInterface = nullptr;
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                         End of Product Application Namespace                                 ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

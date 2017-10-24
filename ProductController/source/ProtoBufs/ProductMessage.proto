@@ -21,75 +21,46 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                        Select Sources Status Protocol Buffer Include                         ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 import "ProductSTS.proto";
 
-enum ProductMessageId
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                           System Language Protocol Buffer Include                            ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+import "Language.proto";
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                       LPM Lower Power Microprocessor Message Structure                       ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+message ProductLpmStatus
 {
-     LPM_HARDWARE_DOWN      =  1;
-     LPM_HARDWARE_UP        =  2;
-     CAPS_DOWN              =  3;
-     CAPS_UP                =  4;
-     NETWORK_DOWN           =  5;
-     NETWORK_CHANGE         =  6;
-     NETWORK_UP             =  7;
-     SYSTEM_LANGUAGE_CHANGE =  8;
-     KEY_PRESS              =  9;
-     AUDIO_LEVEL            = 10;
-     AUDIO_TONE             = 11;
-     USER_MUTE              = 12;
-     INTERNAL_MUTE          = 13;
-     SPEAKER_SETTING        = 14;
-     SOURCE_SELECTION       = 15;
-     SOURCE_DESELECTION     = 16;
-     CONFIGURATION_STATUS   = 17;
-     STS_SOURCES_INIT_DONE  = 18;
-     SOURCE_SLOT_SELECTED   = 19;
+        optional bool connected = 1;
 }
 
-enum ProductNetworkType
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                    CAPS Content Audio Playback Services Message Structure                    ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+message ProductCapsStatus
 {
-     LOCAL                 = 1;
-     WIRED                 = 2;
-     WIRELESS              = 3;
-     UNKNOWN_NETWORK_TYPE  = 4;
+        optional bool initialized = 1;
 }
 
-enum ProductKeyState
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                            Audio Path Status Message Structure                               ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+message ProductAudioPathStatus
 {
-     DOWN               = 1;
-     UP                 = 2;
-     UNKNOWN_KEY_STATE  = 3;
+        optional bool connected = 1;
 }
 
-message ProductNetworkData
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                  Select Sources Status and Source Slot Message Structure                     ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+message ProductSelectSourceStatus
 {
-        optional ProductNetworkType type      = 1;
-        optional string             ipaddress = 2;
-        optional int32              frequency = 3;
-}
-
-message ProductKeyData
-{
-        optional ProductKeyState state = 1;
-        optional int32           value = 2;
-}
-
-message ProductLanguageData
-{
-        optional string systemlanguage = 1;
-}
-
-message ProductConfigurationStatus
-{
-        optional bool network  = 1 [default = false];
-        optional bool language = 2 [default = false];
-        optional bool account  = 3 [default = false];
-}
-
-message ProductKeyEvent
-{
-        optional int32 state = 1;
-        optional int32 id    = 2;
+        optional bool initialized = 1;
 }
 
 message ProductSelectSourceSlot
@@ -97,19 +68,125 @@ message ProductSelectSourceSlot
         optional ProductSTS.ProductSourceSlot slot = 1;
 }
 
-message ProductMessageData
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                               Network Status Message Structure                               ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+message ProductNetworkStatus
 {
-        optional ProductNetworkData         networkdata         = 1;
-        optional ProductKeyData             keydata             = 2;
-        optional ProductLanguageData        languagedata        = 3;
-        optional ProductConfigurationStatus configurationstatus = 4;
-        optional ProductSelectSourceSlot    selectsourceslot    = 5;
+        enum ProductNetworkType
+        {
+             Wired    = 1;
+             Wireless = 2;
+             Unknown  = 3;
+        }
+        optional ProductNetworkType networktype = 1;
+        optional bool               configured  = 2;
+        optional bool               connected   = 3;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                           Network Wireless Status Message Structure                          ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// A separate message is created for sending the network wireless status. This message is       ///
+/// populated with data from the Bose Network Manager process, and cannot be used to determine   ///
+/// whether the Riviera board is connected to a network or not. Its primary purpose is to send   ///
+/// data that determined whether a wireless network exists and is configurable, as well as to    ///
+/// send frequency information to the LPM from the Product Controller to avoid any frequency     ///
+/// interruption during a speaker Adapt IQ process.                                              ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+message ProductWirelessStatus
+{
+        optional bool   configured   = 1;
+        optional uint32 frequencykhz = 2;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///              Voice Message Structure for the Virtual Personal Assistant VPA                  ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+message ProductVoiceStatus
+{
+        optional bool microphoneenabled = 1;
+        optional bool accountconfigured = 2;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                 Key Data Message Structure                                   ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+message ProductKeyData
+{
+        optional int32 action = 1;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                             System Language Message Structure                                ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+message ProductLanguageData
+{
+        optional string systemlanguage = 1 [ default = "en" ];
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                           Configuration Status Message Structure                             ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+message ProductConfigurationStatus
+{
+        optional bool network  = 1 [ default = false ];
+        optional bool language = 2 [ default = false ];
+        optional bool account  = 3 [ default = false ];
+}
+
+message Language
+{
+    message Properties
+    {
+            repeated string supported_language_codes  = 1;
+    }
+    optional string     code       = 1;
+    optional Properties properties = 2;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                              Autowake Status Message Structure                               ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+message ProductAutowakeStatus
+{
+        optional bool active = 1;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                              Playback Request Message Structure                              ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+message ProductPlaybackRequest
+{
+        enum ProductPlaybackState
+        {
+             Play    = 1;
+             Pause   = 2;
+             Stop    = 3;
+             Unknown = 4;
+        }
+        optional ProductPlaybackState state = 1;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                Base Product Message Structure                                ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 message ProductMessage
 {
-        optional ProductMessageId   id   = 1;
-        optional ProductMessageData data = 2;
+        optional ProductLpmStatus           lpmstatus           =  1;
+        optional ProductCapsStatus          capsstatus          =  2;
+        optional ProductAudioPathStatus     audiopathstatus     =  3;
+        optional ProductSelectSourceStatus  selectsourcestatus  =  4;
+        optional ProductSelectSourceSlot    selectsourceslot    =  5;
+        optional ProductNetworkStatus       networkstatus       =  6;
+        optional ProductWirelessStatus      wirelessstatus      =  7;
+        optional ProductVoiceStatus         voicestatus         =  8;
+        optional ProductKeyData             keydata             =  9;
+        optional ProductLanguageData        languagedata        = 10;
+        optional ProductConfigurationStatus configurationstatus = 11;
+        optional ProductAutowakeStatus      autowakestatus      = 12;
+        optional ProductPlaybackRequest     playbackrequest     = 13;
+        optional bool                       power               = 14;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -28,7 +28,6 @@
 #include "SystemUtils.h"
 #include "DPrint.h"
 #include "Services.h"
-#include "RebroadcastLatencyMode.pb.h"
 #include "ProductEdidInterface.h"
 #include "ProductController.h"
 #include "ProductMessage.pb.h"

@@ -1,0 +1,133 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @file      CustomProductControllerStateOn.cpp
+///
+/// @brief     This source code file contains functionality to process events that occur during the
+///            product on state.
+///
+/// @author    Stuart J. Lumby
+///
+/// @date      09/22/2017
+///
+/// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
+///
+///            Bose Corporation
+///            The Mountain Road,
+///            Framingham, MA 01701-9168
+///            U.S.A.
+///
+///            This program may not be reproduced, in whole or in part, in any form by any means
+///            whatsoever without the written permission of Bose Corporation.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+///            Included Header Files
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#include "DPrint.h"
+#include "CustomProductControllerStateOn.h"
+#include "ProductControllerHsm.h"
+#include "ProfessorProductController.h"
+#include "ProductControllerState.h"
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                            Start of Product Application Namespace                            ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace ProductApp
+{
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// The following declares a DPrint class type object and a standard string for logging information
+/// in this source code file.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+static DPrint s_logger( "Product" );
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStateOn::CustomProductControllerStateOn
+///
+/// @param hsm
+///
+/// @param pSuperState
+///
+/// @param productController
+///
+/// @param stateId
+///
+/// @param name
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+CustomProductControllerStateOn::CustomProductControllerStateOn( ProductControllerHsm&       hsm,
+                                                                CHsmState*                  pSuperState,
+                                                                ProfessorProductController& productController,
+                                                                Hsm::STATE                  stateId,
+                                                                const std::string&          name )
+
+    : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
+      m_productController( productController )
+{
+    BOSE_DEBUG( s_logger, "The product on state is being constructed." );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStateOn::HandleStateEnter
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStateOn::HandleStateEnter( )
+{
+    BOSE_DEBUG( s_logger, "The product on state is being entered." );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStateOn::HandleStateStart
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStateOn::HandleStateStart( )
+{
+    BOSE_DEBUG( s_logger, "The product on state is being started and going to a playable state." );
+    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStateOn::HandleStateExit
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStateOn::HandleStateExit( )
+{
+    BOSE_DEBUG( s_logger, "The product on state is being exited." );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateOn::HandlePowerState
+///
+/// @param  bool power
+///
+/// @return This method returns a true Boolean value indicating that it has handled the power
+///         state changed and no futher processing will be required by any of its superstates.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateOn::HandlePowerState( )
+{
+    BOSE_DEBUG( s_logger, "The product on state is changing to a power off state." );
+
+    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_OFF );
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                             End of Product Application Namespace                             ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                        End of File                                           ///
+////////////////////////////////////////////////////////////////////////////////////////////////////

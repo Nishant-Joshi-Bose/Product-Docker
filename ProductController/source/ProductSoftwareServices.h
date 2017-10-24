@@ -3,7 +3,7 @@
 /// @file      ProductSoftwareServices.h
 ///
 /// @brief     This header file contains declarations for managing software services through the
-///            Audio for Video (A4V) server.
+///            Audio for Video server.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -47,11 +47,14 @@
 #include "BoseLinkServerMsgReboot.pb.h"
 #include "BoseLinkServerMsgIds.pb.h"
 #include "NetworkPortDefines.h"
-#include "A4VSystemTimeout.pb.h"
-#include "A4VPersistence.pb.h"
+#include "Services.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                             Start of Product Namespace                                       ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 ///            Forward Class Declarations
@@ -96,6 +99,7 @@ public:
     /// This declaration is used to start and run the product software services.
     //////////////////////////////////////////////////////////////////////////////////////////////
     void Run( void );
+    void Stop( void );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration is used to handle reboot requests as a software service.
@@ -113,7 +117,7 @@ private:
     ///         to this class can be used to get the one sole instance of it.
     ///
     /// @return This method does not return anything.
-    ///
+    ///Services.h
     //////////////////////////////////////////////////////////////////////////////////////////////
     ProductSoftwareServices( NotifyTargetTaskIF*         mainTask,
                              Callback< ProductMessage >  ProductNotify,
@@ -128,7 +132,7 @@ private:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     ProductSoftwareServices( ProductSoftwareServices const& ) = delete;
-    void operator     = ( ProductSoftwareServices const& ) = delete;
+    ProductSoftwareServices operator = ( ProductSoftwareServices const& ) = delete;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration stores the main task for processing software events and requests. It is
@@ -149,6 +153,10 @@ private:
     void HandleClientDisconnect( void );
     void SendRebootRequestHandler( BoseLinkServerMsgReboot rebootRequest );
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                               End of ProductApp Namespace                                    ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

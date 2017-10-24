@@ -39,23 +39,38 @@
 #include "ProductControllerStates.h"
 #include "HsmState.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                            Start of Product Application Namespace                            ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// Forward Class Declarations
+///            Forward Class Declarations
 ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductControllerHsm;
 class ProfessorProductController;
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @class CustomProductControllerStateNetworkStandby
+///
+/// @brief This class is used for executing produce specific actions when in a network standby
+///        state.
+///CustomProductControllerStateNetworkStandby
+////////////////////////////////////////////////////////////////////////////////////////////////////
 class CustomProductControllerStateNetworkStandby : public ProductControllerStateNetworkStandby
 {
 public:
 
-    CustomProductControllerStateNetworkStandby( ProductControllerHsm&       hsm,
-                                                CHsmState*                  pSuperState,
-                                                ProfessorProductController& productController,
-                                                Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY,
-                                                const std::string&          name    = "CustomProductControllerStateNetworkStandby" );
+    CustomProductControllerStateNetworkStandby
+    ( ProductControllerHsm&       hsm,
+      CHsmState*                  pSuperState,
+      ProfessorProductController& productController,
+      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY,
+      const std::string&          name    = "CustomProductControllerStateNetworkStandby" );
 
     virtual ~CustomProductControllerStateNetworkStandby( )
     {
@@ -64,12 +79,18 @@ public:
 
     void HandleStateEnter( ) override;
     void HandleStateStart( ) override;
-    void HandleStateExit( ) override;
+    void HandleStateExit( )  override;
 
-    bool HandleLpmState( bool active )  override;
-    bool HandleCapsState( bool active )  override;
-    bool HandleNetworkState( bool active )  override;
+    bool HandleAutowakeStatus( bool active ) override;
+
+private:
+
+    ProfessorProductController& m_productController;
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                             End of Product Application Namespace                             ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

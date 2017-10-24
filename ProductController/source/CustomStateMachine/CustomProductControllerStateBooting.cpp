@@ -32,32 +32,32 @@
 #include "DPrint.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following declares a DPrint class type object and a standard string for logging information
-/// in this source code file.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static DPrint s_logger( "CustomProductControllerStateBooting" );
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             Start of Product Namespace                                       ///
+///                            Start of Product Application Namespace                            ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// The following declares a DPrint class type object and a standard string for logging information
+/// in this source code file.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+static DPrint s_logger( "Product" );
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief CustomProductControllerStateBooting::CustomProductControllerStateBooting
 ///
-/// @param hsm
+/// @param ProductControllerHsm& hsm
 ///
-/// @param pSuperState
+/// @param CHsmState* pSuperState
 ///
-/// @param productController
+/// @param ProfessorProductController& productController
 ///
-/// @param stateId
+/// @param Hsm::STATE stateId
 ///
-/// @param name
+/// @param const std::string& name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateBooting::CustomProductControllerStateBooting( ProductControllerHsm&       hsm,
@@ -66,9 +66,10 @@ CustomProductControllerStateBooting::CustomProductControllerStateBooting( Produc
                                                                           Hsm::STATE                  stateId,
                                                                           const std::string&          name )
 
-    : ProductControllerStateBooting( hsm, pSuperState, productController, stateId, name )
+    : ProductControllerStateBooting( hsm, pSuperState, productController, stateId, name ),
+      m_productController( productController )
 {
-    BOSE_DEBUG( s_logger, "The Product Booting State has been constructed." );
+    BOSE_DEBUG( s_logger, "The product booting state has been constructed." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,7 +79,7 @@ CustomProductControllerStateBooting::CustomProductControllerStateBooting( Produc
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateBooting::HandleStateEnter( )
 {
-    BOSE_DEBUG( s_logger, "The Product Booting State is being entered." );
+    BOSE_DEBUG( s_logger, "The product booting state is being entered." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,7 +89,9 @@ void CustomProductControllerStateBooting::HandleStateEnter( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateBooting::HandleStateStart( )
 {
-    BOSE_DEBUG( s_logger, "The Product Booting State is being started." );
+    BOSE_DEBUG( s_logger, "The product booting state is being started." );
+
+    HandlePotentialStateChange( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,124 +101,116 @@ void CustomProductControllerStateBooting::HandleStateStart( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateBooting::HandleStateExit( )
 {
-    BOSE_DEBUG( s_logger, "The Product Booting State is being exited." );
+    BOSE_DEBUG( s_logger, "The product booting state is being exited." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief CustomProductControllerStateBooting::HandleLpmState
-/// @param state
-/// @return
+///
+/// @param bool active This argument is true if the Low Power Microprocessor (LPM) is active;
+///                    it is false otherwise.
+///
+/// @return This method will always return true, indicating that it has handled the event.
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateBooting::HandleLpmState( bool active )
 {
-    BOSE_DEBUG( s_logger, "The Product Booting State is handling the LPM state." );
+    BOSE_DEBUG( s_logger, "The product booting state is handling the LPM state." );
 
     if( active )
     {
-        if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
-        {
-            if( static_cast< ProfessorProductController& >( GetProductController( ) ).GetNetworkStatus( ) )
-            {
-                BOSE_DEBUG( s_logger, "The Product Booting State is changing to the Idle state." );
-                ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
-            }
-            else
-            {
-                BOSE_DEBUG( s_logger, "The Product Booting State is changing to the Network Standby state." );
-                ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
-            }
-        }
+        HandlePotentialStateChange( );
     }
 
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief CustomProductControllerStateBooting::HandleCapsState
-/// @param state
-/// @return
+///
+/// @param bool active This argument is true if the Content Audio Playback Service (CAPS) is active;
+///                    it is false otherwise.
+///
+/// @return This method will always return true, indicating that it has handled the event.
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateBooting::HandleCapsState( bool active )
 {
-    BOSE_DEBUG( s_logger, "The Product Booting State is handling the CAPS state." );
+    BOSE_DEBUG( s_logger, "The product booting state is handling the CAPS state." );
 
     if( active )
     {
-        if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
-        {
-            if( static_cast< ProfessorProductController& >( GetProductController( ) ).GetNetworkStatus( ) )
-            {
-                BOSE_DEBUG( s_logger, "The Product Booting State is changing to the Idle state." );
-                ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
-            }
-            else
-            {
-                BOSE_DEBUG( s_logger, "The Product Booting State is changing to the Network Standby state." );
-                ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
-            }
-        }
+        HandlePotentialStateChange( );
     }
 
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief CustomProductControllerStateBooting::HandleNetworkState
-/// @param state
-/// @return
+///
+/// @brief  CustomProductControllerStateBooting::HandleAudioPathState
+///
+/// @param bool active This argument is true if the Audio Path is active and connected; it is false
+///                     otherwise.
+///
+/// @return This method will always return true, indicating that it has handled the event.
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateBooting::HandleNetworkState( bool active )
+bool CustomProductControllerStateBooting::HandleAudioPathState( bool active )
 {
-    BOSE_DEBUG( s_logger, "The Product Booting State is handling the network state." );
+    BOSE_DEBUG( s_logger, "The product booting state is handling the audio path state." );
 
     if( active )
     {
-        if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
-        {
-            if( static_cast< ProfessorProductController& >( GetProductController( ) ).GetNetworkStatus( ) )
-            {
-                BOSE_DEBUG( s_logger, "The Product Booting State is changing to the Idle state." );
-                ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
-            }
-            else
-            {
-                BOSE_DEBUG( s_logger, "The Product Booting State is changing to the Network Standby state." );
-                ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
-            }
-        }
+        HandlePotentialStateChange( );
     }
 
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief CustomProductControllerStateBooting::HandleSTSSourcesInit
-/// @param none
-/// @return true - the event was handled
+///
+/// @return This method will always return true, indicating that it has handled the event.
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateBooting::HandleSTSSourcesInit( void )
 {
-    BOSE_DEBUG( s_logger, "The Product Booting State is handling the STSSourcesInit event." );
+    BOSE_DEBUG( s_logger, "The product booting state is handling the STSSourcesInit event." );
 
-    if( static_cast< ProfessorProductController& >( GetProductController( ) ).IsBooted( ) )
-    {
-        if( static_cast< ProfessorProductController& >( GetProductController( ) ).GetNetworkStatus( ) )
-        {
-            BOSE_DEBUG( s_logger, "The Product Booting State is changing to the Idle state." );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
-        }
-        else
-        {
-            BOSE_DEBUG( s_logger, "The Product Booting State is changing to the Network Standby state." );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
-        }
-    }
+    HandlePotentialStateChange( );
 
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                       End of Namespace                                       ///
+///
+/// @brief CustomProductControllerStateBooting::HandlePotentialStateChange
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStateBooting::HandlePotentialStateChange( void )
+{
+    if( m_productController.IsBooted( ) )
+    {
+        if( m_productController.IsSoftwareUpdateRequired( ) )
+        {
+            BOSE_DEBUG( s_logger, "The product booting state is changing to the software updating state." );
+            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING );
+        }
+        else
+        {
+            BOSE_DEBUG( s_logger, "The product booting state is changing to the playable state." );
+
+            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE );
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                             End of Product Application Namespace                             ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
