@@ -86,6 +86,7 @@ class ProductSystemManager;
 class ProductNetworkManager;
 class ProductAudioService;
 class ProductSoftwareServices;
+class ProductEdidInterface;
 class ProductCommandLine;
 class ProductUserInterface;
 class CustomProductControllerStateBooting;
@@ -247,6 +248,7 @@ private:
     ProductSoftwareServices*  m_ProductSoftwareServices;
     ProductCommandLine*       m_ProductCommandLine;
     ProductUserInterface*     m_ProductUserInterface;
+    ProductEdidInterface*      m_ProductEdidInterface;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

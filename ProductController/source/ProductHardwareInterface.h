@@ -149,6 +149,7 @@ public:
     bool SendBlueToothDeviceData( const std::string&       bluetoothDeviceName,
                                   const unsigned long long bluetoothMacAddress );
     bool SendSourceSelection( const IPCSource_t&       sourceSelect );
+    bool CECSetPhysicalAddress( const uint32_t cecPhyAddr );
 
 private:
 

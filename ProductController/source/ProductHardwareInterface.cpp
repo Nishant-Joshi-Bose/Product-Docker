@@ -1405,6 +1405,37 @@ bool ProductHardwareInterface::SendSourceSelection( const IPCSource_t& sourceSel
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name  ProductHardwareInterface::CECSetPhysicalAddress
+///
+/// @brief This method sends a request to the LPM hardware.
+///
+/// @param None
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProductHardwareInterface::CECSetPhysicalAddress( const uint32_t cecPhysicalAddress )
+{
+    BOSE_DEBUG( s_logger, "CEC Physical Address will be sent to  LPM" );
+
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM send CEC Physical Address request could not be made, as no connection is available." );
+
+        return false;
+    }
+    else
+    {
+        IpcCecPhyscialAddress_t cecAddrSetting;
+        cecAddrSetting.set_cecphyaddr( cecPhysicalAddress );
+        m_LpmClient->SendCecPhysicalAddress( cecAddrSetting );
+
+        return true;
+    }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief ProductHardwareInterface::Stop
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

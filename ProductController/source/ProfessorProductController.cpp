@@ -48,6 +48,7 @@
 #include "ProductMessage.pb.h"
 #include "NetManager.pb.h"
 #include "Callback.h"
+#include "ProductEdidInterface.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                         Start of Product Application Namespace                               ///
@@ -319,7 +320,11 @@ void ProfessorProductController::Run( )
 
     m_ProductHardwareInterface = ProductHardwareInterface::GetInstance( GetTask( ),
                                                                         CallbackForMessages );
-
+                                                                        
+    m_ProductEdidInterface     = ProductEdidInterface::GetInstance( GetTask( ),
+                                                                    CallbackForMessages,
+                                                                    m_ProductHardwareInterface );
+                                                                    
     m_ProductSystemManager     = ProductSystemManager    ::GetInstance( GetTask( ),
                                                                         CallbackForMessages );
 
@@ -347,7 +352,8 @@ void ProfessorProductController::Run( )
         m_ProductAudioService      == nullptr ||
         m_ProductSoftwareServices  == nullptr ||
         m_ProductCommandLine       == nullptr ||
-        m_ProductUserInterface     == nullptr )
+        m_ProductUserInterface     == nullptr ||
+        m_ProductEdidInterface     == nullptr )
     {
         BOSE_DEBUG( s_logger, "-------- Product Controller Failed Initialization ----------" );
         BOSE_DEBUG( s_logger, "A Product Controller module failed to be allocated.         " );
@@ -365,6 +371,7 @@ void ProfessorProductController::Run( )
     m_ProductSoftwareServices  ->Run( );
     m_ProductCommandLine       ->Run( );
     m_ProductUserInterface     ->Run( );
+    m_ProductEdidInterface     ->Run( );
 
     ///
     /// Set up the STSProductController

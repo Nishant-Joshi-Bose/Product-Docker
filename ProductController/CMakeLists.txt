@@ -11,6 +11,7 @@ INCLUDE_DIRECTORIES(
   include
   source
   source/CustomStateMachine
+  ${A4VVIDEOMANAGER_DIR}/source/Client
 )
 
 # -----------------------------------------------------------------------------
@@ -31,6 +32,7 @@ ADD_EXECUTABLE(Professor
   source/ProductSystemManager.cpp
   source/ProductUserInterface.cpp
   source/ProfessorProductController.cpp
+  source/ProductEdidInterface.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateBooting.cpp
   source/CustomStateMachine/CustomProductControllerStateIdle.cpp
@@ -52,6 +54,7 @@ TARGET_LINK_LIBRARIES(Professor
   CastleProductControllerCommon
   LpmClient
   KeyHandler
+  A4VVideoManagerClient
   SoundTouchClient
   FrontDoorClient
   CliClient
