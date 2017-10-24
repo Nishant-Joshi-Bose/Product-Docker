@@ -1,16 +1,20 @@
 rlwrap - readline wrapper.
 
-Add command-line editing and history to the Shelby CLI.
+Add command-line editing and history to the SoundTouch CLI.
 
-See TI-HSP/fs/bin/tap.
+See opt-bose-fs/bin/tap
 
 ------------------------------------------------------------------------------
 
 For cross compiling:
 
- sysroots=/scratch/qc-sdk-8017-0.2/sysroots
- toolchain=arm-oemllib32-linux-
- cc="${toolchain}gcc --sysroot=$sysroots/aarch64-oe-linux"
+ # components get Riviera-Toolchain installed_location
+ # for example:
+ toolchain=/scratch/components-cache/Release/master/1.1/Riviera-Toolchain
+
+ sysroots=$toolchain/sdk/sysroots
+ cross=arm-oemllib32-linux-
+ cc="${cross}gcc --sysroot=$sysroots/aarch64-oe-linux"
  PATH=$PATH:$sysroots/i686-oesdk-linux/usr/bin/arm-oemllib32-linux
 
 ------------------------------------------------------------------------------
@@ -30,11 +34,9 @@ Cross compile rlwrap:
 $ autoreconf --install
 $ ./configure --host=arm-linux CC="$cc"
 $ make
-$
 $ cd src
-$ arm-linux-gnueabihf-gcc -DDATADIR=\"/usr/local/share\"  -g -O2   -o rlwrap main.o signals.o readline.o pty.o completion.o term.o ptytty.o utils.o string_utils.o malloc_debug.o /scratch/libreadline.a -lutil -lcurses
-$
-$ ${toolchain}strip rlwrap
+$ mv rlwrap rlwrap.unstripped
+$ ${cross}strip -o rlwrap rlwrap.unstripped
 $
 $ file rlwrap
 rlwrap: ELF 32-bit LSB executable, ARM, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.32, stripped

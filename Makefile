@@ -22,20 +22,21 @@ ifndef DONT_UPDATE_CASTLETOOLS
 endif
 	components install
 
+CMAKE_USE_CCACHE := $(USE_CCACHE)
+
+PROFESSORLPMPACKAGE_DIR = $(shell components get ProfessorLPM-Package installed_location)
 RIVIERALPMSERVICE_DIR = $(shell components get RivieraLpmService installed_location)
-CASTLEPRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
+PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 A4VVIDEOMANAGERSERVICE_DIR = $(shell components get A4VVideoManagerService installed_location)
 A4VQUICKSETSERVICE_DIR = $(shell components get A4VQuickSetService installed_location)
-PROFESSORLPMPACKAGE_DIR = $(shell components get ProfessorLPM-Package installed_location)
 A4VREMOTECOMMUNICATIONSERVICE_DIR = $(shell components get A4VRemoteCommunicationService installed_location)
-CMAKE_USE_CCACHE := $(USE_CCACHE)
 
 .PHONY: generated_sources
 generated_sources: check_tools version-files
 	$(MAKE) -C ProductController $@
 	$(MAKE) -C $(RIVIERALPMSERVICE_DIR) $@
-	$(MAKE) -C $(CASTLEPRODUCTCONTROLLERCOMMON_DIR) $@
+	$(MAKE) -C $(PRODUCTCONTROLLERCOMMON_DIR) $@
 	$(MAKE) -C $(A4VVIDEOMANAGERSERVICE_DIR) $@
 	$(MAKE) -C $(A4VQUICKSETSERVICE_DIR) $@
 	$(MAKE) -C $(A4VREMOTECOMMUNICATIONSERVICE_DIR) $@
@@ -55,7 +56,6 @@ cmake_build: generated_sources | $(BUILDS_DIR) astyle
 .PHONY: product-ipk
 product-ipk: cmake_build
 	./scripts/create-product-ipk
-	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage $(PROFESSORLPMPACKAGE_DIR) ./builds/$(cfg)/
 
 .PHONY: graph
 graph: product-ipk
@@ -63,8 +63,12 @@ graph: product-ipk
 	dot -Tsvgz builds/$(cfg)/components.dot -o builds/$(cfg)/components.svgz
 
 .PHONY: package
-package: product-ipk
+package: product-ipk lpmupdater-ipk
 	./scripts/create-product-tarball
+
+.PHONY: lpmupdater-ipk
+lpmupdater-ipk:
+	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage $(PROFESSORLPMPACKAGE_DIR) ./builds/$(cfg)/
 
 .PHONY: clean
 clean:
