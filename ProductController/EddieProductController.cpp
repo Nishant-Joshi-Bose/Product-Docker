@@ -37,7 +37,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_cachedStatus(),
     m_productSource( m_FrontDoorClientIF, *GetTask() ),
     m_LpmInterface( std::bind( &EddieProductController::HandleProductMessage,
-                               this, std::placeholders::_1 ), GetTask() )
+                               this, std::placeholders::_1 ), GetTask() ),
     m_demoController( m_ProductControllerTask )
 {
     BOSE_INFO( s_logger, __func__ );
