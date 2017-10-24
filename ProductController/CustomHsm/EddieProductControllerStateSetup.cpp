@@ -58,11 +58,7 @@ bool EddieProductControllerStateSetup::HandleModulesReady()
     if( eddieProductController != nullptr )
     {
         if( IsNetworkConfigured( eddieProductController->GetNetworkStatus() ) )
-        {
-            BOSE_INFO( s_logger, __func__ );
             ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
-            return false;
-        }
     }
 
     return true;
