@@ -54,10 +54,15 @@ bool EddieProductControllerStateSetup::HandleModulesReady()
 {
     BOSE_INFO( s_logger, __func__ );
 
-    if( IsNetworkConfigured( static_cast<EddieProductController &>( GetProductController() ).GetNetworkStatus() ) )
+    EddieProductController *eddieProductController = dynamic_cast<EddieProductController*>( &GetProductController() );
+    if( eddieProductController != nullptr )
     {
-        BOSE_INFO( s_logger, __func__ );
-        ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
+        if( IsNetworkConfigured( eddieProductController->GetNetworkStatus() ) )
+        {
+            BOSE_INFO( s_logger, __func__ );
+            ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
+            return false;
+        }
     }
 
     return true;
