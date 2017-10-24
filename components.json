@@ -9,7 +9,7 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-23_0936"
+    "selected_version": "Continuous/Castle-Fork/2017-10-23_1251"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -21,7 +21,7 @@
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2457"
+    "selected_version": "branches/castle-libs@2461"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -29,11 +29,11 @@
   },
   {
     "name": "CastlePassport-native",
-    "selected_version": "Continuous/master/0.0.2-96+37ff0d8"
+    "selected_version": "Continuous/master/0.0.2-109+17a9da9"
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/0.0.2-96+37ff0d8"
+    "selected_version": "Continuous/master/0.0.2-109+17a9da9"
   },
   {
     "name": "CastleProductControllerCommon",
