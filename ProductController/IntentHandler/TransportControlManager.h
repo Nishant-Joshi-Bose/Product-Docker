@@ -6,7 +6,9 @@
 //////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
+#include "ProductController.h"
 #include "IntentHandler.h"
+#include "EddieProductController.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 
 namespace ProductApp
@@ -15,14 +17,16 @@ namespace ProductApp
 class TransportControlManager: public IntentManager
 {
 public:
-    TransportControlManager( NotifyTargetTaskIF& task, CliClientMT& cliClient,
-                             const FrontDoorClientIF_t& frontDoorClient ):
-        IntentManager( task, cliClient, frontDoorClient ),
+    TransportControlManager( NotifyTargetTaskIF& task,
+                             const CliClientMT& cliClient,
+                             const FrontDoorClientIF_t& frontDoorClient,
+                             const ProductController& controller ):
+        IntentManager( task, cliClient, frontDoorClient, controller ),
         m_NowPlayingRsp( nullptr, &task )
     {
         m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
-            ( std::bind( &TransportControlManager::FrontDoorClientErrorCb,
-                         this, std::placeholders::_1 ), &task );
+                                   ( std::bind( &TransportControlManager::FrontDoorClientErrorCb,
+                                                this, std::placeholders::_1 ), &task );
 
         AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingRsp =
             AsyncCallback<SoundTouchInterface::NowPlayingJson> ( std::bind( &TransportControlManager::PutTransportControlCbRsp, this, std::placeholders::_1 ), &task );
@@ -40,8 +44,8 @@ public:
     bool Handle( KeyHandlerUtil::ActionType_t arg ) override;
 
 private:
-    bool ValidSourceAvailable();
-    bool CurrentlyPlaying();
+    inline bool ValidSourceAvailable();
+    inline bool CurrentlyPlaying();
 
     void PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp );
 

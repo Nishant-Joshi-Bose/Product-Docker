@@ -71,17 +71,47 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
     return true;
 }
 
-bool TransportControlManager::ValidSourceAvailable()
+inline bool TransportControlManager::ValidSourceAvailable()
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
+    const EddieProductController *eddiePC = \
+                                            dynamic_cast<const EddieProductController*>( &GetProductController() );
+    if( eddiePC != nullptr )
+    {
+        if( eddiePC->GetNowPlaying().has_source() )
+        {
+            BOSE_DEBUG( s_logger, "Found nowPlaying" );
+            return true;
+        }
+    }
+    else
+    {
+        BOSE_ERROR( s_logger, "Error while casting to Eddie PC" );
+    }
     return false;
 }
 
-bool TransportControlManager::CurrentlyPlaying()
+inline bool TransportControlManager::CurrentlyPlaying()
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
+    const EddieProductController *eddiePC = \
+                                            dynamic_cast<const EddieProductController*>( &GetProductController() );
+    if( eddiePC != nullptr )
+    {
+        if( eddiePC->GetNowPlaying().state().has_status() &&
+            eddiePC->GetNowPlaying().state().status() == SoundTouchInterface::StatusJson::play )
+        {
+            BOSE_DEBUG( s_logger, "Found nowPlaying" );
+            return true;
+        }
+    }
+    else
+    {
+        BOSE_ERROR( s_logger, "Error while casting to Eddie PC" );
+    }
     return false;
 }
+
 
 void TransportControlManager::PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp )
 {

@@ -59,9 +59,10 @@ enum class Action
 class IntentHandler
 {
 public:
-    IntentHandler( NotifyTargetTaskIF& task, CliClientMT& cliClient,
-                   FrontDoorClientIF_t& fd_client,
-                   ProductController& controller );
+    IntentHandler( NotifyTargetTaskIF& task,
+                   const CliClientMT& cliClient,
+                   const FrontDoorClientIF_t& fd_client,
+                   const ProductController& controller );
     virtual ~IntentHandler()
     {
         m_IntentManagerMap.clear();
@@ -123,10 +124,10 @@ public:
                  ( arg == ( uint16_t ) Action::VOLUME_DOWN ) );
     }
 private:
-    NotifyTargetTaskIF&   m_task;
-    CliClientMT&          m_cliClient;
-    FrontDoorClientIF_t&  m_frontDoorClient;
-    IntentManagerMap_t    m_IntentManagerMap;
-    ProductController&    m_controller;
+    NotifyTargetTaskIF&         m_task;
+    const CliClientMT&          m_cliClient;
+    const FrontDoorClientIF_t&  m_frontDoorClient;
+    IntentManagerMap_t          m_IntentManagerMap;
+    const ProductController&    m_controller;
 };
 } // namespace ProductApp

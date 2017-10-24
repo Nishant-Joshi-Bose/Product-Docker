@@ -11,6 +11,7 @@
 #include "NotifyTargetTaskIF.h"
 #include "CliClientMT.h"
 #include "FrontDoorClientIF.h"
+#include "ProductController.h"
 #include "KeyHandler.h"
 #include "AsyncCallback.h"
 
@@ -22,11 +23,14 @@ using CbPtr_t  = std::shared_ptr<AsyncCallback<KeyHandlerUtil::ActionType_t&> >;
 class IntentManager
 {
 public:
-    IntentManager( NotifyTargetTaskIF& task, CliClientMT& cliClient,
-                   const FrontDoorClientIF_t& frontDoorClient ):
+    IntentManager( NotifyTargetTaskIF& task,
+                   const CliClientMT& cliClient,
+                   const FrontDoorClientIF_t& frontDoorClient,
+                   const ProductController& controller ):
         m_frontDoorClient( frontDoorClient ),
         m_task( task ),
         m_cliClient( cliClient ),
+        m_controller( controller ),
         m_frontDoorClientErrorCb( nullptr, &task )
     {
     }
@@ -62,6 +66,11 @@ protected:
         return m_cliClient;
     }
 
+    const ProductController& GetProductController() const
+    {
+        return m_controller;
+    }
+
     const FrontDoorClientIF_t& GetFrontDoorClient() const
     {
         return m_frontDoorClient;
@@ -77,20 +86,15 @@ protected:
         return m_intent;
     }
 
-#if 0
-    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>& FrontDoorClientErrorCb()
-    {
-        return m_frontDoorClientErrorCb;
-    }
-#endif
     virtual void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) = 0;
 
 private:
-    FrontDoorClientIF_t                     m_frontDoorClient;
+    const FrontDoorClientIF_t               m_frontDoorClient;
     NotifyTargetTaskIF&                     m_task;
-    CliClientMT&                            m_cliClient;
+    const CliClientMT&                      m_cliClient;
     CbPtr_t                                 m_callBack;
     KeyHandlerUtil::ActionType_t            m_intent;
+    const ProductController&                m_controller;
 protected:
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> m_frontDoorClientErrorCb;
 };

@@ -40,9 +40,10 @@ static DPrint s_logger( "IntentHandler" );
 
 namespace ProductApp
 {
-IntentHandler::IntentHandler( NotifyTargetTaskIF& task, CliClientMT& cliClient,
-                              FrontDoorClientIF_t& frontDoorClient,
-                              ProductController& controller
+IntentHandler::IntentHandler( NotifyTargetTaskIF& task,
+                              const CliClientMT& cliClient,
+                              const FrontDoorClientIF_t& frontDoorClient,
+                              const ProductController& controller
                             ):
     m_task( task ),
     m_cliClient( cliClient ),
@@ -57,7 +58,8 @@ void IntentHandler::Initialize()
     //+ Transport Control API's
     IntentManagerPtr_t transportManager =
         std::make_shared<TransportControlManager>( m_task, m_cliClient,
-                                                   m_frontDoorClient );
+                                                   m_frontDoorClient,
+                                                   m_controller );
 
     m_IntentManagerMap[( uint16_t )Action::PLAY_PAUSE] = transportManager;
     m_IntentManagerMap[( uint16_t )Action::NEXT_TRACK] = transportManager;
