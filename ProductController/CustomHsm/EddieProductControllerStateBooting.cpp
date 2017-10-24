@@ -97,4 +97,9 @@ void EddieProductControllerStateBooting::GoToNextState()
     }
 }
 
+bool EddieProductControllerStateBooting::HandleIntents( KeyHandlerUtil::ActionType_t result )
+{
+    return false;
+}
+
 } // namespace ProductApp

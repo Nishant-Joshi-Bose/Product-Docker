@@ -11,6 +11,7 @@
 #include "FrontDoorClientIF.h"
 #include "KeyHandler.h"
 #include "IntentManager.h"
+#include "ProductController.h"
 
 namespace ProductApp
 {
@@ -59,19 +60,23 @@ class IntentHandler
 {
 public:
     IntentHandler( NotifyTargetTaskIF& task, CliClientMT& cliClient,
-                   const FrontDoorClientIF_t& fd_client );
-    virtual ~IntentHandler() { }
+                   FrontDoorClientIF_t& fd_client,
+                   ProductController& controller );
+    virtual ~IntentHandler()
+    {
+        m_IntentManagerMap.clear();
+    }
 
     // Initialization will include adding various IntentManagers that are
     // associated with intent Values
     void Initialize();
 
     // Public function to Handle intents
-    bool Handle( KeyHandlerUtil::ActionType_t arg );
+    bool Handle( KeyHandlerUtil::ActionType_t arg ) ;
 
     // Public function to register any call backs back into Product HSM
-    // Intent Managers will not do any state transistion, it is only expected
-    // to valid,build and send messages (through frontdoor or IPC).
+    // Intent Managers will not do any state transition, it is only expected
+    // to validate,build and send messages (through frontdoor or IPC).
     void RegisterCallBack( KeyHandlerUtil::ActionType_t intent, CbPtr_t cb );
 
     const NotifyTargetTaskIF& GetTask() const
@@ -82,15 +87,46 @@ public:
     {
         return m_cliClient;
     }
-
-    const FrontDoorClientIF_t& GetFrontDoor() const
+    const FrontDoorClientIF_t& GetFrontDoorClient() const
     {
         return m_frontDoorClient;
     }
+    const ProductController& GetProductController() const
+    {
+        return m_controller;
+    }
+
+    bool isIntentPlayControl( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( ( arg == ( uint16_t ) Action::PLAY_PAUSE ) ||
+                 ( arg == ( uint16_t ) Action::NEXT_TRACK ) ||
+                 ( arg == ( uint16_t ) Action::PREV_TRACK ) );
+    }
+    bool IsIntentBlueTooth( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( ( arg == ( uint16_t ) Action::CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST ) ||
+                 ( arg == ( uint16_t ) Action::SEND_TO_DISCOVERABLE )                  ||
+                 ( arg == ( uint16_t ) Action::CLEAR_PAIRING_LIST ) );
+    }
+    bool IsIntentAlexa( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( arg == ( uint16_t ) Action::ALEXA_CAROUSEL );
+    }
+    bool IsIntentNetworking( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( ( arg == ( uint16_t ) Action::SEND_TO_AP_MODE ) ||
+                 ( arg == ( uint16_t ) Action::DISABLE_NETWORKING ) );
+    }
+    bool IsIntentVolumeControl( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( ( arg == ( uint16_t ) Action::VOLUME_UP ) ||
+                 ( arg == ( uint16_t ) Action::VOLUME_DOWN ) );
+    }
 private:
-    NotifyTargetTaskIF&      m_task;
-    CliClientMT&             m_cliClient;
-    FrontDoorClientIF_t      m_frontDoorClient;
-    IntentManagerMap_t       m_IntentManagerMap;
+    NotifyTargetTaskIF&   m_task;
+    CliClientMT&          m_cliClient;
+    FrontDoorClientIF_t&  m_frontDoorClient;
+    IntentManagerMap_t    m_IntentManagerMap;
+    ProductController&    m_controller;
 };
 } // namespace ProductApp

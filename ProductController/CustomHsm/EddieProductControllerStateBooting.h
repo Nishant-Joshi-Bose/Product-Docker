@@ -51,6 +51,7 @@ public:
     bool HandleLpmInterfaceState( bool isConnected );
 
     bool HandleModulesReady() override;
+    bool HandleIntents( KeyHandlerUtil::ActionType_t result ) override;
 
 private:
     ///////////////////////////////////////////////////////////////////////////////

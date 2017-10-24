@@ -36,6 +36,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_deviceManager( GetTask(), *this ),
     m_cachedStatus(),
     m_productSource( m_FrontDoorClientIF, *GetTask() ),
+    m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this )
     m_LpmInterface( std::bind( &EddieProductController::HandleProductMessage,
                                this, std::placeholders::_1 ), GetTask() ),
     m_demoController( m_ProductControllerTask )
@@ -98,7 +99,7 @@ void EddieProductController::RegisterKeyHandler()
 {
     auto func = [this]( KeyHandlerUtil::ActionType_t result )
     {
-        HandleIntends( result );
+        HandleIntents( result );
     };
     auto cb = std::make_shared<AsyncCallback<KeyHandlerUtil::ActionType_t> > ( func, GetTask() );
     m_KeyHandler.RegisterKeyHandler( cb );
@@ -514,11 +515,13 @@ void EddieProductController::HandleGetDeviceStateRequest( const Callback<::Devic
     resp.Send( currentState );
 }
 
-void EddieProductController::HandleIntends( KeyHandlerUtil::ActionType_t result )
+void EddieProductController::HandleIntents( KeyHandlerUtil::ActionType_t result )
 {
     BOSE_INFO( s_logger, "Translated Intend %d", result );
     m_CliClientMT.SendAsyncResponse( "Translated intend = " + \
                                      std::to_string( result ) );
+
+    m_EddieProductControllerHsm.Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntents, result );
     return;
 }
 
