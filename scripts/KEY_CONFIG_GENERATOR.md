@@ -56,5 +56,11 @@ TestKeyConfig.json contains a sample "friendly" configuration.
 Run the configuration generator as follows (KeyConfiguration.json will be the output).
 
 
-```./scripts/friendly_to_raw_key_config.py  --inputcfg=./Config/UserKeyConfig.json --actions=./ProductController/include/KeyActions.h --cap=/scratch/components-cache/trunk@911/RivieraLPM/include/RivieraLPM_KeyValues.h --ir=/scratch/components-cache/trunk@911/RivieraLPM/include/RivieraLPM_KeyValues.h --outputcfg=./Config/KeyConfiguration.json
-
+```
+./scripts/friendly_to_raw_key_config.py \
+ --inputcfg=./Config/UserKeyConfig.json \
+ --actions=./ProductController/include/KeyActions.h \
+ --cap=/scratch/components-cache/trunk@911/RivieraLPM/include/RivieraLPM_KeyValues.h \
+ --ir=/scratch/components-cache/trunk@911/RivieraLPM/include/RivieraLPM_KeyValues.h \
+ --outputcfg=./opt-bose-fs/etc/KeyConfiguration.json
+```
