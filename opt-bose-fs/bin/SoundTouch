@@ -77,10 +77,17 @@ EOF
 
     set_ap.sh
 
+    demoFlag=/mnt/nv/DemoModeOn
     if ! $override; then
         mkdir -p "$rundir" || exit
         rm -f "$rundir"/*.xml
         ln -s /opt/Bose/etc/Shepherd*.xml "$rundir" || exit
+        if [ -e "$demoFlag" ]; then
+            log info "--DEMO MODE--"
+            ln -nsf /opt/Bose/etc/KeyConfiguration-demo.json  "$rundir"/KeyConfiguration.json
+        else
+            ln -nsf /opt/Bose/etc/KeyConfiguration.json       "$rundir"/KeyConfiguration.json
+        fi
 
         if is-development; then
             cat >"$rundir/Debug.xml" <<\EOF

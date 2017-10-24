@@ -30,7 +30,7 @@ public:
         m_frontDoorClientErrorCb( nullptr, &task )
     {
     }
-    ~IntentManager() { }
+    virtual ~IntentManager() { }
 
     // Public function to Handle intents
     // This function will build and send message either through FrontDoor

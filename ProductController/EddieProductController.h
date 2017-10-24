@@ -17,6 +17,7 @@
 #include "EddieProductControllerStateNetworkStandby.h"
 #include "DeviceManager.h"
 #include "LightBarController.h"
+#include "DemoController.h"
 #include "ConfigurationStatus.pb.h"
 #include "SoundTouchInterface/AllowSourceSelect.pb.h"
 #include "Language.pb.h"
@@ -27,6 +28,7 @@
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "ProductCliClient.h"
 #include "LpmClientIF.h"
+#include "LpmInterface.h"
 #include "KeyHandler.h"
 #include "ProductSource.h"
 #include "IntentHandler.h"
@@ -65,6 +67,7 @@ private:
 ////////////////////////////////////////////////////////////////////////////////
     void ReadSystemLanguageFromPersistence();
     void ReadConfigurationStatusFromPersistence();
+    void ReadNowPlayingFromPersistence();
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  PersistSystemLanguageCode
@@ -73,6 +76,14 @@ private:
 ////////////////////////////////////////////////////////////////////////////////
     void PersistSystemLanguageCode();
     void PersistSystemConfigurationStatus();
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  PersistCapsNowPlaying
+/// @brief Function to persist nowPlaying information in /mnt/nv/product-persistence/.
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void PersistCapsNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingPb, bool force = false );
+    bool IsNowPlayingChanged( const SoundTouchInterface::NowPlayingJson& nowPlayingPb );
     void HandleAllowSourceSelectCliCmd( const std::list<std::string> & argList, std::string& response );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -93,6 +104,12 @@ private:
                                                 std::string& response );
 
     void HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name HandleCapsNowPlaying
+/// @brief Function to Handle "/content/nowPlaying" notification from Caps.
+///////////////////////////////////////////////////////////////////////////////
+    void HandleCapsNowPlaying( const SoundTouchInterface::NowPlayingJson& );
 
 public:
     // Handle Key Information received from LPM
@@ -132,7 +149,7 @@ public:
     void HandleLPMReady();
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @name  HandleLPMReady
+/// @name  HandleCAPSReady
 /// @brief Function to call when CAPS is ready to send/receive request.
 /// @return void
 ////////////////////////////////////////////////////////////////////////////////
@@ -222,6 +239,25 @@ public:
     {
         return m_IntentHandler;
     }
+///////////////////////////////////////////////////////////////////////////////
+/// @name   HandleProductMessage
+/// @brief  Handles message sent by LPM to ProductController. As per the
+///         message id in productMessage, appropriate methods in state machine
+///         or ProductController are called
+/// @param  ProductMessage - ProductMessage protobuf
+/// @return void
+///////////////////////////////////////////////////////////////////////////////
+    void HandleProductMessage( const ProductMessage& productMessage );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name   GetLpmInterface
+/// @brief  Returns reference to LpmInterface
+/// @return LpmInterface&
+///////////////////////////////////////////////////////////////////////////////
+    inline LpmInterface& GetLpmInterface()
+    {
+        return m_LpmInterface;
+    }
 
 private:
 
@@ -242,9 +278,11 @@ private:
     DeviceManager                               m_deviceManager;
 
     ProtoPersistenceIF::ProtoPersistencePtr     m_ConfigurationStatusPersistence = nullptr;
+    ProtoPersistenceIF::ProtoPersistencePtr     m_nowPlayingPersistence = nullptr;
     ProtoPersistenceIF::ProtoPersistencePtr     m_LanguagePersistence = nullptr;
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
     ProductPb::Language                         m_systemLanguage;
+    SoundTouchInterface::NowPlayingJson         m_nowPlaying;
     NetManager::Protobuf::NetworkStatus         m_cachedStatus;
 
     ProductCliClient                            m_productCliClient;
@@ -252,9 +290,12 @@ private:
     std::unique_ptr<LightBarController>         m_lightbarController;
     ProductSource                               m_productSource;
     IntentHandler                               m_IntentHandler;
+    LpmInterface                                m_LpmInterface;
     bool                                        m_isCapsReady = false;
-    bool                                        m_isLPMReady  = true;
+    bool                                        m_isLPMReady  = false;
     bool                                        m_isNetworkModuleReady  = false;
+    /// Demonstration Controller instance
+    DemoApp::DemoController m_demoController;
 };
 }
 // namespace
