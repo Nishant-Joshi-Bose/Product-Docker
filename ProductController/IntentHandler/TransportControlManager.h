@@ -18,13 +18,14 @@ public:
     TransportControlManager( NotifyTargetTaskIF& task, CliClientMT& cliClient,
                              const FrontDoorClientIF_t& frontDoorClient ):
         IntentManager( task, cliClient, frontDoorClient ),
-        m_NowPlayingJsonRsp( nullptr, &task )
+        m_NowPlayingRsp( nullptr, &task )
     {
-        errorCb() =
-            AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>( std::bind( &TransportControlManager::CallBackError, this, std::placeholders::_1 ), &m_task );
+        m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
+            ( std::bind( &TransportControlManager::FrontDoorClientErrorCb,
+                         this, std::placeholders::_1 ), &task );
 
-        AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingJsonRsp =
-            AsyncCallback<SoundTouchInterface::NowPlayingJson> ( std::bind( &TransportControlManager::PutTransportControlCbRsp, this, std::placeholders::_1 ), &m_task );
+        AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingRsp =
+            AsyncCallback<SoundTouchInterface::NowPlayingJson> ( std::bind( &TransportControlManager::PutTransportControlCbRsp, this, std::placeholders::_1 ), &task );
 
     }
     virtual ~TransportControlManager() { }
@@ -44,8 +45,8 @@ private:
 
     void PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp );
 
-    virtual void CallBackError( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
+    virtual void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
 
-    AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingJsonRsp;
+    AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingRsp;
 };
 } // namespace ProductApp

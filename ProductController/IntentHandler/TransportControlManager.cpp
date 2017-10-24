@@ -21,15 +21,20 @@ static DPrint s_logger( "TransportControlManager" );
 
 namespace ProductApp
 {
+///////////////////////////////////////////////////////////////////////////////
+/// @name  Handle
+/// @brief Function to build and send FrontDoor message to execute the
+//         to either play or pause if source is alreay selected,
+//         Else the function ignores the intent.
+//         The callBack function is called to give control back to the state
+//         machine if HSM has registered a call back.
+/// @return true: Successful
+//          false: Error
+////////////////////////////////////////////////////////////////////////////////
 
 bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
 {
-    // This function will build and send message through FrontDoor depending
-    // on whethere the product controller is currently playing or paused.
-    // If no source is selected ignoring the intent for play_pause
-    // Return control to ProductController through callback if registered.
-
-    SoundTouchInterface::TransportControl data;
+    SoundTouchInterface::TransportControl transportControl;
     if( intent == ( uint16_t ) Action::PLAY_PAUSE )
     {
         if( ValidSourceAvailable() )
@@ -37,14 +42,19 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
             if( CurrentlyPlaying() )
             {
                 // Send Pause
-                data.set_state( SoundTouchInterface::TransportControl::pause );
+                transportControl.\
+                set_state( SoundTouchInterface::TransportControl::pause );
             }
             else
             {
                 // Send Play
-                data.set_state( SoundTouchInterface::TransportControl::play );
+                transportControl.\
+                set_state( SoundTouchInterface::TransportControl::play );
             }
-            m_frontDoorClient->SendPut<SoundTouchInterface::NowPlayingJson>( "/content/transportControl", data, m_NowPlayingJsonRsp, errorCb() );
+            GetFrontDoorClient()->\
+            SendPut<SoundTouchInterface::\
+            NowPlayingJson>( "/content/transportControl", transportControl,
+                             m_NowPlayingRsp, m_frontDoorClientErrorCb );
         }
         else
         {
@@ -54,9 +64,9 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
     }
 
     //Fire the cb so the control goes back to the ProductController
-    if( cb() != nullptr )
+    if( CallBack() != nullptr )
     {
-        ( *cb() )( intent );
+        ( *CallBack() )( intent );
     }
     return true;
 }
@@ -76,10 +86,9 @@ bool TransportControlManager::CurrentlyPlaying()
 void TransportControlManager::PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp )
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
-//  BOSE_LOG( INFO, "GOT Response " << resp.source().sourcedisplayname() );
 }
 
-void TransportControlManager::CallBackError( const FRONT_DOOR_CLIENT_ERRORS errorCode )
+void TransportControlManager::FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode )
 {
     BOSE_ERROR( s_logger, "%s:error code- %d", __func__, errorCode );
 }

@@ -27,7 +27,7 @@ public:
         m_frontDoorClient( frontDoorClient ),
         m_task( task ),
         m_cliClient( cliClient ),
-        m_errorCb( nullptr, &task )
+        m_frontDoorClientErrorCb( nullptr, &task )
     {
     }
     ~IntentManager() { }
@@ -46,8 +46,8 @@ public:
     // to valid,build and send messages (through frontdoor or IPC).
     void RegisterCallBack( KeyHandlerUtil::ActionType_t intent, CbPtr_t cb )
     {
-        m_intent = intent;
-        m_cb     = cb;
+        m_intent       = intent;
+        m_callBack     = cb;
         return;
     }
 
@@ -62,14 +62,14 @@ protected:
         return m_cliClient;
     }
 
-    const FrontDoorClientIF_t& GetFrontDoor() const
+    const FrontDoorClientIF_t& GetFrontDoorClient() const
     {
         return m_frontDoorClient;
     }
 
-    const CbPtr_t& cb() const
+    const CbPtr_t& CallBack() const
     {
-        return m_cb;
+        return m_callBack;
     }
 
     const KeyHandlerUtil::ActionType_t& intent() const
@@ -77,18 +77,21 @@ protected:
         return m_intent;
     }
 
-    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>& errorCb()
+#if 0
+    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>& FrontDoorClientErrorCb()
     {
-        return m_errorCb;
+        return m_frontDoorClientErrorCb;
     }
-    virtual void CallBackError( const FRONT_DOOR_CLIENT_ERRORS errorCode ) = 0;
+#endif
+    virtual void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) = 0;
 
+private:
     FrontDoorClientIF_t                     m_frontDoorClient;
     NotifyTargetTaskIF&                     m_task;
-private:
     CliClientMT&                            m_cliClient;
-    CbPtr_t                                 m_cb;
+    CbPtr_t                                 m_callBack;
     KeyHandlerUtil::ActionType_t            m_intent;
-    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> m_errorCb;
+protected:
+    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> m_frontDoorClientErrorCb;
 };
 } // namespace ProductApp

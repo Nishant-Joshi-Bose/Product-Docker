@@ -87,7 +87,7 @@ public:
     {
         return m_cliClient;
     }
-    const FrontDoorClientIF_t& GetFrontDoor() const
+    const FrontDoorClientIF_t& GetFrontDoorClient() const
     {
         return m_frontDoorClient;
     }
@@ -96,28 +96,28 @@ public:
         return m_controller;
     }
 
-    inline bool isIntentPlayControl( KeyHandlerUtil::ActionType_t arg )
+    bool isIntentPlayControl( KeyHandlerUtil::ActionType_t arg )
     {
         return ( ( arg == ( uint16_t ) Action::PLAY_PAUSE ) ||
                  ( arg == ( uint16_t ) Action::NEXT_TRACK ) ||
                  ( arg == ( uint16_t ) Action::PREV_TRACK ) );
     }
-    inline bool IsIntentBlueTooth( KeyHandlerUtil::ActionType_t arg )
+    bool IsIntentBlueTooth( KeyHandlerUtil::ActionType_t arg )
     {
         return ( ( arg == ( uint16_t ) Action::CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST ) ||
                  ( arg == ( uint16_t ) Action::SEND_TO_DISCOVERABLE )                  ||
                  ( arg == ( uint16_t ) Action::CLEAR_PAIRING_LIST ) );
     }
-    inline bool IsIntentAlexa( KeyHandlerUtil::ActionType_t arg )
+    bool IsIntentAlexa( KeyHandlerUtil::ActionType_t arg )
     {
         return ( arg == ( uint16_t ) Action::ALEXA_CAROUSEL );
     }
-    inline bool IsIntentNetworking( KeyHandlerUtil::ActionType_t arg )
+    bool IsIntentNetworking( KeyHandlerUtil::ActionType_t arg )
     {
         return ( ( arg == ( uint16_t ) Action::SEND_TO_AP_MODE ) ||
                  ( arg == ( uint16_t ) Action::DISABLE_NETWORKING ) );
     }
-    inline bool IsIntentVolumeControl( KeyHandlerUtil::ActionType_t arg )
+    bool IsIntentVolumeControl( KeyHandlerUtil::ActionType_t arg )
     {
         return ( ( arg == ( uint16_t ) Action::VOLUME_UP ) ||
                  ( arg == ( uint16_t ) Action::VOLUME_DOWN ) );
