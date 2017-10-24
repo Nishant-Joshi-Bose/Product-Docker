@@ -43,8 +43,7 @@ public:
 
     void Initialize();
 
-
-    NetManager::Protobuf::NetworkStatus & GetNetworkStatus()
+    NetManager::Protobuf::NetworkStatus const& GetNetworkStatus() const
     {
         return m_cachedStatus;
     }

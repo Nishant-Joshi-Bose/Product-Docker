@@ -54,11 +54,14 @@ bool EddieProductControllerStateSetup::HandleModulesReady()
 {
     BOSE_INFO( s_logger, __func__ );
 
-    EddieProductController *eddieProductController = dynamic_cast<EddieProductController*>( &GetProductController() );
-    if( eddieProductController != nullptr )
+    if( auto eddieProductController = dynamic_cast<EddieProductController*>( &GetProductController() ) )
     {
         if( IsNetworkConfigured( eddieProductController->GetNetworkStatus() ) )
             ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
+    }
+    else
+    {
+        BOSE_ERROR( s_logger, "Failed. Bad cast in Eddie's HandleModulesReady" );
     }
 
     return true;
