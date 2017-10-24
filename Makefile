@@ -23,8 +23,8 @@ endif
 	components install
 
 RIVIERALPMSERVICE_DIR = $(shell components get RivieraLpmService installed_location)
-CASTLEPRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
-CASTLEDEMOCONTROLLER_DIR = $(shell components get CastleDemoController installed_location)
+PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
+DEMOCONTROLLER_DIR = $(shell components get CastleDemoController installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 EDDIELPMPACKAGE_DIR = $(shell components get EddieLPM-Package installed_location)
 CMAKE_USE_CCACHE := $(USE_CCAHCE)
@@ -33,8 +33,8 @@ CMAKE_USE_CCACHE := $(USE_CCAHCE)
 generated_sources: check_tools version-files
 	$(MAKE) -C ProductController $@
 	$(MAKE) -C $(RIVIERALPMSERVICE_DIR) $@
-	$(MAKE) -C $(CASTLEPRODUCTCONTROLLERCOMMON_DIR) $@
-	$(MAKE) -C $(CASTLEDEMOCONTROLLER_DIR) $@
+	$(MAKE) -C $(PRODUCTCONTROLLERCOMMON_DIR) $@
+	$(MAKE) -C $(DEMOCONTROLLER_DIR) $@
 
 .PHONY: astyle
 astyle:
