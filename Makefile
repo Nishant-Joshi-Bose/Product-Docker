@@ -27,7 +27,7 @@ PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerComm
 DEMOCONTROLLER_DIR = $(shell components get CastleDemoController installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 EDDIELPMPACKAGE_DIR = $(shell components get EddieLPM-Package installed_location)
-CMAKE_USE_CCACHE := $(USE_CCAHCE)
+CMAKE_USE_CCACHE := $(USE_CCACHE)
 
 .PHONY: generated_sources
 generated_sources: check_tools version-files
