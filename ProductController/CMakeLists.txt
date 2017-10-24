@@ -45,6 +45,7 @@ TARGET_LINK_LIBRARIES(Eddie
   FrontDoorClient
   NetworkServiceClient
   KeyHandler
+  BLESetupServiceProto
   CliClient
   BoseLibs
   libjsoncpp.a

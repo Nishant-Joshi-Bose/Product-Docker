@@ -101,6 +101,7 @@ INCLUDE_DIRECTORIES(
   ${CASTLECLI_DIR}/include
   ${NETWORKSERVICE_DIR}/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/BLESetupService
   ${UNITTEST_DIR}/include
 )
 

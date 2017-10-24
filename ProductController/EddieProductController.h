@@ -43,6 +43,12 @@ public:
 
     void Initialize();
 
+
+    NetManager::Protobuf::NetworkStatus & GetNetworkStatus()
+    {
+        return m_cachedStatus;
+    }
+
 private:
     /// Disable copies
     EddieProductController( const EddieProductController& ) = delete;

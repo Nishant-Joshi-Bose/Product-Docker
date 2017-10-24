@@ -161,7 +161,8 @@ void EddieProductController::HandleCapsNowPlaying( const SoundTouchInterface::No
 void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus )
 {
     BOSE_INFO( s_logger, "%s,N/w status- (%s)", __func__,  ProtoToMarkup::ToJson( networkStatus, false ).c_str() );
-    if( networkStatus.has_primary() )
+
+    if( networkStatus.has_isprimaryup() )
     {
         bool isCurrPrimaryUp = ( networkStatus.has_isprimaryup() && networkStatus.isprimaryup() );
         bool isPrevPrimaryUp = ( m_cachedStatus.has_isprimaryup() && m_cachedStatus.isprimaryup() );
@@ -171,11 +172,9 @@ void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::Ne
             // Store the network status when changes.
             m_ConfigurationStatus.mutable_status()->set_network( isCurrPrimaryUp );
         }
-        if( not m_isNetworkModuleReady )
-        {
-            HandleNetworkModuleReady( true );
-        }
         m_cachedStatus = networkStatus;
+        BOSE_INFO( s_logger, "%s, m_isNetworkModuleReady- (%d)", __func__,  m_isNetworkModuleReady );
+        HandleNetworkModuleReady( true );
     }
 }
 

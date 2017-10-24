@@ -34,5 +34,6 @@ public:
     void HandleStateStart() override;
     void HandleStateExit() override;
     bool HandleIntents( KeyHandlerUtil::ActionType_t result ) override;
+    bool HandleModulesReady() override;
 };
 } // namespace ProductApp
