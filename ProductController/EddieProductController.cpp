@@ -36,7 +36,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_deviceManager( GetTask(), *this ),
     m_cachedStatus(),
     m_productSource( m_FrontDoorClientIF, *GetTask() ),
-    m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this )
+    m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
     m_LpmInterface( std::bind( &EddieProductController::HandleProductMessage,
                                this, std::placeholders::_1 ), GetTask() ),
     m_demoController( m_ProductControllerTask )
