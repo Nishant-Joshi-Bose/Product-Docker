@@ -28,6 +28,7 @@
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "ProductCliClient.h"
 #include "LpmClientIF.h"
+#include "LpmInterface.h"
 #include "KeyHandler.h"
 #include "ProductSource.h"
 
@@ -147,7 +148,7 @@ public:
     void HandleLPMReady();
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @name  HandleLPMReady
+/// @name  HandleCAPSReady
 /// @brief Function to call when CAPS is ready to send/receive request.
 /// @return void
 ////////////////////////////////////////////////////////////////////////////////
@@ -233,6 +234,26 @@ public:
     void CapsInitializationStatusCallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
     void HandleAllowSourceSelectRequest( const Callback<SoundTouchInterface::AllowSourceSelect> &resp );
 
+///////////////////////////////////////////////////////////////////////////////
+/// @name   HandleProductMessage
+/// @brief  Handles message sent by LPM to ProductController. As per the
+///         message id in productMessage, appropriate methods in state machine
+///         or ProductController are called
+/// @param  ProductMessage - ProductMessage protobuf
+/// @return void
+///////////////////////////////////////////////////////////////////////////////
+    void HandleProductMessage( const ProductMessage& productMessage );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name   GetLpmInterface
+/// @brief  Returns reference to LpmInterface
+/// @return LpmInterface&
+///////////////////////////////////////////////////////////////////////////////
+    inline LpmInterface& GetLpmInterface()
+    {
+        return m_LpmInterface;
+    }
+
 private:
 
     EddieProductControllerHsm                   m_EddieProductControllerHsm;
@@ -263,10 +284,10 @@ private:
 
     std::unique_ptr<LightBarController>         m_lightbarController;
     ProductSource                               m_productSource;
+    LpmInterface                                m_LpmInterface;
     bool                                        m_isCapsReady = false;
-    bool                                        m_isLPMReady  = true;
+    bool                                        m_isLPMReady  = false;
     bool                                        m_isNetworkModuleReady  = false;
-
     /// Demonstration Controller instance
     DemoApp::DemoController m_demoController;
 };

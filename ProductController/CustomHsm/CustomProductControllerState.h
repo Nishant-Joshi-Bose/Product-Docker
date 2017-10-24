@@ -40,6 +40,16 @@ public:
     {
     }
 
+    virtual bool HandleLpmState( bool isActive )
+    {
+        return false;
+    }
+
+    virtual bool HandleLpmInterfaceState( bool isConnected )
+    {
+        return false;
+    }
+
     virtual bool HandleModulesReady( )
     {
         return false;

@@ -36,6 +36,8 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_deviceManager( GetTask(), *this ),
     m_cachedStatus(),
     m_productSource( m_FrontDoorClientIF, *GetTask() ),
+    m_LpmInterface( std::bind( &EddieProductController::HandleProductMessage,
+                               this, std::placeholders::_1 ), GetTask() )
     m_demoController( m_ProductControllerTask )
 {
     BOSE_INFO( s_logger, __func__ );
@@ -64,6 +66,7 @@ EddieProductController::~EddieProductController()
 
 void EddieProductController::Initialize()
 {
+    m_LpmInterface.Initialize();
     m_productCliClient.Initialize( GetTask() );
     RegisterCliClientCmds();
     RegisterEndPoints();
@@ -77,13 +80,8 @@ void EddieProductController::Initialize()
 void EddieProductController::InitializeLpmClient()
 {
     BOSE_INFO( s_logger, __func__ );
-
-    // Connect/Initialize the LPM Client
-    m_LpmClient = LpmClientFactory::Create( "EddieLpmClient", GetTask() );
-
-    auto func = std::bind( &EddieProductController::HandleLPMReady, this );
-    AsyncCallback<bool> connectCb( func, GetTask() );
-    m_LpmClient->Connect( connectCb );
+/// To_Do- will remove m_LpmClient from EddieProductController in separate commit.
+    m_LpmClient = m_LpmInterface.GetLpmClient();
 }
 
 void EddieProductController::RegisterLpmEvents()
@@ -334,10 +332,6 @@ void EddieProductController::HandleNetworkModuleReady( bool networkModuleReady )
 void EddieProductController::HandleLPMReady()
 {
     BOSE_INFO( s_logger, __func__ );
-    RegisterLpmEvents();
-    RegisterKeyHandler();
-    m_isLPMReady = true;
-    m_EddieProductControllerHsm.Handle<>( &CustomProductControllerState::HandleModulesReady );
 }
 
 bool EddieProductController::IsAllModuleReady()
@@ -661,5 +655,55 @@ void EddieProductController::HandleGetProductControllerStateCliCmd( const std::l
     response += "Current State: " + m_EddieProductControllerHsm.GetCurrentState()->GetName();
 }
 
+void EddieProductController::HandleProductMessage( const ProductMessage& productMessage )
+{
+    BOSE_DEBUG( s_logger, "Product Controller Messages" );
+
+    if( productMessage.has_id() )
+    {
+        switch( productMessage.id() )
+        {
+        case LPM_HARDWARE_DOWN:
+        {
+            BOSE_DEBUG( s_logger, "Received LPM Hardware Down message" );
+            m_isLPMReady = false;
+        }
+        break;
+        case LPM_HARDWARE_UP:
+        {
+            BOSE_DEBUG( s_logger, "Received LPM Hardware Up message" );
+            m_isLPMReady = true;
+            // RegisterLpmEvents and RegisterKeyHandler
+            RegisterLpmEvents();
+            RegisterKeyHandler();
+            m_EddieProductControllerHsm.Handle<bool>( &CustomProductControllerState::HandleLpmState, true );
+        }
+        break;
+        case LPM_INTERFACE_DOWN:
+        {
+            BOSE_DEBUG( s_logger, "Received LPM Interface Down message" );
+            m_EddieProductControllerHsm.Handle<bool>(
+                &CustomProductControllerState::HandleLpmInterfaceState, false );
+        }
+        break;
+        case LPM_INTERFACE_UP:
+        {
+            BOSE_DEBUG( s_logger, "Received LPM Interface UP message" );
+            m_EddieProductControllerHsm.Handle<bool>(
+                &CustomProductControllerState::HandleLpmInterfaceState, true );
+        }
+        break;
+        default:
+            BOSE_ERROR( s_logger, "Unhandled product message" );
+            break;
+        }
+        return;
+    }
+    else
+    {
+        BOSE_ERROR( s_logger, "productMessage doesn't have an Id" );
+        return;
+    }
+}
 
 } // namespace ProductApp

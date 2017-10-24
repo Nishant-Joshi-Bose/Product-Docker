@@ -44,6 +44,8 @@ enum ProductMessageId
      CONFIGURATION_STATUS   = 17;
      STS_SOURCES_INIT_DONE  = 18;
      SOURCE_SLOT_SELECTED   = 19;
+     LPM_INTERFACE_DOWN     = 20;
+     LPM_INTERFACE_UP       = 21;
 }
 
 enum ProductNetworkType
