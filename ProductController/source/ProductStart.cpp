@@ -40,6 +40,7 @@
 #include "SystemUtils.h"
 #include "DPrint.h"
 #include "ProfessorProductController.h"
+#include "FunctionInfo.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -49,6 +50,36 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 static DPrint s_logger{ "Product" };
 DPrint   s_webExLogger( "Product" );
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name  ShowBacktrace
+///
+/// @brief  This function attempts to unwind the stack.
+///
+/// @return This method does not return anything.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ShowBacktrace( int sig )
+{
+
+    // having hopefully given the hapless user a clue as to where the
+    // problem might be, restore the original signal handler, resume, and let
+    // things die in the normal way
+    // (actually, let's do this first on the off chance that this handler causes a second fault)
+    signal( SIGSEGV,  SIG_DFL );
+
+    // TODO: is assuuming that logging is still intact at this point overly-optimistic?
+
+    BOSE_INFO( s_logger, "************************************************" );
+    BOSE_INFO( s_logger, "* ProductController caught SIGSEGV!!!!!!!!!!!!!!" );
+    BOSE_INFO( s_logger, "************************************************" );
+    for( auto f : backtrace() )
+    {
+        BOSE_INFO( s_logger, f.length() ? f.c_str() : "<unresolved>" );
+    }
+    BOSE_INFO( s_logger, "*** backtrace complete ***" );
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -114,6 +145,7 @@ int main( int argumentCount, char** argumentValue )
         signal( SIGTERM, ProcessShutDown );
         signal( SIGINT,  ProcessShutDown );
         signal( SIGPIPE, SIG_IGN );
+        signal( SIGSEGV,  ShowBacktrace );
 
         SystemUtils::ThereCanBeOnlyOne( );
 
