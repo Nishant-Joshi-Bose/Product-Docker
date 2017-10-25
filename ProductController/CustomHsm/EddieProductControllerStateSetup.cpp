@@ -50,19 +50,11 @@ bool EddieProductControllerStateSetup::HandleIntents( KeyHandlerUtil::ActionType
     return false;
 }
 
-bool EddieProductControllerStateSetup::HandleModulesReady()
+bool EddieProductControllerStateSetup::HandleNetworkModuleStatus( const NetManager::Protobuf::NetworkStatus& networkStatus, int profileSize )
 {
-    BOSE_INFO( s_logger, __func__ );
-
-    if( auto eddieProductController = dynamic_cast<EddieProductController*>( &GetProductController() ) )
-    {
-        if( IsNetworkConfigured( eddieProductController->GetNetworkStatus() ) )
-            ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
-    }
-    else
-    {
-        BOSE_ERROR( s_logger, "Failed. Bad cast in Eddie's HandleModulesReady" );
-    }
+    BOSE_INFO( s_logger, "%s, profileSize =%d", __func__, profileSize );
+    if( profileSize || IsNetworkConfigured( networkStatus ) )
+        ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
 
     return true;
 }

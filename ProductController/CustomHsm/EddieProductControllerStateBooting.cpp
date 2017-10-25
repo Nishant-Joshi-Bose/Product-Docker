@@ -102,4 +102,9 @@ bool EddieProductControllerStateBooting::HandleIntents( KeyHandlerUtil::ActionTy
     return false;
 }
 
+bool EddieProductControllerStateBooting::HandleNetworkModuleStatus( const NetManager::Protobuf::NetworkStatus& networkStatus, int profileSize )
+{
+    return false;
+}
+
 } // namespace ProductApp
