@@ -44,8 +44,8 @@ public:
     bool Handle( KeyHandlerUtil::ActionType_t arg ) override;
 
 private:
-    inline bool ValidSourceAvailable();
-    inline bool CurrentlyPlaying();
+    bool ValidSourceAvailable();
+    bool CurrentlyPlaying();
 
     void PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp );
 
