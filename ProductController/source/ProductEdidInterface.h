@@ -98,6 +98,7 @@ public:
     /// This declaration is used to start and run the hardware manager.
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool Run( void );
+    void Stop( void );
 
 private:
 
