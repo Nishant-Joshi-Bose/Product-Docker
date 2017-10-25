@@ -43,18 +43,18 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
             {
                 // Send Pause
                 transportControl.\
-                set_state( SoundTouchInterface::TransportControl::pause );
+                  set_state( SoundTouchInterface::TransportControl::pause );
             }
             else
             {
                 // Send Play
                 transportControl.\
-                set_state( SoundTouchInterface::TransportControl::play );
+                  set_state( SoundTouchInterface::TransportControl::play );
             }
             GetFrontDoorClient()->\
-            SendPut<SoundTouchInterface::\
-            NowPlayingJson>( "/content/transportControl", transportControl,
-                             m_NowPlayingRsp, m_frontDoorClientErrorCb );
+              SendPut<SoundTouchInterface::\
+              NowPlayingJson>( "/content/transportControl", transportControl,
+                               m_NowPlayingRsp, m_frontDoorClientErrorCb );
         }
         else
         {
@@ -75,7 +75,7 @@ inline bool TransportControlManager::ValidSourceAvailable()
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
     const EddieProductController *eddiePC = \
-                                            dynamic_cast<const EddieProductController*>( &GetProductController() );
+        dynamic_cast<const EddieProductController*>( &GetProductController() );
     if( eddiePC != nullptr )
     {
         if( eddiePC->GetNowPlaying().has_source() )
@@ -95,11 +95,11 @@ inline bool TransportControlManager::CurrentlyPlaying()
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
     const EddieProductController *eddiePC = \
-                                            dynamic_cast<const EddieProductController*>( &GetProductController() );
+        dynamic_cast<const EddieProductController*>( &GetProductController() );
     if( eddiePC != nullptr )
     {
-        if( eddiePC->GetNowPlaying().state().has_status() &&
-            eddiePC->GetNowPlaying().state().status() == SoundTouchInterface::StatusJson::play )
+        if( eddiePC->GetNowPlaying().state().has_status() && 
+            eddiePC->GetNowPlaying().state().status() == SoundTouchInterface::StatusJson::play)
         {
             BOSE_DEBUG( s_logger, "Found nowPlaying" );
             return true;
@@ -115,12 +115,17 @@ inline bool TransportControlManager::CurrentlyPlaying()
 
 void TransportControlManager::PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp )
 {
+    // No Need to handle this as Product Controller will get a nowPlaying that
+    // will update update the information.
     BOSE_DEBUG( s_logger, "%s", __func__ );
+    return;
 }
 
 void TransportControlManager::FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode )
 {
+    // Nothing to do for now, printing this if anyone cares.
     BOSE_ERROR( s_logger, "%s:error code- %d", __func__, errorCode );
+    return;
 }
 
 }
