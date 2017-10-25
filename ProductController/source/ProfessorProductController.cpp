@@ -320,11 +320,11 @@ void ProfessorProductController::Run( )
 
     m_ProductHardwareInterface = ProductHardwareInterface::GetInstance( GetTask( ),
                                                                         CallbackForMessages );
-                                                                        
+
     m_ProductEdidInterface     = ProductEdidInterface::GetInstance( GetTask( ),
                                                                     CallbackForMessages,
                                                                     m_ProductHardwareInterface );
-                                                                    
+
     m_ProductSystemManager     = ProductSystemManager    ::GetInstance( GetTask( ),
                                                                         CallbackForMessages );
 
@@ -847,6 +847,7 @@ void ProfessorProductController::Wait( )
     m_ProductSoftwareServices ->Stop( );
     m_ProductCommandLine      ->Stop( );
     m_ProductUserInterface    ->Stop( );
+    m_ProductEdidInterface    ->Stop( );
 
     ///
     /// Delete all the submodules.
@@ -858,6 +859,7 @@ void ProfessorProductController::Wait( )
     delete m_ProductSoftwareServices;
     delete m_ProductCommandLine;
     delete m_ProductUserInterface;
+    delete m_ProductEdidInterface;
 
     m_ProductHardwareInterface = nullptr;
     m_ProductSystemManager = nullptr;
@@ -866,6 +868,7 @@ void ProfessorProductController::Wait( )
     m_ProductSoftwareServices = nullptr;
     m_ProductCommandLine = nullptr;
     m_ProductUserInterface = nullptr;
+    m_ProductEdidInterface = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
