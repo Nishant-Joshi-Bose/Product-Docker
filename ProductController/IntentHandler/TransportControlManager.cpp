@@ -35,53 +35,54 @@ namespace ProductApp
 bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
 {
     bool sendMsg = false;
-    if( !ValidSourceAvailable() )
+    if( ValidSourceAvailable() )
+    {
+        SoundTouchInterface::TransportControl transportControl;
+        if( intent == ( uint16_t ) Action::PLAY_PAUSE )
+        {
+            if( CurrentlyPlaying() )
+            {
+                // Send Pause
+                transportControl.\
+                set_state( SoundTouchInterface::TransportControl::pause );
+            }
+            else
+            {
+                // Send Play
+                transportControl.\
+                set_state( SoundTouchInterface::TransportControl::play );
+            }
+            sendMsg = true;
+        }
+        else if( intent == ( uint16_t ) Action::NEXT_TRACK )
+        {
+            // Send NEXT_TRACK
+            transportControl.\
+            set_state( SoundTouchInterface::TransportControl::skipNext );
+            sendMsg = true;
+        }
+        else if( intent == ( uint16_t ) Action::PREV_TRACK )
+        {
+            // Send PREV_TRACK
+            transportControl.\
+            set_state( SoundTouchInterface::TransportControl::skipPrevious );
+            sendMsg = true;
+        }
+
+        if( sendMsg )
+        {
+            BOSE_DEBUG( s_logger, "SendPut through Frontdoor for transportControl "
+                        " for intent : %d", intent );
+            GetFrontDoorClient()->\
+            SendPut<SoundTouchInterface::\
+            NowPlayingJson>( "/content/transportControl", transportControl,
+                             m_NowPlayingRsp, m_frontDoorClientErrorCb );
+        }
+    }
+    else
     {
         BOSE_DEBUG( s_logger, "No source available, PlayControl intent "
                     "  ignored for now" );
-        return true;
-    }
-
-    SoundTouchInterface::TransportControl transportControl;
-    if( intent == ( uint16_t ) Action::PLAY_PAUSE )
-    {
-        if( CurrentlyPlaying() )
-        {
-            // Send Pause
-            transportControl.\
-            set_state( SoundTouchInterface::TransportControl::pause );
-        }
-        else
-        {
-            // Send Play
-            transportControl.\
-            set_state( SoundTouchInterface::TransportControl::play );
-        }
-        sendMsg = true;
-    }
-    else if( intent == ( uint16_t ) Action::NEXT_TRACK )
-    {
-        // Send NEXT_TRACK
-        transportControl.\
-        set_state( SoundTouchInterface::TransportControl::skipNext );
-        sendMsg = true;
-    }
-    else if( intent == ( uint16_t ) Action::PREV_TRACK )
-    {
-        // Send PREV_TRACK
-        transportControl.\
-        set_state( SoundTouchInterface::TransportControl::skipPrevious );
-        sendMsg = true;
-    }
-
-    if( sendMsg )
-    {
-        BOSE_DEBUG( s_logger, "SendPut through Frontdoor for transportControl "
-                    " for intent : %d", intent );
-        GetFrontDoorClient()->\
-        SendPut<SoundTouchInterface::\
-        NowPlayingJson>( "/content/transportControl", transportControl,
-                         m_NowPlayingRsp, m_frontDoorClientErrorCb );
     }
     //Fire the cb so the control goes back to the ProductController
     if( CallBack() != nullptr )
