@@ -274,6 +274,30 @@ else
     echo "Installed Riviera-HSP: \$i"
     echo "See https://github.com/BoseCorp/Eddie/blob/master/README.md#hsp"
 fi
+# Try to kill services before installation begin to make sure
+#   minimal files are in use due to in-place installation.
+#   This is done for IP2. Needs to be removed / modified in IP3 to 
+#   use Product & Shepherd instead.
+echo "Stopping all services except SoftwareupdateService, NetManager"
+pkill LPMService
+pkill APServer
+pkill PtsServer
+pkill Passport
+pkill AVS
+pkill UpnpSource
+pkill Vfe
+pkill btproperty
+pkill STSCertified
+pkill Bluetooth
+pkill BTLESetup
+pkill IoT
+pkill BoseApp
+pkill Eddie
+pkill FrontDoor
+pkill WebServer
+exit 0
+# we are leaving telnet, avahi-daemon, SoftwareUpdateService, NetManager alive.
+
 EOF
 
 put_script "$stage/prerm" <<EOF

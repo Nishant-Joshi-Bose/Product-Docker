@@ -98,7 +98,8 @@ echo "hsp preinst"
 # Should be removed in IP3, when stopping services is 
 # taken care of by Shepherd / Product / SoftwareUpdateService. 
 echo "Stopping LPM"
-killall LPMServer
+pkill LPMService
+
 EOF
 
 put_script "$stage/prerm" <<EOF
