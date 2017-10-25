@@ -36,17 +36,4 @@ bool EddieProductControllerStateTop::HandleIntents( KeyHandlerUtil::ActionType_t
     return true;
 }
 
-bool EddieProductControllerStateTop::HandleNetworkModuleStatus( const NetManager::Protobuf::NetworkStatus& networkStatus, int profileSize )
-{
-    if( profileSize || networkStatus.isprimaryup() )
-    {
-        ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
-    }
-    else
-    {
-        ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP );
-    }
-    return true;
-}
-
 } // namespace ProductApp

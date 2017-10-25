@@ -191,7 +191,7 @@ void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::Ne
         }
         else
         {
-            m_EddieProductControllerHsm.Handle<const NetManager::Protobuf::NetworkStatus&, int>( &CustomProductControllerState::HandleNetworkModuleStatus, networkStatus, m_WiFiProfilesCount );
+            m_EddieProductControllerHsm.Handle<const NetManager::Protobuf::NetworkStatus&, int>( &CustomProductControllerState::HandleNetworkConfigurationStatus, networkStatus, m_WiFiProfilesCount );
         }
     }
 }
@@ -200,7 +200,7 @@ void EddieProductController::HandleWiFiProfileResponse( const NetManager::Protob
 {
     m_WiFiProfilesCount = profiles.profiles_size();
     BOSE_INFO( s_logger, "%s, m_WiFiProfilesCount=%d", __func__, m_WiFiProfilesCount );
-    m_EddieProductControllerHsm.Handle<const NetManager::Protobuf::NetworkStatus&, int>( &CustomProductControllerState::HandleNetworkModuleStatus, m_cachedStatus, m_WiFiProfilesCount );
+    m_EddieProductControllerHsm.Handle<const NetManager::Protobuf::NetworkStatus&, int>( &CustomProductControllerState::HandleNetworkConfigurationStatus, m_cachedStatus, m_WiFiProfilesCount );
 }
 
 void EddieProductController::SendAllowSourceSelectNotification( bool isSourceSelectAllowed )

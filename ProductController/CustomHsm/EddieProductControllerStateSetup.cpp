@@ -50,7 +50,7 @@ bool EddieProductControllerStateSetup::HandleIntents( KeyHandlerUtil::ActionType
     return false;
 }
 
-bool EddieProductControllerStateSetup::HandleNetworkModuleStatus( const NetManager::Protobuf::NetworkStatus& networkStatus, int profileSize )
+bool EddieProductControllerStateSetup::HandleNetworkConfigurationStatus( const NetManager::Protobuf::NetworkStatus& networkStatus, int profileSize )
 {
     BOSE_INFO( s_logger, "%s, profileSize =%d", __func__, profileSize );
     if( profileSize || IsNetworkConfigured( networkStatus ) )

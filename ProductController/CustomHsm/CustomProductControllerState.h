@@ -62,7 +62,7 @@ public:
         return false;
     }
 
-    virtual bool HandleNetworkModuleStatus( const NetManager::Protobuf::NetworkStatus & networkStatus, int profileSize )
+    virtual bool HandleNetworkConfigurationStatus( const NetManager::Protobuf::NetworkStatus & networkStatus, int profileSize )
     {
         return false;
     }
