@@ -43,6 +43,11 @@ public:
 
     void Initialize();
 
+    NetManager::Protobuf::NetworkStatus const& GetNetworkStatus() const
+    {
+        return m_cachedStatus;
+    }
+
 private:
     /// Disable copies
     EddieProductController( const EddieProductController& ) = delete;
@@ -105,6 +110,7 @@ private:
 
     void HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus );
 
+    void HandleWiFiProfileResponse( const NetManager::Protobuf::WiFiProfiles& profiles );
 ///////////////////////////////////////////////////////////////////////////////
 /// @name HandleCapsNowPlaying
 /// @brief Function to Handle "/content/nowPlaying" notification from Caps.
@@ -232,7 +238,7 @@ public:
 /// @return void
 ///////////////////////////////////////////////////////////////////////////////
     void HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationStatus &status );
-    void CapsInitializationStatusCallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
+    void CallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
     void HandleAllowSourceSelectRequest( const Callback<SoundTouchInterface::AllowSourceSelect> &resp );
 
     IntentHandler& IntentHandle()
@@ -294,6 +300,9 @@ private:
     bool                                        m_isCapsReady = false;
     bool                                        m_isLPMReady  = false;
     bool                                        m_isNetworkModuleReady  = false;
+
+    int                                         m_WiFiProfilesCount;
+    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>     errorCb;
     /// Demonstration Controller instance
     DemoApp::DemoController m_demoController;
 };

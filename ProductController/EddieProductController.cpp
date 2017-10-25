@@ -39,6 +39,9 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
     m_LpmInterface( std::bind( &EddieProductController::HandleProductMessage,
                                this, std::placeholders::_1 ), GetTask() ),
+    m_WiFiProfilesCount( 0 ),
+    errorCb( AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> ( std::bind( &EddieProductController::CallbackError,
+                                                                  this, std::placeholders::_1 ), GetTask() ) ),
     m_demoController( m_ProductControllerTask )
 {
     BOSE_INFO( s_logger, __func__ );
@@ -147,6 +150,13 @@ void EddieProductController::RegisterEndPoints()
                                                                                    this, std::placeholders::_1 ), GetTask() );
     m_FrontDoorClientIF->RegisterNotification<NetManager::Protobuf::NetworkStatus>( "/network/status", networkStatusCb );
 
+
+    AsyncCallback<NetManager::Protobuf::WiFiProfiles> networkWifiProfilesCb( std::bind( &EddieProductController::HandleWiFiProfileResponse ,
+                                                                             this, std::placeholders::_1 ), GetTask() );
+    m_FrontDoorClientIF->RegisterNotification<NetManager::Protobuf::WiFiProfiles>( "/network/wifi/profile", networkWifiProfilesCb );
+
+    m_FrontDoorClientIF->SendGet<NetManager::Protobuf::WiFiProfiles>( "/network/wifi/profile", networkWifiProfilesCb, errorCb );
+
     AsyncCallback<SoundTouchInterface::NowPlayingJson> nowPlayingCb( std::bind( &EddieProductController::HandleCapsNowPlaying ,
                                                                                 this, std::placeholders::_1 ), GetTask() );
 
@@ -158,10 +168,12 @@ void EddieProductController::HandleCapsNowPlaying( const SoundTouchInterface::No
     BOSE_INFO( s_logger, "%s,np- (%s)", __func__,  ProtoToMarkup::ToJson( nowPlayingPb, false ).c_str() );
     PersistCapsNowPlaying( nowPlayingPb );
 }
+
 void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus )
 {
     BOSE_INFO( s_logger, "%s,N/w status- (%s)", __func__,  ProtoToMarkup::ToJson( networkStatus, false ).c_str() );
-    if( networkStatus.has_primary() )
+
+    if( networkStatus.has_isprimaryup() )
     {
         bool isCurrPrimaryUp = ( networkStatus.has_isprimaryup() && networkStatus.isprimaryup() );
         bool isPrevPrimaryUp = ( m_cachedStatus.has_isprimaryup() && m_cachedStatus.isprimaryup() );
@@ -171,12 +183,24 @@ void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::Ne
             // Store the network status when changes.
             m_ConfigurationStatus.mutable_status()->set_network( isCurrPrimaryUp );
         }
+        BOSE_INFO( s_logger, "%s, m_isNetworkModuleReady- (%d)", __func__,  m_isNetworkModuleReady );
+        m_cachedStatus = networkStatus;
         if( not m_isNetworkModuleReady )
         {
             HandleNetworkModuleReady( true );
         }
-        m_cachedStatus = networkStatus;
+        else
+        {
+            m_EddieProductControllerHsm.Handle<const NetManager::Protobuf::NetworkStatus&, int>( &CustomProductControllerState::HandleNetworkConfigurationStatus, networkStatus, m_WiFiProfilesCount );
+        }
     }
+}
+
+void EddieProductController::HandleWiFiProfileResponse( const NetManager::Protobuf::WiFiProfiles& profiles )
+{
+    m_WiFiProfilesCount = profiles.profiles_size();
+    BOSE_INFO( s_logger, "%s, m_WiFiProfilesCount=%d", __func__, m_WiFiProfilesCount );
+    m_EddieProductControllerHsm.Handle<const NetManager::Protobuf::NetworkStatus&, int>( &CustomProductControllerState::HandleNetworkConfigurationStatus, m_cachedStatus, m_WiFiProfilesCount );
 }
 
 void EddieProductController::SendAllowSourceSelectNotification( bool isSourceSelectAllowed )
@@ -245,8 +269,6 @@ void EddieProductController::HandleAUXSourceKeyPress()
 void EddieProductController::SendInitialRequests()
 {
     BOSE_INFO( s_logger, __func__ );
-    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errorCb( std::bind( &EddieProductController::CapsInitializationStatusCallbackError ,
-                                                                this, std::placeholders::_1 ) , GetTask() );
 
     AsyncCallback<SoundTouchInterface::CapsInitializationStatus> capsInitializationCb( std::bind( &EddieProductController::HandleCapsInitializationUpdate ,
             this, std::placeholders::_1 ) , GetTask() );
@@ -258,7 +280,7 @@ void EddieProductController::SendInitialRequests()
     m_FrontDoorClientIF->SendGet<NetManager::Protobuf::NetworkStatus>( "/network/status", networkStatusCb, errorCb );
 }
 
-void EddieProductController::CapsInitializationStatusCallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode )
+void EddieProductController::CallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode )
 {
     BOSE_ERROR( s_logger, "%s:error code- %d", __func__, errorCode );
 }

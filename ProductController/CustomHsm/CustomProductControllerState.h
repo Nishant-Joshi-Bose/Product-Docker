@@ -14,6 +14,7 @@
 #include "Hsm.h"
 #include "HsmState.h"
 #include "KeyHandler.h"
+#include "NetManager.pb.h"
 
 namespace ProductApp
 {
@@ -57,6 +58,11 @@ public:
     }
 
     virtual bool HandleIntents( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
+    virtual bool HandleNetworkConfigurationStatus( const NetManager::Protobuf::NetworkStatus & networkStatus, int profileSize )
     {
         return false;
     }

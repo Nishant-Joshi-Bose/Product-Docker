@@ -31,18 +31,32 @@ void EddieProductControllerStateSetup::HandleStateEnter()
 void EddieProductControllerStateSetup::HandleStateStart()
 {
     BOSE_INFO( s_logger, __func__ );
-    SetupNetworkAccessPoint();
+    EnableWiFiSetupMode();
+    GetProductController().GetProductFrontDoorUtility().EnableNetworkAccessPoint();
+    GetProductController().GetProductFrontDoorUtility().EnableBTBLEAdvertising();
 }
 
 void EddieProductControllerStateSetup::HandleStateExit()
 {
     BOSE_INFO( s_logger, __func__ );
-    DisableNetworkAccessPoint();
+    EnableWiFiAutoSwitchingMode();
+    GetProductController().GetProductFrontDoorUtility().DisableNetworkAccessPoint();
+    GetProductController().GetProductFrontDoorUtility().DisableBTBLEAdvertising();
 }
+
 
 bool EddieProductControllerStateSetup::HandleIntents( KeyHandlerUtil::ActionType_t result )
 {
     return false;
+}
+
+bool EddieProductControllerStateSetup::HandleNetworkConfigurationStatus( const NetManager::Protobuf::NetworkStatus& networkStatus, int profileSize )
+{
+    BOSE_INFO( s_logger, "%s, profileSize =%d", __func__, profileSize );
+    if( profileSize || IsNetworkConfigured( networkStatus ) )
+        ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
+
+    return true;
 }
 
 } // namespace ProductApp

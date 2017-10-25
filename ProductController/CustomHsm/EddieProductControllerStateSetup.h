@@ -34,5 +34,6 @@ public:
     void HandleStateStart() override;
     void HandleStateExit() override;
     bool HandleIntents( KeyHandlerUtil::ActionType_t result ) override;
+    bool HandleNetworkConfigurationStatus( const NetManager::Protobuf::NetworkStatus& networkStatus, int profileSize ) override;
 };
 } // namespace ProductApp
