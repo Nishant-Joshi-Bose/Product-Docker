@@ -11,6 +11,7 @@ This repo contains the source code and tools specific to the SoundTouch Eddie pr
 ##### Table of Contents  
 [Getting Started](#start)  
 [Reflash Riviera-HSP](#hsp)  
+[Update LPM via APQ using IPK](#lpm)   
 [More...](#more)  
 
 <a name="start"/>
@@ -76,6 +77,20 @@ $ cd `components get Riviera-HSP-Images installed_location`/images
 $ sudo ./fastboot.sh
 $ sudo fastboot reboot
 ```
+
+<a name="lpm"/>
+
+### Updating LPM from APQ using IPK
+
+To update LPM from APQ:
+```shell session
+$ cd /scratch/LPM
+$ cp /home/softlib/verisoft/Eddie/Continuous/master/latest/eddie_lpm_updater_*.ipk eddie_lpm_updater.ipk
+$ adb push /scratch/ eddie_lpm_updater.ipk /dev/shm/
+$ adb shell /opt/Bose/bin/rw
+$ adb shell opkg -d bose install /dev/shm/eddie_lpm_updater.ipk
+```
+Once installation completes, unplug and replug power supply to Eddie board. Please note that power cycle is must for LPM firmware update to complete.
 
 ### More...
 
