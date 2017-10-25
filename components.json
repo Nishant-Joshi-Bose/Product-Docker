@@ -104,10 +104,6 @@
     "selected_version": "branches/UnitTest++@2456"
   },
   {
-    "name": "UnitTest++-ti",
-    "selected_version": "branches/UnitTest++@2456"
-  },
-  {
     "name": "WiFi-Setup-Webpage",
     "selected_version": "master@19f561f91af118db5439955e4d85bc0a914964eb"
   }
