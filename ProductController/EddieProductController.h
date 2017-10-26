@@ -24,7 +24,6 @@
 #include "DeviceManager.pb.h"
 #include "NetManager.pb.h"
 #include "SoundTouchInterface/CapsInitializationStatus.pb.h"
-#include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "ProductCliClient.h"
 #include "LpmClientIF.h"
@@ -124,13 +123,6 @@ public:
     void HandleAUXSourceKeyPress();
 
     void HandleIntents( KeyHandlerUtil::ActionType_t result );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name  SendAllowSourceSelectNotification
-/// @brief function to send Send allowSourceSelectUpdate Notification Msg to the subscriber.
-/// @return void
-////////////////////////////////////////////////////////////////////////////////
-    void SendAllowSourceSelectNotification( bool isSourceSelectAllowed );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  IsAllModuleReady
@@ -239,8 +231,6 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
     void HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationStatus &status );
     void CallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
-    void HandleAllowSourceSelectRequest( const Callback<SoundTouchInterface::AllowSourceSelect> &resp );
-
     IntentHandler& IntentHandle()
     {
         return m_IntentHandler;

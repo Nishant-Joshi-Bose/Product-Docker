@@ -102,7 +102,7 @@ INCLUDE_DIRECTORIES(
   ${DEMOCONTROLLER_DIR}/include
   ${NETWORKSERVICE_DIR}/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/BLESetupService
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/Bluetooth
   ${UNITTEST_DIR}/include
 )
 

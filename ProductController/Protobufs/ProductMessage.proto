@@ -110,19 +110,19 @@ message ProductMessageData
         //optional ProductSelectSourceSlot    selectsourceslot    = 5;
 }
 
-message ProductMessage
-{
-        optional ProductMessageId   id   = 1;
-        optional ProductMessageData data = 2;
-        optional ProductAudioPathStatus     audiopathstatus     =  3;
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Audio Path Status Message Structure                               ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 message ProductAudioPathStatus
 {
         optional bool connected = 1;
+}
+
+message ProductMessage
+{
+        optional ProductMessageId   id   = 1;
+        optional ProductMessageData data = 2;
+        optional ProductAudioPathStatus     audiopathstatus     =  3;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

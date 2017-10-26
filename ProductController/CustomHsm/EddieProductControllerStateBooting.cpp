@@ -28,16 +28,19 @@ EddieProductControllerStateBooting::EddieProductControllerStateBooting( EddiePro
 void EddieProductControllerStateBooting::HandleStateEnter()
 {
     BOSE_INFO( s_logger, __func__ );
+    ProductControllerStateBooting::HandleStateEnter();
 }
 
 void EddieProductControllerStateBooting::HandleStateStart()
 {
     BOSE_INFO( s_logger, __func__ );
+    ProductControllerStateBooting::HandleStateStart();
 }
 
 void EddieProductControllerStateBooting::HandleStateExit()
 {
     BOSE_INFO( s_logger, __func__ );
+    ProductControllerStateBooting::HandleStateExit();
 }
 
 bool EddieProductControllerStateBooting::HandleModulesReady()

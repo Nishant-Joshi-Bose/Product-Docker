@@ -50,7 +50,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateBooting );
     m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateSetup );
     m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateNetworkStandby );
-    m_EddieProductControllerHsm.Init( CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING );
+    m_EddieProductControllerHsm.Init( PRODUCT_CONTROLLER_STATE_BOOTING );
 
     InitializeLpmClient();
     m_LanguagePersistence = ProtoPersistenceFactory::Create( "ProductLanguage", g_ProductPersistenceDir );
@@ -130,16 +130,11 @@ void EddieProductController::RegisterEndPoints()
     AsyncCallback<SoundTouchInterface::CapsInitializationStatus> capsInitializationCb( std::bind( &EddieProductController::HandleCapsInitializationUpdate,
             this, std::placeholders::_1 ) , GetTask() );
 
-    AsyncCallback<Callback<SoundTouchInterface::AllowSourceSelect>> getallowSourceSelectReqCb( std::bind( &EddieProductController::HandleAllowSourceSelectRequest ,
-                                                                 this, std::placeholders::_1 ) , GetTask() );
-
     /// Registration of endpoints to the frontdoor client.
 
     m_FrontDoorClientIF->RegisterNotification<SoundTouchInterface::CapsInitializationStatus>( "CapsInitializationUpdate", capsInitializationCb );
     m_FrontDoorClientIF->RegisterGet( "/system/language" , getLanguageReqCb );
     m_FrontDoorClientIF->RegisterGet( "/system/configuration/status" , getConfigurationStatusReqCb );
-
-    m_FrontDoorClientIF->RegisterGet( "/content/allowSourceSelect" , getallowSourceSelectReqCb );
 
     m_FrontDoorClientIF->RegisterPost<ProductPb::Language>( "/system/language" , postLanguageReqCb );
     ///Device info get request handler
@@ -203,24 +198,8 @@ void EddieProductController::HandleWiFiProfileResponse( const NetManager::Protob
     m_EddieProductControllerHsm.Handle<const NetManager::Protobuf::NetworkStatus&, int>( &CustomProductControllerState::HandleNetworkConfigurationStatus, m_cachedStatus, m_WiFiProfilesCount );
 }
 
-void EddieProductController::SendAllowSourceSelectNotification( bool isSourceSelectAllowed )
-{
-    BOSE_INFO( s_logger, __func__ );
-    SoundTouchInterface::AllowSourceSelect pb;
-    pb.set_sourceselectallowed( isSourceSelectAllowed );
-    m_FrontDoorClientIF->SendNotification( "/content/allowSourceSelectUpdate", pb );
-}
-
-void EddieProductController::HandleAllowSourceSelectRequest( const Callback<SoundTouchInterface::AllowSourceSelect> &resp )
-{
-    BOSE_DEBUG( s_logger, __func__ );
-    SoundTouchInterface::AllowSourceSelect pb;
-    pb.set_sourceselectallowed( true );
-    resp.Send( pb );
-}
-
-// This function will handle key information coming from LPM and give it to
-// KeyHandler for repeat Manager to handle.
+/// This function will handle key information coming from LPM and give it to
+/// KeyHandler for repeat Manager to handle.
 void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInformation )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -289,7 +268,6 @@ void EddieProductController::HandleCapsInitializationUpdate( const SoundTouchInt
 {
     BOSE_DEBUG( s_logger, "%s:notification: %s", __func__, ProtoToMarkup::ToJson( resp, false ).c_str() );
     HandleCAPSReady( resp.capsinitialized() );
-    SendAllowSourceSelectNotification( true );
 }
 
 void EddieProductController::HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp )
@@ -610,11 +588,11 @@ void EddieProductController::HandleAllowSourceSelectCliCmd( const std::list<std:
     std::string arg = argList.front();
     if( arg == "yes" )
     {
-        SendAllowSourceSelectNotification( true );
+        SendAllowSourceSelectMessage( true );
     }
     else if( arg == "no" )
     {
-        SendAllowSourceSelectNotification( false );
+        SendAllowSourceSelectMessage( false );
     }
     else
     {
@@ -640,7 +618,7 @@ void EddieProductController::HandleSetProductControllerStateCliCmd( const std::l
     if( arg == "boot" )
     {
         response = "Setting Product Controller state to BOOT";
-        m_EddieProductControllerHsm.ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING );
+        m_EddieProductControllerHsm.ChangeState( PRODUCT_CONTROLLER_STATE_BOOTING );
     }
     else if( arg == "on" )
     {
