@@ -75,7 +75,7 @@ public:
       Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED,
       const std::string&          name    = "CustomProductControllerStateIdleVoiceUnconfigured" );
 
-    virtual ~CustomProductControllerStateIdleVoiceUnconfigured()
+    ~CustomProductControllerStateIdleVoiceUnconfigured( ) override
     {
 
     }
@@ -84,6 +84,7 @@ public:
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
 
+    bool HandleAutowakeStatus( bool active )                   override;
     bool HandleNetworkState( bool configured, bool connected ) override;
     bool HandleVoiceState( bool configured )                   override;
 
@@ -93,28 +94,24 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief This timer is used to monitor the amount of time the device is in this state. It is
-    ///        armed on entry to this state and stopped on exit to this state. If it expires in
-    ///        20 minutes, the HandleTimeOut method declared below will be invoked.
+    /// @brief This timer is used to monitor the amount of time the device is in this state.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    APTimerPtr m_timer;
+    std::shared_ptr<APTimer> m_timer;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief This method will be invoked by an expired timer, which is defined above and armed on
-    ///        entry to this state, if the device has remained in a voice unconfigured state for 20
-    ///        minutes.
+    /// @brief This method will be invoked by the expired timer defined above.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleTimeOut( void );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

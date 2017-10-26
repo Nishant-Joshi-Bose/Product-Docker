@@ -70,7 +70,7 @@ public:
                                           Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE,
                                           const std::string&          name    = "CustomProductControllerStatePlayable" );
 
-    virtual ~CustomProductControllerStatePlayable()
+    ~CustomProductControllerStatePlayable( ) override
     {
 
     }
@@ -79,6 +79,7 @@ public:
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
 
+    bool HandlePowerState( ) override;
     bool HandlePlaybackRequest( ProductPlaybackRequest_ProductPlaybackState state ) override;
 
 private:
@@ -87,10 +88,10 @@ private:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -27,6 +27,7 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+#include "Utilities.h"
 #include "CustomProductControllerState.h"
 #include "ProductControllerHsm.h"
 
@@ -38,13 +39,11 @@ namespace ProductApp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerState::CustomProductControllerState
+/// @name  CustomProductControllerState::CustomProductControllerState
 ///
-/// @param ProductControllerHsm& hsm
+/// @param ProductControllerHsm& productStateMachine
 ///
 /// @param CHsmState* pSuperState
-///
-/// @param ProfessorProductController& productController
 ///
 /// @param Hsm::STATE stateId
 ///
@@ -58,7 +57,7 @@ CustomProductControllerState::CustomProductControllerState( ProductControllerHsm
 
     : CHsmState( stateId, &productStateMachine, name, pSuperState )
 {
-    return;
+
 }
 
 bool CustomProductControllerState::HandleLpmState( bool active )
@@ -113,7 +112,7 @@ bool CustomProductControllerState::HandleKeyAction( int action )
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 

@@ -14,7 +14,7 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
+/// @date      10/26/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -42,43 +42,38 @@
 #include "ProfessorProductController.h"
 #include "FunctionInfo.h"
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// The following declares a DPrint class type object and a standard string for logging information
-/// in this source code file.
+/// The following declares a DPrint class type object for logging information in the product
+/// controller source code.
 ///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static DPrint s_logger{ "Product" };
-DPrint   s_webExLogger( "Product" );
+////////////////////////////////////////////////////////////////////////////////////////////////
+static DPrint s_logger { "Product" };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  ShowBacktrace
+/// @name   ShowBacktrace
 ///
-/// @brief  This function attempts to unwind the stack.
-///
-/// @return This method does not return anything.
+/// @brief  This function attempts to print out the stack after a memory violation segmentation
+///         fault before the process crashes. Note that although this may be useful for quickly
+///         assessing these faults, a solid gdb debugging tool also exists for this purpose.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ShowBacktrace( int sig )
 {
-
-    // having hopefully given the hapless user a clue as to where the
-    // problem might be, restore the original signal handler, resume, and let
-    // things die in the normal way
-    // (actually, let's do this first on the off chance that this handler causes a second fault)
+    ///
+    /// Attempt to print out the stack, resume, and allow the process to die.
+    ///
     signal( SIGSEGV,  SIG_DFL );
 
-    // TODO: is assuuming that logging is still intact at this point overly-optimistic?
+    BOSE_ERROR( s_logger, "------- Product Controller Segmentation Fault Start --------" );
 
-    BOSE_INFO( s_logger, "************************************************" );
-    BOSE_INFO( s_logger, "* ProductController caught SIGSEGV!!!!!!!!!!!!!!" );
-    BOSE_INFO( s_logger, "************************************************" );
-    for( auto f : backtrace() )
+    for( auto function : backtrace( ) )
     {
-        BOSE_INFO( s_logger, f.length() ? f.c_str() : "<unresolved>" );
+        BOSE_ERROR( s_logger, function.length( ) ? function.c_str() : "<unresolved>" );
     }
-    BOSE_INFO( s_logger, "*** backtrace complete ***" );
+
+    BOSE_ERROR( s_logger, "-------- Product Controller Segmentation Fault End ---------" );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,8 +139,8 @@ int main( int argumentCount, char** argumentValue )
     {
         signal( SIGTERM, ProcessShutDown );
         signal( SIGINT,  ProcessShutDown );
+        signal( SIGSEGV, ShowBacktrace );
         signal( SIGPIPE, SIG_IGN );
-        signal( SIGSEGV,  ShowBacktrace );
 
         SystemUtils::ThereCanBeOnlyOne( );
 

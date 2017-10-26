@@ -69,7 +69,7 @@ public:
                                   Hsm::STATE            stateId = 0,
                                   const std::string&    name    = "Top" );
 
-    virtual ~CustomProductControllerState()
+    ~CustomProductControllerState( ) override
     {
 
     }
@@ -107,7 +107,7 @@ public:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 

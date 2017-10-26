@@ -3,7 +3,7 @@
 /// @file      ProductSystemManager.cpp
 ///
 /// @brief     This header file contains functionality for sending and receiving system information
-///            through a Front Door network router process.
+///            through a FrontDoor process.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -26,7 +26,7 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "DPrint.h"
+#include "Utilities.h"
 #include "Services.h"
 #include "BoseLinkServerMsgReboot.pb.h"
 #include "BoseLinkServerMsgIds.pb.h"
@@ -36,28 +36,18 @@
 #include "NetworkPortDefines.h"
 #include "ProductSystemManager.h"
 #include "ConfigurationStatus.pb.h"
-#include "ProductMessage.pb.h"
 #include "CapsInitializationStatus.pb.h"
 #include "NetManager.pb.h"
 #include "STSNetworkStatus.pb.h"
-#include "NetManager.pb.h"
 #include "FrontDoorClient.h"
 #include "ProductMessage.pb.h"
 #include "Language.pb.h"
-#include "ConfigurationStatus.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             Start of Product Namespace                                       ///
+///                          Start of the Product Application Namespace                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-///            Definitions
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-#define PRODUCT_NETWORK_MONITOR_CHECK_IN_SECONDS ( 1 )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -68,27 +58,25 @@ const std::string g_ProductDirectory = "product-persistence/";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// The following declares a DPrint class type object for logging information in this source code
-/// file.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static const DPrint s_logger { "Product" };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProductSystemManager::GetInstance
 ///
 /// @brief  This static method creates the one and only instance of a ProductSystemManager object.
 ///         The C++ Version 11 compiler guarantees that only one instance is created in a thread
 ///         safe way.
 ///
+/// @param NotifyTargetTaskIF* ProductTask This argument points to a task to process
+///                                        resource requests and notifications.
+///
+/// @param Callback< ProductMessage > ProductNotify This is a callback to send events to
+///                                                 the Product Controller.
+///
 /// @return This method returns a pointer to a ProductSystemManager object.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductSystemManager* ProductSystemManager::GetInstance( NotifyTargetTaskIF*        mainTask,
+ProductSystemManager* ProductSystemManager::GetInstance( NotifyTargetTaskIF*        ProductTask,
                                                          Callback< ProductMessage > ProductNotify )
 {
-    static ProductSystemManager* instance = new ProductSystemManager( mainTask,
+    static ProductSystemManager* instance = new ProductSystemManager( ProductTask,
                                                                       ProductNotify );
 
     BOSE_DEBUG( s_logger, "The instance %8p of the Product System Manager was returned.", instance );
@@ -104,15 +92,17 @@ ProductSystemManager* ProductSystemManager::GetInstance( NotifyTargetTaskIF*    
 ///         to ensure that only one instance of this class can be created through the class
 ///         GetInstance method.
 ///
-/// @param  void This method does not take any arguments.
+/// @param NotifyTargetTaskIF* ProductTask This argument points to a task to process
+///                                        resource requests and notifications.
 ///
-/// @return This method does not return anything.
+/// @param Callback< ProductMessage > ProductNotify This is a callback to send events to
+///                                                 the Product Controller.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductSystemManager::ProductSystemManager( NotifyTargetTaskIF*        mainTask,
+ProductSystemManager::ProductSystemManager( NotifyTargetTaskIF*        ProductTask,
                                             Callback< ProductMessage > ProductNotify )
 
-    : m_mainTask( mainTask ),
+    : m_ProductTask( ProductTask ),
       m_ProductNotify( ProductNotify ),
       m_FrontDoorClient( FrontDoor::FrontDoorClient::Create( "ProductSystemManager" ) ),
       m_LanguageSettingsPersistentStorage( ProtoPersistenceFactory::Create( "ProductLanguage",
@@ -120,30 +110,24 @@ ProductSystemManager::ProductSystemManager( NotifyTargetTaskIF*        mainTask,
       m_ConfigurationStatusPersistentStorage( ProtoPersistenceFactory::Create( "ConfigurationStatus",
                                                                                g_ProductDirectory ) )
 {
-    return;
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  ProductSystemManager::Run
+/// @name   ProductSystemManager::Run
 ///
-/// @brief  ProductSystemManager::Run
-///
-/// @return
+/// @return This method returns true if the module is successfully started.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductSystemManager::Run( )
 {
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Registration for the Bose Content Audio Playback Services or CAPS process for getting a
-    /// notification when this process is running is made through the Front Door network router.
-    ////////////////////////////////////////////////////////////////////////////////////////////////
     ReadLanguageSettingsFromPersistentStorage( );
     ReadConfigurationStatusFromPersistentStorage( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// Registration for other Bose client processes for getting system language settings is made
-    /// through the Front Door network router. The callback HandleLanguageRequest is used to process
+    /// through the FrontDoorClient. The callback HandleGetLanguageRequest is used to process
     /// language requests.
     ////////////////////////////////////////////////////////////////////////////////////////////////
     {
@@ -151,7 +135,7 @@ bool ProductSystemManager::Run( )
         callback( std::bind( &ProductSystemManager::HandleGetLanguageRequest,
                              this,
                              std::placeholders::_1 ),
-                  m_mainTask );
+                  m_ProductTask );
 
         m_FrontDoorClient->RegisterGet( "/system/language", callback );
 
@@ -160,9 +144,9 @@ bool ProductSystemManager::Run( )
     BOSE_DEBUG( s_logger, "Registration for getting system language requests has been made." );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Registration for posting system language settings to other Bose client processes is made
-    /// through the Front Door network router. The callback HandlePostLanguageRequest is used to
-    /// process language requests.
+    /// Registration for other Bose client processes for posting system language settings is made
+    /// through the FrontDoorClient. The callback HandlePostLanguageRequest is used to process
+    /// language requests.
     ////////////////////////////////////////////////////////////////////////////////////////////////
     {
         AsyncCallback < ProductPb::Language, Callback < ProductPb::Language > >
@@ -170,7 +154,7 @@ bool ProductSystemManager::Run( )
                              this,
                              std::placeholders::_1,
                              std::placeholders::_2 ),
-                  m_mainTask );
+                  m_ProductTask );
 
         m_FrontDoorClient->RegisterPost< ProductPb::Language >( "/system/language" , callback );
     }
@@ -179,15 +163,15 @@ bool ProductSystemManager::Run( )
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// Registration for other Bose client processes for getting configuration status settings is
-    /// made through the Front Door network router. The callback HandleGetConfigurationStatusRequest
-    /// is used to process language requests.
+    /// made through the FrontDoorClient. The callback HandleGetConfigurationStatusRequest is used
+    /// to process language requests.
     ////////////////////////////////////////////////////////////////////////////////////////////////
     {
         AsyncCallback < Callback < ProductPb::ConfigurationStatus > >
         callback( std::bind( &ProductSystemManager::HandleGetConfigurationStatusRequest,
                              this,
                              std::placeholders::_1 ),
-                  m_mainTask );
+                  m_ProductTask );
 
         m_FrontDoorClient->RegisterGet( "/system/configuration/status" , callback );
     }
@@ -196,33 +180,33 @@ bool ProductSystemManager::Run( )
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// Registration for the Bose Content Audio Playback Services or CAPS process for getting a
-    /// notification when this process is running is made through the Front Door network router.
-    /// The callback GetNetworkStatusNotification is used to process the notifications.
+    /// notification when this process is running is made through the FrontDoorClient. The callback
+    /// HandleCapsStatus is used to process the notifications.
     ////////////////////////////////////////////////////////////////////////////////////////////////
     {
         AsyncCallback< SoundTouchInterface::CapsInitializationStatus >
-        CallbackForNotification( std::bind( &ProductSystemManager::GetCapsNotification,
+        CallbackForNotification( std::bind( &ProductSystemManager::HandleCapsStatus,
                                             this,
                                             std::placeholders::_1 ),
-                                 m_mainTask );
+                                 m_ProductTask );
 
         AsyncCallback< SoundTouchInterface::CapsInitializationStatus >
-        CallbackForSuccess( std::bind( &ProductSystemManager::GetCapsStatus,
+        CallbackForSuccess( std::bind( &ProductSystemManager::HandleCapsStatus,
                                        this,
                                        std::placeholders::_1 ),
-                            m_mainTask );
+                            m_ProductTask );
 
         AsyncCallback< FRONT_DOOR_CLIENT_ERRORS >
-        CallbackForFailure( std::bind( &ProductSystemManager::GetCapsStatusFailed,
+        CallbackForFailure( std::bind( &ProductSystemManager::HandleCapsStatusFailed,
                                        this,
                                        std::placeholders::_1 ),
-                            m_mainTask );
+                            m_ProductTask );
 
         m_FrontDoorClient->SendGet< SoundTouchInterface::CapsInitializationStatus >
         ( "/system/capsInitializationStatus", CallbackForSuccess, CallbackForFailure );
 
         m_FrontDoorClient->RegisterNotification< SoundTouchInterface::CapsInitializationStatus >
-        ( "CapsInitializationUpdate", CallbackForNotification );
+        ( "/CapsInitializationUpdate", CallbackForNotification );
     }
 
     BOSE_DEBUG( s_logger, "A notification request for CAPS initialization messages has been made." );
@@ -232,7 +216,9 @@ bool ProductSystemManager::Run( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSystemManager::ReadLanguageSettingsFromPersistentStorage
+/// @name   ProductSystemManager::ReadLanguageSettingsFromPersistentStorage
+///
+/// @return This method returns true if the corresponding member has a system language defined.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductSystemManager::IsSystemLanguageSet( )
@@ -242,7 +228,7 @@ bool ProductSystemManager::IsSystemLanguageSet( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSystemManager::ReadLanguageSettingsFromPersistentStorage
+/// @name  ProductSystemManager::ReadLanguageSettingsFromPersistentStorage
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::ReadLanguageSettingsFromPersistentStorage( )
@@ -259,10 +245,13 @@ void ProductSystemManager::ReadLanguageSettingsFromPersistentStorage( )
         BOSE_DEBUG( s_logger, "Reading language settings from persistent storage failed." );
         BOSE_DEBUG( s_logger, "Default language settings will be written to persistent storage." );
 
+        ////////////////////////////////////////////////////////////////////////////////////////////
         ///
-        /// Set the default language to English and add the supported languages if this data has not
-        /// been set in storage.
+        /// @todo At this time, the default language is set to English and add the supported
+        ///       languages are added since the data has not been set in storage. Future support
+        ///       may involve reading these values from a configuration file.
         ///
+        ////////////////////////////////////////////////////////////////////////////////////////////
         m_LanguageSettings.set_code( "en" );
         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "da" ); /// Danish
         m_LanguageSettings.mutable_properties( )->add_supported_language_codes( "de" ); /// German
@@ -303,7 +292,7 @@ void ProductSystemManager::ReadLanguageSettingsFromPersistentStorage( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSystemManager::WriteLanguageSettingsFromPersistentStorage
+/// @name  ProductSystemManager::WriteLanguageSettingsFromPersistentStorage
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::WriteLanguageSettingsToPersistentStorage( )
@@ -324,9 +313,9 @@ void ProductSystemManager::WriteLanguageSettingsToPersistentStorage( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSystemManager::HandleGetLanguageRequest
+/// @name  ProductSystemManager::HandleGetLanguageRequest
 ///
-/// @param response
+/// @param Callback< ProductPb::Language >& response
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::HandleGetLanguageRequest( const Callback< ProductPb::Language >& response )
@@ -338,16 +327,21 @@ void ProductSystemManager::HandleGetLanguageRequest( const Callback< ProductPb::
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSystemManager::HandlePostLanguageRequest
+/// @name  ProductSystemManager::HandlePostLanguageRequest
 ///
-/// @param language
+/// @param ProductPb::Language& language
 ///
-/// @param response
+/// @param Callback< ProductPb::Language >& response
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::HandlePostLanguageRequest( const ProductPb::Language&             language,
                                                       const Callback< ProductPb::Language >& response )
 {
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @todo A check for whether the system language is supported needs to be made.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     BOSE_DEBUG( s_logger, "The request to set the system language to \"%s\" has been made.",
                 language.code( ).c_str( ) );
 
@@ -360,15 +354,27 @@ void ProductSystemManager::HandlePostLanguageRequest( const ProductPb::Language&
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSystemManager::SetConfigurationStatus
+/// @name  ProductSystemManager::SetNetworkAccoutConfigurationStatus
+///
+/// @param bool network
+///
+/// @param bool account
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::SetConfigurationStatus( bool network, bool account, bool language )
+void ProductSystemManager::SetNetworkAccoutConfigurationStatus( bool network, bool account )
 {
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @todo For the time being during initial testing, the product controller will handle setting
+    ///       the network and account information. Once an end-point for determining the account
+    ///       status becomes available the handling of the account may be processed insidet the
+    ///       ProductSystemManager class directly.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     auto configurationStatus = m_ConfigurationStatus.mutable_status( );
 
     configurationStatus->set_network( network );
-    configurationStatus->set_language( language );
+    configurationStatus->set_language( IsSystemLanguageSet( ) );
     configurationStatus->set_account( account );
 
     WriteConfigurationStatusToPersistentStorage( );
@@ -376,7 +382,7 @@ void ProductSystemManager::SetConfigurationStatus( bool network, bool account, b
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSystemManager::ReadConfigurationStatusToPersistentStorage
+/// @name  ProductSystemManager::ReadConfigurationStatusFromPersistentStorage
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::ReadConfigurationStatusFromPersistentStorage( )
@@ -422,7 +428,7 @@ void ProductSystemManager::ReadConfigurationStatusFromPersistentStorage( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSystemManager::WriteConfigurationStatusToPersistentStorage
+/// @name  ProductSystemManager::WriteConfigurationStatusToPersistentStorage
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::WriteConfigurationStatusToPersistentStorage( )
@@ -443,12 +449,14 @@ void ProductSystemManager::WriteConfigurationStatusToPersistentStorage( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSystemManager::HandleGetConfigurationSProcessNetworkStatustatusRequest
+/// @name  ProductSystemManager::HandleGetConfigurationStatusRequest
 ///
-/// @param response
+/// @param Callback< ProductPb::ConfigurationStatus >& response
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::HandleGetConfigurationStatusRequest( const Callback< ProductPb::ConfigurationStatus >& response )
+void ProductSystemManager::HandleGetConfigurationStatusRequest( const
+                                                                Callback< ProductPb::ConfigurationStatus >&
+                                                                response )
 {
     BOSE_DEBUG( s_logger, "Sending the configuration status for a get request." );
 
@@ -457,76 +465,34 @@ void ProductSystemManager::HandleGetConfigurationStatusRequest( const Callback< 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSystemManager::GetCapsStatusNotification
+/// @name  ProductSystemManager::HandleCapsStatus
 ///
-/// @param status
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::GetCapsNotification( const SoundTouchInterface::CapsInitializationStatus&
-                                                status )
-{
-    BOSE_DEBUG( s_logger, "------------- Product CAPS Notification Event --------------" );
-
-    if( status.capsinitialized( ) )
-    {
-        BOSE_DEBUG( s_logger, "CAPS has been initialization." );
-
-        ProductMessage productMessage;
-        productMessage.mutable_capsstatus( )->set_initialized( true );
-        SendMessage( productMessage );
-    }
-    else
-    {
-        BOSE_DEBUG( s_logger, "CAPS has not been initialization." );
-
-        ProductMessage productMessage;
-        productMessage.mutable_capsstatus( )->set_initialized( false );
-        SendMessage( productMessage );
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief ProductSystemManager::GetCapsStatus
-///
-/// @param status
+/// @param SoundTouchInterface::CapsInitializationStatus& status
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::GetCapsStatus( const SoundTouchInterface::CapsInitializationStatus&
-                                          status )
+void ProductSystemManager::HandleCapsStatus( const SoundTouchInterface::CapsInitializationStatus&
+                                             status )
 {
     BOSE_DEBUG( s_logger, "---------------- Product CAPS Status Event -----------------" );
+    BOSE_DEBUG( s_logger, "CAPS has %s.", status.capsinitialized( ) ? "been initialized" : "not been initialized" );
 
-    if( status.capsinitialized( ) )
-    {
-        BOSE_DEBUG( s_logger, "CAPS has been initialized." );
-
-        ProductMessage productMessage;
-        productMessage.mutable_capsstatus( )->set_initialized( true );
-        SendMessage( productMessage );
-    }
-    else
-    {
-        BOSE_DEBUG( s_logger, "CAPS has not been initialized." );
-
-        ProductMessage productMessage;
-        productMessage.mutable_capsstatus( )->set_initialized( false );
-        SendMessage( productMessage );
-    }
+    ProductMessage productMessage;
+    productMessage.mutable_capsstatus( )->set_initialized( status.capsinitialized( ) );
+    SendMessage( productMessage );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSystemManager::GetCapsStatusFailed
+/// @name  ProductSystemManager::HandleCapsStatusFailed
 ///
-/// @param error
+/// @param FRONT_DOOR_CLIENT_ERRORS error
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::GetCapsStatusFailed( const FRONT_DOOR_CLIENT_ERRORS error )
+void ProductSystemManager::HandleCapsStatusFailed( const FRONT_DOOR_CLIENT_ERRORS error )
 {
     BOSE_DEBUG( s_logger, "---------------- Product CAPS Status Failed ----------------" );
     BOSE_ERROR( s_logger, "The CAPS initialization status was not received." );
-    BOSE_ERROR( s_logger, "An error having the value %d has occurred.      ", error );
+    BOSE_ERROR( s_logger, "An error having the value %d has occurred.", error );
 
     ProductMessage productMessage;
     productMessage.mutable_capsstatus( )->set_initialized( false );
@@ -537,19 +503,19 @@ void ProductSystemManager::GetCapsStatusFailed( const FRONT_DOOR_CLIENT_ERRORS e
 ///
 /// @name  ProductSystemManager::HandleMessage
 ///
-/// @brief ProductSystemManager::HandleMessage
+/// @brief This method sends a ProductMessage Protocol Buffer to the product controller.
 ///
-/// @param message
+/// @param ProductMessage& message
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::SendMessage( ProductMessage& message )
 {
-    IL::BreakThread( std::bind( m_ProductNotify, message ), m_mainTask );
+    IL::BreakThread( std::bind( m_ProductNotify, message ), m_ProductTask );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSystemManager::Stop
+/// @name  ProductSystemManager::Stop
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::Stop( void )
@@ -558,7 +524,7 @@ void ProductSystemManager::Stop( void )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                               End of ProductApp Namespace                                    ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 

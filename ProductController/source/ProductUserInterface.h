@@ -44,13 +44,18 @@
 #include "APServerSocketListenerIF.h"
 #include "IPCMessageRouterIF.h"
 #include "APProductIF.h"
+#include "KeyActions.h"
 #include "ProductMessage.pb.h"
 #include "LpmClientIF.h"
 #include "KeyHandler.h"
 #include "KeyActions.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                          Start of the Product Application Namespace                          ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 ///            Forward Class Declarations
@@ -63,12 +68,8 @@ class ProductController;
 ///
 /// @class ProductUserInterface
 ///
-/// @brief This class acts as a container to handle all the main functionality related to this
-///        program that is not product specific, including controlling the product states, as well
-///        as to instantiating subclasses to manage the device and lower level hardware, and to
-///        interface with the user and higher level applications. Note that only one instantiation
-///        of this class is to be created through its GetInstance static method, which returns a
-///        single static reference to an instance of this class.
+/// @brief This class acts to extract raw keys from the LPM hardware, pass them to a key handler,
+///        and send the key action to the product controller state machine for processing.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductUserInterface
@@ -88,7 +89,7 @@ public:
     /// @return This method returns a reference to a ProductUserInterface object.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    static ProductUserInterface* GetInstance( NotifyTargetTaskIF*         mainTask,
+    static ProductUserInterface* GetInstance( NotifyTargetTaskIF*         ProductTask,
                                               Callback< ProductMessage >  ProductNotify,
                                               ProductHardwareInterface*   HardwareInterface,
                                               CliClientMT&                CommandLineInterface );
@@ -102,22 +103,32 @@ public:
     void Run( void );
     void Stop( void );
 
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method converts a key action and return its associated value as a
+    ///        string.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    std::string GetKeyString( const KEY_ACTION keyAction );
+
 private:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @name   ProductUserInterface
+    /// @name  ProductUserInterface
     ///
-    /// @brief  The constructor for this class is set to be private. This definition prevents this
-    ///         class from being instantiated directly, so that only the static method GetInstance
-    ///         to this class can be used to get the one sole instance of it.
+    /// @brief The constructor for this class is set to be private. This definition prevents this
+    ///        class from being instantiated directly, so that only the static method GetInstance
+    ///        to this class can be used to get the one sole instance of it.
     ///
-    /// @param  void This method does not take any arguments.
+    /// @param NotifyTargetTaskIF* ProductTask
     ///
-    /// @return This method does not return anything.
+    /// @param Callback< ProductMessage > ProductNotify
+    ///
+    /// @param ProductHardwareInterface*  HardwareInterface
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductUserInterface( NotifyTargetTaskIF*        mainTask,
+    ProductUserInterface( NotifyTargetTaskIF*        ProductTask,
                           Callback< ProductMessage > ProductNotify,
                           ProductHardwareInterface*  HardwareInterface,
                           CliClientMT&               CommandLineInterface );
@@ -134,7 +145,7 @@ private:
     ProductUserInterface operator = ( ProductUserInterface const& ) = delete;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
+    ///uint32_t
     /// @brief The following methods are used to register for and receive key events from the LPM
     ///        hardware interface and the key handler.
     ///
@@ -157,7 +168,7 @@ private:
     ///        applications, respectively.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF*          m_mainTask;
+    NotifyTargetTaskIF*          m_ProductTask;
     NotifyTargetTaskIF*          m_keyEventTask;
     Callback< ProductMessage >   m_ProductNotify;
     ProductHardwareInterface*    m_ProductHardwareInterface;
@@ -171,6 +182,10 @@ private:
     KeyHandlerUtil::KeyHandler   m_KeyHandler;
     static constexpr const char* m_keyConfigFileName = "/opt/Bose/etc/KeyConfiguration.json";
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                           End of the Product Application Namespace                           ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

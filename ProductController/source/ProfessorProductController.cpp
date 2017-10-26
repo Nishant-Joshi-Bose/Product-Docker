@@ -5,7 +5,7 @@
 /// @brief     This file contains source code that implements the ProfessorProductController class
 ///            that acts as a container to handle all the main functionality related to this program
 ///            that is product specific. In these regards, this class is used as a container to
-///            control the product states, as well as to instantiate subclasses to manage the device
+///            control the product states, as well as to instantiate modules to manage the device
 ///            and lower level hardware, and interface with the user and system level applications.
 ///
 /// @author    Stuart J. Lumby
@@ -33,10 +33,28 @@
 #include <thread>
 #include <unistd.h>
 #include "SystemUtils.h"
-#include "DPrint.h"
+#include "Utilities.h"
 #include "KeyActions.h"
 #include "ProductController.h"
 #include "ProfessorProductController.h"
+#include "ProductControllerStateTop.h"
+#include "ProductControllerStateSetup.h"
+#include "ProductControllerStates.h"
+#include "CustomProductControllerState.h"
+#include "CustomProductControllerStateBooting.h"
+#include "CustomProductControllerStateUpdatingSoftware.h"
+#include "CustomProductControllerStateLowPower.h"
+#include "CustomProductControllerStateOn.h"
+#include "CustomProductControllerStatePlayable.h"
+#include "CustomProductControllerStateNetworkStandby.h"
+#include "CustomProductControllerStateNetworkStandbyConfigured.h"
+#include "CustomProductControllerStateNetworkStandbyUnconfigured.h"
+#include "CustomProductControllerStateIdle.h"
+#include "CustomProductControllerStateIdleVoiceConfigured.h"
+#include "CustomProductControllerStateIdleVoiceUnconfigured.h"
+#include "CustomProductControllerStatePlayingActive.h"
+#include "CustomProductControllerStatePlaying.h"
+#include "CustomProductControllerStatePlayingInactive.h"
 #include "ProductHardwareInterface.h"
 #include "ProductAudioService.h"
 #include "ProductSoftwareServices.h"
@@ -51,7 +69,7 @@
 #include "ProductEdidInterface.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                         Start of Product Application Namespace                               ///
+///                          Start of the Product Application Namespace                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
@@ -61,7 +79,7 @@ namespace ProductApp
 ///            Constant Definitions
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr const uint32_t PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = ( 4 );
+constexpr uint32_t PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -77,55 +95,11 @@ typedef IPCMessageRouterIF::IPCMessageRouterPtr RouterPointer;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// The following declares a DPrint class type object and a standard string for logging information
-/// in this source code file.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static const DPrint s_logger { "Product" };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following declares a list of strings whose index corresponding to the key action enumeration.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string KeyAction[ ] =
-{
-    "",
-    "KEY_ACTION_POWER",
-    "KEY_ACTION_SOURCE",
-    "KEY_ACTION_PRESET_1",
-    "KEY_ACTION_PRESET_2",
-    "KEY_ACTION_PRESET_3",
-    "KEY_ACTION_PRESET_4",
-    "KEY_ACTION_PRESET_5",
-    "KEY_ACTION_PRESET_6",
-    "KEY_ACTION_VOLUME_UP",
-    "KEY_ACTION_VOLUME_DOWN",
-    "KEY_ACTION_PLAY_PAUSE",
-    "KEY_ACTION_SKIP_FORWARD",
-    "KEY_ACTION_SKIP_BACK",
-    "KEY_ACTION_MUTE",
-    "KEY_ACTION_SOUNDTOUCH",
-    "KEY_ACTION_CONNECT",
-    "KEY_ACTION_ACTION",
-    "KEY_ACTION_TV",
-    "KEY_ACTION_THUMB_UP",
-    "KEY_ACTION_THUMB_DOWN",
-    "KEY_ACTION_FACTORY_DEFAULT",
-    "KEY_ACTION_WIFI_OFF",
-    "KEY_ACTION_AP_SETUP",
-    "KEY_ACTION_PAIR_SPEAKERS"
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProfessorProductController::GetInstance
 ///
 /// @brief  This static method creates the one and only instance of a ProfessorProductController object.
 ///         The C++ Version 11 compiler guarantees that only one instance is created in a thread
 ///         safe way.
-///
-/// @param  void This method does not take any arguments.
 ///
 /// @return This method returns a pointer to a ProfessorProductController object.
 ///
@@ -138,7 +112,6 @@ ProfessorProductController* ProfessorProductController::GetInstance( )
 
     return instance;
 }
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProfessorProductController::ProfessorProductController
@@ -146,16 +119,16 @@ ProfessorProductController* ProfessorProductController::GetInstance( )
 /// @brief  This method is the ProfessorProductController constructor, which is declared as being
 ///         private to ensure that only one instance of this class can be created through the class
 ///         GetInstance method.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @param  void This method does not take any arguments.
-///
-/// @return This method does not return anything.
+/// @name   ProfessorProductController::ProfessorProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProfessorProductController::ProfessorProductController( ) :
 
     ///
-    /// Construction of the Inherited Classes
+    /// Construction of the common Product Controller Class
     ///
     ProductController( "Professor" ),
 
@@ -165,83 +138,6 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductControllerStateMachine( GetTask( ),
                                      "ProfessorStateMachine",
                                      static_cast< ProductController & >( *this ) ),
-    ///
-    /// Create the top state for the product controller, which all other states are sub-states.
-    ///
-    m_ProductControllerStateTop( m_ProductControllerStateMachine,
-                                 nullptr,
-                                 static_cast< ProductApp::ProductController & >( *this ) ),
-
-    ///
-    /// The following states are all immediate sub-states of the top state.
-    ///
-    m_ProductControllerStateSetup( m_ProductControllerStateMachine,
-                                   &m_ProductControllerStateTop,
-                                   static_cast< ProductApp::ProductController & >( *this ) ),
-
-    m_CustomProductControllerStateBooting( m_ProductControllerStateMachine,
-                                           &m_ProductControllerStateTop,
-                                           *this ),
-
-    m_CustomProductControllerStateUpdatingSoftware( m_ProductControllerStateMachine,
-                                                    &m_ProductControllerStateTop,
-                                                    *this ),
-
-    m_CustomProductControllerStateOff( m_ProductControllerStateMachine,
-                                       &m_ProductControllerStateTop,
-                                       *this ),
-
-    m_CustomProductControllerStateOn( m_ProductControllerStateMachine,
-                                      &m_ProductControllerStateTop,
-                                      *this ),
-
-    ///
-    /// The following playable state is a sub-state of the on state. Substates to the playable
-    /// state include the network standby and idle state, along with their lower sub-states.
-    ///
-    m_CustomProductControllerStatePlayable( m_ProductControllerStateMachine,
-                                            &m_CustomProductControllerStateOn,
-                                            *this ),
-
-    m_CustomProductControllerStateNetworkStandby( m_ProductControllerStateMachine,
-                                                  &m_CustomProductControllerStatePlayable,
-                                                  *this ),
-
-    m_CustomProductControllerStateNetworkStandbyConfigured( m_ProductControllerStateMachine,
-                                                            &m_CustomProductControllerStateNetworkStandby,
-                                                            *this ),
-
-    m_CustomProductControllerStateNetworkStandbyUnconfigured( m_ProductControllerStateMachine,
-                                                              &m_CustomProductControllerStateNetworkStandby,
-                                                              *this ),
-
-    m_CustomProductControllerStateIdle( m_ProductControllerStateMachine,
-                                        &m_CustomProductControllerStatePlayable,
-                                        *this ),
-
-    m_CustomProductControllerStateIdleVoiceConfigured( m_ProductControllerStateMachine,
-                                                       &m_CustomProductControllerStateIdle,
-                                                       *this ),
-
-    m_CustomProductControllerStateIdleVoiceUnconfigured( m_ProductControllerStateMachine,
-                                                         &m_CustomProductControllerStateIdle,
-                                                         *this ),
-
-    ///
-    /// The following playing state is a sub-state of the on state. Substates to the playable
-    /// state include the playing active and inactive state.
-    ///
-    m_CustomProductControllerStatePlaying( m_ProductControllerStateMachine,
-                                           &m_CustomProductControllerStateOn,
-                                           *this ),
-
-    m_CustomProductControllerStatePlayingActive( m_ProductControllerStateMachine,
-                                                 &m_CustomProductControllerStatePlaying,
-                                                 *this ),
-
-    m_CustomProductControllerStatePlayingInactive( m_ProductControllerStateMachine,
-                                                   &m_CustomProductControllerStatePlaying,
-                                                   *this ),
 
     ///
     /// Construction of the Product Controller Modules
@@ -269,18 +165,12 @@ ProfessorProductController::ProfessorProductController( ) :
     m_IsSoftwareUpdateRequired( false ),
     m_Running( false )
 {
-    return;
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::Run
-///
-/// @brief
-///
-/// @param  void This method does not take any arguments.
-///
-/// @return This method does not return anything.
+/// @name ProfessorProductController::Run
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::Run( )
@@ -289,30 +179,96 @@ void ProfessorProductController::Run( )
 
     BOSE_DEBUG( s_logger, "---------- - Product Controller Starting Modules ------------" );
     BOSE_DEBUG( s_logger, "The Professor Product Controller is starting up its modules." );
+    BOSE_DEBUG( s_logger, "The Professor Product Controller is using its new state machine set up." );
 
     ///
-    /// Start the Product Controller state machine.
+    /// Construction of the Common States
     ///
-    m_ProductControllerStateMachine.AddState( &m_ProductControllerStateTop );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateBooting );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateUpdatingSoftware );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateOff );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateOn );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStatePlayable );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateNetworkStandby );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateNetworkStandbyConfigured );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateNetworkStandbyUnconfigured );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateIdle );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateIdleVoiceConfigured );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStateIdleVoiceUnconfigured );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStatePlaying );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStatePlayingActive );
-    m_ProductControllerStateMachine.AddState( &m_CustomProductControllerStatePlayingInactive );
+    auto* stateTop = new ProductControllerStateTop( m_ProductControllerStateMachine,
+                                                    nullptr,
+                                                    static_cast< ProductApp::ProductController & >( *this ) );
+    ///
+    /// Construction of the Custom Professor States
+    ///
+    auto* stateBooting = new CustomProductControllerStateBooting( m_ProductControllerStateMachine,
+                                                                  stateTop,
+                                                                  *this );
+
+    auto* stateUpdatingSoftware = new CustomProductControllerStateUpdatingSoftware( m_ProductControllerStateMachine,
+                                                                                    stateTop,
+                                                                                    *this );
+
+    auto* stateLowPower = new CustomProductControllerStateLowPower( m_ProductControllerStateMachine,
+                                                                    stateTop,
+                                                                    *this );
+
+    auto* stateOn = new CustomProductControllerStateOn( m_ProductControllerStateMachine,
+                                                        stateTop,
+                                                        *this );
+
+    auto* statePlayable = new CustomProductControllerStatePlayable( m_ProductControllerStateMachine,
+                                                                    stateOn,
+                                                                    *this );
+
+    auto* stateNetworkStandby = new CustomProductControllerStateNetworkStandby( m_ProductControllerStateMachine,
+                                                                                statePlayable,
+                                                                                *this );
+
+    auto* stateNetworkStandbyConfigured = new CustomProductControllerStateNetworkStandbyConfigured( m_ProductControllerStateMachine,
+            stateNetworkStandby,
+            *this );
+
+    auto* stateNetworkStandbyUnconfigured = new CustomProductControllerStateNetworkStandbyUnconfigured( m_ProductControllerStateMachine,
+            stateNetworkStandby,
+            *this );
+
+    auto* stateIdle = new CustomProductControllerStateIdle( m_ProductControllerStateMachine,
+                                                            statePlayable,
+                                                            *this );
+
+    auto* stateIdleVoiceConfigured = new CustomProductControllerStateIdleVoiceConfigured( m_ProductControllerStateMachine,
+            stateIdle,
+            *this );
+
+    auto* stateIdleVoiceUnconfigured = new CustomProductControllerStateIdleVoiceUnconfigured( m_ProductControllerStateMachine,
+            stateIdle,
+            *this );
+
+    auto* statePlaying = new CustomProductControllerStatePlaying( m_ProductControllerStateMachine,
+                                                                  stateOn,
+                                                                  *this );
+
+    auto* statePlayingActive = new CustomProductControllerStatePlayingActive( m_ProductControllerStateMachine,
+                                                                              statePlaying,
+                                                                              *this );
+
+    auto* statePlayingInactive = new CustomProductControllerStatePlayingInactive( m_ProductControllerStateMachine,
+                                                                                  statePlaying,
+                                                                                  *this );
+
+    ///
+    /// The states are added to the state machine and the state machine is initialized.
+    ///
+    m_ProductControllerStateMachine.AddState( stateTop );
+    m_ProductControllerStateMachine.AddState( stateBooting );
+    m_ProductControllerStateMachine.AddState( stateUpdatingSoftware );
+    m_ProductControllerStateMachine.AddState( stateLowPower );
+    m_ProductControllerStateMachine.AddState( stateOn );
+    m_ProductControllerStateMachine.AddState( statePlayable );
+    m_ProductControllerStateMachine.AddState( stateNetworkStandby );
+    m_ProductControllerStateMachine.AddState( stateNetworkStandbyConfigured );
+    m_ProductControllerStateMachine.AddState( stateNetworkStandbyUnconfigured );
+    m_ProductControllerStateMachine.AddState( stateIdle );
+    m_ProductControllerStateMachine.AddState( stateIdleVoiceConfigured );
+    m_ProductControllerStateMachine.AddState( stateIdleVoiceUnconfigured );
+    m_ProductControllerStateMachine.AddState( statePlaying );
+    m_ProductControllerStateMachine.AddState( statePlayingActive );
+    m_ProductControllerStateMachine.AddState( statePlayingInactive );
 
     m_ProductControllerStateMachine.Init( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
     ///
-    /// Get instances of all the subprocesses.
+    /// Get instances of all the modules.
     ///
     Callback < ProductMessage > CallbackForMessages( std::bind( &ProfessorProductController::HandleMessage,
                                                                 this,
@@ -355,8 +311,8 @@ void ProfessorProductController::Run( )
         m_ProductUserInterface     == nullptr ||
         m_ProductEdidInterface     == nullptr )
     {
-        BOSE_DEBUG( s_logger, "-------- Product Controller Failed Initialization ----------" );
-        BOSE_DEBUG( s_logger, "A Product Controller module failed to be allocated.         " );
+        BOSE_CRITICAL( s_logger, "-------- Product Controller Failed Initialization ----------" );
+        BOSE_CRITICAL( s_logger, "A Product Controller module failed to be allocated.         " );
 
         return;
     }
@@ -381,92 +337,93 @@ void ProfessorProductController::Run( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProfessorProductController::IsBooted
+/// @name   ProfessorProductController::GetHardwareInterface
 ///
-/// @return
+/// @return This method returns a true or false value, based on a set member variable.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductHardwareInterface* ProfessorProductController::GetHardwareInterface( )
+ProductHardwareInterface* ProfessorProductController::GetHardwareInterface( ) const
 {
     return m_ProductHardwareInterface;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProfessorProductController::IsBooted
+/// @name   ProfessorProductController::IsBooted
 ///
-/// @return
+/// @return This method returns a true or false value, based on a series of set member variables,
+///         which all must be true to indicate that the device has booted.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsBooted( )
+bool ProfessorProductController::IsBooted( ) const
 {
-    BOSE_DEBUG( s_logger, "------------ Product Controller Booted Check ---------------" );
-    BOSE_DEBUG( s_logger, " " );
-    BOSE_DEBUG( s_logger, "LPM Connected        :  %s", ( m_IsLpmReady       ? "true" : "false" ) );
-    BOSE_DEBUG( s_logger, "CAPS Initialized     :  %s", ( m_IsCapsReady      ? "true" : "false" ) );
-    BOSE_DEBUG( s_logger, "Audio Path Connected :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
-    BOSE_DEBUG( s_logger, "STS Initialized      :  %s", ( m_IsSTSReady       ? "true" : "false" ) );
-    BOSE_DEBUG( s_logger, " " );
+    BOSE_VERBOSE( s_logger, "------------ Product Controller Booted Check ---------------" );
+    BOSE_VERBOSE( s_logger, " " );
+    BOSE_VERBOSE( s_logger, "LPM Connected        :  %s", ( m_IsLpmReady       ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "CAPS Initialized     :  %s", ( m_IsCapsReady      ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Audio Path Connected :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "STS Initialized      :  %s", ( m_IsSTSReady       ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, " " );
 
     return ( m_IsLpmReady and m_IsCapsReady and m_IsAudioPathReady and m_IsSTSReady );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProfessorProductController::IsNetworkConfigured
+/// @name   ProfessorProductController::IsNetworkConfigured
 ///
-/// @return
+/// @return This method returns a true or false value, based on a set member variable.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsNetworkConfigured( )
+bool ProfessorProductController::IsNetworkConfigured( ) const
 {
     return m_IsNetworkConfigured;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProfessorProductController::IsNetworkConfigured
+/// @name   ProfessorProductController::IsNetworkConfigured
 ///
-/// @return
+/// @return This method returns a true or false value, based on a set member variable.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsNetworkConnected( )
+bool ProfessorProductController::IsNetworkConnected( ) const
 {
     return m_IsNetworkConnected;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProfessorProductController::IsAutoWakeEnabled
+/// @name   ProfessorProductController::IsAutoWakeEnabled
 ///
-/// @return
+/// @return This method returns a true or false value, based on a set member variable.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsAutoWakeEnabled( )
+bool ProfessorProductController::IsAutoWakeEnabled( ) const
 {
     return m_IsAutoWakeEnabled;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProfessorProductController::IsVoiceConfigured
+/// @name   ProfessorProductController::IsVoiceConfigured
 ///
-/// @return
+/// @return This method returns a true or false value, based on a set member variable.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsVoiceConfigured( )
+bool ProfessorProductController::IsVoiceConfigured( ) const
 {
     return ( m_IsMicrophoneEnabled and m_IsAccountConfigured );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProfessorProductController::IsSoftwareUpdateRequired
+/// @name   ProfessorProductController::IsSoftwareUpdateRequired
 ///
-/// @return
+/// @return This method returns a true or false value, based on a set member variable.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsSoftwareUpdateRequired( )
+bool ProfessorProductController::IsSoftwareUpdateRequired( ) const
 {
     return m_IsSoftwareUpdateRequired;
 }
@@ -477,10 +434,6 @@ bool ProfessorProductController::IsSoftwareUpdateRequired( )
 ///
 /// @brief  This method is called to perform the needed initialization of the ProductSTSController,
 ///         specifically, provide the set of sources to be created initially.
-///
-/// @param  void This method does not take any arguments.
-///
-/// @return This method does not return anything.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::SetupProductSTSConntroller( void )
@@ -518,17 +471,13 @@ void ProfessorProductController::SetupProductSTSConntroller( void )
 /// @brief  This method is called from the ProductSTSController when all the initially-created
 ///         sources have been created with CAPS/STS.
 ///
-/// @note   THIS METHOD IS CALLED ON THE ProductSTSController THREAD
-///
-/// @param  void This method does not take any arguments.
-///
-/// @return This method does not return anything.
+/// @note   This method is called on the ProductSTSController task.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::HandleSTSInitWasComplete( void )
 {
     ProductMessage message;
-    message.mutable_selectsourcestatus( )->set_initialized( true );
+    message.mutable_stsinterfacestatus( )->set_initialized( true );
 
     IL::BreakThread( std::bind( &ProfessorProductController::HandleMessage,
                                 this,
@@ -540,14 +489,12 @@ void ProfessorProductController::HandleSTSInitWasComplete( void )
 ///
 /// @name   ProfessorProductController::HandleSelectSourceSlot
 ///
-/// @brief  This method is called from the ProductSTSController when one of our sources is
-///         activated by CAPS/STS
+/// @brief  This method is called from the ProductSTSController, when one of our sources is
+///         activated by CAPS/STS.
 ///
-/// @note   THIS METHOD IS CALLED ON THE ProductSTSController THREAD
+/// @note   This method is called on the ProductSTSController task.
 ///
-/// @param  ProductSTSAccount::ProductSourceSlot sourceSlot - identifies the activated slot
-///
-/// @return This method does not return anything.
+/// @param  ProductSTSAccount::ProductSourceSlot sourceSlot This identifies the activated slot.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot )
@@ -569,10 +516,8 @@ void ProfessorProductController::HandleSelectSourceSlot( ProductSTSAccount::Prod
 ///         more product specific class instances, and is used to process the state machine for the
 ///         product.
 ///
-/// @param  ProductMessage& This argument contains product message event information based on the
-///                         ProductMessage Protocal Buffer.
-///
-/// @return This method does not return anything.
+/// @param  ProductMessage& message This argument contains product message event information based
+///                                 on the ProductMessage Protocal Buffer.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::HandleMessage( const ProductMessage& message )
@@ -584,77 +529,68 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     if( message.has_lpmstatus( ) )
     {
-        if( message.lpmstatus( ).connected( ) )
+        if( message.lpmstatus( ).has_connected( ) )
         {
-            BOSE_DEBUG( s_logger, "An LPM Hardware up message was received." );
-
-            m_IsLpmReady = true;
-
-            m_ProductControllerStateMachine.Handle< bool >
-            ( &CustomProductControllerState::HandleLpmState, true );
+            m_IsLpmReady = message.lpmstatus( ).connected( );
         }
         else
         {
-            BOSE_DEBUG( s_logger, "An LPM Hardware down message was received." );
-
-            m_IsLpmReady = false;
-
-            m_ProductControllerStateMachine.Handle< bool >
-            ( &CustomProductControllerState::HandleLpmState, false );
+            BOSE_ERROR( s_logger, "An invalid LPM status message was received." );
+            return;
         }
+
+        BOSE_DEBUG( s_logger, "An LPM Hardware %s message was received.",
+                    m_IsLpmReady ? "up" : "down" );
+
+        m_ProductControllerStateMachine.Handle< bool >
+        ( &CustomProductControllerState::HandleLpmState, m_IsLpmReady );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// CAPS status messages are handled at this point.
+    /// Content Audio Playback Services (CAPS) status messages are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_capsstatus( ) )
     {
-        if( message.capsstatus( ).initialized( ) )
+        if( message.capsstatus( ).has_initialized( ) )
         {
-            BOSE_DEBUG( s_logger, "A CAPS Content Audio Playback Services up message was received." );
-
-            m_IsCapsReady = true;
-
-            m_ProductControllerStateMachine.Handle< bool >
-            ( &CustomProductControllerState::HandleCapsState, true );
+            m_IsCapsReady = message.capsstatus( ).initialized( );
         }
         else
         {
-            BOSE_DEBUG( s_logger, "A CAPS Content Audio Playback Services down message was received." );
-
-            m_IsCapsReady = false;
-
-            m_ProductControllerStateMachine.Handle< bool >
-            ( &CustomProductControllerState::HandleCapsState, false );
+            BOSE_ERROR( s_logger, "An invalid CAPS status message was received." );
+            return;
         }
+
+        BOSE_DEBUG( s_logger, "A CAPS Content Audio Playback Services %s message was received.",
+                    m_IsCapsReady ? "up" : "down" );
+
+        m_ProductControllerStateMachine.Handle< bool >
+        ( &CustomProductControllerState::HandleCapsState, m_IsCapsReady );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// CAPS status messages are handled at this point.
+    /// Audio path status messages are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_audiopathstatus( ) )
     {
-        if( message.audiopathstatus( ).connected( ) )
+        if( message.audiopathstatus( ).has_connected( ) )
         {
-            BOSE_DEBUG( s_logger, "An Audio Path services up message was received." );
-
-            m_IsAudioPathReady = true;
-
-            m_ProductControllerStateMachine.Handle< bool >
-            ( &CustomProductControllerState::HandleAudioPathState, true );
+            m_IsAudioPathReady = message.audiopathstatus( ).connected( );
         }
         else
         {
-            BOSE_DEBUG( s_logger, "An Audio Path services down message was received." );
-
-            m_IsAudioPathReady = false;
-
-            m_ProductControllerStateMachine.Handle< bool >
-            ( &CustomProductControllerState::HandleAudioPathState, false );
+            BOSE_ERROR( s_logger, "An invalid audio path status message was received." );
+            return;
         }
+
+        BOSE_DEBUG( s_logger, "An audio path status %s message was received.",
+                    m_IsAudioPathReady ? "connected" : "not connected" );
+
+        m_ProductControllerStateMachine.Handle< bool >
+        ( &CustomProductControllerState::HandleAudioPathState, m_IsAudioPathReady );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Source selection status and slot selected data are handled at this point.
+    /// STS interface status and slot selected data are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_selectsourcestatus( ) )
+    else if( message.has_stsinterfacestatus( ) )
     {
         BOSE_DEBUG( s_logger, "An STS Sources Initialized message was received." );
 
@@ -675,17 +611,24 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_networkstatus( ) )
     {
-        m_IsNetworkConfigured = false;
-        m_IsNetworkConnected  = false;
-
-        if( message.networkstatus( ).configured( ) )
+        if( message.networkstatus( ).has_configured( ) )
         {
-            m_IsNetworkConfigured = true;
+            m_IsNetworkConfigured = message.networkstatus( ).configured( );
+        }
+        else
+        {
+            BOSE_ERROR( s_logger, "An invalid network configured status message was received." );
+            return;
         }
 
-        if( message.networkstatus( ).connected( ) )
+        if( message.networkstatus( ).has_connected( ) )
         {
-            m_IsNetworkConnected = true;
+            m_IsNetworkConnected = message.networkstatus( ).connected( );
+        }
+        else
+        {
+            BOSE_ERROR( s_logger, "An invalid network connected status message was received." );
+            return;
         }
 
         if( message.networkstatus( ).networktype( ) == ProductNetworkStatus_ProductNetworkType_Wireless )
@@ -706,9 +649,10 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
                         m_IsNetworkConfigured ? "configured" : "not configured",
                         m_IsNetworkConnected  ? "connected"  : "not connected" );
         }
-        m_ProductSystemManager->SetConfigurationStatus( m_IsNetworkConfigured,
-                                                        false,
-                                                        m_ProductSystemManager->IsSystemLanguageSet( ) );
+
+        m_ProductSystemManager->SetNetworkAccoutConfigurationStatus( m_IsNetworkConfigured,
+                                                                     m_IsAccountConfigured );
+
         m_ProductControllerStateMachine.Handle< bool, bool >
         ( &CustomProductControllerState::HandleNetworkState, m_IsNetworkConfigured, m_IsNetworkConnected );
     }
@@ -723,9 +667,8 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         {
             m_IsNetworkConfigured = true;
 
-            m_ProductSystemManager->SetConfigurationStatus( m_IsNetworkConfigured,
-                                                            false,
-                                                            m_ProductSystemManager->IsSystemLanguageSet( ) );
+            m_ProductSystemManager->SetNetworkAccoutConfigurationStatus( m_IsNetworkConfigured,
+                                                                         m_IsAccountConfigured );
 
             m_ProductControllerStateMachine.Handle< bool, bool >
             ( &CustomProductControllerState::HandleNetworkState, m_IsNetworkConfigured, m_IsNetworkConnected );
@@ -735,14 +678,16 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         /// Send the frequency information (if available) to the LPM to avoid any frequency
         /// interruption during a speaker Adapt IQ process.
         ///
-        if( message.wirelessstatus( ).frequencykhz( ) > 0 )
+        if( message.wirelessstatus( ).has_frequencykhz( ) and
+            message.wirelessstatus( ).frequencykhz( ) > 0 )
         {
             m_ProductHardwareInterface->SendWiFiRadioStatus( message.wirelessstatus( ).frequencykhz( ) );
         }
 
         BOSE_DEBUG( s_logger, "A %s wireless network message was received with frequency %d kHz.",
                     message.wirelessstatus( ).configured( ) ? "configured" : "unconfigured",
-                    message.wirelessstatus( ).frequencykhz( ) );
+                    message.wirelessstatus( ).has_frequencykhz( ) ?
+                    message.wirelessstatus( ).frequencykhz( ) : 0 );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Voice messages for the Virtual Personal Assistant or VPA are handled at this point.          ///
@@ -755,7 +700,8 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         }
         else
         {
-            m_IsMicrophoneEnabled = false;
+            BOSE_ERROR( s_logger, "An invalid voice status message for the microphone status was received." );
+            return;
         }
 
         if( message.voicestatus( ).has_accountconfigured( ) )
@@ -764,7 +710,8 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         }
         else
         {
-            m_IsAccountConfigured = false;
+            BOSE_ERROR( s_logger, "An invalid voice status message for account configuration was received." );
+            return;
         }
 
         m_ProductControllerStateMachine.Handle< bool >
@@ -776,9 +723,10 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     else if( message.has_keydata( ) )
     {
         auto keyData = message.keydata( );
+        auto keyString = m_ProductUserInterface->GetKeyString( static_cast< KEY_ACTION >( keyData.action( ) ) );
 
-        BOSE_DEBUG( s_logger, "The key action value %s( %d ) was received.",
-                    KeyAction[ keyData.action( ) ].c_str( ),
+        BOSE_DEBUG( s_logger, "The key action value %s (valued %d) was received.",
+                    keyString.c_str( ),
                     keyData.action( ) );
 
         m_ProductControllerStateMachine.Handle< int >
@@ -806,18 +754,40 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         }
         else
         {
-            m_IsAutoWakeEnabled = false;
+            BOSE_ERROR( s_logger, "An invalid autowake status message was received." );
+            return;
         }
+
+        BOSE_DEBUG( s_logger, "An autowake status %s message has been received.",
+                    m_IsAutoWakeEnabled ? "active" : "inactive" );
 
         m_ProductControllerStateMachine.Handle< bool >
         ( &CustomProductControllerState::HandleAutowakeStatus, m_IsAutoWakeEnabled );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// Playback messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.has_playbackrequest( ) )
+    {
+        if( not message.playbackrequest( ).has_state( ) )
+        {
+            BOSE_ERROR( s_logger, "An invalid playback request message was received." );
+            return;
+        }
+
+        BOSE_ERROR( s_logger, "An playback %s has been requested.",
+                    ProductPlaybackRequest_ProductPlaybackState_Name
+                    ( message.playbackrequest( ).state( ) ).c_str( ) );
+
+        m_ProductControllerStateMachine.Handle< ProductPlaybackRequest_ProductPlaybackState >
+        ( &CustomProductControllerState::HandlePlaybackRequest, message.playbackrequest( ).state( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Unknown message types are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else
     {
-        BOSE_DEBUG( s_logger, "An unknown message type was received." );
+        BOSE_ERROR( s_logger, "An unknown message type was received." );
     }
 }
 
@@ -875,12 +845,9 @@ void ProfessorProductController::Wait( )
 ///
 /// @name   ProfessorProductController::End
 ///
-/// @brief  This method is called when the Product Controller process ends. It is used to stop the
-///         main task.
-///
-/// @param  void This method does not take any arguments.
-///
-/// @return This method does not return anything.
+/// @brief  This method is called when the Product Controller process ends. It is used to set the
+///         running member to false, which will invoke the Wait method idle loop to exit and perform
+///         any necessary clean up.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::End( )
@@ -891,7 +858,7 @@ void ProfessorProductController::End( )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                         End of Product Application Namespace                                 ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 

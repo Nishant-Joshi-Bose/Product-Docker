@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateOff.h
+/// @file      CustomProductControllerStateLowPower.h
 ///
-/// @brief     This source code file contains functionality to process events that occur during the
-///            product off state.
+/// @brief     This source code file contains functionality to process events that occur during a
+///            low product state.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -55,22 +55,22 @@ class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class CustomProductControllerStateOff
+/// @class CustomProductControllerStateLowPower
 ///
 /// @brief This class is used for executing produce specific actions when in an on state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateOff : public ProductControllerState
+class CustomProductControllerStateLowPower : public ProductControllerState
 {
 public:
 
-    CustomProductControllerStateOff( ProductControllerHsm&        hsm,
-                                      CHsmState*                  pSuperState,
-                                      ProfessorProductController& productController,
-                                      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_OFF,
-                                      const std::string&          name    = "CustomProductControllerStateOff" );
+    CustomProductControllerStateLowPower( ProductControllerHsm&        hsm,
+                                          CHsmState*                  pSuperState,
+                                          ProfessorProductController& productController,
+                                          Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_LOW_POWER,
+                                          const std::string&          name    = "CustomProductControllerStateLowPower" );
 
-    virtual ~CustomProductControllerStateOff()
+    ~CustomProductControllerStateLowPower( ) override
     {
 
     }
@@ -86,10 +86,10 @@ private:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

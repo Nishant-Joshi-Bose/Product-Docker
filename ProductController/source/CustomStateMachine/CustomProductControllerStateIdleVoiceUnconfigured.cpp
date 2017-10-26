@@ -8,7 +8,7 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
+/// @date      10/24/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -28,11 +28,11 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "DPrint.h"
+#include "Utilities.h"
 #include "CustomProductControllerStateIdleVoiceUnconfigured.h"
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
 #include "ProductControllerStateIdle.h"
-#include "APTimer.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -45,16 +45,8 @@ namespace ProductApp
 ///            Constant Definitions
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr const uint32_t VOICE_UNCONFIGURED_MILLISECOND_TIMEOUT_START = ( ( 20 * 60 ) * 1000 );
-constexpr const uint32_t VOICE_UNCONFIGURED_MILLISECOND_TIMEOUT_RETRY = ( 0 );
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following declares a DPrint class type object and a standard string for logging information
-/// in this source code file.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static DPrint s_logger( "Product" );
+constexpr uint32_t VOICE_UNCONFIGURED_MILLISECOND_TIMEOUT_START = ( 20 * 60 ) * 1000;
+constexpr uint32_t VOICE_UNCONFIGURED_MILLISECOND_TIMEOUT_RETRY = 0;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -84,7 +76,7 @@ CustomProductControllerStateIdleVoiceUnconfigured::CustomProductControllerStateI
       m_productController( productController ),
       m_timer( APTimer::Create( m_productController.GetTask( ), "VoiceUnconfiguredTimer" ) )
 {
-    BOSE_DEBUG( s_logger, "The product idle voice unconfigured state is being constructed." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceUnconfigured is being constructed." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,11 +86,12 @@ CustomProductControllerStateIdleVoiceUnconfigured::CustomProductControllerStateI
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateIdleVoiceUnconfigured::HandleStateEnter( )
 {
-    BOSE_DEBUG( s_logger, "The product idle voice unconfigured state is being entered." );
-    BOSE_DEBUG( s_logger, "The timer will be set to expire in 20 minutes." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceUnconfigured is being entered." );
+    BOSE_VERBOSE( s_logger, "A timer has been set to expire in %d minutes.",
+                  VOICE_UNCONFIGURED_MILLISECOND_TIMEOUT_START / 60000 );
 
     m_timer->SetTimeouts( VOICE_UNCONFIGURED_MILLISECOND_TIMEOUT_START,
-                          VOICE_UNCONFIGURED_MILLISECOND_TIMEOUT_RETRY  );
+                          VOICE_UNCONFIGURED_MILLISECOND_TIMEOUT_RETRY );
 
     m_timer->Start( std::bind( &CustomProductControllerStateIdleVoiceUnconfigured::HandleTimeOut,
                                this ) );
@@ -111,7 +104,7 @@ void CustomProductControllerStateIdleVoiceUnconfigured::HandleStateEnter( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateIdleVoiceUnconfigured::HandleStateStart( )
 {
-    BOSE_DEBUG( s_logger, "The product idle voice unconfigured state is being started." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceUnconfigured is being started." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,8 +114,8 @@ void CustomProductControllerStateIdleVoiceUnconfigured::HandleStateStart( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateIdleVoiceUnconfigured::HandleStateExit( )
 {
-    BOSE_DEBUG( s_logger, "The product idle voice unconfigured state is being exited." );
-    BOSE_DEBUG( s_logger, "The timer will be stopped." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceUnconfigured is being exited." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceUnconfigured timer has been stopped." );
 
     m_timer->Stop( );
 }
@@ -132,30 +125,53 @@ void CustomProductControllerStateIdleVoiceUnconfigured::HandleStateExit( )
 /// @brief CustomProductControllerStateIdleVoiceUnconfigured::HandleTimeOut
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
- void CustomProductControllerStateIdleVoiceUnconfigured::HandleTimeOut( void )
- {
-      BOSE_DEBUG( s_logger, "A time out in the idle voice unconfigured state has occurred." );
+void CustomProductControllerStateIdleVoiceUnconfigured::HandleTimeOut( void )
+{
+    BOSE_VERBOSE( s_logger, "A time out in CustomProductControllerStateIdleVoiceUnconfigured has occurred." );
 
-      m_timer->Stop( );
+    m_timer->Stop( );
 
-      if( m_productController.IsAutoWakeEnabled( ) )
-      {
-          BOSE_DEBUG( s_logger, "The product idle voice unconfigured state is not changing." );
-          BOSE_DEBUG( s_logger, "The timer will be set to expire in 20 minutes." );
+    if( not m_productController.IsAutoWakeEnabled( ) )
+    {
+        BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceUnconfigured timer has been stopped." );
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      "CustomProductControllerStateIdleVoiceUnconfigured",
+                      "CustomProductControllerStateNetworkStandby" );
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
+    }
+}
 
-          m_timer->SetTimeouts( VOICE_UNCONFIGURED_MILLISECOND_TIMEOUT_START,
-                                VOICE_UNCONFIGURED_MILLISECOND_TIMEOUT_RETRY  );
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateIdleVoiceUnconfigured::HandleAutowakeStatus
+///
+/// @param  bool active
+///
+/// @return This method returns a true Boolean value indicating that it has handled the autowake
+///         state change and no futher processing will be required by any of its superstates.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateIdleVoiceUnconfigured::HandleAutowakeStatus( bool active )
+{
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceUnconfigured is handling the autowake status." );
 
-          m_timer->Start( std::bind( &CustomProductControllerStateIdleVoiceUnconfigured::HandleTimeOut,
-                                     this ) );
-      }
-      else
-      {
-          BOSE_DEBUG( s_logger, "An attempt to set the device to a network standby state will be made." );
-          BOSE_DEBUG( s_logger, "The timer has been stopped." );
+    if( active )
+    {
+        m_timer->Stop( );
+    }
+    else
+    {
+        BOSE_VERBOSE( s_logger, "The timer will be set to expire in %d minutes.",
+                      VOICE_UNCONFIGURED_MILLISECOND_TIMEOUT_START / 60000 );
 
-          ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
-      }
+        m_timer->SetTimeouts( VOICE_UNCONFIGURED_MILLISECOND_TIMEOUT_START,
+                              VOICE_UNCONFIGURED_MILLISECOND_TIMEOUT_RETRY );
+
+        m_timer->Start( std::bind( &CustomProductControllerStateIdleVoiceUnconfigured::HandleTimeOut,
+                                   this ) );
+    }
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -173,7 +189,7 @@ void CustomProductControllerStateIdleVoiceUnconfigured::HandleStateExit( )
 bool CustomProductControllerStateIdleVoiceUnconfigured::HandleNetworkState( bool configured,
                                                                             bool connected )
 {
-    BOSE_DEBUG( s_logger, "The product idle voice unconfigured state is handling a network state change." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceUnconfigured is handling a network change." );
 
     ///
     /// If the network is not configured then it must also be unconnected. In these case, change the
@@ -184,15 +200,15 @@ bool CustomProductControllerStateIdleVoiceUnconfigured::HandleNetworkState( bool
     {
         if( m_productController.IsAutoWakeEnabled( ) )
         {
-            BOSE_DEBUG( s_logger, "The product idle voice unconfigured state is not changing." );
+            BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceUnconfigured is not changing." );
         }
         else
         {
-            BOSE_DEBUG( s_logger, "The state is changing to a network standby state." );
+            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                          "CustomProductControllerStateIdleVoiceUnconfigured",
+                          "CustomProductControllerStateNeworkStandby" );
             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
         }
-
-        return true;
     }
     ///
     /// If the network is connected and voice for a Virtual Personal Assistant (VPA) is configured
@@ -201,24 +217,23 @@ bool CustomProductControllerStateIdleVoiceUnconfigured::HandleNetworkState( bool
     ///
     else
     {
-        bool networkConnected;
-        bool voiceConfigured;
-
-        networkConnected = connected;
-        voiceConfigured = m_productController.IsVoiceConfigured( );
+        auto const& networkConnected = connected;
+        auto const& voiceConfigured = m_productController.IsVoiceConfigured( );
 
         if( networkConnected and voiceConfigured )
         {
-            BOSE_DEBUG( s_logger, "The state is changing to an idle voice configured state." );
+            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                          "CustomProductControllerStateIdleVoiceUnconfigured",
+                          "CustomProductControllerStateIdleVoiceConfigured" );
             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
         }
         else
         {
-            BOSE_DEBUG( s_logger, "The product idle voice unconfigured state is not changing." );
+            BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceUnconfigured is not changing." );
         }
-
-        return true;
     }
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -233,32 +248,31 @@ bool CustomProductControllerStateIdleVoiceUnconfigured::HandleNetworkState( bool
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateIdleVoiceUnconfigured::HandleVoiceState( bool configured )
 {
-    BOSE_DEBUG( s_logger, "The product idle voice configured state is handling a voice state change." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceUnconfigured is handling a voice state change." );
 
-    bool voiceConfigured;
-    bool networkConnected;
-
-    voiceConfigured = configured;
-    networkConnected = m_productController.IsNetworkConnected( );
+    auto const& voiceConfigured  = configured;
+    auto const& networkConnected = m_productController.IsNetworkConnected( );
 
     if( voiceConfigured and networkConnected )
     {
-        BOSE_DEBUG( s_logger, "The product idle state is changing to a voice configured state." );
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      "CustomProductControllerStateIdleVoiceUnconfigured",
+                      "CustomProductControllerStateIdleVoiceConfigured" );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
     }
     else
     {
-        BOSE_DEBUG( s_logger, "The product idle voice unconfigured state is not changing." );
+        BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceUnconfigured is not changing." );
     }
 
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

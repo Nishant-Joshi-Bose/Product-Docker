@@ -7,7 +7,7 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
+/// @date      10/24/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -27,6 +27,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "DPrint.h"
+#include "Utilities.h"
 #include "CustomProductControllerStateIdle.h"
 #include "ProductControllerHsm.h"
 #include "ProductControllerStateIdle.h"
@@ -38,14 +39,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following declares a DPrint class type object and a standard string for logging information
-/// in this source code file.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static DPrint s_logger( "Product" );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -71,25 +64,24 @@ CustomProductControllerStateIdle::CustomProductControllerStateIdle( ProductContr
     : ProductControllerStateIdle( hsm, pSuperState, productController, stateId, name ),
       m_productController( productController )
 {
-    BOSE_DEBUG( s_logger, "The product idle state is being constructed." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdle is being constructed." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief CustomProductControllerStateIdle::HandleStateEnter
 ///
+/// @todo  A transition state may need to be added at this point to ensure that the power state
+///        change occurs and to handle any error conditions.
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateIdle::HandleStateEnter( )
 {
-    BOSE_DEBUG( s_logger, "The product idle state is being entered by the state machine." );
-    BOSE_DEBUG( s_logger, "An attempt to set an autowake power state is now being made." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdle is being entered by the state machine." );
 
-    ProductHardwareInterface* HardwareInterface = m_productController.GetHardwareInterface( );
+    m_productController.GetHardwareInterface( )->RequestPowerStateAutowake( );
 
-    if( HardwareInterface != nullptr )
-    {
-        HardwareInterface->RequestPowerStateAutowake( );
-    }
+    BOSE_VERBOSE( s_logger, "An attempt to set an autowake power state is now being made." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,22 +91,20 @@ void CustomProductControllerStateIdle::HandleStateEnter( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateIdle::HandleStateStart( )
 {
-    BOSE_DEBUG( s_logger, "The product idle state is being started." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdle is being started." );
 
-    bool networkConnected;
-    bool voiceConfigured;
-
-    networkConnected = m_productController.IsNetworkConfigured( );
-    voiceConfigured = m_productController.IsVoiceConfigured( );
-
-    if( networkConnected and voiceConfigured )
+    if( m_productController.IsNetworkConfigured( ) and m_productController.IsVoiceConfigured( ) )
     {
-        BOSE_DEBUG( s_logger, "The product idle state is changing to a voice configured state." );
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      "CustomProductControllerStateIdle",
+                      "CustomProductControllerStateIdleVoiceConfigured." );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
     }
     else
     {
-        BOSE_DEBUG( s_logger, "The product idle state is changing to a voice unconfigured state." );
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      "CustomProductControllerStateIdle",
+                      "CustomProductControllerStateIdleVoiceUnconfigured." );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED );
     }
 }
@@ -126,14 +116,14 @@ void CustomProductControllerStateIdle::HandleStateStart( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateIdle::HandleStateExit( )
 {
-    BOSE_DEBUG( s_logger, "The product idle state is being exited." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdle is being exited." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

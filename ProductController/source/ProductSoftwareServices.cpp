@@ -26,9 +26,9 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "SystemUtils.h"
-#include "unistd.h"
 #include "DPrint.h"
+#include "Utilities.h"
+#include "unistd.h"
 #include "NotifyTargetTaskIF.h"
 #include "APTask.h"
 #include "Services.h"
@@ -49,7 +49,7 @@
 #include "Services.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             Start of Product Namespace                                       ///
+///                          Start of the Product Application Namespace                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
@@ -69,30 +69,29 @@ typedef APProductIF::APProductPtr               ProductPointer;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// The following declares a DPrint class type object and a standard string for logging information
-/// in this source code file.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static DPrint s_logger { "Product" };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProductSoftwareServices::GetInstance
 ///
 /// @brief  This static method creates the one and only instance of a ProductSoftwareServices object.
 ///         The C++ Version 11 compiler guarantees that only one instance is created in a thread
 ///         safe way.
-///IPCSource_t
-/// @param  void This method does not take any arguments.
+///
+/// @param NotifyTargetTaskIF* ProductTask This argument points to a task to process
+///                                        resource requests and notifications.
+///
+/// @param Callback< ProductMessage > ProductNotify This is a callback to send events to
+///                                                 the Product Controller.
+///
+/// @param ProductHardwareInterface* HardwareInterface This argument points to the hardware
+///                                                    interface.
 ///
 /// @return This method returns a pointer to a ProductSoftwareServices object.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductSoftwareServices* ProductSoftwareServices::GetInstance( NotifyTargetTaskIF*        mainTask,
+ProductSoftwareServices* ProductSoftwareServices::GetInstance( NotifyTargetTaskIF*        ProductTask,
                                                                Callback< ProductMessage > ProductNotify,
                                                                ProductHardwareInterface*  HardwareInterface )
 {
-    static ProductSoftwareServices* instance = new ProductSoftwareServices( mainTask,
+    static ProductSoftwareServices* instance = new ProductSoftwareServices( ProductTask,
                                                                             ProductNotify,
                                                                             HardwareInterface );
 
@@ -109,45 +108,45 @@ ProductSoftwareServices* ProductSoftwareServices::GetInstance( NotifyTargetTaskI
 ///         to ensure that only one instance of this class can be created through the class
 ///         GetInstance method.
 ///
-/// @param  void This method does not take any arguments.
+/// @param NotifyTargetTaskIF* ProductTask This argument points to a task to process
+///                                        resource requests and notifications.
 ///
-/// @return This method does not return anything.
+/// @param Callback< ProductMessage > ProductNotify This is a callback to send events to
+///                                                 the Product Controller.
+///
+/// @param ProductHardwareInterface* HardwareInterface This argument points to the hardware
+///                                                    interface.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductSoftwareServices::ProductSoftwareServices( NotifyTargetTaskIF*        mainTask,
+ProductSoftwareServices::ProductSoftwareServices( NotifyTargetTaskIF*        ProductTask,
                                                   Callback< ProductMessage > ProductNotify,
                                                   ProductHardwareInterface*  HardwareInterface )
 
-    : m_mainTask( mainTask ),
+    : m_ProductTask( ProductTask ),
       m_ProductNotify( ProductNotify ),
       m_ProductHardwareInterface( HardwareInterface )
 {
-    return;
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProductSoftwareServices::Run
 ///
-/// @brief  This method registers for product events and requests, as well as reboot requests
-///         through three registration methods.
-///
-/// @param  void This method does not take any arguments.
-///
-/// @return This method does not return anything.
+/// @brief  This method establishes a server for software services.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSoftwareServices::Run( )
 {
     BOSE_DEBUG( s_logger, "Creation of a server to handle software services has been made." );
 
-    m_serverListener = IL::CreateServerListener( "ProductSoftwareServicesListener", m_mainTask );
+    m_serverListener = IL::CreateServerListener( "ProductSoftwareServicesListener", m_ProductTask );
 
 
     AsyncCallback< ServerSocket > callback( std::bind( &ProductSoftwareServices::AcceptClient,
                                                        this,
                                                        std::placeholders::_1 ),
-                                            m_mainTask );
+                                            m_ProductTask );
 
     m_serverListener->Serve( IPCDirectory::Get( )->DefaultAddress( IPCDirectory::A4V_SERVER ), callback );
 }
@@ -158,17 +157,15 @@ void ProductSoftwareServices::Run( )
 ///
 /// @brief  This method accepts and establishes client connections for making reboot requests.
 ///
-/// @param  client [input] This argument is a pointer to a client socket class instance that wishes
-///                        to connect and register for reboot requests.
-///
-/// @return This method does not return anything.
+/// @param  ServerSocket client This argument is a pointer to a client socket class instance that
+///                             wishes to connect and register for reboot requests.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSoftwareServices::AcceptClient( ServerSocket client )
 {
     std::string   clientName   = client->GetPeerAddrInfo( ).ToString( );
     RouterPointer messageRouter = IPCMessageRouterFactory::CreateRouter( "ServerRouter" + clientName,
-                                                                         m_mainTask );
+                                                                         m_ProductTask );
 
     BOSE_DEBUG( s_logger, "A client connection %s for reboot requests has been established.",
                 clientName.c_str( ) );
@@ -181,7 +178,7 @@ void ProductSoftwareServices::AcceptClient( ServerSocket client )
         AsyncCallback< BoseLinkServerMsgReboot > callback( std::bind( &ProductSoftwareServices::SendRebootRequestHandler,
                                                                       this,
                                                                       std::placeholders::_1 ),
-                                                           m_mainTask );
+                                                           m_ProductTask );
 
         messageRouter->Attach< BoseLinkServerMsgReboot >( BOSELINK_SERVER_MSG_ID_REBOOT, callback );
     }
@@ -193,7 +190,7 @@ void ProductSoftwareServices::AcceptClient( ServerSocket client )
     {
         AsyncCallback< void > callback( std::bind( &ProductSoftwareServices::HandleClientDisconnect,
                                                    this ),
-                                        m_mainTask );
+                                        m_ProductTask );
 
         messageRouter->Serve( std::move( client ), callback );
     }
@@ -204,10 +201,6 @@ void ProductSoftwareServices::AcceptClient( ServerSocket client )
 /// @name   ProductSoftwareServices::HandleClientDisconnect
 ///
 /// @brief  This method is a callback for handling client disconnections for reboot requests.
-///
-/// @param  void This method does not take any arguments.
-///
-/// @return This method does not return anything.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSoftwareServices::HandleClientDisconnect( )
@@ -224,9 +217,7 @@ void ProductSoftwareServices::HandleClientDisconnect( )
 ///         SendRebootRequest is public though and can also be called through the system interface
 ///         directly.
 ///
-/// @param  BoseLinkServerMsgReboot [input] This argument contains the reboot message request data.
-///
-/// @return This method does not return anything.
+/// @param  BoseLinkServerMsgReboot rebootRequest This argument contains reboot message data.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSoftwareServices::SendRebootRequestHandler( BoseLinkServerMsgReboot rebootRequest )
@@ -244,9 +235,7 @@ void ProductSoftwareServices::SendRebootRequestHandler( BoseLinkServerMsgReboot 
 ///
 /// @brief  This method is used to send a reboot request to the LPM hardware.
 ///
-/// @param  delay [input] This argument contains the delay in seconds to wait before a reboot.
-///
-/// @return This method does not return anything.
+/// @param  int delay
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSoftwareServices::SendRebootRequest( unsigned int delay )
@@ -260,7 +249,7 @@ void ProductSoftwareServices::SendRebootRequest( unsigned int delay )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSoftwareServices::Stop
+/// @name ProductSoftwareServices::Stop
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSoftwareServices::Stop( void )
@@ -269,7 +258,7 @@ void ProductSoftwareServices::Stop( void )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                               End of ProductApp Namespace                                    ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 

@@ -72,7 +72,7 @@ public:
       Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY,
       const std::string&          name    = "CustomProductControllerStateNetworkStandby" );
 
-    virtual ~CustomProductControllerStateNetworkStandby( )
+    ~CustomProductControllerStateNetworkStandby( ) override
     {
 
     }
@@ -89,10 +89,10 @@ private:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

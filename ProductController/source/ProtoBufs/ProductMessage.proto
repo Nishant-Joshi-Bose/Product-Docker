@@ -22,7 +22,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                        Select Sources Status Protocol Buffer Include                         ///
+///                                STS Protocol Buffer Include                                   ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 import "ProductSTS.proto";
 
@@ -58,7 +58,7 @@ message ProductAudioPathStatus
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                  Select Sources Status and Source Slot Message Structure                     ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-message ProductSelectSourceStatus
+message ProductSTSInterfaceStatus
 {
         optional bool initialized = 1;
 }
@@ -176,7 +176,7 @@ message ProductMessage
         optional ProductLpmStatus           lpmstatus           =  1;
         optional ProductCapsStatus          capsstatus          =  2;
         optional ProductAudioPathStatus     audiopathstatus     =  3;
-        optional ProductSelectSourceStatus  selectsourcestatus  =  4;
+        optional ProductSTSInterfaceStatus  stsinterfacestatus  =  4;
         optional ProductSelectSourceSlot    selectsourceslot    =  5;
         optional ProductNetworkStatus       networkstatus       =  6;
         optional ProductWirelessStatus      wirelessstatus      =  7;

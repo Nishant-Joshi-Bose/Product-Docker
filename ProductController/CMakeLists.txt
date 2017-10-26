@@ -41,7 +41,7 @@ ADD_EXECUTABLE(Professor
   source/CustomStateMachine/CustomProductControllerStateNetworkStandbyConfigured.cpp
   source/CustomStateMachine/CustomProductControllerStateNetworkStandby.cpp
   source/CustomStateMachine/CustomProductControllerStateNetworkStandbyUnconfigured.cpp
-  source/CustomStateMachine/CustomProductControllerStateOff.cpp
+  source/CustomStateMachine/CustomProductControllerStateLowPower.cpp
   source/CustomStateMachine/CustomProductControllerStateOn.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayable.cpp
   source/CustomStateMachine/CustomProductControllerStatePlaying.cpp
@@ -63,9 +63,9 @@ TARGET_LINK_LIBRARIES(Professor
   NetworkServiceClient
   STS
   ShelbyUtils
-  libjsoncpp.a
-  libprotobuf.a
-  libTinyXml.a
+  jsoncpp
+  protobuf
+  TinyXml
   pthread
   rt
 )
