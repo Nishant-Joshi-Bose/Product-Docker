@@ -155,8 +155,6 @@ void EddieProductController::RegisterEndPoints()
                                                                              this, std::placeholders::_1 ), GetTask() );
     m_FrontDoorClientIF->RegisterNotification<NetManager::Protobuf::WiFiProfiles>( "/network/wifi/profile", networkWifiProfilesCb );
 
-    m_FrontDoorClientIF->SendGet<NetManager::Protobuf::WiFiProfiles>( "/network/wifi/profile", networkWifiProfilesCb, errorCb );
-
     AsyncCallback<SoundTouchInterface::NowPlayingJson> nowPlayingCb( std::bind( &EddieProductController::HandleCapsNowPlaying ,
                                                                                 this, std::placeholders::_1 ), GetTask() );
 
@@ -175,24 +173,8 @@ void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::Ne
 
     if( networkStatus.has_isprimaryup() )
     {
-        bool isCurrPrimaryUp = ( networkStatus.has_isprimaryup() && networkStatus.isprimaryup() );
-        bool isPrevPrimaryUp = ( m_cachedStatus.has_isprimaryup() && m_cachedStatus.isprimaryup() );
-        if( isCurrPrimaryUp not_eq isPrevPrimaryUp )
-        {
-            BOSE_INFO( s_logger, "%s, IsPrimary up=%s", __func__, isCurrPrimaryUp ? "Up" : "Down" );
-            // Store the network status when changes.
-            m_ConfigurationStatus.mutable_status()->set_network( isCurrPrimaryUp );
-        }
-        BOSE_INFO( s_logger, "%s, m_isNetworkModuleReady- (%d)", __func__,  m_isNetworkModuleReady );
         m_cachedStatus = networkStatus;
-        if( not m_isNetworkModuleReady )
-        {
-            HandleNetworkModuleReady( true );
-        }
-        else
-        {
-            m_EddieProductControllerHsm.Handle<const NetManager::Protobuf::NetworkStatus&, int>( &CustomProductControllerState::HandleNetworkConfigurationStatus, networkStatus, m_WiFiProfilesCount );
-        }
+        m_EddieProductControllerHsm.Handle<const NetManager::Protobuf::NetworkStatus&, int>( &CustomProductControllerState::HandleNetworkConfigurationStatus, networkStatus, m_WiFiProfilesCount );
     }
 }
 
@@ -270,14 +252,36 @@ void EddieProductController::SendInitialRequests()
 {
     BOSE_INFO( s_logger, __func__ );
 
-    AsyncCallback<SoundTouchInterface::CapsInitializationStatus> capsInitializationCb( std::bind( &EddieProductController::HandleCapsInitializationUpdate ,
-            this, std::placeholders::_1 ) , GetTask() );
-    m_FrontDoorClientIF->SendGet<SoundTouchInterface::CapsInitializationStatus>( "/system/capsInitializationStatus", capsInitializationCb, errorCb );
+    {
+        AsyncCallback<std::list<std::string> > poiReadyCb( std::bind( &EddieProductController::HandleNetworkPointOfInterestReady, this, std::placeholders::_1 ), GetTask() );
+        AsyncCallback<std::list<std::string> > poiNotReadyCb( std::bind( &EddieProductController::HandleNetworkPointOfInterestNotReady, this, std::placeholders::_1 ), GetTask() );
 
-    AsyncCallback<NetManager::Protobuf::NetworkStatus> networkStatusCb( std::bind( &EddieProductController::HandleNetworkStatus ,
-                                                                                   this, std::placeholders::_1 ), GetTask() );
+        std::list<std::string> endPoints;
 
-    m_FrontDoorClientIF->SendGet<NetManager::Protobuf::NetworkStatus>( "/network/status", networkStatusCb, errorCb );
+        endPoints.push_back( "/network/status" );
+        endPoints.push_back( "/network/wifi/profile" );
+
+        m_FrontDoorClientIF->RegisterEndpointsOfInterest( endPoints, poiReadyCb,  poiNotReadyCb );
+    }
+
+    {
+        AsyncCallback<std::list<std::string> > poiReadyCb( std::bind( &EddieProductController::HandleCapsPointOfInterestReady, this, std::placeholders::_1 ), GetTask() );
+        AsyncCallback<std::list<std::string> > poiNotReadyCb( std::bind( &EddieProductController::HandleCapsPointOfInterestNotReady, this, std::placeholders::_1 ), GetTask() );
+        std::list<std::string> endPoints;
+
+        endPoints.push_back( "/system/capsInitializationStatus" );
+        m_FrontDoorClientIF->RegisterEndpointsOfInterest( endPoints, poiReadyCb,  poiNotReadyCb );
+    }
+
+    {
+        AsyncCallback<std::list<std::string> > poiReadyCb( std::bind( &EddieProductController::HandleBluetoothPointOfInterestReady, this, std::placeholders::_1 ), GetTask() );
+        AsyncCallback<std::list<std::string> > poiNotReadyCb( std::bind( &EddieProductController::HandleBluetoothPointOfInterestNotReady, this, std::placeholders::_1 ), GetTask() );
+        std::list<std::string> endPoints;
+
+        endPoints.push_back( "/bluetooth/BLESetup/status" );
+        endPoints.push_back( "/bluetooth/sink/list" );
+        m_FrontDoorClientIF->RegisterEndpointsOfInterest( endPoints, poiReadyCb,  poiNotReadyCb );
+    }
 }
 
 void EddieProductController::CallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode )
@@ -348,6 +352,18 @@ void EddieProductController::HandleCAPSReady( bool capsReady )
 
 void EddieProductController::HandleNetworkModuleReady( bool networkModuleReady )
 {
+    BOSE_INFO( s_logger, "%s:networkModuleReady=%d", __func__, networkModuleReady );
+
+    if( networkModuleReady && !m_isNetworkModuleReady )
+    {
+        AsyncCallback<NetManager::Protobuf::WiFiProfiles> networkWifiProfilesCb( std::bind( &EddieProductController::HandleWiFiProfileResponse ,
+                                                                                 this, std::placeholders::_1 ), GetTask() );
+        m_FrontDoorClientIF->SendGet<NetManager::Protobuf::WiFiProfiles>( "/network/wifi/profile", networkWifiProfilesCb, errorCb );
+
+        AsyncCallback<NetManager::Protobuf::NetworkStatus> networkStatusCb( std::bind( &EddieProductController::HandleNetworkStatus ,
+                                                                                       this, std::placeholders::_1 ), GetTask() );
+        m_FrontDoorClientIF->SendGet<NetManager::Protobuf::NetworkStatus>( "/network/status", networkStatusCb, errorCb );
+    }
     m_isNetworkModuleReady = networkModuleReady;
     m_EddieProductControllerHsm.Handle<>( &CustomProductControllerState::HandleModulesReady );
 }
@@ -378,7 +394,7 @@ bool EddieProductController::IsLanguageSet()
 
 bool EddieProductController::IsNetworkSetupDone()
 {
-    return m_ConfigurationStatus.status().network();
+    return ( m_WiFiProfilesCount || m_cachedStatus.isprimaryup() );
 }
 
 void EddieProductController::ReadConfigurationStatusFromPersistence()
@@ -729,6 +745,56 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
         BOSE_ERROR( s_logger, "productMessage doesn't have an Id" );
         return;
     }
+}
+
+void EddieProductController::HandleNetworkPointOfInterestReady( const std::list<std::string>& points )
+{
+    BOSE_INFO( s_logger, __func__ );
+    HandleNetworkModuleReady( true );
+}
+
+void EddieProductController::HandleNetworkPointOfInterestNotReady( const std::list<std::string>& points )
+{
+    BOSE_INFO( s_logger, __func__ );
+    HandleNetworkModuleReady( false );
+}
+
+void EddieProductController::HandleCapsPointOfInterestReady( const std::list<std::string>& points )
+{
+    BOSE_INFO( s_logger, __func__ );
+    HandleCAPSReady( true );
+    SendAllowSourceSelectNotification( true );
+}
+
+void EddieProductController::HandleCapsPointOfInterestNotReady( const std::list<std::string>& points )
+{
+    BOSE_INFO( s_logger, __func__ );
+    HandleCAPSReady( false );
+    SendAllowSourceSelectNotification( false );
+}
+
+void EddieProductController::HandleBluetoothPointOfInterestReady( const std::list<std::string>& points )
+{
+    BOSE_INFO( s_logger, __func__ );
+    HandleBluetoothModuleReady( true );
+}
+
+void EddieProductController::HandleBluetoothPointOfInterestNotReady( const std::list<std::string>& points )
+{
+    BOSE_INFO( s_logger, __func__ );
+    HandleBluetoothModuleReady( false );
+}
+
+void EddieProductController::HandleBluetoothModuleReady( bool bluetoothModuleReady )
+{
+    m_isBluetoothReady = bluetoothModuleReady;
+    m_EddieProductControllerHsm.Handle<>( &CustomProductControllerState::HandleModulesReady );
+}
+
+void EddieProductController::HandleBtBleModuleReady( bool btBleModuleReady )
+{
+    m_isBluetoothReady = btBleModuleReady;
+    m_EddieProductControllerHsm.Handle<>( &CustomProductControllerState::HandleModulesReady );
 }
 
 } // namespace ProductApp

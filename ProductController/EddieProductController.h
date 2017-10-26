@@ -65,6 +65,15 @@ private:
                        int32_t transact_id );
     void RegisterCliClientCmds() override;
 
+    void HandleBluetoothModuleReady( bool bluetoothModuleReady );
+    void HandleBtBleModuleReady( bool btBleModuleReady );
+    void HandleNetworkPointOfInterestReady( const std::list<std::string>& points );
+    void HandleNetworkPointOfInterestNotReady( const std::list<std::string>& points );
+    void HandleCapsPointOfInterestReady( const std::list<std::string>& points );
+    void HandleCapsPointOfInterestNotReady( const std::list<std::string>& points );
+    void HandleBluetoothPointOfInterestReady( const std::list<std::string>& points );
+    void HandleBluetoothPointOfInterestNotReady( const std::list<std::string>& points );
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  ReadSystemLanguageFromPersistence
 /// @brief Function to read persisted language code from /mnt/nv/product-persistence.
@@ -300,6 +309,8 @@ private:
     bool                                        m_isCapsReady = false;
     bool                                        m_isLPMReady  = false;
     bool                                        m_isNetworkModuleReady  = false;
+    bool                                        m_isBLEModuleReady  = false;
+    bool                                        m_isBluetoothReady  = false;
 
     int                                         m_WiFiProfilesCount;
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>     errorCb;
