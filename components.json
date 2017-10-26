@@ -17,7 +17,7 @@
   },
   {
     "name": "CastleDemoController-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-2+6b2c6e6"
+    "selected_version": "Continuous/master/0.0.1-3+dbbb2e7"
   },
   {
     "name": "CastleLibs-qc8017_32",
@@ -41,7 +41,7 @@
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@1af1c459c4c1245118e07ccb4d7a41988089be2d"
+    "selected_version": "master@bdaf02647dc25342b02623357934d639a14ea11a"
   },
   {
     "name": "EddieLPM-Package",
@@ -77,7 +77,7 @@
   },
   {
     "name": "RivieraLpmService",
-    "selected_version": "master@e00ff641e88294e6a28f023d1d00cd1a24791798"
+    "selected_version": "master@5e3aefe78e9cd00f7dbeaab54f17be962be60cdf"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -89,11 +89,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.1.1-81+fce0250"
+    "selected_version": "Continuous/master/0.1.1-82+8fa35f1"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-26_1313"
+    "selected_version": "Continuous/Castle-Fork/2017-10-26_1731"
   },
   {
     "name": "UnitTest++-native",
