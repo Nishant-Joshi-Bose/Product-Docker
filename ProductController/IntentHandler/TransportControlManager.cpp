@@ -34,42 +34,87 @@ namespace ProductApp
 
 bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
 {
-    bool sendMsg = false;
     if( ValidSourceAvailable() )
     {
         SoundTouchInterface::TransportControl transportControl;
-        if( intent == ( uint16_t ) Action::PLAY_PAUSE )
+        SoundTouchInterface::StatusJson status = CurrentStatusJson();
+        bool sendTransportControlMsg = false;
+        switch( intent )
         {
-            if( CurrentlyPlaying() )
+        case( uint16_t ) Action::PLAY_PAUSE:
+        {
+            if( status == SoundTouchInterface::StatusJson::play )
             {
                 // Send Pause
                 transportControl.\
                 set_state( SoundTouchInterface::TransportControl::pause );
+                sendTransportControlMsg = true;
+                Pause();
+            }
+            else if( status == SoundTouchInterface::StatusJson::paused )
+            {
+                // Send Pause
+                transportControl.\
+                set_state( SoundTouchInterface::TransportControl::play );
+                sendTransportControlMsg = true;
+                Play();
+            }
+            else if( status == SoundTouchInterface::StatusJson::buffering )
+            {
+                if( TogglePlayPause() )
+                {
+                    // Send Play
+                    transportControl.\
+                    set_state( SoundTouchInterface::TransportControl::play );
+                }
+                else
+                {
+                    // Send Pause
+                    transportControl.\
+                    set_state( SoundTouchInterface::TransportControl::pause );
+                }
+                sendTransportControlMsg = true;
+            }
+            else if( status == SoundTouchInterface::StatusJson::stopped )
+            {
+                // Send playbackRequest of source persisted
             }
             else
             {
-                // Send Play
-                transportControl.\
-                set_state( SoundTouchInterface::TransportControl::play );
+                // Just drop the intent
+                BOSE_DEBUG( s_logger, "status not handled" );
             }
-            sendMsg = true;
         }
-        else if( intent == ( uint16_t ) Action::NEXT_TRACK )
-        {
-            // Send NEXT_TRACK
-            transportControl.\
-            set_state( SoundTouchInterface::TransportControl::skipNext );
-            sendMsg = true;
-        }
-        else if( intent == ( uint16_t ) Action::PREV_TRACK )
-        {
-            // Send PREV_TRACK
-            transportControl.\
-            set_state( SoundTouchInterface::TransportControl::skipPrevious );
-            sendMsg = true;
-        }
+        break;
 
-        if( sendMsg )
+        case( uint16_t ) Action::NEXT_TRACK:
+        {
+            if( ( status == SoundTouchInterface::StatusJson::play ) ||
+                ( status == SoundTouchInterface::StatusJson::paused )  ||
+                ( status == SoundTouchInterface::StatusJson::buffering ) )
+            {
+                // Send NEXT_TRACK
+                transportControl.\
+                set_state( SoundTouchInterface::TransportControl::skipNext );
+                sendTransportControlMsg = true;
+            }
+        }
+        break;
+        case( uint16_t ) Action::PREV_TRACK:
+        {
+            if( ( status == SoundTouchInterface::StatusJson::play ) ||
+                ( status == SoundTouchInterface::StatusJson::paused )  ||
+                ( status == SoundTouchInterface::StatusJson::buffering ) )
+            {
+                // Send NEXT_TRACK
+                transportControl.\
+                set_state( SoundTouchInterface::TransportControl::skipPrevious );
+                sendTransportControlMsg = true;
+            }
+        }
+        break;
+        }
+        if( sendTransportControlMsg )
         {
             BOSE_DEBUG( s_logger, "SendPut through Frontdoor for transportControl "
                         " for intent : %d", intent );
@@ -78,12 +123,14 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
             NowPlayingJson>( "/content/transportControl", transportControl,
                              m_NowPlayingRsp, m_frontDoorClientErrorCb );
         }
+
     }
     else
     {
         BOSE_DEBUG( s_logger, "No source available, PlayControl intent "
                     "  ignored for now" );
     }
+
     //Fire the cb so the control goes back to the ProductController
     if( CallBack() != nullptr )
     {
@@ -112,27 +159,30 @@ inline bool TransportControlManager::ValidSourceAvailable()
     return false;
 }
 
-inline bool TransportControlManager::CurrentlyPlaying()
+inline SoundTouchInterface::StatusJson TransportControlManager::CurrentStatusJson()
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
-    const EddieProductController *eddiePC = \
-                                            dynamic_cast<const EddieProductController*>( &GetProductController() );
+    const EddieProductController *eddiePC =
+        dynamic_cast<const EddieProductController*>( &GetProductController() );
     if( eddiePC != nullptr )
     {
-        if( eddiePC->GetNowPlaying().state().has_status() &&
-            eddiePC->GetNowPlaying().state().status() == SoundTouchInterface::StatusJson::play )
+        if( eddiePC->GetNowPlaying().state().has_status() )
         {
-            BOSE_DEBUG( s_logger, "Found nowPlaying" );
-            return true;
+            BOSE_DEBUG( s_logger, "Found status = %d",
+                        eddiePC->GetNowPlaying().state().status() );
+            return ( eddiePC->GetNowPlaying().state().status() );
+        }
+        else
+        {
+            BOSE_ERROR( s_logger, "No Status in GetNowPlaying()" );
         }
     }
     else
     {
         BOSE_ERROR( s_logger, "Error while casting to Eddie PC" );
     }
-    return false;
+    return ( SoundTouchInterface::StatusJson::error );
 }
-
 
 void TransportControlManager::PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp )
 {

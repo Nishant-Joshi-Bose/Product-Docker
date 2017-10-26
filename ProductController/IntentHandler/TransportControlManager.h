@@ -22,7 +22,8 @@ public:
                              const FrontDoorClientIF_t& frontDoorClient,
                              const ProductController& controller ):
         IntentManager( task, cliClient, frontDoorClient, controller ),
-        m_NowPlayingRsp( nullptr, &task )
+        m_NowPlayingRsp( nullptr, &task ),
+        m_play( true )
     {
         m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
                                    ( std::bind( &TransportControlManager::FrontDoorClientErrorCb,
@@ -44,13 +45,31 @@ public:
     bool Handle( KeyHandlerUtil::ActionType_t arg ) override;
 
 private:
+    bool TogglePlayPause()
+    {
+        if( m_play )
+            m_play = false;
+        else
+            m_play = true;
+        return m_play;
+    }
+    void Play()
+    {
+        m_play = true;
+    }
+    void Pause()
+    {
+        m_play = false;
+    }
     bool ValidSourceAvailable();
     bool CurrentlyPlaying();
+    SoundTouchInterface::StatusJson CurrentStatusJson();
 
     void PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp );
 
     virtual void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
 
     AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingRsp;
+    bool m_play;
 };
 } // namespace ProductApp

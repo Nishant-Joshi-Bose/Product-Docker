@@ -51,6 +51,7 @@ IntentHandler::IntentHandler( NotifyTargetTaskIF& task,
     m_controller( controller )
 {
     BOSE_DEBUG( s_logger, "%s: ", __func__ );
+    Initialize();
 }
 
 void IntentHandler::Initialize()
@@ -93,12 +94,12 @@ void IntentHandler::Initialize()
 
 bool IntentHandler::Handle( KeyHandlerUtil::ActionType_t intent )
 {
+    BOSE_DEBUG( s_logger, "%s: ", __func__ );
     IntentManagerMap_t::iterator iter = m_IntentManagerMap.find( intent );
     if( iter != m_IntentManagerMap.end() )
     {
         iter->second->Handle( intent );
-        BOSE_DEBUG( s_logger, "Found the Handle for intent :%d",
-                    intent );
+        BOSE_DEBUG( s_logger, "Found the Handle for intent :%d", intent );
         return( true );
     }
     else
@@ -112,6 +113,20 @@ bool IntentHandler::Handle( KeyHandlerUtil::ActionType_t intent )
 void IntentHandler::RegisterCallBack( KeyHandlerUtil::ActionType_t intent,
                                       CbPtr_t cb )
 {
+    BOSE_DEBUG( s_logger, "%s: ", __func__ );
+    IntentManagerMap_t::iterator iter = m_IntentManagerMap.find( intent );
+    if( iter != m_IntentManagerMap.end() )
+    {
+        iter->second->RegisterCallBack( intent, cb );
+        BOSE_DEBUG( s_logger, "Found the Manager for intent :%d", intent );
+        return;
+    }
+    else
+    {
+        BOSE_ERROR( s_logger, "Manager not found for intent : %d, check "
+                    "initialization code", intent );
+        return;
+    }
     return;
 }
 
