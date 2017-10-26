@@ -36,6 +36,10 @@
     "selected_version": "Release/pre-IP2/0.1.0-73+50fd024"
   },
   {
+    "name": "CastlePassport-qc8017_32",
+    "selected_version": "Continuous/master/0.0.2-127+5f9ec11"
+  },
+  {
     "name": "CastleProductControllerCommon",
     "selected_version": "master@6219f809686614aa13a35f1581ea8df766baec74"
   },
