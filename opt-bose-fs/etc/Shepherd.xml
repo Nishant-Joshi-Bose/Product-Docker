@@ -34,7 +34,11 @@
   <!-- The Bluetooth daemon depends on the btproperty daemon -->
   <daemon name="btproperty"/>
 
-  <daemon name="Bluetooth"/>
+  <daemon name="BluetoothManager"/>
+
+  <daemon name="BT"/>
+
+  <daemon name="BTSource"/>
 
   <daemon name="BTLESetup"/>
 
