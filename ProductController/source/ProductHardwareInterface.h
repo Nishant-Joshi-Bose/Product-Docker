@@ -137,7 +137,6 @@ public:
     bool SendUserMute( bool      mute );
     bool SendInternalMute( bool  mute );
     bool SendAudioPathPresentationLatency( uint32_t  latency );
-    bool SendSetDSPAudioMode( IpcAudioMode_t         audioMode );
     bool SendLipSyncDelay( uint32_t                  audioDelay );
     bool SendToneAndLevelControl( IpcToneControl_t&  controls );
     bool SendSpeakerList( IpcAccessoryList_t&        accessoryList );

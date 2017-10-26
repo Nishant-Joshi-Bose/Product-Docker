@@ -1033,57 +1033,6 @@ bool ProductHardwareInterface::SendAudioPathPresentationLatency( uint32_t latenc
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  ProductHardwareInterface::SendSetDSPAudioMode
-///
-/// @brief This method sends a request to the LPM hardware.
-///
-/// @param audioMode [input]
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductHardwareInterface::SendSetDSPAudioMode( IpcAudioMode_t audioMode )
-{
-    std::string audioModeString;
-
-    switch( audioMode )
-    {
-    case IPC_AUDIO_MODE_UNSPECIFIED:
-        audioModeString.assign( "Unspecified" );
-        break;
-    case IPC_AUDIO_MODE_DIRECT:
-        audioModeString.assign( "Direct" );
-        break;
-    case IPC_AUDIO_MODE_NORMAL:
-        audioModeString.assign( "Normal" );
-        break;
-    case IPC_AUDIO_MODE_DIALOG:
-        audioModeString.assign( "Dialog" );
-        break;
-    case IPC_AUDIO_MODE_NIGHT:
-        audioModeString.assign( "Night" );
-        break;
-    default:
-        audioModeString.assign( "Unknown" );
-        break;
-    }
-
-    BOSE_DEBUG( s_logger, "Audio mode is to be set to %s.", audioModeString.c_str( ) );
-
-    if( m_connected == false || m_LpmClient == nullptr )
-    {
-        BOSE_ERROR( s_logger, "An LPM set latency request could not be made, as no connection is available." );
-
-        return false;
-    }
-    else
-    {
-        BOSE_DEBUG( s_logger, "An LPM set latency request is currently not supported." );
-
-        return true;
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name  ProductHardwareInterface::SendLipSyncDelay
 ///
 /// @brief This method sends a request to the LPM hardware.
