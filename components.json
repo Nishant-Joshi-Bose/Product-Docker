@@ -1,59 +1,71 @@
 [
   {
-    "name": "UnitTest++-ti",
-    "selected_version": "branches/UnitTest++@2424"
+    "name": "AVS-qc8017_32",
+    "selected_version": "Release/Castle-Fork/16.1.4.39672.2526406"
   },
   {
-    "name": "UnitTest++-qc8017_32",
-    "selected_version": "branches/UnitTest++@2424"
-  },
-  {
-    "name": "UnitTest++-native",
-    "selected_version": "branches/UnitTest++@2424"
+    "name": "BoseLibs-qc8017_32",
+    "selected_version": "Release/master/0.1.1-82+2130982"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
     "selected_version": "Continuous/Castle-Fork-Bluetooth-Out/2017-10-11_1539"
   },
   {
+    "name": "CastleCli-qc8017_32",
+    "selected_version": "Release/master/0.0.2-4+368de6e"
+  },
+  {
+    "name": "CastleDemoController-qc8017_32",
+    "selected_version": "Continuous/master/0.0.1-2+6b2c6e6"
+  },
+  {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2427"
+    "selected_version": "branches/castle-libs@2463"
   },
   {
-    "name": "protobuf-qc8017_32",
-    "selected_version": "branches/protobuf@2423"
+    "name": "CastleNetworkService-qc8017_32",
+    "selected_version": "Continuous/master/0.1.0-79+e2b05bc"
   },
   {
-    "name": "protobuf-native",
-    "selected_version": "branches/protobuf@2423"
+    "name": "CastlePassport-native",
+    "selected_version": "Continuous/master/0.0.2-127+5f9ec11"
+  },
+  {
+    "name": "CastlePassport-qc8017_32",
+    "selected_version": "Continuous/master/0.0.2-127+5f9ec11"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@6219f809686614aa13a35f1581ea8df766baec74"
+    "selected_version": "master@c3d90ea8558196ad51a55b08c438f15e3c504932"
+  },
+  {
+    "name": "CastleTestUtils",
+    "selected_version": "master@1af1c459c4c1245118e07ccb4d7a41988089be2d"
+  },
+  {
+    "name": "EddieLPM-Package",
+    "selected_version": "Release/trunk/0.1.2.2530662/DP1"
   },
   {
     "name": "googletest-qc8017_32",
     "selected_version": "branches/googletest@2287"
   },
   {
-    "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.1.1-67+b83469d"
+    "name": "KeyHandler-native",
+    "selected_version": "Continuous/master/0.0.1-16+c6f445a"
   },
   {
-    "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/0.0.2-89+63a66fc"
+    "name": "KeyHandler-qc8017_32",
+    "selected_version": "Continuous/master/0.0.1-16+c6f445a"
   },
   {
-    "name": "CastlePassport-native",
-    "selected_version": "Continuous/master/0.0.2-89+63a66fc"
+    "name": "protobuf-native",
+    "selected_version": "branches/protobuf@2465"
   },
   {
-    "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/1.0.1-20+2d50016"
-  },
-  {
-    "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/master/0.1.1-72+0b6fa36"
+    "name": "protobuf-qc8017_32",
+    "selected_version": "branches/protobuf@2465"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -64,40 +76,32 @@
     "selected_version": "Continuous/dev/1.1-11-g57d3c6e"
   },
   {
-    "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-19_1421"
-  },
-  {
-    "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/0.0.2-4+368de6e"
-  },
-  {
     "name": "RivieraLpmService",
-    "selected_version": "master@cb84f2c87f581967debddb4a1bbc626d265ddbcf"
+    "selected_version": "master@e00ff641e88294e6a28f023d1d00cd1a24791798"
   },
   {
-    "name": "RivieraLPM",
-    "selected_version": "trunk@1021"
+    "name": "RivieraLpmUpdater",
+    "selected_version": "Continuous/DefaultForcePost/0.0.1-14+fb164fe"
   },
   {
-    "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-19_1421"
+    "name": "Shepherd-qc8017_32",
+    "selected_version": "Release/master/1.0.1-20+2d50016"
   },
   {
-    "name": "EddieLPM-Package",
-    "selected_version": "Release/trunk/0.1.0.2509512/DP1"
+    "name": "SoftwareUpdate-qc8017_32",
+    "selected_version": "Continuous/master/0.1.1-81+fce0250"
   },
   {
-    "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-65+7e66868"
+    "name": "SoundTouch-SDK-qc8017_32",
+    "selected_version": "Continuous/Castle-Fork/2017-10-26_1313"
   },
   {
-    "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-14+14ad38c"
+    "name": "UnitTest++-native",
+    "selected_version": "branches/UnitTest++@2464"
   },
   {
-    "name": "KeyHandler-native",
-    "selected_version": "Continuous/master/0.0.1-14+14ad38c"
+    "name": "UnitTest++-qc8017_32",
+    "selected_version": "branches/UnitTest++@2464"
   },
   {
     "name": "WiFi-Setup-Webpage",

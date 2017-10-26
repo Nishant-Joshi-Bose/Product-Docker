@@ -22,14 +22,21 @@ ifndef DONT_UPDATE_CASTLETOOLS
 endif
 	components install
 
+CMAKE_USE_CCACHE := $(USE_CCACHE)
+
+EDDIELPMPACKAGE_DIR = $(shell components get EddieLPM-Package installed_location)
+PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
 RIVIERALPMSERVICE_DIR = $(shell components get RivieraLpmService installed_location)
-CASTLEPRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
+RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
+TESTUTILS_DIR = $(shell components get CastleTestUtils installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools version-files
 	$(MAKE) -C ProductController $@
 	$(MAKE) -C $(RIVIERALPMSERVICE_DIR) $@
-	$(MAKE) -C $(CASTLEPRODUCTCONTROLLERCOMMON_DIR) $@
+	$(MAKE) -C $(PRODUCTCONTROLLERCOMMON_DIR) $@
+	ln -nsf $(TESTUTILS_DIR) builds/CastleTestUtils
+	touch builds/__init__.py
 
 .PHONY: astyle
 astyle:
@@ -40,10 +47,7 @@ endif
 .PHONY: cmake_build
 cmake_build: generated_sources | $(BUILDS_DIR) astyle
 	rm -rf $(BUILDS_DIR)/CMakeCache.txt $(BUILDS_DIR)/CMakeFiles
-# Symlinks to placate cmake's add_subdirectory which doesn't like absolute paths.
-	ln -nsf $(RIVIERALPMSERVICE_DIR) builds/RivieraLpmService
-	ln -nsf $(CASTLEPRODUCTCONTROLLERCOMMON_DIR) builds/CastleProductControllerCommon
-	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR)
+	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
 
 .PHONY: product-ipk
@@ -55,13 +59,22 @@ graph: product-ipk
 	graph-components --exclude='-(native|ti)$$' Eddie builds/$(cfg)/product-ipk-stage/component-info.gz >builds/$(cfg)/components.dot
 	dot -Tsvgz builds/$(cfg)/components.dot -o builds/$(cfg)/components.svgz
 
+.PHONY: hsp-ipk
+hsp-ipk: cmake_build
+	./scripts/create-hsp-ipk
+
 .PHONY: package
-package: product-ipk
+package: product-ipk hsp-ipk lpmupdater-ipk
 	./scripts/create-product-tarball
+
+.PHONY: lpmupdater-ipk
+lpmupdater-ipk:
+	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage $(EDDIELPMPACKAGE_DIR) ./builds/$(cfg)/ eddie
 
 .PHONY: clean
 clean:
-	rm -rf $(BUILDS_DIR)
+	rm -rf $(BUILDS_DIR) builds/CastleTestUtils builds/__init__.py
+	find . -name \*.pyc -delete
 
 .PHONY: distclean
 distclean:

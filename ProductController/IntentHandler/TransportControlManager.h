@@ -6,7 +6,8 @@
 //////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-#include "IntentManager.h"
+#include "IntentHandler.h"
+#include "SoundTouchInterface/PlayerService.pb.h"
 
 namespace ProductApp
 {
@@ -16,8 +17,16 @@ class TransportControlManager: public IntentManager
 public:
     TransportControlManager( NotifyTargetTaskIF& task, CliClientMT& cliClient,
                              const FrontDoorClientIF_t& frontDoorClient ):
-        IntentManager( task, cliClient, frontDoorClient )
+        IntentManager( task, cliClient, frontDoorClient ),
+        m_NowPlayingRsp( nullptr, &task )
     {
+        m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
+            ( std::bind( &TransportControlManager::FrontDoorClientErrorCb,
+                         this, std::placeholders::_1 ), &task );
+
+        AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingRsp =
+            AsyncCallback<SoundTouchInterface::NowPlayingJson> ( std::bind( &TransportControlManager::PutTransportControlCbRsp, this, std::placeholders::_1 ), &task );
+
     }
     virtual ~TransportControlManager() { }
 
@@ -28,7 +37,16 @@ public:
     // If cb is not null, the call back will return control to HSM in
     // desired function for desired state change
     //
-    bool Handle( KeyHandlerUtil::ActionType_t arg );
+    bool Handle( KeyHandlerUtil::ActionType_t arg ) override;
 
+private:
+    bool ValidSourceAvailable();
+    bool CurrentlyPlaying();
+
+    void PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp );
+
+    virtual void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
+
+    AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingRsp;
 };
 } // namespace ProductApp

@@ -1,5 +1,5 @@
 #### Eddie Jenkins Smoke Test Status
-<a title='Jenkins build status for smoke tests against Eddie' href='http://05f97107.ngrok.io/view/Smoke%20Tests/'><img src='http://05f97107.ngrok.io/buildStatus/icon?job=Smoke_tests'></a>
+<a title='Jenkins build status for smoke tests against Eddie' href='http://b8daa1c8.ngrok.io/view/Eddie/job/Eddie_Smoke_Tests/'><img src='http://b8daa1c8.ngrok.io/view/Eddie/job/Eddie_Smoke_Tests/badge/icon'></a>
 
 <!-- ngrok is used for secure tunnel so our jenkins server behind our firewall can be accessed from GitHub. When the tests are added and a pull request is submitted an automatic jenkins build is initiated. When that build is successful or failed it will automatically get updated in the Readme. We are using a jenkins plugin that uses API's to update the status of the jenkins build.-->
 
@@ -11,6 +11,7 @@ This repo contains the source code and tools specific to the SoundTouch Eddie pr
 ##### Table of Contents  
 [Getting Started](#start)  
 [Reflash Riviera-HSP](#hsp)  
+[Update LPM via APQ using IPK](#lpm)   
 [More...](#more)  
 
 <a name="start"/>
@@ -76,6 +77,21 @@ $ cd `components get Riviera-HSP-Images installed_location`/images
 $ sudo ./fastboot.sh
 $ sudo fastboot reboot
 ```
+
+<a name="lpm"/>
+
+### Updating LPM from APQ using IPK
+
+To update LPM from APQ:
+```shell session
+$ cd /scratch/
+$ cp /home/softlib/verisoft/Eddie/Continuous/master/latest/eddie_lpm_updater_*.ipk eddie_lpm_updater.ipk
+$ adb push /scratch/eddie_lpm_updater.ipk /dev/shm/
+$ adb shell /opt/Bose/bin/rw
+$ adb shell opkg remove eddie_lpm_updater
+$ adb shell opkg -d bose install /dev/shm/eddie_lpm_updater.ipk
+```
+Once installation completes, unplug and replug power supply to Eddie board. Please note that power cycle is must for LPM firmware update to complete.
 
 ### More...
 

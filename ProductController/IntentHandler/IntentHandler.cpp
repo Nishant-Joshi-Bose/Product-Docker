@@ -9,12 +9,12 @@
 //  This Handler should not perform state transistions.
 //  It is intentional that the hsm or productController access is not given
 //  to this module.
-//  The Handler in-turn would delegate its work to customized Intent 
+//  The Handler in-turn would delegate its work to customized Intent
 //  Managers based on the ActionType that is passed to it.
 //  These customized IntentManager will be taking actions based on
-//  1. State of its own subsystem, based on what was processed for the same 
+//  1. State of its own subsystem, based on what was processed for the same
 //  action before, like a play or pause would have to toggle the actions.
-//  2. The IntentHandler will call various IntentManagers that are registered 
+//  2. The IntentHandler will call various IntentManagers that are registered
 //  for specific intents. The initializing of IntentManagers needs to be done
 //  in IntentHandler::Initialize() for all intents that needs to be handled
 //  by this module.
@@ -41,12 +41,15 @@ static DPrint s_logger( "IntentHandler" );
 namespace ProductApp
 {
 IntentHandler::IntentHandler( NotifyTargetTaskIF& task, CliClientMT& cliClient,
-                              const FrontDoorClientIF_t& frontDoorClient ):
+                              FrontDoorClientIF_t& frontDoorClient,
+                              ProductController& controller
+                            ):
     m_task( task ),
     m_cliClient( cliClient ),
-    m_frontDoorClient( frontDoorClient )
+    m_frontDoorClient( frontDoorClient ),
+    m_controller( controller )
 {
-    m_IntentManagerMap.clear();
+    BOSE_DEBUG( s_logger, "%s: ", __func__ );
 }
 
 void IntentHandler::Initialize()

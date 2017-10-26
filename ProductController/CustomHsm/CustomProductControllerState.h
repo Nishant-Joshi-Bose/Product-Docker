@@ -13,6 +13,8 @@
 
 #include "Hsm.h"
 #include "HsmState.h"
+#include "KeyHandler.h"
+#include "NetManager.pb.h"
 
 namespace ProductApp
 {
@@ -40,7 +42,27 @@ public:
     {
     }
 
+    virtual bool HandleLpmState( bool isActive )
+    {
+        return false;
+    }
+
+    virtual bool HandleLpmInterfaceState( bool isConnected )
+    {
+        return false;
+    }
+
     virtual bool HandleModulesReady( )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntents( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
+    virtual bool HandleNetworkConfigurationStatus( const NetManager::Protobuf::NetworkStatus & networkStatus, int profileSize )
     {
         return false;
     }

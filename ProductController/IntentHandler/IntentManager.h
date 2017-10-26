@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 ///// @file   IntentManager.h
 ///// @brief  Eddie specific IntentManager class for Riviera based product
-//            This is a base class and any Specific IntentManager like 
+//            This is a base class and any Specific IntentManager like
 //            TransportControlManager needs to inherit from this class.
 /////
 ///// @attention Copyright 2017 Bose Corporation, Framingham, MA
@@ -12,6 +12,7 @@
 #include "CliClientMT.h"
 #include "FrontDoorClientIF.h"
 #include "KeyHandler.h"
+#include "AsyncCallback.h"
 
 namespace ProductApp
 {
@@ -23,12 +24,13 @@ class IntentManager
 public:
     IntentManager( NotifyTargetTaskIF& task, CliClientMT& cliClient,
                    const FrontDoorClientIF_t& frontDoorClient ):
+        m_frontDoorClient( frontDoorClient ),
         m_task( task ),
         m_cliClient( cliClient ),
-        m_frontDoorClient( frontDoorClient )
+        m_frontDoorClientErrorCb( nullptr, &task )
     {
     }
-    ~IntentManager() { }
+    virtual ~IntentManager() { }
 
     // Public function to Handle intents
     // This function will build and send message either through FrontDoor
@@ -44,8 +46,8 @@ public:
     // to valid,build and send messages (through frontdoor or IPC).
     void RegisterCallBack( KeyHandlerUtil::ActionType_t intent, CbPtr_t cb )
     {
-        m_intent = intent;
-        m_cb     = cb;
+        m_intent       = intent;
+        m_callBack     = cb;
         return;
     }
 
@@ -60,14 +62,14 @@ protected:
         return m_cliClient;
     }
 
-    const FrontDoorClientIF_t& GetFrontDoor() const
+    const FrontDoorClientIF_t& GetFrontDoorClient() const
     {
         return m_frontDoorClient;
     }
 
-    const CbPtr_t& cb() const
+    const CbPtr_t& CallBack() const
     {
-        return m_cb;
+        return m_callBack;
     }
 
     const KeyHandlerUtil::ActionType_t& intent() const
@@ -75,12 +77,21 @@ protected:
         return m_intent;
     }
 
-private:
+#if 0
+    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>& FrontDoorClientErrorCb()
+    {
+        return m_frontDoorClientErrorCb;
+    }
+#endif
+    virtual void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) = 0;
 
-    NotifyTargetTaskIF&               m_task;
-    CliClientMT&                      m_cliClient;
-    FrontDoorClientIF_t               m_frontDoorClient;
-    CbPtr_t                           m_cb;
-    KeyHandlerUtil::ActionType_t      m_intent;
+private:
+    FrontDoorClientIF_t                     m_frontDoorClient;
+    NotifyTargetTaskIF&                     m_task;
+    CliClientMT&                            m_cliClient;
+    CbPtr_t                                 m_callBack;
+    KeyHandlerUtil::ActionType_t            m_intent;
+protected:
+    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> m_frontDoorClientErrorCb;
 };
 } // namespace ProductApp

@@ -44,6 +44,8 @@ enum ProductMessageId
      CONFIGURATION_STATUS   = 17;
      STS_SOURCES_INIT_DONE  = 18;
      SOURCE_SLOT_SELECTED   = 19;
+     LPM_INTERFACE_DOWN     = 20;
+     LPM_INTERFACE_UP       = 21;
 }
 
 enum ProductNetworkType
@@ -108,10 +110,19 @@ message ProductMessageData
         //optional ProductSelectSourceSlot    selectsourceslot    = 5;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                            Audio Path Status Message Structure                               ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+message ProductAudioPathStatus
+{
+        optional bool connected = 1;
+}
+
 message ProductMessage
 {
         optional ProductMessageId   id   = 1;
         optional ProductMessageData data = 2;
+        optional ProductAudioPathStatus     audiopathstatus     =  3;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

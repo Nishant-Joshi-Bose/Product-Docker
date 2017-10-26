@@ -17,18 +17,20 @@
 #include "EddieProductControllerStateNetworkStandby.h"
 #include "DeviceManager.h"
 #include "LightBarController.h"
+#include "DemoController.h"
 #include "ConfigurationStatus.pb.h"
 #include "SoundTouchInterface/AllowSourceSelect.pb.h"
 #include "Language.pb.h"
 #include "DeviceManager.pb.h"
 #include "NetManager.pb.h"
 #include "SoundTouchInterface/CapsInitializationStatus.pb.h"
-#include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "ProductCliClient.h"
 #include "LpmClientIF.h"
+#include "LpmInterface.h"
 #include "KeyHandler.h"
 #include "ProductSource.h"
+#include "IntentHandler.h"
 
 namespace ProductApp
 {
@@ -39,6 +41,11 @@ public:
     virtual ~EddieProductController();
 
     void Initialize();
+
+    NetManager::Protobuf::NetworkStatus const& GetNetworkStatus() const
+    {
+        return m_cachedStatus;
+    }
 
 private:
     /// Disable copies
@@ -64,6 +71,7 @@ private:
 ////////////////////////////////////////////////////////////////////////////////
     void ReadSystemLanguageFromPersistence();
     void ReadConfigurationStatusFromPersistence();
+    void ReadNowPlayingFromPersistence();
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  PersistSystemLanguageCode
@@ -72,6 +80,14 @@ private:
 ////////////////////////////////////////////////////////////////////////////////
     void PersistSystemLanguageCode();
     void PersistSystemConfigurationStatus();
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  PersistCapsNowPlaying
+/// @brief Function to persist nowPlaying information in /mnt/nv/product-persistence/.
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void PersistCapsNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingPb, bool force = false );
+    bool IsNowPlayingChanged( const SoundTouchInterface::NowPlayingJson& nowPlayingPb );
     void HandleAllowSourceSelectCliCmd( const std::list<std::string> & argList, std::string& response );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -93,20 +109,20 @@ private:
 
     void HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus );
 
+    void HandleWiFiProfileResponse( const NetManager::Protobuf::WiFiProfiles& profiles );
+///////////////////////////////////////////////////////////////////////////////
+/// @name HandleCapsNowPlaying
+/// @brief Function to Handle "/content/nowPlaying" notification from Caps.
+///////////////////////////////////////////////////////////////////////////////
+    void HandleCapsNowPlaying( const SoundTouchInterface::NowPlayingJson& );
+
 public:
     // Handle Key Information received from LPM
     void HandleLpmKeyInformation( IpcKeyInformation_t keyInformation );
 
     void HandleAUXSourceKeyPress();
 
-    void HandleIntends( KeyHandlerUtil::ActionType_t result );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name  SendAllowSourceSelectNotification
-/// @brief function to send Send allowSourceSelectUpdate Notification Msg to the subscriber.
-/// @return void
-////////////////////////////////////////////////////////////////////////////////
-    void SendAllowSourceSelectNotification( bool isSourceSelectAllowed );
+    void HandleIntents( KeyHandlerUtil::ActionType_t result );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  IsAllModuleReady
@@ -131,7 +147,7 @@ public:
     void HandleLPMReady();
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @name  HandleLPMReady
+/// @name  HandleCAPSReady
 /// @brief Function to call when CAPS is ready to send/receive request.
 /// @return void
 ////////////////////////////////////////////////////////////////////////////////
@@ -214,8 +230,30 @@ public:
 /// @return void
 ///////////////////////////////////////////////////////////////////////////////
     void HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationStatus &status );
-    void CapsInitializationStatusCallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
-    void HandleAllowSourceSelectRequest( const Callback<SoundTouchInterface::AllowSourceSelect> &resp );
+    void CallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
+    IntentHandler& IntentHandle()
+    {
+        return m_IntentHandler;
+    }
+///////////////////////////////////////////////////////////////////////////////
+/// @name   HandleProductMessage
+/// @brief  Handles message sent by LPM to ProductController. As per the
+///         message id in productMessage, appropriate methods in state machine
+///         or ProductController are called
+/// @param  ProductMessage - ProductMessage protobuf
+/// @return void
+///////////////////////////////////////////////////////////////////////////////
+    void HandleProductMessage( const ProductMessage& productMessage );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name   GetLpmInterface
+/// @brief  Returns reference to LpmInterface
+/// @return LpmInterface&
+///////////////////////////////////////////////////////////////////////////////
+    inline LpmInterface& GetLpmInterface()
+    {
+        return m_LpmInterface;
+    }
 
 private:
 
@@ -236,18 +274,27 @@ private:
     DeviceManager                               m_deviceManager;
 
     ProtoPersistenceIF::ProtoPersistencePtr     m_ConfigurationStatusPersistence = nullptr;
+    ProtoPersistenceIF::ProtoPersistencePtr     m_nowPlayingPersistence = nullptr;
     ProtoPersistenceIF::ProtoPersistencePtr     m_LanguagePersistence = nullptr;
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
     ProductPb::Language                         m_systemLanguage;
+    SoundTouchInterface::NowPlayingJson         m_nowPlaying;
     NetManager::Protobuf::NetworkStatus         m_cachedStatus;
 
     ProductCliClient                            m_productCliClient;
 
     std::unique_ptr<LightBarController>         m_lightbarController;
     ProductSource                               m_productSource;
+    IntentHandler                               m_IntentHandler;
+    LpmInterface                                m_LpmInterface;
     bool                                        m_isCapsReady = false;
-    bool                                        m_isLPMReady  = true;
+    bool                                        m_isLPMReady  = false;
     bool                                        m_isNetworkModuleReady  = false;
+
+    int                                         m_WiFiProfilesCount;
+    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>     errorCb;
+    /// Demonstration Controller instance
+    DemoApp::DemoController m_demoController;
 };
 }
 // namespace

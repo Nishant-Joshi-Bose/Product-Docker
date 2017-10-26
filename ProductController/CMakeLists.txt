@@ -1,13 +1,12 @@
 INCLUDE_DIRECTORIES(
-  ${RIVIERA_LPM_SERVICE_DIR}/source/Client
-  ${RIVIERA_LPM_SERVICE_DIR}/source/LPMIPC
-  ${RIVIERA_LPM_DIR}/include
-  ${CASTLE_PRODUCT_CONTROLLER_COMMON_DIR}
-  ${CASTLE_PRODUCT_CONTROLLER_COMMON_DIR}/Hsm
+  ${PRODUCTCONTROLLERCOMMON_DIR}
+  ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
+  ${DEMOCONTROLLER_DIR}
   ${CUSTOM_HSM_DIR}
   ${KEYHANDLER_DIR}/include
   DeviceManager
   LightBarController
+  IntentHandler
   .
 )
 
@@ -36,14 +35,17 @@ ADD_EXECUTABLE(Eddie
   ${PROTO_CC_DEST}/ContentItem.pb.cc
   IntentHandler/IntentHandler.cpp
   IntentHandler/TransportControlManager.cpp
+  LpmInterface.cpp
 )
 
 TARGET_LINK_LIBRARIES(Eddie
   CastleProductControllerCommon
+  CastleDemoController
   LpmClient
   FrontDoorClient
   NetworkServiceClient
   KeyHandler
+  BLESetupServiceProto
   CliClient
   BoseLibs
   libjsoncpp.a
