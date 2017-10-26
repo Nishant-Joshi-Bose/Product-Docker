@@ -9,7 +9,7 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-23_1251"
+    "selected_version": "Continuous/Castle-Fork/2017-10-25_1936"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -21,19 +21,19 @@
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2461"
+    "selected_version": "branches/castle-libs@2463"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.1.0-77+6b945e7"
+    "selected_version": "Continuous/master/0.1.0-79+e2b05bc"
   },
   {
     "name": "CastlePassport-native",
-    "selected_version": "Continuous/master/0.0.2-109+17a9da9"
+    "selected_version": "Continuous/master/0.0.2-127+5f9ec11"
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/0.0.2-109+17a9da9"
+    "selected_version": "Continuous/master/0.0.2-127+5f9ec11"
   },
   {
     "name": "CastleProductControllerCommon",
@@ -41,11 +41,11 @@
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@f49aa0bba9d7502b806db59c33c71cefa8648f3a"
+    "selected_version": "master@1af1c459c4c1245118e07ccb4d7a41988089be2d"
   },
   {
     "name": "EddieLPM-Package",
-    "selected_version": "Release/trunk/0.1.0.2509512/DP1"
+    "selected_version": "Release/trunk/0.1.2.2530662/DP1"
   },
   {
     "name": "googletest-qc8017_32",
@@ -61,11 +61,11 @@
   },
   {
     "name": "protobuf-native",
-    "selected_version": "branches/protobuf@2458"
+    "selected_version": "branches/protobuf@2465"
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "branches/protobuf@2458"
+    "selected_version": "branches/protobuf@2465"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -89,7 +89,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.1.1-73+c0cd458"
+    "selected_version": "Continuous/master/0.1.1-81+fce0250"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -97,11 +97,11 @@
   },
   {
     "name": "UnitTest++-native",
-    "selected_version": "branches/UnitTest++@2456"
+    "selected_version": "branches/UnitTest++@2464"
   },
   {
     "name": "UnitTest++-qc8017_32",
-    "selected_version": "branches/UnitTest++@2456"
+    "selected_version": "branches/UnitTest++@2464"
   },
   {
     "name": "WiFi-Setup-Webpage",
