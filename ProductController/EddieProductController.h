@@ -254,6 +254,10 @@ public:
     {
         return m_LpmInterface;
     }
+    const SoundTouchInterface::NowPlayingJson& GetNowPlaying() const
+    {
+        return m_nowPlaying;
+    }
 
 private:
 

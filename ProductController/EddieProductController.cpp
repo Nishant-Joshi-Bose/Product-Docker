@@ -465,15 +465,15 @@ bool EddieProductController::IsNowPlayingChanged( const SoundTouchInterface::Now
              or ( m_nowPlaying.container().contentitem().sourceaccount() not_eq nowPlayingPb.container().contentitem().sourceaccount() )
              or ( m_nowPlaying.container().contentitem().source() not_eq nowPlayingPb.container().contentitem().source() ) );
 }
+
 void EddieProductController::PersistCapsNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingPb, bool forcePersist )
 {
     BOSE_INFO( s_logger, __func__ );
     if( forcePersist or IsNowPlayingChanged( nowPlayingPb ) )
     {
-        m_nowPlaying.CopyFrom( nowPlayingPb );
         try
         {
-            m_nowPlayingPersistence->Store( ProtoToMarkup::ToJson( m_nowPlaying ) );
+            m_nowPlayingPersistence->Store( ProtoToMarkup::ToJson( nowPlayingPb ) );
         }
         catch( const ProtoToMarkup::MarkupError &e )
         {
@@ -484,6 +484,7 @@ void EddieProductController::PersistCapsNowPlaying( const SoundTouchInterface::N
             BOSE_LOG( ERROR, "Storing nowplaying in persistence failed - " << e.what() );
         }
     }
+    m_nowPlaying.CopyFrom( nowPlayingPb );
 }
 
 void EddieProductController::SendActivateAccessPointCmd()
