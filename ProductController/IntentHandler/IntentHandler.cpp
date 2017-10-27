@@ -65,6 +65,7 @@ void IntentHandler::Initialize()
     m_IntentManagerMap[( uint16_t )Action::PLAY_PAUSE] = transportManager;
     m_IntentManagerMap[( uint16_t )Action::NEXT_TRACK] = transportManager;
     m_IntentManagerMap[( uint16_t )Action::PREV_TRACK] = transportManager;
+
     //- Transport Control API's
     //
     //+ Bluetooth Control API's

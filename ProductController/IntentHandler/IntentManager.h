@@ -54,9 +54,8 @@ public:
         m_callBack     = cb;
         return;
     }
-
 protected:
-    const NotifyTargetTaskIF& GetTask() const
+    NotifyTargetTaskIF& GetTask() const
     {
         return m_task;
     }

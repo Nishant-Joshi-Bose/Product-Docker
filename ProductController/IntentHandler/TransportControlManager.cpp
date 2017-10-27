@@ -75,14 +75,12 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
                 }
                 sendTransportControlMsg = true;
             }
-            else if( status == SoundTouchInterface::StatusJson::stopped )
-            {
-                // Send playbackRequest of source persisted
-            }
             else
             {
-                // Just drop the intent
-                BOSE_DEBUG( s_logger, "status not handled" );
+                // Send playbackRequest of source persisted : To do,
+                // Talk to Ranjeet: What param in playbackRequest
+                // Talk to Vikram: How can nowPlaying that is persisted be used.
+                sendTransportControlMsg = true;
             }
         }
         break;
@@ -118,8 +116,9 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
         {
             BOSE_DEBUG( s_logger, "SendPut through Frontdoor for transportControl "
                         " for intent : %d", intent );
+
             GetFrontDoorClient()->\
-            SendPut<SoundTouchInterface::\
+            SendPost<SoundTouchInterface::\
             NowPlayingJson>( "/content/transportControl", transportControl,
                              m_NowPlayingRsp, m_frontDoorClientErrorCb );
         }
@@ -198,5 +197,4 @@ void TransportControlManager::FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ER
     BOSE_ERROR( s_logger, "%s:error code- %d", __func__, errorCode );
     return;
 }
-
 }

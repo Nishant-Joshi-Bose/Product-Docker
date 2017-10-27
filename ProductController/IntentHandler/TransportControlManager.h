@@ -23,15 +23,15 @@ public:
                              const ProductController& controller ):
         IntentManager( task, cliClient, frontDoorClient, controller ),
         m_NowPlayingRsp( nullptr, &task ),
+//      m_NowPlayingRsp( [this]( SoundTouchInterface::NowPlayingJson ) { }, &task ),
         m_play( true )
     {
         m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
                                    ( std::bind( &TransportControlManager::FrontDoorClientErrorCb,
                                                 this, std::placeholders::_1 ), &task );
 
-        AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingRsp =
+        m_NowPlayingRsp =
             AsyncCallback<SoundTouchInterface::NowPlayingJson> ( std::bind( &TransportControlManager::PutTransportControlCbRsp, this, std::placeholders::_1 ), &task );
-
     }
     virtual ~TransportControlManager() { }
 
@@ -43,6 +43,7 @@ public:
     // desired function for desired state change
     //
     bool Handle( KeyHandlerUtil::ActionType_t arg ) override;
+    void PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp );
 
 private:
     bool TogglePlayPause()
@@ -64,8 +65,6 @@ private:
     bool ValidSourceAvailable();
     bool CurrentlyPlaying();
     SoundTouchInterface::StatusJson CurrentStatusJson();
-
-    void PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp );
 
     virtual void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
 
