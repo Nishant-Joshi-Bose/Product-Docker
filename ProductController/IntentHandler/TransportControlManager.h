@@ -23,7 +23,6 @@ public:
                              const ProductController& controller ):
         IntentManager( task, cliClient, frontDoorClient, controller ),
         m_NowPlayingRsp( nullptr, &task ),
-//      m_NowPlayingRsp( [this]( SoundTouchInterface::NowPlayingJson ) { }, &task ),
         m_play( true )
     {
         m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
