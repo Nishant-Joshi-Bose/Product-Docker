@@ -27,41 +27,20 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "SystemUtils.h"
 #include "DPrint.h"
+#include "Utilities.h"
 #include "Services.h"
 #include "BreakThread.h"
 #include "FrontDoorClient.h"
 #include "NetworkPortDefines.h"
+#include "NetManager.pb.h"
 #include "ProductNetworkManager.h"
-#include "ConfigurationStatus.pb.h"
 #include "ProductMessage.pb.h"
-#include "CapsInitializationStatus.pb.h"
-#include "NetManager.pb.h"
-#include "STSNetworkStatus.pb.h"
-#include "NetManager.pb.h"
-#include "ProductMessage.pb.h"
-#include "Language.pb.h"
-#include "ConfigurationStatus.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             Start of Product Namespace                                       ///
+///                        Start of the Product Application Namespace                            ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-///            Definitions
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-#define PRODUCT_NETWORK_MONITOR_CHECK_IN_SECONDS ( 1 )
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following declares a DPrint class type object for logging information in this source code
-/// file.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static const DPrint s_logger { "Product" };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -71,13 +50,20 @@ static const DPrint s_logger { "Product" };
 ///         The C++ Version 11 compiler guarantees that only one instance is created in a thread
 ///         safe way.
 ///
+/// @param NotifyTargetTaskIF* ProductTask This argument points to a task to process
+///                                        resource requests and notifications.
+///
+/// @param Callback< ProductMessage > ProductNotify This is a callback to send events to the
+///                                                  Product Controller.
+///
+///
 /// @return This method returns a pointer to a ProductNetworkManager object.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductNetworkManager* ProductNetworkManager::GetInstance( NotifyTargetTaskIF*        mainTask,
+ProductNetworkManager* ProductNetworkManager::GetInstance( NotifyTargetTaskIF*        ProductTask,
                                                            Callback< ProductMessage > ProductNotify )
 {
-    static ProductNetworkManager* instance = new ProductNetworkManager( mainTask,
+    static ProductNetworkManager* instance = new ProductNetworkManager( ProductTask,
                                                                         ProductNotify );
 
     BOSE_DEBUG( s_logger, "The instance %8p of the Product Network Manager was returned.", instance );
@@ -93,56 +79,46 @@ ProductNetworkManager* ProductNetworkManager::GetInstance( NotifyTargetTaskIF*  
 ///         to ensure that only one instance of this class can be created through the class
 ///         GetInstance method.
 ///
-/// @param  void This method does not take any arguments.
+/// @param NotifyTargetTaskIF* ProductTask This argument points to a task to process
+///                                        resource requests and notifications.
 ///
-/// @return This method does not return anything.
+/// @param Callback< ProductMessage > ProductNotify This is a callback to send events to the Product
+///                                                 Controller.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductNetworkManager::ProductNetworkManager( NotifyTargetTaskIF*        mainTask,
+ProductNetworkManager::ProductNetworkManager( NotifyTargetTaskIF*        ProductTask,
                                               Callback< ProductMessage > ProductNotify )
 
-    : m_mainTask( mainTask ),
+    : m_ProductTask( ProductTask ),
       m_ProductNotify( ProductNotify ),
       m_FrontDoorClient( FrontDoor::FrontDoorClient::Create( "ProductNetworkManager" ) )
 {
-    return;
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  ProductNetworkManager::Run
+/// @name   ProductNetworkManager::Run
 ///
-/// @brief  ProductNetworkManager::Run
+/// @brief  This method attempts starts and runs the network manager. Essentially, it sets up
+///         callbacks to respond to network status notifications.
 ///
-/// @return
+/// @return This method returns true if successful.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductNetworkManager::Run( )
 {
-    MonitorNetwork( );
-
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name  ProductNetworkManager::MonitorNetwork
-///
-/// @brief This method attempts to registers for network status notifications.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductNetworkManager::MonitorNetwork( )
-{
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Registration as a client for getting the entire network status is made through the Front
-    /// Door router. The callback GetEntireNetworkStatus is used to receive notifications regarding
-    /// the entire network status.
+    /// Registration as a client for getting the entire network status is made through the
+    /// FrontDoorClient object pointer. The callback HandleEntireNetworkStatus is used to receive
+    /// notifications regarding the entire network status from the Network Manager process that
+    /// communicates to a FrontDoor process that in turn routes this status through to our client.
     ////////////////////////////////////////////////////////////////////////////////////////////////
     AsyncCallback< NetManager::Protobuf::NetworkStatus >
-    CallbackForEntireNetworkStatus( std::bind( &ProductNetworkManager::GetEntireNetworkStatus,
+    CallbackForEntireNetworkStatus( std::bind( &ProductNetworkManager::HandleEntireNetworkStatus,
                                                this,
                                                std::placeholders::_1 ),
-                                    m_mainTask );
+                                    m_ProductTask );
 
     m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::NetworkStatus >
     ( "/network/status", CallbackForEntireNetworkStatus );
@@ -151,49 +127,53 @@ void ProductNetworkManager::MonitorNetwork( )
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// Registration as a client for getting all the available wireless network profiles is made
-    /// through the Front Door router. The callback GetWirelessNetworkProfiles is used to receive
-    /// these notifications.
+    /// through the FrontDoorClient object pointer. The callback HandleWiFiProfiles is used to
+    /// receive these notifications.
     ////////////////////////////////////////////////////////////////////////////////////////////////
     AsyncCallback< NetManager::Protobuf::WiFiProfiles >
-    CallbackForWirelessNetworkProfiles( std::bind( &ProductNetworkManager::GetWirelessNetworkProfiles,
-                                                   this,
-                                                   std::placeholders::_1 ),
-                                        m_mainTask );
+    CallbackForWiFiProfiles( std::bind( &ProductNetworkManager::HandleWiFiProfiles,
+                                        this,
+                                        std::placeholders::_1 ),
+                             m_ProductTask );
 
     m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::WiFiProfiles >
-    ( "network/wifi/profile", CallbackForWirelessNetworkProfiles );
+    ( "/network/wifi/profile", CallbackForWiFiProfiles );
 
     BOSE_DEBUG( s_logger, "A notification request for network wireless profile data has been made." );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// Registration as a client for getting the current wireless network status is made through the
-    /// Front Door router. The callback GetWirelessNetworkStatus is used to receive these
-    /// notifications.
+    /// FrontDoorClient object pointer. The callback HandleWiFiStatus is used to receive these
+    /// these notifications.
     ////////////////////////////////////////////////////////////////////////////////////////////////
     AsyncCallback< NetManager::Protobuf::WiFiStatus >
-    CallbackForWirelessNetworkStatus( std::bind( &ProductNetworkManager::GetWirelessNetworkStatus,
-                                                 this,
-                                                 std::placeholders::_1 ),
-                                      m_mainTask );
+    CallbackForWiFiStatus( std::bind( &ProductNetworkManager::HandleWiFiStatus,
+                                      this,
+                                      std::placeholders::_1 ),
+                           m_ProductTask );
 
     m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::WiFiStatus >
-    ( "network/wifi/status", CallbackForWirelessNetworkStatus );
+    ( "/network/wifi/status", CallbackForWiFiStatus );
 
     BOSE_DEBUG( s_logger, "A notification request for network wireless status changes has been made." );
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  ProductNetworkManager::GetEntireNetworkStatus
+/// @name  ProductNetworkManager::HandleEntireNetworkStatus
 ///
 /// @brief This method processes the network status received, and will send a ProductMessage to
-///        notify the Product Controller of the network state, configured, and connected status.
+///        notify the product controller of the network state, configured, and connected status.
 ///
-/// @param networkStatus  This class corresponds to a Google Protocol Buffer that contains
-///                       information on the current available networks.
+/// @param NetManager::Protobuf::NetworkStatus& networkStatus  This parameter is a Google Protocol
+///                                                             Buffer that contains a status on
+///                                                             the currently available networks.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductNetworkManager::GetEntireNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus )
+void ProductNetworkManager::HandleEntireNetworkStatus( const NetManager::Protobuf::NetworkStatus&
+                                                       networkStatus )
 {
     if( networkStatus.interfaces_size( ) <= 0 )
     {
@@ -211,10 +191,6 @@ void ProductNetworkManager::GetEntireNetworkStatus( const NetManager::Protobuf::
     }
     else
     {
-        BOSE_DEBUG( s_logger, "-------------- Product Network Manager Status --------------" );
-        BOSE_DEBUG( s_logger, "There are %d networks currently available.", networkStatus.interfaces_size( ) );
-        BOSE_DEBUG( s_logger, " " );
-
         ProductMessage productMessage;
         auto networkData = productMessage.mutable_networkstatus( );
 
@@ -222,31 +198,45 @@ void ProductNetworkManager::GetEntireNetworkStatus( const NetManager::Protobuf::
         networkData->set_connected( false );
         networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Unknown );
 
-        std::string interfaceMacString( "Unknown" );
-        std::string interfaceNameString( "Unknown" );
-        std::string networkStateString( "Unknown" );
-        std::string networkTypeString( "Unknown" );
-        std::string ipAddressString( "Unknown" );
-        std::string broadcastString( "Unknown" );
-        std::string subnetMaskString( "Unknown" );
-        std::string gatewayAddressString( "Unknown" );
-        std::string primaryDnsString( "Unknown" );
-        std::string secondaryDnsString( "Unknown" );
+        BOSE_DEBUG( s_logger, "-------------- Product Network Manager Status --------------" );
 
-        int  index;
-
-        for( index = 0; index < networkStatus.interfaces_size( ); index++ )
+        if( networkStatus.has_primary( ) )
         {
-            interfaceMacString.assign( "Unknown" );
-            interfaceNameString.assign( "Unknown" );
-            networkStateString.assign( "Unknown" );
-            networkTypeString.assign( "Unknown" );
-            ipAddressString.assign( "Unknown" );
-            broadcastString.assign( "Unknown" );
-            subnetMaskString.assign( "Unknown" );
-            gatewayAddressString.assign( "Unknown" );
-            primaryDnsString.assign( "Unknown" );
-            secondaryDnsString.assign( "Unknown" );
+            BOSE_DEBUG( s_logger, "The primary network is type is %s.",
+                        NetworkType_Name( networkStatus.primary( ) ).c_str( ) );
+        }
+
+        if( networkStatus.has_isprimaryup( ) )
+        {
+            if( networkStatus.isprimaryup( ) )
+            {
+                BOSE_DEBUG( s_logger, "The primary network is currently up." );
+            }
+            else
+            {
+                BOSE_DEBUG( s_logger, "The primary network is currently down." );
+            }
+        }
+        else
+        {
+            BOSE_DEBUG( s_logger, "The primary network is in an unknown state." );
+        }
+
+        BOSE_DEBUG( s_logger, "There are %d networks currently available.", networkStatus.interfaces_size( ) );
+        BOSE_DEBUG( s_logger, " " );
+
+        for( int index = 0; index < networkStatus.interfaces_size( ); index++ )
+        {
+            std::string interfaceMacString( "Unknown" );
+            std::string interfaceNameString( "Unknown" );
+            std::string networkStateString( "Unknown" );
+            std::string networkTypeString( "Unknown" );
+            std::string ipAddressString( "Unknown" );
+            std::string broadcastString( "Unknown" );
+            std::string subnetMaskString( "Unknown" );
+            std::string gatewayAddressString( "Unknown" );
+            std::string primaryDnsString( "Unknown" );
+            std::string secondaryDnsString( "Unknown" );
 
             if( networkStatus.interfaces( index ).has_macaddress( ) )
             {
@@ -260,38 +250,21 @@ void ProductNetworkManager::GetEntireNetworkStatus( const NetManager::Protobuf::
 
             if( networkStatus.interfaces( index ).has_state( ) )
             {
-                switch( networkStatus.interfaces( index ).state( ) )
+                if( networkStatus.interfaces( index ).state( ) ==
+                    NetManager::Protobuf::NetworkInterface_State::NetworkInterface_State_DOWN )
                 {
-                case NetManager::Protobuf::NetworkInterface_State::NetworkInterface_State_DOWN:
                     networkStateString.assign( "Down" );
-                    break;
-                case NetManager::Protobuf::NetworkInterface_State::NetworkInterface_State_UP:
+                }
+                else if( networkStatus.interfaces( index ).state( ) ==
+                         NetManager::Protobuf::NetworkInterface_State::NetworkInterface_State_UP )
+                {
                     networkStateString.assign( "Up" );
-                    break;
-                default:
-                    break;
                 }
             }
 
             if( networkStatus.interfaces( index ).has_type( ) )
             {
-                switch( networkStatus.interfaces( index ).type( ) )
-                {
-                case NetManager::Protobuf::NetworkType::WIRED_ETH:
-                    networkTypeString.assign( "Wired Ethernet" );
-                    break;
-                case NetManager::Protobuf::NetworkType::WIRELESS:
-                    networkTypeString.assign( "Wireless" );
-                    break;
-                case NetManager::Protobuf::NetworkType::WIRELESS_AP:
-                    networkTypeString.assign( "Wireless Access Point" );
-                    break;
-                case NetManager::Protobuf::NetworkType::WIRED_USB:
-                    networkTypeString.assign( "Wired USB" );
-                    break;
-                default:
-                    break;
-                }
+                networkTypeString.assign( NetworkType_Name( networkStatus.interfaces( index ).type( ) ) );
             }
 
             if( networkStatus.interfaces( index ).has_state( ) &&
@@ -302,20 +275,12 @@ void ProductNetworkManager::GetEntireNetworkStatus( const NetManager::Protobuf::
                     if( networkStatus.interfaces( index ).state( ) ==
                         NetManager::Protobuf::NetworkInterface_State::NetworkInterface_State_UP )
                     {
-                        if( networkStatus.interfaces( index ).has_ipinfo( ) )
+                        if( networkStatus.interfaces( index ).has_ipinfo( ) and
+                            networkStatus.interfaces( index ).ipinfo( ).has_ipaddress( ) )
                         {
-                            if( networkStatus.interfaces( index ).ipinfo( ).has_ipaddress( ) )
-                            {
-                                networkData->set_configured( true );
-                                networkData->set_connected( true );
-                                networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Wired );
-                            }
-                            else
-                            {
-                                networkData->set_configured( true );
-                                networkData->set_connected( false );
-                                networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Wired );
-                            }
+                            networkData->set_configured( true );
+                            networkData->set_connected( true );
+                            networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Wired );
                         }
                         else
                         {
@@ -325,26 +290,29 @@ void ProductNetworkManager::GetEntireNetworkStatus( const NetManager::Protobuf::
                         }
                     }
                 }
-                else if( networkStatus.interfaces( index ).type( ) == NetManager::Protobuf::NetworkType::WIRELESS    ||
-                         networkStatus.interfaces( index ).type( ) == NetManager::Protobuf::NetworkType::WIRELESS_AP )
+
+                ////////////////////////////////////////////////////////////////////////////////////
+                ///
+                /// @todo The wireless AP type means that the system WiFi interface is in an AP mode
+                ///        serving as an access point for setup. This needs to be discussed as the
+                ///        interface should not be considered to be configured for these network
+                ///        types.
+                ///
+                ////////////////////////////////////////////////////////////////////////////////////
+                else if( networkStatus.interfaces( index ).type( ) ==
+                         NetManager::Protobuf::NetworkType::WIRELESS  ||
+                         networkStatus.interfaces( index ).type( ) ==
+                         NetManager::Protobuf::NetworkType::WIRELESS_AP )
                 {
-                    if( networkStatus.interfaces( index ).state( ) ==
+                    if( networkStatus.interfaces( index ).has_ipinfo( ) and
+                        networkStatus.interfaces( index ).state( ) ==
                         NetManager::Protobuf::NetworkInterface_State::NetworkInterface_State_UP )
                     {
-                        if( networkStatus.interfaces( index ).has_ipinfo( ) )
+                        if( networkStatus.interfaces( index ).ipinfo( ).has_ipaddress( ) )
                         {
-                            if( networkStatus.interfaces( index ).ipinfo( ).has_ipaddress( ) )
-                            {
-                                networkData->set_configured( true );
-                                networkData->set_connected( true );
-                                networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Wireless );
-                            }
-                            else
-                            {
-                                networkData->set_configured( true );
-                                networkData->set_connected( false );
-                                networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Wireless );
-                            }
+                            networkData->set_configured( true );
+                            networkData->set_connected( true );
+                            networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Wireless );
                         }
                         else
                         {
@@ -352,6 +320,12 @@ void ProductNetworkManager::GetEntireNetworkStatus( const NetManager::Protobuf::
                             networkData->set_connected( false );
                             networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Wireless );
                         }
+                    }
+                    else
+                    {
+                        networkData->set_configured( true );
+                        networkData->set_connected( false );
+                        networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Wireless );
                     }
                 }
             }
@@ -384,55 +358,18 @@ void ProductNetworkManager::GetEntireNetworkStatus( const NetManager::Protobuf::
                 }
             }
 
-            BOSE_DEBUG( s_logger, "Interface Index   : %d ", index );
-            BOSE_DEBUG( s_logger, "Interface MAC     : %s ", interfaceMacString.c_str( ) );
-            BOSE_DEBUG( s_logger, "Interface Name    : %s ", interfaceNameString.c_str( ) );
-            BOSE_DEBUG( s_logger, "Network State     : %s ", networkStateString.c_str( ) );
-            BOSE_DEBUG( s_logger, "Network Type      : %s ", networkTypeString.c_str( ) );
-            BOSE_DEBUG( s_logger, "IP Address        : %s ", ipAddressString.c_str( ) );
-            BOSE_DEBUG( s_logger, "Broadcast Address : %s ", broadcastString.c_str( ) );
-            BOSE_DEBUG( s_logger, "Subnet Mask       : %s ", subnetMaskString.c_str( ) );
-            BOSE_DEBUG( s_logger, "Gateway Address   : %s ", gatewayAddressString.c_str( ) );
-            BOSE_DEBUG( s_logger, "Primary DNS       : %s ", primaryDnsString.c_str( ) );
-            BOSE_DEBUG( s_logger, "Secondary DNS     : %s ", secondaryDnsString.c_str( ) );
-            BOSE_DEBUG( s_logger, " " );
-        }
-
-        if( networkStatus.primary( ) == NetManager::Protobuf::NetworkType::WIRED_ETH )
-        {
-            BOSE_DEBUG( s_logger, "The primary network is Wired Ethernet." );
-        }
-        else if( networkStatus.primary( ) == NetManager::Protobuf::NetworkType::WIRED_USB )
-        {
-            BOSE_DEBUG( s_logger, "The primary network is Wired USB." );
-        }
-        else if( networkStatus.primary( ) == NetManager::Protobuf::NetworkType::WIRELESS )
-        {
-            BOSE_DEBUG( s_logger, "The primary network is Wireless." );
-        }
-        else if( networkStatus.primary( ) == NetManager::Protobuf::NetworkType::WIRELESS_AP )
-        {
-            BOSE_DEBUG( s_logger, "The primary network is Wireless AP." );
-        }
-        else
-        {
-            BOSE_DEBUG( s_logger, "The primary network has an unknown type." );
-        }
-
-        if( networkStatus.has_isprimaryup( ) )
-        {
-            if( networkStatus.isprimaryup( ) )
-            {
-                BOSE_DEBUG( s_logger, "The primary network is currently up." );
-            }
-            else
-            {
-                BOSE_DEBUG( s_logger, "The primary network is currently down." );
-            }
-        }
-        else
-        {
-            BOSE_DEBUG( s_logger, "The primary network is in an unknown state." );
+            BOSE_VERBOSE( s_logger, "Interface Index   : %d ", index );
+            BOSE_VERBOSE( s_logger, "Interface MAC     : %s ", interfaceMacString.c_str( ) );
+            BOSE_VERBOSE( s_logger, "Interface Name    : %s ", interfaceNameString.c_str( ) );
+            BOSE_VERBOSE( s_logger, "Network State     : %s ", networkStateString.c_str( ) );
+            BOSE_VERBOSE( s_logger, "Network Type      : %s ", networkTypeString.c_str( ) );
+            BOSE_VERBOSE( s_logger, "IP Address        : %s ", ipAddressString.c_str( ) );
+            BOSE_VERBOSE( s_logger, "Broadcast Address : %s ", broadcastString.c_str( ) );
+            BOSE_VERBOSE( s_logger, "Subnet Mask       : %s ", subnetMaskString.c_str( ) );
+            BOSE_VERBOSE( s_logger, "Gateway Address   : %s ", gatewayAddressString.c_str( ) );
+            BOSE_VERBOSE( s_logger, "Primary DNS       : %s ", primaryDnsString.c_str( ) );
+            BOSE_VERBOSE( s_logger, "Secondary DNS     : %s ", secondaryDnsString.c_str( ) );
+            BOSE_VERBOSE( s_logger, " " );
         }
 
         SendMessage( productMessage );
@@ -441,24 +378,26 @@ void ProductNetworkManager::GetEntireNetworkStatus( const NetManager::Protobuf::
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  ProductNetworkManager::GetWirelessNetworkProfiles
+/// @name  ProductNetworkManager::HandleWiFiProfiles
 ///
 /// @brief This method processes the wireless network profiles received, and will send a
 ///        ProductMessage to notify the Product Controller of the wireless network configured state.
 ///
-/// @param wirelessStatus This class corresponds to a Google Protocol Buffer that contains
-///                       information on the current available wireless network profiles.
+/// @param NetManager::Protobuf::WiFiProfiles& wirelessStatus This argument is a Google Protocol
+///                                                           Buffer that contains information on
+///                                                           the currently available wireless
+///                                                           network profiles.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductNetworkManager::GetWirelessNetworkProfiles( const NetManager::Protobuf::WiFiProfiles&
-                                                        wirelessProfiles )
+void ProductNetworkManager::HandleWiFiProfiles( const NetManager::Protobuf::WiFiProfiles&
+                                                wirelessProfiles )
 {
     auto wirelessProfileSize = wirelessProfiles.profiles_size( );
 
     if( wirelessProfileSize <= 0 )
     {
         BOSE_DEBUG( s_logger, "----------------- Product Network Manager ------------------" );
-        BOSE_DEBUG( s_logger, "No wireless networks are currently available." );
+        BOSE_DEBUG( s_logger, "No wireless networks are currently configured." );
     }
     else
     {
@@ -466,18 +405,14 @@ void ProductNetworkManager::GetWirelessNetworkProfiles( const NetManager::Protob
         BOSE_DEBUG( s_logger, "There are %d wireless networks currently available.", wirelessProfileSize );
         BOSE_DEBUG( s_logger, " " );
 
-        int  index;
-        std::string WirlessSsidString( "Unknown" );
-        std::string WirlessSecurityString( "Unknown" );
-
         ProductMessage productMessage;
         productMessage.mutable_wirelessstatus( )->set_configured( false );
         productMessage.mutable_wirelessstatus( )->set_frequencykhz( 0 );
 
-        for( index = 0; index < wirelessProfileSize; index++ )
+        for( int index = 0; index < wirelessProfileSize; index++ )
         {
-            WirlessSsidString.assign( "Unknown" );
-            WirlessSecurityString.assign( "Unknown" );
+            std::string WirlessSsidString( "Unknown" );
+            std::string WirlessSecurityString( "Unknown" );
 
             if( wirelessProfiles.profiles( index ).has_ssid( ) )
             {
@@ -491,48 +426,42 @@ void ProductNetworkManager::GetWirelessNetworkProfiles( const NetManager::Protob
                 WirlessSecurityString.assign( wirelessProfiles.profiles( index ).security( ) );
             }
 
-            BOSE_DEBUG( s_logger, "Wireless Index    : %d ", index );
-            BOSE_DEBUG( s_logger, "Wireless SSID     : %s ", WirlessSsidString.c_str( ) );
-            BOSE_DEBUG( s_logger, "Wireless Security : %s ", WirlessSecurityString.c_str( ) );
-            BOSE_DEBUG( s_logger, " " );
+            BOSE_VERBOSE( s_logger, "Wireless Index    : %d ", index );
+            BOSE_VERBOSE( s_logger, "Wireless SSID     : %s ", WirlessSsidString.c_str( ) );
+            BOSE_VERBOSE( s_logger, "Wireless Security : %s ", WirlessSecurityString.c_str( ) );
+            BOSE_VERBOSE( s_logger, " " );
         }
 
         ///
         /// If a configured wireless network is available, send a message to the Product Controller.
-        /// Otherwise, do not send a message, since a wired Ethernet network may already be
-        /// configured and available.
+        /// Otherwise, do not send a network unconfigured message, since a wired Ethernet network
+        /// may already be configured and connected.
         ///
         if( productMessage.mutable_wirelessstatus( )->configured( ) )
         {
-            BOSE_DEBUG( s_logger, "A configured wireless network is currently available." );
             SendMessage( productMessage );
-        }
-        else
-        {
-            BOSE_DEBUG( s_logger, "No configured wireless network is currently available." );
         }
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  ProductNetworkManager::GetWirelessNetworkProfiles
+/// @name  ProductNetworkManager::HandleWiFiStatus
 ///
-/// @brief This method processes the wireless network profiles received, and will send a
-///        ProductMessage to notify the Product Controller of the wireless network configured state.
+/// @brief This method processes the WiFi status received, and will send a ProductMessage to
+///        notify the Product Controller of a WiFi network configured state if configured.
 ///
-/// @param wirelessStatus This class corresponds to a Google Protocol Buffer that contains
-///                       information on the current available wireless networks.
+/// @param NetManager::Protobuf::WiFiProfiles& wirelessStatus This argument is a Google Protocol
+///                                                           Buffer that contains information on
+///                                                           the currently available wireless
+///                                                           networks.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductNetworkManager::GetWirelessNetworkStatus( const NetManager::Protobuf::WiFiStatus&
-                                                      wirelessStatus )
+void ProductNetworkManager::HandleWiFiStatus( const NetManager::Protobuf::WiFiStatus& wirelessStatus )
 {
     ///
     /// Only process the wireless network status if it has an SSID, which indicates that it is
-    /// configurable. In this case, record the frequency for sending frequency information from the
-    /// Product Controller to the LPM to avoid any frequency interruption during a speaker Adapt IQ
-    /// process.
+    /// configurable. Send the frequency to the LPM hardware if available.
     ///
     std::string wirlessSsidString( "Unknown" );
     std::string wirlessStateString( "Unknown" );
@@ -540,8 +469,13 @@ void ProductNetworkManager::GetWirelessNetworkStatus( const NetManager::Protobuf
     std::string wirlessSignalDbm( "Unknown" );
 
     ProductMessage productMessage;
-    productMessage.mutable_wirelessstatus( )->set_configured( false );
-    productMessage.mutable_wirelessstatus( )->set_frequencykhz( 0 );
+    productMessage.mutable_wirelessstatus( )->set_configured( wirelessStatus.has_ssid( ) );
+
+    if( wirelessStatus.has_frequencykhz( ) )
+    {
+        wirlessFrequencyInKhz.assign( std::to_string( wirelessStatus.frequencykhz( ) ) );
+        productMessage.mutable_wirelessstatus( )->set_frequencykhz( wirelessStatus.frequencykhz( ) );
+    }
 
     if( wirelessStatus.has_ssid( ) )
     {
@@ -551,75 +485,47 @@ void ProductNetworkManager::GetWirelessNetworkStatus( const NetManager::Protobuf
 
     if( wirelessStatus.has_state( ) )
     {
-        switch( wirelessStatus.state( ) )
-        {
-        case NetManager::Protobuf::WiFiStationState::WIFI_STATION_DISCONNECTED:
-            wirlessStateString.assign( "Disconnected" );
-            break;
-        case NetManager::Protobuf::WiFiStationState::WIFI_STATION_CONNECTING:
-            wirlessStateString.assign( "Connecting" );
-            break;
-        case NetManager::Protobuf::WiFiStationState::WIFI_STATION_CONNECTED:
-            wirlessStateString.assign( "Connected" );
-            break;
-        case NetManager::Protobuf::WiFiStationState::WIFI_STATION_FAILED_WRONG_PASSWORD:
-            wirlessStateString.assign( "Wrong Password" );
-            break;
-        case NetManager::Protobuf::WiFiStationState::WIFI_STATION_FAILED_TIMEOUT:
-            wirlessStateString.assign( "Timed Out" );
-            break;
-        case NetManager::Protobuf::WiFiStationState::WIFI_STATION_FAILED_REJECTED:
-            wirlessStateString.assign( "Failed" );
-            break;
-        default:
-            break;
-        }
+        wirlessStateString.assign( WiFiStationState_Name( wirelessStatus.state( ) ) );
     }
 
-    if( wirelessStatus.has_frequencykhz( ) )
-    {
-        wirlessFrequencyInKhz.assign( std::to_string( wirelessStatus.frequencykhz( ) ) );
-        productMessage.mutable_wirelessstatus( )->set_frequencykhz( wirelessStatus.frequencykhz( ) );
-    }
 
     if( wirelessStatus.has_signaldbm( ) )
     {
         wirlessSignalDbm.assign( std::to_string( wirelessStatus.signaldbm( ) ) );
     }
 
-    BOSE_DEBUG( s_logger, "----------------- Product Network Manager ------------------" );
-    BOSE_DEBUG( s_logger, "The current wireless network has the following information:" );
-    BOSE_DEBUG( s_logger, " " );
-    BOSE_DEBUG( s_logger, "Wireless SSID  : %s ", wirlessSsidString.c_str( ) );
-    BOSE_DEBUG( s_logger, "Wireless State : %s ", wirlessStateString.c_str( ) );
-    BOSE_DEBUG( s_logger, "Frequency kHz  : %s ", wirlessFrequencyInKhz.c_str( ) );
-    BOSE_DEBUG( s_logger, "Signal DBM     : %s ", wirlessSignalDbm.c_str( ) );
-    BOSE_DEBUG( s_logger, " " );
+    BOSE_VERBOSE( s_logger, "----------------- Product Network Manager ------------------" );
+    BOSE_VERBOSE( s_logger, "The current wireless network has the following information:" );
+    BOSE_VERBOSE( s_logger, " " );
+    BOSE_VERBOSE( s_logger, "Wireless SSID  : %s ", wirlessSsidString.c_str( ) );
+    BOSE_VERBOSE( s_logger, "Wireless State : %s ", wirlessStateString.c_str( ) );
+    BOSE_VERBOSE( s_logger, "Frequency kHz  : %s ", wirlessFrequencyInKhz.c_str( ) );
+    BOSE_VERBOSE( s_logger, "Signal DBM     : %s ", wirlessSignalDbm.c_str( ) );
+    BOSE_VERBOSE( s_logger, " " );
 
     if( productMessage.mutable_wirelessstatus( )->configured( ) )
     {
-        BOSE_DEBUG( s_logger, "A configured wireless network is currently available." );
         SendMessage( productMessage );
     }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  ProductNetworkManager::HandleMessage
+/// @name  ProductNetworkManager::SendMessage
 ///
-/// @brief ProductNetworkManager::HandleMessage
+/// @brief This method sends a ProductMessage Protocol Buffer to the product controller.
 ///
-/// @param message
+/// @param ProductMessage& message
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////
 void ProductNetworkManager::SendMessage( ProductMessage& message )
 {
-    IL::BreakThread( std::bind( m_ProductNotify, message ), m_mainTask );
+    IL::BreakThread( std::bind( m_ProductNotify, message ), m_ProductTask );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductNetworkManager::Stop
+/// @name ProductNetworkManager::Stop
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductNetworkManager::Stop( void )
@@ -628,7 +534,7 @@ void ProductNetworkManager::Stop( void )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                               End of ProductApp Namespace                                    ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 

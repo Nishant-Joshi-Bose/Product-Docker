@@ -7,7 +7,7 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
+/// @date      10/24/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -27,6 +27,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "DPrint.h"
+#include "Utilities.h"
 #include "CustomProductControllerStatePlaying.h"
 #include "ProductControllerHsm.h"
 #include "ProductControllerState.h"
@@ -38,14 +39,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following declares a DPrint class type object and a standard string for logging information
-/// in this source code file.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static DPrint s_logger( "Product" );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -72,25 +65,24 @@ CustomProductControllerStatePlaying::CustomProductControllerStatePlaying
     : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
       m_productController( productController )
 {
-    BOSE_DEBUG( s_logger, "The product playing state is being constructed." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlaying is being constructed." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief CustomProductControllerStatePlaying::HandleStateEnter
 ///
+/// @todo  A transition state may need to be added at this point to ensure that the power state
+///        change occurs and to handle any error conditions.
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlaying::HandleStateEnter( )
 {
-    BOSE_DEBUG( s_logger, "The product playing state is being entered." );
-    BOSE_DEBUG( s_logger, "An attempt to set to full power is being made." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlaying is being entered." );
 
-    ProductHardwareInterface* HardwareInterface = m_productController.GetHardwareInterface( );
+    m_productController.GetHardwareInterface( )->RequestPowerStateFull( );
 
-    if( HardwareInterface != nullptr )
-    {
-        HardwareInterface->RequestPowerStateFull( );
-    }
+    BOSE_VERBOSE( s_logger, "An attempt to set to full power is being made." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,7 +92,7 @@ void CustomProductControllerStatePlaying::HandleStateEnter( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlaying::HandleStateStart( )
 {
-    BOSE_DEBUG( s_logger, "The product playing state is being started." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlaying is being started." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,14 +102,32 @@ void CustomProductControllerStatePlaying::HandleStateStart( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlaying::HandleStateExit( )
 {
-    BOSE_DEBUG( s_logger, "The product playing state is being exited." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlaying is being exited." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///
+/// @brief  CustomProductControllerStatePlaying::HandlePowerState
+///
+/// @return This method returns a true Boolean value indicating that it has handled the power
+///         state changed and no futher processing will be required by any of its superstates.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlaying::HandlePowerState( )
+{
+    BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                  "CustomProductControllerStatePlaying",
+                  "CustomProductControllerStatePlayable" );
+    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE );
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

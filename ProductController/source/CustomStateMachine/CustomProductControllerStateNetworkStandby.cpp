@@ -7,7 +7,7 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
+/// @date      10/24/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -27,6 +27,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "DPrint.h"
+#include "Utilities.h"
 #include "ProductControllerHsm.h"
 #include "ProductHardwareInterface.h"
 #include "ProfessorProductController.h"
@@ -37,14 +38,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following declares a DPrint class type object and a standard string for logging information
-/// in this source code file.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static DPrint s_logger( "Product" );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -72,25 +65,24 @@ CustomProductControllerStateNetworkStandby::CustomProductControllerStateNetworkS
     : ProductControllerStateNetworkStandby( hsm, pSuperState, productController, stateId, name ),
       m_productController( productController )
 {
-    BOSE_DEBUG( s_logger, "The product network standby state is being constructed." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandby is being constructed." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief CustomProductControllerStateNetworkStandby::HandleStateEnter
 ///
+/// @todo  A transition state may need to be added at this point to ensure that the power state
+///        change occurs and to handle any error conditions.
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateNetworkStandby::HandleStateEnter()
 {
-    BOSE_DEBUG( s_logger, "The product network standby state is being entered." );
-    BOSE_DEBUG( s_logger, "An attempt to set a standby power state is being made." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandby is being entered." );
 
-    ProductHardwareInterface* HardwareInterface = m_productController.GetHardwareInterface( );
+    m_productController.GetHardwareInterface( )->RequestPowerStateStandby( );
 
-    if( HardwareInterface != nullptr )
-    {
-        HardwareInterface->RequestPowerStateStandby( );
-    }
+    BOSE_VERBOSE( s_logger, "An attempt to set a standby power state is being made." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,18 +92,22 @@ void CustomProductControllerStateNetworkStandby::HandleStateEnter()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateNetworkStandby::HandleStateStart()
 {
-    BOSE_DEBUG( s_logger, "The product network standby state is being started." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandby is being started." );
 
-    bool networkConfigured = m_productController.IsNetworkConfigured( );
+    auto const& networkConfigured = m_productController.IsNetworkConfigured( );
 
     if( networkConfigured )
     {
-        BOSE_DEBUG( s_logger, "The product network standby state is changing to a configured state." );
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      "CustomProductControllerStateNetworkStandby",
+                      "CustomProductControllerStateNetworkStandbyUnconfigured" );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED );
     }
     else
     {
-        BOSE_DEBUG( s_logger, "The product network standby state is changing to an unconfigured state." );
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      "CustomProductControllerStateNetworkStandby",
+                      "CustomProductControllerStateNetworkStandbyConfigured" );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
     }
 }
@@ -123,7 +119,7 @@ void CustomProductControllerStateNetworkStandby::HandleStateStart()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateNetworkStandby::HandleStateExit()
 {
-    BOSE_DEBUG( s_logger, "The product network standby state is being exited." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandby is being exited." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -132,17 +128,19 @@ void CustomProductControllerStateNetworkStandby::HandleStateExit()
 ///
 /// @param  bool active
 ///
-/// @return This method returns a true Boolean value indicating that it has handled the voice
+/// @return This method returns a true Boolean value indicating that it has handled the autowake
 ///         state change and no futher processing will be required by any of its superstates.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateNetworkStandby::HandleAutowakeStatus( bool active )
 {
-    BOSE_DEBUG( s_logger, "The product network standby state is handling a change in autowake status." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandby is handling the autowake status." );
 
     if( active )
     {
-        BOSE_DEBUG( s_logger, "The product network standby state is changing to an idle state." );
+        BOSE_VERBOSE( s_logger, "%s is changing %s.",
+                      "CustomProductControllerStateNetworkStandby",
+                      "CustomProductControllerStateIdle" );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
     }
 
@@ -150,10 +148,10 @@ bool CustomProductControllerStateNetworkStandby::HandleAutowakeStatus( bool acti
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

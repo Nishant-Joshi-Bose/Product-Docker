@@ -7,7 +7,14 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
+/// @date      10/24/2017
+///
+/// @todo      There are two timers to consider. Four hours for no user action and 20 minutes for
+///            no audio being rendered, which are handled by this state and the custom state
+///            CustomProductControllerStatePlayingInactive. There is the possibility where audio is
+///            not playing and in this state, where audio is simply playing packets comprised of all
+///            0s. This may need to be discussed with the Audio Path team to determine how to fully
+///            implement this functionality.
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -27,7 +34,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "DPrint.h"
-#include "CustomProductControllerState.h"
+#include "Utilities.h"
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
 #include "ProductControllerState.h"
@@ -44,17 +51,8 @@ namespace ProductApp
 ///            Constant Definitions
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr const uint32_t PLAYING_INACTIVE_MILLISECOND_TIMEOUT_START = ( ( ( 4 * 60 ) * 60 ) * 1000 );
-constexpr const uint32_t PLAYING_INACTIVE_MILLISECOND_TIMEOUT_RETRY = ( 0 );
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following declares a DPrint class type object and a standard string for logging information
-/// in this source code file.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static DPrint s_logger( "Product" );
+constexpr uint32_t PLAYING_INACTIVE_MILLISECOND_TIMEOUT_START = ( ( 4 * 60 ) * 60 ) * 1000;
+constexpr uint32_t PLAYING_INACTIVE_MILLISECOND_TIMEOUT_RETRY = 0;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -83,7 +81,7 @@ CustomProductControllerStatePlayingActive::CustomProductControllerStatePlayingAc
       m_productController( productController ),
       m_timer( APTimer::Create( m_productController.GetTask( ), "PlayingInactiveTimer" ) )
 {
-    BOSE_DEBUG( s_logger, "The product playing active state is being constructed." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayingActive is being constructed." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -93,11 +91,12 @@ CustomProductControllerStatePlayingActive::CustomProductControllerStatePlayingAc
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlayingActive::HandleStateEnter( )
 {
-    BOSE_DEBUG( s_logger, "The product playing active state is being entered." );
-    BOSE_DEBUG( s_logger, "A timer for using inactivity will be set to expire in 4 hours." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayingActive is being entered." );
+    BOSE_VERBOSE( s_logger, "A timer for user inactivity will be set to expire in %d minutes.",
+                  PLAYING_INACTIVE_MILLISECOND_TIMEOUT_START / 60000 );
 
     m_timer->SetTimeouts( PLAYING_INACTIVE_MILLISECOND_TIMEOUT_START,
-                          PLAYING_INACTIVE_MILLISECOND_TIMEOUT_RETRY  );
+                          PLAYING_INACTIVE_MILLISECOND_TIMEOUT_RETRY );
 
     m_timer->Start( std::bind( &CustomProductControllerStatePlayingActive::HandleTimeOut,
                                this ) );
@@ -110,8 +109,8 @@ void CustomProductControllerStatePlayingActive::HandleStateEnter( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlayingActive::HandleStateStart( )
 {
-    BOSE_DEBUG( s_logger, "The product playing active state is being started." );
-    BOSE_DEBUG( s_logger, "A playback will be initiated at this point when supported." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayingActive is being started." );
+    BOSE_VERBOSE( s_logger, "A playback will be initiated at this point when supported." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,8 +120,8 @@ void CustomProductControllerStatePlayingActive::HandleStateStart( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlayingActive::HandleStateExit( )
 {
-    BOSE_DEBUG( s_logger, "The product playing active state is being exited." );
-    BOSE_DEBUG( s_logger, "The timer will be stopped." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayingActive is being exited." );
+    BOSE_VERBOSE( s_logger, "The timer will be stopped." );
 
     m_timer->Stop( );
 }
@@ -134,12 +133,14 @@ void CustomProductControllerStatePlayingActive::HandleStateExit( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlayingActive::HandleTimeOut( void )
 {
-      BOSE_DEBUG( s_logger, "A time out in the product playing active state has occurred." );
-      BOSE_DEBUG( s_logger, "An attempt to set the device to a playable state will be made." );
+    BOSE_VERBOSE( s_logger, "A time out in CustomProductControllerStatePlayingActive has occurred." );
 
-      m_timer->Stop( );
+    m_timer->Stop( );
 
-      ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE );
+    BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                  "CustomProductControllerStatePlayingActive",
+                  "CustomProductControllerStatePlayable" );
+    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -153,27 +154,28 @@ void CustomProductControllerStatePlayingActive::HandleTimeOut( void )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlayingActive::
-     HandlePlaybackRequest( ProductPlaybackRequest_ProductPlaybackState state )
+HandlePlaybackRequest( ProductPlaybackRequest_ProductPlaybackState state )
 {
-    BOSE_DEBUG( s_logger, "The product playing active state is handling a playback request." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayingActive is handling a playback request." );
 
     if( state == ProductPlaybackRequest_ProductPlaybackState_Play )
     {
-        BOSE_DEBUG( s_logger, "The product playing active state is not changing state." );
-        BOSE_DEBUG( s_logger, "A new playback play request will be initiated when supported." );
+        BOSE_VERBOSE( s_logger, "A new playback play request will be initiated when supported." );
     }
     else if( state == ProductPlaybackRequest_ProductPlaybackState_Pause )
     {
-        BOSE_DEBUG( s_logger, "The product playing active state is changing to an inactive state." );
-        BOSE_DEBUG( s_logger, "A playback pause event was sent." );
-
+        BOSE_VERBOSE( s_logger, "A playback pause event was sent." );
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      "CustomProductControllerStatePlayingActive",
+                      "CustomProductControllerStatePlayingInactive" );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
     }
     else if( state == ProductPlaybackRequest_ProductPlaybackState_Stop )
     {
-        BOSE_DEBUG( s_logger, "The product playing active state is changing to an inactive state." );
-        BOSE_DEBUG( s_logger, "A playback stop event was sent." );
-
+        BOSE_VERBOSE( s_logger, "A playback stop event was sent." );
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      "CustomProductControllerStatePlayingActive",
+                      "CustomProductControllerStatePlayingInactive" );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
     }
 
@@ -186,31 +188,31 @@ bool CustomProductControllerStatePlayingActive::
 ///
 /// @param  int action
 ///
-/// @return This method returns a true Boolean value indicating that it has handled the key action
-///         and no futher processing will be required by any of its superstates.
+/// @return This method returns a false Boolean value in case processing of the key needs to be
+///         handled by any of the superstates.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlayingActive::HandleKeyAction( int action )
 {
-    BOSE_DEBUG( s_logger, "A key action was sent to the product playing active state." );
-    BOSE_DEBUG( s_logger, "The timer will be stopped and reset based on user activity." );
+    BOSE_VERBOSE( s_logger, "A key action was sent to CustomProductControllerStatePlayingActive." );
+    BOSE_VERBOSE( s_logger, "The timer will be stopped and reset based on user activity." );
 
     m_timer->Stop( );
 
     m_timer->SetTimeouts( PLAYING_INACTIVE_MILLISECOND_TIMEOUT_START,
-                          PLAYING_INACTIVE_MILLISECOND_TIMEOUT_RETRY  );
+                          PLAYING_INACTIVE_MILLISECOND_TIMEOUT_RETRY );
 
     m_timer->Start( std::bind( &CustomProductControllerStatePlayingActive::HandleTimeOut,
                                this ) );
 
-    return true;
+    return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

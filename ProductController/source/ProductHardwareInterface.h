@@ -45,10 +45,11 @@
 #include "LpmClientIF.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                Start of ProductApp Namespace                                 ///
+///                          Start of the Product Application Namespace                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 ///            Included Subclasses
@@ -76,22 +77,23 @@ public:
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @name   ProductHardwareInterface::GetInstance
-    ///
+    ///set
     /// @brief  This static method creates the one and only instance of a ProductHardwareInterface
     ///         object. That only one instance is created in a thread safe way is guaranteed by
     ///         the C++ Version 11 compiler.
     ///
-    /// @param  task [input]         This argument specifies the task in which to run the hardware
-    ///                               interface.
+    /// @param  NotifyTargetTaskIF* task This argument specifies the task in which to run the
+    ///                                  hardware interface.
     ///
-    /// @param  ProductNotifyCallback This argument specifies a callback to send messages back to
-    ///                               the product controller.
+    /// @param  Callback< ProductMessage > ProductNotify This argument specifies a callback to
+    ///                                                  send messages back to the product
+    ///                                                  controller.
     ///
-    /// @return This method returns a reference to a ProductHardwareInterface object.
+    /// @return This method returns a pointer to a ProductHardwareInterface object.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    static ProductHardwareInterface* GetInstance( NotifyTargetTaskIF*        task,
-                                                  Callback< ProductMessage > ProductNotifyCallback );
+    static ProductHardwareInterface* GetInstance( NotifyTargetTaskIF*        ProductTask,
+                                                  Callback< ProductMessage > ProductNotify );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration is used to start and run the hardware manager.
@@ -103,7 +105,7 @@ public:
     /// These methods handle LPM status requests.
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool RequestLpmStatus( Callback< LpmServiceMessages::IpcLpmHealthStatusPayload_t > callback );
-    void HandleLpmStatus( LpmServiceMessages::IpcLpmHealthStatusPayload_t             status );
+    void HandleLpmStatus( LpmServiceMessages::IpcLpmHealthStatusPayload_t              status );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This method is used to set a callback to receive key events from the LPM hardware.
@@ -147,26 +149,26 @@ public:
     void SetBlueToothDeviceName( const std::string&       bluetoothDeviceName );
     bool SendBlueToothDeviceData( const std::string&       bluetoothDeviceName,
                                   const unsigned long long bluetoothMacAddress );
-    bool SendSourceSelection( const IPCSource_t&       sourceSelect );
+    bool SendSourceSelection( const LPM_IPC_SOURCE_ID      sourceSelect );
     bool CECSetPhysicalAddress( const uint32_t cecPhyAddr );
 
 private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief ProductHardwareInterface
+    /// @brief  ProductHardwareInterface
     ///
     /// @brief  The constructor for this class is set to be private. This definition prevents this
     ///         class from being instantiated directly, so that only the static method GetInstance
     ///         to this class can be used to get the one sole instance of it.
     ///
-    /// @param  task
+    /// @param  NotifyTargetTaskIF* ProductTask
     ///
-    /// @param ProductNotifyCallback
+    /// @param Callback< ProductMessage > ProductNotify
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    ProductHardwareInterface( NotifyTargetTaskIF*        task,
-                              Callback< ProductMessage > ProductNotifyCallback );
+    ProductHardwareInterface( NotifyTargetTaskIF*        ProductTask,
+                              Callback< ProductMessage > ProductNotify );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -183,7 +185,7 @@ private:
     /// These declarations store the main task for processing LPM hardware events and requests. It
     /// is passed by the ProductController instance.
     //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF*        m_mainTask      = nullptr;
+    NotifyTargetTaskIF*        m_ProductTask   = nullptr;
     Callback< ProductMessage > m_ProductNotify = nullptr;
     LpmClientIF::LpmClientPtr  m_LpmClient     = nullptr;
 
@@ -206,10 +208,10 @@ private:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                               End of ProductApp Namespace                                    ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

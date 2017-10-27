@@ -7,7 +7,7 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
+/// @date      10/24/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -27,6 +27,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "DPrint.h"
+#include "Utilities.h"
 #include "CustomProductControllerStateOn.h"
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
@@ -37,14 +38,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following declares a DPrint class type object and a standard string for logging information
-/// in this source code file.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static DPrint s_logger( "Product" );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -70,7 +63,7 @@ CustomProductControllerStateOn::CustomProductControllerStateOn( ProductControlle
     : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
       m_productController( productController )
 {
-    BOSE_DEBUG( s_logger, "The product on state is being constructed." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateOn is being constructed." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +73,7 @@ CustomProductControllerStateOn::CustomProductControllerStateOn( ProductControlle
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateOn::HandleStateEnter( )
 {
-    BOSE_DEBUG( s_logger, "The product on state is being entered." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateOn is being entered." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +83,10 @@ void CustomProductControllerStateOn::HandleStateEnter( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateOn::HandleStateStart( )
 {
-    BOSE_DEBUG( s_logger, "The product on state is being started and going to a playable state." );
+    BOSE_VERBOSE( s_logger, "%s is being started and going to %s.",
+                  "CustomProductControllerStateOn",
+                  "CustomProductControllerStatePlayable" );
+
     ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE );
 }
 
@@ -101,33 +97,14 @@ void CustomProductControllerStateOn::HandleStateStart( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateOn::HandleStateExit( )
 {
-    BOSE_DEBUG( s_logger, "The product on state is being exited." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateOn is being exited." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief  CustomProductControllerStateOn::HandlePowerState
-///
-/// @param  bool power
-///
-/// @return This method returns a true Boolean value indicating that it has handled the power
-///         state changed and no futher processing will be required by any of its superstates.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateOn::HandlePowerState( )
-{
-    BOSE_DEBUG( s_logger, "The product on state is changing to a power off state." );
-
-    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_OFF );
-
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

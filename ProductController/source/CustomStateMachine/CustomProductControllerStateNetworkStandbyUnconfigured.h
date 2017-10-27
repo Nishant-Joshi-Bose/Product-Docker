@@ -73,7 +73,7 @@ public:
       Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED,
       const std::string&          name    = "CustomProductControllerStateNetworkStandbyUnconfigured" );
 
-    virtual ~CustomProductControllerStateNetworkStandbyUnconfigured( )
+    ~CustomProductControllerStateNetworkStandbyUnconfigured( ) override
     {
 
     }
@@ -91,28 +91,24 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief This timer is used to monitor the amount of time the device is in this state. It is
-    ///        armed on entry to this state and stopped on exit to this state. If it expires in
-    ///        2 hours, the HandleTimeOut method declared below will be invoked.
+    /// @brief This timer is used to monitor the amount of time the device is in this state.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    APTimerPtr m_timer;
+    std::shared_ptr<APTimer> m_timer;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief This method will be invoked by an expired timer, which is defined above and armed on
-    ///        entry to this state, if the device has remained in a network standby unconfigured
-    ///        state for 2 hours.
+    /// @brief This method will be invoked by the expired timer defined above.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleTimeOut( void );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

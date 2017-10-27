@@ -30,6 +30,8 @@
 #include <thread>
 #include <unistd.h>
 #include "SystemUtils.h"
+#include "Utilities.h"
+#include "KeyActions.h"
 #include "DPrint.h"
 #include "APTask.h"
 #include "BreakThread.h"
@@ -39,7 +41,7 @@
 #include "ProductMessage.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             Start of Product Namespace                                       ///
+///                          Start of the Product Application Namespace                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
@@ -49,7 +51,7 @@ namespace ProductApp
 ///            Constant Definitions
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr const uint32_t PRODUCT_USER_INTERFACE_RETRY_IN_SECONDS = ( 1 );
+constexpr uint32_t PRODUCT_USER_INTERFACE_RETRY_IN_SECONDS = 1;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -66,32 +68,30 @@ typedef CLIClient::CLICmdDescriptor             CommandDescription;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// The following declares a DPrint class type object for logging information in this source code
-/// file.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static DPrint s_logger { "Product" };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProductUserInterface::GetInstance
 ///
 /// @brief  This static method creates the one and only instance of a ProductUserInterface object.
 ///         The C++ Version 11 compiler guarantees that only one instance is created in a thread
 ///         safe way.
 ///
-/// @param  void This method does not take any arguments.
+/// @param  NotifyTargetTaskIF*        ProductTask
+///
+/// @param  Callback< ProductMessage > ProductNotify
+///
+/// @param  ProductHardwareInterface*  HardwareInterface
+///
+/// @param  CliClientMT&               CommandLineInterface
 ///
 /// @return This method returns a pointer to a ProductUserInterface object.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductUserInterface* ProductUserInterface::GetInstance
-( NotifyTargetTaskIF*         mainTask,
+( NotifyTargetTaskIF*         ProductTask,
   Callback< ProductMessage >  ProductNotify,
   ProductHardwareInterface*   HardwareInterface,
   CliClientMT&                CommandLineInterface )
 {
-    static ProductUserInterface* instance = new ProductUserInterface( mainTask,
+    static ProductUserInterface* instance = new ProductUserInterface( ProductTask,
                                                                       ProductNotify,
                                                                       HardwareInterface,
                                                                       CommandLineInterface );
@@ -109,26 +109,28 @@ ProductUserInterface* ProductUserInterface::GetInstance
 ///         private to ensure that only one instance of this class can be created through the class
 ///         GetInstance method.
 ///
-/// @param  mainTask
-/// @param  ProductNotify
-/// @param  HardwareInterface
+/// @param  NotifyTargetTaskIF*        ProductTask
 ///
-/// @return This method does not return anything.
+/// @param  Callback< ProductMessage > ProductNotify
+///
+/// @param  ProductHardwareInterface*  HardwareInterface
+///
+/// @param  CliClientMT&               CommandLineInterface
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductUserInterface::ProductUserInterface( NotifyTargetTaskIF*        mainTask,
+ProductUserInterface::ProductUserInterface( NotifyTargetTaskIF*        ProductTask,
                                             Callback< ProductMessage > ProductNotify,
                                             ProductHardwareInterface*  HardwareInterface,
                                             CliClientMT&               CommandLineInterface )
 
-    : m_mainTask( mainTask ),
+    : m_ProductTask( ProductTask ),
       m_keyEventTask( IL::CreateTask( "ProductMonitorNetworkTask" ) ),
       m_ProductNotify( ProductNotify ),
       m_ProductHardwareInterface( HardwareInterface ),
       m_running( false ),
-      m_KeyHandler( *mainTask, CommandLineInterface, m_keyConfigFileName )
+      m_KeyHandler( *ProductTask, CommandLineInterface, m_keyConfigFileName )
 {
-    return;
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -136,10 +138,6 @@ ProductUserInterface::ProductUserInterface( NotifyTargetTaskIF*        mainTask,
 /// @name   ProductUserInterface::Run
 ///
 /// @brief  This method starts the ProductUserInterface instance.
-///
-/// @param  void This method does not take any arguments.
-///
-/// @return This method does not return anything.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductUserInterface::Run( )
@@ -188,7 +186,7 @@ void ProductUserInterface::RegisterForKeyEvents( void )
     };
 
     auto CallbackForKeyInformation = std::make_shared< AsyncCallback < uint32_t > > ( KeyCallback,
-                                     m_mainTask );
+                                     m_ProductTask );
 
 
     m_KeyHandler.RegisterKeyHandler( CallbackForKeyInformation );
@@ -198,46 +196,9 @@ void ProductUserInterface::RegisterForKeyEvents( void )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductUserInterface::KeyInformationCallBack
+/// @name  ProductUserInterface::HandleKeyEvent
 ///
-/// @param uint32_t keyAction
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductUserInterface::KeyInformationCallBack( const int keyAction )
-{
-    ///
-    /// The key action is sent to the Product Controller state machine. Power on or off key actions
-    /// are to be sent as simple product power type messages, whereas the value of other key actions
-    /// are sent as product key data messages containing the key action value for further
-    /// processing.
-    ///
-    BOSE_DEBUG( s_logger, "A key press has been translated to the action %d.", keyAction );
-
-    if( keyAction == KEY_ACTION_POWER )
-    {
-        ProductMessage productMessage;
-        productMessage.set_power( true );
-
-        IL::BreakThread( std::bind( m_ProductNotify,
-                                    productMessage ),
-                         m_mainTask );
-    }
-    else
-    {
-        ProductMessage productMessage;
-        productMessage.mutable_keydata( )->set_action( keyAction );
-
-        IL::BreakThread( std::bind( m_ProductNotify,
-                                    productMessage ),
-                         m_mainTask );
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief ProductUserInterface::HandleKeyEvent
-///
-/// @param keyEvent
+/// @param LpmServiceMessages::IpcKeyInformation_t keyEvent
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductUserInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInformation_t keyEvent )
@@ -248,33 +209,7 @@ void ProductUserInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInformation
 
     if( keyEvent.has_keyorigin( ) )
     {
-        switch( keyEvent.keyorigin( ) )
-        {
-        case KEY_ORIGIN_CONSOLE_BUTTON:
-            keyOriginString.assign( "CONSOLE_BUTTON" );
-            break;
-        case KEY_ORIGIN_CAPSENSE:
-            keyOriginString.assign( "CAPSENSE" );
-            break;
-        case KEY_ORIGIN_IR:
-            keyOriginString.assign( "IR" );
-            break;
-        case KEY_ORIGIN_RF:
-            keyOriginString.assign( "RF" );
-            break;
-        case KEY_ORIGIN_CEC:
-            keyOriginString.assign( "CEC" );
-            break;
-        case KEY_ORIGIN_NETWORK:
-            keyOriginString.assign( "NETWORK" );
-            break;
-        case KEY_ORIGIN_TAP:
-            keyOriginString.assign( "TAP" );
-            break;
-        default:
-            keyOriginString = "UNKNOWN " + std::to_string( keyEvent.keyorigin( ) );
-            break;
-        }
+        keyOriginString.assign( KeyOrigin_t_Name( keyEvent.keyorigin( ) ) );
     }
     else
     {
@@ -283,18 +218,7 @@ void ProductUserInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInformation
 
     if( keyEvent.has_keystate( ) )
     {
-        switch( keyEvent.keystate( ) )
-        {
-        case KEY_RELEASED:
-            keyStateString.assign( "RELEASED" );
-            break;
-        case KEY_PRESSED:
-            keyStateString.assign( "PRESSED" );
-            break;
-        default:
-            keyStateString = "UNKNOWN " + std::to_string( keyEvent.keystate( ) );
-            break;
-        }
+        keyStateString.assign( KeyState_t_Name( keyEvent.keystate( ) ) );
     }
     else
     {
@@ -323,7 +247,7 @@ void ProductUserInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInformation
     ///
     if( !keyEvent.has_keyorigin( ) || !keyEvent.has_keystate( ) || !keyEvent.has_keyid( ) )
     {
-        BOSE_DEBUG( s_logger, "This event cannot be processed, as it is missing data." );
+        BOSE_ERROR( s_logger, "This event cannot be processed, as it is missing data." );
 
         return;
     }
@@ -338,11 +262,159 @@ void ProductUserInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInformation
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @brief ProductUserInterface::KeyInformationCallBack
+///
+/// @param uint32_t keyAction
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductUserInterface::KeyInformationCallBack( const int keyAction )
+{
+    ///
+    /// The key action is sent to the Product Controller state machine. Power on or off key actions
+    /// are to be sent as simple product power type messages, whereas the value of other key actions
+    /// are sent as product key data messages containing the key action value for further
+    /// processing.
+    ///
+    BOSE_DEBUG( s_logger, "A key press or presses have been translated to the action %d.", keyAction );
+
+    if( keyAction == KEY_ACTION_POWER )
+    {
+        ProductMessage productMessage;
+        productMessage.set_power( true );
+
+        IL::BreakThread( std::bind( m_ProductNotify,
+                                    productMessage ),
+                         m_ProductTask );
+    }
+    else
+    {
+        ProductMessage productMessage;
+        productMessage.mutable_keydata( )->set_action( keyAction );
+
+        IL::BreakThread( std::bind( m_ProductNotify,
+                                    productMessage ),
+                         m_ProductTask );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  ProductUserInterface::GetKeyString
+///
+/// @param  const KEY_ACTION keyAction
+///
+/// @return This method return a std::string associated with the key action.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string ProductUserInterface::GetKeyString( const KEY_ACTION keyAction )
+{
+    static std::string keyString( "UNKNOWN" );
+
+    switch( keyAction )
+    {
+    case KEY_ACTION_POWER:
+        keyString.assign( "KEY_ACTION_POWER" );
+        break;
+
+    case KEY_ACTION_SOURCE:
+        keyString.assign( "KEY_ACTION_SOURCE" );
+        break;
+
+    case KEY_ACTION_PRESET_1:
+        keyString.assign( "KEY_ACTION_PRESET_1" );
+        break;
+
+    case KEY_ACTION_PRESET_2:
+        keyString.assign( "KEY_ACTION_PRESET_2" );
+        break;
+
+    case KEY_ACTION_PRESET_3:
+        keyString.assign( "KEY_ACTION_PRESET_3" );
+        break;
+
+    case KEY_ACTION_PRESET_4:
+        keyString.assign( "KEY_ACTION_PRESET_4" );
+        break;
+
+    case KEY_ACTION_PRESET_5:
+        keyString.assign( "KEY_ACTION_PRESET_5" );
+        break;
+
+    case KEY_ACTION_PRESET_6:
+        keyString.assign( "KEY_ACTION_PRESET_6" );
+        break;
+
+    case KEY_ACTION_VOLUME_UP:
+        keyString.assign( "KEY_ACTION_VOLUME_UP" );
+        break;
+
+    case KEY_ACTION_VOLUME_DOWN:
+        keyString.assign( "KEY_ACTION_VOLUME_DOWN" );
+        break;
+
+    case KEY_ACTION_PLAY_PAUSE:
+        keyString.assign( "KEY_ACTION_PLAY_PAUSE" );
+        break;
+
+    case KEY_ACTION_SKIP_FORWARD:
+        keyString.assign( "KEY_ACTION_SKIP_FORWARD" );
+        break;
+
+    case KEY_ACTION_SKIP_BACK:
+        keyString.assign( "KEY_ACTION_SKIP_BACK" );
+        break;
+
+    case KEY_ACTION_MUTE:
+        keyString.assign( "KEY_ACTION_MUTE" );
+        break;
+
+    case KEY_ACTION_SOUNDTOUCH:
+        keyString.assign( "KEY_ACTION_SOUNDTOUCH" );
+        break;
+
+    case KEY_ACTION_CONNECT:
+        keyString.assign( "KEY_ACTION_CONNECT" );
+        break;
+
+    case KEY_ACTION_ACTION:
+        keyString.assign( "KEY_ACTION_ACTION" );
+        break;
+
+    case KEY_ACTION_TV:
+        keyString.assign( "KEY_ACTION_TV" );
+        break;
+
+    case KEY_ACTION_THUMB_UP:
+        keyString.assign( "KEY_ACTION_THUMB_UP" );
+        break;
+
+    case KEY_ACTION_THUMB_DOWN:
+        keyString.assign( "KEY_ACTION_THUMB_DOWN" );
+        break;
+
+    case KEY_ACTION_FACTORY_DEFAULT:
+        keyString.assign( "KEY_ACTION_FACTORY_DEFAULT" );
+        break;
+
+    case KEY_ACTION_WIFI_OFF:
+        keyString.assign( "KEY_ACTION_WIFI_OFF" );
+        break;
+
+    case KEY_ACTION_AP_SETUP:
+        keyString.assign( "KEY_ACTION_AP_SETUP" );
+        break;
+
+    case KEY_ACTION_PAIR_SPEAKERS:
+        keyString.assign( "KEY_ACTION_PAIR_SPEAKERS" );
+        break;
+    }
+
+    return keyString;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProductUserInterface::Stop
-///
-/// @param  void This method does not take any arguments.
-///
-/// @return This method does not return anything.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductUserInterface::Stop( )
@@ -353,7 +425,7 @@ void ProductUserInterface::Stop( )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                               End of ProductApp Namespace                                    ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 

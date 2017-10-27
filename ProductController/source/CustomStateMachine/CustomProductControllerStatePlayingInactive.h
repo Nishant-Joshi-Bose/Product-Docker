@@ -73,7 +73,7 @@ public:
       Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE,
       const std::string&          name    = "CustomProductControllerStatePlayingInactive" );
 
-    virtual ~CustomProductControllerStatePlayingInactive()
+    ~CustomProductControllerStatePlayingInactive( ) override
     {
 
     }
@@ -91,28 +91,24 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief This timer is used to monitor the amount of time the device is in this state. It is
-    ///        armed on entry to this state and stopped on exit to this state. If it expires in
-    ///        20 minutes, the HandleTimeOut method declared below will be invoked.
+    /// @brief This timer is used to monitor the amount of time the device is in this state.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    APTimerPtr m_timer;
+    std::shared_ptr<APTimer> m_timer;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief This method will be invoked by an expired timer, which is defined above and armed on
-    ///        entry to this state, if the device has remained in a inactive playing state for 20
-    ///        minutes with no active audio or user interaction through a key action.
+    /// @brief This method will be invoked by the timer defined above when it expires.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleTimeOut( void );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

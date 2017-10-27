@@ -46,7 +46,7 @@
 #include "ProductMessage.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                         Start of Product Application Namespace                               ///
+///                          Start of the Product Application Namespace                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
@@ -94,7 +94,7 @@ public:
     ///         object. That only one instance is created in a thread safe way is guaranteed by
     ///         the C++ Version 11 compiler.
     ///
-    /// @param  NotifyTargetTaskIF* mainTask
+    /// @param  NotifyTargetTaskIF* ProductTask
     ///
     /// @param  Callback< ProductMessage > ProductNotify
     ///
@@ -102,7 +102,7 @@ public:
     ///
     /// @return This method returns a reference to a ProductCommandLine object.
     //////////////////////////////////////////////////////////////////////////////////////////////
-    static ProductCommandLine* GetInstance( NotifyTargetTaskIF*        mainTask,
+    static ProductCommandLine* GetInstance( NotifyTargetTaskIF*        ProductTask,
                                             Callback< ProductMessage > ProductNotify,
                                             ProductHardwareInterface*  HardwareInterface );
 
@@ -125,14 +125,14 @@ private:
     ///         class from being instantiated directly, so that only the static method GetInstance
     ///         to this class can be used to get the one sole instance of it.
     ///
-    /// @param  NotifyTargetTaskIF* mainTask
+    /// @param  NotifyTargetTaskIF* ProductTask
     ///
     /// @param  Callback< ProductMessage > ProductNotify
     ///
     /// @param  ProductHardwareInterface* HardwareInterface
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductCommandLine( NotifyTargetTaskIF*        mainTask,
+    ProductCommandLine( NotifyTargetTaskIF*        ProductTask,
                         Callback< ProductMessage > ProductNotify,
                         ProductHardwareInterface*  HardwareInterface );
 
@@ -156,10 +156,10 @@ private:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following member stores a pointer to the main task for the command line.
+    /// @brief The following member stores a pointer to the task for the command line.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF* m_task;
+    NotifyTargetTaskIF* m_ProductTask;
 
     std::vector< CommandPointer > CommandsList( void );
 
@@ -167,13 +167,10 @@ private:
                         const std::list< std::string >& arguments,
                         std::string&                    response ) const;
 
-    void ProcessCommand( const std::list< std::string >& arguments,
-                         std::string&                    response ) const;
-
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following subclass instances are used to interface with the product controller
-    ///        state machine and the lower level hardware.
+    ///        and the lower level hardware.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     Callback< ProductMessage >  m_ProductNotify;
@@ -181,7 +178,7 @@ private:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                         End of Product Application Namespace                                 ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 

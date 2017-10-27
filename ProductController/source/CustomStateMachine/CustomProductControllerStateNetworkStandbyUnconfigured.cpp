@@ -7,7 +7,7 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
+/// @date      10/24/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -27,7 +27,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "DPrint.h"
-#include "APTimer.h"
+#include "Utilities.h"
 #include "ProductControllerHsm.h"
 #include "ProductHardwareInterface.h"
 #include "CustomProductControllerStateNetworkStandbyUnconfigured.h"
@@ -44,16 +44,8 @@ namespace ProductApp
 ///            Constant Definitions
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr const uint32_t NETWORK_UNCONFIGURED_MILLISECOND_TIMEOUT_START = ( ( 2 * ( 60 * 60 ) ) * 1000 );
-constexpr const uint32_t NETWORK_UNCONFIGURED_MILLISECOND_TIMEOUT_RETRY = ( 0 );
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following declares a DPrint class type object and a standard string for logging information
-/// in this source code file.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static DPrint s_logger( "Product" );
+constexpr uint32_t NETWORK_UNCONFIGURED_MILLISECOND_TIMEOUT_START = ( 2 * ( 60 * 60 ) ) * 1000;
+constexpr uint32_t NETWORK_UNCONFIGURED_MILLISECOND_TIMEOUT_RETRY =   0 ;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -85,7 +77,7 @@ CustomProductControllerStateNetworkStandbyUnconfigured
       m_timer( APTimer::Create( m_productController.GetTask( ), "NetworkUnconfiguredTimer" ) )
 
 {
-    BOSE_DEBUG( s_logger, "The product network standby unconfigured state is being constructed." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyUnconfigured is being constructed." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,11 +87,12 @@ CustomProductControllerStateNetworkStandbyUnconfigured
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateNetworkStandbyUnconfigured::HandleStateEnter()
 {
-    BOSE_DEBUG( s_logger, "The product network standby unconfigured state is being entered." );
-    BOSE_DEBUG( s_logger, "The timer is set to expire in 2 hours unless the network configured." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyUnconfigured is being entered." );
+    BOSE_VERBOSE( s_logger, "The timer is set to expire in %d minutes unless the network is configured.",
+                  NETWORK_UNCONFIGURED_MILLISECOND_TIMEOUT_START / 60000 );
 
     m_timer->SetTimeouts( NETWORK_UNCONFIGURED_MILLISECOND_TIMEOUT_START,
-                          NETWORK_UNCONFIGURED_MILLISECOND_TIMEOUT_RETRY  );
+                          NETWORK_UNCONFIGURED_MILLISECOND_TIMEOUT_RETRY );
 
     m_timer->Start( std::bind( &CustomProductControllerStateNetworkStandbyUnconfigured::HandleTimeOut,
                                this ) );
@@ -112,7 +105,7 @@ void CustomProductControllerStateNetworkStandbyUnconfigured::HandleStateEnter()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateNetworkStandbyUnconfigured::HandleStateStart()
 {
-    BOSE_DEBUG( s_logger, "The product network standby unconfigured state is being started." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyUnconfigured is being started." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,8 +115,8 @@ void CustomProductControllerStateNetworkStandbyUnconfigured::HandleStateStart()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateNetworkStandbyUnconfigured::HandleStateExit()
 {
-    BOSE_DEBUG( s_logger, "The product network standby unconfigured state is being exited." );
-    BOSE_DEBUG( s_logger, "The timer will be stopped." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyUnconfigured is being exited." );
+    BOSE_VERBOSE( s_logger, "The timer will be stopped." );
 
     m_timer->Stop( );
 }
@@ -133,14 +126,14 @@ void CustomProductControllerStateNetworkStandbyUnconfigured::HandleStateExit()
 /// @brief CustomProductControllerStateNetworkStandbyUnconfigured::HandleTimeOut
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
- void CustomProductControllerStateNetworkStandbyUnconfigured::HandleTimeOut( void )
- {
-      BOSE_DEBUG( s_logger, "A time out in the network standby unconfigured state has occurred." );
-      BOSE_DEBUG( s_logger, "An attempt to set the device to a low power state will be made." );
+void CustomProductControllerStateNetworkStandbyUnconfigured::HandleTimeOut( void )
+{
+    BOSE_VERBOSE( s_logger, "A time out in the network standby unconfigured state has occurred." );
+    BOSE_VERBOSE( s_logger, "An attempt to set the device to a low power state will be made." );
 
-      m_timer->Stop( );
+    m_timer->Stop( );
 
-      ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_OFF );
+    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_LOW_POWER );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -156,37 +149,36 @@ void CustomProductControllerStateNetworkStandbyUnconfigured::HandleStateExit()
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateNetworkStandbyUnconfigured::HandleNetworkState( bool configured,
-                                                                                 bool connected )
+        bool connected )
 {
-    BOSE_DEBUG( s_logger, "The product network standby unconfigured state is handling a network state change." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyUnconfigured is handling a network state change." );
 
-    if( configured and not connected)
+    if( configured and not connected )
     {
-        BOSE_DEBUG( s_logger, "The state is changing to a network standby configured state." );
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      "CustomProductControllerStateNetworkStandbyUnconfigured",
+                      "CustomProductControllerStateNetworkStandbyConfigured" );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED );
-
-        return true;
     }
     else
     {
-        bool networkConnected;
-        bool voiceConfigured;
-
-        networkConnected = connected;
-        voiceConfigured = m_productController.IsVoiceConfigured( );
+        auto const& networkConnected = connected;
+        auto const& voiceConfigured = m_productController.IsVoiceConfigured( );
 
         if( networkConnected and voiceConfigured )
         {
-            BOSE_DEBUG( s_logger, "The product state is changing to an idle state." );
+            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                          "CustomProductControllerStateNetworkStandbyUnconfigured",
+                          "CustomProductControllerStateIdle" );
             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
         }
         else
         {
-            BOSE_DEBUG( s_logger, "The product network standby unconfigured state is not changing." );
+            BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyUnconfigured is not changing." );
         }
-
-        return true;
     }
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -201,32 +193,31 @@ bool CustomProductControllerStateNetworkStandbyUnconfigured::HandleNetworkState(
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateNetworkStandbyUnconfigured::HandleVoiceState( bool configured )
 {
-    BOSE_DEBUG( s_logger, "The product network standby unconfigured state is handling a voice state change." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyUnconfigured is handling a voice state change." );
 
-    bool voiceConfigured;
-    bool networkConnected;
-
-    voiceConfigured = configured;
-    networkConnected = m_productController.IsNetworkConfigured( );
+    auto const& voiceConfigured = configured;
+    auto const& networkConnected = m_productController.IsNetworkConfigured( );
 
     if( voiceConfigured and networkConnected )
     {
-        BOSE_DEBUG( s_logger, "The product state is changing to an idle state." );
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      "CustomProductControllerStateNetworkStandbyUnconfigured",
+                      "CustomProductControllerStateIdle" );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
     }
     else
     {
-        BOSE_DEBUG( s_logger, "The product network standby unconfigured state is not changing." );
+        BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyUnconfigured is not changing state." );
     }
 
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

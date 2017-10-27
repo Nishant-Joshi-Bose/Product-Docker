@@ -70,7 +70,7 @@ public:
                                       Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE,
                                       const std::string&          name    = "CustomProductControllerStateIdle" );
 
-    virtual ~CustomProductControllerStateIdle()
+    ~CustomProductControllerStateIdle( ) override
     {
 
     }
@@ -85,10 +85,10 @@ private:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

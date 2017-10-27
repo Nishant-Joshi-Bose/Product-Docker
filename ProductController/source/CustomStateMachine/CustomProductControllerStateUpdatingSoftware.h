@@ -70,7 +70,7 @@ public:
                                                   Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING,
                                                   const std::string&          name    = "CustomProductControllerStateSoftwareUpdating" );
 
-    virtual ~CustomProductControllerStateUpdatingSoftware( )
+    ~CustomProductControllerStateUpdatingSoftware( ) override
     {
 
     }
@@ -78,10 +78,19 @@ public:
     void HandleStateEnter( ) override;
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
+
+    bool HandleLpmState( bool active )       override;
+    bool HandleCapsState( bool active )      override;
+    bool HandleAudioPathState( bool active ) override;
+    bool HandleSTSSourcesInit( void )        override;
+
+private:
+
+    ProfessorProductController& m_productController;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 

@@ -8,7 +8,7 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
+/// @date      10/24/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -28,24 +28,18 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "DPrint.h"
+#include "Utilities.h"
 #include "CustomProductControllerStateIdleVoiceConfigured.h"
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
 #include "ProductControllerStateIdle.h"
+#include "APTimer.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following declares a DPrint class type object and a standard string for logging information
-/// in this source code file.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static DPrint s_logger( "Product" );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -74,7 +68,7 @@ CustomProductControllerStateIdleVoiceConfigured::CustomProductControllerStateIdl
     : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
       m_productController( productController )
 {
-    BOSE_DEBUG( s_logger, "The product idle voice configured state is being constructed." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceConfigured is being constructed." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,7 +78,7 @@ CustomProductControllerStateIdleVoiceConfigured::CustomProductControllerStateIdl
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateIdleVoiceConfigured::HandleStateEnter( )
 {
-    BOSE_DEBUG( s_logger, "The product idle voice configured state is being entered." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceConfigured is being entered." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -94,7 +88,7 @@ void CustomProductControllerStateIdleVoiceConfigured::HandleStateEnter( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateIdleVoiceConfigured::HandleStateStart( )
 {
-    BOSE_DEBUG( s_logger, "The product idle voice configured state is being started." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceConfigured is being started." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,7 +98,7 @@ void CustomProductControllerStateIdleVoiceConfigured::HandleStateStart( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateIdleVoiceConfigured::HandleStateExit( )
 {
-    BOSE_DEBUG( s_logger, "The product idle voice configured state is being exited." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceConfigured is being exited." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,7 +116,7 @@ void CustomProductControllerStateIdleVoiceConfigured::HandleStateExit( )
 bool CustomProductControllerStateIdleVoiceConfigured::HandleNetworkState( bool configured,
                                                                           bool connected )
 {
-    BOSE_DEBUG( s_logger, "The product idle voice configured state is handling a network state change." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceConfigured is handling a network change." );
 
     ///
     /// If the network is not configured then it must also be unconnected. In these case, change the
@@ -132,15 +126,15 @@ bool CustomProductControllerStateIdleVoiceConfigured::HandleNetworkState( bool c
     {
         if( m_productController.IsAutoWakeEnabled( ) )
         {
-            BOSE_DEBUG( s_logger, "The product idle voice configured state is not changing." );
+            BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceConfigured is not changing." );
         }
         else
         {
-            BOSE_DEBUG( s_logger, "The state is changing to a network standby state." );
+            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                          "CustomProductControllerStateIdleVoiceConfigured",
+                          "CustomProductControllerStateNetworkStandby" );
             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
         }
-
-        return true;
     }
     ///
     /// If the network is unconnected or voice for a Virtual Personal Assistant (VPA) is not
@@ -148,24 +142,23 @@ bool CustomProductControllerStateIdleVoiceConfigured::HandleNetworkState( bool c
     ///
     else
     {
-        bool networkConnected;
-        bool voiceConfigured;
-
-        networkConnected = connected;
-        voiceConfigured = m_productController.IsVoiceConfigured( );
+        auto const& networkConnected = connected;
+        auto const& voiceConfigured  = m_productController.IsVoiceConfigured( );;
 
         if( not networkConnected or not voiceConfigured )
         {
-            BOSE_DEBUG( s_logger, "The state is changing to an idle voice unconfigured state." );
+            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                          "CustomProductControllerStateIdleVoiceConfigured",
+                          "CustomProductControllerStateIdleVoiceUnconfigured" );
             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED );
         }
         else
         {
-            BOSE_DEBUG( s_logger, "The product idle voice configured state is not changing." );
+            BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceConfigured is not changing." );
         }
-
-        return true;
     }
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,32 +173,31 @@ bool CustomProductControllerStateIdleVoiceConfigured::HandleNetworkState( bool c
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateIdleVoiceConfigured::HandleVoiceState( bool configured )
 {
-    BOSE_DEBUG( s_logger, "The product idle voice configured state is handling a voice state change." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceConfigured is handling a voice state change." );
 
-    bool voiceConfigured;
-    bool networkConnected;
-
-    voiceConfigured = configured;
-    networkConnected = m_productController.IsNetworkConfigured( );
+    auto const& voiceConfigured  = configured;
+    auto const& networkConnected = m_productController.IsNetworkConfigured( );
 
     if( not voiceConfigured or not networkConnected )
     {
-        BOSE_DEBUG( s_logger, "The product idle state is changing to a voice unconfigured state." );
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      "CustomProductControllerStateIdleVoiceConfigured",
+                      "CustomProductControllerStateIdleVoiceUnconfigured" );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED );
     }
     else
     {
-        BOSE_DEBUG( s_logger, "The product idle voice configured state is not changing." );
+        BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceConfigured is not changing." );
     }
 
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -7,7 +7,7 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
+/// @date      10/24/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -27,6 +27,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "DPrint.h"
+#include "Utilities.h"
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
 #include "CustomProductControllerStateUpdatingSoftware.h"
@@ -36,14 +37,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following declares a DPrint class type object and a standard string for logging information
-/// in this source code file.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static DPrint s_logger( "Product" );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -67,9 +60,10 @@ CustomProductControllerStateUpdatingSoftware::CustomProductControllerStateUpdati
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, productController, stateId, name )
+    : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
+      m_productController( productController )
 {
-    BOSE_DEBUG( s_logger, "The Product software updating state is being constructed." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateUpdatingSoftware is being constructed." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,7 +73,7 @@ CustomProductControllerStateUpdatingSoftware::CustomProductControllerStateUpdati
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateUpdatingSoftware::HandleStateEnter()
 {
-    BOSE_DEBUG( s_logger, "The Product software updating state is being entered." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateUpdatingSoftware is being entered." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,7 +83,7 @@ void CustomProductControllerStateUpdatingSoftware::HandleStateEnter()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateUpdatingSoftware::HandleStateStart()
 {
-    BOSE_DEBUG( s_logger, "The Product software updating state is being started." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateUpdatingSoftware is being started." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,11 +93,76 @@ void CustomProductControllerStateUpdatingSoftware::HandleStateStart()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateUpdatingSoftware::HandleStateExit()
 {
-    BOSE_DEBUG( s_logger, "The Product software updating state is being exited." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateUpdatingSoftware is being exited." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///
+/// @brief  CustomProductControllerStateUpdatingSoftware::HandleLpmState
+///
+/// @param  bool active
+///
+/// @return This method will always return true, indicating that it has handled the event.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateUpdatingSoftware::HandleLpmState( bool active )
+{
+    BOSE_WARNING( s_logger, "An LPM %s state event has occurred during %s.",
+                  active ? "activation" : "deactivation",
+                  "CustomProductControllerStateUpdatingSoftware" );
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateUpdatingSoftware::HandleCapsState
+///
+/// @param  active
+///
+/// @return This method will always return true, indicating that it has handled the event.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateUpdatingSoftware::HandleCapsState( bool active )
+{
+    BOSE_WARNING( s_logger, "A CAPS %s state event has occurred during  %s.",
+                  active ? "activation" : "deactivation",
+                  "CustomProductControllerStateUpdatingSoftware" );
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateUpdatingSoftware::HandleAudioPathState
+///
+/// @param  bool active
+///
+/// @return This method will always return true, indicating that it has handled the event.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateUpdatingSoftware::HandleAudioPathState( bool active )
+{
+    BOSE_WARNING( s_logger, "An audio path %s state event has occurred during  %s.",
+                  active ? "activation" : "deactivation",
+                  "CustomProductControllerStateUpdatingSoftware" );
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateUpdatingSoftware::HandleSTSSourcesInit
+///
+/// @return This method will always return true, indicating that it has handled the event.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateUpdatingSoftware::HandleSTSSourcesInit( void )
+{
+    BOSE_WARNING( s_logger,
+                  "CustomProductControllerStateUpdatingSoftware is handling an STS initialization." );
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 

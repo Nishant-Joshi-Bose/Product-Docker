@@ -50,7 +50,7 @@
 #include "Services.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             Start of Product Namespace                                       ///
+///                          Start of the Product Application Namespace                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
@@ -117,9 +117,9 @@ private:
     ///         to this class can be used to get the one sole instance of it.
     ///
     /// @return This method does not return anything.
-    ///Services.h
+    ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductSoftwareServices( NotifyTargetTaskIF*         mainTask,
+    ProductSoftwareServices( NotifyTargetTaskIF*         ProductTask,
                              Callback< ProductMessage >  ProductNotify,
                              ProductHardwareInterface*   HardwareInterface );
 
@@ -135,18 +135,18 @@ private:
     ProductSoftwareServices operator = ( ProductSoftwareServices const& ) = delete;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
-    /// This declaration stores the main task for processing software events and requests. It is
-    /// inherited by the ProductController instance.
+    /// This declaration stores the product task for processing software events and requests. It
+    /// is inherited by the ProductController instance.
     //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF*        m_mainTask                 = nullptr;
-    Callback< ProductMessage > m_ProductNotify            = nullptr;
-    ProductHardwareInterface*  m_ProductHardwareInterface = nullptr;
+    NotifyTargetTaskIF*        m_ProductTask;
+    Callback< ProductMessage > m_ProductNotify;
+    ProductHardwareInterface*  m_ProductHardwareInterface;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These declarations are used for handling software reboot request by system application
     /// clients.
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ServerPointer m_serverListener = nullptr;
+    ServerPointer m_serverListener;
 
     void RegisterForRebootRequests( void );
     void AcceptClient( ServerSocket client );
@@ -155,7 +155,7 @@ private:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                               End of ProductApp Namespace                                    ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 

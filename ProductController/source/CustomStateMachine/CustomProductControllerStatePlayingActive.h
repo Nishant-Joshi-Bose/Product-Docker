@@ -38,6 +38,7 @@
 #include "ProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
+#include "APTimer.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -71,7 +72,7 @@ public:
       Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE,
       const std::string&          name    = "CustomProductControllerStatePlayingActive" );
 
-    virtual ~CustomProductControllerStatePlayingActive()
+    ~CustomProductControllerStatePlayingActive( ) override
     {
 
     }
@@ -89,29 +90,24 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief This timer is used to monitor the amount of time the device is in this state. It is
-    ///        armed on entry to this state and stopped on exit to this state. If it expires in
-    ///        4 hours, where no user activity has taken place, the HandleTimeOut method declared
-    ///        below will be invoked.
+    /// @brief This timer is used to monitor the amount of time the device is in this state.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    APTimerPtr m_timer;
+    std::shared_ptr<APTimer> m_timer;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief This method will be invoked by an expired timer, which is defined above and armed on
-    ///        entry to this state, if the device has remained in an active playing state with no
-    ///        user activitey through a key action for 4 hours.
+    /// @brief This method will be invoked by the timer defined above when it expires.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleTimeOut( void );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

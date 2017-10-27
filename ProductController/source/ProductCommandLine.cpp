@@ -28,6 +28,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "SystemUtils.h"
 #include "DPrint.h"
+#include "Utilities.h"
 #include "CliClient.h"
 #include "APTaskFactory.h"
 #include "APProductIF.h"
@@ -37,7 +38,7 @@
 #include "AutoLpmServiceMessages.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                         Start of Product Application Namespace                               ///
+///                          Start of the Product Application Namespace                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
@@ -58,32 +59,26 @@ typedef CLIClient::CLICmdDescriptor             CommandDescription;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// The following declares a DPrint class type object for logging information in this source code
-/// file.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static const DPrint s_logger { "Product" };
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProductCommandLine::GetInstance
 ///
 /// @brief  This static method creates the one and only instance of a ProductCommandLine object.
 ///         The C++ Version 11 compiler guarantees that only one instance is created in a thread
 ///         safe way.
 ///
-/// @param mainTask
+/// @param NotifyTargetTaskIF* ProductTask
 ///
-/// @param ProductNotify
+/// @param Callback< ProductMessage > ProductNotify
+///
+/// @param ProductHardwareInterface*  HardwareInterface
 ///
 /// @return This method returns a pointer to a ProductCommandLine object.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductCommandLine* ProductCommandLine::GetInstance( NotifyTargetTaskIF*        mainTask,
+ProductCommandLine* ProductCommandLine::GetInstance( NotifyTargetTaskIF*        ProductTask,
                                                      Callback< ProductMessage > ProductNotify,
                                                      ProductHardwareInterface*  HardwareInterface )
 {
-    static ProductCommandLine* instance = new ProductCommandLine( mainTask,
+    static ProductCommandLine* instance = new ProductCommandLine( ProductTask,
                                                                   ProductNotify,
                                                                   HardwareInterface );
 
@@ -94,46 +89,42 @@ ProductCommandLine* ProductCommandLine::GetInstance( NotifyTargetTaskIF*        
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductCommandLine::
+/// @name   ProductCommandLine::ProductCommandLine
 ///
-/// @brief  This method is the ProductCommandLine constructor, which is declared as being private to
-///         ensure that only one instance of this class can be created through the class GetInstance
-///         method.
+/// @param  NotifyTargetTaskIF* ProductTask
 ///
-/// @param  void This method does not take any arguments.
+/// @param  Callback< ProductMessage > ProductNotify
 ///
-/// @return This method does not return anything.
+/// @param  ProductHardwareInterface*  HardwareInterface
+///
+/// @return This method returns a pointer to a ProductCommandLine object.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductCommandLine::ProductCommandLine( NotifyTargetTaskIF*        mainTask,
+ProductCommandLine::ProductCommandLine( NotifyTargetTaskIF*        ProductTask,
                                         Callback< ProductMessage > ProductNotify,
                                         ProductHardwareInterface*  HardwareInterface )
-    : m_task( mainTask ),
+    : m_ProductTask( ProductTask ),
       m_ProductNotify( ProductNotify ),
       m_ProductHardwareInterface( HardwareInterface )
 {
-    return;
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProductCommandLine::Run
 ///
-/// @brief  This method starts the main task for the ProductCommandLine instance. The OnEntry method
-///         for the ProductCommandLine instance is called just before the main task starts. Also,
-///         this main task is used for most of the internal processing for each of the subclass
-///         instances.
-///
-/// @param  void This method does not take any arguments.
-///
-/// @return This method does not return anything.
+/// @brief  This method starts and runs the ProductCommandLine instance on the product controller
+///         task, using a CLIClient, which is implemented in the Sound Touch library. A telnet to
+///         the device on port 17000 will allow the user to issue commands after CLIClient is
+///         initialized.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCommandLine::Run( )
 {
     m_CommandLineInterface = new CLIClient( "ProductCommandLineInterface" );
 
-    m_CommandLineInterface->Initialize( m_task,
+    m_CommandLineInterface->Initialize( m_ProductTask,
                                         CommandsList( ),
                                         std::bind( &ProductCommandLine::HandleCommand,
                                                    this,
@@ -148,14 +139,7 @@ void ProductCommandLine::Run( )
 ///
 /// @name   ProductCommandLine::Run
 ///
-/// @brief  This method starts the main task for the ProductCommandLine instance. The OnEntry method
-///         for the ProductCommandLine instance is called just before the main task starts. Also,
-///         this main task is used for most of the internal processing for each of the subclass
-///         instances.
-///
-/// @param  void This method does not take any arguments.
-///
-/// @return This method does not return anything.
+/// @brief  This method is used to stop the ProductCommandLine from running.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCommandLine::Stop( )
@@ -167,7 +151,12 @@ void ProductCommandLine::Stop( )
 ///
 /// @name   ProductCommandLine::CommandsList
 ///
-/// @return
+/// @brief  This method sets up the commands that can be entered by the user through a telnet
+///         interface to the device.
+///
+/// @return This method returns a vector of the available product commands and is sent during
+///         initialization of the CLIClient, which is implemented in the Sound Touch library.
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 std::vector< CommandPointer > ProductCommandLine::CommandsList( )
 {
@@ -182,19 +171,8 @@ std::vector< CommandPointer > ProductCommandLine::CommandsList( )
                                                                              "product mute [on | off]" ) ) );
 
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product source",
-                                                                             "",
-                                                                             "product source [integer | string] "
-                                                                             "[This command selects the audio source.] \r\n"
-                                                                             "               <hdmi1>                   \r\n"
-                                                                             "               <hdmi2>                   \r\n"
-                                                                             "               <hdmi3>                   \r\n"
-                                                                             "               <hdmi4>                   \r\n"
-                                                                             "               <tv>                      \r\n"
-                                                                             "               <aux>                     \r\n"
-                                                                             "               <optical1>                \r\n"
-                                                                             "               <optical2>                \r\n"
-                                                                             "               <coax1>                   \r\n"
-                                                                             "               <coax2>                   \r\n" ) ) );
+                                                                             "This command selects the audio source",
+                                                                             "product source [tv | adaptiq] " ) ) );
 
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_lpm",
                                                                              "This command tests setting the LPM state",
@@ -209,8 +187,8 @@ std::vector< CommandPointer > ProductCommandLine::CommandsList( )
                                                                              "product test_ap [on | off]" ) ) );
 
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_sts",
-                                                                             "This command tests setting the STS intialization to an on or off state",
-                                                                             "product test_sts [on | off]" ) ) );
+                                                                             "This command tests setting STS intialization to complete",
+                                                                             "product test_sts" ) ) );
 
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_bootup",
                                                                              "This command tests setting the device in a boot up state",
@@ -251,7 +229,8 @@ std::vector< CommandPointer > ProductCommandLine::CommandsList( )
     return commands;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// The following commands have yet to be created.
+    /// The following commands have yet to be created, and were created for Ginger. Some of them
+    /// may not be applicable for Professor though.
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// commands.push_back( static_cast< CommandPointer >( new CommandDescription(
@@ -325,7 +304,7 @@ std::vector< CommandPointer > ProductCommandLine::CommandsList( )
     ///                                                      "        <maxBass> <maxTreble> <maxCenter> <maxRear>\n"
     ///                                                      "        <stepBass> <stepTreble> <stepCenter> <stepRear>\n" ) ) );
     ///
-    /// commands.push_back( static_cast<CommandPointer>( new CommandDescription(ProcessCommand
+    /// commands.push_back( static_cast<CommandPointer>( new CommandDescription(
     ///                                                      "product vsync",
     ///                                                      "Sends the IPC AV Sync .",
     ///                                                      "product vsync <sync(uint32)>\n" ) ) );
@@ -345,13 +324,13 @@ std::vector< CommandPointer > ProductCommandLine::CommandsList( )
 ///
 /// @name   ProductCommandLine::HandleCommand
 ///
-/// @param  command
+/// @param  std::string& command
 ///
-/// @param  arguments
+/// @param  std::list< std::string >& arguments
 ///
-/// @param  response
+/// @param  std::string& response
 ///
-/// @return
+/// @return This method returns -1 on an error or 1 if successful.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 int ProductCommandLine::HandleCommand( const std::string&              command,
@@ -428,96 +407,34 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     {
         if( arguments.size( ) != 1 )
         {
-            response  = "Incorrect Usage: product source [integer | string] \r\n";
-            response += "                                <hdmi1>            \r\n";
-            response += "                                <hdmi2>            \r\n";
-            response += "                                <hdmi3>            \r\n";
-            response += "                                <hdmi4>            \r\n";
-            response += "                                <tv>               \r\n";
-            response += "                                <aux>              \r\n";
-            response += "                                <optical1>         \r\n";
-            response += "                                <optical2>         \r\n";
-            response += "                                <coax1>            \r\n";
-            response += "                                <coax2>            \r\n";
+            response  = "Incorrect Usage: product source [tv | adaptiq] \r\n";
 
             return -1;
         }
 
-        IPCSource_t sourceValue;
-        std::string sourceString = arguments.front( );
+        LPM_IPC_SOURCE_ID sourceValue;
+        std::string       sourceString = arguments.front( );
 
-        if( sourceString == "hdmi1" )
+        if( sourceString == "tv" )
         {
-            sourceValue.set_source( LPM_IPC_SOURCE_HDMI_1 );
+            sourceValue = LPM_IPC_SOURCE_TV;
         }
-        else if( sourceString == "hdmi2" )
+        else if( sourceString == "adaptiq" )
         {
-            sourceValue.set_source( LPM_IPC_SOURCE_HDMI_2 );
-        }
-        else if( sourceString == "hdmi3" )
-        {
-            sourceValue.set_source( LPM_IPC_SOURCE_HDMI_3 );
-        }
-        else if( sourceString == "hdmi4" )
-        {
-            sourceValue.set_source( LPM_IPC_SOURCE_HDMI_4 );
-        }
-        else if( sourceString == "tv" )
-        {
-            sourceValue.set_source( LPM_IPC_SOURCE_TV );
-        }
-        else if( sourceString == "aux" )
-        {
-            sourceValue.set_source( LPM_IPC_SOURCE_SIDE_AUX );
-        }
-        else if( sourceString == "optical1" )
-        {
-            sourceValue.set_source( LPM_IPC_SOURCE_OPTICAL1 );
-        }
-        else if( sourceString == "optical2" )
-        {
-            sourceValue.set_source( LPM_IPC_SOURCE_OPTICAL2 );
-        }
-        else if( sourceString == "coax1" )
-        {
-            sourceValue.set_source( LPM_IPC_SOURCE_COAX1 );
-        }
-        else if( sourceString == "coax2" )
-        {
-            sourceValue.set_source( LPM_IPC_SOURCE_COAX2 );
+            sourceValue = LPM_IPC_SOURCE_ADPAPTIQ;
         }
         else
         {
-            sourceValue.set_source( static_cast< LPM_IPC_SOURCE_ID >( std::atoi( sourceString.c_str( ) ) ) );
-        }
-
-        if( 0 <= sourceValue.source( ) && sourceValue.source( ) <= LPM_IPC_NUM_SOURCES )
-        {
-            response  = "The source will be changed to the value ";
-            response +=  sourceString.c_str( );
-            response += ". \r\n";
-
-            sourceValue.set_open_field( 0 );
-            sourceValue.set_status( 0 );
-
-            m_ProductHardwareInterface->SendSourceSelection( sourceValue );
-        }
-        else
-        {
-            response  = "Incorrect Usage: product source [integer | string] \r\n";
-            response += "                                <hdmi1>            \r\n";
-            response += "                                <hdmi2>            \r\n";
-            response += "                                <hdmi3>            \r\n";
-            response += "                                <hdmi4>            \r\n";
-            response += "                                <tv>               \r\n";
-            response += "                                <aux>              \r\n";
-            response += "                                <optical1>         \r\n";
-            response += "                                <optical2>         \r\n";
-            response += "                                <coax1>            \r\n";
-            response += "                                <coax2>            \r\n";
+            response  = "Incorrect Usage: product source [tv | adaptiq] \r\n";
 
             return -1;
         }
+
+        response  = "The source will be changed to the value ";
+        response +=  sourceString.c_str( );
+        response += ". \r\n";
+
+        m_ProductHardwareInterface->SendSourceSelection( sourceValue );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// This command tests setting the LPM to an on or off state and sending it to the product
@@ -555,7 +472,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             return -1;
         }
 
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// This command tests setting the Content Audio Playback Service or CAPS to an on or off
@@ -594,7 +511,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             return -1;
         }
 
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// This command tests setting the Audio Path to an on or off state and sending it to the
@@ -630,46 +547,23 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             return -1;
         }
 
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// This command tests setting the STS initialization to an on or off state and sending it to
-    /// the product controller state machine. Its actual state is not effected.
+    /// This command tests setting STS initialization to completed.
     ////////////////////////////////////////////////////////////////////////////////////////////////
     else if( command.compare( "product test_sts" ) == 0 )
     {
-        if( arguments.size( ) != 1 )
-        {
-            response = "Incorrect Usage: product test_sts [on | off]";
-        }
-
-        std::string argumentString = arguments.front( );
-
         ProductMessage productMessage;
+        productMessage.mutable_stsinterfacestatus( )->set_initialized( true );
 
-        if( argumentString == "on" )
-        {
-            response  = "An STS initialization on state test will now be made.";
+        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
 
-            productMessage.mutable_selectsourcestatus( )->set_initialized( true );
-        }
-        else if( argumentString == "off" )
-        {
-            response  = "An STS initialization off state test will now be made.";
-
-            productMessage.mutable_selectsourcestatus( )->set_initialized( false );
-        }
-        else
-        {
-            response = "Incorrect Usage: product test_sts [on | off]";
-
-            return -1;
-        }
-
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+        response  = "A test setting the STS initialization to complete has been made.";
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// This command tests setting the device in a boot up state.
+    /// This command tests setting autowake to an on or off state and sending it to the product
+    /// controller state machine.
     ////////////////////////////////////////////////////////////////////////////////////////////////
     else if( command.compare( "product test_bootup" ) == 0 )
     {
@@ -677,25 +571,25 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             ProductMessage productMessage;
             productMessage.mutable_lpmstatus( )->set_connected( true );
 
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
         }
         {
             ProductMessage productMessage;
             productMessage.mutable_capsstatus( )->set_initialized( true );
 
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
         }
         {
             ProductMessage productMessage;
             productMessage.mutable_audiopathstatus( )->set_connected( true );
 
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
         }
         {
             ProductMessage productMessage;
-            productMessage.mutable_selectsourcestatus( )->set_initialized( true );
+            productMessage.mutable_stsinterfacestatus( )->set_initialized( true );
 
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
         }
 
         response  = "Requests to set the device in a boot up state have been made.";
@@ -736,7 +630,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             return -1;
         }
 
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// This command tests setting the network to an off, configured, or connected state and
@@ -763,7 +657,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             productMessage.mutable_networkstatus( )->set_connected( false );
             productMessage.mutable_networkstatus( )->set_networktype( ProductNetworkStatus_ProductNetworkType_Unknown );
 
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
         }
         else if( argumentString == "configured" )
         {
@@ -773,7 +667,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             productMessage.mutable_networkstatus( )->set_connected( false );
             productMessage.mutable_networkstatus( )->set_networktype( ProductNetworkStatus_ProductNetworkType_Wired );
 
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
         }
         else if( argumentString == "connected" )
         {
@@ -783,7 +677,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             productMessage.mutable_networkstatus( )->set_connected( true );
             productMessage.mutable_networkstatus( )->set_networktype( ProductNetworkStatus_ProductNetworkType_Wired );
 
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
         }
         else
         {
@@ -792,7 +686,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             return -1;
         }
 
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// This command tests setting a wifi network to an off or off configured state and sending it
@@ -818,7 +712,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             productMessage.mutable_wirelessstatus( )->set_configured( false );
             productMessage.mutable_wirelessstatus( )->set_frequencykhz( 0 );
 
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
         }
         else if( argumentString == "off" )
         {
@@ -827,7 +721,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             productMessage.mutable_wirelessstatus( )->set_configured( true );
             productMessage.mutable_wirelessstatus( )->set_frequencykhz( 0 );
 
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
         }
         else
         {
@@ -836,7 +730,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             return -1;
         }
 
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// This command to tests setting the Content Audio Playback Service to an on or off state and
@@ -864,7 +758,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             productMessage.mutable_wirelessstatus( )->set_configured( true );
             productMessage.mutable_wirelessstatus( )->set_frequencykhz( frequencyValue );
 
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
         }
         else
         {
@@ -912,7 +806,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             return -1;
         }
 
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// This command tests sending a key action value to the product controller state machine.
@@ -938,7 +832,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             ProductMessage productMessage;
             productMessage.mutable_keydata( )->set_action( keyActionValue );
 
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
         }
         else
         {
@@ -957,29 +851,14 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 
         response  = "A power key will be sent as a test to the product controller state machine.";
 
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_task );
+        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
     }
 
     return 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductCommandLine::ProcessCommand
-///
-/// @param  arguments
-///
-/// @param  response
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductCommandLine::ProcessCommand( const std::list< std::string >& arguments,
-                                         std::string&                    response ) const
-{
-    return;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///                         End of Product Application Namespace                                 ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 

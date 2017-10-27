@@ -73,7 +73,7 @@ public:
       Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED,
       const std::string&          name    = "CustomProductControllerStateIdleVoiceConfigured" );
 
-    virtual ~CustomProductControllerStateIdleVoiceConfigured()
+    ~CustomProductControllerStateIdleVoiceConfigured( ) override
     {
 
     }
@@ -91,10 +91,10 @@ private:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

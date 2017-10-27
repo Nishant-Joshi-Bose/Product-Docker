@@ -7,7 +7,7 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
+/// @date      10/24/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -26,6 +26,7 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+#include "Utilities.h"
 #include "CustomProductControllerStateBooting.h"
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
@@ -36,14 +37,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following declares a DPrint class type object and a standard string for logging information
-/// in this source code file.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static DPrint s_logger( "Product" );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -69,7 +62,7 @@ CustomProductControllerStateBooting::CustomProductControllerStateBooting( Produc
     : ProductControllerStateBooting( hsm, pSuperState, productController, stateId, name ),
       m_productController( productController )
 {
-    BOSE_DEBUG( s_logger, "The product booting state has been constructed." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting has been constructed." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,7 +72,7 @@ CustomProductControllerStateBooting::CustomProductControllerStateBooting( Produc
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateBooting::HandleStateEnter( )
 {
-    BOSE_DEBUG( s_logger, "The product booting state is being entered." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting is being entered." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,7 +82,7 @@ void CustomProductControllerStateBooting::HandleStateEnter( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateBooting::HandleStateStart( )
 {
-    BOSE_DEBUG( s_logger, "The product booting state is being started." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting is being started." );
 
     HandlePotentialStateChange( );
 }
@@ -101,7 +94,7 @@ void CustomProductControllerStateBooting::HandleStateStart( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateBooting::HandleStateExit( )
 {
-    BOSE_DEBUG( s_logger, "The product booting state is being exited." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting is being exited." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -116,7 +109,7 @@ void CustomProductControllerStateBooting::HandleStateExit( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateBooting::HandleLpmState( bool active )
 {
-    BOSE_DEBUG( s_logger, "The product booting state is handling the LPM state." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting is handling the LPM state." );
 
     if( active )
     {
@@ -138,7 +131,7 @@ bool CustomProductControllerStateBooting::HandleLpmState( bool active )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateBooting::HandleCapsState( bool active )
 {
-    BOSE_DEBUG( s_logger, "The product booting state is handling the CAPS state." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting is handling the CAPS state." );
 
     if( active )
     {
@@ -160,7 +153,7 @@ bool CustomProductControllerStateBooting::HandleCapsState( bool active )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateBooting::HandleAudioPathState( bool active )
 {
-    BOSE_DEBUG( s_logger, "The product booting state is handling the audio path state." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting is handling the audio path state." );
 
     if( active )
     {
@@ -179,7 +172,7 @@ bool CustomProductControllerStateBooting::HandleAudioPathState( bool active )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateBooting::HandleSTSSourcesInit( void )
 {
-    BOSE_DEBUG( s_logger, "The product booting state is handling the STSSourcesInit event." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting is handling the STSSourcesInit event." );
 
     HandlePotentialStateChange( );
 
@@ -197,23 +190,26 @@ void CustomProductControllerStateBooting::HandlePotentialStateChange( void )
     {
         if( m_productController.IsSoftwareUpdateRequired( ) )
         {
-            BOSE_DEBUG( s_logger, "The product booting state is changing to the software updating state." );
+            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                          "CustomProductControllerStateBooting",
+                          "CustomProductControllerStateUpdatingSoftware" );
             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING );
         }
         else
         {
-            BOSE_DEBUG( s_logger, "The product booting state is changing to the playable state." );
-
+            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                          "CustomProductControllerStateBooting",
+                          "CustomProductControllerStatePlaying" );
             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE );
         }
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -50,28 +50,10 @@
 #include "NetManager.pb.h"
 #include "ProductController.h"
 #include "ProductControllerHsm.h"
-#include "ProductControllerStateTop.h"
-#include "ProductControllerStateSetup.h"
-#include "ProductControllerStates.h"
 #include "ProductSTSController.h"
-#include "CustomProductControllerState.h"
-#include "CustomProductControllerStateBooting.h"
-#include "CustomProductControllerStateUpdatingSoftware.h"
-#include "CustomProductControllerStateOff.h"
-#include "CustomProductControllerStateOn.h"
-#include "CustomProductControllerStatePlayable.h"
-#include "CustomProductControllerStateNetworkStandby.h"
-#include "CustomProductControllerStateNetworkStandbyConfigured.h"
-#include "CustomProductControllerStateNetworkStandbyUnconfigured.h"
-#include "CustomProductControllerStateIdle.h"
-#include "CustomProductControllerStateIdleVoiceConfigured.h"
-#include "CustomProductControllerStateIdleVoiceUnconfigured.h"
-#include "CustomProductControllerStatePlayingActive.h"
-#include "CustomProductControllerStatePlaying.h"
-#include "CustomProductControllerStatePlayingInactive.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                            Start of Product Application Namespace                            ///
+///                          Start of the Product Application Namespace                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
@@ -89,21 +71,6 @@ class ProductSoftwareServices;
 class ProductEdidInterface;
 class ProductCommandLine;
 class ProductUserInterface;
-class CustomProductControllerStateBooting;
-class CustomProductControllerStateUpdatingSoftware;
-class CustomProductControllerStateOff;
-class CustomProductControllerStateOn;
-class CustomProductControllerStatePlayable;
-class CustomProductControllerStateNetworkStandby;
-class CustomProductControllerStateNetworkStandbyConfigured;
-class CustomProductControllerStateNetworkStandbyUnconfigured;
-class CustomProductControllerStateIdle;
-class CustomProductControllerStateIdleVoiceConfigured;
-class CustomProductControllerStateIdleVoiceUnconfigured;
-class CustomProductControllerStatePlaying;
-class CustomProductControllerStatePlayingActive;
-class CustomProductControllerStatePlayingInactive;
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -154,8 +121,7 @@ public:
     ///        from the product controller.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-
-    ProductHardwareInterface* GetHardwareInterface( void );
+    ProductHardwareInterface* GetHardwareInterface( void ) const;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -163,12 +129,12 @@ public:
     ///        product controller.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool IsBooted( void );
-    bool IsNetworkConfigured( void );
-    bool IsNetworkConnected( void );
-    bool IsAutoWakeEnabled( void );
-    bool IsVoiceConfigured( void );
-    bool IsSoftwareUpdateRequired( void );
+    bool IsBooted( void )                 const;
+    bool IsNetworkConfigured( void )      const;
+    bool IsNetworkConnected( void )       const;
+    bool IsAutoWakeEnabled( void )        const;
+    bool IsVoiceConfigured( void )        const;
+    bool IsSoftwareUpdateRequired( void ) const;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -180,7 +146,6 @@ public:
     void HandleMessage( const ProductMessage& message );
 
 private:
-
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @name   ProfessorProductController
@@ -188,10 +153,6 @@ private:
     /// @brief  The constructor for this class is set to be private. This definition prevents this
     ///         class from being instantiated directly, so that only the static method GetInstance
     ///         to this class can be used to get the one sole instance of it.
-    ///
-    /// @param  void This method does not take any arguments.
-    ///
-    /// @return This method does not return anything.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     ProfessorProductController( );
@@ -209,30 +170,11 @@ private:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// The following members are used to provide functionality for a common product controller
-    /// state machine, along with custom states for the Professor platform. The source code and
-    /// associated header files to include are found in the CastleProductControllerCommon
-    /// Repository, which is imported as a library when this application is built.
+    /// The following member is used to provide functionality for the product controller state
+    /// machine.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductControllerHsm        m_ProductControllerStateMachine;
-    ProductControllerStateTop   m_ProductControllerStateTop;
-    ProductControllerStateSetup m_ProductControllerStateSetup;
-
-    CustomProductControllerStateBooting                    m_CustomProductControllerStateBooting;
-    CustomProductControllerStateUpdatingSoftware           m_CustomProductControllerStateUpdatingSoftware;
-    CustomProductControllerStateOff                        m_CustomProductControllerStateOff;
-    CustomProductControllerStateOn                         m_CustomProductControllerStateOn;
-    CustomProductControllerStatePlayable                   m_CustomProductControllerStatePlayable;
-    CustomProductControllerStateNetworkStandby             m_CustomProductControllerStateNetworkStandby;
-    CustomProductControllerStateNetworkStandbyConfigured   m_CustomProductControllerStateNetworkStandbyConfigured;
-    CustomProductControllerStateNetworkStandbyUnconfigured m_CustomProductControllerStateNetworkStandbyUnconfigured;
-    CustomProductControllerStateIdle                       m_CustomProductControllerStateIdle;
-    CustomProductControllerStateIdleVoiceConfigured        m_CustomProductControllerStateIdleVoiceConfigured;
-    CustomProductControllerStateIdleVoiceUnconfigured      m_CustomProductControllerStateIdleVoiceUnconfigured;
-    CustomProductControllerStatePlaying                    m_CustomProductControllerStatePlaying;
-    CustomProductControllerStatePlayingActive              m_CustomProductControllerStatePlayingActive;
-    CustomProductControllerStatePlayingInactive            m_CustomProductControllerStatePlayingInactive;
+    ProductControllerHsm m_ProductControllerStateMachine;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -248,7 +190,7 @@ private:
     ProductSoftwareServices*  m_ProductSoftwareServices;
     ProductCommandLine*       m_ProductCommandLine;
     ProductUserInterface*     m_ProductUserInterface;
-    ProductEdidInterface*      m_ProductEdidInterface;
+    ProductEdidInterface*     m_ProductEdidInterface;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -283,7 +225,7 @@ private:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 

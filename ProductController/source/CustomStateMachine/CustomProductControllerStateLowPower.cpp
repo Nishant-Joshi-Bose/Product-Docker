@@ -1,13 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateUpdatingSoftware.h
+/// @file      CustomProductControllerStateLowPower.cpp
 ///
 /// @brief     This source code file contains functionality to process events that occur during a
-///            software updating state.
+///            low product state.
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
+/// @date      10/24/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -26,28 +26,23 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "CustomProductControllerStateUpdating.h"
-#include "ProductControllerHsm.h"
-#include "ProfessorProductController.h"
 #include "DPrint.h"
+#include "Utilities.h"
+#include "CustomProductControllerStateLowPower.h"
+#include "ProductControllerHsm.h"
+#include "ProductControllerStateIdle.h"
+#include "ProductHardwareInterface.h"
+#include "ProfessorProductController.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following declares a DPrint class type object and a standard string for logging information
-/// in this source code file.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static DPrint s_logger( "Product" );
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             Start of Product Namespace                                       ///
+///                            Start of Product Application Namespace                            ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateUpdatingSoftware::CustomProductControllerStateUpdatingSoftware
+/// @brief CustomProductControllerStateLowPower::CustomProductControllerStateLowPower
 ///
 /// @param hsm
 ///
@@ -60,84 +55,76 @@ namespace ProductApp
 /// @param name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductControllerStateUpdatingSoftware::CustomProductControllerStateUpdatingSoftware
+CustomProductControllerStateLowPower::CustomProductControllerStateLowPower
 ( ProductControllerHsm&       hsm,
   CHsmState*                  pSuperState,
   ProfessorProductController& productController,
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, productController, stateId, name )
+    : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
+      m_productController( productController )
 {
-    BOSE_DEBUG( s_logger, "The Product Software Update State is being constructed." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateLowPower is being constructed." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateUpdatingSoftware::HandleStateEnter
+/// @brief CustomProductControllerStateLowPower::HandleStateEnter
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateUpdatingSoftware::HandleStateEnter()
+void CustomProductControllerStateLowPower::HandleStateEnter( )
 {
-    BOSE_DEBUG( s_logger, "The Product Software Update State is being constructed." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateLowPower is being entered." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateUpdatingSoftware::HandleStateStart
+/// @brief CustomProductControllerStateLowPower::HandleStateStart
+///
+/// @todo  A transition state may need to be added at this point to ensure that the power state
+///        change occurs and to handle any error conditions.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateUpdatingSoftware::HandleStateStart()
+void CustomProductControllerStateLowPower::HandleStateStart( )
 {
-    BOSE_DEBUG( s_logger, "The Product Software Update State is being constructed." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateLowPower is being started." );
+
+    m_productController.GetHardwareInterface( )->RequestPowerStateOff( );
+
+    BOSE_VERBOSE( s_logger, "An attempt to set the device to a low power state is being made." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateUpdatingSoftware::HandleStateExit
+/// @brief CustomProductControllerStateLowPower::HandleStateExit
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateUpdatingSoftware::HandleStateExit()
+void CustomProductControllerStateLowPower::HandleStateExit( )
 {
-    BOSE_DEBUG( s_logger, "The Product Software Update State is being constructed." );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateLowPower is being exited." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief HandleLpmState
+/// @brief  CustomProductControllerStateLowPower::HandlePowerState
 ///
-/// @param active
-///
-/// @return
+/// @return This method returns a true Boolean value indicating that it has handled the power
+///         state changed and no futher processing will be required by any of its superstates.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateUpdatingSoftware::HandleLpmState( bool active )
+bool CustomProductControllerStateLowPower::HandlePowerState( )
 {
+    BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                  "CustomProductControllerStateLowPower",
+                  "CustomProductControllerStatePlayable" );
+    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE );
+
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief HandleCapsState
-/// @param active
-/// @return
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateUpdatingSoftware::HandleCapsState( bool active )
-{
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief HandleNetworkState
-/// @param active
-/// @return
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateUpdatingSoftware::HandleNetworkState( bool active )
-{
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                     End of Namespace                                         ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
