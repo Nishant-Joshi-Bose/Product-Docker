@@ -26,14 +26,12 @@ CMAKE_USE_CCACHE := $(USE_CCACHE)
 
 EDDIELPMPACKAGE_DIR = $(shell components get EddieLPM-Package installed_location)
 PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
-RIVIERALPMSERVICE_DIR = $(shell components get RivieraLpmService installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 TESTUTILS_DIR = $(shell components get CastleTestUtils installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools version-files
 	$(MAKE) -C ProductController $@
-	$(MAKE) -C $(RIVIERALPMSERVICE_DIR) $@
 	$(MAKE) -C $(PRODUCTCONTROLLERCOMMON_DIR) $@
 	ln -nsf $(TESTUTILS_DIR) builds/CastleTestUtils
 	touch builds/__init__.py
