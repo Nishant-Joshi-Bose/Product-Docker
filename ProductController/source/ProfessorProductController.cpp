@@ -34,7 +34,7 @@
 #include <unistd.h>
 #include "SystemUtils.h"
 #include "Utilities.h"
-#include "KeyActions.h"
+#include "KeyActions.pb.h"
 #include "ProductController.h"
 #include "ProfessorProductController.h"
 #include "ProductControllerStateTop.h"
@@ -723,7 +723,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     else if( message.has_keydata( ) )
     {
         auto keyData = message.keydata( );
-        auto keyString = m_ProductUserInterface->GetKeyString( static_cast< KEY_ACTION >( keyData.action( ) ) );
+        auto keyString = m_ProductUserInterface->GetKeyString( static_cast< KeyActionPb::KEY_ACTION >( keyData.action( ) ) );
 
         BOSE_DEBUG( s_logger, "The key action value %s (valued %d) was received.",
                     keyString.c_str( ),

@@ -31,7 +31,6 @@
 #include <unistd.h>
 #include "SystemUtils.h"
 #include "Utilities.h"
-#include "KeyActions.h"
 #include "DPrint.h"
 #include "APTask.h"
 #include "BreakThread.h"
@@ -39,6 +38,10 @@
 #include "ProductHardwareInterface.h"
 #include "ProductUserInterface.h"
 #include "ProductMessage.pb.h"
+#include "AudioService.pb.h"
+#include "KeyActions.pb.h"
+
+using namespace KeyActionPb;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -310,106 +313,13 @@ std::string ProductUserInterface::GetKeyString( const KEY_ACTION keyAction )
 {
     static std::string keyString( "UNKNOWN" );
 
-    switch( keyAction )
+    if( KEY_ACTION_IsValid( keyAction ) )
     {
-    case KEY_ACTION_POWER:
-        keyString.assign( "KEY_ACTION_POWER" );
-        break;
-
-    case KEY_ACTION_SOURCE:
-        keyString.assign( "KEY_ACTION_SOURCE" );
-        break;
-
-    case KEY_ACTION_PRESET_1:
-        keyString.assign( "KEY_ACTION_PRESET_1" );
-        break;
-
-    case KEY_ACTION_PRESET_2:
-        keyString.assign( "KEY_ACTION_PRESET_2" );
-        break;
-
-    case KEY_ACTION_PRESET_3:
-        keyString.assign( "KEY_ACTION_PRESET_3" );
-        break;
-
-    case KEY_ACTION_PRESET_4:
-        keyString.assign( "KEY_ACTION_PRESET_4" );
-        break;
-
-    case KEY_ACTION_PRESET_5:
-        keyString.assign( "KEY_ACTION_PRESET_5" );
-        break;
-
-    case KEY_ACTION_PRESET_6:
-        keyString.assign( "KEY_ACTION_PRESET_6" );
-        break;
-
-    case KEY_ACTION_VOLUME_UP:
-        keyString.assign( "KEY_ACTION_VOLUME_UP" );
-        break;
-
-    case KEY_ACTION_VOLUME_DOWN:
-        keyString.assign( "KEY_ACTION_VOLUME_DOWN" );
-        break;
-
-    case KEY_ACTION_PLAY_PAUSE:
-        keyString.assign( "KEY_ACTION_PLAY_PAUSE" );
-        break;
-
-    case KEY_ACTION_SKIP_FORWARD:
-        keyString.assign( "KEY_ACTION_SKIP_FORWARD" );
-        break;
-
-    case KEY_ACTION_SKIP_BACK:
-        keyString.assign( "KEY_ACTION_SKIP_BACK" );
-        break;
-
-    case KEY_ACTION_MUTE:
-        keyString.assign( "KEY_ACTION_MUTE" );
-        break;
-
-    case KEY_ACTION_SOUNDTOUCH:
-        keyString.assign( "KEY_ACTION_SOUNDTOUCH" );
-        break;
-
-    case KEY_ACTION_CONNECT:
-        keyString.assign( "KEY_ACTION_CONNECT" );
-        break;
-
-    case KEY_ACTION_ACTION:
-        keyString.assign( "KEY_ACTION_ACTION" );
-        break;
-
-    case KEY_ACTION_TV:
-        keyString.assign( "KEY_ACTION_TV" );
-        break;
-
-    case KEY_ACTION_THUMB_UP:
-        keyString.assign( "KEY_ACTION_THUMB_UP" );
-        break;
-
-    case KEY_ACTION_THUMB_DOWN:
-        keyString.assign( "KEY_ACTION_THUMB_DOWN" );
-        break;
-
-    case KEY_ACTION_FACTORY_DEFAULT:
-        keyString.assign( "KEY_ACTION_FACTORY_DEFAULT" );
-        break;
-
-    case KEY_ACTION_WIFI_OFF:
-        keyString.assign( "KEY_ACTION_WIFI_OFF" );
-        break;
-
-    case KEY_ACTION_AP_SETUP:
-        keyString.assign( "KEY_ACTION_AP_SETUP" );
-        break;
-
-    case KEY_ACTION_PAIR_SPEAKERS:
-        keyString.assign( "KEY_ACTION_PAIR_SPEAKERS" );
-        break;
+        keyString.assign( KEY_ACTION_Name( keyAction ) );
     }
 
     return keyString;
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

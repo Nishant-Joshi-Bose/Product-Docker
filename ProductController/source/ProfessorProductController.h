@@ -46,7 +46,7 @@
 #include "ProductMessage.pb.h"
 #include "ProductNetworkManager.h"
 #include "ProductSystemManager.h"
-#include "KeyActions.h"
+#include "KeyActions.pb.h"
 #include "NetManager.pb.h"
 #include "ProductController.h"
 #include "ProductControllerHsm.h"
