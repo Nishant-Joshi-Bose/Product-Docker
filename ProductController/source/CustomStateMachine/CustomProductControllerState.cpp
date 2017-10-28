@@ -30,6 +30,7 @@
 #include "Utilities.h"
 #include "CustomProductControllerState.h"
 #include "ProductControllerHsm.h"
+#include "AudioService.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -107,7 +108,7 @@ bool CustomProductControllerState::HandleAutowakeStatus( bool active )
 
 bool CustomProductControllerState::HandleKeyAction( int action )
 {
-    return false;
+    return true;
 }
 
 

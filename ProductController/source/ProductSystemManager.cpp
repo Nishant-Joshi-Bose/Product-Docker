@@ -137,7 +137,7 @@ bool ProductSystemManager::Run( )
                              std::placeholders::_1 ),
                   m_ProductTask );
 
-        m_FrontDoorClient->RegisterGet( "/system/language", callback );
+        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_LANGUAGE, callback );
 
     }
 
@@ -156,7 +156,7 @@ bool ProductSystemManager::Run( )
                              std::placeholders::_2 ),
                   m_ProductTask );
 
-        m_FrontDoorClient->RegisterPost< ProductPb::Language >( "/system/language" , callback );
+        m_FrontDoorClient->RegisterPost< ProductPb::Language >( FRONTDOOR_SYSTEM_LANGUAGE, callback );
     }
 
     BOSE_DEBUG( s_logger, "Registration for posting system language requests has been made." );
@@ -173,7 +173,7 @@ bool ProductSystemManager::Run( )
                              std::placeholders::_1 ),
                   m_ProductTask );
 
-        m_FrontDoorClient->RegisterGet( "/system/configuration/status" , callback );
+        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS, callback );
     }
 
     BOSE_DEBUG( s_logger, "Registration for getting configuration status requests has been made." );
@@ -203,10 +203,10 @@ bool ProductSystemManager::Run( )
                             m_ProductTask );
 
         m_FrontDoorClient->SendGet< SoundTouchInterface::CapsInitializationStatus >
-        ( "/system/capsInitializationStatus", CallbackForSuccess, CallbackForFailure );
+        ( FRONTDOOR_SYSTEM_CAPS_INITIALIZATION_STATUS, CallbackForSuccess, CallbackForFailure );
 
         m_FrontDoorClient->RegisterNotification< SoundTouchInterface::CapsInitializationStatus >
-        ( "/CapsInitializationUpdate", CallbackForNotification );
+        ( FRONTDOOR_CAPS_INITIALIZATION_UPDATE, CallbackForNotification );
     }
 
     BOSE_DEBUG( s_logger, "A notification request for CAPS initialization messages has been made." );

@@ -38,7 +38,6 @@
 #include "ProductHardwareInterface.h"
 #include "ProductUserInterface.h"
 #include "ProductMessage.pb.h"
-#include "AudioService.pb.h"
 #include "KeyActions.pb.h"
 
 using namespace KeyActionPb;
@@ -311,7 +310,7 @@ void ProductUserInterface::KeyInformationCallBack( const int keyAction )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 std::string ProductUserInterface::GetKeyString( const KEY_ACTION keyAction )
 {
-    static std::string keyString( "UNKNOWN" );
+    std::string keyString( "UNKNOWN" );
 
     if( KEY_ACTION_IsValid( keyAction ) )
     {

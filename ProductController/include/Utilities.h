@@ -33,33 +33,57 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "DPrint.h"
+#include <string>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                              Product Application Namespace                                   ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// The following definition determines the compile time log level. Any log messages that are
-    /// above the given level are compiled out of the executable and cannot be enabled at
-    /// run-time. Currently, the level is set to the highest level to output all log statements,
-    /// but it can be changed to a lower level to leave log statements above this level out of
-    /// the compiled application to reduce its overall size.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    #ifdef  BOSE_LOG_LEVEL
-    #undef  BOSE_LOG_LEVEL
-    #define BOSE_LOG_LEVEL ( DPrint::INSANE )
-    #endif
+////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// The following definition determines the compile time log level. Any log messages that are
+/// above the given level are compiled out of the executable and cannot be enabled at
+/// run-time. Currently, the level is set to the highest level to output all log statements,
+/// but it can be changed to a lower level to leave log statements above this level out of
+/// the compiled application to reduce its overall size.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////
+#ifdef  BOSE_LOG_LEVEL
+#undef  BOSE_LOG_LEVEL
+#define BOSE_LOG_LEVEL ( DPrint::INSANE )
+#endif
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// The following declares a DPrint class type object for logging information in the product
-    /// controller source code.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    static DPrint s_logger { "Product" };
+////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// The following declares a DPrint class type object for logging information in the product
+/// controller source code.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////
+static DPrint s_logger { "Product" };
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// The following constants define known frontdoor directory nodes
+///
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+// system nodes
+extern const std::string FRONTDOOR_SYSTEM_LANGUAGE;
+extern const std::string FRONTDOOR_SYSTEM_CONFIGURATION_STATUS;
+extern const std::string FRONTDOOR_SYSTEM_CAPS_INITIALIZATION_STATUS;
+
+// network nodes
+extern const std::string FRONTDOOR_NETWORK_STATUS;
+extern const std::string FRONTDOOR_NETWORK_WIFI_PROFILE;
+extern const std::string FRONTDOOR_NETWORK_WIFI_STATUS;
+
+// CAPS nodes
+extern const std::string FRONTDOOR_CAPS_INITIALIZATION_UPDATE;
+
+// audio nodes
+extern const std::string FRONTDOOR_AUDIO_VOLUME;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -34,6 +34,7 @@ ADD_EXECUTABLE(Professor
   source/ProductUserInterface.cpp
   source/ProfessorProductController.cpp
   source/ProductEdidInterface.cpp
+  source/Utilities.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateBooting.cpp
   source/CustomStateMachine/CustomProductControllerStateIdle.cpp
