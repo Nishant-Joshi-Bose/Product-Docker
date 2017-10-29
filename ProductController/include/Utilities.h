@@ -70,20 +70,21 @@ static DPrint s_logger { "Product" };
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 // system nodes
-extern const std::string FRONTDOOR_SYSTEM_LANGUAGE;
-extern const std::string FRONTDOOR_SYSTEM_CONFIGURATION_STATUS;
-extern const std::string FRONTDOOR_SYSTEM_CAPS_INITIALIZATION_STATUS;
+constexpr char FRONTDOOR_SYSTEM_LANGUAGE[]                      = "/system/language";
+constexpr char FRONTDOOR_SYSTEM_CONFIGURATION_STATUS[]          = "/system/configuration/status";
+constexpr char FRONTDOOR_SYSTEM_CAPS_INITIALIZATION_STATUS[]    = "/system/capsInitializationStatus";
 
 // network nodes
-extern const std::string FRONTDOOR_NETWORK_STATUS;
-extern const std::string FRONTDOOR_NETWORK_WIFI_PROFILE;
-extern const std::string FRONTDOOR_NETWORK_WIFI_STATUS;
+constexpr char FRONTDOOR_NETWORK_STATUS[]                       = "/network/status";
+constexpr char FRONTDOOR_NETWORK_WIFI_PROFILE[]                 = "/network/wifi/profile";
+constexpr char FRONTDOOR_NETWORK_WIFI_STATUS[]                  = "/network/wifi/status";
 
 // CAPS nodes
-extern const std::string FRONTDOOR_CAPS_INITIALIZATION_UPDATE;
+constexpr char FRONTDOOR_CAPS_INITIALIZATION_UPDATE[]           = "/CapsInitializationUpdate";
 
 // audio nodes
-extern const std::string FRONTDOOR_AUDIO_VOLUME;
+constexpr char FRONTDOOR_AUDIO_VOLUME[]                         = "/audio/volume";
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
