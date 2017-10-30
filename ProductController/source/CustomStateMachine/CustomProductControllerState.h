@@ -37,6 +37,7 @@
 #include "Hsm.h"
 #include "HsmState.h"
 #include "ProductMessage.pb.h"
+#include "FrontDoorClient.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -104,6 +105,11 @@ public:
     virtual bool HandlePowerState( void );
     virtual bool HandleAutowakeStatus( bool active );
     virtual bool HandleKeyAction( int action );
+
+private:
+    std::map<int, bool>          m_KeyDispatch;
+    std::shared_ptr<FrontDoorClientIF>  m_FrontDoorClient;
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
