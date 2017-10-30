@@ -30,9 +30,6 @@
 #include "Utilities.h"
 #include "CustomProductControllerState.h"
 #include "ProductControllerHsm.h"
-#include "KeyActions.pb.h"
-
-using namespace KeyActionPb;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -58,8 +55,7 @@ CustomProductControllerState::CustomProductControllerState( ProductControllerHsm
                                                             Hsm::STATE            stateId,
                                                             const std::string&    name )
 
-    : CHsmState( stateId, &productStateMachine, name, pSuperState ),
-      m_FrontDoorClient( FrontDoor::FrontDoorClient::Create( "ProductControllerSM" ) )
+    : CHsmState( stateId, &productStateMachine, name, pSuperState )
 {
 
 }
@@ -111,13 +107,7 @@ bool CustomProductControllerState::HandleAutowakeStatus( bool active )
 
 bool CustomProductControllerState::HandleKeyAction( int action )
 {
-
-    auto respFunc = []() {};
-    auto errFunc = []( FRONT_DOOR_CLIENT_ERRORS e ) {};
-    AsyncCallback<> cbResp( respFunc, NULL );
-    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> cbErr( errFunc, NULL );
-
-    return true;
+    return false;
 }
 
 
