@@ -80,7 +80,7 @@ constexpr char FRONTDOOR_NETWORK_WIFI_PROFILE[]                 = "/network/wifi
 constexpr char FRONTDOOR_NETWORK_WIFI_STATUS[]                  = "/network/wifi/status";
 
 // CAPS nodes
-constexpr char FRONTDOOR_CAPS_INITIALIZATION_UPDATE[]           = "/CapsInitializationUpdate";
+constexpr char FRONTDOOR_CAPS_INITIALIZATION_UPDATE[]           = "CapsInitializationUpdate";
 
 // audio nodes
 constexpr char FRONTDOOR_AUDIO_VOLUME[]                         = "/audio/volume";
