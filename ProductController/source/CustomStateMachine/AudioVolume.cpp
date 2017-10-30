@@ -28,6 +28,10 @@
 #include "Utilities.h"
 #include "AudioService.pb.h"
 #include "AudioVolume.h"
+#include "AsyncCallback.h"
+#include "Utilities.h"
+#include "ProductMessage.pb.h"
+#include "ProductController.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,9 +43,16 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename VolumeType>
-AudioVolume<VolumeType>::AudioVolume( std::shared_ptr<FrontDoorClientIF> frontDoor ) 
-    : frontDoorClient(frontDoor) 
+AudioVolume<VolumeType>::AudioVolume( Callback<VolumeType> notifyChange ) :
+    minimum( DEFAULT_MINIMUM_VOLUME ),
+    maximum( DEFAULT_MAXIMUM_VOLUME ),
+    current( DEFAULT_CURRENT_VOLUME ),
+    // previous != current to force initial update
+    previous( current + 1 ),
+    stepSize( DEFAULT_STEPSIZE ),
+    notifyChangeCb( notifyChange )
 {
+    Notify();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,11 +65,12 @@ AudioVolume<VolumeType>::AudioVolume( std::shared_ptr<FrontDoorClientIF> frontDo
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename VolumeType>
-VolumeType AudioVolume<VolumeType>::operator=(VolumeType v)
+VolumeType AudioVolume<VolumeType>::operator=( VolumeType v )
 {
     current = v;
-    current = std::min(maximum, current);
-    current = std::max(minimum, current);
+    current = std::min( maximum, current );
+    current = std::max( minimum, current );
+    Notify();
 
     return current;
 }
@@ -73,9 +85,10 @@ VolumeType AudioVolume<VolumeType>::operator=(VolumeType v)
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename VolumeType>
-VolumeType AudioVolume<VolumeType>::operator+(VolumeType v)
+VolumeType AudioVolume<VolumeType>::operator+( VolumeType v )
 {
-    current = std::min(current + v, maximum);
+    current = std::min( current + v, maximum );
+    Notify();
     return current;
 }
 
@@ -89,9 +102,10 @@ VolumeType AudioVolume<VolumeType>::operator+(VolumeType v)
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename VolumeType>
-VolumeType AudioVolume<VolumeType>::operator-(VolumeType v)
+VolumeType AudioVolume<VolumeType>::operator-( VolumeType v )
 {
-    current = std::max(current - v, minimum);
+    current = std::max( current - v, minimum );
+    Notify();
     return current;
 }
 
@@ -105,13 +119,15 @@ VolumeType AudioVolume<VolumeType>::operator-(VolumeType v)
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename VolumeType>
-VolumeType AudioVolume<VolumeType>::operator++(VolumeType v)
+VolumeType AudioVolume<VolumeType>::operator++( VolumeType v )
 {
-    current = std::min(current + stepSize, maximum);
+    current = std::min( current + stepSize, maximum );
+    Notify();
     return current;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////// ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name  AudioVolume<VolumeType>::operator-- (postfix)
 ///
 /// @param v new volume value
@@ -120,9 +136,10 @@ VolumeType AudioVolume<VolumeType>::operator++(VolumeType v)
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename VolumeType>
-VolumeType AudioVolume<VolumeType>::operator--(VolumeType v)
+VolumeType AudioVolume<VolumeType>::operator--( VolumeType v )
 {
-    current = std::max(current - stepSize, minimum);
+    current = std::max( current - stepSize, minimum );
+    Notify();
     return current;
 }
 
@@ -139,11 +156,13 @@ template<typename VolumeType>
 VolumeType AudioVolume<VolumeType>::operator++()
 {
     VolumeType pre = current;
-    current = std::min(current + stepSize, maximum);
+    current = std::min( current + stepSize, maximum );
+    Notify();
     return pre;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////// ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name  AudioVolume<VolumeType>::operator-- (prefix)
 ///
 /// @param v new volume value
@@ -155,11 +174,26 @@ template<typename VolumeType>
 VolumeType AudioVolume<VolumeType>::operator--()
 {
     VolumeType pre = current;
-    current = std::max(current - stepSize, minimum);
+    current = std::max( current - stepSize, minimum );
+    Notify();
     return pre;
 }
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name  AudioVolume<VolumeType>::Notify
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+template<typename VolumeType>
+void AudioVolume<VolumeType>::Notify()
+{
+    if( current != previous )
+    {
+        notifyChangeCb( current );
+        previous = current;
+    }
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

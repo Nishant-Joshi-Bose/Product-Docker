@@ -33,10 +33,7 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "Hsm.h"
-#include "HsmState.h"
-#include "ProductMessage.pb.h"
-#include "FrontDoorClientIF.h"
+#include "Callback.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -50,34 +47,50 @@ template<typename VolumeType> class AudioVolume
 
 public:
 
-    AudioVolume( std::shared_ptr<FrontDoorClientIF> frontDoor );
+    AudioVolume( Callback<VolumeType> notifyChange );
     ~AudioVolume( ) {};
 
-
-    // The following operators manipulate volume, subject to min/max constraints.
-    // Operators that result in an assignment (=/++/--) update the volume via FrontDoor.
-    VolumeType operator=(VolumeType v);
-    VolumeType operator+(VolumeType v);
-    VolumeType operator-(VolumeType v);
-    VolumeType operator++(VolumeType v);
-    VolumeType operator--(VolumeType v);
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// The following operators manipulate volume, subject to min/max constraints.
+    /// Operators that result in an assignment (=/++/--) update the volume via FrontDoor.
+    ///
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    VolumeType operator=( VolumeType v );
+    VolumeType operator+( VolumeType v );
+    VolumeType operator-( VolumeType v );
+    VolumeType operator++( VolumeType v );
+    VolumeType operator--( VolumeType v );
     VolumeType operator++();
     VolumeType operator--();
 
 private:
-    std::shared_ptr<FrontDoorClientIF>  frontDoorClient;
-
-    // current volume
-    VolumeType current;
+    // Invoke notification callback if volume has changed
+    void Notify();
 
     // these are the minimum and maximum values the volume can take on
     VolumeType minimum;
     VolumeType maximum;
+    // current volume
+    VolumeType current;
+    // previous volume (used for detecting )
+    VolumeType previous;
 
     // amount that volume changes for increment/decrement
     VolumeType stepSize;
+
+    // change notification callback
+    Callback<VolumeType> notifyChangeCb;
+
+    // default values
+    static constexpr VolumeType DEFAULT_MINIMUM_VOLUME = 0;
+    static constexpr VolumeType DEFAULT_MAXIMUM_VOLUME = 100;
+    static constexpr VolumeType DEFAULT_CURRENT_VOLUME = 10;
+    static constexpr VolumeType DEFAULT_STEPSIZE = 1;
 };
 
+// include implementation
+#include "AudioVolume.cpp"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                         End of File                                          ///

@@ -39,6 +39,9 @@
 #include "ProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
+#include "AudioVolume.h"
+#include "FrontDoorClientIF.h"
+#include "FrontDoorClient.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -79,10 +82,16 @@ public:
     void HandleStateEnter( ) override;
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
+    bool HandleKeyAction( int action ) override;
 
 private:
+    void UpdateFrontDoorVolume( int32_t volume );
+    void HandleResponse();
+    void HandleError( FRONT_DOOR_CLIENT_ERRORS e );
 
-    ProfessorProductController& m_productController;
+    ProfessorProductController&         m_productController;
+    std::shared_ptr<FrontDoorClientIF>  m_frontDoorClient;
+    AudioVolume<int32_t>                m_volume;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

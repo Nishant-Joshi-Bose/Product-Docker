@@ -32,6 +32,8 @@
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
 #include "ProductControllerState.h"
+#include "KeyActions.pb.h"
+#include "AudioService.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -61,7 +63,11 @@ CustomProductControllerStateOn::CustomProductControllerStateOn( ProductControlle
                                                                 const std::string&          name )
 
     : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
-      m_productController( productController )
+      m_productController( productController ),
+      m_frontDoorClient( FrontDoor::FrontDoorClient::Create( "ProductControllerStateOn" ) ),
+// *INDENT-OFF*
+      m_volume( [ this ]( int v ) { UpdateFrontDoorVolume( v ); } )
+// *INDENT-ON*
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateOn is being constructed." );
 }
@@ -99,6 +105,52 @@ void CustomProductControllerStateOn::HandleStateExit( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateOn is being exited." );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStateOn::HandleStateExit
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateOn::HandleKeyAction( int action )
+{
+    switch( action )
+    {
+    case KeyActionPb::KEY_ACTION_VOLUME_UP:
+        m_volume++;
+        break;
+
+    case KeyActionPb::KEY_ACTION_VOLUME_DOWN:
+        m_volume--;
+        break;
+
+    default:
+        break;
+    }
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStateOn::UpdateFrontDoorVolume
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStateOn::UpdateFrontDoorVolume( int32_t v )
+{
+// *INDENT-OFF*
+    auto respFunc = [](SoundTouchInterface::volume v) { };
+    auto errFunc = []( FRONT_DOOR_CLIENT_ERRORS e ) { };
+// *INDENT-ON*
+    AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_productController.GetTask() );
+    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errCb( errFunc, m_productController.GetTask() );
+
+    SoundTouchInterface::volume volume;
+    volume.set_value( v );
+
+    m_frontDoorClient->SendPost<SoundTouchInterface::volume>(
+        ProductApp::FRONTDOOR_AUDIO_VOLUME, volume, respFunc, errCb );
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
