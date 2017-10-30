@@ -137,16 +137,23 @@ bool CustomProductControllerStateOn::HandleKeyAction( int action )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateOn::UpdateFrontDoorVolume( int32_t v )
 {
-// *INDENT-OFF*
-    auto respFunc = [](SoundTouchInterface::volume v) { };
-    auto errFunc = []( FRONT_DOOR_CLIENT_ERRORS e ) { };
-// *INDENT-ON*
+    auto respFunc = []( SoundTouchInterface::volume v )
+    {
+        BOSE_INFO( s_logger, "Got volume set response (%d)", v.value() );
+    };
+
+    auto errFunc = []( FRONT_DOOR_CLIENT_ERRORS e )
+    {
+        BOSE_INFO( s_logger, "Error updating FrontDoor volume" );
+    };
+
     AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_productController.GetTask() );
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errCb( errFunc, m_productController.GetTask() );
 
     SoundTouchInterface::volume volume;
     volume.set_value( v );
 
+    BOSE_INFO( s_logger, "Updating FrontDoor volume %d", v );
     m_frontDoorClient->SendPost<SoundTouchInterface::volume>(
         ProductApp::FRONTDOOR_AUDIO_VOLUME, volume, respFunc, errCb );
 }
