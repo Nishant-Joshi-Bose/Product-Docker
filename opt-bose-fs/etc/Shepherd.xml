@@ -40,7 +40,7 @@
 
   <daemon name="BTSource"/>
 
-  <daemon name="BTLESetup"/>
+  <daemon name="BLESetup"/>
 
   <daemon name="PtsServer">
     <arg>/opt/Bose/etc/pts-handler</arg>
