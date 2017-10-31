@@ -725,9 +725,9 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         auto keyData = message.keydata( );
         auto keyString = m_ProductUserInterface->GetKeyString( static_cast< KeyActionPb::KEY_ACTION >( keyData.action( ) ) );
 
-        BOSE_DEBUG( s_logger, "The key action value %s (valued %d) was received.",
-                    keyString.c_str( ),
-                    keyData.action( ) );
+        BOSE_INFO( s_logger, "The key action value %s (valued %d) was received.",
+                   keyString.c_str( ),
+                   keyData.action( ) );
 
         m_ProductControllerStateMachine.Handle< int >
         ( &CustomProductControllerState::HandleKeyAction, keyData.action( ) );
