@@ -64,6 +64,17 @@ private:
                        int32_t transact_id );
     void RegisterCliClientCmds() override;
 
+    void HandleBluetoothModuleReady( bool bluetoothModuleReady );
+    void HandleBtLeModuleReady( bool btLeModuleReady );
+    void HandleNetworkCapabilityReady( const std::list<std::string>& points );
+    void HandleNetworkCapabilityNotReady( const std::list<std::string>& points );
+    void HandleCapsCapabilityReady( const std::list<std::string>& points );
+    void HandleCapsCapabilityNotReady( const std::list<std::string>& points );
+    void HandleBluetoothCapabilityReady( const std::list<std::string>& points );
+    void HandleBluetoothCapabilityNotReady( const std::list<std::string>& points );
+    void HandleBtLeCapabilityReady( const std::list<std::string>& points );
+    void HandleBtLeCapabilityNotReady( const std::list<std::string>& points );
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  ReadSystemLanguageFromPersistence
 /// @brief Function to read persisted language code from /mnt/nv/product-persistence.
@@ -168,11 +179,11 @@ public:
     bool IsLanguageSet();
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @name  IsNetworkSetupDone
+/// @name  IsNetworkConfigured
 /// @brief true if system is conencted to ethernet or number of wifi profiles are nonzero
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
-    bool IsNetworkSetupDone();
+    bool IsNetworkConfigured();
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  GetSystemLanguageCode
@@ -294,6 +305,8 @@ private:
     bool                                        m_isCapsReady = false;
     bool                                        m_isLPMReady  = false;
     bool                                        m_isNetworkModuleReady  = false;
+    bool                                        m_isBLEModuleReady  = false;
+    bool                                        m_isBluetoothReady  = false;
 
     int                                         m_WiFiProfilesCount;
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>     errorCb;
