@@ -113,6 +113,8 @@ void CustomProductControllerStateOn::HandleStateExit( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateOn::HandleKeyAction( int action )
 {
+    bool handled = true;
+
     switch( action )
     {
     case KeyActionPb::KEY_ACTION_VOLUME_UP:
@@ -124,10 +126,11 @@ bool CustomProductControllerStateOn::HandleKeyAction( int action )
         break;
 
     default:
+        handled = false;
         break;
     }
 
-    return true;
+    return handled;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
