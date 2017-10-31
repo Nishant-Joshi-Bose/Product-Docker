@@ -29,10 +29,10 @@ EddieProductControllerHsm::EddieProductControllerHsm( NotifyTargetTaskIF* pTask,
 bool EddieProductControllerHsm::IsProductNeedsSetup()
 {
     s_logger.LogInfo( "%s:: lang=%d, network=%d", __func__, m_eddieProductController.IsLanguageSet(),
-                      m_eddieProductController.IsNetworkSetupDone() );
+                      m_eddieProductController.IsNetworkConfigured() );
 
     return not( m_eddieProductController.IsLanguageSet() and
-                m_eddieProductController.IsNetworkSetupDone() );
+                m_eddieProductController.IsNetworkConfigured() );
 }
 
 } // namespace ProductApp

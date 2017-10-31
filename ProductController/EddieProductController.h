@@ -66,13 +66,15 @@ private:
     void RegisterCliClientCmds() override;
 
     void HandleBluetoothModuleReady( bool bluetoothModuleReady );
-    void HandleBtBleModuleReady( bool btBleModuleReady );
-    void HandleNetworkPointOfInterestReady( const std::list<std::string>& points );
-    void HandleNetworkPointOfInterestNotReady( const std::list<std::string>& points );
-    void HandleCapsPointOfInterestReady( const std::list<std::string>& points );
-    void HandleCapsPointOfInterestNotReady( const std::list<std::string>& points );
-    void HandleBluetoothPointOfInterestReady( const std::list<std::string>& points );
-    void HandleBluetoothPointOfInterestNotReady( const std::list<std::string>& points );
+    void HandleBtLeModuleReady( bool btLeModuleReady );
+    void HandleNetworkCapabilityReady( const std::list<std::string>& points );
+    void HandleNetworkCapabilityNotReady( const std::list<std::string>& points );
+    void HandleCapsCapabilityReady( const std::list<std::string>& points );
+    void HandleCapsCapabilityNotReady( const std::list<std::string>& points );
+    void HandleBluetoothCapabilityReady( const std::list<std::string>& points );
+    void HandleBluetoothCapabilityNotReady( const std::list<std::string>& points );
+    void HandleBtLeCapabilityReady( const std::list<std::string>& points );
+    void HandleBtLeCapabilityNotReady( const std::list<std::string>& points );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  ReadSystemLanguageFromPersistence
@@ -185,11 +187,11 @@ public:
     bool IsLanguageSet();
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @name  IsNetworkSetupDone
+/// @name  IsNetworkConfigured
 /// @brief true if system is conencted to ethernet or number of wifi profiles are nonzero
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
-    bool IsNetworkSetupDone();
+    bool IsNetworkConfigured();
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  GetSystemLanguageCode
