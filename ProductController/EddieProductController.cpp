@@ -148,8 +148,6 @@ void EddieProductController::RegisterEndPoints()
     m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_LANGUAGE_API , getLanguageReqCb );
     m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API , getConfigurationStatusReqCb );
 
-    m_FrontDoorClientIF->RegisterGet( FRONTDOOR_CONTENT_ALLOWSOURCESELECT_API , getallowSourceSelectReqCb );
-
     m_FrontDoorClientIF->RegisterPost<ProductPb::Language>( FRONTDOOR_SYSTEM_LANGUAGE_API , postLanguageReqCb );
 
     ///Device info get request handler
@@ -765,7 +763,6 @@ void EddieProductController::HandleCapsCapabilityReady( const std::list<std::str
 {
     BOSE_INFO( s_logger, __func__ );
     HandleCAPSReady( true );
-    SendAllowSourceSelectNotification( true );
 }
 
 void EddieProductController::HandleCapsCapabilityNotReady( const std::list<std::string>& points )
