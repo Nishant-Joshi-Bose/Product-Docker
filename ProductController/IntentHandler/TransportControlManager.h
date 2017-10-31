@@ -6,7 +6,9 @@
 //////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
+#include "ProductController.h"
 #include "IntentHandler.h"
+#include "EddieProductController.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 
 namespace ProductApp
@@ -15,18 +17,20 @@ namespace ProductApp
 class TransportControlManager: public IntentManager
 {
 public:
-    TransportControlManager( NotifyTargetTaskIF& task, CliClientMT& cliClient,
-                             const FrontDoorClientIF_t& frontDoorClient ):
-        IntentManager( task, cliClient, frontDoorClient ),
-        m_NowPlayingRsp( nullptr, &task )
+    TransportControlManager( NotifyTargetTaskIF& task,
+                             const CliClientMT& cliClient,
+                             const FrontDoorClientIF_t& frontDoorClient,
+                             const ProductController& controller ):
+        IntentManager( task, cliClient, frontDoorClient, controller ),
+        m_NowPlayingRsp( nullptr, &task ),
+        m_play( true )
     {
         m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
-            ( std::bind( &TransportControlManager::FrontDoorClientErrorCb,
-                         this, std::placeholders::_1 ), &task );
+                                   ( std::bind( &TransportControlManager::FrontDoorClientErrorCb,
+                                                this, std::placeholders::_1 ), &task );
 
-        AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingRsp =
+        m_NowPlayingRsp =
             AsyncCallback<SoundTouchInterface::NowPlayingJson> ( std::bind( &TransportControlManager::PutTransportControlCbRsp, this, std::placeholders::_1 ), &task );
-
     }
     virtual ~TransportControlManager() { }
 
@@ -38,15 +42,32 @@ public:
     // desired function for desired state change
     //
     bool Handle( KeyHandlerUtil::ActionType_t arg ) override;
+    void PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp );
 
 private:
+    bool TogglePlayPause()
+    {
+        if( m_play )
+            m_play = false;
+        else
+            m_play = true;
+        return m_play;
+    }
+    void Play()
+    {
+        m_play = true;
+    }
+    void Pause()
+    {
+        m_play = false;
+    }
     bool ValidSourceAvailable();
     bool CurrentlyPlaying();
-
-    void PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp );
+    SoundTouchInterface::StatusJson CurrentStatusJson();
 
     virtual void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
 
     AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingRsp;
+    bool m_play;
 };
 } // namespace ProductApp

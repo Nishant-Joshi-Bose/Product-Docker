@@ -1,0 +1,9 @@
+#!/bin/bash
+#
+# Build everything that ElectricCommander will build.
+#
+set -- jobs=4 "$@"
+
+set -x
+make "$@" sdk=qc8017_32 cfg=Release default package || exit
+: success

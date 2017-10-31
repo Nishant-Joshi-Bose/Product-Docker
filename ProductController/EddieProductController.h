@@ -24,7 +24,6 @@
 #include "DeviceManager.pb.h"
 #include "NetManager.pb.h"
 #include "SoundTouchInterface/CapsInitializationStatus.pb.h"
-#include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "ProductCliClient.h"
 #include "LpmClientIF.h"
@@ -137,13 +136,6 @@ public:
     void HandleIntents( KeyHandlerUtil::ActionType_t result );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @name  SendAllowSourceSelectNotification
-/// @brief function to send Send allowSourceSelectUpdate Notification Msg to the subscriber.
-/// @return void
-////////////////////////////////////////////////////////////////////////////////
-    void SendAllowSourceSelectNotification( bool isSourceSelectAllowed );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @name  IsAllModuleReady
 /// @brief true if all the dependent modules are up and ready.
 /// Modules like- LPM, CAPS, SW Update etc.
@@ -250,8 +242,6 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
     void HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationStatus &status );
     void CallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
-    void HandleAllowSourceSelectRequest( const Callback<SoundTouchInterface::AllowSourceSelect> &resp );
-
     IntentHandler& IntentHandle()
     {
         return m_IntentHandler;
@@ -274,6 +264,10 @@ public:
     inline LpmInterface& GetLpmInterface()
     {
         return m_LpmInterface;
+    }
+    const SoundTouchInterface::NowPlayingJson& GetNowPlaying() const
+    {
+        return m_nowPlaying;
     }
 
 private:
