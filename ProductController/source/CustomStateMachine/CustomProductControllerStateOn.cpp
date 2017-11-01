@@ -189,54 +189,6 @@ bool CustomProductControllerStateOn::HandleKeyAction( int action )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateOn::ReceiveFrontDoorVolume
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateOn::ReceiveFrontDoorVolume( SoundTouchInterface::volume& volume )
-{
-    int32_t vol = volume.value();
-
-    BOSE_VERBOSE( s_logger, "Got volume notify (%d)", vol );
-
-    // send to lpm as well (this is currently same range as CAPS, 0-100)
-    ProductHardwareInterface *hwif = m_productController.GetHardwareInterface();
-    hwif->SendSetVolume( vol );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateOn::UpdateFrontDoorVolume
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateOn::UpdateFrontDoorVolume( int32_t v )
-{
-    // TODO - currently the CAPS interface only supports volume setting directly (not delta);
-    // once delta is in place remove volume class and just send a volume_up/volume_down command
-    // when the corresponding intents are received
-    auto respFunc = []( SoundTouchInterface::volume v )
-    {
-        BOSE_VERBOSE( s_logger, "Got volume set response (%d)", v.value() );
-    };
-
-    auto errFunc = []( FRONT_DOOR_CLIENT_ERRORS e )
-    {
-        BOSE_ERROR( s_logger, "Error updating FrontDoor volume" );
-    };
-
-    AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_productController.GetTask() );
-    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errCb( errFunc, m_productController.GetTask() );
-
-    SoundTouchInterface::volume volume;
-    volume.set_value( v );
-
-    BOSE_VERBOSE( s_logger, "Updating FrontDoor volume %d", v );
-    m_frontDoorClient->SendPost<SoundTouchInterface::volume>(
-        ProductApp::FRONTDOOR_AUDIO_VOLUME, volume, respFunc, errCb );
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
