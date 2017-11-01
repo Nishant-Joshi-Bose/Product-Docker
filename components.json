@@ -44,10 +44,6 @@
     "selected_version": "master@6219f809686614aa13a35f1581ea8df766baec74"
   },
   {
-    "name": "googletest-qc8017_32",
-    "selected_version": "branches/googletest@2287"
-  },
-  {
     "name": "KeyHandler-qc8017_32",
     "selected_version": "Continuous/master/0.0.1-14+14ad38c"
   },
@@ -72,8 +68,8 @@
     "selected_version": "Release/master/1.1"
   },
   {
-    "name": "RivieraLpmService",
-    "selected_version": "master@5e3aefe78e9cd00f7dbeaab54f17be962be60cdf"
+    "name": "RivieraLpmService-qc8017_32",
+    "selected_version": "Continuous/master/0.0.1-6+f821a21"
   },
   {
     "name": "RivieraLpmUpdater",
