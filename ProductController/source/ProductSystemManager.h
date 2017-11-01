@@ -95,7 +95,7 @@ public:
     /// These public declarations are primarily to be used by the Product Controller to
     /// determine if the system language has been set and to set the network configuration status.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool IsSystemLanguageSet( void );
+    bool IsSystemLanguageSet( void ) const;
     void SetNetworkAccoutConfigurationStatus( bool network, bool account );
 
 private:
@@ -170,7 +170,7 @@ private:
     /// The following methods are used to handle system and supported language information.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleGetLanguageRequest( const Callback< ProductPb::Language >&  response );
+    void HandleGetLanguageRequest( const Callback< ProductPb::Language >&  response ) const;
     void HandlePostLanguageRequest( const ProductPb::Language&              language,
                                     const Callback< ProductPb::Language >&  response );
 
@@ -180,14 +180,14 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleGetConfigurationStatusRequest( const Callback< ProductPb::ConfigurationStatus >&
-                                              response );
+                                              response ) const;
 
     //////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// The following method is used to handle GET request of /system/info.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////
-    void HandleGetSystemInfoRequest( const Callback<::ProductPb::SystemInfo>& response );
+    void HandleGetSystemInfoRequest( const Callback<::ProductPb::SystemInfo>& response ) const;
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -196,7 +196,7 @@ private:
     /// machine.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void SendMessage( ProductMessage& message );
+    void SendMessage( ProductMessage& message ) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

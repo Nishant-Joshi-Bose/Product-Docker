@@ -240,7 +240,7 @@ bool ProductSystemManager::Run( )
 /// @return This method returns true if the corresponding member has a system language defined.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductSystemManager::IsSystemLanguageSet( )
+bool ProductSystemManager::IsSystemLanguageSet( ) const
 {
     return m_LanguageSettings.has_code( );
 }
@@ -382,7 +382,8 @@ void ProductSystemManager::WriteLanguageSettingsToPersistentStorage( )
 /// @param Callback< ProductPb::Language >& response
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::HandleGetLanguageRequest( const Callback< ProductPb::Language >& response )
+void ProductSystemManager::HandleGetLanguageRequest(
+    const Callback< ProductPb::Language >& response ) const
 {
     BOSE_DEBUG( s_logger, "The request to get the system and supported languages has been made." );
 
@@ -397,7 +398,7 @@ void ProductSystemManager::HandleGetLanguageRequest( const Callback< ProductPb::
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::HandleGetSystemInfoRequest(
-    const Callback<::ProductPb::SystemInfo>& response )
+    const Callback<::ProductPb::SystemInfo>& response ) const
 {
     BOSE_DEBUG( s_logger, "/system/info GET request received." );
 
@@ -535,7 +536,7 @@ void ProductSystemManager::WriteConfigurationStatusToPersistentStorage( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::HandleGetConfigurationStatusRequest( const
                                                                 Callback< ProductPb::ConfigurationStatus >&
-                                                                response )
+                                                                response ) const
 {
     BOSE_DEBUG( s_logger, "Sending the configuration status for a get request." );
 
@@ -587,7 +588,7 @@ void ProductSystemManager::HandleCapsStatusFailed( const FRONT_DOOR_CLIENT_ERROR
 /// @param ProductMessage& message
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::SendMessage( ProductMessage& message )
+void ProductSystemManager::SendMessage( ProductMessage& message ) const
 {
     IL::BreakThread( std::bind( m_ProductNotify, message ), m_ProductTask );
 }
