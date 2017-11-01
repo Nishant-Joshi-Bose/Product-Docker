@@ -42,6 +42,7 @@
 #include "AudioVolume.h"
 #include "FrontDoorClientIF.h"
 #include "FrontDoorClient.h"
+#include "AudioService.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -67,7 +68,18 @@ class ProfessorProductController;
 class CustomProductControllerStateOn : public ProductControllerState
 {
 public:
+    static CustomProductControllerStateOn *Create( ProductControllerHsm&       hsm,
+                                                   CHsmState*                  pSuperState,
+                                                   ProfessorProductController& productController,
+                                                   Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_ON,
+                                                   const std::string&          name    = "CustomProductControllerStateOn" );
 
+    void HandleStateEnter( ) override;
+    void HandleStateStart( ) override;
+    void HandleStateExit( )  override;
+    bool HandleKeyAction( int action ) override;
+
+private:
     CustomProductControllerStateOn( ProductControllerHsm&       hsm,
                                     CHsmState*                  pSuperState,
                                     ProfessorProductController& productController,
@@ -79,19 +91,15 @@ public:
 
     }
 
-    void HandleStateEnter( ) override;
-    void HandleStateStart( ) override;
-    void HandleStateExit( )  override;
-    bool HandleKeyAction( int action ) override;
-
-private:
+    void Initialize();
     void UpdateFrontDoorVolume( int32_t volume );
+    void ReceiveFrontDoorVolume( SoundTouchInterface::volume& volume );
     void HandleResponse();
     void HandleError( FRONT_DOOR_CLIENT_ERRORS e );
 
-    ProfessorProductController&         m_productController;
-    std::shared_ptr<FrontDoorClientIF>  m_frontDoorClient;
-    AudioVolume<int32_t>                m_volume;
+    ProfessorProductController&             m_productController;
+    std::shared_ptr<FrontDoorClientIF>      m_frontDoorClient;
+    std::shared_ptr<AudioVolume<int32_t>>   m_volume;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

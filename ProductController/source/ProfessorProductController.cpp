@@ -202,9 +202,9 @@ void ProfessorProductController::Run( )
                                                                     stateTop,
                                                                     *this );
 
-    auto* stateOn = new CustomProductControllerStateOn( m_ProductControllerStateMachine,
-                                                        stateTop,
-                                                        *this );
+    auto* stateOn = CustomProductControllerStateOn::Create( m_ProductControllerStateMachine,
+                                                            stateTop,
+                                                            *this );
 
     auto* statePlayable = new CustomProductControllerStatePlayable( m_ProductControllerStateMachine,
                                                                     stateOn,

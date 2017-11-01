@@ -33,7 +33,7 @@
 #include "ProfessorProductController.h"
 #include "ProductControllerState.h"
 #include "KeyActions.pb.h"
-#include "AudioService.pb.h"
+#include "ProductHardwareInterface.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -64,13 +64,68 @@ CustomProductControllerStateOn::CustomProductControllerStateOn( ProductControlle
 
     : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
       m_productController( productController ),
-      m_frontDoorClient( FrontDoor::FrontDoorClient::Create( "ProductControllerStateOn" ) ),
-// *INDENT-OFF*
-      m_volume( [ this ]( int v ) { UpdateFrontDoorVolume( v ); } )
-// *INDENT-ON*
+      m_frontDoorClient( FrontDoor::FrontDoorClient::Create( "ProductControllerStateOn" ) )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateOn is being constructed." );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStateOn::Create
+///
+/// @param hsm
+///
+/// @param pSuperState
+///
+/// @param productController
+///
+/// @param stateId
+///
+/// @param name
+///
+/// @return Pointer to a CustomProductControllerState instance
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+CustomProductControllerStateOn *CustomProductControllerStateOn::Create(
+    ProductControllerHsm&       hsm,
+    CHsmState*                  pSuperState,
+    ProfessorProductController& productController,
+    Hsm::STATE                  stateId,
+    const std::string&          name )
+{
+    auto *state = new CustomProductControllerStateOn( hsm,
+                                                      pSuperState,
+                                                      productController,
+                                                      stateId,
+                                                      name );
+
+    state->Initialize();
+
+    return state;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStateOn::Initialize
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStateOn::Initialize()
+{
+    auto fVolume = [ this ]( int32_t v )
+    {
+        UpdateFrontDoorVolume( v );
+    };
+    m_volume = std::make_shared< AudioVolume<int32_t> >( fVolume );
+
+    auto fNotify = [ this ]( SoundTouchInterface::volume v )
+    {
+        ReceiveFrontDoorVolume( v );
+    };
+    m_frontDoorClient->RegisterNotification< SoundTouchInterface::volume >
+    ( FRONTDOOR_AUDIO_VOLUME, fNotify );
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -118,11 +173,11 @@ bool CustomProductControllerStateOn::HandleKeyAction( int action )
     switch( action )
     {
     case KeyActionPb::KEY_ACTION_VOLUME_UP:
-        m_volume++;
+        ( *m_volume )++;
         break;
 
     case KeyActionPb::KEY_ACTION_VOLUME_DOWN:
-        m_volume--;
+        ( *m_volume )--;
         break;
 
     default:
@@ -135,11 +190,30 @@ bool CustomProductControllerStateOn::HandleKeyAction( int action )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @brief CustomProductControllerStateOn::ReceiveFrontDoorVolume
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStateOn::ReceiveFrontDoorVolume( SoundTouchInterface::volume& volume )
+{
+    int32_t vol = volume.value();
+
+    BOSE_VERBOSE( s_logger, "Got volume notify (%d)", vol );
+
+    // send to lpm as well (this is currently same range as CAPS, 0-100)
+    ProductHardwareInterface *hwif = m_productController.GetHardwareInterface();
+    hwif->SendSetVolume( vol );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief CustomProductControllerStateOn::UpdateFrontDoorVolume
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateOn::UpdateFrontDoorVolume( int32_t v )
 {
+    // TODO - currently the CAPS interface only supports volume setting directly (not delta);
+    // once delta is in place remove volume class and just send a volume_up/volume_down command
+    // when the corresponding intents are received
     auto respFunc = []( SoundTouchInterface::volume v )
     {
         BOSE_VERBOSE( s_logger, "Got volume set response (%d)", v.value() );
