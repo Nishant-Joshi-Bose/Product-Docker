@@ -38,11 +38,11 @@ const std::string KEY_CONFIG_FILE = "/var/run/shepherd/KeyConfiguration.json";
 
 EddieProductController::EddieProductController( std::string const& ProductName ):
     ProductController( ProductName ),
-    m_EddieProductControllerHsm( GetTask(), ProductName + "ProductHsm", *this ),
-    m_EddieProductControllerStateTop( m_EddieProductControllerHsm, nullptr,  *this ),
-    m_EddieProductControllerStateBooting( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop, *this ),
-    m_EddieProductControllerStateSetup( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop, *this ),
-    m_EddieProductControllerStateNetworkStandby( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop, *this ),
+    m_EddieProductControllerHsm( GetTask(), ProductName + "ProductHsm" ),
+    m_EddieProductControllerStateTop( m_EddieProductControllerHsm, nullptr ),
+    m_EddieProductControllerStateBooting( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop ),
+    m_EddieProductControllerStateSetup( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop ),
+    m_EddieProductControllerStateNetworkStandby( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop ),
     m_LpmClient(),
     m_KeyHandler( *GetTask(), m_CliClientMT, KEY_CONFIG_FILE ),
     m_deviceManager( GetTask(), *this ),
@@ -62,7 +62,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateBooting );
     m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateSetup );
     m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateNetworkStandby );
-    m_EddieProductControllerHsm.Init( PRODUCT_CONTROLLER_STATE_BOOTING );
+    m_EddieProductControllerHsm.Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );
 
     InitializeLpmClient();
     m_LanguagePersistence = ProtoPersistenceFactory::Create( "ProductLanguage", g_ProductPersistenceDir );

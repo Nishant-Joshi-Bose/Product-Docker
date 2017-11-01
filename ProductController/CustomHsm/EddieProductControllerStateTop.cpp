@@ -17,17 +17,16 @@ namespace ProductApp
 {
 EddieProductControllerStateTop::EddieProductControllerStateTop( EddieProductControllerHsm& hsm,
                                                                 CHsmState* pSuperState,
-                                                                EddieProductController& eddieProductController,
                                                                 Hsm::STATE stateId,
                                                                 const std::string& name ) :
-    ProductControllerStateTop( hsm, pSuperState, eddieProductController, stateId, name )
+    ProductControllerStateTop( hsm, pSuperState, stateId, name )
 {
     BOSE_INFO( s_logger,  __func__ );
 }
 
 bool EddieProductControllerStateTop::HandleModulesReady()
 {
-    BOSE_INFO( s_logger, "%s, %d", __func__, static_cast<EddieProductController&>( GetProductController() ).IsAllModuleReady() );
+    BOSE_INFO( s_logger, "%s, %d", __func__,  GetCustomProductController().IsAllModuleReady() );
     return true;
 }
 

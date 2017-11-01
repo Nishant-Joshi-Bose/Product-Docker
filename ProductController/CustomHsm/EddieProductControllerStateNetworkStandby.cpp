@@ -16,10 +16,9 @@ namespace ProductApp
 {
 EddieProductControllerStateNetworkStandby::EddieProductControllerStateNetworkStandby( EddieProductControllerHsm& hsm,
         CHsmState* pSuperState,
-        EddieProductController& eddieProductController,
         Hsm::STATE stateId,
         const std::string& name ) :
-    ProductControllerStateNetworkStandby( hsm, pSuperState, eddieProductController, stateId, name )
+    ProductControllerStateNetworkStandby( hsm, pSuperState, stateId, name )
 {
     BOSE_INFO( s_logger, __func__ );
 }
@@ -43,8 +42,7 @@ bool EddieProductControllerStateNetworkStandby::HandleIntents( KeyHandlerUtil::A
 {
     BOSE_DEBUG( s_logger, "%s, %d", __func__, ( uint16_t ) result );
 
-    IntentHandler& IHandle =
-        static_cast<EddieProductController&>( GetProductController() ).IntentHandle();
+    IntentHandler& IHandle = GetCustomProductController().IntentHandle();
     if( ( IHandle.isIntentPlayControl( result ) ) ||
         ( IHandle.IsIntentBlueTooth( result ) )   ||
         ( IHandle.IsIntentAlexa( result ) )        ||

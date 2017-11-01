@@ -14,14 +14,12 @@
 namespace ProductApp
 {
 class EddieProductControllerHsm;
-class EddieProductController;
 
 class EddieProductControllerStateNetworkStandby : public ProductControllerStateNetworkStandby
 {
 public:
     EddieProductControllerStateNetworkStandby( EddieProductControllerHsm& hsm,
                                                CHsmState* pSuperState,
-                                               EddieProductController& eddieProductController,
                                                Hsm::STATE stateId = CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY,
                                                //Don't change below state name. This is mapped with Madrid's requirement.
                                                const std::string& name = "NETWORK_STANDBY" );

@@ -15,14 +15,12 @@
 namespace ProductApp
 {
 class EddieProductControllerHsm;
-class EddieProductController;
 
 class EddieProductControllerStateTop : public ProductControllerStateTop
 {
 public:
     EddieProductControllerStateTop( EddieProductControllerHsm& hsm,
                                     CHsmState* pSuperState,
-                                    EddieProductController& eddieProductController,
                                     Hsm::STATE stateId = 0,
                                     const std::string& name = "TOP" );
 
