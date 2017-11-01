@@ -25,7 +25,6 @@ endif
 CMAKE_USE_CCACHE := $(USE_CCACHE)
 
 PROFESSORLPMPACKAGE_DIR = $(shell components get ProfessorLPM-Package installed_location)
-RIVIERALPMSERVICE_DIR = $(shell components get RivieraLpmService installed_location)
 PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 A4VVIDEOMANAGERSERVICE_DIR = $(shell components get A4VVideoManagerService installed_location)
@@ -35,7 +34,6 @@ A4VREMOTECOMMUNICATIONSERVICE_DIR = $(shell components get A4VRemoteCommunicatio
 .PHONY: generated_sources
 generated_sources: check_tools version-files
 	$(MAKE) -C ProductController $@
-	$(MAKE) -C $(RIVIERALPMSERVICE_DIR) $@
 	$(MAKE) -C $(PRODUCTCONTROLLERCOMMON_DIR) $@
 	$(MAKE) -C $(A4VVIDEOMANAGERSERVICE_DIR) $@
 	$(MAKE) -C $(A4VQUICKSETSERVICE_DIR) $@

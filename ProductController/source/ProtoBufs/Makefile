@@ -9,7 +9,8 @@ PROTO_SOURCES = AudioSettings.proto       \
                 Language.proto            \
                 ContentItem.proto         \
                 ProductSTS.proto          \
-                KeyActions.proto
+                KeyActions.proto          \
+                SystemInfo.proto
 
 #
 # The following alias is used to search for imported Protocol Buffer files.

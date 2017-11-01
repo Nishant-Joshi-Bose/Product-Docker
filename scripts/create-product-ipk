@@ -73,6 +73,7 @@ audiopath_dir=$(components get CastleAudioPath-qc8017_32 installed_location) || 
 castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
 castlepassport_dir=$(components get CastlePassport-qc8017_32 installed_location) || exit
 professorlpm_package_dir=$(components get ProfessorLPM-Package installed_location) || exit
+lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
 
 arch=arm-oemllib32-linux
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -194,6 +195,7 @@ sed -i "s/%FROMVERSION%/From: $v/" "$opt_dir/html/update.html" || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlepassport_dir/stage" "$opt_dir" || exit
 "$shepherd_dir/stage" "$opt_dir" || exit
+"$lpmservice_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 

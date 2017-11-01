@@ -42,6 +42,7 @@
 #include "FrontDoorClient.h"
 #include "ProductMessage.pb.h"
 #include "Language.pb.h"
+#include "SystemInfo.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -108,7 +109,9 @@ ProductSystemManager::ProductSystemManager( NotifyTargetTaskIF*        ProductTa
       m_LanguageSettingsPersistentStorage( ProtoPersistenceFactory::Create( "ProductLanguage",
                                                                             g_ProductDirectory ) ),
       m_ConfigurationStatusPersistentStorage( ProtoPersistenceFactory::Create( "ConfigurationStatus",
-                                                                               g_ProductDirectory ) )
+                                                                               g_ProductDirectory ) ),
+      m_SystemInfoPersistentStorage( ProtoPersistenceFactory::Create( "SystemInfo",
+                                                                      g_ProductDirectory ) )
 {
 
 }
@@ -124,6 +127,7 @@ bool ProductSystemManager::Run( )
 {
     ReadLanguageSettingsFromPersistentStorage( );
     ReadConfigurationStatusFromPersistentStorage( );
+    ReadSystemInfoSettingsFromPersistentStorage( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// Registration for other Bose client processes for getting system language settings is made
@@ -211,6 +215,21 @@ bool ProductSystemManager::Run( )
 
     BOSE_DEBUG( s_logger, "A notification request for CAPS initialization messages has been made." );
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Registration for ownership of system/info endpoint accessible over FrontDoor.
+    ///     Need to support GET and NOTIFY commands.
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    {
+        AsyncCallback< Callback<::ProductPb::SystemInfo> >
+        asyncCallback( std::bind( &ProductSystemManager::HandleGetSystemInfoRequest,
+                                  this,
+                                  std::placeholders::_1 ),
+                       m_ProductTask );
+        m_FrontDoorClient->RegisterGet( "/system/info", asyncCallback );
+
+        BOSE_DEBUG( s_logger, "Registration for /system/info GET request complete." );
+    }
+
     return true;
 }
 
@@ -221,7 +240,7 @@ bool ProductSystemManager::Run( )
 /// @return This method returns true if the corresponding member has a system language defined.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductSystemManager::IsSystemLanguageSet( )
+bool ProductSystemManager::IsSystemLanguageSet( ) const
 {
     return m_LanguageSettings.has_code( );
 }
@@ -292,6 +311,51 @@ void ProductSystemManager::ReadLanguageSettingsFromPersistentStorage( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @brief ProductSystemManager::ReadSystemInfoSettingsFromPersistentStorage
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductSystemManager::ReadSystemInfoSettingsFromPersistentStorage( void )
+{
+    try
+    {
+        BOSE_DEBUG( s_logger, "Reading system/info from persistent storage" );
+
+        std::string storageString = m_SystemInfoPersistentStorage->Load( );
+        ProtoToMarkup::FromJson( storageString, &m_SystemInfo );
+    }
+    catch( ... )
+    {
+
+        try
+        {
+            BOSE_DEBUG( s_logger, "Reading system/info from persistent storage failed." );
+            BOSE_DEBUG( s_logger, "Default system/info value will be written to persistent storage." );
+
+            m_SystemInfo.set_name( "Bose SoundTouch 1234" );
+
+            // TODO: these parameters will need updating for final product
+            m_SystemInfo.set_type( "SoundTouch XX" );
+            m_SystemInfo.set_variant( "Professor" );
+            m_SystemInfo.set_guid( "xxxx-xxxx-xx" );
+            m_SystemInfo.set_serialnumber( "1234567890" );
+            m_SystemInfo.set_moduletype( "Riviera" );
+            m_SystemInfo.set_countrycode( "US" );
+            m_SystemInfo.set_regioncode( "US" );
+
+            m_SystemInfoPersistentStorage->Remove( );
+            m_SystemInfoPersistentStorage->Store( ProtoToMarkup::ToJson( m_SystemInfo, false ) );
+        }
+        catch( ... )
+        {
+            BOSE_ERROR( s_logger, "Writing default /system/info to persistent storage failed." );
+        }
+
+    }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name  ProductSystemManager::WriteLanguageSettingsFromPersistentStorage
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -318,11 +382,27 @@ void ProductSystemManager::WriteLanguageSettingsToPersistentStorage( )
 /// @param Callback< ProductPb::Language >& response
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::HandleGetLanguageRequest( const Callback< ProductPb::Language >& response )
+void ProductSystemManager::HandleGetLanguageRequest(
+    const Callback< ProductPb::Language >& response ) const
 {
     BOSE_DEBUG( s_logger, "The request to get the system and supported languages has been made." );
 
     response.Send( m_LanguageSettings );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductSystemManager::HandleGetSystemInfoRequest
+///
+/// @param const Callback<::ProductPb::SystemInfo>& response
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductSystemManager::HandleGetSystemInfoRequest(
+    const Callback<::ProductPb::SystemInfo>& response ) const
+{
+    BOSE_DEBUG( s_logger, "/system/info GET request received." );
+
+    response.Send( m_SystemInfo );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -456,7 +536,7 @@ void ProductSystemManager::WriteConfigurationStatusToPersistentStorage( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::HandleGetConfigurationStatusRequest( const
                                                                 Callback< ProductPb::ConfigurationStatus >&
-                                                                response )
+                                                                response ) const
 {
     BOSE_DEBUG( s_logger, "Sending the configuration status for a get request." );
 
@@ -508,7 +588,7 @@ void ProductSystemManager::HandleCapsStatusFailed( const FRONT_DOOR_CLIENT_ERROR
 /// @param ProductMessage& message
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::SendMessage( ProductMessage& message )
+void ProductSystemManager::SendMessage( ProductMessage& message ) const
 {
     IL::BreakThread( std::bind( m_ProductNotify, message ), m_ProductTask );
 }
