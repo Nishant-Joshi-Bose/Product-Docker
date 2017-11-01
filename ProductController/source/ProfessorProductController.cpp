@@ -885,8 +885,6 @@ void ProfessorProductController::End( )
 ///
 /// @name   ProfessorProductController::SelectSource
 ///
-/// @return This method returns a true or false value, based on a set member variable.
-///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::SelectSource( PlaybackSource_t source )
 {

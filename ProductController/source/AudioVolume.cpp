@@ -43,13 +43,17 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename VolumeType>
-AudioVolume<VolumeType>::AudioVolume( Callback<VolumeType> notifyChange ) :
-    m_Minimum( DEFAULT_MINIMUM_VOLUME ),
-    m_Maximum( DEFAULT_MAXIMUM_VOLUME ),
-    m_Current( DEFAULT_CURRENT_VOLUME ),
+AudioVolume<VolumeType>::AudioVolume( Callback<VolumeType> notifyChange,
+                                      VolumeType minVolume,
+                                      VolumeType maxVolume,
+                                      VolumeType currentVolume,
+                                      VolumeType stepSize ) :
+    m_Minimum( minVolume ),
+    m_Maximum( maxVolume ),
+    m_Current( currentVolume ),
     // m_Previous != m_Current to force initial update
-    m_Previous( m_Current + 1 ),
-    m_StepSize( DEFAULT_STEPSIZE ),
+    m_Previous( currentVolume + 1 ),
+    m_StepSize( stepSize ),
     notifyChangeCb( notifyChange )
 {
     Notify();

@@ -175,8 +175,8 @@ bool CustomProductControllerStatePlayable::HandlePowerState( )
 ///
 /// @brief  CustomProductControllerStatePlayable::HandleKey
 ///
-/// @return This method returns a true Boolean value indicating that it has handled the power
-///         state changed and no futher processing will be required by any of its superstates.
+/// @return This method returns a true Boolean value indicating that it has handled the supplied
+///         key and that no futher processing will be required by any of its superstates.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlayable::HandleKeyAction( int action )

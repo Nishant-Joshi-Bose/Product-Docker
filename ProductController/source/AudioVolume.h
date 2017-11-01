@@ -47,7 +47,12 @@ template<typename VolumeType> class AudioVolume
 
 public:
 
-    AudioVolume( Callback<VolumeType> notifyChange );
+    AudioVolume( Callback<VolumeType> notifyChange,
+                 VolumeType minVolume = DEFAULT_MINIMUM_VOLUME,
+                 VolumeType maxVolume = DEFAULT_MAXIMUM_VOLUME,
+                 VolumeType currentVolume = DEFAULT_CURRENT_VOLUME,
+                 VolumeType stepSize = DEFAULT_STEPSIZE );
+
     ~AudioVolume( ) {};
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
