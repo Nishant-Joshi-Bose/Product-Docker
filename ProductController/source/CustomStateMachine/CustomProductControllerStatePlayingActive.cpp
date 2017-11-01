@@ -77,9 +77,8 @@ CustomProductControllerStatePlayingActive::CustomProductControllerStatePlayingAc
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
-      m_productController( productController ),
-      m_timer( APTimer::Create( m_productController.GetTask( ), "PlayingInactiveTimer" ) )
+    : ProductControllerState( hsm, pSuperState, stateId, name ),
+      m_timer( APTimer::Create( productController.GetTask( ), "PlayingInactiveTimer" ) )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayingActive is being constructed." );
 }

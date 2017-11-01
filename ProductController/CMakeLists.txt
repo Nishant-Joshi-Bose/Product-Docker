@@ -62,6 +62,7 @@ TARGET_LINK_LIBRARIES(Professor
   BoseLibs
   NetworkServiceUtils
   NetworkServiceClient
+  BLESetupServiceProto 
   STS
   ShelbyUtils
   jsoncpp

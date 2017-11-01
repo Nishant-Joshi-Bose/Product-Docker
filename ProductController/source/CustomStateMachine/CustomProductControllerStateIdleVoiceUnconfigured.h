@@ -90,8 +90,6 @@ public:
 
 private:
 
-    ProfessorProductController& m_productController;
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief This timer is used to monitor the amount of time the device is in this state.

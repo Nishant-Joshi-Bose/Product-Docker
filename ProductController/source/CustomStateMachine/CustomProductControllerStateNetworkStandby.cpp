@@ -58,12 +58,10 @@ CustomProductControllerStateNetworkStandby::CustomProductControllerStateNetworkS
 
 ( ProductControllerHsm&       hsm,
   CHsmState*                  pSuperState,
-  ProfessorProductController& productController,
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerStateNetworkStandby( hsm, pSuperState, productController, stateId, name ),
-      m_productController( productController )
+    : ProductControllerStateNetworkStandby( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandby is being constructed." );
 }
@@ -80,7 +78,7 @@ void CustomProductControllerStateNetworkStandby::HandleStateEnter()
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandby is being entered." );
 
-    m_productController.GetHardwareInterface( )->RequestPowerStateStandby( );
+    GetCustomProductController().GetHardwareInterface( )->RequestPowerStateStandby( );
 
     BOSE_VERBOSE( s_logger, "An attempt to set a standby power state is being made." );
 }
@@ -94,7 +92,7 @@ void CustomProductControllerStateNetworkStandby::HandleStateStart()
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandby is being started." );
 
-    auto const& networkConfigured = m_productController.IsNetworkConfigured( );
+    auto const& networkConfigured = GetCustomProductController().IsNetworkConfigured( );
 
     if( networkConfigured )
     {

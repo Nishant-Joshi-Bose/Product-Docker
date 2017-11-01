@@ -61,12 +61,10 @@ CustomProductControllerStateIdleVoiceConfigured::CustomProductControllerStateIdl
 
 ( ProductControllerHsm&       hsm,
   CHsmState*                  pSuperState,
-  ProfessorProductController& productController,
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
-      m_productController( productController )
+    : ProductControllerState( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceConfigured is being constructed." );
 }
@@ -124,7 +122,7 @@ bool CustomProductControllerStateIdleVoiceConfigured::HandleNetworkState( bool c
     ///
     if( not configured )
     {
-        if( m_productController.IsAutoWakeEnabled( ) )
+        if( GetCustomProductController().IsAutoWakeEnabled( ) )
         {
             BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceConfigured is not changing." );
         }
@@ -143,7 +141,7 @@ bool CustomProductControllerStateIdleVoiceConfigured::HandleNetworkState( bool c
     else
     {
         auto const& networkConnected = connected;
-        auto const& voiceConfigured  = m_productController.IsVoiceConfigured( );;
+        auto const& voiceConfigured  = GetCustomProductController().IsVoiceConfigured( );;
 
         if( not networkConnected or not voiceConfigured )
         {
@@ -176,7 +174,7 @@ bool CustomProductControllerStateIdleVoiceConfigured::HandleVoiceState( bool con
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceConfigured is handling a voice state change." );
 
     auto const& voiceConfigured  = configured;
-    auto const& networkConnected = m_productController.IsNetworkConfigured( );
+    auto const& networkConnected = GetCustomProductController().IsNetworkConfigured( );
 
     if( not voiceConfigured or not networkConnected )
     {

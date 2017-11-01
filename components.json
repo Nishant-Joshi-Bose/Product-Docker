@@ -13,39 +13,39 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-19_1911"
+    "selected_version": "Release/Castle-Fork/0.2.0.39777.2536385"
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/master/0.1.1-92+cbf4afb"
+    "selected_version": "Release/master/0.1.2-108+32c2463"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-18_1656"
+    "selected_version": "Continuous/Castle-Fork/2017-10-25_1936"
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/0.0.2-4+368de6e"
+    "selected_version": "Release/master/0.0.3-9+7266474"
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2427"
+    "selected_version": "branches/castle-libs@2463"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/pre-IP2/0.1.0-73+50fd024"
+    "selected_version": "Release/master/0.1.1-82+c364a77"
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/0.0.2-127+5f9ec11"
+    "selected_version": "Release/master/0.0.3-129+c8ab79e"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@6219f809686614aa13a35f1581ea8df766baec74"
+    "selected_version": "master@d86b565e19c2bae860c1923f634cc21467bda516"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-14+14ad38c"
+    "selected_version": "Release/master/0.0.3-20+dac46f2"
   },
   {
     "name": "ProfessorLPM-Package",
@@ -53,11 +53,11 @@
   },
   {
     "name": "protobuf-native",
-    "selected_version": "branches/protobuf@2423"
+    "selected_version": "branches/protobuf@2465"
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "branches/protobuf@2423"
+    "selected_version": "branches/protobuf@2465"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -81,19 +81,19 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.1.1-67+b83469d"
+    "selected_version": "Release/master/0.1.2-85+d220b0c"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/16.1.4.39669.2525290"
+    "selected_version": "Release/Castle-Fork/0.2.0.39777.2536385"
   },
   {
     "name": "UnitTest++-native",
-    "selected_version": "branches/UnitTest++@2424"
+    "selected_version": "branches/UnitTest++@2464"
   },
   {
     "name": "UnitTest++-qc8017_32",
-    "selected_version": "branches/UnitTest++@2424"
+    "selected_version": "branches/UnitTest++@2464"
   },
   {
     "name": "UnitTest++-ti",
