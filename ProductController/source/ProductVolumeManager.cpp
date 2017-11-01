@@ -61,9 +61,9 @@ ProductVolumeManager* ProductVolumeManager::GetInstance( NotifyTargetTaskIF*    
 {
     static ProductVolumeManager* instance = nullptr;
 
-    if (instance == nullptr) 
+    if( instance == nullptr )
     {
-        instance = new ProductVolumeManager(mainTask, ProductNotify, HardwareInterface);
+        instance = new ProductVolumeManager( mainTask, ProductNotify, HardwareInterface );
         instance->Initialize();
     }
 
@@ -76,7 +76,7 @@ ProductVolumeManager* ProductVolumeManager::GetInstance( NotifyTargetTaskIF*    
 /// @name   ProductVolumeManager::Initialize
 ///
 /// @brief  This method performs one-time initialization of this instance.  This is a good place
-///         to put things that you may have wanted to do in the constructor but that might depend on 
+///         to put things that you may have wanted to do in the constructor but that might depend on
 ///         the object being fully-initialized.
 ///
 ///
@@ -84,7 +84,7 @@ ProductVolumeManager* ProductVolumeManager::GetInstance( NotifyTargetTaskIF*    
 void ProductVolumeManager::Initialize( )
 {
 
-//    m_FrontDoorClient = std::make_shared< FrontDoor::FrontDoorClient::Create( "ProductControllerStateOn" ) >;
+    m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductControllerStateOn" );
 
     auto fVolume = [ this ]( int32_t v )
     {
@@ -99,7 +99,7 @@ void ProductVolumeManager::Initialize( )
     m_FrontDoorClient->RegisterNotification< SoundTouchInterface::volume >
     ( FRONTDOOR_AUDIO_VOLUME, fNotify );
 }
- 
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -206,6 +206,33 @@ void ProductVolumeManager::ReceiveFrontDoorVolume( SoundTouchInterface::volume& 
     // send to lpm as well (this is currently same range as CAPS, 0-100)
     m_ProductHardwareInterface->SendSetVolume( vol );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name ProductVolumeManager::Increment
+///
+/// @brief This method increments the volume
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductVolumeManager::Increment( )
+{
+    ( *m_Volume )++;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name ProductVolumeManager::Decrement
+///
+/// @brief This method decrements the volume
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductVolumeManager::Decrement( )
+{
+    ( *m_Volume )--;
+}
+
 
 
 

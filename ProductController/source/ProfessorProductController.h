@@ -46,6 +46,7 @@
 #include "ProductMessage.pb.h"
 #include "ProductNetworkManager.h"
 #include "ProductSystemManager.h"
+#include "ProductVolumeManager.h"
 #include "KeyActions.pb.h"
 #include "NetManager.pb.h"
 #include "ProductController.h"
@@ -126,6 +127,14 @@ public:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
+    /// @brief The following method is used to get a pointer to the volume manager instance
+    ///        from the product controller.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ProductVolumeManager* GetVolumeManager( void ) const;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
     /// @brief The following methods are used by the state machine to determine the status of the
     ///        product controller.
     ///
@@ -199,6 +208,7 @@ private:
     ProductCommandLine*       m_ProductCommandLine;
     ProductUserInterface*     m_ProductUserInterface;
     ProductEdidInterface*     m_ProductEdidInterface;
+    ProductVolumeManager*     m_ProductVolumeManager;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

@@ -149,6 +149,7 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductSoftwareServices( nullptr ),
     m_ProductCommandLine( nullptr ),
     m_ProductUserInterface( nullptr ),
+    m_ProductEdidInterface( nullptr ),
 
     ///
     /// Member Variable Initialization
@@ -202,9 +203,9 @@ void ProfessorProductController::Run( )
                                                                     stateTop,
                                                                     *this );
 
-    auto* stateOn = CustomProductControllerStateOn::Create( m_ProductControllerStateMachine,
-                                                            stateTop,
-                                                            *this );
+    auto* stateOn = new CustomProductControllerStateOn( m_ProductControllerStateMachine,
+                                                        stateTop,
+                                                        *this );
 
     auto* statePlayable = new CustomProductControllerStatePlayable( m_ProductControllerStateMachine,
                                                                     stateOn,
@@ -301,6 +302,10 @@ void ProfessorProductController::Run( )
                                                                         CallbackForMessages,
                                                                         m_ProductHardwareInterface,
                                                                         m_CliClientMT );
+    m_ProductVolumeManager     = ProductVolumeManager    ::GetInstance( GetTask( ),
+                                                                        CallbackForMessages,
+                                                                        m_ProductHardwareInterface );
+
 
     if( m_ProductHardwareInterface == nullptr ||
         m_ProductSystemManager     == nullptr ||
@@ -309,7 +314,8 @@ void ProfessorProductController::Run( )
         m_ProductSoftwareServices  == nullptr ||
         m_ProductCommandLine       == nullptr ||
         m_ProductUserInterface     == nullptr ||
-        m_ProductEdidInterface     == nullptr )
+        m_ProductEdidInterface     == nullptr ||
+        m_ProductVolumeManager     == nullptr )
     {
         BOSE_CRITICAL( s_logger, "-------- Product Controller Failed Initialization ----------" );
         BOSE_CRITICAL( s_logger, "A Product Controller module failed to be allocated.         " );
@@ -328,6 +334,7 @@ void ProfessorProductController::Run( )
     m_ProductCommandLine       ->Run( );
     m_ProductUserInterface     ->Run( );
     m_ProductEdidInterface     ->Run( );
+    m_ProductVolumeManager     ->Run( );
 
     ///
     /// Set up the STSProductController
@@ -346,6 +353,19 @@ ProductHardwareInterface* ProfessorProductController::GetHardwareInterface( ) co
 {
     return m_ProductHardwareInterface;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetVolumeManager
+///
+/// @return This method returns a pointer to the VolumeManager instance
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+ProductVolumeManager* ProfessorProductController::GetVolumeManager( ) const
+{
+    return m_ProductVolumeManager;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -818,6 +838,7 @@ void ProfessorProductController::Wait( )
     m_ProductCommandLine      ->Stop( );
     m_ProductUserInterface    ->Stop( );
     m_ProductEdidInterface    ->Stop( );
+    m_ProductVolumeManager    ->Stop( );
 
     ///
     /// Delete all the submodules.
@@ -830,6 +851,7 @@ void ProfessorProductController::Wait( )
     delete m_ProductCommandLine;
     delete m_ProductUserInterface;
     delete m_ProductEdidInterface;
+    delete m_ProductVolumeManager;
 
     m_ProductHardwareInterface = nullptr;
     m_ProductSystemManager = nullptr;
@@ -839,6 +861,7 @@ void ProfessorProductController::Wait( )
     m_ProductCommandLine = nullptr;
     m_ProductUserInterface = nullptr;
     m_ProductEdidInterface = nullptr;
+    m_ProductVolumeManager = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
