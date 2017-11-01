@@ -48,6 +48,7 @@
 #include "ProductMessage.pb.h"
 #include "Language.pb.h"
 #include "ConfigurationStatus.pb.h"
+#include "SystemInfo.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -146,9 +147,12 @@ private:
     ProtoPersistenceIF::ProtoPersistencePtr m_LanguageSettingsPersistentStorage;
     ProductPb::ConfigurationStatus          m_ConfigurationStatus;
     ProtoPersistenceIF::ProtoPersistencePtr m_ConfigurationStatusPersistentStorage;
+    ProductPb::SystemInfo                   m_SystemInfo;
+    ProtoPersistenceIF::ProtoPersistencePtr m_SystemInfoPersistentStorage;
 
     void ReadLanguageSettingsFromPersistentStorage( void );
     void ReadConfigurationStatusFromPersistentStorage( void );
+    void ReadSystemInfoSettingsFromPersistentStorage( void );
     void WriteLanguageSettingsToPersistentStorage( void );
     void WriteConfigurationStatusToPersistentStorage( void );
 
@@ -177,6 +181,14 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleGetConfigurationStatusRequest( const Callback< ProductPb::ConfigurationStatus >&
                                               response );
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// The following method is used to handle GET request of /system/info.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////
+    void HandleGetSystemInfoRequest( const Callback<::ProductPb::SystemInfo>& response );
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
