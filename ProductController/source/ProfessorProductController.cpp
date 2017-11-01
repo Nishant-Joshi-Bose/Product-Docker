@@ -67,6 +67,7 @@
 #include "NetManager.pb.h"
 #include "Callback.h"
 #include "ProductEdidInterface.h"
+#include "KeyActions.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -743,7 +744,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     else if( message.has_keydata( ) )
     {
         auto keyData = message.keydata( );
-        auto keyString = m_ProductUserInterface->GetKeyString( static_cast< KeyActionPb::KEY_ACTION >( keyData.action( ) ) );
+        auto keyString = KeyActionPb::KEY_ACTION_Name( keyData.action() );
 
         BOSE_INFO( s_logger, "The key action value %s (valued %d) was received.",
                    keyString.c_str( ),

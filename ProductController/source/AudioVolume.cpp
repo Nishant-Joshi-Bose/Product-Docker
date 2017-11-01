@@ -44,12 +44,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename VolumeType>
 AudioVolume<VolumeType>::AudioVolume( Callback<VolumeType> notifyChange ) :
-    minimum( DEFAULT_MINIMUM_VOLUME ),
-    maximum( DEFAULT_MAXIMUM_VOLUME ),
-    current( DEFAULT_CURRENT_VOLUME ),
-    // previous != current to force initial update
-    previous( current + 1 ),
-    stepSize( DEFAULT_STEPSIZE ),
+    m_Minimum( DEFAULT_MINIMUM_VOLUME ),
+    m_Maximum( DEFAULT_MAXIMUM_VOLUME ),
+    m_Current( DEFAULT_CURRENT_VOLUME ),
+    // m_Previous != m_Current to force initial update
+    m_Previous( m_Current + 1 ),
+    m_StepSize( DEFAULT_STEPSIZE ),
     notifyChangeCb( notifyChange )
 {
     Notify();
@@ -67,12 +67,12 @@ AudioVolume<VolumeType>::AudioVolume( Callback<VolumeType> notifyChange ) :
 template<typename VolumeType>
 VolumeType AudioVolume<VolumeType>::operator=( VolumeType v )
 {
-    current = v;
-    current = std::min( maximum, current );
-    current = std::max( minimum, current );
+    m_Current = v;
+    m_Current = std::min( m_Maximum, m_Current );
+    m_Current = std::max( m_Minimum, m_Current );
     Notify();
 
-    return current;
+    return m_Current;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,9 +87,9 @@ VolumeType AudioVolume<VolumeType>::operator=( VolumeType v )
 template<typename VolumeType>
 VolumeType AudioVolume<VolumeType>::operator+( VolumeType v )
 {
-    current = std::min( current + v, maximum );
+    m_Current = std::min( m_Current + v, m_Maximum );
     Notify();
-    return current;
+    return m_Current;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,9 +104,9 @@ VolumeType AudioVolume<VolumeType>::operator+( VolumeType v )
 template<typename VolumeType>
 VolumeType AudioVolume<VolumeType>::operator-( VolumeType v )
 {
-    current = std::max( current - v, minimum );
+    m_Current = std::max( m_Current - v, m_Minimum );
     Notify();
-    return current;
+    return m_Current;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,9 +121,9 @@ VolumeType AudioVolume<VolumeType>::operator-( VolumeType v )
 template<typename VolumeType>
 VolumeType AudioVolume<VolumeType>::operator++( VolumeType v )
 {
-    current = std::min( current + stepSize, maximum );
+    m_Current = std::min( m_Current + m_StepSize, m_Maximum );
     Notify();
-    return current;
+    return m_Current;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,9 +138,9 @@ VolumeType AudioVolume<VolumeType>::operator++( VolumeType v )
 template<typename VolumeType>
 VolumeType AudioVolume<VolumeType>::operator--( VolumeType v )
 {
-    current = std::max( current - stepSize, minimum );
+    m_Current = std::max( m_Current - m_StepSize, m_Minimum );
     Notify();
-    return current;
+    return m_Current;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -155,8 +155,8 @@ VolumeType AudioVolume<VolumeType>::operator--( VolumeType v )
 template<typename VolumeType>
 VolumeType AudioVolume<VolumeType>::operator++()
 {
-    VolumeType pre = current;
-    current = std::min( current + stepSize, maximum );
+    VolumeType pre = m_Current;
+    m_Current = std::min( m_Current + m_StepSize, m_Maximum );
     Notify();
     return pre;
 }
@@ -173,8 +173,8 @@ VolumeType AudioVolume<VolumeType>::operator++()
 template<typename VolumeType>
 VolumeType AudioVolume<VolumeType>::operator--()
 {
-    VolumeType pre = current;
-    current = std::max( current - stepSize, minimum );
+    VolumeType pre = m_Current;
+    m_Current = std::max( m_Current - m_StepSize, m_Minimum );
     Notify();
     return pre;
 }
@@ -188,10 +188,10 @@ VolumeType AudioVolume<VolumeType>::operator--()
 template<typename VolumeType>
 void AudioVolume<VolumeType>::Notify()
 {
-    if( current != previous )
+    if( m_Current != m_Previous )
     {
-        notifyChangeCb( current );
-        previous = current;
+        notifyChangeCb( m_Current );
+        m_Previous = m_Current;
     }
 }
 

@@ -291,7 +291,7 @@ void ProductUserInterface::KeyInformationCallBack( const int keyAction )
     else
     {
         ProductMessage productMessage;
-        productMessage.mutable_keydata( )->set_action( keyAction );
+        productMessage.mutable_keydata( )->set_action( ( KEY_ACTION )keyAction );
 
         IL::BreakThread( std::bind( m_ProductNotify,
                                     productMessage ),

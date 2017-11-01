@@ -69,15 +69,15 @@ private:
     void Notify();
 
     // these are the minimum and maximum values the volume can take on
-    VolumeType minimum;
-    VolumeType maximum;
+    VolumeType m_Minimum;
+    VolumeType m_Maximum;
     // current volume
-    VolumeType current;
+    VolumeType m_Current;
     // previous volume (used for detecting )
-    VolumeType previous;
+    VolumeType m_Previous;
 
     // amount that volume changes for increment/decrement
-    VolumeType stepSize;
+    VolumeType m_StepSize;
 
     // change notification callback
     Callback<VolumeType> notifyChangeCb;
