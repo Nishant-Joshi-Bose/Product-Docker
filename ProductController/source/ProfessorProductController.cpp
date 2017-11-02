@@ -828,7 +828,7 @@ void ProfessorProductController::SelectSource( PlaybackSource_t source )
 
     AsyncCallback<SoundTouchInterface::NowPlayingJson> postPlaybackRequestCb = AsyncCallback<SoundTouchInterface::NowPlayingJson> ( std::bind( &ProfessorProductController::PostlaybackRequestResponse,
                                                                                this, std::placeholders::_1 ), GetTask( ) );
-    //Setup the playbackRequest data for AUX source
+    //Setup the playbackRequest data
     SoundTouchInterface::playbackRequestJson playbackRequestData;
 
     switch( source )
@@ -864,7 +864,7 @@ void ProfessorProductController::SelectSource( PlaybackSource_t source )
 void ProfessorProductController::PostlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson& resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
-    BOSE_LOG( INFO, "GOT Response to AUX playbackRequest: " << resp.source().sourcedisplayname() );
+    BOSE_LOG( INFO, "GOT Response to playbackRequest: " << resp.source().sourcedisplayname() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
