@@ -138,6 +138,17 @@ bool CustomProductControllerStatePlayable::HandlePowerState( )
     return true;
 }
 
+bool CustomProductControllerStatePlayable::HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
+{
+    BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                  "CustomProductControllerStatePlayable",
+                  "CustomProductControllerStatePlaying" );
+    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING );
+
+    return true;
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

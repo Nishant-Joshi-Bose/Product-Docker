@@ -108,6 +108,11 @@ public:
     virtual bool HandleKeyAction( int action );
     virtual bool HandlePairingState( ProductAccessoryPairing pairingStatus );
 
+    virtual bool HandleStopPlaybackResponse( const SoundTouchInterface::status &resp )
+    {
+        return false;
+    }
+
     virtual bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
     {
         return false;

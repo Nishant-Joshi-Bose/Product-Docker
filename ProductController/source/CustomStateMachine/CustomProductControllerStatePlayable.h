@@ -77,6 +77,7 @@ public:
 
     bool HandlePowerState( ) override;
     bool HandlePlaybackRequest( ProductPlaybackRequest_ProductPlaybackState state ) override;
+    bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo ) override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
