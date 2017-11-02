@@ -73,32 +73,6 @@ typedef enum
     SOURCE_SOUNDTOUCH
 } PlaybackSource_t;
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following constants define known frontdoor directory nodes
-///
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-// system nodes
-constexpr char FRONTDOOR_SYSTEM_LANGUAGE[]                      = "/system/language";
-constexpr char FRONTDOOR_SYSTEM_CONFIGURATION_STATUS[]          = "/system/configuration/status";
-constexpr char FRONTDOOR_SYSTEM_CAPS_INITIALIZATION_STATUS[]    = "/system/capsInitializationStatus";
-constexpr char FRONTDOOR_SYSTEM_INFO[]                          = "/system/info";
-
-// network nodes
-constexpr char FRONTDOOR_NETWORK_STATUS[]                       = "/network/status";
-constexpr char FRONTDOOR_NETWORK_WIFI_PROFILE[]                 = "/network/wifi/profile";
-constexpr char FRONTDOOR_NETWORK_WIFI_STATUS[]                  = "/network/wifi/status";
-
-// CAPS nodes
-constexpr char FRONTDOOR_CAPS_INITIALIZATION_UPDATE[]           = "CapsInitializationUpdate";
-
-// audio nodes
-constexpr char FRONTDOOR_AUDIO_VOLUME[]                         = "/audio/volume";
-constexpr char FRONTDOOR_AUDIO_VOLUME_INCREMENT[]               = "/audio/volume/increment";
-constexpr char FRONTDOOR_AUDIO_VOLUME_DECREMENT[]               = "/audio/volume/decrement";
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

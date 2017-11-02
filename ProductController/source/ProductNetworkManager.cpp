@@ -42,6 +42,15 @@
 namespace ProductApp
 {
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// The following constants define FrontDoor endpoints used by the NetworkManager
+///
+////////////////////////////////////////////////////////////////////////////////////////////////
+constexpr char FRONTDOOR_NETWORK_STATUS[]                       = "/network/status";
+constexpr char FRONTDOOR_NETWORK_WIFI_PROFILE[]                 = "/network/wifi/profile";
+constexpr char FRONTDOOR_NETWORK_WIFI_STATUS[]                  = "/network/wifi/status";
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProductNetworkManager::GetInstance

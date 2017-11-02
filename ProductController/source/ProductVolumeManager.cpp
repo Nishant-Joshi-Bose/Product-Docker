@@ -38,6 +38,15 @@
 namespace ProductApp
 {
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// The following constants define FrontDoor endpoints used by the VolumeManager
+///
+////////////////////////////////////////////////////////////////////////////////////////////////
+constexpr char FRONTDOOR_AUDIO_VOLUME[]                         = "/audio/volume";
+constexpr char FRONTDOOR_AUDIO_VOLUME_INCREMENT[]               = "/audio/volume/increment";
+constexpr char FRONTDOOR_AUDIO_VOLUME_DECREMENT[]               = "/audio/volume/decrement";
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProductVolumeManager::GetInstance

@@ -58,6 +58,18 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 const std::string g_ProductDirectory = "product-persistence/";
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// The following constants define FrontDoor endpoints used by the SystemManager
+///
+////////////////////////////////////////////////////////////////////////////////////////////////
+constexpr char FRONTDOOR_SYSTEM_LANGUAGE[]                      = "/system/language";
+constexpr char FRONTDOOR_SYSTEM_CONFIGURATION_STATUS[]          = "/system/configuration/status";
+constexpr char FRONTDOOR_SYSTEM_CAPS_INITIALIZATION_STATUS[]    = "/system/capsInitializationStatus";
+constexpr char FRONTDOOR_SYSTEM_INFO[]                          = "/system/info";
+constexpr char FRONTDOOR_CAPS_INITIALIZATION_UPDATE[]           = "CapsInitializationUpdate";
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProductSystemManager::GetInstance
