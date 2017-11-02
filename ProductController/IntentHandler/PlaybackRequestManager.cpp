@@ -41,7 +41,7 @@ PlaybackRequestManager::PlaybackRequestManager( NotifyTargetTaskIF& task,
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  Handle
 /// @brief Function to build and send FrontDoor message to activate and play
-//         AUX source if it is selected,
+//         source if it is selected,
 //         Else the function ignores the intent.
 //         The callBack function is called to give control back to the state
 //         machine if HSM has registered a call back.
@@ -55,7 +55,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t intent )
     {
         //ToDo: If AUX is currently playing, ignore the key.
         SoundTouchInterface::playbackRequestJson playbackRequestData;
-        playbackRequestData.set_source( "AUX" );
+        playbackRequestData.set_source( "PRODUCT" );
         playbackRequestData.set_sourceaccount( "AUX" );
 
         GetFrontDoorClient()->SendPost<SoundTouchInterface::NowPlayingJson>( "/content/playbackRequest", playbackRequestData,
