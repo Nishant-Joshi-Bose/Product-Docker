@@ -16,10 +16,9 @@ namespace ProductApp
 {
 EddieProductControllerStateNetworkStandby::EddieProductControllerStateNetworkStandby( EddieProductControllerHsm& hsm,
         CHsmState* pSuperState,
-        EddieProductController& eddieProductController,
         Hsm::STATE stateId,
         const std::string& name ) :
-    ProductControllerStateNetworkStandby( hsm, pSuperState, eddieProductController, stateId, name )
+    ProductControllerStateNetworkStandby( hsm, pSuperState, stateId, name )
 {
     BOSE_INFO( s_logger, __func__ );
 }
@@ -39,20 +38,27 @@ void EddieProductControllerStateNetworkStandby::HandleStateExit()
     BOSE_INFO( s_logger, __func__ );
 }
 
-bool EddieProductControllerStateNetworkStandby::HandleIntents( KeyHandlerUtil::ActionType_t result )
+bool EddieProductControllerStateNetworkStandby::HandleIntents( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_DEBUG( s_logger, "%s, %d", __func__, ( uint16_t ) result );
+    BOSE_DEBUG( s_logger, "%s, %d", __func__, ( uint16_t ) intent );
 
-    IntentHandler& IHandle =
-        static_cast<EddieProductController&>( GetProductController() ).IntentHandle();
-    if( ( IHandle.isIntentPlayControl( result ) ) ||
-        ( IHandle.IsIntentBlueTooth( result ) )   ||
-        ( IHandle.IsIntentAlexa( result ) )        ||
-        ( IHandle.IsIntentVolumeControl( result ) ) )
+    if( ( IntentHandler::IsIntentPlayControl( intent ) ) ||
+        ( IntentHandler::IsIntentBlueTooth( intent ) )   ||
+        ( IntentHandler::IsIntentAlexa( intent ) )        ||
+        ( IntentHandler::IsIntentVolumeControl( intent ) ) ||
+        ( IntentHandler::IsIntentAuxIn( intent ) ) )
     {
-        IHandle.Handle( result );
+        GetCustomProductController().GetIntentHandler().Handle( intent );
+        return true;
     }
     return false;
+}
+
+bool EddieProductControllerStateNetworkStandby::HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
+{
+    BOSE_INFO( s_logger,  __func__ );
+    ChangeState( PRODUCT_CONTROLLER_STATE_ON );
+    return true;
 }
 
 } // namespace ProductApp

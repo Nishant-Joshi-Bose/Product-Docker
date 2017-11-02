@@ -1,7 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
-/// @file TransportControlManager.cpp
+/// @file BlueToothManager.cpp
 ///
-/// @brief Implementation of Transport Control Manager
+/// @brief Implementation of Bluetooth Manager for actions from Bluetooth
+//         intends in the product Controller
 ///
 /// @attention
 ///    BOSE CORPORATION.
@@ -15,43 +16,25 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "DPrint.h"
-#include "TransportControlManager.h"
+#include "BlueToothManager.h"
 
-static DPrint s_logger( "TransportControlManager" );
+static DPrint s_logger( "BlueToothManager" );
 
 namespace ProductApp
 {
-
-TransportControlManager::TransportControlManager( NotifyTargetTaskIF& task,
-                                                  const CliClientMT& cliClient,
-                                                  const FrontDoorClientIF_t& frontDoorClient,
-                                                  const ProductController& controller ):
-    IntentManager( task, cliClient, frontDoorClient, controller ),
-    m_NowPlayingRsp( nullptr, &task ),
-    m_play( true )
-{
-    m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
-                               ( std::bind( &TransportControlManager::FrontDoorClientErrorCb,
-                                            this, std::placeholders::_1 ), &task );
-
-    m_NowPlayingRsp = AsyncCallback<SoundTouchInterface::NowPlayingJson>\
-                      ( std::bind( &TransportControlManager::PutTransportControlCbRsp,
-                                   this, std::placeholders::_1 ), &task );
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  Handle
 /// @brief Function to build and send FrontDoor message to execute the
-//         to either play or pause if source is alreay selected,
-//         Else the function ignores the intent.
+//         to Bluetooth intends coming out of the product controller.
 //         The callBack function is called to give control back to the state
 //         machine if HSM has registered a call back.
 /// @return true: Successful
 //          false: Error
 ////////////////////////////////////////////////////////////////////////////////
 
-bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
+bool BlueToothManager::Handle( KeyHandlerUtil::ActionType_t intent )
 {
+#if 0
     if( ValidSourceAvailable() )
     {
         SoundTouchInterface::TransportControl transportControl;
@@ -147,69 +130,27 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
         BOSE_DEBUG( s_logger, "No source available, PlayControl intent "
                     "  ignored for now" );
     }
+#endif
 
     //Fire the cb so the control goes back to the ProductController
     if( CallBack() != nullptr )
     {
-        CallBack()->Send( intent );
+        ( *CallBack() )( intent );
     }
     return true;
 }
 
-inline bool TransportControlManager::ValidSourceAvailable()
-{
-    BOSE_DEBUG( s_logger, "%s", __func__ );
-    const EddieProductController *eddiePC = \
-                                            dynamic_cast<const EddieProductController*>( &GetProductController() );
-    if( eddiePC != nullptr )
-    {
-        if( eddiePC->GetNowPlaying().has_source() )
-        {
-            BOSE_DEBUG( s_logger, "Found nowPlaying" );
-            return true;
-        }
-    }
-    else
-    {
-        BOSE_ERROR( s_logger, "Error while casting to Eddie PC" );
-    }
-    return false;
-}
-
-inline SoundTouchInterface::StatusJson TransportControlManager::CurrentStatusJson()
-{
-    BOSE_DEBUG( s_logger, "%s", __func__ );
-    const EddieProductController *eddiePC =
-        dynamic_cast<const EddieProductController*>( &GetProductController() );
-    if( eddiePC != nullptr )
-    {
-        if( eddiePC->GetNowPlaying().state().has_status() )
-        {
-            BOSE_DEBUG( s_logger, "Found status = %d",
-                        eddiePC->GetNowPlaying().state().status() );
-            return ( eddiePC->GetNowPlaying().state().status() );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "No Status in GetNowPlaying()" );
-        }
-    }
-    else
-    {
-        BOSE_ERROR( s_logger, "Error while casting to Eddie PC" );
-    }
-    return ( SoundTouchInterface::StatusJson::error );
-}
-
-void TransportControlManager::PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp )
+#if 0
+void BlueToothManager::PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp )
 {
     // No Need to handle this as Product Controller will get a nowPlaying that
     // will update update the information.
     BOSE_DEBUG( s_logger, "%s", __func__ );
     return;
 }
+#endif
 
-void TransportControlManager::FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode )
+void BlueToothManager::FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode )
 {
     // Nothing to do for now, printing this if anyone cares.
     BOSE_ERROR( s_logger, "%s:error code- %d", __func__, errorCode );

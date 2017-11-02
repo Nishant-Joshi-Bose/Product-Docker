@@ -17,22 +17,27 @@ namespace ProductApp
 {
 EddieProductControllerStateTop::EddieProductControllerStateTop( EddieProductControllerHsm& hsm,
                                                                 CHsmState* pSuperState,
-                                                                EddieProductController& eddieProductController,
                                                                 Hsm::STATE stateId,
                                                                 const std::string& name ) :
-    ProductControllerStateTop( hsm, pSuperState, eddieProductController, stateId, name )
+    ProductControllerStateTop( hsm, pSuperState, stateId, name )
 {
     BOSE_INFO( s_logger,  __func__ );
 }
 
 bool EddieProductControllerStateTop::HandleModulesReady()
 {
-    BOSE_INFO( s_logger, "%s, %d", __func__, static_cast<EddieProductController&>( GetProductController() ).IsAllModuleReady() );
+    BOSE_INFO( s_logger, "%s, %d", __func__,  GetCustomProductController().IsAllModuleReady() );
     return true;
 }
 
-bool EddieProductControllerStateTop::HandleIntents( KeyHandlerUtil::ActionType_t result )
+bool EddieProductControllerStateTop::HandleIntents( KeyHandlerUtil::ActionType_t intent )
 {
+    return true;
+}
+
+bool EddieProductControllerStateTop::HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& info )
+{
+    BOSE_INFO( s_logger,  __func__ );
     return true;
 }
 

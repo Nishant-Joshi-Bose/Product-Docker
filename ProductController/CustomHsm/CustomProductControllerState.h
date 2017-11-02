@@ -15,9 +15,12 @@
 #include "HsmState.h"
 #include "KeyHandler.h"
 #include "NetManager.pb.h"
+#include "SoundTouchInterface/ContentSelectionService.pb.h"
 
 namespace ProductApp
 {
+class EddieProductController;
+class ProductController;
 class ProductControllerHsm;
 
 class CustomProductControllerState : public CHsmState
@@ -67,7 +70,24 @@ public:
         return false;
     }
 
-    //Declare pure virtual methods for common event handlers here
-    //and implement them in derived ProductController state class.
+    virtual bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
+    {
+        return false;
+    }
+
+    static  void SetProductController( ProductController* productController )
+    {
+        s_productController = productController;
+    }
+    bool IsProductNeedsSetup();
+
+public:
+    /// The custom version of this function returns the custom ProductController
+    static EddieProductController& GetCustomProductController();
+
+    static ProductController* s_productController;
+
+    ///Declare pure virtual methods for common event handlers here
+    ///and implement them in derived ProductController state class.
 };
 } //namespace ProductApp

@@ -48,7 +48,7 @@ enum class Action
     //- VOLUME DOWN
 
     //+ AUX
-    SEND_TO_AUX = 25,
+    AUX_IN = 25,
     //- AUX
 
     //+ ALEXA
@@ -59,9 +59,10 @@ enum class Action
 class IntentHandler
 {
 public:
-    IntentHandler( NotifyTargetTaskIF& task, CliClientMT& cliClient,
-                   FrontDoorClientIF_t& fd_client,
-                   ProductController& controller );
+    IntentHandler( NotifyTargetTaskIF& task,
+                   const CliClientMT& cliClient,
+                   const FrontDoorClientIF_t& fd_client,
+                   const ProductController& controller );
     virtual ~IntentHandler()
     {
         m_IntentManagerMap.clear();
@@ -96,37 +97,41 @@ public:
         return m_controller;
     }
 
-    bool isIntentPlayControl( KeyHandlerUtil::ActionType_t arg )
+    static bool IsIntentPlayControl( KeyHandlerUtil::ActionType_t arg )
     {
         return ( ( arg == ( uint16_t ) Action::PLAY_PAUSE ) ||
                  ( arg == ( uint16_t ) Action::NEXT_TRACK ) ||
                  ( arg == ( uint16_t ) Action::PREV_TRACK ) );
     }
-    bool IsIntentBlueTooth( KeyHandlerUtil::ActionType_t arg )
+    static bool IsIntentBlueTooth( KeyHandlerUtil::ActionType_t arg )
     {
         return ( ( arg == ( uint16_t ) Action::CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST ) ||
                  ( arg == ( uint16_t ) Action::SEND_TO_DISCOVERABLE )                  ||
                  ( arg == ( uint16_t ) Action::CLEAR_PAIRING_LIST ) );
     }
-    bool IsIntentAlexa( KeyHandlerUtil::ActionType_t arg )
+    static bool IsIntentAlexa( KeyHandlerUtil::ActionType_t arg )
     {
         return ( arg == ( uint16_t ) Action::ALEXA_CAROUSEL );
     }
-    bool IsIntentNetworking( KeyHandlerUtil::ActionType_t arg )
+    static bool IsIntentNetworking( KeyHandlerUtil::ActionType_t arg )
     {
         return ( ( arg == ( uint16_t ) Action::SEND_TO_AP_MODE ) ||
                  ( arg == ( uint16_t ) Action::DISABLE_NETWORKING ) );
     }
-    bool IsIntentVolumeControl( KeyHandlerUtil::ActionType_t arg )
+    static bool IsIntentVolumeControl( KeyHandlerUtil::ActionType_t arg )
     {
         return ( ( arg == ( uint16_t ) Action::VOLUME_UP ) ||
                  ( arg == ( uint16_t ) Action::VOLUME_DOWN ) );
     }
+    static bool IsIntentAuxIn( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( ( arg == ( uint16_t ) Action::AUX_IN ) );
+    }
 private:
-    NotifyTargetTaskIF&   m_task;
-    CliClientMT&          m_cliClient;
-    FrontDoorClientIF_t&  m_frontDoorClient;
-    IntentManagerMap_t    m_IntentManagerMap;
-    ProductController&    m_controller;
+    NotifyTargetTaskIF&         m_task;
+    const CliClientMT&          m_cliClient;
+    const FrontDoorClientIF_t&  m_frontDoorClient;
+    IntentManagerMap_t          m_IntentManagerMap;
+    const ProductController&    m_controller;
 };
 } // namespace ProductApp

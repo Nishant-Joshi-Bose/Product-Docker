@@ -10,19 +10,18 @@
 #include <string>
 #include "ProductControllerStateTop.h"
 #include "ProductControllerStates.h"
+#include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "HsmState.h"
 
 namespace ProductApp
 {
 class EddieProductControllerHsm;
-class EddieProductController;
 
 class EddieProductControllerStateTop : public ProductControllerStateTop
 {
 public:
     EddieProductControllerStateTop( EddieProductControllerHsm& hsm,
                                     CHsmState* pSuperState,
-                                    EddieProductController& eddieProductController,
                                     Hsm::STATE stateId = 0,
                                     const std::string& name = "TOP" );
 
@@ -31,6 +30,7 @@ public:
     }
 
     bool HandleModulesReady() override;
-    bool HandleIntents( KeyHandlerUtil::ActionType_t result ) override;
+    bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo ) override;
+    bool HandleIntents( KeyHandlerUtil::ActionType_t intent ) override;
 };
 } // namespace ProductApp

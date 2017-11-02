@@ -15,6 +15,7 @@
 #include "EddieProductControllerStateBooting.h"
 #include "EddieProductControllerStateSetup.h"
 #include "EddieProductControllerStateNetworkStandby.h"
+#include "EddieProductControllerStateAudioOn.h"
 #include "DeviceManager.h"
 #include "LightBarController.h"
 #include "DemoController.h"
@@ -24,13 +25,14 @@
 #include "DeviceManager.pb.h"
 #include "NetManager.pb.h"
 #include "SoundTouchInterface/CapsInitializationStatus.pb.h"
+#include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "ProductCliClient.h"
 #include "LpmClientIF.h"
 #include "LpmInterface.h"
 #include "KeyHandler.h"
-#include "ProductSource.h"
 #include "IntentHandler.h"
+#include "ProductSTSController.h"
 
 namespace ProductApp
 {
@@ -45,6 +47,11 @@ public:
     NetManager::Protobuf::NetworkStatus const& GetNetworkStatus() const
     {
         return m_cachedStatus;
+    }
+
+    EddieProductControllerHsm& GetEddieHsm()
+    {
+        return static_cast<EddieProductControllerHsm&>( m_ProductControllerHsm );
     }
 
 private:
@@ -63,6 +70,17 @@ private:
                        AsyncCallback<std::string, int32_t> rspAndRspCmplt,
                        int32_t transact_id );
     void RegisterCliClientCmds() override;
+
+    void HandleBluetoothModuleReady( bool bluetoothModuleReady );
+    void HandleBtLeModuleReady( bool btLeModuleReady );
+    void HandleNetworkCapabilityReady( const std::list<std::string>& points );
+    void HandleNetworkCapabilityNotReady( const std::list<std::string>& points );
+    void HandleCapsCapabilityReady( const std::list<std::string>& points );
+    void HandleCapsCapabilityNotReady( const std::list<std::string>& points );
+    void HandleBluetoothCapabilityReady( const std::list<std::string>& points );
+    void HandleBluetoothCapabilityNotReady( const std::list<std::string>& points );
+    void HandleBtLeCapabilityReady( const std::list<std::string>& points );
+    void HandleBtLeCapabilityNotReady( const std::list<std::string>& points );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  ReadSystemLanguageFromPersistence
@@ -120,9 +138,7 @@ public:
     // Handle Key Information received from LPM
     void HandleLpmKeyInformation( IpcKeyInformation_t keyInformation );
 
-    void HandleAUXSourceKeyPress();
-
-    void HandleIntents( KeyHandlerUtil::ActionType_t result );
+    void HandleIntents( KeyHandlerUtil::ActionType_t intent );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  IsAllModuleReady
@@ -138,6 +154,13 @@ public:
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
     bool IsCAPSReady() const;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  IsSTSReady
+/// @brief true if STS sources initialization is complete.
+/// @return bool
+////////////////////////////////////////////////////////////////////////////////
+    bool IsSTSReady() const;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  HandleLPMReady
@@ -168,11 +191,11 @@ public:
     bool IsLanguageSet();
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @name  IsNetworkSetupDone
+/// @name  IsNetworkConfigured
 /// @brief true if system is conencted to ethernet or number of wifi profiles are nonzero
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
-    bool IsNetworkSetupDone();
+    bool IsNetworkConfigured();
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  GetSystemLanguageCode
@@ -231,7 +254,21 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
     void HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationStatus &status );
     void CallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
-    IntentHandler& IntentHandle()
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name   HandleSTSReady
+/// @brief- Handles STS sources initialization complete callback from
+/// ProductSTSController
+/// @return void
+///////////////////////////////////////////////////////////////////////////////
+    void HandleSTSReady( void );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name   GetIntentHandler
+/// @brief  Returns reference to IntentHandler
+/// @return IntentHandler&
+///////////////////////////////////////////////////////////////////////////////
+    IntentHandler& GetIntentHandler()
     {
         return m_IntentHandler;
     }
@@ -254,15 +291,28 @@ public:
     {
         return m_LpmInterface;
     }
+    const SoundTouchInterface::NowPlayingJson& GetNowPlaying() const
+    {
+        return m_nowPlaying;
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief Interfaces to the ProductSTSController, which implements the interactions
+    ///       between the Eddie Product Controller and the STS source proxies.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    void SetupProductSTSController( void );
+    void HandleSTSInitWasComplete( void );
+    void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
 
 private:
-
-    EddieProductControllerHsm                   m_EddieProductControllerHsm;
 
     EddieProductControllerStateTop              m_EddieProductControllerStateTop;
     EddieProductControllerStateBooting          m_EddieProductControllerStateBooting;
     EddieProductControllerStateSetup            m_EddieProductControllerStateSetup;
     EddieProductControllerStateNetworkStandby   m_EddieProductControllerStateNetworkStandby;
+    EddieProductControllerStateAudioOn          m_EddieProductControllerStateAudioOn;
 
     // LPM Client handle
     LpmClientIF::LpmClientPtr                   m_LpmClient;
@@ -284,17 +334,26 @@ private:
     ProductCliClient                            m_productCliClient;
 
     std::unique_ptr<LightBarController>         m_lightbarController;
-    ProductSource                               m_productSource;
     IntentHandler                               m_IntentHandler;
     LpmInterface                                m_LpmInterface;
     bool                                        m_isCapsReady = false;
     bool                                        m_isLPMReady  = false;
     bool                                        m_isNetworkModuleReady  = false;
+    bool                                        m_isBLEModuleReady  = false;
+    bool                                        m_isBluetoothReady  = false;
 
     int                                         m_WiFiProfilesCount;
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>     errorCb;
     /// Demonstration Controller instance
     DemoApp::DemoController m_demoController;
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief Interfaces to the ProductSTSController, which implements the interactions
+    ///       between the Eddie Product Controller and the STS source proxies.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    bool                                        m_isSTSReady = false;
+    ProductSTSController                        m_ProductSTSController;
 };
 }
 // namespace

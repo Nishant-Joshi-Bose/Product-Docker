@@ -13,22 +13,14 @@
 
 namespace ProductApp
 {
-class ProductControllerState;
-class EddieProductController;
 
 class EddieProductControllerHsm : public ProductControllerHsm
 {
 public:
     EddieProductControllerHsm( NotifyTargetTaskIF* pTask,
-                               const std::string& name,
-                               EddieProductController& eddieProductController );
+                               const std::string& name );
     virtual ~EddieProductControllerHsm()
     {
     }
-
-    bool IsProductNeedsSetup();
-
-private:
-    EddieProductController& m_eddieProductController;
 };
 } // namespace ProductApp

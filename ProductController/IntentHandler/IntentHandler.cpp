@@ -35,14 +35,16 @@
 #include "DPrint.h"
 #include "IntentHandler.h"
 #include "TransportControlManager.h"
+#include "PlaybackRequestManager.h"
 
 static DPrint s_logger( "IntentHandler" );
 
 namespace ProductApp
 {
-IntentHandler::IntentHandler( NotifyTargetTaskIF& task, CliClientMT& cliClient,
-                              FrontDoorClientIF_t& frontDoorClient,
-                              ProductController& controller
+IntentHandler::IntentHandler( NotifyTargetTaskIF& task,
+                              const CliClientMT& cliClient,
+                              const FrontDoorClientIF_t& frontDoorClient,
+                              const ProductController& controller
                             ):
     m_task( task ),
     m_cliClient( cliClient ),
@@ -50,6 +52,7 @@ IntentHandler::IntentHandler( NotifyTargetTaskIF& task, CliClientMT& cliClient,
     m_controller( controller )
 {
     BOSE_DEBUG( s_logger, "%s: ", __func__ );
+    Initialize();
 }
 
 void IntentHandler::Initialize()
@@ -57,11 +60,13 @@ void IntentHandler::Initialize()
     //+ Transport Control API's
     IntentManagerPtr_t transportManager =
         std::make_shared<TransportControlManager>( m_task, m_cliClient,
-                                                   m_frontDoorClient );
+                                                   m_frontDoorClient,
+                                                   m_controller );
 
     m_IntentManagerMap[( uint16_t )Action::PLAY_PAUSE] = transportManager;
     m_IntentManagerMap[( uint16_t )Action::NEXT_TRACK] = transportManager;
     m_IntentManagerMap[( uint16_t )Action::PREV_TRACK] = transportManager;
+
     //- Transport Control API's
     //
     //+ Bluetooth Control API's
@@ -84,19 +89,24 @@ void IntentHandler::Initialize()
 
     //- Preset Control API's
     //+ AUX Control API's
+    IntentManagerPtr_t playbackRequestManager =
+        std::make_shared<PlaybackRequestManager>( m_task, m_cliClient,
+                                                  m_frontDoorClient,
+                                                  m_controller );
 
+    m_IntentManagerMap[( uint16_t )Action::AUX_IN] = playbackRequestManager;
     //- AUX Control API's
     return;
 }
 
 bool IntentHandler::Handle( KeyHandlerUtil::ActionType_t intent )
 {
+    BOSE_DEBUG( s_logger, "%s: ", __func__ );
     IntentManagerMap_t::iterator iter = m_IntentManagerMap.find( intent );
     if( iter != m_IntentManagerMap.end() )
     {
         iter->second->Handle( intent );
-        BOSE_DEBUG( s_logger, "Found the Handle for intent :%d",
-                    intent );
+        BOSE_DEBUG( s_logger, "Found the Handle for intent :%d", intent );
         return( true );
     }
     else
@@ -110,6 +120,20 @@ bool IntentHandler::Handle( KeyHandlerUtil::ActionType_t intent )
 void IntentHandler::RegisterCallBack( KeyHandlerUtil::ActionType_t intent,
                                       CbPtr_t cb )
 {
+    BOSE_DEBUG( s_logger, "%s: ", __func__ );
+    IntentManagerMap_t::iterator iter = m_IntentManagerMap.find( intent );
+    if( iter != m_IntentManagerMap.end() )
+    {
+        iter->second->RegisterCallBack( intent, cb );
+        BOSE_DEBUG( s_logger, "Found the Manager for intent :%d", intent );
+        return;
+    }
+    else
+    {
+        BOSE_ERROR( s_logger, "Manager not found for intent : %d, check "
+                    "initialization code", intent );
+        return;
+    }
     return;
 }
 
