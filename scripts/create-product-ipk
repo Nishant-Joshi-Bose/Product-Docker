@@ -290,8 +290,10 @@ pkill UpnpSource
 pkill Vfe
 pkill btproperty
 pkill STSCertified
-pkill Bluetooth
+pkill BluetoothManager
+pkill BT
 pkill BLESetup
+pkill BTSource
 pkill IoT
 pkill BoseApp
 pkill Eddie
