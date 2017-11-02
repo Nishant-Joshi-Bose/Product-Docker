@@ -16,10 +16,9 @@ namespace ProductApp
 {
 EddieProductControllerStateSetup::EddieProductControllerStateSetup( EddieProductControllerHsm& hsm,
                                                                     CHsmState* pSuperState,
-                                                                    EddieProductController& eddieProductController,
                                                                     Hsm::STATE stateId,
                                                                     const std::string& name ) :
-    ProductControllerStateSetup( hsm, pSuperState, eddieProductController, stateId, name )
+    ProductControllerStateSetup( hsm, pSuperState, stateId, name )
 {
 }
 
@@ -31,7 +30,7 @@ void EddieProductControllerStateSetup::HandleStateEnter()
 void EddieProductControllerStateSetup::HandleStateStart()
 {
     BOSE_INFO( s_logger, __func__ );
-    EnableWiFiSetupMode();
+    GetProductController().GetNetworkServiceUtil().EnableWiFiSetupMode();
     GetProductController().GetProductFrontDoorUtility().EnableNetworkAccessPoint();
     GetProductController().GetProductFrontDoorUtility().EnableBTBLEAdvertising();
 }
@@ -39,21 +38,29 @@ void EddieProductControllerStateSetup::HandleStateStart()
 void EddieProductControllerStateSetup::HandleStateExit()
 {
     BOSE_INFO( s_logger, __func__ );
-    EnableWiFiAutoSwitchingMode();
+    GetProductController().GetNetworkServiceUtil().EnableWiFiAutoSwitchingMode();
     GetProductController().GetProductFrontDoorUtility().DisableNetworkAccessPoint();
     GetProductController().GetProductFrontDoorUtility().DisableBTBLEAdvertising();
 }
 
 
-bool EddieProductControllerStateSetup::HandleIntents( KeyHandlerUtil::ActionType_t result )
+bool EddieProductControllerStateSetup::HandleIntents( KeyHandlerUtil::ActionType_t intent )
 {
+    BOSE_DEBUG( s_logger, "%s, %d", __func__, ( uint16_t ) intent );
+
+    if( ( IntentHandler::IsIntentAuxIn( intent ) ) )
+    {
+        GetCustomProductController().GetIntentHandler().Handle( intent );
+        return true;
+    }
+
     return false;
 }
 
 bool EddieProductControllerStateSetup::HandleNetworkConfigurationStatus( const NetManager::Protobuf::NetworkStatus& networkStatus, int profileSize )
 {
     BOSE_INFO( s_logger, "%s, profileSize =%d", __func__, profileSize );
-    if( profileSize || IsNetworkConfigured( networkStatus ) )
+    if( profileSize || GetProductController().GetNetworkServiceUtil().IsNetworkConfigured( networkStatus ) )
         ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
 
     return true;

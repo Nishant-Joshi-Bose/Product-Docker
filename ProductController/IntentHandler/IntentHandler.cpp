@@ -35,6 +35,7 @@
 #include "DPrint.h"
 #include "IntentHandler.h"
 #include "TransportControlManager.h"
+#include "PlaybackRequestManager.h"
 
 static DPrint s_logger( "IntentHandler" );
 
@@ -88,7 +89,12 @@ void IntentHandler::Initialize()
 
     //- Preset Control API's
     //+ AUX Control API's
+    IntentManagerPtr_t playbackRequestManager =
+        std::make_shared<PlaybackRequestManager>( m_task, m_cliClient,
+                                                  m_frontDoorClient,
+                                                  m_controller );
 
+    m_IntentManagerMap[( uint16_t )Action::AUX_IN] = playbackRequestManager;
     //- AUX Control API's
     return;
 }

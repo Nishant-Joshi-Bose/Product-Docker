@@ -1,5 +1,5 @@
 #### Eddie Jenkins Smoke Test Status
-<a title='Jenkins build status for smoke tests against Eddie' href='http://b8daa1c8.ngrok.io/view/Eddie/job/Eddie_Smoke_Tests/'><img src='http://b8daa1c8.ngrok.io/view/Eddie/job/Eddie_Smoke_Tests/badge/icon'></a>
+<a title='Jenkins build status for smoke tests against Eddie' href='http://41c679de.ngrok.io/view/Eddie/job/Eddie_Smoke_Tests/'><img src='http://41c679de.ngrok.io/view/Eddie/job/Eddie_Smoke_Tests/badge/icon'></a>
 
 <!-- ngrok is used for secure tunnel so our jenkins server behind our firewall can be accessed from GitHub. When the tests are added and a pull request is submitted an automatic jenkins build is initiated. When that build is successful or failed it will automatically get updated in the Readme. We are using a jenkins plugin that uses API's to update the status of the jenkins build.-->
 

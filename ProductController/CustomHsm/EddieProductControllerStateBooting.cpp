@@ -17,10 +17,9 @@ namespace ProductApp
 {
 EddieProductControllerStateBooting::EddieProductControllerStateBooting( EddieProductControllerHsm& hsm,
                                                                         CHsmState* pSuperState,
-                                                                        EddieProductController& eddieProductController,
                                                                         Hsm::STATE stateId,
                                                                         const std::string& name ) :
-    ProductControllerStateBooting( hsm, pSuperState, eddieProductController, stateId, name )
+    ProductControllerStateBooting( hsm, pSuperState, stateId, name )
 {
     BOSE_INFO( s_logger, __func__ );
 }
@@ -69,10 +68,7 @@ bool EddieProductControllerStateBooting::HandleLpmInterfaceState( bool isConnect
         BOSE_LOG( INFO, "LPM hardware is Down. Set LPM System State to NORMAL" );
         try
         {
-            // Down-casting from base class ProductController to derived class EddieProductController
-            // Safer to use dynamic_cast
-            dynamic_cast<EddieProductController&>(
-                GetProductController() ).GetLpmInterface().SetSystemState( SYSTEM_STATE_NORMAL );
+            GetCustomProductController().GetLpmInterface().SetSystemState( SYSTEM_STATE_NORMAL );
         }
         catch( std::bad_cast& e )
         {
@@ -87,9 +83,9 @@ bool EddieProductControllerStateBooting::HandleLpmInterfaceState( bool isConnect
 void EddieProductControllerStateBooting::GoToNextState()
 {
     BOSE_INFO( s_logger, __func__ );
-    if( static_cast<EddieProductController&>( GetProductController() ).IsAllModuleReady() )
+    if( GetCustomProductController().IsAllModuleReady() )
     {
-        if( static_cast<EddieProductControllerHsm&>( GetHsm() ).IsProductNeedsSetup() )
+        if( IsProductNeedsSetup() )
         {
             ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP );
         }
@@ -100,9 +96,9 @@ void EddieProductControllerStateBooting::GoToNextState()
     }
 }
 
-bool EddieProductControllerStateBooting::HandleIntents( KeyHandlerUtil::ActionType_t result )
+bool EddieProductControllerStateBooting::HandleIntents( KeyHandlerUtil::ActionType_t intent )
 {
     return false;
 }
 
-} // namespace ProductApp
+} /// namespace ProductApp

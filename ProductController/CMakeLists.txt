@@ -1,6 +1,7 @@
 INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
   ${DEMOCONTROLLER_DIR}
   ${CUSTOM_HSM_DIR}
   ${KEYHANDLER_DIR}/include
@@ -23,7 +24,6 @@ ADD_EXECUTABLE(Eddie
   DeviceManager.cpp
   LightBarController/LightBarController.cpp
   ProductCliClient.cpp
-  ProductSource.cpp
   EddieProductController.cpp
   Main.cpp
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
@@ -36,6 +36,7 @@ ADD_EXECUTABLE(Eddie
   IntentHandler/IntentHandler.cpp
   IntentHandler/TransportControlManager.cpp
   IntentHandler/BlueToothManager.cpp
+  IntentHandler/PlaybackRequestManager.cpp
   LpmInterface.cpp
 )
 
@@ -48,7 +49,9 @@ TARGET_LINK_LIBRARIES(Eddie
   KeyHandler
   BLESetupServiceProto
   CliClient
+  ShelbyUtils
   BoseLibs
+  STS
   libjsoncpp.a
   libprotobuf.a
   libTinyXml.a

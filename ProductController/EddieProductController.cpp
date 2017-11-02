@@ -21,7 +21,6 @@ using namespace DemoApp;
 
 #define FRONTDOOR_SYSTEM_LANGUAGE_API               "/system/language"
 #define FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API   "/system/configuration/status"
-#define FRONTDOOR_CONTENT_ALLOWSOURCESELECT_API     "/content/allowSourceSelect"
 #define FRONTDOOR_SYSTEM_INFO_API                   "/system/info"
 #define FRONTDOOR_SYSTEM_STATE_API                  "/system/state"
 #define FRONTDOOR_NETWORK_STATUS_API                "/network/status"
@@ -38,16 +37,15 @@ const std::string KEY_CONFIG_FILE = "/var/run/shepherd/KeyConfiguration.json";
 
 EddieProductController::EddieProductController( std::string const& ProductName ):
     ProductController( ProductName ),
-    m_EddieProductControllerHsm( GetTask(), ProductName + "ProductHsm", *this ),
-    m_EddieProductControllerStateTop( m_EddieProductControllerHsm, nullptr,  *this ),
-    m_EddieProductControllerStateBooting( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop, *this ),
-    m_EddieProductControllerStateSetup( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop, *this ),
-    m_EddieProductControllerStateNetworkStandby( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop, *this ),
+    m_EddieProductControllerHsm( GetTask(), ProductName + "ProductHsm" ),
+    m_EddieProductControllerStateTop( m_EddieProductControllerHsm, nullptr ),
+    m_EddieProductControllerStateBooting( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop ),
+    m_EddieProductControllerStateSetup( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop ),
+    m_EddieProductControllerStateNetworkStandby( m_EddieProductControllerHsm, &m_EddieProductControllerStateTop ),
     m_LpmClient(),
     m_KeyHandler( *GetTask(), m_CliClientMT, KEY_CONFIG_FILE ),
     m_deviceManager( GetTask(), *this ),
     m_cachedStatus(),
-    m_productSource( m_FrontDoorClientIF, *GetTask() ),
     m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
     m_LpmInterface( std::bind( &EddieProductController::HandleProductMessage,
                                this, std::placeholders::_1 ), GetTask() ),
@@ -62,7 +60,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateBooting );
     m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateSetup );
     m_EddieProductControllerHsm.AddState( &m_EddieProductControllerStateNetworkStandby );
-    m_EddieProductControllerHsm.Init( PRODUCT_CONTROLLER_STATE_BOOTING );
+    m_EddieProductControllerHsm.Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );
 
     InitializeLpmClient();
     m_LanguagePersistence = ProtoPersistenceFactory::Create( "ProductLanguage", g_ProductPersistenceDir );
@@ -74,6 +72,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     ReadNowPlayingFromPersistence();
 
     m_lightbarController = std::unique_ptr<LightBarController>( new LightBarController( *this , m_FrontDoorClientIF, m_LpmClient ) );
+    SetupProductSTSController();
 }
 
 EddieProductController::~EddieProductController()
@@ -89,7 +88,6 @@ void EddieProductController::Initialize()
     SendInitialRequests();
     //Register lpm events that lightbar will handle
     m_lightbarController->Initialize();
-    m_productSource.Initialize();
     m_demoController.RegisterEndPoints();
 }
 
@@ -112,9 +110,9 @@ void EddieProductController::RegisterLpmEvents()
 
 void EddieProductController::RegisterKeyHandler()
 {
-    auto func = [this]( KeyHandlerUtil::ActionType_t result )
+    auto func = [this]( KeyHandlerUtil::ActionType_t intent )
     {
-        HandleIntents( result );
+        HandleIntents( intent );
     };
     auto cb = std::make_shared<AsyncCallback<KeyHandlerUtil::ActionType_t> > ( func, GetTask() );
     m_KeyHandler.RegisterKeyHandler( cb );
@@ -213,14 +211,6 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
         m_KeyHandler.HandleKeys( keyInformation.keyorigin(),
                                  keyInformation.keystate(),
                                  keyInformation.keyid() );
-        //Work around code since we can't call non-static functions from within static EddieProductController::KeyInformationCallBack function.
-        //This will be fixed in new KeyHandler component.
-        if( ( keyInformation.keystate() == 1 ) &&
-            ( keyInformation.keyid() == ProductSource::KEY_ID::SELECT_AUX_SOURCE ) )
-        {
-            BOSE_DEBUG( s_logger, "AUX Source key pressed..." );
-            HandleAUXSourceKeyPress();
-        }
     }
     else
     {
@@ -230,13 +220,6 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
                     keyInformation.has_keystate(),
                     keyInformation.has_keyid() );
     }
-}
-
-void EddieProductController::HandleAUXSourceKeyPress()
-{
-    BOSE_DEBUG( s_logger, __func__ );
-
-    m_productSource.SendPostAUXPlaybackRequest();
 }
 
 void EddieProductController::SendInitialRequests()
@@ -291,6 +274,13 @@ void EddieProductController::HandleCapsInitializationUpdate( const SoundTouchInt
 {
     BOSE_DEBUG( s_logger, "%s:notification: %s", __func__, ProtoToMarkup::ToJson( resp, false ).c_str() );
     HandleCAPSReady( resp.capsinitialized() );
+}
+
+void EddieProductController::HandleSTSReady( void )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    m_isSTSReady = true;
+    m_EddieProductControllerHsm.Handle<>( &CustomProductControllerState::HandleModulesReady );
 }
 
 void EddieProductController::HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp )
@@ -372,11 +362,12 @@ void EddieProductController::HandleLPMReady()
 
 bool EddieProductController::IsAllModuleReady()
 {
-    BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|NetworkModuleReady=%d|m_isBluetoothReady=%d|m_isBLEModuleReady=%d|", __func__,
-               m_isCapsReady , m_isLPMReady, m_isNetworkModuleReady, m_isBluetoothReady, m_isBLEModuleReady );
+    BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|NetworkModuleReady=%d|BluetoothReady=%d|BLEModuleReady=%d|STSReady=%d", __func__,
+               m_isCapsReady , m_isLPMReady, m_isNetworkModuleReady, m_isBluetoothReady, m_isBLEModuleReady, m_isSTSReady );
     return ( m_isCapsReady and
              m_isLPMReady and
-             m_isNetworkModuleReady );
+             m_isNetworkModuleReady and
+             m_isSTSReady );
     // TODO m_isBLEModuleReady and m_isBluetoothReady should also be included to complete booting
 }
 
@@ -384,6 +375,12 @@ bool EddieProductController::IsCAPSReady() const
 {
     BOSE_INFO( s_logger, "%s:CAPS Ready=%d", __func__, m_isCapsReady );
     return m_isCapsReady;
+}
+
+bool EddieProductController::IsSTSReady() const
+{
+    BOSE_INFO( s_logger, "%s:STS Ready=%d", __func__, m_isSTSReady );
+    return m_isSTSReady;
 }
 
 bool EddieProductController::IsLanguageSet()
@@ -553,13 +550,13 @@ void EddieProductController::HandleGetDeviceStateRequest( const Callback<::Devic
     resp.Send( currentState );
 }
 
-void EddieProductController::HandleIntents( KeyHandlerUtil::ActionType_t result )
+void EddieProductController::HandleIntents( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "Translated Intend %d", result );
-    m_CliClientMT.SendAsyncResponse( "Translated intend = " + \
-                                     std::to_string( result ) );
+    BOSE_INFO( s_logger, "Translated Intent %d", intent );
+    m_CliClientMT.SendAsyncResponse( "Translated intent = " + \
+                                     std::to_string( intent ) );
 
-    m_EddieProductControllerHsm.Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntents, result );
+    m_EddieProductControllerHsm.Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntents, intent );
     return;
 }
 
@@ -615,7 +612,7 @@ void EddieProductController::HandleCliCmd( uint16_t cmdKey,
     respCb( response, transact_id );
 }
 
-void EddieProductController::HandleAllowSourceSelectCliCmd( const std::list<std::string> & argList, std::string& response )
+void EddieProductController::HandleAllowSourceSelectCliCmd( const std::list<std::string>& argList, std::string& response )
 {
     if( argList.size() != 1 )
     {
@@ -639,7 +636,7 @@ void EddieProductController::HandleAllowSourceSelectCliCmd( const std::list<std:
     }
 }
 
-void EddieProductController::HandleSetProductControllerStateCliCmd( const std::list<std::string> & argList,
+void EddieProductController::HandleSetProductControllerStateCliCmd( const std::list<std::string>& argList,
                                                                     std::string& response )
 {
     std::string usage;
@@ -682,7 +679,7 @@ void EddieProductController::HandleSetProductControllerStateCliCmd( const std::l
     }
 }
 
-void EddieProductController::HandleGetProductControllerStateCliCmd( const std::list<std::string> & argList,
+void EddieProductController::HandleGetProductControllerStateCliCmd( const std::list<std::string>& argList,
                                                                     std::string& response )
 {
     if( argList.size() > 0 )
@@ -745,6 +742,69 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
         BOSE_ERROR( s_logger, "productMessage doesn't have an Id" );
         return;
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   EddieProductController::SetupProductSTSController
+///
+/// @brief  This method is called to perform the needed initialization of the ProductSTSController,
+///         specifically, provide the set of sources to be created initially.
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void EddieProductController::SetupProductSTSController( void )
+{
+    std::vector<ProductSTSController::SourceDescriptor> sources;
+    ProductSTSController::SourceDescriptor descriptor_AUX{ 0, "AUX", true }; // AUX is always available
+    sources.push_back( descriptor_AUX );
+    Callback<void> cb_STSInitWasComplete( std::bind( &EddieProductController::HandleSTSInitWasComplete, this ) );
+    Callback<ProductSTSAccount::ProductSourceSlot> cb_HandleSelectSourceSlot( std::bind( &EddieProductController::HandleSelectSourceSlot, this, std::placeholders::_1 ) );
+    m_ProductSTSController.Initialize( sources, cb_STSInitWasComplete, cb_HandleSelectSourceSlot );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   EddieProductController::HandleSTSInitWasComplete
+///
+/// @brief  This method is called from the ProductSTSController when all the initially-created
+///         sources have been created with CAPS/STS
+///
+/// @note   THIS METHOD IS CALLED ON THE ProductSTSController THREAD
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void EddieProductController::HandleSTSInitWasComplete( void )
+{
+    BOSE_INFO( s_logger, __func__ );
+    IL::BreakThread( std::bind( &EddieProductController::HandleSTSReady,
+                                this ),
+                     GetTask( ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   EddieProductController::HandleSelectSourceSlot
+///
+/// @brief  This method is called from the ProductSTSController when one of our sources is
+///         activated by CAPS/STS
+///
+/// @note   THIS METHOD IS CALLED ON THE ProductSTSController THREAD
+///
+/// @param  ProductSTSAccount::ProductSourceSlot sourceSlot - identifies the activated slot
+///
+/// @return This method does not return anything.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void EddieProductController::HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot )
+{
+    BOSE_INFO( s_logger, "%s: slot: %d", __func__, sourceSlot );
 }
 
 void EddieProductController::HandleNetworkCapabilityReady( const std::list<std::string>& points )

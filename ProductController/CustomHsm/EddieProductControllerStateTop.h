@@ -15,14 +15,12 @@
 namespace ProductApp
 {
 class EddieProductControllerHsm;
-class EddieProductController;
 
 class EddieProductControllerStateTop : public ProductControllerStateTop
 {
 public:
     EddieProductControllerStateTop( EddieProductControllerHsm& hsm,
                                     CHsmState* pSuperState,
-                                    EddieProductController& eddieProductController,
                                     Hsm::STATE stateId = 0,
                                     const std::string& name = "TOP" );
 
@@ -31,6 +29,6 @@ public:
     }
 
     bool HandleModulesReady() override;
-    bool HandleIntents( KeyHandlerUtil::ActionType_t result ) override;
+    bool HandleIntents( KeyHandlerUtil::ActionType_t intent ) override;
 };
 } // namespace ProductApp
