@@ -55,12 +55,14 @@
 #include "CustomProductControllerStatePlayingActive.h"
 #include "CustomProductControllerStatePlaying.h"
 #include "CustomProductControllerStatePlayingInactive.h"
+#include "CustomProductControllerStateAccessoryPairing.h"
 #include "ProductHardwareInterface.h"
 #include "ProductAudioService.h"
 #include "ProductSoftwareServices.h"
 #include "ProductUserInterface.h"
 #include "ProductNetworkManager.h"
 #include "ProductSystemManager.h"
+#include "ProductSpeakerManager.h"
 #include "ProductCommandLine.h"
 #include "ProtoPersistenceFactory.h"
 #include "ProductMessage.pb.h"
@@ -136,9 +138,7 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     /// Construction of the State Machine
     ///
-    m_ProductControllerStateMachine( GetTask( ),
-                                     "ProfessorStateMachine",
-                                     static_cast< ProductController & >( *this ) ),
+    m_ProductControllerStateMachine( GetTask( ), "ProfessorStateMachine" ),
 
     ///
     /// Construction of the Product Controller Modules
@@ -187,58 +187,47 @@ void ProfessorProductController::Run( )
     /// Construction of the Common States
     ///
     auto* stateTop = new ProductControllerStateTop( m_ProductControllerStateMachine,
-                                                    nullptr,
-                                                    static_cast< ProductApp::ProductController & >( *this ) );
+                                                    nullptr );
     ///
     /// Construction of the Custom Professor States
     ///
     auto* stateBooting = new CustomProductControllerStateBooting( m_ProductControllerStateMachine,
-                                                                  stateTop,
-                                                                  *this );
+                                                                  stateTop );
 
     auto* stateUpdatingSoftware = new CustomProductControllerStateUpdatingSoftware( m_ProductControllerStateMachine,
-                                                                                    stateTop,
-                                                                                    *this );
+                                                                                    stateTop );
 
     auto* stateLowPower = new CustomProductControllerStateLowPower( m_ProductControllerStateMachine,
-                                                                    stateTop,
-                                                                    *this );
+                                                                    stateTop );
 
     auto* stateOn = new CustomProductControllerStateOn( m_ProductControllerStateMachine,
-                                                        stateTop,
-                                                        *this );
+                                                        stateTop );
 
     auto* statePlayable = new CustomProductControllerStatePlayable( m_ProductControllerStateMachine,
-                                                                    stateOn,
-                                                                    *this );
+                                                                    stateOn );
 
     auto* stateNetworkStandby = new CustomProductControllerStateNetworkStandby( m_ProductControllerStateMachine,
-                                                                                statePlayable,
-                                                                                *this );
+                                                                                statePlayable );
 
     auto* stateNetworkStandbyConfigured = new CustomProductControllerStateNetworkStandbyConfigured( m_ProductControllerStateMachine,
-            stateNetworkStandby,
-            *this );
+            stateNetworkStandby );
 
     auto* stateNetworkStandbyUnconfigured = new CustomProductControllerStateNetworkStandbyUnconfigured( m_ProductControllerStateMachine,
             stateNetworkStandby,
             *this );
 
     auto* stateIdle = new CustomProductControllerStateIdle( m_ProductControllerStateMachine,
-                                                            statePlayable,
-                                                            *this );
+                                                            statePlayable );
 
     auto* stateIdleVoiceConfigured = new CustomProductControllerStateIdleVoiceConfigured( m_ProductControllerStateMachine,
-            stateIdle,
-            *this );
+            stateIdle );
 
     auto* stateIdleVoiceUnconfigured = new CustomProductControllerStateIdleVoiceUnconfigured( m_ProductControllerStateMachine,
             stateIdle,
             *this );
 
     auto* statePlaying = new CustomProductControllerStatePlaying( m_ProductControllerStateMachine,
-                                                                  stateOn,
-                                                                  *this );
+                                                                  stateOn );
 
     auto* statePlayingActive = new CustomProductControllerStatePlayingActive( m_ProductControllerStateMachine,
                                                                               statePlaying,
@@ -248,9 +237,15 @@ void ProfessorProductController::Run( )
                                                                                   statePlaying,
                                                                                   *this );
 
+    auto* stateAccessoryPairing = new CustomProductControllerStateAccessoryPairing( m_ProductControllerStateMachine,
+                                                                                    statePlayingActive,
+                                                                                    *this );
+
+
     ///
     /// The states are added to the state machine and the state machine is initialized.
     ///
+
     m_ProductControllerStateMachine.AddState( stateTop );
     m_ProductControllerStateMachine.AddState( stateBooting );
     m_ProductControllerStateMachine.AddState( stateUpdatingSoftware );
@@ -266,8 +261,9 @@ void ProfessorProductController::Run( )
     m_ProductControllerStateMachine.AddState( statePlaying );
     m_ProductControllerStateMachine.AddState( statePlayingActive );
     m_ProductControllerStateMachine.AddState( statePlayingInactive );
+    m_ProductControllerStateMachine.AddState( stateAccessoryPairing );
 
-    m_ProductControllerStateMachine.Init( PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
+    m_ProductControllerStateMachine.Init( this, PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
     ///
     /// Get instances of all the modules.
@@ -308,6 +304,10 @@ void ProfessorProductController::Run( )
                                                                         m_ProductHardwareInterface );
 
 
+    m_ProductSpeakerManager    = ProductSpeakerManager::GetInstance( GetTask( ),
+                                                                     CallbackForMessages,
+                                                                     m_ProductHardwareInterface );
+
     if( m_ProductHardwareInterface == nullptr ||
         m_ProductSystemManager     == nullptr ||
         m_ProductNetworkManager    == nullptr ||
@@ -336,6 +336,7 @@ void ProfessorProductController::Run( )
     m_ProductUserInterface     ->Run( );
     m_ProductEdidInterface     ->Run( );
     m_ProductVolumeManager     ->Run( );
+    m_ProductSpeakerManager    ->Run( );
 
     ///
     /// Set up the STSProductController
@@ -367,6 +368,18 @@ ProductVolumeManager* ProfessorProductController::GetVolumeManager( ) const
     return m_ProductVolumeManager;
 }
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name ProfessorProductController::GetSpeakerManager
+///
+/// @return ProductHardwareInterface* - pointer to speaker manager
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+ProductSpeakerManager* ProfessorProductController::GetSpeakerManager( )
+{
+    return m_ProductSpeakerManager;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -784,6 +797,14 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
 
         m_ProductControllerStateMachine.Handle< bool >
         ( &CustomProductControllerState::HandleAutowakeStatus, m_IsAutoWakeEnabled );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// Accessory pairing messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.has_accessorypairing() )
+    {
+        m_ProductControllerStateMachine.Handle< ProductAccessoryPairing >
+        ( &CustomProductControllerState::HandlePairingState, message.accessorypairing( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Playback messages are handled at this point.

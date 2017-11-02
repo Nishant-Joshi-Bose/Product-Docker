@@ -57,12 +57,10 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateIdle::CustomProductControllerStateIdle( ProductControllerHsm&       hsm,
                                                                     CHsmState*                  pSuperState,
-                                                                    ProfessorProductController& productController,
                                                                     Hsm::STATE                  stateId,
                                                                     const std::string&          name )
 
-    : ProductControllerStateIdle( hsm, pSuperState, productController, stateId, name ),
-      m_productController( productController )
+    : ProductControllerStateIdle( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdle is being constructed." );
 }
@@ -79,7 +77,7 @@ void CustomProductControllerStateIdle::HandleStateEnter( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdle is being entered by the state machine." );
 
-    m_productController.GetHardwareInterface( )->RequestPowerStateAutowake( );
+    GetCustomProductController().GetHardwareInterface( )->RequestPowerStateAutowake( );
 
     BOSE_VERBOSE( s_logger, "An attempt to set an autowake power state is now being made." );
 }
@@ -93,7 +91,7 @@ void CustomProductControllerStateIdle::HandleStateStart( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdle is being started." );
 
-    if( m_productController.IsNetworkConfigured( ) and m_productController.IsVoiceConfigured( ) )
+    if( GetCustomProductController().IsNetworkConfigured( ) and GetCustomProductController().IsVoiceConfigured( ) )
     {
         BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                       "CustomProductControllerStateIdle",

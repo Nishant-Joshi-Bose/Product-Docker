@@ -52,7 +52,6 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductControllerHsm;
-class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -67,7 +66,6 @@ public:
 
     CustomProductControllerStateOn( ProductControllerHsm&       hsm,
                                     CHsmState*                  pSuperState,
-                                    ProfessorProductController& productController,
                                     Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_ON,
                                     const std::string&          name    = "CustomProductControllerStateOn" );
 
@@ -82,8 +80,6 @@ public:
     bool HandleKeyAction( int action ) override;
 
 private:
-
-    ProfessorProductController& m_productController;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

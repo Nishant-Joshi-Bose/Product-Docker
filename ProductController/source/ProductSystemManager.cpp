@@ -38,6 +38,7 @@
 #include "ConfigurationStatus.pb.h"
 #include "CapsInitializationStatus.pb.h"
 #include "NetManager.pb.h"
+#include "FrontDoorClient.h"
 #include "STSNetworkStatus.pb.h"
 #include "FrontDoorClient.h"
 #include "ProductMessage.pb.h"

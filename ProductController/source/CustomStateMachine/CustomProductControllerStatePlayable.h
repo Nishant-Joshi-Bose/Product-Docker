@@ -51,7 +51,6 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductControllerHsm;
-class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -66,7 +65,6 @@ public:
 
     CustomProductControllerStatePlayable( ProductControllerHsm&       hsm,
                                           CHsmState*                  pSuperState,
-                                          ProfessorProductController& productController,
                                           Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE,
                                           const std::string&          name    = "CustomProductControllerStatePlayable" );
 
@@ -81,11 +79,9 @@ public:
 
     bool HandlePowerState( ) override;
     bool HandlePlaybackRequest( ProductPlaybackRequest_ProductPlaybackState state ) override;
+    bool HandleKeyAction( int action ) override;
 
 private:
-
-    ProfessorProductController& m_productController;
-    bool HandleKeyAction( int action );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

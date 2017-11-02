@@ -1,11 +1,11 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateNetworkStandbyUnconfigured.h
+/// @file      CustomProductControllerStateAccessoryPairing.h
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product network standby unconfigured state.
+///            product accessory pairing state.
 ///
-/// @author    Stuart J. Lumby
+/// @author    Derek Richardson
 ///
 /// @date      09/22/2017
 ///
@@ -35,9 +35,8 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerState.h"
-#include "ProductControllerStates.h"
-#include "HsmState.h"
+#include "ProductControllerStateIdle.h"
+#include "LpmServiceMessages.pb.h"
 #include "APTimer.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,57 +55,49 @@ class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class CustomProductControllerStateNetworkStandbyUnconfigured
+/// @class CustomProductControllerStateAccessoryPairing
 ///
-/// @brief This class is used for executing produce specific actions when in an network standby
-///        unconfigured state.
+/// @brief This class is used for executing produce specific actions when in an idle state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateNetworkStandbyUnconfigured : public ProductControllerState
+class CustomProductControllerStateAccessoryPairing : public ProductControllerState
 {
 public:
 
-    CustomProductControllerStateNetworkStandbyUnconfigured
-    ( ProductControllerHsm&       hsm,
-      CHsmState*                  pSuperState,
-      ProfessorProductController& productController,
-      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED,
-      const std::string&          name    = "CustomProductControllerStateNetworkStandbyUnconfigured" );
+    CustomProductControllerStateAccessoryPairing( ProductControllerHsm&       hsm,
+                                                  CHsmState*                  pSuperState,
+                                                  ProfessorProductController& productController,
+                                                  Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING,
+                                                  const std::string&          name    = "CustomProductControllerStateAccessoryPairing" );
 
-    ~CustomProductControllerStateNetworkStandbyUnconfigured( ) override
+    virtual ~CustomProductControllerStateAccessoryPairing()
     {
 
     }
 
-    void HandleStateEnter( ) override;
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
-
-    bool HandleNetworkState( bool configured, bool connected ) override;
-    bool HandleVoiceState( bool configured )                   override;
+    bool HandlePairingState( ProductAccessoryPairing pairingStatus ) override;
 
 private:
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief This timer is used to monitor the amount of time the device is in this state.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    std::shared_ptr<APTimer> m_timer;
+    ProfessorProductController& m_productController;
+    APTimerPtr m_timer;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief This method will be invoked by the expired timer defined above.
+    /// @brief This method will be invoked by an expired timer, which is defined above and armed on
+    ///        a successful callback saying pairing was entered
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleTimeOut( void );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                           End of the Product Application Namespace                           ///
+///                             End of Product Application Namespace                             ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                         End of File                                          ///
+///                                        End of File                                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

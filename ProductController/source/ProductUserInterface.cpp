@@ -173,7 +173,7 @@ void ProductUserInterface::RegisterForKeyEvents( void )
                                      this,
                                      std::placeholders::_1 ) );
 
-    while( !m_ProductHardwareInterface->RegisterForKeyEvents( CallbackForKeyEvents ) )
+    while( !m_ProductHardwareInterface->RegisterForLpmEvents( IPC_KEY, CallbackForKeyEvents ) )
     {
         sleep( PRODUCT_USER_INTERFACE_RETRY_IN_SECONDS );
     }

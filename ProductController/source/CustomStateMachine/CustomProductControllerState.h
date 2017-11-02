@@ -37,6 +37,7 @@
 #include "Hsm.h"
 #include "HsmState.h"
 #include "ProductMessage.pb.h"
+#include "ProductController.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -50,6 +51,7 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductControllerHsm;
+class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -104,6 +106,20 @@ public:
     virtual bool HandlePowerState( void );
     virtual bool HandleAutowakeStatus( bool active );
     virtual bool HandleKeyAction( int action );
+    virtual bool HandlePairingState( ProductAccessoryPairing pairingStatus );
+
+
+    static  void SetProductController( ProductController* productController )
+    {
+        s_productController = productController;
+    }
+
+protected:
+    /// The custom version of this function returns the custom ProductController
+    static ProfessorProductController& GetCustomProductController();
+
+    static ProductController* s_productController;
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

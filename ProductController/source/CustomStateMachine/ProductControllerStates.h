@@ -62,7 +62,8 @@ enum ProductControllerStates
     PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING                      = 21,
     PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE               = 22,
     PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE             = 23,
-    PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING            = 24
+    PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING            = 24,
+    PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING            = 25
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

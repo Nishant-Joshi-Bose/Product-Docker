@@ -30,12 +30,15 @@
 #include "Utilities.h"
 #include "CustomProductControllerState.h"
 #include "ProductControllerHsm.h"
+#include "ProfessorProductController.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
+
+ProductController* CustomProductControllerState::s_productController = nullptr;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -110,6 +113,16 @@ bool CustomProductControllerState::HandleKeyAction( int action )
     return false;
 }
 
+
+bool CustomProductControllerState::HandlePairingState( ProductAccessoryPairing pairingStatus )
+{
+    return false;
+}
+
+ProfessorProductController& CustomProductControllerState::GetCustomProductController()
+{
+    return *static_cast<ProfessorProductController*>( s_productController );
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///

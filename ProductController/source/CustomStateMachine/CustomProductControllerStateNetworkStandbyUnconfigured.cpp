@@ -72,9 +72,8 @@ CustomProductControllerStateNetworkStandbyUnconfigured
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
-      m_productController( productController ),
-      m_timer( APTimer::Create( m_productController.GetTask( ), "NetworkUnconfiguredTimer" ) )
+    : ProductControllerState( hsm, pSuperState, stateId, name ),
+      m_timer( APTimer::Create( productController.GetTask( ), "NetworkUnconfiguredTimer" ) )
 
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyUnconfigured is being constructed." );
@@ -163,7 +162,7 @@ bool CustomProductControllerStateNetworkStandbyUnconfigured::HandleNetworkState(
     else
     {
         auto const& networkConnected = connected;
-        auto const& voiceConfigured = m_productController.IsVoiceConfigured( );
+        auto const& voiceConfigured = GetCustomProductController().IsVoiceConfigured( );
 
         if( networkConnected and voiceConfigured )
         {
@@ -196,7 +195,7 @@ bool CustomProductControllerStateNetworkStandbyUnconfigured::HandleVoiceState( b
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyUnconfigured is handling a voice state change." );
 
     auto const& voiceConfigured = configured;
-    auto const& networkConnected = m_productController.IsNetworkConfigured( );
+    auto const& networkConnected = GetCustomProductController().IsNetworkConfigured( );
 
     if( voiceConfigured and networkConnected )
     {

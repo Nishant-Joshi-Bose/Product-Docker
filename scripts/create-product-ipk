@@ -72,7 +72,6 @@ swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 audiopath_dir=$(components get CastleAudioPath-qc8017_32 installed_location) || exit
 castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
 castlepassport_dir=$(components get CastlePassport-qc8017_32 installed_location) || exit
-professorlpm_package_dir=$(components get ProfessorLPM-Package installed_location) || exit
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
 
 arch=arm-oemllib32-linux
@@ -167,7 +166,6 @@ cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
 cp -a "$boselibs_dir/lib" "$opt_dir" || exit
 cp -a "$protobuf_dir/lib" "$opt_dir" || exit
-cp -t "$opt_dir/etc" "$professorlpm_package_dir"/*.bos "$professorlpm_package_dir/lpm_blob_configuration.xml" || exit
 cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
 
 marge_url=https://streamingint.bose.com

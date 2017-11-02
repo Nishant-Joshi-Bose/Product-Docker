@@ -55,12 +55,10 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateBooting::CustomProductControllerStateBooting( ProductControllerHsm&       hsm,
                                                                           CHsmState*                  pSuperState,
-                                                                          ProfessorProductController& productController,
                                                                           Hsm::STATE                  stateId,
                                                                           const std::string&          name )
 
-    : ProductControllerStateBooting( hsm, pSuperState, productController, stateId, name ),
-      m_productController( productController )
+    : ProductControllerStateBooting( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting has been constructed." );
 }
@@ -95,6 +93,7 @@ void CustomProductControllerStateBooting::HandleStateStart( )
 void CustomProductControllerStateBooting::HandleStateExit( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting is being exited." );
+    ProductControllerStateBooting::HandleStateExit( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -186,9 +185,9 @@ bool CustomProductControllerStateBooting::HandleSTSSourcesInit( void )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateBooting::HandlePotentialStateChange( void )
 {
-    if( m_productController.IsBooted( ) )
+    if( GetCustomProductController().IsBooted( ) )
     {
-        if( m_productController.IsSoftwareUpdateRequired( ) )
+        if( GetCustomProductController().IsSoftwareUpdateRequired( ) )
         {
             BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                           "CustomProductControllerStateBooting",

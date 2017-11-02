@@ -51,7 +51,6 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductControllerHsm;
-class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -66,7 +65,6 @@ public:
 
     CustomProductControllerStateUpdatingSoftware( ProductControllerHsm&       hsm,
                                                   CHsmState*                  pSuperState,
-                                                  ProfessorProductController& productController,
                                                   Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING,
                                                   const std::string&          name    = "CustomProductControllerStateSoftwareUpdating" );
 
@@ -85,8 +83,6 @@ public:
     bool HandleSTSSourcesInit( void )        override;
 
 private:
-
-    ProfessorProductController& m_productController;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

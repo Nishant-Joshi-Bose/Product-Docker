@@ -57,12 +57,10 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateOn::CustomProductControllerStateOn( ProductControllerHsm&       hsm,
                                                                 CHsmState*                  pSuperState,
-                                                                ProfessorProductController& productController,
                                                                 Hsm::STATE                  stateId,
                                                                 const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
-      m_productController( productController )
+    : ProductControllerState( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateOn is being constructed." );
 }
@@ -103,21 +101,31 @@ void CustomProductControllerStateOn::HandleStateExit( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateOn::HandleStateExit
+/// @brief  CustomProductControllerStateOn::HandleKeyAction
+///
+/// @param  int action
+///
+/// @return This method returns a true Boolean value indicating that it has handled the key action
+///         and false if the key has not been handled
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateOn::HandleKeyAction( int action )
 {
     bool handled = true;
+    ProfessorProductController &pc = GetCustomProductController();
 
     switch( action )
     {
     case KeyActionPb::KEY_ACTION_VOLUME_UP:
-        m_productController.GetVolumeManager()->Increment();
+        pc.GetVolumeManager()->Increment();
         break;
 
     case KeyActionPb::KEY_ACTION_VOLUME_DOWN:
-        m_productController.GetVolumeManager()->Decrement();
+        pc.GetVolumeManager()->Decrement();
+        break;
+
+    case KeyActionPb::KEY_ACTION_PAIR_SPEAKERS:
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
         break;
 
     default:

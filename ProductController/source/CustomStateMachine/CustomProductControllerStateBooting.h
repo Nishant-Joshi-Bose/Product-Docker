@@ -51,7 +51,6 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductControllerHsm;
-class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -66,7 +65,6 @@ public:
 
     CustomProductControllerStateBooting( ProductControllerHsm&       hsm,
                                          CHsmState*                  pSuperState,
-                                         ProfessorProductController& productController,
                                          Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING,
                                          const std::string&          name    = "CustomProductControllerStateBooting" );
 
@@ -87,8 +85,6 @@ public:
 private:
 
     void HandlePotentialStateChange( void );
-
-    ProfessorProductController& m_productController;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
