@@ -10,6 +10,7 @@ PROTO_SOURCES = AudioSettings.proto       \
                 ContentItem.proto         \
                 ProductSTS.proto          \
                 SystemInfo.proto          \
+                ProductSpeakerManager.proto
 
 #
 # The following alias is used to search for imported Protocol Buffer files.

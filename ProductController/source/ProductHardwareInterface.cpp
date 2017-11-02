@@ -144,6 +144,19 @@ bool ProductHardwareInterface::Run( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   ProductHardwareInterface::RegisterForLpmClientConnectEvent
+///
+/// @brief  Callback<bool> [ cb ] Callback for connect and disconect events
+/// @return void
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductHardwareInterface::RegisterForLpmClientConnectEvent( Callback<bool> cb )
+{
+    m_lpmConnectionNotifies.push_back( cb );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProductHardwareInterface::Connected
 ///
 /// @brief  This method sets up the LPM hardware client.
@@ -304,38 +317,6 @@ void ProductHardwareInterface::HandleLpmStatus( LpmServiceMessages::IpcLpmHealth
     BOSE_DEBUG( s_logger, "Minimum Latency   : %s", status.has_minimumoutputlatencyms( )           ?
                 std::to_string( status.minimumoutputlatencyms( ) ).c_str( ) :
                 "Unknown" );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductHardwareInterface::RegisterForKeyEvents
-///
-/// @brief  This method is used to register a callback for key events through the LPM hardware
-///         client.
-///
-/// @param  Callback< LpmServiceMessages::IpcKeyInformation_t > CallbackForKeyEvents
-///
-/// @return This method returns a false Boolean value is the LPM is not connected. Otherwise, it
-///         attempts the request and returns true.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductHardwareInterface::RegisterForKeyEvents( Callback< LpmServiceMessages::IpcKeyInformation_t >
-                                                     callback )
-{
-    if( m_connected == false || m_LpmClient == nullptr )
-    {
-        BOSE_ERROR( s_logger, "An LPM request for key events could not be made, as no connection is available." );
-
-        return false;
-    }
-    else
-    {
-        BOSE_DEBUG( s_logger, "An LPM request for key events will be made." );
-
-        m_LpmClient->RegisterEvent( IPC_KEY, callback );
-
-        return true;
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -758,6 +739,102 @@ void ProductHardwareInterface::RequestPowerStateFullPassed( const IpcLpmStateRes
         BOSE_ERROR( s_logger, "The power state is now set to an unknown state." );
     }
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name  ProductHardwareInterface::SendAccessoryPairing
+///
+/// @brief This method sends a request to start or stop pairing
+///
+/// @param bool [enabled] - whether to start or stop pairing
+///
+/// @param Callback<IpcSpeakerPairingMode_t> [ cb ] - a callback to return pairing mode
+///
+/// @return bool - whether the pairing enabled cmd was sent
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProductHardwareInterface::SendAccessoryPairing( bool enabled, const Callback<IpcSpeakerPairingMode_t> &cb )
+{
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM accessory pairing request could not be made, as no connection is available." );
+
+        return false;
+    }
+
+    BOSE_DEBUG( s_logger, "Accessory pairing %s", ( enabled ? "enabled" : "disabled" ) );
+
+    IpcSpeakerPairingMode_t pairing;
+
+    pairing.set_pairingenabled( enabled );
+
+    m_LpmClient->OpenSpeakerPairing( pairing, cb );
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name  ProductHardwareInterface::SendAccessoryActive
+///
+/// @brief This method sends a request to set rears and sub active or inactive
+///
+/// @param bool [rears] - whether to enable rears
+/// @param bool [subs] - whether to enable subs
+/// @param Callback<IpcSpeakersActive_t> [ cb ] - a callback to return speaker active settings
+///
+/// @return bool - whether the accessory active cmd was sent
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProductHardwareInterface::SendAccessoryActive( bool rears, bool subs, const Callback<IpcSpeakersActive_t> &cb )
+{
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM set volume request could not be made, as no connection is available." );
+
+        return false;
+    }
+
+    BOSE_DEBUG( s_logger, "Accessory active sent rears: %d, subs: %d", rears, subs );
+
+
+    IpcSpeakersActive_t spkrActive;
+
+    spkrActive.set_rearsenabled( rears );
+    spkrActive.set_subsenabled( subs );
+
+    m_LpmClient->SetSpeakersActive( spkrActive, cb );
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name  ProductHardwareInterface::SendAccessoryDisband
+///
+/// @brief This method sends a request to disband all accessories.
+///
+/// @param none
+///
+/// @return none
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProductHardwareInterface::SendAccessoryDisband( )
+{
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM accessory disband request could not be made, as no connection is available." );
+
+        return false;
+    }
+
+    BOSE_DEBUG( s_logger, "An LPM accessory disband request will be made." );
+
+    // TODO
+    return true;
+}
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

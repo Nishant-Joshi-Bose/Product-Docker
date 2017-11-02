@@ -107,10 +107,6 @@ public:
     bool RequestLpmStatus( Callback< LpmServiceMessages::IpcLpmHealthStatusPayload_t > callback );
     void HandleLpmStatus( LpmServiceMessages::IpcLpmHealthStatusPayload_t              status );
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    /// This method is used to set a callback to receive key events from the LPM hardware.
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    bool RegisterForKeyEvents( Callback< LpmServiceMessages::IpcKeyInformation_t > callback );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These declarations are calls used to set the power state of the hardware.
@@ -151,6 +147,49 @@ public:
                                   const unsigned long long bluetoothMacAddress );
     bool SendSourceSelection( const LPM_IPC_SOURCE_ID      sourceSelect );
     bool CECSetPhysicalAddress( const uint32_t cecPhyAddr );
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    /// These are messages pertaining to the accessory speakers
+    /// Wish these could live in the ProductSpeakerManager but that doesn't have direct
+    /// LpmClient access
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    bool SendAccessoryPairing( bool enabled, const Callback<LpmServiceMessages::IpcSpeakerPairingMode_t>& cb );
+    bool SendAccessoryActive( bool rears, bool subs,  const Callback<IpcSpeakersActive_t> &cb );
+    bool SendAccessoryDisband( );
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    /// These allow other modules to have a notification of when lpm is connected or not
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    void RegisterForLpmClientConnectEvent( Callback<bool> );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @name   ProductHardwareInterface::RegisterForLpmEvents
+    ///
+    /// @brief  This method is a templated function to be used to register lpm any event through the
+    ///         LPM hardware client that will be recieved from LpmClient.
+    ///
+    /// @param  IpcOpcodes_t [ opcode ] The event you care about
+    /// @param  CallbackForKeyEvents [ inputs ] This arguments specifies the callback method or function
+    ///                                         to which key enents are to be sent by the LPM.
+    ///
+    /// @return bool - This method returns whether the register was successful
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    template<typename T>
+    bool RegisterForLpmEvents( IpcOpcodes_t opcode, const Callback<T> &callback )
+    {
+        if( m_connected == false || m_LpmClient == nullptr )
+        {
+            return false;
+        }
+        else
+        {
+            m_LpmClient->RegisterEvent( opcode, callback );
+            return true;
+        }
+    };
 
 private:
 
@@ -205,6 +244,12 @@ private:
     /// This method is called when an LPM server connection is established.
     //////////////////////////////////////////////////////////////////////////////////////////////
     void Connected( bool  connected );
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    /// This is used to store callbacks to submodules that care about lpm connection
+    /// Userful for registering your call backs with a call to RegisterForLpmEvents on boot
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    std::vector < Callback<bool> > m_lpmConnectionNotifies;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

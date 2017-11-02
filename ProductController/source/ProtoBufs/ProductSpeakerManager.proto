@@ -1,0 +1,63 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @file ProductSpeakerManager.proto
+///
+/// @brief Front door protobufs for the /accessories API
+///
+/// Copyright 2017 Bose Corporation
+////////////////////////////////////////////////////////////////////////////////
+
+//{
+//    "rears": ARRAY([
+//        { type:"STRING", ("Virtually Invlsible 150", "OmniJewel")
+//        available:"BOOLEAN",
+//        active:"TRUE",  ## DEPRECATED -- pending confirmation
+//        wireless:"BOOLEAN",
+//        controllable:"TRUE", ## MOVED down
+//        configurationStatus:"STRING"}, ("VALID", "MISSING LEFT", "MISSING RIGHT", "TWO_LEFT", "TWO_RIGHT"
+//        ...
+//    ]),
+//    "subs": ARRAY([
+//        { type:"STRING", ("Acoustamass 300", "Acoustamass 150")
+//        available:"TRUE",
+//        active:"TRUE",  ## DEPRECATED -- pending confirmation
+//        wireless:"TRUE",
+//        controllable:"TRUE", ## MOVED down
+//        configurationStatus:"VALID"},
+//        ...
+//    ]),
+//    "pairingMode": BOOLEAN,
+//    "controllable": {
+//        "rears": BOOLEAN,
+//        "subs": BOOLEAN
+//    },
+//    "enabled": {
+//        "rears": BOOLEAN,
+//        "subs": BOOLEAN
+//    },
+//    "disbandAccessories": BOOLEAN
+//}
+
+package ProductPb;
+
+
+message AccessorySpeakerState
+{
+    message AccessorySpeakerInfo
+    {
+        optional string type                = 1;
+        optional bool available             = 2;
+        optional bool wireless              = 3;
+        optional string configurationStatus = 4;
+    }
+    message SpeakerControls
+    {
+        optional bool rears = 1;
+        optional bool subs  = 2;
+    }
+    repeated AccessorySpeakerInfo rears   = 1;
+    repeated AccessorySpeakerInfo subs    = 2;
+    optional bool pairing                 = 3;
+    optional SpeakerControls controllable = 4;
+    optional SpeakerControls enabled      = 5;
+    optional bool disbandAccessories      = 6;
+}

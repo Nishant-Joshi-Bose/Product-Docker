@@ -106,6 +106,8 @@ public:
     virtual bool HandlePowerState( void );
     virtual bool HandleAutowakeStatus( bool active );
     virtual bool HandleKeyAction( int action );
+    virtual bool HandlePairingState( ProductAccessoryPairing pairingStatus );
+
 
     static  void SetProductController( ProductController* productController )
     {
@@ -117,6 +119,7 @@ protected:
     static ProfessorProductController& GetCustomProductController();
 
     static ProductController* s_productController;
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

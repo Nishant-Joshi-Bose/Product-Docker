@@ -139,6 +139,7 @@ void CustomProductControllerStatePlayingActive::HandleTimeOut( void )
     BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                   "CustomProductControllerStatePlayingActive",
                   "CustomProductControllerStatePlayable" );
+
     ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE );
 }
 

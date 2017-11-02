@@ -113,6 +113,12 @@ bool CustomProductControllerState::HandleKeyAction( int action )
     return false;
 }
 
+
+bool CustomProductControllerState::HandlePairingState( ProductAccessoryPairing pairingStatus )
+{
+    return false;
+}
+
 ProfessorProductController& CustomProductControllerState::GetCustomProductController()
 {
     return *static_cast<ProfessorProductController*>( s_productController );

@@ -1,14 +1,13 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateOn.h
+/// @file      CustomProductControllerStateAccessoryPairing.h
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product on state. It is an all encompassing state that includes the playing and
-///            playable substates.
+///            product accessory pairing state.
 ///
-/// @author    Stuart J. Lumby
+/// @author    Derek Richardson
 ///
-/// @date      10/12/2017
+/// @date      09/22/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -36,9 +35,9 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerState.h"
-#include "ProductControllerStates.h"
-#include "HsmState.h"
+#include "ProductControllerStateIdle.h"
+#include "LpmServiceMessages.pb.h"
+#include "APTimer.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -52,41 +51,53 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductControllerHsm;
+class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class CustomProductControllerState
+/// @class CustomProductControllerStateAccessoryPairing
 ///
-/// @brief This class is used for executing produce specific actions when in an on state.
+/// @brief This class is used for executing produce specific actions when in an idle state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateOn : public ProductControllerState
+class CustomProductControllerStateAccessoryPairing : public ProductControllerState
 {
 public:
 
-    CustomProductControllerStateOn( ProductControllerHsm&       hsm,
-                                    CHsmState*                  pSuperState,
-                                    Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_ON,
-                                    const std::string&          name    = "CustomProductControllerStateOn" );
+    CustomProductControllerStateAccessoryPairing( ProductControllerHsm&       hsm,
+                                                  CHsmState*                  pSuperState,
+                                                  ProfessorProductController& productController,
+                                                  Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING,
+                                                  const std::string&          name    = "CustomProductControllerStateAccessoryPairing" );
 
-    ~CustomProductControllerStateOn( ) override
+    virtual ~CustomProductControllerStateAccessoryPairing()
     {
 
     }
 
-    void HandleStateEnter( ) override;
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
-    bool HandleKeyAction( int action ) override;
+    bool HandlePairingState( ProductAccessoryPairing pairingStatus ) override;
 
 private:
+
+    ProfessorProductController& m_productController;
+    APTimerPtr m_timer;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief This method will be invoked by an expired timer, which is defined above and armed on
+    ///        a successful callback saying pairing was entered
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    void HandleTimeOut( void );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                           End of the Product Application Namespace                           ///
+///                             End of Product Application Namespace                             ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                         End of File                                          ///
+///                                        End of File                                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

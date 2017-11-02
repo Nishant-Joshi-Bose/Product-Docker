@@ -27,6 +27,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "DPrint.h"
+#include "KeyActions.h"
 #include "Utilities.h"
 #include "CustomProductControllerStateOn.h"
 #include "ProductControllerHsm.h"
@@ -96,6 +97,29 @@ void CustomProductControllerStateOn::HandleStateStart( )
 void CustomProductControllerStateOn::HandleStateExit( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateOn is being exited." );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateOn::HandleKeyAction
+///
+/// @param  int action
+///
+/// @return This method returns a true Boolean value indicating that it has handled the key action
+///         and false if the key has not been handled
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateOn::HandleKeyAction( int action )
+{
+    BOSE_INFO( s_logger, "A key action was sent to the product state on with action %d.", action );
+    switch( action )
+    {
+    case KEY_ACTION_PAIR_SPEAKERS:
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
+        return true;
+    default:
+        return false;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

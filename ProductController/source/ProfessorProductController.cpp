@@ -55,12 +55,14 @@
 #include "CustomProductControllerStatePlayingActive.h"
 #include "CustomProductControllerStatePlaying.h"
 #include "CustomProductControllerStatePlayingInactive.h"
+#include "CustomProductControllerStateAccessoryPairing.h"
 #include "ProductHardwareInterface.h"
 #include "ProductAudioService.h"
 #include "ProductSoftwareServices.h"
 #include "ProductUserInterface.h"
 #include "ProductNetworkManager.h"
 #include "ProductSystemManager.h"
+#include "ProductSpeakerManager.h"
 #include "ProductCommandLine.h"
 #include "ProtoPersistenceFactory.h"
 #include "ProductMessage.pb.h"
@@ -136,6 +138,7 @@ ProfessorProductController::ProfessorProductController( ) :
     /// Construction of the State Machine
     ///
     m_ProductControllerStateMachine( GetTask( ), "ProfessorStateMachine" ),
+
     ///
     /// Construction of the Product Controller Modules
     ///
@@ -232,9 +235,15 @@ void ProfessorProductController::Run( )
                                                                                   statePlaying,
                                                                                   *this );
 
+    auto* stateAccessoryPairing = new CustomProductControllerStateAccessoryPairing( m_ProductControllerStateMachine,
+                                                                                    statePlayingActive,
+                                                                                    *this );
+
+
     ///
     /// The states are added to the state machine and the state machine is initialized.
     ///
+
     m_ProductControllerStateMachine.AddState( stateTop );
     m_ProductControllerStateMachine.AddState( stateBooting );
     m_ProductControllerStateMachine.AddState( stateUpdatingSoftware );
@@ -250,6 +259,7 @@ void ProfessorProductController::Run( )
     m_ProductControllerStateMachine.AddState( statePlaying );
     m_ProductControllerStateMachine.AddState( statePlayingActive );
     m_ProductControllerStateMachine.AddState( statePlayingInactive );
+    m_ProductControllerStateMachine.AddState( stateAccessoryPairing );
 
     m_ProductControllerStateMachine.Init( this, PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
@@ -288,6 +298,10 @@ void ProfessorProductController::Run( )
                                                                         m_ProductHardwareInterface,
                                                                         m_CliClientMT );
 
+    m_ProductSpeakerManager    = ProductSpeakerManager::GetInstance( GetTask( ),
+                                                                     CallbackForMessages,
+                                                                     m_ProductHardwareInterface );
+
     if( m_ProductHardwareInterface == nullptr ||
         m_ProductSystemManager     == nullptr ||
         m_ProductNetworkManager    == nullptr ||
@@ -314,6 +328,7 @@ void ProfessorProductController::Run( )
     m_ProductCommandLine       ->Run( );
     m_ProductUserInterface     ->Run( );
     m_ProductEdidInterface     ->Run( );
+    m_ProductSpeakerManager    ->Run( );
 
     ///
     /// Set up the STSProductController
@@ -331,6 +346,18 @@ void ProfessorProductController::Run( )
 ProductHardwareInterface* ProfessorProductController::GetHardwareInterface( ) const
 {
     return m_ProductHardwareInterface;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name ProfessorProductController::GetSpeakerManager
+///
+/// @return ProductHardwareInterface* - pointer to speaker manager
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+ProductSpeakerManager* ProfessorProductController::GetSpeakerManager( )
+{
+    return m_ProductSpeakerManager;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -749,6 +776,14 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
 
         m_ProductControllerStateMachine.Handle< bool >
         ( &CustomProductControllerState::HandleAutowakeStatus, m_IsAutoWakeEnabled );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// Accessory pairing messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.has_accessorypairing() )
+    {
+        m_ProductControllerStateMachine.Handle< ProductAccessoryPairing >
+        ( &CustomProductControllerState::HandlePairingState, message.accessorypairing( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Playback messages are handled at this point.
