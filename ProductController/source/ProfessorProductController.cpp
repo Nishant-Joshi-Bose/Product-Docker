@@ -812,6 +812,71 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     }
 }
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::SelectSource
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::SelectSource( PlaybackSource_t source )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    BOSE_INFO( s_logger, "Source %d selected", source );
+
+    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> ( std::bind( &ProfessorProductController::PostPlaybackRequestError,
+                                                      this, std::placeholders::_1 ), GetTask( ) );
+
+    AsyncCallback<SoundTouchInterface::NowPlayingJson> postPlaybackRequestCb = AsyncCallback<SoundTouchInterface::NowPlayingJson> ( std::bind( &ProfessorProductController::PostlaybackRequestResponse,
+                                                                               this, std::placeholders::_1 ), GetTask( ) );
+    //Setup the playbackRequest data for AUX source
+    SoundTouchInterface::playbackRequestJson playbackRequestData;
+
+    switch( source )
+    {
+    case SOURCE_TV:
+        playbackRequestData.set_source( "PRODUCT" );
+        playbackRequestData.set_sourceaccount( "TV" );
+        break;
+    case SOURCE_SOUNDTOUCH:
+        playbackRequestData.set_source( "DEEZER" );
+        playbackRequestData.set_sourceaccount( "matthew_scanlan@bose.com" );
+        playbackRequestData.mutable_preset() -> set_type( "topTrack" );
+        playbackRequestData.mutable_preset() -> set_location( "132" );
+        playbackRequestData.mutable_preset() -> set_name( "Pop - ##TRANS_TopTracks##" );
+        playbackRequestData.mutable_preset() -> set_presetable( "true" );
+        playbackRequestData.mutable_preset() -> set_containerart( "http://e-cdn-images.deezer.com/images/misc/db7a604d9e7634a67d45cfc86b48370a/500x500-000000-80-0-0.jpg" );
+        playbackRequestData.mutable_playback() -> set_type( "topTrack" );
+        playbackRequestData.mutable_playback() -> set_location( "132" );
+        playbackRequestData.mutable_playback() -> set_name( "Too Good At Goodbyes" );
+        playbackRequestData.mutable_playback() -> set_presetable( "true" );
+        break;
+    }
+    //Send POST for /content/playbackRequest
+    m_FrontDoorClientIF->SendPost<SoundTouchInterface::NowPlayingJson>( "/content/playbackRequest", playbackRequestData,
+                                                                        postPlaybackRequestCb, errorCb );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::PostlaybackRequestResponse
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::PostlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson& resp )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    BOSE_LOG( INFO, "GOT Response to AUX playbackRequest: " << resp.source().sourcedisplayname() );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::PostPlaybackRequestError
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::PostPlaybackRequestError( const FRONT_DOOR_CLIENT_ERRORS errorCode )
+{
+    BOSE_ERROR( s_logger, "%s:error code- %d", __func__, errorCode );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProfessorProductController::Wait
