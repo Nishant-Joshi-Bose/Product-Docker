@@ -84,6 +84,7 @@ typedef enum
 constexpr char FRONTDOOR_SYSTEM_LANGUAGE[]                      = "/system/language";
 constexpr char FRONTDOOR_SYSTEM_CONFIGURATION_STATUS[]          = "/system/configuration/status";
 constexpr char FRONTDOOR_SYSTEM_CAPS_INITIALIZATION_STATUS[]    = "/system/capsInitializationStatus";
+constexpr char FRONTDOOR_SYSTEM_INFO[]                          = "/system/info";
 
 // network nodes
 constexpr char FRONTDOOR_NETWORK_STATUS[]                       = "/network/status";

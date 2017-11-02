@@ -226,9 +226,9 @@ bool ProductSystemManager::Run( )
                                   this,
                                   std::placeholders::_1 ),
                        m_ProductTask );
-        m_FrontDoorClient->RegisterGet( "/system/info", asyncCallback );
+        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_INFO, asyncCallback );
 
-        BOSE_DEBUG( s_logger, "Registration for /system/info GET request complete." );
+        BOSE_DEBUG( s_logger, "Registration for %s GET request complete.", FRONTDOOR_SYSTEM_INFO );
     }
 
     return true;
@@ -348,7 +348,7 @@ void ProductSystemManager::ReadSystemInfoSettingsFromPersistentStorage( void )
         }
         catch( ... )
         {
-            BOSE_ERROR( s_logger, "Writing default /system/info to persistent storage failed." );
+            BOSE_ERROR( s_logger, "Writing default %s to persistent storage failed.", FRONTDOOR_SYSTEM_INFO );
         }
 
     }
@@ -401,7 +401,7 @@ void ProductSystemManager::HandleGetLanguageRequest(
 void ProductSystemManager::HandleGetSystemInfoRequest(
     const Callback<::ProductPb::SystemInfo>& response ) const
 {
-    BOSE_DEBUG( s_logger, "/system/info GET request received." );
+    BOSE_DEBUG( s_logger, "%s GET request received.", FRONTDOOR_SYSTEM_INFO );
 
     response.Send( m_SystemInfo );
 }
