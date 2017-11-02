@@ -18,7 +18,7 @@
 namespace ProductApp
 {
 using FrontDoorClientIF_t = std::shared_ptr<FrontDoorClientIF>;
-using CbPtr_t  = std::shared_ptr<AsyncCallback<KeyHandlerUtil::ActionType_t&> >;
+using CbPtr_t  = std::shared_ptr<const Callback<KeyHandlerUtil::ActionType_t&> >;
 
 class IntentManager
 {

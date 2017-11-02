@@ -21,6 +21,24 @@ static DPrint s_logger( "TransportControlManager" );
 
 namespace ProductApp
 {
+
+TransportControlManager::TransportControlManager( NotifyTargetTaskIF& task,
+                                                  const CliClientMT& cliClient,
+                                                  const FrontDoorClientIF_t& frontDoorClient,
+                                                  const ProductController& controller ):
+    IntentManager( task, cliClient, frontDoorClient, controller ),
+    m_NowPlayingRsp( nullptr, &task ),
+    m_play( true )
+{
+    m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
+                               ( std::bind( &TransportControlManager::FrontDoorClientErrorCb,
+                                            this, std::placeholders::_1 ), &task );
+
+    m_NowPlayingRsp = AsyncCallback<SoundTouchInterface::NowPlayingJson>\
+                      ( std::bind( &TransportControlManager::PutTransportControlCbRsp,
+                                   this, std::placeholders::_1 ), &task );
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  Handle
 /// @brief Function to build and send FrontDoor message to execute the
@@ -133,7 +151,7 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
     //Fire the cb so the control goes back to the ProductController
     if( CallBack() != nullptr )
     {
-        ( *CallBack() )( intent );
+        CallBack()->Send( intent );
     }
     return true;
 }

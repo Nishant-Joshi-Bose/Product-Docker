@@ -29,6 +29,6 @@ public:
     }
 
     bool HandleModulesReady() override;
-    bool HandleIntents( KeyHandlerUtil::ActionType_t result ) override;
+    bool HandleIntents( KeyHandlerUtil::ActionType_t intent ) override;
 };
 } // namespace ProductApp

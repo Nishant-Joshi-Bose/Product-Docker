@@ -44,8 +44,16 @@ void EddieProductControllerStateSetup::HandleStateExit()
 }
 
 
-bool EddieProductControllerStateSetup::HandleIntents( KeyHandlerUtil::ActionType_t result )
+bool EddieProductControllerStateSetup::HandleIntents( KeyHandlerUtil::ActionType_t intent )
 {
+    BOSE_DEBUG( s_logger, "%s, %d", __func__, ( uint16_t ) intent );
+
+    if( ( IntentHandler::IsIntentAuxIn( intent ) ) )
+    {
+        GetCustomProductController().GetIntentHandler().Handle( intent );
+        return true;
+    }
+
     return false;
 }
 

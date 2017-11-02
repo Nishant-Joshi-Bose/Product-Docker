@@ -6,7 +6,6 @@
 //////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-#include "ProductController.h"
 #include "IntentHandler.h"
 #include "EddieProductController.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
@@ -20,19 +19,11 @@ public:
     TransportControlManager( NotifyTargetTaskIF& task,
                              const CliClientMT& cliClient,
                              const FrontDoorClientIF_t& frontDoorClient,
-                             const ProductController& controller ):
-        IntentManager( task, cliClient, frontDoorClient, controller ),
-        m_NowPlayingRsp( nullptr, &task ),
-        m_play( true )
-    {
-        m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
-                                   ( std::bind( &TransportControlManager::FrontDoorClientErrorCb,
-                                                this, std::placeholders::_1 ), &task );
+                             const ProductController& controller );
 
-        m_NowPlayingRsp =
-            AsyncCallback<SoundTouchInterface::NowPlayingJson> ( std::bind( &TransportControlManager::PutTransportControlCbRsp, this, std::placeholders::_1 ), &task );
+    ~TransportControlManager() override
+    {
     }
-    virtual ~TransportControlManager() { }
 
     // Public function to Handle intents
     // This function will build and send message either through FrontDoor
@@ -65,7 +56,7 @@ private:
     bool CurrentlyPlaying();
     SoundTouchInterface::StatusJson CurrentStatusJson();
 
-    virtual void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
+    void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
 
     AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingRsp;
     bool m_play;

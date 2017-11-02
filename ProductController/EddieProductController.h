@@ -24,13 +24,14 @@
 #include "DeviceManager.pb.h"
 #include "NetManager.pb.h"
 #include "SoundTouchInterface/CapsInitializationStatus.pb.h"
+#include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "ProductCliClient.h"
 #include "LpmClientIF.h"
 #include "LpmInterface.h"
 #include "KeyHandler.h"
-#include "ProductSource.h"
 #include "IntentHandler.h"
+#include "ProductSTSController.h"
 
 namespace ProductApp
 {
@@ -131,9 +132,7 @@ public:
     // Handle Key Information received from LPM
     void HandleLpmKeyInformation( IpcKeyInformation_t keyInformation );
 
-    void HandleAUXSourceKeyPress();
-
-    void HandleIntents( KeyHandlerUtil::ActionType_t result );
+    void HandleIntents( KeyHandlerUtil::ActionType_t intent );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  IsAllModuleReady
@@ -149,6 +148,13 @@ public:
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
     bool IsCAPSReady() const;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  IsSTSReady
+/// @brief true if STS sources initialization is complete.
+/// @return bool
+////////////////////////////////////////////////////////////////////////////////
+    bool IsSTSReady() const;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  HandleLPMReady
@@ -242,7 +248,21 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
     void HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationStatus &status );
     void CallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
-    IntentHandler& IntentHandle()
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name   HandleSTSReady
+/// @brief- Handles STS sources initialization complete callback from
+/// ProductSTSController
+/// @return void
+///////////////////////////////////////////////////////////////////////////////
+    void HandleSTSReady( void );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name   GetIntentHandler
+/// @brief  Returns reference to IntentHandler
+/// @return IntentHandler&
+///////////////////////////////////////////////////////////////////////////////
+    IntentHandler& GetIntentHandler()
     {
         return m_IntentHandler;
     }
@@ -269,6 +289,16 @@ public:
     {
         return m_nowPlaying;
     }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief Interfaces to the ProductSTSController, which implements the interactions
+    ///       between the Eddie Product Controller and the STS source proxies.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    void SetupProductSTSController( void );
+    void HandleSTSInitWasComplete( void );
+    void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
 
 private:
 
@@ -299,7 +329,6 @@ private:
     ProductCliClient                            m_productCliClient;
 
     std::unique_ptr<LightBarController>         m_lightbarController;
-    ProductSource                               m_productSource;
     IntentHandler                               m_IntentHandler;
     LpmInterface                                m_LpmInterface;
     bool                                        m_isCapsReady = false;
@@ -312,6 +341,14 @@ private:
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>     errorCb;
     /// Demonstration Controller instance
     DemoApp::DemoController m_demoController;
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief Interfaces to the ProductSTSController, which implements the interactions
+    ///       between the Eddie Product Controller and the STS source proxies.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    bool                                        m_isSTSReady = false;
+    ProductSTSController                        m_ProductSTSController;
 };
 }
 // namespace

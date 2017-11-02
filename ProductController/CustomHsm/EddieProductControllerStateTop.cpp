@@ -30,7 +30,7 @@ bool EddieProductControllerStateTop::HandleModulesReady()
     return true;
 }
 
-bool EddieProductControllerStateTop::HandleIntents( KeyHandlerUtil::ActionType_t result )
+bool EddieProductControllerStateTop::HandleIntents( KeyHandlerUtil::ActionType_t intent )
 {
     return true;
 }
