@@ -49,11 +49,11 @@
   },
   {
     "name": "KeyHandler-native",
-    "selected_version": "Release/master/0.0.3-20+dac46f2"
+    "selected_version": "Continuous/master/0.0.3-22+857ca4e"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/0.0.3-20+dac46f2"
+    "selected_version": "Continuous/master/0.0.3-22+857ca4e"
   },
   {
     "name": "protobuf-native",
