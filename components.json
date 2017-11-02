@@ -9,7 +9,7 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-25_1936"
+    "selected_version": "Continuous/Castle-Fork/2017-11-02_1340"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -25,7 +25,7 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.1.1-82+c364a77"
+    "selected_version": "Continuous/master/0.1.1-84+45c42c6"
   },
   {
     "name": "CastlePassport-native",
@@ -69,7 +69,7 @@
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/1.1"
+    "selected_version": "Continuous/dev/1.1-11-g57d3c6e"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -89,7 +89,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-11-01_1401"
+    "selected_version": "Continuous/Castle-Fork/2017-11-02_1302"
   },
   {
     "name": "UnitTest++-native",

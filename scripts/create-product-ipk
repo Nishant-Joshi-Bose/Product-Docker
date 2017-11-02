@@ -148,9 +148,10 @@ echo "FS_VERSION \"$v\""
 
 stfs=$soundtouch_sdk/fs
 cp "$stfs"/opt/Bose/BoseApp "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/Bluetooth "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BTSource "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/BTLESetup "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BT "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BluetoothManager "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BLESetup "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/CLIServer "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/PlatformReset "$opt_dir/bin" || exit
@@ -289,8 +290,10 @@ pkill UpnpSource
 pkill Vfe
 pkill btproperty
 pkill STSCertified
-pkill Bluetooth
-pkill BTLESetup
+pkill BluetoothManager
+pkill BT
+pkill BLESetup
+pkill BTSource
 pkill IoT
 pkill BoseApp
 pkill Eddie

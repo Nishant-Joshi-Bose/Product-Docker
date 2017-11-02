@@ -32,9 +32,13 @@
   <!-- The Bluetooth daemon depends on the btproperty daemon -->
   <daemon name="btproperty"/>
 
-  <daemon name="Bluetooth"/>
+  <daemon name="BluetoothManager"/>
 
-  <daemon name="BTLESetup"/>
+  <daemon name="BT"/>
+
+  <daemon name="BTSource"/>
+
+  <daemon name="BLESetup"/>
 
   <daemon name="PtsServer">
     <arg>/opt/Bose/etc/pts-handler</arg>
