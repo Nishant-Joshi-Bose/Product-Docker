@@ -15,6 +15,7 @@
 #include "EddieProductControllerStateBooting.h"
 #include "EddieProductControllerStateSetup.h"
 #include "EddieProductControllerStateNetworkStandby.h"
+#include "EddieProductControllerStateAudioOn.h"
 #include "DeviceManager.h"
 #include "LightBarController.h"
 #include "DemoController.h"
@@ -46,6 +47,11 @@ public:
     NetManager::Protobuf::NetworkStatus const& GetNetworkStatus() const
     {
         return m_cachedStatus;
+    }
+
+    EddieProductControllerHsm& GetEddieHsm()
+    {
+        return static_cast<EddieProductControllerHsm&>( m_ProductControllerHsm );
     }
 
 private:
@@ -302,12 +308,11 @@ public:
 
 private:
 
-    EddieProductControllerHsm                   m_EddieProductControllerHsm;
-
     EddieProductControllerStateTop              m_EddieProductControllerStateTop;
     EddieProductControllerStateBooting          m_EddieProductControllerStateBooting;
     EddieProductControllerStateSetup            m_EddieProductControllerStateSetup;
     EddieProductControllerStateNetworkStandby   m_EddieProductControllerStateNetworkStandby;
+    EddieProductControllerStateAudioOn          m_EddieProductControllerStateAudioOn;
 
     // LPM Client handle
     LpmClientIF::LpmClientPtr                   m_LpmClient;

@@ -9,6 +9,7 @@
 #include <string>
 #include "ProductControllerStateNetworkStandby.h"
 #include "ProductControllerStates.h"
+#include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "HsmState.h"
 
 namespace ProductApp
@@ -31,6 +32,7 @@ public:
     void HandleStateEnter() override;
     void HandleStateStart() override;
     void HandleStateExit() override;
+    bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo ) override;
     bool HandleIntents( KeyHandlerUtil::ActionType_t intent ) override;
 };
 } // namespace ProductApp

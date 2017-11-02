@@ -35,4 +35,10 @@ bool EddieProductControllerStateTop::HandleIntents( KeyHandlerUtil::ActionType_t
     return true;
 }
 
+bool EddieProductControllerStateTop::HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& info )
+{
+    BOSE_INFO( s_logger,  __func__ );
+    return true;
+}
+
 } // namespace ProductApp

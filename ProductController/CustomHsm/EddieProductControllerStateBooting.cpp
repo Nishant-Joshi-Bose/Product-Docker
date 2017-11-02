@@ -66,14 +66,7 @@ bool EddieProductControllerStateBooting::HandleLpmInterfaceState( bool isConnect
     if( isConnected )
     {
         BOSE_LOG( INFO, "LPM hardware is Down. Set LPM System State to NORMAL" );
-        try
-        {
-            GetCustomProductController().GetLpmInterface().SetSystemState( SYSTEM_STATE_NORMAL );
-        }
-        catch( std::bad_cast& e )
-        {
-            BOSE_ERROR( s_logger, "Failed. Bad cast in HandleLpmInterfaceState: " );
-        }
+        GetCustomProductController().GetLpmInterface().SetSystemState( SYSTEM_STATE_NORMAL );
         return true;
     }
     BOSE_ERROR( s_logger, "Failed. LPM interface is down" );

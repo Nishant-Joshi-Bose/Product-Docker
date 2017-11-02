@@ -54,4 +54,11 @@ bool EddieProductControllerStateNetworkStandby::HandleIntents( KeyHandlerUtil::A
     return false;
 }
 
+bool EddieProductControllerStateNetworkStandby::HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
+{
+    BOSE_INFO( s_logger,  __func__ );
+    ChangeState( PRODUCT_CONTROLLER_STATE_ON );
+    return true;
+}
+
 } // namespace ProductApp

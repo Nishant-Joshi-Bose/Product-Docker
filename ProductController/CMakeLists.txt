@@ -21,6 +21,7 @@ ADD_EXECUTABLE(Eddie
   ${CUSTOM_HSM_DIR}/EddieProductControllerStateBooting.cpp
   ${CUSTOM_HSM_DIR}/EddieProductControllerStateSetup.cpp
   ${CUSTOM_HSM_DIR}/EddieProductControllerStateNetworkStandby.cpp
+  ${CUSTOM_HSM_DIR}/EddieProductControllerStateAudioOn.cpp
   DeviceManager.cpp
   LightBarController/LightBarController.cpp
   ProductCliClient.cpp

@@ -15,11 +15,12 @@
 #include "HsmState.h"
 #include "KeyHandler.h"
 #include "NetManager.pb.h"
-#include "ProductController.h"
+#include "SoundTouchInterface/ContentSelectionService.pb.h"
 
 namespace ProductApp
 {
 class EddieProductController;
+class ProductController;
 class ProductControllerHsm;
 
 class CustomProductControllerState : public CHsmState
@@ -65,6 +66,11 @@ public:
     }
 
     virtual bool HandleNetworkConfigurationStatus( const NetManager::Protobuf::NetworkStatus & networkStatus, int profileSize )
+    {
+        return false;
+    }
+
+    virtual bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
     {
         return false;
     }
