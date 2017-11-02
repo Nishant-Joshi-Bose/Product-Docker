@@ -365,13 +365,13 @@ void EddieProductController::HandleLPMReady()
 
 bool EddieProductController::IsAllModuleReady()
 {
-    BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|NetworkModuleReady=%d|BluetoothReady=%d|BLEModuleReady=%d|STSReady=%d", __func__,
-               m_isCapsReady , m_isLPMReady, m_isNetworkModuleReady, m_isBluetoothReady, m_isBLEModuleReady, m_isSTSReady );
+    BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|NetworkModuleReady=%d|BLEModuleReady=%d|STSReady=%d", __func__,
+               m_isCapsReady , m_isLPMReady, m_isNetworkModuleReady, m_isBLEModuleReady, m_isSTSReady );
     return ( m_isCapsReady and
              m_isLPMReady and
              m_isNetworkModuleReady and
-             m_isSTSReady );
-    // TODO m_isBLEModuleReady and m_isBluetoothReady should also be included to complete booting
+             m_isSTSReady and
+             m_isBLEModuleReady );
 }
 
 bool EddieProductController::IsCAPSReady() const
