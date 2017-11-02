@@ -57,12 +57,10 @@ namespace ProductApp
 CustomProductControllerStatePlayable::CustomProductControllerStatePlayable
 ( ProductControllerHsm&       hsm,
   CHsmState*                  pSuperState,
-  ProfessorProductController& productController,
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
-      m_productController( productController )
+    : ProductControllerState( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayable is being constructed." );
 }
@@ -86,7 +84,7 @@ void CustomProductControllerStatePlayable::HandleStateStart( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayable is being started." );
 
-    if( m_productController.IsNetworkConfigured( ) )
+    if( GetCustomProductController().IsNetworkConfigured( ) )
     {
         BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                       "CustomProductControllerStatePlayable",
@@ -95,7 +93,7 @@ void CustomProductControllerStatePlayable::HandleStateStart( )
     }
     else
     {
-        if( m_productController.IsAutoWakeEnabled( ) )
+        if( GetCustomProductController().IsAutoWakeEnabled( ) )
         {
             BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                           "CustomProductControllerStatePlayable",

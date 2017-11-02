@@ -52,7 +52,6 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductControllerHsm;
-class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -69,7 +68,6 @@ public:
     CustomProductControllerStateIdleVoiceConfigured
     ( ProductControllerHsm&       hsm,
       CHsmState*                  pSuperState,
-      ProfessorProductController& productController,
       Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED,
       const std::string&          name    = "CustomProductControllerStateIdleVoiceConfigured" );
 
@@ -86,8 +84,6 @@ public:
     bool HandleVoiceState( bool configured )                   override;
 
 private:
-
-    ProfessorProductController& m_productController;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -72,9 +72,8 @@ CustomProductControllerStateIdleVoiceUnconfigured::CustomProductControllerStateI
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
-      m_productController( productController ),
-      m_timer( APTimer::Create( m_productController.GetTask( ), "VoiceUnconfiguredTimer" ) )
+    : ProductControllerState( hsm, pSuperState, stateId, name ),
+      m_timer( APTimer::Create( productController.GetTask( ), "VoiceUnconfiguredTimer" ) )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceUnconfigured is being constructed." );
 }
@@ -131,7 +130,7 @@ void CustomProductControllerStateIdleVoiceUnconfigured::HandleTimeOut( void )
 
     m_timer->Stop( );
 
-    if( not m_productController.IsAutoWakeEnabled( ) )
+    if( not GetCustomProductController().IsAutoWakeEnabled( ) )
     {
         BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceUnconfigured timer has been stopped." );
         BOSE_VERBOSE( s_logger, "%s is changing to %s.",
@@ -198,7 +197,7 @@ bool CustomProductControllerStateIdleVoiceUnconfigured::HandleNetworkState( bool
     ///
     if( not configured )
     {
-        if( m_productController.IsAutoWakeEnabled( ) )
+        if( GetCustomProductController().IsAutoWakeEnabled( ) )
         {
             BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceUnconfigured is not changing." );
         }
@@ -218,7 +217,7 @@ bool CustomProductControllerStateIdleVoiceUnconfigured::HandleNetworkState( bool
     else
     {
         auto const& networkConnected = connected;
-        auto const& voiceConfigured = m_productController.IsVoiceConfigured( );
+        auto const& voiceConfigured = GetCustomProductController().IsVoiceConfigured( );
 
         if( networkConnected and voiceConfigured )
         {
@@ -251,7 +250,7 @@ bool CustomProductControllerStateIdleVoiceUnconfigured::HandleVoiceState( bool c
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceUnconfigured is handling a voice state change." );
 
     auto const& voiceConfigured  = configured;
-    auto const& networkConnected = m_productController.IsNetworkConnected( );
+    auto const& networkConnected = GetCustomProductController().IsNetworkConnected( );
 
     if( voiceConfigured and networkConnected )
     {

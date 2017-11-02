@@ -59,12 +59,9 @@ CustomProductControllerStateNetworkStandbyConfigured
 
 ( ProductControllerHsm&       hsm,
   CHsmState*                  pSuperState,
-  ProfessorProductController& productController,
   Hsm::STATE                  stateId,
   const std::string&          name )
-
-    : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
-      m_productController( productController )
+    : ProductControllerState( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyConfigured is being constructed." );
 }
@@ -126,7 +123,7 @@ bool CustomProductControllerStateNetworkStandbyConfigured::HandleNetworkState( b
     else
     {
         auto const& networkConnected = connected;
-        auto const& voiceConfigured = m_productController.IsVoiceConfigured( );
+        auto const& voiceConfigured = GetCustomProductController().IsVoiceConfigured( );
 
         if( networkConnected and voiceConfigured )
         {
@@ -159,7 +156,7 @@ bool CustomProductControllerStateNetworkStandbyConfigured::HandleVoiceState( boo
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyConfigured is handling a voice state change." );
 
     auto const& voiceConfigured = configured;
-    auto const& networkConnected = m_productController.IsNetworkConnected( );
+    auto const& networkConnected = GetCustomProductController().IsNetworkConnected( );
 
     if( voiceConfigured and networkConnected )
     {

@@ -51,7 +51,6 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductControllerHsm;
-class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -66,7 +65,6 @@ public:
 
     CustomProductControllerStateLowPower( ProductControllerHsm&        hsm,
                                           CHsmState*                  pSuperState,
-                                          ProfessorProductController& productController,
                                           Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_LOW_POWER,
                                           const std::string&          name    = "CustomProductControllerStateLowPower" );
 
@@ -81,8 +79,6 @@ public:
     bool HandlePowerState( ) override;
 
 private:
-
-    ProfessorProductController& m_productController;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

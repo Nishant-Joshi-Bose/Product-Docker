@@ -58,12 +58,10 @@ namespace ProductApp
 CustomProductControllerStateLowPower::CustomProductControllerStateLowPower
 ( ProductControllerHsm&       hsm,
   CHsmState*                  pSuperState,
-  ProfessorProductController& productController,
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
-      m_productController( productController )
+    : ProductControllerState( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateLowPower is being constructed." );
 }
@@ -90,7 +88,7 @@ void CustomProductControllerStateLowPower::HandleStateStart( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateLowPower is being started." );
 
-    m_productController.GetHardwareInterface( )->RequestPowerStateOff( );
+    GetCustomProductController().GetHardwareInterface( )->RequestPowerStateOff( );
 
     BOSE_VERBOSE( s_logger, "An attempt to set the device to a low power state is being made." );
 }

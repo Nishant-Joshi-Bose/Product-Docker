@@ -58,12 +58,10 @@ namespace ProductApp
 CustomProductControllerStatePlaying::CustomProductControllerStatePlaying
 ( ProductControllerHsm&       hsm,
   CHsmState*                  pSuperState,
-  ProfessorProductController& productController,
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, productController, stateId, name ),
-      m_productController( productController )
+    : ProductControllerState( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlaying is being constructed." );
 }
@@ -80,7 +78,7 @@ void CustomProductControllerStatePlaying::HandleStateEnter( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlaying is being entered." );
 
-    m_productController.GetHardwareInterface( )->RequestPowerStateFull( );
+    GetCustomProductController().GetHardwareInterface( )->RequestPowerStateFull( );
 
     BOSE_VERBOSE( s_logger, "An attempt to set to full power is being made." );
 }

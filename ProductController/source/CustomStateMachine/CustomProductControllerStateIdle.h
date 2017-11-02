@@ -51,7 +51,6 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductControllerHsm;
-class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -66,7 +65,6 @@ public:
 
     CustomProductControllerStateIdle( ProductControllerHsm&       hsm,
                                       CHsmState*                  pSuperState,
-                                      ProfessorProductController& productController,
                                       Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE,
                                       const std::string&          name    = "CustomProductControllerStateIdle" );
 
@@ -80,8 +78,6 @@ public:
     void HandleStateExit( )  override;
 
 private:
-
-    ProfessorProductController& m_productController;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
