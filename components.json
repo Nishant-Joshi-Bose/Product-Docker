@@ -102,5 +102,9 @@
   {
     "name": "WiFi-Setup-Webpage",
     "selected_version": "master@19f561f91af118db5439955e4d85bc0a914964eb"
+  },
+  {
+    "name": "CastleLightBarController-qc8017_32",
+    "selected_version": "Continuous/master/0.0.1-1+d4d2e87"
   }
 ]

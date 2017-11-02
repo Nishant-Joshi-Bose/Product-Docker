@@ -72,7 +72,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     ReadConfigurationStatusFromPersistence();
     ReadNowPlayingFromPersistence();
 
-    m_lightbarController = std::unique_ptr<LightBarController>( new LightBarController( *this , m_FrontDoorClientIF, m_LpmClient ) );
+    m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask() , m_FrontDoorClientIF, m_LpmClient ) );
     SetupProductSTSController();
 }
 
@@ -88,7 +88,7 @@ void EddieProductController::Initialize()
     RegisterEndPoints();
     SendInitialRequests();
     //Register lpm events that lightbar will handle
-    m_lightbarController->Initialize();
+    m_lightbarController->RegisterLightBarEndPoints();
     m_demoController.RegisterEndPoints();
 }
 
@@ -107,6 +107,7 @@ void EddieProductController::RegisterLpmEvents()
     auto func = std::bind( &EddieProductController::HandleLpmKeyInformation, this, std::placeholders::_1 );
     AsyncCallback<IpcKeyInformation_t>response_cb( func, GetTask() );
     m_LpmClient->RegisterEvent<IpcKeyInformation_t>( IPC_KEY, response_cb );
+    m_lightbarController->RegisterLpmEvents();
 }
 
 void EddieProductController::RegisterKeyHandler()

@@ -333,7 +333,7 @@ private:
 
     ProductCliClient                            m_productCliClient;
 
-    std::unique_ptr<LightBarController>         m_lightbarController;
+    std::unique_ptr<LightBar::LightBarController>         m_lightbarController;
     IntentHandler                               m_IntentHandler;
     LpmInterface                                m_LpmInterface;
     bool                                        m_isCapsReady = false;
