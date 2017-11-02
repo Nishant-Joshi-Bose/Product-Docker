@@ -9,7 +9,7 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork-Bluetooth-Out/2017-10-11_1539"
+    "selected_version": "Continuous/Castle-Fork/2017-11-02_1340"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -89,7 +89,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-11-01_1401"
+    "selected_version": "Continuous/Castle-Fork/2017-11-02_1302"
   },
   {
     "name": "UnitTest++-native",
