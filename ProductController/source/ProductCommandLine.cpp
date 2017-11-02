@@ -36,6 +36,7 @@
 #include "ProfessorProductController.h"
 #include "ProductCommandLine.h"
 #include "AutoLpmServiceMessages.pb.h"
+#include "KeyActions.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -830,7 +831,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             response += " will be sent to the product controller state machine.\r\n";
 
             ProductMessage productMessage;
-            productMessage.mutable_keydata( )->set_action( keyActionValue );
+            productMessage.mutable_keydata( )->set_action( ( KeyActionPb::KEY_ACTION )keyActionValue );
 
             IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
         }

@@ -42,6 +42,15 @@
 namespace ProductApp
 {
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// The following constants define FrontDoor endpoints used by the NetworkManager
+///
+////////////////////////////////////////////////////////////////////////////////////////////////
+constexpr char FRONTDOOR_NETWORK_STATUS[]                       = "/network/status";
+constexpr char FRONTDOOR_NETWORK_WIFI_PROFILE[]                 = "/network/wifi/profile";
+constexpr char FRONTDOOR_NETWORK_WIFI_STATUS[]                  = "/network/wifi/status";
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProductNetworkManager::GetInstance
@@ -121,7 +130,7 @@ bool ProductNetworkManager::Run( )
                                     m_ProductTask );
 
     m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::NetworkStatus >
-    ( "/network/status", CallbackForEntireNetworkStatus );
+    ( FRONTDOOR_NETWORK_STATUS, CallbackForEntireNetworkStatus );
 
     BOSE_DEBUG( s_logger, "A notification request for the entire network status has been made." );
 
@@ -137,7 +146,7 @@ bool ProductNetworkManager::Run( )
                              m_ProductTask );
 
     m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::WiFiProfiles >
-    ( "/network/wifi/profile", CallbackForWiFiProfiles );
+    ( FRONTDOOR_NETWORK_WIFI_PROFILE, CallbackForWiFiProfiles );
 
     BOSE_DEBUG( s_logger, "A notification request for network wireless profile data has been made." );
 
@@ -153,7 +162,7 @@ bool ProductNetworkManager::Run( )
                            m_ProductTask );
 
     m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::WiFiStatus >
-    ( "/network/wifi/status", CallbackForWiFiStatus );
+    ( FRONTDOOR_NETWORK_WIFI_STATUS, CallbackForWiFiStatus );
 
     BOSE_DEBUG( s_logger, "A notification request for network wireless status changes has been made." );
 

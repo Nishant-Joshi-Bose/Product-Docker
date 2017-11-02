@@ -79,6 +79,7 @@ public:
 
     bool HandlePowerState( ) override;
     bool HandlePlaybackRequest( ProductPlaybackRequest_ProductPlaybackState state ) override;
+    bool HandleKeyAction( int action ) override;
 
 private:
 };

@@ -46,11 +46,13 @@
 #include "ProductMessage.pb.h"
 #include "ProductNetworkManager.h"
 #include "ProductSystemManager.h"
-#include "KeyActions.h"
+#include "ProductVolumeManager.h"
+#include "KeyActions.pb.h"
 #include "NetManager.pb.h"
 #include "ProductController.h"
 #include "ProductControllerHsm.h"
 #include "ProductSTSController.h"
+#include "Utilities.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -126,12 +128,19 @@ public:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
+    /// @brief The following method is used to get a pointer to the volume manager instance
+    ///        from the product controller.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ProductVolumeManager* GetVolumeManager( void ) const;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
     /// @brief The following method is used to get a pointer to the speaker manager instance
     ///        from the product controller.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     ProductSpeakerManager* GetSpeakerManager( void );
-
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -145,6 +154,13 @@ public:
     bool IsAutoWakeEnabled( void )        const;
     bool IsVoiceConfigured( void )        const;
     bool IsSoftwareUpdateRequired( void ) const;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief This method selects a new source.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    void SelectSource( PlaybackSource_t source );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -201,6 +217,7 @@ private:
     ProductCommandLine*       m_ProductCommandLine;
     ProductUserInterface*     m_ProductUserInterface;
     ProductEdidInterface*     m_ProductEdidInterface;
+    ProductVolumeManager*     m_ProductVolumeManager;
     ProductSpeakerManager*    m_ProductSpeakerManager;
 
     //////////////////////////////////////////////////////////////////////////////////////////////

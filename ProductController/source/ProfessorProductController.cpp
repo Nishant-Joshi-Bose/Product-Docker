@@ -34,7 +34,7 @@
 #include <unistd.h>
 #include "SystemUtils.h"
 #include "Utilities.h"
-#include "KeyActions.h"
+#include "KeyActions.pb.h"
 #include "ProductController.h"
 #include "ProfessorProductController.h"
 #include "ProductControllerStateTop.h"
@@ -69,6 +69,7 @@
 #include "NetManager.pb.h"
 #include "Callback.h"
 #include "ProductEdidInterface.h"
+#include "KeyActions.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -149,6 +150,7 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductSoftwareServices( nullptr ),
     m_ProductCommandLine( nullptr ),
     m_ProductUserInterface( nullptr ),
+    m_ProductEdidInterface( nullptr ),
 
     ///
     /// Member Variable Initialization
@@ -297,6 +299,10 @@ void ProfessorProductController::Run( )
                                                                         CallbackForMessages,
                                                                         m_ProductHardwareInterface,
                                                                         m_CliClientMT );
+    m_ProductVolumeManager     = ProductVolumeManager    ::GetInstance( GetTask( ),
+                                                                        CallbackForMessages,
+                                                                        m_ProductHardwareInterface );
+
 
     m_ProductSpeakerManager    = ProductSpeakerManager::GetInstance( GetTask( ),
                                                                      CallbackForMessages,
@@ -309,7 +315,8 @@ void ProfessorProductController::Run( )
         m_ProductSoftwareServices  == nullptr ||
         m_ProductCommandLine       == nullptr ||
         m_ProductUserInterface     == nullptr ||
-        m_ProductEdidInterface     == nullptr )
+        m_ProductEdidInterface     == nullptr ||
+        m_ProductVolumeManager     == nullptr )
     {
         BOSE_CRITICAL( s_logger, "-------- Product Controller Failed Initialization ----------" );
         BOSE_CRITICAL( s_logger, "A Product Controller module failed to be allocated.         " );
@@ -328,6 +335,7 @@ void ProfessorProductController::Run( )
     m_ProductCommandLine       ->Run( );
     m_ProductUserInterface     ->Run( );
     m_ProductEdidInterface     ->Run( );
+    m_ProductVolumeManager     ->Run( );
     m_ProductSpeakerManager    ->Run( );
 
     ///
@@ -347,6 +355,19 @@ ProductHardwareInterface* ProfessorProductController::GetHardwareInterface( ) co
 {
     return m_ProductHardwareInterface;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetVolumeManager
+///
+/// @return This method returns a pointer to the VolumeManager instance
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+ProductVolumeManager* ProfessorProductController::GetVolumeManager( ) const
+{
+    return m_ProductVolumeManager;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -736,11 +757,11 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     else if( message.has_keydata( ) )
     {
         auto keyData = message.keydata( );
-        auto keyString = m_ProductUserInterface->GetKeyString( static_cast< KEY_ACTION >( keyData.action( ) ) );
+        auto keyString = KeyActionPb::KEY_ACTION_Name( keyData.action() );
 
-        BOSE_DEBUG( s_logger, "The key action value %s (valued %d) was received.",
-                    keyString.c_str( ),
-                    keyData.action( ) );
+        BOSE_INFO( s_logger, "The key action value %s (valued %d) was received.",
+                   keyString.c_str( ),
+                   keyData.action( ) );
 
         m_ProductControllerStateMachine.Handle< int >
         ( &CustomProductControllerState::HandleKeyAction, keyData.action( ) );
@@ -839,6 +860,7 @@ void ProfessorProductController::Wait( )
     m_ProductCommandLine      ->Stop( );
     m_ProductUserInterface    ->Stop( );
     m_ProductEdidInterface    ->Stop( );
+    m_ProductVolumeManager    ->Stop( );
 
     ///
     /// Delete all the submodules.
@@ -851,6 +873,7 @@ void ProfessorProductController::Wait( )
     delete m_ProductCommandLine;
     delete m_ProductUserInterface;
     delete m_ProductEdidInterface;
+    delete m_ProductVolumeManager;
 
     m_ProductHardwareInterface = nullptr;
     m_ProductSystemManager = nullptr;
@@ -860,6 +883,7 @@ void ProfessorProductController::Wait( )
     m_ProductCommandLine = nullptr;
     m_ProductUserInterface = nullptr;
     m_ProductEdidInterface = nullptr;
+    m_ProductVolumeManager = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -876,6 +900,16 @@ void ProfessorProductController::End( )
     BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
 
     m_Running = false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::SelectSource
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::SelectSource( PlaybackSource_t source )
+{
+    BOSE_INFO( s_logger, "Source %d selected\n", source );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

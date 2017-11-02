@@ -9,6 +9,7 @@ PROTO_SOURCES = AudioSettings.proto       \
                 Language.proto            \
                 ContentItem.proto         \
                 ProductSTS.proto          \
+                KeyActions.proto          \
                 SystemInfo.proto          \
                 ProductSpeakerManager.proto
 
