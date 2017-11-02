@@ -90,7 +90,7 @@ void ProductVolumeManager::Initialize( )
     {
         UpdateFrontDoorVolume( v );
     };
-    m_Volume = std::make_shared< AudioVolume<int32_t> >( fVolume );
+    m_Volume = new AudioVolume<int32_t>( fVolume );
 
     auto fNotify = [ this ]( SoundTouchInterface::volume v )
     {
@@ -197,7 +197,7 @@ void ProductVolumeManager::UpdateFrontDoorVolume( int32_t volume )
 /// @param  volume Object containing volume received from the FrontDoor
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductVolumeManager::ReceiveFrontDoorVolume( SoundTouchInterface::volume& volume )
+void ProductVolumeManager::ReceiveFrontDoorVolume( SoundTouchInterface::volume const& volume )
 {
     int32_t vol = volume.value();
 
