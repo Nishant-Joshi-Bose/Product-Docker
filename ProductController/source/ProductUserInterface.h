@@ -44,11 +44,10 @@
 #include "APServerSocketListenerIF.h"
 #include "IPCMessageRouterIF.h"
 #include "APProductIF.h"
-#include "KeyActions.h"
+#include "KeyActions.pb.h"
 #include "ProductMessage.pb.h"
 #include "LpmClientIF.h"
 #include "KeyHandler.h"
-#include "KeyActions.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -109,7 +108,7 @@ public:
     ///        string.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    std::string GetKeyString( const KEY_ACTION keyAction );
+    std::string GetKeyString( const KeyActionPb::KEY_ACTION keyAction );
 
 private:
 

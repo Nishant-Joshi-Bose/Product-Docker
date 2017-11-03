@@ -34,7 +34,7 @@
 #include <unistd.h>
 #include "SystemUtils.h"
 #include "Utilities.h"
-#include "KeyActions.h"
+#include "KeyActions.pb.h"
 #include "ProductController.h"
 #include "ProfessorProductController.h"
 #include "ProductControllerStateTop.h"
@@ -69,6 +69,7 @@
 #include "NetManager.pb.h"
 #include "Callback.h"
 #include "ProductEdidInterface.h"
+#include "KeyActions.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -149,6 +150,7 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductSoftwareServices( nullptr ),
     m_ProductCommandLine( nullptr ),
     m_ProductUserInterface( nullptr ),
+    m_ProductEdidInterface( nullptr ),
 
     ///
     /// Member Variable Initialization
@@ -297,6 +299,10 @@ void ProfessorProductController::Run( )
                                                                         CallbackForMessages,
                                                                         m_ProductHardwareInterface,
                                                                         m_CliClientMT );
+    m_ProductVolumeManager     = ProductVolumeManager    ::GetInstance( GetTask( ),
+                                                                        CallbackForMessages,
+                                                                        m_ProductHardwareInterface );
+
 
     m_ProductSpeakerManager    = ProductSpeakerManager::GetInstance( GetTask( ),
                                                                      CallbackForMessages,
@@ -309,7 +315,8 @@ void ProfessorProductController::Run( )
         m_ProductSoftwareServices  == nullptr ||
         m_ProductCommandLine       == nullptr ||
         m_ProductUserInterface     == nullptr ||
-        m_ProductEdidInterface     == nullptr )
+        m_ProductEdidInterface     == nullptr ||
+        m_ProductVolumeManager     == nullptr )
     {
         BOSE_CRITICAL( s_logger, "-------- Product Controller Failed Initialization ----------" );
         BOSE_CRITICAL( s_logger, "A Product Controller module failed to be allocated.         " );
@@ -328,6 +335,7 @@ void ProfessorProductController::Run( )
     m_ProductCommandLine       ->Run( );
     m_ProductUserInterface     ->Run( );
     m_ProductEdidInterface     ->Run( );
+    m_ProductVolumeManager     ->Run( );
     m_ProductSpeakerManager    ->Run( );
 
     ///
@@ -347,6 +355,19 @@ ProductHardwareInterface* ProfessorProductController::GetHardwareInterface( ) co
 {
     return m_ProductHardwareInterface;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetVolumeManager
+///
+/// @return This method returns a pointer to the VolumeManager instance
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+ProductVolumeManager* ProfessorProductController::GetVolumeManager( ) const
+{
+    return m_ProductVolumeManager;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -736,11 +757,11 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     else if( message.has_keydata( ) )
     {
         auto keyData = message.keydata( );
-        auto keyString = m_ProductUserInterface->GetKeyString( static_cast< KEY_ACTION >( keyData.action( ) ) );
+        auto keyString = KeyActionPb::KEY_ACTION_Name( keyData.action() );
 
-        BOSE_DEBUG( s_logger, "The key action value %s (valued %d) was received.",
-                    keyString.c_str( ),
-                    keyData.action( ) );
+        BOSE_INFO( s_logger, "The key action value %s (valued %d) was received.",
+                   keyString.c_str( ),
+                   keyData.action( ) );
 
         m_ProductControllerStateMachine.Handle< int >
         ( &CustomProductControllerState::HandleKeyAction, keyData.action( ) );
@@ -812,56 +833,12 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     }
 }
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::SelectSource
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::SelectSource( PlaybackSource_t source )
-{
-    BOSE_DEBUG( s_logger, __func__ );
-    BOSE_INFO( s_logger, "Source %d selected", source );
-
-    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> ( std::bind( &ProfessorProductController::PostPlaybackRequestError,
-                                                      this, std::placeholders::_1 ), GetTask( ) );
-
-    AsyncCallback<SoundTouchInterface::NowPlayingJson> postPlaybackRequestCb = AsyncCallback<SoundTouchInterface::NowPlayingJson> ( std::bind( &ProfessorProductController::PostlaybackRequestResponse,
-                                                                               this, std::placeholders::_1 ), GetTask( ) );
-    //Setup the playbackRequest data
-    SoundTouchInterface::playbackRequestJson playbackRequestData;
-
-    switch( source )
-    {
-    case SOURCE_TV:
-        playbackRequestData.set_source( "PRODUCT" );
-        playbackRequestData.set_sourceaccount( "TV" );
-        break;
-    case SOURCE_SOUNDTOUCH:
-        playbackRequestData.set_source( "DEEZER" );
-        playbackRequestData.set_sourceaccount( "matthew_scanlan@bose.com" );
-        playbackRequestData.mutable_preset() -> set_type( "topTrack" );
-        playbackRequestData.mutable_preset() -> set_location( "132" );
-        playbackRequestData.mutable_preset() -> set_name( "Pop - ##TRANS_TopTracks##" );
-        playbackRequestData.mutable_preset() -> set_presetable( "true" );
-        playbackRequestData.mutable_preset() -> set_containerart( "http://e-cdn-images.deezer.com/images/misc/db7a604d9e7634a67d45cfc86b48370a/500x500-000000-80-0-0.jpg" );
-        playbackRequestData.mutable_playback() -> set_type( "topTrack" );
-        playbackRequestData.mutable_playback() -> set_location( "132" );
-        playbackRequestData.mutable_playback() -> set_name( "Too Good At Goodbyes" );
-        playbackRequestData.mutable_playback() -> set_presetable( "true" );
-        break;
-    }
-    //Send POST for /content/playbackRequest
-    m_FrontDoorClientIF->SendPost<SoundTouchInterface::NowPlayingJson>( "/content/playbackRequest", playbackRequestData,
-                                                                        postPlaybackRequestCb, errorCb );
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProfessorProductController::PostlaybackRequestResponse
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::PostlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson& resp )
+void ProfessorProductController::PostPlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson& resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
     BOSE_LOG( INFO, "GOT Response to playbackRequest: " << resp.source().sourcedisplayname() );
@@ -904,6 +881,7 @@ void ProfessorProductController::Wait( )
     m_ProductCommandLine      ->Stop( );
     m_ProductUserInterface    ->Stop( );
     m_ProductEdidInterface    ->Stop( );
+    m_ProductVolumeManager    ->Stop( );
 
     ///
     /// Delete all the submodules.
@@ -916,6 +894,7 @@ void ProfessorProductController::Wait( )
     delete m_ProductCommandLine;
     delete m_ProductUserInterface;
     delete m_ProductEdidInterface;
+    delete m_ProductVolumeManager;
 
     m_ProductHardwareInterface = nullptr;
     m_ProductSystemManager = nullptr;
@@ -925,6 +904,7 @@ void ProfessorProductController::Wait( )
     m_ProductCommandLine = nullptr;
     m_ProductUserInterface = nullptr;
     m_ProductEdidInterface = nullptr;
+    m_ProductVolumeManager = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -941,6 +921,51 @@ void ProfessorProductController::End( )
     BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
 
     m_Running = false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::SelectSource
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::SelectSource( PlaybackSource_t source )
+{
+    BOSE_INFO( s_logger, "Source %d selected\n", source );
+    BOSE_DEBUG( s_logger, __func__ );
+    BOSE_INFO( s_logger, "Source %d selected", source );
+
+    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> ( std::bind( &ProfessorProductController::PostPlaybackRequestError,
+                                                      this, std::placeholders::_1 ), GetTask( ) );
+
+    AsyncCallback<SoundTouchInterface::NowPlayingJson> postPlaybackRequestCb = AsyncCallback<SoundTouchInterface::NowPlayingJson> ( std::bind( &ProfessorProductController::PostPlaybackRequestResponse,
+                                                                               this, std::placeholders::_1 ), GetTask( ) );
+    //Setup the playbackRequest data
+    SoundTouchInterface::playbackRequestJson playbackRequestData;
+
+    switch( source )
+    {
+    case SOURCE_TV:
+        playbackRequestData.set_source( "PRODUCT" );
+        playbackRequestData.set_sourceaccount( "TV" );
+        break;
+    case SOURCE_SOUNDTOUCH:
+        //hardcode for now, before CAPS provides the utility to convert nowPlaying to playbackRequest
+        playbackRequestData.set_source( "DEEZER" );
+        playbackRequestData.set_sourceaccount( "matthew_scanlan@bose.com" );
+        playbackRequestData.mutable_preset() -> set_type( "topTrack" );
+        playbackRequestData.mutable_preset() -> set_location( "132" );
+        playbackRequestData.mutable_preset() -> set_name( "Pop - ##TRANS_TopTracks##" );
+        playbackRequestData.mutable_preset() -> set_presetable( "true" );
+        playbackRequestData.mutable_preset() -> set_containerart( "http://e-cdn-images.deezer.com/images/misc/db7a604d9e7634a67d45cfc86b48370a/500x500-000000-80-0-0.jpg" );
+        playbackRequestData.mutable_playback() -> set_type( "topTrack" );
+        playbackRequestData.mutable_playback() -> set_location( "132" );
+        playbackRequestData.mutable_playback() -> set_name( "Too Good At Goodbyes" );
+        playbackRequestData.mutable_playback() -> set_presetable( "true" );
+        break;
+    }
+    //Send POST for /content/playbackRequest
+    m_FrontDoorClientIF->SendPost<SoundTouchInterface::NowPlayingJson>( "/content/playbackRequest", playbackRequestData,
+                                                                        postPlaybackRequestCb, errorCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

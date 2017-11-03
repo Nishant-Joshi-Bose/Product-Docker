@@ -58,6 +58,18 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 const std::string g_ProductDirectory = "product-persistence/";
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// The following constants define FrontDoor endpoints used by the SystemManager
+///
+////////////////////////////////////////////////////////////////////////////////////////////////
+constexpr char FRONTDOOR_SYSTEM_LANGUAGE[]                      = "/system/language";
+constexpr char FRONTDOOR_SYSTEM_CONFIGURATION_STATUS[]          = "/system/configuration/status";
+constexpr char FRONTDOOR_SYSTEM_CAPS_INITIALIZATION_STATUS[]    = "/system/capsInitializationStatus";
+constexpr char FRONTDOOR_SYSTEM_INFO[]                          = "/system/info";
+constexpr char FRONTDOOR_CAPS_INITIALIZATION_UPDATE[]           = "CapsInitializationUpdate";
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProductSystemManager::GetInstance
@@ -142,7 +154,7 @@ bool ProductSystemManager::Run( )
                              std::placeholders::_1 ),
                   m_ProductTask );
 
-        m_FrontDoorClient->RegisterGet( "/system/language", callback );
+        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_LANGUAGE, callback );
 
     }
 
@@ -161,7 +173,7 @@ bool ProductSystemManager::Run( )
                              std::placeholders::_2 ),
                   m_ProductTask );
 
-        m_FrontDoorClient->RegisterPost< ProductPb::Language >( "/system/language" , callback );
+        m_FrontDoorClient->RegisterPost< ProductPb::Language >( FRONTDOOR_SYSTEM_LANGUAGE, callback );
     }
 
     BOSE_DEBUG( s_logger, "Registration for posting system language requests has been made." );
@@ -178,7 +190,7 @@ bool ProductSystemManager::Run( )
                              std::placeholders::_1 ),
                   m_ProductTask );
 
-        m_FrontDoorClient->RegisterGet( "/system/configuration/status" , callback );
+        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS, callback );
     }
 
     BOSE_DEBUG( s_logger, "Registration for getting configuration status requests has been made." );
@@ -208,10 +220,10 @@ bool ProductSystemManager::Run( )
                             m_ProductTask );
 
         m_FrontDoorClient->SendGet< SoundTouchInterface::CapsInitializationStatus >
-        ( "/system/capsInitializationStatus", CallbackForSuccess, CallbackForFailure );
+        ( FRONTDOOR_SYSTEM_CAPS_INITIALIZATION_STATUS, CallbackForSuccess, CallbackForFailure );
 
         m_FrontDoorClient->RegisterNotification< SoundTouchInterface::CapsInitializationStatus >
-        ( "/CapsInitializationUpdate", CallbackForNotification );
+        ( FRONTDOOR_CAPS_INITIALIZATION_UPDATE, CallbackForNotification );
     }
 
     BOSE_DEBUG( s_logger, "A notification request for CAPS initialization messages has been made." );
@@ -226,9 +238,9 @@ bool ProductSystemManager::Run( )
                                   this,
                                   std::placeholders::_1 ),
                        m_ProductTask );
-        m_FrontDoorClient->RegisterGet( "/system/info", asyncCallback );
+        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_INFO, asyncCallback );
 
-        BOSE_DEBUG( s_logger, "Registration for /system/info GET request complete." );
+        BOSE_DEBUG( s_logger, "Registration for %s GET request complete.", FRONTDOOR_SYSTEM_INFO );
     }
 
     return true;
@@ -348,7 +360,7 @@ void ProductSystemManager::ReadSystemInfoSettingsFromPersistentStorage( void )
         }
         catch( ... )
         {
-            BOSE_ERROR( s_logger, "Writing default /system/info to persistent storage failed." );
+            BOSE_ERROR( s_logger, "Writing default %s to persistent storage failed.", FRONTDOOR_SYSTEM_INFO );
         }
 
     }
@@ -401,7 +413,7 @@ void ProductSystemManager::HandleGetLanguageRequest(
 void ProductSystemManager::HandleGetSystemInfoRequest(
     const Callback<::ProductPb::SystemInfo>& response ) const
 {
-    BOSE_DEBUG( s_logger, "/system/info GET request received." );
+    BOSE_DEBUG( s_logger, "%s GET request received.", FRONTDOOR_SYSTEM_INFO );
 
     response.Send( m_SystemInfo );
 }

@@ -27,12 +27,12 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "DPrint.h"
-#include "KeyActions.h"
 #include "Utilities.h"
 #include "CustomProductControllerStateOn.h"
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
 #include "ProductControllerState.h"
+#include "KeyActions.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -111,15 +111,29 @@ void CustomProductControllerStateOn::HandleStateExit( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateOn::HandleKeyAction( int action )
 {
-    BOSE_INFO( s_logger, "A key action was sent to the product state on with action %d.", action );
+    bool handled = true;
+    ProfessorProductController &pc = GetCustomProductController();
+
     switch( action )
     {
-    case KEY_ACTION_PAIR_SPEAKERS:
+    case KeyActionPb::KEY_ACTION_VOLUME_UP:
+        pc.GetVolumeManager()->Increment();
+        break;
+
+    case KeyActionPb::KEY_ACTION_VOLUME_DOWN:
+        pc.GetVolumeManager()->Decrement();
+        break;
+
+    case KeyActionPb::KEY_ACTION_PAIR_SPEAKERS:
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
-        return true;
+        break;
+
     default:
-        return false;
+        handled = false;
+        break;
     }
+
+    return handled;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

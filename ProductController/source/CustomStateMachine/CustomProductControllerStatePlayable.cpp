@@ -170,6 +170,38 @@ bool CustomProductControllerStatePlayable::HandlePowerState( )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStatePlayable::HandleKey
+///
+/// @return This method returns a true Boolean value indicating that it has handled the supplied
+///         key and that no futher processing will be required by any of its superstates.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayable::HandleKeyAction( int action )
+{
+    bool handled = true;
+    ProfessorProductController &pc = GetCustomProductController();
+
+    switch( action )
+    {
+    case KeyActionPb::KEY_ACTION_SOUNDTOUCH:
+        pc.SelectSource( SOURCE_SOUNDTOUCH );
+        break;
+
+    case KeyActionPb::KEY_ACTION_TV:
+        pc.SelectSource( SOURCE_TV );
+        break;
+
+    default:
+        handled = false;
+        break;
+    }
+
+    return handled;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
