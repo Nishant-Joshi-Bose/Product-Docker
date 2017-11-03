@@ -10,8 +10,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -34,7 +32,6 @@
 #include <unistd.h>
 #include "SystemUtils.h"
 #include "Utilities.h"
-#include "KeyActions.pb.h"
 #include "ProductController.h"
 #include "ProfessorProductController.h"
 #include "ProductControllerStateTop.h"
@@ -65,6 +62,7 @@
 #include "ProductSpeakerManager.h"
 #include "ProductCommandLine.h"
 #include "ProtoPersistenceFactory.h"
+#include "ProductMessage.pb.h"
 #include "NetManager.pb.h"
 #include "Callback.h"
 #include "ProductEdidInterface.h"
@@ -190,61 +188,74 @@ void ProfessorProductController::Run( )
     ///
     /// Construction of the Custom Professor States
     ///
-    auto* stateBooting = new CustomProductControllerStateBooting( m_ProductControllerStateMachine,
-                                                                  stateTop );
+    auto* stateBooting = new CustomProductControllerStateBooting
+    ( m_ProductControllerStateMachine,
+      stateTop );
 
-    auto* stateUpdatingSoftware = new CustomProductControllerStateUpdatingSoftware( m_ProductControllerStateMachine,
-                                                                                    stateTop );
+    auto* stateUpdatingSoftware = new CustomProductControllerStateUpdatingSoftware
+    ( m_ProductControllerStateMachine,
+      stateTop );
 
-    auto* stateLowPower = new CustomProductControllerStateLowPower( m_ProductControllerStateMachine,
-                                                                    stateTop );
+    auto* stateLowPower = new CustomProductControllerStateLowPower
+    ( m_ProductControllerStateMachine,
+      stateTop );
 
-    auto* stateOn = new CustomProductControllerStateOn( m_ProductControllerStateMachine,
-                                                        stateTop );
+    auto* stateOn = new CustomProductControllerStateOn
+    ( m_ProductControllerStateMachine,
+      stateTop );
 
-    auto* statePlayable = new CustomProductControllerStatePlayable( m_ProductControllerStateMachine,
-                                                                    stateOn );
+    auto* statePlayable = new CustomProductControllerStatePlayable
+    ( m_ProductControllerStateMachine,
+      stateOn );
 
-    auto* stateNetworkStandby = new CustomProductControllerStateNetworkStandby( m_ProductControllerStateMachine,
-                                                                                statePlayable );
+    auto* stateNetworkStandby = new CustomProductControllerStateNetworkStandby
+    ( m_ProductControllerStateMachine,
+      statePlayable );
 
-    auto* stateNetworkStandbyConfigured = new CustomProductControllerStateNetworkStandbyConfigured( m_ProductControllerStateMachine,
-            stateNetworkStandby );
+    auto* stateNetworkStandbyConfigured = new CustomProductControllerStateNetworkStandbyConfigured
+    ( m_ProductControllerStateMachine,
+      stateNetworkStandby );
 
-    auto* stateNetworkStandbyUnconfigured = new CustomProductControllerStateNetworkStandbyUnconfigured( m_ProductControllerStateMachine,
-            stateNetworkStandby,
-            *this );
+    auto* stateNetworkStandbyUnconfigured = new CustomProductControllerStateNetworkStandbyUnconfigured
+    ( m_ProductControllerStateMachine,
+      stateNetworkStandby,
+      *this );
 
-    auto* stateIdle = new CustomProductControllerStateIdle( m_ProductControllerStateMachine,
-                                                            statePlayable );
+    auto* stateIdle = new CustomProductControllerStateIdle
+    ( m_ProductControllerStateMachine,
+      statePlayable );
 
-    auto* stateIdleVoiceConfigured = new CustomProductControllerStateIdleVoiceConfigured( m_ProductControllerStateMachine,
-            stateIdle );
+    auto* stateIdleVoiceConfigured = new CustomProductControllerStateIdleVoiceConfigured
+    ( m_ProductControllerStateMachine,
+      stateIdle );
 
-    auto* stateIdleVoiceUnconfigured = new CustomProductControllerStateIdleVoiceUnconfigured( m_ProductControllerStateMachine,
-            stateIdle,
-            *this );
+    auto* stateIdleVoiceUnconfigured = new CustomProductControllerStateIdleVoiceUnconfigured
+    ( m_ProductControllerStateMachine,
+      stateIdle,
+      *this );
 
-    auto* statePlaying = new CustomProductControllerStatePlaying( m_ProductControllerStateMachine,
-                                                                  stateOn );
+    auto* statePlaying = new CustomProductControllerStatePlaying
+    ( m_ProductControllerStateMachine,
+      stateOn );
 
-    auto* statePlayingActive = new CustomProductControllerStatePlayingActive( m_ProductControllerStateMachine,
-                                                                              statePlaying,
-                                                                              *this );
+    auto* statePlayingActive = new CustomProductControllerStatePlayingActive
+    ( m_ProductControllerStateMachine,
+      statePlaying,
+      *this );
 
-    auto* statePlayingInactive = new CustomProductControllerStatePlayingInactive( m_ProductControllerStateMachine,
-                                                                                  statePlaying,
-                                                                                  *this );
+    auto* statePlayingInactive = new CustomProductControllerStatePlayingInactive
+    ( m_ProductControllerStateMachine,
+      statePlaying,
+      *this );
 
-    auto* stateAccessoryPairing = new CustomProductControllerStateAccessoryPairing( m_ProductControllerStateMachine,
-                                                                                    statePlayingActive,
-                                                                                    *this );
-
+    auto* stateAccessoryPairing = new CustomProductControllerStateAccessoryPairing
+    ( m_ProductControllerStateMachine,
+      statePlayingActive,
+      *this );
 
     ///
     /// The states are added to the state machine and the state machine is initialized.
     ///
-
     m_ProductControllerStateMachine.AddState( stateTop );
     m_ProductControllerStateMachine.AddState( stateBooting );
     m_ProductControllerStateMachine.AddState( stateUpdatingSoftware );
@@ -274,10 +285,9 @@ void ProfessorProductController::Run( )
     m_ProductHardwareInterface = ProductHardwareInterface::GetInstance( GetTask( ),
                                                                         CallbackForMessages );
 
-    m_ProductEdidInterface     = ProductEdidInterface::GetInstance( GetTask( ),
-                                                                    CallbackForMessages,
-                                                                    m_ProductHardwareInterface );
-
+    m_ProductEdidInterface     = ProductEdidInterface    ::GetInstance( GetTask( ),
+                                                                        CallbackForMessages,
+                                                                        m_ProductHardwareInterface );
     m_ProductSystemManager     = ProductSystemManager    ::GetInstance( GetTask( ),
                                                                         CallbackForMessages );
 
@@ -301,11 +311,9 @@ void ProfessorProductController::Run( )
     m_ProductVolumeManager     = ProductVolumeManager    ::GetInstance( GetTask( ),
                                                                         CallbackForMessages,
                                                                         m_ProductHardwareInterface );
-
-
-    m_ProductSpeakerManager    = ProductSpeakerManager::GetInstance( GetTask( ),
-                                                                     CallbackForMessages,
-                                                                     m_ProductHardwareInterface );
+    m_ProductSpeakerManager    = ProductSpeakerManager   ::GetInstance( GetTask( ),
+                                                                        CallbackForMessages,
+                                                                        m_ProductHardwareInterface );
 
     if( m_ProductHardwareInterface == nullptr ||
         m_ProductSystemManager     == nullptr ||
@@ -354,7 +362,6 @@ ProductHardwareInterface* ProfessorProductController::GetHardwareInterface( ) co
 {
     return m_ProductHardwareInterface;
 }
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProfessorProductController::GetVolumeManager
@@ -366,7 +373,6 @@ ProductVolumeManager* ProfessorProductController::GetVolumeManager( ) const
 {
     return m_ProductVolumeManager;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -469,7 +475,7 @@ bool ProfessorProductController::IsSoftwareUpdateRequired( ) const
 ///         specifically, provide the set of sources to be created initially.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::SetupProductSTSConntroller( void )
+void ProfessorProductController::SetupProductSTSConntroller( )
 {
     std::vector<ProductSTSController::SourceDescriptor> sources;
 
@@ -507,7 +513,7 @@ void ProfessorProductController::SetupProductSTSConntroller( void )
 /// @note   This method is called on the ProductSTSController task.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::HandleSTSInitWasComplete( void )
+void ProfessorProductController::HandleSTSInitWasComplete( )
 {
     ProductMessage message;
     message.mutable_stsinterfacestatus( )->set_initialized( true );
@@ -523,7 +529,7 @@ void ProfessorProductController::HandleSTSInitWasComplete( void )
 /// @name   ProfessorProductController::HandleSelectSourceSlot
 ///
 /// @brief  This method is called from the ProductSTSController, when one of our sources is
-///         activated by CAPS/STS.
+///         activated by CAPS and STS.
 ///
 /// @note   This method is called on the ProductSTSController task.
 ///
@@ -539,6 +545,97 @@ void ProfessorProductController::HandleSelectSourceSlot( ProductSTSAccount::Prod
                                 this,
                                 message ),
                      GetTask( ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::SelectSource
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::SelectSource( PlaybackSource_t playbackSource )
+{
+    BOSE_INFO( s_logger, "Source %d was selected. \n", playbackSource );
+
+    AsyncCallback< FRONT_DOOR_CLIENT_ERRORS > errorCallback =
+        AsyncCallback< FRONT_DOOR_CLIENT_ERRORS > ( std::bind( &ProfessorProductController::PostPlaybackRequestError,
+                                                               this,
+                                                               std::placeholders::_1 ),
+                                                    GetTask( ) );
+
+    AsyncCallback< SoundTouchInterface::NowPlayingJson > postPlaybackRequestCallback =
+        AsyncCallback< SoundTouchInterface::NowPlayingJson > ( std::bind( &ProfessorProductController::PostPlaybackRequestResponse,
+                                                                          this, std::placeholders::_1 ),
+                                                               GetTask( ) );
+    ///
+    /// Setup the playback request data.
+    ///
+    SoundTouchInterface::playbackRequestJson playbackRequestData;
+
+    ///
+    /// The data is hardcoded for test for now, before CAPS provides the utility to convert
+    /// nowPlaying to playbackRequest.
+    ///
+    constexpr char source[ ]           = "DEEZER";
+    constexpr char sourceAccount[ ]    = "matthew_scanlan@bose.com";
+    constexpr char presetType[ ]       = "topTrack";
+    constexpr char location[ ]         = "132";
+    constexpr char name[ ]             = "Pop - ##TRANS_TopTracks##";
+    constexpr bool presetable          = true;
+    constexpr char containerArt[ ]     = "http://e-cdn-images.deezer.com/images/misc/db7a604d9e7634a67d45cfc86b48370a/500x500-000000-80-0-0.jpg";
+    constexpr char playbackType[ ]     = "topTrack";
+    constexpr char playbackLocation[ ] = "132";
+    constexpr char playbackName[ ]     = "Too Good At Goodbyes";
+    constexpr bool playbackPresetable  = true;
+
+    switch( playbackSource )
+    {
+    case SOURCE_TV:
+        playbackRequestData.set_source( "PRODUCT" );
+        playbackRequestData.set_sourceaccount( "TV" );
+        break;
+    case SOURCE_SOUNDTOUCH:
+        playbackRequestData.set_source( source );
+        playbackRequestData.set_sourceaccount( sourceAccount );
+        playbackRequestData.mutable_preset( )  -> set_type( presetType );
+        playbackRequestData.mutable_preset( )  -> set_location( location );
+        playbackRequestData.mutable_preset( )  -> set_name( name );
+        playbackRequestData.mutable_preset( )  -> set_presetable( presetable );
+        playbackRequestData.mutable_preset( )  -> set_containerart( containerArt );
+        playbackRequestData.mutable_playback( )-> set_type( playbackType );
+        playbackRequestData.mutable_playback( )-> set_location( playbackLocation );
+        playbackRequestData.mutable_playback( )-> set_name( playbackName );
+        playbackRequestData.mutable_playback( )-> set_presetable( playbackPresetable );
+        break;
+    }
+
+    ///
+    /// Send a post messgage for the "/content/playbackRequest" end point.
+    ///
+    m_FrontDoorClientIF->SendPost< SoundTouchInterface::NowPlayingJson >( "/content/playbackRequest",
+                                                                          playbackRequestData,
+                                                                          postPlaybackRequestCallback,
+                                                                          errorCallback );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::PostPlaybackRequestResponse
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::PostPlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson& response )
+{
+    BOSE_DEBUG( s_logger, "A response to the playback request %s was received." ,
+                response.source( ).sourcedisplayname( ).c_str( ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::PostPlaybackRequestError
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::PostPlaybackRequestError( const FRONT_DOOR_CLIENT_ERRORS errorCode )
+{
+    BOSE_DEBUG( s_logger, "An error %d was returned to the playback request.", errorCode );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -666,21 +763,21 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
 
         if( message.networkstatus( ).networktype( ) == ProductNetworkStatus_ProductNetworkType_Wireless )
         {
-            BOSE_DEBUG( s_logger, "A wireless %s and %s network message was received.",
-                        m_IsNetworkConfigured ? "configured" : "not configured",
-                        m_IsNetworkConnected  ? "connected"  : "not connected" );
+            BOSE_DEBUG( s_logger, "A wireless %s %s network message was received.",
+                        m_IsNetworkConfigured ? "configured" : "unconfigured",
+                        m_IsNetworkConnected  ? "connected"  : "unconnected" );
         }
         else if( message.networkstatus( ).networktype( ) == ProductNetworkStatus_ProductNetworkType_Wired )
         {
-            BOSE_DEBUG( s_logger, "A wired %s and %s network message was received.",
-                        m_IsNetworkConfigured ? "configured" : "not configured",
-                        m_IsNetworkConnected  ? "connected"  : "not connected" );
+            BOSE_DEBUG( s_logger, "A wired %s %s network message was received.",
+                        m_IsNetworkConfigured ? "configured" : "unconfigured",
+                        m_IsNetworkConnected  ? "connected"  : "unconnected" );
         }
         else
         {
-            BOSE_DEBUG( s_logger, "A unknown %s and %s network message was received.",
-                        m_IsNetworkConfigured ? "configured" : "not configured",
-                        m_IsNetworkConnected  ? "connected"  : "not connected" );
+            BOSE_DEBUG( s_logger, "A unknown %s %s network message was received.",
+                        m_IsNetworkConfigured ? "configured" : "unconfigured",
+                        m_IsNetworkConnected  ? "connected"  : "unconnected" );
         }
 
         m_ProductSystemManager->SetNetworkAccoutConfigurationStatus( m_IsNetworkConfigured,
@@ -834,27 +931,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::PostPlaybackRequestResponse
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::PostPlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson& resp )
-{
-    BOSE_DEBUG( s_logger, __func__ );
-    BOSE_LOG( INFO, "GOT Response to playbackRequest: " << resp.source().sourcedisplayname() );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::PostPlaybackRequestError
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::PostPlaybackRequestError( const FRONT_DOOR_CLIENT_ERRORS errorCode )
-{
-    BOSE_ERROR( s_logger, "%s:error code- %d", __func__, errorCode );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProfessorProductController::Wait
 ///
 /// @brief  This method is called from a calling task to wait until the Product Controller process
@@ -865,8 +941,6 @@ void ProfessorProductController::Wait( )
 {
     while( m_Running )
     {
-        BOSE_DEBUG( s_logger, "A check was made to determine if the Product Controller is running." );
-
         sleep( PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS );
     }
 
@@ -920,50 +994,6 @@ void ProfessorProductController::End( )
     BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
 
     m_Running = false;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::SelectSource
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::SelectSource( PlaybackSource_t source )
-{
-    BOSE_DEBUG( s_logger, __func__ );
-    BOSE_INFO( s_logger, "Source %d selected", source );
-
-    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> ( std::bind( &ProfessorProductController::PostPlaybackRequestError,
-                                                      this, std::placeholders::_1 ), GetTask( ) );
-
-    AsyncCallback<SoundTouchInterface::NowPlayingJson> postPlaybackRequestCb = AsyncCallback<SoundTouchInterface::NowPlayingJson> ( std::bind( &ProfessorProductController::PostPlaybackRequestResponse,
-                                                                               this, std::placeholders::_1 ), GetTask( ) );
-    //Setup the playbackRequest data
-    SoundTouchInterface::playbackRequestJson playbackRequestData;
-
-    switch( source )
-    {
-    case SOURCE_TV:
-        playbackRequestData.set_source( "PRODUCT" );
-        playbackRequestData.set_sourceaccount( "TV" );
-        break;
-    case SOURCE_SOUNDTOUCH:
-        //hardcode for now, before CAPS provides the utility to convert nowPlaying to playbackRequest
-        playbackRequestData.set_source( "DEEZER" );
-        playbackRequestData.set_sourceaccount( "matthew_scanlan@bose.com" );
-        playbackRequestData.mutable_preset() -> set_type( "topTrack" );
-        playbackRequestData.mutable_preset() -> set_location( "132" );
-        playbackRequestData.mutable_preset() -> set_name( "Pop - ##TRANS_TopTracks##" );
-        playbackRequestData.mutable_preset() -> set_presetable( "true" );
-        playbackRequestData.mutable_preset() -> set_containerart( "http://e-cdn-images.deezer.com/images/misc/db7a604d9e7634a67d45cfc86b48370a/500x500-000000-80-0-0.jpg" );
-        playbackRequestData.mutable_playback() -> set_type( "topTrack" );
-        playbackRequestData.mutable_playback() -> set_location( "132" );
-        playbackRequestData.mutable_playback() -> set_name( "Too Good At Goodbyes" );
-        playbackRequestData.mutable_playback() -> set_presetable( "true" );
-        break;
-    }
-    //Send POST for /content/playbackRequest
-    m_FrontDoorClientIF->SendPost<SoundTouchInterface::NowPlayingJson>( "/content/playbackRequest", playbackRequestData,
-                                                                        postPlaybackRequestCb, errorCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -26,7 +24,6 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "DPrint.h"
 #include "Utilities.h"
 #include "Services.h"
 #include "ProductHardwareInterface.h"
@@ -146,13 +143,12 @@ bool ProductHardwareInterface::Run( )
 ///
 /// @name   ProductHardwareInterface::RegisterForLpmClientConnectEvent
 ///
-/// @brief  Callback<bool> [ cb ] Callback for connect and disconect events
-/// @return void
+/// @brief  Callback< bool > callback Callback for connection and disconnection events.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductHardwareInterface::RegisterForLpmClientConnectEvent( Callback<bool> cb )
+void ProductHardwareInterface::RegisterForLpmClientConnectEvent( Callback<bool> callback )
 {
-    m_lpmConnectionNotifies.push_back( cb );
+    m_lpmConnectionNotifies.push_back( callback );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -327,7 +323,7 @@ void ProductHardwareInterface::HandleLpmStatus( LpmServiceMessages::IpcLpmHealth
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductHardwareInterface::RequestNormalOperations( void )
+bool ProductHardwareInterface::RequestNormalOperations( )
 {
     if( m_connected == false || m_LpmClient == nullptr )
     {
@@ -412,7 +408,7 @@ void ProductHardwareInterface::RequestNormalOperationsPassed( const LpmServiceMe
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductHardwareInterface::RequestPowerStateOff( void )
+bool ProductHardwareInterface::RequestPowerStateOff( )
 {
     if( m_connected == false || m_LpmClient == nullptr )
     {
@@ -496,7 +492,7 @@ void ProductHardwareInterface::RequestPowerStateOffPassed( const IpcLpmStateResp
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductHardwareInterface::RequestPowerStateStandby( void )
+bool ProductHardwareInterface::RequestPowerStateStandby( )
 {
     if( m_connected == false || m_LpmClient == nullptr )
     {
@@ -580,7 +576,7 @@ void ProductHardwareInterface::RequestPowerStateStandbyPassed( const IpcLpmState
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductHardwareInterface::RequestPowerStateAutowake( void )
+bool ProductHardwareInterface::RequestPowerStateAutowake( )
 {
     if( m_connected == false || m_LpmClient == nullptr )
     {
@@ -664,7 +660,7 @@ void ProductHardwareInterface::RequestPowerStateAutowakePassed( const IpcLpmStat
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductHardwareInterface::RequestPowerStateFull( void )
+bool ProductHardwareInterface::RequestPowerStateFull( )
 {
     if( m_connected == false || m_LpmClient == nullptr )
     {
@@ -739,7 +735,6 @@ void ProductHardwareInterface::RequestPowerStateFullPassed( const IpcLpmStateRes
         BOSE_ERROR( s_logger, "The power state is now set to an unknown state." );
     }
 }
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name  ProductHardwareInterface::SendAccessoryPairing
@@ -775,18 +770,20 @@ bool ProductHardwareInterface::SendAccessoryPairing( bool enabled, const Callbac
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  ProductHardwareInterface::SendAccessoryActive
+/// @name   ProductHardwareInterface::SendAccessoryActive
 ///
-/// @brief This method sends a request to set rears and sub active or inactive
+/// @brief  This method sends a request to set the rear and sub speakers active or inactive.
 ///
-/// @param bool [rears] - whether to enable rears
-/// @param bool [subs] - whether to enable subs
-/// @param Callback<IpcSpeakersActive_t> [ cb ] - a callback to return speaker active settings
+/// @param  bool rears This argument determines whether to enable rear speakers.
 ///
-/// @return bool - whether the accessory active cmd was sent
+/// @param  bool subs  This argument determines whether to enable sub speakers.
+///
+/// @param  Callback<IpcSpeakersActive_t> callback
+///
+/// @return The method will return a Boolean whether the accessory active command was sent.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductHardwareInterface::SendAccessoryActive( bool rears, bool subs, const Callback<IpcSpeakersActive_t> &cb )
+bool ProductHardwareInterface::SendAccessoryActive( bool rears, bool subs, const Callback<IpcSpeakersActive_t>& callback )
 {
     if( m_connected == false || m_LpmClient == nullptr )
     {
@@ -797,13 +794,12 @@ bool ProductHardwareInterface::SendAccessoryActive( bool rears, bool subs, const
 
     BOSE_DEBUG( s_logger, "Accessory active sent rears: %d, subs: %d", rears, subs );
 
+    IpcSpeakersActive_t speakerActive;
 
-    IpcSpeakersActive_t spkrActive;
+    speakerActive.set_rearsenabled( rears );
+    speakerActive.set_subsenabled( subs );
 
-    spkrActive.set_rearsenabled( rears );
-    spkrActive.set_subsenabled( subs );
-
-    m_LpmClient->SetSpeakersActive( spkrActive, cb );
+    m_LpmClient->SetSpeakersActive( speakerActive, callback );
 
     return true;
 }
@@ -833,8 +829,6 @@ bool ProductHardwareInterface::SendAccessoryDisband( )
     // TODO
     return true;
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -1193,10 +1187,10 @@ bool ProductHardwareInterface::SendRebootRequest( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductHardwareInterface::SetBlueToothMacAddress( const std::string& bluetoothMacAddress )
 {
-    ///////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     /// The Bluetooth MAC Address needs to be reformatted to remove and colon characters. For
     /// example, a Bluetooth MAC Address 88:4A:EA:5A:37:AD of would be reformatted to 884AEA5A37AD.
-    /// ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////////////////////////
     char blueToothReformattedMacAddress[( 2 * BLUETOOTH_MAC_LENGTH ) + 1 ];
 
     blueToothReformattedMacAddress[  0 ] = bluetoothMacAddress[  0 ];
@@ -1356,7 +1350,7 @@ bool ProductHardwareInterface::CECSetPhysicalAddress( const uint32_t cecPhysical
 /// @brief ProductHardwareInterface::Stop
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductHardwareInterface::Stop( void )
+void ProductHardwareInterface::Stop( )
 {
     return;
 }

@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      10/24/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -26,7 +24,6 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "DPrint.h"
 #include "Utilities.h"
 #include "CustomProductControllerStateLowPower.h"
 #include "ProductControllerHsm.h"
@@ -56,6 +53,7 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateLowPower::CustomProductControllerStateLowPower
+
 ( ProductControllerHsm&       hsm,
   CHsmState*                  pSuperState,
   Hsm::STATE                  stateId,
@@ -88,7 +86,7 @@ void CustomProductControllerStateLowPower::HandleStateStart( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateLowPower is being started." );
 
-    GetCustomProductController().GetHardwareInterface( )->RequestPowerStateOff( );
+    GetCustomProductController( ).GetHardwareInterface( )->RequestPowerStateOff( );
 
     BOSE_VERBOSE( s_logger, "An attempt to set the device to a low power state is being made." );
 }
@@ -113,10 +111,32 @@ void CustomProductControllerStateLowPower::HandleStateExit( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateLowPower::HandlePowerState( )
 {
-    BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                  "CustomProductControllerStateLowPower",
-                  "CustomProductControllerStatePlayable" );
-    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE );
+    if( GetCustomProductController( ).IsNetworkConfigured( ) or
+        GetCustomProductController( ).IsAutoWakeEnabled( ) )
+    {
+        if( GetCustomProductController( ).IsNetworkConnected( ) and
+            GetCustomProductController( ).IsVoiceConfigured( ) )
+        {
+            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                          "CustomProductControllerStateLowPower",
+                          "CustomProductControllerStateIdleVoiceConfigured" );
+            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
+        }
+        else
+        {
+            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                          "CustomProductControllerStateLowPower",
+                          "CustomProductControllerStateIdleVoiceUnconfigured" );
+            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED );
+        }
+    }
+    else
+    {
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      "CustomProductControllerStateLowPower",
+                      "CustomProductControllerStateNetworkStandbyUnconfigured" );
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
+    }
 
     return true;
 }

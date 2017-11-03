@@ -6,8 +6,6 @@
 ///
 /// @author    Manoranjani Malisetti
 ///
-/// @date      10/19/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -97,8 +95,8 @@ public:
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration is used to start and run the hardware manager.
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool Run( void );
-    void Stop( void );
+    bool Run( );
+    void Stop( );
 
 private:
 

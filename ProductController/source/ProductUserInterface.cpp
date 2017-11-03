@@ -3,11 +3,9 @@
 /// @file      ProductUserInterface.h
 ///
 /// @brief     This header file declares a ProductUserInterface class that is used to receive user
-///             input.
+///            input.
 ///
 /// @author    Stuart J. Lumby
-///
-/// @date      09/22/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -40,6 +38,11 @@
 #include "ProductMessage.pb.h"
 #include "KeyActions.pb.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+///            Included Namespaces
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 using namespace KeyActionPb;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -159,7 +162,7 @@ void ProductUserInterface::Run( )
 /// @brief ProductUserInterface::RegisterForKeyEvents
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductUserInterface::RegisterForKeyEvents( void )
+void ProductUserInterface::RegisterForKeyEvents( )
 {
     BOSE_DEBUG( s_logger, "The user interface is attempting to register for key events." );
 
@@ -291,7 +294,7 @@ void ProductUserInterface::KeyInformationCallBack( const int keyAction )
     else
     {
         ProductMessage productMessage;
-        productMessage.mutable_keydata( )->set_action( ( KEY_ACTION )keyAction );
+        productMessage.mutable_keydata( )->set_action( static_cast< KEY_ACTION >( keyAction ) );
 
         IL::BreakThread( std::bind( m_ProductNotify,
                                     productMessage ),
@@ -318,7 +321,6 @@ std::string ProductUserInterface::GetKeyString( const KEY_ACTION keyAction )
     }
 
     return keyString;
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

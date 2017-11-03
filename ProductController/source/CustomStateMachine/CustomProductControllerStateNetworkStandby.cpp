@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      10/24/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -26,7 +24,6 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "DPrint.h"
 #include "Utilities.h"
 #include "ProductControllerHsm.h"
 #include "ProductHardwareInterface.h"
@@ -78,7 +75,7 @@ void CustomProductControllerStateNetworkStandby::HandleStateEnter()
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandby is being entered." );
 
-    GetCustomProductController().GetHardwareInterface( )->RequestPowerStateStandby( );
+    GetCustomProductController( ).GetHardwareInterface( )->RequestPowerStateStandby( );
 
     BOSE_VERBOSE( s_logger, "An attempt to set a standby power state is being made." );
 }
@@ -91,23 +88,6 @@ void CustomProductControllerStateNetworkStandby::HandleStateEnter()
 void CustomProductControllerStateNetworkStandby::HandleStateStart()
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandby is being started." );
-
-    auto const& networkConfigured = GetCustomProductController().IsNetworkConfigured( );
-
-    if( networkConfigured )
-    {
-        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                      "CustomProductControllerStateNetworkStandby",
-                      "CustomProductControllerStateNetworkStandbyUnconfigured" );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED );
-    }
-    else
-    {
-        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                      "CustomProductControllerStateNetworkStandby",
-                      "CustomProductControllerStateNetworkStandbyConfigured" );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -132,14 +112,27 @@ void CustomProductControllerStateNetworkStandby::HandleStateExit()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateNetworkStandby::HandleAutowakeStatus( bool active )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandby is handling the autowake status." );
+    BOSE_VERBOSE( s_logger, "%s is handling the autowake %s status.",
+                  "CustomProductControllerStateNetworkStandby",
+                  active ? "activation" : "deactivation" );
 
     if( active )
     {
-        BOSE_VERBOSE( s_logger, "%s is changing %s.",
-                      "CustomProductControllerStateNetworkStandby",
-                      "CustomProductControllerStateIdle" );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
+        if( GetCustomProductController( ).IsNetworkConnected( ) and
+            GetCustomProductController( ).IsVoiceConfigured( ) )
+        {
+            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                          "CustomProductControllerStateNetworkStandby",
+                          "CustomProductControllerStateIdleVoiceConfigured" );
+            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
+        }
+        else
+        {
+            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                          "CustomProductControllerStateNetworkStandby",
+                          "CustomProductControllerStateIdleVoiceUnconfigured" );
+            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED );
+        }
     }
 
     return true;

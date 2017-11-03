@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -99,8 +97,8 @@ public:
     ///         instance.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void Run( void );
-    void Stop( void );
+    void Run( );
+    void Stop( );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -149,7 +147,7 @@ private:
     ///        hardware interface and the key handler.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void RegisterForKeyEvents( void );
+    void RegisterForKeyEvents( );
     void HandleKeyEvent( LpmServiceMessages::IpcKeyInformation_t keyEvent );
 
     //////////////////////////////////////////////////////////////////////////////////////////////

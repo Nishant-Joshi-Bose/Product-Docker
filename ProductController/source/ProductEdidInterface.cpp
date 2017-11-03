@@ -6,8 +6,6 @@
 ///
 /// @author    Manoranjani Malisetti
 ///
-/// @date      10/19/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -26,7 +24,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "SystemUtils.h"
-#include "DPrint.h"
+#include "Utilities.h"
 #include "Services.h"
 #include "ProductEdidInterface.h"
 #include "ProductController.h"
@@ -36,9 +34,6 @@
 #include "A4V_VideoManagerMessageIDs.pb.h"
 #include "A4V_VideoManager.pb.h"
 #include "IPCMessageRouterFactory.h"
-
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             Start of Product Namespace                                       ///
@@ -57,15 +52,6 @@ typedef APServerSocketListenerIF::ListenerPtr   ServerPointer;
 typedef APClientSocketListenerIF::SocketPtr     ClientSocket;
 typedef APServerSocketListenerIF::SocketPtr     ServerSocket;
 typedef IPCMessageRouterIF::IPCMessageRouterPtr RouterPointer;
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following declares a DPrint class type object for logging information in this source code
-/// file.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static const DPrint s_logger { "Product" };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -261,8 +247,6 @@ void ProductEdidInterface::HandlePhyAddrResponse( const A4VVideoManagerServiceMe
 
         return;
     }
-
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -270,7 +254,7 @@ void ProductEdidInterface::HandlePhyAddrResponse( const A4VVideoManagerServiceMe
 /// @brief ProductEdidInterface::Stop
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductEdidInterface::Stop( void )
+void ProductEdidInterface::Stop( )
 {
     return;
 }

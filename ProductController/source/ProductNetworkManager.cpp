@@ -6,8 +6,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -26,7 +24,6 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "SystemUtils.h"
-#include "DPrint.h"
 #include "Utilities.h"
 #include "Services.h"
 #include "BreakThread.h"
@@ -41,15 +38,14 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// The following constants define FrontDoor endpoints used by the NetworkManager
+/// The following constants define FrontDoor endpoints used by the NetworkManager methods.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr char FRONTDOOR_NETWORK_STATUS[]                       = "/network/status";
-constexpr char FRONTDOOR_NETWORK_WIFI_PROFILE[]                 = "/network/wifi/profile";
-constexpr char FRONTDOOR_NETWORK_WIFI_STATUS[]                  = "/network/wifi/status";
+constexpr char FRONTDOOR_NETWORK_STATUS[]       = "/network/status";
+constexpr char FRONTDOOR_NETWORK_WIFI_PROFILE[] = "/network/wifi/profile";
+constexpr char FRONTDOOR_NETWORK_WIFI_STATUS[]  = "/network/wifi/status";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -200,12 +196,8 @@ void ProductNetworkManager::HandleEntireNetworkStatus( const NetManager::Protobu
     }
     else
     {
-        ProductMessage productMessage;
-        auto networkData = productMessage.mutable_networkstatus( );
-
-        networkData->set_configured( false );
-        networkData->set_connected( false );
-        networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Unknown );
+        bool connectedNetworkExists = false;
+        bool configuredNetworkExists = false;
 
         BOSE_DEBUG( s_logger, "-------------- Product Network Manager Status --------------" );
 
@@ -276,65 +268,80 @@ void ProductNetworkManager::HandleEntireNetworkStatus( const NetManager::Protobu
                 networkTypeString.assign( NetworkType_Name( networkStatus.interfaces( index ).type( ) ) );
             }
 
-            if( networkStatus.interfaces( index ).has_state( ) &&
+            if( networkStatus.interfaces( index ).has_state( ) and
                 networkStatus.interfaces( index ).has_type( ) )
             {
-                if( networkStatus.interfaces( index ).type( ) == NetManager::Protobuf::NetworkType::WIRED_ETH )
-                {
-                    if( networkStatus.interfaces( index ).state( ) ==
-                        NetManager::Protobuf::NetworkInterface_State::NetworkInterface_State_UP )
-                    {
-                        if( networkStatus.interfaces( index ).has_ipinfo( ) and
-                            networkStatus.interfaces( index ).ipinfo( ).has_ipaddress( ) )
-                        {
-                            networkData->set_configured( true );
-                            networkData->set_connected( true );
-                            networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Wired );
-                        }
-                        else
-                        {
-                            networkData->set_configured( true );
-                            networkData->set_connected( false );
-                            networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Wired );
-                        }
-                    }
-                }
+                auto const& networkType = networkStatus.interfaces( index ).type( );
+                auto const& networkState = networkStatus.interfaces( index ).state( );
 
-                ////////////////////////////////////////////////////////////////////////////////////
                 ///
-                /// @todo The wireless AP type means that the system WiFi interface is in an AP mode
-                ///        serving as an access point for setup. This needs to be discussed as the
-                ///        interface should not be considered to be configured for these network
-                ///        types.
+                /// A network is configured if it is in an up state. It is also considered to be
+                /// configured and connected if it has an IP address. Note that only the existence
+                /// of a configured or connected network is of concern, so that if another
+                /// unconfigured or unconnected network is found do not send the additional status.
+                /// This may otherwise set the product controller to a network unconnected or
+                /// unconfigured status. Only when there are no configured or connected network
+                /// interfaces is a unconfigured unconnected status sent to the product controller.
                 ///
-                ////////////////////////////////////////////////////////////////////////////////////
-                else if( networkStatus.interfaces( index ).type( ) ==
-                         NetManager::Protobuf::NetworkType::WIRELESS  ||
-                         networkStatus.interfaces( index ).type( ) ==
-                         NetManager::Protobuf::NetworkType::WIRELESS_AP )
+                if( networkState == NetManager::Protobuf::NetworkInterface_State::NetworkInterface_State_UP )
                 {
                     if( networkStatus.interfaces( index ).has_ipinfo( ) and
-                        networkStatus.interfaces( index ).state( ) ==
-                        NetManager::Protobuf::NetworkInterface_State::NetworkInterface_State_UP )
+                        networkStatus.interfaces( index ).ipinfo( ).has_ipaddress( ) )
                     {
-                        if( networkStatus.interfaces( index ).ipinfo( ).has_ipaddress( ) )
+                        if( not connectedNetworkExists )
                         {
+                            ProductMessage productMessage;
+                            auto networkData = productMessage.mutable_networkstatus( );
+
                             networkData->set_configured( true );
                             networkData->set_connected( true );
-                            networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Wireless );
-                        }
-                        else
-                        {
-                            networkData->set_configured( true );
-                            networkData->set_connected( false );
-                            networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Wireless );
+
+                            if( networkType == NetManager::Protobuf::NetworkType::WIRELESS )
+                            {
+                                networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Wireless );
+                            }
+                            else if( networkType ==  NetManager::Protobuf::NetworkType::WIRED_ETH )
+                            {
+                                networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Wired );
+                            }
+                            else
+                            {
+                                networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Unknown );
+                            }
+
+                            SendMessage( productMessage );
+
+                            connectedNetworkExists = true;
+                            configuredNetworkExists = true;
                         }
                     }
                     else
                     {
-                        networkData->set_configured( true );
-                        networkData->set_connected( false );
-                        networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Wireless );
+                        if( not configuredNetworkExists )
+                        {
+                            ProductMessage productMessage;
+                            auto networkData = productMessage.mutable_networkstatus( );
+
+                            networkData->set_configured( true );
+                            networkData->set_connected( false );
+
+                            if( networkType == NetManager::Protobuf::NetworkType::WIRELESS )
+                            {
+                                networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Wireless );
+                            }
+                            else if( networkType ==  NetManager::Protobuf::NetworkType::WIRED_ETH )
+                            {
+                                networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Wired );
+                            }
+                            else
+                            {
+                                networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Unknown );
+                            }
+
+                            SendMessage( productMessage );
+
+                            configuredNetworkExists = true;
+                        }
                     }
                 }
             }
@@ -381,7 +388,21 @@ void ProductNetworkManager::HandleEntireNetworkStatus( const NetManager::Protobu
             BOSE_VERBOSE( s_logger, " " );
         }
 
-        SendMessage( productMessage );
+        ///
+        /// Since no configured or connected network interfaces are available, send an unconfigured
+        /// unconnected network status to the product controller.
+        ///
+        if( not connectedNetworkExists and not configuredNetworkExists )
+        {
+            ProductMessage productMessage;
+            auto networkData = productMessage.mutable_networkstatus( );
+
+            networkData->set_configured( false );
+            networkData->set_connected( false );
+            networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Unknown );
+
+            SendMessage( productMessage );
+        }
     }
 }
 
@@ -537,7 +558,7 @@ void ProductNetworkManager::SendMessage( ProductMessage& message )
 /// @name ProductNetworkManager::Stop
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductNetworkManager::Stop( void )
+void ProductNetworkManager::Stop( )
 {
     return;
 }

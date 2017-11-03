@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -98,8 +96,8 @@ public:
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration is used to start and run the hardware manager.
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool Run( void );
-    void Stop( void );
+    bool Run( );
+    void Stop( );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These methods handle LPM status requests.
@@ -107,23 +105,27 @@ public:
     bool RequestLpmStatus( Callback< LpmServiceMessages::IpcLpmHealthStatusPayload_t > callback );
     void HandleLpmStatus( LpmServiceMessages::IpcLpmHealthStatusPayload_t              status );
 
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    /// This method is used to set a callback to receive key events from the LPM hardware.
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    bool RegisterForKeyEvents( Callback< LpmServiceMessages::IpcKeyInformation_t > callback );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These declarations are calls used to set the power state of the hardware.
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool RequestNormalOperations( void );
+    bool RequestNormalOperations( );
     void RequestNormalOperationsFailed( uint32_t operationCode );
     void RequestNormalOperationsPassed( const LpmServiceMessages::IpcLpmStateResponse_t stateResponse );
-    bool RequestPowerStateOff( void );
+    bool RequestPowerStateOff( );
     void RequestPowerStateOffFailed( uint32_t operationCode );
     void RequestPowerStateOffPassed( const LpmServiceMessages::IpcLpmStateResponse_t stateResponse );
-    bool RequestPowerStateStandby( void );
+    bool RequestPowerStateStandby( );
     void RequestPowerStateStandbyFailed( uint32_t operationCode );
     void RequestPowerStateStandbyPassed( const LpmServiceMessages::IpcLpmStateResponse_t stateResponse );
-    bool RequestPowerStateAutowake( void );
+    bool RequestPowerStateAutowake( );
     void RequestPowerStateAutowakeFailed( uint32_t operationCode );
     void RequestPowerStateAutowakePassed( const LpmServiceMessages::IpcLpmStateResponse_t stateResponse );
-    bool RequestPowerStateFull( void );
+    bool RequestPowerStateFull( );
     void RequestPowerStateFullFailed( uint32_t operationCode );
     void RequestPowerStateFullPassed( const LpmServiceMessages::IpcLpmStateResponse_t stateResponse );
 
@@ -140,14 +142,13 @@ public:
     bool SendSpeakerList( IpcAccessoryList_t&        accessoryList );
     bool SendSetSystemTimeoutEnableBits( Ipc_TimeoutControl_t& timeoutControl );
     bool SendWiFiRadioStatus( uint32_t frequencyInKhz );
-    bool SendRebootRequest( void );
+    bool SendRebootRequest( );
     void SetBlueToothMacAddress( const std::string&       bluetoothMacAddress );
     void SetBlueToothDeviceName( const std::string&       bluetoothDeviceName );
     bool SendBlueToothDeviceData( const std::string&       bluetoothDeviceName,
                                   const unsigned long long bluetoothMacAddress );
     bool SendSourceSelection( const LPM_IPC_SOURCE_ID      sourceSelect );
     bool CECSetPhysicalAddress( const uint32_t cecPhyAddr );
-
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These are messages pertaining to the accessory speakers
@@ -171,13 +172,14 @@ public:
     ///         LPM hardware client that will be recieved from LpmClient.
     ///
     /// @param  IpcOpcodes_t [ opcode ] The event you care about
+    ///
     /// @param  CallbackForKeyEvents [ inputs ] This arguments specifies the callback method or function
     ///                                         to which key enents are to be sent by the LPM.
     ///
     /// @return bool - This method returns whether the register was successful
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    template<typename T>
+    template< typename T >
     bool RegisterForLpmEvents( IpcOpcodes_t opcode, const Callback<T> &callback )
     {
         if( m_connected == false || m_LpmClient == nullptr )

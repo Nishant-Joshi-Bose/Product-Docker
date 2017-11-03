@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -80,9 +78,7 @@ public:
     bool HandleLpmState( bool active )       override;
     bool HandleCapsState( bool active )      override;
     bool HandleAudioPathState( bool active ) override;
-    bool HandleSTSSourcesInit( void )        override;
-
-private:
+    bool HandleSTSSourcesInit( )             override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      10/24/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -26,7 +24,6 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "DPrint.h"
 #include "Utilities.h"
 #include "ProductControllerHsm.h"
 #include "ProductHardwareInterface.h"
@@ -125,12 +122,10 @@ void CustomProductControllerStateNetworkStandbyUnconfigured::HandleStateExit()
 /// @brief CustomProductControllerStateNetworkStandbyUnconfigured::HandleTimeOut
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateNetworkStandbyUnconfigured::HandleTimeOut( void )
+void CustomProductControllerStateNetworkStandbyUnconfigured::HandleTimeOut( )
 {
     BOSE_VERBOSE( s_logger, "A time out in the network standby unconfigured state has occurred." );
     BOSE_VERBOSE( s_logger, "An attempt to set the device to a low power state will be made." );
-
-    m_timer->Stop( );
 
     ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_LOW_POWER );
 }
@@ -147,36 +142,16 @@ void CustomProductControllerStateNetworkStandbyUnconfigured::HandleTimeOut( void
 ///         state change and no futher processing will be required by any of its superstates.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateNetworkStandbyUnconfigured::HandleNetworkState( bool configured,
-        bool connected )
+bool CustomProductControllerStateNetworkStandbyUnconfigured::HandleNetworkState( bool configured, bool connected )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyUnconfigured is handling a network state change." );
+    BOSE_VERBOSE( s_logger, "%s is handling a %s %s network state event.",
+                  "CustomProductControllerStateNetworkStandbyUnconfigured",
+                  configured ? "configured" : "unconfigured,",
+                  connected ? "connected" : "unconnected" );
 
-    if( configured and not connected )
-    {
-        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                      "CustomProductControllerStateNetworkStandbyUnconfigured",
-                      "CustomProductControllerStateNetworkStandbyConfigured" );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED );
-    }
-    else
-    {
-        auto const& networkConnected = connected;
-        auto const& voiceConfigured = GetCustomProductController().IsVoiceConfigured( );
-
-        if( networkConnected and voiceConfigured )
-        {
-            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                          "CustomProductControllerStateNetworkStandbyUnconfigured",
-                          "CustomProductControllerStateIdle" );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
-        }
-        else
-        {
-            BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyUnconfigured is not changing." );
-        }
-    }
-
+    HandlePotentialStateChange( configured,
+                                connected,
+                                GetCustomProductController().IsVoiceConfigured( ) );
     return true;
 }
 
@@ -192,24 +167,45 @@ bool CustomProductControllerStateNetworkStandbyUnconfigured::HandleNetworkState(
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateNetworkStandbyUnconfigured::HandleVoiceState( bool configured )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyUnconfigured is handling a voice state change." );
+    BOSE_VERBOSE( s_logger, "%s is handling a %s voice state event.",
+                  "CustomProductControllerStateNetworkStandbyUnconfigured",
+                  configured ? "configured" : "unconfigured" );
 
-    auto const& voiceConfigured = configured;
-    auto const& networkConnected = GetCustomProductController().IsNetworkConfigured( );
+    HandlePotentialStateChange( GetCustomProductController( ).IsNetworkConfigured( ),
+                                GetCustomProductController( ).IsNetworkConnected( ),
+                                configured );
+    return true;
+}
 
-    if( voiceConfigured and networkConnected )
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStateNetworkStandbyUnconfigured::HandlePotentialStateChange
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStateNetworkStandbyUnconfigured::HandlePotentialStateChange
+( bool networkConfigured,
+  bool networkConnected,
+  bool voiceConfigured )
+{
+    if( networkConnected and voiceConfigured )
     {
         BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                       "CustomProductControllerStateNetworkStandbyUnconfigured",
-                      "CustomProductControllerStateIdle" );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
+                      "CustomProductControllerStateIdleVoiceConfigured" );
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
+    }
+    else if( networkConfigured )
+    {
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      "CustomProductControllerStateNetworkStandbyUnconfigured",
+                      "CustomProductControllerStateNetworkStandbyUnconfigured" );
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED );
     }
     else
     {
-        BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyUnconfigured is not changing state." );
+        BOSE_VERBOSE( s_logger, "%s is not changing.",
+                      "CustomProductControllerStateNetworkStandbyUnconfigured" );
     }
-
-    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

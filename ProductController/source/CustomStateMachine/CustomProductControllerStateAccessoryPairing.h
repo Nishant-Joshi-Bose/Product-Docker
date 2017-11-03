@@ -7,8 +7,6 @@
 ///
 /// @author    Derek Richardson
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -81,9 +79,6 @@ public:
 
 private:
 
-    ProfessorProductController& m_productController;
-    APTimerPtr m_timer;
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief This method will be invoked by an expired timer, which is defined above and armed on
@@ -91,6 +86,8 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleTimeOut( void );
+
+    APTimerPtr m_timer;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

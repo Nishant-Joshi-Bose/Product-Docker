@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -63,10 +61,10 @@ class CustomProductControllerStateBooting : public ProductControllerStateBooting
 {
 public:
 
-    CustomProductControllerStateBooting( ProductControllerHsm&       hsm,
-                                         CHsmState*                  pSuperState,
-                                         Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING,
-                                         const std::string&          name    = "CustomProductControllerStateBooting" );
+    CustomProductControllerStateBooting( ProductControllerHsm& hsm,
+                                         CHsmState*            pSuperState,
+                                         Hsm::STATE            stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING,
+                                         const std::string&    name    = "CustomProductControllerStateBooting" );
 
     ~CustomProductControllerStateBooting( ) override
     {
@@ -80,11 +78,11 @@ public:
     bool HandleLpmState( bool active )       override;
     bool HandleCapsState( bool active )      override;
     bool HandleAudioPathState( bool active ) override;
-    bool HandleSTSSourcesInit( void )        override;
+    bool HandleSTSSourcesInit( )             override;
 
 private:
 
-    void HandlePotentialStateChange( void );
+    void HandlePotentialStateChange( );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -112,8 +110,8 @@ public:
     ///         instance, respectively.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void Run( void );
-    void Stop( void );
+    void Run( );
+    void Stop( );
 
 private:
 
@@ -161,7 +159,7 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     NotifyTargetTaskIF* m_ProductTask;
 
-    std::vector< CommandPointer > CommandsList( void );
+    std::vector< CommandPointer > CommandsList( );
 
     int  HandleCommand( const std::string&              command,
                         const std::list< std::string >& arguments,

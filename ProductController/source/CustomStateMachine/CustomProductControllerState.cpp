@@ -8,8 +8,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -38,6 +36,13 @@
 namespace ProductApp
 {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  This static pointer references the custom product controller instance and is returned
+///         through the GetCustomProductController method to access required product controller
+///         functionality by the state machine classes, which inherit this class.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductController* CustomProductControllerState::s_productController = nullptr;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,7 +83,7 @@ bool CustomProductControllerState::HandleAudioPathState( bool active )
     return false;
 }
 
-bool CustomProductControllerState::HandleSTSSourcesInit( void )
+bool CustomProductControllerState::HandleSTSSourcesInit( )
 {
     return false;
 }
@@ -98,7 +103,7 @@ bool CustomProductControllerState::HandlePlaybackRequest( ProductPlaybackRequest
     return false;
 }
 
-bool CustomProductControllerState::HandlePowerState( void )
+bool CustomProductControllerState::HandlePowerState( )
 {
     return false;
 }
@@ -113,15 +118,14 @@ bool CustomProductControllerState::HandleKeyAction( int action )
     return false;
 }
 
-
 bool CustomProductControllerState::HandlePairingState( ProductAccessoryPairing pairingStatus )
 {
     return false;
 }
 
-ProfessorProductController& CustomProductControllerState::GetCustomProductController()
+ProfessorProductController& CustomProductControllerState::GetCustomProductController( )
 {
-    return *static_cast<ProfessorProductController*>( s_productController );
+    return *static_cast< ProfessorProductController* >( s_productController );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

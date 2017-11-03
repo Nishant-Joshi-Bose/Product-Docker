@@ -8,8 +8,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -84,6 +82,13 @@ public:
     bool HandleVoiceState( bool configured )                   override;
 
 private:
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief This method handles potential state changes for both network and voice status events.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    void HandlePotentialStateChange( bool networkConfigured, bool networkConnected, bool voiceConfigured );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

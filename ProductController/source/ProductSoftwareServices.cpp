@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      07/15/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -26,7 +24,6 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "DPrint.h"
 #include "Utilities.h"
 #include "unistd.h"
 #include "NotifyTargetTaskIF.h"
@@ -252,7 +249,7 @@ void ProductSoftwareServices::SendRebootRequest( unsigned int delay )
 /// @name ProductSoftwareServices::Stop
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSoftwareServices::Stop( void )
+void ProductSoftwareServices::Stop( )
 {
     return;
 }
