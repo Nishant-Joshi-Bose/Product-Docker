@@ -930,7 +930,6 @@ void ProfessorProductController::End( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::SelectSource( PlaybackSource_t source )
 {
-    BOSE_INFO( s_logger, "Source %d selected\n", source );
     BOSE_DEBUG( s_logger, __func__ );
     BOSE_INFO( s_logger, "Source %d selected", source );
 
