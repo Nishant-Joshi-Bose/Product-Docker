@@ -53,6 +53,7 @@
 #include "ProductSTSController.h"
 #include "Utilities.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
+#include "ProductMessage.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
