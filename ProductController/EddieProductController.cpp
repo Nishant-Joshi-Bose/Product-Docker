@@ -891,7 +891,7 @@ void EddieProductController::HandleBtLeModuleReady( bool btLeModuleReady )
 
 void EddieProductController::HandleBluetoothSinkListResponse( const BluetoothSinkService::ListResponse &list )
 {
-    m_BluetoothProfilesCount = list.devices_size();;
+    m_BluetoothProfilesCount = list.devices_size();
     BOSE_INFO( s_logger, "%s m_BluetoothProfilesCount[%d]", __func__, m_BluetoothProfilesCount );
     GetEddieHsm().Handle<>( &CustomProductControllerState::HandleNetworkConfigurationStatus );
 }
