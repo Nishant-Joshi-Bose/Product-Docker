@@ -164,6 +164,10 @@ void EddieProductController::RegisterEndPoints()
                                                                              this, std::placeholders::_1 ), GetTask() );
     m_FrontDoorClientIF->RegisterNotification<NetManager::Protobuf::WiFiProfiles>( FRONTDOOR_NETWORK_WIFI_PROFILE_API, networkWifiProfilesCb );
 
+    AsyncCallback<BluetoothSinkService::ListResponse> bluetoothSinkListCb( std::bind( &EddieProductController::HandleBluetoothSinkListResponse ,
+                                                                           this, std::placeholders::_1 ), GetTask() );
+    m_FrontDoorClientIF->RegisterNotification<BluetoothSinkService::ListResponse>( FRONTDOOR_BLUETOOTH_SINK_LIST_API, bluetoothSinkListCb );
+
     AsyncCallback<SoundTouchInterface::NowPlayingJson> nowPlayingCb( std::bind( &EddieProductController::HandleCapsNowPlaying ,
                                                                                 this, std::placeholders::_1 ), GetTask() );
 
