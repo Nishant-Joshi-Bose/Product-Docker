@@ -46,6 +46,7 @@ TARGET_LINK_LIBRARIES(Eddie
   NetworkServiceClient
   KeyHandler
   BLESetupServiceProto
+  BluetoothSinkServiceProto
   LightBarController
   CliClient
   ShelbyUtils

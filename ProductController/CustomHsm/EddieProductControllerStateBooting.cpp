@@ -80,10 +80,7 @@ void EddieProductControllerStateBooting::GoToNextState()
     {
         if( IsProductNeedsSetup() )
         {
-            if( GetCustomProductController().IsBtLeModuleReady() )
-            {
-                ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP );
-            }
+            ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP );
         }
         else
         {

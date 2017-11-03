@@ -65,7 +65,12 @@ public:
         return false;
     }
 
-    virtual bool HandleNetworkConfigurationStatus( const NetManager::Protobuf::NetworkStatus & networkStatus, int profileSize )
+    virtual bool HandleNetworkConfigurationStatus( )
+    {
+        return false;
+    }
+
+    virtual bool HandleBluetoothLeDiscovery( )
     {
         return false;
     }

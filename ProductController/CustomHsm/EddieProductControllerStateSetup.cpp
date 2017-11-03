@@ -57,11 +57,18 @@ bool EddieProductControllerStateSetup::HandleIntents( KeyHandlerUtil::ActionType
     return false;
 }
 
-bool EddieProductControllerStateSetup::HandleNetworkConfigurationStatus( const NetManager::Protobuf::NetworkStatus& networkStatus, int profileSize )
+bool EddieProductControllerStateSetup::HandleNetworkConfigurationStatus( )
 {
-    BOSE_INFO( s_logger, "%s, profileSize =%d", __func__, profileSize );
-    if( profileSize || GetProductController().GetNetworkServiceUtil().IsNetworkConfigured( networkStatus ) )
+    BOSE_INFO( s_logger, __func__ );
+    if( GetCustomProductController().IsNetworkConfigured() )
         ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
+
+    return true;
+}
+
+bool EddieProductControllerStateSetup::HandleBluetoothLeDiscovery()
+{
+    GetProductController().GetProductFrontDoorUtility().EnableBTBLEAdvertising();
 
     return true;
 }

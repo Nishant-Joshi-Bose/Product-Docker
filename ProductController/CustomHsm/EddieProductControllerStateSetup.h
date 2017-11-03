@@ -31,6 +31,7 @@ public:
     void HandleStateStart() override;
     void HandleStateExit() override;
     bool HandleIntents( KeyHandlerUtil::ActionType_t intent ) override;
-    bool HandleNetworkConfigurationStatus( const NetManager::Protobuf::NetworkStatus& networkStatus, int profileSize ) override;
+    bool HandleNetworkConfigurationStatus( ) override;
+    bool HandleBluetoothLeDiscovery( ) override;
 };
 } // namespace ProductApp
