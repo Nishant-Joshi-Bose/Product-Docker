@@ -306,6 +306,11 @@ public:
         return m_nowPlaying;
     }
 
+    const BluetoothSinkService::ListResponse& GetBluetoothList() const
+    {
+        return m_bluetoothList;
+    }
+
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief Interfaces to the ProductSTSController, which implements the interactions
@@ -339,6 +344,7 @@ private:
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
     ProductPb::Language                         m_systemLanguage;
     SoundTouchInterface::NowPlayingJson         m_nowPlaying;
+    BluetoothSinkService::ListResponse          m_bluetoothList;
     NetManager::Protobuf::NetworkStatus         m_cachedStatus;
 
     ProductCliClient                            m_productCliClient;
