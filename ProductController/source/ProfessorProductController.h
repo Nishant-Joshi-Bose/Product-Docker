@@ -43,7 +43,6 @@
 #include "APClientSocketListenerIF.h"
 #include "APServerSocketListenerIF.h"
 #include "IPCMessageRouterIF.h"
-#include "ProductMessage.pb.h"
 #include "ProductNetworkManager.h"
 #include "ProductSystemManager.h"
 #include "ProductVolumeManager.h"
@@ -53,6 +52,8 @@
 #include "ProductControllerHsm.h"
 #include "ProductSTSController.h"
 #include "Utilities.h"
+#include "SoundTouchInterface/PlayerService.pb.h"
+#include "ProductMessage.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -250,6 +251,8 @@ private:
     void SetupProductSTSConntroller( void );
     void HandleSTSInitWasComplete( void );
     void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
+    void PostPlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson& resp );
+    void PostPlaybackRequestError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
