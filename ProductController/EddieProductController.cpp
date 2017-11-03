@@ -371,8 +371,15 @@ bool EddieProductController::IsAllModuleReady()
              m_isLPMReady and
              m_isNetworkModuleReady and
              m_isSTSReady and
-             m_isBLEModuleReady );
+             m_isBluetoothReady );
 }
+
+bool EddieProductController::IsBtLeModuleReady() const
+{
+    BOSE_INFO( s_logger, "%s:|m_isBLEModuleReady[%d", __func__, m_isBLEModuleReady );
+    return m_isBLEModuleReady;
+}
+
 
 bool EddieProductController::IsCAPSReady() const
 {
