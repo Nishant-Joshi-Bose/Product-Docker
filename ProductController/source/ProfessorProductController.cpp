@@ -835,7 +835,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::PostlaybackRequestResponse
+/// @name   ProfessorProductController::PostPlaybackRequestResponse
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::PostPlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson& resp )
