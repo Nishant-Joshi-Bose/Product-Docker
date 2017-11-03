@@ -890,7 +890,7 @@ void EddieProductController::HandleBtLeModuleReady( bool btLeModuleReady )
     BOSE_INFO( s_logger, __func__ );
     m_isBLEModuleReady = btLeModuleReady;
     if( m_isBLEModuleReady )
-        GetEddieHsm().Handle<>( &CustomProductControllerState::HandleBluetoothLeDiscovery );
+        GetEddieHsm().Handle<>( &CustomProductControllerState::HandleBtLeModuleReady );
 }
 
 void EddieProductController::HandleBluetoothSinkListResponse( const BluetoothSinkService::ListResponse &list )

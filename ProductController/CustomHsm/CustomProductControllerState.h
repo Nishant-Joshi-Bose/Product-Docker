@@ -70,7 +70,7 @@ public:
         return false;
     }
 
-    virtual bool HandleBluetoothLeDiscovery( )
+    virtual bool HandleBtLeModuleReady( )
     {
         return false;
     }

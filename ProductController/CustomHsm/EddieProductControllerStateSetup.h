@@ -32,6 +32,6 @@ public:
     void HandleStateExit() override;
     bool HandleIntents( KeyHandlerUtil::ActionType_t intent ) override;
     bool HandleNetworkConfigurationStatus( ) override;
-    bool HandleBluetoothLeDiscovery( ) override;
+    bool HandleBtLeModuleReady( ) override;
 };
 } // namespace ProductApp

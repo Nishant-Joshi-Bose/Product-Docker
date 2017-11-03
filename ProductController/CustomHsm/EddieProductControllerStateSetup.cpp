@@ -66,7 +66,7 @@ bool EddieProductControllerStateSetup::HandleNetworkConfigurationStatus( )
     return true;
 }
 
-bool EddieProductControllerStateSetup::HandleBluetoothLeDiscovery()
+bool EddieProductControllerStateSetup::HandleBtLeModuleReady()
 {
     GetProductController().GetProductFrontDoorUtility().EnableBTBLEAdvertising();
 
