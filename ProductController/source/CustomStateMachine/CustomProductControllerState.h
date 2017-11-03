@@ -37,7 +37,7 @@
 #include "Hsm.h"
 #include "HsmState.h"
 #include "ProductMessage.pb.h"
-#include "ProductController.h"
+#include "SoundTouchInterface/ContentSelectionService.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -52,6 +52,7 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductControllerHsm;
 class ProfessorProductController;
+class ProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -107,6 +108,7 @@ public:
     virtual bool HandleAutowakeStatus( bool active );
     virtual bool HandleKeyAction( int action );
     virtual bool HandlePairingState( ProductAccessoryPairing pairingStatus );
+    virtual bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo );
 
 
     static  void SetProductController( ProductController* productController )

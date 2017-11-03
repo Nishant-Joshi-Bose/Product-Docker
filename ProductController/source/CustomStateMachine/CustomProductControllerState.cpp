@@ -119,6 +119,11 @@ bool CustomProductControllerState::HandlePairingState( ProductAccessoryPairing p
     return false;
 }
 
+bool CustomProductControllerState::HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
+{
+    return false;
+}
+
 ProfessorProductController& CustomProductControllerState::GetCustomProductController()
 {
     return *static_cast<ProfessorProductController*>( s_productController );

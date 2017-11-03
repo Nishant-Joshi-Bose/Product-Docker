@@ -201,6 +201,24 @@ bool CustomProductControllerStatePlayable::HandleKeyAction( int action )
 }
 
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStatePlayable::HandleNowSelectionInfo
+///
+/// @return This method returns a true Boolean value indicating that nowSelectionInfo
+///         FrontDoor message is handled, and will change state to Audio ON
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool CustomProductControllerStatePlayable::HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
+{
+    BOSE_INFO( s_logger,  __func__ );
+    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING );
+    return true;
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
