@@ -16,6 +16,7 @@
 #include "KeyHandler.h"
 #include "NetManager.pb.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
+#include "InactivityTimers.h"
 
 namespace ProductApp
 {
@@ -76,6 +77,11 @@ public:
     }
 
     virtual bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
+    {
+        return false;
+    }
+
+    virtual bool HandleInactivityTimer( InactivityTimerType timerType )
     {
         return false;
     }
