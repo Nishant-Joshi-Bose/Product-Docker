@@ -365,8 +365,8 @@ void EddieProductController::HandleLPMReady()
 
 bool EddieProductController::IsAllModuleReady()
 {
-    BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|NetworkModuleReady=%d|BLEModuleReady=%d|STSReady=%d", __func__,
-               m_isCapsReady , m_isLPMReady, m_isNetworkModuleReady, m_isBLEModuleReady, m_isSTSReady );
+    BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|NetworkModuleReady=%d|m_isBluetoothReady=%d|STSReady=%d", __func__,
+               m_isCapsReady , m_isLPMReady, m_isNetworkModuleReady, m_isBluetoothReady, m_isSTSReady );
     return ( m_isCapsReady and
              m_isLPMReady and
              m_isNetworkModuleReady and
