@@ -5,6 +5,9 @@ import json
 import re
 from pycparser import c_parser, c_ast, parse_file
 import argparse
+import imp
+import os
+import inspect
 
 """
 Given a key list enumeration file, an actions enumeration file, and a 
@@ -39,6 +42,14 @@ def lookfor(node, target):
       return n
     else:
       ret = lookfor(n, target)
+
+  return ret
+
+def build_enum_map_from_proto(pb, name):
+  ret = {}
+  e = getattr(pb, '_' + name.upper())
+  for v in e.values:
+    ret[v.name] = v.number
 
   return ret
 
@@ -106,7 +117,14 @@ def main():
       ast_keys.append(parse_file(f, use_cpp=True))
     else:
       ast_keys.append(None)
-  ast_actions = parse_file(args.actions_file, use_cpp=True)
+
+  if re.match(r'.*\.pyc$', args.actions_file):
+    pb = imp.load_compiled('p', os.path.abspath(args.actions_file))
+    action_map = build_enum_map_from_proto(pb, 'KEY_ACTION')
+  else:
+    ast_actions = parse_file(args.actions_file, use_cpp=True)
+    # build enum map from events
+    action_map = build_enum_map(ast_actions, 'KEY_ACTION')
 
   # build enum maps from ASTs
   key_maps = []
@@ -116,8 +134,6 @@ def main():
     else:
       key_maps.append(None)
 
-  # and one for the events
-  action_map = build_enum_map(ast_actions, 'KEY_ACTION')
 
   ifile = open(args.inputcfg).read()
   j = json.loads(ifile)
