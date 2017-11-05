@@ -597,10 +597,8 @@ void EddieProductController::RegisterCliClientCmds()
                                              GetTask(), cb , static_cast<int>( CLICmdKeys::GET_PRODUCT_CONTROLLER_STATE ) );
     m_CliClientMT.RegisterCLIServerCommands( "raw_key",
                                              "command to simulate raw key events."
-                                             "origin and key_id fields are product specific, "
-                                             "refer to KeyConfiguration.json to find those. "
-                                             "event is 1 for PRESS and 0 for RELEASE",
-                                             "raw_key origin key_id event",
+                                             "Usage: raw_key origin keyId state ; where origin is 0-6, keyId is 1-7, state 0-1 (press-release).",
+                                             "raw_key origin keyId state",
                                              GetTask(), cb , static_cast<int>( CLICmdKeys::RAW_KEY ) );
 }
 
@@ -657,7 +655,7 @@ void EddieProductController::HandleRawKeyCliCmd( const std::list<std::string>& a
     }
     else
     {
-        response = "Inavlid command. use help to look at the raw_key usage";
+        response = "Invalid command. use help to look at the raw_key usage";
     }
 }
 
