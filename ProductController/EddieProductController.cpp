@@ -584,14 +584,22 @@ void EddieProductController::RegisterCliClientCmds()
     };
 
     m_CliClientMT.RegisterCLIServerCommands( "allowSourceSelect",
-                                             "allowSourceSelect yes|no", "command to send allow/disallow source selection by Caps",
+                                             "command to send allow/disallow source selection by Caps", "allowSourceSelect yes|no",
                                              GetTask(), cb , static_cast<int>( CLICmdKeys::ALLOW_SOURCE_SELECT ) );
     m_CliClientMT.RegisterCLIServerCommands( "setProductState",
-                                             "setProductState boot|standby|setup", "command to set Product Controller state",
+                                             "command to set Product Controller state", "setProductState boot|standby|setup",
                                              GetTask(), cb , static_cast<int>( CLICmdKeys::SET_PRODUCT_CONTROLLER_STATE ) );
     m_CliClientMT.RegisterCLIServerCommands( "getProductState",
-                                             "getProductState", "command to get Product Controller state",
+                                             "command to get Product Controller state", "getProductState",
                                              GetTask(), cb , static_cast<int>( CLICmdKeys::GET_PRODUCT_CONTROLLER_STATE ) );
+    m_CliClientMT.RegisterCLIServerCommands( "getProductState",
+                                             "command to get Product Controller state",  "getProductState",
+                                             GetTask(), cb , static_cast<int>( CLICmdKeys::GET_PRODUCT_CONTROLLER_STATE ) );
+    m_CliClientMT.RegisterCLIServerCommands( "raw_key",
+                                             "command to simulate raw key events."
+                                             "Usage: raw_key origin keyId state ; where origin is 0-6, keyId is 1-7, state 0-1 (press-release).",
+                                             "raw_key origin keyId state",
+                                             GetTask(), cb , static_cast<int>( CLICmdKeys::RAW_KEY ) );
 }
 
 void EddieProductController::HandleCliCmd( uint16_t cmdKey,
@@ -620,11 +628,35 @@ void EddieProductController::HandleCliCmd( uint16_t cmdKey,
         HandleGetProductControllerStateCliCmd( argList, response );
     }
     break;
+    case CLICmdKeys::RAW_KEY:
+    {
+        HandleRawKeyCliCmd( argList, response );
+    }
+    break;
     default:
         response = "Command not found";
         break;
     }
     respCb( response, transact_id );
+}
+
+void EddieProductController::HandleRawKeyCliCmd( const std::list<std::string>& argList, std::string& response )
+{
+    if( argList.size() == 3 )
+    {
+        auto it = argList.begin();
+        uint8_t origin = atoi( ( *it ).c_str() ) ;
+        it++;
+        uint32_t id = atoi( ( *it ).c_str() ) ;
+        it++;
+        uint8_t state = atoi( ( *it ).c_str() ) ;
+
+        m_KeyHandler.HandleKeys( origin, state, id );
+    }
+    else
+    {
+        response = "Invalid command. use help to look at the raw_key usage";
+    }
 }
 
 void EddieProductController::HandleAllowSourceSelectCliCmd( const std::list<std::string>& argList, std::string& response )
