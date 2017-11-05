@@ -305,6 +305,7 @@ public:
     void SetupProductSTSController( void );
     void HandleSTSInitWasComplete( void );
     void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
+    void HandleRawKeyCliCmd( const std::list<std::string>& argList, std::string& response );
 
 private:
 
