@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
-///// @file   BlueToothManager.h
-///// @brief  Eddie specific BlueToothManager class for Riviera based product
+///// @file   BluetoothManager.h
+///// @brief  Eddie specific BluetoothManager class for Riviera based product
 /////
 ///// @attention Copyright 2017 Bose Corporation, Framingham, MA
 //////////////////////////////////////////////////////////////////////////////////
@@ -13,21 +13,21 @@
 namespace ProductApp
 {
 
-class BlueToothManager: public IntentManager
+class BluetoothManager: public IntentManager
 {
 public:
-    BlueToothManager( NotifyTargetTaskIF& task,
+    BluetoothManager( NotifyTargetTaskIF& task,
                              const CliClientMT& cliClient,
                              const FrontDoorClientIF_t& frontDoorClient,
                              const ProductController& controller ):
         IntentManager( task, cliClient, frontDoorClient, controller )
     {
         m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
-                                   ( std::bind( &BlueToothManager::FrontDoorClientErrorCb,
+                                   ( std::bind( &BluetoothManager::FrontDoorClientErrorCb,
                                                 this, std::placeholders::_1 ), &task );
 
     }
-    virtual ~BlueToothManager() { }
+    virtual ~BluetoothManager() { }
 
     // Public function to Handle intents
     // This function will build and send message either through FrontDoor
@@ -37,9 +37,11 @@ public:
     // desired function for desired state change
     //
     bool Handle( KeyHandlerUtil::ActionType_t arg ) override;
-
 private:
+    bool BluetoothDeviceConnected();
+    bool BluetoothDeviceListPresent();
     virtual void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
+
 
 };
 } // namespace ProductApp

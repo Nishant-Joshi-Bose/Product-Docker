@@ -24,6 +24,10 @@
     "selected_version": "branches/castle-libs@2463"
   },
   {
+    "name": "CastleLightBarController-qc8017_32",
+    "selected_version": "Continuous/master/0.0.2-6+9a73c09"
+  },
+  {
     "name": "CastleNetworkService-qc8017_32",
     "selected_version": "Continuous/master/0.1.1-84+45c42c6"
   },
@@ -37,7 +41,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@3557f6f3c19f4109b728236e9c6fc11e5785566e"
+    "selected_version": "master@2f84e2d3d0b42701189391dde5660a1ef3f09e0f"
   },
   {
     "name": "CastleTestUtils",
@@ -73,7 +77,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-5+f0f2179"
+    "selected_version": "Continuous/master/0.0.1-10+f78ca2e"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -89,7 +93,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-11-02_1302"
+    "selected_version": "Continuous/Castle-Fork/2017-11-03_0847"
   },
   {
     "name": "UnitTest++-native",
@@ -102,9 +106,5 @@
   {
     "name": "WiFi-Setup-Webpage",
     "selected_version": "master@19f561f91af118db5439955e4d85bc0a914964eb"
-  },
-  {
-    "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Continuous/master/0.0.2-6+9a73c09"
   }
 ]

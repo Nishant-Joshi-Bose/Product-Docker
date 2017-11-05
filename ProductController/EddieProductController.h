@@ -33,6 +33,7 @@
 #include "KeyHandler.h"
 #include "IntentHandler.h"
 #include "ProductSTSController.h"
+#include "BluetoothSinkService.pb.h"
 
 namespace ProductApp
 {
@@ -81,6 +82,7 @@ private:
     void HandleBluetoothCapabilityNotReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityNotReady( const std::list<std::string>& points );
+    void HandleBluetoothSinkListResponse( const BluetoothSinkService::ListResponse &list );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  ReadSystemLanguageFromPersistence
@@ -147,6 +149,14 @@ public:
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
     bool IsAllModuleReady();
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @name  IsBtLeModuleReady
+    /// @brief true if IsBtLeModuleReady modules is up and ready.
+    /// Module IsBtLeModuleReady.
+    /// @return bool
+    ////////////////////////////////////////////////////////////////////////////////
+    bool IsBtLeModuleReady() const;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  IsCAPSReady
@@ -296,6 +306,11 @@ public:
         return m_nowPlaying;
     }
 
+    const BluetoothSinkService::ListResponse& GetBluetoothList() const
+    {
+        return m_bluetoothList;
+    }
+
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief Interfaces to the ProductSTSController, which implements the interactions
@@ -330,6 +345,7 @@ private:
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
     ProductPb::Language                         m_systemLanguage;
     SoundTouchInterface::NowPlayingJson         m_nowPlaying;
+    BluetoothSinkService::ListResponse          m_bluetoothList;
     NetManager::Protobuf::NetworkStatus         m_cachedStatus;
 
     ProductCliClient                            m_productCliClient;
@@ -344,6 +360,7 @@ private:
     bool                                        m_isBluetoothReady  = false;
 
     int                                         m_WiFiProfilesCount;
+    int                                         m_BluetoothProfilesCount;
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>     errorCb;
     /// Demonstration Controller instance
     DemoApp::DemoController m_demoController;

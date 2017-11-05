@@ -1,3 +1,7 @@
 *~
-/components/
+.#*
+\#*
+.*.swp
+*.pyc
 /builds/
+/components/

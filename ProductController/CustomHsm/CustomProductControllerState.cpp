@@ -42,7 +42,7 @@ bool CustomProductControllerState::IsProductNeedsSetup()
     s_logger.LogInfo( "%s:: lang=%d, network=%d", __func__, GetCustomProductController().IsLanguageSet(),
                       GetCustomProductController().IsNetworkConfigured() );
 
-    return not( GetCustomProductController().IsLanguageSet() and GetCustomProductController().IsNetworkConfigured() );
+    return not( GetCustomProductController().IsNetworkConfigured() );
 }
 
 } // namespace ProductApp
