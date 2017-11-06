@@ -265,9 +265,8 @@ void ProductCliClient::CliCmdAmp( CLIClient::StringListType& argList,
                << " mute=" << rsp.mute()
                << " powerfailure=" << rsp.powerfailure()
                << " fault=" << rsp.fault()
-               << " dcoffset=" << be32toh( rsp.dcoffset1() ) << ','
-               << be32toh( rsp.dcoffset2() )
-               << " thermistor=" << be32toh( rsp.thermistor() );
+               << " dcoffset=" << rsp.dcoffset1() << ',' << rsp.dcoffset2()
+               << " thermistor=" << rsp.thermistor();
             auto const& msg = ss.str();
 
             BOSE_LOG( INFO, msg );
