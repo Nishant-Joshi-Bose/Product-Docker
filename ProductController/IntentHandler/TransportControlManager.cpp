@@ -16,6 +16,7 @@
 
 #include "DPrint.h"
 #include "TransportControlManager.h"
+#include "SourceUtils.h"
 
 static DPrint s_logger( "TransportControlManager" );
 
@@ -95,10 +96,25 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
             }
             else
             {
-                // Send playbackRequest of source persisted : To do,
-                // Talk to Ranjeet: What param in playbackRequest
-                // Talk to Vikram: How can nowPlaying that is persisted be used.
-                sendTransportControlMsg = true;
+#if 1
+                const EddieProductController *eddiePC =
+                    dynamic_cast<const EddieProductController*>( &GetProductController() );
+                if( eddiePC != nullptr )
+                {
+                    SoundTouchInterface::playbackRequestJson pbReqJson;
+                    SoundTouchInterface::NowPlayingJson nowPlayData = eddiePC->GetNowPlaying();
+                    SourceUtils::ConstructPlaybackRequestFromNowPlaying( pbReqJson,
+                                                                         nowPlayData );
+                    GetFrontDoorClient()->\
+                    SendPost<SoundTouchInterface::\
+                    NowPlayingJson>( "/content/playbackRequest", pbReqJson,
+                                     m_NowPlayingRsp, m_frontDoorClientErrorCb );
+                }
+                else
+                {
+                    BOSE_ERROR( s_logger, "Error while casting to Eddie PC" );
+                }
+#endif
             }
         }
         break;
@@ -136,7 +152,7 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
                         " for intent : %d", intent );
 
             GetFrontDoorClient()->\
-            SendPost<SoundTouchInterface::\
+            SendPut<SoundTouchInterface::\
             NowPlayingJson>( "/content/transportControl", transportControl,
                              m_NowPlayingRsp, m_frontDoorClientErrorCb );
         }
