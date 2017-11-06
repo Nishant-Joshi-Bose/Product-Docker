@@ -128,6 +128,11 @@ bool CustomProductControllerState::HandleNowSelectionInfo( const SoundTouchInter
     return false;
 }
 
+bool CustomProductControllerState::HandleInactivityTimer( InactivityTimerType timer )
+{
+    return false;
+}
+
 ProfessorProductController& CustomProductControllerState::GetCustomProductController()
 {
     return *static_cast< ProfessorProductController* >( s_productController );

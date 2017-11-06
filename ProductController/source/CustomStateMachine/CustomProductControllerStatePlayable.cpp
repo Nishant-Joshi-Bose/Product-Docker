@@ -181,7 +181,7 @@ bool CustomProductControllerStatePlayable::HandleKeyAction( int action )
 bool CustomProductControllerStatePlayable::HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
 {
     BOSE_INFO( s_logger,  __func__ );
-    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING );
+    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE );
     return true;
 }
 

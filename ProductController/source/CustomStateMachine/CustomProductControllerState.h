@@ -36,6 +36,7 @@
 #include "HsmState.h"
 #include "ProductMessage.pb.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
+#include "InactivityTimers.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -107,6 +108,7 @@ public:
     virtual bool HandleKeyAction( int action );
     virtual bool HandlePairingState( ProductAccessoryPairing pairingStatus );
     virtual bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo );
+    virtual bool HandleInactivityTimer( InactivityTimerType timer );
 
     static  void SetProductController( ProductController* productController )
     {
