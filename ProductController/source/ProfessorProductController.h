@@ -251,6 +251,7 @@ private:
     void SetupProductSTSConntroller( void );
     void HandleSTSInitWasComplete( void );
     void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
+    void RegisterFrontDoorEndPoints();
     void PostPlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson& resp );
     void PostPlaybackRequestError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
 };

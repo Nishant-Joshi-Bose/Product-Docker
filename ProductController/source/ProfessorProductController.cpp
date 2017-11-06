@@ -337,6 +337,12 @@ void ProfessorProductController::Run( )
     m_ProductVolumeManager     ->Run( );
     m_ProductSpeakerManager    ->Run( );
 
+
+    ///
+    /// Register FrontDoor EndPoints
+    ///
+    RegisterFrontDoorEndPoints();
+
     ///
     /// Set up the STSProductController
     ///
@@ -539,6 +545,20 @@ void ProfessorProductController::HandleSelectSourceSlot( ProductSTSAccount::Prod
                                 this,
                                 message ),
                      GetTask( ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::RegisterFrontDoorEndPoints
+///
+/// @brief  This method is called from the ProfessorProductController run() function at boot up
+///         to register for FrontDoor endpoints
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::RegisterFrontDoorEndPoints()
+{
+    RegisterCommonEndPoints();
+    //TODO:Professor ProductController specific endpoints, for example, nowPlaying
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
