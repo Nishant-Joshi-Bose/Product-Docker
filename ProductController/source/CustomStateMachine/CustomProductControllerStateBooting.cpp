@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      10/24/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -30,7 +28,6 @@
 #include "CustomProductControllerStateBooting.h"
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
-#include "DPrint.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -93,6 +90,7 @@ void CustomProductControllerStateBooting::HandleStateStart( )
 void CustomProductControllerStateBooting::HandleStateExit( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting is being exited." );
+
     ProductControllerStateBooting::HandleStateExit( );
 }
 
@@ -108,7 +106,8 @@ void CustomProductControllerStateBooting::HandleStateExit( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateBooting::HandleLpmState( bool active )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting is handling the LPM state." );
+    BOSE_VERBOSE( s_logger, "%s is handling an LPM %s event.", "CustomProductControllerStateBooting",
+                  active ? "activation" : "deactivation" );
 
     if( active )
     {
@@ -130,7 +129,8 @@ bool CustomProductControllerStateBooting::HandleLpmState( bool active )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateBooting::HandleCapsState( bool active )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting is handling the CAPS state." );
+    BOSE_VERBOSE( s_logger, "%s is handling a CAPS %s event.", "CustomProductControllerStateBooting",
+                  active ? "activation" : "deactivation" );
 
     if( active )
     {
@@ -152,7 +152,8 @@ bool CustomProductControllerStateBooting::HandleCapsState( bool active )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateBooting::HandleAudioPathState( bool active )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting is handling the audio path state." );
+    BOSE_VERBOSE( s_logger, "%s is handling an audio path CAPS %s event.", "CustomProductControllerStateBooting",
+                  active ? "activation" : "deactivation" );
 
     if( active )
     {
@@ -169,7 +170,7 @@ bool CustomProductControllerStateBooting::HandleAudioPathState( bool active )
 /// @return This method will always return true, indicating that it has handled the event.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateBooting::HandleSTSSourcesInit( void )
+bool CustomProductControllerStateBooting::HandleSTSSourcesInit( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting is handling the STSSourcesInit event." );
 
@@ -183,11 +184,11 @@ bool CustomProductControllerStateBooting::HandleSTSSourcesInit( void )
 /// @brief CustomProductControllerStateBooting::HandlePotentialStateChange
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateBooting::HandlePotentialStateChange( void )
+void CustomProductControllerStateBooting::HandlePotentialStateChange( )
 {
-    if( GetCustomProductController().IsBooted( ) )
+    if( GetCustomProductController( ).IsBooted( ) )
     {
-        if( GetCustomProductController().IsSoftwareUpdateRequired( ) )
+        if( GetCustomProductController( ).IsSoftwareUpdateRequired( ) )
         {
             BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                           "CustomProductControllerStateBooting",
@@ -196,10 +197,32 @@ void CustomProductControllerStateBooting::HandlePotentialStateChange( void )
         }
         else
         {
-            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                          "CustomProductControllerStateBooting",
-                          "CustomProductControllerStatePlaying" );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE );
+            if( GetCustomProductController( ).IsNetworkConfigured( ) or
+                GetCustomProductController( ).IsAutoWakeEnabled( ) )
+            {
+                if( GetCustomProductController( ).IsNetworkConnected( ) and
+                    GetCustomProductController( ).IsVoiceConfigured( ) )
+                {
+                    BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                                  "CustomProductControllerStateBooting",
+                                  "CustomProductControllerStateIdleVoiceConfigured" );
+                    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
+                }
+                else
+                {
+                    BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                                  "CustomProductControllerStateBooting",
+                                  "CustomProductControllerStateIdleVoiceUnconfigured" );
+                    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED );
+                }
+            }
+            else
+            {
+                BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                              "CustomProductControllerStateBooting",
+                              "CustomProductControllerStateNetworkStandbyUnconfigured" );
+                ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
+            }
         }
     }
 }

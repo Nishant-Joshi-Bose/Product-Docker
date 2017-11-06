@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      10/24/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -26,7 +24,6 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "DPrint.h"
 #include "Utilities.h"
 #include "CustomProductControllerStatePlaying.h"
 #include "ProductControllerHsm.h"
@@ -78,7 +75,7 @@ void CustomProductControllerStatePlaying::HandleStateEnter( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlaying is being entered." );
 
-    GetCustomProductController().GetHardwareInterface( )->RequestPowerStateFull( );
+    GetCustomProductController( ).GetHardwareInterface( )->RequestPowerStateFull( );
 
     BOSE_VERBOSE( s_logger, "An attempt to set to full power is being made." );
 }
@@ -113,10 +110,32 @@ void CustomProductControllerStatePlaying::HandleStateExit( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlaying::HandlePowerState( )
 {
-    BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                  "CustomProductControllerStatePlaying",
-                  "CustomProductControllerStatePlayable" );
-    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE );
+    if( GetCustomProductController( ).IsNetworkConfigured( ) or
+        GetCustomProductController( ).IsAutoWakeEnabled( ) )
+    {
+        if( GetCustomProductController( ).IsNetworkConnected( ) and
+            GetCustomProductController( ).IsVoiceConfigured( ) )
+        {
+            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                          "CustomProductControllerStatePlaying",
+                          "CustomProductControllerStateIdleVoiceConfigured" );
+            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
+        }
+        else
+        {
+            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                          "CustomProductControllerStatePlaying",
+                          "CustomProductControllerStateIdleVoiceUnconfigured" );
+            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED );
+        }
+    }
+    else
+    {
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      "CustomProductControllerStatePlaying",
+                      "CustomProductControllerStateNetworkStandbyUnconfigured" );
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
+    }
 
     return true;
 }

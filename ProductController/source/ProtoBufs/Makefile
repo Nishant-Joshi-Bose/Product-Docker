@@ -3,14 +3,14 @@ include $(BOSE_WORKSPACE)/Settings.mk
 BOSELIBS_DIR       := $(shell components get BoseLibs-$(sdk)       installed_location)
 SOUNDTOUCH_SDK_DIR := $(shell components get SoundTouch-SDK-$(sdk) installed_location)
 
-PROTO_SOURCES = AudioSettings.proto       \
-                ProductMessage.proto      \
-                ConfigurationStatus.proto \
-                Language.proto            \
-                ContentItem.proto         \
-                ProductSTS.proto          \
-                KeyActions.proto          \
-                SystemInfo.proto          \
+PROTO_SOURCES = AudioSettings.proto         \
+                ProductMessage.proto        \
+                ConfigurationStatus.proto   \
+                Language.proto              \
+                ContentItem.proto           \
+                ProductSTS.proto            \
+                KeyActions.proto            \
+                SystemInfo.proto            \
                 ProductSpeakerManager.proto
 
 #

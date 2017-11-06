@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -63,10 +61,10 @@ class CustomProductControllerStateLowPower : public ProductControllerState
 {
 public:
 
-    CustomProductControllerStateLowPower( ProductControllerHsm&        hsm,
-                                          CHsmState*                  pSuperState,
-                                          Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_LOW_POWER,
-                                          const std::string&          name    = "CustomProductControllerStateLowPower" );
+    CustomProductControllerStateLowPower( ProductControllerHsm& hsm,
+                                          CHsmState*            pSuperState,
+                                          Hsm::STATE            stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_LOW_POWER,
+                                          const std::string&    name    = "CustomProductControllerStateLowPower" );
 
     ~CustomProductControllerStateLowPower( ) override
     {
@@ -77,8 +75,6 @@ public:
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
     bool HandlePowerState( ) override;
-
-private:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

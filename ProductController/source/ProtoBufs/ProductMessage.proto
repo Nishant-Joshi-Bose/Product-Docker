@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -165,10 +163,9 @@ message ProductPlaybackRequest
 {
         enum ProductPlaybackState
         {
-             Play    = 1;
-             Pause   = 2;
-             Stop    = 3;
-             Unknown = 4;
+             Start   = 1;
+             Stop    = 2;
+             Unknown = 3;
         }
         optional ProductPlaybackState state = 1;
 }

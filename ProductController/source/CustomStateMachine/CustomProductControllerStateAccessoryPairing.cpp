@@ -7,8 +7,6 @@
 ///
 /// @author    Derek Richardson
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -26,7 +24,7 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "DPrint.h"
+#include "Utilities.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
@@ -47,7 +45,6 @@ namespace ProductApp
 constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_START = 4 * 60 * 1000;
 constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY = 0 ;
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief CustomProductControllerStateAccessoryPairing::CustomProductControllerStateAccessoryPairing
@@ -63,17 +60,18 @@ constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY = 0 ;
 /// @param const std::string& [ name ] = name to call state
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductControllerStateAccessoryPairing::CustomProductControllerStateAccessoryPairing( ProductControllerHsm&       hsm,
-        CHsmState*                  pSuperState,
-        ProfessorProductController& productController,
-        Hsm::STATE                  stateId,
-        const std::string&          name )
+CustomProductControllerStateAccessoryPairing::CustomProductControllerStateAccessoryPairing
+
+( ProductControllerHsm&       hsm,
+  CHsmState*                  pSuperState,
+  ProfessorProductController& productController,
+  Hsm::STATE                  stateId,
+  const std::string&          name )
 
     : ProductControllerState( hsm, pSuperState, stateId, name ),
-      m_productController( productController ),
       m_timer( APTimer::Create( productController.GetTask( ), "AccessoryPairingTimer" ) )
 {
-    BOSE_INFO( s_logger, "The product accessory pairing state is being constructed." );
+    BOSE_INFO( s_logger, "CustomProductControllerStateAccessoryPairing is being constructed." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,8 +81,9 @@ CustomProductControllerStateAccessoryPairing::CustomProductControllerStateAccess
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateAccessoryPairing::HandleStateStart( )
 {
-    BOSE_INFO( s_logger, "The product accessory pairing state is being started." );
-    ProductSpeakerManager* productSpeakerManager = m_productController.GetSpeakerManager( );
+    BOSE_INFO( s_logger, "CustomProductControllerStateAccessoryPairing is being started." );
+
+    ProductSpeakerManager* productSpeakerManager = GetCustomProductController( ).GetSpeakerManager( );
     productSpeakerManager->DoPairing( );
 }
 
@@ -97,9 +96,10 @@ void CustomProductControllerStateAccessoryPairing::HandleTimeOut( )
 {
     BOSE_INFO( s_logger, "A time out while pairing has occurred." );
 
-    m_timer->Stop( );
-
-    //  @todo  where to go?
+    ///
+    /// Go to the superstate of the pairing state, which will be the setup state or a playing active
+    /// state.
+    ///
     ChangeState( GetSuperId( ) );
 }
 
@@ -110,10 +110,14 @@ void CustomProductControllerStateAccessoryPairing::HandleTimeOut( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAccessoryPairing::HandlePairingState( ProductAccessoryPairing pairingStatus )
 {
-    if( !pairingStatus.active() )
+    BOSE_INFO( s_logger, "CustomProductControllerStateAccessoryPairing is handling pairing." );
+
+    if( not pairingStatus.active( ) )
     {
-        // Pairing ended from outside force go back to playing active our parent state
-        // @todo  where to go?
+        ///
+        /// Go to the superstate of the pairing state, which will be the setup state or a playing
+        /// active state.
+        ///
         ChangeState( GetSuperId( ) );
     }
     else
@@ -135,9 +139,10 @@ bool CustomProductControllerStateAccessoryPairing::HandlePairingState( ProductAc
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateAccessoryPairing::HandleStateExit( )
 {
-    BOSE_INFO( s_logger, "The product accessory pairing state is being exited." );
+    BOSE_INFO( s_logger, "CustomProductControllerStateAccessoryPairing is being exited." );
     m_timer->Stop( );
-    ProductSpeakerManager* productSpeakerManager = m_productController.GetSpeakerManager( );
+
+    ProductSpeakerManager* productSpeakerManager = GetCustomProductController( ).GetSpeakerManager( );
     productSpeakerManager->StopPairing( );
 }
 

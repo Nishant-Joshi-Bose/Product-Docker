@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -88,14 +86,14 @@ public:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration is used to run and stop an instance of the System Manager.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool Run( void );
-    void Stop( void );
+    bool Run( );
+    void Stop( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// These public declarations are primarily to be used by the Product Controller to
     /// determine if the system language has been set and to set the network configuration status.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool IsSystemLanguageSet( void ) const;
+    bool IsSystemLanguageSet( ) const;
     void SetNetworkAccoutConfigurationStatus( bool network, bool account );
 
 private:
@@ -150,11 +148,11 @@ private:
     ProductPb::SystemInfo                   m_SystemInfo;
     ProtoPersistenceIF::ProtoPersistencePtr m_SystemInfoPersistentStorage;
 
-    void ReadLanguageSettingsFromPersistentStorage( void );
-    void ReadConfigurationStatusFromPersistentStorage( void );
-    void ReadSystemInfoSettingsFromPersistentStorage( void );
-    void WriteLanguageSettingsToPersistentStorage( void );
-    void WriteConfigurationStatusToPersistentStorage( void );
+    void ReadLanguageSettingsFromPersistentStorage( );
+    void ReadConfigurationStatusFromPersistentStorage( );
+    void ReadSystemInfoSettingsFromPersistentStorage( );
+    void WriteLanguageSettingsToPersistentStorage( );
+    void WriteConfigurationStatusToPersistentStorage( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -187,7 +185,7 @@ private:
     /// The following method is used to handle GET request of /system/info.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////
-    void HandleGetSystemInfoRequest( const Callback<::ProductPb::SystemInfo>& response ) const;
+    void HandleGetSystemInfoRequest( const Callback< ProductPb::SystemInfo >& response ) const;
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

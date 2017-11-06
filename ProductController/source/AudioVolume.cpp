@@ -6,8 +6,6 @@
 ///
 /// @author    Chris Houston
 ///
-/// @date      10/29/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation

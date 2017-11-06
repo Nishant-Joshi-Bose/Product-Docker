@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      10/24/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -26,7 +24,6 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "DPrint.h"
 #include "Utilities.h"
 #include "CustomProductControllerStateNetworkStandbyConfigured.h"
 #include "ProductControllerHsm.h"
@@ -61,6 +58,7 @@ CustomProductControllerStateNetworkStandbyConfigured
   CHsmState*                  pSuperState,
   Hsm::STATE                  stateId,
   const std::string&          name )
+
     : ProductControllerState( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyConfigured is being constructed." );
@@ -111,33 +109,14 @@ void CustomProductControllerStateNetworkStandbyConfigured::HandleStateExit()
 bool CustomProductControllerStateNetworkStandbyConfigured::HandleNetworkState( bool configured,
                                                                                bool connected )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyConfigured is handling a network state change." );
+    BOSE_VERBOSE( s_logger, "%s is handling a %s %s network state event.",
+                  "CustomProductControllerStateNetworkStandbyConfigured",
+                  configured ? "configured" : "unconfigured,",
+                  connected ? "connected" : "unconnected" );
 
-    if( not configured )
-    {
-        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                      "CustomProductControllerStateNetworkStandbyConfigured",
-                      "CustomProductControllerStateNetworkStandbyUnconfigured" );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
-    }
-    else
-    {
-        auto const& networkConnected = connected;
-        auto const& voiceConfigured = GetCustomProductController().IsVoiceConfigured( );
-
-        if( networkConnected and voiceConfigured )
-        {
-            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                          "CustomProductControllerStateNetworkStandbyConfigured",
-                          "CustomProductControllerStateIdle" );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
-        }
-        else
-        {
-            BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyConfigured is not changing state." );
-        }
-    }
-
+    HandlePotentialStateChange( configured,
+                                connected,
+                                GetCustomProductController().IsVoiceConfigured( ) );
     return true;
 }
 
@@ -153,24 +132,45 @@ bool CustomProductControllerStateNetworkStandbyConfigured::HandleNetworkState( b
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateNetworkStandbyConfigured::HandleVoiceState( bool configured )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyConfigured is handling a voice state change." );
+    BOSE_VERBOSE( s_logger, "%s is handling a %s voice state event.",
+                  "CustomProductControllerStateNetworkStandbyConfigured",
+                  configured ? "configured" : "unconfigured" );
 
-    auto const& voiceConfigured = configured;
-    auto const& networkConnected = GetCustomProductController().IsNetworkConnected( );
+    HandlePotentialStateChange( GetCustomProductController( ).IsNetworkConfigured( ),
+                                GetCustomProductController( ).IsNetworkConnected( ),
+                                configured );
+    return true;
+}
 
-    if( voiceConfigured and networkConnected )
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStateNetworkStandbyConfigured::HandlePotentialStateChange
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStateNetworkStandbyConfigured::HandlePotentialStateChange
+( bool networkConfigured,
+  bool networkConnected,
+  bool voiceConfigured )
+{
+    if( networkConnected and voiceConfigured )
     {
         BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                       "CustomProductControllerStateNetworkStandbyConfigured",
-                      "CustomProductControllerStateIdle" );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
+                      "CustomProductControllerStateIdleVoiceConfigured" );
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
+    }
+    else if( not networkConfigured )
+    {
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      "CustomProductControllerStateNetworkStandbyConfigured",
+                      "CustomProductControllerStateNetworkStandbyUnconfigured" );
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
     }
     else
     {
-        BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyConfigured is not changing." );
+        BOSE_VERBOSE( s_logger, "%s is not changing.",
+                      "CustomProductControllerStateNetworkStandbyConfigured" );
     }
-
-    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

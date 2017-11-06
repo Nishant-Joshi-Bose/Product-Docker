@@ -8,8 +8,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      10/12/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -78,8 +76,6 @@ public:
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
     bool HandleKeyAction( int action ) override;
-
-private:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

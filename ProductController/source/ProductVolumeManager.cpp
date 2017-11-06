@@ -2,11 +2,9 @@
 ///
 /// @file      ProductVolumeManager.cpp
 ///
-/// @brief     This file implements audio olume management.
+/// @brief     This file implements audio volume management.
 ///
 /// @author    Chris Houston
-///
-/// @date      11/1/2017
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -77,6 +75,7 @@ ProductVolumeManager* ProductVolumeManager::GetInstance( NotifyTargetTaskIF*    
     }
 
     BOSE_DEBUG( s_logger, "The instance %p of the ProductVolumeManager was returned.", instance );
+
     return instance;
 }
 
@@ -92,8 +91,7 @@ ProductVolumeManager* ProductVolumeManager::GetInstance( NotifyTargetTaskIF*    
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductVolumeManager::Initialize( )
 {
-
-    m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductControllerStateOn" );
+    m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductVolumeManager" );
 
     auto fVolume = [ this ]( int32_t v )
     {
@@ -105,6 +103,7 @@ void ProductVolumeManager::Initialize( )
     {
         ReceiveFrontDoorVolume( v );
     };
+
     m_FrontDoorClient->RegisterNotification< SoundTouchInterface::volume >
     ( FRONTDOOR_AUDIO_VOLUME, fNotify );
 }
@@ -212,7 +211,9 @@ void ProductVolumeManager::ReceiveFrontDoorVolume( SoundTouchInterface::volume c
 
     BOSE_VERBOSE( s_logger, "Got volume notify (%d)", vol );
 
-    // send to lpm as well (this is currently same range as CAPS, 0-100)
+    ///
+    /// Send volume information to the LPM as well (this is currently same range as CAPS, 0-100).
+    ///
     m_ProductHardwareInterface->SendSetVolume( vol );
 }
 
@@ -241,9 +242,6 @@ void ProductVolumeManager::Decrement( )
 {
     ( *m_Volume )--;
 }
-
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                               End of ProductApp Namespace                                    ///

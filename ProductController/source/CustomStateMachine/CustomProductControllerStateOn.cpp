@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      10/24/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -26,7 +24,6 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "DPrint.h"
 #include "Utilities.h"
 #include "CustomProductControllerStateOn.h"
 #include "ProductControllerHsm.h"
@@ -44,15 +41,15 @@ namespace ProductApp
 ///
 /// @brief CustomProductControllerStateOn::CustomProductControllerStateOn
 ///
-/// @param hsm
+/// @param ProductControllerHsm&       hsm
 ///
-/// @param pSuperState
+/// @param CHsmState*                  pSuperState
 ///
-/// @param productController
+/// @param ProfessorProductController& productController
 ///
-/// @param stateId
+/// @param Hsm::STATE                  stateId
 ///
-/// @param name
+/// @param const std::string&          name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateOn::CustomProductControllerStateOn( ProductControllerHsm&       hsm,
@@ -82,11 +79,7 @@ void CustomProductControllerStateOn::HandleStateEnter( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateOn::HandleStateStart( )
 {
-    BOSE_VERBOSE( s_logger, "%s is being started and going to %s.",
-                  "CustomProductControllerStateOn",
-                  "CustomProductControllerStatePlayable" );
-
-    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE );
+    BOSE_VERBOSE( s_logger, "CustomProductControllerStateOn is being started." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,25 +104,28 @@ void CustomProductControllerStateOn::HandleStateExit( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateOn::HandleKeyAction( int action )
 {
-    bool handled = true;
-    ProfessorProductController &pc = GetCustomProductController();
+    bool handled = false;
+
+    BOSE_INFO( s_logger, "CustomProductControllerStateOn is handling key action %d.", action );
 
     switch( action )
     {
     case KeyActionPb::KEY_ACTION_VOLUME_UP:
-        pc.GetVolumeManager()->Increment();
+        GetCustomProductController( ).GetVolumeManager()->Increment();
+        handled = true;
         break;
 
     case KeyActionPb::KEY_ACTION_VOLUME_DOWN:
-        pc.GetVolumeManager()->Decrement();
+        GetCustomProductController( ).GetVolumeManager()->Decrement();
+        handled = true;
         break;
 
     case KeyActionPb::KEY_ACTION_PAIR_SPEAKERS:
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
+        handled = true;
         break;
 
     default:
-        handled = false;
         break;
     }
 

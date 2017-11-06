@@ -10,8 +10,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -52,8 +50,8 @@
 #include "ProductControllerHsm.h"
 #include "ProductSTSController.h"
 #include "Utilities.h"
-#include "SoundTouchInterface/PlayerService.pb.h"
 #include "ProductMessage.pb.h"
+#include "SoundTouchInterface/PlayerService.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -114,10 +112,10 @@ public:
     ///         end, and end the task resCustomProductControllerStateBootingpectively.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void Run( void );
-    void OnEntry( void );
-    void Wait( void );
-    void End( void );
+    void Run( );
+    void OnEntry( );
+    void Wait( );
+    void End( );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -125,7 +123,7 @@ public:
     ///        from the product controller.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductHardwareInterface* GetHardwareInterface( void ) const;
+    ProductHardwareInterface* GetHardwareInterface( ) const;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -133,7 +131,7 @@ public:
     ///        from the product controller.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductVolumeManager* GetVolumeManager( void ) const;
+    ProductVolumeManager* GetVolumeManager( ) const;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -141,7 +139,7 @@ public:
     ///        from the product controller.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductSpeakerManager* GetSpeakerManager( void );
+    ProductSpeakerManager* GetSpeakerManager( );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -149,12 +147,12 @@ public:
     ///        product controller.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool IsBooted( void )                 const;
-    bool IsNetworkConfigured( void )      const;
-    bool IsNetworkConnected( void )       const;
-    bool IsAutoWakeEnabled( void )        const;
-    bool IsVoiceConfigured( void )        const;
-    bool IsSoftwareUpdateRequired( void ) const;
+    bool IsBooted( )                 const;
+    bool IsNetworkConfigured( )      const;
+    bool IsNetworkConnected( )       const;
+    bool IsAutoWakeEnabled( )        const;
+    bool IsVoiceConfigured( )        const;
+    bool IsSoftwareUpdateRequired( ) const;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -248,8 +246,8 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     ProductSTSController m_ProductSTSController;
 
-    void SetupProductSTSConntroller( void );
-    void HandleSTSInitWasComplete( void );
+    void SetupProductSTSConntroller( );
+    void HandleSTSInitWasComplete( );
     void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
     void PostPlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson& resp );
     void PostPlaybackRequestError( const FRONT_DOOR_CLIENT_ERRORS errorCode );

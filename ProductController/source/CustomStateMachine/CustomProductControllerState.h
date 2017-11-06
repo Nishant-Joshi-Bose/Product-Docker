@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -99,15 +97,14 @@ public:
     virtual bool HandleLpmState( bool active );
     virtual bool HandleCapsState( bool active );
     virtual bool HandleAudioPathState( bool active );
-    virtual bool HandleSTSSourcesInit( void );
+    virtual bool HandleSTSSourcesInit( );
     virtual bool HandleNetworkState( bool configured, bool connected );
     virtual bool HandleVoiceState( bool configured );
     virtual bool HandlePlaybackRequest( ProductPlaybackRequest_ProductPlaybackState state );
-    virtual bool HandlePowerState( void );
+    virtual bool HandlePowerState( );
     virtual bool HandleAutowakeStatus( bool active );
     virtual bool HandleKeyAction( int action );
     virtual bool HandlePairingState( ProductAccessoryPairing pairingStatus );
-
 
     static  void SetProductController( ProductController* productController )
     {
@@ -115,11 +112,12 @@ public:
     }
 
 protected:
-    /// The custom version of this function returns the custom ProductController
-    static ProfessorProductController& GetCustomProductController();
+    ///
+    /// The custom version of this function returns the custom ProductController.
+    ///
+    static ProfessorProductController& GetCustomProductController( );
 
     static ProductController* s_productController;
-
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
