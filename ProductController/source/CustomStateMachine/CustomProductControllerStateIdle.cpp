@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      10/24/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -26,7 +24,6 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "DPrint.h"
 #include "Utilities.h"
 #include "CustomProductControllerStateIdle.h"
 #include "ProductControllerHsm.h"
@@ -77,7 +74,7 @@ void CustomProductControllerStateIdle::HandleStateEnter( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdle is being entered by the state machine." );
 
-    GetCustomProductController().GetHardwareInterface( )->RequestPowerStateAutowake( );
+    GetCustomProductController( ).GetHardwareInterface( )->RequestPowerStateAutowake( );
 
     BOSE_VERBOSE( s_logger, "An attempt to set an autowake power state is now being made." );
 }
@@ -90,21 +87,6 @@ void CustomProductControllerStateIdle::HandleStateEnter( )
 void CustomProductControllerStateIdle::HandleStateStart( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdle is being started." );
-
-    if( GetCustomProductController().IsNetworkConfigured( ) and GetCustomProductController().IsVoiceConfigured( ) )
-    {
-        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                      "CustomProductControllerStateIdle",
-                      "CustomProductControllerStateIdleVoiceConfigured." );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
-    }
-    else
-    {
-        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                      "CustomProductControllerStateIdle",
-                      "CustomProductControllerStateIdleVoiceUnconfigured." );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED );
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

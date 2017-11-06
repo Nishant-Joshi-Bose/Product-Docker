@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      10/24/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -26,7 +24,6 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "DPrint.h"
 #include "Utilities.h"
 #include "CustomProductControllerStatePlayable.h"
 #include "ProductControllerHsm.h"
@@ -83,31 +80,6 @@ void CustomProductControllerStatePlayable::HandleStateEnter( )
 void CustomProductControllerStatePlayable::HandleStateStart( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayable is being started." );
-
-    if( GetCustomProductController().IsNetworkConfigured( ) )
-    {
-        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                      "CustomProductControllerStatePlayable",
-                      "CustomProductControllerStateIdle" );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
-    }
-    else
-    {
-        if( GetCustomProductController().IsAutoWakeEnabled( ) )
-        {
-            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                          "CustomProductControllerStatePlayable",
-                          "CustomProductControllerStateIdle" );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
-        }
-        else
-        {
-            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                          "CustomProductControllerStatePlayable",
-                          "CustomProductControllerStateNetworkStandby" );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
-        }
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -133,19 +105,16 @@ void CustomProductControllerStatePlayable::HandleStateExit( )
 bool CustomProductControllerStatePlayable::HandlePlaybackRequest( ProductPlaybackRequest_ProductPlaybackState
                                                                   state )
 {
-    if( state == ProductPlaybackRequest_ProductPlaybackState_Play )
+    BOSE_VERBOSE( s_logger, "%s is handling a playback %s request.",
+                  "CustomProductControllerStatePlayable",
+                  ProductPlaybackRequest_ProductPlaybackState_Name( state ).c_str( ) );
+
+    if( state == ProductPlaybackRequest_ProductPlaybackState_Start )
     {
         BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                       "CustomProductControllerStatePlayable",
-                      "CustomProductControllerStatePlayableActive" );
+                      "CustomProductControllerStatePlayingActive" );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE );
-    }
-    else
-    {
-        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                      "CustomProductControllerStatePlayable",
-                      "CustomProductControllerStatePlayableInactive" );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
     }
 
     return true;
@@ -163,8 +132,8 @@ bool CustomProductControllerStatePlayable::HandlePowerState( )
 {
     BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                   "CustomProductControllerStatePlayable",
-                  "CustomProductControllerStatePlaying" );
-    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING );
+                  "CustomProductControllerStatePlayingInactive" );
+    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
 
     return true;
 }
@@ -199,8 +168,6 @@ bool CustomProductControllerStatePlayable::HandleKeyAction( int action )
 
     return handled;
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

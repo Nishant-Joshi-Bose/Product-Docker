@@ -6,8 +6,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -86,9 +84,9 @@ public:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration is used to start and run an instance of the Front Door Network.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool Run( void );
+    bool Run( );
     void HandleMessage( ProductMessage& message );
-    void Stop( void );
+    void Stop( );
 
 private:
 

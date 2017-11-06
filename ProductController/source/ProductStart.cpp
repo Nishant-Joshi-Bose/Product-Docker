@@ -14,8 +14,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      10/26/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -48,7 +46,7 @@
 /// controller source code.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////
-static DPrint s_logger { "Product" };
+static DPrint s_logger { "ProductStart" };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -64,7 +62,7 @@ void ShowBacktrace( int sig )
     ///
     /// Attempt to print out the stack, resume, and allow the process to die.
     ///
-    signal( SIGSEGV,  SIG_DFL );
+    signal( SIGSEGV, SIG_DFL );
 
     BOSE_ERROR( s_logger, "------- Product Controller Segmentation Fault Start --------" );
 

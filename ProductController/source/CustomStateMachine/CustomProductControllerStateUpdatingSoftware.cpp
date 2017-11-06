@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      10/24/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -26,7 +24,6 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "DPrint.h"
 #include "Utilities.h"
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
@@ -105,9 +102,9 @@ void CustomProductControllerStateUpdatingSoftware::HandleStateExit()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateUpdatingSoftware::HandleLpmState( bool active )
 {
-    BOSE_WARNING( s_logger, "An LPM %s state event has occurred during %s.",
-                  active ? "activation" : "deactivation",
-                  "CustomProductControllerStateUpdatingSoftware" );
+    BOSE_WARNING( s_logger, "%s is handling an LPM %s event.",
+                  "CustomProductControllerStateUpdatingSoftware",
+                  active ? "activation" : "deactivation" );
     return true;
 }
 
@@ -122,9 +119,9 @@ bool CustomProductControllerStateUpdatingSoftware::HandleLpmState( bool active )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateUpdatingSoftware::HandleCapsState( bool active )
 {
-    BOSE_WARNING( s_logger, "A CAPS %s state event has occurred during  %s.",
-                  active ? "activation" : "deactivation",
-                  "CustomProductControllerStateUpdatingSoftware" );
+    BOSE_WARNING( s_logger, "%s is handling a CAPS %s event.",
+                  "CustomProductControllerStateUpdatingSoftware",
+                  active ? "activation" : "deactivation" );
     return true;
 }
 
@@ -139,9 +136,9 @@ bool CustomProductControllerStateUpdatingSoftware::HandleCapsState( bool active 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateUpdatingSoftware::HandleAudioPathState( bool active )
 {
-    BOSE_WARNING( s_logger, "An audio path %s state event has occurred during  %s.",
-                  active ? "activation" : "deactivation",
-                  "CustomProductControllerStateUpdatingSoftware" );
+    BOSE_WARNING( s_logger, "%s is handling an audio path %s event.",
+                  "CustomProductControllerStateUpdatingSoftware",
+                  active ? "activation" : "deactivation" );
     return true;
 }
 
@@ -152,7 +149,7 @@ bool CustomProductControllerStateUpdatingSoftware::HandleAudioPathState( bool ac
 /// @return This method will always return true, indicating that it has handled the event.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateUpdatingSoftware::HandleSTSSourcesInit( void )
+bool CustomProductControllerStateUpdatingSoftware::HandleSTSSourcesInit( )
 {
     BOSE_WARNING( s_logger,
                   "CustomProductControllerStateUpdatingSoftware is handling an STS initialization." );

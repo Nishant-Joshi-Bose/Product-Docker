@@ -7,8 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -98,8 +96,8 @@ public:
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration is used to start and run the product software services.
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void Run( void );
-    void Stop( void );
+    void Run( );
+    void Stop( );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration is used to handle reboot requests as a software service.
@@ -148,9 +146,9 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     ServerPointer m_serverListener;
 
-    void RegisterForRebootRequests( void );
+    void RegisterForRebootRequests( );
     void AcceptClient( ServerSocket client );
-    void HandleClientDisconnect( void );
+    void HandleClientDisconnect( );
     void SendRebootRequestHandler( BoseLinkServerMsgReboot rebootRequest );
 };
 
