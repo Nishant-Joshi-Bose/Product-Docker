@@ -96,7 +96,6 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
             }
             else
             {
-#if 1
                 const EddieProductController *eddiePC =
                     dynamic_cast<const EddieProductController*>( &GetProductController() );
                 if( eddiePC != nullptr )
@@ -114,7 +113,6 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
                 {
                     BOSE_ERROR( s_logger, "Error while casting to Eddie PC" );
                 }
-#endif
             }
         }
         break;
