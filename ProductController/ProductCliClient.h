@@ -32,4 +32,5 @@ private:
     void CliCmdMfgData( CLIClient::StringListType&, std::string& );
     void CliCmdBackLight( CLIClient::StringListType&, std::string& );
     void CliCmdLightSensor( CLIClient::StringListType&, std::string& );
+    void CliCmdAmp( CLIClient::StringListType&, std::string& );
 };

@@ -3,7 +3,6 @@
  */
 
 #include <endian.h>
-
 #include "ProductCliClient.h"
 #include "DPrint.h"
 #include "SystemUtils.h"
@@ -72,6 +71,11 @@ void ProductCliClient::Initialize( NotifyTargetTaskIF* task )
                          "Get the light sensor LUX value",
                          "light sensor" ) );
 
+    cmds.emplace_back( std::make_shared<Cmd>
+                       ( "amp",
+                         "Get/set amplifier state",
+                         "amp [on|off|mute|unmute]" ) );
+
     m_cliClient.Initialize( task, cmds,
                             [this]( std::string const & cmd,
                                     CLIClient::StringListType & argList,
@@ -116,6 +120,12 @@ bool ProductCliClient::HandleCommand( std::string const& cmd,
     if( cmd == "lightsensor" )
     {
         CliCmdLightSensor( argList, response );
+        return true;
+    }
+
+    if( cmd == "amp" )
+    {
+        CliCmdAmp( argList, response );
         return true;
     }
 
@@ -241,3 +251,59 @@ void ProductCliClient::CliCmdLightSensor( CLIClient::StringListType& argList,
     response = "usage: lightsensor";
     return;
 }// ProductCliClient::CliLightSensor
+
+void ProductCliClient::CliCmdAmp( CLIClient::StringListType& argList,
+                                  std::string& response )
+{
+    if( argList.empty() )
+    {
+        BOSE_LOG( INFO, "Get amplifier status..." );
+        m_lpmClient->GetAmp( [this]( IpcAmp_t const & rsp )
+        {
+            std::ostringstream ss;
+            ss << "amplifier on=" << rsp.on()
+               << " mute=" << rsp.mute()
+               << " powerfailure=" << rsp.powerfailure()
+               << " fault=" << rsp.fault()
+               << " dcoffset=" << be32toh( rsp.dcoffset1() ) << ','
+               << be32toh( rsp.dcoffset2() )
+               << " thermistor=" << be32toh( rsp.thermistor() );
+            auto const& msg = ss.str();
+
+            BOSE_LOG( INFO, msg );
+            m_cliClient.SendAsyncResponse( msg );
+        } );
+        response = "Sent request for amplifier status";
+    }
+    else
+    {
+        IpcAmp_t req;
+        for( auto& arg : argList )
+        {
+            if( arg == "on" )
+            {
+                req.set_on( true );
+                continue;
+            }
+            if( arg == "off" )
+            {
+                req.set_on( false );
+                continue;
+            }
+            if( arg == "mute" )
+            {
+                req.set_mute( true );
+                continue;
+            }
+            if( arg == "unmute" )
+            {
+                req.set_mute( false );
+                continue;
+            }
+            response = "Expected on|off|mute|unmute got '" + arg + '\'';
+            return;
+        }
+        m_lpmClient->SetAmp( req );
+        response = "Sent request to set amplifier state";
+    }
+}
