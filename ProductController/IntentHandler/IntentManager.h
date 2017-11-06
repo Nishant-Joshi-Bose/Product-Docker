@@ -75,7 +75,7 @@ protected:
         return m_frontDoorClient;
     }
 
-    const CbPtr_t& CallBack() const
+    const CbPtr_t& GetCallbackObject() const
     {
         return m_callBack;
     }

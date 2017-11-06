@@ -34,73 +34,73 @@ namespace ProductApp
 
 bool BluetoothManager::Handle( KeyHandlerUtil::ActionType_t intent )
 {
-    switch(intent)
+    switch( intent )
     {
-        case (uint16_t) Action::CLEAR_PAIRING_LIST:
+    case( uint16_t ) Action::CLEAR_PAIRING_LIST:
+    {
+        BOSE_DEBUG( s_logger, "Send Clear pairling list" );
+#if 0
+        GetFrontDoorClient()->\
+        SendPost<>( "/bluetooth/sink/removeAll", transportControl,
+                    m_NowPlayingRsp, m_frontDoorClientErrorCb );
+#endif
+    }
+    break;
+
+    case( uint16_t ) Action::CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST:
+    {
+        if( BluetoothDeviceConnected() )
         {
-            BOSE_DEBUG(s_logger, "Send Clear pairling list");
+            BOSE_DEBUG( s_logger, "Go to discoverable mode" );
 #if 0
             GetFrontDoorClient()->\
-                SendPost<>( "/bluetooth/sink/removeAll", transportControl,
-                             m_NowPlayingRsp, m_frontDoorClientErrorCb );
+            SendPost<>( "/bluetooth/sink/pairable", transportControl,
+                        m_NowPlayingRsp, m_frontDoorClientErrorCb );
 #endif
         }
-        break;
-
-        case (uint16_t) Action::CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST:
+        else if( BluetoothDeviceListPresent() )
         {
-            if (BluetoothDeviceConnected())
-            {
-                BOSE_DEBUG( s_logger, "Go to discoverable mode");
+            BOSE_DEBUG( s_logger, "Profile of devices present"
+                        " Connect to first in the list" );
 #if 0
-                GetFrontDoorClient()->\
-                    SendPost<>( "/bluetooth/sink/pairable", transportControl,
-                                 m_NowPlayingRsp, m_frontDoorClientErrorCb );
+            GetFrontDoorClient()->\
+            SendPost<>( "/bluetooth/sink/connect", transportControl,
+                        m_NowPlayingRsp, m_frontDoorClientErrorCb );
 #endif
-            }
-            else if (BluetoothDeviceListPresent())
-            {
-                BOSE_DEBUG( s_logger, "Profile of devices present"
-                           " Connect to first in the list");
-#if 0
-                GetFrontDoorClient()->\
-                    SendPost<>( "/bluetooth/sink/connect", transportControl,
-                                 m_NowPlayingRsp, m_frontDoorClientErrorCb );
-#endif
-            }
-            else
-            {
-                BOSE_DEBUG( s_logger, "Profile of devices not present"
-                           " Ignoring the intent");
-            }
         }
-        break;
-
-        default:
+        else
         {
-            BOSE_ERROR(s_logger, "Invalid intent %d received in %s",
-                      (uint16_t) intent, __func__);
+            BOSE_DEBUG( s_logger, "Profile of devices not present"
+                        " Ignoring the intent" );
         }
-        break;
+    }
+    break;
+
+    default:
+    {
+        BOSE_ERROR( s_logger, "Invalid intent %d received in %s",
+                    ( uint16_t ) intent, __func__ );
+    }
+    break;
     }
 
     //Fire the cb so the control goes back to the ProductController
-    if( CallBack() != nullptr )
+    if( GetCallbackObject() != nullptr )
     {
-        ( *CallBack() )( intent );
+        ( *GetCallbackObject() )( intent );
     }
     return true;
 }
 
 bool BluetoothManager::BluetoothDeviceConnected()
 {
-    BOSE_DEBUG(s_logger, "%s", __func__);
+    BOSE_DEBUG( s_logger, "%s", __func__ );
     return true;
 }
 
 bool BluetoothManager::BluetoothDeviceListPresent()
 {
-    BOSE_DEBUG(s_logger, "%s", __func__);
+    BOSE_DEBUG( s_logger, "%s", __func__ );
     return true;
 }
 

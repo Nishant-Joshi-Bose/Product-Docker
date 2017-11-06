@@ -149,9 +149,9 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
     }
 
     //Fire the cb so the control goes back to the ProductController
-    if( CallBack() != nullptr )
+    if( GetCallbackObject() != nullptr )
     {
-        CallBack()->Send( intent );
+        GetCallbackObject()->Send( intent );
     }
     return true;
 }
