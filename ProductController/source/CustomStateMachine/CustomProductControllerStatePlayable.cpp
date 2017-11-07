@@ -139,36 +139,6 @@ bool CustomProductControllerStatePlayable::HandlePowerState( )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief  CustomProductControllerStatePlayable::HandleKey
-///
-/// @return This method returns a true Boolean value indicating that it has handled the supplied
-///         key and that no futher processing will be required by any of its superstates.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayable::HandleKeyAction( int action )
-{
-    BOSE_VERBOSE( s_logger,  __func__ );
-    bool handled = false;
-    ProfessorProductController &pc = GetCustomProductController();
-
-    switch( action )
-    {
-    case KeyActionPb::KEY_ACTION_SOUNDTOUCH:
-        pc.SendPlaybackRequest( SOURCE_SOUNDTOUCH );
-        handled = true;
-        break;
-    case KeyActionPb::KEY_ACTION_TV:
-        pc.SendPlaybackRequest( SOURCE_TV );
-        handled = true;
-        break;
-    default:
-        break;
-    }
-    return handled;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 /// @brief  CustomProductControllerStatePlayable::HandleNowSelectionInfo
 ///
 ///
