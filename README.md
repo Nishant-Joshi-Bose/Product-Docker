@@ -84,12 +84,8 @@ $ sudo fastboot reboot
 
 To update LPM from APQ:
 ```shell session
-$ cd /scratch/
-$ cp /home/softlib/verisoft/Eddie/Continuous/master/latest/eddie_lpm_updater_*.ipk eddie_lpm_updater.ipk
-$ adb push /scratch/eddie_lpm_updater.ipk /dev/shm/
-$ adb shell /opt/Bose/bin/rw
-$ adb shell opkg remove eddie_lpm_updater
-$ adb shell opkg -d bose install /dev/shm/eddie_lpm_updater.ipk
+$ cd /scratch/Eddie
+$ ./scripts/putlpm
 ```
 Once installation completes, unplug and replug power supply to Eddie board. Please note that power cycle is must for LPM firmware update to complete.
 
@@ -125,7 +121,7 @@ To setup the usual environment:
 
 ```shell session
 $ adb shell
-/ # HOME=/opt/Bose exec bash -login
+/ # . ~/.profile
 Sat Sep  2 12:10:12 UTC 2017
 Device name: "Bose SoundTouch C7E3A2"
 mc1014468@hepdsw64.bose.com 2017-08-31T08:40:21 master 0.0.1-1+3e07c68

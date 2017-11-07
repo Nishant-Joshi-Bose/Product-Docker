@@ -24,6 +24,7 @@ private:
 
 
     LpmClientIF::LpmClientPtr m_lpmClient;
+    NotifyTargetTaskIF*       m_task;
 
     bool HandleCommand( std::string const&, CLIClient::StringListType&,
                         std::string& );
@@ -33,4 +34,5 @@ private:
     void CliCmdBackLight( CLIClient::StringListType&, std::string& );
     void CliCmdLightSensor( CLIClient::StringListType&, std::string& );
     void CliCmdAmp( CLIClient::StringListType&, std::string& );
+    void CliCmdLcd( CLIClient::StringListType&, std::string& );
 };

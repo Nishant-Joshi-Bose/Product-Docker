@@ -1,0 +1,15 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @file IntentHandler.proto
+///
+/// @brief Intent Handler protouf definition
+///
+/// Copyright 2017 Bose Corporation
+////////////////////////////////////////////////////////////////////////////////
+package IntentHandler.Protobuf;
+
+message ButtonEventNotification {
+    // button event
+    optional string event = 1;
+    // count-down count
+    optional uint32 countdown = 2;
+}
