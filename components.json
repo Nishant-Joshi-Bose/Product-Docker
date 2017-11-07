@@ -17,7 +17,7 @@
   },
   {
     "name": "CastleDemoController-qc8017_32",
-    "selected_version": "Release/master/0.0.2-4+4b20532"
+    "selected_version": "Continuous/master/0.0.2-10+e41375b"
   },
   {
     "name": "CastleLibs-qc8017_32",
@@ -49,7 +49,7 @@
   },
   {
     "name": "EddieLPM-Package",
-    "selected_version": "Release/trunk/0.1.2.2542627/DP1"
+    "selected_version": "Continuous/trunk/2017-11-06_1852/DP1"
   },
   {
     "name": "KeyHandler-native",
@@ -89,11 +89,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.1.2-85+d220b0c"
+    "selected_version": "Continuous/master/0.1.2-99+669209f"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-11-05_1921"
+    "selected_version": "Continuous/Castle-Fork/2017-11-06_1042"
   },
   {
     "name": "UnitTest++-native",

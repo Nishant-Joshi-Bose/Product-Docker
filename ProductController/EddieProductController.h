@@ -383,8 +383,8 @@ private:
     bool                                        m_isBLEModuleReady  = false;
     bool                                        m_isBluetoothReady  = false;
 
-    int                                         m_WiFiProfilesCount;
-    int                                         m_BluetoothProfilesCount;
+    int                                         m_wifiProfilesCount;
+    BluetoothSinkService::ListResponse          m_bluetoothSinkList;
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>     errorCb;
     /// Demonstration Controller instance
     DemoApp::DemoController m_demoController;

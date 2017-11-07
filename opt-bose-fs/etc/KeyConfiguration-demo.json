@@ -1,28 +1,28 @@
 { "KeyTable":
 [
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [4], "TimeOutList": [0], "Action": 1, "Comment": "Console: MFB release between 0-1750 ms ---> play-pause"},
-    {"Origin": 0, "KeyEvent": 4, "KeyList": [4,4], "TimeOutList": [500], "Action": 2, "Comment": "Console: MFB repeat release twice within 500 ms ---> next track"},
-    {"Origin": 0, "KeyEvent": 4, "KeyList": [4,4,4], "TimeOutList": [500], "Action": 3, "Comment": "Console: MFB repeat release thrice within 500 ms ---> prev track"},
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [4], "TimeOutList": [1750], "Action": 4, "Comment": "Console: MFB release after 1750 ms ---> Network Standby"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [2,4], "TimeOutList": [500], "Action": 5, "Comment": "Console: MFB+Aux press and hold for at least 500ms ---> AP Mode"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [3,4], "TimeOutList": [500], "Action": 6, "Comment": "Console: MFB+VolumeUp press and hold for at least 500ms ---> Manual Update"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [1,4], "TimeOutList": [500], "Action": 7, "Comment": "Console: MFB+Bluetooth press and hold for at least 500ms ---> Disable Networking"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [4,5], "TimeOutList": [10000], "Action": 8, "Comment": "Console: MFB+VolumeDown press and hold for at least 10000 ---> Factory Reset"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [4], "TimeOutList": [15000], "Action": 9, "Comment": "Console: MFB press and hold for at least 1500ms ---> Low Power Standby"},
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [4], "TimeOutList": [0], "Action": 1001, "Comment": "Console: MFB release between 0-1750 ms ---> play-pause"},
+    {"Origin": 0, "KeyEvent": 4, "KeyList": [4,4], "TimeOutList": [500], "Action": 1002, "Comment": "Console: MFB repeat release twice within 500 ms ---> next track"},
+    {"Origin": 0, "KeyEvent": 4, "KeyList": [4,4,4], "TimeOutList": [500], "Action": 1003, "Comment": "Console: MFB repeat release thrice within 500 ms ---> prev track"},
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [4], "TimeOutList": [1750], "Action": 1004, "Comment": "Console: MFB release after 1750 ms ---> Network Standby"},
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [2,4], "TimeOutList": [500], "Action": 1005, "Comment": "Console: MFB+Aux press and hold for at least 500ms ---> AP Mode"},
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [3,4], "TimeOutList": [500], "Action": 1006, "Comment": "Console: MFB+VolumeUp press and hold for at least 500ms ---> Manual Update"},
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [1,4], "TimeOutList": [500], "Action": 1007, "Comment": "Console: MFB+Bluetooth press and hold for at least 500ms ---> Disable Networking"},
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [4,5], "TimeOutList": [10000], "Action": 1008, "Comment": "Console: MFB+VolumeDown press and hold for at least 10000 ---> Factory Reset"},
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [4], "TimeOutList": [15000], "Action": 1009, "Comment": "Console: MFB press and hold for at least 1500ms ---> Low Power Standby"},
 
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [1], "TimeOutList": [0], "Action": 20, "Comment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [1], "TimeOutList": [750], "Action": 21, "Comment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [1], "TimeOutList": [10000], "Action": 22, "Comment": "Console: Bluetooth Press and Hold ---> Clear Pairing List"},
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [1], "TimeOutList": [0], "Action": 1020, "Comment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast"},
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [1], "TimeOutList": [750], "Action": 1021, "Comment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable"},
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [1], "TimeOutList": [10000], "Action": 1022, "Comment": "Console: Bluetooth Press and Hold ---> Clear Pairing List"},
 
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [3], "TimeOutList": [0], "Action": 23, "Comment": "Console: VolumeUp(+) release ---> VolumeUp"},
-    {"Origin": 0, "KeyEvent": 3, "KeyList": [3], "TimeOutList": [300,200], "Action": 23, "Comment": "Console: VolumeUp(+) Press and Hold ---> VolumeUp"},
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [3], "TimeOutList": [0], "Action": 1023, "Comment": "Console: VolumeUp(+) release ---> VolumeUp"},
+    {"Origin": 0, "KeyEvent": 3, "KeyList": [3], "TimeOutList": [300,200], "Action": 1023, "Comment": "Console: VolumeUp(+) Press and Hold ---> VolumeUp"},
 
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [5], "TimeOutList": [0], "Action": 24, "Comment": "Console: VolumeUp(-) release ---> VolumeDown"},
-    {"Origin": 0, "KeyEvent": 3, "KeyList": [5], "TimeOutList": [300,200], "Action": 24, "Comment": "Console: VolumeUp(-) Press and Hold ---> VolumeDown"},
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [5], "TimeOutList": [0], "Action": 1024, "Comment": "Console: VolumeUp(-) release ---> VolumeDown"},
+    {"Origin": 0, "KeyEvent": 3, "KeyList": [5], "TimeOutList": [300,200], "Action": 1024, "Comment": "Console: VolumeUp(-) Press and Hold ---> VolumeDown"},
 
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [2], "TimeOutList": [0], "Action": 25, "Comment": "Console: AUX release ---> SendToAux"},
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [2], "TimeOutList": [0], "Action": 1025, "Comment": "Console: AUX release ---> SendToAux"},
 
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [6], "TimeOutList": [0], "Action": 26, "Comment": "Console: Action release ---> Alexa"}
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [6], "TimeOutList": [0], "Action": 1026, "Comment": "Console: Action release ---> Alexa"}
 
 ]
 }

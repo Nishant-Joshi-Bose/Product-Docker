@@ -33,6 +33,7 @@ ADD_EXECUTABLE(Eddie
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/ContentItem.pb.cc
   ${PROTO_CC_DEST}/DisplayController.pb.cc
+  ${PROTO_CC_DEST}/IntentHandler.pb.cc
   IntentHandler/IntentHandler.cpp
   IntentHandler/TransportControlManager.cpp
   IntentHandler/BluetoothManager.cpp

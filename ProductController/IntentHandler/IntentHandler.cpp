@@ -36,11 +36,17 @@
 #include "IntentHandler.h"
 #include "TransportControlManager.h"
 #include "PlaybackRequestManager.h"
+#include "IntentHandler.pb.h"
 
 static DPrint s_logger( "IntentHandler" );
 
+constexpr char BUTTON_EVENT_NOTIFICATION_URL[] = "/system/buttonEvent";
+
+using namespace IntentHandler::Protobuf;
+
 namespace ProductApp
 {
+
 IntentHandler::IntentHandler( NotifyTargetTaskIF& task,
                               const CliClientMT& cliClient,
                               const FrontDoorClientIF_t& frontDoorClient,
@@ -96,15 +102,33 @@ void IntentHandler::Initialize()
 
     m_IntentManagerMap[( uint16_t )Action::AUX_IN] = playbackRequestManager;
     //- AUX Control API's
+
+    // prepare map for button event notification
+    m_IntentNotificationMap[( uint16_t ) Action::PLAY_PAUSE]    = "play_pause" ;
+    m_IntentNotificationMap[( uint16_t ) Action::NEXT_TRACK]    = "next_track" ;
+    m_IntentNotificationMap[( uint16_t ) Action::PREV_TRACK]    = "prev_track" ;
+    m_IntentNotificationMap[( uint16_t ) Action::CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST] \
+        = "carousel_discoverable_connect_to_last" ;
+    m_IntentNotificationMap[( uint16_t ) Action::SEND_TO_DISCOVERABLE]     = "send_to_discoverable" ;
+    m_IntentNotificationMap[( uint16_t ) Action::CLEAR_PAIRING_LIST] = "clear_pairing_list" ;
+    m_IntentNotificationMap[( uint16_t ) Action::VOLUME_UP]     = "volume_up" ;
+    m_IntentNotificationMap[( uint16_t ) Action::VOLUME_DOWN]   = "volume_down" ;
+    m_IntentNotificationMap[( uint16_t ) Action::AUX_IN]        = "aux_in" ;
+
     return;
 }
 
 bool IntentHandler::Handle( KeyHandlerUtil::ActionType_t intent )
 {
     BOSE_DEBUG( s_logger, "%s: ", __func__ );
+
+    //notify button event if required to notify
+    NotifyButtonEvent( intent );
+
     IntentManagerMap_t::iterator iter = m_IntentManagerMap.find( intent );
     if( iter != m_IntentManagerMap.end() )
     {
+
         iter->second->Handle( intent );
         BOSE_DEBUG( s_logger, "Found the Handle for intent :%d", intent );
         return( true );
@@ -137,4 +161,19 @@ void IntentHandler::RegisterCallBack( KeyHandlerUtil::ActionType_t intent,
     return;
 }
 
+void IntentHandler::NotifyButtonEvent( KeyHandlerUtil::ActionType_t intent )
+{
+
+    BOSE_DEBUG( s_logger, "%s: ", __func__ );
+    auto iter = m_IntentNotificationMap.find( ( uint16_t )intent );
+
+    //found handle, notify
+    if( iter != m_IntentNotificationMap.end() )
+    {
+        ButtonEventNotification btn_notification;
+        btn_notification.set_event( m_IntentNotificationMap[ intent ] );
+        m_frontDoorClient->SendNotification( BUTTON_EVENT_NOTIFICATION_URL, btn_notification );
+    }
 }
+}
+
