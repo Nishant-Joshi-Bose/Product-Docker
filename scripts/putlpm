@@ -4,18 +4,20 @@
 #
 this=${0##*/}
 
-if (( $# > 0 )); then
-    echo >&2 "$this: wrong usage"
-    exit 1
+if (( $# == 0 )); then
+    build=/home/softlib/verisoft/Eddie/Continuous/master
+    version=$(cat "$build/latest.txt") || exit
+    set -- "$build/$version/eddie_lpm_updater_$version.ipk"
+    echo "$0" "$1"
 fi
 
-build=/home/softlib/verisoft/Eddie/Continuous/master
+if (( $# != 1 )); then
+    echo >&2 "usage: $this [eddie_lpm_updater.ipk]"
+    exit 1
+fi
+ipk=$1
 
-version=$(cat "$build/latest.txt") || exit
-echo "Build $version"
-
-ipk=$build/$version/eddie_lpm_updater_$version.ipk
-ls -s "$ipk" || exit
+ar t >/dev/null "$ipk" || exit
 
 echo Remount...
 adb shell mount -oremount,rw /opt/Bose || exit
