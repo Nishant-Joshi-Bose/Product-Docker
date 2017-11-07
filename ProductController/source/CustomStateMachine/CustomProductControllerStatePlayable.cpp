@@ -139,6 +139,7 @@ bool CustomProductControllerStatePlayable::HandlePowerState( )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief  CustomProductControllerStatePlayable::HandleNowSelectionInfo
 ///
 ///
