@@ -22,14 +22,14 @@ class ProductController;
 class DisplayController
 {
 public:
-    DisplayController  ( ProductController& m_controller,
-                         const std::shared_ptr<FrontDoorClientIF>& fd_client,
-                         LpmClientIF::LpmClientPtr clientPtr );
+    DisplayController( ProductController& m_controller,
+                       const std::shared_ptr<FrontDoorClientIF>& fd_client,
+                       LpmClientIF::LpmClientPtr clientPtr );
     ~DisplayController();
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  Initialize()
-/// @brief Display specific initialization
+/// @brief-
 /// @return void
 ///////////////////////////////////////////////////////////////////////////////
     void Initialize();
@@ -70,7 +70,7 @@ public:
 /// @brief-
 /// @return void
 ///////////////////////////////////////////////////////////////////////////////
-    void SetAutoMode (bool autoMode)
+    void SetAutoMode( bool autoMode )
     {
         m_autoMode = autoMode;
     }
@@ -80,13 +80,13 @@ private:
     DisplayController( const DisplayController& ) = delete;
     DisplayController& operator=( const DisplayController& ) = delete;
 
-    void RegisterDisplayEndPoints        ();
-    void HandleLpmResponse               ( LBCSResponse_t response, const Callback<Display>& resp );
-    bool HandleLpmNotificationBackLight  ( IpcBackLight_t   lpmBackLight   );
+    void RegisterDisplayEndPoints();
+    void HandleLpmResponse( LBCSResponse_t response, const Callback<Display>& resp );
+    bool HandleLpmNotificationBackLight( IpcBackLight_t   lpmBackLight );
     bool HandleLpmNotificationLightSensor( IpcLightSensor_t lpmLightSensor );
-    void MonitorLightSensor              (                                 );
-    void SetBackLightLevel               ( int actualLevel, int newLevel   );
-    int  GetBackLightLevelFromLux        ( int lux , int lux_rising        );
+    void MonitorLightSensor( );
+    void SetBackLightLevel( int actualLevel, int newLevel );
+    int  GetBackLightLevelFromLux( int lux , int lux_rising );
 
     ProductController&                 m_productController;
     std::shared_ptr<FrontDoorClientIF> m_frontdoorClientPtr;

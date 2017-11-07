@@ -89,22 +89,17 @@ int DisplayController::GetBackLightLevelFromLux ( int lux, int lux_rising )
 
 void DisplayController::SetBackLightLevel ( int actualLevel, int newLevel )
 {
-    int                steps          = abs(actualLevel - newLevel);
-    int                levelIncrement = ((actualLevel > newLevel) ? -1 : 1);
-    IpcBackLight_t     backlight;
-    std::ostringstream ss;
+    int            steps          = abs(actualLevel - newLevel);
+    int            levelIncrement = ((actualLevel > newLevel) ? -1 : 1);
+    IpcBackLight_t backlight;
 
-    ss << "set actual level: " << actualLevel << " new level: " << newLevel;
-    BOSE_LOG( INFO, ss.str() );
-    ss.str("");
+    BOSE_LOG( INFO, "set actual level: " << actualLevel << " new level: " << newLevel );
 
     for ( int i = 0; i < steps; i++ )
     {
         actualLevel += levelIncrement;
 
-        ss << " level: " << actualLevel;
-        BOSE_LOG( INFO, ss.str() );
-        ss.str("");
+        BOSE_LOG( INFO, " level: " << actualLevel );
 
         backlight.set_value( actualLevel );
         m_lpmClient->SetBackLight( backlight );
@@ -113,8 +108,7 @@ void DisplayController::SetBackLightLevel ( int actualLevel, int newLevel )
 
     if ( actualLevel != newLevel )
     {
-        ss << "Warning: adjusting actual level: " << actualLevel << ", new level: " << newLevel << "\n";
-        BOSE_LOG( WARNING, ss.str() );
+        BOSE_LOG( WARNING, "Warning: adjusting actual level: " << actualLevel << ", new level: " << newLevel );
 
         backlight.set_value( newLevel );
         m_lpmClient->SetBackLight( backlight );
@@ -125,9 +119,8 @@ void DisplayController::SetBackLightLevel ( int actualLevel, int newLevel )
 ////////////////////////////////////////////////////////////////////////////////
 void DisplayController::MonitorLightSensor()
 {
-    int                previous_lux   = 0;
-    int                targeted_level = 0;
-    std::ostringstream ss;
+    int previous_lux   = 0;
+    int targeted_level = 0;
 
     m_luxDecimal    = 0;
     m_luxFractional = 0;
@@ -151,17 +144,13 @@ void DisplayController::MonitorLightSensor()
             m_backLight = rsp.value();
         } );
 
-        ss << "actual lux: " << m_luxDecimal << ", previous lux: " << previous_lux << ", back light: " << m_backLight << "\n";
-        BOSE_LOG( INFO, ss.str() );
-        ss.str("");
+        BOSE_LOG( INFO, "actual lux: " << m_luxDecimal << ", previous lux: " << previous_lux << ", back light: " << m_backLight );
 
         if ( m_autoMode )
         {
             targeted_level = GetBackLightLevelFromLux(m_luxDecimal, m_luxDecimal - previous_lux );
 
-            ss << "target level: " << targeted_level << ", actual level: " << m_backLight;
-            BOSE_LOG( INFO, ss.str() );
-            ss.str("");
+            BOSE_LOG( INFO, "target level: " << targeted_level << ", actual level: " << m_backLight );
 
             if ( abs (targeted_level - m_backLight ) >= BACKLIGHT_DIFF_THRESHOLD )
             {
@@ -192,8 +181,13 @@ void DisplayController::Initialize()
 ////////////////////////////////////////////////////////////////////////////////
 void DisplayController::RegisterDisplayEndPoints()
 {
-    auto backLightCallBack   = std::bind( &DisplayController::HandleLpmNotificationBackLight  , this, std::placeholders::_1 );
-    auto lightSensorCallBack = std::bind( &DisplayController::HandleLpmNotificationLightSensor, this, std::placeholders::_1 );
+    auto backLightCallBack = [this]( IpcBackLight_t arg ) {
+        HandleLpmNotificationBackLight( arg );
+    };
+
+    auto lightSensorCallBack = [this]( IpcLightSensor_t arg ) {
+        HandleLpmNotificationLightSensor( arg );
+    };
 
     AsyncCallback<IpcBackLight_t  > notification_cb_back_light  ( backLightCallBack  , m_productController.GetTask() );
     AsyncCallback<IpcLightSensor_t> notification_cb_light_sensor( lightSensorCallBack, m_productController.GetTask() );
@@ -249,7 +243,6 @@ bool DisplayController::HandleLpmNotificationBackLight( IpcBackLight_t lpmBackLi
     m_frontdoorClientPtr->SendNotification( "/ui/display" , GetDisplay() );
     return true;
 }// HandleLpmNotificationBackLight
-
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
