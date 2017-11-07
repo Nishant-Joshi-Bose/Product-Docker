@@ -140,6 +140,7 @@ bool CustomProductControllerStatePlayable::HandlePowerState( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+<<<<<<< HEAD
 /// @brief  CustomProductControllerStatePlayable::HandleKey
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the supplied
@@ -183,6 +184,24 @@ bool CustomProductControllerStatePlayable::HandleNowSelectionInfo( const SoundTo
 {
     BOSE_VERBOSE( s_logger,  __func__ );
     ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE );
+=======
+/// @brief  CustomProductControllerStatePlayable::HandleNowSelectionInfo
+///
+///
+/// @param  const SoundTouchInterface::NowSelectionInfo&
+///
+/// @return This method returns a true Boolean value indicating that it has handled the event
+///         and no futher processing will be required by any of its superstates.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayable::HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
+{
+    BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                  "CustomProductControllerStatePlayable",
+                  "CustomProductControllerStatePlaying" );
+    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
+
+>>>>>>> 17d05ce5ccaf0bbe063bcc64c4c9c2ec8cd94c14
     return true;
 }
 
