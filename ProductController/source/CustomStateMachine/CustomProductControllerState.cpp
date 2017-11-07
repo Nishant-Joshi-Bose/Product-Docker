@@ -123,16 +123,6 @@ bool CustomProductControllerState::HandlePairingState( ProductAccessoryPairing p
     return false;
 }
 
-bool CustomProductControllerState::HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
-{
-    return false;
-}
-
-bool CustomProductControllerState::HandleInactivityTimer( InactivityTimerType timer )
-{
-    return false;
-}
-
 ProfessorProductController& CustomProductControllerState::GetCustomProductController()
 {
     return *static_cast< ProfessorProductController* >( s_productController );

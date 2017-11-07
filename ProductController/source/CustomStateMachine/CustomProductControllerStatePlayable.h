@@ -36,7 +36,7 @@
 #include "ProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
-#include "SoundTouchInterface/ContentSelectionService.pb.h"
+//#include "SoundTouchInterface/ContentSelectionService.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -78,10 +78,7 @@ public:
 
     bool HandlePowerState( ) override;
     bool HandlePlaybackRequest( ProductPlaybackRequest_ProductPlaybackState state ) override;
-<<<<<<< HEAD
     bool HandleKeyAction( int action ) override;
-=======
->>>>>>> 17d05ce5ccaf0bbe063bcc64c4c9c2ec8cd94c14
     bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo ) override;
 };
 

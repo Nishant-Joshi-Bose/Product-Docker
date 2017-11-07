@@ -107,10 +107,6 @@ public:
     virtual bool HandleAutowakeStatus( bool active );
     virtual bool HandleKeyAction( int action );
     virtual bool HandlePairingState( ProductAccessoryPairing pairingStatus );
-<<<<<<< HEAD
-    virtual bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo );
-    virtual bool HandleInactivityTimer( InactivityTimerType timer );
-=======
 
     virtual bool HandleStopPlaybackResponse( const SoundTouchInterface::status &resp )
     {
@@ -127,7 +123,6 @@ public:
         return false;
     }
 
->>>>>>> 17d05ce5ccaf0bbe063bcc64c4c9c2ec8cd94c14
     static  void SetProductController( ProductController* productController )
     {
         s_productController = productController;

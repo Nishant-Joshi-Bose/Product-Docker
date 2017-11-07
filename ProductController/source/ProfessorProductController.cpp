@@ -567,7 +567,7 @@ void ProfessorProductController::RegisterFrontDoorEndPoints()
 /// @name   ProfessorProductController::SelectSource
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::SelectSource( PlaybackSource_t playbackSource )
+void ProfessorProductController::SendPlaybackRequest( PlaybackSource_t playbackSource )
 {
     BOSE_VERBOSE( s_logger, __func__ );
     BOSE_INFO( s_logger, "Source %d was selected. \n", playbackSource );

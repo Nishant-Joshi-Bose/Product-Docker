@@ -140,7 +140,6 @@ bool CustomProductControllerStatePlayable::HandlePowerState( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-<<<<<<< HEAD
 /// @brief  CustomProductControllerStatePlayable::HandleKey
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the supplied
@@ -150,41 +149,26 @@ bool CustomProductControllerStatePlayable::HandlePowerState( )
 bool CustomProductControllerStatePlayable::HandleKeyAction( int action )
 {
     BOSE_VERBOSE( s_logger,  __func__ );
-    bool handled = true;
+    bool handled = false;
     ProfessorProductController &pc = GetCustomProductController();
 
     switch( action )
     {
     case KeyActionPb::KEY_ACTION_SOUNDTOUCH:
-        pc.SelectSource( SOURCE_SOUNDTOUCH );
+        pc.SendPlaybackRequest( SOURCE_SOUNDTOUCH );
+        handled = true;
         break;
-
     case KeyActionPb::KEY_ACTION_TV:
-        pc.SelectSource( SOURCE_TV );
+        pc.SendPlaybackRequest( SOURCE_TV );
+        handled = true;
         break;
-
     default:
-        handled = false;
         break;
     }
-
     return handled;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief  CustomProductControllerStatePlayable::HandleNowSelectionInfo
-///
-/// @return This method returns a true Boolean value indicating that nowSelectionInfo
-///         FrontDoor message is handled, and will change state to Audio ON
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-bool CustomProductControllerStatePlayable::HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
-{
-    BOSE_VERBOSE( s_logger,  __func__ );
-    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE );
-=======
 /// @brief  CustomProductControllerStatePlayable::HandleNowSelectionInfo
 ///
 ///
@@ -201,7 +185,6 @@ bool CustomProductControllerStatePlayable::HandleNowSelectionInfo( const SoundTo
                   "CustomProductControllerStatePlaying" );
     ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
 
->>>>>>> 17d05ce5ccaf0bbe063bcc64c4c9c2ec8cd94c14
     return true;
 }
 
