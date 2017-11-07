@@ -10,6 +10,7 @@ PROTO_SOURCES = \
   ProductMessage.proto \
   AudioSettings.proto \
   ContentItem.proto \
+  DisplayController.proto \
 
 # Where to search for imported *.proto files.
 PROTO_IMPORT_DIRS := \

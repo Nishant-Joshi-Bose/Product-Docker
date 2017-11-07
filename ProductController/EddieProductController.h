@@ -7,6 +7,11 @@
 
 #pragma once
 
+#include <locale>
+#include <string>
+#include <algorithm>
+#include <iostream>
+
 #include "ProductController.h"
 #include "EddieProductControllerHsm.h"
 #include "NotifyTargetTaskIF.h"
@@ -34,6 +39,7 @@
 #include "IntentHandler.h"
 #include "ProductSTSController.h"
 #include "BluetoothSinkService.pb.h"
+#include "DisplayController.h"
 
 namespace ProductApp
 {
@@ -109,6 +115,13 @@ private:
     void PersistCapsNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingPb, bool force = false );
     bool IsNowPlayingChanged( const SoundTouchInterface::NowPlayingJson& nowPlayingPb );
     void HandleAllowSourceSelectCliCmd( const std::list<std::string> & argList, std::string& response );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  HandleSetDisplayAutoMode
+/// @brief Function to TDB
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void HandleSetDisplayAutoMode( const std::list<std::string> & argList, std::string& response );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name HandleSetProductControllerStateCliCmd
@@ -322,6 +335,16 @@ public:
     void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
     void HandleRawKeyCliCmd( const std::list<std::string>& argList, std::string& response );
 
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief set the display controllee automatic mode  to true or false (manual)
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    void SetDisplayAutoMode( bool autoMode ) const
+    {
+        m_displayController->SetAutoMode( autoMode );
+    }// GetDisplayController
+
 private:
 
     EddieProductControllerStateTop              m_EddieProductControllerStateTop;
@@ -351,6 +374,7 @@ private:
     ProductCliClient                            m_productCliClient;
 
     std::unique_ptr<LightBar::LightBarController>         m_lightbarController;
+    std::unique_ptr<DisplayController>          m_displayController;
     IntentHandler                               m_IntentHandler;
     LpmInterface                                m_LpmInterface;
     bool                                        m_isCapsReady = false;

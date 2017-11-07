@@ -1,0 +1,38 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @file DisplayController.proto
+///
+/// @brief Display Animation protouf definition
+///
+/// Copyright 2017 Bose Corporation
+////////////////////////////////////////////////////////////////////////////////
+package DisplayController.Protobuf;
+
+message DisplayTransition{
+    optional uint32 room_lux          = 1;
+    optional uint32 display_intensity = 2;
+}
+
+message DisplayRequestError {
+    // Display Controller will return/notify error string in case of an error
+    optional string id = 1;
+}
+
+message Display {
+    enum Mode {
+        AUTOMATIC = 0;
+        MANUAL    = 1;
+    }
+
+    optional Mode                mode                     = 1 [default = AUTOMATIC];
+    optional uint32              transitionTimeMs         = 2;
+    optional uint32              windowTimeMs             = 3;
+    optional DisplayTransition   dimToMediumTransition    = 4;
+    optional DisplayTransition   mediumToDimTransition    = 5;
+    optional DisplayTransition   mediumToBrightTransition = 6;
+    optional DisplayTransition   brightToMediumTransition = 7;
+    optional uint32              manualIntensity          = 8;
+    optional uint32              backLightPrecentage      = 9;
+    optional uint32              lightSensorLUX           = 10;
+    optional DisplayRequestError error                    = 11;
+}
+

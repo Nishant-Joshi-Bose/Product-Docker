@@ -3,11 +3,16 @@
  */
 
 #include <endian.h>
+#include <iostream>
+#include <fstream>
+
 #include "ProductCliClient.h"
 #include "DPrint.h"
+#include "DirUtils.h"
 #include "SystemUtils.h"
 #include "LpmClientFactory.h"
 #include "RivieraLPM_IpcProtocol.h"
+#include "EddieProductController.h"
 
 namespace
 {
@@ -51,6 +56,8 @@ void ProductCliClient::Initialize( NotifyTargetTaskIF* task )
 
     using Cmd = CLIClient::CLICmdDescriptor;
 
+    m_task = task;
+
     cmds.emplace_back( std::make_shared<Cmd>
                        ( "lpm echo",
                          "Send an echo request to the LPM",
@@ -75,6 +82,11 @@ void ProductCliClient::Initialize( NotifyTargetTaskIF* task )
                        ( "amp",
                          "Get/set amplifier state",
                          "amp [on|off|mute|unmute]" ) );
+
+    cmds.emplace_back( std::make_shared<Cmd>
+                       ( "lcd",
+                         "Manage the lcd hardware",
+                         "lcd" ) );
 
     m_cliClient.Initialize( task, cmds,
                             [this]( std::string const & cmd,
@@ -126,6 +138,12 @@ bool ProductCliClient::HandleCommand( std::string const& cmd,
     if( cmd == "amp" )
     {
         CliCmdAmp( argList, response );
+        return true;
+    }
+
+    if( cmd == "lcd" )
+    {
+        CliCmdLcd( argList, response );
         return true;
     }
 
@@ -306,3 +324,44 @@ void ProductCliClient::CliCmdAmp( CLIClient::StringListType& argList,
         response = "Sent request to set amplifier state";
     }
 }
+
+void ProductCliClient::CliCmdLcd( CLIClient::StringListType& argList,
+                                  std::string& response )
+{
+    const std::string str_usage                    = "usage";
+    const std::string display_controller_file_name = "/sys/devices/soc/7af6000.spi/spi_master/spi6/spi6.1/graphics/fb1/send_command";
+    auto& arg                                      = ( argList.size() == 1 ) ? argList.front() : str_usage;
+
+    if( DirUtils::DoesFileExist( display_controller_file_name ) == false )
+    {
+        response = "error: can't find file: " + display_controller_file_name + " - " + strerror( errno );
+        BOSE_LOG( ERROR, response );
+        return;
+    }
+
+    std::ofstream display_controller_stream( display_controller_file_name );
+
+    if( display_controller_stream.is_open() == false )
+    {
+        response = "error: failed to open file: " + display_controller_file_name + " - " + strerror( errno );
+        BOSE_LOG( ERROR, response );
+        return;
+    }
+
+    if( arg == "off" )
+    {
+        display_controller_stream << "28"; // see ST7789VI_SPEC_V1.4.pdf
+        response = "lcd turned on";
+    }
+    else if( arg == "on" )
+    {
+        display_controller_stream << "29"; // see ST7789VI_SPEC_V1.4.pdf
+        response = "lcd turned on";
+    }
+    else
+    {
+        response = "usage: lcd [on | off]";
+    }
+
+    return;
+}// ProductCliClient::CliCmdLcd
