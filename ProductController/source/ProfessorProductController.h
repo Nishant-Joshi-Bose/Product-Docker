@@ -195,14 +195,6 @@ private:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// The following member is used to provide functionality for the product controller state
-    /// machine.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductControllerHsm m_ProductControllerStateMachine;
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
     /// @brief The following subclass instances are used to manage the lower level hardware and
     ///        the device, as well as to interface with the user and higher level system
     ///        applications and command line, respectively.
