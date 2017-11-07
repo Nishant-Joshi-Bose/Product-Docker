@@ -84,10 +84,8 @@ $ sudo fastboot reboot
 
 To update LPM from APQ:
 ```shell session
-$ adb push /home/softlib/verisoft/Eddie/Continuous/master/latest/eddie_lpm_updater_*.ipk /tmp/eddie_lpm_updater.ipk
-$ adb shell /opt/Bose/bin/rw
-$ adb shell opkg remove eddie_lpm_updater
-$ adb shell opkg -d bose install /tmp/eddie_lpm_updater.ipk
+$ cd /scratch/Eddie
+$ ./scripts/putlpm
 ```
 Once installation completes, unplug and replug power supply to Eddie board. Please note that power cycle is must for LPM firmware update to complete.
 
