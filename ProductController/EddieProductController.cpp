@@ -431,6 +431,7 @@ void EddieProductController::ReadNowPlayingFromPersistence()
     {
         std::string s = m_nowPlayingPersistence->Load();
         ProtoToMarkup::FromJson( s, &m_nowPlaying );
+        m_nowPlaying.clear_state(); // Initialize the status
     }
     catch( const ProtoToMarkup::MarkupError &e )
     {

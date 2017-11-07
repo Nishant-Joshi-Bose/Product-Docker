@@ -197,7 +197,8 @@ inline SoundTouchInterface::StatusJson TransportControlManager::CurrentStatusJso
         dynamic_cast<const EddieProductController*>( &GetProductController() );
     if( eddiePC != nullptr )
     {
-        if( eddiePC->GetNowPlaying().state().has_status() )
+        if( eddiePC->GetNowPlaying().state().has_status() &&
+            eddiePC->GetNowPlaying().has_state() )
         {
             BOSE_DEBUG( s_logger, "Found status = %d",
                         eddiePC->GetNowPlaying().state().status() );
@@ -205,7 +206,7 @@ inline SoundTouchInterface::StatusJson TransportControlManager::CurrentStatusJso
         }
         else
         {
-            BOSE_ERROR( s_logger, "No Status in GetNowPlaying()" );
+            BOSE_DEBUG( s_logger, "No Status in GetNowPlaying()" );
         }
     }
     else
