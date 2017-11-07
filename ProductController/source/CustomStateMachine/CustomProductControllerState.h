@@ -52,7 +52,6 @@ namespace ProductApp
 class ProductControllerHsm;
 class ProductController;
 class ProfessorProductController;
-class ProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -110,17 +109,6 @@ public:
     virtual bool HandlePairingState( ProductAccessoryPairing pairingStatus );
     virtual bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo );
     virtual bool HandleInactivityTimer( InactivityTimerType timer );
-
-    virtual bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
-    {
-        return false;
-    }
-
-    virtual bool HandleInactivityTimer( InactivityTimerType timerType )
-    {
-        return false;
-    }
-
     static  void SetProductController( ProductController* productController )
     {
         s_productController = productController;

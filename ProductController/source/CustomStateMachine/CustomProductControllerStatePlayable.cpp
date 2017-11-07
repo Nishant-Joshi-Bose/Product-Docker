@@ -148,6 +148,7 @@ bool CustomProductControllerStatePlayable::HandlePowerState( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlayable::HandleKeyAction( int action )
 {
+    BOSE_VERBOSE( s_logger,  __func__ );
     bool handled = true;
     ProfessorProductController &pc = GetCustomProductController();
 
@@ -180,7 +181,7 @@ bool CustomProductControllerStatePlayable::HandleKeyAction( int action )
 
 bool CustomProductControllerStatePlayable::HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
 {
-    BOSE_INFO( s_logger,  __func__ );
+    BOSE_VERBOSE( s_logger,  __func__ );
     ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE );
     return true;
 }

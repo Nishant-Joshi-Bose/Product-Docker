@@ -574,6 +574,7 @@ void ProfessorProductController::RegisterFrontDoorEndPoints()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::SelectSource( PlaybackSource_t playbackSource )
 {
+    BOSE_VERBOSE( s_logger, __func__ );
     BOSE_INFO( s_logger, "Source %d was selected. \n", playbackSource );
 
     AsyncCallback< FRONT_DOOR_CLIENT_ERRORS > errorCallback =
