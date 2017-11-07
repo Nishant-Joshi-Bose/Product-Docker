@@ -186,6 +186,11 @@ void ProductHardwareInterface::Connected( bool connected )
         IL::BreakThread( std::bind( &ProductHardwareInterface::Run, this ), m_ProductTask );
     }
 
+    for( auto &cb : m_lpmConnectionNotifies )
+    {
+        cb( m_connected );
+    }
+
     ///
     /// Send the LPM connected status to the product controller.
     ///
