@@ -127,11 +127,17 @@ public:
     {
         return ( ( arg == ( uint16_t ) Action::AUX_IN ) );
     }
+
+private:
+
+    void NotifyButtonEvent( KeyHandlerUtil::ActionType_t intent );
+
 private:
     NotifyTargetTaskIF&         m_task;
     const CliClientMT&          m_cliClient;
     const FrontDoorClientIF_t&  m_frontDoorClient;
     IntentManagerMap_t          m_IntentManagerMap;
     const ProductController&    m_controller;
+    std::unordered_map <uint16_t, std::string> m_IntentNotificationMap;
 };
 } // namespace ProductApp
