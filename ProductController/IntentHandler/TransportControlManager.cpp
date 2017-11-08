@@ -78,7 +78,8 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
                 sendTransportControlMsg = true;
                 Pause();
             }
-            else if( status == SoundTouchInterface::StatusJson::paused )
+            else if( ( status == SoundTouchInterface::StatusJson::paused ) ||
+                     ( status == SoundTouchInterface::StatusJson::stopped ) )
             {
                 transportControl.\
                 set_state( SoundTouchInterface::TransportControl::play );
@@ -203,6 +204,7 @@ inline SoundTouchInterface::StatusJson TransportControlManager::CurrentStatusJso
     if( eddiePC != nullptr )
     {
         if( eddiePC->GetNowPlaying().has_source() &&
+            eddiePC->GetNowPlaying().has_state() &&
             eddiePC->GetNowPlaying().state().has_status() &&
             eddiePC->GetNowPlaying().has_state() )
         {
