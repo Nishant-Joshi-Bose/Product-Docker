@@ -160,28 +160,23 @@ void CustomProductControllerStatePlayingActive::HandleTimeOut( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStatePlayingActive::HandlePlaybackRequest
+/// @brief  CustomProductControllerStatePlayingActive::HandleNowPlayingStatus
 ///
-/// @param  ProductPlaybackRequest_ProductPlaybackState state
+/// @param  ProductNowPlayingStatus_ProductNowPlayingState state
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the playback
 ///         status and no futher processing will be required by any of its superstates.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayingActive::
-HandlePlaybackRequest( ProductPlaybackRequest_ProductPlaybackState state )
+bool CustomProductControllerStatePlayingActive::HandleNowPlayingStatus
+( ProductNowPlayingStatus_ProductNowPlayingState state )
 {
-    BOSE_ERROR( s_logger, "%s is handling a playback %s request.",
+    BOSE_ERROR( s_logger, "%s is handling a now playing %s status.",
                 "CustomProductControllerStatePlayingActive",
-                ProductPlaybackRequest_ProductPlaybackState_Name( state ).c_str( ) );
+                ProductNowPlayingStatus_ProductNowPlayingState_Name( state ).c_str( ) );
 
-    if( state == ProductPlaybackRequest_ProductPlaybackState_Start )
+    if( state == ProductNowPlayingStatus_ProductNowPlayingState_Inactive )
     {
-        BOSE_VERBOSE( s_logger, "A new playback start request will be initiated when supported." );
-    }
-    else if( state == ProductPlaybackRequest_ProductPlaybackState_Stop )
-    {
-        BOSE_VERBOSE( s_logger, "A playback stop event was sent." );
         BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                       "CustomProductControllerStatePlayingActive",
                       "CustomProductControllerStatePlayingInactive" );

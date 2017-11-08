@@ -142,11 +142,12 @@ private:
     ProductUserInterface operator = ( ProductUserInterface const& ) = delete;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ///uint32_t
+    ///
     /// @brief The following methods are used to register for and receive key events from the LPM
     ///        hardware interface and the key handler.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
+    void ConnectToLpm( bool connected );
     void RegisterForKeyEvents( );
     void HandleKeyEvent( LpmServiceMessages::IpcKeyInformation_t keyEvent );
 
@@ -166,9 +167,9 @@ private:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     NotifyTargetTaskIF*          m_ProductTask;
-    NotifyTargetTaskIF*          m_keyEventTask;
     Callback< ProductMessage >   m_ProductNotify;
     ProductHardwareInterface*    m_ProductHardwareInterface;
+    bool                         m_connected;
     bool                         m_running;
 
     //////////////////////////////////////////////////////////////////////////////////////////////

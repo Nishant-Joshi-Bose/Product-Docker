@@ -80,7 +80,7 @@ public:
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
 
-    bool HandlePlaybackRequest( ProductPlaybackRequest_ProductPlaybackState state ) override;
+    bool HandleNowPlayingStatus( ProductNowPlayingStatus_ProductNowPlayingState state ) override;
     bool HandleKeyAction( int action ) override;
 
 private:

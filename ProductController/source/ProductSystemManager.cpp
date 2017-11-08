@@ -32,6 +32,8 @@
 #include "IPCDirectoryIF.h"
 #include "BreakThread.h"
 #include "NetworkPortDefines.h"
+#include "IHsm.h"
+#include "ProfessorProductController.h"
 #include "ProductSystemManager.h"
 #include "ConfigurationStatus.pb.h"
 #include "CapsInitializationStatus.pb.h"
@@ -65,6 +67,7 @@ constexpr char FRONTDOOR_SYSTEM_CONFIGURATION_STATUS[ ]       = "/system/configu
 constexpr char FRONTDOOR_SYSTEM_CAPS_INITIALIZATION_STATUS[ ] = "/system/capsInitializationStatus";
 constexpr char FRONTDOOR_SYSTEM_INFO[ ]                       = "/system/info";
 constexpr char FRONTDOOR_CAPS_INITIALIZATION_UPDATE[ ]        = "CapsInitializationUpdate";
+constexpr char FRONTDOOR_SYSTEM_STATE[ ]                      = "/system/state";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -225,19 +228,38 @@ bool ProductSystemManager::Run( )
     BOSE_DEBUG( s_logger, "A notification request for CAPS initialization messages has been made." );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Registration for ownership of system/info endpoint accessible over FrontDoor.
-    ///     Need to support GET and NOTIFY commands.
+    /// Registration for other Bose client processes for getting system information settings is
+    /// made through the FrontDoorClient. The callback HandleGetSystemInfoRequest is used to process
+    /// system information get requests.
     ////////////////////////////////////////////////////////////////////////////////////////////////
     {
-        AsyncCallback< Callback<ProductPb::SystemInfo> >
+        AsyncCallback< Callback< ProductPb::SystemInfo > >
         asyncCallback( std::bind( &ProductSystemManager::HandleGetSystemInfoRequest,
                                   this,
                                   std::placeholders::_1 ),
                        m_ProductTask );
-        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_INFO, asyncCallback );
 
-        BOSE_DEBUG( s_logger, "Registration for %s GET request complete.", FRONTDOOR_SYSTEM_INFO );
+        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_INFO, asyncCallback );
     }
+
+    BOSE_DEBUG( s_logger, "The registration for %s get request has been made.", FRONTDOOR_SYSTEM_INFO );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Registration for other Bose client processes for getting the system state is made
+    /// through the FrontDoorClient. The callback HandleGetSystemStateRequest is used to process
+    /// system state requests.
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    {
+        AsyncCallback < Callback < ProductPb::SystemState > >
+        callback( std::bind( &ProductSystemManager::HandleGetSystemStateRequest,
+                             this,
+                             std::placeholders::_1 ),
+                  m_ProductTask );
+
+        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_LANGUAGE, callback );
+    }
+
+    BOSE_DEBUG( s_logger, "Registration for getting system state requests has been made." );
 
     return true;
 }
@@ -589,6 +611,31 @@ void ProductSystemManager::HandleCapsStatusFailed( const FRONT_DOOR_CLIENT_ERROR
     ProductMessage productMessage;
     productMessage.mutable_capsstatus( )->set_initialized( false );
     SendMessage( productMessage );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductSystemManager::HandleGetSystemStateRequest
+///
+/// @param ProductPb::SystemState& systemstate
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductSystemManager::HandleGetSystemStateRequest
+( const Callback< ProductPb::SystemState >& stateResponse ) const
+{
+    Hsm::STATE  stateId   = ProfessorProductController::GetInstance( )->GetHsm( ).GetCurrentState( )->GetId( );
+    std::string stateName = ProfessorProductController::GetInstance( )->GetHsm( ).GetCurrentState( )->GetName( );
+
+    ProductPb::SystemState currentState;
+    currentState.set_id( stateId );
+    currentState.set_name( stateName );
+
+    BOSE_DEBUG( s_logger, "--------------- Product Current State Request --------------" );
+    BOSE_DEBUG( s_logger, "The current state name is %s with ID %u.",
+                stateName.c_str( ),
+                static_cast< unsigned int >( stateId ) );
+
+    stateResponse.Send( currentState );
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////

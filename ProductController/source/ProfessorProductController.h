@@ -50,6 +50,7 @@
 #include "ProductControllerHsm.h"
 #include "ProductSTSController.h"
 #include "Utilities.h"
+#include "ProfessorProductController.h"
 #include "ProductMessage.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 
@@ -156,7 +157,7 @@ public:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief This method selects a new source.
+    /// @brief This method selects starts a playback on the specified source.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     void SendPlaybackRequest( PlaybackSource_t source );
@@ -241,9 +242,12 @@ private:
     void SetupProductSTSConntroller( );
     void HandleSTSInitWasComplete( );
     void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
-    void RegisterFrontDoorEndPoints();
+    void RegisterFrontDoorEndPoints( );
     void PostPlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson& resp );
     void PostPlaybackRequestError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
+    void RegisterNowPlayingEndPoint( );
+    void HandleNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingStatus );
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
