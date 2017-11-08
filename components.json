@@ -41,7 +41,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@b31dddf2492eafee850a66dc0ee52d5f2b57928d"
+    "selected_version": "master@b378d3ae3882a841e1714c9e15c9663dcfefeef6"
   },
   {
     "name": "CastleTestUtils",
@@ -93,7 +93,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-11-06_1042"
+    "selected_version": "Continuous/Castle-Fork/2017-11-07_1747"
   },
   {
     "name": "UnitTest++-native",
