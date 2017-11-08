@@ -552,8 +552,6 @@ void ProfessorProductController::HandleSelectSourceSlot( ProductSTSAccount::Prod
 ///
 /// @name   ProfessorProductController::RegisterFrontDoorEndPoints
 ///
-/// @brief  This method is to register for FrontDoor endpoints
-///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::RegisterFrontDoorEndPoints()
 {
@@ -563,12 +561,10 @@ void ProfessorProductController::RegisterFrontDoorEndPoints()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProfessorProductController::SendPlaybackRequest
-/// @brief  This method is to send playback request
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::SendPlaybackRequest( PlaybackSource_t playbackSource )
 {
-    BOSE_VERBOSE( s_logger, __func__ );
     BOSE_INFO( s_logger, "Source %d was selected. \n", playbackSource );
 
     AsyncCallback< FRONT_DOOR_CLIENT_ERRORS > errorCallback =
