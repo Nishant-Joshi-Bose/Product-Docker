@@ -123,7 +123,7 @@ bool CustomProductControllerState::HandlePairingState( ProductAccessoryPairing p
     return false;
 }
 
-ProfessorProductController& CustomProductControllerState::GetCustomProductController( )
+ProfessorProductController& CustomProductControllerState::GetCustomProductController()
 {
     return *static_cast< ProfessorProductController* >( s_productController );
 }

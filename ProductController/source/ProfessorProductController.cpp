@@ -340,6 +340,12 @@ void ProfessorProductController::Run( )
     m_ProductVolumeManager     ->Run( );
     m_ProductSpeakerManager    ->Run( );
 
+
+    ///
+    /// Register FrontDoor EndPoints
+    ///
+    RegisterFrontDoorEndPoints();
+
     ///
     /// Set up the STSProductController
     ///
@@ -544,10 +550,20 @@ void ProfessorProductController::HandleSelectSourceSlot( ProductSTSAccount::Prod
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::SelectSource
+/// @name   ProfessorProductController::RegisterFrontDoorEndPoints
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::SelectSource( PlaybackSource_t playbackSource )
+void ProfessorProductController::RegisterFrontDoorEndPoints()
+{
+    RegisterCommonEndPoints();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::SendPlaybackRequest
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::SendPlaybackRequest( PlaybackSource_t playbackSource )
 {
     BOSE_INFO( s_logger, "Source %d was selected. \n", playbackSource );
 

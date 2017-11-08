@@ -159,7 +159,7 @@ public:
     /// @brief This method selects a new source.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void SelectSource( PlaybackSource_t source );
+    void SendPlaybackRequest( PlaybackSource_t source );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -241,6 +241,7 @@ private:
     void SetupProductSTSConntroller( );
     void HandleSTSInitWasComplete( );
     void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
+    void RegisterFrontDoorEndPoints();
     void PostPlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson& resp );
     void PostPlaybackRequestError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
 };
