@@ -799,11 +799,6 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
             RegisterLpmEvents();
             RegisterKeyHandler();
             GetEddieHsm().Handle<bool>( &CustomProductControllerState::HandleLpmState, true );
-
-            BOSE_INFO( s_logger, "Asking the LPM to enable the amplifier" );
-            IpcAmp_t req;
-            req.set_on( true );
-            m_LpmClient->SetAmp( req );
         }
         break;
         case LPM_INTERFACE_DOWN:
