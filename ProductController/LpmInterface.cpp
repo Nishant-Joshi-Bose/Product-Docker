@@ -59,6 +59,16 @@ void LpmInterface::Connected()
     m_NotifyProductCb( response );
 }
 
+void LpmInterface::SetAmp( bool powered, bool muted )
+{
+    BOSE_INFO( s_logger, "%s: %spowered, %smuted", __func__,
+               powered ? "" : "!", muted ? "" : "!" );
+    IpcAmp_t req;
+    req.set_on( powered );
+    req.set_mute( muted );
+    m_LpmClient->SetAmp( req );
+}
+
 void LpmInterface::SetSystemState( LpmServiceMessages::IpcLpmSystemState_t state )
 {
     if( !m_isConnected )

@@ -73,7 +73,8 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     ReadConfigurationStatusFromPersistence();
     ReadNowPlayingFromPersistence();
 
-    m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask() , m_FrontDoorClientIF, m_LpmClient ) );
+    m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF, m_LpmClient ) );
+    m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF, m_LpmClient ) );
     SetupProductSTSController();
 }
 
@@ -91,6 +92,7 @@ void EddieProductController::Initialize()
     //Register lpm events that lightbar will handle
     m_lightbarController->RegisterLightBarEndPoints();
     m_demoController.RegisterEndPoints();
+    m_displayController ->Initialize();
 }
 
 void EddieProductController::InitializeLpmClient()
@@ -587,6 +589,9 @@ void EddieProductController::RegisterCliClientCmds()
     m_CliClientMT.RegisterCLIServerCommands( "allowSourceSelect",
                                              "command to send allow/disallow source selection by Caps", "allowSourceSelect yes|no",
                                              GetTask(), cb , static_cast<int>( CLICmdKeys::ALLOW_SOURCE_SELECT ) );
+    m_CliClientMT.RegisterCLIServerCommands( "setDisplayAutoMode",
+                                             "command to set the display controller automatic mode", "setDisplayAutoMode auto|manual",
+                                             GetTask(), cb , static_cast<int>( CLICmdKeys::SET_DISPLAY_AUTO_MODE ) );
     m_CliClientMT.RegisterCLIServerCommands( "setProductState",
                                              "command to set Product Controller state", "setProductState boot|standby|setup",
                                              GetTask(), cb , static_cast<int>( CLICmdKeys::SET_PRODUCT_CONTROLLER_STATE ) );
@@ -614,6 +619,11 @@ void EddieProductController::HandleCliCmd( uint16_t cmdKey,
     ss << "Received " << cmdKey << std::endl;
     switch( static_cast<CLICmdKeys>( cmdKey ) )
     {
+    case CLICmdKeys::SET_DISPLAY_AUTO_MODE:
+    {
+        HandleSetDisplayAutoMode( argList, response );
+        break;
+    }
     case CLICmdKeys::ALLOW_SOURCE_SELECT:
     {
         HandleAllowSourceSelectCliCmd( argList, response );
@@ -641,24 +651,29 @@ void EddieProductController::HandleCliCmd( uint16_t cmdKey,
     respCb( response, transact_id );
 }
 
-void EddieProductController::HandleRawKeyCliCmd( const std::list<std::string>& argList, std::string& response )
+void EddieProductController::HandleSetDisplayAutoMode( const std::list<std::string>& argList, std::string& response )
 {
-    if( argList.size() == 3 )
+    if( argList.size() != 1 )
     {
-        auto it = argList.begin();
-        uint8_t origin = atoi( ( *it ).c_str() ) ;
-        it++;
-        uint32_t id = atoi( ( *it ).c_str() ) ;
-        it++;
-        uint8_t state = atoi( ( *it ).c_str() ) ;
-
-        m_KeyHandler.HandleKeys( origin, state, id );
+        response  = "command requires one argument\n" ;
+        response += "Usage: SetDisplayAutoMode";
+        return;
+    }
+    std::string arg = argList.front();
+    if( arg == "auto" )
+    {
+        m_displayController->SetAutoMode( true );
+    }
+    else if( arg == "manual" )
+    {
+        m_displayController->SetAutoMode( false );
     }
     else
     {
-        response = "Invalid command. use help to look at the raw_key usage";
+        response = "Unknown argument.\n";
+        response += "Usage: auto|manual";
     }
-}
+}// HandleSetDisplayAutoMode
 
 void EddieProductController::HandleAllowSourceSelectCliCmd( const std::list<std::string>& argList, std::string& response )
 {
@@ -681,6 +696,25 @@ void EddieProductController::HandleAllowSourceSelectCliCmd( const std::list<std:
     {
         response = "Unknown argument.\n";
         response += "Usage: allowSourceSelect yes|no";
+    }
+}
+
+void EddieProductController::HandleRawKeyCliCmd( const std::list<std::string>& argList, std::string& response )
+{
+    if( argList.size() == 3 )
+    {
+        auto it = argList.begin();
+        uint8_t origin = atoi( ( *it ).c_str() ) ;
+        it++;
+        uint32_t id = atoi( ( *it ).c_str() ) ;
+        it++;
+        uint8_t state = atoi( ( *it ).c_str() ) ;
+
+        m_KeyHandler.HandleKeys( origin, state, id );
+    }
+    else
+    {
+        response = "Invalid command. use help to look at the raw_key usage";
     }
 }
 
@@ -765,11 +799,6 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
             RegisterLpmEvents();
             RegisterKeyHandler();
             GetEddieHsm().Handle<bool>( &CustomProductControllerState::HandleLpmState, true );
-
-            BOSE_INFO( s_logger, "Asking the LPM to enable the amplifier" );
-            IpcAmp_t req;
-            req.set_on( true );
-            m_LpmClient->SetAmp( req );
         }
         break;
         case LPM_INTERFACE_DOWN:

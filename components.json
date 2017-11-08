@@ -25,11 +25,11 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Continuous/master/0.0.2-9+ec891bf"
+    "selected_version": "Release/master/0.0.2-10+ec891bf"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.1.1-86+dcd9041"
+    "selected_version": "Release/IP2/0.2.1-88+d7f5a37"
   },
   {
     "name": "CastlePassport-native",
@@ -41,7 +41,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@2f84e2d3d0b42701189391dde5660a1ef3f09e0f"
+    "selected_version": "master@b378d3ae3882a841e1714c9e15c9663dcfefeef6"
   },
   {
     "name": "CastleTestUtils",
@@ -53,11 +53,11 @@
   },
   {
     "name": "KeyHandler-native",
-    "selected_version": "Continuous/master/0.0.3-24+815dcae"
+    "selected_version": "Release/master/0.0.3-25+815dcae"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/0.0.3-24+815dcae"
+    "selected_version": "Release/master/0.0.3-25+815dcae"
   },
   {
     "name": "protobuf-native",
@@ -93,7 +93,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-11-07_1622"
+    "selected_version": "Continuous/Castle-Fork/2017-11-07_1747"
   },
   {
     "name": "UnitTest++-native",

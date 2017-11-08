@@ -86,6 +86,11 @@ public:
         return false;
     }
 
+    virtual bool HandleStopPlaybackResponse( const SoundTouchInterface::status &resp )
+    {
+        return false;
+    }
+
     static  void SetProductController( ProductController* productController )
     {
         s_productController = productController;
