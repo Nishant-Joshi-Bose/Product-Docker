@@ -45,6 +45,7 @@ enum ProductControllerStates
     PRODUCT_CONTROLLER_STATE_IDLE                        =  5,
     PRODUCT_CONTROLLER_STATE_STANDBY_TRANSITION          =  6,
     PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY           =  7,
+    PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION =  8,
 
     ///
     /// Custom product controller states are defined below.
