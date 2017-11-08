@@ -30,6 +30,10 @@
 #include "ProductHardwareInterface.h"
 #include "ProductVolumeManager.h"
 
+// Temporary - this is just here for documentation; remove it and the associated conditionals
+// in the code once volume notifications are supported by CAPS
+static constexpr bool VOLUME_NOTIFICATIONS_SUPPORTED = false;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             Start of Product Namespace                                       ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,13 +103,16 @@ void ProductVolumeManager::Initialize( )
     };
     m_Volume = new AudioVolume<int32_t>( fVolume );
 
-    auto fNotify = [ this ]( SoundTouchInterface::volume v )
+    if( VOLUME_NOTIFICATIONS_SUPPORTED )
     {
-        ReceiveFrontDoorVolume( v );
-    };
+        auto fNotify = [ this ]( SoundTouchInterface::volume v )
+        {
+            ReceiveFrontDoorVolume( v );
+        };
 
-    m_FrontDoorClient->RegisterNotification< SoundTouchInterface::volume >
-    ( FRONTDOOR_AUDIO_VOLUME, fNotify );
+        m_FrontDoorClient->RegisterNotification< SoundTouchInterface::volume >
+        ( FRONTDOOR_AUDIO_VOLUME, fNotify );
+    }
 }
 
 
@@ -177,9 +184,14 @@ void ProductVolumeManager::UpdateFrontDoorVolume( int32_t volume )
     // TODO - currently the CAPS interface only supports volume setting directly (not delta);
     // once delta is in place remove volume class and just send a volume_up/volume_down command
     // when the corresponding intents are received
-    auto respFunc = []( SoundTouchInterface::volume v )
+    auto respFunc = [ this ]( SoundTouchInterface::volume v )
     {
         BOSE_VERBOSE( s_logger, "Got volume set response (%d)", v.value() );
+        // This is a temporary workaround to volume notifications not being available
+        if( !VOLUME_NOTIFICATIONS_SUPPORTED )
+        {
+            ReceiveFrontDoorVolume( v );
+        }
     };
 
     auto errFunc = []( FRONT_DOOR_CLIENT_ERRORS e )
@@ -194,7 +206,7 @@ void ProductVolumeManager::UpdateFrontDoorVolume( int32_t volume )
     pbVolume.set_value( volume );
 
     BOSE_VERBOSE( s_logger, "Updating FrontDoor volume %d", volume );
-    m_FrontDoorClient->SendPost<SoundTouchInterface::volume>(
+    m_FrontDoorClient->SendPut<SoundTouchInterface::volume>(
         ProductApp::FRONTDOOR_AUDIO_VOLUME, pbVolume, respFunc, errCb );
 }
 
