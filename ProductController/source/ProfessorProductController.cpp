@@ -552,19 +552,18 @@ void ProfessorProductController::HandleSelectSourceSlot( ProductSTSAccount::Prod
 ///
 /// @name   ProfessorProductController::RegisterFrontDoorEndPoints
 ///
-/// @brief  This method is called from the ProfessorProductController run() function at boot up
-///         to register for FrontDoor endpoints
+/// @brief  This method is to register for FrontDoor endpoints
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::RegisterFrontDoorEndPoints()
 {
     RegisterCommonEndPoints();
-    //TODO:Professor ProductController specific endpoints, for example, nowPlaying
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::SelectSource
+/// @name   ProfessorProductController::SendPlaybackRequest
+/// @brief  This method is to send playback request
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::SendPlaybackRequest( PlaybackSource_t playbackSource )
