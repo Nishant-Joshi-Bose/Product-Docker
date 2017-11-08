@@ -55,6 +55,7 @@ private:
     bool ValidSourceAvailable();
     bool CurrentlyPlaying();
     SoundTouchInterface::StatusJson CurrentStatusJson();
+    bool CanPauseInJson();
 
     void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
 
