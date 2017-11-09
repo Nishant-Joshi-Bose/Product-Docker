@@ -7,6 +7,11 @@
 
 #pragma once
 
+#include <locale>
+#include <string>
+#include <algorithm>
+#include <iostream>
+
 #include "ProductController.h"
 #include "EddieProductControllerHsm.h"
 #include "NotifyTargetTaskIF.h"
@@ -33,6 +38,8 @@
 #include "KeyHandler.h"
 #include "IntentHandler.h"
 #include "ProductSTSController.h"
+#include "BluetoothSinkService.pb.h"
+#include "DisplayController.h"
 
 namespace ProductApp
 {
@@ -81,6 +88,7 @@ private:
     void HandleBluetoothCapabilityNotReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityNotReady( const std::list<std::string>& points );
+    void HandleBluetoothSinkListResponse( const BluetoothSinkService::ListResponse &list );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  ReadSystemLanguageFromPersistence
@@ -107,6 +115,13 @@ private:
     void PersistCapsNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingPb, bool force = false );
     bool IsNowPlayingChanged( const SoundTouchInterface::NowPlayingJson& nowPlayingPb );
     void HandleAllowSourceSelectCliCmd( const std::list<std::string> & argList, std::string& response );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  HandleSetDisplayAutoMode
+/// @brief Function to TDB
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void HandleSetDisplayAutoMode( const std::list<std::string> & argList, std::string& response );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name HandleSetProductControllerStateCliCmd
@@ -147,6 +162,14 @@ public:
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
     bool IsAllModuleReady();
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @name  IsBtLeModuleReady
+    /// @brief true if IsBtLeModuleReady modules is up and ready.
+    /// Module IsBtLeModuleReady.
+    /// @return bool
+    ////////////////////////////////////////////////////////////////////////////////
+    bool IsBtLeModuleReady() const;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  IsCAPSReady
@@ -296,6 +319,11 @@ public:
         return m_nowPlaying;
     }
 
+    const BluetoothSinkService::ListResponse& GetBluetoothList() const
+    {
+        return m_bluetoothList;
+    }
+
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief Interfaces to the ProductSTSController, which implements the interactions
@@ -305,6 +333,17 @@ public:
     void SetupProductSTSController( void );
     void HandleSTSInitWasComplete( void );
     void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
+    void HandleRawKeyCliCmd( const std::list<std::string>& argList, std::string& response );
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief set the display controllee automatic mode  to true or false (manual)
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    void SetDisplayAutoMode( bool autoMode ) const
+    {
+        m_displayController->SetAutoMode( autoMode );
+    }// GetDisplayController
 
 private:
 
@@ -329,11 +368,13 @@ private:
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
     ProductPb::Language                         m_systemLanguage;
     SoundTouchInterface::NowPlayingJson         m_nowPlaying;
+    BluetoothSinkService::ListResponse          m_bluetoothList;
     NetManager::Protobuf::NetworkStatus         m_cachedStatus;
 
     ProductCliClient                            m_productCliClient;
 
-    std::unique_ptr<LightBarController>         m_lightbarController;
+    std::unique_ptr<LightBar::LightBarController>         m_lightbarController;
+    std::unique_ptr<DisplayController>          m_displayController;
     IntentHandler                               m_IntentHandler;
     LpmInterface                                m_LpmInterface;
     bool                                        m_isCapsReady = false;
@@ -342,7 +383,8 @@ private:
     bool                                        m_isBLEModuleReady  = false;
     bool                                        m_isBluetoothReady  = false;
 
-    int                                         m_WiFiProfilesCount;
+    int                                         m_wifiProfilesCount;
+    BluetoothSinkService::ListResponse          m_bluetoothSinkList;
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>     errorCb;
     /// Demonstration Controller instance
     DemoApp::DemoController m_demoController;

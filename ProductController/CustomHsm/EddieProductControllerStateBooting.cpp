@@ -40,6 +40,10 @@ void EddieProductControllerStateBooting::HandleStateExit()
 {
     BOSE_INFO( s_logger, __func__ );
     ProductControllerStateBooting::HandleStateExit();
+
+    // TODO: For now, turn the amplifier on unconditionally.
+    // Eventually we'll turn it on and off as needed.
+    GetCustomProductController().GetLpmInterface().SetAmp( /*powered=*/ true, /*muted=*/ false );
 }
 
 bool EddieProductControllerStateBooting::HandleModulesReady()

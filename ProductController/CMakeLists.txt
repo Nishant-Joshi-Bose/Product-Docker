@@ -6,8 +6,8 @@ INCLUDE_DIRECTORIES(
   ${CUSTOM_HSM_DIR}
   ${KEYHANDLER_DIR}/include
   DeviceManager
-  LightBarController
   IntentHandler
+  DisplayController
   .
 )
 
@@ -23,22 +23,23 @@ ADD_EXECUTABLE(Eddie
   ${CUSTOM_HSM_DIR}/EddieProductControllerStateNetworkStandby.cpp
   ${CUSTOM_HSM_DIR}/EddieProductControllerStateAudioOn.cpp
   DeviceManager.cpp
-  LightBarController/LightBarController.cpp
   ProductCliClient.cpp
   EddieProductController.cpp
   Main.cpp
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
   ${PROTO_CC_DEST}/Language.pb.cc
   ${PROTO_CC_DEST}/DeviceManager.pb.cc
-  ${PROTO_CC_DEST}/LightBarController.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/ContentItem.pb.cc
+  ${PROTO_CC_DEST}/DisplayController.pb.cc
+  ${PROTO_CC_DEST}/IntentHandler.pb.cc
   IntentHandler/IntentHandler.cpp
   IntentHandler/TransportControlManager.cpp
-  IntentHandler/BlueToothManager.cpp
+  IntentHandler/BluetoothManager.cpp
   IntentHandler/PlaybackRequestManager.cpp
   LpmInterface.cpp
+  DisplayController/DisplayController.cpp
 )
 
 TARGET_LINK_LIBRARIES(Eddie
@@ -49,6 +50,8 @@ TARGET_LINK_LIBRARIES(Eddie
   NetworkServiceClient
   KeyHandler
   BLESetupServiceProto
+  BluetoothSinkServiceProto
+  LightBarController
   CliClient
   ShelbyUtils
   BoseLibs

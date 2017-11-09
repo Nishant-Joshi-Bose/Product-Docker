@@ -7,7 +7,6 @@
 ///// @attention Copyright 2017 Bose Corporation, Framingham, MA
 //////////////////////////////////////////////////////////////////////////////////
 #pragma once
-
 #include "NotifyTargetTaskIF.h"
 #include "CliClientMT.h"
 #include "FrontDoorClientIF.h"
@@ -54,6 +53,7 @@ public:
         m_callBack     = cb;
         return;
     }
+
 protected:
     NotifyTargetTaskIF& GetTask() const
     {
@@ -75,7 +75,7 @@ protected:
         return m_frontDoorClient;
     }
 
-    const CbPtr_t& CallBack() const
+    const CbPtr_t& GetCallbackObject() const
     {
         return m_callBack;
     }
@@ -97,4 +97,5 @@ private:
 protected:
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> m_frontDoorClientErrorCb;
 };
+
 } // namespace ProductApp

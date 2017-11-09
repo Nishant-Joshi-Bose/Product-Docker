@@ -16,6 +16,7 @@
 
 #include "DPrint.h"
 #include "TransportControlManager.h"
+#include "SourceUtils.h"
 
 static DPrint s_logger( "TransportControlManager" );
 
@@ -57,21 +58,29 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
         SoundTouchInterface::TransportControl transportControl;
         SoundTouchInterface::StatusJson status = CurrentStatusJson();
         bool sendTransportControlMsg = false;
+
         switch( intent )
         {
         case( uint16_t ) Action::PLAY_PAUSE:
         {
             if( status == SoundTouchInterface::StatusJson::play )
             {
-                // Send Pause
-                transportControl.\
-                set_state( SoundTouchInterface::TransportControl::pause );
+                if( CanPauseInJson() )
+                {
+                    transportControl.\
+                    set_state( SoundTouchInterface::TransportControl::pause );
+                }
+                else
+                {
+                    transportControl.\
+                    set_state( SoundTouchInterface::TransportControl::stop );
+                }
                 sendTransportControlMsg = true;
                 Pause();
             }
-            else if( status == SoundTouchInterface::StatusJson::paused )
+            else if( ( status == SoundTouchInterface::StatusJson::paused ) ||
+                     ( status == SoundTouchInterface::StatusJson::stopped ) )
             {
-                // Send Pause
                 transportControl.\
                 set_state( SoundTouchInterface::TransportControl::play );
                 sendTransportControlMsg = true;
@@ -81,13 +90,11 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
             {
                 if( TogglePlayPause() )
                 {
-                    // Send Play
                     transportControl.\
                     set_state( SoundTouchInterface::TransportControl::play );
                 }
                 else
                 {
-                    // Send Pause
                     transportControl.\
                     set_state( SoundTouchInterface::TransportControl::pause );
                 }
@@ -95,10 +102,23 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
             }
             else
             {
-                // Send playbackRequest of source persisted : To do,
-                // Talk to Ranjeet: What param in playbackRequest
-                // Talk to Vikram: How can nowPlaying that is persisted be used.
-                sendTransportControlMsg = true;
+                const EddieProductController *eddiePC =
+                    dynamic_cast<const EddieProductController*>( &GetProductController() );
+                if( eddiePC != nullptr )
+                {
+                    SoundTouchInterface::playbackRequestJson pbReqJson;
+                    SoundTouchInterface::NowPlayingJson nowPlayData = eddiePC->GetNowPlaying();
+                    SourceUtils::ConstructPlaybackRequestFromNowPlaying( pbReqJson,
+                                                                         nowPlayData );
+                    GetFrontDoorClient()->\
+                    SendPost<SoundTouchInterface::\
+                    NowPlayingJson>( "/content/playbackRequest", pbReqJson,
+                                     m_NowPlayingRsp, m_frontDoorClientErrorCb );
+                }
+                else
+                {
+                    BOSE_ERROR( s_logger, "Error while casting to Eddie PC" );
+                }
             }
         }
         break;
@@ -136,7 +156,7 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
                         " for intent : %d", intent );
 
             GetFrontDoorClient()->\
-            SendPost<SoundTouchInterface::\
+            SendPut<SoundTouchInterface::\
             NowPlayingJson>( "/content/transportControl", transportControl,
                              m_NowPlayingRsp, m_frontDoorClientErrorCb );
         }
@@ -149,9 +169,9 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
     }
 
     //Fire the cb so the control goes back to the ProductController
-    if( CallBack() != nullptr )
+    if( GetCallbackObject() != nullptr )
     {
-        CallBack()->Send( intent );
+        GetCallbackObject()->Send( intent );
     }
     return true;
 }
@@ -183,7 +203,10 @@ inline SoundTouchInterface::StatusJson TransportControlManager::CurrentStatusJso
         dynamic_cast<const EddieProductController*>( &GetProductController() );
     if( eddiePC != nullptr )
     {
-        if( eddiePC->GetNowPlaying().state().has_status() )
+        if( eddiePC->GetNowPlaying().has_source() &&
+            eddiePC->GetNowPlaying().has_state() &&
+            eddiePC->GetNowPlaying().state().has_status() &&
+            eddiePC->GetNowPlaying().has_state() )
         {
             BOSE_DEBUG( s_logger, "Found status = %d",
                         eddiePC->GetNowPlaying().state().status() );
@@ -191,7 +214,7 @@ inline SoundTouchInterface::StatusJson TransportControlManager::CurrentStatusJso
         }
         else
         {
-            BOSE_ERROR( s_logger, "No Status in GetNowPlaying()" );
+            BOSE_DEBUG( s_logger, "No Status in GetNowPlaying()" );
         }
     }
     else
@@ -199,6 +222,35 @@ inline SoundTouchInterface::StatusJson TransportControlManager::CurrentStatusJso
         BOSE_ERROR( s_logger, "Error while casting to Eddie PC" );
     }
     return ( SoundTouchInterface::StatusJson::error );
+}
+
+inline bool TransportControlManager::CanPauseInJson()
+{
+    BOSE_DEBUG( s_logger, "%s", __func__ );
+    const EddieProductController *eddiePC =
+        dynamic_cast<const EddieProductController*>( &GetProductController() );
+    if( eddiePC != nullptr )
+    {
+        if( eddiePC->GetNowPlaying().has_source() &&
+            eddiePC->GetNowPlaying().has_state() &&
+            eddiePC->GetNowPlaying().state().has_canpause() &&
+            eddiePC->GetNowPlaying().state().canpause() )
+        {
+            BOSE_DEBUG( s_logger, "Found canpause = %d",
+                        eddiePC->GetNowPlaying().state().canpause() );
+            return ( eddiePC->GetNowPlaying().state().canpause() );
+        }
+        else
+        {
+            BOSE_DEBUG( s_logger, "Cannot Pause: Must be a non-pausable"
+                        "(it that is a word) content" );
+        }
+    }
+    else
+    {
+        BOSE_ERROR( s_logger, "Error while casting to Eddie PC" );
+    }
+    return ( false );
 }
 
 void TransportControlManager::PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp )
