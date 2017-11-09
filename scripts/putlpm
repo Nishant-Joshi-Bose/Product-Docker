@@ -1,0 +1,37 @@
+#!/bin/bash
+#
+# Reflash the LPM with the latest build.
+#
+this=${0##*/}
+
+if (( $# == 0 )); then
+    build=/home/softlib/verisoft/Professor/Continuous/master
+    version=$(cat "$build/latest.txt") || exit
+    set -- "$build/$version/professor_lpm_updater_$version.ipk"
+    echo "$0" "$1"
+fi
+
+if (( $# != 1 )); then
+    echo >&2 "usage: $this [professor_lpm_updater.ipk]"
+    exit 1
+fi
+ipk=$1
+
+ar t >/dev/null "$ipk" || exit
+
+echo Remount...
+adb shell mount -oremount,rw /opt/Bose || exit
+
+echo Uninstall...
+adb shell opkg remove --force-remove professor_lpm_updater  # ok if this fails
+
+echo Copy...
+adb push "$ipk" /tmp/new.ipk || exit
+
+echo Install...
+adb shell opkg -d bose install /tmp/new.ipk || exit
+
+echo Remount...
+adb shell mount -oremount,ro /opt/Bose || exit
+
+echo Done

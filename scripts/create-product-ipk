@@ -13,7 +13,6 @@
 #
 this=${0##*/} # this script's name
 
-stripped=true
 cfg=Release
 
 tryhelp () {
@@ -22,14 +21,12 @@ tryhelp () {
 }
 opts=$(getopt --name "$this" --shell sh \
     -o uh \
-    -l "unstripped,
-        help" \
+    -l "help" \
     -- "$@") || tryhelp
 eval set -- "$opts"
 while :; do
     arg="$1"; shift
     case "$arg" in
-	(--unstripped | -u) stripped=false ;;
 	(--help | -h)
 	    cat <<EOF
 Usage: $this [options]
@@ -37,7 +34,6 @@ Usage: $this [options]
 Create an IPK file for installing SoundTouch with opkg.
 
 Options:
---unstripped (-u)    Don't strip symbols from the executables.
 EOF
 	    exit 0
 	    ;;
@@ -78,31 +74,13 @@ arch=arm-oemllib32-linux
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/$arch/$arch-
 
-function do_strip {
-    local src="$1"; shift
-    local dst="$1"; shift
-
-    if ! $stripped; then
-        cp "$src" "$dst" || exit
-        return
-    fi
-
-    # `strip` just fails without an error message if the file is empty.
-    # Give a better error message.
-    set -- "${tool_prefix}strip" -o "$dst" "$src"
-    if ! "$@"; then
-        echo >&2 "$0: command failed: $*"
-        exit 1
-    fi
-}
-
 stage=$wspace/builds/$cfg/product-ipk-stage
 rm -rf "$stage"
 echo "Stage directory $stage"
 
+output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
-
-mkdir -p "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" || exit
+mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" || exit
 
 rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 
@@ -136,9 +114,7 @@ components record "$stage" || exit
 version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
 cp "$version_json" "$opt_dir/etc" || exit
 
-for i in "$wspace/builds/$cfg/qc8017_32/bin"/*[!~]; do
-    do_strip "$i" "$opt_dir/bin/${i##*/}"
-done
+cp "$wspace/builds/$cfg/qc8017_32/bin"/*[!~] "$opt_dir/bin" || exit
 
 # Historical FS_VERSION file.
 v=$(make-version-string "$version_json" "{user}@{host} {localtime} {branch} {major}.{minor}.{patch}-{build_number}+{abbrev_commit}") || exit
@@ -199,12 +175,6 @@ sed -i "s/%FROMVERSION%/From: $v/" "$opt_dir/html/update.html" || exit
 
 cd "$opt_dir"/lib || exit
 rm -f *.a
-if $stripped; then
-    for i in *.so*; do
-        [ -L "$i" ] && continue # skip symlinks
-        "${tool_prefix}strip" "$i"
-    done
-fi
 
 package_version=$(make-version-string "$version_json" "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}") || exit
 echo "Package version \"$package_version\""
@@ -228,6 +198,9 @@ EOF
 put_script "$stage/postinst" <<EOF
 #!/bin/sh
 echo "SoundTouch postinst"
+if [ -x /mnt/nv/postinst ]; then
+    /mnt/nv/postinst
+fi
 EOF
 
 put_script "$stage/postrm" <<EOF
@@ -257,6 +230,40 @@ echo "SoundTouch prerm"
 EOF
 
 # -----------------------------------------------------------------------------
+# Strip symbols from the executables.
+# Save a copy of the unstripped executables for later debugging.
+
+unstripped_dir=$output_dir/product-unstripped
+unstripped_tar=$unstripped_dir.tar.gz
+rm -rf "$unstripped_dir" "$unstripped_tar"
+mkdir -p "$unstripped_dir" || exit
+
+for i in "$stage"/Bose/{lib,bin}/*; do
+    type=$(file --brief "$i") || exit
+    case "$type" in
+        (*", stripped")
+            echo >&2 "$this: (warning) No debug symbols: $i"
+            ;;
+        (*", not stripped")
+            cp "$i" "$unstripped_dir" || exit
+            # `strip` fails without an error message if the file is empty
+            if ! "${tool_prefix}strip" "$i"; then
+                echo >&2 "$this: Failed to strip $i"
+                exit 1
+            fi
+            ;;
+    esac
+done
+
+cd  || exit
+tar --owner=0 --group=0 -czf "$unstripped_tar" \
+    -C "$(dirname "$unstripped_dir")" \
+    "$(basename "$unstripped_dir")" \
+    || exit
+echo "Wrote $unstripped_tar"
+rm -rf "$unstripped_dir"
+
+# -----------------------------------------------------------------------------
 # Stage area is complete.  Package it into a *.ipk file.
 
 cd "$stage" || exit
@@ -264,9 +271,7 @@ tar --owner=0 --group=0 -czf control.tar.gz control pre* post* || exit
 tar --owner=0 --group=0 -czf data.tar.gz -C "$opt_dir" . || exit
 echo "2.0" > debian-binary || exit
 
-ipk_dir=$wspace/builds/$cfg
-ipk=$ipk_dir/product.ipk
-mkdir -p "$ipk_dir" || exit
+ipk=$output_dir/product.ipk
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
 echo "Created $ipk"
