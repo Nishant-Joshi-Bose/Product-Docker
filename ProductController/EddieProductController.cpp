@@ -166,9 +166,9 @@ void EddieProductController::RegisterEndPoints()
                                                                              this, std::placeholders::_1 ), GetTask() );
     m_FrontDoorClientIF->RegisterNotification<NetManager::Protobuf::WiFiProfiles>( FRONTDOOR_NETWORK_WIFI_PROFILE_API, networkWifiProfilesCb );
 
-    AsyncCallback<BluetoothSinkService::ListResponse> bluetoothSinkListCb( std::bind( &EddieProductController::HandleBluetoothSinkListResponse ,
-                                                                           this, std::placeholders::_1 ), GetTask() );
-    m_FrontDoorClientIF->RegisterNotification<BluetoothSinkService::ListResponse>( FRONTDOOR_BLUETOOTH_SINK_LIST_API, bluetoothSinkListCb );
+    AsyncCallback<BluetoothSinkService::PairedList> bluetoothSinkListCb( std::bind( &EddieProductController::HandleBluetoothSinkPairedList ,
+                                                                                    this, std::placeholders::_1 ), GetTask() );
+    m_FrontDoorClientIF->RegisterNotification<BluetoothSinkService::PairedList>( FRONTDOOR_BLUETOOTH_SINK_LIST_API, bluetoothSinkListCb );
 
     AsyncCallback<SoundTouchInterface::NowPlayingJson> nowPlayingCb( std::bind( &EddieProductController::HandleCapsNowPlaying ,
                                                                                 this, std::placeholders::_1 ), GetTask() );
@@ -944,9 +944,9 @@ void EddieProductController::HandleBluetoothModuleReady( bool bluetoothModuleRea
     BOSE_INFO( s_logger, __func__ );
     if( bluetoothModuleReady && !m_isBluetoothReady )
     {
-        AsyncCallback<BluetoothSinkService::ListResponse> bluetoothSinkListCb( std::bind( &EddieProductController::HandleBluetoothSinkListResponse ,
-                                                                               this, std::placeholders::_1 ), GetTask() );
-        m_FrontDoorClientIF->SendGet<BluetoothSinkService::ListResponse>( FRONTDOOR_BLUETOOTH_SINK_LIST_API, bluetoothSinkListCb, errorCb );
+        AsyncCallback<BluetoothSinkService::PairedList> bluetoothSinkListCb( std::bind( &EddieProductController::HandleBluetoothSinkPairedList ,
+                                                                                        this, std::placeholders::_1 ), GetTask() );
+        m_FrontDoorClientIF->SendGet<BluetoothSinkService::PairedList>( FRONTDOOR_BLUETOOTH_SINK_LIST_API, bluetoothSinkListCb, errorCb );
     }
     m_isBluetoothReady = bluetoothModuleReady;
     GetEddieHsm().Handle<>( &CustomProductControllerState::HandleModulesReady );
@@ -960,7 +960,7 @@ void EddieProductController::HandleBtLeModuleReady( bool btLeModuleReady )
         GetEddieHsm().Handle<>( &CustomProductControllerState::HandleBtLeModuleReady );
 }
 
-void EddieProductController::HandleBluetoothSinkListResponse( const BluetoothSinkService::ListResponse &list )
+void EddieProductController::HandleBluetoothSinkPairedList( const BluetoothSinkService::PairedList &list )
 {
     m_bluetoothSinkList = list;
     BOSE_INFO( s_logger, "%s Bluetooth sink list count [%d]", __func__, m_bluetoothSinkList.devices_size() );
