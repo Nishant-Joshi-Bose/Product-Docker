@@ -20,3 +20,9 @@ message SystemInfo
     optional string countryCode = 7;
     optional string regionCode  = 8;
 }
+
+message SystemState
+{
+    optional uint32 id   = 1;
+    optional string name = 2;
+}

@@ -151,42 +151,28 @@ void CustomProductControllerStatePlayingInactive::HandleTimeOut( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStatePlayingInactive::HandlePlaybackRequest
+/// @brief  CustomProductControllerStatePlayingInactive::HandleNowPlayingStatus
 ///
-/// @param  ProductPlaybackRequest_ProductPlaybackState state
+/// @param  ProductNowPlayingStatus_ProductNowPlayingState state
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the playback
 ///         status and no futher processing will be required by any of its superstates.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayingInactive::HandlePlaybackRequest
-( ProductPlaybackRequest_ProductPlaybackState state )
+bool CustomProductControllerStatePlayingInactive::HandleNowPlayingStatus
+( ProductNowPlayingStatus_ProductNowPlayingState state )
 {
-    BOSE_ERROR( s_logger, "%s is handling a playback %s request.",
+    BOSE_ERROR( s_logger, "%s is handling a now playing %s status.",
                 "CustomProductControllerStatePlayingInactive",
-                ProductPlaybackRequest_ProductPlaybackState_Name( state ).c_str( ) );
+                ProductNowPlayingStatus_ProductNowPlayingState_Name( state ).c_str( ) );
 
-    if( state == ProductPlaybackRequest_ProductPlaybackState_Start )
+    if( state == ProductNowPlayingStatus_ProductNowPlayingState_Active )
     {
-        BOSE_VERBOSE( s_logger, "A playback start event was sent." );
         BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                       "CustomProductControllerStatePlayingInactive",
                       "CustomProductControllerStatePlayingActive" );
 
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE );
-    }
-    else if( state == ProductPlaybackRequest_ProductPlaybackState_Stop )
-    {
-        BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayingInactive is not changing state." );
-        BOSE_VERBOSE( s_logger, "A playback stop event was sent, and the timer will be stopped and reset." );
-
-        m_timer->Stop( );
-
-        m_timer->SetTimeouts( PLAYING_NO_AUDIO_MILLISECOND_TIMEOUT_START,
-                              PLAYING_NO_AUDIO_MILLISECOND_TIMEOUT_RETRY );
-
-        m_timer->Start( std::bind( &CustomProductControllerStatePlayingInactive::HandleTimeOut,
-                                   this ) );
     }
 
     return true;

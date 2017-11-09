@@ -125,6 +125,16 @@ bool CustomProductControllerStateOn::HandleKeyAction( int action )
         handled = true;
         break;
 
+    case KeyActionPb::KEY_ACTION_SOUNDTOUCH:
+        GetCustomProductController( ).SendPlaybackRequest( SOURCE_SOUNDTOUCH );
+        handled = true;
+        break;
+
+    case KeyActionPb::KEY_ACTION_TV:
+        GetCustomProductController( ).SendPlaybackRequest( SOURCE_TV );
+        handled = true;
+        break;
+
     default:
         break;
     }

@@ -157,17 +157,17 @@ message ProductAutowakeStatus
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                              Playback Request Message Structure                              ///
+///                             Now Playing Status Message Structure                             ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-message ProductPlaybackRequest
+message ProductNowPlayingStatus
 {
-        enum ProductPlaybackState
+        enum ProductNowPlayingState
         {
-             Start   = 1;
-             Stop    = 2;
-             Unknown = 3;
+             Active   = 1;
+             Inactive = 2;
+             Unknown  = 3;
         }
-        optional ProductPlaybackState state = 1;
+        optional ProductNowPlayingState state = 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -195,7 +195,7 @@ message ProductMessage
         optional ProductLanguageData        languagedata        = 10;
         optional ProductConfigurationStatus configurationstatus = 11;
         optional ProductAutowakeStatus      autowakestatus      = 12;
-        optional ProductPlaybackRequest     playbackrequest     = 13;
+        optional ProductNowPlayingStatus    nowplayingstatus   = 13;
         optional bool                       power               = 14;
         optional ProductAccessoryPairing    accessorypairing    = 15;
 }

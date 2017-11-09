@@ -68,7 +68,7 @@ public:
                                                   Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING,
                                                   const std::string&          name    = "CustomProductControllerStateAccessoryPairing" );
 
-    virtual ~CustomProductControllerStateAccessoryPairing()
+    ~CustomProductControllerStateAccessoryPairing( ) override
     {
 
     }
@@ -85,7 +85,7 @@ private:
     ///        a successful callback saying pairing was entered
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleTimeOut( void );
+    void HandleTimeOut( );
 
     APTimerPtr m_timer;
 };

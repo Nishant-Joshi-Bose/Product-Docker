@@ -83,6 +83,7 @@ CustomProductControllerStateIdleVoiceUnconfigured::CustomProductControllerStateI
 void CustomProductControllerStateIdleVoiceUnconfigured::HandleStateEnter( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceUnconfigured is being entered." );
+
     BOSE_VERBOSE( s_logger, "A timer has been set to expire in %d minutes.",
                   VOICE_UNCONFIGURED_MILLISECOND_TIMEOUT_START / 60000 );
 
@@ -199,7 +200,8 @@ bool CustomProductControllerStateIdleVoiceUnconfigured::HandleNetworkState( bool
                   configured ? "configured" : "unconfigured,",
                   connected ? "connected" : "unconnected" );
 
-    HandlePotentialStateChange( configured,
+    HandlePotentialStateChange( GetCustomProductController( ).IsAutoWakeEnabled( ),
+                                configured,
                                 connected,
                                 GetCustomProductController().IsVoiceConfigured( ) );
     return true;
@@ -221,7 +223,8 @@ bool CustomProductControllerStateIdleVoiceUnconfigured::HandleVoiceState( bool c
                   "CustomProductControllerStateIdleVoiceUnconfigured",
                   configured ? "configured" : "unconfigured" );
 
-    HandlePotentialStateChange( GetCustomProductController( ).IsNetworkConfigured( ),
+    HandlePotentialStateChange( GetCustomProductController( ).IsAutoWakeEnabled( ),
+                                GetCustomProductController( ).IsNetworkConfigured( ),
                                 GetCustomProductController( ).IsNetworkConnected( ),
                                 configured );
     return true;
@@ -233,11 +236,19 @@ bool CustomProductControllerStateIdleVoiceUnconfigured::HandleVoiceState( bool c
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateIdleVoiceUnconfigured::HandlePotentialStateChange
-( bool networkConfigured,
+( bool autoWakeEnabled,
+  bool networkConfigured,
   bool networkConnected,
   bool voiceConfigured )
 {
-    if( networkConnected and voiceConfigured )
+    if( not networkConfigured and not autoWakeEnabled )
+    {
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      "CustomProductControllerStateIdleVoiceUnconfigured",
+                      "CustomProductControllerStateNetworkStandbyUnconfigured" );
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
+    }
+    else if( networkConnected and voiceConfigured )
     {
         BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                       "CustomProductControllerStateIdleVoiceUnconfigured",

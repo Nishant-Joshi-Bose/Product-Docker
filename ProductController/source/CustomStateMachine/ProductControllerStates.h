@@ -38,12 +38,14 @@ enum ProductControllerStates
     ///
     /// Common product controller states are defined below.
     ///
-    PRODUCT_CONTROLLER_STATE_BOOTING                     =  1,
-    PRODUCT_CONTROLLER_STATE_SETUP                       =  2,
-    PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY             =  3,
-    PRODUCT_CONTROLLER_STATE_ON                          =  4,
-    PRODUCT_CONTROLLER_STATE_IDLE                        =  5,
-    PRODUCT_CONTROLLER_STATE_STANDBY_TRANSITION          =  6,
+    PRODUCT_CONTROLLER_STATE_BOOTING                      =  1,
+    PRODUCT_CONTROLLER_STATE_SETUP                        =  2,
+    PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY              =  3,
+    PRODUCT_CONTROLLER_STATE_ON                           =  4,
+    PRODUCT_CONTROLLER_STATE_IDLE                         =  5,
+    PRODUCT_CONTROLLER_STATE_STANDBY_TRANSITION           =  6,
+    PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY            =  7,
+    PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION =  8,
 
     ///
     /// Custom product controller states are defined below.

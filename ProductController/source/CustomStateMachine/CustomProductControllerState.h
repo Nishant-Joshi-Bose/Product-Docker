@@ -34,9 +34,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Hsm.h"
 #include "HsmState.h"
+#include "InactivityTimers.h"
 #include "ProductMessage.pb.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
-#include "InactivityTimers.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -102,11 +102,16 @@ public:
     virtual bool HandleSTSSourcesInit( );
     virtual bool HandleNetworkState( bool configured, bool connected );
     virtual bool HandleVoiceState( bool configured );
-    virtual bool HandlePlaybackRequest( ProductPlaybackRequest_ProductPlaybackState state );
+    virtual bool HandleNowPlayingStatus( ProductNowPlayingStatus_ProductNowPlayingState state );
     virtual bool HandlePowerState( );
     virtual bool HandleAutowakeStatus( bool active );
     virtual bool HandleKeyAction( int action );
     virtual bool HandlePairingState( ProductAccessoryPairing pairingStatus );
+
+    virtual bool HandleStopPlaybackResponse( const SoundTouchInterface::status &resp )
+    {
+        return false;
+    }
 
     virtual bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
     {
@@ -118,7 +123,7 @@ public:
         return false;
     }
 
-    static  void SetProductController( ProductController* productController )
+    static void SetProductController( ProductController* productController )
     {
         s_productController = productController;
     }
