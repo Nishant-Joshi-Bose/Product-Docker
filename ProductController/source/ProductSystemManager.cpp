@@ -256,11 +256,14 @@ bool ProductSystemManager::Run( )
                              std::placeholders::_1 ),
                   m_ProductTask );
 
-        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_LANGUAGE, callback );
+        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_STATE, callback );
     }
 
     BOSE_DEBUG( s_logger, "Registration for getting system state requests has been made." );
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Registration is complete so return true.
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     return true;
 }
 
