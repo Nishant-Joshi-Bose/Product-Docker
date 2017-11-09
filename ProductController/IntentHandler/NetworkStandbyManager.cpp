@@ -24,9 +24,9 @@ namespace ProductApp
 {
 
 NetworkStandbyManager::NetworkStandbyManager( NotifyTargetTaskIF& task,
-                                                  const CliClientMT& cliClient,
-                                                  const FrontDoorClientIF_t& frontDoorClient,
-                                                  const ProductController& controller ):
+                                              const CliClientMT& cliClient,
+                                              const FrontDoorClientIF_t& frontDoorClient,
+                                              const ProductController& controller ):
     IntentManager( task, cliClient, frontDoorClient, controller )
 {
     m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
@@ -68,7 +68,7 @@ bool NetworkStandbyManager::Handle( KeyHandlerUtil::ActionType_t intent )
     //Fire the cb so the control goes back to the ProductController
     if( GetCallbackObject() != nullptr )
     {
-        GetCallbackObject()->Send( intent );
+        ( *GetCallbackObject() )( intent );
     }
     return true;
 }

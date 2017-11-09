@@ -91,16 +91,13 @@ void IntentHandler::Initialize()
                                                  m_controller );
 
     m_IntentManagerMap[( uint16_t )Action::NETWORK_STANDBY] = networkStandbyManager;
-#if 1
     auto func = [this]( KeyHandlerUtil::ActionType_t intent )
     {
-        //   HandleIntents( intent ); TBD: function in Product Controller that calls HSM to push the product controller into network standby
+        //   someFunction( intent ); TBD: function in Product Controller that calls HSM to push the product controller into network standby
     };
-#endif
     auto cb = std::make_shared<AsyncCallback<KeyHandlerUtil::ActionType_t&> > ( func, &m_task );
 
-    //RegisterCallBack(( uint16_t )Action::NETWORK_STANDBY, cb);
-
+    RegisterCallBack( ( KeyHandlerUtil::ActionType_t ) Action::NETWORK_STANDBY, cb );
     //- Miscellaneous Control API's (LPS, Factory Reset, NetworkStandy)
     //
     //+ Voice (Alexa) Control API's

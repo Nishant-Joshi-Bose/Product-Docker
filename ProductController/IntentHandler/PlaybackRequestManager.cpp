@@ -65,7 +65,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t intent )
     //Fire the cb so the control goes back to the ProductController
     if( GetCallbackObject() != nullptr )
     {
-        GetCallbackObject()->Send( intent );
+        ( *GetCallbackObject() )( intent );
     }
     return true;
 }
