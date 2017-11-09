@@ -33,7 +33,7 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.1.1-86+dcd9041"
+    "selected_version": "Release/IP2/0.2.1-90+2fb766d"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -41,11 +41,11 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@4a5fa0d6d168a82e82f28a5b3dd986806c56ca9a"
+    "selected_version": "master@b378d3ae3882a841e1714c9e15c9663dcfefeef6"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/0.0.3-24+815dcae"
+    "selected_version": "Release/master/0.0.3-25+815dcae"
   },
   {
     "name": "ProfessorLPM-Package",
@@ -53,11 +53,11 @@
   },
   {
     "name": "protobuf-native",
-    "selected_version": "branches/protobuf@2465"
+    "selected_version": "branches/protobuf@2489"
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "branches/protobuf@2465"
+    "selected_version": "branches/protobuf@2489"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -73,7 +73,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Continuous/master/0.0.1-17+05056f3"
+    "selected_version": "Release/IP2/0.2.0-18+dec69bb"
   },
   {
     "name": "Shepherd-qc8017_32",
