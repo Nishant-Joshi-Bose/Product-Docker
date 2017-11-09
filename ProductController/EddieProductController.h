@@ -88,7 +88,7 @@ private:
     void HandleBluetoothCapabilityNotReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityNotReady( const std::list<std::string>& points );
-    void HandleBluetoothSinkListResponse( const BluetoothSinkService::ListResponse &list );
+    void HandleBluetoothSinkPairedList( const BluetoothSinkService::PairedList &list );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  ReadSystemLanguageFromPersistence
@@ -319,7 +319,7 @@ public:
         return m_nowPlaying;
     }
 
-    const BluetoothSinkService::ListResponse& GetBluetoothList() const
+    const BluetoothSinkService::PairedList& GetBluetoothList() const
     {
         return m_bluetoothList;
     }
@@ -368,7 +368,7 @@ private:
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
     ProductPb::Language                         m_systemLanguage;
     SoundTouchInterface::NowPlayingJson         m_nowPlaying;
-    BluetoothSinkService::ListResponse          m_bluetoothList;
+    BluetoothSinkService::PairedList          m_bluetoothList;
     NetManager::Protobuf::NetworkStatus         m_cachedStatus;
 
     ProductCliClient                            m_productCliClient;
@@ -384,7 +384,7 @@ private:
     bool                                        m_isBluetoothReady  = false;
 
     int                                         m_wifiProfilesCount;
-    BluetoothSinkService::ListResponse          m_bluetoothSinkList;
+    BluetoothSinkService::PairedList          m_bluetoothSinkList;
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>     errorCb;
     /// Demonstration Controller instance
     DemoApp::DemoController m_demoController;
