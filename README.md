@@ -90,11 +90,9 @@ $ ./scripts/putlpm ./builds/Release/lpm_updater.ipk # Install LPM ipk generated 
 $ ./scripts/putlpm <path-to-lpm-ipk> # Install a specific LPM ipk  
 ```
 
-Please Note: If your Eddie HW has a old LPM image, please install the LPM ipk twice following the above steps. 
-This is required because, the old LPM image doesn't support updating the PSoC and Animation database. 
-The first time ipk install will update to the new LPM image and the second time ipk install will update 
-the PSoC and the animation database binary. For subsequent new LPM ipk installs, just installing the ipk 
-once should be sufficient.
+Please Note: Check your current LPM version using the vr command on LPM TAP. If LPM version is 
+older than 0.0.4.1163, please install the LPM ipk twice following the above steps.
+For subsequent new LPM ipk installs, just installing the ipk once should be sufficient.
 
 ### More...
 
