@@ -49,7 +49,7 @@
   },
   {
     "name": "EddieLPM-Package",
-    "selected_version": "Continuous/trunk/2017-11-06_1852/DP1"
+    "selected_version": "Release/IP2/0.2.0.2553865/DP1"
   },
   {
     "name": "KeyHandler-native",
@@ -81,7 +81,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Continuous/DefaultForcePost/0.0.1-14+fb164fe"
+    "selected_version": "Release/IP2/0.2.0-18+dec69bb"
   },
   {
     "name": "Shepherd-qc8017_32",
