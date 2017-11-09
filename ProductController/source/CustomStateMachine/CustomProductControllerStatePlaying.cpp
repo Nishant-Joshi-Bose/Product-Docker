@@ -110,7 +110,7 @@ void CustomProductControllerStatePlaying::HandleStateExit( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlaying::HandlePowerState( )
 {
-    GetProductController().SendStopPlaybackMessage();
+    GetProductController( ).SendStopPlaybackMessage( );
 
     if( GetCustomProductController( ).IsNetworkConfigured( ) or
         GetCustomProductController( ).IsAutoWakeEnabled( ) )

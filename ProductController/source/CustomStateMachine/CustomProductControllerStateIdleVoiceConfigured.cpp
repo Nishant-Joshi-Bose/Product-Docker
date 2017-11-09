@@ -55,10 +55,10 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateIdleVoiceConfigured::CustomProductControllerStateIdleVoiceConfigured
 
-( ProductControllerHsm&       hsm,
-  CHsmState*                  pSuperState,
-  Hsm::STATE                  stateId,
-  const std::string&          name )
+( ProductControllerHsm& hsm,
+  CHsmState*            pSuperState,
+  Hsm::STATE            stateId,
+  const std::string&    name )
 
     : ProductControllerState( hsm, pSuperState, stateId, name )
 {
@@ -115,7 +115,8 @@ bool CustomProductControllerStateIdleVoiceConfigured::HandleNetworkState( bool c
                   configured ? "configured" : "unconfigured,",
                   connected ? "connected" : "unconnected" );
 
-    HandlePotentialStateChange( configured,
+    HandlePotentialStateChange( GetCustomProductController( ).IsAutoWakeEnabled( ),
+                                configured,
                                 connected,
                                 GetCustomProductController().IsVoiceConfigured( ) );
     return true;
@@ -137,7 +138,8 @@ bool CustomProductControllerStateIdleVoiceConfigured::HandleVoiceState( bool con
                   "CustomProductControllerStateIdleVoiceConfigured",
                   configured ? "configured" : "unconfigured" );
 
-    HandlePotentialStateChange( GetCustomProductController( ).IsNetworkConfigured( ),
+    HandlePotentialStateChange( GetCustomProductController( ).IsAutoWakeEnabled( ),
+                                GetCustomProductController( ).IsNetworkConfigured( ),
                                 GetCustomProductController( ).IsNetworkConnected( ),
                                 configured );
     return true;
@@ -149,11 +151,19 @@ bool CustomProductControllerStateIdleVoiceConfigured::HandleVoiceState( bool con
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateIdleVoiceConfigured::HandlePotentialStateChange
-( bool networkConfigured,
+( bool autoWakeEnabled,
+  bool networkConfigured,
   bool networkConnected,
   bool voiceConfigured )
 {
-    if( not networkConnected or not voiceConfigured )
+    if( not networkConfigured and not autoWakeEnabled )
+    {
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      "CustomProductControllerStateIdleVoiceConfigured",
+                      "CustomProductControllerStateNetworkStandbyUnconfigured" );
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
+    }
+    else if( not networkConnected or not voiceConfigured )
     {
         BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                       "CustomProductControllerStateIdleVoiceConfigured",

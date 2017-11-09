@@ -216,9 +216,9 @@ std::vector< CommandPointer > ProductCommandLine::CommandsList( )
                                                                              "This command tests sending a key action value",
                                                                              "product key [integer from 0 to 254]" ) ) );
 
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_playback",
-                                                                             "This command tests sending a playback play, stop, or pause request",
-                                                                             "product test_playback [start | stop]" ) ) );
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_nowplaying",
+                                                                             "This command tests sending a now playing active or inactive status",
+                                                                             "product test_nowplaying [active | inactive]" ) ) );
 
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_power",
                                                                              "This command tests sending a power key action",
@@ -227,6 +227,10 @@ std::vector< CommandPointer > ProductCommandLine::CommandsList( )
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_pairing",
                                                                              "This command tests pairing the device with another speaker",
                                                                              "product test_pairing" ) ) );
+
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product state",
+                                                                             "This command returns the current state name and ID.",
+                                                                             "product state" ) ) );
 
     return commands;
 
@@ -858,11 +862,11 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// This command tests sending a playback request to the product controller state machine.
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( command.compare( "product test_playback" ) == 0 )
+    else if( command.compare( "product test_nowplaying" ) == 0 )
     {
         if( arguments.size( ) != 1 )
         {
-            response = "Incorrect Usage: product test_playback [start | stop]";
+            response = "Incorrect Usage: product test_nowplaying [active | inactive]";
 
             return -1;
         }
@@ -871,21 +875,21 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 
         ProductMessage productMessage;
 
-        if( argumentString == "start" )
+        if( argumentString == "active" )
         {
-            response  = "A playback start request test will now be made.";
+            response  = "A now playback active status test will now be made.";
 
-            productMessage.mutable_playbackrequest( )->set_state( ProductPlaybackRequest_ProductPlaybackState_Start );
+            productMessage.mutable_nowplayingstatus( )->set_state( ProductNowPlayingStatus_ProductNowPlayingState_Active );
         }
-        else if( argumentString == "stop" )
+        else if( argumentString == "inactive" )
         {
-            response  = "A playback stop request test will now be made.";
+            response  = "A now playback inactive status test will now be made.";
 
-            productMessage.mutable_playbackrequest( )->set_state( ProductPlaybackRequest_ProductPlaybackState_Stop );
+            productMessage.mutable_nowplayingstatus( )->set_state( ProductNowPlayingStatus_ProductNowPlayingState_Inactive );
         }
         else
         {
-            response = "Incorrect Usage: product test_playback [start | stop]";
+            response = "Incorrect Usage: product test_nowplaying [active | inactive]";
 
             return -1;
         }
@@ -903,6 +907,20 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         response  = "An attempt to pair with another speaker to this device will be made.";
 
         IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /// This command returns the current state name and ID.
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    else if( command.compare( "product state" ) == 0 )
+    {
+        Hsm::STATE  stateId   = ProfessorProductController::GetInstance( )->GetHsm( ).GetCurrentState( )->GetId( );
+        std::string stateName = ProfessorProductController::GetInstance( )->GetHsm( ).GetCurrentState( )->GetName( );
+
+        response  = "The current state name is ";
+        response += stateName;
+        response += " with ID ";
+        response += std::to_string( static_cast< unsigned int >( stateId ) );
+        response += ".";
     }
 
     return 1;

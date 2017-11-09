@@ -98,7 +98,7 @@ bool CustomProductControllerState::HandleVoiceState( bool configured )
     return false;
 }
 
-bool CustomProductControllerState::HandlePlaybackRequest( ProductPlaybackRequest_ProductPlaybackState state )
+bool CustomProductControllerState::HandleNowPlayingStatus( ProductNowPlayingStatus_ProductNowPlayingState state )
 {
     return false;
 }
@@ -123,7 +123,7 @@ bool CustomProductControllerState::HandlePairingState( ProductAccessoryPairing p
     return false;
 }
 
-ProfessorProductController& CustomProductControllerState::GetCustomProductController()
+ProfessorProductController& CustomProductControllerState::GetCustomProductController( )
 {
     return *static_cast< ProfessorProductController* >( s_productController );
 }

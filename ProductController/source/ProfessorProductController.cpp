@@ -178,97 +178,97 @@ void ProfessorProductController::Run( )
     ///
     /// Construction of the Common States
     ///
-    auto* stateTop = new ProductControllerStateTop( GetHsm(),
+    auto* stateTop = new ProductControllerStateTop( GetHsm( ),
                                                     nullptr );
     ///
     /// Construction of the Custom Professor States
     ///
     auto* stateBooting = new CustomProductControllerStateBooting
-    ( GetHsm(),
+    ( GetHsm( ),
       stateTop );
 
     auto* stateUpdatingSoftware = new CustomProductControllerStateUpdatingSoftware
-    ( GetHsm(),
+    ( GetHsm( ),
       stateTop );
 
     auto* stateLowPower = new CustomProductControllerStateLowPower
-    ( GetHsm(),
+    ( GetHsm( ),
       stateTop );
 
     auto* stateOn = new CustomProductControllerStateOn
-    ( GetHsm(),
+    ( GetHsm( ),
       stateTop );
 
     auto* statePlayable = new CustomProductControllerStatePlayable
-    ( GetHsm(),
+    ( GetHsm( ),
       stateOn );
 
     auto* stateNetworkStandby = new CustomProductControllerStateNetworkStandby
-    ( GetHsm(),
+    ( GetHsm( ),
       statePlayable );
 
     auto* stateNetworkStandbyConfigured = new CustomProductControllerStateNetworkStandbyConfigured
-    ( GetHsm(),
+    ( GetHsm( ),
       stateNetworkStandby );
 
     auto* stateNetworkStandbyUnconfigured = new CustomProductControllerStateNetworkStandbyUnconfigured
-    ( GetHsm(),
+    ( GetHsm( ),
       stateNetworkStandby,
       *this );
 
     auto* stateIdle = new CustomProductControllerStateIdle
-    ( GetHsm(),
+    ( GetHsm( ),
       statePlayable );
 
     auto* stateIdleVoiceConfigured = new CustomProductControllerStateIdleVoiceConfigured
-    ( GetHsm(),
+    ( GetHsm( ),
       stateIdle );
 
     auto* stateIdleVoiceUnconfigured = new CustomProductControllerStateIdleVoiceUnconfigured
-    ( GetHsm(),
+    ( GetHsm( ),
       stateIdle,
       *this );
 
     auto* statePlaying = new CustomProductControllerStatePlaying
-    ( GetHsm(),
+    ( GetHsm( ),
       stateOn );
 
     auto* statePlayingActive = new CustomProductControllerStatePlayingActive
-    ( GetHsm(),
+    ( GetHsm( ),
       statePlaying,
       *this );
 
     auto* statePlayingInactive = new CustomProductControllerStatePlayingInactive
-    ( GetHsm(),
+    ( GetHsm( ),
       statePlaying,
       *this );
 
     auto* stateAccessoryPairing = new CustomProductControllerStateAccessoryPairing
-    ( GetHsm(),
+    ( GetHsm( ),
       statePlayingActive,
       *this );
 
     ///
     /// The states are added to the state machine and the state machine is initialized.
     ///
-    GetHsm().AddState( stateTop );
-    GetHsm().AddState( stateBooting );
-    GetHsm().AddState( stateUpdatingSoftware );
-    GetHsm().AddState( stateLowPower );
-    GetHsm().AddState( stateOn );
-    GetHsm().AddState( statePlayable );
-    GetHsm().AddState( stateNetworkStandby );
-    GetHsm().AddState( stateNetworkStandbyConfigured );
-    GetHsm().AddState( stateNetworkStandbyUnconfigured );
-    GetHsm().AddState( stateIdle );
-    GetHsm().AddState( stateIdleVoiceConfigured );
-    GetHsm().AddState( stateIdleVoiceUnconfigured );
-    GetHsm().AddState( statePlaying );
-    GetHsm().AddState( statePlayingActive );
-    GetHsm().AddState( statePlayingInactive );
-    GetHsm().AddState( stateAccessoryPairing );
+    GetHsm( ).AddState( stateTop );
+    GetHsm( ).AddState( stateBooting );
+    GetHsm( ).AddState( stateUpdatingSoftware );
+    GetHsm( ).AddState( stateLowPower );
+    GetHsm( ).AddState( stateOn );
+    GetHsm( ).AddState( statePlayable );
+    GetHsm( ).AddState( stateNetworkStandby );
+    GetHsm( ).AddState( stateNetworkStandbyConfigured );
+    GetHsm( ).AddState( stateNetworkStandbyUnconfigured );
+    GetHsm( ).AddState( stateIdle );
+    GetHsm( ).AddState( stateIdleVoiceConfigured );
+    GetHsm( ).AddState( stateIdleVoiceUnconfigured );
+    GetHsm( ).AddState( statePlaying );
+    GetHsm( ).AddState( statePlayingActive );
+    GetHsm( ).AddState( statePlayingInactive );
+    GetHsm( ).AddState( stateAccessoryPairing );
 
-    GetHsm().Init( this, PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
+    GetHsm( ).Init( this, PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
     ///
     /// Get instances of all the modules.
@@ -340,11 +340,10 @@ void ProfessorProductController::Run( )
     m_ProductVolumeManager     ->Run( );
     m_ProductSpeakerManager    ->Run( );
 
-
     ///
     /// Register FrontDoor EndPoints
     ///
-    RegisterFrontDoorEndPoints();
+    RegisterFrontDoorEndPoints( );
 
     ///
     /// Set up the STSProductController
@@ -553,9 +552,10 @@ void ProfessorProductController::HandleSelectSourceSlot( ProductSTSAccount::Prod
 /// @name   ProfessorProductController::RegisterFrontDoorEndPoints
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::RegisterFrontDoorEndPoints()
+void ProfessorProductController::RegisterFrontDoorEndPoints( )
 {
-    RegisterCommonEndPoints();
+    RegisterCommonEndPoints( );
+    RegisterNowPlayingEndPoint( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -651,6 +651,73 @@ void ProfessorProductController::PostPlaybackRequestError( const FRONT_DOOR_CLIE
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @brief ProfessorProductController::RegisterNowPlayingEndPoint
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::RegisterNowPlayingEndPoint( )
+{
+    ///
+    /// Registration as a client for getting notification of changes in the now playing state from
+    /// CAPS is made through the FrontDoorClient object pointer. The callback HandleCapsNowPlaying
+    /// is used to receive these notifications.
+    ///
+    AsyncCallback< SoundTouchInterface::NowPlayingJson >
+    callback( std::bind( &ProfessorProductController::HandleNowPlaying,
+                         this, std::placeholders::_1 ),
+              GetTask( ) );
+
+    m_FrontDoorClientIF->RegisterNotification< SoundTouchInterface::NowPlayingJson >
+    ( "/content/nowPlaying", callback );
+
+    BOSE_DEBUG( s_logger, "A notification request for CAPS now playing status has been made." );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductSystemManager::HandleNowPlaying
+///
+/// @param SoundTouchInterface::NowPlayingJson& nowPlayingStatus
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::HandleNowPlaying( const SoundTouchInterface::NowPlayingJson&
+                                                   nowPlayingStatus )
+{
+    BOSE_DEBUG( s_logger, "A CAPS now playing status has been received." );
+
+    if( nowPlayingStatus.has_state( ) )
+    {
+        BOSE_DEBUG( s_logger, "The CAPS now playing status has a %s status.",
+                    SoundTouchInterface::StatusJson_Name( nowPlayingStatus.state( ).status( ) ).c_str( ) );
+
+        if( nowPlayingStatus.state( ).status( ) == SoundTouchInterface::StatusJson::play )
+        {
+            ProductMessage productMessage;
+            productMessage.mutable_nowplayingstatus( )->set_state( ProductNowPlayingStatus_ProductNowPlayingState_Active );
+
+            IL::BreakThread( std::bind( &ProfessorProductController::HandleMessage,
+                                        this,
+                                        productMessage ),
+                             GetTask( ) );
+        }
+        else
+        {
+            ProductMessage productMessage;
+            productMessage.mutable_nowplayingstatus( )->set_state( ProductNowPlayingStatus_ProductNowPlayingState_Inactive );
+
+            IL::BreakThread( std::bind( &ProfessorProductController::HandleMessage,
+                                        this,
+                                        productMessage ),
+                             GetTask( ) );
+        }
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "The CAPS now playing status is unknown." );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::HandleMessage
 ///
 /// @brief  This method is called to handle product controller messages, which are sent from the
@@ -683,7 +750,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         BOSE_DEBUG( s_logger, "An LPM Hardware %s message was received.",
                     m_IsLpmReady ? "up" : "down" );
 
-        GetHsm().Handle< bool >
+        GetHsm( ).Handle< bool >
         ( &CustomProductControllerState::HandleLpmState, m_IsLpmReady );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -704,7 +771,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         BOSE_DEBUG( s_logger, "A CAPS Content Audio Playback Services %s message was received.",
                     m_IsCapsReady ? "up" : "down" );
 
-        GetHsm().Handle< bool >
+        GetHsm( ).Handle< bool >
         ( &CustomProductControllerState::HandleCapsState, m_IsCapsReady );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -725,7 +792,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         BOSE_DEBUG( s_logger, "An audio path status %s message was received.",
                     m_IsAudioPathReady ? "connected" : "not connected" );
 
-        GetHsm().Handle< bool >
+        GetHsm( ).Handle< bool >
         ( &CustomProductControllerState::HandleAudioPathState, m_IsAudioPathReady );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -737,7 +804,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
 
         m_IsSTSReady = true;
 
-        GetHsm().Handle<>
+        GetHsm( ).Handle<>
         ( &CustomProductControllerState::HandleSTSSourcesInit );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -797,7 +864,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         m_ProductSystemManager->SetNetworkAccoutConfigurationStatus( m_IsNetworkConfigured,
                                                                      m_IsAccountConfigured );
 
-        GetHsm().Handle< bool, bool >
+        GetHsm( ).Handle< bool, bool >
         ( &CustomProductControllerState::HandleNetworkState, m_IsNetworkConfigured, m_IsNetworkConnected );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -814,7 +881,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             m_ProductSystemManager->SetNetworkAccoutConfigurationStatus( m_IsNetworkConfigured,
                                                                          m_IsAccountConfigured );
 
-            GetHsm().Handle< bool, bool >
+            GetHsm( ).Handle< bool, bool >
             ( &CustomProductControllerState::HandleNetworkState, m_IsNetworkConfigured, m_IsNetworkConnected );
         }
 
@@ -858,7 +925,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             return;
         }
 
-        GetHsm().Handle< bool >
+        GetHsm( ).Handle< bool >
         ( &CustomProductControllerState::HandleVoiceState, IsVoiceConfigured( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -867,13 +934,13 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     else if( message.has_keydata( ) )
     {
         auto keyData = message.keydata( );
-        auto keyString = KeyActionPb::KEY_ACTION_Name( keyData.action() );
+        auto keyString = KeyActionPb::KEY_ACTION_Name( keyData.action( ) );
 
         BOSE_INFO( s_logger, "The key action value %s (valued %d) was received.",
                    keyString.c_str( ),
                    keyData.action( ) );
 
-        GetHsm().Handle< int >
+        GetHsm( ).Handle< int >
         ( &CustomProductControllerState::HandleKeyAction, keyData.action( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -884,7 +951,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     {
         BOSE_DEBUG( s_logger, "A power message has been received." );
 
-        GetHsm().Handle< >
+        GetHsm( ).Handle< >
         ( &CustomProductControllerState::HandlePowerState );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -905,34 +972,34 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         BOSE_DEBUG( s_logger, "An autowake status %s message has been received.",
                     m_IsAutoWakeEnabled ? "active" : "inactive" );
 
-        GetHsm().Handle< bool >
+        GetHsm( ).Handle< bool >
         ( &CustomProductControllerState::HandleAutowakeStatus, m_IsAutoWakeEnabled );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Accessory pairing messages are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_accessorypairing() )
+    else if( message.has_accessorypairing( ) )
     {
-        GetHsm().Handle< ProductAccessoryPairing >
+        GetHsm( ).Handle< ProductAccessoryPairing >
         ( &CustomProductControllerState::HandlePairingState, message.accessorypairing( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Playback messages are handled at this point.
+    /// Now playing status messages are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_playbackrequest( ) )
+    else if( message.has_nowplayingstatus( ) )
     {
-        if( not message.playbackrequest( ).has_state( ) )
+        if( not message.nowplayingstatus( ).has_state( ) )
         {
-            BOSE_ERROR( s_logger, "An invalid playback request message was received." );
+            BOSE_ERROR( s_logger, "An invalid now playing status message was received." );
             return;
         }
 
-        BOSE_ERROR( s_logger, "An playback %s has been requested.",
-                    ProductPlaybackRequest_ProductPlaybackState_Name
-                    ( message.playbackrequest( ).state( ) ).c_str( ) );
+        BOSE_DEBUG( s_logger, "A now playing %s state has been received.",
+                    ProductNowPlayingStatus_ProductNowPlayingState_Name
+                    ( message.nowplayingstatus( ).state( ) ).c_str( ) );
 
-        GetHsm().Handle< ProductPlaybackRequest_ProductPlaybackState >
-        ( &CustomProductControllerState::HandlePlaybackRequest, message.playbackrequest( ).state( ) );
+        GetHsm( ).Handle< ProductNowPlayingStatus_ProductNowPlayingState >
+        ( &CustomProductControllerState::HandleNowPlayingStatus, message.nowplayingstatus( ).state( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Unknown message types are handled at this point.
