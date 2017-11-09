@@ -135,6 +135,12 @@ ProductUserInterface::ProductUserInterface( NotifyTargetTaskIF*        ProductTa
       m_running( false ),
       m_KeyHandler( *ProductTask, CommandLineInterface, m_keyConfigFileName )
 {
+    ///
+    /// Register for LPM connected events after which key registration can be made. Note that this
+    /// module must register for the connection events before the ProductHardware instance is ran
+    /// through its Run method in the product controller; otherwise, this module may not get the
+    /// LPM connected event.
+    ///
     Callback< bool > callback( std::bind( &ProductUserInterface::ConnectToLpm,
                                           this,
                                           std::placeholders::_1 ) );
@@ -170,7 +176,9 @@ void ProductUserInterface::ConnectToLpm( bool connected )
 ///
 /// @name   ProductUserInterface::Run
 ///
-/// @brief  This method runs the ProductUserInterface instance.
+/// @brief  This method runs the ProductUserInterface instance. Note that key events will not be
+///         sent to the product controller, which creates an instance of this class, until it is
+///         set to run.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductUserInterface::Run( )
@@ -230,6 +238,14 @@ void ProductUserInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInformation
     std::string    keyOriginString;
     std::string    keyStateString;
     std::string    keyIdString;
+
+    if( not m_running )
+    {
+        BOSE_DEBUG( s_logger, "--------------- Product Controller User Key Event ---------------" );
+        BOSE_DEBUG( s_logger, "The user interface for key events has not been set to run." );
+
+        return;
+    }
 
     if( keyEvent.has_keyorigin( ) )
     {
