@@ -17,9 +17,9 @@ class BluetoothManager: public IntentManager
 {
 public:
     BluetoothManager( NotifyTargetTaskIF& task,
-                             const CliClientMT& cliClient,
-                             const FrontDoorClientIF_t& frontDoorClient,
-                             const ProductController& controller ):
+                      const CliClientMT& cliClient,
+                      const FrontDoorClientIF_t& frontDoorClient,
+                      const ProductController& controller ):
         IntentManager( task, cliClient, frontDoorClient, controller )
     {
         m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\

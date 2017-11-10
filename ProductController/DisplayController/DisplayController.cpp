@@ -19,7 +19,8 @@ using namespace ::DisplayController::Protobuf;
 namespace ProductApp
 {
 
-typedef enum {
+typedef enum
+{
     BACK_LIGHT_LEVEL_DIM          =  15,
     BACK_LIGHT_LEVEL_DIM_HIGH     =  30,
     BACK_LIGHT_LEVEL_MEDIUM       =  50,
@@ -28,7 +29,8 @@ typedef enum {
     BACK_LIGHT_LEVEL_BRIGHT_HIGH  = 100
 } e_backLightLevel;
 
-typedef enum {
+typedef enum
+{
     DIM_TO_MEDIUM    = 280,
     MEDIUM_TO_DIM    = 170,
     MEDIUM_TO_BRIGHT = 598,
@@ -37,14 +39,14 @@ typedef enum {
 
 static const int MONITOR_SENSOR_SLEEP_MS  = 1000;
 static const int CHANGING_LEVEL_SLEEP_MS  = 10;
-static const int BACKLIGHT_DIFF_THRESHOLD = (BACK_LIGHT_LEVEL_DIM_HIGH - BACK_LIGHT_LEVEL_DIM - 1);
+static const int BACKLIGHT_DIFF_THRESHOLD = ( BACK_LIGHT_LEVEL_DIM_HIGH - BACK_LIGHT_LEVEL_DIM - 1 );
 
 DisplayController::DisplayController( ProductController& controller, const std::shared_ptr<FrontDoorClientIF>& fd_client, LpmClientIF::LpmClientPtr clientPtr ):
-    m_productController ( controller ),
-    m_frontdoorClientPtr( fd_client  ),
-    m_lpmClient         ( clientPtr  ),
-    m_timeToStop        ( false      ),
-    m_autoMode          ( true       )
+    m_productController( controller ),
+    m_frontdoorClientPtr( fd_client ),
+    m_lpmClient( clientPtr ),
+    m_timeToStop( false ),
+    m_autoMode( true )
 {
     s_logger.SetLogLevel( "DisplayController", DPrint::WARNING );
 }// constructor
@@ -53,21 +55,21 @@ DisplayController::~DisplayController()
 {
     m_timeToStop = true;
 
-    if (m_threadMonitorLightSensor)
+    if( m_threadMonitorLightSensor )
     {
         m_threadMonitorLightSensor->join();
     }
 }// destructor
 
-int DisplayController::GetBackLightLevelFromLux ( int lux, int lux_rising )
+int DisplayController::GetBackLightLevelFromLux( int lux, int lux_rising )
 {
-    if ( lux_rising > 1 )
+    if( lux_rising > 1 )
     {
-        if ( lux >= MEDIUM_TO_BRIGHT )
+        if( lux >= MEDIUM_TO_BRIGHT )
         {
             return BACK_LIGHT_LEVEL_BRIGHT_HIGH;
         }
-        else if  ( lux >= DIM_TO_MEDIUM )
+        else if( lux >= DIM_TO_MEDIUM )
         {
             return BACK_LIGHT_LEVEL_MEDIUM;
         }
@@ -75,11 +77,11 @@ int DisplayController::GetBackLightLevelFromLux ( int lux, int lux_rising )
         return BACK_LIGHT_LEVEL_DIM;
     }
 
-    if ( lux >= BRIGHT_TO_MEDIUM )
+    if( lux >= BRIGHT_TO_MEDIUM )
     {
         return BACK_LIGHT_LEVEL_BRIGHT_HIGH;
     }
-    else if (  lux >= MEDIUM_TO_DIM )
+    else if( lux >= MEDIUM_TO_DIM )
     {
         return BACK_LIGHT_LEVEL_MEDIUM;
     }
@@ -87,15 +89,15 @@ int DisplayController::GetBackLightLevelFromLux ( int lux, int lux_rising )
     return BACK_LIGHT_LEVEL_DIM;
 }// GetBackLightLevelFromLux
 
-void DisplayController::SetBackLightLevel ( int actualLevel, int newLevel )
+void DisplayController::SetBackLightLevel( int actualLevel, int newLevel )
 {
-    int            steps          = abs(actualLevel - newLevel);
-    int            levelIncrement = ((actualLevel > newLevel) ? -1 : 1);
+    int            steps          = abs( actualLevel - newLevel );
+    int            levelIncrement = ( ( actualLevel > newLevel ) ? -1 : 1 );
     IpcBackLight_t backlight;
 
     BOSE_LOG( INFO, "set actual level: " << actualLevel << " new level: " << newLevel );
 
-    for ( int i = 0; i < steps; i++ )
+    for( int i = 0; i < steps; i++ )
     {
         actualLevel += levelIncrement;
 
@@ -103,10 +105,10 @@ void DisplayController::SetBackLightLevel ( int actualLevel, int newLevel )
 
         backlight.set_value( actualLevel );
         m_lpmClient->SetBackLight( backlight );
-        usleep ( CHANGING_LEVEL_SLEEP_MS * 1000 );
+        usleep( CHANGING_LEVEL_SLEEP_MS * 1000 );
     }// for all the level steps
 
-    if ( actualLevel != newLevel )
+    if( actualLevel != newLevel )
     {
         BOSE_LOG( WARNING, "Warning: adjusting actual level: " << actualLevel << ", new level: " << newLevel );
 
@@ -129,13 +131,13 @@ void DisplayController::MonitorLightSensor()
     // This will activate the light sensor peripheral, the first reading
     // is always zero until the peripheral is activated in continuous
     // reading
-    m_lpmClient->GetLightSensor( [this]( IpcLightSensor_t const & rsp ) {});
+    m_lpmClient->GetLightSensor( [this]( IpcLightSensor_t const & rsp ) {} );
 
-    while ( ! m_timeToStop )
+    while( ! m_timeToStop )
     {
         m_lpmClient->GetLightSensor( [this]( IpcLightSensor_t const & rsp )
         {
-            m_luxDecimal    = ( int )( be16toh( rsp.lux_decimal_value   () ) );
+            m_luxDecimal    = ( int )( be16toh( rsp.lux_decimal_value() ) );
             m_luxFractional = ( int )( be16toh( rsp.lux_fractional_value() ) );
         } );
 
@@ -146,24 +148,24 @@ void DisplayController::MonitorLightSensor()
 
         BOSE_LOG( INFO, "actual lux: " << m_luxDecimal << ", previous lux: " << previous_lux << ", back light: " << m_backLight );
 
-        if ( m_autoMode )
+        if( m_autoMode )
         {
-            targeted_level = GetBackLightLevelFromLux(m_luxDecimal, m_luxDecimal - previous_lux );
+            targeted_level = GetBackLightLevelFromLux( m_luxDecimal, m_luxDecimal - previous_lux );
 
             BOSE_LOG( INFO, "target level: " << targeted_level << ", actual level: " << m_backLight );
 
-            if ( abs (targeted_level - m_backLight ) >= BACKLIGHT_DIFF_THRESHOLD )
+            if( abs( targeted_level - m_backLight ) >= BACKLIGHT_DIFF_THRESHOLD )
             {
                 SetBackLightLevel( m_backLight , targeted_level );
                 // dummy read of the back light, the IPC mechanism is caching a value
-                m_lpmClient->GetBackLight( [this]( IpcBackLight_t const & rsp ) {});
+                m_lpmClient->GetBackLight( [this]( IpcBackLight_t const & rsp ) {} );
                 m_backLight = targeted_level;
             }
 
             previous_lux = m_luxDecimal;
         }// If we are in automatic mode
 
-        usleep(MONITOR_SENSOR_SLEEP_MS * 1000);
+        usleep( MONITOR_SENSOR_SLEEP_MS * 1000 );
     }// while it's not time to stop
 }// MonitorLightSensor
 
@@ -174,43 +176,45 @@ void DisplayController::Initialize()
     //ui/display end point registration with front door
     RegisterDisplayEndPoints();
 
-    m_threadMonitorLightSensor = std::unique_ptr<std::thread>(new std::thread([this] { MonitorLightSensor(); } ));
+    m_threadMonitorLightSensor = std::unique_ptr<std::thread>( new std::thread( [this] { MonitorLightSensor(); } ) );
 }// Initialize
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 void DisplayController::RegisterDisplayEndPoints()
 {
-    auto backLightCallBack = [this]( IpcBackLight_t arg ) {
+    auto backLightCallBack = [this]( IpcBackLight_t arg )
+    {
         HandleLpmNotificationBackLight( arg );
     };
 
-    auto lightSensorCallBack = [this]( IpcLightSensor_t arg ) {
+    auto lightSensorCallBack = [this]( IpcLightSensor_t arg )
+    {
         HandleLpmNotificationLightSensor( arg );
     };
 
-    AsyncCallback<IpcBackLight_t  > notification_cb_back_light  ( backLightCallBack  , m_productController.GetTask() );
+    AsyncCallback<IpcBackLight_t  > notification_cb_back_light( backLightCallBack  , m_productController.GetTask() );
     AsyncCallback<IpcLightSensor_t> notification_cb_light_sensor( lightSensorCallBack, m_productController.GetTask() );
 
-    m_lpmClient->RegisterEvent<IpcBackLight_t  >( IPC_PER_GET_BACKLIGHT  , notification_cb_back_light   );
+    m_lpmClient->RegisterEvent<IpcBackLight_t  >( IPC_PER_GET_BACKLIGHT  , notification_cb_back_light );
     m_lpmClient->RegisterEvent<IpcLightSensor_t>( IPC_PER_GET_LIGHTSENSOR, notification_cb_light_sensor );
 
     AsyncCallback<Display, Callback<Display>> putDisplayReqCb(
-                                                    std::bind( &DisplayController::HandlePutDisplayRequest ,
-                                                               this,
-                                                               std::placeholders::_1,
-                                                               std::placeholders::_2
-                                                             ),
-                                                    m_productController.GetTask() );
+                                               std::bind( &DisplayController::HandlePutDisplayRequest ,
+                                                          this,
+                                                          std::placeholders::_1,
+                                                          std::placeholders::_2
+                                                        ),
+                                               m_productController.GetTask() );
     m_frontdoorClientPtr->RegisterPut<Display>( "/ui/display", putDisplayReqCb );
 
     AsyncCallback< Callback<Display>> getDisplayReqCb(
-                                         std::bind(
-                                             &DisplayController::HandleGetDisplayRequest,
-                                             this,
-                                             std::placeholders::_1
-                                         ),
-                                         m_productController.GetTask() );
+                                       std::bind(
+                                           &DisplayController::HandleGetDisplayRequest,
+                                           this,
+                                           std::placeholders::_1
+                                       ),
+                                       m_productController.GetTask() );
     m_frontdoorClientPtr->RegisterGet( "/ui/Display", getDisplayReqCb );
 
 }// RegisterDisplayEndPoints
@@ -224,7 +228,7 @@ void DisplayController::HandlePutDisplayRequest( const Display &req,
 
 void  DisplayController::HandleGetDisplayRequest( const Callback<Display>& resp )
 {
-    resp.Send ( GetDisplay() );
+    resp.Send( GetDisplay() );
 }// HandleGetDisplayRequest
 
 ////////////////////////////////////////////////////////////////////////////////

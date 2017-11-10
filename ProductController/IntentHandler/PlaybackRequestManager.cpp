@@ -53,13 +53,32 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t intent )
 {
     if( intent == ( uint16_t ) Action::AUX_IN )
     {
-        //ToDo: If AUX is currently playing, ignore the key.
-        SoundTouchInterface::playbackRequestJson playbackRequestData;
-        playbackRequestData.set_source( "PRODUCT" );
-        playbackRequestData.set_sourceaccount( "AUX" );
+        const EddieProductController *pEddieProductController =
+            dynamic_cast<const EddieProductController*>( &GetProductController() );
+        if( pEddieProductController != nullptr )
+        {
+            //If AUX source is already active, ignore the intent.
+            if( not( ( pEddieProductController->GetNowPlaying().has_state() ) &&
+                     ( pEddieProductController->GetNowPlaying().has_container() ) &&
+                     ( pEddieProductController->GetNowPlaying().container().has_contentitem() ) &&
+                     ( pEddieProductController->GetNowPlaying().container().contentitem().has_source() ) &&
+                     ( pEddieProductController->GetNowPlaying().container().contentitem().source() == "PRODUCT" ) &&
+                     ( pEddieProductController->GetNowPlaying().container().contentitem().has_sourceaccount() ) &&
+                     ( pEddieProductController->GetNowPlaying().container().contentitem().sourceaccount() == "AUX" ) )
+              )
+            {
+                SoundTouchInterface::playbackRequestJson playbackRequestData;
+                playbackRequestData.set_source( "PRODUCT" );
+                playbackRequestData.set_sourceaccount( "AUX" );
 
-        GetFrontDoorClient()->SendPost<SoundTouchInterface::NowPlayingJson>( "/content/playbackRequest", playbackRequestData,
-                                                                             m_NowPlayingRsp, m_frontDoorClientErrorCb );
+                GetFrontDoorClient()->SendPost<SoundTouchInterface::NowPlayingJson>( "/content/playbackRequest", playbackRequestData,
+                                                                                     m_NowPlayingRsp, m_frontDoorClientErrorCb );
+            }
+            else
+            {
+                BOSE_LOG( INFO, "AUX Source is already active, ignoring the intent" );
+            }
+        }
     }
 
     //Fire the cb so the control goes back to the ProductController
