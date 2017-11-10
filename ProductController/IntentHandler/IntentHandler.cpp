@@ -37,6 +37,7 @@
 #include "TransportControlManager.h"
 #include "PlaybackRequestManager.h"
 #include "IntentHandler.pb.h"
+#include "BluetoothManager.h"
 
 static DPrint s_logger( "IntentHandler" );
 
@@ -76,6 +77,14 @@ void IntentHandler::Initialize()
     //- Transport Control API's
     //
     //+ Bluetooth Control API's
+    IntentManagerPtr_t bluetoothRequestManager =
+        std::make_shared<BluetoothManager>( m_task, m_cliClient,
+                                            m_frontDoorClient,
+                                            m_controller );
+
+    m_IntentManagerMap[( uint16_t )Action::CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST] = bluetoothRequestManager;
+    m_IntentManagerMap[( uint16_t )Action::SEND_TO_DISCOVERABLE] = bluetoothRequestManager;
+    m_IntentManagerMap[( uint16_t )Action::CLEAR_PAIRING_LIST] = bluetoothRequestManager;
 
     //- Bluetooth Control API's
     //

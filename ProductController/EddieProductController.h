@@ -149,6 +149,12 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
     void HandleCapsNowPlaying( const SoundTouchInterface::NowPlayingJson& );
 
+///////////////////////////////////////////////////////////////////////////////
+/// @name HandleBluetoothSinkAppStatus
+/// @brief Function to Handle BluetoothSinkEndpoints::APP_STATUS from Bluetooth
+///////////////////////////////////////////////////////////////////////////////
+    void HandleBluetoothSinkAppStatus( const BluetoothSinkService::AppStatus& appStatusPb );
+
 public:
     // Handle Key Information received from LPM
     void HandleLpmKeyInformation( IpcKeyInformation_t keyInformation );
@@ -319,9 +325,14 @@ public:
         return m_nowPlaying;
     }
 
+    const BluetoothSinkService::AppStatus& GetBluetoothAppStatus() const
+    {
+        return m_bluetoothAppStatus;
+    }
+
     const BluetoothSinkService::PairedList& GetBluetoothList() const
     {
-        return m_bluetoothList;
+        return m_bluetoothSinkList;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -368,8 +379,8 @@ private:
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
     ProductPb::Language                         m_systemLanguage;
     SoundTouchInterface::NowPlayingJson         m_nowPlaying;
-    BluetoothSinkService::PairedList          m_bluetoothList;
     NetManager::Protobuf::NetworkStatus         m_cachedStatus;
+    BluetoothSinkService::AppStatus             m_bluetoothAppStatus;
 
     ProductCliClient                            m_productCliClient;
 
@@ -384,7 +395,7 @@ private:
     bool                                        m_isBluetoothReady  = false;
 
     int                                         m_wifiProfilesCount;
-    BluetoothSinkService::PairedList          m_bluetoothSinkList;
+    BluetoothSinkService::PairedList            m_bluetoothSinkList;
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>     errorCb;
     /// Demonstration Controller instance
     DemoApp::DemoController m_demoController;

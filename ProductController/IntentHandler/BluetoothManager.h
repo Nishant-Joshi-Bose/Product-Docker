@@ -9,6 +9,7 @@
 #include "ProductController.h"
 #include "IntentHandler.h"
 #include "EddieProductController.h"
+#include "BluetoothSinkEndpoints.h"
 
 namespace ProductApp
 {
@@ -38,8 +39,9 @@ public:
     //
     bool Handle( KeyHandlerUtil::ActionType_t arg ) override;
 private:
+    bool GetSinkStatus( BluetoothSinkService::APP_STATUS& status );
     bool BluetoothDeviceConnected();
-    bool BluetoothDeviceListPresent();
+    bool BluetoothDeviceListPresent( BluetoothSinkService::PairedList& );
     virtual void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
 
 
