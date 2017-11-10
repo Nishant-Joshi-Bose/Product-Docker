@@ -13,23 +13,23 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.2.1.39779.2536524"
+    "selected_version": "Release/Castle-Fork/0.2.3.40001.2555396"
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.1.2-108+32c2463"
+    "selected_version": "Release/master/0.2.1-143+df6e964"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-10-25_1936"
+    "selected_version": "Release/Castle-Fork/0.2.1-20111"
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/0.0.3-9+7266474"
+    "selected_version": "Release/master/0.2.1-13+f0ae3fa"
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2487"
+    "selected_version": "branches/castle-libs@2496"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -37,7 +37,7 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.0.3-129+c8ab79e"
+    "selected_version": "Release/master/0.2.1-142+130bee6"
   },
   {
     "name": "CastleProductControllerCommon",
@@ -45,7 +45,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/0.0.3-25+815dcae"
+    "selected_version": "Release/master/0.2.1-26+e67ea31"
   },
   {
     "name": "ProfessorLPM-Package",
@@ -65,7 +65,7 @@
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Continuous/dev/1.1-12-g31f8c26"
+    "selected_version": "Release/master/1.2"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -77,15 +77,15 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/1.0.1-28+cfb149a"
+    "selected_version": "Release/master/0.2.1-30+ce98842"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.1.2-85+d220b0c"
+    "selected_version": "Release/master/0.2.1-111+7f0e2bb"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-IP2/0.2.2.39924.2552340"
+    "selected_version": "Release/Castle-Fork/0.2.3.40001.2555396"
   },
   {
     "name": "UnitTest++-native",
@@ -97,6 +97,6 @@
   },
   {
     "name": "UnitTest++-ti",
-    "selected_version": "branches/UnitTest++@2424"
+    "selected_version": "branches/UnitTest++@2485"
   }
 ]
