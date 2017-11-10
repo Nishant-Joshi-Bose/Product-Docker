@@ -171,11 +171,9 @@ void EddieProductController::RegisterEndPoints()
                                                                                     this, std::placeholders::_1 ), GetTask() );
     m_FrontDoorClientIF->RegisterNotification<BluetoothSinkService::PairedList>( FRONTDOOR_BLUETOOTH_SINK_LIST_API, bluetoothSinkListCb );
 
-#if 1
     AsyncCallback<BluetoothSinkService::AppStatus> bluetoothSinkListAppStatusCb( std::bind( &EddieProductController::HandleBluetoothSinkAppStatus ,
                                                                                  this, std::placeholders::_1 ), GetTask() );
     m_FrontDoorClientIF->RegisterNotification<BluetoothSinkService::AppStatus>( BluetoothSinkEndpoints::APP_STATUS, bluetoothSinkListAppStatusCb );
-#endif
 
     AsyncCallback<SoundTouchInterface::NowPlayingJson> nowPlayingCb( std::bind( &EddieProductController::HandleCapsNowPlaying ,
                                                                                 this, std::placeholders::_1 ), GetTask() );
