@@ -958,6 +958,10 @@ void EddieProductController::HandleBluetoothModuleReady( bool bluetoothModuleRea
         AsyncCallback<BluetoothSinkService::PairedList> bluetoothSinkListCb( std::bind( &EddieProductController::HandleBluetoothSinkPairedList ,
                                                                                         this, std::placeholders::_1 ), GetTask() );
         m_FrontDoorClientIF->SendGet<BluetoothSinkService::PairedList>( FRONTDOOR_BLUETOOTH_SINK_LIST_API, bluetoothSinkListCb, errorCb );
+
+        AsyncCallback<BluetoothSinkService::AppStatus> bluetoothSinkListAppStatusCb( std::bind( &EddieProductController::HandleBluetoothSinkAppStatus ,
+                                                                                     this, std::placeholders::_1 ), GetTask() );
+        m_FrontDoorClientIF->SendGet<BluetoothSinkService::AppStatus>( BluetoothSinkEndpoints::APP_STATUS, bluetoothSinkListAppStatusCb, errorCb );
     }
     m_isBluetoothReady = bluetoothModuleReady;
     GetEddieHsm().Handle<>( &CustomProductControllerState::HandleModulesReady );
