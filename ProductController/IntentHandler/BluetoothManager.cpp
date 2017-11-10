@@ -17,6 +17,7 @@
 
 #include "DPrint.h"
 #include "BluetoothManager.h"
+#include "BluetoothSinkEndpoints.h"
 
 static DPrint s_logger( "BluetoothManager" );
 
@@ -39,40 +40,67 @@ bool BluetoothManager::Handle( KeyHandlerUtil::ActionType_t intent )
     case( uint16_t ) Action::CLEAR_PAIRING_LIST:
     {
         BOSE_DEBUG( s_logger, "Send Clear pairling list" );
-#if 0
-        GetFrontDoorClient()->\
-        SendPost<>( "/bluetooth/sink/removeAll", transportControl,
-                    m_NowPlayingRsp, m_frontDoorClientErrorCb );
-#endif
+        BluetoothSinkService::RemoveAll removeAll;
+
+        GetFrontDoorClient()->SendPostEmptyResponse\
+        ( BluetoothSinkEndpoints::REMOVE_ALL_DEVICES,
+          removeAll, {}, m_frontDoorClientErrorCb );
     }
     break;
 
     case( uint16_t ) Action::CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST:
     {
+        BluetoothSinkService::PairedList pairedList;
         if( BluetoothDeviceConnected() )
         {
-            BOSE_DEBUG( s_logger, "Go to discoverable mode" );
-#if 0
-            GetFrontDoorClient()->\
-            SendPost<>( "/bluetooth/sink/pairable", transportControl,
-                        m_NowPlayingRsp, m_frontDoorClientErrorCb );
-#endif
+            BOSE_DEBUG( s_logger, "Carousel - Send to discoverable mode" );
+            BluetoothSinkService::Pairable pairable;
+            GetFrontDoorClient()->SendPostEmptyResponse\
+            ( BluetoothSinkEndpoints::PAIRABLE,
+              pairable, {}, m_frontDoorClientErrorCb );
         }
-        else if( BluetoothDeviceListPresent() )
+        else if( BluetoothDeviceListPresent( pairedList ) )
         {
             BOSE_DEBUG( s_logger, "Profile of devices present"
                         " Connect to first in the list" );
-#if 0
-            GetFrontDoorClient()->\
-            SendPost<>( "/bluetooth/sink/connect", transportControl,
-                        m_NowPlayingRsp, m_frontDoorClientErrorCb );
-#endif
+            BluetoothSinkService::Connect connect;
+            uint8_t index = 0;
+            while( pairedList.devices_size() > index )
+            {
+                if( pairedList.devices( index ).has_mac() )
+                {
+                    connect.set_mac( pairedList.devices( index ).mac() );
+                    GetFrontDoorClient()->SendPostEmptyResponse\
+                    ( BluetoothSinkEndpoints::CONNECT, connect,
+                      {}, m_frontDoorClientErrorCb );
+                    BOSE_DEBUG( s_logger, "Sending connect for device:%s on "
+                                "index :%d ",
+                                pairedList.devices( index ).name().c_str(), index );
+                }
+                else
+                {
+                    BOSE_ERROR( s_logger, "No mac address for device: %s: "
+                                "Trying next one in the list if available",
+                                pairedList.devices( index ).name().c_str() );
+                }
+                index++;
+            }
         }
         else
         {
             BOSE_DEBUG( s_logger, "Profile of devices not present"
                         " Ignoring the intent" );
         }
+    }
+    break;
+
+    case( uint16_t ) Action::SEND_TO_DISCOVERABLE:
+    {
+        BOSE_DEBUG( s_logger, "Send to discoverable mode" );
+        BluetoothSinkService::Pairable pairable;
+        GetFrontDoorClient()->SendPostEmptyResponse\
+        ( BluetoothSinkEndpoints::PAIRABLE,
+          pairable, {}, m_frontDoorClientErrorCb );
     }
     break;
 
@@ -95,24 +123,58 @@ bool BluetoothManager::Handle( KeyHandlerUtil::ActionType_t intent )
 bool BluetoothManager::BluetoothDeviceConnected()
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
-    return true;
+    // If we have a paired Sink list, we have devices connected.
+
+    const EddieProductController *eddiePC = \
+                                            dynamic_cast<const EddieProductController*>( &GetProductController() );
+    if( eddiePC != nullptr )
+    {
+        if( ( eddiePC->GetBluetoothAppStatus().has_status() ) &&
+            ( eddiePC->GetBluetoothAppStatus().status() == \
+              BluetoothSinkService::APP_CONNECTED ) )
+        {
+            BOSE_DEBUG( s_logger, "Number of devices in the PairedList:%d",
+                        eddiePC->GetBluetoothList().devices_size() );
+            return true;
+        }
+        else
+        {
+            BOSE_DEBUG( s_logger, "BT: Status present: %d, status type:%d",
+                        eddiePC->GetBluetoothAppStatus().has_status(),
+                        eddiePC->GetBluetoothAppStatus().has_status() ?  \
+                        eddiePC->GetBluetoothAppStatus().status() : \
+                        BluetoothSinkService::APP_INACTIVE );
+        }
+    }
+    else
+    {
+        BOSE_ERROR( s_logger, "Error while casting to Eddie PC" );
+    }
+    return false;
 }
 
-bool BluetoothManager::BluetoothDeviceListPresent()
+bool BluetoothManager::BluetoothDeviceListPresent( BluetoothSinkService::PairedList &pairedList )
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
-    return true;
-}
 
-#if 0
-void BluetoothManager::PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp )
-{
-    // No Need to handle this as Product Controller will get a nowPlaying that
-    // will update update the information.
-    BOSE_DEBUG( s_logger, "%s", __func__ );
-    return;
+    const EddieProductController *eddiePC = \
+                                            dynamic_cast<const EddieProductController*>( &GetProductController() );
+    if( eddiePC != nullptr )
+    {
+        if( eddiePC->GetBluetoothList().devices_size() > 0 )
+        {
+            BOSE_DEBUG( s_logger, "Number of devices in the BluetoothList:%d",
+                        eddiePC->GetBluetoothList().devices_size() );
+            pairedList = eddiePC->GetBluetoothList();
+            return true;
+        }
+    }
+    else
+    {
+        BOSE_ERROR( s_logger, "Error while casting to Eddie PC" );
+    }
+    return false;
 }
-#endif
 
 void BluetoothManager::FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode )
 {

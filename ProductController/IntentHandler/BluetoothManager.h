@@ -17,9 +17,9 @@ class BluetoothManager: public IntentManager
 {
 public:
     BluetoothManager( NotifyTargetTaskIF& task,
-                             const CliClientMT& cliClient,
-                             const FrontDoorClientIF_t& frontDoorClient,
-                             const ProductController& controller ):
+                      const CliClientMT& cliClient,
+                      const FrontDoorClientIF_t& frontDoorClient,
+                      const ProductController& controller ):
         IntentManager( task, cliClient, frontDoorClient, controller )
     {
         m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
@@ -39,7 +39,7 @@ public:
     bool Handle( KeyHandlerUtil::ActionType_t arg ) override;
 private:
     bool BluetoothDeviceConnected();
-    bool BluetoothDeviceListPresent();
+    bool BluetoothDeviceListPresent( BluetoothSinkService::PairedList& );
     virtual void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
 
 

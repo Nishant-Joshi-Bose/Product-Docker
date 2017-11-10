@@ -14,6 +14,7 @@
 #include "ProtoPersistenceFactory.h"
 #include "LpmClientFactory.h"
 #include "CLICmdsKeys.h"
+#include "BluetoothSinkEndpoints.h"
 
 static DPrint s_logger( "EddieProductController" );
 
@@ -170,10 +171,22 @@ void EddieProductController::RegisterEndPoints()
                                                                                     this, std::placeholders::_1 ), GetTask() );
     m_FrontDoorClientIF->RegisterNotification<BluetoothSinkService::PairedList>( FRONTDOOR_BLUETOOTH_SINK_LIST_API, bluetoothSinkListCb );
 
+#if 1
+    AsyncCallback<BluetoothSinkService::AppStatus> bluetoothSinkListAppStatusCb( std::bind( &EddieProductController::HandleBluetoothSinkAppStatus ,
+                                                                                 this, std::placeholders::_1 ), GetTask() );
+    m_FrontDoorClientIF->RegisterNotification<BluetoothSinkService::AppStatus>( BluetoothSinkEndpoints::APP_STATUS, bluetoothSinkListAppStatusCb );
+#endif
+
     AsyncCallback<SoundTouchInterface::NowPlayingJson> nowPlayingCb( std::bind( &EddieProductController::HandleCapsNowPlaying ,
                                                                                 this, std::placeholders::_1 ), GetTask() );
 
     m_FrontDoorClientIF->RegisterNotification<SoundTouchInterface::NowPlayingJson>( FRONTDOOR_CONTENT_NOWPLAYING_API, nowPlayingCb );
+}
+
+void EddieProductController::HandleBluetoothSinkAppStatus( const BluetoothSinkService::AppStatus& appStatusPb )
+{
+    BOSE_INFO( s_logger, "%s,np- (%s)", __func__,  ProtoToMarkup::ToJson( appStatusPb, false ).c_str() );
+    m_bluetoothAppStatus.CopyFrom( appStatusPb );
 }
 
 void EddieProductController::HandleCapsNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingPb )
