@@ -17,7 +17,6 @@
 
 #include "DPrint.h"
 #include "BluetoothManager.h"
-#include "BluetoothSinkEndpoints.h"
 
 static DPrint s_logger( "BluetoothManager" );
 
@@ -50,47 +49,58 @@ bool BluetoothManager::Handle( KeyHandlerUtil::ActionType_t intent )
 
     case( uint16_t ) Action::CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST:
     {
-        BluetoothSinkService::PairedList pairedList;
-        if( BluetoothDeviceConnected() )
+        BluetoothSinkService::APP_STATUS sinkStatus =
+            BluetoothSinkService::APP_INACTIVE;
+        if( GetSinkStatus( sinkStatus ) )
         {
-            BOSE_DEBUG( s_logger, "Carousel - Send to discoverable mode" );
-            BluetoothSinkService::Pairable pairable;
-            GetFrontDoorClient()->SendPostEmptyResponse\
-            ( BluetoothSinkEndpoints::PAIRABLE,
-              pairable, {}, m_frontDoorClientErrorCb );
-        }
-        else if( BluetoothDeviceListPresent( pairedList ) )
-        {
-            BOSE_DEBUG( s_logger, "Profile of devices present"
-                        " Connect to first in the list" );
-            BluetoothSinkService::Connect connect;
-            uint8_t index = 0;
-            while( pairedList.devices_size() > index )
+            BluetoothSinkService::PairedList pairedList;
+            if( ( ( sinkStatus == BluetoothSinkService::APP_INACTIVE ) ||
+                  ( sinkStatus == BluetoothSinkService::APP_PAIRABLE ) ) &&
+                ( BluetoothDeviceListPresent( pairedList ) ) )
             {
-                if( pairedList.devices( index ).has_mac() )
+                // Connect to last
+                BOSE_DEBUG( s_logger, "Profile of devices present"
+                            " Connect to first in the list" );
+                BluetoothSinkService::Connect connect;
+                uint8_t index = 0;
+                while( pairedList.devices_size() > index )
                 {
-                    connect.set_mac( pairedList.devices( index ).mac() );
-                    GetFrontDoorClient()->SendPostEmptyResponse\
-                    ( BluetoothSinkEndpoints::CONNECT, connect,
-                      {}, m_frontDoorClientErrorCb );
-                    BOSE_DEBUG( s_logger, "Sending connect for device:%s on "
-                                "index :%d ",
-                                pairedList.devices( index ).name().c_str(), index );
+                    if( pairedList.devices( index ).has_mac() )
+                    {
+                        connect.set_mac( pairedList.devices( index ).mac() );
+                        GetFrontDoorClient()->SendPostEmptyResponse\
+                        ( BluetoothSinkEndpoints::CONNECT, connect,
+                          {}, m_frontDoorClientErrorCb );
+                        BOSE_DEBUG( s_logger, "Sending connect for device:%s on "
+                                    "index :%d ",
+                                    pairedList.devices( index ).name().c_str(), index );
+                    }
+                    else
+                    {
+                        BOSE_ERROR( s_logger, "No mac address for device: %s: "
+                                    "Trying next one in the list if available",
+                                    pairedList.devices( index ).name().c_str() );
+                    }
+                    index++;
                 }
-                else
-                {
-                    BOSE_ERROR( s_logger, "No mac address for device: %s: "
-                                "Trying next one in the list if available",
-                                pairedList.devices( index ).name().c_str() );
-                }
-                index++;
             }
+            else if( sinkStatus != BluetoothSinkService::APP_PAIRABLE )
+            {
+                BOSE_DEBUG( s_logger, "Carousel - Send to discoverable mode: "
+                            " sink Status : %d", sinkStatus );
+                BluetoothSinkService::Pairable pairable;
+                GetFrontDoorClient()->SendPostEmptyResponse\
+                ( BluetoothSinkEndpoints::PAIRABLE,
+                  pairable, {}, m_frontDoorClientErrorCb );
+            }
+
         }
         else
         {
-            BOSE_DEBUG( s_logger, "Profile of devices not present"
-                        " Ignoring the intent" );
+            BOSE_ERROR( s_logger, "Failed to get sink Status "
+                        "Ignoring the intent" );
         }
+
     }
     break;
 
@@ -118,6 +128,32 @@ bool BluetoothManager::Handle( KeyHandlerUtil::ActionType_t intent )
         ( *GetCallbackObject() )( intent );
     }
     return true;
+}
+
+bool BluetoothManager::GetSinkStatus( BluetoothSinkService::APP_STATUS& status )
+{
+    BOSE_DEBUG( s_logger, "%s", __func__ );
+    const EddieProductController *eddiePC = \
+                                            dynamic_cast<const EddieProductController*>( &GetProductController() );
+    if( eddiePC != nullptr )
+    {
+        if( eddiePC->GetBluetoothAppStatus().has_status() )
+        {
+            BOSE_DEBUG( s_logger, "Number of devices in the PairedList:%d "
+                        "Status: %d", eddiePC->GetBluetoothList().devices_size(),
+                        eddiePC->GetBluetoothAppStatus().status() );
+            return ( true );
+        }
+        else
+        {
+            BOSE_DEBUG( s_logger, "%s: Status not present", __func__ );
+        }
+    }
+    else
+    {
+        BOSE_ERROR( s_logger, "Error while casting to Eddie PC" );
+    }
+    return false;
 }
 
 bool BluetoothManager::BluetoothDeviceConnected()
@@ -167,6 +203,10 @@ bool BluetoothManager::BluetoothDeviceListPresent( BluetoothSinkService::PairedL
                         eddiePC->GetBluetoothList().devices_size() );
             pairedList = eddiePC->GetBluetoothList();
             return true;
+        }
+        else
+        {
+            BOSE_DEBUG( s_logger, "No devices in the BluetoothList" );
         }
     }
     else
