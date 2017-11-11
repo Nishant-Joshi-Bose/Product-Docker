@@ -27,6 +27,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/KeyActions.pb.cc
   ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc
   ${PROTO_CC_DEST}/SystemInfo.pb.cc
+  ${PROTO_CC_DEST}/AdaptIQ.pb.cc
   source/ProductStart.cpp
   source/ProductCommandLine.cpp
   source/ProductHardwareInterface.cpp
@@ -38,6 +39,7 @@ ADD_EXECUTABLE(Professor
   source/ProfessorProductController.cpp
   source/ProductEdidInterface.cpp
   source/ProductVolumeManager.cpp
+  source/ProductAdaptIQManager.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
   source/CustomStateMachine/CustomProductControllerStateBooting.cpp

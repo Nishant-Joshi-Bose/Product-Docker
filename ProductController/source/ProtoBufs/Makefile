@@ -11,7 +11,8 @@ PROTO_SOURCES = AudioSettings.proto         \
                 ProductSTS.proto            \
                 KeyActions.proto            \
                 SystemInfo.proto            \
-                ProductSpeakerManager.proto
+                ProductSpeakerManager.proto \
+                AdaptIQ.proto 
 
 #
 # The following alias is used to search for imported Protocol Buffer files.
