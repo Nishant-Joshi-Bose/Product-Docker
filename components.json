@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.2.3.40001.2555396"
+    "selected_version": "Release/Castle-Fork-IP2/0.2.4.40020M.2556137"
   },
   {
     "name": "BoseLibs-qc8017_32",
@@ -93,7 +93,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.2.3.40001.2555396"
+    "selected_version": "Release/Castle-Fork-IP2/0.2.4.40020M.2556137"
   },
   {
     "name": "UnitTest++-native",
