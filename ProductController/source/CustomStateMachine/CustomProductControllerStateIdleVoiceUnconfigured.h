@@ -93,7 +93,10 @@ private:
     /// @brief This method handles potential state changes for both network and voice status events.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandlePotentialStateChange( bool networkConfigured, bool networkConnected, bool voiceConfigured );
+    void HandlePotentialStateChange( bool autoWakeEnabled,
+                                     bool networkConfigured,
+                                     bool networkConnected,
+                                     bool voiceConfigured );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

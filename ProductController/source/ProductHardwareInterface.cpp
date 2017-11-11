@@ -164,6 +164,11 @@ void ProductHardwareInterface::Connected( bool connected )
 {
     m_connected = connected;
 
+    ///
+    /// If the LPM client is connected, request normal operations and request the LPM status;
+    /// otherwise, re-attempt to connect to the LPM through its Run method. The product
+    /// controller can not do any useful operations without an LPM connection.
+    ///
     if( connected )
     {
         BOSE_DEBUG( s_logger, "A hardware connection to the LPM has been established." );
@@ -186,9 +191,15 @@ void ProductHardwareInterface::Connected( bool connected )
         IL::BreakThread( std::bind( &ProductHardwareInterface::Run, this ), m_ProductTask );
     }
 
-    for( auto &cb : m_lpmConnectionNotifies )
+    ///
+    /// Send the LPM connected event to all modules that have registered for it via the
+    /// RegisterForLpmClientConnectEvent method. Note that the module must have registered
+    /// for the connection event before the ProductHardware is ran through its Run method;
+    /// otherwise, the module may not get the connected event.
+    ///
+    for( auto &connectedCallback : m_lpmConnectionNotifies )
     {
-        cb( m_connected );
+        connectedCallback( m_connected );
     }
 
     ///
@@ -746,14 +757,15 @@ void ProductHardwareInterface::RequestPowerStateFullPassed( const IpcLpmStateRes
 ///
 /// @brief This method sends a request to start or stop pairing
 ///
-/// @param bool [enabled] - whether to start or stop pairing
+/// @param bool enabled This argument determines whether to start or stop pairing.
 ///
-/// @param Callback<IpcSpeakerPairingMode_t> [ cb ] - a callback to return pairing mode
+/// @param Callback< IpcSpeakerPairingMode_t > pairingCallback This is a callback to return pairing mode.
 ///
-/// @return bool - whether the pairing enabled cmd was sent
+/// @return bool The method returns true when the pairing enabled command was successfully sent.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductHardwareInterface::SendAccessoryPairing( bool enabled, const Callback<IpcSpeakerPairingMode_t> &cb )
+bool ProductHardwareInterface::SendAccessoryPairing( bool enabled, const Callback< IpcSpeakerPairingMode_t >&
+                                                     pairingCallback )
 {
     if( m_connected == false || m_LpmClient == nullptr )
     {
@@ -768,7 +780,7 @@ bool ProductHardwareInterface::SendAccessoryPairing( bool enabled, const Callbac
 
     pairing.set_pairingenabled( enabled );
 
-    m_LpmClient->OpenSpeakerPairing( pairing, cb );
+    m_LpmClient->OpenSpeakerPairing( pairing, pairingCallback );
 
     return true;
 }

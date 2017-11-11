@@ -97,8 +97,8 @@ void CustomProductControllerStateAccessoryPairing::HandleTimeOut( )
     BOSE_INFO( s_logger, "A time out while pairing has occurred." );
 
     ///
-    /// Go to the superstate of the pairing state, which will be the setup state or a playing active
-    /// state.
+    /// Go to the superstate of this pairing state, which should be the last state that the
+    /// product controller was in, to resume functionality.
     ///
     ChangeState( GetSuperId( ) );
 }
@@ -110,13 +110,14 @@ void CustomProductControllerStateAccessoryPairing::HandleTimeOut( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAccessoryPairing::HandlePairingState( ProductAccessoryPairing pairingStatus )
 {
-    BOSE_INFO( s_logger, "CustomProductControllerStateAccessoryPairing is handling pairing." );
+    BOSE_INFO( s_logger, "CustomProductControllerStateAccessoryPairing is handling a pairing %s.",
+               pairingStatus.active( ) ? "activation" : "deactivation" );
 
     if( not pairingStatus.active( ) )
     {
         ///
-        /// Go to the superstate of the pairing state, which will be the setup state or a playing
-        /// active state.
+        /// Go to the superstate of this pairing state, which should be the last state that the
+        /// product controller was in, to resume functionality.
         ///
         ChangeState( GetSuperId( ) );
     }

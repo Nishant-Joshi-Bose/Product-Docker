@@ -1,11 +1,13 @@
-# Source								Destination													Rule
-./builds/Release/product.ipk			<DEPLOY_DIR>/professor_<VERSION_STRING>.ipk					file
-./builds/Release/product-ipk-stage/component-info.gz	<DEPLOY_DIR>/professor_cinfo_<VERSION_STRING>.gz	file
-./builds/Release/components.svgz		<DEPLOY_DIR>/professor_cgraph_<VERSION_STRING>.svgz			file
-./builds/Release/package/product.tar	<DEPLOY_DIR>/professor_<VERSION_STRING>.tar					file
-./builds/Release/package/product_flash	<DEPLOY_DIR>/professor_flash								file
-./builds/Release/lpm_updater.ipk		<DEPLOY_DIR>/professor_lpm_updater_<VERSION_STRING>.ipk		file
-./components.json						<DEPLOY_DIR>/components_<VERSION_STRING>.json				file
+# Source												Destination													Rule
+./builds/Release/product.ipk							<DEPLOY_DIR>/professor_<VERSION_STRING>.ipk					file
+./builds/Release/product-ipk-stage/component-info.gz	<DEPLOY_DIR>/professor_cinfo_<VERSION_STRING>.gz			file
+./builds/Release/components.svgz						<DEPLOY_DIR>/professor_cgraph_<VERSION_STRING>.svgz			file
+./builds/Release/package/product.tar					<DEPLOY_DIR>/professor_<VERSION_STRING>.tar					file
+./builds/Release/package/product_flash					<DEPLOY_DIR>/professor_flash								file
+./builds/Release/package/product_flash.exe				<DEPLOY_DIR>/professor_flash.exe							file
+./builds/Release/package/product_flash_mac				<DEPLOY_DIR>/professor_flash_mac							file
+./builds/Release/lpm_updater.ipk						<DEPLOY_DIR>/professor_lpm_updater_<VERSION_STRING>.ipk		file
+./components.json										<DEPLOY_DIR>/components_<VERSION_STRING>.json				file
 
 # EMACS
 # Local Variables:

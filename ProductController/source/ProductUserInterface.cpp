@@ -129,32 +129,63 @@ ProductUserInterface::ProductUserInterface( NotifyTargetTaskIF*        ProductTa
                                             CliClientMT&               CommandLineInterface )
 
     : m_ProductTask( ProductTask ),
-      m_keyEventTask( IL::CreateTask( "ProductMonitorNetworkTask" ) ),
       m_ProductNotify( ProductNotify ),
       m_ProductHardwareInterface( HardwareInterface ),
+      m_connected( false ),
       m_running( false ),
       m_KeyHandler( *ProductTask, CommandLineInterface, m_keyConfigFileName )
 {
+    ///
+    /// Register for LPM connected events after which key registration can be made. Note that this
+    /// module must register for the connection events before the ProductHardware instance is ran
+    /// through its Run method in the product controller; otherwise, this module may not get the
+    /// LPM connected event.
+    ///
+    Callback< bool > callback( std::bind( &ProductUserInterface::ConnectToLpm,
+                                          this,
+                                          std::placeholders::_1 ) );
 
+    m_ProductHardwareInterface->RegisterForLpmClientConnectEvent( callback );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductUserInterface::Connect
+///
+/// @brief  This method starts the ProductUserInterface instance.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductUserInterface::ConnectToLpm( bool connected )
+{
+    BOSE_DEBUG( s_logger, "%s: The user interface is starting.", __FUNCTION__ );
+
+    m_connected = connected;
+
+    ///
+    /// Attempt to register for key events if connected to the LPM hardware interface.
+    ///
+    if( m_connected )
+    {
+        IL::BreakThread( std::bind( &ProductUserInterface::RegisterForKeyEvents,
+                                    this ),
+                         m_ProductTask );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProductUserInterface::Run
 ///
-/// @brief  This method starts the ProductUserInterface instance.
+/// @brief  This method runs the ProductUserInterface instance. Note that key events will not be
+///         sent to the product controller, which creates an instance of this class, until it is
+///         set to run.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductUserInterface::Run( )
 {
-    BOSE_DEBUG( s_logger, "%s: The user interface is starting.", __FUNCTION__ );
+    BOSE_DEBUG( s_logger, "%s: The user interface is running.", __FUNCTION__ );
 
-    ///
-    /// Attempt to register for key events in a separate task.
-    ///
-    IL::BreakThread( std::bind( &ProductUserInterface::RegisterForKeyEvents,
-                                this ),
-                     m_keyEventTask );
+    m_running = true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -167,19 +198,16 @@ void ProductUserInterface::RegisterForKeyEvents( )
     BOSE_DEBUG( s_logger, "The user interface is attempting to register for key events." );
 
     ///
-    /// Repeated attempts are made to sucessfully pass a callback to the hardware interface to
-    /// receive key events from the LPM. This callback when invoked will send a message to the
-    /// ProductController class that handles the state machine.
+    /// A callback is passed to the hardware interface to receive key events from the LPM. This
+    /// callback when invoked will send a message to the ProductController class that handles the
+    /// state machine.
     ///
     Callback< LpmServiceMessages::IpcKeyInformation_t >
     CallbackForKeyEvents( std::bind( &ProductUserInterface::HandleKeyEvent,
                                      this,
                                      std::placeholders::_1 ) );
 
-    while( !m_ProductHardwareInterface->RegisterForLpmEvents( IPC_KEY, CallbackForKeyEvents ) )
-    {
-        sleep( PRODUCT_USER_INTERFACE_RETRY_IN_SECONDS );
-    }
+    m_ProductHardwareInterface->RegisterForLpmEvents( IPC_KEY, CallbackForKeyEvents );
 
     ///
     /// Register with the key handler and repeat management code to translate raw LPM keys
@@ -192,7 +220,6 @@ void ProductUserInterface::RegisterForKeyEvents( )
 
     auto CallbackForKeyInformation = std::make_shared< AsyncCallback < uint32_t > > ( KeyCallback,
                                      m_ProductTask );
-
 
     m_KeyHandler.RegisterKeyHandler( CallbackForKeyInformation );
 
@@ -211,6 +238,14 @@ void ProductUserInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInformation
     std::string    keyOriginString;
     std::string    keyStateString;
     std::string    keyIdString;
+
+    if( not m_running )
+    {
+        BOSE_DEBUG( s_logger, "--------------- Product Controller User Key Event ---------------" );
+        BOSE_DEBUG( s_logger, "The user interface for key events has not been set to run." );
+
+        return;
+    }
 
     if( keyEvent.has_keyorigin( ) )
     {
