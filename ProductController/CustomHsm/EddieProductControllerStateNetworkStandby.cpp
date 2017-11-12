@@ -6,7 +6,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "EddieProductControllerStateNetworkStandby.h"
-#include "EddieProductControllerHsm.h"
+#include "ProductControllerHsm.h"
 #include "EddieProductController.h"
 #include "DPrint.h"
 
@@ -14,7 +14,7 @@ static DPrint s_logger( "EddieProductControllerStateNetworkStandby" );
 
 namespace ProductApp
 {
-EddieProductControllerStateNetworkStandby::EddieProductControllerStateNetworkStandby( EddieProductControllerHsm& hsm,
+EddieProductControllerStateNetworkStandby::EddieProductControllerStateNetworkStandby( ProductControllerHsm& hsm,
         CHsmState* pSuperState,
         Hsm::STATE stateId,
         const std::string& name ) :

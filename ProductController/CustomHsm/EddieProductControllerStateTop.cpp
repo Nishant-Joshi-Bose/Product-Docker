@@ -7,7 +7,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "EddieProductControllerStateTop.h"
-#include "EddieProductControllerHsm.h"
+#include "ProductControllerHsm.h"
 #include "EddieProductController.h"
 #include "DPrint.h"
 
@@ -15,7 +15,7 @@ static DPrint s_logger( "EddieProductControllerStateTop" );
 
 namespace ProductApp
 {
-EddieProductControllerStateTop::EddieProductControllerStateTop( EddieProductControllerHsm& hsm,
+EddieProductControllerStateTop::EddieProductControllerStateTop( ProductControllerHsm& hsm,
                                                                 CHsmState* pSuperState,
                                                                 Hsm::STATE stateId,
                                                                 const std::string& name ) :

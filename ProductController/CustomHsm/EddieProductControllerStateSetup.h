@@ -13,12 +13,12 @@
 
 namespace ProductApp
 {
-class EddieProductControllerHsm;
+class ProductControllerHsm;
 
 class EddieProductControllerStateSetup : public ProductControllerStateSetup
 {
 public:
-    EddieProductControllerStateSetup( EddieProductControllerHsm& hsm,
+    EddieProductControllerStateSetup( ProductControllerHsm& hsm,
                                       CHsmState* pSuperState,
                                       Hsm::STATE stateId = CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP,
                                       //Don't change below state name. This is mapped with Madrid's requirement.

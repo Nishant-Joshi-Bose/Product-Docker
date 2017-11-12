@@ -12,7 +12,7 @@ class ProductControllerHsm {
 	HandleEvent()
 }
 
-class EddieProductControllerHsm {
+class ProductControllerHsm {
 	IsProductNeedsSetup()
 }
 note bottom: Custom and optional. \nClass for helper functions in Hsm.
@@ -75,12 +75,11 @@ note bottom: Custom
 
 iHsm <|-- CHsm
 CHsm <|-- ProductControllerHsm
-ProductControllerHsm <|-- EddieProductControllerHsm
 
 ProductController <|-- EddieProductController
 ProductControllerHsm o-- ProductController
-EddieProductControllerHsm o-- EddieProductController
-EddieProductController *-- EddieProductControllerHsm
+ProductControllerHsm o-- EddieProductController
+EddieProductController *-- ProductControllerHsm
 EddieProductController *-- EddieProductControllerStateBooting
 EddieProductController *-- EddieProductControllerStateSetup
 EddieProductController *-- EddieProductControllerStateNetworkStandby

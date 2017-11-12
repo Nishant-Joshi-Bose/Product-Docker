@@ -13,7 +13,6 @@
 #include <iostream>
 
 #include "ProductController.h"
-#include "EddieProductControllerHsm.h"
 #include "NotifyTargetTaskIF.h"
 #include "ProtoPersistenceIF.h"
 #include "EddieProductControllerStateTop.h"
@@ -54,11 +53,6 @@ public:
     NetManager::Protobuf::NetworkStatus const& GetNetworkStatus() const
     {
         return m_cachedStatus;
-    }
-
-    EddieProductControllerHsm& GetEddieHsm()
-    {
-        return static_cast<EddieProductControllerHsm&>( m_ProductControllerHsm );
     }
 
 private:
