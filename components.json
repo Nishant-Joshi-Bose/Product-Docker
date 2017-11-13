@@ -69,11 +69,11 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/IP2/0.2.0-18+1070ddb"
+    "selected_version": "Release/IP2/0.2.1-23+a9375b8"
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/IP2/0.2.0-18+dec69bb"
+    "selected_version": "Release/IP2/0.2.2-21+6b1291b"
   },
   {
     "name": "Shepherd-qc8017_32",
