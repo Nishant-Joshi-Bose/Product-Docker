@@ -182,6 +182,14 @@ void ProductHardwareInterface::Connected( bool connected )
 
         RequestNormalOperations( );
         RequestLpmStatus( CallbackForLpmStatus );
+
+        auto func = std::bind(
+                        &ProductHardwareInterface::CECMsgHandler,
+                        this,
+                        std::placeholders::_1 );
+
+        AsyncCallback<LpmServiceMessages::IpcCecMessage_t> CallbackForCecMsgs( func, m_ProductTask );
+        m_LpmClient->RegisterEvent<LpmServiceMessages::IpcCecMessage_t>( IPC_CEC_MSG, CallbackForCecMsgs );
     }
     else
     {
@@ -1359,6 +1367,34 @@ bool ProductHardwareInterface::CECSetPhysicalAddress( const uint32_t cecPhysical
         cecAddrSetting.set_cecphyaddr( cecPhysicalAddress );
         m_LpmClient->SendCecPhysicalAddress( cecAddrSetting );
 
+        return true;
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name  ProductHardwareInterface::CECMsgHandler
+///
+/// @brief This method handles the CEC messages received from LPM
+///
+/// @param None
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProductHardwareInterface::CECMsgHandler( const LpmServiceMessages::IpcCecMessage_t cecMessage )
+{
+    BOSE_DEBUG( s_logger, "Received CEC Message from LPM" );
+
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "CEC Message could not be received, as no connection is available." );
+
+        return false;
+    }
+    else
+    {
+
+        BOSE_DEBUG( s_logger, "CEC Message received from LPM. Send to QS" );
+        //TODO - Send the message to QuickSetService
         return true;
     }
 }
