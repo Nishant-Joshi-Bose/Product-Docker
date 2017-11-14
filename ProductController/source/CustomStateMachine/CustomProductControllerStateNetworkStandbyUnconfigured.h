@@ -36,7 +36,6 @@
 #include "ProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
-#include "APTimer.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -80,24 +79,11 @@ public:
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
 
-    bool HandleNetworkState( bool configured, bool connected ) override;
-    bool HandleVoiceState( bool configured )                   override;
+    bool HandleNetworkState( bool configured, bool connected )  override;
+    bool HandleVoiceState( bool configured )                    override;
+    bool HandleInactivityTimer( InactivityTimerType timerType ) override;
 
 private:
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief This timer is used to monitor the amount of time the device is in this state.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    APTimerPtr m_timer;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief This method will be invoked by the expired timer defined above.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleTimeOut( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

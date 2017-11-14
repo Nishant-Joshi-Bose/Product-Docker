@@ -76,6 +76,10 @@ public:
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
     bool HandlePowerState( ) override;
+    bool HandleInactivityTimer( InactivityTimerType timerType ) override;
+
+private:
+    void GoToAppropriateNonPlayingState( );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
