@@ -127,6 +127,8 @@ create_eddie_ext4 () {
 	#copy and extract product IPK to make new EXT4 fs
 	#extract_product_ipk
 	install_offline 
+	#Getting fs_size from bose.ext4 is creating wrong file
+	#fs_size=1514624512
 	$utils_dir/lin/make_ext4fs -s -l $fs_size -a $bose_partition $bose_ext4 $extract_dir/ > /dev/null || error_exit ${FUNCNAME[0]}
 	if ! [ -f  $bose_ext4 ]; then
 		error_exit ${FUNCNAME[0]} " Updated EXT4 $bose_ext4 not found - make_ext4fs failed. Check if total size of package exceeds MAX EXT4 Size: $fs_size."
