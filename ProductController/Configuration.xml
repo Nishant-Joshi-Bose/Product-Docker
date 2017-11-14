@@ -30,7 +30,7 @@
         </dspImages>
         <outputDeviceParameters/>
         <outputDriverParameterSet defaultOutputDriverIndex="0">
-            <outputDriverParameters outputDriverName="" outputDriverPath="" outputDriverType="AUDIO_DEVICE_TYPE_ALSA" outputSampleRate="44100" wifiAttenuation="0.39810699" auxAttenuation="1" wifiBufferTarget="1802" auxBufferTarget="1802" useDither="false" audioLatency="0">
+            <outputDriverParameters outputDriverName="" outputDriverPath="" outputDriverType="AUDIO_DEVICE_TYPE_ALSA" samplesPerFrame="512" outputSampleRate="44100" wifiAttenuation="0.39810699" auxAttenuation="1" wifiBufferTarget="1802" auxBufferTarget="1802" useDither="false" audioLatency="0">
                 <asrcConstants invFsamp="2.2675736961451251e-05" invki="1725620.886483805" ki="5.7950156249999992e-07" />
             </outputDriverParameters>
         </outputDriverParameterSet>
