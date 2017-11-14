@@ -5,7 +5,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.2.1-143+df6e964"
+    "selected_version": "Continuous/master/0.2.1-154+fb0b43a"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -29,7 +29,7 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.2.2-98+73aeefc"
+    "selected_version": "Continuous/master/0.2.2-101+760170a"
   },
   {
     "name": "CastlePassport-native",
