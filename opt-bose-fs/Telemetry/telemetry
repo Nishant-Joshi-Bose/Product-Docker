@@ -1,0 +1,31 @@
+#! /bin/sh
+
+#Daemon script to run Telemetry script in a loop, according to the options below
+
+telemetry_path="/opt/Bose/Telemetry/"
+run_telemetry=$telemetry_path"run-telemetry.sh"
+post_telemetry=$telemetry_path"post-telemetries.sh"
+
+delay=0
+
+runs_before_post=2       #Number of telemetriers collected before posting
+run_telemetry_sec=1800   #Collect telemetry seconds
+
+
+while [ true ]
+do
+    i=0
+    while [ $i -lt $runs_before_post ]
+    do
+        sleep $(($run_telemetry_sec  - $delay))  #Offset how long telemetry took to run to keep run time constant
+        START=$(date +%s)	    
+		echo -e "Running telemetry daemon :"$i
+        start-stop-daemon --start --quiet --exec $run_telemetry
+        true $((i++))
+        delay="$(($(date +%s)-$START))" #Run time of telemetry
+    done
+    echo -e "Posting telemetry daemon"
+    start-stop-daemon --start --quiet --exec $post_telemetry
+    delay="$(($(date +%s)-$START))" #Run time of post
+done
+

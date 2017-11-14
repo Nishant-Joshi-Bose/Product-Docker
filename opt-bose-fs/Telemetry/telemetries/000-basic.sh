@@ -1,0 +1,29 @@
+#!/bin/bash
+MACADDR=$1
+DATE=$2
+
+re="APServer|AVS|A4V|Bose|BT|BLESetup|CLIServer|ClockSync|Deezer|Device|Eddie|FrontDoor|IHeart|Iot|LPMService|Passport|Professor|NetManger|Server|Software|Spotify|Telnet|STSCertified|UpnpSource|WebServer|Vfe"
+
+re2="([^ ]*) +([0-9]+)"
+re3="(.+):\s+([0-9]+)( kB){0,1}"
+ps -eocomm,pid | egrep "$re" | while read procspec
+do
+    [[ $procspec =~ $re2 ]]
+    process=${BASH_REMATCH[1]}
+    pid=${BASH_REMATCH[2]}
+    cat /proc/$pid/status | egrep "^(Vm|Threads).*$" | while read -r proc
+    do
+     [[ $proc =~ $re3 ]]
+      metric=${BASH_REMATCH[1]}
+      value=${BASH_REMATCH[2]}
+      printf '    {\n'
+      printf '        "time": "%s",\n' $DATE
+      printf '        "type": "metric",\n'
+      printf '        "originatorID": "%s",\n' $MACADDR
+      printf '        "data": {\n'
+      printf '            "metricType": "%s/%s",\n' ${process} ${metric}
+      printf '            "metricValue": %d\n' ${value}
+      printf '        }\n'
+      printf '    },\n'
+    done
+done
