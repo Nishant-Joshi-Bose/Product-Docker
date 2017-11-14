@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork-IP2/0.2.5.40023M.2556757"
+    "selected_version": "Continuous/Castle-Fork/2017-11-14_0931"
   },
   {
     "name": "BoseLibs-qc8017_32",
@@ -17,7 +17,7 @@
   },
   {
     "name": "CastleDemoController-qc8017_32",
-    "selected_version": "Release/master/0.2.1-15+e4c6da3"
+    "selected_version": "Continuous/master/0.2.1-17+3077ff0"
   },
   {
     "name": "CastleLibs-qc8017_32",
@@ -25,19 +25,19 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.2.1-11+d588fde"
+    "selected_version": "Continuous/master/0.2.1-13+53e8e4c"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.2.2-91+cbe4a91"
+    "selected_version": "Continuous/master/0.2.2-98+73aeefc"
   },
   {
     "name": "CastlePassport-native",
-    "selected_version": "Release/master/0.2.1-142+130bee6"
+    "selected_version": "Continuous/master/0.2.1-157+4866309"
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.2.1-142+130bee6"
+    "selected_version": "Continuous/master/0.2.1-157+4866309"
   },
   {
     "name": "CastleProductControllerCommon",
@@ -89,11 +89,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.2.1-111+7f0e2bb"
+    "selected_version": "Continuous/master/0.2.1-114+7092630"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-IP2/0.2.5.40023M.2556757"
+    "selected_version": "Continuous/Castle-Fork/2017-11-14_0931"
   },
   {
     "name": "UnitTest++-native",
