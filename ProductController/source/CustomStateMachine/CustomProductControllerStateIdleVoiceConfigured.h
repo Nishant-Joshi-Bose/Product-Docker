@@ -66,7 +66,7 @@ public:
     CustomProductControllerStateIdleVoiceConfigured
     ( ProductControllerHsm&       hsm,
       CHsmState*                  pSuperState,
-      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED,
+      Hsm::STATE                  stateId,
       const std::string&          name    = "CustomProductControllerStateIdleVoiceConfigured" );
 
     ~CustomProductControllerStateIdleVoiceConfigured( ) override
