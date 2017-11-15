@@ -142,6 +142,7 @@ bool BluetoothManager::GetSinkStatus( BluetoothSinkService::APP_STATUS& status )
             BOSE_DEBUG( s_logger, "Number of devices in the PairedList:%d "
                         "Status: %d", eddiePC->GetBluetoothList().devices_size(),
                         eddiePC->GetBluetoothAppStatus().status() );
+            status = eddiePC->GetBluetoothAppStatus().status();
             return ( true );
         }
         else

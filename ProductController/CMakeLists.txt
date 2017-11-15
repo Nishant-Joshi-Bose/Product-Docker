@@ -54,6 +54,7 @@ TARGET_LINK_LIBRARIES(Eddie
   CliClient
   ShelbyUtils
   BoseLibs
+  PassportClient
   STS
   libjsoncpp.a
   libprotobuf.a

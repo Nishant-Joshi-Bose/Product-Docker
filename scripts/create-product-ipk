@@ -147,6 +147,7 @@ cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
 cp -a "$boselibs_dir/lib" "$opt_dir" || exit
 cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
+cp "$wspace/config/InActivityTimer.json" "$opt_dir/etc" || exit
 
 # ----------------------------------------------------------------------------
 #@todo: WebToolkit Start
