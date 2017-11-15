@@ -66,7 +66,7 @@ public:
 
     ( ProductControllerHsm&       hsm,
       CHsmState*                  pSuperState,
-      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE,
+      Hsm::STATE                  stateId,
       const std::string&          name    = "CustomProductControllerStatePlayingInactive" );
 
     ~CustomProductControllerStatePlayingInactive( ) override

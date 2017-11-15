@@ -63,7 +63,7 @@ public:
 
     CustomProductControllerStateBooting( ProductControllerHsm& hsm,
                                          CHsmState*            pSuperState,
-                                         Hsm::STATE            stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING,
+                                         Hsm::STATE            stateId,
                                          const std::string&    name    = "CustomProductControllerStateBooting" );
 
     ~CustomProductControllerStateBooting( ) override

@@ -65,7 +65,7 @@ public:
     CustomProductControllerStateNetworkStandby
     ( ProductControllerHsm&       hsm,
       CHsmState*                  pSuperState,
-      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY,
+      Hsm::STATE                  stateId,
       const std::string&          name    = "CustomProductControllerStateNetworkStandby" );
 
     ~CustomProductControllerStateNetworkStandby( ) override

@@ -185,64 +185,79 @@ void ProfessorProductController::Run( )
     ///
     auto* stateBooting = new CustomProductControllerStateBooting
     ( GetHsm( ),
-      stateTop );
+      stateTop,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
     auto* stateUpdatingSoftware = new CustomProductControllerStateUpdatingSoftware
     ( GetHsm( ),
-      stateTop );
+      stateTop,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING );
 
     auto* stateLowPower = new CustomProductControllerStateLowPower
     ( GetHsm( ),
-      stateTop );
+      stateTop,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_LOW_POWER );
 
     auto* stateOn = new CustomProductControllerStateOn
     ( GetHsm( ),
-      stateTop );
+      stateTop,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_ON );
 
     auto* statePlayable = new CustomProductControllerStatePlayable
     ( GetHsm( ),
-      stateOn );
+      stateOn,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE );
 
     auto* stateNetworkStandby = new CustomProductControllerStateNetworkStandby
     ( GetHsm( ),
-      statePlayable );
+      statePlayable,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
 
     auto* stateNetworkStandbyConfigured = new CustomProductControllerStateNetworkStandbyConfigured
     ( GetHsm( ),
-      stateNetworkStandby );
+      stateNetworkStandby,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED );
 
     auto* stateNetworkStandbyUnconfigured = new CustomProductControllerStateNetworkStandbyUnconfigured
     ( GetHsm( ),
-      stateNetworkStandby );
+      stateNetworkStandby,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
 
     auto* stateIdle = new CustomProductControllerStateIdle
     ( GetHsm( ),
-      statePlayable );
+      statePlayable,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
 
     auto* stateIdleVoiceConfigured = new CustomProductControllerStateIdleVoiceConfigured
     ( GetHsm( ),
-      stateIdle );
+      stateIdle,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
 
     auto* stateIdleVoiceUnconfigured = new CustomProductControllerStateIdleVoiceUnconfigured
     ( GetHsm( ),
-      stateIdle );
+      stateIdle,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED );
 
     auto* statePlaying = new CustomProductControllerStatePlaying
     ( GetHsm( ),
-      stateOn );
+      stateOn,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING );
 
     auto* statePlayingActive = new CustomProductControllerStatePlayingActive
     ( GetHsm( ),
-      statePlaying );
+      statePlaying,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE );
 
     auto* statePlayingInactive = new CustomProductControllerStatePlayingInactive
     ( GetHsm( ),
-      statePlaying );
+      statePlaying,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
 
     auto* stateAccessoryPairing = new CustomProductControllerStateAccessoryPairing
     ( GetHsm( ),
       statePlayingActive,
-      *this );
+      *this,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
 
     ///
     /// The states are added to the state machine and the state machine is initialized.
