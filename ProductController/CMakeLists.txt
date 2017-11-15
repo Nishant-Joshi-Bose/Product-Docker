@@ -38,6 +38,7 @@ ADD_EXECUTABLE(Professor
   source/ProfessorProductController.cpp
   source/ProductEdidInterface.cpp
   source/ProductVolumeManager.cpp
+  source/CustomProductAudioService.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
   source/CustomStateMachine/CustomProductControllerStateBooting.cpp

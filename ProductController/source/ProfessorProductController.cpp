@@ -54,7 +54,7 @@
 #include "CustomProductControllerStatePlayingInactive.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "ProductHardwareInterface.h"
-#include "ProductAudioService.h"
+#include "CustomProductAudioService.h"
 #include "ProductSoftwareServices.h"
 #include "ProductUserInterface.h"
 #include "ProductNetworkManager.h"
@@ -285,8 +285,7 @@ void ProfessorProductController::Run( )
     m_ProductNetworkManager    = ProductNetworkManager   ::GetInstance( GetTask( ),
                                                                         CallbackForMessages );
 
-    m_ProductAudioService      = ProductAudioService     ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages );
+    m_ProductAudioService      = new CustomProductAudioService( GetTask( ), CallbackForMessages );
 
     m_ProductSoftwareServices  = ProductSoftwareServices ::GetInstance( GetTask( ),
                                                                         CallbackForMessages,

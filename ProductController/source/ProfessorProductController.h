@@ -68,7 +68,7 @@ namespace ProductApp
 class ProductHardwareInterface;
 class ProductSystemManager;
 class ProductNetworkManager;
-class ProductAudioService;
+class CustomProductAudioService;
 class ProductSoftwareServices;
 class ProductEdidInterface;
 class ProductCommandLine;
@@ -204,7 +204,7 @@ private:
     ProductHardwareInterface* m_ProductHardwareInterface;
     ProductSystemManager*     m_ProductSystemManager;
     ProductNetworkManager*    m_ProductNetworkManager;
-    ProductAudioService*      m_ProductAudioService;
+    CustomProductAudioService*      m_ProductAudioService;
     ProductSoftwareServices*  m_ProductSoftwareServices;
     ProductCommandLine*       m_ProductCommandLine;
     ProductUserInterface*     m_ProductUserInterface;
