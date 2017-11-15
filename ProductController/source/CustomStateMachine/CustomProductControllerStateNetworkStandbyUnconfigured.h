@@ -66,7 +66,6 @@ public:
     CustomProductControllerStateNetworkStandbyUnconfigured
     ( ProductControllerHsm&       hsm,
       CHsmState*                  pSuperState,
-      ProfessorProductController& productController,
       Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED,
       const std::string&          name    = "CustomProductControllerStateNetworkStandbyUnconfigured" );
 

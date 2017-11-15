@@ -68,7 +68,6 @@ public:
 
     ( ProductControllerHsm&       hsm,
       CHsmState*                  pSuperState,
-      ProfessorProductController& productController,
       Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED,
       const std::string&          name    = "CustomProductControllerStateIdleVoiceUnconfigured" );
 

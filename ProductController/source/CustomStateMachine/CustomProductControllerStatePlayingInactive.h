@@ -66,7 +66,6 @@ public:
 
     ( ProductControllerHsm&       hsm,
       CHsmState*                  pSuperState,
-      ProfessorProductController& productController,
       Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE,
       const std::string&          name    = "CustomProductControllerStatePlayingInactive" );
 
