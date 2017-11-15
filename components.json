@@ -41,7 +41,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@8b48d423cd82580783d5f159de0bab3ab3344625"
+    "selected_version": "master@cfaacc61e5d18d5a33afe6b1dd17fb3724c67fc6"
   },
   {
     "name": "CastleTestUtils",
@@ -106,5 +106,9 @@
   {
     "name": "WiFi-Setup-Webpage",
     "selected_version": "master@19f561f91af118db5439955e4d85bc0a914964eb"
+  },
+  {
+    "name": "CastlePassportClient-qc8017_32",
+    "selected_version": "Continuous/master/0.2.1-157+4866309"
   }
 ]
