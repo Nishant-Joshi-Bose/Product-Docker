@@ -21,13 +21,11 @@ ADD_EXECUTABLE(Eddie
   ${CUSTOM_HSM_DIR}/EddieProductControllerStateSetup.cpp
   ${CUSTOM_HSM_DIR}/EddieProductControllerStateNetworkStandby.cpp
   ${CUSTOM_HSM_DIR}/EddieProductControllerStateAudioOn.cpp
-  DeviceManager.cpp
   ProductCliClient.cpp
   EddieProductController.cpp
   Main.cpp
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
   ${PROTO_CC_DEST}/Language.pb.cc
-  ${PROTO_CC_DEST}/DeviceManager.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/ContentItem.pb.cc
@@ -56,9 +54,9 @@ TARGET_LINK_LIBRARIES(Eddie
   BoseLibs
   PassportClient
   STS
-  libjsoncpp.a
-  libprotobuf.a
-  libTinyXml.a
+  jsoncpp
+  protobuf
+  TinyXml
   pthread
   rt
 )

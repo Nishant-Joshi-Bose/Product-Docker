@@ -15,21 +15,11 @@
 #include "LpmClientFactory.h"
 #include "CLICmdsKeys.h"
 #include "BluetoothSinkEndpoints.h"
+#include "EndPointsDefines.h"
 
 static DPrint s_logger( "EddieProductController" );
 
 using namespace DemoApp;
-
-#define FRONTDOOR_SYSTEM_LANGUAGE_API               "/system/language"
-#define FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API   "/system/configuration/status"
-#define FRONTDOOR_SYSTEM_INFO_API                   "/system/info"
-#define FRONTDOOR_SYSTEM_STATE_API                  "/system/state"
-#define FRONTDOOR_NETWORK_STATUS_API                "/network/status"
-#define FRONTDOOR_NETWORK_WIFI_PROFILE_API          "/network/wifi/profile"
-#define FRONTDOOR_CONTENT_NOWPLAYING_API            "/content/nowPlaying"
-#define FRONTDOOR_SYSTEM_CAPSINIT_STATUS_API        "/system/capsInitializationStatus"
-#define FRONTDOOR_BLUETOOTH_SINK_LIST_API           "/bluetooth/sink/list"
-#define FRONTDOOR_BLUETOOTH_BLESETUP_STATUS_API     "/bluetooth/BLESetup/status"
 
 namespace ProductApp
 {
@@ -45,7 +35,6 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_EddieProductControllerStateAudioOn( GetHsm(), &m_EddieProductControllerStateTop ),
     m_LpmClient(),
     m_KeyHandler( *GetTask(), m_CliClientMT, KEY_CONFIG_FILE ),
-    m_deviceManager( GetTask(), *this ),
     m_cachedStatus(),
     m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
     m_LpmInterface( std::bind( &EddieProductController::HandleProductMessage,
@@ -137,12 +126,6 @@ void EddieProductController::RegisterEndPoints()
 
     AsyncCallback<Callback<ProductPb::ConfigurationStatus>> getConfigurationStatusReqCb( std::bind( &EddieProductController::HandleConfigurationStatusRequest ,
                                                          this, std::placeholders::_1 ) , GetTask() );
-    //DeviceInfo async callback
-    AsyncCallback <Callback<::DeviceManager::Protobuf::DeviceInfo>> getDeviceInfoReqCb( std::bind( &EddieProductController :: HandleGetDeviceInfoRequest,
-                                                                 this, std::placeholders::_1 ), GetTask() );
-    //Device State async callback
-    AsyncCallback <Callback<::DeviceManager::Protobuf::DeviceState >> getDeviceStateReqCb( std::bind( &EddieProductController :: HandleGetDeviceStateRequest,
-                                                                   this, std::placeholders::_1 ), GetTask() );
 
     AsyncCallback<SoundTouchInterface::CapsInitializationStatus> capsInitializationCb( std::bind( &EddieProductController::HandleCapsInitializationUpdate,
             this, std::placeholders::_1 ) , GetTask() );
@@ -155,10 +138,6 @@ void EddieProductController::RegisterEndPoints()
 
     m_FrontDoorClientIF->RegisterPost<ProductPb::Language>( FRONTDOOR_SYSTEM_LANGUAGE_API , postLanguageReqCb );
 
-    ///Device info get request handler
-    m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_INFO_API, getDeviceInfoReqCb );
-    ///Device state get request handler
-    m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_STATE_API, getDeviceStateReqCb );
     AsyncCallback<NetManager::Protobuf::NetworkStatus> networkStatusCb( std::bind( &EddieProductController::HandleNetworkStatus ,
                                                                                    this, std::placeholders::_1 ), GetTask() );
     m_FrontDoorClientIF->RegisterNotification<NetManager::Protobuf::NetworkStatus>( FRONTDOOR_NETWORK_STATUS_API, networkStatusCb );
@@ -558,25 +537,6 @@ void EddieProductController::SendActivateAccessPointCmd()
 void EddieProductController::SendDeActivateAccessPointCmd()
 {
     BOSE_INFO( s_logger, __func__ );
-}
-
-void EddieProductController::HandleGetDeviceInfoRequest( const Callback<::DeviceManager::Protobuf::DeviceInfo>& resp )
-{
-    ::DeviceManager::Protobuf::DeviceInfo devInfo;
-
-    devInfo = m_deviceManager.GetDeviceInfo();
-
-    BOSE_INFO( s_logger, "%s:Reponse: %s", __func__, ProtoToMarkup::ToJson( devInfo, false ).c_str() );
-
-    resp.Send( devInfo );
-}
-
-void EddieProductController::HandleGetDeviceStateRequest( const Callback<::DeviceManager::Protobuf::DeviceState>& resp )
-{
-    ::DeviceManager::Protobuf::DeviceState currentState;
-    currentState.set_state( GetHsm().GetCurrentState()->GetName() );
-    BOSE_INFO( s_logger, "%s:Reponse: %s", __func__, ProtoToMarkup::ToJson( currentState, false ).c_str() );
-    resp.Send( currentState );
 }
 
 void EddieProductController::HandleIntents( KeyHandlerUtil::ActionType_t intent )

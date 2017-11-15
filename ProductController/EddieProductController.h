@@ -20,7 +20,6 @@
 #include "EddieProductControllerStateSetup.h"
 #include "EddieProductControllerStateNetworkStandby.h"
 #include "EddieProductControllerStateAudioOn.h"
-#include "DeviceManager.h"
 #include "LightBarController.h"
 #include "DemoController.h"
 #include "ConfigurationStatus.pb.h"
@@ -251,20 +250,6 @@ public:
     void HandleConfigurationStatusRequest( const Callback<ProductPb::ConfigurationStatus> &resp );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @name  HandleDeviceInfoRequest
-/// @brief "system/info" endpoint request handler.
-/// @return void
-////////////////////////////////////////////////////////////////////////////////
-    void HandleGetDeviceInfoRequest( const Callback<::DeviceManager::Protobuf::DeviceInfo>& resp );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name  HandleGetDeviceStateRequest
-/// @brief "system/state" endpoint request handler.
-/// @return void
-////////////////////////////////////////////////////////////////////////////////
-    void HandleGetDeviceStateRequest( const Callback<::DeviceManager::Protobuf::DeviceState>& resp );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @name  SendInitialRequests
 /// @brief Function to send initial endpoint request to the front door like "/system/capsInitializationStatus".
 /// @return void
@@ -363,10 +348,6 @@ private:
 
     // Key Handler
     KeyHandlerUtil::KeyHandler                  m_KeyHandler;
-
-    ///Device manager instance
-    DeviceManager                               m_deviceManager;
-
     ProtoPersistenceIF::ProtoPersistencePtr     m_ConfigurationStatusPersistence = nullptr;
     ProtoPersistenceIF::ProtoPersistencePtr     m_nowPlayingPersistence = nullptr;
     ProtoPersistenceIF::ProtoPersistencePtr     m_LanguagePersistence = nullptr;
