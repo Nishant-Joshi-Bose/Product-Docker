@@ -213,8 +213,7 @@ void ProfessorProductController::Run( )
 
     auto* stateNetworkStandbyUnconfigured = new CustomProductControllerStateNetworkStandbyUnconfigured
     ( GetHsm( ),
-      stateNetworkStandby,
-      *this );
+      stateNetworkStandby );
 
     auto* stateIdle = new CustomProductControllerStateIdle
     ( GetHsm( ),
@@ -226,8 +225,7 @@ void ProfessorProductController::Run( )
 
     auto* stateIdleVoiceUnconfigured = new CustomProductControllerStateIdleVoiceUnconfigured
     ( GetHsm( ),
-      stateIdle,
-      *this );
+      stateIdle );
 
     auto* statePlaying = new CustomProductControllerStatePlaying
     ( GetHsm( ),
@@ -235,13 +233,11 @@ void ProfessorProductController::Run( )
 
     auto* statePlayingActive = new CustomProductControllerStatePlayingActive
     ( GetHsm( ),
-      statePlaying,
-      *this );
+      statePlaying );
 
     auto* statePlayingInactive = new CustomProductControllerStatePlayingInactive
     ( GetHsm( ),
-      statePlaying,
-      *this );
+      statePlaying );
 
     auto* stateAccessoryPairing = new CustomProductControllerStateAccessoryPairing
     ( GetHsm( ),

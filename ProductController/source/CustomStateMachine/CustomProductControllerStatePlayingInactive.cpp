@@ -27,20 +27,13 @@
 #include "ProfessorProductController.h"
 #include "ProductControllerState.h"
 #include "CustomProductControllerStatePlayingInactive.h"
+#include "InactivityTimers.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-///            Constant Definitions
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr uint32_t PLAYING_NO_AUDIO_MILLISECOND_TIMEOUT_START = ( 20 * 60 ) * 1000;
-constexpr uint32_t PLAYING_NO_AUDIO_MILLISECOND_TIMEOUT_RETRY = 0;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -61,14 +54,12 @@ CustomProductControllerStatePlayingInactive::CustomProductControllerStatePlaying
 
 ( ProductControllerHsm&       hsm,
   CHsmState*                  pSuperState,
-  ProfessorProductController& productController,
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, stateId, name ),
-      m_timer( APTimer::Create( productController.GetTask( ), "PlayingInactiveNoAudioTimer" ) )
+    : ProductControllerState( hsm, pSuperState, stateId, name )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayingInactive is being constructed." );
+    BOSE_VERBOSE( s_logger, "%s is being constructed.", name.c_str() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,15 +69,10 @@ CustomProductControllerStatePlayingInactive::CustomProductControllerStatePlaying
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlayingInactive::HandleStateEnter( )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayingInactive is being entered." );
-    BOSE_VERBOSE( s_logger, "A timer for audio being out will be set to expire in %d minutes.",
-                  PLAYING_NO_AUDIO_MILLISECOND_TIMEOUT_START / 60000 );
+    BOSE_VERBOSE( s_logger, "%s is being entered.", GetName( ).c_str( ) );
+    BOSE_VERBOSE( s_logger, "NO_AUDIO_TIMER timer is started" );
 
-    m_timer->SetTimeouts( PLAYING_NO_AUDIO_MILLISECOND_TIMEOUT_START,
-                          PLAYING_NO_AUDIO_MILLISECOND_TIMEOUT_RETRY );
-
-    m_timer->Start( std::bind( &CustomProductControllerStatePlayingInactive::HandleTimeOut,
-                               this ) );
+    GetProductController( ).GetInactivityTimers( ).StartTimer( InactivityTimerType::NO_AUDIO_TIMER );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,7 +82,7 @@ void CustomProductControllerStatePlayingInactive::HandleStateEnter( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlayingInactive::HandleStateStart( )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayingInactive is being started." );
+    BOSE_VERBOSE( s_logger, "%s is being started.", GetName( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,47 +92,10 @@ void CustomProductControllerStatePlayingInactive::HandleStateStart( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlayingInactive::HandleStateExit( )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayingInactive is being exited." );
+    BOSE_VERBOSE( s_logger, "%s is being exited.", GetName( ).c_str( ) );
     BOSE_VERBOSE( s_logger, "The timer will be stopped." );
 
-    m_timer->Stop( );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStatePlayingInactive::HandleTimeOut
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStatePlayingInactive::HandleTimeOut( )
-{
-    BOSE_VERBOSE( s_logger, "A time out in CustomProductControllerStatePlayingInactive has occurred." );
-
-    if( GetCustomProductController( ).IsNetworkConfigured( ) or
-        GetCustomProductController( ).IsAutoWakeEnabled( ) )
-    {
-        if( GetCustomProductController( ).IsNetworkConnected( ) and
-            GetCustomProductController( ).IsVoiceConfigured( ) )
-        {
-            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                          "CustomProductControllerStatePlayingInactive",
-                          "CustomProductControllerStateIdleVoiceConfigured" );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
-        }
-        else
-        {
-            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                          "CustomProductControllerStatePlayingInactive",
-                          "CustomProductControllerStateIdleVoiceUnconfigured" );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED );
-        }
-    }
-    else
-    {
-        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                      "CustomProductControllerStatePlayingInactive",
-                      "CustomProductControllerStateNetworkStandbyUnconfigured" );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
-    }
+    GetProductController( ).GetInactivityTimers( ).CancelTimer( InactivityTimerType::NO_AUDIO_TIMER );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -163,13 +112,13 @@ bool CustomProductControllerStatePlayingInactive::HandleNowPlayingStatus
 ( ProductNowPlayingStatus_ProductNowPlayingState state )
 {
     BOSE_ERROR( s_logger, "%s is handling a now playing %s status.",
-                "CustomProductControllerStatePlayingInactive",
+                GetName( ).c_str( ),
                 ProductNowPlayingStatus_ProductNowPlayingState_Name( state ).c_str( ) );
 
     if( state == ProductNowPlayingStatus_ProductNowPlayingState_Active )
     {
         BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                      "CustomProductControllerStatePlayingInactive",
+                      GetName( ).c_str( ),
                       "CustomProductControllerStatePlayingActive" );
 
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE );
@@ -190,16 +139,11 @@ bool CustomProductControllerStatePlayingInactive::HandleNowPlayingStatus
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlayingInactive::HandleKeyAction( int action )
 {
-    BOSE_VERBOSE( s_logger, "A key action was sent to CustomProductControllerStatePlayingInactive." );
-    BOSE_VERBOSE( s_logger, "The timer will be stopped and reset based on user activity." );
+    BOSE_VERBOSE( s_logger, "A key action arrived at %s.", GetName( ).c_str( ) );
+    BOSE_VERBOSE( s_logger, "The timer will be stopped and restarted based on user activity." );
 
-    m_timer->Stop( );
-
-    m_timer->SetTimeouts( PLAYING_NO_AUDIO_MILLISECOND_TIMEOUT_START,
-                          PLAYING_NO_AUDIO_MILLISECOND_TIMEOUT_RETRY );
-
-    m_timer->Start( std::bind( &CustomProductControllerStatePlayingInactive::HandleTimeOut,
-                               this ) );
+    GetProductController( ).GetInactivityTimers( ).CancelTimer( InactivityTimerType::NO_AUDIO_TIMER );
+    GetProductController( ).GetInactivityTimers( ).StartTimer( InactivityTimerType::NO_AUDIO_TIMER );
 
     return false;
 }
