@@ -69,6 +69,7 @@ audiopath_dir=$(components get CastleAudioPath-qc8017_32 installed_location) || 
 castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
 castlepassport_dir=$(components get CastlePassport-qc8017_32 installed_location) || exit
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
+qss_dir=$(components get A4VQuickSetService installed_location) || exit
 
 arch=arm-oemllib32-linux
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -143,6 +144,7 @@ cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
 cp -a "$boselibs_dir/lib" "$opt_dir" || exit
 cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
+cp -a "$qss_dir/UEI/arch/${arch}/lib" "$opt_dir" || exit
 
 marge_url=https://streamingint.bose.com
 stats_url=https://eventsdev.api.bosecm.com
