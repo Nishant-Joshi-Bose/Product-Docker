@@ -41,7 +41,7 @@ ADD_EXECUTABLE(Eddie
 
 TARGET_LINK_LIBRARIES(Eddie
   CastleProductControllerCommon
-  CastleDemoController
+  DemoController
   LpmClient
   FrontDoorClient
   NetworkServiceClient
