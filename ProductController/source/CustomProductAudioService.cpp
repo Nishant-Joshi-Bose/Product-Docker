@@ -422,7 +422,7 @@ void CustomProductAudioService::CenterPutHandler( const ProductPb::AudioCenterLe
 /// @param  const Callback<ProductPb::AudioSurroundLevel> &resp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductAudioService::AudioSurroundLevel( const Callback<ProductPb::AudioSurroundLevel> &resp )
+void CustomProductAudioService::SurroundGetHandler( const Callback<ProductPb::AudioSurroundLevel> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
     ProductPb::AudioSurroundLevel responseMsg = m_AudioSettingsMgr->GetSurround();
