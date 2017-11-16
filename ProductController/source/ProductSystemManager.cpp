@@ -40,7 +40,6 @@
 #include "NetManager.pb.h"
 #include "FrontDoorClient.h"
 #include "STSNetworkStatus.pb.h"
-#include "FrontDoorClient.h"
 #include "ProductMessage.pb.h"
 #include "Language.pb.h"
 #include "SystemInfo.pb.h"

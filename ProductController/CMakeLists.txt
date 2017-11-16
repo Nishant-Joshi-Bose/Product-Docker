@@ -22,7 +22,6 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
   ${PROTO_CC_DEST}/Language.pb.cc
-  ${PROTO_CC_DEST}/ContentItem.pb.cc
   ${PROTO_CC_DEST}/ProductSTS.pb.cc
   ${PROTO_CC_DEST}/KeyActions.pb.cc
   ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc

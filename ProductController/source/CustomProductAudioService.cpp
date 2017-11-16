@@ -15,15 +15,14 @@ static DPrint s_logger( "CustomProductAudioService" );
 
 namespace ProductApp
 {
-/*
+
 CustomProductAudioService* CustomProductAudioService::GetInstance( NotifyTargetTaskIF*        task,
-                                                                          Callback< ProductMessage > ProductNotify )
+                                                                   Callback< ProductMessage > ProductNotify )
 {
     static CustomProductAudioService* instance = new CustomProductAudioService( task,
                                                                                 ProductNotify );
     return instance;
 }
-*/
 
 CustomProductAudioService::CustomProductAudioService( NotifyTargetTaskIF*        task,
                                                       Callback< ProductMessage > ProductNotify )
@@ -50,87 +49,7 @@ void CustomProductAudioService::RegisterAudioPathEvent()
     BOSE_DEBUG( s_logger, __func__ );
     m_APPointer = APProductFactory::Create( "ProductAudioService-APProduct", m_mainTask );
     RegisterCommonAudioPathEvent();
-    {
-        Callback< uint32_t > callback( std::bind( &CustomProductAudioService::SelectCallback,
-                                                  this,
-                                                  std::placeholders::_1 ) );
-        m_APPointer->RegisterForSelect( callback );
-    }
-    {
-        Callback< uint32_t > callback( std::bind( &CustomProductAudioService::DeselectCallback,
-                                                  this,
-                                                  std::placeholders::_1 ) );
-        m_APPointer->RegisterForDeselect( callback );
-    }
-    {
-        Callback< uint32_t > callback( std::bind( &CustomProductAudioService::VolumeCallback,
-                                                  this,
-                                                  std::placeholders::_1 ) );
-        m_APPointer->RegisterForVolume( callback );
-    }
-    {
-        Callback< bool > callback( std::bind( &CustomProductAudioService::UserMuteCallback,
-                                              this,
-                                              std::placeholders::_1 ) );
-        m_APPointer->RegisterForUserMute( callback );
-    }
-    {
-        Callback< bool > callback( std::bind( &CustomProductAudioService::InternalMuteCallback,
-                                              this,
-                                              std::placeholders::_1 ) );
-        m_APPointer->RegisterForInternalMute( callback );
-    }
-    {
-        Callback< uint32_t > callback( std::bind( &CustomProductAudioService::RebroadcastLatencyCallback,
-                                                  this,
-                                                  std::placeholders::_1 ) );
-        m_APPointer->RegisterForRebroadcastLatency( callback );
-    }
     ConnectToAudioPath();
-}
-
-void CustomProductAudioService::VolumeCallback( uint32_t volume )
-{
-    BOSE_DEBUG( s_logger, __func__ );
-    BOSE_DEBUG( s_logger, "CustomProductAudioService::VolumeCallback: volume = %d", volume );
-}
-
-void CustomProductAudioService::UserMuteCallback( bool mute )
-{
-    BOSE_DEBUG( s_logger, __func__ );
-    BOSE_DEBUG( s_logger, "CustomProductAudioService::UserMuteCallback: mute = %s", mute ? "true" : "false" );
-}
-
-void CustomProductAudioService::InternalMuteCallback( bool mute )
-{
-    BOSE_DEBUG( s_logger, __func__ );
-    BOSE_DEBUG( s_logger, "CustomProductAudioService::InternalMuteCallback: mute = %s", mute ? "true" : "false" );
-}
-
-void CustomProductAudioService::RebroadcastLatencyCallback( uint32_t latency )
-{
-    BOSE_DEBUG( s_logger, __func__ );
-    BOSE_DEBUG( s_logger, "CustomProductAudioService::RebroadcastLatencyCallback: latency = %d", latency );
-}
-
-void CustomProductAudioService::GetMainStreamAudioSettingsCallback( ContentItem contentItem )
-{
-    BOSE_DEBUG( s_logger, __func__ );
-    //see if contentItem has changed
-    if( m_AudioSettingsMgr->UpdateContentItem( contentItem ) ) //audio settings changed because of contentItem change
-    {
-        m_mainStreamAudioSettings[kBassName] = m_AudioSettingsMgr->GetBass().value();
-        m_mainStreamAudioSettings[kTrebleName] = m_AudioSettingsMgr->GetTreble().value();
-        m_mainStreamAudioSettings[kCenterName] = m_AudioSettingsMgr->GetCenter().value();
-        m_mainStreamAudioSettings[kSurroundName] = m_AudioSettingsMgr->GetSurround().value();
-        m_mainStreamAudioSettings[kGainOffsetName] = m_AudioSettingsMgr->GetGainOffset().value();
-        m_mainStreamAudioSettings[kAvSyncName] = m_AudioSettingsMgr->GetAvSync().value();
-        m_mainStreamAudioSettings[kModeName] = m_AudioSettingsMgr->GetMode().value();
-        m_mainStreamAudioSettings[kContentTypeName] = m_AudioSettingsMgr->GetContentType().value();
-    }
-    m_mainStreamAudioSettings["inputRoute"] = "INPUT_ROUTE_TV";
-    //TODO: m_mainStreamAudioSettings format, and API to send m_mainStreamAudioSettings back,
-    //      will have to comply with what AudioPath defines. To be updated.
 }
 
 void CustomProductAudioService::RegisterFrontDoorEvent()

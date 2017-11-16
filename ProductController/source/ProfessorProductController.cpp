@@ -288,31 +288,32 @@ void ProfessorProductController::Run( )
                                                                 this,
                                                                 std::placeholders::_1 ) );
 
-    m_ProductHardwareInterface = ProductHardwareInterface::GetInstance( GetTask( ),
-                                                                        CallbackForMessages );
+    m_ProductHardwareInterface = ProductHardwareInterface   ::GetInstance( GetTask( ),
+                                                                           CallbackForMessages );
 
-    m_ProductEdidInterface     = ProductEdidInterface    ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages,
-                                                                        m_ProductHardwareInterface );
-    m_ProductSystemManager     = ProductSystemManager    ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages );
+    m_ProductEdidInterface     = ProductEdidInterface       ::GetInstance( GetTask( ),
+                                                                           CallbackForMessages,
+                                                                           m_ProductHardwareInterface );
+    m_ProductSystemManager     = ProductSystemManager       ::GetInstance( GetTask( ),
+                                                                           CallbackForMessages );
 
-    m_ProductNetworkManager    = ProductNetworkManager   ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages );
+    m_ProductNetworkManager    = ProductNetworkManager      ::GetInstance( GetTask( ),
+                                                                           CallbackForMessages );
 
-    m_ProductAudioService      = new CustomProductAudioService( GetTask( ), CallbackForMessages );
+    m_ProductAudioService      = CustomProductAudioService  ::GetInstance( GetTask( ),
+                                                                           CallbackForMessages );
 
-    m_ProductSoftwareServices  = ProductSoftwareServices ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages,
-                                                                        m_ProductHardwareInterface );
-    m_ProductCommandLine       = ProductCommandLine      ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages,
-                                                                        m_ProductHardwareInterface );
+    m_ProductSoftwareServices  = ProductSoftwareServices    ::GetInstance( GetTask( ),
+                                                                           CallbackForMessages,
+                                                                           m_ProductHardwareInterface );
+    m_ProductCommandLine       = ProductCommandLine         ::GetInstance( GetTask( ),
+                                                                           CallbackForMessages,
+                                                                           m_ProductHardwareInterface );
 
-    m_ProductUserInterface     = ProductUserInterface    ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages,
-                                                                        m_ProductHardwareInterface,
-                                                                        m_CliClientMT );
+    m_ProductUserInterface     = ProductUserInterface       ::GetInstance( GetTask( ),
+                                                                           CallbackForMessages,
+                                                                           m_ProductHardwareInterface,
+                                                                           m_CliClientMT );
     m_ProductVolumeManager     = ProductVolumeManager    ::GetInstance( GetTask( ),
                                                                         CallbackForMessages,
                                                                         m_ProductHardwareInterface );

@@ -15,18 +15,13 @@ class CustomProductAudioService: public ProductAudioService
 {
 public:
     bool Run();
-    //static CustomProductAudioService* GetInstance( NotifyTargetTaskIF*        task,
-    //                                               Callback< ProductMessage > ProductNotify );
-    CustomProductAudioService( NotifyTargetTaskIF*        task,
-                               Callback< ProductMessage > ProductNotify );
+    static CustomProductAudioService* GetInstance( NotifyTargetTaskIF*        task,
+                                                   Callback< ProductMessage > ProductNotify );
+
     ~CustomProductAudioService();
 private:
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    /// Member variables
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    //AudioSettingsManager* m_AudioSettingsMgr;
-    //APProductIF::APProductPtr m_APPointer;
+    CustomProductAudioService( NotifyTargetTaskIF*        task,
+                               Callback< ProductMessage > ProductNotify );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// Front Door handler
@@ -64,19 +59,11 @@ private:
     CallbackConnection m_registerGetContentTypeCb;
     CallbackConnection m_registerPostContentTypeCb;
     CallbackConnection m_registerPutContentTypeCb;
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    /// member variables
-    /////////////////////////////////////////////////////////////////////////////////////////////
-    Json::Value m_mainStreamAudioSettings;
+
     /////////////////////////////////////////////////////////////////////////////////////////////////
-    /// APProduct callback functions
+    /// APProduct handling functions
     /////////////////////////////////////////////////////////////////////////////////////////////////
     void RegisterAudioPathEvent();
-    void VolumeCallback( uint32_t volume );
-    void UserMuteCallback( bool mute );
-    void InternalMuteCallback( bool mute );
-    void RebroadcastLatencyCallback( uint32_t latency );
-    void GetMainStreamAudioSettingsCallback( ContentItem contentItem );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// FrontDoor callback functions
