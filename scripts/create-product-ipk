@@ -71,6 +71,7 @@ castlepassport_dir=$(components get CastlePassport-qc8017_32 installed_location)
 wifi_setup_webpage_dir=$(components get WiFi-Setup-Webpage installed_location) || exit
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
 cli_dir=$(components get CastleCli-qc8017_32 installed_location) || exit
+webkit_dir=$(components get Webkit installed_location) || exit
 
 arch=arm-oemllib32-linux
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -149,32 +150,6 @@ cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
 cp "$wspace/config/InActivityTimer.json" "$opt_dir/etc" || exit
 
-# ----------------------------------------------------------------------------
-#@todo: WebToolkit Start
-# This is strictly temporary way of adding WebToolkit 
-#        to eddie.ipk. It should be a component in CastleTools 
-# See CASTLE-2432
-function get_webtoolkit  {
-    local dir="$wspace/components/CastleWebkit"
-    if [ -e "$dir" ]; then
-        echo "Using existing $dir"
-        cd "$dir" || exit
-        git pull || exit
-    else
-        git clone git@github.com:BoseCorp/CastleWebkit.git "$dir" || exit
-    fi
-    cd "$dir" || exit
-    git checkout 8ca84087e6c7a5bb1e4b559c274edd61117e03bf || exit
-    mkdir -p "$opt_dir"/webkit/ || exit
-    cp "$dir"/mime.tar "$opt_dir"/webkit/ || exit
-    cp "$dir"/wpe.tar "$opt_dir"/webkit/ || exit
-    cp "$dir"/monaco.tar.gz "$opt_dir"/webkit/ || exit
-    cp "$dir"/run_wpe.sh "$opt_dir"/webkit/ || exit
-    cp -arf "$dir"/target_scripts "$opt_dir"/webkit/ || exit
-}
-get_webtoolkit
-# ----------------------------------------------------------------------------
-
 marge_url=https://streamingint.bose.com
 stats_url=https://eventsdev.api.bosecm.com
 sw_update_url=https://worldwide.bose.com/updates/soundtouch-test
@@ -198,6 +173,7 @@ sw_update_url=https://worldwide.bose.com/updates/soundtouch-test
 "$wifi_setup_webpage_dir/stage" "$opt_dir" || exit
 "$lpmservice_dir/stage" "$opt_dir" || exit
 "$cli_dir/stage" "$opt_dir" || exit
+"$webkit_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 
