@@ -26,7 +26,7 @@ namespace ProductApp
 NetworkStandbyManager::NetworkStandbyManager( NotifyTargetTaskIF& task,
                                               const CliClientMT& cliClient,
                                               const FrontDoorClientIF_t& frontDoorClient,
-                                              const ProductController& controller ):
+                                              EddieProductController& controller ):
     IntentManager( task, cliClient, frontDoorClient, controller )
 {
     m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
@@ -76,19 +76,10 @@ bool NetworkStandbyManager::Handle( KeyHandlerUtil::ActionType_t intent )
 inline bool NetworkStandbyManager::ValidSourceAvailable()
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
-    const EddieProductController *eddiePC = \
-                                            dynamic_cast<const EddieProductController*>( &GetProductController() );
-    if( eddiePC != nullptr )
+    if( GetProductController().GetNowPlaying().has_source() )
     {
-        if( eddiePC->GetNowPlaying().has_source() )
-        {
-            BOSE_DEBUG( s_logger, "Found nowPlaying" );
-            return true;
-        }
-    }
-    else
-    {
-        BOSE_ERROR( s_logger, "Error while casting to Eddie PC" );
+        BOSE_DEBUG( s_logger, "Found nowPlaying" );
+        return true;
     }
     return false;
 }

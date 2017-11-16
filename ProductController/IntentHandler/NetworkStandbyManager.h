@@ -17,9 +17,9 @@ class NetworkStandbyManager: public IntentManager
 {
 public:
     NetworkStandbyManager( NotifyTargetTaskIF& task,
-                             const CliClientMT& cliClient,
-                             const FrontDoorClientIF_t& frontDoorClient,
-                             const ProductController& controller );
+                           const CliClientMT& cliClient,
+                           const FrontDoorClientIF_t& frontDoorClient,
+                           EddieProductController& controller );
 
     ~NetworkStandbyManager() override
     {

@@ -24,7 +24,7 @@ namespace ProductApp
 PlaybackRequestManager::PlaybackRequestManager( NotifyTargetTaskIF& task,
                                                 const CliClientMT& cliClient,
                                                 const FrontDoorClientIF_t& frontDoorClient,
-                                                const ProductController& controller ):
+                                                EddieProductController& controller ):
     IntentManager( task, cliClient, frontDoorClient, controller ),
     m_NowPlayingRsp( nullptr, &task )
 {

@@ -46,6 +46,7 @@ bool EddieProductControllerStateAudioOn::HandleIntents( KeyHandlerUtil::ActionTy
         ( IntentHandler::IsIntentBlueTooth( intent ) )   ||
         ( IntentHandler::IsIntentAlexa( intent ) )        ||
         ( IntentHandler::IsIntentVolumeControl( intent ) ) ||
+        ( IntentHandler::IsIntentNetworkStandby( intent ) ) ||
         ( IntentHandler::IsIntentAuxIn( intent ) ) )
     {
         GetCustomProductController().GetIntentHandler().Handle( intent );

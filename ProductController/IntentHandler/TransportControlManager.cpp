@@ -26,7 +26,7 @@ namespace ProductApp
 TransportControlManager::TransportControlManager( NotifyTargetTaskIF& task,
                                                   const CliClientMT& cliClient,
                                                   const FrontDoorClientIF_t& frontDoorClient,
-                                                  const ProductController& controller ):
+                                                  EddieProductController& controller ):
     IntentManager( task, cliClient, frontDoorClient, controller ),
     m_NowPlayingRsp( nullptr, &task ),
     m_play( true )
@@ -102,23 +102,14 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
             }
             else
             {
-                const EddieProductController *eddiePC =
-                    dynamic_cast<const EddieProductController*>( &GetProductController() );
-                if( eddiePC != nullptr )
-                {
-                    SoundTouchInterface::playbackRequestJson pbReqJson;
-                    SoundTouchInterface::NowPlayingJson nowPlayData = eddiePC->GetNowPlaying();
-                    SourceUtils::ConstructPlaybackRequestFromNowPlaying( pbReqJson,
-                                                                         nowPlayData );
-                    GetFrontDoorClient()->\
-                    SendPost<SoundTouchInterface::\
-                    NowPlayingJson>( "/content/playbackRequest", pbReqJson,
-                                     m_NowPlayingRsp, m_frontDoorClientErrorCb );
-                }
-                else
-                {
-                    BOSE_ERROR( s_logger, "Error while casting to Eddie PC" );
-                }
+                SoundTouchInterface::playbackRequestJson pbReqJson;
+                SoundTouchInterface::NowPlayingJson nowPlayData = GetProductController().GetNowPlaying();
+                SourceUtils::ConstructPlaybackRequestFromNowPlaying( pbReqJson,
+                                                                     nowPlayData );
+                GetFrontDoorClient()->\
+                SendPost<SoundTouchInterface::\
+                NowPlayingJson>( "/content/playbackRequest", pbReqJson,
+                                 m_NowPlayingRsp, m_frontDoorClientErrorCb );
             }
         }
         break;
@@ -179,19 +170,10 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
 inline bool TransportControlManager::ValidSourceAvailable()
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
-    const EddieProductController *eddiePC = \
-                                            dynamic_cast<const EddieProductController*>( &GetProductController() );
-    if( eddiePC != nullptr )
+    if( GetProductController().GetNowPlaying().has_source() )
     {
-        if( eddiePC->GetNowPlaying().has_source() )
-        {
-            BOSE_DEBUG( s_logger, "Found nowPlaying" );
-            return true;
-        }
-    }
-    else
-    {
-        BOSE_ERROR( s_logger, "Error while casting to Eddie PC" );
+        BOSE_DEBUG( s_logger, "Found nowPlaying" );
+        return true;
     }
     return false;
 }
@@ -199,27 +181,18 @@ inline bool TransportControlManager::ValidSourceAvailable()
 inline SoundTouchInterface::StatusJson TransportControlManager::CurrentStatusJson()
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
-    const EddieProductController *eddiePC =
-        dynamic_cast<const EddieProductController*>( &GetProductController() );
-    if( eddiePC != nullptr )
+    if( GetProductController().GetNowPlaying().has_source() &&
+        GetProductController().GetNowPlaying().has_state() &&
+        GetProductController().GetNowPlaying().state().has_status() &&
+        GetProductController().GetNowPlaying().has_state() )
     {
-        if( eddiePC->GetNowPlaying().has_source() &&
-            eddiePC->GetNowPlaying().has_state() &&
-            eddiePC->GetNowPlaying().state().has_status() &&
-            eddiePC->GetNowPlaying().has_state() )
-        {
-            BOSE_DEBUG( s_logger, "Found status = %d",
-                        eddiePC->GetNowPlaying().state().status() );
-            return ( eddiePC->GetNowPlaying().state().status() );
-        }
-        else
-        {
-            BOSE_DEBUG( s_logger, "No Status in GetNowPlaying()" );
-        }
+        BOSE_DEBUG( s_logger, "Found status = %d",
+                    GetProductController().GetNowPlaying().state().status() );
+        return ( GetProductController().GetNowPlaying().state().status() );
     }
     else
     {
-        BOSE_ERROR( s_logger, "Error while casting to Eddie PC" );
+        BOSE_DEBUG( s_logger, "No Status in GetNowPlaying()" );
     }
     return ( SoundTouchInterface::StatusJson::error );
 }
@@ -227,28 +200,19 @@ inline SoundTouchInterface::StatusJson TransportControlManager::CurrentStatusJso
 inline bool TransportControlManager::CanPauseInJson()
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
-    const EddieProductController *eddiePC =
-        dynamic_cast<const EddieProductController*>( &GetProductController() );
-    if( eddiePC != nullptr )
+    if( GetProductController().GetNowPlaying().has_source() &&
+        GetProductController().GetNowPlaying().has_state() &&
+        GetProductController().GetNowPlaying().state().has_canpause() &&
+        GetProductController().GetNowPlaying().state().canpause() )
     {
-        if( eddiePC->GetNowPlaying().has_source() &&
-            eddiePC->GetNowPlaying().has_state() &&
-            eddiePC->GetNowPlaying().state().has_canpause() &&
-            eddiePC->GetNowPlaying().state().canpause() )
-        {
-            BOSE_DEBUG( s_logger, "Found canpause = %d",
-                        eddiePC->GetNowPlaying().state().canpause() );
-            return ( eddiePC->GetNowPlaying().state().canpause() );
-        }
-        else
-        {
-            BOSE_DEBUG( s_logger, "Cannot Pause: Must be a non-pausable"
-                        "(it that is a word) content" );
-        }
+        BOSE_DEBUG( s_logger, "Found canpause = %d",
+                    GetProductController().GetNowPlaying().state().canpause() );
+        return ( GetProductController().GetNowPlaying().state().canpause() );
     }
     else
     {
-        BOSE_ERROR( s_logger, "Error while casting to Eddie PC" );
+        BOSE_DEBUG( s_logger, "Cannot Pause: Must be a non-pausable"
+                    "(it that is a word) content" );
     }
     return ( false );
 }

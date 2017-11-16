@@ -51,7 +51,7 @@ namespace ProductApp
 IntentHandler::IntentHandler( NotifyTargetTaskIF& task,
                               const CliClientMT& cliClient,
                               const FrontDoorClientIF_t& frontDoorClient,
-                              const ProductController& controller
+                              EddieProductController& controller
                             ):
     m_task( task ),
     m_cliClient( cliClient ),
@@ -64,6 +64,7 @@ IntentHandler::IntentHandler( NotifyTargetTaskIF& task,
 
 void IntentHandler::Initialize()
 {
+    BOSE_DEBUG( s_logger, "%s", __func__ );
     //+ Transport Control API's
     IntentManagerPtr_t transportManager =
         std::make_shared<TransportControlManager>( m_task, m_cliClient,
@@ -91,12 +92,9 @@ void IntentHandler::Initialize()
                                                  m_controller );
 
     m_IntentManagerMap[( uint16_t )Action::NETWORK_STANDBY] = networkStandbyManager;
-    auto func = [this]( KeyHandlerUtil::ActionType_t intent )
-    {
-        //   someFunction( intent ); TBD: function in Product Controller that calls HSM to push the product controller into network standby
-    };
-    auto cb = std::make_shared<AsyncCallback<KeyHandlerUtil::ActionType_t&> > ( func, &m_task );
 
+    auto func = std::bind( &EddieProductController::HandleNetworkStandbyIntentCb , &GetProductController(), std::placeholders::_1 );
+    auto cb = std::make_shared<AsyncCallback<KeyHandlerUtil::ActionType_t&> > ( func, &m_task );
     RegisterCallBack( ( KeyHandlerUtil::ActionType_t ) Action::NETWORK_STANDBY, cb );
     //- Miscellaneous Control API's (LPS, Factory Reset, NetworkStandy)
     //

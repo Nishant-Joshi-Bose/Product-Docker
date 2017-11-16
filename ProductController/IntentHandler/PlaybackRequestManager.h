@@ -20,7 +20,7 @@ public:
     PlaybackRequestManager( NotifyTargetTaskIF& task,
                             const CliClientMT& cliClient,
                             const FrontDoorClientIF_t& frontDoorClient,
-                            const ProductController& controller );
+                            EddieProductController& controller );
 
     ~PlaybackRequestManager() override
     {
