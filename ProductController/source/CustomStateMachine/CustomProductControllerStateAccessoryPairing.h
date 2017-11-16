@@ -65,7 +65,7 @@ public:
     CustomProductControllerStateAccessoryPairing( ProductControllerHsm&       hsm,
                                                   CHsmState*                  pSuperState,
                                                   ProfessorProductController& productController,
-                                                  Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING,
+                                                  Hsm::STATE                  stateId,
                                                   const std::string&          name    = "CustomProductControllerStateAccessoryPairing" );
 
     ~CustomProductControllerStateAccessoryPairing( ) override

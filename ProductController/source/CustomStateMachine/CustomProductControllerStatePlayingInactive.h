@@ -36,7 +36,6 @@
 #include "ProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
-#include "APTimer.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -67,8 +66,7 @@ public:
 
     ( ProductControllerHsm&       hsm,
       CHsmState*                  pSuperState,
-      ProfessorProductController& productController,
-      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE,
+      Hsm::STATE                  stateId,
       const std::string&          name    = "CustomProductControllerStatePlayingInactive" );
 
     ~CustomProductControllerStatePlayingInactive( ) override
@@ -84,20 +82,6 @@ public:
     bool HandleKeyAction( int action ) override;
 
 private:
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief This timer is used to monitor the amount of time the device is in this state.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    APTimerPtr m_timer;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief This method will be invoked by the timer defined above when it expires.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleTimeOut( );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

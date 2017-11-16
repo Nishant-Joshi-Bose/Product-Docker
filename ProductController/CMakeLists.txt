@@ -69,6 +69,7 @@ TARGET_LINK_LIBRARIES(Professor
   NetworkServiceClient
   BLESetupServiceProto 
   STS
+  PassportClientAPILib
   ShelbyUtils
   jsoncpp
   protobuf

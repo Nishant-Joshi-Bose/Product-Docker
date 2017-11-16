@@ -63,7 +63,7 @@ public:
 
     CustomProductControllerStateIdle( ProductControllerHsm&       hsm,
                                       CHsmState*                  pSuperState,
-                                      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE,
+                                      Hsm::STATE                  stateId,
                                       const std::string&          name    = "CustomProductControllerStateIdle" );
 
     ~CustomProductControllerStateIdle( ) override

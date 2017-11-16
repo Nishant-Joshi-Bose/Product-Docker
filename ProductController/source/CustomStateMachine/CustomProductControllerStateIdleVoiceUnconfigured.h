@@ -37,7 +37,6 @@
 #include "ProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
-#include "APTimer.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -69,8 +68,7 @@ public:
 
     ( ProductControllerHsm&       hsm,
       CHsmState*                  pSuperState,
-      ProfessorProductController& productController,
-      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED,
+      Hsm::STATE                  stateId,
       const std::string&          name    = "CustomProductControllerStateIdleVoiceUnconfigured" );
 
     ~CustomProductControllerStateIdleVoiceUnconfigured( ) override
@@ -82,9 +80,10 @@ public:
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
 
-    bool HandleAutowakeStatus( bool active )                   override;
-    bool HandleNetworkState( bool configured, bool connected ) override;
-    bool HandleVoiceState( bool configured )                   override;
+    bool HandleAutowakeStatus( bool active )                    override;
+    bool HandleNetworkState( bool configured, bool connected )  override;
+    bool HandleVoiceState( bool configured )                    override;
+    bool HandleInactivityTimer( InactivityTimerType timerType ) override;
 
 private:
 
@@ -98,19 +97,6 @@ private:
                                      bool networkConnected,
                                      bool voiceConfigured );
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief This timer is used to monitor the amount of time the device is in this state.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    APTimerPtr m_timer;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief This method will be invoked by the expired timer defined above.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleTimeOut( );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
