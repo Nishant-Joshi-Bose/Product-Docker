@@ -163,6 +163,8 @@ function get_webtoolkit  {
     else
         git clone git@github.com:BoseCorp/CastleWebkit.git "$dir" || exit
     fi
+    cd "$dir" || exit
+    git checkout 8ca84087e6c7a5bb1e4b559c274edd61117e03bf || exit
     mkdir -p "$opt_dir"/webkit/ || exit
     cp "$dir"/mime.tar "$opt_dir"/webkit/ || exit
     cp "$dir"/wpe.tar "$opt_dir"/webkit/ || exit
