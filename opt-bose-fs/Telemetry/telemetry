@@ -1,6 +1,9 @@
 #! /bin/sh
-
-#Daemon script to run Telemetry script in a loop, according to the options below
+# 
+# Daemon script to execute run-telemetry.sh script in a loop, according to the options below.
+# The script collects telemerty at the exact time specified in run_telemetry_sec, since the time the procssess takes is offseted by the delay.
+# The runs_before_post field can be modified to generate a different number of reports that are stored before they are posted.   
+#
 
 telemetry_path="/opt/Bose/Telemetry/"
 run_telemetry=$telemetry_path"run-telemetry.sh"

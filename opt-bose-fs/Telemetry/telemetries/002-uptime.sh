@@ -1,4 +1,8 @@
 #! /bin/bash
+# 
+# Script to get uptime of the device, by logging the current date
+# The data is passed as the json payload to the run-telemetry script
+#
 
 MACADDR=$1
 DATE=$2

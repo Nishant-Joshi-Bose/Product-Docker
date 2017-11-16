@@ -1,4 +1,9 @@
 #! /bin/bash
+#
+# Script to generate all telemetric json reports in the TELEMETRY_DOC_DIR. 
+# Each report name is prefixed with the mac address and the date it was collected.
+# After the structure of the json message is generated all the scripts in the telemetric folder are run to populate the payload of the message.
+#
 
 BASEDIR=$(dirname $(readlink -f $0))
 . $BASEDIR/common-telemetry.sh

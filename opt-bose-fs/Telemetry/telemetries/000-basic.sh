@@ -1,4 +1,9 @@
 #!/bin/bash
+# 
+# Script to get processes specified in re, and capture there Vm and Threads data 
+# The data is passed as the payload json to the run-telemetry script
+#
+
 MACADDR=$1
 DATE=$2
 

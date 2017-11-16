@@ -1,4 +1,10 @@
 #!/bin/bash
+# 
+# Script to get processes that crashed in the re field, based on the core dump files generated
+# After the crash is posted it is stored to crash_log, in order to avoid duplicate posts the crash_log is checked before posting new data
+# The data is passed as the json payload to the run-telemetry script
+#
+
 MACADDR=$1
 DATE=$2
 TELEMETRY_DOC_DIR=$3

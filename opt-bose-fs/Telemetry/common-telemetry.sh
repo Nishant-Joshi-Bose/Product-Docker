@@ -1,8 +1,7 @@
 #! /bin/bash
 
 ##
-## import into our scripts with 'source' or '.' to 
-## bring in common values
+## Holds the directory where telemetry reports are saved before they are posted
 ##
 TELEMETRY_DOC_DIR=/tmp/telemetry
 
