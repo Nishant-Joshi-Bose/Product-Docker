@@ -6,6 +6,10 @@ export HISTFILE=/mnt/nv/.bash_history
 
 [ "${TERM-console}" = console ] && export TERM=ansi
 
+# xterm-256color causes Python to output escape sequences.
+# `python -c "" | wc -c` should print zero (wtf...)
+[ "${TERM-}" = xterm-256color ] && export TERM=xterm
+
 if [ "${PS1-}" ]; then # interactive shells
     source ~/.bashrc
     date
