@@ -20,6 +20,10 @@
     "selected_version": "Release/master/0.2.1-143+df6e964"
   },
   {
+    "name": "bose-opkg-utils",
+    "selected_version": "master@0828ce81e7a9b96e03057da48c04a0cebc9aff21"
+  },
+  {
     "name": "CastleAudioPath-qc8017_32",
     "selected_version": "Release/Castle-Fork/0.2.1-20111"
   },
@@ -81,7 +85,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.2.1-111+7f0e2bb"
+    "selected_version": "Continuous/master/0.2.1-118+ff0fc28"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
