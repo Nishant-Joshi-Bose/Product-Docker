@@ -29,6 +29,9 @@ PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerComm
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 TESTUTILS_DIR = $(shell components get CastleTestUtils installed_location)
 
+
+OPKG_UTILS_DIR=$(shell components get bose-opkg-utils installed_location)
+
 .PHONY: generated_sources
 generated_sources: check_tools version-files
 	$(MAKE) -C ProductController $@
@@ -52,6 +55,11 @@ cmake_build: generated_sources | $(BUILDS_DIR) astyle
 product-ipk: cmake_build
 	./scripts/create-product-ipk
 
+.PHONY: packages-gz
+packages-gz: product-ipk
+	cd $(BOSE_WORKSPACE)/builds/$(cfg) ; ls *.ipk |  xargs -n 1 $(OPKG_UTILS_DIR)/makePackage | gzip > Packages.gz
+
+
 .PHONY: graph
 graph: product-ipk
 	graph-components --sdk=$(sdk) Eddie builds/$(cfg)/product-ipk-stage/component-info.gz >builds/$(cfg)/components.dot
@@ -62,7 +70,7 @@ hsp-ipk: cmake_build
 	./scripts/create-hsp-ipk
 
 .PHONY: package
-package: product-ipk hsp-ipk lpmupdater-ipk
+package: product-ipk hsp-ipk lpmupdater-ipk packages-gz
 	./scripts/create-product-tarball
 
 .PHONY: lpmupdater-ipk
