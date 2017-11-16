@@ -24,7 +24,7 @@ namespace ProductApp
 PlaybackRequestManager::PlaybackRequestManager( NotifyTargetTaskIF& task,
                                                 const CliClientMT& cliClient,
                                                 const FrontDoorClientIF_t& frontDoorClient,
-                                                const ProductController& controller ):
+                                                EddieProductController& controller ):
     IntentManager( task, cliClient, frontDoorClient, controller ),
     m_NowPlayingRsp( nullptr, &task )
 {
@@ -49,7 +49,7 @@ PlaybackRequestManager::PlaybackRequestManager( NotifyTargetTaskIF& task,
 //          false: Error
 ////////////////////////////////////////////////////////////////////////////////
 
-bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t intent )
+bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& intent )
 {
     if( intent == ( uint16_t ) Action::AUX_IN )
     {
@@ -84,7 +84,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t intent )
     //Fire the cb so the control goes back to the ProductController
     if( GetCallbackObject() != nullptr )
     {
-        GetCallbackObject()->Send( intent );
+        ( *GetCallbackObject() )( intent );
     }
     return true;
 }

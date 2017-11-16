@@ -11,7 +11,6 @@
 #include "FrontDoorClientIF.h"
 #include "KeyHandler.h"
 #include "IntentManager.h"
-#include "ProductController.h"
 
 namespace ProductApp
 {
@@ -62,7 +61,7 @@ public:
     IntentHandler( NotifyTargetTaskIF& task,
                    const CliClientMT& cliClient,
                    const FrontDoorClientIF_t& fd_client,
-                   const ProductController& controller );
+                   EddieProductController& controller );
     virtual ~IntentHandler()
     {
         m_IntentManagerMap.clear();
@@ -73,12 +72,12 @@ public:
     void Initialize();
 
     // Public function to Handle intents
-    bool Handle( KeyHandlerUtil::ActionType_t arg ) ;
+    bool Handle( KeyHandlerUtil::ActionType_t& arg );
 
     // Public function to register any call backs back into Product HSM
     // Intent Managers will not do any state transition, it is only expected
     // to validate,build and send messages (through frontdoor or IPC).
-    void RegisterCallBack( KeyHandlerUtil::ActionType_t intent, CbPtr_t cb );
+    void RegisterCallBack( KeyHandlerUtil::ActionType_t& intent, CbPtr_t cb );
 
     const NotifyTargetTaskIF& GetTask() const
     {
@@ -92,7 +91,7 @@ public:
     {
         return m_frontDoorClient;
     }
-    const ProductController& GetProductController() const
+    EddieProductController& GetProductController()
     {
         return m_controller;
     }
@@ -128,6 +127,11 @@ public:
         return ( ( arg == ( uint16_t ) Action::AUX_IN ) );
     }
 
+    static bool IsIntentNetworkStandby( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( ( arg == ( uint16_t ) Action::NETWORK_STANDBY ) );
+    }
+
 private:
 
     void NotifyButtonEvent( KeyHandlerUtil::ActionType_t intent );
@@ -137,7 +141,7 @@ private:
     const CliClientMT&          m_cliClient;
     const FrontDoorClientIF_t&  m_frontDoorClient;
     IntentManagerMap_t          m_IntentManagerMap;
-    const ProductController&    m_controller;
+    EddieProductController&     m_controller;
     std::unordered_map <uint16_t, std::string> m_IntentNotificationMap;
 };
 } // namespace ProductApp

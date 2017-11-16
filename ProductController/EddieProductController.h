@@ -155,6 +155,15 @@ public:
     void HandleIntents( KeyHandlerUtil::ActionType_t intent );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @name  HandleNetworkStandbyIntentCb
+/// @brief This is a registered cb in the IntentHandler for Network Busy
+/// Actions to be taken by the Product Controller and HSM needs to be implemented
+//  here.
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void HandleNetworkStandbyIntentCb( const KeyHandlerUtil::ActionType_t& intent );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @name  IsAllModuleReady
 /// @brief true if all the dependent modules are up and ready.
 /// Modules like- LPM, CAPS, SW Update etc.

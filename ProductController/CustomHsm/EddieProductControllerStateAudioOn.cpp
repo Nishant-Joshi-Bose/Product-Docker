@@ -46,12 +46,20 @@ bool EddieProductControllerStateAudioOn::HandleIntents( KeyHandlerUtil::ActionTy
         ( IntentHandler::IsIntentBlueTooth( intent ) )   ||
         ( IntentHandler::IsIntentAlexa( intent ) )        ||
         ( IntentHandler::IsIntentVolumeControl( intent ) ) ||
+        ( IntentHandler::IsIntentNetworkStandby( intent ) ) ||
         ( IntentHandler::IsIntentAuxIn( intent ) ) )
     {
         GetCustomProductController().GetIntentHandler().Handle( intent );
         return true;
     }
     return false;
+}
+
+bool EddieProductControllerStateAudioOn::HandleNetworkStandbyIntent( )
+{
+    BOSE_DEBUG( s_logger, "%s", __func__ );
+    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
+    return true;
 }
 
 } /// namespace ProductApp

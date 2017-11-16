@@ -10,14 +10,15 @@
 #include "NotifyTargetTaskIF.h"
 #include "CliClientMT.h"
 #include "FrontDoorClientIF.h"
-#include "ProductController.h"
 #include "KeyHandler.h"
 #include "AsyncCallback.h"
 
 namespace ProductApp
 {
 using FrontDoorClientIF_t = std::shared_ptr<FrontDoorClientIF>;
-using CbPtr_t  = std::shared_ptr<const Callback<KeyHandlerUtil::ActionType_t&> >;
+using CbPtr_t  = std::shared_ptr<AsyncCallback<KeyHandlerUtil::ActionType_t&> >;
+
+class EddieProductController;
 
 class IntentManager
 {
@@ -25,7 +26,7 @@ public:
     IntentManager( NotifyTargetTaskIF& task,
                    const CliClientMT& cliClient,
                    const FrontDoorClientIF_t& frontDoorClient,
-                   const ProductController& controller ):
+                   EddieProductController& controller ):
         m_frontDoorClient( frontDoorClient ),
         m_task( task ),
         m_cliClient( cliClient ),
@@ -42,12 +43,12 @@ public:
     // If cb is not null, the call back will return control to HSM in
     // desired function for desired state change
     //
-    virtual bool Handle( KeyHandlerUtil::ActionType_t arg ) = 0;
+    virtual bool Handle( KeyHandlerUtil::ActionType_t& arg ) = 0;
 
     // Public function to register any call backs back into Product HSM
     // Intent Managers will not do any state transistion, it is only expected
     // to valid,build and send messages (through frontdoor or IPC).
-    void RegisterCallBack( KeyHandlerUtil::ActionType_t intent, CbPtr_t cb )
+    void RegisterCallBack( KeyHandlerUtil::ActionType_t& intent, CbPtr_t cb )
     {
         m_intent       = intent;
         m_callBack     = cb;
@@ -65,7 +66,7 @@ protected:
         return m_cliClient;
     }
 
-    const ProductController& GetProductController() const
+    EddieProductController& GetProductController()
     {
         return m_controller;
     }
@@ -93,7 +94,7 @@ private:
     const CliClientMT&                      m_cliClient;
     CbPtr_t                                 m_callBack;
     KeyHandlerUtil::ActionType_t            m_intent;
-    const ProductController&                m_controller;
+    EddieProductController&                 m_controller;
 protected:
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> m_frontDoorClientErrorCb;
 };

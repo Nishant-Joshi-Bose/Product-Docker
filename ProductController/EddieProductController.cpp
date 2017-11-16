@@ -549,6 +549,14 @@ void EddieProductController::HandleIntents( KeyHandlerUtil::ActionType_t intent 
     return;
 }
 
+void EddieProductController::HandleNetworkStandbyIntentCb( const KeyHandlerUtil::ActionType_t& intent )
+{
+    BOSE_INFO( s_logger, "%s: Translated Intent %d", __func__, intent );
+
+    GetEddieHsm().Handle<> ( &CustomProductControllerState::HandleNetworkStandbyIntent );
+    return;
+}
+
 void EddieProductController::RegisterCliClientCmds()
 {
     BOSE_INFO( s_logger, __func__ );

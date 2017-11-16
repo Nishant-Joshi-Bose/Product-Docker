@@ -36,6 +36,7 @@
 #include "IntentHandler.h"
 #include "TransportControlManager.h"
 #include "PlaybackRequestManager.h"
+#include "NetworkStandbyManager.h"
 #include "IntentHandler.pb.h"
 #include "BluetoothManager.h"
 
@@ -51,7 +52,7 @@ namespace ProductApp
 IntentHandler::IntentHandler( NotifyTargetTaskIF& task,
                               const CliClientMT& cliClient,
                               const FrontDoorClientIF_t& frontDoorClient,
-                              const ProductController& controller
+                              EddieProductController& controller
                             ):
     m_task( task ),
     m_cliClient( cliClient ),
@@ -64,6 +65,7 @@ IntentHandler::IntentHandler( NotifyTargetTaskIF& task,
 
 void IntentHandler::Initialize()
 {
+    BOSE_DEBUG( s_logger, "%s", __func__ );
     //+ Transport Control API's
     IntentManagerPtr_t transportManager =
         std::make_shared<TransportControlManager>( m_task, m_cliClient,
@@ -92,9 +94,19 @@ void IntentHandler::Initialize()
 
     //- Networking Control API's
     //
-    //+ Miscellaneous Control API's (LPS, Factory Reset)
+    //+ Miscellaneous Control API's (LPS, Factory Reset, NetworkStandy)
+    IntentManagerPtr_t networkStandbyManager =
+        std::make_shared<NetworkStandbyManager>( m_task, m_cliClient,
+                                                 m_frontDoorClient,
+                                                 m_controller );
 
-    //- Miscellaneous Control API's (LPS, Factory Reset)
+    m_IntentManagerMap[( uint16_t )Action::NETWORK_STANDBY] = networkStandbyManager;
+
+    auto func = std::bind( &EddieProductController::HandleNetworkStandbyIntentCb , &GetProductController(), std::placeholders::_1 );
+    auto cb = std::make_shared<AsyncCallback<KeyHandlerUtil::ActionType_t&> > ( func, &m_task );
+    KeyHandlerUtil::ActionType_t intent = (KeyHandlerUtil::ActionType_t) Action::NETWORK_STANDBY;
+    RegisterCallBack( intent, cb );
+    //- Miscellaneous Control API's (LPS, Factory Reset, NetworkStandy)
     //
     //+ Voice (Alexa) Control API's
 
@@ -116,18 +128,23 @@ void IntentHandler::Initialize()
     m_IntentNotificationMap[( uint16_t ) Action::PLAY_PAUSE]    = "play_pause" ;
     m_IntentNotificationMap[( uint16_t ) Action::NEXT_TRACK]    = "next_track" ;
     m_IntentNotificationMap[( uint16_t ) Action::PREV_TRACK]    = "prev_track" ;
+
     m_IntentNotificationMap[( uint16_t ) Action::CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST] \
         = "carousel_discoverable_connect_to_last" ;
     m_IntentNotificationMap[( uint16_t ) Action::SEND_TO_DISCOVERABLE]     = "send_to_discoverable" ;
     m_IntentNotificationMap[( uint16_t ) Action::CLEAR_PAIRING_LIST] = "clear_pairing_list" ;
+
+    m_IntentNotificationMap[( uint16_t ) Action::NETWORK_STANDBY] = "network_standby" ;
+
     m_IntentNotificationMap[( uint16_t ) Action::VOLUME_UP]     = "volume_up" ;
     m_IntentNotificationMap[( uint16_t ) Action::VOLUME_DOWN]   = "volume_down" ;
+
     m_IntentNotificationMap[( uint16_t ) Action::AUX_IN]        = "aux_in" ;
 
     return;
 }
 
-bool IntentHandler::Handle( KeyHandlerUtil::ActionType_t intent )
+bool IntentHandler::Handle( KeyHandlerUtil::ActionType_t& intent )
 {
     BOSE_DEBUG( s_logger, "%s: ", __func__ );
 
@@ -150,7 +167,7 @@ bool IntentHandler::Handle( KeyHandlerUtil::ActionType_t intent )
     }
 }
 
-void IntentHandler::RegisterCallBack( KeyHandlerUtil::ActionType_t intent,
+void IntentHandler::RegisterCallBack( KeyHandlerUtil::ActionType_t& intent,
                                       CbPtr_t cb )
 {
     BOSE_DEBUG( s_logger, "%s: ", __func__ );
