@@ -6,7 +6,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "EddieProductControllerStateBooting.h"
-#include "EddieProductControllerHsm.h"
+#include "ProductControllerHsm.h"
 #include "EddieProductController.h"
 #include "DPrint.h"
 #include "LpmInterface.h"
@@ -15,7 +15,7 @@ static DPrint s_logger( "EddieProductControllerStateBooting" );
 
 namespace ProductApp
 {
-EddieProductControllerStateBooting::EddieProductControllerStateBooting( EddieProductControllerHsm& hsm,
+EddieProductControllerStateBooting::EddieProductControllerStateBooting( ProductControllerHsm& hsm,
                                                                         CHsmState* pSuperState,
                                                                         Hsm::STATE stateId,
                                                                         const std::string& name ) :
@@ -91,11 +91,6 @@ void EddieProductControllerStateBooting::GoToNextState()
             ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
         }
     }
-}
-
-bool EddieProductControllerStateBooting::HandleIntents( KeyHandlerUtil::ActionType_t intent )
-{
-    return false;
 }
 
 } /// namespace ProductApp

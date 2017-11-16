@@ -13,12 +13,12 @@
 
 namespace ProductApp
 {
-class EddieProductControllerHsm;
+class ProductControllerHsm;
 
 class EddieProductControllerStateAudioOn : public ProductControllerStateOn
 {
 public:
-    EddieProductControllerStateAudioOn( EddieProductControllerHsm& hsm,
+    EddieProductControllerStateAudioOn( ProductControllerHsm& hsm,
                                         CHsmState* pSuperState,
                                         Hsm::STATE stateId = PRODUCT_CONTROLLER_STATE_ON,
                                         //Don't change below state name. This is mapped with Madrid's requirement.

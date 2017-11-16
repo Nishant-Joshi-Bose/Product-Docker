@@ -6,7 +6,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "EddieProductControllerStateAudioOn.h"
-#include "EddieProductControllerHsm.h"
+#include "ProductControllerHsm.h"
 #include "EddieProductController.h"
 #include "DPrint.h"
 
@@ -14,7 +14,7 @@ static DPrint s_logger( "EddieProductControllerStateAudioOn" );
 
 namespace ProductApp
 {
-EddieProductControllerStateAudioOn::EddieProductControllerStateAudioOn( EddieProductControllerHsm& hsm,
+EddieProductControllerStateAudioOn::EddieProductControllerStateAudioOn( ProductControllerHsm& hsm,
                                                                         CHsmState* pSuperState,
                                                                         Hsm::STATE stateId,
                                                                         const std::string& name ) :

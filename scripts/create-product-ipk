@@ -70,6 +70,7 @@ castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 install
 castlepassport_dir=$(components get CastlePassport-qc8017_32 installed_location) || exit
 wifi_setup_webpage_dir=$(components get WiFi-Setup-Webpage installed_location) || exit
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
+cli_dir=$(components get CastleCli-qc8017_32 installed_location) || exit
 
 arch=arm-oemllib32-linux
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -128,7 +129,6 @@ cp "$stfs"/opt/Bose/BTSource "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BT "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BluetoothManager "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BLESetup "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/CLIServer "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/PlatformReset "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/STSCertified "$opt_dir/bin" || exit
@@ -147,6 +147,7 @@ cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
 cp -a "$boselibs_dir/lib" "$opt_dir" || exit
 cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
+cp "$wspace/config/InActivityTimer.json" "$opt_dir/etc" || exit
 
 # ----------------------------------------------------------------------------
 #@todo: WebToolkit Start
@@ -162,6 +163,8 @@ function get_webtoolkit  {
     else
         git clone git@github.com:BoseCorp/CastleWebkit.git "$dir" || exit
     fi
+    cd "$dir" || exit
+    git checkout 8ca84087e6c7a5bb1e4b559c274edd61117e03bf || exit
     mkdir -p "$opt_dir"/webkit/ || exit
     cp "$dir"/mime.tar "$opt_dir"/webkit/ || exit
     cp "$dir"/wpe.tar "$opt_dir"/webkit/ || exit
@@ -194,6 +197,7 @@ sw_update_url=https://worldwide.bose.com/updates/soundtouch-test
 "$shepherd_dir/stage" "$opt_dir" || exit
 "$wifi_setup_webpage_dir/stage" "$opt_dir" || exit
 "$lpmservice_dir/stage" "$opt_dir" || exit
+"$cli_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 

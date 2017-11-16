@@ -14,21 +14,12 @@
 #include "ProtoPersistenceFactory.h"
 #include "LpmClientFactory.h"
 #include "CLICmdsKeys.h"
+#include "BluetoothSinkEndpoints.h"
+#include "EndPointsDefines.h"
 
 static DPrint s_logger( "EddieProductController" );
 
 using namespace DemoApp;
-
-#define FRONTDOOR_SYSTEM_LANGUAGE_API               "/system/language"
-#define FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API   "/system/configuration/status"
-#define FRONTDOOR_SYSTEM_INFO_API                   "/system/info"
-#define FRONTDOOR_SYSTEM_STATE_API                  "/system/state"
-#define FRONTDOOR_NETWORK_STATUS_API                "/network/status"
-#define FRONTDOOR_NETWORK_WIFI_PROFILE_API          "/network/wifi/profile"
-#define FRONTDOOR_CONTENT_NOWPLAYING_API            "/content/nowPlaying"
-#define FRONTDOOR_SYSTEM_CAPSINIT_STATUS_API        "/system/capsInitializationStatus"
-#define FRONTDOOR_BLUETOOTH_SINK_LIST_API           "/bluetooth/sink/list"
-#define FRONTDOOR_BLUETOOTH_BLESETUP_STATUS_API     "/bluetooth/BLESetup/status"
 
 namespace ProductApp
 {
@@ -37,14 +28,13 @@ const std::string KEY_CONFIG_FILE = "/var/run/shepherd/KeyConfiguration.json";
 
 EddieProductController::EddieProductController( std::string const& ProductName ):
     ProductController( ProductName ),
-    m_EddieProductControllerStateTop( GetEddieHsm(), nullptr ),
-    m_EddieProductControllerStateBooting( GetEddieHsm(), &m_EddieProductControllerStateTop ),
-    m_EddieProductControllerStateSetup( GetEddieHsm(), &m_EddieProductControllerStateTop ),
-    m_EddieProductControllerStateNetworkStandby( GetEddieHsm(), &m_EddieProductControllerStateTop ),
-    m_EddieProductControllerStateAudioOn( GetEddieHsm(), &m_EddieProductControllerStateTop ),
+    m_EddieProductControllerStateTop( GetHsm(), nullptr ),
+    m_EddieProductControllerStateBooting( GetHsm(), &m_EddieProductControllerStateTop ),
+    m_EddieProductControllerStateSetup( GetHsm(), &m_EddieProductControllerStateTop ),
+    m_EddieProductControllerStateNetworkStandby( GetHsm(), &m_EddieProductControllerStateTop ),
+    m_EddieProductControllerStateAudioOn( GetHsm(), &m_EddieProductControllerStateTop ),
     m_LpmClient(),
     m_KeyHandler( *GetTask(), m_CliClientMT, KEY_CONFIG_FILE ),
-    m_deviceManager( GetTask(), *this ),
     m_cachedStatus(),
     m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
     m_LpmInterface( std::bind( &EddieProductController::HandleProductMessage,
@@ -57,12 +47,12 @@ EddieProductController::EddieProductController( std::string const& ProductName )
 {
     BOSE_INFO( s_logger, __func__ );
     /// Add States to HSM object and initialize HSM before doing anything else.
-    GetEddieHsm().AddState( &m_EddieProductControllerStateTop );
-    GetEddieHsm().AddState( &m_EddieProductControllerStateBooting );
-    GetEddieHsm().AddState( &m_EddieProductControllerStateSetup );
-    GetEddieHsm().AddState( &m_EddieProductControllerStateNetworkStandby );
-    GetEddieHsm().AddState( &m_EddieProductControllerStateAudioOn );
-    GetEddieHsm().Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );
+    GetHsm().AddState( &m_EddieProductControllerStateTop );
+    GetHsm().AddState( &m_EddieProductControllerStateBooting );
+    GetHsm().AddState( &m_EddieProductControllerStateSetup );
+    GetHsm().AddState( &m_EddieProductControllerStateNetworkStandby );
+    GetHsm().AddState( &m_EddieProductControllerStateAudioOn );
+    GetHsm().Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );
 
     InitializeLpmClient();
     m_LanguagePersistence = ProtoPersistenceFactory::Create( "ProductLanguage", g_ProductPersistenceDir );
@@ -136,12 +126,6 @@ void EddieProductController::RegisterEndPoints()
 
     AsyncCallback<Callback<ProductPb::ConfigurationStatus>> getConfigurationStatusReqCb( std::bind( &EddieProductController::HandleConfigurationStatusRequest ,
                                                          this, std::placeholders::_1 ) , GetTask() );
-    //DeviceInfo async callback
-    AsyncCallback <Callback<::DeviceManager::Protobuf::DeviceInfo>> getDeviceInfoReqCb( std::bind( &EddieProductController :: HandleGetDeviceInfoRequest,
-                                                                 this, std::placeholders::_1 ), GetTask() );
-    //Device State async callback
-    AsyncCallback <Callback<::DeviceManager::Protobuf::DeviceState >> getDeviceStateReqCb( std::bind( &EddieProductController :: HandleGetDeviceStateRequest,
-                                                                   this, std::placeholders::_1 ), GetTask() );
 
     AsyncCallback<SoundTouchInterface::CapsInitializationStatus> capsInitializationCb( std::bind( &EddieProductController::HandleCapsInitializationUpdate,
             this, std::placeholders::_1 ) , GetTask() );
@@ -154,10 +138,6 @@ void EddieProductController::RegisterEndPoints()
 
     m_FrontDoorClientIF->RegisterPost<ProductPb::Language>( FRONTDOOR_SYSTEM_LANGUAGE_API , postLanguageReqCb );
 
-    ///Device info get request handler
-    m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_INFO_API, getDeviceInfoReqCb );
-    ///Device state get request handler
-    m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_STATE_API, getDeviceStateReqCb );
     AsyncCallback<NetManager::Protobuf::NetworkStatus> networkStatusCb( std::bind( &EddieProductController::HandleNetworkStatus ,
                                                                                    this, std::placeholders::_1 ), GetTask() );
     m_FrontDoorClientIF->RegisterNotification<NetManager::Protobuf::NetworkStatus>( FRONTDOOR_NETWORK_STATUS_API, networkStatusCb );
@@ -166,14 +146,24 @@ void EddieProductController::RegisterEndPoints()
                                                                              this, std::placeholders::_1 ), GetTask() );
     m_FrontDoorClientIF->RegisterNotification<NetManager::Protobuf::WiFiProfiles>( FRONTDOOR_NETWORK_WIFI_PROFILE_API, networkWifiProfilesCb );
 
-    AsyncCallback<BluetoothSinkService::ListResponse> bluetoothSinkListCb( std::bind( &EddieProductController::HandleBluetoothSinkListResponse ,
-                                                                           this, std::placeholders::_1 ), GetTask() );
-    m_FrontDoorClientIF->RegisterNotification<BluetoothSinkService::ListResponse>( FRONTDOOR_BLUETOOTH_SINK_LIST_API, bluetoothSinkListCb );
+    AsyncCallback<BluetoothSinkService::PairedList> bluetoothSinkListCb( std::bind( &EddieProductController::HandleBluetoothSinkPairedList ,
+                                                                                    this, std::placeholders::_1 ), GetTask() );
+    m_FrontDoorClientIF->RegisterNotification<BluetoothSinkService::PairedList>( FRONTDOOR_BLUETOOTH_SINK_LIST_API, bluetoothSinkListCb );
+
+    AsyncCallback<BluetoothSinkService::AppStatus> bluetoothSinkListAppStatusCb( std::bind( &EddieProductController::HandleBluetoothSinkAppStatus ,
+                                                                                 this, std::placeholders::_1 ), GetTask() );
+    m_FrontDoorClientIF->RegisterNotification<BluetoothSinkService::AppStatus>( BluetoothSinkEndpoints::APP_STATUS, bluetoothSinkListAppStatusCb );
 
     AsyncCallback<SoundTouchInterface::NowPlayingJson> nowPlayingCb( std::bind( &EddieProductController::HandleCapsNowPlaying ,
                                                                                 this, std::placeholders::_1 ), GetTask() );
 
     m_FrontDoorClientIF->RegisterNotification<SoundTouchInterface::NowPlayingJson>( FRONTDOOR_CONTENT_NOWPLAYING_API, nowPlayingCb );
+}
+
+void EddieProductController::HandleBluetoothSinkAppStatus( const BluetoothSinkService::AppStatus& appStatusPb )
+{
+    BOSE_INFO( s_logger, "%s,np- (%s)", __func__,  ProtoToMarkup::ToJson( appStatusPb, false ).c_str() );
+    m_bluetoothAppStatus.CopyFrom( appStatusPb );
 }
 
 void EddieProductController::HandleCapsNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingPb )
@@ -189,7 +179,7 @@ void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::Ne
     if( networkStatus.has_isprimaryup() )
     {
         m_cachedStatus = networkStatus;
-        GetEddieHsm().Handle<>( &CustomProductControllerState::HandleNetworkConfigurationStatus );
+        GetHsm().Handle<>( &CustomProductControllerState::HandleNetworkConfigurationStatus );
     }
 }
 
@@ -197,7 +187,7 @@ void EddieProductController::HandleWiFiProfileResponse( const NetManager::Protob
 {
     m_wifiProfilesCount = profiles.profiles_size();
     BOSE_INFO( s_logger, "%s, m_wifiProfilesCount=%d", __func__, m_wifiProfilesCount );
-    GetEddieHsm().Handle<>( &CustomProductControllerState::HandleNetworkConfigurationStatus );
+    GetHsm().Handle<>( &CustomProductControllerState::HandleNetworkConfigurationStatus );
 }
 
 /// This function will handle key information coming from LPM and give it to
@@ -290,7 +280,7 @@ void EddieProductController::HandleSTSReady( void )
 {
     BOSE_DEBUG( s_logger, __func__ );
     m_isSTSReady = true;
-    GetEddieHsm().Handle<>( &CustomProductControllerState::HandleModulesReady );
+    GetHsm().Handle<>( &CustomProductControllerState::HandleModulesReady );
 }
 
 void EddieProductController::HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp )
@@ -344,7 +334,7 @@ void EddieProductController::HandleConfigurationStatusRequest( const Callback<Pr
 void EddieProductController::HandleCAPSReady( bool capsReady )
 {
     m_isCapsReady = capsReady;
-    GetEddieHsm().Handle<>( &CustomProductControllerState::HandleModulesReady );
+    GetHsm().Handle<>( &CustomProductControllerState::HandleModulesReady );
 }
 
 void EddieProductController::HandleNetworkModuleReady( bool networkModuleReady )
@@ -362,7 +352,7 @@ void EddieProductController::HandleNetworkModuleReady( bool networkModuleReady )
         m_FrontDoorClientIF->SendGet<NetManager::Protobuf::NetworkStatus>( FRONTDOOR_NETWORK_STATUS_API, networkStatusCb, errorCb );
     }
     m_isNetworkModuleReady = networkModuleReady;
-    GetEddieHsm().Handle<>( &CustomProductControllerState::HandleModulesReady );
+    GetHsm().Handle<>( &CustomProductControllerState::HandleModulesReady );
 }
 
 void EddieProductController::HandleLPMReady()
@@ -549,32 +539,13 @@ void EddieProductController::SendDeActivateAccessPointCmd()
     BOSE_INFO( s_logger, __func__ );
 }
 
-void EddieProductController::HandleGetDeviceInfoRequest( const Callback<::DeviceManager::Protobuf::DeviceInfo>& resp )
-{
-    ::DeviceManager::Protobuf::DeviceInfo devInfo;
-
-    devInfo = m_deviceManager.GetDeviceInfo();
-
-    BOSE_INFO( s_logger, "%s:Reponse: %s", __func__, ProtoToMarkup::ToJson( devInfo, false ).c_str() );
-
-    resp.Send( devInfo );
-}
-
-void EddieProductController::HandleGetDeviceStateRequest( const Callback<::DeviceManager::Protobuf::DeviceState>& resp )
-{
-    ::DeviceManager::Protobuf::DeviceState currentState;
-    currentState.set_state( GetEddieHsm().GetCurrentState()->GetName() );
-    BOSE_INFO( s_logger, "%s:Reponse: %s", __func__, ProtoToMarkup::ToJson( currentState, false ).c_str() );
-    resp.Send( currentState );
-}
-
 void EddieProductController::HandleIntents( KeyHandlerUtil::ActionType_t intent )
 {
     BOSE_INFO( s_logger, "Translated Intent %d", intent );
     m_CliClientMT.SendAsyncResponse( "Translated intent = " + \
                                      std::to_string( intent ) );
 
-    GetEddieHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntents, intent );
+    GetHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntents, intent );
     return;
 }
 
@@ -743,23 +714,23 @@ void EddieProductController::HandleSetProductControllerStateCliCmd( const std::l
     if( arg == "boot" )
     {
         response = "Setting Product Controller state to BOOT";
-        GetEddieHsm().ChangeState( PRODUCT_CONTROLLER_STATE_BOOTING );
+        GetHsm().ChangeState( PRODUCT_CONTROLLER_STATE_BOOTING );
     }
     else if( arg == "on" )
     {
         response = "Setting Product Controller state to AUDIO_ON";
         SoundTouchInterface::NowSelectionInfo nowSelectionInfo;
-        GetEddieHsm().Handle<const SoundTouchInterface::NowSelectionInfo&>( &CustomProductControllerState::HandleNowSelectionInfo, nowSelectionInfo );
+        GetHsm().Handle<const SoundTouchInterface::NowSelectionInfo&>( &CustomProductControllerState::HandleNowSelectionInfo, nowSelectionInfo );
     }
     else if( arg == "standby" )
     {
         response = "Setting Product Controller state to NETWORK_STANDBY";
-        GetEddieHsm().ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
+        GetHsm().ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
     }
     else if( arg == "setup" )
     {
         response = "Setting Product Controller state to SETUP";
-        GetEddieHsm().ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP );
+        GetHsm().ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP );
     }
     else if( arg == "idle" )
     {
@@ -782,7 +753,7 @@ void EddieProductController::HandleGetProductControllerStateCliCmd( const std::l
     response = "-------------------------------------\n";
     response += "Product Controller State Information\n";
     response += "-------------------------------------\n";
-    response += "Current State: " + GetEddieHsm().GetCurrentState()->GetName();
+    response += "Current State: " + GetHsm().GetCurrentState()->GetName();
 }
 
 void EddieProductController::HandleProductMessage( const ProductMessage& productMessage )
@@ -806,20 +777,20 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
             // RegisterLpmEvents and RegisterKeyHandler
             RegisterLpmEvents();
             RegisterKeyHandler();
-            GetEddieHsm().Handle<bool>( &CustomProductControllerState::HandleLpmState, true );
+            GetHsm().Handle<bool>( &CustomProductControllerState::HandleLpmState, true );
         }
         break;
         case LPM_INTERFACE_DOWN:
         {
             BOSE_DEBUG( s_logger, "Received LPM Interface Down message" );
-            GetEddieHsm().Handle<bool>(
+            GetHsm().Handle<bool>(
                 &CustomProductControllerState::HandleLpmInterfaceState, false );
         }
         break;
         case LPM_INTERFACE_UP:
         {
             BOSE_DEBUG( s_logger, "Received LPM Interface UP message" );
-            GetEddieHsm().Handle<bool>(
+            GetHsm().Handle<bool>(
                 &CustomProductControllerState::HandleLpmInterfaceState, true );
         }
         break;
@@ -952,12 +923,16 @@ void EddieProductController::HandleBluetoothModuleReady( bool bluetoothModuleRea
     BOSE_INFO( s_logger, __func__ );
     if( bluetoothModuleReady && !m_isBluetoothReady )
     {
-        AsyncCallback<BluetoothSinkService::ListResponse> bluetoothSinkListCb( std::bind( &EddieProductController::HandleBluetoothSinkListResponse ,
-                                                                               this, std::placeholders::_1 ), GetTask() );
-        m_FrontDoorClientIF->SendGet<BluetoothSinkService::ListResponse>( FRONTDOOR_BLUETOOTH_SINK_LIST_API, bluetoothSinkListCb, errorCb );
+        AsyncCallback<BluetoothSinkService::PairedList> bluetoothSinkListCb( std::bind( &EddieProductController::HandleBluetoothSinkPairedList ,
+                                                                                        this, std::placeholders::_1 ), GetTask() );
+        m_FrontDoorClientIF->SendGet<BluetoothSinkService::PairedList>( FRONTDOOR_BLUETOOTH_SINK_LIST_API, bluetoothSinkListCb, errorCb );
+
+        AsyncCallback<BluetoothSinkService::AppStatus> bluetoothSinkListAppStatusCb( std::bind( &EddieProductController::HandleBluetoothSinkAppStatus ,
+                                                                                     this, std::placeholders::_1 ), GetTask() );
+        m_FrontDoorClientIF->SendGet<BluetoothSinkService::AppStatus>( BluetoothSinkEndpoints::APP_STATUS, bluetoothSinkListAppStatusCb, errorCb );
     }
     m_isBluetoothReady = bluetoothModuleReady;
-    GetEddieHsm().Handle<>( &CustomProductControllerState::HandleModulesReady );
+    GetHsm().Handle<>( &CustomProductControllerState::HandleModulesReady );
 }
 
 void EddieProductController::HandleBtLeModuleReady( bool btLeModuleReady )
@@ -965,14 +940,14 @@ void EddieProductController::HandleBtLeModuleReady( bool btLeModuleReady )
     BOSE_INFO( s_logger, __func__ );
     m_isBLEModuleReady = btLeModuleReady;
     if( m_isBLEModuleReady )
-        GetEddieHsm().Handle<>( &CustomProductControllerState::HandleBtLeModuleReady );
+        GetHsm().Handle<>( &CustomProductControllerState::HandleBtLeModuleReady );
 }
 
-void EddieProductController::HandleBluetoothSinkListResponse( const BluetoothSinkService::ListResponse &list )
+void EddieProductController::HandleBluetoothSinkPairedList( const BluetoothSinkService::PairedList &list )
 {
     m_bluetoothSinkList = list;
     BOSE_INFO( s_logger, "%s Bluetooth sink list count [%d]", __func__, m_bluetoothSinkList.devices_size() );
-    GetEddieHsm().Handle<>( &CustomProductControllerState::HandleNetworkConfigurationStatus );
+    GetHsm().Handle<>( &CustomProductControllerState::HandleNetworkConfigurationStatus );
 }
 
 } // namespace ProductApp

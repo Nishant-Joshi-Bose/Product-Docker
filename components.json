@@ -1,63 +1,67 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.2.1.39779.2536524"
+    "selected_version": "Continuous/Castle-Fork/2017-11-16_1156"
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.1.2-108+32c2463"
+    "selected_version": "Continuous/master/0.2.1-159+80d4277"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-11-02_1406"
+    "selected_version": "Release/Castle-Fork/0.2.1-20111"
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/0.0.3-9+7266474"
+    "selected_version": "Continuous/master/0.2.1-18+eca42ed"
   },
   {
     "name": "CastleDemoController-qc8017_32",
-    "selected_version": "Continuous/master/0.0.2-10+e41375b"
+    "selected_version": "Continuous/master/0.2.1-20+c5447c9"
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2487"
+    "selected_version": "branches/castle-libs@2496"
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.0.2-10+ec891bf"
+    "selected_version": "Continuous/master/0.2.1-14+23eb6c0"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/IP2/0.2.1-88+d7f5a37"
+    "selected_version": "Continuous/master/0.2.2-104+61d8bf2"
   },
   {
     "name": "CastlePassport-native",
-    "selected_version": "Release/master/0.0.3-129+c8ab79e"
+    "selected_version": "Continuous/master/0.2.1-159+a802428"
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.0.3-129+c8ab79e"
+    "selected_version": "Continuous/master/0.2.1-159+a802428"
+  },
+  {
+    "name": "CastlePassportClient-qc8017_32",
+    "selected_version": "Continuous/master/0.2.1-159+a802428"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@b378d3ae3882a841e1714c9e15c9663dcfefeef6"
+    "selected_version": "master@7f4a9d77108762136dc735e432d38d89c363ebd8"
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@b863cdbf0828b850666aa8a241ff361e88074ab6"
+    "selected_version": "master@4121d5826e63b72949306a2061e92c816ce8d6fb"
   },
   {
     "name": "EddieLPM-Package",
-    "selected_version": "Continuous/trunk/2017-11-06_1852/DP1"
+    "selected_version": "Release/IP2/0.2.0.2553865/DP1"
   },
   {
     "name": "KeyHandler-native",
-    "selected_version": "Release/master/0.0.3-25+815dcae"
+    "selected_version": "Release/master/0.2.1-26+e67ea31"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/0.0.3-25+815dcae"
+    "selected_version": "Release/master/0.2.1-26+e67ea31"
   },
   {
     "name": "protobuf-native",
@@ -69,31 +73,31 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Continuous/dev/1.1-12-g31f8c26"
+    "selected_version": "Release/master/1.2"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Continuous/dev/1.1-12-g31f8c26"
+    "selected_version": "Release/master/1.2"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-12+47be4e3"
+    "selected_version": "Release/IP2/0.2.1-23+a9375b8"
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Continuous/DefaultForcePost/0.0.1-14+fb164fe"
+    "selected_version": "Release/IP2/0.2.2-21+6b1291b"
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/1.0.1-28+cfb149a"
+    "selected_version": "Release/master/0.2.1-30+ce98842"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.1.2-99+669209f"
+    "selected_version": "Continuous/master/0.2.1-116+0bfa567"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-11-07_1747"
+    "selected_version": "Continuous/Castle-Fork/2017-11-16_1156"
   },
   {
     "name": "UnitTest++-native",

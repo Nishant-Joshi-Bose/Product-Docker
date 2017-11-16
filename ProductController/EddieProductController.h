@@ -13,7 +13,6 @@
 #include <iostream>
 
 #include "ProductController.h"
-#include "EddieProductControllerHsm.h"
 #include "NotifyTargetTaskIF.h"
 #include "ProtoPersistenceIF.h"
 #include "EddieProductControllerStateTop.h"
@@ -21,7 +20,6 @@
 #include "EddieProductControllerStateSetup.h"
 #include "EddieProductControllerStateNetworkStandby.h"
 #include "EddieProductControllerStateAudioOn.h"
-#include "DeviceManager.h"
 #include "LightBarController.h"
 #include "DemoController.h"
 #include "ConfigurationStatus.pb.h"
@@ -56,11 +54,6 @@ public:
         return m_cachedStatus;
     }
 
-    EddieProductControllerHsm& GetEddieHsm()
-    {
-        return static_cast<EddieProductControllerHsm&>( m_ProductControllerHsm );
-    }
-
 private:
     /// Disable copies
     EddieProductController( const EddieProductController& ) = delete;
@@ -88,7 +81,7 @@ private:
     void HandleBluetoothCapabilityNotReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityNotReady( const std::list<std::string>& points );
-    void HandleBluetoothSinkListResponse( const BluetoothSinkService::ListResponse &list );
+    void HandleBluetoothSinkPairedList( const BluetoothSinkService::PairedList &list );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  ReadSystemLanguageFromPersistence
@@ -148,6 +141,12 @@ private:
 /// @brief Function to Handle "/content/nowPlaying" notification from Caps.
 ///////////////////////////////////////////////////////////////////////////////
     void HandleCapsNowPlaying( const SoundTouchInterface::NowPlayingJson& );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name HandleBluetoothSinkAppStatus
+/// @brief Function to Handle BluetoothSinkEndpoints::APP_STATUS from Bluetooth
+///////////////////////////////////////////////////////////////////////////////
+    void HandleBluetoothSinkAppStatus( const BluetoothSinkService::AppStatus& appStatusPb );
 
 public:
     // Handle Key Information received from LPM
@@ -260,20 +259,6 @@ public:
     void HandleConfigurationStatusRequest( const Callback<ProductPb::ConfigurationStatus> &resp );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @name  HandleDeviceInfoRequest
-/// @brief "system/info" endpoint request handler.
-/// @return void
-////////////////////////////////////////////////////////////////////////////////
-    void HandleGetDeviceInfoRequest( const Callback<::DeviceManager::Protobuf::DeviceInfo>& resp );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name  HandleGetDeviceStateRequest
-/// @brief "system/state" endpoint request handler.
-/// @return void
-////////////////////////////////////////////////////////////////////////////////
-    void HandleGetDeviceStateRequest( const Callback<::DeviceManager::Protobuf::DeviceState>& resp );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @name  SendInitialRequests
 /// @brief Function to send initial endpoint request to the front door like "/system/capsInitializationStatus".
 /// @return void
@@ -328,9 +313,14 @@ public:
         return m_nowPlaying;
     }
 
-    const BluetoothSinkService::ListResponse& GetBluetoothList() const
+    const BluetoothSinkService::AppStatus& GetBluetoothAppStatus() const
     {
-        return m_bluetoothList;
+        return m_bluetoothAppStatus;
+    }
+
+    const BluetoothSinkService::PairedList& GetBluetoothList() const
+    {
+        return m_bluetoothSinkList;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -367,18 +357,14 @@ private:
 
     // Key Handler
     KeyHandlerUtil::KeyHandler                  m_KeyHandler;
-
-    ///Device manager instance
-    DeviceManager                               m_deviceManager;
-
     ProtoPersistenceIF::ProtoPersistencePtr     m_ConfigurationStatusPersistence = nullptr;
     ProtoPersistenceIF::ProtoPersistencePtr     m_nowPlayingPersistence = nullptr;
     ProtoPersistenceIF::ProtoPersistencePtr     m_LanguagePersistence = nullptr;
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
     ProductPb::Language                         m_systemLanguage;
     SoundTouchInterface::NowPlayingJson         m_nowPlaying;
-    BluetoothSinkService::ListResponse          m_bluetoothList;
     NetManager::Protobuf::NetworkStatus         m_cachedStatus;
+    BluetoothSinkService::AppStatus             m_bluetoothAppStatus;
 
     ProductCliClient                            m_productCliClient;
 
@@ -393,7 +379,7 @@ private:
     bool                                        m_isBluetoothReady  = false;
 
     int                                         m_wifiProfilesCount;
-    BluetoothSinkService::ListResponse          m_bluetoothSinkList;
+    BluetoothSinkService::PairedList            m_bluetoothSinkList;
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>     errorCb;
     /// Demonstration Controller instance
     DemoApp::DemoController m_demoController;

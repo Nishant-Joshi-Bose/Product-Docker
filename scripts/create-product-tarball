@@ -57,7 +57,8 @@ wspace=$(cd "$here/.." && echo "$PWD") || error_exit ${FUNCNAME[0]}
 riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || error_exit ${FUNCNAME[0]}
 swupdate_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || error_exit ${FUNCNAME[0]}
 opkg_dir="$swupdate_dir"/tools/opkg
-product_ipk=$wspace/builds/$cfg/product.ipk
+ipks_dir=$wspace/builds/$cfg
+product_ipk=$ipks_dir/product.ipk
 utils_dir=$wspace/install/utils
 version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
 CP="cp -PR --preserve=mode,timestamps,links"
@@ -123,10 +124,12 @@ create_eddie_ext4 () {
 	if ! fs_size=$(stat -c%s "$bose_ext4.raw"); then
 		error_exit ${FUNCNAME[0]} " Not able to find size of $bose_ext4 from $bose_ext4.raw."
 	fi
-	mv $bose_ext4 $bose_ext4.orig
+	mv $bose_ext4 orig_userpartition.ext4
 	#copy and extract product IPK to make new EXT4 fs
 	#extract_product_ipk
 	install_offline 
+	#Getting fs_size from bose.ext4 is creating wrong file
+	#fs_size=1514624512
 	$utils_dir/lin/make_ext4fs -s -l $fs_size -a $bose_partition $bose_ext4 $extract_dir/ > /dev/null || error_exit ${FUNCNAME[0]}
 	if ! [ -f  $bose_ext4 ]; then
 		error_exit ${FUNCNAME[0]} " Updated EXT4 $bose_ext4 not found - make_ext4fs failed. Check if total size of package exceeds MAX EXT4 Size: $fs_size."
@@ -134,7 +137,6 @@ create_eddie_ext4 () {
 	# remove intermediate files
 	rm -rf "$extract_dir"
 	rm -f $bose_ext4.raw
-	rm -f $bose_ext4.orig
 	cd $here
 }
 
@@ -145,6 +147,10 @@ echo " Adding utilities to package"
 $CP "$utils_dir" "$stage_package_dir"/  || error_exit ${FUNCNAME[0]} " Adding utilities to package "
 echo " Adding version to package"
 $CP "$version_json" "$stage_package_dir"/  || error_exit ${FUNCNAME[0]} " Adding version to package "
+echo " Adding IPKs to package"
+$CP "$ipks_dir"/*.ipk "$stage_package_dir"/  || error_exit ${FUNCNAME[0]} " Adding IPKs to package "
+# For now delete hsp.ipk
+rm -f "$stage_package_dir"/hsp.ipk
 # crate bose.ext4
 echo " Adding bose.ext4 to package"
 create_eddie_ext4

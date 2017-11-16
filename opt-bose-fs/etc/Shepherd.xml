@@ -1,11 +1,15 @@
 <ShepherdConfig>
   <daemon name="Eddie"/>
 
+  <daemon name="Monaco"
+          exe="/opt/Bose/webkit/run_wpe.sh">
+    <arg>MONACO</arg>
+    <arg>1.0</arg>
+    <arg>PORTRAIT</arg>
+  </daemon>
+
   <daemon name="avahi-daemon"
           exe="start-avahi"/>
-
-  <daemon name="NetManager"
-          recovery="reboot"/>
 
   <daemon name="CLIServer"/>
 
