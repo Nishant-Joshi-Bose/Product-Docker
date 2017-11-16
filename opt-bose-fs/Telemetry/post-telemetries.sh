@@ -22,7 +22,7 @@ function detectStreaming
     fi
 }
 
-detectStreaming && exit 0 # if we're streaming, postpone posting to the server
+#detectStreaming && exit 0 # if we're streaming, postpone posting to the server
 
 files=`ls $TELEMETRY_DOC_DIR/*.json 2>/dev/null`
 
