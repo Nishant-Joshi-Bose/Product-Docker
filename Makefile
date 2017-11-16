@@ -25,12 +25,11 @@ endif
 CMAKE_USE_CCACHE := $(USE_CCACHE)
 
 EDDIELPMPACKAGE_DIR = $(shell components get EddieLPM-Package installed_location)
+OPKG_UTILS_DIR= $(shell components get bose-opkg-utils installed_location)
 PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 TESTUTILS_DIR = $(shell components get CastleTestUtils installed_location)
 
-
-OPKG_UTILS_DIR=$(shell components get bose-opkg-utils installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools version-files
@@ -57,7 +56,7 @@ product-ipk: cmake_build
 
 .PHONY: packages-gz
 packages-gz: product-ipk
-	cd $(BOSE_WORKSPACE)/builds/$(cfg) ; ls *.ipk |  xargs -n 1 $(OPKG_UTILS_DIR)/makePackage | gzip > Packages.gz
+	cd $(BOSE_WORKSPACE)/builds/$(cfg) && ls *.ipk |  xargs -n 1 $(OPKG_UTILS_DIR)/makePackage | gzip > Packages.gz
 
 
 .PHONY: graph
