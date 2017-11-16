@@ -68,8 +68,8 @@ public:
 
     CustomProductControllerState( ProductControllerHsm& productStateMachine,
                                   CHsmState*            pSuperState,
-                                  Hsm::STATE            stateId = 0,
-                                  const std::string&    name    = "Top" );
+                                  Hsm::STATE            stateId,
+                                  const std::string&    name );
 
     ~CustomProductControllerState( ) override
     {

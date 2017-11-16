@@ -63,7 +63,7 @@ public:
 
     CustomProductControllerStateUpdatingSoftware( ProductControllerHsm&       hsm,
                                                   CHsmState*                  pSuperState,
-                                                  Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING,
+                                                  Hsm::STATE                  stateId,
                                                   const std::string&          name    = "CustomProductControllerStateSoftwareUpdating" );
 
     ~CustomProductControllerStateUpdatingSoftware( ) override
