@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductAudioService.cpp
-/// @brief   This file contains source code for communicating with APProduct Server
-///          for controlling audio volume, muting, latency and audio settings
+/// @brief   This file contains source code for Professor specific behavior for
+///         communicating with APProduct Server and APProduct related FrontDoor interaction
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -16,6 +16,17 @@ static DPrint s_logger( "CustomProductAudioService" );
 namespace ProductApp
 {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::GetInstance
+///
+/// @param  NotifyTargetTaskIF* task
+///
+/// @param  Callback< ProductMessage > ProductNotify
+///
+/// @return This method returns a pointer to a CustomProductAudioService object.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductAudioService* CustomProductAudioService::GetInstance( NotifyTargetTaskIF*        task,
                                                                    Callback< ProductMessage > ProductNotify )
 {
@@ -24,6 +35,17 @@ CustomProductAudioService* CustomProductAudioService::GetInstance( NotifyTargetT
     return instance;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::CustomProductAudioService
+///
+/// @param  NotifyTargetTaskIF* task
+///
+/// @param  Callback< ProductMessage > ProductNotify
+///
+/// @return This method returns a pointer to a CustomProductAudioService object.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductAudioService::CustomProductAudioService( NotifyTargetTaskIF*        task,
                                                       Callback< ProductMessage > ProductNotify )
     : ProductAudioService( task, ProductNotify )
@@ -31,11 +53,26 @@ CustomProductAudioService::CustomProductAudioService( NotifyTargetTaskIF*       
     BOSE_DEBUG( s_logger, __func__ );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::~CustomProductAudioService
+///
+/// @brief  CustomProductAudioService class destructor
+///         disconnect from FrontDoor
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductAudioService::~CustomProductAudioService()
 {
     DisconnectFrontDoor();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::Run
+///
+/// @brief  Register for APProduct event, and FrontDoor endpoints
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductAudioService::Run( )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -44,6 +81,11 @@ bool CustomProductAudioService::Run( )
     return true;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::RegisterAudioPathEvent
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::RegisterAudioPathEvent()
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -52,6 +94,14 @@ void CustomProductAudioService::RegisterAudioPathEvent()
     ConnectToAudioPath();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::RegisterFrontDoorEvent
+///
+/// @brief  On Professor, it register for put/post/get FrontDoor request for
+///         bass, treble, center, surround, gainOffset, avSync, mode, contentType
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::RegisterFrontDoorEvent()
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -215,9 +265,13 @@ void CustomProductAudioService::RegisterFrontDoorEvent()
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-/// Endpoint /audio/bass - callback functions for POST/PUT/GET request
-///////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::BassGetHandler
+///
+/// @param  const Callback<ProductPb::AudioBassLevel> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::BassGetHandler( const Callback<ProductPb::AudioBassLevel> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -225,6 +279,15 @@ void CustomProductAudioService::BassGetHandler( const Callback<ProductPb::AudioB
     resp.Send( responseMsg );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::BassPostHandler
+///
+/// @param  const ProductPb::AudioBassLevel &req
+///
+/// @param  const Callback<ProductPb::AudioBassLevel> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::BassPostHandler( const ProductPb::AudioBassLevel &req, const Callback<ProductPb::AudioBassLevel> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -234,6 +297,15 @@ void CustomProductAudioService::BassPostHandler( const ProductPb::AudioBassLevel
     m_FrontDoorClientIF->SendNotification( "/audio/bass", responseMsg );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::BassPutHandler
+///
+/// @param  const ProductPb::AudioBassLevel &req
+///
+/// @param  const Callback<ProductPb::AudioBassLevel> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::BassPutHandler( const ProductPb::AudioBassLevel &req, const Callback<ProductPb::AudioBassLevel> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -243,9 +315,13 @@ void CustomProductAudioService::BassPutHandler( const ProductPb::AudioBassLevel 
     m_FrontDoorClientIF->SendNotification( "/audio/bass", responseMsg );
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-/// Endpoint /audio/treble - callback functions for POST/PUT/GET request
-///////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::TrebleGetHandler
+///
+/// @param  const Callback<ProductPb::AudioTrebleLevel> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::TrebleGetHandler( const Callback<ProductPb::AudioTrebleLevel> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -253,6 +329,15 @@ void CustomProductAudioService::TrebleGetHandler( const Callback<ProductPb::Audi
     resp.Send( responseMsg );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::TreblePostHandler
+///
+/// @param  const ProductPb::AudioTrebleLevel &req
+///
+/// @param  const Callback<ProductPb::AudioTrebleLevel> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::TreblePostHandler( const ProductPb::AudioTrebleLevel &req, const Callback<ProductPb::AudioTrebleLevel> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -262,6 +347,15 @@ void CustomProductAudioService::TreblePostHandler( const ProductPb::AudioTrebleL
     m_FrontDoorClientIF->SendNotification( "/audio/treble", responseMsg );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::TreblePutHandler
+///
+/// @param  const ProductPb::AudioTrebleLevel &req
+///
+/// @param  const Callback<ProductPb::AudioTrebleLevel> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::TreblePutHandler( const ProductPb::AudioTrebleLevel &req, const Callback<ProductPb::AudioTrebleLevel> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -271,9 +365,13 @@ void CustomProductAudioService::TreblePutHandler( const ProductPb::AudioTrebleLe
     m_FrontDoorClientIF->SendNotification( "/audio/treble", responseMsg );
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-/// Endpoint /audio/center - callback functions for POST/PUT/GET request
-///////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::CenterGetHandler
+///
+/// @param  const Callback<ProductPb::AudioCenterLevel> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::CenterGetHandler( const Callback<ProductPb::AudioCenterLevel> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -281,6 +379,15 @@ void CustomProductAudioService::CenterGetHandler( const Callback<ProductPb::Audi
     resp.Send( responseMsg );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::CenterPostHandler
+///
+/// @param  const ProductPb::AudioCenterLevel &req
+///
+/// @param  const Callback<ProductPb::AudioCenterLevel> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::CenterPostHandler( const ProductPb::AudioCenterLevel &req, const Callback<ProductPb::AudioCenterLevel> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -290,6 +397,15 @@ void CustomProductAudioService::CenterPostHandler( const ProductPb::AudioCenterL
     m_FrontDoorClientIF->SendNotification( "/audio/center", responseMsg );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::CenterPutHandler
+///
+/// @param  const ProductPb::AudioCenterLevel &req
+///
+/// @param  const Callback<ProductPb::AudioCenterLevel> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::CenterPutHandler( const ProductPb::AudioCenterLevel &req, const Callback<ProductPb::AudioCenterLevel> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -299,16 +415,29 @@ void CustomProductAudioService::CenterPutHandler( const ProductPb::AudioCenterLe
     m_FrontDoorClientIF->SendNotification( "/audio/center", responseMsg );
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-/// Endpoint /audio/surround - callback functions for POST/PUT/GET request
-///////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductAudioService::SurroundGetHandler( const Callback<ProductPb::AudioSurroundLevel> &resp )
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::SurroundGetHandler
+///
+/// @param  const Callback<ProductPb::AudioSurroundLevel> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::AudioSurroundLevel( const Callback<ProductPb::AudioSurroundLevel> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
     ProductPb::AudioSurroundLevel responseMsg = m_AudioSettingsMgr->GetSurround();
     resp.Send( responseMsg );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::SurroundPostHandler
+///
+/// @param  const ProductPb::AudioSurroundLevel &req
+///
+/// @param  const Callback<ProductPb::AudioSurroundLevel> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::SurroundPostHandler( const ProductPb::AudioSurroundLevel &req, const Callback<ProductPb::AudioSurroundLevel> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -318,6 +447,15 @@ void CustomProductAudioService::SurroundPostHandler( const ProductPb::AudioSurro
     m_FrontDoorClientIF->SendNotification( "/audio/surround", responseMsg );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::SurroundPutHandler
+///
+/// @param  const ProductPb::AudioSurroundLevel &req
+///
+/// @param  const Callback<ProductPb::AudioSurroundLevel> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::SurroundPutHandler( const ProductPb::AudioSurroundLevel &req, const Callback<ProductPb::AudioSurroundLevel> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -327,9 +465,13 @@ void CustomProductAudioService::SurroundPutHandler( const ProductPb::AudioSurrou
     m_FrontDoorClientIF->SendNotification( "/audio/surround", responseMsg );
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-/// Endpoint /audio/gainOffset - callback functions for POST/PUT/GET request
-///////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::GainOffsetGetHandler
+///
+/// @param  const Callback<ProductPb::AudioGainOffset> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::GainOffsetGetHandler( const Callback<ProductPb::AudioGainOffset> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -337,6 +479,15 @@ void CustomProductAudioService::GainOffsetGetHandler( const Callback<ProductPb::
     resp.Send( responseMsg );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::GainOffsetPostHandler
+///
+/// @param  const ProductPb::AudioGainOffset &req
+///
+/// @param  const Callback<ProductPb::AudioGainOffset> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::GainOffsetPostHandler( const ProductPb::AudioGainOffset &req, const Callback<ProductPb::AudioGainOffset> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -346,6 +497,15 @@ void CustomProductAudioService::GainOffsetPostHandler( const ProductPb::AudioGai
     m_FrontDoorClientIF->SendNotification( "/audio/gainOffset", responseMsg );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::GainOffsetPutHandler
+///
+/// @param  const ProductPb::AudioGainOffset &req
+///
+/// @param  const Callback<ProductPb::AudioGainOffset> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::GainOffsetPutHandler( const ProductPb::AudioGainOffset &req, const Callback<ProductPb::AudioGainOffset> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -355,9 +515,13 @@ void CustomProductAudioService::GainOffsetPutHandler( const ProductPb::AudioGain
     m_FrontDoorClientIF->SendNotification( "/audio/gainOffset", responseMsg );
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-/// Endpoint /audio/avSync - callback functions for POST/PUT/GET request
-///////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::AvSyncGetHandler
+///
+/// @param  const Callback<ProductPb::AvSyncGetHandler> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::AvSyncGetHandler( const Callback<ProductPb::AudioAvSync> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -365,6 +529,15 @@ void CustomProductAudioService::AvSyncGetHandler( const Callback<ProductPb::Audi
     resp.Send( responseMsg );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::AvSyncPostHandler
+///
+/// @param  const ProductPb::AudioAvSync &req
+///
+/// @param  const Callback<ProductPb::AudioAvSync> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::AvSyncPostHandler( const ProductPb::AudioAvSync &req, const Callback<ProductPb::AudioAvSync> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -374,6 +547,15 @@ void CustomProductAudioService::AvSyncPostHandler( const ProductPb::AudioAvSync 
     m_FrontDoorClientIF->SendNotification( "/audio/avSync", responseMsg );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::AvSyncPutHandler
+///
+/// @param  const ProductPb::AudioAvSync &req
+///
+/// @param  const Callback<ProductPb::AudioAvSync> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::AvSyncPutHandler( const ProductPb::AudioAvSync &req, const Callback<ProductPb::AudioAvSync> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -383,9 +565,13 @@ void CustomProductAudioService::AvSyncPutHandler( const ProductPb::AudioAvSync &
     m_FrontDoorClientIF->SendNotification( "/audio/avSync", responseMsg );
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-/// Endpoint /audio/mode - callback functions for POST/PUT/GET request
-///////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::ModeGetHandler
+///
+/// @param  const Callback<ProductPb::AudioMode> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::ModeGetHandler( const Callback<ProductPb::AudioMode> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -393,6 +579,15 @@ void CustomProductAudioService::ModeGetHandler( const Callback<ProductPb::AudioM
     resp.Send( responseMsg );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::ModePostHandler
+///
+/// @param  const ProductPb::AudioMode &req
+///
+/// @param  const Callback<ProductPb::AudioMode> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::ModePostHandler( const ProductPb::AudioMode &req, const Callback<ProductPb::AudioMode> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -402,6 +597,15 @@ void CustomProductAudioService::ModePostHandler( const ProductPb::AudioMode &req
     m_FrontDoorClientIF->SendNotification( "/audio/mode", responseMsg );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::ModePutHandler
+///
+/// @param  const ProductPb::AudioMode &req
+///
+/// @param  const Callback<ProductPb::AudioMode> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::ModePutHandler( const ProductPb::AudioMode &req, const Callback<ProductPb::AudioMode> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -411,9 +615,13 @@ void CustomProductAudioService::ModePutHandler( const ProductPb::AudioMode &req,
     m_FrontDoorClientIF->SendNotification( "/audio/mode", responseMsg );
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-/// Endpoint /audio/contentType - callback functions for POST/PUT/GET request
-///////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::ContentTypeGetHandler
+///
+/// @param  const Callback<ProductPb::AudioContentType> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::ContentTypeGetHandler( const Callback<ProductPb::AudioContentType> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -421,6 +629,15 @@ void CustomProductAudioService::ContentTypeGetHandler( const Callback<ProductPb:
     resp.Send( responseMsg );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::ContentTypePostHandler
+///
+/// @param  const ProductPb::AudioContentType &req
+///
+/// @param  const Callback<ProductPb::AudioContentType> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::ContentTypePostHandler( const ProductPb::AudioContentType &req, const Callback<ProductPb::AudioContentType> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -430,6 +647,15 @@ void CustomProductAudioService::ContentTypePostHandler( const ProductPb::AudioCo
     m_FrontDoorClientIF->SendNotification( "/audio/contentType", responseMsg );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::ContentTypePutHandler
+///
+/// @param  const ProductPb::AudioContentType &req
+///
+/// @param  const Callback<ProductPb::AudioContentType> &resp
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::ContentTypePutHandler( const ProductPb::AudioContentType &req, const Callback<ProductPb::AudioContentType> &resp )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -439,9 +665,13 @@ void CustomProductAudioService::ContentTypePutHandler( const ProductPb::AudioCon
     m_FrontDoorClientIF->SendNotification( "/audio/contentType", responseMsg );
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-/// Cleanup functions
-///////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::DisconnectFrontDoor
+///
+/// @brief  Disconnect FrontDoor registrations
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::DisconnectFrontDoor()
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -470,6 +700,5 @@ void CustomProductAudioService::DisconnectFrontDoor()
     m_registerPostContentTypeCb.Disconnect();
     m_registerPutContentTypeCb.Disconnect();
 }
-
 
 }// namespace ProductApp

@@ -1,13 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file   ProductAudioService.h
-/// @brief   This file contains source code for communicating with APProduct Server
-///          for controlling audio volume, muting, latency and audio settings
+/// @file   CustomProductAudioService.h
+/// @brief   This file contains source code for Professor specific behavior for
+///         communicating with APProduct Server and APProduct related FrontDoor interaction
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #pragma once
 #include "ProductAudioService.h"
-//#include "AudioSettingsManager.h"
 
 namespace ProductApp
 {
