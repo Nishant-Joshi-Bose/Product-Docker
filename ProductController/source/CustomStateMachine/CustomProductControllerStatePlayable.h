@@ -75,8 +75,12 @@ public:
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
 
-    bool HandlePowerState( ) override;
     bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo ) override;
+    bool HandleKeyAction( int action ) override;
+
+private:
+
+    void GoToAppropriatePlayingState( );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

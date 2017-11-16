@@ -41,13 +41,11 @@ namespace ProductApp
 ///
 /// @param ProductControllerHsm& hsm
 ///
-/// @param CHsmState* pSuperState
+/// @param CHsmState*            pSuperState
 ///
-/// @param ProfessorProductController& productController
+/// @param Hsm::STATE            stateId
 ///
-/// @param Hsm::STATE stateId
-///
-/// @param const std::string& name
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateBooting::CustomProductControllerStateBooting( ProductControllerHsm& hsm,
@@ -79,7 +77,7 @@ void CustomProductControllerStateBooting::HandleStateStart( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting is being started." );
 
-    HandlePotentialStateChange( );
+    GoToAppropriatePlayableState( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,7 +109,7 @@ bool CustomProductControllerStateBooting::HandleLpmState( bool active )
 
     if( active )
     {
-        HandlePotentialStateChange( );
+        GoToAppropriatePlayableState( );
     }
 
     return true;
@@ -134,7 +132,7 @@ bool CustomProductControllerStateBooting::HandleCapsState( bool active )
 
     if( active )
     {
-        HandlePotentialStateChange( );
+        GoToAppropriatePlayableState( );
     }
 
     return true;
@@ -157,7 +155,7 @@ bool CustomProductControllerStateBooting::HandleAudioPathState( bool active )
 
     if( active )
     {
-        HandlePotentialStateChange( );
+        GoToAppropriatePlayableState( );
     }
 
     return true;
@@ -174,17 +172,17 @@ bool CustomProductControllerStateBooting::HandleSTSSourcesInit( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting is handling the STSSourcesInit event." );
 
-    HandlePotentialStateChange( );
+    GoToAppropriatePlayableState( );
 
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateBooting::HandlePotentialStateChange
+/// @brief CustomProductControllerStateBooting::GoToAppropriatePlayableState
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateBooting::HandlePotentialStateChange( )
+void CustomProductControllerStateBooting::GoToAppropriatePlayableState( )
 {
     if( GetCustomProductController( ).IsBooted( ) )
     {

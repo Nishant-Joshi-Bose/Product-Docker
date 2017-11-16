@@ -41,15 +41,13 @@ namespace ProductApp
 ///
 /// @brief CustomProductControllerStateLowPower::CustomProductControllerStateLowPower
 ///
-/// @param hsm
+/// @param ProductControllerHsm& hsm
 ///
-/// @param pSuperState
+/// @param CHsmState*            pSuperState
 ///
-/// @param productController
+/// @param Hsm::STATE            stateId
 ///
-/// @param stateId
-///
-/// @param name
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateLowPower::CustomProductControllerStateLowPower
@@ -103,13 +101,40 @@ void CustomProductControllerStateLowPower::HandleStateExit( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStateLowPower::HandlePowerState
+/// @brief  CustomProductControllerStateLowPower::HandleKeyAction
 ///
-/// @return This method returns a true Boolean value indicating that it has handled the power
-///         state changed and no futher processing will be required by any of its superstates.
+/// @param  int action
+///
+/// @return This method returns a true Boolean value indicating that it has handled the key action
+///         and false if the key has not been handled
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateLowPower::HandlePowerState( )
+bool CustomProductControllerStateLowPower::HandleKeyAction( int action )
+{
+    bool handled = false;
+
+    BOSE_INFO( s_logger, "CustomProductControllerStateLowPower is handling key action %d.", action );
+
+    switch( action )
+    {
+    case KeyActionPb::KEY_ACTION_POWER:
+        GoToAppropriateNonplayingState( );
+        handled = true;
+        break;
+
+    default:
+        break;
+    }
+
+    return handled;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateLowPower::GoToAppropriateNonplayingState
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStateLowPower::GoToAppropriateNonplayingState( )
 {
     if( GetCustomProductController( ).IsNetworkConfigured( ) or
         GetCustomProductController( ).IsAutoWakeEnabled( ) )
@@ -137,8 +162,6 @@ bool CustomProductControllerStateLowPower::HandlePowerState( )
                       "CustomProductControllerStateNetworkStandbyUnconfigured" );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
     }
-
-    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

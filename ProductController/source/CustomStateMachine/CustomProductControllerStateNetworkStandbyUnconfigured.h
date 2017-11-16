@@ -86,10 +86,13 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief This method handles potential state changes for both network and voice status events.
+    /// @brief This method make the appropriate state change for both network and voice status
+    ///        events.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandlePotentialStateChange( bool networkConfigured, bool networkConnected, bool voiceConfigured );
+    void GoToAppropriatePlayableState( bool networkConfigured,
+                                       bool networkConnected,
+                                       bool voiceConfigured );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

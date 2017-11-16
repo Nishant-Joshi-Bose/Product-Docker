@@ -48,15 +48,13 @@ namespace ProductApp
 ///
 /// @brief CustomProductControllerStatePlayingActive::CustomProductControllerStatePlayingActive
 ///
-/// @param hsm
+/// @param ProductControllerHsm& hsm
 ///
-/// @param pSuperState
+/// @param CHsmState*            pSuperState
 ///
-/// @param productController
+/// @param Hsm::STATE            stateId
 ///
-/// @param stateId
-///
-/// @param name
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStatePlayingActive::CustomProductControllerStatePlayingActive
@@ -105,34 +103,6 @@ void CustomProductControllerStatePlayingActive::HandleStateExit( )
     BOSE_VERBOSE( s_logger, "The timer will be stopped." );
 
     GetProductController( ).GetInactivityTimers( ).CancelTimer( InactivityTimerType::NO_USER_INTERACTION_TIMER );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief  CustomProductControllerStatePlayingActive::HandleNowPlayingStatus
-///
-/// @param  ProductNowPlayingStatus_ProductNowPlayingState state
-///
-/// @return This method returns a true Boolean value indicating that it has handled the playback
-///         status and no futher processing will be required by any of its superstates.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayingActive::HandleNowPlayingStatus
-( ProductNowPlayingStatus_ProductNowPlayingState state )
-{
-    BOSE_ERROR( s_logger, "%s is handling a now playing %s status.",
-                GetName( ).c_str( ),
-                ProductNowPlayingStatus_ProductNowPlayingState_Name( state ).c_str( ) );
-
-    if( state == ProductNowPlayingStatus_ProductNowPlayingState_Inactive )
-    {
-        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                      GetName( ).c_str( ),
-                      "CustomProductControllerStatePlayingInactive" );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
-    }
-
-    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -41,15 +41,13 @@ namespace ProductApp
 ///
 /// @brief CustomProductControllerStatePlaying::CustomProductControllerStatePlaying
 ///
-/// @param hsm
+/// @param ProductControllerHsm& hsm
 ///
-/// @param pSuperState
+/// @param CHsmState*            pSuperState
 ///
-/// @param productController
+/// @param Hsm::STATE            stateId
 ///
-/// @param stateId
-///
-/// @param name
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStatePlaying::CustomProductControllerStatePlaying
@@ -102,23 +100,6 @@ void CustomProductControllerStatePlaying::HandleStateExit( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStatePlaying::HandlePowerState
-///
-/// @return This method returns a true Boolean value indicating that it has handled the power
-///         state changed and no futher processing will be required by any of its superstates.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlaying::HandlePowerState( )
-{
-    GetProductController( ).SendStopPlaybackMessage( );
-
-    GoToAppropriateNonPlayingState( );
-
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @brief CustomProductControllerStatePlayingActive::HandleInactivityTimer
 ///
 /// @param InactivityTimerType timerType; only NO_USER_INTERACTION_TIMER or NO_AUDIO_TIMER
@@ -144,11 +125,89 @@ bool CustomProductControllerStatePlaying::HandleInactivityTimer( InactivityTimer
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @brief  CustomProductControllerStatePlaying::HandleKeyAction
+///
+/// @param  int action
+///
+/// @return This method returns a true Boolean value indicating that it has handled the key action
+///         and false if the key has not been handled
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlaying::HandleKeyAction( int action )
+{
+    bool handled = false;
+
+    BOSE_INFO( s_logger, "%s is handling key action %d.", GetName( ).c_str( ), action );
+
+    switch( action )
+    {
+    case KeyActionPb::KEY_ACTION_POWER:
+        GoToAppropriateNonPlayingState( );
+        handled = true;
+        break;
+
+    default:
+        break;
+    }
+
+    return handled;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStatePlaying::HandleNowPlayingStatus
+///
+/// @param  ProductNowPlayingStatus_ProductNowPlayingState playing
+///
+/// @return This method returns a true Boolean value indicating that it has handled the playback
+///         status and no futher processing will be required by any of its superstates.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlaying::HandleNowPlayingStatus
+( ProductNowPlayingStatus_ProductNowPlayingState playing )
+{
+    Hsm::STATE stateId = GetCustomProductController( ).GetHsm( ).GetCurrentState( )->GetId( );
+
+    BOSE_ERROR( s_logger, "%s is handling a now playing %s status.",
+                GetName( ).c_str( ),
+                ProductNowPlayingStatus_ProductNowPlayingState_Name( playing ).c_str( ) );
+
+    if( stateId == PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE   and
+        playing == ProductNowPlayingStatus_ProductNowPlayingState_Active )
+    {
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      GetName( ).c_str( ),
+                      "CustomProductControllerStatePlayingActive" );
+
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE );
+    }
+    else if( stateId == PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE   and
+             playing == ProductNowPlayingStatus_ProductNowPlayingState_Inactive )
+    {
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      GetName( ).c_str( ),
+                      "CustomProductControllerStatePlayingInactive" );
+
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
+    }
+    else
+    {
+        BOSE_VERBOSE( s_logger, "%s is not changing state.",
+                      GetName( ).c_str( ) );
+    }
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief CustomProductControllerStatePlaying::GoToAppropriateNonPlayingState
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlaying::GoToAppropriateNonPlayingState( )
 {
+    GetProductController( ).SendStopPlaybackMessage( );
+
     if( GetCustomProductController( ).IsNetworkConfigured( ) or
         GetCustomProductController( ).IsAutoWakeEnabled( ) )
     {
@@ -175,7 +234,6 @@ void CustomProductControllerStatePlaying::GoToAppropriateNonPlayingState( )
                       "CustomProductControllerStateNetworkStandbyUnconfigured" );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
     }
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

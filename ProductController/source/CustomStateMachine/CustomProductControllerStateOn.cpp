@@ -41,15 +41,13 @@ namespace ProductApp
 ///
 /// @brief CustomProductControllerStateOn::CustomProductControllerStateOn
 ///
-/// @param ProductControllerHsm&       hsm
+/// @param ProductControllerHsm& hsm
 ///
-/// @param CHsmState*                  pSuperState
+/// @param CHsmState*            pSuperState
 ///
-/// @param ProfessorProductController& productController
+/// @param Hsm::STATE            stateId
 ///
-/// @param Hsm::STATE                  stateId
-///
-/// @param const std::string&          name
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateOn::CustomProductControllerStateOn( ProductControllerHsm&       hsm,

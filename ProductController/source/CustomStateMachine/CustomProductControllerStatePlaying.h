@@ -75,10 +75,13 @@ public:
     void HandleStateEnter( ) override;
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
-    bool HandlePowerState( ) override;
+
     bool HandleInactivityTimer( InactivityTimerType timerType ) override;
+    bool HandleKeyAction( int action ) override;
+    bool HandleNowPlayingStatus( ProductNowPlayingStatus_ProductNowPlayingState playing ) override;
 
 private:
+
     void GoToAppropriateNonPlayingState( );
 };
 
