@@ -28,6 +28,7 @@ EDDIELPMPACKAGE_DIR = $(shell components get EddieLPM-Package installed_location
 OPKG_UTILS_DIR= $(shell components get bose-opkg-utils installed_location)
 PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
+SOFTWARE_UPDATE_DIR=$(shell components get SoftwareUpdate-qc8017_32 installed_location)
 TESTUTILS_DIR = $(shell components get CastleTestUtils installed_location)
 
 
@@ -56,8 +57,7 @@ product-ipk: cmake_build
 
 .PHONY: packages-gz
 packages-gz: product-ipk
-	cd $(BOSE_WORKSPACE)/builds/$(cfg) && ls *.ipk |  xargs -n 1 $(OPKG_UTILS_DIR)/makePackage | gzip > Packages.gz
-
+	cd $(BOSE_WORKSPACE)/builds/$(cfg) &&  $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz *.ipk
 
 .PHONY: graph
 graph: product-ipk
