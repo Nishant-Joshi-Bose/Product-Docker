@@ -51,7 +51,7 @@ TransportControlManager::TransportControlManager( NotifyTargetTaskIF& task,
 //          false: Error
 ////////////////////////////////////////////////////////////////////////////////
 
-bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t intent )
+bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t& intent )
 {
     if( ValidSourceAvailable() )
     {

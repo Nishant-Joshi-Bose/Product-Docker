@@ -32,7 +32,7 @@ namespace ProductApp
 //          false: Error
 ////////////////////////////////////////////////////////////////////////////////
 
-bool BluetoothManager::Handle( KeyHandlerUtil::ActionType_t intent )
+bool BluetoothManager::Handle( KeyHandlerUtil::ActionType_t& intent )
 {
     switch( intent )
     {

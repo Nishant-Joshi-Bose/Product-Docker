@@ -49,7 +49,7 @@ PlaybackRequestManager::PlaybackRequestManager( NotifyTargetTaskIF& task,
 //          false: Error
 ////////////////////////////////////////////////////////////////////////////////
 
-bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t intent )
+bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& intent )
 {
     if( intent == ( uint16_t ) Action::AUX_IN )
     {

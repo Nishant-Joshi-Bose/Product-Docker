@@ -72,12 +72,12 @@ public:
     void Initialize();
 
     // Public function to Handle intents
-    bool Handle( KeyHandlerUtil::ActionType_t arg );
+    bool Handle( KeyHandlerUtil::ActionType_t& arg );
 
     // Public function to register any call backs back into Product HSM
     // Intent Managers will not do any state transition, it is only expected
     // to validate,build and send messages (through frontdoor or IPC).
-    void RegisterCallBack( KeyHandlerUtil::ActionType_t intent, CbPtr_t cb );
+    void RegisterCallBack( KeyHandlerUtil::ActionType_t& intent, CbPtr_t cb );
 
     const NotifyTargetTaskIF& GetTask() const
     {

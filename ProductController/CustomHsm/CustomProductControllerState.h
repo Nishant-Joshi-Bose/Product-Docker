@@ -66,6 +66,11 @@ public:
         return false;
     }
 
+    virtual bool HandleNetworkStandbyIntent( )
+    {
+        return false;
+    }
+
     virtual bool HandleNetworkConfigurationStatus( )
     {
         return false;

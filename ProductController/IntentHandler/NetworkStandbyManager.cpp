@@ -45,7 +45,7 @@ NetworkStandbyManager::NetworkStandbyManager( NotifyTargetTaskIF& task,
 //          false: Error
 ////////////////////////////////////////////////////////////////////////////////
 
-bool NetworkStandbyManager::Handle( KeyHandlerUtil::ActionType_t intent )
+bool NetworkStandbyManager::Handle( KeyHandlerUtil::ActionType_t& intent )
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
     if( ValidSourceAvailable() )

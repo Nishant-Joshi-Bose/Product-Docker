@@ -578,14 +578,11 @@ void EddieProductController::HandleIntents( KeyHandlerUtil::ActionType_t intent 
     return;
 }
 
-void EddieProductController::HandleNetworkStandbyIntentCb( const KeyHandlerUtil::ActionType_t intent )
+void EddieProductController::HandleNetworkStandbyIntentCb( const KeyHandlerUtil::ActionType_t& intent )
 {
     BOSE_INFO( s_logger, "%s: Translated Intent %d", __func__, intent );
 
-    // For now just changing state, the state enter function can do the needful.
-    // If needed in the future, we could have Hsm.Handle can handle customized handle in
-    // various states.
-    GetEddieHsm().ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
+    GetEddieHsm().Handle<> ( &CustomProductControllerState::HandleNetworkStandbyIntent );
     return;
 }
 

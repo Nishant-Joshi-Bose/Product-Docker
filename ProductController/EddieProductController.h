@@ -162,7 +162,7 @@ public:
 //  here.
 /// @return void
 ////////////////////////////////////////////////////////////////////////////////
-    void HandleNetworkStandbyIntentCb( KeyHandlerUtil::ActionType_t intent );
+    void HandleNetworkStandbyIntentCb( const KeyHandlerUtil::ActionType_t& intent );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  IsAllModuleReady

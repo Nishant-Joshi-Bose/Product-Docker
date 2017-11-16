@@ -43,12 +43,12 @@ public:
     // If cb is not null, the call back will return control to HSM in
     // desired function for desired state change
     //
-    virtual bool Handle( KeyHandlerUtil::ActionType_t arg ) = 0;
+    virtual bool Handle( KeyHandlerUtil::ActionType_t& arg ) = 0;
 
     // Public function to register any call backs back into Product HSM
     // Intent Managers will not do any state transistion, it is only expected
     // to valid,build and send messages (through frontdoor or IPC).
-    void RegisterCallBack( KeyHandlerUtil::ActionType_t intent, CbPtr_t cb )
+    void RegisterCallBack( KeyHandlerUtil::ActionType_t& intent, CbPtr_t cb )
     {
         m_intent       = intent;
         m_callBack     = cb;

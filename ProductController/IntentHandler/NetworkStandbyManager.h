@@ -32,7 +32,7 @@ public:
     // If cb is not null, the call back will return control to HSM in
     // desired function for desired state change
     //
-    bool Handle( KeyHandlerUtil::ActionType_t arg ) override;
+    bool Handle( KeyHandlerUtil::ActionType_t& arg ) override;
 
 private:
     bool ValidSourceAvailable();
