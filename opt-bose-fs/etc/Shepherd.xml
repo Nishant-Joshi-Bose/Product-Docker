@@ -21,11 +21,6 @@
 
   <daemon name="FrontDoor"/>
 
-  <daemon name="WebServer">
-    <arg>--disable-setup-port</arg>
-    <arg>-c/opt/Bose/etc/WebServer.xml</arg>
-  </daemon>
-
   <daemon name="BoseApp"
           recovery="reboot">
     <arg>-c/opt/Bose/etc/BoseApp.xml</arg>
