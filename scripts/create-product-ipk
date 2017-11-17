@@ -130,7 +130,6 @@ cp "$stfs"/opt/Bose/BT "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BluetoothManager "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BLESetup "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/PlatformReset "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/STSCertified "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/UpnpSource "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/FrontDoor "$opt_dir/bin" || exit
