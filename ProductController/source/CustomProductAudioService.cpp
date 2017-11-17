@@ -43,8 +43,6 @@ CustomProductAudioService* CustomProductAudioService::GetInstance( NotifyTargetT
 ///
 /// @param  Callback< ProductMessage > ProductNotify
 ///
-/// @return This method returns a pointer to a CustomProductAudioService object.
-///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductAudioService::CustomProductAudioService( NotifyTargetTaskIF*        task,
                                                       Callback< ProductMessage > ProductNotify )
@@ -58,7 +56,6 @@ CustomProductAudioService::CustomProductAudioService( NotifyTargetTaskIF*       
 /// @name   CustomProductAudioService::~CustomProductAudioService
 ///
 /// @brief  CustomProductAudioService class destructor
-///         disconnect from FrontDoor
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductAudioService::~CustomProductAudioService()
