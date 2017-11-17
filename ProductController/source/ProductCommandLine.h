@@ -159,7 +159,7 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     NotifyTargetTaskIF* m_ProductTask;
 
-    std::vector< CommandPointer > CommandsList( );
+    std::vector< CommandPointer > GetCommandsList( );
 
     int  HandleCommand( const std::string&              command,
                         const std::list< std::string >& arguments,

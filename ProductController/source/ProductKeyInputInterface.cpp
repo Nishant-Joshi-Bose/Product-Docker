@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      ProductUserInterface.h
+/// @file      ProductKeyInputInterface.cpp
 ///
-/// @brief     This header file declares a ProductUserInterface class that is used to receive user
-///            input.
+/// @brief     This source code files implements a ProductKeyInputInterface class that is used to
+///            receive raw key input from the LPM hardware and convert it into key actions.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -34,7 +34,7 @@
 #include "BreakThread.h"
 #include "ProductController.h"
 #include "ProductHardwareInterface.h"
-#include "ProductUserInterface.h"
+#include "ProductKeyInputInterface.h"
 #include "ProductMessage.pb.h"
 #include "KeyActions.pb.h"
 
@@ -60,24 +60,11 @@ constexpr uint32_t PRODUCT_USER_INTERFACE_RETRY_IN_SECONDS = 1;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief The following aliases refer to the Bose Sound Touch class utilities for inter-process and
-///        inter-thread communications.
+/// @name   ProductKeyInputInterface::GetInstance
 ///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-typedef APProductIF::APProductPtr               ProductPointer;
-typedef APClientSocketListenerIF::ListenerPtr   ClientPointer;
-typedef APServerSocketListenerIF::ListenerPtr   ServerPointer;
-typedef IPCMessageRouterIF::IPCMessageRouterPtr RouterPointer;
-typedef CLIClient::CmdPtr                       CommandPointer;
-typedef CLIClient::CLICmdDescriptor             CommandDescription;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductUserInterface::GetInstance
-///
-/// @brief  This static method creates the one and only instance of a ProductUserInterface object.
-///         The C++ Version 11 compiler guarantees that only one instance is created in a thread
-///         safe way.
+/// @brief  This static method creates the one and only instance of a ProductKeyInputInterface
+///         object. The C++ Version 11 compiler guarantees that only one instance is created in a
+///         thread safe way.
 ///
 /// @param  NotifyTargetTaskIF*        ProductTask
 ///
@@ -87,19 +74,19 @@ typedef CLIClient::CLICmdDescriptor             CommandDescription;
 ///
 /// @param  CliClientMT&               CommandLineInterface
 ///
-/// @return This method returns a pointer to a ProductUserInterface object.
+/// @return This method returns a pointer to a ProductKeyInputInterface object.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductUserInterface* ProductUserInterface::GetInstance
+ProductKeyInputInterface* ProductKeyInputInterface::GetInstance
 ( NotifyTargetTaskIF*         ProductTask,
   Callback< ProductMessage >  ProductNotify,
   ProductHardwareInterface*   HardwareInterface,
   CliClientMT&                CommandLineInterface )
 {
-    static ProductUserInterface* instance = new ProductUserInterface( ProductTask,
-                                                                      ProductNotify,
-                                                                      HardwareInterface,
-                                                                      CommandLineInterface );
+    static ProductKeyInputInterface* instance = new ProductKeyInputInterface( ProductTask,
+                                                                              ProductNotify,
+                                                                              HardwareInterface,
+                                                                              CommandLineInterface );
 
     BOSE_DEBUG( s_logger, "The instance %8p of the Product User Interface has been obtained.", instance );
 
@@ -108,9 +95,9 @@ ProductUserInterface* ProductUserInterface::GetInstance
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductUserInterface::ProductUserInterface
+/// @name   ProductKeyInputInterface::ProductKeyInputInterface
 ///
-/// @brief  This method is the ProductUserInterface constructor, which is declared as being
+/// @brief  This method is the ProductKeyInputInterface constructor, which is declared as being
 ///         private to ensure that only one instance of this class can be created through the class
 ///         GetInstance method.
 ///
@@ -123,10 +110,10 @@ ProductUserInterface* ProductUserInterface::GetInstance
 /// @param  CliClientMT&               CommandLineInterface
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductUserInterface::ProductUserInterface( NotifyTargetTaskIF*        ProductTask,
-                                            Callback< ProductMessage > ProductNotify,
-                                            ProductHardwareInterface*  HardwareInterface,
-                                            CliClientMT&               CommandLineInterface )
+ProductKeyInputInterface::ProductKeyInputInterface( NotifyTargetTaskIF*        ProductTask,
+                                                    Callback< ProductMessage > ProductNotify,
+                                                    ProductHardwareInterface*  HardwareInterface,
+                                                    CliClientMT&               CommandLineInterface )
 
     : m_ProductTask( ProductTask ),
       m_ProductNotify( ProductNotify ),
@@ -141,7 +128,7 @@ ProductUserInterface::ProductUserInterface( NotifyTargetTaskIF*        ProductTa
     /// through its Run method in the product controller; otherwise, this module may not get the
     /// LPM connected event.
     ///
-    Callback< bool > callback( std::bind( &ProductUserInterface::ConnectToLpm,
+    Callback< bool > callback( std::bind( &ProductKeyInputInterface::ConnectToLpm,
                                           this,
                                           std::placeholders::_1 ) );
 
@@ -150,12 +137,12 @@ ProductUserInterface::ProductUserInterface( NotifyTargetTaskIF*        ProductTa
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductUserInterface::Connect
+/// @name   ProductKeyInputInterface::ConnectToLpm
 ///
-/// @brief  This method starts the ProductUserInterface instance.
+/// @brief  This method starts the ProductKeyInputInterface instance.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductUserInterface::ConnectToLpm( bool connected )
+void ProductKeyInputInterface::ConnectToLpm( bool connected )
 {
     BOSE_DEBUG( s_logger, "%s: The user interface is starting.", __FUNCTION__ );
 
@@ -166,7 +153,7 @@ void ProductUserInterface::ConnectToLpm( bool connected )
     ///
     if( m_connected )
     {
-        IL::BreakThread( std::bind( &ProductUserInterface::RegisterForKeyEvents,
+        IL::BreakThread( std::bind( &ProductKeyInputInterface::RegisterForKeyEvents,
                                     this ),
                          m_ProductTask );
     }
@@ -174,14 +161,14 @@ void ProductUserInterface::ConnectToLpm( bool connected )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductUserInterface::Run
+/// @name   ProductKeyInputInterface::Run
 ///
-/// @brief  This method runs the ProductUserInterface instance. Note that key events will not be
+/// @brief  This method runs the ProductKeyInputInterface instance. Note that key events will not be
 ///         sent to the product controller, which creates an instance of this class, until it is
 ///         set to run.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductUserInterface::Run( )
+void ProductKeyInputInterface::Run( )
 {
     BOSE_DEBUG( s_logger, "%s: The user interface is running.", __FUNCTION__ );
 
@@ -190,10 +177,10 @@ void ProductUserInterface::Run( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductUserInterface::RegisterForKeyEvents
+/// @brief ProductKeyInputInterface::RegisterForKeyEvents
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductUserInterface::RegisterForKeyEvents( )
+void ProductKeyInputInterface::RegisterForKeyEvents( )
 {
     BOSE_DEBUG( s_logger, "The user interface is attempting to register for key events." );
 
@@ -203,7 +190,7 @@ void ProductUserInterface::RegisterForKeyEvents( )
     /// state machine.
     ///
     Callback< LpmServiceMessages::IpcKeyInformation_t >
-    CallbackForKeyEvents( std::bind( &ProductUserInterface::HandleKeyEvent,
+    CallbackForKeyEvents( std::bind( &ProductKeyInputInterface::HandleKeyEvent,
                                      this,
                                      std::placeholders::_1 ) );
 
@@ -228,12 +215,12 @@ void ProductUserInterface::RegisterForKeyEvents( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  ProductUserInterface::HandleKeyEvent
+/// @name  ProductKeyInputInterface::HandleKeyEvent
 ///
 /// @param LpmServiceMessages::IpcKeyInformation_t keyEvent
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductUserInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInformation_t keyEvent )
+void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInformation_t keyEvent )
 {
     std::string    keyOriginString;
     std::string    keyStateString;
@@ -302,68 +289,35 @@ void ProductUserInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInformation
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductUserInterface::KeyInformationCallBack
+/// @brief ProductKeyInputInterface::KeyInformationCallBack
 ///
 /// @param uint32_t keyAction
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductUserInterface::KeyInformationCallBack( const int keyAction )
+void ProductKeyInputInterface::KeyInformationCallBack( const int keyAction )
 {
     ///
-    /// The key action is sent to the Product Controller state machine. Power on or off key actions
-    /// are to be sent as simple product power type messages, whereas the value of other key actions
-    /// are sent as product key data messages containing the key action value for further
-    /// processing.
+    /// The key action is sent to the Product Controller for processing.
     ///
     BOSE_DEBUG( s_logger, "A key press or presses have been translated to the action %d.", keyAction );
 
-    if( keyAction == KEY_ACTION_POWER )
-    {
-        ProductMessage productMessage;
-        productMessage.set_power( true );
+    ProductMessage productMessage;
+    productMessage.mutable_keydata( )->set_action( static_cast< KEY_ACTION > ( keyAction ) );
 
-        IL::BreakThread( std::bind( m_ProductNotify,
-                                    productMessage ),
-                         m_ProductTask );
-    }
-    else
-    {
-        ProductMessage productMessage;
-        productMessage.mutable_keydata( )->set_action( static_cast< KEY_ACTION >( keyAction ) );
-
-        IL::BreakThread( std::bind( m_ProductNotify,
-                                    productMessage ),
-                         m_ProductTask );
-    }
+    IL::BreakThread( std::bind( m_ProductNotify,
+                                productMessage ),
+                     m_ProductTask );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  ProductUserInterface::GetKeyString
+/// @name   ProductKeyInputInterface::Stop
 ///
-/// @param  const KEY_ACTION keyAction
-///
-/// @return This method return a std::string associated with the key action.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string ProductUserInterface::GetKeyString( const KEY_ACTION keyAction )
-{
-    std::string keyString( "UNKNOWN" );
-
-    if( KEY_ACTION_IsValid( keyAction ) )
-    {
-        keyString.assign( KEY_ACTION_Name( keyAction ) );
-    }
-
-    return keyString;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductUserInterface::Stop
+/// @todo  Resources, memory, or any client server connections that may need to be released by
+///        this module when stopped will need to be determined.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductUserInterface::Stop( )
+void ProductKeyInputInterface::Stop( )
 {
     BOSE_DEBUG( s_logger, "The user interface is stopping." );
 

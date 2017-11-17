@@ -40,15 +40,13 @@ namespace ProductApp
 /// @brief CustomProductControllerStateNetworkStandbyConfigured::
 ///        CustomProductControllerStateNetworkStandbyConfigured
 ///
-/// @param hsm
+/// @param ProductControllerHsm& hsm
 ///
-/// @param pSuperState
+/// @param CHsmState*            pSuperState
 ///
-/// @param productController
+/// @param Hsm::STATE            stateId
 ///
-/// @param stateId
-///
-/// @param name
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateNetworkStandbyConfigured::
@@ -114,9 +112,9 @@ bool CustomProductControllerStateNetworkStandbyConfigured::HandleNetworkState( b
                   configured ? "configured" : "unconfigured,",
                   connected ? "connected" : "unconnected" );
 
-    HandlePotentialStateChange( configured,
-                                connected,
-                                GetCustomProductController().IsVoiceConfigured( ) );
+    GoToAppropriatePlayableState( configured,
+                                  connected,
+                                  GetCustomProductController().IsVoiceConfigured( ) );
     return true;
 }
 
@@ -136,18 +134,24 @@ bool CustomProductControllerStateNetworkStandbyConfigured::HandleVoiceState( boo
                   "CustomProductControllerStateNetworkStandbyConfigured",
                   configured ? "configured" : "unconfigured" );
 
-    HandlePotentialStateChange( GetCustomProductController( ).IsNetworkConfigured( ),
-                                GetCustomProductController( ).IsNetworkConnected( ),
-                                configured );
+    GoToAppropriatePlayableState( GetCustomProductController( ).IsNetworkConfigured( ),
+                                  GetCustomProductController( ).IsNetworkConnected( ),
+                                  configured );
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateNetworkStandbyConfigured::HandlePotentialStateChange
+/// @brief CustomProductControllerStateNetworkStandbyConfigured::GoToAppropriatePlayableState
+///
+/// @param bool networkConfigured
+///
+/// @param bool networkConnected
+///
+/// @param bool voiceConfigured
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateNetworkStandbyConfigured::HandlePotentialStateChange
+void CustomProductControllerStateNetworkStandbyConfigured::GoToAppropriatePlayableState
 ( bool networkConfigured,
   bool networkConnected,
   bool voiceConfigured )

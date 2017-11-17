@@ -195,9 +195,8 @@ message ProductMessage
         optional ProductLanguageData        languagedata        = 10;
         optional ProductConfigurationStatus configurationstatus = 11;
         optional ProductAutowakeStatus      autowakestatus      = 12;
-        optional ProductNowPlayingStatus    nowplayingstatus   = 13;
-        optional bool                       power               = 14;
-        optional ProductAccessoryPairing    accessorypairing    = 15;
+        optional ProductNowPlayingStatus    nowplayingstatus    = 13;
+        optional ProductAccessoryPairing    accessorypairing    = 14;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

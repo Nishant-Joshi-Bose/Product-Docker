@@ -123,7 +123,7 @@ void ProductCommandLine::Run( )
     m_CommandLineInterface = new CLIClient( "ProductCommandLineInterface" );
 
     m_CommandLineInterface->Initialize( m_ProductTask,
-                                        CommandsList( ),
+                                        GetCommandsList( ),
                                         std::bind( &ProductCommandLine::HandleCommand,
                                                    this,
                                                    std::placeholders::_1,
@@ -135,9 +135,12 @@ void ProductCommandLine::Run( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductCommandLine::Run
+/// @name  ProductCommandLine::Run
 ///
-/// @brief  This method is used to stop the ProductCommandLine from running.
+/// @brief This method is used to stop the ProductCommandLine from running.
+///
+/// @todo  Resources, memory, or any client server connections that may need to be released by
+///        this module when stopped will need to be determined.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCommandLine::Stop( )
@@ -147,7 +150,7 @@ void ProductCommandLine::Stop( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductCommandLine::CommandsList
+/// @name   ProductCommandLine::GetCommandsList
 ///
 /// @brief  This method sets up the commands that can be entered by the user through a telnet
 ///         interface to the device.
@@ -156,174 +159,83 @@ void ProductCommandLine::Stop( )
 ///         initialization of the CLIClient, which is implemented in the Sound Touch library.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::vector< CommandPointer > ProductCommandLine::CommandsList( )
+std::vector< CommandPointer > ProductCommandLine::GetCommandsList( )
 {
     std::vector< CommandPointer > commands;
 
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product volume",
-                                                                             "This command set the volume to a specified level.",
-                                                                             "product volume [integer from 0 to 100]" ) ) );
-
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product mute",
-                                                                             "This command mutes or unmutes the volume",
-                                                                             "product mute [on | off]" ) ) );
-
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product source",
-                                                                             "This command selects the audio source",
-                                                                             "product source [tv | adaptiq] " ) ) );
-
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_lpm",
-                                                                             "This command tests setting the LPM state",
-                                                                             "product test_lpm [on | off]" ) ) );
-
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_caps",
-                                                                             "This command tests setting CAPS to an on or off state",
-                                                                             "product test_caps [on | off]" ) ) );
-
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_ap",
-                                                                             "This command tests setting the audio path to an on or off state",
-                                                                             "product test_ap [on | off]" ) ) );
-
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_sts",
-                                                                             "This command tests setting STS intialization to complete",
-                                                                             "product test_sts" ) ) );
-
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_bootup",
-                                                                             "This command tests setting the device in a boot up state",
-                                                                             "product test_bootup" ) ) );
-
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product autowake",
-                                                                             "This command tests setting autowake to an on or off state",
-                                                                             "product autowake [on | off]" ) ) );
-
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_network",
-                                                                             "This command tests setting the network to an off, configured, or connected",
-                                                                             "product test_network [off | configured | connected]" ) ) );
-
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_wifi",
-                                                                             "This command tests setting the wifi to an on or off configured state",
-                                                                             "product test_wifi [on | off]" ) ) );
-
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_freq",
-                                                                             "This command tests setting the wifi frequency in kHz",
-                                                                             "product test_freq [integer from 0 to 10,000,000 kHz]" ) ) );
-
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_voice",
-                                                                             "This command tests setting the voice VPA to an on or off configured state",
-                                                                             "product test_voice [on | off]" ) ) );
+                                                                             "This command tests setting autowake to an on or off state.",
+                                                                             "\t product autowake [on | off] \t\t" ) ) );
 
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product key",
-                                                                             "This command tests sending a key action value",
-                                                                             "product key [integer from 0 to 254]" ) ) );
+                                                                             "This command tests sending a key action value.",
+                                                                             "\t\t product key [int from 0 to 254] \t" ) ) );
 
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_nowplaying",
-                                                                             "This command tests sending a now playing active or inactive status",
-                                                                             "product test_nowplaying [active | inactive]" ) ) );
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product mute",
+                                                                             "This command mutes or unmutes the volume.",
+                                                                             "\t\t product mute [on | off] \t\t" ) ) );
 
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_power",
-                                                                             "This command tests sending a power key action",
-                                                                             "product test_power" ) ) );
-
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_pairing",
-                                                                             "This command tests pairing the device with another speaker",
-                                                                             "product test_pairing" ) ) );
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product source",
+                                                                             "This command selects the audio source.",
+                                                                             "\t\t product source [tv | st] \t\t" ) ) );
 
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product state",
                                                                              "This command returns the current state name and ID.",
-                                                                             "product state" ) ) );
+                                                                             "\t\t product state \t\t\t\t" ) ) );
+
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_ap",
+                                                                             "This command tests setting the audio path to an on or off state.",
+                                                                             "\t product test_ap [on | off] \t\t" ) ) );
+
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_bootup",
+                                                                             "This command tests setting the device in a boot up state.",
+                                                                             "\t product test_bootup \t\t\t" ) ) );
+
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_caps",
+                                                                             "This command tests setting CAPS to an on or off state.",
+                                                                             "\t product test_caps [on | off] \t\t" ) ) );
+
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_freq",
+                                                                             "This command tests setting the wifi frequency in kHz.",
+                                                                             "\t product test_freq [int from 0 to 10M] \t" ) ) );
+
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_lpm",
+                                                                             "This command tests setting the LPM state.",
+                                                                             "\t product test_lpm [on | off] \t\t" ) ) );
+
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_network",
+                                                                             "This command tests setting the network to an off, configured, or connected.",
+                                                                             "\t product test_network [off| conf| conn] " ) ) );
+
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_nowplaying",
+                                                                             "This command tests sending a now playing active or inactive status.",
+                                                                             " product test_nowplaying [act | inact] \t" ) ) );
+
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_pairing",
+                                                                             "This command tests pairing the device with another speaker.",
+                                                                             "\t product test_pairing \t\t\t" ) ) );
+
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_power",
+                                                                             "This command tests sending a power key action.",
+                                                                             "\t product test_power \t\t\t" ) ) );
+
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_sts",
+                                                                             "This command tests setting STS intialization to complete.",
+                                                                             "\t product test_sts \t\t\t" ) ) );
+
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_voice",
+                                                                             "This command tests setting the voice VPA to an on or off configured state.",
+                                                                             "\t product test_voice [on | off] \t\t" ) ) );
+
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_wifi",
+                                                                             "This command tests setting the wifi to an on or off configured state.",
+                                                                             "\t product test_wifi [on | off] \t\t" ) ) );
+
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product volume",
+                                                                             "This command sets the volume to a specified level.",
+                                                                             "\t\t product volume [int from 0 to 100] \t" ) ) );
 
     return commands;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// The following commands have yet to be created, and were created for Ginger. Some of them
-    /// may not be applicable for Professor though.
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// commands.push_back( static_cast< CommandPointer >( new CommandDescription(
-    ///                                                    "product status",
-    ///                                                    "This command displays the product server status information.",
-    ///                                                    "product status \n" ) ) );
-    ///
-    /// commands.push_back( static_cast<CommandPointer>( new CommandDescription(
-    ///                                                     "product lpm",
-    ///                                                     "This command forwards the command line to the LPM.",
-    ///                                                     "product lpm ...\n" ) ) );
-    ///
-    ///commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product setsource",
-    ///                                                     "Send Passthrough Source Events to Product Controller",
-    ///                                                     "product setsource [shelby | lastwifi | bt | btpair | btclear | local | standby] \n" ) ) );
-    ///
-    /// commands.push_back( static_cast<CommandPointer>( new CommandDescription(
-    ///                                                      "product internalmute",
-    ///                                                      "This command internally mutes or unmutes the speaker.",
-    ///                                                      "product internalmute [on | off] \n" ) ) );
-    ///
-    /// commands.push_back( static_cast<CommandPointer>( new CommandDescription(
-    ///                                                      "product actsrcipc",
-    ///                                                      "Send Parsed IPC Activation Events to A4VServer",
-    ///                                                      "product actsrcipc <int>[shelby(6)|lastwifi(7)|bt(8)|local(5)|standby(1)]\n" ) ) );
-    ///
-    /// commands.push_back( static_cast<CommandPointer>( new CommandDescription(
-    ///                                                      "product srcupipc",
-    ///                                                      "Send Parsed IPC Source Update to A4VServer",
-    ///                                                      "product srcupipc <int>[shelby(6)|lastwifi(7)|bt(8)|local(5)|standby(1)]\n" ) ) );
-    ///
-    /// commands.push_back( static_cast<CommandPointer>( new CommandDescription(
-    ///                                                      "product stp",
-    ///                                                      "Forwards the CLI to the STP server task",
-    ///                                                      "product stp [request|send|auth|install|reboot]\n" ) ) );
-    ///
-    /// commands.push_back( static_cast<CommandPointer>( new CommandDescription(
-    ///                                                      "product test",
-    ///                                                      "Sends different test commands.",
-    ///                                                      "product test [apmode | ampfault | ismaster | isnotmaster]\n" ) ) );
-    ///
-    /// commands.push_back( static_cast<CommandPointer>( new CommandDescription(
-    ///                                                      "product radio",
-    ///                                                      "Controls the WiFi radio",
-    ///                                                      "product radio [wifi|apmode] [on|off|toggle]\n" ) ) );
-    ///
-    /// commands.push_back( static_cast<CommandPointer>( new CommandDescription(
-    ///                                                      "product btdata",
-    ///                                                      "Sends the BT device data to LPM.",
-    ///                                                      "product btdata <MacAddress> \"<Device Name>\"\n" ) ) );
-    ///
-    /// commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product updatedisplay",
-    ///                                                      "Sends update display data to LPM.",
-    ///                                                      "product updatedisplay <state> <progress>\n" ) ) );
-    ///
-    /// commands.push_back( static_cast<CommandPointer>( new CommandDescription(
-    ///                                                      "product pt",
-    ///                                                      "Forwards tap commands to other devices.",
-    ///                                                      "product pt <dest> \"command\"\n" ) ) );
-    ///
-    /// commands.push_back( static_cast<CommandPointer>( new CommandDescription(
-    ///                                                      "product tc",
-    ///                                                      "Sends the IPC Tone Control to LPM (values are int16).",
-    ///                                                      "product tc <bass> <treble> <center> <rear>\n" ) ) );
-    ///
-    /// commands.push_back( static_cast<CommandPointer>( new CommandDescription(
-    ///                                                      "product tcr",
-    ///                                                      "Sends the IPC Tone Control Response as if it came from LPM (values are int16).",
-    ///                                                      "product tcl <bass> <treble> <center> <rear>\n"
-    ///                                                      "        <minBass> <minTreble> <minCenter> <minRear>\n"
-    ///                                                      "        <maxBass> <maxTreble> <maxCenter> <maxRear>\n"
-    ///                                                      "        <stepBass> <stepTreble> <stepCenter> <stepRear>\n" ) ) );
-    ///
-    /// commands.push_back( static_cast<CommandPointer>( new CommandDescription(
-    ///                                                      "product vsync",
-    ///                                                      "Sends the IPC AV Sync .",
-    ///                                                      "product vsync <sync(uint32)>\n" ) ) );
-    ///
-    /// commands.push_back( static_cast<CommandPointer>( new CommandDescription(
-    ///                                                      "product spklist",
-    ///                                                      "Sends the IPC product Speaker List.",
-    ///                                                      "product spklist <speakerList(uint32)>\n" ) ) );
-    ///
-    /// commands.push_back( static_cast<CommandPointer>( new CommandDescription(
-    ///                                                      "product latency",
-    ///                                                      "      Get or set totalLatency.",
-    ///                                                      "product latency [uint32 mSec]\n" ) ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -355,8 +267,8 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             return -1;
         }
 
-        std::string volumeLevelString = arguments.front( );
-        uint32_t    volumeLevelValue  = std::atoi( volumeLevelString.c_str( ) );
+        const std::string& volumeLevelString = arguments.front( );
+        const uint32_t     volumeLevelValue  = std::atoi( volumeLevelString.c_str( ) );
 
         if( 0 <= volumeLevelValue && volumeLevelValue <= 100 )
         {
@@ -385,7 +297,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             return -1;
         }
 
-        std::string muteState = arguments.front( );
+        const std::string& muteState = arguments.front( );
 
         if( muteState == "on" )
         {
@@ -413,25 +325,24 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     {
         if( arguments.size( ) != 1 )
         {
-            response  = "Incorrect Usage: product source [tv | adaptiq] \r\n";
+            response  = "Incorrect Usage: product source [tv | st] \r\n";
 
             return -1;
         }
 
-        LPM_IPC_SOURCE_ID sourceValue;
-        std::string       sourceString = arguments.front( );
+        const std::string& sourceString = arguments.front( );
 
         if( sourceString == "tv" )
         {
-            sourceValue = LPM_IPC_SOURCE_TV;
+            ProfessorProductController::GetInstance( )->SendPlaybackRequest( SOURCE_TV );
         }
-        else if( sourceString == "adaptiq" )
+        else if( sourceString == "st" )
         {
-            sourceValue = LPM_IPC_SOURCE_ADPAPTIQ;
+            ProfessorProductController::GetInstance( )->SendPlaybackRequest( SOURCE_SOUNDTOUCH );
         }
         else
         {
-            response  = "Incorrect Usage: product source [tv | adaptiq] \r\n";
+            response  = "Incorrect Usage: product source [tv | st] \r\n";
 
             return -1;
         }
@@ -439,8 +350,6 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         response  = "The source will be changed to the value ";
         response +=  sourceString.c_str( );
         response += ". \r\n";
-
-        m_ProductHardwareInterface->SendSourceSelection( sourceValue );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// This command tests setting the LPM to an on or off state and sending it to the product
@@ -455,7 +364,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             return -1;
         }
 
-        std::string argumentString = arguments.front( );
+        const std::string& argumentString = arguments.front( );
 
         ProductMessage productMessage;
 
@@ -494,7 +403,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             return -1;
         }
 
-        std::string argumentString = arguments.front( );
+        const std::string& argumentString = arguments.front( );
 
         ProductMessage productMessage;
 
@@ -530,7 +439,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             response = "Incorrect Usage: product test_ap [on | off]";
         }
 
-        std::string argumentString = arguments.front( );
+        const std::string& argumentString = arguments.front( );
 
         ProductMessage productMessage;
 
@@ -613,7 +522,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             return -1;
         }
 
-        std::string argumentString = arguments.front( );
+        const std::string& argumentString = arguments.front( );
 
         ProductMessage productMessage;
 
@@ -646,12 +555,12 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     {
         if( arguments.size( ) != 1 )
         {
-            response = "Incorrect Usage: product test_network [off | configured | connected]";
+            response = "Incorrect Usage: product test_network [off| conf| conn]";
 
             return -1;
         }
 
-        std::string argumentString = arguments.front( );
+        const std::string& argumentString = arguments.front( );
 
         ProductMessage productMessage;
 
@@ -665,7 +574,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 
             IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
         }
-        else if( argumentString == "configured" )
+        else if( argumentString == "conf" )
         {
             response  = "An network configured state test will now be made.";
 
@@ -675,7 +584,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 
             IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
         }
-        else if( argumentString == "connected" )
+        else if( argumentString == "conn" )
         {
             response  = "An network connected state test will now be made.";
 
@@ -687,12 +596,10 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         }
         else
         {
-            response = "Incorrect Usage: product test_network [off | configured | connected]";
+            response = "Incorrect Usage: product test_network [off| conf| conn]";
 
             return -1;
         }
-
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// This command tests setting a wifi network to an off or off configured state and sending it
@@ -707,7 +614,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             return -1;
         }
 
-        std::string argumentString = arguments.front( );
+        const std::string& argumentString = arguments.front( );
 
         ProductMessage productMessage;
 
@@ -746,13 +653,13 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     {
         if( arguments.size( ) != 1 )
         {
-            response = "Incorrect Usage: product test_freq [integer from 0 to 10,000,000] kHz";
+            response = "Incorrect Usage: product test_freq [int from 0 to 10M]";
 
             return -1;
         }
 
-        std::string argumentString = arguments.front( );
-        uint32_t    frequencyValue = std::atoi( argumentString.c_str( ) );
+        const std::string& argumentString = arguments.front( );
+        const uint32_t     frequencyValue = std::atoi( argumentString.c_str( ) );
 
         if( 0 <= frequencyValue && frequencyValue <= 10000000 )
         {
@@ -768,7 +675,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         }
         else
         {
-            response = "Incorrect Usage: product test_freq [integer from 0 to 10,000,000] kHz";
+            response = "Incorrect Usage: product test_freq [int from 0 to 10M]";
 
             return -1;
         }
@@ -787,7 +694,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             return -1;
         }
 
-        std::string argumentString = arguments.front( );
+        const std::string& argumentString = arguments.front( );
 
         ProductMessage productMessage;
 
@@ -826,8 +733,8 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             return -1;
         }
 
-        std::string argumentString = arguments.front( );
-        uint32_t    keyActionValue = std::atoi( argumentString.c_str( ) );
+        const std::string& argumentString = arguments.front( );
+        const uint32_t     keyActionValue = std::atoi( argumentString.c_str( ) );
 
         if( 0 <= keyActionValue && keyActionValue <= 254 )
         {
@@ -853,9 +760,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     else if( command.compare( "product test_power" ) == 0 )
     {
         ProductMessage productMessage;
-        productMessage.set_power( true );
-
-        response  = "A power key will be sent as a test to the product controller state machine.";
+        productMessage.mutable_keydata( )->set_action( KeyActionPb::KEY_ACTION_POWER );
 
         IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
     }
@@ -866,22 +771,22 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     {
         if( arguments.size( ) != 1 )
         {
-            response = "Incorrect Usage: product test_nowplaying [active | inactive]";
+            response = "Incorrect Usage: product test_nowplaying [act | inact]";
 
             return -1;
         }
 
-        std::string argumentString = arguments.front( );
+        const std::string& argumentString = arguments.front( );
 
         ProductMessage productMessage;
 
-        if( argumentString == "active" )
+        if( argumentString == "act" )
         {
             response  = "A now playback active status test will now be made.";
 
             productMessage.mutable_nowplayingstatus( )->set_state( ProductNowPlayingStatus_ProductNowPlayingState_Active );
         }
-        else if( argumentString == "inactive" )
+        else if( argumentString == "inact" )
         {
             response  = "A now playback inactive status test will now be made.";
 
@@ -889,7 +794,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         }
         else
         {
-            response = "Incorrect Usage: product test_nowplaying [active | inactive]";
+            response = "Incorrect Usage: product test_nowplaying [act | inact]";
 
             return -1;
         }

@@ -40,15 +40,13 @@ namespace ProductApp
 ///
 /// @brief CustomProductControllerStateNetworkStandby::CustomProductControllerStateNetworkStandby
 ///
-/// @param hsm
+/// @param ProductControllerHsm& hsm
 ///
-/// @param pSuperState
+/// @param CHsmState*            pSuperState
 ///
-/// @param productController
+/// @param Hsm::STATE            stateId
 ///
-/// @param stateId
-///
-/// @param name
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateNetworkStandby::CustomProductControllerStateNetworkStandby

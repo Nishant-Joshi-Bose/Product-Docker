@@ -182,7 +182,6 @@ void ProductHardwareInterface::Connected( bool connected )
 
         RequestNormalOperations( );
         RequestLpmStatus( CallbackForLpmStatus );
-
         auto func = std::bind(
                         &ProductHardwareInterface::CECMsgHandler,
                         this,
@@ -225,7 +224,7 @@ void ProductHardwareInterface::Connected( bool connected )
 ///
 /// @param  Callback< LpmServiceMessages::IpcLpmHealthStatusPayload_t > callback
 ///
-/// @return This method returns a false Boolean value is the LPM is not connected. Otherwise, it
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -343,7 +342,7 @@ void ProductHardwareInterface::HandleLpmStatus( LpmServiceMessages::IpcLpmHealth
 ///
 /// @name   ProductHardwareInterface::RequestNormalOperations
 ///
-/// @return This method returns a false Boolean value is the LPM is not connected. Otherwise, it
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -428,7 +427,7 @@ void ProductHardwareInterface::RequestNormalOperationsPassed( const LpmServiceMe
 ///
 /// @name   ProductHardwareInterface::RequestPowerStateOff
 ///
-/// @return This method returns a false Boolean value is the LPM is not connected. Otherwise, it
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -512,7 +511,7 @@ void ProductHardwareInterface::RequestPowerStateOffPassed( const IpcLpmStateResp
 ///
 /// @name   ProductHardwareInterface::RequestPowerStateStandby
 ///
-/// @return This method returns a false Boolean value is the LPM is not connected. Otherwise, it
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -576,7 +575,7 @@ void ProductHardwareInterface::RequestPowerStateStandbyPassed( const IpcLpmState
     {
         if( stateResponse.pwrstate( ) == POWER_STATE_NETWORK_STANDBY )
         {
-            BOSE_ERROR( s_logger, "The power state could not be set to a standby powered state." );
+            BOSE_DEBUG( s_logger, "The power state is now set to a standby powered state." );
         }
         else
         {
@@ -596,7 +595,7 @@ void ProductHardwareInterface::RequestPowerStateStandbyPassed( const IpcLpmState
 ///
 /// @name   ProductHardwareInterface::RequestPowerStateAutowake
 ///
-/// @return This method returns a false Boolean value is the LPM is not connected. Otherwise, it
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -680,7 +679,7 @@ void ProductHardwareInterface::RequestPowerStateAutowakePassed( const IpcLpmStat
 ///
 /// @name   ProductHardwareInterface::RequestPowerStateFull
 ///
-/// @return This method returns a false Boolean value is the LPM is not connected. Otherwise, it
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -863,7 +862,7 @@ bool ProductHardwareInterface::SendAccessoryDisband( )
 ///
 /// @param  uint32_t volume
 ///
-/// @return This method returns a false Boolean value is the LPM is not connected. Otherwise, it
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -899,7 +898,7 @@ bool ProductHardwareInterface::SendSetVolume( uint32_t volume )
 ///
 /// @param  bool mute
 ///
-/// @return This method returns a false Boolean value is the LPM is not connected. Otherwise, it
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -944,7 +943,7 @@ bool ProductHardwareInterface::SendUserMute( bool mute )
 ///
 /// @param  bool mute
 ///
-/// @return This method returns a false Boolean value is the LPM is not connected. Otherwise, it
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -989,7 +988,7 @@ bool ProductHardwareInterface::SendInternalMute( bool mute )
 ///
 /// @param uint32_t latency
 ///
-/// @return This method returns a false Boolean value is the LPM is not connected. Otherwise, it
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1019,7 +1018,7 @@ bool ProductHardwareInterface::SendAudioPathPresentationLatency( uint32_t latenc
 ///
 /// @param  uint32_t audioDelay
 ///
-/// @return This method returns a false Boolean value is the LPM is not connected. Otherwise, it
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1049,7 +1048,7 @@ bool ProductHardwareInterface::SendLipSyncDelay( uint32_t audioDelay )
 ///
 /// @param  IpcToneControl_t& controls
 ///
-/// @return This method returns a false Boolean value is the LPM is not connected. Otherwise, it
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1085,7 +1084,7 @@ bool ProductHardwareInterface::SendToneAndLevelControl( IpcToneControl_t& contro
 ///
 /// @param  IpcAccessoryList_t accessoryList
 ///
-/// @return This method returns a false Boolean value is the LPM is not connected. Otherwise, it
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1115,7 +1114,7 @@ bool ProductHardwareInterface::SendSpeakerList( IpcAccessoryList_t& accessoryLis
 ///
 /// @param  Ipc_TimeoutControl_t& timeoutControl
 ///
-/// @return This method returns a false Boolean value is the LPM is not connected. Otherwise, it
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1145,7 +1144,7 @@ bool ProductHardwareInterface::SendSetSystemTimeoutEnableBits( Ipc_TimeoutContro
 ///
 /// @param uint32_t frequency
 ///
-/// @return This method returns a false Boolean value is the LPM is not connected. Otherwise, it
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1172,7 +1171,7 @@ bool ProductHardwareInterface::SendWiFiRadioStatus( uint32_t frequencyInKhz )
 ///
 /// @name  ProductHardwareInterface::SendRebootRequest
 ///
-/// @return This method returns a false Boolean value is the LPM is not connected. Otherwise, it
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1213,7 +1212,7 @@ bool ProductHardwareInterface::SendRebootRequest( )
 void ProductHardwareInterface::SetBlueToothMacAddress( const std::string& bluetoothMacAddress )
 {
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// The Bluetooth MAC Address needs to be reformatted to remove and colon characters. For
+    /// The Bluetooth MAC Address needs to be reformatted to remove any colon characters. For
     /// example, a Bluetooth MAC Address 88:4A:EA:5A:37:AD of would be reformatted to 884AEA5A37AD.
     /// ////////////////////////////////////////////////////////////////////////////////////////////
     char blueToothReformattedMacAddress[( 2 * BLUETOOTH_MAC_LENGTH ) + 1 ];
@@ -1283,7 +1282,7 @@ void ProductHardwareInterface::SetBlueToothDeviceName( const std::string& blueto
 /// @param  unsigned long long bluetoothMacAddress This argument is a standard string representing
 ///                                                the Bluetooth MAC Address.
 ///
-/// @return This method returns a false Boolean value is the LPM is not connected. Otherwise, it
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1316,7 +1315,7 @@ bool ProductHardwareInterface::SendBlueToothDeviceData( const std::string&      
 ///
 /// @param IPCSource_t& sourceSelect
 ///
-/// @return This method returns a false Boolean value is the LPM is not connected. Otherwise, it
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1401,6 +1400,9 @@ bool ProductHardwareInterface::CECMsgHandler( const LpmServiceMessages::IpcCecMe
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief ProductHardwareInterface::Stop
+///
+/// @todo  Resources, memory, or any client server connections that may need to be released by
+///        this module when stopped will need to be determined.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductHardwareInterface::Stop( )

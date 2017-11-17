@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      ProductUserInterface.h
+/// @file      ProductKeyInputInterface.h
 ///
-/// @brief     This header file declares a ProductUserInterface class that is used to receive user
-///            input.
+/// @brief     This header file declares a ProductKeyInputInterface class that is used to receive
+///            raw key input from the LPM hardware and convert it into key actions.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -63,56 +63,48 @@ class ProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class ProductUserInterface
+/// @class ProductKeyInputInterface
 ///
 /// @brief This class acts to extract raw keys from the LPM hardware, pass them to a key handler,
 ///        and send the key action to the product controller state machine for processing.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProductUserInterface
+class ProductKeyInputInterface
 {
 public:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @name   ProductUserInterface::GetInstance
+    /// @name   ProductKeyInputInterface::GetInstance
     ///
-    /// @brief  This static method creates the one and only instance of a ProductUserInterface
+    /// @brief  This static method creates the one and only instance of a ProductKeyInputInterface
     ///         object. That only one instance is created in a thread safe way is guaranteed by
     ///         the C++ Version 11 compiler.
     ///
     /// @param  void This method does not take any arguments.
     ///
-    /// @return This method returns a reference to a ProductUserInterface object.
+    /// @return This method returns a reference to a ProductKeyInputInterface object.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    static ProductUserInterface* GetInstance( NotifyTargetTaskIF*         ProductTask,
-                                              Callback< ProductMessage >  ProductNotify,
-                                              ProductHardwareInterface*   HardwareInterface,
-                                              CliClientMT&                CommandLineInterface );
+    static ProductKeyInputInterface* GetInstance( NotifyTargetTaskIF*         ProductTask,
+                                                  Callback< ProductMessage >  ProductNotify,
+                                                  ProductHardwareInterface*   HardwareInterface,
+                                                  CliClientMT&                CommandLineInterface );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief  The following public methods are used to start and stop the ProductUserInterface
+    /// @brief  The following public methods are used to start and stop the ProductKeyInputInterface
     ///         instance.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     void Run( );
     void Stop( );
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following method converts a key action and return its associated value as a
-    ///        string.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    std::string GetKeyString( const KeyActionPb::KEY_ACTION keyAction );
-
 private:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @name  ProductUserInterface
+    /// @name  ProductKeyInputInterface
     ///
     /// @brief The constructor for this class is set to be private. This definition prevents this
     ///        class from being instantiated directly, so that only the static method GetInstance
@@ -125,10 +117,10 @@ private:
     /// @param ProductHardwareInterface*  HardwareInterface
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductUserInterface( NotifyTargetTaskIF*        ProductTask,
-                          Callback< ProductMessage > ProductNotify,
-                          ProductHardwareInterface*  HardwareInterface,
-                          CliClientMT&               CommandLineInterface );
+    ProductKeyInputInterface( NotifyTargetTaskIF*        ProductTask,
+                              Callback< ProductMessage > ProductNotify,
+                              ProductHardwareInterface*  HardwareInterface,
+                              CliClientMT&               CommandLineInterface );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -138,8 +130,8 @@ private:
     ///        class can be used to get the one sole instance of it.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductUserInterface( ProductUserInterface const& ) = delete;
-    ProductUserInterface operator = ( ProductUserInterface const& ) = delete;
+    ProductKeyInputInterface( ProductKeyInputInterface const& ) = delete;
+    ProductKeyInputInterface operator = ( ProductKeyInputInterface const& ) = delete;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

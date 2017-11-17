@@ -71,10 +71,14 @@ public:
 
     }
 
-    void HandleStateEnter( ) override;
-    void HandleStateStart( ) override;
-    void HandleStateExit( )  override;
-    bool HandlePowerState( ) override;
+    void HandleStateEnter( )           override;
+    void HandleStateStart( )           override;
+    void HandleStateExit( )            override;
+    bool HandleKeyAction( int action ) override;
+
+private:
+
+    void GoToAppropriateNonplayingState( );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

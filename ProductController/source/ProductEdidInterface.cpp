@@ -253,6 +253,9 @@ void ProductEdidInterface::HandlePhyAddrResponse( const A4VVideoManagerServiceMe
 ///
 /// @brief ProductEdidInterface::Stop
 ///
+/// @todo  Resources, memory, or any client server connections that may need to be released by
+///        this module when stopped will need to be determined.
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductEdidInterface::Stop( )
 {
