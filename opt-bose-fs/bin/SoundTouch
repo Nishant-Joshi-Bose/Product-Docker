@@ -5,8 +5,6 @@
 export PATH=/opt/Bose/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
 tag="${0##*/}[$$]"              # for log messages
 
-/opt/Bose/webkit/target_scripts/lcd/init-lcd.sh
-
 function log {
     local pri="$1"; shift
     logger -s -t "$tag" -p "$pri" "$*"
@@ -76,6 +74,8 @@ EOF
     mkdir -p /mnt/nv/IoTCerts /mnt/nv/BoseApp-Persistence/1 /mnt/nv/product-persistence
 
     rw --read-only
+
+    /opt/Bose/webkit/target_scripts/lcd/init-lcd.sh
 
     set_ap.sh
 
