@@ -204,7 +204,10 @@ echo "SoundTouch postinst"
 if [ -x /mnt/nv/postinst ]; then
     /mnt/nv/postinst
 fi
-ln -s /usr/lib/libcurl.so.5 /opt/Bose/lib/libcurl.so.4
+# the following link is to satisfy the libcurl dependency in
+# the UEI qsp libraries (libqsp.so, libqsp_hal.so); remove it when
+# libraries linked against our libcurl version are available
+ln -sf /usr/lib/libcurl.so.5 /opt/Bose/lib/libcurl.so.4
 EOF
 
 put_script "$stage/postrm" <<EOF
