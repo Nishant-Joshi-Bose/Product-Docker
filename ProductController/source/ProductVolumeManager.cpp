@@ -165,8 +165,11 @@ bool ProductVolumeManager::Run( )
 ///
 /// @brief ProductVolumeManager::Stop
 ///
+/// @todo  Resources, memory, or any client server connections that may need to be released by
+///        this module when stopped will need to be determined.
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductVolumeManager::Stop( void )
+void ProductVolumeManager::Stop( )
 {
 }
 

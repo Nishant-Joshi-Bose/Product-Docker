@@ -48,15 +48,13 @@ namespace ProductApp
 ///
 /// @brief CustomProductControllerStatePlayingActive::CustomProductControllerStatePlayingActive
 ///
-/// @param hsm
+/// @param ProductControllerHsm& hsm
 ///
-/// @param pSuperState
+/// @param CHsmState*            pSuperState
 ///
-/// @param productController
+/// @param Hsm::STATE            stateId
 ///
-/// @param stateId
-///
-/// @param name
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStatePlayingActive::CustomProductControllerStatePlayingActive

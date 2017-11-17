@@ -36,17 +36,9 @@
 #include <stdexcept>
 #include <string>
 #include "SystemUtils.h"
-#include "DPrint.h"
+#include "Utilities.h"
 #include "ProfessorProductController.h"
 #include "FunctionInfo.h"
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following declares a DPrint class type object for logging information in the product
-/// controller source code.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////
-static DPrint s_logger { "ProductStart" };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -64,14 +56,14 @@ void ShowBacktrace( int sig )
     ///
     signal( SIGSEGV, SIG_DFL );
 
-    BOSE_ERROR( s_logger, "------- Product Controller Segmentation Fault Start --------" );
+    BOSE_ERROR( ProductApp::s_logger, "------- Product Controller Segmentation Fault Start --------" );
 
     for( auto function : backtrace( ) )
     {
-        BOSE_ERROR( s_logger, function.length( ) ? function.c_str() : "<unresolved>" );
+        BOSE_ERROR( ProductApp::s_logger, function.length( ) ? function.c_str() : "<unresolved>" );
     }
 
-    BOSE_ERROR( s_logger, "-------- Product Controller Segmentation Fault End ---------" );
+    BOSE_ERROR( ProductApp::s_logger, "-------- Product Controller Segmentation Fault End ---------" );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -142,8 +134,8 @@ int main( int argumentCount, char** argumentValue )
 
         SystemUtils::ThereCanBeOnlyOne( );
 
-        BOSE_DEBUG( s_logger, "----------------- Product Controller Start -----------------" );
-        BOSE_DEBUG( s_logger, "The Product Controller is starting up from the main function." );
+        BOSE_DEBUG( ProductApp::s_logger, "----------------- Product Controller Start -----------------" );
+        BOSE_DEBUG( ProductApp::s_logger, "The Product Controller is starting up from the main function." );
 
         /////////////////////////////////////////////////////////////////////////////////////////
         /// @brief The Product Controller is now ran and the main task is suspended until the
@@ -156,8 +148,8 @@ int main( int argumentCount, char** argumentValue )
     }
     catch( std::exception const& error )
     {
-        BOSE_DEBUG( s_logger, "The Product Controller is shutting down." );
-        BOSE_DEBUG( s_logger, "An exception %s was caught in the attempt.", error.what( ) );
+        BOSE_DEBUG( ProductApp::s_logger, "The Product Controller is shutting down." );
+        BOSE_DEBUG( ProductApp::s_logger, "An exception %s was caught in the attempt.", error.what( ) );
 
         return( EXIT_FAILURE );
     }
@@ -165,4 +157,9 @@ int main( int argumentCount, char** argumentValue )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                        End of File                                           ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

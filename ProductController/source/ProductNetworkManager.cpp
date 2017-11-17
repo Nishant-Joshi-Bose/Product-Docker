@@ -557,6 +557,9 @@ void ProductNetworkManager::SendMessage( ProductMessage& message )
 ///
 /// @name ProductNetworkManager::Stop
 ///
+/// @todo  Resources, memory, or any client server connections that may need to be released by
+///        this module when stopped will need to be determined.
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductNetworkManager::Stop( )
 {

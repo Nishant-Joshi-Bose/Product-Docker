@@ -75,7 +75,7 @@ public:
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @name   ProductHardwareInterface::GetInstance
-    ///set
+    ///
     /// @brief  This static method creates the one and only instance of a ProductHardwareInterface
     ///         object. That only one instance is created in a thread safe way is guaranteed by
     ///         the C++ Version 11 compiler.

@@ -37,20 +37,19 @@
 namespace ProductApp
 {
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief CustomProductControllerStateNetworkStandbyUnconfigured::
 ///        CustomProductControllerStateNetworkStandbyUnconfigured
 ///
-/// @param hsm
+/// @param ProductControllerHsm& hsm
 ///
-/// @param pSuperState
+/// @param CHsmState*            pSuperState
 ///
-/// @param productController
+/// @param Hsm::STATE            stateId
 ///
-/// @param stateId
-///
-/// @param name
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateNetworkStandbyUnconfigured::
@@ -122,7 +121,6 @@ bool CustomProductControllerStateNetworkStandbyUnconfigured::HandleInactivityTim
     }
 
     BOSE_VERBOSE( s_logger, "The timer %d in %s has expired.", timerType, GetName( ).c_str( ) );
-
     BOSE_VERBOSE( s_logger, "An attempt to set the device to a low power state will be made." );
 
     ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_LOW_POWER );
@@ -147,11 +145,11 @@ bool CustomProductControllerStateNetworkStandbyUnconfigured::HandleNetworkState(
     BOSE_VERBOSE( s_logger, "%s is handling a %sconfigured, %sconnected network state event.",
                   GetName( ).c_str( ),
                   configured ? "" : "un",
-                  connected ? "" : "un" );
+                  connected  ? "" : "un" );
 
-    HandlePotentialStateChange( configured,
-                                connected,
-                                GetCustomProductController().IsVoiceConfigured( ) );
+    GoToAppropriatePlayableState( configured,
+                                  connected,
+                                  GetCustomProductController().IsVoiceConfigured( ) );
     return true;
 }
 
@@ -171,18 +169,18 @@ bool CustomProductControllerStateNetworkStandbyUnconfigured::HandleVoiceState( b
                   GetName( ).c_str( ),
                   configured ? "" : "un" );
 
-    HandlePotentialStateChange( GetCustomProductController( ).IsNetworkConfigured( ),
-                                GetCustomProductController( ).IsNetworkConnected( ),
-                                configured );
+    GoToAppropriatePlayableState( GetCustomProductController( ).IsNetworkConfigured( ),
+                                  GetCustomProductController( ).IsNetworkConnected( ),
+                                  configured );
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateNetworkStandbyUnconfigured::HandlePotentialStateChange
+/// @brief CustomProductControllerStateNetworkStandbyUnconfigured::GoToAppropriatePlayableState
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateNetworkStandbyUnconfigured::HandlePotentialStateChange
+void CustomProductControllerStateNetworkStandbyUnconfigured::GoToAppropriatePlayableState
 ( bool networkConfigured,
   bool networkConnected,
   bool voiceConfigured )

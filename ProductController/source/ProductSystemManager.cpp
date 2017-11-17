@@ -52,10 +52,16 @@ namespace ProductApp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-///            Global Constants
+/// @brief Global Constants
+///
+/// @todo  The location and name for files to store persistence data needs to coordinated with the
+///        Eddie team. It will be helpful for debugging and testing efforts to have the persistence
+///        in a single, known place. In ECO1, all persistent date was stored under the directory
+///        /mnt/nv/BosePersistence/1.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 const std::string g_ProductDirectory = "product-persistence/";
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// The following constants define FrontDoor endpoints used by the SystemManager
@@ -188,7 +194,7 @@ bool ProductSystemManager::Run( )
                              std::placeholders::_1 ),
                   m_ProductTask );
 
-        m_FrontDoorClient->RegisterGet( "/system/configuration/status" , callback );
+        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS, callback );
     }
 
     BOSE_DEBUG( s_logger, "Registration for getting configuration status requests has been made." );
@@ -415,7 +421,7 @@ void ProductSystemManager::WriteLanguageSettingsToPersistentStorage( )
 ///
 /// @name  ProductSystemManager::HandleGetLanguageRequest
 ///
-/// @param Callback< ProductPb::Language >& response
+/// @param const Callback< ProductPb::Language >& response
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::HandleGetLanguageRequest(
@@ -445,9 +451,9 @@ void ProductSystemManager::HandleGetSystemInfoRequest(
 ///
 /// @name  ProductSystemManager::HandlePostLanguageRequest
 ///
-/// @param ProductPb::Language& language
+/// @param const ProductPb::Language& language
 ///
-/// @param Callback< ProductPb::Language >& response
+/// @param const Callback< ProductPb::Language >& response
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::HandlePostLanguageRequest( const ProductPb::Language&             language,
@@ -483,7 +489,7 @@ void ProductSystemManager::SetNetworkAccoutConfigurationStatus( bool network, bo
     ///
     /// @todo For the time being during initial testing, the product controller will handle setting
     ///       the network and account information. Once an end-point for determining the account
-    ///       status becomes available the handling of the account may be processed insidet the
+    ///       status becomes available the handling of the account may be processed inside the
     ///       ProductSystemManager class directly.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -567,7 +573,7 @@ void ProductSystemManager::WriteConfigurationStatusToPersistentStorage( )
 ///
 /// @name  ProductSystemManager::HandleGetConfigurationStatusRequest
 ///
-/// @param Callback< ProductPb::ConfigurationStatus >& response
+/// @param const Callback< ProductPb::ConfigurationStatus >& response
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::HandleGetConfigurationStatusRequest( const
@@ -583,7 +589,7 @@ void ProductSystemManager::HandleGetConfigurationStatusRequest( const
 ///
 /// @name  ProductSystemManager::HandleCapsStatus
 ///
-/// @param SoundTouchInterface::CapsInitializationStatus& status
+/// @param const SoundTouchInterface::CapsInitializationStatus& status
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::HandleCapsStatus( const SoundTouchInterface::CapsInitializationStatus&
@@ -601,7 +607,7 @@ void ProductSystemManager::HandleCapsStatus( const SoundTouchInterface::CapsInit
 ///
 /// @name  ProductSystemManager::HandleCapsStatusFailed
 ///
-/// @param FRONT_DOOR_CLIENT_ERRORS error
+/// @param const FRONT_DOOR_CLIENT_ERRORS error
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::HandleCapsStatusFailed( const FRONT_DOOR_CLIENT_ERRORS error )
@@ -619,7 +625,7 @@ void ProductSystemManager::HandleCapsStatusFailed( const FRONT_DOOR_CLIENT_ERROR
 ///
 /// @brief ProductSystemManager::HandleGetSystemStateRequest
 ///
-/// @param ProductPb::SystemState& systemstate
+/// @param const ProductPb::SystemState& systemstate
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::HandleGetSystemStateRequest
@@ -646,10 +652,10 @@ void ProductSystemManager::HandleGetSystemStateRequest
 ///
 /// @brief This method sends a ProductMessage Protocol Buffer to the product controller.
 ///
-/// @param ProductMessage& message
+/// @param const ProductMessage& message
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::SendMessage( ProductMessage& message ) const
+void ProductSystemManager::SendMessage( const ProductMessage& message ) const
 {
     IL::BreakThread( std::bind( m_ProductNotify, message ), m_ProductTask );
 }
@@ -657,6 +663,9 @@ void ProductSystemManager::SendMessage( ProductMessage& message ) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name  ProductSystemManager::Stop
+///
+/// @todo  Resources, memory, or any client server connections that may need to be released by
+///        this module when stopped will need to be determined.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::Stop( )

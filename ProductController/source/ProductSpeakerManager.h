@@ -45,7 +45,7 @@ public:
     static ProductSpeakerManager* GetInstance( NotifyTargetTaskIF* mainTask,
                                                Callback< ProductMessage > ProductNotify,
                                                ProductHardwareInterface*  hardwareInterface );
-    bool Run( void );
+    bool Run( );
     void DoPairing( );
     void StopPairing( );
 

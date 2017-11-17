@@ -32,7 +32,7 @@ ADD_EXECUTABLE(Professor
   source/ProductSoftwareServices.cpp
   source/ProductNetworkManager.cpp
   source/ProductSystemManager.cpp
-  source/ProductUserInterface.cpp
+  source/ProductKeyInputInterface.cpp
   source/ProductSpeakerManager.cpp
   source/ProfessorProductController.cpp
   source/ProductEdidInterface.cpp
