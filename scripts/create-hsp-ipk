@@ -81,7 +81,7 @@ if ! grep -q /cache /proc/mounts; then
     mount /dev/mmcblk0p26 /cache || exit 1
 fi
 mkdir -p /cache/recovery/ || exit 1
-echo "--update_package=/opt/Bose/hsp/update_ext4.zip" > /cache/recovery/command || exit 1
+echo "--update_package=/opt/Bose/hsp/update_ext4.zip --idle_after" > /cache/recovery/command || exit 1
 echo "Rebooting to Recovery" 
 EOF
 
