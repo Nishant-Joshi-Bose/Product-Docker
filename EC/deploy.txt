@@ -9,3 +9,4 @@
 ./builds/Release/package/product_flash.exe		<DEPLOY_DIR>/eddie_flash.exe				file
 ./builds/Release/package/product_flash_mac		<DEPLOY_DIR>/eddie_flash_mac				file
 ./builds/Release/lpm_updater.ipk			<DEPLOY_DIR>/eddie_lpm_updater_<VERSION_STRING>.ipk	file
+./builds/Release/Packages.gz			<DEPLOY_DIR>/Packages.gz	file 
