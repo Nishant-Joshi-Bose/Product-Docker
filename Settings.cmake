@@ -63,6 +63,8 @@ IF(${SDK} STREQUAL "qc8017_32")
     CACHE INTERNAL - FORCE)
   SET(CMAKE_CXX_COMPILER ${RIVIERA_TOOLCHAIN_DIR}/sdk/sysroots/${ARCHITECTURE}-oesdk-linux/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-g++
     CACHE INTERNAL - FORCE)
+  SET(CMAKE_OBJCOPY ${RIVIERA_TOOLCHAIN_DIR}/sdk/sysroots/${ARCHITECTURE}-oesdk-linux/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-objcopy
+    CACHE INTERNAL - FORCE)
 
   SET(COMMON_FLAGS "--sysroot=${SYSROOT} -mtune=cortex-a53 -ftree-vectorize")
   SET(CMAKE_CXX_FLAGS "-std=c++11 ${COMMON_FLAGS}"
