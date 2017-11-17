@@ -30,6 +30,7 @@
 #include "SoundTouchInterface/CapsInitializationStatus.pb.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
+#include "SoundTouchInterface/Presets.pb.h"
 #include "ProductCliClient.h"
 #include "LpmClientIF.h"
 #include "LpmInterface.h"
@@ -110,6 +111,12 @@ private:
     void HandleAllowSourceSelectCliCmd( const std::list<std::string> & argList, std::string& response );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @name  PersistPresets
+/// @brief Function to persist Presets information in /mnt/nv/product-persistence/.
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void PersistPresets(const SoundTouchInterface::presets& presetsPb);
+///////////////////////////////////////////////////////////////////////////////
 /// @name  HandleSetDisplayAutoMode
 /// @brief Function to TDB
 /// @return void
@@ -141,6 +148,12 @@ private:
 /// @brief Function to Handle "/content/nowPlaying" notification from Caps.
 ///////////////////////////////////////////////////////////////////////////////
     void HandleCapsNowPlaying( const SoundTouchInterface::NowPlayingJson& );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name HandlePresetsFromPassport
+/// @brief Function to Handle Preset notification from Passport.
+///////////////////////////////////////////////////////////////////////////////
+void HandlePresetsFromPassport( const SoundTouchInterface::presets& presetPb );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name HandleBluetoothSinkAppStatus
@@ -312,6 +325,10 @@ public:
     {
         return m_nowPlaying;
     }
+    const SoundTouchInterface::presets& GetPresets() const
+    {
+        return m_presets;
+    }
 
     const BluetoothSinkService::AppStatus& GetBluetoothAppStatus() const
     {
@@ -363,6 +380,7 @@ private:
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
     ProductPb::Language                         m_systemLanguage;
     SoundTouchInterface::NowPlayingJson         m_nowPlaying;
+    SoundTouchInterface::presets                m_presets;
     NetManager::Protobuf::NetworkStatus         m_cachedStatus;
     BluetoothSinkService::AppStatus             m_bluetoothAppStatus;
 

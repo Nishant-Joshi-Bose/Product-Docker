@@ -53,6 +53,22 @@ enum class Action
     //+ ALEXA
     ALEXA_CAROUSEL = 26,
     //- ALEXA
+
+    //+ PRESET
+    PRESET_STORE_1 = 101,
+    PRESET_STORE_2 = 102,
+    PRESET_STORE_3 = 103,
+    PRESET_STORE_4 = 104,
+    PRESET_STORE_5 = 105,
+    PRESET_STORE_6 = 106,
+
+    PRESET_SELECT_1 = 107,
+    PRESET_SELECT_2 = 108,
+    PRESET_SELECT_3 = 109,
+    PRESET_SELECT_4 = 110,
+    PRESET_SELECT_5 = 111,
+    PRESET_SELECT_6 = 112
+                      //- PRESET
 };
 
 class IntentHandler
@@ -130,6 +146,26 @@ public:
     static bool IsIntentNetworkStandby( KeyHandlerUtil::ActionType_t arg )
     {
         return ( ( arg == ( uint16_t ) Action::NETWORK_STANDBY ) );
+    }
+
+    static bool IsPresetSelect( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( ( arg == ( uint16_t ) Action::PRESET_SELECT_1 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_SELECT_2 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_SELECT_3 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_SELECT_4 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_SELECT_5 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_SELECT_6 ) );
+    }
+
+    static bool IsPresetStore( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( ( arg == ( uint16_t ) Action::PRESET_STORE_1 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_STORE_2 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_STORE_3 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_STORE_4 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_STORE_5 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_STORE_6 ) );
     }
 
 private:

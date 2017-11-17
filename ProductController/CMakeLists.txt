@@ -36,6 +36,7 @@ ADD_EXECUTABLE(Eddie
   IntentHandler/BluetoothManager.cpp
   IntentHandler/PlaybackRequestManager.cpp
   IntentHandler/NetworkStandbyManager.cpp
+  IntentHandler/PresetManager.cpp
   LpmInterface.cpp
   DisplayController/DisplayController.cpp
 )
