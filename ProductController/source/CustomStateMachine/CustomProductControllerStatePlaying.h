@@ -78,7 +78,6 @@ public:
 
     bool HandleInactivityTimer( InactivityTimerType timerType ) override;
     bool HandleKeyAction( int action ) override;
-    bool HandleNowPlayingStatus( ProductNowPlayingStatus_ProductNowPlayingState playing ) override;
 
 private:
 

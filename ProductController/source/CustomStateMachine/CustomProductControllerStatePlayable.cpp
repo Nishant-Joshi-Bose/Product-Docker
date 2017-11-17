@@ -99,8 +99,8 @@ void CustomProductControllerStatePlayable::HandleStateExit( )
 ///         and no futher processing will be required by any of its superstates.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayable::HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo&
-                                                                   nowSelectionInfo )
+bool CustomProductControllerStatePlayable::HandleNowSelectionInfo
+( const  SoundTouchInterface::NowSelectionInfo&  nowSelectionInfo )
 {
     BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                   "CustomProductControllerStatePlayable",
@@ -117,7 +117,7 @@ bool CustomProductControllerStatePlayable::HandleNowSelectionInfo( const SoundTo
 /// @param  int action
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the key action
-///         and false if the key has not been handled
+///         or false if the key has not been handled.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlayable::HandleKeyAction( int action )
@@ -129,7 +129,13 @@ bool CustomProductControllerStatePlayable::HandleKeyAction( int action )
     switch( action )
     {
     case KeyActionPb::KEY_ACTION_POWER:
-        GoToAppropriatePlayingState( );
+        ///
+        /// Start a playback based on the currently selected source. Once the playback starts, the
+        /// state machine should receive a now selecting event from the product controller, which
+        /// would cause the state machine to transition to a playing state.
+        ///
+        GetCustomProductController( ).SendPlaybackRequest( GetCustomProductController( ).GetCurrentSource( ) );
+
         handled = true;
         break;
 
@@ -138,27 +144,6 @@ bool CustomProductControllerStatePlayable::HandleKeyAction( int action )
     }
 
     return handled;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief  CustomProductControllerStatePlayable::GoToAppropriatePlayingState
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStatePlayable::GoToAppropriatePlayingState( )
-{
-    BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                  "CustomProductControllerStatePlayable",
-                  "CustomProductControllerStatePlayingInactive" );
-    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
-
-    ///
-    /// Start a playback based on the currently selected source. Note that a transition is initially
-    /// made to the playing inactive state. Once the playback starts, the state machine should
-    /// receive another event from the product controller, which would cause the state machine to
-    /// transition to a playing active state.
-    ///
-    GetCustomProductController( ).SendPlaybackRequest( GetCustomProductController( ).GetCurrentSource( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

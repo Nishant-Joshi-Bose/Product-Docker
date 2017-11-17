@@ -107,6 +107,34 @@ void CustomProductControllerStatePlayingActive::HandleStateExit( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @brief  CustomProductControllerStatePlayingActive::HandleNowPlayingStatus
+///
+/// @param  ProductNowPlayingStatus_ProductNowPlayingState state
+///
+/// @return This method returns a true Boolean value indicating that it has handled the playback
+///         status and no futher processing will be required by any of its superstates.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayingActive::HandleNowPlayingStatus
+( ProductNowPlayingStatus_ProductNowPlayingState state )
+{
+    BOSE_ERROR( s_logger, "%s is handling a now playing %s status.",
+                GetName( ).c_str( ),
+                ProductNowPlayingStatus_ProductNowPlayingState_Name( state ).c_str( ) );
+
+    if( state == ProductNowPlayingStatus_ProductNowPlayingState_Inactive )
+    {
+        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
+                      GetName( ).c_str( ),
+                      "CustomProductControllerStatePlayingInactive" );
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
+    }
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief  CustomProductControllerStatePlayingActive::HandleKeyAction
 ///
 /// @param  int action

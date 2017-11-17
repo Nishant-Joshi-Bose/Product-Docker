@@ -76,8 +76,6 @@ void CustomProductControllerStateBooting::HandleStateEnter( )
 void CustomProductControllerStateBooting::HandleStateStart( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting is being started." );
-
-    GoToAppropriatePlayableState( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -109,7 +107,7 @@ bool CustomProductControllerStateBooting::HandleLpmState( bool active )
 
     if( active )
     {
-        GoToAppropriatePlayableState( );
+        PossiblyGoToAppropriatePlayableState( );
     }
 
     return true;
@@ -132,7 +130,7 @@ bool CustomProductControllerStateBooting::HandleCapsState( bool active )
 
     if( active )
     {
-        GoToAppropriatePlayableState( );
+        PossiblyGoToAppropriatePlayableState( );
     }
 
     return true;
@@ -155,7 +153,7 @@ bool CustomProductControllerStateBooting::HandleAudioPathState( bool active )
 
     if( active )
     {
-        GoToAppropriatePlayableState( );
+        PossiblyGoToAppropriatePlayableState( );
     }
 
     return true;
@@ -172,17 +170,17 @@ bool CustomProductControllerStateBooting::HandleSTSSourcesInit( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting is handling the STSSourcesInit event." );
 
-    GoToAppropriatePlayableState( );
+    PossiblyGoToAppropriatePlayableState( );
 
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateBooting::GoToAppropriatePlayableState
+/// @brief CustomProductControllerStateBooting::PossiblyGoToAppropriatePlayableState
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateBooting::GoToAppropriatePlayableState( )
+void CustomProductControllerStateBooting::PossiblyGoToAppropriatePlayableState( )
 {
     if( GetCustomProductController( ).IsBooted( ) )
     {

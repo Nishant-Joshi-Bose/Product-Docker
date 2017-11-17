@@ -97,7 +97,7 @@ void CustomProductControllerStateOn::HandleStateExit( )
 /// @param  int action
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the key action
-///         and false if the key has not been handled
+///         or false if the key has not been handled.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateOn::HandleKeyAction( int action )
