@@ -149,8 +149,9 @@ echo " Adding version to package"
 $CP "$version_json" "$stage_package_dir"/  || error_exit ${FUNCNAME[0]} " Adding version to package "
 echo " Adding IPKs to package"
 $CP "$ipks_dir"/*.ipk "$stage_package_dir"/  || error_exit ${FUNCNAME[0]} " Adding IPKs to package "
-# For now delete hsp.ipk
+# For now delete hsp.ipk and rename eddie.ipk to product.ipk
 rm -f "$stage_package_dir"/hsp.ipk
+mv "$stage_package_dir"/eddie.ipk "$stage_package_dir"/product.ipk  || error_exit  ${FUNCNAME[0]} " Moving as product.ipk "
 # crate bose.ext4
 echo " Adding bose.ext4 to package"
 create_eddie_ext4
