@@ -53,7 +53,7 @@ cmake_build: generated_sources | $(BUILDS_DIR) astyle
 product-ipk: cmake_build
 	./scripts/create-product-ipk
 
-IPKS = hsp.ipk lpm_updater.ipk product.ipk
+IPKS = hsp.ipk lpm_updater.ipk eddie.ipk
 
 .PHONY: packages-gz
 packages-gz: product-ipk
