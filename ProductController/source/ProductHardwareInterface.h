@@ -113,21 +113,21 @@ public:
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These declarations are calls used to set the power state of the hardware.
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool RequestNormalOperations( );
-    void RequestNormalOperationsFailed( uint32_t operationCode );
-    void RequestNormalOperationsPassed( const LpmServiceMessages::IpcLpmStateResponse_t stateResponse );
-    bool RequestPowerStateOff( );
-    void RequestPowerStateOffFailed( uint32_t operationCode );
-    void RequestPowerStateOffPassed( const LpmServiceMessages::IpcLpmStateResponse_t stateResponse );
-    bool RequestPowerStateStandby( );
-    void RequestPowerStateStandbyFailed( uint32_t operationCode );
-    void RequestPowerStateStandbyPassed( const LpmServiceMessages::IpcLpmStateResponse_t stateResponse );
-    bool RequestPowerStateAutowake( );
-    void RequestPowerStateAutowakeFailed( uint32_t operationCode );
-    void RequestPowerStateAutowakePassed( const LpmServiceMessages::IpcLpmStateResponse_t stateResponse );
-    bool RequestPowerStateFull( );
-    void RequestPowerStateFullFailed( uint32_t operationCode );
-    void RequestPowerStateFullPassed( const LpmServiceMessages::IpcLpmStateResponse_t stateResponse );
+    bool RequestSystemStateLowPower( );
+    void RequestSystemStateLowPowerFailed( uint32_t operationCode );
+    void RequestSystemStateLowPowerPassed( const LpmServiceMessages::IpcLpmStateResponse_t stateResponse );
+
+    bool RequestSystemStateStandby( );
+    void RequestSystemStateStandbyFailed( uint32_t operationCode );
+    void RequestSystemStateStandbyPassed( const LpmServiceMessages::IpcLpmStateResponse_t stateResponse );
+
+    bool RequestSystemStateIdle( );
+    void RequestSystemStateIdleFailed( uint32_t operationCode );
+    void RequestSystemStateIdlePassed( const LpmServiceMessages::IpcLpmStateResponse_t stateResponse );
+
+    bool RequestSystemStateOn( );
+    void RequestSystemStateOnFailed( uint32_t operationCode );
+    void RequestSystemStateOnPassed( const LpmServiceMessages::IpcLpmStateResponse_t stateResponse );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These declarations are utility calls, which send messages to the LPM hardware manager

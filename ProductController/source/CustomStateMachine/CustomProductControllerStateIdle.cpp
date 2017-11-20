@@ -72,7 +72,7 @@ void CustomProductControllerStateIdle::HandleStateEnter( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdle is being entered by the state machine." );
 
-    GetCustomProductController( ).GetHardwareInterface( )->RequestPowerStateAutowake( );
+    GetCustomProductController( ).GetHardwareInterface( )->RequestSystemStateIdle( );
 
     BOSE_VERBOSE( s_logger, "An attempt to set an autowake power state is now being made." );
 }

@@ -84,7 +84,7 @@ void CustomProductControllerStateLowPower::HandleStateStart( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateLowPower is being started." );
 
-    GetCustomProductController( ).GetHardwareInterface( )->RequestPowerStateOff( );
+    GetCustomProductController( ).GetHardwareInterface( )->RequestSystemStateLowPower( );
 
     BOSE_VERBOSE( s_logger, "An attempt to set the device to a low power state is being made." );
 }
