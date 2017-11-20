@@ -12,9 +12,9 @@ BASEDIR=$(dirname $(readlink -f $0))
 ##
 function detectStreaming 
 {
-    #Tap command over telnet to get product stae
+     #Tap command over telnet to get product stae
     data="$((echo "getproductstate";sleep 5;echo "exit" 2>/dev/null) | telnet localhost 17000 2>/dev/null | tee  /dev/stderr 2>/dev/null)" 
-    if [ `echo $data | grep -c "STANDBY" ` -gt 0 ]
+    if [ `echo $data | grep -c "STREAMING" ` -gt 0 ]
     then
         return 1 # true/success in shell-land
     else
@@ -22,7 +22,6 @@ function detectStreaming
     fi
 }
 
-#Disable for now since product state is not accurate 
 #detectStreaming && exit 0 # if we're streaming, postpone posting to the server
 
 files=`ls $TELEMETRY_DOC_DIR/*.json 2>/dev/null`

@@ -7,7 +7,8 @@
 MACADDR=$1
 DATE=$2
 
-re="APServer|AVS|A4V|Bose|BT|BLESetup|CLIServer|ClockSync|Deezer|Device|Eddie|FrontDoor|IHeart|Iot|LPMService|Passport|Professor|NetManger|Server|Software|Spotify|Telnet|STSCertified|UpnpSource|Vfe"
+#Processes to search for
+re=$4
 
 re2="([^ ]*) +([0-9]+)"
 re3="(.+):\s+([0-9]+)( kB){0,1}"
