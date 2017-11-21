@@ -208,16 +208,16 @@ private:
     ///        applications and command line, respectively.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    ProductHardwareInterface* m_ProductHardwareInterface;
-    ProductSystemManager*     m_ProductSystemManager;
-    ProductNetworkManager*    m_ProductNetworkManager;
-    CustomProductAudioService*      m_ProductAudioService;
-    ProductSoftwareServices*  m_ProductSoftwareServices;
-    ProductCommandLine*       m_ProductCommandLine;
-    ProductKeyInputInterface* m_ProductKeyInputInterface;
-    ProductEdidInterface*     m_ProductEdidInterface;
-    ProductVolumeManager*     m_ProductVolumeManager;
-    ProductSpeakerManager*    m_ProductSpeakerManager;
+    ProductHardwareInterface*   m_ProductHardwareInterface;
+    ProductSystemManager*       m_ProductSystemManager;
+    ProductNetworkManager*      m_ProductNetworkManager;
+    std::shared_ptr<CustomProductAudioService> m_ProductAudioService;
+    ProductSoftwareServices*    m_ProductSoftwareServices;
+    ProductCommandLine*         m_ProductCommandLine;
+    ProductKeyInputInterface*   m_ProductKeyInputInterface;
+    ProductEdidInterface*       m_ProductEdidInterface;
+    ProductVolumeManager*       m_ProductVolumeManager;
+    ProductSpeakerManager*      m_ProductSpeakerManager;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

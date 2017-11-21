@@ -299,8 +299,8 @@ void ProfessorProductController::Run( )
     m_ProductNetworkManager    = ProductNetworkManager      ::GetInstance( GetTask( ),
                                                                            CallbackForMessages );
 
-    m_ProductAudioService      = CustomProductAudioService  ::GetInstance( GetTask( ),
-                                                                           CallbackForMessages );
+    m_ProductAudioService      = std::make_shared<CustomProductAudioService>( GetTask( ),
+                                                                              CallbackForMessages );
 
     m_ProductSoftwareServices  = ProductSoftwareServices    ::GetInstance( GetTask( ),
                                                                            CallbackForMessages,
@@ -308,16 +308,16 @@ void ProfessorProductController::Run( )
     m_ProductCommandLine       = ProductCommandLine         ::GetInstance( GetTask( ),
                                                                            CallbackForMessages,
                                                                            m_ProductHardwareInterface );
-    m_ProductKeyInputInterface = ProductKeyInputInterface 	::GetInstance( GetTask( ),
-                                                                        CallbackForMessages,
-                                                                        m_ProductHardwareInterface,
-                                                                        m_CliClientMT );
-    m_ProductVolumeManager     = ProductVolumeManager    ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages,
-                                                                        m_ProductHardwareInterface );
-    m_ProductSpeakerManager    = ProductSpeakerManager   ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages,
-                                                                        m_ProductHardwareInterface );
+    m_ProductKeyInputInterface = ProductKeyInputInterface   ::GetInstance( GetTask( ),
+                                                                           CallbackForMessages,
+                                                                           m_ProductHardwareInterface,
+                                                                           m_CliClientMT );
+    m_ProductVolumeManager     = ProductVolumeManager       ::GetInstance( GetTask( ),
+                                                                           CallbackForMessages,
+                                                                           m_ProductHardwareInterface );
+    m_ProductSpeakerManager    = ProductSpeakerManager      ::GetInstance( GetTask( ),
+                                                                           CallbackForMessages,
+                                                                           m_ProductHardwareInterface );
 
     if( m_ProductHardwareInterface == nullptr ||
         m_ProductSystemManager     == nullptr ||
@@ -1073,7 +1073,7 @@ void ProfessorProductController::Wait( )
     delete m_ProductHardwareInterface;
     delete m_ProductSystemManager;
     delete m_ProductNetworkManager;
-    delete m_ProductAudioService;
+    m_ProductAudioService.reset();
     delete m_ProductSoftwareServices;
     delete m_ProductCommandLine;
     delete m_ProductKeyInputInterface;
