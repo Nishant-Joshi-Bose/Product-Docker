@@ -368,7 +368,7 @@ bool EddieProductController::IsAllModuleReady()
              m_isLPMReady and
              ( m_isNetworkModuleReady and m_cachedStatus.has_isprimaryup() and m_wifiProfilesCount >= 0 ) and
              m_isSTSReady and
-             m_isBluetoothReady );
+             ( m_isBluetoothReady and m_isBluetothSinkListReady ) );
 }
 
 bool EddieProductController::IsBtLeModuleReady() const
@@ -945,6 +945,7 @@ void EddieProductController::HandleBtLeModuleReady( bool btLeModuleReady )
 
 void EddieProductController::HandleBluetoothSinkPairedList( const BluetoothSinkService::PairedList &list )
 {
+    m_isBluetothSinkListReady = true;
     m_bluetoothSinkList = list;
     BOSE_INFO( s_logger, "%s Bluetooth sink list count [%d]", __func__, m_bluetoothSinkList.devices_size() );
     GetHsm().Handle<>( &CustomProductControllerState::HandleNetworkConfigurationStatus );

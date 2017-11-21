@@ -377,6 +377,7 @@ private:
     bool                                        m_isNetworkModuleReady  = false;
     bool                                        m_isBLEModuleReady  = false;
     bool                                        m_isBluetoothReady  = false;
+    bool                                        m_isBluetothSinkListReady = false;
 
     int                                         m_wifiProfilesCount;
     BluetoothSinkService::PairedList            m_bluetoothSinkList;
