@@ -8,6 +8,7 @@
 
 #include "IntentHandler.h"
 #include "EddieProductController.h"
+#include "SoundTouchInterface/Presets.pb.h"
 
 namespace ProductApp
 {
@@ -39,11 +40,12 @@ public:
     // desired function for desired state change
     //
     bool Handle( KeyHandlerUtil::ActionType_t& arg ) override;
+    SoundTouchInterface::presets                m_presets; // temp
 
 private:
     uint8_t IntentToIdMap( KeyHandlerUtil::ActionType_t& intent );
-    bool IsPresetContentPreset( uint8_t presetId,
-                                SoundTouchInterface::preset &presetItem );
+    bool IsPresetContentPresent( uint8_t presetId,
+                                 SoundTouchInterface::preset &presetItem );
 
     void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
 };

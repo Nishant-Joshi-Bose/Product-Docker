@@ -59,8 +59,8 @@ bool PresetManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     case( uint16_t ) Action::PRESET_SELECT_5:
     case( uint16_t ) Action::PRESET_SELECT_6:
     {
-        SoundTouchInterface::preset presetsItem;
-        if( IsPresetContentPreset( presetId, presetsItem ) )
+        SoundTouchInterface::preset presetItem;
+        if( IsPresetContentPresent( presetId, presetItem ) )
         {
             // Send PlaybackRequest - TBD
             // Use persisted presetsPb to build playbackRequest
@@ -91,6 +91,29 @@ bool PresetManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             // Use the content item from nowPlaying to send to Passport
             // for storing preset
             // TBD Later
+
+            // Make a local copy to edit and send
+            m_presets.CopyFrom(GetProductController().GetPreset());
+
+            SoundTouchInterface::preset presetItem;
+#if 0 //TBD
+            Create a new function to get mutable presetItem
+            if( IsPresetContentPresent( presetId, presetItem, m_presets ) )
+            {
+                // Look if we have the presetItem, if found, update it.
+            //  presetItem->contentItem().CopyFrom( GetProductController().GetNowPlaying().container().contentitem() );
+            }
+            else
+#endif // TBD
+            {
+                // if not found, add it 
+                SoundTouchInterface::preset* addPreset = m_presets.add_preset();
+                addPreset->set_id(presetId);
+                SoundTouchInterface::ContentItem  *newItem =
+                                               addPreset->mutable_contentitem();
+                newItem->CopyFrom(GetProductController().GetNowPlaying().container().contentitem());
+            }
+            // Send PassportClient IPC message, TBD
         }
     }
     break;
@@ -138,22 +161,25 @@ uint8_t PresetManager::IntentToIdMap( KeyHandlerUtil::ActionType_t& intent )
     }
 }
 
-bool PresetManager::IsPresetContentPreset( uint8_t presetId,
-                                           SoundTouchInterface::preset &presetItem )
+bool PresetManager::IsPresetContentPresent( uint8_t presetId,
+                                            SoundTouchInterface::preset *presetItem )
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
     uint8_t index = 0;
     while( GetProductController().GetPresets().preset_size() > index )
     {
+#if 0
         if( ( GetProductController().GetPresets().preset( index ).has_id() ) &&
             ( GetProductController().GetPresets().preset( index ).id() == \
               presetId ) &&
             ( GetProductController().GetPresets().preset( index ).has_contentitem() ) )
         {
-            presetItem = GetProductController().GetPresets().preset( index );
+            presetItem =
+                GetProductController().GetPresets().mutable_preset( index );
             return true;
         }
         index++;
+#endif
     }
     return false;
 }

@@ -172,12 +172,6 @@ void EddieProductController::HandleCapsNowPlaying( const SoundTouchInterface::No
     PersistCapsNowPlaying( nowPlayingPb );
 }
 
-void EddieProductController::HandlePresetsFromPassport( const SoundTouchInterface::presets& presetPb )
-{
-    BOSE_INFO( s_logger, "%s,np- (%s)", __func__,  ProtoToMarkup::ToJson( presetPb, false ).c_str() );
-    PersistPresets( presetPb );
-}
-
 void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus )
 {
     BOSE_INFO( s_logger, "%s,N/w status- (%s)", __func__,  ProtoToMarkup::ToJson( networkStatus, false ).c_str() );
@@ -533,18 +527,6 @@ void EddieProductController::PersistCapsNowPlaying( const SoundTouchInterface::N
         }
     }
     m_nowPlaying.CopyFrom( nowPlayingPb );
-}
-
-void EddieProductController::PersistPresets(const SoundTouchInterface::presets& presetsPb)
-{
-    BOSE_INFO( s_logger, __func__ );
-
-    // Store into a file on the disk
-    // TBD
-
-    // Store into ProductController
-    m_presets.CopyFrom( presetsPb );
-    return;
 }
 
 void EddieProductController::SendActivateAccessPointCmd()
