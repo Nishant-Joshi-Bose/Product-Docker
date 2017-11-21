@@ -39,7 +39,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
     m_LpmInterface( std::bind( &EddieProductController::HandleProductMessage,
                                this, std::placeholders::_1 ), GetTask() ),
-    m_wifiProfilesCount( 0 ),
+    m_wifiProfilesCount( -1 ),
     m_bluetoothSinkList(),
     errorCb( AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> ( std::bind( &EddieProductController::CallbackError,
                                                                   this, std::placeholders::_1 ), GetTask() ) ),
@@ -366,7 +366,7 @@ bool EddieProductController::IsAllModuleReady()
                m_isCapsReady , m_isLPMReady, m_isNetworkModuleReady, m_isBluetoothReady, m_isSTSReady );
     return ( m_isCapsReady and
              m_isLPMReady and
-             m_isNetworkModuleReady and
+             ( m_isNetworkModuleReady and m_cachedStatus.has_isprimaryup() and m_wifiProfilesCount >= 0 ) and
              m_isSTSReady and
              m_isBluetoothReady );
 }
