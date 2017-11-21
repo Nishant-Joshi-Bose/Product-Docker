@@ -38,6 +38,8 @@
 #include "ProductSTSController.h"
 #include "BluetoothSinkService.pb.h"
 #include "DisplayController.h"
+#include "BOptional.h"
+
 
 namespace ProductApp
 {
@@ -51,7 +53,7 @@ public:
 
     NetManager::Protobuf::NetworkStatus const& GetNetworkStatus() const
     {
-        return m_cachedStatus;
+        return m_cachedStatus.get();
     }
 
 private:
@@ -320,7 +322,7 @@ public:
 
     const BluetoothSinkService::PairedList& GetBluetoothList() const
     {
-        return m_bluetoothSinkList;
+        return m_bluetoothSinkList.get();
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -363,7 +365,7 @@ private:
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
     ProductPb::Language                         m_systemLanguage;
     SoundTouchInterface::NowPlayingJson         m_nowPlaying;
-    NetManager::Protobuf::NetworkStatus         m_cachedStatus;
+    BOptional<NetManager::Protobuf::NetworkStatus> m_cachedStatus;
     BluetoothSinkService::AppStatus             m_bluetoothAppStatus;
 
     ProductCliClient                            m_productCliClient;
@@ -377,10 +379,9 @@ private:
     bool                                        m_isNetworkModuleReady  = false;
     bool                                        m_isBLEModuleReady  = false;
     bool                                        m_isBluetoothReady  = false;
-    bool                                        m_isBluetothSinkListReady = false;
 
-    int                                         m_wifiProfilesCount;
-    BluetoothSinkService::PairedList            m_bluetoothSinkList;
+    BOptional<int>                              m_wifiProfilesCount;
+    BOptional<BluetoothSinkService::PairedList> m_bluetoothSinkList;
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>     errorCb;
     /// Demonstration Controller instance
     DemoApp::DemoController m_demoController;
