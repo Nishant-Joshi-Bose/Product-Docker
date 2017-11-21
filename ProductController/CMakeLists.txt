@@ -60,6 +60,8 @@ TARGET_LINK_LIBRARIES(Eddie
   TinyXml
   pthread
   rt
+  cap
+  dl
 )
 
 INSTALL(TARGETS Eddie DESTINATION ${OUTPUT_BIN_DIR})
