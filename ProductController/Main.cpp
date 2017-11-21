@@ -29,7 +29,7 @@ try
     if( argc != 1 )
         BOSE_DIE( "unexpected argument: '" << argv[1] << '\'' );
 
-    BOSE_INFO( s_logger, "Version: " VERSION_STRING_LONG );
+    BOSE_INFO( s_logger, "Version: %s", VERSION_STRING_LONG );
 
     ::signal( SIGPIPE, SIG_IGN );
 
