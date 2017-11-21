@@ -73,7 +73,7 @@ void CustomProductControllerStateNetworkStandby::HandleStateEnter()
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandby is being entered." );
 
-    GetCustomProductController( ).GetHardwareInterface( )->RequestSystemStateStandby( );
+    GetCustomProductController( ).GetHardwareInterface( )->RequestLpmSystemState( SYSTEM_STATE_STANDBY );
 
     BOSE_VERBOSE( s_logger, "An attempt to set a standby power state is being made." );
 }
