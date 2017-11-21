@@ -84,6 +84,7 @@ opt_dir=$stage/Bose
 mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" || exit
 
 rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
+rsync -a --exclude='*~' --exclude='*-README.txt' "$qss_dir/opt-bose-fs/." "$opt_dir/." || exit
 
 # -----------------------------------------------------------------------------
 # SoundTouch-SDK daemon configuration.
@@ -146,6 +147,8 @@ cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
 cp -a "$qss_dir/UEI/arch/${arch}/lib" "$opt_dir" || exit
 cp Config/InActivityTimer.json "$opt_dir/etc" || exit
+cp "$wspace/builds/$cfg/qc8017_32/A4VQuickSetService/source/QSS/IPC/LPMEmul/LPMEmul" "$opt_dir/bin" || exit
+cp "$wspace/builds/$cfg/qc8017_32/A4VQuickSetService/source/QSS/IPC/IPCDaemon/IPCDaemon" "$opt_dir/bin" || exit
 
 marge_url=https://streamingint.bose.com
 stats_url=https://eventsdev.api.bosecm.com
