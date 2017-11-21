@@ -12,6 +12,7 @@
 #include "FrontDoorClientIF.h"
 #include "KeyHandler.h"
 #include "AsyncCallback.h"
+#include "SoundTouchInterface/PlayerService.pb.h"
 
 namespace ProductApp
 {
@@ -85,6 +86,9 @@ protected:
     {
         return m_intent;
     }
+
+    bool ValidSourceAvailable();
+    SoundTouchInterface::StatusJson CurrentStatusJson();
 
     virtual void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) = 0;
 

@@ -46,28 +46,60 @@ PresetManager::PresetManager( NotifyTargetTaskIF& task,
 
 bool PresetManager::Handle( KeyHandlerUtil::ActionType_t& intent )
 {
-    BOSE_DEBUG( s_logger, "%s", __func__ );
+    BOSE_DEBUG( s_logger, "%s : Intent: %d", __func__, intent );
 
-    switch(intent)
+    uint8_t presetId = IntentToIdMap( intent );
+    SoundTouchInterface::StatusJson status = CurrentStatusJson();
+    switch( intent )
     {
-    case ( uint16_t ) Action::PRESET_SELECT_1:
-    case ( uint16_t ) Action::PRESET_SELECT_2:
-    case ( uint16_t ) Action::PRESET_SELECT_3:
-    case ( uint16_t ) Action::PRESET_SELECT_4:
-    case ( uint16_t ) Action::PRESET_SELECT_5:
-    case ( uint16_t ) Action::PRESET_SELECT_6:
+    case( uint16_t ) Action::PRESET_SELECT_1:
+    case( uint16_t ) Action::PRESET_SELECT_2:
+    case( uint16_t ) Action::PRESET_SELECT_3:
+    case( uint16_t ) Action::PRESET_SELECT_4:
+    case( uint16_t ) Action::PRESET_SELECT_5:
+    case( uint16_t ) Action::PRESET_SELECT_6:
     {
-        uint8_t presetId = IntentToIdMap(intent);
-        if (IsPresetValid(presetId, presets ))
+        SoundTouchInterface::preset presetsItem;
+        if( IsPresetContentPreset( presetId, presetsItem ) )
         {
+            // Send PlaybackRequest - TBD
+            // Use persisted presetsPb to build playbackRequest
         }
         else
         {
-            BOSE_DEBUG( s_logger, "Preset not present for index:%d, intent:%d",
-                       presetId, intent);
+            BOSE_DEBUG( s_logger, "Preset not present for presetId:%d, "
+                        "intent:%d", presetId, intent );
         }
     }
     break;
+
+    case( uint16_t ) Action::PRESET_STORE_1:
+    case( uint16_t ) Action::PRESET_STORE_2:
+    case( uint16_t ) Action::PRESET_STORE_3:
+    case( uint16_t ) Action::PRESET_STORE_4:
+    case( uint16_t ) Action::PRESET_STORE_5:
+    case( uint16_t ) Action::PRESET_STORE_6:
+    {
+        if( ValidSourceAvailable() &&
+            ( status == SoundTouchInterface::StatusJson::play ) &&
+            ( status == SoundTouchInterface::StatusJson::buffering ) &&
+            ( GetProductController().GetNowPlaying().has_container() ) &&
+            ( GetProductController().GetNowPlaying().container().has_contentitem() ) &&
+            ( GetProductController().GetNowPlaying().container().contentitem().has_presetable() ) &&
+            ( GetProductController().GetNowPlaying().container().contentitem().presetable() ) )
+        {
+            // Use the content item from nowPlaying to send to Passport
+            // for storing preset
+            // TBD Later
+        }
+    }
+    break;
+
+    default:
+    {
+        BOSE_ERROR( s_logger, "%s: unsupported intent:%d", __func__, intent );
+        return false;
+    }
     }
 
     //Fire the cb so the control goes back to the ProductController
@@ -78,32 +110,50 @@ bool PresetManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     return true;
 }
 
-void uint8_t PresetManager::IntentToIdMap(KeyHandlerUtil::ActionType_t& intent)
+uint8_t PresetManager::IntentToIdMap( KeyHandlerUtil::ActionType_t& intent )
 {
-    switch( intent)
+    BOSE_DEBUG( s_logger, "%s", __func__ );
+    switch( intent )
     {
-        case ( uint16_t ) Action::PRESET_SELECT_1:
-            return PRESET_2;
-        case ( uint16_t ) Action::PRESET_SELECT_2:
-            return PRESET_2;
-        case ( uint16_t ) Action::PRESET_SELECT_3:
-            return PRESET_3;
-        case ( uint16_t ) Action::PRESET_SELECT_4:
-            return PRESET_4;
-        case ( uint16_t ) Action::PRESET_SELECT_5:
-            return PRESET_5;
-        case ( uint16_t ) Action::PRESET_SELECT_6:
-            return PRESET_6;
-        default:
-            return PRESET_INVALID;
+    case( uint16_t ) Action::PRESET_SELECT_1:
+    case( uint16_t ) Action::PRESET_STORE_1:
+        return PRESET_1;
+    case( uint16_t ) Action::PRESET_SELECT_2:
+    case( uint16_t ) Action::PRESET_STORE_2:
+        return PRESET_2;
+    case( uint16_t ) Action::PRESET_SELECT_3:
+    case( uint16_t ) Action::PRESET_STORE_3:
+        return PRESET_3;
+    case( uint16_t ) Action::PRESET_SELECT_4:
+    case( uint16_t ) Action::PRESET_STORE_4:
+        return PRESET_4;
+    case( uint16_t ) Action::PRESET_SELECT_5:
+    case( uint16_t ) Action::PRESET_STORE_5:
+        return PRESET_5;
+    case( uint16_t ) Action::PRESET_SELECT_6:
+    case( uint16_t ) Action::PRESET_STORE_6:
+        return PRESET_6;
+    default:
+        return PRESET_INVALID;
     }
 }
 
-void bool IsPresetValid(uint8_t presetId, SoundTouchInterface::preset &presetItem)
+bool PresetManager::IsPresetContentPreset( uint8_t presetId,
+                                           SoundTouchInterface::preset &presetItem )
 {
-    if (GetProductController().GetPresets().preset_size())
+    BOSE_DEBUG( s_logger, "%s", __func__ );
+    uint8_t index = 0;
+    while( GetProductController().GetPresets().preset_size() > index )
     {
-        TBD
+        if( ( GetProductController().GetPresets().preset( index ).has_id() ) &&
+            ( GetProductController().GetPresets().preset( index ).id() == \
+              presetId ) &&
+            ( GetProductController().GetPresets().preset( index ).has_contentitem() ) )
+        {
+            presetItem = GetProductController().GetPresets().preset( index );
+            return true;
+        }
+        index++;
     }
     return false;
 }

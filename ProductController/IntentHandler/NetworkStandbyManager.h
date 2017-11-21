@@ -35,8 +35,6 @@ public:
     bool Handle( KeyHandlerUtil::ActionType_t& arg ) override;
 
 private:
-    bool ValidSourceAvailable();
-
     void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
 };
 } // namespace ProductApp

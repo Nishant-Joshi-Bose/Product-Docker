@@ -17,15 +17,15 @@ constexpr uint8_t  PRESET_3                   = 3;
 constexpr uint8_t  PRESET_4                   = 4;
 constexpr uint8_t  PRESET_5                   = 5;
 constexpr uint8_t  PRESET_6                   = 6;
-constexpr uint8_t  PRESET_6                   = 0xFF;
+constexpr uint8_t  PRESET_INVALID             = 0xFF;
 
 class PresetManager: public IntentManager
 {
 public:
     PresetManager( NotifyTargetTaskIF& task,
-                           const CliClientMT& cliClient,
-                           const FrontDoorClientIF_t& frontDoorClient,
-                           EddieProductController& controller );
+                   const CliClientMT& cliClient,
+                   const FrontDoorClientIF_t& frontDoorClient,
+                   EddieProductController& controller );
 
     ~PresetManager() override
     {
@@ -41,7 +41,9 @@ public:
     bool Handle( KeyHandlerUtil::ActionType_t& arg ) override;
 
 private:
-    void uint8_t IntentToIdMap(KeyHandlerUtil::ActionType_t& intent);
+    uint8_t IntentToIdMap( KeyHandlerUtil::ActionType_t& intent );
+    bool IsPresetContentPreset( uint8_t presetId,
+                                SoundTouchInterface::preset &presetItem );
 
     void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
 };

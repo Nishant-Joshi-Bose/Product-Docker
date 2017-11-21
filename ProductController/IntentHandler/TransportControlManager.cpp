@@ -167,36 +167,6 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     return true;
 }
 
-inline bool TransportControlManager::ValidSourceAvailable()
-{
-    BOSE_DEBUG( s_logger, "%s", __func__ );
-    if( GetProductController().GetNowPlaying().has_source() )
-    {
-        BOSE_DEBUG( s_logger, "Found nowPlaying" );
-        return true;
-    }
-    return false;
-}
-
-inline SoundTouchInterface::StatusJson TransportControlManager::CurrentStatusJson()
-{
-    BOSE_DEBUG( s_logger, "%s", __func__ );
-    if( GetProductController().GetNowPlaying().has_source() &&
-        GetProductController().GetNowPlaying().has_state() &&
-        GetProductController().GetNowPlaying().state().has_status() &&
-        GetProductController().GetNowPlaying().has_state() )
-    {
-        BOSE_DEBUG( s_logger, "Found status = %d",
-                    GetProductController().GetNowPlaying().state().status() );
-        return ( GetProductController().GetNowPlaying().state().status() );
-    }
-    else
-    {
-        BOSE_DEBUG( s_logger, "No Status in GetNowPlaying()" );
-    }
-    return ( SoundTouchInterface::StatusJson::error );
-}
-
 inline bool TransportControlManager::CanPauseInJson()
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
