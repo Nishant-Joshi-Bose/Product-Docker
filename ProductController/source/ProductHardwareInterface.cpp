@@ -2,7 +2,7 @@
 ///
 /// @file      ProductHardwareInterface.cpp
 ///
-/// @brief     This header file contains declarations for managing the hardware, which interfaces
+/// @brief     This header file contains source code for managing the hardware, which interfaces
 ///            primarily with the Low Power Microprocessor or LPM.
 ///
 /// @author    Stuart J. Lumby
@@ -51,65 +51,15 @@ constexpr uint32_t MILLISECOND_TIMEOUT_START = 30 * 1000;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief The following aliases refer to the Bose Sound Touch class utilities for inter-process and
-///        inter-thread communications.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-typedef APClientSocketListenerIF::ListenerPtr   ClientListener;
-typedef APClientSocketListenerIF::SocketPtr     ClientSocket;
-typedef APServerSocketListenerIF::ListenerPtr   ServerListener;
-typedef APServerSocketListenerIF::SocketPtr     ServerSocket;
-typedef IPCMessageRouterIF::IPCMessageRouterPtr MessageRouter;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductHardwareInterface::GetInstance
-///
-/// @brief  This static method creates the one and only instance of a ProductHardwareInterface
-///         object. That only one instance is created in a thread safe way is guaranteed by
-///         the C++ Version 11 compiler.
-///
-/// @param  NotifyTargetTaskIF* task This argument specifies the task in which to run the
-///                                  hardware interface.
-///
-/// @param  Callback< ProductMessage > ProductNotify This argument specifies a callback to
-///                                                  send messages back to the product
-///                                                  controller.
-///
-/// @return This method returns a pointer to a ProductHardwareInterface object.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductHardwareInterface* ProductHardwareInterface::GetInstance( NotifyTargetTaskIF*        ProductTask,
-                                                                 Callback< ProductMessage > ProductNotify )
-{
-    static ProductHardwareInterface* instance = new ProductHardwareInterface( ProductTask,
-                                                                              ProductNotify );
-
-    BOSE_DEBUG( s_logger, "The instance %8p of the Product Hardware Manager was returned.", instance );
-
-    return instance;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProductHardwareInterface::ProductHardwareInterface
 ///
-/// @brief  This method is the ProductHardwareInterface constructor, which is declared as being
-///         private to ensure that only one instance of this class can be created through the class
-///         GetInstance method.
-///
-/// @param  NotifyTargetTaskIF* task This argument specifies the task in which to run the
-///                                  hardware interface.
-///
-/// @param  Callback< ProductMessage > ProductNotify This argument specifies a callback to
-///                                                  send messages back to the product
-///                                                  controller.
+/// @brief  ProfessorProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductHardwareInterface::ProductHardwareInterface( NotifyTargetTaskIF*        ProductTask,
-                                                    Callback< ProductMessage > ProductNotify )
-    : m_ProductTask( ProductTask ),
-      m_ProductNotify( ProductNotify ),
+ProductHardwareInterface::ProductHardwareInterface( ProfessorProductController& ProductController )
+
+    : m_ProductTask( ProductController.GetTask( ) ),
+      m_ProductNotify( ProductController.GetMessageHandler( ) ),
       m_connected( false )
 {
 
@@ -340,7 +290,7 @@ void ProductHardwareInterface::HandleLpmStatus( LpmServiceMessages::IpcLpmHealth
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductHardwareInterface::RequestLpmSystemState
+/// @name   ProductHardwareInterface::RequestSystemStateLowPower
 ///
 /// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
@@ -385,19 +335,20 @@ bool ProductHardwareInterface::RequestLpmSystemState( IpcLpmSystemState_t state 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name    ProductHardwareInterface::RequestLpmSystemStateFailed
+/// @name    ProductHardwareInterface::RequestSystemStateLowPowerFailed
 ///
 /// @param   uint32_t operationCode
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductHardwareInterface::RequestLpmSystemStateFailed( IpcLpmSystemState_t state, uint32_t operationCode )
+void ProductHardwareInterface::RequestLpmSystemStateFailed( IpcLpmSystemState_t state,
+                                                            uint32_t            operationCode )
 {
     BOSE_ERROR( s_logger, "An LPM request for a low power code %u failed.", operationCode );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name    ProductHardwareInterface::RequestLpmSystemStatePassed
+/// @name    ProductHardwareInterface::RequestSystemStateLowPowerPassed
 ///
 /// @param   IpcLpmStateResponse_t stateResponse
 ///
