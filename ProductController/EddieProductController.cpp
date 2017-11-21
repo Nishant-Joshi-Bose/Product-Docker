@@ -227,7 +227,7 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
             }
             else
             {
-                BOSE_ERROR( s_logger, "%s, %s", __func__, "Invalid as CurrentKeyId" );
+                BOSE_ERROR( s_logger, "%s, Invalid CurrentKeyID: %s", __func__, currentKeyId );
             }
             KeyPress.set_buttonid( currentButtonId ) ;
             KeyPress.set_origin( keyToOriginator( currentOrigin ) );
