@@ -24,7 +24,7 @@ using namespace DemoApp;
 namespace ProductApp
 {
 const std::string g_ProductPersistenceDir = "product-persistence/";
-const std::string KEY_CONFIG_FILE = "/var/run/shepherd/KeyConfiguration.json";
+const std::string KEY_CONFIG_FILE = "/var/run/KeyConfiguration.json";
 
 EddieProductController::EddieProductController( std::string const& ProductName ):
     ProductController( ProductName ),
