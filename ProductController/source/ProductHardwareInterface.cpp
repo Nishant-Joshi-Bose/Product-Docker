@@ -180,7 +180,7 @@ void ProductHardwareInterface::Connected( bool connected )
                                          this,
                                          std::placeholders::_1 ) );
 
-        RequestNormalOperations( );
+        RequestSystemStateStandby( );
         RequestLpmStatus( CallbackForLpmStatus );
         auto func = std::bind(
                         &ProductHardwareInterface::CECMsgHandler,
@@ -340,98 +340,13 @@ void ProductHardwareInterface::HandleLpmStatus( LpmServiceMessages::IpcLpmHealth
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductHardwareInterface::RequestNormalOperations
+/// @name   ProductHardwareInterface::RequestSystemStateLowPower
 ///
 /// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductHardwareInterface::RequestNormalOperations( )
-{
-    if( m_connected == false || m_LpmClient == nullptr )
-    {
-        BOSE_ERROR( s_logger, "An LPM request for normal operations could not be made." );
-        BOSE_ERROR( s_logger, "No LPM connection is currently available." );
-
-        return false;
-    }
-    else
-    {
-        BOSE_DEBUG( s_logger, "An LPM request for normal operations will be made." );
-
-        IpcLpmSystemStateSet_t systemStateRequest;
-
-        systemStateRequest.set_state( SYSTEM_STATE_NORMAL );
-
-        Callback< LpmServiceMessages::IpcLpmStateResponse_t >
-        PassedCallback( std::bind( &ProductHardwareInterface::RequestNormalOperationsPassed,
-                                   this,
-                                   std::placeholders::_1 ) );
-
-        Callback< uint32_t >
-        FailedCallback( std::bind( &ProductHardwareInterface::RequestNormalOperationsFailed,
-                                   this,
-                                   std::placeholders::_1 ) );
-
-        m_LpmClient->SetSystemStateTimeout( systemStateRequest,
-                                            PassedCallback,
-                                            FailedCallback,
-                                            MILLISECOND_TIMEOUT_START );
-        return true;
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductHardwareInterface::RequestNormalOperationsFailed
-///
-/// @param  uint32_t operationCode
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductHardwareInterface::RequestNormalOperationsFailed( uint32_t operationCode )
-{
-    BOSE_ERROR( s_logger, "An LPM request for normal operations code %u failed.", operationCode );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductHardwareInterface::RequestNormalOperationsPassed
-///
-/// @param  LpmServiceMessages::IpcLpmStateResponse_t stateResponse
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductHardwareInterface::RequestNormalOperationsPassed( const LpmServiceMessages::IpcLpmStateResponse_t
-                                                              stateResponse )
-{
-    if( stateResponse.has_sysstate( ) )
-    {
-        if( stateResponse.sysstate( ) == SYSTEM_STATE_NORMAL )
-        {
-            BOSE_DEBUG( s_logger, "The system state is now set to a normal state." );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "The system state could not be set to a normal state." );
-            BOSE_ERROR( s_logger, "The system state is now set to the %s state.",
-                        IpcLpmSystemState_t_Name( stateResponse.sysstate( ) ).c_str( ) );
-        }
-    }
-    else
-    {
-        BOSE_ERROR( s_logger, "The system state could not be set to a normal state." );
-        BOSE_ERROR( s_logger, "The system state is now set to an unknown state." );
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductHardwareInterface::RequestPowerStateOff
-///
-/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
-///         attempts the request and returns true.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductHardwareInterface::RequestPowerStateOff( )
+bool ProductHardwareInterface::RequestSystemStateLowPower( )
 {
     if( m_connected == false || m_LpmClient == nullptr )
     {
@@ -449,12 +364,12 @@ bool ProductHardwareInterface::RequestPowerStateOff( )
         systemStateRequest.set_state( SYSTEM_STATE_LOW_POWER );
 
         Callback< uint32_t >
-        FailedCallback( std::bind( &ProductHardwareInterface::RequestPowerStateOffFailed,
+        FailedCallback( std::bind( &ProductHardwareInterface::RequestSystemStateLowPowerFailed,
                                    this,
                                    std::placeholders::_1 ) );
 
         Callback< IpcLpmStateResponse_t >
-        PassedCallback( std::bind( &ProductHardwareInterface::RequestPowerStateOffPassed,
+        PassedCallback( std::bind( &ProductHardwareInterface::RequestSystemStateLowPowerPassed,
                                    this,
                                    std::placeholders::_1 ) );
 
@@ -468,24 +383,24 @@ bool ProductHardwareInterface::RequestPowerStateOff( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name    ProductHardwareInterface::RequestPowerStateOffFailed
+/// @name    ProductHardwareInterface::RequestSystemStateLowPowerFailed
 ///
 /// @param   uint32_t operationCode
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductHardwareInterface::RequestPowerStateOffFailed( uint32_t operationCode )
+void ProductHardwareInterface::RequestSystemStateLowPowerFailed( uint32_t operationCode )
 {
     BOSE_ERROR( s_logger, "An LPM request for a low power code %u failed.", operationCode );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name    ProductHardwareInterface::RequestPowerStateOffPassed
+/// @name    ProductHardwareInterface::RequestSystemStateLowPowerPassed
 ///
 /// @param   IpcLpmStateResponse_t stateResponse
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductHardwareInterface::RequestPowerStateOffPassed( const IpcLpmStateResponse_t stateResponse )
+void ProductHardwareInterface::RequestSystemStateLowPowerPassed( const IpcLpmStateResponse_t stateResponse )
 {
     if( stateResponse.has_sysstate( ) )
     {
@@ -509,13 +424,13 @@ void ProductHardwareInterface::RequestPowerStateOffPassed( const IpcLpmStateResp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductHardwareInterface::RequestPowerStateStandby
+/// @name   ProductHardwareInterface::RequestSystemStateStandby
 ///
 /// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductHardwareInterface::RequestPowerStateStandby( )
+bool ProductHardwareInterface::RequestSystemStateStandby( )
 {
     if( m_connected == false || m_LpmClient == nullptr )
     {
@@ -528,52 +443,53 @@ bool ProductHardwareInterface::RequestPowerStateStandby( )
     {
         BOSE_DEBUG( s_logger, "An LPM request for a standby power state will be made." );
 
-        IpcLPMPowerStateSet_t powerStateRequest;
+        IpcLpmSystemStateSet_t systemStateRequest;
 
-        powerStateRequest.set_state( POWER_STATE_NETWORK_STANDBY );
+        systemStateRequest.set_state( SYSTEM_STATE_STANDBY );
 
         Callback< uint32_t >
-        FailedCallback( std::bind( &ProductHardwareInterface::RequestPowerStateStandbyFailed,
+        FailedCallback( std::bind( &ProductHardwareInterface::RequestSystemStateStandbyFailed,
                                    this,
                                    std::placeholders::_1 ) );
 
         Callback< IpcLpmStateResponse_t >
-        PassedCallback( std::bind( &ProductHardwareInterface::RequestPowerStateStandbyPassed,
+        PassedCallback( std::bind( &ProductHardwareInterface::RequestSystemStateStandbyPassed,
                                    this,
                                    std::placeholders::_1 ) );
 
-        m_LpmClient->SetPowerStateTimeout( powerStateRequest,
-                                           PassedCallback,
-                                           FailedCallback,
-                                           MILLISECOND_TIMEOUT_START );
+        m_LpmClient->SetSystemStateTimeout( systemStateRequest,
+                                            PassedCallback,
+                                            FailedCallback,
+                                            MILLISECOND_TIMEOUT_START );
         return true;
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  ProductHardwareInterface::RequestPowerStateStandbyFailed
+/// @name  ProductHardwareInterface::RequestSystemStateStandbyFailed
 ///
 /// @param uint32_t operationCode
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductHardwareInterface::RequestPowerStateStandbyFailed( uint32_t operationCode )
+void ProductHardwareInterface::RequestSystemStateStandbyFailed( uint32_t operationCode )
 {
     BOSE_ERROR( s_logger, "An LPM request for a standby power state code %u failed.", operationCode );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  ProductHardwareInterface::RequestPowerStateStandbyPassed
+/// @name  ProductHardwareInterface::RequestSystemStateStandbyPassed
 ///
 /// @param IpcLpmStateResponse_t stateResponse
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductHardwareInterface::RequestPowerStateStandbyPassed( const IpcLpmStateResponse_t stateResponse )
+void ProductHardwareInterface::RequestSystemStateStandbyPassed( const IpcLpmStateResponse_t stateResponse )
 {
-    if( stateResponse.has_pwrstate( ) )
+    if( stateResponse.has_pwrstate( ) && stateResponse.has_sysstate( ) )
     {
-        if( stateResponse.pwrstate( ) == POWER_STATE_NETWORK_STANDBY )
+        if( stateResponse.pwrstate( ) == POWER_STATE_NETWORK_STANDBY &&
+            stateResponse.sysstate( ) == SYSTEM_STATE_STANDBY )
         {
             BOSE_DEBUG( s_logger, "The power state is now set to a standby powered state." );
         }
@@ -593,13 +509,13 @@ void ProductHardwareInterface::RequestPowerStateStandbyPassed( const IpcLpmState
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductHardwareInterface::RequestPowerStateAutowake
+/// @name   ProductHardwareInterface::RequestSystemStateIdle
 ///
 /// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductHardwareInterface::RequestPowerStateAutowake( )
+bool ProductHardwareInterface::RequestSystemStateIdle( )
 {
     if( m_connected == false || m_LpmClient == nullptr )
     {
@@ -612,52 +528,53 @@ bool ProductHardwareInterface::RequestPowerStateAutowake( )
     {
         BOSE_DEBUG( s_logger, "An LPM request for an autowake power state will be made." );
 
-        IpcLPMPowerStateSet_t powerStateRequest;
+        IpcLpmSystemStateSet_t systemStateRequest;
 
-        powerStateRequest.set_state( POWER_STATE_AUTO_WAKE_STANDBY );
+        systemStateRequest.set_state( SYSTEM_STATE_IDLE );
 
         Callback< uint32_t >
-        FailedCallback( std::bind( &ProductHardwareInterface::RequestPowerStateAutowakeFailed,
+        FailedCallback( std::bind( &ProductHardwareInterface::RequestSystemStateIdleFailed,
                                    this,
                                    std::placeholders::_1 ) );
 
         Callback< IpcLpmStateResponse_t >
-        PassedCallback( std::bind( &ProductHardwareInterface::RequestPowerStateAutowakePassed,
+        PassedCallback( std::bind( &ProductHardwareInterface::RequestSystemStateIdlePassed,
                                    this,
                                    std::placeholders::_1 ) );
 
-        m_LpmClient->SetPowerStateTimeout( powerStateRequest,
-                                           PassedCallback,
-                                           FailedCallback,
-                                           MILLISECOND_TIMEOUT_START );
+        m_LpmClient->SetSystemStateTimeout( systemStateRequest,
+                                            PassedCallback,
+                                            FailedCallback,
+                                            MILLISECOND_TIMEOUT_START );
         return true;
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  ProductHardwareInterface::RequestPowerStateAutowakeFailed
+/// @name  ProductHardwareInterface::RequestSystemStateIdleFailed
 ///
 /// @param uint32_t operationCode
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductHardwareInterface::RequestPowerStateAutowakeFailed( uint32_t operationCode )
+void ProductHardwareInterface::RequestSystemStateIdleFailed( uint32_t operationCode )
 {
     BOSE_ERROR( s_logger, "An LPM request for an autowake power state code %u failed.", operationCode );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  ProductHardwareInterface::RequestPowerStateAutowakePassed
+/// @name  ProductHardwareInterface::RequestSystemStateIdlePassed
 ///
 /// @param IpcLpmStateResponse_t stateResponse
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductHardwareInterface::RequestPowerStateAutowakePassed( const IpcLpmStateResponse_t stateResponse )
+void ProductHardwareInterface::RequestSystemStateIdlePassed( const IpcLpmStateResponse_t stateResponse )
 {
-    if( stateResponse.has_pwrstate( ) )
+    if( stateResponse.has_pwrstate( ) && stateResponse.has_sysstate( ) )
     {
-        if( stateResponse.pwrstate( ) == POWER_STATE_AUTO_WAKE_STANDBY )
+        if( stateResponse.pwrstate( ) == POWER_STATE_AUTO_WAKE_STANDBY &&
+            stateResponse.sysstate( ) == SYSTEM_STATE_IDLE )
         {
             BOSE_DEBUG( s_logger, "The power state is now set to an autowake powered state." );
         }
@@ -677,13 +594,13 @@ void ProductHardwareInterface::RequestPowerStateAutowakePassed( const IpcLpmStat
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductHardwareInterface::RequestPowerStateFull
+/// @name   ProductHardwareInterface::RequestSystemStateOn
 ///
 /// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductHardwareInterface::RequestPowerStateFull( )
+bool ProductHardwareInterface::RequestSystemStateOn( )
 {
     if( m_connected == false || m_LpmClient == nullptr )
     {
@@ -696,52 +613,53 @@ bool ProductHardwareInterface::RequestPowerStateFull( )
     {
         BOSE_DEBUG( s_logger, "An LPM request for a full power state will be made." );
 
-        IpcLPMPowerStateSet_t powerStateRequest;
+        IpcLpmSystemStateSet_t systemStateRequest;
 
-        powerStateRequest.set_state( POWER_STATE_FULL_POWER );
+        systemStateRequest.set_state( SYSTEM_STATE_ON );
 
         Callback< uint32_t >
-        FailedCallback( std::bind( &ProductHardwareInterface::RequestPowerStateFullFailed,
+        FailedCallback( std::bind( &ProductHardwareInterface::RequestSystemStateOnFailed,
                                    this,
                                    std::placeholders::_1 ) );
 
         Callback< IpcLpmStateResponse_t >
-        PassedCallback( std::bind( &ProductHardwareInterface::RequestPowerStateFullPassed,
+        PassedCallback( std::bind( &ProductHardwareInterface::RequestSystemStateOnPassed,
                                    this,
                                    std::placeholders::_1 ) );
 
-        m_LpmClient->SetPowerStateTimeout( powerStateRequest,
-                                           PassedCallback,
-                                           FailedCallback,
-                                           MILLISECOND_TIMEOUT_START );
+        m_LpmClient->SetSystemStateTimeout( systemStateRequest,
+                                            PassedCallback,
+                                            FailedCallback,
+                                            MILLISECOND_TIMEOUT_START );
         return true;
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  RequestPowerStateFullFailed
+/// @name  RequestSystemStateOnFailed
 ///
 /// @param uint32_t operationCode
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductHardwareInterface::RequestPowerStateFullFailed( uint32_t operationCode )
+void ProductHardwareInterface::RequestSystemStateOnFailed( uint32_t operationCode )
 {
     BOSE_ERROR( s_logger, "An LPM request for a full power state code %u failed.", operationCode );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  RequestPowerStateFullPassed
+/// @name  RequestSystemStateOnPassed
 ///
 /// @param IpcLpmStateResponse_t stateResponse
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductHardwareInterface::RequestPowerStateFullPassed( const IpcLpmStateResponse_t stateResponse )
+void ProductHardwareInterface::RequestSystemStateOnPassed( const IpcLpmStateResponse_t stateResponse )
 {
-    if( stateResponse.has_pwrstate( ) )
+    if( stateResponse.has_pwrstate( ) && stateResponse.has_sysstate( ) )
     {
-        if( stateResponse.pwrstate( ) == POWER_STATE_FULL_POWER )
+        if( stateResponse.pwrstate( ) == POWER_STATE_FULL_POWER &&
+            stateResponse.sysstate( ) == SYSTEM_STATE_ON )
         {
             BOSE_DEBUG( s_logger, "The power state is now set to a full powered state." );
         }

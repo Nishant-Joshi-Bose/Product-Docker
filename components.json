@@ -53,7 +53,7 @@
   },
   {
     "name": "ProfessorLPM-Package",
-    "selected_version": "Release/IP2/0.2.2.2554038"
+    "selected_version": "Release/IP2/0.2.4.2569960"
   },
   {
     "name": "protobuf-native",
@@ -73,7 +73,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Continuous/master/0.3.1-26+f3638d3"
+    "selected_version": "Release/IP2/0.2.2-29+43fdfb4"
   },
   {
     "name": "RivieraLpmUpdater",
