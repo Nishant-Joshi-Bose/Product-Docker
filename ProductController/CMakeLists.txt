@@ -3,6 +3,7 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
   ${DEMOCONTROLLER_DIR}
+  ${DATACOLLECTIONCLIENT_DIR}
   ${CUSTOM_HSM_DIR}
   ${KEYHANDLER_DIR}/include
   DeviceManager
@@ -43,6 +44,7 @@ ADD_EXECUTABLE(Eddie
 TARGET_LINK_LIBRARIES(Eddie
   CastleProductControllerCommon
   DemoController
+  DataCollectionClient
   LpmClient
   FrontDoorClient
   NetworkServiceClient
