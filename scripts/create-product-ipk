@@ -3,7 +3,7 @@
 # Create an IPK file for installing SoundTouch with opkg.
 #
 # To install:
-#   opkg install -d bose product.ipk
+#   opkg install -d bose eddie.ipk
 #
 # The file /etc/opkg/opkg.conf should contain this line:
 #   dest bose /opt/Bose
@@ -143,7 +143,6 @@ cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
 cp -a "$boselibs_dir/lib" "$opt_dir" || exit
 cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
-cp "$wspace/config/InActivityTimer.json" "$opt_dir/etc" || exit
 
 marge_url=https://streamingint.bose.com
 stats_url=https://eventsdev.api.bosecm.com
@@ -295,7 +294,7 @@ tar --owner=0 --group=0 -czf control.tar.gz control pre* post* || exit
 tar --owner=0 --group=0 -czf data.tar.gz -C "$opt_dir" . || exit
 echo "2.0" > debian-binary || exit
 
-ipk=$output_dir/product.ipk
+ipk=$output_dir/eddie.ipk
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
 echo "Created $ipk"

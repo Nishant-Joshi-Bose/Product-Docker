@@ -58,7 +58,7 @@ riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) |
 swupdate_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || error_exit ${FUNCNAME[0]}
 opkg_dir="$swupdate_dir"/tools/opkg
 ipks_dir=$wspace/builds/$cfg
-product_ipk=$ipks_dir/product.ipk
+product_ipk=$wspace/builds/$cfg/eddie.ipk
 utils_dir=$wspace/install/utils
 version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
 CP="cp -PR --preserve=mode,timestamps,links"
@@ -149,8 +149,9 @@ echo " Adding version to package"
 $CP "$version_json" "$stage_package_dir"/  || error_exit ${FUNCNAME[0]} " Adding version to package "
 echo " Adding IPKs to package"
 $CP "$ipks_dir"/*.ipk "$stage_package_dir"/  || error_exit ${FUNCNAME[0]} " Adding IPKs to package "
-# For now delete hsp.ipk
+# For now delete hsp.ipk and rename eddie.ipk to product.ipk
 rm -f "$stage_package_dir"/hsp.ipk
+mv "$stage_package_dir"/eddie.ipk "$stage_package_dir"/product.ipk  || error_exit  ${FUNCNAME[0]} " Moving as product.ipk "
 # crate bose.ext4
 echo " Adding bose.ext4 to package"
 create_eddie_ext4
