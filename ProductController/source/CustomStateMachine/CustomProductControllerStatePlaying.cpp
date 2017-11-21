@@ -73,7 +73,7 @@ void CustomProductControllerStatePlaying::HandleStateEnter( )
 {
     BOSE_VERBOSE( s_logger, "%s is being entered.", GetName( ).c_str( ) );
 
-    GetCustomProductController( ).GetHardwareInterface( )->RequestSystemStateOn( );
+    GetCustomProductController( ).GetHardwareInterface( )->RequestLpmSystemState( SYSTEM_STATE_ON );
 
     BOSE_VERBOSE( s_logger, "An attempt to set to full power is being made." );
 }
