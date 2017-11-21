@@ -39,7 +39,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
     m_LpmInterface( std::bind( &EddieProductController::HandleProductMessage,
                                this, std::placeholders::_1 ), GetTask() ),
-    m_wifiProfilesCount( 0 ),
+    m_wifiProfilesCount(),
     m_bluetoothSinkList(),
     errorCb( AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> ( std::bind( &EddieProductController::CallbackError,
                                                                   this, std::placeholders::_1 ), GetTask() ) ),
@@ -186,7 +186,7 @@ void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::Ne
 void EddieProductController::HandleWiFiProfileResponse( const NetManager::Protobuf::WiFiProfiles& profiles )
 {
     m_wifiProfilesCount = profiles.profiles_size();
-    BOSE_INFO( s_logger, "%s, m_wifiProfilesCount=%d", __func__, m_wifiProfilesCount );
+    BOSE_INFO( s_logger, "%s, m_wifiProfilesCount=%d", __func__, m_wifiProfilesCount.get() );
     GetHsm().Handle<>( &CustomProductControllerState::HandleNetworkConfigurationStatus );
 }
 
@@ -366,9 +366,9 @@ bool EddieProductController::IsAllModuleReady()
                m_isCapsReady , m_isLPMReady, m_isNetworkModuleReady, m_isBluetoothReady, m_isSTSReady );
     return ( m_isCapsReady and
              m_isLPMReady and
-             m_isNetworkModuleReady and
+             ( m_isNetworkModuleReady and m_cachedStatus.is_initialized() and m_wifiProfilesCount.is_initialized() ) and
              m_isSTSReady and
-             m_isBluetoothReady );
+             ( m_isBluetoothReady and m_bluetoothSinkList.is_initialized() ) );
 }
 
 bool EddieProductController::IsBtLeModuleReady() const
@@ -397,7 +397,7 @@ bool EddieProductController::IsLanguageSet()
 
 bool EddieProductController::IsNetworkConfigured()
 {
-    return ( m_bluetoothSinkList.devices_size() || m_wifiProfilesCount || m_cachedStatus.isprimaryup() );
+    return ( m_bluetoothSinkList.get().devices_size() || m_wifiProfilesCount.get() || m_cachedStatus.get().isprimaryup() );
 }
 
 void EddieProductController::ReadConfigurationStatusFromPersistence()
@@ -946,7 +946,6 @@ void EddieProductController::HandleBtLeModuleReady( bool btLeModuleReady )
 void EddieProductController::HandleBluetoothSinkPairedList( const BluetoothSinkService::PairedList &list )
 {
     m_bluetoothSinkList = list;
-    BOSE_INFO( s_logger, "%s Bluetooth sink list count [%d]", __func__, m_bluetoothSinkList.devices_size() );
     GetHsm().Handle<>( &CustomProductControllerState::HandleNetworkConfigurationStatus );
 }
 
