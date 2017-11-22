@@ -32,7 +32,6 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "ThreadMutex.h"
 #include "NotifyTargetTaskIF.h"
 #include "CliClient.h"
 #include "APTask.h"
@@ -46,6 +45,8 @@
 #include "ProductMessage.pb.h"
 #include "LpmClientIF.h"
 #include "KeyHandler.h"
+#include "ProductHardwareInterface.h"
+#include "ProfessorProductController.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -59,11 +60,11 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductHardwareInterface;
-class ProductController;
+class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class ProductKeyInputInterface
+/// @class ProductKeyInputInterface Constructor
 ///
 /// @brief This class acts to extract raw keys from the LPM hardware, pass them to a key handler,
 ///        and send the key action to the product controller state machine for processing.
@@ -75,26 +76,17 @@ public:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @name   ProductKeyInputInterface::GetInstance
+    /// @brief ProductKeyInputInterface Constructor
     ///
-    /// @brief  This static method creates the one and only instance of a ProductKeyInputInterface
-    ///         object. That only one instance is created in a thread safe way is guaranteed by
-    ///         the C++ Version 11 compiler.
-    ///
-    /// @param  void This method does not take any arguments.
-    ///
-    /// @return This method returns a reference to a ProductKeyInputInterface object.
+    /// @param ProfessorProductController& ProductController
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    static ProductKeyInputInterface* GetInstance( NotifyTargetTaskIF*         ProductTask,
-                                                  Callback< ProductMessage >  ProductNotify,
-                                                  ProductHardwareInterface*   HardwareInterface,
-                                                  CliClientMT&                CommandLineInterface );
+    ProductKeyInputInterface( ProfessorProductController& ProductController );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief  The following public methods are used to start and stop the ProductKeyInputInterface
-    ///         instance.
+    /// @brief  The following public methods are used to run and stop instances of the
+    ///         ProductKeyInputInterface class, respectively.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     void Run( );
@@ -104,34 +96,19 @@ private:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @name  ProductKeyInputInterface
-    ///
-    /// @brief The constructor for this class is set to be private. This definition prevents this
-    ///        class from being instantiated directly, so that only the static method GetInstance
-    ///        to this class can be used to get the one sole instance of it.
-    ///
-    /// @param NotifyTargetTaskIF* ProductTask
-    ///
-    /// @param Callback< ProductMessage > ProductNotify
-    ///
-    /// @param ProductHardwareInterface*  HardwareInterface
+    /// @brief The following declarations provide a task in which to process key information, a
+    ///        method to notify the product controller for receipt of a key action, an interface
+    ///        to the lower level hardware via the LPM for raw keys, and a main key handler class
+    ///        instance. Boolean variables indicating whether there is a connection to receive raw
+    ///        key presses and whether the module is running are also provided.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductKeyInputInterface( NotifyTargetTaskIF*        ProductTask,
-                              Callback< ProductMessage > ProductNotify,
-                              ProductHardwareInterface*  HardwareInterface,
-                              CliClientMT&               CommandLineInterface );
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following copy constructor and equality operator for this class are private
-    ///        and are set to be undefined through the delete keyword. This prevents this class
-    ///        from being copied directly, so that only the static method GetInstance to this
-    ///        class can be used to get the one sole instance of it.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductKeyInputInterface( ProductKeyInputInterface const& ) = delete;
-    ProductKeyInputInterface operator = ( ProductKeyInputInterface const& ) = delete;
+    NotifyTargetTaskIF*                         m_ProductTask;
+    Callback< ProductMessage >                  m_ProductNotify;
+    std::shared_ptr< ProductHardwareInterface > m_ProductHardwareInterface;
+    KeyHandlerUtil::KeyHandler                  m_KeyHandler;
+    bool                                        m_connected;
+    bool                                        m_running;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -150,27 +127,6 @@ private:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     void KeyInformationCallBack( const int keyAction );
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following subclass instances are used to manage the lower level hardware and
-    ///        the device, as well as to interface with the user and higher level system
-    ///        applications, respectively.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF*          m_ProductTask;
-    Callback< ProductMessage >   m_ProductNotify;
-    ProductHardwareInterface*    m_ProductHardwareInterface;
-    bool                         m_connected;
-    bool                         m_running;
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following declaration are used for handling key presses.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    KeyHandlerUtil::KeyHandler   m_KeyHandler;
-    static constexpr const char* m_keyConfigFileName = "/opt/Bose/etc/KeyConfiguration.json";
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

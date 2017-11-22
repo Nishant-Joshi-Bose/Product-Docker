@@ -76,59 +76,29 @@ constexpr char FRONTDOOR_SYSTEM_STATE[ ]                      = "/system/state";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductSystemManager::GetInstance
-///
-/// @brief  This static method creates the one and only instance of a ProductSystemManager object.
-///         The C++ Version 11 compiler guarantees that only one instance is created in a thread
-///         safe way.
-///
-/// @param NotifyTargetTaskIF* ProductTask This argument points to a task to process
-///                                        resource requests and notifications.
-///
-/// @param Callback< ProductMessage > ProductNotify This is a callback to send events to
-///                                                 the Product Controller.
-///
-/// @return This method returns a pointer to a ProductSystemManager object.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductSystemManager* ProductSystemManager::GetInstance( NotifyTargetTaskIF*        ProductTask,
-                                                         Callback< ProductMessage > ProductNotify )
-{
-    static ProductSystemManager* instance = new ProductSystemManager( ProductTask,
-                                                                      ProductNotify );
-
-    BOSE_DEBUG( s_logger, "The instance %8p of the Product System Manager was returned.", instance );
-
-    return instance;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProductSystemManager::ProductSystemManager
 ///
-/// @brief  This method is the ProductSystemManager constructor, which is declared as being private
-///         to ensure that only one instance of this class can be created through the class
-///         GetInstance method.
-///
-/// @param NotifyTargetTaskIF* ProductTask This argument points to a task to process
-///                                        resource requests and notifications.
-///
-/// @param Callback< ProductMessage > ProductNotify This is a callback to send events to
-///                                                 the Product Controller.
+/// @param ProfessorProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductSystemManager::ProductSystemManager( NotifyTargetTaskIF*        ProductTask,
-                                            Callback< ProductMessage > ProductNotify )
+ProductSystemManager::ProductSystemManager( ProfessorProductController&  ProductController ) :
 
-    : m_ProductTask( ProductTask ),
-      m_ProductNotify( ProductNotify ),
-      m_FrontDoorClient( FrontDoor::FrontDoorClient::Create( "ProductSystemManager" ) ),
-      m_LanguageSettingsPersistentStorage( ProtoPersistenceFactory::Create( "ProductLanguage",
-                                                                            g_ProductDirectory ) ),
-      m_ConfigurationStatusPersistentStorage( ProtoPersistenceFactory::Create( "ConfigurationStatus",
-                                                                               g_ProductDirectory ) ),
-      m_SystemInfoPersistentStorage( ProtoPersistenceFactory::Create( "SystemInfo",
-                                                                      g_ProductDirectory ) )
+    ///
+    /// Product Controller and Front Door Interfaces
+    ///
+    m_ProductController( ProductController ),
+    m_ProductTask( ProductController.GetTask( ) ),
+    m_ProductNotify( ProductController.GetMessageHandler( ) ),
+    m_FrontDoorClient( FrontDoor::FrontDoorClient::Create( "ProductSystemManager" ) ),
+    ///
+    /// Presistent Storage Initialization
+    ///
+    m_LanguageSettingsPersistentStorage( ProtoPersistenceFactory::Create( "ProductLanguage",
+                                                                          g_ProductDirectory ) ),
+    m_ConfigurationStatusPersistentStorage( ProtoPersistenceFactory::Create( "ConfigurationStatus",
+                                                                             g_ProductDirectory ) ),
+    m_SystemInfoPersistentStorage( ProtoPersistenceFactory::Create( "SystemInfo",
+                                                                    g_ProductDirectory ) )
 {
 
 }
@@ -395,7 +365,6 @@ void ProductSystemManager::ReadSystemInfoSettingsFromPersistentStorage( )
     }
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name  ProductSystemManager::WriteLanguageSettingsFromPersistentStorage
@@ -631,8 +600,8 @@ void ProductSystemManager::HandleCapsStatusFailed( const FRONT_DOOR_CLIENT_ERROR
 void ProductSystemManager::HandleGetSystemStateRequest
 ( const Callback< ProductPb::SystemState >& stateResponse ) const
 {
-    Hsm::STATE  stateId   = ProfessorProductController::GetInstance( )->GetHsm( ).GetCurrentState( )->GetId( );
-    std::string stateName = ProfessorProductController::GetInstance( )->GetHsm( ).GetCurrentState( )->GetName( );
+    Hsm::STATE  stateId   = m_ProductController.GetHsm( ).GetCurrentState( )->GetId( );
+    std::string stateName = m_ProductController.GetHsm( ).GetCurrentState( )->GetName( );
 
     ProductPb::SystemState currentState;
     currentState.set_id( stateId );
