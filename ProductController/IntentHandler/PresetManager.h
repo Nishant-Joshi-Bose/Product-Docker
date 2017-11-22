@@ -33,24 +33,22 @@ public:
     // desired function for desired state change
     //
     bool Handle( KeyHandlerUtil::ActionType_t& arg ) override;
-    SoundTouchInterface::presets                m_presets; // temp
+    void PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp );
 
 private:
-    SoundTouchInterface::PresetID IntentToPresetIdMap( \
-                                                       KeyHandlerUtil::ActionType_t& intent );
+    SoundTouchInterface::presets                m_presets; // temp
+    SoundTouchInterface::PresetID IntentToPresetIdMap( KeyHandlerUtil::ActionType_t& intent );
 
-    SoundTouchInterface::preset* IsPresetContentPresent( \
-                                                         SoundTouchInterface::PresetID presetId,
+    SoundTouchInterface::preset* IsPresetContentPresent( SoundTouchInterface::PresetID presetId,
                                                          SoundTouchInterface::presets &presetItem );
 
-    void BuildPlaybackRequestFromPresetCI( \
-                                           SoundTouchInterface::playbackRequestJson &pr,
+    void BuildPlaybackRequestFromPresetCI( SoundTouchInterface::playbackRequestJson &pr,
                                            const SoundTouchInterface::ContentItem &ci );
 
-    void BuildPresetContentItemFromNp( \
-                                       SoundTouchInterface::ContentItem *destinationCI,
+    void BuildPresetContentItemFromNp( SoundTouchInterface::ContentItem *destinationCI,
                                        const SoundTouchInterface::NowPlayingJson_ContentItemJson &sourceCI );
 
     void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
+    AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingRsp;
 };
 } // namespace ProductApp

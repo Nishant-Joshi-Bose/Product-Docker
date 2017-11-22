@@ -27,11 +27,15 @@ PresetManager::PresetManager( NotifyTargetTaskIF& task,
                               const CliClientMT& cliClient,
                               const FrontDoorClientIF_t& frontDoorClient,
                               EddieProductController& controller ):
-    IntentManager( task, cliClient, frontDoorClient, controller )
+    IntentManager( task, cliClient, frontDoorClient, controller ),
+    m_NowPlayingRsp( nullptr, &task )
 {
     m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
                                ( std::bind( &PresetManager::FrontDoorClientErrorCb,
                                             this, std::placeholders::_1 ), &task );
+    m_NowPlayingRsp = AsyncCallback<SoundTouchInterface::NowPlayingJson>\
+                      ( std::bind( &PresetManager::PutTransportControlCbRsp,
+                                   this, std::placeholders::_1 ), &task );
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -286,6 +290,13 @@ void PresetManager::BuildPresetContentItemFromNp( SoundTouchInterface::ContentIt
     {
         BOSE_ERROR( s_logger, "Error: nullptr for destinationCI" );
     }
+    return;
+}
+void PresetManager::PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp )
+{
+    // No Need to handle this as Product Controller will get a nowPlaying that
+    // will update update the information.
+    BOSE_DEBUG( s_logger, "%s", __func__ );
     return;
 }
 void PresetManager::FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode )
