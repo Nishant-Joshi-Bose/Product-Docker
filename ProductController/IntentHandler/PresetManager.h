@@ -12,13 +12,6 @@
 
 namespace ProductApp
 {
-constexpr uint8_t  PRESET_1                   = 1;
-constexpr uint8_t  PRESET_2                   = 2;
-constexpr uint8_t  PRESET_3                   = 3;
-constexpr uint8_t  PRESET_4                   = 4;
-constexpr uint8_t  PRESET_5                   = 5;
-constexpr uint8_t  PRESET_6                   = 6;
-constexpr uint8_t  PRESET_INVALID             = 0xFF;
 
 class PresetManager: public IntentManager
 {
@@ -43,9 +36,20 @@ public:
     SoundTouchInterface::presets                m_presets; // temp
 
 private:
-    uint8_t IntentToIdMap( KeyHandlerUtil::ActionType_t& intent );
-    bool IsPresetContentPresent( uint8_t presetId,
-                                 SoundTouchInterface::preset &presetItem );
+    SoundTouchInterface::PresetID IntentToPresetIdMap( \
+                                                       KeyHandlerUtil::ActionType_t& intent );
+
+    SoundTouchInterface::preset* IsPresetContentPresent( \
+                                                         SoundTouchInterface::PresetID presetId,
+                                                         SoundTouchInterface::presets &presetItem );
+
+    void BuildPlaybackRequestFromPresetCI( \
+                                           SoundTouchInterface::playbackRequestJson &pr,
+                                           const SoundTouchInterface::ContentItem &ci );
+
+    void BuildPresetContentItemFromNp( \
+                                       SoundTouchInterface::ContentItem *destinationCI,
+                                       const SoundTouchInterface::NowPlayingJson_ContentItemJson &sourceCI );
 
     void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
 };
