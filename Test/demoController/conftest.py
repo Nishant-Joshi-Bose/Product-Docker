@@ -2,8 +2,16 @@ import pytest
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.LoggerUtils.log_setup import get_logger
-from .demo_utils import DemoUtils
+from CastleTestUtils.RivieraUtils import rivieraCommunication
+from CastleTestUtils.DemoUtils.demoUtils import DemoUtils
+#from demo_utils import DemoUtils
 logger = get_logger(__name__)
+
+def pytest_addoption(parser):
+    parser.addoption("--network-iface",
+                     action="store",
+                     default="wlan0",
+                     help="network interface to choose")
 
 @pytest.fixture(scope='function')
 def save_speaker_log(request, device_ip):
@@ -37,7 +45,8 @@ def device_ip(request):
     logger.info("device_ip")
     if request.config.getoption("--target").lower() == 'device':
         networkbaseObj = NetworkBase(None)
-        device_ip = networkbaseObj.check_inf_presence('eth0').group(2)
+        iface = request.config.getoption("--network-iface")
+        device_ip = networkbaseObj.check_inf_presence(iface).group(2)
     return device_ip
 
 @pytest.fixture(scope="class")
@@ -52,29 +61,33 @@ def frontDoor(request, device_ip):
     return frontdoorObj
 
 @pytest.fixture(scope='class')
-def demoUtils(frontDoor):
+def demoUtils(frontDoor, adb):
     """
     Get DemoUtils instance.
     """
     logger.info("demoUtils")
-    return DemoUtils(frontDoor)
+    return DemoUtils(frontDoor, adb)
 
 @pytest.fixture(scope='function', autouse=True)
 def setDemoOff(request, frontDoor, demoUtils):
     """
     Set demoMode off
     """
-    from CastleTestUtils.SoftwareUpdateUtils.RebootDevice import reboot_device as wait_for_reboot
     logger.info("setDemoOff")
     demoResponse = frontDoor.getDemoMode()
     logger.info("demoResponse " + demoResponse)
     if demoResponse == 'on':
-        demoUtils.setDemoMode("off", request.config.getoption("--device-id"))
+        demoUtils.setDemoMode("off", True, 3, request.config.getoption("--network-iface"))
+        demoUtils.verifyDemoMode("off")
 
-        demoResponse = frontDoor.getDemoMode()
-        logger.info("demoResponse" + demoResponse)
-        if demoResponse != 'off':
-            assert False , "DemoMode is not off when expected. demoResponse: " + demoResponse
+@pytest.fixture(scope='class')
+def adb(request):
+    """
+    Get adb instance
+    """
+    adb = rivieraCommunication.getCommunicationType('ADB')
+    adb.setCommunicationDetail(request.config.getoption("--device-id"))
+    return adb
 
 @pytest.fixture(scope='function', autouse=True)
 def test_log_banner(request):
