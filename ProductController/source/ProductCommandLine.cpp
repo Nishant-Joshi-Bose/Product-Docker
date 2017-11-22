@@ -24,9 +24,7 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "SystemUtils.h"
 #include "Utilities.h"
-#include "CliClient.h"
 #include "APTaskFactory.h"
 #include "APProductIF.h"
 #include "ProductHardwareInterface.h"
@@ -43,67 +41,18 @@ namespace ProductApp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief The following aliases refer to the Bose Sound Touch class utilities for inter-process and
-///        inter-thread communications.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-typedef APClientSocketListenerIF::ListenerPtr   ClientPointer;
-typedef APServerSocketListenerIF::ListenerPtr   ServerPointer;
-typedef APClientSocketListenerIF::SocketPtr     ClientSocket;
-typedef APServerSocketListenerIF::SocketPtr     ServerSocket;
-typedef IPCMessageRouterIF::IPCMessageRouterPtr RouterPointer;
-typedef CLIClient::CmdPtr                       CommandPointer;
-typedef CLIClient::CLICmdDescriptor             CommandDescription;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductCommandLine::GetInstance
-///
-/// @brief  This static method creates the one and only instance of a ProductCommandLine object.
-///         The C++ Version 11 compiler guarantees that only one instance is created in a thread
-///         safe way.
-///
-/// @param NotifyTargetTaskIF* ProductTask
-///
-/// @param Callback< ProductMessage > ProductNotify
-///
-/// @param ProductHardwareInterface*  HardwareInterface
-///
-/// @return This method returns a pointer to a ProductCommandLine object.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductCommandLine* ProductCommandLine::GetInstance( NotifyTargetTaskIF*        ProductTask,
-                                                     Callback< ProductMessage > ProductNotify,
-                                                     ProductHardwareInterface*  HardwareInterface )
-{
-    static ProductCommandLine* instance = new ProductCommandLine( ProductTask,
-                                                                  ProductNotify,
-                                                                  HardwareInterface );
-
-    BOSE_DEBUG( s_logger, "The instance %8p of the Product Command Line was returned.", instance );
-
-    return instance;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProductCommandLine::ProductCommandLine
 ///
-/// @param  NotifyTargetTaskIF* ProductTask
-///
-/// @param  Callback< ProductMessage > ProductNotify
-///
-/// @param  ProductHardwareInterface*  HardwareInterface
-///
-/// @return This method returns a pointer to a ProductCommandLine object.
+/// @param  ProfessorProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductCommandLine::ProductCommandLine( NotifyTargetTaskIF*        ProductTask,
-                                        Callback< ProductMessage > ProductNotify,
-                                        ProductHardwareInterface*  HardwareInterface )
-    : m_ProductTask( ProductTask ),
-      m_ProductNotify( ProductNotify ),
-      m_ProductHardwareInterface( HardwareInterface )
+ProductCommandLine::ProductCommandLine( ProfessorProductController& ProductController )
+
+    : m_ProductController( ProductController ),
+      m_ProductTask( ProductController.GetTask( ) ),
+      m_ProductNotify( ProductController.GetMessageHandler( ) ),
+      m_ProductHardwareInterface( ProductController.GetHardwareInterface( ) ),
+      m_CommandLineInterface( new CLIClient( "ProductCommandLineInterface" ) )
 {
 
 }
@@ -120,8 +69,6 @@ ProductCommandLine::ProductCommandLine( NotifyTargetTaskIF*        ProductTask,
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCommandLine::Run( )
 {
-    m_CommandLineInterface = new CLIClient( "ProductCommandLineInterface" );
-
     m_CommandLineInterface->Initialize( m_ProductTask,
                                         GetCommandsList( ),
                                         std::bind( &ProductCommandLine::HandleCommand,
@@ -334,11 +281,11 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 
         if( sourceString == "tv" )
         {
-            ProfessorProductController::GetInstance( )->SendPlaybackRequest( SOURCE_TV );
+            m_ProductController.SendPlaybackRequest( SOURCE_TV );
         }
         else if( sourceString == "st" )
         {
-            ProfessorProductController::GetInstance( )->SendPlaybackRequest( SOURCE_SOUNDTOUCH );
+            m_ProductController.SendPlaybackRequest( SOURCE_SOUNDTOUCH );
         }
         else
         {
@@ -818,8 +765,8 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     ////////////////////////////////////////////////////////////////////////////////////////////////
     else if( command.compare( "product state" ) == 0 )
     {
-        Hsm::STATE  stateId   = ProfessorProductController::GetInstance( )->GetHsm( ).GetCurrentState( )->GetId( );
-        std::string stateName = ProfessorProductController::GetInstance( )->GetHsm( ).GetCurrentState( )->GetName( );
+        Hsm::STATE  stateId   = m_ProductController.GetHsm( ).GetCurrentState( )->GetId( );
+        std::string stateName = m_ProductController.GetHsm( ).GetCurrentState( )->GetName( );
 
         response  = "The current state name is ";
         response += stateName;

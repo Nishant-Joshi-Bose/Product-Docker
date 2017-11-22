@@ -56,71 +56,36 @@ namespace ProductApp
 ///            Constant Definitions
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr uint32_t PRODUCT_USER_INTERFACE_RETRY_IN_SECONDS = 1;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductKeyInputInterface::GetInstance
-///
-/// @brief  This static method creates the one and only instance of a ProductKeyInputInterface
-///         object. The C++ Version 11 compiler guarantees that only one instance is created in a
-///         thread safe way.
-///
-/// @param  NotifyTargetTaskIF*        ProductTask
-///
-/// @param  Callback< ProductMessage > ProductNotify
-///
-/// @param  ProductHardwareInterface*  HardwareInterface
-///
-/// @param  CliClientMT&               CommandLineInterface
-///
-/// @return This method returns a pointer to a ProductKeyInputInterface object.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductKeyInputInterface* ProductKeyInputInterface::GetInstance
-( NotifyTargetTaskIF*         ProductTask,
-  Callback< ProductMessage >  ProductNotify,
-  ProductHardwareInterface*   HardwareInterface,
-  CliClientMT&                CommandLineInterface )
-{
-    static ProductKeyInputInterface* instance = new ProductKeyInputInterface( ProductTask,
-                                                                              ProductNotify,
-                                                                              HardwareInterface,
-                                                                              CommandLineInterface );
-
-    BOSE_DEBUG( s_logger, "The instance %8p of the Product User Interface has been obtained.", instance );
-
-    return instance;
-}
+constexpr const char* KEY_CONFIGURATION_FILE_NAME = "/opt/Bose/etc/KeyConfiguration.json";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProductKeyInputInterface::ProductKeyInputInterface
 ///
-/// @brief  This method is the ProductKeyInputInterface constructor, which is declared as being
-///         private to ensure that only one instance of this class can be created through the class
-///         GetInstance method.
+/// @brief  This method is the ProductKeyInputInterface constructor.
 ///
-/// @param  NotifyTargetTaskIF*        ProductTask
-///
-/// @param  Callback< ProductMessage > ProductNotify
-///
-/// @param  ProductHardwareInterface*  HardwareInterface
-///
-/// @param  CliClientMT&               CommandLineInterface
+/// @param  ProfessorProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductKeyInputInterface::ProductKeyInputInterface( NotifyTargetTaskIF*        ProductTask,
-                                                    Callback< ProductMessage > ProductNotify,
-                                                    ProductHardwareInterface*  HardwareInterface,
-                                                    CliClientMT&               CommandLineInterface )
+ProductKeyInputInterface::ProductKeyInputInterface( ProfessorProductController& ProductController ) :
 
-    : m_ProductTask( ProductTask ),
-      m_ProductNotify( ProductNotify ),
-      m_ProductHardwareInterface( HardwareInterface ),
-      m_connected( false ),
-      m_running( false ),
-      m_KeyHandler( *ProductTask, CommandLineInterface, m_keyConfigFileName )
+    ///
+    /// Product Controller Interface
+    ///
+    m_ProductTask( ProductController.GetTask( ) ),
+    m_ProductNotify( ProductController.GetMessageHandler( ) ),
+    m_ProductHardwareInterface( ProductController.GetHardwareInterface( ) ),
+    ///
+    /// Instantiation of the Key Handler
+    ///
+    m_KeyHandler( *m_ProductTask,
+                  ProductController.GetCommandLineInterface( ),
+                  KEY_CONFIGURATION_FILE_NAME ),
+    ///
+    /// Initialization of Class Members
+    ///
+    m_connected( false ),
+    m_running( false )
 {
     ///
     /// Register for LPM connected events after which key registration can be made. Note that this
@@ -222,9 +187,9 @@ void ProductKeyInputInterface::RegisterForKeyEvents( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInformation_t keyEvent )
 {
-    std::string    keyOriginString;
-    std::string    keyStateString;
-    std::string    keyIdString;
+    std::string keyOriginString;
+    std::string keyStateString;
+    std::string keyIdString;
 
     if( not m_running )
     {
@@ -302,7 +267,7 @@ void ProductKeyInputInterface::KeyInformationCallBack( const int keyAction )
     BOSE_DEBUG( s_logger, "A key press or presses have been translated to the action %d.", keyAction );
 
     ProductMessage productMessage;
-    productMessage.mutable_keydata( )->set_action( static_cast< KEY_ACTION > ( keyAction ) );
+    productMessage.mutable_keydata( )->set_action( static_cast< KEY_ACTION >( keyAction ) );
 
     IL::BreakThread( std::bind( m_ProductNotify,
                                 productMessage ),

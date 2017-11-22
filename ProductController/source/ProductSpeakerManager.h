@@ -7,8 +7,6 @@
 ///
 /// @author    Derek Richardson
 ///
-/// @date      09/22/2017
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -21,8 +19,19 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// The following compiler directive prevents this header file from being included more than once,
+/// which may cause multiple declaration compiler errors.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+///            Included Header Files
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <memory>
 #include "Callback.h"
 #include "LpmClientIF.h"
@@ -35,76 +44,122 @@
 #include "ProductNetworkManager.h"
 #include "ProductSpeakerManager.pb.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                          Start of the Product Application Namespace                          ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @class The ProductSpeakerManager class
+///
+/// @brief This class is used for managing the wireless accessories, including pairing and active
+///        speaker control.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductSpeakerManager
 {
-
 public:
-    static ProductSpeakerManager* GetInstance( NotifyTargetTaskIF* mainTask,
-                                               Callback< ProductMessage > ProductNotify,
-                                               ProductHardwareInterface*  hardwareInterface );
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @name   ProductSpeakerManager Constructor
+    ///
+    /// @param  ProfessorProductController& ProductController
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ProductSpeakerManager( ProfessorProductController& productController );
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief  The following public methods are used to run, start, and stop pairing for
+    ///         instances this class, respectively.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
     bool Run( );
     void DoPairing( );
     void StopPairing( );
 
 private:
-    NotifyTargetTaskIF*                m_mainTask          = nullptr;
-    Callback< ProductMessage >         m_ProductNotify     = nullptr;
-    ProductHardwareInterface*          m_hardwareInterface = nullptr;
-    std::shared_ptr<FrontDoorClientIF> m_FrontDoorClientIF = nullptr;
-    ProductPb::AccessorySpeakerState   m_accessorySpeakerState;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following declarations are used to interface with the product controller and
+    ///        the lower level LPM hardware.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    NotifyTargetTaskIF*                         m_ProductTask;
+    Callback< ProductMessage >                  m_ProductNotify;
+    std::shared_ptr< ProductHardwareInterface > m_ProductHardwareInterface;
+    std::shared_ptr<FrontDoorClientIF>          m_FrontDoorClientIF;
+    ProductPb::AccessorySpeakerState            m_accessorySpeakerState;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Handle lpm connection info
+    ///
+    /// @brief The following method performs needed initialization before running.
+    ///
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    void Init( );
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following Boolean is used to handle LPM connection info.
+    ///
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     bool m_lpmConnected;
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Misc internal
+    ///
+    /// @brief The following methods are used to register for events.
+    ///
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    void Init();
-    ProductSpeakerManager( NotifyTargetTaskIF* task,
-                           Callback< ProductMessage > ProductNotify,
-                           ProductHardwareInterface*  hardwareInterface );
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Functions to register for events
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    void RegisterFrontDoorEvents();
-    void RegisterLpmClientEvents();
+    void RegisterFrontDoorEvents( );
+    void RegisterLpmClientEvents( );
     void SetLpmConnectionState( bool connected );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Functions to internally interact with LPM speaker code
+    ///
+    /// @brief The following are methods to internally interact with LPM speaker code.
+    ///
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    void PairingFrontDoorRequestCallback( const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB, LpmServiceMessages::IpcSpeakerPairingMode_t pair );
+    void PairingFrontDoorRequestCallback( const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB,
+                                          LpmServiceMessages::IpcSpeakerPairingMode_t pair );
     void PairingCallback( LpmServiceMessages::IpcSpeakerPairingMode_t pair );
-    void DoPairingFrontDoor( bool pair, const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB );
+    void DoPairingFrontDoor( bool pair,
+                             const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB );
 
     void DisbandAccessories( const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB );
 
-    void SetSpeakersEnabledCallback( const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB, const LpmServiceMessages::IpcSpeakersActive_t req );
-    void SetSpeakersEnabled( const ProductPb::AccessorySpeakerState::SpeakerControls req, const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB );
+    void SetSpeakersEnabledCallback( const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB,
+                                     const LpmServiceMessages::IpcSpeakersActive_t req );
+    void SetSpeakersEnabled( const ProductPb::AccessorySpeakerState::SpeakerControls req,
+                             const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB );
 
     void RecieveAccessoryListCallback( LpmServiceMessages::IpcAccessoryList_t accList );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Front Door handler etc.
+    ///
+    /// @brief The following declaration are used as Front Door handlers.
+    ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     CallbackConnection m_registerGetAccessoriesCb;
     CallbackConnection m_registerPutAccessoriesCb;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// FrontDoor callback functions
+    ///
+    /// @brief The following methods are used as Front Door callbacks.
+    ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     void AccessoriesGetHandler( const Callback<ProductPb::AccessorySpeakerState> &resp );
-    void AccessoriesPutHandler( const ProductPb::AccessorySpeakerState &req, const Callback<ProductPb::AccessorySpeakerState> &resp );
-
+    void AccessoriesPutHandler( const ProductPb::AccessorySpeakerState &req,
+                                const Callback<ProductPb::AccessorySpeakerState> &resp );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Stuff to convert IpcAccessoryList_t to AccessorySpeakerState
+    ///
+    /// @brief The following methods are utility methods for determining the accessories status and
+    ///        types.
+    ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     static bool AccessoryStatusIsConnected( unsigned int status );
     static bool AccessoryTypeIsRear( unsigned int type );
@@ -113,9 +168,12 @@ private:
     static void AccessoryDescriptionToAccessorySpeakerInfo( const LpmServiceMessages::AccessoryDescription_t &accDesc,
                                                             ProductPb::AccessorySpeakerState::AccessorySpeakerInfo* spkrInfo );
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                           End of the Product Application Namespace                           ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-

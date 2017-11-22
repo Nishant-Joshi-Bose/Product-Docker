@@ -83,7 +83,8 @@ void CustomProductControllerStateAccessoryPairing::HandleStateStart( )
 {
     BOSE_INFO( s_logger, "CustomProductControllerStateAccessoryPairing is being started." );
 
-    ProductSpeakerManager* productSpeakerManager = GetCustomProductController( ).GetSpeakerManager( );
+    auto productSpeakerManager = GetCustomProductController( ).GetSpeakerManager( );
+
     productSpeakerManager->DoPairing( );
 }
 
@@ -143,7 +144,8 @@ void CustomProductControllerStateAccessoryPairing::HandleStateExit( )
     BOSE_INFO( s_logger, "CustomProductControllerStateAccessoryPairing is being exited." );
     m_timer->Stop( );
 
-    ProductSpeakerManager* productSpeakerManager = GetCustomProductController( ).GetSpeakerManager( );
+    std::shared_ptr< ProductSpeakerManager >
+    productSpeakerManager = GetCustomProductController( ).GetSpeakerManager( );
     productSpeakerManager->StopPairing( );
 }
 

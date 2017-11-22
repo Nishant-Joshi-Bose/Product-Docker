@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @file      ProfessorProductController.cpp
 ///
@@ -83,37 +83,6 @@ constexpr uint32_t PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief The following aliases refer to the Bose Sound Touch class utilities for inter-process and
-///        inter-thread communications.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-typedef APClientSocketListenerIF::ListenerPtr   ClientPointer;
-typedef APServerSocketListenerIF::ListenerPtr   ServerPointer;
-typedef APClientSocketListenerIF::SocketPtr     ClientSocket;
-typedef APServerSocketListenerIF::SocketPtr     ServerSocket;
-typedef IPCMessageRouterIF::IPCMessageRouterPtr RouterPointer;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetInstance
-///
-/// @brief  This static method creates the one and only instance of a ProfessorProductController object.
-///         The C++ Version 11 compiler guarantees that only one instance is created in a thread
-///         safe way.
-///
-/// @return This method returns a pointer to a ProfessorProductController object.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-ProfessorProductController* ProfessorProductController::GetInstance( )
-{
-    static ProfessorProductController* instance = new ProfessorProductController( );
-
-    BOSE_DEBUG( s_logger, "The instance %8p of the Product Controller was returned.", instance );
-
-    return instance;
-}
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProfessorProductController::ProfessorProductController
 ///
 /// @brief  This method is the ProfessorProductController constructor, which is declared as being
@@ -134,11 +103,13 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductHardwareInterface( nullptr ),
     m_ProductSystemManager( nullptr ),
     m_ProductNetworkManager( nullptr ),
-    m_ProductAudioService( nullptr ),
     m_ProductSoftwareServices( nullptr ),
     m_ProductCommandLine( nullptr ),
     m_ProductKeyInputInterface( nullptr ),
     m_ProductEdidInterface( nullptr ),
+    m_ProductVolumeManager( nullptr ),
+    m_ProductSpeakerManager( nullptr ),
+    m_ProductAudioService( nullptr ),
 
     ///
     /// Member Variable Initialization
@@ -283,42 +254,17 @@ void ProfessorProductController::Run( )
     BOSE_DEBUG( s_logger, "----------- Product Controller Starting Modules ------------" );
     BOSE_DEBUG( s_logger, "The Professor Product Controller instantiating and running its modules." );
 
-    Callback < ProductMessage > CallbackForMessages( std::bind( &ProfessorProductController::HandleMessage,
-                                                                this,
-                                                                std::placeholders::_1 ) );
-
-    m_ProductHardwareInterface = ProductHardwareInterface::GetInstance( GetTask( ),
-                                                                        CallbackForMessages );
-
-    m_ProductEdidInterface     = ProductEdidInterface    ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages,
-                                                                        m_ProductHardwareInterface );
-    m_ProductSystemManager     = ProductSystemManager    ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages );
-
-    m_ProductNetworkManager    = ProductNetworkManager   ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages );
-
-    m_ProductAudioService      = ProductAudioService     ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages );
-
-    m_ProductSoftwareServices  = ProductSoftwareServices ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages,
-                                                                        m_ProductHardwareInterface );
-    m_ProductCommandLine       = ProductCommandLine      ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages,
-                                                                        m_ProductHardwareInterface );
-
-    m_ProductKeyInputInterface = ProductKeyInputInterface::GetInstance( GetTask( ),
-                                                                        CallbackForMessages,
-                                                                        m_ProductHardwareInterface,
-                                                                        m_CliClientMT );
-    m_ProductVolumeManager     = ProductVolumeManager    ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages,
-                                                                        m_ProductHardwareInterface );
-    m_ProductSpeakerManager    = ProductSpeakerManager   ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages,
-                                                                        m_ProductHardwareInterface );
+    m_ProductHardwareInterface = std::make_shared< ProductHardwareInterface >( *this );
+    m_ProductEdidInterface     = std::make_shared< ProductEdidInterface     >( *this );
+    m_ProductSystemManager     = std::make_shared< ProductSystemManager     >( *this );
+    m_ProductNetworkManager    = std::make_shared< ProductNetworkManager    >( *this );
+    m_ProductSoftwareServices  = std::make_shared< ProductSoftwareServices  >( *this );
+    m_ProductCommandLine       = std::make_shared< ProductCommandLine       >( *this );
+    m_ProductKeyInputInterface = std::make_shared< ProductKeyInputInterface >( *this );
+    m_ProductVolumeManager     = std::make_shared< ProductVolumeManager     >( *this );
+    m_ProductSpeakerManager    = std::make_shared< ProductSpeakerManager    >( *this );
+    m_ProductAudioService      = ProductAudioService ::GetInstance( GetTask( ),
+                                                                    GetMessageHandler( ) );
 
     if( m_ProductHardwareInterface == nullptr ||
         m_ProductSystemManager     == nullptr ||
@@ -363,23 +309,55 @@ void ProfessorProductController::Run( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::GetHardwareInterface
+/// @brief  ProfessorProductController::GetMessageHandler
 ///
-/// @return This method returns a pointer to the LPM hardware interface.
+/// @return Callback < ProductMessage >
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductHardwareInterface* ProfessorProductController::GetHardwareInterface( ) const
+Callback < ProductMessage > ProfessorProductController::GetMessageHandler( )
+{
+    Callback < ProductMessage >
+    ProductMessageHandler( std::bind( &ProfessorProductController::HandleMessage,
+                                      this,
+                                      std::placeholders::_1 ) );
+    return ProductMessageHandler;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  ProfessorProductController::GetMessageHandler
+///
+/// @return This method returns a reference to a command line interface for adding module specific
+///         commands. Note that this interface is instantiated in the inherited ProductController
+///         class; the ProductCommandLine interface instantiated in this class is used for specific
+///         product controller commands in Professor.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+CliClientMT& ProfessorProductController::GetCommandLineInterface( )
+{
+    return m_CliClientMT;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetHardwareInterface
+///
+/// @return This method returns a shared pointer to the LPM hardware interface.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::shared_ptr< ProductHardwareInterface >& ProfessorProductController::GetHardwareInterface( )
 {
     return m_ProductHardwareInterface;
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProfessorProductController::GetVolumeManager
 ///
-/// @return This method returns a pointer to the VolumeManager instance
+/// @return This method returns a shared pointer to the VolumeManager instance
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductVolumeManager* ProfessorProductController::GetVolumeManager( ) const
+std::shared_ptr< ProductVolumeManager >& ProfessorProductController::GetVolumeManager( )
 {
     return m_ProductVolumeManager;
 }
@@ -388,10 +366,10 @@ ProductVolumeManager* ProfessorProductController::GetVolumeManager( ) const
 ///
 /// @name ProfessorProductController::GetSpeakerManager
 ///
-/// @return ProductHardwareInterface* - pointer to speaker manager
+/// @return This method returns a shared pointer to the ProductSpeakerManager instance.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductSpeakerManager* ProfessorProductController::GetSpeakerManager( )
+std::shared_ptr< ProductSpeakerManager >& ProfessorProductController::GetSpeakerManager( )
 {
     return m_ProductSpeakerManager;
 }
@@ -1067,29 +1045,6 @@ void ProfessorProductController::Wait( )
     m_ProductKeyInputInterface->Stop( );
     m_ProductEdidInterface    ->Stop( );
     m_ProductVolumeManager    ->Stop( );
-
-    ///
-    /// Delete all the submodules.
-    ///
-    delete m_ProductHardwareInterface;
-    delete m_ProductSystemManager;
-    delete m_ProductNetworkManager;
-    delete m_ProductAudioService;
-    delete m_ProductSoftwareServices;
-    delete m_ProductCommandLine;
-    delete m_ProductKeyInputInterface;
-    delete m_ProductEdidInterface;
-    delete m_ProductVolumeManager;
-
-    m_ProductHardwareInterface = nullptr;
-    m_ProductSystemManager = nullptr;
-    m_ProductNetworkManager = nullptr;
-    m_ProductAudioService = nullptr;
-    m_ProductSoftwareServices = nullptr;
-    m_ProductCommandLine = nullptr;
-    m_ProductKeyInputInterface = nullptr;
-    m_ProductEdidInterface = nullptr;
-    m_ProductVolumeManager = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

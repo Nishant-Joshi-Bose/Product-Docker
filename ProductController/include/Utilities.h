@@ -30,8 +30,11 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include <string>
 #include "DPrint.h"
+#include "APClientSocketListenerIF.h"
+#include "APServerSocketListenerIF.h"
+#include "IPCMessageRouterIF.h"
+#include "CliClient.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -41,11 +44,11 @@ namespace ProductApp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// The following definition determines the compile time log level. Any log messages that are
-/// above the given level are compiled out of the executable and cannot be enabled at
-/// run-time. Currently, the level is set to the highest level to output all log statements,
-/// but it can be changed to a lower level to leave log statements above this level out of
-/// the compiled application to reduce its overall size.
+/// @brief The following definition determines the compile time log level. Any log messages that are
+///        above the given level are compiled out of the executable and cannot be enabled at
+///        run-time. Currently, the level is set to the highest level to output all log statements,
+///        but it can be changed to a lower level to leave log statements above this level out of
+///        the compiled application to reduce its overall size.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef  BOSE_LOG_LEVEL
@@ -61,9 +64,23 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 static DPrint s_logger { "Product" };
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief The following aliases refer to the Bose Sound Touch SDK utilities for inter-process
+///        and inter-thread communications.
+///
+//////////////////////////////////////////////////////////////////////////////////////////////
+typedef APClientSocketListenerIF::ListenerPtr   ClientListener;
+typedef APClientSocketListenerIF::SocketPtr     ClientSocket;
+typedef APServerSocketListenerIF::ListenerPtr   ServerListener;
+typedef APServerSocketListenerIF::SocketPtr     ServerSocket;
+typedef IPCMessageRouterIF::IPCMessageRouterPtr MessageRouter;
+typedef CLIClient::CmdPtr                       CommandPointer;
+typedef CLIClient::CLICmdDescriptor             CommandDescription;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// This is an enumeration of possible sources.
+/// This is an enumeration of possible playback sources.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 typedef enum
