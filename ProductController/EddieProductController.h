@@ -24,8 +24,6 @@
 #include "DemoController.h"
 #include "ConfigurationStatus.pb.h"
 #include "SoundTouchInterface/AllowSourceSelect.pb.h"
-#include "Language.pb.h"
-#include "DeviceManager.pb.h"
 #include "NetManager.pb.h"
 #include "SoundTouchInterface/CapsInitializationStatus.pb.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
@@ -37,6 +35,8 @@
 #include "IntentHandler.h"
 #include "ProductSTSController.h"
 #include "DisplayController.h"
+#include "MacAddressInfo.h"
+#include "BOptional.h"
 
 namespace ProductApp
 {
@@ -50,7 +50,16 @@ public:
 
     NetManager::Protobuf::NetworkStatus const& GetNetworkStatus() const
     {
-        return m_cachedStatus;
+        return m_cachedStatus.get();
+    }
+    std::string GetDefaultProductName() const override
+    {
+        /// To-Do: fix the default name
+        return "Bose " + MacAddressInfo::GetPrimaryMAC();
+    }
+    std::vector<std::string> GetUniqueLanguages() const override
+    {
+        return {};
     }
 
 private:
@@ -203,29 +212,8 @@ public:
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
     bool IsNetworkConfigured();
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name  GetSystemLanguageCode
-/// @brief returns system language code.
-/// @return std::string
-////////////////////////////////////////////////////////////////////////////////
-    std::string GetSystemLanguageCode();
-
     void SendActivateAccessPointCmd();
     void SendDeActivateAccessPointCmd();
-///////////////////////////////////////////////////////////////////////////////
-/// @name  HandleGetLanguageRequest
-/// @brief Handles GET request for "/system/language" endpoint.
-/// @return void
-////////////////////////////////////////////////////////////////////////////////
-    void HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name  HandlePostLanguageRequest
-/// @brief Handles POST request for "/system/language" endpoint.
-/// @return void
-////////////////////////////////////////////////////////////////////////////////
-    void HandlePostLanguageRequest( const ProductPb::Language &lang, const Callback<ProductPb::Language> &resp );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  HandleConfigurationStatusRequest
@@ -304,7 +292,7 @@ public:
     void SetDisplayAutoMode( bool autoMode ) const
     {
         m_displayController->SetAutoMode( autoMode );
-    }// GetDisplayController
+    }
 
 private:
 
@@ -320,10 +308,8 @@ private:
     // Key Handler
     KeyHandlerUtil::KeyHandler                  m_KeyHandler;
     ProtoPersistenceIF::ProtoPersistencePtr     m_ConfigurationStatusPersistence = nullptr;
-    ProtoPersistenceIF::ProtoPersistencePtr     m_LanguagePersistence = nullptr;
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
-    ProductPb::Language                         m_systemLanguage;
-    NetManager::Protobuf::NetworkStatus         m_cachedStatus;
+    BOptional<NetManager::Protobuf::NetworkStatus> m_cachedStatus;
 
     ProductCliClient                            m_productCliClient;
 
@@ -336,7 +322,7 @@ private:
     bool                                        m_isNetworkModuleReady  = false;
     bool                                        m_isBLEModuleReady  = false;
 
-    int                                         m_wifiProfilesCount;
+    BOptional<int>                              m_wifiProfilesCount;
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>     errorCb;
     /// Demonstration Controller instance
     DemoApp::DemoController m_demoController;

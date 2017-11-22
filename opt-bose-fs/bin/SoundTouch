@@ -84,12 +84,13 @@ EOF
         mkdir -p "$rundir" || exit
         rm -f "$rundir"/*.xml
         ln -s /opt/Bose/etc/Shepherd*.xml "$rundir" || exit
+
+        key=KeyConfiguration.json
         if [ -e "$demoFlag" ]; then
             log info "--DEMO MODE--"
-            ln -nsf /opt/Bose/etc/KeyConfiguration-demo.json  "$rundir"/KeyConfiguration.json
-        else
-            ln -nsf /opt/Bose/etc/KeyConfiguration.json       "$rundir"/KeyConfiguration.json
+            key=KeyConfiguration-demo.json
         fi
+        ln -nsf "/opt/Bose/etc/$key" /var/run/KeyConfiguration.json
 
         if is-development; then
             cat >"$rundir/Debug.xml" <<\EOF

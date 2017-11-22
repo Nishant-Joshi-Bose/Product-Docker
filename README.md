@@ -8,6 +8,8 @@ SoundTouch Eddie
 
 This repo contains the source code and tools specific to the SoundTouch Eddie product.
 
+![Eddie](eddie.png)
+
 ##### Table of Contents  
 [Getting Started](#start)  
 [Reflash Riviera-HSP](#hsp)  

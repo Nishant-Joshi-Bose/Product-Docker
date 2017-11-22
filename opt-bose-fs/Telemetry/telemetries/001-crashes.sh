@@ -10,7 +10,7 @@ DATE=$2
 TELEMETRY_DOC_DIR=$3
 
 #Core dumps to search for
-re="APServer|AVS|A4V|Bose|BT|BLESetup|CLIServer|ClockSync|Deezer|Device|Eddie|FrontDoor|IHeart|Iot|LPMService|Passport|Professor|NetManger|Server|Software|Spotify|Telnet|STSCertified|UpnpSource|Vfe"
+re=$4
 
 crash_log=$TELEMETRY_DOC_DIR"/crashes_posted.txt" #Create a log to remember what core dump info has already been posted
 if [ ! -e "$crash_log" ] ; then

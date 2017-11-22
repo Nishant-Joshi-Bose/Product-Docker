@@ -5,7 +5,6 @@ INCLUDE_DIRECTORIES(
   ${DEMOCONTROLLER_DIR}
   ${CUSTOM_HSM_DIR}
   ${KEYHANDLER_DIR}/include
-  DeviceManager
   IntentHandler
   DisplayController
   .
@@ -25,7 +24,6 @@ ADD_EXECUTABLE(Eddie
   EddieProductController.cpp
   Main.cpp
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
-  ${PROTO_CC_DEST}/Language.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/ContentItem.pb.cc
@@ -60,6 +58,8 @@ TARGET_LINK_LIBRARIES(Eddie
   TinyXml
   pthread
   rt
+  cap
+  dl
 )
 
 INSTALL(TARGETS Eddie DESTINATION ${OUTPUT_BIN_DIR})

@@ -33,7 +33,7 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.2.2-104+61d8bf2"
+    "selected_version": "Continuous/master/0.2.2-105+ea19c8e"
   },
   {
     "name": "CastlePassport-native",
@@ -57,7 +57,7 @@
   },
   {
     "name": "EddieLPM-Package",
-    "selected_version": "Release/IP2/0.2.0.2553865/DP1"
+    "selected_version": "Release/IP2/0.2.0.2571468/DP1"
   },
   {
     "name": "KeyHandler-native",
@@ -93,7 +93,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/0.2.1-30+ce98842"
+    "selected_version": "Release/master/0.2.2-35+82ffd55"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
