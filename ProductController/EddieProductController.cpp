@@ -40,7 +40,6 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_LpmInterface( std::bind( &EddieProductController::HandleProductMessage,
                                this, std::placeholders::_1 ), GetTask() ),
     m_wifiProfilesCount(),
-    m_bluetoothSinkList(),
     errorCb( AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> ( std::bind( &EddieProductController::CallbackError,
                                                                   this, std::placeholders::_1 ), GetTask() ) ),
     m_demoController( m_ProductControllerTask, m_KeyHandler )
@@ -57,10 +56,8 @@ EddieProductController::EddieProductController( std::string const& ProductName )
 
     InitializeLpmClient();
     m_ConfigurationStatusPersistence = ProtoPersistenceFactory::Create( "ConfigurationStatus", g_ProductPersistenceDir );
-    m_nowPlayingPersistence = ProtoPersistenceFactory::Create( "NowPlaying", g_ProductPersistenceDir );
     m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
     ReadConfigurationStatusFromPersistence();
-    ReadNowPlayingFromPersistence();
 
     m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF, m_LpmClient ) );
     m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF, m_LpmClient ) );
@@ -136,31 +133,6 @@ void EddieProductController::RegisterEndPoints()
     AsyncCallback<NetManager::Protobuf::WiFiProfiles> networkWifiProfilesCb( std::bind( &EddieProductController::HandleWiFiProfileResponse ,
                                                                              this, std::placeholders::_1 ), GetTask() );
     m_FrontDoorClientIF->RegisterNotification<NetManager::Protobuf::WiFiProfiles>( FRONTDOOR_NETWORK_WIFI_PROFILE_API, networkWifiProfilesCb );
-
-    AsyncCallback<BluetoothSinkService::PairedList> bluetoothSinkListCb( std::bind( &EddieProductController::HandleBluetoothSinkPairedList ,
-                                                                                    this, std::placeholders::_1 ), GetTask() );
-    m_FrontDoorClientIF->RegisterNotification<BluetoothSinkService::PairedList>( FRONTDOOR_BLUETOOTH_SINK_LIST_API, bluetoothSinkListCb );
-
-    AsyncCallback<BluetoothSinkService::AppStatus> bluetoothSinkListAppStatusCb( std::bind( &EddieProductController::HandleBluetoothSinkAppStatus ,
-                                                                                 this, std::placeholders::_1 ), GetTask() );
-    m_FrontDoorClientIF->RegisterNotification<BluetoothSinkService::AppStatus>( BluetoothSinkEndpoints::APP_STATUS, bluetoothSinkListAppStatusCb );
-
-    AsyncCallback<SoundTouchInterface::NowPlayingJson> nowPlayingCb( std::bind( &EddieProductController::HandleCapsNowPlaying ,
-                                                                                this, std::placeholders::_1 ), GetTask() );
-
-    m_FrontDoorClientIF->RegisterNotification<SoundTouchInterface::NowPlayingJson>( FRONTDOOR_CONTENT_NOWPLAYING_API, nowPlayingCb );
-}
-
-void EddieProductController::HandleBluetoothSinkAppStatus( const BluetoothSinkService::AppStatus& appStatusPb )
-{
-    BOSE_INFO( s_logger, "%s,np- (%s)", __func__,  ProtoToMarkup::ToJson( appStatusPb, false ).c_str() );
-    m_bluetoothAppStatus.CopyFrom( appStatusPb );
-}
-
-void EddieProductController::HandleCapsNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingPb )
-{
-    BOSE_INFO( s_logger, "%s,np- (%s)", __func__,  ProtoToMarkup::ToJson( nowPlayingPb, false ).c_str() );
-    PersistCapsNowPlaying( nowPlayingPb );
 }
 
 void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus )
@@ -216,6 +188,8 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
 void EddieProductController::SendInitialRequests()
 {
     BOSE_INFO( s_logger, __func__ );
+
+    SendCommonInitialRequests();
 
     {
         AsyncCallback<std::list<std::string> > poiReadyCb( std::bind( &EddieProductController::HandleNetworkCapabilityReady, this, std::placeholders::_1 ), GetTask() );
@@ -366,24 +340,6 @@ void EddieProductController::ReadConfigurationStatusFromPersistence()
     }
 }
 
-void EddieProductController::ReadNowPlayingFromPersistence()
-{
-    try
-    {
-        std::string s = m_nowPlayingPersistence->Load();
-        ProtoToMarkup::FromJson( s, &m_nowPlaying );
-        m_nowPlaying.clear_state(); // Initialize the status
-    }
-    catch( const ProtoToMarkup::MarkupError &e )
-    {
-        BOSE_LOG( ERROR, "Configuration status from persistence failed markup error - " << e.what() );
-    }
-    catch( ProtoPersistenceIF::ProtoPersistenceException& e )
-    {
-        BOSE_LOG( ERROR, "Loading configuration status from persistence failed - " << e.what() );
-    }
-}
-
 void EddieProductController::PersistSystemConfigurationStatus()
 {
     BOSE_INFO( s_logger, __func__ );
@@ -406,37 +362,6 @@ void EddieProductController::PersistSystemConfigurationStatus()
             BOSE_LOG( ERROR, "Loading configuration status from persistence failed - " << e.what() );
         }
     }
-}
-
-///
-///Return true if nowPlaying protobuf has changed.
-///
-bool EddieProductController::IsNowPlayingChanged( const SoundTouchInterface::NowPlayingJson& nowPlayingPb )
-{
-    return ( ( m_nowPlaying.source().sourcedisplayname() not_eq nowPlayingPb.source().sourcedisplayname() )
-             or ( m_nowPlaying.container().contentitem().sourceaccount() not_eq nowPlayingPb.container().contentitem().sourceaccount() )
-             or ( m_nowPlaying.container().contentitem().source() not_eq nowPlayingPb.container().contentitem().source() ) );
-}
-
-void EddieProductController::PersistCapsNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingPb, bool forcePersist )
-{
-    BOSE_INFO( s_logger, __func__ );
-    if( forcePersist or IsNowPlayingChanged( nowPlayingPb ) )
-    {
-        try
-        {
-            m_nowPlayingPersistence->Store( ProtoToMarkup::ToJson( nowPlayingPb ) );
-        }
-        catch( const ProtoToMarkup::MarkupError &e )
-        {
-            BOSE_LOG( ERROR, "Storing nowplaying failed markup error - " << e.what() );
-        }
-        catch( ProtoPersistenceIF::ProtoPersistenceException& e )
-        {
-            BOSE_LOG( ERROR, "Storing nowplaying in persistence failed - " << e.what() );
-        }
-    }
-    m_nowPlaying.CopyFrom( nowPlayingPb );
 }
 
 void EddieProductController::SendActivateAccessPointCmd()
@@ -804,18 +729,6 @@ void EddieProductController::HandleCapsCapabilityNotReady( const std::list<std::
     HandleCAPSReady( false );
 }
 
-void EddieProductController::HandleBluetoothCapabilityReady( const std::list<std::string>& points )
-{
-    BOSE_INFO( s_logger, __func__ );
-    HandleBluetoothModuleReady( true );
-}
-
-void EddieProductController::HandleBluetoothCapabilityNotReady( const std::list<std::string>& points )
-{
-    BOSE_INFO( s_logger, __func__ );
-    HandleBluetoothModuleReady( false );
-}
-
 void EddieProductController::HandleBtLeCapabilityReady( const std::list<std::string>& points )
 {
     BOSE_INFO( s_logger, __func__ );
@@ -828,35 +741,12 @@ void EddieProductController::HandleBtLeCapabilityNotReady( const std::list<std::
     HandleBtLeModuleReady( false );
 }
 
-void EddieProductController::HandleBluetoothModuleReady( bool bluetoothModuleReady )
-{
-    BOSE_INFO( s_logger, __func__ );
-    if( bluetoothModuleReady && !m_isBluetoothReady )
-    {
-        AsyncCallback<BluetoothSinkService::PairedList> bluetoothSinkListCb( std::bind( &EddieProductController::HandleBluetoothSinkPairedList ,
-                                                                                        this, std::placeholders::_1 ), GetTask() );
-        m_FrontDoorClientIF->SendGet<BluetoothSinkService::PairedList>( FRONTDOOR_BLUETOOTH_SINK_LIST_API, bluetoothSinkListCb, errorCb );
-
-        AsyncCallback<BluetoothSinkService::AppStatus> bluetoothSinkListAppStatusCb( std::bind( &EddieProductController::HandleBluetoothSinkAppStatus ,
-                                                                                     this, std::placeholders::_1 ), GetTask() );
-        m_FrontDoorClientIF->SendGet<BluetoothSinkService::AppStatus>( BluetoothSinkEndpoints::APP_STATUS, bluetoothSinkListAppStatusCb, errorCb );
-    }
-    m_isBluetoothReady = bluetoothModuleReady;
-    GetHsm().Handle<>( &CustomProductControllerState::HandleModulesReady );
-}
-
 void EddieProductController::HandleBtLeModuleReady( bool btLeModuleReady )
 {
     BOSE_INFO( s_logger, __func__ );
     m_isBLEModuleReady = btLeModuleReady;
     if( m_isBLEModuleReady )
         GetHsm().Handle<>( &CustomProductControllerState::HandleBtLeModuleReady );
-}
-
-void EddieProductController::HandleBluetoothSinkPairedList( const BluetoothSinkService::PairedList &list )
-{
-    m_bluetoothSinkList = list;
-    GetHsm().Handle<>( &CustomProductControllerState::HandleNetworkConfigurationStatus );
 }
 
 } // namespace ProductApp
