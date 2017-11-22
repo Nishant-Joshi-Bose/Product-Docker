@@ -83,8 +83,8 @@ void CustomProductControllerStateAccessoryPairing::HandleStateStart( )
 {
     BOSE_INFO( s_logger, "CustomProductControllerStateAccessoryPairing is being started." );
 
-    std::shared_ptr< ProductSpeakerManager >
-    productSpeakerManager = GetCustomProductController( ).GetSpeakerManager( );
+    auto productSpeakerManager = GetCustomProductController( ).GetSpeakerManager( );
+
     productSpeakerManager->DoPairing( );
 }
 

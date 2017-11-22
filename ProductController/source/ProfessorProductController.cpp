@@ -327,7 +327,10 @@ Callback < ProductMessage > ProfessorProductController::GetMessageHandler( )
 ///
 /// @brief  ProfessorProductController::GetMessageHandler
 ///
-/// @return
+/// @return This method returns a reference to a command line interface for adding module specific
+///         commands. Note that this interface is instantiated in the inherited ProductController
+///         class; the ProductCommandLine interface instantiated in this class is used for specific
+///         product controller commands in Professor.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CliClientMT& ProfessorProductController::GetCommandLineInterface( )
@@ -351,7 +354,7 @@ std::shared_ptr< ProductHardwareInterface >& ProfessorProductController::GetHard
 ///
 /// @name   ProfessorProductController::GetVolumeManager
 ///
-/// @return This method returns a pointer to the VolumeManager instance
+/// @return This method returns a shared pointer to the VolumeManager instance
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 std::shared_ptr< ProductVolumeManager >& ProfessorProductController::GetVolumeManager( )
@@ -363,7 +366,7 @@ std::shared_ptr< ProductVolumeManager >& ProfessorProductController::GetVolumeMa
 ///
 /// @name ProfessorProductController::GetSpeakerManager
 ///
-/// @return This method returns a pointer to the ProductSpeakerManager instance.
+/// @return This method returns a shared pointer to the ProductSpeakerManager instance.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 std::shared_ptr< ProductSpeakerManager >& ProfessorProductController::GetSpeakerManager( )
