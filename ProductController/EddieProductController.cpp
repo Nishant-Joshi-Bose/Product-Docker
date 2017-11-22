@@ -46,6 +46,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_demoController( m_ProductControllerTask, m_KeyHandler )
 {
     BOSE_INFO( s_logger, __func__ );
+    m_deviceManager.Initialize( this );
     /// Add States to HSM object and initialize HSM before doing anything else.
     GetHsm().AddState( &m_EddieProductControllerStateTop );
     GetHsm().AddState( &m_EddieProductControllerStateBooting );
@@ -55,10 +56,8 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     GetHsm().Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );
 
     InitializeLpmClient();
-    m_LanguagePersistence = ProtoPersistenceFactory::Create( "ProductLanguage", g_ProductPersistenceDir );
     m_ConfigurationStatusPersistence = ProtoPersistenceFactory::Create( "ConfigurationStatus", g_ProductPersistenceDir );
     m_nowPlayingPersistence = ProtoPersistenceFactory::Create( "NowPlaying", g_ProductPersistenceDir );
-    ReadSystemLanguageFromPersistence();
     m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
     ReadConfigurationStatusFromPersistence();
     ReadNowPlayingFromPersistence();
@@ -118,12 +117,6 @@ void EddieProductController::RegisterEndPoints()
     BOSE_INFO( s_logger, __func__ );
     RegisterCommonEndPoints();
 
-    AsyncCallback<Callback<ProductPb::Language>> getLanguageReqCb( std::bind( &EddieProductController::HandleGetLanguageRequest ,
-                                                                              this, std::placeholders::_1 ) , GetTask() );
-
-    AsyncCallback<ProductPb::Language , Callback< ProductPb::Language>> postLanguageReqCb( std::bind( &EddieProductController::HandlePostLanguageRequest,
-                                                                     this, std::placeholders::_1, std::placeholders::_2 ) , GetTask() );
-
     AsyncCallback<Callback<ProductPb::ConfigurationStatus>> getConfigurationStatusReqCb( std::bind( &EddieProductController::HandleConfigurationStatusRequest ,
                                                          this, std::placeholders::_1 ) , GetTask() );
 
@@ -133,10 +126,8 @@ void EddieProductController::RegisterEndPoints()
     /// Registration of endpoints to the frontdoor client.
 
     m_FrontDoorClientIF->RegisterNotification<SoundTouchInterface::CapsInitializationStatus>( "CapsInitializationUpdate", capsInitializationCb );
-    m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_LANGUAGE_API , getLanguageReqCb );
-    m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API , getConfigurationStatusReqCb );
 
-    m_FrontDoorClientIF->RegisterPost<ProductPb::Language>( FRONTDOOR_SYSTEM_LANGUAGE_API , postLanguageReqCb );
+    m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API , getConfigurationStatusReqCb );
 
     AsyncCallback<NetManager::Protobuf::NetworkStatus> networkStatusCb( std::bind( &EddieProductController::HandleNetworkStatus ,
                                                                                    this, std::placeholders::_1 ), GetTask() );
@@ -283,48 +274,6 @@ void EddieProductController::HandleSTSReady( void )
     GetHsm().Handle<>( &CustomProductControllerState::HandleModulesReady );
 }
 
-void EddieProductController::HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp )
-{
-    ProductPb::Language lang;
-    lang.set_code( GetSystemLanguageCode() );
-    lang.mutable_properties()->add_supported_language_codes( "da" );   /// Danish
-    lang.mutable_properties()->add_supported_language_codes( "de" );   /// German
-    lang.mutable_properties()->add_supported_language_codes( "en" );   /// English
-    lang.mutable_properties()->add_supported_language_codes( "es" );   /// Spanish
-    lang.mutable_properties()->add_supported_language_codes( "fr" );   /// French
-    lang.mutable_properties()->add_supported_language_codes( "it" );   /// Italian
-    lang.mutable_properties()->add_supported_language_codes( "nl" );   /// Dutch
-    lang.mutable_properties()->add_supported_language_codes( "sv" );   /// Swedish
-    lang.mutable_properties()->add_supported_language_codes( "ja" );   /// Japanese
-    lang.mutable_properties()->add_supported_language_codes( "zh" );   /// Chinese
-
-    lang.mutable_properties()->add_supported_language_codes( "ko" );   /// Korean
-    lang.mutable_properties()->add_supported_language_codes( "th" );   /// Thai
-    lang.mutable_properties()->add_supported_language_codes( "cs" );   /// Czechoslovakian
-    lang.mutable_properties()->add_supported_language_codes( "fi" );   /// Finnish
-    lang.mutable_properties()->add_supported_language_codes( "el" );   /// Greek
-    lang.mutable_properties()->add_supported_language_codes( "no" );   /// Norwegian
-    lang.mutable_properties()->add_supported_language_codes( "pl" );   /// Polish
-    lang.mutable_properties()->add_supported_language_codes( "pt" );   /// Portuguese
-    lang.mutable_properties()->add_supported_language_codes( "ro" );   /// Romanian
-    lang.mutable_properties()->add_supported_language_codes( "ru" );   /// Russian
-
-    lang.mutable_properties()->add_supported_language_codes( "sl" );   /// Slovenian
-    lang.mutable_properties()->add_supported_language_codes( "tr" );   /// Turkish
-    lang.mutable_properties()->add_supported_language_codes( "hu" );   /// Hungarian
-
-    BOSE_INFO( s_logger, "%s:Response: %s", __func__, ProtoToMarkup::ToJson( lang, false ).c_str() );
-    resp.Send( lang );
-}
-
-void EddieProductController::HandlePostLanguageRequest( const ProductPb::Language &lang, const Callback<ProductPb::Language> &resp )
-{
-    m_systemLanguage.set_code( lang.code() );
-    PersistSystemLanguageCode();
-    BOSE_INFO( s_logger, "%s:Response: %s", __func__, ProtoToMarkup::ToJson( lang, false ).c_str() );
-    resp.Send( lang );
-}
-
 void EddieProductController::HandleConfigurationStatusRequest( const Callback<ProductPb::ConfigurationStatus> &resp )
 {
     BOSE_INFO( s_logger, "%s:Response: %s", __func__, ProtoToMarkup::ToJson( m_ConfigurationStatus, false ).c_str() );
@@ -392,7 +341,7 @@ bool EddieProductController::IsSTSReady() const
 
 bool EddieProductController::IsLanguageSet()
 {
-    return not m_systemLanguage.code().empty();
+    return m_deviceManager.IsLanguageSet();
 }
 
 bool EddieProductController::IsNetworkConfigured()
@@ -432,45 +381,6 @@ void EddieProductController::ReadNowPlayingFromPersistence()
     catch( ProtoPersistenceIF::ProtoPersistenceException& e )
     {
         BOSE_LOG( ERROR, "Loading configuration status from persistence failed - " << e.what() );
-    }
-}
-
-void EddieProductController::ReadSystemLanguageFromPersistence()
-{
-    try
-    {
-        std::string s = m_LanguagePersistence->Load();
-        ProtoToMarkup::FromJson( s, &m_systemLanguage );
-    }
-    catch( const ProtoToMarkup::MarkupError &e )
-    {
-        BOSE_LOG( ERROR, "ReadSystemLanguageFromPersistence- markup error - " << e.what() );
-    }
-    catch( ProtoPersistenceIF::ProtoPersistenceException& e )
-    {
-        BOSE_LOG( ERROR, "ReadSystemLanguageFromPersistence failed - " << e.what() );
-    }
-}
-
-std::string EddieProductController::GetSystemLanguageCode()
-{
-    return m_systemLanguage.code();
-}
-
-void EddieProductController::PersistSystemLanguageCode()
-{
-    BOSE_INFO( s_logger, __func__ );
-    try
-    {
-        m_LanguagePersistence->Remove();
-        m_LanguagePersistence->Store( ProtoToMarkup::ToJson( m_systemLanguage ) );
-        /// Persist configuration status everytime language gets
-        /// changed.
-        PersistSystemConfigurationStatus();
-    }
-    catch( ... )
-    {
-        BOSE_LOG( ERROR, "Storing language in persistence failed" );
     }
 }
 
