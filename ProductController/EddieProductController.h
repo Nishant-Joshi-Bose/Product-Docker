@@ -83,6 +83,12 @@ private:
     void HandleBtLeCapabilityNotReady( const std::list<std::string>& points );
     void HandleBluetoothSinkPairedList( const BluetoothSinkService::PairedList &list );
 
+///////////////////////////////////////////////////////////////////////////////
+/// @name DataCollectionClient
+/// @brief When any key is been released sending the Data to DataCollectionClient
+/// @return void
+//////////////////////////////////////////////////////////////////////////////
+    void SendDataCollection( IpcKeyInformation_t keyInformation );
     std::string keyToOriginator( enum KeyOrigin_t e );
     std::string keyToEventName( uint32_t e );
 ///////////////////////////////////////////////////////////////////////////////

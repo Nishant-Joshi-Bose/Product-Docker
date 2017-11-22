@@ -214,25 +214,7 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
                                  keyInformation.keyid() );
         if( keyInformation.keystate() == KEY_RELEASED )
         {
-
-            std::string currentButtonId;
-            const auto currentKeyId = keyInformation.keyid();
-            const auto currentOrigin = keyInformation.keyorigin();
-
-            ProductPb::Protobuf::ButtonPress KeyPress;
-            KeyPress.set_eventname( keyToEventName( currentKeyId ) );
-            if( currentKeyId <= NUM_KEY_NAMES )
-            {
-                currentButtonId = KEY_NAMES[currentKeyId - 1];
-            }
-            else
-            {
-                BOSE_ERROR( s_logger, "%s, Invalid CurrentKeyID: %s", __func__, currentKeyId );
-            }
-            KeyPress.set_buttonid( currentButtonId ) ;
-            KeyPress.set_origin( keyToOriginator( currentOrigin ) );
-            DataCollectionClient m_DataCollection( "EddieProductController" );
-            m_DataCollection.processKeyData( KeyPress );
+            SendDataCollection( keyInformation );
         }
     }
     else
@@ -243,6 +225,29 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
                     keyInformation.has_keystate(),
                     keyInformation.has_keyid() );
     }
+}
+
+void EddieProductController::SendDataCollection( IpcKeyInformation_t keyInformation )
+{
+    std::string currentButtonId;
+    const auto currentKeyId = keyInformation.keyid();
+    const auto currentOrigin = keyInformation.keyorigin();
+
+    ProductPb::Protobuf::ButtonPress KeyPress;
+    KeyPress.set_eventname( keyToEventName( currentKeyId ) );
+    if( currentKeyId <= NUM_KEY_NAMES )
+    {
+        currentButtonId = KEY_NAMES[currentKeyId - 1];
+    }
+    else
+    {
+        BOSE_ERROR( s_logger, "%s, Invalid CurrentKeyID: %d", __func__, currentKeyId );
+    }
+    KeyPress.set_buttonid( currentButtonId ) ;
+    KeyPress.set_origin( keyToOriginator( currentOrigin ) );
+    DataCollectionClient m_DataCollection( "EddieProductController" );
+    m_DataCollection.processKeyData( KeyPress );
+
 }
 
 std::string EddieProductController::keyToEventName( uint32_t e )
@@ -257,11 +262,11 @@ std::string EddieProductController::keyToEventName( uint32_t e )
     };
     case 2:
     {
-        return "aux-pressed" ;
+        return "aux" ;
     };
     case 3:
     {
-        return "emptystr" ;
+        return "volume-plus" ;
     };
     case 4:
     {
@@ -269,7 +274,7 @@ std::string EddieProductController::keyToEventName( uint32_t e )
     };
     case 5:
     {
-        return "emptystr" ;
+        return "volume-minus" ;
     };
     case 6:
     {
