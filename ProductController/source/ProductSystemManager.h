@@ -38,13 +38,11 @@
 #include "FrontDoorClientIF.h"
 #include "ProtoPersistenceIF.h"
 #include "ProtoPersistenceFactory.h"
-#include "Language.pb.h"
 #include "CapsInitializationStatus.pb.h"
 #include "NetworkService.pb.h"
 #include "STSNetworkStatus.pb.h"
 #include "NetManager.pb.h"
 #include "ProductMessage.pb.h"
-#include "Language.pb.h"
 #include "ConfigurationStatus.pb.h"
 #include "SystemInfo.pb.h"
 #include "ProfessorProductController.h"
@@ -95,9 +93,8 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// These public declarations are primarily to be used by the Product Controller to
-    /// determine if the system language has been set and to set the network configuration status.
+    /// set the network configuration status.
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool IsSystemLanguageSet( ) const;
     void SetNetworkAccoutConfigurationStatus( bool network, bool account );
 
 private:
@@ -115,21 +112,17 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following member variables and methods are used to store the language settings
-    ///        and the configuration status.
+    /// @brief The following member variables and methods are used to store the
+    ///        configuration status.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    ProductPb::Language                     m_LanguageSettings;
-    ProtoPersistenceIF::ProtoPersistencePtr m_LanguageSettingsPersistentStorage;
     ProductPb::ConfigurationStatus          m_ConfigurationStatus;
     ProtoPersistenceIF::ProtoPersistencePtr m_ConfigurationStatusPersistentStorage;
     ProductPb::SystemInfo                   m_SystemInfo;
     ProtoPersistenceIF::ProtoPersistencePtr m_SystemInfoPersistentStorage;
 
-    void ReadLanguageSettingsFromPersistentStorage( );
     void ReadConfigurationStatusFromPersistentStorage( );
     void ReadSystemInfoSettingsFromPersistentStorage( );
-    void WriteLanguageSettingsToPersistentStorage( );
     void WriteConfigurationStatusToPersistentStorage( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,15 +133,6 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleCapsStatus( const SoundTouchInterface::CapsInitializationStatus& status );
     void HandleCapsStatusFailed( const FRONT_DOOR_CLIENT_ERRORS error );
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following methods are used to handle system and supported language information.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleGetLanguageRequest( const Callback< ProductPb::Language >&  response ) const;
-    void HandlePostLanguageRequest( const ProductPb::Language&              language,
-                                    const Callback< ProductPb::Language >&  response );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
