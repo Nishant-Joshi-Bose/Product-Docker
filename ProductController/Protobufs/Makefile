@@ -4,8 +4,6 @@ BOSELIBS_DIR := $(shell components get BoseLibs-$(sdk) installed_location)
 
 PROTO_SOURCES = \
   ConfigurationStatus.proto \
-  Language.proto \
-  DeviceManager.proto \
   LightBarController.proto \
   ProductMessage.proto \
   AudioSettings.proto \

@@ -15,26 +15,16 @@
 #include "LpmClientFactory.h"
 #include "CLICmdsKeys.h"
 #include "BluetoothSinkEndpoints.h"
+#include "EndPointsDefines.h"
 
 static DPrint s_logger( "EddieProductController" );
 
 using namespace DemoApp;
 
-#define FRONTDOOR_SYSTEM_LANGUAGE_API               "/system/language"
-#define FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API   "/system/configuration/status"
-#define FRONTDOOR_SYSTEM_INFO_API                   "/system/info"
-#define FRONTDOOR_SYSTEM_STATE_API                  "/system/state"
-#define FRONTDOOR_NETWORK_STATUS_API                "/network/status"
-#define FRONTDOOR_NETWORK_WIFI_PROFILE_API          "/network/wifi/profile"
-#define FRONTDOOR_CONTENT_NOWPLAYING_API            "/content/nowPlaying"
-#define FRONTDOOR_SYSTEM_CAPSINIT_STATUS_API        "/system/capsInitializationStatus"
-#define FRONTDOOR_BLUETOOTH_SINK_LIST_API           "/bluetooth/sink/list"
-#define FRONTDOOR_BLUETOOTH_BLESETUP_STATUS_API     "/bluetooth/BLESetup/status"
-
 namespace ProductApp
 {
 const std::string g_ProductPersistenceDir = "product-persistence/";
-const std::string KEY_CONFIG_FILE = "/var/run/shepherd/KeyConfiguration.json";
+const std::string KEY_CONFIG_FILE = "/var/run/KeyConfiguration.json";
 
 EddieProductController::EddieProductController( std::string const& ProductName ):
     ProductController( ProductName ),
@@ -45,18 +35,18 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_EddieProductControllerStateAudioOn( GetHsm(), &m_EddieProductControllerStateTop ),
     m_LpmClient(),
     m_KeyHandler( *GetTask(), m_CliClientMT, KEY_CONFIG_FILE ),
-    m_deviceManager( GetTask(), *this ),
     m_cachedStatus(),
     m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
     m_LpmInterface( std::bind( &EddieProductController::HandleProductMessage,
                                this, std::placeholders::_1 ), GetTask() ),
-    m_wifiProfilesCount( 0 ),
+    m_wifiProfilesCount(),
     m_bluetoothSinkList(),
     errorCb( AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> ( std::bind( &EddieProductController::CallbackError,
                                                                   this, std::placeholders::_1 ), GetTask() ) ),
     m_demoController( m_ProductControllerTask, m_KeyHandler )
 {
     BOSE_INFO( s_logger, __func__ );
+    m_deviceManager.Initialize( this );
     /// Add States to HSM object and initialize HSM before doing anything else.
     GetHsm().AddState( &m_EddieProductControllerStateTop );
     GetHsm().AddState( &m_EddieProductControllerStateBooting );
@@ -66,10 +56,8 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     GetHsm().Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );
 
     InitializeLpmClient();
-    m_LanguagePersistence = ProtoPersistenceFactory::Create( "ProductLanguage", g_ProductPersistenceDir );
     m_ConfigurationStatusPersistence = ProtoPersistenceFactory::Create( "ConfigurationStatus", g_ProductPersistenceDir );
     m_nowPlayingPersistence = ProtoPersistenceFactory::Create( "NowPlaying", g_ProductPersistenceDir );
-    ReadSystemLanguageFromPersistence();
     m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
     ReadConfigurationStatusFromPersistence();
     ReadNowPlayingFromPersistence();
@@ -129,20 +117,8 @@ void EddieProductController::RegisterEndPoints()
     BOSE_INFO( s_logger, __func__ );
     RegisterCommonEndPoints();
 
-    AsyncCallback<Callback<ProductPb::Language>> getLanguageReqCb( std::bind( &EddieProductController::HandleGetLanguageRequest ,
-                                                                              this, std::placeholders::_1 ) , GetTask() );
-
-    AsyncCallback<ProductPb::Language , Callback< ProductPb::Language>> postLanguageReqCb( std::bind( &EddieProductController::HandlePostLanguageRequest,
-                                                                     this, std::placeholders::_1, std::placeholders::_2 ) , GetTask() );
-
     AsyncCallback<Callback<ProductPb::ConfigurationStatus>> getConfigurationStatusReqCb( std::bind( &EddieProductController::HandleConfigurationStatusRequest ,
                                                          this, std::placeholders::_1 ) , GetTask() );
-    //DeviceInfo async callback
-    AsyncCallback <Callback<::DeviceManager::Protobuf::DeviceInfo>> getDeviceInfoReqCb( std::bind( &EddieProductController :: HandleGetDeviceInfoRequest,
-                                                                 this, std::placeholders::_1 ), GetTask() );
-    //Device State async callback
-    AsyncCallback <Callback<::DeviceManager::Protobuf::DeviceState >> getDeviceStateReqCb( std::bind( &EddieProductController :: HandleGetDeviceStateRequest,
-                                                                   this, std::placeholders::_1 ), GetTask() );
 
     AsyncCallback<SoundTouchInterface::CapsInitializationStatus> capsInitializationCb( std::bind( &EddieProductController::HandleCapsInitializationUpdate,
             this, std::placeholders::_1 ) , GetTask() );
@@ -150,15 +126,9 @@ void EddieProductController::RegisterEndPoints()
     /// Registration of endpoints to the frontdoor client.
 
     m_FrontDoorClientIF->RegisterNotification<SoundTouchInterface::CapsInitializationStatus>( "CapsInitializationUpdate", capsInitializationCb );
-    m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_LANGUAGE_API , getLanguageReqCb );
+
     m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API , getConfigurationStatusReqCb );
 
-    m_FrontDoorClientIF->RegisterPost<ProductPb::Language>( FRONTDOOR_SYSTEM_LANGUAGE_API , postLanguageReqCb );
-
-    ///Device info get request handler
-    m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_INFO_API, getDeviceInfoReqCb );
-    ///Device state get request handler
-    m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_STATE_API, getDeviceStateReqCb );
     AsyncCallback<NetManager::Protobuf::NetworkStatus> networkStatusCb( std::bind( &EddieProductController::HandleNetworkStatus ,
                                                                                    this, std::placeholders::_1 ), GetTask() );
     m_FrontDoorClientIF->RegisterNotification<NetManager::Protobuf::NetworkStatus>( FRONTDOOR_NETWORK_STATUS_API, networkStatusCb );
@@ -207,7 +177,7 @@ void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::Ne
 void EddieProductController::HandleWiFiProfileResponse( const NetManager::Protobuf::WiFiProfiles& profiles )
 {
     m_wifiProfilesCount = profiles.profiles_size();
-    BOSE_INFO( s_logger, "%s, m_wifiProfilesCount=%d", __func__, m_wifiProfilesCount );
+    BOSE_INFO( s_logger, "%s, m_wifiProfilesCount=%d", __func__, m_wifiProfilesCount.get() );
     GetHsm().Handle<>( &CustomProductControllerState::HandleNetworkConfigurationStatus );
 }
 
@@ -304,48 +274,6 @@ void EddieProductController::HandleSTSReady( void )
     GetHsm().Handle<>( &CustomProductControllerState::HandleModulesReady );
 }
 
-void EddieProductController::HandleGetLanguageRequest( const Callback<ProductPb::Language> &resp )
-{
-    ProductPb::Language lang;
-    lang.set_code( GetSystemLanguageCode() );
-    lang.mutable_properties()->add_supported_language_codes( "da" );   /// Danish
-    lang.mutable_properties()->add_supported_language_codes( "de" );   /// German
-    lang.mutable_properties()->add_supported_language_codes( "en" );   /// English
-    lang.mutable_properties()->add_supported_language_codes( "es" );   /// Spanish
-    lang.mutable_properties()->add_supported_language_codes( "fr" );   /// French
-    lang.mutable_properties()->add_supported_language_codes( "it" );   /// Italian
-    lang.mutable_properties()->add_supported_language_codes( "nl" );   /// Dutch
-    lang.mutable_properties()->add_supported_language_codes( "sv" );   /// Swedish
-    lang.mutable_properties()->add_supported_language_codes( "ja" );   /// Japanese
-    lang.mutable_properties()->add_supported_language_codes( "zh" );   /// Chinese
-
-    lang.mutable_properties()->add_supported_language_codes( "ko" );   /// Korean
-    lang.mutable_properties()->add_supported_language_codes( "th" );   /// Thai
-    lang.mutable_properties()->add_supported_language_codes( "cs" );   /// Czechoslovakian
-    lang.mutable_properties()->add_supported_language_codes( "fi" );   /// Finnish
-    lang.mutable_properties()->add_supported_language_codes( "el" );   /// Greek
-    lang.mutable_properties()->add_supported_language_codes( "no" );   /// Norwegian
-    lang.mutable_properties()->add_supported_language_codes( "pl" );   /// Polish
-    lang.mutable_properties()->add_supported_language_codes( "pt" );   /// Portuguese
-    lang.mutable_properties()->add_supported_language_codes( "ro" );   /// Romanian
-    lang.mutable_properties()->add_supported_language_codes( "ru" );   /// Russian
-
-    lang.mutable_properties()->add_supported_language_codes( "sl" );   /// Slovenian
-    lang.mutable_properties()->add_supported_language_codes( "tr" );   /// Turkish
-    lang.mutable_properties()->add_supported_language_codes( "hu" );   /// Hungarian
-
-    BOSE_INFO( s_logger, "%s:Response: %s", __func__, ProtoToMarkup::ToJson( lang, false ).c_str() );
-    resp.Send( lang );
-}
-
-void EddieProductController::HandlePostLanguageRequest( const ProductPb::Language &lang, const Callback<ProductPb::Language> &resp )
-{
-    m_systemLanguage.set_code( lang.code() );
-    PersistSystemLanguageCode();
-    BOSE_INFO( s_logger, "%s:Response: %s", __func__, ProtoToMarkup::ToJson( lang, false ).c_str() );
-    resp.Send( lang );
-}
-
 void EddieProductController::HandleConfigurationStatusRequest( const Callback<ProductPb::ConfigurationStatus> &resp )
 {
     BOSE_INFO( s_logger, "%s:Response: %s", __func__, ProtoToMarkup::ToJson( m_ConfigurationStatus, false ).c_str() );
@@ -387,9 +315,9 @@ bool EddieProductController::IsAllModuleReady()
                m_isCapsReady , m_isLPMReady, m_isNetworkModuleReady, m_isBluetoothReady, m_isSTSReady );
     return ( m_isCapsReady and
              m_isLPMReady and
-             m_isNetworkModuleReady and
+             ( m_isNetworkModuleReady and m_cachedStatus.is_initialized() and m_wifiProfilesCount.is_initialized() ) and
              m_isSTSReady and
-             m_isBluetoothReady );
+             ( m_isBluetoothReady and m_bluetoothSinkList.is_initialized() ) );
 }
 
 bool EddieProductController::IsBtLeModuleReady() const
@@ -413,12 +341,12 @@ bool EddieProductController::IsSTSReady() const
 
 bool EddieProductController::IsLanguageSet()
 {
-    return not m_systemLanguage.code().empty();
+    return m_deviceManager.IsLanguageSet();
 }
 
 bool EddieProductController::IsNetworkConfigured()
 {
-    return ( m_bluetoothSinkList.devices_size() || m_wifiProfilesCount || m_cachedStatus.isprimaryup() );
+    return ( m_bluetoothSinkList.get().devices_size() || m_wifiProfilesCount.get() || m_cachedStatus.get().isprimaryup() );
 }
 
 void EddieProductController::ReadConfigurationStatusFromPersistence()
@@ -453,45 +381,6 @@ void EddieProductController::ReadNowPlayingFromPersistence()
     catch( ProtoPersistenceIF::ProtoPersistenceException& e )
     {
         BOSE_LOG( ERROR, "Loading configuration status from persistence failed - " << e.what() );
-    }
-}
-
-void EddieProductController::ReadSystemLanguageFromPersistence()
-{
-    try
-    {
-        std::string s = m_LanguagePersistence->Load();
-        ProtoToMarkup::FromJson( s, &m_systemLanguage );
-    }
-    catch( const ProtoToMarkup::MarkupError &e )
-    {
-        BOSE_LOG( ERROR, "ReadSystemLanguageFromPersistence- markup error - " << e.what() );
-    }
-    catch( ProtoPersistenceIF::ProtoPersistenceException& e )
-    {
-        BOSE_LOG( ERROR, "ReadSystemLanguageFromPersistence failed - " << e.what() );
-    }
-}
-
-std::string EddieProductController::GetSystemLanguageCode()
-{
-    return m_systemLanguage.code();
-}
-
-void EddieProductController::PersistSystemLanguageCode()
-{
-    BOSE_INFO( s_logger, __func__ );
-    try
-    {
-        m_LanguagePersistence->Remove();
-        m_LanguagePersistence->Store( ProtoToMarkup::ToJson( m_systemLanguage ) );
-        /// Persist configuration status everytime language gets
-        /// changed.
-        PersistSystemConfigurationStatus();
-    }
-    catch( ... )
-    {
-        BOSE_LOG( ERROR, "Storing language in persistence failed" );
     }
 }
 
@@ -560,25 +449,6 @@ void EddieProductController::SendDeActivateAccessPointCmd()
     BOSE_INFO( s_logger, __func__ );
 }
 
-void EddieProductController::HandleGetDeviceInfoRequest( const Callback<::DeviceManager::Protobuf::DeviceInfo>& resp )
-{
-    ::DeviceManager::Protobuf::DeviceInfo devInfo;
-
-    devInfo = m_deviceManager.GetDeviceInfo();
-
-    BOSE_INFO( s_logger, "%s:Reponse: %s", __func__, ProtoToMarkup::ToJson( devInfo, false ).c_str() );
-
-    resp.Send( devInfo );
-}
-
-void EddieProductController::HandleGetDeviceStateRequest( const Callback<::DeviceManager::Protobuf::DeviceState>& resp )
-{
-    ::DeviceManager::Protobuf::DeviceState currentState;
-    currentState.set_state( GetHsm().GetCurrentState()->GetName() );
-    BOSE_INFO( s_logger, "%s:Reponse: %s", __func__, ProtoToMarkup::ToJson( currentState, false ).c_str() );
-    resp.Send( currentState );
-}
-
 void EddieProductController::HandleIntents( KeyHandlerUtil::ActionType_t intent )
 {
     BOSE_INFO( s_logger, "Translated Intent %d", intent );
@@ -586,6 +456,14 @@ void EddieProductController::HandleIntents( KeyHandlerUtil::ActionType_t intent 
                                      std::to_string( intent ) );
 
     GetHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntents, intent );
+    return;
+}
+
+void EddieProductController::HandleNetworkStandbyIntentCb( const KeyHandlerUtil::ActionType_t& intent )
+{
+    BOSE_INFO( s_logger, "%s: Translated Intent %d", __func__, intent );
+
+    GetHsm().Handle<> ( &CustomProductControllerState::HandleNetworkStandbyIntent );
     return;
 }
 
@@ -978,7 +856,6 @@ void EddieProductController::HandleBtLeModuleReady( bool btLeModuleReady )
 void EddieProductController::HandleBluetoothSinkPairedList( const BluetoothSinkService::PairedList &list )
 {
     m_bluetoothSinkList = list;
-    BOSE_INFO( s_logger, "%s Bluetooth sink list count [%d]", __func__, m_bluetoothSinkList.devices_size() );
     GetHsm().Handle<>( &CustomProductControllerState::HandleNetworkConfigurationStatus );
 }
 

@@ -5,7 +5,6 @@ INCLUDE_DIRECTORIES(
   ${DEMOCONTROLLER_DIR}
   ${CUSTOM_HSM_DIR}
   ${KEYHANDLER_DIR}/include
-  DeviceManager
   IntentHandler
   DisplayController
   .
@@ -21,13 +20,10 @@ ADD_EXECUTABLE(Eddie
   ${CUSTOM_HSM_DIR}/EddieProductControllerStateSetup.cpp
   ${CUSTOM_HSM_DIR}/EddieProductControllerStateNetworkStandby.cpp
   ${CUSTOM_HSM_DIR}/EddieProductControllerStateAudioOn.cpp
-  DeviceManager.cpp
   ProductCliClient.cpp
   EddieProductController.cpp
   Main.cpp
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
-  ${PROTO_CC_DEST}/Language.pb.cc
-  ${PROTO_CC_DEST}/DeviceManager.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/ContentItem.pb.cc
@@ -37,13 +33,14 @@ ADD_EXECUTABLE(Eddie
   IntentHandler/TransportControlManager.cpp
   IntentHandler/BluetoothManager.cpp
   IntentHandler/PlaybackRequestManager.cpp
+  IntentHandler/NetworkStandbyManager.cpp
   LpmInterface.cpp
   DisplayController/DisplayController.cpp
 )
 
 TARGET_LINK_LIBRARIES(Eddie
   CastleProductControllerCommon
-  CastleDemoController
+  DemoController
   LpmClient
   FrontDoorClient
   NetworkServiceClient
@@ -56,11 +53,13 @@ TARGET_LINK_LIBRARIES(Eddie
   BoseLibs
   PassportClient
   STS
-  libjsoncpp.a
-  libprotobuf.a
-  libTinyXml.a
+  jsoncpp
+  protobuf
+  TinyXml
   pthread
   rt
+  cap
+  dl
 )
 
 INSTALL(TARGETS Eddie DESTINATION ${OUTPUT_BIN_DIR})

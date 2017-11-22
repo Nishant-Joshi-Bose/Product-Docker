@@ -1,11 +1,15 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-11-14_0931"
+    "selected_version": "Continuous/Castle-Fork/2017-11-16_1441"
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/master/0.2.1-154+fb0b43a"
+    "selected_version": "Continuous/master/0.2.1-159+80d4277"
+  },
+  {
+    "name": "bose-opkg-utils",
+    "selected_version": "master@0828ce81e7a9b96e03057da48c04a0cebc9aff21"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -13,11 +17,11 @@
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/0.2.1-13+f0ae3fa"
+    "selected_version": "Continuous/master/0.2.1-18+eca42ed"
   },
   {
     "name": "CastleDemoController-qc8017_32",
-    "selected_version": "Continuous/master/0.2.1-17+3077ff0"
+    "selected_version": "Continuous/master/0.2.1-20+c5447c9"
   },
   {
     "name": "CastleLibs-qc8017_32",
@@ -25,31 +29,35 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Continuous/master/0.2.1-13+53e8e4c"
+    "selected_version": "Continuous/master/0.2.1-14+23eb6c0"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.2.2-101+760170a"
+    "selected_version": "Continuous/master/0.2.2-105+ea19c8e"
   },
   {
     "name": "CastlePassport-native",
-    "selected_version": "Continuous/master/0.2.1-157+4866309"
+    "selected_version": "Continuous/master/0.2.1-159+a802428"
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/0.2.1-157+4866309"
+    "selected_version": "Continuous/master/0.2.1-159+a802428"
+  },
+  {
+    "name": "CastlePassportClient-qc8017_32",
+    "selected_version": "Continuous/master/0.2.1-159+a802428"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@cfaacc61e5d18d5a33afe6b1dd17fb3724c67fc6"
+    "selected_version": "master@b63f86863110cb2dc0a6437be420872f0535df2e"
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@a7eb98a9c62354519f97d5a5f1f76b2283836098"
+    "selected_version": "master@4121d5826e63b72949306a2061e92c816ce8d6fb"
   },
   {
     "name": "EddieLPM-Package",
-    "selected_version": "Release/IP2/0.2.0.2553865/DP1"
+    "selected_version": "Release/IP2/0.2.0.2571468/DP1"
   },
   {
     "name": "KeyHandler-native",
@@ -85,15 +93,15 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/0.2.1-30+ce98842"
+    "selected_version": "Release/master/0.2.2-35+82ffd55"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.2.1-114+7092630"
+    "selected_version": "Release/master/0.2.1-122+424b9c5"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-11-14_0931"
+    "selected_version": "Continuous/Castle-Fork/2017-11-16_1441"
   },
   {
     "name": "UnitTest++-native",
@@ -104,11 +112,11 @@
     "selected_version": "branches/UnitTest++@2485"
   },
   {
-    "name": "WiFi-Setup-Webpage",
-    "selected_version": "master@19f561f91af118db5439955e4d85bc0a914964eb"
+    "name": "Webkit",
+    "selected_version": "Continuous/master/0.2.1-11+bb11bf1"
   },
   {
-    "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Continuous/master/0.2.1-157+4866309"
+    "name": "WiFi-Setup-Webpage",
+    "selected_version": "master@19f561f91af118db5439955e4d85bc0a914964eb"
   }
 ]

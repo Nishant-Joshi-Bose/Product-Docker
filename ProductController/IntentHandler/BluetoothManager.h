@@ -20,7 +20,7 @@ public:
     BluetoothManager( NotifyTargetTaskIF& task,
                       const CliClientMT& cliClient,
                       const FrontDoorClientIF_t& frontDoorClient,
-                      const ProductController& controller ):
+                      EddieProductController& controller ):
         IntentManager( task, cliClient, frontDoorClient, controller )
     {
         m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
@@ -37,7 +37,7 @@ public:
     // If cb is not null, the call back will return control to HSM in
     // desired function for desired state change
     //
-    bool Handle( KeyHandlerUtil::ActionType_t arg ) override;
+    bool Handle( KeyHandlerUtil::ActionType_t& arg ) override;
 private:
     bool GetSinkStatus( BluetoothSinkService::APP_STATUS& status );
     bool BluetoothDeviceConnected();

@@ -32,6 +32,7 @@ public:
     void HandleStateStart() override;
     void HandleStateExit() override;
     bool HandleIntents( KeyHandlerUtil::ActionType_t intent ) override;
+    bool HandleNetworkStandbyIntent( ) override;
 
 };
 } /// namespace ProductApp

@@ -1,6 +1,13 @@
 <ShepherdConfig>
   <daemon name="Eddie"/>
 
+  <daemon name="Monaco"
+          exe="/opt/Bose/webkit/run_wpe.sh">
+    <arg>MONACO</arg>
+    <arg>1.0</arg>
+    <arg>PORTRAIT</arg>
+  </daemon>
+
   <daemon name="avahi-daemon"
           exe="start-avahi"/>
 
@@ -13,11 +20,6 @@
   </daemon>
 
   <daemon name="FrontDoor"/>
-
-  <daemon name="WebServer">
-    <arg>--disable-setup-port</arg>
-    <arg>-c/opt/Bose/etc/WebServer.xml</arg>
-  </daemon>
 
   <daemon name="BoseApp"
           recovery="reboot">

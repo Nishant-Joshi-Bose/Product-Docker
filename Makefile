@@ -27,6 +27,7 @@ CMAKE_USE_CCACHE := $(USE_CCACHE)
 EDDIELPMPACKAGE_DIR = $(shell components get EddieLPM-Package installed_location)
 PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
+SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
 TESTUTILS_DIR = $(shell components get CastleTestUtils installed_location)
 
 .PHONY: generated_sources
@@ -52,6 +53,12 @@ cmake_build: generated_sources | $(BUILDS_DIR) astyle
 product-ipk: cmake_build
 	./scripts/create-product-ipk
 
+IPKS = hsp.ipk lpm_updater.ipk eddie.ipk
+
+.PHONY: packages-gz
+packages-gz: product-ipk
+	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS)
+
 .PHONY: graph
 graph: product-ipk
 	graph-components --sdk=$(sdk) Eddie builds/$(cfg)/product-ipk-stage/component-info.gz >builds/$(cfg)/components.dot
@@ -62,7 +69,7 @@ hsp-ipk: cmake_build
 	./scripts/create-hsp-ipk
 
 .PHONY: package
-package: product-ipk hsp-ipk lpmupdater-ipk
+package: product-ipk hsp-ipk lpmupdater-ipk packages-gz
 	./scripts/create-product-tarball
 
 .PHONY: lpmupdater-ipk
