@@ -21,25 +21,65 @@ namespace ProductApp
 
 typedef enum
 {
-    BACK_LIGHT_LEVEL_DIM          =  15,
-    BACK_LIGHT_LEVEL_DIM_HIGH     =  30,
-    BACK_LIGHT_LEVEL_MEDIUM       =  50,
-    BACK_LIGHT_LEVEL_MEDIUM_HIGH  =  65,
-    BACK_LIGHT_LEVEL_BRIGHT       =  70,
-    BACK_LIGHT_LEVEL_BRIGHT_HIGH  = 100
+    BACK_LIGHT_LEVEL_DIM           =   2,
+    BACK_LIGHT_LEVEL_DIM_HIGH      =  10,
+    BACK_LIGHT_LEVEL_MEDIUM_LOW    =  20,
+    BACK_LIGHT_LEVEL_MEDIUM        =  25,
+    BACK_LIGHT_LEVEL_MEDIUM_HIGH   =  40,
+    BACK_LIGHT_LEVEL_BRIGHT        =  60,
+    BACK_LIGHT_LEVEL_BRIGHT_HIGH   = 100
 } e_backLightLevel;
 
-typedef enum
+typedef struct
 {
-    DIM_TO_MEDIUM    = 280,
-    MEDIUM_TO_DIM    = 170,
-    MEDIUM_TO_BRIGHT = 598,
-    BRIGHT_TO_MEDIUM = 400
-} e_luxThreshold;
+    float            lux ;
+    e_backLightLevel level;
+} t_luxBacklightTuple;
 
-static const int MONITOR_SENSOR_SLEEP_MS  = 1000;
-static const int CHANGING_LEVEL_SLEEP_MS  = 10;
-static const int BACKLIGHT_DIFF_THRESHOLD = ( BACK_LIGHT_LEVEL_DIM_HIGH - BACK_LIGHT_LEVEL_DIM - 1 );
+// The LUX values are in real lux, withiout the light reading device attenuation
+t_luxBacklightTuple lowering_lux_threshold[] =
+{
+    {430, BACK_LIGHT_LEVEL_BRIGHT_HIGH},  // BRIGHT HIGH TO BRIGHT
+    {215, BACK_LIGHT_LEVEL_BRIGHT     },  // BRIGHT TO MEDIUM HIGH
+    {100, BACK_LIGHT_LEVEL_MEDIUM_HIGH},  // MEDIUM HIGH TO MEDIUM
+    { 50, BACK_LIGHT_LEVEL_MEDIUM     },  // MEDIUM TO DIM HIGH
+    { 17, BACK_LIGHT_LEVEL_MEDIUM_LOW },
+    {  5, BACK_LIGHT_LEVEL_DIM_HIGH   },  // DIM HIGH TO DIM
+    {  0, BACK_LIGHT_LEVEL_DIM        }   // value must be 0
+};
+
+
+t_luxBacklightTuple rising_lux_threshold[] =
+{
+    {430, BACK_LIGHT_LEVEL_BRIGHT_HIGH},  // BRIGHT HIGH TO BRIGHT
+    {215, BACK_LIGHT_LEVEL_BRIGHT     },  // BRIGHT TO MEDIUM HIGH
+    {100, BACK_LIGHT_LEVEL_MEDIUM_HIGH},  // MEDIUM HIGH TO MEDIUM
+    { 50, BACK_LIGHT_LEVEL_MEDIUM     },  // MEDIUM TO DIM HIGH
+    { 17, BACK_LIGHT_LEVEL_MEDIUM_LOW },
+    {  5, BACK_LIGHT_LEVEL_DIM_HIGH   },  // DIM HIGH TO DIM
+    {  1, BACK_LIGHT_LEVEL_DIM        }
+};
+
+
+#if 0
+t_luxBacklightTuple rising_lux_threshold  [] =
+{
+    {150.0, BACK_LIGHT_LEVEL_BRIGHT_HIGH},  // BRIGHT TO BRIGHT HIGH
+    { 50.0, BACK_LIGHT_LEVEL_BRIGHT     },  // MEDIUM HIGH TO BRIGHT
+    { 30.0, BACK_LIGHT_LEVEL_MEDIUM_HIGH},  // MEDIUM TO MEDIUM HIGH
+    { 15.0, BACK_LIGHT_LEVEL_MEDIUM     },  // DIM HIGH TO MEDIUM
+    { 10.0, BACK_LIGHT_LEVEL_DIM_HIGH   },  // DIM TO DIM HIGH
+    {  0.0, BACK_LIGHT_LEVEL_DIM        }
+};
+#endif // 0
+
+static const int   MONITOR_SENSOR_SLEEP_MS  = 1000;
+static const int   CHANGING_LEVEL_SLEEP_MS  = 10;
+static const int   BACKLIGHT_DIFF_THRESHOLD = ( BACK_LIGHT_LEVEL_DIM_HIGH - BACK_LIGHT_LEVEL_DIM - 1 );
+static const float PLEXI_LUX_FACTOR         = 1.0f;
+static const float SILVER_LUX_FACTOR        = 11.0f;
+static const float BLACK_LUX_FACTOR         = 16.0f;
+//static const int NB_LIGHT_SENSOR_VALUES   = 5;
 
 DisplayController::DisplayController( ProductController& controller, const std::shared_ptr<FrontDoorClientIF>& fd_client, LpmClientIF::LpmClientPtr clientPtr ):
     m_productController( controller ),
@@ -48,7 +88,12 @@ DisplayController::DisplayController( ProductController& controller, const std::
     m_timeToStop( false ),
     m_autoMode( true )
 {
-    s_logger.SetLogLevel( "DisplayController", DPrint::WARNING );
+    //s_logger.SetLogLevel( "DisplayController", DPrint::WARNING );
+    s_logger.SetLogLevel( "DisplayController", DPrint::INFO );
+
+    m_luxFactor = SILVER_LUX_FACTOR;
+    //m_luxFactor = BLACK_LUX_FACTOR;
+    //m_luxFactor = PLEXI_LUX_FACTOR;
 }// constructor
 
 DisplayController::~DisplayController()
@@ -61,32 +106,20 @@ DisplayController::~DisplayController()
     }
 }// destructor
 
-int DisplayController::GetBackLightLevelFromLux( int lux, int lux_rising )
+int DisplayController::GetBackLightLevelFromLux( float lux, float lux_rising )
 {
-    if( lux_rising > 1 )
+    t_luxBacklightTuple* lux_threshold = ( lux_rising > 0.0f ) ? rising_lux_threshold : lowering_lux_threshold;
+    int i;
+
+    for( i = 0; lux_threshold[i].lux > 0.0f; i++ )
     {
-        if( lux >= MEDIUM_TO_BRIGHT )
+        if( lux >= lux_threshold[i].lux )
         {
-            return BACK_LIGHT_LEVEL_BRIGHT_HIGH;
+            return ( lux_threshold[i].level );
         }
-        else if( lux >= DIM_TO_MEDIUM )
-        {
-            return BACK_LIGHT_LEVEL_MEDIUM;
-        }
-
-        return BACK_LIGHT_LEVEL_DIM;
     }
 
-    if( lux >= BRIGHT_TO_MEDIUM )
-    {
-        return BACK_LIGHT_LEVEL_BRIGHT_HIGH;
-    }
-    else if( lux >= MEDIUM_TO_DIM )
-    {
-        return BACK_LIGHT_LEVEL_MEDIUM;
-    }
-
-    return BACK_LIGHT_LEVEL_DIM;
+    return  lux_threshold[i].level;
 }// GetBackLightLevelFromLux
 
 void DisplayController::SetBackLightLevel( int actualLevel, int newLevel )
@@ -96,6 +129,18 @@ void DisplayController::SetBackLightLevel( int actualLevel, int newLevel )
     IpcBackLight_t backlight;
 
     BOSE_LOG( INFO, "set actual level: " << actualLevel << " new level: " << newLevel );
+
+    if ( ( actualLevel < 0 ) || ( actualLevel > 100 ) )
+    {
+        BOSE_LOG( ERROR, "invalid actual back light level: "  << actualLevel );
+        return;
+    }
+
+    if ( (newLevel < 0) || (newLevel > 100) )
+    {
+        BOSE_LOG( ERROR, "invalid new back light level: "  << newLevel );
+        return;
+    }
 
     for( int i = 0; i < steps; i++ )
     {
@@ -121,9 +166,10 @@ void DisplayController::SetBackLightLevel( int actualLevel, int newLevel )
 ////////////////////////////////////////////////////////////////////////////////
 void DisplayController::MonitorLightSensor()
 {
-    int previous_lux   = 0;
-    int targeted_level = 0;
+    float previous_lux   = 0;
+    int   targeted_level = 0;
 
+    m_luxValue      = 0.0f;
     m_luxDecimal    = 0;
     m_luxFractional = 0;
     m_backLight     = 0;
@@ -141,16 +187,28 @@ void DisplayController::MonitorLightSensor()
             m_luxFractional = ( int )( be16toh( rsp.lux_fractional_value() ) );
         } );
 
+        m_luxValue = ( ( ( float ) m_luxDecimal ) + ( ( ( float )m_luxFractional ) * 0.001f ) ) * m_luxFactor;
+
         m_lpmClient->GetBackLight( [this]( IpcBackLight_t const & rsp )
         {
             m_backLight = rsp.value();
         } );
 
-        BOSE_LOG( INFO, "actual lux: " << m_luxDecimal << ", previous lux: " << previous_lux << ", back light: " << m_backLight );
+        if ( ( m_backLight < 0 )  || ( m_backLight > 100 ) )
+        {
+            BOSE_LOG ( WARNING, "invalid back light level read: " << m_backLight );
+            SetBackLightLevel ( 50, 49 );
+        }
+
+        BOSE_LOG( INFO,  "lux(raw, adj, prev): (" << m_luxDecimal    << "."
+                  << m_luxFractional << ", "
+                  << m_luxValue      << ", "
+                  << previous_lux    << ") bl: "
+                  << m_backLight     << ( ( m_luxValue - previous_lux ) < 0.0f ?  " lowering" : " rising" ) );
 
         if( m_autoMode )
         {
-            targeted_level = GetBackLightLevelFromLux( m_luxDecimal, m_luxDecimal - previous_lux );
+            targeted_level = GetBackLightLevelFromLux( m_luxValue, m_luxValue - previous_lux );
 
             BOSE_LOG( INFO, "target level: " << targeted_level << ", actual level: " << m_backLight );
 
@@ -162,7 +220,7 @@ void DisplayController::MonitorLightSensor()
                 m_backLight = targeted_level;
             }
 
-            previous_lux = m_luxDecimal;
+            previous_lux = m_luxValue;
         }// If we are in automatic mode
 
         usleep( MONITOR_SENSOR_SLEEP_MS * 1000 );
