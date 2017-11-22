@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// @file PresetManager.cpp
 ///
-/// @brief Implementation of Transport Control Manager
+/// @brief Implementation of PresentManager
 ///
 /// @attention
 ///    BOSE CORPORATION.
