@@ -250,7 +250,7 @@ void EddieProductController::SendDataCollection( IpcKeyInformation_t keyInformat
 
 std::string EddieProductController::keyToEventName( uint32_t e )
 {
-    const std::string emptystr = "";
+    const std::string emptystr;
 
     switch( e )
     {
