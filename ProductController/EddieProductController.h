@@ -38,6 +38,7 @@
 #include "ProductSTSController.h"
 #include "BluetoothSinkService.pb.h"
 #include "DisplayController.h"
+#include "DataCollectionClient.h"
 
 namespace ProductApp
 {
@@ -399,6 +400,7 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool                                        m_isSTSReady = false;
     ProductSTSController                        m_ProductSTSController;
+    DataCollectionClient                        m_DataCollectionClient;
 };
 static const char* const KEY_NAMES[] __attribute__( ( unused ) ) =
 {

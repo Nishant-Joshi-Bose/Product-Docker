@@ -17,7 +17,6 @@
 #include "BluetoothSinkEndpoints.h"
 #include "EndPointsDefines.h"
 #include "ButtonPress.pb.h"
-#include "DataCollectionClient.h"
 
 static DPrint s_logger( "EddieProductController" );
 
@@ -45,7 +44,8 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_bluetoothSinkList(),
     errorCb( AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> ( std::bind( &EddieProductController::CallbackError,
                                                                   this, std::placeholders::_1 ), GetTask() ) ),
-    m_demoController( m_ProductControllerTask, m_KeyHandler )
+    m_demoController( m_ProductControllerTask, m_KeyHandler ),
+    m_DataCollectionClient( "EddieProductController" )
 {
     BOSE_INFO( s_logger, __func__ );
     /// Add States to HSM object and initialize HSM before doing anything else.
@@ -245,9 +245,7 @@ void EddieProductController::SendDataCollection( IpcKeyInformation_t keyInformat
     }
     KeyPress.set_buttonid( currentButtonId ) ;
     KeyPress.set_origin( keyToOriginator( currentOrigin ) );
-    DataCollectionClient m_DataCollection( "EddieProductController" );
-    m_DataCollection.processKeyData( KeyPress );
-
+    m_DataCollectionClient.processKeyData( KeyPress );
 }
 
 std::string EddieProductController::keyToEventName( uint32_t e )
