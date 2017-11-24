@@ -36,10 +36,6 @@
     "selected_version": "Continuous/master/0.2.2-108+a5e0b02"
   },
   {
-    "name": "CastlePassport-native",
-    "selected_version": "Continuous/master/0.2.1-159+a802428"
-  },
-  {
     "name": "CastlePassport-qc8017_32",
     "selected_version": "Continuous/master/0.2.1-159+a802428"
   },
@@ -58,10 +54,6 @@
   {
     "name": "EddieLPM-Package",
     "selected_version": "Release/IP2/0.2.0.2571468/DP1"
-  },
-  {
-    "name": "KeyHandler-native",
-    "selected_version": "Release/master/0.2.1-26+e67ea31"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -102,10 +94,6 @@
   {
     "name": "SoundTouch-SDK-qc8017_32",
     "selected_version": "Continuous/Castle-Fork/2017-11-16_1441"
-  },
-  {
-    "name": "UnitTest++-native",
-    "selected_version": "branches/UnitTest++@2485"
   },
   {
     "name": "UnitTest++-qc8017_32",
