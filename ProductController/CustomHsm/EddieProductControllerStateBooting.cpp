@@ -93,4 +93,11 @@ void EddieProductControllerStateBooting::GoToNextState()
     }
 }
 
+bool EddieProductControllerStateBooting::HandleNetworkConfigurationStatus()
+{
+    BOSE_INFO( s_logger, __func__ );
+    GoToNextState();
+    return true;
+}
+
 } /// namespace ProductApp
