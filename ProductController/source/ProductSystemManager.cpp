@@ -62,7 +62,6 @@ const std::string g_ProductDirectory = "product-persistence/";
 ////////////////////////////////////////////////////////////////////////////////////////////////
 constexpr char FRONTDOOR_SYSTEM_CONFIGURATION_STATUS[ ]       = "/system/configuration/status";
 constexpr char FRONTDOOR_SYSTEM_CAPS_INITIALIZATION_STATUS[ ] = "/system/capsInitializationStatus";
-constexpr char FRONTDOOR_SYSTEM_INFO[ ]                       = "/system/info";
 constexpr char FRONTDOOR_CAPS_INITIALIZATION_UPDATE[ ]        = "CapsInitializationUpdate";
 constexpr char FRONTDOOR_SYSTEM_STATE[ ]                      = "/system/state";
 
