@@ -474,6 +474,34 @@ bool ProfessorProductController::IsSystemLanguageSet( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   ProfessorProductController::GetProductType
+///
+/// @return This method returns the std::string const& value to be used for the Product "Type" field
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string const& ProfessorProductController::GetProductType() const
+{
+    static std::string productType = "Professor Soundbar";
+    return productType;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetProductVariant
+///
+/// @return This method returns the std::string const& value to be used for the Product "Variant" field
+///
+/// @TODO - Below value may be available through HSP APIs
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string const& ProfessorProductController::GetProductVariant() const
+{
+    static std::string productType = "Professor";
+    return productType;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::SetupProductSTSConntroller
 ///
 /// @brief  This method is called to perform the needed initialization of the ProductSTSController,

@@ -185,6 +185,10 @@ public:
         return "Bose " + MacAddressInfo::GetPrimaryMAC();
     }
 
+    std::string const& GetProductType() const override;
+
+    std::string const& GetProductVariant() const override;
+
     std::vector<std::string> GetUniqueLanguages() const override
     {
         return {};

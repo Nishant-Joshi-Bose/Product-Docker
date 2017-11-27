@@ -86,9 +86,7 @@ ProductSystemManager::ProductSystemManager( ProfessorProductController&  Product
     /// Presistent Storage Initialization
     ///
     m_ConfigurationStatusPersistentStorage( ProtoPersistenceFactory::Create( "ConfigurationStatus",
-                                                                             g_ProductDirectory ) ),
-    m_SystemInfoPersistentStorage( ProtoPersistenceFactory::Create( "SystemInfo",
-                                                                    g_ProductDirectory ) )
+                                                                             g_ProductDirectory ) )
 {
 
 }
@@ -103,7 +101,6 @@ ProductSystemManager::ProductSystemManager( ProfessorProductController&  Product
 bool ProductSystemManager::Run( )
 {
     ReadConfigurationStatusFromPersistentStorage( );
-    ReadSystemInfoSettingsFromPersistentStorage( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// Registration for other Bose client processes for getting configuration status settings is
@@ -156,23 +153,6 @@ bool ProductSystemManager::Run( )
     BOSE_DEBUG( s_logger, "A notification request for CAPS initialization messages has been made." );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Registration for other Bose client processes for getting system information settings is
-    /// made through the FrontDoorClient. The callback HandleGetSystemInfoRequest is used to process
-    /// system information get requests.
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    {
-        AsyncCallback< Callback< ProductPb::SystemInfo > >
-        asyncCallback( std::bind( &ProductSystemManager::HandleGetSystemInfoRequest,
-                                  this,
-                                  std::placeholders::_1 ),
-                       m_ProductTask );
-
-        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_INFO, asyncCallback );
-    }
-
-    BOSE_DEBUG( s_logger, "The registration for %s get request has been made.", FRONTDOOR_SYSTEM_INFO );
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
     /// Registration for other Bose client processes for getting the system state is made
     /// through the FrontDoorClient. The callback HandleGetSystemStateRequest is used to process
     /// system state requests.
@@ -193,68 +173,6 @@ bool ProductSystemManager::Run( )
     /// Registration is complete so return true.
     ////////////////////////////////////////////////////////////////////////////////////////////////
     return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief ProductSystemManager::ReadSystemInfoSettingsFromPersistentStorage
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::ReadSystemInfoSettingsFromPersistentStorage( )
-{
-    try
-    {
-        BOSE_DEBUG( s_logger, "Reading system/info from persistent storage" );
-
-        std::string storageString = m_SystemInfoPersistentStorage->Load( );
-        ProtoToMarkup::FromJson( storageString, &m_SystemInfo );
-    }
-    catch( ... )
-    {
-
-        try
-        {
-            BOSE_DEBUG( s_logger, "Reading system information from persistent storage failed." );
-            BOSE_DEBUG( s_logger, "Default system information value will be written to persistent storage." );
-
-            m_SystemInfo.set_name( "Bose SoundTouch 1234" );
-
-            ////////////////////////////////////////////////////////////////////////////////////////
-            ///
-            /// @todo  these parameters will need updating for final product
-            ///
-            ////////////////////////////////////////////////////////////////////////////////////////
-            m_SystemInfo.set_type( "SoundTouch XX" );
-            m_SystemInfo.set_variant( "Professor" );
-            m_SystemInfo.set_guid( "xxxx-xxxx-xx" );
-            m_SystemInfo.set_serialnumber( "1234567890" );
-            m_SystemInfo.set_moduletype( "Riviera" );
-            m_SystemInfo.set_countrycode( "US" );
-            m_SystemInfo.set_regioncode( "US" );
-
-            m_SystemInfoPersistentStorage->Remove( );
-            m_SystemInfoPersistentStorage->Store( ProtoToMarkup::ToJson( m_SystemInfo, false ) );
-        }
-        catch( ... )
-        {
-            BOSE_ERROR( s_logger, "Writing default system information to persistent storage failed." );
-        }
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief ProductSystemManager::HandleGetSystemInfoRequest
-///
-/// @param const Callback<::ProductPb::SystemInfo>& response
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::HandleGetSystemInfoRequest(
-    const Callback< ProductPb::SystemInfo >& response ) const
-{
-    BOSE_DEBUG( s_logger, "A system information get request was received." );
-
-    response.Send( m_SystemInfo );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

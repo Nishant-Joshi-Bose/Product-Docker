@@ -118,11 +118,8 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ProductPb::ConfigurationStatus          m_ConfigurationStatus;
     ProtoPersistenceIF::ProtoPersistencePtr m_ConfigurationStatusPersistentStorage;
-    ProductPb::SystemInfo                   m_SystemInfo;
-    ProtoPersistenceIF::ProtoPersistencePtr m_SystemInfoPersistentStorage;
 
     void ReadConfigurationStatusFromPersistentStorage( );
-    void ReadSystemInfoSettingsFromPersistentStorage( );
     void WriteConfigurationStatusToPersistentStorage( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,14 +138,6 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleGetConfigurationStatusRequest( const Callback< ProductPb::ConfigurationStatus >&
                                               response ) const;
-
-    //////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following method is used to handle GET request of /system/info.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////
-    void HandleGetSystemInfoRequest( const Callback< ProductPb::SystemInfo >& response ) const;
-
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
