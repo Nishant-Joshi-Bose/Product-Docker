@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 ///// @file   IntentManager.h
-///// @brief  Eddie specific IntentManager class for Riviera based product
+///// @brief  IntentManager class for Riviera based product
 //            This is a base class and any Specific IntentManager like
 //            TransportControlManager needs to inherit from this class.
 /////
@@ -67,7 +67,7 @@ protected:
         return m_cliClient;
     }
 
-    EddieProductController& GetProductController()
+    EddieProductController& GetProductController() const
     {
         return m_controller;
     }
@@ -87,8 +87,8 @@ protected:
         return m_intent;
     }
 
-    bool ValidSourceAvailable();
-    SoundTouchInterface::StatusJson CurrentStatusJson();
+    bool ValidSourceAvailable() const;
+    SoundTouchInterface::StatusJson CurrentNowPlayingStatusJson() const;
 
     virtual void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) = 0;
 

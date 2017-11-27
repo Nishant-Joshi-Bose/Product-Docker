@@ -56,7 +56,7 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     if( ValidSourceAvailable() )
     {
         SoundTouchInterface::TransportControl transportControl;
-        SoundTouchInterface::StatusJson status = CurrentStatusJson();
+        SoundTouchInterface::StatusJson status = CurrentNowPlayingStatusJson();
         bool sendTransportControlMsg = false;
 
         switch( intent )

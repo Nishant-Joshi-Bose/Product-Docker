@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// @file IntentManager.cpp
 ///
-/// @brief Implementation of Transport Control Manager
+/// @brief Implementation of  base class IntentManager
 ///
 /// @attention
 ///    BOSE CORPORATION.
@@ -23,7 +23,7 @@ static DPrint s_logger( "IntentManager" );
 namespace ProductApp
 {
 
-bool IntentManager::ValidSourceAvailable()
+bool IntentManager::ValidSourceAvailable() const
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
     if( GetProductController().GetNowPlaying().has_source() )
@@ -34,13 +34,12 @@ bool IntentManager::ValidSourceAvailable()
     return false;
 }
 
-SoundTouchInterface::StatusJson IntentManager::CurrentStatusJson()
+SoundTouchInterface::StatusJson IntentManager::CurrentNowPlayingStatusJson() const
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
     if( GetProductController().GetNowPlaying().has_source() &&
         GetProductController().GetNowPlaying().has_state() &&
-        GetProductController().GetNowPlaying().state().has_status() &&
-        GetProductController().GetNowPlaying().has_state() )
+        GetProductController().GetNowPlaying().state().has_status() )
     {
         BOSE_DEBUG( s_logger, "Found status = %d",
                     GetProductController().GetNowPlaying().state().status() );

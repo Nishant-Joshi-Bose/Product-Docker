@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 ///// @file   PresetManager.h
-///// @brief  Eddie specific PresetManager class for Riviera based product
+///// @brief  PresetManager class for Riviera based product
 /////
 ///// @attention Copyright 2017 Bose Corporation, Framingham, MA
 //////////////////////////////////////////////////////////////////////////////////
@@ -37,16 +37,16 @@ public:
 
 private:
     SoundTouchInterface::presets                m_presets; // temp
-    SoundTouchInterface::PresetID IntentToPresetIdMap( KeyHandlerUtil::ActionType_t& intent );
+    static SoundTouchInterface::PresetID IntentToPresetIdMap( KeyHandlerUtil::ActionType_t& intent );
 
     SoundTouchInterface::preset* IsPresetContentPresent( SoundTouchInterface::PresetID presetId,
-                                                         SoundTouchInterface::presets &presetItem );
+                                                         SoundTouchInterface::presets &presetItem ) const;
 
     void BuildPlaybackRequestFromPresetCI( SoundTouchInterface::playbackRequestJson &pr,
-                                           const SoundTouchInterface::ContentItem &ci );
+                                           const SoundTouchInterface::ContentItem &ci ) const;
 
     void BuildPresetContentItemFromNp( SoundTouchInterface::ContentItem *destinationCI,
-                                       const SoundTouchInterface::NowPlayingJson_ContentItemJson &sourceCI );
+                                       const SoundTouchInterface::NowPlayingJson_ContentItemJson &sourceCI ) const;
 
     void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
     AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingRsp;
