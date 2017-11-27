@@ -222,7 +222,7 @@ void PresetManager::BuildPlaybackRequestFromPresetCI( SoundTouchInterface::playb
         {
             pri->set_location( PresetCi.location() );
         }
-#if 0 // TBD, does not match
+#if 0 // TBD, does not match @todo
         if( PresetCi.has_itemname() )
         {
             pri->set_name( PresetCi.itemname() );
@@ -232,7 +232,7 @@ void PresetManager::BuildPlaybackRequestFromPresetCI( SoundTouchInterface::playb
         {
             pri->set_presetable( PresetCi.ispresetable() );
         }
-#if 0 // TBD, does not match
+#if 0 // TBD, does not match @todo
         if( PresetCi.has_containerart() )
         {
             pri->set_containerart( PresetCi.containerart() );
@@ -255,7 +255,7 @@ void PresetManager::BuildPresetContentItemFromNp( SoundTouchInterface::ContentIt
         {
             destinationCI->set_location( sourceCI.location() );
         }
-#if 0 // TBD, they don't match
+#if 0 // TBD, they don't match @todo
         if( sourceCI.has_name() )
         {
             destinationCI->set_itemname( sourceCI.name() );
@@ -277,7 +277,7 @@ void PresetManager::BuildPresetContentItemFromNp( SoundTouchInterface::ContentIt
         {
             destinationCI->set_ispresetable( sourceCI.presetable() );
         }
-#if 0 // TBD, they don't match
+#if 0 // TBD, they don't match @todo
         if( sourceCI.has_containerart() )
         {
             destinationCI->set_containerart( sourceCI.containerart() );
