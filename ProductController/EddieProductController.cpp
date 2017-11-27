@@ -227,7 +227,7 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
     }
 }
 
-void EddieProductController::SendDataCollection( IpcKeyInformation_t keyInformation )
+void EddieProductController::SendDataCollection( const IpcKeyInformation_t& keyInformation )
 {
     std::string currentButtonId;
     const auto currentKeyId = keyInformation.keyid();
