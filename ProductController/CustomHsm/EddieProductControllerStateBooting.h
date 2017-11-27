@@ -49,6 +49,7 @@ public:
     bool HandleLpmInterfaceState( bool isConnected );
 
     bool HandleModulesReady() override;
+    bool HandleNetworkConfigurationStatus();
 
 private:
     ///////////////////////////////////////////////////////////////////////////////
