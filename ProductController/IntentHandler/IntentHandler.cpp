@@ -39,6 +39,7 @@
 #include "NetworkStandbyManager.h"
 #include "IntentHandler.pb.h"
 #include "BluetoothManager.h"
+#include "PresetManager.h"
 
 static DPrint s_logger( "IntentHandler" );
 
@@ -104,7 +105,7 @@ void IntentHandler::Initialize()
 
     auto func = std::bind( &EddieProductController::HandleNetworkStandbyIntentCb , &GetProductController(), std::placeholders::_1 );
     auto cb = std::make_shared<AsyncCallback<KeyHandlerUtil::ActionType_t&> > ( func, &m_task );
-    KeyHandlerUtil::ActionType_t intent = (KeyHandlerUtil::ActionType_t) Action::NETWORK_STANDBY;
+    KeyHandlerUtil::ActionType_t intent = ( KeyHandlerUtil::ActionType_t ) Action::NETWORK_STANDBY;
     RegisterCallBack( intent, cb );
     //- Miscellaneous Control API's (LPS, Factory Reset, NetworkStandy)
     //
@@ -124,6 +125,27 @@ void IntentHandler::Initialize()
     m_IntentManagerMap[( uint16_t )Action::AUX_IN] = playbackRequestManager;
     //- AUX Control API's
 
+    //+ PRESET Management
+    IntentManagerPtr_t presetManager =
+        std::make_shared<PresetManager>( m_task, m_cliClient,
+                                         m_frontDoorClient,
+                                         m_controller );
+
+    m_IntentManagerMap[( uint16_t )Action::PRESET_STORE_1] = presetManager;
+    m_IntentManagerMap[( uint16_t )Action::PRESET_STORE_2] = presetManager;
+    m_IntentManagerMap[( uint16_t )Action::PRESET_STORE_3] = presetManager;
+    m_IntentManagerMap[( uint16_t )Action::PRESET_STORE_4] = presetManager;
+    m_IntentManagerMap[( uint16_t )Action::PRESET_STORE_5] = presetManager;
+    m_IntentManagerMap[( uint16_t )Action::PRESET_STORE_6] = presetManager;
+
+    m_IntentManagerMap[( uint16_t )Action::PRESET_SELECT_1] = presetManager;
+    m_IntentManagerMap[( uint16_t )Action::PRESET_SELECT_2] = presetManager;
+    m_IntentManagerMap[( uint16_t )Action::PRESET_SELECT_3] = presetManager;
+    m_IntentManagerMap[( uint16_t )Action::PRESET_SELECT_4] = presetManager;
+    m_IntentManagerMap[( uint16_t )Action::PRESET_SELECT_5] = presetManager;
+    m_IntentManagerMap[( uint16_t )Action::PRESET_SELECT_6] = presetManager;
+
+    //- PRESET Management
     // prepare map for button event notification
     m_IntentNotificationMap[( uint16_t ) Action::PLAY_PAUSE]    = "play_pause" ;
     m_IntentNotificationMap[( uint16_t ) Action::NEXT_TRACK]    = "next_track" ;
@@ -141,6 +163,19 @@ void IntentHandler::Initialize()
 
     m_IntentNotificationMap[( uint16_t ) Action::AUX_IN]        = "aux_in" ;
 
+    m_IntentNotificationMap[( uint16_t ) Action::PRESET_STORE_1] = "preset_store_1" ;
+    m_IntentNotificationMap[( uint16_t ) Action::PRESET_STORE_2] = "preset_store_2" ;
+    m_IntentNotificationMap[( uint16_t ) Action::PRESET_STORE_3] = "preset_store_3" ;
+    m_IntentNotificationMap[( uint16_t ) Action::PRESET_STORE_4] = "preset_store_4" ;
+    m_IntentNotificationMap[( uint16_t ) Action::PRESET_STORE_5] = "preset_store_5" ;
+    m_IntentNotificationMap[( uint16_t ) Action::PRESET_STORE_6] = "preset_store_6" ;
+
+    m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_1] = "preset_select_1" ;
+    m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_2] = "preset_select_2" ;
+    m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_3] = "preset_select_3" ;
+    m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_4] = "preset_select_4" ;
+    m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_5] = "preset_select_5" ;
+    m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_6] = "preset_select_6" ;
     return;
 }
 

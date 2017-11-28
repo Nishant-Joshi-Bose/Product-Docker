@@ -46,6 +46,22 @@ enum class Action
     //+ ALEXA
     ALEXA_CAROUSEL = ActionCommon_t::ALEXA_CAROUSEL,
     //- ALEXA
+
+    //+ PRESET
+    PRESET_STORE_1 = ActionCommon_t::PRESET_STORE_1,
+    PRESET_STORE_2 = ActionCommon_t::PRESET_STORE_2,
+    PRESET_STORE_3 = ActionCommon_t::PRESET_STORE_3,
+    PRESET_STORE_4 = ActionCommon_t::PRESET_STORE_4,
+    PRESET_STORE_5 = ActionCommon_t::PRESET_STORE_5,
+    PRESET_STORE_6 = ActionCommon_t::PRESET_STORE_6,
+
+    PRESET_SELECT_1 = ActionCommon_t::PRESET_SELECT_1,
+    PRESET_SELECT_2 = ActionCommon_t::PRESET_SELECT_2,
+    PRESET_SELECT_3 = ActionCommon_t::PRESET_SELECT_3,
+    PRESET_SELECT_4 = ActionCommon_t::PRESET_SELECT_4,
+    PRESET_SELECT_5 = ActionCommon_t::PRESET_SELECT_5,
+    PRESET_SELECT_6 = ActionCommon_t::PRESET_SELECT_6,
+    //- PRESET
 };
 
 } // namespace ProductApp

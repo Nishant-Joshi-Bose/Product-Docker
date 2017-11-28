@@ -81,6 +81,20 @@ void EddieProductController::Initialize()
     m_displayController ->Initialize();
 }
 
+std::string const& EddieProductController::GetProductType() const
+{
+    static std::string productType = "SoundTouch 05";
+    return productType;
+}
+
+//@TODO - Below value may be available through HSP APIs
+std::string const& EddieProductController::GetProductVariant() const
+{
+    static std::string productType = "Eddie";
+    return productType;
+}
+
+
 void EddieProductController::InitializeLpmClient()
 {
     BOSE_INFO( s_logger, __func__ );

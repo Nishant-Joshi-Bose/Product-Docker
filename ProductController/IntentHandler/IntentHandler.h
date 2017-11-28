@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 ///// @file   IntentHandler.h
-///// @brief  Eddie specific IntentHandler class for Riviera based product
+///// @brief  IntentHandler class for Riviera based product
 /////
 ///// @attention Copyright 2017 Bose Corporation, Framingham, MA
 //////////////////////////////////////////////////////////////////////////////////
@@ -93,6 +93,26 @@ public:
     static bool IsIntentNetworkStandby( KeyHandlerUtil::ActionType_t arg )
     {
         return ( ( arg == ( uint16_t ) Action::NETWORK_STANDBY ) );
+    }
+
+    static bool IsPresetSelect( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( ( arg == ( uint16_t ) Action::PRESET_SELECT_1 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_SELECT_2 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_SELECT_3 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_SELECT_4 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_SELECT_5 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_SELECT_6 ) );
+    }
+
+    static bool IsPresetStore( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( ( arg == ( uint16_t ) Action::PRESET_STORE_1 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_STORE_2 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_STORE_3 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_STORE_4 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_STORE_5 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_STORE_6 ) );
     }
 
 private:

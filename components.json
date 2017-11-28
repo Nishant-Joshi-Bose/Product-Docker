@@ -5,7 +5,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/master/0.2.1-159+80d4277"
+    "selected_version": "Release/master/0.2.2-167+bde4f82"
   },
   {
     "name": "bose-opkg-utils",
@@ -17,7 +17,7 @@
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Continuous/master/0.2.1-18+eca42ed"
+    "selected_version": "Release/master/0.2.1-19+eca42ed"
   },
   {
     "name": "CastleDemoController-qc8017_32",
@@ -29,15 +29,11 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Continuous/master/0.2.1-14+23eb6c0"
+    "selected_version": "Release/master/0.2.2-16+e84f85f"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.2.2-105+ea19c8e"
-  },
-  {
-    "name": "CastlePassport-native",
-    "selected_version": "Continuous/master/0.2.1-159+a802428"
+    "selected_version": "Continuous/master/0.2.2-108+a5e0b02"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -49,7 +45,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@a42976d818a040ee5eb56cd0f5150b09b94fd04f"
+    "selected_version": "master@b2416b06f787b3b107ea6f81bf7f0c2dcfb97675"
   },
   {
     "name": "CastleTestUtils",
@@ -58,10 +54,6 @@
   {
     "name": "EddieLPM-Package",
     "selected_version": "Release/IP2/0.2.0.2571468/DP1"
-  },
-  {
-    "name": "KeyHandler-native",
-    "selected_version": "Release/master/0.2.1-26+e67ea31"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -97,23 +89,15 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.2.1-122+424b9c5"
+    "selected_version": "Continuous/master/0.2.1-126+1c2bbfd"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
     "selected_version": "Continuous/Castle-Fork/2017-11-16_1441"
   },
   {
-    "name": "UnitTest++-native",
-    "selected_version": "branches/UnitTest++@2485"
-  },
-  {
-    "name": "UnitTest++-qc8017_32",
-    "selected_version": "branches/UnitTest++@2485"
-  },
-  {
     "name": "Webkit",
-    "selected_version": "Continuous/master/0.2.1-11+bb11bf1"
+    "selected_version": "Release/master/0.2.4-18+ead75d3"
   },
   {
     "name": "WiFi-Setup-Webpage",

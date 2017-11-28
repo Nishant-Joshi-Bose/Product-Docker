@@ -62,6 +62,10 @@ public:
         return {};
     }
 
+    std::string const& GetProductType() const override;
+
+    std::string const& GetProductVariant() const override;
+
 private:
     /// Disable copies
     EddieProductController( const EddieProductController& ) = delete;
