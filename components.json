@@ -29,7 +29,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Continuous/master/0.2.1-14+23eb6c0"
+    "selected_version": "Release/master/0.2.2-16+e84f85f"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -97,7 +97,7 @@
   },
   {
     "name": "Webkit",
-    "selected_version": "Continuous/master/0.2.1-11+bb11bf1"
+    "selected_version": "Release/master/0.2.4-18+ead75d3"
   },
   {
     "name": "WiFi-Setup-Webpage",
