@@ -33,7 +33,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "ProtoPersistenceIF.h"
 #include "ConfigurationStatus.pb.h"
-#include "Language.pb.h"
 #include "ProductMessage.pb.h"
 #include "CapsInitializationStatus.pb.h"
 #include "NetworkService.pb.h"
@@ -42,8 +41,6 @@
 #include "BreakThread.h"
 #include "APTaskFactory.h"
 #include "FrontDoorClientIF.h"
-#include "ProductMessage.pb.h"
-#include "Language.pb.h"
 #include "ConfigurationStatus.pb.h"
 #include "ProfessorProductController.h"
 

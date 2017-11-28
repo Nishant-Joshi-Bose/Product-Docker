@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@f6d204e1599a92f9fcaf36fad6a1dc8d5e833063"
+    "selected_version": "master@007e5d39e6e307caba9229dc66fa9f477d631922"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -45,7 +45,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@cfaacc61e5d18d5a33afe6b1dd17fb3724c67fc6"
+    "selected_version": "master@b2416b06f787b3b107ea6f81bf7f0c2dcfb97675"
   },
   {
     "name": "KeyHandler-qc8017_32",

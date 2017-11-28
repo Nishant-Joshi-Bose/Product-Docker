@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @file      ProfessorProductController.cpp
 ///
@@ -249,6 +249,11 @@ void ProfessorProductController::Run( )
     GetHsm( ).Init( this, PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
     ///
+    /// Initialize entities in the Common Product Controller
+    ///
+    m_deviceManager.Initialize( this );
+
+    ///
     /// Get instances of all the modules.
     ///
     BOSE_DEBUG( s_logger, "----------- Product Controller Starting Modules ------------" );
@@ -456,6 +461,46 @@ bool ProfessorProductController::IsSoftwareUpdateRequired( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   ProfessorProductController::IsSystemLanguageSet
+///
+/// @return This method returns true if the corresponding member has a system language defined.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProfessorProductController::IsSystemLanguageSet( ) const
+{
+    return m_deviceManager.IsLanguageSet();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetProductType
+///
+/// @return This method returns the std::string const& value to be used for the Product "Type" field
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string const& ProfessorProductController::GetProductType() const
+{
+    static std::string productType = "Professor Soundbar";
+    return productType;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetProductVariant
+///
+/// @return This method returns the std::string const& value to be used for the Product "Variant" field
+///
+/// @TODO - Below value may be available through HSP APIs
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string const& ProfessorProductController::GetProductVariant() const
+{
+    static std::string productType = "Professor";
+    return productType;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::SetupProductSTSConntroller
 ///
 /// @brief  This method is called to perform the needed initialization of the ProductSTSController,
@@ -574,7 +619,7 @@ void ProfessorProductController::SendPlaybackRequest( PlaybackSource_t playbackS
     /// nowPlaying to playbackRequest.
     ///
     constexpr char source[ ]           = "DEEZER";
-    constexpr char sourceAccount[ ]    = "matthew_scanlan@bose.com";
+    constexpr char sourceAccount[ ]    = "aleksander_soltan@bose.com";
     constexpr char presetType[ ]       = "topTrack";
     constexpr char location[ ]         = "132";
     constexpr char name[ ]             = "Pop - ##TRANS_TopTracks##";

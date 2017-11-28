@@ -14,7 +14,6 @@ PROTO_SOURCES = ProductMessage.proto        \
 # The following alias is used to search for imported Protocol Buffer files.
 #
 PROTO_IMPORT_DIRS :=  .                                       \
-                      ../../../ProductSTSController/Protobufs \
                       $(PROTO_CC_DEST)                        \
                       $(BOSELIBS_DIR)/protobufs               \
                       $(BOSELIBS_DIR)/include                 \

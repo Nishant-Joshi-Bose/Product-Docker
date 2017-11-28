@@ -133,16 +133,6 @@ message ProductConfigurationStatus
         optional bool account  = 3 [ default = false ];
 }
 
-message Language
-{
-    message Properties
-    {
-            repeated string supported_language_codes  = 1;
-    }
-    optional string     code       = 1;
-    optional Properties properties = 2;
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                              Autowake Status Message Structure                               ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
