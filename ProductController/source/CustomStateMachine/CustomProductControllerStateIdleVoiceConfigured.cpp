@@ -42,15 +42,13 @@ namespace ProductApp
 /// @brief CustomProductControllerStateIdleVoiceConfigured::
 ///        CustomProductControllerStateIdleVoiceConfigured
 ///
-/// @param hsm
+/// @param ProductControllerHsm& hsm
 ///
-/// @param pSuperState
+/// @param CHsmState*            pSuperState
 ///
-/// @param productController
+/// @param Hsm::STATE            stateId
 ///
-/// @param stateId
-///
-/// @param name
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateIdleVoiceConfigured::CustomProductControllerStateIdleVoiceConfigured
@@ -115,10 +113,10 @@ bool CustomProductControllerStateIdleVoiceConfigured::HandleNetworkState( bool c
                   configured ? "configured" : "unconfigured,",
                   connected ? "connected" : "unconnected" );
 
-    HandlePotentialStateChange( GetCustomProductController( ).IsAutoWakeEnabled( ),
-                                configured,
-                                connected,
-                                GetCustomProductController().IsVoiceConfigured( ) );
+    GoToAppropriatePlayableState( GetCustomProductController( ).IsAutoWakeEnabled( ),
+                                  configured,
+                                  connected,
+                                  GetCustomProductController().IsVoiceConfigured( ) );
     return true;
 }
 
@@ -138,19 +136,27 @@ bool CustomProductControllerStateIdleVoiceConfigured::HandleVoiceState( bool con
                   "CustomProductControllerStateIdleVoiceConfigured",
                   configured ? "configured" : "unconfigured" );
 
-    HandlePotentialStateChange( GetCustomProductController( ).IsAutoWakeEnabled( ),
-                                GetCustomProductController( ).IsNetworkConfigured( ),
-                                GetCustomProductController( ).IsNetworkConnected( ),
-                                configured );
+    GoToAppropriatePlayableState( GetCustomProductController( ).IsAutoWakeEnabled( ),
+                                  GetCustomProductController( ).IsNetworkConfigured( ),
+                                  GetCustomProductController( ).IsNetworkConnected( ),
+                                  configured );
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateIdleVoiceConfigured::HandlePotentialStateChange
+/// @brief CustomProductControllerStateIdleVoiceConfigured::GoToAppropriatePlayableState
+///
+/// @param bool autoWakeEnabled
+///
+/// @param bool networkConfigured
+///
+/// @param bool networkConnected
+///
+/// @param bool voiceConfigured
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateIdleVoiceConfigured::HandlePotentialStateChange
+void CustomProductControllerStateIdleVoiceConfigured::GoToAppropriatePlayableState
 ( bool autoWakeEnabled,
   bool networkConfigured,
   bool networkConnected,

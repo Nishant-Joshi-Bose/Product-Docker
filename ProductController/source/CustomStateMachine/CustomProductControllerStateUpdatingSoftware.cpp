@@ -39,18 +39,17 @@ namespace ProductApp
 ///
 /// @brief CustomProductControllerStateUpdatingSoftware::CustomProductControllerStateUpdatingSoftware
 ///
-/// @param hsm
+/// @param ProductControllerHsm& hsm
 ///
-/// @param pSuperState
+/// @param CHsmState*            pSuperState
 ///
-/// @param productController
+/// @param Hsm::STATE            stateId
 ///
-/// @param stateId
-///
-/// @param name
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateUpdatingSoftware::CustomProductControllerStateUpdatingSoftware
+
 ( ProductControllerHsm&       hsm,
   CHsmState*                  pSuperState,
   Hsm::STATE                  stateId,
@@ -103,7 +102,7 @@ void CustomProductControllerStateUpdatingSoftware::HandleStateExit()
 bool CustomProductControllerStateUpdatingSoftware::HandleLpmState( bool active )
 {
     BOSE_WARNING( s_logger, "%s is handling an LPM %s event.",
-                  "CustomProductControllerStateUpdatingSoftware",
+                  GetName( ).c_str( ),
                   active ? "activation" : "deactivation" );
     return true;
 }
@@ -120,7 +119,7 @@ bool CustomProductControllerStateUpdatingSoftware::HandleLpmState( bool active )
 bool CustomProductControllerStateUpdatingSoftware::HandleCapsState( bool active )
 {
     BOSE_WARNING( s_logger, "%s is handling a CAPS %s event.",
-                  "CustomProductControllerStateUpdatingSoftware",
+                  GetName( ).c_str( ),
                   active ? "activation" : "deactivation" );
     return true;
 }
@@ -137,7 +136,7 @@ bool CustomProductControllerStateUpdatingSoftware::HandleCapsState( bool active 
 bool CustomProductControllerStateUpdatingSoftware::HandleAudioPathState( bool active )
 {
     BOSE_WARNING( s_logger, "%s is handling an audio path %s event.",
-                  "CustomProductControllerStateUpdatingSoftware",
+                  GetName( ).c_str( ),
                   active ? "activation" : "deactivation" );
     return true;
 }
@@ -151,8 +150,7 @@ bool CustomProductControllerStateUpdatingSoftware::HandleAudioPathState( bool ac
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateUpdatingSoftware::HandleSTSSourcesInit( )
 {
-    BOSE_WARNING( s_logger,
-                  "CustomProductControllerStateUpdatingSoftware is handling an STS initialization." );
+    BOSE_WARNING( s_logger, "%s is handling an STS initialization.", GetName( ).c_str( ) );
     return true;
 }
 

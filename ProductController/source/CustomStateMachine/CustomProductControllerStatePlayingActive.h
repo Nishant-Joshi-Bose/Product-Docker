@@ -79,8 +79,6 @@ public:
 
     bool HandleNowPlayingStatus( ProductNowPlayingStatus_ProductNowPlayingState state ) override;
     bool HandleKeyAction( int action ) override;
-
-private:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

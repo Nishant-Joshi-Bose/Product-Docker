@@ -43,84 +43,33 @@ namespace ProductApp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief The following aliases refer to the Bose Sound Touch class utilities for inter-process and
-///        inter-thread communications.
+/// @name   ProductEdidInterface::ProductEdidInterface
+///
+/// @param  ProfessorProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-typedef APClientSocketListenerIF::ListenerPtr   ClientPointer;
-typedef APServerSocketListenerIF::ListenerPtr   ServerPointer;
-typedef APClientSocketListenerIF::SocketPtr     ClientSocket;
-typedef APServerSocketListenerIF::SocketPtr     ServerSocket;
-typedef IPCMessageRouterIF::IPCMessageRouterPtr RouterPointer;
+ProductEdidInterface::ProductEdidInterface( ProfessorProductController& ProductController )
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductEdidInterface::GetInstance
-///
-/// @brief  This static method creates the one and only instance of a ProductEdidInterface object.
-///         The C++ Version 11 compiler guarantees that only one instance is created in a thread
-///         safe way.
-///
-/// @param mainTask
-///
-/// @param ProductNotify
-///
-/// @return This method returns a pointer to a ProductEdidInterface object.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductEdidInterface* ProductEdidInterface::GetInstance( NotifyTargetTaskIF*        mainTask,
-                                                         Callback< ProductMessage > ProductNotify,
-                                                         ProductHardwareInterface*  HardwareInterface )
+    : m_ProductTask( ProductController.GetTask( ) ),
+      m_ProductNotify( ProductController.GetMessageHandler( ) ),
+      m_ProductHardwareInterface( ProductController.GetHardwareInterface( ) ),
+      m_connected( false )
 {
-    static ProductEdidInterface* instance = new ProductEdidInterface( mainTask, ProductNotify, HardwareInterface );
 
-    BOSE_DEBUG( s_logger, "The instance %8p of the Product Command Line was returned.", instance );
-    return instance;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductEdidInterface::
-///
-/// @brief  This method is the ProductEdidInterface constructor, which is declared as being private to
-///         ensure that only one instance of this class can be created through the class GetInstance
-///         method.
-///
-/// @param  void This method does not take any arguments.
-///
-/// @return This method does not return anything.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductEdidInterface::ProductEdidInterface( NotifyTargetTaskIF*        mainTask,
-                                            Callback< ProductMessage > ProductNotify,
-                                            ProductHardwareInterface*  HardwareInterface )
-    : m_mainTask( mainTask ),
-      m_ProductNotify( ProductNotify ),
-      m_connected( false ),
-      m_ProductHardwareInterface( HardwareInterface )
-
-{
-    return;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProductEdidInterface::Run
 ///
-/// @brief  This method starts the main task for the ProductEdidInterface instance. The OnEntry method
-///         for the ProductEdidInterface instance is called just before the main task starts. Also,
-///         this main task is used for most of the internal processing for each of the subclass
-///         instances.
-///
-/// @param  void This method does not take any arguments.
-///
-/// @return This method does not return anything.
+/// @brief  This method connects and starts the handling of communication with A4VVideoManager
+///         service.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductEdidInterface::Run( )
 {
     BOSE_DEBUG( s_logger, "The hardware connection to the A4VVideoManager is being established." );
-    m_EdidClient = A4VVideoManagerClientFactory::Create( "ProductEdidInterface", m_mainTask );
+    m_EdidClient = A4VVideoManagerClientFactory::Create( "ProductEdidInterface", m_ProductTask );
     Callback< bool > ConnectedCallback( std::bind( &ProductEdidInterface::Connected,
                                                    this,
                                                    std::placeholders::_1 ) );
@@ -132,18 +81,13 @@ bool ProductEdidInterface::Run( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductEdidInterface::Connected
+/// @brief ProductEdidInterface::Connected
 ///
-/// @brief  This method sets up the LPM hardware client.
-///
-/// @param  void This method does not take any arguments.
-///
-/// @return This method does not return anything.
+/// @param bool connected
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductEdidInterface::Connected( bool connected )
 {
-
     if( !connected )
     {
         BOSE_DEBUG( s_logger, "Connection to A4VVideoManager could not be established." );
@@ -151,7 +95,7 @@ void ProductEdidInterface::Connected( bool connected )
 
         m_connected = false;
 
-        IL::BreakThread( std::bind( &ProductEdidInterface::Run, this ), m_mainTask );
+        IL::BreakThread( std::bind( &ProductEdidInterface::Run, this ), m_ProductTask );
 
         return;
     }
@@ -177,7 +121,7 @@ void ProductEdidInterface::Connected( bool connected )
 ///
 /// @brief ProductEdidInterface::HandleHpdEvent
 ///
-/// @param keyEvent
+/// @param A4VVideoManagerServiceMessages::EventHDMIMsg_t hpdEvent
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductEdidInterface::HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMIMsg_t hpdEvent )
@@ -193,7 +137,7 @@ void ProductEdidInterface::HandleHpdEvent( A4VVideoManagerServiceMessages::Event
                             &ProductEdidInterface::HandleRawEDIDResponse,
                             this,
                             std::placeholders::_1 );
-            AsyncCallback<A4VVideoManagerServiceMessages::EDIDRawMsg_t> cb( func, m_mainTask );
+            AsyncCallback<A4VVideoManagerServiceMessages::EDIDRawMsg_t> cb( func, m_ProductTask );
             m_EdidClient->RequestRawEDID( cb );
         }
         {
@@ -202,7 +146,7 @@ void ProductEdidInterface::HandleHpdEvent( A4VVideoManagerServiceMessages::Event
                             &ProductEdidInterface::HandlePhyAddrResponse,
                             this,
                             std::placeholders::_1 );
-            AsyncCallback<A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t> cb( func, m_mainTask );
+            AsyncCallback<A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t> cb( func, m_ProductTask );
             m_EdidClient->RequestPhyAddr( cb );
         }
 
@@ -213,20 +157,19 @@ void ProductEdidInterface::HandleHpdEvent( A4VVideoManagerServiceMessages::Event
 ///
 /// @brief ProductEdidInterface::HandleRawEDIDResponse
 ///
-/// @param keyEvent
+/// @param const A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductEdidInterface::HandleRawEDIDResponse( const A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid )
 {
     //TBD - Mano
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief ProductEdidInterface::HandlePhyAddrResponse
 ///
-/// @param keyEvent
+/// @param const A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t keyEvent
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductEdidInterface::HandlePhyAddrResponse( const A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t cecPhysicalAddress )
@@ -253,6 +196,9 @@ void ProductEdidInterface::HandlePhyAddrResponse( const A4VVideoManagerServiceMe
 ///
 /// @brief ProductEdidInterface::Stop
 ///
+/// @todo  Resources, memory, or any client server connections that may need to be released by
+///        this module when stopped will need to be determined.
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductEdidInterface::Stop( )
 {
@@ -260,7 +206,7 @@ void ProductEdidInterface::Stop( )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                               End of ProductApp Namespace                                    ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 

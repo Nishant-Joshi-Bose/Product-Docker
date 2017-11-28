@@ -39,15 +39,13 @@ namespace ProductApp
 ///
 /// @brief CustomProductControllerStatePlayingInactive::CustomProductControllerStatePlayingInactive
 ///
-/// @param hsm
+/// @param ProductControllerHsm& hsm
 ///
-/// @param pSuperState
+/// @param CHsmState*            pSuperState
 ///
-/// @param productController
+/// @param Hsm::STATE            stateId
 ///
-/// @param stateId
-///
-/// @param name
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStatePlayingInactive::CustomProductControllerStatePlayingInactive
@@ -120,7 +118,6 @@ bool CustomProductControllerStatePlayingInactive::HandleNowPlayingStatus
         BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                       GetName( ).c_str( ),
                       "CustomProductControllerStatePlayingActive" );
-
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE );
     }
 

@@ -2,7 +2,8 @@
 ///
 /// @file      ProductEdidInterface.h
 ///
-/// @brief     This file contains the source code to handle communication with A4VVideoManager service
+/// @brief     This header file contains declarations to handle communication with a A4VVideoManager
+///            service.
 ///
 /// @author    Manoranjani Malisetti
 ///
@@ -17,7 +18,6 @@
 ///            whatsoever without the written permission of Bose Corporation.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -43,106 +43,68 @@
 #include "A4VVideoManagerClientFactory.h"
 #include "A4V_VideoManagerClientIF.h"
 #include "ProductHardwareInterface.h"
+#include "ProfessorProductController.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                          Start of the Product Application Namespace                          ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-///            Included Subclasses
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProductHardwareInterface;
-class ProductController;
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @class ProductEdidInterface
+///
+/// @brief This class is used to handle communication with a A4VVideoManager service.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductEdidInterface
 {
 public:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following aliases refer to the Bose Sound Touch SDK utilities for inter-process
-    ///        and inter-thread communications.
+    /// @name   ProductEdidInterface Constructor
+    ///
+    /// @param  ProfessorProductController& ProductController
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    typedef APClientSocketListenerIF::ListenerPtr   ClientListener;
-    typedef APClientSocketListenerIF::SocketPtr     ClientSocket;
-    typedef APServerSocketListenerIF::ListenerPtr   ServerListener;
-    typedef APServerSocketListenerIF::SocketPtr     ServerSocket;
-    typedef IPCMessageRouterIF::IPCMessageRouterPtr MessageRouter;
-
+    ProductEdidInterface( ProfessorProductController& ProductController );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @name   ProductEdidInterface::GetInstance
+    /// @brief The following public methods are used to run and stop instances of the
+    ///        ProductEdidInterface class, respectively.
     ///
-    /// @brief  This static method creates the one and only instance of a ProductEdidInterface
-    ///         object. That only one instance is created in a thread safe way is guaranteed by
-    ///         the C++ Version 11 compiler.
-    ///
-    /// @param  task [input]         This argument specifies the task in which to run the hardware
-    ///                               interface.
-    ///
-    /// @param  ProductNotifyCallback This argument specifies a callback to send messages back to
-    ///                               the product controller.
-    ///
-    /// @return This method returns a reference to a ProductEdidInterface object.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    static ProductEdidInterface* GetInstance( NotifyTargetTaskIF*        task,
-                                              Callback< ProductMessage > ProductNotifyCallback,
-                                              ProductHardwareInterface*  HardwareInterface );
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    /// This declaration is used to start and run the hardware manager.
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool Run( );
     void Stop( );
 
 private:
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief ProductEdidInterface
+    /// @brief The following declarations are used to interface with the product controller and
+    ///        the lower level LPM hardware, as well as the A4VVideoManager service.
     ///
-    /// @brief  The constructor for this class is set to be private. This definition prevents this
-    ///         class from being instantiated directly, so that only the static method GetInstance
-    ///         to this class can be used to get the one sole instance of it.
-    ///
-    /// @param  task
-    ///
-    /// @param ProductNotifyCallback
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ProductEdidInterface( NotifyTargetTaskIF*        task,
-                          Callback< ProductMessage > ProductNotifyCallback,
-                          ProductHardwareInterface*  HardwareInterface );
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    NotifyTargetTaskIF*                          m_ProductTask;
+    Callback< ProductMessage >                   m_ProductNotify;
+    std::shared_ptr < ProductHardwareInterface > m_ProductHardwareInterface;
+    A4VVideoManager::A4VVideoManagerClientIF::A4VVideoManagerClientPtr m_EdidClient;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following copy constructor and equality operator for this class are private
-    ///        and are set to be undefined through the delete keyword. This prevents this class
-    ///        from being copied directly, so that only the static method GetInstance to this
-    ///        class can be used to get the one sole instance of it.
+    /// @brief This member determines whether a connections to the LPM server connection is
+    ///        established.
     ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductEdidInterface( ProductEdidInterface const& ) = delete;
-    void operator     = ( ProductEdidInterface const& ) = delete;
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    /// These declarations store the main task for processing LPM hardware events and requests. It
-    /// is passed by the ProductController instance.
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF*        m_mainTask       = nullptr;
-    Callback< ProductMessage > m_ProductNotify  = nullptr;
-    A4VVideoManager::A4VVideoManagerClientIF::A4VVideoManagerClientPtr m_EdidClient = nullptr;
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    /// This member determines whether a connections to the LPM server connection is established.
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool m_connected = false;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
-    /// This method is called when an A4VVM server connection is established.
+    ///
+    /// @brief This method is called when an A4VVM server connection is established.
+    ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     void Connected( bool  connected );
 
@@ -155,16 +117,11 @@ private:
     void HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMIMsg_t hpdEvent );
     void HandleRawEDIDResponse( const A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid );
     void HandlePhyAddrResponse( const A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t cecPhysicalAddress );
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following subclass instances are used to manage the lower level hardware and
-    ///        the device.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductHardwareInterface* m_ProductHardwareInterface = nullptr;
-
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                           End of the Product Application Namespace                           ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

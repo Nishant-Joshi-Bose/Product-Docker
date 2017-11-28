@@ -38,20 +38,19 @@
 namespace ProductApp
 {
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief CustomProductControllerStateIdleVoiceUnconfigured::
 ///        CustomProductControllerStateIdleVoiceUnconfigured
 ///
-/// @param hsm
+/// @param ProductControllerHsm& hsm
 ///
-/// @param pSuperState
+/// @param CHsmState*            pSuperState
 ///
-/// @param productController
+/// @param Hsm::STATE            stateId
 ///
-/// @param stateId
-///
-/// @param name
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateIdleVoiceUnconfigured::CustomProductControllerStateIdleVoiceUnconfigured
@@ -73,11 +72,13 @@ CustomProductControllerStateIdleVoiceUnconfigured::CustomProductControllerStateI
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateIdleVoiceUnconfigured::HandleStateEnter( )
 {
-    BOSE_VERBOSE( s_logger, "%s is being entered.", GetName( ).c_str( ) );
+    if( not GetCustomProductController( ).IsAutoWakeEnabled( ) )
+    {
+        BOSE_VERBOSE( s_logger, "%s is being entered.", GetName( ).c_str( ) );
+        BOSE_VERBOSE( s_logger, "NO_AUDIO_TIMER has been started" );
 
-    BOSE_VERBOSE( s_logger, "NO_AUDIO_TIMER has been started" );
-
-    GetProductController( ).GetInactivityTimers( ).StartTimer( InactivityTimerType::NO_AUDIO_TIMER );
+        GetProductController( ).GetInactivityTimers( ).StartTimer( InactivityTimerType::NO_AUDIO_TIMER );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,6 +141,7 @@ bool CustomProductControllerStateIdleVoiceUnconfigured::HandleInactivityTimer( I
             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED );
         }
     }
+
     return true;
 }
 
@@ -191,12 +193,12 @@ bool CustomProductControllerStateIdleVoiceUnconfigured::HandleNetworkState( bool
     BOSE_VERBOSE( s_logger, "%s is handling a %sconfigured, %sconnected network state event.",
                   GetName( ).c_str( ),
                   configured ? "" : "un",
-                  connected ? "" : "un" );
+                  connected  ? "" : "un" );
 
-    HandlePotentialStateChange( GetCustomProductController( ).IsAutoWakeEnabled( ),
-                                configured,
-                                connected,
-                                GetCustomProductController().IsVoiceConfigured( ) );
+    GoToAppropriatePlayableState( GetCustomProductController( ).IsAutoWakeEnabled( ),
+                                  configured,
+                                  connected,
+                                  GetCustomProductController().IsVoiceConfigured( ) );
     return true;
 }
 
@@ -216,19 +218,27 @@ bool CustomProductControllerStateIdleVoiceUnconfigured::HandleVoiceState( bool c
                   GetName( ).c_str( ),
                   configured ? "" : "un" );
 
-    HandlePotentialStateChange( GetCustomProductController( ).IsAutoWakeEnabled( ),
-                                GetCustomProductController( ).IsNetworkConfigured( ),
-                                GetCustomProductController( ).IsNetworkConnected( ),
-                                configured );
+    GoToAppropriatePlayableState( GetCustomProductController( ).IsAutoWakeEnabled( ),
+                                  GetCustomProductController( ).IsNetworkConfigured( ),
+                                  GetCustomProductController( ).IsNetworkConnected( ),
+                                  configured );
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateIdleVoiceUnconfigured::HandlePotentialStateChange
+/// @brief CustomProductControllerStateIdleVoiceUnconfigured::GoToAppropriatePlayableState
+///
+/// @param bool autoWakeEnabled
+///
+/// @param bool networkConfigured
+///
+/// @param bool networkConnected
+///
+/// @param bool voiceConfigured
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateIdleVoiceUnconfigured::HandlePotentialStateChange
+void CustomProductControllerStateIdleVoiceUnconfigured::GoToAppropriatePlayableState
 ( bool autoWakeEnabled,
   bool networkConfigured,
   bool networkConnected,

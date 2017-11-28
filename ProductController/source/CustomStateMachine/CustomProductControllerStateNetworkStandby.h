@@ -56,7 +56,7 @@ class ProductControllerHsm;
 ///
 /// @brief This class is used for executing produce specific actions when in a network standby
 ///        state.
-///CustomProductControllerStateNetworkStandby
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class CustomProductControllerStateNetworkStandby : public ProductControllerStateNetworkStandby
 {

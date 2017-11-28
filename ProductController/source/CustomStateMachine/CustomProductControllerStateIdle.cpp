@@ -41,15 +41,13 @@ namespace ProductApp
 ///
 /// @brief CustomProductControllerStateIdle::CustomProductControllerStateIdle
 ///
-/// @param hsm
+/// @param ProductControllerHsm& hsm
 ///
-/// @param pSuperState
+/// @param CHsmState*            pSuperState
 ///
-/// @param productController
+/// @param Hsm::STATE            stateId
 ///
-/// @param stateId
-///
-/// @param name
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateIdle::CustomProductControllerStateIdle( ProductControllerHsm& hsm,
@@ -74,7 +72,7 @@ void CustomProductControllerStateIdle::HandleStateEnter( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdle is being entered by the state machine." );
 
-    GetCustomProductController( ).GetHardwareInterface( )->RequestPowerStateAutowake( );
+    GetCustomProductController( ).GetHardwareInterface( )->RequestLpmSystemState( SYSTEM_STATE_IDLE );
 
     BOSE_VERBOSE( s_logger, "An attempt to set an autowake power state is now being made." );
 }

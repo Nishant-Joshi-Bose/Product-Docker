@@ -53,10 +53,16 @@ namespace ProductApp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-///            Global Constants
+/// @brief Global Constants
+///
+/// @todo  The location and name for files to store persistence data needs to coordinated with the
+///        Eddie team. It will be helpful for debugging and testing efforts to have the persistence
+///        in a single, known place. In ECO1, all persistent date was stored under the directory
+///        /mnt/nv/BosePersistence/1.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 const std::string g_ProductDirectory = "product-persistence/";
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// The following constants define FrontDoor endpoints used by the SystemManager
@@ -71,59 +77,29 @@ constexpr char FRONTDOOR_SYSTEM_STATE[ ]                      = "/system/state";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductSystemManager::GetInstance
-///
-/// @brief  This static method creates the one and only instance of a ProductSystemManager object.
-///         The C++ Version 11 compiler guarantees that only one instance is created in a thread
-///         safe way.
-///
-/// @param NotifyTargetTaskIF* ProductTask This argument points to a task to process
-///                                        resource requests and notifications.
-///
-/// @param Callback< ProductMessage > ProductNotify This is a callback to send events to
-///                                                 the Product Controller.
-///
-/// @return This method returns a pointer to a ProductSystemManager object.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductSystemManager* ProductSystemManager::GetInstance( NotifyTargetTaskIF*        ProductTask,
-                                                         Callback< ProductMessage > ProductNotify )
-{
-    static ProductSystemManager* instance = new ProductSystemManager( ProductTask,
-                                                                      ProductNotify );
-
-    BOSE_DEBUG( s_logger, "The instance %8p of the Product System Manager was returned.", instance );
-
-    return instance;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProductSystemManager::ProductSystemManager
 ///
-/// @brief  This method is the ProductSystemManager constructor, which is declared as being private
-///         to ensure that only one instance of this class can be created through the class
-///         GetInstance method.
-///
-/// @param NotifyTargetTaskIF* ProductTask This argument points to a task to process
-///                                        resource requests and notifications.
-///
-/// @param Callback< ProductMessage > ProductNotify This is a callback to send events to
-///                                                 the Product Controller.
+/// @param ProfessorProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductSystemManager::ProductSystemManager( NotifyTargetTaskIF*        ProductTask,
-                                            Callback< ProductMessage > ProductNotify )
+ProductSystemManager::ProductSystemManager( ProfessorProductController&  ProductController ) :
 
-    : m_ProductTask( ProductTask ),
-      m_ProductNotify( ProductNotify ),
-      m_FrontDoorClient( FrontDoor::FrontDoorClient::Create( "ProductSystemManager" ) ),
-      m_LanguageSettingsPersistentStorage( ProtoPersistenceFactory::Create( "ProductLanguage",
-                                                                            g_ProductDirectory ) ),
-      m_ConfigurationStatusPersistentStorage( ProtoPersistenceFactory::Create( "ConfigurationStatus",
-                                                                               g_ProductDirectory ) ),
-      m_SystemInfoPersistentStorage( ProtoPersistenceFactory::Create( "SystemInfo",
-                                                                      g_ProductDirectory ) )
+    ///
+    /// Product Controller and Front Door Interfaces
+    ///
+    m_ProductController( ProductController ),
+    m_ProductTask( ProductController.GetTask( ) ),
+    m_ProductNotify( ProductController.GetMessageHandler( ) ),
+    m_FrontDoorClient( FrontDoor::FrontDoorClient::Create( "ProductSystemManager" ) ),
+    ///
+    /// Presistent Storage Initialization
+    ///
+    m_LanguageSettingsPersistentStorage( ProtoPersistenceFactory::Create( "ProductLanguage",
+                                                                          g_ProductDirectory ) ),
+    m_ConfigurationStatusPersistentStorage( ProtoPersistenceFactory::Create( "ConfigurationStatus",
+                                                                             g_ProductDirectory ) ),
+    m_SystemInfoPersistentStorage( ProtoPersistenceFactory::Create( "SystemInfo",
+                                                                    g_ProductDirectory ) )
 {
 
 }
@@ -189,7 +165,7 @@ bool ProductSystemManager::Run( )
                              std::placeholders::_1 ),
                   m_ProductTask );
 
-        m_FrontDoorClient->RegisterGet( "/system/configuration/status" , callback );
+        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS, callback );
     }
 
     BOSE_DEBUG( s_logger, "Registration for getting configuration status requests has been made." );
@@ -390,7 +366,6 @@ void ProductSystemManager::ReadSystemInfoSettingsFromPersistentStorage( )
     }
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name  ProductSystemManager::WriteLanguageSettingsFromPersistentStorage
@@ -416,7 +391,7 @@ void ProductSystemManager::WriteLanguageSettingsToPersistentStorage( )
 ///
 /// @name  ProductSystemManager::HandleGetLanguageRequest
 ///
-/// @param Callback< ProductPb::Language >& response
+/// @param const Callback< ProductPb::Language >& response
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::HandleGetLanguageRequest(
@@ -446,9 +421,9 @@ void ProductSystemManager::HandleGetSystemInfoRequest(
 ///
 /// @name  ProductSystemManager::HandlePostLanguageRequest
 ///
-/// @param ProductPb::Language& language
+/// @param const ProductPb::Language& language
 ///
-/// @param Callback< ProductPb::Language >& response
+/// @param const Callback< ProductPb::Language >& response
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::HandlePostLanguageRequest( const ProductPb::Language&             language,
@@ -484,7 +459,7 @@ void ProductSystemManager::SetNetworkAccoutConfigurationStatus( bool network, bo
     ///
     /// @todo For the time being during initial testing, the product controller will handle setting
     ///       the network and account information. Once an end-point for determining the account
-    ///       status becomes available the handling of the account may be processed insidet the
+    ///       status becomes available the handling of the account may be processed inside the
     ///       ProductSystemManager class directly.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -568,7 +543,7 @@ void ProductSystemManager::WriteConfigurationStatusToPersistentStorage( )
 ///
 /// @name  ProductSystemManager::HandleGetConfigurationStatusRequest
 ///
-/// @param Callback< ProductPb::ConfigurationStatus >& response
+/// @param const Callback< ProductPb::ConfigurationStatus >& response
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::HandleGetConfigurationStatusRequest( const
@@ -584,7 +559,7 @@ void ProductSystemManager::HandleGetConfigurationStatusRequest( const
 ///
 /// @name  ProductSystemManager::HandleCapsStatus
 ///
-/// @param SoundTouchInterface::CapsInitializationStatus& status
+/// @param const SoundTouchInterface::CapsInitializationStatus& status
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::HandleCapsStatus( const SoundTouchInterface::CapsInitializationStatus&
@@ -602,7 +577,7 @@ void ProductSystemManager::HandleCapsStatus( const SoundTouchInterface::CapsInit
 ///
 /// @name  ProductSystemManager::HandleCapsStatusFailed
 ///
-/// @param FRONT_DOOR_CLIENT_ERRORS error
+/// @param const FRONT_DOOR_CLIENT_ERRORS error
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::HandleCapsStatusFailed( const FRONT_DOOR_CLIENT_ERRORS error )
@@ -620,14 +595,14 @@ void ProductSystemManager::HandleCapsStatusFailed( const FRONT_DOOR_CLIENT_ERROR
 ///
 /// @brief ProductSystemManager::HandleGetSystemStateRequest
 ///
-/// @param ProductPb::SystemState& systemstate
+/// @param const ProductPb::SystemState& systemstate
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::HandleGetSystemStateRequest
 ( const Callback< ProductPb::SystemState >& stateResponse ) const
 {
-    Hsm::STATE  stateId   = ProfessorProductController::GetInstance( )->GetHsm( ).GetCurrentState( )->GetId( );
-    std::string stateName = ProfessorProductController::GetInstance( )->GetHsm( ).GetCurrentState( )->GetName( );
+    Hsm::STATE  stateId   = m_ProductController.GetHsm( ).GetCurrentState( )->GetId( );
+    std::string stateName = m_ProductController.GetHsm( ).GetCurrentState( )->GetName( );
 
     ProductPb::SystemState currentState;
     currentState.set_id( stateId );
@@ -647,10 +622,10 @@ void ProductSystemManager::HandleGetSystemStateRequest
 ///
 /// @brief This method sends a ProductMessage Protocol Buffer to the product controller.
 ///
-/// @param ProductMessage& message
+/// @param const ProductMessage& message
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::SendMessage( ProductMessage& message ) const
+void ProductSystemManager::SendMessage( const ProductMessage& message ) const
 {
     IL::BreakThread( std::bind( m_ProductNotify, message ), m_ProductTask );
 }
@@ -658,6 +633,9 @@ void ProductSystemManager::SendMessage( ProductMessage& message ) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name  ProductSystemManager::Stop
+///
+/// @todo  Resources, memory, or any client server connections that may need to be released by
+///        this module when stopped will need to be determined.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::Stop( )
