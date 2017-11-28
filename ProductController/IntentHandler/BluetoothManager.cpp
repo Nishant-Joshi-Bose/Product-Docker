@@ -217,10 +217,4 @@ bool BluetoothManager::BluetoothDeviceListPresent( BluetoothSinkService::PairedL
     return false;
 }
 
-void BluetoothManager::FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode )
-{
-    // Nothing to do for now, printing this if anyone cares.
-    BOSE_ERROR( s_logger, "%s:error code- %d", __func__, errorCode );
-    return;
-}
 }

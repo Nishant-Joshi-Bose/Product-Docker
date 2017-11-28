@@ -90,7 +90,7 @@ protected:
     bool ValidSourceAvailable() const;
     SoundTouchInterface::StatusJson CurrentNowPlayingStatusJson() const;
 
-    virtual void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) = 0;
+    virtual void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode );
 
 private:
     const FrontDoorClientIF_t               m_frontDoorClient;

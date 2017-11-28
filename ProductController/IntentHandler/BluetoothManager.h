@@ -42,8 +42,5 @@ private:
     bool GetSinkStatus( BluetoothSinkService::APP_STATUS& status );
     bool BluetoothDeviceConnected();
     bool BluetoothDeviceListPresent( BluetoothSinkService::PairedList& );
-    virtual void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
-
-
 };
 } // namespace ProductApp

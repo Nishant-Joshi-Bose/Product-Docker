@@ -26,16 +26,14 @@ PlaybackRequestManager::PlaybackRequestManager( NotifyTargetTaskIF& task,
                                                 const FrontDoorClientIF_t& frontDoorClient,
                                                 EddieProductController& controller ):
     IntentManager( task, cliClient, frontDoorClient, controller ),
-    m_NowPlayingRsp( nullptr, &task )
+    m_NowPlayingRsp( std::bind( &PlaybackRequestManager::\
+                                PostPlaybackRequestCbRsp, this,
+                                std::placeholders::_1 ), &task )
 {
     m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
-                               ( std::bind( &PlaybackRequestManager::FrontDoorClientErrorCb,
+                               ( std::bind( &PlaybackRequestManager::\
+                                            FrontDoorClientErrorCb,
                                             this, std::placeholders::_1 ), &task );
-
-    m_NowPlayingRsp = AsyncCallback<SoundTouchInterface::NowPlayingJson>
-                      ( std::bind( &PlaybackRequestManager::PostPlaybackRequestCbRsp,
-                                   this, std::placeholders::_1 ), &task );
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -93,11 +91,6 @@ void PlaybackRequestManager::PostPlaybackRequestCbRsp( const SoundTouchInterface
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
     BOSE_LOG( INFO, "GOT Response to playbackRequest: " << resp.source().sourcedisplayname() );
-}
-
-void PlaybackRequestManager::FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode )
-{
-    BOSE_ERROR( s_logger, "%s:error code- %d", __func__, errorCode );
 }
 
 } // namespace ProductApp

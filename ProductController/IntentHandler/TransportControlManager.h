@@ -55,8 +55,6 @@ private:
     bool CurrentlyPlaying();
     bool CanPauseInJson();
 
-    void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
-
     AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingRsp;
     bool m_play;
 };

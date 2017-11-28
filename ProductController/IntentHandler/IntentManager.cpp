@@ -52,4 +52,12 @@ SoundTouchInterface::StatusJson IntentManager::CurrentNowPlayingStatusJson() con
     return ( SoundTouchInterface::StatusJson::error );
 }
 
+void IntentManager::FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode )
+{
+    // Nothing to do for now, printing this if anyone cares.
+    BOSE_ERROR( s_logger, "%s:error code- %d", __func__, errorCode );
+    return;
+}
+
+
 }

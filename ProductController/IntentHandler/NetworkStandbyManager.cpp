@@ -73,10 +73,4 @@ bool NetworkStandbyManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     return true;
 }
 
-void NetworkStandbyManager::FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode )
-{
-    // Nothing to do for now, printing this if anyone cares.
-    BOSE_ERROR( s_logger, "%s:error code- %d", __func__, errorCode );
-    return;
-}
 }

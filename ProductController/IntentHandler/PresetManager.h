@@ -48,7 +48,6 @@ private:
     void BuildPresetContentItemFromNp( SoundTouchInterface::ContentItem *destinationCI,
                                        const SoundTouchInterface::NowPlayingJson_ContentItemJson &sourceCI ) const;
 
-    void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
     AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingRsp;
 };
 } // namespace ProductApp

@@ -195,10 +195,4 @@ void TransportControlManager::PutTransportControlCbRsp( const SoundTouchInterfac
     return;
 }
 
-void TransportControlManager::FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode )
-{
-    // Nothing to do for now, printing this if anyone cares.
-    BOSE_ERROR( s_logger, "%s:error code- %d", __func__, errorCode );
-    return;
-}
 }

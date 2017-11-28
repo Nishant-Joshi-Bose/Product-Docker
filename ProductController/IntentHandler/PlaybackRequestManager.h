@@ -39,8 +39,6 @@ private:
 
     void PostPlaybackRequestCbRsp( const SoundTouchInterface::NowPlayingJson& resp );
 
-    void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
-
     AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingRsp;
 };
 } // namespace ProductApp
