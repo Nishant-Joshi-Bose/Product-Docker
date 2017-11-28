@@ -620,7 +620,7 @@ void ProfessorProductController::SendPlaybackRequest( PlaybackSource_t playbackS
     /// nowPlaying to playbackRequest.
     ///
     constexpr char source[ ]           = "DEEZER";
-    constexpr char sourceAccount[ ]    = "matthew_scanlan@bose.com";
+    constexpr char sourceAccount[ ]    = "aleksander_soltan@bose.com";
     constexpr char presetType[ ]       = "topTrack";
     constexpr char location[ ]         = "132";
     constexpr char name[ ]             = "Pop - ##TRANS_TopTracks##";
