@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 ///// @file   IntentHandler.h
-///// @brief  Eddie specific IntentHandler class for Riviera based product
+///// @brief  IntentHandler class for Riviera based product
 /////
 ///// @attention Copyright 2017 Bose Corporation, Framingham, MA
 //////////////////////////////////////////////////////////////////////////////////
@@ -53,6 +53,22 @@ enum class Action
     //+ ALEXA
     ALEXA_CAROUSEL = 26,
     //- ALEXA
+
+    //+ PRESET
+    PRESET_STORE_1 = 27,
+    PRESET_STORE_2 = 28,
+    PRESET_STORE_3 = 29,
+    PRESET_STORE_4 = 30,
+    PRESET_STORE_5 = 31,
+    PRESET_STORE_6 = 32,
+
+    PRESET_SELECT_1 = 33,
+    PRESET_SELECT_2 = 34,
+    PRESET_SELECT_3 = 35,
+    PRESET_SELECT_4 = 36,
+    PRESET_SELECT_5 = 37,
+    PRESET_SELECT_6 = 38
+                      //- PRESET
 };
 
 class IntentHandler
@@ -130,6 +146,26 @@ public:
     static bool IsIntentNetworkStandby( KeyHandlerUtil::ActionType_t arg )
     {
         return ( ( arg == ( uint16_t ) Action::NETWORK_STANDBY ) );
+    }
+
+    static bool IsPresetSelect( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( ( arg == ( uint16_t ) Action::PRESET_SELECT_1 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_SELECT_2 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_SELECT_3 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_SELECT_4 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_SELECT_5 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_SELECT_6 ) );
+    }
+
+    static bool IsPresetStore( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( ( arg == ( uint16_t ) Action::PRESET_STORE_1 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_STORE_2 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_STORE_3 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_STORE_4 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_STORE_5 ) ||
+                 ( arg == ( uint16_t ) Action::PRESET_STORE_6 ) );
     }
 
 private:
