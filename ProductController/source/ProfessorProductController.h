@@ -48,6 +48,7 @@
 #include "Utilities.h"
 #include "ProductMessage.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
+#include "MacAddressInfo.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -177,6 +178,23 @@ public:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleMessage( const ProductMessage& message );
+
+    std::string GetDefaultProductName() const override
+    {
+        /// To-Do: fix the default name
+        return "Bose " + MacAddressInfo::GetPrimaryMAC();
+    }
+
+    std::string const& GetProductType() const override;
+
+    std::string const& GetProductVariant() const override;
+
+    std::vector<std::string> GetUniqueLanguages() const override
+    {
+        return {};
+    }
+
+    bool IsSystemLanguageSet( ) const;
 
 private:
 

@@ -122,6 +122,16 @@ public:
         return false;
     }
 
+    virtual bool HandleModulesReady( )
+    {
+        return false;
+    }
+
+    virtual bool HandleNetworkConfigurationStatus( )
+    {
+        return false;
+    }
+
     static void SetProductController( ProductController* productController )
     {
         s_productController = productController;

@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @file      ProfessorProductController.cpp
 ///
@@ -249,6 +249,11 @@ void ProfessorProductController::Run( )
     GetHsm( ).Init( this, PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
     ///
+    /// Initialize entities in the Common Product Controller
+    ///
+    m_deviceManager.Initialize( this );
+
+    ///
     /// Get instances of all the modules.
     ///
     BOSE_DEBUG( s_logger, "----------- Product Controller Starting Modules ------------" );
@@ -453,6 +458,46 @@ bool ProfessorProductController::IsVoiceConfigured( ) const
 bool ProfessorProductController::IsSoftwareUpdateRequired( ) const
 {
     return m_IsSoftwareUpdateRequired;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::IsSystemLanguageSet
+///
+/// @return This method returns true if the corresponding member has a system language defined.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProfessorProductController::IsSystemLanguageSet( ) const
+{
+    return m_deviceManager.IsLanguageSet();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetProductType
+///
+/// @return This method returns the std::string const& value to be used for the Product "Type" field
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string const& ProfessorProductController::GetProductType() const
+{
+    static std::string productType = "Professor Soundbar";
+    return productType;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetProductVariant
+///
+/// @return This method returns the std::string const& value to be used for the Product "Variant" field
+///
+/// @TODO - Below value may be available through HSP APIs
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string const& ProfessorProductController::GetProductVariant() const
+{
+    static std::string productType = "Professor";
+    return productType;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
