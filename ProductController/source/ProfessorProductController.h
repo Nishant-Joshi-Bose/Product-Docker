@@ -46,7 +46,6 @@
 #include "ProductControllerHsm.h"
 #include "ProductSTSController.h"
 #include "Utilities.h"
-#include "ProductMessage.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "MacAddressInfo.h"
 
@@ -214,14 +213,7 @@ private:
     std::shared_ptr< ProductEdidInterface     > m_ProductEdidInterface;
     std::shared_ptr< ProductVolumeManager     > m_ProductVolumeManager;
     std::shared_ptr< ProductSpeakerManager    > m_ProductSpeakerManager;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @todo  The following suclass will need to be changed in the common product controller code
-    ///        to a generic C++ class from a singleton, and declared as a shared pointer here.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ProductAudioService* m_ProductAudioService;
+    std::shared_ptr< CustomProductAudioService> m_ProductAudioService;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

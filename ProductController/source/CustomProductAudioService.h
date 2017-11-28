@@ -7,6 +7,7 @@
 
 #pragma once
 #include "ProductAudioService.h"
+#include "ProfessorProductController.h"
 
 namespace ProductApp
 {
@@ -16,6 +17,7 @@ public:
     CustomProductAudioService( ProfessorProductController& ProductController );
 
 private:
+    NotifyTargetTaskIF*                     m_ProductTask   = nullptr;
     Callback< ProductMessage >              m_ProductNotify = nullptr;
 
     //////////////////////////////////////////////////////////////////////////////////////////////

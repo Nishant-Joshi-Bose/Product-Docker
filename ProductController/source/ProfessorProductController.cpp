@@ -62,7 +62,6 @@
 #include "ProductSpeakerManager.h"
 #include "ProductCommandLine.h"
 #include "ProtoPersistenceFactory.h"
-#include "ProductMessage.pb.h"
 #include "NetManager.pb.h"
 #include "Callback.h"
 #include "ProductEdidInterface.h"

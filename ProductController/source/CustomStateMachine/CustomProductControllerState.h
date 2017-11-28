@@ -137,21 +137,6 @@ public:
         s_productController = productController;
     }
 
-    virtual bool HandleModulesReady( )
-    {
-        return false;
-    }
-
-    virtual bool HandleNetworkStandbyIntent( )
-    {
-        return false;
-    }
-
-    virtual bool HandleNetworkConfigurationStatus( )
-    {
-        return false;
-    }
-
 protected:
     ///
     /// The custom version of this function returns the custom ProductController.

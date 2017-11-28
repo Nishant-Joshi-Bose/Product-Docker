@@ -25,8 +25,10 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductAudioService::CustomProductAudioService( ProfessorProductController& ProductController )
-    : ProductAudioService( ProductController ),
-      m_ProductNotify( ProductController.GetMessageHandler( ) )
+    : ProductAudioService( ProductController.GetTask( ),
+                           ProductController.GetMessageHandler() ),
+      m_ProductTask( ProductController.GetTask( ) ),
+      m_ProductNotify( ProductController.GetMessageHandler() )
 {
     BOSE_DEBUG( s_logger, __func__ );
 }
