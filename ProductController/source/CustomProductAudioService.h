@@ -13,10 +13,11 @@ namespace ProductApp
 class CustomProductAudioService: public ProductAudioService
 {
 public:
-    CustomProductAudioService( NotifyTargetTaskIF*        task,
-                               Callback< ProductMessage > ProductNotify );
+    CustomProductAudioService( ProfessorProductController& ProductController );
 
 private:
+    Callback< ProductMessage >              m_ProductNotify = nullptr;
+
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// Front Door handlers
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,6 +34,8 @@ private:
     /// APProduct handling functions
     /////////////////////////////////////////////////////////////////////////////////////////////////
     void RegisterAudioPathEvent() override;
+    void ConnectCallback( bool connect );
+    void DisconnectCallback();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// FrontDoor handling functions

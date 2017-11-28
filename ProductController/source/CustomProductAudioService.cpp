@@ -24,9 +24,9 @@ namespace ProductApp
 /// @param  Callback< ProductMessage > ProductNotify
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductAudioService::CustomProductAudioService( NotifyTargetTaskIF*        task,
-                                                      Callback< ProductMessage > ProductNotify )
-    : ProductAudioService( task, ProductNotify )
+CustomProductAudioService::CustomProductAudioService( ProfessorProductController& ProductController )
+    : ProductAudioService( ProductController ),
+      m_ProductNotify( ProductController.GetMessageHandler( ) )
 {
     BOSE_DEBUG( s_logger, __func__ );
 }
@@ -39,7 +39,7 @@ CustomProductAudioService::CustomProductAudioService( NotifyTargetTaskIF*       
 void CustomProductAudioService::RegisterAudioPathEvent()
 {
     BOSE_DEBUG( s_logger, __func__ );
-    m_APPointer = APProductFactory::Create( "ProductAudioService-APProduct", m_mainTask );
+    m_APPointer = APProductFactory::Create( "ProductAudioService-APProduct", m_ProductTask );
     RegisterCommonAudioPathEvent();
     //TODO: register for custom AudioPath event
     ConnectToAudioPath();
@@ -72,7 +72,7 @@ void CustomProductAudioService::RegisterFrontDoorEvent()
     {
         m_AudioSettingsMgr->SetBass( val );
     },
-    m_FrontDoorClientIF, m_mainTask );
+    m_FrontDoorClientIF, m_ProductTask );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/treble - register ProductController as handler for POST/PUT/GET requests
@@ -86,7 +86,7 @@ void CustomProductAudioService::RegisterFrontDoorEvent()
     {
         m_AudioSettingsMgr->SetTreble( val );
     },
-    m_FrontDoorClientIF, m_mainTask );
+    m_FrontDoorClientIF, m_ProductTask );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/center - register ProductController as handler for POST/PUT/GET requests
@@ -100,7 +100,7 @@ void CustomProductAudioService::RegisterFrontDoorEvent()
     {
         m_AudioSettingsMgr->SetCenter( val );
     },
-    m_FrontDoorClientIF, m_mainTask );
+    m_FrontDoorClientIF, m_ProductTask );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/surround - register ProductController as handler for POST/PUT/GET requests
@@ -114,7 +114,7 @@ void CustomProductAudioService::RegisterFrontDoorEvent()
     {
         m_AudioSettingsMgr->SetSurround( val );
     },
-    m_FrontDoorClientIF, m_mainTask );
+    m_FrontDoorClientIF, m_ProductTask );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/gainOffset - register ProductController as handler for POST/PUT/GET requests
@@ -128,7 +128,7 @@ void CustomProductAudioService::RegisterFrontDoorEvent()
     {
         m_AudioSettingsMgr->SetGainOffset( val );
     },
-    m_FrontDoorClientIF, m_mainTask );
+    m_FrontDoorClientIF, m_ProductTask );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/avSync - register ProductController as handler for POST/PUT/GET requests
@@ -142,7 +142,7 @@ void CustomProductAudioService::RegisterFrontDoorEvent()
     {
         m_AudioSettingsMgr->SetAvSync( val );
     },
-    m_FrontDoorClientIF, m_mainTask );
+    m_FrontDoorClientIF, m_ProductTask );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/mode - register ProductController as handler for POST/PUT/GET requests
@@ -155,7 +155,7 @@ void CustomProductAudioService::RegisterFrontDoorEvent()
     {
         m_AudioSettingsMgr->SetMode( val );
     },
-    m_FrontDoorClientIF, m_mainTask );
+    m_FrontDoorClientIF, m_ProductTask );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/contentType - register ProductController as handler for POST/PUT/GET requests
@@ -169,7 +169,36 @@ void CustomProductAudioService::RegisterFrontDoorEvent()
     {
         m_AudioSettingsMgr->SetContentType( val );
     },
-    m_FrontDoorClientIF, m_mainTask );
+    m_FrontDoorClientIF, m_ProductTask );
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::ConnectCallback
+///
+/// @param  bool connect
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::ConnectCallback( bool connect )
+{
+    BOSE_DEBUG( s_logger, "CustomProductAudioService::ConnectCallback: connect = %s", connect ? "true" : "false" );
+    ProductMessage message;
+    message.mutable_audiopathstatus( )->set_connected( connect );
+    m_ProductNotify.Send( message );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductAudioService::ConnectCallback
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::DisconnectCallback()
+{
+    BOSE_DEBUG( s_logger, "CustomProductAudioService::DisconnectCallback" );
+    ProductMessage message;
+    message.mutable_audiopathstatus( )->set_connected( false );
+    m_ProductNotify.Send( message );
+}
+
 
 }// namespace ProductApp

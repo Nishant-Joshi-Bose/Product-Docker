@@ -5,7 +5,6 @@ SOUNDTOUCH_SDK_DIR := $(shell components get SoundTouch-SDK-$(sdk) installed_loc
 
 PROTO_SOURCES = ProductMessage.proto        \
                 ConfigurationStatus.proto   \
-                Language.proto              \
                 ProductSTS.proto            \
                 KeyActions.proto            \
                 SystemInfo.proto            \

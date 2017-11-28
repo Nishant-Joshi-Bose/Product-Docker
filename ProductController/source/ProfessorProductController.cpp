@@ -263,8 +263,8 @@ void ProfessorProductController::Run( )
     m_ProductKeyInputInterface = std::make_shared< ProductKeyInputInterface >( *this );
     m_ProductVolumeManager     = std::make_shared< ProductVolumeManager     >( *this );
     m_ProductSpeakerManager    = std::make_shared< ProductSpeakerManager    >( *this );
-    m_ProductAudioService      = ProductAudioService ::GetInstance( GetTask( ),
-                                                                    GetMessageHandler( ) );
+    m_ProductAudioService      = std::make_shared< CustomProductAudioService>( *this );
+
     if( m_ProductHardwareInterface == nullptr ||
         m_ProductSystemManager     == nullptr ||
         m_ProductNetworkManager    == nullptr ||
@@ -324,7 +324,7 @@ Callback < ProductMessage > ProfessorProductController::GetMessageHandler( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  ProfessorProductController::GetMessageHandler
+/// @brief  ProfessorProductController::GetCommandLineInterface
 ///
 /// @return This method returns a reference to a command line interface for adding module specific
 ///         commands. Note that this interface is instantiated in the inherited ProductController
