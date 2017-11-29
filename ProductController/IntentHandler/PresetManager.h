@@ -8,7 +8,8 @@
 
 #include "IntentHandler.h"
 #include "EddieProductController.h"
-#include "SoundTouchInterface/Presets.pb.h"
+#include "Presets.pb.h"
+#include "ContentItem.pb.h"
 
 namespace ProductApp
 {
@@ -36,16 +37,16 @@ public:
     void PutTransportControlCbRsp( const SoundTouchInterface::NowPlayingJson& resp );
 
 private:
-    SoundTouchInterface::presets                m_presets; // temp
-    static SoundTouchInterface::PresetID IntentToPresetIdMap( KeyHandlerUtil::ActionType_t& intent );
+    ProductPresets::presets    m_presets; // temp
+    static PresetID IntentToPresetIdMap( KeyHandlerUtil::ActionType_t& intent );
 
-    SoundTouchInterface::preset* IsPresetContentPresent( SoundTouchInterface::PresetID presetId,
-                                                         SoundTouchInterface::presets &presetItem ) const;
+    ProductPresets::preset* IsPresetContentPresent( PresetID presetId,
+                                                    ProductPresets::presets &presetItem ) const;
 
     void BuildPlaybackRequestFromPresetCI( SoundTouchInterface::playbackRequestJson &pr,
-                                           const SoundTouchInterface::ContentItem &ci ) const;
+                                           const ContentItem &ci ) const;
 
-    void BuildPresetContentItemFromNp( SoundTouchInterface::ContentItem *destinationCI,
+    void BuildPresetContentItemFromNp( ContentItem *destinationCI,
                                        const SoundTouchInterface::NowPlayingJson_ContentItemJson &sourceCI ) const;
 
     AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingRsp;
