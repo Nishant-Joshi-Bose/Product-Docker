@@ -63,7 +63,8 @@ static constexpr bool VOLUME_NOTIFICATIONS_SUPPORTED = false;
 ProductVolumeManager::ProductVolumeManager( ProfessorProductController& ProductController )
 
     : m_ProductTask( ProductController.GetTask( ) ),
-      m_ProductNotify( ProductController.GetMessageHandler( ) )
+      m_ProductNotify( ProductController.GetMessageHandler( ) ),
+      m_ProductHardwareInterface( ProductController.GetHardwareInterface( ) )
 {
     Initialize( );
 }
