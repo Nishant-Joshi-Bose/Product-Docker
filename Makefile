@@ -53,10 +53,19 @@ cmake_build: generated_sources | $(BUILDS_DIR) astyle
 product-ipk: cmake_build
 	./scripts/create-product-ipk
 
-IPKS = hsp.ipk lpm_updater.ipk eddie.ipk
+#Uncomment next two line after removing next 2 lines, once HSP is integrated.
+#IPKS = hsp.ipk  eddie.ipk lpm_updater.ipk
+#PACKAGENAMES = hsp SoundTouch eddie_lpm_updater
+IPKS = eddie.ipk lpm_updater.ipk
+PACKAGENAMES = SoundTouch eddie_lpm_updater
+
+#Create Zip file for Bonjour / Local update
+.PHONY: localupdate-zip
+localupdate-zip: product-ipk hsp-ipk lpmupdater-ipk
+	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-localupdate-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o eddie_localupdate.zip
 
 .PHONY: packages-gz
-packages-gz: product-ipk
+packages-gz: product-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS)
 
 .PHONY: graph
@@ -69,9 +78,12 @@ hsp-ipk: cmake_build
 	./scripts/create-hsp-ipk
 
 .PHONY: package
-package: product-ipk hsp-ipk lpmupdater-ipk packages-gz
+package: product-ipk hsp-ipk lpmupdater-ipk 
 	./scripts/create-product-tarball
 
+.PHONY: all-packages
+all-packages: package packages-gz localupdate-zip
+	
 .PHONY: lpmupdater-ipk
 lpmupdater-ipk:
 	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage $(EDDIELPMPACKAGE_DIR) ./builds/$(cfg)/ eddie
