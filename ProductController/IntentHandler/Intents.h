@@ -43,9 +43,9 @@ enum class Action
     AUX_IN = 25,
     //- AUX
 
-    //+ ALEXA
-    ALEXA_CAROUSEL = ActionCommon_t::ALEXA_CAROUSEL,
-    //- ALEXA
+    //+ VOICE ALEXA
+    VOICE_CAROUSEL = ActionCommon_t::ALEXA_CAROUSEL,
+    //- VOICE ALEXA
 
     //+ PRESET
     PRESET_STORE_1 = ActionCommon_t::PRESET_STORE_1,

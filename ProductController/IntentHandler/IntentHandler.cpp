@@ -184,7 +184,6 @@ void IntentHandler::Initialize()
 
     m_IntentNotificationMap[( uint16_t ) Action::VOICE_CAROUSEL] = "Voice_Control" ;
 
-
     return;
 }
 
