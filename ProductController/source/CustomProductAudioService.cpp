@@ -11,7 +11,7 @@
 #include "FrontDoorClient.h"
 #include "CustomProductAudioService.h"
 
-//static DPrint s_logger( "CustomProductAudioService" );
+static DPrint s_logger( "CustomProductAudioService" );
 
 namespace ProductApp
 {
@@ -19,9 +19,7 @@ namespace ProductApp
 ///
 /// @name   CustomProductAudioService::CustomProductAudioService
 ///
-/// @param  NotifyTargetTaskIF* task
-///
-/// @param  Callback< ProductMessage > ProductNotify
+/// @param  ProfessorProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductAudioService::CustomProductAudioService( ProfessorProductController& ProductController )
@@ -64,114 +62,146 @@ void CustomProductAudioService::RegisterFrontDoorEvent()
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/bass - register ProductController as handler for POST/PUT/GET requests
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    m_AudioBassSetting = std::make_shared<AudioSetting<ProductPb::AudioBassLevel>> ( "/audio/bass",
-                         [ this ]( )
+    auto getBassAction = [ this ]( )
     {
-        BOSE_INFO( s_logger, "Sisi - bass value: %s", ProtoToMarkup::ToJson( m_AudioSettingsMgr->GetBass( ), false ).c_str() );
         return m_AudioSettingsMgr->GetBass( );
-    },
-    [ this ]( const ProductPb::AudioBassLevel & val )
+    };
+    auto setBassAction = [ this ]( const ProductPb::AudioBassLevel val )
     {
         m_AudioSettingsMgr->SetBass( val );
-    },
-    m_FrontDoorClientIF, m_ProductTask );
+    };
+    m_AudioBassSetting = std::make_shared<AudioSetting<ProductPb::AudioBassLevel>>
+                         ( "/audio/bass",
+                           getBassAction,
+                           setBassAction,
+                           m_FrontDoorClientIF,
+                           m_ProductTask );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/treble - register ProductController as handler for POST/PUT/GET requests
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    m_AudioTrebleSetting = std::make_shared<AudioSetting<ProductPb::AudioTrebleLevel>>( "/audio/treble",
-                           [ this ]( )
+    auto getTrebleAction = [ this ]( )
     {
         return m_AudioSettingsMgr->GetTreble( );
-    },
-    [ this ]( const ProductPb::AudioTrebleLevel & val )
+    };
+    auto setTrebleAction = [ this ]( const ProductPb::AudioTrebleLevel val )
     {
         m_AudioSettingsMgr->SetTreble( val );
-    },
-    m_FrontDoorClientIF, m_ProductTask );
+    };
+    m_AudioTrebleSetting = std::make_shared<AudioSetting<ProductPb::AudioTrebleLevel>>
+                           ( "/audio/treble",
+                             getTrebleAction,
+                             setTrebleAction,
+                             m_FrontDoorClientIF,
+                             m_ProductTask );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/center - register ProductController as handler for POST/PUT/GET requests
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    m_AudioCenterSetting = std::make_shared<AudioSetting<ProductPb::AudioCenterLevel>>( "/audio/center",
-                           [ this ]( )
+    auto getCenterAction = [ this ]( )
     {
         return m_AudioSettingsMgr->GetCenter( );
-    },
-    [ this ]( const ProductPb::AudioCenterLevel & val )
+    };
+    auto setCenterAction = [ this ]( const ProductPb::AudioCenterLevel val )
     {
         m_AudioSettingsMgr->SetCenter( val );
-    },
-    m_FrontDoorClientIF, m_ProductTask );
+    };
+    m_AudioCenterSetting = std::make_shared<AudioSetting<ProductPb::AudioCenterLevel>>
+                           ( "/audio/center",
+                             getCenterAction,
+                             setCenterAction,
+                             m_FrontDoorClientIF,
+                             m_ProductTask );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/surround - register ProductController as handler for POST/PUT/GET requests
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    m_AudioSurroundSetting = std::make_shared<AudioSetting<ProductPb::AudioSurroundLevel>>( "/audio/surround",
-                             [ this ]( )
+    auto getSurroundAction = [ this ]( )
     {
         return m_AudioSettingsMgr->GetSurround( );
-    },
-    [ this ]( const ProductPb::AudioSurroundLevel & val )
+    };
+    auto setSurroundAction = [ this ]( const ProductPb::AudioSurroundLevel val )
     {
         m_AudioSettingsMgr->SetSurround( val );
-    },
-    m_FrontDoorClientIF, m_ProductTask );
+    };
+    m_AudioSurroundSetting = std::make_shared<AudioSetting<ProductPb::AudioSurroundLevel>>
+                             ( "/audio/surround",
+                               getSurroundAction,
+                               setSurroundAction,
+                               m_FrontDoorClientIF,
+                               m_ProductTask );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/gainOffset - register ProductController as handler for POST/PUT/GET requests
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    m_AudioGainOffsetSetting = std::make_shared<AudioSetting<ProductPb::AudioGainOffset>>( "/audio/gainOffset",
-                               [ this ]( )
+    auto getGainOffsetAction = [ this ]( )
     {
         return m_AudioSettingsMgr->GetGainOffset( );
-    },
-    [ this ]( const ProductPb::AudioGainOffset & val )
+    };
+    auto setGainOffsetAction = [ this ]( const ProductPb::AudioGainOffset val )
     {
         m_AudioSettingsMgr->SetGainOffset( val );
-    },
-    m_FrontDoorClientIF, m_ProductTask );
+    };
+    m_AudioGainOffsetSetting = std::make_shared<AudioSetting<ProductPb::AudioGainOffset>>
+                               ( "/audio/gainOffset",
+                                 getGainOffsetAction,
+                                 setGainOffsetAction,
+                                 m_FrontDoorClientIF,
+                                 m_ProductTask );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/avSync - register ProductController as handler for POST/PUT/GET requests
     //////////////////////////////////////////////////////////////////////////////////////////////
-    m_AudioAvSyncsetSetting = std::make_shared<AudioSetting<ProductPb::AudioAvSync>>( "/audio/avSync",
-                              [ this ]( )
+    auto getAvSyncAction = [ this ]( )
     {
         return m_AudioSettingsMgr->GetAvSync( );
-    },
-    [ this ]( const ProductPb::AudioAvSync & val )
+    };
+    auto setAvSyncAction = [ this ]( const ProductPb::AudioAvSync val )
     {
         m_AudioSettingsMgr->SetAvSync( val );
-    },
-    m_FrontDoorClientIF, m_ProductTask );
+    };
+    m_AudioAvSyncsetSetting = std::make_shared<AudioSetting<ProductPb::AudioAvSync>>
+                              ( "/audio/avSync",
+                                getAvSyncAction,
+                                setAvSyncAction,
+                                m_FrontDoorClientIF,
+                                m_ProductTask );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/mode - register ProductController as handler for POST/PUT/GET requests
     //////////////////////////////////////////////////////////////////////////////////////////////
-    m_AudioModeSetting = std::make_shared<AudioSetting<ProductPb::AudioMode>>( "/audio/mode", [ this ]( )
+    auto getModeAction = [ this ]( )
     {
         return m_AudioSettingsMgr->GetMode( );
-    },
-    [ this ]( const ProductPb::AudioMode & val )
+    };
+    auto setModeAction = [ this ]( const ProductPb::AudioMode val )
     {
         m_AudioSettingsMgr->SetMode( val );
-    },
-    m_FrontDoorClientIF, m_ProductTask );
+    };
+    m_AudioModeSetting = std::make_shared<AudioSetting<ProductPb::AudioMode>>
+                         ( "/audio/mode",
+                           getModeAction,
+                           setModeAction,
+                           m_FrontDoorClientIF,
+                           m_ProductTask );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/contentType - register ProductController as handler for POST/PUT/GET requests
     //////////////////////////////////////////////////////////////////////////////////////////////
-    m_AudioContentTypeSetting = std::make_shared<AudioSetting<ProductPb::AudioContentType>>( "/audio/contentType",
-                                [ this ]( )
+    auto getContentTypeAction = [ this ]( )
     {
         return m_AudioSettingsMgr->GetContentType( );
-    },
-    [ this ]( const ProductPb::AudioContentType & val )
+    };
+    auto setContentTypeAction = [ this ]( const ProductPb::AudioContentType val )
     {
         m_AudioSettingsMgr->SetContentType( val );
-    },
-    m_FrontDoorClientIF, m_ProductTask );
+    };
+    m_AudioContentTypeSetting = std::make_shared<AudioSetting<ProductPb::AudioContentType>>
+                                ( "/audio/contentType",
+                                  getContentTypeAction,
+                                  setContentTypeAction,
+                                  m_FrontDoorClientIF,
+                                  m_ProductTask );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
