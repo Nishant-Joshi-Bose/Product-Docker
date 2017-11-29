@@ -11,65 +11,12 @@
 #include "FrontDoorClientIF.h"
 #include "KeyHandler.h"
 #include "IntentManager.h"
+#include "Intents.h"
 
 namespace ProductApp
 {
 using IntentManagerPtr_t  = std::shared_ptr<IntentManager>;
 using IntentManagerMap_t  = std::unordered_map<uint16_t, IntentManagerPtr_t>;
-
-enum class Action
-{
-    INVALID = 0,
-    //+ MULTIBUTTON ACTIONS for Eddie
-    PLAY_PAUSE = 1,
-    NEXT_TRACK = 2,
-    PREV_TRACK = 3,
-    NETWORK_STANDBY = 4,
-    SEND_TO_AP_MODE = 5,
-    MANUAL_UPDATE = 6,
-    DISABLE_NETWORKING = 7,
-    FACTORY_RESET = 8,
-    LOW_POWER_STANDBY = 9,
-    //- MULTIBUTTON ACTIONS for Eddie
-
-    //+ Bluetooth Button
-    CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST = 20,
-    SEND_TO_DISCOVERABLE = 21,
-    CLEAR_PAIRING_LIST = 22,
-    //- Bluetooth Button
-
-    //+ VOLUME UP
-    VOLUME_UP = 23,
-    //- VOLUME UP
-
-    //+ VOLUME DOWN
-    VOLUME_DOWN = 24,
-    //- VOLUME DOWN
-
-    //+ AUX
-    AUX_IN = 25,
-    //- AUX
-
-    //+ ALEXA
-    ALEXA_CAROUSEL = 26,
-    //- ALEXA
-
-    //+ PRESET
-    PRESET_STORE_1 = 27,
-    PRESET_STORE_2 = 28,
-    PRESET_STORE_3 = 29,
-    PRESET_STORE_4 = 30,
-    PRESET_STORE_5 = 31,
-    PRESET_STORE_6 = 32,
-
-    PRESET_SELECT_1 = 33,
-    PRESET_SELECT_2 = 34,
-    PRESET_SELECT_3 = 35,
-    PRESET_SELECT_4 = 36,
-    PRESET_SELECT_5 = 37,
-    PRESET_SELECT_6 = 38
-                      //- PRESET
-};
 
 class IntentHandler
 {
