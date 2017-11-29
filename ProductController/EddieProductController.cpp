@@ -42,7 +42,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_wifiProfilesCount(),
     errorCb( AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> ( std::bind( &EddieProductController::CallbackError,
                                                                   this, std::placeholders::_1 ), GetTask() ) ),
-    m_demoController( m_ProductControllerTask, m_KeyHandler )
+    m_demoController( m_ProductControllerTask, m_KeyHandler, g_ProductPersistenceDir )
 {
     BOSE_INFO( s_logger, __func__ );
     m_deviceManager.Initialize( this );
@@ -77,7 +77,7 @@ void EddieProductController::Initialize()
     SendInitialRequests();
     //Register lpm events that lightbar will handle
     m_lightbarController->RegisterLightBarEndPoints();
-    m_demoController.RegisterEndPoints();
+    m_demoController.Initialize();
     m_displayController ->Initialize();
 }
 
