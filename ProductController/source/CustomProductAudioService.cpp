@@ -24,9 +24,7 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductAudioService::CustomProductAudioService( ProfessorProductController& ProductController )
     : ProductAudioService( ProductController.GetTask( ),
-                           ProductController.GetMessageHandler() ),
-      m_ProductTask( ProductController.GetTask( ) ),
-      m_ProductNotify( ProductController.GetMessageHandler() )
+                           ProductController.GetMessageHandler() )
 {
     BOSE_DEBUG( s_logger, __func__ );
 }
@@ -41,7 +39,6 @@ void CustomProductAudioService::RegisterAudioPathEvent()
     BOSE_DEBUG( s_logger, __func__ );
     m_APPointer = APProductFactory::Create( "ProductAudioService-APProduct", m_ProductTask );
     RegisterCommonAudioPathEvent();
-    //TODO: register for custom AudioPath event
     ConnectToAudioPath();
 }
 
@@ -203,34 +200,5 @@ void CustomProductAudioService::RegisterFrontDoorEvent()
                                   m_FrontDoorClientIF,
                                   m_ProductTask );
 }
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   CustomProductAudioService::ConnectCallback
-///
-/// @param  bool connect
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductAudioService::ConnectCallback( bool connect )
-{
-    BOSE_DEBUG( s_logger, "CustomProductAudioService::ConnectCallback: connect = %s", connect ? "true" : "false" );
-    ProductMessage message;
-    message.mutable_audiopathstatus( )->set_connected( connect );
-    m_ProductNotify.Send( message );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductAudioService::ConnectCallback
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductAudioService::DisconnectCallback()
-{
-    BOSE_DEBUG( s_logger, "CustomProductAudioService::DisconnectCallback" );
-    ProductMessage message;
-    message.mutable_audiopathstatus( )->set_connected( false );
-    m_ProductNotify.Send( message );
-}
-
 
 }// namespace ProductApp
