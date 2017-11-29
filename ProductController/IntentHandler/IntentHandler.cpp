@@ -39,6 +39,7 @@
 #include "NetworkStandbyManager.h"
 #include "IntentHandler.pb.h"
 #include "BluetoothManager.h"
+#include "VoiceManager.h"
 
 static DPrint s_logger( "IntentHandler" );
 
@@ -104,14 +105,9 @@ void IntentHandler::Initialize()
 
     auto func = std::bind( &EddieProductController::HandleNetworkStandbyIntentCb , &GetProductController(), std::placeholders::_1 );
     auto cb = std::make_shared<AsyncCallback<KeyHandlerUtil::ActionType_t&> > ( func, &m_task );
-    KeyHandlerUtil::ActionType_t intent = (KeyHandlerUtil::ActionType_t) Action::NETWORK_STANDBY;
+    KeyHandlerUtil::ActionType_t intent = ( KeyHandlerUtil::ActionType_t ) Action::NETWORK_STANDBY;
     RegisterCallBack( intent, cb );
     //- Miscellaneous Control API's (LPS, Factory Reset, NetworkStandy)
-    //
-    //+ Voice (Alexa) Control API's
-
-    //- Voice (Alexa) Control API's
-    //
     //+ Preset Control API's
 
     //- Preset Control API's
@@ -123,6 +119,15 @@ void IntentHandler::Initialize()
 
     m_IntentManagerMap[( uint16_t )Action::AUX_IN] = playbackRequestManager;
     //- AUX Control API's
+
+    //+ Voice (Alexa) Control API's
+    IntentManagerPtr_t voiceRequestManager =
+        std::make_shared<VoiceManager>( m_task, m_cliClient,
+                                        m_frontDoorClient,
+                                        m_controller );
+    m_IntentManagerMap[( uint16_t )Action::ALEXA_CAROUSEL] = voiceRequestManager;
+    //- Voice (Alexa) Control API's
+
 
     // prepare map for button event notification
     m_IntentNotificationMap[( uint16_t ) Action::PLAY_PAUSE]    = "play_pause" ;
@@ -140,6 +145,8 @@ void IntentHandler::Initialize()
     m_IntentNotificationMap[( uint16_t ) Action::VOLUME_DOWN]   = "volume_down" ;
 
     m_IntentNotificationMap[( uint16_t ) Action::AUX_IN]        = "aux_in" ;
+
+    m_IntentNotificationMap[( uint16_t ) Action::ALEXA_CAROUSEL] = "Voice_Alexa_Control" ;
 
     return;
 }
