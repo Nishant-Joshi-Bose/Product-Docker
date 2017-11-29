@@ -62,11 +62,11 @@ void CustomProductAudioService::RegisterFrontDoorEvent()
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/bass - register ProductController as handler for POST/PUT/GET requests
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    auto getBassAction = [ this ]( )
+    auto getBassAction = [this]( )
     {
         return m_AudioSettingsMgr->GetBass( );
     };
-    auto setBassAction = [ this ]( const ProductPb::AudioBassLevel val )
+    auto setBassAction = [this]( const ProductPb::AudioBassLevel val )
     {
         m_AudioSettingsMgr->SetBass( val );
     };
