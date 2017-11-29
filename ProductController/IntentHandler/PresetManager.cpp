@@ -16,6 +16,8 @@
 
 #include "DPrint.h"
 #include "PresetManager.h"
+#include "ProductController.h"
+#include "Intents.h"
 
 static DPrint s_logger( "PresetManager" );
 
@@ -25,12 +27,12 @@ namespace ProductApp
 PresetManager::PresetManager( NotifyTargetTaskIF& task,
                               const CliClientMT& cliClient,
                               const FrontDoorClientIF_t& frontDoorClient,
-                              EddieProductController& controller ):
+                              ProductController& controller ):
     IntentManager( task, cliClient, frontDoorClient, controller ),
     m_NowPlayingRsp( std::bind( &PresetManager::PutTransportControlCbRsp,
                                 this, std::placeholders::_1 ) , &task )
 {
-    m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
+    m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>
                                ( std::bind( &PresetManager::FrontDoorClientErrorCb,
                                             this, std::placeholders::_1 ), &task );
 }
@@ -70,10 +72,8 @@ bool PresetManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             SoundTouchInterface::playbackRequestJson pbReqJson;
             BuildPlaybackRequestFromPresetCI( pbReqJson,
                                               presetItem->contentitem() );
-            GetFrontDoorClient()->SendPost<SoundTouchInterface::\
-            NowPlayingJson>( "/content/playbackRequest", pbReqJson,
-                             m_NowPlayingRsp, m_frontDoorClientErrorCb );
-
+            GetFrontDoorClient()->SendPost<SoundTouchInterface::NowPlayingJson>
+            ( "/content/playbackRequest", pbReqJson, m_NowPlayingRsp, m_frontDoorClientErrorCb );
         }
         else
         {
@@ -95,10 +95,8 @@ bool PresetManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             ( ( status == SoundTouchInterface::StatusJson::play ) ||
               ( status == SoundTouchInterface::StatusJson::buffering ) ) &&
             ( GetProductController().GetNowPlaying().has_container() ) &&
-            ( GetProductController().GetNowPlaying().container().\
-              has_contentitem() ) &&
-            ( GetProductController().GetNowPlaying().container().contentitem().\
-              presetable() ) )
+            ( GetProductController().GetNowPlaying().container().has_contentitem() ) &&
+            ( GetProductController().GetNowPlaying().container().contentitem().presetable() ) )
         {
             // Use the content item from nowPlaying to send to Passport
             // for storing preset
@@ -173,9 +171,8 @@ PresetID PresetManager::IntentToPresetIdMap( KeyHandlerUtil::ActionType_t& inten
     }
 }
 
-ProductPresets::preset* \
-PresetManager::IsPresetContentPresent( PresetID presetId,
-                                       ProductPresets::presets &presetItem ) const
+ProductPresets::preset* PresetManager::IsPresetContentPresent( PresetID presetId,
+                                                               ProductPresets::presets &presetItem ) const
 {
     BOSE_DEBUG( s_logger, "%s: Number of preset stored: %d", __func__,
                 presetItem.preset_size() );

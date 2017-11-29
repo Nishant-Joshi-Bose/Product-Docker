@@ -40,6 +40,7 @@
 #include "IntentHandler.pb.h"
 #include "BluetoothManager.h"
 #include "PresetManager.h"
+#include "EddieProductController.h"
 
 static DPrint s_logger( "IntentHandler" );
 
@@ -53,7 +54,7 @@ namespace ProductApp
 IntentHandler::IntentHandler( NotifyTargetTaskIF& task,
                               const CliClientMT& cliClient,
                               const FrontDoorClientIF_t& frontDoorClient,
-                              EddieProductController& controller
+                              ProductController& controller
                             ):
     m_task( task ),
     m_cliClient( cliClient ),
@@ -103,7 +104,7 @@ void IntentHandler::Initialize()
 
     m_IntentManagerMap[( uint16_t )Action::NETWORK_STANDBY] = networkStandbyManager;
 
-    auto func = std::bind( &EddieProductController::HandleNetworkStandbyIntentCb , &GetProductController(), std::placeholders::_1 );
+    auto func = std::bind( &EddieProductController::HandleNetworkStandbyIntentCb , static_cast<EddieProductController*>( &GetProductController() ), std::placeholders::_1 );
     auto cb = std::make_shared<AsyncCallback<KeyHandlerUtil::ActionType_t&> > ( func, &m_task );
     KeyHandlerUtil::ActionType_t intent = ( KeyHandlerUtil::ActionType_t ) Action::NETWORK_STANDBY;
     RegisterCallBack( intent, cb );
@@ -113,9 +114,6 @@ void IntentHandler::Initialize()
 
     //- Voice (Alexa) Control API's
     //
-    //+ Preset Control API's
-
-    //- Preset Control API's
     //+ AUX Control API's
     IntentManagerPtr_t playbackRequestManager =
         std::make_shared<PlaybackRequestManager>( m_task, m_cliClient,
@@ -151,7 +149,7 @@ void IntentHandler::Initialize()
     m_IntentNotificationMap[( uint16_t ) Action::NEXT_TRACK]    = "next_track" ;
     m_IntentNotificationMap[( uint16_t ) Action::PREV_TRACK]    = "prev_track" ;
 
-    m_IntentNotificationMap[( uint16_t ) Action::CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST] \
+    m_IntentNotificationMap[( uint16_t ) Action::CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST]
         = "carousel_discoverable_connect_to_last" ;
     m_IntentNotificationMap[( uint16_t ) Action::SEND_TO_DISCOVERABLE]     = "send_to_discoverable" ;
     m_IntentNotificationMap[( uint16_t ) Action::CLEAR_PAIRING_LIST] = "clear_pairing_list" ;

@@ -24,7 +24,7 @@ public:
     IntentHandler( NotifyTargetTaskIF& task,
                    const CliClientMT& cliClient,
                    const FrontDoorClientIF_t& fd_client,
-                   EddieProductController& controller );
+                   ProductController& controller );
     virtual ~IntentHandler()
     {
         m_IntentManagerMap.clear();
@@ -54,7 +54,7 @@ public:
     {
         return m_frontDoorClient;
     }
-    EddieProductController& GetProductController()
+    ProductController& GetProductController()
     {
         return m_controller;
     }
@@ -124,7 +124,7 @@ private:
     const CliClientMT&          m_cliClient;
     const FrontDoorClientIF_t&  m_frontDoorClient;
     IntentManagerMap_t          m_IntentManagerMap;
-    EddieProductController&     m_controller;
+    ProductController&          m_controller;
     std::unordered_map <uint16_t, std::string> m_IntentNotificationMap;
 };
 } // namespace ProductApp

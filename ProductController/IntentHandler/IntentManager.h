@@ -19,7 +19,7 @@ namespace ProductApp
 using FrontDoorClientIF_t = std::shared_ptr<FrontDoorClientIF>;
 using CbPtr_t  = std::shared_ptr<AsyncCallback<KeyHandlerUtil::ActionType_t&> >;
 
-class EddieProductController;
+class ProductController;
 
 class IntentManager
 {
@@ -27,7 +27,7 @@ public:
     IntentManager( NotifyTargetTaskIF& task,
                    const CliClientMT& cliClient,
                    const FrontDoorClientIF_t& frontDoorClient,
-                   EddieProductController& controller ):
+                   ProductController& controller ):
         m_frontDoorClient( frontDoorClient ),
         m_task( task ),
         m_cliClient( cliClient ),
@@ -67,7 +67,7 @@ protected:
         return m_cliClient;
     }
 
-    EddieProductController& GetProductController() const
+    ProductController& GetProductController() const
     {
         return m_controller;
     }
@@ -98,7 +98,7 @@ private:
     const CliClientMT&                      m_cliClient;
     CbPtr_t                                 m_callBack;
     KeyHandlerUtil::ActionType_t            m_intent;
-    EddieProductController&                 m_controller;
+    ProductController&                      m_controller;
 protected:
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> m_frontDoorClientErrorCb;
 };

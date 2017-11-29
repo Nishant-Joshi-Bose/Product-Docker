@@ -6,10 +6,10 @@
 //////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-#include "IntentHandler.h"
-#include "EddieProductController.h"
+#include "IntentManager.h"
 #include "Presets.pb.h"
 #include "ContentItem.pb.h"
+#include "SoundTouchInterface/ContentSelectionService.pb.h"
 
 namespace ProductApp
 {
@@ -20,7 +20,7 @@ public:
     PresetManager( NotifyTargetTaskIF& task,
                    const CliClientMT& cliClient,
                    const FrontDoorClientIF_t& frontDoorClient,
-                   EddieProductController& controller );
+                   ProductController& controller );
 
     ~PresetManager() override
     {

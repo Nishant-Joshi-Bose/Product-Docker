@@ -6,10 +6,8 @@
 //////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-#include "ProductController.h"
-#include "IntentHandler.h"
-#include "EddieProductController.h"
-#include "BluetoothSinkEndpoints.h"
+#include "IntentManager.h"
+#include "BluetoothSinkService.pb.h"
 
 namespace ProductApp
 {
@@ -20,10 +18,10 @@ public:
     BluetoothManager( NotifyTargetTaskIF& task,
                       const CliClientMT& cliClient,
                       const FrontDoorClientIF_t& frontDoorClient,
-                      EddieProductController& controller ):
+                      ProductController& controller ):
         IntentManager( task, cliClient, frontDoorClient, controller )
     {
-        m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
+        m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>
                                    ( std::bind( &BluetoothManager::FrontDoorClientErrorCb,
                                                 this, std::placeholders::_1 ), &task );
 

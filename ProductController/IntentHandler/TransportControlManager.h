@@ -6,8 +6,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-#include "IntentHandler.h"
-#include "EddieProductController.h"
+#include "IntentManager.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 
 namespace ProductApp
@@ -19,7 +18,7 @@ public:
     TransportControlManager( NotifyTargetTaskIF& task,
                              const CliClientMT& cliClient,
                              const FrontDoorClientIF_t& frontDoorClient,
-                             EddieProductController& controller );
+                             ProductController& controller );
 
     ~TransportControlManager() override
     {

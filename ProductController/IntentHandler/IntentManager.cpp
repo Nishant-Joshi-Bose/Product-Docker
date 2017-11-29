@@ -15,7 +15,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "DPrint.h"
-#include "EddieProductController.h"
+#include "ProductController.h"
 #include "IntentManager.h"
 
 static DPrint s_logger( "IntentManager" );

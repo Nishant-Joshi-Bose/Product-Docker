@@ -17,6 +17,8 @@
 #include "DPrint.h"
 #include "TransportControlManager.h"
 #include "SourceUtils.h"
+#include "ProductController.h"
+#include "Intents.h"
 
 static DPrint s_logger( "TransportControlManager" );
 
@@ -26,16 +28,16 @@ namespace ProductApp
 TransportControlManager::TransportControlManager( NotifyTargetTaskIF& task,
                                                   const CliClientMT& cliClient,
                                                   const FrontDoorClientIF_t& frontDoorClient,
-                                                  EddieProductController& controller ):
+                                                  ProductController& controller ):
     IntentManager( task, cliClient, frontDoorClient, controller ),
     m_NowPlayingRsp( nullptr, &task ),
     m_play( true )
 {
-    m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
+    m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>
                                ( std::bind( &TransportControlManager::FrontDoorClientErrorCb,
                                             this, std::placeholders::_1 ), &task );
 
-    m_NowPlayingRsp = AsyncCallback<SoundTouchInterface::NowPlayingJson>\
+    m_NowPlayingRsp = AsyncCallback<SoundTouchInterface::NowPlayingJson>
                       ( std::bind( &TransportControlManager::PutTransportControlCbRsp,
                                    this, std::placeholders::_1 ), &task );
 }
@@ -67,13 +69,11 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             {
                 if( CanPauseInJson() )
                 {
-                    transportControl.\
-                    set_state( SoundTouchInterface::TransportControl::pause );
+                    transportControl.set_state( SoundTouchInterface::TransportControl::pause );
                 }
                 else
                 {
-                    transportControl.\
-                    set_state( SoundTouchInterface::TransportControl::stop );
+                    transportControl.set_state( SoundTouchInterface::TransportControl::stop );
                 }
                 sendTransportControlMsg = true;
                 Pause();
@@ -81,8 +81,7 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             else if( ( status == SoundTouchInterface::StatusJson::paused ) ||
                      ( status == SoundTouchInterface::StatusJson::stopped ) )
             {
-                transportControl.\
-                set_state( SoundTouchInterface::TransportControl::play );
+                transportControl.set_state( SoundTouchInterface::TransportControl::play );
                 sendTransportControlMsg = true;
                 Play();
             }
@@ -90,13 +89,11 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             {
                 if( TogglePlayPause() )
                 {
-                    transportControl.\
-                    set_state( SoundTouchInterface::TransportControl::play );
+                    transportControl.set_state( SoundTouchInterface::TransportControl::play );
                 }
                 else
                 {
-                    transportControl.\
-                    set_state( SoundTouchInterface::TransportControl::pause );
+                    transportControl.set_state( SoundTouchInterface::TransportControl::pause );
                 }
                 sendTransportControlMsg = true;
             }
@@ -104,12 +101,9 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             {
                 SoundTouchInterface::playbackRequestJson pbReqJson;
                 SoundTouchInterface::NowPlayingJson nowPlayData = GetProductController().GetNowPlaying();
-                SourceUtils::ConstructPlaybackRequestFromNowPlaying( pbReqJson,
-                                                                     nowPlayData );
-                GetFrontDoorClient()->\
-                SendPost<SoundTouchInterface::\
-                NowPlayingJson>( "/content/playbackRequest", pbReqJson,
-                                 m_NowPlayingRsp, m_frontDoorClientErrorCb );
+                SourceUtils::ConstructPlaybackRequestFromNowPlaying( pbReqJson, nowPlayData );
+                GetFrontDoorClient()->SendPost<SoundTouchInterface::NowPlayingJson>
+                ( "/content/playbackRequest", pbReqJson, m_NowPlayingRsp, m_frontDoorClientErrorCb );
             }
         }
         break;
@@ -121,8 +115,7 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t& intent )
                 ( status == SoundTouchInterface::StatusJson::buffering ) )
             {
                 // Send NEXT_TRACK
-                transportControl.\
-                set_state( SoundTouchInterface::TransportControl::skipNext );
+                transportControl.set_state( SoundTouchInterface::TransportControl::skipNext );
                 sendTransportControlMsg = true;
             }
         }
@@ -134,8 +127,7 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t& intent )
                 ( status == SoundTouchInterface::StatusJson::buffering ) )
             {
                 // Send NEXT_TRACK
-                transportControl.\
-                set_state( SoundTouchInterface::TransportControl::skipPrevious );
+                transportControl.set_state( SoundTouchInterface::TransportControl::skipPrevious );
                 sendTransportControlMsg = true;
             }
         }
@@ -143,20 +135,16 @@ bool TransportControlManager::Handle( KeyHandlerUtil::ActionType_t& intent )
         }
         if( sendTransportControlMsg )
         {
-            BOSE_DEBUG( s_logger, "SendPut through Frontdoor for transportControl "
-                        " for intent : %d", intent );
+            BOSE_DEBUG( s_logger, "SendPut through Frontdoor for transportControl for intent : %d", intent );
 
-            GetFrontDoorClient()->\
-            SendPut<SoundTouchInterface::\
-            NowPlayingJson>( "/content/transportControl", transportControl,
-                             m_NowPlayingRsp, m_frontDoorClientErrorCb );
+            GetFrontDoorClient()->SendPut<SoundTouchInterface::NowPlayingJson>
+            ( "/content/transportControl", transportControl, m_NowPlayingRsp, m_frontDoorClientErrorCb );
         }
 
     }
     else
     {
-        BOSE_DEBUG( s_logger, "No source available, PlayControl intent "
-                    "  ignored for now" );
+        BOSE_DEBUG( s_logger, "No source available, PlayControl intent ignored for now" );
     }
 
     //Fire the cb so the control goes back to the ProductController
@@ -172,7 +160,6 @@ inline bool TransportControlManager::CanPauseInJson()
     BOSE_DEBUG( s_logger, "%s", __func__ );
     if( GetProductController().GetNowPlaying().has_source() &&
         GetProductController().GetNowPlaying().has_state() &&
-        GetProductController().GetNowPlaying().state().has_canpause() &&
         GetProductController().GetNowPlaying().state().canpause() )
     {
         BOSE_DEBUG( s_logger, "Found canpause = %d",
@@ -181,8 +168,7 @@ inline bool TransportControlManager::CanPauseInJson()
     }
     else
     {
-        BOSE_DEBUG( s_logger, "Cannot Pause: Must be a non-pausable"
-                    "(it that is a word) content" );
+        BOSE_DEBUG( s_logger, "Cannot Pause: Must be a non-pausable (it that is a word) content" );
     }
     return ( false );
 }
