@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file   EddieProductController.cpp
-/// @brief  Eddiec Product controller class.
+/// @brief  Eddie product controller class.
 ///
 /// @attention Copyright 2017 Bose Corporation, Framingham, MA
 ////////////////////////////////////////////////////////////////////////////////
@@ -16,7 +16,7 @@
 #include "CLICmdsKeys.h"
 #include "BluetoothSinkEndpoints.h"
 #include "EndPointsDefines.h"
-#include "ButtonPress.pb.h"
+//#include "ButtonPress.pb.h" // @TODO Leela, re-enable this code
 
 static DPrint s_logger( "EddieProductController" );
 
@@ -206,6 +206,7 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
 
 void EddieProductController::SendDataCollection( const IpcKeyInformation_t& keyInformation )
 {
+#if 0 // @TODO Leela, re-enable this code
     std::string currentButtonId;
     const auto currentKeyId = keyInformation.keyid();
     const auto currentOrigin = keyInformation.keyorigin();
@@ -223,6 +224,7 @@ void EddieProductController::SendDataCollection( const IpcKeyInformation_t& keyI
     KeyPress.set_buttonid( currentButtonId ) ;
     KeyPress.set_origin( keyToOriginator( currentOrigin ) );
     m_DataCollectionClient.processKeyData( KeyPress );
+#endif
 }
 
 std::string EddieProductController::keyToEventName( uint32_t e )
