@@ -16,7 +16,6 @@
 
 #include "DPrint.h"
 #include "PresetManager.h"
-#include "SoundTouchInterface/Presets.pb.h"
 
 static DPrint s_logger( "PresetManager" );
 
@@ -50,7 +49,7 @@ bool PresetManager::Handle( KeyHandlerUtil::ActionType_t& intent )
 {
     BOSE_DEBUG( s_logger, "%s : Intent: %d", __func__, intent );
 
-    SoundTouchInterface::PresetID presetId = IntentToPresetIdMap( intent );
+    PresetID presetId = IntentToPresetIdMap( intent );
     BOSE_DEBUG( s_logger, "%d", ( uint32_t ) presetId );
     SoundTouchInterface::StatusJson status = CurrentNowPlayingStatusJson();
     switch( intent )
@@ -62,7 +61,7 @@ bool PresetManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     case( uint16_t ) Action::PRESET_SELECT_5:
     case( uint16_t ) Action::PRESET_SELECT_6:
     {
-        SoundTouchInterface::preset *presetItem =
+        ProductPresets::preset *presetItem =
             IsPresetContentPresent( presetId, m_presets );
         // Look for the preset if present
         if( presetItem != nullptr )
@@ -110,7 +109,7 @@ bool PresetManager::Handle( KeyHandlerUtil::ActionType_t& intent )
 #endif
 
             // Look for the preset if present
-            SoundTouchInterface::preset *presetItem =
+            ProductPresets::preset *presetItem =
                 IsPresetContentPresent( presetId, m_presets );
             if( presetItem == nullptr )
             {
@@ -146,37 +145,37 @@ bool PresetManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     return true;
 }
 
-SoundTouchInterface::PresetID PresetManager::IntentToPresetIdMap( KeyHandlerUtil::ActionType_t& intent )
+PresetID PresetManager::IntentToPresetIdMap( KeyHandlerUtil::ActionType_t& intent )
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
     switch( intent )
     {
     case( uint16_t ) Action::PRESET_SELECT_1:
     case( uint16_t ) Action::PRESET_STORE_1:
-        return SoundTouchInterface::PresetID::P1;
+        return PresetID::P1;
     case( uint16_t ) Action::PRESET_SELECT_2:
     case( uint16_t ) Action::PRESET_STORE_2:
-        return SoundTouchInterface::PresetID::P2;
+        return PresetID::P2;
     case( uint16_t ) Action::PRESET_SELECT_3:
     case( uint16_t ) Action::PRESET_STORE_3:
-        return SoundTouchInterface::PresetID::P3;
+        return PresetID::P3;
     case( uint16_t ) Action::PRESET_SELECT_4:
     case( uint16_t ) Action::PRESET_STORE_4:
-        return SoundTouchInterface::PresetID::P4;
+        return PresetID::P4;
     case( uint16_t ) Action::PRESET_SELECT_5:
     case( uint16_t ) Action::PRESET_STORE_5:
-        return SoundTouchInterface::PresetID::P5;
+        return PresetID::P5;
     case( uint16_t ) Action::PRESET_SELECT_6:
     case( uint16_t ) Action::PRESET_STORE_6:
-        return SoundTouchInterface::PresetID::P6;
+        return PresetID::P6;
     default:
-        return SoundTouchInterface::PresetID::UNDEFINED_PRESET;
+        return PresetID::UNDEFINED_PRESET;
     }
 }
 
-SoundTouchInterface::preset* \
-PresetManager::IsPresetContentPresent( SoundTouchInterface::PresetID presetId,
-                                       SoundTouchInterface::presets &presetItem ) const
+ProductPresets::preset* \
+PresetManager::IsPresetContentPresent( PresetID presetId,
+                                       ProductPresets::presets &presetItem ) const
 {
     BOSE_DEBUG( s_logger, "%s: Number of preset stored: %d", __func__,
                 presetItem.preset_size() );
@@ -196,7 +195,7 @@ PresetManager::IsPresetContentPresent( SoundTouchInterface::PresetID presetId,
     return nullptr;
 }
 
-void PresetManager::BuildPlaybackRequestFromPresetCI( SoundTouchInterface::playbackRequestJson &pr, const SoundTouchInterface::ContentItem &PresetCi ) const
+void PresetManager::BuildPlaybackRequestFromPresetCI( SoundTouchInterface::playbackRequestJson &pr, const ContentItem &PresetCi ) const
 {
     BOSE_DEBUG( s_logger, "%s:", __func__ );
 
@@ -240,7 +239,7 @@ void PresetManager::BuildPlaybackRequestFromPresetCI( SoundTouchInterface::playb
     return;
 }
 
-void PresetManager::BuildPresetContentItemFromNp( SoundTouchInterface::ContentItem *destinationCI, const SoundTouchInterface::NowPlayingJson_ContentItemJson &sourceCI ) const
+void PresetManager::BuildPresetContentItemFromNp( ContentItem *destinationCI, const SoundTouchInterface::NowPlayingJson_ContentItemJson &sourceCI ) const
 {
     BOSE_DEBUG( s_logger, "%s:", __func__ );
     if( destinationCI != nullptr )
@@ -263,10 +262,12 @@ void PresetManager::BuildPresetContentItemFromNp( SoundTouchInterface::ContentIt
         {
             destinationCI->set_source( sourceCI.source() );
         }
+#if 0 // TBD: @todo
         if( sourceCI.has_subsource() )
         {
             destinationCI->set_subsource( sourceCI.subsource() );
         }
+#endif
         if( sourceCI.has_sourceaccount() )
         {
             destinationCI->set_sourceaccount( sourceCI.sourceaccount() );
