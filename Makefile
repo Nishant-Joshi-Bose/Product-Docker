@@ -60,9 +60,9 @@ IPKS = eddie.ipk lpm_updater.ipk
 PACKAGENAMES = SoundTouch eddie_lpm_updater
 
 #Create Zip file for Bonjour / Local update
-.PHONY: localupdate-zip
-localupdate-zip: product-ipk hsp-ipk lpmupdater-ipk
-	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-localupdate-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o eddie_localupdate.zip
+.PHONY: update-zip
+update-zip: product-ipk hsp-ipk lpmupdater-ipk
+	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o eddie_update.zip
 
 .PHONY: packages-gz
 packages-gz: product-ipk hsp-ipk lpmupdater-ipk
@@ -82,7 +82,7 @@ package: product-ipk hsp-ipk lpmupdater-ipk
 	./scripts/create-product-tarball
 
 .PHONY: all-packages
-all-packages: package packages-gz localupdate-zip
+all-packages: package packages-gz update-zip
 	
 .PHONY: lpmupdater-ipk
 lpmupdater-ipk:
