@@ -24,6 +24,10 @@
     "selected_version": "Continuous/master/0.2.1-29+5498be3"
   },
   {
+   "name": "CastleDataCollectionClient-qc8017_32",
+   "selected_version": "Continuous/master/0.0.2-2+f4be393"
+  },
+  {
     "name": "CastleLibs-qc8017_32",
     "selected_version": "branches/castle-libs@2496"
   },
