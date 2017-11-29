@@ -40,6 +40,7 @@
 #include "IntentHandler.pb.h"
 #include "BluetoothManager.h"
 #include "PresetManager.h"
+#include "VoiceManager.h"
 
 static DPrint s_logger( "IntentHandler" );
 
@@ -108,11 +109,6 @@ void IntentHandler::Initialize()
     KeyHandlerUtil::ActionType_t intent = ( KeyHandlerUtil::ActionType_t ) Action::NETWORK_STANDBY;
     RegisterCallBack( intent, cb );
     //- Miscellaneous Control API's (LPS, Factory Reset, NetworkStandy)
-    //
-    //+ Voice (Alexa) Control API's
-
-    //- Voice (Alexa) Control API's
-    //
     //+ Preset Control API's
 
     //- Preset Control API's
@@ -146,6 +142,15 @@ void IntentHandler::Initialize()
     m_IntentManagerMap[( uint16_t )Action::PRESET_SELECT_6] = presetManager;
 
     //- PRESET Management
+
+    //+ Voice (Alexa) Control API's
+    IntentManagerPtr_t voiceRequestManager =
+        std::make_shared<VoiceManager>( m_task, m_cliClient,
+                                        m_frontDoorClient,
+                                        m_controller );
+    m_IntentManagerMap[( uint16_t )Action::ALEXA_CAROUSEL] = voiceRequestManager;
+    //- Voice (Alexa) Control API's
+
     // prepare map for button event notification
     m_IntentNotificationMap[( uint16_t ) Action::PLAY_PAUSE]    = "play_pause" ;
     m_IntentNotificationMap[( uint16_t ) Action::NEXT_TRACK]    = "next_track" ;
@@ -176,6 +181,9 @@ void IntentHandler::Initialize()
     m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_4] = "preset_select_4" ;
     m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_5] = "preset_select_5" ;
     m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_6] = "preset_select_6" ;
+
+    m_IntentNotificationMap[( uint16_t ) Action::ALEXA_CAROUSEL] = "Voice_Alexa_Control" ;
+
     return;
 }
 
