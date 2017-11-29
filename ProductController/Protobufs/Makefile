@@ -4,13 +4,13 @@ BOSELIBS_DIR := $(shell components get BoseLibs-$(sdk) installed_location)
 
 PROTO_SOURCES = \
   ConfigurationStatus.proto \
-  Language.proto \
   LightBarController.proto \
   ProductMessage.proto \
   AudioSettings.proto \
   ContentItem.proto \
   DisplayController.proto \
   IntentHandler.proto \
+  Presets.proto \
 
 # Where to search for imported *.proto files.
 PROTO_IMPORT_DIRS := \

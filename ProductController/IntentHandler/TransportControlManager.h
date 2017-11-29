@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 ///// @file   TransportControlManager.h
-///// @brief  Eddie specific TransportControlManager class for Riviera based product
+///// @brief  TransportControlManager class for Riviera based product
 /////
 ///// @attention Copyright 2017 Bose Corporation, Framingham, MA
 //////////////////////////////////////////////////////////////////////////////////
@@ -52,12 +52,8 @@ private:
     {
         m_play = false;
     }
-    bool ValidSourceAvailable();
     bool CurrentlyPlaying();
-    SoundTouchInterface::StatusJson CurrentStatusJson();
     bool CanPauseInJson();
-
-    void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
 
     AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingRsp;
     bool m_play;
