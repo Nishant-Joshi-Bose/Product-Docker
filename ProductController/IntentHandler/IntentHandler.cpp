@@ -41,7 +41,6 @@
 #include "BluetoothManager.h"
 #include "VoiceManager.h"
 #include "PresetManager.h"
-#include "VoiceManager.h"
 
 static DPrint s_logger( "IntentHandler" );
 
