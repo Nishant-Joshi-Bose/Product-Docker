@@ -34,21 +34,23 @@ namespace ProductApp
 
 bool VoiceManager::Handle( KeyHandlerUtil::ActionType_t& intent )
 {
+    BOSE_INFO( s_logger, "%s: ", __func__ );
+
     switch( intent )
     {
-        case( uint16_t ) Action::ALEXA_CAROUSEL:
-        {
-            BOSE_DEBUG( s_logger, "Send voice action" );
+    case( uint16_t ) Action::VOICE_CAROUSEL:
+    {
+        BOSE_INFO( s_logger, "Send voice action" );
 
-        }
-        break;
+    }
+    break;
 
-        default:
-        {
-            BOSE_ERROR( s_logger, "Invalid intent %d received in %s",
-                        ( uint16_t ) intent, __func__ );
-        }
-        break;
+    default:
+    {
+        BOSE_ERROR( s_logger, "Invalid intent %d received in %s",
+                    ( uint16_t ) intent, __func__ );
+    }
+    break;
     }
 
     //Fire the cb so the control goes back to the ProductController
