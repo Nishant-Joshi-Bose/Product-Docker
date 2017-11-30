@@ -125,7 +125,7 @@ void IntentHandler::Initialize()
         std::make_shared<VoiceManager>( m_task, m_cliClient,
                                         m_frontDoorClient,
                                         m_controller );
-    m_IntentManagerMap[( uint16_t )Action::ALEXA_CAROUSEL] = voiceRequestManager;
+    m_IntentManagerMap[( uint16_t )Action::VOICE_CAROUSEL] = voiceRequestManager;
     //- Voice (Alexa) Control API's
 
 
@@ -146,7 +146,7 @@ void IntentHandler::Initialize()
 
     m_IntentNotificationMap[( uint16_t ) Action::AUX_IN]        = "aux_in" ;
 
-    m_IntentNotificationMap[( uint16_t ) Action::ALEXA_CAROUSEL] = "Voice_Alexa_Control" ;
+    m_IntentNotificationMap[( uint16_t ) Action::VOICE_CAROUSEL] = "Voice_Control" ;
 
     return;
 }

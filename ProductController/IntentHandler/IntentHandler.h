@@ -50,9 +50,9 @@ enum class Action
     AUX_IN = 25,
     //- AUX
 
-    //+ ALEXA
-    ALEXA_CAROUSEL = 26,
-    //- ALEXA
+    //+ VOICE - ALEXA
+    VOICE_CAROUSEL = 26,
+    //- VOICE - ALEXA
 };
 
 class IntentHandler
@@ -108,9 +108,9 @@ public:
                  ( arg == ( uint16_t ) Action::SEND_TO_DISCOVERABLE )                  ||
                  ( arg == ( uint16_t ) Action::CLEAR_PAIRING_LIST ) );
     }
-    static bool IsIntentAlexa( KeyHandlerUtil::ActionType_t arg )
+    static bool IsIntentVoice( KeyHandlerUtil::ActionType_t arg )
     {
-        return ( arg == ( uint16_t ) Action::ALEXA_CAROUSEL );
+        return ( arg == ( uint16_t ) Action::VOICE_CAROUSEL );
     }
     static bool IsIntentNetworking( KeyHandlerUtil::ActionType_t arg )
     {
