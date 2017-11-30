@@ -140,17 +140,7 @@ void IntentHandler::Initialize()
     m_IntentManagerMap[( uint16_t )Action::PRESET_SELECT_4] = presetManager;
     m_IntentManagerMap[( uint16_t )Action::PRESET_SELECT_5] = presetManager;
     m_IntentManagerMap[( uint16_t )Action::PRESET_SELECT_6] = presetManager;
-
     //- PRESET Management
-
-    //+ Voice (Alexa) Control API's
-    IntentManagerPtr_t voiceRequestManager =
-        std::make_shared<VoiceManager>( m_task, m_cliClient,
-                                        m_frontDoorClient,
-                                        m_controller );
-
-    m_IntentManagerMap[( uint16_t )Action::VOICE_CAROUSEL] = voiceRequestManager;
-    //- Voice (Alexa) Control API's
 
     // prepare map for button event notification
     m_IntentNotificationMap[( uint16_t ) Action::PLAY_PAUSE]    = "play_pause" ;
