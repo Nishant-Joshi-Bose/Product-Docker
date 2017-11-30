@@ -31,26 +31,26 @@ CustomProductAudioService::CustomProductAudioService( ProfessorProductController
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductAudioService::RegisterAudioPathEvent
+/// @name   CustomProductAudioService::RegisterAudioPathEvents
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductAudioService::RegisterAudioPathEvent()
+void CustomProductAudioService::RegisterAudioPathEvents()
 {
     BOSE_DEBUG( s_logger, __func__ );
     m_APPointer = APProductFactory::Create( "ProductAudioService-APProduct", m_ProductTask );
-    RegisterCommonAudioPathEvent();
+    RegisterCommonAudioPathEvents();
     ConnectToAudioPath();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductAudioService::RegisterFrontDoorEvent
+/// @name   CustomProductAudioService::RegisterFrontDoorEvents
 ///
 /// @brief  On Professor, it register for put/post/get FrontDoor request for
 ///         bass, treble, center, surround, gainOffset, avSync, mode, contentType
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductAudioService::RegisterFrontDoorEvent()
+void CustomProductAudioService::RegisterFrontDoorEvents()
 {
     BOSE_DEBUG( s_logger, __func__ );
 
