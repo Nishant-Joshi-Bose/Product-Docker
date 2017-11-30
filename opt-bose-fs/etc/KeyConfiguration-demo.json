@@ -22,7 +22,21 @@
 
     {"Origin": 0, "KeyEvent": 1, "KeyList": [2], "TimeOutList": [0], "Action": 1025, "Comment": "Console: AUX release ---> SendToAux"},
 
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [6], "TimeOutList": [0], "Action": 1026, "Comment": "Console: Action release ---> Alexa"}
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [6], "TimeOutList": [0], "Action": 1026, "Comment": "Console: Action release ---> Alexa"},
+
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [8], "TimeOutList": [1000], "Action": 1027, "Comment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1"},
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [9], "TimeOutList": [1000], "Action": 1028, "Comment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2"},
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [10], "TimeOutList": [1000], "Action": 1029, "Comment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3"},
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [11], "TimeOutList": [1000], "Action": 1030, "Comment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4"},
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [12], "TimeOutList": [1000], "Action": 1031, "Comment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5"},
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [13], "TimeOutList": [1000], "Action": 1032, "Comment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6"},
+
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [8], "TimeOutList": [200], "Action": 1033, "Comment": "Console: Preset 1 release ---> Select Preset stored on Key 1"},
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [9], "TimeOutList": [200], "Action": 1034, "Comment": "Console: Preset 2 release ---> Select Preset stored on Key 2"},
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [10], "TimeOutList": [200], "Action": 1035, "Comment": "Console: Preset 3 release ---> Select Preset stored on Key 3"},
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [11], "TimeOutList": [200], "Action": 1036, "Comment": "Console: Preset 4 release ---> Select Preset stored on Key 4"},
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [12], "TimeOutList": [200], "Action": 1037, "Comment": "Console: Preset 5 release ---> Select Preset stored on Key 5"},
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [13], "TimeOutList": [200], "Action": 1038, "Comment": "Console: Preset 6 release ---> Select Preset stored on Key 6"}
 
 ]
 }
