@@ -39,6 +39,7 @@
 #include "NetworkStandbyManager.h"
 #include "IntentHandler.pb.h"
 #include "BluetoothManager.h"
+#include "VoiceManager.h"
 #include "PresetManager.h"
 #include "VoiceManager.h"
 
