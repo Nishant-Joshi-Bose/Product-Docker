@@ -46,7 +46,8 @@ bool EddieProductControllerStateNetworkStandby::HandleIntents( KeyHandlerUtil::A
         ( IntentHandler::IsIntentBlueTooth( intent ) )   ||
         ( IntentHandler::IsIntentVoice( intent ) )        ||
         ( IntentHandler::IsIntentVolumeControl( intent ) ) ||
-        ( IntentHandler::IsIntentAuxIn( intent ) ) )
+        ( IntentHandler::IsIntentAuxIn( intent ) )         ||
+        ( IntentHandler::IsPresetSelect( intent ) ) )
     {
         GetCustomProductController().GetIntentHandler().Handle( intent );
         return true;

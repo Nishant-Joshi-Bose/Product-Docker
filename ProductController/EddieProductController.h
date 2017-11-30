@@ -35,6 +35,7 @@
 #include "IntentHandler.h"
 #include "ProductSTSController.h"
 #include "DisplayController.h"
+#include "DataCollectionClient.h"
 #include "MacAddressInfo.h"
 #include "BOptional.h"
 
@@ -91,6 +92,14 @@ private:
     void HandleBtLeCapabilityReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityNotReady( const std::list<std::string>& points );
 
+///////////////////////////////////////////////////////////////////////////////
+/// @name DataCollectionClient
+/// @brief When any key is been released sending the Data to DataCollectionClient
+/// @return void
+//////////////////////////////////////////////////////////////////////////////
+    void SendDataCollection( const IpcKeyInformation_t& keyInformation );
+    std::string keyToOriginator( enum KeyOrigin_t e );
+    std::string keyToEventName( uint32_t e );
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  ReadSystemLanguageFromPersistence
 /// @brief Function to read persisted language code from /mnt/nv/product-persistence.
@@ -338,6 +347,19 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool                                        m_isSTSReady = false;
     ProductSTSController                        m_ProductSTSController;
+    DataCollectionClient                        m_DataCollectionClient;
 };
+static const char* const KEY_NAMES[] __attribute__( ( unused ) ) =
+{
+    "Bluetooth",
+    "Aux",
+    "VolumePlus",
+    "MultiFunction",
+    "Volumeminus",
+    "Alexa",
+    "InvalidKey"
+};
+constexpr auto NUM_KEY_NAMES __attribute__( ( unused ) ) =
+    sizeof( KEY_NAMES ) / sizeof( KEY_NAMES[0] );
 }
 // namespace

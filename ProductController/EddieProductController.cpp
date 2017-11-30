@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file   EddieProductController.cpp
-/// @brief  Eddiec Product controller class.
+/// @brief  Eddie product controller class.
 ///
 /// @attention Copyright 2017 Bose Corporation, Framingham, MA
 ////////////////////////////////////////////////////////////////////////////////
@@ -16,6 +16,7 @@
 #include "CLICmdsKeys.h"
 #include "BluetoothSinkEndpoints.h"
 #include "EndPointsDefines.h"
+//#include "ButtonPress.pb.h" // @TODO Leela, re-enable this code
 
 static DPrint s_logger( "EddieProductController" );
 
@@ -42,7 +43,8 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_wifiProfilesCount(),
     errorCb( AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> ( std::bind( &EddieProductController::CallbackError,
                                                                   this, std::placeholders::_1 ), GetTask() ) ),
-    m_demoController( m_ProductControllerTask, m_KeyHandler )
+    m_demoController( m_ProductControllerTask, m_KeyHandler, g_ProductPersistenceDir ),
+    m_DataCollectionClient( "EddieProductController" )
 {
     BOSE_INFO( s_logger, __func__ );
     m_deviceManager.Initialize( this );
@@ -77,7 +79,7 @@ void EddieProductController::Initialize()
     SendInitialRequests();
     //Register lpm events that lightbar will handle
     m_lightbarController->RegisterLightBarEndPoints();
-    m_demoController.RegisterEndPoints();
+    m_demoController.Initialize();
     m_displayController ->Initialize();
 }
 
@@ -181,13 +183,16 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
                     " keystate:%d, keyid:%d",
                     keyInformation.keyorigin(),
                     keyInformation.keystate(), keyInformation.keyid() );
-
         m_CliClientMT.SendAsyncResponse( "Received from LPM, KeySource: CONSOLE, State " + \
                                          std::to_string( keyInformation.keystate() ) + " KeyId " + \
                                          std::to_string( keyInformation.keyid() ) );
         m_KeyHandler.HandleKeys( keyInformation.keyorigin(),
                                  keyInformation.keystate(),
                                  keyInformation.keyid() );
+        if( keyInformation.keystate() == KEY_RELEASED )
+        {
+            SendDataCollection( keyInformation );
+        }
     }
     else
     {
@@ -198,6 +203,102 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
                     keyInformation.has_keyid() );
     }
 }
+
+void EddieProductController::SendDataCollection( const IpcKeyInformation_t& keyInformation )
+{
+#if 0 // @TODO Leela, re-enable this code
+    std::string currentButtonId;
+    const auto currentKeyId = keyInformation.keyid();
+    const auto currentOrigin = keyInformation.keyorigin();
+
+    ProductPb::Protobuf::ButtonPress KeyPress;
+    KeyPress.set_eventname( keyToEventName( currentKeyId ) );
+    if( currentKeyId <= NUM_KEY_NAMES )
+    {
+        currentButtonId = KEY_NAMES[currentKeyId - 1];
+    }
+    else
+    {
+        BOSE_ERROR( s_logger, "%s, Invalid CurrentKeyID: %d", __func__, currentKeyId );
+    }
+    KeyPress.set_buttonid( currentButtonId ) ;
+    KeyPress.set_origin( keyToOriginator( currentOrigin ) );
+    m_DataCollectionClient.processKeyData( KeyPress );
+#endif
+}
+
+std::string EddieProductController::keyToEventName( uint32_t e )
+{
+    const std::string emptystr;
+
+    switch( e )
+    {
+    case 1 :
+    {
+        return "bluetooth" ;
+    };
+    case 2:
+    {
+        return "aux" ;
+    };
+    case 3:
+    {
+        return "volume-plus" ;
+    };
+    case 4:
+    {
+        return "play-pause" ;
+    };
+    case 5:
+    {
+        return "volume-minus" ;
+    };
+    case 6:
+    {
+        return "alexa" ;
+    };
+
+    }
+    return emptystr;
+}
+
+std::string EddieProductController::keyToOriginator( enum KeyOrigin_t e )
+{
+    switch( e )
+    {
+    case KEY_ORIGIN_CONSOLE_BUTTON:
+    {
+        return "console" ;
+    };
+
+    case KEY_ORIGIN_CAPSENSE:
+    {
+        return "capsense";
+    };
+    case KEY_ORIGIN_IR:
+    {
+        return "ir-remote" ;
+    };
+    case KEY_ORIGIN_RF:
+    {
+        return "rf" ;
+    };
+    case KEY_ORIGIN_CEC:
+    {
+        return "cec" ;
+    };
+    case KEY_ORIGIN_NETWORK:
+    {
+        return "network" ;
+    };
+    case KEY_ORIGIN_TAP:
+    {
+        return "tap" ;
+    };
+    }
+    return "unknown" ;
+}
+
 
 void EddieProductController::SendInitialRequests()
 {

@@ -220,6 +220,8 @@ else
     echo "Installed Riviera-HSP: \$i"
     echo "See https://github.com/BoseCorp/Eddie/blob/master/README.md#hsp"
 fi
+
+# ---8<------8<------8<------8<------8<------8<------8<------8<------8<---
 # Try to kill services before installation begin to make sure
 #   minimal files are in use due to in-place installation.
 #   This is done for IP2. Needs to be removed / modified in IP3 to 
@@ -242,9 +244,10 @@ pkill IoT
 pkill BoseApp
 pkill Eddie
 pkill FrontDoor
-exit 0
 # we are leaving telnet, avahi-daemon, SoftwareUpdateService, NetManager alive.
+# ---8<------8<------8<------8<------8<------8<------8<------8<------8<---
 
+exit 0
 EOF
 
 put_script "$stage/prerm" <<EOF

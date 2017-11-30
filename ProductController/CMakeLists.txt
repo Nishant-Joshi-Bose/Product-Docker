@@ -2,7 +2,9 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
+  ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
   ${DEMOCONTROLLER_DIR}
+  ${DATACOLLECTIONCLIENT_DIR}
   ${CUSTOM_HSM_DIR}
   ${KEYHANDLER_DIR}/include
   IntentHandler
@@ -29,12 +31,15 @@ ADD_EXECUTABLE(Eddie
   ${PROTO_CC_DEST}/ContentItem.pb.cc
   ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/IntentHandler.pb.cc
+  ${PROTO_CC_DEST}/Presets.pb.cc
   IntentHandler/IntentHandler.cpp
+  IntentHandler/IntentManager.cpp
   IntentHandler/TransportControlManager.cpp
   IntentHandler/BluetoothManager.cpp
   IntentHandler/VoiceManager.cpp
   IntentHandler/PlaybackRequestManager.cpp
   IntentHandler/NetworkStandbyManager.cpp
+  IntentHandler/PresetManager.cpp
   LpmInterface.cpp
   DisplayController/DisplayController.cpp
 )
@@ -42,6 +47,7 @@ ADD_EXECUTABLE(Eddie
 TARGET_LINK_LIBRARIES(Eddie
   CastleProductControllerCommon
   DemoController
+  DataCollectionClient
   LpmClient
   FrontDoorClient
   NetworkServiceClient

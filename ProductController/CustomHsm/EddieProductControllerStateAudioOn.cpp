@@ -47,7 +47,9 @@ bool EddieProductControllerStateAudioOn::HandleIntents( KeyHandlerUtil::ActionTy
         ( IntentHandler::IsIntentVoice( intent ) )        ||
         ( IntentHandler::IsIntentVolumeControl( intent ) ) ||
         ( IntentHandler::IsIntentNetworkStandby( intent ) ) ||
-        ( IntentHandler::IsIntentAuxIn( intent ) ) )
+        ( IntentHandler::IsIntentAuxIn( intent ) )          ||
+        ( IntentHandler::IsPresetSelect( intent ) )         ||
+        ( IntentHandler::IsPresetStore( intent ) ) )
     {
         GetCustomProductController().GetIntentHandler().Handle( intent );
         return true;

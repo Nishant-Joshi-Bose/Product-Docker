@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 ///// @file   BluetoothManager.h
-///// @brief  Eddie specific BluetoothManager class for Riviera based product
+///// @brief  BluetoothManager class for Riviera based product
 /////
 ///// @attention Copyright 2017 Bose Corporation, Framingham, MA
 //////////////////////////////////////////////////////////////////////////////////
@@ -42,8 +42,5 @@ private:
     bool GetSinkStatus( BluetoothSinkService::APP_STATUS& status );
     bool BluetoothDeviceConnected();
     bool BluetoothDeviceListPresent( BluetoothSinkService::PairedList& );
-    virtual void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
-
-
 };
 } // namespace ProductApp

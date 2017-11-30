@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 ///// @file   NetworkStandbyManager.h
-///// @brief  Eddie specific NetworkStandbyManager class for Riviera based product
+///// @brief  NetworkStandbyManager class for Riviera based product
 /////
 ///// @attention Copyright 2017 Bose Corporation, Framingham, MA
 //////////////////////////////////////////////////////////////////////////////////
@@ -33,10 +33,5 @@ public:
     // desired function for desired state change
     //
     bool Handle( KeyHandlerUtil::ActionType_t& arg ) override;
-
-private:
-    bool ValidSourceAvailable();
-
-    void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
 };
 } // namespace ProductApp

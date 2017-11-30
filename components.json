@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-11-16_1441"
+    "selected_version": "Continuous/Castle-Fork/2017-11-28_2352"
   },
   {
     "name": "BoseLibs-qc8017_32",
@@ -21,7 +21,11 @@
   },
   {
     "name": "CastleDemoController-qc8017_32",
-    "selected_version": "Continuous/master/0.2.1-20+c5447c9"
+    "selected_version": "Continuous/master/0.2.1-29+5498be3"
+  },
+  {
+   "name": "CastleDataCollectionClient-qc8017_32",
+   "selected_version": "Continuous/master/0.0.2-2+f4be393"
   },
   {
     "name": "CastleLibs-qc8017_32",
@@ -29,7 +33,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Continuous/master/0.2.1-14+23eb6c0"
+    "selected_version": "Release/master/0.2.2-16+e84f85f"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -45,7 +49,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@b2416b06f787b3b107ea6f81bf7f0c2dcfb97675"
+    "selected_version": "master@32749313b056e98fa9ea73e3b3d3b15e01b516db"
   },
   {
     "name": "CastleTestUtils",
@@ -69,7 +73,7 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/1.2"
+    "selected_version": "Continuous/dev/1.2-3-gaba6b95"
   },
   {
     "name": "Riviera-Toolchain",
@@ -89,15 +93,15 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.2.1-122+424b9c5"
+    "selected_version": "Continuous/master/0.2.1-136+46ef4d0"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-11-16_1441"
+    "selected_version": "Continuous/Castle-Fork/2017-11-28_2352"
   },
   {
     "name": "Webkit",
-    "selected_version": "Continuous/master/0.2.1-11+bb11bf1"
+    "selected_version": "Release/master/0.2.4-18+ead75d3"
   },
   {
     "name": "WiFi-Setup-Webpage",
