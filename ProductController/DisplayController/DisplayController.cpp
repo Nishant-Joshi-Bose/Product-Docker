@@ -39,7 +39,7 @@ typedef struct
 } t_luxBacklightTuple;
 
 // The LUX values are in real lux, without the light reading device attenuation
-std::vector<t_luxBacklightTuple> lowering_lux_threshold =
+static std::vector<t_luxBacklightTuple> lowering_lux_threshold =
 {
     {387.00, BACK_LIGHT_LEVEL_BRIGHT_HIGH},// BRIGHT HIGH
     {195.50, BACK_LIGHT_LEVEL_BRIGHT     },
@@ -50,7 +50,7 @@ std::vector<t_luxBacklightTuple> lowering_lux_threshold =
     {  0.00, BACK_LIGHT_LEVEL_DIM        } // DIM LOW
 };
 
-std::vector<t_luxBacklightTuple> rising_lux_threshold =
+static std::vector<t_luxBacklightTuple> rising_lux_threshold =
 {
     {430.00, BACK_LIGHT_LEVEL_BRIGHT_HIGH},// BRIGHT HIGH
     {215.00, BACK_LIGHT_LEVEL_BRIGHT     },
@@ -61,20 +61,20 @@ std::vector<t_luxBacklightTuple> rising_lux_threshold =
     {  0.00, BACK_LIGHT_LEVEL_DIM        } // DIM LOW
 };
 
-static const char* DISPLAY_CONTROLLER_FILE_NAME    = "/persist/display_controller.json";
-static const char* JSON_TOKEN_DISPLAY_CONTROLLER   = "DisplayController"               ;
-static const char* JSON_TOKEN_DEVICE_MODE          = "Mode"                            ;
-static const char* JSON_TOKEN_DEVICE_ABSORTION_LUX = "DeviceAbsortionLux"              ;
-static const char* JSON_TOKEN_BACK_LIGHT_LEVELS    = "BackLightLevelsPercent"          ;
-static const char* JSON_TOKEN_LOWERING_THRESHOLDS  = "LoweringThresholdLux"            ;
-static const char* JSON_TOKEN_RISING_THRESHOLDS    = "RisingThresholdLux"              ;
-static const int    MONITOR_SENSOR_SLEEP_MS        = 1000;
-static const int    CHANGING_LEVEL_SLEEP_MS        = 10  ;
-static const int    BACKLIGHT_DIFF_THRESHOLD       = ( BACK_LIGHT_LEVEL_DIM_HIGH - BACK_LIGHT_LEVEL_DIM - 1 );
-static const float  LUX_DIFF_THRESHOLD             = 2.0f ;
-static const float  PLEXI_LUX_FACTOR               = 1.0f ;
-static const float  SILVER_LUX_FACTOR              = 11.0f;
-static const float  BLACK_LUX_FACTOR               = 16.0f;
+static constexpr char  DISPLAY_CONTROLLER_FILE_NAME   [] = "/opt/Bose/etc/display_controller.json";
+static constexpr char  JSON_TOKEN_DISPLAY_CONTROLLER  [] = "DisplayController"                    ;
+static constexpr char  JSON_TOKEN_DEVICE_MODE         [] = "Mode"                                 ;
+static constexpr char  JSON_TOKEN_DEVICE_ABSORTION_LUX[] = "DeviceAbsortionLux"                   ;
+static constexpr char  JSON_TOKEN_BACK_LIGHT_LEVELS   [] = "BackLightLevelsPercent"               ;
+static constexpr char  JSON_TOKEN_LOWERING_THRESHOLDS [] = "LoweringThresholdLux"                 ;
+static constexpr char  JSON_TOKEN_RISING_THRESHOLDS   [] = "RisingThresholdLux"                   ;
+static constexpr int   BACKLIGHT_DIFF_THRESHOLD          = ( BACK_LIGHT_LEVEL_DIM_HIGH - BACK_LIGHT_LEVEL_DIM - 1 );
+static constexpr int   MONITOR_SENSOR_SLEEP_MS           = 1000 ;
+static constexpr int   CHANGING_LEVEL_SLEEP_MS           = 10   ;
+static constexpr float LUX_DIFF_THRESHOLD                = 2.0f ;
+static constexpr float PLEXI_LUX_FACTOR                  = 1.0f ;
+static constexpr float SILVER_LUX_FACTOR                 = 11.0f;
+static constexpr float BLACK_LUX_FACTOR                  = 16.0f;
 
 DisplayController::DisplayController( ProductController& controller, const std::shared_ptr<FrontDoorClientIF>& fd_client, LpmClientIF::LpmClientPtr clientPtr ):
     m_productController( controller ),
