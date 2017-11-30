@@ -83,7 +83,6 @@ DisplayController::DisplayController( ProductController& controller, const std::
     m_timeToStop( false ),
     m_autoMode( true )
 {
-    s_logger.SetLogLevel( "DisplayController", DPrint::WARNING );
     //s_logger.SetLogLevel( "DisplayController", DPrint::INFO );
 
     ParseJSONData();
@@ -191,12 +190,10 @@ void DisplayController::ParseJSONData()
         rising_ss   << "{" << rising_lux_threshold  [i].lux << ", " <<  rising_lux_threshold  [i].level << "} ";
     }
 
-    BOSE_LOG( INFO, "===========================================================" );
-    BOSE_LOG( INFO, "Device absortion factor: " << m_luxFactor );
-    BOSE_LOG( INFO, "mode                   : " << ( m_autoMode ? "Auto" : "Manual" ) );
-    BOSE_LOG( INFO, "lowering threshold     : " << lowering_ss.str() );
-    BOSE_LOG( INFO, "rising   threshold     : " << rising_ss  .str() );
-    BOSE_LOG( INFO, "===========================================================" );
+    BOSE_LOG( INFO, "Device absortion factor: " << m_luxFactor                        <<
+              " mode: "                   << ( m_autoMode ? "Auto" : "Manual" ) <<
+              " lowering threshold: "     << lowering_ss.str()                  <<
+              " rising threshold: "       << rising_ss.str() );
 
 }// ParseJSONData
 
