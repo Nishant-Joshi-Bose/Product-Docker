@@ -183,7 +183,8 @@ void IntentHandler::Initialize()
     m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_5] = "preset_select_5" ;
     m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_6] = "preset_select_6" ;
 
-    m_IntentNotificationMap[( uint16_t ) Action::VOICE_CAROUSEL] = "Voice_Control" ;
+    m_IntentNotificationMap[( uint16_t ) Action::VOICE_CAROUSEL] = "voice_Control" ;
+
 
     return;
 }
