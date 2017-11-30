@@ -17,6 +17,7 @@
 
 #include "DPrint.h"
 #include "VoiceManager.h"
+#include "ProductController.h"
 
 static DPrint s_logger( "VoiceManager" );
 

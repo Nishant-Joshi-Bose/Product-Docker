@@ -6,8 +6,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-#include "EddieProductController.h"
-#include "IntentHandler.h"
+#include "IntentManager.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 
@@ -20,7 +19,7 @@ public:
     PlaybackRequestManager( NotifyTargetTaskIF& task,
                             const CliClientMT& cliClient,
                             const FrontDoorClientIF_t& frontDoorClient,
-                            EddieProductController& controller );
+                            ProductController& controller );
 
     ~PlaybackRequestManager() override
     {

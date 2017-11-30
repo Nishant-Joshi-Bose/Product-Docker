@@ -8,10 +8,10 @@
 
 #include "ProductController.h"
 #include "IntentHandler.h"
-#include "EddieProductController.h"
 
 namespace ProductApp
 {
+class ProductController;
 
 class VoiceManager: public IntentManager
 {
@@ -19,7 +19,7 @@ public:
     VoiceManager( NotifyTargetTaskIF& task,
                   const CliClientMT& cliClient,
                   const FrontDoorClientIF_t& frontDoorClient,
-                  EddieProductController& controller ):
+                  ProductController& controller ):
         IntentManager( task, cliClient, frontDoorClient, controller )
     {
         m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
