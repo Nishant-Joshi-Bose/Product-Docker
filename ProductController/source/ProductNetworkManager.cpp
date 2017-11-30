@@ -38,6 +38,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// The following constants define FrontDoor endpoints used by the NetworkManager methods.
@@ -49,53 +50,15 @@ constexpr char FRONTDOOR_NETWORK_WIFI_STATUS[]  = "/network/wifi/status";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductNetworkManager::GetInstance
+/// @name  ProductNetworkManager::ProductNetworkManager
 ///
-/// @brief  This static method creates the one and only instance of a ProductNetworkManager object.
-///         The C++ Version 11 compiler guarantees that only one instance is created in a thread
-///         safe way.
-///
-/// @param NotifyTargetTaskIF* ProductTask This argument points to a task to process
-///                                        resource requests and notifications.
-///
-/// @param Callback< ProductMessage > ProductNotify This is a callback to send events to the
-///                                                  Product Controller.
-///
-///
-/// @return This method returns a pointer to a ProductNetworkManager object.
+/// @param ProfessorProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductNetworkManager* ProductNetworkManager::GetInstance( NotifyTargetTaskIF*        ProductTask,
-                                                           Callback< ProductMessage > ProductNotify )
-{
-    static ProductNetworkManager* instance = new ProductNetworkManager( ProductTask,
-                                                                        ProductNotify );
+ProductNetworkManager::ProductNetworkManager( ProfessorProductController& ProductController )
 
-    BOSE_DEBUG( s_logger, "The instance %8p of the Product Network Manager was returned.", instance );
-
-    return instance;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductNetworkManager::ProductNetworkManager
-///
-/// @brief  This method is the ProductNetworkManager constructor, which is declared as being private
-///         to ensure that only one instance of this class can be created through the class
-///         GetInstance method.
-///
-/// @param NotifyTargetTaskIF* ProductTask This argument points to a task to process
-///                                        resource requests and notifications.
-///
-/// @param Callback< ProductMessage > ProductNotify This is a callback to send events to the Product
-///                                                 Controller.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductNetworkManager::ProductNetworkManager( NotifyTargetTaskIF*        ProductTask,
-                                              Callback< ProductMessage > ProductNotify )
-
-    : m_ProductTask( ProductTask ),
-      m_ProductNotify( ProductNotify ),
+    : m_ProductTask( ProductController.GetTask( ) ),
+      m_ProductNotify( ProductController.GetMessageHandler( ) ),
       m_FrontDoorClient( FrontDoor::FrontDoorClient::Create( "ProductNetworkManager" ) )
 {
 
@@ -556,6 +519,9 @@ void ProductNetworkManager::SendMessage( ProductMessage& message )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name ProductNetworkManager::Stop
+///
+/// @todo  Resources, memory, or any client server connections that may need to be released by
+///        this module when stopped will need to be determined.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductNetworkManager::Stop( )

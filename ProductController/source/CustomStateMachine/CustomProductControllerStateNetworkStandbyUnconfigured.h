@@ -36,7 +36,6 @@
 #include "ProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
-#include "APTimer.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -67,8 +66,7 @@ public:
     CustomProductControllerStateNetworkStandbyUnconfigured
     ( ProductControllerHsm&       hsm,
       CHsmState*                  pSuperState,
-      ProfessorProductController& productController,
-      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED,
+      Hsm::STATE                  stateId,
       const std::string&          name    = "CustomProductControllerStateNetworkStandbyUnconfigured" );
 
     ~CustomProductControllerStateNetworkStandbyUnconfigured( ) override
@@ -80,31 +78,21 @@ public:
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
 
-    bool HandleNetworkState( bool configured, bool connected ) override;
-    bool HandleVoiceState( bool configured )                   override;
+    bool HandleNetworkState( bool configured, bool connected )  override;
+    bool HandleVoiceState( bool configured )                    override;
+    bool HandleInactivityTimer( InactivityTimerType timerType ) override;
 
 private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief This timer is used to monitor the amount of time the device is in this state.
+    /// @brief This method make the appropriate state change for both network and voice status
+    ///        events.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    APTimerPtr m_timer;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief This method will be invoked by the expired timer defined above.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleTimeOut( );
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief This method handles potential state changes for both network and voice status events.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandlePotentialStateChange( bool networkConfigured, bool networkConnected, bool voiceConfigured );
+    void GoToAppropriatePlayableState( bool networkConfigured,
+                                       bool networkConnected,
+                                       bool voiceConfigured );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

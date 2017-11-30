@@ -32,7 +32,7 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "ThreadMutex.h"
+#include "Utilities.h"
 #include "NotifyTargetTaskIF.h"
 #include "APTask.h"
 #include "BreakThread.h"
@@ -46,6 +46,8 @@
 #include "BoseLinkServerMsgIds.pb.h"
 #include "NetworkPortDefines.h"
 #include "Services.h"
+#include "ProductHardwareInterface.h"
+#include "ProfessorProductController.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -55,52 +57,37 @@ namespace ProductApp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-///            Forward Class Declarations
+/// @class ProductSoftwareServices
+///
+/// @brief This class is used for managing software services through the Audio for Video server.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProductHardwareInterface;
-class ProductController;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief The following aliases refer to the Bose Sound Touch class utilities for inter-process and
-///        inter-thread communications.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-typedef APProductIF::APProductPtr               ProductPointer;
-typedef APClientSocketListenerIF::ListenerPtr   ClientPointer;
-typedef APServerSocketListenerIF::ListenerPtr   ServerPointer;
-typedef IPCMessageRouterIF::IPCMessageRouterPtr RouterPointer;
-typedef APServerSocketListenerIF::SocketPtr     ServerSocket;
-typedef IPCMessageRouterIF::IPCMessageRouterPtr RouterPointer;
-
 class ProductSoftwareServices
 {
 public:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @name   ProductSoftwareServices::GetInstance
+    /// @name   ProductSoftwareServices Constructor
     ///
-    /// @brief  This static method creates the one and only instance of a ProductSoftwareServices
-    ///         object. That only one instance is created in a thread safe way is guaranteed by
-    ///         the C++ Version 11 compiler.
-    ///
-    /// @return This method returns a reference to a ProductSoftwareServices object.
+    /// @param  ProfessorProductController& ProductController
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    static ProductSoftwareServices* GetInstance( NotifyTargetTaskIF*         mainTask,
-                                                 Callback< ProductMessage >  ProductNotify,
-                                                 ProductHardwareInterface*   HardwareInterface );
+    ProductSoftwareServices( ProfessorProductController& ProductController );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
-    /// This declaration is used to start and run the product software services.
+    ///
+    /// @brief  The following public methods are used to run and stop instances of the
+    ///         ProductSoftwareServices class, respectively.
+    ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     void Run( );
     void Stop( );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
-    /// This declaration is used to handle reboot requests as a software service.
+    ///
+    /// @brief  This declaration is used to handle reboot requests as a software service.
+    ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     void SendRebootRequest( unsigned int delay );
 
@@ -108,43 +95,21 @@ private:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @name   ProductSoftwareServices
-    ///
-    /// @brief  The constructor for this class is set to be private. This definition prevents this
-    ///         class from being instantiated directly, so that only the static method GetInstance
-    ///         to this class can be used to get the one sole instance of it.
-    ///
-    /// @return This method does not return anything.
+    /// @brief The following declarations are used to interface with the product controller and
+    ///        the lower level LPM hardware.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductSoftwareServices( NotifyTargetTaskIF*         ProductTask,
-                             Callback< ProductMessage >  ProductNotify,
-                             ProductHardwareInterface*   HardwareInterface );
+    NotifyTargetTaskIF*                         m_ProductTask;
+    Callback< ProductMessage >                  m_ProductNotify;
+    std::shared_ptr< ProductHardwareInterface > m_ProductHardwareInterface;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following copy constructor and equality operator for this class are private
-    ///        and are set to be undefined through the delete keyword. This prevents this class
-    ///        from being copied directly, so that only the static method GetInstance to this
-    ///        class can be used to get the one sole instance of it.
+    /// @brief These declarations are used for handling software reboot request by system
+    ///        application clients.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductSoftwareServices( ProductSoftwareServices const& ) = delete;
-    ProductSoftwareServices operator = ( ProductSoftwareServices const& ) = delete;
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    /// This declaration stores the product task for processing software events and requests. It
-    /// is inherited by the ProductController instance.
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF*        m_ProductTask;
-    Callback< ProductMessage > m_ProductNotify;
-    ProductHardwareInterface*  m_ProductHardwareInterface;
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    /// These declarations are used for handling software reboot request by system application
-    /// clients.
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ServerPointer m_serverListener;
+    ServerListener m_serverListener;
 
     void RegisterForRebootRequests( );
     void AcceptClient( ServerSocket client );

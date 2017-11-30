@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@f6d204e1599a92f9fcaf36fad6a1dc8d5e833063"
+    "selected_version": "master@007e5d39e6e307caba9229dc66fa9f477d631922"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -13,11 +13,15 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.2.3.40001.2555396"
+    "selected_version": "Release/Castle-Fork-IP2/0.2.4.40020M.2556137"
   },
   {
     "name": "BoseLibs-qc8017_32",
     "selected_version": "Release/master/0.2.1-143+df6e964"
+  },
+  {
+    "name": "bose-opkg-utils",
+    "selected_version": "master@0828ce81e7a9b96e03057da48c04a0cebc9aff21"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -33,7 +37,7 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/IP2/0.2.1-90+2fb766d"
+    "selected_version": "Continuous/master/0.2.2-98+73aeefc"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -41,7 +45,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@8b48d423cd82580783d5f159de0bab3ab3344625"
+    "selected_version": "master@b2416b06f787b3b107ea6f81bf7f0c2dcfb97675"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -49,7 +53,7 @@
   },
   {
     "name": "ProfessorLPM-Package",
-    "selected_version": "Release/IP2/0.2.2.2554038"
+    "selected_version": "Release/IP2/0.2.4.2569960"
   },
   {
     "name": "protobuf-native",
@@ -69,11 +73,11 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/IP2/0.2.0-18+1070ddb"
+    "selected_version": "Release/IP2/0.2.2-29+43fdfb4"
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/IP2/0.2.0-18+dec69bb"
+    "selected_version": "Release/IP2/0.2.2-21+6b1291b"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -81,22 +85,22 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.2.1-111+7f0e2bb"
+    "selected_version": "Continuous/master/0.2.1-118+ff0fc28"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.2.3.40001.2555396"
+    "selected_version": "Release/Castle-Fork-IP2/0.2.4.40020M.2556137"
   },
   {
-    "name": "UnitTest++-native",
-    "selected_version": "branches/UnitTest++@2485"
+    "name": "unittest-cpp-native",
+    "selected_version": "Release/bose-master/2.0.0-3+167ffec"
   },
   {
-    "name": "UnitTest++-qc8017_32",
-    "selected_version": "branches/UnitTest++@2485"
+    "name": "unittest-cpp-qc8017_32",
+    "selected_version": "Release/bose-master/2.0.0-3+167ffec"
   },
   {
-    "name": "UnitTest++-ti",
-    "selected_version": "branches/UnitTest++@2485"
+    "name": "unittest-cpp-ti",
+    "selected_version": "Release/bose-master/2.0.0-3+167ffec"
   }
 ]

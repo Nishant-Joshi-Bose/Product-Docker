@@ -25,11 +25,6 @@
 import "ProductSTS.proto";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                           System Language Protocol Buffer Include                            ///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-import "Language.proto";
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           Key Actions Protocol Buffer Include                                ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 import "KeyActions.proto";
@@ -138,16 +133,6 @@ message ProductConfigurationStatus
         optional bool account  = 3 [ default = false ];
 }
 
-message Language
-{
-    message Properties
-    {
-            repeated string supported_language_codes  = 1;
-    }
-    optional string     code       = 1;
-    optional Properties properties = 2;
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                              Autowake Status Message Structure                               ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -195,9 +180,8 @@ message ProductMessage
         optional ProductLanguageData        languagedata        = 10;
         optional ProductConfigurationStatus configurationstatus = 11;
         optional ProductAutowakeStatus      autowakestatus      = 12;
-        optional ProductNowPlayingStatus    nowplayingstatus   = 13;
-        optional bool                       power               = 14;
-        optional ProductAccessoryPairing    accessorypairing    = 15;
+        optional ProductNowPlayingStatus    nowplayingstatus    = 13;
+        optional ProductAccessoryPairing    accessorypairing    = 14;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

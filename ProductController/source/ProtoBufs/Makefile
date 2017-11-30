@@ -6,7 +6,6 @@ SOUNDTOUCH_SDK_DIR := $(shell components get SoundTouch-SDK-$(sdk) installed_loc
 PROTO_SOURCES = AudioSettings.proto         \
                 ProductMessage.proto        \
                 ConfigurationStatus.proto   \
-                Language.proto              \
                 ContentItem.proto           \
                 ProductSTS.proto            \
                 KeyActions.proto            \
@@ -18,7 +17,6 @@ PROTO_SOURCES = AudioSettings.proto         \
 # The following alias is used to search for imported Protocol Buffer files.
 #
 PROTO_IMPORT_DIRS :=  .                                       \
-                      ../../../ProductSTSController/Protobufs \
                       $(PROTO_CC_DEST)                        \
                       $(BOSELIBS_DIR)/protobufs               \
                       $(BOSELIBS_DIR)/include                 \

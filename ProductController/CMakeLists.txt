@@ -2,6 +2,7 @@ INCLUDE_DIRECTORIES(
   ${NETWORK_SERVICE_DIR}/include
   ${CASTLECLI_DIR}/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/SoundTouchInterface
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/Bluetooth
   ${PRODUCTCONTROLLERCOMMON_DIR}
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
@@ -21,7 +22,6 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
-  ${PROTO_CC_DEST}/Language.pb.cc
   ${PROTO_CC_DEST}/ContentItem.pb.cc
   ${PROTO_CC_DEST}/ProductSTS.pb.cc
   ${PROTO_CC_DEST}/KeyActions.pb.cc
@@ -34,7 +34,7 @@ ADD_EXECUTABLE(Professor
   source/ProductSoftwareServices.cpp
   source/ProductNetworkManager.cpp
   source/ProductSystemManager.cpp
-  source/ProductUserInterface.cpp
+  source/ProductKeyInputInterface.cpp
   source/ProductSpeakerManager.cpp
   source/ProfessorProductController.cpp
   source/ProductEdidInterface.cpp
@@ -69,8 +69,10 @@ TARGET_LINK_LIBRARIES(Professor
   BoseLibs
   NetworkServiceUtils
   NetworkServiceClient
-  BLESetupServiceProto 
+  BLESetupServiceProto
+  BluetoothSinkServiceProto
   STS
+  PassportClientAPILib
   ShelbyUtils
   jsoncpp
   protobuf

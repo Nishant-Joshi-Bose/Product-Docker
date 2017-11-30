@@ -51,11 +51,11 @@ ProductController* CustomProductControllerState::s_productController = nullptr;
 ///
 /// @param ProductControllerHsm& productStateMachine
 ///
-/// @param CHsmState* pSuperState
+/// @param CHsmState*            pSuperState
 ///
-/// @param Hsm::STATE stateId
+/// @param Hsm::STATE            stateId
 ///
-/// @param const std::string& name
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerState::CustomProductControllerState( ProductControllerHsm& productStateMachine,
@@ -99,11 +99,6 @@ bool CustomProductControllerState::HandleVoiceState( bool configured )
 }
 
 bool CustomProductControllerState::HandleNowPlayingStatus( ProductNowPlayingStatus_ProductNowPlayingState state )
-{
-    return false;
-}
-
-bool CustomProductControllerState::HandlePowerState( )
 {
     return false;
 }

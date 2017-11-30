@@ -56,7 +56,7 @@
 #include "ProductHardwareInterface.h"
 #include "ProductAudioService.h"
 #include "ProductSoftwareServices.h"
-#include "ProductUserInterface.h"
+#include "ProductKeyInputInterface.h"
 #include "ProductNetworkManager.h"
 #include "ProductSystemManager.h"
 #include "ProductSpeakerManager.h"
@@ -83,46 +83,11 @@ constexpr uint32_t PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief The following aliases refer to the Bose Sound Touch class utilities for inter-process and
-///        inter-thread communications.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-typedef APClientSocketListenerIF::ListenerPtr   ClientPointer;
-typedef APServerSocketListenerIF::ListenerPtr   ServerPointer;
-typedef APClientSocketListenerIF::SocketPtr     ClientSocket;
-typedef APServerSocketListenerIF::SocketPtr     ServerSocket;
-typedef IPCMessageRouterIF::IPCMessageRouterPtr RouterPointer;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetInstance
-///
-/// @brief  This static method creates the one and only instance of a ProfessorProductController object.
-///         The C++ Version 11 compiler guarantees that only one instance is created in a thread
-///         safe way.
-///
-/// @return This method returns a pointer to a ProfessorProductController object.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-ProfessorProductController* ProfessorProductController::GetInstance( )
-{
-    static ProfessorProductController* instance = new ProfessorProductController( );
-
-    BOSE_DEBUG( s_logger, "The instance %8p of the Product Controller was returned.", instance );
-
-    return instance;
-}
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProfessorProductController::ProfessorProductController
 ///
 /// @brief  This method is the ProfessorProductController constructor, which is declared as being
 ///         private to ensure that only one instance of this class can be created through the class
 ///         GetInstance method.
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::ProfessorProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProfessorProductController::ProfessorProductController( ) :
@@ -138,11 +103,13 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductHardwareInterface( nullptr ),
     m_ProductSystemManager( nullptr ),
     m_ProductNetworkManager( nullptr ),
-    m_ProductAudioService( nullptr ),
     m_ProductSoftwareServices( nullptr ),
     m_ProductCommandLine( nullptr ),
-    m_ProductUserInterface( nullptr ),
+    m_ProductKeyInputInterface( nullptr ),
     m_ProductEdidInterface( nullptr ),
+    m_ProductVolumeManager( nullptr ),
+    m_ProductSpeakerManager( nullptr ),
+    m_ProductAudioService( nullptr ),
 
     ///
     /// Member Variable Initialization
@@ -157,7 +124,8 @@ ProfessorProductController::ProfessorProductController( ) :
     m_IsAccountConfigured( false ),
     m_IsMicrophoneEnabled( false ),
     m_IsSoftwareUpdateRequired( false ),
-    m_Running( false )
+    m_Running( false ),
+    m_currentSource( SOURCE_TV )
 {
 
 }
@@ -171,9 +139,8 @@ void ProfessorProductController::Run( )
 {
     m_Running = true;
 
-    BOSE_DEBUG( s_logger, "---------- - Product Controller Starting Modules ------------" );
-    BOSE_DEBUG( s_logger, "The Professor Product Controller is starting up its modules." );
-    BOSE_DEBUG( s_logger, "The Professor Product Controller is using its new state machine set up." );
+    BOSE_DEBUG( s_logger, "----------- Product Controller State Machine    ------------" );
+    BOSE_DEBUG( s_logger, "The Professor Product Controller is setting up the state machine." );
 
     ///
     /// Construction of the Common States
@@ -185,68 +152,79 @@ void ProfessorProductController::Run( )
     ///
     auto* stateBooting = new CustomProductControllerStateBooting
     ( GetHsm( ),
-      stateTop );
+      stateTop,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
     auto* stateUpdatingSoftware = new CustomProductControllerStateUpdatingSoftware
     ( GetHsm( ),
-      stateTop );
+      stateTop,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING );
 
     auto* stateLowPower = new CustomProductControllerStateLowPower
     ( GetHsm( ),
-      stateTop );
+      stateTop,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_LOW_POWER );
 
     auto* stateOn = new CustomProductControllerStateOn
     ( GetHsm( ),
-      stateTop );
+      stateTop,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_ON );
 
     auto* statePlayable = new CustomProductControllerStatePlayable
     ( GetHsm( ),
-      stateOn );
+      stateOn,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE );
 
     auto* stateNetworkStandby = new CustomProductControllerStateNetworkStandby
     ( GetHsm( ),
-      statePlayable );
+      statePlayable,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
 
     auto* stateNetworkStandbyConfigured = new CustomProductControllerStateNetworkStandbyConfigured
     ( GetHsm( ),
-      stateNetworkStandby );
+      stateNetworkStandby,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED );
 
     auto* stateNetworkStandbyUnconfigured = new CustomProductControllerStateNetworkStandbyUnconfigured
     ( GetHsm( ),
       stateNetworkStandby,
-      *this );
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
 
     auto* stateIdle = new CustomProductControllerStateIdle
     ( GetHsm( ),
-      statePlayable );
+      statePlayable,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE );
 
     auto* stateIdleVoiceConfigured = new CustomProductControllerStateIdleVoiceConfigured
     ( GetHsm( ),
-      stateIdle );
+      stateIdle,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
 
     auto* stateIdleVoiceUnconfigured = new CustomProductControllerStateIdleVoiceUnconfigured
     ( GetHsm( ),
       stateIdle,
-      *this );
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED );
 
     auto* statePlaying = new CustomProductControllerStatePlaying
     ( GetHsm( ),
-      stateOn );
+      stateOn,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING );
 
     auto* statePlayingActive = new CustomProductControllerStatePlayingActive
     ( GetHsm( ),
       statePlaying,
-      *this );
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE );
 
     auto* statePlayingInactive = new CustomProductControllerStatePlayingInactive
     ( GetHsm( ),
       statePlaying,
-      *this );
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
 
     auto* stateAccessoryPairing = new CustomProductControllerStateAccessoryPairing
     ( GetHsm( ),
       statePlayingActive,
-      *this );
+      *this,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
 
     ///
     /// The states are added to the state machine and the state machine is initialized.
@@ -271,44 +249,27 @@ void ProfessorProductController::Run( )
     GetHsm( ).Init( this, PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
     ///
+    /// Initialize entities in the Common Product Controller
+    ///
+    m_deviceManager.Initialize( this );
+
+    ///
     /// Get instances of all the modules.
     ///
-    Callback < ProductMessage > CallbackForMessages( std::bind( &ProfessorProductController::HandleMessage,
-                                                                this,
-                                                                std::placeholders::_1 ) );
+    BOSE_DEBUG( s_logger, "----------- Product Controller Starting Modules ------------" );
+    BOSE_DEBUG( s_logger, "The Professor Product Controller instantiating and running its modules." );
 
-    m_ProductHardwareInterface = ProductHardwareInterface::GetInstance( GetTask( ),
-                                                                        CallbackForMessages );
-
-    m_ProductEdidInterface     = ProductEdidInterface    ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages,
-                                                                        m_ProductHardwareInterface );
-    m_ProductSystemManager     = ProductSystemManager    ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages );
-
-    m_ProductNetworkManager    = ProductNetworkManager   ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages );
-
-    m_ProductAudioService      = ProductAudioService     ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages );
-
-    m_ProductSoftwareServices  = ProductSoftwareServices ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages,
-                                                                        m_ProductHardwareInterface );
-    m_ProductCommandLine       = ProductCommandLine      ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages,
-                                                                        m_ProductHardwareInterface );
-
-    m_ProductUserInterface     = ProductUserInterface    ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages,
-                                                                        m_ProductHardwareInterface,
-                                                                        m_CliClientMT );
-    m_ProductVolumeManager     = ProductVolumeManager    ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages,
-                                                                        m_ProductHardwareInterface );
-    m_ProductSpeakerManager    = ProductSpeakerManager   ::GetInstance( GetTask( ),
-                                                                        CallbackForMessages,
-                                                                        m_ProductHardwareInterface );
+    m_ProductHardwareInterface = std::make_shared< ProductHardwareInterface >( *this );
+    m_ProductEdidInterface     = std::make_shared< ProductEdidInterface     >( *this );
+    m_ProductSystemManager     = std::make_shared< ProductSystemManager     >( *this );
+    m_ProductNetworkManager    = std::make_shared< ProductNetworkManager    >( *this );
+    m_ProductSoftwareServices  = std::make_shared< ProductSoftwareServices  >( *this );
+    m_ProductCommandLine       = std::make_shared< ProductCommandLine       >( *this );
+    m_ProductKeyInputInterface = std::make_shared< ProductKeyInputInterface >( *this );
+    m_ProductVolumeManager     = std::make_shared< ProductVolumeManager     >( *this );
+    m_ProductSpeakerManager    = std::make_shared< ProductSpeakerManager    >( *this );
+    m_ProductAudioService      = ProductAudioService ::GetInstance( GetTask( ),
+                                                                    GetMessageHandler( ) );
 
     if( m_ProductHardwareInterface == nullptr ||
         m_ProductSystemManager     == nullptr ||
@@ -316,7 +277,7 @@ void ProfessorProductController::Run( )
         m_ProductAudioService      == nullptr ||
         m_ProductSoftwareServices  == nullptr ||
         m_ProductCommandLine       == nullptr ||
-        m_ProductUserInterface     == nullptr ||
+        m_ProductKeyInputInterface == nullptr ||
         m_ProductEdidInterface     == nullptr ||
         m_ProductVolumeManager     == nullptr )
     {
@@ -335,7 +296,7 @@ void ProfessorProductController::Run( )
     m_ProductAudioService      ->Run( );
     m_ProductSoftwareServices  ->Run( );
     m_ProductCommandLine       ->Run( );
-    m_ProductUserInterface     ->Run( );
+    m_ProductKeyInputInterface ->Run( );
     m_ProductEdidInterface     ->Run( );
     m_ProductVolumeManager     ->Run( );
     m_ProductSpeakerManager    ->Run( );
@@ -353,23 +314,55 @@ void ProfessorProductController::Run( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::GetHardwareInterface
+/// @brief  ProfessorProductController::GetMessageHandler
 ///
-/// @return This method returns a true or false value, based on a set member variable.
+/// @return Callback < ProductMessage >
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductHardwareInterface* ProfessorProductController::GetHardwareInterface( ) const
+Callback < ProductMessage > ProfessorProductController::GetMessageHandler( )
+{
+    Callback < ProductMessage >
+    ProductMessageHandler( std::bind( &ProfessorProductController::HandleMessage,
+                                      this,
+                                      std::placeholders::_1 ) );
+    return ProductMessageHandler;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  ProfessorProductController::GetMessageHandler
+///
+/// @return This method returns a reference to a command line interface for adding module specific
+///         commands. Note that this interface is instantiated in the inherited ProductController
+///         class; the ProductCommandLine interface instantiated in this class is used for specific
+///         product controller commands in Professor.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+CliClientMT& ProfessorProductController::GetCommandLineInterface( )
+{
+    return m_CliClientMT;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetHardwareInterface
+///
+/// @return This method returns a shared pointer to the LPM hardware interface.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::shared_ptr< ProductHardwareInterface >& ProfessorProductController::GetHardwareInterface( )
 {
     return m_ProductHardwareInterface;
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProfessorProductController::GetVolumeManager
 ///
-/// @return This method returns a pointer to the VolumeManager instance
+/// @return This method returns a shared pointer to the VolumeManager instance
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductVolumeManager* ProfessorProductController::GetVolumeManager( ) const
+std::shared_ptr< ProductVolumeManager >& ProfessorProductController::GetVolumeManager( )
 {
     return m_ProductVolumeManager;
 }
@@ -378,10 +371,10 @@ ProductVolumeManager* ProfessorProductController::GetVolumeManager( ) const
 ///
 /// @name ProfessorProductController::GetSpeakerManager
 ///
-/// @return ProductHardwareInterface* - pointer to speaker manager
+/// @return This method returns a shared pointer to the ProductSpeakerManager instance.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductSpeakerManager* ProfessorProductController::GetSpeakerManager( )
+std::shared_ptr< ProductSpeakerManager >& ProfessorProductController::GetSpeakerManager( )
 {
     return m_ProductSpeakerManager;
 }
@@ -469,6 +462,46 @@ bool ProfessorProductController::IsSoftwareUpdateRequired( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   ProfessorProductController::IsSystemLanguageSet
+///
+/// @return This method returns true if the corresponding member has a system language defined.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProfessorProductController::IsSystemLanguageSet( ) const
+{
+    return m_deviceManager.IsLanguageSet();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetProductType
+///
+/// @return This method returns the std::string const& value to be used for the Product "Type" field
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string const& ProfessorProductController::GetProductType() const
+{
+    static std::string productType = "Professor Soundbar";
+    return productType;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetProductVariant
+///
+/// @return This method returns the std::string const& value to be used for the Product "Variant" field
+///
+/// @TODO - Below value may be available through HSP APIs
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string const& ProfessorProductController::GetProductVariant() const
+{
+    static std::string productType = "Professor";
+    return productType;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::SetupProductSTSConntroller
 ///
 /// @brief  This method is called to perform the needed initialization of the ProductSTSController,
@@ -477,7 +510,7 @@ bool ProfessorProductController::IsSoftwareUpdateRequired( ) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::SetupProductSTSConntroller( )
 {
-    std::vector<ProductSTSController::SourceDescriptor> sources;
+    std::vector< ProductSTSController::SourceDescriptor > sources;
 
     ///
     /// Adapt IQ is not available as a normal source, whereas the TV source will always be available.
@@ -529,7 +562,7 @@ void ProfessorProductController::HandleSTSInitWasComplete( )
 /// @name   ProfessorProductController::HandleSelectSourceSlot
 ///
 /// @brief  This method is called from the ProductSTSController, when one of our sources is
-///         activated by CAPS and STS.
+///         activated by CAPS via STS.
 ///
 /// @note   This method is called on the ProductSTSController task.
 ///
@@ -567,16 +600,16 @@ void ProfessorProductController::SendPlaybackRequest( PlaybackSource_t playbackS
 {
     BOSE_INFO( s_logger, "Source %d was selected. \n", playbackSource );
 
-    AsyncCallback< FRONT_DOOR_CLIENT_ERRORS > errorCallback =
-        AsyncCallback< FRONT_DOOR_CLIENT_ERRORS > ( std::bind( &ProfessorProductController::PostPlaybackRequestError,
-                                                               this,
-                                                               std::placeholders::_1 ),
-                                                    GetTask( ) );
+    AsyncCallback< FRONT_DOOR_CLIENT_ERRORS >
+    errorCallback( std::bind( &ProfessorProductController::PostPlaybackRequestError,
+                              this,
+                              std::placeholders::_1 ),
+                   GetTask( ) );
 
-    AsyncCallback< SoundTouchInterface::NowPlayingJson > postPlaybackRequestCallback =
-        AsyncCallback< SoundTouchInterface::NowPlayingJson > ( std::bind( &ProfessorProductController::PostPlaybackRequestResponse,
-                                                                          this, std::placeholders::_1 ),
-                                                               GetTask( ) );
+    AsyncCallback< SoundTouchInterface::NowPlayingJson >
+    postPlaybackRequestCallback( std::bind( &ProfessorProductController::PostPlaybackRequestResponse,
+                                            this, std::placeholders::_1 ),
+                                 GetTask( ) );
     ///
     /// Setup the playback request data.
     ///
@@ -587,7 +620,7 @@ void ProfessorProductController::SendPlaybackRequest( PlaybackSource_t playbackS
     /// nowPlaying to playbackRequest.
     ///
     constexpr char source[ ]           = "DEEZER";
-    constexpr char sourceAccount[ ]    = "matthew_scanlan@bose.com";
+    constexpr char sourceAccount[ ]    = "aleksander_soltan@bose.com";
     constexpr char presetType[ ]       = "topTrack";
     constexpr char location[ ]         = "132";
     constexpr char name[ ]             = "Pop - ##TRANS_TopTracks##";
@@ -626,6 +659,18 @@ void ProfessorProductController::SendPlaybackRequest( PlaybackSource_t playbackS
                                                                           playbackRequestData,
                                                                           postPlaybackRequestCallback,
                                                                           errorCallback );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  ProfessorProductController::GetCurrentSource
+///
+/// @return This method returns the currently selected source.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+PlaybackSource_t ProfessorProductController::GetCurrentSource( )
+{
+    return m_currentSource;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -713,6 +758,26 @@ void ProfessorProductController::HandleNowPlaying( const SoundTouchInterface::No
     else
     {
         BOSE_DEBUG( s_logger, "The CAPS now playing status is unknown." );
+    }
+
+    if( nowPlayingStatus.has_container( )                          and
+        nowPlayingStatus.container( ).has_contentitem( )           and
+        nowPlayingStatus.container( ).contentitem( ).has_source( ) and
+        nowPlayingStatus.container( ).contentitem( ).has_sourceaccount( ) )
+    {
+        if( nowPlayingStatus.container( ).contentitem( ).source( ).compare( "PRODUCT" ) == 0   and
+            nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( "TV" ) == 0 )
+        {
+            BOSE_DEBUG( s_logger, "The CAPS now playing source is set to SOURCE_TV." );
+
+            m_currentSource = SOURCE_TV;
+        }
+        else
+        {
+            BOSE_DEBUG( s_logger, "The CAPS now playing source is set to SOURCE_SOUNDTOUCH." );
+
+            m_currentSource = SOURCE_SOUNDTOUCH;
+        }
     }
 }
 
@@ -944,17 +1009,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         ( &CustomProductControllerState::HandleKeyAction, keyData.action( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Power key messages are handled at this point. Whether the power is to be changed is
-    /// determined by the currently active state.
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_power( ) )
-    {
-        BOSE_DEBUG( s_logger, "A power message has been received." );
-
-        GetHsm( ).Handle< >
-        ( &CustomProductControllerState::HandlePowerState );
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Autowake messages are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_autowakestatus( ) )
@@ -1033,32 +1087,9 @@ void ProfessorProductController::Wait( )
     m_ProductNetworkManager   ->Stop( );
     m_ProductSoftwareServices ->Stop( );
     m_ProductCommandLine      ->Stop( );
-    m_ProductUserInterface    ->Stop( );
+    m_ProductKeyInputInterface->Stop( );
     m_ProductEdidInterface    ->Stop( );
     m_ProductVolumeManager    ->Stop( );
-
-    ///
-    /// Delete all the submodules.
-    ///
-    delete m_ProductHardwareInterface;
-    delete m_ProductSystemManager;
-    delete m_ProductNetworkManager;
-    delete m_ProductAudioService;
-    delete m_ProductSoftwareServices;
-    delete m_ProductCommandLine;
-    delete m_ProductUserInterface;
-    delete m_ProductEdidInterface;
-    delete m_ProductVolumeManager;
-
-    m_ProductHardwareInterface = nullptr;
-    m_ProductSystemManager = nullptr;
-    m_ProductNetworkManager = nullptr;
-    m_ProductAudioService = nullptr;
-    m_ProductSoftwareServices = nullptr;
-    m_ProductCommandLine = nullptr;
-    m_ProductUserInterface = nullptr;
-    m_ProductEdidInterface = nullptr;
-    m_ProductVolumeManager = nullptr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

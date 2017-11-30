@@ -62,15 +62,25 @@ To update the HSP, see the next section.
 
 ### Reflashing the Riviera HSP
 
-To reflash the Riviera HSP:
+To reflash the Riviera HSP from Linux:
 ```shell session
 $ cd /scratch/Professor
 $ components install
 $ adb shell reboot bootloader       # reboot the Riviera unit into the fastboot bootloader
 $ sudo fastboot devices             # make sure the unit is in the bootloader
-$ cd `components get Riviera-HSP-Images installed_location`/images
+$ cd `components get Riviera-HSP-Images installed_location`
 $ sudo ./fastboot.sh
 $ sudo fastboot reboot
+```
+
+To reflash the Riviera HSP from Windows Command Prompt:
+```shell session
+$ adb reboot bootloader             # reboot the Riviera unit into the fastboot bootloader
+$ fastboot devices                  # check that the fastboot device is present
+$ fastboot.sh                       # run the fastboot script
+
+*** See the Fastboot section of https://wiki.bose.com/display/BC/1.+Flashing+the+SNAP+Board for Fastboot
+    installation instructions.
 ```
 
 <a name="lpm"/>

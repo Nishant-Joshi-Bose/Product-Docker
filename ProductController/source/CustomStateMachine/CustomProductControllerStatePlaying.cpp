@@ -41,15 +41,13 @@ namespace ProductApp
 ///
 /// @brief CustomProductControllerStatePlaying::CustomProductControllerStatePlaying
 ///
-/// @param hsm
+/// @param ProductControllerHsm& hsm
 ///
-/// @param pSuperState
+/// @param CHsmState*            pSuperState
 ///
-/// @param productController
+/// @param Hsm::STATE            stateId
 ///
-/// @param stateId
-///
-/// @param name
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStatePlaying::CustomProductControllerStatePlaying
@@ -60,7 +58,7 @@ CustomProductControllerStatePlaying::CustomProductControllerStatePlaying
 
     : ProductControllerState( hsm, pSuperState, stateId, name )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlaying is being constructed." );
+    BOSE_VERBOSE( s_logger, "%s is being constructed.", name.c_str() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -73,9 +71,9 @@ CustomProductControllerStatePlaying::CustomProductControllerStatePlaying
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlaying::HandleStateEnter( )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlaying is being entered." );
+    BOSE_VERBOSE( s_logger, "%s is being entered.", GetName( ).c_str( ) );
 
-    GetCustomProductController( ).GetHardwareInterface( )->RequestPowerStateFull( );
+    GetCustomProductController( ).GetHardwareInterface( )->RequestLpmSystemState( SYSTEM_STATE_ON );
 
     BOSE_VERBOSE( s_logger, "An attempt to set to full power is being made." );
 }
@@ -87,7 +85,7 @@ void CustomProductControllerStatePlaying::HandleStateEnter( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlaying::HandleStateStart( )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlaying is being started." );
+    BOSE_VERBOSE( s_logger, "%s is being started.", GetName( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,18 +95,75 @@ void CustomProductControllerStatePlaying::HandleStateStart( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlaying::HandleStateExit( )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlaying is being exited." );
+    BOSE_VERBOSE( s_logger, "%s is being exited.", GetName( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStatePlaying::HandlePowerState
+/// @brief CustomProductControllerStatePlayingActive::HandleInactivityTimer
 ///
-/// @return This method returns a true Boolean value indicating that it has handled the power
-///         state changed and no futher processing will be required by any of its superstates.
+/// @param InactivityTimerType timerType; only NO_USER_INTERACTION_TIMER or NO_AUDIO_TIMER
+///        expected here
+///
+/// @return This method returns a true Boolean value indicating that it has handled the timer expiration
+///         unless the timer that had expired is an irrelevant timer
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlaying::HandlePowerState( )
+bool CustomProductControllerStatePlaying::HandleInactivityTimer( InactivityTimerType timerType )
+{
+    if( timerType != InactivityTimerType::NO_USER_INTERACTION_TIMER &&
+        timerType != InactivityTimerType::NO_AUDIO_TIMER )
+    {
+        BOSE_ERROR( s_logger, "The timer %d is unexpected in %s.", timerType, GetName( ).c_str( ) );
+        return false;
+    }
+
+    GoToAppropriateNonPlayingState( );
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStatePlaying::HandleKeyAction
+///
+/// @param  int action
+///
+/// @return This method returns a true Boolean value indicating that it has handled the key action
+///         or false if the key has not been handled.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlaying::HandleKeyAction( int action )
+{
+    bool handled = false;
+
+    BOSE_INFO( s_logger, "%s is handling key action %d.", GetName( ).c_str( ), action );
+
+    switch( action )
+    {
+    case KeyActionPb::KEY_ACTION_POWER:
+        ///
+        /// Stop the playback based on the currently selected source. Transition to the appropriate
+        /// non-playing state.
+        ///
+        GetProductController( ).SendStopPlaybackMessage( );
+        GoToAppropriateNonPlayingState( );
+        handled = true;
+        break;
+
+    default:
+        break;
+    }
+
+    return handled;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStatePlaying::GoToAppropriateNonPlayingState
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStatePlaying::GoToAppropriateNonPlayingState( )
 {
     GetProductController( ).SendStopPlaybackMessage( );
 
@@ -119,14 +174,14 @@ bool CustomProductControllerStatePlaying::HandlePowerState( )
             GetCustomProductController( ).IsVoiceConfigured( ) )
         {
             BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                          "CustomProductControllerStatePlaying",
+                          GetName( ).c_str( ),
                           "CustomProductControllerStateIdleVoiceConfigured" );
             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
         }
         else
         {
             BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                          "CustomProductControllerStatePlaying",
+                          GetName( ).c_str( ),
                           "CustomProductControllerStateIdleVoiceUnconfigured" );
             ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED );
         }
@@ -134,12 +189,10 @@ bool CustomProductControllerStatePlaying::HandlePowerState( )
     else
     {
         BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                      "CustomProductControllerStatePlaying",
+                      GetName( ).c_str( ),
                       "CustomProductControllerStateNetworkStandbyUnconfigured" );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
     }
-
-    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

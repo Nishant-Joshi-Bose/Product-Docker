@@ -29,6 +29,7 @@
 #include "ProductHardwareInterface.h"
 #include "CustomProductControllerStateNetworkStandbyUnconfigured.h"
 #include "ProfessorProductController.h"
+#include "InactivityTimers.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -36,28 +37,19 @@
 namespace ProductApp
 {
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-///            Constant Definitions
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr uint32_t NETWORK_UNCONFIGURED_MILLISECOND_TIMEOUT_START = ( 2 * ( 60 * 60 ) ) * 1000;
-constexpr uint32_t NETWORK_UNCONFIGURED_MILLISECOND_TIMEOUT_RETRY =   0 ;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief CustomProductControllerStateNetworkStandbyUnconfigured::
 ///        CustomProductControllerStateNetworkStandbyUnconfigured
 ///
-/// @param hsm
+/// @param ProductControllerHsm& hsm
 ///
-/// @param pSuperState
+/// @param CHsmState*            pSuperState
 ///
-/// @param productController
+/// @param Hsm::STATE            stateId
 ///
-/// @param stateId
-///
-/// @param name
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateNetworkStandbyUnconfigured::
@@ -65,15 +57,13 @@ CustomProductControllerStateNetworkStandbyUnconfigured
 
 ( ProductControllerHsm&       hsm,
   CHsmState*                  pSuperState,
-  ProfessorProductController& productController,
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, stateId, name ),
-      m_timer( APTimer::Create( productController.GetTask( ), "NetworkUnconfiguredTimer" ) )
+    : ProductControllerState( hsm, pSuperState, stateId, name )
 
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyUnconfigured is being constructed." );
+    BOSE_VERBOSE( s_logger, "%s is being constructed.", name.c_str() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,15 +73,10 @@ CustomProductControllerStateNetworkStandbyUnconfigured
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateNetworkStandbyUnconfigured::HandleStateEnter()
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyUnconfigured is being entered." );
-    BOSE_VERBOSE( s_logger, "The timer is set to expire in %d minutes unless the network is configured.",
-                  NETWORK_UNCONFIGURED_MILLISECOND_TIMEOUT_START / 60000 );
+    BOSE_VERBOSE( s_logger, "%s is being entered.", GetName( ).c_str( ) );
+    BOSE_VERBOSE( s_logger, "NO_NETWORK_CONFIGURED_TIMER timer is started" );
 
-    m_timer->SetTimeouts( NETWORK_UNCONFIGURED_MILLISECOND_TIMEOUT_START,
-                          NETWORK_UNCONFIGURED_MILLISECOND_TIMEOUT_RETRY );
-
-    m_timer->Start( std::bind( &CustomProductControllerStateNetworkStandbyUnconfigured::HandleTimeOut,
-                               this ) );
+    GetProductController( ).GetInactivityTimers( ).StartTimer( InactivityTimerType::NO_NETWORK_CONFIGURED_TIMER );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,7 +86,7 @@ void CustomProductControllerStateNetworkStandbyUnconfigured::HandleStateEnter()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateNetworkStandbyUnconfigured::HandleStateStart()
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyUnconfigured is being started." );
+    BOSE_VERBOSE( s_logger, "%s is being started.", GetName( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,23 +96,36 @@ void CustomProductControllerStateNetworkStandbyUnconfigured::HandleStateStart()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateNetworkStandbyUnconfigured::HandleStateExit()
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyUnconfigured is being exited." );
+    BOSE_VERBOSE( s_logger, "%s is being exited.", GetName( ).c_str( ) );
     BOSE_VERBOSE( s_logger, "The timer will be stopped." );
 
-    m_timer->Stop( );
+    GetProductController( ).GetInactivityTimers( ).CancelTimer( InactivityTimerType::NO_NETWORK_CONFIGURED_TIMER );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateNetworkStandbyUnconfigured::HandleTimeOut
+/// @brief CustomProductControllerStateNetworkStandbyUnconfigured::HandleInactivityTimer
+///
+/// @param InactivityTimerType timerType; only NO_NETWORK_CONFIGURED_TIMER expected here
+///
+/// @return This method returns a true Boolean value indicating that it has handled the timer expiration
+///         unless the timer that had expired is an irrelevant timer
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateNetworkStandbyUnconfigured::HandleTimeOut( )
+bool CustomProductControllerStateNetworkStandbyUnconfigured::HandleInactivityTimer( InactivityTimerType timerType )
 {
-    BOSE_VERBOSE( s_logger, "A time out in the network standby unconfigured state has occurred." );
+    if( timerType != InactivityTimerType::NO_NETWORK_CONFIGURED_TIMER )
+    {
+        BOSE_ERROR( s_logger, "The timer %d is unexpected in %s.", timerType, GetName( ).c_str( ) );
+        return false;
+    }
+
+    BOSE_VERBOSE( s_logger, "The timer %d in %s has expired.", timerType, GetName( ).c_str( ) );
     BOSE_VERBOSE( s_logger, "An attempt to set the device to a low power state will be made." );
 
     ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_LOW_POWER );
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -144,14 +142,14 @@ void CustomProductControllerStateNetworkStandbyUnconfigured::HandleTimeOut( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateNetworkStandbyUnconfigured::HandleNetworkState( bool configured, bool connected )
 {
-    BOSE_VERBOSE( s_logger, "%s is handling a %s %s network state event.",
-                  "CustomProductControllerStateNetworkStandbyUnconfigured",
-                  configured ? "configured" : "unconfigured,",
-                  connected ? "connected" : "unconnected" );
+    BOSE_VERBOSE( s_logger, "%s is handling a %sconfigured, %sconnected network state event.",
+                  GetName( ).c_str( ),
+                  configured ? "" : "un",
+                  connected  ? "" : "un" );
 
-    HandlePotentialStateChange( configured,
-                                connected,
-                                GetCustomProductController().IsVoiceConfigured( ) );
+    GoToAppropriatePlayableState( configured,
+                                  connected,
+                                  GetCustomProductController().IsVoiceConfigured( ) );
     return true;
 }
 
@@ -167,22 +165,22 @@ bool CustomProductControllerStateNetworkStandbyUnconfigured::HandleNetworkState(
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateNetworkStandbyUnconfigured::HandleVoiceState( bool configured )
 {
-    BOSE_VERBOSE( s_logger, "%s is handling a %s voice state event.",
-                  "CustomProductControllerStateNetworkStandbyUnconfigured",
-                  configured ? "configured" : "unconfigured" );
+    BOSE_VERBOSE( s_logger, "%s is handling a %sconfigured voice state event.",
+                  GetName( ).c_str( ),
+                  configured ? "" : "un" );
 
-    HandlePotentialStateChange( GetCustomProductController( ).IsNetworkConfigured( ),
-                                GetCustomProductController( ).IsNetworkConnected( ),
-                                configured );
+    GoToAppropriatePlayableState( GetCustomProductController( ).IsNetworkConfigured( ),
+                                  GetCustomProductController( ).IsNetworkConnected( ),
+                                  configured );
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateNetworkStandbyUnconfigured::HandlePotentialStateChange
+/// @brief CustomProductControllerStateNetworkStandbyUnconfigured::GoToAppropriatePlayableState
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateNetworkStandbyUnconfigured::HandlePotentialStateChange
+void CustomProductControllerStateNetworkStandbyUnconfigured::GoToAppropriatePlayableState
 ( bool networkConfigured,
   bool networkConnected,
   bool voiceConfigured )
@@ -190,21 +188,20 @@ void CustomProductControllerStateNetworkStandbyUnconfigured::HandlePotentialStat
     if( networkConnected and voiceConfigured )
     {
         BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                      "CustomProductControllerStateNetworkStandbyUnconfigured",
+                      GetName( ).c_str( ),
                       "CustomProductControllerStateIdleVoiceConfigured" );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
     }
     else if( networkConfigured )
     {
         BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                      "CustomProductControllerStateNetworkStandbyUnconfigured",
+                      GetName( ).c_str( ),
                       "CustomProductControllerStateNetworkStandbyUnconfigured" );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED );
     }
     else
     {
-        BOSE_VERBOSE( s_logger, "%s is not changing.",
-                      "CustomProductControllerStateNetworkStandbyUnconfigured" );
+        BOSE_VERBOSE( s_logger, "%s is not changing.", GetName( ).c_str( ) );
     }
 }
 

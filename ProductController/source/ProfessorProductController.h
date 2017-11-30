@@ -3,10 +3,9 @@
 /// @file      ProfessorProductController.h
 ///
 /// @brief     This header file declares a ProfessorProductController class that acts as a container
-///            to handle all the main functionality related to this program that is not product
-///            specific. A single instance of this class is created in the main function for the
-///            Product Controller, where the Run method for this instance is called to start and run
-///            this program.
+///            to handle all the main functionality related to this program. A single instance of
+///            this class is created in the main function for the Product Controller, where the Run
+///            method for its instance is called to start and run this program.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -38,9 +37,6 @@
 #include "ThreadMutex.h"
 #include "NotifyTargetTaskIF.h"
 #include "APTask.h"
-#include "APClientSocketListenerIF.h"
-#include "APServerSocketListenerIF.h"
-#include "IPCMessageRouterIF.h"
 #include "ProductNetworkManager.h"
 #include "ProductSystemManager.h"
 #include "ProductVolumeManager.h"
@@ -50,9 +46,9 @@
 #include "ProductControllerHsm.h"
 #include "ProductSTSController.h"
 #include "Utilities.h"
-#include "ProfessorProductController.h"
 #include "ProductMessage.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
+#include "MacAddressInfo.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -72,7 +68,7 @@ class ProductAudioService;
 class ProductSoftwareServices;
 class ProductEdidInterface;
 class ProductCommandLine;
-class ProductUserInterface;
+class ProductKeyInputInterface;
 class ProductSpeakerManager;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,74 +76,79 @@ class ProductSpeakerManager;
 /// @class ProfessorProductController
 ///
 /// @brief This class acts as a container to handle all the main functionality related to this
-///        program that is not product specific, including controlling the product states, as well
-///        as to instantiating subclasses to manage the device and lower level hardware, and to
-///        interface with the user and higher level applications. Note that only one instantiation
-///        of this class is to be created through its GetInstance static method, which returns a
-///        single static reference to an instance of this class.
+///        program, including controlling the product states, as well as to instantiating subclasses
+///        to manage the device and lower level hardware, and to interface with the user and higher
+///        level applications.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProfessorProductController : public ProductController
 {
 public:
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @name   ProfessorProductController::GetInstance
+    /// @brief  Constructor for the ProfessorProductController Class
     ///
-    /// @brief  This static method creates the one and only instance of a ProfessorProductController
-    ///         object. That only one instance is created in a thread safe way is guaranteed by
-    ///         the C++ Version 11 compiler.
-    ///
-    /// @param  void This method does not take any arguments.
-    ///
-    /// @return This method returns a reference to a ProfessorProductController object.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    static ProfessorProductController* GetInstance( );
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ProfessorProductController( );
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief  The following public methods are used to start the ProfessorProductController
-    ///         instance task, set up processing before this task runs, and wait for the task to
-    ///         end, and end the task resCustomProductControllerStateBootingpectively.
+    ///         instance task, wait in a separate task until the product task ends, and stop the
+    ///         product task, respectively.
     ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     void Run( );
-    void OnEntry( );
     void Wait( );
     void End( );
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following method is used to get a pointer to the hardware interface instance
+    /// @brief The following method is used to get the product controller callback function to which
+    ///         product message events (based on ProductMessage Protocol Buffers) can be sent.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    Callback < ProductMessage > GetMessageHandler( );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method is used to get a reference to the command line interface
+    ///        from the common inherited product controller.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    CliClientMT& GetCommandLineInterface( );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method is used to get a shared pointer to the hardware interface
+    ///        instance from the product controller.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    std::shared_ptr< ProductHardwareInterface >& GetHardwareInterface( );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method is used to get a shared pointer to the volume manager instance
     ///        from the product controller.
     ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductHardwareInterface* GetHardwareInterface( ) const;
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    std::shared_ptr< ProductVolumeManager >& GetVolumeManager( );
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following method is used to get a pointer to the volume manager instance
+    /// @brief The following method is used to get a shared pointer to the speaker manager instance
     ///        from the product controller.
     ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductVolumeManager* GetVolumeManager( ) const;
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    std::shared_ptr< ProductSpeakerManager >& GetSpeakerManager( );
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following method is used to get a pointer to the speaker manager instance
-    ///        from the product controller.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductSpeakerManager* GetSpeakerManager( );
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following methods are used by the state machine to determine the status of the
     ///        product controller.
     ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     bool IsBooted( )                 const;
     bool IsNetworkConfigured( )      const;
     bool IsNetworkConnected( )       const;
@@ -155,70 +156,80 @@ public:
     bool IsVoiceConfigured( )        const;
     bool IsSoftwareUpdateRequired( ) const;
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief This method selects starts a playback on the specified source.
     ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     void SendPlaybackRequest( PlaybackSource_t source );
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following declaration is used to get the currently selected source.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    PlaybackSource_t GetCurrentSource( );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following method is called to handle product controller messages, which are
     ///        sent from the more product specific class instances, and is used to process the
     ///        state machine for the product.
     ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleMessage( const ProductMessage& message );
 
+    std::string GetDefaultProductName() const override
+    {
+        /// To-Do: fix the default name
+        return "Bose " + MacAddressInfo::GetPrimaryMAC();
+    }
+
+    std::string const& GetProductType() const override;
+
+    std::string const& GetProductVariant() const override;
+
+    std::vector<std::string> GetUniqueLanguages() const override
+    {
+        return {};
+    }
+
+    bool IsSystemLanguageSet( ) const;
+
 private:
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @name   ProfessorProductController
-    ///
-    /// @brief  The constructor for this class is set to be private. This definition prevents this
-    ///         class from being instantiated directly, so that only the static method GetInstance
-    ///         to this class can be used to get the one sole instance of it.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ProfessorProductController( );
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following copy constructor and equality operator for this class are private
-    ///        and are set to be undefined through the delete keyword. This prevents this class
-    ///        from being copied directly, so that only the static method GetInstance to this
-    ///        class can be used to get the one sole instance of it.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ProfessorProductController( ProfessorProductController const& ) = delete;
-    ProfessorProductController operator = ( ProfessorProductController const& ) = delete;
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following subclass instances are used to manage the lower level hardware and
+    /// @brief The following subclasses declarations are used to manage the lower level hardware and
     ///        the device, as well as to interface with the user and higher level system
-    ///        applications and command line, respectively.
+    ///        applications and command line.
     ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductHardwareInterface* m_ProductHardwareInterface;
-    ProductSystemManager*     m_ProductSystemManager;
-    ProductNetworkManager*    m_ProductNetworkManager;
-    ProductAudioService*      m_ProductAudioService;
-    ProductSoftwareServices*  m_ProductSoftwareServices;
-    ProductCommandLine*       m_ProductCommandLine;
-    ProductUserInterface*     m_ProductUserInterface;
-    ProductEdidInterface*     m_ProductEdidInterface;
-    ProductVolumeManager*     m_ProductVolumeManager;
-    ProductSpeakerManager*    m_ProductSpeakerManager;
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    std::shared_ptr< ProductHardwareInterface > m_ProductHardwareInterface;
+    std::shared_ptr< ProductSystemManager     > m_ProductSystemManager;
+    std::shared_ptr< ProductNetworkManager    > m_ProductNetworkManager;
+    std::shared_ptr< ProductSoftwareServices  > m_ProductSoftwareServices;
+    std::shared_ptr< ProductCommandLine       > m_ProductCommandLine;
+    std::shared_ptr< ProductKeyInputInterface > m_ProductKeyInputInterface;
+    std::shared_ptr< ProductEdidInterface     > m_ProductEdidInterface;
+    std::shared_ptr< ProductVolumeManager     > m_ProductVolumeManager;
+    std::shared_ptr< ProductSpeakerManager    > m_ProductSpeakerManager;
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @todo  The following suclass will need to be changed in the common product controller code
+    ///        to a generic C++ class from a singleton, and declared as a shared pointer here.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ProductAudioService* m_ProductAudioService;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following member variables are used to determined whether certain required
     ///        processes or connections are ready for setting the various Product Controller state
     ///        machine states.
     ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     bool m_IsLpmReady;
     bool m_IsCapsReady;
     bool m_IsAudioPathReady;
@@ -231,23 +242,41 @@ private:
     bool m_IsSoftwareUpdateRequired;
     bool m_Running;
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief Interfaces to the ProductSTSController, which implements the interactions
-    ///        between the Professor Product Controller and the STS source proxies.
+    /// @brief The following declarations are used as interfaces to the ProductSTSController,
+    ///        which implements the interactions between the Professor Product Controller and the
+    ///        STS source proxies.
     ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ProductSTSController m_ProductSTSController;
 
     void SetupProductSTSConntroller( );
     void HandleSTSInitWasComplete( );
     void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method is used to register for end-points used in the inherited common
+    ///        ProductController class, as well as for end-points registered for in this class.
+    ///
+    /// @todo  These end-points and callbacks may be better placed in a common module, especially
+    ///        for end-points being used for playback functionality.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     void RegisterFrontDoorEndPoints( );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following declarations is used for internal source selection and playback.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    PlaybackSource_t m_currentSource;
+
     void PostPlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson& resp );
     void PostPlaybackRequestError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
     void RegisterNowPlayingEndPoint( );
     void HandleNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingStatus );
-
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

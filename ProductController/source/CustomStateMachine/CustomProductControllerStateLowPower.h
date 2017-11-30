@@ -63,7 +63,7 @@ public:
 
     CustomProductControllerStateLowPower( ProductControllerHsm& hsm,
                                           CHsmState*            pSuperState,
-                                          Hsm::STATE            stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_LOW_POWER,
+                                          Hsm::STATE            stateId,
                                           const std::string&    name    = "CustomProductControllerStateLowPower" );
 
     ~CustomProductControllerStateLowPower( ) override
@@ -71,10 +71,14 @@ public:
 
     }
 
-    void HandleStateEnter( ) override;
-    void HandleStateStart( ) override;
-    void HandleStateExit( )  override;
-    bool HandlePowerState( ) override;
+    void HandleStateEnter( )           override;
+    void HandleStateStart( )           override;
+    void HandleStateExit( )            override;
+    bool HandleKeyAction( int action ) override;
+
+private:
+
+    void GoToAppropriateNonplayingState( );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

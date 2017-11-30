@@ -53,75 +53,16 @@ namespace ProductApp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief The following aliases refer to the Bose Sound Touch class utilities for inter-process and
-///        inter-thread communications.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-typedef APClientSocketListenerIF::ListenerPtr   ClientPointer;
-typedef APServerSocketListenerIF::ListenerPtr   ServerPointer;
-typedef APClientSocketListenerIF::SocketPtr     ClientSocket;
-typedef APServerSocketListenerIF::SocketPtr     ServerSocket;
-typedef IPCMessageRouterIF::IPCMessageRouterPtr RouterPointer;
-typedef APProductIF::APProductPtr               ProductPointer;
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductSoftwareServices::GetInstance
-///
-/// @brief  This static method creates the one and only instance of a ProductSoftwareServices object.
-///         The C++ Version 11 compiler guarantees that only one instance is created in a thread
-///         safe way.
-///
-/// @param NotifyTargetTaskIF* ProductTask This argument points to a task to process
-///                                        resource requests and notifications.
-///
-/// @param Callback< ProductMessage > ProductNotify This is a callback to send events to
-///                                                 the Product Controller.
-///
-/// @param ProductHardwareInterface* HardwareInterface This argument points to the hardware
-///                                                    interface.
-///
-/// @return This method returns a pointer to a ProductSoftwareServices object.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductSoftwareServices* ProductSoftwareServices::GetInstance( NotifyTargetTaskIF*        ProductTask,
-                                                               Callback< ProductMessage > ProductNotify,
-                                                               ProductHardwareInterface*  HardwareInterface )
-{
-    static ProductSoftwareServices* instance = new ProductSoftwareServices( ProductTask,
-                                                                            ProductNotify,
-                                                                            HardwareInterface );
-
-    BOSE_DEBUG( s_logger, "The instance %8p of the Product Software Services was returned.", instance );
-
-    return instance;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProductSoftwareServices::ProductSoftwareServices
 ///
-/// @brief  This method is the ProductSoftwareServices constructor, which is declared as being private
-///         to ensure that only one instance of this class can be created through the class
-///         GetInstance method.
-///
-/// @param NotifyTargetTaskIF* ProductTask This argument points to a task to process
-///                                        resource requests and notifications.
-///
-/// @param Callback< ProductMessage > ProductNotify This is a callback to send events to
-///                                                 the Product Controller.
-///
-/// @param ProductHardwareInterface* HardwareInterface This argument points to the hardware
-///                                                    interface.
+/// @param ProfessorProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductSoftwareServices::ProductSoftwareServices( NotifyTargetTaskIF*        ProductTask,
-                                                  Callback< ProductMessage > ProductNotify,
-                                                  ProductHardwareInterface*  HardwareInterface )
+ProductSoftwareServices::ProductSoftwareServices( ProfessorProductController& ProductController )
 
-    : m_ProductTask( ProductTask ),
-      m_ProductNotify( ProductNotify ),
-      m_ProductHardwareInterface( HardwareInterface )
+    : m_ProductTask( ProductController.GetTask( ) ),
+      m_ProductNotify( ProductController.GetMessageHandler( ) ),
+      m_ProductHardwareInterface( ProductController.GetHardwareInterface( ) )
 {
 
 }
@@ -161,7 +102,7 @@ void ProductSoftwareServices::Run( )
 void ProductSoftwareServices::AcceptClient( ServerSocket client )
 {
     std::string   clientName   = client->GetPeerAddrInfo( ).ToString( );
-    RouterPointer messageRouter = IPCMessageRouterFactory::CreateRouter( "ServerRouter" + clientName,
+    MessageRouter messageRouter = IPCMessageRouterFactory::CreateRouter( "ServerRouter" + clientName,
                                                                          m_ProductTask );
 
     BOSE_DEBUG( s_logger, "A client connection %s for reboot requests has been established.",
@@ -247,6 +188,9 @@ void ProductSoftwareServices::SendRebootRequest( unsigned int delay )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name ProductSoftwareServices::Stop
+///
+/// @todo Resources, memory, or any client server connections that may need to be released by
+///       this module when stopped will need to be determined.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSoftwareServices::Stop( )

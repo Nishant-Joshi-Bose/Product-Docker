@@ -49,15 +49,15 @@ constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY = 0 ;
 ///
 /// @brief CustomProductControllerStateAccessoryPairing::CustomProductControllerStateAccessoryPairing
 ///
-/// @param ProductControllerHsm& [ hsm ] - hsm reference
+/// @param ProductControllerHsm&       hsm               This argument references the state machine.
 ///
-/// @param CHsmState* [ pSuperState ] - parent state
+/// @param CHsmState*                  pSuperState       This argument references the parent state.
 ///
-/// @param ProfessorProductController& [ productController ] - reference to product controller
+/// @param ProfessorProductController& productController This argument references the product controller.
 ///
-/// @param Hsm::STATE [ stateId ] - enum for state identification
+/// @param Hsm::STATE                  stateId           This enumeration represents the state ID.
 ///
-/// @param const std::string& [ name ] = name to call state
+/// @param const std::string&          name              This argument names the state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateAccessoryPairing::CustomProductControllerStateAccessoryPairing
@@ -83,7 +83,8 @@ void CustomProductControllerStateAccessoryPairing::HandleStateStart( )
 {
     BOSE_INFO( s_logger, "CustomProductControllerStateAccessoryPairing is being started." );
 
-    ProductSpeakerManager* productSpeakerManager = GetCustomProductController( ).GetSpeakerManager( );
+    auto productSpeakerManager = GetCustomProductController( ).GetSpeakerManager( );
+
     productSpeakerManager->DoPairing( );
 }
 
@@ -143,7 +144,8 @@ void CustomProductControllerStateAccessoryPairing::HandleStateExit( )
     BOSE_INFO( s_logger, "CustomProductControllerStateAccessoryPairing is being exited." );
     m_timer->Stop( );
 
-    ProductSpeakerManager* productSpeakerManager = GetCustomProductController( ).GetSpeakerManager( );
+    std::shared_ptr< ProductSpeakerManager >
+    productSpeakerManager = GetCustomProductController( ).GetSpeakerManager( );
     productSpeakerManager->StopPairing( );
 }
 

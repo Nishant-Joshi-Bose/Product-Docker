@@ -40,15 +40,13 @@ namespace ProductApp
 ///
 /// @brief CustomProductControllerStateNetworkStandby::CustomProductControllerStateNetworkStandby
 ///
-/// @param hsm
+/// @param ProductControllerHsm& hsm
 ///
-/// @param pSuperState
+/// @param CHsmState*            pSuperState
 ///
-/// @param productController
+/// @param Hsm::STATE            stateId
 ///
-/// @param stateId
-///
-/// @param name
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateNetworkStandby::CustomProductControllerStateNetworkStandby
@@ -75,7 +73,7 @@ void CustomProductControllerStateNetworkStandby::HandleStateEnter()
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandby is being entered." );
 
-    GetCustomProductController( ).GetHardwareInterface( )->RequestPowerStateStandby( );
+    GetCustomProductController( ).GetHardwareInterface( )->RequestLpmSystemState( SYSTEM_STATE_STANDBY );
 
     BOSE_VERBOSE( s_logger, "An attempt to set a standby power state is being made." );
 }

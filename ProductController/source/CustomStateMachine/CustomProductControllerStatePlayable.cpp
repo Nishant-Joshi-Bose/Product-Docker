@@ -40,23 +40,19 @@ namespace ProductApp
 ///
 /// @brief CustomProductControllerStatePlayable::CustomProductControllerStatePlayable
 ///
-/// @param  ProductControllerHsm&       hsm
+/// @param  ProductControllerHsm& hsm
 ///
-/// @param  CHsmState*                  pSuperState
+/// @param  CHsmState*            pSuperState
 ///
-/// @param  ProfessorProductController& productController
+/// @param  Hsm::STATE            stateId
 ///
-/// @param  Hsm::STATE                  stateId
-///
-/// @param  const std::string&          name
+/// @param  const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductControllerStatePlayable::CustomProductControllerStatePlayable
-( ProductControllerHsm&       hsm,
-  CHsmState*                  pSuperState,
-  Hsm::STATE                  stateId,
-  const std::string&          name )
-
+CustomProductControllerStatePlayable::CustomProductControllerStatePlayable( ProductControllerHsm& hsm,
+                                                                            CHsmState*            pSuperState,
+                                                                            Hsm::STATE            stateId,
+                                                                            const std::string&    name )
     : ProductControllerState( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayable is being constructed." );
@@ -94,33 +90,6 @@ void CustomProductControllerStatePlayable::HandleStateExit( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStatePlayable::HandlePowerState
-///
-/// @return This method returns a true Boolean value indicating that it has handled the power
-///         state changed and no futher processing will be required by any of its superstates.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayable::HandlePowerState( )
-{
-    BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                  "CustomProductControllerStatePlayable",
-                  "CustomProductControllerStatePlayingInactive" );
-    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @todo For initial testing, a power request from this state will put the device in a full
-    ///       power mode and attempt to select the TV source. Logic to determine if a SoundTouch
-    ///       source was previously playing may need to be added to switch to this source instead.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    GetCustomProductController( ).SendPlaybackRequest( SOURCE_TV );
-
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @brief  CustomProductControllerStatePlayable::HandleNowSelectionInfo
 ///
 ///
@@ -130,8 +99,8 @@ bool CustomProductControllerStatePlayable::HandlePowerState( )
 ///         and no futher processing will be required by any of its superstates.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayable::HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo&
-                                                                   nowSelectionInfo )
+bool CustomProductControllerStatePlayable::HandleNowSelectionInfo
+( const  SoundTouchInterface::NowSelectionInfo&  nowSelectionInfo )
 {
     BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                   "CustomProductControllerStatePlayable",
@@ -139,6 +108,42 @@ bool CustomProductControllerStatePlayable::HandleNowSelectionInfo( const SoundTo
     ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
 
     return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStatePlayable::HandleKeyAction
+///
+/// @param  int action
+///
+/// @return This method returns a true Boolean value indicating that it has handled the key action
+///         or false if the key has not been handled.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayable::HandleKeyAction( int action )
+{
+    bool handled = false;
+
+    BOSE_INFO( s_logger, "CustomProductControllerStatePlayable is handling key action %d.", action );
+
+    switch( action )
+    {
+    case KeyActionPb::KEY_ACTION_POWER:
+        ///
+        /// Start a playback based on the currently selected source. Once the playback starts, the
+        /// state machine should receive a now selecting event from the product controller, which
+        /// would cause the state machine to transition to a playing state.
+        ///
+        GetCustomProductController( ).SendPlaybackRequest( GetCustomProductController( ).GetCurrentSource( ) );
+
+        handled = true;
+        break;
+
+    default:
+        break;
+    }
+
+    return handled;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

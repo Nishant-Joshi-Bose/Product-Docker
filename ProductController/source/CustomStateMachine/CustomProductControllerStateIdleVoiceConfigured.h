@@ -66,7 +66,7 @@ public:
     CustomProductControllerStateIdleVoiceConfigured
     ( ProductControllerHsm&       hsm,
       CHsmState*                  pSuperState,
-      Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED,
+      Hsm::STATE                  stateId,
       const std::string&          name    = "CustomProductControllerStateIdleVoiceConfigured" );
 
     ~CustomProductControllerStateIdleVoiceConfigured( ) override
@@ -85,13 +85,14 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief This method handles potential state changes for both network and voice status events.
+    /// @brief This method makes the appropriate state change for both network and voice status
+    ///        events.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandlePotentialStateChange( bool autoWakeEnabled,
-                                     bool networkConfigured,
-                                     bool networkConnected,
-                                     bool voiceConfigured );
+    void GoToAppropriatePlayableState( bool autoWakeEnabled,
+                                       bool networkConfigured,
+                                       bool networkConnected,
+                                       bool voiceConfigured );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

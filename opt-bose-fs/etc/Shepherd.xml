@@ -4,9 +4,6 @@
   <daemon name="avahi-daemon"
           exe="start-avahi"/>
 
-  <daemon name="NetManager"
-          recovery="reboot"/>
-
   <daemon name="CLIServer"/>
 
   <daemon name="A4VVideoManagerService"/>

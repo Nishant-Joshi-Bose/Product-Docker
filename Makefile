@@ -30,6 +30,7 @@ RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_locat
 A4VVIDEOMANAGERSERVICE_DIR = $(shell components get A4VVideoManagerService installed_location)
 A4VQUICKSETSERVICE_DIR = $(shell components get A4VQuickSetService installed_location)
 A4VREMOTECOMMUNICATIONSERVICE_DIR = $(shell components get A4VRemoteCommunicationService installed_location)
+SOFTWARE_UPDATE_DIR=$(shell components get SoftwareUpdate-qc8017_32 installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools version-files
@@ -57,11 +58,16 @@ product-ipk: cmake_build
 
 .PHONY: graph
 graph: product-ipk
-	graph-components --exclude='-(native|ti)$$' Professor builds/$(cfg)/product-ipk-stage/component-info.gz >builds/$(cfg)/components.dot
+	graph-components --sdk=$(sdk) Professor builds/$(cfg)/product-ipk-stage/component-info.gz >builds/$(cfg)/components.dot
 	dot -Tsvgz builds/$(cfg)/components.dot -o builds/$(cfg)/components.svgz
 
+.PHONY: packages-gz
+packages-gz: product-ipk
+	cd $(BOSE_WORKSPACE)/builds/$(cfg) &&  $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz *.ipk
+
+
 .PHONY: package
-package: product-ipk lpmupdater-ipk
+package: product-ipk lpmupdater-ipk packages-gz
 	./scripts/create-product-tarball
 
 .PHONY: lpmupdater-ipk

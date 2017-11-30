@@ -63,7 +63,7 @@ public:
 
     CustomProductControllerStatePlayable( ProductControllerHsm&       hsm,
                                           CHsmState*                  pSuperState,
-                                          Hsm::STATE                  stateId = PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE,
+                                          Hsm::STATE                  stateId,
                                           const std::string&          name    = "CustomProductControllerStatePlayable" );
 
     ~CustomProductControllerStatePlayable( ) override
@@ -75,8 +75,8 @@ public:
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
 
-    bool HandlePowerState( ) override;
     bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo ) override;
+    bool HandleKeyAction( int action ) override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

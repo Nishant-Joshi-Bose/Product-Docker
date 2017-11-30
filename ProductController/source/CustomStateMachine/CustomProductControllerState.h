@@ -68,8 +68,8 @@ public:
 
     CustomProductControllerState( ProductControllerHsm& productStateMachine,
                                   CHsmState*            pSuperState,
-                                  Hsm::STATE            stateId = 0,
-                                  const std::string&    name    = "Top" );
+                                  Hsm::STATE            stateId,
+                                  const std::string&    name );
 
     ~CustomProductControllerState( ) override
     {
@@ -103,7 +103,6 @@ public:
     virtual bool HandleNetworkState( bool configured, bool connected );
     virtual bool HandleVoiceState( bool configured );
     virtual bool HandleNowPlayingStatus( ProductNowPlayingStatus_ProductNowPlayingState state );
-    virtual bool HandlePowerState( );
     virtual bool HandleAutowakeStatus( bool active );
     virtual bool HandleKeyAction( int action );
     virtual bool HandlePairingState( ProductAccessoryPairing pairingStatus );
@@ -119,6 +118,16 @@ public:
     }
 
     virtual bool HandleInactivityTimer( InactivityTimerType timerType )
+    {
+        return false;
+    }
+
+    virtual bool HandleModulesReady( )
+    {
+        return false;
+    }
+
+    virtual bool HandleNetworkConfigurationStatus( )
     {
         return false;
     }
