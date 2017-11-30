@@ -149,17 +149,7 @@ void IntentHandler::Initialize()
     m_IntentManagerMap[( uint16_t )Action::PRESET_SELECT_4] = presetManager;
     m_IntentManagerMap[( uint16_t )Action::PRESET_SELECT_5] = presetManager;
     m_IntentManagerMap[( uint16_t )Action::PRESET_SELECT_6] = presetManager;
-
     //- PRESET Management
-
-    //+ Voice (Alexa) Control API's
-    IntentManagerPtr_t voiceRequestManager =
-        std::make_shared<VoiceManager>( m_task, m_cliClient,
-                                        m_frontDoorClient,
-                                        m_controller );
-
-    m_IntentManagerMap[( uint16_t )Action::VOICE_CAROUSEL] = voiceRequestManager;
-    //- Voice (Alexa) Control API's
 
     // prepare map for button event notification
     m_IntentNotificationMap[( uint16_t ) Action::PLAY_PAUSE]    = "play_pause" ;
@@ -178,10 +168,8 @@ void IntentHandler::Initialize()
 
     m_IntentNotificationMap[( uint16_t ) Action::AUX_IN]        = "aux_in" ;
 
-    //- Voice (Alexa) Control API's
     m_IntentNotificationMap[( uint16_t ) Action::VOICE_CAROUSEL] = "voice_Control" ;
 
-    //- Preset API's
     m_IntentNotificationMap[( uint16_t ) Action::PRESET_STORE_1] = "preset_store_1" ;
     m_IntentNotificationMap[( uint16_t ) Action::PRESET_STORE_2] = "preset_store_2" ;
     m_IntentNotificationMap[( uint16_t ) Action::PRESET_STORE_3] = "preset_store_3" ;
