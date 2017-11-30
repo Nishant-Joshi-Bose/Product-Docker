@@ -5,7 +5,7 @@
 /// @brief     This header file describes the protocol buffer messages associated with AdaptIQ.
 ///            to the Product Controller state machine.
 ///
-/// @author    Stuart J. Lumby
+/// @author    Chris Houston
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -24,22 +24,68 @@ package ProductPb;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                       AdaptIQ Status Message Structure                                       ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// GET and NOTIFY /adaptiq
 message AdaptIQStatus
 {
-    optional string     smState             = 1;
+    /*
+     * "NA"
+     * "intro"
+     * "error"
+     * "measuring"
+     * "measurement complete"
+     * "analysis"
+     * "analysis complete"
+     */
+    optional string     smstate             = 1;
+
+    /*
+     * "Running"
+     * "Booting"
+     * "Enabled Normal"
+     * "Enabled Retail"
+     */
     optional string     mode                = 2;
-    optional int32      currentLocation     = 3;
-    optional int32      currentSpeaker      = 4;
-    optional bool       hpConnected         = 5;
-    optional int32      errorCode           = 6;
+
+    optional int32      currentlocation     = 3;
+    optional int32      currentspeaker      = 4;
+    optional bool       hpconnected         = 5;
+    optional int32      errorcode           = 6;
 
     message properties
     {
+        /*
+         * "enter"
+         * "cancel"
+         * "advance"
+         */
         repeated string     supportedActions    = 1;
+        /*
+         * "Enabled Normal"
+         * "Enabled Retail"
+         * "Disabled"
+         */
         repeated string     supportedModes      = 2;
     }
 }
 
+/// PUT /adaptiq
+message AdaptIQReq
+{
+    /*
+     * "enter"
+     * "cancel"
+     * "advance"
+     */
+    optional string     action              = 1;
+
+    /*
+     * "Enabled Normal"
+     * "Enabled Retail"
+     * "Disabled"
+     */
+    optional string     mode                = 2;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                        End of File                                           ///
