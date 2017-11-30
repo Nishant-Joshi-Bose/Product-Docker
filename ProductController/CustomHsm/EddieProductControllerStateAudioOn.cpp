@@ -44,7 +44,7 @@ bool EddieProductControllerStateAudioOn::HandleIntents( KeyHandlerUtil::ActionTy
 
     if( ( IntentHandler::IsIntentPlayControl( intent ) ) ||
         ( IntentHandler::IsIntentBlueTooth( intent ) )   ||
-        ( IntentHandler::IsIntentAlexa( intent ) )        ||
+        ( IntentHandler::IsIntentVoice( intent ) )        ||
         ( IntentHandler::IsIntentVolumeControl( intent ) ) ||
         ( IntentHandler::IsIntentNetworkStandby( intent ) ) ||
         ( IntentHandler::IsIntentAuxIn( intent ) )          ||
