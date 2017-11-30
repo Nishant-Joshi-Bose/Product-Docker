@@ -39,6 +39,7 @@
 #include "NetworkStandbyManager.h"
 #include "IntentHandler.pb.h"
 #include "BluetoothManager.h"
+#include "VoiceManager.h"
 #include "PresetManager.h"
 #include "VoiceManager.h"
 
@@ -121,6 +122,14 @@ void IntentHandler::Initialize()
     m_IntentManagerMap[( uint16_t )Action::AUX_IN] = playbackRequestManager;
     //- AUX Control API's
 
+    //+ Voice (Alexa) Control API's
+    IntentManagerPtr_t voiceRequestManager =
+        std::make_shared<VoiceManager>( m_task, m_cliClient,
+                                        m_frontDoorClient,
+                                        m_controller );
+    m_IntentManagerMap[( uint16_t )Action::VOICE_CAROUSEL] = voiceRequestManager;
+    //- Voice (Alexa) Control API's
+
     //+ PRESET Management
     IntentManagerPtr_t presetManager =
         std::make_shared<PresetManager>( m_task, m_cliClient,
@@ -186,7 +195,6 @@ void IntentHandler::Initialize()
     m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_4] = "preset_select_4" ;
     m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_5] = "preset_select_5" ;
     m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_6] = "preset_select_6" ;
-
 
     return;
 }

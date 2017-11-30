@@ -40,7 +40,7 @@ void EddieProductControllerStateNetworkStandby::HandleStateExit()
 
 bool EddieProductControllerStateNetworkStandby::HandleIntents( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_DEBUG( s_logger, "%s, %d", __func__, ( uint16_t ) intent );
+    BOSE_INFO( s_logger, "%s, %d", __func__, ( uint16_t ) intent );
 
     if( ( IntentHandler::IsIntentPlayControl( intent ) ) ||
         ( IntentHandler::IsIntentBlueTooth( intent ) )   ||
