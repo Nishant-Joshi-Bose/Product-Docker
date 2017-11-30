@@ -33,7 +33,8 @@ ADD_EXECUTABLE(Eddie
   ${PROTO_CC_DEST}/IntentHandler.pb.cc
   ${PROTO_CC_DEST}/Presets.pb.cc
   IntentHandler/IntentHandler.cpp
-  IntentHandler/PlaybackRequestManager.cpp 
+  IntentHandler/PlaybackRequestManager.cpp
+  IntentHandler/VoiceManager.cpp
   LpmInterface.cpp
   DisplayController/DisplayController.cpp
 )

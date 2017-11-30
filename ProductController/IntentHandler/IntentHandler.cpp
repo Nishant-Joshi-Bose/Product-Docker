@@ -35,6 +35,7 @@
 #include "DPrint.h"
 #include "IntentHandler.h"
 #include "PlaybackRequestManager.h"
+#include "VoiceManager.h"
 #include "EddieProductController.h"
 
 static DPrint s_logger( "IntentHandler" );
@@ -73,6 +74,15 @@ void IntentHandler::Initialize()
 
     m_IntentManagerMap[( uint16_t )Action::AUX_IN] = playbackRequestManager;
     //- AUX Control API's
+
+    //+ Voice (Alexa) Control API's
+    IntentManagerPtr_t voiceRequestManager =
+        std::make_shared<VoiceManager>( GetTask() , GetCli(),
+                                        GetFrontDoorClient(),
+                                        GetProductController() );
+    m_IntentManagerMap[( uint16_t )Action::VOICE_CAROUSEL] = voiceRequestManager;
+    //- Voice (Alexa) Control API's
+
 }
 
 }

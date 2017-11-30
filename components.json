@@ -49,7 +49,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "PGC-321@a487032fa1e1c28c66d7868877ced20cd48d72f9"
+    "selected_version": "PGC-321@17a3ce5c37857528c7059f38243f48478ee7b7a0"
   },
   {
     "name": "CastleTestUtils",
@@ -73,7 +73,7 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/1.2"
+    "selected_version": "Continuous/dev/1.2-3-gaba6b95"
   },
   {
     "name": "Riviera-Toolchain",
@@ -93,7 +93,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.2.1-126+1c2bbfd"
+    "selected_version": "Release/master/0.3.1-140+71ec442"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
