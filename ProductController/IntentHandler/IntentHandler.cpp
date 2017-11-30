@@ -148,13 +148,9 @@ void IntentHandler::Initialize()
         std::make_shared<VoiceManager>( m_task, m_cliClient,
                                         m_frontDoorClient,
                                         m_controller );
-<<<<<<< HEAD
-    m_IntentManagerMap[( uint16_t )Action::ALEXA_CAROUSEL] = voiceRequestManager;
-=======
+
     m_IntentManagerMap[( uint16_t )Action::VOICE_CAROUSEL] = voiceRequestManager;
     //- Voice (Alexa) Control API's
-
->>>>>>> Changed name to VOICE instead of ALEXA
 
     // prepare map for button event notification
     m_IntentNotificationMap[( uint16_t ) Action::PLAY_PAUSE]    = "play_pause" ;
@@ -173,7 +169,10 @@ void IntentHandler::Initialize()
 
     m_IntentNotificationMap[( uint16_t ) Action::AUX_IN]        = "aux_in" ;
 
-<<<<<<< HEAD
+    //- Voice (Alexa) Control API's
+    m_IntentNotificationMap[( uint16_t ) Action::VOICE_CAROUSEL] = "voice_Control" ;
+
+    //- Preset API's
     m_IntentNotificationMap[( uint16_t ) Action::PRESET_STORE_1] = "preset_store_1" ;
     m_IntentNotificationMap[( uint16_t ) Action::PRESET_STORE_2] = "preset_store_2" ;
     m_IntentNotificationMap[( uint16_t ) Action::PRESET_STORE_3] = "preset_store_3" ;
@@ -188,11 +187,6 @@ void IntentHandler::Initialize()
     m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_5] = "preset_select_5" ;
     m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_6] = "preset_select_6" ;
 
-    //- Voice (Alexa) Control API's
-    m_IntentNotificationMap[( uint16_t ) Action::ALEXA_CAROUSEL] = "Voice_Alexa_Control" ;
-=======
-    m_IntentNotificationMap[( uint16_t ) Action::VOICE_CAROUSEL] = "Voice_Control" ;
->>>>>>> Changed name to VOICE instead of ALEXA
 
     return;
 }
