@@ -20,14 +20,14 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// Front Door handlers
     /////////////////////////////////////////////////////////////////////////////////////////////
-    std::shared_ptr<AudioSetting<ProductPb::AudioBassLevel>> m_AudioBassSetting;
-    std::shared_ptr<AudioSetting<ProductPb::AudioTrebleLevel>> m_AudioTrebleSetting;
-    std::shared_ptr<AudioSetting<ProductPb::AudioCenterLevel>> m_AudioCenterSetting;
-    std::shared_ptr<AudioSetting<ProductPb::AudioSurroundLevel>> m_AudioSurroundSetting;
-    std::shared_ptr<AudioSetting<ProductPb::AudioGainOffset>> m_AudioGainOffsetSetting;
-    std::shared_ptr<AudioSetting<ProductPb::AudioAvSync>> m_AudioAvSyncsetSetting;
-    std::shared_ptr<AudioSetting<ProductPb::AudioMode>> m_AudioModeSetting;
-    std::shared_ptr<AudioSetting<ProductPb::AudioContentType>> m_AudioContentTypeSetting;
+    std::shared_ptr<AudioSetting<ProductPb::AudioBassLevel>>        m_AudioBassSetting;
+    std::shared_ptr<AudioSetting<ProductPb::AudioTrebleLevel>>      m_AudioTrebleSetting;
+    std::shared_ptr<AudioSetting<ProductPb::AudioCenterLevel>>      m_AudioCenterSetting;
+    std::shared_ptr<AudioSetting<ProductPb::AudioSurroundLevel>>    m_AudioSurroundSetting;
+    std::shared_ptr<AudioSetting<ProductPb::AudioGainOffset>>       m_AudioGainOffsetSetting;
+    std::shared_ptr<AudioSetting<ProductPb::AudioAvSync>>           m_AudioAvSyncsetSetting;
+    std::shared_ptr<AudioSetting<ProductPb::AudioMode>>             m_AudioModeSetting;
+    std::shared_ptr<AudioSetting<ProductPb::AudioContentType>>      m_AudioContentTypeSetting;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
     /// APProduct handling functions
