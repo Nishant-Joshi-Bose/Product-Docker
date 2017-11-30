@@ -86,7 +86,8 @@ private:
     bool HandleLpmNotificationLightSensor( IpcLightSensor_t lpmLightSensor );
     void MonitorLightSensor( );
     void SetBackLightLevel( int actualLevel, int newLevel );
-    int  GetBackLightLevelFromLux( int lux , int lux_rising );
+    int  GetBackLightLevelFromLux( float lux, float lux_rising );
+    void ParseJSONData();
 
     ProductController&                 m_productController;
     std::shared_ptr<FrontDoorClientIF> m_frontdoorClientPtr;
@@ -94,10 +95,12 @@ private:
     Display                            m_display;
     std::unique_ptr<std::thread>       m_threadMonitorLightSensor;
     bool                               m_timeToStop;
+    int                                m_backLight ;
+    bool                               m_autoMode  ;
+    float                              m_luxFactor ;
+    float                              m_luxValue  ;
     int                                m_luxDecimal   ;
     int                                m_luxFractional;
-    int                                m_backLight   ;
-    bool                               m_autoMode    ;
 };
 } //namespace ProductApp
 
