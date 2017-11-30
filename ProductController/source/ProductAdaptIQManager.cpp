@@ -88,7 +88,7 @@ void ProductAdaptIQManager::Run( )
 {
     m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductAdaptIQManager" );
 
-    auto getFunc = [ this ]( Callback<AdaptIQStatus> resp )
+    auto getFunc = [ this ]( Callback<const AdaptIQStatus> resp )
     {
         AdaptIQStatus status;
         HandleGet( status );
@@ -97,11 +97,14 @@ void ProductAdaptIQManager::Run( )
     AsyncCallback<Callback<AdaptIQStatus>> getCb( getFunc, m_ProductTask );
     m_GetConnection = m_FrontDoorClient->RegisterGet( s_FrontDoorAdaptIQ, getFunc );
 
-    auto putFunc = [ this ]( const AdaptIQStatus & status, Callback<AdaptIQStatus> resp )
+    auto putFunc = [ this ]( const AdaptIQReq & req, Callback<const AdaptIQReq> resp )
     {
+        AdaptIQReq respMsg;
+        HandlePut( req, respMsg );
+        resp.Send( respMsg );
     };
-    AsyncCallback<const AdaptIQStatus&, Callback<AdaptIQStatus>> putCb( putFunc, m_ProductTask );
-    m_PutConnection = m_FrontDoorClient->RegisterPut<AdaptIQStatus>( s_FrontDoorAdaptIQ, putFunc );
+    AsyncCallback<const AdaptIQReq&, Callback<AdaptIQReq>> putCb( putFunc, m_ProductTask );
+    m_PutConnection = m_FrontDoorClient->RegisterPut<AdaptIQReq>( s_FrontDoorAdaptIQ, putFunc );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,7 +131,7 @@ void ProductAdaptIQManager::Stop( void )
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductAdaptIQManager::HandleGet( ProductPb::AdaptIQStatus& status )
+void ProductAdaptIQManager::HandleGet( AdaptIQStatus& status )
 {
     // fill in list of supported actions
     status.mutable_properties()->add_supportedactions( s_ActionEnter );
@@ -153,8 +156,10 @@ void ProductAdaptIQManager::HandleGet( ProductPb::AdaptIQStatus& status )
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductAdaptIQManager::HandlePut( ProductPb::AdaptIQReq& req )
+void ProductAdaptIQManager::HandlePut( const AdaptIQReq& req, ProductPb::AdaptIQReq& resp )
 {
+    // TODO : there's no response defined in the LAN API right now, so just mirror back the request
+    resp = req;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
