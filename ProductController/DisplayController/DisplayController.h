@@ -87,6 +87,7 @@ private:
     void MonitorLightSensor( );
     void SetBackLightLevel( int actualLevel, int newLevel );
     int  GetBackLightLevelFromLux( float lux, float lux_rising );
+    void ParseJSONData();
 
     ProductController&                 m_productController;
     std::shared_ptr<FrontDoorClientIF> m_frontdoorClientPtr;

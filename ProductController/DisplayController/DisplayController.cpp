@@ -7,6 +7,8 @@
 
 #include <limits.h>
 #include <functional>
+#include <json/json.h>
+#include "SystemUtils.h"
 #include "FrontDoorClient.h"
 #include "DisplayController.h"
 #include "ProductController.h"
@@ -36,50 +38,43 @@ typedef struct
     e_backLightLevel level;
 } t_luxBacklightTuple;
 
-// The LUX values are in real lux, withiout the light reading device attenuation
-t_luxBacklightTuple lowering_lux_threshold[] =
+// The LUX values are in real lux, without the light reading device attenuation
+std::vector<t_luxBacklightTuple> lowering_lux_threshold =
 {
-    {430, BACK_LIGHT_LEVEL_BRIGHT_HIGH},  // BRIGHT HIGH TO BRIGHT
-    {215, BACK_LIGHT_LEVEL_BRIGHT     },  // BRIGHT TO MEDIUM HIGH
-    {100, BACK_LIGHT_LEVEL_MEDIUM_HIGH},  // MEDIUM HIGH TO MEDIUM
-    { 50, BACK_LIGHT_LEVEL_MEDIUM     },  // MEDIUM TO DIM HIGH
-    { 17, BACK_LIGHT_LEVEL_MEDIUM_LOW },
-    {  5, BACK_LIGHT_LEVEL_DIM_HIGH   },  // DIM HIGH TO DIM
-    {  0, BACK_LIGHT_LEVEL_DIM        }   // value must be 0
+    {387.00, BACK_LIGHT_LEVEL_BRIGHT_HIGH},// BRIGHT HIGH
+    {195.50, BACK_LIGHT_LEVEL_BRIGHT     },
+    { 90.00, BACK_LIGHT_LEVEL_MEDIUM_HIGH},
+    { 45.00, BACK_LIGHT_LEVEL_MEDIUM     },
+    { 15.30, BACK_LIGHT_LEVEL_MEDIUM_LOW },
+    {  4.50, BACK_LIGHT_LEVEL_DIM_HIGH   },
+    {  0.00, BACK_LIGHT_LEVEL_DIM        } // DIM LOW
 };
 
-
-t_luxBacklightTuple rising_lux_threshold[] =
+std::vector<t_luxBacklightTuple> rising_lux_threshold =
 {
-    {430, BACK_LIGHT_LEVEL_BRIGHT_HIGH},  // BRIGHT HIGH TO BRIGHT
-    {215, BACK_LIGHT_LEVEL_BRIGHT     },  // BRIGHT TO MEDIUM HIGH
-    {100, BACK_LIGHT_LEVEL_MEDIUM_HIGH},  // MEDIUM HIGH TO MEDIUM
-    { 50, BACK_LIGHT_LEVEL_MEDIUM     },  // MEDIUM TO DIM HIGH
-    { 17, BACK_LIGHT_LEVEL_MEDIUM_LOW },
-    {  5, BACK_LIGHT_LEVEL_DIM_HIGH   },  // DIM HIGH TO DIM
-    {  1, BACK_LIGHT_LEVEL_DIM        }
+    {430.00, BACK_LIGHT_LEVEL_BRIGHT_HIGH},// BRIGHT HIGH
+    {215.00, BACK_LIGHT_LEVEL_BRIGHT     },
+    {100.00, BACK_LIGHT_LEVEL_MEDIUM_HIGH},
+    { 50.00, BACK_LIGHT_LEVEL_MEDIUM     },
+    { 17.00, BACK_LIGHT_LEVEL_MEDIUM_LOW },
+    {  5.00, BACK_LIGHT_LEVEL_DIM_HIGH   },
+    {  0.00, BACK_LIGHT_LEVEL_DIM        } // DIM LOW
 };
 
-
-#if 0
-t_luxBacklightTuple rising_lux_threshold  [] =
-{
-    {150.0, BACK_LIGHT_LEVEL_BRIGHT_HIGH},  // BRIGHT TO BRIGHT HIGH
-    { 50.0, BACK_LIGHT_LEVEL_BRIGHT     },  // MEDIUM HIGH TO BRIGHT
-    { 30.0, BACK_LIGHT_LEVEL_MEDIUM_HIGH},  // MEDIUM TO MEDIUM HIGH
-    { 15.0, BACK_LIGHT_LEVEL_MEDIUM     },  // DIM HIGH TO MEDIUM
-    { 10.0, BACK_LIGHT_LEVEL_DIM_HIGH   },  // DIM TO DIM HIGH
-    {  0.0, BACK_LIGHT_LEVEL_DIM        }
-};
-#endif // 0
-
-static const int   MONITOR_SENSOR_SLEEP_MS  = 1000;
-static const int   CHANGING_LEVEL_SLEEP_MS  = 10;
-static const int   BACKLIGHT_DIFF_THRESHOLD = ( BACK_LIGHT_LEVEL_DIM_HIGH - BACK_LIGHT_LEVEL_DIM - 1 );
-static const float PLEXI_LUX_FACTOR         = 1.0f;
-static const float SILVER_LUX_FACTOR        = 11.0f;
-static const float BLACK_LUX_FACTOR         = 16.0f;
-//static const int NB_LIGHT_SENSOR_VALUES   = 5;
+static const char* DISPLAY_CONTROLLER_FILE_NAME    = "/persist/display_controller.json";
+static const char* JSON_TOKEN_DISPLAY_CONTROLLER   = "DisplayController"               ;
+static const char* JSON_TOKEN_DEVICE_MODE          = "Mode"                            ;
+static const char* JSON_TOKEN_DEVICE_ABSORTION_LUX = "DeviceAbsortionLux"              ;
+static const char* JSON_TOKEN_BACK_LIGHT_LEVELS    = "BackLightLevelsPercent"          ;
+static const char* JSON_TOKEN_LOWERING_THRESHOLDS  = "LoweringThresholdLux"            ;
+static const char* JSON_TOKEN_RISING_THRESHOLDS    = "RisingThresholdLux"              ;
+static const int    MONITOR_SENSOR_SLEEP_MS        = 1000;
+static const int    CHANGING_LEVEL_SLEEP_MS        = 10  ;
+static const int    BACKLIGHT_DIFF_THRESHOLD       = ( BACK_LIGHT_LEVEL_DIM_HIGH - BACK_LIGHT_LEVEL_DIM - 1 );
+static const float  LUX_DIFF_THRESHOLD             = 2.0f ;
+static const float  PLEXI_LUX_FACTOR               = 1.0f ;
+static const float  SILVER_LUX_FACTOR              = 11.0f;
+static const float  BLACK_LUX_FACTOR               = 16.0f;
 
 DisplayController::DisplayController( ProductController& controller, const std::shared_ptr<FrontDoorClientIF>& fd_client, LpmClientIF::LpmClientPtr clientPtr ):
     m_productController( controller ),
@@ -88,12 +83,10 @@ DisplayController::DisplayController( ProductController& controller, const std::
     m_timeToStop( false ),
     m_autoMode( true )
 {
-    //s_logger.SetLogLevel( "DisplayController", DPrint::WARNING );
-    s_logger.SetLogLevel( "DisplayController", DPrint::INFO );
+    s_logger.SetLogLevel( "DisplayController", DPrint::WARNING );
+    //s_logger.SetLogLevel( "DisplayController", DPrint::INFO );
 
-    m_luxFactor = SILVER_LUX_FACTOR;
-    //m_luxFactor = BLACK_LUX_FACTOR;
-    //m_luxFactor = PLEXI_LUX_FACTOR;
+    ParseJSONData();
 }// constructor
 
 DisplayController::~DisplayController()
@@ -106,12 +99,113 @@ DisplayController::~DisplayController()
     }
 }// destructor
 
+void DisplayController::ParseJSONData()
+{
+    auto f = SystemUtils::ReadFile( DISPLAY_CONTROLLER_FILE_NAME );
+
+    m_luxFactor = SILVER_LUX_FACTOR;
+
+    if( ! f )
+    {
+        BOSE_LOG( WARNING, "Warning: can't find file: " << DISPLAY_CONTROLLER_FILE_NAME );
+        return;
+    }
+
+    Json::Reader json_reader;
+    Json::Value  json_root;
+
+    if( ! json_reader.parse( *f, json_root ) )
+    {
+        BOSE_LOG( ERROR, "Error: failed to parse JSON File: " << DISPLAY_CONTROLLER_FILE_NAME << " " << json_reader.getFormattedErrorMessages() );
+        return;
+    }
+
+    if( ! json_root[JSON_TOKEN_DISPLAY_CONTROLLER].isMember( JSON_TOKEN_DEVICE_ABSORTION_LUX ) )
+    {
+        BOSE_LOG( ERROR, "Error: " << JSON_TOKEN_DEVICE_ABSORTION_LUX << " is not a member of: " << JSON_TOKEN_DISPLAY_CONTROLLER );
+        return;
+    }
+
+    if( ! json_root[JSON_TOKEN_DISPLAY_CONTROLLER].isMember( JSON_TOKEN_DEVICE_MODE ) )
+    {
+        BOSE_LOG( ERROR, "Error: " << JSON_TOKEN_DEVICE_MODE << " is not a member of: " << JSON_TOKEN_DISPLAY_CONTROLLER );
+        return;
+    }
+
+    if( ! json_root[JSON_TOKEN_DISPLAY_CONTROLLER].isMember( JSON_TOKEN_BACK_LIGHT_LEVELS ) )
+    {
+        BOSE_LOG( ERROR, "Error: " << JSON_TOKEN_BACK_LIGHT_LEVELS << " is not a member of: " << JSON_TOKEN_DISPLAY_CONTROLLER );
+        return;
+    }
+
+    if( ! json_root[JSON_TOKEN_DISPLAY_CONTROLLER].isMember( JSON_TOKEN_LOWERING_THRESHOLDS ) )
+    {
+        BOSE_LOG( ERROR, "Error: " << JSON_TOKEN_LOWERING_THRESHOLDS << " is not a member of: " << JSON_TOKEN_DISPLAY_CONTROLLER );
+        return;
+    }
+
+    if( ! json_root[JSON_TOKEN_DISPLAY_CONTROLLER].isMember( JSON_TOKEN_RISING_THRESHOLDS ) )
+    {
+        BOSE_LOG( ERROR, "Error: " << JSON_TOKEN_RISING_THRESHOLDS << " is not a member of: " << JSON_TOKEN_DISPLAY_CONTROLLER );
+        return;
+    }
+
+    Json::Value  json_back_light_level   = json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_BACK_LIGHT_LEVELS  ];
+    Json::Value  json_lowering_threshold = json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_LOWERING_THRESHOLDS];
+    Json::Value  json_rising_threadhold  = json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_RISING_THRESHOLDS  ];
+    unsigned int nb_threshold_levels     = lowering_lux_threshold.size();
+
+    if( json_back_light_level.size() != nb_threshold_levels )
+    {
+        BOSE_LOG( ERROR, "Error: not enough elements in " << JSON_TOKEN_BACK_LIGHT_LEVELS << " expected: " << nb_threshold_levels << " found: " << json_back_light_level.size() );
+        return;
+    }
+
+    if( json_lowering_threshold.size() != nb_threshold_levels )
+    {
+        BOSE_LOG( ERROR, "Error: not enough elements in " << JSON_TOKEN_LOWERING_THRESHOLDS << " expected: " << nb_threshold_levels << " found: " << json_lowering_threshold.size() );
+        return;
+    }
+
+    if( json_rising_threadhold.size() != nb_threshold_levels )
+    {
+        BOSE_LOG( ERROR, "Error: not enough elements in " << JSON_TOKEN_RISING_THRESHOLDS << " expected: " << nb_threshold_levels << " found: " << json_rising_threadhold.size() );
+        return;
+    }
+
+    for( unsigned int i = 0; i < nb_threshold_levels; i++ )
+    {
+        lowering_lux_threshold[i] = t_luxBacklightTuple{json_lowering_threshold[i].asFloat(), ( e_backLightLevel )json_back_light_level[i].asUInt()};
+        rising_lux_threshold  [i] = t_luxBacklightTuple{json_rising_threadhold [i].asFloat(), ( e_backLightLevel )json_back_light_level[i].asUInt()};
+    }
+
+    m_luxFactor = json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_DEVICE_ABSORTION_LUX].asFloat();
+    m_autoMode  = strcasecmp( json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_DEVICE_MODE].asString().c_str(), "Auto" ) == 0 ? true : false;
+
+    std::stringstream lowering_ss;
+    std::stringstream rising_ss;
+
+    for( unsigned int i = 0; i < nb_threshold_levels; i++ )
+    {
+        lowering_ss << "{" << lowering_lux_threshold[i].lux << ", " <<  lowering_lux_threshold[i].level << "} ";
+        rising_ss   << "{" << rising_lux_threshold  [i].lux << ", " <<  rising_lux_threshold  [i].level << "} ";
+    }
+
+    BOSE_LOG( INFO, "===========================================================" );
+    BOSE_LOG( INFO, "Device absortion factor: " << m_luxFactor );
+    BOSE_LOG( INFO, "mode                   : " << ( m_autoMode ? "Auto" : "Manual" ) );
+    BOSE_LOG( INFO, "lowering threshold     : " << lowering_ss.str() );
+    BOSE_LOG( INFO, "rising   threshold     : " << rising_ss  .str() );
+    BOSE_LOG( INFO, "===========================================================" );
+
+}// ParseJSONData
+
 int DisplayController::GetBackLightLevelFromLux( float lux, float lux_rising )
 {
-    t_luxBacklightTuple* lux_threshold = ( lux_rising > 0.0f ) ? rising_lux_threshold : lowering_lux_threshold;
-    int i;
+    std::vector <t_luxBacklightTuple> lux_threshold = ( lux_rising > 0.0f ) ? rising_lux_threshold : lowering_lux_threshold;
+    int                               nb_threshold  = lux_threshold.size();
 
-    for( i = 0; lux_threshold[i].lux > 0.0f; i++ )
+    for( int i = 0; i < nb_threshold; i++ )
     {
         if( lux >= lux_threshold[i].lux )
         {
@@ -119,7 +213,7 @@ int DisplayController::GetBackLightLevelFromLux( float lux, float lux_rising )
         }
     }
 
-    return  lux_threshold[i].level;
+    return  lux_threshold.back().level;
 }// GetBackLightLevelFromLux
 
 void DisplayController::SetBackLightLevel( int actualLevel, int newLevel )
@@ -130,13 +224,13 @@ void DisplayController::SetBackLightLevel( int actualLevel, int newLevel )
 
     BOSE_LOG( INFO, "set actual level: " << actualLevel << " new level: " << newLevel );
 
-    if ( ( actualLevel < 0 ) || ( actualLevel > 100 ) )
+    if( ( actualLevel < 0 ) || ( actualLevel > 100 ) )
     {
         BOSE_LOG( ERROR, "invalid actual back light level: "  << actualLevel );
         return;
     }
 
-    if ( (newLevel < 0) || (newLevel > 100) )
+    if( ( newLevel < 0 ) || ( newLevel > 100 ) )
     {
         BOSE_LOG( ERROR, "invalid new back light level: "  << newLevel );
         return;
@@ -146,7 +240,7 @@ void DisplayController::SetBackLightLevel( int actualLevel, int newLevel )
     {
         actualLevel += levelIncrement;
 
-        BOSE_LOG( INFO, " level: " << actualLevel );
+        //BOSE_LOG( INFO, " level: " << actualLevel );
 
         backlight.set_value( actualLevel );
         m_lpmClient->SetBackLight( backlight );
@@ -194,10 +288,10 @@ void DisplayController::MonitorLightSensor()
             m_backLight = rsp.value();
         } );
 
-        if ( ( m_backLight < 0 )  || ( m_backLight > 100 ) )
+        if( ( m_backLight < 0 )  || ( m_backLight > 100 ) )
         {
-            BOSE_LOG ( WARNING, "invalid back light level read: " << m_backLight );
-            SetBackLightLevel ( 50, 49 );
+            BOSE_LOG( WARNING, "invalid back light level read: " << m_backLight );
+            SetBackLightLevel( 50, 49 );
         }
 
         BOSE_LOG( INFO,  "lux(raw, adj, prev): (" << m_luxDecimal    << "."
@@ -212,7 +306,8 @@ void DisplayController::MonitorLightSensor()
 
             BOSE_LOG( INFO, "target level: " << targeted_level << ", actual level: " << m_backLight );
 
-            if( abs( targeted_level - m_backLight ) >= BACKLIGHT_DIFF_THRESHOLD )
+            if( ( abs( targeted_level - m_backLight ) >= BACKLIGHT_DIFF_THRESHOLD ) &&
+                ( fabs( previous_lux   - m_luxValue ) >= LUX_DIFF_THRESHOLD ) )
             {
                 SetBackLightLevel( m_backLight , targeted_level );
                 // dummy read of the back light, the IPC mechanism is caching a value
