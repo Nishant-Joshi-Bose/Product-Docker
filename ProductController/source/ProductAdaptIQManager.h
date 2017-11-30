@@ -53,78 +53,30 @@ class ProductController;
 class ProductAdaptIQManager
 {
 public:
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @name   ProductAdaptIQManager::GetInstance
+    /// @name   ProductAdaptIQManager::ProductAdaptIQManager
     ///
-    /// @brief  This static method creates the one and only instance of a ProductAdaptIQManager
-    ///         object. That only one instance is created in a thread safe way is guaranteed by
-    ///         the C++ Version 11 compiler.
+    /// @param ProductController
     ///
-    /// @param  task [input]         This argument specifies the task in which to run the hardware
-    ///                               interface.
+    /// @return This method does not return anything.
     ///
-    /// @param  ProductNotifyCallback This argument specifies a callback to send messages back to
-    ///                               the product controller.
-    ///
-    /// @return This method returns a reference to a ProductAdaptIQManager object.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    static ProductAdaptIQManager* GetInstance( NotifyTargetTaskIF*        task,
-                                               Callback< ProductMessage > ProductNotifyCallback,
-                                               ProductHardwareInterface*  HardwareInterface );
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ProductAdaptIQManager( ProfessorProductController& ProductController );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration is used to start and run the hardware manager.
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool Run( void );
+    void Run( void );
     void Stop( void );
 
 private:
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief ProductAdaptIQManager
-    ///
-    /// @brief  The constructor for this class is set to be private. This definition prevents this
-    ///         class from being instantiated directly, so that only the static method GetInstance
-    ///         to this class can be used to get the one sole instance of it.
-    ///
-    /// @param  task
-    ///
-    /// @param ProductNotifyCallback
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ProductAdaptIQManager( NotifyTargetTaskIF*        task,
-                           Callback< ProductMessage > ProductNotifyCallback,
-                           ProductHardwareInterface*  HardwareInterface );
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following copy constructor and equality operator for this class are private
-    ///        and are set to be undefined through the delete keyword. This prevents this class
-    ///        from being copied directly, so that only the static method GetInstance to this
-    ///        class can be used to get the one sole instance of it.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductAdaptIQManager( ProductAdaptIQManager const& ) = delete;
-    void operator     = ( ProductAdaptIQManager const& ) = delete;
-
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These declarations store the main task for processing LPM hardware events and requests. It
     /// is passed by the ProductController instance.
     //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF*        m_mainTask       = nullptr;
-    Callback< ProductMessage > m_ProductNotify  = nullptr;
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following subclass instances are used to manage the lower level hardware and
-    ///        the device.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductHardwareInterface* m_ProductHardwareInterface = nullptr;
+    NotifyTargetTaskIF*        m_ProductTask        = nullptr;
+    Callback< ProductMessage > m_ProductNotify      = nullptr;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -134,6 +86,20 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     void Initialize();
 
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following subclass instance is used to manage the lower level hardware and
+    ///        the device.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    std::shared_ptr<ProductHardwareInterface> m_ProductHardwareInterface;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following subclass instance is used to communicate with the FrontDoor.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr<FrontDoorClientIF>      m_FrontDoorClient;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -141,7 +107,16 @@ private:
     /// @brief The following methods handle interaction with the FrontDoor.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-//    void HandleAdaptIQGet(AdaptIQ);
+    void HandleGet( ProductPb::AdaptIQStatus& );
+    void HandlePut( ProductPb::AdaptIQReq& );
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following members store instances of the FrontDoor callbacks.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    CallbackConnection      m_PutConnection;
+    CallbackConnection      m_GetConnection;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

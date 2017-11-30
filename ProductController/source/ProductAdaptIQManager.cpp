@@ -32,6 +32,18 @@
 
 using namespace ProductPb;
 
+namespace
+{
+const std::string s_ActionEnter         = "enter";
+const std::string s_ActionCancel        = "cancel";
+const std::string s_ActionAdvance       = "advance";
+
+const std::string s_ModeNormal          = "Enabled Normal";
+const std::string s_ModeRetail          = "Enabled Retail";
+const std::string s_ModeDisabled        = "Enabled Disabled";
+const std::string s_FrontDoorAdaptIQ    = "/adaptiq";
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             Start of Product Namespace                                       ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,95 +55,20 @@ namespace ProductApp
 /// The following constants define FrontDoor endpoints used by the AdaptIQManager
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr char FRONTDOOR_ADAPTIQ[]                              = "/adaptiq";
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductAdaptIQManager::GetInstance
-///
-/// @brief  This static method creates the one and only instance of a ProductAdaptIQManager object.
-///         The C++ Version 11 compiler guarantees that only one instance is created in a thread
-///         safe way.
-///
-/// @param mainTask
-///
-/// @param ProductNotify
-///
-/// @param HardwareInterface
-///
-/// @return This method returns a pointer to a ProductAdaptIQManager object.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductAdaptIQManager* ProductAdaptIQManager::GetInstance( NotifyTargetTaskIF*        mainTask,
-                                                           Callback< ProductMessage > ProductNotify,
-                                                           ProductHardwareInterface*  HardwareInterface )
-{
-    static ProductAdaptIQManager* instance = nullptr;
-
-    if( instance == nullptr )
-    {
-        instance = new ProductAdaptIQManager( mainTask, ProductNotify, HardwareInterface );
-        instance->Initialize();
-    }
-
-    BOSE_DEBUG( s_logger, "The instance %p of the ProductAdaptIQManager was returned.", instance );
-
-    return instance;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductAdaptIQManager::Initialize
-///
-/// @brief  This method performs one-time initialization of this instance.  This is a good place
-///         to put things that you may have wanted to do in the constructor but that might depend on
-///         the object being fully-initialized.
-///
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductAdaptIQManager::Initialize( )
-{
-    m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductAdaptIQManager" );
-
-    auto getFunc = [ this ]( Callback<AdaptIQStatus> resp )
-    {
-        AdaptIQStatus s;
-        resp.Send( s );
-    };
-    AsyncCallback<Callback<AdaptIQStatus>> getCb( getFunc, m_mainTask );
-    m_FrontDoorClient->RegisterGet( FRONTDOOR_ADAPTIQ, getFunc );
-
-    auto putFunc = [ this ]( const AdaptIQStatus & status, Callback<AdaptIQStatus> resp )
-    {
-    };
-    AsyncCallback<const AdaptIQStatus&, Callback<AdaptIQStatus>> putCb( putFunc, m_mainTask );
-    m_FrontDoorClient->RegisterPut<AdaptIQStatus>( FRONTDOOR_ADAPTIQ, putFunc );
-}
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProductAdaptIQManager::ProductAdaptIQManager
 ///
-/// @brief  This method is the ProductAdaptIQManager constructor, which is declared as being private to
-///         ensure that only one instance of this class can be created through the class GetInstance
-///         method.
-///
-/// @param mainTask
-///
-/// @param ProductNotify
-///
-/// @param HardwareInterface
+/// @param ProductController
 ///
 /// @return This method does not return anything.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductAdaptIQManager::ProductAdaptIQManager( NotifyTargetTaskIF*        mainTask,
-                                              Callback< ProductMessage > ProductNotify,
-                                              ProductHardwareInterface*  HardwareInterface )
-    : m_mainTask( mainTask ),
-      m_ProductNotify( ProductNotify ),
-      m_ProductHardwareInterface( HardwareInterface )
+ProductAdaptIQManager::ProductAdaptIQManager( ProfessorProductController& ProductController ) :
+    m_ProductTask( ProductController.GetTask( ) ),
+    m_ProductNotify( ProductController.GetMessageHandler( ) ),
+    m_ProductHardwareInterface( ProductController.GetHardwareInterface( ) )
 {
 }
 
@@ -139,19 +76,32 @@ ProductAdaptIQManager::ProductAdaptIQManager( NotifyTargetTaskIF*        mainTas
 ///
 /// @name   ProductAdaptIQManager::Run
 ///
-/// @brief  This method starts the main task for the ProductAdaptIQManager instance. The OnEntry method
-///         for the ProductAdaptIQManager instance is called just before the main task starts. Also,
-///         this main task is used for most of the internal processing for each of the subclass
-///         instances.
+/// @brief  This method starts the main task for the ProductAdaptIQManager class.
 ///
 /// @param  void This method does not take any arguments.
 ///
 /// @return This method does not return anything.
 ///
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductAdaptIQManager::Run( )
+void ProductAdaptIQManager::Run( )
 {
-    return true;
+    m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductAdaptIQManager" );
+
+    auto getFunc = [ this ]( Callback<AdaptIQStatus> resp )
+    {
+        AdaptIQStatus status;
+        HandleGet( status );
+        resp.Send( status );
+    };
+    AsyncCallback<Callback<AdaptIQStatus>> getCb( getFunc, m_ProductTask );
+    m_GetConnection = m_FrontDoorClient->RegisterGet( s_FrontDoorAdaptIQ, getFunc );
+
+    auto putFunc = [ this ]( const AdaptIQStatus & status, Callback<AdaptIQStatus> resp )
+    {
+    };
+    AsyncCallback<const AdaptIQStatus&, Callback<AdaptIQStatus>> putCb( putFunc, m_ProductTask );
+    m_PutConnection = m_FrontDoorClient->RegisterPut<AdaptIQStatus>( s_FrontDoorAdaptIQ, putFunc );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,6 +110,50 @@ bool ProductAdaptIQManager::Run( )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductAdaptIQManager::Stop( void )
+{
+    m_PutConnection.Disconnect();
+    m_GetConnection.Disconnect();
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductAdaptIQManager::HandleGet
+///
+/// @brief  This method populates the supplied AdaptIQStatus argument
+///
+/// @param  AdaptIQStatus
+///
+/// @return
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductAdaptIQManager::HandleGet( ProductPb::AdaptIQStatus& status )
+{
+    // fill in list of supported actions
+    status.mutable_properties()->add_supportedactions( s_ActionEnter );
+    status.mutable_properties()->add_supportedactions( s_ActionCancel );
+    status.mutable_properties()->add_supportedactions( s_ActionAdvance );
+
+    // fill in list of supported modes
+    status.mutable_properties()->add_supportedmodes( s_ModeNormal );
+    status.mutable_properties()->add_supportedmodes( s_ModeRetail );
+    status.mutable_properties()->add_supportedmodes( s_ModeDisabled );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductAdaptIQManager::HandlePut
+///
+/// @brief  This method handles an AdaptIQ request
+///
+/// @param  AdaptIQReq
+///
+/// @return
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductAdaptIQManager::HandlePut( ProductPb::AdaptIQReq& req )
 {
 }
 

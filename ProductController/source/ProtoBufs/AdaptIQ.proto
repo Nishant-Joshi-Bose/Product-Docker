@@ -28,6 +28,23 @@ package ProductPb;
 /// GET and NOTIFY /adaptiq
 message AdaptIQStatus
 {
+
+    message AdaptIQProperties
+    {
+        /*
+         * "enter"
+         * "cancel"
+         * "advance"
+         */
+        repeated string     supportedactions    = 1;
+        /*
+         * "Enabled Normal"
+         * "Enabled Retail"
+         * "Disabled"
+         */
+        repeated string     supportedmodes      = 2;
+    }
+
     /*
      * "NA"
      * "intro"
@@ -45,28 +62,12 @@ message AdaptIQStatus
      * "Enabled Normal"
      * "Enabled Retail"
      */
-    optional string     mode                = 2;
-
-    optional int32      currentlocation     = 3;
-    optional int32      currentspeaker      = 4;
-    optional bool       hpconnected         = 5;
-    optional int32      errorcode           = 6;
-
-    message properties
-    {
-        /*
-         * "enter"
-         * "cancel"
-         * "advance"
-         */
-        repeated string     supportedActions    = 1;
-        /*
-         * "Enabled Normal"
-         * "Enabled Retail"
-         * "Disabled"
-         */
-        repeated string     supportedModes      = 2;
-    }
+    optional string             mode                = 2;
+    optional int32              currentlocation     = 3;
+    optional int32              currentspeaker      = 4;
+    optional bool               hpconnected         = 5;
+    optional int32              errorcode           = 6;
+    optional AdaptIQProperties  properties          = 7;
 }
 
 /// PUT /adaptiq
