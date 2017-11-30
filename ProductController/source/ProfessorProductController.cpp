@@ -108,6 +108,7 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductKeyInputInterface( nullptr ),
     m_ProductEdidInterface( nullptr ),
     m_ProductVolumeManager( nullptr ),
+    m_ProductAdaptIQManager( nullptr ),
     m_ProductSpeakerManager( nullptr ),
     m_ProductAudioService( nullptr ),
 
@@ -267,6 +268,7 @@ void ProfessorProductController::Run( )
     m_ProductCommandLine       = std::make_shared< ProductCommandLine       >( *this );
     m_ProductKeyInputInterface = std::make_shared< ProductKeyInputInterface >( *this );
     m_ProductVolumeManager     = std::make_shared< ProductVolumeManager     >( *this );
+    m_ProductAdaptIQManager    = std::make_shared< ProductAdaptIQManager    >( *this );
     m_ProductSpeakerManager    = std::make_shared< ProductSpeakerManager    >( *this );
     m_ProductAudioService      = ProductAudioService ::GetInstance( GetTask( ),
                                                                     GetMessageHandler( ) );
@@ -279,7 +281,8 @@ void ProfessorProductController::Run( )
         m_ProductCommandLine       == nullptr ||
         m_ProductKeyInputInterface == nullptr ||
         m_ProductEdidInterface     == nullptr ||
-        m_ProductVolumeManager     == nullptr )
+        m_ProductVolumeManager     == nullptr ||
+        m_ProductAdaptIQManager    == nullptr )
     {
         BOSE_CRITICAL( s_logger, "-------- Product Controller Failed Initialization ----------" );
         BOSE_CRITICAL( s_logger, "A Product Controller module failed to be allocated.         " );
@@ -299,6 +302,7 @@ void ProfessorProductController::Run( )
     m_ProductKeyInputInterface ->Run( );
     m_ProductEdidInterface     ->Run( );
     m_ProductVolumeManager     ->Run( );
+    m_ProductAdaptIQManager    ->Run( );
     m_ProductSpeakerManager    ->Run( );
 
     ///
@@ -365,6 +369,18 @@ std::shared_ptr< ProductHardwareInterface >& ProfessorProductController::GetHard
 std::shared_ptr< ProductVolumeManager >& ProfessorProductController::GetVolumeManager( )
 {
     return m_ProductVolumeManager;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetAdaptIQManager
+///
+/// @return This method returns a shared pointer to the AdaptIQManager instance
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::shared_ptr< ProductAdaptIQManager >& ProfessorProductController::GetAdaptIQManager( )
+{
+    return m_ProductAdaptIQManager;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1090,6 +1106,7 @@ void ProfessorProductController::Wait( )
     m_ProductKeyInputInterface->Stop( );
     m_ProductEdidInterface    ->Stop( );
     m_ProductVolumeManager    ->Stop( );
+    m_ProductAdaptIQManager   ->Stop( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
