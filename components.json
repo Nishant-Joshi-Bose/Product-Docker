@@ -4,12 +4,12 @@
     "selected_version": "Continuous/Castle-Fork/2017-11-28_2352"
   },
   {
-    "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.2.2-167+bde4f82"
-  },
-  {
     "name": "bose-opkg-utils",
     "selected_version": "master@0828ce81e7a9b96e03057da48c04a0cebc9aff21"
+  },
+  {
+    "name": "BoseLibs-qc8017_32",
+    "selected_version": "Release/master/0.2.2-167+bde4f82"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -20,12 +20,12 @@
     "selected_version": "Release/master/0.2.1-19+eca42ed"
   },
   {
-    "name": "CastleDemoController-qc8017_32",
-    "selected_version": "Continuous/master/0.2.1-29+5498be3"
+    "name": "CastleDataCollectionClient-qc8017_32",
+    "selected_version": "Continuous/master/0.0.2-2+f4be393"
   },
   {
-   "name": "CastleDataCollectionClient-qc8017_32",
-   "selected_version": "Continuous/master/0.0.2-2+f4be393"
+    "name": "CastleDemoController-qc8017_32",
+    "selected_version": "Continuous/master/0.2.1-29+5498be3"
   },
   {
     "name": "CastleLibs-qc8017_32",
