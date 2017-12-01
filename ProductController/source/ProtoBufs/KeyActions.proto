@@ -27,9 +27,13 @@ enum KEY_ACTION
     KEY_ACTION_WIFI_OFF                 = 20;
     KEY_ACTION_AP_SETUP                 = 21;
     KEY_ACTION_PAIR_SPEAKERS            = 22;
+    // this seems redundant, but the keyhandler component will detect multiple entries with the same
+    // key+action combination as duplicate entries (even though the timeouts may be different)
     KEY_ACTION_VOLUME_UP_1              = 23;
     KEY_ACTION_VOLUME_UP_2              = 24;
-    KEY_ACTION_VOLUME_DOWN_1            = 25;
-    KEY_ACTION_VOLUME_DOWN_2            = 26;
+    KEY_ACTION_VOLUME_UP_3              = 25;
+    KEY_ACTION_VOLUME_DOWN_1            = 26;
+    KEY_ACTION_VOLUME_DOWN_2            = 27;
+    KEY_ACTION_VOLUME_DOWN_3            = 28;
 }
 

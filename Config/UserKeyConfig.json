@@ -74,18 +74,18 @@
     },
     {
       "Origin": [ "IR", "TAP", "CEC" ],
-      "KeyEvent": "PRESS",
+      "KeyEvent": "PRESS_HOLD_REPEAT",
       "KeyList": [ "BOSE_VOLUME_UP" ],
       "TimeOutList": [300, 100],
-      "Action": "KEY_ACTION_VOLUME_UP_1",
+      "Action": "KEY_ACTION_VOLUME_UP_2",
       "Comment": "volume up repeat"
     },
     {
       "Origin": [ "IR", "TAP", "CEC" ],
-      "KeyEvent": "PRESS",
+      "KeyEvent": "PRESS_HOLD_REPEAT",
       "KeyList": [ "BOSE_VOLUME_UP" ],
-      "TimeOutList": [1000],
-      "Action": "KEY_ACTION_VOLUME_UP_2",
+      "TimeOutList": [1000, 100],
+      "Action": "KEY_ACTION_VOLUME_UP_3",
       "Comment": "volume up long repeat"
     },
     {
@@ -98,18 +98,18 @@
     },
     {
       "Origin": [ "IR", "TAP", "CEC" ],
-      "KeyEvent": "PRESS",
+      "KeyEvent": "PRESS_HOLD_REPEAT",
       "KeyList": [ "BOSE_VOLUME_DOWN" ],
       "TimeOutList": [300, 100],
-      "Action": "KEY_ACTION_VOLUME_DOWN_1",
+      "Action": "KEY_ACTION_VOLUME_DOWN_2",
       "Comment": "volume down repeat"
     },
     {
       "Origin": [ "IR", "TAP", "CEC" ],
-      "KeyEvent": "PRESS",
+      "KeyEvent": "PRESS_HOLD_REPEAT",
       "KeyList": [ "BOSE_VOLUME_DOWN" ],
-      "TimeOutList": [1000],
-      "Action": "KEY_ACTION_VOLUME_DOWN_2",
+      "TimeOutList": [1000, 100],
+      "Action": "KEY_ACTION_VOLUME_DOWN_3",
       "Comment": "volume down long repeat"
     },
     {
