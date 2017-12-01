@@ -224,7 +224,7 @@ public:
 /// @brief true if system is conencted to ethernet or number of wifi profiles are nonzero
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
-    bool IsNetworkConfigured();
+    bool IsNetworkConfigured() const;
     void SendActivateAccessPointCmd();
     void SendDeActivateAccessPointCmd();
 
