@@ -1,23 +1,18 @@
 #!/bin/bash
 #
-# Create an IPK file for installing Riviera HSP with opkg.
+# Create an IPK file for installing Monaco with opkg.
 #
 # To install:
-#   opkg install -d bose hsp.ipk
+#   opkg install -d bose monaco.ipk
 #
 # The file /etc/opkg/opkg.conf should contain this line:
 #   dest bose /opt/Bose
 #
 # To uninstall:
-#   opkg remove hsp
-#
-# CAUTION: HSP IPK, if interrupted / have issues, 
-#          can corrupt the device. 
-#          Please have it QFILed if this happen
+#   opkg remove monaco
 #
 this=${0##*/} # this script's name
 
-stripped=true
 cfg=Release
 
 tryhelp () {
@@ -36,7 +31,7 @@ while :; do
         cat <<EOF
 Usage: $this [options]
 
-Create an IPK file for installing Riviera HSP with opkg.
+Create an IPK file for installing Monaco with opkg.
 
 Options:
 EOF
@@ -62,35 +57,31 @@ function put_script {
 here=$(cd "$(dirname $0)" && echo "$PWD") || exit
 wspace=$(cd "$here/.." && echo "$PWD") || exit
 
-riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || exit
-riviera_hsp_ver=$(components get Riviera-HSP-Images selected_version) || exit
-riviera_hsp_ver=${riviera_hsp_ver##*/}
+monaco_dir=$(components get BoseWebMonaco installed_location) || exit
+monaco_ver=$(components get BoseWebMonaco selected_version) || exit
+monaco_ver=${monaco_ver##*/}
 
-arch=arm-oemllib32-linux
-sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
-tool_prefix=$sysroot/usr/bin/$arch/$arch-
-
-stage=$wspace/builds/$cfg/hsp-ipk-stage
+stage=$wspace/builds/$cfg/monaco-ipk-stage
 rm -rf "$stage"
 echo "Stage directory $stage"
 
+output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
-mkdir -p "$opt_dir/hsp" || exit
+mkdir -p "$output_dir" "$opt_dir" || exit
 
-echo "$riviera_hsp_ver" > "$opt_dir"/hsp/HSP_VERSION || exit
-echo "Package version \"$riviera_hsp_ver\""
-cp "$riviera_hsp_images_dir"/update_ext4.zip "$opt_dir/hsp/" || exit
+echo "Package version \"$monaco_ver\""
+cp -rf "$monaco_dir"/monaco "$opt_dir/" || exit
 
 cat >"$stage/control" <<EOF || exit
-Package: hsp
-Version: $riviera_hsp_ver
-Description: Hardware Support Package version $riviera_hsp_ver
- The Riviera HSP
-Section: soundtouch
+Package: monaco
+Version: $monaco_ver
+Description: Bose Web Monaco Package version $monaco_ver
+ Bose Web Monaco
+Section: web browser app
 Priority: required
 License: Commercial
 Architecture: armv7a-vfp-neon
-OE: soundtouch
+OE: web browser app
 Homepage: http://www.bose.com/
 #Depends: libc6 (>= 2.21)
 Source: None
@@ -99,41 +90,26 @@ EOF
 # Installer scripts
 put_script "$stage/postinst" <<EOF
 #!/bin/sh
-echo "hsp postinst"
-if [ ! -f /opt/Bose/hsp/update_ext4.zip ]; then
-    echo "/opt/Bose/hsp/update_ext4.zip not found"
-    exit 1
-fi
-if ! grep -q /cache /proc/mounts; then
-    echo "Mounting Cache"
-    mount /dev/mmcblk0p26 /cache || exit 1
-fi
-mkdir -p /cache/recovery/ || exit 1
-echo "--update_package=/opt/Bose/hsp/update_ext4.zip" > /cache/recovery/command || exit 1
-echo "--idle_after" >> /cache/recovery/command || exit 1
-echo "Rebooting to Recovery" 
+echo "monaco postinst"
 EOF
 
 put_script "$stage/postrm" <<EOF
 #!/bin/sh
-echo "hsp postrm"
+echo "monaco postrm"
 EOF
 
 put_script "$stage/preinst" <<EOF
 #!/bin/sh
-echo "hsp preinst"
-# This is temporary for IP2. 
-# Should be removed in IP3, when stopping services is 
-# taken care of by Shepherd / Product / SoftwareUpdateService. 
-echo "Stopping LPM"
-pkill LPMService
-exit 0
-
+echo "monaco preinst"
+echo "Stopping WPENetworkProcess"
+pkill WPENetworkProcess
+echo "Stopping WPEWebProcess"
+pkill WPEWebProcess
 EOF
 
 put_script "$stage/prerm" <<EOF
 #!/bin/sh
-echo "hsp prerm"
+echo "monaco prerm"
 EOF
 
 # -----------------------------------------------------------------------------
@@ -145,7 +121,7 @@ tar --owner=0 --group=0 -czf data.tar.gz -C "$opt_dir" . || exit
 echo "2.0" > debian-binary || exit
 
 ipk_dir=$wspace/builds/$cfg
-ipk=$ipk_dir/hsp.ipk
+ipk=$ipk_dir/monaco.ipk
 mkdir -p "$ipk_dir" || exit
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit

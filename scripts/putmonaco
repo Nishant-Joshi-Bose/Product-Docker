@@ -1,0 +1,38 @@
+#!/bin/bash
+#
+# Install Monaco IPK from the latest EC Continuous build or 
+# from the .ipk file provided as an argument.
+#
+this=${0##*/}
+
+if (( $# == 0 )); then
+    build=/home/softlib/verisoft/Eddie/Continuous/master
+    version=$(cat "$build/latest.txt") || exit
+    set -- "$build/$version/monaco.ipk"
+    echo "$0" "$1"
+fi
+
+if (( $# != 1 )); then
+    echo >&2 "usage: $this [monaco.ipk]"
+    exit 1
+fi
+ipk=$1
+
+ar t >/dev/null "$ipk" || exit
+
+echo Remount...
+adb shell mount -oremount,rw /opt/Bose || exit
+
+echo Uninstall...
+adb shell opkg remove --force-remove monaco  # ok if this fails
+
+echo Copy...
+adb push "$ipk" /tmp/new-monaco.ipk || exit
+
+echo Install...
+adb shell opkg -d bose install /tmp/new-monaco.ipk || exit
+
+echo Remount...
+adb shell mount -oremount,ro /opt/Bose || exit
+
+echo Done

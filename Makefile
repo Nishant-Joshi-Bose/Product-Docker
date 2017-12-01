@@ -77,16 +77,20 @@ graph: product-ipk
 hsp-ipk: cmake_build
 	./scripts/create-hsp-ipk
 
+.PHONY: lpmupdater-ipk
+lpmupdater-ipk:
+	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage $(EDDIELPMPACKAGE_DIR) ./builds/$(cfg)/ eddie
+
+.PHONY: monaco-ipk
+monaco-ipk:
+	./scripts/create-monaco-ipk
+
 .PHONY: package
-package: product-ipk hsp-ipk lpmupdater-ipk 
+package: product-ipk hsp-ipk lpmupdater-ipk monaco-ipk
 	./scripts/create-product-tarball
 
 .PHONY: all-packages
 all-packages: package packages-gz update-zip
-	
-.PHONY: lpmupdater-ipk
-lpmupdater-ipk:
-	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage $(EDDIELPMPACKAGE_DIR) ./builds/$(cfg)/ eddie
 
 .PHONY: clean
 clean:
