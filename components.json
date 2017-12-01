@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-11-28_2352"
+    "selected_version": "Continuous/Castle-Fork/2017-12-01_0851"
   },
   {
     "name": "bose-opkg-utils",
@@ -9,7 +9,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.2.2-167+bde4f82"
+    "selected_version": "Release/master/0.2.3-172+b5562fa"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -21,7 +21,7 @@
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
-    "selected_version": "Continuous/master/0.0.2-2+f4be393"
+    "selected_version": "Continuous/master/0.0.2-4+565b674"
   },
   {
     "name": "CastleDemoController-qc8017_32",
@@ -29,23 +29,23 @@
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2496"
+    "selected_version": "branches/castle-libs@2515"
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.2.2-16+e84f85f"
+    "selected_version": "Release/master/0.2.2-19+55c9871"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.2.2-108+a5e0b02"
+    "selected_version": "Continuous/master/0.2.2-118+62bec80"
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/0.2.1-159+a802428"
+    "selected_version": "Continuous/master/0.2.3-214+f4b0e24"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Continuous/master/0.2.1-159+a802428"
+    "selected_version": "Continuous/master/0.2.3-214+f4b0e24"
   },
   {
     "name": "CastleProductControllerCommon",
@@ -53,7 +53,7 @@
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@4121d5826e63b72949306a2061e92c816ce8d6fb"
+    "selected_version": "master@4de2cf4f3f690b4347f89c4711add3ae7a0e59c2"
   },
   {
     "name": "EddieLPM-Package",
@@ -65,15 +65,15 @@
   },
   {
     "name": "protobuf-native",
-    "selected_version": "branches/protobuf@2489"
+    "selected_version": "branches/protobuf@2510"
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "branches/protobuf@2489"
+    "selected_version": "branches/protobuf@2510"
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Continuous/dev/1.2-3-gaba6b95"
+    "selected_version": "Continuous/dev/1.2-4-g1e617b2"
   },
   {
     "name": "Riviera-Toolchain",
@@ -97,11 +97,11 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-11-28_2352"
+    "selected_version": "Continuous/Castle-Fork/2017-12-01_0851"
   },
   {
     "name": "Webkit",
-    "selected_version": "Release/master/0.2.4-18+ead75d3"
+    "selected_version": "Release/master/0.2.5-19+b62a283"
   },
   {
     "name": "WiFi-Setup-Webpage",
