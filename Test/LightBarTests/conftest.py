@@ -1,5 +1,6 @@
 import pytest
-from FrontDoorAPI import FrontDoorAPI
+from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
+
 def pytest_addoption(parser):
     parser.addoption("--ip-address", 
 		      action="store", 
