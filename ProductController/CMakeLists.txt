@@ -26,6 +26,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/KeyActions.pb.cc
   ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc
   ${PROTO_CC_DEST}/SystemInfo.pb.cc
+  ${PROTO_CC_DEST}/AdaptIQ.pb.cc
   source/ProductStart.cpp
   source/ProductCommandLine.cpp
   source/ProductHardwareInterface.cpp
@@ -38,6 +39,7 @@ ADD_EXECUTABLE(Professor
   source/ProductEdidInterface.cpp
   source/ProductVolumeManager.cpp
   source/CustomProductAudioService.cpp
+  source/ProductAdaptIQManager.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
   source/CustomStateMachine/CustomProductControllerStateBooting.cpp
@@ -77,6 +79,8 @@ TARGET_LINK_LIBRARIES(Professor
   TinyXml
   pthread
   rt
+  dl
+  cap
 )
 
 INSTALL(TARGETS Professor DESTINATION ${OUTPUT_BIN_DIR})

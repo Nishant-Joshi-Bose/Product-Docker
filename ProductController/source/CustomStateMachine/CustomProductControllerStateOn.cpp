@@ -118,6 +118,11 @@ bool CustomProductControllerStateOn::HandleKeyAction( int action )
         handled = true;
         break;
 
+    case KeyActionPb::KEY_ACTION_MUTE:
+        GetCustomProductController( ).GetVolumeManager()->ToggleMute();
+        handled = true;
+        break;
+
     case KeyActionPb::KEY_ACTION_PAIR_SPEAKERS:
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
         handled = true;

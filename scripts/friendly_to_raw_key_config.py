@@ -8,6 +8,7 @@ import argparse
 import imp
 import os
 import inspect
+import copy
 
 """
 Given a key list enumeration file, an actions enumeration file, and a 
@@ -147,40 +148,46 @@ def main():
     origin_name = e['Origin']
     event_name = e['KeyEvent']
     action_name = e['Action']
-    if not origin_name in ORIGIN_NAMES:
-      print('Entry {}, Unknown origin {}, skipping'.format(i, origin_name))
-      continue
-    if not event_name in EVENT_NAMES:
-      print('Entry {}, Unknown event {}, skipping'.format(i, event_name))
-      continue
-    if not action_name in action_map:
-      print('Entry {}, Unknown action {}, skipping'.format(i, action_name))
-      continue
 
-    # replace with numeric values
-    origin = ORIGIN_NAMES[origin_name]
-    event = EVENT_NAMES[event_name]
-    e['Origin'] = origin
-    e['KeyEvent'] = event
-    e['Action'] = action_map[action_name]
- 
-    key_map = key_maps[origin]
-    if key_map is None:
-      print('Entry {}, No key file supplied for origin {}, skipping'.format(i, origin_name))
-      continue
+    # origin is a list now
+    for origin_name in e['Origin']:
+      if not origin_name in ORIGIN_NAMES:
+        print('Entry {}, Unknown origin {}, skipping'.format(i, origin_name))
+        continue
+      if not event_name in EVENT_NAMES:
+        print('Entry {}, Unknown event {}, skipping'.format(i, event_name))
+        continue
+      if not action_name in action_map:
+        print('Entry {}, Unknown action {}, skipping'.format(i, action_name))
+        continue
 
-    for k in range(len(e['KeyList'])):
-      key = e['KeyList'][k]
-      if not key in key_map:
-        print('Entry {} / {}, Unknown key {}, skipping entry'.format(i, k, key))
-        discard = 1
-        break
-      else:
-        e['KeyList'][k] = key_map[key]
+      oe = copy.deepcopy(e);
   
-    if discard == 0:
-      keymap['KeyTable'].append(e)
-
+      # replace with numeric values
+      origin = ORIGIN_NAMES[origin_name]
+      event = EVENT_NAMES[event_name]
+      oe['Origin'] = origin
+      oe['KeyEvent'] = event
+      oe['Action'] = action_map[action_name]
+   
+      key_map = key_maps[origin]
+      if key_map is None:
+        print('Entry {}, No key file supplied for origin {}, skipping'.format(i, origin_name))
+        continue
+  
+      for k in range(len(e['KeyList'])):
+        key = e['KeyList'][k]
+        if not key in key_map:
+          print('Entry {} / {}, Unknown key {}, skipping entry ({}, {})'.format(i, k, key, origin_name, origin))
+          discard = 1
+          break
+        else:
+          print('Entry {} / {}, key {}, do ({}, {})'.format(i, k, key, origin_name, origin))
+          oe['KeyList'][k] = key_map[key]
+    
+      if discard == 0:
+        keymap['KeyTable'].append(oe)
+ 
   s = json.dumps(keymap, indent=4)
   with io.FileIO(args.outputcfg, "w") as file:
     file.write(s)

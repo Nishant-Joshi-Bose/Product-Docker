@@ -1,0 +1,93 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @file      AdaptIQ.proto
+///
+/// @brief     This header file describes the protocol buffer messages associated with AdaptIQ.
+///            to the Product Controller state machine.
+///
+/// @author    Chris Houston
+///
+/// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
+///
+///            Bose Corporation
+///            The Mountain Road,
+///            Framingham, MA 01701-9168
+///            U.S.A.
+///
+///            This program may not be reproduced, in whole or in part, in any form by any means
+///            whatsoever without the written permission of Bose Corporation.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+package ProductPb;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                       AdaptIQ Status Message Structure                                       ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// GET and NOTIFY /adaptiq
+message AdaptIQStatus
+{
+
+    message AdaptIQProperties
+    {
+        /*
+         * "enter"
+         * "cancel"
+         * "advance"
+         */
+        repeated string     supportedactions    = 1;
+        /*
+         * "Enabled Normal"
+         * "Enabled Retail"
+         * "Disabled"
+         */
+        repeated string     supportedmodes      = 2;
+    }
+
+    /*
+     * "NA"
+     * "intro"
+     * "error"
+     * "measuring"
+     * "measurement complete"
+     * "analysis"
+     * "analysis complete"
+     */
+    optional string     smstate             = 1;
+
+    /*
+     * "Running"
+     * "Booting"
+     * "Enabled Normal"
+     * "Enabled Retail"
+     */
+    optional string             mode                = 2;
+    optional int32              currentlocation     = 3;
+    optional int32              currentspeaker      = 4;
+    optional bool               hpconnected         = 5;
+    optional int32              errorcode           = 6;
+    optional AdaptIQProperties  properties          = 7;
+}
+
+/// PUT /adaptiq
+message AdaptIQReq
+{
+    /*
+     * "enter"
+     * "cancel"
+     * "advance"
+     */
+    optional string     action              = 1;
+
+    /*
+     * "Enabled Normal"
+     * "Enabled Retail"
+     * "Disabled"
+     */
+    optional string     mode                = 2;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                        End of File                                           ///
+////////////////////////////////////////////////////////////////////////////////////////////////////

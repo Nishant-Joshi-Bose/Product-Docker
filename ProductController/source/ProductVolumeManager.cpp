@@ -4,7 +4,7 @@
 ///
 /// @brief     This file contains source code to implement audio volume management.
 ///
-/// @author    Manoranjani Malisetti
+/// @author    Chris Houston
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -41,17 +41,10 @@ namespace ProductApp
 /// The following constants define FrontDoor endpoints used by the VolumeManager
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr char FRONTDOOR_AUDIO_VOLUME[ ]           = "/audio/volume";
-constexpr char FRONTDOOR_AUDIO_VOLUME_INCREMENT[ ] = "/audio/volume/increment";
-constexpr char FRONTDOOR_AUDIO_VOLUME_DECREMENT[ ] = "/audio/volume/decrement";
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @todo The following constant is temporary for documentation purposes; remove it and the
-///       associated conditionals in the code once volume notifications are supported by CAPS.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-static constexpr bool VOLUME_NOTIFICATIONS_SUPPORTED = false;
+constexpr char  FRONTDOOR_AUDIO_VOLUME[ ]           = "/audio/volume";
+constexpr char  FRONTDOOR_AUDIO_VOLUME_INCREMENT[ ] = "/audio/volume/increment";
+constexpr char  FRONTDOOR_AUDIO_VOLUME_DECREMENT[ ] = "/audio/volume/decrement";
+constexpr int   VOLUME_STEP_SIZE                    = 1;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -66,38 +59,6 @@ ProductVolumeManager::ProductVolumeManager( ProfessorProductController& ProductC
       m_ProductNotify( ProductController.GetMessageHandler( ) ),
       m_ProductHardwareInterface( ProductController.GetHardwareInterface( ) )
 {
-    Initialize( );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductVolumeManager::Initialize
-///
-/// @brief  This method performs one-time initialization of this instance. This is a good place to
-///         put functionality that needs to be done in the constructor but that might depend on the
-///         object  being fully-initialized.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductVolumeManager::Initialize( )
-{
-    m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductVolumeManager" );
-
-    auto fVolume = [ this ]( int32_t v )
-    {
-        UpdateFrontDoorVolume( v );
-    };
-    m_Volume = new AudioVolume<int32_t>( fVolume );
-
-    if( VOLUME_NOTIFICATIONS_SUPPORTED )
-    {
-        auto fNotify = [ this ]( SoundTouchInterface::volume v )
-        {
-            ReceiveFrontDoorVolume( v );
-        };
-
-        m_FrontDoorClient->RegisterNotification< SoundTouchInterface::volume >
-        ( FRONTDOOR_AUDIO_VOLUME, fNotify );
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -113,6 +74,16 @@ void ProductVolumeManager::Initialize( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductVolumeManager::Run( )
 {
+    m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductVolumeManager" );
+
+    auto fNotify = [ this ]( SoundTouchInterface::volume v )
+    {
+        ReceiveFrontDoorVolume( v );
+    };
+
+    m_NotifierCallback = m_FrontDoorClient->RegisterNotification< SoundTouchInterface::volume >
+                         ( FRONTDOOR_AUDIO_VOLUME, fNotify );
+
     return true;
 }
 
@@ -126,52 +97,7 @@ bool ProductVolumeManager::Run( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductVolumeManager::Stop( )
 {
-
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name ProductVolumeManager::UpdateFrontDoorVolume
-///
-/// @brief This method writes a new volume to the FrontDoor.
-///
-/// @param  volume Volume to send (0 - 100)
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductVolumeManager::UpdateFrontDoorVolume( int32_t volume )
-{
-    ///
-    /// @todo Currently the CAPS interface only supports volume setting directly (and not as a
-    ///       difference); once difference is in place remove volume class and just send a
-    ///       volume_up or volume_down command, when the corresponding intents are received.
-    ///
-    auto respFunc = [ this ]( SoundTouchInterface::volume v )
-    {
-        BOSE_VERBOSE( s_logger, "Got volume set response (%d)", v.value() );
-
-        ///
-        /// This is a temporary workaround to volume notifications not being available
-        ///
-        if( !VOLUME_NOTIFICATIONS_SUPPORTED )
-        {
-            ReceiveFrontDoorVolume( v );
-        }
-    };
-
-    auto errFunc = []( FRONT_DOOR_CLIENT_ERRORS e )
-    {
-        BOSE_ERROR( s_logger, "Error updating FrontDoor volume" );
-    };
-
-    AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
-    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errCb( errFunc, m_ProductTask );
-
-    SoundTouchInterface::volume pbVolume;
-    pbVolume.set_value( volume );
-
-    BOSE_VERBOSE( s_logger, "Updating FrontDoor volume %d", volume );
-    m_FrontDoorClient->SendPut<SoundTouchInterface::volume>(
-        ProductApp::FRONTDOOR_AUDIO_VOLUME, pbVolume, respFunc, errCb );
+    m_NotifierCallback.Disconnect( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,14 +109,20 @@ void ProductVolumeManager::UpdateFrontDoorVolume( int32_t volume )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductVolumeManager::ReceiveFrontDoorVolume( SoundTouchInterface::volume const& volume )
 {
-    int32_t vol = volume.value();
+    if( volume.has_value() )
+    {
+        BOSE_VERBOSE( s_logger, "Got volume notify (%d)", volume.value() );
+        ///
+        /// You can do something here with volume
+        ///
 
-    BOSE_VERBOSE( s_logger, "Got volume notify (%d)", vol );
+    }
 
-    ///
-    /// Send volume information to the LPM as well (this is currently same range as CAPS, 0-100).
-    ///
-    m_ProductHardwareInterface->SendSetVolume( vol );
+    /// update mute status if it's available
+    if( volume.has_muted() )
+    {
+        m_muted = volume.muted();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -203,7 +135,24 @@ void ProductVolumeManager::ReceiveFrontDoorVolume( SoundTouchInterface::volume c
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductVolumeManager::Increment( )
 {
-    ( *m_Volume )++;
+    auto errFunc = []( FRONT_DOOR_CLIENT_ERRORS e )
+    {
+        BOSE_ERROR( s_logger, "Error incrementing FrontDoor volume" );
+    };
+    auto respFunc = [ this ]( SoundTouchInterface::volume v )
+    {
+        BOSE_VERBOSE( s_logger, "Got volume increment response" );
+    };
+
+    AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
+    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errCb( errFunc, m_ProductTask );
+
+    SoundTouchInterface::volume pbVolume;
+    pbVolume.set_delta( VOLUME_STEP_SIZE );
+
+    BOSE_VERBOSE( s_logger, "Incrementing FrontDoor volume" );
+    m_FrontDoorClient->SendPut<SoundTouchInterface::volume>(
+        ProductApp::FRONTDOOR_AUDIO_VOLUME_INCREMENT, pbVolume, respFunc, errCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -216,7 +165,55 @@ void ProductVolumeManager::Increment( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductVolumeManager::Decrement( )
 {
-    ( *m_Volume )--;
+    auto errFunc = []( FRONT_DOOR_CLIENT_ERRORS e )
+    {
+        BOSE_ERROR( s_logger, "Error incrementing FrontDoor volume" );
+    };
+    auto respFunc = [ this ]( SoundTouchInterface::volume v )
+    {
+        BOSE_VERBOSE( s_logger, "Got volume decrement response" );
+    };
+
+    AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
+    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errCb( errFunc, m_ProductTask );
+
+    SoundTouchInterface::volume pbVolume;
+    pbVolume.set_delta( VOLUME_STEP_SIZE );
+
+    BOSE_VERBOSE( s_logger, "Decrementing FrontDoor volume" );
+    m_FrontDoorClient->SendPut<SoundTouchInterface::volume>(
+        ProductApp::FRONTDOOR_AUDIO_VOLUME_DECREMENT, pbVolume, respFunc, errCb );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name ProductVolumeManager::ToggleMute
+///
+/// @brief This method toggles mute
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductVolumeManager::ToggleMute( )
+{
+    auto errFunc = []( FRONT_DOOR_CLIENT_ERRORS e )
+    {
+        BOSE_ERROR( s_logger, "Error setting FrontDoor mute" );
+    };
+    auto respFunc = [ this ]( SoundTouchInterface::volume v )
+    {
+        BOSE_VERBOSE( s_logger, "Got mute response" );
+    };
+
+    AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
+    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errCb( errFunc, m_ProductTask );
+
+    m_muted = !m_muted;
+    SoundTouchInterface::volume pbVolume;
+    pbVolume.set_muted( m_muted );
+
+    BOSE_VERBOSE( s_logger, "Toggling FrontDoor mute" );
+    m_FrontDoorClient->SendPut<SoundTouchInterface::volume>(
+        ProductApp::FRONTDOOR_AUDIO_VOLUME, pbVolume, respFunc, errCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

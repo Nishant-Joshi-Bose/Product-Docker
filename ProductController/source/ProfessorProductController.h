@@ -40,6 +40,7 @@
 #include "ProductNetworkManager.h"
 #include "ProductSystemManager.h"
 #include "ProductVolumeManager.h"
+#include "ProductAdaptIQManager.h"
 #include "KeyActions.pb.h"
 #include "NetManager.pb.h"
 #include "ProductController.h"
@@ -136,6 +137,14 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
+    /// @brief The following method is used to get a shared pointer to the AdaptIQ instance
+    ///        from the product controller.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    std::shared_ptr< ProductAdaptIQManager >& GetAdaptIQManager( );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
     /// @brief The following method is used to get a shared pointer to the speaker manager instance
     ///        from the product controller.
     ///
@@ -212,6 +221,7 @@ private:
     std::shared_ptr< ProductKeyInputInterface > m_ProductKeyInputInterface;
     std::shared_ptr< ProductEdidInterface     > m_ProductEdidInterface;
     std::shared_ptr< ProductVolumeManager     > m_ProductVolumeManager;
+    std::shared_ptr< ProductAdaptIQManager     > m_ProductAdaptIQManager;
     std::shared_ptr< ProductSpeakerManager    > m_ProductSpeakerManager;
     std::shared_ptr< CustomProductAudioService> m_ProductAudioService;
 
