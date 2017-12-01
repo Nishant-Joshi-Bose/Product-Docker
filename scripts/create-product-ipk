@@ -160,7 +160,7 @@ sw_update_url=https://worldwide.bose.com/updates/soundtouch-test
 
 "$avs_dir/stage" "$opt_dir" || exit
 "$swup_dir/stage" "$opt_dir" || exit
-"$audiopath_dir/stage" "$opt_dir" || exit
+"$audiopath_dir/stage" "$opt_dir" --with-vfe || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlepassport_dir/stage" "$opt_dir" || exit
 "$shepherd_dir/stage" "$opt_dir" || exit
