@@ -44,7 +44,6 @@ namespace ProductApp
 constexpr char  FRONTDOOR_AUDIO_VOLUME[ ]           = "/audio/volume";
 constexpr char  FRONTDOOR_AUDIO_VOLUME_INCREMENT[ ] = "/audio/volume/increment";
 constexpr char  FRONTDOOR_AUDIO_VOLUME_DECREMENT[ ] = "/audio/volume/decrement";
-constexpr int   VOLUME_STEP_SIZE                    = 1;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -133,7 +132,7 @@ void ProductVolumeManager::ReceiveFrontDoorVolume( SoundTouchInterface::volume c
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductVolumeManager::Increment( )
+void ProductVolumeManager::Increment( unsigned int step )
 {
     auto errFunc = []( FRONT_DOOR_CLIENT_ERRORS e )
     {
@@ -148,7 +147,8 @@ void ProductVolumeManager::Increment( )
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errCb( errFunc, m_ProductTask );
 
     SoundTouchInterface::volume pbVolume;
-    pbVolume.set_delta( VOLUME_STEP_SIZE );
+    pbVolume.set_delta( step );
+    printf( "%s: %d\n", __func__, step );
 
     BOSE_VERBOSE( s_logger, "Incrementing FrontDoor volume" );
     m_FrontDoorClient->SendPut<SoundTouchInterface::volume>(
@@ -163,7 +163,7 @@ void ProductVolumeManager::Increment( )
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductVolumeManager::Decrement( )
+void ProductVolumeManager::Decrement( unsigned int step )
 {
     auto errFunc = []( FRONT_DOOR_CLIENT_ERRORS e )
     {
@@ -178,7 +178,8 @@ void ProductVolumeManager::Decrement( )
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errCb( errFunc, m_ProductTask );
 
     SoundTouchInterface::volume pbVolume;
-    pbVolume.set_delta( VOLUME_STEP_SIZE );
+    pbVolume.set_delta( step );
+    printf( "%s: %d\n", __func__, step );
 
     BOSE_VERBOSE( s_logger, "Decrementing FrontDoor volume" );
     m_FrontDoorClient->SendPut<SoundTouchInterface::volume>(

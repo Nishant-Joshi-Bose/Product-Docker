@@ -108,13 +108,23 @@ bool CustomProductControllerStateOn::HandleKeyAction( int action )
 
     switch( action )
     {
-    case KeyActionPb::KEY_ACTION_VOLUME_UP:
-        GetCustomProductController( ).GetVolumeManager()->Increment();
+    case KeyActionPb::KEY_ACTION_VOLUME_UP_1:
+        GetCustomProductController( ).GetVolumeManager()->Increment( 1 );
         handled = true;
         break;
 
-    case KeyActionPb::KEY_ACTION_VOLUME_DOWN:
-        GetCustomProductController( ).GetVolumeManager()->Decrement();
+    case KeyActionPb::KEY_ACTION_VOLUME_UP_2:
+        GetCustomProductController( ).GetVolumeManager()->Increment( 2 );
+        handled = true;
+        break;
+
+    case KeyActionPb::KEY_ACTION_VOLUME_DOWN_1:
+        GetCustomProductController( ).GetVolumeManager()->Decrement( 1 );
+        handled = true;
+        break;
+
+    case KeyActionPb::KEY_ACTION_VOLUME_DOWN_2:
+        GetCustomProductController( ).GetVolumeManager()->Decrement( 2 );
         handled = true;
         break;
 

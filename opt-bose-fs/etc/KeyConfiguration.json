@@ -164,7 +164,9 @@
             "Origin": 2, 
             "Comment": "volume up", 
             "KeyEvent": 0, 
-            "TimeOutList": [], 
+            "TimeOutList": [
+                0
+            ], 
             "Action": 9, 
             "KeyList": [
                 3
@@ -174,7 +176,9 @@
             "Origin": 6, 
             "Comment": "volume up", 
             "KeyEvent": 0, 
-            "TimeOutList": [], 
+            "TimeOutList": [
+                0
+            ], 
             "Action": 9, 
             "KeyList": [
                 3
@@ -184,7 +188,84 @@
             "Origin": 4, 
             "Comment": "volume up", 
             "KeyEvent": 0, 
-            "TimeOutList": [], 
+            "TimeOutList": [
+                0
+            ], 
+            "Action": 9, 
+            "KeyList": [
+                3
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "volume up repeat", 
+            "KeyEvent": 0, 
+            "TimeOutList": [
+                300, 
+                100
+            ], 
+            "Action": 9, 
+            "KeyList": [
+                3
+            ]
+        }, 
+        {
+            "Origin": 6, 
+            "Comment": "volume up repeat", 
+            "KeyEvent": 0, 
+            "TimeOutList": [
+                300, 
+                100
+            ], 
+            "Action": 9, 
+            "KeyList": [
+                3
+            ]
+        }, 
+        {
+            "Origin": 4, 
+            "Comment": "volume up repeat", 
+            "KeyEvent": 0, 
+            "TimeOutList": [
+                300, 
+                100
+            ], 
+            "Action": 9, 
+            "KeyList": [
+                3
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "volume up long repeat", 
+            "KeyEvent": 0, 
+            "TimeOutList": [
+                1000
+            ], 
+            "Action": 9, 
+            "KeyList": [
+                3
+            ]
+        }, 
+        {
+            "Origin": 6, 
+            "Comment": "volume up long repeat", 
+            "KeyEvent": 0, 
+            "TimeOutList": [
+                1000
+            ], 
+            "Action": 9, 
+            "KeyList": [
+                3
+            ]
+        }, 
+        {
+            "Origin": 4, 
+            "Comment": "volume up long repeat", 
+            "KeyEvent": 0, 
+            "TimeOutList": [
+                1000
+            ], 
             "Action": 9, 
             "KeyList": [
                 3
@@ -194,7 +275,9 @@
             "Origin": 2, 
             "Comment": "volume down", 
             "KeyEvent": 0, 
-            "TimeOutList": [], 
+            "TimeOutList": [
+                0
+            ], 
             "Action": 10, 
             "KeyList": [
                 2
@@ -204,7 +287,9 @@
             "Origin": 6, 
             "Comment": "volume down", 
             "KeyEvent": 0, 
-            "TimeOutList": [], 
+            "TimeOutList": [
+                0
+            ], 
             "Action": 10, 
             "KeyList": [
                 2
@@ -214,7 +299,84 @@
             "Origin": 4, 
             "Comment": "volume down", 
             "KeyEvent": 0, 
-            "TimeOutList": [], 
+            "TimeOutList": [
+                0
+            ], 
+            "Action": 10, 
+            "KeyList": [
+                2
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "volume down repeat", 
+            "KeyEvent": 0, 
+            "TimeOutList": [
+                300, 
+                100
+            ], 
+            "Action": 10, 
+            "KeyList": [
+                2
+            ]
+        }, 
+        {
+            "Origin": 6, 
+            "Comment": "volume down repeat", 
+            "KeyEvent": 0, 
+            "TimeOutList": [
+                300, 
+                100
+            ], 
+            "Action": 10, 
+            "KeyList": [
+                2
+            ]
+        }, 
+        {
+            "Origin": 4, 
+            "Comment": "volume down repeat", 
+            "KeyEvent": 0, 
+            "TimeOutList": [
+                300, 
+                100
+            ], 
+            "Action": 10, 
+            "KeyList": [
+                2
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "volume down long repeat", 
+            "KeyEvent": 0, 
+            "TimeOutList": [
+                1000
+            ], 
+            "Action": 10, 
+            "KeyList": [
+                2
+            ]
+        }, 
+        {
+            "Origin": 6, 
+            "Comment": "volume down long repeat", 
+            "KeyEvent": 0, 
+            "TimeOutList": [
+                1000
+            ], 
+            "Action": 10, 
+            "KeyList": [
+                2
+            ]
+        }, 
+        {
+            "Origin": 4, 
+            "Comment": "volume down long repeat", 
+            "KeyEvent": 0, 
+            "TimeOutList": [
+                1000
+            ], 
             "Action": 10, 
             "KeyList": [
                 2
