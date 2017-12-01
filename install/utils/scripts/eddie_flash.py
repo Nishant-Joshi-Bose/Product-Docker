@@ -45,13 +45,14 @@ def do_single_ipk_update(adbC, local_ipk_path, dest_ipk_path, opkg_cmd):
     return
 
 def do_create_opkg_conf(adbC, opkg_conf):
-    adbC.executeCommand('cat "dest root /opt/Bose/" > %s' %opkg_conf)
-    adbC.executeCommand('cat "src/gz product https://invalid-bose-galapagos-softwareupdate-dev.s3.amazonaws.com/eddie" >> %s' %opkg_conf)
-    adbC.executeCommand('cat "option cache_dir /dev/shm/update/cache/" >> %s' %opkg_conf)
-    adbC.executeCommand('cat "option lists_dir /mnt/nv/update//update/list/" >> %s' %opkg_conf)
-    adbC.executeCommand('cat "option lock_file /mnt/nv/update//update/opkg.lock" >> %s' %opkg_conf)
-    adbC.executeCommand('cat "option info_dir /update/info/" >> %s' %opkg_conf)
-    adbC.executeCommand('cat "option status_file /update/status" >> %s' %opkg_conf)
+    adbC.executeCommand('"mkdir -p /mnt/nv/update"')
+    adbC.executeCommand('"echo \'dest root /opt/Bose/\' > %s"' %opkg_conf)
+    adbC.executeCommand('"echo \'src/gz product https://invalid-bose-galapagos-softwareupdate-dev.s3.amazonaws.com/eddie\' >> %s"' %opkg_conf)
+    adbC.executeCommand('"echo \'option cache_dir /dev/shm/update/cache/\' >> %s"' %opkg_conf)
+    adbC.executeCommand('"echo \'option lists_dir /mnt/nv/update/update/list/\' >> %s"' %opkg_conf)
+    adbC.executeCommand('"echo \'option lock_file /mnt/nv/update/update/opkg.lock\' >> %s"' %opkg_conf)
+    adbC.executeCommand('"echo \'option info_dir /update/info/\' >> %s"' %opkg_conf)
+    adbC.executeCommand('"echo \'option status_file /update/status\' >> %s"' %opkg_conf)
 
 def do_ipk_update(package_path, adbC, userspace_ipk_update, lpm_ipk_update, hsp_ipk_updates):
     # For now, just use first available device
@@ -70,20 +71,24 @@ def do_ipk_update(package_path, adbC, userspace_ipk_update, lpm_ipk_update, hsp_
             # Create /mnt/nv/update/opkg.conf
             do_create_opkg_conf( adbC, "/mnt/nv/update/opkg.conf")
             do_single_ipk_update(adbC, userspace_ipk, "/tmp/product.ipk", "export LD_LIBRARY_PATH=/opt/Bose/update/opkg/;/opt/Bose/update/opkg/opkg -f /mnt/nv/update//opkg.conf --add-arch armv7a-vfp-neon:100") 
+            logging.info("Rebooting APQ")
+            adbC.rebootDevice()
+            time.sleep(2)
+            adbC.waitForRebootDevice(60)
         else:
             logging.error("Product IPK not found %s" %userspace_ipk)
     if lpm_ipk_update:
         if os.path.isfile(lpm_ipk):
-            do_single_ipk_update(adbC, lpm_ipk, "/tmp/lpm.ipk", "opkg -d bose") 
+            #do_single_ipk_update(adbC, lpm_ipk, "/tmp/lpm.ipk", "opkg -d bose") 
             # Create /mnt/nv/update/opkg.conf
             do_create_opkg_conf(adbC, "/mnt/nv/update/opkg.conf")
             do_single_ipk_update(adbC, lpm_ipk, "/tmp/lpm.ipk", "export LD_LIBRARY_PATH=/opt/Bose/update/opkg/;/opt/Bose/update/opkg/opkg -f /mnt/nv/update//opkg.conf --add-arch armv7a-vfp-neon:100") 
+            logging.info("Restarting LPM & APQ")
+            adbC.executeCommand('\"/opt/Bose/bin/ResetUtil SYSTEM\"')
+            time.sleep(2)
+            adbC.waitForRebootDevice(60)
         else:
             logging.error("LPM IPK not found %s" %lpm_ipk)
-    logging.info("Restarting LPM & APQ")
-    adbC.executeCommand("/opt/Bose/bin/ResetUtil SYSTEM")
-    time.sleep(2)
-    adbC.waitForRebootDevice(60)
     logging.info("******************************************************************************************");    
     return
 
@@ -118,6 +123,7 @@ def do_qc_flash(package, update_fastboot, full_update, all_partitions, userspace
         tar = tarfile.open(package)
         tar.extractall()
         tar.close()
+        
         # See if top directory, required scripts are available
         # At this point path_to_package should be valid path
         extracted_package = os.path.abspath("eddie")

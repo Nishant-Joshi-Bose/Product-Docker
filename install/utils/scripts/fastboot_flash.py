@@ -42,6 +42,7 @@ class FastbootUpdater:
         else:
             self.adbC = adb_obj
         self.fastboot_bin = self.adbC.get_fastboot_path()
+        logging.info("Fastboot path [%s]" %self.fastboot_bin)
         self.device_serial = device
         self.is_intialized = self.setDevice()
     
@@ -184,8 +185,8 @@ def get_fasboot_partition_files(package_path, full_update=False,
                                 all_partitions=False, userspace_only=False, 
                                 erase_persist=False):
     # Map of all partitions vs. their files. We potentially can parse all labels from rawprogram*.xml
+    print sys._getframe().f_code.co_name
     partition_list = OrderedDict()
-    partitions_to_flash = None
     if userspace_only:
         partition_list["bose"] = "orig_userpartition.ext4"
     elif (all_partitions) or (full_update):
@@ -287,6 +288,7 @@ def get_fasboot_partition_files(package_path, full_update=False,
 def do_fastboot_flash(package_path, adb_obj, full_update=False,
                       all_partitions=False,  userspace_only=False, 
                       erase_persist=False):
+    print sys._getframe().f_code.co_name
     fastboot_updater = None
     try:
         logging.info("******************************************************************************************")

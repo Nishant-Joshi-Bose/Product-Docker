@@ -1,13 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 ///// @file   PlaybackRequestManager.h
-///// @brief  Eddie specific PlaybackRequestManager class for Riviera based product
+///// @brief  PlaybackRequestManager class for Riviera based product
 /////
 ///// @attention Copyright 2017 Bose Corporation, Framingham, MA
 //////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-#include "EddieProductController.h"
-#include "IntentHandler.h"
+#include "IntentManager.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 
@@ -20,7 +19,7 @@ public:
     PlaybackRequestManager( NotifyTargetTaskIF& task,
                             const CliClientMT& cliClient,
                             const FrontDoorClientIF_t& frontDoorClient,
-                            EddieProductController& controller );
+                            ProductController& controller );
 
     ~PlaybackRequestManager() override
     {
@@ -38,8 +37,6 @@ public:
 private:
 
     void PostPlaybackRequestCbRsp( const SoundTouchInterface::NowPlayingJson& resp );
-
-    void FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode ) override;
 
     AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingRsp;
 };

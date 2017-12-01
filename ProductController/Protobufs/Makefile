@@ -9,7 +9,7 @@ PROTO_SOURCES = \
   AudioSettings.proto \
   ContentItem.proto \
   DisplayController.proto \
-  IntentHandler.proto \
+  Presets.proto \
 
 # Where to search for imported *.proto files.
 PROTO_IMPORT_DIRS := \

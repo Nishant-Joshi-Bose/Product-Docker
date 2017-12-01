@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import os
 from CastleTestUtils.LoggerUtils.log_setup import get_logger
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
@@ -124,3 +125,11 @@ def adb(request):
     adb = rivieraCommunication.getCommunicationType('ADB')
     adb.setCommunicationDetail(request.config.getoption("--device-id"))
     return adb
+=======
+
+def pytest_addoption(parser):
+    parser.addoption("--ip-address", 
+		      action="store", 
+		      default=None,
+                      help="IP Address of Target under test")
+>>>>>>> origin

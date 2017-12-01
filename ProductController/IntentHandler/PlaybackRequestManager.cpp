@@ -16,6 +16,8 @@
 
 #include "DPrint.h"
 #include "PlaybackRequestManager.h"
+#include "ProductController.h"
+#include "Intents.h"
 
 static DPrint s_logger( "PlaybackRequestManager" );
 
@@ -24,18 +26,14 @@ namespace ProductApp
 PlaybackRequestManager::PlaybackRequestManager( NotifyTargetTaskIF& task,
                                                 const CliClientMT& cliClient,
                                                 const FrontDoorClientIF_t& frontDoorClient,
-                                                EddieProductController& controller ):
+                                                ProductController& controller ):
     IntentManager( task, cliClient, frontDoorClient, controller ),
-    m_NowPlayingRsp( nullptr, &task )
+    m_NowPlayingRsp( std::bind( &PlaybackRequestManager::PostPlaybackRequestCbRsp, this,
+                                std::placeholders::_1 ), &task )
 {
-    m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>\
+    m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>
                                ( std::bind( &PlaybackRequestManager::FrontDoorClientErrorCb,
                                             this, std::placeholders::_1 ), &task );
-
-    m_NowPlayingRsp = AsyncCallback<SoundTouchInterface::NowPlayingJson>
-                      ( std::bind( &PlaybackRequestManager::PostPlaybackRequestCbRsp,
-                                   this, std::placeholders::_1 ), &task );
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -53,31 +51,24 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& intent )
 {
     if( intent == ( uint16_t ) Action::AUX_IN )
     {
-        const EddieProductController *pEddieProductController =
-            dynamic_cast<const EddieProductController*>( &GetProductController() );
-        if( pEddieProductController != nullptr )
+        //If AUX source is already active, ignore the intent.
+        if( not( ( GetProductController().GetNowPlaying().has_state() ) &&
+                 ( GetProductController().GetNowPlaying().has_container() ) &&
+                 ( GetProductController().GetNowPlaying().container().has_contentitem() ) &&
+                 ( GetProductController().GetNowPlaying().container().contentitem().source() == "PRODUCT" ) &&
+                 ( GetProductController().GetNowPlaying().container().contentitem().sourceaccount() == "AUX" ) )
+          )
         {
-            //If AUX source is already active, ignore the intent.
-            if( not( ( pEddieProductController->GetNowPlaying().has_state() ) &&
-                     ( pEddieProductController->GetNowPlaying().has_container() ) &&
-                     ( pEddieProductController->GetNowPlaying().container().has_contentitem() ) &&
-                     ( pEddieProductController->GetNowPlaying().container().contentitem().has_source() ) &&
-                     ( pEddieProductController->GetNowPlaying().container().contentitem().source() == "PRODUCT" ) &&
-                     ( pEddieProductController->GetNowPlaying().container().contentitem().has_sourceaccount() ) &&
-                     ( pEddieProductController->GetNowPlaying().container().contentitem().sourceaccount() == "AUX" ) )
-              )
-            {
-                SoundTouchInterface::playbackRequestJson playbackRequestData;
-                playbackRequestData.set_source( "PRODUCT" );
-                playbackRequestData.set_sourceaccount( "AUX" );
+            SoundTouchInterface::playbackRequestJson playbackRequestData;
+            playbackRequestData.set_source( "PRODUCT" );
+            playbackRequestData.set_sourceaccount( "AUX" );
 
-                GetFrontDoorClient()->SendPost<SoundTouchInterface::NowPlayingJson>( "/content/playbackRequest", playbackRequestData,
-                                                                                     m_NowPlayingRsp, m_frontDoorClientErrorCb );
-            }
-            else
-            {
-                BOSE_LOG( INFO, "AUX Source is already active, ignoring the intent" );
-            }
+            GetFrontDoorClient()->SendPost<SoundTouchInterface::NowPlayingJson>( "/content/playbackRequest", playbackRequestData,
+                                                                                 m_NowPlayingRsp, m_frontDoorClientErrorCb );
+        }
+        else
+        {
+            BOSE_LOG( INFO, "AUX Source is already active, ignoring the intent" );
         }
     }
 
@@ -93,11 +84,6 @@ void PlaybackRequestManager::PostPlaybackRequestCbRsp( const SoundTouchInterface
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
     BOSE_LOG( INFO, "GOT Response to playbackRequest: " << resp.source().sourcedisplayname() );
-}
-
-void PlaybackRequestManager::FrontDoorClientErrorCb( const FRONT_DOOR_CLIENT_ERRORS errorCode )
-{
-    BOSE_ERROR( s_logger, "%s:error code- %d", __func__, errorCode );
 }
 
 } // namespace ProductApp

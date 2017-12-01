@@ -1,14 +1,14 @@
 { "KeyTable":
 [
     {"Origin": 0, "KeyEvent": 1, "KeyList": [4], "TimeOutList": [0], "Action": 1, "Comment": "Console: MFB release between 0-1750 ms ---> play-pause"},
-    {"Origin": 0, "KeyEvent": 4, "KeyList": [4,4], "TimeOutList": [500], "Action": 2, "Comment": "Console: MFB repeat release twice within 500 ms ---> next track"},
-    {"Origin": 0, "KeyEvent": 4, "KeyList": [4,4,4], "TimeOutList": [500], "Action": 3, "Comment": "Console: MFB repeat release thrice within 500 ms ---> prev track"},
+    {"Origin": 0, "KeyEvent": 4, "KeyList": [4,4], "TimeOutList": [500], "Action": 2, "Comment": "Console: MFB repeat release twice within 500ms ---> next track"},
+    {"Origin": 0, "KeyEvent": 4, "KeyList": [4,4,4], "TimeOutList": [500], "Action": 3, "Comment": "Console: MFB repeat release thrice within 500ms ---> prev track"},
     {"Origin": 0, "KeyEvent": 1, "KeyList": [4], "TimeOutList": [1750], "Action": 4, "Comment": "Console: MFB release after 1750 ms ---> Network Standby"},
     {"Origin": 0, "KeyEvent": 2, "KeyList": [2,4], "TimeOutList": [500], "Action": 5, "Comment": "Console: MFB+Aux press and hold for at least 500ms ---> AP Mode"},
     {"Origin": 0, "KeyEvent": 2, "KeyList": [3,4], "TimeOutList": [500], "Action": 6, "Comment": "Console: MFB+VolumeUp press and hold for at least 500ms ---> Manual Update"},
     {"Origin": 0, "KeyEvent": 2, "KeyList": [1,4], "TimeOutList": [500], "Action": 7, "Comment": "Console: MFB+Bluetooth press and hold for at least 500ms ---> Disable Networking"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [4,5], "TimeOutList": [10000], "Action": 8, "Comment": "Console: MFB+VolumeDown press and hold for at least 10000 ---> Factory Reset"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [4], "TimeOutList": [15000], "Action": 9, "Comment": "Console: MFB press and hold for at least 1500ms ---> Low Power Standby"},
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [4,5], "TimeOutList": [10000], "Action": 8, "Comment": "Console: MFB+VolumeDown press and hold for at least 10000ms ---> Factory Reset"},
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [4], "TimeOutList": [15000], "Action": 9, "Comment": "Console: MFB press and hold for at least 15000ms ---> Low Power Standby"},
 
     {"Origin": 0, "KeyEvent": 1, "KeyList": [1], "TimeOutList": [0], "Action": 20, "Comment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast"},
     {"Origin": 0, "KeyEvent": 2, "KeyList": [1], "TimeOutList": [750], "Action": 21, "Comment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable"},
@@ -22,7 +22,21 @@
 
     {"Origin": 0, "KeyEvent": 1, "KeyList": [2], "TimeOutList": [0], "Action": 25, "Comment": "Console: AUX release ---> SendToAux"},
 
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [6], "TimeOutList": [0], "Action": 26, "Comment": "Console: Action release ---> Alexa"}
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [6], "TimeOutList": [0], "Action": 26, "Comment": "Console: Action release ---> Alexa"},
+
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [8], "TimeOutList": [1000], "Action": 27, "Comment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1"},
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [9], "TimeOutList": [1000], "Action": 28, "Comment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2"},
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [10], "TimeOutList": [1000], "Action": 29, "Comment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3"},
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [11], "TimeOutList": [1000], "Action": 30, "Comment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4"},
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [12], "TimeOutList": [1000], "Action": 31, "Comment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5"},
+    {"Origin": 0, "KeyEvent": 2, "KeyList": [13], "TimeOutList": [1000], "Action": 32, "Comment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6"},
+
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [8], "TimeOutList": [200], "Action": 33, "Comment": "Console: Preset 1 release ---> Select Preset stored on Key 1"},
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [9], "TimeOutList": [200], "Action": 34, "Comment": "Console: Preset 2 release ---> Select Preset stored on Key 2"},
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [10], "TimeOutList": [200], "Action": 35, "Comment": "Console: Preset 3 release ---> Select Preset stored on Key 3"},
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [11], "TimeOutList": [200], "Action": 36, "Comment": "Console: Preset 4 release ---> Select Preset stored on Key 4"},
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [12], "TimeOutList": [200], "Action": 37, "Comment": "Console: Preset 5 release ---> Select Preset stored on Key 5"},
+    {"Origin": 0, "KeyEvent": 1, "KeyList": [13], "TimeOutList": [200], "Action": 38, "Comment": "Console: Preset 6 release ---> Select Preset stored on Key 6"}
 
 ]
 }
