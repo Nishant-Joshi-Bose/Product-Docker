@@ -4,7 +4,7 @@
 ///
 /// @brief     This file contains the source code to handle communication with A4VVideoManager service
 ///
-/// @author    Manoranjani Malisetti
+/// @author    Chris Houston
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
