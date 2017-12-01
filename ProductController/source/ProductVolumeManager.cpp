@@ -4,7 +4,7 @@
 ///
 /// @brief     This file contains source code to implement audio volume management.
 ///
-/// @author    Manoranjani Malisetti
+/// @author    Chris Houston
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -117,6 +117,12 @@ void ProductVolumeManager::ReceiveFrontDoorVolume( SoundTouchInterface::volume c
         ///
 
     }
+
+    /// update mute status if it's available
+    if( volume.has_muted() )
+    {
+        m_muted = volume.muted();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -177,6 +183,37 @@ void ProductVolumeManager::Decrement( )
     BOSE_VERBOSE( s_logger, "Decrementing FrontDoor volume" );
     m_FrontDoorClient->SendPut<SoundTouchInterface::volume>(
         ProductApp::FRONTDOOR_AUDIO_VOLUME_DECREMENT, pbVolume, respFunc, errCb );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name ProductVolumeManager::ToggleMute
+///
+/// @brief This method toggles mute
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductVolumeManager::ToggleMute( )
+{
+    auto errFunc = []( FRONT_DOOR_CLIENT_ERRORS e )
+    {
+        BOSE_ERROR( s_logger, "Error setting FrontDoor mute" );
+    };
+    auto respFunc = [ this ]( SoundTouchInterface::volume v )
+    {
+        BOSE_VERBOSE( s_logger, "Got mute response" );
+    };
+
+    AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
+    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errCb( errFunc, m_ProductTask );
+
+    m_muted = !m_muted;
+    SoundTouchInterface::volume pbVolume;
+    pbVolume.set_muted( m_muted );
+
+    BOSE_VERBOSE( s_logger, "Toggling FrontDoor mute" );
+    m_FrontDoorClient->SendPut<SoundTouchInterface::volume>(
+        ProductApp::FRONTDOOR_AUDIO_VOLUME, pbVolume, respFunc, errCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
