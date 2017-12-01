@@ -122,8 +122,8 @@ private:
     void UpdateFrontDoorVolume( int32_t volume );
     void ReceiveFrontDoorVolume( SoundTouchInterface::volume const& volume );
 
-    std::shared_ptr< FrontDoorClientIF > m_FrontDoorClient;
-    AudioVolume< int32_t >*              m_Volume;
+    std::shared_ptr< FrontDoorClientIF >    m_FrontDoorClient;
+    CallbackConnection                      m_NotifierCallback;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
