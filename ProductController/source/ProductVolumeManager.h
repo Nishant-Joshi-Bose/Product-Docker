@@ -4,7 +4,7 @@
 ///
 /// @brief     This file contains declarations to implement audio volume management.
 ///
-/// @author    Manoranjani Malisetti
+/// @author    Chris Houston
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -88,6 +88,7 @@ public:
     //////////////////////////////////////////////////////////////////////////////////////////////
     void Increment( );
     void Decrement( );
+    void ToggleMute( );
 
 private:
 
@@ -122,8 +123,15 @@ private:
     void UpdateFrontDoorVolume( int32_t volume );
     void ReceiveFrontDoorVolume( SoundTouchInterface::volume const& volume );
 
-    std::shared_ptr< FrontDoorClientIF > m_FrontDoorClient;
-    AudioVolume< int32_t >*              m_Volume;
+    std::shared_ptr< FrontDoorClientIF >    m_FrontDoorClient;
+    CallbackConnection                      m_NotifierCallback;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following member tracks mute status
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    bool                                    m_muted = false;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -77,6 +77,8 @@ TARGET_LINK_LIBRARIES(Professor
   TinyXml
   pthread
   rt
+  dl
+  cap
 )
 
 INSTALL(TARGETS Professor DESTINATION ${OUTPUT_BIN_DIR})
