@@ -433,7 +433,7 @@ bool EddieProductController::IsLanguageSet()
     return m_deviceManager.IsLanguageSet();
 }
 
-bool EddieProductController::IsNetworkConfigured()
+bool EddieProductController::IsNetworkConfigured() const
 {
     return ( m_bluetoothSinkList.get().devices_size() || m_wifiProfilesCount.get() || m_cachedStatus.get().isprimaryup() );
 }
