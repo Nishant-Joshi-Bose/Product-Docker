@@ -1,7 +1,7 @@
 {
   "KeyTable": [
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_ON_OFF" ],
       "TimeOutList": [],
@@ -9,7 +9,7 @@
       "Comment": "power toggle"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_BLUETOOTH_SOURCE" ],
       "TimeOutList": [],
@@ -17,7 +17,7 @@
       "Comment": "source select"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_NUMBER_1" ],
       "TimeOutList": [],
@@ -25,7 +25,7 @@
       "Comment": "preset 1"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_NUMBER_2" ],
       "TimeOutList": [],
@@ -33,7 +33,7 @@
       "Comment": "preset 2"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_NUMBER_3" ],
       "TimeOutList": [],
@@ -41,7 +41,7 @@
       "Comment": "preset 3"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_NUMBER_4" ],
       "TimeOutList": [],
@@ -49,7 +49,7 @@
       "Comment": "preset 4"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_NUMBER_5" ],
       "TimeOutList": [],
@@ -57,7 +57,7 @@
       "Comment": "preset 5"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_NUMBER_6" ],
       "TimeOutList": [],
@@ -65,7 +65,7 @@
       "Comment": "preset 6"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP", "CEC" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_VOLUME_UP" ],
       "TimeOutList": [],
@@ -73,7 +73,7 @@
       "Comment": "volume up"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP", "CEC" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_VOLUME_DOWN" ],
       "TimeOutList": [],
@@ -81,7 +81,7 @@
       "Comment": "volume down"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_PLAY" ],
       "TimeOutList": [],
@@ -89,7 +89,7 @@
       "Comment": "play/pause"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_QUICK_SKIP" ],
       "TimeOutList": [],
@@ -97,7 +97,7 @@
       "Comment": "skip forward"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_QUICK_REPLAY" ],
       "TimeOutList": [],
@@ -105,7 +105,7 @@
       "Comment": "skip back"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_MUTE" ],
       "TimeOutList": [],
@@ -113,7 +113,7 @@
       "Comment": "mute toggle"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_SOUND_TOUCH_SOURCE" ],
       "TimeOutList": [],
@@ -121,7 +121,7 @@
       "Comment": "select soundtouch"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_CONNECT" ],
       "TimeOutList": [],
@@ -129,7 +129,7 @@
       "Comment": "connect"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_ACTION" ],
       "TimeOutList": [],
@@ -137,7 +137,7 @@
       "Comment": "vpa"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_TV_SOURCE" ],
       "TimeOutList": [],
@@ -145,7 +145,7 @@
       "Comment": "select tv"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_PAGE_THUMBS_UP" ],
       "TimeOutList": [],
@@ -153,7 +153,7 @@
       "Comment": "thumbs up"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_PAGE_THUMBS_DOWN" ],
       "TimeOutList": [],
@@ -165,7 +165,7 @@
 
 
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS_HOLD",
       "KeyList": [ "BOSE_FD" ],
       "TimeOutList": [ 5000 ],
@@ -173,7 +173,7 @@
       "Comment": "factory default"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS_HOLD",
       "KeyList": [ "BOSE_WIFI_OFF" ],
       "TimeOutList": [ 3000 ],
@@ -181,7 +181,7 @@
       "Comment": "wifi off"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS_HOLD",
       "KeyList": [ "BOSE_AP_SETUP" ],
       "TimeOutList": [ 3000 ],
@@ -189,7 +189,7 @@
       "Comment": "ap setup"
     },
     {
-      "Origin": "IR",
+      "Origin": [ "IR", "TAP" ],
       "KeyEvent": "PRESS_HOLD",
       "KeyList": [ "BOSE_PAIR_SPKR" ],
       "TimeOutList": [ 3000 ],
@@ -201,7 +201,7 @@
 
 
     {
-      "Origin": "CAPSENSE",
+      "Origin": [ "CAPSENSE" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_MUTE" ],
       "TimeOutList": [],
@@ -209,174 +209,12 @@
       "Comment": "mute toggle"
     },
     {
-      "Origin": "CAPSENSE",
+      "Origin": [ "CAPSENSE" ],
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_ACTION" ],
       "TimeOutList": [],
       "Action": "KEY_ACTION_ACTION",
       "Comment": "vpa"
-    },
-
-
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_ON_OFF" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_POWER",
-      "Comment": "power toggle"
-    },
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_BLUETOOTH_SOURCE" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_SOURCE",
-      "Comment": "source select"
-    },
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_NUMBER_1" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_PRESET_1",
-      "Comment": "preset 1"
-    },
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_NUMBER_2" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_PRESET_2",
-      "Comment": "preset 2"
-    },
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_NUMBER_3" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_PRESET_3",
-      "Comment": "preset 3"
-    },
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_NUMBER_4" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_PRESET_4",
-      "Comment": "preset 4"
-    },
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_NUMBER_5" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_PRESET_5",
-      "Comment": "preset 5"
-    },
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_NUMBER_6" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_PRESET_6",
-      "Comment": "preset 6"
-    },
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_VOLUME_UP" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_VOLUME_UP",
-      "Comment": "volume up"
-    },
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_VOLUME_DOWN" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_VOLUME_DOWN",
-      "Comment": "volume down"
-    },
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_PLAY" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_PLAY_PAUSE",
-      "Comment": "play/pause"
-    },
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_QUICK_SKIP" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_SKIP_FORWARD",
-      "Comment": "skip forward"
-    },
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_QUICK_REPLAY" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_SKIP_BACK",
-      "Comment": "skip back"
-    },
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_MUTE" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_MUTE",
-      "Comment": "mute toggle"
-    },
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_SOUND_TOUCH_SOURCE" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_SOUNDTOUCH",
-      "Comment": "select soundtouch"
-    },
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_CONNECT" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_CONNECT",
-      "Comment": "connect"
-    },
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_ACTION" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_ACTION",
-      "Comment": "vpa"
-    },
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_TV_SOURCE" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_TV",
-      "Comment": "select tv"
-    },
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_PAGE_THUMBS_UP" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_THUMB_UP",
-      "Comment": "thumbs up"
-    },
-    {
-      "Origin": "TAP",
-      "KeyEvent": "PRESS",
-      "KeyList": [ "BOSE_PAGE_THUMBS_DOWN" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_THUMB_DOWN",
-      "Comment": "thumbs down"
     }
 
 
