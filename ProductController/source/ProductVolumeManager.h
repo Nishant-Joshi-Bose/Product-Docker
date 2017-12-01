@@ -4,7 +4,7 @@
 ///
 /// @brief     This file contains declarations to implement audio volume management.
 ///
-/// @author    Chri Houston
+/// @author    Chris Houston
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
