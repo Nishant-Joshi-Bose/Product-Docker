@@ -1,0 +1,29 @@
+
+////////////////////////////////////////////////////////////////////////
+/// This file was automatically generated.
+///
+/// Copyright 2017 Bose Corporation
+////////////////////////////////////////////////////////////////////////
+
+import "ProtoToMarkup/MarkupOptions.proto";
+package ProductPresets;
+import "ContentItem.proto";
+
+
+message preset
+{
+    option (ignore_unexpected_markup) = true;
+
+    optional PresetID    id           = 1 [(enum_by_number)= true];
+    optional ContentItem ContentItem  = 2;
+    optional uint64      createdOn    = 3;
+    optional uint64      updatedOn    = 4;
+   
+}
+
+message presets
+{
+    option (ignore_unexpected_markup) = true;
+    repeated preset preset = 1;
+                
+}

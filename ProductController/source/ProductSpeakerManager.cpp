@@ -21,8 +21,9 @@
 #include "Utilities.h"
 #include "HsmState.h"
 #include "FrontDoorClient.h"
+#include "ProfessorProductController.h"
+#include "ProductHardwareInterface.h"
 #include "ProductSpeakerManager.h"
-#include "ProductControllerStates.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///

@@ -7,8 +7,8 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
+  ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
   ${KEYHANDLER_DIR}/include
-  .
   include
   source
   source/CustomStateMachine
@@ -28,6 +28,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc
   ${PROTO_CC_DEST}/SystemInfo.pb.cc
   ${PROTO_CC_DEST}/AdaptIQ.pb.cc
+  ${PROTO_CC_DEST}/Presets.pb.cc
   source/ProductStart.cpp
   source/ProductCommandLine.cpp
   source/ProductHardwareInterface.cpp

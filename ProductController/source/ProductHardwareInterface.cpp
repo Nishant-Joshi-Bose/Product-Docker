@@ -25,15 +25,10 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
-#include "Services.h"
-#include "ProductHardwareInterface.h"
-#include "ProductController.h"
-#include "ProductMessage.pb.h"
-#include "LpmClientIF.h"
 #include "LpmClientFactory.h"
-#include "BreakThread.h"
-#include "RivieraLPM_IpcProtocol.h"
 #include "AutoLpmServiceMessages.pb.h"
+#include "ProfessorProductController.h"
+#include "ProductHardwareInterface.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///

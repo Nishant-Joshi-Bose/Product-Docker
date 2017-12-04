@@ -23,15 +23,12 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "SystemUtils.h"
 #include "Utilities.h"
-#include "Services.h"
-#include "BreakThread.h"
 #include "FrontDoorClient.h"
-#include "NetworkPortDefines.h"
 #include "NetManager.pb.h"
-#include "ProductNetworkManager.h"
 #include "ProductMessage.pb.h"
+#include "ProfessorProductController.h"
+#include "ProductNetworkManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                        Start of the Product Application Namespace                            ///

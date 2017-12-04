@@ -23,17 +23,9 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "SystemUtils.h"
-#include "Utilities.h"
-#include "Services.h"
+#include "ProfessorProductController.h"
+#include "ProductHardwareInterface.h"
 #include "ProductEdidInterface.h"
-#include "ProductController.h"
-#include "ProductMessage.pb.h"
-#include "BreakThread.h"
-#include "RivieraLPM_IpcProtocol.h"
-#include "A4V_VideoManagerMessageIDs.pb.h"
-#include "A4V_VideoManager.pb.h"
-#include "IPCMessageRouterFactory.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             Start of Product Namespace                                       ///
