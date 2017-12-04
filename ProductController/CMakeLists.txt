@@ -9,9 +9,11 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
   ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
   ${KEYHANDLER_DIR}/include
+  .
   include
   source
   source/CustomStateMachine
+  source/IntentHandler
   ${A4VVIDEOMANAGER_DIR}/source/Client
 )
 
