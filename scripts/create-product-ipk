@@ -69,6 +69,7 @@ audiopath_dir=$(components get CastleAudioPath-qc8017_32 installed_location) || 
 castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
 castlepassport_dir=$(components get CastlePassport-qc8017_32 installed_location) || exit
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
+cli_dir=$(components get CastleCli-qc8017_32 installed_location) || exit
 qss_dir=$(components get A4VQuickSetService installed_location) || exit
 
 arch=arm-oemllib32-linux
@@ -166,6 +167,7 @@ sw_update_url=https://worldwide.bose.com/updates/soundtouch-test
 "$castlepassport_dir/stage" "$opt_dir" || exit
 "$shepherd_dir/stage" "$opt_dir" || exit
 "$lpmservice_dir/stage" "$opt_dir" || exit
+"$cli_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 

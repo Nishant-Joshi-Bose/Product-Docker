@@ -65,7 +65,7 @@ PACKAGENAMES = SoundTouch professor_lpm_updater
 #Create Zip file for Bonjour / Local update
 .PHONY: update-zip
 update-zip: product-ipk hsp-ipk lpmupdater-ipk
-	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o professor_update.zip
+	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip
 
 .PHONY: packages-gz
 packages-gz: product-ipk hsp-ipk lpmupdater-ipk
