@@ -61,26 +61,26 @@ ADD_EXECUTABLE(Professor
 TARGET_LINK_LIBRARIES(Professor
   CastleProductControllerCommon
   LpmClient
-  KeyHandler
   A4VVideoManagerClient
-  SoundTouchClient
   FrontDoorClient
-  CliClient
-  BoseLibs
   NetworkServiceUtils
   NetworkServiceClient
+  KeyHandler
   BLESetupServiceProto
   BluetoothSinkServiceProto
-  STS
-  PassportClientAPILib
+  LightBarController
+  CliClient
   ShelbyUtils
+  BoseLibs
+  PassportClient
+  STS
   jsoncpp
   protobuf
   TinyXml
   pthread
   rt
-  dl
   cap
+  dl
 )
 
 INSTALL(TARGETS Professor DESTINATION ${OUTPUT_BIN_DIR})

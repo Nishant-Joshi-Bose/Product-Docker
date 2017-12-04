@@ -1,0 +1,114 @@
+[
+  {
+    "name": "A4VQuickSetService",
+    "selected_version": "asoltan_devel@96f7cb04e415af27a8510d09cdf67ee72a634ebb"
+  },
+  {
+    "name": "A4VRemoteCommunicationService",
+    "selected_version": "asoltan_devel@863a982eb9bf7bcc7f0c45a6e226ac4f1cf97a50"
+  },
+  {
+    "name": "A4VVideoManagerService",
+    "selected_version": "asoltan_devel@e0cfb34bab537984e6849ed58298208e36999b67"
+  },
+  {
+    "name": "AVS-qc8017_32",
+    "selected_version": "Release/Castle-Fork-IP2/0.2.4.40020M.2556137"
+  },
+  {
+    "name": "bose-opkg-utils",
+    "selected_version": "master@0828ce81e7a9b96e03057da48c04a0cebc9aff21"
+  },
+  {
+    "name": "BoseLibs-qc8017_32",
+    "selected_version": "Release/master/0.2.3-172+b5562fa"
+  },
+  {
+    "name": "CastleAudioPath-qc8017_32",
+    "selected_version": "Release/Castle-Fork/0.2.2-20162"
+  },
+  {
+    "name": "CastleCli-qc8017_32",
+    "selected_version": "Release/master/0.2.1-19+eca42ed"
+  },
+  {
+    "name": "CastleLibs-qc8017_32",
+    "selected_version": "branches/castle-libs@2515"
+  },
+  {
+    "name": "CastleLightBarController-qc8017_32",
+    "selected_version": "Release/master/0.2.2-19+55c9871"
+  },
+  {
+    "name": "CastleNetworkService-qc8017_32",
+    "selected_version": "Continuous/master/0.2.2-118+62bec80"
+  },
+  {
+    "name": "CastlePassport-qc8017_32",
+    "selected_version": "Continuous/master/0.2.3-214+f4b0e24"
+  },
+  {
+    "name": "CastlePassportClient-qc8017_32",
+    "selected_version": "Continuous/master/0.2.3-214+f4b0e24"
+  },
+  {
+    "name": "CastleProductControllerCommon",
+    "selected_version": "master@b2416b06f787b3b107ea6f81bf7f0c2dcfb97675"
+  },
+  {
+    "name": "KeyHandler-qc8017_32",
+    "selected_version": "Release/master/0.2.1-26+e67ea31"
+  },
+  {
+    "name": "ProfessorLPM-Package",
+    "selected_version": "Release/IP2/0.2.4.2569960"
+  },
+  {
+    "name": "protobuf-native",
+    "selected_version": "branches/protobuf@2510"
+  },
+  {
+    "name": "protobuf-qc8017_32",
+    "selected_version": "branches/protobuf@2510"
+  },
+  {
+    "name": "Riviera-HSP-Images",
+    "selected_version": "Continuous/dev/1.2-4-g1e617b2"
+  },
+  {
+    "name": "Riviera-Toolchain",
+    "selected_version": "Release/master/1.2"
+  },
+  {
+    "name": "RivieraLpmService-qc8017_32",
+    "selected_version": "Release/IP2/0.2.2-29+43fdfb4"
+  },
+  {
+    "name": "RivieraLpmUpdater",
+    "selected_version": "Release/IP2/0.2.2-21+6b1291b"
+  },
+  {
+    "name": "Shepherd-qc8017_32",
+    "selected_version": "Release/master/0.2.2-35+82ffd55"
+  },
+  {
+    "name": "SoftwareUpdate-qc8017_32",
+    "selected_version": "Release/master/0.3.1-140+71ec442"
+  },
+  {
+    "name": "SoundTouch-SDK-qc8017_32",
+    "selected_version": "Continuous/Castle-Fork/2017-12-01_0851"
+  },
+  {
+    "name": "unittest-cpp-native",
+    "selected_version": "Release/bose-master/2.0.0-3+167ffec"
+  },
+  {
+    "name": "unittest-cpp-qc8017_32",
+    "selected_version": "Release/bose-master/2.0.0-3+167ffec"
+  },
+  {
+    "name": "unittest-cpp-ti",
+    "selected_version": "Release/bose-master/2.0.0-3+167ffec"
+  }
+]
