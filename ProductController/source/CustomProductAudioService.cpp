@@ -67,12 +67,12 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         m_AudioSettingsMgr->SetBass( val );
     };
-    m_AudioBassSetting = std::make_unique<AudioSetting<ProductPb::AudioBassLevel>>
-                         ( "/audio/bass",
-                           getBassAction,
-                           setBassAction,
-                           m_FrontDoorClientIF,
-                           m_ProductTask );
+    m_AudioBassSetting = std::unique_ptr<AudioSetting<ProductPb::AudioBassLevel>>( new AudioSetting<ProductPb::AudioBassLevel>
+                                                                                   ( "/audio/bass",
+                                                                                           getBassAction,
+                                                                                           setBassAction,
+                                                                                           m_FrontDoorClientIF,
+                                                                                           m_ProductTask ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/treble - register ProductController as handler for POST/PUT/GET requests
@@ -85,12 +85,12 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         m_AudioSettingsMgr->SetTreble( val );
     };
-    m_AudioTrebleSetting = std::make_unique<AudioSetting<ProductPb::AudioTrebleLevel>>
+    m_AudioTrebleSetting = std::unique_ptr<AudioSetting<ProductPb::AudioTrebleLevel>>( new AudioSetting<ProductPb::AudioTrebleLevel>
                            ( "/audio/treble",
                              getTrebleAction,
                              setTrebleAction,
                              m_FrontDoorClientIF,
-                             m_ProductTask );
+                             m_ProductTask ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/center - register ProductController as handler for POST/PUT/GET requests
@@ -103,12 +103,12 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         m_AudioSettingsMgr->SetCenter( val );
     };
-    m_AudioCenterSetting = std::make_unique<AudioSetting<ProductPb::AudioCenterLevel>>
+    m_AudioCenterSetting = std::unique_ptr<AudioSetting<ProductPb::AudioCenterLevel>>( new AudioSetting<ProductPb::AudioCenterLevel>
                            ( "/audio/center",
                              getCenterAction,
                              setCenterAction,
                              m_FrontDoorClientIF,
-                             m_ProductTask );
+                             m_ProductTask ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/surround - register ProductController as handler for POST/PUT/GET requests
@@ -121,12 +121,12 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         m_AudioSettingsMgr->SetSurround( val );
     };
-    m_AudioSurroundSetting = std::make_unique<AudioSetting<ProductPb::AudioSurroundLevel>>
+    m_AudioSurroundSetting = std::unique_ptr<AudioSetting<ProductPb::AudioSurroundLevel>>( new AudioSetting<ProductPb::AudioSurroundLevel>
                              ( "/audio/surround",
                                getSurroundAction,
                                setSurroundAction,
                                m_FrontDoorClientIF,
-                               m_ProductTask );
+                               m_ProductTask ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/gainOffset - register ProductController as handler for POST/PUT/GET requests
@@ -139,12 +139,12 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         m_AudioSettingsMgr->SetGainOffset( val );
     };
-    m_AudioGainOffsetSetting = std::make_unique<AudioSetting<ProductPb::AudioGainOffset>>
-                               ( "/audio/gainOffset",
-                                 getGainOffsetAction,
-                                 setGainOffsetAction,
-                                 m_FrontDoorClientIF,
-                                 m_ProductTask );
+    m_AudioGainOffsetSetting =  std::unique_ptr<AudioSetting<ProductPb::AudioGainOffset>>( new AudioSetting<ProductPb::AudioGainOffset>
+                                ( "/audio/gainOffset",
+                                  getGainOffsetAction,
+                                  setGainOffsetAction,
+                                  m_FrontDoorClientIF,
+                                  m_ProductTask ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/avSync - register ProductController as handler for POST/PUT/GET requests
@@ -157,12 +157,12 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         m_AudioSettingsMgr->SetAvSync( val );
     };
-    m_AudioAvSyncsetSetting = std::make_unique<AudioSetting<ProductPb::AudioAvSync>>
+    m_AudioAvSyncsetSetting = std::unique_ptr<AudioSetting<ProductPb::AudioAvSync>>( new AudioSetting<ProductPb::AudioAvSync>
                               ( "/audio/avSync",
                                 getAvSyncAction,
                                 setAvSyncAction,
                                 m_FrontDoorClientIF,
-                                m_ProductTask );
+                                m_ProductTask ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/mode - register ProductController as handler for POST/PUT/GET requests
@@ -175,12 +175,12 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         m_AudioSettingsMgr->SetMode( val );
     };
-    m_AudioModeSetting = std::make_unique<AudioSetting<ProductPb::AudioMode>>
-                         ( "/audio/mode",
-                           getModeAction,
-                           setModeAction,
-                           m_FrontDoorClientIF,
-                           m_ProductTask );
+    m_AudioModeSetting = std::unique_ptr<AudioSetting<ProductPb::AudioMode>>( new AudioSetting<ProductPb::AudioMode>
+                                                                              ( "/audio/mode",
+                                                                                getModeAction,
+                                                                                setModeAction,
+                                                                                m_FrontDoorClientIF,
+                                                                                m_ProductTask ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/contentType - register ProductController as handler for POST/PUT/GET requests
@@ -193,12 +193,12 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         m_AudioSettingsMgr->SetContentType( val );
     };
-    m_AudioContentTypeSetting = std::make_unique<AudioSetting<ProductPb::AudioContentType>>
+    m_AudioContentTypeSetting = std::unique_ptr<AudioSetting<ProductPb::AudioContentType>>( new AudioSetting<ProductPb::AudioContentType>
                                 ( "/audio/contentType",
                                   getContentTypeAction,
                                   setContentTypeAction,
                                   m_FrontDoorClientIF,
-                                  m_ProductTask );
+                                  m_ProductTask ) );
 }
 
 }// namespace ProductApp

@@ -30,7 +30,7 @@
 #include "unistd.h"
 #include "ProfessorProductController.h"
 #include "ProductHardwareInterface.h"
-#include "ProductAudioService.h"
+#include "CustomProductAudioService.h"
 #include "ProductSoftwareServices.h"
 #include "ProductKeyInputInterface.h"
 #include "ProductVolumeManager.h"
