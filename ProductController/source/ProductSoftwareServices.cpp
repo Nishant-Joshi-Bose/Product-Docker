@@ -24,26 +24,11 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "Utilities.h"
 #include "unistd.h"
-#include "NotifyTargetTaskIF.h"
-#include "APTask.h"
-#include "Services.h"
-#include "APProductIF.h"
-#include "APProductFactory.h"
-#include "BoseLinkServerMsgReboot.pb.h"
 #include "BoseLinkServerMsgIds.pb.h"
-#include "IPCServerListener.h"
-#include "APServerSocketListenerFactory.h"
-#include "IPCMessageRouterIF.h"
-#include "IPCMessageRouterFactory.h"
-#include "IPCDirectory.h"
-#include "IPCDirectoryIF.h"
-#include "NetworkPortDefines.h"
-#include "ProductController.h"
+#include "ProfessorProductController.h"
 #include "ProductHardwareInterface.h"
 #include "ProductSoftwareServices.h"
-#include "Services.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///

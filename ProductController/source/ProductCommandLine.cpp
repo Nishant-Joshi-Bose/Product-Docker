@@ -24,14 +24,9 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "Utilities.h"
-#include "APTaskFactory.h"
-#include "APProductIF.h"
 #include "ProductHardwareInterface.h"
 #include "ProfessorProductController.h"
 #include "ProductCommandLine.h"
-#include "AutoLpmServiceMessages.pb.h"
-#include "KeyActions.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///

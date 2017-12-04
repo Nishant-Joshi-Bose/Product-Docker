@@ -27,13 +27,19 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include <chrono>
-#include <thread>
-#include <unistd.h>
-#include "SystemUtils.h"
-#include "Utilities.h"
-#include "ProductController.h"
+#include "unistd.h"
 #include "ProfessorProductController.h"
+#include "ProductHardwareInterface.h"
+#include "ProductAudioService.h"
+#include "ProductSoftwareServices.h"
+#include "ProductKeyInputInterface.h"
+#include "ProductVolumeManager.h"
+#include "ProductEdidInterface.h"
+#include "ProductNetworkManager.h"
+#include "ProductSystemManager.h"
+#include "ProductSpeakerManager.h"
+#include "ProductCommandLine.h"
+#include "ProductAdaptIQManager.h"
 #include "ProductControllerStateTop.h"
 #include "ProductControllerStateSetup.h"
 #include "ProductControllerStates.h"
@@ -53,20 +59,6 @@
 #include "CustomProductControllerStatePlaying.h"
 #include "CustomProductControllerStatePlayingInactive.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
-#include "ProductHardwareInterface.h"
-#include "ProductAudioService.h"
-#include "ProductSoftwareServices.h"
-#include "ProductKeyInputInterface.h"
-#include "ProductNetworkManager.h"
-#include "ProductSystemManager.h"
-#include "ProductSpeakerManager.h"
-#include "ProductCommandLine.h"
-#include "ProtoPersistenceFactory.h"
-#include "ProductMessage.pb.h"
-#include "NetManager.pb.h"
-#include "Callback.h"
-#include "ProductEdidInterface.h"
-#include "KeyActions.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///

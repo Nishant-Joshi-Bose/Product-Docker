@@ -10,6 +10,7 @@ PROTO_SOURCES = AudioSettings.proto         \
                 ProductSTS.proto            \
                 KeyActions.proto            \
                 SystemInfo.proto            \
+                Presets.proto               \
                 ProductSpeakerManager.proto \
                 AdaptIQ.proto 
 

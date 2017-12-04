@@ -24,19 +24,12 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include <chrono>
-#include <thread>
-#include <unistd.h>
-#include "SystemUtils.h"
 #include "Utilities.h"
-#include "DPrint.h"
-#include "APTask.h"
-#include "BreakThread.h"
-#include "ProductController.h"
+#include "KeyActions.pb.h"
+#include "ProductMessage.pb.h"
+#include "ProfessorProductController.h"
 #include "ProductHardwareInterface.h"
 #include "ProductKeyInputInterface.h"
-#include "ProductMessage.pb.h"
-#include "KeyActions.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

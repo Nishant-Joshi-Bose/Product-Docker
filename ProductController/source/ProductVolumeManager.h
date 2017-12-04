@@ -31,12 +31,10 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "NotifyTargetTaskIF.h"
+#include "Utilities.h"
+#include "FrontDoorClientIF.h"
 #include "AudioVolume.h"
-#include "FrontDoorClient.h"
-#include "AudioService.pb.h"
-#include "ProductHardwareInterface.h"
-#include "ProfessorProductController.h"
+#include "ProductMessage.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -131,7 +129,7 @@ private:
     /// @brief The following member tracks mute status
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool                                    m_muted = false;
+    bool m_muted = false;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

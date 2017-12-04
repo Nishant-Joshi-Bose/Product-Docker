@@ -32,21 +32,9 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "NotifyTargetTaskIF.h"
-#include "CliClient.h"
-#include "APTask.h"
-#include "BreakThread.h"
-#include "APTaskFactory.h"
-#include "APClientSocketListenerIF.h"
-#include "APServerSocketListenerIF.h"
-#include "IPCMessageRouterIF.h"
-#include "APProductIF.h"
-#include "KeyActions.pb.h"
-#include "ProductMessage.pb.h"
-#include "LpmClientIF.h"
 #include "KeyHandler.h"
-#include "ProductHardwareInterface.h"
-#include "ProfessorProductController.h"
+#include "LpmServiceMessages.pb.h"
+#include "ProductMessage.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
