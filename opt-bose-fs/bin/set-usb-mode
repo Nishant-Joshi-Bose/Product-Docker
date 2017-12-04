@@ -1,0 +1,76 @@
+#!/bin/bash
+# Utility for switching usb compositions between networking( p2p or client ) and adb.
+# adb is default on development builds. networking over usb is default on production,
+# to support demo. we also switch to point-to-point networking over usb on a key-combo,
+# to assist PTS folks in troubleshooting.
+
+export PATH=/opt/Bose/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
+
+function log {
+    local pri="$1"; shift
+
+    # warning goes to stderr, too.  info does not.
+    local s=-s; [ "$pri" = info ] && s=
+
+    logger $s -t "$tag" -p "$pri" "$*"
+}
+
+function wait_for_rndis0 {
+    # wait for composition script to execute
+    local try=10
+    while :; do
+        sleep 0.5
+        if [ -d "/sys/class/net/rndis0" ]; then
+            break
+        fi
+        if (( (try -= 1) == 0 )); then
+            log error "usb composition failed, giving up"
+            break
+        fi
+        log warning "usb composition failed, will retry ($try)"
+    done
+}
+
+function do_p2p {
+    log info "Switching to USB p2p mode"
+    killall dnsmasq 2> /dev/null
+    # switching to usb composition 'RNDIS : ECM' to enable networking over usb
+    /sbin/usb/compositions/9057
+    wait_for_rndis0
+
+    ip link set rndis0 down
+    ip link set rndis0 name usb2
+    ip link set usb2 up
+    ip addr add 203.0.113.1/24 dev usb2
+    dnsmasq -i usb2 --no-daemon --no-resolv --no-poll --dhcp-range=203.0.113.2,203.0.113.5,12h &
+}
+
+function do_client {
+    log info "Switching to USB client mode"
+    killall dnsmasq 2> /dev/null
+    # switching to usb composition 'RNDIS : ECM' to enable networking over usb
+    /sbin/usb/compositions/9057
+    wait_for_rndis0
+}
+
+function do_adb {
+    log info "Switching to adb mode"
+    killall dnsmasq 2> /dev/null
+    # switching to usb composition 'DIAG + ADB' to enable adb over usb
+    /sbin/usb/compositions/901D
+}
+
+if (( $# == 1 )) && [ "$1" = p2p ]; then
+    do_p2p
+elif (( $# == 1 )) && [ "$1" = client ]; then
+    do_client
+elif (( $# == 0 )); then
+    if is-development; then
+        do_adb
+    else
+        do_client
+    fi
+else
+    echo >&2 "usage: ${0##*/} [p2p|client]"
+    exit 1
+fi
