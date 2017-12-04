@@ -34,19 +34,12 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "ThreadMutex.h"
-#include "NotifyTargetTaskIF.h"
-#include "APTask.h"
-#include "ProductNetworkManager.h"
-#include "ProductSystemManager.h"
-#include "ProductVolumeManager.h"
-#include "ProductAdaptIQManager.h"
-#include "KeyActions.pb.h"
-#include "NetManager.pb.h"
-#include "ProductController.h"
-#include "ProductControllerHsm.h"
-#include "ProductSTSController.h"
 #include "Utilities.h"
+#include "ProductController.h"
+#include "ProductSTSController.h"
+#include "FrontDoorClientIF.h"
+#include "ProductVolumeManager.h"
+#include "ProductMessage.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "MacAddressInfo.h"
 
@@ -69,6 +62,7 @@ class ProductSoftwareServices;
 class ProductEdidInterface;
 class ProductCommandLine;
 class ProductKeyInputInterface;
+class ProductAdaptIQManager;
 class ProductSpeakerManager;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

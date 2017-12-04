@@ -25,17 +25,10 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
-#include "Services.h"
-#include "BoseLinkServerMsgReboot.pb.h"
-#include "BoseLinkServerMsgIds.pb.h"
-#include "IPCDirectory.h"
-#include "IPCDirectoryIF.h"
-#include "BreakThread.h"
-#include "NetworkPortDefines.h"
-#include "IHsm.h"
+#include "FrontDoorClient.h"
+#include "ProtoPersistenceFactory.h"
 #include "ProfessorProductController.h"
 #include "ProductSystemManager.h"
-#include "FrontDoorClient.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///

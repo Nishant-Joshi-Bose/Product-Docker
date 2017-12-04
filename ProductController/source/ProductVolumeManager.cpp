@@ -23,9 +23,8 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include <string>
-#include "DPrint.h"
 #include "Utilities.h"
+#include "FrontDoorClient.h"
 #include "ProfessorProductController.h"
 #include "ProductHardwareInterface.h"
 #include "ProductVolumeManager.h"
@@ -59,6 +58,7 @@ ProductVolumeManager::ProductVolumeManager( ProfessorProductController& ProductC
       m_ProductNotify( ProductController.GetMessageHandler( ) ),
       m_ProductHardwareInterface( ProductController.GetHardwareInterface( ) )
 {
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,7 +83,6 @@ bool ProductVolumeManager::Run( )
 
     m_NotifierCallback = m_FrontDoorClient->RegisterNotification< SoundTouchInterface::volume >
                          ( FRONTDOOR_AUDIO_VOLUME, fNotify );
-
     return true;
 }
 
@@ -99,6 +98,7 @@ void ProductVolumeManager::Stop( )
 {
     m_NotifierCallback.Disconnect( );
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
