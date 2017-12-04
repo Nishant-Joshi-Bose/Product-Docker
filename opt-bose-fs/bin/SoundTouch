@@ -75,12 +75,22 @@ EOF
 
     rw --read-only
 
+    /opt/Bose/webkit/target_scripts/lcd/init-lcd.sh
+
     set_ap.sh
 
+    demoFlag=/mnt/nv/DemoModeOn
     if ! $override; then
         mkdir -p "$rundir" || exit
         rm -f "$rundir"/*.xml
         ln -s /opt/Bose/etc/Shepherd*.xml "$rundir" || exit
+
+        key=KeyConfiguration.json
+        if [ -e "$demoFlag" ]; then
+            log info "--DEMO MODE--"
+            key=KeyConfiguration-demo.json
+        fi
+        ln -nsf "/opt/Bose/etc/$key" /var/run/KeyConfiguration.json
 
         if is-development; then
             cat >"$rundir/Debug.xml" <<\EOF

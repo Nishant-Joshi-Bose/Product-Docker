@@ -106,7 +106,6 @@ c=$wspace/ProductController/Configuration.xml
 xmllint --noout --schema "$u/validate-config.xsd" "$c" || exit
 gen_config "$u/BoseApp.xslt" "$c" "BoseApp.xml"
 gen_config "$u/UpnpSource.xslt" "$c" "UpnpSource.xml"
-gen_config "$u/WebServer.xslt" "$c" "WebServer.xml"
 gen_config "$u/APConfig.xslt" "$c" "APConfig.xml"
 
 # -----------------------------------------------------------------------------
@@ -125,21 +124,20 @@ echo "FS_VERSION \"$v\""
 
 stfs=$soundtouch_sdk/fs
 cp "$stfs"/opt/Bose/BoseApp "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BTSource "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BT "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BluetoothManager "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BLESetup "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/CLIServer "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/PlatformReset "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/STSCertified "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/UpnpSource "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/WebServer "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/FrontDoor "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/etc/HandCraftedWebServer-SoundTouch.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
-cp "$stfs"/opt/Bose/etc/WebServer-SoundTouch.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
 cp "$boselibs_dir"/services.json "$opt_dir/etc" || exit
 cp -a "$stfs"/opt/Bose/Xml "$opt_dir/bin" || exit
-cp -a "$stfs"/opt/Bose/html "$opt_dir" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
 cp -a "$boselibs_dir/lib" "$opt_dir" || exit
@@ -158,11 +156,6 @@ sw_update_url=https://worldwide.bose.com/updates/soundtouch-test
     SoundTouchSdkPrivateCfg.statsServerUrl="$stats_url" \
     SoundTouchSdkPrivateCfg.swUpdateUrl="$sw_update_url" \
     || exit
-
-# Edit the version information into update.html.
-v=$(make-version-string "$version_json" "{major}.{minor}.{patch}") || exit
-echo "HTML version \"$v\""
-sed -i "s/%FROMVERSION%/From: $v/" "$opt_dir/html/update.html" || exit
 
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
