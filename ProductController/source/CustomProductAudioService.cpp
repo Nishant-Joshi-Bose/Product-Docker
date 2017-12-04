@@ -67,7 +67,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         m_AudioSettingsMgr->SetBass( val );
     };
-    m_AudioBassSetting = std::make_shared<AudioSetting<ProductPb::AudioBassLevel>>
+    m_AudioBassSetting = std::make_unique<AudioSetting<ProductPb::AudioBassLevel>>
                          ( "/audio/bass",
                            getBassAction,
                            setBassAction,
@@ -85,7 +85,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         m_AudioSettingsMgr->SetTreble( val );
     };
-    m_AudioTrebleSetting = std::make_shared<AudioSetting<ProductPb::AudioTrebleLevel>>
+    m_AudioTrebleSetting = std::make_unique<AudioSetting<ProductPb::AudioTrebleLevel>>
                            ( "/audio/treble",
                              getTrebleAction,
                              setTrebleAction,
@@ -103,7 +103,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         m_AudioSettingsMgr->SetCenter( val );
     };
-    m_AudioCenterSetting = std::make_shared<AudioSetting<ProductPb::AudioCenterLevel>>
+    m_AudioCenterSetting = std::make_unique<AudioSetting<ProductPb::AudioCenterLevel>>
                            ( "/audio/center",
                              getCenterAction,
                              setCenterAction,
@@ -121,7 +121,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         m_AudioSettingsMgr->SetSurround( val );
     };
-    m_AudioSurroundSetting = std::make_shared<AudioSetting<ProductPb::AudioSurroundLevel>>
+    m_AudioSurroundSetting = std::make_unique<AudioSetting<ProductPb::AudioSurroundLevel>>
                              ( "/audio/surround",
                                getSurroundAction,
                                setSurroundAction,
@@ -139,7 +139,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         m_AudioSettingsMgr->SetGainOffset( val );
     };
-    m_AudioGainOffsetSetting = std::make_shared<AudioSetting<ProductPb::AudioGainOffset>>
+    m_AudioGainOffsetSetting = std::make_unique<AudioSetting<ProductPb::AudioGainOffset>>
                                ( "/audio/gainOffset",
                                  getGainOffsetAction,
                                  setGainOffsetAction,
@@ -157,7 +157,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         m_AudioSettingsMgr->SetAvSync( val );
     };
-    m_AudioAvSyncsetSetting = std::make_shared<AudioSetting<ProductPb::AudioAvSync>>
+    m_AudioAvSyncsetSetting = std::make_unique<AudioSetting<ProductPb::AudioAvSync>>
                               ( "/audio/avSync",
                                 getAvSyncAction,
                                 setAvSyncAction,
@@ -175,7 +175,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         m_AudioSettingsMgr->SetMode( val );
     };
-    m_AudioModeSetting = std::make_shared<AudioSetting<ProductPb::AudioMode>>
+    m_AudioModeSetting = std::make_unique<AudioSetting<ProductPb::AudioMode>>
                          ( "/audio/mode",
                            getModeAction,
                            setModeAction,
@@ -193,7 +193,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         m_AudioSettingsMgr->SetContentType( val );
     };
-    m_AudioContentTypeSetting = std::make_shared<AudioSetting<ProductPb::AudioContentType>>
+    m_AudioContentTypeSetting = std::make_unique<AudioSetting<ProductPb::AudioContentType>>
                                 ( "/audio/contentType",
                                   getContentTypeAction,
                                   setContentTypeAction,
