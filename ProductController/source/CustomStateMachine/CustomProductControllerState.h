@@ -106,33 +106,15 @@ public:
     virtual bool HandleAutowakeStatus( bool active );
     virtual bool HandleKeyAction( int action );
     virtual bool HandlePairingState( ProductAccessoryPairing pairingStatus );
+    virtual bool HandleStopPlaybackResponse( const SoundTouchInterface::status &response );
+    virtual bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo );
+    virtual bool HandleInactivityTimer( InactivityTimerType timerType );
+    virtual bool HandleModulesReady( );
+    virtual bool HandleNetworkConfigurationStatus( );
+    virtual bool HandleBluetoothModuleState( bool ready );
+    virtual bool HandleLpmInterfaceState( bool isConnected );
 
-    virtual bool HandleStopPlaybackResponse( const SoundTouchInterface::status &resp )
-    {
-        return false;
-    }
-
-    virtual bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
-    {
-        return false;
-    }
-
-    virtual bool HandleInactivityTimer( InactivityTimerType timerType )
-    {
-        return false;
-    }
-
-    virtual bool HandleModulesReady( )
-    {
-        return false;
-    }
-
-    virtual bool HandleNetworkConfigurationStatus( )
-    {
-        return false;
-    }
-
-    static void SetProductController( ProductController* productController )
+    inline static void SetProductController( ProductController* productController )
     {
         s_productController = productController;
     }

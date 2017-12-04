@@ -32,20 +32,14 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "NotifyTargetTaskIF.h"
-#include "BreakThread.h"
-#include "APTaskFactory.h"
-#include "FrontDoorClientIF.h"
+#include "Utilities.h"
 #include "ProtoPersistenceIF.h"
-#include "ProtoPersistenceFactory.h"
-#include "CapsInitializationStatus.pb.h"
-#include "NetworkService.pb.h"
-#include "STSNetworkStatus.pb.h"
-#include "NetManager.pb.h"
+#include "FrontDoorClientIF.h"
 #include "ProductMessage.pb.h"
+#include "Language.pb.h"
 #include "ConfigurationStatus.pb.h"
 #include "SystemInfo.pb.h"
-#include "ProfessorProductController.h"
+#include "CapsInitializationStatus.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///

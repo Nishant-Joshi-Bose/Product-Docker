@@ -118,6 +118,41 @@ bool CustomProductControllerState::HandlePairingState( ProductAccessoryPairing p
     return false;
 }
 
+bool CustomProductControllerState::HandleStopPlaybackResponse( const SoundTouchInterface::status &response )
+{
+    return false;
+}
+
+bool CustomProductControllerState::HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
+{
+    return false;
+}
+
+bool CustomProductControllerState::HandleInactivityTimer( InactivityTimerType timerType )
+{
+    return false;
+}
+
+bool CustomProductControllerState::HandleModulesReady( )
+{
+    return false;
+}
+
+bool CustomProductControllerState::HandleNetworkConfigurationStatus( )
+{
+    return false;
+}
+
+bool CustomProductControllerState::HandleBluetoothModuleState( bool ready )
+{
+    return false;
+}
+
+bool CustomProductControllerState::HandleLpmInterfaceState( bool isConnected )
+{
+    return false;
+}
+
 ProfessorProductController& CustomProductControllerState::GetCustomProductController( )
 {
     return *static_cast< ProfessorProductController* >( s_productController );

@@ -31,18 +31,10 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "ProtoPersistenceIF.h"
-#include "ConfigurationStatus.pb.h"
-#include "ProductMessage.pb.h"
-#include "CapsInitializationStatus.pb.h"
-#include "NetworkService.pb.h"
-#include "STSNetworkStatus.pb.h"
-#include "NetManager.pb.h"
-#include "BreakThread.h"
-#include "APTaskFactory.h"
+#include "Utilities.h"
 #include "FrontDoorClientIF.h"
-#include "ConfigurationStatus.pb.h"
-#include "ProfessorProductController.h"
+#include "NetManager.pb.h"
+#include "ProductMessage.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
