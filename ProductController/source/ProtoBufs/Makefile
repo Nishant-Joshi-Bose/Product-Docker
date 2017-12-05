@@ -2,6 +2,7 @@ include $(BOSE_WORKSPACE)/Settings.mk
 
 BOSELIBS_DIR       := $(shell components get BoseLibs-$(sdk)       installed_location)
 SOUNDTOUCH_SDK_DIR := $(shell components get SoundTouch-SDK-$(sdk) installed_location)
+CASTLE_PRODUCT_CONTROLLER_COMMON_DIR := $(shell components get CastleProductControllerCommon installed_location)
 
 PROTO_SOURCES = ProductMessage.proto        \
                 ConfigurationStatus.proto   \
@@ -21,5 +22,6 @@ PROTO_IMPORT_DIRS :=  .                                       \
                       $(BOSELIBS_DIR)/include                 \
                       $(SOUNDTOUCH_SDK_DIR)/protobufs         \
                       $(SOUNDTOUCH_SDK_DIR)/prebuilt/include  \
+                      $(CASTLE_PRODUCT_CONTROLLER_COMMON_DIR)/Protobufs \
 
 include $(BOSELIBS_DIR)/protobuf.mk
