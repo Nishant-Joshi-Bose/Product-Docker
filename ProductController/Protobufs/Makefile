@@ -6,6 +6,7 @@ PROTO_SOURCES = \
   ConfigurationStatus.proto \
   LightBarController.proto \
   ProductMessage.proto \
+  KeyActions.proto \
   AudioSettings.proto \
   ContentItem.proto \
   DisplayController.proto \

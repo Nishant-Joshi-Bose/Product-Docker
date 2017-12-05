@@ -29,17 +29,28 @@ const std::string KEY_CONFIG_FILE = "/var/run/KeyConfiguration.json";
 
 EddieProductController::EddieProductController( std::string const& ProductName ):
     ProductController( ProductName ),
-    m_EddieProductControllerStateTop( GetHsm(), nullptr ),
-    m_EddieProductControllerStateBooting( GetHsm(), &m_EddieProductControllerStateTop ),
-    m_EddieProductControllerStateSetup( GetHsm(), &m_EddieProductControllerStateTop ),
-    m_EddieProductControllerStateNetworkStandby( GetHsm(), &m_EddieProductControllerStateTop ),
-    m_EddieProductControllerStateAudioOn( GetHsm(), &m_EddieProductControllerStateTop ),
-    m_LpmClient(),
+    m_ProductControllerStateTop( GetHsm(), nullptr ),
+    m_CustomProductControllerStateBooting( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING ),
+    m_CustomProductControllerStateSetup( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP ),
+    m_CustomProductControllerStateOn( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_ON ),
+    m_ProductControllerStateLowPowerStandby( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY ),
+    m_ProductControllerStateSwUpdating( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING ),
+    m_ProductControllerStateCriticalError( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_CRITICAL_ERROR ),
+    m_ProductControllerStateRebooting( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_REBOOTING ),
+    m_ProductControllerStatePlaying( GetHsm(), &m_CustomProductControllerStateOn, PRODUCT_CONTROLLER_STATE_PLAYING ),
+    m_ProductControllerStatePlayable( GetHsm(), &m_CustomProductControllerStateOn, PRODUCT_CONTROLLER_STATE_PLAYABLE ),
+    m_ProductControllerStateLowPowerStandbyTransition( GetHsm(), &m_ProductControllerStateLowPowerStandby, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION ),
+    m_ProductControllerStatePlayingActive( GetHsm(), &m_ProductControllerStatePlaying, PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE ),
+    m_ProductControllerStatePlayingInactive( GetHsm(), &m_ProductControllerStatePlaying, PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE ),
+    m_ProductControllerStateIdle( GetHsm(), &m_ProductControllerStatePlayable, PRODUCT_CONTROLLER_STATE_IDLE ),
+    m_ProductControllerStateNetworkStandby( GetHsm(), &m_ProductControllerStatePlayable, PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY ),
+    m_ProductControllerStateVoiceConfigured( GetHsm(), &m_ProductControllerStateIdle, PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED ),
+    m_ProductControllerStateVoiceNotConfigured( GetHsm(), &m_ProductControllerStateIdle, PRODUCT_CONTROLLER_STATE_IDLE_VOICE_NOT_CONFIGURED ),
+    m_ProductControllerStateNetworkConfigured( GetHsm(), &m_ProductControllerStateNetworkStandby, PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED ),
+    m_ProductControllerStateNetworkNotConfigured( GetHsm(), &m_ProductControllerStateNetworkStandby, PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_NOT_CONFIGURED ),
     m_KeyHandler( *GetTask(), m_CliClientMT, KEY_CONFIG_FILE ),
     m_cachedStatus(),
     m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
-    m_LpmInterface( std::bind( &EddieProductController::HandleProductMessage,
-                               this, std::placeholders::_1 ), GetTask() ),
     m_wifiProfilesCount(),
     errorCb( AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> ( std::bind( &EddieProductController::CallbackError,
                                                                   this, std::placeholders::_1 ), GetTask() ) ),
@@ -49,21 +60,38 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     BOSE_INFO( s_logger, __func__ );
     m_deviceManager.Initialize( this );
     /// Add States to HSM object and initialize HSM before doing anything else.
-    GetHsm().AddState( &m_EddieProductControllerStateTop );
-    GetHsm().AddState( &m_EddieProductControllerStateBooting );
-    GetHsm().AddState( &m_EddieProductControllerStateSetup );
-    GetHsm().AddState( &m_EddieProductControllerStateNetworkStandby );
-    GetHsm().AddState( &m_EddieProductControllerStateAudioOn );
+    GetHsm().AddState( &m_ProductControllerStateTop );
+    GetHsm().AddState( &m_ProductControllerStateLowPowerStandby );
+    GetHsm().AddState( &m_ProductControllerStateSwUpdating );
+    GetHsm().AddState( &m_CustomProductControllerStateBooting );
+    GetHsm().AddState( &m_CustomProductControllerStateSetup );
+    GetHsm().AddState( &m_CustomProductControllerStateOn );
+    GetHsm().AddState( &m_ProductControllerStateCriticalError );
+    GetHsm().AddState( &m_ProductControllerStateRebooting );
+    GetHsm().AddState( &m_ProductControllerStatePlaying );
+    GetHsm().AddState( &m_ProductControllerStatePlayable );
+    GetHsm().AddState( &m_ProductControllerStateLowPowerStandbyTransition );
+    GetHsm().AddState( &m_ProductControllerStatePlayingActive );
+    GetHsm().AddState( &m_ProductControllerStatePlayingInactive );
+    GetHsm().AddState( &m_ProductControllerStateIdle );
+    GetHsm().AddState( &m_ProductControllerStateNetworkStandby );
+    GetHsm().AddState( &m_ProductControllerStateVoiceConfigured );
+    GetHsm().AddState( &m_ProductControllerStateVoiceNotConfigured );
+    GetHsm().AddState( &m_ProductControllerStateNetworkConfigured );
+    GetHsm().AddState( &m_ProductControllerStateNetworkNotConfigured );
+
     GetHsm().Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );
 
-    InitializeLpmClient();
     m_ConfigurationStatusPersistence = ProtoPersistenceFactory::Create( "ConfigurationStatus", g_ProductPersistenceDir );
     m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
     ReadConfigurationStatusFromPersistence();
 
-    m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF, m_LpmClient ) );
-    m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF, m_LpmClient ) );
+    m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_LpmInterface.GetLpmClient() ) );
+    m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF,  m_LpmInterface.GetLpmClient() ) );
     SetupProductSTSController();
+
+    // Initialize and register Intents for the Product Controller
+    m_IntentHandler.Initialize();
 }
 
 EddieProductController::~EddieProductController()
@@ -72,12 +100,12 @@ EddieProductController::~EddieProductController()
 
 void EddieProductController::Initialize()
 {
-    m_LpmInterface.Initialize();
+    m_LpmInterface.Initialize( std::bind( &EddieProductController::HandleProductMessage , this, std::placeholders::_1 ) );
     m_productCliClient.Initialize( GetTask() );
     RegisterCliClientCmds();
     RegisterEndPoints();
     SendInitialRequests();
-    //Register lpm events that lightbar will handle
+    ///Register lpm events that lightbar will handle
     m_lightbarController->RegisterLightBarEndPoints();
     m_demoController.Initialize();
     m_displayController ->Initialize();
@@ -96,14 +124,6 @@ std::string const& EddieProductController::GetProductVariant() const
     return productType;
 }
 
-
-void EddieProductController::InitializeLpmClient()
-{
-    BOSE_INFO( s_logger, __func__ );
-/// To_Do- will remove m_LpmClient from EddieProductController in separate commit.
-    m_LpmClient = m_LpmInterface.GetLpmClient();
-}
-
 void EddieProductController::RegisterLpmEvents()
 {
     BOSE_INFO( s_logger, __func__ );
@@ -111,7 +131,7 @@ void EddieProductController::RegisterLpmEvents()
     // Register keys coming from the LPM.
     auto func = std::bind( &EddieProductController::HandleLpmKeyInformation, this, std::placeholders::_1 );
     AsyncCallback<IpcKeyInformation_t>response_cb( func, GetTask() );
-    m_LpmClient->RegisterEvent<IpcKeyInformation_t>( IPC_KEY, response_cb );
+    m_LpmInterface.GetLpmClient()->RegisterEvent<IpcKeyInformation_t>( IPC_KEY, response_cb );
     m_lightbarController->RegisterLpmEvents();
 }
 
@@ -158,15 +178,25 @@ void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::Ne
     if( networkStatus.has_isprimaryup() )
     {
         m_cachedStatus = networkStatus;
-        GetHsm().Handle<>( &CustomProductControllerState::HandleNetworkConfigurationStatus );
+        GetHsm().Handle< bool, bool > ( &CustomProductControllerState::HandleNetworkState, IsNetworkConfigured() /*configured*/, IsNetworkConnected() /*connected*/ );
     }
+}
+
+bool EddieProductController::IsNetworkConfigured() const
+{
+    return ( m_bluetoothSinkList.get().devices_size() || m_wifiProfilesCount.get() || m_cachedStatus.get().isprimaryup() );
+}
+
+bool EddieProductController::IsNetworkConnected() const
+{
+    return m_cachedStatus.get().isprimaryup() ;
 }
 
 void EddieProductController::HandleWiFiProfileResponse( const NetManager::Protobuf::WiFiProfiles& profiles )
 {
     m_wifiProfilesCount = profiles.profiles_size();
     BOSE_INFO( s_logger, "%s, m_wifiProfilesCount=%d", __func__, m_wifiProfilesCount.get() );
-    GetHsm().Handle<>( &CustomProductControllerState::HandleNetworkConfigurationStatus );
+    GetHsm().Handle< bool, bool > ( &CustomProductControllerState::HandleNetworkState, IsNetworkConfigured() /*configured*/, IsNetworkConnected() /*connected*/ );
 }
 
 /// This function will handle key information coming from LPM and give it to
@@ -269,32 +299,36 @@ std::string EddieProductController::keyToOriginator( enum KeyOrigin_t e )
     case KEY_ORIGIN_CONSOLE_BUTTON:
     {
         return "console" ;
-    };
+    }
 
     case KEY_ORIGIN_CAPSENSE:
     {
         return "capsense";
-    };
+    }
     case KEY_ORIGIN_IR:
     {
         return "ir-remote" ;
-    };
+    }
     case KEY_ORIGIN_RF:
     {
         return "rf" ;
-    };
+    }
     case KEY_ORIGIN_CEC:
     {
         return "cec" ;
-    };
+    }
     case KEY_ORIGIN_NETWORK:
     {
         return "network" ;
-    };
+    }
     case KEY_ORIGIN_TAP:
     {
         return "tap" ;
-    };
+    }
+    case KEY_ORIGIN_INVALID:
+    {
+        return "invalid" ;
+    }
     }
     return "unknown" ;
 }
@@ -360,7 +394,7 @@ void EddieProductController::HandleSTSReady( void )
 {
     BOSE_DEBUG( s_logger, __func__ );
     m_isSTSReady = true;
-    GetHsm().Handle<>( &CustomProductControllerState::HandleModulesReady );
+    GetHsm().Handle<>( &CustomProductControllerState::HandleSTSSourcesInit );
 }
 
 void EddieProductController::HandleConfigurationStatusRequest( const Callback<ProductPb::ConfigurationStatus> &resp )
@@ -372,7 +406,7 @@ void EddieProductController::HandleConfigurationStatusRequest( const Callback<Pr
 void EddieProductController::HandleCAPSReady( bool capsReady )
 {
     m_isCapsReady = capsReady;
-    GetHsm().Handle<>( &CustomProductControllerState::HandleModulesReady );
+    GetHsm().Handle<bool>( &CustomProductControllerState::HandleCapsState, capsReady );
 }
 
 void EddieProductController::HandleNetworkModuleReady( bool networkModuleReady )
@@ -389,24 +423,20 @@ void EddieProductController::HandleNetworkModuleReady( bool networkModuleReady )
                                                                                        this, std::placeholders::_1 ), GetTask() );
         m_FrontDoorClientIF->SendGet<NetManager::Protobuf::NetworkStatus>( FRONTDOOR_NETWORK_STATUS_API, networkStatusCb, errorCb );
     }
+
     m_isNetworkModuleReady = networkModuleReady;
-    GetHsm().Handle<>( &CustomProductControllerState::HandleModulesReady );
 }
 
-void EddieProductController::HandleLPMReady()
-{
-    BOSE_INFO( s_logger, __func__ );
-}
-
-bool EddieProductController::IsAllModuleReady()
+bool EddieProductController::IsAllModuleReady() const
 {
     BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|NetworkModuleReady=%d|m_isBluetoothReady=%d|STSReady=%d", __func__,
-               m_isCapsReady , m_isLPMReady, m_isNetworkModuleReady, m_isBluetoothReady, m_isSTSReady );
-    return ( m_isCapsReady and
-             m_isLPMReady and
-             ( m_isNetworkModuleReady and m_cachedStatus.is_initialized() and m_wifiProfilesCount.is_initialized() ) and
-             m_isSTSReady and
-             ( m_isBluetoothReady and m_bluetoothSinkList.is_initialized() ) );
+               IsCAPSReady() , IsLpmReady(), IsNetworkModuleReady(), IsBluetoothModuleReady(), IsSTSReady() );
+
+    return ( IsCAPSReady() and
+             IsLpmReady() and
+             IsNetworkModuleReady() and
+             IsSTSReady() and
+             IsBluetoothModuleReady() ) ;
 }
 
 bool EddieProductController::IsBtLeModuleReady() const
@@ -415,11 +445,30 @@ bool EddieProductController::IsBtLeModuleReady() const
     return m_isBLEModuleReady;
 }
 
-
 bool EddieProductController::IsCAPSReady() const
 {
-    BOSE_INFO( s_logger, "%s:CAPS Ready=%d", __func__, m_isCapsReady );
+    BOSE_DEBUG( s_logger, "%s:%s", __func__, m_isCapsReady ? "Yes" : "No" );
     return m_isCapsReady;
+}
+
+bool EddieProductController::IsLpmReady() const
+{
+    BOSE_DEBUG( s_logger, "%s:%s", __func__, m_isLpmReady ? "Yes" : "No" );
+    return m_isLpmReady;
+}
+
+bool EddieProductController::IsNetworkModuleReady() const
+{
+    bool ready = m_isNetworkModuleReady and m_cachedStatus.is_initialized() and m_wifiProfilesCount.is_initialized();
+    BOSE_DEBUG( s_logger, "%s:%s", __func__, ready ? "Yes" : "No" );
+    return ready;
+}
+
+bool EddieProductController::IsBluetoothModuleReady() const
+{
+    bool ready = m_isBluetoothReady and m_bluetoothSinkList.is_initialized();
+    BOSE_DEBUG( s_logger, "%s:%s", __func__, ready ? "Yes" : "No" );
+    return ready;
 }
 
 bool EddieProductController::IsSTSReady() const
@@ -431,11 +480,6 @@ bool EddieProductController::IsSTSReady() const
 bool EddieProductController::IsLanguageSet()
 {
     return m_deviceManager.IsLanguageSet();
-}
-
-bool EddieProductController::IsNetworkConfigured() const
-{
-    return ( m_bluetoothSinkList.get().devices_size() || m_wifiProfilesCount.get() || m_cachedStatus.get().isprimaryup() );
 }
 
 void EddieProductController::ReadConfigurationStatusFromPersistence()
@@ -453,6 +497,7 @@ void EddieProductController::ReadConfigurationStatusFromPersistence()
     {
         BOSE_LOG( ERROR, "Loading configuration status from persistence failed - " << e.what() );
     }
+    BOSE_INFO( s_logger, "%s: %s", __func__, ProtoToMarkup::ToJson( m_ConfigurationStatus ).c_str() );
 }
 
 void EddieProductController::PersistSystemConfigurationStatus()
@@ -708,52 +753,33 @@ void EddieProductController::HandleGetProductControllerStateCliCmd( const std::l
 
 void EddieProductController::HandleProductMessage( const ProductMessage& productMessage )
 {
-    BOSE_DEBUG( s_logger, "Product Controller Messages" );
+    BOSE_INFO( s_logger, "%s", __func__ );
 
-    if( productMessage.has_id() )
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// LPM status messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    if( productMessage.has_lpmstatus( ) )
     {
-        switch( productMessage.id() )
+        if( productMessage.lpmstatus( ).has_connected( ) )
         {
-        case LPM_HARDWARE_DOWN:
-        {
-            BOSE_DEBUG( s_logger, "Received LPM Hardware Down message" );
-            m_isLPMReady = false;
+            m_isLpmReady = productMessage.lpmstatus( ).connected( );
         }
-        break;
-        case LPM_HARDWARE_UP:
+        else
         {
-            BOSE_DEBUG( s_logger, "Received LPM Hardware Up message" );
-            m_isLPMReady = true;
-            // RegisterLpmEvents and RegisterKeyHandler
+            BOSE_ERROR( s_logger, "An invalid LPM status message was received." );
+            return;
+        }
+        if( m_isLpmReady )
+        {
+            /// RegisterLpmEvents and RegisterKeyHandler
             RegisterLpmEvents();
             RegisterKeyHandler();
-            GetHsm().Handle<bool>( &CustomProductControllerState::HandleLpmState, true );
         }
-        break;
-        case LPM_INTERFACE_DOWN:
-        {
-            BOSE_DEBUG( s_logger, "Received LPM Interface Down message" );
-            GetHsm().Handle<bool>(
-                &CustomProductControllerState::HandleLpmInterfaceState, false );
-        }
-        break;
-        case LPM_INTERFACE_UP:
-        {
-            BOSE_DEBUG( s_logger, "Received LPM Interface UP message" );
-            GetHsm().Handle<bool>(
-                &CustomProductControllerState::HandleLpmInterfaceState, true );
-        }
-        break;
-        default:
-            BOSE_ERROR( s_logger, "Unhandled product message" );
-            break;
-        }
-        return;
-    }
-    else
-    {
-        BOSE_ERROR( s_logger, "productMessage doesn't have an Id" );
-        return;
+
+        BOSE_DEBUG( s_logger, "An LPM Hardware %s message was received.",
+                    m_isLpmReady ? "up" : "down" );
+
+        GetHsm().Handle<bool>( &CustomProductControllerState::HandleLpmState, m_isLpmReady );
     }
 }
 
@@ -864,4 +890,15 @@ void EddieProductController::HandleBtLeModuleReady( bool btLeModuleReady )
         GetHsm().Handle<>( &CustomProductControllerState::HandleBtLeModuleReady );
 }
 
-} // namespace ProductApp
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @name   IsBooted
+/// @return This method returns a true or false value, based on a series of set member variables,
+///         which all must be true to indicate that the device has booted.
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool EddieProductController::IsBooted( ) const
+{
+    return IsAllModuleReady();
+}
+
+
+} /// namespace ProductApp

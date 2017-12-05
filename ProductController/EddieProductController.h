@@ -15,11 +15,27 @@
 #include "ProductController.h"
 #include "NotifyTargetTaskIF.h"
 #include "ProtoPersistenceIF.h"
-#include "EddieProductControllerStateTop.h"
-#include "EddieProductControllerStateBooting.h"
-#include "EddieProductControllerStateSetup.h"
-#include "EddieProductControllerStateNetworkStandby.h"
-#include "EddieProductControllerStateAudioOn.h"
+#include "ProductControllerStateTop.h"
+#include "ProductControllerStateSetup.h"
+#include "ProductControllerStateNetworkStandby.h"
+#include "ProductControllerStateLowPowerStandby.h"
+#include "ProductControllerStateLowPowerStandbyTransition.h"
+#include "ProductControllerStateNetworkStandbyConfigured.h"
+#include "ProductControllerStateNetworkStandbyNotConfigured.h"
+#include "ProductControllerStateIdleVoiceConfigured.h"
+#include "ProductControllerStateIdleVoiceNotConfigured.h"
+#include "ProductControllerStatePlayable.h"
+#include "ProductControllerStatePlaying.h"
+#include "ProductControllerStatePlayingActive.h"
+#include "ProductControllerStatePlayingInactive.h"
+#include "ProductControllerStateRebooting.h"
+#include "CustomProductControllerStateBooting.h"
+#include "CustomProductControllerStateSetup.h"
+#include "CustomProductControllerStateOn.h"
+#include "ProductControllerStateOn.h"
+#include "ProductControllerStateIdle.h"
+#include "ProductControllerStateSoftwareUpdating.h"
+#include "ProductControllerStateCriticalError.h"
 #include "LightBarController.h"
 #include "DemoController.h"
 #include "ConfigurationStatus.pb.h"
@@ -29,8 +45,6 @@
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "ProductCliClient.h"
-#include "LpmClientIF.h"
-#include "LpmInterface.h"
 #include "KeyHandler.h"
 #include "IntentHandler.h"
 #include "ProductSTSController.h"
@@ -62,9 +76,38 @@ public:
     {
         return {};
     }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /// @name  IsBooted
+    /// @brief The following methods are used by the state machine to determine the status of the
+    ///        product controller.
+    /// @return bool
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    bool IsBooted( ) const override;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @name  IsNetworkConfigured
+    /// @brief true if system is conencted to ethernet or number of wifi profiles are nonzero
+    /// @return bool
+    ////////////////////////////////////////////////////////////////////////////////
+    bool IsNetworkConfigured() const override;
+    bool IsNetworkConnected( ) const override;
+    bool IsAutoWakeEnabled( )  const override
+    {
+        /// TO_Do
+        return false;
+    }
+    bool IsVoiceConfigured( )  const override
+    {
+        /// TO_Do
+        return false;
+    }
+    bool IsSoftwareUpdateRequired( ) const override
+    {
+        /// TO_Do
+        return false;
+    }
 
     std::string const& GetProductType() const override;
-
     std::string const& GetProductVariant() const override;
 
 private:
@@ -73,8 +116,8 @@ private:
     EddieProductController& operator=( const EddieProductController& ) = delete;
 
 private:
-    // Initialize and Register with LPM for events notifications
-    void InitializeLpmClient();
+    ///Register with LPM for events notifications
+
     void RegisterLpmEvents();
     void RegisterKeyHandler();
     void RegisterEndPoints();
@@ -147,7 +190,7 @@ private:
     void HandleWiFiProfileResponse( const NetManager::Protobuf::WiFiProfiles& profiles );
 
 public:
-    // Handle Key Information received from LPM
+    /// Handle Key Information received from LPM
     void HandleLpmKeyInformation( IpcKeyInformation_t keyInformation );
 
     void HandleIntents( KeyHandlerUtil::ActionType_t intent );
@@ -167,7 +210,7 @@ public:
 /// Modules like- LPM, CAPS, SW Update etc.
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
-    bool IsAllModuleReady();
+    bool IsAllModuleReady() const;
 
     ///////////////////////////////////////////////////////////////////////////////
     /// @name  IsBtLeModuleReady
@@ -183,6 +226,9 @@ public:
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
     bool IsCAPSReady() const;
+    bool IsNetworkModuleReady() const;
+    bool IsBluetoothModuleReady() const;
+    bool IsLpmReady() const;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  IsSTSReady
@@ -190,13 +236,6 @@ public:
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
     bool IsSTSReady() const;
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name  HandleLPMReady
-/// @brief Function to call when LPM client is ready to send/receive request.
-/// @return void
-////////////////////////////////////////////////////////////////////////////////
-    void HandleLPMReady();
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  HandleCAPSReady
@@ -218,13 +257,6 @@ public:
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
     bool IsLanguageSet();
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name  IsNetworkConfigured
-/// @brief true if system is conencted to ethernet or number of wifi profiles are nonzero
-/// @return bool
-////////////////////////////////////////////////////////////////////////////////
-    bool IsNetworkConfigured() const;
     void SendActivateAccessPointCmd();
     void SendDeActivateAccessPointCmd();
 
@@ -276,16 +308,6 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
     void HandleProductMessage( const ProductMessage& productMessage );
 
-///////////////////////////////////////////////////////////////////////////////
-/// @name   GetLpmInterface
-/// @brief  Returns reference to LpmInterface
-/// @return LpmInterface&
-///////////////////////////////////////////////////////////////////////////////
-    inline LpmInterface& GetLpmInterface()
-    {
-        return m_LpmInterface;
-    }
-
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief Interfaces to the ProductSTSController, which implements the interactions
@@ -309,16 +331,29 @@ public:
 
 private:
 
-    EddieProductControllerStateTop              m_EddieProductControllerStateTop;
-    EddieProductControllerStateBooting          m_EddieProductControllerStateBooting;
-    EddieProductControllerStateSetup            m_EddieProductControllerStateSetup;
-    EddieProductControllerStateNetworkStandby   m_EddieProductControllerStateNetworkStandby;
-    EddieProductControllerStateAudioOn          m_EddieProductControllerStateAudioOn;
+    ProductControllerStateTop               m_ProductControllerStateTop;
+    CustomProductControllerStateBooting     m_CustomProductControllerStateBooting;
+    CustomProductControllerStateSetup       m_CustomProductControllerStateSetup;
+    CustomProductControllerStateOn          m_CustomProductControllerStateOn;
+    ProductControllerStateLowPowerStandby   m_ProductControllerStateLowPowerStandby;
+    ProductControllerSoftwareUpdating       m_ProductControllerStateSwUpdating;
+    ProductControllerStateCriticalError     m_ProductControllerStateCriticalError;
+    ProductControllerStateRebooting         m_ProductControllerStateRebooting;
 
-    // LPM Client handle
-    LpmClientIF::LpmClientPtr                   m_LpmClient;
+    ProductControllerStatePlaying           m_ProductControllerStatePlaying;
+    ProductControllerStatePlayable          m_ProductControllerStatePlayable;
+    ProductControllerStateLowPowerStandbyTransition   m_ProductControllerStateLowPowerStandbyTransition;
 
-    // Key Handler
+    ProductControllerStatePlayingActive     m_ProductControllerStatePlayingActive;
+    ProductControllerStatePlayingInactive   m_ProductControllerStatePlayingInactive;
+    ProductControllerStateIdle              m_ProductControllerStateIdle;
+    ProductControllerStateNetworkStandby    m_ProductControllerStateNetworkStandby;
+
+    ProductControllerStateIdleVoiceConfigured   m_ProductControllerStateVoiceConfigured;
+    ProductControllerStateIdleVoiceNotConfigured   m_ProductControllerStateVoiceNotConfigured;
+    ProductControllerStateNetworkStandbyConfigured   m_ProductControllerStateNetworkConfigured;
+    ProductControllerStateNetworkStandbyNotConfigured   m_ProductControllerStateNetworkNotConfigured;
+    /// Key Handler
     KeyHandlerUtil::KeyHandler                  m_KeyHandler;
     ProtoPersistenceIF::ProtoPersistencePtr     m_ConfigurationStatusPersistence = nullptr;
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
@@ -329,9 +364,8 @@ private:
     std::unique_ptr<LightBar::LightBarController>         m_lightbarController;
     std::unique_ptr<DisplayController>          m_displayController;
     IntentHandler                               m_IntentHandler;
-    LpmInterface                                m_LpmInterface;
     bool                                        m_isCapsReady = false;
-    bool                                        m_isLPMReady  = false;
+    bool                                        m_isLpmReady  = false;
     bool                                        m_isNetworkModuleReady  = false;
     bool                                        m_isBLEModuleReady  = false;
 
@@ -346,6 +380,7 @@ private:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool                                        m_isSTSReady = false;
+    bool m_IsAudioPathReady = true;
     ProductSTSController                        m_ProductSTSController;
     DataCollectionClient                        m_DataCollectionClient;
 };
