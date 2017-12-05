@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "asoltan_devel@96f7cb04e415af27a8510d09cdf67ee72a634ebb"
+    "selected_version": "master@96f7cb04e415af27a8510d09cdf67ee72a634ebb"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -9,7 +9,7 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "asoltan_devel@e0cfb34bab537984e6849ed58298208e36999b67"
+    "selected_version": "master@e0cfb34bab537984e6849ed58298208e36999b67"
   },
   {
     "name": "AVS-qc8017_32",
