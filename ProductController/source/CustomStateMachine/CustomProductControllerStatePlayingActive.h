@@ -77,7 +77,7 @@ public:
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
 
-    bool HandleNowPlayingStatus( ProductNowPlayingStatus_ProductNowPlayingState state ) override;
+    bool HandleNowPlayingStatus( const ProductNowPlayingStatus_ProductNowPlayingState& state ) override;
     bool HandleKeyAction( int action ) override;
 };
 

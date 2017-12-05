@@ -57,7 +57,7 @@ namespace ProductApp
 class ProductHardwareInterface;
 class ProductSystemManager;
 class ProductNetworkManager;
-class ProductAudioService;
+class CustomProductAudioService;
 class ProductSoftwareServices;
 class ProductEdidInterface;
 class ProductCommandLine;
@@ -217,14 +217,7 @@ private:
     std::shared_ptr< ProductVolumeManager     > m_ProductVolumeManager;
     std::shared_ptr< ProductAdaptIQManager     > m_ProductAdaptIQManager;
     std::shared_ptr< ProductSpeakerManager    > m_ProductSpeakerManager;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @todo  The following suclass will need to be changed in the common product controller code
-    ///        to a generic C++ class from a singleton, and declared as a shared pointer here.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ProductAudioService* m_ProductAudioService;
+    std::shared_ptr< CustomProductAudioService> m_ProductAudioService;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

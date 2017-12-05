@@ -30,7 +30,7 @@
 #include "unistd.h"
 #include "ProfessorProductController.h"
 #include "ProductHardwareInterface.h"
-#include "ProductAudioService.h"
+#include "CustomProductAudioService.h"
 #include "ProductSoftwareServices.h"
 #include "ProductKeyInputInterface.h"
 #include "ProductVolumeManager.h"
@@ -262,8 +262,7 @@ void ProfessorProductController::Run( )
     m_ProductVolumeManager     = std::make_shared< ProductVolumeManager     >( *this );
     m_ProductAdaptIQManager    = std::make_shared< ProductAdaptIQManager    >( *this );
     m_ProductSpeakerManager    = std::make_shared< ProductSpeakerManager    >( *this );
-    m_ProductAudioService      = ProductAudioService ::GetInstance( GetTask( ),
-                                                                    GetMessageHandler( ) );
+    m_ProductAudioService      = std::make_shared< CustomProductAudioService>( *this );
 
     if( m_ProductHardwareInterface == nullptr ||
         m_ProductSystemManager     == nullptr ||
@@ -326,7 +325,7 @@ Callback < ProductMessage > ProfessorProductController::GetMessageHandler( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  ProfessorProductController::GetMessageHandler
+/// @brief  ProfessorProductController::GetCommandLineInterface
 ///
 /// @return This method returns a reference to a command line interface for adding module specific
 ///         commands. Note that this interface is instantiated in the inherited ProductController
@@ -1060,7 +1059,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
                     ProductNowPlayingStatus_ProductNowPlayingState_Name
                     ( message.nowplayingstatus( ).state( ) ).c_str( ) );
 
-        GetHsm( ).Handle< ProductNowPlayingStatus_ProductNowPlayingState >
+        GetHsm( ).Handle< const ProductNowPlayingStatus_ProductNowPlayingState & >
         ( &CustomProductControllerState::HandleNowPlayingStatus, message.nowplayingstatus( ).state( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
