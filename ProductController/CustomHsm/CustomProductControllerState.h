@@ -16,6 +16,7 @@
 #include "KeyHandler.h"
 #include "NetManager.pb.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
+#include "ProductMessage.pb.h"
 #include "InactivityTimers.h"
 
 namespace ProductApp
@@ -39,12 +40,46 @@ public:
         return false;
     }
 
-    virtual bool HandleLpmInterfaceState( bool isConnected )
+    virtual bool HandleCapsState( bool ready )
     {
         return false;
     }
 
-    virtual bool HandleModulesReady( )
+    virtual bool HandleAudioPathState( bool ready )
+    {
+        return false;
+    }
+
+    virtual bool HandleNetworkState( bool configured, bool connected )
+    {
+        return false;
+    }
+
+    virtual bool HandleVoiceState( bool configured )
+    {
+        return false;
+    }
+    virtual bool HandleAutowakeStatus( bool active )
+    {
+        return false;
+    }
+
+    virtual bool HandleBluetoothModuleState( bool ready )
+    {
+        return false;
+    }
+
+    virtual bool HandleSTSSourcesInit( )
+    {
+        return false;
+    }
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @name   HandleLpmInterfaceState
+    /// @brief  Handles state when connection to LpmServer has been established
+    /// @param  isConnected - bool - is LpmClient connected or not
+    /// @return bool
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual bool HandleLpmInterfaceState( bool isConnected )
     {
         return false;
     }
@@ -73,6 +108,10 @@ public:
     {
         return false;
     }
+    virtual bool HandleNowPlayingStatus( const ProductNowPlayingStatus_ProductNowPlayingState& state )
+    {
+        return false;
+    }
 
     virtual bool HandleInactivityTimer( InactivityTimerType timerType )
     {
@@ -83,52 +122,6 @@ public:
     {
         return false;
     }
-
-    virtual bool HandleCapsState( bool ready )
-    {
-        return false;
-    }
-
-    virtual bool HandleAudioPathState( bool ready )
-
-    {
-        return false;
-    }
-
-    virtual bool HandleSTSSourcesInit( )
-
-    {
-        return false;
-    }
-
-    virtual bool HandleNetworkState( bool configured, bool connected )
-
-    {
-        return false;
-    }
-
-    virtual bool HandleVoiceState( bool configured )
-
-    {
-        return false;
-    }
-
-    virtual bool HandleBluetoothModuleState( bool ready )
-
-    {
-        return false;
-    }
-
-    virtual bool HandleAutowakeStatus( bool active )
-
-
-    {
-        return false;
-    }
-
-    // Add your HandleCustomXXX() functions here that implements product specific event handlers.
-    // This function should be overridden in the product specific state derived class
-    // that executes product specific event handler.
 
     static  void SetProductController( ProductController* productController )
     {

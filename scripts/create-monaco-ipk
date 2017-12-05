@@ -105,6 +105,7 @@ echo "Stopping WPENetworkProcess"
 pkill WPENetworkProcess
 echo "Stopping WPEWebProcess"
 pkill WPEWebProcess
+exit 0
 EOF
 
 put_script "$stage/prerm" <<EOF

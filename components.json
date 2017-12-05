@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-01_0851"
+    "selected_version": "Continuous/Castle-Fork/2017-12-04_1711"
   },
   {
     "name": "BoseWebMonaco",
@@ -53,7 +53,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@17a3ce5c37857528c7059f38243f48478ee7b7a0"
+    "selected_version": "master@3a4994ff9f66ee673d96005133f9bf465919ea68"
   },
   {
     "name": "CastleTestUtils",
@@ -85,7 +85,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/IP2/0.2.1-23+a9375b8"
+    "selected_version": "Release/IP2/0.2.2-29+43fdfb4"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -101,7 +101,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-01_0851"
+    "selected_version": "Continuous/Castle-Fork/2017-12-04_1741"
   },
   {
     "name": "Webkit",
