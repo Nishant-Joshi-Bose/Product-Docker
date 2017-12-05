@@ -44,7 +44,8 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     errorCb( AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> ( std::bind( &EddieProductController::CallbackError,
                                                                   this, std::placeholders::_1 ), GetTask() ) ),
     m_demoController( m_ProductControllerTask, m_KeyHandler, g_ProductPersistenceDir ),
-    m_DataCollectionClient( "EddieProductController" )
+    m_DataCollectionClient( "EddieProductController" ),
+    m_voiceServiceClient( ProductName, m_FrontDoorClientIF )
 {
     BOSE_INFO( s_logger, __func__ );
     m_deviceManager.Initialize( this );

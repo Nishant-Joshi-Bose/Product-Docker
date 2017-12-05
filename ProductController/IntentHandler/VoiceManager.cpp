@@ -2,7 +2,7 @@
 /// @file VoiceManager.cpp
 ///
 /// @brief Implementation of Voice Manager for actions from Voice
-//         intends in the product Controller
+///         intends in the product Controller
 ///
 /// @attention
 ///    BOSE CORPORATION.
@@ -17,7 +17,7 @@
 
 #include "DPrint.h"
 #include "VoiceManager.h"
-#include "ProductController.h"
+#include "EddieProductController.h"
 
 static DPrint s_logger( "VoiceManager" );
 
@@ -42,7 +42,11 @@ bool VoiceManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     case( uint16_t ) Action::VOICE_CAROUSEL:
     {
         BOSE_INFO( s_logger, "Send voice action" );
-
+        EddieProductController *eddieProductController = dynamic_cast<EddieProductController*>( &GetProductController() );
+        if( eddieProductController )
+        {
+            eddieProductController->GetVoiceServiceClient().Listen();
+        }
     }
     break;
 
