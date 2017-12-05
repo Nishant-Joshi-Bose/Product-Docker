@@ -22,3 +22,4 @@ def setDemoOff(request, frontDoor, demoUtils):
     if demoResponse == 'on':
         demoUtils.setDemoMode("off", True, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoMode("off")
+

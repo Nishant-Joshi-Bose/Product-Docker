@@ -5,15 +5,12 @@ This module contains and integrated test of the Demo Controller. It uses the Fro
 to validate responses.
 """
 import pytest
-import sys
-print sys.path
 from ..keyUtils import cli_keys as key
 from CastleTestUtils.LoggerUtils.log_setup import get_logger
 logger = get_logger(__name__)
 
 @pytest.mark.usefixtures("save_speaker_log")
 class TestDemo():
-    _timeout=180
     def test_demoOffAfterTimeout(self, demoUtils, request):
         """
         This test verifies demoMode goes 'off' after timeout
@@ -27,7 +24,9 @@ class TestDemo():
         logger.info("Start test_demoOffAfterTimeout")
         demoUtils.setDemoMode("on", True,3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoMode("on")
-        demoUtils.verifySecondReboot(self._timeout *2)
+        status, responseTimeout = demoUtils.getDemoTimeout()
+        assert status, responseTimeout
+        demoUtils.verifySecondReboot(responseTimeout *2)
 
     def test_demoOnAfterTimeout(self, demoUtils, request):
         """
@@ -41,7 +40,9 @@ class TestDemo():
         """
         logger.info("Start test_demo_on_after_timeout")
         demoUtils.setDemoMode("on", True, 3, request.config.getoption("--network-iface"))
-        demoUtils.verifyDemoModeOn(self._timeout-40)
+        status, responseTimeout = demoUtils.getDemoTimeout()
+        assert status, responseTimeout
+        demoUtils.verifyDemoModeOn(responseTimeout-40)
         demoUtils.setDemoMode("on", False, 3,request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(60)
 
@@ -56,9 +57,11 @@ class TestDemo():
         """
         logger.info("Start test_demoOnFor30Min")
         demoUtils.setDemoMode("on", True,3, request.config.getoption("--network-iface"))
-        demoUtils.verifyDemoModeOn(self._timeout-40)
+        status, responseTimeout = demoUtils.getDemoTimeout()
+        assert status, responseTimeout
+        demoUtils.verifyDemoModeOn(responseTimeout-40)
         demoUtils.setDemoMode("on", False,3, request.config.getoption("--network-iface"))
-        demoUtils.verifyDemoModeOn(self._timeout*10)
+        demoUtils.verifyDemoModeOn(responseTimeout*10)
 
     @pytest.mark.skip(reason="wip this test should work once the startPlayback is implemented. Skipping it for right now")
     def test_demoOnStandby(self, frontDoor, demoUtils):
@@ -75,7 +78,9 @@ class TestDemo():
         """
         logger.info("Start test_demoOnStandby")
         demoUtils.setDemoMode("on", True)
-        demoUtils.verifyDemoModeOn(self._timeout-40)
+        status, responseTimeout = demoUtils.getDemoTimeout()
+        assert status, responseTimeout
+        demoUtils.verifyDemoModeOn(responseTimeout-40)
         demoUtils.setDemoMode("on", False)
         demoUtils.verifyDemoMode("on")
         stopPlaybackResponse = frontDoor.stopPlaybackRequest()
@@ -101,7 +106,9 @@ class TestDemo():
 
         logger.info("Start test_demoOnKeyIntent")
         demoUtils.setDemoMode("on", True, 3, request.config.getoption("--network-iface"))
-        demoUtils.verifyDemoModeOn(self._timeout-60)
+        status, responseTimeout = demoUtils.getDemoTimeout()
+        assert status, responseTimeout
+        demoUtils.verifyDemoModeOn(responseTimeout-60)
         demoUtils.setDemoMode("on", False, 3,request.config.getoption("--network-iface"))
         demoUtils.verifyDemoMode("on")
 
