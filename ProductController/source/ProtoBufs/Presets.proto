@@ -14,8 +14,8 @@ message preset
 {
     option (ignore_unexpected_markup) = true;
 
-    optional PresetID    id           = 1 [(enum_by_number)= true];
-    optional ContentItem ContentItem  = 2;
+    optional ProductPb.PresetID    id           = 1 [(enum_by_number)= true];
+    optional ProductPb.ContentItem ContentItem  = 2;
     optional uint64      createdOn    = 3;
     optional uint64      updatedOn    = 4;
    
