@@ -33,7 +33,7 @@ function wait_for_rndis0 {
 
 function do_p2p {
     log info "Switching to USB p2p mode"
-    killall dnsmasq 2> /dev/null
+    killwait dnsmasq 2> /dev/null
     # switching to usb composition 'RNDIS : ECM' to enable networking over usb
     /sbin/usb/compositions/9057
     wait_for_rndis0
@@ -47,7 +47,7 @@ function do_p2p {
 
 function do_client {
     log info "Switching to USB client mode"
-    killall dnsmasq 2> /dev/null
+    killwait dnsmasq 2> /dev/null
     # switching to usb composition 'RNDIS : ECM' to enable networking over usb
     /sbin/usb/compositions/9057
     wait_for_rndis0
@@ -55,7 +55,7 @@ function do_client {
 
 function do_adb {
     log info "Switching to adb mode"
-    killall dnsmasq 2> /dev/null
+    killwait dnsmasq 2> /dev/null
     # switching to usb composition 'DIAG + ADB' to enable adb over usb
     /sbin/usb/compositions/901D
 }
