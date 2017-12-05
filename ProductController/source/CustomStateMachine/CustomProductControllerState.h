@@ -102,7 +102,7 @@ public:
     virtual bool HandleSTSSourcesInit( );
     virtual bool HandleNetworkState( bool configured, bool connected );
     virtual bool HandleVoiceState( bool configured );
-    virtual bool HandleNowPlayingStatus( ProductNowPlayingStatus_ProductNowPlayingState state );
+    virtual bool HandleNowPlayingStatus( const ProductNowPlayingStatus_ProductNowPlayingState& state );
     virtual bool HandleAutowakeStatus( bool active );
     virtual bool HandleKeyAction( int action );
     virtual bool HandlePairingState( ProductAccessoryPairing pairingStatus );

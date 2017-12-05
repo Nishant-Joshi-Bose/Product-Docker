@@ -5,7 +5,7 @@
 # After the structure of the json message is generated all the scripts in the telemetric folder are run to populate the payload of the message.
 #
 
-processes_to_track="APServer|AVS|A4V|Bose|BT|BLESetup|CLIServer|ClockSync|Deezer|Device|Eddie|FrontDoor|IHeart|Iot|LPMService|Passport|Professor|NetManger|Server|Software|Spotify|Telnet|STSCertified|UpnpSource|WebServer|Vfe"
+processes_to_track="APServer|AVS|A4V|Bose|BT|BLESetup|CLIServer|ClockSync|Deezer|Device|Eddie|FrontDoor|IHeart|Iot|LPMService|Passport|Professor|NetManger|Server|Software|Spotify|Telnet|STSCertified|UpnpSource|Vfe"
 
 BASEDIR=$(dirname $(readlink -f $0))
 . $BASEDIR/common-telemetry.sh
@@ -65,7 +65,7 @@ printf '  },\n' >&6
 printf '  "payload": [\n' >&6
 for src in `ls $BASEDIR/telemetries/*.sh`
 do
-   bash $src ${macaddr} ${date} $TELEMETRY_DOC_DIR $processes_to_track >&6
+   bash $src ${macaddr} ${date} $TELEMETRY_DOC_DIR "$processes_to_track" >&6
 done
 printf "  ]\n" >&6
 printf "}\n" >&6

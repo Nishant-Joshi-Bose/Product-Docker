@@ -107,7 +107,7 @@ void CustomProductControllerStatePlayingInactive::HandleStateExit( )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlayingInactive::HandleNowPlayingStatus
-( ProductNowPlayingStatus_ProductNowPlayingState state )
+( const ProductNowPlayingStatus_ProductNowPlayingState& state )
 {
     BOSE_ERROR( s_logger, "%s is handling a now playing %s status.",
                 GetName( ).c_str( ),

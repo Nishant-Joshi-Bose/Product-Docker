@@ -1059,7 +1059,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
                     ProductNowPlayingStatus_ProductNowPlayingState_Name
                     ( message.nowplayingstatus( ).state( ) ).c_str( ) );
 
-        GetHsm( ).Handle< ProductNowPlayingStatus_ProductNowPlayingState >
+        GetHsm( ).Handle< const ProductNowPlayingStatus_ProductNowPlayingState & >
         ( &CustomProductControllerState::HandleNowPlayingStatus, message.nowplayingstatus( ).state( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////

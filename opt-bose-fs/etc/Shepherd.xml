@@ -20,17 +20,23 @@
 
   <daemon name="FrontDoor"/>
 
-  <daemon name="WebServer">
-    <arg>--disable-setup-port</arg>
-    <arg>-c/opt/Bose/etc/WebServer.xml</arg>
-  </daemon>
-
   <daemon name="BoseApp"
           recovery="reboot">
     <arg>-c/opt/Bose/etc/BoseApp.xml</arg>
   </daemon>
 
   <daemon name="STSCertified"/>
+
+  <!-- The Bluetooth daemon depends on the btproperty daemon -->
+  <daemon name="btproperty"/>
+
+  <daemon name="BluetoothManager"/>
+
+  <daemon name="BT"/>
+
+  <daemon name="BTSource"/>
+
+  <daemon name="BLESetup"/>
 
   <daemon name="PtsServer">
     <arg>/opt/Bose/etc/pts-handler</arg>

@@ -98,7 +98,7 @@ bool CustomProductControllerState::HandleVoiceState( bool configured )
     return false;
 }
 
-bool CustomProductControllerState::HandleNowPlayingStatus( ProductNowPlayingStatus_ProductNowPlayingState state )
+bool CustomProductControllerState::HandleNowPlayingStatus( const ProductNowPlayingStatus_ProductNowPlayingState& state )
 {
     return false;
 }
