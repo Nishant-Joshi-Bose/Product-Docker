@@ -56,16 +56,16 @@ product-ipk: cmake_build
 #Uncomment next two line after removing next 2 lines, once HSP is integrated.
 #IPKS = hsp.ipk  eddie.ipk lpm_updater.ipk
 #PACKAGENAMES = hsp SoundTouch eddie_lpm_updater
-IPKS = eddie.ipk lpm_updater.ipk
-PACKAGENAMES = SoundTouch eddie_lpm_updater
+IPKS = monaco.ipk eddie.ipk lpm_updater.ipk
+PACKAGENAMES = monaco SoundTouch eddie_lpm_updater
 
 #Create Zip file for Bonjour / Local update
 .PHONY: update-zip
-update-zip: product-ipk hsp-ipk lpmupdater-ipk
+update-zip: monaco-ipk product-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o eddie_update.zip
 
 .PHONY: packages-gz
-packages-gz: product-ipk hsp-ipk lpmupdater-ipk
+packages-gz: monaco-ipk product-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS)
 
 .PHONY: graph
