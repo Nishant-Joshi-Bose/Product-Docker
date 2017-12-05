@@ -47,6 +47,11 @@ bool VoiceManager::Handle( KeyHandlerUtil::ActionType_t& intent )
         {
             eddieProductController->GetVoiceServiceClient().Listen();
         }
+        else
+        {
+            BOSE_ERROR( s_logger, "Invalid Eddie product controller" );
+            return false;
+        }
     }
     break;
 
