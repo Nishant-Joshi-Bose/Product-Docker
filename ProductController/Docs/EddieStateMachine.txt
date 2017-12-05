@@ -36,11 +36,11 @@ LowPowerStandby-up-> TOP
 }
 
 state Playable{
-Playable-up-> DeviceOn
+Playable-up-> On
 }
 
-state DeviceOn{
-DeviceOn-up-> TOP
+state On{
+On-up-> TOP
 }
 
 state LowPowerStandbyTransition{
@@ -73,7 +73,7 @@ VoiceNotConfigured-up-> Idle
 
 
 state Playing{
-Playing-up-> DeviceOn
+Playing-up-> On
 }
 
 state PlayingActive{
