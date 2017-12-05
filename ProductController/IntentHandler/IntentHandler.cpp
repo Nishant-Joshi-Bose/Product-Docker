@@ -51,7 +51,6 @@ IntentHandler::IntentHandler( NotifyTargetTaskIF& task,
     CommonIntentHandler( task, cliClient, frontDoorClient, controller )
 {
     BOSE_DEBUG( s_logger, "%s: ", __func__ );
-    Initialize();
 }
 
 void IntentHandler::Initialize()

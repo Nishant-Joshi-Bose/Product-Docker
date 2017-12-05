@@ -1,0 +1,89 @@
+@startuml
+
+
+title \n Eddie ProductController State Machine \n\n
+
+'note top of TOP : This is Parent state
+
+state TOP{
+}
+
+state SoftwareUpdating{
+SoftwareUpdating-up-> TOP
+}
+
+
+state Booting {
+Booting-up-> TOP
+}
+
+state Setup {
+Setup-up-> Playing
+}
+
+state CriticalError {
+CriticalError-up-> TOP
+}
+
+state Rebooting {
+Rebooting-up-> TOP
+}
+
+
+
+state LowPowerStandby{
+LowPowerStandby-up-> TOP
+}
+
+state Playable{
+Playable-up-> DeviceOn
+}
+
+state DeviceOn{
+DeviceOn-up-> TOP
+}
+
+state LowPowerStandbyTransition{
+LowPowerStandbyTransition-up-> LowPowerStandby
+}
+
+state NetworkStandby{
+NetworkStandby-up-> Playable
+}
+
+state NetworkConfigured{
+NetworkConfigured-up-> NetworkStandby
+}
+
+state NetworkNotConfigured{
+NetworkNotConfigured-up-> NetworkStandby
+}
+
+state Idle{
+Idle-up-> Playable
+}
+
+state VoiceConfigured{
+VoiceConfigured-up-> Idle
+}
+
+state VoiceNotConfigured{
+VoiceNotConfigured-up-> Idle
+}
+
+
+state Playing{
+Playing-up-> DeviceOn
+}
+
+state PlayingActive{
+PlayingActive-up-> Playing
+}
+
+state PlayingInActive{
+PlayingInActive-up-> Playing
+}
+
+
+@enduml
+
