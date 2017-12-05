@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-01_0851"
+    "selected_version": "Continuous/Castle-Fork/2017-12-04_1711"
   },
   {
     "name": "BoseWebMonaco",
@@ -101,7 +101,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-01_0851"
+    "selected_version": "Continuous/Castle-Fork/2017-12-04_1711"
   },
   {
     "name": "Webkit",
