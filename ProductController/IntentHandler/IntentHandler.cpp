@@ -72,6 +72,7 @@ void IntentHandler::Initialize()
                                                   GetProductController() );
 
     m_IntentManagerMap[( uint16_t )Action::AUX_IN] = playbackRequestManager;
+    m_IntentNotificationMap[( uint16_t ) Action::AUX_IN]        = "aux_in" ;
     //- AUX Control API's
 
     //+ Voice (Alexa) Control API's
@@ -80,6 +81,7 @@ void IntentHandler::Initialize()
                                         GetFrontDoorClient(),
                                         GetProductController() );
     m_IntentManagerMap[( uint16_t )Action::VOICE_CAROUSEL] = voiceRequestManager;
+    m_IntentNotificationMap[( uint16_t ) Action::VOICE_CAROUSEL] = "voice_control" ;
     //- Voice (Alexa) Control API's
 
 }

@@ -48,6 +48,7 @@ TARGET_LINK_LIBRARIES(Eddie
   BLESetupServiceProto
   BluetoothSinkServiceProto
   LightBarController
+  VoiceServiceClient
   CliClient
   ShelbyUtils
   BoseLibs

@@ -52,6 +52,7 @@
 #include "DataCollectionClient.h"
 #include "MacAddressInfo.h"
 #include "BOptional.h"
+#include "VoiceServiceClient.h"
 
 namespace ProductApp
 {
@@ -308,25 +309,46 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
     void HandleProductMessage( const ProductMessage& productMessage );
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief Interfaces to the ProductSTSController, which implements the interactions
-    ///       between the Eddie Product Controller and the STS source proxies.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/// @name   GetLpmInterface
+/// @brief  Returns reference to LpmInterface
+/// @return LpmInterface&
+///////////////////////////////////////////////////////////////////////////////
+    inline LpmInterface& GetLpmInterface()
+    {
+        return m_LpmInterface;
+    }
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief Interfaces to the ProductSTSController, which implements the interactions
+///       between the Eddie Product Controller and the STS source proxies.
+///
+//////////////////////////////////////////////////////////////////////////////////////////////
     void SetupProductSTSController( void );
     void HandleSTSInitWasComplete( void );
     void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
     void HandleRawKeyCliCmd( const std::list<std::string>& argList, std::string& response );
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief set the display controllee automatic mode  to true or false (manual)
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief set the display controllee automatic mode  to true or false (manual)
+///
+//////////////////////////////////////////////////////////////////////////////////////////////
     void SetDisplayAutoMode( bool autoMode ) const
     {
         m_displayController->SetAutoMode( autoMode );
+    }
+
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name   GetVoiceServiceClient
+/// @brief  Returns reference to VoiceServiceClient
+/// @return VoiceServiceClient&
+///////////////////////////////////////////////////////////////////////////////
+    inline VoiceServiceClient& GetVoiceServiceClient()
+    {
+        return m_voiceServiceClient;
     }
 
 private:
@@ -383,6 +405,7 @@ private:
     bool m_IsAudioPathReady = true;
     ProductSTSController                        m_ProductSTSController;
     DataCollectionClient                        m_DataCollectionClient;
+    VoiceServiceClient                          m_voiceServiceClient;
 };
 static const char* const KEY_NAMES[] __attribute__( ( unused ) ) =
 {
