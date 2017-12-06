@@ -4,7 +4,8 @@
 ./builds/Release/product-ipk-stage/component-info.gz	<DEPLOY_DIR>/eddie_cinfo_<VERSION_STRING>.gz		file
 ./builds/Release/components.svgz			<DEPLOY_DIR>/eddie_cgraph_<VERSION_STRING>.svgz		file
 ./builds/Release/package/product.tar			<DEPLOY_DIR>/eddie_<VERSION_STRING>.tar			file
-./builds/Release/eddie_update.zip			<DEPLOY_DIR>/eddie_update_<VERSION_STRING>.zip		file
+./builds/Release/product_update.zip			<DEPLOY_DIR>/eddie_update_<VERSION_STRING>.zip		file
+./builds/Release/product_update_with_hsp.zip		<DEPLOY_DIR>/eddie_update_with_hsp_<VERSION_STRING>.zip	file
 ./builds/Release/package/product_flash			<DEPLOY_DIR>/eddie_flash				file
 ./builds/Release/package/product_flash.exe		<DEPLOY_DIR>/eddie_flash.exe				file
 ./builds/Release/package/product_flash_mac		<DEPLOY_DIR>/eddie_flash_mac				file
