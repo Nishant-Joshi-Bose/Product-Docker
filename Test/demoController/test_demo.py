@@ -11,7 +11,7 @@ logger = get_logger(__name__)
 
 @pytest.mark.usefixtures("save_speaker_log")
 class TestDemo():
-    def test_demoOffAfterTimeout(self, demoUtils, request):
+    def test_demoOffAfterTimeout(self, demoUtils, device_ip, request):
         """
         This test verifies demoMode goes 'off' after timeout
         Test steps:
@@ -24,11 +24,11 @@ class TestDemo():
         logger.info("Start test_demoOffAfterTimeout")
         demoUtils.setDemoMode("on", True,3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoMode("on")
-        status, responseTimeout = demoUtils.getDemoTimeout()
+        status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
         demoUtils.verifySecondReboot(responseTimeout *2)
 
-    def test_demoOnAfterTimeout(self, demoUtils, request):
+    def test_demoOnAfterTimeout(self, demoUtils,device_ip, request):
         """
         This test verifies the demoMode stays on after timeout
         Test steps:
@@ -40,13 +40,13 @@ class TestDemo():
         """
         logger.info("Start test_demo_on_after_timeout")
         demoUtils.setDemoMode("on", True, 3, request.config.getoption("--network-iface"))
-        status, responseTimeout = demoUtils.getDemoTimeout()
+        status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
         demoUtils.verifyDemoModeOn(responseTimeout-40)
         demoUtils.setDemoMode("on", False, 3,request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(60)
 
-    def test_demoOnFor30Min(self, demoUtils, request):
+    def test_demoOnFor30Min(self, demoUtils,device_ip, request):
         """
         This test verifies demoMode stays 'on' for 30 minutes
         Test steps:
@@ -57,14 +57,14 @@ class TestDemo():
         """
         logger.info("Start test_demoOnFor30Min")
         demoUtils.setDemoMode("on", True,3, request.config.getoption("--network-iface"))
-        status, responseTimeout = demoUtils.getDemoTimeout()
+        status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
         demoUtils.verifyDemoModeOn(responseTimeout-40)
         demoUtils.setDemoMode("on", False,3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(responseTimeout*10)
 
     @pytest.mark.skip(reason="wip this test should work once the startPlayback is implemented. Skipping it for right now")
-    def test_demoOnStandby(self, frontDoor, demoUtils):
+    def test_demoOnStandby(self, frontDoor, demoUtils, device_ip):
         """
         This test after setting the demoMode to 'On' puts the device to standby and verify demoMode stays 'On' after coming out of standby.
         Test steps:
@@ -78,7 +78,7 @@ class TestDemo():
         """
         logger.info("Start test_demoOnStandby")
         demoUtils.setDemoMode("on", True)
-        status, responseTimeout = demoUtils.getDemoTimeout()
+        status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
         demoUtils.verifyDemoModeOn(responseTimeout-40)
         demoUtils.setDemoMode("on", False)
@@ -90,7 +90,7 @@ class TestDemo():
         demoUtils.verifyDemoMode("on")
 
     @pytest.mark.skip(reason="wip")
-    def test_demoOnKeyIntent(self, request, demoUtils):
+    def test_demoOnKeyIntent(self, request, demoUtils, device_ip):
         """
         """
         key.mfb_playpause()
@@ -106,7 +106,7 @@ class TestDemo():
 
         logger.info("Start test_demoOnKeyIntent")
         demoUtils.setDemoMode("on", True, 3, request.config.getoption("--network-iface"))
-        status, responseTimeout = demoUtils.getDemoTimeout()
+        status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
         demoUtils.verifyDemoModeOn(responseTimeout-60)
         demoUtils.setDemoMode("on", False, 3,request.config.getoption("--network-iface"))

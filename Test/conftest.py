@@ -82,7 +82,7 @@ def device_ip(request):
     if request.config.getoption("--target").lower() == 'device':
         networkbaseObj = NetworkBase(None)
         iface = request.config.getoption("--network-iface")
-        device_ip = networkbaseObj.check_inf_presence(iface).group(2)
+        device_ip = networkbaseObj.check_inf_presence(iface)
         return device_ip
 
 @pytest.fixture(scope="class")
