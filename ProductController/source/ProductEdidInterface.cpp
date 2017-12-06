@@ -23,15 +23,23 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+#include "Utilities.h"
 #include "ProfessorProductController.h"
 #include "ProductHardwareInterface.h"
 #include "ProductEdidInterface.h"
+#include "FrontDoorClient.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             Start of Product Namespace                                       ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// The following constants define FrontDoor endpoints used by the VolumeManager
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+constexpr char  FRONTDOOR_AUDIO_VOLUME[ ]           = "/audio/volume";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -68,6 +76,28 @@ bool ProductEdidInterface::Run( )
 
     m_EdidClient->Connect( ConnectedCallback );
 
+    m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductEdidInterface" );
+    ///
+    /// Registration as a client for getting notification of changes in the now playing state from
+    /// CAPS is made through the FrontDoorClient object pointer. The callback HandleCapsNowPlaying
+    /// is used to receive these notifications.
+    ///
+    AsyncCallback< SoundTouchInterface::NowPlayingJson >
+    callback( std::bind( &ProductEdidInterface::HandleNowPlaying,
+                         this, std::placeholders::_1 ),
+              m_ProductTask );
+
+    m_FrontDoorClient->RegisterNotification< SoundTouchInterface::NowPlayingJson >
+    ( "/content/nowPlaying", callback );
+
+
+    auto fNotify = [ this ]( SoundTouchInterface::volume v )
+    {
+        HandleFrontDoorVolume( v );
+    };
+
+    m_FrontDoorClient->RegisterNotification< SoundTouchInterface::volume >
+    ( FRONTDOOR_AUDIO_VOLUME, fNotify );
     return true;
 }
 
@@ -195,6 +225,34 @@ void ProductEdidInterface::HandlePhyAddrResponse( const A4VVideoManagerServiceMe
 void ProductEdidInterface::Stop( )
 {
     return;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductEdidInterface::HandleNowPlaying
+///
+/// @param SoundTouchInterface::NowPlayingJson& nowPlayingStatus
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductEdidInterface::HandleNowPlaying( const SoundTouchInterface::NowPlayingJson&
+                                             nowPlayingStatus )
+{
+    BOSE_DEBUG( s_logger, "CEC A CAPS now playing status has been received." );
+
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductEdidInterface::HandleFrontDoorVolume
+///
+/// @param  volume Object containing volume received from the FrontDoor
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductEdidInterface::HandleFrontDoorVolume( SoundTouchInterface::volume const& volume )
+{
+    BOSE_VERBOSE( s_logger, "Got volume notify LPM (%d) (%d)", volume.value(), volume.muted() );
+
+    m_ProductHardwareInterface->SendVolMute( volume.value(), volume.muted() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
