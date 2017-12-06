@@ -28,7 +28,8 @@ bool CustomProductControllerStateOn::HandleIntents( KeyHandlerUtil::ActionType_t
 {
     BOSE_LOG( INFO, "intent:" << intent );
 
-    if( GetCustomProductController( ).GetIntentHandler( ).IsIntentAuxIn( intent ) )
+    if( ( GetCustomProductController( ).GetIntentHandler( ).IsIntentAuxIn( intent ) ) ||
+        ( GetCustomProductController( ).GetIntentHandler( ).IsIntentVoice( intent ) ) )
     {
         GetCustomProductController().GetIntentHandler().Handle( intent );
         return true;
