@@ -62,7 +62,15 @@ PACKAGENAMES = monaco SoundTouch eddie_lpm_updater
 #Create Zip file for Bonjour / Local update
 .PHONY: update-zip
 update-zip: monaco-ipk product-ipk hsp-ipk lpmupdater-ipk
-	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o eddie_update.zip
+	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip
+
+#Create one more Zip file for Bonjour / Local update with HSP 
+#- This is temporary, till DP2 boards are not available.
+IPKS_HSP = hsp.ipk monaco.ipk eddie.ipk lpm_updater.ipk
+PACKAGENAMES_HSP = hsp monaco SoundTouch eddie_lpm_updater
+.PHONY: update-zip-with-hsp
+update-zip-with-hsp: monaco-ipk product-ipk hsp-ipk lpmupdater-ipk
+	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_with_hsp.zip
 
 .PHONY: packages-gz
 packages-gz: monaco-ipk product-ipk hsp-ipk lpmupdater-ipk
@@ -90,7 +98,7 @@ package: product-ipk hsp-ipk lpmupdater-ipk monaco-ipk
 	./scripts/create-product-tarball
 
 .PHONY: all-packages
-all-packages: package packages-gz update-zip
+all-packages: package packages-gz update-zip update-zip-with-hsp
 
 .PHONY: clean
 clean:
