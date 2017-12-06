@@ -8,7 +8,6 @@ PROTO_SOURCES = ProductMessage.proto        \
                 ProductSTS.proto            \
                 KeyActions.proto            \
                 SystemInfo.proto            \
-                Presets.proto               \
                 ProductSpeakerManager.proto \
                 AdaptIQ.proto 
 
