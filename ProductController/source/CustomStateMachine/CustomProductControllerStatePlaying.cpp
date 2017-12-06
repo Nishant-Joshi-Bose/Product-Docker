@@ -165,6 +165,8 @@ bool CustomProductControllerStatePlaying::HandleKeyAction( int action )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlaying::GoToAppropriateNonPlayingState( )
 {
+    GetCustomProductController( ).GetEdidInterface( )->PowerOff( );
+
     GetProductController( ).SendStopPlaybackMessage( );
 
     if( GetCustomProductController( ).IsNetworkConfigured( ) or
@@ -194,6 +196,21 @@ void CustomProductControllerStatePlaying::GoToAppropriateNonPlayingState( )
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
     }
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStatePlaying::HandleLPMPowerStatusFull
+///
+/// @return This method returns a true Boolean value indicating that it has handled the power
+///         status from the LPM.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlaying::HandleLPMPowerStatusFullPower( )
+{
+    GetCustomProductController( ).GetEdidInterface( )->PowerOn( );
+    return true;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///

@@ -35,6 +35,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
+#include "ProductEdidInterface.h"
 #include "ProductController.h"
 #include "ProductSTSController.h"
 #include "FrontDoorClientIF.h"
@@ -146,6 +147,15 @@ public:
     std::shared_ptr< ProductSpeakerManager >& GetSpeakerManager( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method is used to get a pointer to the Edid interface instance
+    ///        from the product controller.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    std::shared_ptr< ProductEdidInterface >& GetEdidInterface( );
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following methods are used by the state machine to determine the status of the
     ///        product controller.

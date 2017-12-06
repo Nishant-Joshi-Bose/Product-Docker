@@ -114,6 +114,33 @@ public:
     virtual bool HandleBluetoothModuleState( bool ready );
     virtual bool HandleLpmInterfaceState( bool isConnected );
 
+
+    virtual bool HandleLPMPowerStatusColdBoot( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLPMPowerStatusLowPower( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLPMPowerStatusNetworkStandby( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLPMPowerStatusAutoWakeStandby( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLPMPowerStatusFullPower( )
+    {
+        return false;
+    }
+
+
     inline static void SetProductController( ProductController* productController )
     {
         s_productController = productController;

@@ -79,6 +79,8 @@ public:
     bool HandleInactivityTimer( InactivityTimerType timerType ) override;
     bool HandleKeyAction( int action ) override;
 
+    bool HandleLPMPowerStatusFullPower( ) override;
+
 private:
 
     void GoToAppropriateNonPlayingState( );
