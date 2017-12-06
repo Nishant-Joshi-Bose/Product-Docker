@@ -1,0 +1,49 @@
+{
+	"version": {
+		"major": 1,
+		"minor": 1
+	},
+	"supportedAudioSettings": ["audioBassLevel", "audioTrebleLevel"],
+	"configurations": {
+		"audioBassLevel": {
+			"currentPersistenceLevel": "global",
+			"persistenceSession": false,
+			"properties": {
+				"min": -100,
+				"max": 100,
+				"step": 20,
+				"supportedPersistence": ["session", "global", "contentItem"]
+			}
+		},
+		"audioTrebleLevel": {
+			"currentPersistenceLevel": "global",
+			"persistenceSession": false,
+			"properties": {
+				"min": -100,
+				"max": 100,
+				"step": 20,
+				"supportedPersistence": ["session", "global", "contentItem"]
+			}
+		}
+	},
+	"values": {
+		"global": {
+			"audioBassLevel": 0,
+			"audioTrebleLevel": 0
+		},
+		"session": {
+			"audioBassLevel": 0,
+			"audioTrebleLevel": 0
+		},
+		"contentItem": {
+			"default": {
+				"audioBassLevel": 0,
+				"audioTrebleLevel": 0
+			}
+		}
+	},
+	"defaultValues": {
+		"audioBassLevel": 0,
+		"audioTrebleLevel": 0
+	}
+}

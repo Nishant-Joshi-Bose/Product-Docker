@@ -8,6 +8,7 @@
 #include "EddieProductController.h"
 #include "ProductControllerStates.h"
 #include "CustomProductControllerState.h"
+#include "CustomProductAudioService.h"
 #include "APTaskFactory.h"
 #include "AsyncCallback.h"
 #include "ProtoToMarkup.h"
@@ -91,6 +92,10 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF,  m_LpmInterface.GetLpmClient() ) );
     SetupProductSTSController();
 
+    // Start Eddie ProductAudioService
+    m_ProductAudioService = std::make_shared< CustomProductAudioService>( *this, m_FrontDoorClientIF );
+    m_ProductAudioService -> Run();
+
     // Initialize and register Intents for the Product Controller
     m_IntentHandler.Initialize();
 }
@@ -110,6 +115,23 @@ void EddieProductController::Initialize()
     m_lightbarController->RegisterLightBarEndPoints();
     m_demoController.Initialize();
     m_displayController ->Initialize();
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  EddieProductController::GetMessageHandler
+///
+/// @return Callback < ProductMessage >
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+Callback < ProductMessage > EddieProductController::GetMessageHandler( )
+{
+    Callback < ProductMessage >
+    ProductMessageHandler( std::bind( &EddieProductController::HandleProductMessage,
+                                      this,
+                                      std::placeholders::_1 ) );
+    return ProductMessageHandler;
 }
 
 std::string const& EddieProductController::GetProductType() const

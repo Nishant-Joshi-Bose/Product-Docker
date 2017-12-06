@@ -56,6 +56,9 @@
 
 namespace ProductApp
 {
+
+class CustomProductAudioService;
+
 class EddieProductController : public ProductController
 {
 public:
@@ -63,6 +66,8 @@ public:
     virtual ~EddieProductController();
 
     void Initialize();
+
+    Callback < ProductMessage > GetMessageHandler( );
 
     NetManager::Protobuf::NetworkStatus const& GetNetworkStatus() const
     {
@@ -380,6 +385,9 @@ private:
     ProtoPersistenceIF::ProtoPersistencePtr     m_ConfigurationStatusPersistence = nullptr;
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
     BOptional<NetManager::Protobuf::NetworkStatus> m_cachedStatus;
+
+    /// ProductAudioService
+    std::shared_ptr< CustomProductAudioService> m_ProductAudioService;
 
     ProductCliClient                            m_productCliClient;
 
