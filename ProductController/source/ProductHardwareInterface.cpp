@@ -974,6 +974,42 @@ bool ProductHardwareInterface::CECSetPhysicalAddress( const uint32_t cecPhysical
         return true;
     }
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductHardwareInterface::SendVolMute
+///
+/// @brief  This method sends a volume and mute update to the LPM hardware.
+///
+/// @param  bool mute
+///
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
+///         attempts the request and returns true.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProductHardwareInterface::SendVolMute( const uint8_t volume, const uint8_t mute )
+{
+    BOSE_DEBUG( s_logger, "A volume update is being set. vol = %d, mute = %d", volume, mute );
+
+    if( m_connected == false || m_LpmClient == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM user mute request could not be made, as no connection is available." );
+
+        return false;
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "An LPM volume update will be made." );
+
+        IpcAudioSetVolume_t volSetting;
+
+        volSetting.set_volume( volume );
+        volSetting.set_mute( mute );
+
+        m_LpmClient->SetVolume( volSetting );
+
+        return true;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
