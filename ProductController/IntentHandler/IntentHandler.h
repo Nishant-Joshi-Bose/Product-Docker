@@ -37,6 +37,10 @@ public:
         return ( ( arg == ( uint16_t ) Action::AUX_IN ) );
     }
 
+    static bool IsIntentVoice( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( arg == ( uint16_t ) Action::VOICE_CAROUSEL );
+    }
 private:
 
 };
