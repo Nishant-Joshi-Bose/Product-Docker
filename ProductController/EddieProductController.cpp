@@ -541,8 +541,19 @@ void EddieProductController::HandleIntents( KeyHandlerUtil::ActionType_t intent 
     m_CliClientMT.SendAsyncResponse( "Translated intent = " + \
                                      std::to_string( intent ) );
 
-    GetHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntents, intent );
-    return;
+    if( HandleCommonIntents( intent ) )
+    {
+        return;
+    }
+
+    if( IntentHandler::IsIntentAuxIn( intent ) )
+    {
+        GetHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntentAuxIn, intent );
+    }
+    else if( IntentHandler::IsIntentVoice( intent ) )
+    {
+        GetHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntentVoice, intent );
+    }
 }
 
 void EddieProductController::HandleNetworkStandbyIntentCb( const KeyHandlerUtil::ActionType_t& intent )
