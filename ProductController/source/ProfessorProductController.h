@@ -148,8 +148,8 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following method is used to get a pointer to the Edid interface instance
-    ///        from the product controller.
+    /// @brief The following method is used to get get a shared pointer reference to Edid 
+    ///        instance from the product controller.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< ProductEdidInterface >& GetEdidInterface( );

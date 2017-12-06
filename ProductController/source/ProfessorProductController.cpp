@@ -390,7 +390,7 @@ std::shared_ptr< ProductSpeakerManager >& ProfessorProductController::GetSpeaker
 ///
 /// @name ProfessorProductController::GetEdidInterface
 ///
-/// @return ProductEdidInterface* - pointer to EDID interface
+/// @return This method returns a shared pointer to the ProductEdidInterface instance.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 std::shared_ptr< ProductEdidInterface >& ProfessorProductController::GetEdidInterface( )
