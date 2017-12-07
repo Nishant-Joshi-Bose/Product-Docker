@@ -35,6 +35,12 @@ public:
     {
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    ///
+    /// Here are the common event handlers. They need to be declared virtual and
+    /// have an implementation that returns false
+    ///
+    ///////////////////////////////////////////////////////////////////////////////
     virtual bool HandleLpmState( bool isActive )
     {
         return false;
@@ -59,7 +65,38 @@ public:
     {
         return false;
     }
+
     virtual bool HandleAutowakeStatus( bool active )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentPlayControl( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentBlueTooth( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentNetworkStandby( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentPresetSelect( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentPresetStore( KeyHandlerUtil::ActionType_t result )
     {
         return false;
     }
@@ -73,33 +110,8 @@ public:
     {
         return false;
     }
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @name   HandleLpmInterfaceState
-    /// @brief  Handles state when connection to LpmServer has been established
-    /// @param  isConnected - bool - is LpmClient connected or not
-    /// @return bool
-    ///////////////////////////////////////////////////////////////////////////////
+
     virtual bool HandleLpmInterfaceState( bool isConnected )
-    {
-        return false;
-    }
-
-    virtual bool HandleIntents( KeyHandlerUtil::ActionType_t result )
-    {
-        return false;
-    }
-
-    virtual bool HandleNetworkStandbyIntent( )
-    {
-        return false;
-    }
-
-    virtual bool HandleNetworkConfigurationStatus( )
-    {
-        return false;
-    }
-
-    virtual bool HandleBtLeModuleReady( )
     {
         return false;
     }
@@ -108,6 +120,7 @@ public:
     {
         return false;
     }
+
     virtual bool HandleNowPlayingStatus( const ProductNowPlayingStatus_ProductNowPlayingState& state )
     {
         return false;
@@ -119,6 +132,37 @@ public:
     }
 
     virtual bool HandleStopPlaybackResponse( const SoundTouchInterface::status &resp )
+    {
+        return false;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+    ///
+    /// Here are the Custom event handlers. They need to be declared virtual and
+    /// have an implementation that returns false
+    ///
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual bool HandleIntentAuxIn( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
+    virtual bool HandleNetworkStandbyIntent( )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentVoice( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
+    virtual bool HandleNetworkConfigurationStatus( )
+    {
+        return false;
+    }
+
+    virtual bool HandleBtLeModuleReady( )
     {
         return false;
     }
