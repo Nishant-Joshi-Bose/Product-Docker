@@ -1,11 +1,11 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-04_1711"
+    "selected_version": "Continuous/Castle-Fork/2017-12-06_2141"
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Continuous/develop/0.2.1-6+15f80ff"
+    "selected_version": "Continuous/develop/0.2.1-8+075b2d4"
   },
   {
     "name": "bose-opkg-utils",
@@ -29,7 +29,7 @@
   },
   {
     "name": "CastleDemoController-qc8017_32",
-    "selected_version": "Continuous/master/0.2.1-29+5498be3"
+    "selected_version": "Continuous/master/0.2.1-30+7679278"
   },
   {
     "name": "CastleLibs-qc8017_32",
@@ -45,11 +45,11 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/0.2.3-214+f4b0e24"
+    "selected_version": "Continuous/master/0.2.3-231+63a1ec0"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Continuous/master/0.2.3-214+f4b0e24"
+    "selected_version": "Continuous/master/0.2.3-231+63a1ec0"
   },
   {
     "name": "CastleProductControllerCommon",
@@ -57,7 +57,7 @@
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@4de2cf4f3f690b4347f89c4711add3ae7a0e59c2"
+    "selected_version": "master@8ad73581d5939d85013d1cea0b3937d294714e45"
   },
   {
     "name": "EddieLPM-Package",
@@ -97,7 +97,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.3.1-152+4805a8e"
+    "selected_version": "Continuous/master/0.3.1-153+4805a8e"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
