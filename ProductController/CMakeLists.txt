@@ -21,7 +21,6 @@ INCLUDE_DIRECTORIES(
 # Professor daemon.
 
 ADD_EXECUTABLE(Professor
-  ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
   ${PROTO_CC_DEST}/ProductSTS.pb.cc
@@ -29,7 +28,6 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc
   ${PROTO_CC_DEST}/SystemInfo.pb.cc
   ${PROTO_CC_DEST}/AdaptIQ.pb.cc
-  ${PROTO_CC_DEST}/Presets.pb.cc
   source/ProductStart.cpp
   source/ProductCommandLine.cpp
   source/ProductHardwareInterface.cpp
