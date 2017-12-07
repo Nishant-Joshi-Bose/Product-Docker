@@ -34,7 +34,16 @@ import "KeyActions.proto";
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 message ProductLpmStatus
 {
-        optional bool connected = 1;
+        enum LpmPowerStatus
+        {
+             ColdBooted         = 0;
+             LowPower           = 1;
+             NetworkStandby     = 2;
+             AutoWakeStandby    = 3;
+             FullPower          = 4;
+        }
+        optional bool connected             = 1;
+        optional LpmPowerStatus powerstatus = 2;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

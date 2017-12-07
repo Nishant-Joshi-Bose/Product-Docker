@@ -388,6 +388,18 @@ std::shared_ptr< ProductSpeakerManager >& ProfessorProductController::GetSpeaker
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name ProfessorProductController::GetEdidInterface
+///
+/// @return This method returns a shared pointer to the ProductEdidInterface instance.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::shared_ptr< ProductEdidInterface >& ProfessorProductController::GetEdidInterface( )
+{
+    return m_ProductEdidInterface;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::IsBooted
 ///
 /// @return This method returns a true or false value, based on a series of set member variables,
@@ -812,18 +824,35 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         if( message.lpmstatus( ).has_connected( ) )
         {
             m_IsLpmReady = message.lpmstatus( ).connected( );
+            BOSE_DEBUG( s_logger, "An LPM Hardware %s message was received.",
+                        m_IsLpmReady ? "up" : "down" );
+            GetHsm( ).Handle< bool >
+            ( &CustomProductControllerState::HandleLpmState, m_IsLpmReady );
         }
-        else
+
+        if( message.lpmstatus( ).has_powerstatus( ) )
         {
-            BOSE_ERROR( s_logger, "An invalid LPM status message was received." );
-            return;
+            switch( message.lpmstatus( ).powerstatus( ) )
+            {
+            case ProductLpmStatus::ColdBooted:
+                GetHsm( ).Handle<>( &CustomProductControllerState::HandleLPMPowerStatusColdBoot );
+                break;
+            case ProductLpmStatus::LowPower:
+                GetHsm( ).Handle<>( &CustomProductControllerState::HandleLPMPowerStatusLowPower );
+                break;
+            case ProductLpmStatus::NetworkStandby:
+                GetHsm( ).Handle<>( &CustomProductControllerState::HandleLPMPowerStatusNetworkStandby );
+                break;
+            case ProductLpmStatus::AutoWakeStandby:
+                GetHsm( ).Handle<>( &CustomProductControllerState::HandleLPMPowerStatusAutoWakeStandby );
+                break;
+            case ProductLpmStatus::FullPower:
+                GetHsm( ).Handle<>( &CustomProductControllerState::HandleLPMPowerStatusFullPower );
+                break;
+            default:
+                break;
+            }
         }
-
-        BOSE_DEBUG( s_logger, "An LPM Hardware %s message was received.",
-                    m_IsLpmReady ? "up" : "down" );
-
-        GetHsm( ).Handle< bool >
-        ( &CustomProductControllerState::HandleLpmState, m_IsLpmReady );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Content Audio Playback Services (CAPS) status messages are handled at this point.
