@@ -55,19 +55,9 @@ CustomProductControllerStateUpdatingSoftware::CustomProductControllerStateUpdati
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, stateId, name )
+    : ProductControllerSoftwareUpdating( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateUpdatingSoftware is being constructed." );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateUpdatingSoftware::HandleStateEnter
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateUpdatingSoftware::HandleStateEnter()
-{
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateUpdatingSoftware is being entered." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
