@@ -1,0 +1,62 @@
+///////////////////////////////////////////////////////////////////////////////
+/// @file IntentHandler.cpp
+///
+/// @brief Implementation of Intent Handler
+//  This module will offload the work of the Product Controller validate
+//  and build LAN API or IPC messages to perform actions of various Intents
+//  It also lets the Product Controller get control back in an Async way, so
+//  the HSM can perform state changes if it needs to.
+//  This Handler should not perform state transistions.
+//  It is intentional that the hsm or productController access is not given
+//  to this module.
+//  The Handler in-turn would delegate its work to customized Intent
+//  Managers based on the ActionType that is passed to it.
+//  These customized IntentManager will be taking actions based on
+//  1. State of its own subsystem, based on what was processed for the same
+//  action before, like a play or pause would have to toggle the actions.
+//  2. The IntentHandler will call various IntentManagers that are registered
+//  for specific intents. The initializing of IntentManagers needs to be done
+//  in IntentHandler::Initialize() for all intents that needs to be handled
+//  by this module.
+//
+///
+/// @attention
+///    BOSE CORPORATION.
+///    COPYRIGHT 2017 BOSE CORPORATION ALL RIGHTS RESERVED.
+///    This program may not be reproduced, in whole or in part in any
+///    form or any means whatsoever without the written permission of:
+///        BOSE CORPORATION
+///        The Mountain
+///        Framingham, MA 01701-9168
+///
+///////////////////////////////////////////////////////////////////////////////
+
+#include "DPrint.h"
+#include "IntentHandler.h"
+#include "ProductController.h"
+#include "CliClientMT.h"
+
+static DPrint s_logger( "IntentHandler" );
+
+namespace ProductApp
+{
+
+IntentHandler::IntentHandler( NotifyTargetTaskIF& task,
+                              const CliClientMT& cliClient,
+                              const FrontDoorClientIF_t& frontDoorClient,
+                              ProductController& controller
+                            ):
+    CommonIntentHandler( task, cliClient, frontDoorClient, controller )
+{
+    BOSE_DEBUG( s_logger, "%s: ", __func__ );
+}
+
+void IntentHandler::Initialize()
+{
+    // Nothing yet beyond the common intents
+    CommonIntentHandler::Initialize();
+    BOSE_DEBUG( s_logger, "%s", __func__ );
+}
+
+}
+

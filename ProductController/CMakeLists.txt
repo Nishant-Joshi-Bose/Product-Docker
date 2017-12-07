@@ -56,6 +56,7 @@ ADD_EXECUTABLE(Professor
   source/CustomStateMachine/CustomProductControllerStatePlayingActive.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayingInactive.cpp
   source/CustomStateMachine/CustomProductControllerStateUpdatingSoftware.cpp
+  source/IntentHandler/IntentHandler.cpp
 )
 
 TARGET_LINK_LIBRARIES(Professor

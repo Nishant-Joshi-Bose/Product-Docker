@@ -37,6 +37,7 @@
 #include "InactivityTimers.h"
 #include "ProductMessage.pb.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
+#include "KeyManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -76,19 +77,105 @@ public:
 
     }
 
-    void HandleStateEnter( ) override
+    ///////////////////////////////////////////////////////////////////////////////
+    ///
+    /// Here are the common event handlers. They need to be declared virtual and
+    /// have an implementation that returns false
+    ///
+    ///////////////////////////////////////////////////////////////////////////////
+    virtual bool HandleLpmState( bool isActive )
     {
-
+        return false;
     }
 
-    void HandleStateStart( ) override
+    virtual bool HandleCapsState( bool ready )
     {
-
+        return false;
     }
 
-    void HandleStateExit( ) override
+    virtual bool HandleAudioPathState( bool ready )
     {
+        return false;
+    }
 
+    virtual bool HandleNetworkState( bool configured, bool connected )
+    {
+        return false;
+    }
+
+    virtual bool HandleVoiceState( bool configured )
+    {
+        return false;
+    }
+
+    virtual bool HandleAutowakeStatus( bool active )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentPlayControl( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentBlueTooth( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentNetworkStandby( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentPresetSelect( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentPresetStore( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
+    virtual bool HandleBluetoothModuleState( bool ready )
+    {
+        return false;
+    }
+
+    virtual bool HandleSTSSourcesInit( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLpmInterfaceState( bool isConnected )
+    {
+        return false;
+    }
+
+    virtual bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
+    {
+        return false;
+    }
+
+    virtual bool HandleNowPlayingStatus( const ProductNowPlayingStatus_ProductNowPlayingState& state )
+    {
+        return false;
+    }
+
+    virtual bool HandleInactivityTimer( InactivityTimerType timerType )
+    {
+        return false;
+    }
+
+    virtual bool HandleStopPlaybackResponse( const SoundTouchInterface::status &resp )
+    {
+        return false;
     }
 
     ///
@@ -96,23 +183,10 @@ public:
     /// should be overridden in the product specific state derived class that actually executes
     /// product specific action.
     ///
-    virtual bool HandleLpmState( bool active );
-    virtual bool HandleCapsState( bool active );
-    virtual bool HandleAudioPathState( bool active );
-    virtual bool HandleSTSSourcesInit( );
-    virtual bool HandleNetworkState( bool configured, bool connected );
-    virtual bool HandleVoiceState( bool configured );
-    virtual bool HandleNowPlayingStatus( const ProductNowPlayingStatus_ProductNowPlayingState& state );
-    virtual bool HandleAutowakeStatus( bool active );
     virtual bool HandleKeyAction( int action );
     virtual bool HandlePairingState( ProductAccessoryPairing pairingStatus );
-    virtual bool HandleStopPlaybackResponse( const SoundTouchInterface::status &response );
-    virtual bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo );
-    virtual bool HandleInactivityTimer( InactivityTimerType timerType );
     virtual bool HandleModulesReady( );
     virtual bool HandleNetworkConfigurationStatus( );
-    virtual bool HandleBluetoothModuleState( bool ready );
-    virtual bool HandleLpmInterfaceState( bool isConnected );
 
 
     virtual bool HandleLPMPowerStatusColdBoot( )

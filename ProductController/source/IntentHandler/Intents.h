@@ -39,10 +39,6 @@ enum class Action
     VOLUME_DOWN = ActionCommon_t::VOLUME_DOWN,
     //- VOLUME DOWN
 
-    //+ VOICE ALEXA
-    VOICE_CAROUSEL = ActionCommon_t::VOICE_CAROUSEL,
-    //- VOICE ALEXA
-
     //+ PRESET
     PRESET_STORE_1 = ActionCommon_t::PRESET_STORE_1,
     PRESET_STORE_2 = ActionCommon_t::PRESET_STORE_2,
