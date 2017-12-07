@@ -53,7 +53,7 @@ CustomProductControllerStatePlayable::CustomProductControllerStatePlayable( Prod
                                                                             CHsmState*            pSuperState,
                                                                             Hsm::STATE            stateId,
                                                                             const std::string&    name )
-    : ProductControllerState( hsm, pSuperState, stateId, name )
+    : ProductControllerStatePlayable( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayable is being constructed." );
 }
@@ -66,26 +66,6 @@ CustomProductControllerStatePlayable::CustomProductControllerStatePlayable( Prod
 void CustomProductControllerStatePlayable::HandleStateEnter( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayable is being entered." );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStatePlayable::HandleStateStart
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStatePlayable::HandleStateStart( )
-{
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayable is being started." );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStatePlayable::HandleStateExit
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStatePlayable::HandleStateExit( )
-{
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayable is being exited." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -57,7 +57,7 @@ CustomProductControllerStateLowPower::CustomProductControllerStateLowPower
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, stateId, name )
+    : ProductControllerStateLowPowerStandby( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateLowPower is being constructed." );
 }
@@ -87,16 +87,6 @@ void CustomProductControllerStateLowPower::HandleStateStart( )
     GetCustomProductController( ).GetHardwareInterface( )->RequestLpmSystemState( SYSTEM_STATE_LOW_POWER );
 
     BOSE_VERBOSE( s_logger, "An attempt to set the device to a low power state is being made." );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateLowPower::HandleStateExit
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateLowPower::HandleStateExit( )
-{
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateLowPower is being exited." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

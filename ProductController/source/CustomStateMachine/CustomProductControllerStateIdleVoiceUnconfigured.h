@@ -34,7 +34,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerState.h"
+#include "ProductControllerStateIdleVoiceNotConfigured.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
 
@@ -60,7 +60,8 @@ class ProfessorProductController;
 ///        unconfigured state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateIdleVoiceUnconfigured : public ProductControllerState
+class CustomProductControllerStateIdleVoiceUnconfigured :
+    public ProductControllerStateIdleVoiceNotConfigured
 {
 public:
 
@@ -77,7 +78,6 @@ public:
     }
 
     void HandleStateEnter( ) override;
-    void HandleStateStart( ) override;
     void HandleStateExit( )  override;
 
     bool HandleAutowakeStatus( bool active )                    override;

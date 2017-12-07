@@ -58,40 +58,11 @@ CustomProductControllerStateIdleVoiceConfigured::CustomProductControllerStateIdl
   Hsm::STATE            stateId,
   const std::string&    name )
 
-    : ProductControllerState( hsm, pSuperState, stateId, name )
+    : ProductControllerStateIdleVoiceConfigured( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceConfigured is being constructed." );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateIdleVoiceConfigured::HandleStateEnter
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateIdleVoiceConfigured::HandleStateEnter( )
-{
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceConfigured is being entered." );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateIdleVoiceConfigured::HandleStateStart
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateIdleVoiceConfigured::HandleStateStart( )
-{
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceConfigured is being started." );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateIdleVoiceConfigured::HandleStateExit
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateIdleVoiceConfigured::HandleStateExit( )
-{
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdleVoiceConfigured is being exited." );
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
