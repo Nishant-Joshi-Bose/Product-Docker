@@ -34,7 +34,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerState.h"
+#include "ProductControllerStateOn.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
 
@@ -58,7 +58,7 @@ class ProductControllerHsm;
 /// @brief This class is used for executing produce specific actions when in an on state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateOn : public ProductControllerState
+class CustomProductControllerStateOn : public ProductControllerStateOn
 {
 public:
 
@@ -72,8 +72,6 @@ public:
 
     }
 
-    void HandleStateEnter( ) override;
-    void HandleStateStart( ) override;
     void HandleStateExit( )  override;
     bool HandleKeyAction( int action ) override;
 };

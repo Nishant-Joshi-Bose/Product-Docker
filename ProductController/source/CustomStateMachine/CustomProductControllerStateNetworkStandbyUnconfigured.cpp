@@ -60,7 +60,7 @@ CustomProductControllerStateNetworkStandbyUnconfigured
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, stateId, name )
+    : ProductControllerStateNetworkStandbyNotConfigured( hsm, pSuperState, stateId, name )
 
 {
     BOSE_VERBOSE( s_logger, "%s is being constructed.", name.c_str() );
@@ -77,16 +77,6 @@ void CustomProductControllerStateNetworkStandbyUnconfigured::HandleStateEnter()
     BOSE_VERBOSE( s_logger, "NO_NETWORK_CONFIGURED_TIMER timer is started" );
 
     GetProductController( ).GetInactivityTimers( ).StartTimer( InactivityTimerType::NO_NETWORK_CONFIGURED_TIMER );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateNetworkStandbyUnconfigured::HandleStateStart
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateNetworkStandbyUnconfigured::HandleStateStart()
-{
-    BOSE_VERBOSE( s_logger, "%s is being started.", GetName( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

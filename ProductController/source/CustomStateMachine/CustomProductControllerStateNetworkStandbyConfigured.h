@@ -33,7 +33,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerState.h"
+#include "ProductControllerStateNetworkStandbyConfigured.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
 
@@ -58,7 +58,8 @@ class ProductControllerHsm;
 ///        configured state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateNetworkStandbyConfigured : public ProductControllerState
+class CustomProductControllerStateNetworkStandbyConfigured :
+    public ProductControllerStateNetworkStandbyConfigured
 {
 public:
 
@@ -72,10 +73,6 @@ public:
     {
 
     }
-
-    void HandleStateEnter( ) override;
-    void HandleStateStart( ) override;
-    void HandleStateExit( )  override;
 
     bool HandleNetworkState( bool configured, bool connected ) override;
     bool HandleVoiceState( bool configured )                   override;

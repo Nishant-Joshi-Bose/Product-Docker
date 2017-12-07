@@ -60,7 +60,7 @@ CustomProductControllerStateIdleVoiceUnconfigured::CustomProductControllerStateI
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, stateId, name )
+    : ProductControllerStateIdleVoiceNotConfigured( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "%s is being constructed.", name.c_str( ) );
 }
@@ -79,16 +79,6 @@ void CustomProductControllerStateIdleVoiceUnconfigured::HandleStateEnter( )
 
         GetProductController( ).GetInactivityTimers( ).StartTimer( InactivityTimerType::NO_AUDIO_TIMER );
     }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateIdleVoiceUnconfigured::HandleStateStart
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateIdleVoiceUnconfigured::HandleStateStart( )
-{
-    BOSE_VERBOSE( s_logger, "%s is being started.", GetName( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

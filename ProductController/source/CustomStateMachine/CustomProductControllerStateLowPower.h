@@ -33,7 +33,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerState.h"
+#include "ProductControllerStateLowPowerStandby.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
 
@@ -57,7 +57,7 @@ class ProductControllerHsm;
 /// @brief This class is used for executing produce specific actions when in an on state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateLowPower : public ProductControllerState
+class CustomProductControllerStateLowPower : public ProductControllerStateLowPowerStandby
 {
 public:
 
@@ -73,7 +73,6 @@ public:
 
     void HandleStateEnter( )           override;
     void HandleStateStart( )           override;
-    void HandleStateExit( )            override;
     bool HandleKeyAction( int action ) override;
 
 private:

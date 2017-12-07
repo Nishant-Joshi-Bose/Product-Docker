@@ -33,7 +33,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerState.h"
+#include "ProductControllerStatePlayable.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
 
@@ -57,7 +57,7 @@ class ProductControllerHsm;
 /// @brief This class is used for executing produce specific actions when in a playable state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStatePlayable : public ProductControllerState
+class CustomProductControllerStatePlayable : public ProductControllerStatePlayable
 {
 public:
 
@@ -72,8 +72,6 @@ public:
     }
 
     void HandleStateEnter( ) override;
-    void HandleStateStart( ) override;
-    void HandleStateExit( )  override;
 
     bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo ) override;
     bool HandleKeyAction( int action ) override;

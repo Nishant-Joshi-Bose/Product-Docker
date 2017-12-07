@@ -56,7 +56,7 @@ CustomProductControllerStatePlaying::CustomProductControllerStatePlaying
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, stateId, name )
+    : ProductControllerStatePlaying( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "%s is being constructed.", name.c_str() );
 }
@@ -78,15 +78,6 @@ void CustomProductControllerStatePlaying::HandleStateEnter( )
     BOSE_VERBOSE( s_logger, "An attempt to set to full power is being made." );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStatePlaying::HandleStateStart
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStatePlaying::HandleStateStart( )
-{
-    BOSE_VERBOSE( s_logger, "%s is being started.", GetName( ).c_str( ) );
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

@@ -55,39 +55,9 @@ CustomProductControllerStateUpdatingSoftware::CustomProductControllerStateUpdati
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, stateId, name )
+    : ProductControllerSoftwareUpdating( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateUpdatingSoftware is being constructed." );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateUpdatingSoftware::HandleStateEnter
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateUpdatingSoftware::HandleStateEnter()
-{
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateUpdatingSoftware is being entered." );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateUpdatingSoftware::HandleStateStart
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateUpdatingSoftware::HandleStateStart()
-{
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateUpdatingSoftware is being started." );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateUpdatingSoftware::HandleStateExit
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateUpdatingSoftware::HandleStateExit()
-{
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateUpdatingSoftware is being exited." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

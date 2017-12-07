@@ -33,7 +33,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerState.h"
+#include "ProductControllerStateSoftwareUpdating.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
 
@@ -57,7 +57,7 @@ class ProductControllerHsm;
 /// @brief This class is used for executing produce specific actions when in an idle state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateUpdatingSoftware : public ProductControllerState
+class CustomProductControllerStateUpdatingSoftware : public ProductControllerSoftwareUpdating
 {
 public:
 
@@ -70,10 +70,6 @@ public:
     {
 
     }
-
-    void HandleStateEnter( ) override;
-    void HandleStateStart( ) override;
-    void HandleStateExit( )  override;
 
     bool HandleLpmState( bool active )       override;
     bool HandleCapsState( bool active )      override;

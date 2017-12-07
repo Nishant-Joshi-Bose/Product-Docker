@@ -74,8 +74,6 @@ public:
     }
 
     void HandleStateEnter( ) override;
-    void HandleStateStart( ) override;
-    void HandleStateExit( )  override;
 
     bool HandleAutowakeStatus( bool active ) override;
 };

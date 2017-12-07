@@ -33,7 +33,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerState.h"
+#include "ProductControllerStatePlayingInactive.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
 
@@ -58,7 +58,7 @@ class ProfessorProductController;
 /// @brief This class is used for executing produce specific actions when in an playing inactive state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStatePlayingInactive : public ProductControllerState
+class CustomProductControllerStatePlayingInactive : public ProductControllerStatePlayingInactive
 {
 public:
 

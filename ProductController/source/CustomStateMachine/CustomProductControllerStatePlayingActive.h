@@ -33,7 +33,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerState.h"
+#include "ProductControllerStatePlayingActive.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
 
@@ -58,7 +58,7 @@ class ProfessorProductController;
 /// @brief This class is used for executing produce specific actions when in an playing active state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStatePlayingActive : public ProductControllerState
+class CustomProductControllerStatePlayingActive : public ProductControllerStatePlayingActive
 {
 public:
 
@@ -72,10 +72,6 @@ public:
     {
 
     }
-
-    void HandleStateEnter( ) override;
-    void HandleStateStart( ) override;
-    void HandleStateExit( )  override;
 
     bool HandleNowPlayingStatus( const ProductNowPlayingStatus_ProductNowPlayingState& state ) override;
     bool HandleKeyAction( int action ) override;
