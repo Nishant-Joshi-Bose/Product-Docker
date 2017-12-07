@@ -55,29 +55,9 @@ CustomProductControllerStateOn::CustomProductControllerStateOn( ProductControlle
                                                                 Hsm::STATE                  stateId,
                                                                 const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, stateId, name )
+    : ProductControllerStateOn( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateOn is being constructed." );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateOn::HandleStateEnter
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateOn::HandleStateEnter( )
-{
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateOn is being entered." );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateOn::HandleStateStart
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateOn::HandleStateStart( )
-{
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateOn is being started." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,6 +68,7 @@ void CustomProductControllerStateOn::HandleStateStart( )
 void CustomProductControllerStateOn::HandleStateExit( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateOn is being exited." );
+    GetProductController().SendAllowSourceSelectMessage( false );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

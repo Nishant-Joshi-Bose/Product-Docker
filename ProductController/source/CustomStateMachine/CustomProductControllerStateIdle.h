@@ -72,8 +72,7 @@ public:
     }
 
     void HandleStateEnter( ) override;
-    void HandleStateStart( ) override;
-    void HandleStateExit( )  override;
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

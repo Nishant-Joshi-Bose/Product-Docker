@@ -64,45 +64,9 @@ CustomProductControllerStatePlayingActive::CustomProductControllerStatePlayingAc
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, stateId, name )
+    : ProductControllerStatePlayingActive( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "%s is being constructed.", name.c_str() );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStatePlayingActive::HandleStateEnter
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStatePlayingActive::HandleStateEnter( )
-{
-    BOSE_VERBOSE( s_logger, "%s is being entered.", GetName( ).c_str( ) );
-    BOSE_VERBOSE( s_logger, "NO_USER_INTERACTION_TIMER timer is started" );
-
-    GetProductController( ).GetInactivityTimers( ).StartTimer( InactivityTimerType::NO_USER_INTERACTION_TIMER );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStatePlayingActive::HandleStateStart
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStatePlayingActive::HandleStateStart( )
-{
-    BOSE_VERBOSE( s_logger, "%s is being started.", GetName( ).c_str( ) );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStatePlayingActive::HandleStateExit
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStatePlayingActive::HandleStateExit( )
-{
-    BOSE_VERBOSE( s_logger, "%s is being exited.", GetName( ).c_str( ) );
-    BOSE_VERBOSE( s_logger, "The timer will be stopped." );
-
-    GetProductController( ).GetInactivityTimers( ).CancelTimer( InactivityTimerType::NO_USER_INTERACTION_TIMER );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

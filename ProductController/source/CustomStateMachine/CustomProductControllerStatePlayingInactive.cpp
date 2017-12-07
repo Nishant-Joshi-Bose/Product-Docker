@@ -55,7 +55,7 @@ CustomProductControllerStatePlayingInactive::CustomProductControllerStatePlaying
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, stateId, name )
+    : ProductControllerStatePlayingInactive( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "%s is being constructed.", name.c_str() );
 }

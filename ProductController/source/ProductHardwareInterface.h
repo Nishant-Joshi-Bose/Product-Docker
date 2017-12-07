@@ -125,6 +125,7 @@ public:
                                   const unsigned long long bluetoothMacAddress );
     bool SendSourceSelection( const LPM_IPC_SOURCE_ID      sourceSelect );
     bool CECSetPhysicalAddress( const uint32_t cecPhyAddr );
+    bool SendVolMute( const uint8_t volume, const uint8_t mute );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

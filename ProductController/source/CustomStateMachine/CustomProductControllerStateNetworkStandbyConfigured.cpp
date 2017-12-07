@@ -57,39 +57,9 @@ CustomProductControllerStateNetworkStandbyConfigured
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, stateId, name )
+    : ProductControllerStateNetworkStandbyConfigured( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyConfigured is being constructed." );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateNetworkStandbyConfigured::HandleStateEnter
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateNetworkStandbyConfigured::HandleStateEnter()
-{
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyConfigured is being entered." );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateNetworkStandbyConfigured::HandleStateStart
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateNetworkStandbyConfigured::HandleStateStart()
-{
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyConfigured is being started." );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateNetworkStandbyConfigured::HandleStateExit
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateNetworkStandbyConfigured::HandleStateExit()
-{
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandbyConfigured is being exited." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

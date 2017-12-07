@@ -56,7 +56,7 @@ CustomProductControllerStatePlaying::CustomProductControllerStatePlaying
   Hsm::STATE                  stateId,
   const std::string&          name )
 
-    : ProductControllerState( hsm, pSuperState, stateId, name )
+    : ProductControllerStatePlaying( hsm, pSuperState, stateId, name )
 {
     BOSE_VERBOSE( s_logger, "%s is being constructed.", name.c_str() );
 }
@@ -78,15 +78,6 @@ void CustomProductControllerStatePlaying::HandleStateEnter( )
     BOSE_VERBOSE( s_logger, "An attempt to set to full power is being made." );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStatePlaying::HandleStateStart
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStatePlaying::HandleStateStart( )
-{
-    BOSE_VERBOSE( s_logger, "%s is being started.", GetName( ).c_str( ) );
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -165,6 +156,8 @@ bool CustomProductControllerStatePlaying::HandleKeyAction( int action )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlaying::GoToAppropriateNonPlayingState( )
 {
+    GetCustomProductController( ).GetEdidInterface( )->PowerOff( );
+
     GetProductController( ).SendStopPlaybackMessage( );
 
     if( GetCustomProductController( ).IsNetworkConfigured( ) or
@@ -194,6 +187,21 @@ void CustomProductControllerStatePlaying::GoToAppropriateNonPlayingState( )
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
     }
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStatePlaying::HandleLPMPowerStatusFull
+///
+/// @return This method returns a true Boolean value indicating that it has handled the power
+///         status from the LPM.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlaying::HandleLPMPowerStatusFullPower( )
+{
+    GetCustomProductController( ).GetEdidInterface( )->PowerOn( );
+    return true;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///

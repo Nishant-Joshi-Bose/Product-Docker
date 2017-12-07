@@ -33,7 +33,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerState.h"
+#include "ProductControllerStatePlaying.h"
 #include "ProductControllerStates.h"
 #include "HsmState.h"
 
@@ -57,7 +57,7 @@ class ProductControllerHsm;
 /// @brief This class is used for executing produce specific actions when in an playing state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStatePlaying : public ProductControllerState
+class CustomProductControllerStatePlaying : public ProductControllerStatePlaying
 {
 public:
 
@@ -73,11 +73,12 @@ public:
     }
 
     void HandleStateEnter( ) override;
-    void HandleStateStart( ) override;
     void HandleStateExit( )  override;
 
     bool HandleInactivityTimer( InactivityTimerType timerType ) override;
     bool HandleKeyAction( int action ) override;
+
+    bool HandleLPMPowerStatusFullPower( ) override;
 
 private:
 

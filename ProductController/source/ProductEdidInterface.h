@@ -33,6 +33,11 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "A4VVideoManagerClientFactory.h"
+//#include "ProfessorProductController.h"
+#include "ProductFrontDoorUtility.h"
+//#include "SoundTouchInterface/ContentSelectionService.pb.h"
+#include "SoundTouchInterface/PlayerService.pb.h"
+#include "SoundTouchInterface/AudioService.pb.h"
 #include "ProductMessage.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,6 +83,13 @@ public:
     bool Run( );
     void Stop( );
 
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    /// The following methods are used to inform the video manager that either power has been
+    /// enabled or that it should prepare for power to be disabled
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    void PowerOff( );
+    void PowerOn( );
+
 private:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,6 +127,9 @@ private:
     void HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMIMsg_t hpdEvent );
     void HandleRawEDIDResponse( const A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid );
     void HandlePhyAddrResponse( const A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t cecPhysicalAddress );
+    void HandleNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingStatus );
+    void HandleFrontDoorVolume( SoundTouchInterface::volume const& volume );
+    std::shared_ptr< FrontDoorClientIF >    m_FrontDoorClient;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

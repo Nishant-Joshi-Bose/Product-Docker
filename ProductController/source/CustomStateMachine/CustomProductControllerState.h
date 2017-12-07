@@ -188,6 +188,33 @@ public:
     virtual bool HandleModulesReady( );
     virtual bool HandleNetworkConfigurationStatus( );
 
+
+    virtual bool HandleLPMPowerStatusColdBoot( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLPMPowerStatusLowPower( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLPMPowerStatusNetworkStandby( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLPMPowerStatusAutoWakeStandby( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLPMPowerStatusFullPower( )
+    {
+        return false;
+    }
+
+
     inline static void SetProductController( ProductController* productController )
     {
         s_productController = productController;
