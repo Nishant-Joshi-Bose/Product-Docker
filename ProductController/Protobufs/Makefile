@@ -7,10 +7,7 @@ PROTO_SOURCES = \
   LightBarController.proto \
   ProductMessage.proto \
   KeyActions.proto \
-  AudioSettings.proto \
-  ContentItem.proto \
   DisplayController.proto \
-  Presets.proto \
 
 # Where to search for imported *.proto files.
 PROTO_IMPORT_DIRS := \

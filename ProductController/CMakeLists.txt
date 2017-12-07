@@ -2,6 +2,7 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
   ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
   ${DEMOCONTROLLER_DIR}
   ${DATACOLLECTIONCLIENT_DIR}
@@ -26,15 +27,13 @@ ADD_EXECUTABLE(Eddie
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/KeyActions.pb.cc
-  ${PROTO_CC_DEST}/AudioSettings.pb.cc
-  ${PROTO_CC_DEST}/ContentItem.pb.cc
   ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/IntentHandler.pb.cc
-  ${PROTO_CC_DEST}/Presets.pb.cc
   IntentHandler/IntentHandler.cpp
   IntentHandler/PlaybackRequestManager.cpp
   IntentHandler/VoiceManager.cpp
   DisplayController/DisplayController.cpp
+  CustomProductAudioService.cpp
 )
 
 TARGET_LINK_LIBRARIES(Eddie
