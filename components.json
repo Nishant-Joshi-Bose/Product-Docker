@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-01_0851"
+    "selected_version": "Continuous/Castle-Fork/2017-12-07_0226"
   },
   {
     "name": "bose-opkg-utils",
@@ -41,15 +41,15 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.2.2-118+62bec80"
+    "selected_version": "Continuous/master/0.2.2-124+eb12ab6"
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/0.2.3-214+f4b0e24"
+    "selected_version": "Continuous/master/0.2.3-231+63a1ec0"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Continuous/master/0.2.3-214+f4b0e24"
+    "selected_version": "Continuous/master/0.2.3-231+63a1ec0"
   },
   {
     "name": "CastleProductControllerCommon",
@@ -73,7 +73,7 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Continuous/dev/1.2-4-g1e617b2"
+    "selected_version": "Continuous/dev/1.2-7-g1520c0a"
   },
   {
     "name": "Riviera-Toolchain",
@@ -93,11 +93,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.3.1-140+71ec442"
+    "selected_version": "Continuous/master/0.3.1-153+4805a8e"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-01_0851"
+    "selected_version": "Continuous/Castle-Fork/2017-12-07_0226"
   },
   {
     "name": "unittest-cpp-native",

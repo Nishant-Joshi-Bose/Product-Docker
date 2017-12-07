@@ -59,7 +59,6 @@ class ProductHardwareInterface;
 class ProductSystemManager;
 class ProductNetworkManager;
 class CustomProductAudioService;
-class ProductSoftwareServices;
 class ProductEdidInterface;
 class ProductCommandLine;
 class ProductKeyInputInterface;
@@ -148,7 +147,7 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following method is used to get get a shared pointer reference to Edid 
+    /// @brief The following method is used to get get a shared pointer reference to Edid
     ///        instance from the product controller.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -220,7 +219,6 @@ private:
     std::shared_ptr< ProductHardwareInterface > m_ProductHardwareInterface;
     std::shared_ptr< ProductSystemManager     > m_ProductSystemManager;
     std::shared_ptr< ProductNetworkManager    > m_ProductNetworkManager;
-    std::shared_ptr< ProductSoftwareServices  > m_ProductSoftwareServices;
     std::shared_ptr< ProductCommandLine       > m_ProductCommandLine;
     std::shared_ptr< ProductKeyInputInterface > m_ProductKeyInputInterface;
     std::shared_ptr< ProductEdidInterface     > m_ProductEdidInterface;
