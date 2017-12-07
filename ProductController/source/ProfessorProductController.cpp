@@ -31,7 +31,6 @@
 #include "ProfessorProductController.h"
 #include "ProductHardwareInterface.h"
 #include "CustomProductAudioService.h"
-#include "ProductSoftwareServices.h"
 #include "ProductKeyInputInterface.h"
 #include "ProductVolumeManager.h"
 #include "ProductEdidInterface.h"
@@ -95,7 +94,6 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductHardwareInterface( nullptr ),
     m_ProductSystemManager( nullptr ),
     m_ProductNetworkManager( nullptr ),
-    m_ProductSoftwareServices( nullptr ),
     m_ProductCommandLine( nullptr ),
     m_ProductKeyInputInterface( nullptr ),
     m_ProductEdidInterface( nullptr ),
@@ -256,7 +254,6 @@ void ProfessorProductController::Run( )
     m_ProductEdidInterface     = std::make_shared< ProductEdidInterface     >( *this );
     m_ProductSystemManager     = std::make_shared< ProductSystemManager     >( *this );
     m_ProductNetworkManager    = std::make_shared< ProductNetworkManager    >( *this );
-    m_ProductSoftwareServices  = std::make_shared< ProductSoftwareServices  >( *this );
     m_ProductCommandLine       = std::make_shared< ProductCommandLine       >( *this );
     m_ProductKeyInputInterface = std::make_shared< ProductKeyInputInterface >( *this );
     m_ProductVolumeManager     = std::make_shared< ProductVolumeManager     >( *this );
@@ -268,7 +265,6 @@ void ProfessorProductController::Run( )
         m_ProductSystemManager     == nullptr ||
         m_ProductNetworkManager    == nullptr ||
         m_ProductAudioService      == nullptr ||
-        m_ProductSoftwareServices  == nullptr ||
         m_ProductCommandLine       == nullptr ||
         m_ProductKeyInputInterface == nullptr ||
         m_ProductEdidInterface     == nullptr ||
@@ -288,7 +284,6 @@ void ProfessorProductController::Run( )
     m_ProductSystemManager     ->Run( );
     m_ProductNetworkManager    ->Run( );
     m_ProductAudioService      ->Run( );
-    m_ProductSoftwareServices  ->Run( );
     m_ProductCommandLine       ->Run( );
     m_ProductKeyInputInterface ->Run( );
     m_ProductEdidInterface     ->Run( );
@@ -1121,7 +1116,6 @@ void ProfessorProductController::Wait( )
     m_ProductHardwareInterface->Stop( );
     m_ProductSystemManager    ->Stop( );
     m_ProductNetworkManager   ->Stop( );
-    m_ProductSoftwareServices ->Stop( );
     m_ProductCommandLine      ->Stop( );
     m_ProductKeyInputInterface->Stop( );
     m_ProductEdidInterface    ->Stop( );
