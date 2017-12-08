@@ -56,6 +56,14 @@
     "selected_version": "master@1c37a54ea423f7f699b6d117bc2aca2846493459"
   },
   {
+    "name": "FrontDoor-native",
+    "selected_version": "Release/master/1.0.0-34+f7ab7db"
+  },
+  {
+    "name": "FrontDoor-qc8017_32",
+    "selected_version": "Release/master/1.0.0-34+f7ab7db"
+  },
+  {
     "name": "KeyHandler-qc8017_32",
     "selected_version": "Release/master/0.2.1-26+e67ea31"
   },
@@ -97,7 +105,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-07_0226"
+    "selected_version": "Continuous/Castle-Fork/2017-12-08_1536"
   },
   {
     "name": "unittest-cpp-native",
