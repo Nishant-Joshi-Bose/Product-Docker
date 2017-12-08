@@ -260,7 +260,16 @@ void ProductKeyInputInterface::KeyInformationCallBack( const int keyAction )
     BOSE_DEBUG( s_logger, "A key press or presses have been translated to the action %d.", keyAction );
 
     ProductMessage productMessage;
-    productMessage.mutable_keydata( )->set_action( static_cast< KEY_ACTION >( keyAction ) );
+
+    if( keyAction > KeyActionPb::KEY_ACTION_LAST_COMMON )
+    {
+        // @TODO for now, until Professor implements its non-common intents
+        productMessage.mutable_keydata( )->set_action( static_cast< KEY_ACTION >( keyAction ) );
+    }
+    else
+    {
+        productMessage.set_intent( static_cast< KEY_ACTION >( keyAction ) );
+    }
 
     IL::BreakThread( std::bind( m_ProductNotify,
                                 productMessage ),

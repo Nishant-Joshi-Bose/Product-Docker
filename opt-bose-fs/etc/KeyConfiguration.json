@@ -5,7 +5,7 @@
             "Comment": "power toggle", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 1, 
+            "Action": 101, 
             "KeyList": [
                 76
             ]
@@ -15,157 +15,52 @@
             "Comment": "power toggle", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 1, 
+            "Action": 101, 
             "KeyList": [
                 76
             ]
         }, 
-        {
-            "Origin": 2, 
-            "Comment": "source select", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 2, 
-            "KeyList": [
-                129
-            ]
-        }, 
-        {
-            "Origin": 6, 
-            "Comment": "source select", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 2, 
-            "KeyList": [
-                129
-            ]
-        }, 
-        {
-            "Origin": 2, 
-            "Comment": "preset 1", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 3, 
-            "KeyList": [
-                65
-            ]
-        }, 
-        {
-            "Origin": 6, 
-            "Comment": "preset 1", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 3, 
-            "KeyList": [
-                65
-            ]
-        }, 
-        {
-            "Origin": 2, 
-            "Comment": "preset 2", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 4, 
-            "KeyList": [
-                66
-            ]
-        }, 
-        {
-            "Origin": 6, 
-            "Comment": "preset 2", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 4, 
-            "KeyList": [
-                66
-            ]
-        }, 
-        {
-            "Origin": 2, 
-            "Comment": "preset 3", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 5, 
-            "KeyList": [
-                67
-            ]
-        }, 
-        {
-            "Origin": 6, 
-            "Comment": "preset 3", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 5, 
-            "KeyList": [
-                67
-            ]
-        }, 
-        {
-            "Origin": 2, 
-            "Comment": "preset 4", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 6, 
-            "KeyList": [
-                68
-            ]
-        }, 
-        {
-            "Origin": 6, 
-            "Comment": "preset 4", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 6, 
-            "KeyList": [
-                68
-            ]
-        }, 
-        {
-            "Origin": 2, 
-            "Comment": "preset 5", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 7, 
-            "KeyList": [
-                69
-            ]
-        }, 
-        {
-            "Origin": 6, 
-            "Comment": "preset 5", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 7, 
-            "KeyList": [
-                69
-            ]
-        }, 
-        {
-            "Origin": 2, 
-            "Comment": "preset 6", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 8, 
-            "KeyList": [
-                70
-            ]
-        }, 
-        {
-            "Origin": 6, 
-            "Comment": "preset 6", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 8, 
-            "KeyList": [
-                70
-            ]
-        }, 
+    {"Origin": 2, "KeyEvent": 1, "KeyList": [129], "TimeOutList": [0], "Action": 20, "Comment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast"},
+    {"Origin": 2, "KeyEvent": 2, "KeyList": [129], "TimeOutList": [750], "Action": 21, "Comment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable"},
+    {"Origin": 2, "KeyEvent": 2, "KeyList": [129], "TimeOutList": [10000], "Action": 22, "Comment": "Console: Bluetooth Press and Hold ---> Clear Pairing List"},
+
+    {"Origin": 6, "KeyEvent": 1, "KeyList": [129], "TimeOutList": [0], "Action": 20, "Comment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast"},
+    {"Origin": 6, "KeyEvent": 2, "KeyList": [129], "TimeOutList": [750], "Action": 21, "Comment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable"},
+    {"Origin": 6, "KeyEvent": 2, "KeyList": [129], "TimeOutList": [10000], "Action": 22, "Comment": "Console: Bluetooth Press and Hold ---> Clear Pairing List"},
+
+    {"Origin": 2, "KeyEvent": 2, "KeyList": [65], "TimeOutList": [1000], "Action": 27, "Comment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1"},
+    {"Origin": 2, "KeyEvent": 2, "KeyList": [66], "TimeOutList": [1000], "Action": 28, "Comment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2"},
+    {"Origin": 2, "KeyEvent": 2, "KeyList": [67], "TimeOutList": [1000], "Action": 29, "Comment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3"},
+    {"Origin": 2, "KeyEvent": 2, "KeyList": [68], "TimeOutList": [1000], "Action": 30, "Comment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4"},
+    {"Origin": 2, "KeyEvent": 2, "KeyList": [69], "TimeOutList": [1000], "Action": 31, "Comment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5"},
+    {"Origin": 2, "KeyEvent": 2, "KeyList": [70], "TimeOutList": [1000], "Action": 32, "Comment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6"},
+
+    {"Origin": 2, "KeyEvent": 1, "KeyList": [65], "TimeOutList": [200], "Action": 33, "Comment": "Console: Preset 1 release ---> Select Preset stored on Key 1"},
+    {"Origin": 2, "KeyEvent": 1, "KeyList": [66], "TimeOutList": [200], "Action": 34, "Comment": "Console: Preset 2 release ---> Select Preset stored on Key 2"},
+    {"Origin": 2, "KeyEvent": 1, "KeyList": [67], "TimeOutList": [200], "Action": 35, "Comment": "Console: Preset 3 release ---> Select Preset stored on Key 3"},
+    {"Origin": 2, "KeyEvent": 1, "KeyList": [68], "TimeOutList": [200], "Action": 36, "Comment": "Console: Preset 4 release ---> Select Preset stored on Key 4"},
+    {"Origin": 2, "KeyEvent": 1, "KeyList": [69], "TimeOutList": [200], "Action": 37, "Comment": "Console: Preset 5 release ---> Select Preset stored on Key 5"},
+    {"Origin": 2, "KeyEvent": 1, "KeyList": [70], "TimeOutList": [200], "Action": 38, "Comment": "Console: Preset 6 release ---> Select Preset stored on Key 6"},
+
+    {"Origin": 6, "KeyEvent": 2, "KeyList": [65], "TimeOutList": [1000], "Action": 27, "Comment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1"},
+    {"Origin": 6, "KeyEvent": 2, "KeyList": [66], "TimeOutList": [1000], "Action": 28, "Comment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2"},
+    {"Origin": 6, "KeyEvent": 2, "KeyList": [67], "TimeOutList": [1000], "Action": 29, "Comment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3"},
+    {"Origin": 6, "KeyEvent": 2, "KeyList": [68], "TimeOutList": [1000], "Action": 30, "Comment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4"},
+    {"Origin": 6, "KeyEvent": 2, "KeyList": [69], "TimeOutList": [1000], "Action": 31, "Comment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5"},
+    {"Origin": 6, "KeyEvent": 2, "KeyList": [70], "TimeOutList": [1000], "Action": 32, "Comment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6"},
+
+    {"Origin": 6, "KeyEvent": 1, "KeyList": [65], "TimeOutList": [200], "Action": 33, "Comment": "Console: Preset 1 release ---> Select Preset stored on Key 1"},
+    {"Origin": 6, "KeyEvent": 1, "KeyList": [66], "TimeOutList": [200], "Action": 34, "Comment": "Console: Preset 2 release ---> Select Preset stored on Key 2"},
+    {"Origin": 6, "KeyEvent": 1, "KeyList": [67], "TimeOutList": [200], "Action": 35, "Comment": "Console: Preset 3 release ---> Select Preset stored on Key 3"},
+    {"Origin": 6, "KeyEvent": 1, "KeyList": [68], "TimeOutList": [200], "Action": 36, "Comment": "Console: Preset 4 release ---> Select Preset stored on Key 4"},
+    {"Origin": 6, "KeyEvent": 1, "KeyList": [69], "TimeOutList": [200], "Action": 37, "Comment": "Console: Preset 5 release ---> Select Preset stored on Key 5"},
+    {"Origin": 6, "KeyEvent": 1, "KeyList": [70], "TimeOutList": [200], "Action": 38, "Comment": "Console: Preset 6 release ---> Select Preset stored on Key 6"},
         {
             "Origin": 2, 
             "Comment": "volume up", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 9, 
+            "Action": 23, 
             "KeyList": [
                 3
             ]
@@ -175,7 +70,7 @@
             "Comment": "volume up", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 9, 
+            "Action": 23, 
             "KeyList": [
                 3
             ]
@@ -185,7 +80,7 @@
             "Comment": "volume up", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 9, 
+            "Action": 23, 
             "KeyList": [
                 3
             ]
@@ -195,7 +90,7 @@
             "Comment": "volume down", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 10, 
+            "Action": 24, 
             "KeyList": [
                 2
             ]
@@ -205,7 +100,7 @@
             "Comment": "volume down", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 10, 
+            "Action": 24, 
             "KeyList": [
                 2
             ]
@@ -215,7 +110,7 @@
             "Comment": "volume down", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 10, 
+            "Action": 24, 
             "KeyList": [
                 2
             ]
@@ -225,7 +120,7 @@
             "Comment": "play/pause", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 11, 
+            "Action": 1, 
             "KeyList": [
                 85
             ]
@@ -235,7 +130,7 @@
             "Comment": "play/pause", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 11, 
+            "Action": 1, 
             "KeyList": [
                 85
             ]
@@ -245,7 +140,7 @@
             "Comment": "skip forward", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 12, 
+            "Action": 2, 
             "KeyList": [
                 90
             ]
@@ -255,7 +150,7 @@
             "Comment": "skip forward", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 12, 
+            "Action": 2, 
             "KeyList": [
                 90
             ]
@@ -265,7 +160,7 @@
             "Comment": "skip back", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 13, 
+            "Action": 3, 
             "KeyList": [
                 89
             ]
@@ -275,7 +170,7 @@
             "Comment": "skip back", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 13, 
+            "Action": 3, 
             "KeyList": [
                 89
             ]
@@ -285,7 +180,7 @@
             "Comment": "mute toggle", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 14, 
+            "Action": 114, 
             "KeyList": [
                 1
             ]
@@ -295,7 +190,7 @@
             "Comment": "mute toggle", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 14, 
+            "Action": 114, 
             "KeyList": [
                 1
             ]
@@ -305,7 +200,7 @@
             "Comment": "select soundtouch", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 15, 
+            "Action": 115, 
             "KeyList": [
                 179
             ]
@@ -315,7 +210,7 @@
             "Comment": "select soundtouch", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 15, 
+            "Action": 115, 
             "KeyList": [
                 179
             ]
@@ -325,7 +220,7 @@
             "Comment": "connect", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 16, 
+            "Action": 116, 
             "KeyList": [
                 17
             ]
@@ -335,7 +230,7 @@
             "Comment": "connect", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 16, 
+            "Action": 116, 
             "KeyList": [
                 17
             ]
@@ -345,7 +240,7 @@
             "Comment": "vpa", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 17, 
+            "Action": 117, 
             "KeyList": [
                 18
             ]
@@ -355,7 +250,7 @@
             "Comment": "vpa", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 17, 
+            "Action": 117, 
             "KeyList": [
                 18
             ]
@@ -365,7 +260,7 @@
             "Comment": "select tv", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 18, 
+            "Action": 118, 
             "KeyList": [
                 14
             ]
@@ -375,7 +270,7 @@
             "Comment": "select tv", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 18, 
+            "Action": 118, 
             "KeyList": [
                 14
             ]
@@ -385,7 +280,7 @@
             "Comment": "thumbs up", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 19, 
+            "Action": 119, 
             "KeyList": [
                 107
             ]
@@ -395,7 +290,7 @@
             "Comment": "thumbs up", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 19, 
+            "Action": 119, 
             "KeyList": [
                 107
             ]
@@ -405,7 +300,7 @@
             "Comment": "thumbs down", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 20, 
+            "Action": 120, 
             "KeyList": [
                 106
             ]
@@ -415,7 +310,7 @@
             "Comment": "thumbs down", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 20, 
+            "Action": 120, 
             "KeyList": [
                 106
             ]
@@ -427,7 +322,7 @@
             "TimeOutList": [
                 5000
             ], 
-            "Action": 21, 
+            "Action": 8, 
             "KeyList": [
                 253
             ]
@@ -439,7 +334,7 @@
             "TimeOutList": [
                 5000
             ], 
-            "Action": 21, 
+            "Action": 8, 
             "KeyList": [
                 253
             ]
@@ -451,7 +346,7 @@
             "TimeOutList": [
                 3000
             ], 
-            "Action": 22, 
+            "Action": 7, 
             "KeyList": [
                 252
             ]
@@ -463,7 +358,7 @@
             "TimeOutList": [
                 3000
             ], 
-            "Action": 22, 
+            "Action": 7, 
             "KeyList": [
                 252
             ]
@@ -475,7 +370,7 @@
             "TimeOutList": [
                 3000
             ], 
-            "Action": 23, 
+            "Action": 5, 
             "KeyList": [
                 251
             ]
@@ -487,7 +382,7 @@
             "TimeOutList": [
                 3000
             ], 
-            "Action": 23, 
+            "Action": 5, 
             "KeyList": [
                 251
             ]
@@ -499,7 +394,7 @@
             "TimeOutList": [
                 3000
             ], 
-            "Action": 24, 
+            "Action": 124, 
             "KeyList": [
                 250
             ]
@@ -511,7 +406,7 @@
             "TimeOutList": [
                 3000
             ], 
-            "Action": 24, 
+            "Action": 124, 
             "KeyList": [
                 250
             ]
@@ -521,7 +416,7 @@
             "Comment": "mute toggle", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 14, 
+            "Action": 114, 
             "KeyList": [
                 1
             ]
@@ -531,7 +426,7 @@
             "Comment": "vpa", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 17, 
+            "Action": 117, 
             "KeyList": [
                 18
             ]
