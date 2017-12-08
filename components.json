@@ -25,7 +25,7 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.2.2-20162"
+    "selected_version": "Continuous/Castle-Fork/2017-12-07_1731"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -56,12 +56,12 @@
     "selected_version": "master@1c37a54ea423f7f699b6d117bc2aca2846493459"
   },
   {
-    "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/0.2.1-26+e67ea31"
-  },
-  {
     "name": "ProfessorLPM-Package",
     "selected_version": "Release/IP2/0.2.4.2569960"
+  },
+  {
+    "name": "KeyHandler-qc8017_32",
+    "selected_version": "Release/master/0.2.1-26+e67ea31"
   },
   {
     "name": "protobuf-native",
