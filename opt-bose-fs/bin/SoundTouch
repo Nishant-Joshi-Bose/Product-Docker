@@ -76,8 +76,6 @@ EOF
 
     rw --read-only
 
-    /opt/Bose/webkit/target_scripts/lcd/init-lcd.sh
-
     set_ap.sh
 
     demoFlag=/mnt/nv/DemoModeOn
