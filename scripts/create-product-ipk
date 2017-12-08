@@ -73,6 +73,7 @@ lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) 
 cli_dir=$(components get CastleCli-qc8017_32 installed_location) || exit
 webkit_dir=$(components get Webkit installed_location) || exit
 productuiassets_dir=$(components get CastleProductUIAssets installed_location) || exit
+frontdoor_dir=$(components get FrontDoor-qc8017_32 installed_location) || exit
 
 arch=arm-oemllib32-linux
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -133,7 +134,6 @@ cp "$stfs"/opt/Bose/BLESetup "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/STSCertified "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/UpnpSource "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/FrontDoor "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
@@ -170,6 +170,7 @@ sw_update_url=https://worldwide.bose.com/updates/soundtouch-test
 "$cli_dir/stage" "$opt_dir" || exit
 "$webkit_dir/stage" "$opt_dir" || exit
 "$productuiassets_dir/stage" --chimes=alpha --type=flac "$opt_dir" || exit
+"$frontdoor_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 

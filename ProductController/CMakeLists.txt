@@ -60,6 +60,7 @@ TARGET_LINK_LIBRARIES(Eddie
   rt
   cap
   dl
+  SoundTouch_SDK_Protobuf_static
 )
 
 INSTALL(TARGETS Eddie DESTINATION ${OUTPUT_BIN_DIR})
