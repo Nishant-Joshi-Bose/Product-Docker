@@ -1,13 +1,9 @@
 import pytest
+from CastleTestUtils.RivieraUtils  import rivieraCommunication
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from configure import conf
 
 def pytest_addoption(parser):
-    parser.addoption("--ip-address", 
-		      action="store", 
-		      default=None,
-                      help="IP Address of Target under test")
-
     parser.addoption("--LPM_port", 
 		      action="store", 
 		      default=None,
@@ -15,11 +11,10 @@ def pytest_addoption(parser):
 @pytest.fixture()
 def get_details():
     #getting the ipaddress and lpm port  of the device
-    _ip_address = pytest.config.getoption('--ip-address')
+    communication = rivieraCommunication.getCommunicationType("ADB")
+    communication.setCommunicationDetail()
+    _ip_address = communication.getIPAddress()
     conf["LPMport"] = pytest.config.getoption("--LPM_port")
-    if _ip_address == None:
-        print "The _ip_address is:", _ip_address
-        pytest.fail("Do this: pytest -sv <test_example.py> --ip-address <ip>")
     return _ip_address
 
 @pytest.fixture()

@@ -31,14 +31,12 @@ class Test_lightbar():
         logger.info("Running Get Active Animation Test")
         animation_state = get_FrontdoorInstance.getActiveAnimation()
         logger.debug("The state is %s" % animation_state)
-        animation_keys = animation_state.keys()
-        assert "current" in animation_keys, "Animation is not being played "
         currentData = animation_state["current"]
         if "value" in currentData.keys():
             received_animation = currentData["value"]
             logger.debug("The animation currently playing is :-- %s" % received_animation)
         else:
-            logger.debug("No animation is currently playing")
+            logger.error("No animation is currently playing")
         assert "error" not in animation_state.keys(), "Error occurred in get animation"
 
     def test_deleteActiveAnimation(self, get_FrontdoorInstance):
@@ -51,7 +49,6 @@ class Test_lightbar():
         animation_state = get_FrontdoorInstance.getActiveAnimation()
         logger.debug("The active animation is %s" % animation_state)
         animation_keys = animation_state.keys()
-        assert "current" in animation_keys, "Animation is not played correctly"
         currentData = animation_state["current"].keys()
         if "value" in currentData:
             animation_value = animation_state["current"]["value"]
@@ -59,14 +56,12 @@ class Test_lightbar():
             json_data = json.dumps(data)
             animation_state = get_FrontdoorInstance.stopActiveAnimation(json_data)
             animation_keys = animation_state.keys()
-            assert 'current' in animation_keys, "Animation is not playing perfect on the device"
             if "error" in animation_keys:
-                assert "description" in (animation_keys["error"]).keys(), "All Animation is played successfully"
                 assert False, animation_keys["error"]["description"]
             else:
                 logger.debug("Last animation played on device is %s" % animation_value)
         else:
-            logger.debug("Play some animation using put request")
+            logger.error("Play some animation using put request")
 
     def test_playInValidAnimationScenarios(self, get_FrontdoorInstance):
         """

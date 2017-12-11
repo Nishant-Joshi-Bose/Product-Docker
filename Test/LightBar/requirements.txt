@@ -1,3 +1,2 @@
 #Test/LightBar/test_localui_lightbar_script.py:5
 pyserial == 3.4
-
