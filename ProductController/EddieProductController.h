@@ -175,15 +175,6 @@ private:
     void HandleSetDisplayAutoMode( const std::list<std::string> & argList, std::string& response );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @name HandleSetProductControllerStateCliCmd
-/// @brief Function to change the state of EddieProductController
-///        Usage: setProductState boot|on|standby|setup|idle
-/// @return void
-///////////////////////////////////////////////////////////////////////////////
-    void HandleSetProductControllerStateCliCmd( const std::list<std::string> & argList,
-                                                std::string& response );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @name HandleGetProductControllerStateCliCmd
 /// @brief Function to get the state of EddieProductController
 ///        Usage: getProductState

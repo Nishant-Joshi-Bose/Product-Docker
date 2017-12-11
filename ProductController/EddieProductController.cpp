@@ -597,18 +597,15 @@ void EddieProductController::RegisterCliClientCmds()
     m_CliClientMT.RegisterCLIServerCommands( "allowSourceSelect",
                                              "command to send allow/disallow source selection by Caps", "allowSourceSelect yes|no",
                                              GetTask(), cb , static_cast<int>( CLICmdKeys::ALLOW_SOURCE_SELECT ) );
+
     m_CliClientMT.RegisterCLIServerCommands( "setDisplayAutoMode",
                                              "command to set the display controller automatic mode", "setDisplayAutoMode auto|manual",
                                              GetTask(), cb , static_cast<int>( CLICmdKeys::SET_DISPLAY_AUTO_MODE ) );
-    m_CliClientMT.RegisterCLIServerCommands( "setProductState",
-                                             "command to set Product Controller state", "setProductState boot|standby|setup",
-                                             GetTask(), cb , static_cast<int>( CLICmdKeys::SET_PRODUCT_CONTROLLER_STATE ) );
+
     m_CliClientMT.RegisterCLIServerCommands( "getProductState",
                                              "command to get Product Controller state", "getProductState",
                                              GetTask(), cb , static_cast<int>( CLICmdKeys::GET_PRODUCT_CONTROLLER_STATE ) );
-    m_CliClientMT.RegisterCLIServerCommands( "getProductState",
-                                             "command to get Product Controller state",  "getProductState",
-                                             GetTask(), cb , static_cast<int>( CLICmdKeys::GET_PRODUCT_CONTROLLER_STATE ) );
+
     m_CliClientMT.RegisterCLIServerCommands( "raw_key",
                                              "command to simulate raw key events."
                                              "Usage: raw_key origin keyId state ; where origin is 0-6, keyId is 1-7, state 0-1 (press-release).",
@@ -635,11 +632,6 @@ void EddieProductController::HandleCliCmd( uint16_t cmdKey,
     case CLICmdKeys::ALLOW_SOURCE_SELECT:
     {
         HandleAllowSourceSelectCliCmd( argList, response );
-    }
-    break;
-    case CLICmdKeys::SET_PRODUCT_CONTROLLER_STATE:
-    {
-        HandleSetProductControllerStateCliCmd( argList, response );
     }
     break;
     case CLICmdKeys::GET_PRODUCT_CONTROLLER_STATE:
@@ -723,51 +715,6 @@ void EddieProductController::HandleRawKeyCliCmd( const std::list<std::string>& a
     else
     {
         response = "Invalid command. use help to look at the raw_key usage";
-    }
-}
-
-void EddieProductController::HandleSetProductControllerStateCliCmd( const std::list<std::string>& argList,
-                                                                    std::string& response )
-{
-    std::string usage;
-    usage = "Usage: setProductState boot|on|standby|setup|idle";
-
-    if( argList.size() != 1 )
-    {
-        response = "Incorrect usage\n" + usage;
-        return;
-    }
-
-    std::string arg = argList.front();
-
-    if( arg == "boot" )
-    {
-        response = "Setting Product Controller state to BOOT";
-        GetHsm().ChangeState( PRODUCT_CONTROLLER_STATE_BOOTING );
-    }
-    else if( arg == "on" )
-    {
-        response = "Setting Product Controller state to AUDIO_ON";
-        SoundTouchInterface::NowSelectionInfo nowSelectionInfo;
-        GetHsm().Handle<const SoundTouchInterface::NowSelectionInfo&>( &CustomProductControllerState::HandleNowSelectionInfo, nowSelectionInfo );
-    }
-    else if( arg == "standby" )
-    {
-        response = "Setting Product Controller state to NETWORK_STANDBY";
-        GetHsm().ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY );
-    }
-    else if( arg == "setup" )
-    {
-        response = "Setting Product Controller state to SETUP";
-        GetHsm().ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP );
-    }
-    else if( arg == "idle" )
-    {
-        response = "Will be implemented in future";
-    }
-    else
-    {
-        response = "Unknown argument\n" + usage;
     }
 }
 
