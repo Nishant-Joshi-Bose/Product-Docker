@@ -268,6 +268,13 @@ void ProductKeyInputInterface::KeyInformationCallBack( const int keyAction )
     }
     else
     {
+        // Need to send a no-op key to ProductController, to reset the inactivity timer
+        ProductMessage productNoopKeyMessage;
+        productNoopKeyMessage.mutable_keydata( )->set_action( static_cast< KEY_ACTION >( 0 ) );
+        IL::BreakThread( std::bind( m_ProductNotify,
+                                    productNoopKeyMessage ),
+                         m_ProductTask );
+
         productMessage.set_intent( static_cast< KEY_ACTION >( keyAction ) );
     }
 
