@@ -163,9 +163,11 @@
         {
             "Origin": 2, 
             "Comment": "volume up", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 9, 
+            "KeyEvent": 1, 
+            "TimeOutList": [
+                0
+            ], 
+            "Action": 23, 
             "KeyList": [
                 3
             ]
@@ -173,9 +175,11 @@
         {
             "Origin": 6, 
             "Comment": "volume up", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 9, 
+            "KeyEvent": 1, 
+            "TimeOutList": [
+                0
+            ], 
+            "Action": 23, 
             "KeyList": [
                 3
             ]
@@ -183,9 +187,50 @@
         {
             "Origin": 4, 
             "Comment": "volume up", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 9, 
+            "KeyEvent": 1, 
+            "TimeOutList": [
+                0
+            ], 
+            "Action": 23, 
+            "KeyList": [
+                3
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "volume up repeat", 
+            "KeyEvent": 3, 
+            "TimeOutList": [
+                300, 
+                100
+            ], 
+            "Action": 23, 
+            "KeyList": [
+                3
+            ]
+        }, 
+        {
+            "Origin": 6, 
+            "Comment": "volume up repeat", 
+            "KeyEvent": 3, 
+            "TimeOutList": [
+                300, 
+                100
+            ], 
+            "Action": 23, 
+            "KeyList": [
+                3
+            ]
+        }, 
+        {
+            "Origin": 4, 
+            "Comment": "volume up repeat", 
+            "KeyEvent": 3, 
+            "TimeOutList": [
+                300, 
+                100
+            ], 
+            "Action": 23, 
             "KeyList": [
                 3
             ]
@@ -193,9 +238,11 @@
         {
             "Origin": 2, 
             "Comment": "volume down", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 10, 
+            "KeyEvent": 1, 
+            "TimeOutList": [
+                0
+            ], 
+            "Action": 25, 
             "KeyList": [
                 2
             ]
@@ -203,9 +250,11 @@
         {
             "Origin": 6, 
             "Comment": "volume down", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 10, 
+            "KeyEvent": 1, 
+            "TimeOutList": [
+                0
+            ], 
+            "Action": 25, 
             "KeyList": [
                 2
             ]
@@ -213,9 +262,50 @@
         {
             "Origin": 4, 
             "Comment": "volume down", 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 10, 
+            "KeyEvent": 1, 
+            "TimeOutList": [
+                0
+            ], 
+            "Action": 25, 
+            "KeyList": [
+                2
+            ]
+        }, 
+        {
+            "Origin": 2, 
+            "Comment": "volume down repeat", 
+            "KeyEvent": 3, 
+            "TimeOutList": [
+                300, 
+                100
+            ], 
+            "Action": 25, 
+            "KeyList": [
+                2
+            ]
+        }, 
+        {
+            "Origin": 6, 
+            "Comment": "volume down repeat", 
+            "KeyEvent": 3, 
+            "TimeOutList": [
+                300, 
+                100
+            ], 
+            "Action": 25, 
+            "KeyList": [
+                2
+            ]
+        }, 
+        {
+            "Origin": 4, 
+            "Comment": "volume down repeat", 
+            "KeyEvent": 3, 
+            "TimeOutList": [
+                300, 
+                100
+            ], 
+            "Action": 25, 
             "KeyList": [
                 2
             ]
@@ -225,7 +315,7 @@
             "Comment": "play/pause", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 11, 
+            "Action": 9, 
             "KeyList": [
                 85
             ]
@@ -235,7 +325,7 @@
             "Comment": "play/pause", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 11, 
+            "Action": 9, 
             "KeyList": [
                 85
             ]
@@ -245,7 +335,7 @@
             "Comment": "skip forward", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 12, 
+            "Action": 10, 
             "KeyList": [
                 90
             ]
@@ -255,7 +345,7 @@
             "Comment": "skip forward", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 12, 
+            "Action": 10, 
             "KeyList": [
                 90
             ]
@@ -265,7 +355,7 @@
             "Comment": "skip back", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 13, 
+            "Action": 11, 
             "KeyList": [
                 89
             ]
@@ -275,7 +365,7 @@
             "Comment": "skip back", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 13, 
+            "Action": 11, 
             "KeyList": [
                 89
             ]
@@ -285,7 +375,7 @@
             "Comment": "mute toggle", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 14, 
+            "Action": 12, 
             "KeyList": [
                 1
             ]
@@ -295,7 +385,7 @@
             "Comment": "mute toggle", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 14, 
+            "Action": 12, 
             "KeyList": [
                 1
             ]
@@ -305,7 +395,7 @@
             "Comment": "select soundtouch", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 15, 
+            "Action": 13, 
             "KeyList": [
                 179
             ]
@@ -315,7 +405,7 @@
             "Comment": "select soundtouch", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 15, 
+            "Action": 13, 
             "KeyList": [
                 179
             ]
@@ -325,7 +415,7 @@
             "Comment": "connect", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 16, 
+            "Action": 14, 
             "KeyList": [
                 17
             ]
@@ -335,7 +425,7 @@
             "Comment": "connect", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 16, 
+            "Action": 14, 
             "KeyList": [
                 17
             ]
@@ -345,7 +435,7 @@
             "Comment": "vpa", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 17, 
+            "Action": 15, 
             "KeyList": [
                 18
             ]
@@ -355,7 +445,7 @@
             "Comment": "vpa", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 17, 
+            "Action": 15, 
             "KeyList": [
                 18
             ]
@@ -365,7 +455,7 @@
             "Comment": "select tv", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 18, 
+            "Action": 16, 
             "KeyList": [
                 14
             ]
@@ -375,7 +465,7 @@
             "Comment": "select tv", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 18, 
+            "Action": 16, 
             "KeyList": [
                 14
             ]
@@ -385,7 +475,7 @@
             "Comment": "thumbs up", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 19, 
+            "Action": 17, 
             "KeyList": [
                 107
             ]
@@ -395,7 +485,7 @@
             "Comment": "thumbs up", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 19, 
+            "Action": 17, 
             "KeyList": [
                 107
             ]
@@ -405,7 +495,7 @@
             "Comment": "thumbs down", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 20, 
+            "Action": 18, 
             "KeyList": [
                 106
             ]
@@ -415,7 +505,7 @@
             "Comment": "thumbs down", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 20, 
+            "Action": 18, 
             "KeyList": [
                 106
             ]
@@ -427,7 +517,7 @@
             "TimeOutList": [
                 5000
             ], 
-            "Action": 21, 
+            "Action": 19, 
             "KeyList": [
                 253
             ]
@@ -439,7 +529,7 @@
             "TimeOutList": [
                 5000
             ], 
-            "Action": 21, 
+            "Action": 19, 
             "KeyList": [
                 253
             ]
@@ -451,7 +541,7 @@
             "TimeOutList": [
                 3000
             ], 
-            "Action": 22, 
+            "Action": 20, 
             "KeyList": [
                 252
             ]
@@ -463,7 +553,7 @@
             "TimeOutList": [
                 3000
             ], 
-            "Action": 22, 
+            "Action": 20, 
             "KeyList": [
                 252
             ]
@@ -475,7 +565,7 @@
             "TimeOutList": [
                 3000
             ], 
-            "Action": 23, 
+            "Action": 21, 
             "KeyList": [
                 251
             ]
@@ -487,7 +577,7 @@
             "TimeOutList": [
                 3000
             ], 
-            "Action": 23, 
+            "Action": 21, 
             "KeyList": [
                 251
             ]
@@ -499,7 +589,7 @@
             "TimeOutList": [
                 3000
             ], 
-            "Action": 24, 
+            "Action": 22, 
             "KeyList": [
                 250
             ]
@@ -511,7 +601,7 @@
             "TimeOutList": [
                 3000
             ], 
-            "Action": 24, 
+            "Action": 22, 
             "KeyList": [
                 250
             ]
@@ -521,7 +611,7 @@
             "Comment": "mute toggle", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 14, 
+            "Action": 12, 
             "KeyList": [
                 1
             ]
@@ -531,7 +621,7 @@
             "Comment": "vpa", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
-            "Action": 17, 
+            "Action": 15, 
             "KeyList": [
                 18
             ]

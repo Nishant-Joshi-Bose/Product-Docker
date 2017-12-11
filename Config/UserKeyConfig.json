@@ -66,19 +66,35 @@
     },
     {
       "Origin": [ "IR", "TAP", "CEC" ],
-      "KeyEvent": "PRESS",
+      "KeyEvent": "RELEASE",
       "KeyList": [ "BOSE_VOLUME_UP" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_VOLUME_UP",
+      "TimeOutList": [0],
+      "Action": "KEY_ACTION_VOLUME_UP_1",
       "Comment": "volume up"
     },
     {
       "Origin": [ "IR", "TAP", "CEC" ],
-      "KeyEvent": "PRESS",
+      "KeyEvent": "PRESS_HOLD_REPEAT",
+      "KeyList": [ "BOSE_VOLUME_UP" ],
+      "TimeOutList": [300, 100],
+      "Action": "KEY_ACTION_VOLUME_UP_1",
+      "Comment": "volume up repeat"
+    },
+    {
+      "Origin": [ "IR", "TAP", "CEC" ],
+      "KeyEvent": "RELEASE",
       "KeyList": [ "BOSE_VOLUME_DOWN" ],
-      "TimeOutList": [],
-      "Action": "KEY_ACTION_VOLUME_DOWN",
+      "TimeOutList": [0],
+      "Action": "KEY_ACTION_VOLUME_DOWN_1",
       "Comment": "volume down"
+    },
+    {
+      "Origin": [ "IR", "TAP", "CEC" ],
+      "KeyEvent": "PRESS_HOLD_REPEAT",
+      "KeyList": [ "BOSE_VOLUME_DOWN" ],
+      "TimeOutList": [300, 100],
+      "Action": "KEY_ACTION_VOLUME_DOWN_1",
+      "Comment": "volume down repeat"
     },
     {
       "Origin": [ "IR", "TAP" ],
