@@ -27,6 +27,7 @@ $ pytest -vs test_localui_lightbar_script.py::Test_lightbar::test_playInValidAni
 
 ##### To run the positive test scenarios for lightbar animation:
 ```shell session
-$ pytest -vs test_localui_lightbar_script.py::Test_lightbar::test_playValidAnimationScenarios --ip-address=<ip-address> --LPM_port <lpm_port>
+$ pytest -vs test_localui_lightbar_script.py::Test_lightbar::test_playValidAnimationScenarios \
+--ip-address=<ip-address> --LPM_port <lpm_port>
 ```
 
