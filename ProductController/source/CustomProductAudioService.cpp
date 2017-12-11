@@ -199,6 +199,25 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                   setContentTypeAction,
                                   m_FrontDoorClientIF,
                                   m_ProductTask ) );
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// Endpoint /audio/balance - register ProductController as handler for POST/PUT/GET requests
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    auto getDualMonoSelectAction = [ this ]( )
+    {
+        return m_AudioSettingsMgr->GetDualMonoSelect( );
+    };
+    auto setDualMonoSelectAction = [ this ]( const ProductPb::AudioDualMonoSelect val )
+    {
+        m_AudioSettingsMgr->SetDualMonoSelect( val );
+    };
+    m_DualMonoSelectSetting = std::unique_ptr<AudioSetting<ProductPb::AudioDualMonoSelect>>( new AudioSetting<ProductPb::AudioDualMonoSelect>
+                              ( "/audio/dualMonoSelect",
+                                getDualMonoSelectAction,
+                                setDualMonoSelectAction,
+                                m_FrontDoorClientIF,
+                                m_ProductTask ) );
+
 }
 
 }// namespace ProductApp
