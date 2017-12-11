@@ -84,17 +84,17 @@ class Test_lightbar():
                 data = {"next":{"value":row[0], "transition":row[1], "repeat":row[2]}}
                 if row[1] == "queue":
                     continue
-                data1 = json.dumps(data)
-                logger.info("data is %s " % data1)
-                animation_state1 = get_FrontdoorInstance.playLightBarAnimation(data1)
-                logger.debug("The received state is %s" % animation_state1)
-                if "error" in animation_state1.keys():
-                    if "description" in animation_state1["error"].keys():
-                        failScenarios.append(data1)
+                json_data = json.dumps(data)
+                logger.info("data is %s " % json_data)
+                animation_state = get_FrontdoorInstance.playLightBarAnimation(json_data)
+                logger.debug("The received state is %s" % animation_state)
+                if "error" in animation_state.keys():
+                    if "description" in animation_state["error"].keys():
+                        failScenarios.append(json_data)
                     else:
-                        passScenarios.append(data1)
+                        passScenarios.append(json_data)
                 else:
-                    passScenarios.append(data1)
+                    passScenarios.append(json_data)
             logger.debug("PASS ARE %s" % passScenarios)
             logger.debug("FAIL ARE %s" % failScenarios)
             assert len(passScenarios) == 0, "Some negative scenarios passed {}".format(passScenarios)
@@ -124,8 +124,8 @@ class Test_lightbar():
         animations = []
         with open("Animations_manifest.json") as filename:
             # convert json object to dictionary for parsing animation value
-            json_to_dict1 = json.load(filename)
-        for animation_name in json_to_dict1["animations"]:
+            json_to_dict = json.load(filename)
+        for animation_name in json_to_dict["animations"]:
             animations.append(str(animation_name["name"]))
         logger.info("List of supported animations:\n")
         for iterator in animations:
@@ -137,11 +137,11 @@ class Test_lightbar():
                 for repeat_state in repeat_states:
                     # sleep before playing next animation
                     sleep(2)
-                    data1 = {"next":{"value":animation, "transition":transition, "repeat":repeat_state}}
+                    animationData = {"next":{"value":animation, "transition":transition, "repeat":repeat_state}}
                     if transition == "queue":
                         continue
-                    json_data = json.dumps(data1)
-                    animation_state1 = get_FrontdoorInstance.playLightBarAnimation(json_data)
+                    json_data = json.dumps(animationData)
+                    animation_state = get_FrontdoorInstance.playLightBarAnimation(json_data)
                     # verification for serial logs if connected with the device
                     if checkValidPort:
                         SerialLog = SerialLoggingUtil(None, conf["LPMport"])
@@ -149,12 +149,12 @@ class Test_lightbar():
                         logger.info("\nLightbar logs from LPM are:\n %s" % SerialOutput)
                         SerialLastAnimation = SerialOutput[-2].split(",")[-2:]
                         SerialDetails.append(SerialLastAnimation)
-                    if "error" in animation_state1.keys():
-                        error = animation_state1["error"]["description"]
+                    if "error" in animation_state.keys():
+                        error = animation_state["error"]["description"]
                         if error == "animation not supported":
-                            failScenarios.append(data1)
+                            failScenarios.append(animationData)
                         else:
-                            passScenarios.append(data1)
+                            passScenarios.append(animationData)
                         if failScenarios:
                             logger.debug("\nSome scenarios are failed.They are :--\n %s" % failScenarios)
                             assert "False", "Failures found"
