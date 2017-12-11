@@ -84,8 +84,8 @@ public:
     /// @brief The following methods allow for manipulation of system volume
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void Increment( );
-    void Decrement( );
+    void Increment( unsigned int );
+    void Decrement( unsigned int );
     void ToggleMute( );
 
 private:
