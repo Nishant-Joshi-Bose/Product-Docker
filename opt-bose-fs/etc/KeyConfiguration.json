@@ -177,6 +177,45 @@
         }, 
         {
             "Origin": 2, 
+            "Comment": "volume down repeat", 
+            "KeyEvent": 3, 
+            "TimeOutList": [
+                300, 
+                100
+            ], 
+            "Action": 25, 
+            "KeyList": [
+                2
+            ]
+        }, 
+        {
+            "Origin": 6, 
+            "Comment": "volume down repeat", 
+            "KeyEvent": 3, 
+            "TimeOutList": [
+                300, 
+                100
+            ], 
+            "Action": 25, 
+            "KeyList": [
+                2
+            ]
+        }, 
+        {
+            "Origin": 4, 
+            "Comment": "volume down repeat", 
+            "KeyEvent": 3, 
+            "TimeOutList": [
+                300, 
+                100
+            ], 
+            "Action": 25, 
+            "KeyList": [
+                2
+            ]
+        }, 
+        {
+            "Origin": 2, 
             "Comment": "play/pause", 
             "KeyEvent": 0, 
             "TimeOutList": [], 
