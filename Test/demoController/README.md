@@ -16,5 +16,5 @@ sudo pip install -r Test/requirements.txt
 ### Run tests
 
 ```
-pytest demoController/test_demo.py -vs --target=device --network-iface='eth0' --device-id=61b5457
+pytest Test/demoController/test_demo.py -vs --target=device --network-iface='eth0' --device-id=61b5457
 ```
