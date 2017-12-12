@@ -56,7 +56,26 @@ here=$(cd "$(dirname $0)" && echo "$PWD") || error_exit ${FUNCNAME[0]}
 wspace=$(cd "$here/.." && echo "$PWD") || error_exit ${FUNCNAME[0]}
 riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || error_exit ${FUNCNAME[0]}
 swupdate_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || error_exit ${FUNCNAME[0]}
-opkg_dir="$swupdate_dir"/tools/opkg
+
+
+opkg_confif_dir="$swupdate_dir"/tools/opkg
+
+
+# opkg_lib_dir="$swupdate_dir"/tools/opkg
+# opkg_bin_dir="$swupdate_dir"/tools/opkg
+
+# opkg_bin_dir=/usr/local/bin
+# opkg_lib_dir=/usr/local/lib
+
+MACHINE_TYPE=`uname -m`
+if [ ${MACHINE_TYPE} == 'x86_64' ]; then
+  opkg_bin_dir=/usr/local/bin
+  opkg_lib_dir=/usr/local/lib
+else
+  opkg_lib_dir="$swupdate_dir"/tools/opkg
+  opkg_bin_dir="$swupdate_dir"/tools/opkg
+fi
+
 ipks_dir=$wspace/builds/$cfg
 product_ipk=$wspace/builds/$cfg/product.ipk
 utils_dir=$wspace/install/utils
@@ -89,18 +108,18 @@ extract_product_ipk () {
 
 install_offline () {
     local offline_dir="$stage_package_dir"/temp-offline
-    rm -rf "$offline_dir" 
+    rm -rf "$offline_dir"
     mkdir -p "$offline_dir"  || error_exit ${FUNCNAME[0]}
     cd "$stage_package_dir" || error_exit ${FUNCNAME[0]}
-    local opkg_cmd=(fakeroot "$opkg_dir"/opkg 
-                    -f "$opkg_dir"/opkg.conf 
-                    --offline-root="$offline_dir" 
-                    --volatile-cache 
-                    --add-arch armv7a-vfp-neon:100 
+    local opkg_cmd=(fakeroot "$opkg_bin_dir"/opkg
+                    -f "$opkg_confif_dir"/opkg.conf
+                    --offline-root="$offline_dir"
+                    --volatile-cache
+                    --add-arch armv7a-vfp-neon:100
                     install "$product_ipk")
-    echo "Executing ${opkg_cmd[@]}"	
-    # Not throwing error as opkg command on Normal linux 
-    LD_LIBRARY_PATH="$opkg_dir" "${opkg_cmd[@]}" || error_exit ${FUNCNAME[0]}
+    echo "Executing ${opkg_cmd[@]}"
+    # Not throwing error as opkg command on Normal linux
+    LD_LIBRARY_PATH="$opkg_lib_dir" "${opkg_cmd[@]}" || error_exit ${FUNCNAME[0]}
     mv "$offline_dir"/opt/Bose "$stage_package_dir"/"$bose_partition"  || error_exit ${FUNCNAME[NCNAME[0]}
     sed -i -- 's/Status: install user unpacked/Status: install user installed/g' "$stage_package_dir"/"$bose_partition"/update/status  || error_exit ${FUNCNAME[0]}
     rm -rf "$offline_dir"
@@ -127,7 +146,7 @@ create_product_ext4 () {
 	mv $bose_ext4 orig_userpartition.ext4
 	#copy and extract product IPK to make new EXT4 fs
 	#extract_product_ipk
-	install_offline 
+	install_offline
 	#Getting fs_size from bose.ext4 is creating wrong file
 	#fs_size=1514624512
 	$utils_dir/lin/make_ext4fs -s -l $fs_size -a $bose_partition $bose_ext4 $extract_dir/ > /dev/null || error_exit ${FUNCNAME[0]}

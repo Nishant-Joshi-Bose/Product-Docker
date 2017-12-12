@@ -7,9 +7,9 @@
     <defaultSetupSsid>Bose ST TBD</defaultSetupSsid>
 
     <isAudioNotificationSupported>true</isAudioNotificationSupported>
-    <isBluetoothAudioSourceSupported>false</isBluetoothAudioSourceSupported>
-    <isOutOfBoxAPSetupSupported>true</isOutOfBoxAPSetupSupported>
-    <isOutOfBoxEnabled>true</isOutOfBoxEnabled>
+    <isBluetoothAudioSourceSupported>true</isBluetoothAudioSourceSupported>
+    <isOutOfBoxAPSetupSupported>false</isOutOfBoxAPSetupSupported>
+    <isOutOfBoxEnabled>false</isOutOfBoxEnabled>
     <volume thresholdLow="10" thresholdHigh="70" defaultValue="50"/>
     <moduleType>riviera</moduleType>
     <hasStatusLed>false</hasStatusLed>

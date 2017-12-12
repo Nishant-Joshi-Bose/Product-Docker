@@ -224,6 +224,38 @@ else
     echo "Installed Riviera-HSP: \$i"
     echo "See https://github.com/BoseCorp/Professor/blob/master/README.md#hsp"
 fi
+
+# ---8<------8<------8<------8<------8<------8<------8<------8<------8<---
+# Try to kill services before installation begin to make sure
+#   minimal files are in use due to in-place installation.
+#   This is done for IP2. Needs to be removed / modified in IP3 to 
+#   use Product & Shepherd instead.
+echo "Stopping all services except SoftwareupdateService, NetManager"
+pkill Telemetry
+pkill APServer
+pkill CLIServer
+pkill LPMService
+pkill Passport
+pkill AVS
+pkill Professor
+pkill avahi-daemon
+pkill A4VVideoManagerService
+pkill A4VRemoteCommunicationService
+pkill A4VQuickSetService
+pkill IoT
+pkill UpnpSource
+pkill FrontDoor
+pkill BoseApp
+pkill STSCertified
+pkill BluetoothManager
+pkill BT
+pkill BTSource
+pkill BLESetup
+pkill PtsServer
+# we are leaving telnet, avahi-daemon, SoftwareUpdateService, NetManager alive.
+# ---8<------8<------8<------8<------8<------8<------8<------8<------8<---
+
+exit 0
 EOF
 
 put_script "$stage/prerm" <<EOF
