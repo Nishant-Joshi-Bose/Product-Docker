@@ -1,7 +1,7 @@
 Key Configuration Generator
 ===========================
 
-The key configuration generator script (friendly_to_raw_key_config.py) simplifies maintenance of the .json configuration file for the CastleKeyHandler component by allowing the user to specify keys and actions by their symbolic names from enumerations in the source code.  The script takes as input a "friendly" .json configuration file, C/C++ header files containing key value enumerations (one per possible source, each source is optional), and either a .pyc output from protobuf compilation or a header file containing key action enumerations.  The script outputs a .json configuration file suitable for use with the CastleKeyHandler component (enumerations converted to numeric values).
+The key configuration generator script (friendly_to_raw_key_config.py) simplifies maintenance of the .json configuration file for the CastleKeyHandler component by allowing the user to specify keys and actions by their symbolic names from enumerations in the source code.  The script takes as input one or more "friendly" .json configuration files, C/C++ header files containing key value enumerations (one per possible source, each source is optional), and one or more .pyc outputs from protobuf compilation or header files containing key action enumerations.  The script outputs a .json configuration file suitable for use with the CastleKeyHandler component (enumerations converted to numeric values).
 
 # Configuration fields
 
@@ -40,15 +40,15 @@ The "KeyEvent" can be any of the following strings
 Run the sript without any arguments for help.
 
 ./scripts/friendly_to_raw_key_config.py 
-usage: generate key config [-h] --inputcfg INPUTCFG --actions ACTION_FILE
+usage: generate key config [-h] --inputcfgs INPUTCFGS --actions ACTIONS_FILES
                            [--console CONSOLE_FILE] [--cap CAP_FILE]
                            [--ir IR_FILE] [--rf RF_FILE] [--cec CEC_FILE]
                            [--net NET_FILE] [--tap TAP_FILE] --outputcfg
                            OUTPUTCFG
 
-* inputcfg -  "friendly" .json configuration file
+* inputcfgs -  list of "friendly" .json configuration files
 * outputcfg - "raw" .json confiugration file
-* actions - .pyc file output from compilation of .proto file containing KEY_ACTION enumeration or header file containing list of actions ("typedef enum { ... } KEY_ACTION;") (type is determined by file extension)
+* actions - list of .pyc files output from compilation of .proto file containing KEY_ACTION enumeration or header files containing list of actions ("typedef enum { ... } KEY_ACTION;") (type is determined by file extension)
 * console/cap/ir/rf/cec/net/tap - header file containing list of keys for corresponding origin ("typedef enum KEY_VALUE;"); only required if you have keys defined from the corresponding origin
 
 TestKeyConfig.json contains a sample "friendly" configuration.  
@@ -60,10 +60,14 @@ Run the configuration generator as follows (KeyConfiguration.json will be the ou
 LPM_KEYS=/scratch/components-cache/master@5e3aefe78e9cd00f7dbeaab54f17be962be60cdf/RivieraLpmService/source/LPMIPC/LPM_KeyValues.h
 
 ./scripts/friendly_to_raw_key_config.py \
- --inputcfg=./Config/UserKeyConfig.json \
- --actions=./builds/Release/qc8017_32/proto_py/KeyActions_pb2.pyc \
- --cap=${LPM_KEYS} \
- --ir=${LPM_KEYS} \
- --outputcfg=./opt-bose-fs/etc/KeyConfiguration.json
+ --inputcfg \
+    ./Config/UserKeyConfig.json \
+    ./CommonConfig.json \
+ --actions \
+    ./builds/Release/qc8017_32/proto_py/KeyActions_pb2.pyc \
+    ./CommonIntents.h \
+ --cap ${LPM_KEYS} \
+ --ir ${LPM_KEYS} \
+ --outputcfg ./opt-bose-fs/etc/KeyConfiguration.json
 ```
 
