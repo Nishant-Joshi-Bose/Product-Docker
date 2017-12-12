@@ -1,0 +1,13 @@
+syntax = "proto2";
+
+package ProductPb;
+
+import "AudioBassLevel.proto";
+import "AudioTrebleLevel.proto";
+import "AudioCenterLevel.proto";
+import "AudioSurroundLevel.proto";
+import "AudioGainOffset.proto";
+import "AudioAvSync.proto";
+import "AudioMode.proto";
+import "AudioContentType.proto";
+import "AudioDualMonoSelect.proto";

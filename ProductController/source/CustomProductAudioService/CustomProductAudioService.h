@@ -8,6 +8,7 @@
 #pragma once
 #include "ProductAudioService.h"
 #include "ProfessorProductController.h"
+#include "CustomAudioSettingsManager.h"
 
 namespace ProductApp
 {
@@ -17,6 +18,7 @@ public:
     CustomProductAudioService( ProfessorProductController& ProductController );
 
 private:
+    std::shared_ptr<CustomAudioSettingsManager>   m_AudioSettingsMgr;
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// Front Door handlers
     /////////////////////////////////////////////////////////////////////////////////////////////
