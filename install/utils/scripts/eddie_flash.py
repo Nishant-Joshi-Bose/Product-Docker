@@ -126,7 +126,7 @@ def do_qc_flash(package, update_fastboot, full_update, all_partitions, userspace
         
         # See if top directory, required scripts are available
         # At this point path_to_package should be valid path
-        extracted_package = os.path.abspath("eddie")
+        extracted_package = os.path.abspath("product")
         extracted_package = os.path.normpath(extracted_package) + os.sep
         if not os.path.exists(extracted_package):
             raise Exception("Expected Extracted Package [%s]. Not Found. Cannot Continue update." %(extracted_package))
@@ -170,7 +170,7 @@ if __name__ == '__main__':
             logging.info("The flash script requires root priviledge. Please try and rerun in sudo mode.")
             sys.exit(-1)
             
-    parser = argparse.ArgumentParser(description='Flash Eddie and LPM using Fastboot Flash.')
+    parser = argparse.ArgumentParser(description='Flash Product and LPM using Fastboot Flash.')
     parser.add_argument('package', action='store', help="Full path of package TAR file")
     #parser.add_argument('serial', action='store', required=False, help="LPM Debug Serial port - e.g. /dev/ttyUSB1")
     subparsers = parser.add_subparsers(help='commands')

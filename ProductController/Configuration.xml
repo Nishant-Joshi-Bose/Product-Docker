@@ -8,8 +8,8 @@
 
     <isAudioNotificationSupported>true</isAudioNotificationSupported>
     <isBluetoothAudioSourceSupported>true</isBluetoothAudioSourceSupported>
-    <isOutOfBoxAPSetupSupported>true</isOutOfBoxAPSetupSupported>
-    <isOutOfBoxEnabled>true</isOutOfBoxEnabled>
+    <isOutOfBoxAPSetupSupported>false</isOutOfBoxAPSetupSupported>
+    <isOutOfBoxEnabled>false</isOutOfBoxEnabled>
     <volume thresholdLow="10" thresholdHigh="70" defaultValue="50"/>
     <moduleType>riviera</moduleType>
     <hasStatusLed>false</hasStatusLed>

@@ -10,7 +10,7 @@
 #
 #  putipk
 #  putipk jobs=4
-#  putipk /home/softlib/verisoft/Eddie/Release/master/latest/product.ipk
+#  putipk /home/softlib/verisoft/Professor/Release/master/latest/product.ipk
 #
 
 if (( $# == 1 )) && [[ "$1" = *.ipk ]]; then

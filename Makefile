@@ -58,7 +58,7 @@ product-ipk: cmake_build
 
 #Uncomment next two line after removing next 2 lines, once HSP is integrated.
 #IPKS = hsp.ipk  product.ipk lpm_updater.ipk
-#PACKAGENAMES = hsp SoundTouch eddie_lpm_updater
+#PACKAGENAMES = hsp SoundTouch professor_lpm_updater
 IPKS = product.ipk lpm_updater.ipk
 PACKAGENAMES = SoundTouch professor_lpm_updater
 
@@ -68,7 +68,7 @@ update-zip: product-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip
 
 #Create one more Zip file for Bonjour / Local update with HSP 
-#- This is temporary, till DP2 boards are not available.
+#- This is temporary, till DP2 boards are available.
 IPKS_HSP = hsp.ipk product.ipk lpm_updater.ipk
 PACKAGENAMES_HSP = hsp SoundTouch professor_lpm_updater
 .PHONY: update-zip-with-hsp

@@ -231,23 +231,27 @@ fi
 #   This is done for IP2. Needs to be removed / modified in IP3 to 
 #   use Product & Shepherd instead.
 echo "Stopping all services except SoftwareupdateService, NetManager"
-pkill LPMService
+pkill Telemetry
 pkill APServer
-pkill PtsServer
+pkill CLIServer
+pkill LPMService
 pkill Passport
 pkill AVS
+pkill Professor
+pkill avahi-daemon
+pkill A4VVideoManagerService
+pkill A4VRemoteCommunicationService
+pkill A4VQuickSetService
+pkill IoT
 pkill UpnpSource
-pkill Vfe
-pkill btproperty
+pkill FrontDoor
+pkill BoseApp
 pkill STSCertified
 pkill BluetoothManager
 pkill BT
-pkill BLESetup
 pkill BTSource
-pkill IoT
-pkill BoseApp
-pkill Eddie
-pkill FrontDoor
+pkill BLESetup
+pkill PtsServer
 # we are leaving telnet, avahi-daemon, SoftwareUpdateService, NetManager alive.
 # ---8<------8<------8<------8<------8<------8<------8<------8<------8<---
 
