@@ -114,7 +114,6 @@ def main():
   ast_keys = []
   for f in key_files:
     if f is not None:
-      print('parsing {}'.format(f))
       ast_keys.append(index.parse(f, clang_args).cursor)
     else:
       ast_keys.append(None)
@@ -122,7 +121,6 @@ def main():
   # merge action files ASTs (python or c/c++ headers) to action map
   action_map = {}
   for f in args.actions_files:
-    print('parse {}'.format(f))
     if re.match(r'.*\.pyc$', f):
       pb = imp.load_compiled('p', os.path.abspath(f))
       a = build_enum_map_from_proto(pb, 'KEY_ACTION')
@@ -149,10 +147,13 @@ def main():
 
   # merge user config files
   j = {}
+  j['KeyTable'] = []
   for f in args.inputcfgs:
     ifile = open(f).read()
-    j.update(json.loads(ifile))
+    jtmp = json.loads(ifile)
+    j['KeyTable'] += jtmp['KeyTable']
 
+  print(action_map)
   # transmogrify the key table
   keymap = {'KeyTable' : []}
 
