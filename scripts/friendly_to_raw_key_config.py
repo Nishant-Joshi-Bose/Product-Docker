@@ -9,6 +9,10 @@ import imp
 import os
 import inspect
 import copy
+import clang.cindex
+from pprint import pprint
+import yaml
+import jsonpickle
 
 """
 Given a key list enumeration file, an actions enumeration file, and a 
@@ -34,18 +38,6 @@ EVENT_NAMES = {
   "RELEASE_BURST" : 4
 }
 
-def lookfor(node, target):
-  ret = None
-
-  for n0 in node.children():
-    n = n0[1]
-    if n.__class__.__name__ == target:
-      return n
-    else:
-      ret = lookfor(n, target)
-
-  return ret
-
 def build_enum_map_from_proto(pb, name):
   ret = {}
   e = getattr(pb, '_' + name.upper())
@@ -54,33 +46,43 @@ def build_enum_map_from_proto(pb, name):
 
   return ret
 
-def build_enum_map(ast, name):
+
+#        if n.kind == clang.cindex.CursorKind.ENUM_DECL:
+#          print('this is {} - {}'.format(n.kind, n.type.spelling))
+#          for c in n.get_children():
+#            #print('   c is {}'.format(c.kind))
+#            pass
+
+"""
+Recursively search the AST for enum <name>; return the cursor (or None if not found)
+"""
+def lookfor_enum(cursor, name):
+  ret = None
+
+  for c in cursor.get_children():
+    if (c.kind == clang.cindex.CursorKind.ENUM_DECL) and (c.type.spelling == name):
+      return c
+    else:
+      ret = lookfor_enum(c, name)
+
+  return ret
+
+def build_enum_map_from_ast(cursor, name):
   ret = {}
-  cur_val = 0
-  for n0 in ast.children():
-    n = n0[1]
-    if (n.__class__.__name__ ==  'Typedef') and (n.name == name):
-      # walk down to the enumerator list
-      enum_list = lookfor(n, 'EnumeratorList')
-      for e0 in enum_list.children():
-        e = e0[1]
+  enum = lookfor_enum(cursor, name)
 
-        # if it has a value, use it, otherwise use current value
-        if e.value != None:
-          v = e.value
-          if v.__class__.__name__ == 'Constant':
-            cur_val = int(v.value)
-            val = cur_val
-          elif v.__class__.__name__ == 'ID':
-            val = cur_val
-        else:
-          val = cur_val
+  # nothing found, just return an empty dict
+  if enum is None:
+    return ret
 
-        ret[e.name] = val 
-        cur_val += 1
+  for c in enum.get_children():
+    if (c.kind == clang.cindex.CursorKind.ENUM_CONSTANT_DECL):
+      ret[c.spelling] = c.enum_value
+
   return ret
 
 def main():
+  index = clang.cindex.Index.create()
   argparser = argparse.ArgumentParser('generate key config')
   # friendly input file
   argparser.add_argument('--inputcfg', dest='inputcfg', required = True,
@@ -115,7 +117,8 @@ def main():
   ast_keys = []
   for f in key_files:
     if f is not None:
-      ast_keys.append(parse_file(f, use_cpp=True))
+      print('parsing {}'.format(f))
+      ast_keys.append(index.parse(f).cursor)
     else:
       ast_keys.append(None)
 
@@ -123,15 +126,15 @@ def main():
     pb = imp.load_compiled('p', os.path.abspath(args.actions_file))
     action_map = build_enum_map_from_proto(pb, 'KEY_ACTION')
   else:
-    ast_actions = parse_file(args.actions_file, use_cpp=True)
+    ast_actions = index.parse(args.actions_file).cursor
     # build enum map from events
-    action_map = build_enum_map(ast_actions, 'KEY_ACTION')
+    action_map = build_enum_map_from_ast(ast_actions, 'KEY_ACTION')
 
   # build enum maps from ASTs
   key_maps = []
   for a in ast_keys:
     if a is not None:
-      key_maps.append(build_enum_map(a, 'KEY_VALUE'))
+      key_maps.append(build_enum_map_from_ast(a, 'KEY_VALUE'))
     else:
       key_maps.append(None)
 
@@ -192,6 +195,6 @@ def main():
   with io.FileIO(args.outputcfg, "w") as file:
     file.write(s)
   
-if __name__ == '__main__':
+if __name__ == '__main__':  
   main()
 
