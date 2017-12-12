@@ -1,11 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-04_1711"
-  },
-  {
-    "name": "BoseWebMonaco",
-    "selected_version": "Continuous/develop/0.2.1-6+15f80ff"
+    "selected_version": "Continuous/Castle-Fork/2017-12-07_0226"
   },
   {
     "name": "bose-opkg-utils",
@@ -16,8 +12,12 @@
     "selected_version": "Release/master/0.2.3-172+b5562fa"
   },
   {
+    "name": "BoseWebMonaco",
+    "selected_version": "Continuous/develop/0.2.1-8+075b2d4"
+  },
+  {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.2.2-20162"
+    "selected_version": "Continuous/Castle-Fork/2017-12-07_1731"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -29,7 +29,7 @@
   },
   {
     "name": "CastleDemoController-qc8017_32",
-    "selected_version": "Continuous/master/0.2.1-29+5498be3"
+    "selected_version": "Continuous/master/0.2.1-30+7679278"
   },
   {
     "name": "CastleLibs-qc8017_32",
@@ -41,23 +41,27 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.2.2-118+62bec80"
+    "selected_version": "Continuous/master/0.2.2-126+a5558a2"
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/0.2.3-214+f4b0e24"
+    "selected_version": "Continuous/master/0.2.3-241+a135591"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Continuous/master/0.2.3-214+f4b0e24"
+    "selected_version": "Continuous/master/0.2.3-241+a135591"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@3a4994ff9f66ee673d96005133f9bf465919ea68"
+    "selected_version": "master@328386eeb10313b4471b8e07ac954b6b3ee62517"
+  },
+  {
+    "name": "CastleProductUIAssets",
+    "selected_version": "master@c158e65cfaf3c9a0897998790017d2b012dad8d3"
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@4de2cf4f3f690b4347f89c4711add3ae7a0e59c2"
+    "selected_version": "master@8ad73581d5939d85013d1cea0b3937d294714e45"
   },
   {
     "name": "EddieLPM-Package",
@@ -74,6 +78,14 @@
   {
     "name": "protobuf-qc8017_32",
     "selected_version": "branches/protobuf@2510"
+  },
+  {
+    "name": "FrontDoor-native",
+    "selected_version": "Release/master/1.0.0-34+f7ab7db"
+  },
+  {
+    "name": "FrontDoor-qc8017_32",
+    "selected_version": "Release/master/1.0.0-34+f7ab7db"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -97,11 +109,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.3.1-149+12db43f"
+    "selected_version": "Continuous/master/0.3.1-153+4805a8e"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-04_1741"
+    "selected_version": "Continuous/Castle-Fork/2017-12-08_1536"
   },
   {
     "name": "Webkit",

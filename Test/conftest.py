@@ -1,54 +1,38 @@
+"""
+Parent conftest.py for the Eddie repository
+
+"""
+
 import os
+import datetime
+
 from CastleTestUtils.LoggerUtils.log_setup import get_logger
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.RivieraUtils import rivieraCommunication
+
 import pytest
-import datetime
 _log = None
 logger = get_logger(__name__)
 
 def pytest_addoption(parser):
-    parser.addoption("--device-id",
-                     action="store",
-                     default=None,
-                     help="device-id: Device Id")
-
-    parser.addoption("--target",
-                     action="store",
-                     default="native",
-                     help="target: [native/device], Specify whether the tests need to be executed on native or on device")
-
-    parser.addoption("--log-dir",
-                     action="store",
-                     default="SCMLogs",
-                     help="Where to store logs.")
-
-    parser.addoption("--log-type",
-		     action="store",
-                     default = "useSerial",
-                     help="logging : [useSerial / ipBased ]")
-
-    parser.addoption("--network-iface",
-                     action="store",
-                     default="wlan0",
-                     help="network interface to choose")
-
-    parser.addoption("--ip-address",
-                    action="store",
-                    default=None,
-                    help="IP Address of Target under test")
+    """ Command Line Parameters """
+    parser.addoption("--device-id", action="store", default=None, help="device-id: Device Id")
+    parser.addoption("--target", action="store", default="native", help="target: [native/device], Specify whether the tests need to be executed on native or on device")
+    parser.addoption("--log-dir", action="store", default="SCMLogs", help="Where to store logs.")
+    parser.addoption("--log-type", action="store", default="useSerial", help="logging : [useSerial / ipBased ]")
+    parser.addoption("--network-iface", action="store", default="wlan0", help="network interface to choose")
+    parser.addoption("--ip-address", action="store", default=None, help="IP Address of Target under test")
 
 def ping(ip):
-    return 0 == os.system("ping -q -c 5 -i 0.2 -w 2 " + ip)
+    """ Pings a given IP Address """
+    return os.system("ping -q -c 5 -i 0.2 -w 2 " + ip) == 0
 
 @pytest.fixture(scope='session')
 def scm_ip(request):
+    """ Get the IP address of Device under Test """
     return request.config.getoption("--scm-ip")
 
-################################################################
-############          Starting Processes             ###########
-################################################################
 @pytest.fixture(scope='function')
 def save_speaker_log(request, device_ip):
     """
@@ -58,13 +42,13 @@ def save_speaker_log(request, device_ip):
     from CastleTestUtils.LoggerUtils.logreadLogger import LogreadLogger
     logreadlogger = LogreadLogger(device_ip)
     try:
-        logreadlogger.start_log_collection(testName=request.function.__name__ ,path="./SpeakerLogs", saveperiodically=True)
+        logreadlogger.start_log_collection(testName=request.function.__name__, path="./SpeakerLogs", saveperiodically=True)
     except:
         logger.info("Error while start: The log from the speaker will not be saved.")
 
     def teardown():
+        """ Stop Speaker Log  Collection """
         logger.info("teardown")
-        # stop speaker log collection
         try:
             logreadlogger.stop_log_collection()
         except:
@@ -75,7 +59,7 @@ def save_speaker_log(request, device_ip):
 @pytest.fixture(scope='class')
 def device_ip(request):
     """
-    This fixture gets the device ip from eth0
+    This fixture gets the device IP
     :return: device ip
     """
     logger.info("device_ip")
@@ -105,6 +89,7 @@ def test_log_banner(request):
     logger.info("\n%s\n----- Start test:    %s\n%s\n", "-" * 60, testName, "-" * 60)
 
     def teardown():
+        """ log banner ends """
         logger.info("\n%s\n----- Completed test:    %s\n%s\n", "-" * 60, testName, "-" * 60)
 
     request.addfinalizer(teardown)

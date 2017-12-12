@@ -5,12 +5,13 @@ This module contains and integrated test of the Demo Controller. It uses the Fro
 to validate responses.
 """
 import pytest
-from ..keyUtils import cli_keys as key
 from CastleTestUtils.LoggerUtils.log_setup import get_logger
+from ..keyUtils import cli_keys as key
 logger = get_logger(__name__)
 
 @pytest.mark.usefixtures("save_speaker_log")
 class TestDemo():
+    """ Test Class for Demo State """
     def test_demoOffAfterTimeout(self, demoUtils, device_ip, request):
         """
         This test verifies demoMode goes 'off' after timeout
@@ -22,13 +23,13 @@ class TestDemo():
         5. Verify device reboots the second time and demoMode goes "off" within the specified time
         """
         logger.info("Start test_demoOffAfterTimeout")
-        demoUtils.setDemoMode("on", True,3, request.config.getoption("--network-iface"))
+        demoUtils.setDemoMode("on", True, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoMode("on")
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
         demoUtils.verifySecondReboot(responseTimeout *2)
 
-    def test_demoOnAfterTimeout(self, demoUtils,device_ip, request):
+    def test_demoOnAfterTimeout(self, demoUtils, device_ip, request):
         """
         This test verifies the demoMode stays on after timeout
         Test steps:
@@ -43,10 +44,10 @@ class TestDemo():
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
         demoUtils.verifyDemoModeOn(responseTimeout-40)
-        demoUtils.setDemoMode("on", False, 3,request.config.getoption("--network-iface"))
+        demoUtils.setDemoMode("on", False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(60)
 
-    def test_demoOnFor30Min(self, demoUtils,device_ip, request):
+    def test_demoOnFor30Min(self, demoUtils, device_ip, request):
         """
         This test verifies demoMode stays 'on' for 30 minutes
         Test steps:
@@ -56,11 +57,11 @@ class TestDemo():
         4. Set demoMode 'on' and verify demoMode stays 'on' for 30 min
         """
         logger.info("Start test_demoOnFor30Min")
-        demoUtils.setDemoMode("on", True,3, request.config.getoption("--network-iface"))
+        demoUtils.setDemoMode("on", True, 3, request.config.getoption("--network-iface"))
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
         demoUtils.verifyDemoModeOn(responseTimeout-40)
-        demoUtils.setDemoMode("on", False,3, request.config.getoption("--network-iface"))
+        demoUtils.setDemoMode("on", False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(responseTimeout*10)
 
     @pytest.mark.skip(reason="wip this test should work once the startPlayback is implemented. Skipping it for right now")
@@ -112,7 +113,7 @@ class TestDemo():
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
         demoUtils.verifyDemoModeOn(responseTimeout-60)
-        demoUtils.setDemoMode("on", False, 3,request.config.getoption("--network-iface"))
+        demoUtils.setDemoMode("on", False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoMode("on")
         key.mfb_playpause()
         demoUtils.verifyNotification()

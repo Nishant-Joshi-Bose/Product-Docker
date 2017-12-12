@@ -31,7 +31,7 @@ $ git clone git@github.com:BoseCorp/Eddie.git
 Build the .ipk package file containing the SoundTouch software.
 ```shell session
 $ cd /scratch/Eddie
-$ make
+$ make package
 ```
 
 Make sure your Eddie unit is accessible via adb.
@@ -49,7 +49,7 @@ Install the .ipk file you built.
 $ adb shell /opt/Bose/bin/stop      # generally it's okay if this fails
 $ adb shell /opt/Bose/bin/rw        # make the file systems writeable
 $ adb shell opkg remove SoundTouch  # this too may fail
-$ adb push builds/Release/product.ipk /tmp/product.ipk
+$ adb push builds/Release/eddie.ipk /tmp/product.ipk
 $ adb shell opkg install -d bose /tmp/product.ipk
 $ adb shell reboot
 ```

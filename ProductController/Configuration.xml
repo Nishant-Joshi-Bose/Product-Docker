@@ -26,7 +26,7 @@
                            hasAudioInputMux="false"
                            hasAIC="false"
                            putDSPinSuspend="false"
-                           useArmVolumeControl="false"
+                           useArmVolumeControl="true"
                            productOwnsInitialVolume="false"
                            chimeVolume="40"
                            hasABL="false" />

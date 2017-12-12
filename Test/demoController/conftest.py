@@ -1,3 +1,6 @@
+"""
+Conftest.py for DemoController
+"""
 import pytest
 from CastleTestUtils.LoggerUtils.log_setup import get_logger
 from CastleTestUtils.DemoUtils.demoUtils import DemoUtils
@@ -22,4 +25,3 @@ def setDemoOff(request, frontDoor, demoUtils):
     if demoResponse == 'on':
         demoUtils.setDemoMode("off", True, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoMode("off")
-

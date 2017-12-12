@@ -25,6 +25,8 @@ public:
     virtual ~CustomProductControllerStateOn() override
     {
     }
-    bool HandleIntents( KeyHandlerUtil::ActionType_t intent ) override;
+    bool HandleIntentAuxIn( KeyHandlerUtil::ActionType_t intent ) override;
+    bool HandleIntentVoice( KeyHandlerUtil::ActionType_t intent ) override;
 };
+
 } /// namespace ProductApp

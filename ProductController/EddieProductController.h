@@ -56,6 +56,9 @@
 
 namespace ProductApp
 {
+
+class CustomProductAudioService;
+
 class EddieProductController : public ProductController
 {
 public:
@@ -63,6 +66,8 @@ public:
     virtual ~EddieProductController();
 
     void Initialize();
+
+    Callback < ProductMessage > GetMessageHandler( );
 
     NetManager::Protobuf::NetworkStatus const& GetNetworkStatus() const
     {
@@ -168,15 +173,6 @@ private:
 /// @return void
 ////////////////////////////////////////////////////////////////////////////////
     void HandleSetDisplayAutoMode( const std::list<std::string> & argList, std::string& response );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name HandleSetProductControllerStateCliCmd
-/// @brief Function to change the state of EddieProductController
-///        Usage: setProductState boot|on|standby|setup|idle
-/// @return void
-///////////////////////////////////////////////////////////////////////////////
-    void HandleSetProductControllerStateCliCmd( const std::list<std::string> & argList,
-                                                std::string& response );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name HandleGetProductControllerStateCliCmd
@@ -380,6 +376,9 @@ private:
     ProtoPersistenceIF::ProtoPersistencePtr     m_ConfigurationStatusPersistence = nullptr;
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
     BOptional<NetManager::Protobuf::NetworkStatus> m_cachedStatus;
+
+    /// ProductAudioService
+    std::shared_ptr< CustomProductAudioService> m_ProductAudioService;
 
     ProductCliClient                            m_productCliClient;
 

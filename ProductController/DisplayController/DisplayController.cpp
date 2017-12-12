@@ -83,8 +83,6 @@ DisplayController::DisplayController( ProductController& controller, const std::
     m_timeToStop( false ),
     m_autoMode( true )
 {
-    //s_logger.SetLogLevel( "DisplayController", DPrint::INFO );
-
     ParseJSONData();
 }// constructor
 

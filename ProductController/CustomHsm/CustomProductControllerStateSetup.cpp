@@ -24,17 +24,22 @@ CustomProductControllerStateSetup::CustomProductControllerStateSetup( ProductCon
     BOSE_INFO( s_logger, __func__ );
 }
 
-bool CustomProductControllerStateSetup::HandleIntents( KeyHandlerUtil::ActionType_t intent )
+bool CustomProductControllerStateSetup::HandleIntentAuxIn( KeyHandlerUtil::ActionType_t intent )
 {
     BOSE_LOG( INFO, "intent:" << intent );
 
-    if( ( GetCustomProductController( ).GetIntentHandler( ).IsIntentAuxIn( intent ) ) ||
-        ( GetCustomProductController( ).GetIntentHandler( ).IsIntentBlueTooth( intent ) ) )
-    {
-        GetCustomProductController().GetIntentHandler().Handle( intent );
-        return true;
-    }
-    return false;
+    GetCustomProductController().GetIntentHandler().Handle( intent );
+
+    return true;
+}
+
+bool CustomProductControllerStateSetup::HandleIntentBlueTooth( KeyHandlerUtil::ActionType_t intent )
+{
+    BOSE_LOG( INFO, "intent:" << intent );
+
+    GetCustomProductController().GetIntentHandler().Handle( intent );
+
+    return true;
 }
 
 } /// namespace ProductApp

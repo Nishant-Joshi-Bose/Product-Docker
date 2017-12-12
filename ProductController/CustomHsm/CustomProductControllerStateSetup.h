@@ -26,6 +26,7 @@ public:
     {
     }
 
-    bool HandleIntents( KeyHandlerUtil::ActionType_t intent ) override;
+    bool HandleIntentAuxIn( KeyHandlerUtil::ActionType_t intent ) override;
+    bool HandleIntentBlueTooth( KeyHandlerUtil::ActionType_t intent ) override;
 };
 } /// namespace ProductApp
