@@ -6,6 +6,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 #include <limits.h>
+#include <float.h>
 #include <functional>
 #include <json/json.h>
 #include "SystemUtils.h"
@@ -255,7 +256,7 @@ void DisplayController::SetBackLightLevel( int actualLevel, int newLevel )
 ////////////////////////////////////////////////////////////////////////////////
 void DisplayController::MonitorLightSensor()
 {
-    float previous_lux   = 0;
+    float previous_lux   = FLT_MAX;
     int   targeted_level = 0;
 
     m_luxValue      = 0.0f;
@@ -277,6 +278,11 @@ void DisplayController::MonitorLightSensor()
         } );
 
         m_luxValue = ( ( ( float ) m_luxDecimal ) + ( ( ( float )m_luxFractional ) * 0.001f ) ) * m_luxFactor;
+
+        if ( ( m_luxValue != 0.0 ) && ( previous_lux == FLT_MAX ) )
+        {
+            previous_lux = m_luxValue;
+        }
 
         m_lpmClient->GetBackLight( [this]( IpcBackLight_t const & rsp )
         {
@@ -301,16 +307,16 @@ void DisplayController::MonitorLightSensor()
 
             BOSE_LOG( INFO, "target level: " << targeted_level << ", actual level: " << m_backLight );
 
-            if( ( abs( targeted_level - m_backLight ) >= BACKLIGHT_DIFF_THRESHOLD ) &&
-                ( fabs( previous_lux   - m_luxValue ) >= LUX_DIFF_THRESHOLD ) )
+            if( ( abs ( targeted_level - m_backLight) >= BACKLIGHT_DIFF_THRESHOLD ) &&
+                ( fabs( previous_lux  - m_luxValue  ) >= LUX_DIFF_THRESHOLD       ) )
             {
                 SetBackLightLevel( m_backLight , targeted_level );
                 // dummy read of the back light, the IPC mechanism is caching a value
                 m_lpmClient->GetBackLight( [this]( IpcBackLight_t const & rsp ) {} );
-                m_backLight = targeted_level;
+                m_backLight  = targeted_level;
+                previous_lux = m_luxValue;
             }
 
-            previous_lux = m_luxValue;
         }// If we are in automatic mode
 
         usleep( MONITOR_SENSOR_SLEEP_MS * 1000 );
