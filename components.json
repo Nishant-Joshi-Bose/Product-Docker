@@ -81,11 +81,11 @@
   },
   {
     "name": "FrontDoor-native",
-    "selected_version": "Release/master/1.0.0-34+f7ab7db"
+    "selected_version": "Continuous/master/1.0.0-42+77af206"
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/1.0.0-34+f7ab7db"
+    "selected_version": "Continuous/master/1.0.0-42+77af206"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -113,7 +113,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-08_1536"
+    "selected_version": "Continuous/Castle-Fork/2017-12-12_1607"
   },
   {
     "name": "Webkit",
