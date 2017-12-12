@@ -3,7 +3,6 @@ import sys
 import io
 import json
 import re
-from pycparser import c_parser, c_ast, parse_file
 import argparse
 import imp
 import os
@@ -11,8 +10,6 @@ import inspect
 import copy
 import clang.cindex
 from pprint import pprint
-import yaml
-import jsonpickle
 
 """
 Given a key list enumeration file, an actions enumeration file, and a 
@@ -46,35 +43,34 @@ def build_enum_map_from_proto(pb, name):
 
   return ret
 
-
-#        if n.kind == clang.cindex.CursorKind.ENUM_DECL:
-#          print('this is {} - {}'.format(n.kind, n.type.spelling))
-#          for c in n.get_children():
-#            #print('   c is {}'.format(c.kind))
-#            pass
-
 """
 Recursively search the AST for enum <name>; return the cursor (or None if not found)
 """
-def lookfor_enum(cursor, name):
+def lookfor_enum(cursor, name): 
   ret = None
 
   for c in cursor.get_children():
-    if (c.kind == clang.cindex.CursorKind.ENUM_DECL) and (c.type.spelling == name):
+    bare_name = re.sub(r'.*::', '', c.type.spelling)
+    if (c.kind == clang.cindex.CursorKind.ENUM_DECL) and (bare_name == name):
+      # found it!
       return c
     else:
       ret = lookfor_enum(c, name)
+      if ret is not None:
+        break
 
   return ret
 
+"""
+Build a dict from enum <name>.  cursor is a node in a clang AST
+"""
 def build_enum_map_from_ast(cursor, name):
-  ret = {}
   enum = lookfor_enum(cursor, name)
 
-  # nothing found, just return an empty dict
   if enum is None:
-    return ret
+    return None 
 
+  ret = {}
   for c in enum.get_children():
     if (c.kind == clang.cindex.CursorKind.ENUM_CONSTANT_DECL):
       ret[c.spelling] = c.enum_value
@@ -82,13 +78,14 @@ def build_enum_map_from_ast(cursor, name):
   return ret
 
 def main():
+  clang_args = ['-x', 'c++']
   index = clang.cindex.Index.create()
   argparser = argparse.ArgumentParser('generate key config')
   # friendly input file
-  argparser.add_argument('--inputcfg', dest='inputcfg', required = True,
+  argparser.add_argument('--inputcfgs', dest='inputcfgs', required = True, nargs='+',
     help='\"Friendly\" json config file')
   # input header file with action enumeration
-  argparser.add_argument('--actions', dest='actions_file', required = True,
+  argparser.add_argument('--actions', dest='actions_files', required = True, nargs='+',
     help='Event values output header file')
   # key definitions for different origins, all optional
   argparser.add_argument('--console', dest='console_file',
@@ -118,17 +115,29 @@ def main():
   for f in key_files:
     if f is not None:
       print('parsing {}'.format(f))
-      ast_keys.append(index.parse(f).cursor)
+      ast_keys.append(index.parse(f, clang_args).cursor)
     else:
       ast_keys.append(None)
 
-  if re.match(r'.*\.pyc$', args.actions_file):
-    pb = imp.load_compiled('p', os.path.abspath(args.actions_file))
-    action_map = build_enum_map_from_proto(pb, 'KEY_ACTION')
-  else:
-    ast_actions = index.parse(args.actions_file).cursor
-    # build enum map from events
-    action_map = build_enum_map_from_ast(ast_actions, 'KEY_ACTION')
+  # merge action files ASTs (python or c/c++ headers) to action map
+  action_map = {}
+  for f in args.actions_files:
+    print('parse {}'.format(f))
+    if re.match(r'.*\.pyc$', f):
+      pb = imp.load_compiled('p', os.path.abspath(f))
+      a = build_enum_map_from_proto(pb, 'KEY_ACTION')
+      if a is not None:
+        action_map.update(a)
+    else:
+      ast_actions = index.parse(f, clang_args).cursor
+      # build enum map from events
+      a = build_enum_map_from_ast(ast_actions, 'KEY_ACTION')
+      if a:
+        action_map.update(a)
+      else:
+        a = build_enum_map_from_ast(ast_actions, 'ActionCommon_t')
+        if a:
+          action_map.update(a)
 
   # build enum maps from ASTs
   key_maps = []
@@ -138,9 +147,11 @@ def main():
     else:
       key_maps.append(None)
 
-
-  ifile = open(args.inputcfg).read()
-  j = json.loads(ifile)
+  # merge user config files
+  j = {}
+  for f in args.inputcfgs:
+    ifile = open(f).read()
+    j.update(json.loads(ifile))
 
   # transmogrify the key table
   keymap = {'KeyTable' : []}
