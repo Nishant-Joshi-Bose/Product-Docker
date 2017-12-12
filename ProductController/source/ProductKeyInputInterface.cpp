@@ -275,7 +275,7 @@ void ProductKeyInputInterface::KeyInformationCallBack( const int keyAction )
                                     productNoopKeyMessage ),
                          m_ProductTask );
 
-        productMessage.set_intent( static_cast< KEY_ACTION >( keyAction ) );
+        productMessage.set_intent( keyAction );
     }
 
     IL::BreakThread( std::bind( m_ProductNotify,
