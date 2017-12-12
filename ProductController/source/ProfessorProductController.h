@@ -55,7 +55,7 @@ namespace ProductApp
 ///            Forward Class Declarations
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProductHardwareInterface;
+class CustomProductHardwareInterface;
 class ProductSystemManager;
 class ProductNetworkManager;
 class CustomProductAudioService;
@@ -119,7 +119,7 @@ public:
     ///        instance from the product controller.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    std::shared_ptr< ProductHardwareInterface >& GetHardwareInterface( );
+    std::shared_ptr< CustomProductHardwareInterface >& GetHardwareInterface( ) override;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -153,19 +153,18 @@ public:
     //////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< ProductEdidInterface >& GetEdidInterface( );
 
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following methods are used by the state machine to determine the status of the
     ///        product controller.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool IsBooted( )                 const;
-    bool IsNetworkConfigured( )      const;
-    bool IsNetworkConnected( )       const;
-    bool IsAutoWakeEnabled( )        const;
-    bool IsVoiceConfigured( )        const;
-    bool IsSoftwareUpdateRequired( ) const;
+    bool IsBooted( )                 const override;
+    bool IsNetworkConfigured( )      const override;
+    bool IsNetworkConnected( )       const override;
+    bool IsAutoWakeEnabled( )        const override;
+    bool IsVoiceConfigured( )        const override;
+    bool IsSoftwareUpdateRequired( ) const override;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -216,16 +215,16 @@ private:
     ///        applications and command line.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    std::shared_ptr< ProductHardwareInterface > m_ProductHardwareInterface;
-    std::shared_ptr< ProductSystemManager     > m_ProductSystemManager;
-    std::shared_ptr< ProductNetworkManager    > m_ProductNetworkManager;
-    std::shared_ptr< ProductCommandLine       > m_ProductCommandLine;
-    std::shared_ptr< ProductKeyInputInterface > m_ProductKeyInputInterface;
-    std::shared_ptr< ProductEdidInterface     > m_ProductEdidInterface;
-    std::shared_ptr< ProductVolumeManager     > m_ProductVolumeManager;
-    std::shared_ptr< ProductAdaptIQManager     > m_ProductAdaptIQManager;
-    std::shared_ptr< ProductSpeakerManager    > m_ProductSpeakerManager;
-    std::shared_ptr< CustomProductAudioService> m_ProductAudioService;
+    std::shared_ptr< CustomProductHardwareInterface > m_ProductHardwareInterface;
+    std::shared_ptr< ProductSystemManager           > m_ProductSystemManager;
+    std::shared_ptr< ProductNetworkManager          > m_ProductNetworkManager;
+    std::shared_ptr< ProductCommandLine             > m_ProductCommandLine;
+    std::shared_ptr< ProductKeyInputInterface       > m_ProductKeyInputInterface;
+    std::shared_ptr< ProductEdidInterface           > m_ProductEdidInterface;
+    std::shared_ptr< ProductVolumeManager           > m_ProductVolumeManager;
+    std::shared_ptr< ProductAdaptIQManager          > m_ProductAdaptIQManager;
+    std::shared_ptr< ProductSpeakerManager          > m_ProductSpeakerManager;
+    std::shared_ptr< CustomProductAudioService      > m_ProductAudioService;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

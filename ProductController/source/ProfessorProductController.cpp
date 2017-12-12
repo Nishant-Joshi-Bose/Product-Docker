@@ -29,7 +29,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "unistd.h"
 #include "ProfessorProductController.h"
-#include "ProductHardwareInterface.h"
+#include "CustomProductHardwareInterface.h"
 #include "CustomProductAudioService.h"
 #include "ProductKeyInputInterface.h"
 #include "ProductVolumeManager.h"
@@ -250,16 +250,16 @@ void ProfessorProductController::Run( )
     BOSE_DEBUG( s_logger, "----------- Product Controller Starting Modules ------------" );
     BOSE_DEBUG( s_logger, "The Professor Product Controller instantiating and running its modules." );
 
-    m_ProductHardwareInterface = std::make_shared< ProductHardwareInterface >( *this );
-    m_ProductEdidInterface     = std::make_shared< ProductEdidInterface     >( *this );
-    m_ProductSystemManager     = std::make_shared< ProductSystemManager     >( *this );
-    m_ProductNetworkManager    = std::make_shared< ProductNetworkManager    >( *this );
-    m_ProductCommandLine       = std::make_shared< ProductCommandLine       >( *this );
-    m_ProductKeyInputInterface = std::make_shared< ProductKeyInputInterface >( *this );
-    m_ProductVolumeManager     = std::make_shared< ProductVolumeManager     >( *this );
-    m_ProductAdaptIQManager    = std::make_shared< ProductAdaptIQManager    >( *this );
-    m_ProductSpeakerManager    = std::make_shared< ProductSpeakerManager    >( *this );
-    m_ProductAudioService      = std::make_shared< CustomProductAudioService>( *this );
+    m_ProductHardwareInterface = std::make_shared< CustomProductHardwareInterface >( *this );
+    m_ProductEdidInterface     = std::make_shared< ProductEdidInterface           >( *this );
+    m_ProductSystemManager     = std::make_shared< ProductSystemManager           >( *this );
+    m_ProductNetworkManager    = std::make_shared< ProductNetworkManager          >( *this );
+    m_ProductCommandLine       = std::make_shared< ProductCommandLine             >( *this );
+    m_ProductKeyInputInterface = std::make_shared< ProductKeyInputInterface       >( *this );
+    m_ProductVolumeManager     = std::make_shared< ProductVolumeManager           >( *this );
+    m_ProductAdaptIQManager    = std::make_shared< ProductAdaptIQManager          >( *this );
+    m_ProductSpeakerManager    = std::make_shared< ProductSpeakerManager          >( *this );
+    m_ProductAudioService      = std::make_shared< CustomProductAudioService      >( *this );
 
     if( m_ProductHardwareInterface == nullptr ||
         m_ProductSystemManager     == nullptr ||
@@ -340,7 +340,7 @@ CliClientMT& ProfessorProductController::GetCommandLineInterface( )
 /// @return This method returns a shared pointer to the LPM hardware interface.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::shared_ptr< ProductHardwareInterface >& ProfessorProductController::GetHardwareInterface( )
+std::shared_ptr< CustomProductHardwareInterface >& ProfessorProductController::GetHardwareInterface( )
 {
     return m_ProductHardwareInterface;
 }
@@ -819,34 +819,28 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         if( message.lpmstatus( ).has_connected( ) )
         {
             m_IsLpmReady = message.lpmstatus( ).connected( );
-            BOSE_DEBUG( s_logger, "An LPM Hardware %s message was received.",
-                        m_IsLpmReady ? "up" : "down" );
-            GetHsm( ).Handle< bool >
-            ( &CustomProductControllerState::HandleLpmState, m_IsLpmReady );
-        }
 
-        if( message.lpmstatus( ).has_powerstatus( ) )
+            GetHsm( ).Handle< bool >( &CustomProductControllerState::HandleLpmState, m_IsLpmReady );
+        }
+        else if( message.lpmstatus( ).has_powerstatus( ) )
         {
-            switch( message.lpmstatus( ).powerstatus( ) )
+            BOSE_DEBUG( s_logger, "The LPM power state was set to %s",
+                        IpcLPMPowerState_t_Name( message.lpmstatus( ).powerstatus( ) ).c_str( ) );
+        }
+        else if( message.lpmstatus( ).has_systemstatus( ) )
+        {
+            BOSE_DEBUG( s_logger, "The LPM system state was set to %s",
+                        IpcLpmSystemState_t_Name( message.lpmstatus( ).systemstatus( ) ).c_str( ) );
+
+            if( message.lpmstatus( ).systemstatus( ) == SYSTEM_STATE_ON )
             {
-            case ProductLpmStatus::ColdBooted:
-                GetHsm( ).Handle<>( &CustomProductControllerState::HandleLPMPowerStatusColdBoot );
-                break;
-            case ProductLpmStatus::LowPower:
-                GetHsm( ).Handle<>( &CustomProductControllerState::HandleLPMPowerStatusLowPower );
-                break;
-            case ProductLpmStatus::NetworkStandby:
-                GetHsm( ).Handle<>( &CustomProductControllerState::HandleLPMPowerStatusNetworkStandby );
-                break;
-            case ProductLpmStatus::AutoWakeStandby:
-                GetHsm( ).Handle<>( &CustomProductControllerState::HandleLPMPowerStatusAutoWakeStandby );
-                break;
-            case ProductLpmStatus::FullPower:
-                GetHsm( ).Handle<>( &CustomProductControllerState::HandleLPMPowerStatusFullPower );
-                break;
-            default:
-                break;
+                GetHsm( ).Handle< >( &CustomProductControllerState::HandleLPMPowerStatusFullPower );
             }
+        }
+        else
+        {
+            BOSE_ERROR( s_logger, "An invalid LPM status message was received." );
+            return;
         }
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
