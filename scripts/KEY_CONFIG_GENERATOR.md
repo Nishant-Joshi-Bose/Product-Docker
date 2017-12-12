@@ -3,6 +3,9 @@ Key Configuration Generator
 
 The key configuration generator script (friendly_to_raw_key_config.py) simplifies maintenance of the .json configuration file for the CastleKeyHandler component by allowing the user to specify keys and actions by their symbolic names from enumerations in the source code.  The script takes as input one or more "friendly" .json configuration files, C/C++ header files containing key value enumerations (one per possible source, each source is optional), and one or more .pyc outputs from protobuf compilation or header files containing key action enumerations.  The script outputs a .json configuration file suitable for use with the CastleKeyHandler component (enumerations converted to numeric values).
 
+# clang dependency
+Note that this has a dependency on python clang.  Additionally, depending on the location of your clang library, you may need to set LD_LIBRARY_PATH so that the library can be found (i.e. export LD_LIBRARY_PATH=/usr/lib/llvm-4.0/lib/).
+
 # Configuration fields
 
 The following fields can be specified in a "friendly" format which will then be converted to the numeric format expected by CastleKeyHandler.
