@@ -13,6 +13,9 @@
 
 static DPrint s_logger( "CustomProductAudioService" );
 
+constexpr char kBassEndPoint    [] = "/audio/bass";
+constexpr char kTrebleEndPoint  [] = "/audio/treble";
+
 namespace ProductApp
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,25 +31,11 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductAudioService::CustomProductAudioService( EddieProductController& ProductController, const FrontDoorClientIF_t& FrontDoorClient )
     : ProductAudioService( ProductController.GetTask( ),
-                           ProductController.GetMessageHandler() )
+                           ProductController.GetMessageHandler() ),
+      m_AudioSettingsMgr( std::make_shared<CustomAudioSettingsManager> () )
 {
     BOSE_DEBUG( s_logger, __func__ );
     m_FrontDoorClientIF = FrontDoorClient;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   CustomProductAudioService::Run
-///
-/// @brief  Register for APProduct events, and FrontDoor endpoints
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductAudioService::Run( )
-{
-    BOSE_DEBUG( s_logger, __func__ );
-    RegisterAudioPathEvents();
-    RegisterFrontDoorEvents();
-    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
