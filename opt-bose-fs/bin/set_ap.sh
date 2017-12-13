@@ -48,3 +48,7 @@ cset name="SEC_TDM_RX_0 Audio Mixer MultiMedia1" 1
 cset name="SEC_TDM_RX_0 Channels" "Eight"
 cset name="MultiMedia1 Mixer SEC_TDM_TX_0" 1
 cset name="SEC_TDM_TX_0 Channels" "Eight"
+
+cset name="MultiMedia2 Mixer PRI_TDM_TX_0" "1"
+cset name="PRI_TDM_TX_0 Channels" "Eight"
+cset name="PRI_TDM_TX_0 SampleRate" "KHZ_16"

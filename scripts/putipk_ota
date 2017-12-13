@@ -1,0 +1,43 @@
+#!/bin/bash
+#
+# Update the Riviera unit via adb with the latest .ipk build.
+#
+# With one argument that's a *.ipk file, install that ipk file.  Otherwise,
+# we'll build the usual product.ipk first and install that file; any arguments
+# are passed through to `make`.
+#
+# Examples:
+#
+#  putipk
+#  putipk jobs=4
+#  putipk /home/softlib/verisoft/Professor/Release/master/latest/product.ipk
+#
+
+if (( $# == 1 )) && [[ "$1" = *.ipk ]]; then
+    ipk=$1
+else
+    cd "$(dirname "$0")/.." || exit
+    ipk=$PWD/builds/Release/product.ipk
+    rm -f "$ipk"
+
+    make "$@" || exit
+fi
+
+ls -sh "$ipk" || exit
+
+echo Stop...
+adb shell /opt/Bose/bin/stop      # ok if this fails
+
+echo Remount... 
+adb shell mount -oremount,rw /opt/Bose || exit
+
+echo Copy...
+adb push "$ipk" /tmp/new.ipk || exit
+
+echo Install...
+adb shell export LD_LIBRARY_PATH=/opt/Bose/update/opkg/ \&\& /opt/Bose/update/opkg/opkg -f /mnt/nv/update/opkg.conf  --add-arch armv7a-vfp-neon:100 --force-reinstall --force-downgrade install /tmp/new.ipk \&\& rm -v /tmp/new.ipk || exit
+
+echo Remount...
+adb shell mount -oremount,ro /opt/Bose || exit
+
+echo Done
