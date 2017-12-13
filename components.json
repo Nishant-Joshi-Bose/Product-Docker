@@ -68,6 +68,10 @@
     "selected_version": "Release/IP2/0.2.1.2584357/DP1"
   },
   {
+    "name": "GalapagosClient-qc8017_32",
+    "selected_version": "Release/IP2/0.0.1-6+cf92afc"
+  },
+  {
     "name": "KeyHandler-qc8017_32",
     "selected_version": "Release/master/0.2.1-26+e67ea31"
   },
