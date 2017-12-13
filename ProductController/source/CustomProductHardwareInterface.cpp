@@ -184,12 +184,10 @@ bool CustomProductHardwareInterface::SendAudioPathPresentationLatency( uint32_t 
 
         return false;
     }
-    else
-    {
-        BOSE_DEBUG( s_logger, "An LPM set latency request is currently not supported." );
 
-        return true;
-    }
+    BOSE_DEBUG( s_logger, "An LPM set latency request is currently not supported." );
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -214,12 +212,10 @@ bool CustomProductHardwareInterface::SendLipSyncDelay( uint32_t audioDelay )
 
         return false;
     }
-    else
-    {
-        BOSE_DEBUG( s_logger, "An LPM lip sync delay request is currently not supported." );
 
-        return true;
-    }
+    BOSE_DEBUG( s_logger, "An LPM lip sync delay request is currently not supported." );
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -250,12 +246,10 @@ bool CustomProductHardwareInterface::SendToneAndLevelControl( IpcToneControl_t& 
 
         return false;
     }
-    else
-    {
-        BOSE_DEBUG( s_logger, "An LPM audio and tone level request is currently not supported." );
 
-        return true;
-    }
+    BOSE_DEBUG( s_logger, "An LPM audio and tone level request is currently not supported." );
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -280,12 +274,10 @@ bool CustomProductHardwareInterface::SendSpeakerList( IpcAccessoryList_t& access
 
         return false;
     }
-    else
-    {
-        BOSE_DEBUG( s_logger, "An LPM speaker activation settings request is currently not supported." );
 
-        return true;
-    }
+    BOSE_DEBUG( s_logger, "An LPM speaker activation settings request is currently not supported." );
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -310,12 +302,10 @@ bool CustomProductHardwareInterface::SendSetSystemTimeoutEnableBits( Ipc_Timeout
 
         return false;
     }
-    else
-    {
-        BOSE_DEBUG( s_logger, "An LPM activation settings request is currently not supported." );
 
-        return true;
-    }
+    BOSE_DEBUG( s_logger, "An LPM activation settings request is currently not supported." );
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -341,15 +331,11 @@ bool CustomProductHardwareInterface::SendWiFiRadioStatus( uint32_t frequencyInKh
 
         return false;
     }
-    else
-    {
-        BOSE_DEBUG( s_logger, "Sending the wireless radio frequency to the LPM is currently not supported." );
 
-        return true;
-    }
+    BOSE_DEBUG( s_logger, "Sending the wireless radio frequency to the LPM is currently not supported." );
+
+    return true;
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -386,6 +372,11 @@ void CustomProductHardwareInterface::SetBlueToothMacAddress( const std::string& 
 
     m_blueToothMacAddress = strtoull( blueToothReformattedMacAddress, nullptr, 16 );
 
+    ///
+    /// The member m_gettingBlueToothData will be set to false once the device name and MAC address
+    /// have both been obtained and sent to the LPM interface. It is true when it is missing either
+    /// of these values.
+    ///
     if( m_gettingBlueToothData )
     {
         SendBlueToothDeviceData( m_blueToothDeviceName, m_blueToothMacAddress );
@@ -401,8 +392,8 @@ void CustomProductHardwareInterface::SetBlueToothMacAddress( const std::string& 
 ///
 /// @name   CustomProductHardwareInterface::SetBlueToothDeviceName
 ///
-/// @brief  This method is used to set the Bluetooth MAC Address and send it to the LPM hardware,
-///         as long as the associated Bluetooth device name has been previously obtained.
+/// @brief  This method is used to set the Bluetooth Device Name and send it to the LPM hardware,
+///         as long as the associated Bluetooth MAC Address has been previously obtained.
 ///
 /// @param  std::string bluetoothDeviceName This argument is a standard string representing the
 ///                                         Bluetooth device name.
@@ -412,6 +403,11 @@ void CustomProductHardwareInterface::SetBlueToothDeviceName( const std::string& 
 {
     m_blueToothDeviceName.assign( bluetoothDeviceName );
 
+    ///
+    /// The member m_gettingBlueToothData will be set to false once the device name and MAC address
+    /// have both been obtained and sent to the LPM interface. It is true when it is missing either
+    /// of these values.
+    ///
     if( m_gettingBlueToothData )
     {
         SendBlueToothDeviceData( m_blueToothDeviceName, m_blueToothMacAddress );
@@ -452,12 +448,10 @@ bool CustomProductHardwareInterface::SendBlueToothDeviceData( const std::string&
 
         return false;
     }
-    else
-    {
-        BOSE_DEBUG( s_logger, "An LPM bluetooth data request is currently not supported." );
 
-        return true;
-    }
+    BOSE_DEBUG( s_logger, "An LPM bluetooth data request is currently not supported." );
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -486,24 +480,22 @@ bool CustomProductHardwareInterface::SendSourceSelection( const LPM_IPC_SOURCE_I
 
         return false;
     }
-    else
-    {
-        BOSE_DEBUG( s_logger, "An LPM source selection request is currently not supported." );
 
-        return true;
-    }
+    BOSE_DEBUG( s_logger, "An LPM source selection request is currently not supported." );
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  CustomProductHardwareInterface::CECSetPhysicalAddress
+/// @name  CustomProductHardwareInterface::SetCecPhysicalAddress
 ///
 /// @brief This method sends a request to the LPM hardware.
 ///
 /// @param None
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductHardwareInterface::CECSetPhysicalAddress( const uint32_t cecPhysicalAddress )
+bool CustomProductHardwareInterface::SetCecPhysicalAddress( const uint32_t cecPhysicalAddress )
 {
     BOSE_DEBUG( s_logger, "CEC Physical Address will be sent to  LPM" );
 
@@ -513,14 +505,12 @@ bool CustomProductHardwareInterface::CECSetPhysicalAddress( const uint32_t cecPh
 
         return false;
     }
-    else
-    {
-        IpcCecPhyscialAddress_t cecAddrSetting;
-        cecAddrSetting.set_cecphyaddr( cecPhysicalAddress );
-        GetLpmClient( )->SendCecPhysicalAddress( cecAddrSetting );
 
-        return true;
-    }
+    IpcCecPhyscialAddress_t cecAddrSetting;
+    cecAddrSetting.set_cecphyaddr( cecPhysicalAddress );
+    GetLpmClient( )->SendCecPhysicalAddress( cecAddrSetting );
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -25,7 +25,7 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.2.2-20162"
+    "selected_version": "Continuous/Castle-Fork/2017-12-07_1731"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -41,19 +41,19 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.2.2-124+eb12ab6"
+    "selected_version": "Continuous/master/0.2.2-126+a5558a2"
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/0.2.3-231+63a1ec0"
+    "selected_version": "Continuous/master/0.2.3-241+a135591"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Continuous/master/0.2.3-231+63a1ec0"
+    "selected_version": "Continuous/master/0.2.3-241+a135591"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@9e941ef46627596e5b1a1710816d91cb4733031e"
+    "selected_version": "master@370db073b97f8a2f62a7b8294c6951aa94a3c025"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -100,15 +100,7 @@
     "selected_version": "Continuous/Castle-Fork/2017-12-08_1246"
   },
   {
-    "name": "unittest-cpp-native",
-    "selected_version": "Release/bose-master/2.0.0-3+167ffec"
-  },
-  {
     "name": "unittest-cpp-qc8017_32",
-    "selected_version": "Release/bose-master/2.0.0-3+167ffec"
-  },
-  {
-    "name": "unittest-cpp-ti",
     "selected_version": "Release/bose-master/2.0.0-3+167ffec"
   }
 ]

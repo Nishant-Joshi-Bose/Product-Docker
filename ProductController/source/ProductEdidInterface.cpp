@@ -208,7 +208,7 @@ void ProductEdidInterface::HandlePhyAddrResponse( const A4VVideoManagerServiceMe
     {
         BOSE_DEBUG( s_logger, "A send CEC PA request will be made." );
 
-        m_ProductHardwareInterface->CECSetPhysicalAddress( cecPhysicalAddress.addr() );
+        m_ProductHardwareInterface->SetCecPhysicalAddress( cecPhysicalAddress.addr() );
 
         return;
     }

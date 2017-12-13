@@ -822,26 +822,49 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
 
             GetHsm( ).Handle< bool >( &CustomProductControllerState::HandleLpmState, m_IsLpmReady );
         }
-        else if( message.lpmstatus( ).has_powerstatus( ) )
-        {
-            BOSE_DEBUG( s_logger, "The LPM power state was set to %s",
-                        IpcLPMPowerState_t_Name( message.lpmstatus( ).powerstatus( ) ).c_str( ) );
-        }
-        else if( message.lpmstatus( ).has_systemstatus( ) )
+
+        if( message.lpmstatus( ).has_systemstatus( ) )
         {
             BOSE_DEBUG( s_logger, "The LPM system state was set to %s",
                         IpcLpmSystemState_t_Name( message.lpmstatus( ).systemstatus( ) ).c_str( ) );
 
-            if( message.lpmstatus( ).systemstatus( ) == SYSTEM_STATE_ON )
+            switch( message.lpmstatus( ).systemstatus( ) )
             {
+            case SYSTEM_STATE_ON:
                 GetHsm( ).Handle< >( &CustomProductControllerState::HandleLPMPowerStatusFullPower );
+                break;
+            case SYSTEM_STATE_OFF:
+                break;
+            case SYSTEM_STATE_BOOTING:
+                break;
+            case SYSTEM_STATE_STANDBY:
+                break;
+            case SYSTEM_STATE_RECOVERY:
+                break;
+            case SYSTEM_STATE_LOW_POWER:
+                break;
+            case SYSTEM_STATE_UPDATE:
+                break;
+            case SYSTEM_STATE_SHUTDOWN:
+                break;
+            case SYSTEM_STATE_FACTORY_DEFAULT:
+                break;
+            case SYSTEM_STATE_IDLE:
+                break;
+            default:
+                break;
             }
         }
-        else
+
+        ///
+        /// The power state if returned from the LPM hardware is used only for informational purposes.
+        ///
+        if( message.lpmstatus( ).has_powerstatus( ) )
         {
-            BOSE_ERROR( s_logger, "An invalid LPM status message was received." );
-            return;
+            BOSE_DEBUG( s_logger, "The LPM power state was set to %s",
+                        IpcLPMPowerState_t_Name( message.lpmstatus( ).powerstatus( ) ).c_str( ) );
         }
+
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Content Audio Playback Services (CAPS) status messages are handled at this point.

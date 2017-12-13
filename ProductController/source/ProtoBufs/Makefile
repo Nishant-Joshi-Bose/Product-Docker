@@ -10,7 +10,7 @@ PROTO_SOURCES = ProductMessage.proto        \
                 KeyActions.proto            \
                 SystemInfo.proto            \
                 ProductSpeakerManager.proto \
-                AdaptIQ.proto 
+                AdaptIQ.proto               \
 
 #
 # The following alias is used to search for imported Protocol Buffer files.
@@ -21,6 +21,6 @@ PROTO_IMPORT_DIRS :=  .                                       \
                       $(BOSELIBS_DIR)/include                 \
                       $(SOUNDTOUCH_SDK_DIR)/protobufs         \
                       $(SOUNDTOUCH_SDK_DIR)/prebuilt/include  \
-                      $(RIVIERA_LPM_PROTO_DIR)/proto
+                      $(RIVIERA_LPM_PROTO_DIR)/proto          \
 
 include $(BOSELIBS_DIR)/protobuf.mk

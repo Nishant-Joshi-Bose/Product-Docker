@@ -38,7 +38,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "ProductHardwareInterface.h"
 #include "ProductMessage.pb.h"
-#include "CustomProductHardwareInterface.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -91,7 +90,7 @@ public:
     bool SendBlueToothDeviceData( const std::string&       bluetoothDeviceName,
                                   const unsigned long long bluetoothMacAddress );
     bool SendSourceSelection( const LPM_IPC_SOURCE_ID      sourceSelect );
-    bool CECSetPhysicalAddress( const uint32_t cecPhyAddr );
+    bool SetCecPhysicalAddress( const uint32_t cecPhyAddr );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -120,7 +119,7 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool               m_gettingBlueToothData = false;
     unsigned long long m_blueToothMacAddress  = 0ULL;
-    std::string        m_blueToothDeviceName  { "" };
+    std::string        m_blueToothDeviceName;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

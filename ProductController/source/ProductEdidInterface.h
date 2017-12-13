@@ -33,9 +33,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "A4VVideoManagerClientFactory.h"
-//#include "ProfessorProductController.h"
 #include "ProductFrontDoorUtility.h"
-//#include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "SoundTouchInterface/AudioService.pb.h"
 #include "ProductMessage.pb.h"
@@ -51,8 +49,8 @@ namespace ProductApp
 ///            Forward Class Declarations
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProfessorProductController;
 class CustomProductHardwareInterface;
+class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

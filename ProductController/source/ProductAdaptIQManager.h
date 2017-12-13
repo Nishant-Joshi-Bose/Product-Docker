@@ -47,7 +47,7 @@ namespace ProductApp
 ///            Included Subclasses
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProductHardwareInterface;
+class CustomProductHardwareInterface;
 class ProductController;
 
 class ProductAdaptIQManager
