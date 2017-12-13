@@ -59,7 +59,7 @@ swupdate_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || er
 opkg_dir="$swupdate_dir"/tools/opkg
 ipks_dir=$wspace/builds/$cfg
 product_ipk=$wspace/builds/$cfg/eddie.ipk
-utils_dir=$wspace/install/utils
+utils_dir="$swupdate_dir"/tools
 version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
 CP="cp -PR --preserve=mode,timestamps,links"
 bose_partition=bose
@@ -115,7 +115,7 @@ create_eddie_ext4 () {
 	fi
 	echo " Generating Bose partition"
 	# extract HSP's bose partition
-        $utils_dir/lin/simg2img $bose_ext4 $bose_ext4.raw > /dev/null 2>&1
+        "$utils_dir"/BuildTools/simg2img $bose_ext4 $bose_ext4.raw > /dev/null 2>&1
 	#find size in bytes of $ext4_full.raw to be used during rebuilding EXT4	=33554432
 	if ! [ -f  $bose_ext4.raw ]; then
 	    error_exit ${FUNCNAME[0]} " Not able to create intermediate RAW file $bose_ext4.raw, using simg2img."
@@ -130,7 +130,7 @@ create_eddie_ext4 () {
 	install_offline 
 	#Getting fs_size from bose.ext4 is creating wrong file
 	#fs_size=1514624512
-	$utils_dir/lin/make_ext4fs -s -l $fs_size -a $bose_partition $bose_ext4 $extract_dir/ > /dev/null || error_exit ${FUNCNAME[0]}
+	"$utils_dir"/BuildTools/make_ext4fs -s -l $fs_size -a $bose_partition $bose_ext4 $extract_dir/ > /dev/null || error_exit ${FUNCNAME[0]}
 	if ! [ -f  $bose_ext4 ]; then
 		error_exit ${FUNCNAME[0]} " Updated EXT4 $bose_ext4 not found - make_ext4fs failed. Check if total size of package exceeds MAX EXT4 Size: $fs_size."
 	fi
@@ -143,8 +143,11 @@ create_eddie_ext4 () {
 # copy HSP, utilities, version, lpm firmware
 echo " Adding Riviera-HSP to package"
 $CP "$riviera_hsp_images_dir"/* "$stage_package_dir/" || error_exit " Adding Riviera-HSP to package "
-echo " Adding utilities to package"
-$CP "$utils_dir" "$stage_package_dir"/  || error_exit ${FUNCNAME[0]} " Adding utilities to package "
+
+echo " Adding flash utilties to package"
+$CP "$utils_dir"/FlashTools/lin "$stage_package_dir"/utils/  || error_exit ${FUNCNAME[0]} " Adding utilities to package "
+$CP "$utils_dir"/FlashTools/win "$stage_package_dir"/utils/  || error_exit ${FUNCNAME[0]} " Adding utilities to package "
+
 echo " Adding version to package"
 $CP "$version_json" "$stage_package_dir"/  || error_exit ${FUNCNAME[0]} " Adding version to package "
 echo " Adding IPKs to package"
@@ -168,9 +171,9 @@ mkdir -p "$output_dir" || error_exit " Creating output directory $output_dir"
 # create final package tar
 cd "$stage" || error_exit " cd $stage "
 tar -cf $output_package ./*  || error_exit " Creating tar "
-$CP "$utils_dir"/lin/product_flash $output_dir  || error_exit " Copying product_flash utility "
-$CP "$utils_dir"/win/product_flash.exe $output_dir  || error_exit " Copying product_flash.exe utility "
-$CP "$utils_dir"/mac/product_flash_mac $output_dir  || error_exit " Copying product_flash_mac utility "
+$CP "$utils_dir"/FlashTools/product_flash $output_dir  || error_exit " Copying product_flash utility "
+$CP "$utils_dir"/FlashTools/product_flash.exe $output_dir  || error_exit " Copying product_flash.exe utility "
+$CP "$utils_dir"/FlashTools/product_flash_mac $output_dir  || error_exit " Copying product_flash_mac utility "
 rm -rf "$stage"
 echo "$0 Complete."
 exit 0
