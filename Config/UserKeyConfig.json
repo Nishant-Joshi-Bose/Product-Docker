@@ -13,6 +13,8 @@
       "KeyEvent": "PRESS",
       "KeyList": [ "BOSE_BLUETOOTH_SOURCE" ],
       "TimeOutList": [],
+//      "Action": "KEY_ACTION_BLUETOOTH",
+//      "Comment": "bluetooth button"
       "Action": "KEY_ACTION_SOURCE",
       "Comment": "source select"
     },

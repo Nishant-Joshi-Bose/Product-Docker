@@ -27,9 +27,6 @@
 
   <daemon name="STSCertified"/>
 
-  <!-- The Bluetooth daemon depends on the btproperty daemon -->
-  <daemon name="btproperty"/>
-
   <daemon name="BluetoothManager"/>
 
   <daemon name="BT"/>

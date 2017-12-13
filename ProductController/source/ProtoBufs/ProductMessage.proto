@@ -191,6 +191,7 @@ message ProductMessage
         optional ProductAutowakeStatus      autowakestatus      = 12;
         optional ProductNowPlayingStatus    nowplayingstatus    = 13;
         optional ProductAccessoryPairing    accessorypairing    = 14;
+        optional uint32                     intent              = 15;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

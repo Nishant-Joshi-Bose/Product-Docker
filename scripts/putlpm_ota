@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+# Reflash the LPM with the latest build.
+#
+this=${0##*/}
+
+if (( $# == 0 )); then
+    build=/home/softlib/verisoft/Professor/Continuous/master
+    version=$(cat "$build/latest.txt") || exit
+    set -- "$build/$version/lpm_updater.ipk"
+    echo "$0" "$1"
+fi
+
+if (( $# != 1 )); then
+    echo >&2 "usage: $this [lpm_updater.ipk]"
+    exit 1
+fi
+ipk=$1
+
+ar t >/dev/null "$ipk" || exit
+
+echo Remount...
+adb shell mount -oremount,rw /opt/Bose || exit
+
+echo Copy...
+adb push "$ipk" /tmp/new.ipk || exit
+
+echo Install...
+adb shell export LD_LIBRARY_PATH=/opt/Bose/update/opkg/ \&\& /opt/Bose/update/opkg/opkg -f /mnt/nv/update/opkg.conf  --add-arch armv7a-vfp-neon:100 --force-reinstall --force-downgrade install /tmp/new.ipk || exit
+
+echo Remount...
+adb shell mount -oremount,ro /opt/Bose || exit
+
+echo Done

@@ -76,12 +76,12 @@ TARGET_LINK_LIBRARIES(Professor
   LpmClient
   A4VVideoManagerClient
   FrontDoorClient
-  NetworkServiceUtils
   NetworkServiceClient
   KeyHandler
   BLESetupServiceProto
   BluetoothSinkServiceProto
   LightBarController
+  VoiceServiceClient
   CliClient
   ShelbyUtils
   BoseLibs

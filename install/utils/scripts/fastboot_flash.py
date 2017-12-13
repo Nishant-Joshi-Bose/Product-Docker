@@ -14,257 +14,182 @@ import sys
 import time
 import os
 import pexpect
-import serial
 import subprocess
 import platform
 import fnmatch
 import logging
 import shutil
+import argparse
 from collections import OrderedDict
-
+from adb_communication import ADBComm
 ''' This class provides facility to perform update via fastboot utility for Qualcomm device.        
     It requires fastboot and adb utilities installed on system, and Micro-USB ADB port of device connected to any USB port of system.
 '''
 class FastbootUpdater:
-        package_path = "."
-        fastboot_util = "./utils/lin/fastboot"
-        fastboot_bin = "sudo " + fastboot_util
-        adb_util = "./utils/lin/adb"
-        adb_bin = "sudo  " + adb_util
-        is_windows = False
-        device_of_interest = "apq8017"
-        adb_device_list =  []
-        fastboot_device_list =  []
-        adb_reboot_delay = 10
-        fastboot_reboot_delay = 60
-                
-        def __init__(self, package_path = ".", port = "/dev/ttyUSB0", serial_controller = None):
-            self.package_path = package_path
-            self.init_binaries()
-            #if not os.path.exists(self.fastboot_util):
-            #    raise Exception("Cannot find Fastboot binary [%s]. Exiting." %(self.fastboot_util))
-            #if not os.path.exists(self.adb_util):
-            #    raise Exception("Cannot find ADB binary [%s]. Exiting." %(self.adb_util))
-            #self.copy_binaries()
-            self.port = port
-            self.serial_controller = None
-            self.restart_adb()
-
-        def execute_cmd_on_host(self, cmd):
-            out = None
-            if "Windows" in platform.system():
-                p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
-                 
-                ## Talk with command i.e. read data from stdout and stderr. Store this info in tuple 
-                ## Read data from stdout and stderr, until end-of-file is reached. Wait for process to terminate. 
-                (out, err) = p.communicate()
-                 
-                ## Wait for command to terminate. Get return returncode ##
-                p_status = p.wait()
-                #print "Command output : ", output
-                #print "Command exit status/return code : ", p_status		
-                logging.debug("\t\t[%s]" %out)
-            else:
-                logging.debug("\tExecuting: [%s]" %cmd)
-                con = pexpect.spawn(cmd) 
-                con.expect(pexpect.EOF, timeout=600)
-                out = con.before
-                con.close()
-                logging.debug("\t\t[%s]" %out)
-            return out
-
-        def copy_binaries(self):
-            if "Windows" in platform.system():
-                try:
-                    destpath = os.path.abspath(os.path.join(self.package_path, '..'))
-                    logging.debug("Trying to copy [%s] to [%s]" %(self.fastboot_util, destpath))
-                    shutil.copy(self.fastboot_util, destpath)
-                except:
-                    # Ignore and continue, operation may fail going further
-                    logging.debug("Ignoring copy error for fastboot EXE")
-                self.fastboot_util = destpath + "\\fastboot.exe"
-                self.fastboot_bin = self.fastboot_util
-
-                try:
-                    logging.debug("Trying to copy [%s] to [%s]" %(self.adb_util, destpath))
-                    shutil.copy(self.adb_util, destpath)
-                except:
-                    # Ignore and continue, operation may fail going further
-                    logging.debug("Ignoring copy error for ADB EXE")
-                self.adb_util = self.package_path + "\\adb.exe"
-                self.adb_bin = self.adb_util
-            # else: nothing to do
-            return
-
-        def init_binaries(self):
-            if "Windows" in platform.system():
-                logging.debug("On Windows System....")
-                self.fastboot_util = self.package_path + "\utils\\win\\fastboot.exe"
-                self.fastboot_bin = self.fastboot_util
-                self.adb_util = self.package_path + "\utils\\win\\adb.exe"
-                self.adb_bin = self.adb_util
-                self.is_windows = True
-            else:            
-                logging.debug("On Linux System....")
-                #self.fastboot_util = self.package_path + "/utils/lin/fastboot"
-                self.fastboot_util = "fastboot"
-                self.fastboot_bin = "sudo " + self.fastboot_util
-                #self.adb_util = self.package_path + "/utils/lin/adb"
-                self.adb_util = "adb"
-                self.adb_bin = "sudo " + self.adb_util                
-            return
-       
-        def restart_adb(self):
-            cmd = self.adb_bin + " kill-server; " + self.adb_bin + " start-server"
-            self.execute_cmd_on_host(cmd)
-            #else: TODO
-            return
-                    
-        def stop_adb(self):
-            cmd = self.adb_bin + " kill-server "
-            self.execute_cmd_on_host(cmd)
-            #else: TODO
-            return
-
-        def find_adb_devices(self):
-            dev_list = []
-            cmd = self.adb_bin + " devices -l"
-            result = self.execute_cmd_on_host(cmd)
-            if result is not None:
-                result_list = result.split("\n")
-                for line in result_list:
-                    if self.device_of_interest in line:
-                        logging.info("Found ADB dev: %s" %line.split(' ')[0])
-                        dev_list.insert(-1, line.split(' ')[0])
-            return dev_list
-            
-        def find_fastboot_devices(self):
-            dev_list = []
-            cmd = self.fastboot_bin + " devices"
-            result = self.execute_cmd_on_host(cmd)
-            if result is not None:
-                result_list = result.split("\n")
-                for line in result_list:
-                    if "fastboot" in line:
-                        logging.info("Found FASTBOOT dev: %s" %line.split(' ')[0])
-                        dev_list.insert(-1, line.split(' ')[0])
-            return dev_list
-            
-        def boot_to_fastboot(self):
-            ''' if adb devices give at least one device, 
-                    adb is active, boot to fastboot mode
-                otherwise if fastboot devices give at least one device
-                    fastboot mode is active already
-                otherwise
-                    provide error saying no valid device is found
-            '''
-            logging.info("Boot to Fastboot.")
-            self.adb_device_list = self.find_adb_devices()
-            if len(self.adb_device_list) > 0:
-                cmd = self.adb_bin + " -s " + self.adb_device_list[0] + " reboot bootloader"
-                self.execute_cmd_on_host(cmd)
-                logging.info("Waiting for device to boot up for [%s] seconds." %str(self.adb_reboot_delay))
-                count = 0
-                while count < self.adb_reboot_delay:
-                    time.sleep(1)
-                    self.fastboot_device_list = self.find_fastboot_devices()
-                    if len(self.fastboot_device_list) > 0:
-                        break
-                    sys.stdout.write('.')
-                    sys.stdout.flush()
-                    count = count + 1
-                sys.stdout.write('\n')
-            else:   # Try to see if device is already in fastboot mode
-                self.fastboot_device_list = self.find_fastboot_devices()
-                
-            if len(self.fastboot_device_list) == 0:                
-                raise Exception("Not able to move / find any device to Fastboot mode.")
-            else:
-                if len(self.fastboot_device_list) > 1:
-                    raise Exception("More then one device in fastboot mode.\nExit extra devices from Fastboot mode / unplug their USB to continue.")
-            return
-            
-        def reboot_from_fastboot(self):
-            ''' if fastboot devices give at least one device, 
-                    fastboot is active, boot to adb mode by fastboot reboot
-                otherwise
-                    provide error saying no valid device is found
-            '''
-            self.fastboot_device_list = self.find_fastboot_devices()
-            if len(self.fastboot_device_list) == 0:
-                self.adb_device_list = self.find_adb_devices()
-                if len(self.adb_device_list) == 0:
-                    raise("No device found in fastboot mode or adb mode.")
-                else:
-                    logging.warning("No device in fastboot mode. Found device in Normal mode.")
-            else:
-                self.execute_cmd_on_host(self.fastboot_bin + " reboot")
-                logging.info("Waiting for device to boot for [%s] seconds." %str(self.fastboot_reboot_delay))
-                count = 0
-                while count < self.fastboot_reboot_delay:
-                    time.sleep(1)
-                    self.adb_device_list = self.find_adb_devices()
-                    if len(self.adb_device_list) > 0:
-                        break
-                    sys.stdout.write('.')
-                    sys.stdout.flush()
-                    count = count + 1
-                sys.stdout.write('\n')
-            if len(self.adb_device_list) == 0:
-                raise Exception("Not able to reboot device to Normal mode.")                    
-            return
-        
-        def fastboot_erase(self, partition, assume_fastboot=False, reboot_back=False):
-            if not assume_fastboot:
-                self.boot_to_fastboot()
-            cmd = self.fastboot_bin + " erase " + partition
-            logging.debug("Erasing Partition: [%s]" %partition)
-            out = self.execute_cmd_on_host(cmd)
-            logging.debug(out)
-            if reboot_back: 
-                self.reboot_from_fastboot()
-            return
-            
-        def fastboot_flash(self, partition, image_file, assume_fastboot=False, reboot_back=False):
-            if not os.path.isfile(image_file):
-                raise Exception("Partition image [%s] does not exist." %image_file)
-                
-            if not assume_fastboot:
-                self.boot_to_fastboot()
-            cmd = self.fastboot_bin + " flash " + partition + " " + image_file            
-            logging.debug("Flashing partition: [%s]" %partition)
-            out = self.execute_cmd_on_host(cmd)
-            logging.debug(out)
-            if reboot_back: 
-                self.reboot_from_fastboot()
-            return
-        
-        # Fetch file from device via adb to given dest
-        def get_file(self, src, dest):
-            return
+    package_path = "."
+    device_serial = None
+    fastboot_device_list =  []
+    is_initialzed = False
+    fastboot_bin = ""
+    adb_reboot_delay = 10
+    fastboot_reboot_delay = 60
+    is_intialized = False
     
-        # Put file to device via adb from given src to device destination
-        def put_file(self,src, dest):
-            return
+    def __init__(self, package_path = ".", adb_obj = None, device = None):
+        self.package_path = package_path
+        if adb_obj is None:
+            self.adbC = ADBComm(package_path)
+        else:
+            self.adbC = adb_obj
+        self.fastboot_bin = self.adbC.get_fastboot_path()
+        logging.info("Fastboot path [%s]" %self.fastboot_bin)
+        self.device_serial = device
+        self.is_intialized = self.setDevice()
+    
+    def get_intiialized(self):
+        return self.is_intiialized
+         
+    def execute_cmd_on_host(self, cmd):
+        out = None
+        if "Windows" in platform.system():
+            p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+             
+            ## Talk with command i.e. read data from stdout and stderr. Store this info in tuple 
+            ## Read data from stdout and stderr, until end-of-file is reached. Wait for process to terminate. 
+            (out, err) = p.communicate()
+             
+            ## Wait for command to terminate. Get return returncode ##
+            p_status = p.wait()
+            #print "Command output : ", output
+            #print "Command exit status/return code : ", p_status		
+            logging.debug("\t\t[%s]" %out)
+        else:
+            logging.info("\tExecuting: [%s]" %cmd)
+            con = pexpect.spawn(cmd) 
+            con.expect(pexpect.EOF, timeout=600)
+            out = con.before
+            con.close()
+            logging.debug("\t\t[%s]" %out)
+        return out
 
-        # Run fastboot script - This is risky. 
-        def update_from_script(self, fastboot_script_path_name, reboot_back=False):
-            if not os.path.exists(fastboot_script_path_name):
-                raise Exception("Fastboot script [%s] does not exist." %fastboot_script_path_name)
-            self.boot_to_fastboot()
-            if reboot_back:
-                self.reboot_from_fastboot()
-            return
+    def find_fastboot_devices(self):
+        dev_list = []
+        cmd = self.fastboot_bin + " devices"
+        result = self.execute_cmd_on_host(cmd)
+        if result is not None:
+            result_list = result.split("\n")
+            for line in result_list:
+                if "fastboot" in line:
+                    logging.info("Found FASTBOOT dev: %s" %line.split(' ')[0])
+                    dev_list.insert(-1, line.split(' ')[0])
+        return dev_list
+    
+    def boot_to_fastboot(self):
+        ''' if adb devices give at least one device, 
+                adb is active, boot to fastboot mode
+            otherwise if fastboot devices give at least one device
+                fastboot mode is active already
+            otherwise
+                provide error saying no valid device is found
+        '''
+        logging.info("Boot to Fastboot.")
+        if self.adbC.isDeviceAvailable(self.device_serial):
+            logging.info("Rebooting ADB Dev %s to Bootloader" %self.device_serial)
+            self.adbC.setTargetDevice(self.device_serial)
+            self.adbC.rebootDevice(True)
+            count = 0
+            while count < self.adb_reboot_delay:
+                time.sleep(1)
+                self.fastboot_device_list = self.find_fastboot_devices()
+                if len(self.fastboot_device_list) > 0:
+                    break
+                sys.stdout.write('.')
+                sys.stdout.flush()
+                count = count + 1
+            sys.stdout.write('\n')
+        else:   # Try to see if device is already in fastboot mode
+            self.fastboot_device_list = self.find_fastboot_devices()
+            
+        if len(self.fastboot_device_list) == 0:                
+            logging.error("Not able to move / find any device to Fastboot mode.")
+            return False
+        else:
+            if len(self.fastboot_device_list) > 1:
+                logging.error("More then one device in fastboot mode.\nExit extra devices from Fastboot mode / unplug their USB to continue.")
+                return False
+        return True
+
+    def reboot_from_fastboot(self):
+        ''' if fastboot devices give at least one device, 
+                fastboot is active, boot to adb mode by fastboot reboot
+            otherwise
+                provide error saying no valid device is found
+        '''
+        self.fastboot_device_list = self.find_fastboot_devices()
+        if len(self.fastboot_device_list) > 0:
+            self.execute_cmd_on_host(self.fastboot_bin + " reboot")
+         
+        logging.info("Waiting for device to boot for [%s] seconds." %str(self.fastboot_reboot_delay))
+        count = 0
+        while count < self.fastboot_reboot_delay:
+            time.sleep(1)            
+            if self.adbC.isDeviceAvailable(self.device_serial):
+                break
+            sys.stdout.write('.')
+            sys.stdout.flush()
+            count = count + 1
+        sys.stdout.write('\n')
+        if not self.adbC.isDeviceAvailable(self.device_serial):
+            raise Exception("Not able to reboot device to Normal mode.")
+        return
+    
+    def fastboot_erase(self, partition, reboot_back=False):
+        cmd = self.fastboot_bin + " erase " + partition
+        logging.debug("Erasing Partition: [%s]" %partition)
+        out = self.execute_cmd_on_host(cmd)
+        logging.debug(out)
+        if reboot_back: 
+            self.reboot_from_fastboot()
+        return
+        
+    def fastboot_flash(self, partition, image_file, reboot_back=False):
+        if not os.path.isfile(image_file):
+            raise Exception("Partition image [%s] does not exist." %image_file)
+        cmd = self.fastboot_bin + " flash " + partition + " " + image_file            
+        logging.debug("Flashing partition: [%s]" %partition)
+        out = self.execute_cmd_on_host(cmd)
+        logging.debug(out)
+        if reboot_back: 
+            self.reboot_from_fastboot()
+        return
+
+    def setDevice(self):
+        if self.device_serial is None:
+            self.device_serial = self.adbC.getFirstDeviceAvailable()
+             
+        if self.device_serial is None:
+            logging.warning("No ADB Device found. Finding Fastboot device ")
+            dev_list = self.find_fastboot_devices()
+            if len(dev_list) > 0:
+                self.device_serial = dev_list[0]
+                logging.info("Found Fastboot dev %s" %self.device_serial)
+            else:
+                logging.error("No Fastboot Device found.")
+                return False
+        else:
+            logging.info("Using %s as device. Try to boot to fastboot" %self.device_serial)
+            return self.boot_to_fastboot()
+        return True
 
 def get_fasboot_partition_files(package_path, full_update=False, 
                                 all_partitions=False, userspace_only=False, 
-                                partition_file=None, erase_persist=False):
+                                erase_persist=False):
     # Map of all partitions vs. their files. We potentially can parse all labels from rawprogram*.xml
+    print sys._getframe().f_code.co_name
     partition_list = OrderedDict()
-    partitions_to_flash = None
     if userspace_only:
-        partition_list["bose"] = "*bose.ext4"
-    elif (all_partitions) or (partition_file is not None) or (full_update):
+        partition_list["bose"] = "orig_userpartition.ext4"
+    elif (all_partitions) or (full_update):
         partition_list["partition"] = "*gpt_both0*.bin"
         partition_list["PrimaryGPT"] = "*gpt_main0*.bin"
         partition_list["BackupGPT"] = "*gpt_backup0*.bin"
@@ -296,7 +221,7 @@ def get_fasboot_partition_files(package_path, full_update=False,
         partition_list["rpm"] = "*rpm*.mbn"
         partition_list["rpmbak"] = "*rpm*.mbn"
         partition_list["userdata"] = "*apq8017-usrfs*.ext4"
-        partition_list["bose"] = "*bose.ext4"
+        partition_list["bose"] = "orig_userpartition.ext4"
         partition_list["bose-persist"] = "*bose-persist*.ext4"
         #partition_list["fsc"] = ""
         #partition_list["ssd"] = ""
@@ -360,41 +285,37 @@ def get_fasboot_partition_files(package_path, full_update=False,
 
     return new_list
     
-def do_fastboot_flash(package_path, full_update=False,
+def do_fastboot_flash(package_path, adb_obj, full_update=False,
                       all_partitions=False,  userspace_only=False, 
-                      partition_file=None, erase_persist=False, serial_port = None):
+                      erase_persist=False):
+    print sys._getframe().f_code.co_name
+    fastboot_updater = None
     try:
-        logging.info("Fastboot Flash Start.")
-        abs_package_path = os.path.normpath(os.path.abspath(package_path)) + os.sep
-        if not os.path.isdir(abs_package_path):
-            raise Exception("Package directory [%s] not present. Exiting." %abs_package_path)
-        controller = None
-        fastboot_updater = None
-        
-        if serial_port is not None:
-            logging.debug("Opening serial port [%s]." % serial_port)
-            controller = serial_controller.SerialController(serial_port)
-            controller.open()
-            
-        partitions = get_fasboot_partition_files(abs_package_path, full_update, all_partitions, userspace_only, partition_file, erase_persist)
-        fastboot_updater = FastbootUpdater(abs_package_path, serial_port, controller)
         logging.info("******************************************************************************************")
         logging.info("\tWARNING: Starting Fastboot Flash. Ensure the power and USB connections to the device are secured.")
         logging.info("\tWARNING: Power failure or any disruption in connection may damage the device completely.")
         logging.info("\tWARNING: In case of any such issues after update, QFIL update may be required to recover device.")
         logging.info("******************************************************************************************\n")
-        assume_fastboot = False
+
+        logging.info("Fastboot Flash Start.")
+        abs_package_path = os.path.normpath(os.path.abspath(package_path)) + os.sep
+        if not os.path.isdir(abs_package_path):
+            raise Exception("Package directory [%s] not present. Exiting." %abs_package_path)
+            
+        partitions = get_fasboot_partition_files(abs_package_path, full_update, all_partitions, userspace_only, erase_persist)
+        fastboot_updater = FastbootUpdater(abs_package_path, adb_obj)
+        if not fastboot_updater.get_intiialized:
+            raise Exception("Cannot initialize device to Fastboot mode")        
         for partition in partitions:            
             logging.info("------------------------------------------------------------------------------------------")
             if (partitions[partition] != "") or (partitions[partition] == "" and full_update):
                 logging.info("--- Erasing: [%s]" %partition)
                 time.sleep(1)
-                fastboot_updater.fastboot_erase(partition, assume_fastboot)
-                assume_fastboot = True
+                fastboot_updater.fastboot_erase(partition)
                 if partitions[partition] != "":
                     logging.info("--- Flashing: [%s] with [%s]" %(partition, partitions[partition]))
                     time.sleep(1)
-                    fastboot_updater.fastboot_flash(partition, partitions[partition], assume_fastboot)
+                    fastboot_updater.fastboot_flash(partition, partitions[partition])
             else:
                 logging.info("--- Not Flashing: [%s] as filename is Blank" %(partition))
             logging.info("------------------------------------------------------------------------------------------")
@@ -404,20 +325,12 @@ def do_fastboot_flash(package_path, full_update=False,
         fastboot_updater.reboot_from_fastboot()
         logging.info("******************************************************************************************\n")
         
-        if controller is not None:
-            controller.close()
     except Exception as e:
         logging.error(type(e))
         logging.error('Error: %s %s' %(e.args,  sys.exc_info()[0]))
     except:
         logging.error('Unexpected Error: [%s]' %(sys.exc_info()[0]))
     finally:    
-        if controller is not None:
-            if controller.isOpen():
-                controller.close()                
-        if fastboot_updater is not None:
-            fastboot_updater.stop_adb()
-
         logging.info("Fastboot Flash End.")
     return
     
@@ -426,8 +339,20 @@ if __name__ == '__main__':
         if os.getuid() != 0:
             print("The flash script requires root priviledge. Please try and rerun in sudo mode.")
             sys.exit(-1)
+
+    logging.basicConfig(filename="flash_util.log", format='%(asctime)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
+    #define a new Handler to log to console as well
+    console = logging.StreamHandler()
+    # optional, set the logging level
+    console.setLevel(logging.INFO)
+    # set a format which is the same for console use
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    # tell the handler to use this format
+    console.setFormatter(formatter)
+    # add the handler to the root logger
+    logging.getLogger('').addHandler(console)
             
-    parser = argparse.ArgumentParser(description='Flash Eddie and LPM using Fastboot/Serial.')
+    parser = argparse.ArgumentParser(description='Flash Product using Fastboot.')
     parser.add_argument('package', 
                         action='store', 
                         help="Full path of package Folder")
@@ -454,13 +379,6 @@ if __name__ == '__main__':
                                  action='store_true', 
                                  required=False, 
                                  help="Erase persistent partition")    
-    '''fastboot_parser.add_argument('-l', '--partition-list', 
-                                 default="", 
-                                 action='store', 
-                                 required=False, 
-                                 help="Name of partition list file")    
-    '''
-
     args = parser.parse_args()
     abs_package = os.path.abspath(args.package)
     
@@ -468,9 +386,7 @@ if __name__ == '__main__':
     userspace_only = False
     all_partitions = False
     erase_persist = False
-    partition_list_file = None
     update_fastboot = False
-    lpm_serial_dev = ""
     if args.full_update:
         full_update = True
     else:
@@ -482,9 +398,8 @@ if __name__ == '__main__':
         elif ('all' in args.__dict__) and args.all:
             all_partitions = True
             
-    if full_update or userspace_only or all_partitions or erase_persist or partition_list_file != "":
-        logging.basicConfig(filename="fastboot_flash.log", format='%(asctime)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
-        do_fastboot_flash(abs_package, full_update, all_partitions, userspace_only, partition_list_file, erase_persist)
+    if full_update or userspace_only or all_partitions or erase_persist:
+        do_fastboot_flash(abs_package, None, full_update, all_partitions, userspace_only, erase_persist)
     else:
         print("No valid option to perform Fastboot operation. Exiting")
         sys.exit(-1)
