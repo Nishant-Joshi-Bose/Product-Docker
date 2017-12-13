@@ -72,8 +72,10 @@ mkdir -p "$output_dir" "$opt_dir" || exit
 echo "Package version \"$monaco_ver\""
 cp -rf "$monaco_dir"/monaco "$opt_dir/" || exit
 
+PackageName=monaco
+
 cat >"$stage/control" <<EOF || exit
-Package: monaco
+Package: $PackageName
 Version: $monaco_ver
 Description: Bose Web Monaco Package version $monaco_ver
  Bose Web Monaco
@@ -91,6 +93,9 @@ EOF
 put_script "$stage/postinst" <<EOF
 #!/bin/sh
 echo "monaco postinst"
+# Set Progress End
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 100
+exit 0
 EOF
 
 put_script "$stage/postrm" <<EOF
@@ -101,6 +106,8 @@ EOF
 put_script "$stage/preinst" <<EOF
 #!/bin/sh
 echo "monaco preinst"
+# Set Progress Start
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
 echo "Stopping WPENetworkProcess"
 pkill WPENetworkProcess
 echo "Stopping WPEWebProcess"
