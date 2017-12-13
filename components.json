@@ -53,7 +53,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@0397624203fc5bf29de09901fa90cd0f057cc5be"
+    "selected_version": "master@7d5c4fded383c2d951e180d1e99dd172441c0ac6"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -81,7 +81,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Continuous/master/0.3.1-49+cd24555"
+    "selected_version": "Continuous/master/0.3.1-54+9a9f240"
   },
   {
     "name": "RivieraLpmUpdater",

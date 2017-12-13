@@ -25,7 +25,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
 #include "ProfessorProductController.h"
-#include "ProductHardwareInterface.h"
+#include "CustomProductHardwareInterface.h"
 #include "ProductEdidInterface.h"
 #include "FrontDoorClient.h"
 
@@ -208,7 +208,7 @@ void ProductEdidInterface::HandlePhyAddrResponse( const A4VVideoManagerServiceMe
     {
         BOSE_DEBUG( s_logger, "A send CEC PA request will be made." );
 
-        m_ProductHardwareInterface->CECSetPhysicalAddress( cecPhysicalAddress.addr() );
+        m_ProductHardwareInterface->SetCecPhysicalAddress( cecPhysicalAddress.addr() );
 
         return;
     }
@@ -252,7 +252,8 @@ void ProductEdidInterface::HandleFrontDoorVolume( SoundTouchInterface::volume co
 {
     BOSE_VERBOSE( s_logger, "Got volume notify LPM (%d) (%d)", volume.value(), volume.muted() );
 
-    m_ProductHardwareInterface->SendVolMute( volume.value(), volume.muted() );
+    m_ProductHardwareInterface->SendSetVolume( volume.value( ) );
+    m_ProductHardwareInterface->SendMute( volume.muted( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

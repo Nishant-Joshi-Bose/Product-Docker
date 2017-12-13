@@ -87,7 +87,7 @@ SET(OUTPUT_BIN_DIR bin)
 SET(OUTPUT_LIB_DIR lib)
 SET(CUSTOM_HSM_DIR "${CMAKE_SOURCE_DIR}/ProductController/source/CustomStateMachine")
 SET(INTENT_HANDLER_DIR "${CMAKE_SOURCE_DIR}/ProductController/source/IntentHandler")
-
+SET(CUSTOM_HARDWARE_DIR "${CMAKE_SOURCE_DIR}/ProductController/source")
 
 IF(${CFG} STREQUAL "Release")
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os -g2 -DNDEBUG")

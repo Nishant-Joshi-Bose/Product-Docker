@@ -28,7 +28,7 @@
 #include "KeyActions.pb.h"
 #include "ProductMessage.pb.h"
 #include "ProfessorProductController.h"
-#include "ProductHardwareInterface.h"
+#include "CustomProductHardwareInterface.h"
 #include "ProductKeyInputInterface.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,16 +81,13 @@ ProductKeyInputInterface::ProductKeyInputInterface( ProfessorProductController& 
     m_running( false )
 {
     ///
-    /// Register for LPM connected events after which key registration can be made. Note that this
-    /// module must register for the connection events before the ProductHardware instance is ran
-    /// through its Run method in the product controller; otherwise, this module may not get the
-    /// LPM connected event.
+    /// Register for LPM connected events after which key registration can be made.
     ///
     Callback< bool > callback( std::bind( &ProductKeyInputInterface::ConnectToLpm,
                                           this,
                                           std::placeholders::_1 ) );
 
-    m_ProductHardwareInterface->RegisterForLpmClientConnectEvent( callback );
+    m_ProductHardwareInterface->RegisterForLpmConnection( callback );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -260,7 +257,6 @@ void ProductKeyInputInterface::KeyInformationCallBack( const int keyAction )
     BOSE_DEBUG( s_logger, "A key press or presses have been translated to the action %d.", keyAction );
 
     ProductMessage productMessage;
-
     if( keyAction > KeyActionPb::KEY_ACTION_LAST_COMMON )
     {
         // @TODO for now, until Professor implements its non-common intents
