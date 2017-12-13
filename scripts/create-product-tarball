@@ -188,7 +188,6 @@ cd "$stage" || error_exit " cd $stage "
 tar -cf $output_package ./*  || error_exit " Creating tar "
 $CP "$utils_dir"/lin/product_flash $output_dir  || error_exit " Copying product_flash utility "
 $CP "$utils_dir"/win/product_flash.exe $output_dir  || error_exit " Copying product_flash.exe utility "
-$CP "$utils_dir"/mac/product_flash_mac $output_dir  || error_exit " Copying product_flash_mac utility "
 rm -rf "$stage"
 echo "$0 Complete."
 exit 0
