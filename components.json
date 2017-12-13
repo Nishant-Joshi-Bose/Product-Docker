@@ -45,23 +45,23 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/0.2.3-231+63a1ec0"
+    "selected_version": "Continuous/master/0.2.3-241+a135591"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Continuous/master/0.2.3-231+63a1ec0"
+    "selected_version": "Continuous/master/0.2.3-241+a135591"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@1c37a54ea423f7f699b6d117bc2aca2846493459"
-  },
-  {
-    "name": "ProfessorLPM-Package",
-    "selected_version": "Release/IP2/0.2.4.2569960"
+    "selected_version": "master@0397624203fc5bf29de09901fa90cd0f057cc5be"
   },
   {
     "name": "KeyHandler-qc8017_32",
     "selected_version": "Release/master/0.2.1-26+e67ea31"
+  },
+  {
+    "name": "ProfessorLPM-Package",
+    "selected_version": "Release/IP2/0.2.4.2569960"
   },
   {
     "name": "protobuf-native",
@@ -100,15 +100,7 @@
     "selected_version": "Continuous/Castle-Fork/2017-12-08_1246"
   },
   {
-    "name": "unittest-cpp-native",
-    "selected_version": "Release/bose-master/2.0.0-3+167ffec"
-  },
-  {
     "name": "unittest-cpp-qc8017_32",
-    "selected_version": "Release/bose-master/2.0.0-3+167ffec"
-  },
-  {
-    "name": "unittest-cpp-ti",
     "selected_version": "Release/bose-master/2.0.0-3+167ffec"
   }
 ]
