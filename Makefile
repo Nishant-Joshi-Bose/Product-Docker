@@ -102,7 +102,8 @@ all-packages: package packages-gz update-zip update-zip-with-hsp
 
 .PHONY: clean
 clean:
-	rm -rf $(BUILDS_DIR)
+	rm -rf $(BUILDS_DIR) builds/CastleTestUtils builds/__init__.py
+	find . -name \*.pyc -delete
 
 .PHONY: distclean
 distclean:
