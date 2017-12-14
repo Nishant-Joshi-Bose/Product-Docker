@@ -220,7 +220,6 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setDualMonoSelectAction = [ this ]( const ProductPb::AudioDualMonoSelect val )
     {
-        bool ret = m_AudioSettingsMgr->SetDualMonoSelect( val );
         return m_AudioSettingsMgr->SetDualMonoSelect( val );
     };
     m_DualMonoSelectSetting = std::unique_ptr<AudioSetting<ProductPb::AudioDualMonoSelect>>( new AudioSetting<ProductPb::AudioDualMonoSelect>
