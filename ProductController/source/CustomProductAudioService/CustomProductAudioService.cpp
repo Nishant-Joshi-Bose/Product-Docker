@@ -212,7 +212,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                   m_ProductTask ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Endpoint /audio/balance - register ProductController as handler for POST/PUT/GET requests
+    /// Endpoint /audio/dualMonoSelect - register ProductController as handler for POST/PUT/GET requests
     //////////////////////////////////////////////////////////////////////////////////////////////
     auto getDualMonoSelectAction = [ this ]( )
     {
