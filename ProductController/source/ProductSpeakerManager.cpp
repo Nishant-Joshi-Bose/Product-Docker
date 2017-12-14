@@ -22,7 +22,7 @@
 #include "HsmState.h"
 #include "FrontDoorClient.h"
 #include "ProfessorProductController.h"
-#include "ProductHardwareInterface.h"
+#include "CustomProductHardwareInterface.h"
 #include "ProductSpeakerManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,7 +78,7 @@ void ProductSpeakerManager::Init( )
     m_accessorySpeakerState.set_pairing( false );
 
     Callback<bool> cb( std::bind( &ProductSpeakerManager::SetLpmConnectionState, this, std::placeholders::_1 ) );
-    m_ProductHardwareInterface->RegisterForLpmClientConnectEvent( cb );
+    m_ProductHardwareInterface->RegisterForLpmConnection( cb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

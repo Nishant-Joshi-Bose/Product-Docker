@@ -45,23 +45,23 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/0.2.3-231+63a1ec0"
+    "selected_version": "Continuous/master/0.2.3-241+a135591"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Continuous/master/0.2.3-231+63a1ec0"
+    "selected_version": "Continuous/master/0.2.3-241+a135591"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@1c37a54ea423f7f699b6d117bc2aca2846493459"
-  },
-  {
-    "name": "ProfessorLPM-Package",
-    "selected_version": "Release/IP2/0.2.4.2569960"
+    "selected_version": "master@7d5c4fded383c2d951e180d1e99dd172441c0ac6"
   },
   {
     "name": "KeyHandler-qc8017_32",
     "selected_version": "Release/master/0.2.1-26+e67ea31"
+  },
+  {
+    "name": "ProfessorLPM-Package",
+    "selected_version": "Release/IP2/0.2.4.2569960"
   },
   {
     "name": "protobuf-native",
@@ -81,7 +81,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Continuous/master/0.3.1-49+cd24555"
+    "selected_version": "Continuous/master/0.3.1-54+9a9f240"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -100,15 +100,7 @@
     "selected_version": "Continuous/Castle-Fork/2017-12-08_1246"
   },
   {
-    "name": "unittest-cpp-native",
-    "selected_version": "Release/bose-master/2.0.0-3+167ffec"
-  },
-  {
     "name": "unittest-cpp-qc8017_32",
-    "selected_version": "Release/bose-master/2.0.0-3+167ffec"
-  },
-  {
-    "name": "unittest-cpp-ti",
     "selected_version": "Release/bose-master/2.0.0-3+167ffec"
   }
 ]

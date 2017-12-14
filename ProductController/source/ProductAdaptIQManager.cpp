@@ -27,7 +27,7 @@
 #include "DPrint.h"
 #include "Utilities.h"
 #include "ProfessorProductController.h"
-#include "ProductHardwareInterface.h"
+#include "CustomProductHardwareInterface.h"
 #include "ProductAdaptIQManager.h"
 
 using namespace ProductPb;

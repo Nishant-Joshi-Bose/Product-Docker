@@ -24,7 +24,7 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "ProductHardwareInterface.h"
+#include "CustomProductHardwareInterface.h"
 #include "ProfessorProductController.h"
 #include "ProductCommandLine.h"
 
@@ -245,13 +245,13 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         {
             response = "The mute will be turned on. \r\n";
 
-            m_ProductHardwareInterface->SendInternalMute( true );
+            m_ProductHardwareInterface->SendMute( true );
         }
         else if( muteState == "off" )
         {
             response = "The mute will be turned off. \r\n";
 
-            m_ProductHardwareInterface->SendInternalMute( false );
+            m_ProductHardwareInterface->SendMute( false );
         }
         else
         {

@@ -1,11 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      ProductEdidInterface.h
+/// @file      CustomProductHardwareInterface.h
 ///
-/// @brief     This header file contains declarations to handle communication with a A4VVideoManager
-///            service.
+/// @brief     This header file contains custom Professor declarations for managing the hardware,
+///            which interfaces with the Low Power Microprocessor or LPM on Riviera APQ boards.
 ///
-/// @author    Manoranjani Malisetti
+/// @note      This custom class declared here inherits a ProductHardwareInterface class found in the
+///            common code repository. This base inherited class starts and runs an LPM client
+///            connection, as well as provides several common hardware based methods.
+///
+/// @author    Stuart J. Lumby
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -19,7 +23,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// The following compiler directive prevents this header file from being included more than once,
 /// which may cause multiple declaration compiler errors.
@@ -32,10 +36,7 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "A4VVideoManagerClientFactory.h"
-#include "ProductFrontDoorUtility.h"
-#include "SoundTouchInterface/PlayerService.pb.h"
-#include "SoundTouchInterface/AudioService.pb.h"
+#include "ProductHardwareInterface.h"
 #include "ProductMessage.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,85 +50,76 @@ namespace ProductApp
 ///            Forward Class Declarations
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductHardwareInterface;
 class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class ProductEdidInterface
+/// @class CustomProductHardwareInterface
 ///
-/// @brief This class is used to handle communication with a A4VVideoManager service.
+/// @brief This class is used to managing the hardware, which interfaces with the Low Power
+///        Microprocessor or LPM.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProductEdidInterface
+class CustomProductHardwareInterface : public ProductHardwareInterface
 {
 public:
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @name   ProductEdidInterface Constructor
+    /// @brief  CustomProductHardwareInterface Constructor
     ///
     /// @param  ProfessorProductController& ProductController
     ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductEdidInterface( ProfessorProductController& ProductController );
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    CustomProductHardwareInterface( ProfessorProductController& ProductController );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following public methods are used to run and stop instances of the
-    ///        ProductEdidInterface class, respectively.
+    /// @brief These declarations are custom Professor utility calls, which send messages to the
+    ///         LPM hardware client.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool Run( );
-    void Stop( );
+    bool SendAudioPathPresentationLatency( uint32_t  latency );
+    bool SendLipSyncDelay( uint32_t                  audioDelay );
+    bool SendToneAndLevelControl( IpcToneControl_t&  controls );
+    bool SendSpeakerList( IpcAccessoryList_t&        accessoryList );
+    bool SendSetSystemTimeoutEnableBits( Ipc_TimeoutControl_t& timeoutControl );
+    bool SendWiFiRadioStatus( uint32_t frequencyInKhz );
+    void SetBlueToothMacAddress( const std::string&       bluetoothMacAddress );
+    void SetBlueToothDeviceName( const std::string&       bluetoothDeviceName );
+    bool SendBlueToothDeviceData( const std::string&       bluetoothDeviceName,
+                                  const unsigned long long bluetoothMacAddress );
+    bool SendSourceSelection( const LPM_IPC_SOURCE_ID      sourceSelect );
+    bool SetCecPhysicalAddress( const uint32_t cecPhyAddr );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
-    /// The following methods are used to inform the video manager that either power has been
-    /// enabled or that it should prepare for power to be disabled
+    ///
+    /// @brief These methods pertain to the accessory speakers and pairing.
+    ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void PowerOff( );
-    void PowerOn( );
+    bool SendAccessoryPairing( bool enabled, const Callback<LpmServiceMessages::IpcSpeakerPairingMode_t>& cb );
+    bool SendAccessoryActive( bool rears, bool subs,  const Callback<IpcSpeakersActive_t> &cb );
+    bool SendAccessoryDisband( );
 
 private:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following declarations are used to interface with the product controller and
-    ///        the lower level LPM hardware, as well as the A4VVideoManager service.
+    /// @brief These declarations store the main task for processing LPM hardware events and
+    ///        requests. It is passed by the ProductController instance.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF*                          m_ProductTask;
-    Callback< ProductMessage >                   m_ProductNotify;
-    std::shared_ptr < CustomProductHardwareInterface > m_ProductHardwareInterface;
-    A4VVideoManager::A4VVideoManagerClientIF::A4VVideoManagerClientPtr m_EdidClient;
+    NotifyTargetTaskIF*        m_ProductTask   = nullptr;
+    Callback< ProductMessage > m_ProductNotify = nullptr;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief This member determines whether a connections to the LPM server connection is
-    ///        established.
+    /// @brief These declarations are used to handle Bluetooth functionality.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool m_connected = false;
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief This method is called when an A4VVM server connection is established.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    void Connected( bool  connected );
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following method is used to register for and receive key events from the
-    ///        A4VVideoManager interface.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMIMsg_t hpdEvent );
-    void HandleRawEDIDResponse( const A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid );
-    void HandlePhyAddrResponse( const A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t cecPhysicalAddress );
-    void HandleNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingStatus );
-    void HandleFrontDoorVolume( SoundTouchInterface::volume const& volume );
-    std::shared_ptr< FrontDoorClientIF >    m_FrontDoorClient;
+    bool               m_gettingBlueToothData = false;
+    unsigned long long m_blueToothMacAddress  = 0ULL;
+    std::string        m_blueToothDeviceName;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

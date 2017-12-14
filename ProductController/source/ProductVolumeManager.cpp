@@ -26,7 +26,7 @@
 #include "Utilities.h"
 #include "FrontDoorClient.h"
 #include "ProfessorProductController.h"
-#include "ProductHardwareInterface.h"
+#include "CustomProductHardwareInterface.h"
 #include "ProductVolumeManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

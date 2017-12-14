@@ -26,7 +26,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
 #include "ProductControllerHsm.h"
-#include "ProductHardwareInterface.h"
+#include "CustomProductHardwareInterface.h"
 #include "CustomProductControllerStateNetworkStandbyUnconfigured.h"
 #include "ProfessorProductController.h"
 #include "InactivityTimers.h"

@@ -8,6 +8,7 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
   ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductHardwareInterface
   ${KEYHANDLER_DIR}/include
   .
   include
@@ -41,7 +42,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
   source/ProductStart.cpp
   source/ProductCommandLine.cpp
-  source/ProductHardwareInterface.cpp
+  source/CustomProductHardwareInterface.cpp
   source/ProductNetworkManager.cpp
   source/ProductSystemManager.cpp
   source/ProductKeyInputInterface.cpp

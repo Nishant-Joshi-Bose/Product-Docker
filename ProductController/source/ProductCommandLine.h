@@ -46,8 +46,8 @@ namespace ProductApp
 ///            Forward Class Declarations
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+class CustomProductHardwareInterface;
 class ProfessorProductController;
-class ProductHardwareInterface;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -87,10 +87,10 @@ private:
     ///        the lower level LPM hardware.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProfessorProductController&                 m_ProductController;
-    NotifyTargetTaskIF*                         m_ProductTask;
-    Callback< ProductMessage >                  m_ProductNotify;
-    std::shared_ptr< ProductHardwareInterface > m_ProductHardwareInterface;
+    ProfessorProductController&                       m_ProductController;
+    NotifyTargetTaskIF*                               m_ProductTask;
+    Callback< ProductMessage >                        m_ProductNotify;
+    std::shared_ptr< CustomProductHardwareInterface > m_ProductHardwareInterface;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
