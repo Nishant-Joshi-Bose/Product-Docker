@@ -108,10 +108,8 @@ put_script "$stage/preinst" <<EOF
 echo "monaco preinst"
 # Set Progress Start
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
-echo "Stopping WPENetworkProcess"
-pkill WPENetworkProcess
-echo "Stopping WPEWebProcess"
-pkill WPEWebProcess
+echo "Stopping dyz-shm"
+pkill dyz-shm
 exit 0
 EOF
 
