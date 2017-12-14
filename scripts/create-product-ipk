@@ -59,6 +59,7 @@ wspace=$(cd "$here/.." && echo "$PWD") || exit
 
 riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || exit
 riviera_toolchain_dir=$(components get Riviera-Toolchain installed_location) || exit
+galapagosclient_dir=$(components get GalapagosClient-qc8017_32 installed_location) || exit
 soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
@@ -171,17 +172,20 @@ sw_update_url=https://worldwide.bose.com/updates/soundtouch-test
 "$webkit_dir/stage" "$opt_dir" || exit
 "$productuiassets_dir/stage" --chimes=alpha --type=flac "$opt_dir" || exit
 "$frontdoor_dir/stage" "$opt_dir" || exit
+"$galapagosclient_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 
 cd "$opt_dir"/lib || exit
 rm -f *.a
 
+PackageName=SoundTouch
+
 package_version=$(make-version-string "$version_json" "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}") || exit
 echo "Package version \"$package_version\""
 
 cat >"$stage/control" <<EOF || exit
-Package: SoundTouch
+Package: $PackageName
 Version: $package_version
 Description: SoundTouch version $package_version
  The SoundTouch app
@@ -202,6 +206,9 @@ echo "SoundTouch postinst"
 if [ -x /mnt/nv/postinst ]; then
     /mnt/nv/postinst
 fi
+# Set Progress End
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 100
+exit 0
 EOF
 
 put_script "$stage/postrm" <<EOF
@@ -223,6 +230,8 @@ else
     echo "Installed Riviera-HSP: \$i"
     echo "See https://github.com/BoseCorp/Eddie/blob/master/README.md#hsp"
 fi
+# Start Progress
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
 
 # ---8<------8<------8<------8<------8<------8<------8<------8<------8<---
 # Try to kill services before installation begin to make sure

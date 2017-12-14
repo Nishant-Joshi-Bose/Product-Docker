@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-12_1607"
+    "selected_version": "Continuous/Castle-Fork/2017-12-13_2326"
   },
   {
     "name": "bose-opkg-utils",
@@ -17,7 +17,7 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.2.3-20217"
+    "selected_version": "Continuous/Castle-Fork/2017-12-07_1731"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -45,15 +45,15 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/0.2.3-258+6fe7ff7"
+    "selected_version": "Continuous/master/0.2.4-273+117f836"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Continuous/master/0.2.3-258+6fe7ff7"
+    "selected_version": "Continuous/master/0.2.4-273+117f836"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@328386eeb10313b4471b8e07ac954b6b3ee62517"
+    "selected_version": "master@36b319ef4144bdb09f995508ddb8ac49a147173a"
   },
   {
     "name": "CastleProductUIAssets",
@@ -66,6 +66,10 @@
   {
     "name": "EddieLPM-Package",
     "selected_version": "Release/IP2/0.2.1.2584357/DP1"
+  },
+  {
+    "name": "GalapagosClient-qc8017_32",
+    "selected_version": "Release/IP2/0.0.1-6+cf92afc"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -113,7 +117,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-12_1607"
+    "selected_version": "Continuous/Castle-Fork/2017-12-13_2326"
   },
   {
     "name": "Webkit",

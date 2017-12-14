@@ -487,13 +487,6 @@ bool EddieProductController::IsNetworkModuleReady() const
     return ready;
 }
 
-bool EddieProductController::IsBluetoothModuleReady() const
-{
-    bool ready = m_isBluetoothReady and m_bluetoothSinkList.is_initialized();
-    BOSE_DEBUG( s_logger, "%s:%s", __func__, ready ? "Yes" : "No" );
-    return ready;
-}
-
 bool EddieProductController::IsSTSReady() const
 {
     BOSE_INFO( s_logger, "%s:STS Ready=%d", __func__, m_isSTSReady );
