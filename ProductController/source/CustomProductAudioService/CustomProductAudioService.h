@@ -18,7 +18,7 @@ public:
     CustomProductAudioService( ProfessorProductController& ProductController );
 
 private:
-    std::shared_ptr<CustomAudioSettingsManager>   m_AudioSettingsMgr;
+    std::unique_ptr<CustomAudioSettingsManager>   m_AudioSettingsMgr;
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// Front Door handlers
     /////////////////////////////////////////////////////////////////////////////////////////////
