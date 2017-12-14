@@ -85,6 +85,8 @@
 			}
         },
         "audioDualMonoSelect": {
+            "currentPersistenceLevel": "global",
+            "persistenceSession": false,
             "properties": {
                 "supportedValues": ["left", "right", "both"]
             }

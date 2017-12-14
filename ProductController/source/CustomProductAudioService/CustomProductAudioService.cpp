@@ -76,7 +76,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setBassAction = [this]( const ProductPb::AudioBassLevel val )
     {
-        m_AudioSettingsMgr->SetBass( val );
+        return m_AudioSettingsMgr->SetBass( val );
     };
     m_AudioBassSetting = std::unique_ptr<AudioSetting<ProductPb::AudioBassLevel>>( new AudioSetting<ProductPb::AudioBassLevel>
                                                                                    ( kBassEndPoint,
@@ -94,7 +94,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setTrebleAction = [ this ]( const ProductPb::AudioTrebleLevel val )
     {
-        m_AudioSettingsMgr->SetTreble( val );
+        return m_AudioSettingsMgr->SetTreble( val );
     };
     m_AudioTrebleSetting = std::unique_ptr<AudioSetting<ProductPb::AudioTrebleLevel>>( new AudioSetting<ProductPb::AudioTrebleLevel>
                            ( kTrebleEndPoint,
@@ -112,7 +112,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setCenterAction = [ this ]( const ProductPb::AudioCenterLevel val )
     {
-        m_AudioSettingsMgr->SetCenter( val );
+        return m_AudioSettingsMgr->SetCenter( val );
     };
     m_AudioCenterSetting = std::unique_ptr<AudioSetting<ProductPb::AudioCenterLevel>>( new AudioSetting<ProductPb::AudioCenterLevel>
                            ( kCenterEndPoint,
@@ -130,7 +130,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setSurroundAction = [ this ]( const ProductPb::AudioSurroundLevel val )
     {
-        m_AudioSettingsMgr->SetSurround( val );
+        return m_AudioSettingsMgr->SetSurround( val );
     };
     m_AudioSurroundSetting = std::unique_ptr<AudioSetting<ProductPb::AudioSurroundLevel>>( new AudioSetting<ProductPb::AudioSurroundLevel>
                              ( kSurroundEndPoint,
@@ -148,7 +148,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setGainOffsetAction = [ this ]( const ProductPb::AudioGainOffset val )
     {
-        m_AudioSettingsMgr->SetGainOffset( val );
+        return m_AudioSettingsMgr->SetGainOffset( val );
     };
     m_AudioGainOffsetSetting =  std::unique_ptr<AudioSetting<ProductPb::AudioGainOffset>>( new AudioSetting<ProductPb::AudioGainOffset>
                                 ( kGainOffsetEndPoint,
@@ -166,7 +166,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setAvSyncAction = [ this ]( const ProductPb::AudioAvSync val )
     {
-        m_AudioSettingsMgr->SetAvSync( val );
+        return m_AudioSettingsMgr->SetAvSync( val );
     };
     m_AudioAvSyncsetSetting = std::unique_ptr<AudioSetting<ProductPb::AudioAvSync>>( new AudioSetting<ProductPb::AudioAvSync>
                               ( kAvSyncEndPoint,
@@ -184,7 +184,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setModeAction = [ this ]( const ProductPb::AudioMode val )
     {
-        m_AudioSettingsMgr->SetMode( val );
+        return m_AudioSettingsMgr->SetMode( val );
     };
     m_AudioModeSetting = std::unique_ptr<AudioSetting<ProductPb::AudioMode>>( new AudioSetting<ProductPb::AudioMode>
                                                                               ( kModeEndPoint,
@@ -202,7 +202,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setContentTypeAction = [ this ]( const ProductPb::AudioContentType val )
     {
-        m_AudioSettingsMgr->SetContentType( val );
+        return m_AudioSettingsMgr->SetContentType( val );
     };
     m_AudioContentTypeSetting = std::unique_ptr<AudioSetting<ProductPb::AudioContentType>>( new AudioSetting<ProductPb::AudioContentType>
                                 ( kContentTypeEndPoint,
@@ -220,7 +220,8 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setDualMonoSelectAction = [ this ]( const ProductPb::AudioDualMonoSelect val )
     {
-        m_AudioSettingsMgr->SetDualMonoSelect( val );
+        bool ret = m_AudioSettingsMgr->SetDualMonoSelect( val );
+        return m_AudioSettingsMgr->SetDualMonoSelect( val );
     };
     m_DualMonoSelectSetting = std::unique_ptr<AudioSetting<ProductPb::AudioDualMonoSelect>>( new AudioSetting<ProductPb::AudioDualMonoSelect>
                               ( kDualMonoSelectEndPoint,

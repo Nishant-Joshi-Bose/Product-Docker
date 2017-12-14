@@ -43,12 +43,7 @@ CustomAudioSettingsManager::CustomAudioSettingsManager()
 bool CustomAudioSettingsManager::SetBass( ProductPb::AudioBassLevel bass )
 {
     BOSE_DEBUG( s_logger, __func__ );
-    bool retVal;
-    retVal = SetAudioProperties( bass, kBassName );
-    string persistLevel = GetCurrentPersistLevel(kBassName);
-    m_currentBass.set_persistence(persistLevel);
-    m_currentBass.set_value(GetCurrentSettingValue(kBassName, persistLevel).asInt());
-    return retVal;
+    return SetAudioProperties( bass, kBassName, m_currentBass );
 }
 
 const ProductPb::AudioBassLevel& CustomAudioSettingsManager::GetBass()
@@ -62,13 +57,8 @@ const ProductPb::AudioBassLevel& CustomAudioSettingsManager::GetBass()
 ///////////////////////////////////////////////////////////////////////////////////////
 bool CustomAudioSettingsManager::SetTreble( ProductPb::AudioTrebleLevel treble )
 {
-    bool retVal;
     BOSE_DEBUG( s_logger, __func__ );
-    retVal = SetAudioProperties( treble, kTrebleName );
-    string persistLevel = GetCurrentPersistLevel(kTrebleName);
-    m_currentTreble.set_persistence(persistLevel);
-    m_currentTreble.set_value(GetCurrentSettingValue(kBassName, persistLevel).asInt());
-    return retVal;;
+    return SetAudioProperties( treble, kTrebleName, m_currentTreble );
 }
 
 const ProductPb::AudioTrebleLevel& CustomAudioSettingsManager::GetTreble()
@@ -82,13 +72,8 @@ const ProductPb::AudioTrebleLevel& CustomAudioSettingsManager::GetTreble()
 ///////////////////////////////////////////////////////////////////////////////////////
 bool CustomAudioSettingsManager::SetCenter( ProductPb::AudioCenterLevel center )
 {
-    bool retVal;
     BOSE_DEBUG( s_logger, __func__ );
-    retVal = SetAudioProperties( center, kCenterName );
-    string persistLevel = GetCurrentPersistLevel(kCenterName);
-    m_currentCenter.set_persistence(persistLevel);
-    m_currentCenter.set_value(GetCurrentSettingValue(kCenterName, persistLevel).asInt());
-    return retVal;
+    return SetAudioProperties( center, kCenterName, m_currentCenter );
 }
 
 const ProductPb::AudioCenterLevel& CustomAudioSettingsManager::GetCenter()
@@ -102,13 +87,8 @@ const ProductPb::AudioCenterLevel& CustomAudioSettingsManager::GetCenter()
 ///////////////////////////////////////////////////////////////////////////////////////
 bool CustomAudioSettingsManager::SetSurround( ProductPb::AudioSurroundLevel surround )
 {
-    bool retVal;
     BOSE_DEBUG( s_logger, __func__ );
-    retVal = SetAudioProperties( surround, kSurroundName );
-    string persistLevel = GetCurrentPersistLevel(kSurroundName);
-    m_currentSurround.set_persistence(persistLevel);
-    m_currentSurround.set_value(GetCurrentSettingValue(kSurroundName, persistLevel).asInt());
-    return retVal;
+    return SetAudioProperties( surround, kSurroundName, m_currentSurround );
 }
 
 const ProductPb::AudioSurroundLevel& CustomAudioSettingsManager::GetSurround()
@@ -122,13 +102,8 @@ const ProductPb::AudioSurroundLevel& CustomAudioSettingsManager::GetSurround()
 //////////////////////////////////////////////////////////////////////////////////////
 bool CustomAudioSettingsManager::SetGainOffset( ProductPb::AudioGainOffset gainOffset )
 {
-    bool retVal;
     BOSE_DEBUG( s_logger, __func__ );
-    retVal = SetAudioProperties( gainOffset, kGainOffsetName );
-    string persistLevel = GetCurrentPersistLevel(kGainOffsetName);
-    m_currentGainOffset.set_persistence(persistLevel);
-    m_currentGainOffset.set_value(GetCurrentSettingValue(kGainOffsetName, persistLevel).asInt());
-    return retVal;
+    return SetAudioProperties( gainOffset, kGainOffsetName, m_currentGainOffset );
 }
 
 const ProductPb::AudioGainOffset& CustomAudioSettingsManager::GetGainOffset()
@@ -142,13 +117,8 @@ const ProductPb::AudioGainOffset& CustomAudioSettingsManager::GetGainOffset()
 //////////////////////////////////////////////////////////////////////////////////////
 bool CustomAudioSettingsManager::SetAvSync( ProductPb::AudioAvSync avSync )
 {
-    bool retVal;
     BOSE_DEBUG( s_logger, __func__ );
-    retVal = SetAudioProperties( avSync, kAvSyncName );
-    string persistLevel = GetCurrentPersistLevel(kAvSyncName);
-    m_currentAvSync.set_persistence(persistLevel);
-    m_currentAvSync.set_value(GetCurrentSettingValue(kAvSyncName, persistLevel).asInt());
-    return retVal;
+    return SetAudioProperties( avSync, kAvSyncName, m_currentAvSync );
 }
 const ProductPb::AudioAvSync& CustomAudioSettingsManager::GetAvSync()
 {
@@ -161,13 +131,8 @@ const ProductPb::AudioAvSync& CustomAudioSettingsManager::GetAvSync()
 //////////////////////////////////////////////////////////////////////////////////////
 bool CustomAudioSettingsManager::SetMode( ProductPb::AudioMode mode )
 {
-    bool retVal;
     BOSE_DEBUG( s_logger, __func__ );
-    retVal = SetAudioProperties( mode, kModeName );
-    string persistLevel = GetCurrentPersistLevel(kModeName);
-    m_currentMode.set_persistence(persistLevel);
-    m_currentMode.set_value(GetCurrentSettingValue(kModeName, persistLevel).asString());
-    return retVal;
+    return SetAudioProperties( mode, kModeName, m_currentMode );
 }
 const ProductPb::AudioMode& CustomAudioSettingsManager::GetMode()
 {
@@ -180,14 +145,8 @@ const ProductPb::AudioMode& CustomAudioSettingsManager::GetMode()
 //////////////////////////////////////////////////////////////////////////////////////
 bool CustomAudioSettingsManager::SetContentType( ProductPb::AudioContentType contentType )
 {
-    bool retVal;
     BOSE_DEBUG( s_logger, __func__ );
-    retVal = SetAudioProperties( contentType, kContentTypeName );
-    string persistLevel = GetCurrentPersistLevel(kContentTypeName);
-    m_currentContentType.set_persistence(persistLevel);
-    m_currentContentType.set_value(GetCurrentSettingValue(kContentTypeName, persistLevel).asString());
-    return retVal;
-
+    return SetAudioProperties( contentType, kContentTypeName, m_currentContentType );
 }
 const ProductPb::AudioContentType& CustomAudioSettingsManager::GetContentType()
 {
@@ -207,8 +166,12 @@ bool CustomAudioSettingsManager::SetDualMonoSelect( ProductPb::AudioDualMonoSele
         return false;
     }
     m_audioSettings["values"][kPersistGlobal][kDualMonoSelectName] = DualMonoSelect.value();
-    m_currentDualMonoSelect.set_value( DualMonoSelect.value() );
-    return true;
+    if( m_currentDualMonoSelect.value() != DualMonoSelect.value() )
+    {
+        m_currentDualMonoSelect.set_value( DualMonoSelect.value() );
+        return true;
+    }
+    return false;
 }
 const ProductPb::AudioDualMonoSelect& CustomAudioSettingsManager::GetDualMonoSelect()
 {
