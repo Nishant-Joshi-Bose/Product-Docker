@@ -41,6 +41,8 @@ cset name="RX INT3_2 MUX" "RX2"
 cset name="RX INT4_2 MUX" "RX3"
 cset name="RX INT1 DEM MUX" "CLSH_DSM_OUT"
 cset name="RX INT2 DEM MUX" "CLSH_DSM_OUT"
+# not ready for low latency yet
+#cset name='PCM_Dev 12 Topology Playback' 'LL'
 
 cset name="MultiMedia2 Mixer PRI_TDM_TX_0" "1"
 cset name="PRI_TDM_TX_0 Channels" "Eight"
