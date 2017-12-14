@@ -30,8 +30,14 @@ bool EddieProductControllerStateTop::HandleModulesReady()
     return true;
 }
 
-bool EddieProductControllerStateTop::HandleIntents( KeyHandlerUtil::ActionType_t intent )
+bool EddieProductControllerStateTop::HandleIntentAuxIn( KeyHandlerUtil::ActionType_t intent )
 {
+    return true;
+}
+
+bool EddieProductControllerStateTop::HandleIntentVoice( KeyHandlerUtil::ActionType_t intent )
+{
+    BOSE_LOG( INFO, "intent:" << intent );
     return true;
 }
 

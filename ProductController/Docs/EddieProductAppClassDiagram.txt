@@ -61,7 +61,7 @@ class ProductControllerStateNetworkStandby {
 	ExecuteAction()
 }
 
-class EddieProductControllerStateBooting {
+class CustomProductControllerStateBooting {
 }
 note bottom: Custom
 
@@ -80,7 +80,7 @@ ProductController <|-- EddieProductController
 ProductControllerHsm o-- ProductController
 ProductControllerHsm o-- EddieProductController
 EddieProductController *-- ProductControllerHsm
-EddieProductController *-- EddieProductControllerStateBooting
+EddieProductController *-- CustomProductControllerStateBooting
 EddieProductController *-- EddieProductControllerStateSetup
 EddieProductController *-- EddieProductControllerStateNetworkStandby
 
@@ -91,7 +91,7 @@ ProductControllerState <|-- ProductControllerStateSetup
 ProductControllerState <|-- ProductControllerStateNetworkStandby
 ProductControllerState <|-- ProductControllerSubstate
 
-ProductControllerStateBooting <|-- EddieProductControllerStateBooting
+ProductControllerStateBooting <|-- CustomProductControllerStateBooting
 ProductControllerStateSetup <|-- EddieProductControllerStateSetup
 ProductControllerStateNetworkStandby <|-- EddieProductControllerStateNetworkStandby
 

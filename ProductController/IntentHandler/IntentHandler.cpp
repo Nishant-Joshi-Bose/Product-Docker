@@ -34,18 +34,11 @@
 #include <unordered_map>
 #include "DPrint.h"
 #include "IntentHandler.h"
-#include "TransportControlManager.h"
 #include "PlaybackRequestManager.h"
-#include "NetworkStandbyManager.h"
-#include "IntentHandler.pb.h"
-#include "BluetoothManager.h"
-#include "PresetManager.h"
+#include "VoiceManager.h"
+#include "EddieProductController.h"
 
 static DPrint s_logger( "IntentHandler" );
-
-constexpr char BUTTON_EVENT_NOTIFICATION_URL[] = "/system/buttonEvent";
-
-using namespace IntentHandler::Protobuf;
 
 namespace ProductApp
 {
@@ -53,188 +46,45 @@ namespace ProductApp
 IntentHandler::IntentHandler( NotifyTargetTaskIF& task,
                               const CliClientMT& cliClient,
                               const FrontDoorClientIF_t& frontDoorClient,
-                              EddieProductController& controller
+                              ProductController& controller
                             ):
-    m_task( task ),
-    m_cliClient( cliClient ),
-    m_frontDoorClient( frontDoorClient ),
-    m_controller( controller )
+    CommonIntentHandler( task, cliClient, frontDoorClient, controller )
 {
     BOSE_DEBUG( s_logger, "%s: ", __func__ );
-    Initialize();
 }
 
 void IntentHandler::Initialize()
 {
+    CommonIntentHandler::Initialize();
     BOSE_DEBUG( s_logger, "%s", __func__ );
-    //+ Transport Control API's
-    IntentManagerPtr_t transportManager =
-        std::make_shared<TransportControlManager>( m_task, m_cliClient,
-                                                   m_frontDoorClient,
-                                                   m_controller );
 
-    m_IntentManagerMap[( uint16_t )Action::PLAY_PAUSE] = transportManager;
-    m_IntentManagerMap[( uint16_t )Action::NEXT_TRACK] = transportManager;
-    m_IntentManagerMap[( uint16_t )Action::PREV_TRACK] = transportManager;
-
-    //- Transport Control API's
-    //
-    //+ Bluetooth Control API's
-    IntentManagerPtr_t bluetoothRequestManager =
-        std::make_shared<BluetoothManager>( m_task, m_cliClient,
-                                            m_frontDoorClient,
-                                            m_controller );
-
-    m_IntentManagerMap[( uint16_t )Action::CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST] = bluetoothRequestManager;
-    m_IntentManagerMap[( uint16_t )Action::SEND_TO_DISCOVERABLE] = bluetoothRequestManager;
-    m_IntentManagerMap[( uint16_t )Action::CLEAR_PAIRING_LIST] = bluetoothRequestManager;
-
-    //- Bluetooth Control API's
-    //
-    //+ Networking Control API's
-
-    //- Networking Control API's
-    //
-    //+ Miscellaneous Control API's (LPS, Factory Reset, NetworkStandy)
-    IntentManagerPtr_t networkStandbyManager =
-        std::make_shared<NetworkStandbyManager>( m_task, m_cliClient,
-                                                 m_frontDoorClient,
-                                                 m_controller );
-
-    m_IntentManagerMap[( uint16_t )Action::NETWORK_STANDBY] = networkStandbyManager;
-
-    auto func = std::bind( &EddieProductController::HandleNetworkStandbyIntentCb , &GetProductController(), std::placeholders::_1 );
-    auto cb = std::make_shared<AsyncCallback<KeyHandlerUtil::ActionType_t&> > ( func, &m_task );
-    KeyHandlerUtil::ActionType_t intent = ( KeyHandlerUtil::ActionType_t ) Action::NETWORK_STANDBY;
+#if 1 // @TODO PGC-321 move HandleNetworkStandbyIntentCb to Common
+    auto func = std::bind( &EddieProductController::HandleNetworkStandbyIntentCb , static_cast<EddieProductController*>( &GetProductController() ), std::placeholders::_1 );
+    auto cb = std::make_shared<AsyncCallback<KeyHandlerUtil::ActionType_t&> > ( func, &GetTask() );
+    KeyHandlerUtil::ActionType_t intent = ( KeyHandlerUtil::ActionType_t ) ActionCommon_t::NETWORK_STANDBY;
     RegisterCallBack( intent, cb );
-    //- Miscellaneous Control API's (LPS, Factory Reset, NetworkStandy)
-    //
-    //+ Voice (Alexa) Control API's
+#endif
 
-    //- Voice (Alexa) Control API's
-    //
-    //+ Preset Control API's
-
-    //- Preset Control API's
     //+ AUX Control API's
     IntentManagerPtr_t playbackRequestManager =
-        std::make_shared<PlaybackRequestManager>( m_task, m_cliClient,
-                                                  m_frontDoorClient,
-                                                  m_controller );
+        std::make_shared<PlaybackRequestManager>( GetTask() , GetCli(),
+                                                  GetFrontDoorClient(),
+                                                  GetProductController() );
 
     m_IntentManagerMap[( uint16_t )Action::AUX_IN] = playbackRequestManager;
+    m_IntentNotificationMap[( uint16_t ) Action::AUX_IN]        = "aux_in" ;
     //- AUX Control API's
 
-    //+ PRESET Management
-    IntentManagerPtr_t presetManager =
-        std::make_shared<PresetManager>( m_task, m_cliClient,
-                                         m_frontDoorClient,
-                                         m_controller );
+    //+ Voice (Alexa) Control API's
+    IntentManagerPtr_t voiceRequestManager =
+        std::make_shared<VoiceManager>( GetTask() , GetCli(),
+                                        GetFrontDoorClient(),
+                                        GetProductController() );
+    m_IntentManagerMap[( uint16_t )Action::VOICE_CAROUSEL] = voiceRequestManager;
+    m_IntentNotificationMap[( uint16_t ) Action::VOICE_CAROUSEL] = "voice_control" ;
+    //- Voice (Alexa) Control API's
 
-    m_IntentManagerMap[( uint16_t )Action::PRESET_STORE_1] = presetManager;
-    m_IntentManagerMap[( uint16_t )Action::PRESET_STORE_2] = presetManager;
-    m_IntentManagerMap[( uint16_t )Action::PRESET_STORE_3] = presetManager;
-    m_IntentManagerMap[( uint16_t )Action::PRESET_STORE_4] = presetManager;
-    m_IntentManagerMap[( uint16_t )Action::PRESET_STORE_5] = presetManager;
-    m_IntentManagerMap[( uint16_t )Action::PRESET_STORE_6] = presetManager;
-
-    m_IntentManagerMap[( uint16_t )Action::PRESET_SELECT_1] = presetManager;
-    m_IntentManagerMap[( uint16_t )Action::PRESET_SELECT_2] = presetManager;
-    m_IntentManagerMap[( uint16_t )Action::PRESET_SELECT_3] = presetManager;
-    m_IntentManagerMap[( uint16_t )Action::PRESET_SELECT_4] = presetManager;
-    m_IntentManagerMap[( uint16_t )Action::PRESET_SELECT_5] = presetManager;
-    m_IntentManagerMap[( uint16_t )Action::PRESET_SELECT_6] = presetManager;
-
-    //- PRESET Management
-    // prepare map for button event notification
-    m_IntentNotificationMap[( uint16_t ) Action::PLAY_PAUSE]    = "play_pause" ;
-    m_IntentNotificationMap[( uint16_t ) Action::NEXT_TRACK]    = "next_track" ;
-    m_IntentNotificationMap[( uint16_t ) Action::PREV_TRACK]    = "prev_track" ;
-
-    m_IntentNotificationMap[( uint16_t ) Action::CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST] \
-        = "carousel_discoverable_connect_to_last" ;
-    m_IntentNotificationMap[( uint16_t ) Action::SEND_TO_DISCOVERABLE]     = "send_to_discoverable" ;
-    m_IntentNotificationMap[( uint16_t ) Action::CLEAR_PAIRING_LIST] = "clear_pairing_list" ;
-
-    m_IntentNotificationMap[( uint16_t ) Action::NETWORK_STANDBY] = "network_standby" ;
-
-    m_IntentNotificationMap[( uint16_t ) Action::VOLUME_UP]     = "volume_up" ;
-    m_IntentNotificationMap[( uint16_t ) Action::VOLUME_DOWN]   = "volume_down" ;
-
-    m_IntentNotificationMap[( uint16_t ) Action::AUX_IN]        = "aux_in" ;
-
-    m_IntentNotificationMap[( uint16_t ) Action::PRESET_STORE_1] = "preset_store_1" ;
-    m_IntentNotificationMap[( uint16_t ) Action::PRESET_STORE_2] = "preset_store_2" ;
-    m_IntentNotificationMap[( uint16_t ) Action::PRESET_STORE_3] = "preset_store_3" ;
-    m_IntentNotificationMap[( uint16_t ) Action::PRESET_STORE_4] = "preset_store_4" ;
-    m_IntentNotificationMap[( uint16_t ) Action::PRESET_STORE_5] = "preset_store_5" ;
-    m_IntentNotificationMap[( uint16_t ) Action::PRESET_STORE_6] = "preset_store_6" ;
-
-    m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_1] = "preset_select_1" ;
-    m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_2] = "preset_select_2" ;
-    m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_3] = "preset_select_3" ;
-    m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_4] = "preset_select_4" ;
-    m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_5] = "preset_select_5" ;
-    m_IntentNotificationMap[( uint16_t ) Action::PRESET_SELECT_6] = "preset_select_6" ;
-    return;
 }
 
-bool IntentHandler::Handle( KeyHandlerUtil::ActionType_t& intent )
-{
-    BOSE_DEBUG( s_logger, "%s: ", __func__ );
-
-    //notify button event if required to notify
-    NotifyButtonEvent( intent );
-
-    IntentManagerMap_t::iterator iter = m_IntentManagerMap.find( intent );
-    if( iter != m_IntentManagerMap.end() )
-    {
-
-        iter->second->Handle( intent );
-        BOSE_DEBUG( s_logger, "Found the Handle for intent :%d", intent );
-        return( true );
-    }
-    else
-    {
-        BOSE_ERROR( s_logger, "Handle not found for intent : %d, check "
-                    "initialization code", intent );
-        return false;
-    }
-}
-
-void IntentHandler::RegisterCallBack( KeyHandlerUtil::ActionType_t& intent,
-                                      CbPtr_t cb )
-{
-    BOSE_DEBUG( s_logger, "%s: ", __func__ );
-    IntentManagerMap_t::iterator iter = m_IntentManagerMap.find( intent );
-    if( iter != m_IntentManagerMap.end() )
-    {
-        iter->second->RegisterCallBack( intent, cb );
-        BOSE_DEBUG( s_logger, "Found the Manager for intent :%d", intent );
-        return;
-    }
-    else
-    {
-        BOSE_ERROR( s_logger, "Manager not found for intent : %d, check "
-                    "initialization code", intent );
-        return;
-    }
-    return;
-}
-
-void IntentHandler::NotifyButtonEvent( KeyHandlerUtil::ActionType_t intent )
-{
-
-    BOSE_DEBUG( s_logger, "%s: ", __func__ );
-    auto iter = m_IntentNotificationMap.find( ( uint16_t )intent );
-
-    //found handle, notify
-    if( iter != m_IntentNotificationMap.end() )
-    {
-        ButtonEventNotification btn_notification;
-        btn_notification.set_event( m_IntentNotificationMap[ intent ] );
-        m_frontDoorClient->SendNotification( BUTTON_EVENT_NOTIFICATION_URL, btn_notification );
-    }
-}
 }
 

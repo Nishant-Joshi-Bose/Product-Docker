@@ -41,7 +41,7 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
         exit 1
     fi
 
-    if ! mfgdata get country_code >/dev/null; then
+    if ! mfgdata get guid >/dev/null; then
         log warning "Missing or invalid manufacturing data, won't start SoundTouch"
         cat >&2 <<\EOF
 To set manufacturing data:
@@ -50,6 +50,7 @@ To set manufacturing data:
   mfgdata clear
   mfgdata set development true
   mfgdata set country_code US
+  mfgdata set guid "$(cat /proc/sys/kernel/random/uuid)"
   mount -oremount,ro /persist
 
 EOF

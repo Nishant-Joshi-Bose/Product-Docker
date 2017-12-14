@@ -1,5 +1,5 @@
 #### Eddie Jenkins Smoke Test Status
-<a title='Jenkins build status for smoke tests against Eddie' href='http://7ccfb548.ngrok.io/view/Eddie/job/Eddie_Smoke_Tests/'><img src='http://7ccfb548.ngrok.io/view/Eddie/job/Eddie_Smoke_Tests/badge/icon'></a>
+<a title='Jenkins build status for Eddie' href='http://hepdsw32.bose.com:8080/view/Eddie/job/Eddie-Pipeline/'><img src='http://7ccfb548.ngrok.io/view/Eddie/job/Eddie-Pipeline/badge/icon'></a>
 
 <!-- ngrok is used for secure tunnel so our jenkins server behind our firewall can be accessed from GitHub. When the tests are added and a pull request is submitted an automatic jenkins build is initiated. When that build is successful or failed it will automatically get updated in the Readme. We are using a jenkins plugin that uses API's to update the status of the jenkins build.-->
 
@@ -31,7 +31,7 @@ $ git clone git@github.com:BoseCorp/Eddie.git
 Build the .ipk package file containing the SoundTouch software.
 ```shell session
 $ cd /scratch/Eddie
-$ make
+$ make package
 ```
 
 Make sure your Eddie unit is accessible via adb.
@@ -49,7 +49,7 @@ Install the .ipk file you built.
 $ adb shell /opt/Bose/bin/stop      # generally it's okay if this fails
 $ adb shell /opt/Bose/bin/rw        # make the file systems writeable
 $ adb shell opkg remove SoundTouch  # this too may fail
-$ adb push builds/Release/product.ipk /tmp/product.ipk
+$ adb push builds/Release/eddie.ipk /tmp/product.ipk
 $ adb shell opkg install -d bose /tmp/product.ipk
 $ adb shell reboot
 ```

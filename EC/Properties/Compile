@@ -8,6 +8,10 @@ cd $[buildDir]
 CastleToolsDir=/home/epd/srcref/CastleTools
 export PATH=$CastleToolsDir/bin:$PATH
 
-make DONT_UPDATE_CASTLETOOLS=1 jobs=8 default package || exit
+if [ "$[/javascript myJob.Klocwork]" = "true" ]; then
+    KWINJECT="kwinject -I 'testCCompiler.c,testCXXCompiler.cxx'"
+fi
+
+eval $KWINJECT make DONT_UPDATE_CASTLETOOLS=1 jobs=8 default all-packages || exit
 
 : success

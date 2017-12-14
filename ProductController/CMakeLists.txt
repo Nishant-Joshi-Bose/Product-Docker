@@ -2,7 +2,10 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
+  ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
   ${DEMOCONTROLLER_DIR}
+  ${DATACOLLECTIONCLIENT_DIR}
   ${CUSTOM_HSM_DIR}
   ${KEYHANDLER_DIR}/include
   IntentHandler
@@ -15,35 +18,28 @@ INCLUDE_DIRECTORIES(
 
 ADD_EXECUTABLE(Eddie
   ${CUSTOM_HSM_DIR}/CustomProductControllerState.cpp
-  ${CUSTOM_HSM_DIR}/EddieProductControllerStateTop.cpp
-  ${CUSTOM_HSM_DIR}/EddieProductControllerStateBooting.cpp
-  ${CUSTOM_HSM_DIR}/EddieProductControllerStateSetup.cpp
-  ${CUSTOM_HSM_DIR}/EddieProductControllerStateNetworkStandby.cpp
-  ${CUSTOM_HSM_DIR}/EddieProductControllerStateAudioOn.cpp
+  ${CUSTOM_HSM_DIR}/CustomProductControllerStateBooting.cpp
+  ${CUSTOM_HSM_DIR}/CustomProductControllerStateSetup.cpp
+  ${CUSTOM_HSM_DIR}/CustomProductControllerStateOn.cpp
   ProductCliClient.cpp
   EddieProductController.cpp
   Main.cpp
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
-  ${PROTO_CC_DEST}/AudioSettings.pb.cc
-  ${PROTO_CC_DEST}/ContentItem.pb.cc
+  ${PROTO_CC_DEST}/KeyActions.pb.cc
   ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/IntentHandler.pb.cc
-  ${PROTO_CC_DEST}/Presets.pb.cc
   IntentHandler/IntentHandler.cpp
-  IntentHandler/IntentManager.cpp
-  IntentHandler/TransportControlManager.cpp
-  IntentHandler/BluetoothManager.cpp
   IntentHandler/PlaybackRequestManager.cpp
-  IntentHandler/NetworkStandbyManager.cpp
-  IntentHandler/PresetManager.cpp
-  LpmInterface.cpp
+  IntentHandler/VoiceManager.cpp
   DisplayController/DisplayController.cpp
+  CustomProductAudioService.cpp
 )
 
 TARGET_LINK_LIBRARIES(Eddie
   CastleProductControllerCommon
   DemoController
+  DataCollectionClient
   LpmClient
   FrontDoorClient
   NetworkServiceClient
@@ -51,6 +47,7 @@ TARGET_LINK_LIBRARIES(Eddie
   BLESetupServiceProto
   BluetoothSinkServiceProto
   LightBarController
+  VoiceServiceClient
   CliClient
   ShelbyUtils
   BoseLibs
@@ -63,6 +60,7 @@ TARGET_LINK_LIBRARIES(Eddie
   rt
   cap
   dl
+  SoundTouch_SDK_Protobuf_static
 )
 
 INSTALL(TARGETS Eddie DESTINATION ${OUTPUT_BIN_DIR})
