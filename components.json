@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-12_1607"
+    "selected_version": "Continuous/Castle-Fork/2017-12-13_2326"
   },
   {
     "name": "bose-opkg-utils",
@@ -45,11 +45,11 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Continuous/master/0.2.3-258+6fe7ff7"
+    "selected_version": "Continuous/master/0.2.4-273+117f836"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Continuous/master/0.2.3-258+6fe7ff7"
+    "selected_version": "Continuous/master/0.2.4-273+117f836"
   },
   {
     "name": "CastleProductControllerCommon",
@@ -117,7 +117,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-12_1607"
+    "selected_version": "Continuous/Castle-Fork/2017-12-13_2326"
   },
   {
     "name": "Webkit",
