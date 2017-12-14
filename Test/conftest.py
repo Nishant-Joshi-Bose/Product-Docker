@@ -23,6 +23,7 @@ def pytest_addoption(parser):
     parser.addoption("--log-type", action="store", default="useSerial", help="logging : [useSerial / ipBased ]")
     parser.addoption("--network-iface", action="store", default="wlan0", help="network interface to choose")
     parser.addoption("--ip-address", action="store", default=None, help="IP Address of Target under test")
+    parser.addoption("--lpm_port", action="store", default=None, help="serial port of the device")
 
 def ping(ip):
     """ Pings a given IP Address """

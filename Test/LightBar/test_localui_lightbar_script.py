@@ -28,14 +28,14 @@ class Test_lightbar():
             self.port_list.append(portName.device)
         return self.port_list
 
-    def test_getActiveAnimation(self, get_FrontdoorInstance):
+    def test_getActiveAnimation(self, frontDoor):
         """
         Get the active animation pattern currently being played on lightbar
         param: Frontdoor Instance
 
         """
         logger.info("Running Get Active Animation Test")
-        animation_state = get_FrontdoorInstance.getActiveAnimation()
+        animation_state = frontDoor.getActiveAnimation()
         logger.debug("The animation state is %s" % animation_state)
         currentData = animation_state["current"]
         if "value" in currentData.keys():
@@ -44,14 +44,14 @@ class Test_lightbar():
         else:
             logger.error("No animation is currently playing")
 
-    def test_deleteActiveAnimation(self, get_FrontdoorInstance):
+    def test_deleteActiveAnimation(self, frontDoor):
         """
         Delete the animation pattern currently being played
         param: Frontdoor Instance
 
         """
         logger.info("Running Delete Active Animation Test")
-        animation_state = get_FrontdoorInstance.getActiveAnimation()
+        animation_state = frontDoor.getActiveAnimation()
         logger.debug("The  animation state is %s" % animation_state)
         animation_keys = animation_state.keys()
         currentData = animation_state["current"].keys()
@@ -59,7 +59,7 @@ class Test_lightbar():
             animation_value = animation_state["current"]["value"]
             data = {"next":{"value":animation_value, "transition":"smooth", "repeat":"true"}}
             json_data = json.dumps(data)
-            animation_state = get_FrontdoorInstance.stopActiveAnimation(json_data)
+            animation_state = frontDoor.stopActiveAnimation(json_data)
             animation_keys = animation_state.keys()
             if "error" in animation_keys:
                 assert False, animation_keys["error"]["description"]
@@ -68,7 +68,7 @@ class Test_lightbar():
         else:
             logger.error("Play some animation using put request")
 
-    def test_playInValidAnimationScenarios(self, get_FrontdoorInstance):
+    def test_playInValidAnimationScenarios(self, frontDoor):
         """
         Play the negative scenarios of lightbar animation pattern from conf["csv_filename"] file
         param: Frontdoor Instance
@@ -92,7 +92,7 @@ class Test_lightbar():
                     continue
                 json_data = json.dumps(data)
                 logger.info("Data is %s " % json_data)
-                animation_state = get_FrontdoorInstance.playLightBarAnimation(json_data)
+                animation_state = frontDoor.playLightBarAnimation(json_data)
                 logger.debug("The received state is %s" % animation_state)
                 if "error" in animation_state.keys():
                     if "description" in animation_state["error"].keys():
@@ -104,7 +104,7 @@ class Test_lightbar():
             assert len(failNegScenarios) == 0, "Some negative scenarios failed %s " %(failNegScenarios)
             logger.debug("Passed Negative scenarios  are %s" % passNegScenarios)
 
-    def test_playValidAnimationScenarios(self, get_FrontdoorInstance):
+    def test_playValidAnimationScenarios(self, frontDoor):
         """
         Plays the positive scenarios of lightbar animation pattern from conf["json_filename"] file
         param: Frontdoor Instance
@@ -141,7 +141,7 @@ class Test_lightbar():
             sleep(2)
             animationData = {"next":{"value":values[0], "transition":values[1], "repeat":values[2]}}
             json_data = json.dumps(animationData)
-            animation_state = get_FrontdoorInstance.playLightBarAnimation(json_data)
+            animation_state = frontDoor.playLightBarAnimation(json_data)
             # verification for serial logs if connected with the device
             if checkValidPort:
                 SerialLog = SerialLoggingUtil(None, conf["LPMport"])
