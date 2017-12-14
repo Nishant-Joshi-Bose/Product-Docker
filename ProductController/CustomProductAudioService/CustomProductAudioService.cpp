@@ -72,7 +72,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setBassAction = [this]( const ProductPb::AudioBassLevel val )
     {
-        m_AudioSettingsMgr->SetBass( val );
+        return m_AudioSettingsMgr->SetBass( val );
     };
     m_AudioBassSetting = std::unique_ptr<AudioSetting<ProductPb::AudioBassLevel>>( new AudioSetting<ProductPb::AudioBassLevel>
                                                                                    ( kBassEndPoint,
@@ -90,7 +90,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setTrebleAction = [ this ]( const ProductPb::AudioTrebleLevel val )
     {
-        m_AudioSettingsMgr->SetTreble( val );
+        return m_AudioSettingsMgr->SetTreble( val );
     };
     m_AudioTrebleSetting = std::unique_ptr<AudioSetting<ProductPb::AudioTrebleLevel>>( new AudioSetting<ProductPb::AudioTrebleLevel>
                            ( kTrebleEndPoint,

@@ -37,15 +37,7 @@ CustomAudioSettingsManager::CustomAudioSettingsManager()
 bool CustomAudioSettingsManager::SetBass( ProductPb::AudioBassLevel bass )
 {
     BOSE_DEBUG( s_logger, __func__ );
-    bool retVal;
-    retVal = SetAudioProperties( bass, kBassName );
-    string persistLevel = GetCurrentPersistLevel(kBassName);
-    BOSE_DEBUG( s_logger, "Sisi - persistenceLevel = %s\n", persistLevel.c_str() );
-    BOSE_DEBUG( s_logger, "Sisi - value = %d\n", GetCurrentSettingValue(kBassName, persistLevel).asInt() );
-
-    m_currentBass.set_persistence(persistLevel);
-    m_currentBass.set_value(GetCurrentSettingValue(kBassName, persistLevel).asInt());
-    return retVal;
+    return SetAudioProperties( bass, kBassName, m_currentBass );
 }
 
 const ProductPb::AudioBassLevel& CustomAudioSettingsManager::GetBass()
@@ -59,13 +51,8 @@ const ProductPb::AudioBassLevel& CustomAudioSettingsManager::GetBass()
 ///////////////////////////////////////////////////////////////////////////////////////
 bool CustomAudioSettingsManager::SetTreble( ProductPb::AudioTrebleLevel treble )
 {
-    bool retVal;
     BOSE_DEBUG( s_logger, __func__ );
-    retVal = SetAudioProperties( treble, kTrebleName );
-    string persistLevel = GetCurrentPersistLevel(kTrebleName);
-    m_currentTreble.set_persistence(persistLevel);
-    m_currentTreble.set_value(GetCurrentSettingValue(kBassName, persistLevel).asInt());
-    return retVal;
+    return SetAudioProperties( treble, kTrebleName, m_currentTreble );
 }
 
 const ProductPb::AudioTrebleLevel& CustomAudioSettingsManager::GetTreble()
