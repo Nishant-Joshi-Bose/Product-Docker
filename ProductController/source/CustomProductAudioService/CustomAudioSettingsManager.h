@@ -8,35 +8,33 @@
 #include <json/value.h>
 #include "AudioSettingsManager.h"
 #include "AudioSettings.pb.h"
-#include "SoundTouchInterface/ContentItem.pb.h"
-#include "ProductMessage.pb.h"
 
 namespace ProductApp
 {
 using std::string;
 
-class CustomAudioSettingsManager:AudioSettingsManager
+class CustomAudioSettingsManager: AudioSettingsManager
 {
 public:
     CustomAudioSettingsManager();
     bool SetBass( ProductPb::AudioBassLevel bass );
-    const ProductPb::AudioBassLevel& GetBass();
+    ProductPb::AudioBassLevel GetBass() const;
     bool SetTreble( ProductPb::AudioTrebleLevel treble );
-    const ProductPb::AudioTrebleLevel& GetTreble();
+    ProductPb::AudioTrebleLevel GetTreble() const;
     bool SetCenter( ProductPb::AudioCenterLevel center );
-    const ProductPb::AudioCenterLevel& GetCenter();
+    ProductPb::AudioCenterLevel GetCenter() const;
     bool SetSurround( ProductPb::AudioSurroundLevel surround );
-    const ProductPb::AudioSurroundLevel& GetSurround();
+    ProductPb::AudioSurroundLevel GetSurround() const;
     bool SetGainOffset( ProductPb::AudioGainOffset gainOffset );
-    const ProductPb::AudioGainOffset& GetGainOffset();
+    ProductPb::AudioGainOffset GetGainOffset() const;
     bool SetAvSync( ProductPb::AudioAvSync avSync );
-    const ProductPb::AudioAvSync& GetAvSync();
+    ProductPb::AudioAvSync GetAvSync() const;
     bool SetMode( ProductPb::AudioMode mode );
-    const ProductPb::AudioMode& GetMode();
+    ProductPb::AudioMode GetMode() const;
     bool SetContentType( ProductPb::AudioContentType contentType );
-    const ProductPb::AudioContentType& GetContentType();
+    ProductPb::AudioContentType GetContentType() const;
     bool SetDualMonoSelect( ProductPb::AudioDualMonoSelect DualMonoSelect );
-    const ProductPb::AudioDualMonoSelect& GetDualMonoSelect();
+    ProductPb::AudioDualMonoSelect GetDualMonoSelect() const;
 
 private:
     ProductPb::AudioBassLevel m_currentBass;
@@ -52,9 +50,7 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////
     /// Helper functions to set contentItem sensitive audio settings
     //////////////////////////////////////////////////////////////////////////////////////
-
     void InitializeAudioSettings();
-
 };
 }// namespace ProductApp
 

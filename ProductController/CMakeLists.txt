@@ -30,15 +30,6 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc
   ${PROTO_CC_DEST}/SystemInfo.pb.cc
   ${PROTO_CC_DEST}/AdaptIQ.pb.cc
-  ${PROTO_CC_DEST}/AudioBassLevel.pb.cc
-  ${PROTO_CC_DEST}/AudioTrebleLevel.pb.cc
-  ${PROTO_CC_DEST}/AudioCenterLevel.pb.cc
-  ${PROTO_CC_DEST}/AudioSurroundLevel.pb.cc
-  ${PROTO_CC_DEST}/AudioGainOffset.pb.cc
-  ${PROTO_CC_DEST}/AudioAvSync.pb.cc
-  ${PROTO_CC_DEST}/AudioMode.pb.cc
-  ${PROTO_CC_DEST}/AudioContentType.pb.cc
-  ${PROTO_CC_DEST}/AudioDualMonoSelect.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
   source/ProductStart.cpp
   source/ProductCommandLine.cpp

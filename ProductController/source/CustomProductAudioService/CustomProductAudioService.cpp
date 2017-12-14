@@ -74,7 +74,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetBass( );
     };
-    auto setBassAction = [this]( const ProductPb::AudioBassLevel val )
+    auto setBassAction = [this]( const ProductPb::AudioBassLevel & val )
     {
         return m_AudioSettingsMgr->SetBass( val );
     };
@@ -92,7 +92,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetTreble( );
     };
-    auto setTrebleAction = [ this ]( const ProductPb::AudioTrebleLevel val )
+    auto setTrebleAction = [ this ]( const ProductPb::AudioTrebleLevel & val )
     {
         return m_AudioSettingsMgr->SetTreble( val );
     };
@@ -110,7 +110,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetCenter( );
     };
-    auto setCenterAction = [ this ]( const ProductPb::AudioCenterLevel val )
+    auto setCenterAction = [ this ]( const ProductPb::AudioCenterLevel & val )
     {
         return m_AudioSettingsMgr->SetCenter( val );
     };
@@ -128,7 +128,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetSurround( );
     };
-    auto setSurroundAction = [ this ]( const ProductPb::AudioSurroundLevel val )
+    auto setSurroundAction = [ this ]( const ProductPb::AudioSurroundLevel & val )
     {
         return m_AudioSettingsMgr->SetSurround( val );
     };
@@ -146,7 +146,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetGainOffset( );
     };
-    auto setGainOffsetAction = [ this ]( const ProductPb::AudioGainOffset val )
+    auto setGainOffsetAction = [ this ]( const ProductPb::AudioGainOffset & val )
     {
         return m_AudioSettingsMgr->SetGainOffset( val );
     };
@@ -164,7 +164,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetAvSync( );
     };
-    auto setAvSyncAction = [ this ]( const ProductPb::AudioAvSync val )
+    auto setAvSyncAction = [ this ]( const ProductPb::AudioAvSync & val )
     {
         return m_AudioSettingsMgr->SetAvSync( val );
     };
@@ -182,7 +182,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetMode( );
     };
-    auto setModeAction = [ this ]( const ProductPb::AudioMode val )
+    auto setModeAction = [ this ]( const ProductPb::AudioMode & val )
     {
         return m_AudioSettingsMgr->SetMode( val );
     };
@@ -200,7 +200,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetContentType( );
     };
-    auto setContentTypeAction = [ this ]( const ProductPb::AudioContentType val )
+    auto setContentTypeAction = [ this ]( const ProductPb::AudioContentType & val )
     {
         return m_AudioSettingsMgr->SetContentType( val );
     };
@@ -218,7 +218,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetDualMonoSelect( );
     };
-    auto setDualMonoSelectAction = [ this ]( const ProductPb::AudioDualMonoSelect val )
+    auto setDualMonoSelectAction = [ this ]( const ProductPb::AudioDualMonoSelect & val )
     {
         return m_AudioSettingsMgr->SetDualMonoSelect( val );
     };
