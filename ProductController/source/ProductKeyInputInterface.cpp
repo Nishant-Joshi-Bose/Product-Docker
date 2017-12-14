@@ -192,6 +192,14 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
     if( keyEvent.has_keyorigin( ) )
     {
         keyOriginString.assign( KeyOrigin_t_Name( keyEvent.keyorigin( ) ) );
+#if 1 // @TODO PGC-523 kludge
+        if( keyEvent.keyorigin( ) == LpmServiceMessages::KEY_ORIGIN_CONSOLE_BUTTON )
+        {
+            // On Professor this can only be the capsense "Action" button, so fake it until PGC-523 is fixed
+            keyEvent.set_keyorigin( LpmServiceMessages::KEY_ORIGIN_CAPSENSE );
+            keyEvent.set_keyid( 6 ); // borrowing the Eddie key number
+        }
+#endif
     }
     else
     {
