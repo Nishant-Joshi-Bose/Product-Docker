@@ -80,9 +80,10 @@ mkdir -p "$opt_dir/hsp" || exit
 echo "$riviera_hsp_ver" > "$opt_dir"/hsp/HSP_VERSION || exit
 echo "Package version \"$riviera_hsp_ver\""
 cp "$riviera_hsp_images_dir"/update_ext4.zip "$opt_dir/hsp/" || exit
+PackageName=hsp
 
 cat >"$stage/control" <<EOF || exit
-Package: hsp
+Package: $PackageName
 Version: $riviera_hsp_ver
 Description: Hardware Support Package version $riviera_hsp_ver
  The Riviera HSP
@@ -100,18 +101,27 @@ EOF
 put_script "$stage/postinst" <<EOF
 #!/bin/sh
 echo "hsp postinst"
+exiterror()
+{
+    # Set Progress End
+    /opt/Bose/bin/ProgressReport -n $PackageName -e 1 -i 1 -r RECOVERY -b 0 -p 100
+    exit 1    
+}
+
 if [ ! -f /opt/Bose/hsp/update_ext4.zip ]; then
     echo "/opt/Bose/hsp/update_ext4.zip not found"
-    exit 1
+    exiterror
 fi
 if ! grep -q /cache /proc/mounts; then
     echo "Mounting Cache"
-    mount /dev/mmcblk0p26 /cache || exit 1
+    mount /dev/mmcblk0p26 /cache || exiterror
 fi
-mkdir -p /cache/recovery/ || exit 1
-echo "--update_package=/opt/Bose/hsp/update_ext4.zip" > /cache/recovery/command || exit 1
-echo "--idle_after" >> /cache/recovery/command || exit 1
-echo "Rebooting to Recovery" 
+mkdir -p /cache/recovery/ || exiterror
+echo "--update_package=/opt/Bose/hsp/update_ext4.zip" > /cache/recovery/command || exiterror
+echo "--idle_after" >> /cache/recovery/command || exiterror
+# Set Progress End
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 1 -r RECOVERY -b 0 -p 100
+exit 0
 EOF
 
 put_script "$stage/postrm" <<EOF
@@ -125,6 +135,8 @@ echo "hsp preinst"
 # This is temporary for IP2. 
 # Should be removed in IP3, when stopping services is 
 # taken care of by Shepherd / Product / SoftwareUpdateService. 
+# Set Progress Start
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 1 -r RECOVERY -b 0 -p 1
 echo "Stopping LPM"
 pkill LPMService
 exit 0
