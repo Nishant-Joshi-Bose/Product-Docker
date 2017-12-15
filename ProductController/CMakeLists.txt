@@ -84,6 +84,7 @@ TARGET_LINK_LIBRARIES(Professor
   rt
   cap
   dl
+  SoundTouch_SDK_Protobuf_static
 )
 
 INSTALL(TARGETS Professor DESTINATION ${OUTPUT_BIN_DIR})

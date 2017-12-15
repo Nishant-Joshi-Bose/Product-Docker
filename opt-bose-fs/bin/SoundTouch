@@ -50,7 +50,7 @@ To set manufacturing data:
   mfgdata clear
   mfgdata set development true
   mfgdata set country_code US
-  mfgdata set guid "\$(cat /proc/sys/kernel/random/uuid)"
+  mfgdata set guid "$(cat /proc/sys/kernel/random/uuid)"
   mount -oremount,ro /persist
 
 EOF
