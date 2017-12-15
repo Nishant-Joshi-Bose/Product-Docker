@@ -54,9 +54,9 @@ product-ipk: cmake_build
 	./scripts/create-product-ipk
 
 #Uncomment next two line after removing next 2 lines, once HSP is integrated.
-#IPKS = hsp.ipk  eddie.ipk lpm_updater.ipk
+#IPKS = hsp.ipk  product.ipk lpm_updater.ipk
 #PACKAGENAMES = hsp SoundTouch eddie_lpm_updater
-IPKS = monaco.ipk eddie.ipk lpm_updater.ipk
+IPKS = monaco.ipk product.ipk lpm_updater.ipk
 PACKAGENAMES = monaco SoundTouch eddie_lpm_updater
 
 #Create Zip file for Bonjour / Local update
@@ -66,7 +66,7 @@ update-zip: monaco-ipk product-ipk hsp-ipk lpmupdater-ipk
 
 #Create one more Zip file for Bonjour / Local update with HSP 
 #- This is temporary, till DP2 boards are not available.
-IPKS_HSP = hsp.ipk monaco.ipk eddie.ipk lpm_updater.ipk
+IPKS_HSP = hsp.ipk monaco.ipk product.ipk lpm_updater.ipk
 PACKAGENAMES_HSP = hsp monaco SoundTouch eddie_lpm_updater
 .PHONY: update-zip-with-hsp
 update-zip-with-hsp: monaco-ipk product-ipk hsp-ipk lpmupdater-ipk
