@@ -214,6 +214,10 @@ public:
         return false;
     }
 
+    virtual bool HandleAdaptIQStatus( ProductAdaptIQStatus status )
+    {
+        return false;
+    }
 
     inline static void SetProductController( ProductController* productController )
     {

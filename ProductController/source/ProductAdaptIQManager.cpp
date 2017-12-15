@@ -88,6 +88,12 @@ void ProductAdaptIQManager::Run( )
 {
     m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductAdaptIQManager" );
 
+    auto lpmFunc = [ this ]( bool connected )
+    {
+        SetLpmConnectionState( connected );
+    };
+    m_ProductHardwareInterface->RegisterForLpmConnection( Callback<bool>( lpmFunc ) );
+
     auto getFunc = [ this ]( Callback<const AdaptIQStatus> resp )
     {
         AdaptIQStatus status;
@@ -95,7 +101,7 @@ void ProductAdaptIQManager::Run( )
         resp.Send( status );
     };
     AsyncCallback<Callback<AdaptIQStatus>> getCb( getFunc, m_ProductTask );
-    m_GetConnection = m_FrontDoorClient->RegisterGet( s_FrontDoorAdaptIQ, getFunc );
+    m_GetConnection = m_FrontDoorClient->RegisterGet( s_FrontDoorAdaptIQ, getCb );
 
     auto putFunc = [ this ]( const AdaptIQReq & req, Callback<const AdaptIQReq> resp )
     {
@@ -104,7 +110,7 @@ void ProductAdaptIQManager::Run( )
         resp.Send( respMsg );
     };
     AsyncCallback<const AdaptIQReq&, Callback<AdaptIQReq>> putCb( putFunc, m_ProductTask );
-    m_PutConnection = m_FrontDoorClient->RegisterPut<AdaptIQReq>( s_FrontDoorAdaptIQ, putFunc );
+    m_PutConnection = m_FrontDoorClient->RegisterPut<AdaptIQReq>( s_FrontDoorAdaptIQ, putCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,6 +167,69 @@ void ProductAdaptIQManager::HandlePut( const AdaptIQReq& req, ProductPb::AdaptIQ
     // TODO : there's no response defined in the LAN API right now, so just mirror back the request
     resp = req;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductAdaptIQManager::SetLpmConnectionState
+///
+/// @brief  The following methods is called when an LPM connection event is received
+///
+/// @param  connected
+///
+/// @return
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductAdaptIQManager::SetLpmConnectionState( bool connected )
+{
+    if( connected )
+    {
+        RegisterLpmClientEvents();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductAdaptIQManager::RegisterLpmClientEvents
+///
+/// @brief  Register to receive events from the LPM
+///
+/// @param  none
+///
+/// @return none
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductAdaptIQManager::RegisterLpmClientEvents( )
+{
+    auto aiqFunc = [ this ]( LpmServiceMessages::IpcAiqRequest_t status )
+    {
+        HandleAdaptIQStatus( status );
+    };
+    bool success =  m_ProductHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcAiqRequest_t>
+                    // TODO TODO TODO CHANGE OPCODE IPC_AIQ_COEF ISN'T RIGHT OPCODE CHANGE WHEN NEW ONE IS ALLOCATED
+                    ( LpmServiceMessages::IPC_AIQ_COEF, Callback<LpmServiceMessages::IpcAiqRequest_t>( aiqFunc ) );
+
+    BOSE_INFO( s_logger, "%s registered for AdaptIQ status from the LPM hardware.",
+               ( success ? "Successfully" : "Unsuccessfully" ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductAdaptIQManager::HandleAdaptIQStatus
+///
+/// @brief  Process an AdaptIQ status message from the LPM
+///
+/// @param  none
+///
+/// @return none
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductAdaptIQManager::HandleAdaptIQStatus( LpmServiceMessages::IpcAiqRequest_t status )
+{
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                               End of ProductApp Namespace                                    ///

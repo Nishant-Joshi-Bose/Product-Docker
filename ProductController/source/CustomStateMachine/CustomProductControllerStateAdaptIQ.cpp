@@ -103,19 +103,19 @@ void CustomProductControllerStateAdaptIQ::HandleTimeOut( )
 /// @brief CustomProductControllerStateAdaptIQ::HandleAdaptIQState
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateAdaptIQ::HandleAdaptIQState( ProductAdaptIQ aiqStatus )
+bool CustomProductControllerStateAdaptIQ::HandleAdaptIQState( ProductAdaptIQStatus aiqStatus )
 {
-        ///
-        /// Go to the superstate of this pairing state, which should be the last state that the
-        /// product controller was in, to resume functionality.
-        ///
-        ChangeState( GetSuperId( ) );
+    ///
+    /// Go to the superstate of this pairing state, which should be the last state that the
+    /// product controller was in, to resume functionality.
+    ///
+    ChangeState( GetSuperId( ) );
 
-        m_timer->SetTimeouts( PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_START,
-                              PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY );
+    m_timer->SetTimeouts( PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_START,
+                          PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY );
 
-        m_timer->Start( std::bind( &CustomProductControllerStateAdaptIQ::HandleTimeOut,
-                                   this ) );
+    m_timer->Start( std::bind( &CustomProductControllerStateAdaptIQ::HandleTimeOut,
+                               this ) );
 
     return true;
 }

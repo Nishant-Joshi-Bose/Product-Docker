@@ -63,10 +63,10 @@ class CustomProductControllerStateAdaptIQ : public ProductControllerState
 public:
 
     CustomProductControllerStateAdaptIQ( ProductControllerHsm&       hsm,
-                                                  CHsmState*                  pSuperState,
-                                                  ProfessorProductController& productController,
-                                                  Hsm::STATE                  stateId,
-                                                  const std::string&          name    = "CustomProductControllerStateAdaptIQ" );
+                                         CHsmState*                  pSuperState,
+                                         ProfessorProductController& productController,
+                                         Hsm::STATE                  stateId,
+                                         const std::string&          name    = "CustomProductControllerStateAdaptIQ" );
 
     ~CustomProductControllerStateAdaptIQ( ) override
     {
@@ -75,7 +75,7 @@ public:
 
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
-    bool HandleAdaptIQState( ProductAdaptIQ aiqStatus );
+    bool HandleAdaptIQState( ProductAdaptIQStatus aiqStatus );
 
 private:
 

@@ -47,10 +47,9 @@ message ProductLpmStatus
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                      
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-message ProductAdaptIQ
+message ProductAdaptIQStatus
 {
-        optional LpmServiceMessages.IpcAiqSetupStatus_t     status      = 1;
-        optional LpmServiceMessages.IpcAiqRequest_t         request     = 2;
+        optional LpmServiceMessages.IpcAiqSetupStatus_t     status  = 1;
 }
 
 
