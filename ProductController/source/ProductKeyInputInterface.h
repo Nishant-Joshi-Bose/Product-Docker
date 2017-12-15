@@ -47,7 +47,7 @@ namespace ProductApp
 ///            Forward Class Declarations
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductHardwareInterface;
+class CustomProductLpmHardwareInterface;
 class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,12 +91,12 @@ private:
     ///        key presses and whether the module is running are also provided.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF*                               m_ProductTask;
-    Callback< ProductMessage >                        m_ProductNotify;
-    std::shared_ptr< CustomProductHardwareInterface > m_ProductHardwareInterface;
-    KeyHandlerUtil::KeyHandler                        m_KeyHandler;
-    bool                                              m_connected;
-    bool                                              m_running;
+    NotifyTargetTaskIF*                                  m_ProductTask;
+    Callback< ProductMessage >                           m_ProductNotify;
+    std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
+    KeyHandlerUtil::KeyHandler                           m_KeyHandler;
+    bool                                                 m_connected;
+    bool                                                 m_running;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

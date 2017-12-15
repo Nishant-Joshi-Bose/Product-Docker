@@ -26,7 +26,7 @@
 #include "Utilities.h"
 #include "FrontDoorClient.h"
 #include "ProfessorProductController.h"
-#include "CustomProductHardwareInterface.h"
+#include "CustomProductLpmHardwareInterface.h"
 #include "ProductVolumeManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +55,7 @@ ProductVolumeManager::ProductVolumeManager( ProfessorProductController& ProductC
 
     : m_ProductTask( ProductController.GetTask( ) ),
       m_ProductNotify( ProductController.GetMessageHandler( ) ),
-      m_ProductHardwareInterface( ProductController.GetHardwareInterface( ) )
+      m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) )
 {
 
 }

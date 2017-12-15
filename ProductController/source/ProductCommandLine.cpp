@@ -24,7 +24,7 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "CustomProductHardwareInterface.h"
+#include "CustomProductLpmHardwareInterface.h"
 #include "ProfessorProductController.h"
 #include "ProductCommandLine.h"
 
@@ -46,7 +46,7 @@ ProductCommandLine::ProductCommandLine( ProfessorProductController& ProductContr
     : m_ProductController( ProductController ),
       m_ProductTask( ProductController.GetTask( ) ),
       m_ProductNotify( ProductController.GetMessageHandler( ) ),
-      m_ProductHardwareInterface( ProductController.GetHardwareInterface( ) ),
+      m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
       m_CommandLineInterface( new CLIClient( "ProductCommandLineInterface" ) )
 {
 
@@ -218,7 +218,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             response +=  volumeLevelString;
             response += ". \r\n";
 
-            m_ProductHardwareInterface->SendSetVolume( volumeLevelValue );
+            m_ProductLpmHardwareInterface->NotifyVolumeLevel( volumeLevelValue );
         }
         else
         {
@@ -245,13 +245,13 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         {
             response = "The mute will be turned on. \r\n";
 
-            m_ProductHardwareInterface->SendMute( true );
+            m_ProductLpmHardwareInterface->NotifyMuteState( true );
         }
         else if( muteState == "off" )
         {
             response = "The mute will be turned off. \r\n";
 
-            m_ProductHardwareInterface->SendMute( false );
+            m_ProductLpmHardwareInterface->NotifyMuteState( false );
         }
         else
         {

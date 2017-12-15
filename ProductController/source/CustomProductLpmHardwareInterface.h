@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductHardwareInterface.h
+/// @file      CustomProductLpmHardwareInterface.h
 ///
 /// @brief     This header file contains custom Professor declarations for managing the hardware,
 ///            which interfaces with the Low Power Microprocessor or LPM on Riviera APQ boards.
 ///
-/// @note      This custom class declared here inherits a ProductHardwareInterface class found in the
-///            common code repository. This base inherited class starts and runs an LPM client
+/// @note      This custom class declared here inherits a ProductLpmHardwareInterface class found in
+///            the common code repository. This base inherited class starts and runs an LPM client
 ///            connection, as well as provides several common hardware based methods.
 ///
 /// @author    Stuart J. Lumby
@@ -36,7 +36,7 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "ProductHardwareInterface.h"
+#include "ProductLpmHardwareInterface.h"
 #include "ProductMessage.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,24 +54,24 @@ class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class CustomProductHardwareInterface
+/// @class CustomProductLpmHardwareInterface
 ///
 /// @brief This class is used to managing the hardware, which interfaces with the Low Power
 ///        Microprocessor or LPM.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductHardwareInterface : public ProductHardwareInterface
+class CustomProductLpmHardwareInterface : public ProductLpmHardwareInterface
 {
 public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief  CustomProductHardwareInterface Constructor
+    /// @brief  CustomProductLpmHardwareInterface Constructor
     ///
     /// @param  ProfessorProductController& ProductController
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    CustomProductHardwareInterface( ProfessorProductController& ProductController );
+    CustomProductLpmHardwareInterface( ProfessorProductController& ProductController );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -79,6 +79,8 @@ public:
     ///         LPM hardware client.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
+    bool NotifyVolumeLevel( uint32_t volume );
+    bool NotifyMuteState( bool mute );
     bool SendAudioPathPresentationLatency( uint32_t  latency );
     bool SendLipSyncDelay( uint32_t                  audioDelay );
     bool SendToneAndLevelControl( IpcToneControl_t&  controls );

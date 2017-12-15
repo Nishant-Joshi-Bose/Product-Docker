@@ -29,7 +29,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "unistd.h"
 #include "ProfessorProductController.h"
-#include "CustomProductHardwareInterface.h"
+#include "CustomProductLpmHardwareInterface.h"
 #include "CustomProductAudioService.h"
 #include "ProductKeyInputInterface.h"
 #include "ProductVolumeManager.h"
@@ -91,7 +91,7 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     /// Construction of the Product Controller Modules
     ///
-    m_ProductHardwareInterface( nullptr ),
+    m_ProductLpmHardwareInterface( nullptr ),
     m_ProductSystemManager( nullptr ),
     m_ProductNetworkManager( nullptr ),
     m_ProductCommandLine( nullptr ),
@@ -250,26 +250,26 @@ void ProfessorProductController::Run( )
     BOSE_DEBUG( s_logger, "----------- Product Controller Starting Modules ------------" );
     BOSE_DEBUG( s_logger, "The Professor Product Controller instantiating and running its modules." );
 
-    m_ProductHardwareInterface = std::make_shared< CustomProductHardwareInterface >( *this );
-    m_ProductEdidInterface     = std::make_shared< ProductEdidInterface           >( *this );
-    m_ProductSystemManager     = std::make_shared< ProductSystemManager           >( *this );
-    m_ProductNetworkManager    = std::make_shared< ProductNetworkManager          >( *this );
-    m_ProductCommandLine       = std::make_shared< ProductCommandLine             >( *this );
-    m_ProductKeyInputInterface = std::make_shared< ProductKeyInputInterface       >( *this );
-    m_ProductVolumeManager     = std::make_shared< ProductVolumeManager           >( *this );
-    m_ProductAdaptIQManager    = std::make_shared< ProductAdaptIQManager          >( *this );
-    m_ProductSpeakerManager    = std::make_shared< ProductSpeakerManager          >( *this );
-    m_ProductAudioService      = std::make_shared< CustomProductAudioService      >( *this );
+    m_ProductLpmHardwareInterface = std::make_shared< CustomProductLpmHardwareInterface >( *this );
+    m_ProductEdidInterface        = std::make_shared< ProductEdidInterface              >( *this );
+    m_ProductSystemManager        = std::make_shared< ProductSystemManager              >( *this );
+    m_ProductNetworkManager       = std::make_shared< ProductNetworkManager             >( *this );
+    m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
+    m_ProductKeyInputInterface    = std::make_shared< ProductKeyInputInterface          >( *this );
+    m_ProductVolumeManager        = std::make_shared< ProductVolumeManager              >( *this );
+    m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
+    m_ProductSpeakerManager       = std::make_shared< ProductSpeakerManager             >( *this );
+    m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this );
 
-    if( m_ProductHardwareInterface == nullptr ||
-        m_ProductSystemManager     == nullptr ||
-        m_ProductNetworkManager    == nullptr ||
-        m_ProductAudioService      == nullptr ||
-        m_ProductCommandLine       == nullptr ||
-        m_ProductKeyInputInterface == nullptr ||
-        m_ProductEdidInterface     == nullptr ||
-        m_ProductVolumeManager     == nullptr ||
-        m_ProductAdaptIQManager    == nullptr )
+    if( m_ProductLpmHardwareInterface == nullptr ||
+        m_ProductSystemManager        == nullptr ||
+        m_ProductNetworkManager       == nullptr ||
+        m_ProductAudioService         == nullptr ||
+        m_ProductCommandLine          == nullptr ||
+        m_ProductKeyInputInterface    == nullptr ||
+        m_ProductEdidInterface        == nullptr ||
+        m_ProductVolumeManager        == nullptr ||
+        m_ProductAdaptIQManager       == nullptr )
     {
         BOSE_CRITICAL( s_logger, "-------- Product Controller Failed Initialization ----------" );
         BOSE_CRITICAL( s_logger, "A Product Controller module failed to be allocated.         " );
@@ -280,16 +280,16 @@ void ProfessorProductController::Run( )
     ///
     /// Run all the submodules.
     ///
-    m_ProductHardwareInterface ->Run( );
-    m_ProductSystemManager     ->Run( );
-    m_ProductNetworkManager    ->Run( );
-    m_ProductAudioService      ->Run( );
-    m_ProductCommandLine       ->Run( );
-    m_ProductKeyInputInterface ->Run( );
-    m_ProductEdidInterface     ->Run( );
-    m_ProductVolumeManager     ->Run( );
-    m_ProductAdaptIQManager    ->Run( );
-    m_ProductSpeakerManager    ->Run( );
+    m_ProductLpmHardwareInterface->Run( );
+    m_ProductSystemManager       ->Run( );
+    m_ProductNetworkManager      ->Run( );
+    m_ProductAudioService        ->Run( );
+    m_ProductCommandLine         ->Run( );
+    m_ProductKeyInputInterface   ->Run( );
+    m_ProductEdidInterface       ->Run( );
+    m_ProductVolumeManager       ->Run( );
+    m_ProductAdaptIQManager      ->Run( );
+    m_ProductSpeakerManager      ->Run( );
 
     ///
     /// Register FrontDoor EndPoints
@@ -335,14 +335,14 @@ CliClientMT& ProfessorProductController::GetCommandLineInterface( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::GetHardwareInterface
+/// @name   ProfessorProductController::GetLpmHardwareInterface
 ///
 /// @return This method returns a shared pointer to the LPM hardware interface.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::shared_ptr< CustomProductHardwareInterface >& ProfessorProductController::GetHardwareInterface( )
+std::shared_ptr< CustomProductLpmHardwareInterface >& ProfessorProductController::GetLpmHardwareInterface( )
 {
-    return m_ProductHardwareInterface;
+    return m_ProductLpmHardwareInterface;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -823,7 +823,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             GetHsm( ).Handle< bool >( &CustomProductControllerState::HandleLpmState, m_IsLpmReady );
         }
 
-        if( message.lpmstatus( ).has_systemstatus( ) )
+        if( message.lpmstatus( ).has_systemstate( ) )
         {
             BOSE_DEBUG( s_logger, "The LPM system state was set to %s",
                         IpcLpmSystemState_t_Name( message.lpmstatus( ).systemstatus( ) ).c_str( ) );
@@ -859,7 +859,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         ///
         /// The power state if returned from the LPM hardware is used only for informational purposes.
         ///
-        if( message.lpmstatus( ).has_powerstatus( ) )
+        if( message.lpmstatus( ).has_powerstate( ) )
         {
             BOSE_DEBUG( s_logger, "The LPM power state was set to %s",
                         IpcLPMPowerState_t_Name( message.lpmstatus( ).powerstatus( ) ).c_str( ) );
@@ -1005,7 +1005,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         if( message.wirelessstatus( ).has_frequencykhz( ) and
             message.wirelessstatus( ).frequencykhz( ) > 0 )
         {
-            m_ProductHardwareInterface->SendWiFiRadioStatus( message.wirelessstatus( ).frequencykhz( ) );
+            m_ProductLpmHardwareInterface->SendWiFiRadioStatus( message.wirelessstatus( ).frequencykhz( ) );
         }
 
         BOSE_DEBUG( s_logger, "A %s wireless network message was received with frequency %d kHz.",
@@ -1138,14 +1138,14 @@ void ProfessorProductController::Wait( )
     ///
     /// Stop all the submodules.
     ///
-    m_ProductHardwareInterface->Stop( );
-    m_ProductSystemManager    ->Stop( );
-    m_ProductNetworkManager   ->Stop( );
-    m_ProductCommandLine      ->Stop( );
-    m_ProductKeyInputInterface->Stop( );
-    m_ProductEdidInterface    ->Stop( );
-    m_ProductVolumeManager    ->Stop( );
-    m_ProductAdaptIQManager   ->Stop( );
+    m_ProductLpmHardwareInterface->Stop( );
+    m_ProductSystemManager       ->Stop( );
+    m_ProductNetworkManager      ->Stop( );
+    m_ProductCommandLine         ->Stop( );
+    m_ProductKeyInputInterface   ->Stop( );
+    m_ProductEdidInterface       ->Stop( );
+    m_ProductVolumeManager       ->Stop( );
+    m_ProductAdaptIQManager      ->Stop( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

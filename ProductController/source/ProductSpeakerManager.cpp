@@ -22,7 +22,7 @@
 #include "HsmState.h"
 #include "FrontDoorClient.h"
 #include "ProfessorProductController.h"
-#include "CustomProductHardwareInterface.h"
+#include "CustomProductLpmHardwareInterface.h"
 #include "ProductSpeakerManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@ ProductSpeakerManager::ProductSpeakerManager( ProfessorProductController& Produc
 
     : m_ProductTask( ProductController.GetTask( ) ),
       m_ProductNotify( ProductController.GetMessageHandler( ) ),
-      m_ProductHardwareInterface( ProductController.GetHardwareInterface( ) ),
+      m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
       m_FrontDoorClientIF( FrontDoor::FrontDoorClient::Create( "ProductSpeakerManager" ) ),
       m_lpmConnected( false )
 {
@@ -78,7 +78,7 @@ void ProductSpeakerManager::Init( )
     m_accessorySpeakerState.set_pairing( false );
 
     Callback<bool> cb( std::bind( &ProductSpeakerManager::SetLpmConnectionState, this, std::placeholders::_1 ) );
-    m_ProductHardwareInterface->RegisterForLpmConnection( cb );
+    m_ProductLpmHardwareInterface->RegisterForLpmConnection( cb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,7 +129,7 @@ void ProductSpeakerManager::RegisterLpmClientEvents( )
                        this,
                        std::placeholders::_1 ) );
 
-    bool success =  m_ProductHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcAccessoryList_t >
+    bool success =  m_ProductLpmHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcAccessoryList_t >
                     ( LpmServiceMessages::IPC_AUDIO_RSP_SPEAKER_LIST, listCB );
 
     BOSE_INFO( s_logger, "%s registered for accessory list from the LPM hardware.",
@@ -143,7 +143,7 @@ void ProductSpeakerManager::RegisterLpmClientEvents( )
                        this,
                        std::placeholders::_1 ) );
 
-    success = m_ProductHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcSpeakerPairingMode_t >
+    success = m_ProductLpmHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcSpeakerPairingMode_t >
               ( LpmServiceMessages::IPC_AUDIO_SPEAKER_PAIRING, pairCB );
 
     BOSE_INFO( s_logger, "%s registered for accessory pairing events from the LPM hardware.",
@@ -289,7 +289,7 @@ void ProductSpeakerManager::DoPairingFrontDoor( bool pair,
                             frontDoorCB,
                             std::placeholders::_1 ) );
 
-    m_ProductHardwareInterface->SendAccessoryPairing( pair, doPairingCb );
+    m_ProductLpmHardwareInterface->SendAccessoryPairing( pair, doPairingCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -312,7 +312,7 @@ void ProductSpeakerManager::DoPairing( )
                                 this,
                                 std::placeholders::_1 ) );
 
-        m_ProductHardwareInterface->SendAccessoryPairing( true, doPairingCb );
+        m_ProductLpmHardwareInterface->SendAccessoryPairing( true, doPairingCb );
     }
 }
 
@@ -330,7 +330,7 @@ void ProductSpeakerManager::StopPairing( )
                                 this,
                                 std::placeholders::_1 ) );
 
-        m_ProductHardwareInterface->SendAccessoryPairing( false, doPairingCb );
+        m_ProductLpmHardwareInterface->SendAccessoryPairing( false, doPairingCb );
     }
 }
 
@@ -427,7 +427,7 @@ void ProductSpeakerManager::SetSpeakersEnabled( const ProductPb::AccessorySpeake
         subs = m_accessorySpeakerState.enabled( ).subs( );
     }
 
-    m_ProductHardwareInterface->SendAccessoryActive( rears, subs, doPairingCb );
+    m_ProductLpmHardwareInterface->SendAccessoryActive( rears, subs, doPairingCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
