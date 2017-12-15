@@ -69,7 +69,6 @@ static constexpr char  JSON_TOKEN_DEVICE_ABSORTION_LUX[] = "DeviceAbsortionLux" 
 static constexpr char  JSON_TOKEN_BACK_LIGHT_LEVELS   [] = "BackLightLevelsPercent"               ;
 static constexpr char  JSON_TOKEN_LOWERING_THRESHOLDS [] = "LoweringThresholdLux"                 ;
 static constexpr char  JSON_TOKEN_RISING_THRESHOLDS   [] = "RisingThresholdLux"                   ;
-static constexpr int   BACKLIGHT_DIFF_THRESHOLD          = ( BACK_LIGHT_LEVEL_DIM_HIGH - BACK_LIGHT_LEVEL_DIM - 1 );
 static constexpr int   MONITOR_SENSOR_SLEEP_MS           = 1000 ;
 static constexpr int   CHANGING_LEVEL_SLEEP_MS           = 10   ;
 static constexpr float LUX_DIFF_THRESHOLD                = 2.0f ;
@@ -279,7 +278,7 @@ void DisplayController::MonitorLightSensor()
 
         m_luxValue = ( ( ( float ) m_luxDecimal ) + ( ( ( float )m_luxFractional ) * 0.001f ) ) * m_luxFactor;
 
-        if ( ( m_luxValue != 0.0 ) && ( previous_lux == FLT_MAX ) )
+        if( ( m_luxValue != 0.0 ) && ( previous_lux == FLT_MAX ) )
         {
             previous_lux = m_luxValue;
         }
@@ -295,11 +294,13 @@ void DisplayController::MonitorLightSensor()
             SetBackLightLevel( 50, 49 );
         }
 
-        BOSE_LOG( INFO,  "lux(raw, adj, prev): (" << m_luxDecimal    << "."
+        float lux_diff = m_luxValue - previous_lux;
+        BOSE_LOG( INFO,  "lux(raw, adj, prev): ("
+                  << m_luxDecimal    << "."
                   << m_luxFractional << ", "
                   << m_luxValue      << ", "
                   << previous_lux    << ") bl: "
-                  << m_backLight     << ( ( m_luxValue - previous_lux ) < 0.0f ?  " lowering" : " rising" ) );
+                  << m_backLight     << ( ( lux_diff == 0.0f ) ? " level" : ( lux_diff  < 0.0f ?  " lowering" : " rising" ) ) );
 
         if( m_autoMode )
         {
@@ -307,8 +308,7 @@ void DisplayController::MonitorLightSensor()
 
             BOSE_LOG( INFO, "target level: " << targeted_level << ", actual level: " << m_backLight );
 
-            if( ( abs ( targeted_level - m_backLight) >= BACKLIGHT_DIFF_THRESHOLD ) &&
-                ( fabs( previous_lux  - m_luxValue  ) >= LUX_DIFF_THRESHOLD       ) )
+            if( fabs( previous_lux - m_luxValue ) >= LUX_DIFF_THRESHOLD )
             {
                 SetBackLightLevel( m_backLight , targeted_level );
                 // dummy read of the back light, the IPC mechanism is caching a value
