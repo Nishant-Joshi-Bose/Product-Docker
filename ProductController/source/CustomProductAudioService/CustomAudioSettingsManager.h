@@ -18,23 +18,23 @@ class CustomAudioSettingsManager: AudioSettingsManager
 public:
     CustomAudioSettingsManager();
     bool SetBass( ProductPb::AudioBassLevel bass );
-    ProductPb::AudioBassLevel GetBass() const;
+    const ProductPb::AudioBassLevel& GetBass() const;
     bool SetTreble( ProductPb::AudioTrebleLevel treble );
-    ProductPb::AudioTrebleLevel GetTreble() const;
+    const ProductPb::AudioTrebleLevel& GetTreble() const;
     bool SetCenter( ProductPb::AudioCenterLevel center );
-    ProductPb::AudioCenterLevel GetCenter() const;
+    const ProductPb::AudioCenterLevel& GetCenter() const;
     bool SetSurround( ProductPb::AudioSurroundLevel surround );
-    ProductPb::AudioSurroundLevel GetSurround() const;
+    const ProductPb::AudioSurroundLevel& GetSurround() const;
     bool SetGainOffset( ProductPb::AudioGainOffset gainOffset );
-    ProductPb::AudioGainOffset GetGainOffset() const;
+    const ProductPb::AudioGainOffset& GetGainOffset() const;
     bool SetAvSync( ProductPb::AudioAvSync avSync );
-    ProductPb::AudioAvSync GetAvSync() const;
+    const ProductPb::AudioAvSync& GetAvSync() const;
     bool SetMode( ProductPb::AudioMode mode );
-    ProductPb::AudioMode GetMode() const;
+    const ProductPb::AudioMode& GetMode() const;
     bool SetContentType( ProductPb::AudioContentType contentType );
-    ProductPb::AudioContentType GetContentType() const;
+    const ProductPb::AudioContentType& GetContentType() const;
     bool SetDualMonoSelect( ProductPb::AudioDualMonoSelect DualMonoSelect );
-    ProductPb::AudioDualMonoSelect GetDualMonoSelect() const;
+    const ProductPb::AudioDualMonoSelect& GetDualMonoSelect() const;
 
 private:
     ProductPb::AudioBassLevel m_currentBass;
@@ -51,6 +51,8 @@ private:
     /// Helper functions to set contentItem sensitive audio settings
     //////////////////////////////////////////////////////////////////////////////////////
     void InitializeAudioSettings();
+    template<typename ProtoBuf>
+    void initializeProto( string propName, ProtoBuf& proto );
 };
 }// namespace ProductApp
 
