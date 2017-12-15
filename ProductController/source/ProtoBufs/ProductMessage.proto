@@ -47,11 +47,10 @@ message ProductLpmStatus
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                      
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-message ProductLpmStatus
+message ProductAdaptIQ
 {
-        optional bool                                   connected = 1;
-        optional LpmServiceMessages.IpcLpmSystemState_t systemstatus = 2;
-        optional LpmServiceMessages.IpcLPMPowerState_t  powerstatus  = 3;
+        optional LpmServiceMessages.IpcAiqSetupStatus_t     status      = 1;
+        optional LpmServiceMessages.IpcAiqRequest_t         request     = 2;
 }
 
 
