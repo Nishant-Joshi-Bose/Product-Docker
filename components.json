@@ -1,11 +1,11 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@7a7d6c70c1699df12b29e1a60f805baf8a4e94c0"
+    "selected_version": "master@87826338d5d1a864aa28ead923b4fc47b9f47ef4"
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@3be710e6b1895d76d70c9aa8bd4d6641f5aca6fd" 
+    "selected_version": "master@21029f2c7a4a326bf2859a5f4c4c5d1678a18696"
   },
   {
     "name": "A4VVideoManagerService",
