@@ -66,7 +66,7 @@ CustomProductLpmHardwareInterface::CustomProductLpmHardwareInterface( ProfessorP
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductLpmHardwareInterface::NotifyVolumeLevel
+/// @name   CustomProductLpmHardwareInterface::NotifyVolumeLevel
 ///
 /// @brief  This method send a notification of the volume level through the LPM hardware to other
 ///         interested processes.
@@ -77,7 +77,7 @@ CustomProductLpmHardwareInterface::CustomProductLpmHardwareInterface( ProfessorP
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductLpmHardwareInterface::NotifyVolumeLevel( uint32_t volume )
+bool CustomProductLpmHardwareInterface::NotifyVolumeLevel( uint32_t volume )
 {
     BOSE_DEBUG( s_logger, "A volume level of %d is being sent as a notifiation.", volume );
 
@@ -94,14 +94,14 @@ bool ProductLpmHardwareInterface::NotifyVolumeLevel( uint32_t volume )
 
     volumeSetting.set_volume( volume );
 
-    m_LpmClient->SetVolume( volumeSetting );
+    GetLpmClient( )->SetVolume( volumeSetting );
 
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductLpmHardwareInterface::NotifyMuteState
+/// @name   CustomProductLpmHardwareInterface::NotifyMuteState
 ///
 /// @brief  This method send a notification of the mute state through the LPM hardware to other
 ///         interested processes.
@@ -112,7 +112,7 @@ bool ProductLpmHardwareInterface::NotifyVolumeLevel( uint32_t volume )
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductLpmHardwareInterface::NotifyMuteState( bool mute )
+bool CustomProductLpmHardwareInterface::NotifyMuteState( bool mute )
 {
     BOSE_DEBUG( s_logger, "A mute %s is being sent as a notification.", mute ? "on" : "off" );
 
@@ -142,7 +142,7 @@ bool ProductLpmHardwareInterface::NotifyMuteState( bool mute )
         muteSetting.set_unifymute( 0 );
     }
 
-    m_LpmClient->SetMute( muteSetting );
+    GetLpmClient( )->SetMute( muteSetting );
 
     return true;
 }
@@ -512,7 +512,7 @@ void CustomProductLpmHardwareInterface::SetBlueToothDeviceName( const std::strin
 ///                                         Bluetooth device name.
 ///
 /// @param  unsigned long long bluetoothMacAddress This argument is a standard string representing
-///                                                the Bluetooth MAC Address.
+///                                                the Bluetooth MAC Addresmount -o remount,rw /opt/Bose
 ///
 /// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.

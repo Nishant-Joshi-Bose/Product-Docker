@@ -91,7 +91,7 @@ public:
     /// @brief  The following public methods are used to start the ProfessorProductController
     ///         instance task, wait in a separate task until the product task ends, and stop the
     ///         product task, respectively.
-    ///
+    ///ProductLpmHardwareInterface
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void Run( );
     void Wait( );

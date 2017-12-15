@@ -826,9 +826,9 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         if( message.lpmstatus( ).has_systemstate( ) )
         {
             BOSE_DEBUG( s_logger, "The LPM system state was set to %s",
-                        IpcLpmSystemState_t_Name( message.lpmstatus( ).systemstatus( ) ).c_str( ) );
+                        IpcLpmSystemState_t_Name( message.lpmstatus( ).systemstate( ) ).c_str( ) );
 
-            switch( message.lpmstatus( ).systemstatus( ) )
+            switch( message.lpmstatus( ).systemstate( ) )
             {
             case SYSTEM_STATE_ON:
                 GetHsm( ).Handle< >( &CustomProductControllerState::HandleLPMPowerStatusFullPower );
@@ -862,7 +862,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         if( message.lpmstatus( ).has_powerstate( ) )
         {
             BOSE_DEBUG( s_logger, "The LPM power state was set to %s",
-                        IpcLPMPowerState_t_Name( message.lpmstatus( ).powerstatus( ) ).c_str( ) );
+                        IpcLPMPowerState_t_Name( message.lpmstatus( ).powerstate( ) ).c_str( ) );
         }
 
     }
