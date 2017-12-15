@@ -106,6 +106,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentVoice( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
     virtual bool HandleSTSSourcesInit( )
     {
         return false;
@@ -148,11 +153,6 @@ public:
     }
 
     virtual bool HandleNetworkStandbyIntent( )
-    {
-        return false;
-    }
-
-    virtual bool HandleIntentVoice( KeyHandlerUtil::ActionType_t result )
     {
         return false;
     }

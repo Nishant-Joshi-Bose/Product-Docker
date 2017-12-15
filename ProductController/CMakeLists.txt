@@ -31,7 +31,6 @@ ADD_EXECUTABLE(Eddie
   ${PROTO_CC_DEST}/IntentHandler.pb.cc
   IntentHandler/IntentHandler.cpp
   IntentHandler/PlaybackRequestManager.cpp
-  IntentHandler/VoiceManager.cpp
   DisplayController/DisplayController.cpp
   CustomProductAudioService.cpp
 )
