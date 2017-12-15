@@ -75,7 +75,7 @@ public:
 
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
-    bool HandleAdaptIQState( ProductAdaptIQStatus aiqStatus );
+    bool HandleAdaptIQStatus( const ProductAdaptIQStatus& aiqStatus ) override;
 
 private:
 

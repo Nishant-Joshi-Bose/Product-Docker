@@ -1116,7 +1116,8 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_aiqstatus( ) )
     {
-        GetHsm( ).Handle< ProductAdaptIQStatus >( &CustomProductControllerState::HandleAdaptIQStatus )
+        GetHsm( ).Handle< const ProductAdaptIQStatus & >
+        ( &CustomProductControllerState::HandleAdaptIQStatus, message.aiqstatus( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Unknown message types are handled at this point.

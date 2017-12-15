@@ -100,13 +100,13 @@ void CustomProductControllerStateAdaptIQ::HandleTimeOut( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateAdaptIQ::HandleAdaptIQState
+/// @brief CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateAdaptIQ::HandleAdaptIQState( ProductAdaptIQStatus aiqStatus )
+bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdaptIQStatus& aiqStatus )
 {
     ///
-    /// Go to the superstate of this pairing state, which should be the last state that the
+    /// Go to the superstate of this state, which should be the last state that the
     /// product controller was in, to resume functionality.
     ///
     ChangeState( GetSuperId( ) );

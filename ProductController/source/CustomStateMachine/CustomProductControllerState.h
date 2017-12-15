@@ -214,7 +214,7 @@ public:
         return false;
     }
 
-    virtual bool HandleAdaptIQStatus( ProductAdaptIQStatus status )
+    virtual bool HandleAdaptIQStatus( const ProductAdaptIQStatus& status )
     {
         return false;
     }
