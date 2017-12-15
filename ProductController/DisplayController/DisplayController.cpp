@@ -256,6 +256,7 @@ void DisplayController::SetBackLightLevel( int actualLevel, int newLevel )
 void DisplayController::MonitorLightSensor()
 {
     float previous_lux   = FLT_MAX;
+    float lux_diff       = FLT_MAX;
     int   targeted_level = 0;
 
     m_luxValue      = 0.0f;
@@ -294,7 +295,8 @@ void DisplayController::MonitorLightSensor()
             SetBackLightLevel( 50, 49 );
         }
 
-        float lux_diff = m_luxValue - previous_lux;
+        lux_diff = m_luxValue - previous_lux;
+
         BOSE_LOG( INFO,  "lux(raw, adj, prev): ("
                   << m_luxDecimal    << "."
                   << m_luxFractional << ", "
@@ -304,11 +306,11 @@ void DisplayController::MonitorLightSensor()
 
         if( m_autoMode )
         {
-            targeted_level = GetBackLightLevelFromLux( m_luxValue, m_luxValue - previous_lux );
+            targeted_level = GetBackLightLevelFromLux( m_luxValue, lux_diff );
 
-            BOSE_LOG( INFO, "target level: " << targeted_level << ", actual level: " << m_backLight );
+            BOSE_LOG( INFO, "target level: " << targeted_level << ", actual level: " << m_backLight << " lux diff: " << lux_diff );
 
-            if( fabs( previous_lux - m_luxValue ) >= LUX_DIFF_THRESHOLD )
+            if( fabs( lux_diff ) >= LUX_DIFF_THRESHOLD )
             {
                 SetBackLightLevel( m_backLight , targeted_level );
                 // dummy read of the back light, the IPC mechanism is caching a value
