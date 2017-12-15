@@ -59,6 +59,7 @@ wspace=$(cd "$here/.." && echo "$PWD") || exit
 
 riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || exit
 riviera_toolchain_dir=$(components get Riviera-Toolchain installed_location) || exit
+galapagosclient_dir=$(components get GalapagosClient-qc8017_32 installed_location) || exit
 soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
@@ -70,6 +71,7 @@ castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 install
 castlepassport_dir=$(components get CastlePassport-qc8017_32 installed_location) || exit
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
 cli_dir=$(components get CastleCli-qc8017_32 installed_location) || exit
+frontdoor_dir=$(components get FrontDoor-qc8017_32 installed_location) || exit
 qss_dir=$(components get A4VQuickSetService installed_location) || exit
 
 arch=arm-oemllib32-linux
@@ -82,7 +84,7 @@ echo "Stage directory $stage"
 
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
-mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" || exit
+mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/etc/chimes" || exit
 
 rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 rsync -a --exclude='*~' --exclude='*-README.txt' "$qss_dir/opt-bose-fs/." "$opt_dir/." || exit
@@ -132,7 +134,6 @@ cp "$stfs"/opt/Bose/BLESetup "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/STSCertified "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/UpnpSource "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/FrontDoor "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
@@ -144,7 +145,6 @@ cp -a "$boselibs_dir/lib" "$opt_dir" || exit
 cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
 cp -a "$qss_dir/UEI/arch/${arch}/lib" "$opt_dir" || exit
-cp Config/InActivityTimer.json "$opt_dir/etc" || exit
 
 marge_url=https://streamingint.bose.com
 stats_url=https://eventsdev.api.bosecm.com
@@ -162,23 +162,27 @@ sw_update_url=https://worldwide.bose.com/updates/soundtouch-test
 
 "$avs_dir/stage" "$opt_dir" || exit
 "$swup_dir/stage" "$opt_dir" || exit
-"$audiopath_dir/stage" "$opt_dir" --with-vfe  || exit
+"$audiopath_dir/stage" "$opt_dir" --with-vfe || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlepassport_dir/stage" "$opt_dir" || exit
 "$shepherd_dir/stage" "$opt_dir" || exit
 "$lpmservice_dir/stage" "$opt_dir" || exit
 "$cli_dir/stage" "$opt_dir" || exit
+"$frontdoor_dir/stage" "$opt_dir" || exit
+"$galapagosclient_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 
 cd "$opt_dir"/lib || exit
 rm -f *.a
 
+PackageName=SoundTouch
+
 package_version=$(make-version-string "$version_json" "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}") || exit
 echo "Package version \"$package_version\""
 
 cat >"$stage/control" <<EOF || exit
-Package: SoundTouch
+Package: $PackageName
 Version: $package_version
 Description: SoundTouch version $package_version
  The SoundTouch app
@@ -199,10 +203,15 @@ echo "SoundTouch postinst"
 if [ -x /mnt/nv/postinst ]; then
     /mnt/nv/postinst
 fi
+
 # the following link is to satisfy the libcurl dependency in
 # the UEI qsp libraries (libqsp.so, libqsp_hal.so); remove it when
 # libraries linked against our libcurl version are available
 ln -sf /usr/lib/libcurl.so.5 /opt/Bose/lib/libcurl.so.4
+
+# Set Progress End
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 100
+exit 0
 EOF
 
 put_script "$stage/postrm" <<EOF
@@ -224,6 +233,8 @@ else
     echo "Installed Riviera-HSP: \$i"
     echo "See https://github.com/BoseCorp/Professor/blob/master/README.md#hsp"
 fi
+# Start Progress
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
 
 # ---8<------8<------8<------8<------8<------8<------8<------8<------8<---
 # Try to kill services before installation begin to make sure
@@ -244,6 +255,7 @@ pkill A4VRemoteCommunicationService
 pkill A4VQuickSetService
 pkill IoT
 pkill UpnpSource
+pkill Vfe
 pkill FrontDoor
 pkill BoseApp
 pkill STSCertified
