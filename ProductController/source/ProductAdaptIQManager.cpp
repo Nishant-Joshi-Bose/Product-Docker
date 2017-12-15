@@ -202,13 +202,13 @@ void ProductAdaptIQManager::SetLpmConnectionState( bool connected )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductAdaptIQManager::RegisterLpmClientEvents( )
 {
-    auto aiqFunc = [ this ]( LpmServiceMessages::IpcAiqRequest_t status )
+    auto aiqFunc = [ this ]( LpmServiceMessages::IpcAiqSetupStatus_t status )
     {
         HandleAdaptIQStatus( status );
     };
-    bool success =  m_ProductHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcAiqRequest_t>
+    bool success =  m_ProductHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcAiqSetupStatus_t >
                     // TODO TODO TODO CHANGE OPCODE IPC_AIQ_COEF ISN'T RIGHT OPCODE CHANGE WHEN NEW ONE IS ALLOCATED
-                    ( LpmServiceMessages::IPC_AIQ_COEF, Callback<LpmServiceMessages::IpcAiqRequest_t>( aiqFunc ) );
+                    ( LpmServiceMessages::IPC_AIQ_COEF, Callback<LpmServiceMessages::IpcAiqSetupStatus_t >( aiqFunc ) );
 
     BOSE_INFO( s_logger, "%s registered for AdaptIQ status from the LPM hardware.",
                ( success ? "Successfully" : "Unsuccessfully" ) );
@@ -226,8 +226,16 @@ void ProductAdaptIQManager::RegisterLpmClientEvents( )
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductAdaptIQManager::HandleAdaptIQStatus( LpmServiceMessages::IpcAiqRequest_t status )
+void ProductAdaptIQManager::HandleAdaptIQStatus( LpmServiceMessages::IpcAiqSetupStatus_t status )
 {
+    ProductMessage msg;
+
+    *( msg.mutable_aiqstatus()->mutable_status() ) = status;
+
+    IL::BreakThread( [ = ]( )
+    {
+        m_ProductNotify( msg );
+    }, m_ProductTask );
 }
 
 

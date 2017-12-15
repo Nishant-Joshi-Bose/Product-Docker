@@ -200,6 +200,7 @@ message ProductMessage
         optional ProductNowPlayingStatus    nowplayingstatus    = 13;
         optional ProductAccessoryPairing    accessorypairing    = 14;
         optional uint32                     intent              = 15;
+        optional ProductAdaptIQStatus       aiqstatus           = 16;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
