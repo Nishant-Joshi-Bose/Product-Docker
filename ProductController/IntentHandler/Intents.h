@@ -62,6 +62,16 @@ enum class Action
     PRESET_SELECT_5 = ActionCommon_t::PRESET_SELECT_5,
     PRESET_SELECT_6 = ActionCommon_t::PRESET_SELECT_6,
     //- PRESET
+
+    //+ VOLUME RAMP UP and DOWN
+    VOLUME_RAMP_UP   = ActionCommon_t::VOLUME_RAMP_UP,
+    VOLUME_RAMP_DOWN = ActionCommon_t::VOLUME_RAMP_DOWN,
+    //- VOLUME RAMP UP and DOWN
+
+    //+ Cancel Intents
+    VOLUME_RAMP_UP_CANCEL   = ActionCommon_t::VOLUME_RAMP_UP_CANCEL,
+    VOLUME_RAMP_DOWN_CANCEL = ActionCommon_t::VOLUME_RAMP_DOWN_CANCEL,
+    //- Cancel Intents
 };
 
 } // namespace ProductApp
