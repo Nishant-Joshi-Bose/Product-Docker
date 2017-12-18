@@ -233,8 +233,7 @@ void ProductAdaptIQManager::RegisterLpmClientEvents( )
         HandleAdaptIQStatus( status );
     };
     bool success =  m_ProductHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcAiqSetupStatus_t >
-                    // TODO TODO TODO CHANGE OPCODE IPC_AIQ_COEF ISN'T RIGHT OPCODE CHANGE WHEN NEW ONE IS ALLOCATED
-                    ( LpmServiceMessages::IPC_AIQ_COEF, Callback<LpmServiceMessages::IpcAiqSetupStatus_t >( aiqFunc ) );
+                    ( LpmServiceMessages::IPC_DSP_AIQ_SETUP_STATUS, Callback<LpmServiceMessages::IpcAiqSetupStatus_t >( aiqFunc ) );
 
     BOSE_INFO( s_logger, "%s registered for AdaptIQ status from the LPM hardware.",
                ( success ? "Successfully" : "Unsuccessfully" ) );
