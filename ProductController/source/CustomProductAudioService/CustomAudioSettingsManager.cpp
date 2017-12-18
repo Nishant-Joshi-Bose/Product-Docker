@@ -10,6 +10,9 @@
 #include "SystemUtils.h"
 #include "CustomAudioSettingsManager.h"
 
+#include "ProtoToMarkup.h"
+
+
 static DPrint s_logger( "CustomAudioSettingsManager" );
 
 constexpr char  kDefaultConfigPath[] = "/opt/Bose/etc/DefaultAudioSettings.json";
@@ -39,22 +42,24 @@ CustomAudioSettingsManager::CustomAudioSettingsManager()
 /////////////////////////////////////////////////////////////////////////////////////////
 /// Bass setting setter/getter
 /////////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetBass( ProductPb::AudioBassLevel bass )
+bool CustomAudioSettingsManager::SetBass( const ProductPb::AudioBassLevel& bass )
 {
     BOSE_DEBUG( s_logger, __func__ );
+    BOSE_INFO( s_logger, "CustomAudioSettingsManager::SetBass()= %s", ProtoToMarkup::ToJson( bass, false ).c_str() );
     return SetAudioProperties( bass, kBassName, m_currentBass );
 }
 
 const ProductPb::AudioBassLevel& CustomAudioSettingsManager::GetBass() const
 {
     BOSE_DEBUG( s_logger, __func__ );
+    BOSE_INFO( s_logger, "CustomAudioSettingsManager::GetBass()= %s", ProtoToMarkup::ToJson( m_currentBass, false ).c_str() );
     return m_currentBass;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Treble setting setter/getter
 ///////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetTreble( ProductPb::AudioTrebleLevel treble )
+bool CustomAudioSettingsManager::SetTreble( const ProductPb::AudioTrebleLevel& treble )
 {
     BOSE_DEBUG( s_logger, __func__ );
     return SetAudioProperties( treble, kTrebleName, m_currentTreble );
@@ -69,7 +74,7 @@ const ProductPb::AudioTrebleLevel& CustomAudioSettingsManager::GetTreble() const
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Center setting setter/getter
 ///////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetCenter( ProductPb::AudioCenterLevel center )
+bool CustomAudioSettingsManager::SetCenter( const ProductPb::AudioCenterLevel& center )
 {
     BOSE_DEBUG( s_logger, __func__ );
     return SetAudioProperties( center, kCenterName, m_currentCenter );
@@ -84,7 +89,7 @@ const ProductPb::AudioCenterLevel& CustomAudioSettingsManager::GetCenter() const
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Surround setting setter/getter
 ///////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetSurround( ProductPb::AudioSurroundLevel surround )
+bool CustomAudioSettingsManager::SetSurround( const ProductPb::AudioSurroundLevel& surround )
 {
     BOSE_DEBUG( s_logger, __func__ );
     return SetAudioProperties( surround, kSurroundName, m_currentSurround );
@@ -99,7 +104,7 @@ const ProductPb::AudioSurroundLevel& CustomAudioSettingsManager::GetSurround() c
 ////////////////////////////////////////////////////////////////////////////////////////
 /// GainOffset setting setter/getter
 //////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetGainOffset( ProductPb::AudioGainOffset gainOffset )
+bool CustomAudioSettingsManager::SetGainOffset( const ProductPb::AudioGainOffset& gainOffset )
 {
     BOSE_DEBUG( s_logger, __func__ );
     return SetAudioProperties( gainOffset, kGainOffsetName, m_currentGainOffset );
@@ -114,7 +119,7 @@ const ProductPb::AudioGainOffset& CustomAudioSettingsManager::GetGainOffset() co
 ////////////////////////////////////////////////////////////////////////////////////////
 /// AvSync setting setter/getter
 //////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetAvSync( ProductPb::AudioAvSync avSync )
+bool CustomAudioSettingsManager::SetAvSync( const ProductPb::AudioAvSync& avSync )
 {
     BOSE_DEBUG( s_logger, __func__ );
     return SetAudioProperties( avSync, kAvSyncName, m_currentAvSync );
@@ -129,7 +134,7 @@ const ProductPb::AudioAvSync& CustomAudioSettingsManager::GetAvSync() const
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Mode setting setter/getter
 //////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetMode( ProductPb::AudioMode mode )
+bool CustomAudioSettingsManager::SetMode( const ProductPb::AudioMode& mode )
 {
     BOSE_DEBUG( s_logger, __func__ );
     return SetAudioProperties( mode, kModeName, m_currentMode );
@@ -143,12 +148,12 @@ const ProductPb::AudioMode& CustomAudioSettingsManager::GetMode() const
 ////////////////////////////////////////////////////////////////////////////////////////
 /// ContentType setting setter/getter
 //////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetContentType( ProductPb::AudioContentType contentType )
+bool CustomAudioSettingsManager::SetContentType( const ProductPb::AudioContentType& contentType )
 {
     BOSE_DEBUG( s_logger, __func__ );
     return SetAudioProperties( contentType, kContentTypeName, m_currentContentType );
 }
-const ProductPb::AudioContentType& CustomAudioSettingsManager::GetContentType()
+const ProductPb::AudioContentType& CustomAudioSettingsManager::GetContentType() const
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentContentType;
@@ -157,7 +162,7 @@ const ProductPb::AudioContentType& CustomAudioSettingsManager::GetContentType()
 ////////////////////////////////////////////////////////////////////////////////////////
 /// DualMonoSelect setting setter/getter
 //////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetDualMonoSelect( ProductPb::AudioDualMonoSelect DualMonoSelect )
+bool CustomAudioSettingsManager::SetDualMonoSelect( const ProductPb::AudioDualMonoSelect& DualMonoSelect )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !DualMonoSelect.has_value() )
@@ -173,7 +178,7 @@ bool CustomAudioSettingsManager::SetDualMonoSelect( ProductPb::AudioDualMonoSele
     }
     return false;
 }
-const ProductPb::AudioDualMonoSelect& CustomAudioSettingsManager::GetDualMonoSelect()
+const ProductPb::AudioDualMonoSelect& CustomAudioSettingsManager::GetDualMonoSelect() const
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentDualMonoSelect;

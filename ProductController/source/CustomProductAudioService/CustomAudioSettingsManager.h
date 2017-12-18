@@ -17,23 +17,23 @@ class CustomAudioSettingsManager: AudioSettingsManager
 {
 public:
     CustomAudioSettingsManager();
-    bool SetBass( ProductPb::AudioBassLevel bass );
+    bool SetBass( const ProductPb::AudioBassLevel& bass );
     const ProductPb::AudioBassLevel& GetBass() const;
-    bool SetTreble( ProductPb::AudioTrebleLevel treble );
+    bool SetTreble( const ProductPb::AudioTrebleLevel& treble );
     const ProductPb::AudioTrebleLevel& GetTreble() const;
-    bool SetCenter( ProductPb::AudioCenterLevel center );
+    bool SetCenter( const ProductPb::AudioCenterLevel& center );
     const ProductPb::AudioCenterLevel& GetCenter() const;
-    bool SetSurround( ProductPb::AudioSurroundLevel surround );
+    bool SetSurround( const ProductPb::AudioSurroundLevel& surround );
     const ProductPb::AudioSurroundLevel& GetSurround() const;
-    bool SetGainOffset( ProductPb::AudioGainOffset gainOffset );
+    bool SetGainOffset( const ProductPb::AudioGainOffset& gainOffset );
     const ProductPb::AudioGainOffset& GetGainOffset() const;
-    bool SetAvSync( ProductPb::AudioAvSync avSync );
+    bool SetAvSync( const ProductPb::AudioAvSync& avSync );
     const ProductPb::AudioAvSync& GetAvSync() const;
-    bool SetMode( ProductPb::AudioMode mode );
+    bool SetMode( const ProductPb::AudioMode& mode );
     const ProductPb::AudioMode& GetMode() const;
-    bool SetContentType( ProductPb::AudioContentType contentType );
+    bool SetContentType( const ProductPb::AudioContentType& contentType );
     const ProductPb::AudioContentType& GetContentType() const;
-    bool SetDualMonoSelect( ProductPb::AudioDualMonoSelect DualMonoSelect );
+    bool SetDualMonoSelect( const ProductPb::AudioDualMonoSelect& DualMonoSelect );
     const ProductPb::AudioDualMonoSelect& GetDualMonoSelect() const;
 
 private:
