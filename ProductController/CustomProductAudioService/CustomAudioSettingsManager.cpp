@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomAudioSettingsManager.cpp
 /// @brief  This file contains source code for setting and getting AudioSettings
-///         such as bass, treble, center, surround, gainOffset, avSync, mode, contentType
+///         such as bass, treble
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <json/reader.h>
@@ -10,10 +10,12 @@
 #include "SystemUtils.h"
 #include "CustomAudioSettingsManager.h"
 
+#include "ProtoToMarkup.h"
+
+
 static DPrint s_logger( "CustomAudioSettingsManager" );
 
-constexpr char kDefaultConfigPath[] = "/opt/Bose/etc/DefaultAudioSettings.json";
-
+constexpr char  kDefaultConfigPath[] = "/opt/Bose/etc/DefaultAudioSettings.json";
 constexpr uint32_t kConfigVersionMajor = 2;
 constexpr uint32_t kConfigVersionMinor = 1;
 
@@ -27,20 +29,19 @@ using std::string;
 CustomAudioSettingsManager::CustomAudioSettingsManager()
 {
     BOSE_DEBUG( s_logger, __func__ );
-    //Reading persistence
     InitializeAudioSettings();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
 /// Bass setting setter/getter
 /////////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetBass( ProductPb::AudioBassLevel bass )
+bool CustomAudioSettingsManager::SetBass( const ProductPb::AudioBassLevel& bass )
 {
     BOSE_DEBUG( s_logger, __func__ );
     return SetAudioProperties( bass, kBassName, m_currentBass );
 }
 
-const ProductPb::AudioBassLevel& CustomAudioSettingsManager::GetBass()
+const ProductPb::AudioBassLevel& CustomAudioSettingsManager::GetBass() const
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentBass;
@@ -49,13 +50,13 @@ const ProductPb::AudioBassLevel& CustomAudioSettingsManager::GetBass()
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Treble setting setter/getter
 ///////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetTreble( ProductPb::AudioTrebleLevel treble )
+bool CustomAudioSettingsManager::SetTreble( const ProductPb::AudioTrebleLevel& treble )
 {
     BOSE_DEBUG( s_logger, __func__ );
     return SetAudioProperties( treble, kTrebleName, m_currentTreble );
 }
 
-const ProductPb::AudioTrebleLevel& CustomAudioSettingsManager::GetTreble()
+const ProductPb::AudioTrebleLevel& CustomAudioSettingsManager::GetTreble() const
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentTreble;
@@ -83,32 +84,21 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
                    m_audioSettings["version"]["major"].asInt(), m_audioSettings["version"]["minor"].asInt(),
                    kConfigVersionMajor, kConfigVersionMinor );
     }
+    initializeProto( kBassName, m_currentBass );
+    initializeProto( kTrebleName, m_currentTreble );
+}
 
-    // Initialize m_currentXX protobufs, only if the configuration file has this field specified
-    if( m_audioSettings["configurations"].isMember( kBassName ) )
+template<typename ProtoBuf>
+void CustomAudioSettingsManager::initializeProto( string propName, ProtoBuf& proto )
+{
+    proto.set_value( m_audioSettings["defaultValues"][propName].asInt() );
+    proto.set_persistence( m_audioSettings["configurations"][propName]["currentPersistenceLevel"].asString() );
+    proto.mutable_properties()->set_min( m_audioSettings["configurations"][propName]["properties"]["min"].asInt() );
+    proto.mutable_properties()->set_max( m_audioSettings["configurations"][propName]["properties"]["max"].asInt() );
+    proto.mutable_properties()->set_step( m_audioSettings["configurations"][propName]["properties"]["step"].asInt() );
+    for( uint32_t i = 0; i < m_audioSettings["configurations"][propName]["properties"]["supportedPersistence"].size(); i++ )
     {
-        m_currentBass.set_value( m_audioSettings["defaultValues"][kBassName].asInt() );
-        m_currentBass.set_persistence( m_audioSettings["configurations"][kBassName]["currentPersistenceLevel"].asString() );
-        m_currentBass.mutable_properties()->set_min( m_audioSettings["configurations"][kBassName]["properties"]["min"].asInt() );
-        m_currentBass.mutable_properties()->set_max( m_audioSettings["configurations"][kBassName]["properties"]["max"].asInt() );
-        m_currentBass.mutable_properties()->set_step( m_audioSettings["configurations"][kBassName]["properties"]["step"].asInt() );
-        for( uint32_t i = 0; i < m_audioSettings["configurations"][kBassName]["properties"]["supportedPersistence"].size(); i++ )
-        {
-            m_currentBass.mutable_properties()->add_supportedpersistence( m_audioSettings["configurations"][kBassName]["properties"]["supportedPersistence"][i].asString() );
-        }
-    }
-
-    if( m_audioSettings["configurations"].isMember( kTrebleName ) )
-    {
-        m_currentTreble.set_value( m_audioSettings["defaultValues"][kTrebleName].asInt() );
-        m_currentTreble.set_persistence( m_audioSettings["configurations"][kTrebleName]["currentPersistenceLevel"].asString() );
-        m_currentTreble.mutable_properties()->set_min( m_audioSettings["configurations"][kTrebleName]["properties"]["min"].asInt() );
-        m_currentTreble.mutable_properties()->set_max( m_audioSettings["configurations"][kTrebleName]["properties"]["max"].asInt() );
-        m_currentTreble.mutable_properties()->set_step( m_audioSettings["configurations"][kTrebleName]["properties"]["step"].asInt() );
-        for( uint32_t i = 0; i < m_audioSettings["configurations"][kTrebleName]["properties"]["supportedPersistence"].size(); i++ )
-        {
-            m_currentTreble.mutable_properties()->add_supportedpersistence( m_audioSettings["configurations"][kTrebleName]["properties"]["supportedPersistence"][i].asString() );
-        }
+        proto.mutable_properties()->add_supportedpersistence( m_audioSettings["configurations"][propName]["properties"]["supportedPersistence"][i].asString() );
     }
 }
 

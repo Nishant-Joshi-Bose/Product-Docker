@@ -157,6 +157,8 @@ sw_update_url=https://worldwide.bose.com/updates/soundtouch-test
     SoundTouchSdkPrivateCfg.swUpdateUrl="$sw_update_url" \
     || exit
 
+cp "$audiopath_dir/bin/eddie/libDspPlayback.so" "$opt_dir/bin" || exit
+
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
 

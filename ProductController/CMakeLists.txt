@@ -30,8 +30,6 @@ ADD_EXECUTABLE(Eddie
   ${PROTO_CC_DEST}/KeyActions.pb.cc
   ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/IntentHandler.pb.cc
-  ${PROTO_CC_DEST}/AudioBassLevel.pb.cc
-  ${PROTO_CC_DEST}/AudioTrebleLevel.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
   IntentHandler/IntentHandler.cpp
   IntentHandler/PlaybackRequestManager.cpp
