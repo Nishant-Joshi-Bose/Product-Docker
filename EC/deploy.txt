@@ -1,5 +1,5 @@
 # Source						Destination						Rule
-./builds/Release/eddie.ipk				<DEPLOY_DIR>/eddie.ipk					file
+./builds/Release/product.ipk				<DEPLOY_DIR>/eddie.ipk					file
 ./builds/Release/product-unstripped.tar.gz		<DEPLOY_DIR>/eddie_unstripped_<VERSION_STRING>.tar.gz	file
 ./builds/Release/product-ipk-stage/component-info.gz	<DEPLOY_DIR>/eddie_cinfo_<VERSION_STRING>.gz		file
 ./builds/Release/components.svgz			<DEPLOY_DIR>/eddie_cgraph_<VERSION_STRING>.svgz		file
