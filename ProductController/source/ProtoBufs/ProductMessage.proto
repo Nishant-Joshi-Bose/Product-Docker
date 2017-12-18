@@ -62,6 +62,7 @@ message ProductAdaptIQControl
             Start       = 1;
             Cancel      = 2;
             Advance     = 3;
+            Previous    = 4;
         }
         optional AdaptIQAction action = 1; 
 }

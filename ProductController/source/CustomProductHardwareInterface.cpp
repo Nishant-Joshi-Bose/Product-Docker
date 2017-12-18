@@ -514,6 +514,51 @@ bool CustomProductHardwareInterface::SetCecPhysicalAddress( const uint32_t cecPh
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name  CustomProductHardwareInterface::SendAdaptIQControl
+///
+/// @brief This method sends an AdaptIQ control request to the DSP
+///
+/// @param action
+///
+/// @return bool The method returns true when the control request was successfully sent.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductHardwareInterface::SendAdaptIQControl( ProductAdaptIQControl::AdaptIQAction action )
+{
+    if( isConnected( ) == false || GetLpmClient( ) == nullptr )
+    {
+        BOSE_ERROR( s_logger, "%s failed, as no connection is available.", __func__ );
+
+        return false;
+    }
+
+    BOSE_DEBUG( s_logger, "%s : send action %s", __func__, ProductAdaptIQControl::AdaptIQAction_Name( action ).c_str() );
+
+    IpcAiqControl_t msg;
+    switch( action )
+    {
+    case ProductAdaptIQControl::Start:
+        // TODO FIX THIS "START" IS MISSING IN IPC DEFS
+        break;
+    case ProductAdaptIQControl::Cancel:
+        msg.set_cmd( IpcAiqCmd_t::AIQ_CONTROL_STOP );
+        break;
+    case ProductAdaptIQControl::Advance:
+        msg.set_cmd( IpcAiqCmd_t::AIQ_CONTROL_ADVANCE );
+        break;
+    case ProductAdaptIQControl::Previous:
+        msg.set_cmd( IpcAiqCmd_t::AIQ_CONTROL_PREVIOUS );
+        break;
+    default:
+        break;
+    }
+    GetLpmClient( )->SendAdaptIQControl( msg );
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }

@@ -263,6 +263,25 @@ void ProductAdaptIQManager::HandleAdaptIQStatus( LpmServiceMessages::IpcAiqSetup
     }, m_ProductTask );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductAdaptIQManager::SendAdaptIQControl
+///
+/// @brief  Send a control message to AdaptIQ
+///
+/// @param  none
+///
+/// @return none
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductAdaptIQManager::SendAdaptIQControl( ProductAdaptIQControl::AdaptIQAction action )
+{
+    m_ProductHardwareInterface->SendAdaptIQControl( action );
+}
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                               End of ProductApp Namespace                                    ///

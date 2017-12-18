@@ -129,6 +129,44 @@ void CustomProductControllerStateAdaptIQ::HandleStateExit( )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerAdaptIQ::HandleAdaptIQControl
+///
+/// @return This method returns a true Boolean value indicating that it has handled the
+///         AdaptIQControl request.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAdaptIQControl& cmd )
+{
+    // for now just forward the action on the the lpm / dsp; we'll do more complex stuff later
+    switch( cmd.action() )
+    {
+    case ProductAdaptIQControl::Start:
+        m_AdaptIQManager->SendAdaptIQControl( ProductAdaptIQControl::Start );
+        break;
+
+    case ProductAdaptIQControl::Cancel:
+        m_AdaptIQManager->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
+        break;
+
+    case ProductAdaptIQControl::Advance:
+        m_AdaptIQManager->SendAdaptIQControl( ProductAdaptIQControl::Advance );
+        break;
+
+    case ProductAdaptIQControl::Previous:
+        m_AdaptIQManager->SendAdaptIQControl( ProductAdaptIQControl::Previous );
+        break;
+
+    default:
+        break;
+    }
+
+    return true;
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             End of Product Application Namespace                             ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
