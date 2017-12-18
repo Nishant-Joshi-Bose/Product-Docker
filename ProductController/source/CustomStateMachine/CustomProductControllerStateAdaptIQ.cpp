@@ -39,8 +39,9 @@ namespace ProductApp
 ///            Constant Definitions
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_START = 4 * 60 * 1000;
-constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY = 0 ;
+
+// This is just a placeholder
+constexpr uint32_t ADAPTIQ_INACTIVITY_TIMEOUT = 1 * 60 * 1000;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -81,6 +82,12 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
 {
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being started." );
 
+    m_timer->SetTimeouts( ADAPTIQ_INACTIVITY_TIMEOUT, 0 );
+    m_timer->Start( [ = ]( )
+    {
+        HandleTimeOut();
+    } );
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,18 +113,6 @@ void CustomProductControllerStateAdaptIQ::HandleTimeOut( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdaptIQStatus& aiqStatus )
 {
-    ///
-    /// Go to the superstate of this state, which should be the last state that the
-    /// product controller was in, to resume functionality.
-    ///
-    ChangeState( GetSuperId( ) );
-
-    m_timer->SetTimeouts( PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_START,
-                          PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY );
-
-    m_timer->Start( std::bind( &CustomProductControllerStateAdaptIQ::HandleTimeOut,
-                               this ) );
-
     return true;
 }
 
