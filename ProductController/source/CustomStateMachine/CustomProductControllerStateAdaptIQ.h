@@ -5,8 +5,6 @@
 /// @brief     This source code file contains functionality to process events that occur during the
 ///            product accessory pairing state.
 ///
-/// @author    Derek Richardson
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
