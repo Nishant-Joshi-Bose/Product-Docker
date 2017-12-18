@@ -702,7 +702,7 @@ PlaybackSource_t ProfessorProductController::GetCurrentSource( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::PostPlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson& response )
 {
-    BOSE_DEBUG( s_logger, "A response to the playback request %s was received." ,
+    BOSE_DEBUG( s_logger, "A response to the playback request %s was received.",
                 response.source( ).sourcedisplayname( ).c_str( ) );
 }
 
@@ -1126,6 +1126,11 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     {
         GetHsm( ).Handle< const ProductAdaptIQStatus & >
         ( &CustomProductControllerState::HandleAdaptIQStatus, message.aiqstatus( ) );
+    }
+    else if( message.has_aiqcontrol( ) )
+    {
+        GetHsm( ).Handle< const ProductAdaptIQControl & >
+        ( &CustomProductControllerState::HandleAdaptIQControl, message.aiqcontrol( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Unknown message types are handled at this point.

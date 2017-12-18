@@ -45,14 +45,26 @@ message ProductLpmStatus
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                      
+///                       AdaptIQ Status (from DSP) Message Structure
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 message ProductAdaptIQStatus
 {
         optional LpmServiceMessages.IpcAiqSetupStatus_t     status  = 1;
 }
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                       AdaptIQ Control (from FrontDoor) Message Structure
+////////////////////////////////////////////////////////////////////////////////////////////////////
+message ProductAdaptIQControl
+{
+        enum AdaptIQAction
+        {
+            Start       = 1;
+            Cancel      = 2;
+            Advance     = 3;
+        }
+        optional AdaptIQAction action = 1; 
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                    CAPS Content Audio Playback Services Message Structure                    ///
@@ -201,6 +213,7 @@ message ProductMessage
         optional ProductAccessoryPairing    accessorypairing    = 14;
         optional uint32                     intent              = 15;
         optional ProductAdaptIQStatus       aiqstatus           = 16;
+        optional ProductAdaptIQControl      aiqcontrol          = 17;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

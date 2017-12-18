@@ -202,6 +202,26 @@ bool CustomProductControllerStatePlaying::HandleLPMPowerStatusFullPower( )
     return true;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStatePlaying::HandleAdaptIQControl
+///
+/// @return This method returns a true Boolean value indicating that it has handled the
+///         AdaptIQControl request.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlaying::HandleAdaptIQControl( const ProductAdaptIQControl& cmd )
+{
+    if( cmd.action() == ProductAdaptIQControl::Start )
+    {
+        // TODO: does this need to be further qualified by anything (i.e. can't run if we're already
+        // in another substate of Playing?)
+        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
+        return true;
+    }
+
+    return false;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///

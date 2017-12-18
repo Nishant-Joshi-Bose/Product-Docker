@@ -79,6 +79,7 @@ public:
     bool HandleKeyAction( int action ) override;
 
     bool HandleLPMPowerStatusFullPower( ) override;
+    bool HandleAdaptIQControl( const ProductAdaptIQControl& ) override;
 
 private:
 

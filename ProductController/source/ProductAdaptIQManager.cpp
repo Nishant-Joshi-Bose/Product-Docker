@@ -164,6 +164,32 @@ void ProductAdaptIQManager::HandleGet( AdaptIQStatus& status )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductAdaptIQManager::HandlePut( const AdaptIQReq& req, ProductPb::AdaptIQReq& resp )
 {
+    ProductMessage msg;
+
+    if( req.action() == "enter" )
+    {
+        msg.mutable_aiqcontrol()->set_action( ProductAdaptIQControl::Start );
+    }
+    else if( req.action() == "cancel" )
+    {
+        msg.mutable_aiqcontrol()->set_action( ProductAdaptIQControl::Cancel );
+    }
+    else if( req.action() == "advance" )
+    {
+        msg.mutable_aiqcontrol()->set_action( ProductAdaptIQControl::Advance );
+    }
+    else
+    {
+    }
+
+    if( msg.has_aiqcontrol() )
+    {
+        IL::BreakThread( [ = ]( )
+        {
+            m_ProductNotify( msg );
+        }, m_ProductTask );
+    }
+
     // TODO : there's no response defined in the LAN API right now, so just mirror back the request
     resp = req;
 }

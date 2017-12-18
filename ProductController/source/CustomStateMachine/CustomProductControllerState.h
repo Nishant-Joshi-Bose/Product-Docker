@@ -219,6 +219,11 @@ public:
         return false;
     }
 
+    virtual bool HandleAdaptIQControl( const ProductAdaptIQControl& control )
+    {
+        return false;
+    }
+
     inline static void SetProductController( ProductController* productController )
     {
         s_productController = productController;
