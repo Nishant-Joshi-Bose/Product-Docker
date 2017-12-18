@@ -7,7 +7,7 @@
 
 #pragma once
 #include "ProductAudioService.h"
-#include "HelloWorldProductController.h"
+#include "EddieProductController.h"
 #include "CustomAudioSettingsManager.h"
 
 namespace ProductApp
