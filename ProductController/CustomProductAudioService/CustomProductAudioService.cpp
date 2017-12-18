@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductAudioService.cpp
-/// @brief   This file contains source code for Professor specific behavior for
+/// @brief   This file contains source code for Eddie specific behavior for
 ///         communicating with APProduct Server and APProduct related FrontDoor interaction
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -22,7 +22,7 @@ namespace ProductApp
 ///
 /// @name   CustomProductAudioService::CustomProductAudioService
 ///
-/// @param  ProfessorProductController& ProductController
+/// @param  EddieProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductAudioService::CustomProductAudioService( EddieProductController& ProductController, const FrontDoorClientIF_t& FrontDoorClient ):
@@ -51,8 +51,8 @@ void CustomProductAudioService::RegisterAudioPathEvents()
 ///
 /// @name   CustomProductAudioService::RegisterFrontDoorEvents
 ///
-/// @brief  On Professor, it register for put/post/get FrontDoor request for
-///         bass, treble, center, surround, gainOffset, avSync, mode, contentType
+/// @brief  On Eddie, it register for put/post/get FrontDoor request for
+///         bass, treble
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::RegisterFrontDoorEvents()

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomProductAudioService.h
-/// @brief   This file contains source code for Professor specific behavior for
+/// @brief   This file contains source code for Eddie specific behavior for
 ///         communicating with APProduct Server and APProduct related FrontDoor interaction
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////////////////////////

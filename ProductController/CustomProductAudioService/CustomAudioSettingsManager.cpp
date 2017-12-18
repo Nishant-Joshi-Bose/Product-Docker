@@ -77,7 +77,7 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
     }
     else if( m_audioSettings["version"]["major"].asInt() != kConfigVersionMajor )
     {
-        BOSE_INFO( s_logger, "DefaultAudioSettings.json has version %d.%d, whereas Professor expects version %d.%d",
+        BOSE_INFO( s_logger, "DefaultAudioSettings.json has version %d.%d, whereas Eddie expects version %d.%d",
                    m_audioSettings["version"]["major"].asInt(), m_audioSettings["version"]["minor"].asInt(),
                    kConfigVersionMajor, kConfigVersionMinor );
     }
