@@ -553,7 +553,8 @@ bool CustomProductHardwareInterface::SendAdaptIQControl( ProductAdaptIQControl::
     default:
         break;
     }
-    GetLpmClient( )->SendAdaptIQControl( msg );
+    // Note this message gets routed through the LPM directly to the DSP
+    GetLpmClient( )->SendAdaptIQControl( msg, Ipc_Device_t::IPC_DEVICE_DSP );
 
     return true;
 }
