@@ -45,14 +45,12 @@ CustomAudioSettingsManager::CustomAudioSettingsManager()
 bool CustomAudioSettingsManager::SetBass( const ProductPb::AudioBassLevel& bass )
 {
     BOSE_DEBUG( s_logger, __func__ );
-    BOSE_INFO( s_logger, "CustomAudioSettingsManager::SetBass()= %s", ProtoToMarkup::ToJson( bass, false ).c_str() );
     return SetAudioProperties( bass, kBassName, m_currentBass );
 }
 
 const ProductPb::AudioBassLevel& CustomAudioSettingsManager::GetBass() const
 {
     BOSE_DEBUG( s_logger, __func__ );
-    BOSE_INFO( s_logger, "CustomAudioSettingsManager::GetBass()= %s", ProtoToMarkup::ToJson( m_currentBass, false ).c_str() );
     return m_currentBass;
 }
 

@@ -35,7 +35,7 @@ namespace ProductApp
 CustomProductAudioService::CustomProductAudioService( ProfessorProductController& ProductController ):
     ProductAudioService( ProductController.GetTask( ),
                          ProductController.GetMessageHandler() ),
-    m_AudioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>() )
+    m_AudioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) )
 {
     BOSE_DEBUG( s_logger, __func__ );
 }
