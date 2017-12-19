@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-17_2131"
+    "selected_version": "Continuous/Castle-Fork/2017-12-19_1321"
   },
   {
     "name": "bose-opkg-utils",
@@ -9,7 +9,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.1-198+668d419"
+    "selected_version": "Release/master/0.3.2-205+1f18f4c"
   },
   {
     "name": "BoseWebMonaco",
@@ -109,7 +109,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/0.2.3-46+0f5c429"
+    "selected_version": "Release/master/0.3.0-49+29239c4"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -117,7 +117,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-17_2131"
+    "selected_version": "Continuous/Castle-Fork/2017-12-19_1321"
   },
   {
     "name": "Webkit",
