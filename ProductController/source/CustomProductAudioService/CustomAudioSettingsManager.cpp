@@ -236,7 +236,7 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
         m_currentDualMonoSelect.mutable_properties()->add_supportedvalues( m_audioSettings["configurations"][kDualMonoSelectName]["properties"]["supportedValues"][i].asString() );
     }
 }
-
+/*
 template<typename ProtoBuf>
 void CustomAudioSettingsManager::initializeProto( string propName, ProtoBuf& proto )
 {
@@ -249,6 +249,6 @@ void CustomAudioSettingsManager::initializeProto( string propName, ProtoBuf& pro
     {
         proto.mutable_properties()->add_supportedpersistence( m_audioSettings["configurations"][propName]["properties"]["supportedPersistence"][i].asString() );
     }
-}
+}*/
 
 }// namespace ProductApp
