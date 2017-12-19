@@ -26,7 +26,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
 #include "ProductControllerHsm.h"
-#include "CustomProductHardwareInterface.h"
+#include "CustomProductLpmHardwareInterface.h"
 #include "ProfessorProductController.h"
 #include "CustomProductControllerStateNetworkStandby.h"
 
@@ -73,7 +73,7 @@ void CustomProductControllerStateNetworkStandby::HandleStateEnter()
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateNetworkStandby is being entered." );
 
-    GetCustomProductController( ).GetHardwareInterface( )->SetSystemState( SYSTEM_STATE_STANDBY );
+    GetCustomProductController( ).GetLpmHardwareInterface( )->SetSystemState( SYSTEM_STATE_STANDBY );
 
     BOSE_VERBOSE( s_logger, "An attempt to set a standby power state is being made." );
 }
