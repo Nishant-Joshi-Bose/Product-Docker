@@ -851,7 +851,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
                 break;
             case SYSTEM_STATE_IDLE:
                 break;
-            default:
+            case SYSTEM_STATE_NUM_OF:
                 break;
             }
         }
