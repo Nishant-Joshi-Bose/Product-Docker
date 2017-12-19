@@ -127,7 +127,8 @@ bool CustomProductLpmHardwareInterface::NotifyMuteState( bool mute )
 
     ///
     /// @todo The LPM mute setting will be changed to contain only one field to set the mute state.
-    ///       The two fields used here are from legacy LPM code.
+    ///       The two fields used here are from legacy LPM code. Note that the JIRA Story PGC-551
+    ///       has been created to track this future change.
     ///
     IpcAudioMute_t muteSetting;
 
