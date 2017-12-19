@@ -30,8 +30,6 @@ private:
     /// Helper functions to set contentItem sensitive audio settings
     //////////////////////////////////////////////////////////////////////////////////////
     void InitializeAudioSettings();
-    template<typename ProtoBuf>
-    void initializeProto( string propName, ProtoBuf& proto );
 };
 }// namespace ProductApp
 

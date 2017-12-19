@@ -85,18 +85,4 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
     initializeProto( kTrebleName, m_currentTreble );
 }
 
-template<typename ProtoBuf>
-void CustomAudioSettingsManager::initializeProto( string propName, ProtoBuf& proto )
-{
-    proto.set_value( m_audioSettings["defaultValues"][propName].asInt() );
-    proto.set_persistence( m_audioSettings["configurations"][propName]["currentPersistenceLevel"].asString() );
-    proto.mutable_properties()->set_min( m_audioSettings["configurations"][propName]["properties"]["min"].asInt() );
-    proto.mutable_properties()->set_max( m_audioSettings["configurations"][propName]["properties"]["max"].asInt() );
-    proto.mutable_properties()->set_step( m_audioSettings["configurations"][propName]["properties"]["step"].asInt() );
-    for( uint32_t i = 0; i < m_audioSettings["configurations"][propName]["properties"]["supportedPersistence"].size(); i++ )
-    {
-        proto.mutable_properties()->add_supportedpersistence( m_audioSettings["configurations"][propName]["properties"]["supportedPersistence"][i].asString() );
-    }
-}
-
 }// namespace ProductApp
