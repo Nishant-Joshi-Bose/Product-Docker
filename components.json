@@ -37,7 +37,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.2.2-19+55c9871"
+    "selected_version": "Continuous/master/0.2.3-22+68b412a"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -53,7 +53,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@36b319ef4144bdb09f995508ddb8ac49a147173a"
+    "selected_version": "master@08a99cc6e1931bd4431c6a84360ae91f30b9bb39"
   },
   {
     "name": "CastleProductUIAssets",
@@ -101,7 +101,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/IP2/0.2.2-29+43fdfb4"
+    "selected_version": "Continuous/master/0.3.1-54+9a9f240"
   },
   {
     "name": "RivieraLpmUpdater",
