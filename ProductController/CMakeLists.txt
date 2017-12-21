@@ -15,6 +15,7 @@ INCLUDE_DIRECTORIES(
   source
   source/CustomStateMachine
   source/IntentHandler
+  source/CustomProductAudioService
   ${A4VVIDEOMANAGER_DIR}/source/Client
 )
 
@@ -23,24 +24,26 @@ INCLUDE_DIRECTORIES(
 
 ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/AdaptIQ.pb.cc
+  ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
   ${PROTO_CC_DEST}/KeyActions.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc
   ${PROTO_CC_DEST}/ProductSTS.pb.cc
   ${PROTO_CC_DEST}/SystemInfo.pb.cc
-  source/CustomProductAudioService.cpp
-  source/CustomProductLpmHardwareInterface.cpp
-  source/ProductStart.cpp
-  source/ProductCommandLine.cpp
-  source/ProductNetworkManager.cpp
-  source/ProductSystemManager.cpp
-  source/ProductKeyInputInterface.cpp
-  source/ProductSpeakerManager.cpp
-  source/ProfessorProductController.cpp
-  source/ProductEdidInterface.cpp
-  source/ProductVolumeManager.cpp
   source/ProductAdaptIQManager.cpp
+  source/ProductCommandLine.cpp
+  source/ProductEdidInterface.cpp
+  source/ProductKeyInputInterface.cpp
+  source/ProductNetworkManager.cpp
+  source/ProductStart.cpp
+  source/ProductSystemManager.cpp
+  source/ProductSpeakerManager.cpp
+  source/ProductVolumeManager.cpp
+  source/ProfessorProductController.cpp
+  source/CustomProductAudioService/CustomProductAudioService.cpp
+  source/CustomProductAudioService/CustomAudioSettingsManager.cpp
+  source/CustomProductLpmHardwareInterface.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
   source/CustomStateMachine/CustomProductControllerStateBooting.cpp
