@@ -1,0 +1,62 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @file      CustomProductHardwareInterface.cpp
+///
+/// @brief     This source code file declares a CustomProductHardwareInterface class that inherits
+///            the base ProductHardwareInterface for managing the hardware, which interfaces with
+///            the Low Power Microprocessor or LPM on Riviera based boards.
+///
+/// @note      This custom class inherits a ProductHardwareInterface class found in a common code
+///            repository. This base inherited class starts and runs an LPM client connection, as
+///            well as provides several common hardware based methods.
+///
+/// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
+///
+///            Bose Corporation
+///            The Mountain Road,
+///            Framingham, MA 01701-9168
+///            U.S.A.
+///
+///            This program may not be reproduced, in whole or in part, in any form by any means
+///            whatsoever without the written permission of Bose Corporation.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+///            Included Header Files
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#include "EddieProductController.h"
+#include "CustomProductHardwareInterface.h"
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                          Start of the Product Application Namespace                          ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace ProductApp
+{
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductHardwareInterface::CustomProductHardwareInterface
+///
+/// @brief  EddieProductController& ProductController
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+CustomProductHardwareInterface::CustomProductHardwareInterface( EddieProductController&
+                                                                ProductController )
+
+    : ProductHardwareInterface( ProductController.GetTask( ),
+                                ProductController.GetMessageHandler( ) )
+{
+
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                           End of the Product Application Namespace                           ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                         End of File                                          ///
+////////////////////////////////////////////////////////////////////////////////////////////////////

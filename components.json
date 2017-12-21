@@ -53,7 +53,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "PGC-449@7a9a095f9943ef3745e5b6d5a7daa67fc8fc4596"
+    "selected_version": "PGC-449@abfe9547216248d8a9e1f657589a1bf35126fb2b"
   },
   {
     "name": "CastleProductUIAssets",
@@ -101,7 +101,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/IP2/0.2.2-29+43fdfb4"
+    "selected_version": "Continuous/master/0.3.1-54+9a9f240"
   },
   {
     "name": "RivieraLpmUpdater",

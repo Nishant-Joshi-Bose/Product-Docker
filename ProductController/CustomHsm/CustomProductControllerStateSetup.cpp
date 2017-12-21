@@ -9,7 +9,6 @@
 #include "ProductControllerHsm.h"
 #include "EddieProductController.h"
 #include "DPrint.h"
-#include "LpmInterface.h"
 
 static DPrint s_logger( "CustomProductControllerStateSetup" );
 
