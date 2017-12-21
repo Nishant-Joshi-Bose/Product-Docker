@@ -307,11 +307,11 @@ public:
     void HandleProductMessage( const ProductMessage& productMessage );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @name   GetHardwareInterface
+/// @name   GetLpmHardwareInterface
 /// @brief  Returns reference to LpmInterface
 /// @return LpmInterface&
 ///////////////////////////////////////////////////////////////////////////////
-    inline std::shared_ptr< CustomProductHardwareInterface >& GetHardwareInterface( ) override
+    inline std::shared_ptr< CustomProductLpmHardwareInterface >& GetLpmHardwareInterface( ) override
     {
         return m_LpmInterface;
     }
@@ -408,7 +408,7 @@ private:
     VoiceServiceClient                          m_voiceServiceClient;
 
     /// Shared Pointer to the LPM Custom Hardware Interface
-    std::shared_ptr< CustomProductHardwareInterface > m_LpmInterface;
+    std::shared_ptr< CustomProductLpmHardwareInterface > m_LpmInterface;
 };
 static const char* const KEY_NAMES[] __attribute__( ( unused ) ) =
 {

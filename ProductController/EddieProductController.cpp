@@ -17,7 +17,7 @@
 #include "CLICmdsKeys.h"
 #include "BluetoothSinkEndpoints.h"
 #include "EndPointsDefines.h"
-#include "CustomProductHardwareInterface.h"
+#include "CustomProductLpmHardwareInterface.h"
 
 //#include "ButtonPress.pb.h" // @TODO Leela, re-enable this code
 
@@ -60,7 +60,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_demoController( m_ProductControllerTask, m_KeyHandler, g_ProductPersistenceDir ),
     m_DataCollectionClient( "EddieProductController" ),
     m_voiceServiceClient( ProductName, m_FrontDoorClientIF ),
-    m_LpmInterface( std::make_shared< CustomProductHardwareInterface >( *this ) )
+    m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) )
 {
     BOSE_INFO( s_logger, __func__ );
     m_deviceManager.Initialize( this );
@@ -91,8 +91,8 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
     ReadConfigurationStatusFromPersistence();
 
-    m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_LpmInterface->GetClient() ) );
-    m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF,  m_LpmInterface->GetClient() ) );
+    m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient() ) );
+    m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient() ) );
     SetupProductSTSController();
 
     // Start Eddie ProductAudioService
@@ -159,7 +159,7 @@ void EddieProductController::RegisterLpmEvents()
     // Register keys coming from the LPM.
     auto func = std::bind( &EddieProductController::HandleLpmKeyInformation, this, std::placeholders::_1 );
     AsyncCallback<IpcKeyInformation_t>response_cb( func, GetTask() );
-    m_LpmInterface->GetClient()->RegisterEvent<IpcKeyInformation_t>( IPC_KEY, response_cb );
+    m_LpmInterface->GetLpmClient()->RegisterEvent<IpcKeyInformation_t>( IPC_KEY, response_cb );
     m_lightbarController->RegisterLpmEvents();
 }
 
@@ -759,12 +759,12 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
         ///
         /// @todo The system state is return here. Code to act on this event needs to be developed.
         ///
-        if( productMessage.lpmstatus( ).has_systemstatus( ) )
+        if( productMessage.lpmstatus( ).has_systemstate( ) )
         {
             BOSE_DEBUG( s_logger, "The LPM system state was set to %s",
-                        IpcLpmSystemState_t_Name( productMessage.lpmstatus( ).systemstatus( ) ).c_str( ) );
+                        IpcLpmSystemState_t_Name( productMessage.lpmstatus( ).systemstate( ) ).c_str( ) );
 
-            switch( productMessage.lpmstatus( ).systemstatus( ) )
+            switch( productMessage.lpmstatus( ).systemstate( ) )
             {
             case SYSTEM_STATE_ON:
                 break;
@@ -786,7 +786,7 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
                 break;
             case SYSTEM_STATE_IDLE:
                 break;
-            default:
+            case SYSTEM_STATE_NUM_OF:
                 break;
             }
         }
@@ -794,10 +794,10 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
         ///
         /// The power state if returned from the LPM hardware is used only for informational purposes.
         ///
-        if( productMessage.lpmstatus( ).has_powerstatus( ) )
+        if( productMessage.lpmstatus( ).has_powerstate( ) )
         {
             BOSE_DEBUG( s_logger, "The LPM power state was set to %s",
-                        IpcLPMPowerState_t_Name( productMessage.lpmstatus( ).powerstatus( ) ).c_str( ) );
+                        IpcLPMPowerState_t_Name( productMessage.lpmstatus( ).powerstate( ) ).c_str( ) );
         }
     }
 }
