@@ -5,7 +5,6 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
   ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
-  ${DEMOCONTROLLER_DIR}
   ${DATACOLLECTIONCLIENT_DIR}
   ${CUSTOM_HSM_DIR}
   ${KEYHANDLER_DIR}/include
@@ -40,7 +39,6 @@ ADD_EXECUTABLE(Eddie
 
 TARGET_LINK_LIBRARIES(Eddie
   CastleProductControllerCommon
-  DemoController
   DataCollectionClient
   LpmClient
   FrontDoorClient

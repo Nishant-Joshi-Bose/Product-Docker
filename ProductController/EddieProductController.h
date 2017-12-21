@@ -37,7 +37,6 @@
 #include "ProductControllerStateSoftwareUpdating.h"
 #include "ProductControllerStateCriticalError.h"
 #include "LightBarController.h"
-#include "DemoController.h"
 #include "ConfigurationStatus.pb.h"
 #include "SoundTouchInterface/AllowSourceSelect.pb.h"
 #include "NetManager.pb.h"
@@ -393,8 +392,6 @@ private:
 
     BOptional<int>                              m_wifiProfilesCount;
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>     errorCb;
-    /// Demonstration Controller instance
-    DemoApp::DemoController m_demoController;
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief Interfaces to the ProductSTSController, which implements the interactions

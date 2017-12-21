@@ -23,8 +23,6 @@
 
 static DPrint s_logger( "EddieProductController" );
 
-using namespace DemoApp;
-
 namespace ProductApp
 {
 const std::string g_ProductPersistenceDir = "product-persistence/";
@@ -57,7 +55,6 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_wifiProfilesCount(),
     errorCb( AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> ( std::bind( &EddieProductController::CallbackError,
                                                                   this, std::placeholders::_1 ), GetTask() ) ),
-    m_demoController( m_ProductControllerTask, m_KeyHandler, g_ProductPersistenceDir ),
     m_DataCollectionClient( "EddieProductController" ),
     m_voiceServiceClient( ProductName, m_FrontDoorClientIF ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) )
@@ -118,7 +115,6 @@ void EddieProductController::Initialize()
     SendInitialRequests();
     ///Register lpm events that lightbar will handle
     m_lightbarController->RegisterLightBarEndPoints();
-    m_demoController.Initialize();
     m_displayController ->Initialize();
 }
 
