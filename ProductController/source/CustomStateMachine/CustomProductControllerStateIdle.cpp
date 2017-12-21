@@ -28,7 +28,7 @@
 #include "CustomProductControllerStateIdle.h"
 #include "ProductControllerHsm.h"
 #include "ProductControllerStateIdle.h"
-#include "CustomProductHardwareInterface.h"
+#include "CustomProductLpmHardwareInterface.h"
 #include "ProfessorProductController.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,7 +72,7 @@ void CustomProductControllerStateIdle::HandleStateEnter( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateIdle is being entered by the state machine." );
 
-    GetCustomProductController( ).GetHardwareInterface( )->SetSystemState( SYSTEM_STATE_IDLE );
+    GetCustomProductController( ).GetLpmHardwareInterface( )->SetSystemState( SYSTEM_STATE_IDLE );
 
     BOSE_VERBOSE( s_logger, "An attempt to set an autowake power state is now being made." );
 }

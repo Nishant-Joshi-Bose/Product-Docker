@@ -55,7 +55,7 @@ namespace ProductApp
 ///            Forward Class Declarations
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductHardwareInterface;
+class CustomProductLpmHardwareInterface;
 class ProductSystemManager;
 class ProductNetworkManager;
 class CustomProductAudioService;
@@ -91,7 +91,7 @@ public:
     /// @brief  The following public methods are used to start the ProfessorProductController
     ///         instance task, wait in a separate task until the product task ends, and stop the
     ///         product task, respectively.
-    ///
+    ///ProductLpmHardwareInterface
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void Run( );
     void Wait( );
@@ -115,11 +115,11 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following method is used to get a shared pointer to the hardware interface
+    /// @brief The following method is used to get a shared pointer to the LPM hardware interface
     ///        instance from the product controller.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    std::shared_ptr< CustomProductHardwareInterface >& GetHardwareInterface( ) override;
+    std::shared_ptr< CustomProductLpmHardwareInterface >& GetLpmHardwareInterface( ) override;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -215,16 +215,16 @@ private:
     ///        applications and command line.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    std::shared_ptr< CustomProductHardwareInterface > m_ProductHardwareInterface;
-    std::shared_ptr< ProductSystemManager           > m_ProductSystemManager;
-    std::shared_ptr< ProductNetworkManager          > m_ProductNetworkManager;
-    std::shared_ptr< ProductCommandLine             > m_ProductCommandLine;
-    std::shared_ptr< ProductKeyInputInterface       > m_ProductKeyInputInterface;
-    std::shared_ptr< ProductEdidInterface           > m_ProductEdidInterface;
-    std::shared_ptr< ProductVolumeManager           > m_ProductVolumeManager;
-    std::shared_ptr< ProductAdaptIQManager          > m_ProductAdaptIQManager;
-    std::shared_ptr< ProductSpeakerManager          > m_ProductSpeakerManager;
-    std::shared_ptr< CustomProductAudioService      > m_ProductAudioService;
+    std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
+    std::shared_ptr< ProductSystemManager              > m_ProductSystemManager;
+    std::shared_ptr< ProductNetworkManager             > m_ProductNetworkManager;
+    std::shared_ptr< ProductCommandLine                > m_ProductCommandLine;
+    std::shared_ptr< ProductKeyInputInterface          > m_ProductKeyInputInterface;
+    std::shared_ptr< ProductEdidInterface              > m_ProductEdidInterface;
+    std::shared_ptr< ProductVolumeManager              > m_ProductVolumeManager;
+    std::shared_ptr< ProductAdaptIQManager             > m_ProductAdaptIQManager;
+    std::shared_ptr< ProductSpeakerManager             > m_ProductSpeakerManager;
+    std::shared_ptr< CustomProductAudioService         > m_ProductAudioService;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

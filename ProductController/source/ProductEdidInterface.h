@@ -49,7 +49,7 @@ namespace ProductApp
 ///            Forward Class Declarations
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductHardwareInterface;
+class CustomProductLpmHardwareInterface;
 class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,9 +96,9 @@ private:
     ///        the lower level LPM hardware, as well as the A4VVideoManager service.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF*                          m_ProductTask;
-    Callback< ProductMessage >                   m_ProductNotify;
-    std::shared_ptr < CustomProductHardwareInterface > m_ProductHardwareInterface;
+    NotifyTargetTaskIF*        m_ProductTask;
+    Callback< ProductMessage > m_ProductNotify;
+    std::shared_ptr < CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
     A4VVideoManager::A4VVideoManagerClientIF::A4VVideoManagerClientPtr m_EdidClient;
 
     //////////////////////////////////////////////////////////////////////////////////////////////

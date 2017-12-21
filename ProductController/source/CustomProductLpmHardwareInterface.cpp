@@ -1,12 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductHardwareInterface.cpp
+/// @file      CustomProductLpmHardwareInterface.cpp
 ///
 /// @brief     This source code file contains custom Professor functionality for managing the
 ///            hardware, which interfaces with the Low Power Microprocessor or LPM on Riviera
 ///            APQ boards.
 ///
-/// @note      This custom class inherits a ProductHardwareInterface class found in a common
+/// @note      This custom class inherits a ProductLpmHardwareInterface class found in a common
 ///            code repository. This base inherited class starts and runs an LPM client connection,
 ///            as well as provides several common hardware based methods.
 ///
@@ -33,7 +33,7 @@
 #include "LpmClientFactory.h"
 #include "AutoLpmServiceMessages.pb.h"
 #include "ProfessorProductController.h"
-#include "CustomProductHardwareInterface.h"
+#include "CustomProductLpmHardwareInterface.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -50,23 +50,107 @@ constexpr uint32_t BLUETOOTH_MAC_LENGTH = 6;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductHardwareInterface::CustomProductHardwareInterface
+/// @name   CustomProductLpmHardwareInterface::CustomProductLpmHardwareInterface
 ///
 /// @brief  ProfessorProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductHardwareInterface::CustomProductHardwareInterface( ProfessorProductController&
-                                                                ProductController )
+CustomProductLpmHardwareInterface::CustomProductLpmHardwareInterface( ProfessorProductController&
+                                                                      ProductController )
 
-    : ProductHardwareInterface( ProductController.GetTask( ),
-                                ProductController.GetMessageHandler( ) )
+    : ProductLpmHardwareInterface( ProductController.GetTask( ),
+                                   ProductController.GetMessageHandler( ) )
 {
 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  CustomProductHardwareInterface::SendAccessoryPairing
+/// @name   CustomProductLpmHardwareInterface::NotifyVolumeLevel
+///
+/// @brief  This method send a notification of the volume level through the LPM hardware to other
+///         interested processes.
+///
+/// @param  uint32_t volume
+///
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
+///         attempts the request and returns true.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductLpmHardwareInterface::NotifyVolumeLevel( uint32_t volume )
+{
+    BOSE_DEBUG( s_logger, "A volume level of %d is being sent as a notifiation.", volume );
+
+    if( isConnected( ) == false || GetLpmClient( ) == nullptr )
+    {
+        BOSE_ERROR( s_logger, "A notification of the volume level failed. There is no LPM connection." );
+
+        return false;
+    }
+
+    BOSE_DEBUG( s_logger, "An LPM volume level notification will be made." );
+
+    IpcAudioSetVolume_t volumeSetting;
+
+    volumeSetting.set_volume( volume );
+
+    GetLpmClient( )->SetVolume( volumeSetting );
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductLpmHardwareInterface::NotifyMuteState
+///
+/// @brief  This method send a notification of the mute state through the LPM hardware to other
+///         interested processes.
+///
+/// @param  bool mute
+///
+/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
+///         attempts the request and returns true.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductLpmHardwareInterface::NotifyMuteState( bool mute )
+{
+    BOSE_DEBUG( s_logger, "A mute %s is being sent as a notification.", mute ? "on" : "off" );
+
+    if( isConnected( ) == false || GetLpmClient( ) == nullptr )
+    {
+        BOSE_ERROR( s_logger, "A notification of the mute state failed. There is no LPM connection." );
+
+        return false;
+    }
+
+    BOSE_DEBUG( s_logger, "An LPM mute state notification will be made." );
+
+    ///
+    /// @todo The LPM mute setting will be changed to contain only one field to set the mute state.
+    ///       The two fields used here are from legacy LPM code. Note that the JIRA Story PGC-551
+    ///       has been created to track this future change.
+    ///
+    IpcAudioMute_t muteSetting;
+
+    if( mute )
+    {
+        muteSetting.set_internalmute( 1 );
+        muteSetting.set_unifymute( 1 );
+    }
+    else
+    {
+        muteSetting.set_internalmute( 0 );
+        muteSetting.set_unifymute( 0 );
+    }
+
+    GetLpmClient( )->SetMute( muteSetting );
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name  CustomProductLpmHardwareInterface::SendAccessoryPairing
 ///
 /// @brief This method sends a request to start or stop pairing
 ///
@@ -77,8 +161,8 @@ CustomProductHardwareInterface::CustomProductHardwareInterface( ProfessorProduct
 /// @return bool The method returns true when the pairing enabled command was successfully sent.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductHardwareInterface::SendAccessoryPairing( bool enabled,
-                                                           const Callback< IpcSpeakerPairingMode_t >& pairingCallback )
+bool CustomProductLpmHardwareInterface::SendAccessoryPairing( bool enabled,
+                                                              const Callback< IpcSpeakerPairingMode_t >& pairingCallback )
 {
     if( isConnected( ) == false || GetLpmClient( ) == nullptr )
     {
@@ -100,7 +184,7 @@ bool CustomProductHardwareInterface::SendAccessoryPairing( bool enabled,
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductHardwareInterface::SendAccessoryActive
+/// @name   CustomProductLpmHardwareInterface::SendAccessoryActive
 ///
 /// @brief  This method sends a request to set the rear and sub speakers active or inactive.
 ///
@@ -113,9 +197,9 @@ bool CustomProductHardwareInterface::SendAccessoryPairing( bool enabled,
 /// @return The method will return a Boolean whether the accessory active command was sent.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductHardwareInterface::SendAccessoryActive( bool rears,
-                                                          bool subs,
-                                                          const Callback<IpcSpeakersActive_t>& callback )
+bool CustomProductLpmHardwareInterface::SendAccessoryActive( bool rears,
+                                                             bool subs,
+                                                             const Callback<IpcSpeakersActive_t>& callback )
 {
     if( isConnected( ) == false || GetLpmClient( ) == nullptr )
     {
@@ -138,7 +222,7 @@ bool CustomProductHardwareInterface::SendAccessoryActive( bool rears,
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  CustomProductHardwareInterface::SendAccessoryDisband
+/// @name  CustomProductLpmHardwareInterface::SendAccessoryDisband
 ///
 /// @brief This method sends a request to disband all accessories.
 ///
@@ -147,7 +231,7 @@ bool CustomProductHardwareInterface::SendAccessoryActive( bool rears,
 /// @return none
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductHardwareInterface::SendAccessoryDisband( )
+bool CustomProductLpmHardwareInterface::SendAccessoryDisband( )
 {
     if( isConnected( ) == false || GetLpmClient( ) == nullptr )
     {
@@ -164,7 +248,7 @@ bool CustomProductHardwareInterface::SendAccessoryDisband( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  CustomProductHardwareInterface::SendAudioPathPresentationLatency
+/// @name  CustomProductLpmHardwareInterface::SendAudioPathPresentationLatency
 ///
 /// @brief This method sends a request to the LPM hardware.
 ///
@@ -174,7 +258,7 @@ bool CustomProductHardwareInterface::SendAccessoryDisband( )
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductHardwareInterface::SendAudioPathPresentationLatency( uint32_t latency )
+bool CustomProductLpmHardwareInterface::SendAudioPathPresentationLatency( uint32_t latency )
 {
     BOSE_DEBUG( s_logger, "Audio path latency of %d is being set.", latency );
 
@@ -192,7 +276,7 @@ bool CustomProductHardwareInterface::SendAudioPathPresentationLatency( uint32_t 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductHardwareInterface::SendLipSyncDelay
+/// @name   CustomProductLpmHardwareInterface::SendLipSyncDelay
 ///
 /// @brief  This method sends a request to the LPM hardware.
 ///
@@ -202,7 +286,7 @@ bool CustomProductHardwareInterface::SendAudioPathPresentationLatency( uint32_t 
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductHardwareInterface::SendLipSyncDelay( uint32_t audioDelay )
+bool CustomProductLpmHardwareInterface::SendLipSyncDelay( uint32_t audioDelay )
 {
     BOSE_DEBUG( s_logger, "Audio lip sync delay is to be set to %d.", audioDelay );
 
@@ -220,7 +304,7 @@ bool CustomProductHardwareInterface::SendLipSyncDelay( uint32_t audioDelay )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductHardwareInterface::SendToneAndLevelControl
+/// @name   CustomProductLpmHardwareInterface::SendToneAndLevelControl
 ///
 /// @brief  This method sends a request to the LPM hardware.
 ///
@@ -230,7 +314,7 @@ bool CustomProductHardwareInterface::SendLipSyncDelay( uint32_t audioDelay )
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductHardwareInterface::SendToneAndLevelControl( IpcToneControl_t& controls )
+bool CustomProductLpmHardwareInterface::SendToneAndLevelControl( IpcToneControl_t& controls )
 {
     BOSE_DEBUG( s_logger, "Audio tone and level settings are to be set as follows: " );
     BOSE_DEBUG( s_logger, "               " );
@@ -254,7 +338,7 @@ bool CustomProductHardwareInterface::SendToneAndLevelControl( IpcToneControl_t& 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductHardwareInterface::SendSpeakerList
+/// @name   CustomProductLpmHardwareInterface::SendSpeakerList
 ///
 /// @brief  This method sends speaker list information to the LPM hardware.
 ///
@@ -264,7 +348,7 @@ bool CustomProductHardwareInterface::SendToneAndLevelControl( IpcToneControl_t& 
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductHardwareInterface::SendSpeakerList( IpcAccessoryList_t& accessoryList )
+bool CustomProductLpmHardwareInterface::SendSpeakerList( IpcAccessoryList_t& accessoryList )
 {
     BOSE_DEBUG( s_logger, "Speaker activation settings are to be set as follows: " );
 
@@ -282,7 +366,7 @@ bool CustomProductHardwareInterface::SendSpeakerList( IpcAccessoryList_t& access
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductHardwareInterface::SendSetSystemTimeoutEnableBits
+/// @name   CustomProductLpmHardwareInterface::SendSetSystemTimeoutEnableBits
 ///
 /// @brief  This method sends a request to the LPM hardware.
 ///
@@ -292,7 +376,7 @@ bool CustomProductHardwareInterface::SendSpeakerList( IpcAccessoryList_t& access
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductHardwareInterface::SendSetSystemTimeoutEnableBits( Ipc_TimeoutControl_t& timeoutControl )
+bool CustomProductLpmHardwareInterface::SendSetSystemTimeoutEnableBits( Ipc_TimeoutControl_t& timeoutControl )
 {
     BOSE_DEBUG( s_logger, "Auto power down will be set to %s.", timeoutControl.enable( ) ? "on" : "off" );
 
@@ -310,7 +394,7 @@ bool CustomProductHardwareInterface::SendSetSystemTimeoutEnableBits( Ipc_Timeout
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  CustomProductHardwareInterface::SendWiFiRadioStatus
+/// @name  CustomProductLpmHardwareInterface::SendWiFiRadioStatus
 ///
 /// @brief This method sends the wireless radio frequency to the LPM hardware.
 ///
@@ -320,7 +404,7 @@ bool CustomProductHardwareInterface::SendSetSystemTimeoutEnableBits( Ipc_Timeout
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductHardwareInterface::SendWiFiRadioStatus( uint32_t frequencyInKhz )
+bool CustomProductLpmHardwareInterface::SendWiFiRadioStatus( uint32_t frequencyInKhz )
 {
     BOSE_DEBUG( s_logger, "An attempt to send the wireless frequency %d KHz to the LPM is being made.",
                 frequencyInKhz );
@@ -339,7 +423,7 @@ bool CustomProductHardwareInterface::SendWiFiRadioStatus( uint32_t frequencyInKh
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductHardwareInterface::SetBlueToothMacAddress
+/// @name   CustomProductLpmHardwareInterface::SetBlueToothMacAddress
 ///
 /// @brief  This method is used to set the Bluetooth MAC Address and send it to the LPM hardware,
 ///         as long as the associated Bluetooth device name has been previously obtained.
@@ -348,7 +432,7 @@ bool CustomProductHardwareInterface::SendWiFiRadioStatus( uint32_t frequencyInKh
 ///                                         Bluetooth MAC Address.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductHardwareInterface::SetBlueToothMacAddress( const std::string& bluetoothMacAddress )
+void CustomProductLpmHardwareInterface::SetBlueToothMacAddress( const std::string& bluetoothMacAddress )
 {
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// The Bluetooth MAC Address needs to be reformatted to remove any colon characters. For
@@ -390,7 +474,7 @@ void CustomProductHardwareInterface::SetBlueToothMacAddress( const std::string& 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductHardwareInterface::SetBlueToothDeviceName
+/// @name   CustomProductLpmHardwareInterface::SetBlueToothDeviceName
 ///
 /// @brief  This method is used to set the Bluetooth Device Name and send it to the LPM hardware,
 ///         as long as the associated Bluetooth MAC Address has been previously obtained.
@@ -399,7 +483,7 @@ void CustomProductHardwareInterface::SetBlueToothMacAddress( const std::string& 
 ///                                         Bluetooth device name.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductHardwareInterface::SetBlueToothDeviceName( const std::string& bluetoothDeviceName )
+void CustomProductLpmHardwareInterface::SetBlueToothDeviceName( const std::string& bluetoothDeviceName )
 {
     m_blueToothDeviceName.assign( bluetoothDeviceName );
 
@@ -421,7 +505,7 @@ void CustomProductHardwareInterface::SetBlueToothDeviceName( const std::string& 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductHardwareInterface::SendBlueToothDeviceData
+/// @name   CustomProductLpmHardwareInterface::SendBlueToothDeviceData
 ///
 /// @brief  This method is used to send the Bluetooth device and MAC Address data to the LPM hardware.
 ///
@@ -429,14 +513,14 @@ void CustomProductHardwareInterface::SetBlueToothDeviceName( const std::string& 
 ///                                         Bluetooth device name.
 ///
 /// @param  unsigned long long bluetoothMacAddress This argument is a standard string representing
-///                                                the Bluetooth MAC Address.
+///                                                the Bluetooth MAC Addresmount -o remount,rw /opt/Bose
 ///
 /// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductHardwareInterface::SendBlueToothDeviceData( const std::string&       bluetoothDeviceName,
-                                                              const unsigned long long bluetoothMacAddress )
+bool CustomProductLpmHardwareInterface::SendBlueToothDeviceData( const std::string&       bluetoothDeviceName,
+                                                                 const unsigned long long bluetoothMacAddress )
 {
     BOSE_DEBUG( s_logger, "Bluetooth data is being set to the Device %s with MAC Address 0x%016llX.",
                 bluetoothDeviceName.c_str( ),
@@ -456,7 +540,7 @@ bool CustomProductHardwareInterface::SendBlueToothDeviceData( const std::string&
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  CustomProductHardwareInterface::SendSourceSelection
+/// @name  CustomProductLpmHardwareInterface::SendSourceSelection
 ///
 /// @brief This method sends a request to the LPM hardware.
 ///
@@ -466,7 +550,7 @@ bool CustomProductHardwareInterface::SendBlueToothDeviceData( const std::string&
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductHardwareInterface::SendSourceSelection( const LPM_IPC_SOURCE_ID sourceSelect )
+bool CustomProductLpmHardwareInterface::SendSourceSelection( const LPM_IPC_SOURCE_ID sourceSelect )
 {
     IPCSource_t source;
 
@@ -488,14 +572,14 @@ bool CustomProductHardwareInterface::SendSourceSelection( const LPM_IPC_SOURCE_I
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  CustomProductHardwareInterface::SetCecPhysicalAddress
+/// @name  CustomProductLpmHardwareInterface::SetCecPhysicalAddress
 ///
 /// @brief This method sends a request to the LPM hardware.
 ///
 /// @param None
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductHardwareInterface::SetCecPhysicalAddress( const uint32_t cecPhysicalAddress )
+bool CustomProductLpmHardwareInterface::SetCecPhysicalAddress( const uint32_t cecPhysicalAddress )
 {
     BOSE_DEBUG( s_logger, "CEC Physical Address will be sent to  LPM" );
 
