@@ -55,7 +55,6 @@ wspace=$(cd "$here/.." && echo "$PWD") || error_exit ${FUNCNAME[0]}
 riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || error_exit ${FUNCNAME[0]}
 swupdate_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || error_exit ${FUNCNAME[0]}
 
-
 opkg_config_dir="$swupdate_dir"/tools/opkg
 MACHINE_TYPE=`uname -m`
 if [ ${MACHINE_TYPE} == 'x86_64' ]; then
@@ -101,10 +100,10 @@ install_offline () {
     rm -rf "$offline_dir"
     mkdir -p "$offline_dir"  || error_exit ${FUNCNAME[0]}
     cd "$stage_package_dir" || error_exit ${FUNCNAME[0]}
-    local opkg_cmd=(fakeroot "$opkg_bin_dir"/opkg
-                    -f "$opkg_config_dir"/opkg.conf
-                    --offline-root="$offline_dir"
-                    --volatile-cache
+    local opkg_cmd=(fakeroot "$opkg_bin_dir"/opkg 
+                    -f "$opkg_config_dir"/opkg.conf 
+                    --offline-root="$offline_dir" 
+                    --volatile-cache 
                     --add-arch armv7a-vfp-neon:100
                     install "$product_ipk")
     echo "Executing ${opkg_cmd[@]}"
