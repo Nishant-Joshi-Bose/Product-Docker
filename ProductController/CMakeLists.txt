@@ -31,18 +31,19 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc
   ${PROTO_CC_DEST}/ProductSTS.pb.cc
   ${PROTO_CC_DEST}/SystemInfo.pb.cc
-  source/ProductStart.cpp
+  source/ProductAdaptIQManager.cpp
   source/ProductCommandLine.cpp
-  source/ProductNetworkManager.cpp
-  source/ProductSystemManager.cpp
-  source/ProductKeyInputInterface.cpp
-  source/ProductSpeakerManager.cpp
-  source/ProfessorProductController.cpp
   source/ProductEdidInterface.cpp
+  source/ProductKeyInputInterface.cpp
+  source/ProductNetworkManager.cpp
+  source/ProductStart.cpp
+  source/ProductSystemManager.cpp
+  source/ProductSpeakerManager.cpp
   source/ProductVolumeManager.cpp
+  source/ProfessorProductController.cpp
   source/CustomProductAudioService/CustomProductAudioService.cpp
   source/CustomProductAudioService/CustomAudioSettingsManager.cpp
-  source/ProductAdaptIQManager.cpp
+  source/CustomProductLpmHardwareInterface.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
   source/CustomStateMachine/CustomProductControllerStateBooting.cpp
