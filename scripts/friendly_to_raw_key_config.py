@@ -3,12 +3,13 @@ import sys
 import io
 import json
 import re
-from pycparser import c_parser, c_ast, parse_file
 import argparse
 import imp
 import os
 import inspect
 import copy
+import clang.cindex
+from pprint import pprint
 
 """
 Given a key list enumeration file, an actions enumeration file, and a 
@@ -34,18 +35,6 @@ EVENT_NAMES = {
   "RELEASE_BURST" : 4
 }
 
-def lookfor(node, target):
-  ret = None
-
-  for n0 in node.children():
-    n = n0[1]
-    if n.__class__.__name__ == target:
-      return n
-    else:
-      ret = lookfor(n, target)
-
-  return ret
-
 def build_enum_map_from_proto(pb, name):
   ret = {}
   e = getattr(pb, '_' + name.upper())
@@ -54,39 +43,49 @@ def build_enum_map_from_proto(pb, name):
 
   return ret
 
-def build_enum_map(ast, name):
+"""
+Recursively search the AST for enum <name>; return the cursor (or None if not found)
+"""
+def lookfor_enum(cursor, name): 
+  ret = None
+
+  for c in cursor.get_children():
+    bare_name = re.sub(r'.*::', '', c.type.spelling)
+    if (c.kind == clang.cindex.CursorKind.ENUM_DECL) and (bare_name == name):
+      # found it!
+      return c
+    else:
+      ret = lookfor_enum(c, name)
+      if ret is not None:
+        break
+
+  return ret
+
+"""
+Build a dict from enum <name>.  cursor is a node in a clang AST
+"""
+def build_enum_map_from_ast(cursor, name):
+  enum = lookfor_enum(cursor, name)
+
+  if enum is None:
+    return None 
+
   ret = {}
-  cur_val = 0
-  for n0 in ast.children():
-    n = n0[1]
-    if (n.__class__.__name__ ==  'Typedef') and (n.name == name):
-      # walk down to the enumerator list
-      enum_list = lookfor(n, 'EnumeratorList')
-      for e0 in enum_list.children():
-        e = e0[1]
+  for c in enum.get_children():
+    if (c.kind == clang.cindex.CursorKind.ENUM_CONSTANT_DECL):
+      ret[c.spelling] = c.enum_value
 
-        # if it has a value, use it, otherwise use current value
-        if e.value != None:
-          v = e.value
-          if v.__class__.__name__ == 'Constant':
-            cur_val = int(v.value)
-            val = cur_val
-          elif v.__class__.__name__ == 'ID':
-            val = cur_val
-        else:
-          val = cur_val
-
-        ret[e.name] = val 
-        cur_val += 1
   return ret
 
 def main():
+  clang_args = ['-x', 'c++']
+  index = clang.cindex.Index.create()
   argparser = argparse.ArgumentParser('generate key config')
   # friendly input file
-  argparser.add_argument('--inputcfg', dest='inputcfg', required = True,
+  argparser.add_argument('--inputcfgs', dest='inputcfgs', required = True, nargs='+',
     help='\"Friendly\" json config file')
   # input header file with action enumeration
-  argparser.add_argument('--actions', dest='actions_file', required = True,
+  argparser.add_argument('--actions', dest='actions_files', required = True, nargs='+',
     help='Event values output header file')
   # key definitions for different origins, all optional
   argparser.add_argument('--console', dest='console_file',
@@ -115,30 +114,46 @@ def main():
   ast_keys = []
   for f in key_files:
     if f is not None:
-      ast_keys.append(parse_file(f, use_cpp=True))
+      ast_keys.append(index.parse(f, clang_args).cursor)
     else:
       ast_keys.append(None)
 
-  if re.match(r'.*\.pyc$', args.actions_file):
-    pb = imp.load_compiled('p', os.path.abspath(args.actions_file))
-    action_map = build_enum_map_from_proto(pb, 'KEY_ACTION')
-  else:
-    ast_actions = parse_file(args.actions_file, use_cpp=True)
-    # build enum map from events
-    action_map = build_enum_map(ast_actions, 'KEY_ACTION')
+  # merge action files ASTs (python or c/c++ headers) to action map
+  action_map = {}
+  for f in args.actions_files:
+    if re.match(r'.*\.pyc$', f):
+      pb = imp.load_compiled('p', os.path.abspath(f))
+      a = build_enum_map_from_proto(pb, 'KEY_ACTION')
+      if a is not None:
+        action_map.update(a)
+    else:
+      ast_actions = index.parse(f, clang_args).cursor
+      # build enum map from events
+      a = build_enum_map_from_ast(ast_actions, 'KEY_ACTION')
+      if a:
+        action_map.update(a)
+      else:
+        a = build_enum_map_from_ast(ast_actions, 'ActionCommon_t')
+        if a:
+          action_map.update(a)
 
   # build enum maps from ASTs
   key_maps = []
   for a in ast_keys:
     if a is not None:
-      key_maps.append(build_enum_map(a, 'KEY_VALUE'))
+      key_maps.append(build_enum_map_from_ast(a, 'KEY_VALUE'))
     else:
       key_maps.append(None)
 
+  # merge user config files
+  j = {}
+  j['KeyTable'] = []
+  for f in args.inputcfgs:
+    ifile = open(f).read()
+    jtmp = json.loads(ifile)
+    j['KeyTable'] += jtmp['KeyTable']
 
-  ifile = open(args.inputcfg).read()
-  j = json.loads(ifile)
-
+  print(action_map)
   # transmogrify the key table
   keymap = {'KeyTable' : []}
 
@@ -192,6 +207,6 @@ def main():
   with io.FileIO(args.outputcfg, "w") as file:
     file.write(s)
   
-if __name__ == '__main__':
+if __name__ == '__main__':  
   main()
 

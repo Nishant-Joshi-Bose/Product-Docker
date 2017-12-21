@@ -77,7 +77,7 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Continuous/master/1.0.0-42+77af206"
+    "selected_version": "Release/master/1.0.0-44+42f6178"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -101,7 +101,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.3.1-167+6b6fcf5"
+    "selected_version": "Continuous/master/0.3.1-169+8209152"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",

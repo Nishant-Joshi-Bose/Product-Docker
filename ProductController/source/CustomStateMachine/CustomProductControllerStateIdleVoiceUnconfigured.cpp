@@ -120,15 +120,15 @@ bool CustomProductControllerStateIdleVoiceUnconfigured::HandleInactivityTimer( I
         {
             BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                           GetName( ).c_str( ),
-                          "CustomProductControllerStateNetworkStandbyUnconfigured" );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
+                          "CustomProductControllerStateNetworkStandbyConfigured" );
+            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED );
         }
         else
         {
             BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                           GetName( ).c_str( ),
-                          "CustomProductControllerStateNetworkStandbyConfigured" );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED );
+                          "CustomProductControllerStateNetworkStandbyUnconfigured" );
+            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
         }
     }
 

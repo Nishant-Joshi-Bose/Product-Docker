@@ -28,7 +28,7 @@
 #include "CustomProductControllerStateLowPower.h"
 #include "ProductControllerHsm.h"
 #include "ProductControllerStateIdle.h"
-#include "CustomProductHardwareInterface.h"
+#include "CustomProductLpmHardwareInterface.h"
 #include "ProfessorProductController.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,7 +84,7 @@ void CustomProductControllerStateLowPower::HandleStateStart( )
 {
     BOSE_VERBOSE( s_logger, "CustomProductControllerStateLowPower is being started." );
 
-    GetCustomProductController( ).GetHardwareInterface( )->SetSystemState( SYSTEM_STATE_LOW_POWER );
+    GetCustomProductController( ).GetLpmHardwareInterface( )->SetSystemState( SYSTEM_STATE_LOW_POWER );
 
     BOSE_VERBOSE( s_logger, "An attempt to set the device to a low power state is being made." );
 }
