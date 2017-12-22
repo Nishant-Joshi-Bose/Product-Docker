@@ -551,6 +551,12 @@ void EddieProductController::SendDeActivateAccessPointCmd()
     BOSE_INFO( s_logger, __func__ );
 }
 
+NetManager::Protobuf::OperationalMode EddieProductController::GetWiFiOperationalMode( ) const
+{
+    // @TODO return the real network operational mode
+    return NetManager::Protobuf::OperationalMode::autoSwitching;
+}
+
 void EddieProductController::HandleIntents( KeyHandlerUtil::ActionType_t intent )
 {
     BOSE_INFO( s_logger, "Translated Intent %d", intent );
