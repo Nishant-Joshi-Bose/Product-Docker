@@ -2,15 +2,21 @@ export BOSE_WORKSPACE := $(abspath $(CURDIR))
 include Settings.mk
 
 .PHONY: default
-ifeq ($(sdk),native)
-default: cmake_build
-else
 default: graph
-endif
 
-.PHONY: version-files
-version-files: | $(BUILDS_DIR)
+.PHONY: force
+force:
+
+VERSION_FILES = \
+ $(BUILDS_DIR)/BoseVersion.h \
+ $(BUILDS_DIR)/BoseVersion.json \
+
+$(VERSION_FILES): version.txt | $(BUILDS_DIR)
 	gen-version-files version.txt $(BUILDS_DIR)
+
+ifndef DONT_UPDATE_VERSION
+$(VERSION_FILES): force
+endif
 
 $(BUILDS_DIR):
 	mkdir -p $@
@@ -31,7 +37,7 @@ SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_
 TESTUTILS_DIR = $(shell components get CastleTestUtils installed_location)
 
 .PHONY: generated_sources
-generated_sources: check_tools version-files
+generated_sources: check_tools $(VERSION_FILES)
 	$(MAKE) -C ProductController $@
 	$(MAKE) -C $(PRODUCTCONTROLLERCOMMON_DIR) $@
 	ln -nsf $(TESTUTILS_DIR) builds/CastleTestUtils
@@ -99,6 +105,13 @@ package: product-ipk hsp-ipk lpmupdater-ipk monaco-ipk
 
 .PHONY: all-packages
 all-packages: package packages-gz update-zip update-zip-with-hsp
+
+.PHONY: deploy
+deploy: graph all-packages
+ifndef RIVIERA_HSP_VERSION
+	$(error No RIVIERA_HSP_VERSION)
+endif
+	scripts/collect-deployables builds/Release builds/deploy/HSP-${RIVIERA_HSP_VERSION}
 
 .PHONY: clean
 clean:

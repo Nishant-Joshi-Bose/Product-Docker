@@ -12,6 +12,12 @@ if [ "$[/javascript myJob.Klocwork]" = "true" ]; then
     KWINJECT="kwinject -I 'testCCompiler.c,testCXXCompiler.cxx'"
 fi
 
-eval $KWINJECT make DONT_UPDATE_CASTLETOOLS=1 jobs=8 default all-packages || exit
+export DONT_UPDATE_CASTLETOOLS=1
+
+export RIVIERA_HSP_VERSION=1.3
+eval $KWINJECT make jobs=8 deploy || exit
+export DONT_UPDATE_VERSION=1
+export RIVIERA_HSP_VERSION=2.0
+make jobs=8 deploy || exit
 
 : success
