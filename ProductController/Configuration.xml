@@ -20,7 +20,6 @@
     <hasDemo>false</hasDemo>
     <isSsdpEnabled>true</isSsdpEnabled>
     <speakerType>5</speakerType>
-
 	<AudioPathParameters>
         <primaryParameters delayCompensation="0" 
         					hasAudioInputMux="false" 
@@ -69,5 +68,4 @@
             </outputDriverParameters>
         </outputDriverParameterSet>
     </AudioPathParameters>
-
 </Configuration>
