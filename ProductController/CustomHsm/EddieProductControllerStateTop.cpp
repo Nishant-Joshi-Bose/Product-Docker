@@ -35,12 +35,6 @@ bool EddieProductControllerStateTop::HandleIntentAuxIn( KeyHandlerUtil::ActionTy
     return true;
 }
 
-bool EddieProductControllerStateTop::HandleIntentVoice( KeyHandlerUtil::ActionType_t intent )
-{
-    BOSE_LOG( INFO, "intent:" << intent );
-    return true;
-}
-
 bool EddieProductControllerStateTop::HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& info )
 {
     BOSE_INFO( s_logger,  __func__ );
