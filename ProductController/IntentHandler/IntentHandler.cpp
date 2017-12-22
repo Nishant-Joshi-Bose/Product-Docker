@@ -75,15 +75,6 @@ void IntentHandler::Initialize()
     m_IntentNotificationMap[( uint16_t ) Action::AUX_IN]        = "aux_in" ;
     //- AUX Control API's
 
-    //+ Voice (Alexa) Control API's
-    IntentManagerPtr_t voiceRequestManager =
-        std::make_shared<VoiceManager>( GetTask() , GetCli(),
-                                        GetFrontDoorClient(),
-                                        GetProductController() );
-    m_IntentManagerMap[( uint16_t )Action::VOICE_CAROUSEL] = voiceRequestManager;
-    m_IntentNotificationMap[( uint16_t ) Action::VOICE_CAROUSEL] = "voice_control" ;
-    //- Voice (Alexa) Control API's
-
 }
 
 }
