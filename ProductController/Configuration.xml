@@ -21,44 +21,51 @@
     <isSsdpEnabled>true</isSsdpEnabled>
     <speakerType>5</speakerType>
 
-    <AudioPathParameters>
-        <primaryParameters  delayCompensation="0" 
-                            hasAudioInputMux="false" 
-                            hasAIC="false" 
-                            putDSPinSuspend="false" 
-                            useArmVolumeControl="false" 
-                            productOwnsInitialVolume="false" 
-                            chimeVolume="40" 
-                            hasABL="false" 
-                            hasBattery="false" />
+	<AudioPathParameters>
+        <primaryParameters delayCompensation="0" 
+        					hasAudioInputMux="false" 
+        					hasAIC="false" 
+        					putDSPinSuspend="false" 
+        					useArmVolumeControl="false" 
+        					productOwnsInitialVolume="false" 
+        					chimeVolume="40" 
+        					hasABL="false" 
+        					hasBattery="false" />
         <bassParameters hasControlCapabilities="false" 
-                        minimum="-9" 
-                        maximum="0" 
-                        defaultValue="0" />
+        				minimum="-9" 
+        				maximum="0" 
+        				defaultValue="0" />
         <dspImages stereoDspImage="">
             <monoCapability isMonoCapable="false" 
-                            monoDspImage="" />
-            <stereoPairingCapability    isStereoPairingCapable="false" 
-                                        leftDspImage="" 
-                                        rightDspImage="" />
+            				monoDspImage="" />
+            <stereoPairingCapability isStereoPairingCapable="false" 
+            						leftDspImage="" 
+            						rightDspImage="" />
         </dspImages>
-        <outputDeviceParameters/>
+        <outputDeviceParameters>
+            <audioParams objName="APPAudio">
+                <app />
+            </audioParams>
+            <muteParams objName="APPMute">
+                <app />
+            </muteParams>
+            <volumeParams volcontrolType="VOLUME_FORWARD_APPRODUCT" />
+        </outputDeviceParameters>
         <outputDriverParameterSet defaultOutputDriverIndex="0">
             <outputDriverParameters outputDriverName="" 
-                                    outputDriverPath="" 
-                                    outputDriverType="AUDIO_DEVICE_TYPE_ALSA" 
-                                    hardwareDeviceName="hw:0,0"
-                                    samplesPerFrame="512" 
-                                    outputSampleRate="48000" 
-                                    wifiAttenuation="0.39810699" 
-                                    auxAttenuation="1" 
-                                    wifiBufferTarget="1802" 
-                                    auxBufferTarget="1802" 
-                                    useDither="false" 
-                                    audioLatency="0">
-                <asrcConstants  invFsamp="2.2675736961451251e-05" 
-                                invki="1725620.886483805" 
-                                ki="5.7950156249999992e-07" />
+            						outputDriverPath="" 
+            						outputDriverType="AUDIO_DEVICE_TYPE_ALSA" 
+            						samplesPerFrame="512" 
+            						outputSampleRate="44100" 
+            						wifiAttenuation="0.39810699" 
+            						auxAttenuation="1" 
+            						wifiBufferTarget="1802" 
+            						auxBufferTarget="1802" 
+            						useDither="false" 
+            						audioLatency="0">
+                <asrcConstants invFsamp="2.2675736961451251e-05" 
+                				invki="1725620.886483805" 
+                				ki="5.7950156249999992e-07" />
             </outputDriverParameters>
         </outputDriverParameterSet>
     </AudioPathParameters>
