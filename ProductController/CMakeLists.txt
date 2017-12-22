@@ -29,6 +29,7 @@ ADD_EXECUTABLE(Eddie
   ${PROTO_CC_DEST}/KeyActions.pb.cc
   ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/IntentHandler.pb.cc
+  ${PROTO_CC_DEST}/VolumeConfig.pb.cc
   IntentHandler/IntentHandler.cpp
   IntentHandler/PlaybackRequestManager.cpp
   IntentHandler/VoiceManager.cpp
