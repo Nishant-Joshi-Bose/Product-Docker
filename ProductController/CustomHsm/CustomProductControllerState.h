@@ -107,6 +107,7 @@ public:
     }
 
     virtual bool HandleIntentWiFi( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentVolume( KeyHandlerUtil::ActionType_t result )
     {
         return false;
     }
