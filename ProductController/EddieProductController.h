@@ -37,7 +37,6 @@
 #include "ProductControllerStateSoftwareUpdating.h"
 #include "ProductControllerStateCriticalError.h"
 #include "LightBarController.h"
-#include "DemoController.h"
 #include "ConfigurationStatus.pb.h"
 #include "SoundTouchInterface/AllowSourceSelect.pb.h"
 #include "NetManager.pb.h"
@@ -82,6 +81,7 @@ public:
     {
         return {};
     }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// @name  IsBooted
     /// @brief The following methods are used by the state machine to determine the status of the
@@ -185,6 +185,7 @@ private:
     void HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus );
 
     void HandleWiFiProfileResponse( const NetManager::Protobuf::WiFiProfiles& profiles );
+
 
 public:
     /// Handle Key Information received from LPM
@@ -305,11 +306,11 @@ public:
     void HandleProductMessage( const ProductMessage& productMessage );
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @name   GetLpmInterface
+/// @name   GetLpmHardwareInterface
 /// @brief  Returns reference to LpmInterface
 /// @return LpmInterface&
 ///////////////////////////////////////////////////////////////////////////////
-    inline LpmInterface& GetLpmInterface()
+    inline std::shared_ptr< CustomProductLpmHardwareInterface >& GetLpmHardwareInterface( ) override
     {
         return m_LpmInterface;
     }
@@ -391,8 +392,6 @@ private:
 
     BOptional<int>                              m_wifiProfilesCount;
     AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>     errorCb;
-    /// Demonstration Controller instance
-    DemoApp::DemoController m_demoController;
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief Interfaces to the ProductSTSController, which implements the interactions
@@ -404,6 +403,9 @@ private:
     ProductSTSController                        m_ProductSTSController;
     DataCollectionClient                        m_DataCollectionClient;
     VoiceServiceClient                          m_voiceServiceClient;
+
+    /// Shared Pointer to the LPM Custom Hardware Interface
+    std::shared_ptr< CustomProductLpmHardwareInterface > m_LpmInterface;
 };
 static const char* const KEY_NAMES[] __attribute__( ( unused ) ) =
 {

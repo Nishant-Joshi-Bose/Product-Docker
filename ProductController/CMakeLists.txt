@@ -3,8 +3,8 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
   ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
-  ${DEMOCONTROLLER_DIR}
   ${DATACOLLECTIONCLIENT_DIR}
   ${CUSTOM_HSM_DIR}
   ${KEYHANDLER_DIR}/include
@@ -37,11 +37,11 @@ ADD_EXECUTABLE(Eddie
   DisplayController/DisplayController.cpp
   CustomProductAudioService/CustomProductAudioService.cpp
   CustomProductAudioService/CustomAudioSettingsManager.cpp
+  CustomProductLpmHardwareInterface.cpp
 )
 
 TARGET_LINK_LIBRARIES(Eddie
   CastleProductControllerCommon
-  DemoController
   DataCollectionClient
   LpmClient
   FrontDoorClient

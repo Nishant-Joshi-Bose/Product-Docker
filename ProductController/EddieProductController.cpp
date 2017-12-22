@@ -17,11 +17,11 @@
 #include "CLICmdsKeys.h"
 #include "BluetoothSinkEndpoints.h"
 #include "EndPointsDefines.h"
+#include "CustomProductLpmHardwareInterface.h"
+
 //#include "ButtonPress.pb.h" // @TODO Leela, re-enable this code
 
 static DPrint s_logger( "EddieProductController" );
-
-using namespace DemoApp;
 
 namespace ProductApp
 {
@@ -55,9 +55,9 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_wifiProfilesCount(),
     errorCb( AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> ( std::bind( &EddieProductController::CallbackError,
                                                                   this, std::placeholders::_1 ), GetTask() ) ),
-    m_demoController( m_ProductControllerTask, m_KeyHandler, g_ProductPersistenceDir ),
     m_DataCollectionClient( "EddieProductController" ),
-    m_voiceServiceClient( ProductName, m_FrontDoorClientIF )
+    m_voiceServiceClient( ProductName, m_FrontDoorClientIF ),
+    m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) )
 {
     BOSE_INFO( s_logger, __func__ );
     m_deviceManager.Initialize( this );
@@ -88,8 +88,8 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
     ReadConfigurationStatusFromPersistence();
 
-    m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_LpmInterface.GetLpmClient() ) );
-    m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF,  m_LpmInterface.GetLpmClient() ) );
+    m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient() ) );
+    m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient() ) );
     SetupProductSTSController();
 
     // Start Eddie ProductAudioService
@@ -106,14 +106,15 @@ EddieProductController::~EddieProductController()
 
 void EddieProductController::Initialize()
 {
-    m_LpmInterface.Initialize( std::bind( &EddieProductController::HandleProductMessage , this, std::placeholders::_1 ) );
+    //Instantiate and run the hardware interface.
+    m_LpmInterface->Run( );
+
     m_productCliClient.Initialize( GetTask() );
     RegisterCliClientCmds();
     RegisterEndPoints();
     SendInitialRequests();
     ///Register lpm events that lightbar will handle
     m_lightbarController->RegisterLightBarEndPoints();
-    m_demoController.Initialize();
     m_displayController ->Initialize();
 }
 
@@ -154,7 +155,7 @@ void EddieProductController::RegisterLpmEvents()
     // Register keys coming from the LPM.
     auto func = std::bind( &EddieProductController::HandleLpmKeyInformation, this, std::placeholders::_1 );
     AsyncCallback<IpcKeyInformation_t>response_cb( func, GetTask() );
-    m_LpmInterface.GetLpmClient()->RegisterEvent<IpcKeyInformation_t>( IPC_KEY, response_cb );
+    m_LpmInterface->GetLpmClient()->RegisterEvent<IpcKeyInformation_t>( IPC_KEY, response_cb );
     m_lightbarController->RegisterLpmEvents();
 }
 
@@ -754,6 +755,50 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
                     m_isLpmReady ? "up" : "down" );
 
         GetHsm().Handle<bool>( &CustomProductControllerState::HandleLpmState, m_isLpmReady );
+
+        ///
+        /// @todo The system state is return here. Code to act on this event needs to be developed.
+        ///
+        if( productMessage.lpmstatus( ).has_systemstate( ) )
+        {
+            BOSE_DEBUG( s_logger, "The LPM system state was set to %s",
+                        IpcLpmSystemState_t_Name( productMessage.lpmstatus( ).systemstate( ) ).c_str( ) );
+
+            switch( productMessage.lpmstatus( ).systemstate( ) )
+            {
+            case SYSTEM_STATE_ON:
+                break;
+            case SYSTEM_STATE_OFF:
+                break;
+            case SYSTEM_STATE_BOOTING:
+                break;
+            case SYSTEM_STATE_STANDBY:
+                break;
+            case SYSTEM_STATE_RECOVERY:
+                break;
+            case SYSTEM_STATE_LOW_POWER:
+                break;
+            case SYSTEM_STATE_UPDATE:
+                break;
+            case SYSTEM_STATE_SHUTDOWN:
+                break;
+            case SYSTEM_STATE_FACTORY_DEFAULT:
+                break;
+            case SYSTEM_STATE_IDLE:
+                break;
+            case SYSTEM_STATE_NUM_OF:
+                break;
+            }
+        }
+
+        ///
+        /// The power state if returned from the LPM hardware is used only for informational purposes.
+        ///
+        if( productMessage.lpmstatus( ).has_powerstate( ) )
+        {
+            BOSE_DEBUG( s_logger, "The LPM power state was set to %s",
+                        IpcLPMPowerState_t_Name( productMessage.lpmstatus( ).powerstate( ) ).c_str( ) );
+        }
     }
 }
 
