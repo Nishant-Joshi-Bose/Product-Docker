@@ -98,6 +98,9 @@ For subsequent new LPM ipk installs, just installing the ipk once should be suff
 
 ### More...
 
+Ask to be added to the SSG-Eddie mailing list to stay in the loop by clicking
+[here](mailto:Jonathan_Cooper@bose.com?subject=Add%20me%20to%20the%20SSG-Eddie%20mailing%20list).
+
 To rebuild the .ipk file and install via adb in one step:
 
 ```shell session
