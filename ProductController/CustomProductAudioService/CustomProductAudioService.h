@@ -8,21 +8,17 @@
 #pragma once
 #include "ProductAudioService.h"
 #include "EddieProductController.h"
+#include "CustomAudioSettingsManager.h"
 
 namespace ProductApp
 {
-
-constexpr char kBassEndPoint[] = "/audio/bass";
-constexpr char kTrebleEndPoint[] = "/audio/treble";
-
 class CustomProductAudioService: public ProductAudioService
 {
 public:
-    bool Run();
-    CustomProductAudioService( EddieProductController& ProductController,
-                               const FrontDoorClientIF_t& FrontDoorClient );
+    CustomProductAudioService( EddieProductController& ProductController, const FrontDoorClientIF_t& FrontDoorClient );
 
 private:
+    std::unique_ptr<CustomAudioSettingsManager>   m_AudioSettingsMgr;
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// Front Door handlers
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -35,7 +31,7 @@ private:
     void RegisterAudioPathEvents() override;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// FrontDoor callback functions
+    /// FrontDoor handling functions
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     void RegisterFrontDoorEvents() override;
 };

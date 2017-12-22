@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file   CustomProductAudioService.h
+/// @file   CustomProductAudioService.cpp
 /// @brief   This file contains source code for Eddie specific behavior for
 ///         communicating with APProduct Server and APProduct related FrontDoor interaction
 /// Copyright 2017 Bose Corporation
@@ -13,40 +13,25 @@
 
 static DPrint s_logger( "CustomProductAudioService" );
 
+constexpr char kBassEndPoint            [] = "/audio/bass";
+constexpr char kTrebleEndPoint          [] = "/audio/treble";
+
 namespace ProductApp
 {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   CustomProductAudioService::CustomProductAudioService
 ///
-/// @param  NotifyTargetTaskIF* task
-///
-/// @param  Callback< ProductMessage > ProductNotify
-///
-/// @return This method returns a pointer to a CustomProductAudioService object.
+/// @param  EddieProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductAudioService::CustomProductAudioService( EddieProductController& ProductController, const FrontDoorClientIF_t& FrontDoorClient )
-    : ProductAudioService( ProductController.GetTask( ),
-                           ProductController.GetMessageHandler() )
+CustomProductAudioService::CustomProductAudioService( EddieProductController& ProductController, const FrontDoorClientIF_t& FrontDoorClient ):
+    ProductAudioService( ProductController.GetTask( ),
+                         ProductController.GetMessageHandler() ),
+    m_AudioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) )
 {
     BOSE_DEBUG( s_logger, __func__ );
     m_FrontDoorClientIF = FrontDoorClient;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   CustomProductAudioService::Run
-///
-/// @brief  Register for APProduct events, and FrontDoor endpoints
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductAudioService::Run( )
-{
-    BOSE_DEBUG( s_logger, __func__ );
-    RegisterAudioPathEvents();
-    RegisterFrontDoorEvents();
-    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,7 +54,7 @@ void CustomProductAudioService::RegisterAudioPathEvents()
 /// @brief  On Eddie, it register for put/post/get FrontDoor request for
 ///         bass, treble
 ///
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::RegisterFrontDoorEvents()
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -81,9 +66,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetBass( );
     };
-    auto setBassAction = [this]( const ProductPb::AudioBassLevel val )
+    auto setBassAction = [this]( ProductPb::AudioBassLevel val )
     {
-        m_AudioSettingsMgr->SetBass( val );
+        return m_AudioSettingsMgr->SetBass( val );
     };
     m_AudioBassSetting = std::unique_ptr<AudioSetting<ProductPb::AudioBassLevel>>( new AudioSetting<ProductPb::AudioBassLevel>
                                                                                    ( kBassEndPoint,
@@ -99,9 +84,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     {
         return m_AudioSettingsMgr->GetTreble( );
     };
-    auto setTrebleAction = [ this ]( const ProductPb::AudioTrebleLevel val )
+    auto setTrebleAction = [ this ]( ProductPb::AudioTrebleLevel val )
     {
-        m_AudioSettingsMgr->SetTreble( val );
+        return m_AudioSettingsMgr->SetTreble( val );
     };
     m_AudioTrebleSetting = std::unique_ptr<AudioSetting<ProductPb::AudioTrebleLevel>>( new AudioSetting<ProductPb::AudioTrebleLevel>
                            ( kTrebleEndPoint,
@@ -109,7 +94,6 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                              setTrebleAction,
                              m_FrontDoorClientIF,
                              m_ProductTask ) );
-
 }
 
 }// namespace ProductApp

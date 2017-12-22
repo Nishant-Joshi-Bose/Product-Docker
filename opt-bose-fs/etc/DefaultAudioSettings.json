@@ -1,9 +1,11 @@
 {
 	"version": {
-		"major": 1,
+		"major": 2,
 		"minor": 1
 	},
-	"supportedAudioSettings": ["audioBassLevel", "audioTrebleLevel"],
+	"supportedAudioSettings": {
+		"contentItemSensitive": ["audioBassLevel", "audioTrebleLevel"]
+    },
 	"configurations": {
 		"audioBassLevel": {
 			"currentPersistenceLevel": "global",

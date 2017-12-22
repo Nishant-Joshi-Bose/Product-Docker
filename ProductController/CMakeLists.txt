@@ -9,6 +9,7 @@ INCLUDE_DIRECTORIES(
   ${CUSTOM_HSM_DIR}
   ${KEYHANDLER_DIR}/include
   IntentHandler
+  CustomProductAudioService
   DisplayController
   .
 )
@@ -29,10 +30,12 @@ ADD_EXECUTABLE(Eddie
   ${PROTO_CC_DEST}/KeyActions.pb.cc
   ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/IntentHandler.pb.cc
+  ${PROTO_CC_DEST}/AudioSettings.pb.cc
   IntentHandler/IntentHandler.cpp
   IntentHandler/PlaybackRequestManager.cpp
   DisplayController/DisplayController.cpp
-  CustomProductAudioService.cpp
+  CustomProductAudioService/CustomProductAudioService.cpp
+  CustomProductAudioService/CustomAudioSettingsManager.cpp
   CustomProductLpmHardwareInterface.cpp
 )
 
