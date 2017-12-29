@@ -3,12 +3,16 @@ ifndef BOSE_WORKSPACE
 endif
 
 sdk = qc8017_32
-ifeq ($(sdk),native)
+
+ifeq ($(sdk),$(filter native x86 x86_64, $(sdk)))
   cfg = Debug
 else
   cfg = Release
 endif
-jobs = 1
+
+jobs := $(shell grep -c ^processor /proc/cpuinfo)
+
+$(info sdk=${sdk} cfg=${cfg} jobs=${jobs})
 
 BUILDS_DIR := $(BOSE_WORKSPACE)/builds/$(cfg)/$(sdk)
 
