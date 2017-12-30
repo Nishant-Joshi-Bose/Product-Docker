@@ -354,7 +354,7 @@ public:
 /// @return NetManager::Protobuf::OperationalMode of the WiFi subsystem
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-    NetManager::Protobuf::OperationalMode GetWiFiOperationalMode( ) const override;
+    NetManager::Protobuf::OperationalMode GetWiFiOperationalMode( );
 
 private:
 
