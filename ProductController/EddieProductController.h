@@ -347,6 +347,15 @@ public:
         return m_voiceServiceClient;
     }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   GetWiFiOperationalMode
+///
+/// @return NetManager::Protobuf::OperationalMode of the WiFi subsystem
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+    NetManager::Protobuf::OperationalMode GetWiFiOperationalMode( );
+
 private:
 
     ProductControllerStateTop               m_ProductControllerStateTop;
