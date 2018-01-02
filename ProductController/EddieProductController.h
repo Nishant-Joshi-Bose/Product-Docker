@@ -82,6 +82,18 @@ public:
         return {};
     }
 
+    BLESetupService::ProductId GetProductId() const override
+    {
+        return BLESetupService::ProductId::EDDIE;
+    }
+    BLESetupService::VariantId GetVariantId() const override
+    {
+        return BLESetupService::VariantId::NONE;
+    }
+    std::string GetProductVersonNumber() const override
+    {
+        return "0.0.1";
+    }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// @name  IsBooted
     /// @brief The following methods are used by the state machine to determine the status of the
