@@ -61,6 +61,8 @@ EddieProductController::EddieProductController( std::string const& ProductName )
 {
     BOSE_INFO( s_logger, __func__ );
     m_deviceManager.Initialize( this );
+    m_ProductFrontDoorUtility.Initialize( this );
+
     /// Add States to HSM object and initialize HSM before doing anything else.
     GetHsm().AddState( &m_ProductControllerStateTop );
     GetHsm().AddState( &m_ProductControllerStateLowPowerStandby );
