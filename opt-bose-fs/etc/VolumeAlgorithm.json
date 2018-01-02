@@ -1,4 +1,4 @@
 [
-  {"StartStep":  1, "EndStep":   9,   "delta": 1}, 
-  {"StartStep": 10, "EndStep": 100,   "delta": 2}
+  {"StartStep":  1, "EndStep":   9,   "Delta": 1}, 
+  {"StartStep": 10, "EndStep":  54,   "Delta": 2}
 ]
