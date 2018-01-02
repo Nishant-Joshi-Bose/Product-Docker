@@ -15,10 +15,10 @@
     {"Origin": 0, "KeyEvent": 2, "KeyList": [1], "TimeOutList": [10000], "Action": 22, "Comment": "Console: Bluetooth Press and Hold ---> Clear Pairing List"},
 
     {"Origin": 0, "KeyEvent": 1, "KeyList": [3], "TimeOutList": [0], "Action": 23, "Comment": "Console: VolumeUp(+) release ---> VolumeUp"},
-    {"Origin": 0, "KeyEvent": 3, "KeyList": [3], "TimeOutList": [300,200], "Action": 39, "Comment": "Console: VolumeUp(+) Press and Hold ---> VolumeRampUp"},
+    {"Origin": 0, "KeyEvent": 3, "KeyList": [3], "TimeOutList": [300,100], "Action": 39, "Comment": "Console: VolumeUp(+) Press and Hold ---> VolumeRampUp"},
 
     {"Origin": 0, "KeyEvent": 1, "KeyList": [5], "TimeOutList": [0], "Action": 24, "Comment": "Console: VolumeUp(-) release ---> VolumeDown"},
-    {"Origin": 0, "KeyEvent": 3, "KeyList": [5], "TimeOutList": [300,200], "Action": 40, "Comment": "Console: VolumeUp(-) Press and Hold ---> VolumeRampDown"},
+    {"Origin": 0, "KeyEvent": 3, "KeyList": [5], "TimeOutList": [300,100], "Action": 40, "Comment": "Console: VolumeUp(-) Press and Hold ---> VolumeRampDown"},
 
     {"Origin": 0, "KeyEvent": 1, "KeyList": [2], "TimeOutList": [0], "Action": 25, "Comment": "Console: AUX release ---> SendToAux"},
 
