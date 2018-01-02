@@ -150,23 +150,17 @@ void DisplayController::ParseJSONData()
     Json::Value  json_back_light_level   = json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_BACK_LIGHT_LEVELS  ];
     Json::Value  json_lowering_threshold = json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_LOWERING_THRESHOLDS];
     Json::Value  json_rising_threadhold  = json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_RISING_THRESHOLDS  ];
-    unsigned int nb_threshold_levels     = lowering_lux_threshold.size();
-
-    if( json_back_light_level.size() != nb_threshold_levels )
-    {
-        BOSE_LOG( ERROR, "Error: not enough elements in " << JSON_TOKEN_BACK_LIGHT_LEVELS << " expected: " << nb_threshold_levels << " found: " << json_back_light_level.size() );
-        return;
-    }
+    unsigned int nb_threshold_levels     = json_back_light_level.size();
 
     if( json_lowering_threshold.size() != nb_threshold_levels )
     {
-        BOSE_LOG( ERROR, "Error: not enough elements in " << JSON_TOKEN_LOWERING_THRESHOLDS << " expected: " << nb_threshold_levels << " found: " << json_lowering_threshold.size() );
+        BOSE_LOG( ERROR, "Error: not right # of elements in " << JSON_TOKEN_LOWERING_THRESHOLDS << " expected: " << nb_threshold_levels << " found: " << json_lowering_threshold.size() );
         return;
     }
 
     if( json_rising_threadhold.size() != nb_threshold_levels )
     {
-        BOSE_LOG( ERROR, "Error: not enough elements in " << JSON_TOKEN_RISING_THRESHOLDS << " expected: " << nb_threshold_levels << " found: " << json_rising_threadhold.size() );
+        BOSE_LOG( ERROR, "Error: not right # of elements in " << JSON_TOKEN_RISING_THRESHOLDS << " expected: " << nb_threshold_levels << " found: " << json_rising_threadhold.size() );
         return;
     }
 
@@ -188,7 +182,8 @@ void DisplayController::ParseJSONData()
         rising_ss   << "{" << rising_lux_threshold  [i].lux << ", " <<  rising_lux_threshold  [i].level << "} ";
     }
 
-    BOSE_LOG( INFO, "Device absortion factor: " << m_luxFactor                        <<
+    BOSE_LOG( INFO,
+              "Device absortion factor: " << m_luxFactor                        <<
               " mode: "                   << ( m_autoMode ? "Auto" : "Manual" ) <<
               " lowering threshold: "     << lowering_ss.str()                  <<
               " rising threshold: "       << rising_ss.str() );
