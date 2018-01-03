@@ -4,8 +4,6 @@
 ///
 /// @brief     This file implements audio volume management.
 ///
-/// @author    Chris Houston
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
