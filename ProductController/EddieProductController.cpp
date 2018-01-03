@@ -61,7 +61,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
 {
     BOSE_INFO( s_logger, __func__ );
     m_deviceManager.Initialize( this );
-    m_ProductFrontDoorUtility.Initialize( this );
+    m_ProductFrontDoorUtility.Initialize( this, &m_deviceManager );
 
     /// Add States to HSM object and initialize HSM before doing anything else.
     GetHsm().AddState( &m_ProductControllerStateTop );
@@ -148,6 +148,24 @@ std::string const& EddieProductController::GetProductVariant() const
 {
     static std::string productType = "Eddie";
     return productType;
+}
+
+std::string const& EddieProductController::GetDefaultProductName() const
+{
+    static std::string productName = "Bose ";
+    std::string macAddress = MacAddressInfo::GetPrimaryMAC();
+    try
+    {
+        productName += ( macAddress.substr( macAddress.length() - 6 ) );
+    }
+    catch( const std::out_of_range& error )
+    {
+        productName += macAddress;
+        BOSE_WARNING( s_logger, "errorType = %s", error.what() );
+    }
+
+    BOSE_INFO( s_logger, "%s productName=%s", __func__, productName.c_str() );
+    return productName;
 }
 
 void EddieProductController::RegisterLpmEvents()
