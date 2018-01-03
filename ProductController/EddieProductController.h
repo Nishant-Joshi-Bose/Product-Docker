@@ -72,6 +72,7 @@ public:
     {
         return m_cachedStatus.get();
     }
+
     std::vector<std::string> GetUniqueLanguages() const override
     {
         return {};
@@ -87,7 +88,7 @@ public:
     }
     std::string GetProductVersionNumber() const override
     {
-        /// To-Do: Fix the version number
+        //To-Do Need to get version number from config file
         return "0.0.1";
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,9 +124,12 @@ public:
 
     std::string const& GetProductType() const override;
     std::string const& GetProductVariant() const override;
+<<<<<<< HEAD
     std::string const& GetDefaultProductName() const override;
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> Revert changes of product name
 
 >>>>>>> Modified device name by truncating mac address to last 6 digit
 private:
