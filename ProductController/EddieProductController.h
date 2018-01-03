@@ -124,6 +124,10 @@ public:
     std::string const& GetProductType() const override;
     std::string const& GetProductVariant() const override;
     std::string const& GetDefaultProductName() const override;
+<<<<<<< HEAD
+=======
+
+>>>>>>> Modified device name by truncating mac address to last 6 digit
 private:
     /// Disable copies
     EddieProductController( const EddieProductController& ) = delete;
