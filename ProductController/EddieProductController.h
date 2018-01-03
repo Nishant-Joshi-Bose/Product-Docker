@@ -87,7 +87,7 @@ public:
     }
     std::string GetProductVersionNumber() const override
     {
-        //To-Do Need to get version number from config file
+        /// To-Do: Fix the version number
         return "0.0.1";
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
