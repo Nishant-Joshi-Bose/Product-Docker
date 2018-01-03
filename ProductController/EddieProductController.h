@@ -90,7 +90,7 @@ public:
     {
         return BLESetupService::VariantId::NONE;
     }
-    std::string GetProductVersonNumber() const override
+    std::string GetProductVersionNumber() const override
     {
         return "0.0.1";
     }
