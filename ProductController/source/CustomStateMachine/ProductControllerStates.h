@@ -76,7 +76,8 @@ enum ProductControllerStates
     ///
     /// Custom product controller states that are specific to Professor are defined below.
     ///
-    PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING = 19
+    PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING    = 19,
+    PROFESSOR_PRODUCT_CONTROLLER_STATE_ADAPTIQ              = 20
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

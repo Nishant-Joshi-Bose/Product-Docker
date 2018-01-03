@@ -58,6 +58,7 @@
 #include "CustomProductControllerStatePlaying.h"
 #include "CustomProductControllerStatePlayingInactive.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
+#include "CustomProductControllerStateAdaptIQ.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -217,6 +218,12 @@ void ProfessorProductController::Run( )
       *this,
       PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
 
+    auto* stateAdaptIQ = new CustomProductControllerStateAdaptIQ
+    ( GetHsm( ),
+      statePlayingActive,
+      *this,
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
+
     ///
     /// The states are added to the state machine and the state machine is initialized.
     ///
@@ -236,6 +243,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( statePlayingActive );
     GetHsm( ).AddState( statePlayingInactive );
     GetHsm( ).AddState( stateAccessoryPairing );
+    GetHsm( ).AddState( stateAdaptIQ );
 
     GetHsm( ).Init( this, PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
@@ -694,7 +702,7 @@ PlaybackSource_t ProfessorProductController::GetCurrentSource( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::PostPlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson& response )
 {
-    BOSE_DEBUG( s_logger, "A response to the playback request %s was received." ,
+    BOSE_DEBUG( s_logger, "A response to the playback request %s was received.",
                 response.source( ).sourcedisplayname( ).c_str( ) );
 }
 
@@ -1110,6 +1118,19 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     {
         // @TODO for now, until Professor implements its non-common intents
         ( void ) HandleCommonIntents( message.intent() );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// AdaptIQ messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.has_aiqstatus( ) )
+    {
+        GetHsm( ).Handle< const ProductAdaptIQStatus & >
+        ( &CustomProductControllerState::HandleAdaptIQStatus, message.aiqstatus( ) );
+    }
+    else if( message.has_aiqcontrol( ) )
+    {
+        GetHsm( ).Handle< const ProductAdaptIQControl & >
+        ( &CustomProductControllerState::HandleAdaptIQControl, message.aiqcontrol( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Unknown message types are handled at this point.

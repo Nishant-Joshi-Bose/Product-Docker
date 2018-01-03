@@ -4,8 +4,6 @@
 ///
 /// @brief     This file implements audio volume management.
 ///
-/// @author    Chris Houston
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -88,6 +86,12 @@ void ProductAdaptIQManager::Run( )
 {
     m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductAdaptIQManager" );
 
+    auto lpmFunc = [ this ]( bool connected )
+    {
+        SetLpmConnectionState( connected );
+    };
+    m_ProductLpmHardwareInterface->RegisterForLpmConnection( Callback<bool>( lpmFunc ) );
+
     auto getFunc = [ this ]( Callback<const AdaptIQStatus> resp )
     {
         AdaptIQStatus status;
@@ -95,7 +99,7 @@ void ProductAdaptIQManager::Run( )
         resp.Send( status );
     };
     AsyncCallback<Callback<AdaptIQStatus>> getCb( getFunc, m_ProductTask );
-    m_GetConnection = m_FrontDoorClient->RegisterGet( s_FrontDoorAdaptIQ, getFunc );
+    m_GetConnection = m_FrontDoorClient->RegisterGet( s_FrontDoorAdaptIQ, getCb );
 
     auto putFunc = [ this ]( const AdaptIQReq & req, Callback<const AdaptIQReq> resp )
     {
@@ -104,7 +108,7 @@ void ProductAdaptIQManager::Run( )
         resp.Send( respMsg );
     };
     AsyncCallback<const AdaptIQReq&, Callback<AdaptIQReq>> putCb( putFunc, m_ProductTask );
-    m_PutConnection = m_FrontDoorClient->RegisterPut<AdaptIQReq>( s_FrontDoorAdaptIQ, putFunc );
+    m_PutConnection = m_FrontDoorClient->RegisterPut<AdaptIQReq>( s_FrontDoorAdaptIQ, putCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,9 +162,124 @@ void ProductAdaptIQManager::HandleGet( AdaptIQStatus& status )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductAdaptIQManager::HandlePut( const AdaptIQReq& req, ProductPb::AdaptIQReq& resp )
 {
+    ProductMessage msg;
+
+    if( req.action() == "enter" )
+    {
+        msg.mutable_aiqcontrol()->set_action( ProductAdaptIQControl::Start );
+    }
+    else if( req.action() == "cancel" )
+    {
+        msg.mutable_aiqcontrol()->set_action( ProductAdaptIQControl::Cancel );
+    }
+    else if( req.action() == "advance" )
+    {
+        msg.mutable_aiqcontrol()->set_action( ProductAdaptIQControl::Advance );
+    }
+    else
+    {
+    }
+
+    if( msg.has_aiqcontrol() )
+    {
+        IL::BreakThread( [ = ]( )
+        {
+            m_ProductNotify( msg );
+        }, m_ProductTask );
+    }
+
     // TODO : there's no response defined in the LAN API right now, so just mirror back the request
     resp = req;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductAdaptIQManager::SetLpmConnectionState
+///
+/// @brief  The following methods is called when an LPM connection event is received
+///
+/// @param  connected
+///
+/// @return
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductAdaptIQManager::SetLpmConnectionState( bool connected )
+{
+    if( connected )
+    {
+        RegisterLpmClientEvents();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductAdaptIQManager::RegisterLpmClientEvents
+///
+/// @brief  Register to receive events from the LPM
+///
+/// @param  none
+///
+/// @return none
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductAdaptIQManager::RegisterLpmClientEvents( )
+{
+    auto aiqFunc = [ this ]( LpmServiceMessages::IpcAiqSetupStatus_t status )
+    {
+        HandleAdaptIQStatus( status );
+    };
+    bool success =  m_ProductLpmHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcAiqSetupStatus_t >
+                    ( LpmServiceMessages::IPC_DSP_AIQ_SETUP_STATUS, Callback<LpmServiceMessages::IpcAiqSetupStatus_t >( aiqFunc ) );
+
+    BOSE_INFO( s_logger, "%s registered for AdaptIQ status from the LPM hardware.",
+               ( success ? "Successfully" : "Unsuccessfully" ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductAdaptIQManager::HandleAdaptIQStatus
+///
+/// @brief  Process an AdaptIQ status message from the LPM
+///
+/// @param  none
+///
+/// @return none
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductAdaptIQManager::HandleAdaptIQStatus( LpmServiceMessages::IpcAiqSetupStatus_t status )
+{
+    ProductMessage msg;
+
+    *( msg.mutable_aiqstatus()->mutable_status() ) = status;
+
+    IL::BreakThread( [ = ]( )
+    {
+        m_ProductNotify( msg );
+    }, m_ProductTask );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductAdaptIQManager::SendAdaptIQControl
+///
+/// @brief  Send a control message to AdaptIQ
+///
+/// @param  none
+///
+/// @return none
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductAdaptIQManager::SendAdaptIQControl( ProductAdaptIQControl::AdaptIQAction action )
+{
+    m_ProductLpmHardwareInterface->SendAdaptIQControl( action );
+}
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                               End of ProductApp Namespace                                    ///
