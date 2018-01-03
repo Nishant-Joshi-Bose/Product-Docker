@@ -599,7 +599,7 @@ bool CustomProductLpmHardwareInterface::SetCecPhysicalAddress( const uint32_t ce
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  CustomProductHardwareInterface::SendAdaptIQControl
+/// @name  CustomProductHardwareLpmInterface::SendAdaptIQControl
 ///
 /// @brief This method sends an AdaptIQ control request to the DSP
 ///
@@ -608,7 +608,7 @@ bool CustomProductLpmHardwareInterface::SetCecPhysicalAddress( const uint32_t ce
 /// @return bool The method returns true when the control request was successfully sent.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductHardwareInterface::SendAdaptIQControl( ProductAdaptIQControl::AdaptIQAction action )
+bool CustomProductLpmHardwareInterface::SendAdaptIQControl( ProductAdaptIQControl::AdaptIQAction action )
 {
     if( isConnected( ) == false || GetLpmClient( ) == nullptr )
     {

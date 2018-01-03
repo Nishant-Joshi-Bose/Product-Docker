@@ -92,7 +92,7 @@ void ProductAdaptIQManager::Run( )
     {
         SetLpmConnectionState( connected );
     };
-    m_ProductHardwareInterface->RegisterForLpmConnection( Callback<bool>( lpmFunc ) );
+    m_ProductLpmHardwareInterface->RegisterForLpmConnection( Callback<bool>( lpmFunc ) );
 
     auto getFunc = [ this ]( Callback<const AdaptIQStatus> resp )
     {
@@ -232,7 +232,7 @@ void ProductAdaptIQManager::RegisterLpmClientEvents( )
     {
         HandleAdaptIQStatus( status );
     };
-    bool success =  m_ProductHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcAiqSetupStatus_t >
+    bool success =  m_ProductLpmHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcAiqSetupStatus_t >
                     ( LpmServiceMessages::IPC_DSP_AIQ_SETUP_STATUS, Callback<LpmServiceMessages::IpcAiqSetupStatus_t >( aiqFunc ) );
 
     BOSE_INFO( s_logger, "%s registered for AdaptIQ status from the LPM hardware.",
@@ -277,7 +277,7 @@ void ProductAdaptIQManager::HandleAdaptIQStatus( LpmServiceMessages::IpcAiqSetup
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductAdaptIQManager::SendAdaptIQControl( ProductAdaptIQControl::AdaptIQAction action )
 {
-    m_ProductHardwareInterface->SendAdaptIQControl( action );
+    m_ProductLpmHardwareInterface->SendAdaptIQControl( action );
 }
 
 
