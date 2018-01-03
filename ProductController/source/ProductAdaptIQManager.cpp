@@ -27,7 +27,7 @@
 #include "DPrint.h"
 #include "Utilities.h"
 #include "ProfessorProductController.h"
-#include "CustomProductHardwareInterface.h"
+#include "CustomProductLpmHardwareInterface.h"
 #include "ProductAdaptIQManager.h"
 
 using namespace ProductPb;
@@ -68,7 +68,7 @@ namespace ProductApp
 ProductAdaptIQManager::ProductAdaptIQManager( ProfessorProductController& ProductController ) :
     m_ProductTask( ProductController.GetTask( ) ),
     m_ProductNotify( ProductController.GetMessageHandler( ) ),
-    m_ProductHardwareInterface( ProductController.GetHardwareInterface( ) )
+    m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) )
 {
 }
 

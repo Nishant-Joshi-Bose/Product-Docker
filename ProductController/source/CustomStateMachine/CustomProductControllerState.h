@@ -143,6 +143,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentVoice( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
     virtual bool HandleBluetoothModuleState( bool ready )
     {
         return false;

@@ -28,6 +28,8 @@
     {"Origin": 6, "KeyEvent": 2, "KeyList": [129], "TimeOutList": [750], "Action": 21, "Comment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable"},
     {"Origin": 6, "KeyEvent": 2, "KeyList": [129], "TimeOutList": [10000], "Action": 22, "Comment": "Console: Bluetooth Press and Hold ---> Clear Pairing List"},
 
+    {"Origin": 1, "KeyEvent": 1, "KeyList": [6],   "TimeOutList": [0], "Action": 26, "Comment": "Console: Action release ---> Alexa"},
+
     {"Origin": 2, "KeyEvent": 2, "KeyList": [65], "TimeOutList": [1000], "Action": 27, "Comment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1"},
     {"Origin": 2, "KeyEvent": 2, "KeyList": [66], "TimeOutList": [1000], "Action": 28, "Comment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2"},
     {"Origin": 2, "KeyEvent": 2, "KeyList": [67], "TimeOutList": [1000], "Action": 29, "Comment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3"},
@@ -171,45 +173,6 @@
             "KeyEvent": 3, 
             "TimeOutList": [300,100], 
             "Action": 110, 
-            "KeyList": [
-                2
-            ]
-        }, 
-        {
-            "Origin": 2, 
-            "Comment": "volume down repeat", 
-            "KeyEvent": 3, 
-            "TimeOutList": [
-                300, 
-                100
-            ], 
-            "Action": 25, 
-            "KeyList": [
-                2
-            ]
-        }, 
-        {
-            "Origin": 6, 
-            "Comment": "volume down repeat", 
-            "KeyEvent": 3, 
-            "TimeOutList": [
-                300, 
-                100
-            ], 
-            "Action": 25, 
-            "KeyList": [
-                2
-            ]
-        }, 
-        {
-            "Origin": 4, 
-            "Comment": "volume down repeat", 
-            "KeyEvent": 3, 
-            "TimeOutList": [
-                300, 
-                100
-            ], 
-            "Action": 25, 
             "KeyList": [
                 2
             ]

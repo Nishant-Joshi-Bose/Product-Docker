@@ -8,6 +8,7 @@
 #pragma once
 #include "ProductAudioService.h"
 #include "ProfessorProductController.h"
+#include "CustomAudioSettingsManager.h"
 
 namespace ProductApp
 {
@@ -17,6 +18,7 @@ public:
     CustomProductAudioService( ProfessorProductController& ProductController );
 
 private:
+    std::unique_ptr<CustomAudioSettingsManager>   m_AudioSettingsMgr;
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// Front Door handlers
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -28,7 +30,7 @@ private:
     std::unique_ptr<AudioSetting<ProductPb::AudioAvSync>>           m_AudioAvSyncsetSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioMode>>             m_AudioModeSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioContentType>>      m_AudioContentTypeSetting;
-
+    std::unique_ptr<AudioSetting<ProductPb::AudioDualMonoSelect>>   m_DualMonoSelectSetting;
     /////////////////////////////////////////////////////////////////////////////////////////////////
     /// APProduct handling functions
     /////////////////////////////////////////////////////////////////////////////////////////////////

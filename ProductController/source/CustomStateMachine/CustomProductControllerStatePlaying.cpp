@@ -28,7 +28,7 @@
 #include "CustomProductControllerStatePlaying.h"
 #include "ProductControllerHsm.h"
 #include "ProductControllerState.h"
-#include "CustomProductHardwareInterface.h"
+#include "CustomProductLpmHardwareInterface.h"
 #include "ProfessorProductController.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -73,7 +73,7 @@ void CustomProductControllerStatePlaying::HandleStateEnter( )
 {
     BOSE_VERBOSE( s_logger, "%s is being entered.", GetName( ).c_str( ) );
 
-    GetCustomProductController( ).GetHardwareInterface( )->SetSystemState( SYSTEM_STATE_ON );
+    GetCustomProductController( ).GetLpmHardwareInterface( )->SetSystemState( SYSTEM_STATE_ON );
 
     BOSE_VERBOSE( s_logger, "An attempt to set to full power is being made." );
 }

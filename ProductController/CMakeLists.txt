@@ -8,13 +8,14 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
   ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
-  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductHardwareInterface
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
   ${KEYHANDLER_DIR}/include
   .
   include
   source
   source/CustomStateMachine
   source/IntentHandler
+  source/CustomProductAudioService
   ${A4VVIDEOMANAGER_DIR}/source/Client
 )
 
@@ -22,25 +23,27 @@ INCLUDE_DIRECTORIES(
 # Professor daemon.
 
 ADD_EXECUTABLE(Professor
-  ${PROTO_CC_DEST}/ProductMessage.pb.cc
-  ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
-  ${PROTO_CC_DEST}/ProductSTS.pb.cc
-  ${PROTO_CC_DEST}/KeyActions.pb.cc
-  ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc
-  ${PROTO_CC_DEST}/SystemInfo.pb.cc
   ${PROTO_CC_DEST}/AdaptIQ.pb.cc
-  source/ProductStart.cpp
-  source/ProductCommandLine.cpp
-  source/CustomProductHardwareInterface.cpp
-  source/ProductNetworkManager.cpp
-  source/ProductSystemManager.cpp
-  source/ProductKeyInputInterface.cpp
-  source/ProductSpeakerManager.cpp
-  source/ProfessorProductController.cpp
-  source/ProductEdidInterface.cpp
-  source/ProductVolumeManager.cpp
-  source/CustomProductAudioService.cpp
+  ${PROTO_CC_DEST}/AudioSettings.pb.cc
+  ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
+  ${PROTO_CC_DEST}/KeyActions.pb.cc
+  ${PROTO_CC_DEST}/ProductMessage.pb.cc
+  ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc
+  ${PROTO_CC_DEST}/ProductSTS.pb.cc
+  ${PROTO_CC_DEST}/SystemInfo.pb.cc
   source/ProductAdaptIQManager.cpp
+  source/ProductCommandLine.cpp
+  source/ProductEdidInterface.cpp
+  source/ProductKeyInputInterface.cpp
+  source/ProductNetworkManager.cpp
+  source/ProductStart.cpp
+  source/ProductSystemManager.cpp
+  source/ProductSpeakerManager.cpp
+  source/ProductVolumeManager.cpp
+  source/ProfessorProductController.cpp
+  source/CustomProductAudioService/CustomProductAudioService.cpp
+  source/CustomProductAudioService/CustomAudioSettingsManager.cpp
+  source/CustomProductLpmHardwareInterface.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQ.cpp

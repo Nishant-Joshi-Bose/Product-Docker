@@ -47,7 +47,7 @@ namespace ProductApp
 ///            Included Subclasses
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductHardwareInterface;
+class CustomProductLpmHardwareInterface;
 class ProductController;
 
 class ProductAdaptIQManager
@@ -100,7 +100,7 @@ private:
     ///        the device.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    std::shared_ptr<CustomProductHardwareInterface> m_ProductHardwareInterface;
+    std::shared_ptr<CustomProductLpmHardwareInterface> m_ProductLpmHardwareInterface;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

@@ -25,7 +25,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
 #include "ProfessorProductController.h"
-#include "CustomProductHardwareInterface.h"
+#include "CustomProductLpmHardwareInterface.h"
 #include "ProductEdidInterface.h"
 #include "FrontDoorClient.h"
 
@@ -52,7 +52,7 @@ ProductEdidInterface::ProductEdidInterface( ProfessorProductController& ProductC
 
     : m_ProductTask( ProductController.GetTask( ) ),
       m_ProductNotify( ProductController.GetMessageHandler( ) ),
-      m_ProductHardwareInterface( ProductController.GetHardwareInterface( ) ),
+      m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
       m_connected( false )
 {
 
@@ -208,7 +208,7 @@ void ProductEdidInterface::HandlePhyAddrResponse( const A4VVideoManagerServiceMe
     {
         BOSE_DEBUG( s_logger, "A send CEC PA request will be made." );
 
-        m_ProductHardwareInterface->SetCecPhysicalAddress( cecPhysicalAddress.addr() );
+        m_ProductLpmHardwareInterface->SetCecPhysicalAddress( cecPhysicalAddress.addr() );
 
         return;
     }
@@ -252,8 +252,8 @@ void ProductEdidInterface::HandleFrontDoorVolume( SoundTouchInterface::volume co
 {
     BOSE_VERBOSE( s_logger, "Got volume notify LPM (%d) (%d)", volume.value(), volume.muted() );
 
-    m_ProductHardwareInterface->SendSetVolume( volume.value( ) );
-    m_ProductHardwareInterface->SendMute( volume.muted( ) );
+    m_ProductLpmHardwareInterface->NotifyVolumeLevel( volume.value( ) );
+    m_ProductLpmHardwareInterface->NotifyMuteState( volume.muted( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

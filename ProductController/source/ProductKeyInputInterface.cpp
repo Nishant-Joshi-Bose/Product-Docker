@@ -28,7 +28,7 @@
 #include "KeyActions.pb.h"
 #include "ProductMessage.pb.h"
 #include "ProfessorProductController.h"
-#include "CustomProductHardwareInterface.h"
+#include "CustomProductLpmHardwareInterface.h"
 #include "ProductKeyInputInterface.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,7 +67,7 @@ ProductKeyInputInterface::ProductKeyInputInterface( ProfessorProductController& 
     ///
     m_ProductTask( ProductController.GetTask( ) ),
     m_ProductNotify( ProductController.GetMessageHandler( ) ),
-    m_ProductHardwareInterface( ProductController.GetHardwareInterface( ) ),
+    m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
     ///
     /// Instantiation of the Key Handler
     ///
@@ -87,7 +87,7 @@ ProductKeyInputInterface::ProductKeyInputInterface( ProfessorProductController& 
                                           this,
                                           std::placeholders::_1 ) );
 
-    m_ProductHardwareInterface->RegisterForLpmConnection( callback );
+    m_ProductLpmHardwareInterface->RegisterForLpmConnection( callback );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,7 +149,7 @@ void ProductKeyInputInterface::RegisterForKeyEvents( )
                                      this,
                                      std::placeholders::_1 ) );
 
-    m_ProductHardwareInterface->RegisterForLpmEvents( IPC_KEY, CallbackForKeyEvents );
+    m_ProductLpmHardwareInterface->RegisterForLpmEvents( IPC_KEY, CallbackForKeyEvents );
 
     ///
     /// Register with the key handler and repeat management code to translate raw LPM keys
@@ -192,6 +192,14 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
     if( keyEvent.has_keyorigin( ) )
     {
         keyOriginString.assign( KeyOrigin_t_Name( keyEvent.keyorigin( ) ) );
+#if 1 // @TODO PGC-523 kludge
+        if( keyEvent.keyorigin( ) == LpmServiceMessages::KEY_ORIGIN_CONSOLE_BUTTON )
+        {
+            // On Professor this can only be the capsense "Action" button, so fake it until PGC-523 is fixed
+            keyEvent.set_keyorigin( LpmServiceMessages::KEY_ORIGIN_CAPSENSE );
+            keyEvent.set_keyid( 6 ); // borrowing the Eddie key number
+        }
+#endif
     }
     else
     {

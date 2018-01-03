@@ -1,9 +1,12 @@
 {
 	"version": {
-		"major": 1,
-		"minor": 1
+        "major": 2,
+        "minor": 1
 	},
-	"supportedAudioSettings": ["audioBassLevel", "audioTrebleLevel", "audioCenterLevel", "audioSurroundLevel", "audioGainOffset", "audioAvSync", "audioMode", "audioContentType"],
+    "supportedAudioSettings": {
+        "contentItemSensitive": ["audioBassLevel", "audioTrebleLevel", "audioCenterLevel", "audioSurroundLevel", "audioGainOffset", "audioAvSync", "audioMode", "audioContentType"],
+        "contentItemNonSensitive": ["dualMonoSelect"]
+    },
 	"configurations": {
 		"audioBassLevel": {
 			"currentPersistenceLevel": "global",
@@ -80,7 +83,14 @@
 				"supportedValues": ["unspecified", "audio", "video"],
 				"supportedPersistence": ["session", "global", "contentItem"]
 			}
-		}	
+        },
+        "audioDualMonoSelect": {
+            "currentPersistenceLevel": "global",
+            "persistenceSession": false,
+            "properties": {
+                "supportedValues": ["left", "right", "both"]
+            }
+        }
 	},
 	"values": {
 		"global": {
@@ -91,7 +101,8 @@
 			"audioGainOffset": 0,
 			"audioAvSync": 0,
 			"audioMode": "direct",
-			"audioContentType": "unspecified"
+            "audioContentType": "unspecified",
+            "audioDualMonoSelect": "both"
 		},
 		"session": {
 			"audioBassLevel": 0,
@@ -124,6 +135,7 @@
 		"audioGainOffset": 0,
 		"audioAvSync": 0,
 		"audioMode": "direct",
-		"audioContentType": "unspecified"
+        "audioContentType": "unspecified",
+        "audioDualMonoSelect": "both"
 	}
 }
