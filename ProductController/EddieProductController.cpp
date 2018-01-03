@@ -150,6 +150,23 @@ std::string const& EddieProductController::GetProductVariant() const
     return productType;
 }
 
+std::string const& EddieProductController::GetDefaultProductName() const
+{
+    static std::string productName = "Bose";
+    std::string macAddress = MacAddressInfo::GetPrimaryMAC();
+    try
+    {
+        productName = ( "Bose " + macAddress.substr( macAddress.length() - 6 ) );
+    }
+    catch( const std::out_of_range& error )
+    {
+        BOSE_WARNING( s_logger, "errorType = %s", error.what() );
+        productName = ( "Bose " + macAddress );
+    }
+
+    return productName;
+}
+
 void EddieProductController::RegisterLpmEvents()
 {
     BOSE_INFO( s_logger, __func__ );
