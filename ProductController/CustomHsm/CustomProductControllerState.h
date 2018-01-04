@@ -101,6 +101,12 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentVoice( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentWiFi( KeyHandlerUtil::ActionType_t result )
     virtual bool HandleIntentVolume( KeyHandlerUtil::ActionType_t result )
     {
         return false;
@@ -153,11 +159,6 @@ public:
     }
 
     virtual bool HandleNetworkStandbyIntent( )
-    {
-        return false;
-    }
-
-    virtual bool HandleIntentVoice( KeyHandlerUtil::ActionType_t result )
     {
         return false;
     }

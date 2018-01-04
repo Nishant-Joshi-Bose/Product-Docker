@@ -26,7 +26,6 @@ public:
     {
     }
     bool HandleIntentAuxIn( KeyHandlerUtil::ActionType_t intent ) override;
-    bool HandleIntentVoice( KeyHandlerUtil::ActionType_t intent ) override;
 };
 
 } /// namespace ProductApp

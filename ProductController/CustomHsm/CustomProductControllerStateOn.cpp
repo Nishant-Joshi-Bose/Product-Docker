@@ -9,7 +9,6 @@
 #include "ProductControllerHsm.h"
 #include "EddieProductController.h"
 #include "DPrint.h"
-#include "LpmInterface.h"
 
 static DPrint s_logger( "CustomProductControllerStateOn" );
 
@@ -25,15 +24,6 @@ CustomProductControllerStateOn::CustomProductControllerStateOn( ProductControlle
 }
 
 bool CustomProductControllerStateOn::HandleIntentAuxIn( KeyHandlerUtil::ActionType_t intent )
-{
-    BOSE_LOG( INFO, "intent:" << intent );
-
-    GetCustomProductController().GetIntentHandler().Handle( intent );
-
-    return true;
-}
-
-bool CustomProductControllerStateOn::HandleIntentVoice( KeyHandlerUtil::ActionType_t intent )
 {
     BOSE_LOG( INFO, "intent:" << intent );
 

@@ -3,12 +3,13 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
   ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
-  ${DEMOCONTROLLER_DIR}
   ${DATACOLLECTIONCLIENT_DIR}
   ${CUSTOM_HSM_DIR}
   ${KEYHANDLER_DIR}/include
   IntentHandler
+  CustomProductAudioService
   DisplayController
   .
 )
@@ -29,17 +30,18 @@ ADD_EXECUTABLE(Eddie
   ${PROTO_CC_DEST}/KeyActions.pb.cc
   ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/IntentHandler.pb.cc
+  ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/VolumeConfig.pb.cc
   IntentHandler/IntentHandler.cpp
   IntentHandler/PlaybackRequestManager.cpp
-  IntentHandler/VoiceManager.cpp
   DisplayController/DisplayController.cpp
-  CustomProductAudioService.cpp
+  CustomProductAudioService/CustomProductAudioService.cpp
+  CustomProductAudioService/CustomAudioSettingsManager.cpp
+  CustomProductLpmHardwareInterface.cpp
 )
 
 TARGET_LINK_LIBRARIES(Eddie
   CastleProductControllerCommon
-  DemoController
   DataCollectionClient
   LpmClient
   FrontDoorClient

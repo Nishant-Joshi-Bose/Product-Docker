@@ -6,6 +6,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 #include <limits.h>
+#include <float.h>
 #include <functional>
 #include <json/json.h>
 #include "SystemUtils.h"
@@ -68,7 +69,6 @@ static constexpr char  JSON_TOKEN_DEVICE_ABSORTION_LUX[] = "DeviceAbsortionLux" 
 static constexpr char  JSON_TOKEN_BACK_LIGHT_LEVELS   [] = "BackLightLevelsPercent"               ;
 static constexpr char  JSON_TOKEN_LOWERING_THRESHOLDS [] = "LoweringThresholdLux"                 ;
 static constexpr char  JSON_TOKEN_RISING_THRESHOLDS   [] = "RisingThresholdLux"                   ;
-static constexpr int   BACKLIGHT_DIFF_THRESHOLD          = ( BACK_LIGHT_LEVEL_DIM_HIGH - BACK_LIGHT_LEVEL_DIM - 1 );
 static constexpr int   MONITOR_SENSOR_SLEEP_MS           = 1000 ;
 static constexpr int   CHANGING_LEVEL_SLEEP_MS           = 10   ;
 static constexpr float LUX_DIFF_THRESHOLD                = 2.0f ;
@@ -150,23 +150,17 @@ void DisplayController::ParseJSONData()
     Json::Value  json_back_light_level   = json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_BACK_LIGHT_LEVELS  ];
     Json::Value  json_lowering_threshold = json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_LOWERING_THRESHOLDS];
     Json::Value  json_rising_threadhold  = json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_RISING_THRESHOLDS  ];
-    unsigned int nb_threshold_levels     = lowering_lux_threshold.size();
-
-    if( json_back_light_level.size() != nb_threshold_levels )
-    {
-        BOSE_LOG( ERROR, "Error: not enough elements in " << JSON_TOKEN_BACK_LIGHT_LEVELS << " expected: " << nb_threshold_levels << " found: " << json_back_light_level.size() );
-        return;
-    }
+    unsigned int nb_threshold_levels     = json_back_light_level.size();
 
     if( json_lowering_threshold.size() != nb_threshold_levels )
     {
-        BOSE_LOG( ERROR, "Error: not enough elements in " << JSON_TOKEN_LOWERING_THRESHOLDS << " expected: " << nb_threshold_levels << " found: " << json_lowering_threshold.size() );
+        BOSE_LOG( ERROR, "Error: not right # of elements in " << JSON_TOKEN_LOWERING_THRESHOLDS << " expected: " << nb_threshold_levels << " found: " << json_lowering_threshold.size() );
         return;
     }
 
     if( json_rising_threadhold.size() != nb_threshold_levels )
     {
-        BOSE_LOG( ERROR, "Error: not enough elements in " << JSON_TOKEN_RISING_THRESHOLDS << " expected: " << nb_threshold_levels << " found: " << json_rising_threadhold.size() );
+        BOSE_LOG( ERROR, "Error: not right # of elements in " << JSON_TOKEN_RISING_THRESHOLDS << " expected: " << nb_threshold_levels << " found: " << json_rising_threadhold.size() );
         return;
     }
 
@@ -188,7 +182,8 @@ void DisplayController::ParseJSONData()
         rising_ss   << "{" << rising_lux_threshold  [i].lux << ", " <<  rising_lux_threshold  [i].level << "} ";
     }
 
-    BOSE_LOG( INFO, "Device absortion factor: " << m_luxFactor                        <<
+    BOSE_LOG( INFO,
+              "Device absortion factor: " << m_luxFactor                        <<
               " mode: "                   << ( m_autoMode ? "Auto" : "Manual" ) <<
               " lowering threshold: "     << lowering_ss.str()                  <<
               " rising threshold: "       << rising_ss.str() );
@@ -255,7 +250,8 @@ void DisplayController::SetBackLightLevel( int actualLevel, int newLevel )
 ////////////////////////////////////////////////////////////////////////////////
 void DisplayController::MonitorLightSensor()
 {
-    float previous_lux   = 0;
+    float previous_lux   = FLT_MAX;
+    float lux_diff       = FLT_MAX;
     int   targeted_level = 0;
 
     m_luxValue      = 0.0f;
@@ -278,6 +274,11 @@ void DisplayController::MonitorLightSensor()
 
         m_luxValue = ( ( ( float ) m_luxDecimal ) + ( ( ( float )m_luxFractional ) * 0.001f ) ) * m_luxFactor;
 
+        if( ( m_luxValue != 0.0 ) && ( previous_lux == FLT_MAX ) )
+        {
+            previous_lux = m_luxValue;
+        }
+
         m_lpmClient->GetBackLight( [this]( IpcBackLight_t const & rsp )
         {
             m_backLight = rsp.value();
@@ -289,28 +290,30 @@ void DisplayController::MonitorLightSensor()
             SetBackLightLevel( 50, 49 );
         }
 
-        BOSE_LOG( INFO,  "lux(raw, adj, prev): (" << m_luxDecimal    << "."
+        lux_diff = m_luxValue - previous_lux;
+
+        BOSE_LOG( INFO,  "lux(raw, adj, prev): ("
+                  << m_luxDecimal    << "."
                   << m_luxFractional << ", "
                   << m_luxValue      << ", "
                   << previous_lux    << ") bl: "
-                  << m_backLight     << ( ( m_luxValue - previous_lux ) < 0.0f ?  " lowering" : " rising" ) );
+                  << m_backLight     << ( ( lux_diff == 0.0f ) ? " level" : ( lux_diff  < 0.0f ?  " lowering" : " rising" ) ) );
 
         if( m_autoMode )
         {
-            targeted_level = GetBackLightLevelFromLux( m_luxValue, m_luxValue - previous_lux );
+            targeted_level = GetBackLightLevelFromLux( m_luxValue, lux_diff );
 
-            BOSE_LOG( INFO, "target level: " << targeted_level << ", actual level: " << m_backLight );
+            BOSE_LOG( INFO, "target level: " << targeted_level << ", actual level: " << m_backLight << " lux diff: " << lux_diff );
 
-            if( ( abs( targeted_level - m_backLight ) >= BACKLIGHT_DIFF_THRESHOLD ) &&
-                ( fabs( previous_lux   - m_luxValue ) >= LUX_DIFF_THRESHOLD ) )
+            if( fabs( lux_diff ) >= LUX_DIFF_THRESHOLD )
             {
                 SetBackLightLevel( m_backLight , targeted_level );
                 // dummy read of the back light, the IPC mechanism is caching a value
                 m_lpmClient->GetBackLight( [this]( IpcBackLight_t const & rsp ) {} );
-                m_backLight = targeted_level;
+                m_backLight  = targeted_level;
+                previous_lux = m_luxValue;
             }
 
-            previous_lux = m_luxValue;
         }// If we are in automatic mode
 
         usleep( MONITOR_SENSOR_SLEEP_MS * 1000 );
