@@ -108,13 +108,13 @@ void ProductAdaptIQManager::Run( )
     AsyncCallback<Callback<AdaptIQStatus>> getCb( getFunc, m_ProductTask );
     m_GetConnection = m_FrontDoorClient->RegisterGet( s_FrontDoorAdaptIQ, getCb );
 
-    auto putFunc = [ this ]( const AdaptIQReq & req, Callback<const AdaptIQReq> resp )
+    auto putFunc = [ this ]( const AdaptIQReq req, Callback<const AdaptIQReq> resp )
     {
         AdaptIQReq respMsg;
         HandlePut( req, respMsg );
         resp.Send( respMsg );
     };
-    AsyncCallback<const AdaptIQReq&, Callback<AdaptIQReq>> putCb( putFunc, m_ProductTask );
+    AsyncCallback<const AdaptIQReq, Callback<AdaptIQReq>> putCb( putFunc, m_ProductTask );
     m_PutConnection = m_FrontDoorClient->RegisterPut<AdaptIQReq>( s_FrontDoorAdaptIQ, putCb );
 }
 
@@ -192,11 +192,14 @@ void ProductAdaptIQManager::HandleGet( AdaptIQStatus& status )
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductAdaptIQManager::HandlePut( const AdaptIQReq& req, ProductPb::AdaptIQReq& resp )
+void ProductAdaptIQManager::HandlePut( const AdaptIQReq req, ProductPb::AdaptIQReq& resp )
 {
     ProductMessage msg;
 
-    if( req.action() == "enter" )
+    if( !req.has_action() )
+    {
+    }
+    else if( req.action() == "enter" )
     {
         msg.mutable_aiqcontrol()->set_action( ProductAdaptIQControl::Start );
     }

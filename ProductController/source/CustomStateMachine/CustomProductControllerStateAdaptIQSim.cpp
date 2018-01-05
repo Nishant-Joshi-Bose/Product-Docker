@@ -77,11 +77,14 @@ CustomProductControllerStateAdaptIQ::CustomProductControllerStateAdaptIQ
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateAdaptIQ::StartTimer( int timeout )
 {
+    BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ ::: %s\n", __func__ );
     m_timer->SetTimeouts( timeout, 0 );
+    BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ ::: %s\n", __func__ );
     m_timer->Start( [ = ]( )
     {
         HandleTimeOut();
     } );
+    BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ ::: %s\n", __func__ );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,6 +106,7 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
     m_AdaptIQManager->SetDefaultProperties( m_status );
     m_AdaptIQManager->SetStatus( m_status );
     StartTimer( ADAPTIQ_BOOT_TIME );
+    BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ ::: %s\n", __func__ );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,6 +116,7 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateAdaptIQ::HandleTimeOut( )
 {
+    BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ ::: %s (%s)\n", __func__, m_status.smstate().c_str() );
     if( m_status.smstate() == "Booting" )
     {
         // DSP booted, wait for "Advance"
@@ -145,6 +150,7 @@ void CustomProductControllerStateAdaptIQ::HandleTimeOut( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdaptIQStatus& aiqStatus )
 {
+    BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ ::: %s\n", __func__ );
     return true;
 }
 
@@ -169,6 +175,7 @@ void CustomProductControllerStateAdaptIQ::HandleStateExit( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAdaptIQControl& cmd )
 {
+    BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ ::: %s\n", __func__ );
     switch( cmd.action() )
     {
     case ProductAdaptIQControl::Start:
