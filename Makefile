@@ -106,6 +106,13 @@ package: product-ipk hsp-ipk lpmupdater-ipk
 .PHONY: all-packages
 all-packages: package packages-gz update-zip update-zip-with-hsp
 
+.PHONY: deploy
+deploy: graph all-packages
+ifndef RIVIERA_HSP_VERSION
+	$(error No RIVIERA_HSP_VERSION)
+endif
+	scripts/collect-deployables builds/Release builds/deploy/HSP-${RIVIERA_HSP_VERSION}
+
 .PHONY: clean
 clean:
 	rm -rf $(BUILDS_DIR) builds/CastleTestUtils builds/__init__.py
