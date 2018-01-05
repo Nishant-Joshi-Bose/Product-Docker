@@ -84,6 +84,7 @@ public:
     }
     BLESetupService::VariantId GetVariantId() const override
     {
+        /// TODO variantID should be from mfg data
         return BLESetupService::VariantId::NONE;
     }
     std::string GetProductVersionNumber() const override
