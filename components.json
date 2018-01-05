@@ -29,7 +29,7 @@
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/0.2.2-24+b3aee04"
+    "selected_version": "Release/master/0.2.3-26+8cf9ea4"
   },
   {
     "name": "CastleLibs-qc8017_32",
@@ -61,7 +61,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/0.2.2-37+75e97be"
+    "selected_version": "Release/master/0.2.3-40+cd721ac"
   },
   {
     "name": "ProfessorLPM-Package",
