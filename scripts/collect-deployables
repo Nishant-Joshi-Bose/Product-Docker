@@ -27,7 +27,11 @@ files=(
     "$builds_dir/package/product_flash_mac"
     "$builds_dir/lpm_updater.ipk"
     "$builds_dir/Packages.gz"
+)
+
+files_to_cp=(
     "$builds_dir/../../components.json"
 )
 
 mv "${files[@]}" "$deploy_dir" || exit
+cp "${files_to_cp[@]}" "$deploy_dir" || exit
