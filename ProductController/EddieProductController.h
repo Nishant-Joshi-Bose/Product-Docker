@@ -89,7 +89,7 @@ public:
     }
     std::string GetProductVersionNumber() const override
     {
-        return ( VERSION_MAJOR + std::string( "." ) + VERSION_MINOR + std::string( "." ) + VERSION_PATCH );
+        return ( VERSION_STRING_SHORT + std::string( "." ) + VERSION_BUILD_NUMBER + std::string( "+" ) + VERSION_BUILD_ABBREV_COMMIT );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// @name  IsBooted
@@ -200,6 +200,7 @@ private:
 public:
     /// Handle Key Information received from LPM
     void HandleLpmKeyInformation( IpcKeyInformation_t keyInformation );
+    void HandleLpmMicMuteEvents( IpcVPAMicStateEvent_t micMute );
 
     void HandleIntents( KeyHandlerUtil::ActionType_t intent );
 

@@ -32,7 +32,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     ProductController( ProductName ),
     m_ProductControllerStateTop( GetHsm(), nullptr ),
     m_CustomProductControllerStateBooting( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING ),
-    m_CustomProductControllerStateSetup( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP ),
+    m_CustomProductControllerStateSetup( GetHsm(), &m_ProductControllerStatePlaying, CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP ),
     m_CustomProductControllerStateOn( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_ON ),
     m_ProductControllerStateLowPowerStandby( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY ),
     m_ProductControllerStateSwUpdating( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING ),
@@ -179,6 +179,12 @@ void EddieProductController::RegisterLpmEvents()
     AsyncCallback<IpcKeyInformation_t>response_cb( func, GetTask() );
     m_LpmInterface->GetLpmClient()->RegisterEvent<IpcKeyInformation_t>( IPC_KEY, response_cb );
     m_lightbarController->RegisterLpmEvents();
+
+    // Register mic mute from LPM.
+    auto micmute = std::bind( &EddieProductController::HandleLpmMicMuteEvents, this, std::placeholders::_1 );
+    AsyncCallback<IpcVPAMicStateEvent_t>micmuteresponse_cb( micmute, GetTask() );
+    m_LpmInterface->GetLpmClient()->RegisterEvent<IpcVPAMicStateEvent_t>( IPC_VPA_MIC_STATE_EVENT, micmuteresponse_cb );
+
 }
 
 void EddieProductController::RegisterKeyHandler()
@@ -277,6 +283,20 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
                     keyInformation.has_keyorigin(),
                     keyInformation.has_keystate(),
                     keyInformation.has_keyid() );
+    }
+}
+
+/// This function will handle mic mute events coming from LPM.
+void EddieProductController::HandleLpmMicMuteEvents( IpcVPAMicStateEvent_t micMute )
+{
+    BOSE_INFO( s_logger, __func__ );
+    if( micMute.state() == VPA_MIC_DISABLED )
+    {
+        BOSE_INFO( s_logger, "%s Disabled", __func__ );
+    }
+    else if( micMute.state() == VPA_MIC_ENABLED )
+    {
+        BOSE_INFO( s_logger, "%s Enabled", __func__ );
     }
 }
 
