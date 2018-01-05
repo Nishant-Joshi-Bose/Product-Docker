@@ -181,10 +181,11 @@ void EddieProductController::RegisterLpmEvents()
     m_lightbarController->RegisterLpmEvents();
 
     // Register mic mute from LPM.
-    auto micmute = std::bind( &EddieProductController::HandleLpmMicMuteEvents, this, std::placeholders::_1 );
-    AsyncCallback<IpcVPAMicStateEvent_t>micmuteresponse_cb( micmute, GetTask() );
-    m_LpmInterface->GetLpmClient()->RegisterEvent<IpcVPAMicStateEvent_t>( IPC_VPA_MIC_STATE_EVENT, micmuteresponse_cb );
+    AsyncCallback<IpcVPAMicState_t>micmuteresponse_cb( std::bind( &EddieProductController::HandleLpmMicMuteEvents, this, std::placeholders::_1 ), GetTask() );
+    m_LpmInterface->GetLpmClient()->RegisterEvent<IpcVPAMicState_t>( IPC_VPA_MIC_STATE_EVENT, micmuteresponse_cb );
 
+    // Get mic mute state from LPM.
+    m_LpmInterface->GetLpmClient()->IpcGetVpaMicState( micmuteresponse_cb, IPC_DEVICE_LPM );
 }
 
 void EddieProductController::RegisterKeyHandler()
@@ -287,9 +288,9 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
 }
 
 /// This function will handle mic mute events coming from LPM.
-void EddieProductController::HandleLpmMicMuteEvents( IpcVPAMicStateEvent_t micMute )
+void EddieProductController::HandleLpmMicMuteEvents( IpcVPAMicState_t micMute )
 {
-    BOSE_INFO( s_logger, __func__ );
+    BOSE_INFO( s_logger, "%s micMute.state() = %d", __func__ , micMute.state() );
     if( micMute.state() == VPA_MIC_DISABLED )
     {
         BOSE_INFO( s_logger, "%s Disabled", __func__ );
