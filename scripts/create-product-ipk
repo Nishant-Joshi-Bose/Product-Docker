@@ -235,8 +235,9 @@ else
     echo "See https://github.com/BoseCorp/Eddie/blob/master/README.md#hsp"
 fi
 # Start Progress
-/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
-
+if [ -f /opt/Bose/bin/ProgressReport ]; then
+	/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
+fi
 # ---8<------8<------8<------8<------8<------8<------8<------8<------8<---
 # Try to kill services before installation begin to make sure
 #   minimal files are in use due to in-place installation.
