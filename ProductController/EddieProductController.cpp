@@ -287,9 +287,23 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
 }
 
 /// This function will handle mic mute events coming from LPM.
+<<<<<<< HEAD
 void EddieProductController::HandleLpmMicMuteEvents( IpcVPAMicState_t micMute )
 {
     GetHsm().Handle<IpcVPAMicState_t>( &CustomProductControllerState::HandleMicMuteButton, micMute );
+=======
+void EddieProductController::HandleLpmMicMuteEvents( IpcVPAMicStateEvent_t micMute )
+{
+    BOSE_INFO( s_logger, __func__ );
+    if( micMute.state() == VPA_MIC_DISABLED )
+    {
+        BOSE_INFO( s_logger, "%s Disabled", __func__ );
+    }
+    else if( micMute.state() == VPA_MIC_ENABLED )
+    {
+        BOSE_INFO( s_logger, "%s Enabled", __func__ );
+    }
+>>>>>>> REgistration of Mic mute events with LPM
 }
 
 void EddieProductController::SendDataCollection( const IpcKeyInformation_t& keyInformation )

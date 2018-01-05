@@ -89,7 +89,11 @@ public:
     }
     std::string GetProductVersionNumber() const override
     {
+<<<<<<< HEAD
         return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );
+=======
+        return ( VERSION_STRING_SHORT + std::string( "." ) + VERSION_BUILD_NUMBER + std::string( "+" ) + VERSION_BUILD_ABBREV_COMMIT );
+>>>>>>> REgistration of Mic mute events with LPM
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// @name  IsBooted
