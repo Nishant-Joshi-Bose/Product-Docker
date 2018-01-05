@@ -2,15 +2,21 @@ export BOSE_WORKSPACE := $(abspath $(CURDIR))
 include Settings.mk
 
 .PHONY: default
-ifeq ($(sdk),native)
-default: cmake_build
-else
 default: graph
-endif
 
-.PHONY: version-files
-version-files: | $(BUILDS_DIR)
+.PHONY: force
+force:
+
+VERSION_FILES = \
+ $(BUILDS_DIR)/BoseVersion.h \
+ $(BUILDS_DIR)/BoseVersion.json \
+
+$(VERSION_FILES): version.txt | $(BUILDS_DIR)
 	gen-version-files version.txt $(BUILDS_DIR)
+
+ifndef DONT_UPDATE_VERSION
+$(VERSION_FILES): force
+endif
 
 $(BUILDS_DIR):
 	mkdir -p $@
@@ -33,7 +39,7 @@ RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_locat
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
 
 .PHONY: generated_sources
-generated_sources: check_tools version-files
+generated_sources: check_tools $(VERSION_FILES)
 	$(MAKE) -C ProductController $@
 	$(MAKE) -C $(PRODUCTCONTROLLERCOMMON_DIR) $@
 	$(MAKE) -C $(A4VVIDEOMANAGERSERVICE_DIR) $@

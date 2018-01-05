@@ -81,7 +81,7 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/1.3"
+    "selected_version": "Release/master/${RIVIERA_HSP_VERSION}"
   },
   {
     "name": "Riviera-Toolchain",
