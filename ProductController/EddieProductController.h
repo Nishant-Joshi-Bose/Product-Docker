@@ -52,6 +52,7 @@
 #include "MacAddressInfo.h"
 #include "BOptional.h"
 #include "VoiceServiceClient.h"
+#include "BoseVersion.h"
 
 namespace ProductApp
 {
@@ -72,16 +73,24 @@ public:
     {
         return m_cachedStatus.get();
     }
-    std::string GetDefaultProductName() const override
-    {
-        /// To-Do: fix the default name
-        return "Bose " + MacAddressInfo::GetPrimaryMAC();
-    }
     std::vector<std::string> GetUniqueLanguages() const override
     {
         return {};
     }
 
+    BLESetupService::ProductId GetProductId() const override
+    {
+        return BLESetupService::ProductId::EDDIE;
+    }
+    BLESetupService::VariantId GetVariantId() const override
+    {
+        /// TODO variantID should be from mfg data
+        return BLESetupService::VariantId::NONE;
+    }
+    std::string GetProductVersionNumber() const override
+    {
+        return ( VERSION_MAJOR + std::string( "." ) + VERSION_MINOR + std::string( "." ) + VERSION_PATCH );
+    }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// @name  IsBooted
     /// @brief The following methods are used by the state machine to determine the status of the
@@ -115,6 +124,7 @@ public:
 
     std::string const& GetProductType() const override;
     std::string const& GetProductVariant() const override;
+    std::string const& GetDefaultProductName() const override;
 
 private:
     /// Disable copies
