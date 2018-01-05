@@ -17,7 +17,7 @@
   },
   {
     "name": "bose-opkg-utils",
-    "selected_version": "master@0828ce81e7a9b96e03057da48c04a0cebc9aff21"
+    "selected_version": "master@887d0ab5d58c2aa3b6d3c0fb0c1dc31adf81e799"
   },
   {
     "name": "BoseLibs-qc8017_32",
@@ -25,7 +25,7 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-19_1021"
+    "selected_version": "Release/Castle-Fork/0.2.4-20251"
   },
   {
     "name": "CastleCli-qc8017_32",
