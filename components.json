@@ -17,7 +17,7 @@
   },
   {
     "name": "bose-opkg-utils",
-    "selected_version": "master@0828ce81e7a9b96e03057da48c04a0cebc9aff21"
+    "selected_version": "master@887d0ab5d58c2aa3b6d3c0fb0c1dc31adf81e799"
   },
   {
     "name": "BoseLibs-qc8017_32",
@@ -25,12 +25,11 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.2.3-20217"
-
+    "selected_version": "Release/Castle-Fork/0.2.4-20251"
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/0.2.2-24+b3aee04"
+    "selected_version": "Release/master/0.2.3-26+8cf9ea4"
   },
   {
     "name": "CastleLibs-qc8017_32",
@@ -62,7 +61,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/0.2.2-37+75e97be"
+    "selected_version": "Release/master/0.2.3-40+cd721ac"
   },
   {
     "name": "ProfessorLPM-Package",
@@ -82,7 +81,7 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/1.3"
+    "selected_version": "Release/master/${RIVIERA_HSP_VERSION}"
   },
   {
     "name": "Riviera-Toolchain",

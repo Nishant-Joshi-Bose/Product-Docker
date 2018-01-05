@@ -2,15 +2,21 @@ export BOSE_WORKSPACE := $(abspath $(CURDIR))
 include Settings.mk
 
 .PHONY: default
-ifeq ($(sdk),native)
-default: cmake_build
-else
 default: graph
-endif
 
-.PHONY: version-files
-version-files: | $(BUILDS_DIR)
+.PHONY: force
+force:
+
+VERSION_FILES = \
+ $(BUILDS_DIR)/BoseVersion.h \
+ $(BUILDS_DIR)/BoseVersion.json \
+
+$(VERSION_FILES): version.txt | $(BUILDS_DIR)
 	gen-version-files version.txt $(BUILDS_DIR)
+
+ifndef DONT_UPDATE_VERSION
+$(VERSION_FILES): force
+endif
 
 $(BUILDS_DIR):
 	mkdir -p $@
@@ -33,7 +39,7 @@ RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_locat
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
 
 .PHONY: generated_sources
-generated_sources: check_tools version-files
+generated_sources: check_tools $(VERSION_FILES)
 	$(MAKE) -C ProductController $@
 	$(MAKE) -C $(PRODUCTCONTROLLERCOMMON_DIR) $@
 	$(MAKE) -C $(A4VVIDEOMANAGERSERVICE_DIR) $@
@@ -58,9 +64,9 @@ product-ipk: cmake_build
 
 #Uncomment next two line after removing next 2 lines, once HSP is integrated.
 #IPKS = hsp.ipk  product.ipk lpm_updater.ipk
-#PACKAGENAMES = hsp SoundTouch professor_lpm_updater
+#PACKAGENAMES = hsp SoundTouch lpm_updater
 IPKS = product.ipk lpm_updater.ipk
-PACKAGENAMES = SoundTouch professor_lpm_updater
+PACKAGENAMES = SoundTouch lpm_updater
 
 #Create Zip file for Bonjour / Local update
 .PHONY: update-zip
@@ -70,7 +76,7 @@ update-zip: product-ipk hsp-ipk lpmupdater-ipk
 #Create one more Zip file for Bonjour / Local update with HSP 
 #- This is temporary, till DP2 boards are available.
 IPKS_HSP = hsp.ipk product.ipk lpm_updater.ipk
-PACKAGENAMES_HSP = hsp SoundTouch professor_lpm_updater
+PACKAGENAMES_HSP = hsp SoundTouch lpm_updater
 .PHONY: update-zip-with-hsp
 update-zip-with-hsp: product-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_with_hsp.zip
@@ -99,6 +105,13 @@ package: product-ipk hsp-ipk lpmupdater-ipk
 
 .PHONY: all-packages
 all-packages: package packages-gz update-zip update-zip-with-hsp
+
+.PHONY: deploy
+deploy: graph all-packages
+ifndef RIVIERA_HSP_VERSION
+	$(error No RIVIERA_HSP_VERSION)
+endif
+	scripts/collect-deployables builds/Release builds/deploy/HSP-${RIVIERA_HSP_VERSION}
 
 .PHONY: clean
 clean:
