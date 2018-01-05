@@ -90,11 +90,13 @@ class TestDemo():
         assert startPlaybackResponse["body"]["container"]["contentItem"]["status"] != "play"
         demoUtils.verifyDemoMode("on")
 
-    @pytest.mark.skip(reason="wip")
-    def test_demoOnKeyIntent(self, request, demoUtils, device_ip):
+    def test_demoKeyIntent(self, request, demoUtils, device_ip):
         """
-        Test demoOnKey Intent
-        1. Excerise various /content/transportControl operations and verify demoState
+        This test verifies keyIntent is not present when demoMode is 'Off' and is present when demoMode is 'On' and /opt/Bose/etc/KeyConfiguration-demo.json file exists
+        Test steps:
+        1. With demoMode off press mfb and verify keyIntent is not present
+        2. Set demoMode 'On'
+        3. Press mfb and verify keyIntent is present and /opt/Bose/etc/KeyConfiguration-demo.json file exists
         """
         key.mfb_playpause()
         demoUtils.verifyNotification()
@@ -106,7 +108,6 @@ class TestDemo():
         demoUtils.verifyNotification()
         key.mfb_prev_track()
         demoUtils.verifyNotification()
-
         logger.info("Start test_demoOnKeyIntent")
         demoUtils.setDemoMode("on", True, 3, request.config.getoption("--network-iface"))
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
@@ -114,7 +115,6 @@ class TestDemo():
         demoUtils.verifyDemoModeOn(responseTimeout-60)
         demoUtils.setDemoMode("on", False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoMode("on")
-
         key.mfb_playpause()
         demoUtils.verifyNotification()
         key.mfb_nw_standby()
