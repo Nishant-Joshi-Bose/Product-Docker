@@ -52,6 +52,7 @@
 #include "MacAddressInfo.h"
 #include "BOptional.h"
 #include "VoiceServiceClient.h"
+#include "BoseVersion.h"
 
 namespace ProductApp
 {
@@ -87,8 +88,7 @@ public:
     }
     std::string GetProductVersionNumber() const override
     {
-        //To-Do Need to get version number from config file
-        return "0.0.1";
+        return ( VERSION_MAJOR + std::string( "." ) + VERSION_MINOR + std::string( "." ) + VERSION_PATCH );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// @name  IsBooted
@@ -123,19 +123,8 @@ public:
 
     std::string const& GetProductType() const override;
     std::string const& GetProductVariant() const override;
-<<<<<<< HEAD
-<<<<<<< HEAD
-    std::string const& GetDefaultProductName() const override;
-<<<<<<< HEAD
-=======
-=======
->>>>>>> Revert changes of product name
-
->>>>>>> Modified device name by truncating mac address to last 6 digit
-=======
     std::string const& GetDefaultProductName() const override;
 
->>>>>>> CHanged GetDefaultProductName with default name
 private:
     /// Disable copies
     EddieProductController( const EddieProductController& ) = delete;

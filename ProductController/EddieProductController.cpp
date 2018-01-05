@@ -100,6 +100,8 @@ EddieProductController::EddieProductController( std::string const& ProductName )
 
     // Initialize and register Intents for the Product Controller
     m_IntentHandler.Initialize();
+
+
 }
 
 EddieProductController::~EddieProductController()
