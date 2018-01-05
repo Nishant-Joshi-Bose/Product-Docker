@@ -40,14 +40,6 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// This is just a placeholder
-constexpr uint32_t ADAPTIQ_INACTIVITY_TIMEOUT   = 1 * 60 * 1000;
-
-constexpr int ADAPTIQ_SPEAKER_FIRST             = 1;
-constexpr int ADAPTIQ_SPEAKER_LAST              = 5;
-constexpr int ADAPTIQ_LOCATION_FIRST            = 1;
-constexpr int ADAPTIQ_LOCATION_LAST             = 5;
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief CustomProductControllerStateAdaptIQ::CustomProductControllerStateAdaptIQ
@@ -80,6 +72,20 @@ CustomProductControllerStateAdaptIQ::CustomProductControllerStateAdaptIQ
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @brief CustomProductControllerStateAdaptIQ::StartTimer
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStateAdaptIQ::StartTimer( int timeout )
+{
+    m_timer->SetTimeouts( timeout, 0 );
+    m_timer->Start( [ = ]( )
+    {
+        HandleTimeOut();
+    } );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief CustomProductControllerStateAdaptIQ::HandleStateStart
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,20 +93,16 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
 {
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being started." );
 
-    m_timer->SetTimeouts( ADAPTIQ_INACTIVITY_TIMEOUT, 0 );
-    m_timer->Start( [ = ]( )
-    {
-        HandleTimeOut();
-    } );
-
-    status.set_smstate( "NA" );
-    status.set_mode( "Booting" );
-    status.set_currentlocation( ADAPTIQ_LOCATION_FIRST );
-    status.set_currentspeaker( ADAPTIQ_SPEAKER_FIRST );
-    status.set_hpconnected( true );
-    status.set_errorcode( 0 );
-    m_AdaptIQManager->SetDefaultProperties( status );
-    m_AdaptIQManager->SetStatus( status );
+    // set initial status and send initial notification
+    m_status.set_smstate( "NA" );
+    m_status.set_mode( "Booting" );
+    m_status.set_currentlocation( ProductAdaptIQManager::ADAPTIQ_LOCATION_FIRST );
+    m_status.set_currentspeaker( ProductAdaptIQManager::ADAPTIQ_SPEAKER_FIRST );
+    m_status.set_hpconnected( true );
+    m_status.set_errorcode( 0 );
+    m_AdaptIQManager->SetDefaultProperties( m_status );
+    m_AdaptIQManager->SetStatus( m_status );
+    StartTimer( ADAPTIQ_BOOT_TIME );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,13 +112,30 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateAdaptIQ::HandleTimeOut( )
 {
-    BOSE_INFO( s_logger, "A time out during AdaptIQ has occurred." );
-
-    ///
-    /// Go to the superstate of this state, which should be the last state that the
-    /// product controller was in, to resume functionality.
-    ///
-    ChangeState( GetSuperId( ) );
+    if( m_status.smstate() == "Booting" )
+    {
+        // DSP booted, wait for "Advance"
+        m_status.set_smstate( "Intro" );
+        m_status.set_mode( "Running" );
+        m_AdaptIQManager->SetStatus( m_status );
+    }
+    else if( m_status.smstate() == "Listening" )
+    {
+        // measurement complete, wait for "Advance"
+        m_status.set_smstate( "Measurement Complete" );
+        m_AdaptIQManager->SetStatus( m_status );
+    }
+    else if( m_status.smstate() == "Analysis" )
+    {
+        // analysis complete, start tearing down adapt iq
+        m_status.set_smstate( "Analysis Complete" );
+        m_AdaptIQManager->SetStatus( m_status );
+        StartTimer( ADAPTIQ_EXIT_TIME );
+    }
+    else if( m_status.smstate() == "Analysis Complete" )
+    {
+        ChangeState( GetSuperId() );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,7 +157,6 @@ void CustomProductControllerStateAdaptIQ::HandleStateExit( )
 {
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being exited." );
     m_timer->Stop( );
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -151,23 +169,70 @@ void CustomProductControllerStateAdaptIQ::HandleStateExit( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAdaptIQControl& cmd )
 {
-    // for now just forward the action on the the lpm / dsp; we'll do more complex stuff later
     switch( cmd.action() )
     {
     case ProductAdaptIQControl::Start:
-        m_AdaptIQManager->SendAdaptIQControl( ProductAdaptIQControl::Start );
         break;
 
     case ProductAdaptIQControl::Cancel:
-        m_AdaptIQManager->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
         break;
 
     case ProductAdaptIQControl::Advance:
-        m_AdaptIQManager->SendAdaptIQControl( ProductAdaptIQControl::Advance );
+        if( m_status.smstate() == "Intro" )
+        {
+            // got "Advance" in intro, go to listening and wait for measurement complete
+            m_status.set_smstate( "Listening" );
+            m_AdaptIQManager->SetStatus( m_status );
+            StartTimer( ADAPTIQ_MEASUREMENT_TIME );
+        }
+        else if( m_status.smstate() == "Measurement Complete" )
+        {
+            // got "Advance" in measurement complete, update location / speaker
+            if( m_status.currentlocation() == ProductAdaptIQManager::ADAPTIQ_LOCATION_LAST )
+            {
+                m_status.set_smstate( "Analysis" );
+                StartTimer( ADAPTIQ_ANALYSIS_TIME );
+            }
+            else
+            {
+                m_status.set_smstate( "Listening" );
+                m_status.set_currentlocation( m_status.currentlocation() + 1 );
+                m_status.set_currentspeaker( m_status.currentspeaker() + 1 );
+                m_AdaptIQManager->SetStatus( m_status );
+                StartTimer( ADAPTIQ_MEASUREMENT_TIME );
+            }
+        }
+        else
+        {
+            // wrong state, error
+            m_status.set_smstate( "Error" );
+            m_AdaptIQManager->SetDefaultProperties( m_status );
+            m_AdaptIQManager->SetStatus( m_status );
+        }
+
         break;
 
     case ProductAdaptIQControl::Previous:
-        m_AdaptIQManager->SendAdaptIQControl( ProductAdaptIQControl::Previous );
+        if( m_status.smstate() == "Measurement Complete" )
+        {
+            // got "Previous" in measurement complete, update location / speaker
+            if( m_status.currentlocation() > ProductAdaptIQManager::ADAPTIQ_LOCATION_FIRST )
+            {
+                m_status.set_currentlocation( m_status.currentlocation() - 1 );
+                m_status.set_currentspeaker( m_status.currentspeaker() - 1 );
+            }
+            m_status.set_smstate( "Listening" );
+            m_AdaptIQManager->SetStatus( m_status );
+            StartTimer( ADAPTIQ_MEASUREMENT_TIME );
+        }
+        else
+        {
+            // wrong state, error
+            m_status.set_smstate( "Error" );
+            m_AdaptIQManager->SetDefaultProperties( m_status );
+            m_AdaptIQManager->SetStatus( m_status );
+        }
+
         break;
 
     default:

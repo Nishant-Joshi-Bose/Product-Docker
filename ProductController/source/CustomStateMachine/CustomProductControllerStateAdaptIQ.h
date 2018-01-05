@@ -86,6 +86,8 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleTimeOut( );
+    void StartTimer( int timeout );
+
     APTimerPtr m_timer;
 
     std::shared_ptr< ProductAdaptIQManager >& m_AdaptIQManager;
@@ -95,7 +97,15 @@ private:
     /// @brief This holds the current status of the AdaptIQ process.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    ProductPb::AdaptIQStatus status;
+    ProductPb::AdaptIQStatus m_status;
+
+    // This is just a placeholder
+    static constexpr uint32_t ADAPTIQ_INACTIVITY_TIMEOUT    = 1 * 60 * 1000;
+
+    static constexpr uint32_t ADAPTIQ_BOOT_TIME             = 1 * 1000;
+    static constexpr uint32_t ADAPTIQ_MEASUREMENT_TIME      = 3 * 1000;
+    static constexpr uint32_t ADAPTIQ_ANALYSIS_TIME         = 3 * 1000;
+    static constexpr uint32_t ADAPTIQ_EXIT_TIME             = 1 * 1000;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

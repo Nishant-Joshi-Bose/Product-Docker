@@ -92,6 +92,11 @@ public:
     //////////////////////////////////////////////////////////////////////////////////////////////
     void SetStatus( const ProductPb::AdaptIQStatus&, bool force = false );
 
+    static constexpr int ADAPTIQ_SPEAKER_FIRST     = 1;
+    static constexpr int ADAPTIQ_SPEAKER_LAST      = 5;
+    static constexpr int ADAPTIQ_LOCATION_FIRST    = 1;
+    static constexpr int ADAPTIQ_LOCATION_LAST     = 5;
+
 private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These declarations store the main task for processing LPM hardware events and requests. It
@@ -154,6 +159,7 @@ private:
     void RegisterLpmClientEvents( );
     void HandleAdaptIQStatus( LpmServiceMessages::IpcAiqSetupStatus_t );
     void AdaptIQNotify( const ProductPb::AdaptIQStatus& );
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

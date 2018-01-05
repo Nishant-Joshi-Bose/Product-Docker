@@ -68,6 +68,13 @@ ProductAdaptIQManager::ProductAdaptIQManager( ProfessorProductController& Produc
     m_ProductNotify( ProductController.GetMessageHandler( ) ),
     m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) )
 {
+    m_status.set_smstate( "NA" );
+    m_status.set_mode( "Booting" );
+    m_status.set_currentlocation( ADAPTIQ_LOCATION_FIRST );
+    m_status.set_currentspeaker( ADAPTIQ_SPEAKER_FIRST );
+    m_status.set_hpconnected( true );
+    m_status.set_errorcode( 0 );
+    SetDefaultProperties( m_status );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
