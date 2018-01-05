@@ -122,6 +122,39 @@ void ProductAdaptIQManager::Stop( void )
     m_GetConnection.Disconnect();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductAdaptIQManager::SetDefaultProperties
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductAdaptIQManager::SetDefaultProperties( ProductPb::AdaptIQStatus& status )
+{
+    // fill in list of supported actions
+    status.mutable_properties()->add_supportedactions( s_ActionEnter );
+    status.mutable_properties()->add_supportedactions( s_ActionCancel );
+    status.mutable_properties()->add_supportedactions( s_ActionAdvance );
+
+    // fill in list of supported modes
+    status.mutable_properties()->add_supportedmodes( s_ModeNormal );
+    status.mutable_properties()->add_supportedmodes( s_ModeRetail );
+    status.mutable_properties()->add_supportedmodes( s_ModeDisabled );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductAdaptIQManager::SetStatus
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductAdaptIQManager::SetStatus( const ProductPb::AdaptIQStatus& status, bool force )
+{
+    if( ( m_status.SerializeAsString() != status.SerializeAsString() ) || force )
+    {
+        m_status = status;
+        m_FrontDoorClient->SendNotification( s_FrontDoorAdaptIQ, m_status );
+    }
+}
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -137,15 +170,7 @@ void ProductAdaptIQManager::Stop( void )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductAdaptIQManager::HandleGet( AdaptIQStatus& status )
 {
-    // fill in list of supported actions
-    status.mutable_properties()->add_supportedactions( s_ActionEnter );
-    status.mutable_properties()->add_supportedactions( s_ActionCancel );
-    status.mutable_properties()->add_supportedactions( s_ActionAdvance );
-
-    // fill in list of supported modes
-    status.mutable_properties()->add_supportedmodes( s_ModeNormal );
-    status.mutable_properties()->add_supportedmodes( s_ModeRetail );
-    status.mutable_properties()->add_supportedmodes( s_ModeDisabled );
+    SetDefaultProperties( status );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

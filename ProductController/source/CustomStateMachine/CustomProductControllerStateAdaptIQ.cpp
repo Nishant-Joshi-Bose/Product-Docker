@@ -41,7 +41,12 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // This is just a placeholder
-constexpr uint32_t ADAPTIQ_INACTIVITY_TIMEOUT = 1 * 60 * 1000;
+constexpr uint32_t ADAPTIQ_INACTIVITY_TIMEOUT   = 1 * 60 * 1000;
+
+constexpr int ADAPTIQ_SPEAKER_FIRST             = 1;
+constexpr int ADAPTIQ_SPEAKER_LAST              = 5;
+constexpr int ADAPTIQ_LOCATION_FIRST            = 1;
+constexpr int ADAPTIQ_LOCATION_LAST             = 5;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -88,6 +93,14 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
         HandleTimeOut();
     } );
 
+    status.set_smstate( "NA" );
+    status.set_mode( "Booting" );
+    status.set_currentlocation( ADAPTIQ_LOCATION_FIRST );
+    status.set_currentspeaker( ADAPTIQ_SPEAKER_FIRST );
+    status.set_hpconnected( true );
+    status.set_errorcode( 0 );
+    m_AdaptIQManager->SetDefaultProperties( status );
+    m_AdaptIQManager->SetStatus( status );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
