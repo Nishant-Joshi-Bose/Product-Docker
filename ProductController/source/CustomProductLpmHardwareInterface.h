@@ -93,6 +93,7 @@ public:
                                   const unsigned long long bluetoothMacAddress );
     bool SendSourceSelection( const LPM_IPC_SOURCE_ID      sourceSelect );
     bool SetCecPhysicalAddress( const uint32_t cecPhyAddr );
+    bool SendAdaptIQControl( ProductAdaptIQControl::AdaptIQAction action );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
