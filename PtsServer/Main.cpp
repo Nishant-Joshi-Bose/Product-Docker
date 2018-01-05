@@ -1,5 +1,5 @@
 /*
-  Trivial web server to serve PTS information.
+  Trivial web server to serve PTS information and static web content.
 
   If you're thinking of extending this web server to do something more than it
   currently does, you should instead consider using a real web server.
@@ -41,6 +41,10 @@ char const* program_name;
     } while( 0 )
 
 constexpr unsigned short listen_port = 80;
+
+/* Handling each HTTP request must finish within this amount of time. */
+constexpr unsigned int max_connection_seconds = 60;
+
 char const* handler_program;
 
 int open_listenfd()
@@ -86,21 +90,14 @@ void handle_connection( int sockfd )
             LOG( "dup2: " << err() );
         close( sockfd );
 
+        alarm( max_connection_seconds );
+
+        signal( SIGCHLD, SIG_DFL );
+
         execl( handler_program, handler_program, nullptr );
         DIE( "execl " << handler_program << ": " << err() );
     }
     close( sockfd );
-
-    int status = 0;
-    if( waitpid( kid, &status, 0 ) == -1 )
-        LOG( "waitpid: " << err() );
-    else
-    {
-        if( WIFEXITED( status ) && WEXITSTATUS( status ) != 0 )
-            LOG( "Child exited " << WEXITSTATUS( status ) );
-        if( WIFSIGNALED( status ) )
-            LOG( "Child signaled " << WTERMSIG( status ) );
-    }
 }
 
 void listener( int listenfd )
@@ -151,7 +148,7 @@ try
     if( !handler_program )
         DIE( "No handler program specified" );
 
-    signal( SIGPIPE, SIG_IGN );
+    signal( SIGCHLD, SIG_IGN );
 
     int listenfd = open_listenfd();
 

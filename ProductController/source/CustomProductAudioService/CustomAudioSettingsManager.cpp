@@ -224,42 +224,43 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
                         kConfigVersionMajor, kConfigVersionMinor );
             return;
         }
+    }
 
-        // Initialize ProtoBufs with m_audioSettings JSON values, only if no error during reading from persistence or default config files
-        initializeProto( kBassName, m_currentBass );
-        initializeProto( kTrebleName, m_currentTreble );
-        initializeProto( kCenterName, m_currentCenter );
-        initializeProto( kSurroundName, m_currentSurround );
-        initializeProto( kGainOffsetName, m_currentGainOffset );
-        initializeProto( kAvSyncName, m_currentAvSync );
+    // If it gets here, it means we successfully read from either persistence or default config file
+    // Initialize ProtoBufs with m_audioSettings JSON values
+    initializeProto( kBassName, m_currentBass );
+    initializeProto( kTrebleName, m_currentTreble );
+    initializeProto( kCenterName, m_currentCenter );
+    initializeProto( kSurroundName, m_currentSurround );
+    initializeProto( kGainOffsetName, m_currentGainOffset );
+    initializeProto( kAvSyncName, m_currentAvSync );
 
-        m_currentMode.set_value( m_audioSettings["defaultValues"][kModeName].asString() );
-        m_currentMode.set_persistence( m_audioSettings["configurations"][kModeName]["currentPersistenceLevel"].asString() );
-        for( uint32_t i = 0; i < m_audioSettings["configurations"][kModeName]["properties"]["supportedValues"].size(); i++ )
-        {
-            m_currentMode.mutable_properties()->add_supportedvalues( m_audioSettings["configurations"][kModeName]["properties"]["supportedValues"][i].asString() );
-        }
-        for( uint32_t i = 0; i < m_audioSettings["configurations"][kModeName]["properties"]["supportedPersistence"].size(); i++ )
-        {
-            m_currentMode.mutable_properties()->add_supportedpersistence( m_audioSettings["configurations"][kModeName]["properties"]["supportedPersistence"][i].asString() );
-        }
+    m_currentMode.set_value( m_audioSettings["defaultValues"][kModeName].asString() );
+    m_currentMode.set_persistence( m_audioSettings["configurations"][kModeName]["currentPersistenceLevel"].asString() );
+    for( uint32_t i = 0; i < m_audioSettings["configurations"][kModeName]["properties"]["supportedValues"].size(); i++ )
+    {
+        m_currentMode.mutable_properties()->add_supportedvalues( m_audioSettings["configurations"][kModeName]["properties"]["supportedValues"][i].asString() );
+    }
+    for( uint32_t i = 0; i < m_audioSettings["configurations"][kModeName]["properties"]["supportedPersistence"].size(); i++ )
+    {
+        m_currentMode.mutable_properties()->add_supportedpersistence( m_audioSettings["configurations"][kModeName]["properties"]["supportedPersistence"][i].asString() );
+    }
 
-        m_currentContentType.set_value( m_audioSettings["defaultValues"][kContentTypeName].asString() );
-        m_currentContentType.set_persistence( m_audioSettings["configurations"][kContentTypeName]["currentPersistenceLevel"].asString() );
-        for( uint32_t i = 0; i < m_audioSettings["configurations"][kContentTypeName]["properties"]["supportedValues"].size(); i++ )
-        {
-            m_currentContentType.mutable_properties()->add_supportedvalues( m_audioSettings["configurations"][kContentTypeName]["properties"]["supportedValues"][i].asString() );
-        }
-        for( uint32_t i = 0; i < m_audioSettings["configurations"][kContentTypeName]["properties"]["supportedPersistence"].size(); i++ )
-        {
-            m_currentContentType.mutable_properties()->add_supportedpersistence( m_audioSettings["configurations"][kContentTypeName]["properties"]["supportedPersistence"][i].asString() );
-        }
+    m_currentContentType.set_value( m_audioSettings["defaultValues"][kContentTypeName].asString() );
+    m_currentContentType.set_persistence( m_audioSettings["configurations"][kContentTypeName]["currentPersistenceLevel"].asString() );
+    for( uint32_t i = 0; i < m_audioSettings["configurations"][kContentTypeName]["properties"]["supportedValues"].size(); i++ )
+    {
+        m_currentContentType.mutable_properties()->add_supportedvalues( m_audioSettings["configurations"][kContentTypeName]["properties"]["supportedValues"][i].asString() );
+    }
+    for( uint32_t i = 0; i < m_audioSettings["configurations"][kContentTypeName]["properties"]["supportedPersistence"].size(); i++ )
+    {
+        m_currentContentType.mutable_properties()->add_supportedpersistence( m_audioSettings["configurations"][kContentTypeName]["properties"]["supportedPersistence"][i].asString() );
+    }
 
-        m_currentDualMonoSelect.set_value( m_audioSettings["defaultValues"][kDualMonoSelectName].asString() );
-        for( uint32_t i = 0; i < m_audioSettings["configurations"][kDualMonoSelectName]["properties"]["supportedValues"].size(); i++ )
-        {
-            m_currentDualMonoSelect.mutable_properties()->add_supportedvalues( m_audioSettings["configurations"][kDualMonoSelectName]["properties"]["supportedValues"][i].asString() );
-        }
+    m_currentDualMonoSelect.set_value( m_audioSettings["defaultValues"][kDualMonoSelectName].asString() );
+    for( uint32_t i = 0; i < m_audioSettings["configurations"][kDualMonoSelectName]["properties"]["supportedValues"].size(); i++ )
+    {
+        m_currentDualMonoSelect.mutable_properties()->add_supportedvalues( m_audioSettings["configurations"][kDualMonoSelectName]["properties"]["supportedValues"][i].asString() );
     }
 }
 
