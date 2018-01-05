@@ -89,7 +89,7 @@ public:
     }
     std::string GetProductVersionNumber() const override
     {
-        return ( VERSION_STRING_SHORT + std::string( "." ) + VERSION_BUILD_NUMBER + std::string( "+" ) + VERSION_BUILD_ABBREV_COMMIT );
+        return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// @name  IsBooted
@@ -196,11 +196,10 @@ private:
 
     void HandleWiFiProfileResponse( const NetManager::Protobuf::WiFiProfiles& profiles );
 
-
 public:
     /// Handle Key Information received from LPM
     void HandleLpmKeyInformation( IpcKeyInformation_t keyInformation );
-    void HandleLpmMicMuteEvents( IpcVPAMicStateEvent_t micMute );
+    void HandleLpmMicMuteEvents( IpcVPAMicState_t micMute );
 
     void HandleIntents( KeyHandlerUtil::ActionType_t intent );
 
