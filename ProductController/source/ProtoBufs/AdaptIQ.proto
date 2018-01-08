@@ -36,13 +36,13 @@ message AdaptIQStatus
          * "cancel"
          * "advance"
          */
-        repeated string     supportedactions    = 1;
+        repeated string     supportedActions    = 1;
         /*
          * "Enabled Normal"
          * "Enabled Retail"
          * "Disabled"
          */
-        repeated string     supportedmodes      = 2;
+        repeated string     supportedModes      = 2;
     }
 
     /*
@@ -54,7 +54,7 @@ message AdaptIQStatus
      * "analysis"
      * "analysis complete"
      */
-    optional string     smstate             = 1;
+    optional string     smState             = 1;
 
     /*
      * "Running"
@@ -63,10 +63,10 @@ message AdaptIQStatus
      * "Enabled Retail"
      */
     optional string             mode                = 2;
-    optional int32              currentlocation     = 3;
-    optional int32              currentspeaker      = 4;
-    optional bool               hpconnected         = 5;
-    optional int32              errorcode           = 6;
+    optional int32              currentLocation     = 3;
+    optional int32              currentSpeaker      = 4;
+    optional bool               hpConnected         = 5;
+    optional int32              errorCode           = 6;
     optional AdaptIQProperties  properties          = 7;
 }
 

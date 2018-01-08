@@ -140,7 +140,8 @@ class FrontDoorAPI(FrontDoorAPIBase):
 	# This function detects if the message is a notification and adds it to the last_notificaiton
 	if '"method":"NOTIFY"' in message:
 	    self.last_notification = json.loads(message)
-	    self.debug_print("Last Notification recieved:", json.dumps(self.last_notification, indent=4, sort_keys=True))
+	    #self.debug_print("Last Notification recieved:", json.dumps(self.last_notification, indent=4, sort_keys=True))
+	    print("Last Notification recieved: {}".format(json.dumps(self.last_notification, indent=4, sort_keys=True)).encode())
 	else:
 	    #self.debug_print("This is not a notification & the message is:", message)
             self._jsonIn.append(message)
