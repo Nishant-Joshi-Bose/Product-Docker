@@ -43,6 +43,7 @@
 #include "ProductMessage.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "MacAddressInfo.h"
+#include "BoseVersion.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -189,15 +190,27 @@ public:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleMessage( const ProductMessage& message );
 
-    std::string GetDefaultProductName() const override
-    {
-        /// To-Do: fix the default name
-        return "Bose " + MacAddressInfo::GetPrimaryMAC();
-    }
+    std::string const& GetDefaultProductName() const override;
 
     std::string const& GetProductType() const override;
 
     std::string const& GetProductVariant() const override;
+
+    BLESetupService::ProductId GetProductId() const override
+    {
+        return BLESetupService::ProductId::PROFESSOR;
+    }
+
+    std::string GetProductVersionNumber() const override
+    {
+        return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );
+    }
+
+    BLESetupService::VariantId GetVariantId() const override
+    {
+        /// TODO variantID should be from mfg data
+        return BLESetupService::VariantId::NONE;
+    }
 
     std::vector<std::string> GetUniqueLanguages() const override
     {
