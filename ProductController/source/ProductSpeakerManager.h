@@ -132,6 +132,9 @@ private:
 
     void DisbandAccessories( const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB );
 
+    void DisbandAccessoriesCallback( const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB,
+                                     LpmServiceMessages::IpcAccessoryDisbandCommand_t accDisband );
+
     void SetSpeakersEnabledCallback( const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB,
                                      const LpmServiceMessages::IpcSpeakersActive_t req );
     void SetSpeakersEnabled( const ProductPb::AccessorySpeakerState::SpeakerControls req,
@@ -162,6 +165,7 @@ private:
     ///        types.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+    static const char* AccessoryRearConiguration( uint8_t numLeft, uint8_t numRight );
     static bool AccessoryStatusIsConnected( unsigned int status );
     static bool AccessoryTypeIsRear( unsigned int type );
     static bool AccessoryTypeIsSub( unsigned int type );

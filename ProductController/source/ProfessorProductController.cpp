@@ -1186,6 +1186,31 @@ void ProfessorProductController::End( )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetDefaultProductName
+///
+/// @brief  This method is to get the default product name by reading from mac address.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string const& ProfessorProductController::GetDefaultProductName() const
+{
+    static std::string productName = "Bose ";
+    std::string macAddress = MacAddressInfo::GetPrimaryMAC();
+    try
+    {
+        productName += ( macAddress.substr( macAddress.length() - 6 ) );
+    }
+    catch( const std::out_of_range& error )
+    {
+        productName += macAddress;
+        BOSE_WARNING( s_logger, "errorType = %s", error.what() );
+    }
+
+    BOSE_INFO( s_logger, "%s productName=%s", __func__, productName.c_str() );
+    return productName;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
