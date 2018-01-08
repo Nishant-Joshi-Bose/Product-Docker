@@ -21,7 +21,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.2-205+1f18f4c"
+    "selected_version": "Continuous/master/0.3.2-215+062c793"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -53,7 +53,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@1f415c318f8c5b0cb4cfee8752cb4672d71f938b"
+    "selected_version": "master@921590169bb2689818ea3a3ec4c31ce079127fa8"
   },
   {
     "name": "GalapagosClient-qc8017_32",
