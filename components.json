@@ -84,10 +84,6 @@
     "selected_version": "branches/protobuf@2510"
   },
   {
-    "name": "FrontDoor-native",
-    "selected_version": "Release/master/1.0.0-44+42f6178"
-  },
-  {
     "name": "FrontDoor-qc8017_32",
     "selected_version": "Release/master/1.0.0-44+42f6178"
   },
