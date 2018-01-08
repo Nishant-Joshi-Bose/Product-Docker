@@ -9,7 +9,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.2-205+1f18f4c"
+    "selected_version": "Continuous/master/0.3.2-215+062c793"
   },
   {
     "name": "BoseWebMonaco",
@@ -53,7 +53,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@2f3f64e401366402c13d34859324d5db13f94887"
+    "selected_version": "master@921590169bb2689818ea3a3ec4c31ce079127fa8"
   },
   {
     "name": "CastleProductUIAssets",
