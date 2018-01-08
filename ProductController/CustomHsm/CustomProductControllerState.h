@@ -18,6 +18,7 @@
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "ProductMessage.pb.h"
 #include "InactivityTimers.h"
+#include "LpmClientFactory.h"
 
 namespace ProductApp
 {
@@ -165,6 +166,10 @@ public:
         return false;
     }
 
+    virtual bool HandleMicMuteButton( IpcVPAMicState_t state )
+    {
+        return false;
+    }
     ///////////////////////////////////////////////////////////////////////////////
     ///
     /// Here are the Custom event handlers. They need to be declared virtual and
