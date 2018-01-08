@@ -286,12 +286,6 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
     }
 }
 
-/// This function will handle mic mute events coming from LPM.
-void EddieProductController::HandleLpmMicMuteEvents( IpcVPAMicState_t micMute )
-{
-    GetHsm().Handle<IpcVPAMicState_t>( &CustomProductControllerState::HandleMicMuteButton, micMute );
-}
-
 void EddieProductController::SendDataCollection( const IpcKeyInformation_t& keyInformation )
 {
 #if 0 // @TODO Leela, re-enable this code
