@@ -199,7 +199,6 @@ private:
 public:
     /// Handle Key Information received from LPM
     void HandleLpmKeyInformation( IpcKeyInformation_t keyInformation );
-    void HandleLpmMicMuteEvents( IpcVPAMicState_t micMute );
 
     void HandleIntents( KeyHandlerUtil::ActionType_t intent );
 
