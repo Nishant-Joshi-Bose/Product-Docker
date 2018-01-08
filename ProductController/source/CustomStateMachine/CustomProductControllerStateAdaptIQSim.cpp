@@ -117,7 +117,7 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
 void CustomProductControllerStateAdaptIQ::HandleTimeOut( )
 {
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ ::: %s (%s)\n", __func__, m_status.smstate().c_str() );
-    if( m_status.smstate() == "Booting" )
+    if( m_status.smstate() == "NA" )
     {
         // DSP booted, wait for "Advance"
         m_status.set_smstate( "Intro" );
