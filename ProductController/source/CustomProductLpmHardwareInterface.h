@@ -102,7 +102,7 @@ public:
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool SendAccessoryPairing( bool enabled, const Callback<LpmServiceMessages::IpcSpeakerPairingMode_t>& cb );
     bool SendAccessoryActive( bool rears, bool subs,  const Callback<IpcSpeakersActive_t> &cb );
-    bool SendAccessoryDisband( );
+    bool SendAccessoryDisband( const Callback<IpcAccessoryDisbandCommand_t> &cb );
 
 private:
 
