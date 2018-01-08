@@ -53,6 +53,7 @@ HTTP/1.1 200 OK\r
 Content-Type: text/plain\r
 Cache-Control: no-cache\r
 \r"""
+        sys.stdout.flush()
         os.execl("/sbin/logread", "logread")
 
     if path == "/logread.txt.gz":
@@ -61,6 +62,7 @@ HTTP/1.1 200 OK\r
 Content-Type: application/x-gzip\r
 Cache-Control: no-cache\r
 \r"""
+        sys.stdout.flush()
         os.execl("/bin/sh", "sh", "-c", "logread | gzip")
 
     if path == "/pts.txt":
