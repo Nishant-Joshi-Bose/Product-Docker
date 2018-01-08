@@ -181,7 +181,7 @@ void EddieProductController::RegisterLpmEvents()
     m_lightbarController->RegisterLpmEvents();
 
     // Register mic mute from LPM.
-    AsyncCallback<IpcVPAMicState_t>micmuteresponse_cb( std::bind( &EddieProductController::HandleLpmMicMuteEvents, this, std::placeholders::_1 ), GetTask() );
+    AsyncCallback<IpcVPAMicState_t>micmuteresponse_cb( std::bind( &EddieProductController::HandleLpmMicEvents, this, std::placeholders::_1 ), GetTask() );
     m_LpmInterface->GetLpmClient()->RegisterEvent<IpcVPAMicState_t>( IPC_VPA_MIC_STATE_EVENT, micmuteresponse_cb );
     // Get mic mute state from LPM.
     m_LpmInterface->GetLpmClient()->IpcGetVpaMicState( micmuteresponse_cb, IPC_DEVICE_LPM );
