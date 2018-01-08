@@ -231,7 +231,7 @@ bool CustomProductLpmHardwareInterface::SendAccessoryActive( bool rears,
 /// @return none
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductLpmHardwareInterface::SendAccessoryDisband( )
+bool CustomProductLpmHardwareInterface::SendAccessoryDisband( const Callback<IpcAccessoryDisbandCommand_t> &cb )
 {
     if( isConnected( ) == false || GetLpmClient( ) == nullptr )
     {
@@ -242,7 +242,11 @@ bool CustomProductLpmHardwareInterface::SendAccessoryDisband( )
 
     BOSE_DEBUG( s_logger, "An LPM accessory disband request will be made." );
 
-    // TODO
+    IpcAccessoryDisbandCommand_t command;
+    command.set_disband( true );
+
+    GetLpmClient()->DisbandAccessorySpeakers( command, cb );
+
     return true;
 }
 

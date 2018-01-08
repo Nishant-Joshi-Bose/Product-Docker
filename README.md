@@ -21,10 +21,20 @@ $ PATH=$PATH:/scratch/CastleTools/bin   # add this to your ~/.profile, ~/.bash_p
 $ git clone git@github.com:BoseCorp/Professor.git
 ```
 
-Build the .ipk package file containing the SoundTouch software.
+Build the .ipk package file containing the SoundTouch software (for 0.3 Riviera based hardware set HSP version to 2.0).
 ```shell session
 $ cd /scratch/Professor
-$ make
+$ env RIVIERA_HSP_VERSION=1.3 make
+```
+
+Set Riviera version.
+For old hardware:
+```shell session
+env RIVIERA_HSP_VERSION=1.3 make
+```
+For new hardware:
+```shell session
+env RIVIERA_HSP_VERSION=2.0 make
 ```
 
 Make sure your Professor unit is accessible via adb.
