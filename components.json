@@ -65,7 +65,7 @@
   },
   {
     "name": "ProfessorLPM-Package",
-    "selected_version": "Release/IP2/0.2.4.2569960"
+    "selected_version": "Nightly/trunk/2018-01-07_2350/DP1"
   },
   {
     "name": "protobuf-native",
