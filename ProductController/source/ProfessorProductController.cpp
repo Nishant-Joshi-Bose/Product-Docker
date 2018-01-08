@@ -535,12 +535,15 @@ void ProfessorProductController::SetupProductSTSConntroller( )
     std::vector< ProductSTSController::SourceDescriptor > sources;
 
     ///
-    /// Adapt IQ is not available as a normal source, whereas the TV source will always be available.
+    /// Adapt IQ and Setup is not available as a normal source, whereas the TV source will always
+    /// be available.
     ///
     ProductSTSController::SourceDescriptor descriptor_AiQ{ ProductSTS::SLOT_AIQ, "ADAPTiQ", false };
+    ProductSTSController::SourceDescriptor descriptor_Setup{ ProductSTS::SLOT_SETUP, "Setup", false };
     ProductSTSController::SourceDescriptor descriptor_TV { ProductSTS::SLOT_TV,  "TV",      true  };
 
     sources.push_back( descriptor_AiQ );
+    sources.push_back( descriptor_Setup );
     sources.push_back( descriptor_TV );
 
     Callback< void >
