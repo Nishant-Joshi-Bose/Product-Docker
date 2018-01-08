@@ -17,19 +17,6 @@ while ! amixer cset name="SLIMBUS_6_RX Audio Mixer MultiMedia1" "1"; do
     sleep 1
 done
 
-# ??? - Is this needed for Professor - ???
-# ??? - Is this for HFP / Bluetooth  - ???
-amixer cset name="SLIMBUS_6_RX Audio Mixer MultiMedia1" "1"
-amixer cset name="SLIM RX2 MUX" "AIF4_PB"
-amixer cset name="SLIM RX3 MUX" "AIF4_PB"
-amixer cset name="SLIM_6_RX Channels" "Two"
-amixer cset name="RX INT1_2 MUX" "RX2"
-amixer cset name="RX INT2_2 MUX" "RX3"
-amixer cset name="RX INT1 DEM MUX" "CLSH_DSM_OUT"
-amixer cset name="RX INT2 DEM MUX" "CLSH_DSM_OUT"
-#disable low latency channel per Dominic Arcoraci's suggestion
-#amixer cset name='PCM_Dev 12 Topology Playback' 'LL'
-
 # AIQ -> APQ (2 channels)
 amixer cset name="MultiMedia1 Mixer SLIM_0_TX" "1"
 amixer cset name="ADC2 Volume" "12"
