@@ -183,7 +183,6 @@ void EddieProductController::RegisterLpmEvents()
     // Register mic mute from LPM.
     AsyncCallback<IpcVPAMicState_t>micmuteresponse_cb( std::bind( &EddieProductController::HandleLpmMicMuteEvents, this, std::placeholders::_1 ), GetTask() );
     m_LpmInterface->GetLpmClient()->RegisterEvent<IpcVPAMicState_t>( IPC_VPA_MIC_STATE_EVENT, micmuteresponse_cb );
-
     // Get mic mute state from LPM.
     m_LpmInterface->GetLpmClient()->IpcGetVpaMicState( micmuteresponse_cb, IPC_DEVICE_LPM );
 }
@@ -290,15 +289,7 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
 /// This function will handle mic mute events coming from LPM.
 void EddieProductController::HandleLpmMicMuteEvents( IpcVPAMicState_t micMute )
 {
-    BOSE_INFO( s_logger, "%s micMute.state() = %d", __func__ , micMute.state() );
-    if( micMute.state() == VPA_MIC_DISABLED )
-    {
-        BOSE_INFO( s_logger, "%s Disabled", __func__ );
-    }
-    else if( micMute.state() == VPA_MIC_ENABLED )
-    {
-        BOSE_INFO( s_logger, "%s Enabled", __func__ );
-    }
+    GetHsm().Handle<IpcVPAMicState_t>( &CustomProductControllerState::HandleMicMuteButton, micMute );
 }
 
 void EddieProductController::SendDataCollection( const IpcKeyInformation_t& keyInformation )
