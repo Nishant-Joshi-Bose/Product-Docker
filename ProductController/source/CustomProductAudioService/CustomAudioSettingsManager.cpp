@@ -191,7 +191,7 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
     try
     {
         std::string s = m_audioSettingsPersistence->Load();
-        success = reader.parse( s.c_str(), m_audioSettings );
+        success = reader.parse( s, m_audioSettings );
         if( !success )
         {
             BOSE_ERROR( s_logger, reader.getFormattedErrorMessages().c_str() );
