@@ -32,16 +32,16 @@ def do_put_mode(fd):
     print('3: Disabled')
     cmd = raw_input('> ')
     if(cmd == '1'):
-      action = 'Enabled Normal'
+      mode = 'Enabled Normal'
     elif(cmd == '2'):
-      action = 'Enanbled Retail'
+      mode = 'Enanbled Retail'
     elif(cmd == '3'):
-      action = 'Disabled'
+      mode = 'Disabled'
     else:
       print('invalid mode')
       continue
       
-    j = json.dumps({'action' : action}, indent=4)
+    j = json.dumps({'mode' : mode}, indent=4)
     r = fd.send('PUT', '/adaptiq', j)
     print('PUT reply is {}'.format(r))
     break
@@ -56,16 +56,17 @@ def do_put_action(fd):
     print('3: advance')
     cmd = raw_input('> ')
     if(cmd == '1'):
-      mode = 'enter'
+      action = 'enter'
     elif(cmd == '2'):
-      mode = 'cancel'
+      action = 'cancel'
     elif(cmd == '3'):
-      mode = 'advance'
+      action = 'advance'
     else:
       print('invalid action')
       continue
       
-    j = json.dumps({'mode' : mode}, indent=4)
+    j = json.dumps({'action' : action}, indent=4)
+    print('sending {}'.format(j))
     r = fd.send('PUT', '/adaptiq', j)
     print('PUT reply is {}'.format(r))
     break

@@ -46,7 +46,9 @@ ADD_EXECUTABLE(Professor
   source/CustomProductLpmHardwareInterface.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
-  source/CustomStateMachine/CustomProductControllerStateAdaptIQ.cpp
+# change this to CustomProductControllerStateAdaptIQ.cpp when real AiQ is
+# in place
+  source/CustomStateMachine/CustomProductControllerStateAdaptIQSim.cpp
   source/CustomStateMachine/CustomProductControllerStateBooting.cpp
   source/CustomStateMachine/CustomProductControllerStateIdle.cpp
   source/CustomStateMachine/CustomProductControllerStateIdleVoiceConfigured.cpp
