@@ -5,8 +5,6 @@
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <json/reader.h>
-#include <iostream>
-
 #include <fstream>
 #include "DPrint.h"
 #include "SystemUtils.h"
@@ -193,9 +191,6 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
     try
     {
         std::string s = m_audioSettingsPersistence->Load();
-        //BOSE_DEBUG( s_logger, "InitializeAudioSettings - loaded m_audioSettings string = %s", s.c_str() );
-        std::cout << "InitializeAudioSettings loaded m_audioSettings string = " << s.c_str() << std::endl;
-
         success = reader.parse( s, m_audioSettings );
         if( !success )
         {
