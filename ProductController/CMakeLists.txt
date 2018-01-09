@@ -52,6 +52,7 @@ TARGET_LINK_LIBRARIES(Eddie
   LightBarController
   VoiceServiceClient
   CliClient
+  AudioLibs
   ShelbyUtils
   BoseLibs
   PassportClient
