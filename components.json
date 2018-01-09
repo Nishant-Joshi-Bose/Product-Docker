@@ -77,7 +77,7 @@
   },
   {
     "name": "EddieLPM-Package",
-    "selected_version": "Release/IP2/0.2.1.2584357/DP1"
+    "selected_version": "Release/trunk/0.2.1.2641805/DP1"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -109,11 +109,11 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Continuous/master/0.3.1-54+9a9f240"
+    "selected_version": "Continuous/master/0.3.1-65+aaccb42"
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Continuous/master/0.3.0-25+6864629"
+    "selected_version": "Continuous/master/0.3.0-27+ffa4c35"
   },
   {
     "name": "Shepherd-qc8017_32",
