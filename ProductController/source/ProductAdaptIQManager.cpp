@@ -68,6 +68,13 @@ ProductAdaptIQManager::ProductAdaptIQManager( ProfessorProductController& Produc
     m_ProductNotify( ProductController.GetMessageHandler( ) ),
     m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) )
 {
+    m_status.set_smstate( "NA" );
+    m_status.set_mode( "Booting" );
+    m_status.set_currentlocation( ADAPTIQ_LOCATION_FIRST );
+    m_status.set_currentspeaker( ADAPTIQ_SPEAKER_FIRST );
+    m_status.set_hpconnected( true );
+    m_status.set_errorcode( 0 );
+    SetDefaultProperties( m_status );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,13 +108,13 @@ void ProductAdaptIQManager::Run( )
     AsyncCallback<Callback<AdaptIQStatus>> getCb( getFunc, m_ProductTask );
     m_GetConnection = m_FrontDoorClient->RegisterGet( s_FrontDoorAdaptIQ, getCb );
 
-    auto putFunc = [ this ]( const AdaptIQReq & req, Callback<const AdaptIQReq> resp )
+    auto putFunc = [ this ]( const AdaptIQReq req, Callback<const AdaptIQReq> resp )
     {
         AdaptIQReq respMsg;
         HandlePut( req, respMsg );
         resp.Send( respMsg );
     };
-    AsyncCallback<const AdaptIQReq&, Callback<AdaptIQReq>> putCb( putFunc, m_ProductTask );
+    AsyncCallback<const AdaptIQReq, Callback<AdaptIQReq>> putCb( putFunc, m_ProductTask );
     m_PutConnection = m_FrontDoorClient->RegisterPut<AdaptIQReq>( s_FrontDoorAdaptIQ, putCb );
 }
 
@@ -121,6 +128,39 @@ void ProductAdaptIQManager::Stop( void )
     m_PutConnection.Disconnect();
     m_GetConnection.Disconnect();
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductAdaptIQManager::SetDefaultProperties
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductAdaptIQManager::SetDefaultProperties( ProductPb::AdaptIQStatus& status )
+{
+    // fill in list of supported actions
+    status.mutable_properties()->add_supportedactions( s_ActionEnter );
+    status.mutable_properties()->add_supportedactions( s_ActionCancel );
+    status.mutable_properties()->add_supportedactions( s_ActionAdvance );
+
+    // fill in list of supported modes
+    status.mutable_properties()->add_supportedmodes( s_ModeNormal );
+    status.mutable_properties()->add_supportedmodes( s_ModeRetail );
+    status.mutable_properties()->add_supportedmodes( s_ModeDisabled );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductAdaptIQManager::SetStatus
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductAdaptIQManager::SetStatus( const ProductPb::AdaptIQStatus& status, bool force )
+{
+    if( ( m_status.SerializeAsString() != status.SerializeAsString() ) || force )
+    {
+        m_status = status;
+        m_FrontDoorClient->SendNotification( s_FrontDoorAdaptIQ, m_status );
+    }
+}
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,15 +177,7 @@ void ProductAdaptIQManager::Stop( void )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductAdaptIQManager::HandleGet( AdaptIQStatus& status )
 {
-    // fill in list of supported actions
-    status.mutable_properties()->add_supportedactions( s_ActionEnter );
-    status.mutable_properties()->add_supportedactions( s_ActionCancel );
-    status.mutable_properties()->add_supportedactions( s_ActionAdvance );
-
-    // fill in list of supported modes
-    status.mutable_properties()->add_supportedmodes( s_ModeNormal );
-    status.mutable_properties()->add_supportedmodes( s_ModeRetail );
-    status.mutable_properties()->add_supportedmodes( s_ModeDisabled );
+    SetDefaultProperties( status );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -160,11 +192,14 @@ void ProductAdaptIQManager::HandleGet( AdaptIQStatus& status )
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductAdaptIQManager::HandlePut( const AdaptIQReq& req, ProductPb::AdaptIQReq& resp )
+void ProductAdaptIQManager::HandlePut( const AdaptIQReq req, ProductPb::AdaptIQReq& resp )
 {
     ProductMessage msg;
 
-    if( req.action() == "enter" )
+    if( !req.has_action() )
+    {
+    }
+    else if( req.action() == "enter" )
     {
         msg.mutable_aiqcontrol()->set_action( ProductAdaptIQControl::Start );
     }
