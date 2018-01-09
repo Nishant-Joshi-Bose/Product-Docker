@@ -37,6 +37,9 @@ public:
     const ProductPb::AudioDualMonoSelect& GetDualMonoSelect() const;
 
 private:
+    ////////////////////////////////////////////////////////////////////////////////////////
+    /// Protos containing current audio settings values
+    //////////////////////////////////////////////////////////////////////////////////////
     ProductPb::AudioBassLevel m_currentBass;
     ProductPb::AudioTrebleLevel m_currentTreble;
     ProductPb::AudioCenterLevel m_currentCenter;
