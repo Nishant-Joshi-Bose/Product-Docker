@@ -151,6 +151,19 @@ message ProductNowPlayingStatus
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///                             LPM Lowpower standby status                                      ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+message ProductLpmLowPowerStatus
+{
+        enum ProductLpmLowPowerState
+        {
+             Suspend   = 1;
+             Resume    = 2;
+        }
+        optional ProductLpmLowPowerState state = 1;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                Base Product Message Structure                                ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 message ProductMessage
@@ -168,6 +181,7 @@ message ProductMessage
         optional ProductConfigurationStatus configurationstatus = 11;
         optional ProductAutowakeStatus      autowakestatus      = 12;
         optional ProductNowPlayingStatus    nowplayingstatus    = 13;
+      	optional ProductLpmLowPowerStatus   lpmlowpowerstatus   = 14;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
