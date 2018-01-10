@@ -9,7 +9,7 @@ import os
 import inspect
 import copy
 import clang.cindex
-from pprint import pprint
+import pprint
 
 """
 Given a key list enumeration file, an actions enumeration file, and a 
@@ -282,6 +282,7 @@ def generate_friendly_config(clang_args, index, args):
     # replace with numeric values
     origin = ORIGIN_NAMES_REV[origin_name]
     event = EVENT_NAMES_REV[event_name]
+
     oe['Origin'] = [origin]
     oe['KeyEvent'] = event
     oe['Action'] = action_map[action_name]
@@ -304,11 +305,17 @@ def generate_friendly_config(clang_args, index, args):
     if discard == 0:
       keymap['KeyTable'].append(oe)
  
-  s = json.dumps(keymap, indent=4)
+  cf = CustomFormat(indent=4) 
+  s = cf.pformat(keymap)
+
   with io.FileIO(args.outputcfg, "w") as file:
     file.write(s)
 
-  pass
+class CustomFormat(pprint.PrettyPrinter):
+  def format(self, obj, ctx, maxlev, lev):
+    if isinstance(obj, unicode) or isinstance(obj, str):
+      return ('"{}"'.format(obj), True, False)
+    return pprint.PrettyPrinter.format(self, obj, ctx, maxlev, lev)
 
 def main():
   clang_args = ['-x', 'c++']
