@@ -89,11 +89,11 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Continuous/master/0.3.1-62+f9502e6"
+    "selected_version": "Release/master/0.3.2-69+0035e65"
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Continuous/master/0.3.0-25+6864629"
+    "selected_version": "Release/master/0.3.0-29+d12a9ef"
   },
   {
     "name": "Shepherd-qc8017_32",

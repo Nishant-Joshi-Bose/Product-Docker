@@ -31,4 +31,6 @@ adb shell export LD_LIBRARY_PATH=/opt/Bose/update/opkg/ \&\& /opt/Bose/update/op
 echo Remount...
 adb shell mount -oremount,ro /opt/Bose || exit
 
+adb shell /opt/Bose/bin/ResetUtil SYSTEM
+
 echo Done

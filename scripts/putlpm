@@ -34,4 +34,6 @@ adb shell opkg -d bose install /tmp/new.ipk || exit
 echo Remount...
 adb shell mount -oremount,ro /opt/Bose || exit
 
+adb shell /opt/Bose/bin/ResetUtil SYSTEM
+
 echo Done
