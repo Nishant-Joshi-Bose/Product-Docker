@@ -182,7 +182,7 @@ void DisplayController::ParseJSONData()
         rising_ss   << "{" << rising_lux_threshold  [i].lux << ", " <<  rising_lux_threshold  [i].level << "} ";
     }
 
-    BOSE_LOG( INFO,
+    BOSE_LOG( VERBOSE,
               "Device absortion factor: " << m_luxFactor                        <<
               " mode: "                   << ( m_autoMode ? "Auto" : "Manual" ) <<
               " lowering threshold: "     << lowering_ss.str()                  <<
@@ -212,7 +212,7 @@ void DisplayController::SetBackLightLevel( int actualLevel, int newLevel )
     int            levelIncrement = ( ( actualLevel > newLevel ) ? -1 : 1 );
     IpcBackLight_t backlight;
 
-    BOSE_LOG( INFO, "set actual level: " << actualLevel << " new level: " << newLevel );
+    BOSE_LOG( VERBOSE, "set actual level: " << actualLevel << " new level: " << newLevel );
 
     if( ( actualLevel < 0 ) || ( actualLevel > 100 ) )
     {
@@ -230,7 +230,7 @@ void DisplayController::SetBackLightLevel( int actualLevel, int newLevel )
     {
         actualLevel += levelIncrement;
 
-        //BOSE_LOG( INFO, " level: " << actualLevel );
+        //BOSE_LOG( VERBOSE, " level: " << actualLevel );
 
         backlight.set_value( actualLevel );
         m_lpmClient->SetBackLight( backlight );
@@ -292,7 +292,7 @@ void DisplayController::MonitorLightSensor()
 
         lux_diff = m_luxValue - previous_lux;
 
-        BOSE_LOG( INFO,  "lux(raw, adj, prev): ("
+        BOSE_LOG( VERBOSE,  "lux(raw, adj, prev): ("
                   << m_luxDecimal    << "."
                   << m_luxFractional << ", "
                   << m_luxValue      << ", "
@@ -303,7 +303,7 @@ void DisplayController::MonitorLightSensor()
         {
             targeted_level = GetBackLightLevelFromLux( m_luxValue, lux_diff );
 
-            BOSE_LOG( INFO, "target level: " << targeted_level << ", actual level: " << m_backLight << " lux diff: " << lux_diff );
+            BOSE_LOG( VERBOSE, "target level: " << targeted_level << ", actual level: " << m_backLight << " lux diff: " << lux_diff );
 
             if( fabs( lux_diff ) >= LUX_DIFF_THRESHOLD )
             {
