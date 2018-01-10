@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-19_1321"
+    "selected_version": "Continuous/Castle-Fork/2018-01-04_1656"
   },
   {
     "name": "bose-opkg-utils",
@@ -25,7 +25,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/master/0.3.2-215+062c793"
+    "selected_version": "Release/master/0.3.3-217+add0b8b"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -37,7 +37,7 @@
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2525"
+    "selected_version": "branches/castle-libs@2528"
   },
   {
     "name": "CastleLightBarController-qc8017_32",
@@ -45,7 +45,7 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.2.2-133+c4a1fd6"
+    "selected_version": "Release/master/0.3.1-143+0d93ad3"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -57,7 +57,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@28e2ae1a7628708aef99a88e9dc1c42e48bc4915"
+    "selected_version": "master@100ec75ab47b4b6f1c42918bd632de2cb4b0de1f"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -81,7 +81,7 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/1.0.0-44+42f6178"
+    "selected_version": "Release/build44/1.0.0-73+7457e9a"
   },
   {
     "name": "Riviera-HSP-Images",

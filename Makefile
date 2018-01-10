@@ -85,6 +85,10 @@ update-zip-with-hsp: product-ipk hsp-ipk lpmupdater-ipk
 packages-gz: product-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS)
 
+.PHONY: packages-gz-with-hsp
+packages-gz-with-hsp: product-ipk hsp-ipk lpmupdater-ipk
+	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_HSP)
+
 .PHONY: graph
 graph: product-ipk
 	graph-components --sdk=$(sdk) Professor builds/$(cfg)/product-ipk-stage/component-info.gz >builds/$(cfg)/components.dot
@@ -104,7 +108,7 @@ package: product-ipk hsp-ipk lpmupdater-ipk
 	./scripts/create-product-tarball
 
 .PHONY: all-packages
-all-packages: package packages-gz update-zip update-zip-with-hsp
+all-packages: package packages-gz-with-hsp update-zip-with-hsp packages-gz update-zip
 
 .PHONY: deploy
 deploy: graph all-packages
