@@ -283,6 +283,9 @@ def generate_friendly_config(clang_args, index, args):
     origin = ORIGIN_NAMES_REV[origin_name]
     event = EVENT_NAMES_REV[event_name]
 
+    if origin == 'TAP':
+      continue
+
     oe['Origin'] = [origin]
     oe['KeyEvent'] = event
     oe['Action'] = action_map[action_name]
@@ -307,6 +310,8 @@ def generate_friendly_config(clang_args, index, args):
  
   cf = CustomFormat(indent=4) 
   s = cf.pformat(keymap)
+  s = re.sub(r'\s+{\s+', r'\n{\n', s)
+  s = re.sub(r'},', r'\n},', s)
 
   with io.FileIO(args.outputcfg, "w") as file:
     file.write(s)
