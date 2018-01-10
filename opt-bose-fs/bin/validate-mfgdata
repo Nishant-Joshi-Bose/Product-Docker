@@ -1,0 +1,85 @@
+#!/usr/bin/python2.7
+#
+# Validate the manufacturing data to make sure it contains the information the
+# SoundTouch daemons require.  If invalid, show how to fix it.
+#
+# See also:
+# https://wiki.bose.com/display/BC/Riviera+Manufacturing+Data+Information
+#
+import sys
+import os
+import subprocess
+import re
+
+this_script = os.path.basename(sys.argv.pop(0))
+
+if len(sys.argv) > 1:
+    raise Exception("wrong usage")
+
+def warn(*args):
+    print >>sys.stderr, this_script + ":", " ".join(map(lambda a: str(a), args))
+
+devnull = open(os.devnull, "w")
+
+def get(name):
+    """Get the mfgdata value associated with NAME"""
+    ph = subprocess.Popen(["mfgdata", "get", name],
+                          stdout=subprocess.PIPE, stderr=devnull)
+    out = ph.stdout.read()
+    if ph.wait() != 0:
+        return None
+    return out.rstrip("\n")
+
+fixes = []
+
+# "modified" is always present ordinarily.  If missing, means there's no
+# manufacturing data at all or it's malformed/corrupt.
+if get("modified") is None:
+    warn("Manufacturing data is missing or invalid")
+    fixes.append("clear")
+
+# 'development' is optional, but if present must be "true" or "false"
+optional_dev = True
+dev = get("development")
+if dev is not None and dev != "true" and dev != "false":
+    warn("development field is invalid:", dev)
+    fixes.append("set development true")
+    optional_dev = False
+
+cc = get("country_code")
+if cc is None:
+    warn("No country_code")
+    fixes.append("set country_code US")
+elif not re.match(r'^[A-Z][A-Z]$', cc):
+    warn("Invalid country_code", cc)
+    fixes.append("set country_code US")
+
+# The guid is supposed to be 32 hex digits.
+# For historical reasons, we also allow hyphens.
+guid = get("guid")
+if guid is None:
+    warn("No guid")
+elif not re.match(r'^[0-9a-fA-F]{32}$', guid.replace("-", "")):
+    warn("Invalid guid: '{}'".format(guid))
+    guid = None
+if guid is None:
+    guid = open("/proc/sys/kernel/random/uuid").read().rstrip("\n").replace("-", "")
+    fixes.append("set guid " + guid)
+
+if not fixes:
+    # Validation successful.
+    sys.exit()
+
+if optional_dev:
+    fixes.append("set development true # (optional)")
+
+print """
+To set manufacturing data:
+
+  mount -oremount,rw /persist"""
+for fix in fixes:
+    print "  mfgdata", fix
+print """\
+  mount -oremount,ro /persist
+"""
+sys.exit(1)
