@@ -65,7 +65,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@66b8059678161e112d1afb6480fbba0d5d772e67"
+    "selected_version": "master@49a96cb33d4a20a697795d3ee9d502f9e50571d1"
   },
   {
     "name": "CastleProductUIAssets",
@@ -128,7 +128,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-01-09_1346"
+    "selected_version": "Continuous/Castle-Fork/2018-01-10_1011"
   },
   {
     "name": "Webkit",
