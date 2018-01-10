@@ -91,6 +91,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentLowPowerStandby( KeyHandlerUtil::ActionType_t intent )
+    {
+        return false;
+    }
+
     virtual bool HandleIntentPresetSelect( KeyHandlerUtil::ActionType_t result )
     {
         return false;
@@ -126,6 +131,16 @@ public:
     }
 
     virtual bool HandleLpmInterfaceState( bool isConnected )
+    {
+        return false;
+    }
+
+    virtual bool HandleLpmLowpowerSystemState()
+    {
+        return false;
+    }
+
+    virtual bool HandleLpmLowPowerStatus( const ProductLpmLowPowerStatus& )
     {
         return false;
     }

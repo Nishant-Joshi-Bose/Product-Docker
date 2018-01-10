@@ -110,7 +110,7 @@ EddieProductController::~EddieProductController()
 
 void EddieProductController::Initialize()
 {
-    //Instantiate and run the hardware interface.
+    ///Instantiate and run the hardware interface.
     m_LpmInterface->Run( );
 
     m_productCliClient.Initialize( GetTask() );
@@ -643,8 +643,7 @@ void EddieProductController::HandleCliCmd( uint16_t cmdKey,
 {
     std::string response( "Success" );
 
-    std::ostringstream ss;
-    ss << "Received " << cmdKey << std::endl;
+    BOSE_INFO( s_logger, "%s - cmd: %d", __func__, cmdKey );
     switch( static_cast<CLICmdKeys>( cmdKey ) )
     {
     case CLICmdKeys::SET_DISPLAY_AUTO_MODE:
@@ -767,30 +766,25 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
         if( productMessage.lpmstatus( ).has_connected( ) )
         {
             m_isLpmReady = productMessage.lpmstatus( ).connected( );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "An invalid LPM status message was received." );
-            return;
-        }
-        if( m_isLpmReady )
-        {
-            /// RegisterLpmEvents and RegisterKeyHandler
-            RegisterLpmEvents();
-            RegisterKeyHandler();
-        }
+            if( m_isLpmReady )
+            {
+                /// RegisterLpmEvents and RegisterKeyHandler
+                RegisterLpmEvents();
+                RegisterKeyHandler();
+            }
 
-        BOSE_DEBUG( s_logger, "An LPM Hardware %s message was received.",
-                    m_isLpmReady ? "up" : "down" );
+            BOSE_DEBUG( s_logger, "An LPM Hardware %s message was received.",
+                        m_isLpmReady ? "up" : "down" );
 
-        GetHsm().Handle<bool>( &CustomProductControllerState::HandleLpmState, m_isLpmReady );
+            GetHsm().Handle<bool>( &CustomProductControllerState::HandleLpmState, m_isLpmReady );
+        }
 
         ///
         /// @todo The system state is return here. Code to act on this event needs to be developed.
         ///
         if( productMessage.lpmstatus( ).has_systemstate( ) )
         {
-            BOSE_DEBUG( s_logger, "The LPM system state was set to %s",
+            BOSE_DEBUG( s_logger, "%s-The LPM system state was set to %s", __func__,
                         IpcLpmSystemState_t_Name( productMessage.lpmstatus( ).systemstate( ) ).c_str( ) );
 
             switch( productMessage.lpmstatus( ).systemstate( ) )
@@ -806,7 +800,10 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
             case SYSTEM_STATE_RECOVERY:
                 break;
             case SYSTEM_STATE_LOW_POWER:
-                break;
+            {
+                GetHsm( ).Handle< >( &CustomProductControllerState::HandleLpmLowpowerSystemState );
+            }
+            break;
             case SYSTEM_STATE_UPDATE:
                 break;
             case SYSTEM_STATE_SHUTDOWN:
@@ -825,9 +822,13 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
         ///
         if( productMessage.lpmstatus( ).has_powerstate( ) )
         {
-            BOSE_DEBUG( s_logger, "The LPM power state was set to %s",
+            BOSE_DEBUG( s_logger, "%s-The LPM power state was set to %s", __func__,
                         IpcLPMPowerState_t_Name( productMessage.lpmstatus( ).powerstate( ) ).c_str( ) );
         }
+    }
+    if( productMessage.has_lpmlowpowerstatus( ) )
+    {
+        GetHsm( ).Handle<const ProductLpmLowPowerStatus& >( &CustomProductControllerState::HandleLpmLowPowerStatus, productMessage.lpmlowpowerstatus( ) );
     }
 }
 

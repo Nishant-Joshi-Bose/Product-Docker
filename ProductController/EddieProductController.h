@@ -141,7 +141,7 @@ private:
                        const std::list<std::string> & argList,
                        AsyncCallback<std::string, int32_t> rspAndRspCmplt,
                        int32_t transact_id );
-    void RegisterCliClientCmds() override;
+    void RegisterCliClientCmds();
 
     void HandleBtLeModuleReady( bool btLeModuleReady );
     void HandleNetworkCapabilityReady( const std::list<std::string>& points );

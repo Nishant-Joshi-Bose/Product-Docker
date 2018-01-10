@@ -45,7 +45,7 @@
             <outputDriverParameters outputDriverName=""
                                     outputDriverPath=""
                                     outputDriverType="AUDIO_DEVICE_TYPE_ALSA"
-                                    hardwareDeviceName="hw:0,0"
+                                    hardwareDeviceName="hw:0,12"
                                     samplesPerFrame="192"
                                     outputSampleRate="48000"
                                     wifiAttenuation="0.39810699"

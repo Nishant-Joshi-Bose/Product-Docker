@@ -7,7 +7,7 @@ this=${0##*/}
 if (( $# == 0 )); then
     build=/home/softlib/verisoft/Eddie/Continuous/master
     version=$(cat "$build/latest.txt") || exit
-    set -- "$build/$version/lpm_updater.ipk"
+    set -- "$build/$version/HSP-${RIVIERA_HSP_VERSION?}/lpm_updater.ipk"
     echo "$0" "$1"
 fi
 
