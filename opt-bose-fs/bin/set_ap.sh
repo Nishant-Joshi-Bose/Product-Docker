@@ -17,17 +17,7 @@ while ! amixer cset name="SLIMBUS_6_RX Audio Mixer MultiMedia1" "1"; do
     sleep 1
 done
 
-amixer cset name="SLIMBUS_6_RX Audio Mixer MultiMedia1" "1"
-amixer cset name="SLIM RX2 MUX" "AIF4_PB"
-amixer cset name="SLIM RX3 MUX" "AIF4_PB"
-amixer cset name="SLIM_6_RX Channels" "Two"
-amixer cset name="RX INT1_2 MUX" "RX2"
-amixer cset name="RX INT2_2 MUX" "RX3"
-amixer cset name="RX INT1 DEM MUX" "CLSH_DSM_OUT"
-amixer cset name="RX INT2 DEM MUX" "CLSH_DSM_OUT"
-#disable low latency channel per Dominic Arcoraci's suggestion
-#amixer cset name='PCM_Dev 12 Topology Playback' 'LL'
-
+# AIQ -> APQ (2 channels)
 amixer cset name="MultiMedia1 Mixer SLIM_0_TX" "1"
 amixer cset name="ADC2 Volume" "12"
 amixer cset name="ADC3 Volume" "12"
@@ -41,11 +31,14 @@ amixer cset name="ADC MUX8" "AMIC"
 amixer cset name="AMIC MUX7" "ADC2"
 amixer cset name="AMIC MUX8" "ADC3"
 
+# APQ -> Shark  Q (8 channels [2-audio, 4-announce, 2-spare])
 amixer cset name="SEC_TDM_RX_0 Audio Mixer MultiMedia1" 1
 amixer cset name="SEC_TDM_RX_0 Channels" "Eight"
-amixer cset name="MultiMedia1 Mixer SEC_TDM_TX_0" 1
-amixer cset name="SEC_TDM_TX_0 Channels" "Eight"
 
-amixer cset name="MultiMedia2 Mixer PRI_TDM_TX_0" "1"
-amixer cset name="PRI_TDM_TX_0 Channels" "Eight"
-amixer cset name="PRI_TDM_TX_0 SampleRate" "KHZ_16"
+# Shark -> APQ (8 channels [2-HDMI, 3-AEC, 1-AEC ctrl])
+amixer cset name="MultiMedia1 Mixer SEC_TDM_TX_0" 1
+
+# MICS -> APQ (8 channels MIC data for Vfe)
+amixer cset name="MultiMedia2 Mixer SEC_TDM_TX_0" "1"
+amixer cset name="SEC_TDM_TX_0 Channels" "Eight"
+amixer cset name="SEC_TDM_TX_0 SampleRate" "KHZ_16"

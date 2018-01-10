@@ -169,6 +169,7 @@ bool CustomAudioSettingsManager::SetDualMonoSelect( const ProductPb::AudioDualMo
     {
         m_audioSettings["values"][kPersistGlobal][kDualMonoSelectName] = DualMonoSelect.value();
         m_currentDualMonoSelect.set_value( DualMonoSelect.value() );
+        PersistAudioSettings();
         return true;
     }
     return false;
@@ -185,22 +186,57 @@ const ProductPb::AudioDualMonoSelect& CustomAudioSettingsManager::GetDualMonoSel
 void CustomAudioSettingsManager::InitializeAudioSettings()
 {
     BOSE_DEBUG( s_logger, __func__ );
-    //TODO: read from persistence, if failed or if major version doesn't match then read from Default file
-    //m_audioSettings
+    bool success = true; //successful reading from persistence, initialized to be true
     Json::Reader reader;
-    std::ifstream in( kDefaultConfigPath );
-    auto const& defaultAudioSettings = SystemUtils::ReadFile( kDefaultConfigPath );
-    if( !reader.parse( *defaultAudioSettings, m_audioSettings ) )
+    try
     {
-        BOSE_INFO( s_logger, reader.getFormattedErrorMessages().c_str() );
-        return;
+        std::string s = m_audioSettingsPersistence->Load();
+        success = reader.parse( s, m_audioSettings );
+        if( !success )
+        {
+            BOSE_DEBUG( s_logger, reader.getFormattedErrorMessages().c_str() );
+        }
+        else if( m_audioSettings.empty()
+                 || ( !m_audioSettings.isMember( "configurations" ) )
+                 || ( !m_audioSettings.isMember( "values" ) ) )
+        {
+            success = false;
+            BOSE_ERROR( s_logger, "Persisted m_audioSettings doesn't contain valid data" );
+        }
     }
-    else if( m_audioSettings["version"]["major"].asInt() != kConfigVersionMajor )
+    catch( ProtoPersistenceIF::ProtoPersistenceException& e )
     {
-        BOSE_INFO( s_logger, "DefaultAudioSettings.json has version %d.%d, whereas Professor expects version %d.%d",
-                   m_audioSettings["version"]["major"].asInt(), m_audioSettings["version"]["minor"].asInt(),
-                   kConfigVersionMajor, kConfigVersionMinor );
+        success = false;
+        BOSE_ERROR( s_logger, "Loading audioSettings from persistence failed - %s ", e.what() );
     }
+
+    // If reading from persistence failed, read from default configuration file
+    if( !success )
+    {
+        BOSE_DEBUG( s_logger, "Reading audio settings from persistence failed, let's read from default config file" );
+        std::ifstream in( kDefaultConfigPath );
+        auto const& defaultAudioSettings = SystemUtils::ReadFile( kDefaultConfigPath );
+        if( !reader.parse( *defaultAudioSettings, m_audioSettings ) )
+        {
+            // If reading from default configuration file failed, there's something majorly wrong, have to return
+            BOSE_ERROR( s_logger, "Reading from default config file also failed with error %s", reader.getFormattedErrorMessages().c_str() );
+            return;
+        }
+        else if( m_audioSettings["version"]["major"].asInt() != kConfigVersionMajor )
+        {
+            // major version means major format or structure change in audio settings JSON
+            // If the major version doesn't match between configuration file and code, there's mismatch during build procedure
+            // force loading it will cause unknown error, should report error and stop
+            BOSE_ERROR( s_logger, "Reading from default config file also failed. DefaultAudioSettings.json has version %d.%d, and Professor expects version %d.%d, check your build system",
+                        m_audioSettings["version"]["major"].asInt(), m_audioSettings["version"]["minor"].asInt(),
+                        kConfigVersionMajor, kConfigVersionMinor );
+            return;
+        }
+    }
+
+    // If it gets here, it means we successfully read from either persistence or default config file
+    // Initialize ProtoBufs with m_audioSettings JSON values
+    BOSE_DEBUG( s_logger, "Initialize current protos with m_audioSettings" );
     initializeProto( kBassName, m_currentBass );
     initializeProto( kTrebleName, m_currentTreble );
     initializeProto( kCenterName, m_currentCenter );
@@ -208,8 +244,17 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
     initializeProto( kGainOffsetName, m_currentGainOffset );
     initializeProto( kAvSyncName, m_currentAvSync );
 
-    m_currentMode.set_value( m_audioSettings["defaultValues"][kModeName].asString() );
-    m_currentMode.set_persistence( m_audioSettings["configurations"][kModeName]["currentPersistenceLevel"].asString() );
+    m_audioSettings["configurations"][kModeName]["persistenceSession"] = false;
+    std::string currPersistLvlMode = m_audioSettings["configurations"][kModeName]["currentPersistenceLevel"].asString();
+    m_currentMode.set_persistence( currPersistLvlMode );
+    if( currPersistLvlMode == kPersistContentItem )
+    {
+        m_currentMode.set_value( m_audioSettings["values"][currPersistLvlMode][m_currentContentItem][kModeName].asString() );
+    }
+    else
+    {
+        m_currentMode.set_value( m_audioSettings["values"][currPersistLvlMode][kModeName].asString() );
+    }
     for( uint32_t i = 0; i < m_audioSettings["configurations"][kModeName]["properties"]["supportedValues"].size(); i++ )
     {
         m_currentMode.mutable_properties()->add_supportedvalues( m_audioSettings["configurations"][kModeName]["properties"]["supportedValues"][i].asString() );
@@ -219,8 +264,17 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
         m_currentMode.mutable_properties()->add_supportedpersistence( m_audioSettings["configurations"][kModeName]["properties"]["supportedPersistence"][i].asString() );
     }
 
-    m_currentContentType.set_value( m_audioSettings["defaultValues"][kContentTypeName].asString() );
-    m_currentContentType.set_persistence( m_audioSettings["configurations"][kContentTypeName]["currentPersistenceLevel"].asString() );
+    m_audioSettings["configurations"][kContentTypeName]["persistenceSession"] = false;
+    std::string currPersistLvlContentType = m_audioSettings["configurations"][kContentTypeName]["currentPersistenceLevel"].asString();
+    m_currentContentType.set_persistence( currPersistLvlContentType );
+    if( currPersistLvlContentType == kPersistContentItem )
+    {
+        m_currentContentType.set_value( m_audioSettings["values"][currPersistLvlContentType][m_currentContentItem][kContentTypeName].asString() );
+    }
+    else
+    {
+        m_currentContentType.set_value( m_audioSettings["values"][currPersistLvlContentType][kContentTypeName].asString() );
+    }
     for( uint32_t i = 0; i < m_audioSettings["configurations"][kContentTypeName]["properties"]["supportedValues"].size(); i++ )
     {
         m_currentContentType.mutable_properties()->add_supportedvalues( m_audioSettings["configurations"][kContentTypeName]["properties"]["supportedValues"][i].asString() );
