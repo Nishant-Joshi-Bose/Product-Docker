@@ -192,6 +192,18 @@ message ProductAccessoryPairing
 {
         optional bool active = 1;
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                             LPM Lowpower standby status                                      ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+message ProductLpmLowPowerStatus
+{
+        enum ProductLpmLowPowerState
+        {
+             Suspend   = 1;
+             Resume    = 2;
+        }
+        optional ProductLpmLowPowerState state = 1;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                Base Product Message Structure                                ///
@@ -215,6 +227,7 @@ message ProductMessage
         optional uint32                     intent              = 15;
         optional ProductAdaptIQStatus       aiqstatus           = 16;
         optional ProductAdaptIQControl      aiqcontrol          = 17;
+      	optional ProductLpmLowPowerStatus   lpmlowpowerstatus   = 18;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
