@@ -855,7 +855,10 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             case SYSTEM_STATE_RECOVERY:
                 break;
             case SYSTEM_STATE_LOW_POWER:
-                break;
+            {
+                GetHsm( ).Handle< >( &CustomProductControllerState::HandleLpmLowpowerSystemState );
+            }
+            break;
             case SYSTEM_STATE_UPDATE:
                 break;
             case SYSTEM_STATE_SHUTDOWN:
@@ -876,6 +879,10 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         {
             BOSE_DEBUG( s_logger, "The LPM power state was set to %s",
                         IpcLPMPowerState_t_Name( message.lpmstatus( ).powerstate( ) ).c_str( ) );
+        }
+        if( message.has_lpmlowpowerstatus( ) )
+        {
+            GetHsm( ).Handle<const ProductLpmLowPowerStatus& >( &CustomProductControllerState::HandleLpmLowPowerStatus, message.lpmlowpowerstatus( ) );
         }
 
     }
