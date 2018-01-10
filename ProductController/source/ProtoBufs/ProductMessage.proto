@@ -215,6 +215,7 @@ message ProductMessage
         optional uint32                     intent              = 15;
         optional ProductAdaptIQStatus       aiqstatus           = 16;
         optional ProductAdaptIQControl      aiqcontrol          = 17;
+        optional bool                       audiopathselect     = 18;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

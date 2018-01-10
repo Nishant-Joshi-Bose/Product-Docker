@@ -229,6 +229,16 @@ public:
         return false;
     }
 
+    virtual bool HandleAudioPathSelect( )
+    {
+        return false;
+    }
+
+    virtual bool HandleAudioPathDeselect( )
+    {
+        return false;
+    }
+
     inline static void SetProductController( ProductController* productController )
     {
         s_productController = productController;
