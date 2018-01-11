@@ -21,7 +21,7 @@ def setDemoOff(request, frontDoor, demoUtils):
     """
     logger.info("setDemoOff")
     demoResponse = frontDoor.getDemoMode()
-    logger.info("demoResponse " + demoResponse)
-    if demoResponse == 'on':
-        demoUtils.setDemoMode("off", True, 3, request.config.getoption("--network-iface"))
-        demoUtils.verifyDemoMode("off")
+    logger.info("demoResponse " + str(demoResponse))
+    if demoResponse == True:
+        demoUtils.setDemoMode(False, True, 3, request.config.getoption("--network-iface"))
+        demoUtils.verifyDemoMode(False)
