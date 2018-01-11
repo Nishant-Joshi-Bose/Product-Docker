@@ -8,6 +8,10 @@
     "selected_version": "master@ab77e2216a0b358837791fd837a2c165f46f811e"
   },
   {
+    "name": "BLERemoteXCVR",
+    "selected_version": "Continuous/master/0.15-46+ge9e064b"
+  },
+  {
     "name": "A4VVideoManagerService",
     "selected_version": "master@7ff1596f1ca22a0eab6e6509a6cd2b7ab1f123c0"
   },

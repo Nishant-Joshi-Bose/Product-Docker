@@ -28,7 +28,7 @@ adb push "$ipk" /tmp/new.ipk || exit
 echo Install...
 adb shell export LD_LIBRARY_PATH=/opt/Bose/update/opkg/ \&\& /opt/Bose/update/opkg/opkg -f /mnt/nv/update/opkg.conf  --add-arch armv7a-vfp-neon:100 --force-reinstall --force-downgrade install /tmp/new.ipk || exit
 
-echo Remount...
-adb shell mount -oremount,ro /opt/Bose || exit
+echo Rebooting...
+adb shell /opt/Bose/bin/ResetUtil SYSTEM
 
 echo Done
