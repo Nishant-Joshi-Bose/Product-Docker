@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.1.40690.2643502"
+    "selected_version": "Release/Castle-Fork/0.3.2.40696.2644691"
   },
   {
     "name": "bose-opkg-utils",
@@ -41,7 +41,7 @@
   },
   {
     "name": "CastleDemoController-qc8017_32",
-    "selected_version": "Release/master/0.3.0-43+13170b9"
+    "selected_version": "Release/master/0.3.0-48+7207eed"
   },
   {
     "name": "CastleLibs-qc8017_32",
@@ -57,11 +57,11 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.3.1-333+7e78b4f"
+    "selected_version": "Release/master/0.3.1-338+0a6b925"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.3.1-333+7e78b4f"
+    "selected_version": "Release/master/0.3.1-338+0a6b925"
   },
   {
     "name": "CastleProductControllerCommon",
@@ -92,7 +92,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/0.2.3-48+374b63e"
+    "selected_version": "Release/master/0.2.3-50+5c1258b"
   },
   {
     "name": "protobuf-native",
@@ -124,11 +124,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.3.3-212+320ea06"
+    "selected_version": "Release/master/0.3.3-216+a1ca422"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.1.40690.2643502"
+    "selected_version": "Release/Castle-Fork/0.3.2.40696.2644691"
   },
   {
     "name": "Webkit",
