@@ -24,6 +24,18 @@
     "selected_version": "Release/master/0.3.3-217+add0b8b"
   },
   {
+    "name": "BoseOPKG-native",
+    "selected_version": "Release/master/0.1.0-4+31ebf8c"
+  },
+  {
+    "name": "BoseOPKG-qc8017_32",
+    "selected_version": "Release/master/0.1.0-4+31ebf8c"
+  },
+  {
+    "name": "BoseOPKG-x86",
+    "selected_version": "Release/master/0.1.0-4+31ebf8c"
+  },
+  {
     "name": "CastleAudioPath-qc8017_32",
     "selected_version": "Release/Castle-Fork/0.2.4-20251"
   },
@@ -37,7 +49,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Continuous/master/0.2.3-22+68b412a"
+    "selected_version": "Release/master/0.3.1-25+fba27a0"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -53,7 +65,11 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@100ec75ab47b4b6f1c42918bd632de2cb4b0de1f"
+    "selected_version": "master@66b8059678161e112d1afb6480fbba0d5d772e67"
+  },
+  {
+    "name": "FrontDoor-qc8017_32",
+    "selected_version": "Release/build44/1.0.0-73+7457e9a"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -76,10 +92,6 @@
     "selected_version": "branches/protobuf@2510"
   },
   {
-    "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/build44/1.0.0-73+7457e9a"
-  },
-  {
     "name": "Riviera-HSP-Images",
     "selected_version": "Release/master/${RIVIERA_HSP_VERSION}"
   },
@@ -89,11 +101,11 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Continuous/master/0.3.1-62+f9502e6"
+    "selected_version": "Release/master/0.3.2-69+0035e65"
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Continuous/master/0.3.0-25+6864629"
+    "selected_version": "Release/master/0.3.0-29+d12a9ef"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -101,11 +113,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.3.1-176+32f2891"
+    "selected_version": "Release/master/0.3.2-204+e018972"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2017-12-19_1321"
+    "selected_version": "Release/Castle-Fork/0.3.1.40690.2643502"
   },
   {
     "name": "unittest-cpp-qc8017_32",

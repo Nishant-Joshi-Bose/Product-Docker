@@ -131,6 +131,24 @@ void ProfessorProductController::Run( )
 {
     m_Running = true;
 
+    ///
+    /// Get instances of all the modules.
+    ///
+    BOSE_DEBUG( s_logger, "----------- Product Controller Starting Modules ------------" );
+    BOSE_DEBUG( s_logger, "The Professor Product Controller instantiating and running its modules." );
+
+    m_ProductLpmHardwareInterface = std::make_shared< CustomProductLpmHardwareInterface >( *this );
+    m_ProductEdidInterface        = std::make_shared< ProductEdidInterface              >( *this );
+    m_ProductSystemManager        = std::make_shared< ProductSystemManager              >( *this );
+    m_ProductNetworkManager       = std::make_shared< ProductNetworkManager             >( *this );
+    m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
+    m_ProductKeyInputInterface    = std::make_shared< ProductKeyInputInterface          >( *this );
+    m_ProductVolumeManager        = std::make_shared< ProductVolumeManager              >( *this );
+    m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
+    m_ProductSpeakerManager       = std::make_shared< ProductSpeakerManager             >( *this );
+    m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this );
+
+
     BOSE_DEBUG( s_logger, "----------- Product Controller State Machine    ------------" );
     BOSE_DEBUG( s_logger, "The Professor Product Controller is setting up the state machine." );
 
@@ -252,22 +270,6 @@ void ProfessorProductController::Run( )
     ///
     m_deviceManager.Initialize( this );
 
-    ///
-    /// Get instances of all the modules.
-    ///
-    BOSE_DEBUG( s_logger, "----------- Product Controller Starting Modules ------------" );
-    BOSE_DEBUG( s_logger, "The Professor Product Controller instantiating and running its modules." );
-
-    m_ProductLpmHardwareInterface = std::make_shared< CustomProductLpmHardwareInterface >( *this );
-    m_ProductEdidInterface        = std::make_shared< ProductEdidInterface              >( *this );
-    m_ProductSystemManager        = std::make_shared< ProductSystemManager              >( *this );
-    m_ProductNetworkManager       = std::make_shared< ProductNetworkManager             >( *this );
-    m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
-    m_ProductKeyInputInterface    = std::make_shared< ProductKeyInputInterface          >( *this );
-    m_ProductVolumeManager        = std::make_shared< ProductVolumeManager              >( *this );
-    m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
-    m_ProductSpeakerManager       = std::make_shared< ProductSpeakerManager             >( *this );
-    m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this );
 
     if( m_ProductLpmHardwareInterface == nullptr ||
         m_ProductSystemManager        == nullptr ||
@@ -853,7 +855,10 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             case SYSTEM_STATE_RECOVERY:
                 break;
             case SYSTEM_STATE_LOW_POWER:
-                break;
+            {
+                GetHsm( ).Handle< >( &CustomProductControllerState::HandleLpmLowpowerSystemState );
+            }
+            break;
             case SYSTEM_STATE_UPDATE:
                 break;
             case SYSTEM_STATE_SHUTDOWN:
@@ -874,6 +879,10 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         {
             BOSE_DEBUG( s_logger, "The LPM power state was set to %s",
                         IpcLPMPowerState_t_Name( message.lpmstatus( ).powerstate( ) ).c_str( ) );
+        }
+        if( message.has_lpmlowpowerstatus( ) )
+        {
+            GetHsm( ).Handle<const ProductLpmLowPowerStatus& >( &CustomProductControllerState::HandleLpmLowPowerStatus, message.lpmlowpowerstatus( ) );
         }
 
     }
