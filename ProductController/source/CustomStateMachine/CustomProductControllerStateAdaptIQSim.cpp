@@ -27,6 +27,7 @@
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
 #include "ProductMessage.pb.h"
+#include "APTimerFactory.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -64,7 +65,7 @@ CustomProductControllerStateAdaptIQ::CustomProductControllerStateAdaptIQ
   const std::string&          name )
 
     : ProductControllerState( hsm, pSuperState, stateId, name ),
-      m_timer( APTimer::Create( productController.GetTask( ), "AdaptIQTimer" ) ),
+      m_timer( APTimerFactory::CreateTimer( productController.GetTask( ), "AdaptIQTimer" ) ),
       m_AdaptIQManager( productController.GetAdaptIQManager( ) )
 {
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being constructed." );
