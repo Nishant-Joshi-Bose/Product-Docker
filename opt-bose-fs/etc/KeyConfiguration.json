@@ -1,44 +1,44 @@
-{ "KeyTable":
+{ "keyTable":
 [
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [4], "TimeOutList": [0], "Action": 1, "Comment": "Console: MFB release between 0-1750 ms ---> play-pause"},
-    {"Origin": 0, "KeyEvent": 4, "KeyList": [4,4], "TimeOutList": [500], "Action": 2, "Comment": "Console: MFB repeat release twice within 500ms ---> next track"},
-    {"Origin": 0, "KeyEvent": 4, "KeyList": [4,4,4], "TimeOutList": [500], "Action": 3, "Comment": "Console: MFB repeat release thrice within 500ms ---> prev track"},
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [4], "TimeOutList": [1750], "Action": 4, "Comment": "Console: MFB release after 1750 ms ---> Network Standby"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [2,4], "TimeOutList": [500], "Action": 5, "Comment": "Console: MFB+Aux press and hold for at least 500ms ---> AP Mode"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [3,4], "TimeOutList": [500], "Action": 6, "Comment": "Console: MFB+VolumeUp press and hold for at least 500ms ---> Manual Update"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [1,4], "TimeOutList": [500], "Action": 7, "Comment": "Console: MFB+Bluetooth press and hold for at least 500ms ---> Disable Networking"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [4,5], "TimeOutList": [10000], "Action": 8, "Comment": "Console: MFB+VolumeDown press and hold for at least 10000ms ---> Factory Reset"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [4], "TimeOutList": [15000], "Action": 9, "Comment": "Console: MFB press and hold for at least 15000ms ---> Low Power Standby"},
+    {"origin": 0, "keyEvent": 1, "keyList": [4], "timeOutList": [0], "action": 1, "comment": "Console: MFB release between 0-1750 ms ---> play-pause"},
+    {"origin": 0, "keyEvent": 4, "keyList": [4,4], "timeOutList": [500], "action": 2, "comment": "Console: MFB repeat release twice within 500ms ---> next track"},
+    {"origin": 0, "keyEvent": 4, "keyList": [4,4,4], "timeOutList": [500], "action": 3, "comment": "Console: MFB repeat release thrice within 500ms ---> prev track"},
+    {"origin": 0, "keyEvent": 1, "keyList": [4], "timeOutList": [1750], "action": 4, "comment": "Console: MFB release after 1750 ms ---> Network Standby"},
+    {"origin": 0, "keyEvent": 2, "keyList": [2,4], "timeOutList": [500], "action": 5, "comment": "Console: MFB+Aux press and hold for at least 500ms ---> AP Mode"},
+    {"origin": 0, "keyEvent": 2, "keyList": [3,4], "timeOutList": [500], "action": 6, "comment": "Console: MFB+VolumeUp press and hold for at least 500ms ---> Manual Update"},
+    {"origin": 0, "keyEvent": 2, "keyList": [1,4], "timeOutList": [500], "action": 7, "comment": "Console: MFB+Bluetooth press and hold for at least 500ms ---> Disable Networking"},
+    {"origin": 0, "keyEvent": 2, "keyList": [4,5], "timeOutList": [10000], "action": 8, "comment": "Console: MFB+VolumeDown press and hold for at least 10000ms ---> Factory Reset"},
+    {"origin": 0, "keyEvent": 2, "keyList": [4], "timeOutList": [15000], "action": 9, "comment": "Console: MFB press and hold for at least 15000ms ---> Low Power Standby"},
 
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [1], "TimeOutList": [0], "Action": 20, "Comment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [1], "TimeOutList": [750], "Action": 21, "Comment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [1], "TimeOutList": [10000], "Action": 22, "Comment": "Console: Bluetooth Press and Hold ---> Clear Pairing List"},
+    {"origin": 0, "keyEvent": 1, "keyList": [1], "timeOutList": [0], "action": 20, "comment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast"},
+    {"origin": 0, "keyEvent": 2, "keyList": [1], "timeOutList": [750], "action": 21, "comment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable"},
+    {"origin": 0, "keyEvent": 2, "keyList": [1], "timeOutList": [10000], "action": 22, "comment": "Console: Bluetooth Press and Hold ---> Clear Pairing List"},
 
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [3], "TimeOutList": [0], "Action": 23, "Comment": "Console: VolumeUp(+) release ---> VolumeUp"},
-    {"Origin": 0, "KeyEvent": 3, "KeyList": [3], "TimeOutList": [300,100], "Action": 39, "Comment": "Console: VolumeUp(+) Press and Hold ---> VolumeRampUp"},
+    {"origin": 0, "keyEvent": 1, "keyList": [3], "timeOutList": [0], "action": 23, "comment": "Console: VolumeUp(+) release ---> VolumeUp"},
+    {"origin": 0, "keyEvent": 3, "keyList": [3], "timeOutList": [300,100], "action": 39, "comment": "Console: VolumeUp(+) Press and Hold ---> VolumeRampUp"},
 
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [5], "TimeOutList": [0], "Action": 24, "Comment": "Console: VolumeUp(-) release ---> VolumeDown"},
-    {"Origin": 0, "KeyEvent": 3, "KeyList": [5], "TimeOutList": [300,100], "Action": 40, "Comment": "Console: VolumeUp(-) Press and Hold ---> VolumeRampDown"},
+    {"origin": 0, "keyEvent": 1, "keyList": [5], "timeOutList": [0], "action": 24, "comment": "Console: VolumeUp(-) release ---> VolumeDown"},
+    {"origin": 0, "keyEvent": 3, "keyList": [5], "timeOutList": [300,100], "action": 40, "comment": "Console: VolumeUp(-) Press and Hold ---> VolumeRampDown"},
 
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [2], "TimeOutList": [0], "Action": 25, "Comment": "Console: AUX release ---> SendToAux"},
+    {"origin": 0, "keyEvent": 1, "keyList": [2], "timeOutList": [0], "action": 25, "comment": "Console: AUX release ---> SendToAux"},
 
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [6], "TimeOutList": [0], "Action": 26, "Comment": "Console: Action release ---> Alexa"},
+    {"origin": 0, "keyEvent": 1, "keyList": [6], "timeOutList": [0], "action": 26, "comment": "Console: action release ---> Alexa"},
 
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [8], "TimeOutList": [1000], "Action": 27, "Comment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [9], "TimeOutList": [1000], "Action": 28, "Comment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [10], "TimeOutList": [1000], "Action": 29, "Comment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [11], "TimeOutList": [1000], "Action": 30, "Comment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [12], "TimeOutList": [1000], "Action": 31, "Comment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5"},
-    {"Origin": 0, "KeyEvent": 2, "KeyList": [13], "TimeOutList": [1000], "Action": 32, "Comment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6"},
+    {"origin": 0, "keyEvent": 2, "keyList": [8], "timeOutList": [1000], "action": 27, "comment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1"},
+    {"origin": 0, "keyEvent": 2, "keyList": [9], "timeOutList": [1000], "action": 28, "comment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2"},
+    {"origin": 0, "keyEvent": 2, "keyList": [10], "timeOutList": [1000], "action": 29, "comment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3"},
+    {"origin": 0, "keyEvent": 2, "keyList": [11], "timeOutList": [1000], "action": 30, "comment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4"},
+    {"origin": 0, "keyEvent": 2, "keyList": [12], "timeOutList": [1000], "action": 31, "comment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5"},
+    {"origin": 0, "keyEvent": 2, "keyList": [13], "timeOutList": [1000], "action": 32, "comment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6"},
 
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [8], "TimeOutList": [200], "Action": 33, "Comment": "Console: Preset 1 release ---> Select Preset stored on Key 1"},
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [9], "TimeOutList": [200], "Action": 34, "Comment": "Console: Preset 2 release ---> Select Preset stored on Key 2"},
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [10], "TimeOutList": [200], "Action": 35, "Comment": "Console: Preset 3 release ---> Select Preset stored on Key 3"},
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [11], "TimeOutList": [200], "Action": 36, "Comment": "Console: Preset 4 release ---> Select Preset stored on Key 4"},
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [12], "TimeOutList": [200], "Action": 37, "Comment": "Console: Preset 5 release ---> Select Preset stored on Key 5"},
-    {"Origin": 0, "KeyEvent": 1, "KeyList": [13], "TimeOutList": [200], "Action": 38, "Comment": "Console: Preset 6 release ---> Select Preset stored on Key 6"},
+    {"origin": 0, "keyEvent": 1, "keyList": [8], "timeOutList": [200], "action": 33, "comment": "Console: Preset 1 release ---> Select Preset stored on Key 1"},
+    {"origin": 0, "keyEvent": 1, "keyList": [9], "timeOutList": [200], "action": 34, "comment": "Console: Preset 2 release ---> Select Preset stored on Key 2"},
+    {"origin": 0, "keyEvent": 1, "keyList": [10], "timeOutList": [200], "action": 35, "comment": "Console: Preset 3 release ---> Select Preset stored on Key 3"},
+    {"origin": 0, "keyEvent": 1, "keyList": [11], "timeOutList": [200], "action": 36, "comment": "Console: Preset 4 release ---> Select Preset stored on Key 4"},
+    {"origin": 0, "keyEvent": 1, "keyList": [12], "timeOutList": [200], "action": 37, "comment": "Console: Preset 5 release ---> Select Preset stored on Key 5"},
+    {"origin": 0, "keyEvent": 1, "keyList": [13], "timeOutList": [200], "action": 38, "comment": "Console: Preset 6 release ---> Select Preset stored on Key 6"},
 
-    {"Origin": 0, "KeyEvent": 5, "KeyList": [3], "TimeOutList": [], "Action": 50, "Comment": "Console: VolumeUp(+) release(KeyEvent: Release Anyways ---> Cancel Ramp up"},
-    {"Origin": 0, "KeyEvent": 5, "KeyList": [5], "TimeOutList": [], "Action": 51, "Comment": "Console: VolumeDown(-) release(KeyEvent: Release Anyways ---> Cancel Ramp down"}
+    {"origin": 0, "keyEvent": 5, "keyList": [3], "timeOutList": [], "action": 50, "comment": "Console: VolumeUp(+) release(keyEvent: Release Anyways ---> Cancel Ramp up"},
+    {"origin": 0, "keyEvent": 5, "keyList": [5], "timeOutList": [], "action": 51, "comment": "Console: VolumeDown(-) release(keyEvent: Release Anyways ---> Cancel Ramp down"}
 ]
 }
