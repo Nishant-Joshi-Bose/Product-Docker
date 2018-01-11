@@ -1,11 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      ProductSpeakerManager.h
+/// @file      SpeakerPairingManager.h
 ///
-/// @brief     This header file contains declarations for managing the wireless accessories,
-///            including pairing and active speaker control.
+/// @brief     This header file declares an intent manager class for managing the wireless
+///            speaker accessories, including pairing and active speaker control, on Professor
+///            Devices
 ///
-/// @author    Derek Richardson
+/// @author    Stuart J. Lumby
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -43,46 +44,77 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 ///            Forward Class Declarations
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductLpmHardwareInterface;
 class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class The ProductSpeakerManager class
-///
-/// @brief This class is used for managing the wireless accessories, including pairing and active
-///        speaker control.
+/// @brief The SpeakerPairingManager Class
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProductSpeakerManager
+class SpeakerPairingManager: public IntentManager
 {
 public:
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @name   ProductSpeakerManager Constructor
+    /// @brief Constructor for the SpeakerPairingManager Class
     ///
-    /// @param  ProfessorProductController& ProductController
+    /// @param NotifyTargetTaskIF&        task
     ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductSpeakerManager( ProfessorProductController& productController );
+    /// @param const CliClientMT&         commandLineClient
+    ///
+    /// @param const FrontDoorClientIF_t& frontDoorClient
+    ///
+    /// @param ProductController&         productController
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    SpeakerPairingManager( NotifyTargetTaskIF&        task,
+                           const CliClientMT&         commandLineClient,
+                           const FrontDoorClientIF_t& frontDoorClient,
+                           ProductController&         productController );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief Destructor for the SpeakerPairingManager Class
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ~SpeakerPairingManager( ) override
+    {
+
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @name  Handle
+    ///
+    /// @brief This method is used to handle speaker pairing action intents.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    bool Handle( KeyHandlerUtil::ActionType_t& action ) override;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief  The following public methods are used to run, start, and stop pairing for
-    ///         instances this class, respectively.
+    /// @brief  The following public methods are used to start, and stop pairing for instances
+    ///         this class, respectively.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool Run( );
     void DoPairing( );
     void StopPairing( );
 
 private:
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following member variable stores the custom Professor product controller instance.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ProfessorProductController& m_CustomProductController;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -101,7 +133,7 @@ private:
     /// @brief The following method performs needed initialization before running.
     ///
     ///////////////////////////////////////////////////////////////////////////////////////////////////
-    void Init( );
+    void Initialize( );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -132,9 +164,6 @@ private:
 
     void DisbandAccessories( const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB );
 
-    void DisbandAccessoriesCallback( const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB,
-                                     LpmServiceMessages::IpcAccessoryDisbandCommand_t accDisband );
-
     void SetSpeakersEnabledCallback( const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB,
                                      const LpmServiceMessages::IpcSpeakersActive_t req );
     void SetSpeakersEnabled( const ProductPb::AccessorySpeakerState::SpeakerControls req,
@@ -159,19 +188,20 @@ private:
     void AccessoriesPutHandler( const ProductPb::AccessorySpeakerState &req,
                                 const Callback<ProductPb::AccessorySpeakerState> &resp );
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////intent/
     ///
     /// @brief The following methods are utility methods for determining the accessories status and
     ///        types.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    static const char* AccessoryRearConiguration( uint8_t numLeft, uint8_t numRight );
     static bool AccessoryStatusIsConnected( unsigned int status );
     static bool AccessoryTypeIsRear( unsigned int type );
     static bool AccessoryTypeIsSub( unsigned int type );
     static const char* AccessoryTypeToString( unsigned int type );
-    static void AccessoryDescriptionToAccessorySpeakerInfo( const LpmServiceMessages::AccessoryDescription_t &accDesc,
-                                                            ProductPb::AccessorySpeakerState::AccessorySpeakerInfo* spkrInfo );
+    static void AccessoryDescriptionToAccessorySpeakerInfo( const LpmServiceMessages::AccessoryDescription_t&
+                                                            accDesc,
+                                                            ProductPb::AccessorySpeakerState::AccessorySpeakerInfo*
+                                                            spkrInfo );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

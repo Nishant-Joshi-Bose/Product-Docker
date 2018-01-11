@@ -65,8 +65,7 @@ CustomProductControllerStateAdaptIQ::CustomProductControllerStateAdaptIQ
   const std::string&          name )
 
     : ProductControllerState( hsm, pSuperState, stateId, name ),
-      m_timer( APTimerFactory::CreateTimer( productController.GetTask( ), "AdaptIQTimer" ) ),
-      m_AdaptIQManager( productController.GetAdaptIQManager( ) )
+      m_timer( APTimer::Create( productController.GetTask( ), "AdaptIQTimer" ) )
 {
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being constructed." );
 }
@@ -104,8 +103,8 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
     m_status.set_currentspeaker( ProductAdaptIQManager::ADAPTIQ_SPEAKER_FIRST );
     m_status.set_hpconnected( true );
     m_status.set_errorcode( 0 );
-    m_AdaptIQManager->SetDefaultProperties( m_status );
-    m_AdaptIQManager->SetStatus( m_status );
+    GetCustomProductController( ).GetAdaptIQManager( )->SetDefaultProperties( m_status );
+    GetCustomProductController( ).GetAdaptIQManager( )->SetStatus( m_status );
     StartTimer( ADAPTIQ_BOOT_TIME );
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ ::: %s\n", __func__ );
 }
@@ -123,19 +122,19 @@ void CustomProductControllerStateAdaptIQ::HandleTimeOut( )
         // DSP booted, wait for "Advance"
         m_status.set_smstate( "Intro" );
         m_status.set_mode( "Running" );
-        m_AdaptIQManager->SetStatus( m_status );
+        GetCustomProductController( ).GetAdaptIQManager( )->SetStatus( m_status );
     }
     else if( m_status.smstate() == "Listening" )
     {
         // measurement complete, wait for "Advance"
         m_status.set_smstate( "Measurement Complete" );
-        m_AdaptIQManager->SetStatus( m_status );
+        GetCustomProductController( ).GetAdaptIQManager( )->SetStatus( m_status );
     }
     else if( m_status.smstate() == "Analysis" )
     {
         // analysis complete, start tearing down adapt iq
         m_status.set_smstate( "Analysis Complete" );
-        m_AdaptIQManager->SetStatus( m_status );
+        GetCustomProductController( ).GetAdaptIQManager( )->SetStatus( m_status );
         StartTimer( ADAPTIQ_EXIT_TIME );
     }
     else if( m_status.smstate() == "Analysis Complete" )
@@ -190,7 +189,7 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAda
         {
             // got "Advance" in intro, go to listening and wait for measurement complete
             m_status.set_smstate( "Listening" );
-            m_AdaptIQManager->SetStatus( m_status );
+            GetCustomProductController( ).GetAdaptIQManager( )->SetStatus( m_status );
             StartTimer( ADAPTIQ_MEASUREMENT_TIME );
         }
         else if( m_status.smstate() == "Measurement Complete" )
@@ -206,7 +205,7 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAda
                 m_status.set_smstate( "Listening" );
                 m_status.set_currentlocation( m_status.currentlocation() + 1 );
                 m_status.set_currentspeaker( m_status.currentspeaker() + 1 );
-                m_AdaptIQManager->SetStatus( m_status );
+                GetCustomProductController( ).GetAdaptIQManager( )->SetStatus( m_status );
                 StartTimer( ADAPTIQ_MEASUREMENT_TIME );
             }
         }
@@ -214,8 +213,8 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAda
         {
             // wrong state, error
             m_status.set_smstate( "Error" );
-            m_AdaptIQManager->SetDefaultProperties( m_status );
-            m_AdaptIQManager->SetStatus( m_status );
+            GetCustomProductController( ).GetAdaptIQManager( )->SetDefaultProperties( m_status );
+            GetCustomProductController( ).GetAdaptIQManager( )->SetStatus( m_status );
         }
 
         break;
@@ -230,15 +229,15 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAda
                 m_status.set_currentspeaker( m_status.currentspeaker() - 1 );
             }
             m_status.set_smstate( "Listening" );
-            m_AdaptIQManager->SetStatus( m_status );
+            GetCustomProductController( ).GetAdaptIQManager( )->SetStatus( m_status );
             StartTimer( ADAPTIQ_MEASUREMENT_TIME );
         }
         else
         {
             // wrong state, error
             m_status.set_smstate( "Error" );
-            m_AdaptIQManager->SetDefaultProperties( m_status );
-            m_AdaptIQManager->SetStatus( m_status );
+            GetCustomProductController( ).GetAdaptIQManager( )->SetDefaultProperties( m_status );
+            GetCustomProductController( ).GetAdaptIQManager( )->SetStatus( m_status );
         }
 
         break;
@@ -249,8 +248,6 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAda
 
     return true;
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             End of Product Application Namespace                             ///

@@ -74,7 +74,7 @@ public:
     void HandleStateEnter( ) override;
 
     bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo ) override;
-    bool HandleKeyAction( int action ) override;
+    bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action ) override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

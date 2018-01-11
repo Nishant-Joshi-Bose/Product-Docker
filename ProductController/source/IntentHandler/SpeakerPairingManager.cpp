@@ -1,9 +1,9 @@
 ﻿////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      ProductSpeakerManager.cpp
+/// @file      SpeakerPairingManager.cpp
 ///
-/// @brief     This file contains source code for managing the wireless accessories, including
-///            pairing and active speaker control.
+/// @brief     This source code file contains functionality to implement an intent manager class for
+///            managing the wireless accessories, including pairing and active speaker control.
 ///
 /// @author    Derek Richardson
 ///
@@ -18,12 +18,17 @@
 ///            whatsoever without the written permission of Bose Corporation.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+///            Included Header Files
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
-#include "HsmState.h"
 #include "FrontDoorClient.h"
 #include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
-#include "ProductSpeakerManager.h"
+#include "SpeakerPairingManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -38,95 +43,125 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 const std::string accessoryFrontDoorURL = "/accessories";
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSpeakerManager::ProductSpeakerManager
+/// @brief SpeakerPairingManager::SpeakerPairingManager
 ///
-/// @param ProfessorProductController& productController
+/// @param NotifyTargetTaskIF&        task
+///
+/// @param const CliClientMT&         commandLineClient
+///
+/// @param const FrontDoorClientIF_t& frontDoorClient
+///
+/// @param ProductController&         productController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductSpeakerManager::ProductSpeakerManager( ProfessorProductController& ProductController )
+SpeakerPairingManager::SpeakerPairingManager( NotifyTargetTaskIF&        task,
+                                              const CliClientMT&         commandLineClient,
+                                              const FrontDoorClientIF_t& frontDoorClient,
+                                              ProductController&         productController )
 
-    : m_ProductTask( ProductController.GetTask( ) ),
-      m_ProductNotify( ProductController.GetMessageHandler( ) ),
-      m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
-      m_FrontDoorClientIF( FrontDoor::FrontDoorClient::Create( "ProductSpeakerManager" ) ),
+    : IntentManager( task, commandLineClient, frontDoorClient, productController ),
+      m_CustomProductController( static_cast< ProfessorProductController& >( productController ) ),
+      m_ProductTask( m_CustomProductController.GetTask( ) ),
+      m_ProductNotify( m_CustomProductController.GetMessageHandler( ) ),
+      m_ProductLpmHardwareInterface( m_CustomProductController.GetLpmHardwareInterface( ) ),
+      m_FrontDoorClientIF( FrontDoor::FrontDoorClient::Create( "SpeakerPairingManager" ) ),
       m_lpmConnected( false )
 {
-    BOSE_INFO( s_logger, __func__ );
-    Init( );
+    BOSE_INFO( s_logger, "%s is being constructed.", "SpeakerPairingManager" );
+
+    Initialize( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSpeakerManager::Init
+/// @brief SpeakerPairingManager::Initialize
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSpeakerManager::Init( )
+void SpeakerPairingManager::Initialize( )
 {
     ///
     /// @todo Figure out how to better platform controllability of accessories.
     ///
     ProductPb::AccessorySpeakerState::SpeakerControls* controlable = m_accessorySpeakerState.mutable_controllable( );
-    controlable->set_subs( false );
-    controlable->set_rears( false );
+    controlable->set_subs( true );
+    controlable->set_rears( true );
 
     ProductPb::AccessorySpeakerState::SpeakerControls* enabled = m_accessorySpeakerState.mutable_enabled( );
-    enabled->set_subs( false );
-    enabled->set_rears( false );
+    enabled->set_subs( true );
+    enabled->set_rears( true );
 
     m_accessorySpeakerState.set_pairing( false );
 
-    Callback<bool> cb( std::bind( &ProductSpeakerManager::SetLpmConnectionState, this, std::placeholders::_1 ) );
+    Callback<bool> cb( std::bind( &SpeakerPairingManager::SetLpmConnectionState, this, std::placeholders::_1 ) );
     m_ProductLpmHardwareInterface->RegisterForLpmConnection( cb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSpeakerManager::SetLpmConnectionState
+/// @brief  SpeakerPairingManager::Handle
 ///
-/// @param bool connected
+/// @brief  This method is used to build and send Front Door messages to activate and play a source
+///         if it is selected.
+///
+/// @param  KeyHandlerUtil::ActionType_t& action
+///
+/// @return This method returns true base on its handling of a playback request.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSpeakerManager::SetLpmConnectionState( bool connected )
+bool SpeakerPairingManager::Handle( KeyHandlerUtil::ActionType_t& action )
 {
-    BOSE_INFO( s_logger, "ProductSpeakerManager::LpmConnected: connected = %s", connected ? "true" : "false" );
+    BOSE_INFO( s_logger, "%s is in %s handling the action %u.", "SpeakerPairingManager",
+                                                                __FUNCTION__,
+                                                                action );
 
-    m_lpmConnected = connected;
-
-    if( m_lpmConnected )
+    if( action == ( uint16_t )Action::ACTION_PAIR_SPEAKERS )
     {
-        RegisterLpmClientEvents( );
+        BOSE_INFO( s_logger, "Speaker pairing is to be started." );
+        DoPairing( );
     }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief ProductSpeakerManager::Run
-///
-/// @return
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductSpeakerManager::Run( )
-{
-    RegisterFrontDoorEvents( );
+    if( action == ( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS )
+    {
+        BOSE_INFO( s_logger, "Speaker pairing is to be stopped." );
+        StopPairing( );
+    }
 
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSpeakerManager::RegisterLpmClientEvents
+/// @brief SpeakerPairingManager::SetLpmConnectionState
+///
+/// @param bool connected
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSpeakerManager::RegisterLpmClientEvents( )
+void SpeakerPairingManager::SetLpmConnectionState( bool connected )
+{
+    BOSE_INFO( s_logger, "SpeakerPairingManager::LpmConnected: connected = %s", connected ? "true" : "false" );
+
+    m_lpmConnected = connected;
+
+    if( m_lpmConnected )
+    {
+        RegisterLpmClientEvents( );
+        RegisterFrontDoorEvents( );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief SpeakerPairingManager::RegisterLpmClientEvents
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void SpeakerPairingManager::RegisterLpmClientEvents( )
 {
     ///
     /// Get ASYNC accessory list change events
     ///
     Callback< LpmServiceMessages::IpcAccessoryList_t >
-    listCB( std::bind( &ProductSpeakerManager::RecieveAccessoryListCallback,
+    listCB( std::bind( &SpeakerPairingManager::RecieveAccessoryListCallback,
                        this,
                        std::placeholders::_1 ) );
 
@@ -140,7 +175,7 @@ void ProductSpeakerManager::RegisterLpmClientEvents( )
     /// Get ASYNC pairing mode events
     ///
     Callback< LpmServiceMessages::IpcSpeakerPairingMode_t >
-    pairCB( std::bind( &ProductSpeakerManager::PairingCallback,
+    pairCB( std::bind( &SpeakerPairingManager::PairingCallback,
                        this,
                        std::placeholders::_1 ) );
 
@@ -157,16 +192,16 @@ void ProductSpeakerManager::RegisterLpmClientEvents( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSpeakerManager::RegisterFrontDoorEvents
+/// @brief SpeakerPairingManager::RegisterFrontDoorEvents
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSpeakerManager::RegisterFrontDoorEvents( )
+void SpeakerPairingManager::RegisterFrontDoorEvents( )
 {
-    BOSE_INFO( s_logger, __func__ );
+    BOSE_INFO( s_logger, __FUNCTION__ );
 
     {
         AsyncCallback<Callback< ProductPb::AccessorySpeakerState > >
-        getAccessoriesCb( std::bind( &ProductSpeakerManager::AccessoriesGetHandler,
+        getAccessoriesCb( std::bind( &SpeakerPairingManager::AccessoriesGetHandler,
                                      this,
                                      std::placeholders::_1 ) ,
                           m_ProductTask );
@@ -177,7 +212,7 @@ void ProductSpeakerManager::RegisterFrontDoorEvents( )
     }
     {
         AsyncCallback< ProductPb::AccessorySpeakerState, Callback< ProductPb::AccessorySpeakerState > >
-        putAccessoriesCb( std::bind( &ProductSpeakerManager::AccessoriesPutHandler,
+        putAccessoriesCb( std::bind( &SpeakerPairingManager::AccessoriesPutHandler,
                                      this,
                                      std::placeholders::_1,
                                      std::placeholders::_2 ) ,
@@ -197,31 +232,31 @@ void ProductSpeakerManager::RegisterFrontDoorEvents( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSpeakerManager::AccessoriesGetHandler
+/// @brief SpeakerPairingManager::AccessoriesGetHandler
 ///
 /// @param resp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSpeakerManager::AccessoriesGetHandler( const Callback<ProductPb::AccessorySpeakerState> &resp )
+void SpeakerPairingManager::AccessoriesGetHandler( const Callback<ProductPb::AccessorySpeakerState> &resp )
 {
-    BOSE_INFO( s_logger, __func__ );
+    BOSE_INFO( s_logger, __FUNCTION__ );
 
     resp( m_accessorySpeakerState );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSpeakerManager::AccessoriesPutHandler
+/// @brief SpeakerPairingManager::AccessoriesPutHandler
 ///
 /// @param const ProductPb::AccessorySpeakerState& req
 ///
 /// @param const Callback<ProductPb::AccessorySpeakerState>& resp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSpeakerManager::AccessoriesPutHandler( const ProductPb::AccessorySpeakerState& req,
+void SpeakerPairingManager::AccessoriesPutHandler( const ProductPb::AccessorySpeakerState& req,
                                                    const Callback<ProductPb::AccessorySpeakerState>& resp )
 {
-    BOSE_INFO( s_logger, __func__ );
+    BOSE_INFO( s_logger, __FUNCTION__ );
 
     if( req.has_enabled( ) )
     {
@@ -249,14 +284,14 @@ void ProductSpeakerManager::AccessoriesPutHandler( const ProductPb::AccessorySpe
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSpeakerManager::PairingFrontDoorRequestCallback
+/// @brief SpeakerPairingManager::PairingFrontDoorRequestCallback
 ///
 /// @param const Callback<ProductPb::AccessorySpeakerState>& frontDoorCB
 ///
 /// @param LpmServiceMessages::IpcSpeakerPairingMode_t pair
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSpeakerManager::PairingFrontDoorRequestCallback( const Callback<ProductPb::AccessorySpeakerState>& frontDoorCB,
+void SpeakerPairingManager::PairingFrontDoorRequestCallback( const Callback<ProductPb::AccessorySpeakerState>& frontDoorCB,
                                                              LpmServiceMessages::IpcSpeakerPairingMode_t pair )
 {
     if( pair.has_pairingenabled( ) )
@@ -269,14 +304,14 @@ void ProductSpeakerManager::PairingFrontDoorRequestCallback( const Callback<Prod
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSpeakerManager::DoPairingFrontDoor
+/// @brief SpeakerPairingManager::DoPairingFrontDoor
 ///
 /// @param bool pair
 ///
 /// @param const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSpeakerManager::DoPairingFrontDoor( bool pair,
+void SpeakerPairingManager::DoPairingFrontDoor( bool pair,
                                                 const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB )
 {
     ///
@@ -285,7 +320,7 @@ void ProductSpeakerManager::DoPairingFrontDoor( bool pair,
     ///       an accessory pairing state.
     ///
     Callback< LpmServiceMessages::IpcSpeakerPairingMode_t >
-    doPairingCb( std::bind( &ProductSpeakerManager::PairingFrontDoorRequestCallback,
+    doPairingCb( std::bind( &SpeakerPairingManager::PairingFrontDoorRequestCallback,
                             this,
                             frontDoorCB,
                             std::placeholders::_1 ) );
@@ -301,15 +336,15 @@ void ProductSpeakerManager::DoPairingFrontDoor( bool pair,
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSpeakerManager::DoPairing
+/// @brief SpeakerPairingManager::DoPairing
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSpeakerManager::DoPairing( )
+void SpeakerPairingManager::DoPairing( )
 {
     if( !m_accessorySpeakerState.pairing( ) )
     {
         Callback< LpmServiceMessages::IpcSpeakerPairingMode_t >
-        doPairingCb( std::bind( &ProductSpeakerManager::PairingCallback,
+        doPairingCb( std::bind( &SpeakerPairingManager::PairingCallback,
                                 this,
                                 std::placeholders::_1 ) );
 
@@ -319,15 +354,15 @@ void ProductSpeakerManager::DoPairing( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSpeakerManager::StopPairing
+/// @brief SpeakerPairingManager::StopPairing
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSpeakerManager::StopPairing( )
+void SpeakerPairingManager::StopPairing( )
 {
     if( m_accessorySpeakerState.pairing( ) )
     {
         Callback< LpmServiceMessages::IpcSpeakerPairingMode_t >
-        doPairingCb( std::bind( &ProductSpeakerManager::PairingCallback,
+        doPairingCb( std::bind( &SpeakerPairingManager::PairingCallback,
                                 this,
                                 std::placeholders::_1 ) );
 
@@ -343,41 +378,17 @@ void ProductSpeakerManager::StopPairing( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSpeakerManager::DisbandAccessories
+/// @brief SpeakerPairingManager::DisbandAccessories
 ///
 /// @param const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSpeakerManager::DisbandAccessories( const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB )
+void SpeakerPairingManager::DisbandAccessories( const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB )
 {
-    Callback< LpmServiceMessages::IpcAccessoryDisbandCommand_t >
-    disbandCb( std::bind( &ProductSpeakerManager::DisbandAccessoriesCallback,
-                          this,
-                          frontDoorCB,
-                          std::placeholders::_1 ) );
-    m_ProductLpmHardwareInterface->SendAccessoryDisband( disbandCb );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief ProductSpeakerManager::DisbandAccessoriesCallback
-///
-/// @param const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB - callback to send ne list to
-/// @param const LpmServiceMessages::IpcAccessoryDisbandCommand_t accDisband - if it succeeded
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSpeakerManager::DisbandAccessoriesCallback( const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB,
-                                                        LpmServiceMessages::IpcAccessoryDisbandCommand_t accDisband )
-{
-    if( accDisband.disband() )
-    {
-        m_accessorySpeakerState.mutable_subs()->Clear();
-        m_accessorySpeakerState.mutable_rears()->Clear();
-
-        m_accessorySpeakerState.mutable_controllable()->set_subs( false );
-        m_accessorySpeakerState.mutable_controllable()->set_rears( false );
-    }
-
+    ///
+    /// @todo Send actual state, determine the desired behavior here. Put off till IP4 when setup is
+    ///       due, since this has not implemented yet, just respond right away.
+    ///
     frontDoorCB( m_accessorySpeakerState );
 }
 
@@ -388,14 +399,14 @@ void ProductSpeakerManager::DisbandAccessoriesCallback( const Callback<ProductPb
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSpeakerManager::SetSpeakersEnabledCallback
+/// @brief SpeakerPairingManager::SetSpeakersEnabledCallback
 ///
 /// @param const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB
 ///
 /// @param const LpmServiceMessages::IpcSpeakersActive_t req
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSpeakerManager::SetSpeakersEnabledCallback( const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB,
+void SpeakerPairingManager::SetSpeakersEnabledCallback( const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB,
                                                         const LpmServiceMessages::IpcSpeakersActive_t req )
 {
     ProductPb::AccessorySpeakerState::SpeakerControls* enabled = m_accessorySpeakerState.mutable_enabled( );
@@ -417,21 +428,21 @@ void ProductSpeakerManager::SetSpeakersEnabledCallback( const Callback<ProductPb
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSpeakerManager::SetSpeakersEnabled
+/// @brief SpeakerPairingManager::SetSpeakersEnabled
 ///
 /// @param const ProductPb::AccessorySpeakerState::SpeakerControls req
 ///
 /// @param const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSpeakerManager::SetSpeakersEnabled( const ProductPb::AccessorySpeakerState::SpeakerControls req,
+void SpeakerPairingManager::SetSpeakersEnabled( const ProductPb::AccessorySpeakerState::SpeakerControls req,
                                                 const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB )
 {
     bool rears = true;
     bool subs = true;
 
     Callback< LpmServiceMessages::IpcSpeakersActive_t >
-    doEnabledCb( std::bind( &ProductSpeakerManager::SetSpeakersEnabledCallback,
+    doPairingCb( std::bind( &SpeakerPairingManager::SetSpeakersEnabledCallback,
                             this,
                             frontDoorCB, std::placeholders::_1 ) );
 
@@ -452,7 +463,7 @@ void ProductSpeakerManager::SetSpeakersEnabled( const ProductPb::AccessorySpeake
         subs = m_accessorySpeakerState.enabled( ).subs( );
     }
 
-    m_ProductLpmHardwareInterface->SendAccessoryActive( rears, subs, doEnabledCb );
+    m_ProductLpmHardwareInterface->SendAccessoryActive( rears, subs, doPairingCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -463,22 +474,19 @@ void ProductSpeakerManager::SetSpeakersEnabled( const ProductPb::AccessorySpeake
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSpeakerManager::RecieveAccessoryListCallback
+/// @brief SpeakerPairingManager::RecieveAccessoryListCallback
 ///
 /// @param LpmServiceMessages::IpcAccessoryList_t accList
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSpeakerManager::RecieveAccessoryListCallback( LpmServiceMessages::IpcAccessoryList_t accList )
+void SpeakerPairingManager::RecieveAccessoryListCallback( LpmServiceMessages::IpcAccessoryList_t accList )
 {
-    BOSE_INFO( s_logger, __func__ );
+    BOSE_INFO( s_logger, __FUNCTION__ );
 
     m_accessorySpeakerState.clear_rears( );
     m_accessorySpeakerState.clear_subs( );
 
-    uint8_t numOfLeftRears  = 0;
-    uint8_t numOfRightRears = 0;
-    bool rearsEnabled = false;
-    bool subsEnabled  = false;
+    uint8_t numOfSpeakers = 0;
 
     for( uint8_t i = 0; i < accList.accessory_size( ); i++ )
     {
@@ -489,44 +497,15 @@ void ProductSpeakerManager::RecieveAccessoryListCallback( LpmServiceMessages::Ip
             {
                 const auto& spkrInfo = m_accessorySpeakerState.add_rears( );
                 AccessoryDescriptionToAccessorySpeakerInfo( accDesc, spkrInfo );
-                if( accDesc.position() == LpmServiceMessages::ACCESSORY_POSITION_LEFT_REAR )
-                {
-                    numOfLeftRears++;
-                }
-                else if( accDesc.position() == LpmServiceMessages::ACCESSORY_POSITION_RIGHT_REAR )
-                {
-                    numOfRightRears++;
-                }
-                rearsEnabled |= ( accDesc.active() != 0 );
+                numOfSpeakers++;
             }
             else if( accDesc.has_type( ) && AccessoryTypeIsSub( accDesc.type( ) ) )
             {
                 const auto& spkrInfo = m_accessorySpeakerState.add_subs( );
                 AccessoryDescriptionToAccessorySpeakerInfo( accDesc, spkrInfo );
-                subsEnabled |= ( accDesc.active() != 0 );
+                numOfSpeakers++;
             }
         }
-    }
-
-    // If we have at least one we want to mark them as controllable
-    m_accessorySpeakerState.mutable_controllable()->set_rears( m_accessorySpeakerState.rears_size() > 0 );
-    m_accessorySpeakerState.mutable_controllable()->set_subs( m_accessorySpeakerState.subs_size() > 0 );
-
-    // Set controllable fields
-    m_accessorySpeakerState.mutable_enabled()->set_rears( rearsEnabled );
-    m_accessorySpeakerState.mutable_enabled()->set_subs( subsEnabled );
-
-    // Subwoofers are always in VALID config as LPM controls that to mitigate improper tuning
-    for( int i = 0; i < m_accessorySpeakerState.subs_size(); i++ )
-    {
-        m_accessorySpeakerState.mutable_subs( i )->set_configurationstatus( "VALID" );
-    }
-
-    // Rears we send off to get valid config
-    const char* rearConfig = AccessoryRearConiguration( numOfLeftRears, numOfRightRears );
-    for( int i = 0; i < m_accessorySpeakerState.rears_size(); i++ )
-    {
-        m_accessorySpeakerState.mutable_rears( i )->set_configurationstatus( rearConfig );
     }
 
     m_FrontDoorClientIF->SendNotification( accessoryFrontDoorURL, m_accessorySpeakerState );
@@ -534,12 +513,12 @@ void ProductSpeakerManager::RecieveAccessoryListCallback( LpmServiceMessages::Ip
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSpeakerManager::PairingCallback
+/// @brief SpeakerPairingManager::PairingCallback
 ///
 /// @param LpmServiceMessages::IpcSpeakerPairingMode_t pair
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSpeakerManager::PairingCallback( LpmServiceMessages::IpcSpeakerPairingMode_t pair )
+void SpeakerPairingManager::PairingCallback( LpmServiceMessages::IpcSpeakerPairingMode_t pair )
 {
     if( pair.has_pairingenabled( ) )
     {
@@ -559,56 +538,16 @@ void ProductSpeakerManager::PairingCallback( LpmServiceMessages::IpcSpeakerPairi
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  ProductSpeakerManager::AccessoryRearConiguration
-///
-/// @param  uint8_t numLeft  - number of left channel rears
-///         uint8_t numRight - number of right channel rears
-///
-/// @return This method returns a char* based on whether the configuration is valid
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-const char* ProductSpeakerManager::AccessoryRearConiguration( uint8_t numLeft, uint8_t numRight )
-{
-    if( numLeft == 0 )
-    {
-        if( numRight == 1 )
-        {
-            return "MISSING_LEFT";
-        }
-        else if( numRight > 1 )
-        {
-            return "TWO_RIGHT";
-        }
-    }
-
-    if( numRight == 0 )
-    {
-        if( numLeft == 1 )
-        {
-            return "MISSING_RIGHT";
-        }
-        else if( numLeft > 1 )
-        {
-            return "TWO_LEFT";
-        }
-    }
-
-    return "VALID";
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief  ProductSpeakerManager::AccessoryStatusIsConnected
+/// @brief  SpeakerPairingManager::AccessoryStatusIsConnected
 ///
 /// @param  unsigned intstatus
 ///
 /// @return This method returns true if the accessory is connected; otherwise, it returns false.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductSpeakerManager::AccessoryStatusIsConnected( unsigned int status )
+bool SpeakerPairingManager::AccessoryStatusIsConnected( unsigned int status )
 {
     switch( static_cast< LpmServiceMessages::AccessoryConnectionStatus_t >( status ) )
     {
@@ -624,7 +563,7 @@ bool ProductSpeakerManager::AccessoryStatusIsConnected( unsigned int status )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  ProductSpeakerManager::AccessoryTypeIsRear
+/// @brief  SpeakerPairingManager::AccessoryTypeIsRear
 ///
 /// @param  unsigned int type
 ///
@@ -632,7 +571,7 @@ bool ProductSpeakerManager::AccessoryStatusIsConnected( unsigned int status )
 ///         false.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductSpeakerManager::AccessoryTypeIsRear( unsigned int type )
+bool SpeakerPairingManager::AccessoryTypeIsRear( unsigned int type )
 {
     switch( static_cast< LpmServiceMessages::AccessoryType_t >( type ) )
     {
@@ -645,7 +584,7 @@ bool ProductSpeakerManager::AccessoryTypeIsRear( unsigned int type )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  ProductSpeakerManager::AccessoryTypeIsSub
+/// @brief  SpeakerPairingManager::AccessoryTypeIsSub
 ///
 /// @param  unsigned int type
 ///
@@ -653,7 +592,7 @@ bool ProductSpeakerManager::AccessoryTypeIsRear( unsigned int type )
 ///         false.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductSpeakerManager::AccessoryTypeIsSub( unsigned int type )
+bool SpeakerPairingManager::AccessoryTypeIsSub( unsigned int type )
 {
     switch( static_cast< LpmServiceMessages::AccessoryType_t >( type ) )
     {
@@ -667,14 +606,14 @@ bool ProductSpeakerManager::AccessoryTypeIsSub( unsigned int type )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  ProductSpeakerManager::AccessoryTypeToString
+/// @brief  SpeakerPairingManager::AccessoryTypeToString
 ///
 /// @param  unsigned int type
 ///
 /// @return This method returns the accessory type as a string.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-const char* ProductSpeakerManager::AccessoryTypeToString( unsigned int type )
+const char* SpeakerPairingManager::AccessoryTypeToString( unsigned int type )
 {
     switch( static_cast< LpmServiceMessages::AccessoryType_t >( type ) )
     {
@@ -692,14 +631,14 @@ const char* ProductSpeakerManager::AccessoryTypeToString( unsigned int type )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSpeakerManager::AccessoryDescriptionToAccessorySpeakerInfo
+/// @brief SpeakerPairingManager::AccessoryDescriptionToAccessorySpeakerInfo
 ///
 /// @param const LpmServiceMessages::AccessoryDescription_t &accDesc
 ///
 /// @param ProductPb::AccessorySpeakerState::AccessorySpeakerInfo* spkrInfo
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSpeakerManager::AccessoryDescriptionToAccessorySpeakerInfo( const LpmServiceMessages::AccessoryDescription_t &accDesc,
+void SpeakerPairingManager::AccessoryDescriptionToAccessorySpeakerInfo( const LpmServiceMessages::AccessoryDescription_t &accDesc,
                                                                         ProductPb::AccessorySpeakerState::AccessorySpeakerInfo* spkrInfo )
 {
     if( accDesc.has_type( ) )
@@ -717,6 +656,12 @@ void ProductSpeakerManager::AccessoryDescriptionToAccessorySpeakerInfo( const Lp
     {
         spkrInfo->set_wireless( false );
     }
+
+    ///
+    /// @todo Add logic around this call when the application API is better defined. For now it is
+    ///       always valid.
+    ///
+    spkrInfo->set_configurationstatus( "VALID" );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

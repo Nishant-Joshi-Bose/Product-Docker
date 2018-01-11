@@ -35,11 +35,11 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
+#include "IntentHandler.h"
 #include "ProductEdidInterface.h"
 #include "ProductController.h"
 #include "ProductSTSController.h"
 #include "FrontDoorClientIF.h"
-#include "ProductVolumeManager.h"
 #include "ProductMessage.pb.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "MacAddressInfo.h"
@@ -64,7 +64,6 @@ class ProductEdidInterface;
 class ProductCommandLine;
 class ProductKeyInputInterface;
 class ProductAdaptIQManager;
-class ProductSpeakerManager;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -124,14 +123,6 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following method is used to get a shared pointer to the volume manager instance
-    ///        from the product controller.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    std::shared_ptr< ProductVolumeManager >& GetVolumeManager( );
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
     /// @brief The following method is used to get a shared pointer to the AdaptIQ instance
     ///        from the product controller.
     ///
@@ -140,19 +131,19 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following method is used to get a shared pointer to the speaker manager instance
-    ///        from the product controller.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    std::shared_ptr< ProductSpeakerManager >& GetSpeakerManager( );
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following method is used to get get a shared pointer reference to Edid
+    /// @brief The following method is used to get a shared pointer reference to the Edid
     ///        instance from the product controller.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< ProductEdidInterface >& GetEdidInterface( );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method is used to get a reference to the intent manager instance for
+    ///        processing actions from the product controller.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    IntentHandler& GetIntentHandler( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -180,6 +171,14 @@ public:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     PlaybackSource_t GetCurrentSource( );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following declaration is used to get the the last Sound Touch playback. It is
+    ///        currently is a kludge, until the common code supports persistent storage of this data.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    SoundTouchInterface::playbackRequestJson& GetLastSoundTouchPlayback( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -234,9 +233,7 @@ private:
     std::shared_ptr< ProductCommandLine                > m_ProductCommandLine;
     std::shared_ptr< ProductKeyInputInterface          > m_ProductKeyInputInterface;
     std::shared_ptr< ProductEdidInterface              > m_ProductEdidInterface;
-    std::shared_ptr< ProductVolumeManager              > m_ProductVolumeManager;
     std::shared_ptr< ProductAdaptIQManager             > m_ProductAdaptIQManager;
-    std::shared_ptr< ProductSpeakerManager             > m_ProductSpeakerManager;
     std::shared_ptr< CustomProductAudioService         > m_ProductAudioService;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -288,11 +285,18 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     PlaybackSource_t m_currentSource;
+    SoundTouchInterface::playbackRequestJson m_lastSoundTouchPlayback;
 
-    void PostPlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson& resp );
-    void PostPlaybackRequestError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
-    void RegisterNowPlayingEndPoint( );
-    void HandleNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingStatus );
+    void  SetTestSoundTouchPlayback( );
+    void  RegisterNowPlayingEndPoint( );
+    void  HandleNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingStatus );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following declaration is used for intent management based on key actions.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    IntentHandler m_IntentHandler;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

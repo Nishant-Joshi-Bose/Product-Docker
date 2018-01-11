@@ -75,11 +75,10 @@ public:
     void HandleStateEnter( ) override;
     void HandleStateExit( )  override;
 
-    bool HandleInactivityTimer( InactivityTimerType timerType ) override;
-    bool HandleKeyAction( int action ) override;
-
-    bool HandleLPMPowerStatusFullPower( ) override;
-    bool HandleAdaptIQControl( const ProductAdaptIQControl& ) override;
+    bool HandleInactivityTimer( InactivityTimerType timerType )       override;
+    bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action ) override;
+    bool HandleLPMPowerStatusFullPower( )                             override;
+    bool HandleAdaptIQControl( const ProductAdaptIQControl& )         override;
 
 private:
 
