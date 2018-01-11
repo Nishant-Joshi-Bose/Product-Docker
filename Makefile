@@ -105,7 +105,7 @@ lpmupdater-ipk:
 
 .PHONY: package
 package: product-ipk hsp-ipk lpmupdater-ipk 
-	./scripts/create-product-tarball
+	./scripts/create-product-tar
 
 .PHONY: all-packages
 all-packages: package packages-gz-with-hsp update-zip-with-hsp packages-gz update-zip
