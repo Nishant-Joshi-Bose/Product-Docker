@@ -446,18 +446,8 @@ def create_package(name, workspace, is_without_lpm, development):
     return retVal, retStr
     
     
-if __name__ == '__main__':
-    logging.basicConfig(filename="create-product-tar.log", format='%(asctime)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
-    #define a new Handler to log to console as well
-    console = logging.StreamHandler()
-    # optional, set the logging level
-    console.setLevel(logging.INFO)
-    # set a format which is the same for console use
-    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    # tell the handler to use this format
-    console.setFormatter(formatter)
-    # add the handler to the root logger
-    logging.getLogger('').addHandler(console)
+if __name__ == '__main__':    
+    logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
             
     parser = argparse.ArgumentParser(description='Create Product tarball for QFIL / full system flash via product_flash.')
     parser.add_argument('-n', '--name', 
