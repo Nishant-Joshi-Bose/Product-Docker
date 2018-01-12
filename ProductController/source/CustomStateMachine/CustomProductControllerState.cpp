@@ -68,26 +68,14 @@ CustomProductControllerState::CustomProductControllerState( ProductControllerHsm
 
 }
 
-bool CustomProductControllerState::HandleKeyAction( int action )
-{
-    return false;
-}
-
-bool CustomProductControllerState::HandlePairingState( ProductAccessoryPairing pairingStatus )
-{
-    return false;
-}
-
-bool CustomProductControllerState::HandleModulesReady( )
-{
-    return false;
-}
-
-bool CustomProductControllerState::HandleNetworkConfigurationStatus( )
-{
-    return false;
-}
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductControllerState::GetCustomProductController
+///
+/// @return This method returns the Professor Custom Product Controller Reference of type
+///         ProfessorProductController.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ProfessorProductController& CustomProductControllerState::GetCustomProductController( )
 {
     return *static_cast< ProfessorProductController* >( s_productController );

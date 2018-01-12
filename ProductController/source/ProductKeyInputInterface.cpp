@@ -25,18 +25,11 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
-#include "KeyActions.pb.h"
+#include "Intents.h"
 #include "ProductMessage.pb.h"
 #include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProductKeyInputInterface.h"
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-///            Included Namespaces
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-using namespace KeyActionPb;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -80,14 +73,34 @@ ProductKeyInputInterface::ProductKeyInputInterface( ProfessorProductController& 
     m_connected( false ),
     m_running( false )
 {
+
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductKeyInputInterface::Run
+///
+/// @brief  This method runs the ProductKeyInputInterface instance. Note that key events will not be
+///         sent to the product controller, which creates an instance of this class, until it is
+///         set to run.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductKeyInputInterface::Run( )
+{
+    BOSE_DEBUG( s_logger, "%s: The user interface is running.", __FUNCTION__ );
+
     ///
-    /// Register for LPM connected events after which key registration can be made.
+    /// Register for LPM connected events after which key registration can be made. Note that even
+    /// if the LPM is already connected, its connection status should be sent once a connection
+    /// registration is first established.
     ///
     Callback< bool > callback( std::bind( &ProductKeyInputInterface::ConnectToLpm,
                                           this,
                                           std::placeholders::_1 ) );
 
     m_ProductLpmHardwareInterface->RegisterForLpmConnection( callback );
+
+    m_running = true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,22 +125,6 @@ void ProductKeyInputInterface::ConnectToLpm( bool connected )
                                     this ),
                          m_ProductTask );
     }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductKeyInputInterface::Run
-///
-/// @brief  This method runs the ProductKeyInputInterface instance. Note that key events will not be
-///         sent to the product controller, which creates an instance of this class, until it is
-///         set to run.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductKeyInputInterface::Run( )
-{
-    BOSE_DEBUG( s_logger, "%s: The user interface is running.", __FUNCTION__ );
-
-    m_running = true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -192,13 +189,19 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
     if( keyEvent.has_keyorigin( ) )
     {
         keyOriginString.assign( KeyOrigin_t_Name( keyEvent.keyorigin( ) ) );
-#if 1 // @TODO PGC-523 kludge
+
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        /// @todo  On Professor, the console button can only be the capsense "Action" button, so
+        ///        fake it until the JIRA Story PGC-523 is resolved.
+        ////////////////////////////////////////////////////////////////////////////////////////////
+#if 1
+
         if( keyEvent.keyorigin( ) == LpmServiceMessages::KEY_ORIGIN_CONSOLE_BUTTON )
         {
-            // On Professor this can only be the capsense "Action" button, so fake it until PGC-523 is fixed
             keyEvent.set_keyorigin( LpmServiceMessages::KEY_ORIGIN_CAPSENSE );
-            keyEvent.set_keyid( 6 ); // borrowing the Eddie key number
+            keyEvent.set_keyid( 6 ); /// borrowing the Eddie key number
         }
+
 #endif
     }
     else
@@ -265,26 +268,9 @@ void ProductKeyInputInterface::KeyInformationCallBack( const int keyAction )
     BOSE_DEBUG( s_logger, "A key press or presses have been translated to the action %d.", keyAction );
 
     ProductMessage productMessage;
-    if( keyAction > KeyActionPb::KEY_ACTION_LAST_COMMON )
-    {
-        // @TODO for now, until Professor implements its non-common intents
-        productMessage.mutable_keydata( )->set_action( static_cast< KEY_ACTION >( keyAction ) );
-    }
-    else
-    {
-        // Need to send a no-op key to ProductController, to reset the inactivity timer
-        ProductMessage productNoopKeyMessage;
-        productNoopKeyMessage.mutable_keydata( )->set_action( static_cast< KEY_ACTION >( 0 ) );
-        IL::BreakThread( std::bind( m_ProductNotify,
-                                    productNoopKeyMessage ),
-                         m_ProductTask );
+    productMessage.set_action( static_cast< uint32_t >( keyAction ) );
 
-        productMessage.set_intent( keyAction );
-    }
-
-    IL::BreakThread( std::bind( m_ProductNotify,
-                                productMessage ),
-                     m_ProductTask );
+    IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

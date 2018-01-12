@@ -116,37 +116,21 @@ bool CustomProductControllerStatePlaying::HandleInactivityTimer( InactivityTimer
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStatePlaying::HandleKeyAction
+/// @brief  CustomProductControllerStatePlaying::HandleIntentUserPower
 ///
-/// @param  int action
+/// @param  KeyHandlerUtil::ActionType_t action
 ///
-/// @return This method returns a true Boolean value indicating that it has handled the key action
-///         or false if the key has not been handled.
+/// @return
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlaying::HandleKeyAction( int action )
+bool CustomProductControllerStatePlaying::HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )
 {
-    bool handled = false;
+    BOSE_INFO( s_logger, "%s in %s is handling key action %d.", GetName( ).c_str( ), __FUNCTION__, action );
 
-    BOSE_INFO( s_logger, "%s is handling key action %d.", GetName( ).c_str( ), action );
+    GetProductController( ).SendStopPlaybackMessage( );
+    GoToAppropriateNonPlayingState( );
 
-    switch( action )
-    {
-    case KeyActionPb::KEY_ACTION_POWER:
-        ///
-        /// Stop the playback based on the currently selected source. Transition to the appropriate
-        /// non-playing state.
-        ///
-        GetProductController( ).SendStopPlaybackMessage( );
-        GoToAppropriateNonPlayingState( );
-        handled = true;
-        break;
-
-    default:
-        break;
-    }
-
-    return handled;
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

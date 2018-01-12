@@ -25,6 +25,8 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
+#include "Intents.h"
+#include "IntentHandler.h"
 #include "CustomProductControllerStateLowPower.h"
 #include "ProductControllerHsm.h"
 #include "ProductControllerStateIdle.h"
@@ -91,32 +93,20 @@ void CustomProductControllerStateLowPower::HandleStateStart( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStateLowPower::HandleKeyAction
+/// @brief  CustomProductControllerStateLowPower::HandleIntentUserPower
 ///
 /// @param  int action
 ///
-/// @return This method returns a true Boolean value indicating that it has handled the key action
-///         or false if the key has not been handled.
+/// @return This method returns a true Boolean value indicating that it has handled the key action.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateLowPower::HandleKeyAction( int action )
+bool CustomProductControllerStateLowPower::HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )
 {
-    bool handled = false;
-
     BOSE_INFO( s_logger, "CustomProductControllerStateLowPower is handling key action %d.", action );
 
-    switch( action )
-    {
-    case KeyActionPb::KEY_ACTION_POWER:
-        GoToAppropriateNonplayingState( );
-        handled = true;
-        break;
+    GoToAppropriateNonplayingState( );
 
-    default:
-        break;
-    }
-
-    return handled;
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

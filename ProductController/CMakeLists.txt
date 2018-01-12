@@ -13,9 +13,10 @@ INCLUDE_DIRECTORIES(
   .
   include
   source
+  source/CustomProductAudioService
+  source/CustomProductLpmHardwareInterface
   source/CustomStateMachine
   source/IntentHandler
-  source/CustomProductAudioService
   ${A4VVIDEOMANAGER_DIR}/source/Client
 )
 
@@ -26,7 +27,6 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/AdaptIQ.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
-  ${PROTO_CC_DEST}/KeyActions.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc
   ${PROTO_CC_DEST}/ProductSTS.pb.cc
@@ -38,12 +38,10 @@ ADD_EXECUTABLE(Professor
   source/ProductNetworkManager.cpp
   source/ProductStart.cpp
   source/ProductSystemManager.cpp
-  source/ProductSpeakerManager.cpp
-  source/ProductVolumeManager.cpp
   source/ProfessorProductController.cpp
   source/CustomProductAudioService/CustomProductAudioService.cpp
   source/CustomProductAudioService/CustomAudioSettingsManager.cpp
-  source/CustomProductLpmHardwareInterface.cpp
+  source/CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
 # change this to CustomProductControllerStateAdaptIQ.cpp when real AiQ is
@@ -64,6 +62,9 @@ ADD_EXECUTABLE(Professor
   source/CustomStateMachine/CustomProductControllerStatePlayingInactive.cpp
   source/CustomStateMachine/CustomProductControllerStateUpdatingSoftware.cpp
   source/IntentHandler/IntentHandler.cpp
+  source/IntentHandler/PlaybackRequestManager.cpp
+  source/IntentHandler/SpeakerPairingManager.cpp
+  source/IntentHandler/VolumeMuteControlManager.cpp
 )
 
 TARGET_LINK_LIBRARIES(Professor
