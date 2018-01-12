@@ -63,36 +63,8 @@ elif not re.match(r'^[0-9a-fA-F]{32}$', guid.replace("-", "")):
     warn("Invalid guid: '{}'".format(guid))
     guid = None
 if guid is None:
-    guid = open("/proc/sys/kernel/random/uuid").read().rstrip("\n")
+    guid = open("/proc/sys/kernel/random/uuid").read().rstrip("\n").replace("-", "")
     fixes.append("set guid " + guid)
-
-language = get("language")
-if language is None:
-    fixes.append("set language en")
-
-model = get("model")
-if model is None:
-    fixes.append("set model 'SoundTouch 20'")
-
-description = get("description")
-if description is None:
-    fixes.append("set description SoundTouch")
-
-serialnumber = get("serialnumber")
-if serialnumber is None:
-    fixes.append("set serialnumber 1234567890")
-
-manufacturer = get("manufacturer")
-if manufacturer is None:
-   fixes.append("set manufacturer 'Bose Corp'")
-
-product = get("product")
-if product is None:
-    fixes.append("set product SoundTouch-ECO2")
-
-color = get("color")
-if color is None:
-    fixes.append("set color SILVER  # (BLACK|WHITE|SILVER)")
 
 if not fixes:
     # Validation successful.
