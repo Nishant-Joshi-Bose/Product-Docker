@@ -175,25 +175,13 @@ private:
     void PersistSystemLanguageCode();
     void PersistSystemConfigurationStatus();
 
-    void HandleAllowSourceSelectCliCmd( const std::list<std::string> & argList, std::string& response );
-
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  HandleSetDisplayAutoMode
 /// @brief Function to TDB
 /// @return void
 ////////////////////////////////////////////////////////////////////////////////
     void HandleSetDisplayAutoMode( const std::list<std::string> & argList, std::string& response );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name HandleGetProductControllerStateCliCmd
-/// @brief Function to get the state of EddieProductController
-///        Usage: getProductState
-///////////////////////////////////////////////////////////////////////////////
-    void HandleGetProductControllerStateCliCmd( const std::list<std::string> & argList,
-                                                std::string& response );
-
     void HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus );
-
     void HandleWiFiProfileResponse( const NetManager::Protobuf::WiFiProfiles& profiles );
 
 public:

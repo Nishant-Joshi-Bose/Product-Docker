@@ -11,8 +11,6 @@
 enum class CLICmdKeys
 {
     /// Always start CLI keys from COMMON_CLICMD_KEYS_LAST + 1
-    ALLOW_SOURCE_SELECT = CommonCLICmdKeys::COMMON_CLICMD_KEYS_LAST + 1,
-    GET_PRODUCT_CONTROLLER_STATE,
-    RAW_KEY,
+    RAW_KEY = CommonCLICmdKeys::COMMON_CLICMD_KEYS_LAST + 1,
     SET_DISPLAY_AUTO_MODE
 };

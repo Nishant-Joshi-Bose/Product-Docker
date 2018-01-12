@@ -617,17 +617,9 @@ void EddieProductController::RegisterCliClientCmds()
         HandleCliCmd( cmdKey, argList, respCb, transact_id );
     };
 
-    m_CliClientMT.RegisterCLIServerCommands( "allowSourceSelect",
-                                             "command to send allow/disallow source selection by Caps", "allowSourceSelect yes|no",
-                                             GetTask(), cb , static_cast<int>( CLICmdKeys::ALLOW_SOURCE_SELECT ) );
-
     m_CliClientMT.RegisterCLIServerCommands( "setDisplayAutoMode",
                                              "command to set the display controller automatic mode", "setDisplayAutoMode auto|manual",
                                              GetTask(), cb , static_cast<int>( CLICmdKeys::SET_DISPLAY_AUTO_MODE ) );
-
-    m_CliClientMT.RegisterCLIServerCommands( "getProductState",
-                                             "command to get Product Controller state", "getProductState",
-                                             GetTask(), cb , static_cast<int>( CLICmdKeys::GET_PRODUCT_CONTROLLER_STATE ) );
 
     m_CliClientMT.RegisterCLIServerCommands( "raw_key",
                                              "command to simulate raw key events."
@@ -651,16 +643,6 @@ void EddieProductController::HandleCliCmd( uint16_t cmdKey,
         HandleSetDisplayAutoMode( argList, response );
         break;
     }
-    case CLICmdKeys::ALLOW_SOURCE_SELECT:
-    {
-        HandleAllowSourceSelectCliCmd( argList, response );
-    }
-    break;
-    case CLICmdKeys::GET_PRODUCT_CONTROLLER_STATE:
-    {
-        HandleGetProductControllerStateCliCmd( argList, response );
-    }
-    break;
     case CLICmdKeys::RAW_KEY:
     {
         HandleRawKeyCliCmd( argList, response );
@@ -697,30 +679,6 @@ void EddieProductController::HandleSetDisplayAutoMode( const std::list<std::stri
     }
 }// HandleSetDisplayAutoMode
 
-void EddieProductController::HandleAllowSourceSelectCliCmd( const std::list<std::string>& argList, std::string& response )
-{
-    if( argList.size() != 1 )
-    {
-        response = "command requires one argument\n" ;
-        response += "Usage: allowSourceSelect yes|no";
-        return;
-    }
-    std::string arg = argList.front();
-    if( arg == "yes" )
-    {
-        SendAllowSourceSelectMessage( true );
-    }
-    else if( arg == "no" )
-    {
-        SendAllowSourceSelectMessage( false );
-    }
-    else
-    {
-        response = "Unknown argument.\n";
-        response += "Usage: allowSourceSelect yes|no";
-    }
-}
-
 void EddieProductController::HandleRawKeyCliCmd( const std::list<std::string>& argList, std::string& response )
 {
     if( argList.size() == 3 )
@@ -736,22 +694,8 @@ void EddieProductController::HandleRawKeyCliCmd( const std::list<std::string>& a
     }
     else
     {
-        response = "Invalid command. use help to look at the raw_key usage";
+        response = "Invalid arguments. use help to look at the raw_key usage";
     }
-}
-
-void EddieProductController::HandleGetProductControllerStateCliCmd( const std::list<std::string>& argList,
-                                                                    std::string& response )
-{
-    if( argList.size() > 0 )
-    {
-        response = "Incorrect usage \nUsage: getProductState";
-        return;
-    }
-    response = "-------------------------------------\n";
-    response += "Product Controller State Information\n";
-    response += "-------------------------------------\n";
-    response += "Current State: " + GetHsm().GetCurrentState()->GetName();
 }
 
 void EddieProductController::HandleProductMessage( const ProductMessage& productMessage )
