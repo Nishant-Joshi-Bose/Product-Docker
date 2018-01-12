@@ -40,7 +40,14 @@
                                      leftDspImage=""
                                      rightDspImage="" />
         </dspImages>
-        <outputDeviceParameters/>
+        <outputDeviceParameters>
+            <audioParams objName="APPAudio">
+                <app />
+            </audioParams>
+            <muteParams objName="APPMute">
+                <app />
+            </muteParams>
+        </outputDeviceParameters>
         <outputDriverParameterSet defaultOutputDriverIndex="0">
             <outputDriverParameters outputDriverName=""
                                     outputDriverPath=""

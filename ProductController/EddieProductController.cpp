@@ -826,9 +826,35 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
                         IpcLPMPowerState_t_Name( productMessage.lpmstatus( ).powerstate( ) ).c_str( ) );
         }
     }
-    if( productMessage.has_lpmlowpowerstatus( ) )
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// AudioPath Select or Deselect messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( productMessage.has_audiopathselect( ) )
+    {
+        if( productMessage.audiopathselect() == true )
+        {
+            BOSE_DEBUG( s_logger, "AudioPath Select event received" );
+            GetHsm( ).Handle< > ( &CustomProductControllerState::HandleAudioPathSelect );
+        }
+        else
+        {
+            BOSE_DEBUG( s_logger, "AudioPath Deselect event received" );
+            GetHsm( ).Handle< > ( &CustomProductControllerState::HandleAudioPathDeselect );
+        }
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// LPM low power status messages are handled at this point.
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    else if( productMessage.has_lpmlowpowerstatus( ) )
     {
         GetHsm( ).Handle<const ProductLpmLowPowerStatus& >( &CustomProductControllerState::HandleLpmLowPowerStatus, productMessage.lpmlowpowerstatus( ) );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// Unknown message types are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else
+    {
+        BOSE_ERROR( s_logger, "An unknown message type was received." );
     }
 }
 
