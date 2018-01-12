@@ -161,6 +161,8 @@ void ProductAdaptIQManager::SetStatus( const ProductPb::AdaptIQStatus& status, b
     }
 }
 
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProductAdaptIQManager::HandleGet
