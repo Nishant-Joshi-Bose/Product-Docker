@@ -6,6 +6,16 @@ from CastleTestUtils.LoggerUtils.log_setup import get_logger
 from CastleTestUtils.DemoUtils.demoUtils import DemoUtils
 logger = get_logger(__name__)
 
+@pytest.fixture(scope='class', autouse=True)
+def resetDemo(request, frontDoor, demoUtils):
+    """
+    reset demoMode False if True
+    """
+    def teardown():
+        logger.info("set demoMode False towards the end of all the tests")
+        setDemo(request, frontDoor, demoUtils)
+    request.addfinalizer(teardown)
+
 @pytest.fixture(scope='class')
 def demoUtils(frontDoor, adb):
     """
@@ -20,6 +30,12 @@ def setDemoOff(request, frontDoor, demoUtils):
     Set demoMode off
     """
     logger.info("setDemoOff")
+    setDemo(request, frontDoor, demoUtils)
+
+def setDemo(request, frontDoor, demoUtils):
+    """
+    Set demoMode False if True
+    """
     demoResponse = frontDoor.getDemoMode()
     logger.info("demoResponse " + str(demoResponse))
     if demoResponse == True:
