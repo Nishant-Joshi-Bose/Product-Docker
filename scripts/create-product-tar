@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+    #!/usr/bin/python2.7
 #
 # Manage Creation of product Tarball for full flash / QFIL
 #
@@ -391,12 +391,11 @@ def create_output(is_without_lpm, development):
     if retVal != 0:
         return retVal, retStr
 
-    if os_arch() != '32':
-        ''' create bose-persist partition
-        '''
-        retVal, retStr = create_bose_persist_partition(is_without_lpm, development)
-        if retVal != 0:
-            return retVal, retStr
+    ''' create bose-persist partition
+    '''
+    retVal, retStr = create_bose_persist_partition(is_without_lpm, development)
+    if retVal != 0:
+        return retVal, retStr
     
     ''' Create Package Tar ball and copy to output
     cd "$stage" || error_exit " cd $stage "
