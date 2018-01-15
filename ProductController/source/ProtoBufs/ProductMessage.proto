@@ -217,9 +217,6 @@ message ProductMessage
         optional ProductAdaptIQControl      aiqcontrol          = 17;
         optional ProductLpmLowPowerStatus   lpmlowpowerstatus   = 18;
         optional bool                       audiopathselect     = 19;
-        optional ProductAdaptIQStatus       aiqstatus           = 15;
-        optional ProductAdaptIQControl      aiqcontrol          = 16;
-      	optional ProductLpmLowPowerStatus   lpmlowpowerstatus   = 17;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
