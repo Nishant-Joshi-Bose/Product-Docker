@@ -1199,6 +1199,22 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         ( &CustomProductControllerState::HandleAdaptIQControl, message.aiqcontrol( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// AudioPath Select or Deselect messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.has_audiopathselect( ) )
+    {
+        if( message.audiopathselect() == true )
+        {
+            BOSE_DEBUG( s_logger, "AudioPath Select event received" );
+            GetHsm( ).Handle< > ( &CustomProductControllerState::HandleAudioPathSelect );
+        }
+        else
+        {
+            BOSE_DEBUG( s_logger, "AudioPath Deselect event received" );
+            GetHsm( ).Handle< > ( &CustomProductControllerState::HandleAudioPathDeselect );
+        }
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Unknown message types are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else
