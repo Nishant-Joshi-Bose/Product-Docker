@@ -25,10 +25,12 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
+#include "Intents.h"
+#include "IntentHandler.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
-#include "ProductSpeakerManager.h"
+#include "SpeakerPairingManager.h"
 #include "ProductMessage.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -83,9 +85,9 @@ void CustomProductControllerStateAccessoryPairing::HandleStateStart( )
 {
     BOSE_INFO( s_logger, "CustomProductControllerStateAccessoryPairing is being started." );
 
-    auto productSpeakerManager = GetCustomProductController( ).GetSpeakerManager( );
+    unsigned int startPairingAction = static_cast< unsigned int >( Action::ACTION_PAIR_SPEAKERS );
 
-    productSpeakerManager->DoPairing( );
+    GetCustomProductController( ).GetIntentHandler( ).Handle( startPairingAction );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -142,11 +144,12 @@ bool CustomProductControllerStateAccessoryPairing::HandlePairingState( ProductAc
 void CustomProductControllerStateAccessoryPairing::HandleStateExit( )
 {
     BOSE_INFO( s_logger, "CustomProductControllerStateAccessoryPairing is being exited." );
+
     m_timer->Stop( );
 
-    std::shared_ptr< ProductSpeakerManager >
-    productSpeakerManager = GetCustomProductController( ).GetSpeakerManager( );
-    productSpeakerManager->StopPairing( );
+    unsigned int stopPairingAction = static_cast< unsigned int >( Action::ACTION_STOP_PAIR_SPEAKERS );
+
+    GetCustomProductController( ).GetIntentHandler( ).Handle( stopPairingAction );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

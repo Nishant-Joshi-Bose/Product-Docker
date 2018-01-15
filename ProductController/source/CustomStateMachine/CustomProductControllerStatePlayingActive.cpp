@@ -99,23 +99,96 @@ bool CustomProductControllerStatePlayingActive::HandleNowPlayingStatus
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStatePlayingActive::HandleKeyAction
+/// @brief  CustomProductControllerStatePlayingActive::HandleIntent
 ///
-/// @param  int action
+/// @param  KeyHandlerUtil::ActionType_t action
 ///
-/// @return This method returns a false Boolean value in case processing of the key needs to be
-///         handled by any of the superstates.
+/// @return This method returns a Boolean false value in case the key action needs to be handled in
+///         one of its superstates.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayingActive::HandleKeyAction( int action )
+bool CustomProductControllerStatePlayingActive::HandleIntent( KeyHandlerUtil::ActionType_t action )
+{
+    ProcessUserActivity( );
+    return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStatePlayingActive::HandleIntentUserPower
+///
+/// @param  KeyHandlerUtil::ActionType_t action
+///
+/// @return This method returns a Boolean false value in case the key action needs to be handled in
+///         one of its superstates.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayingActive::HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )
+{
+    ProcessUserActivity( );
+    return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStatePlayingActive::HandleIntentVolumeMuteControl
+///
+/// @param  KeyHandlerUtil::ActionType_t action
+///
+/// @return
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayingActive::HandleIntentVolumeMuteControl( KeyHandlerUtil::ActionType_t action )
+{
+    ProcessUserActivity( );
+    return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStatePlayingActive::HandleIntentSpeakerPairing
+///
+/// @param  KeyHandlerUtil::ActionType_t action
+///
+/// @return
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayingActive::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t action )
+{
+    ProcessUserActivity( );
+    return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStatePlayingActive::HandleIntentPlayback
+///
+/// @param KeyHandlerUtil::ActionType_t action
+///
+/// @return
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayingActive::HandleIntentPlayback( KeyHandlerUtil::ActionType_t action )
+{
+    ProcessUserActivity( );
+    return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStatePlayingActive::ProcessUserActivity
+///
+/// @note  This private method is used to reset the timer based on some user key action that was
+///         received.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStatePlayingActive::ProcessUserActivity( )
 {
     BOSE_VERBOSE( s_logger, "A key action arrived at %s.", GetName( ).c_str( ) );
     BOSE_VERBOSE( s_logger, "The timer will be stopped and restarted based on user activity." );
 
     GetProductController( ).GetInactivityTimers( ).CancelTimer( InactivityTimerType::NO_USER_INTERACTION_TIMER );
     GetProductController( ).GetInactivityTimers( ).StartTimer( InactivityTimerType::NO_USER_INTERACTION_TIMER );
-
-    return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -25,11 +25,12 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
+#include "Intents.h"
+#include "IntentHandler.h"
 #include "CustomProductControllerStateOn.h"
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
 #include "ProductControllerState.h"
-#include "KeyActions.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -57,7 +58,7 @@ CustomProductControllerStateOn::CustomProductControllerStateOn( ProductControlle
 
     : ProductControllerStateOn( hsm, pSuperState, stateId, name )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateOn is being constructed." );
+    BOSE_INFO( s_logger, "%s is being constructed.", GetName( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,63 +68,62 @@ CustomProductControllerStateOn::CustomProductControllerStateOn( ProductControlle
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateOn::HandleStateExit( )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateOn is being exited." );
-    GetProductController().SendAllowSourceSelectMessage( false );
+    BOSE_INFO( s_logger, "GetName( ).c_str( ) is in %s.", __FUNCTION__ );
+
+    GetProductController( ).SendAllowSourceSelectMessage( false );
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateOn::HandleIntentVolumeMuteControl
+///
+/// @param  action
+///
+/// @return This method returns a true Boolean value indicating that it has handled the action.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateOn::HandleIntentVolumeMuteControl( KeyHandlerUtil::ActionType_t action )
+{
+    BOSE_INFO( s_logger, "%s in %s is handling the action %u", GetName( ).c_str( ), __FUNCTION__, action );
+
+    GetCustomProductController( ).GetIntentHandler( ).Handle( action );
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStateOn::HandleKeyAction
+/// @brief  CustomProductControllerStateOn::HandleIntentSpeakerPairing
+///
+/// @param  action
+///
+/// @return This method returns a true Boolean value indicating that it has handled the action.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateOn::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t action )
+{
+    BOSE_INFO( s_logger, "%s in %s is handling the action %u", GetName( ).c_str( ), __FUNCTION__, action );
+
+    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateOn::HandleIntentPlayback
 ///
 /// @param  int action
 ///
-/// @return This method returns a true Boolean value indicating that it has handled the key action
-///         or false if the key has not been handled.
+/// @return This method returns a true Boolean value indicating that it has handled the action.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateOn::HandleKeyAction( int action )
+bool CustomProductControllerStateOn::HandleIntentPlayback( KeyHandlerUtil::ActionType_t action )
 {
-    bool handled = false;
+    BOSE_INFO( s_logger, "%s in %s is handling the action %u", GetName( ).c_str( ), __FUNCTION__, action );
 
-    BOSE_INFO( s_logger, "CustomProductControllerStateOn is handling key action %d.", action );
+    GetCustomProductController( ).GetIntentHandler( ).Handle( action );
 
-    switch( action )
-    {
-    case KeyActionPb::KEY_ACTION_VOLUME_UP_1:
-        GetCustomProductController( ).GetVolumeManager()->Increment( 1 );
-        handled = true;
-        break;
-
-    case KeyActionPb::KEY_ACTION_VOLUME_DOWN_1:
-        GetCustomProductController( ).GetVolumeManager()->Decrement( 1 );
-        handled = true;
-        break;
-
-    case KeyActionPb::KEY_ACTION_MUTE:
-        GetCustomProductController( ).GetVolumeManager()->ToggleMute();
-        handled = true;
-        break;
-
-    case KeyActionPb::KEY_ACTION_PAIR_SPEAKERS:
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
-        handled = true;
-        break;
-
-    case KeyActionPb::KEY_ACTION_SOUNDTOUCH:
-        GetCustomProductController( ).SendPlaybackRequest( SOURCE_SOUNDTOUCH );
-        handled = true;
-        break;
-
-    case KeyActionPb::KEY_ACTION_TV:
-        GetCustomProductController( ).SendPlaybackRequest( SOURCE_TV );
-        handled = true;
-        break;
-
-    default:
-        break;
-    }
-
-    return handled;
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

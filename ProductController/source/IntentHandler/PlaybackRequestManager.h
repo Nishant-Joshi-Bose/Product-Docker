@@ -1,9 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateAdaptIQ.h
+/// @file      PlaybackRequestManager.h
 ///
-/// @brief     This source code file contains functionality to process events that occur during the
-///            product accessory pairing state.
+/// @brief     This header file declares an intent manager class for implementing playbacks for
+///            Professor product specific source selection key actions, typically based on remote
+///            key actions.
+///
+/// @author    Stuart J. Lumby
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -30,14 +33,11 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include <string>
-#include "ProductControllerStateIdle.h"
-#include "LpmServiceMessages.pb.h"
-#include "APTimer.h"
-#include "ProductAdaptIQManager.h"
+#include "IntentManager.h"
+#include "SoundTouchInterface/PlayerService.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                            Start of Product Application Namespace                            ///
+///                          Start of the Product Application Namespace                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
@@ -47,70 +47,77 @@ namespace ProductApp
 ///            Forward Class Declarations
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProductControllerHsm;
 class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class CustomProductControllerStateAdaptIQ
-///
-/// @brief This class is used for executing produce specific actions when in an idle state.
+/// @brief The PlaybackRequestManager Class
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateAdaptIQ : public ProductControllerState
+class PlaybackRequestManager: public IntentManager
 {
 public:
 
-    CustomProductControllerStateAdaptIQ( ProductControllerHsm&       hsm,
-                                         CHsmState*                  pSuperState,
-                                         ProfessorProductController& productController,
-                                         Hsm::STATE                  stateId,
-                                         const std::string&          name    = "CustomProductControllerStateAdaptIQ" );
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief Constructor for the PlaybackRequestManager Class
+    ///
+    /// @param NotifyTargetTaskIF&        task
+    ///
+    /// @param const CliClientMT&         commandLineClient
+    ///
+    /// @param const FrontDoorClientIF_t& frontDoorClient
+    ///
+    /// @param ProductController&         productController
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    PlaybackRequestManager( NotifyTargetTaskIF&         task,
+                            const CliClientMT&          commandLineClient,
+                            const FrontDoorClientIF_t&  frontDoorClient,
+                            ProductController&          productController );
 
-    ~CustomProductControllerStateAdaptIQ( ) override
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief Destructor for the PlaybackRequestManager Class
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ~PlaybackRequestManager( ) override
     {
 
     }
 
-    void HandleStateStart( ) override;
-    void HandleStateExit( )  override;
-    bool HandleAdaptIQStatus( const ProductAdaptIQStatus& aiqStatus ) override;
-    bool HandleAdaptIQControl( const ProductAdaptIQControl& cmd );
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @name  Handle
+    ///
+    /// @brief This method is used to handle playback action intents.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    bool Handle( KeyHandlerUtil::ActionType_t& arg ) override;
 
 private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief This method will be invoked by an expired timer, which is defined above and armed on
-    ///        a successful callback saying pairing was entered
+    /// @brief The following member variable stores the custom Professor product controller instance.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleTimeOut( );
-    void StartTimer( int timeout );
-
-    APTimerPtr m_timer;
+    ProfessorProductController& m_CustomProductController;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief This holds the current status of the AdaptIQ process.
+    /// @brief These methods are callbacks that are invoked from a playback request.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    ProductPb::AdaptIQStatus m_status;
-
-    // This is just a placeholder
-    static constexpr uint32_t ADAPTIQ_INACTIVITY_TIMEOUT    = 1 * 60 * 1000;
-
-    static constexpr uint32_t ADAPTIQ_BOOT_TIME             = 1 * 1000;
-    static constexpr uint32_t ADAPTIQ_MEASUREMENT_TIME      = 3 * 1000;
-    static constexpr uint32_t ADAPTIQ_ANALYSIS_TIME         = 3 * 1000;
-    static constexpr uint32_t ADAPTIQ_EXIT_TIME             = 1 * 1000;
+    void PostPlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson& response );
+    void PostPlaybackRequestError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -24,6 +24,8 @@
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+#include "Intents.h"
+#include "IntentHandler.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProfessorProductController.h"
 #include "ProductCommandLine.h"
@@ -276,11 +278,13 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 
         if( sourceString == "tv" )
         {
-            m_ProductController.SendPlaybackRequest( SOURCE_TV );
+            unsigned int startTvPlayback = static_cast< unsigned int >( Action::ACTION_TV );
+            m_ProductController.GetIntentHandler( ).Handle( startTvPlayback );
         }
         else if( sourceString == "st" )
         {
-            m_ProductController.SendPlaybackRequest( SOURCE_SOUNDTOUCH );
+            unsigned int startSoundTouchPlayback = static_cast< unsigned int >( Action::ACTION_SOUNDTOUCH );
+            m_ProductController.GetIntentHandler( ).Handle( startSoundTouchPlayback );
         }
         else
         {
@@ -685,7 +689,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             response += " will be sent to the product controller state machine.\r\n";
 
             ProductMessage productMessage;
-            productMessage.mutable_keydata( )->set_action( static_cast< KeyActionPb::KEY_ACTION >( keyActionValue ) );
+            productMessage.set_action( static_cast< uint32_t >( keyActionValue ) );
 
             IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
         }
@@ -702,7 +706,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     else if( command.compare( "product test_power" ) == 0 )
     {
         ProductMessage productMessage;
-        productMessage.mutable_keydata( )->set_action( KeyActionPb::KEY_ACTION_POWER );
+        productMessage.set_action( static_cast< uint32_t >( Action::ACTION_POWER ) );
 
         IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
     }
@@ -749,7 +753,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     else if( command.compare( "product test_pairing" ) == 0 )
     {
         ProductMessage productMessage;
-        productMessage.mutable_keydata( )->set_action( KeyActionPb::KEY_ACTION_PAIR_SPEAKERS );
+        productMessage.set_action( static_cast< uint32_t >( Action::ACTION_PAIR_SPEAKERS ) );
 
         response  = "An attempt to pair with another speaker to this device will be made.";
 

@@ -25,11 +25,6 @@
 import "ProductSTS.proto";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                           Key Actions Protocol Buffer Include                                ///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-import "KeyActions.proto";
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                LPM Protocol Buffer Include                                   ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 import "AutoLpmServiceMessages.proto";
@@ -138,14 +133,6 @@ message ProductVoiceStatus
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                 Key Data Message Structure                                   ///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-message ProductKeyData
-{
-        optional KeyActionPb.KEY_ACTION action = 1;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             System Language Message Structure                                ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 message ProductLanguageData
@@ -192,6 +179,7 @@ message ProductAccessoryPairing
 {
         optional bool active = 1;
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             LPM Lowpower standby status                                      ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -218,7 +206,7 @@ message ProductMessage
         optional ProductNetworkStatus       networkstatus       =  6;
         optional ProductWirelessStatus      wirelessstatus      =  7;
         optional ProductVoiceStatus         voicestatus         =  8;
-        optional ProductKeyData             keydata             =  9;
+        optional uint32                     action              =  9;
         optional ProductLanguageData        languagedata        = 10;
         optional ProductConfigurationStatus configurationstatus = 11;
         optional ProductAutowakeStatus      autowakestatus      = 12;
@@ -229,6 +217,9 @@ message ProductMessage
         optional ProductAdaptIQControl      aiqcontrol          = 17;
         optional ProductLpmLowPowerStatus   lpmlowpowerstatus   = 18;
         optional bool                       audiopathselect     = 19;
+        optional ProductAdaptIQStatus       aiqstatus           = 15;
+        optional ProductAdaptIQControl      aiqcontrol          = 16;
+      	optional ProductLpmLowPowerStatus   lpmlowpowerstatus   = 17;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

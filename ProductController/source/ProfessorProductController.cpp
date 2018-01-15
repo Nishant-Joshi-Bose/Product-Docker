@@ -32,16 +32,15 @@
 #include "CustomProductLpmHardwareInterface.h"
 #include "CustomProductAudioService.h"
 #include "ProductKeyInputInterface.h"
-#include "ProductVolumeManager.h"
 #include "ProductEdidInterface.h"
 #include "ProductNetworkManager.h"
 #include "ProductSystemManager.h"
-#include "ProductSpeakerManager.h"
 #include "ProductCommandLine.h"
 #include "ProductAdaptIQManager.h"
 #include "ProductControllerStateTop.h"
 #include "ProductControllerStateSetup.h"
 #include "ProductControllerStates.h"
+#include "IntentHandler.h"
 #include "CustomProductControllerState.h"
 #include "CustomProductControllerStateBooting.h"
 #include "CustomProductControllerStateUpdatingSoftware.h"
@@ -58,7 +57,7 @@
 #include "CustomProductControllerStatePlaying.h"
 #include "CustomProductControllerStatePlayingInactive.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
-#include "CustomProductControllerStateAdaptIQ.h"
+#include "CustomProductControllerStateAdaptIQSim.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -98,9 +97,7 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductCommandLine( nullptr ),
     m_ProductKeyInputInterface( nullptr ),
     m_ProductEdidInterface( nullptr ),
-    m_ProductVolumeManager( nullptr ),
     m_ProductAdaptIQManager( nullptr ),
-    m_ProductSpeakerManager( nullptr ),
     m_ProductAudioService( nullptr ),
 
     ///
@@ -117,7 +114,16 @@ ProfessorProductController::ProfessorProductController( ) :
     m_IsMicrophoneEnabled( false ),
     m_IsSoftwareUpdateRequired( false ),
     m_Running( false ),
-    m_currentSource( SOURCE_TV )
+    m_currentSource( SOURCE_TV ),
+
+    ///
+    /// Intent Handler Initialization
+    ///
+    m_IntentHandler( *GetTask(),
+                     m_CliClientMT,
+                     m_FrontDoorClientIF,
+                     *this )
+
 {
 
 }
@@ -130,24 +136,6 @@ ProfessorProductController::ProfessorProductController( ) :
 void ProfessorProductController::Run( )
 {
     m_Running = true;
-
-    ///
-    /// Get instances of all the modules.
-    ///
-    BOSE_DEBUG( s_logger, "----------- Product Controller Starting Modules ------------" );
-    BOSE_DEBUG( s_logger, "The Professor Product Controller instantiating and running its modules." );
-
-    m_ProductLpmHardwareInterface = std::make_shared< CustomProductLpmHardwareInterface >( *this );
-    m_ProductEdidInterface        = std::make_shared< ProductEdidInterface              >( *this );
-    m_ProductSystemManager        = std::make_shared< ProductSystemManager              >( *this );
-    m_ProductNetworkManager       = std::make_shared< ProductNetworkManager             >( *this );
-    m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
-    m_ProductKeyInputInterface    = std::make_shared< ProductKeyInputInterface          >( *this );
-    m_ProductVolumeManager        = std::make_shared< ProductVolumeManager              >( *this );
-    m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
-    m_ProductSpeakerManager       = std::make_shared< ProductSpeakerManager             >( *this );
-    m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this );
-
 
     BOSE_DEBUG( s_logger, "----------- Product Controller State Machine    ------------" );
     BOSE_DEBUG( s_logger, "The Professor Product Controller is setting up the state machine." );
@@ -270,6 +258,20 @@ void ProfessorProductController::Run( )
     ///
     m_deviceManager.Initialize( this );
 
+    ///
+    /// Get instances of all the modules.
+    ///
+    BOSE_DEBUG( s_logger, "----------- Product Controller Starting Modules ------------" );
+    BOSE_DEBUG( s_logger, "The Professor Product Controller instantiating and running its modules." );
+
+    m_ProductLpmHardwareInterface = std::make_shared< CustomProductLpmHardwareInterface >( *this );
+    m_ProductEdidInterface        = std::make_shared< ProductEdidInterface              >( *this );
+    m_ProductSystemManager        = std::make_shared< ProductSystemManager              >( *this );
+    m_ProductNetworkManager       = std::make_shared< ProductNetworkManager             >( *this );
+    m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
+    m_ProductKeyInputInterface    = std::make_shared< ProductKeyInputInterface          >( *this );
+    m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
+    m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this );
 
     if( m_ProductLpmHardwareInterface == nullptr ||
         m_ProductSystemManager        == nullptr ||
@@ -278,7 +280,6 @@ void ProfessorProductController::Run( )
         m_ProductCommandLine          == nullptr ||
         m_ProductKeyInputInterface    == nullptr ||
         m_ProductEdidInterface        == nullptr ||
-        m_ProductVolumeManager        == nullptr ||
         m_ProductAdaptIQManager       == nullptr )
     {
         BOSE_CRITICAL( s_logger, "-------- Product Controller Failed Initialization ----------" );
@@ -297,9 +298,7 @@ void ProfessorProductController::Run( )
     m_ProductCommandLine         ->Run( );
     m_ProductKeyInputInterface   ->Run( );
     m_ProductEdidInterface       ->Run( );
-    m_ProductVolumeManager       ->Run( );
     m_ProductAdaptIQManager      ->Run( );
-    m_ProductSpeakerManager      ->Run( );
 
     ///
     /// Register FrontDoor EndPoints
@@ -310,6 +309,17 @@ void ProfessorProductController::Run( )
     /// Set up the STSProductController
     ///
     SetupProductSTSConntroller( );
+
+    ///
+    /// The initial data for the last SoundTouch playback is hardcoded for test for now.
+    /// This call should be removed once Professor is set to be released.
+    ///
+    SetTestSoundTouchPlayback( );
+
+    ///
+    /// Initialize and register intents for key actions for the Product Controller.
+    ///
+    m_IntentHandler.Initialize( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -357,18 +367,6 @@ std::shared_ptr< CustomProductLpmHardwareInterface >& ProfessorProductController
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::GetVolumeManager
-///
-/// @return This method returns a shared pointer to the VolumeManager instance
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::shared_ptr< ProductVolumeManager >& ProfessorProductController::GetVolumeManager( )
-{
-    return m_ProductVolumeManager;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProfessorProductController::GetAdaptIQManager
 ///
 /// @return This method returns a shared pointer to the AdaptIQManager instance
@@ -381,19 +379,7 @@ std::shared_ptr< ProductAdaptIQManager >& ProfessorProductController::GetAdaptIQ
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name ProfessorProductController::GetSpeakerManager
-///
-/// @return This method returns a shared pointer to the ProductSpeakerManager instance.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::shared_ptr< ProductSpeakerManager >& ProfessorProductController::GetSpeakerManager( )
-{
-    return m_ProductSpeakerManager;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name ProfessorProductController::GetEdidInterface
+/// @name   ProfessorProductController::GetEdidInterface
 ///
 /// @return This method returns a shared pointer to the ProductEdidInterface instance.
 ///
@@ -401,6 +387,18 @@ std::shared_ptr< ProductSpeakerManager >& ProfessorProductController::GetSpeaker
 std::shared_ptr< ProductEdidInterface >& ProfessorProductController::GetEdidInterface( )
 {
     return m_ProductEdidInterface;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetIntentHandler
+///
+/// @return This method returns a reference to the IntentHandler instance.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+IntentHandler& ProfessorProductController::GetIntentHandler( )
+{
+    return m_IntentHandler;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -493,7 +491,7 @@ bool ProfessorProductController::IsSoftwareUpdateRequired( ) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProfessorProductController::IsSystemLanguageSet( ) const
 {
-    return m_deviceManager.IsLanguageSet();
+    return m_deviceManager.IsLanguageSet( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -503,7 +501,7 @@ bool ProfessorProductController::IsSystemLanguageSet( ) const
 /// @return This method returns the std::string const& value to be used for the Product "Type" field
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string const& ProfessorProductController::GetProductType() const
+std::string const& ProfessorProductController::GetProductType( ) const
 {
     static std::string productType = "Professor Soundbar";
     return productType;
@@ -518,7 +516,7 @@ std::string const& ProfessorProductController::GetProductType() const
 /// @TODO - Below value may be available through HSP APIs
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string const& ProfessorProductController::GetProductVariant() const
+std::string const& ProfessorProductController::GetProductVariant( ) const
 {
     static std::string productType = "Professor";
     return productType;
@@ -620,109 +618,6 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::SendPlaybackRequest
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::SendPlaybackRequest( PlaybackSource_t playbackSource )
-{
-    BOSE_INFO( s_logger, "Source %d was selected. \n", playbackSource );
-
-    AsyncCallback< FRONT_DOOR_CLIENT_ERRORS >
-    errorCallback( std::bind( &ProfessorProductController::PostPlaybackRequestError,
-                              this,
-                              std::placeholders::_1 ),
-                   GetTask( ) );
-
-    AsyncCallback< SoundTouchInterface::NowPlayingJson >
-    postPlaybackRequestCallback( std::bind( &ProfessorProductController::PostPlaybackRequestResponse,
-                                            this, std::placeholders::_1 ),
-                                 GetTask( ) );
-    ///
-    /// Setup the playback request data.
-    ///
-    SoundTouchInterface::playbackRequestJson playbackRequestData;
-
-    ///
-    /// The data is hardcoded for test for now, before CAPS provides the utility to convert
-    /// nowPlaying to playbackRequest.
-    ///
-    constexpr char source[ ]           = "DEEZER";
-    constexpr char sourceAccount[ ]    = "aleksander_soltan@bose.com";
-    constexpr char presetType[ ]       = "topTrack";
-    constexpr char location[ ]         = "132";
-    constexpr char name[ ]             = "Pop - ##TRANS_TopTracks##";
-    constexpr bool presetable          = true;
-    constexpr char containerArt[ ]     = "http://e-cdn-images.deezer.com/images/misc/db7a604d9e7634a67d45cfc86b48370a/500x500-000000-80-0-0.jpg";
-    constexpr char playbackType[ ]     = "topTrack";
-    constexpr char playbackLocation[ ] = "132";
-    constexpr char playbackName[ ]     = "Too Good At Goodbyes";
-    constexpr bool playbackPresetable  = true;
-
-    switch( playbackSource )
-    {
-    case SOURCE_TV:
-        playbackRequestData.set_source( "PRODUCT" );
-        playbackRequestData.set_sourceaccount( "TV" );
-        break;
-    case SOURCE_SOUNDTOUCH:
-        playbackRequestData.set_source( source );
-        playbackRequestData.set_sourceaccount( sourceAccount );
-        playbackRequestData.mutable_preset( )  -> set_type( presetType );
-        playbackRequestData.mutable_preset( )  -> set_location( location );
-        playbackRequestData.mutable_preset( )  -> set_name( name );
-        playbackRequestData.mutable_preset( )  -> set_presetable( presetable );
-        playbackRequestData.mutable_preset( )  -> set_containerart( containerArt );
-        playbackRequestData.mutable_playback( )-> set_type( playbackType );
-        playbackRequestData.mutable_playback( )-> set_location( playbackLocation );
-        playbackRequestData.mutable_playback( )-> set_name( playbackName );
-        playbackRequestData.mutable_playback( )-> set_presetable( playbackPresetable );
-        break;
-    }
-
-    ///
-    /// Send a post messgage for the "/content/playbackRequest" end point.
-    ///
-    m_FrontDoorClientIF->SendPost< SoundTouchInterface::NowPlayingJson >( "/content/playbackRequest",
-                                                                          playbackRequestData,
-                                                                          postPlaybackRequestCallback,
-                                                                          errorCallback );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief  ProfessorProductController::GetCurrentSource
-///
-/// @return This method returns the currently selected source.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-PlaybackSource_t ProfessorProductController::GetCurrentSource( )
-{
-    return m_currentSource;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::PostPlaybackRequestResponse
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::PostPlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson& response )
-{
-    BOSE_DEBUG( s_logger, "A response to the playback request %s was received.",
-                response.source( ).sourcedisplayname( ).c_str( ) );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::PostPlaybackRequestError
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::PostPlaybackRequestError( const FRONT_DOOR_CLIENT_ERRORS errorCode )
-{
-    BOSE_DEBUG( s_logger, "An error %d was returned to the playback request.", errorCode );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @brief ProfessorProductController::RegisterNowPlayingEndPoint
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -799,13 +694,116 @@ void ProfessorProductController::HandleNowPlaying( const SoundTouchInterface::No
 
             m_currentSource = SOURCE_TV;
         }
+        ///
+        /// @todo The following records the now playing Soundtouch source as a playback request for
+        ///       subsequent playback requests through the PlaybackRequestManager intent manager.
+        ///       State sources such as AdaptIQ and Setup will need to filtered out here when they
+        ///       become available.
+        ///
         else
         {
             BOSE_DEBUG( s_logger, "The CAPS now playing source is set to SOURCE_SOUNDTOUCH." );
 
             m_currentSource = SOURCE_SOUNDTOUCH;
+
+            if( nowPlayingStatus.has_container( )                and
+                nowPlayingStatus.container( ).has_contentitem( ) )
+            {
+                if( nowPlayingStatus.container( ).contentitem( ).has_source( ) )
+                {
+                    m_lastSoundTouchPlayback.set_source( nowPlayingStatus.container( ).contentitem( ).source( ) );
+                }
+                if( nowPlayingStatus.container( ).contentitem( ).has_sourceaccount( ) )
+                {
+                    m_lastSoundTouchPlayback.set_sourceaccount( nowPlayingStatus.container( ).contentitem( ).sourceaccount( ) );
+                }
+                if( nowPlayingStatus.container( ).contentitem( ).has_type( ) )
+                {
+                    m_lastSoundTouchPlayback.mutable_playback( )->set_type( nowPlayingStatus.container( ).contentitem( ).type( ) );
+                }
+                if( nowPlayingStatus.container( ).contentitem( ).has_location( ) )
+                {
+                    m_lastSoundTouchPlayback.mutable_playback( )->set_location( nowPlayingStatus.container( ).contentitem( ).location( ) );
+                }
+                if( nowPlayingStatus.container( ).contentitem( ).has_name( ) )
+                {
+                    m_lastSoundTouchPlayback.mutable_playback( )->set_name( nowPlayingStatus.container( ).contentitem( ).name( ) );
+                }
+                if( nowPlayingStatus.container( ).contentitem( ).has_presetable( ) )
+                {
+                    m_lastSoundTouchPlayback.mutable_playback( )->set_presetable( nowPlayingStatus.container( ).contentitem( ).presetable( ) );
+                }
+                if( nowPlayingStatus.container( ).contentitem( ).has_containerart( ) )
+                {
+                    m_lastSoundTouchPlayback.mutable_playback( )->set_containerart( nowPlayingStatus.container( ).contentitem( ).containerart( ) );
+                }
+            }
         }
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  ProfessorProductController::GetCurrentSource
+///
+/// @return This method returns the currently selected source.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+PlaybackSource_t ProfessorProductController::GetCurrentSource( )
+{
+    return m_currentSource;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::SetTestSoundTouchPlayback
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::SetTestSoundTouchPlayback( )
+{
+    ///
+    /// The initial data for the last SoundTouch playback is hardcoded for test for debugging
+    /// purposes.
+    ///
+    constexpr char source[ ]           = "DEEZER";
+    constexpr char sourceAccount[ ]    = "aleksander_soltan@bose.com";
+    constexpr char presetType[ ]       = "topTrack";
+    constexpr char location[ ]         = "132";
+    constexpr char name[ ]             = "Pop - ##TRANS_TopTracks##";
+    constexpr bool presetable          = true;
+    constexpr char containerArt[ ]     = "http://e-cdn-images.deezer.com/images/misc/db7a604d9e7634a67d45cfc86b48370a/500x500-000000-80-0-0.jpg";
+    constexpr char playbackType[ ]     = "topTrack";
+    constexpr char playbackLocation[ ] = "132";
+    constexpr char playbackName[ ]     = "Too Good At Goodbyes";
+    constexpr bool playbackPresetable  = true;
+
+    ///
+    /// @todo The following is a kludge, until the common code supports persistent storage of this
+    ///       data.
+    ///
+    m_lastSoundTouchPlayback.set_source( source );
+    m_lastSoundTouchPlayback.set_sourceaccount( sourceAccount );
+    m_lastSoundTouchPlayback.mutable_preset( )  ->set_type( presetType );
+    m_lastSoundTouchPlayback.mutable_preset( )  ->set_location( location );
+    m_lastSoundTouchPlayback.mutable_preset( )  ->set_name( name );
+    m_lastSoundTouchPlayback.mutable_preset( )  ->set_presetable( presetable );
+    m_lastSoundTouchPlayback.mutable_preset( )  ->set_containerart( containerArt );
+    m_lastSoundTouchPlayback.mutable_playback( )->set_type( playbackType );
+    m_lastSoundTouchPlayback.mutable_playback( )->set_location( playbackLocation );
+    m_lastSoundTouchPlayback.mutable_playback( )->set_name( playbackName );
+    m_lastSoundTouchPlayback.mutable_playback( )->set_presetable( playbackPresetable );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::GetLastSoundTouchPlayback
+///
+/// @return This method returns a reference to the last playback request for Sound Touch sources.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+SoundTouchInterface::playbackRequestJson& ProfessorProductController::GetLastSoundTouchPlayback( )
+{
+    return m_lastSoundTouchPlayback;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -855,10 +853,8 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             case SYSTEM_STATE_RECOVERY:
                 break;
             case SYSTEM_STATE_LOW_POWER:
-            {
                 GetHsm( ).Handle< >( &CustomProductControllerState::HandleLpmLowpowerSystemState );
-            }
-            break;
+                break;
             case SYSTEM_STATE_UPDATE:
                 break;
             case SYSTEM_STATE_SHUTDOWN:
@@ -880,11 +876,14 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             BOSE_DEBUG( s_logger, "The LPM power state was set to %s",
                         IpcLPMPowerState_t_Name( message.lpmstatus( ).powerstate( ) ).c_str( ) );
         }
-        if( message.has_lpmlowpowerstatus( ) )
-        {
-            GetHsm( ).Handle<const ProductLpmLowPowerStatus& >( &CustomProductControllerState::HandleLpmLowPowerStatus, message.lpmlowpowerstatus( ) );
-        }
-
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// LPM low power status messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.has_lpmlowpowerstatus( ) )
+    {
+        GetHsm( ).Handle< const ProductLpmLowPowerStatus& >
+        ( &CustomProductControllerState::HandleLpmLowPowerStatus, message.lpmlowpowerstatus( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Content Audio Playback Services (CAPS) status messages are handled at this point.
@@ -937,7 +936,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
 
         m_IsSTSReady = true;
 
-        GetHsm( ).Handle<>
+        GetHsm( ).Handle< >
         ( &CustomProductControllerState::HandleSTSSourcesInit );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -1062,21 +1061,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         ( &CustomProductControllerState::HandleVoiceState, IsVoiceConfigured( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Key data messages are handled at this point.
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_keydata( ) )
-    {
-        auto keyData = message.keydata( );
-        auto keyString = KeyActionPb::KEY_ACTION_Name( keyData.action( ) );
-
-        BOSE_INFO( s_logger, "The key action value %s (valued %d) was received.",
-                   keyString.c_str( ),
-                   keyData.action( ) );
-
-        GetHsm( ).Handle< int >
-        ( &CustomProductControllerState::HandleKeyAction, keyData.action( ) );
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Autowake messages are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_autowakestatus( ) )
@@ -1124,12 +1108,82 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         ( &CustomProductControllerState::HandleNowPlayingStatus, message.nowplayingstatus( ).state( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Intent messages are handled at this point.
+    /// Key action messages are handled at this point, and passed to the state machine based on
+    /// the intent associated with the action.
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_intent( ) )
+    else if( message.has_action( ) )
     {
-        // @TODO for now, until Professor implements its non-common intents
-        ( void ) HandleCommonIntents( message.intent() );
+        ///
+        /// The following determines whether the key action is to be handled by a common intent
+        /// manager.
+        ///
+        if( GetIntentHandler( ).IsIntentPlayControl( message.action( ) ) )
+        {
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPlayControl,
+                                                              message.action( ) );
+        }
+        else if( GetIntentHandler( ).IsIntentBlueTooth( message.action( ) ) )
+        {
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentBlueTooth,
+                                                              message.action( ) );
+        }
+        else if( GetIntentHandler( ).IsIntentVolumeControl( message.action( ) ) )
+        {
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentVolumeControl,
+                                                              message.action( ) );
+        }
+        else if( GetIntentHandler( ).IsIntentNetworkStandby( message.action( ) ) )
+        {
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentNetworkStandby,
+                                                              message.action( ) );
+        }
+        else if( GetIntentHandler( ).IsPresetSelect( message.action( ) ) )
+        {
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPresetSelect,
+                                                              message.action( ) );
+        }
+        else if( GetIntentHandler( ).IsPresetStore( message.action( ) ) )
+        {
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPresetStore,
+                                                              message.action( ) );
+        }
+        else if( GetIntentHandler( ).IsIntentVoice( message.action( ) ) )
+        {
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentVoice,
+                                                              message.action( ) );
+        }
+
+        ///
+        /// The following determines whether the key action is to be handled by the custom intent
+        /// manager.
+        ///
+        else if( GetIntentHandler( ).IsIntentUserPower( message.action( ) ) )
+        {
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentUserPower,
+                                                              message.action( ) );
+        }
+        else if( GetIntentHandler( ).IsIntentVolumeMuteControl( message.action( ) ) )
+        {
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentVolumeMuteControl,
+                                                              message.action( ) );
+        }
+        else if( GetIntentHandler( ).IsIntentSpeakerPairing( message.action( ) ) )
+        {
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentSpeakerPairing,
+                                                              message.action( ) );
+        }
+        else if( GetIntentHandler( ).IsIntentSourceSelection( message.action( ) ) )
+        {
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPlayback,
+                                                              message.action( ) );
+        }
+        else
+        {
+            BOSE_ERROR( s_logger, "An action key %u was received that has no associated intent.", message.action( ) );
+
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntent,
+                                                              message.action( ) );
+        }
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// AdaptIQ messages are handled at this point.
@@ -1193,7 +1247,6 @@ void ProfessorProductController::Wait( )
     m_ProductCommandLine         ->Stop( );
     m_ProductKeyInputInterface   ->Stop( );
     m_ProductEdidInterface       ->Stop( );
-    m_ProductVolumeManager       ->Stop( );
     m_ProductAdaptIQManager      ->Stop( );
 }
 
@@ -1220,21 +1273,21 @@ void ProfessorProductController::End( )
 /// @brief  This method is to get the default product name by reading from mac address.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string const& ProfessorProductController::GetDefaultProductName() const
+std::string const& ProfessorProductController::GetDefaultProductName( ) const
 {
     static std::string productName = "Bose ";
-    std::string macAddress = MacAddressInfo::GetPrimaryMAC();
+    std::string macAddress = MacAddressInfo::GetPrimaryMAC( );
     try
     {
-        productName += ( macAddress.substr( macAddress.length() - 6 ) );
+        productName += ( macAddress.substr( macAddress.length( ) - 6 ) );
     }
     catch( const std::out_of_range& error )
     {
         productName += macAddress;
-        BOSE_WARNING( s_logger, "errorType = %s", error.what() );
+        BOSE_WARNING( s_logger, "errorType = %s", error.what( ) );
     }
 
-    BOSE_INFO( s_logger, "%s productName=%s", __func__, productName.c_str() );
+    BOSE_INFO( s_logger, "%s productName=%s", __func__, productName.c_str( ) );
     return productName;
 }
 

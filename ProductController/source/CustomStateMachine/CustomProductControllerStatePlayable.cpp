@@ -25,6 +25,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
+#include "IntentHandler.h"
 #include "CustomProductControllerStatePlayable.h"
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
@@ -55,7 +56,7 @@ CustomProductControllerStatePlayable::CustomProductControllerStatePlayable( Prod
                                                                             const std::string&    name )
     : ProductControllerStatePlayable( hsm, pSuperState, stateId, name )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayable is being constructed." );
+    BOSE_VERBOSE( s_logger, "%s is being constructed.", GetName( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,7 +66,7 @@ CustomProductControllerStatePlayable::CustomProductControllerStatePlayable( Prod
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlayable::HandleStateEnter( )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStatePlayable is being entered." );
+    BOSE_VERBOSE( s_logger, "%s is in %s.", GetName( ).c_str( ), __FUNCTION__ );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -82,9 +83,9 @@ void CustomProductControllerStatePlayable::HandleStateEnter( )
 bool CustomProductControllerStatePlayable::HandleNowSelectionInfo
 ( const  SoundTouchInterface::NowSelectionInfo&  nowSelectionInfo )
 {
-    BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                  "CustomProductControllerStatePlayable",
+    BOSE_VERBOSE( s_logger, "%s is changing to %s.", GetName( ).c_str( ),
                   "CustomProductControllerStatePlayingInactive" );
+
     ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
 
     return true;
@@ -92,38 +93,30 @@ bool CustomProductControllerStatePlayable::HandleNowSelectionInfo
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStatePlayable::HandleKeyAction
+/// @brief  CustomProductControllerStatePlayable::HandleIntentUserPower
 ///
-/// @param  int action
+/// @param  KeyHandlerUtil::ActionType_t action
 ///
-/// @return This method returns a true Boolean value indicating that it has handled the key action
-///         or false if the key has not been handled.
+/// @return This method returns a true Boolean value indicating that it has handled the event
+///         and no futher processing will be required by any of its superstates.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayable::HandleKeyAction( int action )
+bool CustomProductControllerStatePlayable::HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )
 {
-    bool handled = false;
+    BOSE_INFO( s_logger, "%s in %s is handling key action %d.", GetName( ).c_str( ), __FUNCTION__, action );
 
-    BOSE_INFO( s_logger, "CustomProductControllerStatePlayable is handling key action %d.", action );
-
-    switch( action )
+    if( GetCustomProductController( ).GetCurrentSource( ) == SOURCE_TV )
     {
-    case KeyActionPb::KEY_ACTION_POWER:
-        ///
-        /// Start a playback based on the currently selected source. Once the playback starts, the
-        /// state machine should receive a now selecting event from the product controller, which
-        /// would cause the state machine to transition to a playing state.
-        ///
-        GetCustomProductController( ).SendPlaybackRequest( GetCustomProductController( ).GetCurrentSource( ) );
-
-        handled = true;
-        break;
-
-    default:
-        break;
+        unsigned int startTvPlayback = static_cast< unsigned int >( Action::ACTION_TV );
+        GetCustomProductController( ).GetIntentHandler( ).Handle( startTvPlayback );
+    }
+    else if( GetCustomProductController( ).GetCurrentSource( ) == SOURCE_SOUNDTOUCH )
+    {
+        unsigned int startSoundTouchPlayback = static_cast< unsigned int >( Action::ACTION_SOUNDTOUCH );
+        GetCustomProductController( ).GetIntentHandler( ).Handle( startSoundTouchPlayback );
     }
 
-    return handled;
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
