@@ -1,1248 +1,1198 @@
 {
-    "KeyTable": [
+    "keyTable": [
         {
-            "Comment": "power toggle", 
-            "Origin": 2, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 101, 
-            "KeyList": [
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "power toggle", 
+            "action": 101, 
+            "keyList": [
                 76
             ]
         }, 
         {
-            "Comment": "power toggle", 
-            "Origin": 6, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 101, 
-            "KeyList": [
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "power toggle", 
+            "action": 101, 
+            "keyList": [
                 76
             ]
         }, 
         {
-            "Comment": "power toggle", 
-            "Origin": 4, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 101, 
-            "KeyList": [
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "power toggle", 
+            "action": 101, 
+            "keyList": [
                 76
             ]
         }, 
         {
-            "Comment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast", 
-            "Origin": 2, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 0
             ], 
-            "Action": 20, 
-            "KeyList": [
+            "commment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast", 
+            "action": 20, 
+            "keyList": [
                 129
             ]
         }, 
         {
-            "Comment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast", 
-            "Origin": 6, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 0
             ], 
-            "Action": 20, 
-            "KeyList": [
+            "commment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast", 
+            "action": 20, 
+            "keyList": [
                 129
             ]
         }, 
         {
-            "Comment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast", 
-            "Origin": 4, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 0
             ], 
-            "Action": 20, 
-            "KeyList": [
+            "commment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast", 
+            "action": 20, 
+            "keyList": [
                 129
             ]
         }, 
         {
-            "Comment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable", 
-            "Origin": 2, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 750
             ], 
-            "Action": 21, 
-            "KeyList": [
+            "commment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable", 
+            "action": 21, 
+            "keyList": [
                 129
             ]
         }, 
         {
-            "Comment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable", 
-            "Origin": 6, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 750
             ], 
-            "Action": 21, 
-            "KeyList": [
+            "commment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable", 
+            "action": 21, 
+            "keyList": [
                 129
             ]
         }, 
         {
-            "Comment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable", 
-            "Origin": 4, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 750
             ], 
-            "Action": 21, 
-            "KeyList": [
+            "commment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable", 
+            "action": 21, 
+            "keyList": [
                 129
             ]
         }, 
         {
-            "Comment": "Console: Bluetooth Press and Hold ---> Clear Pairing List", 
-            "Origin": 2, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 10000
             ], 
-            "Action": 22, 
-            "KeyList": [
+            "commment": "Console: Bluetooth Press and Hold ---> Clear Pairing List", 
+            "action": 22, 
+            "keyList": [
                 129
             ]
         }, 
         {
-            "Comment": "Console: Bluetooth Press and Hold ---> Clear Pairing List", 
-            "Origin": 6, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 10000
             ], 
-            "Action": 22, 
-            "KeyList": [
+            "commment": "Console: Bluetooth Press and Hold ---> Clear Pairing List", 
+            "action": 22, 
+            "keyList": [
                 129
             ]
         }, 
         {
-            "Comment": "Console: Bluetooth Press and Hold ---> Clear Pairing List", 
-            "Origin": 4, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 10000
             ], 
-            "Action": 22, 
-            "KeyList": [
+            "commment": "Console: Bluetooth Press and Hold ---> Clear Pairing List", 
+            "action": 22, 
+            "keyList": [
                 129
             ]
         }, 
         {
-            "Comment": "Console: Action release ---> Alexa", 
-            "Origin": 1, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 1, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 0
             ], 
-            "Action": 26, 
-            "KeyList": [
+            "commment": "Console: action release ---> Alexa", 
+            "action": 26, 
+            "keyList": [
                 6
             ]
         }, 
         {
-            "Comment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1", 
-            "Origin": 2, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 1000
             ], 
-            "Action": 27, 
-            "KeyList": [
+            "commment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1", 
+            "action": 27, 
+            "keyList": [
                 65
             ]
         }, 
         {
-            "Comment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1", 
-            "Origin": 6, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 1000
             ], 
-            "Action": 27, 
-            "KeyList": [
+            "commment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1", 
+            "action": 27, 
+            "keyList": [
                 65
             ]
         }, 
         {
-            "Comment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1", 
-            "Origin": 4, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 1000
             ], 
-            "Action": 27, 
-            "KeyList": [
+            "commment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1", 
+            "action": 27, 
+            "keyList": [
                 65
             ]
         }, 
         {
-            "Comment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2", 
-            "Origin": 2, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 1000
             ], 
-            "Action": 28, 
-            "KeyList": [
+            "commment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2", 
+            "action": 28, 
+            "keyList": [
                 66
             ]
         }, 
         {
-            "Comment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2", 
-            "Origin": 6, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 1000
             ], 
-            "Action": 28, 
-            "KeyList": [
+            "commment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2", 
+            "action": 28, 
+            "keyList": [
                 66
             ]
         }, 
         {
-            "Comment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2", 
-            "Origin": 4, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 1000
             ], 
-            "Action": 28, 
-            "KeyList": [
+            "commment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2", 
+            "action": 28, 
+            "keyList": [
                 66
             ]
         }, 
         {
-            "Comment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3", 
-            "Origin": 2, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 1000
             ], 
-            "Action": 29, 
-            "KeyList": [
+            "commment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3", 
+            "action": 29, 
+            "keyList": [
                 67
             ]
         }, 
         {
-            "Comment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3", 
-            "Origin": 6, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 1000
             ], 
-            "Action": 29, 
-            "KeyList": [
+            "commment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3", 
+            "action": 29, 
+            "keyList": [
                 67
             ]
         }, 
         {
-            "Comment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3", 
-            "Origin": 4, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 1000
             ], 
-            "Action": 29, 
-            "KeyList": [
+            "commment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3", 
+            "action": 29, 
+            "keyList": [
                 67
             ]
         }, 
         {
-            "Comment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4", 
-            "Origin": 2, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 1000
             ], 
-            "Action": 30, 
-            "KeyList": [
+            "commment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4", 
+            "action": 30, 
+            "keyList": [
                 68
             ]
         }, 
         {
-            "Comment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4", 
-            "Origin": 6, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 1000
             ], 
-            "Action": 30, 
-            "KeyList": [
+            "commment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4", 
+            "action": 30, 
+            "keyList": [
                 68
             ]
         }, 
         {
-            "Comment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4", 
-            "Origin": 4, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 1000
             ], 
-            "Action": 30, 
-            "KeyList": [
+            "commment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4", 
+            "action": 30, 
+            "keyList": [
                 68
             ]
         }, 
         {
-            "Comment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5", 
-            "Origin": 2, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 1000
             ], 
-            "Action": 31, 
-            "KeyList": [
+            "commment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5", 
+            "action": 31, 
+            "keyList": [
                 69
             ]
         }, 
         {
-            "Comment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5", 
-            "Origin": 6, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 1000
             ], 
-            "Action": 31, 
-            "KeyList": [
+            "commment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5", 
+            "action": 31, 
+            "keyList": [
                 69
             ]
         }, 
         {
-            "Comment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5", 
-            "Origin": 4, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 1000
             ], 
-            "Action": 31, 
-            "KeyList": [
+            "commment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5", 
+            "action": 31, 
+            "keyList": [
                 69
             ]
         }, 
         {
-            "Comment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6", 
-            "Origin": 2, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 1000
             ], 
-            "Action": 32, 
-            "KeyList": [
+            "commment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6", 
+            "action": 32, 
+            "keyList": [
                 70
             ]
         }, 
         {
-            "Comment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6", 
-            "Origin": 6, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 1000
             ], 
-            "Action": 32, 
-            "KeyList": [
+            "commment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6", 
+            "action": 32, 
+            "keyList": [
                 70
             ]
         }, 
         {
-            "Comment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6", 
-            "Origin": 4, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 1000
             ], 
-            "Action": 32, 
-            "KeyList": [
+            "commment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6", 
+            "action": 32, 
+            "keyList": [
                 70
             ]
         }, 
         {
-            "Comment": "Console: Preset 1 release ---> Select Preset stored on Key 1", 
-            "Origin": 2, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 200
             ], 
-            "Action": 33, 
-            "KeyList": [
+            "commment": "Console: Preset 1 release ---> Select Preset stored on Key 1", 
+            "action": 33, 
+            "keyList": [
                 65
             ]
         }, 
         {
-            "Comment": "Console: Preset 1 release ---> Select Preset stored on Key 1", 
-            "Origin": 6, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 200
             ], 
-            "Action": 33, 
-            "KeyList": [
+            "commment": "Console: Preset 1 release ---> Select Preset stored on Key 1", 
+            "action": 33, 
+            "keyList": [
                 65
             ]
         }, 
         {
-            "Comment": "Console: Preset 1 release ---> Select Preset stored on Key 1", 
-            "Origin": 4, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 200
             ], 
-            "Action": 33, 
-            "KeyList": [
+            "commment": "Console: Preset 1 release ---> Select Preset stored on Key 1", 
+            "action": 33, 
+            "keyList": [
                 65
             ]
         }, 
         {
-            "Comment": "Console: Preset 2 release ---> Select Preset stored on Key 2", 
-            "Origin": 2, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 200
             ], 
-            "Action": 34, 
-            "KeyList": [
+            "commment": "Console: Preset 2 release ---> Select Preset stored on Key 2", 
+            "action": 34, 
+            "keyList": [
                 66
             ]
         }, 
         {
-            "Comment": "Console: Preset 2 release ---> Select Preset stored on Key 2", 
-            "Origin": 6, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 200
             ], 
-            "Action": 34, 
-            "KeyList": [
+            "commment": "Console: Preset 2 release ---> Select Preset stored on Key 2", 
+            "action": 34, 
+            "keyList": [
                 66
             ]
         }, 
         {
-            "Comment": "Console: Preset 2 release ---> Select Preset stored on Key 2", 
-            "Origin": 4, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 200
             ], 
-            "Action": 34, 
-            "KeyList": [
+            "commment": "Console: Preset 2 release ---> Select Preset stored on Key 2", 
+            "action": 34, 
+            "keyList": [
                 66
             ]
         }, 
         {
-            "Comment": "Console: Preset 3 release ---> Select Preset stored on Key 3", 
-            "Origin": 2, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 200
             ], 
-            "Action": 35, 
-            "KeyList": [
+            "commment": "Console: Preset 3 release ---> Select Preset stored on Key 3", 
+            "action": 35, 
+            "keyList": [
                 67
             ]
         }, 
         {
-            "Comment": "Console: Preset 3 release ---> Select Preset stored on Key 3", 
-            "Origin": 6, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 200
             ], 
-            "Action": 35, 
-            "KeyList": [
+            "commment": "Console: Preset 3 release ---> Select Preset stored on Key 3", 
+            "action": 35, 
+            "keyList": [
                 67
             ]
         }, 
         {
-            "Comment": "Console: Preset 3 release ---> Select Preset stored on Key 3", 
-            "Origin": 4, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 200
             ], 
-            "Action": 35, 
-            "KeyList": [
+            "commment": "Console: Preset 3 release ---> Select Preset stored on Key 3", 
+            "action": 35, 
+            "keyList": [
                 67
             ]
         }, 
         {
-            "Comment": "Console: Preset 4 release ---> Select Preset stored on Key 4", 
-            "Origin": 2, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 200
             ], 
-            "Action": 36, 
-            "KeyList": [
+            "commment": "Console: Preset 4 release ---> Select Preset stored on Key 4", 
+            "action": 36, 
+            "keyList": [
                 68
             ]
         }, 
         {
-            "Comment": "Console: Preset 4 release ---> Select Preset stored on Key 4", 
-            "Origin": 6, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 200
             ], 
-            "Action": 36, 
-            "KeyList": [
+            "commment": "Console: Preset 4 release ---> Select Preset stored on Key 4", 
+            "action": 36, 
+            "keyList": [
                 68
             ]
         }, 
         {
-            "Comment": "Console: Preset 4 release ---> Select Preset stored on Key 4", 
-            "Origin": 4, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 200
             ], 
-            "Action": 36, 
-            "KeyList": [
+            "commment": "Console: Preset 4 release ---> Select Preset stored on Key 4", 
+            "action": 36, 
+            "keyList": [
                 68
             ]
         }, 
         {
-            "Comment": "Console: Preset 5 release ---> Select Preset stored on Key 5", 
-            "Origin": 2, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 200
             ], 
-            "Action": 37, 
-            "KeyList": [
+            "commment": "Console: Preset 5 release ---> Select Preset stored on Key 5", 
+            "action": 37, 
+            "keyList": [
                 69
             ]
         }, 
         {
-            "Comment": "Console: Preset 5 release ---> Select Preset stored on Key 5", 
-            "Origin": 6, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 200
             ], 
-            "Action": 37, 
-            "KeyList": [
+            "commment": "Console: Preset 5 release ---> Select Preset stored on Key 5", 
+            "action": 37, 
+            "keyList": [
                 69
             ]
         }, 
         {
-            "Comment": "Console: Preset 5 release ---> Select Preset stored on Key 5", 
-            "Origin": 4, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 200
             ], 
-            "Action": 37, 
-            "KeyList": [
+            "commment": "Console: Preset 5 release ---> Select Preset stored on Key 5", 
+            "action": 37, 
+            "keyList": [
                 69
             ]
         }, 
         {
-            "Comment": "Console: Preset 6 release ---> Select Preset stored on Key 6", 
-            "Origin": 2, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 200
             ], 
-            "Action": 38, 
-            "KeyList": [
+            "commment": "Console: Preset 6 release ---> Select Preset stored on Key 6", 
+            "action": 38, 
+            "keyList": [
                 70
             ]
         }, 
         {
-            "Comment": "Console: Preset 6 release ---> Select Preset stored on Key 6", 
-            "Origin": 6, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 200
             ], 
-            "Action": 38, 
-            "KeyList": [
+            "commment": "Console: Preset 6 release ---> Select Preset stored on Key 6", 
+            "action": 38, 
+            "keyList": [
                 70
             ]
         }, 
         {
-            "Comment": "Console: Preset 6 release ---> Select Preset stored on Key 6", 
-            "Origin": 4, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 200
             ], 
-            "Action": 38, 
-            "KeyList": [
+            "commment": "Console: Preset 6 release ---> Select Preset stored on Key 6", 
+            "action": 38, 
+            "keyList": [
                 70
             ]
         }, 
         {
-            "Comment": "volume up", 
-            "Origin": 2, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 0
             ], 
-            "Action": 109, 
-            "KeyList": [
+            "commment": "volume up", 
+            "action": 109, 
+            "keyList": [
                 3
             ]
         }, 
         {
-            "Comment": "volume up", 
-            "Origin": 6, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 0
             ], 
-            "Action": 109, 
-            "KeyList": [
+            "commment": "volume up", 
+            "action": 109, 
+            "keyList": [
                 3
             ]
         }, 
         {
-            "Comment": "volume up", 
-            "Origin": 4, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 0
             ], 
-            "Action": 109, 
-            "KeyList": [
+            "commment": "volume up", 
+            "action": 109, 
+            "keyList": [
                 3
             ]
         }, 
         {
-            "Comment": "volume up", 
-            "Origin": 4, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
-                0
+            "origin": 2, 
+            "keyEvent": 3, 
+            "timeOutList": [
+                300, 
+                100
             ], 
-            "Action": 109, 
-            "KeyList": [
+            "commment": "volume up repeat", 
+            "action": 109, 
+            "keyList": [
                 3
             ]
         }, 
         {
-            "Comment": "volume up repeat", 
-            "Origin": 2, 
-            "KeyEvent": 3, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 3, 
+            "timeOutList": [
                 300, 
                 100
             ], 
-            "Action": 109, 
-            "KeyList": [
+            "commment": "volume up repeat", 
+            "action": 109, 
+            "keyList": [
                 3
             ]
         }, 
         {
-            "Comment": "volume up repeat", 
-            "Origin": 6, 
-            "KeyEvent": 3, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 3, 
+            "timeOutList": [
                 300, 
                 100
             ], 
-            "Action": 109, 
-            "KeyList": [
+            "commment": "volume up repeat", 
+            "action": 109, 
+            "keyList": [
                 3
             ]
         }, 
         {
-            "Comment": "volume up repeat", 
-            "Origin": 4, 
-            "KeyEvent": 3, 
-            "TimeOutList": [
-                300, 
-                100
-            ], 
-            "Action": 109, 
-            "KeyList": [
-                3
-            ]
-        }, 
-        {
-            "Comment": "volume up repeat", 
-            "Origin": 4, 
-            "KeyEvent": 3, 
-            "TimeOutList": [
-                300, 
-                100
-            ], 
-            "Action": 109, 
-            "KeyList": [
-                3
-            ]
-        }, 
-        {
-            "Comment": "volume down", 
-            "Origin": 2, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 0
             ], 
-            "Action": 110, 
-            "KeyList": [
+            "commment": "volume down", 
+            "action": 110, 
+            "keyList": [
                 2
             ]
         }, 
         {
-            "Comment": "volume down", 
-            "Origin": 6, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 0
             ], 
-            "Action": 110, 
-            "KeyList": [
+            "commment": "volume down", 
+            "action": 110, 
+            "keyList": [
                 2
             ]
         }, 
         {
-            "Comment": "volume down", 
-            "Origin": 4, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 1, 
+            "timeOutList": [
                 0
             ], 
-            "Action": 110, 
-            "KeyList": [
+            "commment": "volume down", 
+            "action": 110, 
+            "keyList": [
                 2
             ]
         }, 
         {
-            "Comment": "volume down", 
-            "Origin": 4, 
-            "KeyEvent": 1, 
-            "TimeOutList": [
-                0
-            ], 
-            "Action": 110, 
-            "KeyList": [
-                2
-            ]
-        }, 
-        {
-            "Comment": "volume down repeat", 
-            "Origin": 2, 
-            "KeyEvent": 3, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 3, 
+            "timeOutList": [
                 300, 
                 100
             ], 
-            "Action": 110, 
-            "KeyList": [
+            "commment": "volume down repeat", 
+            "action": 110, 
+            "keyList": [
                 2
             ]
         }, 
         {
-            "Comment": "volume down repeat", 
-            "Origin": 6, 
-            "KeyEvent": 3, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 3, 
+            "timeOutList": [
                 300, 
                 100
             ], 
-            "Action": 110, 
-            "KeyList": [
+            "commment": "volume down repeat", 
+            "action": 110, 
+            "keyList": [
                 2
             ]
         }, 
         {
-            "Comment": "volume down repeat", 
-            "Origin": 4, 
-            "KeyEvent": 3, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 3, 
+            "timeOutList": [
                 300, 
                 100
             ], 
-            "Action": 110, 
-            "KeyList": [
+            "commment": "volume down repeat", 
+            "action": 110, 
+            "keyList": [
                 2
             ]
         }, 
         {
-            "Comment": "volume down repeat", 
-            "Origin": 4, 
-            "KeyEvent": 3, 
-            "TimeOutList": [
-                300, 
-                100
-            ], 
-            "Action": 110, 
-            "KeyList": [
-                2
-            ]
-        }, 
-        {
-            "Comment": "play/pause", 
-            "Origin": 2, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 1, 
-            "KeyList": [
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "play/pause", 
+            "action": 1, 
+            "keyList": [
                 85
             ]
         }, 
         {
-            "Comment": "play/pause", 
-            "Origin": 6, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 1, 
-            "KeyList": [
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "play/pause", 
+            "action": 1, 
+            "keyList": [
                 85
             ]
         }, 
         {
-            "Comment": "play/pause", 
-            "Origin": 4, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 1, 
-            "KeyList": [
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "play/pause", 
+            "action": 1, 
+            "keyList": [
                 85
             ]
         }, 
         {
-            "Comment": "skip forward", 
-            "Origin": 2, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 2, 
-            "KeyList": [
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "skip forward", 
+            "action": 2, 
+            "keyList": [
                 90
             ]
         }, 
         {
-            "Comment": "skip forward", 
-            "Origin": 6, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 2, 
-            "KeyList": [
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "skip forward", 
+            "action": 2, 
+            "keyList": [
                 90
             ]
         }, 
         {
-            "Comment": "skip forward", 
-            "Origin": 4, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 2, 
-            "KeyList": [
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "skip forward", 
+            "action": 2, 
+            "keyList": [
                 90
             ]
         }, 
         {
-            "Comment": "skip back", 
-            "Origin": 2, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 3, 
-            "KeyList": [
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "skip back", 
+            "action": 3, 
+            "keyList": [
                 89
             ]
         }, 
         {
-            "Comment": "skip back", 
-            "Origin": 6, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 3, 
-            "KeyList": [
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "skip back", 
+            "action": 3, 
+            "keyList": [
                 89
             ]
         }, 
         {
-            "Comment": "skip back", 
-            "Origin": 4, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 3, 
-            "KeyList": [
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "skip back", 
+            "action": 3, 
+            "keyList": [
                 89
             ]
         }, 
         {
-            "Comment": "mute toggle", 
-            "Origin": 2, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 114, 
-            "KeyList": [
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "mute toggle", 
+            "action": 114, 
+            "keyList": [
                 1
             ]
         }, 
         {
-            "Comment": "mute toggle", 
-            "Origin": 6, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 114, 
-            "KeyList": [
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "mute toggle", 
+            "action": 114, 
+            "keyList": [
                 1
             ]
         }, 
         {
-            "Comment": "mute toggle", 
-            "Origin": 4, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 114, 
-            "KeyList": [
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "mute toggle", 
+            "action": 114, 
+            "keyList": [
                 1
             ]
         }, 
         {
-            "Comment": "select soundtouch", 
-            "Origin": 2, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 115, 
-            "KeyList": [
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select soundtouch", 
+            "action": 115, 
+            "keyList": [
                 179
             ]
         }, 
         {
-            "Comment": "select soundtouch", 
-            "Origin": 6, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 115, 
-            "KeyList": [
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select soundtouch", 
+            "action": 115, 
+            "keyList": [
                 179
             ]
         }, 
         {
-            "Comment": "select soundtouch", 
-            "Origin": 4, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 115, 
-            "KeyList": [
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select soundtouch", 
+            "action": 115, 
+            "keyList": [
                 179
             ]
         }, 
         {
-            "Comment": "connect", 
-            "Origin": 2, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 116, 
-            "KeyList": [
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "connect", 
+            "action": 116, 
+            "keyList": [
                 17
             ]
         }, 
         {
-            "Comment": "connect", 
-            "Origin": 6, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 116, 
-            "KeyList": [
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "connect", 
+            "action": 116, 
+            "keyList": [
                 17
             ]
         }, 
         {
-            "Comment": "connect", 
-            "Origin": 4, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 116, 
-            "KeyList": [
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "connect", 
+            "action": 116, 
+            "keyList": [
                 17
             ]
         }, 
         {
-            "Comment": "vpa", 
-            "Origin": 2, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 117, 
-            "KeyList": [
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "vpa", 
+            "action": 117, 
+            "keyList": [
                 18
             ]
         }, 
         {
-            "Comment": "vpa", 
-            "Origin": 6, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 117, 
-            "KeyList": [
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "vpa", 
+            "action": 117, 
+            "keyList": [
                 18
             ]
         }, 
         {
-            "Comment": "vpa", 
-            "Origin": 4, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 117, 
-            "KeyList": [
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "vpa", 
+            "action": 117, 
+            "keyList": [
                 18
             ]
         }, 
         {
-            "Comment": "select tv", 
-            "Origin": 2, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 118, 
-            "KeyList": [
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select tv", 
+            "action": 118, 
+            "keyList": [
                 14
             ]
         }, 
         {
-            "Comment": "select tv", 
-            "Origin": 6, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 118, 
-            "KeyList": [
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select tv", 
+            "action": 118, 
+            "keyList": [
                 14
             ]
         }, 
         {
-            "Comment": "select tv", 
-            "Origin": 4, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 118, 
-            "KeyList": [
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select tv", 
+            "action": 118, 
+            "keyList": [
                 14
             ]
         }, 
         {
-            "Comment": "thumbs up", 
-            "Origin": 2, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 119, 
-            "KeyList": [
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "thumbs up", 
+            "action": 119, 
+            "keyList": [
                 107
             ]
         }, 
         {
-            "Comment": "thumbs up", 
-            "Origin": 6, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 119, 
-            "KeyList": [
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "thumbs up", 
+            "action": 119, 
+            "keyList": [
                 107
             ]
         }, 
         {
-            "Comment": "thumbs up", 
-            "Origin": 4, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 119, 
-            "KeyList": [
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "thumbs up", 
+            "action": 119, 
+            "keyList": [
                 107
             ]
         }, 
         {
-            "Comment": "thumbs down", 
-            "Origin": 2, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 120, 
-            "KeyList": [
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "thumbs down", 
+            "action": 120, 
+            "keyList": [
                 106
             ]
         }, 
         {
-            "Comment": "thumbs down", 
-            "Origin": 6, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 120, 
-            "KeyList": [
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "thumbs down", 
+            "action": 120, 
+            "keyList": [
                 106
             ]
         }, 
         {
-            "Comment": "thumbs down", 
-            "Origin": 4, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 120, 
-            "KeyList": [
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "thumbs down", 
+            "action": 120, 
+            "keyList": [
                 106
             ]
         }, 
         {
-            "Comment": "factory default", 
-            "Origin": 2, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 5000
             ], 
-            "Action": 8, 
-            "KeyList": [
+            "commment": "factory default", 
+            "action": 8, 
+            "keyList": [
                 253
             ]
         }, 
         {
-            "Comment": "factory default", 
-            "Origin": 6, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 5000
             ], 
-            "Action": 8, 
-            "KeyList": [
+            "commment": "factory default", 
+            "action": 8, 
+            "keyList": [
                 253
             ]
         }, 
         {
-            "Comment": "factory default", 
-            "Origin": 4, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 5000
             ], 
-            "Action": 8, 
-            "KeyList": [
+            "commment": "factory default", 
+            "action": 8, 
+            "keyList": [
                 253
             ]
         }, 
         {
-            "Comment": "wifi off", 
-            "Origin": 2, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 3000
             ], 
-            "Action": 7, 
-            "KeyList": [
+            "commment": "wifi off", 
+            "action": 7, 
+            "keyList": [
                 252
             ]
         }, 
         {
-            "Comment": "wifi off", 
-            "Origin": 6, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 3000
             ], 
-            "Action": 7, 
-            "KeyList": [
+            "commment": "wifi off", 
+            "action": 7, 
+            "keyList": [
                 252
             ]
         }, 
         {
-            "Comment": "wifi off", 
-            "Origin": 4, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 3000
             ], 
-            "Action": 7, 
-            "KeyList": [
+            "commment": "wifi off", 
+            "action": 7, 
+            "keyList": [
                 252
             ]
         }, 
         {
-            "Comment": "ap setup", 
-            "Origin": 2, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 3000
             ], 
-            "Action": 5, 
-            "KeyList": [
+            "commment": "ap setup", 
+            "action": 5, 
+            "keyList": [
                 251
             ]
         }, 
         {
-            "Comment": "ap setup", 
-            "Origin": 6, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 3000
             ], 
-            "Action": 5, 
-            "KeyList": [
+            "commment": "ap setup", 
+            "action": 5, 
+            "keyList": [
                 251
             ]
         }, 
         {
-            "Comment": "ap setup", 
-            "Origin": 4, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 3000
             ], 
-            "Action": 5, 
-            "KeyList": [
+            "commment": "ap setup", 
+            "action": 5, 
+            "keyList": [
                 251
             ]
         }, 
         {
-            "Comment": "pair speakers", 
-            "Origin": 2, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 2, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 3000
             ], 
-            "Action": 124, 
-            "KeyList": [
+            "commment": "pair speakers", 
+            "action": 124, 
+            "keyList": [
                 250
             ]
         }, 
         {
-            "Comment": "pair speakers", 
-            "Origin": 6, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 6, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 3000
             ], 
-            "Action": 124, 
-            "KeyList": [
+            "commment": "pair speakers", 
+            "action": 124, 
+            "keyList": [
                 250
             ]
         }, 
         {
-            "Comment": "pair speakers", 
-            "Origin": 4, 
-            "KeyEvent": 2, 
-            "TimeOutList": [
+            "origin": 4, 
+            "keyEvent": 2, 
+            "timeOutList": [
                 3000
             ], 
-            "Action": 124, 
-            "KeyList": [
+            "commment": "pair speakers", 
+            "action": 124, 
+            "keyList": [
                 250
             ]
         }, 
         {
-            "Comment": "mute toggle", 
-            "Origin": 1, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 114, 
-            "KeyList": [
+            "origin": 1, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "mute toggle", 
+            "action": 114, 
+            "keyList": [
                 1
             ]
         }, 
         {
-            "Comment": "vpa", 
-            "Origin": 1, 
-            "KeyEvent": 0, 
-            "TimeOutList": [], 
-            "Action": 117, 
-            "KeyList": [
+            "origin": 1, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "vpa", 
+            "action": 117, 
+            "keyList": [
                 18
             ]
         }

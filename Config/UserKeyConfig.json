@@ -1,332 +1,300 @@
 {   
-    "KeyTable": [
+    "keyTable": [
     {
-        "Action": "KEY_ACTION_POWER",
-        "Comment": "power toggle",
-        "KeyEvent": "PRESS",
-        "KeyList": ["BOSE_ON_OFF"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": []
+        "action": "KEY_ACTION_POWER",
+        "commment": "power toggle",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_ON_OFF"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": []
     },
     {
-        "Action": "KEY_ACTION_BLUETOOTH_CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST",
-        "Comment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast",
-        "KeyEvent": "RELEASE",
-        "KeyList": ["BOSE_BLUETOOTH_SOURCE"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [0]
+        "action": "KEY_ACTION_BLUETOOTH_CAROUSEL_DISCOVERABLE_CONNECT_TO_LAST",
+        "commment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_BLUETOOTH_SOURCE"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [0]
     },
     {
-        "Action": "KEY_ACTION_BLUETOOTH_SEND_TO_DISCOVERABLE",
-        "Comment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable",
-        "KeyEvent": "PRESS_HOLD",
-        "KeyList": ["BOSE_BLUETOOTH_SOURCE"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [750]
+        "action": "KEY_ACTION_BLUETOOTH_SEND_TO_DISCOVERABLE",
+        "commment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_BLUETOOTH_SOURCE"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [750]
     },
     {
-        "Action": "KEY_ACTION_BLUETOOTH_CLEAR_PAIRING_LIST",
-        "Comment": "Console: Bluetooth Press and Hold ---> Clear Pairing List",
-        "KeyEvent": "PRESS_HOLD",
-        "KeyList": ["BOSE_BLUETOOTH_SOURCE"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [10000]
+        "action": "KEY_ACTION_BLUETOOTH_CLEAR_PAIRING_LIST",
+        "commment": "Console: Bluetooth Press and Hold ---> Clear Pairing List",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_BLUETOOTH_SOURCE"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [10000]
     },
     {
-        "Action": "VOICE_CAROUSEL",
-        "Comment": "Console: Action release ---> Alexa",
-        "KeyEvent": "RELEASE",
-        "KeyList": ["BOSE_GAME_SOURCE"],
-        "Origin": ["CAPSENSE"],
-        "TimeOutList": [0]
+        "action": "VOICE_CAROUSEL",
+        "commment": "Console: action release ---> Alexa",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_GAME_SOURCE"],
+        "origin": ["CAPSENSE"],
+        "timeOutList": [0]
     },
     {
-        "Action": "KEY_ACTION_PRESET_STORE_1",
-        "Comment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1",
-        "KeyEvent": "PRESS_HOLD",
-        "KeyList": ["BOSE_NUMBER_1"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [1000]
+        "action": "KEY_ACTION_PRESET_STORE_1",
+        "commment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_NUMBER_1"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [1000]
     },
     {
-        "Action": "KEY_ACTION_PRESET_STORE_2",
-        "Comment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2",
-        "KeyEvent": "PRESS_HOLD",
-        "KeyList": ["BOSE_NUMBER_2"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [1000]
+        "action": "KEY_ACTION_PRESET_STORE_2",
+        "commment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_NUMBER_2"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [1000]
     },
     {
-        "Action": "KEY_ACTION_PRESET_STORE_3",
-        "Comment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3",
-        "KeyEvent": "PRESS_HOLD",
-        "KeyList": ["BOSE_NUMBER_3"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [1000]
+        "action": "KEY_ACTION_PRESET_STORE_3",
+        "commment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_NUMBER_3"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [1000]
     },
     {
-        "Action": "KEY_ACTION_PRESET_STORE_4",
-        "Comment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4",
-        "KeyEvent": "PRESS_HOLD",
-        "KeyList": ["BOSE_NUMBER_4"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [1000]
+        "action": "KEY_ACTION_PRESET_STORE_4",
+        "commment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_NUMBER_4"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [1000]
     },
     {
-        "Action": "KEY_ACTION_PRESET_STORE_5",
-        "Comment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5",
-        "KeyEvent": "PRESS_HOLD",
-        "KeyList": ["BOSE_NUMBER_5"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [1000]
+        "action": "KEY_ACTION_PRESET_STORE_5",
+        "commment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_NUMBER_5"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [1000]
     },
     {
-        "Action": "KEY_ACTION_PRESET_STORE_6",
-        "Comment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6",
-        "KeyEvent": "PRESS_HOLD",
-        "KeyList": ["BOSE_NUMBER_6"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [1000]
+        "action": "KEY_ACTION_PRESET_STORE_6",
+        "commment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_NUMBER_6"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [1000]
     },
     {
-        "Action": "KEY_ACTION_PRESET_SELECT_1",
-        "Comment": "Console: Preset 1 release ---> Select Preset stored on Key 1",
-        "KeyEvent": "RELEASE",
-        "KeyList": ["BOSE_NUMBER_1"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [200]
+        "action": "KEY_ACTION_PRESET_SELECT_1",
+        "commment": "Console: Preset 1 release ---> Select Preset stored on Key 1",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_1"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [200]
     },
     {
-        "Action": "KEY_ACTION_PRESET_SELECT_2",
-        "Comment": "Console: Preset 2 release ---> Select Preset stored on Key 2",
-        "KeyEvent": "RELEASE",
-        "KeyList": ["BOSE_NUMBER_2"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [200]
+        "action": "KEY_ACTION_PRESET_SELECT_2",
+        "commment": "Console: Preset 2 release ---> Select Preset stored on Key 2",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_2"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [200]
     },
     {
-        "Action": "KEY_ACTION_PRESET_SELECT_3",
-        "Comment": "Console: Preset 3 release ---> Select Preset stored on Key 3",
-        "KeyEvent": "RELEASE",
-        "KeyList": ["BOSE_NUMBER_3"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [200]
+        "action": "KEY_ACTION_PRESET_SELECT_3",
+        "commment": "Console: Preset 3 release ---> Select Preset stored on Key 3",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_3"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [200]
     },
     {
-        "Action": "KEY_ACTION_PRESET_SELECT_4",
-        "Comment": "Console: Preset 4 release ---> Select Preset stored on Key 4",
-        "KeyEvent": "RELEASE",
-        "KeyList": ["BOSE_NUMBER_4"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [200]
+        "action": "KEY_ACTION_PRESET_SELECT_4",
+        "commment": "Console: Preset 4 release ---> Select Preset stored on Key 4",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_4"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [200]
     },
     {
-        "Action": "KEY_ACTION_PRESET_SELECT_5",
-        "Comment": "Console: Preset 5 release ---> Select Preset stored on Key 5",
-        "KeyEvent": "RELEASE",
-        "KeyList": ["BOSE_NUMBER_5"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [200]
+        "action": "KEY_ACTION_PRESET_SELECT_5",
+        "commment": "Console: Preset 5 release ---> Select Preset stored on Key 5",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_5"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [200]
     },
     {
-        "Action": "KEY_ACTION_PRESET_SELECT_6",
-        "Comment": "Console: Preset 6 release ---> Select Preset stored on Key 6",
-        "KeyEvent": "RELEASE",
-        "KeyList": ["BOSE_NUMBER_6"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [200]
+        "action": "KEY_ACTION_PRESET_SELECT_6",
+        "commment": "Console: Preset 6 release ---> Select Preset stored on Key 6",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_NUMBER_6"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [200]
     },
     {
-        "Action": "KEY_ACTION_VOLUME_UP_1",
-        "Comment": "volume up",
-        "KeyEvent": "RELEASE",
-        "KeyList": ["BOSE_VOLUME_UP"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [0]
+        "action": "KEY_ACTION_VOLUME_UP_1",
+        "commment": "volume up",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_VOLUME_UP"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [0]
     },
     {
-        "Action": "KEY_ACTION_VOLUME_UP_1",
-        "Comment": "volume up",
-        "KeyEvent": "RELEASE",
-        "KeyList": ["BOSE_VOLUME_UP"],
-        "Origin": ["CEC"],
-        "TimeOutList": [0]
+        "action": "KEY_ACTION_VOLUME_UP_1",
+        "commment": "volume up repeat",
+        "keyEvent": "PRESS_HOLD_REPEAT",
+        "keyList": ["BOSE_VOLUME_UP"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [300, 100]
     },
     {
-        "Action": "KEY_ACTION_VOLUME_UP_1",
-        "Comment": "volume up repeat",
-        "KeyEvent": "PRESS_HOLD_REPEAT",
-        "KeyList": ["BOSE_VOLUME_UP"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [300, 100]
+        "action": "KEY_ACTION_VOLUME_DOWN_1",
+        "commment": "volume down",
+        "keyEvent": "RELEASE",
+        "keyList": ["BOSE_VOLUME_DOWN"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [0]
     },
     {
-        "Action": "KEY_ACTION_VOLUME_UP_1",
-        "Comment": "volume up repeat",
-        "KeyEvent": "PRESS_HOLD_REPEAT",
-        "KeyList": ["BOSE_VOLUME_UP"],
-        "Origin": ["CEC"],
-        "TimeOutList": [300, 100]
+        "action": "KEY_ACTION_VOLUME_DOWN_1",
+        "commment": "volume down repeat",
+        "keyEvent": "PRESS_HOLD_REPEAT",
+        "keyList": ["BOSE_VOLUME_DOWN"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [300, 100]
     },
     {
-        "Action": "KEY_ACTION_VOLUME_DOWN_1",
-        "Comment": "volume down",
-        "KeyEvent": "RELEASE",
-        "KeyList": ["BOSE_VOLUME_DOWN"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [0]
+        "action": "KEY_ACTION_PLAY_PAUSE",
+        "commment": "play/pause",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_PLAY"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": []
     },
     {
-        "Action": "KEY_ACTION_VOLUME_DOWN_1",
-        "Comment": "volume down",
-        "KeyEvent": "RELEASE",
-        "KeyList": ["BOSE_VOLUME_DOWN"],
-        "Origin": ["CEC"],
-        "TimeOutList": [0]
+        "action": "KEY_ACTION_SKIP_FORWARD",
+        "commment": "skip forward",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_QUICK_SKIP"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": []
     },
     {
-        "Action": "KEY_ACTION_VOLUME_DOWN_1",
-        "Comment": "volume down repeat",
-        "KeyEvent": "PRESS_HOLD_REPEAT",
-        "KeyList": ["BOSE_VOLUME_DOWN"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [300, 100]
+        "action": "KEY_ACTION_SKIP_BACK",
+        "commment": "skip back",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_QUICK_REPLAY"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": []
     },
     {
-        "Action": "KEY_ACTION_VOLUME_DOWN_1",
-        "Comment": "volume down repeat",
-        "KeyEvent": "PRESS_HOLD_REPEAT",
-        "KeyList": ["BOSE_VOLUME_DOWN"],
-        "Origin": ["CEC"],
-        "TimeOutList": [300, 100]
+        "action": "KEY_ACTION_MUTE",
+        "commment": "mute toggle",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_MUTE"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": []
     },
     {
-        "Action": "KEY_ACTION_PLAY_PAUSE",
-        "Comment": "play/pause",
-        "KeyEvent": "PRESS",
-        "KeyList": ["BOSE_PLAY"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": []
+        "action": "KEY_ACTION_SOUNDTOUCH",
+        "commment": "select soundtouch",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_SOUND_TOUCH_SOURCE"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": []
     },
     {
-        "Action": "KEY_ACTION_SKIP_FORWARD",
-        "Comment": "skip forward",
-        "KeyEvent": "PRESS",
-        "KeyList": ["BOSE_QUICK_SKIP"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": []
+        "action": "KEY_ACTION_CONNECT",
+        "commment": "connect",
+        "keyEvent": "PRESS",
+        "keyList": ["KEY_VAL_AVAIL_11"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": []
     },
     {
-        "Action": "KEY_ACTION_SKIP_BACK",
-        "Comment": "skip back",
-        "KeyEvent": "PRESS",
-        "KeyList": ["BOSE_QUICK_REPLAY"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": []
+        "action": "KEY_ACTION_ACTION",
+        "commment": "vpa",
+        "keyEvent": "PRESS",
+        "keyList": ["KEY_VAL_AVAIL_12"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": []
     },
     {
-        "Action": "KEY_ACTION_MUTE",
-        "Comment": "mute toggle",
-        "KeyEvent": "PRESS",
-        "KeyList": ["BOSE_MUTE"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": []
+        "action": "KEY_ACTION_TV",
+        "commment": "select tv",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_TV_SOURCE"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": []
     },
     {
-        "Action": "KEY_ACTION_SOUNDTOUCH",
-        "Comment": "select soundtouch",
-        "KeyEvent": "PRESS",
-        "KeyList": ["BOSE_SOUND_TOUCH_SOURCE"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": []
+        "action": "KEY_ACTION_THUMB_UP",
+        "commment": "thumbs up",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_PAGE_THUMBS_UP"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": []
     },
     {
-        "Action": "KEY_ACTION_CONNECT",
-        "Comment": "connect",
-        "KeyEvent": "PRESS",
-        "KeyList": ["KEY_VAL_AVAIL_11"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": []
+        "action": "KEY_ACTION_THUMB_DOWN",
+        "commment": "thumbs down",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_PAGE_THUMBS_DOWN"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": []
     },
     {
-        "Action": "KEY_ACTION_ACTION",
-        "Comment": "vpa",
-        "KeyEvent": "PRESS",
-        "KeyList": ["KEY_VAL_AVAIL_12"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": []
+        "action": "KEY_ACTION_FACTORY_DEFAULT",
+        "commment": "factory default",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_FD"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [5000]
     },
     {
-        "Action": "KEY_ACTION_TV",
-        "Comment": "select tv",
-        "KeyEvent": "PRESS",
-        "KeyList": ["BOSE_TV_SOURCE"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": []
+        "action": "KEY_ACTION_WIFI_OFF",
+        "commment": "wifi off",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_WIFI_OFF"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [3000]
     },
     {
-        "Action": "KEY_ACTION_THUMB_UP",
-        "Comment": "thumbs up",
-        "KeyEvent": "PRESS",
-        "KeyList": ["BOSE_PAGE_THUMBS_UP"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": []
+        "action": "KEY_ACTION_AP_SETUP",
+        "commment": "ap setup",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_AP_SETUP"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [3000]
     },
     {
-        "Action": "KEY_ACTION_THUMB_DOWN",
-        "Comment": "thumbs down",
-        "KeyEvent": "PRESS",
-        "KeyList": ["BOSE_PAGE_THUMBS_DOWN"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": []
+        "action": "KEY_ACTION_PAIR_SPEAKERS",
+        "commment": "pair speakers",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_PAIR_SPKR"],
+        "origin": ["IR", "TAP", "CEC"],
+        "timeOutList": [3000]
     },
     {
-        "Action": "KEY_ACTION_FACTORY_DEFAULT",
-        "Comment": "factory default",
-        "KeyEvent": "PRESS_HOLD",
-        "KeyList": ["BOSE_FD"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [5000]
+        "action": "KEY_ACTION_MUTE",
+        "commment": "mute toggle",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_MUTE"],
+        "origin": ["CAPSENSE"],
+        "timeOutList": []
     },
     {
-        "Action": "KEY_ACTION_WIFI_OFF",
-        "Comment": "wifi off",
-        "KeyEvent": "PRESS_HOLD",
-        "KeyList": ["BOSE_WIFI_OFF"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [3000]
-    },
-    {
-        "Action": "KEY_ACTION_AP_SETUP",
-        "Comment": "ap setup",
-        "KeyEvent": "PRESS_HOLD",
-        "KeyList": ["BOSE_AP_SETUP"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [3000]
-    },
-    {
-        "Action": "KEY_ACTION_PAIR_SPEAKERS",
-        "Comment": "pair speakers",
-        "KeyEvent": "PRESS_HOLD",
-        "KeyList": ["BOSE_PAIR_SPKR"],
-        "Origin": ["IR", "TAP", "CEC"],
-        "TimeOutList": [3000]
-    },
-    {
-        "Action": "KEY_ACTION_MUTE",
-        "Comment": "mute toggle",
-        "KeyEvent": "PRESS",
-        "KeyList": ["BOSE_MUTE"],
-        "Origin": ["CAPSENSE"],
-        "TimeOutList": []
-    },
-    {
-        "Action": "KEY_ACTION_ACTION",
-        "Comment": "vpa",
-        "KeyEvent": "PRESS",
-        "KeyList": ["KEY_VAL_AVAIL_12"],
-        "Origin": ["CAPSENSE"],
-        "TimeOutList": []
+        "action": "KEY_ACTION_ACTION",
+        "commment": "vpa",
+        "keyEvent": "PRESS",
+        "keyList": ["KEY_VAL_AVAIL_12"],
+        "origin": ["CAPSENSE"],
+        "timeOutList": []
     }
     ]
 }
