@@ -67,8 +67,7 @@ CustomProductControllerStateAdaptIQ::CustomProductControllerStateAdaptIQ
   const std::string&          name )
 
     : ProductControllerState( hsm, pSuperState, stateId, name ),
-      m_timer( APTimer::Create( productController.GetTask( ), "AdaptIQTimer" ) ),
-      m_AdaptIQManager( productController.GetAdaptIQManager( ) )
+      m_timer( APTimer::Create( productController.GetTask( ), "AdaptIQTimer" ) )
 {
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being constructed." );
 }
@@ -142,19 +141,19 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAda
     switch( cmd.action() )
     {
     case ProductAdaptIQControl::Start:
-        m_AdaptIQManager->SendAdaptIQControl( ProductAdaptIQControl::Start );
+        GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Start );
         break;
 
     case ProductAdaptIQControl::Cancel:
-        m_AdaptIQManager->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
+        GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
         break;
 
     case ProductAdaptIQControl::Advance:
-        m_AdaptIQManager->SendAdaptIQControl( ProductAdaptIQControl::Advance );
+        GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Advance );
         break;
 
     case ProductAdaptIQControl::Previous:
-        m_AdaptIQManager->SendAdaptIQControl( ProductAdaptIQControl::Previous );
+        GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Previous );
         break;
 
     default:

@@ -1,10 +1,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      ProductVolumeManager.h
+/// @file      VolumeMuteControlManager.h
 ///
-/// @brief     This file contains declarations to implement audio volume management.
+/// @brief     This header file declares an intent manager class for implementing volume and mute
+///            control based on Professor product specific key actions
 ///
-/// @author    Chris Houston
+/// @author    Stuart J. Lumby
+///
+/// @todo      This intent manager needs to incorporate changes for the ramping up or down of the
+///            volume found in the common code in the repository CastleProductControllerCommon.
+///            This requirement is logged under the JIRA Story PGC-600.
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -17,7 +22,6 @@
 ///            whatsoever without the written permission of Bose Corporation.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// The following compiler directive prevents this header file from being included more than once,
@@ -52,31 +56,46 @@ class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class ProductVolumeManager
+/// @class VolumeMuteControlManager
 ///
 /// @brief This class provides functionality to implement audio volume management.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProductVolumeManager
+class VolumeMuteControlManager : public IntentManager
 {
 public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief ProductVolumeManager Constructor
+    /// @brief Constructor for the VolumeMuteControlManager Class
     ///
-    /// @param  ProfessorProductController& ProductController
+    /// @param NotifyTargetTaskIF&         task
+    ///
+    /// @param const CliClientMT&          commandLineClient
+    ///
+    /// @param const FrontDoorClientIF_t&  frontDoorClient
+    ///
+    /// @param ProfessorProductController& productController
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    ProductVolumeManager( ProfessorProductController& ProductController );
+    VolumeMuteControlManager( NotifyTargetTaskIF&        task,
+                              const CliClientMT&         commandLineClient,
+                              const FrontDoorClientIF_t& frontDoorClient,
+                              ProductController&         productController );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief  The following public methods are used to run and stop instances of the
-    ///         ProductVolumeManager class, respectively.
+    /// @brief  The following methods is used to handle volume and mute actions.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool Run( );
+    bool Handle( KeyHandlerUtil::ActionType_t& action ) override;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief  The following methods is used to stop instances of the VolumeMuteControlManager
+    ///         class.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
     void Stop( );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,6 +108,13 @@ public:
     void ToggleMute( );
 
 private:
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following member variable stores the custom Professor product controller instance.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ProfessorProductController& m_CustomProductController;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These declarations store the main task for processing LPM hardware events and requests. It
@@ -111,7 +137,7 @@ private:
     ///        has completed
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void Initialize();
+    void Initialize( );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

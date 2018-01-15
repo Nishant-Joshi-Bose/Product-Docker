@@ -71,10 +71,9 @@ public:
 
     }
 
-    void HandleStateEnter( )           override;
-    void HandleStateStart( )           override;
-    bool HandleKeyAction( int action ) override;
-
+    void HandleStateEnter( ) override;
+    void HandleStateStart( ) override;
+    bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action ) override;
 private:
 
     void GoToAppropriateNonplayingState( );

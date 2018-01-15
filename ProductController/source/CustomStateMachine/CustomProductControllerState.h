@@ -77,12 +77,12 @@ public:
 
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// Here are the common event handlers. They need to be declared virtual and
-    /// have an implementation that returns false
+    /// Here are the common event handlers. They need to be declared virtual and have an
+    /// implementation that returns false.
     ///
-    ///////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     virtual bool HandleLpmState( bool isActive )
     {
         return false;
@@ -147,7 +147,6 @@ public:
     {
         return false;
     }
-
     virtual bool HandleIntentVoice( KeyHandlerUtil::ActionType_t result )
     {
         return false;
@@ -177,7 +176,6 @@ public:
     {
         return false;
     }
-
     virtual bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
     {
         return false;
@@ -198,16 +196,27 @@ public:
         return false;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// Methods are to be added at this point to implement product specific actions. These methods
     /// should be overridden in the product specific state derived class that actually executes
     /// product specific action.
     ///
-    virtual bool HandleKeyAction( int action );
-    virtual bool HandlePairingState( ProductAccessoryPairing pairingStatus );
-    virtual bool HandleModulesReady( );
-    virtual bool HandleNetworkConfigurationStatus( );
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    virtual bool HandlePairingState( ProductAccessoryPairing pairingStatus )
+    {
+        return false;
+    }
 
+    virtual bool HandleModulesReady( )
+    {
+        return false;
+    }
+
+    virtual bool HandleNetworkConfigurationStatus( )
+    {
+        return false;
+    }
 
     virtual bool HandleLPMPowerStatusColdBoot( )
     {
@@ -234,6 +243,31 @@ public:
         return false;
     }
 
+    virtual bool HandleIntent( KeyHandlerUtil::ActionType_t action )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentVolumeMuteControl( KeyHandlerUtil::ActionType_t action )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t action )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentPlayback( KeyHandlerUtil::ActionType_t action )
+    {
+        return false;
+    }
+
     virtual bool HandleAdaptIQStatus( const ProductAdaptIQStatus& status )
     {
         return false;
@@ -244,6 +278,12 @@ public:
         return false;
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// This method returns the Professor Custom Product Controller reference of type
+    /// ProfessorProductController.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     inline static void SetProductController( ProductController* productController )
     {
         s_productController = productController;

@@ -1,62 +1,152 @@
-///////////////////////////////////////////////////////////////////////////////
-/// @file IntentHandler.cpp
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief Implementation of Intent Handler
-//  This module will offload the work of the Product Controller validate
-//  and build LAN API or IPC messages to perform actions of various Intents
-//  It also lets the Product Controller get control back in an Async way, so
-//  the HSM can perform state changes if it needs to.
-//  This Handler should not perform state transistions.
-//  It is intentional that the hsm or productController access is not given
-//  to this module.
-//  The Handler in-turn would delegate its work to customized Intent
-//  Managers based on the ActionType that is passed to it.
-//  These customized IntentManager will be taking actions based on
-//  1. State of its own subsystem, based on what was processed for the same
-//  action before, like a play or pause would have to toggle the actions.
-//  2. The IntentHandler will call various IntentManagers that are registered
-//  for specific intents. The initializing of IntentManagers needs to be done
-//  in IntentHandler::Initialize() for all intents that needs to be handled
-//  by this module.
-//
+/// @file      IntentHandler.cpp
 ///
-/// @attention
-///    BOSE CORPORATION.
-///    COPYRIGHT 2017 BOSE CORPORATION ALL RIGHTS RESERVED.
-///    This program may not be reproduced, in whole or in part in any
-///    form or any means whatsoever without the written permission of:
-///        BOSE CORPORATION
-///        The Mountain
-///        Framingham, MA 01701-9168
+/// @brief     This file contains source code that implements an intent handler. Its purpose is to
+///            offload the work of the product controller, validate, and build LAN API or IPC
+///            messages to perform actions of various intents. It also lets the product controller
+///            get control back in an async way, so the HSM can perform state changes if it needs
+///            to.
 ///
-///////////////////////////////////////////////////////////////////////////////
+/// @note      This Handler should not perform state transistions. It is intentional that HSM or
+///            product controller access is not given to this module. The handler in turn should
+///            delegate its work to customized intent managers based on the ActionType that is
+///            passed to it. These customized intent managers will be taking actions based on the
+///            following:
+///
+///            1. State of its own subsystem, based on what was processed for the same action
+///               before, like a play or pause would have to toggle the actions.
+///
+///            2. The intent handler will call various intent managers that are registered for
+///               specific intents. The initializing of intent managers needs to be done in the
+///               method IntentHandler::Initialize for all intents that needs to be handled by this
+///               module.
+///
+/// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
+///
+///            Bose Corporation
+///            The Mountain Road,
+///            Framingham, MA 01701-9168
+///            U.S.A.
+///
+///            This program may not be reproduced, in whole or in part, in any form by any means
+///            whatsoever without the written permission of Bose Corporation.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#include "DPrint.h"
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+///            Included Header Files
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#include "Utilities.h"
 #include "IntentHandler.h"
-#include "ProductController.h"
+#include "ProfessorProductController.h"
 #include "CliClientMT.h"
+#include "VolumeMuteControlManager.h"
+#include "SpeakerPairingManager.h"
+#include "PlaybackRequestManager.h"
 
-static DPrint s_logger( "IntentHandler" );
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                          Start of the Product Application Namespace                          ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
 
-IntentHandler::IntentHandler( NotifyTargetTaskIF& task,
-                              const CliClientMT& cliClient,
-                              const FrontDoorClientIF_t& frontDoorClient,
-                              ProductController& controller
-                            ):
-    CommonIntentHandler( task, cliClient, frontDoorClient, controller )
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief IntentHandler::IntentHandler
+///
+/// @param NotifyTargetTaskIF&        task
+///
+/// @param const CliClientMT&         commandLineClient
+///
+/// @param const FrontDoorClientIF_t& frontDoorClient
+///
+/// @param ProductController&         productController
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+IntentHandler::IntentHandler( NotifyTargetTaskIF&         task,
+                              const CliClientMT&          commandLineClient,
+                              const FrontDoorClientIF_t&  frontDoorClient,
+                              ProductController&          productController )
+
+    : CommonIntentHandler( task, commandLineClient, frontDoorClient, productController )
 {
-    BOSE_DEBUG( s_logger, "%s: ", __func__ );
+    BOSE_DEBUG( s_logger, "The IntentHandler is being constructed." );
 }
 
-void IntentHandler::Initialize()
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief IntentHandler::Initialize
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void IntentHandler::Initialize( )
 {
-    // Nothing yet beyond the common intents
-    CommonIntentHandler::Initialize();
-    BOSE_DEBUG( s_logger, "%s", __func__ );
+    BOSE_DEBUG( s_logger, "IntentHandler is in %s.", __FUNCTION__ );
+
+    ///
+    /// Initialize all the common intents found in the common source code.
+    ///
+    CommonIntentHandler::Initialize( );
+
+    ///
+    /// Custom intent managers for Professor are constructed at this point.
+    ///
+    IntentManagerPtr_t volumeMuteControlManager = std::make_shared< VolumeMuteControlManager >
+                                                  ( GetTask( ),
+                                                    GetCli( ),
+                                                    GetFrontDoorClient( ),
+                                                    GetProductController( ) );
+
+    IntentManagerPtr_t speakerPairingManager = std::make_shared< SpeakerPairingManager >
+                                               ( GetTask( ),
+                                                 GetCli( ),
+                                                 GetFrontDoorClient( ),
+                                                 GetProductController( ) );
+
+    IntentManagerPtr_t playbackRequestManager = std::make_shared< PlaybackRequestManager >
+                                                ( GetTask( ),
+                                                  GetCli( ),
+                                                  GetFrontDoorClient( ),
+                                                  GetProductController( ) );
+
+    ///
+    /// A map is created to associate the custom volume and mute control intent manager with volume
+    /// and mute key actions. Note that these actions are product specific to Professor devices,
+    /// typically based on remote key actions.
+    ///
+    m_IntentManagerMap[( uint16_t )Action::ACTION_VOLUME_UP_1 ]   = volumeMuteControlManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_VOLUME_DOWN_1 ] = volumeMuteControlManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_MUTE ]          = volumeMuteControlManager;
+    m_IntentNotificationMap[( uint16_t )Action::ACTION_VOLUME_UP_1 ]   = "volume_up";
+    m_IntentNotificationMap[( uint16_t )Action::ACTION_VOLUME_DOWN_1 ] = "volume_down";
+    m_IntentNotificationMap[( uint16_t )Action::ACTION_MUTE ]          = "mute";
+
+    ///
+    /// A map is created to associate the custom speaker pairing intent manager with pair speaker key
+    /// actions.
+    ///
+    m_IntentManagerMap[( uint16_t )Action::ACTION_PAIR_SPEAKERS ] = speakerPairingManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS ] = speakerPairingManager;
+    m_IntentNotificationMap[( uint16_t )Action::ACTION_PAIR_SPEAKERS ] = "pair_speakers";
+    m_IntentNotificationMap[( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS ] = "stop_pair_speakers";
+
+    ///
+    /// A map is created to associate the custom playback intent manager with product specific
+    /// source selection key actions, typically based on remote key actions.
+    ///
+    m_IntentManagerMap[( uint16_t )Action::ACTION_TV ]         = playbackRequestManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_SOUNDTOUCH ] = playbackRequestManager;
+    m_IntentNotificationMap[( uint16_t )Action::ACTION_TV ]         = "tv";
+    m_IntentNotificationMap[( uint16_t )Action::ACTION_SOUNDTOUCH ] = "soundtouch";
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                           End of the Product Application Namespace                           ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                         End of File                                          ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
