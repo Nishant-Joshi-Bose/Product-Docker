@@ -47,23 +47,14 @@ if dev is not None and dev != "true" and dev != "false":
     optional_dev = False
 
 cc = get("country_code")
-if cc is None:
-    warn("No country_code")
-    fixes.append("set country_code US")
-elif not re.match(r'^[A-Z][A-Z]$', cc):
+if cc is None or not re.match(r'^[A-Z][A-Z]$', cc):
     warn("Invalid country_code", cc)
     fixes.append("set country_code US")
 
-# The guid is supposed to be 32 hex digits.
-# For historical reasons, we also allow hyphens.
 guid = get("guid")
-if guid is None:
-    warn("No guid")
-elif not re.match(r'^[0-9a-fA-F]{32}$', guid.replace("-", "")):
-    warn("Invalid guid: '{}'".format(guid))
-    guid = None
-if guid is None:
-    guid = open("/proc/sys/kernel/random/uuid").read().rstrip("\n").replace("-", "")
+if guid is None or not re.match(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', guid):
+    warn("Invalid guid:", guid)
+    guid = open("/proc/sys/kernel/random/uuid").read().rstrip("\n")
     fixes.append("set guid " + guid)
 
 if not fixes:
