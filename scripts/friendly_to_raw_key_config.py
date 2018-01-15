@@ -146,25 +146,25 @@ def generate_raw_config(clang_args, index, args):
 
   # merge user config files
   j = {}
-  j['KeyTable'] = []
+  j['keyTable'] = []
   for f in args.inputcfgs:
     ifile = open(f).read()
     jtmp = json.loads(ifile)
-    j['KeyTable'] += jtmp['KeyTable']
+    j['keyTable'] += jtmp['keyTable']
 
   print(action_map)
   # transmogrify the key table
-  keymap = {'KeyTable' : []}
+  keymap = {'keyTable' : []}
 
-  for i, e in enumerate(j['KeyTable']):
+  for i, e in enumerate(j['keyTable']):
     discard = 0
     # sanity-check entry
-    origin_name = e['Origin']
-    event_name = e['KeyEvent']
-    action_name = e['Action']
+    origin_name = e['origin']
+    event_name = e['keyEvent']
+    action_name = e['action']
 
     # origin is a list now
-    for origin_name in e['Origin']:
+    for origin_name in e['origin']:
       if not origin_name in ORIGIN_NAMES:
         print('Entry {}, Unknown origin {}, skipping'.format(i, origin_name))
         continue
@@ -180,27 +180,27 @@ def generate_raw_config(clang_args, index, args):
       # replace with numeric values
       origin = ORIGIN_NAMES[origin_name]
       event = EVENT_NAMES[event_name]
-      oe['Origin'] = origin
-      oe['KeyEvent'] = event
-      oe['Action'] = action_map[action_name]
+      oe['origin'] = origin
+      oe['keyEvent'] = event
+      oe['action'] = action_map[action_name]
    
       key_map = key_maps[origin]
       if key_map is None:
         print('Entry {}, No key file supplied for origin {}, skipping'.format(i, origin_name))
         continue
   
-      for k in range(len(e['KeyList'])):
-        key = e['KeyList'][k]
+      for k in range(len(e['keyList'])):
+        key = e['keyList'][k]
         if not key in key_map:
           print('Entry {} / {}, Unknown key {}, skipping entry ({}, {})'.format(i, k, key, origin_name, origin))
           discard = 1
           break
         else:
           print('Entry {} / {}, key {}, do ({}, {})'.format(i, k, key, origin_name, origin))
-          oe['KeyList'][k] = key_map[key]
+          oe['keyList'][k] = key_map[key]
     
       if discard == 0:
-        keymap['KeyTable'].append(oe)
+        keymap['keyTable'].append(oe)
  
   s = json.dumps(keymap, indent=4)
   with io.FileIO(args.outputcfg, "w") as file:
@@ -250,22 +250,22 @@ def generate_friendly_config(clang_args, index, args):
 
   # merge user config files
   j = {}
-  j['KeyTable'] = []
+  j['keyTable'] = []
   for f in args.inputcfgs:
     ifile = open(f).read()
     jtmp = json.loads(ifile)
-    j['KeyTable'] += jtmp['KeyTable']
+    j['keyTable'] += jtmp['keyTable']
 
   print(action_map)
   # transmogrify the key table
-  keymap = {'KeyTable' : []}
+  keymap = {'keyTable' : []}
 
-  for i, e in enumerate(j['KeyTable']):
+  for i, e in enumerate(j['keyTable']):
     discard = 0
     # sanity-check entry
-    origin_name = e['Origin']
-    event_name = e['KeyEvent']
-    action_name = e['Action']
+    origin_name = e['origin']
+    event_name = e['keyEvent']
+    action_name = e['action']
 
     if not origin_name in ORIGIN_NAMES_REV:
       print('Entry {}, Unknown origin {}, skipping'.format(i, origin_name))
@@ -286,27 +286,27 @@ def generate_friendly_config(clang_args, index, args):
     if origin == 'TAP':
       continue
 
-    oe['Origin'] = [origin]
-    oe['KeyEvent'] = event
-    oe['Action'] = action_map[action_name]
+    oe['origin'] = [origin]
+    oe['keyEvent'] = event
+    oe['action'] = action_map[action_name]
   
     key_map = key_maps[origin_name]
     if key_map is None:
       print('Entry {}, No key file supplied for origin {}, skipping'.format(i, origin_name))
       continue
   
-    for k in range(len(e['KeyList'])):
-      key = e['KeyList'][k]
+    for k in range(len(e['keyList'])):
+      key = e['keyList'][k]
       if not key in key_map:
         print('Entry {} / {}, Unknown key {}, skipping entry ({}, {})'.format(i, k, key, origin_name, origin))
         discard = 1
         break
       else:
         print('Entry {} / {}, key {}, do ({}, {})'.format(i, k, key, origin_name, origin))
-        oe['KeyList'][k] = key_map[key]
+        oe['keyList'][k] = key_map[key]
   
     if discard == 0:
-      keymap['KeyTable'].append(oe)
+      keymap['keyTable'].append(oe)
  
   cf = CustomFormat(indent=4) 
   s = cf.pformat(keymap)

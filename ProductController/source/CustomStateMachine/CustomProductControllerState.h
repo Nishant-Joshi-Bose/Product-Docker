@@ -278,6 +278,16 @@ public:
         return false;
     }
 
+    virtual bool HandleAudioPathSelect( )
+    {
+        return false;
+    }
+
+    virtual bool HandleAudioPathDeselect( )
+    {
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// This method returns the Professor Custom Product Controller reference of type

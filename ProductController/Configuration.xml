@@ -48,7 +48,6 @@
             <muteParams objName="APPMute">
                 <app />
             </muteParams>
-            <volumeParams volcontrolType="VOLUME_FORWARD_APPRODUCT" />
         </outputDeviceParameters>
         <outputDriverParameterSet 	defaultOutputDriverIndex="0">
             <outputDriverParameters	outputDriverName="" 
