@@ -27,10 +27,10 @@ fields = line.split(" ")
 if len(fields) != 3:
     log("Malformed first header line", repr(fields))
     sys.exit()
-op, path, version = fields
+method, path, version = fields
 
 if debug:
-    log("op '{}', path '{}', version '{}'".format(op, path, version))
+    log("method '{}', path '{}', version '{}'".format(method, path, version))
 
 # Read the HTTP headers
 while True:
@@ -45,7 +45,36 @@ while True:
     if debug:
         log("header '{}'".format(line))
 
-if op == "GET":
+if method == "GET":
+
+# ----------------------------------------------------------------------------
+# Quality Audit CGI pages.
+
+    if path == "/qaudit":
+        print """\
+HTTP/1.1 301 Moved Permanently\r
+Location: /qaudit/\r
+\r
+Moved Permanently\r
+"""
+        sys.exit()
+
+    if path.startswith("/qaudit/"):
+        path = path[8:]
+        if path == "":
+            path = "main"
+        prog = path
+        args = []
+        i = path.find("/")
+        if i != -1:
+            args.append(path[i+1:])
+            prog = path[:i]
+        log("qaudit", prog, args)
+        os.chdir("/opt/Bose/qaudit")
+        sys.stdout.flush()
+        os.execv(prog, [prog] + args)
+
+# ----------------------------------------------------------------------------
 
     if path == "/logread.txt":
         print """\
