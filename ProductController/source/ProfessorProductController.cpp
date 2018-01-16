@@ -355,7 +355,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( statePlayingTransition );
     GetHsm( ).AddState( statePlayingTransitionSelected );
 
-    GetHsm( ).Init( this, PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SELECTED );
+    GetHsm( ).Init( this, PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
     ///
     /// Initialize entities in the Common Product Controller
