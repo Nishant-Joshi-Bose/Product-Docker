@@ -80,14 +80,14 @@ Cache-Control: no-cache\r
 \r"""
         os.dup2(sys.stdout.fileno(), sys.stderr.fileno()) # redirect stderr to stdout
         call("date")
-        call("cat", "/opt/Bose/etc/FS_VERSION")
+        call("cat", "/opt/Bose/etc/BoseVersion.json")
         call("free", "-m")
         call("ifconfig", "-a")
         call("ip", "route", "list")
         call("wpa_cli", "status")
         call("wpa_cli", "scan_results")
-        call("sh", "-c", "head -100 /mnt/nv/BoseApp-Persistence/1/*.xml")
-        call("ls", "-lH", "/mnt/nv/BoseLog")
+        call("sh", "-c", "head -100 /mnt/nv/product-persistence/* /mnt/nv/BoseApp-Persistence/1/*")
+        call("ls", "-lHt", "/mnt/nv/BoseLog")
         call("ps")
         sys.exit()
 
