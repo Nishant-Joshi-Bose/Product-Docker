@@ -289,7 +289,7 @@ private:
 
     void  SetTestSoundTouchPlayback( );
     void  RegisterNowPlayingEndPoint( );
-    void  HandleNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingStatus );
+    void  HandleNowPlaying( const SoundTouchInterface::NowPlaying& nowPlayingStatus );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
