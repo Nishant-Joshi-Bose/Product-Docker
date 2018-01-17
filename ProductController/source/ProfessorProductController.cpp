@@ -509,6 +509,19 @@ std::string const& ProfessorProductController::GetProductType( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   ProfessorProductController::GetProductColor
+///
+/// @return This method returns the std::string value to be used for the Product "color" field
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string ProfessorProductController::GetProductColor() const
+{
+    // @TODO https://jirapro.bose.com/browse/PGC-630
+    return "BLACK";
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::GetProductVariant
 ///
 /// @return This method returns the std::string const& value to be used for the Product "Variant" field
@@ -804,6 +817,18 @@ void ProfessorProductController::SetTestSoundTouchPlayback( )
 SoundTouchInterface::playbackRequestJson& ProfessorProductController::GetLastSoundTouchPlayback( )
 {
     return m_lastSoundTouchPlayback;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   GetWiFiOperationalMode
+///
+/// @return NetManager::Protobuf::OperationalMode of the WiFi subsystem
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+NetManager::Protobuf::OperationalMode ProfessorProductController::GetWiFiOperationalMode( )
+{
+    return GetNetworkServiceUtil().GetNetManagerOperationMode();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

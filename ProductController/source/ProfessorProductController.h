@@ -180,6 +180,15 @@ public:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     SoundTouchInterface::playbackRequestJson& GetLastSoundTouchPlayback( );
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @name   GetWiFiOperationalMode
+    ///
+    /// @return NetManager::Protobuf::OperationalMode of the WiFi subsystem
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    NetManager::Protobuf::OperationalMode GetWiFiOperationalMode( ) override;
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following method is called to handle product controller messages, which are
@@ -192,6 +201,8 @@ public:
     std::string const& GetDefaultProductName() const override;
 
     std::string const& GetProductType() const override;
+
+    std::string GetProductColor() const override;
 
     std::string const& GetProductVariant() const override;
 
