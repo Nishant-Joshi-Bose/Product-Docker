@@ -6,6 +6,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 #pragma once
 #include <json/value.h>
+#include <json/reader.h>
 #include "AudioSettingsManager.h"
 #include "AudioSettings.pb.h"
 
@@ -13,7 +14,7 @@ namespace ProductApp
 {
 using std::string;
 
-class CustomAudioSettingsManager: AudioSettingsManager
+class CustomAudioSettingsManager: public AudioSettingsManager
 {
 public:
     CustomAudioSettingsManager();

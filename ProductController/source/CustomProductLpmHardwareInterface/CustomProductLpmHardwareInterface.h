@@ -81,9 +81,6 @@ public:
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool NotifyVolumeLevel( uint32_t volume );
     bool NotifyMuteState( bool mute );
-    bool SendAudioPathPresentationLatency( uint32_t  latency );
-    bool SendLipSyncDelay( uint32_t                  audioDelay );
-    bool SendToneAndLevelControl( IpcToneControl_t&  controls );
     bool SendSpeakerList( IpcAccessoryList_t&        accessoryList );
     bool SendSetSystemTimeoutEnableBits( Ipc_TimeoutControl_t& timeoutControl );
     bool SendWiFiRadioStatus( uint32_t frequencyInKhz );
@@ -103,6 +100,14 @@ public:
     bool SendAccessoryPairing( bool enabled, const Callback<LpmServiceMessages::IpcSpeakerPairingMode_t>& cb );
     bool SendAccessoryActive( bool rears, bool subs,  const Callback<IpcSpeakersActive_t> &cb );
     bool SendAccessoryDisband( const Callback<IpcAccessoryDisbandCommand_t> &cb );
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief This method is for sending streamConfig to DSP for configuring inputs and gain.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    bool SendStreamConfig( std::string& serializedAudioSettings, std::string& serializedInputRoute, const Callback<bool>& cb );
+
 
 private:
 
