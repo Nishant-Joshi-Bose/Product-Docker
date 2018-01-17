@@ -82,11 +82,6 @@ public:
     {
         return BLESetupService::ProductId::EDDIE;
     }
-    BLESetupService::VariantId GetVariantId() const override
-    {
-        /// TODO variantID should be from mfg data
-        return BLESetupService::VariantId::NONE;
-    }
     std::string GetProductVersionNumber() const override
     {
         return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );
@@ -123,8 +118,10 @@ public:
     }
 
     std::string const& GetProductType() const override;
+    std::string GetProductColor() const override;
     std::string const& GetProductVariant() const override;
     std::string const& GetDefaultProductName() const override;
+    BLESetupService::VariantId GetVariantId() const override;
 
 private:
     /// Disable copies

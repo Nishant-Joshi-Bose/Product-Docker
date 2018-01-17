@@ -18,6 +18,7 @@
 #include "BluetoothSinkEndpoints.h"
 #include "EndPointsDefines.h"
 #include "CustomProductLpmHardwareInterface.h"
+#include "MfgData.h"
 
 //#include "ButtonPress.pb.h" // @TODO Leela, re-enable this code
 
@@ -919,5 +920,56 @@ bool EddieProductController::IsBooted( ) const
     return IsAllModuleReady();
 }
 
+std::string EddieProductController::GetProductColor() const
+{
+    if( auto color = MfgData::GetColor() )
+    {
+        if( *color == "luxGray" )
+        {
+            return "SILVER";
+        }
+        else if( *color == "tripleBlack" )
+        {
+            return "BLACK";
+        }
+        else
+        {
+            BOSE_LOG( WARNING, "Unexpected color value in manufacturing data: " << *color );
+        }
+    }
+    else
+    {
+        BOSE_DIE( "No 'productColor' in mfgdata" );
+    }
+
+    return "UNKNOWN";
+}
+
+BLESetupService::VariantId EddieProductController::GetVariantId() const
+{
+    BLESetupService::VariantId varintId = BLESetupService::VariantId::NONE;
+
+    if( auto color = MfgData::GetColor() )
+    {
+        if( *color == "luxGray" )
+        {
+            varintId = BLESetupService::VariantId::SILVER;
+        }
+        else if( *color == "tripleBlack" )
+        {
+            varintId = BLESetupService::VariantId::BLACK;
+        }
+        else
+        {
+            varintId = BLESetupService::VariantId::WHITE;
+        }
+    }
+    else
+    {
+        BOSE_DIE( "No 'productColor' in mfgdata" );
+    }
+
+    return varintId;
+}
 
 } /// namespace ProductApp

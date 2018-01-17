@@ -9,7 +9,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.3-217+add0b8b"
+    "selected_version": "Continuous/master/0.3.3-221+108b0e9"
   },
   {
     "name": "BoseOPKG-native",
@@ -65,7 +65,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@1dfa6cd5447309040479f0768724d3804bbafccd"
+    "selected_version": "master@bd916fb365efbc2290758f3faec84b0fe1b3806d"
   },
   {
     "name": "CastleProductUIAssets",
