@@ -216,6 +216,11 @@ public:
         return {};
     }
 
+    std::string GetProductColor() const
+    {
+        return "BLACK";
+    }
+
     bool IsSystemLanguageSet( ) const;
 
 private:
