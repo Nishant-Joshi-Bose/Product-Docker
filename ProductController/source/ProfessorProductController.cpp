@@ -654,7 +654,7 @@ void ProfessorProductController::HandleNowPlaying( const SoundTouchInterface::No
     if( nowPlayingStatus.has_state( ) )
     {
         BOSE_DEBUG( s_logger, "The CAPS now playing status has a %s status.",
-                    SoundTouchInterface::StatusJson_Name( nowPlayingStatus.state( ).status( ) ).c_str( ) );
+                    SoundTouchInterface::Status_Name( nowPlayingStatus.state( ).status( ) ).c_str( ) );
 
         if( nowPlayingStatus.state( ).status( ) == SoundTouchInterface::Status::play )
         {

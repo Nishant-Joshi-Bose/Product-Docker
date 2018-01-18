@@ -93,7 +93,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
                                                      std::placeholders::_1 ),
                                           &GetTask( ) );
 
-        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying>( "/content/playbackRequest",
+        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
                                                                           playbackRequestData,
                                                                           postPlaybackRequestResponseCallback,
                                                                           postPlaybackRequestErrorCallback );
@@ -116,7 +116,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
                                                      std::placeholders::_1 ),
                                           &GetTask( ) );
 
-        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying>( "/content/playbackRequest",
+        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
                                                                           playbackRequestData,
                                                                           postPlaybackRequestResponseCallback,
                                                                           postPlaybackRequestErrorCallback );
