@@ -58,6 +58,7 @@
 #include "CustomProductControllerStatePlayingInactive.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "CustomProductControllerStateAdaptIQSim.h"
+#include "MfgData.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -1290,6 +1291,59 @@ std::string const& ProfessorProductController::GetDefaultProductName( ) const
     BOSE_INFO( s_logger, "%s productName=%s", __func__, productName.c_str( ) );
     return productName;
 }
+
+std::string ProfessorProductController::GetProductColor() const
+{
+    if( auto color = MfgData::GetColor() )
+    {
+        if( *color == "luxGray" )
+        {
+            return "SILVER";
+        }
+        else if( *color == "tripleBlack" )
+        {
+            return "BLACK";
+        }
+        else
+        {
+            BOSE_LOG( WARNING, "Unexpected color value in manufacturing data: " << *color );
+        }
+    }
+    else
+    {
+        BOSE_DIE( "No 'productColor' in mfgdata" );
+    }
+
+    return "UNKNOWN";
+}
+
+BLESetupService::VariantId ProfessorProductController::GetVariantId() const
+{
+    BLESetupService::VariantId varintId = BLESetupService::VariantId::NONE;
+
+    if( auto color = MfgData::GetColor() )
+    {
+        if( *color == "luxGray" )
+        {
+            varintId = BLESetupService::VariantId::SILVER;
+        }
+        else if( *color == "tripleBlack" )
+        {
+            varintId = BLESetupService::VariantId::BLACK;
+        }
+        else
+        {
+            varintId = BLESetupService::VariantId::WHITE;
+        }
+    }
+    else
+    {
+        BOSE_DIE( "No 'productColor' in mfgdata" );
+    }
+
+    return varintId;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///

@@ -29,6 +29,7 @@
 #include "PlaybackRequestManager.h"
 #include "ProfessorProductController.h"
 #include "Intents.h"
+#include "EndPointsDefines.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
