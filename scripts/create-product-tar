@@ -140,6 +140,12 @@ def copy_files_to_stage():
         dest = os.path.join(stage_package_dir, "win")
         logging.debug("\tAdding [%s] to stage" %(src))
         copytree(src, dest, symlinks=True)
+
+        src = os.path.join(swupdate_dir, "tools/FlashTools/mac")
+        dest = os.path.join(stage_package_dir, "mac")
+        logging.debug("\tAdding [%s] to stage" %(src))
+        copytree(src, dest, symlinks=True)
+
     except:
         logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
         return -22, "Cannot add Flash utilities to stage"
