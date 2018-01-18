@@ -37,6 +37,39 @@ public:
         return ( ( arg == ( uint16_t ) Action::AUX_IN ) );
     }
 
+    static bool IsIntentManualUpdateControl( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( ( arg == ( uint16_t ) Action::MANUAL_UPDATE ) ||
+                 ( arg == ( uint16_t ) Action::MANUAL_UPDATE_COUNTDOWN ) ||
+                 ( arg == ( uint16_t ) Action::MANUAL_UPDATE_CANCEL ) );
+    }
+
+    static bool IsIntentFactoryResetControl( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( ( arg == ( uint16_t ) Action::FACTORY_RESET ) ||
+                 ( arg == ( uint16_t ) Action::FACTORY_RESET_COUNTDOWN ) ||
+                 ( arg == ( uint16_t ) Action::FACTORY_RESET_CANCEL ) );
+    }
+
+    static bool IsIntentSetupCountdownControl( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( ( arg == ( uint16_t ) Action::SETUP_AP_COUNTDOWN ) ||
+                 ( arg == ( uint16_t ) Action::SETUP_AP_CANCEL ) );
+    }
+
+    static bool IsIntentDisableNetworkCountdownControl( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( ( arg == ( uint16_t ) Action::DISABLE_NETWORK_COUNTDOWN ) ||
+                 ( arg == ( uint16_t ) Action::DISABLE_NETWORK_CANCEL ) );
+    }
+
+    static bool IsIntentPTSUpdateControl( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( ( arg == ( uint16_t ) Action::PTS_UPDATE ) ||
+                 ( arg == ( uint16_t ) Action::PTS_UPDATE_COUNTDOWN ) ||
+                 ( arg == ( uint16_t ) Action::PTS_UPDATE_CANCEL ) );
+    }
+
 private:
 
 };
