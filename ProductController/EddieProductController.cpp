@@ -600,23 +600,23 @@ void EddieProductController::HandleIntents( KeyHandlerUtil::ActionType_t intent 
     {
         GetHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntentAuxIn, intent );
     }
-    if( IntentHandler::IsIntentManualUpdateControl( intent ) )
+    else if( IntentHandler::IsIntentManualUpdateControl( intent ) )
     {
         GetHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntentAuxIn, intent );
     }
-    if( IntentHandler::IsIntentFactoryResetControl( intent ) )
+    else if( IntentHandler::IsIntentFactoryResetControl( intent ) )
     {
         GetHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntentAuxIn, intent );
     }
-    if( IntentHandler::IsIntentSetupCountdownControl( intent ) )
+    else if( IntentHandler::IsIntentSetupCountdownControl( intent ) )
     {
         GetHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntentAuxIn, intent );
     }
-    if( IntentHandler::IsIntentDisableNetworkCountdownControl( intent ) )
+    else if( IntentHandler::IsIntentDisableNetworkCountdownControl( intent ) )
     {
         GetHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntentAuxIn, intent );
     }
-    if( IntentHandler::IsIntentPTSUpdateControl( intent ) )
+    else if( IntentHandler::IsIntentPTSUpdateControl( intent ) )
     {
         GetHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntentAuxIn, intent );
     }

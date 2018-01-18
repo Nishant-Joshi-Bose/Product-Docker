@@ -17,16 +17,7 @@ public:
     CountdownManager( NotifyTargetTaskIF& task,
                       const CliClientMT& cliClient,
                       const FrontDoorClientIF_t& frontDoorClient,
-                      ProductController& controller):
-        IntentManager( task, cliClient, frontDoorClient, controller ),
-        m_counter(0),
-        m_countDownType(0)
-    {
-        m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>
-                                   ( std::bind( &CountdownManager::FrontDoorClientErrorCb,
-                                                this, std::placeholders::_1 ), &task );
-
-    }
+                      ProductController& controller );
     ~CountdownManager() override { }
 
     // Public function to Handle intents
@@ -42,6 +33,7 @@ private:
     bool            m_complete;
     int32_t         m_counter;
     int32_t         m_countDownType;
-    uint16_t        m_intentType;
+
+    void NotifyButtonEvent( std::string& event, std::string& state, uint32_t value );
 };
 } // namespace ProductApp

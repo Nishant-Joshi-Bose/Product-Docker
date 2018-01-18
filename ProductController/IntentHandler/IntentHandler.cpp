@@ -35,6 +35,7 @@
 #include "DPrint.h"
 #include "IntentHandler.h"
 #include "PlaybackRequestManager.h"
+#include "CountdownManager.h"
 #include "VoiceManager.h"
 #include "EddieProductController.h"
 
@@ -77,9 +78,9 @@ void IntentHandler::Initialize()
 
     //+ (Manual Update)
     IntentManagerPtr_t valcunKeyManager =
-        std::make_shared<CountdownManager>( m_task, m_cliClient,
-                                            m_frontDoorClient,
-                                            m_controller );
+        std::make_shared<CountdownManager>( GetTask() , GetCli(),
+                                            GetFrontDoorClient(),
+                                            GetProductController() );
 
     m_IntentManagerMap[( uint16_t )Action::MANUAL_UPDATE] = valcunKeyManager;
     m_IntentManagerMap[( uint16_t )Action::MANUAL_UPDATE_CANCEL] = valcunKeyManager;
