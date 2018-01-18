@@ -50,6 +50,21 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_ProductControllerStateVoiceNotConfigured( GetHsm(), &m_ProductControllerStateIdle, PRODUCT_CONTROLLER_STATE_IDLE_VOICE_NOT_CONFIGURED ),
     m_ProductControllerStateNetworkConfigured( GetHsm(), &m_ProductControllerStateNetworkStandby, PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED ),
     m_ProductControllerStateNetworkNotConfigured( GetHsm(), &m_ProductControllerStateNetworkStandby, PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_NOT_CONFIGURED ),
+    m_ProductControllerStatePlayingDeselected( m_ProductControllerHsm, &m_ProductControllerStatePlaying, PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED ),
+    m_ProductControllerStatePlayingSelected( m_ProductControllerHsm, &m_ProductControllerStatePlaying, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED ),
+    m_ProductControllerStatePlayingSelectedSilent( m_ProductControllerHsm, &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT ),
+    m_ProductControllerStatePlayingSelectedNotSilent( m_ProductControllerHsm, &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT ),
+    m_ProductControllerStatePlayingSelectedSetup( m_ProductControllerHsm, &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP ),
+    m_ProductControllerStatePlayingSelectedSetupNetwork( m_ProductControllerHsm, &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NETWORK_SETUP ),
+    m_ProductControllerStatePlayingSelectedSetupOther( m_ProductControllerHsm, &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_OTHER ),
+    m_ProductControllerStateStoppingStreams( m_ProductControllerHsm, &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS ),
+    m_ProductControllerStatePlayableTransition( m_ProductControllerHsm, &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION ),
+    m_ProductControllerStatePlayableTransitionIdle( m_ProductControllerHsm, &m_ProductControllerStatePlayableTransition, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE ),
+    m_ProductControllerStatePlayableTransitionNetworkStandby( m_ProductControllerHsm, &m_ProductControllerStatePlayableTransition, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY ),
+    m_ProductControllerStateSoftwareUpdateTransition( m_ProductControllerHsm, &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION ),
+    m_ProductControllerStateLowPowerTransition( m_ProductControllerHsm, &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_TRANSITION ),
+    m_ProductControllerStatePlayingTransition( m_ProductControllerHsm, &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION ),
+    m_ProductControllerStatePlayingTransitionSelected( m_ProductControllerHsm, &m_ProductControllerStatePlayingTransition, PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SELECTED ),
     m_KeyHandler( *GetTask(), m_CliClientMT, KEY_CONFIG_FILE ),
     m_cachedStatus(),
     m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
@@ -84,6 +99,22 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     GetHsm().AddState( &m_ProductControllerStateVoiceNotConfigured );
     GetHsm().AddState( &m_ProductControllerStateNetworkConfigured );
     GetHsm().AddState( &m_ProductControllerStateNetworkNotConfigured );
+    GetHsm().AddState( &m_ProductControllerStatePlayingDeselected );
+    GetHsm().AddState( &m_ProductControllerStatePlayingSelected );
+    GetHsm().AddState( &m_ProductControllerStatePlayingSelectedSilent );
+    GetHsm().AddState( &m_ProductControllerStatePlayingSelectedNotSilent );
+    GetHsm().AddState( &m_ProductControllerStatePlayingSelectedSetup );
+    GetHsm().AddState( &m_ProductControllerStatePlayingSelectedSetupNetwork );
+    GetHsm().AddState( &m_ProductControllerStatePlayingSelectedSetupOther );
+    GetHsm().AddState( &m_ProductControllerStateStoppingStreams );
+    GetHsm().AddState( &m_ProductControllerStatePlayableTransition );
+    GetHsm().AddState( &m_ProductControllerStatePlayableTransitionIdle );
+    GetHsm().AddState( &m_ProductControllerStatePlayableTransitionNetworkStandby );
+    GetHsm().AddState( &m_ProductControllerStateSoftwareUpdateTransition );
+    GetHsm().AddState( &m_ProductControllerStateLowPowerTransition );
+    GetHsm().AddState( &m_ProductControllerStatePlayingTransition );
+    GetHsm().AddState( &m_ProductControllerStatePlayingTransitionSelected );
+
 
     GetHsm().Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );
 
