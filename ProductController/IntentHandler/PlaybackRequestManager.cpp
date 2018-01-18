@@ -63,8 +63,8 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             playbackRequestData.set_source( "PRODUCT" );
             playbackRequestData.set_sourceaccount( "AUX" );
 
-            GetFrontDoorClient()->SendPost<SoundTouchInterface::NowPlayingJson>( "/content/playbackRequest", playbackRequestData,
-                                                                                 m_NowPlayingRsp, m_frontDoorClientErrorCb );
+            GetFrontDoorClient()->SendPost<SoundTouchInterface::NowPlaying>( "/content/playbackRequest", playbackRequestData,
+                                                                             m_NowPlayingRsp, m_frontDoorClientErrorCb );
         }
         else
         {
@@ -80,7 +80,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     return true;
 }
 
-void PlaybackRequestManager::PostPlaybackRequestCbRsp( const SoundTouchInterface::NowPlayingJson& resp )
+void PlaybackRequestManager::PostPlaybackRequestCbRsp( const SoundTouchInterface::NowPlaying& resp )
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
     BOSE_LOG( INFO, "GOT Response to playbackRequest: " << resp.source().sourcedisplayname() );

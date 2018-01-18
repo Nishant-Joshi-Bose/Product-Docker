@@ -36,8 +36,8 @@ public:
 
 private:
 
-    void PostPlaybackRequestCbRsp( const SoundTouchInterface::NowPlayingJson& resp );
+    void PostPlaybackRequestCbRsp( const SoundTouchInterface::NowPlaying& resp );
 
-    AsyncCallback<SoundTouchInterface::NowPlayingJson> m_NowPlayingRsp;
+    AsyncCallback<SoundTouchInterface::NowPlaying> m_NowPlayingRsp;
 };
 } // namespace ProductApp
