@@ -27,10 +27,10 @@ fields = line.split(" ")
 if len(fields) != 3:
     log("Malformed first header line", repr(fields))
     sys.exit()
-op, path, version = fields
+method, path, version = fields
 
 if debug:
-    log("op '{}', path '{}', version '{}'".format(op, path, version))
+    log("method '{}', path '{}', version '{}'".format(method, path, version))
 
 # Read the HTTP headers
 while True:
@@ -45,7 +45,36 @@ while True:
     if debug:
         log("header '{}'".format(line))
 
-if op == "GET":
+if method == "GET":
+
+# ----------------------------------------------------------------------------
+# Quality Audit CGI pages.
+
+    if path == "/qaudit":
+        print """\
+HTTP/1.1 301 Moved Permanently\r
+Location: /qaudit/\r
+\r
+Moved Permanently\r
+"""
+        sys.exit()
+
+    if path.startswith("/qaudit/"):
+        path = path[8:]
+        if path == "":
+            path = "main"
+        prog = path
+        args = []
+        i = path.find("/")
+        if i != -1:
+            args.append(path[i+1:])
+            prog = path[:i]
+        log("qaudit", prog, args)
+        os.chdir("/opt/Bose/qaudit")
+        sys.stdout.flush()
+        os.execv(prog, [prog] + args)
+
+# ----------------------------------------------------------------------------
 
     if path == "/logread.txt":
         print """\
@@ -80,14 +109,14 @@ Cache-Control: no-cache\r
 \r"""
         os.dup2(sys.stdout.fileno(), sys.stderr.fileno()) # redirect stderr to stdout
         call("date")
-        call("cat", "/opt/Bose/etc/FS_VERSION")
+        call("cat", "/opt/Bose/etc/BoseVersion.json")
         call("free", "-m")
         call("ifconfig", "-a")
         call("ip", "route", "list")
         call("wpa_cli", "status")
         call("wpa_cli", "scan_results")
-        call("sh", "-c", "head -100 /mnt/nv/BoseApp-Persistence/1/*.xml")
-        call("ls", "-lH", "/mnt/nv/BoseLog")
+        call("sh", "-c", "head -100 /mnt/nv/product-persistence/* /mnt/nv/BoseApp-Persistence/1/*")
+        call("ls", "-lHt", "/mnt/nv/BoseLog")
         call("ps")
         sys.exit()
 

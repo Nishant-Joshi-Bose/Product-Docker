@@ -181,7 +181,8 @@ message ProductMessage
         optional ProductConfigurationStatus configurationstatus = 11;
         optional ProductAutowakeStatus      autowakestatus      = 12;
         optional ProductNowPlayingStatus    nowplayingstatus    = 13;
-      	optional ProductLpmLowPowerStatus   lpmlowpowerstatus   = 14;
+        optional ProductLpmLowPowerStatus   lpmlowpowerstatus   = 14;
+        optional bool                       audiopathselect     = 15;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

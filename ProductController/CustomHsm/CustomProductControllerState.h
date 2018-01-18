@@ -165,6 +165,16 @@ public:
         return false;
     }
 
+    virtual bool HandleAudioPathSelect( )
+    {
+        return false;
+    }
+
+    virtual bool HandleAudioPathDeselect( )
+    {
+        return false;
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
     ///
     /// Here are the Custom event handlers. They need to be declared virtual and

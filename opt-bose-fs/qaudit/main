@@ -1,0 +1,70 @@
+#!/usr/bin/python2.7
+#
+# Invoked via pts-handler to display pages related to Quality Audit.
+#
+import os
+import sys
+import re
+
+if len(sys.argv) != 1:
+    raise Exception("wrong usage " + str(sys.argv))
+
+def html_escape(text):
+    return re.sub(r'[<&>]', lambda x: { "<": "&lt;",
+                                        "&": "&amp;",
+                                        ">": "&gt;" }[x.group(0)], text)
+
+def show_text_file(name):
+    print """<div class="text-file">"""
+    with open(name) as f:
+        br = ""
+        for line in f:
+            print br + html_escape(line.rstrip("\n")).replace(" ", "&nbsp;")
+            br = "<br>"
+    print "</div>"
+
+print """\
+HTTP/1.1 200 OK\r
+Content-Type: text/html\r
+Cache-Control: no-cache\r
+\r"""
+
+print """
+<html>
+<head>
+<title>SoundTouch &ndash; Quality Audit</title>
+<style type="text/css">
+ body {
+   font-family: Verdana, Arial, Helvetica, sans-serif;
+ }
+ hr {
+   border: 1px solid blue;
+   color: #fff;
+   background-color: #fff;
+   height: 1px;
+   width: 100%;
+ }
+ div.text-file {
+   background-color: lightgrey;
+   border: thin dotted;
+   padding: 1em;
+   margin: 1em;
+ }
+</style>
+</head>
+<body>
+<h1>SoundTouch &ndash; Quality Audit</h1>
+<hr>
+"""
+
+print "<li>Software Version"
+show_text_file("/opt/Bose/etc/BoseVersion.json")
+
+print "<li>Manufacturing Data"
+show_text_file("/persist/mfg_data.json")
+
+print """
+<hr>
+</body>
+</html>
+"""
