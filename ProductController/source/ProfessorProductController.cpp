@@ -73,6 +73,7 @@
 #include "ProductControllerStateLowPowerTransition.h"
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSelected.h"
+#include "MfgData.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -732,12 +733,12 @@ void ProfessorProductController::RegisterNowPlayingEndPoint( )
     /// CAPS is made through the FrontDoorClient object pointer. The callback HandleCapsNowPlaying
     /// is used to receive these notifications.
     ///
-    AsyncCallback< SoundTouchInterface::NowPlayingJson >
+    AsyncCallback< SoundTouchInterface::NowPlaying >
     callback( std::bind( &ProfessorProductController::HandleNowPlaying,
                          this, std::placeholders::_1 ),
               GetTask( ) );
 
-    m_FrontDoorClientIF->RegisterNotification< SoundTouchInterface::NowPlayingJson >
+    m_FrontDoorClientIF->RegisterNotification< SoundTouchInterface::NowPlaying >
     ( "/content/nowPlaying", callback );
 
     BOSE_DEBUG( s_logger, "A notification request for CAPS now playing status has been made." );
@@ -747,10 +748,10 @@ void ProfessorProductController::RegisterNowPlayingEndPoint( )
 ///
 /// @brief ProductSystemManager::HandleNowPlaying
 ///
-/// @param SoundTouchInterface::NowPlayingJson& nowPlayingStatus
+/// @param SoundTouchInterface::NowPlaying& nowPlayingStatus
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::HandleNowPlaying( const SoundTouchInterface::NowPlayingJson&
+void ProfessorProductController::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
                                                    nowPlayingStatus )
 {
     BOSE_DEBUG( s_logger, "A CAPS now playing status has been received." );
@@ -758,9 +759,9 @@ void ProfessorProductController::HandleNowPlaying( const SoundTouchInterface::No
     if( nowPlayingStatus.has_state( ) )
     {
         BOSE_DEBUG( s_logger, "The CAPS now playing status has a %s status.",
-                    SoundTouchInterface::StatusJson_Name( nowPlayingStatus.state( ).status( ) ).c_str( ) );
+                    SoundTouchInterface::Status_Name( nowPlayingStatus.state( ).status( ) ).c_str( ) );
 
-        if( nowPlayingStatus.state( ).status( ) == SoundTouchInterface::StatusJson::play )
+        if( nowPlayingStatus.state( ).status( ) == SoundTouchInterface::Status::play )
         {
             ProductMessage productMessage;
             productMessage.mutable_nowplayingstatus( )->set_state( ProductNowPlayingStatus_ProductNowPlayingState_Active );
@@ -1394,6 +1395,59 @@ std::string const& ProfessorProductController::GetDefaultProductName( ) const
     BOSE_INFO( s_logger, "%s productName=%s", __func__, productName.c_str( ) );
     return productName;
 }
+
+std::string ProfessorProductController::GetProductColor() const
+{
+    if( auto color = MfgData::GetColor() )
+    {
+        if( *color == "luxGray" )
+        {
+            return "SILVER";
+        }
+        else if( *color == "tripleBlack" )
+        {
+            return "BLACK";
+        }
+        else
+        {
+            BOSE_LOG( WARNING, "Unexpected color value in manufacturing data: " << *color );
+        }
+    }
+    else
+    {
+        BOSE_DIE( "No 'productColor' in mfgdata" );
+    }
+
+    return "UNKNOWN";
+}
+
+BLESetupService::VariantId ProfessorProductController::GetVariantId() const
+{
+    BLESetupService::VariantId varintId = BLESetupService::VariantId::NONE;
+
+    if( auto color = MfgData::GetColor() )
+    {
+        if( *color == "luxGray" )
+        {
+            varintId = BLESetupService::VariantId::SILVER;
+        }
+        else if( *color == "tripleBlack" )
+        {
+            varintId = BLESetupService::VariantId::BLACK;
+        }
+        else
+        {
+            varintId = BLESetupService::VariantId::WHITE;
+        }
+    }
+    else
+    {
+        BOSE_DIE( "No 'productColor' in mfgdata" );
+    }
+
+    return varintId;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///

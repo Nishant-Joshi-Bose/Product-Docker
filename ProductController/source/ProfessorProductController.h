@@ -193,7 +193,11 @@ public:
 
     std::string const& GetProductType() const override;
 
+    std::string GetProductColor() const override;
+
     std::string const& GetProductVariant() const override;
+
+    BLESetupService::VariantId GetVariantId() const override;
 
     BLESetupService::ProductId GetProductId() const override
     {
@@ -205,20 +209,10 @@ public:
         return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );
     }
 
-    BLESetupService::VariantId GetVariantId() const override
-    {
-        /// TODO variantID should be from mfg data
-        return BLESetupService::VariantId::NONE;
-    }
 
     std::vector<std::string> GetUniqueLanguages() const override
     {
         return {};
-    }
-
-    std::string GetProductColor() const
-    {
-        return "BLACK";
     }
 
     bool IsSystemLanguageSet( ) const;
@@ -294,7 +288,7 @@ private:
 
     void  SetTestSoundTouchPlayback( );
     void  RegisterNowPlayingEndPoint( );
-    void  HandleNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingStatus );
+    void  HandleNowPlaying( const SoundTouchInterface::NowPlaying& nowPlayingStatus );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
