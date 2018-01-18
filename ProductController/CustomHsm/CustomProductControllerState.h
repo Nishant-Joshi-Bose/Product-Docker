@@ -111,6 +111,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentFactoryReset( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
     virtual bool HandleIntentWiFi( KeyHandlerUtil::ActionType_t result )
     {
         return false;
