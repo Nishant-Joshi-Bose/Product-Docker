@@ -19,6 +19,7 @@
 #include "EndPointsDefines.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "MfgData.h"
+#include "BLESetupEndpoints.h"
 
 //#include "ButtonPress.pb.h" // @TODO Leela, re-enable this code
 
@@ -458,7 +459,7 @@ void EddieProductController::SendInitialRequests()
         AsyncCallback<std::list<std::string> > poiNotReadyCb( std::bind( &EddieProductController::HandleBtLeCapabilityNotReady, this, std::placeholders::_1 ), GetTask() );
         std::list<std::string> endPoints;
 
-        endPoints.push_back( FRONTDOOR_BLUETOOTH_BLESETUP_STATUS_API );
+        endPoints.push_back( BLESetupEndpoints::STATUS_NOTIF );
         m_FrontDoorClientIF->RegisterEndpointsOfInterest( endPoints, poiReadyCb,  poiNotReadyCb );
     }
 }

@@ -9,7 +9,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/master/0.3.3-221+108b0e9"
+    "selected_version": "Release/master/0.3.4-222+cec23e5"
   },
   {
     "name": "BoseOPKG-native",
@@ -65,7 +65,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@bd916fb365efbc2290758f3faec84b0fe1b3806d"
+    "selected_version": "master@d4eaa9eb177d908c9acba2c733c1683812f643dd"
   },
   {
     "name": "CastleProductUIAssets",
@@ -124,15 +124,15 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.3.3-226+178df68"
+    "selected_version": "Continuous/master/0.3.3-237+813d265"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.2.40696.2644691"
+    "selected_version": "Continuous/Castle-Fork/2018-01-18_1016"
   },
   {
     "name": "Webkit",
-    "selected_version": "Continuous/master/0.2.5-23+f3c6ee9"
+    "selected_version": "Release/master/0.3.1-24+472ac23"
   },
   {
     "name": "WiFi-Setup-Webpage",
