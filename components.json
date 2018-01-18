@@ -25,7 +25,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.3-217+add0b8b"
+    "selected_version": "Continuous/master/0.3.3-221+108b0e9"
   },
   {
     "name": "BoseOPKG-native",
@@ -69,7 +69,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@f93573a623f725e105bd26a65ba8748a777e1b4f"
+    "selected_version": "master@bd916fb365efbc2290758f3faec84b0fe1b3806d"
   },
   {
     "name": "FrontDoor-qc8017_32",
