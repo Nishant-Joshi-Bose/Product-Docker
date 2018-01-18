@@ -1139,45 +1139,13 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     else if( message.has_action( ) )
     {
         ///
-        /// The following determines whether the key action is to be handled by a common intent
+        /// The following attempts to handle the key action using a common intent
         /// manager.
         ///
-        if( GetIntentHandler( ).IsIntentPlayControl( message.action( ) ) )
+        if( HandleCommonIntents( message.action() ) )
         {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPlayControl,
-                                                              message.action( ) );
+            BOSE_VERBOSE( s_logger, "Action key %u handled by common intent handler", message.action() );
         }
-        else if( GetIntentHandler( ).IsIntentBlueTooth( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentBlueTooth,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsIntentVolumeControl( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentVolumeControl,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsIntentNetworkStandby( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentNetworkStandby,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsPresetSelect( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPresetSelect,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsPresetStore( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPresetStore,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsIntentVoice( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentVoice,
-                                                              message.action( ) );
-        }
-
         ///
         /// The following determines whether the key action is to be handled by the custom intent
         /// manager.
