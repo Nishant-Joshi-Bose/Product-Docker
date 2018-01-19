@@ -48,7 +48,6 @@ private:
     /// APProduct handling functions
     /////////////////////////////////////////////////////////////////////////////////////////////////
     void RegisterAudioPathEvents() override;
-
     void GetMainStreamAudioSettingsCallback( std::string contentItem,  const Callback<std::string, std::string> cb );
     void SetStreamConfigCallback( std::string serializedAudioSettings, std::string serializedInputRoute, const Callback<bool> cb );
     void SendMainStreamAudioSettingsEvent();

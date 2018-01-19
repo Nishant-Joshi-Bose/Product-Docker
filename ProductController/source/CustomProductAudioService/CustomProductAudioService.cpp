@@ -89,7 +89,7 @@ void CustomProductAudioService::RegisterAudioPathEvents()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductAudioService::SendMainStreamAudioSettingsEvent
+/// @name   CustomProductAudioService::GetMainStreamAudioSettingsCallback
 ///
 /// @param  std::string contentItem
 ///
@@ -102,6 +102,7 @@ void CustomProductAudioService::RegisterAudioPathEvents()
 void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string contentItem,  const Callback<std::string, std::string> cb )
 {
     BOSE_DEBUG( s_logger, __func__ );
+    BOSE_DEBUG( s_logger, "GetMainStreamAudioSettingsCallback - contentItem = %s", contentItem.c_str() );
     // Parse contentItem string received from APProduct
     bool error = false;
     SoundTouchInterface::ContentItem contentItemProto;
@@ -118,6 +119,8 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
     if( !error && contentItemProto.has_source() && contentItemProto.has_sourceaccount() )
     {
         // Update audio settings
+        BOSE_DEBUG( s_logger, "GetMainStreamAudioSettingsCallback, source = %s, sourecAccount = %s", contentItemProto.source().c_str(), contentItemProto.sourceaccount().c_str() );
+
         m_AudioSettingsMgr->UpdateContentItem( contentItemProto );
         FetchLatestAudioSettings();
         // Update input route
@@ -137,7 +140,7 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
         BOSE_ERROR( s_logger, "ContentItem string from APProduct doesn't contain \"source\" or \"sourceAccount\" field" );
     }
     // Reply APProduct with the current m_MainStreamAudioSettings and m_InputRoute
-    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_MainStreamAudioSettings );
+    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_MainStreamAudioSettings, false );
     std::string inputRoute = std::to_string( m_InputRoute );
     cb.Send( mainStreamAudioSettings, inputRoute );
 }
@@ -161,7 +164,6 @@ void CustomProductAudioService::FetchLatestAudioSettings( )
     m_MainStreamAudioSettings.set_contenttype( ContentTypeNameToEnum( m_AudioSettingsMgr->GetContentType( ).value() ) );
     m_MainStreamAudioSettings.set_dualmonoselect( DualMonoSelectNameToEnum( m_AudioSettingsMgr->GetDualMonoSelect( ).value() ) );
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -194,7 +196,7 @@ void CustomProductAudioService::SetStreamConfigCallback( std::string serializedA
 void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 {
     BOSE_DEBUG( s_logger, __func__ );
-    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_MainStreamAudioSettings );
+    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_MainStreamAudioSettings, false );
     m_APPointer -> SetMainStreamAudioSettings( mainStreamAudioSettings );
 }
 
@@ -218,7 +220,7 @@ LpmServiceMessages::AudioSettingsAudioMode_t CustomProductAudioService::ModeName
     {
         return AUDIOSETTINGS_AUDIO_MODE_DIALOG;
     }
-    else if( modeName == "film" )
+    else if( modeName == "normal" )
     {
         return AUDIOSETTINGS_AUDIO_MODE_NORMAL;
     }
