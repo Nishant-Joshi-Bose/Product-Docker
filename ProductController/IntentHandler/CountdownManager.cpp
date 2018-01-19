@@ -80,8 +80,8 @@ bool CountdownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
         {
             NotifyButtonEvent( m_eventName[( ProductApp::Action )m_eventType], BUTTON_STATE_CANCELED, 0 );
             m_eventType = 0;
-            m_factoryResetCounter = FACTORY_RESET_TIME;
         }
+        m_factoryResetCounter = FACTORY_RESET_TIME;
     }
     break;
 
@@ -94,8 +94,8 @@ bool CountdownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
         {
             NotifyButtonEvent( m_eventName[( ProductApp::Action )m_eventType], BUTTON_STATE_CANCELED, 0 );
             m_eventType = 0;
-            m_shortCounter = FIVE_SECOND_TIME;
         }
+        m_shortCounter = FIVE_SECOND_TIME;
     }
     break;
 
