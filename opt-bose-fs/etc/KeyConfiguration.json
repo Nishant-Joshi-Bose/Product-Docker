@@ -5,9 +5,9 @@
     {"origin": 0, "keyEvent": 4, "keyList": [4,4,4], "timeOutList": [500], "action": 3, "comment": "Console: MFB repeat release thrice within 500ms ---> prev track"},
     {"origin": 0, "keyEvent": 1, "keyList": [4], "timeOutList": [1750], "action": 4, "comment": "Console: MFB release after 1750 ms ---> Network Standby"},
     {"origin": 0, "keyEvent": 2, "keyList": [2,4], "timeOutList": [5000], "action": 5, "comment": "Console: MFB+Aux press and hold for at least 5000ms ---> AP Mode"},
-    {"origin": 0, "keyEvent": 2, "keyList": [2,3], "timeOutList": [5000], "action": 6, "comment": "Console: AUX+VolumeUp press and hold for at least 500ms ---> Manual Update"},
+    {"origin": 0, "keyEvent": 2, "keyList": [2,3], "timeOutList": [5000], "action": 6, "comment": "Console: AUX+VolumeUp press and hold for at least 5000ms ---> Manual Update"},
     {"origin": 0, "keyEvent": 2, "keyList": [1,4], "timeOutList": [5000], "action": 7, "comment": "Console: MFB+Bluetooth press and hold for at least 5000ms ---> Disable Networking"},
-    {"origin": 0, "keyEvent": 2, "keyList": [2,5], "timeOutList": [10000], "action": 8, "comment": "Console: AUX+VolumeDown press and release during count down ---> Factory Reset"},
+    {"origin": 0, "keyEvent": 2, "keyList": [2,5], "timeOutList": [10000], "action": 8, "comment": "Console: AUX+VolumeDown press and hold for atlease 10000ms ---> Factory Reset"},
     {"origin": 0, "keyEvent": 2, "keyList": [4], "timeOutList": [15000], "action": 9, "comment": "Console: MFB press and hold for at least 15000ms ---> Low Power Standby"},
 
     {"origin": 0, "keyEvent": 1, "keyList": [1], "timeOutList": [0], "action": 20, "comment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast"},
@@ -41,26 +41,26 @@
     {"origin": 0, "keyEvent": 5, "keyList": [3], "timeOutList": [], "action": 50, "comment": "Console: VolumeUp(+) release(keyEvent: Release Anyways ---> Cancel Ramp up"},
     {"origin": 0, "keyEvent": 5, "keyList": [5], "timeOutList": [], "action": 51, "comment": "Console: VolumeDown(-) release(keyEvent: Release Anyways ---> Cancel Ramp down"},
 
-    {"origin": 0, "keyEvent": 3, "keyList": [2,3], "timeOutList": [1000,1000], "action": 101, "comment": "Console: AUX+VolumeUp press and hold for at least 5000ms ---> Manual Update Count down"},
-    {"origin": 0, "keyEvent": 5, "keyList": [2], "timeOutList": [], "action": 121, "comment": "Console: AUX+VolumeUp press and hold for at least 5000ms ---> Manual Update Cancel"},
-    {"origin": 0, "keyEvent": 5, "keyList": [3], "timeOutList": [], "action": 121, "comment": "Console: AUX+VolumeUp press and hold for at least 5000ms ---> Manual Update Cancel"},
+    {"origin": 0, "keyEvent": 3, "keyList": [2,3], "timeOutList": [1000,1000], "action": 101, "comment": "Console: AUX+VolumeUp press and hold will generate a repeat every 1000m ---> Manual Update Count down"},
+    {"origin": 0, "keyEvent": 5, "keyList": [2], "timeOutList": [], "action": 121, "comment": "Console: Release of AUX will generate ---> Manual Update Cancel"},
+    {"origin": 0, "keyEvent": 5, "keyList": [3], "timeOutList": [], "action": 121, "comment": "Console: Release of VolumeUp will generate ---> Manual Update Cancel"},
 
-    {"origin": 0, "keyEvent": 3, "keyList": [2,5], "timeOutList": [1000,1000], "action": 102, "comment": "Console: AUX+VolumeDown press and hold for at least 10000ms ---> Factory Reset Count down"},
-    {"origin": 0, "keyEvent": 5, "keyList": [2], "timeOutList": [], "action": 122, "comment": "Console: AUX+VolumeDown press and hold for at least 10000ms ---> Factory Reset Cancel"},
-    {"origin": 0, "keyEvent": 5, "keyList": [5], "timeOutList": [], "action": 122, "comment": "Console: AUX+VolumeDown press and hold for at least 10000ms ---> Factory Reset Cancel"},
+    {"origin": 0, "keyEvent": 3, "keyList": [2,5], "timeOutList": [1000,1000], "action": 102, "comment": "Console: AUX+VolumeDown press and hold will generate a repeat every 1000m ---> Factory Reset Count down"},
+    {"origin": 0, "keyEvent": 5, "keyList": [2], "timeOutList": [], "action": 122, "comment": "Console: Release of AUX will generate ---> Factory Reset Cancel"},
+    {"origin": 0, "keyEvent": 5, "keyList": [5], "timeOutList": [], "action": 122, "comment": "Console: Release of VolumeDown will generate ---> Factory Reset Cancel"},
 
-    {"origin": 0, "keyEvent": 3, "keyList": [2,4], "timeOutList": [1000,1000], "action": 103, "comment": "Console: MFB+Aux press and hold for at least 5000ms ---> AP Mode Count down"},
-    {"origin": 0, "keyEvent": 5, "keyList": [2], "timeOutList": [], "action": 123, "comment": "Console: MFB+Aux press and hold for at least 5000ms ---> AP Mode Cancel"},
-    {"origin": 0, "keyEvent": 5, "keyList": [4], "timeOutList": [], "action": 123, "comment": "Console: MFB+Aux press and hold for at least 5000ms ---> AP Mode Cancel"},
+    {"origin": 0, "keyEvent": 3, "keyList": [2,4], "timeOutList": [1000,1000], "action": 103, "comment": "Console: MFB+Aux press and hold will generate a repeat every 1000m ---> AP Mode Count down"},
+    {"origin": 0, "keyEvent": 5, "keyList": [2], "timeOutList": [], "action": 123, "comment": "Console: Release of AUX will generate ---> AP Mode Cancel"},
+    {"origin": 0, "keyEvent": 5, "keyList": [4], "timeOutList": [], "action": 123, "comment": "Console: Release of MFB will generate ---> AP Mode Cancel"},
 
-    {"origin": 0, "keyEvent": 3, "keyList": [1,4], "timeOutList": [1000,1000], "action": 104, "comment": "Console: MFB+Bluetooth press and hold for at least 5000ms ---> Disable Networking Count down"},
-    {"origin": 0, "keyEvent": 5, "keyList": [1], "timeOutList": [], "action": 124, "comment": "Console: MFB+Bluetooth press and hold for at least 5000ms ---> Disable Networking Cancel"},
-    {"origin": 0, "keyEvent": 5, "keyList": [4], "timeOutList": [], "action": 124, "comment": "Console: MFB+Bluetooth press and hold for at least 5000ms ---> Disable Networking Cancel"},
+    {"origin": 0, "keyEvent": 3, "keyList": [1,4], "timeOutList": [1000,1000], "action": 104, "comment": "Console: MFB+Bluetooth press and hold will generate a repeat every 1000m ---> Disable Networking Count down"},
+    {"origin": 0, "keyEvent": 5, "keyList": [1], "timeOutList": [], "action": 124, "comment": "Console: Release of Bluetooth will generate ---> Disable Networking Cancel"},
+    {"origin": 0, "keyEvent": 5, "keyList": [4], "timeOutList": [], "action": 124, "comment": "Console: Release of MFB will generate ---> Disable Networking Cancel"},
 
     {"origin": 0, "keyEvent": 2, "keyList": [3,5], "timeOutList": [5000], "action": 110, "comment": "Console: VolumeUp+VolumeDown press and release during count down ---> PTS Update"},
-    {"origin": 0, "keyEvent": 3, "keyList": [3,5], "timeOutList": [1000,1000], "action": 105, "comment": "Console: VolumeUp+VolumeDown press and hold for at least 1000ms ---> PTS Update Count down"},
-    {"origin": 0, "keyEvent": 5, "keyList": [3], "timeOutList": [], "action": 125, "comment": "Console: VolumeUp+VolumeDown press and hold for at least 10000ms ---> PTS Update Cancel"},
-    {"origin": 0, "keyEvent": 5, "keyList": [5], "timeOutList": [], "action": 125, "comment": "Console: VolumeUp+VolumeDown press and hold for at least 10000ms ---> PTS Update Cancel"}
+    {"origin": 0, "keyEvent": 3, "keyList": [3,5], "timeOutList": [1000,1000], "action": 105, "comment": "Console: VolumeUp+VolumeDown press and hold will generate a repeat every 1000m ---> PTS Update Count down"},
+    {"origin": 0, "keyEvent": 5, "keyList": [3], "timeOutList": [], "action": 125, "comment": "Console: Release of VolumeUP will generate ---> PTS Update Cancel"},
+    {"origin": 0, "keyEvent": 5, "keyList": [5], "timeOutList": [], "action": 125, "comment": "Console: Release of VolumeDown will generate ---> PTS Update Cancel"}
 
 ]
 }
