@@ -10,7 +10,6 @@
 #include "APProductFactory.h"
 #include "FrontDoorClient.h"
 #include "CustomProductAudioService.h"
-//#include "CustomProductLpmHardwareInterface.h"
 #include "ProtoToMarkup.h"
 #include "SoundTouchInterface/ContentItem.pb.h"
 #include "AutoLpmServiceMessages.pb.h"
