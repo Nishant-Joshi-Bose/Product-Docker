@@ -35,7 +35,7 @@
 #include "DPrint.h"
 #include "IntentHandler.h"
 #include "PlaybackRequestManager.h"
-#include "CountdownManager.h"
+#include "CountDownManager.h"
 #include "VoiceManager.h"
 #include "EddieProductController.h"
 
@@ -76,37 +76,37 @@ void IntentHandler::Initialize()
     m_IntentNotificationMap[( uint16_t ) Action::AUX_IN]        = "aux_in" ;
     //- AUX Control API's
 
-    //+ (Common Countdown manager for key combination )
-    IntentManagerPtr_t valcunKeyManager =
-        std::make_shared<CountdownManager>( GetTask() , GetCli(),
+    //+ (Common Countdown manager for key combination)
+    IntentManagerPtr_t countDownManager =
+        std::make_shared<CountDownManager>( GetTask() , GetCli(),
                                             GetFrontDoorClient(),
                                             GetProductController() );
 
-    //+ (Manual Update countdown and cancel )
-    m_IntentManagerMap[( uint16_t )Action::MANUAL_UPDATE_CANCEL] = valcunKeyManager;
-    m_IntentManagerMap[( uint16_t )Action::MANUAL_UPDATE_COUNTDOWN] = valcunKeyManager;
-    //- (Manual Update)
+    //+ (Manual Update countdown and cancel)
+    m_IntentManagerMap[( uint16_t )Action::MANUAL_UPDATE_CANCEL] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::MANUAL_UPDATE_COUNTDOWN] = countDownManager;
+    //- (Manual Update countdown and cancel)
 
-    //+ (Factory Reset countdown and cancel )
-    m_IntentManagerMap[( uint16_t )Action::FACTORY_RESET_CANCEL] = valcunKeyManager;
-    m_IntentManagerMap[( uint16_t )Action::FACTORY_RESET_COUNTDOWN] = valcunKeyManager;
-    //- (Factory Reset)
+    //+ (Factory Reset countdown and cancel)
+    m_IntentManagerMap[( uint16_t )Action::FACTORY_RESET_CANCEL] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::FACTORY_RESET_COUNTDOWN] = countDownManager;
+    //- (Factory Reset countdown and cancel)
+
     //+ (Setup AP countdown and cancel)
-    m_IntentManagerMap[( uint16_t )Action::SETUP_AP_COUNTDOWN] = valcunKeyManager;
-    m_IntentManagerMap[( uint16_t )Action::SETUP_AP_CANCEL] = valcunKeyManager;
+    m_IntentManagerMap[( uint16_t )Action::SETUP_AP_COUNTDOWN] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::SETUP_AP_CANCEL] = countDownManager;
     //- (Setup AP countdown and cancel)
 
-    //+ (Disable Network countdown and cancel )
-    m_IntentManagerMap[( uint16_t )Action::DISABLE_NETWORK_COUNTDOWN] = valcunKeyManager;
-    m_IntentManagerMap[( uint16_t )Action::DISABLE_NETWORK_CANCEL] = valcunKeyManager;
-    //- (Disable Network)
+    //+ (Disable Network countdown and cancel)
+    m_IntentManagerMap[( uint16_t )Action::DISABLE_NETWORK_COUNTDOWN] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::DISABLE_NETWORK_CANCEL] = countDownManager;
+    //- (Disable Network countdown and cancel)
 
-    //+ (PTS Update countdown and cancel )
-    m_IntentManagerMap[( uint16_t )Action::PTS_UPDATE_CANCEL] = valcunKeyManager;
-    m_IntentManagerMap[( uint16_t )Action::PTS_UPDATE_COUNTDOWN] = valcunKeyManager;
-    //- (PTS Update)
-    //- (Common Countdown manager for key combination )
-
+    //+ (PTS Update countdown and cancel)
+    m_IntentManagerMap[( uint16_t )Action::PTS_UPDATE_CANCEL] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::PTS_UPDATE_COUNTDOWN] = countDownManager;
+    //- (PTS Update countdown and cancel)
+    //- (Common Countdown manager for key combination)
 }
 
 }

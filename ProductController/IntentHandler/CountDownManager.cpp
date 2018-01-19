@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-/// @file CountdownManager.cpp
+/// @file CountDownManager.cpp
 ///
 /// @brief Implementation of Bluetooth Manager for actions from Bluetooth
 //         intends in the product Controller
@@ -16,7 +16,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "DPrint.h"
-#include "CountdownManager.h"
+#include "CountDownManager.h"
 #include "ProductController.h"
 #include "Intents.h"
 #include "IntentHandler.pb.h"
@@ -29,7 +29,7 @@ constexpr char BUTTON_EVENT_NOTIFICATION_URL[] = "/system/buttonEvent";
 #define FACTORY_RESET_TIME            10
 #define FIVE_SECOND_TIME              5
 
-static DPrint s_logger( "CountdownManager" );
+static DPrint s_logger( "CountDownManager" );
 
 static std::map <ProductApp::Action, std::string> m_eventName =
 {
@@ -43,7 +43,7 @@ static std::map <ProductApp::Action, std::string> m_eventName =
 namespace ProductApp
 {
 
-CountdownManager::CountdownManager( NotifyTargetTaskIF& task,
+CountDownManager::CountDownManager( NotifyTargetTaskIF& task,
                                     const CliClientMT& cliClient,
                                     const FrontDoorClientIF_t& frontDoorClient,
                                     ProductController& controller ):
@@ -53,7 +53,7 @@ CountdownManager::CountdownManager( NotifyTargetTaskIF& task,
     m_factoryResetCounter( 10 )
 {
     m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>
-                               ( std::bind( &CountdownManager::FrontDoorClientErrorCb,
+                               ( std::bind( &CountDownManager::FrontDoorClientErrorCb,
                                             this, std::placeholders::_1 ), &task );
 
 }
@@ -68,9 +68,9 @@ CountdownManager::CountdownManager( NotifyTargetTaskIF& task,
 //          false: Error
 ////////////////////////////////////////////////////////////////////////////////
 
-bool CountdownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
+bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
 {
-    BOSE_INFO( s_logger, "%s - (intent=%d)(m_shortCounter=%d)(m_factoryResetCounter=%d)", __func__, intent, m_shortCounter, m_factoryResetCounter );
+    BOSE_DEBUG( s_logger, "%s - (intent=%d)", __func__, intent );
 
     switch( intent )
     {
@@ -148,9 +148,9 @@ bool CountdownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     return true;
 }
 
-void CountdownManager::NotifyButtonEvent( const std::string& event, const std::string& state, uint32_t value )
+void CountDownManager::NotifyButtonEvent( const std::string& event, const std::string& state, uint32_t value )
 {
-    BOSE_INFO( s_logger, "%s: event = %s, state = %s, value = %d", __func__, event.c_str(), state.c_str(), value );
+    BOSE_DEBUG( s_logger, "%s: event = %s, state = %s, value = %d", __func__, event.c_str(), state.c_str(), value );
     IntentHandler::Protobuf::ButtonEventNotification buttonNotification;
 
     buttonNotification.set_event( event );

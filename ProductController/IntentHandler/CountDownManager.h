@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
-///// @file   CountdownManager.h
-///// @brief  CountdownManager class for Riviera based product
+///// @file   CountDownManager.h
+///// @brief  CountDownManager class for Riviera based product
 /////
 ///// @attention Copyright 2018 Bose Corporation, Framingham, MA
 //////////////////////////////////////////////////////////////////////////////////
@@ -12,14 +12,14 @@
 namespace ProductApp
 {
 
-class CountdownManager: public IntentManager
+class CountDownManager: public IntentManager
 {
 public:
-    CountdownManager( NotifyTargetTaskIF& task,
+    CountDownManager( NotifyTargetTaskIF& task,
                       const CliClientMT& cliClient,
                       const FrontDoorClientIF_t& frontDoorClient,
                       ProductController& controller );
-    ~CountdownManager() override { }
+    ~CountDownManager() override { }
 
     // Public function to Handle intents
     // This function will build and send message either through FrontDoor
