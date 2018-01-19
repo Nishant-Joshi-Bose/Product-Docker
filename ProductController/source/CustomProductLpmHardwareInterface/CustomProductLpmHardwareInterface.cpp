@@ -623,20 +623,20 @@ bool CustomProductLpmHardwareInterface::SendAdaptIQControl( ProductAdaptIQContro
 
     BOSE_DEBUG( s_logger, "%s : send action %s", __func__, ProductAdaptIQControl::AdaptIQAction_Name( action ).c_str() );
 
-    IpcAiqControl_t msg;
+    IpcAiqControlPayload_t msg;
     switch( action )
     {
     case ProductAdaptIQControl::Start:
         // TODO FIX THIS "START" IS MISSING IN IPC DEFS
         break;
     case ProductAdaptIQControl::Cancel:
-        msg.set_cmd( IpcAiqCmd_t::AIQ_CONTROL_STOP );
+        msg.set_control( IpcAiqControl_t::AIQ_CONTROL_STOP );
         break;
     case ProductAdaptIQControl::Advance:
-        msg.set_cmd( IpcAiqCmd_t::AIQ_CONTROL_ADVANCE );
+        msg.set_control( IpcAiqControl_t::AIQ_CONTROL_ADVANCE );
         break;
     case ProductAdaptIQControl::Previous:
-        msg.set_cmd( IpcAiqCmd_t::AIQ_CONTROL_PREVIOUS );
+        msg.set_control( IpcAiqControl_t::AIQ_CONTROL_PREVIOUS );
         break;
     default:
         break;
@@ -646,6 +646,29 @@ bool CustomProductLpmHardwareInterface::SendAdaptIQControl( ProductAdaptIQContro
 
     return true;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name  CustomProductHardwareLpmInterface::BootDSPImage
+///
+/// @brief This method loads the specified DSP image
+///
+/// @param action
+///
+/// @return bool The method returns true when the control request was successfully sent.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductLpmHardwareInterface::BootDSPImage( LpmServiceMessages::DSPImage_t image )
+{
+    LpmServiceMessages::IpcDspImagePayload_t p;
+
+    p.set_image( image );
+    GetLpmClient( )->DspRebootToImage( p );
+
+    return true;
+}
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///

@@ -87,6 +87,9 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
         HandleTimeOut();
     } );
 
+    // TODO: does response come back after dsp has rebooted or as an event later on?
+    HardwareIface( )->BootDSPImage( LpmServiceMessages::DSPImage_t::INSTALLER_IMAGE );
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -124,6 +127,9 @@ void CustomProductControllerStateAdaptIQ::HandleStateExit( )
 {
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being exited." );
     m_timer->Stop( );
+
+    // TODO: does response come back after dsp has rebooted or as an event later on?
+    HardwareIface( )->BootDSPImage( LpmServiceMessages::DSPImage_t::END_USER_IMAGE );
 
 }
 
@@ -163,6 +169,15 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAda
     return true;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStateAdaptIQ::HardwareIface
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::shared_ptr<CustomProductLpmHardwareInterface>& CustomProductControllerStateAdaptIQ::HardwareIface( )
+{
+    return GetCustomProductController( ).GetLpmHardwareInterface( );
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

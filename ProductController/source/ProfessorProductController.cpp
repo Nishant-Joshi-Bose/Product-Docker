@@ -57,7 +57,7 @@
 #include "CustomProductControllerStatePlaying.h"
 #include "CustomProductControllerStatePlayingInactive.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
-#include "CustomProductControllerStateAdaptIQSim.h"
+#include "CustomProductControllerStateAdaptIQ.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
