@@ -1,23 +1,7 @@
 # castle tools - sublime project creator
+# AUTHOR: DWR
 
-# Super hacky script that creates a sublime project that will load all components into the folder view
-# File will be in root repo directory named <FOLDER>.sublime-project
-# This allows for easy autofill and quicker API checking
-
-# TODO:
-#   - Utilize file_exclude_patterns and folder_exclude_patterns for folders
-#   - Ignore folders for all but apq?
-
-# How to use:
-# Run from location of your components.json
-
-# To create a project for sublime on windows it takes location of your scratch mount as arg:
-#     dirk@drbox:/scratch/Professor$ python scripts/sublime_project_creator.py --scratch Y:
-
-# To create project for sublime on linux just run from *.git base:
-#     dirk@drbox:/scratch/Professor$ python scripts/sublime_project_creator.py
-
-# If you do setloc for a repo just rerun and re-open project
+# WIKI: https://wiki.bose.com/display/BC/Sublime+Text+3+-+Castle+Tools+Project+Generator
 
 import json
 import os
@@ -26,14 +10,16 @@ import sys
 import argparse
 
 parser = argparse.ArgumentParser(description='Create sublime text project')
-parser.add_argument('--scratch', dest="scratchRemote", help='Remote scratch mount dir')
+parser.add_argument('--update', dest="updateFile", help='Update a project file after changing components')
 parser.add_argument('--output', dest="outputName", help='Output file name')
+
 parser.add_argument('--select', action="store_true", default=False, help='Show Y/n for each component')
 
 # THIS DEFAULTS TO 1.3 FOR DP1 FOR NOW
 parser.add_argument('--hsp', dest="hspVersion", help='Set RIVIERA_HSP_VERSION ')
 
 # NOTE YOU NEED WINDOWS SSH PUBKEY IN THE REMOTE ~/.ssh/authorized_keys to use this
+parser.add_argument('--scratch', dest="scratchRemote", help='Remote scratch mount dir')
 parser.add_argument('--user', dest="remoteUser", help='Username to log into remote machine')
 parser.add_argument('--host', dest="remoteHost", help='Hostname of remote machine to make on')
 
@@ -48,24 +34,64 @@ def run_command(command):
                             stderr=subprocess.PIPE,
                             stdin=subprocess.PIPE).communicate()
 
+########################################################################
+# DEFAULT PARAMS
+hsp = "1.3"
+remote = False
+remotePath = ""
+remoteUser = ""
+remotePath = ""
+remoteBuild = False
+
+
+
+########################################################################
+# CHECK IF UPDATING
+updating = False
+updateJson = {}
+if( args.updateFile ):
+    updating = True
+    updateJson = json.load( open( os.path.join( os.getcwd(), args.updateFile ) ) )
+
+    # LOAD IN SAVED PARAMS
+    hsp = updateJson["castle_sublime_params"]["hsp"]
+    remote = updateJson["castle_sublime_params"]["remote"]
+    remotePath = updateJson["castle_sublime_params"]["remote_path"]
+    remoteUser = updateJson["castle_sublime_params"]["remote_user"]
+    remoteHost = updateJson["castle_sublime_params"]["remote_host"]
+    remoteBuild = updateJson["castle_sublime_params"]["remote_build"]
+
+def IsComponentInProjext( name ):
+    #print(updateJson["folders"])
+    for comp in updateJson["folders"]:
+        if( "name" in comp and comp["name"] == name ):
+            return True;
+    return False
+
+########################################################################
+# PARSE REMOTE BUILD
+if( args.remoteUser and args.remoteHost):
+    remoteUser = args.remoteUser
+    remoteHost = args.remoteHost
+
+########################################################################
 # PARSE OUTPUT FILE NAME
 fileName = os.path.basename( os.getcwd() )
 if( args.outputName ):
     fileName = args.outputName
 
+outputFileName = os.path.join( os.getcwd(), fileName + ".sublime-project" )
+print( "Creating project : " + outputFileName )
 
+
+########################################################################
 # PARSE HSP VERSION
-hsp = "1.3" # hard coded
 if( args.hspVersion ):
     hsp = args.hspVersion
 
-run_command( "env RIVIERA_HSP_VERSION="+hsp+" make check_tools")
 
-buildMeta = [ [ "Make " + fileName , os.getcwd() ] ]
-
+########################################################################
 # PARSE REMOTE SCRATCH PATH
-remote = False
-remotePath = ""
 if( args.scratchRemote ):
     remote = True
     remoteIsWin = True # For now we assume remote is windows machine with samba mounted drive
@@ -74,27 +100,38 @@ if( args.scratchRemote ):
     if( not args.remoteUser or not args.remoteHost):
         print("!!!!Warning set scratch to remote but set no remote build user/host!!!")
 
+########################################################################
+# ENSURE COMPONENTS ARE INSTALLED
+run_command( "env RIVIERA_HSP_VERSION="+hsp+" make check_tools")
 
-outputFileName = os.path.join( os.getcwd(), fileName + ".sublime-project" )
-print( "Creating project : " + outputFileName )
+########################################################################
+# INIT BUILD LIST
+buildMeta = [ [ "Make " + fileName , os.getcwd() ] ]
 
+########################################################################
+# LOAD COMPONENTS.JSON
 filePath = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', 'components.json'))
 data = json.load( open(filePath) )
 
+########################################################################
+# INIT FOLDERS LIST
 baseJson = '{ "folders" : [] }'
 baseJsonObj = json.loads( baseJson )
 
 outputFolders = []
 
-
+########################################################################
+# ADD ROOT FOLDER
 if( remote ):
     basePath = remotePath + os.getcwd().replace("scratch/","").replace("/", "\\")
-    compDict = { "path" : basePath }
+    compDict = { "path" : basePath, "name":  os.path.basename( os.getcwd() )}
     outputFolders.append( compDict )
 else:
-    compDict = { "path" : os.getcwd()}
+    compDict = { "path" : os.getcwd(), "name": os.path.basename( os.getcwd() )}
     outputFolders.append( compDict )
 
+########################################################################
+# LOOP THROUGH COMPONENTS AND GET LOCATIONS
 for comp in data:
     findCmd = "env RIVIERA_HSP_VERSION=" +hsp+ " components get " + comp['name'] + " installed_location"
     cmdResp = run_command( findCmd )
@@ -111,34 +148,35 @@ for comp in data:
     if( remote ):
         compLocation = remotePath + compLocation.replace("scratch/","").replace("/", "\\")
     # print( compLocation )
-    compDict = { "path" : compLocation }
+    compDict = { "path" : compLocation, "name" : comp['name'] }
 
     if( args.select ):
         maybe = raw_input(comp['name'] + " [Y/n] ? ")
         if( maybe == "Y" ):
             outputFolders.append( compDict )
     else:
-        # Skip HSP dirs
-        if( comp["name"] != "Riviera-Toolchain" and comp["name"] != "Riviera-HSP-Images" ):
+        # Only update if the thing is in out list
+        if( updating == False or IsComponentInProjext( comp["name"] ) ) :
             outputFolders.append( compDict )
 
+########################################################################
 # SUPER HACKY PER COMPONENT BUILD STUFF :)
 myBuilds = []
-
 buildMeta.reverse()
 
+########################################################################
 # CREATE COMMAND TO MAKE ALL SETLOC COMPONENTS
 buildAllString = ""
-if( args.remoteUser and args.remoteHost ):
-    buildAllString = "ssh " + args.remoteUser + "@" + args.remoteHost + " \""
+if( remoteBuild ):
+    buildAllString = "ssh " + remoteUser + "@" + remoteHost + " \""
 
 for meta in buildMeta:
     # Example command I got to work
     # ssh dirk@drbox "cd /scratch/Professor ; source ~/.profile; env RIVIERA_HSP_VERSION=1.3 make"
 
     makeCommand = ""
-    if( args.remoteUser and args.remoteHost ):
-        makeCommand = "ssh " + args.remoteUser + "@" + args.remoteHost + " \""
+    if( remoteBuild ):
+        makeCommand = "ssh " + remoteUser + "@" + remoteHost + " \""
 
         makeCommand += "echo !!!! MAKING "+meta[1]+" !!!; cd " + meta[1] + " ; source ~/.profile; env RIVIERA_HSP_VERSION=" +hsp+ " make ;"
         buildAllString += "echo !!!! MAKING "+meta[1]+" !!!; cd " + meta[1] + " ; source ~/.profile; env RIVIERA_HSP_VERSION=" +hsp+ " make ;"
@@ -152,16 +190,36 @@ for meta in buildMeta:
     # Maybe do something about sdk in name here
     myBuilds.append( { "name" : meta[0], "shell_cmd" : makeCommand })
 
-if( args.remoteUser and args.remoteHost ):
+if( remoteBuild ):
     buildAllString += " \""
 
 myBuilds.append( { "name" : "Make All", "shell_cmd" : buildAllString })
 
 
+########################################################################
+# FINAL DICTIONARY CREATION
 baseJsonObj["folders"] = outputFolders
 baseJsonObj["build_systems"] = myBuilds
 
+########################################################################
+# SAVE PARAMS SCRIPT WAS RAN WITH
+myParams = {}
+myParams["version"]       = "potato"
+#myParams["creation_hash"] = "TODO"
+myParams["hsp"]           = hsp
+myParams["remote"]        = remote
+myParams["remote_path"]   = remotePath
+myParams["remote_user"]   = remoteUser
+myParams["remote_host"]   = remoteHost
+myParams["remote_build"]  = remoteBuild
 
+baseJsonObj["castle_sublime_params"] = myParams
+
+########################################################################
+# SAVE IT OFF
 outputFile = open( outputFileName, "w")
 outputFile.truncate()
 outputFile.write( json.dumps(baseJsonObj, indent=4, sort_keys=True) )
+
+########################################################################
+# ENJOY
