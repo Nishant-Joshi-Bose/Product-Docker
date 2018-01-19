@@ -82,7 +82,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
         playbackRequestData.set_source( "PRODUCT" );
         playbackRequestData.set_sourceaccount( "TV" );
 
-        AsyncCallback< SoundTouchInterface::NowPlayingJson >
+        AsyncCallback< SoundTouchInterface::NowPlaying >
         postPlaybackRequestResponseCallback( std::bind( &PlaybackRequestManager::PostPlaybackRequestResponse,
                                                         this, std::placeholders::_1 ),
                                              &GetTask( ) );
@@ -93,10 +93,10 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
                                                      std::placeholders::_1 ),
                                           &GetTask( ) );
 
-        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlayingJson>( "/content/playbackRequest",
-                                                                              playbackRequestData,
-                                                                              postPlaybackRequestResponseCallback,
-                                                                              postPlaybackRequestErrorCallback );
+        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying>( "/content/playbackRequest",
+                                                                          playbackRequestData,
+                                                                          postPlaybackRequestResponseCallback,
+                                                                          postPlaybackRequestErrorCallback );
 
         BOSE_INFO( s_logger, "An attempt to play the TV source has been made." );
     }
@@ -105,7 +105,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
         SoundTouchInterface::playbackRequestJson& playbackRequestData =
             m_CustomProductController.GetLastSoundTouchPlayback( );
 
-        AsyncCallback< SoundTouchInterface::NowPlayingJson >
+        AsyncCallback< SoundTouchInterface::NowPlaying >
         postPlaybackRequestResponseCallback( std::bind( &PlaybackRequestManager::PostPlaybackRequestResponse,
                                                         this, std::placeholders::_1 ),
                                              &GetTask( ) );
@@ -116,10 +116,10 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
                                                      std::placeholders::_1 ),
                                           &GetTask( ) );
 
-        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlayingJson>( "/content/playbackRequest",
-                                                                              playbackRequestData,
-                                                                              postPlaybackRequestResponseCallback,
-                                                                              postPlaybackRequestErrorCallback );
+        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying>( "/content/playbackRequest",
+                                                                          playbackRequestData,
+                                                                          postPlaybackRequestResponseCallback,
+                                                                          postPlaybackRequestErrorCallback );
 
         BOSE_INFO( s_logger, "An attempt to play the last SoundTouch source has been made." );
     }
@@ -136,7 +136,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
 /// @name   PlaybackRequestManager::PostPlaybackRequestResponse
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void PlaybackRequestManager::PostPlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson&
+void PlaybackRequestManager::PostPlaybackRequestResponse( const SoundTouchInterface::NowPlaying&
                                                           response )
 {
     BOSE_DEBUG( s_logger, "%s in %s", "PlaybackRequestManager", __FUNCTION__ );

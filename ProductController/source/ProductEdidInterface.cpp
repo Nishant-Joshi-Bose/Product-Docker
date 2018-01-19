@@ -82,12 +82,12 @@ bool ProductEdidInterface::Run( )
     /// CAPS is made through the FrontDoorClient object pointer. The callback HandleCapsNowPlaying
     /// is used to receive these notifications.
     ///
-    AsyncCallback< SoundTouchInterface::NowPlayingJson >
+    AsyncCallback< SoundTouchInterface::NowPlaying >
     callback( std::bind( &ProductEdidInterface::HandleNowPlaying,
                          this, std::placeholders::_1 ),
               m_ProductTask );
 
-    m_FrontDoorClient->RegisterNotification< SoundTouchInterface::NowPlayingJson >
+    m_FrontDoorClient->RegisterNotification< SoundTouchInterface::NowPlaying >
     ( "/content/nowPlaying", callback );
 
 
@@ -231,10 +231,10 @@ void ProductEdidInterface::Stop( )
 ///
 /// @brief ProductEdidInterface::HandleNowPlaying
 ///
-/// @param SoundTouchInterface::NowPlayingJson& nowPlayingStatus
+/// @param SoundTouchInterface::NowPlaying& nowPlayingStatus
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductEdidInterface::HandleNowPlaying( const SoundTouchInterface::NowPlayingJson&
+void ProductEdidInterface::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
                                              nowPlayingStatus )
 {
     BOSE_DEBUG( s_logger, "CEC A CAPS now playing status has been received." );

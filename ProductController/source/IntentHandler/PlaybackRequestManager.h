@@ -109,7 +109,7 @@ private:
     /// @brief These methods are callbacks that are invoked from a playback request.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void PostPlaybackRequestResponse( const SoundTouchInterface::NowPlayingJson& response );
+    void PostPlaybackRequestResponse( const SoundTouchInterface::NowPlaying& response );
     void PostPlaybackRequestError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
 };
 

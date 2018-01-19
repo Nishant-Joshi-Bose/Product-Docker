@@ -641,12 +641,12 @@ void ProfessorProductController::RegisterNowPlayingEndPoint( )
     /// CAPS is made through the FrontDoorClient object pointer. The callback HandleCapsNowPlaying
     /// is used to receive these notifications.
     ///
-    AsyncCallback< SoundTouchInterface::NowPlayingJson >
+    AsyncCallback< SoundTouchInterface::NowPlaying >
     callback( std::bind( &ProfessorProductController::HandleNowPlaying,
                          this, std::placeholders::_1 ),
               GetTask( ) );
 
-    m_FrontDoorClientIF->RegisterNotification< SoundTouchInterface::NowPlayingJson >
+    m_FrontDoorClientIF->RegisterNotification< SoundTouchInterface::NowPlaying >
     ( "/content/nowPlaying", callback );
 
     BOSE_DEBUG( s_logger, "A notification request for CAPS now playing status has been made." );
@@ -656,10 +656,10 @@ void ProfessorProductController::RegisterNowPlayingEndPoint( )
 ///
 /// @brief ProductSystemManager::HandleNowPlaying
 ///
-/// @param SoundTouchInterface::NowPlayingJson& nowPlayingStatus
+/// @param SoundTouchInterface::NowPlaying& nowPlayingStatus
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::HandleNowPlaying( const SoundTouchInterface::NowPlayingJson&
+void ProfessorProductController::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
                                                    nowPlayingStatus )
 {
     BOSE_DEBUG( s_logger, "A CAPS now playing status has been received." );
@@ -667,9 +667,9 @@ void ProfessorProductController::HandleNowPlaying( const SoundTouchInterface::No
     if( nowPlayingStatus.has_state( ) )
     {
         BOSE_DEBUG( s_logger, "The CAPS now playing status has a %s status.",
-                    SoundTouchInterface::StatusJson_Name( nowPlayingStatus.state( ).status( ) ).c_str( ) );
+                    SoundTouchInterface::Status_Name( nowPlayingStatus.state( ).status( ) ).c_str( ) );
 
-        if( nowPlayingStatus.state( ).status( ) == SoundTouchInterface::StatusJson::play )
+        if( nowPlayingStatus.state( ).status( ) == SoundTouchInterface::Status::play )
         {
             ProductMessage productMessage;
             productMessage.mutable_nowplayingstatus( )->set_state( ProductNowPlayingStatus_ProductNowPlayingState_Active );
