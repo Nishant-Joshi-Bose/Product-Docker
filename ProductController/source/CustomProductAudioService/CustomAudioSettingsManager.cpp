@@ -4,7 +4,6 @@
 ///         such as bass, treble, center, surround, gainOffset, avSync, mode, contentType
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include <json/reader.h>
 #include <fstream>
 #include "DPrint.h"
 #include "SystemUtils.h"
@@ -196,6 +195,21 @@ const ProductPb::AudioDualMonoSelect& CustomAudioSettingsManager::GetDualMonoSel
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentDualMonoSelect;
+}
+
+void CustomAudioSettingsManager::UpdateAllProtos()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    // Only required for contentItem sensitive audio settings
+    // contentItem non-sensitive audio settings will only be set through setters, no other ways
+    UpdateCurrentProto( kBassName,          m_currentBass );
+    UpdateCurrentProto( kTrebleName,        m_currentTreble );
+    UpdateCurrentProto( kCenterName,        m_currentCenter );
+    UpdateCurrentProto( kSurroundName,      m_currentSurround );
+    UpdateCurrentProto( kGainOffsetName,    m_currentGainOffset );
+    UpdateCurrentProto( kAvSyncName,        m_currentAvSync );
+    UpdateCurrentProto( kModeName,          m_currentMode );
+    UpdateCurrentProto( kContentTypeName,   m_currentContentType );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

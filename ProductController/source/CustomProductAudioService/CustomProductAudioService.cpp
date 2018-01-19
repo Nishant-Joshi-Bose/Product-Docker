@@ -53,18 +53,19 @@ CustomProductAudioService::CustomProductAudioService( ProfessorProductController
 void CustomProductAudioService::RegisterAudioPathEvents()
 {
     BOSE_DEBUG( s_logger, __func__ );
-    //Initialize variables related to AudioPath
-    m_InputRoute = 0x01;
-    m_MainStreamAudioSettings.set_basslevel( m_AudioSettingsMgr->GetBass( ).value() );
-    m_MainStreamAudioSettings.set_treblelevel( m_AudioSettingsMgr->GetTreble( ).value() );
-    m_MainStreamAudioSettings.set_centerlevel( m_AudioSettingsMgr->GetCenter( ).value() );
-    m_MainStreamAudioSettings.set_surroundlevel( m_AudioSettingsMgr->GetSurround( ).value() );
-    m_MainStreamAudioSettings.set_gainoffsetdb( m_AudioSettingsMgr->GetGainOffset( ).value() );
-    m_MainStreamAudioSettings.set_targetlatencyms( m_AudioSettingsMgr->GetAvSync( ).value() );
-    m_MainStreamAudioSettings.set_audiomode( ModeNameToEnum( m_AudioSettingsMgr->GetMode( ).value() ) );
-    m_MainStreamAudioSettings.set_contenttype( ContentTypeNameToEnum( m_AudioSettingsMgr->GetContentType( ).value() ) );
-    m_MainStreamAudioSettings.set_dualmonoselect( DualMonoSelectNameToEnum( m_AudioSettingsMgr->GetDualMonoSelect( ).value() ) );
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Initialize member variables related to AudioPath
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    // Initialize m_InputRoute
+    m_InputRoute = 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_NETWORK;
+    // Initialize m_MainStreamAudioSettings with current audio settings value from AudioSettingsManager
+    // thermalData will be updated by thermal task periodically in a separate route
+    FetchLatestAudioSettings();
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Register for AudioPath requests and events
+    /////////////////////////////////////////////////////////////////////////////////////////////////
     m_APPointer = APProductFactory::Create( "ProductAudioService-APProduct", m_ProductTask );
     RegisterCommonAudioPathEvents();
 
@@ -94,15 +95,16 @@ void CustomProductAudioService::RegisterAudioPathEvents()
 ///
 /// @param  const Callback<std::string, std::string> cb
 ///
-/// @brief
+/// @brief  Callback function, when AudioPath wants to notify ProductController about the new contentItem
+///         and get latest mainStreamAudioSettings and inputRoute back
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string contentItem,  const Callback<std::string, std::string> cb )
 {
     BOSE_DEBUG( s_logger, __func__ );
-    // Update current contentItem
+    // Parse contentItem string received from APProduct
+    bool error = false;
     SoundTouchInterface::ContentItem contentItemProto;
-    // TODO: error checking, and if no source info, skip below processing
     try
     {
         ProtoToMarkup::FromJson( contentItem, &contentItemProto );
@@ -110,32 +112,72 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
     catch( const ProtoToMarkup::MarkupError &e )
     {
         BOSE_ERROR( s_logger, "Converting contentItem string from APProduct to ContentItem proto failed markup error - %s", e.what() );
+        error = true;
     }
-    m_AudioSettingsMgr->UpdateContentItem( contentItemProto );
-    // Get latest mainStreamAudioSettings after contentItem change
-    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_MainStreamAudioSettings );
-    // Get inputRoute for new contentItem
-    if( contentItemProto.source() == "PRODUCT" )
+    // If no parsing error occured, update m_MainStreamAudioSettings and m_InputRoute with new contentItem
+    if( !error && contentItemProto.has_source() && contentItemProto.has_sourceaccount() )
     {
-        m_InputRoute = ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_OPTICAL ) |
-                       ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_ARC ) |
-                       ( 1 << AUDIO_INPUT_BIT_POSITION_HDMI );
+        // Update audio settings
+        m_AudioSettingsMgr->UpdateContentItem( contentItemProto );
+        FetchLatestAudioSettings();
+        // Update input route
+        if( contentItemProto.source() == "PRODUCT" )
+        {
+            m_InputRoute = ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_OPTICAL ) |
+                           ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_ARC ) |
+                           ( 1 << AUDIO_INPUT_BIT_POSITION_HDMI );
+        }
+        else
+        {
+            m_InputRoute = 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_NETWORK;
+        }
     }
     else
     {
-        m_InputRoute = 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_NETWORK;
+        BOSE_ERROR( s_logger, "ContentItem string from APProduct doesn't contain \"source\" or \"sourceAccount\" field" );
     }
+    // Reply APProduct with the current m_MainStreamAudioSettings and m_InputRoute
+    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_MainStreamAudioSettings );
     std::string inputRoute = std::to_string( m_InputRoute );
     cb.Send( mainStreamAudioSettings, inputRoute );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductAudioService::SendMainStreamAudioSettingsEvent
+/// @name   CustomProductAudioService::FetchLatestAudioSettings
 ///
-/// @brief
+/// @brief  update m_MainStreamAudioSettings with the latest audio settings from AudioSettingsManager
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::FetchLatestAudioSettings( )
+{
+    m_MainStreamAudioSettings.set_basslevel( m_AudioSettingsMgr->GetBass( ).value() );
+    m_MainStreamAudioSettings.set_treblelevel( m_AudioSettingsMgr->GetTreble( ).value() );
+    m_MainStreamAudioSettings.set_centerlevel( m_AudioSettingsMgr->GetCenter( ).value() );
+    m_MainStreamAudioSettings.set_surroundlevel( m_AudioSettingsMgr->GetSurround( ).value() );
+    m_MainStreamAudioSettings.set_gainoffsetdb( m_AudioSettingsMgr->GetGainOffset( ).value() );
+    m_MainStreamAudioSettings.set_targetlatencyms( m_AudioSettingsMgr->GetAvSync( ).value() );
+    m_MainStreamAudioSettings.set_audiomode( ModeNameToEnum( m_AudioSettingsMgr->GetMode( ).value() ) );
+    m_MainStreamAudioSettings.set_contenttype( ContentTypeNameToEnum( m_AudioSettingsMgr->GetContentType( ).value() ) );
+    m_MainStreamAudioSettings.set_dualmonoselect( DualMonoSelectNameToEnum( m_AudioSettingsMgr->GetDualMonoSelect( ).value() ) );
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::SetStreamConfigCallback
+///
+/// @param  std::string serializedAudioSettings
+///
+/// @param  std::string serializedInputRoute
+///
+/// @param  const Callback<bool> cb
+///
+/// @brief  Callback function, when AudioPath wants to send streamConfig structure to change DSP settings
+///         serializedAudioSettings contains audio settings, thermal data, and stream mix
+///         serializedInputRoute contains input route info
+///
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::SetStreamConfigCallback( std::string serializedAudioSettings, std::string serializedInputRoute, const Callback<bool> cb )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -146,7 +188,7 @@ void CustomProductAudioService::SetStreamConfigCallback( std::string serializedA
 ///
 /// @name   CustomProductAudioService::SendMainStreamAudioSettingsEvent
 ///
-/// @brief
+/// @brief  ProductController notifies APProduct about latest mainStreamAudioSettings by sending this event
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
