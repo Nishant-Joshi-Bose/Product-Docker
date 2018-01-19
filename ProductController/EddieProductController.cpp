@@ -632,23 +632,7 @@ void EddieProductController::HandleIntents( KeyHandlerUtil::ActionType_t intent 
     {
         GetHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntentAuxIn, intent );
     }
-    else if( IntentHandler::IsIntentManualUpdateControl( intent ) )
-    {
-        GetHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntentAuxIn, intent );
-    }
-    else if( IntentHandler::IsIntentFactoryResetControl( intent ) )
-    {
-        GetHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntentAuxIn, intent );
-    }
-    else if( IntentHandler::IsIntentSetupCountdownControl( intent ) )
-    {
-        GetHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntentAuxIn, intent );
-    }
-    else if( IntentHandler::IsIntentDisableNetworkCountdownControl( intent ) )
-    {
-        GetHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntentAuxIn, intent );
-    }
-    else if( IntentHandler::IsIntentPTSUpdateControl( intent ) )
+    else if( IntentHandler::IsIntentCountDownControl( intent ) )
     {
         GetHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntentAuxIn, intent );
     }
