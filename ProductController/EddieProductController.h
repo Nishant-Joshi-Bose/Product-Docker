@@ -36,6 +36,21 @@
 #include "ProductControllerStateIdle.h"
 #include "ProductControllerStateSoftwareUpdating.h"
 #include "ProductControllerStateCriticalError.h"
+#include "ProductControllerStatePlayingDeselected.h"
+#include "ProductControllerStatePlayingSelected.h"
+#include "ProductControllerStatePlayingSelectedSilent.h"
+#include "ProductControllerStatePlayingSelectedNotSilent.h"
+#include "ProductControllerStatePlayingSelectedSetup.h"
+#include "ProductControllerStatePlayingSelectedSetupNetwork.h"
+#include "ProductControllerStatePlayingSelectedSetupOther.h"
+#include "ProductControllerStateStoppingStreams.h"
+#include "ProductControllerStatePlayableTransition.h"
+#include "ProductControllerStatePlayableTransitionIdle.h"
+#include "ProductControllerStatePlayableTransitionNetworkStandby.h"
+#include "ProductControllerStateSoftwareUpdateTransition.h"
+#include "ProductControllerStateLowPowerTransition.h"
+#include "ProductControllerStatePlayingTransition.h"
+#include "ProductControllerStatePlayingTransitionSelected.h"
 #include "LightBarController.h"
 #include "ConfigurationStatus.pb.h"
 #include "SoundTouchInterface/AllowSourceSelect.pb.h"
@@ -374,6 +389,23 @@ private:
     ProductControllerStateIdleVoiceNotConfigured   m_ProductControllerStateVoiceNotConfigured;
     ProductControllerStateNetworkStandbyConfigured   m_ProductControllerStateNetworkConfigured;
     ProductControllerStateNetworkStandbyNotConfigured   m_ProductControllerStateNetworkNotConfigured;
+
+    ProductControllerStatePlayingDeselected                 m_ProductControllerStatePlayingDeselected;
+    ProductControllerStatePlayingSelected                   m_ProductControllerStatePlayingSelected;
+    ProductControllerStatePlayingSelectedSilent             m_ProductControllerStatePlayingSelectedSilent;
+    ProductControllerStatePlayingSelectedNotSilent          m_ProductControllerStatePlayingSelectedNotSilent;
+    ProductControllerStatePlayingSelectedSetup              m_ProductControllerStatePlayingSelectedSetup;
+    ProductControllerStatePlayingSelectedSetupNetwork       m_ProductControllerStatePlayingSelectedSetupNetwork;
+    ProductControllerStatePlayingSelectedSetupOther         m_ProductControllerStatePlayingSelectedSetupOther;
+    ProductControllerStateStoppingStreams                   m_ProductControllerStateStoppingStreams;
+    ProductControllerStatePlayableTransition                m_ProductControllerStatePlayableTransition;
+    ProductControllerStatePlayableTransitionIdle            m_ProductControllerStatePlayableTransitionIdle;
+    ProductControllerStatePlayableTransitionNetworkStandby  m_ProductControllerStatePlayableTransitionNetworkStandby;
+    ProductControllerStateSoftwareUpdateTransition          m_ProductControllerStateSoftwareUpdateTransition;
+    ProductControllerStateLowPowerTransition                m_ProductControllerStateLowPowerTransition;
+    ProductControllerStatePlayingTransition                 m_ProductControllerStatePlayingTransition;
+    ProductControllerStatePlayingTransitionSelected         m_ProductControllerStatePlayingTransitionSelected;
+
     /// Key Handler
     KeyHandlerUtil::KeyHandler                  m_KeyHandler;
     ProtoPersistenceIF::ProtoPersistencePtr     m_ConfigurationStatusPersistence = nullptr;

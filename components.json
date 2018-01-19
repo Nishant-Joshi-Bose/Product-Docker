@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.2.40696.2644691"
+    "selected_version": "Release/Castle-Fork/0.3.3.40771.2655933"
   },
   {
     "name": "bose-opkg-utils",
@@ -25,7 +25,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/develop/0.2.1-20+299be5e"
+    "selected_version": "Release/develop/0.2.1-24+02d9159"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -65,7 +65,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@bd916fb365efbc2290758f3faec84b0fe1b3806d"
+    "selected_version": "master@d4eaa9eb177d908c9acba2c733c1683812f643dd"
   },
   {
     "name": "CastleProductUIAssets",
@@ -84,7 +84,7 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/build44/1.0.0-73+7457e9a"
+    "selected_version": "Release/master/1.0.0-44+42f6178"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -124,11 +124,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.3.3-237+813d265"
+    "selected_version": "Release/master/0.3.4-241+8143ac4"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.2.40696.2644691"
+    "selected_version": "Release/Castle-Fork/0.3.3.40771.2655933"
   },
   {
     "name": "Webkit",
