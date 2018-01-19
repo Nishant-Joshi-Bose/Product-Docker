@@ -2,7 +2,7 @@
 ///// @file   CountdownManager.h
 ///// @brief  CountdownManager class for Riviera based product
 /////
-///// @attention Copyright 2017 Bose Corporation, Framingham, MA
+///// @attention Copyright 2018 Bose Corporation, Framingham, MA
 //////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
