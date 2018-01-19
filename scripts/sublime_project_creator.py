@@ -40,7 +40,7 @@ hsp = "1.3"
 remote = False
 remotePath = ""
 remoteUser = ""
-remotePath = ""
+remoteHost = ""
 remoteBuild = False
 
 
@@ -71,6 +71,7 @@ def IsComponentInProjext( name ):
 ########################################################################
 # PARSE REMOTE BUILD
 if( args.remoteUser and args.remoteHost):
+    remoteBuild = True
     remoteUser = args.remoteUser
     remoteHost = args.remoteHost
 
