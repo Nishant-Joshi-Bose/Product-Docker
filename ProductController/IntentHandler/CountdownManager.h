@@ -7,6 +7,7 @@
 #pragma once
 
 #include "IntentManager.h"
+#include "Intents.h"
 
 namespace ProductApp
 {
@@ -30,10 +31,10 @@ public:
     bool Handle( KeyHandlerUtil::ActionType_t& arg ) override;
 
 private:
-    bool            m_complete;
-    int32_t         m_counter;
-    int32_t         m_countDownType;
+    uint32_t            m_eventType = 0;
+    uint32_t            m_shortCounter = 5;
+    uint32_t            m_factoryResetCounter = 10;
 
-    void NotifyButtonEvent( std::string& event, std::string& state, uint32_t value );
+    void NotifyButtonEvent( const std::string& event, const std::string& state, uint32_t value );
 };
 } // namespace ProductApp
