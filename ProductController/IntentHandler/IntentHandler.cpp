@@ -109,20 +109,6 @@ void IntentHandler::Initialize()
     m_IntentManagerMap[( uint16_t )Action::PTS_UPDATE_COUNTDOWN] = valcunKeyManager;
     //- (PTS Update)
 
-
-    /*    m_IntentNotificationMap[( uint16_t ) Action::MANUAL_UPDATE]        = "manual_update" ;
-        m_IntentNotificationMap[( uint16_t ) Action::MANUAL_UPDATE_CANCEL]        = "manual_update_cancel" ;
-        m_IntentNotificationMap[( uint16_t ) Action::MANUAL_UPDATE_COUNTDOWN]        = "manual_update_countdown" ;
-        m_IntentNotificationMap[( uint16_t ) Action::FACTORY_RESET_CANCEL]        = "factory_reset_cancel" ;
-        m_IntentNotificationMap[( uint16_t ) Action::FACTORY_RESET_COUNTDOWN]        = "factory_reset_countdown" ;
-        m_IntentNotificationMap[( uint16_t ) Action::SETUP_AP_COUNTDOWN]        = "setup_ap_countdown" ;
-        m_IntentNotificationMap[( uint16_t ) Action::SETUP_AP_CANCEL]        = "setup_ap_cancel" ;
-        m_IntentNotificationMap[( uint16_t ) Action::DISABLE_NETWORK_COUNTDOWN]        = "disable_network_countdown" ;
-        m_IntentNotificationMap[( uint16_t ) Action::DISABLE_NETWORK_CANCEL]        = "disable_network_cancel" ;
-        m_IntentNotificationMap[( uint16_t ) Action::PTS_UPDATE]        = "pts_update" ;
-        m_IntentNotificationMap[( uint16_t ) Action::PTS_UPDATE_CANCEL]        = "pts_update_cancel" ;
-        m_IntentNotificationMap[( uint16_t ) Action::PTS_UPDATE_COUNTDOWN]        = "pts_update_countdown" ;*/
-
 }
 
 }
