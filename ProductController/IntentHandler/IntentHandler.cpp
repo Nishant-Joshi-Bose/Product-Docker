@@ -76,38 +76,36 @@ void IntentHandler::Initialize()
     m_IntentNotificationMap[( uint16_t ) Action::AUX_IN]        = "aux_in" ;
     //- AUX Control API's
 
-    //+ (Manual Update)
+    //+ (Common Countdown manager for key combination )
     IntentManagerPtr_t valcunKeyManager =
         std::make_shared<CountdownManager>( GetTask() , GetCli(),
                                             GetFrontDoorClient(),
                                             GetProductController() );
 
-    m_IntentManagerMap[( uint16_t )Action::MANUAL_UPDATE] = valcunKeyManager;
+    //+ (Manual Update countdown and cancel )
     m_IntentManagerMap[( uint16_t )Action::MANUAL_UPDATE_CANCEL] = valcunKeyManager;
     m_IntentManagerMap[( uint16_t )Action::MANUAL_UPDATE_COUNTDOWN] = valcunKeyManager;
     //- (Manual Update)
 
-    //+ (Factory Reset)
-    m_IntentManagerMap[( uint16_t )Action::FACTORY_RESET] = valcunKeyManager;
+    //+ (Factory Reset countdown and cancel )
     m_IntentManagerMap[( uint16_t )Action::FACTORY_RESET_CANCEL] = valcunKeyManager;
     m_IntentManagerMap[( uint16_t )Action::FACTORY_RESET_COUNTDOWN] = valcunKeyManager;
     //- (Factory Reset)
-
     //+ (Setup AP countdown and cancel)
     m_IntentManagerMap[( uint16_t )Action::SETUP_AP_COUNTDOWN] = valcunKeyManager;
     m_IntentManagerMap[( uint16_t )Action::SETUP_AP_CANCEL] = valcunKeyManager;
     //- (Setup AP countdown and cancel)
 
-    //+ (Disable Network)
+    //+ (Disable Network countdown and cancel )
     m_IntentManagerMap[( uint16_t )Action::DISABLE_NETWORK_COUNTDOWN] = valcunKeyManager;
     m_IntentManagerMap[( uint16_t )Action::DISABLE_NETWORK_CANCEL] = valcunKeyManager;
     //- (Disable Network)
 
-    //+ (PTS Update)
-    m_IntentManagerMap[( uint16_t )Action::PTS_UPDATE] = valcunKeyManager;
+    //+ (PTS Update countdown and cancel )
     m_IntentManagerMap[( uint16_t )Action::PTS_UPDATE_CANCEL] = valcunKeyManager;
     m_IntentManagerMap[( uint16_t )Action::PTS_UPDATE_COUNTDOWN] = valcunKeyManager;
     //- (PTS Update)
+    //- (Common Countdown manager for key combination )
 
 }
 
