@@ -113,10 +113,9 @@ void CustomProductControllerStateAdaptIQ::HandleTimeOut( )
 bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdaptIQStatus& aiqStatus )
 {
     ProductPb::AdaptIQStatus frontDoorStatus;
-//    LpmServiceMessages::IpcAiqSetupStatus_t dspStatus = *aiqStatus.mutable_status();
 
-    GetCustomProductController( ).GetAdaptIQManager( )->DSPToFrontDoorStatus( frontDoorStatus, aiqStatus.mutable_status() );
-//    GetCustomProductController( ).GetAdaptIQManager( )->SetStatus( ProductAdaptIQControl::Start );
+    GetCustomProductController( ).GetAdaptIQManager( )->DSPToFrontDoorStatus( frontDoorStatus, aiqStatus );
+    GetCustomProductController( ).GetAdaptIQManager( )->SetStatus( frontDoorStatus );
 
     return true;
 }
