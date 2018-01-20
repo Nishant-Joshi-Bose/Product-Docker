@@ -90,7 +90,8 @@ public:
     /// @brief This method updates the cached status of the AdaptIQ process.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void SetStatus( const ProductPb::AdaptIQStatus&, bool force = false );
+    void SetStatus( const ProductPb::AdaptIQStatus& status, bool force );
+    void DSPToFrontDoorStatus( ProductPb::AdaptIQStatus& frontDoorStatus, LpmServiceMessages::IpcAiqSetupStatus_t& dspStatus );
 
     static constexpr int ADAPTIQ_SPEAKER_FIRST     = 1;
     static constexpr int ADAPTIQ_SPEAKER_LAST      = 5;

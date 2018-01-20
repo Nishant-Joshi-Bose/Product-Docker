@@ -35,6 +35,7 @@ namespace
 const std::string s_ActionEnter         = "enter";
 const std::string s_ActionCancel        = "cancel";
 const std::string s_ActionAdvance       = "advance";
+const std::string s_ActionPrevious      = "previous";
 
 const std::string s_ModeNormal          = "Enabled Normal";
 const std::string s_ModeRetail          = "Enabled Retail";
@@ -140,11 +141,74 @@ void ProductAdaptIQManager::SetDefaultProperties( ProductPb::AdaptIQStatus& stat
     status.mutable_properties()->add_supportedactions( s_ActionEnter );
     status.mutable_properties()->add_supportedactions( s_ActionCancel );
     status.mutable_properties()->add_supportedactions( s_ActionAdvance );
+    status.mutable_properties()->add_supportedactions( s_ActionPrevious );
 
     // fill in list of supported modes
     status.mutable_properties()->add_supportedmodes( s_ModeNormal );
     status.mutable_properties()->add_supportedmodes( s_ModeRetail );
     status.mutable_properties()->add_supportedmodes( s_ModeDisabled );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductAdaptIQManager::SetStatus
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductAdaptIQManager::DSPToFrontDoorStatus( ProductPb::AdaptIQStatus& frontDoorStatus, LpmServiceMessages::IpcAiqSetupStatus_t& dspStatus )
+{
+    static const char* smStateNames[] =
+    {
+        "SM_STATE_0",
+        "SM_STATE_1",
+        "SM_STATE_2",
+        "SM_STATE_3",
+        "SM_STATE_4",
+        "SM_STATE_5",
+        "SM_STATE_6",
+        "SM_STATE_7",
+        "SM_STATE_8",
+        "SM_STATE_9",
+    };
+
+    static const char* modeNames[] =
+    {
+        "MODE_0",
+        "MODE_1",
+        "MODE_2",
+        "MODE_3",
+        "MODE_4",
+        "MODE_5",
+        "MODE_6",
+        "MODE_7",
+        "MODE_8",
+        "MODE_9",
+    };
+
+    // set the translated fields ...
+    if( dspStatus.smstate() < 10 )
+    {
+        frontDoorStatus.set_smstate( smStateNames[dspStatus.smstate()] );
+    }
+    else
+    {
+        frontDoorStatus.set_smstate( "SM_STATE_UNKNOWN" );
+    }
+
+    if( dspStatus.mode() < 10 )
+    {
+        frontDoorStatus.set_mode( modeNames[dspStatus.mode()] );
+    }
+    else
+    {
+        frontDoorStatus.set_mode( "MODE_UNKNOWN" );
+    }
+
+    // ... and set the direct-copy fields
+    frontDoorStatus.set_currentlocation( dspStatus.currentlocation() );
+    frontDoorStatus.set_currentspeaker( dspStatus.currentchannel() );
+    frontDoorStatus.set_hpconnected( dspStatus.hpconnected() );
+    frontDoorStatus.set_errorcode( dspStatus.errorcode() );
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -291,6 +355,8 @@ void ProductAdaptIQManager::RegisterLpmClientEvents( )
 void ProductAdaptIQManager::HandleAdaptIQStatus( LpmServiceMessages::IpcAiqSetupStatus_t status )
 {
     ProductMessage msg;
+
+    BOSE_INFO( s_logger, "%s", __func__ );
 
     *( msg.mutable_aiqstatus()->mutable_status() ) = status;
 

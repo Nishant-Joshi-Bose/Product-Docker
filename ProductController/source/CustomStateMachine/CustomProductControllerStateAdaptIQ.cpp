@@ -112,6 +112,12 @@ void CustomProductControllerStateAdaptIQ::HandleTimeOut( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdaptIQStatus& aiqStatus )
 {
+    ProductPb::AdaptIQStatus frontDoorStatus;
+//    LpmServiceMessages::IpcAiqSetupStatus_t dspStatus = *aiqStatus.mutable_status();
+
+    GetCustomProductController( ).GetAdaptIQManager( )->DSPToFrontDoorStatus( frontDoorStatus, aiqStatus.mutable_status() );
+//    GetCustomProductController( ).GetAdaptIQManager( )->SetStatus( ProductAdaptIQControl::Start );
+
     return true;
 }
 
@@ -146,22 +152,27 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAda
     switch( cmd.action() )
     {
     case ProductAdaptIQControl::Start:
+        BOSE_INFO( s_logger, "%s : Start %d\n", __func__, cmd.action() );
         GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Start );
         break;
 
     case ProductAdaptIQControl::Cancel:
+        BOSE_INFO( s_logger, "%s : Cancel %d\n", __func__, cmd.action() );
         GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
         break;
 
     case ProductAdaptIQControl::Advance:
+        BOSE_INFO( s_logger, "%s : Advance %d\n", __func__, cmd.action() );
         GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Advance );
         break;
 
     case ProductAdaptIQControl::Previous:
+        BOSE_INFO( s_logger, "%s : Previous %d\n", __func__, cmd.action() );
         GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Previous );
         break;
 
     default:
+        BOSE_INFO( s_logger, "%s : Unhandled Action %d\n", __func__, cmd.action() );
         break;
     }
 
