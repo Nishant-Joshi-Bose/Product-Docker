@@ -26,5 +26,6 @@ public:
     {
     }
     void PossiblyGoToNextState() override;
+    void HandleStateExit() override;
 };
 } /// namespace ProductApp
