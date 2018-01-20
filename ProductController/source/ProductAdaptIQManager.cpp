@@ -211,6 +211,10 @@ void ProductAdaptIQManager::HandlePut( const AdaptIQReq req, ProductPb::AdaptIQR
     {
         msg.mutable_aiqcontrol()->set_action( ProductAdaptIQControl::Advance );
     }
+    else if( req.action() == "previous" )
+    {
+        msg.mutable_aiqcontrol()->set_action( ProductAdaptIQControl::Previous );
+    }
     else
     {
     }

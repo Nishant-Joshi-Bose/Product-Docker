@@ -40,9 +40,6 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// This is just a placeholder
-constexpr uint32_t ADAPTIQ_INACTIVITY_TIMEOUT = 1 * 60 * 1000;
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief CustomProductControllerStateAdaptIQ::CustomProductControllerStateAdaptIQ
@@ -143,6 +140,8 @@ void CustomProductControllerStateAdaptIQ::HandleStateExit( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAdaptIQControl& cmd )
 {
+    BOSE_INFO( s_logger, "%s : Handle Action %d\n", __func__, cmd.action() );
+
     // for now just forward the action on the the lpm / dsp; we'll do more complex stuff later
     switch( cmd.action() )
     {

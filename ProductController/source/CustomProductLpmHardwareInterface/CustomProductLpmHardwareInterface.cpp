@@ -627,7 +627,7 @@ bool CustomProductLpmHardwareInterface::SendAdaptIQControl( ProductAdaptIQContro
     switch( action )
     {
     case ProductAdaptIQControl::Start:
-        // TODO FIX THIS "START" IS MISSING IN IPC DEFS
+        /* Start has no equivalent in IPC; instead it triggers the AIQ SM to boot the AIQ image */
         break;
     case ProductAdaptIQControl::Cancel:
         msg.set_control( IpcAiqControl_t::AIQ_CONTROL_STOP );
