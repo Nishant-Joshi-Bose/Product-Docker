@@ -906,7 +906,7 @@ void ProfessorProductController::SetTestSoundTouchPlayback( )
 /// @return This method returns a reference to the last playback request for Sound Touch sources.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-SoundTouchInterface::playbackRequest& ProfessorProductController::GetLastSoundTouchPlayback( )
+SoundTouchInterface::PlaybackRequest& ProfessorProductController::GetLastSoundTouchPlayback( )
 {
     return m_lastSoundTouchPlayback;
 }

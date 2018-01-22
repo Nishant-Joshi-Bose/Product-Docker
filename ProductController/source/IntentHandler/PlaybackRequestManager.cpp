@@ -79,7 +79,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
 
     if( action == ( uint16_t )Action::ACTION_TV )
     {
-        SoundTouchInterface::playbackRequest playbackRequestData;
+        SoundTouchInterface::PlaybackRequest playbackRequestData;
         playbackRequestData.set_source( "PRODUCT" );
         playbackRequestData.set_sourceaccount( "TV" );
 
@@ -103,7 +103,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
     }
     else if( action == ( uint16_t )Action::ACTION_SOUNDTOUCH )
     {
-        SoundTouchInterface::playbackRequest& playbackRequestData =
+        SoundTouchInterface::PlaybackRequest& playbackRequestData =
             m_CustomProductController.GetLastSoundTouchPlayback( );
 
         AsyncCallback< SoundTouchInterface::NowPlaying >
