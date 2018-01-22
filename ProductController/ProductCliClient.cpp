@@ -280,11 +280,7 @@ void ProductCliClient::CliCmdAmp( CLIClient::StringListType& argList,
         {
             std::ostringstream ss;
             ss << "amplifier on=" << rsp.on()
-               << " mute=" << rsp.mute()
-               << " powerfailure=" << rsp.powerfailure()
-               << " fault=" << rsp.fault()
-               << " dcoffset=" << rsp.dcoffset1() << ',' << rsp.dcoffset2()
-               << " thermistor=" << rsp.thermistor();
+               << " mute=" << rsp.mute();
             auto const& msg = ss.str();
 
             BOSE_LOG( INFO, msg );
