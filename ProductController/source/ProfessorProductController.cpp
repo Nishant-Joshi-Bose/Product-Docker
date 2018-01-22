@@ -614,6 +614,19 @@ std::string const& ProfessorProductController::GetProductType( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   ProfessorProductController::GetProductColor
+///
+/// @return This method returns the std::string value to be used for the Product "color" field
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string ProfessorProductController::GetProductColor() const
+{
+    // @TODO https://jirapro.bose.com/browse/PGC-630
+    return "BLACK";
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::GetProductVariant
 ///
 /// @return This method returns the std::string const& value to be used for the Product "Variant" field
@@ -909,6 +922,18 @@ void ProfessorProductController::SetTestSoundTouchPlayback( )
 SoundTouchInterface::playbackRequestJson& ProfessorProductController::GetLastSoundTouchPlayback( )
 {
     return m_lastSoundTouchPlayback;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   GetWiFiOperationalMode
+///
+/// @return NetManager::Protobuf::OperationalMode of the WiFi subsystem
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+NetManager::Protobuf::OperationalMode ProfessorProductController::GetWiFiOperationalMode( )
+{
+    return GetNetworkServiceUtil().GetNetManagerOperationMode();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1219,45 +1244,13 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     else if( message.has_action( ) )
     {
         ///
-        /// The following determines whether the key action is to be handled by a common intent
+        /// The following attempts to handle the key action using a common intent
         /// manager.
         ///
-        if( GetIntentHandler( ).IsIntentPlayControl( message.action( ) ) )
+        if( HandleCommonIntents( message.action() ) )
         {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPlayControl,
-                                                              message.action( ) );
+            BOSE_VERBOSE( s_logger, "Action key %u handled by common intent handler", message.action() );
         }
-        else if( GetIntentHandler( ).IsIntentBlueTooth( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentBlueTooth,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsIntentVolumeControl( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentVolumeControl,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsIntentNetworkStandby( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentNetworkStandby,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsPresetSelect( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPresetSelect,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsPresetStore( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPresetStore,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsIntentVoice( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentVoice,
-                                                              message.action( ) );
-        }
-
         ///
         /// The following determines whether the key action is to be handled by the custom intent
         /// manager.
@@ -1396,33 +1389,9 @@ std::string const& ProfessorProductController::GetDefaultProductName( ) const
     return productName;
 }
 
-std::string ProfessorProductController::GetProductColor() const
-{
-    if( auto color = MfgData::GetColor() )
-    {
-        if( *color == "luxGray" )
-        {
-            return "SILVER";
-        }
-        else if( *color == "tripleBlack" )
-        {
-            return "BLACK";
-        }
-        else
-        {
-            BOSE_LOG( WARNING, "Unexpected color value in manufacturing data: " << *color );
-        }
-    }
-    else
-    {
-        BOSE_DIE( "No 'productColor' in mfgdata" );
-    }
-
-    return "UNKNOWN";
-}
-
 BLESetupService::VariantId ProfessorProductController::GetVariantId() const
 {
+    // @TODO https://jirapro.bose.com/browse/PGC-630
     BLESetupService::VariantId varintId = BLESetupService::VariantId::NONE;
 
     if( auto color = MfgData::GetColor() )
