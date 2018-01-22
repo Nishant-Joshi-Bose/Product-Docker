@@ -658,9 +658,9 @@ bool CustomProductLpmHardwareInterface::SendAdaptIQControl( ProductAdaptIQContro
 /// @return bool The method returns true when the control request was successfully sent.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductLpmHardwareInterface::BootDSPImage( LpmServiceMessages::DSPImage_t image )
+bool CustomProductLpmHardwareInterface::BootDSPImage( LpmServiceMessages::IpcImage_t image )
 {
-    LpmServiceMessages::IpcDspImagePayload_t p;
+    LpmServiceMessages::IpcDeviceBoot_t p;
 
     p.set_image( image );
     GetLpmClient( )->DspRebootToImage( p );

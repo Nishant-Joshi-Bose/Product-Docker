@@ -85,7 +85,7 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
     } );
 
     // TODO: does response come back after dsp has rebooted or as an event later on?
-    HardwareIface( )->BootDSPImage( LpmServiceMessages::DSPImage_t::INSTALLER_IMAGE );
+    HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_AIQ);
 
 }
 
@@ -131,7 +131,7 @@ void CustomProductControllerStateAdaptIQ::HandleStateExit( )
     m_timer->Stop( );
 
     // TODO: does response come back after dsp has rebooted or as an event later on?
-    HardwareIface( )->BootDSPImage( LpmServiceMessages::DSPImage_t::END_USER_IMAGE );
+    HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_USER_APPLICATION);
 
 }
 
