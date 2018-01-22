@@ -59,7 +59,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& intent )
                  ( GetProductController().GetNowPlaying().container().contentitem().sourceaccount() == "AUX" ) )
           )
         {
-            SoundTouchInterface::playbackRequestJson playbackRequestData;
+            SoundTouchInterface::PlaybackRequest playbackRequestData;
             playbackRequestData.set_source( "PRODUCT" );
             playbackRequestData.set_sourceaccount( "AUX" );
 
@@ -83,7 +83,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& intent )
 void PlaybackRequestManager::PostPlaybackRequestCbRsp( const SoundTouchInterface::NowPlaying& resp )
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
-    BOSE_LOG( INFO, "GOT Response to playbackRequest: " << resp.source().sourcedisplayname() );
+    BOSE_LOG( INFO, "GOT Response to PlaybackRequest: " << resp.source().sourcedisplayname() );
 }
 
 } // namespace ProductApp
