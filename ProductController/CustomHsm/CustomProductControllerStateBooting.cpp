@@ -60,4 +60,10 @@ void CustomProductControllerStateBooting::PossiblyGoToNextState()
     }
 }
 
+void CustomProductControllerStateBooting::HandleStateExit()
+{
+    BOSE_INFO( s_logger, __func__ );
+    GetProductController().GetLpmHardwareInterface()->SetAmp( /*powered=*/ true, /*muted=*/ false );
+}
+
 } /// namespace ProductApp
