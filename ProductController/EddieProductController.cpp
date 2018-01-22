@@ -791,6 +791,8 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
                 break;
             case SYSTEM_STATE_NUM_OF:
                 break;
+            case SYSTEM_STATE_ERROR:
+                break;
             }
         }
 
