@@ -828,6 +828,13 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
     {
         GetHsm( ).Handle<const ProductLpmLowPowerStatus& >( &CustomProductControllerState::HandleLpmLowPowerStatus, productMessage.lpmlowpowerstatus( ) );
     }
+    //
+    // An amp fault has been detected on the LPM. Enter the CriticalError state.
+    //
+    else if( productMessage.has_ampfaultdetected() )
+    {
+        GetHsm( ).Handle<>( &CustomProductControllerState::HandleAmpFaultDetected );
+    }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Unknown message types are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////

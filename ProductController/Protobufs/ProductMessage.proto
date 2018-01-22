@@ -183,6 +183,7 @@ message ProductMessage
         optional ProductNowPlayingStatus    nowplayingstatus    = 13;
         optional ProductLpmLowPowerStatus   lpmlowpowerstatus   = 14;
         optional bool                       audiopathselect     = 15;
+        optional bool                       ampfaultdetected    = 16;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
