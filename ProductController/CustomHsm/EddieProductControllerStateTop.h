@@ -32,5 +32,6 @@ public:
     bool HandleModulesReady() override;
     bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo ) override;
     bool HandleIntentAuxIn( KeyHandlerUtil::ActionType_t intent ) override;
+    bool HandleCountDownManager( KeyHandlerUtil::ActionType_t intent ) override;
 };
 } // namespace ProductApp
