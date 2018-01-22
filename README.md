@@ -104,7 +104,7 @@ Ask to be added to the SSG-Eddie mailing list to stay in the loop by clicking
 To rebuild the .ipk file and install via adb in one step:
 
 ```shell session
-$ ./scripts/putipk jobs=4
+$ ./scripts/putipk
 ```
 
 Access the APQ console via the tap cable.
