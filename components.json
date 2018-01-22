@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@3b04b213c1699aed2ae1f98ecd18309cf25bb7a2"
+    "selected_version": "master@71625c371acb0765f282608d273ca5f439731031"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -13,7 +13,7 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@7ff1596f1ca22a0eab6e6509a6cd2b7ab1f123c0"
+    "selected_version": "master@c641553d6df404782bd2948aaa3e4e06906190b7"
   },
   {
     "name": "AVS-qc8017_32",
@@ -53,7 +53,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.2-30+6a8b6b3"
+    "selected_version": "Continuous/master/0.3.3-35+3fd1676"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -69,15 +69,15 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@cc2992bca80d0562c63f9835b4505237f38e643a"
+    "selected_version": "master@5ba50e1c23dd0526a007e2bee5a32fd5316c372e"
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/build44/1.0.0-73+7457e9a"
+    "selected_version": "Release/master/0.3.4-79+83bfa5b"
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/IP2/0.0.1-6+cf92afc"
+    "selected_version": "Release/master/0.0.1-18+64c6444"
   },
   {
     "name": "KeyHandler-qc8017_32",
