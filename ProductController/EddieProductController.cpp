@@ -634,7 +634,7 @@ void EddieProductController::HandleIntents( KeyHandlerUtil::ActionType_t intent 
     }
     else if( IntentHandler::IsIntentCountDownControl( intent ) )
     {
-        GetHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntentAuxIn, intent );
+        GetHsm().Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleCountDownManager, intent );
     }
 }
 
