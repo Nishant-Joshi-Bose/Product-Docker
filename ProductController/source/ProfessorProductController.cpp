@@ -41,6 +41,7 @@
 #include "ProductControllerStateSetup.h"
 #include "ProductControllerStates.h"
 #include "IntentHandler.h"
+#include "ProductSTS.pb.h"
 #include "CustomProductControllerState.h"
 #include "CustomProductControllerStateBooting.h"
 #include "CustomProductControllerStateUpdatingSoftware.h"
@@ -1077,7 +1078,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         const auto& slot = message.selectsourceslot( ).slot( );
 
         BOSE_DEBUG( s_logger, "An STS Select message was received for slot %s.",
-                    ProductSourceSlot_Name( slot ).c_str( ) );
+                    ProductSTS::ProductSourceSlot_Name( static_cast<ProductSTS::ProductSourceSlot>( slot ) ).c_str( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Network status messages are handled at this point.
