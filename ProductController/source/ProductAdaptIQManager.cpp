@@ -142,11 +142,6 @@ void ProductAdaptIQManager::SetDefaultProperties( ProductPb::AdaptIQStatus& stat
     status.mutable_properties()->add_supportedactions( s_ActionCancel );
     status.mutable_properties()->add_supportedactions( s_ActionAdvance );
     status.mutable_properties()->add_supportedactions( s_ActionPrevious );
-
-    // fill in list of supported modes
-    status.mutable_properties()->add_supportedmodes( s_ModeNormal );
-    status.mutable_properties()->add_supportedmodes( s_ModeRetail );
-    status.mutable_properties()->add_supportedmodes( s_ModeDisabled );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -163,51 +158,66 @@ void ProductAdaptIQManager::DSPToFrontDoorStatus( ProductPb::AdaptIQStatus& fron
      */
     ProductAdaptIQStatus& status = const_cast<ProductAdaptIQStatus&>( dspStatus );
 
-    static const char* smStateNames[] =
+    /*
+     * none of these definitions belong here, and they will be removed from here once aiq definition is finished,
+     * but for now with the definition in flux this keeps us from having to change a bunch of other files
+     */
+    // https://wiki.bose.com/pages/viewpage.action?spaceKey=A4V&title=Professor+AdaptIQ#?lucidIFH-viewer-73845d7d=1
+    enum IpcAiqStates
     {
-        "SM_STATE_0",
-        "SM_STATE_1",
-        "SM_STATE_2",
-        "SM_STATE_3",
-        "SM_STATE_4",
-        "SM_STATE_5",
-        "SM_STATE_6",
-        "SM_STATE_7",
-        "SM_STATE_8",
-        "SM_STATE_9",
+        AIQ_STATE_INTRO_1,
+        AIQ_STATE_INTRO_2,
+        AIQ_STATE_INTRO_3,
+        AIQ_STATE_INTRO_4,
+        AIQ_STATE_MEASURING,
+        AIQ_STATE_TRANSITION_FIRST,
+        AIQ_STATE_TRANSITION_NEXT,
+        AIQ_STATE_TRANSITION_LAST,
+        AIQ_STATE_SUCCESS,
+        AIQ_STATE_SUCCESS_INFO,
+        AIQ_STATE_LOST_HEADSET,
+        AIQ_STATE_ERR_NOISY,
+        AIQ_STATE_ERR_TOO_CLOSE,
+        AIQ_STATE_ERR_MICS_MOVED,
+        AIQ_STATE_ERR_NO_SOUND,
+        AIQ_STATE_ERR_PREVIOUS,
+        AIQ_STATE_ERR_FAIL,
+        AIQ_STATE_ERR_DETECT_HS,
+        AIQ_STATE_ERR_NO_HS_TERM,
     };
 
-    static const char* modeNames[] =
+    static std::map<IpcAiqStates, const char *> stateIdToName =
     {
-        "MODE_0",
-        "MODE_1",
-        "MODE_2",
-        "MODE_3",
-        "MODE_4",
-        "MODE_5",
-        "MODE_6",
-        "MODE_7",
-        "MODE_8",
-        "MODE_9",
+        {AIQ_STATE_INTRO_1,                     "AIQ_STATE_INTRO_1"},               // no smState equivalent
+        {AIQ_STATE_INTRO_2,                     "AIQ_STATE_INTRO_2"},               // no smState equivalent
+        {AIQ_STATE_INTRO_3,                     "AIQ_STATE_INTRO_3_COMFY"},
+        {AIQ_STATE_INTRO_4,                     "AIQ_STATE_INTRO_4_READY"},
+        {AIQ_STATE_MEASURING,                   "AIQ_STATE_MEASURING"},
+        {AIQ_STATE_TRANSITION_FIRST,            "AIQ_STATE_TRANSITION_FIRST"},
+        {AIQ_STATE_TRANSITION_NEXT,             "AIQ_STATE_TRANSITION_NEXT"},
+        {AIQ_STATE_TRANSITION_LAST,             "AIQ_STATE_TRANSITION_LAST"},
+        {AIQ_STATE_SUCCESS,                     "AIQ_STATE_SUCCESS"},
+        {AIQ_STATE_SUCCESS_INFO,                "AIQ_STATE_INFO"},                  // no smState equivalent
+        {AIQ_STATE_LOST_HEADSET,                "AIQ_STATE_ERR_HS_LOST"},
+        {AIQ_STATE_ERR_NOISY,                   "AIQ_STATE_ERR_NOISE"},
+        {AIQ_STATE_ERR_TOO_CLOSE,               "AIQ_STATE_ERR_TOO_CLOSE"},
+        {AIQ_STATE_ERR_MICS_MOVED,              "AIQ_STATE_ERR_MIC_MOVED"},
+        {AIQ_STATE_ERR_NO_SOUND,                "AIQ_STATE_ERR_NO_SOUND"},
+        {AIQ_STATE_ERR_PREVIOUS,                "AIQ_STATE_ERR_PREVIOUS"},
+        {AIQ_STATE_ERR_FAIL,                    "AIQ_STATE_ERR_FAIL"},
+        {AIQ_STATE_ERR_DETECT_HS,               "AIQ_STATE_ERR_HS_LOST"},
+        {AIQ_STATE_ERR_NO_HS_TERM,              "AIQ_STATE_ERR_HS_FAIL"},
     };
 
     // set the translated fields ...
-    if( status.mutable_status()->smstate() < 10 )
+    IpcAiqStates smState = static_cast<IpcAiqStates>( status.mutable_status()->smstate() );
+    if( stateIdToName.count( smState ) )
     {
-        frontDoorStatus.set_smstate( smStateNames[status.mutable_status()->smstate()] );
+        frontDoorStatus.set_smstate( stateIdToName[smState] );
     }
     else
     {
-        frontDoorStatus.set_smstate( "SM_STATE_UNKNOWN" );
-    }
-
-    if( status.mutable_status()->mode() < 10 )
-    {
-        frontDoorStatus.set_mode( modeNames[status.mutable_status()->mode()] );
-    }
-    else
-    {
-        frontDoorStatus.set_mode( "MODE_UNKNOWN" );
+        frontDoorStatus.set_smstate( "AIQ_STATE_UNKNOWN" );
     }
 
     // ... and set the direct-copy fields
