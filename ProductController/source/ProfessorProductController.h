@@ -178,7 +178,7 @@ public:
     ///        currently is a kludge, until the common code supports persistent storage of this data.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    SoundTouchInterface::playbackRequestJson& GetLastSoundTouchPlayback( );
+    SoundTouchInterface::playbackRequest& GetLastSoundTouchPlayback( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -284,7 +284,7 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     PlaybackSource_t m_currentSource;
-    SoundTouchInterface::playbackRequestJson m_lastSoundTouchPlayback;
+    SoundTouchInterface::playbackRequest m_lastSoundTouchPlayback;
 
     void  SetTestSoundTouchPlayback( );
     void  RegisterNowPlayingEndPoint( );
