@@ -88,16 +88,16 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
                                                         this, std::placeholders::_1 ),
                                              &GetTask( ) );
 
-        AsyncCallback< FRONT_DOOR_CLIENT_ERRORS >
+        AsyncCallback< EndPointsError::Error >
         postPlaybackRequestErrorCallback( std::bind( &PlaybackRequestManager::PostPlaybackRequestError,
                                                      this,
                                                      std::placeholders::_1 ),
                                           &GetTask( ) );
 
-        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
-                                                                          playbackRequestData,
-                                                                          postPlaybackRequestResponseCallback,
-                                                                          postPlaybackRequestErrorCallback );
+        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
+                playbackRequestData,
+                postPlaybackRequestResponseCallback,
+                postPlaybackRequestErrorCallback );
 
         BOSE_INFO( s_logger, "An attempt to play the TV source has been made." );
     }
@@ -111,16 +111,16 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
                                                         this, std::placeholders::_1 ),
                                              &GetTask( ) );
 
-        AsyncCallback< FRONT_DOOR_CLIENT_ERRORS >
+        AsyncCallback< EndPointsError::Error >
         postPlaybackRequestErrorCallback( std::bind( &PlaybackRequestManager::PostPlaybackRequestError,
                                                      this,
                                                      std::placeholders::_1 ),
                                           &GetTask( ) );
 
-        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
-                                                                          playbackRequestData,
-                                                                          postPlaybackRequestResponseCallback,
-                                                                          postPlaybackRequestErrorCallback );
+        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
+                playbackRequestData,
+                postPlaybackRequestResponseCallback,
+                postPlaybackRequestErrorCallback );
 
         BOSE_INFO( s_logger, "An attempt to play the last SoundTouch source has been made." );
     }
@@ -150,10 +150,9 @@ void PlaybackRequestManager::PostPlaybackRequestResponse( const SoundTouchInterf
 /// @name   PlaybackRequestManager::PostPlaybackRequestError
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void PlaybackRequestManager::PostPlaybackRequestError( const FRONT_DOOR_CLIENT_ERRORS errorCode )
+void PlaybackRequestManager::PostPlaybackRequestError( const EndPointsError::Error& error )
 {
-    BOSE_DEBUG( s_logger, "%s in %s", "PlaybackRequestManager", __FUNCTION__ );
-    BOSE_ERROR( s_logger, "An error %d was returned to the playback request.", errorCode );
+    BOSE_WARNING( s_logger, "%s: Error = (%d-%d) %s", __func__, error.code(), error.subcode(), error.message().c_str() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

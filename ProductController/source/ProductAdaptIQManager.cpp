@@ -27,6 +27,7 @@
 #include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProductAdaptIQManager.h"
+#include "EndPointsError.pb.h"
 
 using namespace ProductPb;
 
@@ -99,22 +100,22 @@ void ProductAdaptIQManager::Run( )
     };
     m_ProductLpmHardwareInterface->RegisterForLpmConnection( Callback<bool>( lpmFunc ) );
 
-    auto getFunc = [ this ]( Callback<const AdaptIQStatus> resp )
+    auto getFunc = [ this ]( const Callback<const AdaptIQStatus>& resp, const Callback<EndPointsError::Error>& errorRsp )
     {
         AdaptIQStatus status;
         HandleGet( status );
         resp.Send( status );
     };
-    AsyncCallback<Callback<AdaptIQStatus>> getCb( getFunc, m_ProductTask );
+    AsyncCallback<Callback<AdaptIQStatus>, Callback<EndPointsError::Error> > getCb( getFunc, m_ProductTask );
     m_GetConnection = m_FrontDoorClient->RegisterGet( s_FrontDoorAdaptIQ, getCb );
 
-    auto putFunc = [ this ]( const AdaptIQReq req, Callback<const AdaptIQReq> resp )
+    auto putFunc = [ this ]( const AdaptIQReq req, const Callback<const AdaptIQReq>& resp, const Callback<EndPointsError::Error>& errorRsp )
     {
         AdaptIQReq respMsg;
         HandlePut( req, respMsg );
         resp.Send( respMsg );
     };
-    AsyncCallback<const AdaptIQReq, Callback<AdaptIQReq>> putCb( putFunc, m_ProductTask );
+    AsyncCallback<const AdaptIQReq, Callback<AdaptIQReq>, Callback<EndPointsError::Error>> putCb( putFunc, m_ProductTask );
     m_PutConnection = m_FrontDoorClient->RegisterPut<AdaptIQReq>( s_FrontDoorAdaptIQ, putCb );
 }
 
