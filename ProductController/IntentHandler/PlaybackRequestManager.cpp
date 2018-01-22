@@ -59,7 +59,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& intent )
                  ( GetProductController().GetNowPlaying().container().contentitem().sourceaccount() == "AUX" ) )
           )
         {
-            SoundTouchInterface::playbackRequestJson playbackRequestData;
+            SoundTouchInterface::playbackRequest playbackRequestData;
             playbackRequestData.set_source( "PRODUCT" );
             playbackRequestData.set_sourceaccount( "AUX" );
 
