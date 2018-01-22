@@ -16,16 +16,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "DPrint.h"
+#include "IntentHandler.pb.h"
 #include "CountDownManager.h"
 #include "ProductController.h"
 #include "Intents.h"
-#include "IntentHandler.pb.h"
 
 constexpr char BUTTON_EVENT_NOTIFICATION_URL[] = "/system/buttonEvent";
-#define BUTTON_STATE_CANCELED       "canceled"
-#define BUTTON_STATE_COUNTDOWN      "countdown"
-#define BUTTON_STATE_COMPLETED      "completed"
-
 #define FACTORY_RESET_TIME            10
 #define FIVE_SECOND_TIME              5
 
@@ -78,7 +74,7 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     {
         if( m_factoryResetCounter > 0 and m_factoryResetCounter < FACTORY_RESET_TIME and m_eventType )
         {
-            NotifyButtonEvent( m_eventName[( ProductApp::Action )m_eventType], BUTTON_STATE_CANCELED, 0 );
+            NotifyButtonEvent( m_eventName[( ProductApp::Action )m_eventType], IntentHandler::Protobuf::ButtonEventState::CANCELED, 0 );
             m_eventType = 0;
         }
         m_factoryResetCounter = FACTORY_RESET_TIME;
@@ -92,7 +88,7 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     {
         if( m_shortCounter > 0 and m_shortCounter < FIVE_SECOND_TIME && m_eventType )
         {
-            NotifyButtonEvent( m_eventName[( ProductApp::Action )m_eventType], BUTTON_STATE_CANCELED, 0 );
+            NotifyButtonEvent( m_eventName[( ProductApp::Action )m_eventType], IntentHandler::Protobuf::ButtonEventState::CANCELED, 0 );
             m_eventType = 0;
         }
         m_shortCounter = FIVE_SECOND_TIME;
@@ -106,11 +102,11 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             m_factoryResetCounter--;
             if( m_factoryResetCounter )
             {
-                NotifyButtonEvent( m_eventName[( ProductApp::Action )intent], BUTTON_STATE_COUNTDOWN, m_factoryResetCounter );
+                NotifyButtonEvent( m_eventName[( ProductApp::Action )intent], IntentHandler::Protobuf::ButtonEventState::COUNTDOWN, m_factoryResetCounter );
             }
             else
             {
-                NotifyButtonEvent( m_eventName[( ProductApp::Action )intent], BUTTON_STATE_COMPLETED, m_factoryResetCounter );
+                NotifyButtonEvent( m_eventName[( ProductApp::Action )intent], IntentHandler::Protobuf::ButtonEventState::COMPLETED, m_factoryResetCounter );
             }
             m_eventType = ( uint32_t )intent;
         }
@@ -127,11 +123,11 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             m_shortCounter--;
             if( m_shortCounter )
             {
-                NotifyButtonEvent( m_eventName[( ProductApp::Action )intent], BUTTON_STATE_COUNTDOWN, m_shortCounter );
+                NotifyButtonEvent( m_eventName[( ProductApp::Action )intent], IntentHandler::Protobuf::ButtonEventState::COUNTDOWN, m_shortCounter );
             }
             else
             {
-                NotifyButtonEvent( m_eventName[( ProductApp::Action )intent], BUTTON_STATE_COMPLETED, m_shortCounter );
+                NotifyButtonEvent( m_eventName[( ProductApp::Action )intent], IntentHandler::Protobuf::ButtonEventState::COMPLETED, m_shortCounter );
             }
             m_eventType = ( uint32_t )intent;
         }
@@ -148,13 +144,13 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     return true;
 }
 
-void CountDownManager::NotifyButtonEvent( const std::string& event, const std::string& state, uint32_t value )
+void CountDownManager::NotifyButtonEvent( const std::string& event, const uint32_t& state, const uint32_t value )
 {
-    BOSE_DEBUG( s_logger, "%s: event = %s, state = %s, value = %d", __func__, event.c_str(), state.c_str(), value );
+    BOSE_DEBUG( s_logger, "%s: event = %s, state = %d, value = %d", __func__, event.c_str(), state, value );
     IntentHandler::Protobuf::ButtonEventNotification buttonNotification;
 
     buttonNotification.set_event( event );
-    buttonNotification.set_state( state );
+    buttonNotification.set_state( ( IntentHandler::Protobuf::ButtonEventState )state );
 
     if( value )
     {

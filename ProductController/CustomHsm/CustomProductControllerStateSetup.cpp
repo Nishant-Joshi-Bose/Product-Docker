@@ -41,4 +41,13 @@ bool CustomProductControllerStateSetup::HandleIntentBlueTooth( KeyHandlerUtil::A
     return true;
 }
 
+bool CustomProductControllerStateSetup::HandleCountDownManager( KeyHandlerUtil::ActionType_t intent )
+{
+    BOSE_LOG( INFO, "intent:" << intent );
+
+    GetCustomProductController().GetIntentHandler().Handle( intent );
+
+    return true;
+}
+
 } /// namespace ProductApp

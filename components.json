@@ -65,7 +65,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@bb580f6d87b48e212efbc4ef16bc152aad2782d7"
+    "selected_version": "master@b669f2a7100cbc4fc2db555f452b68312c8f3f68"
   },
   {
     "name": "CastleProductUIAssets",
@@ -92,7 +92,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/0.2.3-50+5c1258b"
+    "selected_version": "Release/master/0.2.3-57+c56897b"
   },
   {
     "name": "protobuf-native",

@@ -35,6 +35,6 @@ private:
     uint32_t            m_shortCounter = 5;
     uint32_t            m_factoryResetCounter = 10;
 
-    void NotifyButtonEvent( const std::string& event, const std::string& state, uint32_t value );
+    void NotifyButtonEvent( const std::string& event, const uint32_t& state, const uint32_t value );
 };
 } // namespace ProductApp
