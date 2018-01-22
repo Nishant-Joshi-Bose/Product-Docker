@@ -7,7 +7,9 @@
 #pragma once
 
 #include "IntentManager.h"
-#include "Intents.h"
+
+#define FACTORY_RESET_TIME            10
+#define FIVE_SECOND_TIME              5
 
 namespace ProductApp
 {
@@ -31,10 +33,10 @@ public:
     bool Handle( KeyHandlerUtil::ActionType_t& arg ) override;
 
 private:
-    uint32_t            m_eventType = 0;
-    uint32_t            m_shortCounter = 5;
-    uint32_t            m_factoryResetCounter = 10;
+    uint32_t            m_actionType = 0;
+    uint32_t            m_shortCounter = FIVE_SECOND_TIME;
+    uint32_t            m_factoryResetCounter = FACTORY_RESET_TIME;
 
-    void NotifyButtonEvent( const std::string& event, const uint32_t& state, const uint32_t value );
+    void NotifyButtonEvent( const std::string& event, const uint32_t state, const uint32_t value );
 };
 } // namespace ProductApp

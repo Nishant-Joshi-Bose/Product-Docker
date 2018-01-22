@@ -22,8 +22,6 @@
 #include "Intents.h"
 
 constexpr char BUTTON_EVENT_NOTIFICATION_URL[] = "/system/buttonEvent";
-#define FACTORY_RESET_TIME            10
-#define FIVE_SECOND_TIME              5
 
 static DPrint s_logger( "CountDownManager" );
 
@@ -44,9 +42,9 @@ CountDownManager::CountDownManager( NotifyTargetTaskIF& task,
                                     const FrontDoorClientIF_t& frontDoorClient,
                                     ProductController& controller ):
     IntentManager( task, cliClient, frontDoorClient, controller ),
-    m_eventType( 0 ),
-    m_shortCounter( 5 ),
-    m_factoryResetCounter( 10 )
+    m_actionType( 0 ),
+    m_shortCounter( FIVE_SECOND_TIME ),
+    m_factoryResetCounter( FACTORY_RESET_TIME )
 {
     m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>
                                ( std::bind( &CountDownManager::FrontDoorClientErrorCb,
@@ -72,10 +70,10 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     {
     case( uint16_t ) Action::FACTORY_RESET_CANCEL:
     {
-        if( m_factoryResetCounter > 0 and m_factoryResetCounter < FACTORY_RESET_TIME and m_eventType )
+        if( m_factoryResetCounter > 0 and m_factoryResetCounter < FACTORY_RESET_TIME and m_actionType )
         {
-            NotifyButtonEvent( m_eventName[( ProductApp::Action )m_eventType], IntentHandler::Protobuf::ButtonEventState::CANCELED, 0 );
-            m_eventType = 0;
+            NotifyButtonEvent( m_eventName[( ProductApp::Action )m_actionType], IntentHandler::Protobuf::ButtonEventState::CANCELED, 0 );
+            m_actionType = 0;
         }
         m_factoryResetCounter = FACTORY_RESET_TIME;
     }
@@ -86,10 +84,10 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     case( uint16_t ) Action::DISABLE_NETWORK_CANCEL:
     case( uint16_t ) Action::SETUP_AP_CANCEL:
     {
-        if( m_shortCounter > 0 and m_shortCounter < FIVE_SECOND_TIME && m_eventType )
+        if( m_shortCounter > 0 and m_shortCounter < FIVE_SECOND_TIME && m_actionType )
         {
-            NotifyButtonEvent( m_eventName[( ProductApp::Action )m_eventType], IntentHandler::Protobuf::ButtonEventState::CANCELED, 0 );
-            m_eventType = 0;
+            NotifyButtonEvent( m_eventName[( ProductApp::Action )m_actionType], IntentHandler::Protobuf::ButtonEventState::CANCELED, 0 );
+            m_actionType = 0;
         }
         m_shortCounter = FIVE_SECOND_TIME;
     }
@@ -108,7 +106,7 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             {
                 NotifyButtonEvent( m_eventName[( ProductApp::Action )intent], IntentHandler::Protobuf::ButtonEventState::COMPLETED, m_factoryResetCounter );
             }
-            m_eventType = ( uint32_t )intent;
+            m_actionType = ( uint32_t )intent;
         }
     }
     break;
@@ -129,8 +127,14 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             {
                 NotifyButtonEvent( m_eventName[( ProductApp::Action )intent], IntentHandler::Protobuf::ButtonEventState::COMPLETED, m_shortCounter );
             }
-            m_eventType = ( uint32_t )intent;
+            m_actionType = ( uint32_t )intent;
         }
+    }
+    break;
+
+    default:
+    {
+        BOSE_ERROR( s_logger, "Invalid Action type" );
     }
     break;
 
@@ -144,7 +148,7 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     return true;
 }
 
-void CountDownManager::NotifyButtonEvent( const std::string& event, const uint32_t& state, const uint32_t value )
+void CountDownManager::NotifyButtonEvent( const std::string& event, const uint32_t state, const uint32_t value )
 {
     BOSE_DEBUG( s_logger, "%s: event = %s, state = %d, value = %d", __func__, event.c_str(), state, value );
     IntentHandler::Protobuf::ButtonEventNotification buttonNotification;
