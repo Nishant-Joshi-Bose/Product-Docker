@@ -7,7 +7,7 @@
     {"origin": 0, "keyEvent": 2, "keyList": [2,4], "timeOutList": [5000], "action": 5, "comment": "Console: Aux+MFB press and hold for at least 5000ms ---> AP Mode"},
     {"origin": 0, "keyEvent": 2, "keyList": [2,3], "timeOutList": [5000], "action": 6, "comment": "Console: AUX+VolumeUp press and hold for at least 5000ms ---> Manual Update"},
     {"origin": 0, "keyEvent": 2, "keyList": [1,4], "timeOutList": [5000], "action": 7, "comment": "Console: Bluetoot+MFB press and hold for at least 5000ms ---> Disable Networking"},
-    {"origin": 0, "keyEvent": 2, "keyList": [2,5], "timeOutList": [10000], "action": 8, "comment": "Console: AUX+VolumeDown press and hold for atlease 10000ms ---> Factory Reset"},
+    {"origin": 0, "keyEvent": 2, "keyList": [2,5], "timeOutList": [10000], "action": 8, "comment": "Console: AUX+VolumeDown press and hold for at lease 10000ms ---> Factory Reset"},
     {"origin": 0, "keyEvent": 2, "keyList": [4], "timeOutList": [15000], "action": 9, "comment": "Console: MFB press and hold for at least 15000ms ---> Low Power Standby"},
 
     {"origin": 0, "keyEvent": 1, "keyList": [1], "timeOutList": [0], "action": 20, "comment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast"},
