@@ -206,6 +206,8 @@ public:
 
     std::string const& GetProductVariant() const override;
 
+    BLESetupService::VariantId GetVariantId() const override;
+
     BLESetupService::ProductId GetProductId() const override
     {
         return BLESetupService::ProductId::PROFESSOR;
@@ -216,11 +218,6 @@ public:
         return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );
     }
 
-    BLESetupService::VariantId GetVariantId() const override
-    {
-        /// TODO variantID should be from mfg data
-        return BLESetupService::VariantId::NONE;
-    }
 
     std::vector<std::string> GetUniqueLanguages() const override
     {

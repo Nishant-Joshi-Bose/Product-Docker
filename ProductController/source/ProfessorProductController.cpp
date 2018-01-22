@@ -58,6 +58,22 @@
 #include "CustomProductControllerStatePlayingInactive.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "CustomProductControllerStateAdaptIQSim.h"
+#include "ProductControllerStatePlayingDeselected.h"
+#include "ProductControllerStatePlayingSelected.h"
+#include "ProductControllerStatePlayingSelectedSilent.h"
+#include "ProductControllerStatePlayingSelectedNotSilent.h"
+#include "ProductControllerStatePlayingSelectedSetup.h"
+#include "ProductControllerStatePlayingSelectedSetupNetwork.h"
+#include "ProductControllerStatePlayingSelectedSetupOther.h"
+#include "ProductControllerStateStoppingStreams.h"
+#include "ProductControllerStatePlayableTransition.h"
+#include "ProductControllerStatePlayableTransitionIdle.h"
+#include "ProductControllerStatePlayableTransitionNetworkStandby.h"
+#include "ProductControllerStateSoftwareUpdateTransition.h"
+#include "ProductControllerStateLowPowerTransition.h"
+#include "ProductControllerStatePlayingTransition.h"
+#include "ProductControllerStatePlayingTransitionSelected.h"
+#include "MfgData.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -141,13 +157,11 @@ void ProfessorProductController::Run( )
     BOSE_DEBUG( s_logger, "The Professor Product Controller is setting up the state machine." );
 
     ///
-    /// Construction of the Common States
+    /// Construction of the common and custom states
     ///
     auto* stateTop = new ProductControllerStateTop( GetHsm( ),
                                                     nullptr );
-    ///
-    /// Construction of the Custom Professor States
-    ///
+
     auto* stateBooting = new CustomProductControllerStateBooting
     ( GetHsm( ),
       stateTop,
@@ -230,6 +244,81 @@ void ProfessorProductController::Run( )
       *this,
       PROFESSOR_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
 
+    auto* stateDeselected = new ProductControllerStatePlayingDeselected
+    ( GetHsm( ),
+      statePlaying,
+      PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED );
+
+    auto* stateSelected = new ProductControllerStatePlayingSelected
+    ( GetHsm( ),
+      statePlaying,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED );
+
+    auto* stateSilent = new ProductControllerStatePlayingSelectedSilent
+    ( GetHsm( ),
+      stateSelected,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
+
+    auto* stateNotSilent = new ProductControllerStatePlayingSelectedNotSilent
+    ( GetHsm( ),
+      stateSelected,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT );
+
+    auto* stateSetup = new ProductControllerStatePlayingSelectedSetup
+    ( GetHsm( ),
+      stateSelected,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP );
+
+    auto* stateSetupNetwork = new ProductControllerStatePlayingSelectedSetupNetwork
+    ( GetHsm( ),
+      stateSetup,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NETWORK_SETUP );
+
+    auto* stateSetupOther = new ProductControllerStatePlayingSelectedSetupOther
+    ( GetHsm( ),
+      stateSetup,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_OTHER );
+
+    auto* stateStoppingStreams = new ProductControllerStateStoppingStreams
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS );
+
+    auto* statePlayableTransition = new ProductControllerStatePlayableTransition
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION );
+
+    auto* statePlayableTransitionIdle = new ProductControllerStatePlayableTransitionIdle
+    ( GetHsm( ),
+      statePlayableTransition,
+      PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE );
+
+    auto* statePlayableTransitionNetworkStandby = new ProductControllerStatePlayableTransitionNetworkStandby
+    ( GetHsm( ),
+      statePlayableTransition,
+      PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY );
+
+    auto* stateSoftwareUpdateTransition = new ProductControllerStateSoftwareUpdateTransition
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION );
+
+    auto* stateLowPowerTransition = new ProductControllerStateLowPowerTransition
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_LOW_POWER_TRANSITION );
+
+    auto* statePlayingTransition = new ProductControllerStatePlayingTransition
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION );
+
+    auto* statePlayingTransitionSelected = new ProductControllerStatePlayingTransitionSelected
+    ( GetHsm( ),
+      statePlayingTransition,
+      PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SELECTED );
+
     ///
     /// The states are added to the state machine and the state machine is initialized.
     ///
@@ -250,6 +339,22 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( statePlayingInactive );
     GetHsm( ).AddState( stateAccessoryPairing );
     GetHsm( ).AddState( stateAdaptIQ );
+
+    GetHsm( ).AddState( stateDeselected );
+    GetHsm( ).AddState( stateSelected );
+    GetHsm( ).AddState( stateSilent );
+    GetHsm( ).AddState( stateNotSilent );
+    GetHsm( ).AddState( stateSetup );
+    GetHsm( ).AddState( stateSetupNetwork );
+    GetHsm( ).AddState( stateSetupOther );
+    GetHsm( ).AddState( stateStoppingStreams );
+    GetHsm( ).AddState( statePlayableTransition );
+    GetHsm( ).AddState( statePlayableTransitionIdle );
+    GetHsm( ).AddState( statePlayableTransitionNetworkStandby );
+    GetHsm( ).AddState( stateSoftwareUpdateTransition );
+    GetHsm( ).AddState( stateLowPowerTransition );
+    GetHsm( ).AddState( statePlayingTransition );
+    GetHsm( ).AddState( statePlayingTransitionSelected );
 
     GetHsm( ).Init( this, PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
@@ -1283,6 +1388,35 @@ std::string const& ProfessorProductController::GetDefaultProductName( ) const
     BOSE_INFO( s_logger, "%s productName=%s", __func__, productName.c_str( ) );
     return productName;
 }
+
+BLESetupService::VariantId ProfessorProductController::GetVariantId() const
+{
+    // @TODO https://jirapro.bose.com/browse/PGC-630
+    BLESetupService::VariantId varintId = BLESetupService::VariantId::NONE;
+
+    if( auto color = MfgData::GetColor() )
+    {
+        if( *color == "luxGray" )
+        {
+            varintId = BLESetupService::VariantId::SILVER;
+        }
+        else if( *color == "tripleBlack" )
+        {
+            varintId = BLESetupService::VariantId::BLACK;
+        }
+        else
+        {
+            varintId = BLESetupService::VariantId::WHITE;
+        }
+    }
+    else
+    {
+        BOSE_DIE( "No 'productColor' in mfgdata" );
+    }
+
+    return varintId;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
