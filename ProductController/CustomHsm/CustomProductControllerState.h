@@ -186,13 +186,7 @@ public:
         return false;
     }
 
-    ///////////////////////////////////////////////////////////////////////////////
-    ///
-    /// Here are the Custom event handlers. They need to be declared virtual and
-    /// have an implementation that returns false
-    ///
-    ///////////////////////////////////////////////////////////////////////////////
-    virtual bool HandleCountDownManager( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentCountDown( KeyHandlerUtil::ActionType_t result )
     {
         return false;
     }

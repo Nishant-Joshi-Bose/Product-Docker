@@ -83,28 +83,28 @@ void IntentHandler::Initialize()
                                             GetProductController() );
 
     //+ (Manual Update countdown and cancel)
-    m_IntentManagerMap[( uint16_t )Action::MANUAL_UPDATE_CANCEL] = countDownManager;
     m_IntentManagerMap[( uint16_t )Action::MANUAL_UPDATE_COUNTDOWN] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::MANUAL_UPDATE_CANCEL] = countDownManager;
     //- (Manual Update countdown and cancel)
 
     //+ (Factory Reset countdown and cancel)
-    m_IntentManagerMap[( uint16_t )Action::FACTORY_RESET_CANCEL] = countDownManager;
-    m_IntentManagerMap[( uint16_t )Action::FACTORY_RESET_COUNTDOWN] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::FACTORY_DEFAULT_COUNTDOWN] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::FACTORY_DEFAULT_CANCEL] = countDownManager;
     //- (Factory Reset countdown and cancel)
 
     //+ (Setup AP countdown and cancel)
-    m_IntentManagerMap[( uint16_t )Action::SETUP_AP_COUNTDOWN] = countDownManager;
-    m_IntentManagerMap[( uint16_t )Action::SETUP_AP_CANCEL] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::MANUAL_SETUP_COUNTDOWN] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::MANUAL_SETUP_CANCEL] = countDownManager;
     //- (Setup AP countdown and cancel)
 
     //+ (Disable Network countdown and cancel)
-    m_IntentManagerMap[( uint16_t )Action::DISABLE_NETWORK_COUNTDOWN] = countDownManager;
-    m_IntentManagerMap[( uint16_t )Action::DISABLE_NETWORK_CANCEL] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::TOGGLE_WIFI_RADIO_COUNTDOWN] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::TOGGLE_WIFI_RADIO_CANCEL] = countDownManager;
     //- (Disable Network countdown and cancel)
 
     //+ (PTS Update countdown and cancel)
-    m_IntentManagerMap[( uint16_t )Action::PTS_UPDATE_CANCEL] = countDownManager;
-    m_IntentManagerMap[( uint16_t )Action::PTS_UPDATE_COUNTDOWN] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::SYSTEM_INFO_COUNTDOWN] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::SYSTEM_INFO_CANCEL] = countDownManager;
     //- (PTS Update countdown and cancel)
     //- (Common Countdown manager for key combination)
 }

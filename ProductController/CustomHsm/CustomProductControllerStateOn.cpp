@@ -32,7 +32,7 @@ bool CustomProductControllerStateOn::HandleIntentAuxIn( KeyHandlerUtil::ActionTy
     return true;
 }
 
-bool CustomProductControllerStateOn::HandleCountDownManager( KeyHandlerUtil::ActionType_t intent )
+bool CustomProductControllerStateOn::HandleIntentCountDown( KeyHandlerUtil::ActionType_t intent )
 {
     BOSE_LOG( INFO, "intent:" << intent );
 

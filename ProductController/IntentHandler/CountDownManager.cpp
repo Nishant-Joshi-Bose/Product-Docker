@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// @file CountDownManager.cpp
 ///
-/// @brief Implementation of Bluetooth Manager for actions from Bluetooth
-//         intends in the product Controller
+/// @brief Implementation of Count Down Manager for actions to display countdown
+///        intends in the product Controller for multiple keys press
 ///
 /// @attention
 ///    BOSE CORPORATION.
@@ -25,13 +25,19 @@ constexpr char BUTTON_EVENT_NOTIFICATION_URL[] = "/system/buttonEvent";
 
 static DPrint s_logger( "CountDownManager" );
 
-static std::map <ProductApp::Action, std::string> m_eventName =
+typedef struct _CountDown
 {
-    {ProductApp::Action::MANUAL_UPDATE_COUNTDOWN, "systemUpdate"},
-    {ProductApp::Action::FACTORY_RESET_COUNTDOWN, "factoryReset"},
-    {ProductApp::Action::SETUP_AP_COUNTDOWN, "setupAp"},
-    {ProductApp::Action::DISABLE_NETWORK_COUNTDOWN, "disableNetwork"},
-    {ProductApp::Action::PTS_UPDATE_COUNTDOWN, "ptsUpdate"}
+    std::string name;
+    int         time;
+} CountDownInfo;
+
+static std::map <ProductApp::Action, CountDownInfo> m_eventName =
+{
+    {ProductApp::Action::MANUAL_UPDATE_COUNTDOWN, {"systemUpdate", 5}},
+    {ProductApp::Action::FACTORY_DEFAULT_COUNTDOWN, {"factoryDefault", 10}},
+    {ProductApp::Action::MANUAL_SETUP_COUNTDOWN, {"manualSetup", 5}},
+    {ProductApp::Action::TOGGLE_WIFI_RADIO_COUNTDOWN, {"toggleWiFiRadio", 5}},
+    {ProductApp::Action::SYSTEM_INFO_COUNTDOWN, {"systemInfo", 5}}
 };
 
 namespace ProductApp
@@ -42,14 +48,12 @@ CountDownManager::CountDownManager( NotifyTargetTaskIF& task,
                                     const FrontDoorClientIF_t& frontDoorClient,
                                     ProductController& controller ):
     IntentManager( task, cliClient, frontDoorClient, controller ),
-    m_actionType( 0 ),
-    m_shortCounter( FIVE_SECOND_TIME ),
-    m_factoryResetCounter( FACTORY_RESET_TIME )
+    m_counter( -1 ),
+    m_actionType( 0 )
 {
-    m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>
+    m_frontDoorClientErrorCb = AsyncCallback<EndPointsError::Error>
                                ( std::bind( &CountDownManager::FrontDoorClientErrorCb,
                                             this, std::placeholders::_1 ), &task );
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -64,70 +68,53 @@ CountDownManager::CountDownManager( NotifyTargetTaskIF& task,
 
 bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
 {
-    BOSE_DEBUG( s_logger, "%s - (intent=%d)", __func__, intent );
+    BOSE_DEBUG( s_logger, "%s - (intent=%d)(m_counter=%d)", __func__, intent, m_counter );
 
     switch( intent )
     {
-    case( uint16_t ) Action::FACTORY_RESET_CANCEL:
-    {
-        if( m_factoryResetCounter > 0 and m_factoryResetCounter < FACTORY_RESET_TIME and m_actionType )
-        {
-            NotifyButtonEvent( m_eventName[( ProductApp::Action )m_actionType], IntentHandler::Protobuf::ButtonEventState::CANCELED, 0 );
-            m_actionType = 0;
-        }
-        m_factoryResetCounter = FACTORY_RESET_TIME;
-    }
-    break;
-
+    case( uint16_t ) Action::FACTORY_DEFAULT_CANCEL:
     case( uint16_t ) Action::MANUAL_UPDATE_CANCEL:
-    case( uint16_t ) Action::PTS_UPDATE_CANCEL:
-    case( uint16_t ) Action::DISABLE_NETWORK_CANCEL:
-    case( uint16_t ) Action::SETUP_AP_CANCEL:
+    case( uint16_t ) Action::SYSTEM_INFO_CANCEL:
+    case( uint16_t ) Action::TOGGLE_WIFI_RADIO_CANCEL:
+    case( uint16_t ) Action::MANUAL_SETUP_CANCEL:
     {
-        if( m_shortCounter > 0 and m_shortCounter < FIVE_SECOND_TIME && m_actionType )
+        if( m_actionType and m_counter > 0 and m_counter <= m_eventName[( ProductApp::Action )m_actionType].time )
         {
-            NotifyButtonEvent( m_eventName[( ProductApp::Action )m_actionType], IntentHandler::Protobuf::ButtonEventState::CANCELED, 0 );
+            NotifyButtonEvent( m_eventName[( ProductApp::Action )m_actionType].name, IntentHandler::Protobuf::ButtonEventState::CANCELED, 0 );
             m_actionType = 0;
         }
-        m_shortCounter = FIVE_SECOND_TIME;
-    }
-    break;
-
-    case( uint16_t ) Action::FACTORY_RESET_COUNTDOWN:
-    {
-        if( m_factoryResetCounter )
+        else if( m_counter == 0 )
         {
-            m_factoryResetCounter--;
-            if( m_factoryResetCounter )
-            {
-                NotifyButtonEvent( m_eventName[( ProductApp::Action )intent], IntentHandler::Protobuf::ButtonEventState::COUNTDOWN, m_factoryResetCounter );
-            }
-            else
-            {
-                NotifyButtonEvent( m_eventName[( ProductApp::Action )intent], IntentHandler::Protobuf::ButtonEventState::COMPLETED, m_factoryResetCounter );
-            }
-            m_actionType = ( uint32_t )intent;
+            m_actionType = 0;
         }
     }
     break;
 
+    case( uint16_t ) Action::FACTORY_DEFAULT_COUNTDOWN:
     case( uint16_t ) Action::MANUAL_UPDATE_COUNTDOWN:
-    case( uint16_t ) Action::SETUP_AP_COUNTDOWN:
-    case( uint16_t ) Action::DISABLE_NETWORK_COUNTDOWN:
-    case( uint16_t ) Action::PTS_UPDATE_COUNTDOWN:
+    case( uint16_t ) Action::MANUAL_SETUP_COUNTDOWN:
+    case( uint16_t ) Action::TOGGLE_WIFI_RADIO_COUNTDOWN:
+    case( uint16_t ) Action::SYSTEM_INFO_COUNTDOWN:
     {
-        if( m_shortCounter )
+        if( !m_actionType )
         {
-            m_shortCounter--;
-            if( m_shortCounter )
+            m_counter = m_eventName[( ProductApp::Action )intent].time + 1;
+            m_actionType = ( uint32_t )intent;
+        }
+
+        if( m_counter > 0 )
+        {
+            m_counter--;
+            if( m_counter )
             {
-                NotifyButtonEvent( m_eventName[( ProductApp::Action )intent], IntentHandler::Protobuf::ButtonEventState::COUNTDOWN, m_shortCounter );
+                BOSE_INFO( s_logger, "%s-(m_counter=%d)", __func__, m_counter );
+                NotifyButtonEvent( m_eventName[( ProductApp::Action )intent].name, IntentHandler::Protobuf::ButtonEventState::COUNTDOWN, m_counter );
             }
             else
             {
-                NotifyButtonEvent( m_eventName[( ProductApp::Action )intent], IntentHandler::Protobuf::ButtonEventState::COMPLETED, m_shortCounter );
+                BOSE_INFO( s_logger, "%s-(m_counter=%d)", __func__, m_counter );
+                NotifyButtonEvent( m_eventName[( ProductApp::Action )intent].name, IntentHandler::Protobuf::ButtonEventState::COMPLETED, 0 );
             }
-            m_actionType = ( uint32_t )intent;
         }
     }
     break;
