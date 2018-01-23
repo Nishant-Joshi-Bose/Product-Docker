@@ -85,7 +85,7 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
     } );
 
     // TODO: does response come back after dsp has rebooted or as an event later on?
-    HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_AIQ);
+    HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_AIQ );
 
 }
 
@@ -131,7 +131,7 @@ void CustomProductControllerStateAdaptIQ::HandleStateExit( )
     m_timer->Stop( );
 
     // TODO: does response come back after dsp has rebooted or as an event later on?
-    HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_USER_APPLICATION);
+    HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_USER_APPLICATION );
 
 }
 
@@ -157,7 +157,11 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAda
 
     case ProductAdaptIQControl::Cancel:
         BOSE_INFO( s_logger, "%s : Cancel %d\n", __func__, cmd.action() );
+        // TODO: do we need to send an explicit cancellation?  the DSP is going to get rebooted at this point
+        // anyway
         GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
+        // go to parent state
+        ChangeState( GetSuperId( ) );
         break;
 
     case ProductAdaptIQControl::Advance:

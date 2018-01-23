@@ -71,6 +71,7 @@ enum ProductControllerStates
     PRODUCT_CONTROLLER_STATE_LOW_POWER_TRANSITION,
     PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION,
     PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SELECTED,
+    PROFESSOR_PRODUCT_CONTROLLER_CUSTOM_STATES_START,
 
     ///
     /// Custom product controller states that rely on common states are defined below.
@@ -92,8 +93,8 @@ enum ProductControllerStates
     ///
     /// Custom product controller states that are specific to Professor are defined below.
     ///
-    PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING    = 19,
-    PROFESSOR_PRODUCT_CONTROLLER_STATE_ADAPTIQ              = 20
+    PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING    = PROFESSOR_PRODUCT_CONTROLLER_CUSTOM_STATES_START,
+    PROFESSOR_PRODUCT_CONTROLLER_STATE_ADAPTIQ
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
