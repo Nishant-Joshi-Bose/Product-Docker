@@ -38,6 +38,7 @@
 #include "LpmServiceMessages.pb.h"
 #include "ProductSpeakerManager.pb.h"
 #include "ProductMessage.pb.h"
+#include "EndPointsError.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -187,9 +188,11 @@ private:
     /// @brief The following methods are used as Front Door callbacks.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    void AccessoriesGetHandler( const Callback<ProductPb::AccessorySpeakerState> &resp );
+    void AccessoriesGetHandler( const Callback<ProductPb::AccessorySpeakerState> &resp,
+                                const Callback<EndPointsError::Error>& error );
     void AccessoriesPutHandler( const ProductPb::AccessorySpeakerState &req,
-                                const Callback<ProductPb::AccessorySpeakerState> &resp );
+                                const Callback<ProductPb::AccessorySpeakerState> &resp,
+                                const Callback<EndPointsError::Error>& error );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ///

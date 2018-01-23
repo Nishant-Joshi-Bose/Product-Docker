@@ -200,10 +200,11 @@ void SpeakerPairingManager::RegisterFrontDoorEvents( )
     BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s.", __FUNCTION__ );
 
     {
-        AsyncCallback<Callback< ProductPb::AccessorySpeakerState > >
+        AsyncCallback<Callback< ProductPb::AccessorySpeakerState >, Callback<EndPointsError::Error> >
         getAccessoriesCb( std::bind( &SpeakerPairingManager::AccessoriesGetHandler,
                                      this,
-                                     std::placeholders::_1 ) ,
+                                     std::placeholders::_1,
+                                     std::placeholders::_2 ) ,
                           m_ProductTask );
 
         m_registerGetAccessoriesCb =
@@ -211,11 +212,12 @@ void SpeakerPairingManager::RegisterFrontDoorEvents( )
                                               getAccessoriesCb );
     }
     {
-        AsyncCallback< ProductPb::AccessorySpeakerState, Callback< ProductPb::AccessorySpeakerState > >
+        AsyncCallback< ProductPb::AccessorySpeakerState, Callback< ProductPb::AccessorySpeakerState >, Callback<EndPointsError::Error> >
         putAccessoriesCb( std::bind( &SpeakerPairingManager::AccessoriesPutHandler,
                                      this,
                                      std::placeholders::_1,
-                                     std::placeholders::_2 ) ,
+                                     std::placeholders::_2,
+                                     std::placeholders::_3 ) ,
                           m_ProductTask );
 
         m_registerPutAccessoriesCb =
@@ -237,7 +239,8 @@ void SpeakerPairingManager::RegisterFrontDoorEvents( )
 /// @param resp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void SpeakerPairingManager::AccessoriesGetHandler( const Callback<ProductPb::AccessorySpeakerState> &resp )
+void SpeakerPairingManager::AccessoriesGetHandler( const Callback<ProductPb::AccessorySpeakerState> &resp,
+                                                   const Callback<EndPointsError::Error>& error )
 {
     BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s.", __FUNCTION__ );
 
@@ -254,7 +257,8 @@ void SpeakerPairingManager::AccessoriesGetHandler( const Callback<ProductPb::Acc
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::AccessoriesPutHandler( const ProductPb::AccessorySpeakerState& req,
-                                                   const Callback<ProductPb::AccessorySpeakerState>& resp )
+                                                   const Callback<ProductPb::AccessorySpeakerState>& resp,
+                                                   const Callback<EndPointsError::Error>& error )
 {
     BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s.", __FUNCTION__ );
 
