@@ -285,7 +285,7 @@ public:
 /// @return void
 ///////////////////////////////////////////////////////////////////////////////
     void HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationStatus &status );
-    void CallbackError( const FRONT_DOOR_CLIENT_ERRORS errorCode );
+    void CallbackError( const EndPointsError::Error &error );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name   HandleSTSReady
@@ -426,7 +426,7 @@ private:
     bool                                        m_isBLEModuleReady  = false;
 
     BOptional<int>                              m_wifiProfilesCount;
-    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>     errorCb;
+    AsyncCallback<EndPointsError::Error>            m_fdErrorCb;
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief Interfaces to the ProductSTSController, which implements the interactions
