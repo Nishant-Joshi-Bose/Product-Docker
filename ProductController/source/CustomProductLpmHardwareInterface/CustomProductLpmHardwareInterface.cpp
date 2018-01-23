@@ -559,8 +559,10 @@ bool CustomProductLpmHardwareInterface::SendSourceSelection( const LPM_IPC_SOURC
     IPCSource_t source;
 
     source.set_source( sourceSelect );
-    source.set_open_field( 0 );
-    source.set_status( 0 );
+// not sure what these two do, but they're commented out in the latest proto
+// file
+//    source.set_open_field( 0 );
+//    source.set_status( 0 );
 
     if( isConnected( ) == false || GetLpmClient( ) == nullptr )
     {

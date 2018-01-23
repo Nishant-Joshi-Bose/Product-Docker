@@ -995,6 +995,8 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
                 break;
             case SYSTEM_STATE_NUM_OF:
                 break;
+            case SYSTEM_STATE_ERROR:
+                break;
             }
         }
 
