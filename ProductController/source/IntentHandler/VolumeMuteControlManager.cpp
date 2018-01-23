@@ -68,7 +68,7 @@ VolumeMuteControlManager::VolumeMuteControlManager( NotifyTargetTaskIF&        t
                                                     ProductController&         productController )
 
     : IntentManager( task, commandLineClient, frontDoorClient, productController ),
-      m_CustomProductController( static_cast< ProfessorProductController& >( productController ) ),
+      m_CustomProductController( static_cast< ProfessorProductController & >( productController ) ),
       m_ProductTask( m_CustomProductController.GetTask( ) ),
       m_ProductNotify( m_CustomProductController.GetMessageHandler( ) ),
       m_ProductLpmHardwareInterface( m_CustomProductController.GetLpmHardwareInterface( ) )
@@ -112,8 +112,7 @@ void VolumeMuteControlManager::Initialize( )
 bool VolumeMuteControlManager::Handle( KeyHandlerUtil::ActionType_t& action )
 {
     BOSE_INFO( s_logger, "%s is in %s handling the action %u.", "VolumeMuteControlManager",
-                                                                __FUNCTION__,
-                                                                action );
+               __func__,action );
 
     if( action == ( uint16_t )Action::ACTION_VOLUME_UP_1 )
     {
@@ -182,7 +181,7 @@ void VolumeMuteControlManager::ReceiveFrontDoorVolume( SoundTouchInterface::volu
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void VolumeMuteControlManager::Increment( unsigned int step )
 {
-    auto errFunc = []( FRONT_DOOR_CLIENT_ERRORS e )
+    auto errFunc = []( const EndPointsError::Error & e )
     {
         BOSE_ERROR( s_logger, "Error incrementing FrontDoor volume" );
     };
@@ -192,14 +191,14 @@ void VolumeMuteControlManager::Increment( unsigned int step )
     };
 
     AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
-    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errCb( errFunc, m_ProductTask );
+    AsyncCallback<EndPointsError::Error> errCb( errFunc, m_ProductTask );
 
     SoundTouchInterface::volume pbVolume;
     pbVolume.set_delta( step );
     printf( "%s: %d\n", __func__, step );
 
     BOSE_VERBOSE( s_logger, "Incrementing FrontDoor volume" );
-    m_FrontDoorClient->SendPut<SoundTouchInterface::volume>(
+    m_FrontDoorClient->SendPut<SoundTouchInterface::volume, EndPointsError::Error>(
         ProductApp::FRONTDOOR_AUDIO_VOLUME_INCREMENT, pbVolume, respFunc, errCb );
 }
 
@@ -213,7 +212,7 @@ void VolumeMuteControlManager::Increment( unsigned int step )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void VolumeMuteControlManager::Decrement( unsigned int step )
 {
-    auto errFunc = []( FRONT_DOOR_CLIENT_ERRORS e )
+    auto errFunc = []( const EndPointsError::Error & e )
     {
         BOSE_ERROR( s_logger, "Error incrementing FrontDoor volume" );
     };
@@ -223,14 +222,14 @@ void VolumeMuteControlManager::Decrement( unsigned int step )
     };
 
     AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
-    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errCb( errFunc, m_ProductTask );
+    AsyncCallback<EndPointsError::Error> errCb( errFunc, m_ProductTask );
 
     SoundTouchInterface::volume pbVolume;
     pbVolume.set_delta( step );
     printf( "%s: %d\n", __func__, step );
 
     BOSE_VERBOSE( s_logger, "Decrementing FrontDoor volume" );
-    m_FrontDoorClient->SendPut<SoundTouchInterface::volume>(
+    m_FrontDoorClient->SendPut<SoundTouchInterface::volume, EndPointsError::Error>(
         ProductApp::FRONTDOOR_AUDIO_VOLUME_DECREMENT, pbVolume, respFunc, errCb );
 }
 
@@ -244,7 +243,7 @@ void VolumeMuteControlManager::Decrement( unsigned int step )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void VolumeMuteControlManager::ToggleMute( )
 {
-    auto errFunc = []( FRONT_DOOR_CLIENT_ERRORS e )
+    auto errFunc = []( const EndPointsError::Error & e )
     {
         BOSE_ERROR( s_logger, "Error setting FrontDoor mute" );
     };
@@ -254,14 +253,14 @@ void VolumeMuteControlManager::ToggleMute( )
     };
 
     AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
-    AsyncCallback<FRONT_DOOR_CLIENT_ERRORS> errCb( errFunc, m_ProductTask );
+    AsyncCallback<EndPointsError::Error> errCb( errFunc, m_ProductTask );
 
     m_muted = !m_muted;
     SoundTouchInterface::volume pbVolume;
     pbVolume.set_muted( m_muted );
 
     BOSE_VERBOSE( s_logger, "Toggling FrontDoor mute" );
-    m_FrontDoorClient->SendPut<SoundTouchInterface::volume>(
+    m_FrontDoorClient->SendPut<SoundTouchInterface::volume, EndPointsError::Error>(
         ProductApp::FRONTDOOR_AUDIO_VOLUME, pbVolume, respFunc, errCb );
 }
 
