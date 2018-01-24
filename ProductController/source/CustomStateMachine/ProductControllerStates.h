@@ -38,7 +38,8 @@ enum ProductControllerStates
     ///
     /// Common product controller states amongst devices are defined below.
     ///
-    PRODUCT_CONTROLLER_STATE_BOOTING,
+    // Important Note: HsmState framework reserves '0' as top state. DO NOT USE!
+    PRODUCT_CONTROLLER_STATE_BOOTING = 1,
     PRODUCT_CONTROLLER_STATE_REBOOTING,
     PRODUCT_CONTROLLER_STATE_SETUP,
     PRODUCT_CONTROLLER_STATE_CRITICAL_ERROR,
