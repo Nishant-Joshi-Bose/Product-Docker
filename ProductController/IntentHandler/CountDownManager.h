@@ -30,8 +30,8 @@ public:
     bool Handle( KeyHandlerUtil::ActionType_t& arg ) override;
 
 private:
-    uint16_t                m_counter = 0;
-    uint16_t                m_actionType = 0;
+    uint16_t                m_counter;
+    uint16_t                m_actionType;
 
     void NotifyButtonEvent( const std::string& event, const uint16_t state, const uint16_t value );
 };
