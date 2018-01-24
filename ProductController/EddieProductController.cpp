@@ -51,6 +51,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_ProductControllerStateVoiceNotConfigured( GetHsm(), &m_ProductControllerStateIdle, PRODUCT_CONTROLLER_STATE_IDLE_VOICE_NOT_CONFIGURED ),
     m_ProductControllerStateNetworkConfigured( GetHsm(), &m_ProductControllerStateNetworkStandby, PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED ),
     m_ProductControllerStateNetworkNotConfigured( GetHsm(), &m_ProductControllerStateNetworkStandby, PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_NOT_CONFIGURED ),
+    m_ProductControllerStateFactoryDefault( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_FACTORY_DEFAULT ),
     m_ProductControllerStatePlayingDeselected( GetHsm(), &m_ProductControllerStatePlaying, PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED ),
     m_ProductControllerStatePlayingSelected( GetHsm(), &m_ProductControllerStatePlaying, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED ),
     m_ProductControllerStatePlayingSelectedSilent( GetHsm(), &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT ),
@@ -100,6 +101,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     GetHsm().AddState( &m_ProductControllerStateVoiceNotConfigured );
     GetHsm().AddState( &m_ProductControllerStateNetworkConfigured );
     GetHsm().AddState( &m_ProductControllerStateNetworkNotConfigured );
+    GetHsm().AddState( &m_ProductControllerStateFactoryDefault );
     GetHsm().AddState( &m_ProductControllerStatePlayingDeselected );
     GetHsm().AddState( &m_ProductControllerStatePlayingSelected );
     GetHsm().AddState( &m_ProductControllerStatePlayingSelectedSilent );
@@ -743,6 +745,7 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
         if( productMessage.lpmstatus( ).has_connected( ) )
         {
             m_isLpmReady = productMessage.lpmstatus( ).connected( );
+
             if( m_isLpmReady )
             {
                 /// RegisterLpmEvents and RegisterKeyHandler
@@ -755,6 +758,7 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
 
             GetHsm().Handle<bool>( &CustomProductControllerState::HandleLpmState, m_isLpmReady );
         }
+
 
         ///
         /// @todo The system state is return here. Code to act on this event needs to be developed.
@@ -786,6 +790,8 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
             case SYSTEM_STATE_SHUTDOWN:
                 break;
             case SYSTEM_STATE_FACTORY_DEFAULT:
+                BOSE_INFO( s_logger, "SYSTEM_STATE_FACTORY_DEFAULT was received." );
+                GetHsm().Handle<>( &CustomProductControllerState::HandleFactoryDefault );
                 break;
             case SYSTEM_STATE_IDLE:
                 break;
@@ -827,6 +833,13 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
     else if( productMessage.has_lpmlowpowerstatus( ) )
     {
         GetHsm( ).Handle<const ProductLpmLowPowerStatus& >( &CustomProductControllerState::HandleLpmLowPowerStatus, productMessage.lpmlowpowerstatus( ) );
+    }
+    //
+    // An amp fault has been detected on the LPM. Enter the CriticalError state.
+    //
+    else if( productMessage.has_ampfaultdetected() )
+    {
+        GetHsm( ).Handle<>( &CustomProductControllerState::HandleAmpFaultDetected );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Unknown message types are handled at this point.

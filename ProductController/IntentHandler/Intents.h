@@ -20,8 +20,8 @@ enum class Action
     NETWORK_STANDBY = ActionCommon_t::NETWORK_STANDBY,
     SEND_TO_AP_MODE = ActionCommon_t::SEND_TO_AP_MODE,
     MANUAL_UPDATE = ActionCommon_t::MANUAL_UPDATE,
+    FACTORY_DEFAULT = ActionCommon_t::FACTORY_DEFAULT,
     TOGGLE_WIFI_RADIO = ActionCommon_t::TOGGLE_WIFI_RADIO,
-    FACTORY_RESET = ActionCommon_t::FACTORY_RESET,
     LOW_POWER_STANDBY = ActionCommon_t::LOW_POWER_STANDBY,
     //- MULTIBUTTON ACTIONS for Eddie
 
