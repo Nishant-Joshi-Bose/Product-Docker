@@ -40,9 +40,6 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// This is just a placeholder
-constexpr uint32_t ADAPTIQ_INACTIVITY_TIMEOUT = 1 * 60 * 1000;
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief CustomProductControllerStateAdaptIQ::CustomProductControllerStateAdaptIQ
@@ -87,6 +84,9 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
         HandleTimeOut();
     } );
 
+    // TODO: does response come back after dsp has rebooted or as an event later on?
+    HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_AIQ );
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,6 +112,11 @@ void CustomProductControllerStateAdaptIQ::HandleTimeOut( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdaptIQStatus& aiqStatus )
 {
+    ProductPb::AdaptIQStatus frontDoorStatus;
+
+    GetCustomProductController( ).GetAdaptIQManager( )->DSPToFrontDoorStatus( frontDoorStatus, aiqStatus );
+    GetCustomProductController( ).GetAdaptIQManager( )->SetStatus( frontDoorStatus );
+
     return true;
 }
 
@@ -125,6 +130,9 @@ void CustomProductControllerStateAdaptIQ::HandleStateExit( )
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being exited." );
     m_timer->Stop( );
 
+    // TODO: does response come back after dsp has rebooted or as an event later on?
+    HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_USER_APPLICATION );
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,32 +145,52 @@ void CustomProductControllerStateAdaptIQ::HandleStateExit( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAdaptIQControl& cmd )
 {
+    BOSE_INFO( s_logger, "%s : Handle Action %d\n", __func__, cmd.action() );
+
     // for now just forward the action on the the lpm / dsp; we'll do more complex stuff later
     switch( cmd.action() )
     {
     case ProductAdaptIQControl::Start:
+        BOSE_INFO( s_logger, "%s : Start %d\n", __func__, cmd.action() );
         GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Start );
         break;
 
     case ProductAdaptIQControl::Cancel:
+        BOSE_INFO( s_logger, "%s : Cancel %d\n", __func__, cmd.action() );
+        // TODO: do we need to send an explicit cancellation?  the DSP is going to get rebooted at this point
+        // anyway
         GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
+        // go to parent state
+        ChangeState( GetSuperId( ) );
         break;
 
     case ProductAdaptIQControl::Advance:
+        BOSE_INFO( s_logger, "%s : Advance %d\n", __func__, cmd.action() );
         GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Advance );
         break;
 
     case ProductAdaptIQControl::Previous:
+        BOSE_INFO( s_logger, "%s : Previous %d\n", __func__, cmd.action() );
         GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Previous );
         break;
 
     default:
+        BOSE_INFO( s_logger, "%s : Unhandled Action %d\n", __func__, cmd.action() );
         break;
     }
 
     return true;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStateAdaptIQ::HardwareIface
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::shared_ptr<CustomProductLpmHardwareInterface>& CustomProductControllerStateAdaptIQ::HardwareIface( )
+{
+    return GetCustomProductController( ).GetLpmHardwareInterface( );
+}
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

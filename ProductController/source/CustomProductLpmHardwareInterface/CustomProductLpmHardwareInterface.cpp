@@ -308,40 +308,6 @@ bool CustomProductLpmHardwareInterface::SendLipSyncDelay( uint32_t audioDelay )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductLpmHardwareInterface::SendToneAndLevelControl
-///
-/// @brief  This method sends a request to the LPM hardware.
-///
-/// @param  IpcToneControl_t& controls
-///
-/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
-///         attempts the request and returns true.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductLpmHardwareInterface::SendToneAndLevelControl( IpcToneControl_t& controls )
-{
-    BOSE_DEBUG( s_logger, "Audio tone and level settings are to be set as follows: " );
-    BOSE_DEBUG( s_logger, "               " );
-    BOSE_DEBUG( s_logger, "Bass      : %d ", controls.bass( ) );
-    BOSE_DEBUG( s_logger, "Treble    : %d ", controls.treble( ) );
-    BOSE_DEBUG( s_logger, "Center    : %d ", controls.centerspeaker( ) );
-    BOSE_DEBUG( s_logger, "Surround  : %d ", controls.surroundspeaker( ) );
-    BOSE_DEBUG( s_logger, "               " );
-
-    if( isConnected( ) == false || GetLpmClient( ) == nullptr )
-    {
-        BOSE_ERROR( s_logger, "An LPM audio and tone level request could not be made, as no connection is available." );
-
-        return false;
-    }
-
-    BOSE_DEBUG( s_logger, "An LPM audio and tone level request is currently not supported." );
-
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   CustomProductLpmHardwareInterface::SendSpeakerList
 ///
 /// @brief  This method sends speaker list information to the LPM hardware.
@@ -559,8 +525,10 @@ bool CustomProductLpmHardwareInterface::SendSourceSelection( const LPM_IPC_SOURC
     IPCSource_t source;
 
     source.set_source( sourceSelect );
-    source.set_open_field( 0 );
-    source.set_status( 0 );
+// not sure what these two do, but they're commented out in the latest proto
+// file
+//    source.set_open_field( 0 );
+//    source.set_status( 0 );
 
     if( isConnected( ) == false || GetLpmClient( ) == nullptr )
     {
@@ -623,20 +591,20 @@ bool CustomProductLpmHardwareInterface::SendAdaptIQControl( ProductAdaptIQContro
 
     BOSE_DEBUG( s_logger, "%s : send action %s", __func__, ProductAdaptIQControl::AdaptIQAction_Name( action ).c_str() );
 
-    IpcAiqControl_t msg;
+    IpcAiqControlPayload_t msg;
     switch( action )
     {
     case ProductAdaptIQControl::Start:
-        // TODO FIX THIS "START" IS MISSING IN IPC DEFS
+        /* Start has no equivalent in IPC; instead it triggers the AIQ SM to boot the AIQ image */
         break;
     case ProductAdaptIQControl::Cancel:
-        msg.set_cmd( IpcAiqCmd_t::AIQ_CONTROL_STOP );
+        msg.set_control( IpcAiqControl_t::AIQ_CONTROL_STOP );
         break;
     case ProductAdaptIQControl::Advance:
-        msg.set_cmd( IpcAiqCmd_t::AIQ_CONTROL_ADVANCE );
+        msg.set_control( IpcAiqControl_t::AIQ_CONTROL_ADVANCE );
         break;
     case ProductAdaptIQControl::Previous:
-        msg.set_cmd( IpcAiqCmd_t::AIQ_CONTROL_PREVIOUS );
+        msg.set_control( IpcAiqControl_t::AIQ_CONTROL_PREVIOUS );
         break;
     default:
         break;
@@ -646,6 +614,29 @@ bool CustomProductLpmHardwareInterface::SendAdaptIQControl( ProductAdaptIQContro
 
     return true;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name  CustomProductHardwareLpmInterface::BootDSPImage
+///
+/// @brief This method loads the specified DSP image
+///
+/// @param action
+///
+/// @return bool The method returns true when the control request was successfully sent.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductLpmHardwareInterface::BootDSPImage( LpmServiceMessages::IpcImage_t image )
+{
+    LpmServiceMessages::IpcDeviceBoot_t p;
+
+    p.set_image( image );
+    GetLpmClient( )->DspRebootToImage( p );
+
+    return true;
+}
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///

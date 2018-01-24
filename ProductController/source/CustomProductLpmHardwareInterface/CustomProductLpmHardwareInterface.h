@@ -83,7 +83,6 @@ public:
     bool NotifyMuteState( bool mute );
     bool SendAudioPathPresentationLatency( uint32_t  latency );
     bool SendLipSyncDelay( uint32_t                  audioDelay );
-    bool SendToneAndLevelControl( IpcToneControl_t&  controls );
     bool SendSpeakerList( IpcAccessoryList_t&        accessoryList );
     bool SendSetSystemTimeoutEnableBits( Ipc_TimeoutControl_t& timeoutControl );
     bool SendWiFiRadioStatus( uint32_t frequencyInKhz );
@@ -94,6 +93,7 @@ public:
     bool SendSourceSelection( const LPM_IPC_SOURCE_ID      sourceSelect );
     bool SetCecPhysicalAddress( const uint32_t cecPhyAddr );
     bool SendAdaptIQControl( ProductAdaptIQControl::AdaptIQAction action );
+    bool BootDSPImage( LpmServiceMessages::IpcImage_t image );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
