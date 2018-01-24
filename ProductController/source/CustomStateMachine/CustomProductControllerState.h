@@ -38,6 +38,7 @@
 #include "ProductMessage.pb.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "KeyManager.h"
+#include "SoftwareUpdateAPIMessages.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -302,6 +303,11 @@ public:
     inline static void SetProductController( ProductController* productController )
     {
         s_productController = productController;
+    }
+
+    virtual bool HandleSoftwareUpdateState( const SoftwareUpdateProto::StatusResponse& status )
+    {
+        return false;
     }
 
 protected:

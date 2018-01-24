@@ -524,7 +524,8 @@ bool ProfessorProductController::IsBooted( ) const
     BOSE_VERBOSE( s_logger, "STS Initialized      :  %s", ( m_IsSTSReady       ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
-    return ( m_IsLpmReady and m_IsCapsReady and m_IsAudioPathReady and m_IsSTSReady );
+    return ( m_IsLpmReady and m_IsCapsReady and m_IsAudioPathReady and m_IsSTSReady and
+             IsSoftwareUpdateReady() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
