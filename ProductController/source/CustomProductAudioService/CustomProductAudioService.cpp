@@ -57,7 +57,7 @@ void CustomProductAudioService::RegisterAudioPathEvents()
     /// Initialize member variables related to AudioPath
     /////////////////////////////////////////////////////////////////////////////////////////////////
     // Initialize m_InputRoute
-    m_InputRoute = 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_NETWORK;
+    m_InputRoute = 1 << AUDIO_INPUT_BIT_POSITION_NETWORK;
     // Initialize m_MainStreamAudioSettings with current audio settings value from AudioSettingsManager
     // thermalData will be updated by thermal task periodically in a separate route
     FetchLatestAudioSettings();
@@ -127,11 +127,11 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
         {
             m_InputRoute = ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_OPTICAL ) |
                            ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_ARC ) |
-                           ( 1 << AUDIO_INPUT_BIT_POSITION_HDMI );
+                           ( 1 << AUDIO_INPUT_BIT_POSITION_EARC );
         }
         else
         {
-            m_InputRoute = 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_NETWORK;
+            m_InputRoute = 1 << AUDIO_INPUT_BIT_POSITION_NETWORK;
         }
     }
     else
@@ -157,7 +157,7 @@ void CustomProductAudioService::FetchLatestAudioSettings( )
     m_MainStreamAudioSettings.set_treblelevel( m_AudioSettingsMgr->GetTreble( ).value() );
     m_MainStreamAudioSettings.set_centerlevel( m_AudioSettingsMgr->GetCenter( ).value() );
     m_MainStreamAudioSettings.set_surroundlevel( m_AudioSettingsMgr->GetSurround( ).value() );
-    m_MainStreamAudioSettings.set_gainoffsetdb( m_AudioSettingsMgr->GetGainOffset( ).value() );
+    m_MainStreamAudioSettings.set_gainoffset( m_AudioSettingsMgr->GetGainOffset( ).value() );
     m_MainStreamAudioSettings.set_targetlatencyms( m_AudioSettingsMgr->GetAvSync( ).value() );
     m_MainStreamAudioSettings.set_audiomode( ModeNameToEnum( m_AudioSettingsMgr->GetMode( ).value() ) );
     m_MainStreamAudioSettings.set_contenttype( ContentTypeNameToEnum( m_AudioSettingsMgr->GetContentType( ).value() ) );
@@ -207,26 +207,23 @@ void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 LpmServiceMessages::AudioSettingsAudioMode_t CustomProductAudioService::ModeNameToEnum( const std::string& modeName )
 {
     BOSE_DEBUG( s_logger, __func__ );
-    if( modeName == "night" )
-    {
-        return AUDIOSETTINGS_AUDIO_MODE_NIGHT;
-    }
-    else if( modeName == "direct" )
+    if( modeName == "direct" )
     {
         return AUDIOSETTINGS_AUDIO_MODE_DIRECT;
-    }
-    else if( modeName == "dialog" )
-    {
-        return AUDIOSETTINGS_AUDIO_MODE_DIALOG;
     }
     else if( modeName == "normal" )
     {
         return AUDIOSETTINGS_AUDIO_MODE_NORMAL;
     }
-    else
+    else if( modeName == "dialog" )
     {
-        return AUDIOSETTINGS_AUDIO_MODE_UNSPECIFIED;
+        return AUDIOSETTINGS_AUDIO_MODE_DIALOG;
     }
+    else if( modeName == "night" )
+    {
+        return AUDIOSETTINGS_AUDIO_MODE_NIGHT;
+    }
+    return AUDIOSETTINGS_AUDIO_MODE_DIRECT;
 }
 
 LpmServiceMessages::AudioSettingsContent_t CustomProductAudioService::ContentTypeNameToEnum( const std::string& contentTypeName )
@@ -385,7 +382,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         bool ret = m_AudioSettingsMgr->SetGainOffset( val );
         if( ret )
         {
-            m_MainStreamAudioSettings.set_gainoffsetdb( m_AudioSettingsMgr->GetGainOffset( ).value() );
+            m_MainStreamAudioSettings.set_gainoffset( m_AudioSettingsMgr->GetGainOffset( ).value() );
             SendMainStreamAudioSettingsEvent();
         }
         return ret;

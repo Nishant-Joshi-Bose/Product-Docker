@@ -91,6 +91,7 @@ public:
     bool SendSourceSelection( const LPM_IPC_SOURCE_ID      sourceSelect );
     bool SetCecPhysicalAddress( const uint32_t cecPhyAddr );
     bool SendAdaptIQControl( ProductAdaptIQControl::AdaptIQAction action );
+    bool BootDSPImage( LpmServiceMessages::IpcImage_t image );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

@@ -178,7 +178,16 @@ public:
     ///        currently is a kludge, until the common code supports persistent storage of this data.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    SoundTouchInterface::playbackRequestJson& GetLastSoundTouchPlayback( );
+    SoundTouchInterface::PlaybackRequest& GetLastSoundTouchPlayback( );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @name   GetWiFiOperationalMode
+    ///
+    /// @return NetManager::Protobuf::OperationalMode of the WiFi subsystem
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    NetManager::Protobuf::OperationalMode GetWiFiOperationalMode( ) override;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -193,7 +202,11 @@ public:
 
     std::string const& GetProductType() const override;
 
+    std::string GetProductColor() const override;
+
     std::string const& GetProductVariant() const override;
+
+    BLESetupService::VariantId GetVariantId() const override;
 
     BLESetupService::ProductId GetProductId() const override
     {
@@ -205,11 +218,6 @@ public:
         return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );
     }
 
-    BLESetupService::VariantId GetVariantId() const override
-    {
-        /// TODO variantID should be from mfg data
-        return BLESetupService::VariantId::NONE;
-    }
 
     std::vector<std::string> GetUniqueLanguages() const override
     {
@@ -285,11 +293,11 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     PlaybackSource_t m_currentSource;
-    SoundTouchInterface::playbackRequestJson m_lastSoundTouchPlayback;
+    SoundTouchInterface::PlaybackRequest m_lastSoundTouchPlayback;
 
     void  SetTestSoundTouchPlayback( );
     void  RegisterNowPlayingEndPoint( );
-    void  HandleNowPlaying( const SoundTouchInterface::NowPlayingJson& nowPlayingStatus );
+    void  HandleNowPlaying( const SoundTouchInterface::NowPlaying& nowPlayingStatus );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

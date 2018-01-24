@@ -40,6 +40,7 @@
 #include "ConfigurationStatus.pb.h"
 #include "SystemInfo.pb.h"
 #include "CapsInitializationStatus.pb.h"
+#include "EndPointsError.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -123,15 +124,15 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleCapsStatus( const SoundTouchInterface::CapsInitializationStatus& status );
-    void HandleCapsStatusFailed( const FRONT_DOOR_CLIENT_ERRORS error );
+    void HandleCapsStatusFailed( const EndPointsError::Error& error );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following method is used to handle the configuration status.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleGetConfigurationStatusRequest( const Callback< ProductPb::ConfigurationStatus >&
-                                              response ) const;
+    void HandleGetConfigurationStatusRequest( const Callback< ProductPb::ConfigurationStatus >& response,
+                                              const Callback<EndPointsError::Error>& errorRsp ) const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -139,7 +140,8 @@ private:
     ///        state.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleGetSystemStateRequest( const Callback< ProductPb::SystemState >& response ) const;
+    void HandleGetSystemStateRequest( const Callback< ProductPb::SystemState >& response,
+                                      const Callback<EndPointsError::Error>& errorRsp ) const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

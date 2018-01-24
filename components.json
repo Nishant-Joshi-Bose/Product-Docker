@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@3b04b213c1699aed2ae1f98ecd18309cf25bb7a2"
+    "selected_version": "master@71625c371acb0765f282608d273ca5f439731031"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -13,7 +13,7 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@7ff1596f1ca22a0eab6e6509a6cd2b7ab1f123c0"
+    "selected_version": "master@c641553d6df404782bd2948aaa3e4e06906190b7"
   },
   {
     "name": "AVS-qc8017_32",
@@ -25,7 +25,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.3-217+add0b8b"
+    "selected_version": "Continuous/master/0.3.3-221+108b0e9"
   },
   {
     "name": "BoseOPKG-native",
@@ -53,7 +53,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.2-30+6a8b6b3"
+    "selected_version": "Continuous/master/0.3.3-35+3fd1676"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -69,15 +69,15 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "ss_PGC457_mainStreamAudioSettings@f995bef4cf53b530fb041528e54a84336119f17d"
+    "selected_version": "master@5e64e845ea539a5494f1ff73bcbeb33bb22e1d69"
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/build44/1.0.0-73+7457e9a"
+    "selected_version": "Release/master/0.3.4-79+83bfa5b"
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/IP2/0.0.1-6+cf92afc"
+    "selected_version": "Release/master/0.0.1-18+64c6444"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -86,8 +86,8 @@
   {
     "name": "ProfessorLPM-Package",
     "selected_version": {
-      "RIVIERA_HSP_VERSION=1.3": "Nightly/trunk/2018-01-10_2350/DP1",
-      "RIVIERA_HSP_VERSION=2.1": "Nightly/trunk/2018-01-10_2350/DP2"
+      "RIVIERA_HSP_VERSION=1.3": "Nightly/trunk/2018-01-22_2350/DP1",
+      "RIVIERA_HSP_VERSION=2.1": "Nightly/trunk/2018-01-22_2350/DP2"
     }
   },
   {
@@ -108,7 +108,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.3.2-69+0035e65"
+    "selected_version": "Continuous/master/0.3.3-83+9d04a25"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -120,11 +120,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.3.3-226+178df68"
+    "selected_version": "Continuous/master/0.3.3-237+813d265"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.2.40696.2644691"
+    "selected_version": "Continuous/Castle-Fork/2018-01-22_1232"
   },
   {
     "name": "unittest-cpp-qc8017_32",

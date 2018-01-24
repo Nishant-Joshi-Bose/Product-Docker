@@ -57,7 +57,23 @@
 #include "CustomProductControllerStatePlaying.h"
 #include "CustomProductControllerStatePlayingInactive.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
-#include "CustomProductControllerStateAdaptIQSim.h"
+#include "CustomProductControllerStateAdaptIQ.h"
+#include "ProductControllerStatePlayingDeselected.h"
+#include "ProductControllerStatePlayingSelected.h"
+#include "ProductControllerStatePlayingSelectedSilent.h"
+#include "ProductControllerStatePlayingSelectedNotSilent.h"
+#include "ProductControllerStatePlayingSelectedSetup.h"
+#include "ProductControllerStatePlayingSelectedSetupNetwork.h"
+#include "ProductControllerStatePlayingSelectedSetupOther.h"
+#include "ProductControllerStateStoppingStreams.h"
+#include "ProductControllerStatePlayableTransition.h"
+#include "ProductControllerStatePlayableTransitionIdle.h"
+#include "ProductControllerStatePlayableTransitionNetworkStandby.h"
+#include "ProductControllerStateSoftwareUpdateTransition.h"
+#include "ProductControllerStateLowPowerTransition.h"
+#include "ProductControllerStatePlayingTransition.h"
+#include "ProductControllerStatePlayingTransitionSelected.h"
+#include "MfgData.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -141,13 +157,11 @@ void ProfessorProductController::Run( )
     BOSE_DEBUG( s_logger, "The Professor Product Controller is setting up the state machine." );
 
     ///
-    /// Construction of the Common States
+    /// Construction of the common and custom states
     ///
     auto* stateTop = new ProductControllerStateTop( GetHsm( ),
                                                     nullptr );
-    ///
-    /// Construction of the Custom Professor States
-    ///
+
     auto* stateBooting = new CustomProductControllerStateBooting
     ( GetHsm( ),
       stateTop,
@@ -230,6 +244,81 @@ void ProfessorProductController::Run( )
       *this,
       PROFESSOR_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
 
+    auto* stateDeselected = new ProductControllerStatePlayingDeselected
+    ( GetHsm( ),
+      statePlaying,
+      PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED );
+
+    auto* stateSelected = new ProductControllerStatePlayingSelected
+    ( GetHsm( ),
+      statePlaying,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED );
+
+    auto* stateSilent = new ProductControllerStatePlayingSelectedSilent
+    ( GetHsm( ),
+      stateSelected,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
+
+    auto* stateNotSilent = new ProductControllerStatePlayingSelectedNotSilent
+    ( GetHsm( ),
+      stateSelected,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT );
+
+    auto* stateSetup = new ProductControllerStatePlayingSelectedSetup
+    ( GetHsm( ),
+      stateSelected,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP );
+
+    auto* stateSetupNetwork = new ProductControllerStatePlayingSelectedSetupNetwork
+    ( GetHsm( ),
+      stateSetup,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NETWORK_SETUP );
+
+    auto* stateSetupOther = new ProductControllerStatePlayingSelectedSetupOther
+    ( GetHsm( ),
+      stateSetup,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_OTHER );
+
+    auto* stateStoppingStreams = new ProductControllerStateStoppingStreams
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS );
+
+    auto* statePlayableTransition = new ProductControllerStatePlayableTransition
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION );
+
+    auto* statePlayableTransitionIdle = new ProductControllerStatePlayableTransitionIdle
+    ( GetHsm( ),
+      statePlayableTransition,
+      PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE );
+
+    auto* statePlayableTransitionNetworkStandby = new ProductControllerStatePlayableTransitionNetworkStandby
+    ( GetHsm( ),
+      statePlayableTransition,
+      PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY );
+
+    auto* stateSoftwareUpdateTransition = new ProductControllerStateSoftwareUpdateTransition
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION );
+
+    auto* stateLowPowerTransition = new ProductControllerStateLowPowerTransition
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_LOW_POWER_TRANSITION );
+
+    auto* statePlayingTransition = new ProductControllerStatePlayingTransition
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION );
+
+    auto* statePlayingTransitionSelected = new ProductControllerStatePlayingTransitionSelected
+    ( GetHsm( ),
+      statePlayingTransition,
+      PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SELECTED );
+
     ///
     /// The states are added to the state machine and the state machine is initialized.
     ///
@@ -250,6 +339,22 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( statePlayingInactive );
     GetHsm( ).AddState( stateAccessoryPairing );
     GetHsm( ).AddState( stateAdaptIQ );
+
+    GetHsm( ).AddState( stateDeselected );
+    GetHsm( ).AddState( stateSelected );
+    GetHsm( ).AddState( stateSilent );
+    GetHsm( ).AddState( stateNotSilent );
+    GetHsm( ).AddState( stateSetup );
+    GetHsm( ).AddState( stateSetupNetwork );
+    GetHsm( ).AddState( stateSetupOther );
+    GetHsm( ).AddState( stateStoppingStreams );
+    GetHsm( ).AddState( statePlayableTransition );
+    GetHsm( ).AddState( statePlayableTransitionIdle );
+    GetHsm( ).AddState( statePlayableTransitionNetworkStandby );
+    GetHsm( ).AddState( stateSoftwareUpdateTransition );
+    GetHsm( ).AddState( stateLowPowerTransition );
+    GetHsm( ).AddState( statePlayingTransition );
+    GetHsm( ).AddState( statePlayingTransitionSelected );
 
     GetHsm( ).Init( this, PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
@@ -509,6 +614,19 @@ std::string const& ProfessorProductController::GetProductType( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   ProfessorProductController::GetProductColor
+///
+/// @return This method returns the std::string value to be used for the Product "color" field
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string ProfessorProductController::GetProductColor() const
+{
+    // @TODO https://jirapro.bose.com/browse/PGC-630
+    return "BLACK";
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::GetProductVariant
 ///
 /// @return This method returns the std::string const& value to be used for the Product "Variant" field
@@ -628,12 +746,12 @@ void ProfessorProductController::RegisterNowPlayingEndPoint( )
     /// CAPS is made through the FrontDoorClient object pointer. The callback HandleCapsNowPlaying
     /// is used to receive these notifications.
     ///
-    AsyncCallback< SoundTouchInterface::NowPlayingJson >
+    AsyncCallback< SoundTouchInterface::NowPlaying >
     callback( std::bind( &ProfessorProductController::HandleNowPlaying,
                          this, std::placeholders::_1 ),
               GetTask( ) );
 
-    m_FrontDoorClientIF->RegisterNotification< SoundTouchInterface::NowPlayingJson >
+    m_FrontDoorClientIF->RegisterNotification< SoundTouchInterface::NowPlaying >
     ( "/content/nowPlaying", callback );
 
     BOSE_DEBUG( s_logger, "A notification request for CAPS now playing status has been made." );
@@ -643,10 +761,10 @@ void ProfessorProductController::RegisterNowPlayingEndPoint( )
 ///
 /// @brief ProductSystemManager::HandleNowPlaying
 ///
-/// @param SoundTouchInterface::NowPlayingJson& nowPlayingStatus
+/// @param SoundTouchInterface::NowPlaying& nowPlayingStatus
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::HandleNowPlaying( const SoundTouchInterface::NowPlayingJson&
+void ProfessorProductController::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
                                                    nowPlayingStatus )
 {
     BOSE_DEBUG( s_logger, "A CAPS now playing status has been received." );
@@ -654,9 +772,9 @@ void ProfessorProductController::HandleNowPlaying( const SoundTouchInterface::No
     if( nowPlayingStatus.has_state( ) )
     {
         BOSE_DEBUG( s_logger, "The CAPS now playing status has a %s status.",
-                    SoundTouchInterface::StatusJson_Name( nowPlayingStatus.state( ).status( ) ).c_str( ) );
+                    SoundTouchInterface::Status_Name( nowPlayingStatus.state( ).status( ) ).c_str( ) );
 
-        if( nowPlayingStatus.state( ).status( ) == SoundTouchInterface::StatusJson::play )
+        if( nowPlayingStatus.state( ).status( ) == SoundTouchInterface::Status::play )
         {
             ProductMessage productMessage;
             productMessage.mutable_nowplayingstatus( )->set_state( ProductNowPlayingStatus_ProductNowPlayingState_Active );
@@ -801,9 +919,21 @@ void ProfessorProductController::SetTestSoundTouchPlayback( )
 /// @return This method returns a reference to the last playback request for Sound Touch sources.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-SoundTouchInterface::playbackRequestJson& ProfessorProductController::GetLastSoundTouchPlayback( )
+SoundTouchInterface::PlaybackRequest& ProfessorProductController::GetLastSoundTouchPlayback( )
 {
     return m_lastSoundTouchPlayback;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   GetWiFiOperationalMode
+///
+/// @return NetManager::Protobuf::OperationalMode of the WiFi subsystem
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+NetManager::Protobuf::OperationalMode ProfessorProductController::GetWiFiOperationalMode( )
+{
+    return GetNetworkServiceUtil().GetNetManagerOperationMode();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -864,6 +994,8 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             case SYSTEM_STATE_IDLE:
                 break;
             case SYSTEM_STATE_NUM_OF:
+                break;
+            case SYSTEM_STATE_ERROR:
                 break;
             }
         }
@@ -1114,45 +1246,13 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     else if( message.has_action( ) )
     {
         ///
-        /// The following determines whether the key action is to be handled by a common intent
+        /// The following attempts to handle the key action using a common intent
         /// manager.
         ///
-        if( GetIntentHandler( ).IsIntentPlayControl( message.action( ) ) )
+        if( HandleCommonIntents( message.action() ) )
         {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPlayControl,
-                                                              message.action( ) );
+            BOSE_VERBOSE( s_logger, "Action key %u handled by common intent handler", message.action() );
         }
-        else if( GetIntentHandler( ).IsIntentBlueTooth( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentBlueTooth,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsIntentVolumeControl( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentVolumeControl,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsIntentNetworkStandby( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentNetworkStandby,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsPresetSelect( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPresetSelect,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsPresetStore( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPresetStore,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsIntentVoice( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentVoice,
-                                                              message.action( ) );
-        }
-
         ///
         /// The following determines whether the key action is to be handled by the custom intent
         /// manager.
@@ -1290,6 +1390,35 @@ std::string const& ProfessorProductController::GetDefaultProductName( ) const
     BOSE_INFO( s_logger, "%s productName=%s", __func__, productName.c_str( ) );
     return productName;
 }
+
+BLESetupService::VariantId ProfessorProductController::GetVariantId() const
+{
+    // @TODO https://jirapro.bose.com/browse/PGC-630
+    BLESetupService::VariantId varintId = BLESetupService::VariantId::NONE;
+
+    if( auto color = MfgData::GetColor() )
+    {
+        if( *color == "luxGray" )
+        {
+            varintId = BLESetupService::VariantId::SILVER;
+        }
+        else if( *color == "tripleBlack" )
+        {
+            varintId = BLESetupService::VariantId::BLACK;
+        }
+        else
+        {
+            varintId = BLESetupService::VariantId::WHITE;
+        }
+    }
+    else
+    {
+        BOSE_DIE( "No 'productColor' in mfgdata" );
+    }
+
+    return varintId;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///

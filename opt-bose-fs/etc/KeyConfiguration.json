@@ -1070,10 +1070,8 @@
         }, 
         {
             "origin": 2, 
-            "keyEvent": 2, 
-            "timeOutList": [
-                3000
-            ], 
+            "keyEvent": 0, 
+            "timeOutList": [], 
             "commment": "wifi off", 
             "action": 7, 
             "keyList": [
@@ -1082,10 +1080,8 @@
         }, 
         {
             "origin": 6, 
-            "keyEvent": 2, 
-            "timeOutList": [
-                3000
-            ], 
+            "keyEvent": 0, 
+            "timeOutList": [], 
             "commment": "wifi off", 
             "action": 7, 
             "keyList": [
@@ -1094,10 +1090,8 @@
         }, 
         {
             "origin": 4, 
-            "keyEvent": 2, 
-            "timeOutList": [
-                3000
-            ], 
+            "keyEvent": 0, 
+            "timeOutList": [], 
             "commment": "wifi off", 
             "action": 7, 
             "keyList": [
@@ -1106,10 +1100,8 @@
         }, 
         {
             "origin": 2, 
-            "keyEvent": 2, 
-            "timeOutList": [
-                3000
-            ], 
+            "keyEvent": 0, 
+            "timeOutList": [], 
             "commment": "ap setup", 
             "action": 5, 
             "keyList": [
@@ -1118,10 +1110,8 @@
         }, 
         {
             "origin": 6, 
-            "keyEvent": 2, 
-            "timeOutList": [
-                3000
-            ], 
+            "keyEvent": 0, 
+            "timeOutList": [], 
             "commment": "ap setup", 
             "action": 5, 
             "keyList": [
@@ -1130,10 +1120,8 @@
         }, 
         {
             "origin": 4, 
-            "keyEvent": 2, 
-            "timeOutList": [
-                3000
-            ], 
+            "keyEvent": 0, 
+            "timeOutList": [], 
             "commment": "ap setup", 
             "action": 5, 
             "keyList": [

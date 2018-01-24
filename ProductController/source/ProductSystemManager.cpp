@@ -100,11 +100,12 @@ bool ProductSystemManager::Run( )
     /// to process configuration requests.
     ////////////////////////////////////////////////////////////////////////////////////////////////
     {
-        AsyncCallback < Callback < ProductPb::ConfigurationStatus > >
-        callback( std::bind( &ProductSystemManager::HandleGetConfigurationStatusRequest,
-                             this,
-                             std::placeholders::_1 ),
-                  m_ProductTask );
+        AsyncCallback < Callback < ProductPb::ConfigurationStatus >, Callback<EndPointsError::Error>>
+                callback( std::bind( &ProductSystemManager::HandleGetConfigurationStatusRequest,
+                                     this,
+                                     std::placeholders::_1,
+                                     std::placeholders::_2 ),
+                          m_ProductTask );
 
         m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS, callback );
     }
@@ -129,13 +130,13 @@ bool ProductSystemManager::Run( )
                                        std::placeholders::_1 ),
                             m_ProductTask );
 
-        AsyncCallback< FRONT_DOOR_CLIENT_ERRORS >
+        AsyncCallback< EndPointsError::Error >
         CallbackForFailure( std::bind( &ProductSystemManager::HandleCapsStatusFailed,
                                        this,
                                        std::placeholders::_1 ),
                             m_ProductTask );
 
-        m_FrontDoorClient->SendGet< SoundTouchInterface::CapsInitializationStatus >
+        m_FrontDoorClient->SendGet< SoundTouchInterface::CapsInitializationStatus, EndPointsError::Error >
         ( FRONTDOOR_SYSTEM_CAPS_INITIALIZATION_STATUS, CallbackForSuccess, CallbackForFailure );
 
         m_FrontDoorClient->RegisterNotification< SoundTouchInterface::CapsInitializationStatus >
@@ -150,10 +151,11 @@ bool ProductSystemManager::Run( )
     /// system state requests.
     ////////////////////////////////////////////////////////////////////////////////////////////////
     {
-        AsyncCallback < Callback < ProductPb::SystemState > >
+        AsyncCallback < Callback < ProductPb::SystemState >, Callback<EndPointsError::Error> >
         callback( std::bind( &ProductSystemManager::HandleGetSystemStateRequest,
                              this,
-                             std::placeholders::_1 ),
+                             std::placeholders::_1,
+                             std::placeholders::_2 ),
                   m_ProductTask );
 
         m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_STATE, callback );
@@ -261,9 +263,8 @@ void ProductSystemManager::WriteConfigurationStatusToPersistentStorage( )
 /// @param const Callback< ProductPb::ConfigurationStatus >& response
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::HandleGetConfigurationStatusRequest( const
-                                                                Callback< ProductPb::ConfigurationStatus >&
-                                                                response ) const
+void ProductSystemManager::HandleGetConfigurationStatusRequest( const Callback< ProductPb::ConfigurationStatus >& response,
+                                                                const Callback<EndPointsError::Error>& errorRsp ) const
 {
     BOSE_DEBUG( s_logger, "Sending the configuration status for a get request." );
 
@@ -295,11 +296,11 @@ void ProductSystemManager::HandleCapsStatus( const SoundTouchInterface::CapsInit
 /// @param const FRONT_DOOR_CLIENT_ERRORS error
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::HandleCapsStatusFailed( const FRONT_DOOR_CLIENT_ERRORS error )
+void ProductSystemManager::HandleCapsStatusFailed( const EndPointsError::Error& error )
 {
     BOSE_DEBUG( s_logger, "---------------- Product CAPS Status Failed ----------------" );
     BOSE_ERROR( s_logger, "The CAPS initialization status was not received." );
-    BOSE_ERROR( s_logger, "An error having the value %d has occurred.", error );
+    BOSE_WARNING( s_logger, "%s: Error = (%d-%d) %s", __func__, error.code(), error.subcode(), error.message().c_str() );
 
     ProductMessage productMessage;
     productMessage.mutable_capsstatus( )->set_initialized( false );
@@ -313,8 +314,8 @@ void ProductSystemManager::HandleCapsStatusFailed( const FRONT_DOOR_CLIENT_ERROR
 /// @param const ProductPb::SystemState& systemstate
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::HandleGetSystemStateRequest
-( const Callback< ProductPb::SystemState >& stateResponse ) const
+void ProductSystemManager::HandleGetSystemStateRequest( const Callback< ProductPb::SystemState >& stateResponse,
+                                                        const Callback<EndPointsError::Error>& errorRsp ) const
 {
     Hsm::STATE  stateId   = m_ProductController.GetHsm( ).GetCurrentState( )->GetId( );
     std::string stateName = m_ProductController.GetHsm( ).GetCurrentState( )->GetName( );
