@@ -29,11 +29,6 @@ CustomAudioSettingsManager::CustomAudioSettingsManager()
     InitializeAudioSettings();
 }
 
-void CustomAudioSettingsManager::UpdateAllProtos()
-{
-    BOSE_DEBUG( s_logger, __func__ );
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////
 /// Bass setting setter/getter
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -62,6 +57,13 @@ const ProductPb::AudioTrebleLevel& CustomAudioSettingsManager::GetTreble() const
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentTreble;
+}
+
+void CustomAudioSettingsManager::UpdateAllProtos()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kBassName,          m_currentBass );
+    UpdateCurrentProto( kTrebleName,        m_currentTreble );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
