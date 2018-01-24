@@ -105,7 +105,7 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             }
             else
             {
-                BOSE_ERROR( s_logger, "Missing entry in m_countdownIntentInfoMap fpr intent = %d", intent );
+                BOSE_ERROR( s_logger, "Missing entry in m_countdownIntentInfoMap for intent = %d", intent );
                 return false;
             }
         }
