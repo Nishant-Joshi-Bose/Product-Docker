@@ -308,40 +308,6 @@ bool CustomProductLpmHardwareInterface::SendLipSyncDelay( uint32_t audioDelay )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductLpmHardwareInterface::SendToneAndLevelControl
-///
-/// @brief  This method sends a request to the LPM hardware.
-///
-/// @param  IpcToneControl_t& controls
-///
-/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
-///         attempts the request and returns true.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductLpmHardwareInterface::SendToneAndLevelControl( IpcToneControl_t& controls )
-{
-    BOSE_DEBUG( s_logger, "Audio tone and level settings are to be set as follows: " );
-    BOSE_DEBUG( s_logger, "               " );
-    BOSE_DEBUG( s_logger, "Bass      : %d ", controls.bass( ) );
-    BOSE_DEBUG( s_logger, "Treble    : %d ", controls.treble( ) );
-    BOSE_DEBUG( s_logger, "Center    : %d ", controls.centerspeaker( ) );
-    BOSE_DEBUG( s_logger, "Surround  : %d ", controls.surroundspeaker( ) );
-    BOSE_DEBUG( s_logger, "               " );
-
-    if( isConnected( ) == false || GetLpmClient( ) == nullptr )
-    {
-        BOSE_ERROR( s_logger, "An LPM audio and tone level request could not be made, as no connection is available." );
-
-        return false;
-    }
-
-    BOSE_DEBUG( s_logger, "An LPM audio and tone level request is currently not supported." );
-
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   CustomProductLpmHardwareInterface::SendSpeakerList
 ///
 /// @brief  This method sends speaker list information to the LPM hardware.
