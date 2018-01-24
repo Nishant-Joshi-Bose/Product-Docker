@@ -133,6 +133,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentFactoryDefault( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
     virtual bool HandleIntentPresetSelect( KeyHandlerUtil::ActionType_t result )
     {
         return false;
@@ -197,6 +202,11 @@ public:
     }
 
     virtual bool HandleStopPlaybackResponse( const SoundTouchInterface::status &resp )
+    {
+        return false;
+    }
+
+    virtual bool HandleFactoryDefault( )
     {
         return false;
     }

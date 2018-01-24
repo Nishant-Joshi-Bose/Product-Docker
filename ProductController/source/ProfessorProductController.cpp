@@ -73,6 +73,7 @@
 #include "ProductControllerStateLowPowerTransition.h"
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSelected.h"
+#include "ProductControllerStateFactoryDefault.h"
 #include "MfgData.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -319,6 +320,11 @@ void ProfessorProductController::Run( )
       statePlayingTransition,
       PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SELECTED );
 
+    auto* stateFactoryDefault = new ProductControllerStateFactoryDefault
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_FACTORY_DEFAULT );
+
     ///
     /// The states are added to the state machine and the state machine is initialized.
     ///
@@ -355,6 +361,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( stateLowPowerTransition );
     GetHsm( ).AddState( statePlayingTransition );
     GetHsm( ).AddState( statePlayingTransitionSelected );
+    GetHsm( ).AddState( stateFactoryDefault );
 
     GetHsm( ).Init( this, PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
