@@ -995,6 +995,8 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
                 break;
             case SYSTEM_STATE_NUM_OF:
                 break;
+            case SYSTEM_STATE_ERROR:
+                break;
             }
         }
 
@@ -1311,6 +1313,13 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             BOSE_DEBUG( s_logger, "AudioPath Deselect event received" );
             GetHsm( ).Handle< > ( &CustomProductControllerState::HandleAudioPathDeselect );
         }
+    }
+    //
+    // An amp fault has been detected on the LPM. Enter the CriticalError state.
+    //
+    else if( message.has_ampfaultdetected() )
+    {
+        GetHsm( ).Handle<>( &CustomProductControllerState::HandleAmpFaultDetected );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Unknown message types are handled at this point.
