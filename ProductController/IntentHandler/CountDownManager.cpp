@@ -48,12 +48,10 @@ CountDownManager::CountDownManager( NotifyTargetTaskIF& task,
                                     const FrontDoorClientIF_t& frontDoorClient,
                                     ProductController& controller ):
     IntentManager( task, cliClient, frontDoorClient, controller ),
-    m_counter( 0 ),
-    m_actionType( 0 )
+    m_countdownValue( 0 ),
+    m_actionType()
 {
-    m_frontDoorClientErrorCb = AsyncCallback<EndPointsError::Error>
-                               ( std::bind( &CountDownManager::FrontDoorClientErrorCb,
-                                            this, std::placeholders::_1 ), &task );
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -68,7 +66,7 @@ CountDownManager::CountDownManager( NotifyTargetTaskIF& task,
 
 bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
 {
-    BOSE_DEBUG( s_logger, "%s - (intent=%d)(m_counter=%d)", __func__, intent, m_counter );
+    BOSE_DEBUG( s_logger, "%s - (intent=%d)(m_countdownValue=%d)", __func__, intent, m_countdownValue );
 
     switch( intent )
     {
@@ -78,14 +76,14 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     case( uint16_t ) Action::TOGGLE_WIFI_RADIO_CANCEL:
     case( uint16_t ) Action::MANUAL_SETUP_CANCEL:
     {
-        if( m_actionType and m_counter > 0 and m_counter <= m_countdownIntentInfoMap[( ProductApp::Action )m_actionType].countdown )
+        if( m_actionType.is_initialized() and m_countdownValue > 0 and m_countdownValue <= m_countdownIntentInfoMap[( ProductApp::Action )m_actionType.get()].countdown )
         {
-            NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )m_actionType].intentName, IntentHandler::Protobuf::ButtonEventState::CANCELED, 0 );
-            m_actionType = 0;
+            NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )m_actionType.get()].intentName, IntentHandler::Protobuf::ButtonEventState::CANCELED, 0 );
+            m_actionType.reset();
         }
-        else if( m_counter == 0 )
+        else if( m_countdownValue == 0 )
         {
-            m_actionType = 0;
+            m_actionType.reset();
         }
     }
     break;
@@ -96,12 +94,12 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     case( uint16_t ) Action::TOGGLE_WIFI_RADIO_COUNTDOWN:
     case( uint16_t ) Action::SYSTEM_INFO_COUNTDOWN:
     {
-        if( !m_actionType )
+        if( !m_actionType.is_initialized() )
         {
             if( m_countdownIntentInfoMap.find( ( ProductApp::Action )intent ) != m_countdownIntentInfoMap.end() )
             {
-                m_counter = m_countdownIntentInfoMap[( ProductApp::Action )intent].countdown + 1;
-                m_actionType = ( uint16_t )intent;
+                m_countdownValue = m_countdownIntentInfoMap[( ProductApp::Action )intent].countdown + 1;
+                m_actionType = ( ProductApp::Action )intent;
             }
             else
             {
@@ -110,12 +108,12 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             }
         }
 
-        if( m_counter )
+        if( m_countdownValue )
         {
-            m_counter--;
-            if( m_counter )
+            m_countdownValue--;
+            if( m_countdownValue )
             {
-                NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )intent].intentName, IntentHandler::Protobuf::ButtonEventState::COUNTDOWN, m_counter );
+                NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )intent].intentName, IntentHandler::Protobuf::ButtonEventState::COUNTDOWN, m_countdownValue );
             }
             else
             {

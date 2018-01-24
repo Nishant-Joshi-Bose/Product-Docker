@@ -7,6 +7,7 @@
 #pragma once
 
 #include "IntentManager.h"
+#include "Intents.h"
 
 namespace ProductApp
 {
@@ -30,8 +31,8 @@ public:
     bool Handle( KeyHandlerUtil::ActionType_t& arg ) override;
 
 private:
-    uint16_t                m_counter;
-    uint16_t                m_actionType;
+    uint16_t                            m_countdownValue;
+    BOptional<ProductApp::Action>       m_actionType;
 
     void NotifyButtonEvent( const std::string& event, const uint16_t state, const uint16_t value );
 };
