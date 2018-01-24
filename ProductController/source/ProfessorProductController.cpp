@@ -1321,6 +1321,13 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             GetHsm( ).Handle< > ( &CustomProductControllerState::HandleAudioPathDeselect );
         }
     }
+    //
+    // An amp fault has been detected on the LPM. Enter the CriticalError state.
+    //
+    else if( message.has_ampfaultdetected() )
+    {
+        GetHsm( ).Handle<>( &CustomProductControllerState::HandleAmpFaultDetected );
+    }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Unknown message types are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////

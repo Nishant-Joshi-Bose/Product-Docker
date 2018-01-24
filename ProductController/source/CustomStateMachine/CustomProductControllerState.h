@@ -303,6 +303,13 @@ public:
         return false;
     }
 
+    /*! \brief Respond to the LPM detecting an amp fault.
+     */
+    virtual bool HandleAmpFaultDetected()
+    {
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// This method returns the Professor Custom Product Controller reference of type
