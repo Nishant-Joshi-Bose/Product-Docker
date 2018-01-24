@@ -46,6 +46,11 @@ public:
         return false;
     }
 
+    virtual bool HandleFactoryDefault( )
+    {
+        return false;
+    }
+
     virtual bool HandleCapsState( bool ready )
     {
         return false;
@@ -87,6 +92,11 @@ public:
     }
 
     virtual bool HandleIntentNetworkStandby( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentFactoryDefault( KeyHandlerUtil::ActionType_t result )
     {
         return false;
     }
@@ -202,6 +212,13 @@ public:
     }
 
     virtual bool HandleBtLeModuleReady( )
+    {
+        return false;
+    }
+
+    /*! \brief Respond to the LPM detecting an amp fault.
+     */
+    virtual bool HandleAmpFaultDetected()
     {
         return false;
     }
