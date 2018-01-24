@@ -164,50 +164,50 @@ void ProductAdaptIQManager::DSPToFrontDoorStatus( ProductPb::AdaptIQStatus& fron
      * but for now with the definition in flux this keeps us from having to change a bunch of other files
      */
     // https://wiki.bose.com/pages/viewpage.action?spaceKey=A4V&title=Professor+AdaptIQ#?lucidIFH-viewer-73845d7d=1
+    // https://svn.bose.com/hepd/RivieraSharc/trunk/modules/IPC/IpcProtocol.h
     enum IpcAiqStates
     {
-        AIQ_STATE_INTRO_1,
-        AIQ_STATE_INTRO_2,
-        AIQ_STATE_INTRO_3,
-        AIQ_STATE_INTRO_4,
+        AIQ_STATE_NONE,
+        AIQ_STATE_NOT_RUNNING,
+        AIQ_STATE_INTRO_3_COMFY,
+        AIQ_STATE_INTRO_4_READY,
         AIQ_STATE_MEASURING,
         AIQ_STATE_TRANSITION_FIRST,
         AIQ_STATE_TRANSITION_NEXT,
         AIQ_STATE_TRANSITION_LAST,
         AIQ_STATE_SUCCESS,
-        AIQ_STATE_SUCCESS_INFO,
-        AIQ_STATE_LOST_HEADSET,
-        AIQ_STATE_ERR_NOISY,
+        AIQ_STATE_ERR_NOISE,
         AIQ_STATE_ERR_TOO_CLOSE,
         AIQ_STATE_ERR_MICS_MOVED,
         AIQ_STATE_ERR_NO_SOUND,
         AIQ_STATE_ERR_PREVIOUS,
         AIQ_STATE_ERR_FAIL,
-        AIQ_STATE_ERR_DETECT_HS,
-        AIQ_STATE_ERR_NO_HS_TERM,
+        AIQ_STATE_ERR_HS_DETECT,
+        AIQ_STATE_ERR_HS_LOST,
+        AIQ_STATE_ERR_HS_FAIL,
     };
 
+#define MAP_ENUM_STRING(e) {e, #e}
     static std::map<IpcAiqStates, const char *> stateIdToName =
     {
-        {AIQ_STATE_INTRO_1,                     "AIQ_STATE_INTRO_1"},               // no smState equivalent
-        {AIQ_STATE_INTRO_2,                     "AIQ_STATE_INTRO_2"},               // no smState equivalent
-        {AIQ_STATE_INTRO_3,                     "AIQ_STATE_INTRO_3_COMFY"},
-        {AIQ_STATE_INTRO_4,                     "AIQ_STATE_INTRO_4_READY"},
-        {AIQ_STATE_MEASURING,                   "AIQ_STATE_MEASURING"},
-        {AIQ_STATE_TRANSITION_FIRST,            "AIQ_STATE_TRANSITION_FIRST"},
-        {AIQ_STATE_TRANSITION_NEXT,             "AIQ_STATE_TRANSITION_NEXT"},
-        {AIQ_STATE_TRANSITION_LAST,             "AIQ_STATE_TRANSITION_LAST"},
-        {AIQ_STATE_SUCCESS,                     "AIQ_STATE_SUCCESS"},
-        {AIQ_STATE_SUCCESS_INFO,                "AIQ_STATE_INFO"},                  // no smState equivalent
-        {AIQ_STATE_LOST_HEADSET,                "AIQ_STATE_ERR_HS_LOST"},
-        {AIQ_STATE_ERR_NOISY,                   "AIQ_STATE_ERR_NOISE"},
-        {AIQ_STATE_ERR_TOO_CLOSE,               "AIQ_STATE_ERR_TOO_CLOSE"},
-        {AIQ_STATE_ERR_MICS_MOVED,              "AIQ_STATE_ERR_MIC_MOVED"},
-        {AIQ_STATE_ERR_NO_SOUND,                "AIQ_STATE_ERR_NO_SOUND"},
-        {AIQ_STATE_ERR_PREVIOUS,                "AIQ_STATE_ERR_PREVIOUS"},
-        {AIQ_STATE_ERR_FAIL,                    "AIQ_STATE_ERR_FAIL"},
-        {AIQ_STATE_ERR_DETECT_HS,               "AIQ_STATE_ERR_HS_LOST"},
-        {AIQ_STATE_ERR_NO_HS_TERM,              "AIQ_STATE_ERR_HS_FAIL"},
+        MAP_ENUM_STRING( AIQ_STATE_NONE ),
+        MAP_ENUM_STRING( AIQ_STATE_NOT_RUNNING ),
+        MAP_ENUM_STRING( AIQ_STATE_INTRO_3_COMFY ),
+        MAP_ENUM_STRING( AIQ_STATE_INTRO_4_READY ),
+        MAP_ENUM_STRING( AIQ_STATE_MEASURING ),
+        MAP_ENUM_STRING( AIQ_STATE_TRANSITION_FIRST ),
+        MAP_ENUM_STRING( AIQ_STATE_TRANSITION_NEXT ),
+        MAP_ENUM_STRING( AIQ_STATE_TRANSITION_LAST ),
+        MAP_ENUM_STRING( AIQ_STATE_SUCCESS ),
+        MAP_ENUM_STRING( AIQ_STATE_ERR_NOISE ),
+        MAP_ENUM_STRING( AIQ_STATE_ERR_TOO_CLOSE ),
+        MAP_ENUM_STRING( AIQ_STATE_ERR_MICS_MOVED ),
+        MAP_ENUM_STRING( AIQ_STATE_ERR_NO_SOUND ),
+        MAP_ENUM_STRING( AIQ_STATE_ERR_PREVIOUS ),
+        MAP_ENUM_STRING( AIQ_STATE_ERR_FAIL ),
+        MAP_ENUM_STRING( AIQ_STATE_ERR_HS_DETECT ),
+        MAP_ENUM_STRING( AIQ_STATE_ERR_HS_LOST ),
+        MAP_ENUM_STRING( AIQ_STATE_ERR_HS_FAIL ),
     };
 
     // set the translated fields ...
