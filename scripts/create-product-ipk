@@ -253,7 +253,7 @@ pkill CLIServer
 pkill LPMService
 pkill Passport
 pkill AVS
-pkill Professor
+pkill -9 Professor
 pkill avahi-daemon
 pkill A4VVideoManagerService
 pkill A4VRemoteCommunicationService
