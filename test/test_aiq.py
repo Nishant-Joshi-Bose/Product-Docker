@@ -54,6 +54,7 @@ def do_put_action(fd):
     print('1: enter')
     print('2: cancel')
     print('3: advance')
+    print('4: previous')
     cmd = raw_input('> ')
     if(cmd == '1'):
       action = 'enter'
@@ -61,6 +62,8 @@ def do_put_action(fd):
       action = 'cancel'
     elif(cmd == '3'):
       action = 'advance'
+    elif(cmd == '4'):
+      action = 'previous'
     else:
       print('invalid action')
       continue

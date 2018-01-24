@@ -254,6 +254,12 @@ void ProductEdidInterface::HandleNowPlaying( const SoundTouchInterface::NowPlayi
 
                     m_ProductLpmHardwareInterface->SendSourceSelection( LPM_IPC_SOURCE_TV );
                 }
+                else
+                {
+                    BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to SOURCE_SOUNDTOUCH." );
+
+                    m_ProductLpmHardwareInterface->SendSourceSelection( LPM_IPC_SOURCE_SHELBY );
+                }
 
             }
         }
