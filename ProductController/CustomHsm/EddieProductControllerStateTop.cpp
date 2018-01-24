@@ -42,7 +42,7 @@ bool EddieProductControllerStateTop::HandleNowSelectionInfo( const SoundTouchInt
 }
 
 
-bool EddieProductControllerStateTop::HandleCountDownManager( KeyHandlerUtil::ActionType_t intent )
+bool EddieProductControllerStateTop::HandleIntentCountDown( KeyHandlerUtil::ActionType_t intent )
 {
     return true;
 }

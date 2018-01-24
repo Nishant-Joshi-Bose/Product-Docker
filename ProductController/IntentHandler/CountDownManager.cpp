@@ -27,11 +27,11 @@ static DPrint s_logger( "CountDownManager" );
 
 typedef struct _CountDown
 {
-    std::string name;
-    int         time;
+    std::string     intentName;
+    uint16_t        countdown;
 } CountDownInfo;
 
-static std::map <ProductApp::Action, CountDownInfo> m_eventName =
+static std::map <ProductApp::Action, CountDownInfo> m_countdownIntentInfoMap =
 {
     {ProductApp::Action::MANUAL_UPDATE_COUNTDOWN, {"systemUpdate", 5}},
     {ProductApp::Action::FACTORY_DEFAULT_COUNTDOWN, {"factoryDefault", 10}},
@@ -48,7 +48,7 @@ CountDownManager::CountDownManager( NotifyTargetTaskIF& task,
                                     const FrontDoorClientIF_t& frontDoorClient,
                                     ProductController& controller ):
     IntentManager( task, cliClient, frontDoorClient, controller ),
-    m_counter( -1 ),
+    m_counter( 0 ),
     m_actionType( 0 )
 {
     m_frontDoorClientErrorCb = AsyncCallback<EndPointsError::Error>
@@ -59,7 +59,7 @@ CountDownManager::CountDownManager( NotifyTargetTaskIF& task,
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  Handle
 /// @brief Function to build and send FrontDoor message to execute the
-//         to Bluetooth intends coming out of the product controller.
+//         key combination intends coming out of the product controller.
 //         The callBack function is called to give control back to the state
 //         machine if HSM has registered a call back.
 /// @return true: Successful
@@ -78,9 +78,9 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     case( uint16_t ) Action::TOGGLE_WIFI_RADIO_CANCEL:
     case( uint16_t ) Action::MANUAL_SETUP_CANCEL:
     {
-        if( m_actionType and m_counter > 0 and m_counter <= m_eventName[( ProductApp::Action )m_actionType].time )
+        if( m_actionType and m_counter > 0 and m_counter <= m_countdownIntentInfoMap[( ProductApp::Action )m_actionType].countdown )
         {
-            NotifyButtonEvent( m_eventName[( ProductApp::Action )m_actionType].name, IntentHandler::Protobuf::ButtonEventState::CANCELED, 0 );
+            NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )m_actionType].intentName, IntentHandler::Protobuf::ButtonEventState::CANCELED, 0 );
             m_actionType = 0;
         }
         else if( m_counter == 0 )
@@ -98,22 +98,28 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     {
         if( !m_actionType )
         {
-            m_counter = m_eventName[( ProductApp::Action )intent].time + 1;
-            m_actionType = ( uint32_t )intent;
+            if( m_countdownIntentInfoMap.find( ( ProductApp::Action )intent ) != m_countdownIntentInfoMap.end() )
+            {
+                m_counter = m_countdownIntentInfoMap[( ProductApp::Action )intent].countdown + 1;
+                m_actionType = ( uint16_t )intent;
+            }
+            else
+            {
+                BOSE_ERROR( s_logger, "Missing entry in m_countdownIntentInfoMap fpr intent = %d", intent );
+                return false;
+            }
         }
 
-        if( m_counter > 0 )
+        if( m_counter )
         {
             m_counter--;
             if( m_counter )
             {
-                BOSE_INFO( s_logger, "%s-(m_counter=%d)", __func__, m_counter );
-                NotifyButtonEvent( m_eventName[( ProductApp::Action )intent].name, IntentHandler::Protobuf::ButtonEventState::COUNTDOWN, m_counter );
+                NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )intent].intentName, IntentHandler::Protobuf::ButtonEventState::COUNTDOWN, m_counter );
             }
             else
             {
-                BOSE_INFO( s_logger, "%s-(m_counter=%d)", __func__, m_counter );
-                NotifyButtonEvent( m_eventName[( ProductApp::Action )intent].name, IntentHandler::Protobuf::ButtonEventState::COMPLETED, 0 );
+                NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )intent].intentName, IntentHandler::Protobuf::ButtonEventState::COMPLETED, 0 );
             }
         }
     }
@@ -123,8 +129,7 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     {
         BOSE_ERROR( s_logger, "Invalid Action type" );
     }
-    break;
-
+    return false;
     }
 
     //Fire the cb so the control goes back to the ProductController
@@ -132,10 +137,11 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     {
         ( *GetCallbackObject() )( intent );
     }
+
     return true;
 }
 
-void CountDownManager::NotifyButtonEvent( const std::string& event, const uint32_t state, const uint32_t value )
+void CountDownManager::NotifyButtonEvent( const std::string& event, const uint16_t state, const uint16_t value )
 {
     BOSE_DEBUG( s_logger, "%s: event = %s, state = %d, value = %d", __func__, event.c_str(), state, value );
     IntentHandler::Protobuf::ButtonEventNotification buttonNotification;

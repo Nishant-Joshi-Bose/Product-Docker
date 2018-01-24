@@ -30,9 +30,9 @@ public:
     bool Handle( KeyHandlerUtil::ActionType_t& arg ) override;
 
 private:
-    int32_t                 m_counter = 0;
-    uint32_t                m_actionType = 0;
+    uint16_t                m_counter = 0;
+    uint16_t                m_actionType = 0;
 
-    void NotifyButtonEvent( const std::string& event, const uint32_t state, const uint32_t value );
+    void NotifyButtonEvent( const std::string& event, const uint16_t state, const uint16_t value );
 };
 } // namespace ProductApp
