@@ -21,6 +21,7 @@ public:
     const ProductPb::AudioBassLevel& GetBass() const;
     bool SetTreble( const ProductPb::AudioTrebleLevel& treble );
     const ProductPb::AudioTrebleLevel& GetTreble() const;
+    void UpdateAllProtos() override;
 
 private:
     ProductPb::AudioBassLevel m_currentBass;
