@@ -36,6 +36,7 @@
 #include "ProductControllerStateIdle.h"
 #include "ProductControllerStateSoftwareUpdating.h"
 #include "ProductControllerStateCriticalError.h"
+#include "ProductControllerStateFactoryDefault.h"
 #include "ProductControllerStatePlayingDeselected.h"
 #include "ProductControllerStatePlayingSelected.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
@@ -389,6 +390,7 @@ private:
     ProductControllerStateIdleVoiceNotConfigured   m_ProductControllerStateVoiceNotConfigured;
     ProductControllerStateNetworkStandbyConfigured   m_ProductControllerStateNetworkConfigured;
     ProductControllerStateNetworkStandbyNotConfigured   m_ProductControllerStateNetworkNotConfigured;
+    ProductControllerStateFactoryDefault                    m_ProductControllerStateFactoryDefault;
 
     ProductControllerStatePlayingDeselected                 m_ProductControllerStatePlayingDeselected;
     ProductControllerStatePlayingSelected                   m_ProductControllerStatePlayingSelected;

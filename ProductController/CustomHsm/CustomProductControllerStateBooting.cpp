@@ -63,6 +63,7 @@ void CustomProductControllerStateBooting::PossiblyGoToNextState()
 void CustomProductControllerStateBooting::HandleStateExit()
 {
     BOSE_INFO( s_logger, __func__ );
+    ProductControllerStateBooting::HandleStateExit();
     GetProductController().GetLpmHardwareInterface()->SetAmp( /*powered=*/ true, /*muted=*/ false );
 }
 

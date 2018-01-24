@@ -59,6 +59,13 @@ const ProductPb::AudioTrebleLevel& CustomAudioSettingsManager::GetTreble() const
     return m_currentTreble;
 }
 
+void CustomAudioSettingsManager::UpdateAllProtos()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    UpdateCurrentProto( kBassName,          m_currentBass );
+    UpdateCurrentProto( kTrebleName,        m_currentTreble );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Load default audio settings
 ///////////////////////////////////////////////////////////////////////////////////////

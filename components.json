@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.3.40771.2655933"
+    "selected_version": "Release/Castle-Fork/0.3.4.40831.2663218"
   },
   {
     "name": "bose-opkg-utils",
@@ -45,7 +45,7 @@
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2528"
+    "selected_version": "branches/castle-libs@2547"
   },
   {
     "name": "CastleLightBarController-qc8017_32",
@@ -65,7 +65,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@5ba50e1c23dd0526a007e2bee5a32fd5316c372e"
+    "selected_version": "master@0bfef333cf5e65dead8725265b0ed471ff2e7dfd"
   },
   {
     "name": "CastleProductUIAssets",
@@ -128,7 +128,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/FrontDoorUpdate-Castle-Fork/2018-01-23_1241"
+    "selected_version": "Release/Castle-Fork/0.3.4.40831.2663218"
   },
   {
     "name": "Webkit",
