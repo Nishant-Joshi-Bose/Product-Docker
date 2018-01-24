@@ -64,12 +64,16 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
 
     set_ap.sh
 
-    key=KeyConfiguration.json
+    keyPath=/opt/Bose/etc/KeyConfiguration.json
     if [ -e /mnt/nv/DemoModeOn ]; then
         log info "--DEMO MODE--"
-        key=KeyConfiguration-demo.json
+        keyPath=/opt/Bose/KeyConfiguration-demo.json
+        if [ -e /mnt/nv/KeyConfiguration-demo.json ]; then
+            log info "--USING ALTERNATE KeyConfiguration-demo.json--"
+            keyPath=/mnt/nv/KeyConfiguration-demo.json
+        fi
     fi
-    ln -nsf "/opt/Bose/etc/$key" /var/run/KeyConfiguration.json || exit
+    ln -nsf "$keyPath" /var/run/KeyConfiguration.json || exit
 
     if ! $override; then
         mkdir -p "$rundir" || exit
