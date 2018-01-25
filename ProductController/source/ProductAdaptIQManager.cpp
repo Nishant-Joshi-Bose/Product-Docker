@@ -33,14 +33,18 @@ using namespace ProductPb;
 
 namespace
 {
-const std::string s_ActionEnter         = "enter";
-const std::string s_ActionCancel        = "cancel";
-const std::string s_ActionAdvance       = "advance";
-const std::string s_ActionPrevious      = "previous";
+const std::string s_ActionEnter         = "ACTION_ENTER";
+const std::string s_ActionCancel        = "ACTION_CANCEL";
+const std::string s_ActionAdvance       = "ACTION_ADVANCE";
+const std::string s_ActionPrevious      = "ACTION_PREVIOUS";
 
+#if 0
+// these have moved to a new endpoint, not sure if they will be implemented here
+// or elsewhere
 const std::string s_ModeNormal          = "Enabled Normal";
 const std::string s_ModeRetail          = "Enabled Retail";
 const std::string s_ModeDisabled        = "Enabled Disabled";
+#endif
 const std::string s_FrontDoorAdaptIQ    = "/adaptiq";
 }
 
@@ -70,13 +74,11 @@ ProductAdaptIQManager::ProductAdaptIQManager( ProfessorProductController& Produc
     m_ProductNotify( ProductController.GetMessageHandler( ) ),
     m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) )
 {
-    m_status.set_smstate( "NA" );
-    m_status.set_mode( "Booting" );
+    m_status.set_smstate( "AIQ_STATE_NOT_RUNNING" );
     m_status.set_currentlocation( ADAPTIQ_LOCATION_FIRST );
     m_status.set_currentspeaker( ADAPTIQ_SPEAKER_FIRST );
     m_status.set_hpconnected( true );
     m_status.set_errorcode( 0 );
-    SetDefaultProperties( m_status );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -239,7 +241,11 @@ void ProductAdaptIQManager::SetStatus( const ProductPb::AdaptIQStatus& status, b
     if( ( m_status.SerializeAsString() != status.SerializeAsString() ) || force )
     {
         m_status = status;
-        m_FrontDoorClient->SendNotification( s_FrontDoorAdaptIQ, m_status );
+
+        // make a copy and add fixed properties to it
+        ProductPb::AdaptIQStatus msg = status;
+        SetDefaultProperties( msg );
+        m_FrontDoorClient->SendNotification( s_FrontDoorAdaptIQ, msg );
     }
 }
 
@@ -259,6 +265,7 @@ void ProductAdaptIQManager::SetStatus( const ProductPb::AdaptIQStatus& status, b
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductAdaptIQManager::HandleGet( AdaptIQStatus& status )
 {
+    status = m_status;
     SetDefaultProperties( status );
 }
 
@@ -281,19 +288,19 @@ void ProductAdaptIQManager::HandlePut( const AdaptIQReq req, ProductPb::AdaptIQR
     if( !req.has_action() )
     {
     }
-    else if( req.action() == "enter" )
+    else if( req.action() == s_ActionEnter )
     {
         msg.mutable_aiqcontrol()->set_action( ProductAdaptIQControl::Start );
     }
-    else if( req.action() == "cancel" )
+    else if( req.action() == s_ActionCancel )
     {
         msg.mutable_aiqcontrol()->set_action( ProductAdaptIQControl::Cancel );
     }
-    else if( req.action() == "advance" )
+    else if( req.action() == s_ActionAdvance )
     {
         msg.mutable_aiqcontrol()->set_action( ProductAdaptIQControl::Advance );
     }
-    else if( req.action() == "previous" )
+    else if( req.action() == s_ActionPrevious )
     {
         msg.mutable_aiqcontrol()->set_action( ProductAdaptIQControl::Previous );
     }
