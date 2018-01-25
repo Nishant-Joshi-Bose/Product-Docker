@@ -45,7 +45,7 @@
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2547"
+    "selected_version": "branches/castle-libs@2549"
   },
   {
     "name": "CastleLightBarController-qc8017_32",
@@ -96,11 +96,11 @@
   },
   {
     "name": "protobuf-native",
-    "selected_version": "branches/protobuf@2510"
+    "selected_version": "branches/protobuf@2548"
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "branches/protobuf@2510"
+    "selected_version": "branches/protobuf@2548"
   },
   {
     "name": "Riviera-HSP-Images",

@@ -41,4 +41,10 @@ bool EddieProductControllerStateTop::HandleNowSelectionInfo( const SoundTouchInt
     return true;
 }
 
+
+bool EddieProductControllerStateTop::HandleIntentCountDown( KeyHandlerUtil::ActionType_t intent )
+{
+    return true;
+}
+
 } // namespace ProductApp

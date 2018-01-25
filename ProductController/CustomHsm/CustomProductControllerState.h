@@ -196,6 +196,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentCountDown( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
     virtual bool HandleNetworkStandbyIntent( )
     {
         return false;

@@ -35,6 +35,7 @@
 #include "DPrint.h"
 #include "IntentHandler.h"
 #include "PlaybackRequestManager.h"
+#include "CountDownManager.h"
 #include "VoiceManager.h"
 #include "EddieProductController.h"
 
@@ -75,6 +76,37 @@ void IntentHandler::Initialize()
     m_IntentNotificationMap[( uint16_t ) Action::AUX_IN]        = "aux_in" ;
     //- AUX Control API's
 
+    //+ (Common Countdown manager for key combination)
+    IntentManagerPtr_t countDownManager =
+        std::make_shared<CountDownManager>( GetTask() , GetCli(),
+                                            GetFrontDoorClient(),
+                                            GetProductController() );
+
+    //+ (Manual Update countdown and cancel)
+    m_IntentManagerMap[( uint16_t )Action::MANUAL_UPDATE_COUNTDOWN] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::MANUAL_UPDATE_CANCEL] = countDownManager;
+    //- (Manual Update countdown and cancel)
+
+    //+ (Factory Reset countdown and cancel)
+    m_IntentManagerMap[( uint16_t )Action::FACTORY_DEFAULT_COUNTDOWN] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::FACTORY_DEFAULT_CANCEL] = countDownManager;
+    //- (Factory Reset countdown and cancel)
+
+    //+ (Setup AP countdown and cancel)
+    m_IntentManagerMap[( uint16_t )Action::MANUAL_SETUP_COUNTDOWN] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::MANUAL_SETUP_CANCEL] = countDownManager;
+    //- (Setup AP countdown and cancel)
+
+    //+ (Disable Network countdown and cancel)
+    m_IntentManagerMap[( uint16_t )Action::TOGGLE_WIFI_RADIO_COUNTDOWN] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::TOGGLE_WIFI_RADIO_CANCEL] = countDownManager;
+    //- (Disable Network countdown and cancel)
+
+    //+ (PTS Update countdown and cancel)
+    m_IntentManagerMap[( uint16_t )Action::SYSTEM_INFO_COUNTDOWN] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::SYSTEM_INFO_CANCEL] = countDownManager;
+    //- (PTS Update countdown and cancel)
+    //- (Common Countdown manager for key combination)
 }
 
 }

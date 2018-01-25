@@ -37,6 +37,21 @@ public:
         return ( ( arg == ( uint16_t ) Action::AUX_IN ) );
     }
 
+    static bool IsIntentCountDown( KeyHandlerUtil::ActionType_t arg )
+    {
+        return ( ( arg == ( uint16_t ) Action::MANUAL_UPDATE_COUNTDOWN ) ||
+                 ( arg == ( uint16_t ) Action::MANUAL_UPDATE_CANCEL ) ||
+                 ( arg == ( uint16_t ) Action::FACTORY_DEFAULT_COUNTDOWN ) ||
+                 ( arg == ( uint16_t ) Action::FACTORY_DEFAULT_CANCEL ) ||
+                 ( arg == ( uint16_t ) Action::MANUAL_SETUP_COUNTDOWN ) ||
+                 ( arg == ( uint16_t ) Action::MANUAL_SETUP_CANCEL ) ||
+                 ( arg == ( uint16_t ) Action::TOGGLE_WIFI_RADIO_COUNTDOWN ) ||
+                 ( arg == ( uint16_t ) Action::TOGGLE_WIFI_RADIO_CANCEL ) ||
+                 ( arg == ( uint16_t ) Action::SYSTEM_INFO_COUNTDOWN ) ||
+                 ( arg == ( uint16_t ) Action::SYSTEM_INFO_CANCEL ) );
+    }
+
+
 private:
 
 };
