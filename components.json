@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.3.40771.2655933"
+    "selected_version": "Release/Castle-Fork/0.3.4.40831.2663218"
   },
   {
     "name": "bose-opkg-utils",
@@ -41,19 +41,19 @@
   },
   {
     "name": "CastleDemoController-qc8017_32",
-    "selected_version": "Release/master/0.3.0-48+7207eed"
+    "selected_version": "Release/master/0.3.1-54+cd3c2f0"
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2528"
+    "selected_version": "branches/castle-libs@2547"
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.1-25+fba27a0"
+    "selected_version": "Release/master/0.3.3-36+4b737e3"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-143+0d93ad3"
+    "selected_version": "Release/master/0.3.1-151+d44b384"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -65,7 +65,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@d4eaa9eb177d908c9acba2c733c1683812f643dd"
+    "selected_version": "master@0bfef333cf5e65dead8725265b0ed471ff2e7dfd"
   },
   {
     "name": "CastleProductUIAssets",
@@ -84,15 +84,15 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/1.0.0-44+42f6178"
+    "selected_version": "Release/master/0.3.4-79+83bfa5b"
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-9+675b0c2"
+    "selected_version": "Release/master/0.0.1-18+64c6444"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/0.2.3-50+5c1258b"
+    "selected_version": "Release/master/0.2.3-57+c56897b"
   },
   {
     "name": "protobuf-native",
@@ -112,7 +112,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.3.2-69+0035e65"
+    "selected_version": "Release/master/0.3.3-81+b0d568b"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -128,7 +128,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.3.40771.2655933"
+    "selected_version": "Release/Castle-Fork/0.3.4.40831.2663218"
   },
   {
     "name": "Webkit",

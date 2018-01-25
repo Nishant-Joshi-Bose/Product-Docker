@@ -13,6 +13,7 @@ function log {
 cd /opt/Bose/bin || exit
 
 rundir=/var/run/shepherd
+pidfile=/var/run/shepherd/pids
 override=false
 
 # For testing, make it easy to override what shepherd config files we use.
@@ -64,12 +65,16 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
 
     set_ap.sh
 
-    key=KeyConfiguration.json
+    keyPath=/opt/Bose/etc/KeyConfiguration.json
     if [ -e /mnt/nv/DemoModeOn ]; then
         log info "--DEMO MODE--"
-        key=KeyConfiguration-demo.json
+        keyPath=/opt/Bose/KeyConfiguration-demo.json
+        if [ -e /mnt/nv/KeyConfiguration-demo.json ]; then
+            log info "--USING ALTERNATE KeyConfiguration-demo.json--"
+            keyPath=/mnt/nv/KeyConfiguration-demo.json
+        fi
     fi
-    ln -nsf "/opt/Bose/etc/$key" /var/run/KeyConfiguration.json || exit
+    ln -nsf "$keyPath" /var/run/KeyConfiguration.json || exit
 
     if ! $override; then
         mkdir -p "$rundir" || exit
@@ -128,6 +133,42 @@ if (( $# == 1 )) && [ "$1" = stop ]; then
     exit 0
 fi
 
+if (( $# == 1 )) && [ "$1" = factory_default ]; then
+    log info "Stopping all services"
+    rm -f "$rundir"/*.xml  # remove all daemons from the shepherd configuration
+    killall -SIGHUP shepherdd
+    
+    # give 30 secs to stop all the services
+    i=30
+    
+    # Continue till the pid file becomes empty. empty means no srv running
+    while [ -s "$pidfile" ]; do
+        srv_running=$(wc -l < "$pidfile")
+        
+        if (( ( i-- ) <= 0 )); then
+            log warning "Timed out. $srv_running service(s) are still running. Proceeding to clear data."
+            break
+        fi
+        
+        if (( i < 25 )); then
+            log warning "$srv_running service(s) are still running. Waiting for another $i secs"
+        fi
+        
+        sleep 1
+    done
+
+    log info "clearing data"
+    rm -rfv /mnt/nv/BoseApp-Persistence/* /mnt/nv/product-persistence/*
+    sync
+
+    log info "Done clearing data. rebooting"
+    ResetUtil SYSTEM # ResetUtil shall indicate to LPM to reboot (without using on LPMService)
+    sleep 30
+    log warning "LPM didn't reset, asking Linux to reboot"
+    reboot
+    exit
+fi
+
 if (( $# >= 1 )) && [ "$1" = restart ]; then
     shift
     "$0" stop
@@ -146,5 +187,6 @@ usage: $0 start [args...]
    or: $0 stop
    or: $0 restart
    or: $0 status
+   or: $0 factory_default
 "
 exit 1

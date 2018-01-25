@@ -32,4 +32,13 @@ bool CustomProductControllerStateOn::HandleIntentAuxIn( KeyHandlerUtil::ActionTy
     return true;
 }
 
+bool CustomProductControllerStateOn::HandleIntentCountDown( KeyHandlerUtil::ActionType_t intent )
+{
+    BOSE_LOG( INFO, "intent:" << intent );
+
+    GetCustomProductController().GetIntentHandler().Handle( intent );
+
+    return true;
+}
+
 } /// namespace ProductApp

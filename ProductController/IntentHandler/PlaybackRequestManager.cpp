@@ -31,7 +31,7 @@ PlaybackRequestManager::PlaybackRequestManager( NotifyTargetTaskIF& task,
     m_NowPlayingRsp( std::bind( &PlaybackRequestManager::PostPlaybackRequestCbRsp, this,
                                 std::placeholders::_1 ), &task )
 {
-    m_frontDoorClientErrorCb = AsyncCallback<FRONT_DOOR_CLIENT_ERRORS>
+    m_frontDoorClientErrorCb = AsyncCallback<EndPointsError::Error>
                                ( std::bind( &PlaybackRequestManager::FrontDoorClientErrorCb,
                                             this, std::placeholders::_1 ), &task );
 }
@@ -59,12 +59,12 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& intent )
                  ( GetProductController().GetNowPlaying().container().contentitem().sourceaccount() == "AUX" ) )
           )
         {
-            SoundTouchInterface::playbackRequestJson playbackRequestData;
+            SoundTouchInterface::PlaybackRequest playbackRequestData;
             playbackRequestData.set_source( "PRODUCT" );
             playbackRequestData.set_sourceaccount( "AUX" );
 
-            GetFrontDoorClient()->SendPost<SoundTouchInterface::NowPlaying>( "/content/playbackRequest", playbackRequestData,
-                                                                             m_NowPlayingRsp, m_frontDoorClientErrorCb );
+            GetFrontDoorClient()->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( "/content/playbackRequest", playbackRequestData,
+                    m_NowPlayingRsp, m_frontDoorClientErrorCb );
         }
         else
         {
@@ -83,7 +83,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& intent )
 void PlaybackRequestManager::PostPlaybackRequestCbRsp( const SoundTouchInterface::NowPlaying& resp )
 {
     BOSE_DEBUG( s_logger, "%s", __func__ );
-    BOSE_LOG( INFO, "GOT Response to playbackRequest: " << resp.source().sourcedisplayname() );
+    BOSE_LOG( INFO, "GOT Response to PlaybackRequest: " << resp.source().sourcedisplayname() );
 }
 
 } // namespace ProductApp

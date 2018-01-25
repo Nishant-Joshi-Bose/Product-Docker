@@ -350,22 +350,22 @@ void DisplayController::RegisterDisplayEndPoints()
     m_lpmClient->RegisterEvent<IpcBackLight_t  >( IPC_PER_GET_BACKLIGHT  , notification_cb_back_light );
     m_lpmClient->RegisterEvent<IpcLightSensor_t>( IPC_PER_GET_LIGHTSENSOR, notification_cb_light_sensor );
 
-    AsyncCallback<Display, Callback<Display>> putDisplayReqCb(
-                                               std::bind( &DisplayController::HandlePutDisplayRequest ,
-                                                          this,
-                                                          std::placeholders::_1,
-                                                          std::placeholders::_2
-                                                        ),
-                                               m_productController.GetTask() );
+    AsyncCallback<Display, Callback<Display>, Callback<EndPointsError::Error>> putDisplayReqCb(
+                                                                                std::bind( &DisplayController::HandlePutDisplayRequest ,
+                                                                                        this,
+                                                                                        std::placeholders::_1,
+                                                                                        std::placeholders::_2
+                                                                                         ),
+                                                                                m_productController.GetTask() );
     m_frontdoorClientPtr->RegisterPut<Display>( "/ui/display", putDisplayReqCb );
 
-    AsyncCallback< Callback<Display>> getDisplayReqCb(
-                                       std::bind(
-                                           &DisplayController::HandleGetDisplayRequest,
-                                           this,
-                                           std::placeholders::_1
-                                       ),
-                                       m_productController.GetTask() );
+    AsyncCallback< Callback<Display>, Callback<EndPointsError::Error>> getDisplayReqCb(
+                                                                        std::bind(
+                                                                            &DisplayController::HandleGetDisplayRequest,
+                                                                            this,
+                                                                            std::placeholders::_1
+                                                                        ),
+                                                                        m_productController.GetTask() );
     m_frontdoorClientPtr->RegisterGet( "/ui/Display", getDisplayReqCb );
 
 }// RegisterDisplayEndPoints
