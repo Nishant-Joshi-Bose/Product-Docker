@@ -79,7 +79,6 @@ ProductAdaptIQManager::ProductAdaptIQManager( ProfessorProductController& Produc
     m_status.set_currentspeaker( ADAPTIQ_SPEAKER_FIRST );
     m_status.set_hpconnected( true );
     m_status.set_errorcode( 0 );
-    SetDefaultProperties( m_status );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -242,8 +241,11 @@ void ProductAdaptIQManager::SetStatus( const ProductPb::AdaptIQStatus& status, b
     if( ( m_status.SerializeAsString() != status.SerializeAsString() ) || force )
     {
         m_status = status;
-        SetDefaultProperties( m_status );
-        m_FrontDoorClient->SendNotification( s_FrontDoorAdaptIQ, m_status );
+
+        // make a copy and add fixed properties to it
+        ProductPb::AdaptIQStatus msg = status;
+        SetDefaultProperties( msg );
+        m_FrontDoorClient->SendNotification( s_FrontDoorAdaptIQ, msg );
     }
 }
 
@@ -264,6 +266,7 @@ void ProductAdaptIQManager::SetStatus( const ProductPb::AdaptIQStatus& status, b
 void ProductAdaptIQManager::HandleGet( AdaptIQStatus& status )
 {
     status = m_status;
+    SetDefaultProperties( status );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
