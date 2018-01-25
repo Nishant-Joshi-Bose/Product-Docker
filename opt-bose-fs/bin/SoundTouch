@@ -68,7 +68,7 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
     keyPath=/opt/Bose/etc/KeyConfiguration.json
     if [ -e /mnt/nv/DemoModeOn ]; then
         log info "--DEMO MODE--"
-        keyPath=/opt/Bose/KeyConfiguration-demo.json
+        keyPath=/opt/Bose/etc/KeyConfiguration-demo.json
         if [ -e /mnt/nv/KeyConfiguration-demo.json ]; then
             log info "--USING ALTERNATE KeyConfiguration-demo.json--"
             keyPath=/mnt/nv/KeyConfiguration-demo.json
