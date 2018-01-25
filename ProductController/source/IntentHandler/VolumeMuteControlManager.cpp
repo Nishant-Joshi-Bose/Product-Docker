@@ -112,7 +112,7 @@ void VolumeMuteControlManager::Initialize( )
 bool VolumeMuteControlManager::Handle( KeyHandlerUtil::ActionType_t& action )
 {
     BOSE_INFO( s_logger, "%s is in %s handling the action %u.", "VolumeMuteControlManager",
-               __func__,action );
+               __func__, action );
 
     if( action == ( uint16_t )Action::ACTION_VOLUME_UP_1 )
     {
