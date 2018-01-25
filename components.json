@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@71625c371acb0765f282608d273ca5f439731031"
+    "selected_version": "master@f0033df3ce87639f3fddb9914e3f77048a304540"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -17,15 +17,15 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.2.40696.2644691"
+    "selected_version": "Release/Castle-Fork/0.3.4.40831.2663218"
   },
   {
     "name": "bose-opkg-utils",
-    "selected_version": "master@964c29cc453ccd3d1b28fb40bae8df11c0dc3b3c"
+    "selected_version": "master@887d0ab5d58c2aa3b6d3c0fb0c1dc31adf81e799"
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Continuous/master/0.3.3-221+108b0e9"
+    "selected_version": "Release/master/0.3.4-222+cec23e5"
   },
   {
     "name": "BoseOPKG-native",
@@ -49,15 +49,15 @@
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2528"
+    "selected_version": "branches/castle-libs@2549"
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Continuous/master/0.3.3-35+3fd1676"
+    "selected_version": "Release/master/0.3.3-36+4b737e3"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-143+0d93ad3"
+    "selected_version": "Release/master/0.3.1-151+d44b384"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -81,7 +81,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/0.2.3-50+5c1258b"
+    "selected_version": "Release/master/0.2.3-57+c56897b"
   },
   {
     "name": "ProfessorLPM-Package",
@@ -120,11 +120,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.3.3-237+813d265"
+    "selected_version": "Release/master/0.3.4-241+8143ac4"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-01-22_1232"
+    "selected_version": "Release/Castle-Fork/0.3.4.40831.2663218"
   },
   {
     "name": "unittest-cpp-qc8017_32",
