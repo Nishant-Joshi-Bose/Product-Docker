@@ -70,7 +70,9 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_KeyHandler( *GetTask(), m_CliClientMT, KEY_CONFIG_FILE ),
     m_cachedStatus(),
     m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
+#if 0 //@TODO: AJAY
     m_wifiProfilesCount(),
+#endif
     m_fdErrorCb( AsyncCallback<EndPointsError::Error> ( std::bind( &EddieProductController::CallbackError,
                                                                    this, std::placeholders::_1 ), GetTask() ) ),
     m_DataCollectionClient( "EddieProductController" ),
@@ -249,6 +251,7 @@ void EddieProductController::RegisterEndPoints()
 
     m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API , getConfigurationStatusReqCb );
 
+#if 0 // @TODO-AJAY
     AsyncCallback<NetManager::Protobuf::NetworkStatus> networkStatusCb( std::bind( &EddieProductController::HandleNetworkStatus ,
                                                                                    this, std::placeholders::_1 ), GetTask() );
     m_FrontDoorClientIF->RegisterNotification<NetManager::Protobuf::NetworkStatus>( FRONTDOOR_NETWORK_STATUS_API, networkStatusCb );
@@ -256,8 +259,10 @@ void EddieProductController::RegisterEndPoints()
     AsyncCallback<NetManager::Protobuf::WiFiProfiles> networkWifiProfilesCb( std::bind( &EddieProductController::HandleWiFiProfileResponse ,
                                                                              this, std::placeholders::_1 ), GetTask() );
     m_FrontDoorClientIF->RegisterNotification<NetManager::Protobuf::WiFiProfiles>( FRONTDOOR_NETWORK_WIFI_PROFILE_API, networkWifiProfilesCb );
+#endif
 }
 
+#if 0 // @TODO-AJAY
 void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus )
 {
     BOSE_INFO( s_logger, "%s,N/w status- (%s)", __func__,  ProtoToMarkup::ToJson( networkStatus, false ).c_str() );
@@ -268,6 +273,7 @@ void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::Ne
         GetHsm().Handle< bool, bool > ( &CustomProductControllerState::HandleNetworkState, IsNetworkConfigured() /*configured*/, IsNetworkConnected() /*connected*/ );
     }
 }
+#endif
 
 bool EddieProductController::IsNetworkConfigured() const
 {
@@ -279,12 +285,14 @@ bool EddieProductController::IsNetworkConnected() const
     return m_cachedStatus.get().isprimaryup() ;
 }
 
+#if 0 // @TODO-AJAY
 void EddieProductController::HandleWiFiProfileResponse( const NetManager::Protobuf::WiFiProfiles& profiles )
 {
     m_wifiProfilesCount = profiles.profiles_size();
     BOSE_INFO( s_logger, "%s, m_wifiProfilesCount=%d", __func__, m_wifiProfilesCount.get() );
     GetHsm().Handle< bool, bool > ( &CustomProductControllerState::HandleNetworkState, IsNetworkConfigured() /*configured*/, IsNetworkConnected() /*connected*/ );
 }
+#endif
 
 /// This function will handle key information coming from LPM and give it to
 /// KeyHandler for repeat Manager to handle.

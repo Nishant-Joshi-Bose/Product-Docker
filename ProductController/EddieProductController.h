@@ -85,10 +85,12 @@ public:
 
     Callback < ProductMessage > GetMessageHandler( );
 
+#if 0 // @TODO AJAY
     NetManager::Protobuf::NetworkStatus const& GetNetworkStatus() const
     {
         return m_cachedStatus.get();
     }
+#endif
     std::vector<std::string> GetUniqueLanguages() const override
     {
         return {};
@@ -412,7 +414,9 @@ private:
     KeyHandlerUtil::KeyHandler                  m_KeyHandler;
     ProtoPersistenceIF::ProtoPersistencePtr     m_ConfigurationStatusPersistence = nullptr;
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
+#if 0 // @TODO: Ajay
     BOptional<NetManager::Protobuf::NetworkStatus> m_cachedStatus;
+#endif
 
     /// ProductAudioService
     std::shared_ptr< CustomProductAudioService> m_ProductAudioService;
