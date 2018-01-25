@@ -58,7 +58,7 @@
 #include "CustomProductControllerStatePlaying.h"
 #include "CustomProductControllerStatePlayingInactive.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
-#include "CustomProductControllerStateAdaptIQSim.h"
+#include "CustomProductControllerStateAdaptIQ.h"
 #include "ProductControllerStatePlayingDeselected.h"
 #include "ProductControllerStatePlayingSelected.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
@@ -995,6 +995,8 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             case SYSTEM_STATE_IDLE:
                 break;
             case SYSTEM_STATE_NUM_OF:
+                break;
+            case SYSTEM_STATE_ERROR:
                 break;
             }
         }
