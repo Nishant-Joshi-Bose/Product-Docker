@@ -57,7 +57,7 @@
 #include "CustomProductControllerStatePlaying.h"
 #include "CustomProductControllerStatePlayingInactive.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
-#include "CustomProductControllerStateAdaptIQSim.h"
+#include "CustomProductControllerStateAdaptIQ.h"
 #include "ProductControllerStatePlayingDeselected.h"
 #include "ProductControllerStatePlayingSelected.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
@@ -73,6 +73,7 @@
 #include "ProductControllerStateLowPowerTransition.h"
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSelected.h"
+#include "ProductControllerStateFactoryDefault.h"
 #include "MfgData.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -319,6 +320,11 @@ void ProfessorProductController::Run( )
       statePlayingTransition,
       PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SELECTED );
 
+    auto* stateFactoryDefault = new ProductControllerStateFactoryDefault
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_FACTORY_DEFAULT );
+
     ///
     /// The states are added to the state machine and the state machine is initialized.
     ///
@@ -355,6 +361,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( stateLowPowerTransition );
     GetHsm( ).AddState( statePlayingTransition );
     GetHsm( ).AddState( statePlayingTransitionSelected );
+    GetHsm( ).AddState( stateFactoryDefault );
 
     GetHsm( ).Init( this, PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
@@ -610,6 +617,19 @@ std::string const& ProfessorProductController::GetProductType( ) const
 {
     static std::string productType = "Professor Soundbar";
     return productType;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetProductColor
+///
+/// @return This method returns the std::string value to be used for the Product "color" field
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string ProfessorProductController::GetProductColor() const
+{
+    // @TODO https://jirapro.bose.com/browse/PGC-630
+    return "BLACK";
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -906,9 +926,21 @@ void ProfessorProductController::SetTestSoundTouchPlayback( )
 /// @return This method returns a reference to the last playback request for Sound Touch sources.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-SoundTouchInterface::playbackRequestJson& ProfessorProductController::GetLastSoundTouchPlayback( )
+SoundTouchInterface::PlaybackRequest& ProfessorProductController::GetLastSoundTouchPlayback( )
 {
     return m_lastSoundTouchPlayback;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   GetWiFiOperationalMode
+///
+/// @return NetManager::Protobuf::OperationalMode of the WiFi subsystem
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+NetManager::Protobuf::OperationalMode ProfessorProductController::GetWiFiOperationalMode( )
+{
+    return GetNetworkServiceUtil().GetNetManagerOperationMode();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -969,6 +1001,8 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             case SYSTEM_STATE_IDLE:
                 break;
             case SYSTEM_STATE_NUM_OF:
+                break;
+            case SYSTEM_STATE_ERROR:
                 break;
             }
         }
@@ -1219,45 +1253,13 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     else if( message.has_action( ) )
     {
         ///
-        /// The following determines whether the key action is to be handled by a common intent
+        /// The following attempts to handle the key action using a common intent
         /// manager.
         ///
-        if( GetIntentHandler( ).IsIntentPlayControl( message.action( ) ) )
+        if( HandleCommonIntents( message.action() ) )
         {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPlayControl,
-                                                              message.action( ) );
+            BOSE_VERBOSE( s_logger, "Action key %u handled by common intent handler", message.action() );
         }
-        else if( GetIntentHandler( ).IsIntentBlueTooth( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentBlueTooth,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsIntentVolumeControl( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentVolumeControl,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsIntentNetworkStandby( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentNetworkStandby,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsPresetSelect( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPresetSelect,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsPresetStore( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPresetStore,
-                                                              message.action( ) );
-        }
-        else if( GetIntentHandler( ).IsIntentVoice( message.action( ) ) )
-        {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentVoice,
-                                                              message.action( ) );
-        }
-
         ///
         /// The following determines whether the key action is to be handled by the custom intent
         /// manager.
@@ -1318,6 +1320,13 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             BOSE_DEBUG( s_logger, "AudioPath Deselect event received" );
             GetHsm( ).Handle< > ( &CustomProductControllerState::HandleAudioPathDeselect );
         }
+    }
+    //
+    // An amp fault has been detected on the LPM. Enter the CriticalError state.
+    //
+    else if( message.has_ampfaultdetected() )
+    {
+        GetHsm( ).Handle<>( &CustomProductControllerState::HandleAmpFaultDetected );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Unknown message types are handled at this point.
@@ -1396,33 +1405,9 @@ std::string const& ProfessorProductController::GetDefaultProductName( ) const
     return productName;
 }
 
-std::string ProfessorProductController::GetProductColor() const
-{
-    if( auto color = MfgData::GetColor() )
-    {
-        if( *color == "luxGray" )
-        {
-            return "SILVER";
-        }
-        else if( *color == "tripleBlack" )
-        {
-            return "BLACK";
-        }
-        else
-        {
-            BOSE_LOG( WARNING, "Unexpected color value in manufacturing data: " << *color );
-        }
-    }
-    else
-    {
-        BOSE_DIE( "No 'productColor' in mfgdata" );
-    }
-
-    return "UNKNOWN";
-}
-
 BLESetupService::VariantId ProfessorProductController::GetVariantId() const
 {
+    // @TODO https://jirapro.bose.com/browse/PGC-630
     BLESetupService::VariantId varintId = BLESetupService::VariantId::NONE;
 
     if( auto color = MfgData::GetColor() )

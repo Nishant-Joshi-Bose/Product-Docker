@@ -178,7 +178,16 @@ public:
     ///        currently is a kludge, until the common code supports persistent storage of this data.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    SoundTouchInterface::playbackRequestJson& GetLastSoundTouchPlayback( );
+    SoundTouchInterface::PlaybackRequest& GetLastSoundTouchPlayback( );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @name   GetWiFiOperationalMode
+    ///
+    /// @return NetManager::Protobuf::OperationalMode of the WiFi subsystem
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    NetManager::Protobuf::OperationalMode GetWiFiOperationalMode( ) override;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -284,7 +293,7 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     PlaybackSource_t m_currentSource;
-    SoundTouchInterface::playbackRequestJson m_lastSoundTouchPlayback;
+    SoundTouchInterface::PlaybackRequest m_lastSoundTouchPlayback;
 
     void  SetTestSoundTouchPlayback( );
     void  RegisterNowPlayingEndPoint( );
