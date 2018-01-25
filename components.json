@@ -57,7 +57,7 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-143+0d93ad3"
+    "selected_version": "Release/master/0.3.1-151+d44b384"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -69,7 +69,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@5ba50e1c23dd0526a007e2bee5a32fd5316c372e"
+    "selected_version": "master@5e64e845ea539a5494f1ff73bcbeb33bb22e1d69"
   },
   {
     "name": "FrontDoor-qc8017_32",
