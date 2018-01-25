@@ -4,7 +4,6 @@
 ///         such as bass, treble, center, surround, gainOffset, avSync, mode, contentType
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include <json/reader.h>
 #include <fstream>
 #include "DPrint.h"
 #include "SystemUtils.h"
@@ -38,6 +37,8 @@ CustomAudioSettingsManager::CustomAudioSettingsManager()
 
 /////////////////////////////////////////////////////////////////////////////////////////
 /// Bass setting setter/getter
+///     setter returns a boolean which indicates whether current bass value is changed by setter
+///     getter returns a protobuf of current bass value
 /////////////////////////////////////////////////////////////////////////////////////////
 bool CustomAudioSettingsManager::SetBass( const ProductPb::AudioBassLevel& bass )
 {
@@ -53,6 +54,8 @@ const ProductPb::AudioBassLevel& CustomAudioSettingsManager::GetBass() const
 
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Treble setting setter/getter
+///     setter returns a boolean which indicates whether current treble value is changed by setter
+///     getter returns a protobuf of current treble value
 ///////////////////////////////////////////////////////////////////////////////////////
 bool CustomAudioSettingsManager::SetTreble( const ProductPb::AudioTrebleLevel& treble )
 {
@@ -68,6 +71,8 @@ const ProductPb::AudioTrebleLevel& CustomAudioSettingsManager::GetTreble() const
 
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Center setting setter/getter
+///     setter returns a boolean which indicates whether current center value is changed by setter
+///     getter returns a protobuf of current center value
 ///////////////////////////////////////////////////////////////////////////////////////
 bool CustomAudioSettingsManager::SetCenter( const ProductPb::AudioCenterLevel& center )
 {
@@ -83,6 +88,8 @@ const ProductPb::AudioCenterLevel& CustomAudioSettingsManager::GetCenter() const
 
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Surround setting setter/getter
+///     setter returns a boolean which indicates whether current surround value is changed by setter
+///     getter returns a protobuf of current surround value
 ///////////////////////////////////////////////////////////////////////////////////////
 bool CustomAudioSettingsManager::SetSurround( const ProductPb::AudioSurroundLevel& surround )
 {
@@ -98,6 +105,8 @@ const ProductPb::AudioSurroundLevel& CustomAudioSettingsManager::GetSurround() c
 
 ////////////////////////////////////////////////////////////////////////////////////////
 /// GainOffset setting setter/getter
+///     setter returns a boolean which indicates whether current gainOffset value is changed by setter
+///     getter returns a protobuf of current gainOffset value
 //////////////////////////////////////////////////////////////////////////////////////
 bool CustomAudioSettingsManager::SetGainOffset( const ProductPb::AudioGainOffset& gainOffset )
 {
@@ -113,6 +122,8 @@ const ProductPb::AudioGainOffset& CustomAudioSettingsManager::GetGainOffset() co
 
 ////////////////////////////////////////////////////////////////////////////////////////
 /// AvSync setting setter/getter
+///     setter returns a boolean which indicates whether current avSync value is changed by setter
+///     getter returns a protobuf of current avSync value
 //////////////////////////////////////////////////////////////////////////////////////
 bool CustomAudioSettingsManager::SetAvSync( const ProductPb::AudioAvSync& avSync )
 {
@@ -128,6 +139,8 @@ const ProductPb::AudioAvSync& CustomAudioSettingsManager::GetAvSync() const
 
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Mode setting setter/getter
+///     setter returns a boolean which indicates whether current mode value is changed by setter
+///     getter returns a protobuf of current mode value
 //////////////////////////////////////////////////////////////////////////////////////
 bool CustomAudioSettingsManager::SetMode( const ProductPb::AudioMode& mode )
 {
@@ -142,6 +155,8 @@ const ProductPb::AudioMode& CustomAudioSettingsManager::GetMode() const
 
 ////////////////////////////////////////////////////////////////////////////////////////
 /// ContentType setting setter/getter
+///     setter returns a boolean which indicates whether current contentType value is changed by setter
+///     getter returns a protobuf of current contentType value
 //////////////////////////////////////////////////////////////////////////////////////
 bool CustomAudioSettingsManager::SetContentType( const ProductPb::AudioContentType& contentType )
 {
@@ -156,19 +171,21 @@ const ProductPb::AudioContentType& CustomAudioSettingsManager::GetContentType() 
 
 ////////////////////////////////////////////////////////////////////////////////////////
 /// DualMonoSelect setting setter/getter
+///     setter returns a boolean which indicates whether current DualMonoSelect value is changed by setter
+///     getter returns a protobuf of current dualMonoSelect value
 //////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetDualMonoSelect( const ProductPb::AudioDualMonoSelect& DualMonoSelect )
+bool CustomAudioSettingsManager::SetDualMonoSelect( const ProductPb::AudioDualMonoSelect& dualMonoSelect )
 {
     BOSE_DEBUG( s_logger, __func__ );
-    if( !DualMonoSelect.has_value() )
+    if( !dualMonoSelect.has_value() )
     {
         BOSE_INFO( s_logger, "DualMonoSelect doesn't contain any value" );
         return false;
     }
-    if( m_currentDualMonoSelect.value() != DualMonoSelect.value() )
+    if( m_currentDualMonoSelect.value() != dualMonoSelect.value() )
     {
-        m_audioSettings["values"][kPersistGlobal][kDualMonoSelectName] = DualMonoSelect.value();
-        m_currentDualMonoSelect.set_value( DualMonoSelect.value() );
+        m_audioSettings["values"][kPersistGlobal][kDualMonoSelectName] = dualMonoSelect.value();
+        m_currentDualMonoSelect.set_value( dualMonoSelect.value() );
         PersistAudioSettings();
         return true;
     }
@@ -178,6 +195,21 @@ const ProductPb::AudioDualMonoSelect& CustomAudioSettingsManager::GetDualMonoSel
 {
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentDualMonoSelect;
+}
+
+void CustomAudioSettingsManager::UpdateAllProtos()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    // Only required for contentItem sensitive audio settings
+    // contentItem non-sensitive audio settings will only be set through setters, no other ways
+    UpdateCurrentProto( kBassName,          m_currentBass );
+    UpdateCurrentProto( kTrebleName,        m_currentTreble );
+    UpdateCurrentProto( kCenterName,        m_currentCenter );
+    UpdateCurrentProto( kSurroundName,      m_currentSurround );
+    UpdateCurrentProto( kGainOffsetName,    m_currentGainOffset );
+    UpdateCurrentProto( kAvSyncName,        m_currentAvSync );
+    UpdateCurrentProto( kModeName,          m_currentMode );
+    UpdateCurrentProto( kContentTypeName,   m_currentContentType );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

@@ -72,7 +72,7 @@
 			"currentPersistenceLevel": "global",
 			"persistenceSession": false,
 			"properties": {
-				"supportedValues": ["night", "direct", "dialog", "film"],
+                "supportedValues": ["night", "direct", "dialog", "normal"],
 				"supportedPersistence": ["session", "global", "contentItem"]
 			}
 		},
