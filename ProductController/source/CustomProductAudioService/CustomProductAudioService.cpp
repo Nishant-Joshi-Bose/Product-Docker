@@ -10,6 +10,9 @@
 #include "APProductFactory.h"
 #include "FrontDoorClient.h"
 #include "CustomProductAudioService.h"
+#include "ProtoToMarkup.h"
+#include "SoundTouchInterface/ContentItem.pb.h"
+#include "AutoLpmServiceMessages.pb.h"
 
 static DPrint s_logger( "CustomProductAudioService" );
 
@@ -35,6 +38,7 @@ namespace ProductApp
 CustomProductAudioService::CustomProductAudioService( ProfessorProductController& ProductController ):
     ProductAudioService( ProductController.GetTask( ),
                          ProductController.GetMessageHandler() ),
+    m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
     m_AudioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -48,9 +52,212 @@ CustomProductAudioService::CustomProductAudioService( ProfessorProductController
 void CustomProductAudioService::RegisterAudioPathEvents()
 {
     BOSE_DEBUG( s_logger, __func__ );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Initialize member variables related to AudioPath
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    // Initialize m_InputRoute
+    m_InputRoute = 1 << AUDIO_INPUT_BIT_POSITION_NETWORK;
+    // Initialize m_MainStreamAudioSettings with current audio settings value from AudioSettingsManager
+    // thermalData will be updated by thermal task periodically in a separate route
+    FetchLatestAudioSettings();
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Register for AudioPath requests and events
+    /////////////////////////////////////////////////////////////////////////////////////////////////
     m_APPointer = APProductFactory::Create( "ProductAudioService-APProduct", m_ProductTask );
     RegisterCommonAudioPathEvents();
+
+    {
+        Callback< std::string, Callback< std::string, std::string > > callback( std::bind( &CustomProductAudioService::GetMainStreamAudioSettingsCallback,
+                                                                                this,
+                                                                                std::placeholders::_1,
+                                                                                std::placeholders::_2 ) );
+        m_APPointer->RegisterForMainStreamAudioSettingsRequest( callback );
+    }
+    {
+        Callback<std::string, std::string, Callback< bool > > callback( std::bind( &CustomProductAudioService::SetStreamConfigCallback,
+                                                                                   this,
+                                                                                   std::placeholders::_1,
+                                                                                   std::placeholders::_2,
+                                                                                   std::placeholders::_3 ) );
+        m_APPointer->RegisterForSetStreamConfig( callback );
+    }
     ConnectToAudioPath();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::GetMainStreamAudioSettingsCallback
+///
+/// @param  std::string contentItem
+///
+/// @param  const Callback<std::string, std::string> cb
+///
+/// @brief  Callback function, when AudioPath wants to notify ProductController about the new contentItem
+///         and get latest mainStreamAudioSettings and inputRoute back
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string contentItem,  const Callback<std::string, std::string> cb )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    BOSE_DEBUG( s_logger, "GetMainStreamAudioSettingsCallback - contentItem = %s", contentItem.c_str() );
+    // Parse contentItem string received from APProduct
+    bool error = false;
+    SoundTouchInterface::ContentItem contentItemProto;
+    try
+    {
+        ProtoToMarkup::FromJson( contentItem, &contentItemProto );
+    }
+    catch( const ProtoToMarkup::MarkupError &e )
+    {
+        BOSE_ERROR( s_logger, "Converting contentItem string from APProduct to ContentItem proto failed markup error - %s", e.what() );
+        error = true;
+    }
+    // If no parsing error occured, update m_MainStreamAudioSettings and m_InputRoute with new contentItem
+    if( !error && contentItemProto.has_source() && contentItemProto.has_sourceaccount() )
+    {
+        // Update audio settings
+        BOSE_DEBUG( s_logger, "GetMainStreamAudioSettingsCallback, source = %s, sourecAccount = %s", contentItemProto.source().c_str(), contentItemProto.sourceaccount().c_str() );
+
+        m_AudioSettingsMgr->UpdateContentItem( contentItemProto );
+        FetchLatestAudioSettings();
+        // Update input route
+        if( contentItemProto.source() == "PRODUCT" )
+        {
+            m_InputRoute = ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_OPTICAL ) |
+                           ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_ARC ) |
+                           ( 1 << AUDIO_INPUT_BIT_POSITION_EARC );
+        }
+        else
+        {
+            m_InputRoute = 1 << AUDIO_INPUT_BIT_POSITION_NETWORK;
+        }
+    }
+    else
+    {
+        BOSE_ERROR( s_logger, "ContentItem string from APProduct doesn't contain \"source\" or \"sourceAccount\" field" );
+    }
+    // Reply APProduct with the current m_MainStreamAudioSettings and m_InputRoute
+    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_MainStreamAudioSettings, false );
+    std::string inputRoute = std::to_string( m_InputRoute );
+    cb.Send( mainStreamAudioSettings, inputRoute );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::FetchLatestAudioSettings
+///
+/// @brief  update m_MainStreamAudioSettings with the latest audio settings from AudioSettingsManager
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::FetchLatestAudioSettings( )
+{
+    m_MainStreamAudioSettings.set_basslevel( m_AudioSettingsMgr->GetBass( ).value() );
+    m_MainStreamAudioSettings.set_treblelevel( m_AudioSettingsMgr->GetTreble( ).value() );
+    m_MainStreamAudioSettings.set_centerlevel( m_AudioSettingsMgr->GetCenter( ).value() );
+    m_MainStreamAudioSettings.set_surroundlevel( m_AudioSettingsMgr->GetSurround( ).value() );
+    m_MainStreamAudioSettings.set_gainoffset( m_AudioSettingsMgr->GetGainOffset( ).value() );
+    m_MainStreamAudioSettings.set_targetlatencyms( m_AudioSettingsMgr->GetAvSync( ).value() );
+    m_MainStreamAudioSettings.set_audiomode( ModeNameToEnum( m_AudioSettingsMgr->GetMode( ).value() ) );
+    m_MainStreamAudioSettings.set_contenttype( ContentTypeNameToEnum( m_AudioSettingsMgr->GetContentType( ).value() ) );
+    m_MainStreamAudioSettings.set_dualmonoselect( DualMonoSelectNameToEnum( m_AudioSettingsMgr->GetDualMonoSelect( ).value() ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::SetStreamConfigCallback
+///
+/// @param  std::string serializedAudioSettings
+///
+/// @param  std::string serializedInputRoute
+///
+/// @param  const Callback<bool> cb
+///
+/// @brief  Callback function, when AudioPath wants to send streamConfig structure to change DSP settings
+///         serializedAudioSettings contains audio settings, thermal data, and stream mix
+///         serializedInputRoute contains input route info
+///
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::SetStreamConfigCallback( std::string serializedAudioSettings, std::string serializedInputRoute, const Callback<bool> cb )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    m_ProductLpmHardwareInterface->SendStreamConfig( serializedAudioSettings, serializedInputRoute, cb );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::SendMainStreamAudioSettingsEvent
+///
+/// @brief  ProductController notifies APProduct about latest mainStreamAudioSettings by sending this event
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_MainStreamAudioSettings, false );
+    m_APPointer -> SetMainStreamAudioSettings( mainStreamAudioSettings );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief Helper functions to convert audio setting values from string format to enumuration required from DSP
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+LpmServiceMessages::AudioSettingsAudioMode_t CustomProductAudioService::ModeNameToEnum( const std::string& modeName )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    if( modeName == "direct" )
+    {
+        return AUDIOSETTINGS_AUDIO_MODE_DIRECT;
+    }
+    else if( modeName == "normal" )
+    {
+        return AUDIOSETTINGS_AUDIO_MODE_NORMAL;
+    }
+    else if( modeName == "dialog" )
+    {
+        return AUDIOSETTINGS_AUDIO_MODE_DIALOG;
+    }
+    else if( modeName == "night" )
+    {
+        return AUDIOSETTINGS_AUDIO_MODE_NIGHT;
+    }
+    return AUDIOSETTINGS_AUDIO_MODE_DIRECT;
+}
+
+LpmServiceMessages::AudioSettingsContent_t CustomProductAudioService::ContentTypeNameToEnum( const std::string& contentTypeName )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    if( contentTypeName == "audio" )
+    {
+        return AUDIOSETTINGS_CONTENT_AUDIO;
+    }
+    else if( contentTypeName == "video" )
+    {
+        return AUDIOSETTINGS_CONTENT_VIDEO;
+    }
+    else
+    {
+        return AUDIOSETTINGS_CONTENT_UNSPECIFIED;
+    }
+}
+
+LpmServiceMessages::AudioSettingsDualMonoMode_t CustomProductAudioService::DualMonoSelectNameToEnum( const std::string& dualMonoSelectName )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    if( dualMonoSelectName == "left" )
+    {
+        return AUDIOSETTINGS_DUAL_MONO_LEFT;
+    }
+    else if( dualMonoSelectName == "video" )
+    {
+        return AUDIOSETTINGS_DUAL_MONO_RIGHT;
+    }
+    else
+    {
+        return AUDIOSETTINGS_DUAL_MONO_BOTH;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,7 +283,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setBassAction = [this]( ProductPb::AudioBassLevel val )
     {
-        return m_AudioSettingsMgr->SetBass( val );
+        bool ret = m_AudioSettingsMgr->SetBass( val );
+        if( ret )
+        {
+            m_MainStreamAudioSettings.set_basslevel( m_AudioSettingsMgr->GetBass( ).value() );
+            SendMainStreamAudioSettingsEvent();
+        }
+        return ret;
     };
     m_AudioBassSetting = std::unique_ptr<AudioSetting<ProductPb::AudioBassLevel>>( new AudioSetting<ProductPb::AudioBassLevel>
                                                                                    ( kBassEndPoint,
@@ -94,7 +307,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setTrebleAction = [ this ]( ProductPb::AudioTrebleLevel val )
     {
-        return m_AudioSettingsMgr->SetTreble( val );
+        bool ret = m_AudioSettingsMgr->SetTreble( val );
+        if( ret )
+        {
+            m_MainStreamAudioSettings.set_treblelevel( m_AudioSettingsMgr->GetTreble( ).value() );
+            SendMainStreamAudioSettingsEvent();
+        }
+        return ret;
     };
     m_AudioTrebleSetting = std::unique_ptr<AudioSetting<ProductPb::AudioTrebleLevel>>( new AudioSetting<ProductPb::AudioTrebleLevel>
                            ( kTrebleEndPoint,
@@ -112,7 +331,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setCenterAction = [ this ]( ProductPb::AudioCenterLevel val )
     {
-        return m_AudioSettingsMgr->SetCenter( val );
+        bool ret = m_AudioSettingsMgr->SetCenter( val );
+        if( ret )
+        {
+            m_MainStreamAudioSettings.set_centerlevel( m_AudioSettingsMgr->GetCenter( ).value() );
+            SendMainStreamAudioSettingsEvent();
+        }
+        return ret;
     };
     m_AudioCenterSetting = std::unique_ptr<AudioSetting<ProductPb::AudioCenterLevel>>( new AudioSetting<ProductPb::AudioCenterLevel>
                            ( kCenterEndPoint,
@@ -130,7 +355,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setSurroundAction = [ this ]( ProductPb::AudioSurroundLevel val )
     {
-        return m_AudioSettingsMgr->SetSurround( val );
+        bool ret = m_AudioSettingsMgr->SetSurround( val );
+        if( ret )
+        {
+            m_MainStreamAudioSettings.set_surroundlevel( m_AudioSettingsMgr->GetSurround( ).value() );
+            SendMainStreamAudioSettingsEvent();
+        }
+        return ret;
     };
     m_AudioSurroundSetting = std::unique_ptr<AudioSetting<ProductPb::AudioSurroundLevel>>( new AudioSetting<ProductPb::AudioSurroundLevel>
                              ( kSurroundEndPoint,
@@ -148,7 +379,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setGainOffsetAction = [ this ]( ProductPb::AudioGainOffset val )
     {
-        return m_AudioSettingsMgr->SetGainOffset( val );
+        bool ret = m_AudioSettingsMgr->SetGainOffset( val );
+        if( ret )
+        {
+            m_MainStreamAudioSettings.set_gainoffset( m_AudioSettingsMgr->GetGainOffset( ).value() );
+            SendMainStreamAudioSettingsEvent();
+        }
+        return ret;
     };
     m_AudioGainOffsetSetting =  std::unique_ptr<AudioSetting<ProductPb::AudioGainOffset>>( new AudioSetting<ProductPb::AudioGainOffset>
                                 ( kGainOffsetEndPoint,
@@ -166,7 +403,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setAvSyncAction = [ this ]( ProductPb::AudioAvSync val )
     {
-        return m_AudioSettingsMgr->SetAvSync( val );
+        bool ret = m_AudioSettingsMgr->SetAvSync( val );
+        if( ret )
+        {
+            m_MainStreamAudioSettings.set_targetlatencyms( m_AudioSettingsMgr->GetAvSync( ).value() );
+            SendMainStreamAudioSettingsEvent();
+        }
+        return ret;
     };
     m_AudioAvSyncsetSetting = std::unique_ptr<AudioSetting<ProductPb::AudioAvSync>>( new AudioSetting<ProductPb::AudioAvSync>
                               ( kAvSyncEndPoint,
@@ -184,7 +427,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setModeAction = [ this ]( ProductPb::AudioMode val )
     {
-        return m_AudioSettingsMgr->SetMode( val );
+        bool ret = m_AudioSettingsMgr->SetMode( val );
+        if( ret )
+        {
+            m_MainStreamAudioSettings.set_audiomode( ModeNameToEnum( m_AudioSettingsMgr->GetMode( ).value() ) );
+            SendMainStreamAudioSettingsEvent();
+        }
+        return ret;
     };
     m_AudioModeSetting = std::unique_ptr<AudioSetting<ProductPb::AudioMode>>( new AudioSetting<ProductPb::AudioMode>
                                                                               ( kModeEndPoint,
@@ -202,7 +451,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setContentTypeAction = [ this ]( ProductPb::AudioContentType val )
     {
-        return m_AudioSettingsMgr->SetContentType( val );
+        bool ret = m_AudioSettingsMgr->SetContentType( val );
+        if( ret )
+        {
+            m_MainStreamAudioSettings.set_contenttype( ContentTypeNameToEnum( m_AudioSettingsMgr->GetContentType( ).value() ) );
+            SendMainStreamAudioSettingsEvent();
+        }
+        return ret;
     };
     m_AudioContentTypeSetting = std::unique_ptr<AudioSetting<ProductPb::AudioContentType>>( new AudioSetting<ProductPb::AudioContentType>
                                 ( kContentTypeEndPoint,
@@ -220,7 +475,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setDualMonoSelectAction = [ this ]( ProductPb::AudioDualMonoSelect val )
     {
-        return m_AudioSettingsMgr->SetDualMonoSelect( val );
+        bool ret = m_AudioSettingsMgr->SetDualMonoSelect( val );
+        if( ret )
+        {
+            m_MainStreamAudioSettings.set_dualmonoselect( DualMonoSelectNameToEnum( m_AudioSettingsMgr->GetDualMonoSelect( ).value() ) );
+            SendMainStreamAudioSettingsEvent();
+        }
+        return ret;
     };
     m_DualMonoSelectSetting = std::unique_ptr<AudioSetting<ProductPb::AudioDualMonoSelect>>( new AudioSetting<ProductPb::AudioDualMonoSelect>
                               ( kDualMonoSelectEndPoint,
