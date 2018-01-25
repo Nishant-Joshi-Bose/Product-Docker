@@ -73,6 +73,7 @@
 #include "ProductControllerStateLowPowerTransition.h"
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSelected.h"
+#include "ProductControllerStateFactoryDefault.h"
 #include "MfgData.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -319,6 +320,11 @@ void ProfessorProductController::Run( )
       statePlayingTransition,
       PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SELECTED );
 
+    auto* stateFactoryDefault = new ProductControllerStateFactoryDefault
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_FACTORY_DEFAULT );
+
     ///
     /// The states are added to the state machine and the state machine is initialized.
     ///
@@ -355,6 +361,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( stateLowPowerTransition );
     GetHsm( ).AddState( statePlayingTransition );
     GetHsm( ).AddState( statePlayingTransitionSelected );
+    GetHsm( ).AddState( stateFactoryDefault );
 
     GetHsm( ).Init( this, PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
@@ -1313,6 +1320,13 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             BOSE_DEBUG( s_logger, "AudioPath Deselect event received" );
             GetHsm( ).Handle< > ( &CustomProductControllerState::HandleAudioPathDeselect );
         }
+    }
+    //
+    // An amp fault has been detected on the LPM. Enter the CriticalError state.
+    //
+    else if( message.has_ampfaultdetected() )
+    {
+        GetHsm( ).Handle<>( &CustomProductControllerState::HandleAmpFaultDetected );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Unknown message types are handled at this point.
