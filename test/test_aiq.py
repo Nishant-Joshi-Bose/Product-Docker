@@ -15,12 +15,12 @@ def do_get(fd):
   print('GET reply is {}'.format(r))
 
   print('Supported actions:')
-  for i, a in enumerate(j['body']['properties']['supportedactions']):
+  for i, a in enumerate(j['body']['properties']['supportedActions']):
     print('   {}: {}'.format(i, a))
 
-  print('Supported modes:')
-  for i, m in enumerate(j['body']['properties']['supportedmodes']):
-    print('   {}: {}'.format(i, m))
+#  print('Supported modes:')
+#  for i, m in enumerate(j['body']['properties']['supportedmodes']):
+#    print('   {}: {}'.format(i, m))
 
 """
   Send a PUT request with "mode" parameter set
@@ -57,13 +57,13 @@ def do_put_action(fd):
     print('4: previous')
     cmd = raw_input('> ')
     if(cmd == '1'):
-      action = 'enter'
+      action = 'ACTION_ENTER'
     elif(cmd == '2'):
-      action = 'cancel'
+      action = 'ACTION_CANCEL'
     elif(cmd == '3'):
-      action = 'advance'
+      action = 'ACTION_ADVANCE'
     elif(cmd == '4'):
-      action = 'previous'
+      action = 'ACTION_PREVIOUS'
     else:
       print('invalid action')
       continue
