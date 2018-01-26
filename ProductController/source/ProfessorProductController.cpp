@@ -74,6 +74,11 @@
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSelected.h"
 #include "ProductControllerStateFactoryDefault.h"
+#include "ProductControllerStateStoppingStreamsDedicated.h"
+#include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
+#include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
+#include "ProductControllerStatePlayingSelectedSetupExiting.h"
+
 #include "MfgData.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -320,7 +325,7 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_FACTORY_DEFAULT );
 
-    auto* stateProductControllerStateStoppingStreamsDedicated = new ProductControllerStateFactoryDefault
+    auto* stateProductControllerStateStoppingStreamsDedicated = new ProductControllerStateStoppingStreamsDedicated
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED );
@@ -382,8 +387,6 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( stateProductControllerStateStoppingStreamsDedicated );
     GetHsm( ).AddState( stateProductControllerStateStoppingStreamsDedicatedForFactoryDefault );
     GetHsm( ).AddState( stateProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate );
-    GetHsm( ).AddState( stateProductControllerStatePlayingSelectedSetupExiting );
-    GetHsm( ).AddState( stateAccessoryPairingSelected );
     GetHsm( ).AddState( stateProductControllerStatePlayingSelectedSetupExiting );
 
 
