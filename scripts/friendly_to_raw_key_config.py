@@ -222,14 +222,16 @@ def generate_friendly_config(clang_args, index, args):
     if f is not None:
       tu = index.parse(f, clang_args)
       verify_clang_tu(tu)
-      ast_keys.append(index.parse(f, tu.cursor))
+      ast_keys.append(tu.cursor)
     else:
       ast_keys.append(None)
 
   # merge action files ASTs (python or c/c++ headers) to action map
   action_map = {}
   for f in args.actions_files:
-    a = build_enum_map_from_ast(ast_actions, 'Action', True)
+    tu = index.parse(f, clang_args)
+    verify_clang_tu(tu)
+    a = build_enum_map_from_ast(tu.cursor, 'Action', True)
     action_map.update(a)
 
   # build enum maps from ASTs
