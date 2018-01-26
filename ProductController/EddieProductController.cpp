@@ -191,6 +191,8 @@ std::string const& EddieProductController::GetDefaultProductName() const
 {
     static std::string productName = "Bose ";
     std::string macAddress = MacAddressInfo::GetPrimaryMAC();
+
+    productName = "Bose ";
     try
     {
         productName += ( macAddress.substr( macAddress.length() - 6 ) );
