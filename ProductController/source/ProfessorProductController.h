@@ -251,7 +251,6 @@ private:
     ///        machine states.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool m_IsLpmReady;
     bool m_IsCapsReady;
     bool m_IsAudioPathReady;
     bool m_IsSTSReady;
