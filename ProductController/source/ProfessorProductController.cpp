@@ -129,7 +129,6 @@ ProfessorProductController::ProfessorProductController( ) :
     m_IsAutoWakeEnabled( false ),
     m_IsAccountConfigured( false ),
     m_IsMicrophoneEnabled( false ),
-    m_IsSoftwareUpdateRequired( false ),
     m_Running( false ),
     m_currentSource( SOURCE_TV ),
 
@@ -581,18 +580,6 @@ bool ProfessorProductController::IsAutoWakeEnabled( ) const
 bool ProfessorProductController::IsVoiceConfigured( ) const
 {
     return ( m_IsMicrophoneEnabled and m_IsAccountConfigured );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::IsSoftwareUpdateRequired
-///
-/// @return This method returns a true or false value, based on a set member variable.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsSoftwareUpdateRequired( ) const
-{
-    return m_IsSoftwareUpdateRequired;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
