@@ -69,7 +69,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "PGC-640@99a0e385a2597cd3394c93ad0365823250bb37e1"
+    "selected_version": "PGC-640-Eddie@29e133433255c160d2a0da498a1e66cc243fe7b9"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -120,7 +120,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.3.4-241+8143ac4"
+    "selected_version": "Continuous/master/0.3.4-252+49b755b"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
