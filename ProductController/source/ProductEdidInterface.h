@@ -109,6 +109,13 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool m_connected = false;
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following member variable stores the custom Professor product controller instance.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ProfessorProductController& m_CustomProductController;
+
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief This method is called when an A4VVM server connection is established.
@@ -127,6 +134,9 @@ private:
     void HandlePhyAddrResponse( const A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t cecPhysicalAddress );
     void HandleNowPlaying( const SoundTouchInterface::NowPlaying& nowPlayingStatus );
     void HandleFrontDoorVolume( SoundTouchInterface::volume const& volume );
+    void HandleSrcSwitch( const LpmServiceMessages::IPCSource_t cecSource );
+    void HandlePlaybackRequestResponse( const SoundTouchInterface::NowPlaying& response );
+    void HandlePlaybackRequestError( const EndPointsError::Error& error );
     std::shared_ptr< FrontDoorClientIF >    m_FrontDoorClient;
 };
 
