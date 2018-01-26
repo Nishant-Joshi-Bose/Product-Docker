@@ -102,6 +102,16 @@ def build_enum_map_from_ast(cursor, name, swap):
 
   return ret
 
+def verify_clang_tu(tu):
+  for d in tu.diagnostics:
+    if d.severity >= 3:
+      print('severity: {}'.format(d.severity))
+      print('location: {}'.format(d.location))
+      print('spelling: {}'.format(d.spelling))
+      print('option: {}'.format(d.option))
+      raise Exception('clang encountered an error')
+
+
 """
 Friendly config -> raw config
 """
@@ -113,14 +123,18 @@ def generate_raw_config(clang_args, index, args):
   ast_keys = []
   for f in key_files:
     if f is not None:
-      ast_keys.append(index.parse(f, clang_args).cursor)
+      tu = index.parse(f, clang_args)
+      verify_clang_tu(tu)
+      ast_keys.append(tu.cursor)
     else:
       ast_keys.append(None)
 
   # merge action files ASTs (python or c/c++ headers) to action map
   action_map = {}
   for f in args.actions_files:
-      ast_actions = index.parse(f, clang_args).cursor
+      tu = index.parse(f, clang_args)
+      verify_clang_tu(tu)
+      ast_actions = tu.cursor
       # build enum map from events
       a = build_enum_map_from_ast(ast_actions, 'Action', False)
       action_map.update(a)
@@ -206,7 +220,9 @@ def generate_friendly_config(clang_args, index, args):
   ast_keys = []
   for f in key_files:
     if f is not None:
-      ast_keys.append(index.parse(f, clang_args).cursor)
+      tu = index.parse(f, clang_args)
+      verify_clang_tu(tu)
+      ast_keys.append(index.parse(f, tu.cursor))
     else:
       ast_keys.append(None)
 
