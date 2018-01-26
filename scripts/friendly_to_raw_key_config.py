@@ -120,21 +120,10 @@ def generate_raw_config(clang_args, index, args):
   # merge action files ASTs (python or c/c++ headers) to action map
   action_map = {}
   for f in args.actions_files:
-    if re.match(r'.*\.pyc$', f):
-      pb = imp.load_compiled('p', os.path.abspath(f))
-      a = build_enum_map_from_proto(pb, 'KEY_ACTION', False)
-      if a is not None:
-        action_map.update(a)
-    else:
       ast_actions = index.parse(f, clang_args).cursor
       # build enum map from events
-      a = build_enum_map_from_ast(ast_actions, 'KEY_ACTION', False)
-      if a:
-        action_map.update(a)
-      else:
-        a = build_enum_map_from_ast(ast_actions, 'ActionCommon_t', False)
-        if a:
-          action_map.update(a)
+      a = build_enum_map_from_ast(ast_actions, 'Action', False)
+      action_map.update(a)
 
   # build enum maps from ASTs
   key_maps = []
@@ -224,21 +213,8 @@ def generate_friendly_config(clang_args, index, args):
   # merge action files ASTs (python or c/c++ headers) to action map
   action_map = {}
   for f in args.actions_files:
-    if re.match(r'.*\.pyc$', f):
-      pb = imp.load_compiled('p', os.path.abspath(f))
-      a = build_enum_map_from_proto(pb, 'KEY_ACTION', True)
-      if a is not None:
-        action_map.update(a)
-    else:
-      ast_actions = index.parse(f, clang_args).cursor
-      # build enum map from events
-      a = build_enum_map_from_ast(ast_actions, 'KEY_ACTION', True)
-      if a:
-        action_map.update(a)
-      else:
-        a = build_enum_map_from_ast(ast_actions, 'ActionCommon_t', True)
-        if a:
-          action_map.update(a)
+    a = build_enum_map_from_ast(ast_actions, 'Action', True)
+    action_map.update(a)
 
   # build enum maps from ASTs
   key_maps = []
