@@ -333,13 +333,13 @@ void ProfessorProductController::Run( )
     auto* stateProductControllerStateStoppingStreamsDedicatedForFactoryDefault =
         new ProductControllerStateStoppingStreamsDedicatedForFactoryDefault
     ( GetHsm( ),
-      stateTop,
+      stateProductControllerStateStoppingStreamsDedicated,
       PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_FACTORY_DEFAULT );
 
     auto* stateProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate =
         new ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate
     ( GetHsm( ),
-      stateTop,
+      stateProductControllerStateStoppingStreamsDedicated,
       PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE );
 
     auto* stateProductControllerStatePlayingSelectedSetupExiting =
