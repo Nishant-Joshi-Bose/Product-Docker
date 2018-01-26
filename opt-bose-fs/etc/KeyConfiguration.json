@@ -47,7 +47,7 @@
                 0
             ], 
             "commment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast", 
-            "action": 10, 
+            "action": 20, 
             "keyList": [
                 129
             ]
@@ -59,7 +59,7 @@
                 0
             ], 
             "commment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast", 
-            "action": 10, 
+            "action": 20, 
             "keyList": [
                 129
             ]
@@ -71,7 +71,7 @@
                 0
             ], 
             "commment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast", 
-            "action": 10, 
+            "action": 20, 
             "keyList": [
                 129
             ]
@@ -83,7 +83,7 @@
                 0
             ], 
             "commment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast", 
-            "action": 10, 
+            "action": 20, 
             "keyList": [
                 129
             ]
@@ -95,7 +95,7 @@
                 750
             ], 
             "commment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable", 
-            "action": 11, 
+            "action": 21, 
             "keyList": [
                 129
             ]
@@ -107,7 +107,7 @@
                 750
             ], 
             "commment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable", 
-            "action": 11, 
+            "action": 21, 
             "keyList": [
                 129
             ]
@@ -119,7 +119,7 @@
                 750
             ], 
             "commment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable", 
-            "action": 11, 
+            "action": 21, 
             "keyList": [
                 129
             ]
@@ -131,7 +131,7 @@
                 750
             ], 
             "commment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable", 
-            "action": 11, 
+            "action": 21, 
             "keyList": [
                 129
             ]
@@ -143,7 +143,7 @@
                 10000
             ], 
             "commment": "Console: Bluetooth Press and Hold ---> Clear Pairing List", 
-            "action": 12, 
+            "action": 22, 
             "keyList": [
                 129
             ]
@@ -155,7 +155,7 @@
                 10000
             ], 
             "commment": "Console: Bluetooth Press and Hold ---> Clear Pairing List", 
-            "action": 12, 
+            "action": 22, 
             "keyList": [
                 129
             ]
@@ -167,7 +167,7 @@
                 10000
             ], 
             "commment": "Console: Bluetooth Press and Hold ---> Clear Pairing List", 
-            "action": 12, 
+            "action": 22, 
             "keyList": [
                 129
             ]
@@ -179,7 +179,7 @@
                 10000
             ], 
             "commment": "Console: Bluetooth Press and Hold ---> Clear Pairing List", 
-            "action": 12, 
+            "action": 22, 
             "keyList": [
                 129
             ]
@@ -203,7 +203,7 @@
                 1000
             ], 
             "commment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1", 
-            "action": 21, 
+            "action": 33, 
             "keyList": [
                 65
             ]
@@ -215,7 +215,7 @@
                 1000
             ], 
             "commment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1", 
-            "action": 21, 
+            "action": 33, 
             "keyList": [
                 65
             ]
@@ -227,7 +227,7 @@
                 1000
             ], 
             "commment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1", 
-            "action": 21, 
+            "action": 33, 
             "keyList": [
                 65
             ]
@@ -239,7 +239,7 @@
                 1000
             ], 
             "commment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1", 
-            "action": 21, 
+            "action": 33, 
             "keyList": [
                 65
             ]
@@ -251,7 +251,7 @@
                 1000
             ], 
             "commment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2", 
-            "action": 22, 
+            "action": 34, 
             "keyList": [
                 66
             ]
@@ -263,7 +263,7 @@
                 1000
             ], 
             "commment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2", 
-            "action": 22, 
+            "action": 34, 
             "keyList": [
                 66
             ]
@@ -275,7 +275,7 @@
                 1000
             ], 
             "commment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2", 
-            "action": 22, 
+            "action": 34, 
             "keyList": [
                 66
             ]
@@ -287,7 +287,7 @@
                 1000
             ], 
             "commment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2", 
-            "action": 22, 
+            "action": 34, 
             "keyList": [
                 66
             ]
@@ -299,7 +299,7 @@
                 1000
             ], 
             "commment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3", 
-            "action": 23, 
+            "action": 35, 
             "keyList": [
                 67
             ]
@@ -311,7 +311,7 @@
                 1000
             ], 
             "commment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3", 
-            "action": 23, 
+            "action": 35, 
             "keyList": [
                 67
             ]
@@ -323,7 +323,7 @@
                 1000
             ], 
             "commment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3", 
-            "action": 23, 
+            "action": 35, 
             "keyList": [
                 67
             ]
@@ -335,7 +335,7 @@
                 1000
             ], 
             "commment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3", 
-            "action": 23, 
+            "action": 35, 
             "keyList": [
                 67
             ]
@@ -347,7 +347,7 @@
                 1000
             ], 
             "commment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4", 
-            "action": 24, 
+            "action": 36, 
             "keyList": [
                 68
             ]
@@ -359,7 +359,7 @@
                 1000
             ], 
             "commment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4", 
-            "action": 24, 
+            "action": 36, 
             "keyList": [
                 68
             ]
@@ -371,7 +371,7 @@
                 1000
             ], 
             "commment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4", 
-            "action": 24, 
+            "action": 36, 
             "keyList": [
                 68
             ]
@@ -383,7 +383,7 @@
                 1000
             ], 
             "commment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4", 
-            "action": 24, 
+            "action": 36, 
             "keyList": [
                 68
             ]
@@ -395,7 +395,7 @@
                 1000
             ], 
             "commment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5", 
-            "action": 25, 
+            "action": 37, 
             "keyList": [
                 69
             ]
@@ -407,7 +407,7 @@
                 1000
             ], 
             "commment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5", 
-            "action": 25, 
+            "action": 37, 
             "keyList": [
                 69
             ]
@@ -419,7 +419,7 @@
                 1000
             ], 
             "commment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5", 
-            "action": 25, 
+            "action": 37, 
             "keyList": [
                 69
             ]
@@ -431,7 +431,7 @@
                 1000
             ], 
             "commment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5", 
-            "action": 25, 
+            "action": 37, 
             "keyList": [
                 69
             ]
@@ -443,7 +443,7 @@
                 1000
             ], 
             "commment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6", 
-            "action": 26, 
+            "action": 38, 
             "keyList": [
                 70
             ]
@@ -455,7 +455,7 @@
                 1000
             ], 
             "commment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6", 
-            "action": 26, 
+            "action": 38, 
             "keyList": [
                 70
             ]
@@ -467,7 +467,7 @@
                 1000
             ], 
             "commment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6", 
-            "action": 26, 
+            "action": 38, 
             "keyList": [
                 70
             ]
@@ -479,7 +479,7 @@
                 1000
             ], 
             "commment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6", 
-            "action": 26, 
+            "action": 38, 
             "keyList": [
                 70
             ]
@@ -491,7 +491,7 @@
                 200
             ], 
             "commment": "Console: Preset 1 release ---> Select Preset stored on Key 1", 
-            "action": 21, 
+            "action": 33, 
             "keyList": [
                 65
             ]
@@ -503,7 +503,7 @@
                 200
             ], 
             "commment": "Console: Preset 1 release ---> Select Preset stored on Key 1", 
-            "action": 21, 
+            "action": 33, 
             "keyList": [
                 65
             ]
@@ -515,7 +515,7 @@
                 200
             ], 
             "commment": "Console: Preset 1 release ---> Select Preset stored on Key 1", 
-            "action": 21, 
+            "action": 33, 
             "keyList": [
                 65
             ]
@@ -527,7 +527,7 @@
                 200
             ], 
             "commment": "Console: Preset 1 release ---> Select Preset stored on Key 1", 
-            "action": 21, 
+            "action": 33, 
             "keyList": [
                 65
             ]
@@ -539,7 +539,7 @@
                 200
             ], 
             "commment": "Console: Preset 2 release ---> Select Preset stored on Key 2", 
-            "action": 22, 
+            "action": 34, 
             "keyList": [
                 66
             ]
@@ -551,7 +551,7 @@
                 200
             ], 
             "commment": "Console: Preset 2 release ---> Select Preset stored on Key 2", 
-            "action": 22, 
+            "action": 34, 
             "keyList": [
                 66
             ]
@@ -563,7 +563,7 @@
                 200
             ], 
             "commment": "Console: Preset 2 release ---> Select Preset stored on Key 2", 
-            "action": 22, 
+            "action": 34, 
             "keyList": [
                 66
             ]
@@ -575,7 +575,7 @@
                 200
             ], 
             "commment": "Console: Preset 2 release ---> Select Preset stored on Key 2", 
-            "action": 22, 
+            "action": 34, 
             "keyList": [
                 66
             ]
@@ -587,7 +587,7 @@
                 200
             ], 
             "commment": "Console: Preset 3 release ---> Select Preset stored on Key 3", 
-            "action": 23, 
+            "action": 35, 
             "keyList": [
                 67
             ]
@@ -599,7 +599,7 @@
                 200
             ], 
             "commment": "Console: Preset 3 release ---> Select Preset stored on Key 3", 
-            "action": 23, 
+            "action": 35, 
             "keyList": [
                 67
             ]
@@ -611,7 +611,7 @@
                 200
             ], 
             "commment": "Console: Preset 3 release ---> Select Preset stored on Key 3", 
-            "action": 23, 
+            "action": 35, 
             "keyList": [
                 67
             ]
@@ -623,7 +623,7 @@
                 200
             ], 
             "commment": "Console: Preset 3 release ---> Select Preset stored on Key 3", 
-            "action": 23, 
+            "action": 35, 
             "keyList": [
                 67
             ]
@@ -635,7 +635,7 @@
                 200
             ], 
             "commment": "Console: Preset 4 release ---> Select Preset stored on Key 4", 
-            "action": 24, 
+            "action": 36, 
             "keyList": [
                 68
             ]
@@ -647,7 +647,7 @@
                 200
             ], 
             "commment": "Console: Preset 4 release ---> Select Preset stored on Key 4", 
-            "action": 24, 
+            "action": 36, 
             "keyList": [
                 68
             ]
@@ -659,7 +659,7 @@
                 200
             ], 
             "commment": "Console: Preset 4 release ---> Select Preset stored on Key 4", 
-            "action": 24, 
+            "action": 36, 
             "keyList": [
                 68
             ]
@@ -671,7 +671,7 @@
                 200
             ], 
             "commment": "Console: Preset 4 release ---> Select Preset stored on Key 4", 
-            "action": 24, 
+            "action": 36, 
             "keyList": [
                 68
             ]
@@ -683,7 +683,7 @@
                 200
             ], 
             "commment": "Console: Preset 5 release ---> Select Preset stored on Key 5", 
-            "action": 25, 
+            "action": 37, 
             "keyList": [
                 69
             ]
@@ -695,7 +695,7 @@
                 200
             ], 
             "commment": "Console: Preset 5 release ---> Select Preset stored on Key 5", 
-            "action": 25, 
+            "action": 37, 
             "keyList": [
                 69
             ]
@@ -707,7 +707,7 @@
                 200
             ], 
             "commment": "Console: Preset 5 release ---> Select Preset stored on Key 5", 
-            "action": 25, 
+            "action": 37, 
             "keyList": [
                 69
             ]
@@ -719,7 +719,7 @@
                 200
             ], 
             "commment": "Console: Preset 5 release ---> Select Preset stored on Key 5", 
-            "action": 25, 
+            "action": 37, 
             "keyList": [
                 69
             ]
@@ -731,7 +731,7 @@
                 200
             ], 
             "commment": "Console: Preset 6 release ---> Select Preset stored on Key 6", 
-            "action": 26, 
+            "action": 38, 
             "keyList": [
                 70
             ]
@@ -743,7 +743,7 @@
                 200
             ], 
             "commment": "Console: Preset 6 release ---> Select Preset stored on Key 6", 
-            "action": 26, 
+            "action": 38, 
             "keyList": [
                 70
             ]
@@ -755,7 +755,7 @@
                 200
             ], 
             "commment": "Console: Preset 6 release ---> Select Preset stored on Key 6", 
-            "action": 26, 
+            "action": 38, 
             "keyList": [
                 70
             ]
@@ -767,7 +767,7 @@
                 200
             ], 
             "commment": "Console: Preset 6 release ---> Select Preset stored on Key 6", 
-            "action": 26, 
+            "action": 38, 
             "keyList": [
                 70
             ]

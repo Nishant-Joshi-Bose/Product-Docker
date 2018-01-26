@@ -299,8 +299,6 @@ class CustomFormat(pprint.PrettyPrinter):
     return pprint.PrettyPrinter.format(self, obj, ctx, maxlev, lev)
 
 def main():
-  clang_args = ['-x', 'c++']
-  index = clang.cindex.Index.create()
   argparser = argparse.ArgumentParser('generate key config')
   # friendly input file
   argparser.add_argument('--inputcfgs', dest='inputcfgs', required = True, nargs='+',
@@ -328,7 +326,15 @@ def main():
   # output configuration to generate
   argparser.add_argument('--outputcfg', dest='outputcfg', required = True,
     help='Key config json output')
+  argparser.add_argument('--incdirs', dest='inc_dirs', nargs='+',
+    help='Path(s) for include files')
   args = argparser.parse_args()
+
+  clang_args = ['-x', 'c++']
+  if args.inc_dirs is not None:
+    for inc in args.inc_dirs:
+      clang_args.append('-I{}'.format(inc))
+  index = clang.cindex.Index.create()
 
   if args.reverse:
     generate_friendly_config(clang_args, index, args)
