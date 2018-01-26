@@ -229,6 +229,11 @@ public:
     }
     bool IsProductNeedsSetup();
 
+    virtual bool HandleSoftwareUpdateStatus( )
+    {
+        return false;
+    }
+
 public:
     /// The custom version of this function returns the custom ProductController
     static EddieProductController& GetCustomProductController();

@@ -516,14 +516,16 @@ void EddieProductController::HandleNetworkModuleReady( bool networkModuleReady )
 
 bool EddieProductController::IsAllModuleReady() const
 {
-    BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|NetworkModuleReady=%d|m_isBluetoothReady=%d|STSReady=%d", __func__,
-               IsCAPSReady() , IsLpmReady(), IsNetworkModuleReady(), IsBluetoothModuleReady(), IsSTSReady() );
+    BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|NetworkModuleReady=%d|m_isBluetoothReady=%d|"
+               "STSReady=%d|IsSoftwareUpdateReady=%d", __func__, IsCAPSReady() , IsLpmReady(),
+               IsNetworkModuleReady(), IsBluetoothModuleReady(), IsSTSReady(), IsSoftwareUpdateReady() );
 
     return ( IsCAPSReady() and
              IsLpmReady() and
              IsNetworkModuleReady() and
              IsSTSReady() and
-             IsBluetoothModuleReady() ) ;
+             IsBluetoothModuleReady() and
+             IsSoftwareUpdateReady() ) ;
 }
 
 bool EddieProductController::IsBtLeModuleReady() const
