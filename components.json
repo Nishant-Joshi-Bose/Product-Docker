@@ -86,8 +86,8 @@
   {
     "name": "ProfessorLPM-Package",
     "selected_version": {
-      "RIVIERA_HSP_VERSION=1.3": "Nightly/trunk/2018-01-22_2350/DP1",
-      "RIVIERA_HSP_VERSION=2.1": "Nightly/trunk/2018-01-22_2350/DP2"
+      "RIVIERA_HSP_VERSION=1.3": "Continuous/trunk/2018-01-26_1335/DP1",
+      "RIVIERA_HSP_VERSION=2.1": "Continuous/trunk/2018-01-26_1335/DP2"
     }
   },
   {
@@ -108,7 +108,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Continuous/master/0.3.3-83+9d04a25"
+    "selected_version": "Continuous/master/0.3.3-84+09bf8e2"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -120,7 +120,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.3.4-241+8143ac4"
+    "selected_version": "Continuous/master/0.3.4-252+49b755b"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",

@@ -41,6 +41,7 @@
 #include "ProductControllerStateSetup.h"
 #include "CustomProductControllerStates.h"
 #include "IntentHandler.h"
+#include "ProductSTS.pb.h"
 #include "CustomProductControllerState.h"
 #include "CustomProductControllerStateBooting.h"
 #include "CustomProductControllerStateUpdatingSoftware.h"
@@ -125,7 +126,6 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     /// Member Variable Initialization
     ///
-    m_IsLpmReady( false ),
     m_IsCapsReady( false ),
     m_IsAudioPathReady( false ),
     m_IsSTSReady( false ),
@@ -987,25 +987,19 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     BOSE_DEBUG( s_logger, "----------- Product Controller Message Handler -------------" );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// LPM status messages are handled at this point.
+    /// LPM status messages has both Common handling and Professor-specific handling
     ///////////////////////////////////////////////////////////////////////////////////////////////
     if( message.has_lpmstatus( ) )
     {
-        if( message.lpmstatus( ).has_connected( ) )
-        {
-            m_IsLpmReady = message.lpmstatus( ).connected( );
-
-            GetHsm( ).Handle< bool >( &CustomProductControllerState::HandleLpmState, m_IsLpmReady );
-        }
-
+        // First do the common stuff
+        ( void ) HandleCommonProductMessage( message );
+        // Then the Professor - specific stuff
         if( message.lpmstatus( ).has_systemstate( ) )
         {
-            BOSE_DEBUG( s_logger, "The LPM system state was set to %s",
-                        IpcLpmSystemState_t_Name( message.lpmstatus( ).systemstate( ) ).c_str( ) );
-
             switch( message.lpmstatus( ).systemstate( ) )
             {
             case SYSTEM_STATE_ON:
+                BOSE_DEBUG( s_logger, "Calling HandleLPMPowerStatusFullPower()" );
                 GetHsm( ).Handle< >( &CustomProductControllerState::HandleLPMPowerStatusFullPower );
                 break;
             case SYSTEM_STATE_OFF:
@@ -1017,7 +1011,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             case SYSTEM_STATE_RECOVERY:
                 break;
             case SYSTEM_STATE_LOW_POWER:
-                GetHsm( ).Handle< >( &CustomProductControllerState::HandleLpmLowpowerSystemState );
                 break;
             case SYSTEM_STATE_UPDATE:
                 break;
@@ -1033,23 +1026,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
                 break;
             }
         }
-
-        ///
-        /// The power state if returned from the LPM hardware is used only for informational purposes.
-        ///
-        if( message.lpmstatus( ).has_powerstate( ) )
-        {
-            BOSE_DEBUG( s_logger, "The LPM power state was set to %s",
-                        IpcLPMPowerState_t_Name( message.lpmstatus( ).powerstate( ) ).c_str( ) );
-        }
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// LPM low power status messages are handled at this point.
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_lpmlowpowerstatus( ) )
-    {
-        GetHsm( ).Handle< const ProductLpmLowPowerStatus& >
-        ( &CustomProductControllerState::HandleLpmLowPowerStatus, message.lpmlowpowerstatus( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Content Audio Playback Services (CAPS) status messages are handled at this point.
@@ -1113,7 +1089,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         const auto& slot = message.selectsourceslot( ).slot( );
 
         BOSE_DEBUG( s_logger, "An STS Select message was received for slot %s.",
-                    ProductSourceSlot_Name( slot ).c_str( ) );
+                    ProductSTS::ProductSourceSlot_Name( static_cast<ProductSTS::ProductSourceSlot>( slot ) ).c_str( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Network status messages are handled at this point.
@@ -1333,34 +1309,12 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         ( &CustomProductControllerState::HandleAdaptIQControl, message.aiqcontrol( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// AudioPath Select or Deselect messages are handled at this point.
+    /// Common ProductMessage elements are handled last, any events with overrides to
+    /// the Common elements will have been handled above and not get here
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_audiopathselect( ) )
+    else if( !HandleCommonProductMessage( message ) )
     {
-        if( message.audiopathselect() == true )
-        {
-            BOSE_DEBUG( s_logger, "AudioPath Select event received" );
-            GetHsm( ).Handle< > ( &CustomProductControllerState::HandleAudioPathSelect );
-        }
-        else
-        {
-            BOSE_DEBUG( s_logger, "AudioPath Deselect event received" );
-            GetHsm( ).Handle< > ( &CustomProductControllerState::HandleAudioPathDeselect );
-        }
-    }
-    //
-    // An amp fault has been detected on the LPM. Enter the CriticalError state.
-    //
-    else if( message.has_ampfaultdetected() )
-    {
-        GetHsm( ).Handle<>( &CustomProductControllerState::HandleAmpFaultDetected );
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Unknown message types are handled at this point.
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    else
-    {
-        BOSE_ERROR( s_logger, "An unknown message type was received." );
+        BOSE_ERROR( s_logger, "An unknown message type was received - %s.", ProtoToMarkup::ToJson( message ).c_str() );
     }
 }
 
