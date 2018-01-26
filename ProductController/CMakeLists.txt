@@ -44,9 +44,7 @@ ADD_EXECUTABLE(Professor
   source/CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
-# change this to CustomProductControllerStateAdaptIQ.cpp when real AiQ is
-# in place
-  source/CustomStateMachine/CustomProductControllerStateAdaptIQSim.cpp
+  source/CustomStateMachine/CustomProductControllerStateAdaptIQ.cpp
   source/CustomStateMachine/CustomProductControllerStateBooting.cpp
   source/CustomStateMachine/CustomProductControllerStateIdle.cpp
   source/CustomStateMachine/CustomProductControllerStateIdleVoiceConfigured.cpp
@@ -92,6 +90,7 @@ TARGET_LINK_LIBRARIES(Professor
   cap
   dl
   SoundTouch_SDK_Protobuf_static
+  SoftwareUpdateAPI
 )
 
 INSTALL(TARGETS Professor DESTINATION ${OUTPUT_BIN_DIR})
