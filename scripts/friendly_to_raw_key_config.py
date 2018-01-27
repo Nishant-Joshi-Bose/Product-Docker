@@ -4,9 +4,7 @@ import io
 import json
 import re
 import argparse
-import imp
 import os
-import inspect
 import copy
 import clang.cindex
 import pprint
