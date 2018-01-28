@@ -52,8 +52,27 @@ ifndef DONT_RUN_ASTYLE
 	run-astyle
 endif
 
+USERKEYCONFIG=$(PWD)/Config/UserKeyConfig.json
+KEYCONFIG=$(PWD)/opt-bose-fs/etc/KeyConfiguration.json
+LPM_KEYS=/scratch/bose2/RivieraLPMtrunk/trunk/Shared/RivieraLPM_KeyValues.h
+INTENT_DEFS=$(PWD)/ProductController/source/IntentHandler/Intents.h 
+KEYCONFIG_INCS=$(PRODUCTCONTROLLERCOMMON_DIR)/IntentHandler
+
+$(KEYCONFIG): $(USERKEYCONFIG)
+	cd tools/key_config_generator && \
+	LD_LIBRARY_PATH=/usr/lib/llvm-5.0/lib ./generate_key_config \
+		--inputcfg $(USERKEYCONFIG) \
+		--actions $(INTENT_DEFS) \
+		--cap $(LPM_KEYS) \
+		--ir $(LPM_KEYS) \
+		--tap $(LPM_KEYS) \
+		--cec $(LPM_KEYS) \
+		--rf $(LPM_KEYS) \
+		--outputcfg $(KEYCONFIG) \
+		--incdirs $(KEYCONFIG_INCS)
+
 .PHONY: cmake_build
-cmake_build: generated_sources | $(BUILDS_DIR) astyle
+cmake_build: generated_sources $(KEYCONFIG) | $(BUILDS_DIR) astyle
 	rm -rf $(BUILDS_DIR)/CMakeCache.txt $(BUILDS_DIR)/CMakeFiles
 	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install

@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+keygen_args="$@"
+
+virtual_env_dir=key_generator_virtualenv
+
+# Setup a python virtual environment based on the system python2.7 interpreter.
+# Enable the environment and install any python packages required.
+setup_python () {
+	mkdir -p $virtual_env_dir || exit
+	virtualenv -p /usr/bin/python2.7 $virtual_env_dir || exit
+	source $virtual_env_dir/bin/activate || exit
+	pip install -r requirements.txt || exit
+}
+
+# Verify a valid python interpreter and clang installation is present.
+check_dependencies () {
+	if ! python_version=$(python -c 'import sys; print(sys.version_info[:2])') 2>/dev/null; then
+		echo >&2 "$0: Python interpreter not detected"
+		exit 1
+	fi
+
+	if [ "$python_version" != "(2, 7)" ]; then
+		echo >&2 "Invalid python interpreter. Must be Python 2.7"
+		exit 1
+	fi
+
+	if ! python -c 'import clang' 2>/dev/null; then
+		pip_output=$(pip install clang)
+		if [ $? -eq 1 ]; then
+			echo >&2 "Could not install clang. Please either install pip or manually install clang"
+			exit 1
+		fi
+	fi
+}
+
+setup_python
+check_dependencies
+
+echo "Generating key configuration"
+if ! python friendly_to_raw_key_config.py $keygen_args; then
+	echo "Error running key generator script"
+	exit 1
+fi
+echo "Generation complete"
+
+exit 0
