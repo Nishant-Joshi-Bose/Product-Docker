@@ -61,6 +61,7 @@ KEYCONFIG_INCS=$(PRODUCTCONTROLLERCOMMON_DIR)/IntentHandler
 $(KEYCONFIG): $(USERKEYCONFIG)
 	cd tools/key_config_generator && \
 	LD_LIBRARY_PATH=/usr/lib/llvm-5.0/lib ./generate_key_config \
+		$(BUILDS_DIR) \
 		--inputcfg $(USERKEYCONFIG) \
 		--actions $(INTENT_DEFS) \
 		--cap $(LPM_KEYS) \
