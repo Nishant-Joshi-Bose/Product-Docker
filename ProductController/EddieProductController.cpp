@@ -6,7 +6,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "EddieProductController.h"
-#include "ProductControllerStates.h"
+#include "CustomProductControllerStates.h"
 #include "CustomProductControllerState.h"
 #include "CustomProductAudioService.h"
 #include "APTaskFactory.h"
@@ -64,7 +64,6 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_ProductControllerStatePlayableTransitionIdle( GetHsm(), &m_ProductControllerStatePlayableTransition, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE ),
     m_ProductControllerStatePlayableTransitionNetworkStandby( GetHsm(), &m_ProductControllerStatePlayableTransition, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY ),
     m_ProductControllerStateSoftwareUpdateTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION ),
-    m_ProductControllerStateLowPowerTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_TRANSITION ),
     m_ProductControllerStatePlayingTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION ),
     m_ProductControllerStatePlayingTransitionSelected( GetHsm(), &m_ProductControllerStatePlayingTransition, PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SELECTED ),
     m_KeyHandler( *GetTask(), m_CliClientMT, KEY_CONFIG_FILE ),
@@ -114,7 +113,6 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     GetHsm().AddState( &m_ProductControllerStatePlayableTransitionIdle );
     GetHsm().AddState( &m_ProductControllerStatePlayableTransitionNetworkStandby );
     GetHsm().AddState( &m_ProductControllerStateSoftwareUpdateTransition );
-    GetHsm().AddState( &m_ProductControllerStateLowPowerTransition );
     GetHsm().AddState( &m_ProductControllerStatePlayingTransition );
     GetHsm().AddState( &m_ProductControllerStatePlayingTransitionSelected );
 
