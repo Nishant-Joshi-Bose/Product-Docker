@@ -481,7 +481,8 @@ bool CustomProductLpmHardwareInterface::SendSourceSelection( const LPM_IPC_SOURC
         return false;
     }
 
-    BOSE_DEBUG( s_logger, "An LPM source selection request is currently not supported." );
+    GetLpmClient( )->SendCecCurrentSource( source );
+    BOSE_DEBUG( s_logger, "An LPM source selection sent to LPM. %d", source.source() );
 
     return true;
 }
