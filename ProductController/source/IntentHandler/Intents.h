@@ -108,6 +108,11 @@ enum class Action
     VOLUME_RAMP_DOWN_CANCEL = ActionCommon_t::VOLUME_RAMP_DOWN_CANCEL,
 
     ///
+    /// Voice Carousel Intent
+    ///
+    VOICE_CAROUSEL          = ActionCommon_t::VOICE_CAROUSEL,
+
+    ///
     /// Last Common Action
     ///
     ACTION_COMMON_LAST = 100,
@@ -121,7 +126,8 @@ enum class Action
     ACTION_MUTE               = 114,
     ACTION_SOUNDTOUCH         = 115,
     ACTION_CONNECT            = 116,
-    ACTION_ACTION             = 117, /// @todo PGC-449 VOICE_CAROUSEL
+    /// ACTION_ACTION was formerly here (117); not renumbering for now since I don't know what
+    /// (if any) the implications are
     ACTION_TV                 = 118,
     ACTION_THUMB_UP           = 119,
     ACTION_THUMB_DOWN         = 120,

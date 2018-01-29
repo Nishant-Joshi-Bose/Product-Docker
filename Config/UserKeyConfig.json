@@ -33,14 +33,6 @@
         "timeOutList": [10000]
     },
     {
-        "action": "ACTION_ACTION",
-        "commment": "TODO PGC-449 Console: action release ---> Alexa",
-        "keyEvent": "RELEASE",
-        "keyList": ["BOSE_GAME_SOURCE"],
-        "origin": ["CAPSENSE"],
-        "timeOutList": [0]
-    },
-    {
         "action": "PRESET_SELECT_1",
         "commment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1",
         "keyEvent": "PRESS_HOLD",
@@ -217,14 +209,6 @@
         "timeOutList": []
     },
     {
-        "action": "ACTION_ACTION",
-        "commment": "vpa",
-        "keyEvent": "PRESS",
-        "keyList": ["KEY_VAL_AVAIL_12"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": []
-    },
-    {
         "action": "ACTION_TV",
         "commment": "select tv",
         "keyEvent": "PRESS",
@@ -289,11 +273,11 @@
         "timeOutList": []
     },
     {
-        "action": "ACTION_ACTION",
+        "action": "VOICE_CAROUSEL",
         "commment": "vpa",
         "keyEvent": "PRESS",
-        "keyList": ["KEY_VAL_AVAIL_12"],
-        "origin": ["CAPSENSE"],
+        "keyList": ["KEY_VAL_AVAIL_AE"],
+        "origin": ["IR", "TAP", "CEC", "RF", "CAPSENSE"],
         "timeOutList": []
     }
     ]

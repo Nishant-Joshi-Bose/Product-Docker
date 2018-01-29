@@ -185,18 +185,6 @@
             ]
         }, 
         {
-            "origin": 1, 
-            "keyEvent": 1, 
-            "timeOutList": [
-                0
-            ], 
-            "commment": "TODO PGC-449 Console: action release ---> Alexa", 
-            "action": 117, 
-            "keyList": [
-                6
-            ]
-        }, 
-        {
             "origin": 2, 
             "keyEvent": 2, 
             "timeOutList": [
@@ -1210,46 +1198,6 @@
             "action": 116, 
             "keyList": [
                 17
-            ]
-        }, 
-        {
-            "origin": 2, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "vpa", 
-            "action": 117, 
-            "keyList": [
-                18
-            ]
-        }, 
-        {
-            "origin": 6, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "vpa", 
-            "action": 117, 
-            "keyList": [
-                18
-            ]
-        }, 
-        {
-            "origin": 4, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "vpa", 
-            "action": 117, 
-            "keyList": [
-                18
-            ]
-        }, 
-        {
-            "origin": 3, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "vpa", 
-            "action": 117, 
-            "keyList": [
-                18
             ]
         }, 
         {
@@ -1543,13 +1491,53 @@
             ]
         }, 
         {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "vpa", 
+            "action": 26, 
+            "keyList": [
+                174
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "vpa", 
+            "action": 26, 
+            "keyList": [
+                174
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "vpa", 
+            "action": 26, 
+            "keyList": [
+                174
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "vpa", 
+            "action": 26, 
+            "keyList": [
+                174
+            ]
+        }, 
+        {
             "origin": 1, 
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "vpa", 
-            "action": 117, 
+            "action": 26, 
             "keyList": [
-                18
+                174
             ]
         }
     ]
