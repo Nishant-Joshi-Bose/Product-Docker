@@ -37,6 +37,7 @@ PROFESSORLPMPACKAGE_DIR = $(shell components get ProfessorLPM-Package installed_
 PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
+RIVIERALPM_DIR = $(shell components get RivieraLPM installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
@@ -54,13 +55,14 @@ endif
 
 USERKEYCONFIG=$(PWD)/Config/UserKeyConfig.json
 KEYCONFIG=$(PWD)/opt-bose-fs/etc/KeyConfiguration.json
-LPM_KEYS=/scratch/bose2/RivieraLPMtrunk/trunk/Shared/RivieraLPM_KeyValues.h
+LPM_KEYS=$(RIVIERALPM_DIR)/include/RivieraLPM_KeyValues.h
 INTENT_DEFS=$(PWD)/ProductController/source/IntentHandler/Intents.h 
 KEYCONFIG_INCS=$(PRODUCTCONTROLLERCOMMON_DIR)/IntentHandler
 
-$(KEYCONFIG): $(USERKEYCONFIG)
+.PHONY: keyconfig
+keyconfig:
 	cd tools/key_config_generator && \
-	LD_LIBRARY_PATH=/usr/lib/llvm-5.0/lib ./generate_key_config \
+	./generate_key_config \
 		$(BUILDS_DIR) \
 		--inputcfg $(USERKEYCONFIG) \
 		--actions $(INTENT_DEFS) \
@@ -73,7 +75,7 @@ $(KEYCONFIG): $(USERKEYCONFIG)
 		--incdirs $(KEYCONFIG_INCS)
 
 .PHONY: cmake_build
-cmake_build: generated_sources $(KEYCONFIG) | $(BUILDS_DIR) astyle
+cmake_build: generated_sources | $(BUILDS_DIR) astyle
 	rm -rf $(BUILDS_DIR)/CMakeCache.txt $(BUILDS_DIR)/CMakeFiles
 	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
