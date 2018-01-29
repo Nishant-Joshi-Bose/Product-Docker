@@ -28,6 +28,7 @@
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProductEdidInterface.h"
 #include "FrontDoorClient.h"
+#include "EndPointsDefines.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             Start of Product Namespace                                       ///
@@ -53,7 +54,8 @@ ProductEdidInterface::ProductEdidInterface( ProfessorProductController& ProductC
     : m_ProductTask( ProductController.GetTask( ) ),
       m_ProductNotify( ProductController.GetMessageHandler( ) ),
       m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
-      m_connected( false )
+      m_connected( false ),
+      m_CustomProductController( static_cast< ProfessorProductController & >( ProductController ) )
 {
 
 }
@@ -135,8 +137,116 @@ void ProductEdidInterface::Connected( bool connected )
 
         m_EdidClient->RegisterForHotplugEvent( CallbackForKeyEvents );
 
+        Callback< LpmServiceMessages::IPCSource_t >
+        CallbackForCecSource( std::bind( &ProductEdidInterface::HandleSrcSwitch,
+                                         this,
+                                         std::placeholders::_1 ) );
+
+        m_ProductLpmHardwareInterface->RegisterForLpmEvents( IPC_ST_SOURCE, CallbackForCecSource );
+
         return;
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name  ProductEdidInterface::HandleSrcSwitch
+///
+/// @brief This method handles the CEC source switch message received from LPM
+///
+/// @param LpmServiceMessages::IPCSource_t cecSource
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductEdidInterface::HandleSrcSwitch( const LpmServiceMessages::IPCSource_t cecSource )
+{
+    BOSE_DEBUG( s_logger, "Received CEC Source Switch message from LPM" );
+
+    if( m_ProductLpmHardwareInterface == nullptr )
+    {
+        BOSE_ERROR( s_logger, "CEC Message could not be received, as no connection is available." );
+
+        return;
+    }
+    else
+    {
+
+        BOSE_DEBUG( s_logger, "CEC Source Switch Message received from LPM  %d",  cecSource.source() );
+        if( cecSource.source() == LPM_IPC_SOURCE_TV )
+        {
+            SoundTouchInterface::PlaybackRequest playbackRequestData;
+            playbackRequestData.set_source( "PRODUCT" );
+            playbackRequestData.set_sourceaccount( "TV" );
+
+            AsyncCallback< SoundTouchInterface::NowPlaying >
+            cecPlaybackRequestResponseCallback( std::bind( &ProductEdidInterface::HandlePlaybackRequestResponse,
+                                                           this, std::placeholders::_1 ),
+                                                m_ProductTask );
+
+            AsyncCallback< EndPointsError::Error >
+            cecPlaybackRequestErrorCallback( std::bind( &ProductEdidInterface::HandlePlaybackRequestError,
+                                                        this,
+                                                        std::placeholders::_1 ),
+                                             m_ProductTask );
+
+            m_FrontDoorClient->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
+                    playbackRequestData,
+                    cecPlaybackRequestResponseCallback,
+                    cecPlaybackRequestErrorCallback );
+
+            BOSE_INFO( s_logger, "An attempt to play the TV source has been made from CEC." );
+        }
+        else if( cecSource.source() == LPM_IPC_SOURCE_SHELBY )
+        {
+            SoundTouchInterface::PlaybackRequest& playbackRequestData =
+                m_CustomProductController.GetLastSoundTouchPlayback( );
+
+            AsyncCallback< SoundTouchInterface::NowPlaying >
+            cecPlaybackRequestResponseCallback( std::bind( &ProductEdidInterface::HandlePlaybackRequestResponse,
+                                                           this, std::placeholders::_1 ),
+                                                m_ProductTask );
+
+            AsyncCallback< EndPointsError::Error >
+            cecPlaybackRequestErrorCallback( std::bind( &ProductEdidInterface::HandlePlaybackRequestError,
+                                                        this,
+                                                        std::placeholders::_1 ),
+                                             m_ProductTask );
+
+            m_FrontDoorClient->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
+                    playbackRequestData,
+                    cecPlaybackRequestResponseCallback,
+                    cecPlaybackRequestErrorCallback );
+
+            BOSE_INFO( s_logger, "An attempt to play the last SoundTouch source has been made from CEC." );
+        }
+        else
+        {
+            BOSE_ERROR( s_logger, "An invalid intent action has been supplied." );
+        }
+
+        return;
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductEdidInterface::HandlePlaybackRequestResponse
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductEdidInterface::HandlePlaybackRequestResponse( const SoundTouchInterface::NowPlaying&
+                                                          response )
+{
+    BOSE_DEBUG( s_logger, "A response to the playback request %s was received." ,
+                response.source( ).sourcedisplayname( ).c_str( ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductEdidInterface::HandlePlaybackRequestError
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductEdidInterface::HandlePlaybackRequestError( const EndPointsError::Error& error )
+{
+    BOSE_WARNING( s_logger, "%s: Error = (%d-%d) %s", __func__, error.code(), error.subcode(), error.message().c_str() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -237,7 +347,38 @@ void ProductEdidInterface::Stop( )
 void ProductEdidInterface::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
                                              nowPlayingStatus )
 {
-    BOSE_DEBUG( s_logger, "CEC A CAPS now playing status has been received." );
+    BOSE_DEBUG( s_logger, "CEC CAPS now playing status has been received." );
+    if( nowPlayingStatus.has_state( ) )
+    {
+        if( nowPlayingStatus.state( ).status( ) == SoundTouchInterface::Status::play )
+        {
+            if( nowPlayingStatus.has_container( )                          and
+                nowPlayingStatus.container( ).has_contentitem( )           and
+                nowPlayingStatus.container( ).contentitem( ).has_source( ) and
+                nowPlayingStatus.container( ).contentitem( ).has_sourceaccount( ) )
+            {
+                if( nowPlayingStatus.container( ).contentitem( ).source( ).compare( "PRODUCT" ) == 0   and
+                    nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( "TV" ) == 0 )
+                {
+                    BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to SOURCE_TV." );
+
+                    m_ProductLpmHardwareInterface->SendSourceSelection( LPM_IPC_SOURCE_TV );
+                }
+                else
+                {
+                    BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to SOURCE_SOUNDTOUCH." );
+
+                    m_ProductLpmHardwareInterface->SendSourceSelection( LPM_IPC_SOURCE_SHELBY );
+                }
+
+            }
+        }
+    }
+    else
+    {
+        BOSE_DEBUG( s_logger, "CEC CAPS now playing status is unknown. CEC STANDBY  %d",  LPM_IPC_SOURCE_STANDBY );
+        m_ProductLpmHardwareInterface->SendSourceSelection( LPM_IPC_SOURCE_STANDBY );
+    }
 
 }
 
