@@ -230,6 +230,9 @@ public:
     bool IsProductNeedsSetup();
 
     virtual bool IsInNetworkSetupState() const
+    {
+        return false;
+    }
     virtual bool HandleSoftwareUpdateStatus( )
     {
         return false;
