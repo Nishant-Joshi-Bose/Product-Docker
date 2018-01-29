@@ -279,6 +279,18 @@ bool EddieProductController::IsNetworkConnected() const
     return m_cachedStatus.get().isprimaryup() ;
 }
 
+uint32_t EddieProductController::GetWifiProfileCount() const
+{
+    if( m_wifiProfilesCount.is_initialized() )
+    {
+        return m_wifiProfilesCount.get();
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 void EddieProductController::HandleWiFiProfileResponse( const NetManager::Protobuf::WiFiProfiles& profiles )
 {
     m_wifiProfilesCount = profiles.profiles_size();

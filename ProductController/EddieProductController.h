@@ -118,6 +118,7 @@ public:
     ////////////////////////////////////////////////////////////////////////////////
     bool IsNetworkConfigured() const override;
     bool IsNetworkConnected( ) const override;
+    uint32_t GetWifiProfileCount() const override;
     bool IsAutoWakeEnabled( )  const override
     {
         /// TO_Do
