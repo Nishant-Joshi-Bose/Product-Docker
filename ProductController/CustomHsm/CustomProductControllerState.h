@@ -229,6 +229,11 @@ public:
     }
     bool IsProductNeedsSetup();
 
+    virtual bool IsInNetworkSetupState() const
+    {
+        return false;
+    }
+
 public:
     /// The custom version of this function returns the custom ProductController
     static EddieProductController& GetCustomProductController();

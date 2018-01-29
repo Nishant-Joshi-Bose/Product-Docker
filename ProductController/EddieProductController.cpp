@@ -70,7 +70,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_KeyHandler( *GetTask(), m_CliClientMT, KEY_CONFIG_FILE ),
     m_cachedStatus(),
     m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
-#if 0 //@TODO: AJAY
+#if 1 //@TODO: AJAY
     m_wifiProfilesCount(),
 #endif
     m_fdErrorCb( AsyncCallback<EndPointsError::Error> ( std::bind( &EddieProductController::CallbackError,
@@ -251,7 +251,7 @@ void EddieProductController::RegisterEndPoints()
 
     m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API , getConfigurationStatusReqCb );
 
-#if 0 // @TODO-AJAY
+#if 1 // @TODO-AJAY
     AsyncCallback<NetManager::Protobuf::NetworkStatus> networkStatusCb( std::bind( &EddieProductController::HandleNetworkStatus ,
                                                                                    this, std::placeholders::_1 ), GetTask() );
     m_FrontDoorClientIF->RegisterNotification<NetManager::Protobuf::NetworkStatus>( FRONTDOOR_NETWORK_STATUS_API, networkStatusCb );
@@ -262,7 +262,7 @@ void EddieProductController::RegisterEndPoints()
 #endif
 }
 
-#if 0 // @TODO-AJAY
+#if 1 // @TODO-AJAY
 void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus )
 {
     BOSE_INFO( s_logger, "%s,N/w status- (%s)", __func__,  ProtoToMarkup::ToJson( networkStatus, false ).c_str() );
@@ -270,27 +270,25 @@ void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::Ne
     if( networkStatus.has_isprimaryup() )
     {
         m_cachedStatus = networkStatus;
-        GetHsm().Handle< bool, bool > ( &CustomProductControllerState::HandleNetworkState, IsNetworkConfigured() /*configured*/, IsNetworkConnected() /*connected*/ );
+        GetHsm().Handle< bool, bool > ( &CustomProductControllerState::HandleNetworkState, networkConfigured() /*configured*/, networkConnected() /*connected*/ );
     }
 }
-#endif
 
-bool EddieProductController::IsNetworkConfigured() const
+bool EddieProductController::networkConfigured() const
 {
     return ( m_bluetoothSinkList.get().devices_size() || m_wifiProfilesCount.get() || m_cachedStatus.get().isprimaryup() );
 }
 
-bool EddieProductController::IsNetworkConnected() const
+bool EddieProductController::networkConnected() const
 {
     return m_cachedStatus.get().isprimaryup() ;
 }
 
-#if 0 // @TODO-AJAY
 void EddieProductController::HandleWiFiProfileResponse( const NetManager::Protobuf::WiFiProfiles& profiles )
 {
     m_wifiProfilesCount = profiles.profiles_size();
     BOSE_INFO( s_logger, "%s, m_wifiProfilesCount=%d", __func__, m_wifiProfilesCount.get() );
-    GetHsm().Handle< bool, bool > ( &CustomProductControllerState::HandleNetworkState, IsNetworkConfigured() /*configured*/, IsNetworkConnected() /*connected*/ );
+    GetHsm().Handle< bool, bool > ( &CustomProductControllerState::HandleNetworkState, networkConfigured() /*configured*/, networkConnected() /*connected*/ );
 }
 #endif
 

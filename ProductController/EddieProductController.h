@@ -85,7 +85,7 @@ public:
 
     Callback < ProductMessage > GetMessageHandler( );
 
-#if 0 // @TODO AJAY
+#if 1 // @TODO AJAY
     NetManager::Protobuf::NetworkStatus const& GetNetworkStatus() const
     {
         return m_cachedStatus.get();
@@ -113,12 +113,12 @@ public:
     bool IsBooted( ) const override;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @name  IsNetworkConfigured
+    /// @name  networkConfigured
     /// @brief true if system is conencted to ethernet or number of wifi profiles are nonzero
     /// @return bool
     ////////////////////////////////////////////////////////////////////////////////
-    bool IsNetworkConfigured() const override;
-    bool IsNetworkConnected( ) const override;
+    bool networkConfigured() const ;
+    bool networkConnected( ) const ;
     bool IsAutoWakeEnabled( )  const override
     {
         /// TO_Do
@@ -414,7 +414,7 @@ private:
     KeyHandlerUtil::KeyHandler                  m_KeyHandler;
     ProtoPersistenceIF::ProtoPersistencePtr     m_ConfigurationStatusPersistence = nullptr;
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
-#if 0 // @TODO: Ajay
+#if 1 // @TODO: AJAY
     BOptional<NetManager::Protobuf::NetworkStatus> m_cachedStatus;
 #endif
 
