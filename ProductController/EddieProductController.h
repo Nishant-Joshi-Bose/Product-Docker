@@ -112,7 +112,7 @@ public:
     bool IsBooted( ) const override;
 
     ///////////////////////////////////////////////////////////////////////////////
-    /// @name  networkConfigured
+    /// @name  IsNetworkConfigured
     /// @brief true if system is conencted to ethernet or number of wifi profiles are nonzero
     /// @return bool
     ////////////////////////////////////////////////////////////////////////////////
