@@ -6,7 +6,7 @@ set -x
 
 cd $[buildDir]
 CastleToolsDir=/home/epd/srcref/CastleTools
-export PATH=$CastleToolsDir/bin:$PATH
+export PATH=$CastleToolsDir/bin:/tools/klocwork/user/bin:/tools/klocwork/server/bin:$PATH
 
 if [ "$[/javascript myJob.Klocwork]" = "true" ]; then
     KWINJECT="kwinject -I 'testCCompiler.c,testCXXCompiler.cxx'"
