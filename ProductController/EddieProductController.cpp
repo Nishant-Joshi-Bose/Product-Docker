@@ -281,7 +281,7 @@ bool EddieProductController::IsNetworkConnected() const
     return m_cachedStatus.get().isprimaryup() ;
 }
 
-int EddieProductController::GetWifiProfileCount() const
+uint32_t EddieProductController::GetWifiProfileCount() const
 {
     if( m_wifiProfilesCount.is_initialized() )
     {
