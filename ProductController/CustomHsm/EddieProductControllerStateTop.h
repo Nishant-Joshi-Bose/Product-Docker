@@ -9,7 +9,7 @@
 
 #include <string>
 #include "ProductControllerStateTop.h"
-#include "ProductControllerStates.h"
+#include "CustomProductControllerStates.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "HsmState.h"
 

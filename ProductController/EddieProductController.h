@@ -400,7 +400,6 @@ private:
     ProductControllerStatePlayableTransitionIdle            m_ProductControllerStatePlayableTransitionIdle;
     ProductControllerStatePlayableTransitionNetworkStandby  m_ProductControllerStatePlayableTransitionNetworkStandby;
     ProductControllerStateSoftwareUpdateTransition          m_ProductControllerStateSoftwareUpdateTransition;
-    ProductControllerStateLowPowerTransition                m_ProductControllerStateLowPowerTransition;
     ProductControllerStatePlayingTransition                 m_ProductControllerStatePlayingTransition;
     ProductControllerStatePlayingTransitionSelected         m_ProductControllerStatePlayingTransitionSelected;
 
