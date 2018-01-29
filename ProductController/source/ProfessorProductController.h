@@ -154,6 +154,7 @@ public:
     bool IsBooted( )                 const override;
     bool IsNetworkConfigured( )      const override;
     bool IsNetworkConnected( )       const override;
+    int  GetWifiProfileCount( )      const override;
     bool IsAutoWakeEnabled( )        const override;
     bool IsVoiceConfigured( )        const override;
     bool IsSoftwareUpdateRequired( ) const override;

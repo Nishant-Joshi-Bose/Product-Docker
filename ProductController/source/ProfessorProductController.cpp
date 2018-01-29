@@ -558,6 +558,12 @@ bool ProfessorProductController::IsNetworkConnected( ) const
     return m_IsNetworkConnected;
 }
 
+int ProfessorProductController::GetWifiProfileCount( ) const
+{
+    BOSE_INFO( s_logger, "Implementation needed for Professor" );
+    return 0;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProfessorProductController::IsAutoWakeEnabled
