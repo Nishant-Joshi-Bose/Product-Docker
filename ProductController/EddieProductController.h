@@ -70,6 +70,7 @@
 #include "VoiceServiceClient.h"
 #include "BoseVersion.h"
 
+
 namespace ProductApp
 {
 
@@ -124,11 +125,6 @@ public:
         return false;
     }
     bool IsVoiceConfigured( )  const override
-    {
-        /// TO_Do
-        return false;
-    }
-    bool IsSoftwareUpdateRequired( ) const override
     {
         /// TO_Do
         return false;

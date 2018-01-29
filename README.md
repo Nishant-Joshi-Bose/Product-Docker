@@ -143,3 +143,15 @@ start is /opt/Bose/bin/start
 
 Certain important error and status messages go only to the console.
 You generally won't see this information via `adb shell`.
+
+To enable development mode:
+
+```shell session
+# mount -oremount,rw /persist
+# mfgdata set development true
+# mount -oremount,ro /persist
+```
+
+This flag enables core dumps, telnet access and other debug features.
+In particular, if a daemon dies unexpectedly, no automatic recovery
+happens when development mode is enabled.

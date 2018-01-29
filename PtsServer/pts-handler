@@ -48,18 +48,18 @@ while True:
 if method == "GET":
 
 # ----------------------------------------------------------------------------
-# Quality Audit CGI pages.
+# Diagnostics CGI pages.
 
-    if path == "/qaudit":
+    if path == "/diag":
         print """\
 HTTP/1.1 301 Moved Permanently\r
-Location: /qaudit/\r
+Location: /diag/\r
 \r
 Moved Permanently\r
 """
         sys.exit()
 
-    if path.startswith("/qaudit/"):
+    if path.startswith("/diag/"):
         path = path[8:]
         if path == "":
             path = "main"
@@ -69,8 +69,8 @@ Moved Permanently\r
         if i != -1:
             args.append(path[i+1:])
             prog = path[:i]
-        log("qaudit", prog, args)
-        os.chdir("/opt/Bose/qaudit")
+        log("diag", prog, args)
+        os.chdir("/opt/Bose/diag")
         sys.stdout.flush()
         os.execv(prog, [prog] + args)
 
