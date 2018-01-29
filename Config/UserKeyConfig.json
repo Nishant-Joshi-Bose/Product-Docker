@@ -251,34 +251,34 @@
     {
         "action": "FACTORY_DEFAULT",
         "commment": "factory default",
-        "keyEvent": "PRESS_HOLD",
+        "keyEvent": "PRESS",
         "keyList": ["BOSE_FD"],
         "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": [5000]
+        "timeOutList": []
     },
     {
         "action": "TOGGLE_WIFI_RADIO",
         "commment": "toggle wifi",
-        "keyEvent": "PRESS_HOLD",
+        "keyEvent": "PRESS",
         "keyList": ["BOSE_WIFI_OFF"],
         "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": [3000]
+        "timeOutList": []
     },
     {
         "action": "SEND_TO_AP_MODE",
         "commment": "ap setup",
-        "keyEvent": "PRESS_HOLD",
+        "keyEvent": "PRESS",
         "keyList": ["BOSE_AP_SETUP"],
         "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": [3000]
+        "timeOutList": []
     },
     {
         "action": "ACTION_PAIR_SPEAKERS",
         "commment": "pair speakers",
-        "keyEvent": "PRESS_HOLD",
+        "keyEvent": "PRESS",
         "keyList": ["BOSE_PAIR_SPKR"],
         "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": [3000]
+        "timeOutList": []
     },
     {
         "action": "ACTION_MUTE",
