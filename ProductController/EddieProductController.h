@@ -117,8 +117,9 @@ public:
     /// @brief true if system is conencted to ethernet or number of wifi profiles are nonzero
     /// @return bool
     ////////////////////////////////////////////////////////////////////////////////
-    bool networkConfigured() const ;
-    bool networkConnected( ) const ;
+    bool IsNetworkConfigured() const override;
+    bool IsNetworkConnected( ) const override;
+    int GetWifiProfileCount() const override;
     bool IsAutoWakeEnabled( )  const override
     {
         /// TO_Do
