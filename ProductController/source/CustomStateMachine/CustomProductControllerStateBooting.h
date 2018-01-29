@@ -34,6 +34,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
 #include "ProductControllerStateBooting.h"
+#include "ProductControllerStates.h"
 #include "HsmState.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,17 +64,12 @@ public:
     CustomProductControllerStateBooting( ProductControllerHsm& hsm,
                                          CHsmState*            pSuperState,
                                          Hsm::STATE            stateId,
-                                         const std::string&    name    = "CustomProductControllerStateBooting" );
+                                         const std::string&    name    = "CustomBooting" );
 
     ~CustomProductControllerStateBooting( ) override
     {
 
     }
-
-    bool HandleLpmState( bool active )       override;
-    bool HandleCapsState( bool active )      override;
-    bool HandleAudioPathState( bool active ) override;
-    bool HandleSTSSourcesInit( )             override;
 
 private:
 

@@ -46,19 +46,11 @@ ADD_EXECUTABLE(Professor
   source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQ.cpp
   source/CustomStateMachine/CustomProductControllerStateBooting.cpp
-  source/CustomStateMachine/CustomProductControllerStateIdle.cpp
-  source/CustomStateMachine/CustomProductControllerStateIdleVoiceConfigured.cpp
-  source/CustomStateMachine/CustomProductControllerStateIdleVoiceUnconfigured.cpp
-  source/CustomStateMachine/CustomProductControllerStateNetworkStandbyConfigured.cpp
-  source/CustomStateMachine/CustomProductControllerStateNetworkStandby.cpp
-  source/CustomStateMachine/CustomProductControllerStateNetworkStandbyUnconfigured.cpp
-  source/CustomStateMachine/CustomProductControllerStateLowPower.cpp
   source/CustomStateMachine/CustomProductControllerStateOn.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayable.cpp
   source/CustomStateMachine/CustomProductControllerStatePlaying.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayingActive.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayingInactive.cpp
-  source/CustomStateMachine/CustomProductControllerStateUpdatingSoftware.cpp
   source/IntentHandler/IntentHandler.cpp
   source/IntentHandler/PlaybackRequestManager.cpp
   source/IntentHandler/SpeakerPairingManager.cpp

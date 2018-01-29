@@ -61,38 +61,6 @@ CustomProductControllerStatePlayable::CustomProductControllerStatePlayable( Prod
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStatePlayable::HandleStateEnter
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStatePlayable::HandleStateEnter( )
-{
-    BOSE_VERBOSE( s_logger, "%s is in %s.", GetName( ).c_str( ), __FUNCTION__ );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief  CustomProductControllerStatePlayable::HandleNowSelectionInfo
-///
-///
-/// @param  const SoundTouchInterface::NowSelectionInfo&
-///
-/// @return This method returns a true Boolean value indicating that it has handled the event
-///         and no futher processing will be required by any of its superstates.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayable::HandleNowSelectionInfo
-( const  SoundTouchInterface::NowSelectionInfo&  nowSelectionInfo )
-{
-    BOSE_VERBOSE( s_logger, "%s is changing to %s.", GetName( ).c_str( ),
-                  "CustomProductControllerStatePlayingInactive" );
-
-    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
-
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @brief  CustomProductControllerStatePlayable::HandleIntentUserPower
 ///
 /// @param  KeyHandlerUtil::ActionType_t action

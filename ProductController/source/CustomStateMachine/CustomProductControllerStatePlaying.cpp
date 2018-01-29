@@ -125,7 +125,7 @@ bool CustomProductControllerStatePlaying::HandleInactivityTimer( InactivityTimer
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlaying::HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )
 {
-    BOSE_INFO( s_logger, "%s in %s is handling key action %d.", GetName( ).c_str( ), __FUNCTION__, action );
+    BOSE_INFO( s_logger, "%s in %s is handling key action %d.", GetName( ).c_str( ), __func__, action );
 
     GetProductController( ).SendStopPlaybackMessage( );
     GoToAppropriateNonPlayingState( );
@@ -159,28 +159,28 @@ void CustomProductControllerStatePlaying::GoToAppropriateNonPlayingState( )
         {
             BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                           GetName( ).c_str( ),
-                          "CustomProductControllerStateIdleVoiceUnconfigured" );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED );
+                          "CustomProductControllerStateIdleVoiceNotConfigured" );
+            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_NOT_CONFIGURED );
         }
     }
     else
     {
         BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                       GetName( ).c_str( ),
-                      "CustomProductControllerStateNetworkStandbyUnconfigured" );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
+                      "ProductControllerStateNetworkStandbyNotConfigured" );
+        ChangeState( PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_NOT_CONFIGURED );
     }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStatePlaying::HandleLPMPowerStatusFull
+/// @brief  CustomProductControllerStatePlaying::HandleLPMPowerStatusFullOn
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the power
 ///         status from the LPM.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlaying::HandleLPMPowerStatusFullPower( )
+bool CustomProductControllerStatePlaying::HandleLPMPowerStatusFullPowerOn( )
 {
     GetCustomProductController( ).GetEdidInterface( )->PowerOn( );
     return true;

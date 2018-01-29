@@ -34,6 +34,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
 #include "ProductControllerStatePlaying.h"
+#include "ProductControllerStates.h"
 #include "HsmState.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,7 +77,7 @@ public:
 
     bool HandleInactivityTimer( InactivityTimerType timerType )       override;
     bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action ) override;
-    bool HandleLPMPowerStatusFullPower( )                             override;
+    bool HandleLPMPowerStatusFullPowerOn( )                           override;
     bool HandleAdaptIQControl( const ProductAdaptIQControl& )         override;
 
 private:

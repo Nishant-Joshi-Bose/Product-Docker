@@ -154,17 +154,11 @@ public:
     bool IsBooted( )                 const override;
     bool IsNetworkConfigured( )      const override;
     bool IsNetworkConnected( )       const override;
-    uint32_t  GetWifiProfileCount( ) const override;
     bool IsAutoWakeEnabled( )        const override;
     bool IsVoiceConfigured( )        const override;
     bool IsSoftwareUpdateRequired( ) const override;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief This method selects starts a playback on the specified source.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    void SendPlaybackRequest( PlaybackSource_t source );
+    bool IsFirstTimeBootUp( )        const override;
+    bool IsOutOfBoxSetupComplete( )  const override;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -252,6 +246,7 @@ private:
     ///        machine states.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
+    bool m_IsLpmReady;
     bool m_IsCapsReady;
     bool m_IsAudioPathReady;
     bool m_IsSTSReady;
@@ -263,7 +258,7 @@ private:
     bool m_IsSoftwareUpdateRequired;
     bool m_Running;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////GetLastSoundTouchPlayback////////////////////
     ///
     /// @brief The following declarations are used as interfaces to the ProductSTSController,
     ///        which implements the interactions between the Professor Product Controller and the
