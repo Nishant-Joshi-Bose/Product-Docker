@@ -33,12 +33,12 @@
         "timeOutList": [10000]
     },
     {
-        "action": "VOICE_CAROUSEL",
+        "action": "KEY_VOICE_CAROUSEL",
         "commment": "Console: action release ---> Alexa",
         "keyEvent": "RELEASE",
-        "keyList": ["BOSE_GAME_SOURCE"],
-        "origin": ["CAPSENSE"],
-        "timeOutList": [0]
+        "keyList": ["KEY_VAL_AVAIL_AE"],
+        "origin": ["CAPSENSE", "TAP"],
+        "timeOutList": []
     },
     {
         "action": "KEY_ACTION_PRESET_STORE_1",
@@ -217,14 +217,6 @@
         "timeOutList": []
     },
     {
-        "action": "KEY_ACTION_ACTION",
-        "commment": "vpa",
-        "keyEvent": "PRESS",
-        "keyList": ["KEY_VAL_AVAIL_12"],
-        "origin": ["IR", "TAP", "CEC"],
-        "timeOutList": []
-    },
-    {
         "action": "KEY_ACTION_TV",
         "commment": "select tv",
         "keyEvent": "PRESS",
@@ -285,14 +277,6 @@
         "commment": "mute toggle",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_MUTE"],
-        "origin": ["CAPSENSE"],
-        "timeOutList": []
-    },
-    {
-        "action": "KEY_ACTION_ACTION",
-        "commment": "vpa",
-        "keyEvent": "PRESS",
-        "keyList": ["KEY_VAL_AVAIL_12"],
         "origin": ["CAPSENSE"],
         "timeOutList": []
     }
