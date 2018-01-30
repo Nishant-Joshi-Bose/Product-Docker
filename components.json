@@ -53,7 +53,7 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-151+d44b384"
+    "selected_version": "Release/master/0.3.1-156+2fba04b"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -92,7 +92,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/0.2.3-57+c56897b"
+    "selected_version": "Release/master/0.2.3-61+878b65d"
   },
   {
     "name": "protobuf-native",
