@@ -38,6 +38,7 @@
 #include "ProductMessage.pb.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "KeyManager.h"
+#include "CustomProductControllerStates.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -311,6 +312,11 @@ public:
     }
 
     virtual bool HandleSoftwareUpdateStatus( )
+    {
+        return false;
+    }
+
+    virtual bool IsInNetworkSetupState() const
     {
         return false;
     }
