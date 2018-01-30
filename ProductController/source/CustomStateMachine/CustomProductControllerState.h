@@ -332,11 +332,6 @@ public:
         s_productController = productController;
     }
 
-    virtual bool HandleSoftwareUpdateStatus( )
-    {
-        return false;
-    }
-
 protected:
     ///
     /// The custom version of this function returns the custom ProductController.
