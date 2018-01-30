@@ -64,7 +64,7 @@ public:
     CustomProductControllerStateBooting( ProductControllerHsm& hsm,
                                          CHsmState*            pSuperState,
                                          Hsm::STATE            stateId,
-                                         const std::string&    name    = "CustomBooting" );
+                                         const std::string&    name    = "CustomProductControllerStateBooting" );
 
     ~CustomProductControllerStateBooting( ) override
     {
@@ -73,7 +73,7 @@ public:
 
 private:
 
-    void PossiblyGoToAppropriatePlayableState( );
+    void PossiblyGoToNextState( ) override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

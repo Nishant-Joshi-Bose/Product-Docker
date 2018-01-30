@@ -60,10 +60,10 @@ CustomProductControllerStateBooting::CustomProductControllerStateBooting( Produc
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateBooting::PossiblyGoToAppropriatePlayableState
+/// @brief CustomProductControllerStateBooting::PossiblyGoToNextState
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateBooting::PossiblyGoToAppropriatePlayableState( )
+void CustomProductControllerStateBooting::PossiblyGoToNextState( )
 {
     if( GetCustomProductController( ).IsBooted( ) )
     {
@@ -89,6 +89,10 @@ void CustomProductControllerStateBooting::PossiblyGoToAppropriatePlayableState( 
         {
             ChangeState( PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION );
         }
+    }
+    else
+    {
+        BOSE_VERBOSE( s_logger, "The %s state is currently not booted.", GetName( ).c_str( ) );
     }
 }
 

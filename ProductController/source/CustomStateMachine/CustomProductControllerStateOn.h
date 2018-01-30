@@ -65,7 +65,7 @@ public:
     CustomProductControllerStateOn( ProductControllerHsm& hsm,
                                     CHsmState*            pSuperState,
                                     Hsm::STATE            stateId,
-                                    const std::string&    name    = "CustomOn" );
+                                    const std::string&    name    = "CustomProductControllerStateOn" );
 
     ~CustomProductControllerStateOn( ) override
     {
