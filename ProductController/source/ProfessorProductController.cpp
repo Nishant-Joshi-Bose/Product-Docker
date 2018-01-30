@@ -42,23 +42,24 @@
 #include "CustomProductControllerStates.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
+#include "ProductControllerStates.h"
 #include "CustomProductControllerState.h"
 #include "CustomProductControllerStateBooting.h"
 #include "CustomProductControllerStateOn.h"
 #include "CustomProductControllerStatePlayable.h"
+#include "CustomProductControllerStatePlaying.h"
+#include "CustomProductControllerStatePlayingActive.h"
+#include "CustomProductControllerStatePlayingInactive.h"
+#include "CustomProductControllerStateAccessoryPairing.h"
+#include "CustomProductControllerStateAdaptIQ.h"
 #include "ProductControllerStateNetworkStandby.h"
 #include "ProductControllerStateNetworkStandbyConfigured.h"
 #include "ProductControllerStateNetworkStandbyNotConfigured.h"
 #include "ProductControllerStateIdle.h"
 #include "ProductControllerStateIdleVoiceConfigured.h"
 #include "ProductControllerStateIdleVoiceNotConfigured.h"
-#include "ProductControllerStateUpdatingSoftware.h"
-#include "ProductControllerStateLowPower.h"
-#include "CustomProductControllerStatePlayingActive.h"
-#include "CustomProductControllerStatePlaying.h"
-#include "CustomProductControllerStatePlayingInactive.h"
-#include "CustomProductControllerStateAccessoryPairing.h"
-#include "CustomProductControllerStateAdaptIQ.h"
+#include "ProductControllerStateLowPowerStandby.h"
+#include "ProductControllerStateLowPowerStandbyTransition.h"
 #include "ProductControllerStatePlayingDeselected.h"
 #include "ProductControllerStatePlayingSelected.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
@@ -71,7 +72,6 @@
 #include "ProductControllerStatePlayableTransitionIdle.h"
 #include "ProductControllerStatePlayableTransitionNetworkStandby.h"
 #include "ProductControllerStateSoftwareUpdateTransition.h"
-#include "ProductControllerStateLowPowerTransition.h"
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSelected.h"
 #include "ProductControllerStateFactoryDefault.h"
@@ -79,6 +79,10 @@
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
+#include "ProductControllerStateWelcome.h"
+#include "ProductControllerStateSoftwareUpdating.h"
+#include "ProductControllerStateRebooting.h"
+#include "ProductControllerStateCriticalError.h"
 #include "MfgData.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -182,7 +186,7 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION );
 
-    auto* stateSoftwareUpdating = new ProductControllerStateSoftwareUpdating
+    auto* stateSoftwareUpdating = new ProductControllerSoftwareUpdating
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING );
@@ -285,11 +289,13 @@ void ProfessorProductController::Run( )
     auto* customStateAccessoryPairing = new CustomProductControllerStateAccessoryPairing
     ( GetHsm( ),
       customStatePlayingActive,
+      *this,
       PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
 
     auto* customStateAdaptIQ = new CustomProductControllerStateAdaptIQ
     ( GetHsm( ),
       customStatePlayingActive,
+      *this,
       PROFESSOR_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
 
     auto* stateSetup = new ProductControllerStateSetup
@@ -363,12 +369,12 @@ void ProfessorProductController::Run( )
 
     auto* stateStoppingStreamsDedicatedForFactoryDefault = new ProductControllerStateStoppingStreamsDedicatedForFactoryDefault
     ( GetHsm( ),
-      stateProductControllerStateStoppingStreamsDedicated,
+      stateStoppingStreamsDedicated,
       PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_FACTORY_DEFAULT );
 
     auto* stateStoppingStreamsDedicatedForSoftwareUpdate = new ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate
     ( GetHsm( ),
-      stateProductControllerStateStoppingStreamsDedicated,
+      stateStoppingStreamsDedicated,
       PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE );
 
     ///

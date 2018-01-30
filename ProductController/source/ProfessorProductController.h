@@ -151,14 +151,15 @@ public:
     ///        product controller.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool IsBooted( )                 const override;
-    bool IsNetworkConfigured( )      const override;
-    bool IsNetworkConnected( )       const override;
-    bool IsAutoWakeEnabled( )        const override;
-    bool IsVoiceConfigured( )        const override;
-    bool IsSoftwareUpdateRequired( ) const override;
-    bool IsFirstTimeBootUp( )        const override;
-    bool IsOutOfBoxSetupComplete( )  const override;
+    bool     IsBooted( )                 const override;
+    bool     IsNetworkConfigured( )      const override;
+    bool     IsNetworkConnected( )       const override;
+    uint32_t GetWifiProfileCount( ) const override;
+    bool     IsAutoWakeEnabled( )        const override;
+    bool     IsVoiceConfigured( )        const override;
+    bool     IsSoftwareUpdateRequired( ) const override;
+    bool     IsFirstTimeBootUp( )        const;
+    bool     IsOutOfBoxSetupComplete( )  const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

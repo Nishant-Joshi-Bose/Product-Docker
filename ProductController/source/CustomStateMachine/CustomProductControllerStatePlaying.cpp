@@ -153,14 +153,14 @@ void CustomProductControllerStatePlaying::GoToAppropriateNonPlayingState( )
             BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                           GetName( ).c_str( ),
                           "CustomProductControllerStateIdleVoiceConfigured" );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
+            ChangeState( PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
         }
         else
         {
             BOSE_VERBOSE( s_logger, "%s is changing to %s.",
                           GetName( ).c_str( ),
                           "CustomProductControllerStateIdleVoiceNotConfigured" );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_NOT_CONFIGURED );
+            ChangeState( PRODUCT_CONTROLLER_STATE_IDLE_VOICE_NOT_CONFIGURED );
         }
     }
     else
