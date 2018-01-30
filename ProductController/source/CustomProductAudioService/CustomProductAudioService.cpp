@@ -35,11 +35,15 @@ namespace ProductApp
 /// @param  ProfessorProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductAudioService::CustomProductAudioService( ProfessorProductController& ProductController ):
+CustomProductAudioService::CustomProductAudioService( ProfessorProductController& ProductController,
+                                                      const FrontDoorClientIF_t& frontDoorClient,
+                                                      LpmClientIF::LpmClientPtr lpmClient ):
     ProductAudioService( ProductController.GetTask( ),
                          ProductController.GetMessageHandler() ),
+    m_FrontDoorClientIF( frontDoorClient ),
     m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
-    m_AudioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) )
+    m_AudioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) ),
+    m_ThermalTask( std::unique_ptr<ThermalMonitorTask>( new ThermalMonitorTask( lpmClient, std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ) ) ) )
 {
     BOSE_DEBUG( s_logger, __func__ );
 }
@@ -52,6 +56,9 @@ CustomProductAudioService::CustomProductAudioService( ProfessorProductController
 void CustomProductAudioService::RegisterAudioPathEvents()
 {
     BOSE_DEBUG( s_logger, __func__ );
+
+    // Start thermal task, which queries thermal status from LPM for AudioPath
+    m_ThermalTask.Start();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Initialize member variables related to AudioPath
@@ -201,12 +208,48 @@ void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   CustomProductAudioService::ThermalDataReceivedCb
+///
+/// @param  const IpcSystemTemperatureData_t& data
+///
+/// @brief  Callback function, when thermal task receives thermal data from LPM
+///
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::ThermalDataReceivedCb( const IpcSystemTemperatureData_t& data )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    std::string tempDataString = ProtoToMarkup::ToJson( data, false );
+    *( m_MainStreamAudioSettings.mutable_temperaturedata() ) = data;
+    SendMainStreamAudioSettingsEvent();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::SetThermalMonitorEnabled
+///
+/// @param  bool enabled
+///
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    if( enabled )
+    {
+        m_thermalTask.Start();
+    }
+    else
+    {
+        m_thermalTask.Stop();
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief Helper functions to convert audio setting values from string format to enumuration required from DSP
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 LpmServiceMessages::AudioSettingsAudioMode_t CustomProductAudioService::ModeNameToEnum( const std::string& modeName )
 {
-    BOSE_DEBUG( s_logger, __func__ );
     if( modeName == "direct" )
     {
         return AUDIOSETTINGS_AUDIO_MODE_DIRECT;
@@ -228,7 +271,6 @@ LpmServiceMessages::AudioSettingsAudioMode_t CustomProductAudioService::ModeName
 
 LpmServiceMessages::AudioSettingsContent_t CustomProductAudioService::ContentTypeNameToEnum( const std::string& contentTypeName )
 {
-    BOSE_DEBUG( s_logger, __func__ );
     if( contentTypeName == "audio" )
     {
         return AUDIOSETTINGS_CONTENT_AUDIO;
@@ -245,7 +287,6 @@ LpmServiceMessages::AudioSettingsContent_t CustomProductAudioService::ContentTyp
 
 LpmServiceMessages::AudioSettingsDualMonoMode_t CustomProductAudioService::DualMonoSelectNameToEnum( const std::string& dualMonoSelectName )
 {
-    BOSE_DEBUG( s_logger, __func__ );
     if( dualMonoSelectName == "left" )
     {
         return AUDIOSETTINGS_DUAL_MONO_LEFT;
@@ -271,8 +312,6 @@ LpmServiceMessages::AudioSettingsDualMonoMode_t CustomProductAudioService::DualM
 void CustomProductAudioService::RegisterFrontDoorEvents()
 {
     BOSE_DEBUG( s_logger, __func__ );
-
-    m_FrontDoorClientIF = FrontDoor::FrontDoorClient::Create( "ProductAudioService-FrontDoor" );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/bass - register ProductController as handler for POST/PUT/GET requests
