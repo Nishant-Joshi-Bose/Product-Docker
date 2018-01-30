@@ -70,6 +70,7 @@
 #include "VoiceServiceClient.h"
 #include "BoseVersion.h"
 
+
 namespace ProductApp
 {
 
@@ -117,17 +118,13 @@ public:
     ////////////////////////////////////////////////////////////////////////////////
     bool IsNetworkConfigured() const override;
     bool IsNetworkConnected( ) const override;
+    uint32_t GetWifiProfileCount() const override;
     bool IsAutoWakeEnabled( )  const override
     {
         /// TO_Do
         return false;
     }
     bool IsVoiceConfigured( )  const override
-    {
-        /// TO_Do
-        return false;
-    }
-    bool IsSoftwareUpdateRequired( ) const override
     {
         /// TO_Do
         return false;
@@ -404,7 +401,6 @@ private:
     ProductControllerStatePlayableTransitionIdle            m_ProductControllerStatePlayableTransitionIdle;
     ProductControllerStatePlayableTransitionNetworkStandby  m_ProductControllerStatePlayableTransitionNetworkStandby;
     ProductControllerStateSoftwareUpdateTransition          m_ProductControllerStateSoftwareUpdateTransition;
-    ProductControllerStateLowPowerTransition                m_ProductControllerStateLowPowerTransition;
     ProductControllerStatePlayingTransition                 m_ProductControllerStatePlayingTransition;
     ProductControllerStatePlayingTransitionSelected         m_ProductControllerStatePlayingTransitionSelected;
 

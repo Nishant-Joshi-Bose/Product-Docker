@@ -6,7 +6,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "EddieProductController.h"
-#include "ProductControllerStates.h"
+#include "CustomProductControllerStates.h"
 #include "CustomProductControllerState.h"
 #include "CustomProductAudioService.h"
 #include "APTaskFactory.h"
@@ -64,7 +64,6 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_ProductControllerStatePlayableTransitionIdle( GetHsm(), &m_ProductControllerStatePlayableTransition, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE ),
     m_ProductControllerStatePlayableTransitionNetworkStandby( GetHsm(), &m_ProductControllerStatePlayableTransition, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY ),
     m_ProductControllerStateSoftwareUpdateTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION ),
-    m_ProductControllerStateLowPowerTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_TRANSITION ),
     m_ProductControllerStatePlayingTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION ),
     m_ProductControllerStatePlayingTransitionSelected( GetHsm(), &m_ProductControllerStatePlayingTransition, PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SELECTED ),
     m_KeyHandler( *GetTask(), m_CliClientMT, KEY_CONFIG_FILE ),
@@ -114,7 +113,6 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     GetHsm().AddState( &m_ProductControllerStatePlayableTransitionIdle );
     GetHsm().AddState( &m_ProductControllerStatePlayableTransitionNetworkStandby );
     GetHsm().AddState( &m_ProductControllerStateSoftwareUpdateTransition );
-    GetHsm().AddState( &m_ProductControllerStateLowPowerTransition );
     GetHsm().AddState( &m_ProductControllerStatePlayingTransition );
     GetHsm().AddState( &m_ProductControllerStatePlayingTransitionSelected );
 
@@ -191,6 +189,8 @@ std::string const& EddieProductController::GetDefaultProductName() const
 {
     static std::string productName = "Bose ";
     std::string macAddress = MacAddressInfo::GetPrimaryMAC();
+
+    productName = "Bose ";
     try
     {
         productName += ( macAddress.substr( macAddress.length() - 6 ) );
@@ -277,6 +277,18 @@ bool EddieProductController::IsNetworkConfigured() const
 bool EddieProductController::IsNetworkConnected() const
 {
     return m_cachedStatus.get().isprimaryup() ;
+}
+
+uint32_t EddieProductController::GetWifiProfileCount() const
+{
+    if( m_wifiProfilesCount.is_initialized() )
+    {
+        return m_wifiProfilesCount.get();
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 void EddieProductController::HandleWiFiProfileResponse( const NetManager::Protobuf::WiFiProfiles& profiles )
@@ -516,14 +528,16 @@ void EddieProductController::HandleNetworkModuleReady( bool networkModuleReady )
 
 bool EddieProductController::IsAllModuleReady() const
 {
-    BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|NetworkModuleReady=%d|m_isBluetoothReady=%d|STSReady=%d", __func__,
-               IsCAPSReady() , IsLpmReady(), IsNetworkModuleReady(), IsBluetoothModuleReady(), IsSTSReady() );
+    BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|NetworkModuleReady=%d|m_isBluetoothReady=%d|"
+               "STSReady=%d|IsSoftwareUpdateReady=%d", __func__, IsCAPSReady() , IsLpmReady(),
+               IsNetworkModuleReady(), IsBluetoothModuleReady(), IsSTSReady(), IsSoftwareUpdateReady() );
 
     return ( IsCAPSReady() and
              IsLpmReady() and
              IsNetworkModuleReady() and
              IsSTSReady() and
-             IsBluetoothModuleReady() ) ;
+             IsBluetoothModuleReady() and
+             IsSoftwareUpdateReady() ) ;
 }
 
 bool EddieProductController::IsBtLeModuleReady() const

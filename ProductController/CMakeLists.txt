@@ -31,6 +31,7 @@ ADD_EXECUTABLE(Eddie
   ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/IntentHandler.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
+  ${PROTO_CC_DEST}/ProductSetupState.pb.cc
   ${PROTO_CC_DEST}/VolumeConfig.pb.cc
   IntentHandler/CountDownManager.cpp
   IntentHandler/IntentHandler.cpp
@@ -66,6 +67,7 @@ TARGET_LINK_LIBRARIES(Eddie
   cap
   dl
   SoundTouch_SDK_Protobuf_static
+  SoftwareUpdateAPI
 )
 
 INSTALL(TARGETS Eddie DESTINATION ${OUTPUT_BIN_DIR})
