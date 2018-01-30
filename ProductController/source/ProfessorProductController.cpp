@@ -39,7 +39,7 @@
 #include "ProductAdaptIQManager.h"
 #include "ProductControllerStateTop.h"
 #include "ProductControllerStateSetup.h"
-#include "ProductControllerStates.h"
+#include "CustomProductControllerStates.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
 #include "CustomProductControllerState.h"
@@ -75,6 +75,11 @@
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSelected.h"
 #include "ProductControllerStateFactoryDefault.h"
+#include "ProductControllerStateStoppingStreamsDedicated.h"
+#include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
+#include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
+#include "ProductControllerStatePlayingSelectedSetupExiting.h"
+
 #include "MfgData.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -129,7 +134,6 @@ ProfessorProductController::ProfessorProductController( ) :
     m_IsAutoWakeEnabled( false ),
     m_IsAccountConfigured( false ),
     m_IsMicrophoneEnabled( false ),
-    m_IsSoftwareUpdateRequired( false ),
     m_Running( false ),
     m_currentSource( SOURCE_TV ),
 
@@ -282,7 +286,7 @@ void ProfessorProductController::Run( )
 
     auto* stateStoppingStreams = new ProductControllerStateStoppingStreams
     ( GetHsm( ),
-      stateTop,
+      stateSelected,
       PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS );
 
     auto* statePlayableTransition = new ProductControllerStatePlayableTransition
@@ -305,11 +309,6 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION );
 
-    auto* stateLowPowerTransition = new ProductControllerStateLowPowerTransition
-    ( GetHsm( ),
-      stateTop,
-      PRODUCT_CONTROLLER_STATE_LOW_POWER_TRANSITION );
-
     auto* statePlayingTransition = new ProductControllerStatePlayingTransition
     ( GetHsm( ),
       stateTop,
@@ -324,6 +323,29 @@ void ProfessorProductController::Run( )
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_FACTORY_DEFAULT );
+
+    auto* stateProductControllerStateStoppingStreamsDedicated = new ProductControllerStateStoppingStreamsDedicated
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED );
+
+    auto* stateProductControllerStateStoppingStreamsDedicatedForFactoryDefault =
+        new ProductControllerStateStoppingStreamsDedicatedForFactoryDefault
+    ( GetHsm( ),
+      stateProductControllerStateStoppingStreamsDedicated,
+      PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_FACTORY_DEFAULT );
+
+    auto* stateProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate =
+        new ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate
+    ( GetHsm( ),
+      stateProductControllerStateStoppingStreamsDedicated,
+      PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE );
+
+    auto* stateProductControllerStatePlayingSelectedSetupExiting =
+        new ProductControllerStatePlayingSelectedSetupExiting
+    ( GetHsm( ),
+      stateSetup,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING );
 
     ///
     /// The states are added to the state machine and the state machine is initialized.
@@ -358,10 +380,14 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( statePlayableTransitionIdle );
     GetHsm( ).AddState( statePlayableTransitionNetworkStandby );
     GetHsm( ).AddState( stateSoftwareUpdateTransition );
-    GetHsm( ).AddState( stateLowPowerTransition );
     GetHsm( ).AddState( statePlayingTransition );
     GetHsm( ).AddState( statePlayingTransitionSelected );
     GetHsm( ).AddState( stateFactoryDefault );
+    GetHsm( ).AddState( stateProductControllerStateStoppingStreamsDedicated );
+    GetHsm( ).AddState( stateProductControllerStateStoppingStreamsDedicatedForFactoryDefault );
+    GetHsm( ).AddState( stateProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate );
+    GetHsm( ).AddState( stateProductControllerStatePlayingSelectedSetupExiting );
+
 
     GetHsm( ).Init( this, PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
@@ -531,7 +557,8 @@ bool ProfessorProductController::IsBooted( ) const
     BOSE_VERBOSE( s_logger, "STS Initialized      :  %s", ( m_IsSTSReady       ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
-    return ( m_IsLpmReady and m_IsCapsReady and m_IsAudioPathReady and m_IsSTSReady );
+    return ( m_IsLpmReady and m_IsCapsReady and m_IsAudioPathReady and m_IsSTSReady and
+             m_isSoftwareUpdateReady );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -558,6 +585,12 @@ bool ProfessorProductController::IsNetworkConnected( ) const
     return m_IsNetworkConnected;
 }
 
+uint32_t ProfessorProductController::GetWifiProfileCount( ) const
+{
+    BOSE_INFO( s_logger, "Implementation needed for Professor" );
+    return 0;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProfessorProductController::IsAutoWakeEnabled
@@ -580,18 +613,6 @@ bool ProfessorProductController::IsAutoWakeEnabled( ) const
 bool ProfessorProductController::IsVoiceConfigured( ) const
 {
     return ( m_IsMicrophoneEnabled and m_IsAccountConfigured );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::IsSoftwareUpdateRequired
-///
-/// @return This method returns a true or false value, based on a set member variable.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsSoftwareUpdateRequired( ) const
-{
-    return m_IsSoftwareUpdateRequired;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

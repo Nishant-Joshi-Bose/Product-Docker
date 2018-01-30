@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      ProductControllerStates.h
+/// @file      CustomProductControllerStates.h
 ///
 /// @brief     This file defines the Product Controller Hierarchical State Machine, abbreviated HSM.
 ///            Both common and specific product state IDs are defined in this file.
@@ -27,53 +27,17 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma once
 
+
+#include "ProductControllerStates.h"
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @note For the HSM State framework, a zero value, 0, in the enumeration is reserved for the top
 ///       state and should not be used.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-enum ProductControllerStates
+enum CustomProductControllerStates
 {
-    ///
-    /// Common product controller states amongst devices are defined below.
-    ///
-    // Important Note: HsmState framework reserves '0' as top state. DO NOT USE!
-    PRODUCT_CONTROLLER_STATE_BOOTING = 1,
-    PRODUCT_CONTROLLER_STATE_REBOOTING,
-    PRODUCT_CONTROLLER_STATE_SETUP,
-    PRODUCT_CONTROLLER_STATE_CRITICAL_ERROR,
-    PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED,
-    PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_NOT_CONFIGURED,
-    PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY,
-    PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY,
-    PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION,
-    PRODUCT_CONTROLLER_STATE_ON,
-    PRODUCT_CONTROLLER_STATE_IDLE,
-    PRODUCT_CONTROLLER_STATE_PLAYABLE,
-    PRODUCT_CONTROLLER_STATE_PLAYING,
-    PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE,
-    PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE,
-    PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED,
-    PRODUCT_CONTROLLER_STATE_IDLE_VOICE_NOT_CONFIGURED,
-    PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING,
-    PRODUCT_CONTROLLER_STATE_FACTORY_DEFAULT,
-    PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED,
-    PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED,
-    PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT,
-    PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT,
-    PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP,
-    PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NETWORK_SETUP,
-    PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_OTHER,
-    PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS,
-    PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION,
-    PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE,
-    PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY,
-    PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION,
-    PRODUCT_CONTROLLER_STATE_LOW_POWER_TRANSITION,
-    PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION,
-    PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SELECTED,
-    PROFESSOR_PRODUCT_CONTROLLER_CUSTOM_STATES_START,
 
     ///
     /// Custom product controller states that rely on common states are defined below.
@@ -95,8 +59,12 @@ enum ProductControllerStates
     ///
     /// Custom product controller states that are specific to Professor are defined below.
     ///
-    PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING    = PROFESSOR_PRODUCT_CONTROLLER_CUSTOM_STATES_START,
-    PROFESSOR_PRODUCT_CONTROLLER_STATE_ADAPTIQ
+    PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING            = PRODUCT_CONTROLLER_STATE_LAST,
+    PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_ACCESSORY_PAIRING,
+    PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING_SELECTED,
+    PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING_DESELECTED,
+    PROFESSOR_PRODUCT_CONTROLLER_STATE_ADAPTIQ,
+    PROFESSOR_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING,
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

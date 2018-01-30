@@ -13,7 +13,7 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@c641553d6df404782bd2948aaa3e4e06906190b7"
+    "selected_version": "master@95b7d64abf58cc7ccee894865e78306f56313ba6"
   },
   {
     "name": "AVS-qc8017_32",
@@ -73,7 +73,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@ead5779a5ed597d07f205486efd6960ea2835e9a"
+    "selected_version": "master@8f0bcce78d108a177c8b80099f7e96e403ebdf3a"
   },
   {
     "name": "FrontDoor-qc8017_32",
