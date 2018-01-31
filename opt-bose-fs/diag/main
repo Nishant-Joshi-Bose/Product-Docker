@@ -53,7 +53,7 @@ print """
 </style>
 </head>
 <body>
-<h1>Diagnostic</h1>
+<h1>Diagnostics</h1>
 <hr>
 """
 
