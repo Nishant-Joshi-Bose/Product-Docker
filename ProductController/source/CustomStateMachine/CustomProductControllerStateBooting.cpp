@@ -55,7 +55,7 @@ CustomProductControllerStateBooting::CustomProductControllerStateBooting( Produc
 
     : ProductControllerStateBooting( hsm, pSuperState, stateId, name )
 {
-    BOSE_VERBOSE( s_logger, "The %s state has been constructed.", GetName( ).c_str( ) );
+    BOSE_INFO( s_logger, "The %s state has been constructed.", GetName( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,19 +69,19 @@ void CustomProductControllerStateBooting::PossiblyGoToNextState( )
     {
         if( GetCustomProductController( ).IsFirstTimeBootUp( ) )
         {
-            BOSE_VERBOSE( s_logger, "The %s state is changing to a Welcome state.", GetName( ).c_str( ) );
+            BOSE_INFO( s_logger, "The %s state is changing to a Welcome state.", GetName( ).c_str( ) );
 
             ChangeState( PRODUCT_CONTROLLER_STATE_WELCOME );
         }
         else if( GetCustomProductController( ).IsSoftwareUpdateRequired( ) )
         {
-            BOSE_VERBOSE( s_logger, "The %s state is changing to an UpdatingSoftware state.", GetName( ).c_str( ) );
+            BOSE_INFO( s_logger, "The %s state is changing to an UpdatingSoftware state.", GetName( ).c_str( ) );
 
             ChangeState( PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION );
         }
         else if( not GetCustomProductController( ).IsOutOfBoxSetupComplete( ) )
         {
-            BOSE_VERBOSE( s_logger, "The %s state is changing to a Setup state.", GetName( ).c_str( ) );
+            BOSE_INFO( s_logger, "The %s state is changing to a Setup state.", GetName( ).c_str( ) );
 
             ChangeState( PRODUCT_CONTROLLER_STATE_SETUP );
         }
@@ -92,7 +92,7 @@ void CustomProductControllerStateBooting::PossiblyGoToNextState( )
     }
     else
     {
-        BOSE_VERBOSE( s_logger, "The %s state is currently not booted.", GetName( ).c_str( ) );
+        BOSE_INFO( s_logger, "The %s state is currently not booted.", GetName( ).c_str( ) );
     }
 }
 

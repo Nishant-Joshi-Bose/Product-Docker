@@ -58,7 +58,7 @@ CustomProductControllerStatePlaying::CustomProductControllerStatePlaying
 
     : ProductControllerStatePlaying( hsm, pSuperState, stateId, name )
 {
-    BOSE_VERBOSE( s_logger, "%s is being constructed.", name.c_str() );
+    BOSE_INFO( s_logger, "%s is being constructed.", name.c_str() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,22 +71,11 @@ CustomProductControllerStatePlaying::CustomProductControllerStatePlaying
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlaying::HandleStateEnter( )
 {
-    BOSE_VERBOSE( s_logger, "%s is being entered.", GetName( ).c_str( ) );
+    BOSE_INFO( s_logger, "%s is being entered.", GetName( ).c_str( ) );
 
     GetCustomProductController( ).GetLpmHardwareInterface( )->SetSystemState( SYSTEM_STATE_ON );
 
-    BOSE_VERBOSE( s_logger, "An attempt to set to full power is being made." );
-}
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStatePlaying::HandleStateExit
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStatePlaying::HandleStateExit( )
-{
-    BOSE_VERBOSE( s_logger, "%s is being exited.", GetName( ).c_str( ) );
+    BOSE_INFO( s_logger, "An attempt to set to full power is being made." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -150,24 +139,24 @@ void CustomProductControllerStatePlaying::GoToAppropriateNonPlayingState( )
         if( GetCustomProductController( ).IsNetworkConnected( ) and
             GetCustomProductController( ).IsVoiceConfigured( ) )
         {
-            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                          GetName( ).c_str( ),
-                          "CustomProductControllerStateIdleVoiceConfigured" );
+            BOSE_INFO( s_logger, "%s is changing to %s.",
+                       GetName( ).c_str( ),
+                       "CustomProductControllerStateIdleVoiceConfigured" );
             ChangeState( PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
         }
         else
         {
-            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                          GetName( ).c_str( ),
-                          "CustomProductControllerStateIdleVoiceNotConfigured" );
+            BOSE_INFO( s_logger, "%s is changing to %s.",
+                       GetName( ).c_str( ),
+                       "CustomProductControllerStateIdleVoiceNotConfigured" );
             ChangeState( PRODUCT_CONTROLLER_STATE_IDLE_VOICE_NOT_CONFIGURED );
         }
     }
     else
     {
-        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                      GetName( ).c_str( ),
-                      "ProductControllerStateNetworkStandbyNotConfigured" );
+        BOSE_INFO( s_logger, "%s is changing to %s.",
+                   GetName( ).c_str( ),
+                   "ProductControllerStateNetworkStandbyNotConfigured" );
         ChangeState( PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_NOT_CONFIGURED );
     }
 }

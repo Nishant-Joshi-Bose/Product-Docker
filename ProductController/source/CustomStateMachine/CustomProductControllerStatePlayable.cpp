@@ -56,7 +56,7 @@ CustomProductControllerStatePlayable::CustomProductControllerStatePlayable( Prod
                                                                             const std::string&    name )
     : ProductControllerStatePlayable( hsm, pSuperState, stateId, name )
 {
-    BOSE_VERBOSE( s_logger, "%s is being constructed.", GetName( ).c_str( ) );
+    BOSE_INFO( s_logger, "%s is being constructed.", GetName( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

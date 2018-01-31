@@ -1,15 +1,16 @@
 INCLUDE_DIRECTORIES(
-  ${NETWORK_SERVICE_DIR}/include
+  ${A4VVIDEOMANAGER_DIR}/source/Client
   ${CASTLECLI_DIR}/include
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/SoundTouchInterface
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/Bluetooth
+  ${KEYHANDLER_DIR}/include
+  ${NETWORK_SERVICE_DIR}/include
   ${PRODUCTCONTROLLERCOMMON_DIR}
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
-  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
-  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
   ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
-  ${KEYHANDLER_DIR}/include
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/Bluetooth
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/SoundTouchInterface
   .
   include
   source
@@ -17,7 +18,6 @@ INCLUDE_DIRECTORIES(
   source/CustomProductLpmHardwareInterface
   source/CustomStateMachine
   source/IntentHandler
-  ${A4VVIDEOMANAGER_DIR}/source/Client
 )
 
 # -----------------------------------------------------------------------------
@@ -39,8 +39,8 @@ ADD_EXECUTABLE(Professor
   source/ProductStart.cpp
   source/ProductSystemManager.cpp
   source/ProfessorProductController.cpp
-  source/CustomProductAudioService/CustomProductAudioService.cpp
   source/CustomProductAudioService/CustomAudioSettingsManager.cpp
+  source/CustomProductAudioService/CustomProductAudioService.cpp
   source/CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp

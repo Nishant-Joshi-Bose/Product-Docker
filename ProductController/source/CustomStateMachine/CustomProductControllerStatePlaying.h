@@ -73,7 +73,6 @@ public:
     }
 
     void HandleStateEnter( ) override;
-    void HandleStateExit( )  override;
 
     bool HandleInactivityTimer( InactivityTimerType timerType )       override;
     bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action ) override;

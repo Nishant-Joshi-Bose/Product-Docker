@@ -129,7 +129,6 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     /// Member Variable Initialization
     ///
-    m_IsLpmReady( false ),
     m_IsCapsReady( false ),
     m_IsAudioPathReady( false ),
     m_IsSTSReady( false ),
@@ -335,17 +334,17 @@ void ProfessorProductController::Run( )
     auto* statePlayingSelectedNotSilent = new ProductControllerStatePlayingSelectedNotSilent
     ( GetHsm( ),
       statePlayingSelected,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NETWORK_SETUP );
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT );
 
     auto* statePlayingSelectedSetup = new ProductControllerStatePlayingSelectedSetup
     ( GetHsm( ),
       statePlayingSelected,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT );
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP );
 
     auto* statePlayingSelectedSetupNetwork = new ProductControllerStatePlayingSelectedSetupNetwork
     ( GetHsm( ),
       statePlayingSelectedSetup,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP );
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK );
 
     auto* statePlayingSelectedSetupOther = new ProductControllerStatePlayingSelectedSetupOther
     ( GetHsm( ),
@@ -589,14 +588,14 @@ bool ProfessorProductController::IsBooted( ) const
 {
     BOSE_VERBOSE( s_logger, "------------ Product Controller Booted Check ---------------" );
     BOSE_VERBOSE( s_logger, " " );
-    BOSE_VERBOSE( s_logger, "LPM Connected         :  %s", ( IsLpmReady( )      ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "LPM Connected         :  %s", ( m_IsLpmReady       ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "CAPS Initialized      :  %s", ( m_IsCapsReady      ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "STS Initialized       :  %s", ( m_IsSTSReady       ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Bluetooth Initialized :  %s", ( IsBluetoothModuleReady( ) ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
-    return ( IsLpmReady( )      and
+    return ( m_IsLpmReady       and
              m_IsCapsReady      and
              m_IsAudioPathReady and
              m_IsSTSReady       and
@@ -683,12 +682,12 @@ bool ProfessorProductController::IsSoftwareUpdateRequired( ) const
 ///
 /// @name   IsFirstTimeBootUp
 ///
-/// @return This method returns a true or false value, based on whether this is the first time that
-///         the device boots up or is first booting up after a factory init.
+/// @return This method returns a true or false value, based on whether this is the first time
+///         booting up after a factory default.
 ///
 /// @todo   A way of determing whether the device is performing a first time boot up will need to be
 ///         coded, possibly through adding a method call to the DeviceManager class in the common
-///         code base.
+///         code base. A JIRA Story PGC-715 has been create for this purpose.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProfessorProductController::IsFirstTimeBootUp( ) const
@@ -700,10 +699,11 @@ bool ProfessorProductController::IsFirstTimeBootUp( ) const
 ///
 /// @name   IsOutOfBoxSetupComplete
 ///
-/// @return This method returns a true or false value, based on a set member variable.
+/// @return This method returns a true o0r false value, based on a set member variable.
 ///
 /// @todo   A way of determing whether the out-of-box setup is complete will need to be coded,
 ///         possibly through adding a method call to the DeviceManager class in the common code base.
+///         A JIRA Story PGC-714 has been create for this purpose.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProfessorProductController::IsOutOfBoxSetupComplete( ) const
@@ -1440,7 +1440,7 @@ std::string const& ProfessorProductController::GetDefaultProductName( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::GetDefaultProductName
+/// @name   ProfessorProductController::GetVariantId
 ///
 /// @brief  This method is to get the product variant ID, such as its colour.
 ///
