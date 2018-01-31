@@ -48,7 +48,7 @@ def notifyBuild(String buildStatus = 'STARTED')
     }
   else if(buildStatus == 'SUCCESS')
     {
-        def subject = "${buildStatus}: EDDIE PIPELINE PIPELINE PASSED"
+        def subject = "${buildStatus}: EDDIE PIPELINE PASSED"
         def summary = "${subject}: http://eco2jenkins.bose.com:8080/job/Pipelines/job/$pipelineName/lastSuccessfulBuild/console"
 		color = 'GREEN'
         colorCode = '#00FF00'
