@@ -29,7 +29,7 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.2.4-20290"
+    "selected_version": "Release/Castle-Fork/0.2.5-20386"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -84,11 +84,11 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/0.3.4-79+83bfa5b"
+    "selected_version": "Release/master/0.3.5-93+a323e45"
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.0.1-18+64c6444"
+    "selected_version": "Release/master/0.0.2-30+87e0b96"
   },
   {
     "name": "KeyHandler-qc8017_32",
