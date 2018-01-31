@@ -37,6 +37,7 @@ PROFESSORLPMPACKAGE_DIR = $(shell components get ProfessorLPM-Package installed_
 PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
+RIVIERALPM_DIR = $(shell components get RivieraLPM installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
@@ -51,6 +52,27 @@ astyle:
 ifndef DONT_RUN_ASTYLE
 	run-astyle
 endif
+
+USERKEYCONFIG=$(PWD)/Config/UserKeyConfig.json
+KEYCONFIG=$(PWD)/opt-bose-fs/etc/KeyConfiguration.json
+LPM_KEYS=$(RIVIERALPM_DIR)/include/RivieraLPM_KeyValues.h
+INTENT_DEFS=$(PWD)/ProductController/source/IntentHandler/Intents.h 
+KEYCONFIG_INCS=$(PRODUCTCONTROLLERCOMMON_DIR)/IntentHandler
+
+.PHONY: keyconfig
+keyconfig:
+	cd tools/key_config_generator && \
+	./generate_key_config \
+		$(BUILDS_DIR) \
+		--inputcfg $(USERKEYCONFIG) \
+		--actions $(INTENT_DEFS) \
+		--cap $(LPM_KEYS) \
+		--ir $(LPM_KEYS) \
+		--tap $(LPM_KEYS) \
+		--cec $(LPM_KEYS) \
+		--rf $(LPM_KEYS) \
+		--outputcfg $(KEYCONFIG) \
+		--incdirs $(KEYCONFIG_INCS)
 
 .PHONY: cmake_build
 cmake_build: generated_sources | $(BUILDS_DIR) astyle
