@@ -179,7 +179,7 @@ public:
         return false;
     }
 
-    virtual bool HandleLpmLowpowerSystemState()
+    virtual bool HandleLpmLowPowerSystemState()
     {
         return false;
     }
