@@ -62,6 +62,7 @@ TARGET_LINK_LIBRARIES(Eddie
   jsoncpp
   protobuf
   TinyXml
+  libHttpInterface.a
   pthread
   rt
   cap

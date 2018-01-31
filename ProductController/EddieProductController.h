@@ -64,12 +64,11 @@
 #include "IntentHandler.h"
 #include "ProductSTSController.h"
 #include "DisplayController.h"
-#include "DataCollectionClient.h"
+#include "DataCollectionClientIF.h"
 #include "MacAddressInfo.h"
 #include "BOptional.h"
 #include "VoiceServiceClient.h"
 #include "BoseVersion.h"
-
 
 namespace ProductApp
 {
@@ -163,12 +162,11 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name DataCollectionClient
-/// @brief When any key is been released sending the Data to DataCollectionClient
+/// @brief invokes DataCollectionClient When any key is released.
 /// @return void
 //////////////////////////////////////////////////////////////////////////////
     void SendDataCollection( const IpcKeyInformation_t& keyInformation );
-    std::string keyToOriginator( enum KeyOrigin_t e );
-    std::string keyToEventName( uint32_t e );
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  ReadSystemLanguageFromPersistence
 /// @brief Function to read persisted language code from /mnt/nv/product-persistence.
@@ -434,7 +432,7 @@ private:
     bool                                        m_isSTSReady = false;
     bool m_IsAudioPathReady = true;
     ProductSTSController                        m_ProductSTSController;
-    DataCollectionClient                        m_DataCollectionClient;
+    std::shared_ptr<DataCollectionClientIF>     m_DataCollectionClient;
     VoiceServiceClient                          m_voiceServiceClient;
 
     /// Shared Pointer to the LPM Custom Hardware Interface
