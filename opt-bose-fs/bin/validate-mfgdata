@@ -59,17 +59,20 @@ if guid is None or not re.match(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{
     guid = open("/proc/sys/kernel/random/uuid").read().rstrip("\n")
     fixes.append("set guid " + guid)
 
-serialnumber = get("snSystem")
-if serialnumber is None or not re.match(r'^RF\d{15}$', serialnumber):
+sn = get("snSystem")
+if not sn: # allow any non-empty string
+    warn("Invalid snSystem:", sn)
     fixes.append("set snSystem RF000000000000000")
 
-language = get("productLanguage")
-if language is None:
+pl = get("productLanguage")
+if pl is None:
+    warn("Invalid productLanguage:", pl)
     fixes.append("set productLanguage english")
 
-color = get("productColor")
-if color is None:
-    fixes.append("set productColor tripleBlack  # (tripleBlack|luxGray)")
+pc = get("productColor")
+if pc is None or not re.match(r'^(tripleBlack|luxGray)$', pc):
+    warn("Invalid productColor:", pc)
+    fixes.append("set productColor tripleBlack  # tripleBlack|luxGray")
 
 if not fixes:
     # Validation successful.
