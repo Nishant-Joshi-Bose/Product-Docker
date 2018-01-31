@@ -15,7 +15,7 @@ def CAPS_Component = ["CAPS-Component/playbackRequest","CAPS-Component/volumeAPI
 def Castle_SW_Update = ["CastleTestUtils-Component/frontdoorAPI"]
 def CastleTestUtils_Integrated = ["CastleTestUtils_Integrated/memoryConsumption"]
 def CastleTestUtils_Component = ["CastleTestUtils-Component/frontdoorAPI"]
-def Eddie  = ["EddieProduct/Eddie-Bootup-Sequence-Timing","EddieProduct/Eddie-DemoController","EddieProduct/Eddie-Preset"]
+def Eddie_Product  = ["EddieProduct/Eddie-Bootup-Sequence-Timing","EddieProduct/Eddie-DemoController","EddieProduct/Eddie-Preset"]
 def Galapagos_Client = ["GalapagosClient/GalapagosClient-Authentication"]
 def STS_Component = ["STS-Component/Deezer_Component_d","STS-Component/Amazon_Component_d"]
 def STS_Integrated = ["STS-Integrated/Amazon_Integrated","STS-Integrated/Deezer_Integrated","STS-Integrated/Spotify_Integrated","STS-Integrated/TuneIn-Integrated"]
@@ -29,13 +29,13 @@ def notifyBuild(String buildStatus = 'STARTED')
 {
   // build status of null means successful
   buildStatus =  buildStatus ?: 'SUCCESS'
-  def pipelineName = 'CastleTestUtils-Pipeline'
+  def pipelineName = 'Eddie-Pipeline'
   def colorName = 'RED'
   def name = 'aman_osman'
   def colorCode = '#FF0000'
   for (item in failureList)
    { 
-        def subject = "${buildStatus}: CastleTestUtils PIPELINE UNSTABLE: Job '$item '"
+        def subject = "${buildStatus}: EDDIE PIPELINE UNSTABLE: Job '$item '"
         def summary = "${subject} ${item}: http://eco2jenkins.bose.com:8080/job/Pipelines/job/$pipelineName/lastFailedBuild/console"
         slackSend (color: colorCode, message: summary)
    }
@@ -48,7 +48,7 @@ def notifyBuild(String buildStatus = 'STARTED')
     }
   else if(buildStatus == 'SUCCESS')
     {
-        def subject = "${buildStatus}: CastleTestUtils PIPELINE PASSED"
+        def subject = "${buildStatus}: EDDIE PIPELINE PIPELINE PASSED"
         def summary = "${subject}: http://eco2jenkins.bose.com:8080/job/Pipelines/job/$pipelineName/lastSuccessfulBuild/console"
 		color = 'GREEN'
         colorCode = '#00FF00'
@@ -179,11 +179,11 @@ timeout(time: 8, unit: 'HOURS')
                            continue
                          }
                     }
-               }, "stream 5 (Eddie)" :{
+               }, "stream 5 (Eddie_Product)" :{
 					
-					stage("Eddie")
+					stage("Eddie_Product")
                     {
-                        for (item in Eddie)
+                        for (item in Eddie_Product)
                          {
                            try
                            {
