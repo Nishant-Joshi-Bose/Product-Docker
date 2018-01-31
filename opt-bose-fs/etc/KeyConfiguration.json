@@ -1184,6 +1184,7 @@
             "origin": 4, 
             "keyEvent": 0, 
             "timeOutList": [], 
+<<<<<<< HEAD
             "commment": "connect", 
             "action": 116, 
             "keyList": [
@@ -1214,6 +1215,8 @@
             "origin": 6, 
             "keyEvent": 0, 
             "timeOutList": [], 
+=======
+>>>>>>> master_development
             "commment": "select tv", 
             "action": 118, 
             "keyList": [
@@ -1532,9 +1535,13 @@
         }, 
         {
             "origin": 1, 
-            "keyEvent": 0, 
+            "keyEvent": 1, 
             "timeOutList": [], 
+<<<<<<< HEAD
             "commment": "vpa", 
+=======
+            "commment": "Console: action release ---> Alexa",
+>>>>>>> master_development
             "action": 26, 
             "keyList": [
                 174

@@ -33,7 +33,15 @@
         "timeOutList": [10000]
     },
     {
-        "action": "PRESET_SELECT_1",
+        "action": "KEY_VOICE_CAROUSEL",
+        "commment": "Console: action release ---> Alexa",
+        "keyEvent": "RELEASE",
+        "keyList": ["KEY_VAL_AVAIL_AE"],
+        "origin": ["CAPSENSE", "TAP"],
+        "timeOutList": []
+    },
+    {
+        "action": "PRESET_STORE_1",
         "commment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_1"],
@@ -41,7 +49,7 @@
         "timeOutList": [1000]
     },
     {
-        "action": "PRESET_SELECT_2",
+        "action": "PRESET_STORE_2",
         "commment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_2"],
@@ -49,7 +57,7 @@
         "timeOutList": [1000]
     },
     {
-        "action": "PRESET_SELECT_3",
+        "action": "PRESET_STORE_3",
         "commment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_3"],
@@ -57,7 +65,7 @@
         "timeOutList": [1000]
     },
     {
-        "action": "PRESET_SELECT_4",
+        "action": "PRESET_STORE_4",
         "commment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_4"],
@@ -65,7 +73,7 @@
         "timeOutList": [1000]
     },
     {
-        "action": "PRESET_SELECT_5",
+        "action": "PRESET_STORE_5",
         "commment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_5"],
@@ -73,7 +81,7 @@
         "timeOutList": [1000]
     },
     {
-        "action": "PRESET_SELECT_6",
+        "action": "PRESET_STORE_6",
         "commment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6",
         "keyEvent": "PRESS_HOLD",
         "keyList": ["BOSE_NUMBER_6"],
@@ -209,7 +217,11 @@
         "timeOutList": []
     },
     {
+<<<<<<< HEAD
         "action": "ACTION_TV",
+=======
+        "action": "KEY_ACTION_TV",
+>>>>>>> master_development
         "commment": "select tv",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_TV_SOURCE"],
@@ -270,14 +282,6 @@
         "keyEvent": "PRESS",
         "keyList": ["BOSE_MUTE"],
         "origin": ["CAPSENSE"],
-        "timeOutList": []
-    },
-    {
-        "action": "VOICE_CAROUSEL",
-        "commment": "vpa",
-        "keyEvent": "PRESS",
-        "keyList": ["KEY_VAL_AVAIL_AE"],
-        "origin": ["IR", "TAP", "CEC", "RF", "CAPSENSE"],
         "timeOutList": []
     }
     ]
