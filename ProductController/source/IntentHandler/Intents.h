@@ -113,11 +113,6 @@ enum class Action
     VOLUME_RAMP_DOWN_CANCEL = ActionCommon_t::VOLUME_RAMP_DOWN_CANCEL,
 
     ///
-    /// Voice Carousel Intent
-    ///
-    VOICE_CAROUSEL          = ActionCommon_t::VOICE_CAROUSEL,
-
-    ///
     /// Last Common Action
     ///
     ACTION_COMMON_LAST = 100,

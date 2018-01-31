@@ -33,7 +33,7 @@
         "timeOutList": [10000]
     },
     {
-        "action": "KEY_VOICE_CAROUSEL",
+        "action": "VOICE_CAROUSEL",
         "commment": "Console: action release ---> Alexa",
         "keyEvent": "RELEASE",
         "keyList": ["KEY_VAL_AVAIL_AE"],
@@ -217,11 +217,7 @@
         "timeOutList": []
     },
     {
-<<<<<<< HEAD
         "action": "ACTION_TV",
-=======
-        "action": "KEY_ACTION_TV",
->>>>>>> master_development
         "commment": "select tv",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_TV_SOURCE"],
