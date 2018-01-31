@@ -82,7 +82,6 @@ public:
     bool NotifyVolumeLevel( uint32_t volume );
     bool NotifyMuteState( bool mute );
     bool SendSpeakerList( IpcAccessoryList_t&        accessoryList );
-    bool SendSetSystemTimeoutEnableBits( Ipc_TimeoutControl_t& timeoutControl );
     bool SendWiFiRadioStatus( uint32_t frequencyInKhz );
     void SetBlueToothMacAddress( const std::string&       bluetoothMacAddress );
     void SetBlueToothDeviceName( const std::string&       bluetoothDeviceName );
