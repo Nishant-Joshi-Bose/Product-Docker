@@ -14,7 +14,7 @@ def buildJob(jobName)
 def CAPS_Component = ["CAPS-Component/playbackRequest","CAPS-Component/volumeAPIs"]
 def Castle_SW_Update = ["CastleTestUtils-Component/frontdoorAPI"]
 def CastleTestUtils_Integrated = ["CastleTestUtils_Integrated/memoryConsumption"]
-def CastleTestUtils_Component = ["CastleTestUtils-Component/frontdoorAPI"
+def CastleTestUtils_Component = ["CastleTestUtils-Component/frontdoorAPI"]
 def Eddie  = ["EddieProduct/Eddie-Bootup-Sequence-Timing","EddieProduct/Eddie-DemoController","EddieProduct/Eddie-Preset"]
 def Galapagos_Client = ["GalapagosClient/GalapagosClient-Authentication"]
 def STS_Component = ["STS-Component/Deezer_Component_d","STS-Component/Amazon_Component_d"]
