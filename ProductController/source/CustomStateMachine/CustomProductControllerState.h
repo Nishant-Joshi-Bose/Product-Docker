@@ -269,7 +269,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentVolumeMuteControl( KeyHandlerUtil::ActionType_t action )
+    virtual bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )
     {
         return false;
     }

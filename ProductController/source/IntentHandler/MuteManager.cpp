@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      VolumeMuteControlManager.cpp
+/// @file      MuteManager.cpp
 ///
 /// @brief     This source code file contains functionality to implement an intent manager class for
 ///            volume and mute control based on Professor product specific key actions
@@ -31,8 +31,7 @@
 #include "Utilities.h"
 #include "FrontDoorClient.h"
 #include "ProfessorProductController.h"
-#include "CustomProductLpmHardwareInterface.h"
-#include "VolumeMuteControlManager.h"
+#include "MuteManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             Start of Product Namespace                                       ///
@@ -46,12 +45,10 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 constexpr char  FRONTDOOR_AUDIO_VOLUME[ ]           = "/audio/volume";
-constexpr char  FRONTDOOR_AUDIO_VOLUME_INCREMENT[ ] = "/audio/volume/increment";
-constexpr char  FRONTDOOR_AUDIO_VOLUME_DECREMENT[ ] = "/audio/volume/decrement";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief VolumeMuteControlManager::VolumeMuteControlManager
+/// @brief MuteManager::MuteManager
 ///
 /// @param NotifyTargetTaskIF&        task
 ///
@@ -62,32 +59,31 @@ constexpr char  FRONTDOOR_AUDIO_VOLUME_DECREMENT[ ] = "/audio/volume/decrement";
 /// @param ProductController&         productController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-VolumeMuteControlManager::VolumeMuteControlManager( NotifyTargetTaskIF&        task,
-                                                    const CliClientMT&         commandLineClient,
-                                                    const FrontDoorClientIF_t& frontDoorClient,
-                                                    ProductController&         productController )
+MuteManager::MuteManager( NotifyTargetTaskIF&        task,
+                          const CliClientMT&         commandLineClient,
+                          const FrontDoorClientIF_t& frontDoorClient,
+                          ProductController&         productController )
 
     : IntentManager( task, commandLineClient, frontDoorClient, productController ),
       m_CustomProductController( static_cast< ProfessorProductController & >( productController ) ),
       m_ProductTask( m_CustomProductController.GetTask( ) ),
-      m_ProductNotify( m_CustomProductController.GetMessageHandler( ) ),
-      m_ProductLpmHardwareInterface( m_CustomProductController.GetLpmHardwareInterface( ) )
+      m_ProductNotify( m_CustomProductController.GetMessageHandler( ) )
 {
-    BOSE_INFO( s_logger, "%s is being constructed.", "VolumeMuteControlManager" );
+    BOSE_INFO( s_logger, "%s is being constructed.", "MuteManager" );
 
     Initialize( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   VolumeMuteControlManager::Initialize
+/// @name   MuteManager::Initialize
 ///
 /// @brief  This method registers for volume notifications from the Front Door.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void VolumeMuteControlManager::Initialize( )
+void MuteManager::Initialize( )
 {
-    m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "VolumeMuteControlManager" );
+    m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "MuteManager" );
 
     auto fNotify = [ this ]( SoundTouchInterface::volume v )
     {
@@ -100,7 +96,7 @@ void VolumeMuteControlManager::Initialize( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  VolumeMuteControlManager::Handle
+/// @brief  MuteManager::Handle
 ///
 /// @brief  This method is used to process volume and mute Professor product specific key actions.
 ///
@@ -109,36 +105,31 @@ void VolumeMuteControlManager::Initialize( )
 /// @return This method returns true base on its handling of the key action sent.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool VolumeMuteControlManager::Handle( KeyHandlerUtil::ActionType_t& action )
+bool MuteManager::Handle( KeyHandlerUtil::ActionType_t& action )
 {
-    BOSE_INFO( s_logger, "%s is in %s handling the action %u.", "VolumeMuteControlManager",
+    BOSE_INFO( s_logger, "%s is in %s handling the action %u.", "MuteManager",
                __func__, action );
 
-    if( action == ( uint16_t )Action::ACTION_VOLUME_UP_1 )
-    {
-        Increment( 1 );
-    }
-    else if( action == ( uint16_t )Action::ACTION_VOLUME_DOWN_1 )
-    {
-        Decrement( 1 );
-    }
-    else if( action == ( uint16_t )Action::ACTION_MUTE )
+    if( action == ( uint16_t )Action::ACTION_MUTE )
     {
         ToggleMute( );
+        return true;
     }
 
+    BOSE_ERROR( s_logger, "%s is in %s handling the unexpected action %u.", "MuteManager",
+                __func__, action );
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief VolumeMuteControlManager::Stop
+/// @brief MuteManager::Stop
 ///
 /// @todo  Resources, memory, or any client server connections that may need to be released by
 ///        this module when stopped will need to be determined.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void VolumeMuteControlManager::Stop( )
+void MuteManager::Stop( )
 {
     m_NotifierCallback.Disconnect( );
 }
@@ -146,102 +137,36 @@ void VolumeMuteControlManager::Stop( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief VolumeMuteControlManager::ReceiveFrontDoorVolume
+/// @brief MuteManager::ReceiveFrontDoorVolume
 ///
 /// @param  volume Object containing volume received from the FrontDoor
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void VolumeMuteControlManager::ReceiveFrontDoorVolume( SoundTouchInterface::volume const& volume )
+void MuteManager::ReceiveFrontDoorVolume( SoundTouchInterface::volume const& volume )
 {
-    if( volume.has_value() )
-    {
-        BOSE_VERBOSE( s_logger, "Got volume notify (%d)", volume.value() );
-
-        ///
-        /// Change in volume actions can be put here.
-        ///
-    }
-
     ///
-    /// Update mute status if it is available.
+    /// Update mute status
     ///
     if( volume.has_muted() )
     {
         m_muted = volume.muted();
     }
+    else
+    {
+        BOSE_ERROR( s_logger, "%s is in %s and has_muted is false.", "MuteManager",
+                    __func__ );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name VolumeMuteControlManager::Increment
-///
-/// @brief This method increments the volume
-///
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void VolumeMuteControlManager::Increment( unsigned int step )
-{
-    auto errFunc = []( const EndPointsError::Error & e )
-    {
-        BOSE_ERROR( s_logger, "Error incrementing FrontDoor volume" );
-    };
-    auto respFunc = [ this ]( SoundTouchInterface::volume v )
-    {
-        BOSE_VERBOSE( s_logger, "Got volume increment response" );
-    };
-
-    AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
-    AsyncCallback<EndPointsError::Error> errCb( errFunc, m_ProductTask );
-
-    SoundTouchInterface::volume pbVolume;
-    pbVolume.set_delta( step );
-    printf( "%s: %d\n", __func__, step );
-
-    BOSE_VERBOSE( s_logger, "Incrementing FrontDoor volume" );
-    m_FrontDoorClient->SendPut<SoundTouchInterface::volume, EndPointsError::Error>(
-        ProductApp::FRONTDOOR_AUDIO_VOLUME_INCREMENT, pbVolume, respFunc, errCb );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name VolumeMuteControlManager::Decrement
-///
-/// @brief This method decrements the volume
-///
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void VolumeMuteControlManager::Decrement( unsigned int step )
-{
-    auto errFunc = []( const EndPointsError::Error & e )
-    {
-        BOSE_ERROR( s_logger, "Error incrementing FrontDoor volume" );
-    };
-    auto respFunc = [ this ]( SoundTouchInterface::volume v )
-    {
-        BOSE_VERBOSE( s_logger, "Got volume decrement response" );
-    };
-
-    AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
-    AsyncCallback<EndPointsError::Error> errCb( errFunc, m_ProductTask );
-
-    SoundTouchInterface::volume pbVolume;
-    pbVolume.set_delta( step );
-    printf( "%s: %d\n", __func__, step );
-
-    BOSE_VERBOSE( s_logger, "Decrementing FrontDoor volume" );
-    m_FrontDoorClient->SendPut<SoundTouchInterface::volume, EndPointsError::Error>(
-        ProductApp::FRONTDOOR_AUDIO_VOLUME_DECREMENT, pbVolume, respFunc, errCb );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name VolumeMuteControlManager::ToggleMute
+/// @name MuteManager::ToggleMute
 ///
 /// @brief This method toggles mute
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void VolumeMuteControlManager::ToggleMute( )
+void MuteManager::ToggleMute( )
 {
     auto errFunc = []( const EndPointsError::Error & e )
     {
@@ -255,9 +180,8 @@ void VolumeMuteControlManager::ToggleMute( )
     AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
     AsyncCallback<EndPointsError::Error> errCb( errFunc, m_ProductTask );
 
-    m_muted = !m_muted;
     SoundTouchInterface::volume pbVolume;
-    pbVolume.set_muted( m_muted );
+    pbVolume.set_muted( !m_muted );
 
     BOSE_VERBOSE( s_logger, "Toggling FrontDoor mute" );
     m_FrontDoorClient->SendPut<SoundTouchInterface::volume, EndPointsError::Error>(

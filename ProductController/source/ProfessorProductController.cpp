@@ -1266,9 +1266,9 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentUserPower,
                                                               message.action( ) );
         }
-        else if( GetIntentHandler( ).IsIntentVolumeMuteControl( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentMuteControl( message.action( ) ) )
         {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentVolumeMuteControl,
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentMuteControl,
                                                               message.action( ) );
         }
         else if( GetIntentHandler( ).IsIntentSpeakerPairing( message.action( ) ) )
