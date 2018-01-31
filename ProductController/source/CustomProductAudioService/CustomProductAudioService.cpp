@@ -9,10 +9,12 @@
 #include "AsyncCallback.h"
 #include "APProductFactory.h"
 #include "FrontDoorClient.h"
+#include "LpmClientFactory.h"
 #include "CustomProductAudioService.h"
 #include "ProtoToMarkup.h"
 #include "SoundTouchInterface/ContentItem.pb.h"
 #include "AutoLpmServiceMessages.pb.h"
+
 
 static DPrint s_logger( "CustomProductAudioService" );
 
@@ -40,11 +42,11 @@ CustomProductAudioService::CustomProductAudioService( ProfessorProductController
                                                       LpmClientIF::LpmClientPtr lpmClient ):
     ProductAudioService( ProductController.GetTask( ),
                          ProductController.GetMessageHandler() ),
-    m_FrontDoorClientIF( frontDoorClient ),
     m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
     m_AudioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) ),
-    m_ThermalTask( std::unique_ptr<ThermalMonitorTask>( new ThermalMonitorTask( lpmClient, std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ) ) ) )
+    m_ThermalTask( std::unique_ptr<ThermalMonitorTask>( new ThermalMonitorTask( lpmClient, std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, std::placeholders::_1 ) ) ) )
 {
+    m_FrontDoorClientIF = frontDoorClient;
     BOSE_DEBUG( s_logger, __func__ );
 }
 
@@ -58,7 +60,7 @@ void CustomProductAudioService::RegisterAudioPathEvents()
     BOSE_DEBUG( s_logger, __func__ );
 
     // Start thermal task, which queries thermal status from LPM for AudioPath
-    m_ThermalTask.Start();
+    m_ThermalTask->Start();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Initialize member variables related to AudioPath
@@ -234,11 +236,11 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
     BOSE_DEBUG( s_logger, __func__ );
     if( enabled )
     {
-        m_thermalTask.Start();
+        m_ThermalTask->Start();
     }
     else
     {
-        m_thermalTask.Stop();
+        m_ThermalTask->Stop();
     }
 }
 

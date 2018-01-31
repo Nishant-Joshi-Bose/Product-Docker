@@ -34,7 +34,7 @@ public:
 private:
     std::shared_ptr<CustomProductLpmHardwareInterface>  m_ProductLpmHardwareInterface;
     std::unique_ptr<CustomAudioSettingsManager>         m_AudioSettingsMgr;
-    std::unique_ptr<ThermalMonitorTask>                 m_thermalTask;
+    std::unique_ptr<ThermalMonitorTask>                 m_ThermalTask;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// Front Door handlers
