@@ -60,7 +60,7 @@ if guid is None or not re.match(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{
     fixes.append("set guid " + guid)
 
 sn = get("snSystem")
-if sn is None or not re.match(r'^RF\d{15}$', sn):
+if not sn: # allow any non-empty string
     warn("Invalid snSystem:", sn)
     fixes.append("set snSystem RF000000000000000")
 
