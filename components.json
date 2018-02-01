@@ -69,7 +69,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@edbc6ad93a98f017e511c6b9993b42dc72e7cc44"
+    "selected_version": "master@834634d16fb3d47ee5c74ccdf8fe54aaced44030"
   },
   {
     "name": "CastleProductUIAssets",
@@ -121,6 +121,10 @@
   {
     "name": "RivieraLpmUpdater",
     "selected_version": "Release/master/0.3.1-36+8a43bfa"
+  },
+  {
+    "name": "SASS-qc8017_32",
+    "selected_version": "Continuous/master/0.1.1-122+5bf289e"
   },
   {
     "name": "Shepherd-qc8017_32",

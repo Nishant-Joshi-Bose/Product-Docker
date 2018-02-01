@@ -1,5 +1,6 @@
 INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ChimesController
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
@@ -56,6 +57,7 @@ TARGET_LINK_LIBRARIES(Eddie
   CliClient
   AudioLibs
   PassportClient
+  SASSFrontDoorServiceProto
   SoftwareUpdateAPI
   STS
   ShelbyUtils
