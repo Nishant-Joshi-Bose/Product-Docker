@@ -34,7 +34,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     ProductController( ProductName ),
     m_ProductControllerStateTop( GetHsm(), nullptr ),
     m_CustomProductControllerStateBooting( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING ),
-    m_CustomProductControllerStateSetup( GetHsm(), &m_ProductControllerStatePlaying, CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP ),
+    m_CustomProductControllerStateSetup( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP ),
     m_CustomProductControllerStateOn( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_ON ),
     m_ProductControllerStateLowPowerStandby( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY ),
     m_ProductControllerStateSwUpdating( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING ),
@@ -130,7 +130,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_DataCollectionClient =  DataCollectionClientFactory::CreateUDCService();
 
     // Start Eddie ProductAudioService
-    m_ProductAudioService = std::make_shared< CustomProductAudioService>( *this, m_FrontDoorClientIF );
+    m_ProductAudioService = std::make_shared< CustomProductAudioService>( *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient() );
     m_ProductAudioService -> Run();
 
     // Initialize and register Intents for the Product Controller
@@ -717,12 +717,15 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
             switch( productMessage.lpmstatus( ).systemstate( ) )
             {
             case SYSTEM_STATE_ON:
+                m_ProductAudioService->SetThermalMonitorEnabled( true );
                 break;
             case SYSTEM_STATE_OFF:
+                m_ProductAudioService->SetThermalMonitorEnabled( false );
                 break;
             case SYSTEM_STATE_BOOTING:
                 break;
             case SYSTEM_STATE_STANDBY:
+                m_ProductAudioService->SetThermalMonitorEnabled( false );
                 break;
             case SYSTEM_STATE_RECOVERY:
                 break;
