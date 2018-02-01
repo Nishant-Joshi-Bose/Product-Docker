@@ -13,7 +13,6 @@ function log {
 cd /opt/Bose/bin || exit
 
 rundir=/var/run/shepherd
-pidfile=/var/run/shepherd/pids
 override=false
 
 # The list of daemons to stop while in low power mode.
@@ -73,16 +72,16 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
 
     set_ap.sh
 
-    keyPath=/opt/Bose/etc/KeyConfiguration.json
+    cfg=/opt/Bose/etc/KeyConfiguration.json
     if [ -e /mnt/nv/DemoModeOn ]; then
         log info "--DEMO MODE--"
-        keyPath=/opt/Bose/etc/KeyConfiguration-demo.json
-        if [ -e /mnt/nv/KeyConfiguration-demo.json ]; then
-            log info "--USING ALTERNATE KeyConfiguration-demo.json--"
-            keyPath=/mnt/nv/KeyConfiguration-demo.json
+        cfg=/mnt/nv/KeyConfiguration-demo.json
+        if ! [ -e "$cfg" ]; then
+            cfg=/opt/Bose/etc/KeyConfiguration-demo.json
         fi
     fi
-    ln -nsf "$keyPath" /var/run/KeyConfiguration.json || exit
+    log info "Key configuration: $cfg"
+    ln -nsf "$cfg" /var/run/KeyConfiguration.json || exit
 
     if ! $override; then
         mkdir -p "$rundir" || exit
@@ -142,35 +141,32 @@ if (( $# == 1 )) && [ "$1" = stop ]; then
 fi
 
 if (( $# == 1 )) && [ "$1" = factory_default ]; then
-    log info "Stopping all services"
+    log info "Stopping all services for factory default"
     rm -f "$rundir"/*.xml  # remove all daemons from the shepherd configuration
     killall -SIGHUP shepherdd
-    
-    # give 30 secs to stop all the services
-    i=30
-    
-    # Continue till the pid file becomes empty. empty means no srv running
-    while [ -s "$pidfile" ]; do
-        srv_running=$(wc -l < "$pidfile")
-        
-        if (( ( i-- ) <= 0 )); then
-            log warning "Timed out. $srv_running service(s) are still running. Proceeding to clear data."
+
+    i=30 # Wait at most this number of seconds to stop all daemons.
+    while :; do
+        n=$(wc -l < "$rundir/pids")
+        if (( n == 0 )); then
             break
         fi
-        
-        if (( i < 25 )); then
-            log warning "$srv_running service(s) are still running. Waiting for another $i secs"
+        if (( --i == 0 )); then
+            log warning "$n daemon(s) still running. Proceeding anyhow."
+            break
         fi
-        
+        if (( i < 25 )); then
+            log warning "$n daemon(s) still running. Waiting for another $i secs"
+        fi
         sleep 1
     done
 
-    log info "clearing data"
+    log info "Clearing product persistence"
     rm -rfv /mnt/nv/BoseApp-Persistence/* /mnt/nv/product-persistence/*
     sync
 
-    log info "Done clearing data. rebooting"
-    ResetUtil SYSTEM # ResetUtil shall indicate to LPM to reboot (without using on LPMService)
+    log info "Rebooting"
+    ResetUtil SYSTEM # Ask LPM to reboot (without using LPMService)
     sleep 30
     log warning "LPM didn't reset, asking Linux to reboot"
     reboot
