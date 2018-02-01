@@ -92,8 +92,13 @@ PACKAGENAMES = SoundTouch lpm_updater
 
 #Create Zip file for Bonjour / Local update
 .PHONY: update-zip
+<<<<<<< HEAD
 update-zip: product-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip
+=======
+update-zip: monaco-ipk product-ipk hsp-ipk lpmupdater-ipk
+	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
+>>>>>>> cf55c634... Create product package with signature (#311)
 
 #Create one more Zip file for Bonjour / Local update with HSP 
 #- This is temporary, till DP2 boards are available.
@@ -101,7 +106,7 @@ IPKS_HSP = hsp.ipk product.ipk lpm_updater.ipk
 PACKAGENAMES_HSP = hsp SoundTouch lpm_updater
 .PHONY: update-zip-with-hsp
 update-zip-with-hsp: product-ipk hsp-ipk lpmupdater-ipk
-	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_with_hsp.zip
+	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_with_hsp.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 .PHONY: packages-gz
 packages-gz: product-ipk hsp-ipk lpmupdater-ipk
