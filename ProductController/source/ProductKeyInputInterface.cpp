@@ -189,20 +189,6 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
     if( keyEvent.has_keyorigin( ) )
     {
         keyOriginString.assign( KeyOrigin_t_Name( keyEvent.keyorigin( ) ) );
-
-        ////////////////////////////////////////////////////////////////////////////////////////////
-        /// @todo  On Professor, the console button can only be the capsense "Action" button, so
-        ///        fake it until the JIRA Story PGC-523 is resolved.
-        ////////////////////////////////////////////////////////////////////////////////////////////
-#if 1
-
-        if( keyEvent.keyorigin( ) == LpmServiceMessages::KEY_ORIGIN_CONSOLE_BUTTON )
-        {
-            keyEvent.set_keyorigin( LpmServiceMessages::KEY_ORIGIN_CAPSENSE );
-            keyEvent.set_keyid( 6 ); /// borrowing the Eddie key number
-        }
-
-#endif
     }
     else
     {

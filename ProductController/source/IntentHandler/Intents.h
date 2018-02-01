@@ -80,6 +80,11 @@ enum class Action
     VOLUME_DOWN = ActionCommon_t::VOLUME_DOWN,
 
     ///
+    /// Voice Action Intents
+    ///
+    VOICE_CAROUSEL = ActionCommon_t::VOICE_CAROUSEL,
+
+    ///
     /// Preset Storage Intents
     ///
     PRESET_STORE_1  = ActionCommon_t::PRESET_STORE_1,
@@ -121,7 +126,7 @@ enum class Action
     ACTION_MUTE               = 114,
     ACTION_SOUNDTOUCH         = 115,
     ACTION_CONNECT            = 116,
-    ACTION_ACTION             = 117, /// @todo PGC-449 VOICE_CAROUSEL
+    // unused                 = 117,
     ACTION_TV                 = 118,
     ACTION_THUMB_UP           = 119,
     ACTION_THUMB_DOWN         = 120,

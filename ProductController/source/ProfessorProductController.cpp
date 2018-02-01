@@ -39,7 +39,7 @@
 #include "ProductAdaptIQManager.h"
 #include "ProductControllerStateTop.h"
 #include "ProductControllerStateSetup.h"
-#include "ProductControllerStates.h"
+#include "CustomProductControllerStates.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
 #include "CustomProductControllerState.h"
@@ -75,6 +75,11 @@
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSelected.h"
 #include "ProductControllerStateFactoryDefault.h"
+#include "ProductControllerStateStoppingStreamsDedicated.h"
+#include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
+#include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
+#include "ProductControllerStatePlayingSelectedSetupExiting.h"
+
 #include "MfgData.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,7 +126,6 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     /// Member Variable Initialization
     ///
-    m_IsLpmReady( false ),
     m_IsCapsReady( false ),
     m_IsAudioPathReady( false ),
     m_IsSTSReady( false ),
@@ -130,7 +134,6 @@ ProfessorProductController::ProfessorProductController( ) :
     m_IsAutoWakeEnabled( false ),
     m_IsAccountConfigured( false ),
     m_IsMicrophoneEnabled( false ),
-    m_IsSoftwareUpdateRequired( false ),
     m_Running( false ),
     m_currentSource( SOURCE_TV ),
 
@@ -283,7 +286,7 @@ void ProfessorProductController::Run( )
 
     auto* stateStoppingStreams = new ProductControllerStateStoppingStreams
     ( GetHsm( ),
-      stateTop,
+      stateSelected,
       PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS );
 
     auto* statePlayableTransition = new ProductControllerStatePlayableTransition
@@ -306,11 +309,6 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION );
 
-    auto* stateLowPowerTransition = new ProductControllerStateLowPowerTransition
-    ( GetHsm( ),
-      stateTop,
-      PRODUCT_CONTROLLER_STATE_LOW_POWER_TRANSITION );
-
     auto* statePlayingTransition = new ProductControllerStatePlayingTransition
     ( GetHsm( ),
       stateTop,
@@ -325,6 +323,29 @@ void ProfessorProductController::Run( )
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_FACTORY_DEFAULT );
+
+    auto* stateProductControllerStateStoppingStreamsDedicated = new ProductControllerStateStoppingStreamsDedicated
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED );
+
+    auto* stateProductControllerStateStoppingStreamsDedicatedForFactoryDefault =
+        new ProductControllerStateStoppingStreamsDedicatedForFactoryDefault
+    ( GetHsm( ),
+      stateProductControllerStateStoppingStreamsDedicated,
+      PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_FACTORY_DEFAULT );
+
+    auto* stateProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate =
+        new ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate
+    ( GetHsm( ),
+      stateProductControllerStateStoppingStreamsDedicated,
+      PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE );
+
+    auto* stateProductControllerStatePlayingSelectedSetupExiting =
+        new ProductControllerStatePlayingSelectedSetupExiting
+    ( GetHsm( ),
+      stateSetup,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING );
 
     ///
     /// The states are added to the state machine and the state machine is initialized.
@@ -359,10 +380,14 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( statePlayableTransitionIdle );
     GetHsm( ).AddState( statePlayableTransitionNetworkStandby );
     GetHsm( ).AddState( stateSoftwareUpdateTransition );
-    GetHsm( ).AddState( stateLowPowerTransition );
     GetHsm( ).AddState( statePlayingTransition );
     GetHsm( ).AddState( statePlayingTransitionSelected );
     GetHsm( ).AddState( stateFactoryDefault );
+    GetHsm( ).AddState( stateProductControllerStateStoppingStreamsDedicated );
+    GetHsm( ).AddState( stateProductControllerStateStoppingStreamsDedicatedForFactoryDefault );
+    GetHsm( ).AddState( stateProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate );
+    GetHsm( ).AddState( stateProductControllerStatePlayingSelectedSetupExiting );
+
 
     GetHsm( ).Init( this, PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
 
@@ -384,7 +409,7 @@ void ProfessorProductController::Run( )
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_ProductKeyInputInterface    = std::make_shared< ProductKeyInputInterface          >( *this );
     m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
-    m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this );
+    m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this, m_FrontDoorClientIF, m_ProductLpmHardwareInterface->GetLpmClient() );
 
     if( m_ProductLpmHardwareInterface == nullptr ||
         m_ProductSystemManager        == nullptr ||
@@ -530,6 +555,7 @@ bool ProfessorProductController::IsBooted( ) const
     BOSE_VERBOSE( s_logger, "CAPS Initialized     :  %s", ( m_IsCapsReady      ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Audio Path Connected :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "STS Initialized      :  %s", ( m_IsSTSReady       ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Software Update Init :  %s", ( m_isSoftwareUpdateReady ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
     return ( m_IsLpmReady and m_IsCapsReady and m_IsAudioPathReady and m_IsSTSReady );
@@ -559,6 +585,12 @@ bool ProfessorProductController::IsNetworkConnected( ) const
     return m_IsNetworkConnected;
 }
 
+uint32_t ProfessorProductController::GetWifiProfileCount( ) const
+{
+    BOSE_INFO( s_logger, "Implementation needed for Professor" );
+    return 0;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProfessorProductController::IsAutoWakeEnabled
@@ -581,18 +613,6 @@ bool ProfessorProductController::IsAutoWakeEnabled( ) const
 bool ProfessorProductController::IsVoiceConfigured( ) const
 {
     return ( m_IsMicrophoneEnabled and m_IsAccountConfigured );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::IsSoftwareUpdateRequired
-///
-/// @return This method returns a true or false value, based on a set member variable.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsSoftwareUpdateRequired( ) const
-{
-    return m_IsSoftwareUpdateRequired;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -961,45 +981,44 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     BOSE_DEBUG( s_logger, "----------- Product Controller Message Handler -------------" );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// LPM status messages are handled at this point.
+    /// LPM status messages has both Common handling and Professor-specific handling
     ///////////////////////////////////////////////////////////////////////////////////////////////
     if( message.has_lpmstatus( ) )
     {
-        if( message.lpmstatus( ).has_connected( ) )
-        {
-            m_IsLpmReady = message.lpmstatus( ).connected( );
-
-            GetHsm( ).Handle< bool >( &CustomProductControllerState::HandleLpmState, m_IsLpmReady );
-        }
-
+        // First do the common stuff
+        ( void ) HandleCommonProductMessage( message );
+        // Then the Professor - specific stuff
         if( message.lpmstatus( ).has_systemstate( ) )
         {
-            BOSE_DEBUG( s_logger, "The LPM system state was set to %s",
-                        IpcLpmSystemState_t_Name( message.lpmstatus( ).systemstate( ) ).c_str( ) );
-
             switch( message.lpmstatus( ).systemstate( ) )
             {
             case SYSTEM_STATE_ON:
+                BOSE_DEBUG( s_logger, "Calling HandleLPMPowerStatusFullPower()" );
                 GetHsm( ).Handle< >( &CustomProductControllerState::HandleLPMPowerStatusFullPower );
+                m_ProductAudioService->SetThermalMonitorEnabled( true );
                 break;
             case SYSTEM_STATE_OFF:
+                m_ProductAudioService->SetThermalMonitorEnabled( false );
                 break;
             case SYSTEM_STATE_BOOTING:
                 break;
             case SYSTEM_STATE_STANDBY:
+                m_ProductAudioService->SetThermalMonitorEnabled( false );
                 break;
             case SYSTEM_STATE_RECOVERY:
                 break;
             case SYSTEM_STATE_LOW_POWER:
-                GetHsm( ).Handle< >( &CustomProductControllerState::HandleLpmLowpowerSystemState );
+                m_ProductAudioService->SetThermalMonitorEnabled( false );
                 break;
             case SYSTEM_STATE_UPDATE:
                 break;
             case SYSTEM_STATE_SHUTDOWN:
+                m_ProductAudioService->SetThermalMonitorEnabled( false );
                 break;
             case SYSTEM_STATE_FACTORY_DEFAULT:
                 break;
             case SYSTEM_STATE_IDLE:
+                m_ProductAudioService->SetThermalMonitorEnabled( false );
                 break;
             case SYSTEM_STATE_NUM_OF:
                 break;
@@ -1007,23 +1026,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
                 break;
             }
         }
-
-        ///
-        /// The power state if returned from the LPM hardware is used only for informational purposes.
-        ///
-        if( message.lpmstatus( ).has_powerstate( ) )
-        {
-            BOSE_DEBUG( s_logger, "The LPM power state was set to %s",
-                        IpcLPMPowerState_t_Name( message.lpmstatus( ).powerstate( ) ).c_str( ) );
-        }
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// LPM low power status messages are handled at this point.
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_lpmlowpowerstatus( ) )
-    {
-        GetHsm( ).Handle< const ProductLpmLowPowerStatus& >
-        ( &CustomProductControllerState::HandleLpmLowPowerStatus, message.lpmlowpowerstatus( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Content Audio Playback Services (CAPS) status messages are handled at this point.
@@ -1307,19 +1309,12 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         ( &CustomProductControllerState::HandleAdaptIQControl, message.aiqcontrol( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    // An amp fault has been detected on the LPM. Enter the CriticalError state.
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_ampfaultdetected() )
-    {
-        GetHsm( ).Handle<>( &CustomProductControllerState::HandleAmpFaultDetected );
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Common ProductMessage elements are handled last, and there are no overrides to
-    /// the Common elements.
+    /// Common ProductMessage elements are handled last, any events with overrides to
+    /// the Common elements will have been handled above and not get here
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( !HandleCommonProductMessage( message ) )
     {
-        BOSE_ERROR( s_logger, "An unknown message type was received." );
+        BOSE_ERROR( s_logger, "An unknown message type was received - %s.", ProtoToMarkup::ToJson( message ).c_str() );
     }
 }
 
