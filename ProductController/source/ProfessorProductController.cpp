@@ -1008,14 +1008,17 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             case SYSTEM_STATE_RECOVERY:
                 break;
             case SYSTEM_STATE_LOW_POWER:
+                m_ProductAudioService->SetThermalMonitorEnabled( false );
                 break;
             case SYSTEM_STATE_UPDATE:
                 break;
             case SYSTEM_STATE_SHUTDOWN:
+                m_ProductAudioService->SetThermalMonitorEnabled( false );
                 break;
             case SYSTEM_STATE_FACTORY_DEFAULT:
                 break;
             case SYSTEM_STATE_IDLE:
+                m_ProductAudioService->SetThermalMonitorEnabled( false );
                 break;
             case SYSTEM_STATE_NUM_OF:
                 break;
