@@ -9,7 +9,7 @@ import NodeVerification
 
 def buildJob(jobName)
 {
-    build job: jobName, parameters: [string(name: 'SW_FREQUENCY', value: "${SW_FREQUENCY}"), string(name: 'SW_BRANCH', value: "${SW_BRANCH}"),string(name: 'EC_URL', value: "${EC_URL}"),Git(name: 'Branch', value: "${Branch}")]
+    build job: jobName, parameters: [string(name: 'SW_FREQUENCY', value: "${SW_FREQUENCY}"), string(name: 'SW_BRANCH', value: "${SW_BRANCH}"),string(name: 'EC_URL', value: "${EC_URL}"),[$class: 'GitParameterValue', name: 'Branch', value: '']]
 }
 def CAPS_Component = ["CAPS-Component/playbackRequest","CAPS-Component/volumeAPIs"]
 def Castle_SW_Update = ["CastleTestUtils-Component/frontdoorAPI"]
