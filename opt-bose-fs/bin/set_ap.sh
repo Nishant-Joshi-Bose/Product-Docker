@@ -31,8 +31,8 @@ amixer cset name="ADC MUX8" "AMIC"
 amixer cset name="AMIC MUX7" "ADC2"
 amixer cset name="AMIC MUX8" "ADC3"
 
+# Needed to allow playback to work - TBD: Why?
 amixer cset name="SLIM RX2 MUX" "AIF4_PB"
-
 
 # APQ -> Shark  Q (8 channels [2-audio, 4-announce, 2-spare])
 amixer cset name="SEC_TDM_RX_0 Audio Mixer MultiMedia1" 1
