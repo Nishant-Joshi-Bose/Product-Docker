@@ -55,19 +55,20 @@ TARGET_LINK_LIBRARIES(Eddie
   VoiceServiceClient
   CliClient
   AudioLibs
-  ShelbyUtils
-  BoseLibs
   PassportClient
+  SoftwareUpdateAPI
   STS
+  ShelbyUtils
+  SoundTouch_SDK_Protobuf_static
+  BoseLibs
   jsoncpp
   protobuf
   TinyXml
+  libHttpInterface.a
   pthread
   rt
   cap
   dl
-  SoundTouch_SDK_Protobuf_static
-  SoftwareUpdateAPI
 )
 
 INSTALL(TARGETS Eddie DESTINATION ${OUTPUT_BIN_DIR})

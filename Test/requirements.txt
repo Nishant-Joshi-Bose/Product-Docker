@@ -1,0 +1,10 @@
+paramiko>=2.4.0
+pexpect>=4.3.0
+psutil>=5.4.1
+pyadb>=0.1.1
+pytest>=3.3.0
+pytest-pythonpath>=0.7.1
+requests>=2.18.4
+simplejson>=3.13.2
+websocket-client>=0.44.0
+xmltodict>=0.11.0
