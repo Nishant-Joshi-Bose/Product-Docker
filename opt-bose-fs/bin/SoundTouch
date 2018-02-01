@@ -16,6 +16,14 @@ rundir=/var/run/shepherd
 pidfile=/var/run/shepherd/pids
 override=false
 
+# The list of daemons to stop while in low power mode.
+# These daemons are typically the ones that don't know how to handle the low power events properly.
+lowpower=(
+    Shepherd-AudioPath.xml
+    Shepherd-NetManager.xml
+    Shepherd-avs.xml
+)
+
 # For testing, make it easy to override what shepherd config files we use.
 if [ -d /mnt/nv/shepherd ]; then
     rundir=/mnt/nv/shepherd
@@ -163,6 +171,24 @@ if (( $# == 1 )) && [ "$1" = factory_default ]; then
     exit
 fi
 
+if (( $# == 1 )) && [ "$1" = enterlowpower ]; then
+    log info "Disabling services to enter low power mode"
+    cd "$rundir" || exit
+    rm -f "${lowpower[@]}"
+    killall -HUP shepherdd
+    exit
+fi
+
+if (( $# == 1 )) && [ "$1" = exitlowpower ]; then
+    log info "Enabling services to exit low power mode"
+    cd "$rundir" || exit
+    for i in "${lowpower[@]}"; do
+        ln -sf "/opt/Bose/etc/$i"
+    done
+    killall -HUP shepherdd
+    exit
+fi
+
 if (( $# >= 1 )) && [ "$1" = restart ]; then
     shift
     "$0" stop
@@ -182,5 +208,7 @@ usage: $0 start [args...]
    or: $0 restart
    or: $0 status
    or: $0 factory_default
+   or: $0 enterlowpower
+   or: $0 exitlowpower
 "
 exit 1
