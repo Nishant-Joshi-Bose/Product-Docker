@@ -555,6 +555,7 @@ bool ProfessorProductController::IsBooted( ) const
     BOSE_VERBOSE( s_logger, "CAPS Initialized     :  %s", ( m_IsCapsReady      ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Audio Path Connected :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "STS Initialized      :  %s", ( m_IsSTSReady       ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Software Update Init :  %s", ( m_isSoftwareUpdateReady ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
     return ( m_IsLpmReady and m_IsCapsReady and m_IsAudioPathReady and m_IsSTSReady and
