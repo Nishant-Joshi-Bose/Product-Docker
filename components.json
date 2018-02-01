@@ -90,8 +90,8 @@
   {
     "name": "ProfessorLPM-Package",
     "selected_version": {
-      "RIVIERA_HSP_VERSION=1.3": "Continuous/trunk/2018-01-26_1335/DP1",
-      "RIVIERA_HSP_VERSION=2.1": "Continuous/trunk/2018-01-26_1335/DP2"
+      "RIVIERA_HSP_VERSION=1.3": "Continuous/trunk/2018-01-30_1739/DP1",
+      "RIVIERA_HSP_VERSION=2.1": "Continuous/trunk/2018-01-30_1739/DP2"
     }
   },
   {
@@ -109,6 +109,10 @@
   {
     "name": "Riviera-Toolchain",
     "selected_version": "Release/master/1.3"
+  },
+  {
+    "name": "RivieraLPM",
+    "selected_version": "trunk@1754"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
