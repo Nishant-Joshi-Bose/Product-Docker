@@ -137,7 +137,6 @@ ProfessorProductController::ProfessorProductController( ) :
     m_IsAutoWakeEnabled( false ),
     m_IsAccountConfigured( false ),
     m_IsMicrophoneEnabled( false ),
-    m_IsSoftwareUpdateRequired( false ),
     m_Running( false ),
     m_currentSource( SOURCE_TV ),
 
@@ -592,14 +591,16 @@ bool ProfessorProductController::IsBooted( ) const
     BOSE_VERBOSE( s_logger, "CAPS Initialized      :  %s", ( m_IsCapsReady      ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "STS Initialized       :  %s", ( m_IsSTSReady       ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Software Update Init  :  %s", ( m_isSoftwareUpdateReady   ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Bluetooth Initialized :  %s", ( IsBluetoothModuleReady( ) ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
-    return ( m_IsLpmReady       and
-             m_IsCapsReady      and
-             m_IsAudioPathReady and
-             m_IsSTSReady       and
-             IsBluetoothModuleReady( ) );
+    return( m_IsLpmReady            and
+            m_IsCapsReady           and
+            m_IsAudioPathReady      and
+            m_IsSTSReady            and
+            m_isSoftwareUpdateReady and
+            IsBluetoothModuleReady( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -661,21 +662,6 @@ bool ProfessorProductController::IsAutoWakeEnabled( ) const
 bool ProfessorProductController::IsVoiceConfigured( ) const
 {
     return ( m_IsMicrophoneEnabled and m_IsAccountConfigured );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::IsSoftwareUpdateRequired
-///
-/// @return This method returns a true or false value, based on a set member variable.
-///
-/// @todo   This method is a stub routine used for testing software updates. Code to detect software
-///         updates will need to be added (possibly to common code) to implement this feature.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsSoftwareUpdateRequired( ) const
-{
-    return m_IsSoftwareUpdateRequired;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
