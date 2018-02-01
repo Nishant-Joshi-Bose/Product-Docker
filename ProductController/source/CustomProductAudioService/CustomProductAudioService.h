@@ -10,15 +10,19 @@
 #include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "CustomAudioSettingsManager.h"
+#include "ThermalMonitorTask.h"
 
 namespace ProductApp
 {
-//class CustomProductLpmHardwareInterface;
 
 class CustomProductAudioService: public ProductAudioService
 {
 public:
-    CustomProductAudioService( ProfessorProductController& ProductController );
+    CustomProductAudioService( ProfessorProductController& ProductController,
+                               const FrontDoorClientIF_t& frontDoorClient,
+                               LpmClientIF::LpmClientPtr lpmClient );
+    void SetThermalMonitorEnabled( bool enabled );
+
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// m_MainStreamAudioSettings is the structure holding information that APProduct would like to know
     ///                             including audio settings and thermal data
@@ -28,8 +32,9 @@ public:
     uint32_t m_InputRoute;
 
 private:
-    std::shared_ptr<CustomProductLpmHardwareInterface> m_ProductLpmHardwareInterface;
-    std::unique_ptr<CustomAudioSettingsManager>   m_AudioSettingsMgr;
+    std::shared_ptr<CustomProductLpmHardwareInterface>  m_ProductLpmHardwareInterface;
+    std::unique_ptr<CustomAudioSettingsManager>         m_AudioSettingsMgr;
+    std::unique_ptr<ThermalMonitorTask>                 m_ThermalTask;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// Front Door handlers
@@ -51,6 +56,7 @@ private:
     void GetMainStreamAudioSettingsCallback( std::string contentItem,  const Callback<std::string, std::string> cb );
     void SetStreamConfigCallback( std::string serializedAudioSettings, std::string serializedInputRoute, const Callback<bool> cb );
     void SendMainStreamAudioSettingsEvent();
+    void ThermalDataReceivedCb( const IpcSystemTemperatureData_t& data );
 
     /////////////////////////////////////////////////////////////////////////////////////////////////
     /// Helper functions to prepare m_MainStreamAudioSettings for APProduct to use
