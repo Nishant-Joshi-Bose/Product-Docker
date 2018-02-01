@@ -58,7 +58,7 @@ if guid is None or not re.match(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{
     fixes.append("set guid " + guid)
 
 serialnumber = get("snSystem")
-if serialnumber is None or not re.match(r'^RF\d{15}$', serialnumber):
+if not serialnumber: # allow any non-empty string
     fixes.append("set snSystem RF000000000000000")
 
 language = get("productLanguage")
