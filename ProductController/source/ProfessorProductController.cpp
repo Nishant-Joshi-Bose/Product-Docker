@@ -558,8 +558,7 @@ bool ProfessorProductController::IsBooted( ) const
     BOSE_VERBOSE( s_logger, "Software Update Init :  %s", ( m_isSoftwareUpdateReady ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
-    return ( m_IsLpmReady and m_IsCapsReady and m_IsAudioPathReady and m_IsSTSReady and
-             m_isSoftwareUpdateReady );
+    return ( m_IsLpmReady and m_IsCapsReady and m_IsAudioPathReady and m_IsSTSReady );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
