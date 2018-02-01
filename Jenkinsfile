@@ -36,7 +36,7 @@ def notifyBuild(String buildStatus = 'STARTED')
   for (item in failureList)
    { 
         def subject = "${buildStatus}: EDDIE PIPELINE UNSTABLE: Job '$item '"
-        def summary = "${subject} ${item}: http://eco2jenkins.bose.com:8080/job/Pipelines/job/$pipelineName/lastFailedBuild/console @trevor_lai @matthew_scanlan @jonathan_cooper @hariharan_ragothaman @aman_osman"
+        def summary = "${subject} ${item}: http://eco2jenkins.bose.com:8080/job/Pipelines/job/$pipelineName/lastFailedBuild/console"
         slackSend (color: colorCode, message: summary)
    }
 
@@ -49,7 +49,7 @@ def notifyBuild(String buildStatus = 'STARTED')
   else if(buildStatus == 'SUCCESS')
     {
         def subject = "${buildStatus}: EDDIE PIPELINE PASSED"
-        def summary = "${subject}: http://eco2jenkins.bose.com:8080/job/Pipelines/job/$pipelineName/lastSuccessfulBuild/console @trevor_lai @matthew_scanlan @jonathan_cooper @hariharan_ragothaman @aman_osman "
+        def summary = "${subject}: http://eco2jenkins.bose.com:8080/job/Pipelines/job/$pipelineName/lastSuccessfulBuild/console"
 		color = 'GREEN'
         colorCode = '#00FF00'
 		slackSend (color: colorCode, message: summary)
