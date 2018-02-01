@@ -72,7 +72,6 @@ public:
     }
 
     void HandleStateExit( )  override;
-    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )       override;
     bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t action )    override;
     bool HandleIntentPlayback( KeyHandlerUtil::ActionType_t action )          override;
 
