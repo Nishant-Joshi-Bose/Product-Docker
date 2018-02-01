@@ -144,6 +144,7 @@ void MuteManager::Stop( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void MuteManager::ReceiveFrontDoorVolume( SoundTouchInterface::volume const& volume )
 {
+    BOSE_VERBOSE( s_logger, "volume received by %s is %s", __func__, ProtoToMarkup::ToJson( volume, false ).c_str() );
     ///
     /// Update mute status
     ///
@@ -174,7 +175,7 @@ void MuteManager::ToggleMute( )
     };
     auto respFunc = [ this ]( SoundTouchInterface::volume v )
     {
-        BOSE_VERBOSE( s_logger, "Got mute response" );
+        ReceiveFrontDoorVolume( v );
     };
 
     AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
