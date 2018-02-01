@@ -12,6 +12,8 @@ int main()
 {
     BOSE_CRITICAL( s_logger, "Connecting" );
 
+    sync();
+
     auto task = IL::CreateTask( "PlatformResetTask" );
 
     auto lpmClient = LpmClientFactory::Create( "PlatformResetLpmClient", task );
