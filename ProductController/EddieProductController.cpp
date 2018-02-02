@@ -180,11 +180,35 @@ std::string const& EddieProductController::GetProductType() const
     return productType;
 }
 
+std::string const& EddieProductController::GetProductModel() const
+{
+    static std::string productModel = "SoundTouch 20";
+
+    if( auto model = MfgData::Get( "model" ) )
+    {
+        productModel =  *model;
+    }
+
+    return productModel;
+}
+
 //@TODO - Below value may be available through HSP APIs
 std::string const& EddieProductController::GetProductVariant() const
 {
     static std::string productType = "Eddie";
     return productType;
+}
+
+std::string const& EddieProductController::GetProductDescription() const
+{
+    static std::string productDescription = "SoundTouch";
+
+    if( auto description = MfgData::Get( "description" ) )
+    {
+        productDescription = *description;
+    }
+
+    return productDescription;
 }
 
 std::string const& EddieProductController::GetDefaultProductName() const
