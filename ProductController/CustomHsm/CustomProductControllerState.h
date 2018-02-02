@@ -41,7 +41,32 @@ public:
     /// have an implementation that returns false
     ///
     ///////////////////////////////////////////////////////////////////////////////
+    virtual bool HandleLPMPowerStatusLowPower( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLPMPowerStatusNetworkStandby( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLPMPowerStatusIdle( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLPMPowerStatusFullPowerOn( )
+    {
+        return false;
+    }
+
     virtual bool HandleLpmState( bool isActive )
+    {
+        return false;
+    }
+
+    virtual bool HandleLpmLowPowerSystemState()
     {
         return false;
     }
