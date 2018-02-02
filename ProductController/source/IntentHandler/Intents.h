@@ -121,8 +121,6 @@ enum class Action
     /// Custom Professor Defined Actions Valued 101 and Higher
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ACTION_POWER              = 101,
-    ACTION_VOLUME_UP_1        = 109,
-    ACTION_VOLUME_DOWN_1      = 110,
     ACTION_MUTE               = 114,
     ACTION_SOUNDTOUCH         = 115,
     ACTION_CONNECT            = 116,

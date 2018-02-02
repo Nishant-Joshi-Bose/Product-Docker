@@ -74,24 +74,6 @@ void CustomProductControllerStateOn::HandleStateExit( )
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStateOn::HandleIntentVolumeMuteControl
-///
-/// @param  action
-///
-/// @return This method returns a true Boolean value indicating that it has handled the action.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateOn::HandleIntentVolumeMuteControl( KeyHandlerUtil::ActionType_t action )
-{
-    BOSE_INFO( s_logger, "%s in %s is handling the action %u", GetName( ).c_str( ), __FUNCTION__, action );
-
-    GetCustomProductController( ).GetIntentHandler( ).Handle( action );
-
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @brief  CustomProductControllerStateOn::HandleIntentSpeakerPairing
 ///
 /// @param  action
