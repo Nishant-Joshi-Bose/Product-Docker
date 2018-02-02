@@ -115,7 +115,7 @@ Cache-Control: no-cache\r
         call("ip", "route", "list")
         call("wpa_cli", "status")
         call("wpa_cli", "scan_results")
-        call("sh", "-c", "head -100 /mnt/nv/product-persistence/* /mnt/nv/BoseApp-Persistence/1/*")
+        call("sh", "-c", "head -20 /mnt/nv/product-persistence/*")
         call("ls", "-lHt", "/mnt/nv/BoseLog")
         call("ps")
         sys.exit()

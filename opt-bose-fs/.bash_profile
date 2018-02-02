@@ -15,7 +15,7 @@ if [ "${PS1-}" ]; then # interactive shells
     date
     (
         name=$(xmllint --xpath '//SystemConfiguration/DeviceName/text()' \
-               /mnt/nv/BoseApp-Persistence/1/SystemConfigurationDB.xml)
+               /mnt/nv/product-persistence/SystemConfigurationDB.xml)
         if [ "$name" ]; then
             echo "Device name: \"$name\""
         fi
