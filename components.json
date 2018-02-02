@@ -9,7 +9,7 @@
   },
   {
     "name": "BLERemoteXCVR",
-    "selected_version": "Continuous/master/0.15-46+ge9e064b"
+    "selected_version": "Release/master/0.15-56+g286fcdd"
   },
   {
     "name": "A4VVideoManagerService",
@@ -69,7 +69,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@235adb60b1f65e8adb0b282a178526202cfaeea3"
+    "selected_version": "master@6ecbae8bf6f964fa2d2e604448de0e1e41f4aadc"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -86,8 +86,8 @@
   {
     "name": "ProfessorLPM-Package",
     "selected_version": {
-      "RIVIERA_HSP_VERSION=1.3": "Continuous/trunk/2018-01-30_1739/DP1",
-      "RIVIERA_HSP_VERSION=2.1": "Continuous/trunk/2018-01-30_1739/DP2"
+      "RIVIERA_HSP_VERSION=1.3": "Release/trunk/0.3.3.2674915/DP1",
+      "RIVIERA_HSP_VERSION=2.1": "Release/trunk/0.3.3.2674915/DP2"
     }
   },
   {
@@ -112,11 +112,15 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Continuous/master/0.3.3-84+09bf8e2"
+    "selected_version": "Release/master/0.3.4-88+c5d5be2"
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/master/0.3.0-29+d12a9ef"
+    "selected_version": "Release/master/0.3.1-36+8a43bfa"
+  },
+  {
+    "name": "SASS-qc8017_32",
+    "selected_version": "Continuous/master/0.1.1-122+5bf289e"
   },
   {
     "name": "Shepherd-qc8017_32",

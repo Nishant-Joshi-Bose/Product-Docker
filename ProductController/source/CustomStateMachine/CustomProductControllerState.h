@@ -129,7 +129,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentNetworkStandby( KeyHandlerUtil::ActionType_t result )
+    virtual bool PowerToggleManager( KeyHandlerUtil::ActionType_t result )
     {
         return false;
     }
