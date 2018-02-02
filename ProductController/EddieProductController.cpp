@@ -192,11 +192,10 @@ std::string const& EddieProductController::GetProductModel() const
     return productModel;
 }
 
-//@TODO - Below value may be available through HSP APIs
 std::string const& EddieProductController::GetProductVariant() const
 {
-    static std::string productType = "Eddie";
-    return productType;
+    static std::string productVariant = "SoundTouch ECO2";
+    return productVariant;
 }
 
 std::string const& EddieProductController::GetProductDescription() const
