@@ -4,6 +4,7 @@ INCLUDE_DIRECTORIES(
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/SoundTouchInterface
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/Bluetooth
   ${PRODUCTCONTROLLERCOMMON_DIR}
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ChimesController
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
@@ -62,7 +63,7 @@ ADD_EXECUTABLE(Professor
   source/IntentHandler/IntentHandler.cpp
   source/IntentHandler/PlaybackRequestManager.cpp
   source/IntentHandler/SpeakerPairingManager.cpp
-  source/IntentHandler/VolumeMuteControlManager.cpp
+  source/IntentHandler/MuteManager.cpp
 )
 
 TARGET_LINK_LIBRARIES(Professor
@@ -91,6 +92,7 @@ TARGET_LINK_LIBRARIES(Professor
   dl
   SoundTouch_SDK_Protobuf_static
   SoftwareUpdateAPI
+  SASSFrontDoorServiceProto
 )
 
 INSTALL(TARGETS Professor DESTINATION ${OUTPUT_BIN_DIR})
