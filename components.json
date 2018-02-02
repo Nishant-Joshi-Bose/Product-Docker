@@ -52,6 +52,14 @@
     "selected_version": "branches/castle-libs@2549"
   },
   {
+    "name": "CastleLibs-native",
+    "selected_version": "branches/castle-libs@2549"
+  },
+  {
+    "name": "CastleLibs-x86",
+    "selected_version": "branches/castle-libs@2549"
+  },
+  {
     "name": "CastleLightBarController-qc8017_32",
     "selected_version": "Release/master/0.3.3-36+4b737e3"
   },
@@ -132,7 +140,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.3.5-273+67e26ed"
+    "selected_version": "Continuous/master/0.3.5-275+2ff05c1"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
