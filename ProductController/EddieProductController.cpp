@@ -839,6 +839,11 @@ void EddieProductController::SetupProductSTSController( void )
     std::vector<ProductSTSController::SourceDescriptor> sources;
     ProductSTSController::SourceDescriptor descriptor_AUX{ 0, "AUX", true }; // AUX is always available
     sources.push_back( descriptor_AUX );
+
+    // 'SETUP' is a "fake" source used for setup state.
+    ProductSTSController::SourceDescriptor descriptor_Setup{ 1, "SETUP", false };
+    sources.push_back( descriptor_Setup );
+
     Callback<void> cb_STSInitWasComplete( std::bind( &EddieProductController::HandleSTSInitWasComplete, this ) );
     Callback<ProductSTSAccount::ProductSourceSlot> cb_HandleSelectSourceSlot( std::bind( &EddieProductController::HandleSelectSourceSlot, this, std::placeholders::_1 ) );
     m_ProductSTSController.Initialize( sources, cb_STSInitWasComplete, cb_HandleSelectSourceSlot );
