@@ -63,7 +63,7 @@ ADD_EXECUTABLE(Professor
   source/IntentHandler/IntentHandler.cpp
   source/IntentHandler/PlaybackRequestManager.cpp
   source/IntentHandler/SpeakerPairingManager.cpp
-  source/IntentHandler/VolumeMuteControlManager.cpp
+  source/IntentHandler/MuteManager.cpp
 )
 
 TARGET_LINK_LIBRARIES(Professor

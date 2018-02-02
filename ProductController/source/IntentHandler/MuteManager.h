@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      VolumeMuteControlManager.h
+/// @file      MuteManager.h
 ///
 /// @brief     This header file declares an intent manager class for implementing volume and mute
 ///            control based on Professor product specific key actions
@@ -37,7 +37,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
 #include "FrontDoorClientIF.h"
-#include "AudioVolume.h"
 #include "ProductMessage.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,23 +50,22 @@ namespace ProductApp
 ///            Forward Class Declarations
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductLpmHardwareInterface;
 class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class VolumeMuteControlManager
+/// @class MuteManager
 ///
 /// @brief This class provides functionality to implement audio volume management.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class VolumeMuteControlManager : public IntentManager
+class MuteManager : public IntentManager
 {
 public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief Constructor for the VolumeMuteControlManager Class
+    /// @brief Constructor for the MuteManager Class
     ///
     /// @param NotifyTargetTaskIF&         task
     ///
@@ -78,10 +76,10 @@ public:
     /// @param ProfessorProductController& productController
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    VolumeMuteControlManager( NotifyTargetTaskIF&        task,
-                              const CliClientMT&         commandLineClient,
-                              const FrontDoorClientIF_t& frontDoorClient,
-                              ProductController&         productController );
+    MuteManager( NotifyTargetTaskIF&        task,
+                 const CliClientMT&         commandLineClient,
+                 const FrontDoorClientIF_t& frontDoorClient,
+                 ProductController&         productController );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -92,7 +90,7 @@ public:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief  The following methods is used to stop instances of the VolumeMuteControlManager
+    /// @brief  The following methods is used to stop instances of the MuteManager
     ///         class.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,11 +98,9 @@ public:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following methods allow for manipulation of system volume
+    /// @brief The following methods allow for manipulation of system mute
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void Increment( unsigned int );
-    void Decrement( unsigned int );
     void ToggleMute( );
 
 private:
@@ -122,14 +118,6 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     NotifyTargetTaskIF*        m_ProductTask    = nullptr;
     Callback< ProductMessage > m_ProductNotify  = nullptr;
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following subclass instances are used to manage the lower level hardware and
-    ///        the device.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    std::shared_ptr<CustomProductLpmHardwareInterface> m_ProductLpmHardwareInterface;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

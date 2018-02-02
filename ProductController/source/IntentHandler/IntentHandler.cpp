@@ -43,7 +43,7 @@
 #include "IntentHandler.h"
 #include "ProfessorProductController.h"
 #include "CliClientMT.h"
-#include "VolumeMuteControlManager.h"
+#include "MuteManager.h"
 #include "SpeakerPairingManager.h"
 #include "PlaybackRequestManager.h"
 
@@ -93,11 +93,11 @@ void IntentHandler::Initialize( )
     ///
     /// Custom intent managers for Professor are constructed at this point.
     ///
-    IntentManagerPtr_t volumeMuteControlManager = std::make_shared< VolumeMuteControlManager >
-                                                  ( GetTask( ),
-                                                    GetCli( ),
-                                                    GetFrontDoorClient( ),
-                                                    GetProductController( ) );
+    IntentManagerPtr_t muteManager = std::make_shared< MuteManager >
+                                     ( GetTask( ),
+                                       GetCli( ),
+                                       GetFrontDoorClient( ),
+                                       GetProductController( ) );
 
     IntentManagerPtr_t speakerPairingManager = std::make_shared< SpeakerPairingManager >
                                                ( GetTask( ),
@@ -116,11 +116,7 @@ void IntentHandler::Initialize( )
     /// and mute key actions. Note that these actions are product specific to Professor devices,
     /// typically based on remote key actions.
     ///
-    m_IntentManagerMap[( uint16_t )Action::ACTION_VOLUME_UP_1 ]   = volumeMuteControlManager;
-    m_IntentManagerMap[( uint16_t )Action::ACTION_VOLUME_DOWN_1 ] = volumeMuteControlManager;
-    m_IntentManagerMap[( uint16_t )Action::ACTION_MUTE ]          = volumeMuteControlManager;
-    m_IntentNotificationMap[( uint16_t )Action::ACTION_VOLUME_UP_1 ]   = "volume_up";
-    m_IntentNotificationMap[( uint16_t )Action::ACTION_VOLUME_DOWN_1 ] = "volume_down";
+    m_IntentManagerMap[( uint16_t )Action::ACTION_MUTE ]          = muteManager;
     m_IntentNotificationMap[( uint16_t )Action::ACTION_MUTE ]          = "mute";
 
     ///

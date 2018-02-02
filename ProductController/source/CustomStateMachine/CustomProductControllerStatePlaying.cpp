@@ -135,6 +135,24 @@ bool CustomProductControllerStatePlaying::HandleIntentUserPower( KeyHandlerUtil:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @brief  CustomProductControllerStateOn::HandleIntentMuteControl
+///
+/// @param  action
+///
+/// @return This method returns a true Boolean value indicating that it has handled the action.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlaying::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )
+{
+    BOSE_INFO( s_logger, "%s in %s is handling the action %u", GetName( ).c_str( ), __FUNCTION__, action );
+
+    GetCustomProductController( ).GetIntentHandler( ).Handle( action );
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief CustomProductControllerStatePlaying::GoToAppropriateNonPlayingState
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
