@@ -32,6 +32,10 @@ fi
 if (( $# >= 1 )) && [ "$1" = start ]; then
     shift
 
+    # We want our certificates to appear valid even when NTP hasn't yet set
+    # our clock (e.g., because there's no network connectivity).
+    set-default-time
+
     log info "* Starting SoundTouch *"
 
     # By default we launch shepherdd into the background (as expected by
