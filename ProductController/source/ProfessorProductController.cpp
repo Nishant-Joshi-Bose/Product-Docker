@@ -71,7 +71,7 @@
 #include "ProductControllerStatePlayableTransitionIdle.h"
 #include "ProductControllerStatePlayableTransitionNetworkStandby.h"
 #include "ProductControllerStateSoftwareUpdateTransition.h"
-#include "ProductControllerStateLowPowerTransition.h"
+#include "ProductControllerStateLowPowerStandbyTransition.h"
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSelected.h"
 #include "ProductControllerStateFactoryDefault.h"
@@ -347,6 +347,13 @@ void ProfessorProductController::Run( )
       stateSetup,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING );
 
+    auto* stateLowPowerStandbyTransition =
+        new ProductControllerStateLowPowerStandbyTransition
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION );
+
+
     ///
     /// The states are added to the state machine and the state machine is initialized.
     ///
@@ -387,6 +394,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( stateProductControllerStateStoppingStreamsDedicatedForFactoryDefault );
     GetHsm( ).AddState( stateProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate );
     GetHsm( ).AddState( stateProductControllerStatePlayingSelectedSetupExiting );
+    GetHsm( ).AddState( stateLowPowerStandbyTransition );
 
 
     GetHsm( ).Init( this, PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
