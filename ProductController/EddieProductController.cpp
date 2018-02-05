@@ -180,11 +180,34 @@ std::string const& EddieProductController::GetProductType() const
     return productType;
 }
 
-//@TODO - Below value may be available through HSP APIs
+std::string const& EddieProductController::GetProductModel() const
+{
+    static std::string productModel = "SoundTouch 20";
+
+    if( auto model = MfgData::Get( "model" ) )
+    {
+        productModel =  *model;
+    }
+
+    return productModel;
+}
+
 std::string const& EddieProductController::GetProductVariant() const
 {
-    static std::string productType = "Eddie";
-    return productType;
+    static std::string productVariant = "SoundTouch ECO2";
+    return productVariant;
+}
+
+std::string const& EddieProductController::GetProductDescription() const
+{
+    static std::string productDescription = "SoundTouch";
+
+    if( auto description = MfgData::Get( "description" ) )
+    {
+        productDescription = *description;
+    }
+
+    return productDescription;
 }
 
 std::string const& EddieProductController::GetDefaultProductName() const
@@ -816,6 +839,11 @@ void EddieProductController::SetupProductSTSController( void )
     std::vector<ProductSTSController::SourceDescriptor> sources;
     ProductSTSController::SourceDescriptor descriptor_AUX{ 0, "AUX", true }; // AUX is always available
     sources.push_back( descriptor_AUX );
+
+    // 'SETUP' is a "fake" source used for setup state.
+    ProductSTSController::SourceDescriptor descriptor_Setup{ 1, "SETUP", false };
+    sources.push_back( descriptor_Setup );
+
     Callback<void> cb_STSInitWasComplete( std::bind( &EddieProductController::HandleSTSInitWasComplete, this ) );
     Callback<ProductSTSAccount::ProductSourceSlot> cb_HandleSelectSourceSlot( std::bind( &EddieProductController::HandleSelectSourceSlot, this, std::placeholders::_1 ) );
     m_ProductSTSController.Initialize( sources, cb_STSInitWasComplete, cb_HandleSelectSourceSlot );
