@@ -206,6 +206,10 @@ public:
 
     std::string const& GetProductVariant() const override;
 
+    std::string const& GetProductModel() const override;
+
+    std::string const& GetProductDescription() const override;
+
     BLESetupService::VariantId GetVariantId() const override;
 
     BLESetupService::ProductId GetProductId() const override

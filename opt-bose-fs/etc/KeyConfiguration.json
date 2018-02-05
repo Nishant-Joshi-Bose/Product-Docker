@@ -787,7 +787,7 @@
                 0
             ], 
             "commment": "volume up", 
-            "action": 109, 
+            "action": 23, 
             "keyList": [
                 3
             ]
@@ -799,7 +799,7 @@
                 0
             ], 
             "commment": "volume up", 
-            "action": 109, 
+            "action": 23, 
             "keyList": [
                 3
             ]
@@ -811,7 +811,7 @@
                 0
             ], 
             "commment": "volume up", 
-            "action": 109, 
+            "action": 23, 
             "keyList": [
                 3
             ]
@@ -823,7 +823,7 @@
                 0
             ], 
             "commment": "volume up", 
-            "action": 109, 
+            "action": 23, 
             "keyList": [
                 3
             ]
@@ -836,7 +836,7 @@
                 100
             ], 
             "commment": "volume up repeat", 
-            "action": 109, 
+            "action": 39, 
             "keyList": [
                 3
             ]
@@ -849,20 +849,7 @@
                 100
             ], 
             "commment": "volume up repeat", 
-            "action": 109, 
-            "keyList": [
-                3
-            ]
-        }, 
-        {
-            "origin": 4, 
-            "keyEvent": 3, 
-            "timeOutList": [
-                300, 
-                100
-            ], 
-            "commment": "volume up repeat", 
-            "action": 109, 
+            "action": 39, 
             "keyList": [
                 3
             ]
@@ -875,7 +862,37 @@
                 100
             ], 
             "commment": "volume up repeat", 
-            "action": 109, 
+            "action": 39, 
+            "keyList": [
+                3
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 5, 
+            "timeOutList": [], 
+            "commment": "volume up cancel", 
+            "action": 50, 
+            "keyList": [
+                3
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 5, 
+            "timeOutList": [], 
+            "commment": "volume up cancel", 
+            "action": 50, 
+            "keyList": [
+                3
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 5, 
+            "timeOutList": [], 
+            "commment": "volume up cancel", 
+            "action": 50, 
             "keyList": [
                 3
             ]
@@ -887,7 +904,7 @@
                 0
             ], 
             "commment": "volume down", 
-            "action": 110, 
+            "action": 24, 
             "keyList": [
                 2
             ]
@@ -899,7 +916,7 @@
                 0
             ], 
             "commment": "volume down", 
-            "action": 110, 
+            "action": 24, 
             "keyList": [
                 2
             ]
@@ -911,7 +928,7 @@
                 0
             ], 
             "commment": "volume down", 
-            "action": 110, 
+            "action": 24, 
             "keyList": [
                 2
             ]
@@ -923,7 +940,7 @@
                 0
             ], 
             "commment": "volume down", 
-            "action": 110, 
+            "action": 24, 
             "keyList": [
                 2
             ]
@@ -936,7 +953,7 @@
                 100
             ], 
             "commment": "volume down repeat", 
-            "action": 110, 
+            "action": 40, 
             "keyList": [
                 2
             ]
@@ -949,20 +966,7 @@
                 100
             ], 
             "commment": "volume down repeat", 
-            "action": 110, 
-            "keyList": [
-                2
-            ]
-        }, 
-        {
-            "origin": 4, 
-            "keyEvent": 3, 
-            "timeOutList": [
-                300, 
-                100
-            ], 
-            "commment": "volume down repeat", 
-            "action": 110, 
+            "action": 40, 
             "keyList": [
                 2
             ]
@@ -975,7 +979,37 @@
                 100
             ], 
             "commment": "volume down repeat", 
-            "action": 110, 
+            "action": 40, 
+            "keyList": [
+                2
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 5, 
+            "timeOutList": [], 
+            "commment": "volume down cancel", 
+            "action": 51, 
+            "keyList": [
+                2
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 5, 
+            "timeOutList": [], 
+            "commment": "volume down cancel", 
+            "action": 51, 
+            "keyList": [
+                2
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 5, 
+            "timeOutList": [], 
+            "commment": "volume down cancel", 
+            "action": 51, 
             "keyList": [
                 2
             ]

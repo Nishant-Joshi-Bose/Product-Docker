@@ -670,6 +670,48 @@ std::string const& ProfessorProductController::GetProductVariant( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   ProfessorProductController::GetProductModel
+///
+/// @return This method returns the std::string const& value to be used for the Product "Model" field
+///
+/// @TODO - Below value may be available through HSP APIs
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string const& ProfessorProductController::GetProductModel() const
+{
+    static std::string productModel = "SoundTouch 20";
+
+    if( auto model = MfgData::Get( "model" ) )
+    {
+        productModel =  *model;
+    }
+
+    return productModel;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetProductDescription
+///
+/// @return This method returns the std::string const& value to be used for the Product "Description" field
+///
+/// @TODO - Below value may be available through HSP APIs
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string const& ProfessorProductController::GetProductDescription() const
+{
+    static std::string productDescription = "SoundTouch";
+
+    if( auto description = MfgData::Get( "description" ) )
+    {
+        productDescription = *description;
+    }
+
+    return productDescription;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::SetupProductSTSConntroller
 ///
 /// @brief  This method is called to perform the needed initialization of the ProductSTSController,
@@ -1272,9 +1314,9 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentUserPower,
                                                               message.action( ) );
         }
-        else if( GetIntentHandler( ).IsIntentVolumeMuteControl( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentMuteControl( message.action( ) ) )
         {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentVolumeMuteControl,
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentMuteControl,
                                                               message.action( ) );
         }
         else if( GetIntentHandler( ).IsIntentSpeakerPairing( message.action( ) ) )
