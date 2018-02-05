@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-02-01_1717"
+    "selected_version": "Release/Castle-Fork/0.3.7.41004.2680929"
   },
   {
     "name": "bose-opkg-utils",
@@ -131,10 +131,6 @@
     "selected_version": "Release/master/0.3.1-36+8a43bfa"
   },
   {
-    "name": "SASS-qc8017_32",
-    "selected_version": "Continuous/master/0.1.1-122+5bf289e"
-  },
-  {
     "name": "Shepherd-qc8017_32",
     "selected_version": "Release/master/0.3.0-49+29239c4"
   },
@@ -144,7 +140,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-02-01_1717"
+    "selected_version": "Release/Castle-Fork/0.3.7.41004.2680929"
   },
   {
     "name": "Webkit",
