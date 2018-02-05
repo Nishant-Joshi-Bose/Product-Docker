@@ -129,7 +129,7 @@ public:
         return false;
     }
 
-    virtual bool PowerToggleManager( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentPowerToggle( KeyHandlerUtil::ActionType_t result )
     {
         return false;
     }
@@ -270,7 +270,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentVolumeMuteControl( KeyHandlerUtil::ActionType_t action )
+    virtual bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )
     {
         return false;
     }

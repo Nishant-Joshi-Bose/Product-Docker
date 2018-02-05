@@ -131,14 +131,14 @@ bool CustomProductControllerStatePlayingActive::HandleIntentUserPower( KeyHandle
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStatePlayingActive::HandleIntentVolumeMuteControl
+/// @brief  CustomProductControllerStatePlayingActive::HandleIntentMuteControl
 ///
 /// @param  KeyHandlerUtil::ActionType_t action
 ///
 /// @return
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayingActive::HandleIntentVolumeMuteControl( KeyHandlerUtil::ActionType_t action )
+bool CustomProductControllerStatePlayingActive::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )
 {
     ProcessUserActivity( );
     return false;

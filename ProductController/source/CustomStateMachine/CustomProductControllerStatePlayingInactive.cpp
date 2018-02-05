@@ -148,7 +148,7 @@ bool CustomProductControllerStatePlayingInactive::HandleIntentUserPower( KeyHand
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStatePlayingInactive::HandleIntentVolumeMuteControl
+/// @brief  CustomProductControllerStatePlayingInactive::HandleIntentMuteControl
 ///
 /// @param  KeyHandlerUtil::ActionType_t action
 ///
@@ -156,7 +156,7 @@ bool CustomProductControllerStatePlayingInactive::HandleIntentUserPower( KeyHand
 ///         one of its superstates.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayingInactive::HandleIntentVolumeMuteControl( KeyHandlerUtil::ActionType_t action )
+bool CustomProductControllerStatePlayingInactive::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )
 {
     ProcessUserActivity( );
     return false;

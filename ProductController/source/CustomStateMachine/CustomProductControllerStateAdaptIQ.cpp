@@ -117,6 +117,12 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdap
     GetCustomProductController( ).GetAdaptIQManager( )->DSPToFrontDoorStatus( frontDoorStatus, aiqStatus );
     GetCustomProductController( ).GetAdaptIQManager( )->SetStatus( frontDoorStatus );
 
+    ProductAdaptIQStatus& status = const_cast<ProductAdaptIQStatus&>( aiqStatus );
+    if( status.mutable_status()->smstate() == LpmServiceMessages::IpcAiqState_t::AIQ_STATE_NOT_RUNNING )
+    {
+        ChangeState( GetSuperId( ) );
+    }
+
     return true;
 }
 
@@ -157,11 +163,7 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAda
 
     case ProductAdaptIQControl::Cancel:
         BOSE_INFO( s_logger, "%s : Cancel %d\n", __func__, cmd.action() );
-        // TODO: do we need to send an explicit cancellation?  the DSP is going to get rebooted at this point
-        // anyway
         GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
-        // go to parent state
-        ChangeState( GetSuperId( ) );
         break;
 
     case ProductAdaptIQControl::Advance:

@@ -63,20 +63,14 @@ CustomProductControllerStateOn::CustomProductControllerStateOn( ProductControlle
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStateOn::HandleIntentVolumeMuteControl
-///
-/// @param  KeyHandlerUtil::ActionType_t intent
-///
-/// @return This method returns a true Boolean value indicating that it has handled the action.
+/// @brief CustomProductControllerStateOn::HandleStateExit
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateOn::HandleIntentVolumeMuteControl( KeyHandlerUtil::ActionType_t intent )
+void CustomProductControllerStateOn::HandleStateExit( )
 {
-    BOSE_INFO( s_logger, "The %s state in %s is handling the intent %u.", GetName( ).c_str( ), __func__, intent );
+    BOSE_INFO( s_logger, "GetName( ).c_str( ) is in %s.", __FUNCTION__ );
 
-    GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
-
-    return true;
+    GetProductController( ).SendAllowSourceSelectMessage( false );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -35,7 +35,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
 #include "ProductControllerStateOn.h"
-#include "ProductControllerStates.h"
 #include "HsmState.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,9 +71,9 @@ public:
 
     }
 
-    bool HandleIntentVolumeMuteControl( KeyHandlerUtil::ActionType_t intent ) override;
-    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )    override;
-    bool HandleIntentPlayback( KeyHandlerUtil::ActionType_t intent )          override;
+    void HandleStateExit( )  override;
+    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t action )    override;
+    bool HandleIntentPlayback( KeyHandlerUtil::ActionType_t action )          override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
