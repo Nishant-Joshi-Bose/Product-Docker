@@ -42,6 +42,7 @@
 #include "CustomProductControllerStates.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
+#include "SystemSourcesProperties.ph.h"
 #include "CustomProductControllerState.h"
 #include "CustomProductControllerStateBooting.h"
 #include "CustomProductControllerStateUpdatingSoftware.h"
@@ -94,6 +95,8 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 constexpr uint32_t PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
+
+constexpr auto FRONTDOOR_SYSTEM_SOURCES_API = "/system/sources";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -1412,6 +1415,20 @@ BLESetupService::VariantId ProfessorProductController::GetVariantId() const
     }
 
     return varintId;
+}
+
+void ProfessorProductController::SendInitialCapsData()
+{
+    BOSE_INFO( s_logger, __func__ );
+
+    // Do the Common stuff first
+    ProductController::SendInitialCapsData();
+
+    // PUT /system/sources::properties
+    SoundTouchInterface::Sources message;
+
+    GetFrontDoorClient()->SendPut<SoundTouchInterface::NowPlaying, EndPointsError::Error>
+    ( FRONTDOOR_SYSTEM_SOURCES_API, message, {}, m_errorCb );
 }
 
 
