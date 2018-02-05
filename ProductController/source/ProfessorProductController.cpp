@@ -409,7 +409,7 @@ void ProfessorProductController::Run( )
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_ProductKeyInputInterface    = std::make_shared< ProductKeyInputInterface          >( *this );
     m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
-    m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this );
+    m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this, m_FrontDoorClientIF, m_ProductLpmHardwareInterface->GetLpmClient() );
 
     if( m_ProductLpmHardwareInterface == nullptr ||
         m_ProductSystemManager        == nullptr ||
@@ -675,6 +675,48 @@ std::string const& ProfessorProductController::GetProductVariant( ) const
 {
     static std::string productType = "Professor";
     return productType;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetProductModel
+///
+/// @return This method returns the std::string const& value to be used for the Product "Model" field
+///
+/// @TODO - Below value may be available through HSP APIs
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string const& ProfessorProductController::GetProductModel() const
+{
+    static std::string productModel = "SoundTouch 20";
+
+    if( auto model = MfgData::Get( "model" ) )
+    {
+        productModel =  *model;
+    }
+
+    return productModel;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetProductDescription
+///
+/// @return This method returns the std::string const& value to be used for the Product "Description" field
+///
+/// @TODO - Below value may be available through HSP APIs
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::string const& ProfessorProductController::GetProductDescription() const
+{
+    static std::string productDescription = "SoundTouch";
+
+    if( auto description = MfgData::Get( "description" ) )
+    {
+        productDescription = *description;
+    }
+
+    return productDescription;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1005,24 +1047,30 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             case SYSTEM_STATE_ON:
                 BOSE_DEBUG( s_logger, "Calling HandleLPMPowerStatusFullPower()" );
                 GetHsm( ).Handle< >( &CustomProductControllerState::HandleLPMPowerStatusFullPower );
+                m_ProductAudioService->SetThermalMonitorEnabled( true );
                 break;
             case SYSTEM_STATE_OFF:
+                m_ProductAudioService->SetThermalMonitorEnabled( false );
                 break;
             case SYSTEM_STATE_BOOTING:
                 break;
             case SYSTEM_STATE_STANDBY:
+                m_ProductAudioService->SetThermalMonitorEnabled( false );
                 break;
             case SYSTEM_STATE_RECOVERY:
                 break;
             case SYSTEM_STATE_LOW_POWER:
+                m_ProductAudioService->SetThermalMonitorEnabled( false );
                 break;
             case SYSTEM_STATE_UPDATE:
                 break;
             case SYSTEM_STATE_SHUTDOWN:
+                m_ProductAudioService->SetThermalMonitorEnabled( false );
                 break;
             case SYSTEM_STATE_FACTORY_DEFAULT:
                 break;
             case SYSTEM_STATE_IDLE:
+                m_ProductAudioService->SetThermalMonitorEnabled( false );
                 break;
             case SYSTEM_STATE_NUM_OF:
                 break;
@@ -1276,9 +1324,9 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentUserPower,
                                                               message.action( ) );
         }
-        else if( GetIntentHandler( ).IsIntentVolumeMuteControl( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentMuteControl( message.action( ) ) )
         {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentVolumeMuteControl,
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentMuteControl,
                                                               message.action( ) );
         }
         else if( GetIntentHandler( ).IsIntentSpeakerPairing( message.action( ) ) )

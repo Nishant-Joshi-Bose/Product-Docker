@@ -104,11 +104,9 @@ public:
         return( ( argument == ( uint16_t )Action::ACTION_POWER ) );
     }
 
-    static bool IsIntentVolumeMuteControl( KeyHandlerUtil::ActionType_t argument )
+    static bool IsIntentMuteControl( KeyHandlerUtil::ActionType_t argument )
     {
-        return( ( argument == ( uint16_t )Action::ACTION_VOLUME_UP_1 )   ||
-                ( argument == ( uint16_t )Action::ACTION_VOLUME_DOWN_1 ) ||
-                ( argument == ( uint16_t )Action::ACTION_MUTE ) );
+        return( argument == ( uint16_t )Action::ACTION_MUTE );
     }
 
     static bool IsIntentSpeakerPairing( KeyHandlerUtil::ActionType_t argument )
