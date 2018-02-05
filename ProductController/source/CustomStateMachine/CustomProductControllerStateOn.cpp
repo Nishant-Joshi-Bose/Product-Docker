@@ -51,14 +51,14 @@ namespace ProductApp
 /// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductControllerStateOn::CustomProductControllerStateOn( ProductControllerHsm&       hsm,
-                                                                CHsmState*                  pSuperState,
-                                                                Hsm::STATE                  stateId,
-                                                                const std::string&          name )
+CustomProductControllerStateOn::CustomProductControllerStateOn( ProductControllerHsm& hsm,
+                                                                CHsmState*            pSuperState,
+                                                                Hsm::STATE            stateId,
+                                                                const std::string&    name )
 
     : ProductControllerStateOn( hsm, pSuperState, stateId, name )
 {
-    BOSE_INFO( s_logger, "%s is being constructed.", GetName( ).c_str( ) );
+    BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,18 +72,19 @@ void CustomProductControllerStateOn::HandleStateExit( )
 
     GetProductController( ).SendAllowSourceSelectMessage( false );
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief  CustomProductControllerStateOn::HandleIntentSpeakerPairing
 ///
-/// @param  KeyHandlerUtil::ActionType_t action
+/// @param  KeyHandlerUtil::ActionType_t intent
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the action.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateOn::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t action )
+bool CustomProductControllerStateOn::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "%s in %s is handling the action %u", GetName( ).c_str( ), __FUNCTION__, action );
+    BOSE_INFO( s_logger, "The %s state in %s is handling the intent %u.", GetName( ).c_str( ), __func__, intent );
 
     ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
 
@@ -94,20 +95,20 @@ bool CustomProductControllerStateOn::HandleIntentSpeakerPairing( KeyHandlerUtil:
 ///
 /// @brief  CustomProductControllerStateOn::HandleIntentPlaySoundTouchSource
 ///
-/// @param  KeyHandlerUtil::ActionType_t action
+/// @param  KeyHandlerUtil::ActionType_t intent
 ///
-/// @return This method returns a true Boolean value indicating that it has handled the action.
+/// @return This method returns a true Boolean value indicating that it has handled the intent.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateOn::HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t action )
+bool CustomProductControllerStateOn::HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "%s in %s is handling the action %u", GetName( ).c_str( ), __FUNCTION__, action );
+    BOSE_INFO( s_logger, "%s in %s is handling the intent %u", GetName( ).c_str( ), __FUNCTION__, intent );
     // If network is configured, and there's persisted last streaming source, handle intent playSoundTouchSource
     if( GetCustomProductController( ).IsNetworkConfigured() )
     {
         if( GetCustomProductController( ).GetLastStreamingContentItem().has_source() )
         {
-            GetCustomProductController( ).GetIntentHandler( ).Handle( action );
+            GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
         }
     }
     // If network is not configured
@@ -122,15 +123,15 @@ bool CustomProductControllerStateOn::HandleIntentPlaySoundTouchSource( KeyHandle
 ///
 /// @brief  CustomProductControllerStateOn::HandleIntentPlayTVSource
 ///
-/// @param  KeyHandlerUtil::ActionType_t action
+/// @param  KeyHandlerUtil::ActionType_t intent
 ///
-/// @return This method returns a true Boolean value indicating that it has handled the action.
+/// @return This method returns a true Boolean value indicating that it has handled the intent.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateOn::HandleIntentPlayTVSource( KeyHandlerUtil::ActionType_t action )
+bool CustomProductControllerStateOn::HandleIntentPlayTVSource( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "%s in %s is handling the action %u", GetName( ).c_str( ), __FUNCTION__, action );
-    GetCustomProductController( ).GetIntentHandler( ).Handle( action );
+    BOSE_INFO( s_logger, "%s in %s is handling the intent %u", GetName( ).c_str( ), __FUNCTION__, intent );
+    GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
     return true;
 }
 

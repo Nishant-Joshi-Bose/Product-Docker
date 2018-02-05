@@ -66,7 +66,7 @@ CustomProductControllerStatePlayingActive::CustomProductControllerStatePlayingAc
 
     : ProductControllerStatePlayingActive( hsm, pSuperState, stateId, name )
 {
-    BOSE_VERBOSE( s_logger, "%s is being constructed.", name.c_str() );
+    BOSE_INFO( s_logger, "%s is being constructed.", name.c_str() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,9 +88,9 @@ bool CustomProductControllerStatePlayingActive::HandleNowPlayingStatus
 
     if( state == ProductNowPlayingStatus_ProductNowPlayingState_Inactive )
     {
-        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                      GetName( ).c_str( ),
-                      "CustomProductControllerStatePlayingInactive" );
+        BOSE_INFO( s_logger, "%s is changing to %s.",
+                   GetName( ).c_str( ),
+                   "CustomProductControllerStatePlayingInactive" );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
     }
 
@@ -199,8 +199,8 @@ bool CustomProductControllerStatePlayingActive::HandleIntentPlayTVSource( KeyHan
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlayingActive::ProcessUserActivity( )
 {
-    BOSE_VERBOSE( s_logger, "A key action arrived at %s.", GetName( ).c_str( ) );
-    BOSE_VERBOSE( s_logger, "The timer will be stopped and restarted based on user activity." );
+    BOSE_INFO( s_logger, "A key action arrived at %s.", GetName( ).c_str( ) );
+    BOSE_INFO( s_logger, "The timer will be stopped and restarted based on user activity." );
 
     GetProductController( ).GetInactivityTimers( ).CancelTimer( InactivityTimerType::NO_USER_INTERACTION_TIMER );
     GetProductController( ).GetInactivityTimers( ).StartTimer( InactivityTimerType::NO_USER_INTERACTION_TIMER );
