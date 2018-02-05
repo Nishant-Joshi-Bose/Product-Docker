@@ -55,139 +55,44 @@ CustomProductControllerStateBooting::CustomProductControllerStateBooting( Produc
 
     : ProductControllerStateBooting( hsm, pSuperState, stateId, name )
 {
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting has been constructed." );
+    BOSE_INFO( s_logger, "The %s state has been constructed.", GetName( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateBooting::HandleLpmState
-///
-/// @param bool active This argument is true if the Low Power Microprocessor (LPM) is active;
-///                    it is false otherwise.
-///
-/// @return This method will always return true, indicating that it has handled the event.
+/// @brief CustomProductControllerStateBooting::PossiblyGoToNextState
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateBooting::HandleLpmState( bool active )
-{
-    BOSE_VERBOSE( s_logger, "%s is handling an LPM %s event.", "CustomProductControllerStateBooting",
-                  active ? "activation" : "deactivation" );
-
-    if( active )
-    {
-        PossiblyGoToAppropriatePlayableState( );
-    }
-
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateBooting::HandleCapsState
-///
-/// @param bool active This argument is true if the Content Audio Playback Service (CAPS) is active;
-///                    it is false otherwise.
-///
-/// @return This method will always return true, indicating that it has handled the event.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateBooting::HandleCapsState( bool active )
-{
-    BOSE_VERBOSE( s_logger, "%s is handling a CAPS %s event.", "CustomProductControllerStateBooting",
-                  active ? "activation" : "deactivation" );
-
-    if( active )
-    {
-        PossiblyGoToAppropriatePlayableState( );
-    }
-
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief  CustomProductControllerStateBooting::HandleAudioPathState
-///
-/// @param bool active This argument is true if the Audio Path is active and connected; it is false
-///                     otherwise.
-///
-/// @return This method will always return true, indicating that it has handled the event.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateBooting::HandleAudioPathState( bool active )
-{
-    BOSE_VERBOSE( s_logger, "%s is handling an audio path CAPS %s event.", "CustomProductControllerStateBooting",
-                  active ? "activation" : "deactivation" );
-
-    if( active )
-    {
-        PossiblyGoToAppropriatePlayableState( );
-    }
-
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateBooting::HandleSTSSourcesInit
-///
-/// @return This method will always return true, indicating that it has handled the event.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateBooting::HandleSTSSourcesInit( )
-{
-    BOSE_VERBOSE( s_logger, "CustomProductControllerStateBooting is handling the STSSourcesInit event." );
-
-    PossiblyGoToAppropriatePlayableState( );
-
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateBooting::PossiblyGoToAppropriatePlayableState
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateBooting::PossiblyGoToAppropriatePlayableState( )
+void CustomProductControllerStateBooting::PossiblyGoToNextState( )
 {
     if( GetCustomProductController( ).IsBooted( ) )
     {
-        if( GetCustomProductController( ).IsSoftwareUpdateRequired( ) )
+        if( GetCustomProductController( ).IsFirstTimeBootUp( ) )
         {
-            BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                          "CustomProductControllerStateBooting",
-                          "CustomProductControllerStateUpdatingSoftware" );
-            ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING );
+            BOSE_INFO( s_logger, "The %s state is changing to a Welcome state.", GetName( ).c_str( ) );
+
+            ChangeState( PRODUCT_CONTROLLER_STATE_WELCOME );
+        }
+        else if( GetCustomProductController( ).IsSoftwareUpdateRequired( ) )
+        {
+            BOSE_INFO( s_logger, "The %s state is changing to an UpdatingSoftware state.", GetName( ).c_str( ) );
+
+            ChangeState( PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION );
+        }
+        else if( not GetCustomProductController( ).IsOutOfBoxSetupComplete( ) )
+        {
+            BOSE_INFO( s_logger, "The %s state is changing to a Setup state.", GetName( ).c_str( ) );
+
+            ChangeState( PRODUCT_CONTROLLER_STATE_SETUP );
         }
         else
         {
-            if( GetCustomProductController( ).IsNetworkConfigured( ) or
-                GetCustomProductController( ).IsAutoWakeEnabled( ) )
-            {
-                if( GetCustomProductController( ).IsNetworkConnected( ) and
-                    GetCustomProductController( ).IsVoiceConfigured( ) )
-                {
-                    BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                                  "CustomProductControllerStateBooting",
-                                  "CustomProductControllerStateIdleVoiceConfigured" );
-                    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED );
-                }
-                else
-                {
-                    BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                                  "CustomProductControllerStateBooting",
-                                  "CustomProductControllerStateIdleVoiceUnconfigured" );
-                    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_IDLE_VOICE_UNCONFIGURED );
-                }
-            }
-            else
-            {
-                BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                              "CustomProductControllerStateBooting",
-                              "CustomProductControllerStateNetworkStandbyUnconfigured" );
-                ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_UNCONFIGURED );
-            }
+            ChangeState( PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION );
         }
+    }
+    else
+    {
+        BOSE_INFO( s_logger, "The %s state is currently not booted.", GetName( ).c_str( ) );
     }
 }
 

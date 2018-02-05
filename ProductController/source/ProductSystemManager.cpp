@@ -136,11 +136,11 @@ bool ProductSystemManager::Run( )
                                        std::placeholders::_1 ),
                             m_ProductTask );
 
-        m_FrontDoorClient->SendGet< SoundTouchInterface::CapsInitializationStatus, EndPointsError::Error >
-        ( FRONTDOOR_SYSTEM_CAPS_INITIALIZATION_STATUS, CallbackForSuccess, CallbackForFailure );
-
         m_FrontDoorClient->RegisterNotification< SoundTouchInterface::CapsInitializationStatus >
         ( FRONTDOOR_CAPS_INITIALIZATION_UPDATE, CallbackForNotification );
+
+        m_FrontDoorClient->SendGet< SoundTouchInterface::CapsInitializationStatus, EndPointsError::Error >
+        ( FRONTDOOR_SYSTEM_CAPS_INITIALIZATION_STATUS, CallbackForSuccess, CallbackForFailure );
     }
 
     BOSE_DEBUG( s_logger, "A notification request for CAPS initialization messages has been made." );
@@ -298,13 +298,14 @@ void ProductSystemManager::HandleCapsStatus( const SoundTouchInterface::CapsInit
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::HandleCapsStatusFailed( const EndPointsError::Error& error )
 {
+    ///
+    /// A product message indicating that CAPS is down (based on a Front Door messaging error) may 
+    /// cause a race condition at this point and is not sent. Refer to the JIRA Story PGC-735 for
+    /// details.
+    ///
     BOSE_DEBUG( s_logger, "---------------- Product CAPS Status Failed ----------------" );
     BOSE_ERROR( s_logger, "The CAPS initialization status was not received." );
     BOSE_WARNING( s_logger, "%s: Error = (%d-%d) %s", __func__, error.code(), error.subcode(), error.message().c_str() );
-
-    ProductMessage productMessage;
-    productMessage.mutable_capsstatus( )->set_initialized( false );
-    SendMessage( productMessage );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

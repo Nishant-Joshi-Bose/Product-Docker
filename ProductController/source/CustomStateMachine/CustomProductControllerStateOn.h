@@ -61,10 +61,10 @@ class CustomProductControllerStateOn : public ProductControllerStateOn
 {
 public:
 
-    CustomProductControllerStateOn( ProductControllerHsm&       hsm,
-                                    CHsmState*                  pSuperState,
-                                    Hsm::STATE                  stateId,
-                                    const std::string&          name    = "CustomProductControllerStateOn" );
+    CustomProductControllerStateOn( ProductControllerHsm& hsm,
+                                    CHsmState*            pSuperState,
+                                    Hsm::STATE            stateId,
+                                    const std::string&    name    = "CustomProductControllerStateOn" );
 
     ~CustomProductControllerStateOn( ) override
     {
@@ -74,8 +74,6 @@ public:
     void HandleStateExit( )  override;
     bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t action )    override;
     bool HandleIntentPlayback( KeyHandlerUtil::ActionType_t action )          override;
-
-
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
