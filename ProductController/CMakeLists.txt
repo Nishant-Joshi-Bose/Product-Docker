@@ -32,6 +32,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc
   ${PROTO_CC_DEST}/ProductSTS.pb.cc
   ${PROTO_CC_DEST}/SystemInfo.pb.cc
+  ${PROTO_CC_DEST}/SystemSourcesProperties.pb.cc
   source/ProductAdaptIQManager.cpp
   source/ProductCommandLine.cpp
   source/ProductEdidInterface.cpp
