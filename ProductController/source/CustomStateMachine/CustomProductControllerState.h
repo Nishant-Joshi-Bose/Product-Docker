@@ -129,7 +129,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentNetworkStandby( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentPowerToggle( KeyHandlerUtil::ActionType_t result )
     {
         return false;
     }
@@ -153,6 +153,7 @@ public:
     {
         return false;
     }
+
     virtual bool HandleIntentVoice( KeyHandlerUtil::ActionType_t result )
     {
         return false;
@@ -178,7 +179,7 @@ public:
         return false;
     }
 
-    virtual bool HandleLpmLowpowerSystemState()
+    virtual bool HandleLpmLowPowerSystemState()
     {
         return false;
     }
@@ -249,12 +250,12 @@ public:
         return false;
     }
 
-    virtual bool HandleLPMPowerStatusAutoWakeStandby( )
+    virtual bool HandleLPMPowerStatusIdle( )
     {
         return false;
     }
 
-    virtual bool HandleLPMPowerStatusFullPower( )
+    virtual bool HandleLPMPowerStatusFullPowerOn( )
     {
         return false;
     }
@@ -304,8 +305,11 @@ public:
         return false;
     }
 
-    /*! \brief Respond to the LPM detecting an amp fault.
-     */
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief This handler is used to respond to the LPM detecting an amp fault.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     virtual bool HandleAmpFaultDetected()
     {
         return false;

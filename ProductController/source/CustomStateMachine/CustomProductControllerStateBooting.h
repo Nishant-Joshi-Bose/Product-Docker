@@ -34,6 +34,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
 #include "ProductControllerStateBooting.h"
+#include "ProductControllerStates.h"
 #include "HsmState.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,14 +71,9 @@ public:
 
     }
 
-    bool HandleLpmState( bool active )       override;
-    bool HandleCapsState( bool active )      override;
-    bool HandleAudioPathState( bool active ) override;
-    bool HandleSTSSourcesInit( )             override;
-
 private:
 
-    void PossiblyGoToAppropriatePlayableState( );
+    void PossiblyGoToNextState( ) override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

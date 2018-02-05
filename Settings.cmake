@@ -125,7 +125,7 @@ INCLUDE_DIRECTORIES(
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/Bluetooth
   ${AVSLIBS_DIR}/include
   ${FRONTDOOR_DIR}/include
-   ${SASS_DIR}/include
+  ${SASS_DIR}/include
   ${UNITTEST_DIR}/include
   ${SOFTWAREUPDATE_DIR}/include/API
 )
