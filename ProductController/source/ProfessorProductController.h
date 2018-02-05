@@ -228,9 +228,9 @@ public:
 
     bool IsSystemLanguageSet( ) const;
 
-private:
-
     std::unique_ptr<LightBar::LightBarController>         m_lightbarController;
+
+private:
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

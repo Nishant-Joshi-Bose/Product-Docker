@@ -427,6 +427,11 @@ void ProfessorProductController::Run( )
     }
 
     ///
+    /// Set up LightBarController
+    ///
+    m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_ProductLpmHardwareInterface->GetLpmClient() ) );
+
+    ///
     /// Run all the submodules.
     ///
     m_ProductLpmHardwareInterface->Run( );
@@ -444,15 +449,6 @@ void ProfessorProductController::Run( )
     RegisterFrontDoorEndPoints( );
 
     ///
-    /// Set up LightBarController
-    ///
-    m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_ProductLpmHardwareInterface->GetLpmClient() ) );
-    m_lightbarController->RegisterLightBarEndPoints();
-    m_lightbarController->RegisterLpmEvents();
-
-
-
-    ///
     /// Set up the STSProductController
     ///
     SetupProductSTSConntroller( );
@@ -467,6 +463,9 @@ void ProfessorProductController::Run( )
     /// Initialize and register intents for key actions for the Product Controller.
     ///
     m_IntentHandler.Initialize( );
+
+
+    m_lightbarController->RegisterLpmEvents();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -770,6 +769,7 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
 {
     RegisterCommonEndPoints( );
     RegisterNowPlayingEndPoint( );
+    m_lightbarController->RegisterLightBarEndPoints();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
