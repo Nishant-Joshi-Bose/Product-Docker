@@ -120,6 +120,29 @@ bool CustomProductControllerStatePlayable::HandleIntentUserPower( KeyHandlerUtil
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStatePlayable::HandleIntentPlaySoundTouchSource
+///
+/// @param  KeyHandlerUtil::ActionType_t action
+///
+/// @return This method returns a true Boolean value indicating that it has handled the action.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayable::HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t action )
+{
+    BOSE_INFO( s_logger, "%s in %s is handling the action %u", GetName( ).c_str( ), __FUNCTION__, action );
+    // If network is configured, but no persisted last streaming source => go to Deselected
+    if( GetCustomProductController().IsNetworkConfigured() &&
+        GetCustomProductController( ).GetLastStreamingContentItem().has_source() )
+    {
+        ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED );
+        return true;
+    }
+    // otherwise, let parent states handle it
+    return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }

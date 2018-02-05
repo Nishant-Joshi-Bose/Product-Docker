@@ -101,24 +101,28 @@ public:
     ///
     static bool IsIntentUserPower( KeyHandlerUtil::ActionType_t argument )
     {
-        return( ( argument == ( uint16_t )Action::ACTION_POWER ) );
+        return ( argument == ( uint16_t )Action::ACTION_POWER ) ;
     }
 
     static bool IsIntentMuteControl( KeyHandlerUtil::ActionType_t argument )
     {
-        return( argument == ( uint16_t )Action::ACTION_MUTE );
+        return ( argument == ( uint16_t )Action::ACTION_MUTE );
     }
 
     static bool IsIntentSpeakerPairing( KeyHandlerUtil::ActionType_t argument )
     {
-        return( ( argument == ( uint16_t )Action::ACTION_PAIR_SPEAKERS ) );
-        return( ( argument == ( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS ) );
+        return ( argument == ( uint16_t )Action::ACTION_PAIR_SPEAKERS );
+        return ( argument == ( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS );
     }
 
-    static bool IsIntentSourceSelection( KeyHandlerUtil::ActionType_t argument )
+    static bool IsIntentPlayTVSource( KeyHandlerUtil::ActionType_t argument )
     {
-        return( ( argument == ( uint16_t )Action::ACTION_TV )         ||
-                ( argument == ( uint16_t )Action::ACTION_SOUNDTOUCH ) );
+        return ( argument == ( uint16_t )Action::ACTION_TV );
+    }
+
+    static bool IsIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t argument )
+    {
+        return ( argument == ( uint16_t )Action::ACTION_SOUNDTOUCH );
     }
 };
 

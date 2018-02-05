@@ -103,8 +103,9 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
     }
     else if( action == ( uint16_t )Action::ACTION_SOUNDTOUCH )
     {
-        SoundTouchInterface::PlaybackRequest& playbackRequestData =
-            m_CustomProductController.GetLastSoundTouchPlayback( );
+        SoundTouchInterface::PlaybackRequest playbackRequestData;
+        m_CustomProductController.BuildPlaybackRequestFromContentItem( playbackRequestData,
+                                                                       m_CustomProductController.GetLastStreamingContentItem() );
 
         AsyncCallback< SoundTouchInterface::NowPlaying >
         postPlaybackRequestResponseCallback( std::bind( &PlaybackRequestManager::PostPlaybackRequestResponse,

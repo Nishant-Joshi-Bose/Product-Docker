@@ -279,7 +279,13 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentPlayback( KeyHandlerUtil::ActionType_t action )
+
+    virtual bool HandleIntentPlayTVSource( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t result )
     {
         return false;
     }

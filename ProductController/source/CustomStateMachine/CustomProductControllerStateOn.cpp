@@ -76,7 +76,7 @@ void CustomProductControllerStateOn::HandleStateExit( )
 ///
 /// @brief  CustomProductControllerStateOn::HandleIntentSpeakerPairing
 ///
-/// @param  action
+/// @param  KeyHandlerUtil::ActionType_t action
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the action.
 ///
@@ -92,19 +92,45 @@ bool CustomProductControllerStateOn::HandleIntentSpeakerPairing( KeyHandlerUtil:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStateOn::HandleIntentPlayback
+/// @brief  CustomProductControllerStateOn::HandleIntentPlaySoundTouchSource
 ///
-/// @param  int action
+/// @param  KeyHandlerUtil::ActionType_t action
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the action.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateOn::HandleIntentPlayback( KeyHandlerUtil::ActionType_t action )
+bool CustomProductControllerStateOn::HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t action )
 {
     BOSE_INFO( s_logger, "%s in %s is handling the action %u", GetName( ).c_str( ), __FUNCTION__, action );
+    // If network is configured, and there's persisted last streaming source, handle intent playSoundTouchSource
+    if( GetCustomProductController( ).IsNetworkConfigured() )
+    {
+        if( GetCustomProductController( ).GetLastStreamingContentItem().has_source() )
+        {
+            GetCustomProductController( ).GetIntentHandler( ).Handle( action );
+        }
+    }
+    // If network is not configured
+    else
+    {
+        ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP );
+    }
+    return true;
+}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateOn::HandleIntentPlayTVSource
+///
+/// @param  KeyHandlerUtil::ActionType_t action
+///
+/// @return This method returns a true Boolean value indicating that it has handled the action.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateOn::HandleIntentPlayTVSource( KeyHandlerUtil::ActionType_t action )
+{
+    BOSE_INFO( s_logger, "%s in %s is handling the action %u", GetName( ).c_str( ), __FUNCTION__, action );
     GetCustomProductController( ).GetIntentHandler( ).Handle( action );
-
     return true;
 }
 

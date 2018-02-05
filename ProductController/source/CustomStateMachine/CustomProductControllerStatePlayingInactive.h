@@ -82,7 +82,8 @@ public:
     bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )                          override;
     bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )                        override;
     bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t action )                     override;
-    bool HandleIntentPlayback( KeyHandlerUtil::ActionType_t action )                           override;
+    bool HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t action );
+    bool HandleIntentPlayTVSource( KeyHandlerUtil::ActionType_t action );
 
 private:
 

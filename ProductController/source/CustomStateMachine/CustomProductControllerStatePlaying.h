@@ -79,6 +79,7 @@ public:
     bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )       override;
     bool HandleLPMPowerStatusFullPower( )                             override;
     bool HandleAdaptIQControl( const ProductAdaptIQControl& )         override;
+    bool HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t action );
 
 private:
 
