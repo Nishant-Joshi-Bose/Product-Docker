@@ -82,11 +82,12 @@ void CustomProductAudioService::RegisterAudioPathEvents()
         m_APPointer->RegisterForMainStreamAudioSettingsRequest( callback );
     }
     {
-        Callback<std::string, std::string, Callback< bool > > callback( std::bind( &CustomProductAudioService::SetStreamConfigCallback,
-                                                                                   this,
-                                                                                   std::placeholders::_1,
-                                                                                   std::placeholders::_2,
-                                                                                   std::placeholders::_3 ) );
+        Callback<std::vector<APProductCommon::ChannelParameters>, std::string, std::string, Callback< bool > > callback( std::bind( &CustomProductAudioService::SetStreamConfigCallback,
+                this,
+                std::placeholders::_1,
+                std::placeholders::_2,
+                std::placeholders::_3,
+                std::placeholders::_4 ) );
         m_APPointer->RegisterForSetStreamConfig( callback );
     }
     ConnectToAudioPath();
@@ -185,7 +186,7 @@ void CustomProductAudioService::FetchLatestAudioSettings( )
 ///         serializedInputRoute contains input route info
 ///
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductAudioService::SetStreamConfigCallback( std::string serializedAudioSettings, std::string serializedInputRoute, const Callback<bool> cb )
+void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCommon::ChannelParameters> channelParams, std::string serializedAudioSettings, std::string serializedInputRoute, const Callback<bool> cb )
 {
     BOSE_DEBUG( s_logger, __func__ );
     m_ProductLpmHardwareInterface->SendStreamConfig( serializedAudioSettings, serializedInputRoute, cb );
