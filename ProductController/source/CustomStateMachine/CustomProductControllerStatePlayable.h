@@ -34,6 +34,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
 #include "ProductControllerStatePlayable.h"
+#include "ProductControllerStates.h"
 #include "HsmState.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -70,9 +71,6 @@ public:
 
     }
 
-    void HandleStateEnter( ) override;
-
-    bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo ) override;
     bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action ) override;
 };
 
