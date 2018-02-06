@@ -100,7 +100,7 @@ bool CustomProductControllerStatePlayable::HandleIntentPlaySoundTouchSource( Key
 {
     BOSE_INFO( s_logger, "%s in %s is handling the action %u", GetName( ).c_str( ), __FUNCTION__, action );
     // If network is configured, but no persisted last streaming source => go to Deselected
-    if( GetCustomProductController().IsNetworkConfigured() &&
+    if( GetCustomProductController().IsNetworkAvailbleForSoundTouchSource() &&
         GetCustomProductController( ).GetLastStreamingContentItem().has_source() )
     {
         ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED );

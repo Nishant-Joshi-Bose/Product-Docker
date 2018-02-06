@@ -73,12 +73,11 @@ public:
     }
 
     void HandleStateEnter( )                                            override;
-    void HandleStateExit( )                                             override;
-    
+
     bool HandleInactivityTimer( InactivityTimerType timerType )         override;
     bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )   override;
     bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action ) override;
-    bool HandleLPMPowerStatusFullPower( )                               override;
+    bool HandleLPMPowerStatusFullPowerOn( )                             override;
     bool HandleAdaptIQControl( const ProductAdaptIQControl& )           override;
     bool HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t intent );
 

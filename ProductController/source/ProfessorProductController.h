@@ -155,6 +155,7 @@ public:
     bool     IsNetworkConfigured( )      const override;
     bool     IsNetworkConnected( )       const override;
     uint32_t GetWifiProfileCount( )      const override;
+    bool     IsNetworkAvailbleForSoundTouchSource( ) const;
     bool     IsAutoWakeEnabled( )        const override;
     bool     IsVoiceConfigured( )        const override;
     bool     IsFirstTimeBootUp( )        const;
@@ -224,6 +225,8 @@ public:
     }
 
     bool IsSystemLanguageSet( ) const;
+
+    void SendInitialCapsData() override;
 
 private:
 

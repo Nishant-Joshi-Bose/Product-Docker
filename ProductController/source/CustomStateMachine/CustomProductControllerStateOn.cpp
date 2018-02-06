@@ -104,7 +104,7 @@ bool CustomProductControllerStateOn::HandleIntentPlaySoundTouchSource( KeyHandle
 {
     BOSE_INFO( s_logger, "%s in %s is handling the intent %u", GetName( ).c_str( ), __FUNCTION__, intent );
     // If network is configured, and there's persisted last streaming source, handle intent playSoundTouchSource
-    if( GetCustomProductController( ).IsNetworkConfigured() )
+    if( GetCustomProductController( ).IsNetworkAvailbleForSoundTouchSource() )
     {
         if( GetCustomProductController( ).GetLastStreamingContentItem().has_source() )
         {
