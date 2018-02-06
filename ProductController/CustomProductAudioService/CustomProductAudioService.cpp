@@ -28,12 +28,12 @@ CustomProductAudioService::CustomProductAudioService( EddieProductController& pr
                                                       const FrontDoorClientIF_t& frontDoorClient,
                                                       LpmClientIF::LpmClientPtr lpmClient ):
     ProductAudioService( productController.GetTask( ),
-                         productController.GetMessageHandler() ),
+                         productController.GetMessageHandler() ,
+                         frontDoorClient ),
     m_audioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) ),
     m_thermalTask( lpmClient, std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ) )
 {
     BOSE_DEBUG( s_logger, __func__ );
-    m_FrontDoorClientIF = frontDoorClient;
 }
 
 /*!
