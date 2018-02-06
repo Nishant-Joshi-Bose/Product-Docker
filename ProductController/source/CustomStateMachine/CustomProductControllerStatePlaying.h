@@ -34,6 +34,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
 #include "ProductControllerStatePlaying.h"
+#include "ProductControllerStates.h"
 #include "HsmState.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,13 +72,12 @@ public:
 
     }
 
-    void HandleStateEnter( ) override;
-    void HandleStateExit( )  override;
-
-    bool HandleInactivityTimer( InactivityTimerType timerType )       override;
-    bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action ) override;
-    bool HandleLPMPowerStatusFullPower( )                             override;
-    bool HandleAdaptIQControl( const ProductAdaptIQControl& )         override;
+    void HandleStateEnter( )                                            override;
+    bool HandleInactivityTimer( InactivityTimerType timerType )         override;
+    bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )   override;
+    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action ) override;
+    bool HandleLPMPowerStatusFullPowerOn( )                             override;
+    bool HandleAdaptIQControl( const ProductAdaptIQControl& )           override;
 
 private:
 

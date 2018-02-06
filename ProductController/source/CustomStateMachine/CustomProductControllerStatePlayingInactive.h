@@ -74,13 +74,12 @@ public:
     }
 
     void HandleStateEnter( ) override;
-    void HandleStateStart( ) override;
     void HandleStateExit( )  override;
 
     bool HandleNowPlayingStatus( const ProductNowPlayingStatus_ProductNowPlayingState& state ) override;
     bool HandleIntent( KeyHandlerUtil::ActionType_t action )                                   override;
     bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )                          override;
-    bool HandleIntentVolumeMuteControl( KeyHandlerUtil::ActionType_t action )                  override;
+    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )                        override;
     bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t action )                     override;
     bool HandleIntentPlayback( KeyHandlerUtil::ActionType_t action )                           override;
 

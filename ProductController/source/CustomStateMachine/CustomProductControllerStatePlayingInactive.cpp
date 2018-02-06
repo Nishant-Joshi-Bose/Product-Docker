@@ -57,7 +57,7 @@ CustomProductControllerStatePlayingInactive::CustomProductControllerStatePlaying
 
     : ProductControllerStatePlayingInactive( hsm, pSuperState, stateId, name )
 {
-    BOSE_VERBOSE( s_logger, "%s is being constructed.", name.c_str() );
+    BOSE_INFO( s_logger, "%s is being constructed.", name.c_str() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,20 +67,10 @@ CustomProductControllerStatePlayingInactive::CustomProductControllerStatePlaying
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlayingInactive::HandleStateEnter( )
 {
-    BOSE_VERBOSE( s_logger, "%s is being entered.", GetName( ).c_str( ) );
-    BOSE_VERBOSE( s_logger, "NO_AUDIO_TIMER timer is started" );
+    BOSE_INFO( s_logger, "%s is being entered.", GetName( ).c_str( ) );
+    BOSE_INFO( s_logger, "NO_AUDIO_TIMER timer is started" );
 
     GetProductController( ).GetInactivityTimers( ).StartTimer( InactivityTimerType::NO_AUDIO_TIMER );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStatePlayingInactive::HandleStateStart
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStatePlayingInactive::HandleStateStart( )
-{
-    BOSE_VERBOSE( s_logger, "%s is being started.", GetName( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,8 +80,8 @@ void CustomProductControllerStatePlayingInactive::HandleStateStart( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlayingInactive::HandleStateExit( )
 {
-    BOSE_VERBOSE( s_logger, "%s is being exited.", GetName( ).c_str( ) );
-    BOSE_VERBOSE( s_logger, "The timer will be stopped." );
+    BOSE_INFO( s_logger, "%s is being exited.", GetName( ).c_str( ) );
+    BOSE_INFO( s_logger, "The timer will be stopped." );
 
     GetProductController( ).GetInactivityTimers( ).CancelTimer( InactivityTimerType::NO_AUDIO_TIMER );
 }
@@ -115,9 +105,9 @@ bool CustomProductControllerStatePlayingInactive::HandleNowPlayingStatus
 
     if( state == ProductNowPlayingStatus_ProductNowPlayingState_Active )
     {
-        BOSE_VERBOSE( s_logger, "%s is changing to %s.",
-                      GetName( ).c_str( ),
-                      "CustomProductControllerStatePlayingActive" );
+        BOSE_INFO( s_logger, "%s is changing to %s.",
+                   GetName( ).c_str( ),
+                   "CustomProductControllerStatePlayingActive" );
         ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE );
     }
 
@@ -158,7 +148,7 @@ bool CustomProductControllerStatePlayingInactive::HandleIntentUserPower( KeyHand
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStatePlayingInactive::HandleIntentVolumeMuteControl
+/// @brief  CustomProductControllerStatePlayingInactive::HandleIntentMuteControl
 ///
 /// @param  KeyHandlerUtil::ActionType_t action
 ///
@@ -166,7 +156,7 @@ bool CustomProductControllerStatePlayingInactive::HandleIntentUserPower( KeyHand
 ///         one of its superstates.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayingInactive::HandleIntentVolumeMuteControl( KeyHandlerUtil::ActionType_t action )
+bool CustomProductControllerStatePlayingInactive::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )
 {
     ProcessUserActivity( );
     return false;
@@ -214,8 +204,8 @@ bool CustomProductControllerStatePlayingInactive::HandleIntentPlayback( KeyHandl
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlayingInactive::ProcessUserActivity( )
 {
-    BOSE_VERBOSE( s_logger, "A key action arrived at %s.", GetName( ).c_str( ) );
-    BOSE_VERBOSE( s_logger, "The timer will be stopped and restarted based on user activity." );
+    BOSE_INFO( s_logger, "A key action arrived at %s.", GetName( ).c_str( ) );
+    BOSE_INFO( s_logger, "The timer will be stopped and restarted based on user activity." );
 
     GetProductController( ).GetInactivityTimers( ).CancelTimer( InactivityTimerType::NO_AUDIO_TIMER );
     GetProductController( ).GetInactivityTimers( ).StartTimer( InactivityTimerType::NO_AUDIO_TIMER );
