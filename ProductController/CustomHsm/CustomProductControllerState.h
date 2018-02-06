@@ -268,6 +268,11 @@ public:
         return false;
     }
 
+    virtual bool HandleOOBSetupDone( )
+    {
+        return false;
+    }
+
 public:
     /// The custom version of this function returns the custom ProductController
     static EddieProductController& GetCustomProductController();
