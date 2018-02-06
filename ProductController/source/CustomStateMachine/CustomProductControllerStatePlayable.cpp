@@ -72,18 +72,17 @@ CustomProductControllerStatePlayable::CustomProductControllerStatePlayable( Prod
 bool CustomProductControllerStatePlayable::HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )
 {
     BOSE_INFO( s_logger, "%s in %s is handling key action %d.", GetName( ).c_str( ), __FUNCTION__, action );
-
-    if( GetCustomProductController( ).GetCurrentSource( ) == SOURCE_TV )
+    if( GetCustomProductController().GetLastContentItem().has_source() &&
+        GetCustomProductController().GetLastContentItem().source() == "PRODUCT" )
     {
         unsigned int startTvPlayback = static_cast< unsigned int >( Action::ACTION_TV );
         GetCustomProductController( ).GetIntentHandler( ).Handle( startTvPlayback );
     }
-    else if( GetCustomProductController( ).GetCurrentSource( ) == SOURCE_SOUNDTOUCH )
+    else
     {
         unsigned int startSoundTouchPlayback = static_cast< unsigned int >( Action::ACTION_SOUNDTOUCH );
-        GetCustomProductController( ).GetIntentHandler( ).Handle( startSoundTouchPlayback );
+        HandleIntentPlaySoundTouchSource( startSoundTouchPlayback );
     }
-
     return true;
 }
 
@@ -101,7 +100,7 @@ bool CustomProductControllerStatePlayable::HandleIntentPlaySoundTouchSource( Key
     BOSE_INFO( s_logger, "%s in %s is handling the action %u", GetName( ).c_str( ), __FUNCTION__, action );
     // If network is configured, but no persisted last streaming source => go to Deselected
     if( GetCustomProductController().IsNetworkAvailbleForSoundTouchSource() &&
-        GetCustomProductController( ).GetLastStreamingContentItem().has_source() )
+        !GetCustomProductController( ).GetLastStreamingContentItem().has_source() )
     {
         ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED );
         return true;

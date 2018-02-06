@@ -197,8 +197,9 @@ void ProductEdidInterface::HandleSrcSwitch( const LpmServiceMessages::IPCSource_
         }
         else if( cecSource.source() == LPM_IPC_SOURCE_SHELBY )
         {
-            SoundTouchInterface::PlaybackRequest& playbackRequestData =
-                m_CustomProductController.GetLastSoundTouchPlayback( );
+            SoundTouchInterface::PlaybackRequest playbackRequestData;
+            m_CustomProductController.BuildPlaybackRequestFromContentItem( playbackRequestData,
+                                                                           m_CustomProductController.GetLastContentItem() );
 
             AsyncCallback< SoundTouchInterface::NowPlaying >
             cecPlaybackRequestResponseCallback( std::bind( &ProductEdidInterface::HandlePlaybackRequestResponse,

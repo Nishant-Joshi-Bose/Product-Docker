@@ -292,10 +292,6 @@ private:
     /// @brief The following declarations is used for internal source selection and playback.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    PlaybackSource_t m_currentSource;
-    SoundTouchInterface::PlaybackRequest m_lastSoundTouchPlayback;
-
-    void  SetTestSoundTouchPlayback( );
     void  RegisterNowPlayingEndPoint( );
     void  HandleNowPlaying( const SoundTouchInterface::NowPlaying& nowPlayingStatus );
 
