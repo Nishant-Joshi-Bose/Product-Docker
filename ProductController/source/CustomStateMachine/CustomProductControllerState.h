@@ -275,7 +275,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t action )
+    virtual bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t result )
     {
         return false;
     }

@@ -638,18 +638,6 @@ uint32_t ProfessorProductController::GetWifiProfileCount( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::IsNetworkAvailbleForSoundTouchSource
-///
-/// @return This method returns a true or false value, based on a set member variable.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsNetworkAvailbleForSoundTouchSource( ) const
-{
-    return IsNetworkConfigured();
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProfessorProductController::IsAutoWakeEnabled
 ///
 /// @return This method returns a true or false value, based on a set member variable.

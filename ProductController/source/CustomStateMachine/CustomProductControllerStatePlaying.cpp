@@ -215,31 +215,6 @@ bool CustomProductControllerStatePlaying::HandleAdaptIQControl( const ProductAda
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief  CustomProductControllerStatePlaying::HandleIntentPlaySoundTouchSource
-///
-/// @param  KeyHandlerUtil::ActionType_t action
-///
-/// @return This method returns a true Boolean value indicating that it has handled the action.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlaying::HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t action )
-{
-    BOSE_INFO( s_logger, "%s in %s is handling the action %u", GetName( ).c_str( ), __FUNCTION__, action );
-    // TODO: PGC-736: Use CAPS new API in nowPlaying signal to determine whether source is streaming source
-    //      per Ranjeet, CAPS is planning to add a new field in nowPlaying to indicate source is streaming source
-    //      use source != PRODUCT to decide this is streaming source, but will have to start checking on the new field when CAPS is ready
-    // If the current playing source is SoundTouch source, do nothing
-    if( GetCustomProductController( ).GetLastStreamingContentItem().has_source() &&
-        GetCustomProductController( ).GetLastStreamingContentItem().source() != "PRODUCT" )
-    {
-        return true;
-    }
-    // Otherwise, let parent states handle it
-    return false;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }

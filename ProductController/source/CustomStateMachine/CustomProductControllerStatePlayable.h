@@ -72,7 +72,6 @@ public:
     }
 
     bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action ) override;
-    bool HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t action );
 
 };
 

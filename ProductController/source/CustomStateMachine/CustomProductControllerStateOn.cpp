@@ -93,34 +93,6 @@ bool CustomProductControllerStateOn::HandleIntentSpeakerPairing( KeyHandlerUtil:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStateOn::HandleIntentPlaySoundTouchSource
-///
-/// @param  KeyHandlerUtil::ActionType_t intent
-///
-/// @return This method returns a true Boolean value indicating that it has handled the intent.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateOn::HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t intent )
-{
-    BOSE_INFO( s_logger, "%s in %s is handling the intent %u", GetName( ).c_str( ), __FUNCTION__, intent );
-    // If network is configured, and there's persisted last streaming source, handle intent playSoundTouchSource
-    if( GetCustomProductController( ).IsNetworkAvailbleForSoundTouchSource() )
-    {
-        if( GetCustomProductController( ).GetLastStreamingContentItem().has_source() )
-        {
-            GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
-        }
-    }
-    // If network is not configured
-    else
-    {
-        ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP );
-    }
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @brief  CustomProductControllerStateOn::HandleIntentPlayTVSource
 ///
 /// @param  KeyHandlerUtil::ActionType_t intent
