@@ -106,6 +106,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
     virtual bool HandleIntentBlueTooth( KeyHandlerUtil::ActionType_t result )
     {
         return false;
