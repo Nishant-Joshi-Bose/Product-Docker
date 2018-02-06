@@ -213,6 +213,16 @@ public:
         return false;
     }
 
+    virtual bool HandleSystemPowerControl( )
+    {
+        return false;
+    }
+
+    virtual bool HandleSoftwareUpdateStart( uint32_t delay )
+    {
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// Methods are to be added at this point to implement product specific actions. These methods
