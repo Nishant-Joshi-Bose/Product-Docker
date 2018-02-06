@@ -1,6 +1,23 @@
 Key Configuration Generator
 ===========================
 
+# abbreviated instructions
+
+## Prerequisites
+* Make sure you have libclang 5.0 installed (on Ubuntu this is provided by the libclang1-5.0 package)
+* Make sure you have virtualenv installed ("sudo pip install virtualenv"; if you've ever built RivieraLpmService you should already have this installed)
+
+## Building
+* Add your changes to Config/UserKeyConfig.json
+* Run "make keyconfig"
+* You should now have an updated opt-bose-fs/etc/KeyConfiguration.json; test it and commit it
+
+* IF you get an error like "clang.cindex.LibclangError: libclang.so: cannot open shared object file: No such file or directory.", then libclang.so isn't in your shared library search path.  You can fix this by specifying it in the environment variable LD_LIBRARY_PATH i.e.
+ 
+LD_LIBRARY_PATH=/usr/lib/llvm-5.0/lib make keyconfig
+
+
+
 The key configuration generator script (friendly_to_raw_key_config.py) simplifies maintenance of the .json configuration file for the CastleKeyHandler component by allowing the user to specify keys and actions by their symbolic names from enumerations in the source code.  The script takes as input one or more "friendly" .json configuration files, C/C++ header files containing key value enumerations (one per possible source, each source is optional), and C/C++ header files containing key action (intent) enumerations.  The script outputs a .json configuration file suitable for use with the CastleKeyHandler component (enumerations converted to numeric values).
 
 # clang dependency
