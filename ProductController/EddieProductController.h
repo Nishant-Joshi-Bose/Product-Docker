@@ -30,7 +30,6 @@
 #include "ProductControllerStatePlayingInactive.h"
 #include "ProductControllerStateRebooting.h"
 #include "CustomProductControllerStateBooting.h"
-#include "CustomProductControllerStateSetup.h"
 #include "CustomProductControllerStateOn.h"
 #include "ProductControllerStateOn.h"
 #include "ProductControllerStateIdle.h"
@@ -366,7 +365,6 @@ private:
 
     ProductControllerStateTop               m_ProductControllerStateTop;
     CustomProductControllerStateBooting     m_CustomProductControllerStateBooting;
-    CustomProductControllerStateSetup       m_CustomProductControllerStateSetup;
     CustomProductControllerStateOn          m_CustomProductControllerStateOn;
     ProductControllerStateLowPowerStandby   m_ProductControllerStateLowPowerStandby;
     ProductControllerSoftwareUpdating       m_ProductControllerStateSwUpdating;

@@ -34,7 +34,6 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     ProductController( ProductName ),
     m_ProductControllerStateTop( GetHsm(), nullptr ),
     m_CustomProductControllerStateBooting( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING ),
-    m_CustomProductControllerStateSetup( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP ),
     m_CustomProductControllerStateOn( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_ON ),
     m_ProductControllerStateLowPowerStandby( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY ),
     m_ProductControllerStateSwUpdating( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING ),
@@ -84,7 +83,6 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     GetHsm().AddState( &m_ProductControllerStateLowPowerStandby );
     GetHsm().AddState( &m_ProductControllerStateSwUpdating );
     GetHsm().AddState( &m_CustomProductControllerStateBooting );
-    GetHsm().AddState( &m_CustomProductControllerStateSetup );
     GetHsm().AddState( &m_CustomProductControllerStateOn );
     GetHsm().AddState( &m_ProductControllerStateCriticalError );
     GetHsm().AddState( &m_ProductControllerStateRebooting );
