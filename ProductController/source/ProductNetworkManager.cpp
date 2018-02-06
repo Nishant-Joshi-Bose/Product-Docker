@@ -157,7 +157,7 @@ void ProductNetworkManager::HandleEntireNetworkStatus( const NetManager::Protobu
 
         auto errorCallback = []( const EndPointsError::Error & error )
         {
-            BOSE_WARNING( s_logger, "%s: Error = (%d-%d) %s", __func__, error.code(), error.subcode(), error.message().c_str() );
+            BOSE_ERROR( s_logger, "%s: Error = (%d-%d) %s", __func__, error.code(), error.subcode(), error.message().c_str() );
         };
         AsyncCallback<EndPointsError::Error> errCb( errorCallback, m_ProductTask );
 
