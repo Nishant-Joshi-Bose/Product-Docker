@@ -43,6 +43,7 @@
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
 #include "ProductControllerStates.h"
+#include "SystemSourcesProperties.pb.h"
 #include "CustomProductControllerState.h"
 #include "CustomProductControllerStateBooting.h"
 #include "CustomProductControllerStateOn.h"
@@ -97,6 +98,8 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 constexpr uint32_t PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
+
+constexpr auto FRONTDOOR_SYSTEM_SOURCES_API = "/system/sources";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -1550,6 +1553,42 @@ BLESetupService::VariantId ProfessorProductController::GetVariantId( ) const
     }
 
     return varintId;
+}
+
+void ProfessorProductController::SendInitialCapsData()
+{
+    BOSE_INFO( s_logger, __func__ );
+
+    // Do the Common stuff first
+    ProductController::SendInitialCapsData();
+
+    // PUT /system/sources::properties
+    SoundTouchInterface::Sources message;
+    auto messageProperties = message.mutable_properties();
+
+    for( uint32_t activationKey = SystemSourcesProperties::ACTIVATION_KEY__MIN; activationKey <= SystemSourcesProperties::ACTIVATION_KEY__MAX; ++activationKey )
+    {
+        messageProperties->add_supportedactivationkeys(
+            SystemSourcesProperties::ACTIVATION_KEY__Name( static_cast<SystemSourcesProperties::ACTIVATION_KEY_>( activationKey ) ) );
+    }
+    messageProperties->set_activationkeyrequired( true );
+
+#if 0 // @TODO CASTLE-6801 field deviceType missing in SoundTouchInterface::Sources
+    for( uint32_t deviceType = SystemSourcesProperties::DEVICE_TYPE__MIN; deviceType <= SystemSourcesProperties::DEVICE_TYPE__MAX; ++deviceType )
+    {
+        messageProperties->add_supporteddevicetypes(
+            SystemSourcesProperties::DEVICE_TYPE__Name( static_cast<SystemSourcesProperties::DEVICE_TYPE_>( deviceType ) ) );
+    }
+    messageProperties->set_devicetyperequired( true );
+#endif
+
+    messageProperties->add_supportedinputroutes( SystemSourcesProperties::INPUT_ROUTE_HDMI__Name( SystemSourcesProperties::INPUT_ROUTE_TV ) );
+    messageProperties->set_inputrouterequired( true );
+
+    BOSE_VERBOSE( s_logger, "%s sending %s", __func__, ProtoToMarkup::ToJson( message ).c_str() );
+
+    GetFrontDoorClient()->SendPut<SoundTouchInterface::NowPlaying, EndPointsError::Error>
+    ( FRONTDOOR_SYSTEM_SOURCES_API, message, {}, m_errorCb );
 }
 
 
