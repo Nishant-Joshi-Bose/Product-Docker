@@ -135,6 +135,10 @@ std::vector< CommandPointer > ProductCommandLine::GetCommandsList( )
                                                                              "This command tests setting the device in a boot up state.",
                                                                              "\t product test_bootup \t\t\t" ) ) );
 
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product boot_status",
+                                                                             "This command outputs the status of the boot up state.",
+                                                                             "\t product boot_status \t\t\t" ) ) );
+
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_caps",
                                                                              "This command tests setting CAPS to an on or off state.",
                                                                              "\t product test_caps [on | off] \t\t" ) ) );
@@ -423,8 +427,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         response  = "A test setting the STS initialization to complete has been made.";
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// This command tests setting autowake to an on or off state and sending it to the product
-    /// controller state machine.
+    /// This command tests setting the device to a boot up state.
     ////////////////////////////////////////////////////////////////////////////////////////////////
     else if( command.compare( "product test_bootup" ) == 0 )
     {
@@ -454,6 +457,20 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         }
 
         response  = "Requests to set the device in a boot up state have been made.";
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /// This command outputs the boot up status of the device.
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    else if( command.compare( "product boot_status" ) == 0 )
+    {
+        if( m_ProductController.IsBooted( ) )
+        {
+            response  = "The device has been successfully booted.";
+        }
+        else
+        {
+            response  = "The device has not yet been booted.";
+        }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// This command tests setting autowake to an on or off state and sending it to the product
