@@ -69,7 +69,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@edbc6ad93a98f017e511c6b9993b42dc72e7cc44"
+    "selected_version": "master@5c998f17357b99eb31ebd347c1fe369f3157f609"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -119,12 +119,16 @@
     "selected_version": "Release/master/0.3.1-36+8a43bfa"
   },
   {
+    "name": "SASS-qc8017_32",
+    "selected_version": "Continuous/master/0.1.1-122+5bf289e"
+  },
+  {
     "name": "Shepherd-qc8017_32",
     "selected_version": "Release/master/0.3.0-49+29239c4"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.3.5-264+836db92"
+    "selected_version": "Continuous/master/0.3.5-270+5ecf463"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",

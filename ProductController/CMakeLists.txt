@@ -1,15 +1,17 @@
 INCLUDE_DIRECTORIES(
-  ${NETWORK_SERVICE_DIR}/include
+  ${A4VVIDEOMANAGER_DIR}/source/Client
   ${CASTLECLI_DIR}/include
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/SoundTouchInterface
-  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/Bluetooth
-  ${PRODUCTCONTROLLERCOMMON_DIR}
-  ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
-  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
-  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
-  ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
-  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
   ${KEYHANDLER_DIR}/include
+  ${NETWORK_SERVICE_DIR}/include
+  ${PRODUCTCONTROLLERCOMMON_DIR}
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ChimesController
+  ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
+  ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/Bluetooth
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/SoundTouchInterface
   .
   include
   source
@@ -17,7 +19,6 @@ INCLUDE_DIRECTORIES(
   source/CustomProductLpmHardwareInterface
   source/CustomStateMachine
   source/IntentHandler
-  ${A4VVIDEOMANAGER_DIR}/source/Client
 )
 
 # -----------------------------------------------------------------------------
@@ -31,6 +32,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc
   ${PROTO_CC_DEST}/ProductSTS.pb.cc
   ${PROTO_CC_DEST}/SystemInfo.pb.cc
+  ${PROTO_CC_DEST}/SystemSourcesProperties.pb.cc
   source/ProductAdaptIQManager.cpp
   source/ProductCommandLine.cpp
   source/ProductEdidInterface.cpp
@@ -39,30 +41,22 @@ ADD_EXECUTABLE(Professor
   source/ProductStart.cpp
   source/ProductSystemManager.cpp
   source/ProfessorProductController.cpp
-  source/CustomProductAudioService/CustomProductAudioService.cpp
   source/CustomProductAudioService/CustomAudioSettingsManager.cpp
+  source/CustomProductAudioService/CustomProductAudioService.cpp
   source/CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQ.cpp
   source/CustomStateMachine/CustomProductControllerStateBooting.cpp
-  source/CustomStateMachine/CustomProductControllerStateIdle.cpp
-  source/CustomStateMachine/CustomProductControllerStateIdleVoiceConfigured.cpp
-  source/CustomStateMachine/CustomProductControllerStateIdleVoiceUnconfigured.cpp
-  source/CustomStateMachine/CustomProductControllerStateNetworkStandbyConfigured.cpp
-  source/CustomStateMachine/CustomProductControllerStateNetworkStandby.cpp
-  source/CustomStateMachine/CustomProductControllerStateNetworkStandbyUnconfigured.cpp
-  source/CustomStateMachine/CustomProductControllerStateLowPower.cpp
   source/CustomStateMachine/CustomProductControllerStateOn.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayable.cpp
   source/CustomStateMachine/CustomProductControllerStatePlaying.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayingActive.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayingInactive.cpp
-  source/CustomStateMachine/CustomProductControllerStateUpdatingSoftware.cpp
   source/IntentHandler/IntentHandler.cpp
   source/IntentHandler/PlaybackRequestManager.cpp
   source/IntentHandler/SpeakerPairingManager.cpp
-  source/IntentHandler/VolumeMuteControlManager.cpp
+  source/IntentHandler/MuteManager.cpp
 )
 
 TARGET_LINK_LIBRARIES(Professor
@@ -91,6 +85,7 @@ TARGET_LINK_LIBRARIES(Professor
   dl
   SoundTouch_SDK_Protobuf_static
   SoftwareUpdateAPI
+  SASSFrontDoorServiceProto
 )
 
 INSTALL(TARGETS Professor DESTINATION ${OUTPUT_BIN_DIR})

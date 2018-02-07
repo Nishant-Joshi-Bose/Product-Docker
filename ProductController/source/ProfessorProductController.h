@@ -151,19 +151,14 @@ public:
     ///        product controller.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool IsBooted( )                 const override;
-    bool IsNetworkConfigured( )      const override;
-    bool IsNetworkConnected( )       const override;
-    uint32_t  GetWifiProfileCount( ) const override;
-    bool IsAutoWakeEnabled( )        const override;
-    bool IsVoiceConfigured( )        const override;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief This method selects starts a playback on the specified source.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    void SendPlaybackRequest( PlaybackSource_t source );
+    bool     IsBooted( )                 const override;
+    bool     IsNetworkConfigured( )      const override;
+    bool     IsNetworkConnected( )       const override;
+    uint32_t GetWifiProfileCount( )      const override;
+    bool     IsAutoWakeEnabled( )        const override;
+    bool     IsVoiceConfigured( )        const override;
+    bool     IsFirstTimeBootUp( )        const;
+    bool     IsOutOfBoxSetupComplete( )  const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -206,6 +201,10 @@ public:
 
     std::string const& GetProductVariant() const override;
 
+    std::string const& GetProductModel() const override;
+
+    std::string const& GetProductDescription() const override;
+
     BLESetupService::VariantId GetVariantId() const override;
 
     BLESetupService::ProductId GetProductId() const override
@@ -225,6 +224,8 @@ public:
     }
 
     bool IsSystemLanguageSet( ) const;
+
+    void SendInitialCapsData() override;
 
 private:
 
@@ -261,7 +262,7 @@ private:
     bool m_IsMicrophoneEnabled;
     bool m_Running;
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////GetLastSoundTouchPlayback////////////////////
     ///
     /// @brief The following declarations are used as interfaces to the ProductSTSController,
     ///        which implements the interactions between the Professor Product Controller and the
