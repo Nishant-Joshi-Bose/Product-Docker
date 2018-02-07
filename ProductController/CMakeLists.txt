@@ -1,5 +1,6 @@
 INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ChimesController
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
@@ -46,6 +47,7 @@ TARGET_LINK_LIBRARIES(Eddie
   CastleProductControllerCommon
   DataCollectionClient
   LpmClient
+  HttpInterface
   FrontDoorClient
   NetworkServiceClient
   KeyHandler
@@ -56,6 +58,7 @@ TARGET_LINK_LIBRARIES(Eddie
   CliClient
   AudioLibs
   PassportClient
+  #SASSFrontDoorServiceProto # TODO: SASS integration
   SoftwareUpdateAPI
   STS
   ShelbyUtils
@@ -64,7 +67,6 @@ TARGET_LINK_LIBRARIES(Eddie
   jsoncpp
   protobuf
   TinyXml
-  libHttpInterface.a
   pthread
   rt
   cap

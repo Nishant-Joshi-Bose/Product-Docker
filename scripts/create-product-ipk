@@ -60,6 +60,7 @@ wspace=$(cd "$here/.." && echo "$PWD") || exit
 riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || exit
 riviera_toolchain_dir=$(components get Riviera-Toolchain installed_location) || exit
 galapagosclient_dir=$(components get GalapagosClient-qc8017_32 installed_location) || exit
+httpproxy_dir=$(components get CastleHTTPProxy-qc8017_32 installed_location) || exit
 soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
@@ -148,6 +149,15 @@ cp -a "$boselibs_dir/lib" "$opt_dir" || exit
 cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
 
+t=$(date +%s)
+put_script "$opt_dir/bin/set-default-time" <<EOF
+#!/bin/bash
+if (( \$(date +%s) < $t )); then
+    logger -s -t set-default-time Using default time $(date -u -d@$t)
+    date -s@$t
+fi
+EOF
+
 # Copy public keys in FS based on DEPLOY_ENV flag exported
 secure_dir=$opt_dir/etc/secure/
 mkdir -p "$secure_dir" || exit
@@ -190,6 +200,7 @@ cp "$audiopath_dir/bin/eddie/libDspPlayback.so" "$opt_dir/bin" || exit
 "$productuiassets_dir/stage" --chimes=alpha --type=flac "$opt_dir" || exit
 "$frontdoor_dir/stage" "$opt_dir" || exit
 "$galapagosclient_dir/stage" "$opt_dir" || exit
+"$httpproxy_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 
