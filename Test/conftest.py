@@ -1,6 +1,5 @@
 """
 Parent conftest.py for the Eddie repository
-
 """
 
 import os
@@ -10,6 +9,7 @@ from CastleTestUtils.LoggerUtils.log_setup import get_logger
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.RivieraUtils import rivieraCommunication
+from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import flash_device
 
 import pytest
 _log = None
@@ -24,6 +24,9 @@ def pytest_addoption(parser):
     parser.addoption("--network-iface", action="store", default="wlan0", help="network interface to choose")
     parser.addoption("--ip-address", action="store", default=None, help="IP Address of Target under test")
     parser.addoption("--lpm_port", action="store", default=None, help="serial port of the device")
+    parser.addoption("--flash_param",default='f', help="Choose '-a'(APQ) / 'l'(LPM) / '-f'(Complete Flash)")
+    parser.addoption("--flash_binary", default='product_flash',help="Binary file to be used - productFlash")
+    parser.addoption("--lpm_update", action="store_true", default=False, help="Set True to Update LPM")
 
 def ping(ip):
     """ Pings a given IP Address """
@@ -33,6 +36,13 @@ def ping(ip):
 def scm_ip(request):
     """ Get the IP address of Device under Test """
     return request.config.getoption("--scm-ip")
+
+@pytest.fixture(scope='session')
+def software_update(flash_device):
+    """
+    For now; this only calls the Software-Update fixture
+    """
+    logger.info("Finished Updating Software on the Device")
 
 @pytest.fixture(scope='function')
 def save_speaker_log(request, device_ip):

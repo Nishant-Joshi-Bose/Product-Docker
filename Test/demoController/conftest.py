@@ -4,6 +4,7 @@ Conftest.py for DemoController
 import pytest
 from CastleTestUtils.LoggerUtils.log_setup import get_logger
 from CastleTestUtils.DemoUtils.demoUtils import DemoUtils
+from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 logger = get_logger(__name__)
 
 @pytest.fixture(scope='class', autouse=True)
@@ -31,7 +32,11 @@ def setDemoOff(request, frontDoor, demoUtils):
     """
     logger.info("setDemoOff")
     setDemo(request, frontDoor, demoUtils)
-
+    """
+    def teardown():
+        setDemo(request, frontDoor, demoUtils)
+    request.addfinalizer(teardown)
+    """
 def setDemo(request, frontDoor, demoUtils):
     """
     Set demoMode False if True
