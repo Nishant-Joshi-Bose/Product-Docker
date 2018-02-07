@@ -192,6 +192,7 @@ void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCo
 {
     BOSE_DEBUG( s_logger, __func__ );
     m_ProductLpmHardwareInterface->SetStreamConfig( serializedAudioSettings, serializedInputRoute, cb );
+    cb.Send( true );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
