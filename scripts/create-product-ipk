@@ -147,6 +147,17 @@ cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
 cp -a "$qss_dir/UEI/arch/${arch}/lib" "$opt_dir" || exit
 
+# Copy public keys in FS based on DEPLOY_ENV flag exported
+secure_dir=$opt_dir/etc/secure/
+mkdir -p "$secure_dir" || exit
+if [ "$DEPLOY_ENV" = prod ]; then
+    cp -r "$wspace/scripts/keys/production/publicKeys/" "$secure_dir" || exit
+    cp -r "$wspace/scripts/keys/production/CACerts/" "$secure_dir" || exit
+else
+    cp -r "$wspace/scripts/keys/development/publicKeys/" "$secure_dir" || exit
+    cp -r "$wspace/scripts/keys/development/CACerts/" "$secure_dir" || exit
+fi
+
 marge_url=https://streamingint.bose.com
 stats_url=https://eventsdev.api.bosecm.com
 sw_update_url=https://worldwide.bose.com/updates/soundtouch-test
@@ -212,6 +223,7 @@ fi
 # the UEI qsp libraries (libqsp.so, libqsp_hal.so); remove it when
 # libraries linked against our libcurl version are available
 ln -sf /usr/lib/libcurl.so.5 /opt/Bose/lib/libcurl.so.4
+chmod -R 440 /opt/Bose/etc/secure || exit
 
 # Set Progress End
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 100

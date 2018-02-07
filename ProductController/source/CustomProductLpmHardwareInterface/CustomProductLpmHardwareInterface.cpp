@@ -280,34 +280,6 @@ bool CustomProductLpmHardwareInterface::SendSpeakerList( IpcAccessoryList_t& acc
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductLpmHardwareInterface::SendSetSystemTimeoutEnableBits
-///
-/// @brief  This method sends a request to the LPM hardware.
-///
-/// @param  Ipc_TimeoutControl_t& timeoutControl
-///
-/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
-///         attempts the request and returns true.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductLpmHardwareInterface::SendSetSystemTimeoutEnableBits( Ipc_TimeoutControl_t& timeoutControl )
-{
-    BOSE_DEBUG( s_logger, "Auto power down will be set to %s.", timeoutControl.enable( ) ? "on" : "off" );
-
-    if( isConnected( ) == false || GetLpmClient( ) == nullptr )
-    {
-        BOSE_ERROR( s_logger, "No LPM connection is currently available." );
-
-        return false;
-    }
-
-    BOSE_DEBUG( s_logger, "An LPM activation settings request is currently not supported." );
-
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name  CustomProductLpmHardwareInterface::SendWiFiRadioStatus
 ///
 /// @brief This method sends the wireless radio frequency to the LPM hardware.
