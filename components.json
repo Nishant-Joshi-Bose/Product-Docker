@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.7.41004.2680929"
+    "selected_version": "Release/Castle-Fork/0.3.8.41015.2682265"
   },
   {
     "name": "bose-opkg-utils",
@@ -25,7 +25,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/develop/0.2.1-32+59feb17"
+    "selected_version": "Release/develop/0.2.1-48+11dcb95"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -42,6 +42,10 @@
   {
     "name": "CastleDemoController-qc8017_32",
     "selected_version": "Release/master/0.3.2-62+b9fcc88"
+  },
+  {
+    "name": "CastleHTTPProxy-qc8017_32",
+    "selected_version": "Release/master/0.0.0-8+e781a16"
   },
   {
     "name": "CastleLibs-native",
@@ -73,7 +77,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "PGC588_playbackRequest@bc14296fa5aade76c5f8ad9eda34ba3067c66642"
+    "selected_version": "PGC588_playbackRequest@cb3fda1b46c10d1ada3a4def438121efbd0a2f08"
   },
   {
     "name": "CastleProductUIAssets",
@@ -92,15 +96,15 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/0.3.5-93+a323e45"
+    "selected_version": "Release/master/0.3.6-102+8b058cd"
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.1.1-38+2220e79"
+    "selected_version": "Release/master/0.1.1-56+508fe9a"
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/0.2.2-27+104a2bb"
+    "selected_version": "Release/master/0.3.2-47+b80d39b"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -140,7 +144,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.7.41004.2680929"
+    "selected_version": "Release/Castle-Fork/0.3.8.41015.2682265"
   },
   {
     "name": "Webkit",

@@ -47,6 +47,7 @@ TARGET_LINK_LIBRARIES(Eddie
   CastleProductControllerCommon
   DataCollectionClient
   LpmClient
+  HttpInterface
   FrontDoorClient
   NetworkServiceClient
   KeyHandler
@@ -66,7 +67,6 @@ TARGET_LINK_LIBRARIES(Eddie
   jsoncpp
   protobuf
   TinyXml
-  libHttpInterface.a
   pthread
   rt
   cap

@@ -220,6 +220,16 @@ public:
         return false;
     }
 
+    virtual bool HandleSystemPowerControl( )
+    {
+        return false;
+    }
+
+    virtual bool HandleSoftwareUpdateStart( uint32_t delay )
+    {
+        return false;
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
     ///
     /// Here are the Custom event handlers. They need to be declared virtual and
