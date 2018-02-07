@@ -28,15 +28,13 @@ def demoUtils(frontDoor, adb):
 @pytest.fixture(scope='function', autouse=True)
 def setDemoOff(request, frontDoor, demoUtils):
     """
-    Set demoMode off
+    Set demoMode off and delete keyConfig
     """
     logger.info("setDemoOff")
     setDemo(request, frontDoor, demoUtils)
-    """
-    def teardown():
-        setDemo(request, frontDoor, demoUtils)
-    request.addfinalizer(teardown)
-    """
+    demoUtils.deleteKeyConfig()
+    demoUtils.verifyDemoKeyConfig("Error Reading configuration file")
+
 def setDemo(request, frontDoor, demoUtils):
     """
     Set demoMode False if True
