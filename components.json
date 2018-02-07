@@ -25,7 +25,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.5-232+ed59d2f"
+    "selected_version": "Release/master/0.3.7-243+5bef58d"
   },
   {
     "name": "BoseOPKG-native",
@@ -57,7 +57,7 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-156+2fba04b"
+    "selected_version": "Release/master/0.3.1-161+ed41fb6"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -77,7 +77,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.0.2-30+87e0b96"
+    "selected_version": "Release/master/0.1.1-38+2220e79"
   },
   {
     "name": "KeyHandler-qc8017_32",
