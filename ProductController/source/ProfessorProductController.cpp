@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @file      ProfessorProductController.cpp
 ///
@@ -757,20 +757,21 @@ std::string const& ProfessorProductController::GetProductVariant( ) const
 ///
 /// @name   ProfessorProductController::GetProductModel
 ///
-/// @return This method returns the std::string const& value to be used for the Product "Model" field
+/// @return This method returns the std::string const& value to be used for the Product "productType" field
 ///
 /// @TODO - Below value may be available through HSP APIs
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 std::string const& ProfessorProductController::GetProductModel() const
 {
-    static std::string productModel = "SoundTouch 20";
+    static std::string productModel = "professor";
 
-    if( auto model = MfgData::Get( "model" ) )
+    if( auto model = MfgData::Get( "productType" ) )
     {
         productModel =  *model;
     }
 
+    // @TODO PGC-757 replace the manufacturing name with the marketing name.
     return productModel;
 }
 
