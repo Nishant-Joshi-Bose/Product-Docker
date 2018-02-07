@@ -175,6 +175,8 @@ void CustomProductAudioService::FetchLatestAudioSettings( )
 ///
 /// @name   CustomProductAudioService::SetStreamConfigCallback
 ///
+/// @param  std::vector<APProductCommon::ChannelParameters> channelParams
+///
 /// @param  std::string serializedAudioSettings
 ///
 /// @param  std::string serializedInputRoute
@@ -189,7 +191,7 @@ void CustomProductAudioService::FetchLatestAudioSettings( )
 void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCommon::ChannelParameters> channelParams, std::string serializedAudioSettings, std::string serializedInputRoute, const Callback<bool> cb )
 {
     BOSE_DEBUG( s_logger, __func__ );
-    m_ProductLpmHardwareInterface->SendStreamConfig( serializedAudioSettings, serializedInputRoute, cb );
+    m_ProductLpmHardwareInterface->SetStreamConfig( serializedAudioSettings, serializedInputRoute, cb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

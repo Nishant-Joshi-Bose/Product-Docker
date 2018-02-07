@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@f6190e89b9415def6fa5335687e2bfa7d19ffa20"
+    "selected_version": "master@0d38c2773fc8f513fbc2214faf92bc9b8ebc3cc0"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -112,7 +112,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.3.4-88+c5d5be2"
+    "selected_version": "Continuous/master/0.3.5-92+2b205e2"
   },
   {
     "name": "RivieraLpmUpdater",

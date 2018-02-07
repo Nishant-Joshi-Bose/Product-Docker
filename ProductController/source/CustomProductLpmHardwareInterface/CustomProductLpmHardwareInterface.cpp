@@ -534,7 +534,7 @@ bool CustomProductLpmHardwareInterface::SendAdaptIQControl( ProductAdaptIQContro
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  CustomProductHardwareLpmInterface::SendStreamConfig
+/// @name  CustomProductHardwareLpmInterface::SetStreamConfig
 ///
 /// @brief This method send setStreamConfig request to DSP,
 ///         which includes mainStreamAudioSettings, inputRoute, and streamMix parameters
@@ -545,7 +545,7 @@ bool CustomProductLpmHardwareInterface::SendAdaptIQControl( ProductAdaptIQContro
 /// @return bool The method returns true when the setStreamConfig request was successfully sent.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductLpmHardwareInterface::SendStreamConfig( std::string& serializedAudioSettings, std::string& serializedInputRoute, const Callback<bool>& cb )
+bool CustomProductLpmHardwareInterface::SetStreamConfig( std::string& serializedAudioSettings, std::string& serializedInputRoute, const Callback<bool>& cb )
 {
     if( isConnected( ) == false || GetLpmClient( ) == nullptr )
     {
