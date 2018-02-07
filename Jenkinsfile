@@ -112,7 +112,7 @@ timeout(time: 8, unit: 'HOURS')
                          {
                            try
                            {
-                              executeBuild(item)
+                              //executeBuild(item)
 							  
                            }
                            catch (Exception ex)
@@ -132,7 +132,7 @@ timeout(time: 8, unit: 'HOURS')
                          {
                            try
                            {
-                              executeBuild(item)
+                              //executeBuild(item)
 							  
                            }
                            catch (Exception ex)
@@ -151,7 +151,7 @@ timeout(time: 8, unit: 'HOURS')
                          {
                            try
                            {
-                              executeBuild(item)
+                              //executeBuild(item)
 							  
                            }
                            catch (Exception ex)
@@ -169,7 +169,7 @@ timeout(time: 8, unit: 'HOURS')
                          {
                            try
                            {
-                              executeBuild(item)
+                              //executeBuild(item)
 							  
                            }
                            catch (Exception ex)
@@ -187,7 +187,7 @@ timeout(time: 8, unit: 'HOURS')
                          {
                            try
                            {
-                              executeBuild(item)
+                              //executeBuild(item)
 							  
                            }
                            catch (Exception ex)
@@ -205,7 +205,7 @@ timeout(time: 8, unit: 'HOURS')
                          {
                            try
                            {
-                              executeBuild(item)
+                              //executeBuild(item)
 							  
                            }
                            catch (Exception ex)
@@ -223,7 +223,7 @@ timeout(time: 8, unit: 'HOURS')
                          {
                            try
                            {
-                              executeBuild(item)
+                              //executeBuild(item)
 							  
                            }
                            catch (Exception ex)
@@ -241,7 +241,7 @@ timeout(time: 8, unit: 'HOURS')
                          {
                            try
                            {
-                              executeBuild(item)
+                              //executeBuild(item)
 							  
                            }
                            catch (Exception ex)
@@ -267,7 +267,12 @@ timeout(time: 8, unit: 'HOURS')
             * Success or failure, always send notifications */
 			notifyBuild(currentBuild.result)
             currentBuild.description = "${failureList}"
+			println failureList
        }
 
     }
+	// To Push Data of Failed Job and Total Job on Graphite
+    println failureList.size()
+    println buildCount
+    def GraphiteSocket = new GraphiteSocket(failureList.size(),buildCount,'Eddie_Nightly')  
 }
