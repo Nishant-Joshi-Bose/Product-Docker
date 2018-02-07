@@ -6,7 +6,7 @@ set -x
 
 cd $[buildDir]
 CastleToolsDir=/home/epd/srcref/CastleTools
-export PATH=$CastleToolsDir/bin:$PATH
+export PATH=$CastleToolsDir/bin:/tools/klocwork/user/bin:/tools/klocwork/server/bin:$PATH
 
 if [ "$[/javascript myJob.Klocwork]" = "true" ]; then
     KWINJECT="kwinject -I 'testCCompiler.c,testCXXCompiler.cxx'"
@@ -17,7 +17,7 @@ export DONT_UPDATE_CASTLETOOLS=1
 export RIVIERA_HSP_VERSION=1.3
 eval $KWINJECT make jobs=8 deploy || exit
 export DONT_UPDATE_VERSION=1
-export RIVIERA_HSP_VERSION=2.1
+export RIVIERA_HSP_VERSION=2.2
 make jobs=8 deploy || exit
 
 : success

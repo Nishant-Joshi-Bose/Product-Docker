@@ -41,7 +41,32 @@ public:
     /// have an implementation that returns false
     ///
     ///////////////////////////////////////////////////////////////////////////////
+    virtual bool HandleLPMPowerStatusLowPower( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLPMPowerStatusNetworkStandby( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLPMPowerStatusIdle( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLPMPowerStatusFullPowerOn( )
+    {
+        return false;
+    }
+
     virtual bool HandleLpmState( bool isActive )
+    {
+        return false;
+    }
+
+    virtual bool HandleLpmLowPowerSystemState()
     {
         return false;
     }
@@ -130,6 +155,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentPowerToggle( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
     virtual bool HandleBluetoothModuleState( bool ready )
     {
         return false;
@@ -185,6 +215,16 @@ public:
         return false;
     }
 
+    virtual bool HandleSystemPowerControl( )
+    {
+        return false;
+    }
+
+    virtual bool HandleSoftwareUpdateStart( uint32_t delay )
+    {
+        return false;
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
     ///
     /// Here are the Custom event handlers. They need to be declared virtual and
@@ -228,6 +268,15 @@ public:
         s_productController = productController;
     }
     bool IsProductNeedsSetup();
+
+    virtual bool IsInNetworkSetupState() const
+    {
+        return false;
+    }
+    virtual bool HandleSoftwareUpdateStatus( )
+    {
+        return false;
+    }
 
 public:
     /// The custom version of this function returns the custom ProductController

@@ -1,5 +1,6 @@
 INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ChimesController
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
@@ -31,6 +32,7 @@ ADD_EXECUTABLE(Eddie
   ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/IntentHandler.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
+  ${PROTO_CC_DEST}/ProductSetupState.pb.cc
   ${PROTO_CC_DEST}/VolumeConfig.pb.cc
   IntentHandler/CountDownManager.cpp
   IntentHandler/IntentHandler.cpp
@@ -45,6 +47,7 @@ TARGET_LINK_LIBRARIES(Eddie
   CastleProductControllerCommon
   DataCollectionClient
   LpmClient
+  HttpInterface
   FrontDoorClient
   NetworkServiceClient
   KeyHandler
@@ -54,10 +57,13 @@ TARGET_LINK_LIBRARIES(Eddie
   VoiceServiceClient
   CliClient
   AudioLibs
-  ShelbyUtils
-  BoseLibs
   PassportClient
+  #SASSFrontDoorServiceProto # TODO: SASS integration
+  SoftwareUpdateAPI
   STS
+  ShelbyUtils
+  SoundTouch_SDK_Protobuf_static
+  BoseLibs
   jsoncpp
   protobuf
   TinyXml
@@ -65,7 +71,6 @@ TARGET_LINK_LIBRARIES(Eddie
   rt
   cap
   dl
-  SoundTouch_SDK_Protobuf_static
 )
 
 INSTALL(TARGETS Eddie DESTINATION ${OUTPUT_BIN_DIR})

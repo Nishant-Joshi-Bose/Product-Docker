@@ -72,7 +72,51 @@ int open_listenfd()
     return listenfd;
 }
 
-void handle_connection( int sockfd )
+std::string to_string( sockaddr_storage const& addr, socklen_t len )
+{
+    switch( addr.ss_family )
+    {
+    case AF_INET:
+    {
+        auto& a = reinterpret_cast<sockaddr_in const&>( addr );
+        if( len < sizeof( a ) )
+        {
+            LOG( "Invalid sockaddr length: "  << len );
+            return {};
+        }
+        char buf[INET_ADDRSTRLEN];
+        if( inet_ntop( AF_INET, &a.sin_addr, buf, sizeof( buf ) ) == nullptr )
+        {
+            LOG( "inet_ntop: " << err() );
+            return {};
+        }
+        return buf;
+    }
+    case AF_INET6:
+    {
+        auto& a = reinterpret_cast<sockaddr_in6 const&>( addr );
+        if( len < sizeof( a ) )
+        {
+            LOG( "Invalid sockaddr length: "  << len );
+            return {};
+        }
+        char buf[INET6_ADDRSTRLEN];
+        if( inet_ntop( AF_INET6, &a.sin6_addr, buf, sizeof( buf ) ) == nullptr )
+        {
+            LOG( "inet_ntop: " << err() );
+            return {};
+        }
+        return buf;
+    }
+    default:
+    {
+        LOG( "Invalid sockaddr family: " << addr.ss_family );
+        return {};
+    }
+    }
+}
+
+void handle_connection( int sockfd, std::string const& clientaddrstr )
 {
     auto kid = fork();
     if( kid == -1 )
@@ -94,6 +138,10 @@ void handle_connection( int sockfd )
 
         signal( SIGCHLD, SIG_DFL );
 
+        auto env = "REMOTE_ADDRESS=" + clientaddrstr;
+        if( putenv( const_cast< char* >( env.c_str() ) ) != 0 )
+            LOG( "putenv: " << err() );
+
         execl( handler_program, handler_program, nullptr );
         DIE( "execl " << handler_program << ": " << err() );
     }
@@ -104,7 +152,7 @@ void listener( int listenfd )
 {
     for( ;; )
     {
-        sockaddr_in clientaddr;
+        sockaddr_storage clientaddr;
         socklen_t clientlen = sizeof( clientaddr );
         int connfd = accept( listenfd, ( sockaddr * )&clientaddr, &clientlen );
         if( connfd == -1 )
@@ -112,11 +160,11 @@ void listener( int listenfd )
             LOG( "accept: " << err() );
             break;
         }
+        auto clientaddrstr = to_string( clientaddr, clientlen );
 
-        LOG( "accept " << inet_ntoa( clientaddr.sin_addr )
-             << ':' << ntohs( clientaddr.sin_port ) );
+        LOG( "accept " << clientaddrstr );
 
-        handle_connection( connfd );
+        handle_connection( connfd, clientaddrstr );
         close( connfd );
     }
 }

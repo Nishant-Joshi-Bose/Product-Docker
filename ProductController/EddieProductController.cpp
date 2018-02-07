@@ -6,7 +6,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "EddieProductController.h"
-#include "ProductControllerStates.h"
+#include "CustomProductControllerStates.h"
 #include "CustomProductControllerState.h"
 #include "CustomProductAudioService.h"
 #include "APTaskFactory.h"
@@ -20,8 +20,8 @@
 #include "CustomProductLpmHardwareInterface.h"
 #include "MfgData.h"
 #include "BLESetupEndpoints.h"
-
-//#include "ButtonPress.pb.h" // @TODO Leela, re-enable this code
+#include "ButtonPress.pb.h"
+#include "DataCollectionClientFactory.h"
 
 static DPrint s_logger( "EddieProductController" );
 
@@ -34,7 +34,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     ProductController( ProductName ),
     m_ProductControllerStateTop( GetHsm(), nullptr ),
     m_CustomProductControllerStateBooting( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING ),
-    m_CustomProductControllerStateSetup( GetHsm(), &m_ProductControllerStatePlaying, CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP ),
+    m_CustomProductControllerStateSetup( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP ),
     m_CustomProductControllerStateOn( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_ON ),
     m_ProductControllerStateLowPowerStandby( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY ),
     m_ProductControllerStateSwUpdating( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING ),
@@ -57,14 +57,13 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_ProductControllerStatePlayingSelectedSilent( GetHsm(), &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT ),
     m_ProductControllerStatePlayingSelectedNotSilent( GetHsm(), &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT ),
     m_ProductControllerStatePlayingSelectedSetup( GetHsm(), &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP ),
-    m_ProductControllerStatePlayingSelectedSetupNetwork( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NETWORK_SETUP ),
+    m_ProductControllerStatePlayingSelectedSetupNetwork( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK ),
     m_ProductControllerStatePlayingSelectedSetupOther( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_OTHER ),
     m_ProductControllerStateStoppingStreams( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS ),
     m_ProductControllerStatePlayableTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION ),
     m_ProductControllerStatePlayableTransitionIdle( GetHsm(), &m_ProductControllerStatePlayableTransition, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE ),
     m_ProductControllerStatePlayableTransitionNetworkStandby( GetHsm(), &m_ProductControllerStatePlayableTransition, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY ),
     m_ProductControllerStateSoftwareUpdateTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION ),
-    m_ProductControllerStateLowPowerTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_TRANSITION ),
     m_ProductControllerStatePlayingTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION ),
     m_ProductControllerStatePlayingTransitionSelected( GetHsm(), &m_ProductControllerStatePlayingTransition, PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SELECTED ),
     m_KeyHandler( *GetTask(), m_CliClientMT, KEY_CONFIG_FILE ),
@@ -73,7 +72,6 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_wifiProfilesCount(),
     m_fdErrorCb( AsyncCallback<EndPointsError::Error> ( std::bind( &EddieProductController::CallbackError,
                                                                    this, std::placeholders::_1 ), GetTask() ) ),
-    m_DataCollectionClient( "EddieProductController" ),
     m_voiceServiceClient( ProductName, m_FrontDoorClientIF ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) )
 {
@@ -114,7 +112,6 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     GetHsm().AddState( &m_ProductControllerStatePlayableTransitionIdle );
     GetHsm().AddState( &m_ProductControllerStatePlayableTransitionNetworkStandby );
     GetHsm().AddState( &m_ProductControllerStateSoftwareUpdateTransition );
-    GetHsm().AddState( &m_ProductControllerStateLowPowerTransition );
     GetHsm().AddState( &m_ProductControllerStatePlayingTransition );
     GetHsm().AddState( &m_ProductControllerStatePlayingTransitionSelected );
 
@@ -129,8 +126,11 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient() ) );
     SetupProductSTSController();
 
+    //Data Collection support
+    m_DataCollectionClient =  DataCollectionClientFactory::CreateUDCService();
+
     // Start Eddie ProductAudioService
-    m_ProductAudioService = std::make_shared< CustomProductAudioService>( *this, m_FrontDoorClientIF );
+    m_ProductAudioService = std::make_shared< CustomProductAudioService>( *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient() );
     m_ProductAudioService -> Run();
 
     // Initialize and register Intents for the Product Controller
@@ -180,17 +180,42 @@ std::string const& EddieProductController::GetProductType() const
     return productType;
 }
 
-//@TODO - Below value may be available through HSP APIs
+std::string const& EddieProductController::GetProductModel() const
+{
+    static std::string productModel = "SoundTouch 20";
+
+    if( auto model = MfgData::Get( "model" ) )
+    {
+        productModel =  *model;
+    }
+
+    return productModel;
+}
+
 std::string const& EddieProductController::GetProductVariant() const
 {
-    static std::string productType = "Eddie";
-    return productType;
+    static std::string productVariant = "SoundTouch ECO2";
+    return productVariant;
+}
+
+std::string const& EddieProductController::GetProductDescription() const
+{
+    static std::string productDescription = "SoundTouch";
+
+    if( auto description = MfgData::Get( "description" ) )
+    {
+        productDescription = *description;
+    }
+
+    return productDescription;
 }
 
 std::string const& EddieProductController::GetDefaultProductName() const
 {
     static std::string productName = "Bose ";
     std::string macAddress = MacAddressInfo::GetPrimaryMAC();
+
+    productName = "Bose ";
     try
     {
         productName += ( macAddress.substr( macAddress.length() - 6 ) );
@@ -279,6 +304,18 @@ bool EddieProductController::IsNetworkConnected() const
     return m_cachedStatus.get().isprimaryup() ;
 }
 
+uint32_t EddieProductController::GetWifiProfileCount() const
+{
+    if( m_wifiProfilesCount.is_initialized() )
+    {
+        return m_wifiProfilesCount.get();
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 void EddieProductController::HandleWiFiProfileResponse( const NetManager::Protobuf::WiFiProfiles& profiles )
 {
     m_wifiProfilesCount = profiles.profiles_size();
@@ -323,13 +360,12 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
 
 void EddieProductController::SendDataCollection( const IpcKeyInformation_t& keyInformation )
 {
-#if 0 // @TODO Leela, re-enable this code
+    BOSE_DEBUG( s_logger, __func__ );
+
     std::string currentButtonId;
     const auto currentKeyId = keyInformation.keyid();
     const auto currentOrigin = keyInformation.keyorigin();
 
-    ProductPb::Protobuf::ButtonPress KeyPress;
-    KeyPress.set_eventname( keyToEventName( currentKeyId ) );
     if( currentKeyId <= NUM_KEY_NAMES )
     {
         currentButtonId = KEY_NAMES[currentKeyId - 1];
@@ -338,87 +374,14 @@ void EddieProductController::SendDataCollection( const IpcKeyInformation_t& keyI
     {
         BOSE_ERROR( s_logger, "%s, Invalid CurrentKeyID: %d", __func__, currentKeyId );
     }
-    KeyPress.set_buttonid( currentButtonId ) ;
-    KeyPress.set_origin( keyToOriginator( currentOrigin ) );
-    m_DataCollectionClient.processKeyData( KeyPress );
-#endif
+
+    auto keyPress  = std::make_shared<DataCollection::ButtonPress>();
+    keyPress->set_buttonid( static_cast<DataCollection::ButtonId >( currentKeyId ) ) ;
+    keyPress->set_origin( static_cast<DataCollection::Origin >( currentOrigin ) );
+
+    m_DataCollectionClient->SendData( keyPress, "button-pressed" );
 }
 
-std::string EddieProductController::keyToEventName( uint32_t e )
-{
-    const std::string emptystr;
-
-    switch( e )
-    {
-    case 1 :
-    {
-        return "bluetooth" ;
-    };
-    case 2:
-    {
-        return "aux" ;
-    };
-    case 3:
-    {
-        return "volume-plus" ;
-    };
-    case 4:
-    {
-        return "play-pause" ;
-    };
-    case 5:
-    {
-        return "volume-minus" ;
-    };
-    case 6:
-    {
-        return "alexa" ;
-    };
-
-    }
-    return emptystr;
-}
-
-std::string EddieProductController::keyToOriginator( enum KeyOrigin_t e )
-{
-    switch( e )
-    {
-    case KEY_ORIGIN_CONSOLE_BUTTON:
-    {
-        return "console" ;
-    }
-
-    case KEY_ORIGIN_CAPSENSE:
-    {
-        return "capsense";
-    }
-    case KEY_ORIGIN_IR:
-    {
-        return "ir-remote" ;
-    }
-    case KEY_ORIGIN_RF:
-    {
-        return "rf" ;
-    }
-    case KEY_ORIGIN_CEC:
-    {
-        return "cec" ;
-    }
-    case KEY_ORIGIN_NETWORK:
-    {
-        return "network" ;
-    }
-    case KEY_ORIGIN_TAP:
-    {
-        return "tap" ;
-    }
-    case KEY_ORIGIN_INVALID:
-    {
-        return "invalid" ;
-    }
-    }
-    return "unknown" ;
-}
 
 
 void EddieProductController::SendInitialRequests()
@@ -516,14 +479,16 @@ void EddieProductController::HandleNetworkModuleReady( bool networkModuleReady )
 
 bool EddieProductController::IsAllModuleReady() const
 {
-    BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|NetworkModuleReady=%d|m_isBluetoothReady=%d|STSReady=%d", __func__,
-               IsCAPSReady() , IsLpmReady(), IsNetworkModuleReady(), IsBluetoothModuleReady(), IsSTSReady() );
+    BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|NetworkModuleReady=%d|m_isBluetoothReady=%d|"
+               "STSReady=%d|IsSoftwareUpdateReady=%d", __func__, IsCAPSReady() , IsLpmReady(),
+               IsNetworkModuleReady(), IsBluetoothModuleReady(), IsSTSReady(), IsSoftwareUpdateReady() );
 
     return ( IsCAPSReady() and
              IsLpmReady() and
              IsNetworkModuleReady() and
              IsSTSReady() and
-             IsBluetoothModuleReady() ) ;
+             IsBluetoothModuleReady() and
+             IsSoftwareUpdateReady() ) ;
 }
 
 bool EddieProductController::IsBtLeModuleReady() const
@@ -775,12 +740,15 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
             switch( productMessage.lpmstatus( ).systemstate( ) )
             {
             case SYSTEM_STATE_ON:
+                m_ProductAudioService->SetThermalMonitorEnabled( true );
                 break;
             case SYSTEM_STATE_OFF:
+                m_ProductAudioService->SetThermalMonitorEnabled( false );
                 break;
             case SYSTEM_STATE_BOOTING:
                 break;
             case SYSTEM_STATE_STANDBY:
+                m_ProductAudioService->SetThermalMonitorEnabled( false );
                 break;
             case SYSTEM_STATE_RECOVERY:
                 break;
@@ -871,6 +839,11 @@ void EddieProductController::SetupProductSTSController( void )
     std::vector<ProductSTSController::SourceDescriptor> sources;
     ProductSTSController::SourceDescriptor descriptor_AUX{ 0, "AUX", true }; // AUX is always available
     sources.push_back( descriptor_AUX );
+
+    // 'SETUP' is a "fake" source used for setup state.
+    ProductSTSController::SourceDescriptor descriptor_Setup{ 1, "SETUP", false };
+    sources.push_back( descriptor_Setup );
+
     Callback<void> cb_STSInitWasComplete( std::bind( &EddieProductController::HandleSTSInitWasComplete, this ) );
     Callback<ProductSTSAccount::ProductSourceSlot> cb_HandleSelectSourceSlot( std::bind( &EddieProductController::HandleSelectSourceSlot, this, std::placeholders::_1 ) );
     m_ProductSTSController.Initialize( sources, cb_STSInitWasComplete, cb_HandleSelectSourceSlot );

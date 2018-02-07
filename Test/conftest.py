@@ -1,3 +1,15 @@
+# conftest.py
+#
+# :Organization:  BOSE CORPORATION
+#
+# :Copyright:  COPYRIGHT 2017 BOSE CORPORATION ALL RIGHTS RESERVED.
+#              This program may not be reproduced, in whole or in part in any
+#              form or any means whatsoever without the written permission of:
+#                  BOSE CORPORATION
+#                  The Mountain,
+#                  Framingham, MA 01701-9168
+#
+
 """
 Parent conftest.py for the Eddie repository
 """
@@ -16,7 +28,12 @@ _log = None
 logger = get_logger(__name__)
 
 def pytest_addoption(parser):
-    """ Command Line Parameters """
+    """
+    Command line options for the pytest tests in this module.
+
+    :param parser: Parser used for method.
+    :return: None
+    """
     parser.addoption("--device-id", action="store", default=None, help="device-id: Device Id")
     parser.addoption("--target", action="store", default="native", help="target: [native/device], Specify whether the tests need to be executed on native or on device")
     parser.addoption("--log-dir", action="store", default="SCMLogs", help="Where to store logs.")
@@ -27,6 +44,12 @@ def pytest_addoption(parser):
     parser.addoption("--flash_param",default='f', help="Choose '-a'(APQ) / 'l'(LPM) / '-f'(Complete Flash)")
     parser.addoption("--flash_binary", default='product_flash',help="Binary file to be used - productFlash")
     parser.addoption("--lpm_update", action="store_true", default=False, help="Set True to Update LPM")
+
+    parser.addoption("--timeout",
+                     action="store",
+                     default=30,
+                     type=int,
+                     help="Timeout for most of the commands")
 
 def ping(ip):
     """ Pings a given IP Address """
@@ -125,3 +148,131 @@ def adb(request):
     adb = rivieraCommunication.getCommunicationType('ADB')
     adb.setCommunicationDetail(request.config.getoption("--device-id"))
     return adb
+
+
+@pytest.fixture(scope='function')
+def rebooted_device():
+    """
+    This will put the device into a rebooted state and yield information about
+        how long it took.
+
+    :return: None
+    """
+    import time
+    from pyadb import ADB
+
+    adb = ADB('/usr/bin/adb')
+    start_time = time.time()
+    adb.run_cmd('reboot')
+    adb.wait_for_device()
+    end_time = time.time()
+
+    yield {'reboot': {'start': start_time, 'end': end_time,
+                      'duration': end_time - start_time}}
+
+
+@pytest.mark.usesfixtures("rebooted_device")
+@pytest.fixture(scope='function')
+def rebooted_and_networked_device(rebooted_device, request):
+    """
+    This will put the device into a rebooted state with network up and yield
+        information about how long it took.
+
+    :return: None
+    """
+    from multiprocessing import Process, Manager
+
+    from bootsequencing.stateutils import network_checker, UNKNOWN
+
+    reboot_information = rebooted_device
+
+    manager = Manager()
+    collection_dict = manager.dict()
+    maximum_time = 30
+    network_connection = request.config.getoption("--network-iface") \
+        if request.config.getoption("--network-iface") else 'eth0'
+
+    # Network
+    network_process = Process(target=network_checker,
+                              args=(network_connection, maximum_time, collection_dict))
+    network_process.daemon = True
+    network_process.start()
+
+    ip_address = None
+    while ip_address is None:
+        try:
+            ip_address = collection_dict['ip']['address']
+        except KeyError:
+            pass
+    assert ip_address is not UNKNOWN, \
+        'Could not locate find network connection after {:.2f}'.format(maximum_time)
+
+    # Added the Thread-safe dictionary information to the reboot dictionary.
+    reboot_information.update(collection_dict.copy())
+
+    yield reboot_information
+
+
+@pytest.fixture(scope='function')
+def adb_versions():
+    """
+    This fixture will return information regarding version information on the
+        ADB system
+
+    :return:
+    """
+    import json
+
+    from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
+
+    riviera = RivieraUtils(communicationType='ADB')
+    versions = {}
+
+    # Get Product information
+    bose_version = riviera.getDeviceBoseVersion()
+    versions['bose'] = json.loads(bose_version)
+    # Get FS information
+    versions['fs'] = riviera.getDeviceFsVersion()
+
+    yield versions
+
+
+@pytest.fixture(scope='function')
+def eddie_master_latest_directory(tmpdir):
+    """
+    Fixture to download the latest Continuous Master Eddie build locally.
+
+    :param tmpdir: Pytest temporary directory fixture
+
+    :yield: The location of the Eddie Tar and Flash
+    """
+    import glob
+    import os
+    import shutil
+
+    # The IP2 Release latest directory
+    eddie_latest = os.path.join('/', 'home', 'softlib', 'verisoft', 'Eddie', 'Continuous', 'master', 'latest')
+
+    eddie_flash = 'eddie_flash'
+    eddie_tar = 'eddie_*.tar'
+
+    # Copy Eddie Flash File
+    eddie_flash_latest = glob.glob(os.path.join(eddie_latest, eddie_flash))[0]
+    shutil.copy(eddie_flash_latest, os.path.join(str(tmpdir), 'eddie_flash'))
+
+    # Copy Eddie Tar File
+    eddie_tar_latest = glob.glob(os.path.join(eddie_latest, eddie_tar))[0]
+    eddie_tar_name = os.path.basename(eddie_tar_latest)
+    shutil.copy(eddie_tar_latest, os.path.join(str(tmpdir), eddie_tar_name))
+
+    # Change to tmpdir
+    cwd = os.getcwd()
+    os.chdir(str(tmpdir))
+
+    yield tmpdir, {'eddie_tar': os.path.join(str(tmpdir), eddie_tar_name),
+                   'eddie_flash': os.path.join(str(tmpdir), eddie_flash)}
+
+    # Go back to original working directory
+    os.chdir(cwd)
+    # Remove everything in the tmpdir
+    tmpdir.remove()
