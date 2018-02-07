@@ -26,16 +26,21 @@ from multiprocessing import process, Manager
 import pytest
 from pyadb import ADB
 
-from commonData import keyConfig
+
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
-from CastleTestUtils.NetworkUtils.network_base import NetworkBase
-from CastleTestUtils.RivieraUtils import rivieraCommunication
-from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
 from CastleTestUtils.LoggerUtils.logreadLogger import LogreadLogger
+from CastleTestUtils.NetworkUtils.network_base import NetworkBase
+from CastleTestUtils.RivieraUtils import adb_utils, rivieraCommunication, rivieraUtils
+from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import flash_device
+
+
+from commonData import keyConfig
 from bootsequencing.stateutils import network_checker, UNKNOWN
 
+
 LOGGER = get_logger(__name__)
+
 
 def pytest_addoption(parser):
     """
@@ -170,7 +175,7 @@ def riviera(deviceid):
     """
     Get RivieraUtil instance.
     """
-    return RivieraUtils('ADB', device=deviceid)
+    return rivieraUtils.RivieraUtils('ADB', device=deviceid)
 
 @pytest.fixture(scope='class')
 def device_guid(frontDoor):
@@ -255,8 +260,8 @@ def rebooted_and_networked_device(rebooted_device, request):
         if request.config.getoption("--network-iface") else 'eth0'
 
     # Network
-    network_process = Process(target=network_checker,
-                              args=(network_connection, maximum_time, collection_dict))
+    network_process = process.Process(target=network_checker,
+                                      args=(network_connection, maximum_time, collection_dict))
     network_process.daemon = True
     network_process.start()
 
@@ -275,14 +280,29 @@ def rebooted_and_networked_device(rebooted_device, request):
     yield reboot_information
 
 
+@pytest.fixture(scope='session')
+def device_id(request):
+    """
+    Acquires the Command line Device ID.
+
+    :param request: PyTest command line request options
+    :return: String Device ID used when starting the test
+    """
+    return request.config.getoption('--device-id')
+
+
+@pytest.mark.usefixture('device_id')
 @pytest.fixture(scope='function')
-def adb_versions():
+def adb_versions(device_id):
     """
     This fixture will return information regarding version information on the
         ADB system
-    :return:
+
+    :param device_id: Command Line Android Device ID
+    :return: Dictionary of Version information of the device
     """
-    riviera = RivieraUtils(communicationType='ADB')
+    riviera = rivieraUtils.RivieraUtils(communicationType='ADB', device=device_id)
+
     versions = {}
 
     # Get Product information
@@ -368,7 +388,7 @@ def ip_address_wlan(request, deviceid, wifi_config):
     :param wifi_config: ConfigParser object of Wireless configs
     :return: The IP Address of the attached Riviera Device
     """
-    riviera_device = RivieraUtils('ADB', device=deviceid, logger=LOGGER)
+    riviera_device = rivieraUtils.RivieraUtils('ADB', device=deviceid, logger=LOGGER)
     network_base = NetworkBase(None, device=deviceid, logger=LOGGER)
 
     interface = 'wlan0'
