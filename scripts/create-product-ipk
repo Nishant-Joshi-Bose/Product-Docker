@@ -90,30 +90,6 @@ mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/et
 rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 rsync -a --exclude='*~' --exclude='*-README.txt' "$qss_dir/opt-bose-fs/." "$opt_dir/." || exit
 
-# -----------------------------------------------------------------------------
-# SoundTouch-SDK daemon configuration.
-
-u=$soundtouch_sdk/util
-function gen_config {
-    local xslt="$1"; shift
-    local inf="$1"; shift
-    local outf="$opt_dir/etc/$1"; shift
-
-    local tmpf="$outf~"
-    rm -f "$outf" "$tmpf"
-    "$u/xsltproc-chk" "$xslt" "$inf" >"$tmpf" || exit 1
-    xmllint --format "$tmpf" >"$outf" || exit 1
-    echo "Wrote $outf"
-    rm -f "$tmpf"
-}
-c=$wspace/ProductController/Configuration.xml
-xmllint --noout --schema "$u/validate-config.xsd" "$c" || exit
-gen_config "$u/BoseApp.xslt" "$c" "BoseApp.xml"
-gen_config "$u/UpnpSource.xslt" "$c" "UpnpSource.xml"
-gen_config "$u/APConfig.xslt" "$c" "APConfig.xml"
-
-# -----------------------------------------------------------------------------
-
 components record "$stage" || exit
 
 version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
@@ -171,7 +147,7 @@ marge_url=https://streamingint.bose.com
 stats_url=https://eventsdev.api.bosecm.com
 sw_update_url=https://worldwide.bose.com/updates/soundtouch-test
 
-"$u/simple-xml-edit" \
+"$soundtouch_sdk/util/simple-xml-edit" \
     "$opt_dir/etc/SoundTouchSdkPrivateCfg.xml" \
     SoundTouchSdkPrivateCfg.margeServerUrl="$marge_url" \
     SoundTouchSdkPrivateCfg.statsServerUrl="$stats_url" \
