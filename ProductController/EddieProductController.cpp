@@ -73,7 +73,8 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_fdErrorCb( AsyncCallback<EndPointsError::Error> ( std::bind( &EddieProductController::CallbackError,
                                                                    this, std::placeholders::_1 ), GetTask() ) ),
     m_voiceServiceClient( ProductName, m_FrontDoorClientIF ),
-    m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) )
+    m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
+    m_dataCollectionClientInterface( m_FrontDoorClientIF )
 {
     BOSE_INFO( s_logger, __func__ );
     m_deviceManager.Initialize( this );
@@ -135,7 +136,6 @@ EddieProductController::EddieProductController( std::string const& ProductName )
 
     // Initialize and register Intents for the Product Controller
     m_IntentHandler.Initialize();
-
 
 }
 
