@@ -52,7 +52,15 @@
     "selected_version": "Release/master/0.2.3-26+8cf9ea4"
   },
   {
+    "name": "CastleLibs-native",
+    "selected_version": "branches/castle-libs@2549"
+  },
+  {
     "name": "CastleLibs-qc8017_32",
+    "selected_version": "branches/castle-libs@2549"
+  },
+  {
+    "name": "CastleLibs-x86",
     "selected_version": "branches/castle-libs@2549"
   },
   {
@@ -73,7 +81,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@5c998f17357b99eb31ebd347c1fe369f3157f609"
+    "selected_version": "master@5e4a1b5bb79bca67991ca8fda8f13cded7f9b4b1"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -132,7 +140,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.3.5-270+5ecf463"
+    "selected_version": "Release/master/0.3.6-280+e23d828"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
