@@ -23,7 +23,7 @@ def NetworkServices_Component = ["NetworkServices-Component/network-wifi-profile
 
 
 failureList = [] 
-buildCount=1
+buildCount=0
 
 def notifyBuild(String buildStatus = 'STARTED')
 {
