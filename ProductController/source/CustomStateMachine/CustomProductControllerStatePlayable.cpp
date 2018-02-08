@@ -69,18 +69,19 @@ CustomProductControllerStatePlayable::CustomProductControllerStatePlayable( Prod
 ///         and no futher processing will be required by any of its superstates.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayable::HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )
+bool CustomProductControllerStatePlayable::HandleIntentUserPower( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "%s in %s is handling key action %d.", GetName( ).c_str( ), __FUNCTION__, action );
-    if( GetCustomProductController().GetLastContentItem().has_source() &&
-        GetCustomProductController().GetLastContentItem().source() == "PRODUCT" )
+    BOSE_INFO( s_logger, "%s in %s is handling key action %d.", GetName( ).c_str( ), __FUNCTION__, intent );
+    // To play Product source, playbackRequest can be made directly by PlaybackRequestManager intentHandler;
+    // To play SoundTouch source, additional check required to confirm if network is configured and persisted SoundTouch source is available
+    if( GetCustomProductController().GetLastContentItem().source() == "PRODUCT" )
     {
-        unsigned int startTvPlayback = static_cast< unsigned int >( Action::ACTION_TV );
+        KeyHandlerUtil::ActionType_t startTvPlayback = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_TV );
         GetCustomProductController( ).GetIntentHandler( ).Handle( startTvPlayback );
     }
     else
     {
-        unsigned int startSoundTouchPlayback = static_cast< unsigned int >( Action::ACTION_SOUNDTOUCH );
+        KeyHandlerUtil::ActionType_t startSoundTouchPlayback = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_SOUNDTOUCH );
         HandleIntentPlaySoundTouchSource( startSoundTouchPlayback );
     }
     return true;

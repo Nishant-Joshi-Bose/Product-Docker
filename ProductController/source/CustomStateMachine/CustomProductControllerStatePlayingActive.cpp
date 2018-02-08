@@ -107,7 +107,8 @@ bool CustomProductControllerStatePlayingActive::HandleIntentUserPower( KeyHandle
 ///
 /// @param  KeyHandlerUtil::ActionType_t action
 ///
-/// @return
+/// @return This method returns a Boolean false value in case the key action needs to be handled in
+///         one of its superstates
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlayingActive::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )
@@ -122,7 +123,8 @@ bool CustomProductControllerStatePlayingActive::HandleIntentMuteControl( KeyHand
 ///
 /// @param  KeyHandlerUtil::ActionType_t action
 ///
-/// @return
+/// @return This method returns a Boolean false value in case the key action needs to be handled in
+///         one of its superstates
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlayingActive::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t action )
@@ -137,7 +139,8 @@ bool CustomProductControllerStatePlayingActive::HandleIntentSpeakerPairing( KeyH
 ///
 /// @param  KeyHandlerUtil::ActionType_t action
 ///
-/// @return This method returns a true Boolean value indicating that it has handled the action.
+/// @return This method returns a Boolean false value in case the key action needs to be handled in
+///         one of its superstates
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlayingActive::HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t action )
@@ -152,7 +155,8 @@ bool CustomProductControllerStatePlayingActive::HandleIntentPlaySoundTouchSource
 ///
 /// @param  KeyHandlerUtil::ActionType_t action
 ///
-/// @return This method returns a true Boolean value indicating that it has handled the action.
+/// @return This method returns a Boolean false value in case the key action needs to be handled in
+///         one of its superstates
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlayingActive::HandleIntentPlayTVSource( KeyHandlerUtil::ActionType_t action )

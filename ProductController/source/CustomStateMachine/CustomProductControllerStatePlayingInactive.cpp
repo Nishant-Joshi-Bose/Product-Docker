@@ -156,7 +156,8 @@ bool CustomProductControllerStatePlayingInactive::HandleIntentSpeakerPairing( Ke
 ///
 /// @param  KeyHandlerUtil::ActionType_t action
 ///
-/// @return This method returns a true Boolean value indicating that it has handled the action.
+/// @return This method returns a Boolean false value in case the key action needs to be handled in
+///         one of its superstates
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlayingInactive::HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t action )
@@ -171,7 +172,8 @@ bool CustomProductControllerStatePlayingInactive::HandleIntentPlaySoundTouchSour
 ///
 /// @param  KeyHandlerUtil::ActionType_t action
 ///
-/// @return This method returns a true Boolean value indicating that it has handled the action.
+/// @return This method returns a Boolean false value in case the key action needs to be handled in
+///         one of its superstates
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlayingInactive::HandleIntentPlayTVSource( KeyHandlerUtil::ActionType_t action )

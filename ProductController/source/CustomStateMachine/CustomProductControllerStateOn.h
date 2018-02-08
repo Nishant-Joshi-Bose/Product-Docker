@@ -73,7 +73,6 @@ public:
 
     void HandleStateExit( )  override;
     bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )  override;
-    //bool HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t intent );
     bool HandleIntentPlayTVSource( KeyHandlerUtil::ActionType_t intent );
 };
 
