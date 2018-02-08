@@ -299,7 +299,7 @@ void ProductSystemManager::HandleCapsStatus( const SoundTouchInterface::CapsInit
 void ProductSystemManager::HandleCapsStatusFailed( const EndPointsError::Error& error )
 {
     ///
-    /// A product message indicating that CAPS is down (based on a Front Door messaging error) may 
+    /// A product message indicating that CAPS is down (based on a Front Door messaging error) may
     /// cause a race condition at this point and is not sent. Refer to the JIRA Story PGC-735 for
     /// details.
     ///
