@@ -1,0 +1,4 @@
+#!/bin/sh
+export WPE_FBDEV=/dev/fb0 
+
+exec /opt/Bose/webkit/run_wpe.sh MONACO 1.0

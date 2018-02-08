@@ -1,6 +1,8 @@
 <ShepherdConfig>
   <daemon name="Professor"/>
 
+  <daemon name="Monaco"/>
+
   <daemon name="avahi-daemon"
           exe="start-avahi"/>
 

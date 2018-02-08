@@ -503,7 +503,9 @@ void ProfessorProductController::Run( )
     ///
     m_IntentHandler.Initialize( );
 
-
+    ///
+    /// Register LPM events for LightBar
+    ///
     m_lightbarController->RegisterLpmEvents();
 }
 
