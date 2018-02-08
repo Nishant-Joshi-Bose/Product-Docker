@@ -13,7 +13,7 @@ namespace ProductApp
 {
 using std::string;
 
-class CustomAudioSettingsManager: AudioSettingsManager
+class CustomAudioSettingsManager: public AudioSettingsManager
 {
 public:
     CustomAudioSettingsManager();
