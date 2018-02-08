@@ -25,7 +25,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.5-232+ed59d2f"
+    "selected_version": "Release/master/0.3.7-243+5bef58d"
   },
   {
     "name": "BoseOPKG-native",
@@ -48,7 +48,15 @@
     "selected_version": "Release/master/0.2.3-26+8cf9ea4"
   },
   {
+    "name": "CastleLibs-native",
+    "selected_version": "branches/castle-libs@2549"
+  },
+  {
     "name": "CastleLibs-qc8017_32",
+    "selected_version": "branches/castle-libs@2549"
+  },
+  {
+    "name": "CastleLibs-x86",
     "selected_version": "branches/castle-libs@2549"
   },
   {
@@ -57,7 +65,7 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-156+2fba04b"
+    "selected_version": "Release/master/0.3.1-161+ed41fb6"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -69,7 +77,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "PGC588_playbackRequest@bc14296fa5aade76c5f8ad9eda34ba3067c66642"
+    "selected_version": "master@5e4a1b5bb79bca67991ca8fda8f13cded7f9b4b1"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -77,7 +85,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.0.2-30+87e0b96"
+    "selected_version": "Release/master/0.1.1-38+2220e79"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -128,7 +136,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.3.5-270+5ecf463"
+    "selected_version": "Release/master/0.3.6-280+e23d828"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",

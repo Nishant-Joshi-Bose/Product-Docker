@@ -147,6 +147,15 @@ cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
 cp -a "$qss_dir/UEI/arch/${arch}/lib" "$opt_dir" || exit
 
+t=$(date +%s)
+put_script "$opt_dir/bin/set-default-time" <<EOF
+#!/bin/bash
+if (( \$(date +%s) < $t )); then
+    logger -s -t set-default-time Using default time $(date -u -d@$t)
+    date -s@$t
+fi
+EOF
+
 # Copy public keys in FS based on DEPLOY_ENV flag exported
 secure_dir=$opt_dir/etc/secure/
 mkdir -p "$secure_dir" || exit
