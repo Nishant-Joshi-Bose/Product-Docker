@@ -61,7 +61,6 @@ riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) |
 riviera_toolchain_dir=$(components get Riviera-Toolchain installed_location) || exit
 galapagosclient_dir=$(components get GalapagosClient-qc8017_32 installed_location) || exit
 httpproxy_dir=$(components get CastleHTTPProxy-qc8017_32 installed_location) || exit
-soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
@@ -105,22 +104,27 @@ v=$(make-version-string "$version_json" "{user}@{host} {localtime} {branch} {maj
 echo "$v" > "$opt_dir/etc/FS_VERSION" || exit
 echo "FS_VERSION \"$v\""
 
+# ----------------------------------------------------------------------------
+# Legacy SoundTouch-SDK stuff.  This will all go away soon.
+soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
 stfs=$soundtouch_sdk/fs
-cp "$stfs"/opt/Bose/BoseApp "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/BTSource "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/BT "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/BluetoothManager "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BLESetup "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BluetoothManager "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BoseApp "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BT "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BTSource "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
+cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/STSCertified "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/UpnpSource "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
-cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
-cp "$boselibs_dir"/services.json "$opt_dir/etc" || exit
 cp -a "$stfs"/opt/Bose/Xml "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
+# ----------------------------------------------------------------------------
+
+cp "$boselibs_dir"/services.json "$opt_dir/etc" || exit
 cp -a "$boselibs_dir/lib" "$opt_dir" || exit
 cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
