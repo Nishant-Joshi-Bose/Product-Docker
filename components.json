@@ -9,7 +9,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.7-243+5bef58d"
+    "selected_version": "Release/master/0.3.8-250+b7e7ef1"
   },
   {
     "name": "BoseOPKG-native",
@@ -30,6 +30,10 @@
   {
     "name": "CastleAudioPath-qc8017_32",
     "selected_version": "Release/Castle-Fork/0.2.5-20386"
+  },
+  {
+    "name": "CastleAudioPath-qc8017_64",
+    "selected_version": "Release/Castle-Fork/0.2.7-20452"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -77,7 +81,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@0e620bc3612554f421f6876d8307512071114ffa"
+    "selected_version": "master@5e4a1b5bb79bca67991ca8fda8f13cded7f9b4b1"
   },
   {
     "name": "CastleProductUIAssets",
@@ -124,7 +128,7 @@
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/1.3"
+    "selected_version": "Release/master/${RIVIERA_HSP_VERSION}"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -140,7 +144,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.3.6-280+e23d828"
+    "selected_version": "Continuous/master/0.3.6-296+71e655f"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
