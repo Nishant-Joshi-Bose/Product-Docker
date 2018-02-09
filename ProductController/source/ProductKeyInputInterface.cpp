@@ -252,6 +252,9 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
         {
             req.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_END_PRESS );
         }
+        BOSE_INFO( s_logger, "Blasting 0x%08x/%s (%s)", req.keyval(), req.codeset().c_str(),
+                    ( keyEvent.keystate() ==  LpmServiceMessages::KEY_PRESSED ) ? "PRESSED" : "RELEASED" );
+
         m_QSSClient->SendKey( req );
 
     }
