@@ -229,11 +229,9 @@ public:
 
     void SendInitialCapsData() override;
 
-    ///LightBarController
     std::unique_ptr<LightBar::LightBarController>         m_lightbarController;
 
 private:
-
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

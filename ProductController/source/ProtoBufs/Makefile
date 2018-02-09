@@ -7,7 +7,6 @@ RIVIERA_LPM_PROTO_DIR 		:= $(shell components get RivieraLpmService-$(sdk)      
 
 PROTO_SOURCES = ProductMessage.proto        \
                 ConfigurationStatus.proto   \
-                LightBarController.proto  	\
                 ProductSTS.proto            \
                 SystemInfo.proto            \
                 ProductSpeakerManager.proto \
