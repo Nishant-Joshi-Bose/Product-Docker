@@ -537,32 +537,25 @@ bool CustomProductLpmHardwareInterface::SendAdaptIQControl( ProductAdaptIQContro
 /// @name  CustomProductHardwareLpmInterface::SetStreamConfig
 ///
 /// @brief This method send setStreamConfig request to DSP,
-///         which includes mainStreamAudioSettings, inputRoute, and streamMix parameters
 ///
-/// @param string streamConfig
-/// Callback<IpcDspStreamConfigRespPayload_t> cb
+/// @param LpmServiceMessages::IpcDspStreamConfigReqPayload_t streamConfig
+/// @param Callback<IpcDspStreamConfigRespPayload_t> cb
 ///
 /// @return bool The method returns true when the setStreamConfig request was successfully sent.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductLpmHardwareInterface::SetStreamConfig( std::string& serializedAudioSettings, std::string& serializedInputRoute, const Callback<bool>& cb )
+bool CustomProductLpmHardwareInterface::SetStreamConfig( LpmServiceMessages::IpcDspStreamConfigReqPayload_t streamConfig, const Callback<bool>& cb )
 {
     if( isConnected( ) == false || GetLpmClient( ) == nullptr )
     {
         BOSE_ERROR( s_logger, "%s failed, as no connection is available.", __func__ );
-
         return false;
     }
-
-    auto respCb = [cb]( IpcDspStreamConfigRespPayload_t resp )
+    auto respCb = [cb]( LpmServiceMessages::IpcDspStreamConfigRespPayload_t resp )
     {
         cb.Send( ( resp.success() > 0 ) ? true : false );
     };
-    // TODO: PGC-218: Enable routing of setStreamConfig() message to DSP
-    // Convert serialized json string from APProduct into IpcDspStreamConfigReqPayload_t type
-    IpcDspStreamConfigReqPayload_t msg;
-    msg.set_inputroute( 1 );
-    GetLpmClient( )->SetStreamConfigRequest( msg, respCb, Ipc_Device_t::IPC_DEVICE_DSP );
+    GetLpmClient( )->SetStreamConfigRequest( streamConfig, respCb, Ipc_Device_t::IPC_DEVICE_DSP );
     return true;
 }
 

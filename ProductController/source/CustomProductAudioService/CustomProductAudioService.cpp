@@ -191,7 +191,31 @@ void CustomProductAudioService::FetchLatestAudioSettings( )
 void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCommon::ChannelParameters> channelParams, std::string serializedAudioSettings, std::string serializedInputRoute, const Callback<bool> cb )
 {
     BOSE_DEBUG( s_logger, __func__ );
-    m_ProductLpmHardwareInterface->SetStreamConfig( serializedAudioSettings, serializedInputRoute, cb );
+
+    // TODO: PGC-218: Enable routing of setStreamConfig() message to DSP
+    // Convert serialized json string from APProduct into IpcDspStreamConfigReqPayload_t type
+    LpmServiceMessages::IpcDspStreamConfigReqPayload_t streamConfig;
+    LpmServiceMessages::AudioSettings_t audioSettingsProto;
+    try
+    {
+        ProtoToMarkup::FromJson( serializedAudioSettings, &audioSettingsProto );
+    }
+    catch( const ProtoToMarkup::MarkupError &e )
+    {
+        BOSE_ERROR( s_logger, "Converting serializedAudioSettings to proto failed markup error - %s", e.what() );
+        cb.Send( false );
+        return;
+    }
+    streamConfig.mutable_audiosettings()->CopyFrom( audioSettingsProto );
+    streamConfig.set_inputroute( std::stoi( serializedInputRoute ) );
+    for( uint32_t i = 0; i < LpmServiceMessages::INPUTCHANNEL_COUNT; i++ )
+    {
+        streamConfig.mutable_channelmix( i )->set_volume( channelParams[i].m_volumLevel );
+        streamConfig.mutable_channelmix( i )->set_usermute( channelParams[i].m_userMuted );
+        streamConfig.mutable_channelmix( i )->set_location( ( LpmServiceMessages::PresentationLocation_t )channelParams[i].m_presentationLocation );
+        streamConfig.mutable_channelmix( i )->set_intent( ( LpmServiceMessages::StreamIntent_t )channelParams[i].m_streamIntent );
+    }
+    m_ProductLpmHardwareInterface->SetStreamConfig( streamConfig, cb );
     cb.Send( true );
 }
 
