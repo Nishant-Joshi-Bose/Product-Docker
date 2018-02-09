@@ -39,4 +39,6 @@
     <arg>/opt/Bose/etc/pts-handler</arg>
   </daemon>
 
+  <daemon name="Monaco"/>
+
 </ShepherdConfig>

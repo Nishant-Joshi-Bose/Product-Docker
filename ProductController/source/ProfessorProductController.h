@@ -44,6 +44,7 @@
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "MacAddressInfo.h"
 #include "BoseVersion.h"
+#include "LightBarController.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -226,6 +227,8 @@ public:
     bool IsSystemLanguageSet( ) const;
 
     void SendInitialCapsData() override;
+
+    std::unique_ptr<LightBar::LightBarController>         m_lightbarController;
 
 private:
 
