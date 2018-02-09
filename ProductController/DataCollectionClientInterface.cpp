@@ -23,7 +23,7 @@
 #include "SystemState.pb.h"
 #include "EndPointsError.pb.h"
 
-static DPrint s_logger( "DataCollectionInterface" );
+static DPrint s_logger( "DataCollectionClientInterface" );
 
 
 DataCollectionClientInterface::DataCollectionClientInterface( const std::shared_ptr<FrontDoorClientIF> &frontDoorClientIF ):
@@ -47,12 +47,14 @@ void DataCollectionClientInterface::Subscribe()
     AsyncCallback<WebInterface::balance> DataCollectionBalanceCb( std::bind( &DataCollectionClientInterface::ProcessBalanceState,
                                                                              this, std::placeholders::_1 ) , m_dataCollectionClientInterfaceTask );
 
-    m_frontDoorClientIF->RegisterNotification<WebInterface::balance>( "/audio/balance", DataCollectionBalanceCb );
+    m_frontDoorClientIF->RegisterNotification<DeviceManagerPb::DeviceState>( "/system/state", DataCollectionStateCb );
 
     m_frontDoorClientIF->RegisterNotification<ProductPb::AudioBassLevel>( "/audio/bass", DataCollectionbassCb );
 
-    m_frontDoorClientIF->RegisterNotification<DeviceManagerPb::DeviceState>( "/system/state", DataCollectionStateCb );
+    m_frontDoorClientIF->RegisterNotification<WebInterface::balance>( "/audio/balance", DataCollectionBalanceCb );
+
 }
+
 void DataCollectionClientInterface::HandleNowPlayingRequest( const SoundTouchInterface::NowPlaying& nPb, const DeviceManagerPb::DeviceState& ds )
 {
     BOSE_DEBUG( s_logger, "System State Process" );
@@ -67,10 +69,12 @@ void DataCollectionClientInterface::HandleNowPlayingRequest( const SoundTouchInt
     m_dataCollectionClient->SendData( dsPb , "system-state-changed" );
 
 }
+
 void DataCollectionClientInterface::GetCallbackError( const EndPointsError::Error& error )
 {
     BOSE_WARNING( s_logger, "%s: Error = (%d-%d) %s", __func__, error.code(), error.subcode(), error.message().c_str() );
 }
+
 void DataCollectionClientInterface::ProcessSystemState( const DeviceManagerPb::DeviceState& ds )
 {
 
@@ -79,7 +83,6 @@ void DataCollectionClientInterface::ProcessSystemState( const DeviceManagerPb::D
     AsyncCallback<EndPointsError::Error> errorCb( std::bind( &DataCollectionClientInterface::GetCallbackError ,
                                                              this, std::placeholders::_1 ) , m_dataCollectionClientInterfaceTask );
     m_frontDoorClientIF->SendGet<SoundTouchInterface::NowPlaying, EndPointsError::Error>( "/content/nowPlaying" , getNowPlayingReqCb, errorCb );
-
 
 }
 

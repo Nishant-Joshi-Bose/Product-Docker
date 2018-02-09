@@ -26,6 +26,7 @@ public:
     void ProcessBassState( const  ProductPb::AudioBassLevel& abl );
     void ProcessBalanceState( const  WebInterface::balance& b );
     void GetCallbackError( const EndPointsError::Error& );
+
 private:
 
     std::shared_ptr<DataCollectionClientIF>      m_dataCollectionClient;
