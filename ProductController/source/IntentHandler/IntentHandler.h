@@ -111,8 +111,7 @@ public:
 
     static bool IsIntentSpeakerPairing( KeyHandlerUtil::ActionType_t argument )
     {
-        return ( argument == ( uint16_t )Action::ACTION_PAIR_SPEAKERS );
-        return ( argument == ( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS );
+        return ( ( argument == ( uint16_t )Action::ACTION_PAIR_SPEAKERS )  || ( argument == ( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS ) );
     }
 
     static bool IsIntentPlayTVSource( KeyHandlerUtil::ActionType_t argument )
