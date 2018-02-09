@@ -30,6 +30,7 @@
 #include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProductKeyInputInterface.h"
+#include "SystemUtils.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -59,8 +60,7 @@ ProductKeyInputInterface::ProductKeyInputInterface( ProfessorProductController& 
     /// Product Controller Interface
     ///
     m_ProductTask( ProductController.GetTask( ) ),
-    m_ProductNotify( ProductController.GetMessageHandler( ) ),
-    m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
+    m_ProductNotify( ProductController.GetMessageHandler( ) ), m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
     ///
     /// Instantiation of the Key Handler
     ///
@@ -73,7 +73,6 @@ ProductKeyInputInterface::ProductKeyInputInterface( ProfessorProductController& 
     m_connected( false ),
     m_running( false )
 {
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,6 +98,8 @@ void ProductKeyInputInterface::Run( )
                                           std::placeholders::_1 ) );
 
     m_ProductLpmHardwareInterface->RegisterForLpmConnection( callback );
+
+    InitializeBlasterConfig( );
 
     m_running = true;
 }
@@ -273,6 +274,40 @@ void ProductKeyInputInterface::Stop( )
 
     m_running = false;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductKeyInputInterface::InitializeBlasterConfig
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProductKeyInputInterface::InitializeBlasterConfig( )
+{
+    BOptional<std::string> config = SystemUtils::ReadFile( KEY_CONFIGURATION_FILE_NAME );
+    if( !config )
+    {
+        BOSE_INFO( s_logger, "%s: Failed loading key blaster configuration file.", __FUNCTION__ );
+        return false;
+    }
+    BOSE_INFO( s_logger, "%s: Loaded blaster config.", __FUNCTION__ );
+
+    ProtoToMarkup::FromJson( *config, &m_blasterConfig, "BlasterConfiguration" );
+
+    // build the list of keys that get blasted for each device type
+    for( auto k : m_blasterConfig.keytable() )
+    {
+        if( k.blastdevices_size() && k.keylist_size() )
+        {
+            for( auto d : k.blastdevices() )
+            {
+                m_blasterMap[k.keylist( 0 )].push_back( d );
+                BOSE_INFO( s_logger, "%s: blast add %s for key %d\n", __FUNCTION__, d.c_str(), k.keylist( 0 ) );
+            }
+        }
+    }
+
+    return true;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///

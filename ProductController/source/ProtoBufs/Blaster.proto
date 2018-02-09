@@ -1,0 +1,49 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @file KeyConfiguration.proto
+///
+/// @brief This file describes the KeyConfiguration json file
+///
+/// Copyright 2018 Bose Corporation
+////////////////////////////////////////////////////////////////////////////////
+
+import "ProtoToMarkup/MarkupOptions.proto";
+
+package BlasterConfiguration;
+
+message BlasterConfiguration
+{
+    option (ignore_unexpected_markup) = true;
+    
+    // blaster configuration is contained within the key table
+    repeated BlasterTable keyTable = 1;
+}
+
+message BlasterTable
+{
+    option (ignore_unexpected_markup) = true;
+    
+    // this is a repeated field to maintain compatibility with the 
+    // KeyHandler component; in reality this will always be a list of 1
+    // since chord keys are handled internally by the remote
+    repeated uint32 keyList = 1;
+
+    // possible values are
+    // DEVICE_TYPE_TV
+    // DEVICE_TYPE_SMART_TV
+    // DEVICE_TYPE_GAME
+    // DEVICE_TYPE_CBL_SAT
+    // DEVICE_TYPE_BD_DVD
+    // DEVICE_TYPE_STREAMING
+    repeated string blastDevices = 2;
+}
+
+message Error
+{
+        option (ignore_unexpected_markup) = true;
+
+        required int32 code = 1;
+        required int32 subcode = 2;
+        required string message = 3;
+        required string guid = 4;
+}
+

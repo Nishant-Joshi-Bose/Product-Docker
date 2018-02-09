@@ -35,6 +35,7 @@
 #include "KeyHandler.h"
 #include "LpmServiceMessages.pb.h"
 #include "ProductMessage.pb.h"
+#include "Blaster.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -97,6 +98,8 @@ private:
     KeyHandlerUtil::KeyHandler                           m_KeyHandler;
     bool                                                 m_connected;
     bool                                                 m_running;
+    BlasterConfiguration::BlasterConfiguration           m_blasterConfig;
+    std::map<uint32_t, std::vector<std::string>>         m_blasterMap;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -115,6 +118,13 @@ private:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     void KeyInformationCallBack( const int keyAction );
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method initializes the key blasting configuration.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    bool InitializeBlasterConfig( );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -94,7 +94,8 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_1"],
         "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": [200]
+        "timeOutList": [200],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_STREAMING"]
     },
     {
         "action": "PRESET_SELECT_2",
