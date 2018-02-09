@@ -175,11 +175,6 @@ public:
         return false;
     }
 
-    virtual bool HandleLpmLowpowerSystemState()
-    {
-        return false;
-    }
-
     virtual bool HandleLpmLowPowerStatus( const ProductLpmLowPowerStatus& )
     {
         return false;
