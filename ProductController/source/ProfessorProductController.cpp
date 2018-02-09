@@ -639,8 +639,7 @@ bool ProfessorProductController::IsNetworkConnected( ) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 uint32_t ProfessorProductController::GetWifiProfileCount( ) const
 {
-    BOSE_INFO( s_logger, "Implementation needed for Professor" );
-    return 0;
+    return m_ProductNetworkManager->GetWifiProfileCount( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
