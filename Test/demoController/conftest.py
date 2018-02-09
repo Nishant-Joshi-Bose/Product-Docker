@@ -5,6 +5,7 @@ import pytest
 from CastleTestUtils.LoggerUtils.log_setup import get_logger
 from CastleTestUtils.DemoUtils.demoUtils import DemoUtils
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
+from ..commonData import keyConfig
 logger = get_logger(__name__)
 
 @pytest.fixture(scope='class', autouse=True)
@@ -44,3 +45,12 @@ def setDemo(request, frontDoor, demoUtils):
     if demoResponse == True:
         demoUtils.setDemoMode(False, True, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoMode(False)
+
+@pytest.fixture(scope='session')
+def get_config():
+    """
+    This fixture will return the keyConfig data from commonData.py
+    :return: keyConfig
+    """
+    data = keyConfig
+    return data

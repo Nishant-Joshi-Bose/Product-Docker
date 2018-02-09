@@ -16,14 +16,14 @@ Parent conftest.py for the Eddie repository
 
 import os
 import datetime
-
+import pytest
 from CastleTestUtils.LoggerUtils.log_setup import get_logger
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.RivieraUtils import rivieraCommunication
 from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import flash_device
+from commonData import keyConfig
 
-import pytest
 _log = None
 logger = get_logger(__name__)
 
@@ -276,3 +276,9 @@ def eddie_master_latest_directory(tmpdir):
     os.chdir(cwd)
     # Remove everything in the tmpdir
     tmpdir.remove()
+
+@pytest.fixture(scope="session")
+def keyConfig():
+    keyConfigData = None
+    keyConfigData = keyConfig["keyTable"]
+    return keyConfigData
