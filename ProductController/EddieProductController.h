@@ -16,7 +16,6 @@
 #include "NotifyTargetTaskIF.h"
 #include "ProtoPersistenceIF.h"
 #include "ProductControllerStateTop.h"
-#include "ProductControllerStateSetup.h"
 #include "ProductControllerStateNetworkStandby.h"
 #include "ProductControllerStateLowPowerStandby.h"
 #include "ProductControllerStateLowPowerStandbyTransition.h"
