@@ -71,6 +71,7 @@ castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 install
 castlepassport_dir=$(components get CastlePassport-qc8017_32 installed_location) || exit
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
 cli_dir=$(components get CastleCli-qc8017_32 installed_location) || exit
+webkit_dir=$(components get Webkit installed_location) || exit
 frontdoor_dir=$(components get FrontDoor-qc8017_32 installed_location) || exit
 qss_dir=$(components get A4VQuickSetService installed_location) || exit
 boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
@@ -181,6 +182,7 @@ cp "$audiopath_dir/bin/lisa/libDspPlayback.so" "$opt_dir/bin" || exit
 "$shepherd_dir/stage" "$opt_dir" || exit
 "$lpmservice_dir/stage" "$opt_dir" || exit
 "$cli_dir/stage" "$opt_dir" || exit
+"$webkit_dir/stage" "$opt_dir" || exit
 "$frontdoor_dir/stage" "$opt_dir" || exit
 "$galapagosclient_dir/stage" "$opt_dir" || exit
 
