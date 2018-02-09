@@ -232,12 +232,38 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
         return;
     }
 
-    ///
-    /// Feed the key into the key handler.
-    ///
-    m_KeyHandler.HandleKeys( keyEvent.keyorigin( ),
-                             keyEvent.keystate( ),
-                             keyEvent.keyid( ) );
+    std::string testDev = "DEVICE_TYPE_TV";
+    std::string testCodeset = "T2051";
+    if( IsBlastedKey( keyEvent.keyid(), testDev ) )
+    {
+        ///
+        /// This key should be blasted
+        ///
+        QSSMSG::BoseKeyReqMessage_t req;
+
+        req.set_keyval( keyEvent.keyid() );
+        req.set_codeset( testCodeset );
+
+        if( keyEvent.keystate() ==  LpmServiceMessages::KEY_PRESSED )
+        {
+            req.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_CONTINUOUS_PRESS );
+        }
+        else
+        {
+            req.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_END_PRESS );
+        }
+        m_QSSClient->SendKey( req );
+
+    }
+    else
+    {
+        ///
+        /// Feed the key into the key handler.
+        ///
+        m_KeyHandler.HandleKeys( keyEvent.keyorigin( ),
+                                 keyEvent.keystate( ),
+                                 keyEvent.keyid( ) );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -285,7 +311,7 @@ bool ProductKeyInputInterface::InitializeBlasterConfig( )
     BOptional<std::string> config = SystemUtils::ReadFile( KEY_CONFIGURATION_FILE_NAME );
     if( !config )
     {
-        BOSE_INFO( s_logger, "%s: Failed loading key blaster configuration file.", __FUNCTION__ );
+        BOSE_ERROR( s_logger, "%s: Failed loading key blaster configuration file.", __FUNCTION__ );
         return false;
     }
     BOSE_INFO( s_logger, "%s: Loaded blaster config.", __FUNCTION__ );
@@ -305,9 +331,43 @@ bool ProductKeyInputInterface::InitializeBlasterConfig( )
         }
     }
 
+    m_QSSClient = A4VQuickSetServiceClientFactory::Create( "ProductKeyInputInterface", m_ProductTask );
+    if( !m_QSSClient )
+    {
+        BOSE_ERROR( s_logger, "%s: Failed loading key blaster configuration file.", __FUNCTION__ );
+        return false;
+    }
+
+    m_QSSClient->Connect( []( bool connected ) {} );
+
     return true;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductKeyInputInterface::IsBlastedKey
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProductKeyInputInterface::IsBlastedKey( uint32_t key, std::string& devType )
+{
+    auto entry = m_blasterMap.find( key );
+
+    if( entry == m_blasterMap.end() )
+    {
+        // key not in map
+        return false;
+    }
+
+    auto devList = entry->second;
+    std::vector<std::string>::iterator it = std::find( devList.begin(), devList.end(), devType );
+    if( it == devList.end() )
+    {
+        // device not in list for key
+        return false;
+    }
+
+    return true;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
