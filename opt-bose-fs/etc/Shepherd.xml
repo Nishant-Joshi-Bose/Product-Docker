@@ -1,8 +1,6 @@
 <ShepherdConfig>
   <daemon name="Professor"/>
 
-  <daemon name="Monaco"/>
-
   <daemon name="avahi-daemon"
           exe="start-avahi"/>
 
@@ -40,5 +38,7 @@
   <daemon name="PtsServer">
     <arg>/opt/Bose/etc/pts-handler</arg>
   </daemon>
+
+  <daemon name="Monaco"/>
 
 </ShepherdConfig>

@@ -1,4 +1,7 @@
 #!/bin/sh
-export WPE_FBDEV=/dev/fb0 
+
+# Change Output to HDMI on Professor;
+# Currently not working due to HDMI driver control
+#export WPE_FBDEV=/dev/fb0 
 
 exec /opt/Bose/webkit/run_wpe.sh MONACO 1.0
