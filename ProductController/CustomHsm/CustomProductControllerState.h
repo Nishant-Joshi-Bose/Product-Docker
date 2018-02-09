@@ -155,6 +155,12 @@ public:
     {
         return false;
     }
+
+    virtual bool HandleIntentSystemInfoMode( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
     virtual bool HandleIntentVolume( KeyHandlerUtil::ActionType_t result )
     {
         return false;
@@ -176,11 +182,6 @@ public:
     }
 
     virtual bool HandleLpmInterfaceState( bool isConnected )
-    {
-        return false;
-    }
-
-    virtual bool HandleLpmLowpowerSystemState()
     {
         return false;
     }

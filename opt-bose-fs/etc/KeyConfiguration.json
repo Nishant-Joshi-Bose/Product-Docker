@@ -40,6 +40,7 @@
 
     {"origin": 0, "keyEvent": 5, "keyList": [3], "timeOutList": [], "action": 50, "comment": "Console: VolumeUp(+) release(keyEvent: Release Anyways ---> Cancel Ramp up"},
     {"origin": 0, "keyEvent": 5, "keyList": [5], "timeOutList": [], "action": 51, "comment": "Console: VolumeDown(-) release(keyEvent: Release Anyways ---> Cancel Ramp down"},
+    {"origin": 0, "keyEvent": 2, "keyList": [3,5], "timeOutList": [5020], "action": 52, "comment": "Console: VolumeUp+VolumeDown press and release during count down ---> System Info/PTS"},
 
     {"origin": 0, "keyEvent": 3, "keyList": [2,3], "timeOutList": [5,1000], "action": 111, "comment": "Console: AUX+VolumeUp press and hold will generate generate first event at 5ms and repeat every 1000ms ---> Manual Update Count down"},
     {"origin": 0, "keyEvent": 5, "keyList": [2], "timeOutList": [], "action": 121, "comment": "Console: Release of AUX will generate ---> Manual Update Cancel"},
@@ -57,7 +58,6 @@
     {"origin": 0, "keyEvent": 5, "keyList": [1], "timeOutList": [], "action": 124, "comment": "Console: Release of Bluetooth will generate ---> Toggle WiFi Radio Cancel"},
     {"origin": 0, "keyEvent": 5, "keyList": [4], "timeOutList": [], "action": 124, "comment": "Console: Release of MFB will generate ---> Toggle WiFi Radio Cancel"},
 
-    {"origin": 0, "keyEvent": 2, "keyList": [3,5], "timeOutList": [5020], "action": 105, "comment": "Console: VolumeUp+VolumeDown press and release during count down ---> System Info"},
     {"origin": 0, "keyEvent": 3, "keyList": [3,5], "timeOutList": [5,1000], "action": 115, "comment": "Console: VolumeUp+VolumeDown press and hold will generate first event at 5ms and repeat every 1000ms ---> System Info Count down"},
     {"origin": 0, "keyEvent": 5, "keyList": [3], "timeOutList": [], "action": 125, "comment": "Console: Release of VolumeUP will generate ---> System Info Cancel"},
     {"origin": 0, "keyEvent": 5, "keyList": [5], "timeOutList": [], "action": 125, "comment": "Console: Release of VolumeDown will generate ---> System Info Cancel"}
