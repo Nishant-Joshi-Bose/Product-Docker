@@ -150,6 +150,12 @@ public:
     {
         return false;
     }
+
+    virtual bool HandleIntentSystemInfoMode( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
     virtual bool HandleIntentVolume( KeyHandlerUtil::ActionType_t result )
     {
         return false;
