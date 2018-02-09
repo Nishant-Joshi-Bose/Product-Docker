@@ -294,7 +294,7 @@ void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::Ne
 
 bool EddieProductController::IsNetworkConfigured() const
 {
-    return ( m_bluetoothSinkList.get().devices_size() || m_wifiProfilesCount.get() || m_cachedStatus.get().isprimaryup() );
+    return ( m_wifiProfilesCount.get() || m_cachedStatus.get().isprimaryup() );
 }
 
 bool EddieProductController::IsNetworkConnected() const
