@@ -460,6 +460,11 @@ void ProfessorProductController::Run( )
     }
 
     ///
+    /// Set up LightBarController
+    ///
+    m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_ProductLpmHardwareInterface->GetLpmClient() ) );
+
+    ///
     /// Run all the submodules.
     ///
     m_ProductLpmHardwareInterface->Run( );
@@ -490,6 +495,11 @@ void ProfessorProductController::Run( )
     /// Initialize and register intents for key actions for the Product Controller.
     ///
     m_IntentHandler.Initialize( );
+
+    ///
+    /// Register LPM events for LightBar
+    ///
+    m_lightbarController->RegisterLpmEvents();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,0 +1,134 @@
+#!/bin/bash
+#
+# Create an IPK file for installing Monaco with opkg.
+#
+# To install:
+#   opkg install -d bose monaco.ipk
+#
+# The file /etc/opkg/opkg.conf should contain this line:
+#   dest bose /opt/Bose
+#
+# To uninstall:
+#   opkg remove monaco
+#
+this=${0##*/} # this script's name
+
+cfg=Release
+
+tryhelp () {
+    echo >&2 "Try '$this --help' for more information."
+    exit 1
+}
+opts=$(getopt --name "$this" --shell sh \
+    -o uh \
+    -l "help" \
+    -- "$@") || tryhelp
+eval set -- "$opts"
+while :; do
+    arg="$1"; shift
+    case "$arg" in
+    (--help | -h)
+        cat <<EOF
+Usage: $this [options]
+
+Create an IPK file for installing Monaco with opkg.
+
+Options:
+EOF
+        exit 0
+        ;;
+
+    (--) break ;;
+    (*)  echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
+    esac
+done
+
+if (( $# != 0 )); then
+    echo >&2 "$this: unexpected argument '$1'"
+    tryhelp
+fi
+
+function put_script {
+    local file="$1"; shift
+    cat "$@" >"$file" || exit
+    chmod 755 "$file" || exit
+}
+
+here=$(cd "$(dirname $0)" && echo "$PWD") || exit
+wspace=$(cd "$here/.." && echo "$PWD") || exit
+
+monaco_dir=$(components get BoseWebMonaco installed_location) || exit
+monaco_ver=$(components get BoseWebMonaco selected_version) || exit
+monaco_ver=${monaco_ver##*/}
+
+stage=$wspace/builds/$cfg/monaco-ipk-stage
+rm -rf "$stage"
+echo "Stage directory $stage"
+
+output_dir=$wspace/builds/$cfg
+opt_dir=$stage/Bose
+mkdir -p "$output_dir" "$opt_dir" || exit
+
+echo "Package version \"$monaco_ver\""
+cp -rf "$monaco_dir"/monaco "$opt_dir/" || exit
+
+PackageName=monaco
+
+cat >"$stage/control" <<EOF || exit
+Package: $PackageName
+Version: $monaco_ver
+Description: Bose Web Monaco Package version $monaco_ver
+ Bose Web Monaco
+Section: web browser app
+Priority: required
+License: Commercial
+Architecture: armv7a-vfp-neon
+OE: web browser app
+Homepage: http://www.bose.com/
+#Depends: libc6 (>= 2.21)
+Source: None
+EOF
+
+# Installer scripts
+put_script "$stage/postinst" <<EOF
+#!/bin/sh
+echo "monaco postinst"
+# Set Progress End
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 100
+exit 0
+EOF
+
+put_script "$stage/postrm" <<EOF
+#!/bin/sh
+echo "monaco postrm"
+EOF
+
+put_script "$stage/preinst" <<EOF
+#!/bin/sh
+echo "monaco preinst"
+# Set Progress Start
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
+echo "Stopping dyz-shm"
+pkill dyz-shm
+exit 0
+EOF
+
+put_script "$stage/prerm" <<EOF
+#!/bin/sh
+echo "monaco prerm"
+EOF
+
+# -----------------------------------------------------------------------------
+# Stage area is complete.  Package it into a *.ipk file.
+
+cd "$stage" || exit
+tar --owner=0 --group=0 -czf control.tar.gz control pre* post* || exit
+tar --owner=0 --group=0 -czf data.tar.gz -C "$opt_dir" . || exit
+echo "2.0" > debian-binary || exit
+
+ipk_dir=$wspace/builds/$cfg
+ipk=$ipk_dir/monaco.ipk
+mkdir -p "$ipk_dir" || exit
+rm -f "$ipk"
+ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
+echo "Created $ipk"
