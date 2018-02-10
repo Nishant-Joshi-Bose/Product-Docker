@@ -81,6 +81,10 @@ public:
     bool Run( );
     void Stop( );
     void HandleMessage( ProductMessage& message );
+    uint32_t GetWifiProfileCount() const
+    {
+        return m_WifiProfileCount;
+    }
 
 private:
 
@@ -93,6 +97,7 @@ private:
     NotifyTargetTaskIF*                m_ProductTask;
     Callback< ProductMessage >         m_ProductNotify;
     std::shared_ptr<FrontDoorClientIF> m_FrontDoorClient;
+    uint32_t                           m_WifiProfileCount;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @file      ProfessorProductController.cpp
 ///
@@ -461,6 +461,11 @@ void ProfessorProductController::Run( )
     }
 
     ///
+    /// Set up LightBarController
+    ///
+    m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_ProductLpmHardwareInterface->GetLpmClient() ) );
+
+    ///
     /// Run all the submodules.
     ///
     m_ProductLpmHardwareInterface->Run( );
@@ -497,6 +502,11 @@ void ProfessorProductController::Run( )
     /// Initialize and register intents for key actions for the Product Controller.
     ///
     m_IntentHandler.Initialize( );
+
+    ///
+    /// Register LPM events for LightBar
+    ///
+    m_lightbarController->RegisterLpmEvents();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -639,8 +649,7 @@ bool ProfessorProductController::IsNetworkConnected( ) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 uint32_t ProfessorProductController::GetWifiProfileCount( ) const
 {
-    BOSE_INFO( s_logger, "Implementation needed for Professor" );
-    return 0;
+    return m_ProductNetworkManager->GetWifiProfileCount( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -757,20 +766,21 @@ std::string const& ProfessorProductController::GetProductVariant( ) const
 ///
 /// @name   ProfessorProductController::GetProductModel
 ///
-/// @return This method returns the std::string const& value to be used for the Product "Model" field
+/// @return This method returns the std::string const& value to be used for the Product "productType" field
 ///
 /// @TODO - Below value may be available through HSP APIs
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 std::string const& ProfessorProductController::GetProductModel() const
 {
-    static std::string productModel = "SoundTouch 20";
+    static std::string productModel = "professor";
 
-    if( auto model = MfgData::Get( "model" ) )
+    if( auto model = MfgData::Get( "productType" ) )
     {
         productModel =  *model;
     }
 
+    // @TODO PGC-757 replace the manufacturing name with the marketing name.
     return productModel;
 }
 
@@ -887,6 +897,7 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
 {
     RegisterCommonEndPoints( );
     RegisterNowPlayingEndPoint( );
+    m_lightbarController->RegisterLightBarEndPoints();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
