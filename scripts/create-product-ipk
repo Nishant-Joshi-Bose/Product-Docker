@@ -285,7 +285,7 @@ for i in "$stage"/Bose/{lib,bin}/*; do
         (*", stripped")
             echo >&2 "$this: (warning) No debug symbols: $i"
             ;;
-        (*", ARM aarch64, "*", not stripped")
+        (*", ARM aarch64, "*", not stripped" | *" 64-bit "*", not stripped")
             cp "$i" "$unstripped_dir" || exit
             # `strip` fails without an error message if the file is empty
             if ! "${tool64_prefix}strip" "$i"; then
