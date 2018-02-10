@@ -42,6 +42,7 @@
 #include "ProductControllerStatePlayingSelectedSetup.h"
 #include "ProductControllerStatePlayingSelectedSetupNetwork.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
+#include "ProductControllerStatePlayingSelectedSetupExiting.h"
 #include "ProductControllerStateStoppingStreams.h"
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
@@ -392,6 +393,7 @@ private:
     ProductControllerStatePlayingSelectedSetup              m_ProductControllerStatePlayingSelectedSetup;
     ProductControllerStatePlayingSelectedSetupNetwork       m_ProductControllerStatePlayingSelectedSetupNetwork;
     ProductControllerStatePlayingSelectedSetupOther         m_ProductControllerStatePlayingSelectedSetupOther;
+    ProductControllerStatePlayingSelectedSetupExiting       m_ProductControllerStatePlayingSelectedSetupExiting;
     ProductControllerStateStoppingStreams                   m_ProductControllerStateStoppingStreams;
     ProductControllerStatePlayableTransition                m_ProductControllerStatePlayableTransition;
     ProductControllerStatePlayableTransitionIdle            m_ProductControllerStatePlayableTransitionIdle;

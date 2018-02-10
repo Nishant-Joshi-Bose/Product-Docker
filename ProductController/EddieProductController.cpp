@@ -58,6 +58,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_ProductControllerStatePlayingSelectedSetup( GetHsm(), &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP ),
     m_ProductControllerStatePlayingSelectedSetupNetwork( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK ),
     m_ProductControllerStatePlayingSelectedSetupOther( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_OTHER ),
+    m_ProductControllerStatePlayingSelectedSetupExiting( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING ),
     m_ProductControllerStateStoppingStreams( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS ),
     m_ProductControllerStatePlayableTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION ),
     m_ProductControllerStatePlayableTransitionIdle( GetHsm(), &m_ProductControllerStatePlayableTransition, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE ),
@@ -105,6 +106,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     GetHsm().AddState( &m_ProductControllerStatePlayingSelectedSetup );
     GetHsm().AddState( &m_ProductControllerStatePlayingSelectedSetupNetwork );
     GetHsm().AddState( &m_ProductControllerStatePlayingSelectedSetupOther );
+    GetHsm().AddState( &m_ProductControllerStatePlayingSelectedSetupExiting );
     GetHsm().AddState( &m_ProductControllerStateStoppingStreams );
     GetHsm().AddState( &m_ProductControllerStatePlayableTransition );
     GetHsm().AddState( &m_ProductControllerStatePlayableTransitionIdle );
@@ -294,7 +296,7 @@ void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::Ne
 
 bool EddieProductController::IsNetworkConfigured() const
 {
-    return ( m_wifiProfilesCount.get() || m_cachedStatus.get().isprimaryup() );
+    return ( GetWifiProfileCount() || m_cachedStatus.get().isprimaryup() );
 }
 
 bool EddieProductController::IsNetworkConnected() const
