@@ -168,17 +168,6 @@ else
     cp -r "$wspace/scripts/keys/development/CACerts/" "$secure_dir" || exit
 fi
 
-marge_url=https://streamingint.bose.com
-stats_url=https://eventsdev.api.bosecm.com
-sw_update_url=https://worldwide.bose.com/updates/soundtouch-test
-
-"$u/simple-xml-edit" \
-    "$opt_dir/etc/SoundTouchSdkPrivateCfg.xml" \
-    SoundTouchSdkPrivateCfg.margeServerUrl="$marge_url" \
-    SoundTouchSdkPrivateCfg.statsServerUrl="$stats_url" \
-    SoundTouchSdkPrivateCfg.swUpdateUrl="$sw_update_url" \
-    || exit
-
 cp "$audiopath_dir/bin/lisa/libDspPlayback.so" "$opt_dir/bin" || exit
 
 # ----------------------------------------------------------------------------
