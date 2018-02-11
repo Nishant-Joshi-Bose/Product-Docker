@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.6.40929.2672236"
+    "selected_version": "Release/Castle-Fork/0.3.8.41015.2682265"
   },
   {
     "name": "bose-opkg-utils",
@@ -25,7 +25,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.7-243+5bef58d"
+    "selected_version": "Release/master/0.3.8-250+b7e7ef1"
   },
   {
     "name": "BoseOPKG-native",
@@ -41,11 +41,15 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/develop/0.2.1-32+59feb17"
+    "selected_version": "Release/develop/0.2.1-48+11dcb95"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.2.5-20386"
+    "selected_version": "Release/Castle-Fork/0.2.7-20452"
+  },
+  {
+    "name": "CastleAudioPath-qc8017_64",
+    "selected_version": "Release/Castle-Fork/0.2.7-20452"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -85,11 +89,11 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/0.3.5-93+a323e45"
+    "selected_version": "Release/master/0.3.6-102+8b058cd"
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.1.1-38+2220e79"
+    "selected_version": "Release/master/0.1.1-56+508fe9a"
   },
   {
     "name": "KeyHandler-qc8017_32",
