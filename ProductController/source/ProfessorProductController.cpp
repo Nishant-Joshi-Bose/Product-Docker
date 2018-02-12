@@ -32,7 +32,6 @@
 #include "CustomProductLpmHardwareInterface.h"
 #include "CustomProductAudioService.h"
 #include "ProductKeyInputInterface.h"
-#include "ProductEdidInterface.h"
 #include "ProductNetworkManager.h"
 #include "ProductSystemManager.h"
 #include "ProductCommandLine.h"
@@ -125,7 +124,7 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductNetworkManager( nullptr ),
     m_ProductCommandLine( nullptr ),
     m_ProductKeyInputInterface( nullptr ),
-    m_ProductEdidInterface( nullptr ),
+    m_ProductCecHelper( nullptr ),
     m_ProductAdaptIQManager( nullptr ),
     m_ProductAudioService( nullptr ),
 
@@ -437,7 +436,7 @@ void ProfessorProductController::Run( )
     BOSE_DEBUG( s_logger, "The Professor Product Controller instantiating and running its modules." );
 
     m_ProductLpmHardwareInterface = std::make_shared< CustomProductLpmHardwareInterface >( *this );
-    m_ProductEdidInterface        = std::make_shared< ProductEdidInterface              >( *this );
+    m_ProductCecHelper            = std::make_shared< ProductCecHelper                  >( *this );
     m_ProductSystemManager        = std::make_shared< ProductSystemManager              >( *this );
     m_ProductNetworkManager       = std::make_shared< ProductNetworkManager             >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
@@ -451,7 +450,7 @@ void ProfessorProductController::Run( )
         m_ProductAudioService         == nullptr ||
         m_ProductCommandLine          == nullptr ||
         m_ProductKeyInputInterface    == nullptr ||
-        m_ProductEdidInterface        == nullptr ||
+        m_ProductCecHelper            == nullptr ||
         m_ProductAdaptIQManager       == nullptr )
     {
         BOSE_CRITICAL( s_logger, "-------- Product Controller Failed Initialization ----------" );
@@ -459,6 +458,11 @@ void ProfessorProductController::Run( )
 
         return;
     }
+
+    ///
+    /// Set up LightBarController
+    ///
+    m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_ProductLpmHardwareInterface->GetLpmClient() ) );
 
     ///
     /// Run all the submodules.
@@ -469,7 +473,7 @@ void ProfessorProductController::Run( )
     m_ProductAudioService        ->Run( );
     m_ProductCommandLine         ->Run( );
     m_ProductKeyInputInterface   ->Run( );
-    m_ProductEdidInterface       ->Run( );
+    m_ProductCecHelper           ->Run( );
     m_ProductAdaptIQManager      ->Run( );
 
     ///
@@ -497,6 +501,11 @@ void ProfessorProductController::Run( )
     /// Initialize and register intents for key actions for the Product Controller.
     ///
     m_IntentHandler.Initialize( );
+
+    ///
+    /// Register LPM events for LightBar
+    ///
+    m_lightbarController->RegisterLpmEvents();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -556,14 +565,14 @@ std::shared_ptr< ProductAdaptIQManager >& ProfessorProductController::GetAdaptIQ
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::GetEdidInterface
+/// @name   ProfessorProductController::GetCecHelper
 ///
-/// @return This method returns a shared pointer to the ProductEdidInterface instance.
+/// @return This method returns a shared pointer to the ProductCecHelper instance.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::shared_ptr< ProductEdidInterface >& ProfessorProductController::GetEdidInterface( )
+std::shared_ptr< ProductCecHelper >& ProfessorProductController::GetCecHelper( )
 {
-    return m_ProductEdidInterface;
+    return m_ProductCecHelper;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -887,6 +896,7 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
 {
     RegisterCommonEndPoints( );
     RegisterNowPlayingEndPoint( );
+    m_lightbarController->RegisterLightBarEndPoints();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1475,7 +1485,7 @@ void ProfessorProductController::Wait( )
     m_ProductNetworkManager      ->Stop( );
     m_ProductCommandLine         ->Stop( );
     m_ProductKeyInputInterface   ->Stop( );
-    m_ProductEdidInterface       ->Stop( );
+    m_ProductCecHelper           ->Stop( );
     m_ProductAdaptIQManager      ->Stop( );
 }
 

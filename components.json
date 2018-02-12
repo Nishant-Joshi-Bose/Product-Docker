@@ -40,6 +40,10 @@
     "selected_version": "Release/master/0.1.0-4+31ebf8c"
   },
   {
+    "name": "BoseWebMonaco",
+    "selected_version": "Release/develop/0.2.1-32+59feb17"
+  },
+  {
     "name": "CastleAudioPath-qc8017_32",
     "selected_version": "Release/Castle-Fork/0.2.5-20386"
   },
@@ -61,7 +65,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.3-36+4b737e3"
+    "selected_version": "Continuous/master/0.3.3-38+042bce8"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -145,5 +149,9 @@
   {
     "name": "unittest-cpp-qc8017_32",
     "selected_version": "Release/bose-master/2.0.0-3+167ffec"
+  },
+  {
+    "name": "Webkit",
+    "selected_version": "Release/master/0.3.1-24+472ac23"
   }
 ]
