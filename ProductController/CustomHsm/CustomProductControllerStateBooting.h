@@ -25,7 +25,6 @@ public:
     virtual ~CustomProductControllerStateBooting() override
     {
     }
-    void PossiblyGoToNextState() override;
     void HandleStateExit() override;
 };
 } /// namespace ProductApp
