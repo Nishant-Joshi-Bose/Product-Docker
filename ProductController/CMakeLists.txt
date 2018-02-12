@@ -22,6 +22,7 @@ ADD_EXECUTABLE(Eddie
   ${CUSTOM_HSM_DIR}/CustomProductControllerState.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateBooting.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateOn.cpp
+  ${CUSTOM_HSM_DIR}/CustomProductControllerStateLowPowerStandby.cpp
   ProductCliClient.cpp
   EddieProductController.cpp
   Main.cpp
