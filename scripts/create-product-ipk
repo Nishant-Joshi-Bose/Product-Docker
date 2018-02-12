@@ -67,6 +67,7 @@ protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
 avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
 swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 audiopath_dir=$(components get CastleAudioPath-qc8017_32 installed_location) || exit
+audiopath64_dir=$(components get CastleAudioPath-qc8017_64 installed_location) || exit
 castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
 castlepassport_dir=$(components get CastlePassport-qc8017_32 installed_location) || exit
 wifi_setup_webpage_dir=$(components get WiFi-Setup-Webpage installed_location) || exit
@@ -78,9 +79,9 @@ productuiassets_dir=$(components get CastleProductUIAssets installed_location) |
 frontdoor_dir=$(components get FrontDoor-qc8017_32 installed_location) || exit
 boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
 
-arch=arm-oemllib32-linux
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
-tool_prefix=$sysroot/usr/bin/$arch/$arch-
+tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
+tool64_prefix=$sysroot/usr/bin/aarch64-oe-linux/aarch64-oe-linux-
 
 stage=$wspace/builds/$cfg/product-ipk-stage
 rm -rf "$stage"
@@ -157,7 +158,8 @@ cp "$audiopath_dir/bin/eddie/libDspPlayback.so" "$opt_dir/bin" || exit
 "$avs_dir/stage" "$opt_dir" || exit
 "$swup_dir/stage" "$opt_dir" || exit
 "$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
-"$audiopath_dir/stage" "$opt_dir" --with-vfe || exit
+"$audiopath_dir/stage" "$opt_dir" || exit
+"$audiopath64_dir/stage" "$opt_dir" --only-vfe || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlepassport_dir/stage" "$opt_dir" || exit
 "$shepherd_dir/stage" "$opt_dir" || exit
@@ -282,6 +284,14 @@ for i in "$stage"/Bose/{lib,bin}/*; do
     case "$type" in
         (*", stripped")
             echo >&2 "$this: (warning) No debug symbols: $i"
+            ;;
+        (*", ARM aarch64, "*", not stripped" | *" 64-bit "*", not stripped")
+            cp "$i" "$unstripped_dir" || exit
+            # `strip` fails without an error message if the file is empty
+            if ! "${tool64_prefix}strip" "$i"; then
+                echo >&2 "$this: Failed to strip $i"
+                exit 1
+            fi
             ;;
         (*", not stripped")
             cp "$i" "$unstripped_dir" || exit

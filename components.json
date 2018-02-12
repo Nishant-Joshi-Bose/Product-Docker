@@ -32,6 +32,10 @@
     "selected_version": "Release/Castle-Fork/0.2.5-20386"
   },
   {
+    "name": "CastleAudioPath-qc8017_64",
+    "selected_version": "Release/Castle-Fork/0.2.7-20452"
+  },
+  {
     "name": "CastleCli-qc8017_32",
     "selected_version": "Release/master/0.2.3-26+8cf9ea4"
   },
@@ -144,7 +148,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.8.41015.2682265"
+    "selected_version": "Continuous/Castle-Fork/2018-02-09_1947"
   },
   {
     "name": "Webkit",
