@@ -233,6 +233,8 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
         return;
     }
 
+#if 0
+// DON'T REMOVE; ONCE THE SOURCE API IS COMPLETE THIS WILL BE ENABLED AND COMPLETED
     std::string testDev = "DEVICE_TYPE_TV";
     std::string testCodeset = "T2778";
     if( IsBlastedKey( keyEvent.keyid(), testDev ) )
@@ -260,6 +262,7 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
 
     }
     else
+#endif
     {
         ///
         /// Feed the key into the key handler.
