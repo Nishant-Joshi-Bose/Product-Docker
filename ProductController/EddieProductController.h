@@ -230,7 +230,6 @@ public:
 ////////////////////////////////////////////////////////////////////////////////
     bool IsCAPSReady() const;
     bool IsNetworkModuleReady() const;
-    bool IsLpmReady() const;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  IsSTSReady
@@ -417,7 +416,6 @@ private:
     std::unique_ptr<DisplayController>          m_displayController;
     IntentHandler                               m_IntentHandler;
     bool                                        m_isCapsReady = false;
-    bool                                        m_isLpmReady  = false;
     bool                                        m_isNetworkModuleReady  = false;
     bool                                        m_isBLEModuleReady  = false;
 

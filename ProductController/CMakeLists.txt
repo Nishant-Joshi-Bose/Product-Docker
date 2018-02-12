@@ -46,6 +46,7 @@ TARGET_LINK_LIBRARIES(Eddie
   CastleProductControllerCommon
   DataCollectionClient
   LpmClient
+  HttpInterface
   FrontDoorClient
   NetworkServiceClient
   KeyHandler
@@ -56,7 +57,7 @@ TARGET_LINK_LIBRARIES(Eddie
   CliClient
   AudioLibs
   PassportClient
-  SASSFrontDoorServiceProto
+  #SASSFrontDoorServiceProto # TODO: SASS integration
   SoftwareUpdateAPI
   STS
   ShelbyUtils
@@ -65,7 +66,6 @@ TARGET_LINK_LIBRARIES(Eddie
   jsoncpp
   protobuf
   TinyXml
-  libHttpInterface.a
   pthread
   rt
   cap

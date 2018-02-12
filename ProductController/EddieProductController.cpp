@@ -503,12 +503,6 @@ bool EddieProductController::IsCAPSReady() const
     return m_isCapsReady;
 }
 
-bool EddieProductController::IsLpmReady() const
-{
-    BOSE_DEBUG( s_logger, "%s:%s", __func__, m_isLpmReady ? "Yes" : "No" );
-    return m_isLpmReady;
-}
-
 bool EddieProductController::IsNetworkModuleReady() const
 {
     bool ready = m_isNetworkModuleReady and m_cachedStatus.is_initialized() and m_wifiProfilesCount.is_initialized();
@@ -707,31 +701,17 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
     BOSE_INFO( s_logger, "%s", __func__ );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// LPM status messages are handled at this point.
+    /// LPM status messages has both Common handling and Professor-specific handling
     ///////////////////////////////////////////////////////////////////////////////////////////////
     if( productMessage.has_lpmstatus( ) )
     {
-        if( productMessage.lpmstatus( ).has_connected( ) )
+        // First do the Eddie-specific stuff, i.e., register callbacks and thermal task control
+        if( productMessage.lpmstatus( ).has_connected( ) && productMessage.lpmstatus( ).connected( ) )
         {
-            m_isLpmReady = productMessage.lpmstatus( ).connected( );
-
-            if( m_isLpmReady )
-            {
-                /// RegisterLpmEvents and RegisterKeyHandler
-                RegisterLpmEvents();
-                RegisterKeyHandler();
-            }
-
-            BOSE_DEBUG( s_logger, "An LPM Hardware %s message was received.",
-                        m_isLpmReady ? "up" : "down" );
-
-            GetHsm().Handle<bool>( &CustomProductControllerState::HandleLpmState, m_isLpmReady );
+            /// RegisterLpmEvents and RegisterKeyHandler
+            RegisterLpmEvents();
+            RegisterKeyHandler();
         }
-
-
-        ///
-        /// @todo The system state is return here. Code to act on this event needs to be developed.
-        ///
         if( productMessage.lpmstatus( ).has_systemstate( ) )
         {
             BOSE_DEBUG( s_logger, "%s-The LPM system state was set to %s", __func__,
@@ -753,17 +733,12 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
             case SYSTEM_STATE_RECOVERY:
                 break;
             case SYSTEM_STATE_LOW_POWER:
-            {
-                GetHsm( ).Handle< >( &CustomProductControllerState::HandleLpmLowpowerSystemState );
-            }
-            break;
+                break;
             case SYSTEM_STATE_UPDATE:
                 break;
             case SYSTEM_STATE_SHUTDOWN:
                 break;
             case SYSTEM_STATE_FACTORY_DEFAULT:
-                BOSE_INFO( s_logger, "SYSTEM_STATE_FACTORY_DEFAULT was received." );
-                GetHsm().Handle<>( &CustomProductControllerState::HandleFactoryDefault );
                 break;
             case SYSTEM_STATE_IDLE:
                 break;
@@ -774,51 +749,16 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
             }
         }
 
-        ///
-        /// The power state if returned from the LPM hardware is used only for informational purposes.
-        ///
-        if( productMessage.lpmstatus( ).has_powerstate( ) )
-        {
-            BOSE_DEBUG( s_logger, "%s-The LPM power state was set to %s", __func__,
-                        IpcLPMPowerState_t_Name( productMessage.lpmstatus( ).powerstate( ) ).c_str( ) );
-        }
+        // Then (after registering for events above) do the common stuff
+        ( void ) HandleCommonProductMessage( productMessage );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// AudioPath Select or Deselect messages are handled at this point.
+    /// Common ProductMessage elements are handled last, any events with overrides to
+    /// the Common elements will have been handled above and not get here
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( productMessage.has_audiopathselect( ) )
+    else if( !HandleCommonProductMessage( productMessage ) )
     {
-        if( productMessage.audiopathselect() == true )
-        {
-            BOSE_DEBUG( s_logger, "AudioPath Select event received" );
-            GetHsm( ).Handle< > ( &CustomProductControllerState::HandleAudioPathSelect );
-        }
-        else
-        {
-            BOSE_DEBUG( s_logger, "AudioPath Deselect event received" );
-            GetHsm( ).Handle< > ( &CustomProductControllerState::HandleAudioPathDeselect );
-        }
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// LPM low power status messages are handled at this point.
-    /////////////////////////////////////////////////////////////////////////////////////////////
-    else if( productMessage.has_lpmlowpowerstatus( ) )
-    {
-        GetHsm( ).Handle<const ProductLpmLowPowerStatus& >( &CustomProductControllerState::HandleLpmLowPowerStatus, productMessage.lpmlowpowerstatus( ) );
-    }
-    //
-    // An amp fault has been detected on the LPM. Enter the CriticalError state.
-    //
-    else if( productMessage.has_ampfaultdetected() )
-    {
-        GetHsm( ).Handle<>( &CustomProductControllerState::HandleAmpFaultDetected );
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Unknown message types are handled at this point.
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    else
-    {
-        BOSE_ERROR( s_logger, "An unknown message type was received." );
+        BOSE_ERROR( s_logger, "An unknown message type was received - %s.", ProtoToMarkup::ToJson( productMessage ).c_str() );
     }
 }
 

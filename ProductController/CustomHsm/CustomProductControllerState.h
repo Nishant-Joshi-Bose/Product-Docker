@@ -150,6 +150,12 @@ public:
     {
         return false;
     }
+
+    virtual bool HandleIntentSystemInfoMode( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
     virtual bool HandleIntentVolume( KeyHandlerUtil::ActionType_t result )
     {
         return false;
@@ -171,11 +177,6 @@ public:
     }
 
     virtual bool HandleLpmInterfaceState( bool isConnected )
-    {
-        return false;
-    }
-
-    virtual bool HandleLpmLowpowerSystemState()
     {
         return false;
     }
@@ -211,6 +212,16 @@ public:
     }
 
     virtual bool HandleAudioPathDeselect( )
+    {
+        return false;
+    }
+
+    virtual bool HandleSystemPowerControl( )
+    {
+        return false;
+    }
+
+    virtual bool HandleSoftwareUpdateStart( uint32_t delay )
     {
         return false;
     }
@@ -269,6 +280,10 @@ public:
     }
 
     virtual bool HandleOOBSetupDone( )
+    {
+        return false;
+    }
+    virtual bool HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t intent )
     {
         return false;
     }

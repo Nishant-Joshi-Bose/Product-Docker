@@ -63,8 +63,11 @@ show_text_file("/opt/Bose/etc/BoseVersion.json")
 print "<li>Manufacturing Data"
 show_text_file("/persist/mfg_data.json")
 
+print "<hr>"
+
+print "Remote:", os.environ.get("REMOTE_ADDRESS", "(oops)")
+
 print """
-<hr>
 </body>
 </html>
 """

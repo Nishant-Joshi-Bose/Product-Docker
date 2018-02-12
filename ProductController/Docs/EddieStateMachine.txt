@@ -8,17 +8,24 @@ title \n Eddie ProductController State Machine \n\n
 state TOP{
 }
 
-state SoftwareUpdating{
-SoftwareUpdating-up-> TOP
-}
-
-
 state Booting {
 Booting-up-> TOP
 }
 
 state Setup {
-Setup-up-> Playing
+Setup-up-> TOP
+}
+
+state On{
+On-up-> TOP
+}
+
+state LowPowerStandby{
+LowPowerStandby-up-> TOP
+}
+
+state SoftwareUpdating{
+SoftwareUpdating-up-> TOP
 }
 
 state CriticalError {
@@ -29,51 +36,16 @@ state Rebooting {
 Rebooting-up-> TOP
 }
 
-
-
-state LowPowerStandby{
-LowPowerStandby-up-> TOP
+state Playing{
+Playing-up-> On
 }
 
 state Playable{
 Playable-up-> On
 }
 
-state On{
-On-up-> TOP
-}
-
 state LowPowerStandbyTransition{
 LowPowerStandbyTransition-up-> LowPowerStandby
-}
-
-state NetworkStandby{
-NetworkStandby-up-> Playable
-}
-
-state NetworkConfigured{
-NetworkConfigured-up-> NetworkStandby
-}
-
-state NetworkNotConfigured{
-NetworkNotConfigured-up-> NetworkStandby
-}
-
-state Idle{
-Idle-up-> Playable
-}
-
-state VoiceConfigured{
-VoiceConfigured-up-> Idle
-}
-
-state VoiceNotConfigured{
-VoiceNotConfigured-up-> Idle
-}
-
-
-state Playing{
-Playing-up-> On
 }
 
 state PlayingActive{
@@ -84,6 +56,88 @@ state PlayingInActive{
 PlayingInActive-up-> Playing
 }
 
+state Idle{
+Idle-up-> Playable
+}
 
+state NetworkStandby{
+NetworkStandby-up-> Playable
+}
+
+state VoiceConfigured{
+VoiceConfigured-up-> Idle
+}
+
+state VoiceNotConfigured{
+VoiceNotConfigured-up-> Idle
+}
+
+state NetworkConfigured{
+NetworkConfigured-up-> NetworkStandby
+}
+
+state NetworkNotConfigured{
+NetworkNotConfigured-up-> NetworkStandby
+}
+
+state FactoryDefault{
+FactoryDefault-up-> TOP
+}
+
+state PlayingSelected{
+PlayingSelected-up-> Playing
+}
+
+state PlayingDeSelected{
+PlayingDeSelected-up-> Playing
+}
+
+state PlayingSelectedSilent{
+PlayingSelectedSilent-up-> PlayingSelected
+}
+
+state PlayingSelectedNotSilent{
+PlayingSelectedNotSilent-up-> PlayingSelected
+}
+
+state PlayingSelectedSetup{
+PlayingSelectedSetup-up-> PlayingSelected
+}
+
+state PlayingSelectedSetupNetwork{
+PlayingSelectedSetupNetwork-up-> PlayingSelectedSetup
+}
+
+state PlayingSelectedSetupOther{
+PlayingSelectedSetupOther-up-> PlayingSelectedSetup
+}
+
+state StoppingStreams{
+StoppingStreams-up-> TOP
+}
+
+state PlayableTransition{
+PlayableTransition-up-> TOP
+}
+
+state PlayableTransitionIdle{
+PlayableTransitionIdle-up-> PlayableTransition
+}
+
+state PlayableTransitionNetworkStandby{
+PlayableTransitionNetworkStandby-up-> PlayableTransition
+}
+
+state SoftwareUpdateTransition{
+SoftwareUpdateTransition-up-> TOP
+}
+
+state PlayingTransition{
+PlayingTransition-up-> TOP
+}
+
+state PlayingTransitionSelected{
+PlayingTransitionSelected-up-> PlayingTransition
+}
 @enduml
 
