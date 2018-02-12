@@ -81,7 +81,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@5e4a1b5bb79bca67991ca8fda8f13cded7f9b4b1"
+    "selected_version": "master@bd16f0d59e8bb11cfa66488e69d94ef27694bb24"
   },
   {
     "name": "CastleProductUIAssets",
@@ -144,7 +144,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.3.6-296+71e655f"
+    "selected_version": "Release/master/0.3.7-301+1d78fe1"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
