@@ -283,44 +283,55 @@
     ],
     "blastTable": [
     {
-        "key": "BOSE_NUMBER_1",
-        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+        "zone": "ZONE1",
+        "keyList": ["BOSE_RED", "BOSE_GREEN", "BOSE_YELLOW", "BOSE_BLUE"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_CBL_SAT"]
     },
     {
-        "key": "BOSE_NUMBER_2",
-        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+        "zone": "ZONE2",
+        "keyList": ["BOSE_DVD_MENU", "BOSE_EPG", "KEY_VAL_AVAIL_F8", "BOSE_EXIT", "BOSE_I_TV", "BOSE_UP_ARROW", "BOSE_DOWN_ARROW", "BOSE_LEFT_ARROW", "BOSE_RIGHT_ARROW", "BOSE_ENTER"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_CBL_SAT"]
     },
     {
-        "key": "BOSE_NUMBER_3",
-        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+        "zone": "ZONE3",
+        "keyList": ["BOSE_INFO", "BOSE_DVR", "BOSE_RECORD"],
+        "blastDevices": ["DEVICE_TYPE_CBL_SAT"]
     },
     {
-        "key": "BOSE_NUMBER_4",
-        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+        "zone": "ZONE4",
+        "keyList": ["BOSE_FAST_REVERSE", "BOSE_FAST_FORWARD", "BOSE_PLAY"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_CBL_SAT"]
     },
     {
-        "key": "BOSE_NUMBER_5",
-        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+        "zone": "ZONE5",
+        "keyList": ["BOSE_NUMBER_1", "BOSE_NUMBER_2", "BOSE_NUMBER_3", "BOSE_NUMBER_4", "BOSE_NUMBER_5", "BOSE_NUMBER_6"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_CBL_SAT"]
     },
     {
-        "key": "BOSE_NUMBER_6",
-        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+        "zone": "ZONE6",
+        "keyList": ["BOSE_NUMBER_7", "BOSE_NUMBER_8", "BOSE_NUMBER_9", "BOSE_NUMBER_0"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_CBL_SAT"]
     },
     {
-        "key": "BOSE_PLAY",
-        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+        "zone": "ZONE7",
+        "keyList": ["BOSE_VOLUME_UP", "BOSE_VOLUME_DOWN", "BOSE_MUTE"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_CBL_SAT"]
     },
     {
-        "key": "BOSE_QUICK_SKIP",
-        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+        "zone": "ZONE8",
+        "keyList": ["BOSE_CHANNEL_PRESET_UP", "BOSE_CHANNEL_PRESET_DOWN", "BOSE_LAST_CHANNEL"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_CBL_SAT"]
     },
     {
-        "key": "BOSE_QUICK_REPLAY",
-        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+        "zone": "ZONE9",
+        "keyList": ["BOSE_ON_OFF", "BOSE_TV_INPUT"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_CBL_SAT"]
     },
     {
-        "key": "BOSE_TV_SOURCE",
-        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+        "zone": "ZONE10",
+        "keyList": ["BOSE_SOURCE_POWER"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD"]
     }
     ]
 }
+

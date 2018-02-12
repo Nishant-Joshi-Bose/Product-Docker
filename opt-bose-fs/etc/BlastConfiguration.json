@@ -1,114 +1,151 @@
 {
     "blastTable": [
         {
+            "keyList": [
+                197, 
+                198, 
+                199, 
+                200
+            ], 
             "blastDevices": [
                 "DEVICE_TYPE_TV", 
                 "DEVICE_TYPE_SMART_TV", 
-                "DEVICE_TYPE_GAME", 
-                "DEVICE_TYPE_CBL_SAT", 
-                "DEVICE_TYPE_BD_DVD", 
-                "DEVICE_TYPE_STREAMING"
+                "DEVICE_TYPE_CBL_SAT"
             ], 
-            "key": 65
+            "zone": "ZONE1"
         }, 
         {
+            "keyList": [
+                144, 
+                208, 
+                248, 
+                48, 
+                193, 
+                192, 
+                32, 
+                160, 
+                96, 
+                224
+            ], 
             "blastDevices": [
                 "DEVICE_TYPE_TV", 
                 "DEVICE_TYPE_SMART_TV", 
                 "DEVICE_TYPE_GAME", 
-                "DEVICE_TYPE_CBL_SAT", 
                 "DEVICE_TYPE_BD_DVD", 
-                "DEVICE_TYPE_STREAMING"
+                "DEVICE_TYPE_CBL_SAT"
             ], 
-            "key": 66
+            "zone": "ZONE2"
         }, 
         {
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_SMART_TV", 
-                "DEVICE_TYPE_GAME", 
-                "DEVICE_TYPE_CBL_SAT", 
-                "DEVICE_TYPE_BD_DVD", 
-                "DEVICE_TYPE_STREAMING"
+            "keyList": [
+                100, 
+                182, 
+                156
             ], 
-            "key": 67
+            "blastDevices": [
+                "DEVICE_TYPE_CBL_SAT"
+            ], 
+            "zone": "ZONE3"
         }, 
         {
+            "keyList": [
+                87, 
+                88, 
+                85
+            ], 
             "blastDevices": [
                 "DEVICE_TYPE_TV", 
                 "DEVICE_TYPE_SMART_TV", 
                 "DEVICE_TYPE_GAME", 
-                "DEVICE_TYPE_CBL_SAT", 
                 "DEVICE_TYPE_BD_DVD", 
-                "DEVICE_TYPE_STREAMING"
+                "DEVICE_TYPE_CBL_SAT"
             ], 
-            "key": 68
+            "zone": "ZONE4"
         }, 
         {
+            "keyList": [
+                65, 
+                66, 
+                67, 
+                68, 
+                69, 
+                70
+            ], 
             "blastDevices": [
                 "DEVICE_TYPE_TV", 
                 "DEVICE_TYPE_SMART_TV", 
-                "DEVICE_TYPE_GAME", 
-                "DEVICE_TYPE_CBL_SAT", 
-                "DEVICE_TYPE_BD_DVD", 
-                "DEVICE_TYPE_STREAMING"
+                "DEVICE_TYPE_CBL_SAT"
             ], 
-            "key": 69
+            "zone": "ZONE5"
         }, 
         {
+            "keyList": [
+                71, 
+                72, 
+                73, 
+                64
+            ], 
             "blastDevices": [
                 "DEVICE_TYPE_TV", 
                 "DEVICE_TYPE_SMART_TV", 
-                "DEVICE_TYPE_GAME", 
-                "DEVICE_TYPE_CBL_SAT", 
-                "DEVICE_TYPE_BD_DVD", 
-                "DEVICE_TYPE_STREAMING"
+                "DEVICE_TYPE_CBL_SAT"
             ], 
-            "key": 70
+            "zone": "ZONE6"
         }, 
         {
+            "keyList": [
+                3, 
+                2, 
+                1
+            ], 
             "blastDevices": [
                 "DEVICE_TYPE_TV", 
                 "DEVICE_TYPE_SMART_TV", 
                 "DEVICE_TYPE_GAME", 
-                "DEVICE_TYPE_CBL_SAT", 
                 "DEVICE_TYPE_BD_DVD", 
-                "DEVICE_TYPE_STREAMING"
+                "DEVICE_TYPE_CBL_SAT"
             ], 
-            "key": 85
+            "zone": "ZONE7"
         }, 
         {
+            "keyList": [
+                25, 
+                24, 
+                20
+            ], 
             "blastDevices": [
                 "DEVICE_TYPE_TV", 
                 "DEVICE_TYPE_SMART_TV", 
-                "DEVICE_TYPE_GAME", 
-                "DEVICE_TYPE_CBL_SAT", 
-                "DEVICE_TYPE_BD_DVD", 
-                "DEVICE_TYPE_STREAMING"
+                "DEVICE_TYPE_CBL_SAT"
             ], 
-            "key": 90
+            "zone": "ZONE8"
         }, 
         {
+            "keyList": [
+                76, 
+                60
+            ], 
             "blastDevices": [
                 "DEVICE_TYPE_TV", 
                 "DEVICE_TYPE_SMART_TV", 
                 "DEVICE_TYPE_GAME", 
-                "DEVICE_TYPE_CBL_SAT", 
                 "DEVICE_TYPE_BD_DVD", 
-                "DEVICE_TYPE_STREAMING"
+                "DEVICE_TYPE_CBL_SAT"
             ], 
-            "key": 89
+            "zone": "ZONE9"
         }, 
         {
+            "keyList": [
+                44
+            ], 
             "blastDevices": [
                 "DEVICE_TYPE_TV", 
                 "DEVICE_TYPE_SMART_TV", 
                 "DEVICE_TYPE_GAME", 
                 "DEVICE_TYPE_CBL_SAT", 
-                "DEVICE_TYPE_BD_DVD", 
-                "DEVICE_TYPE_STREAMING"
+                "DEVICE_TYPE_BD_DVD"
             ], 
-            "key": 14
+            "zone": "ZONE10"
         }
     ]
 }

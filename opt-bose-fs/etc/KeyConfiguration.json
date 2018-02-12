@@ -494,10 +494,6 @@
         }, 
         {
             "origin": 2, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -510,10 +506,6 @@
         }, 
         {
             "origin": 6, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -526,10 +518,6 @@
         }, 
         {
             "origin": 4, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -542,10 +530,6 @@
         }, 
         {
             "origin": 3, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -558,10 +542,6 @@
         }, 
         {
             "origin": 2, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -574,10 +554,6 @@
         }, 
         {
             "origin": 6, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -590,10 +566,6 @@
         }, 
         {
             "origin": 4, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -606,10 +578,6 @@
         }, 
         {
             "origin": 3, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -622,10 +590,6 @@
         }, 
         {
             "origin": 2, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -638,10 +602,6 @@
         }, 
         {
             "origin": 6, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -654,10 +614,6 @@
         }, 
         {
             "origin": 4, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -670,10 +626,6 @@
         }, 
         {
             "origin": 3, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -686,10 +638,6 @@
         }, 
         {
             "origin": 2, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -702,10 +650,6 @@
         }, 
         {
             "origin": 6, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -718,10 +662,6 @@
         }, 
         {
             "origin": 4, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -734,10 +674,6 @@
         }, 
         {
             "origin": 3, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -750,10 +686,6 @@
         }, 
         {
             "origin": 2, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -766,10 +698,6 @@
         }, 
         {
             "origin": 6, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -782,10 +710,6 @@
         }, 
         {
             "origin": 4, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -798,10 +722,6 @@
         }, 
         {
             "origin": 3, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -814,10 +734,6 @@
         }, 
         {
             "origin": 2, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -830,10 +746,6 @@
         }, 
         {
             "origin": 6, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -846,10 +758,6 @@
         }, 
         {
             "origin": 4, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200
@@ -862,10 +770,6 @@
         }, 
         {
             "origin": 3, 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_STREAMING"
-            ], 
             "keyEvent": 1, 
             "timeOutList": [
                 200

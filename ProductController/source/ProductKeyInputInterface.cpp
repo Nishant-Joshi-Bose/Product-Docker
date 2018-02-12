@@ -323,14 +323,19 @@ bool ProductKeyInputInterface::InitializeBlasterConfig( )
     ProtoToMarkup::FromJson( *config, &m_blasterConfig, "BlasterConfiguration" );
 
     // build the list of keys that get blasted for each device type
-    for( auto k : m_blasterConfig.blasttable() )
+    for( auto entry : m_blasterConfig.blasttable() )
     {
-        if( k.blastdevices_size() && k.has_key() )
+        if( !entry.blastdevices_size() || !entry.keylist_size() )
         {
-            for( auto d : k.blastdevices() )
+            BOSE_ERROR( s_logger, "%s: bad blastTable entry detected (%d devices, %d keys)\n", __func__, entry.blastdevices_size(), entry.keylist_size() );
+            continue;
+        }
+        for( auto key : entry.keylist() )
+        {
+            for( auto dev : entry.blastdevices() )
             {
-                m_blasterMap[k.key( )].push_back( d );
-                BOSE_INFO( s_logger, "%s: blast add %s for key %d\n", __FUNCTION__, d.c_str(), k.key( ) );
+                m_blasterMap[key].push_back( dev );
+                BOSE_INFO( s_logger, "%s: blast add %s for key %d\n", __FUNCTION__, dev.c_str(), key );
             }
         }
     }

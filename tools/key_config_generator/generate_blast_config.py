@@ -74,13 +74,15 @@ def generate_raw_config(clang_args, index, args):
 
   for i, e in enumerate(j['blastTable']):
     oe = copy.deepcopy(e)
-    key = e['key']
-    if not key in key_map:
-      print('Entry {}, Unknown key {}, skipping entry'.format(i, key))
-      continue 
-    else:
-      print('Entry {}, key {}'.format(i, key))
-      oe['key'] = key_map[key]
+    oe['keyList'] = []
+    key_list = e['keyList']
+    for key in key_list:
+      if not key in key_map:
+        print('Entry {}, Unknown key {}, skipping entry'.format(i, key))
+        continue 
+      else:
+        print('Entry {}, key {}'.format(i, key))
+        oe['keyList'].append(key_map[key])
     
     blastmap['blastTable'].append(oe)
  

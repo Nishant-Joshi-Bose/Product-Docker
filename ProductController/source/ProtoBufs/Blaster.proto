@@ -21,7 +21,8 @@ message BlasterTable
 {
     option (ignore_unexpected_markup) = true;
     
-    optional uint32 key = 1;
+    optional string zone            = 1;
+    repeated uint32 keyList         = 2;
 
     // possible values are
     // DEVICE_TYPE_TV
@@ -30,7 +31,7 @@ message BlasterTable
     // DEVICE_TYPE_CBL_SAT
     // DEVICE_TYPE_BD_DVD
     // DEVICE_TYPE_STREAMING
-    repeated string blastDevices = 2;
+    repeated string blastDevices    = 3;
 }
 
 message Error
