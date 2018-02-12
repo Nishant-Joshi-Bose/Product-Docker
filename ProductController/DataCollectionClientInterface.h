@@ -21,13 +21,15 @@ public:
     ~DataCollectionClientInterface() { }
 
     void Subscribe();
-    void HandleNowPlayingRequest( const SoundTouchInterface::NowPlaying& nPb, const DeviceManagerPb::DeviceState& ds );
     void ProcessSystemState( const DeviceManagerPb::DeviceState& ds );
     void ProcessBassState( const  ProductPb::AudioBassLevel& abl );
     void ProcessBalanceState( const  WebInterface::balance& b );
-    void GetCallbackError( const EndPointsError::Error& );
+    //void ProcessLanguage( const DeviceManagerPb::ProductSettings& psPb );
 
 private:
+
+    void HandleNowPlayingRequest( const SoundTouchInterface::NowPlaying& nPb, const DeviceManagerPb::DeviceState& ds );
+    void GetCallbackError( const EndPointsError::Error& );
 
     std::shared_ptr<DataCollectionClientIF>      m_dataCollectionClient;
     NotifyTargetTaskIF*                          m_dataCollectionClientInterfaceTask = nullptr;

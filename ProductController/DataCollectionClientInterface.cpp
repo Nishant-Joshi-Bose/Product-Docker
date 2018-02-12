@@ -39,7 +39,7 @@ void DataCollectionClientInterface::Subscribe()
 {
 
     AsyncCallback<DeviceManagerPb::DeviceState> DataCollectionStateCb( std::bind( &DataCollectionClientInterface::ProcessSystemState,
-                                                                                  this, std::placeholders::_1 ) , m_dataCollectionClientInterfaceTask );
+                                                                                  this, std::placeholders::_1 ), m_dataCollectionClientInterfaceTask );
 
     AsyncCallback<ProductPb::AudioBassLevel> DataCollectionbassCb( std::bind( &DataCollectionClientInterface::ProcessBassState,
                                                                               this, std::placeholders::_1 ) , m_dataCollectionClientInterfaceTask );
@@ -47,19 +47,22 @@ void DataCollectionClientInterface::Subscribe()
     AsyncCallback<WebInterface::balance> DataCollectionBalanceCb( std::bind( &DataCollectionClientInterface::ProcessBalanceState,
                                                                              this, std::placeholders::_1 ) , m_dataCollectionClientInterfaceTask );
 
+    //AsyncCallback<DeviceManagerPb::ProductSettings> DataCollectionLanguageCb( std::bind( &DataCollectionClientInterface::ProcessLanguage,
+    //                                                                          this, std::placeholders::_1 ) , m_dataCollectionClientInterfaceTask );
+
     m_frontDoorClientIF->RegisterNotification<DeviceManagerPb::DeviceState>( "/system/state", DataCollectionStateCb );
 
     m_frontDoorClientIF->RegisterNotification<ProductPb::AudioBassLevel>( "/audio/bass", DataCollectionbassCb );
 
     m_frontDoorClientIF->RegisterNotification<WebInterface::balance>( "/audio/balance", DataCollectionBalanceCb );
 
+    //m_frontDoorClientIF->RegisterNotification<DeviceManagerPb::ProductSettings>( "/system/productSettings", DataCollectionLanguageCb );
 }
 
 void DataCollectionClientInterface::HandleNowPlayingRequest( const SoundTouchInterface::NowPlaying& nPb, const DeviceManagerPb::DeviceState& ds )
 {
     BOSE_DEBUG( s_logger, "System State Process" );
     auto dsPb = std::make_shared<DataCollection::SystemState>();
-
     SoundTouchInterface::NowPlaying* pnowPlaying = dsPb->mutable_nowplaying();
     *pnowPlaying = nPb;
     std::string j = ProtoToMarkup::ToXML( nPb.container().contentitem(), false );
@@ -67,7 +70,6 @@ void DataCollectionClientInterface::HandleNowPlayingRequest( const SoundTouchInt
     dsPb->set_contentitem( contentItemValue );
     dsPb->set_systemstate( ds.state() );
     m_dataCollectionClient->SendData( dsPb , "system-state-changed" );
-
 }
 
 void DataCollectionClientInterface::GetCallbackError( const EndPointsError::Error& error )
@@ -77,13 +79,17 @@ void DataCollectionClientInterface::GetCallbackError( const EndPointsError::Erro
 
 void DataCollectionClientInterface::ProcessSystemState( const DeviceManagerPb::DeviceState& ds )
 {
-
-    AsyncCallback<SoundTouchInterface::NowPlaying> getNowPlayingReqCb( std::bind( &DataCollectionClientInterface::HandleNowPlayingRequest ,
-                                                                                  this, std::placeholders::_1, ds ), m_dataCollectionClientInterfaceTask );
-    AsyncCallback<EndPointsError::Error> errorCb( std::bind( &DataCollectionClientInterface::GetCallbackError ,
-                                                             this, std::placeholders::_1 ) , m_dataCollectionClientInterfaceTask );
+    auto func = [this, ds]( const SoundTouchInterface::NowPlaying & noPb )
+    {
+        HandleNowPlayingRequest( noPb, ds );
+    };
+    auto errorfunc = [this]( const EndPointsError::Error & error )
+    {
+        GetCallbackError( error );
+    };
+    AsyncCallback<SoundTouchInterface::NowPlaying> getNowPlayingReqCb( func, m_dataCollectionClientInterfaceTask );
+    AsyncCallback<EndPointsError::Error> errorCb( errorfunc, m_dataCollectionClientInterfaceTask );
     m_frontDoorClientIF->SendGet<SoundTouchInterface::NowPlaying, EndPointsError::Error>( "/content/nowPlaying" , getNowPlayingReqCb, errorCb );
-
 }
 
 void DataCollectionClientInterface::ProcessBassState( const ProductPb::AudioBassLevel& adl )
@@ -100,6 +106,13 @@ void DataCollectionClientInterface::ProcessBalanceState( const WebInterface::bal
     auto dbalPb = std::make_shared<DataCollection::Balance>();
     dbalPb->set_balance( b.targetbalance().text() );
     m_dataCollectionClient->SendData( dbalPb, "balance-changed" );
-
 }
-
+#if 0 //Will remove once Language protobuf is defined in DataCollection
+void DataCollectionClientInterface::ProcessLanguage( const DeviceManagerPb::ProductSettings& psPb )
+{
+    BOSE_DEBUG( s_logger, "Language Changed Process" );
+    auto dlPb = std::make_shared<DataCollection::Language>();
+    dlPb->set_language( b.language() );
+    m_dataCollectionClient->SendData( dlPb, "language-changed" );
+}
+#endif
