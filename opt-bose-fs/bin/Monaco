@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Change Output to HDMI on Professor;
+# Currently not working due to HDMI driver control: JIRA story PGC 655
+#export WPE_FBDEV=/dev/fb0 
+
+exec /opt/Bose/webkit/run_wpe.sh MONACO 1.0
