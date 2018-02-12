@@ -8,12 +8,12 @@ this=${0##*/}
 if (( $# == 0 )); then
     build=/home/softlib/verisoft/Eddie/Continuous/master
     version=$(cat "$build/latest.txt") || exit
-    set -- "$build/$version/HSP-${RIVIERA_HSP_VERSION?}/monaco.ipk"
+    set -- "$build/$version/HSP-${RIVIERA_HSP_VERSION?}/brussels.ipk"
     echo "$0" "$1"
 fi
 
 if (( $# != 1 )); then
-    echo >&2 "usage: $this [monaco.ipk]"
+    echo >&2 "usage: $this [brussels.ipk]"
     exit 1
 fi
 ipk=$1
@@ -24,13 +24,13 @@ echo Remount...
 adb shell mount -oremount,rw /opt/Bose || exit
 
 echo Uninstall...
-adb shell opkg remove --force-remove monaco  # ok if this fails
+adb shell opkg remove --force-remove brussels  # ok if this fails
 
 echo Copy...
-adb push "$ipk" /tmp/new-monaco.ipk || exit
+adb push "$ipk" /tmp/new-brussels.ipk || exit
 
 echo Install...
-adb shell opkg -d bose install /tmp/new-monaco.ipk || exit
+adb shell opkg -d bose install /tmp/new-brussels.ipk || exit
 
 echo Remount...
 adb shell mount -oremount,ro /opt/Bose || exit

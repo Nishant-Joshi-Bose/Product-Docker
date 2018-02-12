@@ -8,12 +8,12 @@ this=${0##*/}
 if (( $# == 0 )); then
     build=/home/softlib/verisoft/Eddie/Continuous/master
     version=$(cat "$build/latest.txt") || exit
-    set -- "$build/$version/HSP-${RIVIERA_HSP_VERSION?}/monaco.ipk"
+    set -- "$build/$version/HSP-${RIVIERA_HSP_VERSION?}/brussels.ipk"
     echo "$0" "$1"
 fi
 
 if (( $# != 1 )); then
-    echo >&2 "usage: $this [monaco.ipk]"
+    echo >&2 "usage: $this [brussels.ipk]"
     exit 1
 fi
 ipk=$1
@@ -24,7 +24,7 @@ echo Remount...
 adb shell mount -oremount,rw /opt/Bose || exit
 
 echo Copy...
-adb push "$ipk" /tmp/new-monaco.ipk || exit
+adb push "$ipk" /tmp/new-brussels.ipk || exit
 
 echo Install...
 adb shell export LD_LIBRARY_PATH=/opt/Bose/update/opkg/ \&\& /opt/Bose/update/opkg/opkg -f /mnt/nv/update/opkg.conf  --add-arch armv7a-vfp-neon:100 --force-reinstall --force-downgrade install /tmp/new-monaco.ipk || exit
