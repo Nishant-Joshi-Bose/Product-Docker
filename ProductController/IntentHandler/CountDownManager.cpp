@@ -21,9 +21,9 @@
 #include "ProductController.h"
 #include "Intents.h"
 
-constexpr char BUTTON_EVENT_NOTIFICATION_URL[] = "/system/buttonEvent";
-
 static DPrint s_logger( "CountDownManager" );
+
+using namespace IntentHandler::Protobuf;
 
 typedef struct _CountDown
 {
@@ -33,11 +33,11 @@ typedef struct _CountDown
 
 static std::map <ProductApp::Action, CountDownInfo> m_countdownIntentInfoMap =
 {
-    {ProductApp::Action::MANUAL_UPDATE_COUNTDOWN, {IntentHandler::Protobuf::ButtonEventName::MANUAL_UPDATE, 5}},
-    {ProductApp::Action::FACTORY_DEFAULT_COUNTDOWN, {IntentHandler::Protobuf::ButtonEventName::FACTORY_DEFAULT, 10}},
-    {ProductApp::Action::MANUAL_SETUP_COUNTDOWN, {IntentHandler::Protobuf::ButtonEventName::MANUAL_SETUP, 5}},
-    {ProductApp::Action::TOGGLE_WIFI_RADIO_COUNTDOWN, {IntentHandler::Protobuf::ButtonEventName::ENABLE_WIFI, 5}},
-    {ProductApp::Action::SYSTEM_INFO_COUNTDOWN, {IntentHandler::Protobuf::ButtonEventName::SYSTEM_INFO, 5}}
+    {ProductApp::Action::MANUAL_UPDATE_COUNTDOWN, {ButtonEventName::MANUAL_UPDATE, 5}},
+    {ProductApp::Action::FACTORY_DEFAULT_COUNTDOWN, {ButtonEventName::FACTORY_DEFAULT, 10}},
+    {ProductApp::Action::MANUAL_SETUP_COUNTDOWN, {ButtonEventName::MANUAL_SETUP, 5}},
+    {ProductApp::Action::TOGGLE_WIFI_RADIO_COUNTDOWN, {ButtonEventName::ENABLE_WIFI, 5}},
+    {ProductApp::Action::SYSTEM_INFO_COUNTDOWN, {ButtonEventName::SYSTEM_INFO, 5}}
 };
 
 namespace ProductApp
@@ -78,7 +78,7 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     {
         if( m_actionType.is_initialized() and m_countdownValue > 0 and m_countdownValue <= m_countdownIntentInfoMap[( ProductApp::Action )m_actionType.get()].countdown )
         {
-            NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )m_actionType.get()].intentName, IntentHandler::Protobuf::ButtonEventState::CANCEL, 0 );
+            NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )m_actionType.get()].intentName, ButtonEventState::CANCEL, 0 );
             m_actionType.reset();
         }
         else if( m_countdownValue == 0 )
@@ -113,11 +113,11 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             m_countdownValue--;
             if( m_countdownValue )
             {
-                NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )intent].intentName, IntentHandler::Protobuf::ButtonEventState::COUNTDOWN, m_countdownValue );
+                NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )intent].intentName, ButtonEventState::COUNTDOWN, m_countdownValue );
             }
             else
             {
-                NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )intent].intentName, IntentHandler::Protobuf::ButtonEventState::COMPLETED, 0 );
+                NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )intent].intentName, ButtonEventState::COMPLETED, 0 );
             }
         }
     }
@@ -144,8 +144,8 @@ void CountDownManager::NotifyButtonEvent( const uint16_t event, const uint16_t s
     BOSE_DEBUG( s_logger, "%s: event = %d, state = %d, value = %d", __func__, event, state, value );
     IntentHandler::Protobuf::ButtonEventNotification buttonNotification;
 
-    buttonNotification.set_event( ( IntentHandler::Protobuf::ButtonEventName )event );
-    buttonNotification.set_state( ( IntentHandler::Protobuf::ButtonEventState )state );
+    buttonNotification.set_event( ( ButtonEventName )event );
+    buttonNotification.set_state( ( ButtonEventState )state );
 
     if( value )
     {
