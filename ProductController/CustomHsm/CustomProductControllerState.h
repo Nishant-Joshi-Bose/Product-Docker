@@ -288,11 +288,6 @@ public:
     {
         return false;
     }
-    virtual bool HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t intent )
-    {
-        return false;
-    }
-
 public:
     /// The custom version of this function returns the custom ProductController
     static EddieProductController& GetCustomProductController();
