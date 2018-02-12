@@ -147,7 +147,7 @@ bool CustomProductControllerStatePlaying::HandleIntentMuteControl( KeyHandlerUti
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlaying::GoToAppropriateNonPlayingState( )
 {
-    GetCustomProductController( ).GetEdidInterface( )->PowerOff( );
+    GetCustomProductController( ).GetCecHelper( )->PowerOff( );
 
     GetProductController( ).SendStopPlaybackMessage( );
 
@@ -189,7 +189,7 @@ void CustomProductControllerStatePlaying::GoToAppropriateNonPlayingState( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlaying::HandleLPMPowerStatusFullPowerOn( )
 {
-    GetCustomProductController( ).GetEdidInterface( )->PowerOn( );
+    GetCustomProductController( ).GetCecHelper( )->PowerOn( );
     return true;
 }
 
