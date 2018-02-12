@@ -60,13 +60,13 @@ wspace=$(cd "$here/.." && echo "$PWD") || exit
 riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || exit
 riviera_toolchain_dir=$(components get Riviera-Toolchain installed_location) || exit
 galapagosclient_dir=$(components get GalapagosClient-qc8017_32 installed_location) || exit
-soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
 avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
 swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 audiopath_dir=$(components get CastleAudioPath-qc8017_32 installed_location) || exit
+audiopath64_dir=$(components get CastleAudioPath-qc8017_64 installed_location) || exit
 castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
 castlepassport_dir=$(components get CastlePassport-qc8017_32 installed_location) || exit
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
@@ -78,7 +78,8 @@ boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
 
 arch=arm-oemllib32-linux
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
-tool_prefix=$sysroot/usr/bin/$arch/$arch-
+tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
+tool64_prefix=$sysroot/usr/bin/aarch64-oe-linux/aarch64-oe-linux-
 
 stage=$wspace/builds/$cfg/product-ipk-stage
 rm -rf "$stage"
@@ -90,30 +91,6 @@ mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/et
 
 rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 rsync -a --exclude='*~' --exclude='*-README.txt' "$qss_dir/opt-bose-fs/." "$opt_dir/." || exit
-
-# -----------------------------------------------------------------------------
-# SoundTouch-SDK daemon configuration.
-
-u=$soundtouch_sdk/util
-function gen_config {
-    local xslt="$1"; shift
-    local inf="$1"; shift
-    local outf="$opt_dir/etc/$1"; shift
-
-    local tmpf="$outf~"
-    rm -f "$outf" "$tmpf"
-    "$u/xsltproc-chk" "$xslt" "$inf" >"$tmpf" || exit 1
-    xmllint --format "$tmpf" >"$outf" || exit 1
-    echo "Wrote $outf"
-    rm -f "$tmpf"
-}
-c=$wspace/ProductController/Configuration.xml
-xmllint --noout --schema "$u/validate-config.xsd" "$c" || exit
-gen_config "$u/BoseApp.xslt" "$c" "BoseApp.xml"
-gen_config "$u/UpnpSource.xslt" "$c" "UpnpSource.xml"
-gen_config "$u/APConfig.xslt" "$c" "APConfig.xml"
-
-# -----------------------------------------------------------------------------
 
 components record "$stage" || exit
 
@@ -127,22 +104,27 @@ v=$(make-version-string "$version_json" "{user}@{host} {localtime} {branch} {maj
 echo "$v" > "$opt_dir/etc/FS_VERSION" || exit
 echo "FS_VERSION \"$v\""
 
+# ----------------------------------------------------------------------------
+# Legacy SoundTouch-SDK stuff.  This will all go away soon.
+soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
 stfs=$soundtouch_sdk/fs
-cp "$stfs"/opt/Bose/BoseApp "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/BTSource "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/BT "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/BluetoothManager "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BLESetup "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BluetoothManager "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BoseApp "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BT "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/BTSource "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
+cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/STSCertified "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/UpnpSource "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
-cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
-cp "$boselibs_dir"/services.json "$opt_dir/etc" || exit
 cp -a "$stfs"/opt/Bose/Xml "$opt_dir/bin" || exit
 cp -a "$stfs"/opt/Bose/lib "$opt_dir" || exit
 cp -a "$stfs"/var/lib/iot "$opt_dir" || exit
+# ----------------------------------------------------------------------------
+
+cp "$boselibs_dir"/services.json "$opt_dir/etc" || exit
 cp -a "$boselibs_dir/lib" "$opt_dir" || exit
 cp -a "$protobuf_dir/lib" "$opt_dir" || exit
 cp "$wspace/PtsServer/pts-handler" "$opt_dir/etc" || exit
@@ -176,7 +158,8 @@ cp "$audiopath_dir/bin/lisa/libDspPlayback.so" "$opt_dir/bin" || exit
 "$avs_dir/stage" "$opt_dir" || exit
 "$swup_dir/stage" "$opt_dir" || exit
 "$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
-"$audiopath_dir/stage" "$opt_dir" --with-vfe || exit
+"$audiopath_dir/stage" "$opt_dir" || exit
+"$audiopath64_dir/stage" "$opt_dir" --only-vfe || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlepassport_dir/stage" "$opt_dir" || exit
 "$shepherd_dir/stage" "$opt_dir" || exit
@@ -306,6 +289,14 @@ for i in "$stage"/Bose/{lib,bin}/*; do
     case "$type" in
         (*", stripped")
             echo >&2 "$this: (warning) No debug symbols: $i"
+            ;;
+        (*", ARM aarch64, "*", not stripped" | *" 64-bit "*", not stripped")
+            cp "$i" "$unstripped_dir" || exit
+            # `strip` fails without an error message if the file is empty
+            if ! "${tool64_prefix}strip" "$i"; then
+                echo >&2 "$this: Failed to strip $i"
+                exit 1
+            fi
             ;;
         (*", not stripped")
             cp "$i" "$unstripped_dir" || exit
