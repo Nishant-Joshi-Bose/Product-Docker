@@ -27,8 +27,8 @@ using namespace IntentHandler::Protobuf;
 
 typedef struct _CountDown
 {
-    IntentHandler::Protobuf::ButtonEventName        intentName;
-    uint16_t                                        countdown;
+    ButtonEventName     intentName;
+    uint16_t            countdown;
 } CountDownInfo;
 
 static std::map <ProductApp::Action, CountDownInfo> m_countdownIntentInfoMap =
@@ -78,7 +78,7 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     {
         if( m_actionType.is_initialized() and m_countdownValue > 0 and m_countdownValue <= m_countdownIntentInfoMap[( ProductApp::Action )m_actionType.get()].countdown )
         {
-            NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )m_actionType.get()].intentName, ButtonEventState::CANCEL, 0 );
+            NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )m_actionType.get()].intentName, ButtonEventState::CANCEL );
             m_actionType.reset();
         }
         else if( m_countdownValue == 0 )
@@ -117,7 +117,7 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             }
             else
             {
-                NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )intent].intentName, ButtonEventState::COMPLETED, 0 );
+                NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )intent].intentName, ButtonEventState::COMPLETED );
             }
         }
     }
@@ -137,21 +137,6 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     }
 
     return true;
-}
-
-void CountDownManager::NotifyButtonEvent( const uint16_t event, const uint16_t state, const uint16_t value )
-{
-    BOSE_DEBUG( s_logger, "%s: event = %d, state = %d, value = %d", __func__, event, state, value );
-    IntentHandler::Protobuf::ButtonEventNotification buttonNotification;
-
-    buttonNotification.set_event( ( ButtonEventName )event );
-    buttonNotification.set_state( ( ButtonEventState )state );
-
-    if( value )
-    {
-        buttonNotification.set_value( value );
-    }
-    GetFrontDoorClient()->SendNotification( BUTTON_EVENT_NOTIFICATION_URL, buttonNotification );
 }
 
 }
