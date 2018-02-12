@@ -4,4 +4,4 @@
 # Currently not working due to HDMI driver control: JIRA story PGC 655
 #export WPE_FBDEV=/dev/fb0 
 
-exec /opt/Bose/webkit/run_wpe.sh MONACO 1.0
+exec /opt/Bose/webkit/run_wpe.sh BRUSSELS 1.0
