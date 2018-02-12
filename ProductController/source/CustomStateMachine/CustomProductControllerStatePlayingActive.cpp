@@ -137,13 +137,11 @@ bool CustomProductControllerStatePlayingActive::HandleIntentSpeakerPairing( KeyH
 ///
 /// @brief  CustomProductControllerStatePlayingActive::HandleIntentPlaySoundTouchSource
 ///
-/// @param  KeyHandlerUtil::ActionType_t action
-///
 /// @return This method returns a Boolean false value in case the key action needs to be handled in
 ///         one of its superstates
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayingActive::HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t action )
+bool CustomProductControllerStatePlayingActive::HandleIntentPlaySoundTouchSource( )
 {
     ProcessUserActivity( );
     return false;

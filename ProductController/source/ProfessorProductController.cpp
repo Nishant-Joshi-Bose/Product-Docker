@@ -1215,8 +1215,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         }
         else if( GetIntentHandler( ).IsIntentPlaySoundTouchSource( message.action( ) ) )
         {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPlaySoundTouchSource,
-                                                              message.action( ) );
+            GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentPlaySoundTouchSource );
         }
         else
         {

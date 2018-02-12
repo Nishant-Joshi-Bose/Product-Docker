@@ -300,7 +300,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t intent )
+    virtual bool HandleIntentPlaySoundTouchSource( )
     {
         return false;
     }

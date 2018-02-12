@@ -81,8 +81,7 @@ bool CustomProductControllerStatePlayable::HandleIntentUserPower( KeyHandlerUtil
     }
     else
     {
-        KeyHandlerUtil::ActionType_t startSoundTouchPlayback = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_SOUNDTOUCH );
-        HandleIntentPlaySoundTouchSource( startSoundTouchPlayback );
+        HandleIntentPlaySoundTouchSource( );
     }
     return true;
 }
