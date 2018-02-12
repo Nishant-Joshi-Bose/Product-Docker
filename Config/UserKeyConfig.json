@@ -94,8 +94,7 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_1"],
         "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": [200],
-        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_STREAMING"]
+        "timeOutList": [200]
     },
     {
         "action": "PRESET_SELECT_2",
@@ -103,8 +102,7 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_2"],
         "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": [200],
-        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_STREAMING"]
+        "timeOutList": [200]
     },
     {
         "action": "PRESET_SELECT_3",
@@ -112,8 +110,7 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_3"],
         "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": [200],
-        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_STREAMING"]
+        "timeOutList": [200]
     },
     {
         "action": "PRESET_SELECT_4",
@@ -121,8 +118,7 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_4"],
         "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": [200],
-        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_STREAMING"]
+        "timeOutList": [200]
     },
     {
         "action": "PRESET_SELECT_5",
@@ -130,8 +126,7 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_5"],
         "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": [200],
-        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_STREAMING"]
+        "timeOutList": [200]
     },
     {
         "action": "PRESET_SELECT_6",
@@ -139,8 +134,7 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_6"],
         "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": [200],
-        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_STREAMING"]
+        "timeOutList": [200]
     },
     {
         "action": "ACTION_VOLUME_UP_1",
@@ -285,6 +279,48 @@
         "keyList": ["BOSE_MUTE"],
         "origin": ["CAPSENSE"],
         "timeOutList": []
+    }
+    ],
+    "blastTable": [
+    {
+        "key": "BOSE_NUMBER_1",
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+    },
+    {
+        "key": "BOSE_NUMBER_2",
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+    },
+    {
+        "key": "BOSE_NUMBER_3",
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+    },
+    {
+        "key": "BOSE_NUMBER_4",
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+    },
+    {
+        "key": "BOSE_NUMBER_5",
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+    },
+    {
+        "key": "BOSE_NUMBER_6",
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+    },
+    {
+        "key": "BOSE_PLAY",
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+    },
+    {
+        "key": "BOSE_QUICK_SKIP",
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+    },
+    {
+        "key": "BOSE_QUICK_REPLAY",
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
+    },
+    {
+        "key": "BOSE_TV_SOURCE",
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_STREAMING"]
     }
     ]
 }

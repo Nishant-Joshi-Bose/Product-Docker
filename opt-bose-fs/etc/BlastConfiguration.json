@@ -1,0 +1,114 @@
+{
+    "blastTable": [
+        {
+            "blastDevices": [
+                "DEVICE_TYPE_TV", 
+                "DEVICE_TYPE_SMART_TV", 
+                "DEVICE_TYPE_GAME", 
+                "DEVICE_TYPE_CBL_SAT", 
+                "DEVICE_TYPE_BD_DVD", 
+                "DEVICE_TYPE_STREAMING"
+            ], 
+            "key": 65
+        }, 
+        {
+            "blastDevices": [
+                "DEVICE_TYPE_TV", 
+                "DEVICE_TYPE_SMART_TV", 
+                "DEVICE_TYPE_GAME", 
+                "DEVICE_TYPE_CBL_SAT", 
+                "DEVICE_TYPE_BD_DVD", 
+                "DEVICE_TYPE_STREAMING"
+            ], 
+            "key": 66
+        }, 
+        {
+            "blastDevices": [
+                "DEVICE_TYPE_TV", 
+                "DEVICE_TYPE_SMART_TV", 
+                "DEVICE_TYPE_GAME", 
+                "DEVICE_TYPE_CBL_SAT", 
+                "DEVICE_TYPE_BD_DVD", 
+                "DEVICE_TYPE_STREAMING"
+            ], 
+            "key": 67
+        }, 
+        {
+            "blastDevices": [
+                "DEVICE_TYPE_TV", 
+                "DEVICE_TYPE_SMART_TV", 
+                "DEVICE_TYPE_GAME", 
+                "DEVICE_TYPE_CBL_SAT", 
+                "DEVICE_TYPE_BD_DVD", 
+                "DEVICE_TYPE_STREAMING"
+            ], 
+            "key": 68
+        }, 
+        {
+            "blastDevices": [
+                "DEVICE_TYPE_TV", 
+                "DEVICE_TYPE_SMART_TV", 
+                "DEVICE_TYPE_GAME", 
+                "DEVICE_TYPE_CBL_SAT", 
+                "DEVICE_TYPE_BD_DVD", 
+                "DEVICE_TYPE_STREAMING"
+            ], 
+            "key": 69
+        }, 
+        {
+            "blastDevices": [
+                "DEVICE_TYPE_TV", 
+                "DEVICE_TYPE_SMART_TV", 
+                "DEVICE_TYPE_GAME", 
+                "DEVICE_TYPE_CBL_SAT", 
+                "DEVICE_TYPE_BD_DVD", 
+                "DEVICE_TYPE_STREAMING"
+            ], 
+            "key": 70
+        }, 
+        {
+            "blastDevices": [
+                "DEVICE_TYPE_TV", 
+                "DEVICE_TYPE_SMART_TV", 
+                "DEVICE_TYPE_GAME", 
+                "DEVICE_TYPE_CBL_SAT", 
+                "DEVICE_TYPE_BD_DVD", 
+                "DEVICE_TYPE_STREAMING"
+            ], 
+            "key": 85
+        }, 
+        {
+            "blastDevices": [
+                "DEVICE_TYPE_TV", 
+                "DEVICE_TYPE_SMART_TV", 
+                "DEVICE_TYPE_GAME", 
+                "DEVICE_TYPE_CBL_SAT", 
+                "DEVICE_TYPE_BD_DVD", 
+                "DEVICE_TYPE_STREAMING"
+            ], 
+            "key": 90
+        }, 
+        {
+            "blastDevices": [
+                "DEVICE_TYPE_TV", 
+                "DEVICE_TYPE_SMART_TV", 
+                "DEVICE_TYPE_GAME", 
+                "DEVICE_TYPE_CBL_SAT", 
+                "DEVICE_TYPE_BD_DVD", 
+                "DEVICE_TYPE_STREAMING"
+            ], 
+            "key": 89
+        }, 
+        {
+            "blastDevices": [
+                "DEVICE_TYPE_TV", 
+                "DEVICE_TYPE_SMART_TV", 
+                "DEVICE_TYPE_GAME", 
+                "DEVICE_TYPE_CBL_SAT", 
+                "DEVICE_TYPE_BD_DVD", 
+                "DEVICE_TYPE_STREAMING"
+            ], 
+            "key": 14
+        }
+    ]
+}
