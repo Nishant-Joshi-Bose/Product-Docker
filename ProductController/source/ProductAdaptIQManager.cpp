@@ -78,7 +78,7 @@ ProductAdaptIQManager::ProductAdaptIQManager( ProfessorProductController& Produc
     m_status.set_currentlocation( ADAPTIQ_LOCATION_FIRST );
     m_status.set_currentspeaker( IpcAiqMeasChannel_t_Name( LpmServiceMessages::AIQ_MEAS_CHANNEL_NONE ) );
     m_status.set_hpconnected( true );
-    m_status.set_errorcode( 0 );
+    m_status.set_errorcode( "AIQ_ERROR_NONE" );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,7 +165,7 @@ void ProductAdaptIQManager::DSPToFrontDoorStatus( ProductPb::AdaptIQStatus& fron
     frontDoorStatus.set_currentlocation( status.mutable_status()->currentlocation() );
     frontDoorStatus.set_currentspeaker( IpcAiqMeasChannel_t_Name( status.mutable_status()->currentchannel() ) );
     frontDoorStatus.set_hpconnected( status.mutable_status()->hpconnected() );
-    frontDoorStatus.set_errorcode( status.mutable_status()->errorcode() );
+    frontDoorStatus.set_errorcode( IpcAiqError_t_Name( status.mutable_status()->errorcode() ) );
 
 }
 

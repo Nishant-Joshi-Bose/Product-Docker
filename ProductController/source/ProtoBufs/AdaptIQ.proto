@@ -66,7 +66,7 @@ message AdaptIQStatus
     optional int32              currentLocation     = 3;
     optional string             currentSpeaker      = 4;
     optional bool               hpConnected         = 5;
-    optional int32              errorCode           = 6;
+    optional string             errorCode           = 6;
     optional AdaptIQProperties  properties          = 7;
 }
 
