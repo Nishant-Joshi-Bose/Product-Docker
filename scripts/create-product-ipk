@@ -287,11 +287,13 @@ for i in "$stage"/Bose/{lib,bin}/*; do
             ;;
         (*", ARM aarch64, "*", not stripped" | *" 64-bit "*", not stripped")
             cp "$i" "$unstripped_dir" || exit
-            # `strip` fails without an error message if the file is empty
-            if ! "${tool64_prefix}strip" "$i"; then
-                echo >&2 "$this: Failed to strip $i"
-                exit 1
-            fi
+# TODO: figure out why `strip` sometimes segfaults on CentOS
+            echo "Not stripping $i"
+#            # `strip` fails without an error message if the file is empty
+#            if ! "${tool64_prefix}strip" "$i"; then
+#                echo >&2 "$this: Failed to strip $i"
+#                exit 1
+#            fi
             ;;
         (*", not stripped")
             cp "$i" "$unstripped_dir" || exit
