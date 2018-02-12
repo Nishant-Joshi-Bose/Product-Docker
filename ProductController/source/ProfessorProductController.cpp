@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @file      ProfessorProductController.cpp
 ///
@@ -32,13 +32,11 @@
 #include "CustomProductLpmHardwareInterface.h"
 #include "CustomProductAudioService.h"
 #include "ProductKeyInputInterface.h"
-#include "ProductEdidInterface.h"
 #include "ProductNetworkManager.h"
 #include "ProductSystemManager.h"
 #include "ProductCommandLine.h"
 #include "ProductAdaptIQManager.h"
 #include "ProductControllerStateTop.h"
-#include "ProductControllerStateSetup.h"
 #include "CustomProductControllerStates.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
@@ -125,7 +123,7 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductNetworkManager( nullptr ),
     m_ProductCommandLine( nullptr ),
     m_ProductKeyInputInterface( nullptr ),
-    m_ProductEdidInterface( nullptr ),
+    m_ProductCecHelper( nullptr ),
     m_ProductAdaptIQManager( nullptr ),
     m_ProductAudioService( nullptr ),
 
@@ -141,7 +139,6 @@ ProfessorProductController::ProfessorProductController( ) :
     m_IsAccountConfigured( false ),
     m_IsMicrophoneEnabled( false ),
     m_Running( false ),
-    m_currentSource( SOURCE_TV ),
 
     ///
     /// Intent Handler Initialization
@@ -299,11 +296,6 @@ void ProfessorProductController::Run( )
       *this,
       PROFESSOR_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
 
-    auto* stateSetup = new ProductControllerStateSetup
-    ( GetHsm( ),
-      customStatePlayingActive,
-      PRODUCT_CONTROLLER_STATE_SETUP );
-
     ///
     /// @todo These states are stubs for the time being, until the playing transition and its
     ///       associated states are completed based on the JIRA Stories PGC-246 and PGC-632.
@@ -407,7 +399,6 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( customStatePlayingInactive );
     GetHsm( ).AddState( customStateAccessoryPairing );
     GetHsm( ).AddState( customStateAdaptIQ );
-    GetHsm( ).AddState( stateSetup );
     GetHsm( ).AddState( statePlayingTransition );
     GetHsm( ).AddState( statePlayingTransitionSelected );
     GetHsm( ).AddState( statePlayingDeselected );
@@ -437,7 +428,7 @@ void ProfessorProductController::Run( )
     BOSE_DEBUG( s_logger, "The Professor Product Controller instantiating and running its modules." );
 
     m_ProductLpmHardwareInterface = std::make_shared< CustomProductLpmHardwareInterface >( *this );
-    m_ProductEdidInterface        = std::make_shared< ProductEdidInterface              >( *this );
+    m_ProductCecHelper            = std::make_shared< ProductCecHelper                  >( *this );
     m_ProductSystemManager        = std::make_shared< ProductSystemManager              >( *this );
     m_ProductNetworkManager       = std::make_shared< ProductNetworkManager             >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
@@ -451,7 +442,7 @@ void ProfessorProductController::Run( )
         m_ProductAudioService         == nullptr ||
         m_ProductCommandLine          == nullptr ||
         m_ProductKeyInputInterface    == nullptr ||
-        m_ProductEdidInterface        == nullptr ||
+        m_ProductCecHelper            == nullptr ||
         m_ProductAdaptIQManager       == nullptr )
     {
         BOSE_CRITICAL( s_logger, "-------- Product Controller Failed Initialization ----------" );
@@ -459,6 +450,11 @@ void ProfessorProductController::Run( )
 
         return;
     }
+
+    ///
+    /// Set up LightBarController
+    ///
+    m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_ProductLpmHardwareInterface->GetLpmClient() ) );
 
     ///
     /// Run all the submodules.
@@ -469,7 +465,7 @@ void ProfessorProductController::Run( )
     m_ProductAudioService        ->Run( );
     m_ProductCommandLine         ->Run( );
     m_ProductKeyInputInterface   ->Run( );
-    m_ProductEdidInterface       ->Run( );
+    m_ProductCecHelper           ->Run( );
     m_ProductAdaptIQManager      ->Run( );
 
     ///
@@ -488,15 +484,14 @@ void ProfessorProductController::Run( )
     SetupProductSTSConntroller( );
 
     ///
-    /// The initial data for the last SoundTouch playback is hardcoded for test for now.
-    /// This call should be removed once Professor is set to be released.
-    ///
-    SetTestSoundTouchPlayback( );
-
-    ///
     /// Initialize and register intents for key actions for the Product Controller.
     ///
     m_IntentHandler.Initialize( );
+
+    ///
+    /// Register LPM events for LightBar
+    ///
+    m_lightbarController->RegisterLpmEvents();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -556,14 +551,14 @@ std::shared_ptr< ProductAdaptIQManager >& ProfessorProductController::GetAdaptIQ
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::GetEdidInterface
+/// @name   ProfessorProductController::GetCecHelper
 ///
-/// @return This method returns a shared pointer to the ProductEdidInterface instance.
+/// @return This method returns a shared pointer to the ProductCecHelper instance.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::shared_ptr< ProductEdidInterface >& ProfessorProductController::GetEdidInterface( )
+std::shared_ptr< ProductCecHelper >& ProfessorProductController::GetCecHelper( )
 {
-    return m_ProductEdidInterface;
+    return m_ProductCecHelper;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -620,7 +615,7 @@ bool ProfessorProductController::IsNetworkConfigured( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::IsNetworkConfigured
+/// @name   ProfessorProductController::IsNetworkConnected
 ///
 /// @return This method returns a true or false value, based on a set member variable.
 ///
@@ -639,8 +634,7 @@ bool ProfessorProductController::IsNetworkConnected( ) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 uint32_t ProfessorProductController::GetWifiProfileCount( ) const
 {
-    BOSE_INFO( s_logger, "Implementation needed for Professor" );
-    return 0;
+    return m_ProductNetworkManager->GetWifiProfileCount( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -757,20 +751,21 @@ std::string const& ProfessorProductController::GetProductVariant( ) const
 ///
 /// @name   ProfessorProductController::GetProductModel
 ///
-/// @return This method returns the std::string const& value to be used for the Product "Model" field
+/// @return This method returns the std::string const& value to be used for the Product "productType" field
 ///
 /// @TODO - Below value may be available through HSP APIs
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 std::string const& ProfessorProductController::GetProductModel() const
 {
-    static std::string productModel = "SoundTouch 20";
+    static std::string productModel = "professor";
 
-    if( auto model = MfgData::Get( "model" ) )
+    if( auto model = MfgData::Get( "productType" ) )
     {
         productModel =  *model;
     }
 
+    // @TODO PGC-757 replace the manufacturing name with the marketing name.
     return productModel;
 }
 
@@ -886,7 +881,11 @@ void ProfessorProductController::HandleSelectSourceSlot( ProductSTSAccount::Prod
 void ProfessorProductController::RegisterFrontDoorEndPoints( )
 {
     RegisterCommonEndPoints( );
+<<<<<<< Updated upstream
+    m_lightbarController->RegisterLightBarEndPoints();
+=======
     RegisterNowPlayingEndPoint( );
+    m_lightbarController->RegisterLightBarEndPoints();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1076,6 +1075,7 @@ void ProfessorProductController::SetTestSoundTouchPlayback( )
 SoundTouchInterface::PlaybackRequest& ProfessorProductController::GetLastSoundTouchPlayback( )
 {
     return m_lastSoundTouchPlayback;
+>>>>>>> Stashed changes
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1362,24 +1362,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         ( &CustomProductControllerState::HandlePairingState, message.accessorypairing( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Now playing status messages are handled at this point.
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_nowplayingstatus( ) )
-    {
-        if( not message.nowplayingstatus( ).has_state( ) )
-        {
-            BOSE_ERROR( s_logger, "An invalid now playing status message was received." );
-            return;
-        }
-
-        BOSE_DEBUG( s_logger, "A now playing %s state has been received.",
-                    ProductNowPlayingStatus_ProductNowPlayingState_Name
-                    ( message.nowplayingstatus( ).state( ) ).c_str( ) );
-
-        GetHsm( ).Handle< const ProductNowPlayingStatus_ProductNowPlayingState & >
-        ( &CustomProductControllerState::HandleNowPlayingStatus, message.nowplayingstatus( ).state( ) );
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Key action messages are handled at this point, and passed to the state machine based on
     /// the intent associated with the action.
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -1412,10 +1394,14 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentSpeakerPairing,
                                                               message.action( ) );
         }
-        else if( GetIntentHandler( ).IsIntentSourceSelection( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentPlayProductSource( message.action( ) ) )
         {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPlayback,
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPlayProductSource,
                                                               message.action( ) );
+        }
+        else if( GetIntentHandler( ).IsIntentPlaySoundTouchSource( message.action( ) ) )
+        {
+            GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentPlaySoundTouchSource );
         }
         else
         {
@@ -1475,7 +1461,7 @@ void ProfessorProductController::Wait( )
     m_ProductNetworkManager      ->Stop( );
     m_ProductCommandLine         ->Stop( );
     m_ProductKeyInputInterface   ->Stop( );
-    m_ProductEdidInterface       ->Stop( );
+    m_ProductCecHelper           ->Stop( );
     m_ProductAdaptIQManager      ->Stop( );
 }
 

@@ -36,7 +36,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
 #include "IntentHandler.h"
-#include "ProductEdidInterface.h"
+#include "ProductCecHelper.h"
 #include "ProductController.h"
 #include "ProductSTSController.h"
 #include "FrontDoorClientIF.h"
@@ -44,6 +44,7 @@
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "MacAddressInfo.h"
 #include "BoseVersion.h"
+#include "LightBarController.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -60,7 +61,7 @@ class CustomProductLpmHardwareInterface;
 class ProductSystemManager;
 class ProductNetworkManager;
 class CustomProductAudioService;
-class ProductEdidInterface;
+class ProductCecHelper;
 class ProductCommandLine;
 class ProductKeyInputInterface;
 class ProductAdaptIQManager;
@@ -135,7 +136,7 @@ public:
     ///        instance from the product controller.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    std::shared_ptr< ProductEdidInterface >& GetEdidInterface( );
+    std::shared_ptr< ProductCecHelper >& GetCecHelper( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -227,6 +228,8 @@ public:
 
     void SendInitialCapsData() override;
 
+    std::unique_ptr<LightBar::LightBarController>         m_lightbarController;
+
 private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -241,7 +244,7 @@ private:
     std::shared_ptr< ProductNetworkManager             > m_ProductNetworkManager;
     std::shared_ptr< ProductCommandLine                > m_ProductCommandLine;
     std::shared_ptr< ProductKeyInputInterface          > m_ProductKeyInputInterface;
-    std::shared_ptr< ProductEdidInterface              > m_ProductEdidInterface;
+    std::shared_ptr< ProductCecHelper                  > m_ProductCecHelper;
     std::shared_ptr< ProductAdaptIQManager             > m_ProductAdaptIQManager;
     std::shared_ptr< CustomProductAudioService         > m_ProductAudioService;
 
@@ -291,10 +294,6 @@ private:
     /// @brief The following declarations is used for internal source selection and playback.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    PlaybackSource_t m_currentSource;
-    SoundTouchInterface::PlaybackRequest m_lastSoundTouchPlayback;
-
-    void  SetTestSoundTouchPlayback( );
     void  RegisterNowPlayingEndPoint( );
     void  HandleNowPlaying( const SoundTouchInterface::NowPlaying& nowPlayingStatus );
 

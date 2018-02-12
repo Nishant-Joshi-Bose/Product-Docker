@@ -56,7 +56,8 @@ ProductNetworkManager::ProductNetworkManager( ProfessorProductController& Produc
 
     : m_ProductTask( ProductController.GetTask( ) ),
       m_ProductNotify( ProductController.GetMessageHandler( ) ),
-      m_FrontDoorClient( FrontDoor::FrontDoorClient::Create( "ProductNetworkManager" ) )
+      m_FrontDoorClient( FrontDoor::FrontDoorClient::Create( "ProductNetworkManager" ) ),
+      m_WifiProfileCount( 0 )
 {
 
 }
@@ -140,6 +141,30 @@ bool ProductNetworkManager::Run( )
 void ProductNetworkManager::HandleEntireNetworkStatus( const NetManager::Protobuf::NetworkStatus&
                                                        networkStatus )
 {
+    static bool doOnce = true;
+    if( doOnce )
+    {
+        // The "entire network" endpoint gets notifications as the hardware network interfaces become operational.
+        // However, the PROFILE endpoint only Notifies on change, so we need to GET the initial value. It is deemed safe
+        // to GET once NetworkManager is operational enough to send us "entire network"
+        doOnce = false;
+
+        AsyncCallback< NetManager::Protobuf::WiFiProfiles >
+        CallbackForWiFiProfiles( std::bind( &ProductNetworkManager::HandleWiFiProfiles,
+                                            this,
+                                            std::placeholders::_1 ),
+                                 m_ProductTask );
+
+        auto errorCallback = []( const EndPointsError::Error & error )
+        {
+            BOSE_ERROR( s_logger, "%s: Error = (%d-%d) %s", __func__, error.code(), error.subcode(), error.message().c_str() );
+        };
+        AsyncCallback<EndPointsError::Error> errCb( errorCallback, m_ProductTask );
+
+        m_FrontDoorClient->SendGet<NetManager::Protobuf::WiFiProfiles, EndPointsError::Error>(
+            FRONTDOOR_NETWORK_WIFI_PROFILE, CallbackForWiFiProfiles, errCb );
+    }
+
     if( networkStatus.interfaces_size( ) <= 0 )
     {
         BOSE_DEBUG( s_logger, "-------------- Product Network Manager Status --------------" );
@@ -382,9 +407,9 @@ void ProductNetworkManager::HandleEntireNetworkStatus( const NetManager::Protobu
 void ProductNetworkManager::HandleWiFiProfiles( const NetManager::Protobuf::WiFiProfiles&
                                                 wirelessProfiles )
 {
-    auto wirelessProfileSize = wirelessProfiles.profiles_size( );
+    m_WifiProfileCount = wirelessProfiles.profiles_size( );
 
-    if( wirelessProfileSize <= 0 )
+    if( m_WifiProfileCount == 0 )
     {
         BOSE_DEBUG( s_logger, "----------------- Product Network Manager ------------------" );
         BOSE_DEBUG( s_logger, "No wireless networks are currently configured." );
@@ -392,14 +417,14 @@ void ProductNetworkManager::HandleWiFiProfiles( const NetManager::Protobuf::WiFi
     else
     {
         BOSE_DEBUG( s_logger, "----------------- Product Network Manager ------------------" );
-        BOSE_DEBUG( s_logger, "There are %d wireless networks currently available.", wirelessProfileSize );
+        BOSE_DEBUG( s_logger, "There are %d wireless networks currently available.", m_WifiProfileCount );
         BOSE_DEBUG( s_logger, " " );
 
         ProductMessage productMessage;
         productMessage.mutable_wirelessstatus( )->set_configured( false );
         productMessage.mutable_wirelessstatus( )->set_frequencykhz( 0 );
 
-        for( int index = 0; index < wirelessProfileSize; index++ )
+        for( uint32_t index = 0; index < m_WifiProfileCount; index++ )
         {
             std::string WirlessSsidString( "Unknown" );
             std::string WirlessSecurityString( "Unknown" );

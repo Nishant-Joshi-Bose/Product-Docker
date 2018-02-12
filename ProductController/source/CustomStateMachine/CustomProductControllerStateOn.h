@@ -72,8 +72,8 @@ public:
     }
 
     void HandleStateExit( )  override;
-    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t action )    override;
-    bool HandleIntentPlayback( KeyHandlerUtil::ActionType_t action )          override;
+    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )  override;
+    bool HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent )    override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

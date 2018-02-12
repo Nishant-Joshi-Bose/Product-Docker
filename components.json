@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.6.40929.2672236"
+    "selected_version": "Release/Castle-Fork/0.3.8.41015.2682265"
   },
   {
     "name": "bose-opkg-utils",
@@ -25,7 +25,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.7-243+5bef58d"
+    "selected_version": "Release/master/0.3.8-250+b7e7ef1"
   },
   {
     "name": "BoseOPKG-native",
@@ -40,20 +40,36 @@
     "selected_version": "Release/master/0.1.0-4+31ebf8c"
   },
   {
+    "name": "BoseWebMonaco",
+    "selected_version": "Release/develop/0.2.1-48+11dcb95"
+  },
+  {
     "name": "CastleAudioPath-qc8017_32",
     "selected_version": "Continuous/Castle-Fork_Multi/2018-02-08_1646"
+  },
+  {
+    "name": "CastleAudioPath-qc8017_64",
+    "selected_version": "Release/Castle-Fork/0.2.7-20452"
   },
   {
     "name": "CastleCli-qc8017_32",
     "selected_version": "Release/master/0.2.3-26+8cf9ea4"
   },
   {
+    "name": "CastleLibs-native",
+    "selected_version": "branches/castle-libs@2549"
+  },
+  {
     "name": "CastleLibs-qc8017_32",
     "selected_version": "branches/castle-libs@2549"
   },
   {
+    "name": "CastleLibs-x86",
+    "selected_version": "branches/castle-libs@2549"
+  },
+  {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.3-36+4b737e3"
+    "selected_version": "Continuous/master/0.3.3-38+042bce8"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -69,15 +85,15 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "PGC218_setStreamConfig@20ba6543608282386974143b70c57b63a3ce87b8"
+    "selected_version": "master@eb6404bac834f473aca01b9caa710180e53185fe"
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/0.3.5-93+a323e45"
+    "selected_version": "Release/master/0.3.6-102+8b058cd"
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.1.1-38+2220e79"
+    "selected_version": "Release/master/0.1.1-56+508fe9a"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -128,7 +144,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.3.5-270+5ecf463"
+    "selected_version": "Release/master/0.3.6-280+e23d828"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -137,5 +153,9 @@
   {
     "name": "unittest-cpp-qc8017_32",
     "selected_version": "Release/bose-master/2.0.0-3+167ffec"
+  },
+  {
+    "name": "Webkit",
+    "selected_version": "Release/master/0.3.1-24+472ac23"
   }
 ]
