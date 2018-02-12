@@ -44,6 +44,7 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 constexpr const char* KEY_CONFIGURATION_FILE_NAME = "/opt/Bose/etc/KeyConfiguration.json";
+constexpr const char* BLAST_CONFIGURATION_FILE_NAME = "/opt/Bose/etc/BlastConfiguration.json";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -311,7 +312,7 @@ void ProductKeyInputInterface::Stop( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductKeyInputInterface::InitializeBlasterConfig( )
 {
-    BOptional<std::string> config = SystemUtils::ReadFile( KEY_CONFIGURATION_FILE_NAME );
+    BOptional<std::string> config = SystemUtils::ReadFile( BLAST_CONFIGURATION_FILE_NAME );
     if( !config )
     {
         BOSE_ERROR( s_logger, "%s: Failed loading key blaster configuration file.", __FUNCTION__ );
@@ -322,14 +323,14 @@ bool ProductKeyInputInterface::InitializeBlasterConfig( )
     ProtoToMarkup::FromJson( *config, &m_blasterConfig, "BlasterConfiguration" );
 
     // build the list of keys that get blasted for each device type
-    for( auto k : m_blasterConfig.keytable() )
+    for( auto k : m_blasterConfig.blasttable() )
     {
-        if( k.blastdevices_size() && k.keylist_size() )
+        if( k.blastdevices_size() && k.has_key() )
         {
             for( auto d : k.blastdevices() )
             {
-                m_blasterMap[k.keylist( 0 )].push_back( d );
-                BOSE_INFO( s_logger, "%s: blast add %s for key %d\n", __FUNCTION__, d.c_str(), k.keylist( 0 ) );
+                m_blasterMap[k.key( )].push_back( d );
+                BOSE_INFO( s_logger, "%s: blast add %s for key %d\n", __FUNCTION__, d.c_str(), k.key( ) );
             }
         }
     }

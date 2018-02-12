@@ -14,18 +14,14 @@ message BlasterConfiguration
 {
     option (ignore_unexpected_markup) = true;
     
-    // blaster configuration is contained within the key table
-    repeated BlasterTable keyTable = 1;
+    repeated BlasterTable blastTable = 1;
 }
 
 message BlasterTable
 {
     option (ignore_unexpected_markup) = true;
     
-    // this is a repeated field to maintain compatibility with the 
-    // KeyHandler component; in reality this will always be a list of 1
-    // since chord keys are handled internally by the remote
-    repeated uint32 keyList = 1;
+    optional uint32 key = 1;
 
     // possible values are
     // DEVICE_TYPE_TV
