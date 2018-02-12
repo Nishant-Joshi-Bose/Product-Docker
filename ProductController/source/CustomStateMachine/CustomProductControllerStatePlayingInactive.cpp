@@ -166,7 +166,7 @@ bool CustomProductControllerStatePlayingInactive::HandleIntentPlaySoundTouchSour
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStatePlayingInactive::HandleIntentPlayTVSource
+/// @brief  CustomProductControllerStatePlayingInactive::HandleIntentPlayProductSource
 ///
 /// @param  KeyHandlerUtil::ActionType_t action
 ///
@@ -174,7 +174,7 @@ bool CustomProductControllerStatePlayingInactive::HandleIntentPlaySoundTouchSour
 ///         one of its superstates
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayingInactive::HandleIntentPlayTVSource( KeyHandlerUtil::ActionType_t action )
+bool CustomProductControllerStatePlayingInactive::HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t action )
 {
     ProcessUserActivity( );
     return false;

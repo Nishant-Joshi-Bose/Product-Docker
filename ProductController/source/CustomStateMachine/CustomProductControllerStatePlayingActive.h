@@ -72,12 +72,12 @@ public:
 
     }
 
-    bool HandleIntent( KeyHandlerUtil::ActionType_t action )                                   override;
-    bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )                          override;
-    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )                        override;
-    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t action )                     override;
-    bool HandleIntentPlaySoundTouchSource( )                                                   override;
-    bool HandleIntentPlayTVSource( KeyHandlerUtil::ActionType_t action )                       override;
+    bool HandleIntent( KeyHandlerUtil::ActionType_t action )                    override;
+    bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )           override;
+    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )         override;
+    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t action )      override;
+    bool HandleIntentPlaySoundTouchSource( )                                    override;
+    bool HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t action )   override;
 
 private:
 

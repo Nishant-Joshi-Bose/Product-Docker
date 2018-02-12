@@ -93,14 +93,14 @@ bool CustomProductControllerStateOn::HandleIntentSpeakerPairing( KeyHandlerUtil:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStateOn::HandleIntentPlayTVSource
+/// @brief  CustomProductControllerStateOn::HandleIntentPlayProductSource
 ///
 /// @param  KeyHandlerUtil::ActionType_t intent
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the intent.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateOn::HandleIntentPlayTVSource( KeyHandlerUtil::ActionType_t intent )
+bool CustomProductControllerStateOn::HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent )
 {
     BOSE_INFO( s_logger, "%s in %s is handling the intent %u", GetName( ).c_str( ), __FUNCTION__, intent );
     GetCustomProductController( ).GetIntentHandler( ).Handle( intent );

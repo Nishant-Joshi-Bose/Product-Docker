@@ -37,7 +37,6 @@
 #include "ProductCommandLine.h"
 #include "ProductAdaptIQManager.h"
 #include "ProductControllerStateTop.h"
-#include "ProductControllerStateSetup.h"
 #include "CustomProductControllerStates.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
@@ -297,11 +296,6 @@ void ProfessorProductController::Run( )
       *this,
       PROFESSOR_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
 
-    auto* stateSetup = new ProductControllerStateSetup
-    ( GetHsm( ),
-      customStatePlayingActive,
-      PRODUCT_CONTROLLER_STATE_SETUP );
-
     ///
     /// @todo These states are stubs for the time being, until the playing transition and its
     ///       associated states are completed based on the JIRA Stories PGC-246 and PGC-632.
@@ -405,7 +399,6 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( customStatePlayingInactive );
     GetHsm( ).AddState( customStateAccessoryPairing );
     GetHsm( ).AddState( customStateAdaptIQ );
-    GetHsm( ).AddState( stateSetup );
     GetHsm( ).AddState( statePlayingTransition );
     GetHsm( ).AddState( statePlayingTransitionSelected );
     GetHsm( ).AddState( statePlayingDeselected );
@@ -1207,9 +1200,9 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentSpeakerPairing,
                                                               message.action( ) );
         }
-        else if( GetIntentHandler( ).IsIntentPlayTVSource( message.action( ) ) )
+        else if( GetIntentHandler( ).IsIntentPlayProductSource( message.action( ) ) )
         {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPlayTVSource,
+            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentPlayProductSource,
                                                               message.action( ) );
         }
         else if( GetIntentHandler( ).IsIntentPlaySoundTouchSource( message.action( ) ) )

@@ -295,7 +295,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentPlayTVSource( KeyHandlerUtil::ActionType_t intent )
+    virtual bool HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent )
     {
         return false;
     }
@@ -345,6 +345,10 @@ public:
         return false;
     }
 
+    virtual bool HandleOOBSetupDone( )
+    {
+        return false;
+    }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// This method returns the Professor Custom Product Controller reference of type

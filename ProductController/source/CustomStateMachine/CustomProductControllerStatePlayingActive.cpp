@@ -149,7 +149,7 @@ bool CustomProductControllerStatePlayingActive::HandleIntentPlaySoundTouchSource
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStatePlayingActive::HandleIntentPlayTVSource
+/// @brief  CustomProductControllerStatePlayingActive::HandleIntentPlayProductSource
 ///
 /// @param  KeyHandlerUtil::ActionType_t action
 ///
@@ -157,7 +157,7 @@ bool CustomProductControllerStatePlayingActive::HandleIntentPlaySoundTouchSource
 ///         one of its superstates
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayingActive::HandleIntentPlayTVSource( KeyHandlerUtil::ActionType_t action )
+bool CustomProductControllerStatePlayingActive::HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t action )
 {
     ProcessUserActivity( );
     return false;

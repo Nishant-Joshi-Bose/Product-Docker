@@ -114,7 +114,7 @@ public:
         return ( ( argument == ( uint16_t )Action::ACTION_PAIR_SPEAKERS )  || ( argument == ( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS ) );
     }
 
-    static bool IsIntentPlayTVSource( KeyHandlerUtil::ActionType_t argument )
+    static bool IsIntentPlayProductSource( KeyHandlerUtil::ActionType_t argument )
     {
         return ( argument == ( uint16_t )Action::ACTION_TV );
     }
