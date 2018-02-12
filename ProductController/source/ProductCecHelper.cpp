@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      ProductEdidInterface.cpp
+/// @file      ProductCecHelper.cpp
 ///
 /// @brief     This header file contains declarations for managing the interface with A4VVideoManager
 ///
@@ -26,7 +26,7 @@
 #include "Utilities.h"
 #include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
-#include "ProductEdidInterface.h"
+#include "ProductCecHelper.h"
 #include "FrontDoorClient.h"
 #include "EndPointsDefines.h"
 
@@ -44,12 +44,12 @@ constexpr char  FRONTDOOR_AUDIO_VOLUME[ ]           = "/audio/volume";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductEdidInterface::ProductEdidInterface
+/// @name   ProductCecHelper::ProductCecHelper
 ///
 /// @param  ProfessorProductController& ProductController
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductEdidInterface::ProductEdidInterface( ProfessorProductController& ProductController )
+ProductCecHelper::ProductCecHelper( ProfessorProductController& ProductController )
 
     : m_ProductTask( ProductController.GetTask( ) ),
       m_ProductNotify( ProductController.GetMessageHandler( ) ),
@@ -62,30 +62,30 @@ ProductEdidInterface::ProductEdidInterface( ProfessorProductController& ProductC
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductEdidInterface::Run
+/// @name   ProductCecHelper::Run
 ///
 /// @brief  This method connects and starts the handling of communication with A4VVideoManager
 ///         service.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductEdidInterface::Run( )
+bool ProductCecHelper::Run( )
 {
     BOSE_DEBUG( s_logger, "The hardware connection to the A4VVideoManager is being established." );
-    m_EdidClient = A4VVideoManagerClientFactory::Create( "ProductEdidInterface", m_ProductTask );
-    Callback< bool > ConnectedCallback( std::bind( &ProductEdidInterface::Connected,
+    m_CecHelper = A4VVideoManagerClientFactory::Create( "ProductCecHelper", m_ProductTask );
+    Callback< bool > ConnectedCallback( std::bind( &ProductCecHelper::Connected,
                                                    this,
                                                    std::placeholders::_1 ) );
 
-    m_EdidClient->Connect( ConnectedCallback );
+    m_CecHelper->Connect( ConnectedCallback );
 
-    m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductEdidInterface" );
+    m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductCecHelper" );
     ///
     /// Registration as a client for getting notification of changes in the now playing state from
     /// CAPS is made through the FrontDoorClient object pointer. The callback HandleCapsNowPlaying
     /// is used to receive these notifications.
     ///
     AsyncCallback< SoundTouchInterface::NowPlaying >
-    callback( std::bind( &ProductEdidInterface::HandleNowPlaying,
+    callback( std::bind( &ProductCecHelper::HandleNowPlaying,
                          this, std::placeholders::_1 ),
               m_ProductTask );
 
@@ -105,12 +105,12 @@ bool ProductEdidInterface::Run( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductEdidInterface::Connected
+/// @brief ProductCecHelper::Connected
 ///
 /// @param bool connected
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductEdidInterface::Connected( bool connected )
+void ProductCecHelper::Connected( bool connected )
 {
     if( !connected )
     {
@@ -119,7 +119,7 @@ void ProductEdidInterface::Connected( bool connected )
 
         m_connected = false;
 
-        IL::BreakThread( std::bind( &ProductEdidInterface::Run, this ), m_ProductTask );
+        IL::BreakThread( std::bind( &ProductCecHelper::Run, this ), m_ProductTask );
 
         return;
     }
@@ -131,14 +131,14 @@ void ProductEdidInterface::Connected( bool connected )
         m_connected = true;
 
         Callback< A4VVideoManagerServiceMessages::EventHDMIMsg_t >
-        CallbackForKeyEvents( std::bind( &ProductEdidInterface::HandleHpdEvent,
+        CallbackForKeyEvents( std::bind( &ProductCecHelper::HandleHpdEvent,
                                          this,
                                          std::placeholders::_1 ) );
 
-        m_EdidClient->RegisterForHotplugEvent( CallbackForKeyEvents );
+        m_CecHelper->RegisterForHotplugEvent( CallbackForKeyEvents );
 
         Callback< LpmServiceMessages::IPCSource_t >
-        CallbackForCecSource( std::bind( &ProductEdidInterface::HandleSrcSwitch,
+        CallbackForCecSource( std::bind( &ProductCecHelper::HandleSrcSwitch,
                                          this,
                                          std::placeholders::_1 ) );
 
@@ -150,14 +150,14 @@ void ProductEdidInterface::Connected( bool connected )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  ProductEdidInterface::HandleSrcSwitch
+/// @name  ProductCecHelper::HandleSrcSwitch
 ///
 /// @brief This method handles the CEC source switch message received from LPM
 ///
 /// @param LpmServiceMessages::IPCSource_t cecSource
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductEdidInterface::HandleSrcSwitch( const LpmServiceMessages::IPCSource_t cecSource )
+void ProductCecHelper::HandleSrcSwitch( const LpmServiceMessages::IPCSource_t cecSource )
 {
     BOSE_DEBUG( s_logger, "Received CEC Source Switch message from LPM" );
 
@@ -173,48 +173,19 @@ void ProductEdidInterface::HandleSrcSwitch( const LpmServiceMessages::IPCSource_
         BOSE_DEBUG( s_logger, "CEC Source Switch Message received from LPM  %d",  cecSource.source() );
         if( cecSource.source() == LPM_IPC_SOURCE_TV )
         {
-            SoundTouchInterface::PlaybackRequest playbackRequestData;
-            playbackRequestData.set_source( "PRODUCT" );
-            playbackRequestData.set_sourceaccount( "TV" );
+            ProductMessage productMessage;
+            productMessage.set_action( static_cast< uint32_t >( Action::ACTION_TV ) );
 
-            AsyncCallback< SoundTouchInterface::NowPlaying >
-            cecPlaybackRequestResponseCallback( std::bind( &ProductEdidInterface::HandlePlaybackRequestResponse,
-                                                           this, std::placeholders::_1 ),
-                                                m_ProductTask );
-
-            AsyncCallback< EndPointsError::Error >
-            cecPlaybackRequestErrorCallback( std::bind( &ProductEdidInterface::HandlePlaybackRequestError,
-                                                        this,
-                                                        std::placeholders::_1 ),
-                                             m_ProductTask );
-
-            m_FrontDoorClient->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
-                    playbackRequestData,
-                    cecPlaybackRequestResponseCallback,
-                    cecPlaybackRequestErrorCallback );
+            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
 
             BOSE_INFO( s_logger, "An attempt to play the TV source has been made from CEC." );
         }
         else if( cecSource.source() == LPM_IPC_SOURCE_SHELBY )
         {
-            SoundTouchInterface::PlaybackRequest& playbackRequestData =
-                m_CustomProductController.GetLastSoundTouchPlayback( );
+            ProductMessage productMessage;
+            productMessage.set_action( static_cast< uint32_t >( Action::ACTION_SOUNDTOUCH ) );
 
-            AsyncCallback< SoundTouchInterface::NowPlaying >
-            cecPlaybackRequestResponseCallback( std::bind( &ProductEdidInterface::HandlePlaybackRequestResponse,
-                                                           this, std::placeholders::_1 ),
-                                                m_ProductTask );
-
-            AsyncCallback< EndPointsError::Error >
-            cecPlaybackRequestErrorCallback( std::bind( &ProductEdidInterface::HandlePlaybackRequestError,
-                                                        this,
-                                                        std::placeholders::_1 ),
-                                             m_ProductTask );
-
-            m_FrontDoorClient->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
-                    playbackRequestData,
-                    cecPlaybackRequestResponseCallback,
-                    cecPlaybackRequestErrorCallback );
+            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
 
             BOSE_INFO( s_logger, "An attempt to play the last SoundTouch source has been made from CEC." );
         }
@@ -229,11 +200,11 @@ void ProductEdidInterface::HandleSrcSwitch( const LpmServiceMessages::IPCSource_
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductEdidInterface::HandlePlaybackRequestResponse
+/// @name   ProductCecHelper::HandlePlaybackRequestResponse
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductEdidInterface::HandlePlaybackRequestResponse( const SoundTouchInterface::NowPlaying&
-                                                          response )
+void ProductCecHelper::HandlePlaybackRequestResponse( const SoundTouchInterface::NowPlaying&
+                                                      response )
 {
     BOSE_DEBUG( s_logger, "A response to the playback request %s was received." ,
                 response.source( ).sourcedisplayname( ).c_str( ) );
@@ -241,22 +212,22 @@ void ProductEdidInterface::HandlePlaybackRequestResponse( const SoundTouchInterf
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductEdidInterface::HandlePlaybackRequestError
+/// @name   ProductCecHelper::HandlePlaybackRequestError
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductEdidInterface::HandlePlaybackRequestError( const EndPointsError::Error& error )
+void ProductCecHelper::HandlePlaybackRequestError( const EndPointsError::Error& error )
 {
     BOSE_WARNING( s_logger, "%s: Error = (%d-%d) %s", __func__, error.code(), error.subcode(), error.message().c_str() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductEdidInterface::HandleHpdEvent
+/// @brief ProductCecHelper::HandleHpdEvent
 ///
 /// @param A4VVideoManagerServiceMessages::EventHDMIMsg_t hpdEvent
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductEdidInterface::HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMIMsg_t hpdEvent )
+void ProductCecHelper::HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMIMsg_t hpdEvent )
 {
     BOSE_LOG( DEBUG, __PRETTY_FUNCTION__ );
     BOSE_LOG( INFO, "Got HDMI event : " << hpdEvent.event() );
@@ -266,20 +237,20 @@ void ProductEdidInterface::HandleHpdEvent( A4VVideoManagerServiceMessages::Event
         {
             BOSE_LOG( INFO, "Sending edid raw Request" );
             auto func = std::bind(
-                            &ProductEdidInterface::HandleRawEDIDResponse,
+                            &ProductCecHelper::HandleRawEDIDResponse,
                             this,
                             std::placeholders::_1 );
             AsyncCallback<A4VVideoManagerServiceMessages::EDIDRawMsg_t> cb( func, m_ProductTask );
-            m_EdidClient->RequestRawEDID( cb );
+            m_CecHelper->RequestRawEDID( cb );
         }
         {
             BOSE_LOG( INFO, "Sending Phy addr Request" );
             auto func = std::bind(
-                            &ProductEdidInterface::HandlePhyAddrResponse,
+                            &ProductCecHelper::HandlePhyAddrResponse,
                             this,
                             std::placeholders::_1 );
             AsyncCallback<A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t> cb( func, m_ProductTask );
-            m_EdidClient->RequestPhyAddr( cb );
+            m_CecHelper->RequestPhyAddr( cb );
         }
 
     }
@@ -287,28 +258,28 @@ void ProductEdidInterface::HandleHpdEvent( A4VVideoManagerServiceMessages::Event
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductEdidInterface::HandleRawEDIDResponse
+/// @brief ProductCecHelper::HandleRawEDIDResponse
 ///
 /// @param const A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductEdidInterface::HandleRawEDIDResponse( const A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid )
+void ProductCecHelper::HandleRawEDIDResponse( const A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid )
 {
     //TBD - Mano
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductEdidInterface::HandlePhyAddrResponse
+/// @brief ProductCecHelper::HandlePhyAddrResponse
 ///
 /// @param const A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t keyEvent
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductEdidInterface::HandlePhyAddrResponse( const A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t cecPhysicalAddress )
+void ProductCecHelper::HandlePhyAddrResponse( const A4VVideoManagerServiceMessages::CECPhysicalAddrMsg_t cecPhysicalAddress )
 {
     BOSE_DEBUG( s_logger, "CEC Physical address 0x%x is being set.", cecPhysicalAddress.addr() );
 
-    if( m_connected == false || m_EdidClient == nullptr )
+    if( m_connected == false || m_CecHelper == nullptr )
     {
         BOSE_ERROR( s_logger, "A send CEC PA request could not be made, as no connection is available." );
 
@@ -326,26 +297,26 @@ void ProductEdidInterface::HandlePhyAddrResponse( const A4VVideoManagerServiceMe
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductEdidInterface::Stop
+/// @brief ProductCecHelper::Stop
 ///
 /// @todo  Resources, memory, or any client server connections that may need to be released by
 ///        this module when stopped will need to be determined.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductEdidInterface::Stop( )
+void ProductCecHelper::Stop( )
 {
     return;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductEdidInterface::HandleNowPlaying
+/// @brief ProductCecHelper::HandleNowPlaying
 ///
 /// @param SoundTouchInterface::NowPlaying& nowPlayingStatus
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductEdidInterface::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
-                                             nowPlayingStatus )
+void ProductCecHelper::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
+                                         nowPlayingStatus )
 {
     BOSE_DEBUG( s_logger, "CEC CAPS now playing status has been received." );
     if( nowPlayingStatus.has_state( ) )
@@ -384,12 +355,12 @@ void ProductEdidInterface::HandleNowPlaying( const SoundTouchInterface::NowPlayi
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductEdidInterface::HandleFrontDoorVolume
+/// @brief ProductCecHelper::HandleFrontDoorVolume
 ///
 /// @param  volume Object containing volume received from the FrontDoor
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductEdidInterface::HandleFrontDoorVolume( SoundTouchInterface::volume const& volume )
+void ProductCecHelper::HandleFrontDoorVolume( SoundTouchInterface::volume const& volume )
 {
     BOSE_VERBOSE( s_logger, "Got volume notify LPM (%d) (%d)", volume.value(), volume.muted() );
 
@@ -399,28 +370,28 @@ void ProductEdidInterface::HandleFrontDoorVolume( SoundTouchInterface::volume co
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductEdidInterface::PowerOff
+/// @brief ProductCecHelper::PowerOff
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductEdidInterface::PowerOff( )
+void ProductCecHelper::PowerOff( )
 {
     A4VVideoManagerServiceMessages::PowerStateMsg_t msg;
 
     msg.set_state( A4VVideoManagerServiceMessages::PowerState_t::PS_Low );
-    m_EdidClient->SetPowerState( msg );
+    m_CecHelper->SetPowerState( msg );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductEdidInterface::PowerOn
+/// @brief ProductCecHelper::PowerOn
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductEdidInterface::PowerOn( )
+void ProductCecHelper::PowerOn( )
 {
     A4VVideoManagerServiceMessages::PowerStateMsg_t msg;
 
     msg.set_state( A4VVideoManagerServiceMessages::PowerState_t::PS_Full );
-    m_EdidClient->SetPowerState( msg );
+    m_CecHelper->SetPowerState( msg );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

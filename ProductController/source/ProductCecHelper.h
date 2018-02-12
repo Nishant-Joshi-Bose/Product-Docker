@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      ProductEdidInterface.h
+/// @file      ProductCecHelper.h
 ///
 /// @brief     This header file contains declarations to handle communication with a A4VVideoManager
 ///            service.
@@ -54,28 +54,28 @@ class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class ProductEdidInterface
+/// @class ProductCecHelper
 ///
 /// @brief This class is used to handle communication with a A4VVideoManager service.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProductEdidInterface
+class ProductCecHelper
 {
 public:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @name   ProductEdidInterface Constructor
+    /// @name   ProductCecHelper Constructor
     ///
     /// @param  ProfessorProductController& ProductController
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    ProductEdidInterface( ProfessorProductController& ProductController );
+    ProductCecHelper( ProfessorProductController& ProductController );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following public methods are used to run and stop instances of the
-    ///        ProductEdidInterface class, respectively.
+    ///        ProductCecHelper class, respectively.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool Run( );
@@ -99,7 +99,7 @@ private:
     NotifyTargetTaskIF*        m_ProductTask;
     Callback< ProductMessage > m_ProductNotify;
     std::shared_ptr < CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
-    A4VVideoManager::A4VVideoManagerClientIF::A4VVideoManagerClientPtr m_EdidClient;
+    A4VVideoManager::A4VVideoManagerClientIF::A4VVideoManagerClientPtr m_CecHelper;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
