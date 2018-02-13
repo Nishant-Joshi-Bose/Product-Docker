@@ -23,6 +23,7 @@ ADD_EXECUTABLE(Eddie
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateBooting.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateOn.cpp
   ProductCliClient.cpp
+  DataCollectionClientInterface.cpp
   EddieProductController.cpp
   Main.cpp
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
