@@ -282,18 +282,21 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 
         if( sourceString == "tv" )
         {
-            unsigned int startTvPlayback = static_cast< unsigned int >( Action::ACTION_TV );
-            m_ProductController.GetIntentHandler( ).Handle( startTvPlayback );
+            KeyHandlerUtil::ActionType_t startTvPlayback = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_TV );
+            ProductMessage msg;
+            msg.set_action( startTvPlayback );
+            m_ProductController.HandleMessage( msg );
         }
         else if( sourceString == "st" )
         {
-            unsigned int startSoundTouchPlayback = static_cast< unsigned int >( Action::ACTION_SOUNDTOUCH );
-            m_ProductController.GetIntentHandler( ).Handle( startSoundTouchPlayback );
+            KeyHandlerUtil::ActionType_t startSoundTouchPlayback = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_SOUNDTOUCH );
+            ProductMessage msg;
+            msg.set_action( startSoundTouchPlayback );
+            m_ProductController.HandleMessage( msg );
         }
         else
         {
             response  = "Incorrect Usage: product source [tv | st] \r\n";
-
             return -1;
         }
 
