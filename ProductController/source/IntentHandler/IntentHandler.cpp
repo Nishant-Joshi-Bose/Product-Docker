@@ -135,7 +135,6 @@ void IntentHandler::Initialize( )
     m_IntentManagerMap[( uint16_t )Action::ACTION_TV ]         = playbackRequestManager;
     m_IntentManagerMap[( uint16_t )Action::ACTION_SOUNDTOUCH ] = playbackRequestManager;
     m_IntentNotificationMap[( uint16_t )Action::ACTION_TV ]         = "tv";
-    m_IntentNotificationMap[( uint16_t )Action::ACTION_SOUNDTOUCH ] = "soundtouch";
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
