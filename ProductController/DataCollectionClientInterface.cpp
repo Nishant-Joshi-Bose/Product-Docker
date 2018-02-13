@@ -50,7 +50,7 @@ void DataCollectionClientInterface::Subscribe()
     //AsyncCallback<DeviceManagerPb::ProductSettings> DataCollectionLanguageCb( std::bind( &DataCollectionClientInterface::ProcessLanguage,
     //                                                                          this, std::placeholders::_1 ) , m_dataCollectionClientInterfaceTask );
 
-    m_frontDoorClientIF->RegisterNotification<DeviceManagerPb::DeviceState>( "/system/state", DataCollectionStateCb );
+    m_frontDoorClientIF->RegisterNotification<DeviceManagerPb::DeviceState>( FRONTDOOR_SYSTEM_STATE_API, DataCollectionStateCb );
 
     m_frontDoorClientIF->RegisterNotification<ProductPb::AudioBassLevel>( "/audio/bass", DataCollectionbassCb );
 
@@ -89,7 +89,7 @@ void DataCollectionClientInterface::ProcessSystemState( const DeviceManagerPb::D
     };
     AsyncCallback<SoundTouchInterface::NowPlaying> getNowPlayingReqCb( func, m_dataCollectionClientInterfaceTask );
     AsyncCallback<EndPointsError::Error> errorCb( errorfunc, m_dataCollectionClientInterfaceTask );
-    m_frontDoorClientIF->SendGet<SoundTouchInterface::NowPlaying, EndPointsError::Error>( "/content/nowPlaying" , getNowPlayingReqCb, errorCb );
+    m_frontDoorClientIF->SendGet<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_NOWPLAYING_API , getNowPlayingReqCb, errorCb );
 }
 
 void DataCollectionClientInterface::ProcessBassState( const ProductPb::AudioBassLevel& adl )

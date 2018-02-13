@@ -6,6 +6,7 @@
 #include "DataCollectionClientIF.h"
 #include "APTaskFactory.h"
 #include "AsyncCallback.h"
+#include "EndPointsDefines.h"
 #include "NotifyTargetTaskIF.h"
 #include "FrontDoorClient.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
