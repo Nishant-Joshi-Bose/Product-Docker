@@ -73,11 +73,11 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.3.2-410+44390aa"
+    "selected_version": "Release/master/0.3.5-451+10160e3"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.3.2-410+44390aa"
+    "selected_version": "Release/master/0.3.5-451+10160e3"
   },
   {
     "name": "CastleProductControllerCommon",
