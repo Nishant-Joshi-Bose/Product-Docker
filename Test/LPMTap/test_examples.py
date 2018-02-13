@@ -11,7 +11,7 @@ __logger = get_logger(__file__)
 
 __lpmPort = pytest.config.getoption('--lpm_port')
 if __lpmPort is None:
-    pytest.fail("LPM port is required: pytest -sv <test.py> --lmp_port </dev/tty.usb-foo>")
+    pytest.fail("LPM port is required: pytest -sv <test.py> --lpm_port </dev/tty.usb-foo>")
 
 __lpm = Lpm(__lpmPort)
 
@@ -27,7 +27,7 @@ def test_amp_fault_on():
 
 	__lpm.amp_fault_set_state(True)
 
-#@pytest.mark.skip("Example/test functionality")
+@pytest.mark.skip("Example/test functionality")
 def test_amp_fault_induce():
 	""" 
 	Induce an amp fault.
