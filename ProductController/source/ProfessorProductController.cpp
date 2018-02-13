@@ -806,13 +806,19 @@ void ProfessorProductController::SetupProductSTSConntroller( )
     /// Adapt IQ and Setup is not available as a normal source, whereas the TV source will always
     /// be available.
     ///
-    ProductSTSController::SourceDescriptor descriptor_AiQ  { ProductSTS::SLOT_AIQ,   "ADAPTiQ", false };
-    ProductSTSController::SourceDescriptor descriptor_Setup{ ProductSTS::SLOT_SETUP, "SETUP", false };
-    ProductSTSController::SourceDescriptor descriptor_TV   { ProductSTS::SLOT_TV,    "TV",      true  };
+    ProductSTSController::SourceDescriptor descriptor_AiQ    { ProductSTS::SLOT_AIQ,   "ADAPTiQ", false };
+    ProductSTSController::SourceDescriptor descriptor_Setup  { ProductSTS::SLOT_SETUP, "SETUP",   false };
+    ProductSTSController::SourceDescriptor descriptor_TV     { ProductSTS::SLOT_TV,    "TV",      true  };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_0 { ProductSTS::SLOT_0,     "SLOT_0",  false };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_1 { ProductSTS::SLOT_1,     "SLOT_1",  false };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_2 { ProductSTS::SLOT_2,     "SLOT_2",  false };
 
     sources.push_back( descriptor_AiQ );
     sources.push_back( descriptor_Setup );
     sources.push_back( descriptor_TV );
+    sources.push_back( descriptor_SLOT_0 );
+    sources.push_back( descriptor_SLOT_1 );
+    sources.push_back( descriptor_SLOT_2 );
 
     Callback< void >
     CallbackForSTSComplete( std::bind( &ProfessorProductController::HandleSTSInitWasComplete,
