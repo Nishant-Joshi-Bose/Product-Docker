@@ -190,6 +190,7 @@ void CustomProductAudioService::FetchLatestAudioSettings( )
 void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCommon::ChannelParameters> channelParams, std::string serializedAudioSettings, std::string serializedInputRoute, const Callback<bool> cb )
 {
     BOSE_DEBUG( s_logger, __func__ );
+    BOSE_DEBUG( s_logger, "serializedAudioSettings = %s, serializedInputRoute = %s", serializedAudioSettings.c_str(), serializedInputRoute.c_str() );
 
     // TODO: PGC-218: Enable routing of setStreamConfig() message to DSP
     // Convert serialized json string from APProduct into IpcDspStreamConfigReqPayload_t type

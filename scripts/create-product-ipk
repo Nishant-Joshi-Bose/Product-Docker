@@ -150,7 +150,7 @@ else
     cp -r "$wspace/scripts/keys/development/CACerts/" "$secure_dir" || exit
 fi
 
-cp "$audiopath_dir/bin/lisa/libDspPlayback.so" "$opt_dir/bin" || exit
+cp "$audiopath_dir/bin/professor/libDspPlayback.so" "$opt_dir/bin" || exit
 
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.

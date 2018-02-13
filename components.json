@@ -45,7 +45,7 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-02-09_1601"
+    "selected_version": "Continuous/Castle-Fork_Multi/2018-02-13_1226"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
@@ -85,7 +85,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@eb6404bac834f473aca01b9caa710180e53185fe"
+    "selected_version": "PGC218_setStreamConfig@a3e5de3237cb76172e8491608b9c72abcb8b41e0"
   },
   {
     "name": "FrontDoor-qc8017_32",

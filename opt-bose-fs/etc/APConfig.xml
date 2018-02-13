@@ -37,7 +37,7 @@
                             outputDriverPath=""
                             outputDriverType="AUDIO_DEVICE_TYPE_ALSA"
                             hardwareDeviceName="hw:0,0"
-                            samplesPerFrame="512"
+                            samplesPerFrame="192"
                             outputSampleRate="48000"
                             wifiAttenuation="0.39810699"
                             auxAttenuation="1"
