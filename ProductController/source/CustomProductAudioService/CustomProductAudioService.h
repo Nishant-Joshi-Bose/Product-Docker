@@ -11,6 +11,7 @@
 #include "CustomProductLpmHardwareInterface.h"
 #include "CustomAudioSettingsManager.h"
 #include "ThermalMonitorTask.h"
+#include "FrontDoorClient.h"
 
 namespace ProductApp
 {
