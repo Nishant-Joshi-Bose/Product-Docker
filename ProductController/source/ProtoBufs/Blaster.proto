@@ -1,0 +1,46 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @file KeyConfiguration.proto
+///
+/// @brief This file describes the KeyConfiguration json file
+///
+/// Copyright 2018 Bose Corporation
+////////////////////////////////////////////////////////////////////////////////
+
+import "ProtoToMarkup/MarkupOptions.proto";
+
+package BlasterConfiguration;
+
+message BlasterConfiguration
+{
+    option (ignore_unexpected_markup) = true;
+    
+    repeated BlasterTable blastTable = 1;
+}
+
+message BlasterTable
+{
+    option (ignore_unexpected_markup) = true;
+    
+    optional string zone            = 1;
+    repeated uint32 keyList         = 2;
+
+    // possible values are
+    // DEVICE_TYPE_TV
+    // DEVICE_TYPE_SMART_TV
+    // DEVICE_TYPE_GAME
+    // DEVICE_TYPE_CBL_SAT
+    // DEVICE_TYPE_BD_DVD
+    // DEVICE_TYPE_STREAMING
+    repeated string blastDevices    = 3;
+}
+
+message Error
+{
+        option (ignore_unexpected_markup) = true;
+
+        required int32 code = 1;
+        required int32 subcode = 2;
+        required string message = 3;
+        required string guid = 4;
+}
+

@@ -389,13 +389,14 @@ def create_output(is_without_lpm, development):
     except:
         logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
         return -33, "Cannot add product_flash tools to output"
-    
+
     ''' create bose partition
     '''
     retVal, retStr = create_bose_partition(is_without_lpm, development, 
                     ['product.ipk', 'brussels.ipk', 'lpm_updater.ipk', 'hsp.ipk'])
     if retVal != 0:
         return retVal, retStr
+
     ''' create bose-persist partition
     '''
     retVal, retStr = create_bose_persist_partition(is_without_lpm, development)

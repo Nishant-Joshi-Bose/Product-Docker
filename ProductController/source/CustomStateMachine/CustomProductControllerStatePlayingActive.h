@@ -72,12 +72,12 @@ public:
 
     }
 
-    bool HandleNowPlayingStatus( const ProductNowPlayingStatus_ProductNowPlayingState& state ) override;
-    bool HandleIntent( KeyHandlerUtil::ActionType_t action )                                   override;
-    bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )                          override;
-    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )                        override;
-    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t action )                     override;
-    bool HandleIntentPlayback( KeyHandlerUtil::ActionType_t action )                           override;
+    bool HandleIntent( KeyHandlerUtil::ActionType_t action )                    override;
+    bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )           override;
+    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )         override;
+    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t action )      override;
+    bool HandleIntentPlaySoundTouchSource( )                                    override;
+    bool HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t action )   override;
 
 private:
 
