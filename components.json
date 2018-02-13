@@ -124,7 +124,7 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/${RIVIERA_HSP_VERSION}"
+    "selected_version": "Continuous/dev/2.2-10-g377883c"
   },
   {
     "name": "Riviera-Toolchain",
