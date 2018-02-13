@@ -16,7 +16,6 @@
 #include "NotifyTargetTaskIF.h"
 #include "ProtoPersistenceIF.h"
 #include "ProductControllerStateTop.h"
-#include "ProductControllerStateSetup.h"
 #include "ProductControllerStateNetworkStandby.h"
 #include "ProductControllerStateLowPowerStandby.h"
 #include "ProductControllerStateLowPowerStandbyTransition.h"
@@ -30,7 +29,6 @@
 #include "ProductControllerStatePlayingInactive.h"
 #include "ProductControllerStateRebooting.h"
 #include "CustomProductControllerStateBooting.h"
-#include "CustomProductControllerStateSetup.h"
 #include "CustomProductControllerStateOn.h"
 #include "ProductControllerStateOn.h"
 #include "ProductControllerStateIdle.h"
@@ -44,6 +42,7 @@
 #include "ProductControllerStatePlayingSelectedSetup.h"
 #include "ProductControllerStatePlayingSelectedSetupNetwork.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
+#include "ProductControllerStatePlayingSelectedSetupExiting.h"
 #include "ProductControllerStateStoppingStreams.h"
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
@@ -366,7 +365,6 @@ private:
 
     ProductControllerStateTop               m_ProductControllerStateTop;
     CustomProductControllerStateBooting     m_CustomProductControllerStateBooting;
-    CustomProductControllerStateSetup       m_CustomProductControllerStateSetup;
     CustomProductControllerStateOn          m_CustomProductControllerStateOn;
     ProductControllerStateLowPowerStandby   m_ProductControllerStateLowPowerStandby;
     ProductControllerSoftwareUpdating       m_ProductControllerStateSwUpdating;
@@ -395,6 +393,7 @@ private:
     ProductControllerStatePlayingSelectedSetup              m_ProductControllerStatePlayingSelectedSetup;
     ProductControllerStatePlayingSelectedSetupNetwork       m_ProductControllerStatePlayingSelectedSetupNetwork;
     ProductControllerStatePlayingSelectedSetupOther         m_ProductControllerStatePlayingSelectedSetupOther;
+    ProductControllerStatePlayingSelectedSetupExiting       m_ProductControllerStatePlayingSelectedSetupExiting;
     ProductControllerStateStoppingStreams                   m_ProductControllerStateStoppingStreams;
     ProductControllerStatePlayableTransition                m_ProductControllerStatePlayableTransition;
     ProductControllerStatePlayableTransitionIdle            m_ProductControllerStatePlayableTransitionIdle;

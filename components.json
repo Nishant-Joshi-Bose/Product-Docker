@@ -32,6 +32,10 @@
     "selected_version": "Release/Castle-Fork/0.2.5-20386"
   },
   {
+    "name": "CastleAudioPath-qc8017_64",
+    "selected_version": "Release/Castle-Fork/0.2.7-20452"
+  },
+  {
     "name": "CastleCli-qc8017_32",
     "selected_version": "Release/master/0.2.3-26+8cf9ea4"
   },
@@ -69,15 +73,15 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.3.2-410+44390aa"
+    "selected_version": "Release/master/0.3.5-451+10160e3"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.3.2-410+44390aa"
+    "selected_version": "Release/master/0.3.5-451+10160e3"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@0e620bc3612554f421f6876d8307512071114ffa"
+    "selected_version": "master@2727b7759eb3ccda7aadf90b88170723ab4d92de"
   },
   {
     "name": "CastleProductUIAssets",
@@ -140,11 +144,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Continuous/master/0.3.6-295+e30c894"
+    "selected_version": "Release/master/0.3.7-301+1d78fe1"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-02-09_1057"
+    "selected_version": "Continuous/Castle-Fork/2018-02-09_1947"
   },
   {
     "name": "Webkit",

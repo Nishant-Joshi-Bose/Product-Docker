@@ -106,6 +106,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
     virtual bool HandleIntentBlueTooth( KeyHandlerUtil::ActionType_t result )
     {
         return false;
@@ -150,6 +155,12 @@ public:
     {
         return false;
     }
+
+    virtual bool HandleIntentSystemInfoMode( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
     virtual bool HandleIntentVolume( KeyHandlerUtil::ActionType_t result )
     {
         return false;
@@ -273,6 +284,10 @@ public:
         return false;
     }
 
+    virtual bool HandleOOBSetupDone( )
+    {
+        return false;
+    }
 public:
     /// The custom version of this function returns the custom ProductController
     static EddieProductController& GetCustomProductController();
