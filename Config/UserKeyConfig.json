@@ -36,7 +36,7 @@
         "action": "VOICE_CAROUSEL",
         "commment": "Console: action release ---> Alexa",
         "keyEvent": "RELEASE",
-        "keyList": ["KEY_VAL_AVAIL_AE"],
+        "keyList": ["BOSE_AMAZON_ACTION"],
         "origin": ["CAPSENSE", "TAP"],
         "timeOutList": []
     },
@@ -137,7 +137,7 @@
         "timeOutList": [200]
     },
     {
-        "action": "ACTION_VOLUME_UP_1",
+        "action": "VOLUME_UP",
         "commment": "volume up",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_VOLUME_UP"],
@@ -145,7 +145,7 @@
         "timeOutList": [0]
     },
     {
-        "action": "ACTION_VOLUME_UP_1",
+        "action": "VOLUME_UP",
         "commment": "volume up repeat",
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_UP"],
@@ -153,7 +153,7 @@
         "timeOutList": [300, 100]
     },
     {
-        "action": "ACTION_VOLUME_DOWN_1",
+        "action": "VOLUME_DOWN",
         "commment": "volume down",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_VOLUME_DOWN"],
@@ -161,7 +161,7 @@
         "timeOutList": [0]
     },
     {
-        "action": "ACTION_VOLUME_DOWN_1",
+        "action": "VOLUME_DOWN",
         "commment": "volume down repeat",
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_DOWN"],

@@ -782,6 +782,206 @@
         }, 
         {
             "origin": 2, 
+            "keyEvent": 1, 
+            "timeOutList": [
+                0
+            ], 
+            "commment": "volume up", 
+            "action": 23, 
+            "keyList": [
+                3
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 1, 
+            "timeOutList": [
+                0
+            ], 
+            "commment": "volume up", 
+            "action": 23, 
+            "keyList": [
+                3
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 1, 
+            "timeOutList": [
+                0
+            ], 
+            "commment": "volume up", 
+            "action": 23, 
+            "keyList": [
+                3
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 1, 
+            "timeOutList": [
+                0
+            ], 
+            "commment": "volume up", 
+            "action": 23, 
+            "keyList": [
+                3
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 3, 
+            "timeOutList": [
+                300, 
+                100
+            ], 
+            "commment": "volume up repeat", 
+            "action": 23, 
+            "keyList": [
+                3
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 3, 
+            "timeOutList": [
+                300, 
+                100
+            ], 
+            "commment": "volume up repeat", 
+            "action": 23, 
+            "keyList": [
+                3
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 3, 
+            "timeOutList": [
+                300, 
+                100
+            ], 
+            "commment": "volume up repeat", 
+            "action": 23, 
+            "keyList": [
+                3
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 3, 
+            "timeOutList": [
+                300, 
+                100
+            ], 
+            "commment": "volume up repeat", 
+            "action": 23, 
+            "keyList": [
+                3
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 1, 
+            "timeOutList": [
+                0
+            ], 
+            "commment": "volume down", 
+            "action": 24, 
+            "keyList": [
+                2
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 1, 
+            "timeOutList": [
+                0
+            ], 
+            "commment": "volume down", 
+            "action": 24, 
+            "keyList": [
+                2
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 1, 
+            "timeOutList": [
+                0
+            ], 
+            "commment": "volume down", 
+            "action": 24, 
+            "keyList": [
+                2
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 1, 
+            "timeOutList": [
+                0
+            ], 
+            "commment": "volume down", 
+            "action": 24, 
+            "keyList": [
+                2
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 3, 
+            "timeOutList": [
+                300, 
+                100
+            ], 
+            "commment": "volume down repeat", 
+            "action": 24, 
+            "keyList": [
+                2
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 3, 
+            "timeOutList": [
+                300, 
+                100
+            ], 
+            "commment": "volume down repeat", 
+            "action": 24, 
+            "keyList": [
+                2
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 3, 
+            "timeOutList": [
+                300, 
+                100
+            ], 
+            "commment": "volume down repeat", 
+            "action": 24, 
+            "keyList": [
+                2
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 3, 
+            "timeOutList": [
+                300, 
+                100
+            ], 
+            "commment": "volume down repeat", 
+            "action": 24, 
+            "keyList": [
+                2
+            ]
+        }, 
+        {
+            "origin": 2, 
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "play/pause", 
@@ -1147,7 +1347,7 @@
             "commment": "factory default", 
             "action": 8, 
             "keyList": [
-                253
+                27
             ]
         }, 
         {
@@ -1157,7 +1357,7 @@
             "commment": "factory default", 
             "action": 8, 
             "keyList": [
-                253
+                27
             ]
         }, 
         {
@@ -1167,7 +1367,7 @@
             "commment": "factory default", 
             "action": 8, 
             "keyList": [
-                253
+                27
             ]
         }, 
         {
@@ -1177,7 +1377,7 @@
             "commment": "factory default", 
             "action": 8, 
             "keyList": [
-                253
+                27
             ]
         }, 
         {
@@ -1187,7 +1387,7 @@
             "commment": "toggle wifi", 
             "action": 7, 
             "keyList": [
-                252
+                28
             ]
         }, 
         {
@@ -1197,7 +1397,7 @@
             "commment": "toggle wifi", 
             "action": 7, 
             "keyList": [
-                252
+                28
             ]
         }, 
         {
@@ -1207,7 +1407,7 @@
             "commment": "toggle wifi", 
             "action": 7, 
             "keyList": [
-                252
+                28
             ]
         }, 
         {
@@ -1217,7 +1417,7 @@
             "commment": "toggle wifi", 
             "action": 7, 
             "keyList": [
-                252
+                28
             ]
         }, 
         {
@@ -1227,7 +1427,7 @@
             "commment": "ap setup", 
             "action": 5, 
             "keyList": [
-                251
+                29
             ]
         }, 
         {
@@ -1237,7 +1437,7 @@
             "commment": "ap setup", 
             "action": 5, 
             "keyList": [
-                251
+                29
             ]
         }, 
         {
@@ -1247,7 +1447,7 @@
             "commment": "ap setup", 
             "action": 5, 
             "keyList": [
-                251
+                29
             ]
         }, 
         {
@@ -1257,7 +1457,7 @@
             "commment": "ap setup", 
             "action": 5, 
             "keyList": [
-                251
+                29
             ]
         }, 
         {
@@ -1267,7 +1467,7 @@
             "commment": "pair speakers", 
             "action": 124, 
             "keyList": [
-                250
+                30
             ]
         }, 
         {
@@ -1277,7 +1477,7 @@
             "commment": "pair speakers", 
             "action": 124, 
             "keyList": [
-                250
+                30
             ]
         }, 
         {
@@ -1287,7 +1487,7 @@
             "commment": "pair speakers", 
             "action": 124, 
             "keyList": [
-                250
+                30
             ]
         }, 
         {
@@ -1297,7 +1497,7 @@
             "commment": "pair speakers", 
             "action": 124, 
             "keyList": [
-                250
+                30
             ]
         }, 
         {
