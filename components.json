@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@0d38c2773fc8f513fbc2214faf92bc9b8ebc3cc0"
+    "selected_version": "master@f6190e89b9415def6fa5335687e2bfa7d19ffa20"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.8.41015.2682265"
+    "selected_version": "Release/Castle-Fork/0.3.6.40929.2672236"
   },
   {
     "name": "bose-opkg-utils",
@@ -25,7 +25,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.8-250+b7e7ef1"
+    "selected_version": "Release/master/0.3.7-243+5bef58d"
   },
   {
     "name": "BoseOPKG-native",
@@ -41,15 +41,11 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/develop/0.2.1-48+11dcb95"
+    "selected_version": "Release/develop/0.2.1-32+59feb17"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork_Multi/2018-02-08_1646"
-  },
-  {
-    "name": "CastleAudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/0.2.7-20452"
+    "selected_version": "Release/Castle-Fork/0.2.5-20386"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -85,15 +81,15 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@eb6404bac834f473aca01b9caa710180e53185fe"
+    "selected_version": "master@5e4a1b5bb79bca67991ca8fda8f13cded7f9b4b1"
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/0.3.6-102+8b058cd"
+    "selected_version": "Release/master/0.3.5-93+a323e45"
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.1.1-56+508fe9a"
+    "selected_version": "Release/master/0.1.1-38+2220e79"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -128,7 +124,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Continuous/master/0.3.5-92+2b205e2"
+    "selected_version": "Release/master/0.3.4-88+c5d5be2"
   },
   {
     "name": "RivieraLpmUpdater",

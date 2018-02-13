@@ -290,17 +290,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentSystemInfoMode( KeyHandlerUtil::ActionType_t intent )
-    {
-        return false;
-    }
-
     virtual bool HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent )
-    {
-        return false;
-    }
-
-    virtual bool HandleIntentPlaySoundTouchSource( )
     {
         return false;
     }
