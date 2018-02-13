@@ -40,8 +40,8 @@
     "selected_version": "Release/master/0.1.0-4+31ebf8c"
   },
   {
-    "name": "BoseWebMonaco",
-    "selected_version": "Release/develop/0.2.1-48+11dcb95"
+    "name": "BoseWebBrussels",
+    "selected_version": "Continuous/develop/0.0.1-2+fdc6859"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -156,6 +156,6 @@
   },
   {
     "name": "Webkit",
-    "selected_version": "Release/master/0.3.1-24+472ac23"
+    "selected_version": "Continuous/master/0.3.2-30+f72a09c"
   }
 ]
