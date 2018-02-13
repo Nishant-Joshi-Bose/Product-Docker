@@ -35,6 +35,8 @@
 #include "KeyHandler.h"
 #include "LpmServiceMessages.pb.h"
 #include "ProductMessage.pb.h"
+#include "Blaster.pb.h"
+#include "A4VQuickSetServiceClientFactory.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -91,12 +93,15 @@ private:
     ///        key presses and whether the module is running are also provided.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF*                                  m_ProductTask;
-    Callback< ProductMessage >                           m_ProductNotify;
-    std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
-    KeyHandlerUtil::KeyHandler                           m_KeyHandler;
-    bool                                                 m_connected;
-    bool                                                 m_running;
+    NotifyTargetTaskIF*                                                         m_ProductTask;
+    Callback< ProductMessage >                                                  m_ProductNotify;
+    std::shared_ptr< CustomProductLpmHardwareInterface >                        m_ProductLpmHardwareInterface;
+    KeyHandlerUtil::KeyHandler                                                  m_KeyHandler;
+    bool                                                                        m_connected;
+    bool                                                                        m_running;
+    BlasterConfiguration::BlasterConfiguration                                  m_blasterConfig;
+    std::map<uint32_t, std::vector<std::string>>                                m_blasterMap;
+    A4VQuickSetService::A4VQuickSetServiceClientIF::A4VQuickSetServiceClientPtr m_QSSClient;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -115,6 +120,21 @@ private:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     void KeyInformationCallBack( const int keyAction );
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method initializes the key blasting configuration.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    bool InitializeBlasterConfig( );
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method determines whether a key should be blasted given the
+    /// device type of the currently-selected source
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    bool IsBlastedKey( uint32_t key, std::string& devType );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

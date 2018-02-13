@@ -76,9 +76,9 @@ ProductAdaptIQManager::ProductAdaptIQManager( ProfessorProductController& Produc
 {
     m_status.set_smstate( "AIQ_STATE_NOT_RUNNING" );
     m_status.set_currentlocation( ADAPTIQ_LOCATION_FIRST );
-    m_status.set_currentspeaker( ADAPTIQ_SPEAKER_FIRST );
+    m_status.set_currentspeaker( IpcAiqMeasChannel_t_Name( LpmServiceMessages::AIQ_MEAS_CHANNEL_NONE ) );
     m_status.set_hpconnected( true );
-    m_status.set_errorcode( 0 );
+    m_status.set_errorcode( "AIQ_ERROR_NONE" );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,73 +161,11 @@ void ProductAdaptIQManager::DSPToFrontDoorStatus( ProductPb::AdaptIQStatus& fron
      */
     ProductAdaptIQStatus& status = const_cast<ProductAdaptIQStatus&>( dspStatus );
 
-    /*
-     * none of these definitions belong here, and they will be removed from here once aiq definition is finished,
-     * but for now with the definition in flux this keeps us from having to change a bunch of other files
-     */
-    // https://wiki.bose.com/pages/viewpage.action?spaceKey=A4V&title=Professor+AdaptIQ#?lucidIFH-viewer-73845d7d=1
-    // https://svn.bose.com/hepd/RivieraSharc/trunk/modules/IPC/IpcProtocol.h
-    enum IpcAiqStates
-    {
-        AIQ_STATE_NONE,
-        AIQ_STATE_NOT_RUNNING,
-        AIQ_STATE_INTRO_3_COMFY,
-        AIQ_STATE_INTRO_4_READY,
-        AIQ_STATE_MEASURING,
-        AIQ_STATE_TRANSITION_FIRST,
-        AIQ_STATE_TRANSITION_NEXT,
-        AIQ_STATE_TRANSITION_LAST,
-        AIQ_STATE_SUCCESS,
-        AIQ_STATE_ERR_NOISE,
-        AIQ_STATE_ERR_TOO_CLOSE,
-        AIQ_STATE_ERR_MICS_MOVED,
-        AIQ_STATE_ERR_NO_SOUND,
-        AIQ_STATE_ERR_PREVIOUS,
-        AIQ_STATE_ERR_FAIL,
-        AIQ_STATE_ERR_HS_DETECT,
-        AIQ_STATE_ERR_HS_LOST,
-        AIQ_STATE_ERR_HS_FAIL,
-    };
-
-#define MAP_ENUM_STRING(e) {e, #e}
-    static std::map<IpcAiqStates, const char *> stateIdToName =
-    {
-        MAP_ENUM_STRING( AIQ_STATE_NONE ),
-        MAP_ENUM_STRING( AIQ_STATE_NOT_RUNNING ),
-        MAP_ENUM_STRING( AIQ_STATE_INTRO_3_COMFY ),
-        MAP_ENUM_STRING( AIQ_STATE_INTRO_4_READY ),
-        MAP_ENUM_STRING( AIQ_STATE_MEASURING ),
-        MAP_ENUM_STRING( AIQ_STATE_TRANSITION_FIRST ),
-        MAP_ENUM_STRING( AIQ_STATE_TRANSITION_NEXT ),
-        MAP_ENUM_STRING( AIQ_STATE_TRANSITION_LAST ),
-        MAP_ENUM_STRING( AIQ_STATE_SUCCESS ),
-        MAP_ENUM_STRING( AIQ_STATE_ERR_NOISE ),
-        MAP_ENUM_STRING( AIQ_STATE_ERR_TOO_CLOSE ),
-        MAP_ENUM_STRING( AIQ_STATE_ERR_MICS_MOVED ),
-        MAP_ENUM_STRING( AIQ_STATE_ERR_NO_SOUND ),
-        MAP_ENUM_STRING( AIQ_STATE_ERR_PREVIOUS ),
-        MAP_ENUM_STRING( AIQ_STATE_ERR_FAIL ),
-        MAP_ENUM_STRING( AIQ_STATE_ERR_HS_DETECT ),
-        MAP_ENUM_STRING( AIQ_STATE_ERR_HS_LOST ),
-        MAP_ENUM_STRING( AIQ_STATE_ERR_HS_FAIL ),
-    };
-
-    // set the translated fields ...
-    IpcAiqStates smState = static_cast<IpcAiqStates>( status.mutable_status()->smstate() );
-    if( stateIdToName.count( smState ) )
-    {
-        frontDoorStatus.set_smstate( stateIdToName[smState] );
-    }
-    else
-    {
-        frontDoorStatus.set_smstate( "AIQ_STATE_UNKNOWN" );
-    }
-
-    // ... and set the direct-copy fields
+    frontDoorStatus.set_smstate( IpcAiqState_t_Name( status.mutable_status()->smstate() ) );
     frontDoorStatus.set_currentlocation( status.mutable_status()->currentlocation() );
-    frontDoorStatus.set_currentspeaker( status.mutable_status()->currentchannel() );
+    frontDoorStatus.set_currentspeaker( IpcAiqMeasChannel_t_Name( status.mutable_status()->currentchannel() ) );
     frontDoorStatus.set_hpconnected( status.mutable_status()->hpconnected() );
-    frontDoorStatus.set_errorcode( status.mutable_status()->errorcode() );
+    frontDoorStatus.set_errorcode( IpcAiqError_t_Name( status.mutable_status()->errorcode() ) );
 
 }
 

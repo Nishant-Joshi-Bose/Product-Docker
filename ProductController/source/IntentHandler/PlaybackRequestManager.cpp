@@ -101,29 +101,6 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
 
         BOSE_INFO( s_logger, "An attempt to play the TV source has been made." );
     }
-    else if( action == ( uint16_t )Action::ACTION_SOUNDTOUCH )
-    {
-        SoundTouchInterface::PlaybackRequest& playbackRequestData =
-            m_CustomProductController.GetLastSoundTouchPlayback( );
-
-        AsyncCallback< SoundTouchInterface::NowPlaying >
-        postPlaybackRequestResponseCallback( std::bind( &PlaybackRequestManager::PostPlaybackRequestResponse,
-                                                        this, std::placeholders::_1 ),
-                                             &GetTask( ) );
-
-        AsyncCallback< EndPointsError::Error >
-        postPlaybackRequestErrorCallback( std::bind( &PlaybackRequestManager::PostPlaybackRequestError,
-                                                     this,
-                                                     std::placeholders::_1 ),
-                                          &GetTask( ) );
-
-        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
-                playbackRequestData,
-                postPlaybackRequestResponseCallback,
-                postPlaybackRequestErrorCallback );
-
-        BOSE_INFO( s_logger, "An attempt to play the last SoundTouch source has been made." );
-    }
     else
     {
         BOSE_ERROR( s_logger, "An invalid intent action has been supplied." );

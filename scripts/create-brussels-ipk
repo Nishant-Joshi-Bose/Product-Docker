@@ -1,0 +1,134 @@
+#!/bin/bash
+#
+# Create an IPK file for installing Brussels with opkg.
+#
+# To install:
+#   opkg install -d bose brussels.ipk
+#
+# The file /etc/opkg/opkg.conf should contain this line:
+#   dest bose /opt/Bose
+#
+# To uninstall:
+#   opkg remove brussels
+#
+this=${0##*/} # this script's name
+
+cfg=Release
+
+tryhelp () {
+    echo >&2 "Try '$this --help' for more information."
+    exit 1
+}
+opts=$(getopt --name "$this" --shell sh \
+    -o uh \
+    -l "help" \
+    -- "$@") || tryhelp
+eval set -- "$opts"
+while :; do
+    arg="$1"; shift
+    case "$arg" in
+    (--help | -h)
+        cat <<EOF
+Usage: $this [options]
+
+Create an IPK file for installing Brussels with opkg.
+
+Options:
+EOF
+        exit 0
+        ;;
+
+    (--) break ;;
+    (*)  echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
+    esac
+done
+
+if (( $# != 0 )); then
+    echo >&2 "$this: unexpected argument '$1'"
+    tryhelp
+fi
+
+function put_script {
+    local file="$1"; shift
+    cat "$@" >"$file" || exit
+    chmod 755 "$file" || exit
+}
+
+here=$(cd "$(dirname $0)" && echo "$PWD") || exit
+wspace=$(cd "$here/.." && echo "$PWD") || exit
+
+brussels_dir=$(components get BoseWebBrussels installed_location) || exit
+brussels_ver=$(components get BoseWebBrussels selected_version) || exit
+brussels_ver=${brussels_ver##*/}
+
+stage=$wspace/builds/$cfg/brussels-ipk-stage
+rm -rf "$stage"
+echo "Stage directory $stage"
+
+output_dir=$wspace/builds/$cfg
+opt_dir=$stage/Bose
+mkdir -p "$output_dir" "$opt_dir" || exit
+
+echo "Package version \"$brussels_ver\""
+cp -rf "$brussels_dir"/brussels "$opt_dir/" || exit
+
+PackageName=brussels
+
+cat >"$stage/control" <<EOF || exit
+Package: $PackageName
+Version: $brussels_ver
+Description: Bose Web Brussels Package version $brussels_ver
+ Bose Web Brussels
+Section: web browser app
+Priority: required
+License: Commercial
+Architecture: armv7a-vfp-neon
+OE: web browser app
+Homepage: http://www.bose.com/
+#Depends: libc6 (>= 2.21)
+Source: None
+EOF
+
+# Installer scripts
+put_script "$stage/postinst" <<EOF
+#!/bin/sh
+echo "brussels postinst"
+# Set Progress End
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 100
+exit 0
+EOF
+
+put_script "$stage/postrm" <<EOF
+#!/bin/sh
+echo "brussels postrm"
+EOF
+
+put_script "$stage/preinst" <<EOF
+#!/bin/sh
+echo "brussels preinst"
+# Set Progress Start
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
+echo "Stopping dyz-shm"
+pkill dyz-shm
+exit 0
+EOF
+
+put_script "$stage/prerm" <<EOF
+#!/bin/sh
+echo "brussels prerm"
+EOF
+
+# -----------------------------------------------------------------------------
+# Stage area is complete.  Package it into a *.ipk file.
+
+cd "$stage" || exit
+tar --owner=0 --group=0 -czf control.tar.gz control pre* post* || exit
+tar --owner=0 --group=0 -czf data.tar.gz -C "$opt_dir" . || exit
+echo "2.0" > debian-binary || exit
+
+ipk_dir=$wspace/builds/$cfg
+ipk=$ipk_dir/brussels.ipk
+mkdir -p "$ipk_dir" || exit
+rm -f "$ipk"
+ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
+echo "Created $ipk"

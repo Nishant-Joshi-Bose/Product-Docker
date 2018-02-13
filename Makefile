@@ -74,6 +74,19 @@ keyconfig:
 		--outputcfg $(KEYCONFIG) \
 		--incdirs $(KEYCONFIG_INCS)
 
+USERBLASTCONFIG=$(PWD)/Config/UserKeyConfig.json
+BLASTCONFIG=$(PWD)/opt-bose-fs/etc/BlastConfiguration.json
+LPM_KEYS=$(RIVIERALPM_DIR)/include/RivieraLPM_KeyValues.h
+
+.PHONY: blastconfig
+blastconfig:
+	cd tools/key_config_generator && \
+	./generate_blast_config \
+		$(BUILDS_DIR) \
+		--inputcfg $(USERBLASTCONFIG) \
+		--keyfile $(LPM_KEYS) \
+		--outputcfg $(BLASTCONFIG) 
+
 .PHONY: cmake_build
 cmake_build: generated_sources | $(BUILDS_DIR) astyle
 	rm -rf $(BUILDS_DIR)/CMakeCache.txt $(BUILDS_DIR)/CMakeFiles
@@ -85,30 +98,30 @@ product-ipk: cmake_build
 	./scripts/create-product-ipk
 
 #Uncomment next two line after removing next 2 lines, once HSP is integrated.
-#IPKS = hsp.ipk  product.ipk lpm_updater.ipk
-#PACKAGENAMES = hsp SoundTouch lpm_updater
-IPKS = product.ipk lpm_updater.ipk
-PACKAGENAMES = SoundTouch lpm_updater
+#IPKS = brussels.ipk hsp.ipk  product.ipk lpm_updater.ipk
+#PACKAGENAMES = brussels hsp SoundTouch lpm_updater
+IPKS = brussels.ipk product.ipk lpm_updater.ipk
+PACKAGENAMES = brussels SoundTouch lpm_updater
 
 #Create Zip file for Bonjour / Local update
 .PHONY: update-zip
-update-zip: product-ipk hsp-ipk lpmupdater-ipk
+update-zip: brussels-ipk product-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 #Create one more Zip file for Bonjour / Local update with HSP 
 #- This is temporary, till DP2 boards are available.
-IPKS_HSP = hsp.ipk product.ipk lpm_updater.ipk
-PACKAGENAMES_HSP = hsp SoundTouch lpm_updater
+IPKS_HSP = hsp.ipk brussels.ipk product.ipk lpm_updater.ipk
+PACKAGENAMES_HSP = hsp brussels SoundTouch lpm_updater
 .PHONY: update-zip-with-hsp
-update-zip-with-hsp: product-ipk hsp-ipk lpmupdater-ipk
+update-zip-with-hsp: brussels-ipk product-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_with_hsp.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 .PHONY: packages-gz
-packages-gz: product-ipk hsp-ipk lpmupdater-ipk
+packages-gz: brussels-ipk product-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS)
 
 .PHONY: packages-gz-with-hsp
-packages-gz-with-hsp: product-ipk hsp-ipk lpmupdater-ipk
+packages-gz-with-hsp: brussels-ipk product-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_HSP)
 
 .PHONY: graph
@@ -124,9 +137,12 @@ hsp-ipk: cmake_build
 lpmupdater-ipk:
 	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage $(PROFESSORLPMPACKAGE_DIR) ./builds/$(cfg)/ professor
 
+.PHONY: brussels-ipk
+brussels-ipk:
+	./scripts/create-brussels-ipk
 
 .PHONY: package
-package: product-ipk hsp-ipk lpmupdater-ipk 
+package: product-ipk hsp-ipk lpmupdater-ipk brussels-ipk
 	./scripts/create-product-tar
 
 .PHONY: all-packages

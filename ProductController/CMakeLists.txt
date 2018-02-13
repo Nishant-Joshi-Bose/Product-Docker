@@ -1,5 +1,6 @@
 INCLUDE_DIRECTORIES(
   ${A4VVIDEOMANAGER_DIR}/source/Client
+  ${A4VQUICKSET_DIR}/source/Client
   ${CASTLECLI_DIR}/include
   ${KEYHANDLER_DIR}/include
   ${NETWORK_SERVICE_DIR}/include
@@ -27,6 +28,7 @@ INCLUDE_DIRECTORIES(
 ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/AdaptIQ.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
+  ${PROTO_CC_DEST}/Blaster.pb.cc
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc
@@ -35,7 +37,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/SystemSourcesProperties.pb.cc
   source/ProductAdaptIQManager.cpp
   source/ProductCommandLine.cpp
-  source/ProductEdidInterface.cpp
+  source/ProductCecHelper.cpp
   source/ProductKeyInputInterface.cpp
   source/ProductNetworkManager.cpp
   source/ProductStart.cpp
@@ -63,6 +65,7 @@ TARGET_LINK_LIBRARIES(Professor
   CastleProductControllerCommon
   LpmClient
   A4VVideoManagerClient
+  A4VQuickSetServiceClient
   FrontDoorClient
   NetworkServiceClient
   KeyHandler

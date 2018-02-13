@@ -71,34 +71,6 @@ CustomProductControllerStatePlayingActive::CustomProductControllerStatePlayingAc
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStatePlayingActive::HandleNowPlayingStatus
-///
-/// @param  ProductNowPlayingStatus_ProductNowPlayingState state
-///
-/// @return This method returns a true Boolean value indicating that it has handled the playback
-///         status and no futher processing will be required by any of its superstates.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayingActive::HandleNowPlayingStatus
-( const ProductNowPlayingStatus_ProductNowPlayingState& state )
-{
-    BOSE_ERROR( s_logger, "%s is handling a now playing %s status.",
-                GetName( ).c_str( ),
-                ProductNowPlayingStatus_ProductNowPlayingState_Name( state ).c_str( ) );
-
-    if( state == ProductNowPlayingStatus_ProductNowPlayingState_Inactive )
-    {
-        BOSE_INFO( s_logger, "%s is changing to %s.",
-                   GetName( ).c_str( ),
-                   "CustomProductControllerStatePlayingInactive" );
-        ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
-    }
-
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @brief  CustomProductControllerStatePlayingActive::HandleIntent
 ///
 /// @param  KeyHandlerUtil::ActionType_t action
@@ -135,7 +107,8 @@ bool CustomProductControllerStatePlayingActive::HandleIntentUserPower( KeyHandle
 ///
 /// @param  KeyHandlerUtil::ActionType_t action
 ///
-/// @return
+/// @return This method returns a Boolean false value in case the key action needs to be handled in
+///         one of its superstates
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlayingActive::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )
@@ -150,7 +123,8 @@ bool CustomProductControllerStatePlayingActive::HandleIntentMuteControl( KeyHand
 ///
 /// @param  KeyHandlerUtil::ActionType_t action
 ///
-/// @return
+/// @return This method returns a Boolean false value in case the key action needs to be handled in
+///         one of its superstates
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlayingActive::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t action )
@@ -161,14 +135,29 @@ bool CustomProductControllerStatePlayingActive::HandleIntentSpeakerPairing( KeyH
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStatePlayingActive::HandleIntentPlayback
+/// @brief  CustomProductControllerStatePlayingActive::HandleIntentPlaySoundTouchSource
 ///
-/// @param KeyHandlerUtil::ActionType_t action
-///
-/// @return
+/// @return This method returns a Boolean false value in case the key action needs to be handled in
+///         one of its superstates
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayingActive::HandleIntentPlayback( KeyHandlerUtil::ActionType_t action )
+bool CustomProductControllerStatePlayingActive::HandleIntentPlaySoundTouchSource( )
+{
+    ProcessUserActivity( );
+    return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStatePlayingActive::HandleIntentPlayProductSource
+///
+/// @param  KeyHandlerUtil::ActionType_t action
+///
+/// @return This method returns a Boolean false value in case the key action needs to be handled in
+///         one of its superstates
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayingActive::HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t action )
 {
     ProcessUserActivity( );
     return false;
