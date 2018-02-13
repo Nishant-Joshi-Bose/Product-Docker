@@ -78,7 +78,7 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     {
         if( m_actionType.is_initialized() and m_countdownValue > 0 and m_countdownValue <= m_countdownIntentInfoMap[( ProductApp::Action )m_actionType.get()].countdown )
         {
-            NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )m_actionType.get()].intentName, ButtonEventState::CANCEL );
+            NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )m_actionType.get()].intentName, ButtonEventState::CANCEL, 0 );
             m_actionType.reset();
         }
         else if( m_countdownValue == 0 )
@@ -117,7 +117,7 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             }
             else
             {
-                NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )intent].intentName, ButtonEventState::COMPLETED );
+                NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )intent].intentName, ButtonEventState::COMPLETED, 0 );
             }
         }
     }
