@@ -24,6 +24,28 @@ lowpower=(
     Shepherd-vfe.xml
 )
 
+# The list of daemons to stop before starting software upgrade.
+softwareupdate=(
+    Shepherd-LPMService.xml
+    Shepherd-NetManager.xml
+    Shepherd-Passport.xml
+    Shepherd-AudioPath.xml
+    Shepherd-CLIServer.xml
+    Shepherd-DemoController.xml
+    Shepherd-FrontDoor.xml
+    Shepherd-GalapagosClient.xml
+    Shepherd-HTTPProxy.xml
+    Shepherd-avs.xml
+    Shepherd-vfe.xml
+    Shepherd.xml
+)
+
+# The list of services to stop before starting software upgrade.
+# Added to stop the dyz-shm service started by run_wpe.sh script for Monaco
+servicesswup=(
+    dyz-shm
+)
+
 # For testing, make it easy to override what shepherd config files we use.
 if [ -d /mnt/nv/shepherd ]; then
     rundir=/mnt/nv/shepherd
@@ -224,6 +246,51 @@ if (( $# == 1 )) && [ "$1" = status ]; then
     exit
 fi
 
+if (( $# == 1 )) && [ "$1" = enterswup ]; then
+    cd "$rundir" || exit
+
+    log info "Disabling services to enter software update mode"
+    for i in "${softwareupdate[@]}"; do
+        if ! echo $coreApplicationList | grep -w $i > /dev/null; 
+	then
+            rm "$i"
+	fi
+    done
+    pkill -HUP shepherdd
+
+    function is_running {
+        # Like `pgrep -x` but doesn't assume $cmd is regex friendly
+        local cmd="$1" i comm
+        for i in /proc/[1-9]*/comm; do
+            read comm <"$i" || comm=
+            if [ "$comm" = "$cmd" ]; then
+                return 0
+            fi
+        done 2>/dev/null
+        return 1
+    }
+
+    # Wait for those daemons to end.
+    for i in $(xmllint --xpath "//ShepherdConfig/daemon/@name" \
+               $(for i in "${softwareupdate[@]}"; do echo "/opt/Bose/etc/$i"; done)); do
+        eval "$i"
+        j=0
+        while is_running "$name"; do
+            if (( (j += 1) >= 10 )); then
+                log warning "daemon '$name' is still running, giving up"
+                break
+            fi
+            sleep 0.5
+        done
+    done
+
+    # Kill services not stopped by shutdown daemon
+    for i in "${servicesswup[@]}"; do
+        killall "$i"
+    done
+    exit
+fi
+
 echo >&2 "\
 usage: $0 start [args...]
    or: $0 stop
@@ -232,5 +299,6 @@ usage: $0 start [args...]
    or: $0 factory_default
    or: $0 enterlowpower
    or: $0 exitlowpower
+   or: $0 enterswup
 "
 exit 1
