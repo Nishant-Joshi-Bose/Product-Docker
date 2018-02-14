@@ -347,7 +347,7 @@ def main():
     help='Path(s) for include files')
   args = argparser.parse_args()
 
-  clang_args = ['-x', 'c++']
+  clang_args = ['-x', 'c++', '-std=c++11']
   if args.inc_dirs is not None:
     for inc in args.inc_dirs:
       clang_args.append('-I{}'.format(inc))
