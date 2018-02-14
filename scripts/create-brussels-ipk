@@ -1,15 +1,15 @@
 #!/bin/bash
 #
-# Create an IPK file for installing Monaco with opkg.
+# Create an IPK file for installing Brussels with opkg.
 #
 # To install:
-#   opkg install -d bose monaco.ipk
+#   opkg install -d bose brussels.ipk
 #
 # The file /etc/opkg/opkg.conf should contain this line:
 #   dest bose /opt/Bose
 #
 # To uninstall:
-#   opkg remove monaco
+#   opkg remove brussels
 #
 this=${0##*/} # this script's name
 
@@ -31,7 +31,7 @@ while :; do
         cat <<EOF
 Usage: $this [options]
 
-Create an IPK file for installing Monaco with opkg.
+Create an IPK file for installing Brussels with opkg.
 
 Options:
 EOF
@@ -57,11 +57,11 @@ function put_script {
 here=$(cd "$(dirname $0)" && echo "$PWD") || exit
 wspace=$(cd "$here/.." && echo "$PWD") || exit
 
-monaco_dir=$(components get BoseWebMonaco installed_location) || exit
-monaco_ver=$(components get BoseWebMonaco selected_version) || exit
-monaco_ver=${monaco_ver##*/}
+brussels_dir=$(components get BoseWebBrussels installed_location) || exit
+brussels_ver=$(components get BoseWebBrussels selected_version) || exit
+brussels_ver=${brussels_ver##*/}
 
-stage=$wspace/builds/$cfg/monaco-ipk-stage
+stage=$wspace/builds/$cfg/brussels-ipk-stage
 rm -rf "$stage"
 echo "Stage directory $stage"
 
@@ -69,16 +69,16 @@ output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
 mkdir -p "$output_dir" "$opt_dir" || exit
 
-echo "Package version \"$monaco_ver\""
-cp -rf "$monaco_dir"/monaco "$opt_dir/" || exit
+echo "Package version \"$brussels_ver\""
+cp -rf "$brussels_dir"/brussels "$opt_dir/" || exit
 
-PackageName=monaco
+PackageName=brussels
 
 cat >"$stage/control" <<EOF || exit
 Package: $PackageName
-Version: $monaco_ver
-Description: Bose Web Monaco Package version $monaco_ver
- Bose Web Monaco
+Version: $brussels_ver
+Description: Bose Web Brussels Package version $brussels_ver
+ Bose Web Brussels
 Section: web browser app
 Priority: required
 License: Commercial
@@ -92,7 +92,7 @@ EOF
 # Installer scripts
 put_script "$stage/postinst" <<EOF
 #!/bin/sh
-echo "monaco postinst"
+echo "brussels postinst"
 # Set Progress End
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 100
 exit 0
@@ -100,12 +100,12 @@ EOF
 
 put_script "$stage/postrm" <<EOF
 #!/bin/sh
-echo "monaco postrm"
+echo "brussels postrm"
 EOF
 
 put_script "$stage/preinst" <<EOF
 #!/bin/sh
-echo "monaco preinst"
+echo "brussels preinst"
 # Set Progress Start
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
 echo "Stopping dyz-shm"
@@ -115,7 +115,7 @@ EOF
 
 put_script "$stage/prerm" <<EOF
 #!/bin/sh
-echo "monaco prerm"
+echo "brussels prerm"
 EOF
 
 # -----------------------------------------------------------------------------
@@ -127,7 +127,7 @@ tar --owner=0 --group=0 -czf data.tar.gz -C "$opt_dir" . || exit
 echo "2.0" > debian-binary || exit
 
 ipk_dir=$wspace/builds/$cfg
-ipk=$ipk_dir/monaco.ipk
+ipk=$ipk_dir/brussels.ipk
 mkdir -p "$ipk_dir" || exit
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
