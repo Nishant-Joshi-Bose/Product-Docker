@@ -250,12 +250,7 @@ if (( $# == 1 )) && [ "$1" = enterswup ]; then
     cd "$rundir" || exit
 
     log info "Disabling services to enter software update mode"
-    for i in "${softwareupdate[@]}"; do
-        if ! echo $coreApplicationList | grep -w $i > /dev/null; 
-	then
-            rm "$i"
-	fi
-    done
+    rm -f "${softwareupdate[@]}"
     pkill -HUP shepherdd
 
     function is_running {
@@ -285,9 +280,8 @@ if (( $# == 1 )) && [ "$1" = enterswup ]; then
     done
 
     # Kill services not stopped by shutdown daemon
-    for i in "${servicesswup[@]}"; do
-        killall "$i"
-    done
+    killwait "${servicesswup[@]}"
+
     exit
 fi
 
