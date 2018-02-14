@@ -116,11 +116,11 @@
   },
   {
     "name": "protobuf-native",
-    "selected_version": "branches/protobuf@2548"
+    "selected_version": "branches/protobuf@2564"
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "branches/protobuf@2548"
+    "selected_version": "branches/protobuf@2564"
   },
   {
     "name": "Riviera-HSP-Images",
