@@ -785,18 +785,6 @@
             ]
         }, 
         {
-            "origin": 4, 
-            "keyEvent": 1, 
-            "timeOutList": [
-                0
-            ], 
-            "commment": "volume up", 
-            "action": 23, 
-            "keyList": [
-                3
-            ]
-        }, 
-        {
             "origin": 3, 
             "keyEvent": 1, 
             "timeOutList": [
@@ -835,19 +823,6 @@
             ]
         }, 
         {
-            "origin": 4, 
-            "keyEvent": 3, 
-            "timeOutList": [
-                300, 
-                100
-            ], 
-            "commment": "volume up repeat", 
-            "action": 23, 
-            "keyList": [
-                3
-            ]
-        }, 
-        {
             "origin": 3, 
             "keyEvent": 3, 
             "timeOutList": [
@@ -885,18 +860,6 @@
             ]
         }, 
         {
-            "origin": 4, 
-            "keyEvent": 1, 
-            "timeOutList": [
-                0
-            ], 
-            "commment": "volume down", 
-            "action": 24, 
-            "keyList": [
-                2
-            ]
-        }, 
-        {
             "origin": 3, 
             "keyEvent": 1, 
             "timeOutList": [
@@ -923,19 +886,6 @@
         }, 
         {
             "origin": 6, 
-            "keyEvent": 3, 
-            "timeOutList": [
-                300, 
-                100
-            ], 
-            "commment": "volume down repeat", 
-            "action": 24, 
-            "keyList": [
-                2
-            ]
-        }, 
-        {
-            "origin": 4, 
             "keyEvent": 3, 
             "timeOutList": [
                 300, 

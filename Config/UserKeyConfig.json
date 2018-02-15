@@ -141,7 +141,7 @@
         "commment": "volume up",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_VOLUME_UP"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "RF"],
         "timeOutList": [0]
     },
     {
@@ -149,7 +149,7 @@
         "commment": "volume up repeat",
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_UP"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "RF"],
         "timeOutList": [300, 100]
     },
     {
@@ -157,7 +157,7 @@
         "commment": "volume down",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_VOLUME_DOWN"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "RF"],
         "timeOutList": [0]
     },
     {
@@ -165,7 +165,7 @@
         "commment": "volume down repeat",
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_DOWN"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "RF"],
         "timeOutList": [300, 100]
     },
     {
