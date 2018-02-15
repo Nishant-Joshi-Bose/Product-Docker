@@ -228,6 +228,16 @@ public:
         return false;
     }
 
+    virtual bool HandleSoftwareUpdateStatus( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLpmSoftwareUpdateState( )
+    {
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// Methods are to be added at this point to implement product specific actions. These methods
@@ -336,11 +346,6 @@ public:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     virtual bool HandleAmpFaultDetected()
-    {
-        return false;
-    }
-
-    virtual bool HandleSoftwareUpdateStatus( )
     {
         return false;
     }
