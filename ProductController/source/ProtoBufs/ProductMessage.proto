@@ -84,6 +84,7 @@ message ProductMessage
         optional ProductLpmLowPowerStatus   lpmlowpowerstatus   = 17;
         optional bool                       audiopathselect     = 18;
         optional bool                       ampfaultdetected    = 19;
+        optional bool                       audiosilent         = 20;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
