@@ -60,7 +60,7 @@ INTENT_DEFS=$(PWD)/ProductController/source/IntentHandler/Intents.h
 KEYCONFIG_INCS=$(PRODUCTCONTROLLERCOMMON_DIR)/IntentHandler
 
 .PHONY: keyconfig
-keyconfig:
+keyconfig: check_tools
 	cd tools/key_config_generator && \
 	./generate_key_config \
 		$(BUILDS_DIR) \
@@ -79,7 +79,7 @@ BLASTCONFIG=$(PWD)/opt-bose-fs/etc/BlastConfiguration.json
 LPM_KEYS=$(RIVIERALPM_DIR)/include/RivieraLPM_KeyValues.h
 
 .PHONY: blastconfig
-blastconfig:
+blastconfig: check_tools
 	cd tools/key_config_generator && \
 	./generate_blast_config \
 		$(BUILDS_DIR) \

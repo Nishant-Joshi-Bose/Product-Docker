@@ -157,5 +157,9 @@
   {
     "name": "Webkit",
     "selected_version": "Continuous/master/0.3.2-30+f72a09c"
+  },
+  {
+    "name": "WiFi-Setup-Webpage",
+    "selected_version": "master@19f561f91af118db5439955e4d85bc0a914964eb"
   }
 ]
