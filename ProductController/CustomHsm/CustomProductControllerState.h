@@ -126,7 +126,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentFactoryDefault( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentFactoryDefault( )
     {
         return false;
     }
@@ -166,7 +166,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentPowerToggle( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentPowerToggle( )
     {
         return false;
     }
@@ -288,6 +288,12 @@ public:
     {
         return false;
     }
+
+    virtual bool HandleAudioPathStreamState( bool streamSilent )
+    {
+        return false;
+    }
+
 public:
     /// The custom version of this function returns the custom ProductController
     static EddieProductController& GetCustomProductController();
