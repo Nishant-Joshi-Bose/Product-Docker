@@ -71,6 +71,7 @@ public:
 
     }
 
+    bool HandleAudioPathSelect( )   override;
     bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action ) override;
 };
 
