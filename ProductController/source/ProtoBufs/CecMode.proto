@@ -2,7 +2,7 @@
 ///
 /// @file      CecMode.proto
 ///
-/// @brief     This header file describes the protocol buffer messages associated with AdaptIQ.
+/// @brief     This header file describes the protocol buffer messages associated with CEC.
 ///            to the Product Controller state machine.
 ///
 /// @author    Manoranjani Malisetti
