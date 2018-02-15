@@ -73,7 +73,6 @@ void IntentHandler::Initialize()
                                                   GetProductController() );
 
     m_IntentManagerMap[( uint16_t )Action::AUX_IN] = playbackRequestManager;
-    m_IntentNotificationMap[( uint16_t ) Action::AUX_IN]        = "aux_in" ;
     //- AUX Control API's
 
     //+ (Common Countdown manager for key combination)

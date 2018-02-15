@@ -106,6 +106,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentPlaySoundTouchSource()
+    {
+        return false;
+    }
+
     virtual bool HandleIntentBlueTooth( KeyHandlerUtil::ActionType_t result )
     {
         return false;
@@ -121,7 +126,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentFactoryDefault( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentFactoryDefault( )
     {
         return false;
     }
@@ -161,7 +166,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentPowerToggle( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentPowerToggle( )
     {
         return false;
     }
@@ -226,6 +231,16 @@ public:
         return false;
     }
 
+    virtual bool HandleSoftwareUpdateStatus( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLpmSoftwareUpdateState( )
+    {
+        return false;
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
     ///
     /// Here are the Custom event handlers. They need to be declared virtual and
@@ -274,7 +289,13 @@ public:
     {
         return false;
     }
-    virtual bool HandleSoftwareUpdateStatus( )
+
+    virtual bool HandleOOBSetupDone( )
+    {
+        return false;
+    }
+
+    virtual bool HandleAudioPathStreamState( bool streamSilent )
     {
         return false;
     }

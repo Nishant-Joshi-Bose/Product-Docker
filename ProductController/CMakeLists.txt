@@ -21,9 +21,9 @@ INCLUDE_DIRECTORIES(
 ADD_EXECUTABLE(Eddie
   ${CUSTOM_HSM_DIR}/CustomProductControllerState.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateBooting.cpp
-  ${CUSTOM_HSM_DIR}/CustomProductControllerStateSetup.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateOn.cpp
   ProductCliClient.cpp
+  DataCollectionClientInterface.cpp
   EddieProductController.cpp
   Main.cpp
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
@@ -32,7 +32,6 @@ ADD_EXECUTABLE(Eddie
   ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/IntentHandler.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
-  ${PROTO_CC_DEST}/ProductSetupState.pb.cc
   ${PROTO_CC_DEST}/VolumeConfig.pb.cc
   IntentHandler/CountDownManager.cpp
   IntentHandler/IntentHandler.cpp
@@ -74,3 +73,6 @@ TARGET_LINK_LIBRARIES(Eddie
 )
 
 INSTALL(TARGETS Eddie DESTINATION ${OUTPUT_BIN_DIR})
+
+# This is temporary because ProductCliClient.cpp needs to include RivieraLPM_IpcProtocol.h
+SET_SOURCE_FILES_PROPERTIES(ProductCliClient.cpp PROPERTY COMPILE_FLAGS -I${RIVIERA_LPM_SERVICE_DIR}/internal_include)

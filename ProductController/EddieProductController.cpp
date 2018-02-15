@@ -25,6 +25,8 @@
 
 static DPrint s_logger( "EddieProductController" );
 
+using namespace DeviceManagerPb;
+
 namespace ProductApp
 {
 const std::string g_ProductPersistenceDir = "product-persistence/";
@@ -34,10 +36,9 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     ProductController( ProductName ),
     m_ProductControllerStateTop( GetHsm(), nullptr ),
     m_CustomProductControllerStateBooting( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING ),
-    m_CustomProductControllerStateSetup( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_SETUP ),
     m_CustomProductControllerStateOn( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_ON ),
     m_ProductControllerStateLowPowerStandby( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY ),
-    m_ProductControllerStateSwUpdating( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING ),
+    m_ProductControllerStateSwInstall( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL ),
     m_ProductControllerStateCriticalError( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_CRITICAL_ERROR ),
     m_ProductControllerStateRebooting( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_REBOOTING ),
     m_ProductControllerStatePlaying( GetHsm(), &m_CustomProductControllerStateOn, PRODUCT_CONTROLLER_STATE_PLAYING ),
@@ -59,6 +60,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_ProductControllerStatePlayingSelectedSetup( GetHsm(), &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP ),
     m_ProductControllerStatePlayingSelectedSetupNetwork( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK ),
     m_ProductControllerStatePlayingSelectedSetupOther( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_OTHER ),
+    m_ProductControllerStatePlayingSelectedSetupExiting( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING ),
     m_ProductControllerStateStoppingStreams( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS ),
     m_ProductControllerStatePlayableTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION ),
     m_ProductControllerStatePlayableTransitionIdle( GetHsm(), &m_ProductControllerStatePlayableTransition, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE ),
@@ -73,47 +75,48 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_fdErrorCb( AsyncCallback<EndPointsError::Error> ( std::bind( &EddieProductController::CallbackError,
                                                                    this, std::placeholders::_1 ), GetTask() ) ),
     m_voiceServiceClient( ProductName, m_FrontDoorClientIF ),
-    m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) )
+    m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
+    m_dataCollectionClientInterface( m_FrontDoorClientIF )
 {
     BOSE_INFO( s_logger, __func__ );
     m_deviceManager.Initialize( this );
     m_ProductFrontDoorUtility.Initialize( this, &m_deviceManager );
 
     /// Add States to HSM object and initialize HSM before doing anything else.
-    GetHsm().AddState( &m_ProductControllerStateTop );
-    GetHsm().AddState( &m_ProductControllerStateLowPowerStandby );
-    GetHsm().AddState( &m_ProductControllerStateSwUpdating );
-    GetHsm().AddState( &m_CustomProductControllerStateBooting );
-    GetHsm().AddState( &m_CustomProductControllerStateSetup );
-    GetHsm().AddState( &m_CustomProductControllerStateOn );
-    GetHsm().AddState( &m_ProductControllerStateCriticalError );
-    GetHsm().AddState( &m_ProductControllerStateRebooting );
-    GetHsm().AddState( &m_ProductControllerStatePlaying );
-    GetHsm().AddState( &m_ProductControllerStatePlayable );
-    GetHsm().AddState( &m_ProductControllerStateLowPowerStandbyTransition );
-    GetHsm().AddState( &m_ProductControllerStatePlayingActive );
-    GetHsm().AddState( &m_ProductControllerStatePlayingInactive );
-    GetHsm().AddState( &m_ProductControllerStateIdle );
-    GetHsm().AddState( &m_ProductControllerStateNetworkStandby );
-    GetHsm().AddState( &m_ProductControllerStateVoiceConfigured );
-    GetHsm().AddState( &m_ProductControllerStateVoiceNotConfigured );
-    GetHsm().AddState( &m_ProductControllerStateNetworkConfigured );
-    GetHsm().AddState( &m_ProductControllerStateNetworkNotConfigured );
-    GetHsm().AddState( &m_ProductControllerStateFactoryDefault );
-    GetHsm().AddState( &m_ProductControllerStatePlayingDeselected );
-    GetHsm().AddState( &m_ProductControllerStatePlayingSelected );
-    GetHsm().AddState( &m_ProductControllerStatePlayingSelectedSilent );
-    GetHsm().AddState( &m_ProductControllerStatePlayingSelectedNotSilent );
-    GetHsm().AddState( &m_ProductControllerStatePlayingSelectedSetup );
-    GetHsm().AddState( &m_ProductControllerStatePlayingSelectedSetupNetwork );
-    GetHsm().AddState( &m_ProductControllerStatePlayingSelectedSetupOther );
-    GetHsm().AddState( &m_ProductControllerStateStoppingStreams );
-    GetHsm().AddState( &m_ProductControllerStatePlayableTransition );
-    GetHsm().AddState( &m_ProductControllerStatePlayableTransitionIdle );
-    GetHsm().AddState( &m_ProductControllerStatePlayableTransitionNetworkStandby );
-    GetHsm().AddState( &m_ProductControllerStateSoftwareUpdateTransition );
-    GetHsm().AddState( &m_ProductControllerStatePlayingTransition );
-    GetHsm().AddState( &m_ProductControllerStatePlayingTransitionSelected );
+    GetHsm().AddState( "", &m_ProductControllerStateTop );
+    GetHsm().AddState( "", &m_ProductControllerStateLowPowerStandby );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), &m_ProductControllerStateSwInstall );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), &m_CustomProductControllerStateBooting );
+    GetHsm().AddState( "", &m_CustomProductControllerStateOn );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), &m_ProductControllerStateCriticalError );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::REBOOTING ), &m_ProductControllerStateRebooting );
+    GetHsm().AddState( "", &m_ProductControllerStatePlaying );
+    GetHsm().AddState( "", &m_ProductControllerStatePlayable );
+    GetHsm().AddState( "", &m_ProductControllerStateLowPowerStandbyTransition );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingActive );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::DESELECTED ), &m_ProductControllerStatePlayingInactive );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::IDLE ), &m_ProductControllerStateIdle );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ), &m_ProductControllerStateNetworkStandby );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::IDLE ), &m_ProductControllerStateVoiceConfigured );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::IDLE ), &m_ProductControllerStateVoiceNotConfigured );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ), &m_ProductControllerStateNetworkConfigured );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ), &m_ProductControllerStateNetworkNotConfigured );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::FACTORY_DEFAULT ), &m_ProductControllerStateFactoryDefault );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::DESELECTED ), &m_ProductControllerStatePlayingDeselected );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelected );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSilent );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedNotSilent );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetup );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetupNetwork );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetupOther );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetupExiting );
+    GetHsm().AddState( "", &m_ProductControllerStateStoppingStreams );
+    GetHsm().AddState( "", &m_ProductControllerStatePlayableTransition );
+    GetHsm().AddState( "", &m_ProductControllerStatePlayableTransitionIdle );
+    GetHsm().AddState( "", &m_ProductControllerStatePlayableTransitionNetworkStandby );
+    GetHsm().AddState( "", &m_ProductControllerStateSoftwareUpdateTransition );
+    GetHsm().AddState( "", &m_ProductControllerStatePlayingTransition );
+    GetHsm().AddState( "", &m_ProductControllerStatePlayingTransitionSelected );
 
 
     GetHsm().Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );
@@ -135,7 +138,6 @@ EddieProductController::EddieProductController( std::string const& ProductName )
 
     // Initialize and register Intents for the Product Controller
     m_IntentHandler.Initialize();
-
 
 }
 
@@ -296,7 +298,7 @@ void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::Ne
 
 bool EddieProductController::IsNetworkConfigured() const
 {
-    return ( m_bluetoothSinkList.get().devices_size() || m_wifiProfilesCount.get() || m_cachedStatus.get().isprimaryup() );
+    return ( GetWifiProfileCount() || m_cachedStatus.get().isprimaryup() );
 }
 
 bool EddieProductController::IsNetworkConnected() const

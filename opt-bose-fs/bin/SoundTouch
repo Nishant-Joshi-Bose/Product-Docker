@@ -15,8 +15,9 @@ cd /opt/Bose/bin || exit
 rundir=/var/run/shepherd
 override=false
 
-# The list of daemons to stop while in low power mode.
-# These daemons are typically the ones that don't know how to handle the low power events properly.
+# The list of daemons to stop while in low power mode.  These daemons are
+# typically the ones that don't know how to handle the low power events
+# properly.
 lowpower=(
     Shepherd-AudioPath.xml
     Shepherd-NetManager.xml
@@ -163,23 +164,7 @@ fi
 if (( $# == 1 )) && [ "$1" = factory_default ]; then
     log info "Stopping all services for factory default"
     rm -f "$rundir"/*.xml  # remove all daemons from the shepherd configuration
-    killall -SIGHUP shepherdd
-
-    i=30 # Wait at most this number of seconds to stop all daemons.
-    while :; do
-        n=$(wc -l < "$rundir/pids")
-        if (( n == 0 )); then
-            break
-        fi
-        if (( --i == 0 )); then
-            log warning "$n daemon(s) still running. Proceeding anyhow."
-            break
-        fi
-        if (( i < 25 )); then
-            log warning "$n daemon(s) still running. Waiting for another $i secs"
-        fi
-        sleep 1
-    done
+    shepherd-wait
 
     log info "Clearing product persistence"
     rm -rfv /mnt/nv/product-persistence/*
@@ -197,7 +182,7 @@ if (( $# == 1 )) && [ "$1" = enterlowpower ]; then
     log info "Disabling services to enter low power mode"
     cd "$rundir" || exit
     rm -f "${lowpower[@]}"
-    killall -HUP shepherdd
+    shepherd-wait
     exit
 fi
 
@@ -207,7 +192,7 @@ if (( $# == 1 )) && [ "$1" = exitlowpower ]; then
     for i in "${lowpower[@]}"; do
         ln -sf "/opt/Bose/etc/$i"
     done
-    killall -HUP shepherdd
+    shepherd-wait
     exit
 fi
 
@@ -224,6 +209,34 @@ if (( $# == 1 )) && [ "$1" = status ]; then
     exit
 fi
 
+if (( $# == 1 )) && [ "$1" = enterswup ]; then
+    log info "Disabling services to enter software update mode"
+
+    # The daemons to stop before starting software upgrade.
+    disable=(
+        Shepherd-AudioPath.xml
+        Shepherd-avs.xml
+        Shepherd-CLIServer.xml
+        Shepherd-DemoController.xml
+        Shepherd-FrontDoor.xml
+        Shepherd-GalapagosClient.xml
+        Shepherd-HTTPProxy.xml
+        Shepherd-LPMService.xml
+        Shepherd-NetManager.xml
+        Shepherd-Passport.xml
+        Shepherd-vfe.xml
+        Shepherd.xml
+    )
+    cd "$rundir" || exit
+    rm -f "${disable[@]}"
+    shepherd-wait
+
+    # Special handling for dyz-shm started by run_wpe.sh (yuck).
+    killwait dyz-shm
+
+    exit
+fi
+
 echo >&2 "\
 usage: $0 start [args...]
    or: $0 stop
@@ -232,5 +245,6 @@ usage: $0 start [args...]
    or: $0 factory_default
    or: $0 enterlowpower
    or: $0 exitlowpower
+   or: $0 enterswup
 "
 exit 1
