@@ -87,6 +87,30 @@ bool CustomProductControllerStatePlayable::HandleIntentUserPower( KeyHandlerUtil
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStatePlayable::HandleAudioPathSelect
+///
+/// @return This method returns a true Boolean value indicating that it has handled the event
+///         and no futher processing will be required by any of its superstates.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayable::HandleAudioPathSelect( )
+{
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+
+    ///
+    /// @todo Go to a playing active state for the time being, until the new state machine is
+    ///       fully in place for Professor. This will allow Professor to work with the latest
+    ///       state machine in common code without influencing further development. Note that
+    ///       this method will not be overidden and removed once the changes are in place and will
+    ///       go to a playing transition state from the common code. This eventual change is covered
+    ///       under the JIRA Story PGC-350.
+    ///
+    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE );
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
