@@ -1,0 +1,64 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @file      CecMode.proto
+///
+/// @brief     This header file describes the protocol buffer messages associated with AdaptIQ.
+///            to the Product Controller state machine.
+///
+/// @author    Manoranjani Malisetti
+///
+/// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
+///
+///            Bose Corporation
+///            The Mountain Road,
+///            Framingham, MA 01701-9168
+///            U.S.A.
+///
+///            This program may not be reproduced, in whole or in part, in any form by any means
+///            whatsoever without the written permission of Bose Corporation.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+package ProductPb;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                       CecMode Message Structure                                       ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// GET and NOTIFY /cec
+message CecModeResponse
+{
+
+    message CecModeProperties
+    {
+        /*
+         * "Enabled Normal"
+         * "Enabled Retail"
+         * "Disabled"
+         */
+        repeated string     supportedModes      = 1;
+    }
+
+    /*
+     * "On"
+     * "Off"
+     * "AltOn"
+     */
+    optional string             mode                = 1;
+    optional CecModeProperties  properties          = 2;
+}
+
+/// PUT /cec
+message CecUpdateRequest
+{
+    /*
+     * "On"
+     * "Off"
+     * "AltOn"
+     */
+    optional string             mode                = 1;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                        End of File                                           ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
