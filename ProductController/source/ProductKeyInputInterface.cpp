@@ -100,7 +100,7 @@ void ProductKeyInputInterface::Run( )
 
     m_ProductLpmHardwareInterface->RegisterForLpmConnection( callback );
 
-    InitializeBlasterConfig( );
+    InitializeQSS( );
 
     m_running = true;
 }
@@ -237,7 +237,7 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
 // DON'T REMOVE; ONCE THE SOURCE API IS COMPLETE THIS WILL BE ENABLED AND COMPLETED
     std::string testDev = "DEVICE_TYPE_TV";
     std::string testCodeset = "T2778";
-    if( IsBlastedKey( keyEvent.keyid(), testDev ) )
+    if( m_QSSClient->IsBlastedKey( keyEvent.keyid(), testDev ) )
     {
         ///
         /// This key should be blasted
@@ -310,39 +310,11 @@ void ProductKeyInputInterface::Stop( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductKeyInputInterface::InitializeBlasterConfig
+/// @name   ProductKeyInputInterface::InitializeQSS
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductKeyInputInterface::InitializeBlasterConfig( )
+bool ProductKeyInputInterface::InitializeQSS( )
 {
-    BOptional<std::string> config = SystemUtils::ReadFile( BLAST_CONFIGURATION_FILE_NAME );
-    if( !config )
-    {
-        BOSE_ERROR( s_logger, "%s: Failed loading key blaster configuration file.", __FUNCTION__ );
-        return false;
-    }
-    BOSE_INFO( s_logger, "%s: Loaded blaster config.", __FUNCTION__ );
-
-    ProtoToMarkup::FromJson( *config, &m_blasterConfig, "BlasterConfiguration" );
-
-    // build the list of keys that get blasted for each device type
-    for( auto entry : m_blasterConfig.blasttable() )
-    {
-        if( !entry.blastdevices_size() || !entry.keylist_size() )
-        {
-            BOSE_ERROR( s_logger, "%s: bad blastTable entry detected (%d devices, %d keys)\n", __func__, entry.blastdevices_size(), entry.keylist_size() );
-            continue;
-        }
-        for( auto key : entry.keylist() )
-        {
-            for( auto dev : entry.blastdevices() )
-            {
-                m_blasterMap[key].push_back( dev );
-                BOSE_INFO( s_logger, "%s: blast add %s for key %d\n", __FUNCTION__, dev.c_str(), key );
-            }
-        }
-    }
-
     m_QSSClient = A4VQuickSetServiceClientFactory::Create( "ProductKeyInputInterface", m_ProductTask );
     if( !m_QSSClient )
     {
@@ -350,33 +322,8 @@ bool ProductKeyInputInterface::InitializeBlasterConfig( )
         return false;
     }
 
+    m_QSSClient->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
     m_QSSClient->Connect( []( bool connected ) {} );
-
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProductKeyInputInterface::IsBlastedKey
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductKeyInputInterface::IsBlastedKey( uint32_t key, std::string& devType )
-{
-    auto entry = m_blasterMap.find( key );
-
-    if( entry == m_blasterMap.end() )
-    {
-        // key not in map
-        return false;
-    }
-
-    auto devList = entry->second;
-    std::vector<std::string>::iterator it = std::find( devList.begin(), devList.end(), devType );
-    if( it == devList.end() )
-    {
-        // device not in list for key
-        return false;
-    }
 
     return true;
 }
