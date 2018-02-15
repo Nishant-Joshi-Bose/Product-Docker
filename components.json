@@ -56,6 +56,10 @@
     "selected_version": "Release/master/0.2.3-26+8cf9ea4"
   },
   {
+    "name": "CastleDemoController-qc8017_32",
+    "selected_version": "Release/master/0.3.2-62+b9fcc88"
+  },
+  {
     "name": "CastleLibs-native",
     "selected_version": "branches/castle-libs@2549"
   },
