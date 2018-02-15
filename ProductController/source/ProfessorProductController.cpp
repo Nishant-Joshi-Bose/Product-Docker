@@ -491,7 +491,7 @@ void ProfessorProductController::Run( )
     ///
     /// Register LPM events for LightBar
     ///
-    m_lightbarController->RegisterLpmEvents();
+    //m_lightbarController->RegisterLpmEvents();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
