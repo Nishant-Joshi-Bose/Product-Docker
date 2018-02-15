@@ -10,7 +10,7 @@ from CastleTestUtils.LoggerUtils.log_setup import get_logger
 logger = get_logger(__name__)
 
 @pytest.mark.usefixtures("save_speaker_log")
-                         #"software_update")
+                         # "software_update")
 class TestDemo():
     """ Test Class for Demo State """
     @pytest.mark.usefixtures("demoUtils", "device_ip", "request")
@@ -102,7 +102,6 @@ class TestDemo():
         5. Delete the keyConfig and verify
         """
         demoUtils.verifyDemoKeyConfig("Error Reading configuration file")
-        #demoUtils.setKeyConfig()
         demoUtils.setKeyConfig(json.dumps(get_config))
         demoUtils.setDemoMode(True, True, 3, request.config.getoption("--network-iface"))
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
