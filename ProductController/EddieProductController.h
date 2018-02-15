@@ -32,7 +32,7 @@
 #include "CustomProductControllerStateOn.h"
 #include "ProductControllerStateOn.h"
 #include "ProductControllerStateIdle.h"
-#include "ProductControllerStateSoftwareUpdating.h"
+#include "ProductControllerStateSoftwareInstall.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
 #include "ProductControllerStatePlayingDeselected.h"
@@ -367,7 +367,7 @@ private:
     CustomProductControllerStateBooting     m_CustomProductControllerStateBooting;
     CustomProductControllerStateOn          m_CustomProductControllerStateOn;
     ProductControllerStateLowPowerStandby   m_ProductControllerStateLowPowerStandby;
-    ProductControllerSoftwareUpdating       m_ProductControllerStateSwUpdating;
+    ProductControllerStateSoftwareInstall   m_ProductControllerStateSwInstall;
     ProductControllerStateCriticalError     m_ProductControllerStateCriticalError;
     ProductControllerStateRebooting         m_ProductControllerStateRebooting;
 

@@ -231,6 +231,16 @@ public:
         return false;
     }
 
+    virtual bool HandleSoftwareUpdateStatus( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLpmSoftwareUpdateState( )
+    {
+        return false;
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
     ///
     /// Here are the Custom event handlers. They need to be declared virtual and
@@ -276,10 +286,6 @@ public:
     bool IsProductNeedsSetup();
 
     virtual bool IsInNetworkSetupState() const
-    {
-        return false;
-    }
-    virtual bool HandleSoftwareUpdateStatus( )
     {
         return false;
     }
