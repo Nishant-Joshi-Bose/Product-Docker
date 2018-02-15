@@ -5,6 +5,7 @@ This repo contains the source code and tools specific to the SoundTouch Professo
 
 ##### Table of Contents  
 [Getting Started](#start)  
+[Compiling Professor](#compile)  
 [Installing Professor](#install)  
 [Reflash Riviera-HSP](#hsp)  
 [Update LPM via APQ using IPK](#lpm)   
@@ -22,16 +23,14 @@ $ PATH=$PATH:/scratch/CastleTools/bin   # add this to your ~/.profile, ~/.bash_p
 $ git clone git@github.com:BoseCorp/Professor.git
 ```
 
-<a name="install">
+<a name="compile">
 
-### Installing Professor
-
-#### Compiling the Software
+### Compiling Professor
 
 How you compile the software will depend largely on how you plan to flash it to the device. Several options are listed below.
 In all cases, you will need to precede the 'make' command with `env RIVIERA_HSP_VERSION=[Version-Number]`. For DP1, the version you need is `1.3`, but for DP2 or later you will need to use `2.0`.
 
-##### 'make package' for Product Flash Script
+#### 'make package' for Product Flash Script
 
 Build the Professor package to install using the product_flash script.
 ```shell session
@@ -40,7 +39,7 @@ $ env RIVIERA_HSP_VERSION=1.3 make package
 ```
 
 
-##### 'make update-zip' for Bonjour Update
+#### 'make update-zip' for Bonjour Update
 
 Build the Professor product_update.zip to install over ethernet.
 ```shell session
@@ -55,7 +54,7 @@ $ env RIVIERA_HSP_VERSION=1.3 make packages-gz-with-hsp update-zip-with-hsp
 ```
 
 
-##### 'make' ipk for OPKG installation 
+#### 'make' ipk for OPKG installation 
 
 Build the Professor product.ipk to install using the putipk_ota script.
 ```shell session
@@ -63,8 +62,9 @@ $ cd /scratch/Professor
 $ env RIVIERA_HSP_VERSION=1.3 make
 ```
 
+<a name="compile">
 
-#### Flashing the Software
+### Installing Professor
 
 There are a number of different ways in which you can flash the software to your device, several of which are listed below. 
 Regardless of the method you used, you can verify that your update was successful by running the following command to check the version:
@@ -74,7 +74,7 @@ adb shell 'export LD_LIBRARY_PATH=/opt/Bose/update/opkg/;/opt/Bose/update/opkg/o
 ```
 
 
-##### Product Flash Script
+#### Product Flash Script
 
 Make sure your Professor unit is accessible via adb.
 ```shell session
@@ -86,33 +86,26 @@ List of devices attached
 $
 ```
 
-Use the product_flash script to install the package you built
+Use the product_flash script to install the package you compiled above.
 ```shell session
 $ cd builds/Release/package
 $ sudo ./product_flash product.tar fastboot [option(s)]
 ```
 
 There are several options available in the product_flash script, depending on what you wish to update:
-
 ```shell session
 	-h 		# Show the help message for this script
-
 	-u 		# Flash only the Bose Partition
-
 	-a 		# Flash all partitions (except usrfs, persist, bose-persist and partition table)
-
 	-f 		# Erase All partitions, including Partition table, and install all IPKs
-
 	-e 		# Erase only bose-persist partition
-
 	-l 		# Perform LPM update using IPK
 ```
 
 
-##### Bonjour
+#### Bonjour
 
 Power on the device and attach an ethernet cable. Once the device is booted, use adb to query the ip address of the eth0 network interface:
-
 ```shell session
 $ ifconfig
 eth0      Link encap:Ethernet  HWaddr 04:B0:5E:56:76:FC  
@@ -138,6 +131,7 @@ Connect to your device through a web browser by going to http://<inet_addr>/upda
 
 The following page should load:
 ![Choose File](choose_file.png)
+
 Click the "Choose File" button and select an update zip file, which can be found in any Electric Commander build (e.g., \\\solid\softlib\verisoft\Professor\Release\master\0.3.1-640+916c122\HSP-1.3\product_update.zip) or built using the instructions above. 
 
 After the transfer is completed, you should see a page that looks like the following:
@@ -146,7 +140,7 @@ After the transfer is completed, you should see a page that looks like the follo
 Your device will reboot twice, and, after it has finished, your update should be complete. 
 
 
-##### Putipk_ota Script
+#### Putipk_ota Script
 
 Make sure your Professor unit is accessible via adb.
 ```shell session
