@@ -74,23 +74,6 @@ keyconfig: check_tools
 		--outputcfg $(KEYCONFIG) \
 		--incdirs $(KEYCONFIG_INCS)
 
-.PHONY: keyconfig_reverse
-keyconfig_reverse: check_tools
-	cd tools/key_config_generator && \
-	./generate_key_config \
-		$(BUILDS_DIR) \
-		--reverse \
-		--inputcfg $(KEYCONFIG) \
-		--actions $(INTENT_DEFS) \
-		--cap $(LPM_KEYS) \
-		--ir $(LPM_KEYS) \
-		--tap $(LPM_KEYS) \
-		--cec $(LPM_KEYS) \
-		--rf $(LPM_KEYS) \
-		--outputcfg $(USERKEYCONFIG) \
-		--incdirs $(KEYCONFIG_INCS)
-
-
 USERBLASTCONFIG=$(PWD)/Config/UserKeyConfig.json
 BLASTCONFIG=$(PWD)/opt-bose-fs/etc/BlastConfiguration.json
 LPM_KEYS=$(RIVIERALPM_DIR)/include/RivieraLPM_KeyValues.h
