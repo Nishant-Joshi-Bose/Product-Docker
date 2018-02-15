@@ -28,13 +28,51 @@ $ git clone git@github.com:BoseCorp/Professor.git
 
 #### Compiling the Software
 
-Build the Professor package (for 0.3 Riviera based hardware set HSP version to 2.0).
+How you compile the software will depend largely on how you plan to flash it to the device. Several options are listed below.
+In all cases, you will need to precede the 'make' command with `env RIVIERA_HSP_VERSION=[Version-Number]`. For DP1, the version you need is `1.3`, but for DP2 or later you will need to use `2.0`.
+
+##### 'make package' for Product Flash Script
+
+Build the Professor package to install using the product_flash script.
 ```shell session
 $ cd /scratch/Professor
 $ env RIVIERA_HSP_VERSION=1.3 make package
 ```
 
+
+##### 'make update-zip' for Bonjour Update
+
+Build the Professor product_update.zip to install over ethernet.
+```shell session
+$ cd /scratch/Professor
+$ env RIVIERA_HSP_VERSION=1.3 make packages-gz update-zip
+```
+
+You can also build an update zip file that includes the Riviera HSP.
+```shell session
+$ cd /scratch/Professor
+$ env RIVIERA_HSP_VERSION=1.3 make packages-gz-with-hsp update-zip-with-hsp
+```
+
+
+##### 'make' ipk for OPKG installation 
+
+Build the Professor product.ipk to install using the putipk_ota script.
+```shell session
+$ cd /scratch/Professor
+$ env RIVIERA_HSP_VERSION=1.3 make
+```
+
+
 #### Flashing the Software
+
+There are a number of different ways in which you can flash the software to your device, several of which are listed below. 
+Regardless of the method you used, you can verify that your update was successful by running the following command to check the version:
+
+```shell session
+adb shell 'export LD_LIBRARY_PATH=/opt/Bose/update/opkg/;/opt/Bose/update/opkg/opkg -f /mnt/nv/update//opkg.conf --volatile-cache  --add-arch armv7a-vfp-neon:100  list'
+```
+
 
 ##### Product Flash Script
 
@@ -50,7 +88,7 @@ $
 
 Use the product_flash script to install the package you built
 ```shell session
-$ cd /builds/Release/package
+$ cd builds/Release/package
 $ sudo ./product_flash product.tar fastboot [option(s)]
 ```
 
@@ -69,6 +107,7 @@ There are several options available in the product_flash script, depending on wh
 
 	-l 		# Perform LPM update using IPK
 ```
+
 
 ##### Bonjour
 
@@ -99,8 +138,35 @@ Connect to your device through a web browser by going to http://<inet_addr>/upda
 
 The following page should load:
 ![Choose File](choose_file.png)
-Click the "Choose File" button and select an update zip file, which can be found in any Electric Commander build (e.g., \\\solid\softlib\verisoft\Professor\Release\master\0.3.1-640+916c122\HSP-1.3\product_update.zip)
+Click the "Choose File" button and select an update zip file, which can be found in any Electric Commander build (e.g., \\\solid\softlib\verisoft\Professor\Release\master\0.3.1-640+916c122\HSP-1.3\product_update.zip) or built using the instructions above. 
 
+After the transfer is completed, you should see a page that looks like the following:
+![Update Finished](update_finished.png)
+
+Your device will reboot twice, and, after it has finished, your update should be complete. 
+
+
+##### Putipk_ota Script
+
+Make sure your Professor unit is accessible via adb.
+```shell session
+$ sudo adb start-server             # must be done as root. typically once per boot of the build host
+$ adb devices
+List of devices attached
+5166240   device
+
+$
+```
+
+Use the putipk_ota script to install the .ipk package you built.
+```shell session
+$ sudo ./scripts/putipk_ota builds/Release/product.ipk
+```
+
+Alternatively, you can use the putipk_ota script without specifying a file, and it will rebuild the .ipk for you.
+```shell session
+$ sudo ./scripts/putipk_ota builds/Release/product.ipk
+```
 
 <a name="hsp"/>
 
@@ -140,12 +206,6 @@ $ ./scripts/putlpm <path-to-lpm-ipk> # Install a specific LPM ipk
 ```
 
 ### More...
-
-To rebuild the .ipk file and install via adb in one step:
-
-```shell session
-$ ./scripts/putipk jobs=4
-```
 
 Access the APQ console via the tap cable.
 
