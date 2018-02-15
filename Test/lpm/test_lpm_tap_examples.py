@@ -9,11 +9,11 @@ from CastleTestUtils.LpmUtils.Lpm import Lpm
 
 __logger = get_logger(__file__)
 
-__lpmPort = pytest.config.getoption('--lpm_port')
-if __lpmPort is None:
+__lpm_port = pytest.config.getoption('--lpm_port')
+if __lpm_port is None:
     pytest.fail("LPM port is required: pytest -sv <test.py> --lpm_port </dev/tty.usb-foo>")
 
-__lpm = Lpm(__lpmPort)
+__lpm = Lpm(__lpm_port)
 
 
 @pytest.mark.skip("Example/test functionality")
@@ -67,7 +67,7 @@ def test_low_power_standby():
 
 	__logger.info("Restored power state: %s", originalState)
 
-@pytest.mark.skip("Example/test functionality")
+#@pytest.mark.skip("Example/test functionality")
 def test_some_keys():
 	""" 
 	Test some key events. 
