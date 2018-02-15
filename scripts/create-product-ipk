@@ -287,6 +287,15 @@ unstripped_tar=$unstripped_dir.tar.gz
 rm -rf "$unstripped_dir" "$unstripped_tar"
 mkdir -p "$unstripped_dir" || exit
 
+# Our standard CentOS configuration has
+# LD_LIBRARY_PATH=/usr/local/lib:/usr/lib:/lib which causes
+# ${tool64_prefix}strip to segfault.  As a workaround, unset LD_LIBRARY_PATH
+# here and hope it wasn't actually needed for anything else this script does.
+if [ "$LD_LIBRARY_PATH" ]; then
+    echo "$this: unsetting LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
+    unset LD_LIBRARY_PATH
+fi
+
 for i in "$stage"/Bose/{lib,bin}/*; do
     type=$(file --brief "$i") || exit
     case "$type" in
@@ -295,13 +304,11 @@ for i in "$stage"/Bose/{lib,bin}/*; do
             ;;
         (*", ARM aarch64, "*", not stripped" | *" 64-bit "*", not stripped")
             cp "$i" "$unstripped_dir" || exit
-# TODO: figure out why `strip` sometimes segfaults on CentOS
-            echo "Not stripping $i"
-#            # `strip` fails without an error message if the file is empty
-#            if ! "${tool64_prefix}strip" "$i"; then
-#                echo >&2 "$this: Failed to strip $i"
-#                exit 1
-#            fi
+            # `strip` fails without an error message if the file is empty
+            if ! "${tool64_prefix}strip" "$i"; then
+                echo >&2 "$this: Failed to strip $i"
+                exit 1
+            fi
             ;;
         (*", not stripped")
             cp "$i" "$unstripped_dir" || exit
