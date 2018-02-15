@@ -546,6 +546,7 @@ bool CustomProductLpmHardwareInterface::SendAdaptIQControl( ProductAdaptIQContro
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductLpmHardwareInterface::SetStreamConfig( LpmServiceMessages::IpcDspStreamConfigReqPayload_t streamConfig, const Callback<bool>& cb )
 {
+    BOSE_DEBUG( s_logger, __func__ );
     if( isConnected( ) == false || GetLpmClient( ) == nullptr )
     {
         BOSE_ERROR( s_logger, "%s failed, as no connection is available.", __func__ );
@@ -555,6 +556,7 @@ bool CustomProductLpmHardwareInterface::SetStreamConfig( LpmServiceMessages::Ipc
     {
         cb.Send( ( resp.success() > 0 ) ? true : false );
     };
+    BOSE_DEBUG( s_logger, "CustomProductLpmHardwareInterface::SetStreamConfig streamConfig = %s", streamConfig.DebugString().c_str() );
     GetLpmClient( )->SetStreamConfigRequest( streamConfig, respCb, Ipc_Device_t::IPC_DEVICE_DSP );
     return true;
 }
