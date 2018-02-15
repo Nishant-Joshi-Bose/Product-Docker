@@ -69,6 +69,7 @@ audiopath_dir=$(components get CastleAudioPath-qc8017_32 installed_location) || 
 audiopath64_dir=$(components get CastleAudioPath-qc8017_64 installed_location) || exit
 castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
 castlepassport_dir=$(components get CastlePassport-qc8017_32 installed_location) || exit
+wifi_setup_webpage_dir=$(components get WiFi-Setup-Webpage installed_location) || exit
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
 cli_dir=$(components get CastleCli-qc8017_32 installed_location) || exit
 webkit_dir=$(components get Webkit installed_location) || exit
@@ -163,6 +164,7 @@ cp "$audiopath_dir/bin/lisa/libDspPlayback.so" "$opt_dir/bin" || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlepassport_dir/stage" "$opt_dir" || exit
 "$shepherd_dir/stage" "$opt_dir" || exit
+"$wifi_setup_webpage_dir/stage" "$opt_dir" || exit
 "$lpmservice_dir/stage" "$opt_dir" || exit
 "$cli_dir/stage" "$opt_dir" || exit
 "$webkit_dir/stage" "$opt_dir" || exit
