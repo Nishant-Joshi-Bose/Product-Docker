@@ -239,6 +239,7 @@
         "keyList": ["BOSE_PAIR_SPKR"],
         "origin": ["IR", "TAP", "CEC", "RF"],
         "timeOutList": []
+    }
     ],
     "blastTable": [
     {

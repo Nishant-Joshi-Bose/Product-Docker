@@ -941,366 +941,6 @@
             ]
         }, 
         {
-            "origin": 2, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "select soundtouch", 
-            "action": 115, 
-            "keyList": [
-                179
-            ]
-        }, 
-        {
-            "origin": 6, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "select soundtouch", 
-            "action": 115, 
-            "keyList": [
-                179
-            ]
-        }, 
-        {
-            "origin": 4, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "select soundtouch", 
-            "action": 115, 
-            "keyList": [
-                179
-            ]
-        }, 
-        {
-            "origin": 3, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "select soundtouch", 
-            "action": 115, 
-            "keyList": [
-                179
-            ]
-        }, 
-        {
-            "origin": 2, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "connect", 
-            "action": 116, 
-            "keyList": [
-                17
-            ]
-        }, 
-        {
-            "origin": 6, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "connect", 
-            "action": 116, 
-            "keyList": [
-                17
-            ]
-        }, 
-        {
-            "origin": 4, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "connect", 
-            "action": 116, 
-            "keyList": [
-                17
-            ]
-        }, 
-        {
-            "origin": 3, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "connect", 
-            "action": 116, 
-            "keyList": [
-                17
-            ]
-        }, 
-        {
-            "origin": 2, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "select tv", 
-            "action": 118, 
-            "keyList": [
-                14
-            ]
-        }, 
-        {
-            "origin": 6, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "select tv", 
-            "action": 118, 
-            "keyList": [
-                14
-            ]
-        }, 
-        {
-            "origin": 4, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "select tv", 
-            "action": 118, 
-            "keyList": [
-                14
-            ]
-        }, 
-        {
-            "origin": 3, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "select tv", 
-            "action": 118, 
-            "keyList": [
-                14
-            ]
-        }, 
-        {
-            "origin": 2, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "thumbs up", 
-            "action": 119, 
-            "keyList": [
-                107
-            ]
-        }, 
-        {
-            "origin": 6, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "thumbs up", 
-            "action": 119, 
-            "keyList": [
-                107
-            ]
-        }, 
-        {
-            "origin": 4, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "thumbs up", 
-            "action": 119, 
-            "keyList": [
-                107
-            ]
-        }, 
-        {
-            "origin": 3, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "thumbs up", 
-            "action": 119, 
-            "keyList": [
-                107
-            ]
-        }, 
-        {
-            "origin": 2, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "thumbs down", 
-            "action": 120, 
-            "keyList": [
-                106
-            ]
-        }, 
-        {
-            "origin": 6, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "thumbs down", 
-            "action": 120, 
-            "keyList": [
-                106
-            ]
-        }, 
-        {
-            "origin": 4, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "thumbs down", 
-            "action": 120, 
-            "keyList": [
-                106
-            ]
-        }, 
-        {
-            "origin": 3, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "thumbs down", 
-            "action": 120, 
-            "keyList": [
-                106
-            ]
-        }, 
-        {
-            "origin": 2, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "factory default", 
-            "action": 8, 
-            "keyList": [
-                253
-            ]
-        }, 
-        {
-            "origin": 6, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "factory default", 
-            "action": 8, 
-            "keyList": [
-                253
-            ]
-        }, 
-        {
-            "origin": 4, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "factory default", 
-            "action": 8, 
-            "keyList": [
-                253
-            ]
-        }, 
-        {
-            "origin": 3, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "factory default", 
-            "action": 8, 
-            "keyList": [
-                253
-            ]
-        }, 
-        {
-            "origin": 2, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "toggle wifi", 
-            "action": 7, 
-            "keyList": [
-                252
-            ]
-        }, 
-        {
-            "origin": 6, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "toggle wifi", 
-            "action": 7, 
-            "keyList": [
-                252
-            ]
-        }, 
-        {
-            "origin": 4, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "toggle wifi", 
-            "action": 7, 
-            "keyList": [
-                252
-            ]
-        }, 
-        {
-            "origin": 3, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "toggle wifi", 
-            "action": 7, 
-            "keyList": [
-                252
-            ]
-        }, 
-        {
-            "origin": 2, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "ap setup", 
-            "action": 5, 
-            "keyList": [
-                251
-            ]
-        }, 
-        {
-            "origin": 6, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "ap setup", 
-            "action": 5, 
-            "keyList": [
-                251
-            ]
-        }, 
-        {
-            "origin": 4, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "ap setup", 
-            "action": 5, 
-            "keyList": [
-                251
-            ]
-        }, 
-        {
-            "origin": 3, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "ap setup", 
-            "action": 5, 
-            "keyList": [
-                251
-            ]
-        }, 
-        {
-            "origin": 2, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "pair speakers", 
-            "action": 124, 
-            "keyList": [
-                250
-            ]
-        }, 
-        {
-            "origin": 6, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "pair speakers", 
-            "action": 124, 
-            "keyList": [
-                250
-            ]
-        }, 
-        {
-            "origin": 4, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "pair speakers", 
-            "action": 124, 
-            "keyList": [
-                250
-            ]
-        }, 
-        {
-            "origin": 3, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "pair speakers", 
-            "action": 124, 
-            "keyList": [
-                250
-            ]
-        }, 
-        {
             "origin": 1, 
             "keyEvent": 0, 
             "timeOutList": [], 
@@ -1308,6 +948,366 @@
             "action": 114, 
             "keyList": [
                 1
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select soundtouch", 
+            "action": 115, 
+            "keyList": [
+                179
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select soundtouch", 
+            "action": 115, 
+            "keyList": [
+                179
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select soundtouch", 
+            "action": 115, 
+            "keyList": [
+                179
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select soundtouch", 
+            "action": 115, 
+            "keyList": [
+                179
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "connect", 
+            "action": 116, 
+            "keyList": [
+                17
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "connect", 
+            "action": 116, 
+            "keyList": [
+                17
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "connect", 
+            "action": 116, 
+            "keyList": [
+                17
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "connect", 
+            "action": 116, 
+            "keyList": [
+                17
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select tv", 
+            "action": 118, 
+            "keyList": [
+                14
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select tv", 
+            "action": 118, 
+            "keyList": [
+                14
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select tv", 
+            "action": 118, 
+            "keyList": [
+                14
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select tv", 
+            "action": 118, 
+            "keyList": [
+                14
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "thumbs up", 
+            "action": 119, 
+            "keyList": [
+                107
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "thumbs up", 
+            "action": 119, 
+            "keyList": [
+                107
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "thumbs up", 
+            "action": 119, 
+            "keyList": [
+                107
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "thumbs up", 
+            "action": 119, 
+            "keyList": [
+                107
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "thumbs down", 
+            "action": 120, 
+            "keyList": [
+                106
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "thumbs down", 
+            "action": 120, 
+            "keyList": [
+                106
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "thumbs down", 
+            "action": 120, 
+            "keyList": [
+                106
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "thumbs down", 
+            "action": 120, 
+            "keyList": [
+                106
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "factory default", 
+            "action": 8, 
+            "keyList": [
+                253
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "factory default", 
+            "action": 8, 
+            "keyList": [
+                253
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "factory default", 
+            "action": 8, 
+            "keyList": [
+                253
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "factory default", 
+            "action": 8, 
+            "keyList": [
+                253
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "toggle wifi", 
+            "action": 7, 
+            "keyList": [
+                252
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "toggle wifi", 
+            "action": 7, 
+            "keyList": [
+                252
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "toggle wifi", 
+            "action": 7, 
+            "keyList": [
+                252
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "toggle wifi", 
+            "action": 7, 
+            "keyList": [
+                252
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "ap setup", 
+            "action": 5, 
+            "keyList": [
+                251
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "ap setup", 
+            "action": 5, 
+            "keyList": [
+                251
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "ap setup", 
+            "action": 5, 
+            "keyList": [
+                251
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "ap setup", 
+            "action": 5, 
+            "keyList": [
+                251
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "pair speakers", 
+            "action": 124, 
+            "keyList": [
+                250
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "pair speakers", 
+            "action": 124, 
+            "keyList": [
+                250
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "pair speakers", 
+            "action": 124, 
+            "keyList": [
+                250
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "pair speakers", 
+            "action": 124, 
+            "keyList": [
+                250
             ]
         }
     ]
