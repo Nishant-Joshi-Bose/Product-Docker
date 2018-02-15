@@ -79,7 +79,7 @@
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
 #include "ProductControllerStateWelcome.h"
-#include "ProductControllerStateSoftwareUpdating.h"
+#include "ProductControllerStateSoftwareInstall.h"
 #include "ProductControllerStateRebooting.h"
 #include "ProductControllerStateCriticalError.h"
 #include "MfgData.h"
@@ -185,10 +185,10 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION );
 
-    auto* stateSoftwareUpdating = new ProductControllerSoftwareUpdating
+    auto* stateSoftwareInstall = new ProductControllerStateSoftwareInstall
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING );
+      PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL );
 
     auto* stateRebooting = new ProductControllerStateRebooting
     ( GetHsm( ),
@@ -380,7 +380,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), customStateBooting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), stateWelcome );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareUpdateTransition );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareUpdating );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareInstall );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateRebooting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), stateCriticalError );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FACTORY_DEFAULT ), stateFactoryDefault );
