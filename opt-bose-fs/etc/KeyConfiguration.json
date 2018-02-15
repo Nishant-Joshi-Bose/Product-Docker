@@ -1147,7 +1147,7 @@
             "commment": "factory default", 
             "action": 8, 
             "keyList": [
-                253
+                27
             ]
         }, 
         {
@@ -1157,7 +1157,7 @@
             "commment": "factory default", 
             "action": 8, 
             "keyList": [
-                253
+                27
             ]
         }, 
         {
@@ -1167,7 +1167,7 @@
             "commment": "factory default", 
             "action": 8, 
             "keyList": [
-                253
+                27
             ]
         }, 
         {
@@ -1177,7 +1177,7 @@
             "commment": "factory default", 
             "action": 8, 
             "keyList": [
-                253
+                27
             ]
         }, 
         {
@@ -1187,7 +1187,7 @@
             "commment": "toggle wifi", 
             "action": 7, 
             "keyList": [
-                252
+                28
             ]
         }, 
         {
@@ -1197,7 +1197,7 @@
             "commment": "toggle wifi", 
             "action": 7, 
             "keyList": [
-                252
+                28
             ]
         }, 
         {
@@ -1207,7 +1207,7 @@
             "commment": "toggle wifi", 
             "action": 7, 
             "keyList": [
-                252
+                28
             ]
         }, 
         {
@@ -1217,7 +1217,7 @@
             "commment": "toggle wifi", 
             "action": 7, 
             "keyList": [
-                252
+                28
             ]
         }, 
         {
@@ -1227,7 +1227,7 @@
             "commment": "ap setup", 
             "action": 5, 
             "keyList": [
-                251
+                29
             ]
         }, 
         {
@@ -1237,7 +1237,7 @@
             "commment": "ap setup", 
             "action": 5, 
             "keyList": [
-                251
+                29
             ]
         }, 
         {
@@ -1247,7 +1247,7 @@
             "commment": "ap setup", 
             "action": 5, 
             "keyList": [
-                251
+                29
             ]
         }, 
         {
@@ -1257,7 +1257,7 @@
             "commment": "ap setup", 
             "action": 5, 
             "keyList": [
-                251
+                29
             ]
         }, 
         {
@@ -1267,7 +1267,7 @@
             "commment": "pair speakers", 
             "action": 124, 
             "keyList": [
-                250
+                30
             ]
         }, 
         {
@@ -1277,7 +1277,7 @@
             "commment": "pair speakers", 
             "action": 124, 
             "keyList": [
-                250
+                30
             ]
         }, 
         {
@@ -1287,7 +1287,7 @@
             "commment": "pair speakers", 
             "action": 124, 
             "keyList": [
-                250
+                30
             ]
         }, 
         {
@@ -1297,7 +1297,7 @@
             "commment": "pair speakers", 
             "action": 124, 
             "keyList": [
-                250
+                30
             ]
         }, 
         {

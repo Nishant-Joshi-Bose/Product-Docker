@@ -51,6 +51,7 @@
 #include "CustomProductControllerStatePlayingInactive.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "CustomProductControllerStateAdaptIQ.h"
+#include "CustomProductControllerStatePlayingSelectedSetup.h"
 #include "ProductControllerStateNetworkStandby.h"
 #include "ProductControllerStateNetworkStandbyConfigured.h"
 #include "ProductControllerStateNetworkStandbyNotConfigured.h"
@@ -63,7 +64,6 @@
 #include "ProductControllerStatePlayingSelected.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
 #include "ProductControllerStatePlayingSelectedNotSilent.h"
-#include "ProductControllerStatePlayingSelectedSetup.h"
 #include "ProductControllerStatePlayingSelectedSetupNetwork.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStateStoppingStreams.h"
@@ -330,24 +330,24 @@ void ProfessorProductController::Run( )
       statePlayingSelected,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT );
 
-    auto* statePlayingSelectedSetup = new ProductControllerStatePlayingSelectedSetup
+    auto* customStatePlayingSelectedSetup = new CustomProductControllerStatePlayingSelectedSetup
     ( GetHsm( ),
       statePlayingSelected,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP );
+      PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP );
 
     auto* statePlayingSelectedSetupNetwork = new ProductControllerStatePlayingSelectedSetupNetwork
     ( GetHsm( ),
-      statePlayingSelectedSetup,
+      customStatePlayingSelectedSetup,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK );
 
     auto* statePlayingSelectedSetupOther = new ProductControllerStatePlayingSelectedSetupOther
     ( GetHsm( ),
-      statePlayingSelectedSetup,
+      customStatePlayingSelectedSetup,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_OTHER );
 
     auto* statePlayingSelectedSetupExiting = new ProductControllerStatePlayingSelectedSetupExiting
     ( GetHsm( ),
-      statePlayingSelectedSetup,
+      customStatePlayingSelectedSetup,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING );
 
     auto* stateStoppingStreams = new ProductControllerStateStoppingStreams
@@ -405,7 +405,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( statePlayingSelected );
     GetHsm( ).AddState( statePlayingSelectedSilent );
     GetHsm( ).AddState( statePlayingSelectedNotSilent );
-    GetHsm( ).AddState( statePlayingSelectedSetup );
+    GetHsm( ).AddState( customStatePlayingSelectedSetup );
     GetHsm( ).AddState( statePlayingSelectedSetupNetwork );
     GetHsm( ).AddState( statePlayingSelectedSetupOther );
     GetHsm( ).AddState( statePlayingSelectedSetupExiting );
