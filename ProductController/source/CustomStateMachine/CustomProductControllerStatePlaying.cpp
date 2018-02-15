@@ -73,6 +73,14 @@ void CustomProductControllerStatePlaying::HandleStateEnter( )
 {
     BOSE_INFO( s_logger, "%s is being entered.", GetName( ).c_str( ) );
 
+    ///
+    /// @todo Go to a full power state for the time being, until the new state machine is fully in
+    ///       place for Professor. This will allow Professor to work with the latest state machine
+    ///       in common code without influencing further development. Note that this method will be
+    ///       removed once the changes are in place and the transition to full power will take place
+    ///       in a playing transition state from the common code. This eventual change is covered
+    ///       under the JIRA Story PGC-350.
+    ///
     GetCustomProductController( ).GetLpmHardwareInterface( )->SetSystemState( SYSTEM_STATE_ON );
 
     BOSE_INFO( s_logger, "An attempt to set to full power is being made." );
