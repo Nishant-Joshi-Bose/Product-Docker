@@ -3,6 +3,12 @@ SoundTouch Professor
 
 This repo contains the source code and tools specific to the SoundTouch Professor product.
 
+For updates about new releases of this software, you can subscribe [here](https://platform.bose.io/dev/svc-embedded-releases/stable-test/web-server/). 
+
+For more information, see the [Professor wiki page](https://wiki.bose.com/display/A4V/Professor).
+
+![Professor](professor.png)
+
 ##### Table of Contents  
 [Getting Started](#start)  
 [Compiling Professor](#compile)  
@@ -28,7 +34,7 @@ $ git clone git@github.com:BoseCorp/Professor.git
 ### Compiling Professor
 
 How you compile the software will depend largely on how you plan to flash it to the device. Several options are listed below.
-In all cases, you will need to precede the 'make' command with `env RIVIERA_HSP_VERSION=[Version-Number]`. For DP1, the version you need is `1.3`, but for DP2 or later you will need to use `2.0`.
+In all cases, you will need to precede the 'make' command with `env RIVIERA_HSP_VERSION=[Version-Number]`. For DP1, the version you need is `1.3`, but for DP2 or later you will be able to use the latest version.
 
 #### 'make package' for Product Flash Script
 
