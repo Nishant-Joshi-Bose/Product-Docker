@@ -44,29 +44,6 @@ def test_amp_fault_induce():
 	# Amp fault lasts until reboot
 	_lpm_tap.reboot()
 
-@pytest.mark.skip("Example/test functionality")
-def test_low_power_standby():
-	"""
-	Use a TAP command to put the LPM in low power standby.
-	This only effects the LPM.
-	"""
-	originalState = _lpm_tap.get_power_state()
-	_logger.info("Current power state: %s", originalState)
-
-	_lpm_tap.set_power_state("LowPower")
-	# Wait up to 2 seconds to enter LowPower state. Note that this only effects
-	# the "power state" on the LPM and will not fully enter low power state
-	# for the whole device.
-	_lpm_tap.wait_for_power_state(["LowPower"], 2)
-
-	_logger.info("Now in LowPower state")
-
-	# Restore the original state.
-	_lpm_tap.set_power_state(originalState)
-	_lpm_tap.wait_for_power_state([originalState], 2)
-
-	_logger.info("Restored power state: %s", originalState)
-
 #@pytest.mark.skip("Example/test functionality")
 def test_some_keys():
 	""" 
