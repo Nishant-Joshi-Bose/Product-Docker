@@ -91,12 +91,16 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
 
     set_ap.sh
 
-    key=KeyConfiguration.json
+    cfg=/opt/Bose/etc/KeyConfiguration.json
     if [ -e /mnt/nv/DemoModeOn ]; then
         log info "--DEMO MODE--"
-        key=KeyConfiguration-demo.json
+        cfg=/mnt/nv/KeyConfiguration-demo.json
+        if ! [ -e "$cfg" ]; then
+            cfg=/opt/Bose/etc/KeyConfiguration-demo.json
+        fi
     fi
-    ln -nsf "/opt/Bose/etc/$key" /var/run/KeyConfiguration.json || exit
+    log info "Key configuration: $cfg"
+    ln -nsf "$cfg" /var/run/KeyConfiguration.json || exit
 
     if ! $override; then
         mkdir -p "$rundir" || exit
