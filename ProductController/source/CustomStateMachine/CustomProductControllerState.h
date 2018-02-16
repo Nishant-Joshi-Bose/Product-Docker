@@ -3,7 +3,7 @@
 /// @file      CustomProductControllerState.h
 ///
 /// @brief     This file declares a CustomProductControllerState class for executing produce
-///            specific actions based on the currect product state and product specific events.
+///            specific intents based on the currect product state and product specific events.
 ///
 /// @author    Stuart J. Lumby
 ///
@@ -114,52 +114,52 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentPlayControl( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentPlayControl( KeyHandlerUtil::ActionType_t intent )
     {
         return false;
     }
 
-    virtual bool HandleIntentBlueTooth( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentBlueTooth( KeyHandlerUtil::ActionType_t intent )
     {
         return false;
     }
 
-    virtual bool HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )
     {
         return false;
     }
 
-    virtual bool HandleIntentPowerToggle( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentPowerToggle( )
     {
         return false;
     }
 
-    virtual bool HandleIntentFactoryDefault( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentFactoryDefault( )
     {
         return false;
     }
 
-    virtual bool HandleIntentPresetSelect( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentPresetSelect( KeyHandlerUtil::ActionType_t intent )
     {
         return false;
     }
 
-    virtual bool HandleIntentPresetStore( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentPresetStore( KeyHandlerUtil::ActionType_t intent )
     {
         return false;
     }
 
-    virtual bool HandleIntentLowPowerStandby( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentLowPowerStandby( KeyHandlerUtil::ActionType_t intent )
     {
         return false;
     }
 
-    virtual bool HandleIntentVoice( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentVoice( KeyHandlerUtil::ActionType_t intent )
     {
         return false;
     }
 
-    virtual bool HandleIntentWiFi( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentWiFi( KeyHandlerUtil::ActionType_t intent )
     {
         return false;
     }
@@ -223,6 +223,21 @@ public:
         return false;
     }
 
+    virtual bool HandleAudioPathStreamState( bool streamSilent )
+    {
+        return false;
+    }
+
+    virtual bool HandleSoftwareUpdateStatus( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLpmSoftwareUpdateState( )
+    {
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// Methods are to be added at this point to implement product specific actions. These methods
@@ -270,27 +285,37 @@ public:
         return false;
     }
 
-    virtual bool HandleIntent( KeyHandlerUtil::ActionType_t action )
+    virtual bool HandleIntent( KeyHandlerUtil::ActionType_t intent )
     {
         return false;
     }
 
-    virtual bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )
+    virtual bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t intent )
     {
         return false;
     }
 
-    virtual bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )
+    virtual bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )
     {
         return false;
     }
 
-    virtual bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t action )
+    virtual bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )
     {
         return false;
     }
 
-    virtual bool HandleIntentPlayback( KeyHandlerUtil::ActionType_t action )
+    virtual bool HandleIntentSystemInfoMode( KeyHandlerUtil::ActionType_t intent )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentPlaySoundTouchSource( )
     {
         return false;
     }
@@ -325,16 +350,15 @@ public:
         return false;
     }
 
-    virtual bool HandleSoftwareUpdateStatus( )
-    {
-        return false;
-    }
-
     virtual bool IsInNetworkSetupState() const
     {
         return false;
     }
 
+    virtual bool HandleOOBSetupDone( )
+    {
+        return false;
+    }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// This method returns the Professor Custom Product Controller reference of type
