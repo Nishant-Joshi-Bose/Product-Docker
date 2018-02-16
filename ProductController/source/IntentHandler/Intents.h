@@ -129,7 +129,9 @@ enum class Action
     ACTION_THUMB_UP           = 119,
     ACTION_THUMB_DOWN         = 120,
     ACTION_PAIR_SPEAKERS      = 124,
-    ACTION_STOP_PAIR_SPEAKERS = 200
+    ACTION_STOP_PAIR_SPEAKERS = 200,
+    ACTION_APAPTIQ_START      = 201,
+    ACTION_APAPTIQ_CANCEL     = 202
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

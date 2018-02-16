@@ -1,11 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStatePlayingActive.h
+/// @file      CustomProductControllerStateAdaptIQExiting.h
 ///
-/// @brief     This source code file contains functionality to process events that occur during the
-///            product playing state.
-///
-/// @author    Stuart J. Lumby
+/// @brief     This source code file contains functionality to process events that occur when the
+///            product is exiting AdaptIQ.
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -33,8 +31,10 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerStatePlayingActive.h"
-#include "HsmState.h"
+#include "ProductControllerStateIdle.h"
+#include "LpmServiceMessages.pb.h"
+#include "APTimer.h"
+#include "ProductAdaptIQManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -52,43 +52,31 @@ class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class CustomProductControllerStatePlayingActive
-///
-/// @brief This class is used for executing produce specific actions when in an playing active state.
+/// @class CustomProductControllerStateAdaptIQExiting
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStatePlayingActive : public ProductControllerStatePlayingActive
+class CustomProductControllerStateAdaptIQExiting : public ProductControllerState
 {
 public:
 
-    CustomProductControllerStatePlayingActive
-    ( ProductControllerHsm&       hsm,
-      CHsmState*                  pSuperState,
-      Hsm::STATE                  stateId,
-      const std::string&          name    = "CustomProductControllerStatePlayingActive" );
+    CustomProductControllerStateAdaptIQExiting( ProductControllerHsm& hsm,
+                                                CHsmState*            pSuperState,
+                                                Hsm::STATE            stateId,
+                                                const std::string&    name = "AdaptIQExiting" );
 
-    ~CustomProductControllerStatePlayingActive( ) override
+    ~CustomProductControllerStateAdaptIQExiting( ) override
     {
 
     }
 
-    bool HandleIntent( KeyHandlerUtil::ActionType_t action )                    override;
-    bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )           override;
-    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )         override;
-    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t action )      override;
-    bool HandleIntentPlaySoundTouchSource( )                                    override;
-    bool HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t action )   override;
-
-private:
-
-    void ProcessUserActivity( );
+    void HandleStateStart( ) override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                           End of the Product Application Namespace                           ///
+///                             End of Product Application Namespace                             ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                         End of File                                          ///
+///                                        End of File                                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

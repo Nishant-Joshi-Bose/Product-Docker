@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file      CustomProductControllerStatePlayingSelectedSetup.h
+/// @file      CustomProductControllerStatePlayingDeselected.h
 ///
-/// @brief     This header file declares functionality to process custom events that occur in
-///            Professor during the product setup state.
+/// @brief     This header file declares functionality to process events that occur during the
+///            product deselected state.
 ///
 /// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -11,7 +11,7 @@
 ///            Included Header Files
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "ProductControllerStatePlayingSelectedSetup.h"
+#include "ProductControllerState.h"
 #include "HsmState.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,23 +26,23 @@ namespace ProductApp
 class ProductControllerHsm;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief The CustomProductControllerStatePlayingSelectedSetup Class
+/// @brief The CustomProductControllerStatePlayingDeselected Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStatePlayingSelectedSetup : public ProductControllerStatePlayingSelectedSetup
+class CustomProductControllerStatePlayingDeselected : public ProductControllerStatePlayingDeselected
 {
 public:
 
-    CustomProductControllerStatePlayingSelectedSetup( ProductControllerHsm& hsm,
-                                                      CHsmState*            pSuperState,
-                                                      Hsm::STATE            stateId,
-                                                      const std::string&    name = "CustomSetup" );
+    CustomProductControllerStatePlayingDeselected( ProductControllerHsm& hsm,
+                                                   CHsmState*            pSuperState,
+                                                   Hsm::STATE            stateId,
+                                                   const std::string&    name = "CustomPlayingDeselected" );
 
-    ~CustomProductControllerStatePlayingSelectedSetup( ) override
+    ~CustomProductControllerStatePlayingDeselected() override
     {
 
     }
 
-    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent ) override;
+    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )  override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

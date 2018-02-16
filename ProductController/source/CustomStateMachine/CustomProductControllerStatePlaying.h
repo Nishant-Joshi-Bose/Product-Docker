@@ -61,11 +61,10 @@ class CustomProductControllerStatePlaying : public ProductControllerStatePlaying
 {
 public:
 
-    CustomProductControllerStatePlaying
-    ( ProductControllerHsm&       hsm,
-      CHsmState*                  pSuperState,
-      Hsm::STATE                  stateId,
-      const std::string&          name    = "CustomProductControllerStatePlaying" );
+    CustomProductControllerStatePlaying( ProductControllerHsm& hsm,
+                                         CHsmState*            pSuperState,
+                                         Hsm::STATE            stateId,
+                                         const std::string&    name  = "CustomPlaying" );
 
     ~CustomProductControllerStatePlaying( ) override
     {
@@ -73,15 +72,8 @@ public:
     }
 
     void HandleStateEnter( )                                            override;
-    bool HandleInactivityTimer( InactivityTimerType timerType )         override;
-    bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )   override;
+    void HandleStateExit( )                                             override;
     bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action ) override;
-    bool HandleLPMPowerStatusFullPowerOn( )                             override;
-    bool HandleAdaptIQControl( const ProductAdaptIQControl& )           override;
-
-private:
-
-    void GoToAppropriateNonPlayingState( );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

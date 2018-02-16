@@ -290,11 +290,6 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentUserPower( KeyHandlerUtil::ActionType_t intent )
-    {
-        return false;
-    }
-
     virtual bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )
     {
         return false;
