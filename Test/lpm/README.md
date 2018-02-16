@@ -32,3 +32,6 @@ LPM unit test for low power standby. Invokes low power state using IPC messsagin
 
 ##### test_lpm_tap_examples.py
 Miscellaneous examples of tests that work over LPM tap including: key input simulation and amp fault.
+
+##### test_thermal.py
+Acquire thermal data over IPC and verify that it is reasonable.

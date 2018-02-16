@@ -1,5 +1,5 @@
 """
-Unit tests for constrolling the lightbar through the LPM using IPC.
+Unit tests for controlling the lightbar through the LPM using IPC.
 Use this to verify that lightbar animations work from the LPM on down.
 
 Tested in this script:
