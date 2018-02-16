@@ -35,7 +35,6 @@
 #include "KeyHandler.h"
 #include "LpmServiceMessages.pb.h"
 #include "ProductMessage.pb.h"
-#include "Blaster.pb.h"
 #include "A4VQuickSetServiceClientFactory.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,8 +98,6 @@ private:
     KeyHandlerUtil::KeyHandler                                                  m_KeyHandler;
     bool                                                                        m_connected;
     bool                                                                        m_running;
-    BlasterConfiguration::BlasterConfiguration                                  m_blasterConfig;
-    std::map<uint32_t, std::vector<std::string>>                                m_blasterMap;
     A4VQuickSetService::A4VQuickSetServiceClientIF::A4VQuickSetServiceClientPtr m_QSSClient;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,15 +123,7 @@ private:
     /// @brief The following method initializes the key blasting configuration.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool InitializeBlasterConfig( );
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following method determines whether a key should be blasted given the
-    /// device type of the currently-selected source
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    bool IsBlastedKey( uint32_t key, std::string& devType );
+    bool InitializeQSS( );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

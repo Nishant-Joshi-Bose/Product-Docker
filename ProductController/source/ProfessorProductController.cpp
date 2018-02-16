@@ -69,6 +69,7 @@
 #include "ProductControllerStateStoppingStreams.h"
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
+#include "ProductControllerStatePlayableTransitionInternal.h"
 #include "ProductControllerStatePlayableTransitionNetworkStandby.h"
 #include "ProductControllerStateSoftwareUpdateTransition.h"
 #include "ProductControllerStatePlayingTransition.h"
@@ -79,7 +80,7 @@
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
 #include "ProductControllerStateWelcome.h"
-#include "ProductControllerStateSoftwareUpdating.h"
+#include "ProductControllerStateSoftwareInstall.h"
 #include "ProductControllerStateRebooting.h"
 #include "ProductControllerStateCriticalError.h"
 #include "MfgData.h"
@@ -185,10 +186,10 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION );
 
-    auto* stateSoftwareUpdating = new ProductControllerSoftwareUpdating
+    auto* stateSoftwareInstall = new ProductControllerStateSoftwareInstall
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATING );
+      PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL );
 
     auto* stateRebooting = new ProductControllerStateRebooting
     ( GetHsm( ),
@@ -210,14 +211,19 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION );
 
-    auto* statePlayableTransitionIdle = new ProductControllerStatePlayableTransitionIdle
+    auto* statePlayableTransitionInternal = new ProductControllerStatePlayableTransitionInternal
     ( GetHsm( ),
       statePlayableTransition,
+      PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_INTERNAL );
+
+    auto* statePlayableTransitionIdle = new ProductControllerStatePlayableTransitionIdle
+    ( GetHsm( ),
+      statePlayableTransitionInternal,
       PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE );
 
     auto* statePlayableTransitionNetworkStandby = new ProductControllerStatePlayableTransitionNetworkStandby
     ( GetHsm( ),
-      statePlayableTransition,
+      statePlayableTransitionInternal,
       PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY );
 
     auto* customStateOn = new CustomProductControllerStateOn
@@ -380,12 +386,13 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), customStateBooting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), stateWelcome );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareUpdateTransition );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareUpdating );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareInstall );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateRebooting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), stateCriticalError );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FACTORY_DEFAULT ), stateFactoryDefault );
     GetHsm( ).AddState( "", statePlayableTransition );
     GetHsm( ).AddState( "", statePlayableTransitionIdle );
+    GetHsm( ).AddState( "", statePlayableTransitionInternal );
     GetHsm( ).AddState( "", statePlayableTransitionNetworkStandby );
     GetHsm( ).AddState( "", customStateOn );
     GetHsm( ).AddState( "", customStatePlayable );
@@ -494,7 +501,7 @@ void ProfessorProductController::Run( )
     ///
     /// Register LPM events for LightBar
     ///
-    m_lightbarController->RegisterLpmEvents();
+    //m_lightbarController->RegisterLpmEvents();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1241,6 +1248,14 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     {
         GetHsm( ).Handle< const ProductAdaptIQControl & >
         ( &CustomProductControllerState::HandleAdaptIQControl, message.aiqcontrol( ) );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// CecMode  messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.has_cecmode( ) )
+    {
+        BOSE_DEBUG( s_logger, "CECMODE set to %d",  message.cecmode( ).cecmode( ) );
+        m_ProductLpmHardwareInterface->SetCecMode( message.cecmode( ).cecmode( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Messages handled in the common code based are processed at this point, unless the message
