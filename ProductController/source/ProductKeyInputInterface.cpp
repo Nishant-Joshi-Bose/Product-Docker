@@ -318,8 +318,7 @@ bool ProductKeyInputInterface::InitializeQSS( )
     m_QSSClient = A4VQuickSetServiceClientFactory::Create( "ProductKeyInputInterface", m_ProductTask );
     if( !m_QSSClient )
     {
-        BOSE_ERROR( s_logger, "%s: Failed loading key blaster configuration file.", __FUNCTION__ );
-        return false;
+        BOSE_DIE( "Failed loading key blaster configuration file." );
     }
 
     m_QSSClient->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
