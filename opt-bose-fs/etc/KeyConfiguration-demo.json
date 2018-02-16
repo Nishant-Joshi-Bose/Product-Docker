@@ -5,7 +5,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "power toggle", 
-            "action": 101, 
+            "action": 1101, 
             "keyList": [
                 76
             ]
@@ -15,7 +15,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "power toggle", 
-            "action": 101, 
+            "action": 1101, 
             "keyList": [
                 76
             ]
@@ -25,7 +25,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "power toggle", 
-            "action": 101, 
+            "action": 1101, 
             "keyList": [
                 76
             ]
@@ -35,7 +35,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "power toggle", 
-            "action": 101, 
+            "action": 1101, 
             "keyList": [
                 76
             ]
@@ -47,7 +47,7 @@
                 0
             ], 
             "commment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast", 
-            "action": 20, 
+            "action": 1020, 
             "keyList": [
                 129
             ]
@@ -59,7 +59,7 @@
                 0
             ], 
             "commment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast", 
-            "action": 20, 
+            "action": 1020, 
             "keyList": [
                 129
             ]
@@ -71,7 +71,7 @@
                 0
             ], 
             "commment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast", 
-            "action": 20, 
+            "action": 1020, 
             "keyList": [
                 129
             ]
@@ -83,7 +83,7 @@
                 0
             ], 
             "commment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast", 
-            "action": 20, 
+            "action": 1020, 
             "keyList": [
                 129
             ]
@@ -95,7 +95,7 @@
                 750
             ], 
             "commment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable", 
-            "action": 21, 
+            "action": 1021, 
             "keyList": [
                 129
             ]
@@ -107,7 +107,7 @@
                 750
             ], 
             "commment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable", 
-            "action": 21, 
+            "action": 1021, 
             "keyList": [
                 129
             ]
@@ -119,7 +119,7 @@
                 750
             ], 
             "commment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable", 
-            "action": 21, 
+            "action": 1021, 
             "keyList": [
                 129
             ]
@@ -131,7 +131,7 @@
                 750
             ], 
             "commment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable", 
-            "action": 21, 
+            "action": 1021, 
             "keyList": [
                 129
             ]
@@ -143,7 +143,7 @@
                 10000
             ], 
             "commment": "Console: Bluetooth Press and Hold ---> Clear Pairing List", 
-            "action": 22, 
+            "action": 1022, 
             "keyList": [
                 129
             ]
@@ -155,7 +155,7 @@
                 10000
             ], 
             "commment": "Console: Bluetooth Press and Hold ---> Clear Pairing List", 
-            "action": 22, 
+            "action": 1022, 
             "keyList": [
                 129
             ]
@@ -167,7 +167,7 @@
                 10000
             ], 
             "commment": "Console: Bluetooth Press and Hold ---> Clear Pairing List", 
-            "action": 22, 
+            "action": 1022, 
             "keyList": [
                 129
             ]
@@ -179,7 +179,7 @@
                 10000
             ], 
             "commment": "Console: Bluetooth Press and Hold ---> Clear Pairing List", 
-            "action": 22, 
+            "action": 1022, 
             "keyList": [
                 129
             ]
@@ -189,7 +189,7 @@
             "keyEvent": 1, 
             "timeOutList": [], 
             "commment": "Console: action release ---> Alexa", 
-            "action": 26, 
+            "action": 1026, 
             "keyList": [
                 174
             ]
@@ -199,7 +199,7 @@
             "keyEvent": 1, 
             "timeOutList": [], 
             "commment": "Console: action release ---> Alexa", 
-            "action": 26, 
+            "action": 1026, 
             "keyList": [
                 174
             ]
@@ -211,7 +211,7 @@
                 1000
             ], 
             "commment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1", 
-            "action": 27, 
+            "action": 1027, 
             "keyList": [
                 65
             ]
@@ -223,7 +223,7 @@
                 1000
             ], 
             "commment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1", 
-            "action": 27, 
+            "action": 1027, 
             "keyList": [
                 65
             ]
@@ -235,7 +235,7 @@
                 1000
             ], 
             "commment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1", 
-            "action": 27, 
+            "action": 1027, 
             "keyList": [
                 65
             ]
@@ -247,7 +247,7 @@
                 1000
             ], 
             "commment": "Console: Preset 1 press and hold for at least 1000ms ---> Store Currently playing into Preset 1", 
-            "action": 27, 
+            "action": 1027, 
             "keyList": [
                 65
             ]
@@ -259,7 +259,7 @@
                 1000
             ], 
             "commment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2", 
-            "action": 28, 
+            "action": 1028, 
             "keyList": [
                 66
             ]
@@ -271,7 +271,7 @@
                 1000
             ], 
             "commment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2", 
-            "action": 28, 
+            "action": 1028, 
             "keyList": [
                 66
             ]
@@ -283,7 +283,7 @@
                 1000
             ], 
             "commment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2", 
-            "action": 28, 
+            "action": 1028, 
             "keyList": [
                 66
             ]
@@ -295,7 +295,7 @@
                 1000
             ], 
             "commment": "Console: Preset 2 press and hold for at least 1000ms ---> Store Currently playing into Preset 2", 
-            "action": 28, 
+            "action": 1028, 
             "keyList": [
                 66
             ]
@@ -307,7 +307,7 @@
                 1000
             ], 
             "commment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3", 
-            "action": 29, 
+            "action": 1029, 
             "keyList": [
                 67
             ]
@@ -319,7 +319,7 @@
                 1000
             ], 
             "commment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3", 
-            "action": 29, 
+            "action": 1029, 
             "keyList": [
                 67
             ]
@@ -331,7 +331,7 @@
                 1000
             ], 
             "commment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3", 
-            "action": 29, 
+            "action": 1029, 
             "keyList": [
                 67
             ]
@@ -343,7 +343,7 @@
                 1000
             ], 
             "commment": "Console: Preset 3 press and hold for at least 1000ms ---> Store Currently playing into Preset 3", 
-            "action": 29, 
+            "action": 1029, 
             "keyList": [
                 67
             ]
@@ -355,7 +355,7 @@
                 1000
             ], 
             "commment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4", 
-            "action": 30, 
+            "action": 1030, 
             "keyList": [
                 68
             ]
@@ -367,7 +367,7 @@
                 1000
             ], 
             "commment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4", 
-            "action": 30, 
+            "action": 1030, 
             "keyList": [
                 68
             ]
@@ -379,7 +379,7 @@
                 1000
             ], 
             "commment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4", 
-            "action": 30, 
+            "action": 1030, 
             "keyList": [
                 68
             ]
@@ -391,7 +391,7 @@
                 1000
             ], 
             "commment": "Console: Preset 4 press and hold for at least 1000ms ---> Store Currently playing into Preset 4", 
-            "action": 30, 
+            "action": 1030, 
             "keyList": [
                 68
             ]
@@ -403,7 +403,7 @@
                 1000
             ], 
             "commment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5", 
-            "action": 31, 
+            "action": 1031, 
             "keyList": [
                 69
             ]
@@ -415,7 +415,7 @@
                 1000
             ], 
             "commment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5", 
-            "action": 31, 
+            "action": 1031, 
             "keyList": [
                 69
             ]
@@ -427,7 +427,7 @@
                 1000
             ], 
             "commment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5", 
-            "action": 31, 
+            "action": 1031, 
             "keyList": [
                 69
             ]
@@ -439,7 +439,7 @@
                 1000
             ], 
             "commment": "Console: Preset 5 press and hold for at least 1000ms ---> Store Currently playing into Preset 5", 
-            "action": 31, 
+            "action": 1031, 
             "keyList": [
                 69
             ]
@@ -451,7 +451,7 @@
                 1000
             ], 
             "commment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6", 
-            "action": 32, 
+            "action": 1032, 
             "keyList": [
                 70
             ]
@@ -463,7 +463,7 @@
                 1000
             ], 
             "commment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6", 
-            "action": 32, 
+            "action": 1032, 
             "keyList": [
                 70
             ]
@@ -475,7 +475,7 @@
                 1000
             ], 
             "commment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6", 
-            "action": 32, 
+            "action": 1032, 
             "keyList": [
                 70
             ]
@@ -487,7 +487,7 @@
                 1000
             ], 
             "commment": "Console: Preset 6 press and hold for at least 1000ms ---> Store Currently playing into Preset 6", 
-            "action": 32, 
+            "action": 1032, 
             "keyList": [
                 70
             ]
@@ -499,7 +499,7 @@
                 200
             ], 
             "commment": "Console: Preset 1 release ---> Select Preset stored on Key 1", 
-            "action": 33, 
+            "action": 1033, 
             "keyList": [
                 65
             ]
@@ -511,7 +511,7 @@
                 200
             ], 
             "commment": "Console: Preset 1 release ---> Select Preset stored on Key 1", 
-            "action": 33, 
+            "action": 1033, 
             "keyList": [
                 65
             ]
@@ -523,7 +523,7 @@
                 200
             ], 
             "commment": "Console: Preset 1 release ---> Select Preset stored on Key 1", 
-            "action": 33, 
+            "action": 1033, 
             "keyList": [
                 65
             ]
@@ -535,7 +535,7 @@
                 200
             ], 
             "commment": "Console: Preset 1 release ---> Select Preset stored on Key 1", 
-            "action": 33, 
+            "action": 1033, 
             "keyList": [
                 65
             ]
@@ -547,7 +547,7 @@
                 200
             ], 
             "commment": "Console: Preset 2 release ---> Select Preset stored on Key 2", 
-            "action": 34, 
+            "action": 1034, 
             "keyList": [
                 66
             ]
@@ -559,7 +559,7 @@
                 200
             ], 
             "commment": "Console: Preset 2 release ---> Select Preset stored on Key 2", 
-            "action": 34, 
+            "action": 1034, 
             "keyList": [
                 66
             ]
@@ -571,7 +571,7 @@
                 200
             ], 
             "commment": "Console: Preset 2 release ---> Select Preset stored on Key 2", 
-            "action": 34, 
+            "action": 1034, 
             "keyList": [
                 66
             ]
@@ -583,7 +583,7 @@
                 200
             ], 
             "commment": "Console: Preset 2 release ---> Select Preset stored on Key 2", 
-            "action": 34, 
+            "action": 1034, 
             "keyList": [
                 66
             ]
@@ -595,7 +595,7 @@
                 200
             ], 
             "commment": "Console: Preset 3 release ---> Select Preset stored on Key 3", 
-            "action": 35, 
+            "action": 1035, 
             "keyList": [
                 67
             ]
@@ -607,7 +607,7 @@
                 200
             ], 
             "commment": "Console: Preset 3 release ---> Select Preset stored on Key 3", 
-            "action": 35, 
+            "action": 1035, 
             "keyList": [
                 67
             ]
@@ -619,7 +619,7 @@
                 200
             ], 
             "commment": "Console: Preset 3 release ---> Select Preset stored on Key 3", 
-            "action": 35, 
+            "action": 1035, 
             "keyList": [
                 67
             ]
@@ -631,7 +631,7 @@
                 200
             ], 
             "commment": "Console: Preset 3 release ---> Select Preset stored on Key 3", 
-            "action": 35, 
+            "action": 1035, 
             "keyList": [
                 67
             ]
@@ -643,7 +643,7 @@
                 200
             ], 
             "commment": "Console: Preset 4 release ---> Select Preset stored on Key 4", 
-            "action": 36, 
+            "action": 1036, 
             "keyList": [
                 68
             ]
@@ -655,7 +655,7 @@
                 200
             ], 
             "commment": "Console: Preset 4 release ---> Select Preset stored on Key 4", 
-            "action": 36, 
+            "action": 1036, 
             "keyList": [
                 68
             ]
@@ -667,7 +667,7 @@
                 200
             ], 
             "commment": "Console: Preset 4 release ---> Select Preset stored on Key 4", 
-            "action": 36, 
+            "action": 1036, 
             "keyList": [
                 68
             ]
@@ -679,7 +679,7 @@
                 200
             ], 
             "commment": "Console: Preset 4 release ---> Select Preset stored on Key 4", 
-            "action": 36, 
+            "action": 1036, 
             "keyList": [
                 68
             ]
@@ -691,7 +691,7 @@
                 200
             ], 
             "commment": "Console: Preset 5 release ---> Select Preset stored on Key 5", 
-            "action": 37, 
+            "action": 1037, 
             "keyList": [
                 69
             ]
@@ -703,7 +703,7 @@
                 200
             ], 
             "commment": "Console: Preset 5 release ---> Select Preset stored on Key 5", 
-            "action": 37, 
+            "action": 1037, 
             "keyList": [
                 69
             ]
@@ -715,7 +715,7 @@
                 200
             ], 
             "commment": "Console: Preset 5 release ---> Select Preset stored on Key 5", 
-            "action": 37, 
+            "action": 1037, 
             "keyList": [
                 69
             ]
@@ -727,7 +727,7 @@
                 200
             ], 
             "commment": "Console: Preset 5 release ---> Select Preset stored on Key 5", 
-            "action": 37, 
+            "action": 1037, 
             "keyList": [
                 69
             ]
@@ -739,7 +739,7 @@
                 200
             ], 
             "commment": "Console: Preset 6 release ---> Select Preset stored on Key 6", 
-            "action": 38, 
+            "action": 1038, 
             "keyList": [
                 70
             ]
@@ -751,7 +751,7 @@
                 200
             ], 
             "commment": "Console: Preset 6 release ---> Select Preset stored on Key 6", 
-            "action": 38, 
+            "action": 1038, 
             "keyList": [
                 70
             ]
@@ -763,7 +763,7 @@
                 200
             ], 
             "commment": "Console: Preset 6 release ---> Select Preset stored on Key 6", 
-            "action": 38, 
+            "action": 1038, 
             "keyList": [
                 70
             ]
@@ -775,7 +775,7 @@
                 200
             ], 
             "commment": "Console: Preset 6 release ---> Select Preset stored on Key 6", 
-            "action": 38, 
+            "action": 1038, 
             "keyList": [
                 70
             ]
@@ -785,7 +785,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "play/pause", 
-            "action": 1, 
+            "action": 1001, 
             "keyList": [
                 85
             ]
@@ -795,7 +795,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "play/pause", 
-            "action": 1, 
+            "action": 1001, 
             "keyList": [
                 85
             ]
@@ -805,7 +805,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "play/pause", 
-            "action": 1, 
+            "action": 1001, 
             "keyList": [
                 85
             ]
@@ -815,7 +815,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "play/pause", 
-            "action": 1, 
+            "action": 1001, 
             "keyList": [
                 85
             ]
@@ -825,7 +825,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "skip forward", 
-            "action": 2, 
+            "action": 1002, 
             "keyList": [
                 90
             ]
@@ -835,7 +835,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "skip forward", 
-            "action": 2, 
+            "action": 1002, 
             "keyList": [
                 90
             ]
@@ -845,7 +845,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "skip forward", 
-            "action": 2, 
+            "action": 1002, 
             "keyList": [
                 90
             ]
@@ -855,7 +855,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "skip forward", 
-            "action": 2, 
+            "action": 1002, 
             "keyList": [
                 90
             ]
@@ -865,7 +865,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "skip back", 
-            "action": 3, 
+            "action": 1003, 
             "keyList": [
                 89
             ]
@@ -875,7 +875,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "skip back", 
-            "action": 3, 
+            "action": 1003, 
             "keyList": [
                 89
             ]
@@ -885,7 +885,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "skip back", 
-            "action": 3, 
+            "action": 1003, 
             "keyList": [
                 89
             ]
@@ -895,7 +895,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "skip back", 
-            "action": 3, 
+            "action": 1003, 
             "keyList": [
                 89
             ]
@@ -905,7 +905,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "mute toggle", 
-            "action": 114, 
+            "action": 1114, 
             "keyList": [
                 1
             ]
@@ -915,7 +915,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "mute toggle", 
-            "action": 114, 
+            "action": 1114, 
             "keyList": [
                 1
             ]
@@ -925,7 +925,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "mute toggle", 
-            "action": 114, 
+            "action": 1114, 
             "keyList": [
                 1
             ]
@@ -935,7 +935,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "mute toggle", 
-            "action": 114, 
+            "action": 1114, 
             "keyList": [
                 1
             ]
@@ -945,7 +945,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "select soundtouch", 
-            "action": 115, 
+            "action": 1115, 
             "keyList": [
                 179
             ]
@@ -955,7 +955,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "select soundtouch", 
-            "action": 115, 
+            "action": 1115, 
             "keyList": [
                 179
             ]
@@ -965,7 +965,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "select soundtouch", 
-            "action": 115, 
+            "action": 1115, 
             "keyList": [
                 179
             ]
@@ -975,7 +975,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "select soundtouch", 
-            "action": 115, 
+            "action": 1115, 
             "keyList": [
                 179
             ]
@@ -985,7 +985,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "connect", 
-            "action": 116, 
+            "action": 1116, 
             "keyList": [
                 17
             ]
@@ -995,7 +995,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "connect", 
-            "action": 116, 
+            "action": 1116, 
             "keyList": [
                 17
             ]
@@ -1005,7 +1005,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "connect", 
-            "action": 116, 
+            "action": 1116, 
             "keyList": [
                 17
             ]
@@ -1015,7 +1015,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "connect", 
-            "action": 116, 
+            "action": 1116, 
             "keyList": [
                 17
             ]
@@ -1025,7 +1025,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "select tv", 
-            "action": 118, 
+            "action": 1118, 
             "keyList": [
                 14
             ]
@@ -1035,7 +1035,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "select tv", 
-            "action": 118, 
+            "action": 1118, 
             "keyList": [
                 14
             ]
@@ -1045,7 +1045,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "select tv", 
-            "action": 118, 
+            "action": 1118, 
             "keyList": [
                 14
             ]
@@ -1055,7 +1055,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "select tv", 
-            "action": 118, 
+            "action": 1118, 
             "keyList": [
                 14
             ]
@@ -1065,7 +1065,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "thumbs up", 
-            "action": 119, 
+            "action": 1119, 
             "keyList": [
                 107
             ]
@@ -1075,7 +1075,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "thumbs up", 
-            "action": 119, 
+            "action": 1119, 
             "keyList": [
                 107
             ]
@@ -1085,7 +1085,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "thumbs up", 
-            "action": 119, 
+            "action": 1119, 
             "keyList": [
                 107
             ]
@@ -1095,7 +1095,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "thumbs up", 
-            "action": 119, 
+            "action": 1119, 
             "keyList": [
                 107
             ]
@@ -1105,7 +1105,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "thumbs down", 
-            "action": 120, 
+            "action": 1120, 
             "keyList": [
                 106
             ]
@@ -1115,7 +1115,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "thumbs down", 
-            "action": 120, 
+            "action": 1120, 
             "keyList": [
                 106
             ]
@@ -1125,7 +1125,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "thumbs down", 
-            "action": 120, 
+            "action": 1120, 
             "keyList": [
                 106
             ]
@@ -1135,7 +1135,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "thumbs down", 
-            "action": 120, 
+            "action": 1120, 
             "keyList": [
                 106
             ]
@@ -1145,9 +1145,9 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "factory default", 
-            "action": 8, 
+            "action": 1008, 
             "keyList": [
-                27
+                253
             ]
         }, 
         {
@@ -1155,9 +1155,9 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "factory default", 
-            "action": 8, 
+            "action": 1008, 
             "keyList": [
-                27
+                253
             ]
         }, 
         {
@@ -1165,9 +1165,9 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "factory default", 
-            "action": 8, 
+            "action": 1008, 
             "keyList": [
-                27
+                253
             ]
         }, 
         {
@@ -1175,9 +1175,9 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "factory default", 
-            "action": 8, 
+            "action": 1008, 
             "keyList": [
-                27
+                253
             ]
         }, 
         {
@@ -1185,9 +1185,9 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "toggle wifi", 
-            "action": 7, 
+            "action": 1007, 
             "keyList": [
-                28
+                252
             ]
         }, 
         {
@@ -1195,9 +1195,9 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "toggle wifi", 
-            "action": 7, 
+            "action": 1007, 
             "keyList": [
-                28
+                252
             ]
         }, 
         {
@@ -1205,9 +1205,9 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "toggle wifi", 
-            "action": 7, 
+            "action": 1007, 
             "keyList": [
-                28
+                252
             ]
         }, 
         {
@@ -1215,9 +1215,9 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "toggle wifi", 
-            "action": 7, 
+            "action": 1007, 
             "keyList": [
-                28
+                252
             ]
         }, 
         {
@@ -1225,9 +1225,9 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "ap setup", 
-            "action": 5, 
+            "action": 1005, 
             "keyList": [
-                29
+                251
             ]
         }, 
         {
@@ -1235,9 +1235,9 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "ap setup", 
-            "action": 5, 
+            "action": 1005, 
             "keyList": [
-                29
+                251
             ]
         }, 
         {
@@ -1245,9 +1245,9 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "ap setup", 
-            "action": 5, 
+            "action": 1005, 
             "keyList": [
-                29
+                251
             ]
         }, 
         {
@@ -1255,9 +1255,9 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "ap setup", 
-            "action": 5, 
+            "action": 1005, 
             "keyList": [
-                29
+                251
             ]
         }, 
         {
@@ -1265,9 +1265,9 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "pair speakers", 
-            "action": 124, 
+            "action": 1124, 
             "keyList": [
-                30
+                250
             ]
         }, 
         {
@@ -1275,9 +1275,9 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "pair speakers", 
-            "action": 124, 
+            "action": 1124, 
             "keyList": [
-                30
+                250
             ]
         }, 
         {
@@ -1285,9 +1285,9 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "pair speakers", 
-            "action": 124, 
+            "action": 1124, 
             "keyList": [
-                30
+                250
             ]
         }, 
         {
@@ -1295,9 +1295,9 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "pair speakers", 
-            "action": 124, 
+            "action": 1124, 
             "keyList": [
-                30
+                250
             ]
         }, 
         {
@@ -1305,7 +1305,7 @@
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "mute toggle", 
-            "action": 114, 
+            "action": 1114, 
             "keyList": [
                 1
             ]

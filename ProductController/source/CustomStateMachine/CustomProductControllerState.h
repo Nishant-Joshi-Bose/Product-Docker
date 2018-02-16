@@ -129,12 +129,12 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentPowerToggle( KeyHandlerUtil::ActionType_t intent )
+    virtual bool HandleIntentPowerToggle( )
     {
         return false;
     }
 
-    virtual bool HandleIntentFactoryDefault( KeyHandlerUtil::ActionType_t intent )
+    virtual bool HandleIntentFactoryDefault( )
     {
         return false;
     }
@@ -219,6 +219,11 @@ public:
     }
 
     virtual bool HandleSoftwareUpdateStart( uint32_t delay )
+    {
+        return false;
+    }
+
+    virtual bool HandleAudioPathStreamState( bool streamSilent )
     {
         return false;
     }
@@ -321,6 +326,11 @@ public:
     }
 
     virtual bool HandleAudioPathDeselect( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLpmSoftwareUpdateState( )
     {
         return false;
     }

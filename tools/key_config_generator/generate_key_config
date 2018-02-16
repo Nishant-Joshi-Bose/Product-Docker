@@ -8,14 +8,14 @@ keygen_args="$@"
 # Enable the environment and install any python packages required.
 setup_python () {
 	mkdir -p $virtual_env_dir || exit
-	virtualenv -p /usr/bin/python2.7 $virtual_env_dir || exit
+	virtualenv-2.7 -p /usr/bin/python2.7 $virtual_env_dir || exit
 	source $virtual_env_dir/bin/activate || exit
 	pip install -r requirements.txt || exit
 }
 
 # Verify a valid python interpreter and clang installation is present.
 check_dependencies () {
-	if ! python_version=$(python -c 'import sys; print(sys.version_info[:2])') 2>/dev/null; then
+	if ! python_version=$(python2.7 -c 'import sys; print(sys.version_info[:2])') 2>/dev/null; then
 		echo >&2 "$0: Python interpreter not detected"
 		exit 1
 	fi
@@ -38,7 +38,7 @@ setup_python
 check_dependencies
 
 echo "Generating key configuration"
-if ! python friendly_to_raw_key_config.py $keygen_args; then
+if ! python2.7 friendly_to_raw_key_config.py $keygen_args; then
 	echo "Error running key generator script"
 	exit 1
 fi

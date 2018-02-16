@@ -40,8 +40,8 @@
     "selected_version": "Release/master/0.1.0-4+31ebf8c"
   },
   {
-    "name": "BoseWebMonaco",
-    "selected_version": "Release/develop/0.2.1-48+11dcb95"
+    "name": "BoseWebBrussels",
+    "selected_version": "Continuous/develop/0.0.1-2+fdc6859"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -54,6 +54,10 @@
   {
     "name": "CastleCli-qc8017_32",
     "selected_version": "Release/master/0.2.3-26+8cf9ea4"
+  },
+  {
+    "name": "CastleDemoController-qc8017_32",
+    "selected_version": "Release/master/0.3.2-62+b9fcc88"
   },
   {
     "name": "CastleLibs-native",
@@ -69,7 +73,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Continuous/master/0.3.3-38+042bce8"
+    "selected_version": "Continuous/master/0.3.3-40+e56a866"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -85,7 +89,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "PGC218_setStreamConfig@a3e5de3237cb76172e8491608b9c72abcb8b41e0"
+    "selected_version": "master@7bae3f4067ec1345c6327fe20c092ced76ae1e5e"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -102,8 +106,8 @@
   {
     "name": "ProfessorLPM-Package",
     "selected_version": {
-      "RIVIERA_HSP_VERSION=1.3": "Release/trunk/0.3.4.2682477/DP1",
-      "RIVIERA_HSP_VERSION=2.1": "Release/trunk/0.3.4.2682477/DP2"
+      "RIVIERA_HSP_VERSION=1.3": "Release/trunk/0.3.5.2692545/DP1",
+      "RIVIERA_HSP_VERSION=2.3": "Release/trunk/0.3.5.2692545/DP2"
     }
   },
   {
@@ -120,11 +124,11 @@
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/1.3"
+    "selected_version": "Release/master/${RIVIERA_HSP_VERSION}"
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@1754"
+    "selected_version": "trunk@1983"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -148,7 +152,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.6.40929.2672236"
+    "selected_version": "Continuous/Castle-Fork_APMulti/2018-02-16_0245"
   },
   {
     "name": "unittest-cpp-qc8017_32",
@@ -156,6 +160,10 @@
   },
   {
     "name": "Webkit",
-    "selected_version": "Release/master/0.3.1-24+472ac23"
+    "selected_version": "Continuous/master/0.3.2-30+f72a09c"
+  },
+  {
+    "name": "WiFi-Setup-Webpage",
+    "selected_version": "master@19f561f91af118db5439955e4d85bc0a914964eb"
   }
 ]
