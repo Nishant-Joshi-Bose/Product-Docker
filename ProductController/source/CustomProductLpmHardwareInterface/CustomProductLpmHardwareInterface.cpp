@@ -488,6 +488,34 @@ bool CustomProductLpmHardwareInterface::SetCecPhysicalAddress( const uint32_t ce
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name  CustomProductLpmHardwareInterface::SetCecMode
+///
+/// @brief This method sends a request to the LPM hardware.
+///
+/// @param None
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductLpmHardwareInterface::SetCecMode( const uint8_t mode )
+{
+    BOSE_DEBUG( s_logger, "CEC MODE setting will be sent to  LPM   %d", mode );
+
+    if( isConnected( ) == false || GetLpmClient( ) == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An LPM send CEC Mode request could not be made, as no connection is available." );
+
+        return false;
+    }
+
+    IpcCecMode_t cecMode;
+    cecMode.set_cecmode( mode );
+    cecMode.set_save( 1 ); //save to nvram
+    GetLpmClient( )->SendCecMode( cecMode );
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name  CustomProductHardwareLpmInterface::SendAdaptIQControl
 ///
 /// @brief This method sends an AdaptIQ control request to the DSP
