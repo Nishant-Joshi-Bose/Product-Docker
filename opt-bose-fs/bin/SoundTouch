@@ -13,11 +13,11 @@ function log {
 cd /opt/Bose/bin || exit
 
 rundir=/var/run/shepherd
-pidfile=/var/run/shepherd/pids
 override=false
 
-# The list of daemons to stop while in low power mode.
-# These daemons are typically the ones that don't know how to handle the low power events properly.
+# The list of daemons to stop while in low power mode.  These daemons are
+# typically the ones that don't know how to handle the low power events
+# properly.
 lowpower=(
     Shepherd-AudioPath.xml
     Shepherd-NetManager.xml
@@ -162,23 +162,7 @@ fi
 if (( $# == 1 )) && [ "$1" = factory_default ]; then
     log info "Stopping all services for factory default"
     rm -f "$rundir"/*.xml  # remove all daemons from the shepherd configuration
-    killall -SIGHUP shepherdd
-
-    i=30 # Wait at most this number of seconds to stop all daemons.
-    while :; do
-        n=$(wc -l < "$rundir/pids")
-        if (( n == 0 )); then
-            break
-        fi
-        if (( --i == 0 )); then
-            log warning "$n daemon(s) still running. Proceeding anyhow."
-            break
-        fi
-        if (( i < 25 )); then
-            log warning "$n daemon(s) still running. Waiting for another $i secs"
-        fi
-        sleep 1
-    done
+    shepherd-wait
 
     log info "Clearing product persistence"
     rm -rfv /mnt/nv/product-persistence/*
@@ -196,7 +180,7 @@ if (( $# == 1 )) && [ "$1" = enterlowpower ]; then
     log info "Disabling services to enter low power mode"
     cd "$rundir" || exit
     rm -f "${lowpower[@]}"
-    killall -HUP shepherdd
+    shepherd-wait
     exit
 fi
 
@@ -206,7 +190,7 @@ if (( $# == 1 )) && [ "$1" = exitlowpower ]; then
     for i in "${lowpower[@]}"; do
         ln -sf "/opt/Bose/etc/$i"
     done
-    killall -HUP shepherdd
+    shepherd-wait
     exit
 fi
 

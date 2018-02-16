@@ -45,7 +45,7 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork_Multi/2018-02-14_1841"
+    "selected_version": "Release/Castle-Fork/0.2.5-20386"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
@@ -144,7 +144,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/0.3.0-49+29239c4"
+    "selected_version": "Release/master/0.3.1-58+fe7b095"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -152,7 +152,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork_APMulti/2018-02-16_0245"
+    "selected_version": "Release/Castle-Fork/0.3.6.40929.2672236"
   },
   {
     "name": "unittest-cpp-qc8017_32",
