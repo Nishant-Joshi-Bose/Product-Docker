@@ -62,6 +62,7 @@ TARGET_LINK_LIBRARIES(Eddie
   STS
   ShelbyUtils
   SoundTouch_SDK_Protobuf_static
+  SystemEventService
   BoseLibs
   jsoncpp
   protobuf
