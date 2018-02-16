@@ -1,7 +1,3 @@
-"""
-Examples for various LPM tests that are initiated from APQ tap.
-"""
-
 import pexpect
 
 class ApqTap():

@@ -7,13 +7,13 @@ import time
 from CastleTestUtils.LoggerUtils.log_setup import get_logger
 from CastleTestUtils.LpmUtils.Lpm import Lpm
 
-__logger = get_logger(__file__)
+_logger = get_logger(__file__)
 
-__lpm_port = pytest.config.getoption('--lpm_port')
-if __lpm_port is None:
+_lpm_port = pytest.config.getoption('--lpm-port')
+if _lpm_port is None:
     pytest.fail("LPM port is required: pytest -sv <test.py> --lpm_port </dev/tty.usb-foo>")
 
-__lpm = Lpm(__lpm_port)
+_lpm_tap = Lpm(_lpm_port)
 
 
 @pytest.mark.skip("Example/test functionality")
@@ -21,28 +21,28 @@ def test_amp_fault_on():
 	""" 
 	Manually set LPM into an amp fault state.
 	"""
-	lpmVersion = __lpm.get_version()
+	lpmVersion = _lpm_tap.get_version()
 	assert lpmVersion
-	__logger.info("LPM found at version %s", lpmVersion)
+	_logger.info("LPM found at version %s", lpmVersion)
 
-	__lpm.amp_fault_set_state(True)
+	_lpm_tap.amp_fault_set_state(True)
 
 @pytest.mark.skip("Example/test functionality")
 def test_amp_fault_induce():
 	""" 
 	Induce an amp fault.
 	"""
-	lpmVersion = __lpm.get_version()
+	lpmVersion = _lpm_tap.get_version()
 	assert lpmVersion
-	__logger.info("LPM found at version %s", lpmVersion)
+	_logger.info("LPM found at version %s", lpmVersion)
 
-	__logger.info("Please wait. Inducing an amp fault takes about 15 seconds...")
-	__lpm.amp_fault_induce()
+	_logger.info("Please wait. Inducing an amp fault takes about 15 seconds...")
+	_lpm_tap.amp_fault_induce()
 	time.sleep(2) # amp fault will block until it is done, but just in case, let's wait a bit
-	system_state = __lpm.get_system_state()
+	system_state = _lpm_tap.get_system_state()
 	assert (system_state == Lpm.SystemState.Error)
 	# Amp fault lasts until reboot
-	__lpm.reboot()
+	_lpm_tap.reboot()
 
 @pytest.mark.skip("Example/test functionality")
 def test_low_power_standby():
@@ -50,22 +50,22 @@ def test_low_power_standby():
 	Use a TAP command to put the LPM in low power standby.
 	This only effects the LPM.
 	"""
-	originalState = __lpm.get_power_state()
-	__logger.info("Current power state: %s", originalState)
+	originalState = _lpm_tap.get_power_state()
+	_logger.info("Current power state: %s", originalState)
 
-	__lpm.set_power_state("LowPower")
+	_lpm_tap.set_power_state("LowPower")
 	# Wait up to 2 seconds to enter LowPower state. Note that this only effects
 	# the "power state" on the LPM and will not fully enter low power state
 	# for the whole device.
-	__lpm.wait_for_power_state(["LowPower"], 2)
+	_lpm_tap.wait_for_power_state(["LowPower"], 2)
 
-	__logger.info("Now in LowPower state")
+	_logger.info("Now in LowPower state")
 
 	# Restore the original state.
-	__lpm.set_power_state(originalState)
-	__lpm.wait_for_power_state([originalState], 2)
+	_lpm_tap.set_power_state(originalState)
+	_lpm_tap.wait_for_power_state([originalState], 2)
 
-	__logger.info("Restored power state: %s", originalState)
+	_logger.info("Restored power state: %s", originalState)
 
 #@pytest.mark.skip("Example/test functionality")
 def test_some_keys():
@@ -74,9 +74,9 @@ def test_some_keys():
 	These route down to the PSoC so it tests the entire chain up from PSoC through SoC.
 	"""
 
-	lpmVersion = __lpm.get_version()
+	lpmVersion = _lpm_tap.get_version()
 	assert lpmVersion
-	__logger.info("LPM found at version %s", lpmVersion)
+	_logger.info("LPM found at version %s", lpmVersion)
 
 	#
 	# Button examples
@@ -84,13 +84,13 @@ def test_some_keys():
 
 	# Volume down twice. 100 ms between down and up of the key. 
 	# Events with too small of an activation time will be ignored as noise.
-	__lpm.button_tap(5, 100)
-	__lpm.button_tap(5, 100)
+	_lpm_tap.button_tap(5, 100)
+	_lpm_tap.button_tap(5, 100)
 
 	# Hold volume up
-	__lpm.button_down(3)
+	_lpm_tap.button_down(3)
 	time.sleep(5)
-	__lpm.button_up(3)
+	_lpm_tap.button_up(3)
 
 	#
 	# Slider examples
@@ -99,23 +99,23 @@ def test_some_keys():
 	#
 
 	# Activate preset 2
-	__lpm.slider_tap(15, 100);
+	_lpm_tap.slider_tap(15, 100);
 
 	# Start on preset 2, drag to preset 3. Should do nothing.
-	__lpm.slider_down(15)
-	__lpm.slider_move(25)
-	__lpm.slider_move(35)
-	__lpm.slider_move(40)
-	__lpm.slider_up(45)
+	_lpm_tap.slider_down(15)
+	_lpm_tap.slider_move(25)
+	_lpm_tap.slider_move(35)
+	_lpm_tap.slider_move(40)
+	_lpm_tap.slider_up(45)
 
 	# Start on preset2, drag around in 2, hold to store preset
-	__lpm.slider_down(15)
+	_lpm_tap.slider_down(15)
 	time.sleep(0.5)
-	__lpm.slider_move(21)
+	_lpm_tap.slider_move(21)
 	time.sleep(0.5)
-	__lpm.slider_move(23)
+	_lpm_tap.slider_move(23)
 	time.sleep(1)
-	__lpm.slider_move(30)
+	_lpm_tap.slider_move(30)
 	time.sleep(1)
-	__lpm.slider_up(28)
+	_lpm_tap.slider_up(28)
 

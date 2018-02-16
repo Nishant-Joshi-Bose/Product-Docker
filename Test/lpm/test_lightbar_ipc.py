@@ -1,3 +1,21 @@
+"""
+Unit tests for constrolling the lightbar through the LPM using IPC.
+Use this to verify that lightbar animations work from the LPM on down.
+
+Tested in this script:
+	* Retrieve animations DB version and integrity
+	* Retrieve animation DB data
+	* Stop animation
+	* Abort animation
+	* Play all animations (3s between each) for visual inspection
+	* Play all animations with no delay for brute force test
+
+Note: This requires the RivieraLpmService's Python folder to be in the path.
+
+Note: In order to use IPC communications you must follow the setup instructions 
+in the README from the Python folder in RivieraLpmService.
+"""
+
 import pytest
 import random
 import threading
@@ -10,25 +28,25 @@ import RivieraLpmService.LpmServiceMessages_pb2 as IPCMessages
 from CastleTestUtils.LoggerUtils.log_setup import get_logger
 
 # Required parameter: ip address of IPC server.
-__ip_address = pytest.config.getoption('--ip-address')
-if __ip_address is None:
+_ip_address = pytest.config.getoption('--ip-address')
+if _ip_address is None:
     pytest.fail("IP address is required: pytest -sv <test.py> --ip-address <0.0.0.0>")
 
 # Logging utility.
-__logger = get_logger(__file__)
+_logger = get_logger(__file__)
 
 # Used to wait for asynchronus requests to come back.
-__lbcs_xfer_event = threading.Event()
+_lbcs_xfer_event = threading.Event()
 
 # The remote LPM Service with which we will communicate.
-__client = LpmClient.LpmClient(__ip_address)
-assert (__client)
+_lpm_ipc = LpmClient.LpmClient(_ip_address)
+assert (_lpm_ipc)
 
 # Animation data that will be populated via a DB request.
-__animationData = None
+_animationData = None
 
 # Used to verify that the anim we requested to be played was played.
-__verifyAnimationId = None;
+_verifyAnimationId = None;
 
 #
 # Utilities and helpers.
@@ -45,29 +63,29 @@ def start_animation_request(animId, repeatFlag):
 	anim.immediateFlag 	= True
 	anim.repeatFlag 	= repeatFlag
 
-	__lbcs_xfer_event.clear()
+	_lbcs_xfer_event.clear()
 
-	__client.LBCSStartAnim(anim, start_animation_request_cb)
+	_lpm_ipc.LBCSStartAnim(anim, start_animation_request_cb)
 
-	__lbcs_xfer_event.wait(10)
+	_lbcs_xfer_event.wait(10)
 
 def abort_animation_request():
 	"""
 	Issue an abort animation request on the LPM Service.
 	"""
 
-	__lbcs_xfer_event.clear()
-	__client.LBCSAbortAnimation(stop_animation_request_cb)	# Reusing stop cb since these are identical cases
-	__lbcs_xfer_event.wait(10)
+	_lbcs_xfer_event.clear()
+	_lpm_ipc.LBCSAbortAnimation(stop_animation_request_cb)	# Reusing stop cb since these are identical cases
+	_lbcs_xfer_event.wait(10)
 
 def stop_animation_request():
 	"""
 	Issue a stop animation request on the LPM Service.
 	"""
 
-	__lbcs_xfer_event.clear()
-	__client.LBCSStopAnimation(stop_animation_request_cb)
-	__lbcs_xfer_event.wait(10)
+	_lbcs_xfer_event.clear()
+	_lpm_ipc.LBCSStopAnimation(stop_animation_request_cb)
+	_lbcs_xfer_event.wait(10)
 
 #
 # Callbacks.
@@ -83,44 +101,44 @@ def get_animation_db_version_cb(resp):
 	assert (resp.major > 0 or resp.minor > 0)
 	assert (resp.animDBChecksumPassed)
 
-	__lbcs_xfer_event.set()
+	_lbcs_xfer_event.set()
 
 def get_animation_db_data_cb(resp):
 	"""
 	Callback for IPC_LBCS_DB_INDEX_DATA_RESP.
 	:param: resp Response from sevice in form of LBCSDbIndexDataResp_t
 	"""
-	global __animationData
+	global _animationData
 
 	assert (resp)
-	__animationData = resp
-	print(__animationData)
-	__lbcs_xfer_event.set()
+	_animationData = resp
+	print(_animationData)
+	_lbcs_xfer_event.set()
 
 def start_animation_request_cb(resp):
 	"""
 	Start animation command completed successfully.
 	"""
-	global __verifyAnimationId
+	global _verifyAnimationId
 
-	if __verifyAnimationId != None:
-		assert (resp.animationId == __verifyAnimationId)
-		__verifyAnimationId = None
+	if _verifyAnimationId != None:
+		assert (resp.animationId == _verifyAnimationId)
+		_verifyAnimationId = None
 
-	__lbcs_xfer_event.set()
+	_lbcs_xfer_event.set()
 
 def stop_animation_request_cb(resp):
 	"""
 	Stop animation command completed successfully.
 	Note that this cb is used for both "stop" and "abort".
 	"""
-	global __verifyAnimationId
+	global _verifyAnimationId
 
-	if __verifyAnimationId != None:
-		assert (resp.animationId == __verifyAnimationId)
-		__verifyAnimationId = None
+	if _verifyAnimationId != None:
+		assert (resp.animationId == _verifyAnimationId)
+		_verifyAnimationId = None
 
-	__lbcs_xfer_event.set()
+	_lbcs_xfer_event.set()
 
 #
 # Test entry points.
@@ -129,100 +147,103 @@ def stop_animation_request_cb(resp):
 def test_get_animation_db_version():
 	"""
 	Request animation DB version and status.
-	Waits for request to complete using __lbcs_xfer_event.
+	Waits for request to complete using _lbcs_xfer_event.
 	"""
 
-	__lbcs_xfer_event.clear()
-	__client.LBCSAnimDBVersionReq(get_animation_db_version_cb)
-	__lbcs_xfer_event.wait(10)
+	_lbcs_xfer_event.clear()
+	_lpm_ipc.LBCSAnimDBVersionReq(get_animation_db_version_cb)
+	_lbcs_xfer_event.wait(10)
 
 def test_get_animation_db_data():
 	"""
 	Request animation DB data.
-	Waits for request to complete using __lbcs_xfer_event.
+	Waits for request to complete using _lbcs_xfer_event.
 	"""
-	client = LpmClient.LpmClient(__ip_address)
+	client = LpmClient.LpmClient(_ip_address)
 	assert (client)
 
-	__client.RegisterEvent(AutoIPCMessages.IPC_LBCS_DB_INDEX_DATA_RESP, 
+	_lpm_ipc.RegisterEvent(AutoIPCMessages.IPC_LBCS_DB_INDEX_DATA_RESP, 
 	IPCMessages.LBCSDbIndexDataResp_t, get_animation_db_data_cb)
 
-	__lbcs_xfer_event.clear()
-	__client.LBCSGetDBIndexData()
-	__lbcs_xfer_event.wait(10)
+	_lbcs_xfer_event.clear()
+	_lpm_ipc.LBCSGetDBIndexData()
+	_lbcs_xfer_event.wait(10)
 
 def test_stop_animation():
 	"""
 	Test that the stop animation command works correctly.
 	"""
-	global __verifyAnimationId
+	global _verifyAnimationId
 
-	assert (__animationData)
+	assert (_animationData)
 
-	rndAnimationId = random.randint(1, len(__animationData.indexEntries))
+	rndAnimationId = random.randint(1, len(_animationData.indexEntries))
 
-	__verifyAnimationId = rndAnimationId
+	_verifyAnimationId = rndAnimationId
 	start_animation_request(rndAnimationId, True)
 	time.sleep(1.0)
 
-	__verifyAnimationId = rndAnimationId
+	_verifyAnimationId = rndAnimationId
 	stop_animation_request()
 
 def test_abort_animation():
 	"""
 	Test that the abort animation command works correctly.
 	"""
-	global __verifyAnimationId
+	global _verifyAnimationId
 
-	assert (__animationData)
+	assert (_animationData)
 
-	rndAnimationId = random.randint(1, len(__animationData.indexEntries))
+	rndAnimationId = random.randint(1, len(_animationData.indexEntries))
 
-	__verifyAnimationId = rndAnimationId
+	_verifyAnimationId = rndAnimationId
 	start_animation_request(rndAnimationId, True)
 	time.sleep(1.0)
 
-	__verifyAnimationId = rndAnimationId
+	_verifyAnimationId = rndAnimationId
 	abort_animation_request()
 
-@pytest.mark.skip("")
 def test_play_all_animations():
 	"""
 	Starts every animation and plays it for a few seconds.
-	__animationData must be previously populate (ideally via test_get_animation_db_version())
+	_animationData must be previously populate (ideally via test_get_animation_db_version())
 	"""
-	global __verifyAnimationId
+	global _verifyAnimationId
 
-	assert (__animationData)
+	assert (_animationData)
 
 	lastAnimationId = None
 
-	for entry in __animationData.indexEntries:
-		__logger.info("Playing animation {0}: \"{1}\"".format(entry.animationId, entry.animationName))
+	for entry in _animationData.indexEntries:
+		_logger.info("Playing animation {0}: \"{1}\"".format(entry.animationId, entry.animationName))
 		
-		__verifyAnimationId = entry.animationId
+		_verifyAnimationId = entry.animationId
 		start_animation_request(entry.animationId, True)
 		
 		time.sleep(3.0)
 
+	# Wait a bit for things to settle down before clearing this animation.
+	time.sleep(2.0)
 	stop_animation_request()
 
 def test_play_all_animations_super_fast():
 	"""
 	Starts every animation and plays it for a few seconds.
-	__animationData must be previously populate (ideally via test_get_animation_db_version())
+	_animationData must be previously populate (ideally via test_get_animation_db_version())
 	"""
-	global __verifyAnimationId
+	global _verifyAnimationId
 
-	assert (__animationData)
+	assert (_animationData)
 
-	for entry in __animationData.indexEntries:
-		__logger.info("Playing animation {0}: \"{1}\"".format(entry.animationId, entry.animationName))
+	for entry in _animationData.indexEntries:
+		_logger.info("Playing animation {0}: \"{1}\"".format(entry.animationId, entry.animationName))
 
-		__verifyAnimationId = entry.animationId
+		_verifyAnimationId = entry.animationId
 		start_animation_request(entry.animationId, True)
 
+		# 75MS is the minimum time it takes to load the longest animation.
 		time.sleep(0.075)
 
-	time.sleep(1.0)
+	# Wait a bit for things to settle down before clearing this animation.
+	time.sleep(2.0)
 	stop_animation_request()
