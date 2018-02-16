@@ -76,7 +76,7 @@ There are a number of different ways in which you can flash the software to your
 Regardless of the method you used, you can verify that your update was successful by running the following command to check the version:
 
 ```shell session
-adb shell 'export LD_LIBRARY_PATH=/opt/Bose/update/opkg/;/opt/Bose/update/opkg/opkg -f /mnt/nv/update//opkg.conf --volatile-cache  --add-arch armv7a-vfp-neon:100  list'
+adb shell LD_LIBRARY_PATH=/opt/Bose/update/opkg /opt/Bose/update/opkg/opkg -f /mnt/nv/update/opkg.conf --volatile-cache  --add-arch armv7a-vfp-neon:100  list
 ```
 
 
@@ -99,7 +99,7 @@ $ sudo ./product_flash product.tar fastboot [option(s)]
 ```
 
 There are several options available in the product_flash script, depending on what you wish to update:
-```shell session
+```shell
 	-h 		# Show the help message for this script
 	-u 		# Flash only the Bose Partition
 	-a 		# Flash all partitions (except usrfs, persist, bose-persist and partition table)
