@@ -1,4 +1,4 @@
-{   
+{
     "keyTable": [
     {
         "action": "ACTION_POWER",
@@ -137,7 +137,7 @@
         "timeOutList": [200]
     },
     {
-        "action": "ACTION_VOLUME_UP_1",
+        "action": "VOLUME_UP",
         "commment": "volume up",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_VOLUME_UP"],
@@ -145,15 +145,15 @@
         "timeOutList": [0]
     },
     {
-        "action": "ACTION_VOLUME_UP_1",
+        "action": "VOLUME_UP",
         "commment": "volume up repeat",
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_UP"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "RF"],
         "timeOutList": [300, 100]
     },
     {
-        "action": "ACTION_VOLUME_DOWN_1",
+        "action": "VOLUME_DOWN",
         "commment": "volume down",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_VOLUME_DOWN"],
@@ -161,11 +161,11 @@
         "timeOutList": [0]
     },
     {
-        "action": "ACTION_VOLUME_DOWN_1",
+        "action": "VOLUME_DOWN",
         "commment": "volume down repeat",
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_DOWN"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "RF"],
         "timeOutList": [300, 100]
     },
     {
@@ -197,7 +197,7 @@
         "commment": "mute toggle",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_MUTE"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "CAPSENSE"],
         "timeOutList": []
     },
     {
@@ -270,14 +270,6 @@
         "keyEvent": "PRESS",
         "keyList": ["BOSE_PAIR_SPKR"],
         "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": []
-    },
-    {
-        "action": "ACTION_MUTE",
-        "commment": "mute toggle",
-        "keyEvent": "PRESS",
-        "keyList": ["BOSE_MUTE"],
-        "origin": ["CAPSENSE"],
         "timeOutList": []
     }
     ],
