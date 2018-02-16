@@ -69,6 +69,7 @@
 #include "ProductControllerStateStoppingStreams.h"
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
+#include "ProductControllerStatePlayableTransitionInternal.h"
 #include "ProductControllerStatePlayableTransitionNetworkStandby.h"
 #include "ProductControllerStateSoftwareUpdateTransition.h"
 #include "ProductControllerStatePlayingTransition.h"
@@ -210,14 +211,19 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION );
 
-    auto* statePlayableTransitionIdle = new ProductControllerStatePlayableTransitionIdle
+    auto* statePlayableTransitionInternal = new ProductControllerStatePlayableTransitionInternal
     ( GetHsm( ),
       statePlayableTransition,
+      PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_INTERNAL );
+
+    auto* statePlayableTransitionIdle = new ProductControllerStatePlayableTransitionIdle
+    ( GetHsm( ),
+      statePlayableTransitionInternal,
       PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE );
 
     auto* statePlayableTransitionNetworkStandby = new ProductControllerStatePlayableTransitionNetworkStandby
     ( GetHsm( ),
-      statePlayableTransition,
+      statePlayableTransitionInternal,
       PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY );
 
     auto* customStateOn = new CustomProductControllerStateOn
@@ -386,6 +392,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FACTORY_DEFAULT ), stateFactoryDefault );
     GetHsm( ).AddState( "", statePlayableTransition );
     GetHsm( ).AddState( "", statePlayableTransitionIdle );
+    GetHsm( ).AddState( "", statePlayableTransitionInternal );
     GetHsm( ).AddState( "", statePlayableTransitionNetworkStandby );
     GetHsm( ).AddState( "", customStateOn );
     GetHsm( ).AddState( "", customStatePlayable );
