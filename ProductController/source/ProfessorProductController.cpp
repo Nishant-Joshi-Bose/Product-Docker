@@ -214,7 +214,7 @@ void ProfessorProductController::Run( )
     auto* statePlayableTransitionInternal = new ProductControllerStatePlayableTransitionInternal
     ( GetHsm( ),
       statePlayableTransition,
-      PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION );
+      PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_INTERNAL );
 
     auto* statePlayableTransitionIdle = new ProductControllerStatePlayableTransitionIdle
     ( GetHsm( ),
