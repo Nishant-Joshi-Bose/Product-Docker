@@ -165,7 +165,7 @@ $ sudo ./scripts/putipk_ota builds/Release/product.ipk
 
 Alternatively, you can use the putipk_ota script without specifying a file, and it will rebuild the .ipk for you.
 ```shell session
-$ sudo ./scripts/putipk_ota builds/Release/product.ipk
+$ sudo ./scripts/putipk_ota
 ```
 
 <a name="hsp"/>
