@@ -106,6 +106,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentPlaySoundTouchSource()
+    {
+        return false;
+    }
+
     virtual bool HandleIntentBlueTooth( KeyHandlerUtil::ActionType_t result )
     {
         return false;
@@ -121,7 +126,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentFactoryDefault( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentFactoryDefault( )
     {
         return false;
     }
@@ -150,12 +155,18 @@ public:
     {
         return false;
     }
+
+    virtual bool HandleIntentSystemInfoMode( KeyHandlerUtil::ActionType_t result )
+    {
+        return false;
+    }
+
     virtual bool HandleIntentVolume( KeyHandlerUtil::ActionType_t result )
     {
         return false;
     }
 
-    virtual bool HandleIntentPowerToggle( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentPowerToggle( )
     {
         return false;
     }
@@ -171,11 +182,6 @@ public:
     }
 
     virtual bool HandleLpmInterfaceState( bool isConnected )
-    {
-        return false;
-    }
-
-    virtual bool HandleLpmLowpowerSystemState()
     {
         return false;
     }
@@ -211,6 +217,26 @@ public:
     }
 
     virtual bool HandleAudioPathDeselect( )
+    {
+        return false;
+    }
+
+    virtual bool HandleSystemPowerControl( )
+    {
+        return false;
+    }
+
+    virtual bool HandleSoftwareUpdateStart( uint32_t delay )
+    {
+        return false;
+    }
+
+    virtual bool HandleSoftwareUpdateStatus( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLpmSoftwareUpdateState( )
     {
         return false;
     }
@@ -263,7 +289,23 @@ public:
     {
         return false;
     }
-    virtual bool HandleSoftwareUpdateStatus( )
+
+    virtual bool HandleOOBSetupDone( )
+    {
+        return false;
+    }
+
+    virtual bool HandleAudioPathStreamState( bool streamSilent )
+    {
+        return false;
+    }
+
+    virtual bool HandleSystemEventServiceLowPowerSuspendResponse( bool isSuspended )
+    {
+        return false;
+    }
+
+    virtual bool HandleSystemEventServiceLowPowerResumeResponse( bool isResumed )
     {
         return false;
     }
