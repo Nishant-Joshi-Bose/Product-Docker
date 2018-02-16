@@ -300,6 +300,16 @@ public:
         return false;
     }
 
+    virtual bool HandleSystemEventServiceLowPowerSuspendResponse( bool isSuspended )
+    {
+        return false;
+    }
+
+    virtual bool HandleSystemEventServiceLowPowerResumeResponse( bool isResumed )
+    {
+        return false;
+    }
+
 public:
     /// The custom version of this function returns the custom ProductController
     static EddieProductController& GetCustomProductController();
