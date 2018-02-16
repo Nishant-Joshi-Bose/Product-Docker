@@ -16,7 +16,6 @@
 #include "NotifyTargetTaskIF.h"
 #include "ProtoPersistenceIF.h"
 #include "ProductControllerStateTop.h"
-#include "ProductControllerStateSetup.h"
 #include "ProductControllerStateNetworkStandby.h"
 #include "ProductControllerStateLowPowerStandby.h"
 #include "ProductControllerStateLowPowerStandbyTransition.h"
@@ -30,11 +29,10 @@
 #include "ProductControllerStatePlayingInactive.h"
 #include "ProductControllerStateRebooting.h"
 #include "CustomProductControllerStateBooting.h"
-#include "CustomProductControllerStateSetup.h"
 #include "CustomProductControllerStateOn.h"
 #include "ProductControllerStateOn.h"
 #include "ProductControllerStateIdle.h"
-#include "ProductControllerStateSoftwareUpdating.h"
+#include "ProductControllerStateSoftwareInstall.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
 #include "ProductControllerStatePlayingDeselected.h"
@@ -44,6 +42,7 @@
 #include "ProductControllerStatePlayingSelectedSetup.h"
 #include "ProductControllerStatePlayingSelectedSetupNetwork.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
+#include "ProductControllerStatePlayingSelectedSetupExiting.h"
 #include "ProductControllerStateStoppingStreams.h"
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
@@ -64,6 +63,7 @@
 #include "ProductSTSController.h"
 #include "DisplayController.h"
 #include "DataCollectionClientIF.h"
+#include "DataCollectionClientInterface.h"
 #include "MacAddressInfo.h"
 #include "BOptional.h"
 #include "VoiceServiceClient.h"
@@ -231,7 +231,6 @@ public:
 ////////////////////////////////////////////////////////////////////////////////
     bool IsCAPSReady() const;
     bool IsNetworkModuleReady() const;
-    bool IsLpmReady() const;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  IsSTSReady
@@ -366,10 +365,9 @@ private:
 
     ProductControllerStateTop               m_ProductControllerStateTop;
     CustomProductControllerStateBooting     m_CustomProductControllerStateBooting;
-    CustomProductControllerStateSetup       m_CustomProductControllerStateSetup;
     CustomProductControllerStateOn          m_CustomProductControllerStateOn;
     ProductControllerStateLowPowerStandby   m_ProductControllerStateLowPowerStandby;
-    ProductControllerSoftwareUpdating       m_ProductControllerStateSwUpdating;
+    ProductControllerStateSoftwareInstall   m_ProductControllerStateSwInstall;
     ProductControllerStateCriticalError     m_ProductControllerStateCriticalError;
     ProductControllerStateRebooting         m_ProductControllerStateRebooting;
 
@@ -395,6 +393,7 @@ private:
     ProductControllerStatePlayingSelectedSetup              m_ProductControllerStatePlayingSelectedSetup;
     ProductControllerStatePlayingSelectedSetupNetwork       m_ProductControllerStatePlayingSelectedSetupNetwork;
     ProductControllerStatePlayingSelectedSetupOther         m_ProductControllerStatePlayingSelectedSetupOther;
+    ProductControllerStatePlayingSelectedSetupExiting       m_ProductControllerStatePlayingSelectedSetupExiting;
     ProductControllerStateStoppingStreams                   m_ProductControllerStateStoppingStreams;
     ProductControllerStatePlayableTransition                m_ProductControllerStatePlayableTransition;
     ProductControllerStatePlayableTransitionIdle            m_ProductControllerStatePlayableTransitionIdle;
@@ -418,7 +417,6 @@ private:
     std::unique_ptr<DisplayController>          m_displayController;
     IntentHandler                               m_IntentHandler;
     bool                                        m_isCapsReady = false;
-    bool                                        m_isLpmReady  = false;
     bool                                        m_isNetworkModuleReady  = false;
     bool                                        m_isBLEModuleReady  = false;
 
@@ -438,6 +436,9 @@ private:
 
     /// Shared Pointer to the LPM Custom Hardware Interface
     std::shared_ptr< CustomProductLpmHardwareInterface > m_LpmInterface;
+
+    //DataCollectionClientInterface
+    DataCollectionClientInterface                m_dataCollectionClientInterface;
 };
 static const char* const KEY_NAMES[] __attribute__( ( unused ) ) =
 {
