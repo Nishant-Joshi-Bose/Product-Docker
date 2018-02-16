@@ -91,6 +91,7 @@ public:
     bool SetCecPhysicalAddress( const uint32_t cecPhyAddr );
     bool SendAdaptIQControl( ProductAdaptIQControl::AdaptIQAction action );
     bool BootDSPImage( LpmServiceMessages::IpcImage_t image );
+    bool SetCecMode( const uint8_t mode );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

@@ -30,6 +30,17 @@
 #include "FrontDoorClient.h"
 #include "EndPointsDefines.h"
 
+using namespace ProductPb;
+
+namespace
+{
+const std::string s_ModeOn         = "On";
+const std::string s_ModeOff        = "Off";
+const std::string s_ModeAltOn      = "AltOn";
+
+const std::string s_FrontDoorCecMode    = "/cec";
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             Start of Product Namespace                                       ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,7 +68,7 @@ ProductCecHelper::ProductCecHelper( ProfessorProductController& ProductControlle
       m_connected( false ),
       m_CustomProductController( static_cast< ProfessorProductController & >( ProductController ) )
 {
-
+    m_cecresp.set_mode( "On" );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,7 +111,110 @@ bool ProductCecHelper::Run( )
 
     m_FrontDoorClient->RegisterNotification< SoundTouchInterface::volume >
     ( FRONTDOOR_AUDIO_VOLUME, fNotify );
+
+    auto getFunc = [ this ]( const Callback<const CecModeResponse>& resp, const Callback<EndPointsError::Error>& errorRsp )
+    {
+        CecModeResponse cecResp;
+        CecModeHandleGet( cecResp );
+        resp.Send( cecResp );
+    };
+    AsyncCallback<Callback<CecModeResponse>, Callback<EndPointsError::Error> > getCb( getFunc, m_ProductTask );
+    m_GetConnection = m_FrontDoorClient->RegisterGet( s_FrontDoorCecMode, getCb );
+
+    auto putFunc = [ this ]( const CecUpdateRequest cecReq, const Callback<const CecModeResponse>& cecResp, const Callback<EndPointsError::Error>& errorRsp )
+    {
+        CecModeResponse respMsg;
+        CecModeHandlePut( cecReq, respMsg );
+        cecResp.Send( respMsg );
+    };
+    AsyncCallback<const CecUpdateRequest, Callback<CecModeResponse>, Callback<EndPointsError::Error>> putCb( putFunc, m_ProductTask );
+    m_PutConnection = m_FrontDoorClient->RegisterPut<CecUpdateRequest>( s_FrontDoorCecMode, putCb );
+
     return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductCecHelper::CecModeHandleGet
+///
+/// @brief  This method populates the supplied CecModeResponse argument
+///
+/// @param  CecModeResponse
+///
+/// @return
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductCecHelper::CecModeHandleGet( CecModeResponse& cecResponse )
+{
+    cecResponse = m_cecresp;
+    SetCecModeDefaultProperties( cecResponse );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductCecHelper::CecModeHandlePut
+///
+/// @brief  This method handles an CecMode request
+///
+/// @param  CecUpdateRequest
+///
+/// @return
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductCecHelper::CecModeHandlePut( const CecUpdateRequest req, ProductPb::CecModeResponse& resp )
+{
+    ProductMessage msg;
+
+    if( !req.has_mode() )
+    {
+    }
+    else if( req.mode() == s_ModeOn )
+    {
+        msg.mutable_cecmode()->set_cecmode( ProductCecMode::On );
+    }
+    else if( req.mode() == s_ModeOff )
+    {
+        msg.mutable_cecmode()->set_cecmode( ProductCecMode::Off );
+    }
+    else if( req.mode() == s_ModeAltOn )
+    {
+        msg.mutable_cecmode()->set_cecmode( ProductCecMode::AltOn );
+    }
+    else
+    {
+    }
+
+    if( msg.has_cecmode() )
+    {
+        IL::BreakThread( [ = ]( )
+        {
+            m_ProductNotify( msg );
+        }, m_ProductTask );
+    }
+
+    resp.set_mode( req.mode() );
+    // fill in list of supported actions
+    resp.mutable_properties()->add_supportedmodes( s_ModeOn );
+    resp.mutable_properties()->add_supportedmodes( s_ModeOff );
+    resp.mutable_properties()->add_supportedmodes( s_ModeAltOn );
+
+    m_cecresp.set_mode( req.mode() ); //update GET response . TODO
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductCecHelper::SetCecModeDefaultProperties
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductCecHelper::SetCecModeDefaultProperties( ProductPb::CecModeResponse& cecResp )
+{
+    // fill in list of supported actions
+    cecResp.mutable_properties()->add_supportedmodes( s_ModeOn );
+    cecResp.mutable_properties()->add_supportedmodes( s_ModeOff );
+    cecResp.mutable_properties()->add_supportedmodes( s_ModeAltOn );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -305,6 +419,8 @@ void ProductCecHelper::HandlePhyAddrResponse( const A4VVideoManagerServiceMessag
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCecHelper::Stop( )
 {
+    m_PutConnection.Disconnect();
+    m_GetConnection.Disconnect();
     return;
 }
 

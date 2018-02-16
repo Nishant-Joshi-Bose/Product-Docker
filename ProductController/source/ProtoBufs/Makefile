@@ -14,6 +14,7 @@ PROTO_SOURCES = ProductMessage.proto        \
                 AudioSettings.proto         \
                 SystemSourcesProperties.proto \
                 Blaster.proto \
+                CecMode.proto \
 
 #
 # The following alias is used to search for imported Protocol Buffer files.
