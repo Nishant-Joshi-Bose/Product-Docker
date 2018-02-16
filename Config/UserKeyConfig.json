@@ -141,7 +141,7 @@
         "commment": "volume up",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_VOLUME_UP"],
-        "origin": ["IR", "TAP", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF"],
         "timeOutList": [0]
     },
     {
@@ -157,7 +157,7 @@
         "commment": "volume down",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_VOLUME_DOWN"],
-        "origin": ["IR", "TAP", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF"],
         "timeOutList": [0]
     },
     {

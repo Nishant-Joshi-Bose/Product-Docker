@@ -785,6 +785,18 @@
             ]
         }, 
         {
+            "origin": 4, 
+            "keyEvent": 1, 
+            "timeOutList": [
+                0
+            ], 
+            "commment": "volume up", 
+            "action": 23, 
+            "keyList": [
+                3
+            ]
+        }, 
+        {
             "origin": 3, 
             "keyEvent": 1, 
             "timeOutList": [
@@ -849,6 +861,18 @@
         }, 
         {
             "origin": 6, 
+            "keyEvent": 1, 
+            "timeOutList": [
+                0
+            ], 
+            "commment": "volume down", 
+            "action": 24, 
+            "keyList": [
+                2
+            ]
+        }, 
+        {
+            "origin": 4, 
             "keyEvent": 1, 
             "timeOutList": [
                 0
