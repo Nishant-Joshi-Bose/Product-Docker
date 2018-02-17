@@ -39,12 +39,7 @@ def pytest_addoption(parser):
     parser.addoption("--log-dir", action="store", default="SCMLogs", help="Where to store logs.")
     parser.addoption("--log-type", action="store", default="useSerial", help="logging : [useSerial / ipBased ]")
     parser.addoption("--network-iface", action="store", default="wlan0", help="network interface to choose")
-    parser.addoption("--ip-address", action="store", default=None, help="IP Address of Target under test")
-    parser.addoption("--lpm_port", action="store", default=None, help="serial port of the device")
-    parser.addoption("--flash_param",default='f', help="Choose '-a'(APQ) / 'l'(LPM) / '-f'(Complete Flash)")
-    parser.addoption("--flash_binary", default='product_flash',help="Binary file to be used - productFlash")
-    parser.addoption("--lpm_update", action="store_true", default=False, help="Set True to Update LPM")
-
+    parser.addoption("--ip-address", action="store", default=None, help="IP Address of Target under test"
     parser.addoption("--timeout",
                      action="store",
                      default=30,
