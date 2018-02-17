@@ -70,7 +70,8 @@ static constexpr char  JSON_TOKEN_BACK_LIGHT_LEVELS   [] = "BackLightLevelsPerce
 static constexpr char  JSON_TOKEN_LOWERING_THRESHOLDS [] = "LoweringThresholdLux"                 ;
 static constexpr char  JSON_TOKEN_RISING_THRESHOLDS   [] = "RisingThresholdLux"                   ;
 static constexpr int   MONITOR_SENSOR_SLEEP_MS           = 1000 ;
-static constexpr int   CHANGING_LEVEL_SLEEP_MS           = 10   ;
+static constexpr int   CHANGING_LEVEL_SLEEP_MS           = 50   ;
+static constexpr int   CHANGING_LEVEL_STEP_SIZE          = 5   ;
 static constexpr float LUX_DIFF_THRESHOLD                = 2.0f ;
 static constexpr float PLEXI_LUX_FACTOR                  = 1.0f ;
 static constexpr float SILVER_LUX_FACTOR                 = 11.0f;
@@ -208,8 +209,8 @@ int DisplayController::GetBackLightLevelFromLux( float lux, float lux_rising )
 
 void DisplayController::SetBackLightLevel( int actualLevel, int newLevel )
 {
-    int            steps          = abs( actualLevel - newLevel );
-    int            levelIncrement = ( ( actualLevel > newLevel ) ? -1 : 1 );
+    int            steps          = ( abs( actualLevel - newLevel ) / CHANGING_LEVEL_STEP_SIZE );
+    int            levelIncrement = ( ( actualLevel > newLevel ) ? -CHANGING_LEVEL_STEP_SIZE : CHANGING_LEVEL_STEP_SIZE );
     IpcBackLight_t backlight;
 
     BOSE_LOG( VERBOSE, "set actual level: " << actualLevel << " new level: " << newLevel );
@@ -239,8 +240,6 @@ void DisplayController::SetBackLightLevel( int actualLevel, int newLevel )
 
     if( actualLevel != newLevel )
     {
-        BOSE_LOG( WARNING, "Warning: adjusting actual level: " << actualLevel << ", new level: " << newLevel );
-
         backlight.set_value( newLevel );
         m_lpmClient->SetBackLight( backlight );
     }
