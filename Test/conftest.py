@@ -12,18 +12,18 @@
 
 """
 Parent conftest.py for the Eddie repository
-
 """
 
 import os
 import datetime
-
+import pytest
 from CastleTestUtils.LoggerUtils.log_setup import get_logger
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.RivieraUtils import rivieraCommunication
+from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import flash_device
+from commonData import keyConfig
 
-import pytest
 _log = None
 logger = get_logger(__name__)
 
@@ -39,10 +39,7 @@ def pytest_addoption(parser):
     parser.addoption("--log-dir", action="store", default="SCMLogs", help="Where to store logs.")
     parser.addoption("--log-type", action="store", default="useSerial", help="logging : [useSerial / ipBased ]")
     parser.addoption("--network-iface", action="store", default="wlan0", help="network interface to choose")
-    parser.addoption("--ip-address", action="store", default=None, help="IP Address of Target under test")
-    parser.addoption("--lpm_port", action="store", default=None, help="LPM serial port of the device")
-    parser.addoption("--apq-port", action="store", default=None, help="APQ serial port of the device")
-
+    parser.addoption("--ip-address", action="store", default=None, help="IP Address of Target under test"
     parser.addoption("--timeout",
                      action="store",
                      default=30,
@@ -57,6 +54,13 @@ def ping(ip):
 def scm_ip(request):
     """ Get the IP address of Device under Test """
     return request.config.getoption("--scm-ip")
+
+@pytest.fixture(scope='session')
+def software_update(flash_device):
+    """
+    For now; this only calls the Software-Update fixture
+    """
+    logger.info("Finished Updating Software on the Device")
 
 @pytest.fixture(scope='function')
 def save_speaker_log(request, device_ip):
@@ -267,3 +271,9 @@ def eddie_master_latest_directory(tmpdir):
     os.chdir(cwd)
     # Remove everything in the tmpdir
     tmpdir.remove()
+
+@pytest.fixture(scope="session")
+def keyConfig():
+    keyConfigData = None
+    keyConfigData = keyConfig["keyTable"]
+    return keyConfigData
