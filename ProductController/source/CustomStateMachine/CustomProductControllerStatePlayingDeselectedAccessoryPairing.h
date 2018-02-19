@@ -1,39 +1,24 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateAccessoryPairing.h
+/// @file      CustomProductControllerStatePlayingDeselectedAccessoryPairing.h
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product accessory pairing state.
+///            product accessory pairing state when in a playing deselected superstate.
 ///
 /// @author    Derek Richardson
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
-///            Bose Corporation
-///            The Mountain Road,
-///            Framingham, MA 01701-9168
-///            U.S.A.
-///
-///            This program may not be reproduced, in whole or in part, in any form by any means
-///            whatsoever without the written permission of Bose Corporation.
-///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following compiler directive prevents this header file from being included more than once,
-/// which may cause multiple declaration compiler errors.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma once
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include <string>
-#include "ProductControllerStateIdle.h"
+#pragma once
+#include "ProductControllerState.h"
+#include "HsmState.h"
 #include "LpmServiceMessages.pb.h"
 #include "APTimer.h"
 
@@ -53,22 +38,23 @@ class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class CustomProductControllerStateAccessoryPairing
+/// @class CustomProductControllerStatePlayingDeselectedAccessoryPairing
 ///
 /// @brief This class is used for executing produce specific actions when in an idle state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateAccessoryPairing : public ProductControllerState
+class CustomProductControllerStatePlayingDeselectedAccessoryPairing : public ProductControllerState
 {
 public:
 
-    CustomProductControllerStateAccessoryPairing( ProductControllerHsm&       hsm,
-                                                  CHsmState*                  pSuperState,
-                                                  ProfessorProductController& productController,
-                                                  Hsm::STATE                  stateId,
-                                                  const std::string&          name    = "CustomProductControllerStateAccessoryPairing" );
+    CustomProductControllerStatePlayingDeselectedAccessoryPairing(
+            ProductControllerHsm&       hsm,
+            CHsmState*                  pSuperState,
+            ProfessorProductController& productController,
+            Hsm::STATE                  stateId,
+            const std::string&          name = "PlayingDeselectedAccessoryPairing" );
 
-    ~CustomProductControllerStateAccessoryPairing( ) override
+    ~CustomProductControllerStatePlayingDeselectedAccessoryPairing( ) override
     {
 
     }
@@ -76,6 +62,7 @@ public:
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
     bool HandlePairingState( ProductAccessoryPairing pairingStatus ) override;
+    bool HandleAudioPathSelect( )                                    override;
 
 private:
 

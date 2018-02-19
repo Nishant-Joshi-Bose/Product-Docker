@@ -1,40 +1,26 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateAdaptIQ.h
+/// @file      CustomProductControllerStatePlayingSelectedAccessoryPairing.h
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product accessory pairing state.
+///            product accessory pairing state when in a playing deselected superstate.
+///
+/// @author    Derek Richardson
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
-///            Bose Corporation
-///            The Mountain Road,
-///            Framingham, MA 01701-9168
-///            U.S.A.
-///
-///            This program may not be reproduced, in whole or in part, in any form by any means
-///            whatsoever without the written permission of Bose Corporation.
-///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following compiler directive prevents this header file from being included more than once,
-/// which may cause multiple declaration compiler errors.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma once
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include <string>
-#include "ProductControllerStateIdle.h"
+#pragma once
+#include "ProductControllerState.h"
+#include "HsmState.h"
 #include "LpmServiceMessages.pb.h"
 #include "APTimer.h"
-#include "ProductAdaptIQManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -52,30 +38,31 @@ class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class CustomProductControllerStateAdaptIQ
+/// @class CustomProductControllerStatePlayingSelectedAccessoryPairing
 ///
 /// @brief This class is used for executing produce specific actions when in an idle state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateAdaptIQ : public ProductControllerState
+class CustomProductControllerStatePlayingSelectedAccessoryPairing : public ProductControllerState
 {
 public:
 
-    CustomProductControllerStateAdaptIQ( ProductControllerHsm&       hsm,
-                                         CHsmState*                  pSuperState,
-                                         ProfessorProductController& productController,
-                                         Hsm::STATE                  stateId,
-                                         const std::string&          name    = "AdaptIQ" );
+    CustomProductControllerStatePlayingSelectedAccessoryPairing(
+            ProductControllerHsm&       hsm,
+            CHsmState*                  pSuperState,
+            ProfessorProductController& productController,
+            Hsm::STATE                  stateId,
+            const std::string&          name = "PlayingSelectedAccessoryPairing" );
 
-    ~CustomProductControllerStateAdaptIQ( ) override
+    ~CustomProductControllerStatePlayingSelectedAccessoryPairing( ) override
     {
 
     }
 
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
-    bool HandleAdaptIQStatus( const ProductAdaptIQStatus& aiqStatus ) override;
-    bool HandleAdaptIQControl( const ProductAdaptIQControl& cmd );
+    bool HandlePairingState( ProductAccessoryPairing pairingStatus ) override;
+    bool HandleAudioPathDeselect( )                                  override;
 
 private:
 
@@ -86,18 +73,8 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleTimeOut( );
+
     APTimerPtr m_timer;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief CustomProductControllerStateAdaptIQ::HardwareIface
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    std::shared_ptr<CustomProductLpmHardwareInterface>& HardwareIface( );
-
-    const uint32_t ADAPTIQ_TIMEOUT_MINUTES      = 20;
-    const uint32_t ADAPTIQ_INACTIVITY_TIMEOUT   = 1 * ADAPTIQ_TIMEOUT_MINUTES * 60 * 1000;
-
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
