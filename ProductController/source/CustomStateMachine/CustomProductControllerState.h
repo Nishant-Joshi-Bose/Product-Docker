@@ -228,6 +228,16 @@ public:
         return false;
     }
 
+    virtual bool HandleSystemEventServiceLowPowerSuspendResponse( bool isSuspended )
+    {
+        return false;
+    }
+
+    virtual bool HandleSystemEventServiceLowPowerResumeResponse( bool isResumed )
+    {
+        return false;
+    }
+
     virtual bool HandleSoftwareUpdateStatus( )
     {
         return false;

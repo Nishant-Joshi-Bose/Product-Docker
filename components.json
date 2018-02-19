@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.8.41015.2682265"
+    "selected_version": "Release/Castle-Fork/0.3.9.41102.2693311"
   },
   {
     "name": "bose-opkg-utils",
@@ -45,7 +45,7 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.2.5-20386"
+    "selected_version": "Release/Castle-Fork/0.2.7-20452"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
@@ -73,23 +73,23 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Continuous/master/0.3.3-40+e56a866"
+    "selected_version": "Continuous/asoltan1/0.3.4-51+91086e2"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-161+ed41fb6"
+    "selected_version": "Release/master/0.3.1-173+5ea5b96"
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.3.2-410+44390aa"
+    "selected_version": "Release/master/0.3.5-451+10160e3"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.3.2-410+44390aa"
+    "selected_version": "Release/master/0.3.5-451+10160e3"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@1d74f9a1f8a669526393a4b688d43acbbcd25e26"
+    "selected_version": "master@b5e2b0158e0edda00e8d1de25ab95f06b021f94d"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -112,11 +112,11 @@
   },
   {
     "name": "protobuf-native",
-    "selected_version": "branches/protobuf@2548"
+    "selected_version": "branches/protobuf@2564"
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "branches/protobuf@2548"
+    "selected_version": "branches/protobuf@2564"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -148,11 +148,15 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.3.7-301+1d78fe1"
+    "selected_version": "Release/IP3/0.3.8-310+8c35f89"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.6.40929.2672236"
+    "selected_version": "Release/Castle-Fork/0.3.9.41102.2693311"
+  },
+  {
+    "name": "SystemEventService-qc8017_32",
+    "selected_version": "Release/master/0.0.1-8+9ca6495"
   },
   {
     "name": "unittest-cpp-qc8017_32",

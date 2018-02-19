@@ -80,6 +80,7 @@ TARGET_LINK_LIBRARIES(Professor
   CliClient
   ShelbyUtils
   AudioLibs
+  SystemEventService
   BoseLibs
   PassportClient
   STS
