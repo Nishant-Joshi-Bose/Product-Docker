@@ -137,7 +137,7 @@ Connect to your device through a web browser by going to http://<inet_addr>/upda
 The following page should load:
 ![Choose File](choose_file.png)
 
-Click the "Choose File" button and select an update zip file, which can be found in any Electric Commander build (e.g., \\\solid\softlib\verisoft\Professor\Release\master\0.3.1-640+916c122\HSP-1.3\product_update.zip) or built using the instructions above. 
+Click the "Choose File" button and select an update zip file, which can be found in any Electric Commander build (e.g., \\\solid\softlib\verisoft\Professor\Release\master\0.3.2-891+2fe56de\HSP-2.1\product_update.zip) or built using the instructions above. 
 
 After the transfer is completed, you should see a page that looks like the following:
 ![Update Finished](update_finished.png)
