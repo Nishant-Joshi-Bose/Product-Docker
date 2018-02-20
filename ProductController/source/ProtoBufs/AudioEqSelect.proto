@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package ProductPb;
+import "SoundTouchInterface/ContentItem.proto";
+
+message AudioEqSelect
+{
+    message EqSelectProperties
+    {
+        repeated string supportedModes = 1;
+    }
+    optional string mode = 1;
+    optional EqSelectProperties properties = 2;
+}
+
