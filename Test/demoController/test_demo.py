@@ -4,14 +4,16 @@
 This module contains and integrated test of the Demo Controller. It uses the FrontdoorAPI and adb
 to validate responses.
 """
+import json
 import pytest
 from CastleTestUtils.LoggerUtils.log_setup import get_logger
-from ..keyUtils import cli_keys as key
 logger = get_logger(__name__)
 
 @pytest.mark.usefixtures("save_speaker_log")
+                         # "software_update")
 class TestDemo():
     """ Test Class for Demo State """
+    @pytest.mark.usefixtures("demoUtils", "device_ip", "request")
     def test_demoOffAfterTimeout(self, demoUtils, device_ip, request):
         """
         This test verifies demoMode is False after timeout
@@ -29,6 +31,7 @@ class TestDemo():
         assert status, responseTimeout
         demoUtils.verifySecondReboot(responseTimeout *2)
 
+    @pytest.mark.usefixtures("demoUtils", "device_ip", "request")
     def test_demoOnAfterTimeout(self, demoUtils, device_ip, request):
         """
         This test verifies the demoMode stays on after timeout
@@ -47,6 +50,7 @@ class TestDemo():
         demoUtils.setDemoMode(True, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(60)
 
+    @pytest.mark.usefixtures("demoUtils", "device_ip", "request")
     def test_demoOnFor30Min(self, demoUtils, device_ip, request):
         """
         This test verifies demoMode stays True for 30 minutes
@@ -64,65 +68,98 @@ class TestDemo():
         demoUtils.setDemoMode(True, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(responseTimeout*10)
 
-    @pytest.mark.skip(reason="wip this test should work once the startPlayback is implemented. Skipping it for right now")
-    def test_demoOnStandby(self, frontDoor, demoUtils, device_ip):
+    @pytest.mark.usefixtures("request", "demoUtils", "device_ip")
+    def test_demoPlayPauseBehaviour(self, request, demoUtils, device_ip):
         """
-        This test after setting the demoMode to 'On' puts the device to standby and verify demoMode stays 'On' after coming out of standby.
+        This test verifies PlayPauseBehaviour while demoMode is True
         Test steps:
-        1. Set demoMode 'on'
+        1. Set demoMode True
         2. Wait for device to reboot
-        3. Verify file 'demoModeOn' exists under /mnt/nv and verify demoMode is 'On'
-        4. Set demoMode 'On' and verify
-        5. StopPlayback
-        6. StartPlayback
-        7. Verify demoMode is 'oN'
+        3. Verify file 'demoModeOn' exists under /mnt/nv and demoMode is True
+        4. Set demoMode True and verify demoMode
+        6. verifyPlayPauseBehaviour
+        7. Verify demoMode is True
         """
-        logger.info("Start test_demoOnStandby")
-        demoUtils.setDemoMode("on", True)
+        logger.info("Start test_demoOnStartStopPlayback")
+        demoUtils.setDemoMode(True, True, 3, request.config.getoption("--network-iface"))
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
-        assert status, responseTimeout
+        assert status, "Demo timeout reported Exception {} " + responseTimeout
         demoUtils.verifyDemoModeOn(responseTimeout-40)
-        demoUtils.setDemoMode("on", False)
-        demoUtils.verifyDemoMode("on")
-        stopPlaybackResponse = frontDoor.stopPlaybackRequest()
-        assert stopPlaybackResponse["body"]["container"]["contentItem"]["status"] != "stop"
-        startPlaybackResponse = frontDoor.startPlaybackRequest()
-        assert startPlaybackResponse["body"]["container"]["contentItem"]["status"] != "play"
-        demoUtils.verifyDemoMode("on")
+        demoUtils.setDemoMode(True, False, 3, request.config.getoption("--network-iface"))
+        demoUtils.verifyDemoModeOn(10)
+        demoUtils.verifyPlayPauseBehaviour()
+        demoUtils.verifyDemoModeOn(10)
 
-    @pytest.mark.skip(reason="will wait for frontdoor notification queue to be checked in before changing the below code")
-    def test_demoKeyIntent(self, request, demoUtils, device_ip):
+    @pytest.mark.usefixtures("demoUtils", "device_ip", "request", "get_config")
+    def test_demoKeyConfig(self, demoUtils, device_ip, request, get_config):
         """
-        This test verifies keyIntent is not present when demoMode is 'Off' and is present when demoMode is 'On' and /opt/Bose/etc/KeyConfiguration-demo.json file exists
+        This test add keyConfig. Set demoMode true and finally delete the keyConfig
         Test steps:
-        1. With demoMode off press mfb and verify keyIntent is not present
-        2. Set demoMode 'On'
-        3. Press mfb and verify keyIntent is present and /opt/Bose/etc/KeyConfiguration-demo.json file exists
+        1. With demoMode off verify no keyConfig exists
+        2. Set keyConfig
+        3. Set demoMode true and verify
+        4. Verify keyConfig exists
+        5. Delete the keyConfig and verify
         """
-        key.mfb_playpause()
-        demoUtils.verifyNotification()
-        key.mfb_nw_standby()
-        demoUtils.verifyNotification()
-        key.mfb_lp_standby()
-        demoUtils.verifyNotification()
-        key.mfb_next_track()
-        demoUtils.verifyNotification()
-        key.mfb_prev_track()
-        demoUtils.verifyNotification()
-        logger.info("Start test_demoOnKeyIntent")
+        demoUtils.verifyDemoKeyConfig("Error Reading configuration file")
+        demoUtils.setKeyConfig(json.dumps(get_config))
         demoUtils.setDemoMode(True, True, 3, request.config.getoption("--network-iface"))
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
-        demoUtils.verifyDemoModeOn(responseTimeout-60)
+        demoUtils.verifyDemoModeOn(responseTimeout-40)
         demoUtils.setDemoMode(True, False, 3, request.config.getoption("--network-iface"))
-        demoUtils.verifyDemoMode(True)
-        key.mfb_playpause()
-        demoUtils.verifyNotification()
-        key.mfb_nw_standby()
-        demoUtils.verifyNotification()
-        key.mfb_lp_standby()
-        demoUtils.verifyNotification()
-        key.mfb_next_track()
-        demoUtils.verifyNotification()
-        key.mfb_prev_track()
-        demoUtils.verifyNotification()
+        demoUtils.verifyDemoModeOn(10)
+        demoUtils.verifyDemoKeyConfig()
+        demoUtils.deleteKeyConfig()
+        demoUtils.verifyDemoKeyConfig("Error Reading configuration file")
+
+    @pytest.mark.usefixtures("demoUtils", "device_ip", "request")
+    def test_demoKeyCntrNotWrk(self, demoUtils, device_ip, request):
+        """
+        This test verifies keyControl(volume) does not work when the keyConfig is not set
+        Test steps:
+        1. With demoMode off verify no keyConfig exists
+        2. Set demoMode on and verify
+        3. Play audio, verify
+        4. Set, change volume and verify volume does not change
+        5. StopPlayback
+        """
+        demoUtils.verifyDemoKeyConfig("Error Reading configuration file")
+        demoUtils.setDemoMode(True, True, 3, request.config.getoption("--network-iface"))
+        status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
+        assert status, responseTimeout
+        demoUtils.verifyDemoModeOn(responseTimeout-40)
+        demoUtils.setDemoMode(True, False, 3, request.config.getoption("--network-iface"))
+        demoUtils.verifyDemoModeOn(10)
+        demoUtils.playandValidateMusic()
+        demoUtils.verifyVolumeKeyControl(device_ip, False)
+        demoUtils.stopPlayback()
+
+    @pytest.mark.usefixtures("demoUtils", "device_ip", "request", "get_config")
+    def test_demoKeyControlWork(self, demoUtils, device_ip, request, get_config):
+        """
+        This test verifies with demo set to True. Demo keyControl(volume) works when keyConfig is present
+        Test steps:
+        1. With demoMode off verify no keyConfig exists
+        2. Add keyConfig and verify
+        3. Set demoMode on and verify
+        4. Play audio, verify
+        5. Set, change volume and verify
+        5. Delete the keyConfig and verify
+        6. StopPlayback
+        """
+        demoUtils.verifyDemoKeyConfig("Error Reading configuration file")
+        demoUtils.setKeyConfig(json.dumps(get_config))
+        demoUtils.verifyDemoKeyConfig()
+        demoUtils.setDemoMode(True, True, 3, request.config.getoption("--network-iface"))
+        status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
+        assert status, responseTimeout
+        demoUtils.verifyDemoModeOn(responseTimeout-40)
+        demoUtils.setDemoMode(True, False, 3, request.config.getoption("--network-iface"))
+        demoUtils.verifyDemoModeOn(10)
+        demoUtils.verifyDemoKeyConfig()
+        demoUtils.playandValidateMusic()
+        demoUtils.verifyVolumeKeyControl(device_ip, True)
+        demoUtils.deleteKeyConfig()
+        demoUtils.verifyDemoKeyConfig("Error Reading configuration file")
+        demoUtils.stopPlayback()
