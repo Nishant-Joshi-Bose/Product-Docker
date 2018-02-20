@@ -114,9 +114,10 @@ private:
     bool                               m_autoMode  ;
     float                              m_luxFactor ;
     float                              m_luxValue  ;
-    int                                m_luxDecimal   ;
-    int                                m_luxFractional;
-    uint64_t                           m_uiHeartBeat  ;
+    int                                m_luxDecimal    ;
+    int                                m_luxFractional ;
+    uint64_t                           m_uiHeartBeat   ;
+    uint64_t                           m_localHeartBeat;
 };
 } //namespace ProductApp
 

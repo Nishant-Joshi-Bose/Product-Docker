@@ -1,4 +1,4 @@
-
+////////////////////////////////////////////////////////////////////////////////
 ///// @file   DisplayController.cpp
 ///// @brief  Implements Eddie Display controller class.
 /////
@@ -86,7 +86,8 @@ DisplayController::DisplayController( ProductController& controller, const std::
     m_lpmClient( clientPtr ),
     m_timeToStop( false ),
     m_autoMode( true ),
-    m_uiHeartBeat( 0 )
+    m_uiHeartBeat( ULLONG_MAX ),
+    m_localHeartBeat( ULLONG_MAX )
 {
     ParseJSONData();
 }// constructor
@@ -271,6 +272,25 @@ void DisplayController::MonitorLightSensor()
 
     while( ! m_timeToStop )
     {
+        if( m_uiHeartBeat != ULLONG_MAX )
+        {
+            if( m_localHeartBeat == ULLONG_MAX )
+            {
+                m_localHeartBeat = m_uiHeartBeat;
+            }// if it's te first heart beat receive from the UI
+
+            if( abs( m_localHeartBeat - m_uiHeartBeat ) > 2 )
+            {
+                BOSE_LOG( ERROR, "Error: the UI stop" );
+                // ??????????????????????????????????????????????????????????????????????
+                // ?? Santosh call the product controller m_productController.uiHasStop()
+                // ?????????????????????????????????????????????????????????????????????
+
+                // reset the heart beat algorithm and resume on first heart beat frim the UI
+                m_localHeartBeat = m_uiHeartBeat = ULLONG_MAX;
+            }// If the UI stop updating the heart beat
+        }// If the UI had started
+
         m_lpmClient->GetLightSensor( [this]( IpcLightSensor_t const & rsp )
         {
             m_luxDecimal    = ( int )( be16toh( rsp.lux_decimal_value() ) );
@@ -411,8 +431,15 @@ void  DisplayController::HandleGetDisplayRequest( const Callback<Display>& resp 
 void DisplayController::HandlePutUIAlive( const Display &req,
                                           const Callback<Display>& resp )
 {
+    BOSE_LOG( VERBOSE, "received heartbeat: " << req.uiheartbeat() << ", current heat beat: " << m_uiHeartBeat );
 
-    m_uiHeartBeat++;
+    if( abs( m_uiHeartBeat - req.uiheartbeat() ) >= 2 )
+    {
+        BOSE_LOG( WARNING, "UI is skipping heart beat, received heartbeat: " << req.uiheartbeat() + ", current heat beat: " << m_uiHeartBeat );
+    }
+
+    m_uiHeartBeat = req.uiheartbeat();
+
 }// HandlePutUIAlive
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -447,7 +474,17 @@ bool DisplayController::HandleLpmNotificationLightSensor( IpcLightSensor_t lpmLi
 bool DisplayController::TurnOnOff( bool turnOn )
 {
     const std::string displayControllerFileName = "/sys/devices/soc/7af6000.spi/spi_master/spi6/spi6.1/graphics/fb1/send_command";
-    const char*       onOffCmdString            = turnOn ? "29" : "28";
+    const char*       onOffCmdString            = turnOn ? "29" : "28" ;
+    bool              displayAutoMode           = turnOn ? true : false;
+
+    BOSE_LOG( VERBOSE, "turning LCD: " << ( turnOn ? "on" : "off" ) );
+
+    SetAutoMode( displayAutoMode );
+
+    if( turnOn == false )
+    {
+        SetBackLightLevel( m_backLight, 0 );
+    }
 
     if( DirUtils::DoesFileExist( displayControllerFileName ) == false )
     {
@@ -464,6 +501,8 @@ bool DisplayController::TurnOnOff( bool turnOn )
     }
 
     displayControllerStream << onOffCmdString; // see ST7789VI_SPEC_V1.4.pdf
+
+    BOSE_LOG( VERBOSE, "LCD is now: " << ( turnOn ? "on" : "off" ) );
     return true;
 }// TurnOnOff
 
