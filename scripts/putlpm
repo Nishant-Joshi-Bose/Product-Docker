@@ -5,6 +5,7 @@
 this=${0##*/}
 
 if (( $# == 0 )); then
+    components install || exit
     make lpmupdater-ipk || exit
     set -- $PWD/builds/Release/lpm_updater.ipk
     echo "$0" "$1"
