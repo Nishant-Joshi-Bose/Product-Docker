@@ -5,9 +5,8 @@
 this=${0##*/}
 
 if (( $# == 0 )); then
-    build=/home/softlib/verisoft/Professor/Continuous/master_development
-    version=$(cat "$build/latest.txt") || exit
-    set -- "$build/$version/DP2/lpm_updater.ipk"
+    make lpmupdater-ipk || exit
+    set -- $PWD/builds/Release/lpm_updater.ipk
     echo "$0" "$1"
 fi
 
