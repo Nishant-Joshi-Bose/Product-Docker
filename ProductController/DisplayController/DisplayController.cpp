@@ -279,6 +279,8 @@ void DisplayController::MonitorLightSensor()
                 m_localHeartBeat = m_uiHeartBeat;
             }// if it's te first heart beat receive from the UI
 
+            m_localHeartBeat++;
+
             if( abs( m_localHeartBeat - m_uiHeartBeat ) > 2 )
             {
                 BOSE_LOG( ERROR, "Error: the UI stop" );
@@ -289,6 +291,7 @@ void DisplayController::MonitorLightSensor()
                 // reset the heart beat algorithm and resume on first heart beat frim the UI
                 m_localHeartBeat = m_uiHeartBeat = ULLONG_MAX;
             }// If the UI stop updating the heart beat
+
         }// If the UI had started
 
         m_lpmClient->GetLightSensor( [this]( IpcLightSensor_t const & rsp )
