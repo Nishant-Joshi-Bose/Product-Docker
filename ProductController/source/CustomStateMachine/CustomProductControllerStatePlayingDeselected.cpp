@@ -1,35 +1,20 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @file      CustomProductControllerStatePlayable.cpp
+/// @file      CustomProductControllerStatePlayingDeselected.cpp
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product playable state.
+///            product deselected state.
 ///
-/// @author    Stuart J. Lumby
-///
-/// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
-///
-///            Bose Corporation
-///            The Mountain Road,
-///            Framingham, MA 01701-9168
-///            U.S.A.
-///
-///            This program may not be reproduced, in whole or in part, in any form by any means
-///            whatsoever without the written permission of Bose Corporation.
-///
+/// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 ///            Included Header Files
-///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
-#include "IntentHandler.h"
-#include "CustomProductControllerStatePlayable.h"
-#include "ProductControllerHsm.h"
-#include "ProfessorProductController.h"
-#include "ProductControllerState.h"
+#include "ProductController.h"
+#include "ProductControllerStates.h"
+#include "ProductControllerStatePlayingDeselected.h"
+#include "CustomProductControllerStatePlayingDeselected.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -39,39 +24,43 @@ namespace ProductApp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStatePlayable::CustomProductControllerStatePlayable
+/// @brief CustomProductControllerStatePlayingDeselected::CustomProductControllerStatePlayingDeselected
 ///
-/// @param  ProductControllerHsm& hsm
+/// @param ProductControllerHsm& hsm
 ///
-/// @param  CHsmState*            pSuperState
+/// @param CHsmState*            pSuperState
 ///
-/// @param  Hsm::STATE            stateId
+/// @param Hsm::STATE            stateId
 ///
-/// @param  const std::string&    name
+/// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductControllerStatePlayable::CustomProductControllerStatePlayable( ProductControllerHsm& hsm,
-                                                                            CHsmState*            pSuperState,
-                                                                            Hsm::STATE            stateId,
-                                                                            const std::string&    name )
-    : ProductControllerStatePlayable( hsm, pSuperState, stateId, name )
+CustomProductControllerStatePlayingDeselected::CustomProductControllerStatePlayingDeselected(
+    ProductControllerHsm& hsm,
+    CHsmState*            pSuperState,
+    Hsm::STATE            stateId,
+    const std::string&    name )
+
+    : ProductControllerStatePlayingDeselected( hsm, pSuperState, stateId, name )
 {
     BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStatePlayable::HandleIntentSpeakerPairing
+/// @brief CustomProductControllerStatePlayingDeselected::HandleIntentSpeakerPairing
 ///
-/// @return This method returns a true Boolean value indicating that it has handled the event
-///         and no futher processing will be required by any of its superstates.
+/// @return This method returns a true Boolean value indicating that it is handling the speaker
+///         pairing intent.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayable::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )
+bool CustomProductControllerStatePlayingDeselected::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )
+
 {
     BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+    BOSE_INFO( s_logger, "The state is changing to the CustomDeselectedAccessoryPairing state." );
 
-    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_ACCESSORY_PAIRING );
+    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED_ACCESSORY_PAIRING );
 
     return true;
 }

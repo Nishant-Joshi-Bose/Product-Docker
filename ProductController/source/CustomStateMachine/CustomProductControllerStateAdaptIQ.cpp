@@ -27,7 +27,6 @@
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
 #include "ProductMessage.pb.h"
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,13 +54,12 @@ namespace ProductApp
 /// @param const std::string&          name              This argument names the state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductControllerStateAdaptIQ::CustomProductControllerStateAdaptIQ
-
-( ProductControllerHsm&       hsm,
-  CHsmState*                  pSuperState,
-  ProfessorProductController& productController,
-  Hsm::STATE                  stateId,
-  const std::string&          name )
+CustomProductControllerStateAdaptIQ::
+CustomProductControllerStateAdaptIQ( ProductControllerHsm&       hsm,
+                                     CHsmState*                  pSuperState,
+                                     ProfessorProductController& productController,
+                                     Hsm::STATE                  stateId,
+                                     const std::string&          name )
 
     : ProductControllerState( hsm, pSuperState, stateId, name ),
       m_timer( APTimer::Create( productController.GetTask( ), "AdaptIQTimer" ) )
@@ -78,6 +76,11 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
 {
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being started." );
 
+    ///
+    /// Disable source selection while in AdaptIQ.
+    ///
+    GetProductController( ).SendAllowSourceSelectMessage( false );
+
     m_timer->SetTimeouts( ADAPTIQ_INACTIVITY_TIMEOUT, 0 );
     m_timer->Start( [ = ]( )
     {
@@ -86,7 +89,6 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
 
     // TODO: does response come back after dsp has rebooted or as an event later on?
     HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_AIQ );
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,10 +101,9 @@ void CustomProductControllerStateAdaptIQ::HandleTimeOut( )
     BOSE_INFO( s_logger, "A time out during AdaptIQ has occurred." );
 
     ///
-    /// Go to the superstate of this state, which should be the last state that the
-    /// product controller was in, to resume functionality.
+    /// Go to the exiting state to stop playback of the AdaptIQ source.
     ///
-    ChangeState( GetSuperId( ) );
+    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,7 +121,10 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdap
     ProductAdaptIQStatus& status = const_cast<ProductAdaptIQStatus&>( aiqStatus );
     if( status.mutable_status()->smstate() == LpmServiceMessages::IpcAiqState_t::AIQ_STATE_NOT_RUNNING )
     {
-        ChangeState( GetSuperId( ) );
+        ///
+        /// Go to the exiting state to stop playback of the AdaptIQ source.
+        ///
+        ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING );
     }
 
     return true;
@@ -133,6 +137,11 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdap
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateAdaptIQ::HandleStateExit( )
 {
+    ///
+    /// Re-enable source selection when exiting AdaptIQ.
+    ///
+    GetProductController( ).SendAllowSourceSelectMessage( true );
+
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being exited." );
     m_timer->Stop( );
 

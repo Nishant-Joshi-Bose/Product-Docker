@@ -1,17 +1,19 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file      CustomProductControllerStatePlayingSelectedSetup.h
 ///
-/// @brief     This header file declares functionality to process custom events that occur in
-///            Professor during the product setup state.
+/// @file      CustomProductControllerStatePlayingTransitionAccessoryPairing.h
 ///
-/// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
+/// @brief     This header file declares functionality to process events occurring during a full
+///            power transition to a speaker pairing state.
+///
+/// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///            Included Header Files
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "ProductControllerStatePlayingSelectedSetup.h"
+#include "ProductControllerState.h"
 #include "HsmState.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -26,23 +28,24 @@ namespace ProductApp
 class ProductControllerHsm;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief The CustomProductControllerStatePlayingSelectedSetup Class
+/// @brief The CustomProductControllerStatePlayingTransitionAccessoryPairing Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStatePlayingSelectedSetup : public ProductControllerStatePlayingSelectedSetup
+class CustomProductControllerStatePlayingTransitionAccessoryPairing : public ProductControllerState
 {
 public:
 
-    CustomProductControllerStatePlayingSelectedSetup( ProductControllerHsm& hsm,
-                                                      CHsmState*            pSuperState,
-                                                      Hsm::STATE            stateId,
-                                                      const std::string&    name = "CustomSetup" );
+    CustomProductControllerStatePlayingTransitionAccessoryPairing( ProductControllerHsm& hsm,
+                                                                   CHsmState*            pSuperState,
+                                                                   Hsm::STATE            stateId,
+                                                                   const std::string&    name = "PlayingTransitionAccessoryPairing" );
 
-    ~CustomProductControllerStatePlayingSelectedSetup( ) override
+    ~CustomProductControllerStatePlayingTransitionAccessoryPairing( ) override
     {
 
     }
 
-    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent ) override;
+    void HandleStateEnter( ) override;
+    bool HandleLPMPowerStatusFullPowerOn( ) override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

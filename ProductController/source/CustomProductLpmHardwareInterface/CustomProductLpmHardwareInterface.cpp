@@ -453,7 +453,7 @@ bool CustomProductLpmHardwareInterface::SendSourceSelection( const LPM_IPC_SOURC
         return false;
     }
 
-    GetLpmClient( )->SendCecCurrentSource( source );
+    //GetLpmClient( )->SendCecCurrentSource( source );
     BOSE_DEBUG( s_logger, "An LPM source selection sent to LPM. %d", source.source() );
 
     return true;
@@ -481,7 +481,7 @@ bool CustomProductLpmHardwareInterface::SetCecPhysicalAddress( const uint32_t ce
 
     IpcCecPhyscialAddress_t cecAddrSetting;
     cecAddrSetting.set_cecphyaddr( cecPhysicalAddress );
-    GetLpmClient( )->SendCecPhysicalAddress( cecAddrSetting );
+    //GetLpmClient( )->SendCecPhysicalAddress( cecAddrSetting );
 
     return true;
 }
@@ -509,7 +509,7 @@ bool CustomProductLpmHardwareInterface::SetCecMode( const uint8_t mode )
     IpcCecMode_t cecMode;
     cecMode.set_cecmode( mode );
     cecMode.set_save( 1 ); //save to nvram
-    GetLpmClient( )->SendCecMode( cecMode );
+    //GetLpmClient( )->SendCecMode( cecMode );
 
     return true;
 }

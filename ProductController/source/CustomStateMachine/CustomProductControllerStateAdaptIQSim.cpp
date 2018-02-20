@@ -96,6 +96,11 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
 {
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being started." );
 
+    ///
+    /// Disable source selection while in AdaptIQ.
+    ///
+    GetProductController( ).SendAllowSourceSelectMessage( false );
+
     // set initial status and send initial notification
     m_status.set_smstate( "NA" );
     m_status.set_mode( "Booting" );
@@ -139,7 +144,10 @@ void CustomProductControllerStateAdaptIQ::HandleTimeOut( )
     }
     else if( m_status.smstate() == "Analysis Complete" )
     {
-        ChangeState( GetSuperId() );
+        ///
+        /// Go to the exiting state to stop playback of the AdaptIQ source.
+        ///
+        ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING );
     }
 }
 
@@ -162,6 +170,12 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdap
 void CustomProductControllerStateAdaptIQ::HandleStateExit( )
 {
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being exited." );
+
+    ///
+    /// Re-enable source selection when exiting AdaptIQ.
+    ///
+    GetProductController( ).SendAllowSourceSelectMessage( true );
+
     m_timer->Stop( );
 }
 

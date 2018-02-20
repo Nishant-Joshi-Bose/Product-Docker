@@ -1,0 +1,163 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @file      CustomProductControllerStatePlayingSelectedAccessoryPairing.cpp
+///
+/// @brief     This source code file contains functionality to process events that occur during the
+///            product accessory pairing state when in a playing selected superstate.
+///
+/// @author    Derek Richardson
+///
+/// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+///            Included Header Files
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#include "Utilities.h"
+#include "Intents.h"
+#include "IntentHandler.h"
+#include "CustomProductControllerStatePlayingSelectedAccessoryPairing.h"
+#include "ProductControllerHsm.h"
+#include "ProfessorProductController.h"
+#include "SpeakerPairingManager.h"
+#include "ProductMessage.pb.h"
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                            Start of Product Application Namespace                            ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+namespace ProductApp
+{
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+///            Constant Definitions
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_START = 4 * 60 * 1000;
+constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY = 0 ;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStatePlayingSelectedAccessoryPairing::
+///        CustomProductControllerStatePlayingSelectedAccessoryPairing
+///
+/// @param ProductControllerHsm&       hsm               This argument references the state machine.
+///
+/// @param CHsmState*                  pSuperState       This argument references the parent state.
+///
+/// @param ProfessorProductController& productController This argument references the product controller.
+///
+/// @param Hsm::STATE                  stateId           This enumeration represents the state ID.
+///
+/// @param const std::string&          name              This argument names the state.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+CustomProductControllerStatePlayingSelectedAccessoryPairing::
+CustomProductControllerStatePlayingSelectedAccessoryPairing( ProductControllerHsm&       hsm,
+                                                             CHsmState*                  pSuperState,
+                                                             ProfessorProductController& productController,
+                                                             Hsm::STATE                  stateId,
+                                                             const std::string&          name )
+
+    : ProductControllerState( hsm, pSuperState, stateId, name ),
+      m_timer( APTimer::Create( productController.GetTask( ), "AccessoryPairingTimer" ) )
+{
+    BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleStateStart
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleStateStart( )
+{
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+
+    unsigned int startPairingAction = static_cast< unsigned int >( Action::ACTION_PAIR_SPEAKERS );
+
+    GetCustomProductController( ).GetIntentHandler( ).Handle( startPairingAction );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleTimeOut
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleTimeOut( )
+{
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+
+    ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStatePlayingSelectedAccessoryPairing::HandlePairingState
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayingSelectedAccessoryPairing::HandlePairingState( ProductAccessoryPairing pairingStatus )
+{
+    BOSE_INFO( s_logger, "The %s state is handling a pairing %s.",
+               GetName( ).c_str( ),
+               pairingStatus.active( ) ? "activation" : "deactivation" );
+
+    if( not pairingStatus.active( ) )
+    {
+        ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED );
+    }
+    else
+    {
+        m_timer->SetTimeouts( PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_START,
+                              PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY );
+
+        m_timer->Start( std::bind( &CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleTimeOut,
+                                   this ) );
+    }
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleAudioPathDeselect
+///
+/// @return This method returns a true Boolean value indicating that it has handled the event.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleAudioPathDeselect( )
+{
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+
+    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED_ACCESSORY_PAIRING );
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleStateExit
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleStateExit( )
+{
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+
+    m_timer->Stop( );
+
+    unsigned int stopPairingAction = static_cast< unsigned int >( Action::ACTION_STOP_PAIR_SPEAKERS );
+
+    GetCustomProductController( ).GetIntentHandler( ).Handle( stopPairingAction );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                             End of Product Application Namespace                             ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                        End of File                                           ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
