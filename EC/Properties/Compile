@@ -9,7 +9,7 @@ CastleToolsDir=/home/epd/srcref/CastleTools
 export PATH=$CastleToolsDir/bin:/tools/klocwork/user/bin:/tools/klocwork/server/bin:$PATH
 
 if [ "$[/javascript myJob.Klocwork]" = "true" ]; then
-    KWINJECT="kwinject -I 'testCCompiler.c,testCXXCompiler.cxx'"
+    KWINJECT="kwinject -I 'testCCompiler.c,testCXXCompiler.cxx' --ignore-files */proto/*"
 fi
 
 export DONT_UPDATE_CASTLETOOLS=1
