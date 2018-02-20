@@ -294,10 +294,10 @@ void ProductCecHelper::HandleSrcSwitch( const LpmServiceMessages::IPCSource_t ce
 
             BOSE_INFO( s_logger, "An attempt to play the TV source has been made from CEC." );
         }
-        else if( cecSource.source() == LPM_IPC_SOURCE_SHELBY )
+        else if( cecSource.source() == LPM_IPC_SOURCE_INTERNAL )
         {
             ProductMessage productMessage;
-            productMessage.set_action( static_cast< uint32_t >( Action::ACTION_SOUNDTOUCH ) );
+            productMessage.set_action( static_cast< uint32_t >( Action::ACTION_POWER ) );
 
             IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
 
@@ -453,9 +453,9 @@ void ProductCecHelper::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
                 }
                 else
                 {
-                    BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to SOURCE_SOUNDTOUCH." );
+                    BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to LPM_IPC_SOURCE_INTERNAL." );
 
-                    m_ProductLpmHardwareInterface->SendSourceSelection( LPM_IPC_SOURCE_SHELBY );
+                    m_ProductLpmHardwareInterface->SendSourceSelection( LPM_IPC_SOURCE_INTERNAL );
                 }
 
             }
