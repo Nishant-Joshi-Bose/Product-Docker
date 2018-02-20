@@ -1,21 +1,26 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file      CustomProductControllerStatePlayingSelectedSetup.cpp
 ///
-/// @brief     This source code file contains functionality to process events
-///            that occur in Professor during the product setup state.
+/// @file      CustomProductControllerStatePlayingTransitionAccessoryPairing.cpp
+///
+/// @brief     This source code file contains functionality to process events occurring during a
+///            full power transition to a speaker pairing state.
 ///
 /// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 ///            Included Header Files
-///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "Utilities.h"
-#include "CustomProductControllerStatePlayingSelectedSetup.h"
 #include "ProductControllerStates.h"
+#include "CustomProductControllerStatePlayingTransitionAccessoryPairing.h"
 #include "ProductController.h"
+#include "DPrint.h"
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// The following declares a DPrint class type object for logging information for this state class.
+////////////////////////////////////////////////////////////////////////////////////////////////////
+static DPrint s_logger( "Product" );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -25,15 +30,8 @@ namespace ProductApp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStatePlayingSelectedSetup::CustomProductControllerStatePlayingSelectedSetup
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStatePlayingSelectedSetup::
-///        CustomProductControllerStatePlayingSelectedSetup
+/// @brief CustomProductControllerStatePlayingTransitionAccessoryPairing::
+///        CustomProductControllerStatePlayingTransitionAccessoryPairing
 ///
 /// @param ProductControllerHsm& hsm
 ///
@@ -44,30 +42,44 @@ namespace ProductApp
 /// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductControllerStatePlayingSelectedSetup::CustomProductControllerStatePlayingSelectedSetup(
+CustomProductControllerStatePlayingTransitionAccessoryPairing::
+CustomProductControllerStatePlayingTransitionAccessoryPairing(
     ProductControllerHsm& hsm,
     CHsmState*            pSuperState,
     Hsm::STATE            stateId,
     const std::string&    name )
 
-    : ProductControllerStatePlayingSelectedSetup( hsm, pSuperState, stateId, name )
+    : ProductControllerState( hsm, pSuperState, stateId, name )
 {
     BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStatePlayingSelectedSetup::HandleIntentMuteControl
-///
-/// @param  KeyHandlerUtil::ActionType_t intent
-///
-/// @return This method returns a true Boolean value indicating that it has handled the muting
-///         intent. It is ignored in the setup state.
+/// @brief CustomProductControllerStatePlayingTransitionAccessoryPairing::HandleStateEnter
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayingSelectedSetup::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )
+void CustomProductControllerStatePlayingTransitionAccessoryPairing::HandleStateEnter()
 {
-    BOSE_INFO( s_logger, "The %s state is in %s ignored the intent %u.", GetName( ).c_str( ), __func__, intent );
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+
+    GetProductController( ).GetLpmHardwareInterface( )->SetSystemState( SYSTEM_STATE_ON );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStatePlayingTransitionAccessoryPairing::HandleLPMPowerStatusFullPowerOn
+///
+/// @return This method returns a true value, indicating that it has handled the device transition
+///         to a full power on system state for speaker pairing.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayingTransitionAccessoryPairing::HandleLPMPowerStatusFullPowerOn( )
+{
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+    BOSE_INFO( s_logger, "The state is changing to a PlayingDeselectedAccessoryPairing state." );
+
+    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED_ACCESSORY_PAIRING );
 
     return true;
 }

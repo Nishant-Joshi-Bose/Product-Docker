@@ -36,53 +36,64 @@
 #include "ProductSystemManager.h"
 #include "ProductCommandLine.h"
 #include "ProductAdaptIQManager.h"
-#include "ProductControllerStateTop.h"
-#include "CustomProductControllerStates.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
-#include "ProductControllerStates.h"
 #include "SystemSourcesProperties.pb.h"
+#include "ProductControllerHsm.h"
+#include "CustomProductControllerStates.h"
 #include "CustomProductControllerState.h"
-#include "CustomProductControllerStateBooting.h"
-#include "CustomProductControllerStateOn.h"
-#include "CustomProductControllerStatePlayable.h"
-#include "CustomProductControllerStatePlaying.h"
-#include "CustomProductControllerStatePlayingActive.h"
-#include "CustomProductControllerStatePlayingInactive.h"
-#include "CustomProductControllerStateAccessoryPairing.h"
-#include "CustomProductControllerStateAdaptIQ.h"
-#include "CustomProductControllerStatePlayingSelectedSetup.h"
-#include "ProductControllerStateNetworkStandby.h"
-#include "ProductControllerStateNetworkStandbyConfigured.h"
-#include "ProductControllerStateNetworkStandbyNotConfigured.h"
+#include "ProductControllerStates.h"
+#include "ProductControllerState.h"
+#include "ProductControllerStateBooting.h"
+#include "ProductControllerStateCriticalError.h"
+#include "ProductControllerStateFactoryDefault.h"
 #include "ProductControllerStateIdle.h"
 #include "ProductControllerStateIdleVoiceConfigured.h"
 #include "ProductControllerStateIdleVoiceNotConfigured.h"
 #include "ProductControllerStateLowPowerStandby.h"
 #include "ProductControllerStateLowPowerStandbyTransition.h"
-#include "ProductControllerStatePlayingDeselected.h"
-#include "ProductControllerStatePlayingSelected.h"
-#include "ProductControllerStatePlayingSelectedSilent.h"
-#include "ProductControllerStatePlayingSelectedNotSilent.h"
-#include "ProductControllerStatePlayingSelectedSetupNetwork.h"
-#include "ProductControllerStatePlayingSelectedSetupOther.h"
-#include "ProductControllerStateStoppingStreams.h"
+#include "ProductControllerStateNetworkStandbyConfigured.h"
+#include "ProductControllerStateNetworkStandby.h"
+#include "ProductControllerStateNetworkStandbyNotConfigured.h"
+#include "ProductControllerStateOn.h"
+#include "ProductControllerStatePlayable.h"
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
 #include "ProductControllerStatePlayableTransitionInternal.h"
 #include "ProductControllerStatePlayableTransitionNetworkStandby.h"
-#include "ProductControllerStateSoftwareUpdateTransition.h"
+#include "ProductControllerStatePlayingActive.h"
+#include "ProductControllerStatePlayingDeselected.h"
+#include "ProductControllerStatePlaying.h"
+#include "ProductControllerStatePlayingInactive.h"
+#include "ProductControllerStatePlayingSelected.h"
+#include "ProductControllerStatePlayingSelectedNotSilent.h"
+#include "ProductControllerStatePlayingSelectedSetupExiting.h"
+#include "ProductControllerStatePlayingSelectedSetup.h"
+#include "ProductControllerStatePlayingSelectedSetupNetwork.h"
+#include "ProductControllerStatePlayingSelectedSetupOther.h"
+#include "ProductControllerStatePlayingSelectedSilent.h"
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSelected.h"
-#include "ProductControllerStateFactoryDefault.h"
-#include "ProductControllerStateStoppingStreamsDedicated.h"
+#include "ProductControllerStateRebooting.h"
+#include "ProductControllerStateSoftwareInstall.h"
+#include "ProductControllerStateSoftwareUpdateTransition.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
-#include "ProductControllerStatePlayingSelectedSetupExiting.h"
+#include "ProductControllerStateStoppingStreamsDedicated.h"
+#include "ProductControllerStateStoppingStreams.h"
+#include "ProductControllerStateTop.h"
 #include "ProductControllerStateWelcome.h"
-#include "ProductControllerStateSoftwareInstall.h"
-#include "ProductControllerStateRebooting.h"
-#include "ProductControllerStateCriticalError.h"
+#include "CustomProductControllerStateAdaptIQExiting.h"
+#include "CustomProductControllerStateAdaptIQ.h"
+#include "CustomProductControllerStateOn.h"
+#include "CustomProductControllerStatePlayable.h"
+#include "CustomProductControllerStatePlayingDeselectedAccessoryPairing.h"
+#include "CustomProductControllerStatePlayingDeselected.h"
+#include "CustomProductControllerStatePlaying.h"
+#include "CustomProductControllerStatePlayingSelectedAccessoryPairing.h"
+#include "CustomProductControllerStatePlayingSelected.h"
+#include "CustomProductControllerStatePlayingSelectedSetup.h"
+#include "CustomProductControllerStatePlayingTransitionAccessoryPairing.h"
 #include "MfgData.h"
 #include "DeviceManager.pb.h"
 
@@ -166,15 +177,22 @@ void ProfessorProductController::Run( )
     BOSE_DEBUG( s_logger, "The Professor Product Controller is setting up the state machine." );
 
     ///
-    /// Construction of the common and custom states
+    /// Construction of the Common and Custom States
+    ///
+
+    ///
+    /// Top State
     ///
     auto* stateTop = new ProductControllerStateTop( GetHsm( ),
                                                     nullptr );
 
-    auto* customStateBooting = new CustomProductControllerStateBooting
+    ///
+    /// Booting State and Various System Level States
+    ///
+    auto* stateBooting = new ProductControllerStateBooting
     ( GetHsm( ),
       stateTop,
-      PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
+      PRODUCT_CONTROLLER_STATE_BOOTING );
 
     auto* stateWelcome = new ProductControllerStateWelcome
     ( GetHsm( ),
@@ -206,6 +224,19 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_FACTORY_DEFAULT );
 
+    auto* stateLowPowerStandbyTransition = new ProductControllerStateLowPowerStandbyTransition
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION );
+
+    auto* stateLowPowerStandby = new ProductControllerStateLowPowerStandby
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY );
+
+    ///
+    /// Playable Transition State and Sub-States
+    ///
     auto* statePlayableTransition = new ProductControllerStatePlayableTransition
     ( GetHsm( ),
       stateTop,
@@ -226,15 +257,21 @@ void ProfessorProductController::Run( )
       statePlayableTransitionInternal,
       PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY );
 
+    ///
+    /// Top On State
+    ///
     auto* customStateOn = new CustomProductControllerStateOn
     ( GetHsm( ),
       stateTop,
-      PROFESSOR_PRODUCT_CONTROLLER_STATE_ON );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_ON );
 
+    ///
+    /// Playable State and Sub-States
+    ///
     auto* customStatePlayable = new CustomProductControllerStatePlayable
     ( GetHsm( ),
       customStateOn,
-      PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYABLE );
 
     auto* stateNetworkStandby = new ProductControllerStateNetworkStandby
     ( GetHsm( ),
@@ -251,16 +288,6 @@ void ProfessorProductController::Run( )
       stateNetworkStandby,
       PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_NOT_CONFIGURED );
 
-    auto* stateLowPowerStandby = new ProductControllerStateLowPowerStandby
-    ( GetHsm( ),
-      stateTop,
-      PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY );
-
-    auto* stateLowPowerStandbyTransition = new ProductControllerStateLowPowerStandbyTransition
-    ( GetHsm( ),
-      stateTop,
-      PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION );
-
     auto* stateIdle = new ProductControllerStateIdle
     ( GetHsm( ),
       customStatePlayable,
@@ -276,36 +303,8 @@ void ProfessorProductController::Run( )
       stateIdle,
       PRODUCT_CONTROLLER_STATE_IDLE_VOICE_NOT_CONFIGURED );
 
-    auto* customStatePlaying = new CustomProductControllerStatePlaying
-    ( GetHsm( ),
-      customStateOn,
-      PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING );
-
-    auto* customStatePlayingActive = new CustomProductControllerStatePlayingActive
-    ( GetHsm( ),
-      customStatePlaying,
-      PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE );
-
-    auto* customStatePlayingInactive = new CustomProductControllerStatePlayingInactive
-    ( GetHsm( ),
-      customStatePlaying,
-      PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE );
-
-    auto* customStateAccessoryPairing = new CustomProductControllerStateAccessoryPairing
-    ( GetHsm( ),
-      customStatePlayingActive,
-      *this,
-      PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
-
-    auto* customStateAdaptIQ = new CustomProductControllerStateAdaptIQ
-    ( GetHsm( ),
-      customStatePlayingActive,
-      *this,
-      PROFESSOR_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
-
     ///
-    /// @todo These states are stubs for the time being, until the playing transition and its
-    ///       associated states are completed based on the JIRA Stories PGC-246 and PGC-632.
+    /// Playing Transition State and Sub-States
     ///
     auto* statePlayingTransition = new ProductControllerStatePlayingTransition
     ( GetHsm( ),
@@ -317,30 +316,49 @@ void ProfessorProductController::Run( )
       statePlayingTransition,
       PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SELECTED );
 
-    auto* statePlayingDeselected = new ProductControllerStatePlayingDeselected
+    auto* customStatePlayingTransitionAccessoryPairing = new CustomProductControllerStatePlayingTransitionAccessoryPairing
     ( GetHsm( ),
-      customStatePlaying,
-      PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED );
+      statePlayingTransition,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_ACCESSORY_PAIRING );
 
-    auto* statePlayingSelected = new ProductControllerStatePlayingSelected
+    ///
+    /// Playing State and Sub-States
+    ///
+    auto* customStatePlaying = new CustomProductControllerStatePlaying
+    ( GetHsm( ),
+      customStateOn,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING );
+
+    auto* customStatePlayingDeselected = new CustomProductControllerStatePlayingDeselected
     ( GetHsm( ),
       customStatePlaying,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED );
+
+    auto* customStatePlayingDeselectedPairing = new CustomProductControllerStatePlayingDeselectedAccessoryPairing
+    ( GetHsm( ),
+      customStatePlayingDeselected,
+      *this,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED_ACCESSORY_PAIRING );
+
+    auto* customStatePlayingSelected = new CustomProductControllerStatePlayingSelected
+    ( GetHsm( ),
+      customStatePlaying,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED );
 
     auto* statePlayingSelectedSilent = new ProductControllerStatePlayingSelectedSilent
     ( GetHsm( ),
-      statePlayingSelected,
+      customStatePlayingSelected,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
 
     auto* statePlayingSelectedNotSilent = new ProductControllerStatePlayingSelectedNotSilent
     ( GetHsm( ),
-      statePlayingSelected,
+      customStatePlayingSelected,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT );
 
     auto* customStatePlayingSelectedSetup = new CustomProductControllerStatePlayingSelectedSetup
     ( GetHsm( ),
-      statePlayingSelected,
-      PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP );
+      customStatePlayingSelected,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP );
 
     auto* statePlayingSelectedSetupNetwork = new ProductControllerStatePlayingSelectedSetupNetwork
     ( GetHsm( ),
@@ -357,11 +375,34 @@ void ProfessorProductController::Run( )
       customStatePlayingSelectedSetup,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING );
 
+    auto* customStatePlayingSelectedPairing = new CustomProductControllerStatePlayingSelectedAccessoryPairing
+    ( GetHsm( ),
+      customStatePlayingSelected,
+      *this,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_ACCESSORY_PAIRING );
+
     auto* stateStoppingStreams = new ProductControllerStateStoppingStreams
     ( GetHsm( ),
-      statePlayingSelected,
+      customStatePlayingSelected,
       PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS );
 
+    ///
+    /// AdaptIQ States
+    ///
+    auto* customStateAdaptIQ = new CustomProductControllerStateAdaptIQ
+    ( GetHsm( ),
+      customStatePlayingSelected,
+      *this,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
+
+    auto* customStateAdaptIQExiting = new CustomProductControllerStateAdaptIQExiting
+    ( GetHsm( ),
+      customStatePlayingSelected,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING );
+
+    ///
+    /// Stopping Dedicated Streams State and Sub-States
+    ///
     auto* stateStoppingStreamsDedicated = new ProductControllerStateStoppingStreamsDedicated
     ( GetHsm( ),
       stateTop,
@@ -383,48 +424,49 @@ void ProfessorProductController::Run( )
     using namespace DeviceManagerPb;
 
     GetHsm( ).AddState( "", stateTop );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), customStateBooting );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), stateBooting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), stateWelcome );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareUpdateTransition );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareInstall );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateRebooting );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::REBOOTING ), stateRebooting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), stateCriticalError );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FACTORY_DEFAULT ), stateFactoryDefault );
+    GetHsm( ).AddState( "", stateLowPowerStandbyTransition );
+    GetHsm( ).AddState( "", stateLowPowerStandby );
     GetHsm( ).AddState( "", statePlayableTransition );
-    GetHsm( ).AddState( "", statePlayableTransitionIdle );
     GetHsm( ).AddState( "", statePlayableTransitionInternal );
+    GetHsm( ).AddState( "", statePlayableTransitionIdle );
     GetHsm( ).AddState( "", statePlayableTransitionNetworkStandby );
     GetHsm( ).AddState( "", customStateOn );
     GetHsm( ).AddState( "", customStatePlayable );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ), stateNetworkStandby );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ), stateNetworkStandbyConfigured );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ), stateNetworkStandbyNotConfigured );
-    GetHsm( ).AddState( "", stateLowPowerStandby );
-    GetHsm( ).AddState( "", stateLowPowerStandbyTransition );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::IDLE ), stateIdle );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::IDLE ), stateIdleVoiceConfigured );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::IDLE ), stateIdleVoiceNotConfigured );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), customStatePlaying );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), customStatePlayingActive );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), customStatePlayingInactive );
-    GetHsm( ).AddState( "", customStateAccessoryPairing );
-    GetHsm( ).AddState( "", customStateAdaptIQ );
     GetHsm( ).AddState( "", statePlayingTransition );
     GetHsm( ).AddState( "", statePlayingTransitionSelected );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::DESELECTED ), statePlayingDeselected );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelected );
+    GetHsm( ).AddState( "", customStatePlayingTransitionAccessoryPairing );
+    GetHsm( ).AddState( "", customStatePlaying );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::DESELECTED ), customStatePlayingDeselected );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::DESELECTED ), customStatePlayingDeselectedPairing );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), customStatePlayingSelected );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSilent );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedNotSilent );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), customStatePlayingSelectedSetup );
-    GetHsm( ).AddState( "", statePlayingSelectedSetupNetwork );
-    GetHsm( ).AddState( "", statePlayingSelectedSetupOther );
-    GetHsm( ).AddState( "", statePlayingSelectedSetupExiting );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupNetwork );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupOther );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupExiting );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), customStatePlayingSelectedPairing );
     GetHsm( ).AddState( "", stateStoppingStreams );
+    GetHsm( ).AddState( "", customStateAdaptIQ );
+    GetHsm( ).AddState( "", customStateAdaptIQExiting );
     GetHsm( ).AddState( "", stateStoppingStreamsDedicated );
     GetHsm( ).AddState( "", stateStoppingStreamsDedicatedForFactoryDefault );
     GetHsm( ).AddState( "", stateStoppingStreamsDedicatedForSoftwareUpdate );
 
-    GetHsm( ).Init( this, PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING );
+    GetHsm( ).Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );
 
     ///
     /// Initialize entities in the Common Product Controller
@@ -501,7 +543,7 @@ void ProfessorProductController::Run( )
     ///
     /// Register LPM events for LightBar
     ///
-    //m_lightbarController->RegisterLpmEvents();
+    m_lightbarController->RegisterLpmEvents();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1203,8 +1245,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         ///
         else if( GetIntentHandler( ).IsIntentUserPower( message.action( ) ) )
         {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentUserPower,
-                                                              message.action( ) );
+            GetHsm( ).Handle< >( &CustomProductControllerState::HandleIntentPowerToggle );
         }
         else if( GetIntentHandler( ).IsIntentMuteControl( message.action( ) ) )
         {
@@ -1371,6 +1412,11 @@ BLESetupService::VariantId ProfessorProductController::GetVariantId( ) const
     return varintId;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::SendInitialCapsData
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::SendInitialCapsData()
 {
     BOSE_INFO( s_logger, __func__ );
@@ -1382,7 +1428,9 @@ void ProfessorProductController::SendInitialCapsData()
     SoundTouchInterface::Sources message;
     auto messageProperties = message.mutable_properties();
 
-    for( uint32_t activationKey = SystemSourcesProperties::ACTIVATION_KEY__MIN; activationKey <= SystemSourcesProperties::ACTIVATION_KEY__MAX; ++activationKey )
+    for( uint32_t activationKey = SystemSourcesProperties::ACTIVATION_KEY__MIN;
+         activationKey <= SystemSourcesProperties::ACTIVATION_KEY__MAX;
+         ++activationKey )
     {
         messageProperties->add_supportedactivationkeys(
             SystemSourcesProperties::ACTIVATION_KEY__Name( static_cast<SystemSourcesProperties::ACTIVATION_KEY_>( activationKey ) ) );
@@ -1398,15 +1446,19 @@ void ProfessorProductController::SendInitialCapsData()
     messageProperties->set_devicetyperequired( true );
 #endif
 
-    messageProperties->add_supportedinputroutes( SystemSourcesProperties::INPUT_ROUTE_HDMI__Name( SystemSourcesProperties::INPUT_ROUTE_TV ) );
+    messageProperties->add_supportedinputroutes(
+        SystemSourcesProperties::INPUT_ROUTE_HDMI__Name( SystemSourcesProperties::INPUT_ROUTE_TV ) );
+
     messageProperties->set_inputrouterequired( true );
 
     BOSE_VERBOSE( s_logger, "%s sending %s", __func__, ProtoToMarkup::ToJson( message ).c_str() );
 
-    GetFrontDoorClient()->SendPut<SoundTouchInterface::NowPlaying, EndPointsError::Error>
-    ( FRONTDOOR_SYSTEM_SOURCES_API, message, {}, m_errorCb );
+    GetFrontDoorClient()->SendPut<SoundTouchInterface::NowPlaying, EndPointsError::Error>(
+        FRONTDOOR_SYSTEM_SOURCES_API,
+        message,
+        { },
+        m_errorCb );
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
