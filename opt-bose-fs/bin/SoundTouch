@@ -89,7 +89,7 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
 
     rw --read-only
 
-    init-lcd.sh
+    init-lcd
 
     set_ap.sh
 
