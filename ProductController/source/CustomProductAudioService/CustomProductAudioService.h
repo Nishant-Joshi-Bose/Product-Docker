@@ -67,6 +67,7 @@ private:
     LpmServiceMessages::AudioSettingsAudioMode_t ModeNameToEnum( const std::string& modeName );
     LpmServiceMessages::AudioSettingsContent_t ContentTypeNameToEnum( const std::string& contentTypeName );
     LpmServiceMessages::AudioSettingsDualMonoMode_t DualMonoSelectNameToEnum( const std::string& dualMonoSelectName );
+    LpmServiceMessages::AudioSettingsDeltaEqSelect_t EqSelectNameToEnum( const std::string& modeName );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// FrontDoor handling functions
