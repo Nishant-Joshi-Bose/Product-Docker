@@ -453,7 +453,7 @@ bool CustomProductLpmHardwareInterface::SendSourceSelection( const LPM_IPC_SOURC
         return false;
     }
 
-    GetLpmClient( )->SendCecCurrentSource( source );
+    //GetLpmClient( )->SendCecCurrentSource( source );
     BOSE_DEBUG( s_logger, "An LPM source selection sent to LPM. %d", source.source() );
 
     return true;
@@ -481,7 +481,7 @@ bool CustomProductLpmHardwareInterface::SetCecPhysicalAddress( const uint32_t ce
 
     IpcCecPhyscialAddress_t cecAddrSetting;
     cecAddrSetting.set_cecphyaddr( cecPhysicalAddress );
-    GetLpmClient( )->SendCecPhysicalAddress( cecAddrSetting );
+    //GetLpmClient( )->SendCecPhysicalAddress( cecAddrSetting );
 
     return true;
 }
@@ -509,7 +509,7 @@ bool CustomProductLpmHardwareInterface::SetCecMode( const uint8_t mode )
     IpcCecMode_t cecMode;
     cecMode.set_cecmode( mode );
     cecMode.set_save( 1 ); //save to nvram
-    GetLpmClient( )->SendCecMode( cecMode );
+    //GetLpmClient( )->SendCecMode( cecMode );
 
     return true;
 }
@@ -562,35 +562,30 @@ bool CustomProductLpmHardwareInterface::SendAdaptIQControl( ProductAdaptIQContro
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  CustomProductHardwareLpmInterface::SendStreamConfig
+/// @name  CustomProductHardwareLpmInterface::SetStreamConfig
 ///
 /// @brief This method send setStreamConfig request to DSP,
-///         which includes mainStreamAudioSettings, inputRoute, and streamMix parameters
 ///
-/// @param string streamConfig
-/// Callback<IpcDspStreamConfigRespPayload_t> cb
+/// @param LpmServiceMessages::IpcDspStreamConfigReqPayload_t streamConfig
+/// @param Callback<IpcDspStreamConfigRespPayload_t> cb
 ///
 /// @return bool The method returns true when the setStreamConfig request was successfully sent.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductLpmHardwareInterface::SendStreamConfig( std::string& serializedAudioSettings, std::string& serializedInputRoute, const Callback<bool>& cb )
+bool CustomProductLpmHardwareInterface::SetStreamConfig( LpmServiceMessages::IpcDspStreamConfigReqPayload_t streamConfig, const Callback<bool>& cb )
 {
+    BOSE_DEBUG( s_logger, __func__ );
     if( isConnected( ) == false || GetLpmClient( ) == nullptr )
     {
         BOSE_ERROR( s_logger, "%s failed, as no connection is available.", __func__ );
-
         return false;
     }
-
-    auto respCb = [cb]( IpcDspStreamConfigRespPayload_t resp )
+    auto respCb = [cb]( LpmServiceMessages::IpcDspStreamConfigRespPayload_t resp )
     {
         cb.Send( ( resp.success() > 0 ) ? true : false );
     };
-    // TODO: PGC-218: Enable routing of setStreamConfig() message to DSP
-    // Convert serialized json string from APProduct into IpcDspStreamConfigReqPayload_t type
-    IpcDspStreamConfigReqPayload_t msg;
-    msg.set_inputroute( 1 );
-    GetLpmClient( )->SetStreamConfigRequest( msg, respCb, Ipc_Device_t::IPC_DEVICE_DSP );
+    BOSE_DEBUG( s_logger, "CustomProductLpmHardwareInterface::SetStreamConfig streamConfig = %s", streamConfig.DebugString().c_str() );
+    GetLpmClient( )->SetStreamConfigRequest( streamConfig, respCb, Ipc_Device_t::IPC_DEVICE_DSP );
     return true;
 }
 

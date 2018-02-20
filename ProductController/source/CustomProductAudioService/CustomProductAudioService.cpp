@@ -81,11 +81,12 @@ void CustomProductAudioService::RegisterAudioPathEvents()
         m_APPointer->RegisterForMainStreamAudioSettingsRequest( callback );
     }
     {
-        Callback<std::string, std::string, Callback< bool > > callback( std::bind( &CustomProductAudioService::SetStreamConfigCallback,
-                                                                                   this,
-                                                                                   std::placeholders::_1,
-                                                                                   std::placeholders::_2,
-                                                                                   std::placeholders::_3 ) );
+        Callback<std::vector<APProductCommon::ChannelParameters>, std::string, std::string, Callback< bool > > callback( std::bind( &CustomProductAudioService::SetStreamConfigCallback,
+                this,
+                std::placeholders::_1,
+                std::placeholders::_2,
+                std::placeholders::_3,
+                std::placeholders::_4 ) );
         m_APPointer->RegisterForSetStreamConfig( callback );
     }
     ConnectToAudioPath();
@@ -107,6 +108,7 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
 {
     BOSE_DEBUG( s_logger, __func__ );
     BOSE_DEBUG( s_logger, "GetMainStreamAudioSettingsCallback - contentItem = %s", contentItem.c_str() );
+
     // Parse contentItem string received from APProduct
     bool error = false;
     SoundTouchInterface::ContentItem contentItemProto;
@@ -144,7 +146,7 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
         BOSE_ERROR( s_logger, "ContentItem string from APProduct doesn't contain \"source\" or \"sourceAccount\" field" );
     }
     // Reply APProduct with the current m_MainStreamAudioSettings and m_InputRoute
-    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_MainStreamAudioSettings, false );
+    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_MainStreamAudioSettings );
     std::string inputRoute = std::to_string( m_InputRoute );
     cb.Send( mainStreamAudioSettings, inputRoute );
 }
@@ -173,6 +175,8 @@ void CustomProductAudioService::FetchLatestAudioSettings( )
 ///
 /// @name   CustomProductAudioService::SetStreamConfigCallback
 ///
+/// @param  std::vector<APProductCommon::ChannelParameters> channelParams
+///
 /// @param  std::string serializedAudioSettings
 ///
 /// @param  std::string serializedInputRoute
@@ -184,10 +188,34 @@ void CustomProductAudioService::FetchLatestAudioSettings( )
 ///         serializedInputRoute contains input route info
 ///
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductAudioService::SetStreamConfigCallback( std::string serializedAudioSettings, std::string serializedInputRoute, const Callback<bool> cb )
+void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCommon::ChannelParameters> channelParams, std::string serializedAudioSettings, std::string serializedInputRoute, const Callback<bool> cb )
 {
     BOSE_DEBUG( s_logger, __func__ );
-    m_ProductLpmHardwareInterface->SendStreamConfig( serializedAudioSettings, serializedInputRoute, cb );
+    LpmServiceMessages::IpcDspStreamConfigReqPayload_t streamConfig;
+    LpmServiceMessages::AudioSettings_t audioSettingsProto;
+    try
+    {
+        ProtoToMarkup::FromJson( serializedAudioSettings, &audioSettingsProto );
+    }
+    catch( const ProtoToMarkup::MarkupError &e )
+    {
+        BOSE_ERROR( s_logger, "Converting serializedAudioSettings to proto failed markup error - %s", e.what() );
+        cb.Send( false );
+        return;
+    }
+
+    streamConfig.mutable_audiosettings()->CopyFrom( audioSettingsProto );
+    streamConfig.set_inputroute( std::stoi( serializedInputRoute ) );
+    for( auto& itr : channelParams )
+    {
+        LpmServiceMessages::ChannelMix_t* channelMix;
+        channelMix = streamConfig.add_channelmix();
+        channelMix->set_volume( itr.m_volumLevel );
+        channelMix->set_usermute( itr.m_userMuted );
+        channelMix->set_location( static_cast<LpmServiceMessages::PresentationLocation_t>( itr.m_presentationLocation ) );
+        channelMix->set_intent( static_cast<LpmServiceMessages::StreamIntent_t>( itr.m_streamIntent ) );
+    }
+    m_ProductLpmHardwareInterface->SetStreamConfig( streamConfig, cb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -200,7 +228,7 @@ void CustomProductAudioService::SetStreamConfigCallback( std::string serializedA
 void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 {
     BOSE_DEBUG( s_logger, __func__ );
-    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_MainStreamAudioSettings, false );
+    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_MainStreamAudioSettings );
     m_APPointer -> SetMainStreamAudioSettings( mainStreamAudioSettings );
 }
 

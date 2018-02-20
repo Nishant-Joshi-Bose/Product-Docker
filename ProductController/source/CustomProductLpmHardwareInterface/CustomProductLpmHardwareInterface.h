@@ -107,7 +107,7 @@ public:
     /// @brief This method is for sending streamConfig to DSP for configuring inputs and gain.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool SendStreamConfig( std::string& serializedAudioSettings, std::string& serializedInputRoute, const Callback<bool>& cb );
+    bool SetStreamConfig( IpcDspStreamConfigReqPayload_t streamConfig, const Callback<bool>& cb );
 
 
 private:

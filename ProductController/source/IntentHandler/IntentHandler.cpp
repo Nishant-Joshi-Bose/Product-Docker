@@ -116,21 +116,21 @@ void IntentHandler::Initialize( )
     /// and mute key actions. Note that these actions are product specific to Professor devices,
     /// typically based on remote key actions.
     ///
-    m_IntentManagerMap[( uint16_t )Action::ACTION_MUTE ]          = muteManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_MUTE ] = muteManager;
 
     ///
     /// A map is created to associate the custom speaker pairing intent manager with pair speaker key
     /// actions.
     ///
-    m_IntentManagerMap[( uint16_t )Action::ACTION_PAIR_SPEAKERS ] = speakerPairingManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_PAIR_SPEAKERS ]      = speakerPairingManager;
     m_IntentManagerMap[( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS ] = speakerPairingManager;
 
     ///
     /// A map is created to associate the custom playback intent manager with product specific
     /// source selection key actions, typically based on remote key actions.
     ///
-    m_IntentManagerMap[( uint16_t )Action::ACTION_TV ]         = playbackRequestManager;
-    m_IntentManagerMap[( uint16_t )Action::ACTION_SOUNDTOUCH ] = playbackRequestManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_TV ]            = playbackRequestManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_APAPTIQ_START ] = playbackRequestManager;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
