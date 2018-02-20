@@ -475,9 +475,12 @@ bool DisplayController::HandleLpmNotificationLightSensor( IpcLightSensor_t lpmLi
 ////////////////////////////////////////////////////////////////////////////////
 bool DisplayController::TurnOnOff( bool turnOn )
 {
-    const std::string displayControllerFileName = "/sys/devices/soc/7af6000.spi/spi_master/spi6/spi6.1/graphics/fb1/send_command";
-    const char*       onOffCmdString            = turnOn ? "29" : "28" ;
-    bool              displayAutoMode           = turnOn ? true : false;
+    const std::string displayControllerDir = "/sys/devices/soc/7af6000.spi/spi_master/spi6/spi6.1/graphics/fb1/";
+    const std::string sendCommandFileName  = displayControllerDir + "send_command";
+    const std::string teFileName           = displayControllerDir + "te";
+    const char*       onOffCmdString       = turnOn ? "29" : "28" ;
+    const char*       teString             = turnOn ? "1"  : "0"  ;
+    bool              displayAutoMode      = turnOn ? true : false;
 
     BOSE_LOG( VERBOSE, "turning LCD: " << ( turnOn ? "on" : "off" ) );
 
@@ -488,21 +491,45 @@ bool DisplayController::TurnOnOff( bool turnOn )
         SetBackLightLevel( m_backLight, 0 );
     }
 
-    if( DirUtils::DoesFileExist( displayControllerFileName ) == false )
+    if( DirUtils::DoesFileExist( sendCommandFileName ) == false )
     {
-        BOSE_LOG( ERROR, "error: can't find file: " + displayControllerFileName + " - " + strerror( errno ) );
+        BOSE_LOG( ERROR, "error: can't find file: " + sendCommandFileName + " - " + strerror( errno ) );
         return false;
     }
 
-    std::ofstream displayControllerStream( displayControllerFileName );
-
-    if( displayControllerStream.is_open() == false )
+    if( DirUtils::DoesFileExist( teFileName ) == false )
     {
-        BOSE_LOG( ERROR,  "error: failed to open file: " + displayControllerFileName + " - " + strerror( errno ) );
+        BOSE_LOG( ERROR, "error: can't find file: " + teFileName + " - " + strerror( errno ) );
         return false;
     }
 
-    displayControllerStream << onOffCmdString; // see ST7789VI_SPEC_V1.4.pdf
+    std::ofstream displayControllerSendCmd( sendCommandFileName );
+    std::ofstream displayControllerTe( teFileName );
+
+    if( displayControllerSendCmd.is_open() == false )
+    {
+        BOSE_LOG( ERROR,  "error: failed to open file: " + sendCommandFileName + " - " + strerror( errno ) );
+        return false;
+    }
+
+    if( displayControllerTe.is_open() == false )
+    {
+        BOSE_LOG( ERROR,  "error: failed to open file: " + teFileName + " - " + strerror( errno ) );
+        return false;
+    }
+
+    if( turnOn == false )
+    {
+        displayControllerTe << teString;
+        usleep( 25 * 1000 ); // wait a full te cycle, the slowest is 40Hz
+    }
+
+    displayControllerSendCmd << onOffCmdString; // see ST7789VI_SPEC_V1.4.pdf
+
+    if( turnOn == true )
+    {
+        displayControllerTe << teString;
+    }
 
     BOSE_LOG( VERBOSE, "LCD is now: " << ( turnOn ? "on" : "off" ) );
     return true;
