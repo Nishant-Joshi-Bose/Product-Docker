@@ -46,6 +46,7 @@
 #include "ProductControllerStateStoppingStreams.h"
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
+#include "ProductControllerStatePlayableTransitionInternal.h"
 #include "ProductControllerStatePlayableTransitionNetworkStandby.h"
 #include "ProductControllerStateSoftwareUpdateTransition.h"
 #include "ProductControllerStatePlayingTransition.h"
@@ -396,6 +397,7 @@ private:
     ProductControllerStatePlayingSelectedSetupExiting       m_ProductControllerStatePlayingSelectedSetupExiting;
     ProductControllerStateStoppingStreams                   m_ProductControllerStateStoppingStreams;
     ProductControllerStatePlayableTransition                m_ProductControllerStatePlayableTransition;
+    ProductControllerStatePlayableTransitionInternal        m_ProductControllerStatePlayableTransitionInternal;
     ProductControllerStatePlayableTransitionIdle            m_ProductControllerStatePlayableTransitionIdle;
     ProductControllerStatePlayableTransitionNetworkStandby  m_ProductControllerStatePlayableTransitionNetworkStandby;
     ProductControllerStateSoftwareUpdateTransition          m_ProductControllerStateSoftwareUpdateTransition;
