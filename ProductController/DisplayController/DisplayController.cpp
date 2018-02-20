@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+
 ///// @file   DisplayController.cpp
 ///// @brief  Implements Eddie Display controller class.
 /////
@@ -8,7 +8,11 @@
 #include <limits.h>
 #include <float.h>
 #include <functional>
+#include <iostream>
+#include <fstream>
 #include <json/json.h>
+
+#include "DirUtils.h"
 #include "SystemUtils.h"
 #include "FrontDoorClient.h"
 #include "DisplayController.h"
@@ -81,7 +85,8 @@ DisplayController::DisplayController( ProductController& controller, const std::
     m_frontdoorClientPtr( fd_client ),
     m_lpmClient( clientPtr ),
     m_timeToStop( false ),
-    m_autoMode( true )
+    m_autoMode( true ),
+    m_uiHeartBeat( 0 )
 {
     ParseJSONData();
 }// constructor
@@ -307,7 +312,7 @@ void DisplayController::MonitorLightSensor()
 
             if( fabs( lux_diff ) >= LUX_DIFF_THRESHOLD )
             {
-                SetBackLightLevel( m_backLight , targeted_level );
+                SetBackLightLevel( m_backLight, targeted_level );
                 // dummy read of the back light, the IPC mechanism is caching a value
                 m_lpmClient->GetBackLight( [this]( IpcBackLight_t const & rsp ) {} );
                 m_backLight  = targeted_level;
@@ -344,14 +349,17 @@ void DisplayController::RegisterDisplayEndPoints()
         HandleLpmNotificationLightSensor( arg );
     };
 
-    AsyncCallback<IpcBackLight_t  > notification_cb_back_light( backLightCallBack  , m_productController.GetTask() );
+    AsyncCallback<IpcBackLight_t  > notification_cb_back_light( backLightCallBack, m_productController.GetTask() );
     AsyncCallback<IpcLightSensor_t> notification_cb_light_sensor( lightSensorCallBack, m_productController.GetTask() );
 
-    m_lpmClient->RegisterEvent<IpcBackLight_t  >( IPC_PER_GET_BACKLIGHT  , notification_cb_back_light );
+    m_lpmClient->RegisterEvent<IpcBackLight_t  >( IPC_PER_GET_BACKLIGHT, notification_cb_back_light );
     m_lpmClient->RegisterEvent<IpcLightSensor_t>( IPC_PER_GET_LIGHTSENSOR, notification_cb_light_sensor );
 
+    // ==========================
+    // HandlePutDisplayRequest
+    // ==========================
     AsyncCallback<Display, Callback<Display>, Callback<EndPointsError::Error>> putDisplayReqCb(
-                                                                                std::bind( &DisplayController::HandlePutDisplayRequest ,
+                                                                                std::bind( &DisplayController::HandlePutDisplayRequest,
                                                                                         this,
                                                                                         std::placeholders::_1,
                                                                                         std::placeholders::_2
@@ -359,6 +367,9 @@ void DisplayController::RegisterDisplayEndPoints()
                                                                                 m_productController.GetTask() );
     m_frontdoorClientPtr->RegisterPut<Display>( "/ui/display", putDisplayReqCb );
 
+    // ==========================
+    // HandleGetDisplayRequest
+    // ==========================
     AsyncCallback< Callback<Display>, Callback<EndPointsError::Error>> getDisplayReqCb(
                                                                         std::bind(
                                                                             &DisplayController::HandleGetDisplayRequest,
@@ -367,6 +378,19 @@ void DisplayController::RegisterDisplayEndPoints()
                                                                         ),
                                                                         m_productController.GetTask() );
     m_frontdoorClientPtr->RegisterGet( "/ui/Display", getDisplayReqCb );
+
+    // ==========================
+    // HandleUIAlive
+    // ==========================
+    AsyncCallback<Display, Callback<Display>, Callback<EndPointsError::Error>> uiAliveReqCb(
+                                                                                std::bind( &DisplayController::HandlePutUIAlive,
+                                                                                        this,
+                                                                                        std::placeholders::_1,
+                                                                                        std::placeholders::_2
+                                                                                         ),
+                                                                                m_productController.GetTask() );
+    m_frontdoorClientPtr->RegisterPut<Display>( "/ui/alive", uiAliveReqCb );
+
 
 }// RegisterDisplayEndPoints
 
@@ -384,6 +408,15 @@ void  DisplayController::HandleGetDisplayRequest( const Callback<Display>& resp 
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
+void DisplayController::HandlePutUIAlive( const Display &req,
+                                          const Callback<Display>& resp )
+{
+
+    m_uiHeartBeat++;
+}// HandlePutUIAlive
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 Display DisplayController::GetDisplay()
 {
     return m_display;
@@ -395,7 +428,7 @@ bool DisplayController::HandleLpmNotificationBackLight( IpcBackLight_t lpmBackLi
 {
     m_display.set_backlightprecentage( lpmBackLight.value() );
 
-    m_frontdoorClientPtr->SendNotification( "/ui/display" , GetDisplay() );
+    m_frontdoorClientPtr->SendNotification( "/ui/display", GetDisplay() );
     return true;
 }// HandleLpmNotificationBackLight
 
@@ -405,8 +438,33 @@ bool DisplayController::HandleLpmNotificationLightSensor( IpcLightSensor_t lpmLi
 {
     m_display.set_lightsensorlux( lpmLightSensor.lux_decimal_value() );
 
-    m_frontdoorClientPtr->SendNotification( "/ui/display" , GetDisplay() );
+    m_frontdoorClientPtr->SendNotification( "/ui/display", GetDisplay() );
     return true;
 }// HandleLpmNotificationBackLight
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+bool DisplayController::TurnOnOff( bool turnOn )
+{
+    const std::string displayControllerFileName = "/sys/devices/soc/7af6000.spi/spi_master/spi6/spi6.1/graphics/fb1/send_command";
+    const char*       onOffCmdString            = turnOn ? "29" : "28";
+
+    if( DirUtils::DoesFileExist( displayControllerFileName ) == false )
+    {
+        BOSE_LOG( ERROR, "error: can't find file: " + displayControllerFileName + " - " + strerror( errno ) );
+        return false;
+    }
+
+    std::ofstream displayControllerStream( displayControllerFileName );
+
+    if( displayControllerStream.is_open() == false )
+    {
+        BOSE_LOG( ERROR,  "error: failed to open file: " + displayControllerFileName + " - " + strerror( errno ) );
+        return false;
+    }
+
+    displayControllerStream << onOffCmdString; // see ST7789VI_SPEC_V1.4.pdf
+    return true;
+}// TurnOnOff
 
 } //namespace ProductApp

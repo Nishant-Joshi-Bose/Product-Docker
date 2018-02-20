@@ -66,6 +66,14 @@ public:
                                      const Callback<Display>& resp );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @name   HandleUIAlive
+/// @brief-
+/// @return void
+///////////////////////////////////////////////////////////////////////////////
+    void HandlePutUIAlive( const Display &req,
+                           const Callback<Display>& resp );
+
+///////////////////////////////////////////////////////////////////////////////
 /// @name   SetAutoMode
 /// @brief-
 /// @return void
@@ -74,6 +82,13 @@ public:
     {
         m_autoMode = autoMode;
     }
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  TurnOnOff
+/// @brief-
+/// @return void
+///////////////////////////////////////////////////////////////////////////////
+    bool TurnOnOff( bool turnOn );
 
 private:
     /// Disable copies
@@ -101,6 +116,7 @@ private:
     float                              m_luxValue  ;
     int                                m_luxDecimal   ;
     int                                m_luxFractional;
+    uint64_t                           m_uiHeartBeat  ;
 };
 } //namespace ProductApp
 
