@@ -43,7 +43,7 @@ _lpm_tap = Lpm(_lpm_tap_port)
 
 # The remote LPM Service with which we will communicate.
 _ipc_client = LpmClient.LpmClient(_ip_address)
-assert _ipc_client
+assert _ipc_client, "Failed to open LPM IPC interface at ip address %s" % _ip_address
 
 # Used to verify that the state requested to enter.
 _verifySystemStateId = None
@@ -62,7 +62,8 @@ def set_system_state_cb(resp):
 	"""
 
 	if _verifySystemStateId != None:
-		assert (_verifySystemStateId == resp.sysState)
+		assert (_verifySystemStateId == resp.sysState), \
+		"System state %i does not match expected state %i" % (resp.sysState, _verifySystemStateId)
 
 	_thread_lock.set()
 
@@ -130,7 +131,8 @@ def test_low_power_standby():
 	#
 	# Verify low power system state.
 
-	assert (_lpm_tap.wait_for_system_state([Lpm.SystemState.LowPower], 10))
+	assert (_lpm_tap.wait_for_system_state([Lpm.SystemState.LowPower], 10)), \
+		"Failed to enter LowPower system state."
 
 	_logger.info("Waking LPM")
 
@@ -143,4 +145,5 @@ def test_low_power_standby():
 	#
 	# Wait for and verify standby system state.
 
-	assert(_lpm_tap.wait_for_system_state([Lpm.SystemState.Standby], 10))
+	assert(_lpm_tap.wait_for_system_state([Lpm.SystemState.Standby], 10)), \
+		"Failed to resume into Standby system state."

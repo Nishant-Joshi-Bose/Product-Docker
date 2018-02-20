@@ -31,7 +31,7 @@ _lbcs_xfer_event = threading.Event()
 
 # The remote LPM Service with which we will communicate.
 _lpm_ipc = LpmClient.LpmClient(_ip_address)
-assert (_lpm_ipc)
+assert _lpm_ipc, "Failed to open LPM IPC interface at ip address %s" % _ip_address
 
 #
 # Callbacks.
@@ -43,15 +43,15 @@ def get_thermal_data_cb(resp):
 	:param: resp Response from service in form of IpcSystemTemperatureData_t, which contains
 		one to many IpcThermalData_t which reference IpcThermalType_t and IpcThermalLocation_t.
 	"""
-	assert(resp)
+	assert resp, "Missing/invalid thermal response data."
 
 	# Eddie only has one thermal value: the amplifier.
-	assert(resp.length > 0)
-	assert(resp.thermalData[0].location == AutoIPCMessages.IPC_THERMAL_LOCATION_CONSOLE_INTERNAL_AMP)
-	assert(resp.thermalData[0].type == AutoIPCMessages.IPC_THERMAL_TYPE_THERMISTOR_TEMP_DEG_C)
-	assert(resp.thermalData[0].value > 0 and resp.thermalData[0].value < 100)
+	assert (resp.length > 0), "Missing/invalid thermal response data."
+	assert (resp.thermalData[0].location == AutoIPCMessages.IPC_THERMAL_LOCATION_CONSOLE_INTERNAL_AMP), "Thermal data 'location' is invalid."
+	assert (resp.thermalData[0].type == AutoIPCMessages.IPC_THERMAL_TYPE_THERMISTOR_TEMP_DEG_C), "Thermal data 'temperature type' is invalid."
+	assert (resp.thermalData[0].value > 0 and resp.thermalData[0].value < 100), "Thermal data 'value' is out of acceptable range."
 
-	_logger.info("Successfully read amp temperature: %dC" % resp.thermalData[0].value)
+	_logger.info("Successfully read amplifier temperature: %dC" % resp.thermalData[0].value)
 
 	_lbcs_xfer_event.set()
 

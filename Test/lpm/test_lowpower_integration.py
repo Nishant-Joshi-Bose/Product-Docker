@@ -52,7 +52,8 @@ def test_low_power_standby():
 
 	time.sleep(10)
 
-	assert _lpm_tap.wait_for_system_state([Lpm.SystemState.LowPower], 10)
+	assert _lpm_tap.wait_for_system_state([Lpm.SystemState.LowPower], 10), \
+		"Failed to enter LowPower system state."
 
 	# Simulate a key press to wake it up.
 	_logger.info("Simulating a key press...")
@@ -60,4 +61,5 @@ def test_low_power_standby():
 
 	# Verify we are back in standby state.
 	_logger.info("Waiting to resume...")
-	assert _lpm_tap.wait_for_system_state([Lpm.PowerState.Standby], 10)
+	assert _lpm_tap.wait_for_system_state([Lpm.PowerState.Standby], 10), \
+		"Failed to resume into Standby system state."

@@ -26,25 +26,27 @@ def test_amp_fault_on():
 	_logger.info("LPM found at version %s", lpmVersion)
 
 	_lpm_tap.amp_fault_set_state(True)
+	# Amp fault lasts until reboot
+	_lpm_tap.reboot()
 
-@pytest.mark.skip("Example/test functionality")
+#@pytest.mark.skip("Example/test functionality")
 def test_amp_fault_induce():
 	""" 
 	Induce an amp fault.
 	"""
 	lpmVersion = _lpm_tap.get_version()
-	assert lpmVersion
+	assert lpmVersion, "Missing/invalid LPM version response."
 	_logger.info("LPM found at version %s", lpmVersion)
 
 	_logger.info("Please wait. Inducing an amp fault takes about 15 seconds...")
 	_lpm_tap.amp_fault_induce()
 	time.sleep(2) # amp fault will block until it is done, but just in case, let's wait a bit
 	system_state = _lpm_tap.get_system_state()
-	assert (system_state == Lpm.SystemState.Error)
+	assert (system_state == Lpm.SystemState.Error), "Amp fault did not result in Error system state."
 	# Amp fault lasts until reboot
 	_lpm_tap.reboot()
 
-#@pytest.mark.skip("Example/test functionality")
+@pytest.mark.skip("Example/test functionality")
 def test_some_keys():
 	""" 
 	Test some key events. 
@@ -52,7 +54,7 @@ def test_some_keys():
 	"""
 
 	lpmVersion = _lpm_tap.get_version()
-	assert lpmVersion
+	assert lpmVersion, "Missing/invalid LPM version response."
 	_logger.info("LPM found at version %s", lpmVersion)
 
 	#

@@ -40,7 +40,7 @@ _lbcs_xfer_event = threading.Event()
 
 # The remote LPM Service with which we will communicate.
 _lpm_ipc = LpmClient.LpmClient(_ip_address)
-assert (_lpm_ipc)
+assert _lpm_ipc, "Failed to open LPM IPC interface at ip address %s" % _ip_address
 
 # Animation data that will be populated via a DB request.
 _animationData = None
@@ -96,10 +96,10 @@ def get_animation_db_version_cb(resp):
 	Callback for LBCSAnimDBVersionReq.
 	:param: resp Response from service in form of LBCSAnimationDBVersion_t.
 	"""
-	print("LBCS animation db version: {0}.{1} valid checksum: {2}"
+	_logger.info("LBCS animation db version: {0}.{1} valid checksum: {2}"
 		.format(resp.major, resp.minor, resp.animDBChecksumPassed))
-	assert (resp.major > 0 or resp.minor > 0)
-	assert (resp.animDBChecksumPassed)
+	assert (resp.major > 0 or resp.minor > 0), "Invalid major/minor version of animation DB."
+	assert resp.animDBChecksumPassed, "Animation DB 'checksum passed' field is false."
 
 	_lbcs_xfer_event.set()
 
@@ -110,7 +110,7 @@ def get_animation_db_data_cb(resp):
 	"""
 	global _animationData
 
-	assert (resp)
+	assert resp, "No valid animation data response received."
 	_animationData = resp
 	print(_animationData)
 	_lbcs_xfer_event.set()
@@ -121,8 +121,10 @@ def start_animation_request_cb(resp):
 	"""
 	global _verifyAnimationId
 
-	if _verifyAnimationId != None:
-		assert (resp.animationId == _verifyAnimationId)
+	if _verifyAnimationId is not None:
+		assert (resp.animationId == _verifyAnimationId), \
+			"Current animation ID %i does not match expected %i for 'start animation'." \
+			% (resp.animationId, _verifyAnimationId)
 		_verifyAnimationId = None
 
 	_lbcs_xfer_event.set()
@@ -134,8 +136,10 @@ def stop_animation_request_cb(resp):
 	"""
 	global _verifyAnimationId
 
-	if _verifyAnimationId != None:
-		assert (resp.animationId == _verifyAnimationId)
+	if _verifyAnimationId is not None:
+		assert (resp.animationId == _verifyAnimationId), \
+			"Current animation ID %i does not match expected %i for 'stop animation'." \
+			% (resp.animationId, _verifyAnimationId)
 		_verifyAnimationId = None
 
 	_lbcs_xfer_event.set()
@@ -160,7 +164,7 @@ def test_get_animation_db_data():
 	Waits for request to complete using _lbcs_xfer_event.
 	"""
 	client = LpmClient.LpmClient(_ip_address)
-	assert (client)
+	assert client, "Unable to open connection to LPM IPC on IP address %s" % _ip_address
 
 	_lpm_ipc.RegisterEvent(AutoIPCMessages.IPC_LBCS_DB_INDEX_DATA_RESP, 
 	IPCMessages.LBCSDbIndexDataResp_t, get_animation_db_data_cb)
@@ -175,7 +179,7 @@ def test_stop_animation():
 	"""
 	global _verifyAnimationId
 
-	assert (_animationData)
+	assert _animationData, "No animation data loaded."
 
 	rndAnimationId = random.randint(1, len(_animationData.indexEntries))
 
@@ -192,7 +196,7 @@ def test_abort_animation():
 	"""
 	global _verifyAnimationId
 
-	assert (_animationData)
+	assert _animationData, "No animation data loaded."
 
 	rndAnimationId = random.randint(1, len(_animationData.indexEntries))
 
@@ -210,7 +214,7 @@ def test_play_all_animations():
 	"""
 	global _verifyAnimationId
 
-	assert (_animationData)
+	assert _animationData, "No animation data loaded."
 
 	lastAnimationId = None
 
@@ -233,7 +237,7 @@ def test_play_all_animations_super_fast():
 	"""
 	global _verifyAnimationId
 
-	assert (_animationData)
+	assert _animationData, "No animation data loaded."
 
 	for entry in _animationData.indexEntries:
 		_logger.info("Playing animation {0}: \"{1}\"".format(entry.animationId, entry.animationName))
