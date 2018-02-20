@@ -93,10 +93,7 @@
   },
   {
     "name": "EddieLPM-Package",
-    "selected_version": {
-      "RIVIERA_HSP_VERSION=1.3": "Release/trunk/0.3.5.2693842/DP1",
-      "RIVIERA_HSP_VERSION=2.3": "Release/trunk/0.3.5.2693842/DP2"
-    }
+    "selected_version": "Release/trunk/0.3.5.2693842/DP2"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -124,11 +121,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/${RIVIERA_HSP_VERSION}"
+    "selected_version": "Release/master/2.3"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/${RIVIERA_HSP_VERSION}"
+    "selected_version": "Release/master/2.3"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
