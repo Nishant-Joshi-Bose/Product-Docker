@@ -26,6 +26,7 @@ constexpr char kAvSyncEndPoint          [] = "/audio/avSync";
 constexpr char kModeEndPoint            [] = "/audio/mode";
 constexpr char kContentTypeEndPoint     [] = "/audio/contentType";
 constexpr char kDualMonoSelectEndPoint  [] = "/audio/dualMonoSelect";
+constexpr char kEqSelectEndPoint        [] = "/audio/eqSelect";
 
 namespace ProductApp
 {
@@ -553,6 +554,35 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                 setDualMonoSelectAction,
                                 m_FrontDoorClientIF,
                                 m_ProductTask ) );
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// Endpoint /audio/eqSelect - register ProductController as handler for POST/PUT/GET requests
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    auto getEqSelectAction = [ this ]( )
+    {
+//        return m_AudioSettingsMgr->GetDualMonoSelect( );
+        return ProductPb::AudioEqSelect();
+    };
+    auto setEqSelectAction = [ this ]( ProductPb::AudioEqSelect val )
+    {
+#if 0
+        bool ret = m_AudioSettingsMgr->SetEqSelect( val );
+        if( ret )
+        {
+//            m_MainStreamAudioSettings.set_eqselect( DualMonoSelectNameToEnum( m_AudioSettingsMgr->GetDualMonoSelect( ).value() ) );
+            SendMainStreamAudioSettingsEvent();
+        }
+        return ret;
+#endif
+        return true;
+    };
+    m_EqSelectSetting = std::unique_ptr<AudioSetting<ProductPb::AudioEqSelect>>( new AudioSetting<ProductPb::AudioEqSelect>
+                                                                                 ( kEqSelectEndPoint,
+                                                                                   getEqSelectAction,
+                                                                                   setEqSelectAction,
+                                                                                   m_FrontDoorClientIF,
+                                                                                   m_ProductTask ) );
+
 
 }
 
