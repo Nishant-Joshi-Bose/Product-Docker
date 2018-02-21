@@ -483,7 +483,7 @@ void EddieProductController::HandleNetworkModuleReady( bool networkModuleReady )
     m_isNetworkModuleReady = networkModuleReady;
 }
 
-void EddieProductController::RequestWiFiProfileStatus()
+void EddieProductController::GetWiFiProfiles()
 {
     AsyncCallback<NetManager::Protobuf::WiFiProfiles> networkWifiProfilesCb( std::bind( &EddieProductController::HandleWiFiProfileResponse ,
                                                                              this, std::placeholders::_1 ), GetTask() );
