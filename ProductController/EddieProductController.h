@@ -139,9 +139,9 @@ public:
     std::string const& GetDefaultProductName() const override;
     BLESetupService::VariantId GetVariantId() const override;
 
-    void SetWifiProfileCount( uint32_t count ) override
+    void ClearWifiProfileCount() override
     {
-        m_wifiProfilesCount = count;
+        m_wifiProfilesCount = 0;
     }
 
     void RequestWiFiProfileStatus() override;
