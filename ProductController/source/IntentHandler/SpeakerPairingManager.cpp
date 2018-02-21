@@ -121,7 +121,7 @@ bool SpeakerPairingManager::Handle( KeyHandlerUtil::ActionType_t& action )
 
     if( action == ( uint16_t )Action::ACTION_START_PAIR_SPEAKERS )
     {
-        // This kicks of the state change to pairing
+        // This kicks off the state change to pairing
         BOSE_INFO( s_logger, "Speaker pairing is to be started." );
         ProductMessage productMessage;
         productMessage.mutable_accessorypairing( )->set_active( true );
@@ -129,7 +129,7 @@ bool SpeakerPairingManager::Handle( KeyHandlerUtil::ActionType_t& action )
     }
     else if( action == ( uint16_t )Action::ACTION_LPM_PAIR_SPEAKERS )
     {
-        BOSE_INFO( s_logger, "Speaker pairing is to be engadged." );
+        BOSE_INFO( s_logger, "Speaker pairing is to be engaged." );
         // This initiates the actual pairing on entry to the state
         DoPairing( );
     }
@@ -601,7 +601,8 @@ void SpeakerPairingManager::PairingCallback( LpmServiceMessages::IpcSpeakerPairi
     IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
 
     // Need to always notify here because we need to let brussels know for UI and to rectify
-    // our white lie made earlier when the request was made
+    // our white lie made earlier in DoPairingFrontDoor when the request was made where we say it
+    // was started before it does.
     m_FrontDoorClientIF->SendNotification( accessoryFrontDoorURL, m_accessorySpeakerState );
 }
 
