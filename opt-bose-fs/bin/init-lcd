@@ -13,7 +13,7 @@ FRONT_BACK_PORCH=${FRONT_BACK_PORCH_MAX}
 LINE_ADDRESS_ORDER_TOP_BOTTOM=36,C0
 LINE_ADDRESS_ORDER_BOTTOM_TOP=36,10
 LINE_ADDRESS_ORDER=${LINE_ADDRESS_ORDER_TOP_BOTTOM}
-ROTATION=180
+ROTATION=36,D0
 ETH0_IP_ADDRESS=$(ifconfig eth0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1)
 WLAN0_IP_ADDRESS=$(ifconfig wlan0 | grep "inet addr" | cut -d ':' -f 2 | cut -d ' ' -f 1)
 IP_ADDRESS=${WLAN0_IP_ADDRESS}
@@ -46,10 +46,6 @@ if [ ! -e /etc/directfbrc ]; then
     ln -s /opt/Bose/etc/directfbrc /etc/directfbrc
 fi
 
-if [ -e ${FB_FILE_SYS_DIR}/rotation ]; then
-    echo ${ROTATION} > ${FB_FILE_SYS_DIR}/rotation
-fi
-
 echo "================================================ ${0##*/}"
 echo "TE SPEED          : ${TE_SPEED}"
 echo "TE ON/OFF         : ${TE_ON_OFF}"
@@ -63,6 +59,7 @@ echo "================================================"
 
 echo ${TE_ON_OFF}          > ${FB_FILE_SYS_DIR}/te
 echo ${TE_SPEED}           > ${FB_FILE_SYS_DIR}/send_command
+echo ${ROTATION}           > ${FB_FILE_SYS_DIR}/send_command
 #echo ${DEBUG}              > ${FB_FILE_SYS_DIR}/debug
 #echo ${FRONT_BACK_PORCH}   > ${FB_FILE_SYS_DIR}/send_command
 #echo ${LINE_ADDRESS_ORDER} > ${FB_FILE_SYS_DIR}/send_command
