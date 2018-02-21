@@ -124,11 +124,6 @@ constexpr auto FRONTDOOR_SYSTEM_SOURCES_API = "/system/sources";
 ProfessorProductController::ProfessorProductController( ) :
 
     ///
-    /// Construction of the common Product Controller Class
-    ///
-    ProductController( "Professor" ),
-
-    ///
     /// Construction of the Product Controller Modules
     ///
     m_ProductLpmHardwareInterface( nullptr ),
@@ -760,86 +755,63 @@ bool ProfessorProductController::IsSystemLanguageSet( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::GetProductType
+/// @name   ProfessorProductController::GetProductName
 ///
-/// @return This method returns the std::string const& value to be used for the Product "Type" field
+/// @return This method returns the std::string value to be used for the Product "productName" field
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string const& ProfessorProductController::GetProductType( ) const
+std::string ProfessorProductController::GetProductName( ) const
 {
-    static std::string productType = "Professor Soundbar";
-    return productType;
+    // @TODO PGC-788 replace the manufacturing name with the marketing name.
+    std::string productName = "professor Soundbar";
+
+    if( auto name = MfgData::Get( "productName" ) )
+    {
+        productName =  *name;
+    }
+
+    return productName;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProfessorProductController::GetProductColor
 ///
-/// @return This method returns the std::string value to be used for the Product "color" field
+/// @return This method returns the std::string value to be used for the Product "productColor" field
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 std::string ProfessorProductController::GetProductColor() const
 {
-    // @TODO https://jirapro.bose.com/browse/PGC-630
-    return "BLACK";
+    // @TODO PGC-630
+    std::string productColor = "2";
+
+    if( auto color = MfgData::Get( "productColor" ) )
+    {
+        productColor =  *color;
+    }
+
+    return productColor;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::GetProductVariant
+/// @name   ProfessorProductController::GetProductType
 ///
-/// @return This method returns the std::string const& value to be used for the Product "Variant" field
+/// @return This method returns the std::string value to be used for the Product "productType" field
 ///
 /// @TODO - Below value may be available through HSP APIs
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string const& ProfessorProductController::GetProductVariant( ) const
+std::string ProfessorProductController::GetProductType() const
 {
-    static std::string productType = "Professor";
+    std::string productType = "professor";
+
+    if( auto type = MfgData::Get( "productType" ) )
+    {
+        productType =  *type;
+    }
+
     return productType;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetProductModel
-///
-/// @return This method returns the std::string const& value to be used for the Product "productType" field
-///
-/// @TODO - Below value may be available through HSP APIs
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string const& ProfessorProductController::GetProductModel() const
-{
-    static std::string productModel = "professor";
-
-    if( auto model = MfgData::Get( "productType" ) )
-    {
-        productModel =  *model;
-    }
-
-    // @TODO PGC-757 replace the manufacturing name with the marketing name.
-    return productModel;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetProductDescription
-///
-/// @return This method returns the std::string const& value to be used for the Product "Description" field
-///
-/// @TODO - Below value may be available through HSP APIs
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string const& ProfessorProductController::GetProductDescription() const
-{
-    static std::string productDescription = "SoundTouch";
-
-    if( auto description = MfgData::Get( "description" ) )
-    {
-        productDescription = *description;
-    }
-
-    return productDescription;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1359,9 +1331,9 @@ void ProfessorProductController::End( )
 /// @brief  This method is to get the default product name by reading from mac address.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string const& ProfessorProductController::GetDefaultProductName( ) const
+std::string ProfessorProductController::GetDefaultProductName( ) const
 {
-    static std::string productName = "Bose ";
+    std::string productName = "Bose ";
     std::string macAddress = MacAddressInfo::GetPrimaryMAC( );
     try
     {
