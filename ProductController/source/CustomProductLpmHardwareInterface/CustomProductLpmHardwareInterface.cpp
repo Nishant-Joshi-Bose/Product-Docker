@@ -66,24 +66,25 @@ CustomProductLpmHardwareInterface::CustomProductLpmHardwareInterface( ProfessorP
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   CustomProductLpmHardwareInterface::NotifyVolumeLevel
+/// @name   CustomProductLpmHardwareInterface::NotifyVolumeMute
 ///
-/// @brief  This method send a notification of the volume level through the LPM hardware to other
-///         interested processes.
+/// @brief  This method send a notification of the volume level and mute status through the LPM hardware
+///         to other interested processes.
 ///
 /// @param  uint32_t volume
+/// @param  bool muteState
 ///
 /// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
-///         attempts the request and returns true.
+///         attempts the event send and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductLpmHardwareInterface::NotifyVolumeLevel( uint32_t volume )
+bool CustomProductLpmHardwareInterface::NotifyVolumeMute( uint32_t volume, bool muteState )
 {
-    BOSE_DEBUG( s_logger, "A volume level of %d is being sent as a notifiation.", volume );
+    BOSE_DEBUG( s_logger, "A volume level of %d and mute state of %d is being sent as a notifiation.", volume, muteState );
 
     if( isConnected( ) == false || GetLpmClient( ) == nullptr )
     {
-        BOSE_ERROR( s_logger, "A notification of the volume level failed. There is no LPM connection." );
+        BOSE_ERROR( s_logger, "A notification of the volume/mute failed. There is no LPM connection." );
 
         return false;
     }
@@ -93,57 +94,9 @@ bool CustomProductLpmHardwareInterface::NotifyVolumeLevel( uint32_t volume )
     IpcAudioSetVolume_t volumeSetting;
 
     volumeSetting.set_volume( volume );
+    volumeSetting.set_mute( muteState );
 
     GetLpmClient( )->SetVolume( volumeSetting );
-
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   CustomProductLpmHardwareInterface::NotifyMuteState
-///
-/// @brief  This method send a notification of the mute state through the LPM hardware to other
-///         interested processes.
-///
-/// @param  bool mute
-///
-/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
-///         attempts the request and returns true.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductLpmHardwareInterface::NotifyMuteState( bool mute )
-{
-    BOSE_DEBUG( s_logger, "A mute %s is being sent as a notification.", mute ? "on" : "off" );
-
-    if( isConnected( ) == false || GetLpmClient( ) == nullptr )
-    {
-        BOSE_ERROR( s_logger, "A notification of the mute state failed. There is no LPM connection." );
-
-        return false;
-    }
-
-    BOSE_DEBUG( s_logger, "An LPM mute state notification will be made." );
-
-    ///
-    /// @todo The LPM mute setting will be changed to contain only one field to set the mute state.
-    ///       The two fields used here are from legacy LPM code. Note that the JIRA Story PGC-551
-    ///       has been created to track this future change.
-    ///
-    IpcAudioMute_t muteSetting;
-
-    if( mute )
-    {
-        muteSetting.set_internalmute( 1 );
-        muteSetting.set_unifymute( 1 );
-    }
-    else
-    {
-        muteSetting.set_internalmute( 0 );
-        muteSetting.set_unifymute( 0 );
-    }
-
-    GetLpmClient( )->SetMute( muteSetting );
 
     return true;
 }
@@ -250,33 +203,6 @@ bool CustomProductLpmHardwareInterface::SendAccessoryDisband( const Callback<Ipc
     return true;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   CustomProductLpmHardwareInterface::SendSpeakerList
-///
-/// @brief  This method sends speaker list information to the LPM hardware.
-///
-/// @param  IpcAccessoryList_t accessoryList
-///
-/// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
-///         attempts the request and returns true.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductLpmHardwareInterface::SendSpeakerList( IpcAccessoryList_t& accessoryList )
-{
-    BOSE_DEBUG( s_logger, "Speaker activation settings are to be set as follows: " );
-
-    if( isConnected( ) == false || GetLpmClient( ) == nullptr )
-    {
-        BOSE_ERROR( s_logger, "An LPM speaker activation settings request could not be made, as no connection is available." );
-
-        return false;
-    }
-
-    BOSE_DEBUG( s_logger, "An LPM speaker activation settings request is currently not supported." );
-
-    return true;
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
