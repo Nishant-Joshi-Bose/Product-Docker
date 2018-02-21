@@ -480,8 +480,7 @@ void ProductCecHelper::HandleFrontDoorVolume( SoundTouchInterface::volume const&
 {
     BOSE_VERBOSE( s_logger, "Got volume notify LPM (%d) (%d)", volume.value(), volume.muted() );
 
-    m_ProductLpmHardwareInterface->NotifyVolumeLevel( volume.value( ) );
-    m_ProductLpmHardwareInterface->NotifyMuteState( volume.muted( ) );
+    m_ProductLpmHardwareInterface->NotifyVolumeMute( volume.value( ), volume.muted( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
