@@ -173,6 +173,14 @@ cp "$audiopath_dir/bin/lisa/libDspPlayback.so" "$opt_dir/bin" || exit
 "$frontdoor_dir/stage" "$opt_dir" || exit
 "$galapagosclient_dir/stage" "$opt_dir" || exit
 
+# Workaround for a bug in CastleAudioPath-qc8017_64 Release/Castle-Fork/0.2.7-20452
+if [ -e "$opt_dir/bin/libpryon.so" ]; then
+    echo "libpryon.so got installed"
+else
+    echo "oops, libpryon.so did not get installed, fixing..."
+    cp "$audiopath64_dir/bin/libpryon.so" "$opt_dir/bin/libpryon.so" || exit
+fi
+
 # ----------------------------------------------------------------------------
 
 cd "$opt_dir"/lib || exit
