@@ -65,7 +65,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.4-44+14ba045"
+    "selected_version": "Release/master/0.3.5-58+9302277"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -129,7 +129,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.3.6-102+0f8af2b"
+    "selected_version": "Release/master/0.3.7-107+628da8c"
   },
   {
     "name": "RivieraLpmUpdater",
