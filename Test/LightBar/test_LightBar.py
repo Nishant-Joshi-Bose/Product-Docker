@@ -19,8 +19,8 @@ def test_getActiveAnimation():
     """ Assert all active animations """
     lb_state = frontDoor.getActiveAnimation()
     print "The state is", lb_state
-    transition = lb_state["properties"]["supported_transitions"]
-    values = lb_state["properties"]["supported_values"]
+    transition = lb_state["properties"]["supportedTransitions"]
+    values = lb_state["properties"]["supportedValues"]
 
 def test_playAnimationInLoop():
     """
@@ -29,21 +29,21 @@ def test_playAnimationInLoop():
     """
     lb_state = frontDoor.getActiveAnimation()
     print "The state is", lb_state
-    transition = lb_state["properties"]["supported_transitions"]
-    values = lb_state["properties"]["supported_values"]
+    transition = lb_state["properties"]["supportedTransitions"]
+    values = lb_state["properties"]["supportedValues"]
 
     for value in values:
-        time.sleep(5)
+        time.sleep(3)
         print "value = ", value
         # create request to play animation in loop
-        data = {"next":{"value":value, "transition":"smooth", "repeat":True}}
+        data = {"nextValue":{"value":value, "transition":"SMOOTH", "repeat":True}}
         data = json.dumps(data)
         lb_state = frontDoor.playLightBarAnimation(data)
         print "lb_state = ", lb_state
-        next_val = lb_state["next"]["value"]
+        next_val = lb_state["nextValue"]["value"]
         assert next_val == value
     lb_state = frontDoor.getActiveAnimation()
-    current_val = lb_state["next"]["value"]
+    current_val = lb_state["nextValue"]["value"]
     assert current_val == value
     lb_state = frontDoor.stopActiveAnimation(data)
 
@@ -52,23 +52,26 @@ def test_stopActiveAnimation():
     Test: Start animation from list
           Stop animation
     """
+    # DMR Adding a wait here b/c this test seemed to want to fail
+    # when run directly after test_playAnimationInLoop
+    time.sleep(3)
     lb_state = frontDoor.getActiveAnimation()
-    values = lb_state["properties"]["supported_values"]
+    values = lb_state["properties"]["supportedValues"]
     total_anims = len(values)
     selected_anim = random.randint(0, total_anims-1)
-    anim_to_play = lb_state["properties"]["supported_values"][selected_anim]
-    data = {"next":{"value":anim_to_play, "transition":"smooth", "repeat":True}}
+    anim_to_play = lb_state["properties"]["supportedValues"][selected_anim]
+    data = {"nextValue":{"value":anim_to_play, "transition":"SMOOTH", "repeat":True}}
     data = json.dumps(data)
-    print "Play aniamtion - ", anim_to_play
+    print "Play animation - ", anim_to_play
     lb_state = frontDoor.playLightBarAnimation(data)
     time.sleep(2)
-    data = {"next":{"value":anim_to_play, "transition":"smooth", "repeat":True}}
+    data = {"nextValue":{"value":anim_to_play, "transition":"SMOOTH", "repeat":True}}
     data = json.dumps(data)
     lb_state = frontDoor.stopActiveAnimation(data)
     #TODO: Cleanup this logic
-    if "current" in lb_state:
-        if "value" in lb_state["current"]:
-            current_key = lb_state["current"]["value"]
+    if "currentValue" in lb_state:
+        if "value" in lb_state["currentValue"]:
+            current_key = lb_state["currentValue"]["value"]
             assert current_key == anim_to_play
         else:
             assert True == False
@@ -82,7 +85,7 @@ def test_stopActiveAnimation():
 def test_invalidAnimationValue():
     """ Invalid animation value test """
     value = "SOME_ANIMATION"
-    data = {"next":{"value":value, "transition":"smooth", "repeat":True}}
+    data = {"nextValue":{"value":value, "transition":"SMOOTH", "repeat":True}}
     data = json.dumps(data)
     lb_state = frontDoor.playLightBarAnimation(data)
     error = lb_state["error"]["description"]
