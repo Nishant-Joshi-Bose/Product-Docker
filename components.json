@@ -97,7 +97,7 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/0.3.7-164+3aa5ee0"
+    "selected_version": "Release/master/0.3.8-166+bdf45c8"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -105,7 +105,7 @@
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/0.3.2-47+b80d39b"
+    "selected_version": "Release/master/0.3.3-53+83e0de2"
   },
   {
     "name": "KeyHandler-qc8017_32",
