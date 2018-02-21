@@ -40,8 +40,8 @@
     "selected_version": "Release/master/0.1.0-4+31ebf8c"
   },
   {
-    "name": "BoseWebBrussels",
-    "selected_version": "Continuous/develop/0.0.1-2+fdc6859"
+    "name": "BoseWebMonaco",
+    "selected_version": "Release/develop/0.2.1-69+6b1fec0"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -117,11 +117,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Continuous/dev/2.3-3-ga574283"
+    "selected_version": "Release/master/2.4"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Continuous/dev/2.3-3-ga574283"
+    "selected_version": "Release/master/2.4"
   },
   {
     "name": "RivieraLPM",
@@ -133,7 +133,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/master/0.3.1-36+8a43bfa"
+    "selected_version": "Continuous/master/0.3.2-38+0fb03f2"
   },
   {
     "name": "SASS-qc8017_32",
