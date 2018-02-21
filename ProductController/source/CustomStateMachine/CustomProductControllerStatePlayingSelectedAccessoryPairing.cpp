@@ -130,7 +130,7 @@ void CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleStateExi
 
     if( m_stopPairingOnExit )
     {
-        unsigned int stopPairingAction = static_cast< unsigned int >( Action::ACTION_STOP_PAIR_SPEAKERS );
+        unsigned int stopPairingAction = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_STOP_PAIR_SPEAKERS );
 
         GetCustomProductController( ).GetIntentHandler( ).Handle( stopPairingAction );
     }
