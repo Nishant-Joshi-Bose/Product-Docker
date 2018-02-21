@@ -117,11 +117,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Continuous/dev/2.3-3-ga574283"
+    "selected_version": "Release/master/2.4"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Continuous/dev/2.3-3-ga574283"
+    "selected_version": "Release/master/2.4"
   },
   {
     "name": "RivieraLPM",
@@ -133,7 +133,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/master/0.3.1-36+8a43bfa"
+    "selected_version": "Continuous/master/0.3.2-38+0fb03f2"
   },
   {
     "name": "SASS-qc8017_32",

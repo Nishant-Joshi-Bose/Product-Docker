@@ -38,6 +38,13 @@ namespace ProductApp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// The following constants define FrontDoor endpoints used by the VolumeManager
+///
+///////////////////////////////////////////////////////////////////////////////////////////////////
+constexpr char  FRONTDOOR_AUDIO_VOLUME[ ]           = "/audio/volume";
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProductCommandLine::ProductCommandLine
 ///
 /// @param  ProfessorProductController& ProductController
@@ -224,7 +231,24 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             response +=  volumeLevelString;
             response += ". \r\n";
 
-            m_ProductLpmHardwareInterface->NotifyVolumeLevel( volumeLevelValue );
+            auto errFunc = []( const EndPointsError::Error & e )
+            {
+                BOSE_ERROR( s_logger, "Error setting FrontDoor mute" );
+            };
+            auto respFunc = [ this ]( SoundTouchInterface::volume v )
+            {
+                BOSE_INFO( s_logger, "Volume set to %d, mute set to %d", v.value(), v.muted() );
+            };
+
+            AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
+            AsyncCallback<EndPointsError::Error> errCb( errFunc, m_ProductTask );
+
+            SoundTouchInterface::volume pbVolume;
+            pbVolume.set_value( volumeLevelValue );
+
+            BOSE_VERBOSE( s_logger, "Setting FrontDoor mute to %d", pbVolume.muted() );
+            m_ProductController.GetFrontDoorClient()->SendPut<SoundTouchInterface::volume, EndPointsError::Error>(
+                ProductApp::FRONTDOOR_AUDIO_VOLUME, pbVolume, respFunc, errCb );
         }
         else
         {
@@ -238,6 +262,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     ////////////////////////////////////////////////////////////////////////////////////////////////
     else if( command.compare( "product mute" ) == 0 )
     {
+        bool muteStateValue;
         if( arguments.size( ) != 1 )
         {
             response = "Incorrect Usage: product mute [on | off] \r\n";
@@ -249,15 +274,15 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 
         if( muteState == "on" )
         {
-            response = "The mute will be turned on. \r\n";
+            muteStateValue = "The mute will be turned on. \r\n";
 
-            m_ProductLpmHardwareInterface->NotifyMuteState( true );
+            muteStateValue = true;
         }
         else if( muteState == "off" )
         {
             response = "The mute will be turned off. \r\n";
 
-            m_ProductLpmHardwareInterface->NotifyMuteState( false );
+            muteStateValue = false;
         }
         else
         {
@@ -265,6 +290,25 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 
             return -1;
         }
+
+        auto errFunc = []( const EndPointsError::Error & e )
+        {
+            BOSE_ERROR( s_logger, "Error setting FrontDoor mute" );
+        };
+        auto respFunc = [ this ]( SoundTouchInterface::volume v )
+        {
+            BOSE_INFO( s_logger, "Volume set to %d, mute set to %d", v.value(), v.muted() );
+        };
+
+        AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
+        AsyncCallback<EndPointsError::Error> errCb( errFunc, m_ProductTask );
+
+        SoundTouchInterface::volume pbVolume;
+        pbVolume.set_muted( muteStateValue );
+
+        BOSE_VERBOSE( s_logger, "Setting FrontDoor mute to %d", pbVolume.muted() );
+        m_ProductController.GetFrontDoorClient()->SendPut<SoundTouchInterface::volume, EndPointsError::Error>(
+            ProductApp::FRONTDOOR_AUDIO_VOLUME, pbVolume, respFunc, errCb );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// This command tests changing the audio source on the device.
