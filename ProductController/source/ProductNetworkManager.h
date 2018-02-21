@@ -86,6 +86,13 @@ public:
         return m_WifiProfileCount;
     }
 
+    void ClearWifiProfileCount()
+    {
+        m_WifiProfileCount = 0;
+    }
+
+    void GetWiFiProfiles();
+
 private:
 
     //////////////////////////////////////////////////////////////////////////////////////////////

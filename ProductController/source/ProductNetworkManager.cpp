@@ -551,6 +551,24 @@ void ProductNetworkManager::Stop( )
     return;
 }
 
+void ProductNetworkManager::GetWiFiProfiles()
+{
+    AsyncCallback< NetManager::Protobuf::WiFiProfiles >
+    CallbackForWiFiProfiles( std::bind( &ProductNetworkManager::HandleWiFiProfiles,
+                                        this,
+                                        std::placeholders::_1 ),
+                             m_ProductTask );
+
+    auto errorCallback = []( const EndPointsError::Error & error )
+    {
+        BOSE_ERROR( s_logger, "%s: Error = (%d-%d) %s", __func__, error.code(), error.subcode(), error.message().c_str() );
+    };
+    AsyncCallback<EndPointsError::Error> errCb( errorCallback, m_ProductTask );
+
+    m_FrontDoorClient->SendGet<NetManager::Protobuf::WiFiProfiles, EndPointsError::Error>(
+        FRONTDOOR_NETWORK_WIFI_PROFILE, CallbackForWiFiProfiles, errCb );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
