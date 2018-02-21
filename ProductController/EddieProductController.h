@@ -40,6 +40,7 @@
 #include "ProductControllerStatePlayingSelectedSilent.h"
 #include "ProductControllerStatePlayingSelectedNotSilent.h"
 #include "ProductControllerStatePlayingSelectedSetup.h"
+#include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
 #include "ProductControllerStatePlayingSelectedSetupNetwork.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
@@ -129,6 +130,7 @@ public:
         return false;
     }
 
+
     std::string const& GetProductType() const override;
     std::string const& GetProductModel() const override;
     std::string GetProductColor() const override;
@@ -136,6 +138,13 @@ public:
     std::string const& GetProductDescription() const override;
     std::string const& GetDefaultProductName() const override;
     BLESetupService::VariantId GetVariantId() const override;
+
+    void SetWifiProfileCount( uint32_t count ) override
+    {
+        m_wifiProfilesCount = count;
+    }
+
+    void RequestWiFiProfileStatus() override;
 
 private:
     /// Disable copies
@@ -387,22 +396,23 @@ private:
     ProductControllerStateNetworkStandbyNotConfigured   m_ProductControllerStateNetworkNotConfigured;
     ProductControllerStateFactoryDefault                    m_ProductControllerStateFactoryDefault;
 
-    ProductControllerStatePlayingDeselected                 m_ProductControllerStatePlayingDeselected;
-    ProductControllerStatePlayingSelected                   m_ProductControllerStatePlayingSelected;
-    ProductControllerStatePlayingSelectedSilent             m_ProductControllerStatePlayingSelectedSilent;
-    ProductControllerStatePlayingSelectedNotSilent          m_ProductControllerStatePlayingSelectedNotSilent;
-    ProductControllerStatePlayingSelectedSetup              m_ProductControllerStatePlayingSelectedSetup;
-    ProductControllerStatePlayingSelectedSetupNetwork       m_ProductControllerStatePlayingSelectedSetupNetwork;
-    ProductControllerStatePlayingSelectedSetupOther         m_ProductControllerStatePlayingSelectedSetupOther;
-    ProductControllerStatePlayingSelectedSetupExiting       m_ProductControllerStatePlayingSelectedSetupExiting;
-    ProductControllerStateStoppingStreams                   m_ProductControllerStateStoppingStreams;
-    ProductControllerStatePlayableTransition                m_ProductControllerStatePlayableTransition;
-    ProductControllerStatePlayableTransitionInternal        m_ProductControllerStatePlayableTransitionInternal;
-    ProductControllerStatePlayableTransitionIdle            m_ProductControllerStatePlayableTransitionIdle;
-    ProductControllerStatePlayableTransitionNetworkStandby  m_ProductControllerStatePlayableTransitionNetworkStandby;
-    ProductControllerStateSoftwareUpdateTransition          m_ProductControllerStateSoftwareUpdateTransition;
-    ProductControllerStatePlayingTransition                 m_ProductControllerStatePlayingTransition;
-    ProductControllerStatePlayingTransitionSelected         m_ProductControllerStatePlayingTransitionSelected;
+    ProductControllerStatePlayingDeselected                         m_ProductControllerStatePlayingDeselected;
+    ProductControllerStatePlayingSelected                           m_ProductControllerStatePlayingSelected;
+    ProductControllerStatePlayingSelectedSilent                     m_ProductControllerStatePlayingSelectedSilent;
+    ProductControllerStatePlayingSelectedNotSilent                  m_ProductControllerStatePlayingSelectedNotSilent;
+    ProductControllerStatePlayingSelectedSetup                      m_ProductControllerStatePlayingSelectedSetup;
+    ProductControllerStatePlayingSelectedSetupNetwork               m_ProductControllerStatePlayingSelectedSetupNetwork;
+    ProductControllerStatePlayingSelectedSetupNetworkTransition     m_ProductControllerStatePlayingSelectedSetupNetworkTransition;
+    ProductControllerStatePlayingSelectedSetupOther                 m_ProductControllerStatePlayingSelectedSetupOther;
+    ProductControllerStatePlayingSelectedSetupExiting               m_ProductControllerStatePlayingSelectedSetupExiting;
+    ProductControllerStateStoppingStreams                           m_ProductControllerStateStoppingStreams;
+    ProductControllerStatePlayableTransition                        m_ProductControllerStatePlayableTransition;
+    ProductControllerStatePlayableTransitionInternal                m_ProductControllerStatePlayableTransitionInternal;
+    ProductControllerStatePlayableTransitionIdle                    m_ProductControllerStatePlayableTransitionIdle;
+    ProductControllerStatePlayableTransitionNetworkStandby          m_ProductControllerStatePlayableTransitionNetworkStandby;
+    ProductControllerStateSoftwareUpdateTransition                  m_ProductControllerStateSoftwareUpdateTransition;
+    ProductControllerStatePlayingTransition                         m_ProductControllerStatePlayingTransition;
+    ProductControllerStatePlayingTransitionSelected                 m_ProductControllerStatePlayingTransitionSelected;
 
     /// Key Handler
     KeyHandlerUtil::KeyHandler                  m_KeyHandler;
