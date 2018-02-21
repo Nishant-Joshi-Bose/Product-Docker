@@ -77,7 +77,7 @@ void CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleStateSta
 {
     BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
 
-    unsigned int startPairingAction = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_LPM_PAIR_SPEAKERS );
+    auto startPairingAction = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_LPM_PAIR_SPEAKERS );
 
     GetCustomProductController( ).GetIntentHandler( ).Handle( startPairingAction );
 }
@@ -130,7 +130,7 @@ void CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleStateExi
 
     if( m_stopPairingOnExit )
     {
-        unsigned int stopPairingAction = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_STOP_PAIR_SPEAKERS );
+        auto stopPairingAction = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_STOP_PAIR_SPEAKERS );
 
         GetCustomProductController( ).GetIntentHandler( ).Handle( stopPairingAction );
     }

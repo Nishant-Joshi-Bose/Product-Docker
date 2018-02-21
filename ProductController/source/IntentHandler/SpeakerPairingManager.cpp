@@ -4,6 +4,7 @@
 ///
 /// @brief     This source code file contains functionality to implement an intent manager class for
 ///            managing the wireless accessories, including pairing and active speaker control.
+///            Wiki here : https://wiki.bose.com/display/A4V/PC+FD+Accessory+Pairing
 ///
 /// @author    Derek Richardson
 ///
