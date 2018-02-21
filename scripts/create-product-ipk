@@ -186,6 +186,9 @@ fi
 cd "$opt_dir"/lib || exit
 rm -f *.a
 
+# Workaround for CASTLE-9311: "libuuid.so missing from Riviera-HSP 2.4"
+cp "$riviera_toolchain_dir/sdk/sysroots/aarch64-oe-linux/lib/libuuid.so.1" "$opt_dir"/lib || exit
+
 PackageName=SoundTouch
 
 package_version=$(make-version-string "$version_json" "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}") || exit
