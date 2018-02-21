@@ -63,7 +63,7 @@ CustomProductControllerStatePlayingSelectedAccessoryPairing( ProductControllerHs
                                                              const std::string&          name )
 
     : ProductControllerState( hsm, pSuperState, stateId, name ),
-      m_timer( APTimer::Create( productController.GetTask( ), "AccessoryPairingTimer" ) )
+      m_stopPairingOnExit( true )
 {
     BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
 }
@@ -77,21 +77,9 @@ void CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleStateSta
 {
     BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
 
-    unsigned int startPairingAction = static_cast< unsigned int >( Action::ACTION_PAIR_SPEAKERS );
+    unsigned int startPairingAction = static_cast< unsigned int >( Action::ACTION_LPM_PAIR_SPEAKERS );
 
     GetCustomProductController( ).GetIntentHandler( ).Handle( startPairingAction );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleTimeOut
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleTimeOut( )
-{
-    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
-
-    ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -109,14 +97,6 @@ bool CustomProductControllerStatePlayingSelectedAccessoryPairing::HandlePairingS
     {
         ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED );
     }
-    else
-    {
-        m_timer->SetTimeouts( PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_START,
-                              PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY );
-
-        m_timer->Start( std::bind( &CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleTimeOut,
-                                   this ) );
-    }
 
     return true;
 }
@@ -132,6 +112,8 @@ bool CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleAudioPat
 {
     BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
 
+    m_stopPairingOnExit = false;
+
     ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED_ACCESSORY_PAIRING );
 
     return true;
@@ -146,11 +128,13 @@ void CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleStateExi
 {
     BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
 
-    m_timer->Stop( );
+    if( m_stopPairingOnExit )
+    {
+        unsigned int stopPairingAction = static_cast< unsigned int >( Action::ACTION_STOP_PAIR_SPEAKERS );
 
-    unsigned int stopPairingAction = static_cast< unsigned int >( Action::ACTION_STOP_PAIR_SPEAKERS );
-
-    GetCustomProductController( ).GetIntentHandler( ).Handle( stopPairingAction );
+        GetCustomProductController( ).GetIntentHandler( ).Handle( stopPairingAction );
+    }
+    m_stopPairingOnExit = true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
