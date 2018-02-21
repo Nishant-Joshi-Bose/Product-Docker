@@ -112,10 +112,7 @@ all-packages: package packages-gz-with-hsp update-zip-with-hsp packages-gz updat
 
 .PHONY: deploy
 deploy: graph all-packages
-ifndef RIVIERA_HSP_VERSION
-	$(error No RIVIERA_HSP_VERSION)
-endif
-	scripts/collect-deployables builds/Release builds/deploy/HSP-${RIVIERA_HSP_VERSION}
+	scripts/collect-deployables builds/Release builds/deploy
 
 .PHONY: clean
 clean:
