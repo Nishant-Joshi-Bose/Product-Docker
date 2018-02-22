@@ -69,7 +69,7 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-173+5ea5b96"
+    "selected_version": "Release/master/0.3.1-176+32ae99f"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -89,7 +89,7 @@
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@c74794b209ef5904a217646793e1bcbf3a409a6f"
+    "selected_version": "master@e8c4d26106de1555536073b2d1434944b81578ea"
   },
   {
     "name": "EddieLPM-Package",
