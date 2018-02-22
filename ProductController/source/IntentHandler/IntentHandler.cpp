@@ -122,7 +122,8 @@ void IntentHandler::Initialize( )
     /// A map is created to associate the custom speaker pairing intent manager with pair speaker key
     /// actions.
     ///
-    m_IntentManagerMap[( uint16_t )Action::ACTION_PAIR_SPEAKERS ]      = speakerPairingManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_START_PAIR_SPEAKERS ] = speakerPairingManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_LPM_PAIR_SPEAKERS ] = speakerPairingManager;
     m_IntentManagerMap[( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS ] = speakerPairingManager;
 
     ///

@@ -120,18 +120,19 @@ enum class Action
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// Custom Professor Defined Actions Valued 101 and Higher
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    ACTION_POWER              = 101,
-    ACTION_MUTE               = 114,
-    ACTION_SOUNDTOUCH         = 115,
-    ACTION_CONNECT            = 116,
-    // unused                 = 117,
-    ACTION_TV                 = 118,
-    ACTION_THUMB_UP           = 119,
-    ACTION_THUMB_DOWN         = 120,
-    ACTION_PAIR_SPEAKERS      = 124,
-    ACTION_STOP_PAIR_SPEAKERS = 200,
-    ACTION_APAPTIQ_START      = 201,
-    ACTION_APAPTIQ_CANCEL     = 202
+    ACTION_POWER               = 101,
+    ACTION_MUTE                = 114,
+    ACTION_SOUNDTOUCH          = 115,
+    ACTION_CONNECT             = 116,
+    // unused                  = 117,
+    ACTION_TV                  = 118,
+    ACTION_THUMB_UP            = 119,
+    ACTION_THUMB_DOWN          = 120,
+    ACTION_START_PAIR_SPEAKERS = 121,
+    ACTION_LPM_PAIR_SPEAKERS   = 122,
+    ACTION_STOP_PAIR_SPEAKERS  = 123,
+    ACTION_APAPTIQ_START       = 124,
+    ACTION_APAPTIQ_CANCEL      = 125
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
