@@ -81,7 +81,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@b5e2b0158e0edda00e8d1de25ab95f06b021f94d"
+    "selected_version": "master@3f0181ff63b9af123b0e25ed5856c9763e5ef01b"
   },
   {
     "name": "CastleProductUIAssets",
@@ -149,7 +149,7 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.0.1-8+9ca6495"
+    "selected_version": "Release/master/0.0.1-12+33dbc10"
   },
   {
     "name": "Webkit",
