@@ -9,6 +9,7 @@
 #include "AsyncCallback.h"
 #include "APProductFactory.h"
 #include "LpmClientFactory.h"
+#include "ProfessorProductController.h"
 #include "CustomProductAudioService.h"
 #include "ProtoToMarkup.h"
 #include "SoundTouchInterface/ContentItem.pb.h"

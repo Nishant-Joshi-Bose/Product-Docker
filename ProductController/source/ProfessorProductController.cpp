@@ -73,7 +73,7 @@
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
 #include "ProductControllerStatePlayingTransition.h"
-#include "ProductControllerStatePlayingTransitionSelected.h"
+#include "ProductControllerStatePlayingTransitionSwitch.h"
 #include "ProductControllerStateRebooting.h"
 #include "ProductControllerStateSoftwareInstall.h"
 #include "ProductControllerStateSoftwareUpdateTransition.h"
@@ -311,10 +311,10 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION );
 
-    auto* statePlayingTransitionSelected = new ProductControllerStatePlayingTransitionSelected
+    auto* statePlayingTransitionSelected = new ProductControllerStatePlayingTransitionSwitch
     ( GetHsm( ),
       statePlayingTransition,
-      PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SELECTED );
+      PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SWITCH );
 
     auto* customStatePlayingTransitionAccessoryPairing = new CustomProductControllerStatePlayingTransitionAccessoryPairing
     ( GetHsm( ),
@@ -587,6 +587,19 @@ CliClientMT& ProfessorProductController::GetCommandLineInterface( )
 std::shared_ptr< CustomProductLpmHardwareInterface >& ProfessorProductController::GetLpmHardwareInterface( )
 {
     return m_ProductLpmHardwareInterface;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetProductAudioServiceInstance
+///
+/// @return This method returns a shared pointer to the Product AudioService which interfaces with AudioPath.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::shared_ptr< CustomProductAudioService >& ProfessorProductController::GetProductAudioServiceInstance( )
+{
+    return m_ProductAudioService;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
