@@ -26,7 +26,6 @@ constexpr char kAvSyncEndPoint          [] = "/audio/avSync";
 constexpr char kModeEndPoint            [] = "/audio/mode";
 constexpr char kContentTypeEndPoint     [] = "/audio/contentType";
 constexpr char kDualMonoSelectEndPoint  [] = "/audio/dualMonoSelect";
-constexpr char kEqSelectEndPoint        [] = "/audio/eqSelect";
 
 namespace ProductApp
 {
@@ -329,35 +328,6 @@ LpmServiceMessages::AudioSettingsDualMonoMode_t CustomProductAudioService::DualM
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief Helper functions to convert eq select values from string format to enumuration required by DSP
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-LpmServiceMessages::AudioSettingsDeltaEqSelect_t CustomProductAudioService::EqSelectNameToEnum( const std::string& modeName )
-{
-    static const std::map<std::string, LpmServiceMessages::AudioSettingsDeltaEqSelect_t> map =
-    {
-        {"EQ_OFF",      AUDIOSETTINGS_DELTAEQ_NONE},
-        {"EQ_AIQ_A",    AUDIOSETTINGS_DELTAEQ_AIQ_A},
-        {"EQ_AIQ_B",    AUDIOSETTINGS_DELTAEQ_AIQ_B},
-        {"EQ_RETAIL_A", AUDIOSETTINGS_DELTAEQ_RETAIL_A},
-        {"EQ_RETAIL_B", AUDIOSETTINGS_DELTAEQ_RETAIL_B},
-        {"EQ_RETAIL_C", AUDIOSETTINGS_DELTAEQ_RETAIL_C},
-    };
-
-    auto ret = map.find( modeName );
-
-    if( ret == map.end() )
-    {
-        return AUDIOSETTINGS_DELTAEQ_NONE;
-    }
-
-    return ret->second;
-}
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   CustomProductAudioService::RegisterFrontDoorEvents
 ///
 /// @brief  On Professor, it register for put/post/get FrontDoor request for
@@ -583,31 +553,6 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                 setDualMonoSelectAction,
                                 m_FrontDoorClientIF,
                                 m_ProductTask ) );
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Endpoint /audio/eqSelect - register ProductController as handler for POST/PUT/GET requests
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    auto getEqSelectAction = [ this ]( )
-    {
-        return m_AudioSettingsMgr->GetEqSelect( );
-    };
-    auto setEqSelectAction = [ this ]( ProductPb::AudioEqSelect val )
-    {
-        bool ret = m_AudioSettingsMgr->SetEqSelect( val );
-        if( ret )
-        {
-            m_MainStreamAudioSettings.set_deltaeqselect( EqSelectNameToEnum( m_AudioSettingsMgr->GetEqSelect( ).mode() ) );
-            SendMainStreamAudioSettingsEvent();
-        }
-        return ret;
-    };
-    m_EqSelectSetting = std::unique_ptr<AudioSetting<ProductPb::AudioEqSelect>>( new AudioSetting<ProductPb::AudioEqSelect>
-                                                                                 ( kEqSelectEndPoint,
-                                                                                   getEqSelectAction,
-                                                                                   setEqSelectAction,
-                                                                                   m_FrontDoorClientIF,
-                                                                                   m_ProductTask ) );
-
 
 }
 

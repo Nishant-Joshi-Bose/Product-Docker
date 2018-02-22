@@ -39,7 +39,6 @@
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "KeyManager.h"
 #include "CustomProductControllerStates.h"
-#include "SystemEventService.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -229,12 +228,12 @@ public:
         return false;
     }
 
-    virtual bool HandleSystemEventServiceLowPowerSuspendResponse( const SystemEventMessagePb::ClientResponse& clientResponsePb )
+    virtual bool HandleSystemEventServiceLowPowerSuspendResponse( bool isSuspended )
     {
         return false;
     }
 
-    virtual bool HandleSystemEventServiceLowPowerResumeResponse( const SystemEventMessagePb::ClientResponse& clientResponsePb )
+    virtual bool HandleSystemEventServiceLowPowerResumeResponse( bool isResumed )
     {
         return false;
     }
