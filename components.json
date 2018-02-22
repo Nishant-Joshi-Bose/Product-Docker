@@ -77,7 +77,7 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-173+5ea5b96"
+    "selected_version": "Release/master/0.3.1-176+32ae99f"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -89,7 +89,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@3f0181ff63b9af123b0e25ed5856c9763e5ef01b"
+    "selected_version": "master@cbd155dd42e03239a29e6aa0f41631f037df5a30"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -105,7 +105,7 @@
   },
   {
     "name": "ProfessorLPM-Package",
-    "selected_version": "Release/trunk/0.3.7.2703915/DP2"
+    "selected_version": "Release/trunk/0.3.8.2705170/DP2"
   },
   {
     "name": "protobuf-native",
@@ -145,7 +145,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.9.41102.2693311"
+    "selected_version": "Release/Castle-Fork/0.3.10.41169.2703991"
   },
   {
     "name": "SystemEventService-qc8017_32",
