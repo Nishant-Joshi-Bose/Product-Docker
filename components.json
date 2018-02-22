@@ -45,7 +45,7 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork_Multi/2018-02-16_1521"
+    "selected_version": "Release/Castle-Fork/0.2.7-20452"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
@@ -145,7 +145,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork_APMulti/2018-02-16_1700"
+    "selected_version": "Release/Castle-Fork/0.3.9.41102.2693311"
   },
   {
     "name": "SystemEventService-qc8017_32",
