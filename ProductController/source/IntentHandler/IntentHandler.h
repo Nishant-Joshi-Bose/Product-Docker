@@ -111,7 +111,20 @@ public:
 
     static bool IsIntentSpeakerPairing( KeyHandlerUtil::ActionType_t argument )
     {
-        return ( ( argument == ( uint16_t )Action::ACTION_PAIR_SPEAKERS )  || ( argument == ( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS ) );
+        if( argument == ( uint16_t )Action::ACTION_LPM_PAIR_SPEAKERS )
+        {
+            return true;
+        }
+        if( argument == ( uint16_t )Action::ACTION_START_PAIR_SPEAKERS )
+        {
+            return true;
+        }
+        if( argument == ( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS )
+        {
+            return true;
+        }
+        return false;
+
     }
 
     static bool IsIntentPlayProductSource( KeyHandlerUtil::ActionType_t argument )
