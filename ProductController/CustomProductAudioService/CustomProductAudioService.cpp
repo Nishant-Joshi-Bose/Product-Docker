@@ -9,6 +9,7 @@
 #include "APProductFactory.h"
 #include "DPrint.h"
 #include "FrontDoorClient.h"
+#include "EddieProductController.h"
 #include "CustomProductAudioService.h"
 #include "LpmClientFactory.h"
 #include "SoundTouchInterface/ContentItem.pb.h"

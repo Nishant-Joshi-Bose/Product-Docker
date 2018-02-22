@@ -50,7 +50,7 @@
 #include "ProductControllerStatePlayableTransitionNetworkStandby.h"
 #include "ProductControllerStateSoftwareUpdateTransition.h"
 #include "ProductControllerStatePlayingTransition.h"
-#include "ProductControllerStatePlayingTransitionSelected.h"
+#include "ProductControllerStatePlayingTransitionSwitch.h"
 #include "LightBarController.h"
 #include "ConfigurationStatus.pb.h"
 #include "SoundTouchInterface/AllowSourceSelect.pb.h"
@@ -321,6 +321,16 @@ public:
         return m_LpmInterface;
     }
 
+///////////////////////////////////////////////////////////////////////////////
+/// @name   GetProductAudioServiceInstance
+/// @brief  Returns reference to ProductAudioService
+/// @return CustomProductLpmHardwareInterface&
+///////////////////////////////////////////////////////////////////////////////
+    inline std::shared_ptr< CustomProductAudioService >& GetProductAudioServiceInstance( )
+    {
+        return m_ProductAudioService;
+    }
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief Interfaces to the ProductSTSController, which implements the interactions
@@ -402,7 +412,7 @@ private:
     ProductControllerStatePlayableTransitionNetworkStandby  m_ProductControllerStatePlayableTransitionNetworkStandby;
     ProductControllerStateSoftwareUpdateTransition          m_ProductControllerStateSoftwareUpdateTransition;
     ProductControllerStatePlayingTransition                 m_ProductControllerStatePlayingTransition;
-    ProductControllerStatePlayingTransitionSelected         m_ProductControllerStatePlayingTransitionSelected;
+    ProductControllerStatePlayingTransitionSwitch           m_ProductControllerStatePlayingTransitionSwitch;
 
     /// Key Handler
     KeyHandlerUtil::KeyHandler                  m_KeyHandler;

@@ -7,12 +7,12 @@
 
 #pragma once
 #include "ProductAudioService.h"
-#include "EddieProductController.h"
 #include "CustomAudioSettingsManager.h"
 #include "ThermalMonitorTask.h"
 
 namespace ProductApp
 {
+class EddieProductController;
 class CustomProductAudioService: public ProductAudioService
 {
 public:
