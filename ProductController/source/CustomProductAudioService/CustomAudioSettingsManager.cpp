@@ -208,7 +208,7 @@ bool CustomAudioSettingsManager::SetEqSelect( const ProductPb::AudioEqSelect& eq
     BOSE_DEBUG( s_logger, __func__ );
     if( !eqSelect.has_mode() )
     {
-        BOSE_INFO( s_logger, "EqSelect doesn't contain any value" );
+        BOSE_INFO( s_logger, "EqSelect doesn't contain any value (%s)", ProtoToMarkup::ToJson( eqSelect ).c_str() );
         return false;
     }
     if( m_currentEqSelect.mode() != eqSelect.mode() )

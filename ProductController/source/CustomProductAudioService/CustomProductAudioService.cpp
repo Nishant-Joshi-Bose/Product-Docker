@@ -329,7 +329,7 @@ LpmServiceMessages::AudioSettingsDualMonoMode_t CustomProductAudioService::DualM
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief Helper functions to convert eq select values from string format to enumuration required from DSP
+/// @brief Helper functions to convert eq select values from string format to enumuration required by DSP
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 LpmServiceMessages::AudioSettingsDeltaEqSelect_t CustomProductAudioService::EqSelectNameToEnum( const std::string& modeName )
