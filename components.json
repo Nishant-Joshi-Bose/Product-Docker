@@ -89,11 +89,11 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@6b6abee798c37ccb3d0c22a4cfd8f04d6b784b97"
+    "selected_version": "master@3f0181ff63b9af123b0e25ed5856c9763e5ef01b"
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/0.3.7-164+3aa5ee0"
+    "selected_version": "Release/master/0.3.8-166+bdf45c8"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -105,7 +105,7 @@
   },
   {
     "name": "ProfessorLPM-Package",
-    "selected_version": "Release/trunk/0.3.7.2703915/DP2"
+    "selected_version": "Release/trunk/0.3.8.2705170/DP2"
   },
   {
     "name": "protobuf-native",
@@ -149,7 +149,7 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.0.1-8+9ca6495"
+    "selected_version": "Release/master/0.0.1-12+33dbc10"
   },
   {
     "name": "unittest-cpp-qc8017_32",
