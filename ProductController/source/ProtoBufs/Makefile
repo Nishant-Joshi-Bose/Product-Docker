@@ -12,7 +12,6 @@ PROTO_SOURCES = ProductMessage.proto        \
                 ProductSpeakerManager.proto \
                 AdaptIQ.proto               \
                 AudioSettings.proto         \
-                AudioEqSelect.proto         \
                 SystemSourcesProperties.proto \
                 CecMode.proto \
 
