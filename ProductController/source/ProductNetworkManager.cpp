@@ -260,6 +260,8 @@ void ProductNetworkManager::HandleEntireNetworkStatus( const NetManager::Protobu
                 auto const& networkState = networkStatus.interfaces( index ).state( );
 
                 ///
+                /// Only wired Ethernet and wireless network connections are of interest here.
+                /// Other network types as wireless access points AP for network setup are excluded.
                 /// A network is configured if it is in an up state. It is also considered to be
                 /// configured and connected if it has an IP address. Note that only the existence
                 /// of a configured or connected network is of concern, so that if another
@@ -268,7 +270,9 @@ void ProductNetworkManager::HandleEntireNetworkStatus( const NetManager::Protobu
                 /// unconfigured status. Only when there are no configured or connected network
                 /// interfaces is a unconfigured unconnected status sent to the product controller.
                 ///
-                if( networkState == NetManager::Protobuf::NetworkInterface_State::NetworkInterface_State_UP )
+                if( networkState == NetManager::Protobuf::NetworkInterface_State::NetworkInterface_State_UP
+                    and ( networkType == NetManager::Protobuf::NetworkType::WIRELESS or
+                          networkType == NetManager::Protobuf::NetworkType::WIRED_ETH ) )
                 {
                     if( networkStatus.interfaces( index ).has_ipinfo( ) and
                         networkStatus.interfaces( index ).ipinfo( ).has_ipaddress( ) )
@@ -288,10 +292,6 @@ void ProductNetworkManager::HandleEntireNetworkStatus( const NetManager::Protobu
                             else if( networkType ==  NetManager::Protobuf::NetworkType::WIRED_ETH )
                             {
                                 networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Wired );
-                            }
-                            else
-                            {
-                                networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Unknown );
                             }
 
                             SendMessage( productMessage );
@@ -317,10 +317,6 @@ void ProductNetworkManager::HandleEntireNetworkStatus( const NetManager::Protobu
                             else if( networkType ==  NetManager::Protobuf::NetworkType::WIRED_ETH )
                             {
                                 networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Wired );
-                            }
-                            else
-                            {
-                                networkData->set_networktype( ProductNetworkStatus_ProductNetworkType_Unknown );
                             }
 
                             SendMessage( productMessage );
