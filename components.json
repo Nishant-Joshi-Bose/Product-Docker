@@ -93,7 +93,7 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/0.3.7-164+3aa5ee0"
+    "selected_version": "Release/master/0.3.8-166+bdf45c8"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -149,7 +149,7 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.0.1-11+f1fe90e"
+    "selected_version": "Release/master/0.0.1-12+33dbc10"
   },
   {
     "name": "unittest-cpp-qc8017_32",

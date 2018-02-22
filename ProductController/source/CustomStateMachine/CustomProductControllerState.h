@@ -37,9 +37,9 @@
 #include "InactivityTimers.h"
 #include "ProductMessage.pb.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
+#include "SystemEventMessage.pb.h"
 #include "KeyManager.h"
 #include "CustomProductControllerStates.h"
-#include "SystemEventService.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
