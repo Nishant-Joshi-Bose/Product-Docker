@@ -36,6 +36,8 @@ public:
     const ProductPb::AudioContentType& GetContentType() const;
     bool SetDualMonoSelect( const ProductPb::AudioDualMonoSelect& DualMonoSelect );
     const ProductPb::AudioDualMonoSelect& GetDualMonoSelect() const;
+    bool SetEqSelect( const ProductPb::AudioEqSelect& EqSelect );
+    const ProductPb::AudioEqSelect& GetEqSelect() const;
 
 private:
     ////////////////////////////////////////////////////////////////////////////////////////
@@ -50,6 +52,7 @@ private:
     ProductPb::AudioMode m_currentMode;
     ProductPb::AudioContentType m_currentContentType;
     ProductPb::AudioDualMonoSelect m_currentDualMonoSelect;
+    ProductPb::AudioEqSelect m_currentEqSelect;
 
     ////////////////////////////////////////////////////////////////////////////////////////
     /// Helper functions to set contentItem sensitive audio settings
