@@ -551,7 +551,7 @@ void ProductNetworkManager::Stop( )
     return;
 }
 
-void ProductNetworkManager::GetWiFiProfiles()
+void ProductNetworkManager::PerformRequestforWiFiProfiles()
 {
     AsyncCallback< NetManager::Protobuf::WiFiProfiles >
     CallbackForWiFiProfiles( std::bind( &ProductNetworkManager::HandleWiFiProfiles,

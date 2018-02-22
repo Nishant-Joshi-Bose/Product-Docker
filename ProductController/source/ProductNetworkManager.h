@@ -91,7 +91,7 @@ public:
         m_WifiProfileCount = 0;
     }
 
-    void GetWiFiProfiles();
+    void PerformRequestforWiFiProfiles();
 
 private:
 

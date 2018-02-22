@@ -233,7 +233,7 @@ public:
 
     void ClearWifiProfileCount() override;
 
-    void GetWiFiProfiles() override;
+    void PerformRequestforWiFiProfiles() override;
 
 private:
 

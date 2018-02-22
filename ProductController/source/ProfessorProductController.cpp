@@ -1472,9 +1472,9 @@ void ProfessorProductController::ClearWifiProfileCount()
     m_ProductNetworkManager->ClearWifiProfileCount();
 }
 
-void ProfessorProductController::GetWiFiProfiles()
+void ProfessorProductController::PerformRequestforWiFiProfiles()
 {
-    m_ProductNetworkManager->GetWiFiProfiles();
+    m_ProductNetworkManager->PerformRequestforWiFiProfiles();
 }
 
 
