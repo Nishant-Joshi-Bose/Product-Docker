@@ -33,7 +33,7 @@
   },
   {
     "name": "CastleAudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork-Classic/0.2.8-20519"
+    "selected_version": "Release/Castle-Fork-Classic/0.2.9-20523"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -69,7 +69,7 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-173+5ea5b96"
+    "selected_version": "Release/master/0.3.1-176+32ae99f"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -81,7 +81,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "SelectDeselect@39c980a898f99955287adaa3b27bb36e9bbbd49d"
+    "selected_version": "SelectDeselect@0bbaef5289009097c19d997c68f87d97a7f4c7ad"
   },
   {
     "name": "CastleProductUIAssets",
@@ -89,7 +89,7 @@
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@c74794b209ef5904a217646793e1bcbf3a409a6f"
+    "selected_version": "master@e8c4d26106de1555536073b2d1434944b81578ea"
   },
   {
     "name": "EddieLPM-Package",
@@ -141,7 +141,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/IP3/0.3.9-327+522f883"
+    "selected_version": "Release/IP3/0.3.10-332+5ccb704"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",

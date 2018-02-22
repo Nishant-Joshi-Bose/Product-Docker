@@ -35,7 +35,7 @@ const std::string KEY_CONFIG_FILE = "/var/run/KeyConfiguration.json";
 EddieProductController::EddieProductController( std::string const& ProductName ):
     ProductController( ProductName ),
     m_ProductControllerStateTop( GetHsm(), nullptr ),
-    m_CustomProductControllerStateBooting( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING ),
+    m_ProductControllerStateBooting( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_BOOTING ),
     m_CustomProductControllerStateOn( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_ON ),
     m_ProductControllerStateLowPowerStandby( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY ),
     m_ProductControllerStateSwInstall( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL ),
@@ -59,6 +59,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_ProductControllerStatePlayingSelectedNotSilent( GetHsm(), &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_NOT_SILENT ),
     m_ProductControllerStatePlayingSelectedSetup( GetHsm(), &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP ),
     m_ProductControllerStatePlayingSelectedSetupNetwork( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK ),
+    m_ProductControllerStatePlayingSelectedSetupNetworkTransition( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_TRANSITION ),
     m_ProductControllerStatePlayingSelectedSetupOther( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_OTHER ),
     m_ProductControllerStatePlayingSelectedSetupExiting( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING ),
     m_ProductControllerStateStoppingStreams( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS ),
@@ -87,7 +88,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     GetHsm().AddState( "", &m_ProductControllerStateTop );
     GetHsm().AddState( "", &m_ProductControllerStateLowPowerStandby );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), &m_ProductControllerStateSwInstall );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), &m_CustomProductControllerStateBooting );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), &m_ProductControllerStateBooting );
     GetHsm().AddState( "", &m_CustomProductControllerStateOn );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), &m_ProductControllerStateCriticalError );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::REBOOTING ), &m_ProductControllerStateRebooting );
@@ -109,6 +110,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedNotSilent );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetup );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetupNetwork );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetupNetworkTransition );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetupOther );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetupExiting );
     GetHsm().AddState( "", &m_ProductControllerStateStoppingStreams );
@@ -479,6 +481,13 @@ void EddieProductController::HandleNetworkModuleReady( bool networkModuleReady )
     }
 
     m_isNetworkModuleReady = networkModuleReady;
+}
+
+void EddieProductController::PerformRequestforWiFiProfiles()
+{
+    AsyncCallback<NetManager::Protobuf::WiFiProfiles> networkWifiProfilesCb( std::bind( &EddieProductController::HandleWiFiProfileResponse ,
+                                                                             this, std::placeholders::_1 ), GetTask() );
+    m_FrontDoorClientIF->SendGet<NetManager::Protobuf::WiFiProfiles, EndPointsError::Error>( FRONTDOOR_NETWORK_WIFI_PROFILE_API, networkWifiProfilesCb, m_fdErrorCb );
 }
 
 bool EddieProductController::IsAllModuleReady() const
