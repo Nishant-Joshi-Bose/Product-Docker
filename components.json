@@ -136,10 +136,6 @@
     "selected_version": "Release/master/0.3.2-39+0fb03f2"
   },
   {
-    "name": "SASS-qc8017_32",
-    "selected_version": "Continuous/master/0.1.1-122+5bf289e"
-  },
-  {
     "name": "Shepherd-qc8017_32",
     "selected_version": "Release/master/0.3.1-58+fe7b095"
   },
@@ -161,7 +157,7 @@
   },
   {
     "name": "Webkit",
-    "selected_version": "Continuous/master/0.3.2-30+f72a09c"
+    "selected_version": "Release/master/0.3.2-28+3d92062"
   },
   {
     "name": "WiFi-Setup-Webpage",
