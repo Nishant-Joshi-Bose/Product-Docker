@@ -4,6 +4,7 @@
 ///
 /// @brief     This source code file contains functionality to implement an intent manager class for
 ///            managing the wireless accessories, including pairing and active speaker control.
+///            Wiki here : https://wiki.bose.com/display/A4V/PC+FD+Accessory+Pairing
 ///
 /// @author    Derek Richardson
 ///
@@ -42,6 +43,8 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 const std::string accessoryFrontDoorURL = "/accessories";
+constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_START = 4 * 60 * 1000;
+constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY = 0 ;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -66,8 +69,9 @@ SpeakerPairingManager::SpeakerPairingManager( NotifyTargetTaskIF&        task,
       m_ProductTask( m_CustomProductController.GetTask( ) ),
       m_ProductNotify( m_CustomProductController.GetMessageHandler( ) ),
       m_ProductLpmHardwareInterface( m_CustomProductController.GetLpmHardwareInterface( ) ),
-      m_FrontDoorClientIF( FrontDoor::FrontDoorClient::Create( "SpeakerPairingManager" ) ),
-      m_lpmConnected( false )
+      m_FrontDoorClientIF( frontDoorClient ),
+      m_lpmConnected( false ),
+      m_timer( APTimer::Create( productController.GetTask( ), "AccessoryPairingTimer" ) )
 {
     BOSE_INFO( s_logger, "%s is being constructed.", "SpeakerPairingManager" );
 
@@ -116,14 +120,24 @@ bool SpeakerPairingManager::Handle( KeyHandlerUtil::ActionType_t& action )
                __FUNCTION__,
                action );
 
-    if( action == ( uint16_t )Action::ACTION_PAIR_SPEAKERS )
+    if( action == ( uint16_t )Action::ACTION_START_PAIR_SPEAKERS )
     {
+        // This kicks off the state change to pairing
         BOSE_INFO( s_logger, "Speaker pairing is to be started." );
+        ProductMessage productMessage;
+        productMessage.mutable_accessorypairing( )->set_active( true );
+        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+    }
+    else if( action == ( uint16_t )Action::ACTION_LPM_PAIR_SPEAKERS )
+    {
+        BOSE_INFO( s_logger, "Speaker pairing is to be engaged." );
+        // This initiates the actual pairing on entry to the state
         DoPairing( );
     }
-    if( action == ( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS )
+    else if( action == ( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS )
     {
         BOSE_INFO( s_logger, "Speaker pairing is to be stopped." );
+        // Stops pairing and then exits the state
         StopPairing( );
     }
 
@@ -288,26 +302,6 @@ void SpeakerPairingManager::AccessoriesPutHandler( const ProductPb::AccessorySpe
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief SpeakerPairingManager::PairingFrontDoorRequestCallback
-///
-/// @param const Callback<ProductPb::AccessorySpeakerState>& frontDoorCB
-///
-/// @param LpmServiceMessages::IpcSpeakerPairingMode_t pair
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void SpeakerPairingManager::PairingFrontDoorRequestCallback( const Callback<ProductPb::AccessorySpeakerState>& frontDoorCB,
-                                                             LpmServiceMessages::IpcSpeakerPairingMode_t pair )
-{
-    if( pair.has_pairingenabled( ) )
-    {
-        m_accessorySpeakerState.set_pairing( pair.pairingenabled( ) );
-    }
-
-    frontDoorCB( m_accessorySpeakerState );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @brief SpeakerPairingManager::DoPairingFrontDoor
 ///
 /// @param bool pair
@@ -318,18 +312,11 @@ void SpeakerPairingManager::PairingFrontDoorRequestCallback( const Callback<Prod
 void SpeakerPairingManager::DoPairingFrontDoor( bool pair,
                                                 const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB )
 {
-    ///
-    /// @todo Need a blocking way to implement this functionality, but will be put off until IP4
-    ///       when setup is required. For now send a message to the product controller to change to
-    ///       an accessory pairing state.
-    ///
-    Callback< LpmServiceMessages::IpcSpeakerPairingMode_t >
-    doPairingCb( std::bind( &SpeakerPairingManager::PairingFrontDoorRequestCallback,
-                            this,
-                            frontDoorCB,
-                            std::placeholders::_1 ) );
-
-    m_ProductLpmHardwareInterface->SendAccessoryPairing( pair, doPairingCb );
+    ProductMessage productMessage;
+    productMessage.mutable_accessorypairing( )->set_active( pair );
+    IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+    m_accessorySpeakerState.set_pairing( pair );
+    frontDoorCB( m_accessorySpeakerState );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -575,21 +562,49 @@ void SpeakerPairingManager::RecieveAccessoryListCallback( LpmServiceMessages::Ip
 ///
 /// @brief SpeakerPairingManager::PairingCallback
 ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void SpeakerPairingManager::HandleTimeOut()
+{
+    BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s", __FUNCTION__ );
+    StopPairing( );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief SpeakerPairingManager::PairingCallback
+///
 /// @param LpmServiceMessages::IpcSpeakerPairingMode_t pair
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::PairingCallback( LpmServiceMessages::IpcSpeakerPairingMode_t pair )
 {
-    if( pair.has_pairingenabled( ) )
+    BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s with pair mode %d", __FUNCTION__, pair.pairingenabled( ) );
+
+    if( pair.pairingenabled( ) && m_accessorySpeakerState.pairing() )
     {
-        m_accessorySpeakerState.set_pairing( pair.pairingenabled( ) );
+        m_timer->SetTimeouts( PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_START,
+                              PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY );
+
+        m_timer->Start( std::bind( &SpeakerPairingManager::HandleTimeOut,
+                                   this ) );
+    }
+    else
+    {
+        m_timer->Stop( );
     }
 
-    m_FrontDoorClientIF->SendNotification( accessoryFrontDoorURL, m_accessorySpeakerState );
+    m_accessorySpeakerState.set_pairing( pair.pairingenabled( ) );
 
     ProductMessage productMessage;
     productMessage.mutable_accessorypairing( )->set_active( m_accessorySpeakerState.pairing( ) );
+
+
     IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+
+    // Need to always notify here because we need to let brussels know for UI and to rectify
+    // our white lie made earlier in DoPairingFrontDoor when the request was made where we say it
+    // was started before it does.
+    m_FrontDoorClientIF->SendNotification( accessoryFrontDoorURL, m_accessorySpeakerState );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -745,9 +760,11 @@ void SpeakerPairingManager::AccessoryDescriptionToAccessorySpeakerInfo( const Lp
         spkrInfo->set_type( AccessoryTypeToString( accDesc.type( ) ) );
     }
 
-    spkrInfo->set_available( true );
+    // If it is expected it went missing so need to show it isn't availible
+    spkrInfo->set_available( accDesc.status( ) != LpmServiceMessages::ACCESSORY_CONNECTION_EXPECTED );
 
-    if( accDesc.has_status( ) && ( accDesc.status( ) == LpmServiceMessages::ACCESSORY_CONNECTION_WIRELESS ) )
+    if( accDesc.has_status( ) && ( ( accDesc.status( ) == LpmServiceMessages::ACCESSORY_CONNECTION_WIRELESS ) ||
+                                   ( accDesc.status( ) == LpmServiceMessages::ACCESSORY_CONNECTION_EXPECTED ) ) )
     {
         spkrInfo->set_wireless( true );
     }

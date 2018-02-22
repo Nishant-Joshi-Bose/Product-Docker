@@ -25,7 +25,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.8-250+b7e7ef1"
+    "selected_version": "Release/master/0.3.9-260+a9ea8ff"
   },
   {
     "name": "BoseOPKG-native",
@@ -73,7 +73,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.5-58+9302277"
+    "selected_version": "Release/master/0.3.5-59+eb49f00"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -81,19 +81,19 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.3.5-451+10160e3"
+    "selected_version": "Release/master/0.3.8-480+1f9654a"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.3.5-451+10160e3"
+    "selected_version": "Release/master/0.3.8-480+1f9654a"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "manualsetup@8c0454ef7e941efa6b04817abc72a446e1e9a644"
+    "selected_version": "master@cbd155dd42e03239a29e6aa0f41631f037df5a30"
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/0.3.6-102+8b058cd"
+    "selected_version": "Release/master/0.3.7-164+3aa5ee0"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -105,7 +105,7 @@
   },
   {
     "name": "ProfessorLPM-Package",
-    "selected_version": "Release/trunk/0.3.6.2701955/DP2"
+    "selected_version": "Release/trunk/0.3.7.2703915/DP2"
   },
   {
     "name": "protobuf-native",
@@ -133,11 +133,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Continuous/master/0.3.2-38+0fb03f2"
-  },
-  {
-    "name": "SASS-qc8017_32",
-    "selected_version": "Continuous/master/0.1.1-122+5bf289e"
+    "selected_version": "Release/master/0.3.2-39+0fb03f2"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -145,7 +141,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/IP3/0.3.8-310+8c35f89"
+    "selected_version": "Release/IP3/0.3.9-327+522f883"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -161,7 +157,7 @@
   },
   {
     "name": "Webkit",
-    "selected_version": "Continuous/master/0.3.2-30+f72a09c"
+    "selected_version": "Release/master/0.3.2-28+3d92062"
   },
   {
     "name": "WiFi-Setup-Webpage",
