@@ -5,7 +5,7 @@
   },
   {
     "name": "bose-opkg-utils",
-    "selected_version": "master@887d0ab5d58c2aa3b6d3c0fb0c1dc31adf81e799"
+    "selected_version": "master@964c29cc453ccd3d1b28fb40bae8df11c0dc3b3c"
   },
   {
     "name": "BoseLibs-qc8017_32",
@@ -49,7 +49,7 @@
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.0.0-8+e781a16"
+    "selected_version": "Release/master/0.1.1-23+21b61da"
   },
   {
     "name": "CastleLibs-native",
@@ -65,7 +65,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.5-58+9302277"
+    "selected_version": "Release/master/0.3.5-59+eb49f00"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -85,11 +85,11 @@
   },
   {
     "name": "CastleProductUIAssets",
-    "selected_version": "master@c158e65cfaf3c9a0897998790017d2b012dad8d3"
+    "selected_version": "master@43394152e689030529a94750d56fe9cd196b885a"
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@e8c4d26106de1555536073b2d1434944b81578ea"
+    "selected_version": "master@3c0822fb1a4d3e4b08217b621badef8a4d240eda"
   },
   {
     "name": "EddieLPM-Package",
@@ -101,7 +101,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.1.1-56+508fe9a"
+    "selected_version": "Release/master/0.1.2-72+5b22962"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -133,7 +133,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/master/0.3.1-36+8a43bfa"
+    "selected_version": "Release/master/0.3.2-39+0fb03f2"
   },
   {
     "name": "Shepherd-qc8017_32",
