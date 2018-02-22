@@ -817,7 +817,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     else if( command.compare( "product test_pairing" ) == 0 )
     {
         ProductMessage productMessage;
-        productMessage.set_action( static_cast< uint32_t >( Action::ACTION_PAIR_SPEAKERS ) );
+        productMessage.set_action( static_cast< uint32_t >( Action::ACTION_START_PAIR_SPEAKERS ) );
 
         response  = "An attempt to pair with another speaker to this device will be made.";
 
