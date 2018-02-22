@@ -173,10 +173,21 @@ cp "$audiopath_dir/bin/lisa/libDspPlayback.so" "$opt_dir/bin" || exit
 "$frontdoor_dir/stage" "$opt_dir" || exit
 "$galapagosclient_dir/stage" "$opt_dir" || exit
 
+# Workaround for a bug in CastleAudioPath-qc8017_64 Release/Castle-Fork/0.2.7-20452
+if [ -e "$opt_dir/bin/libpryon.so" ]; then
+    echo "libpryon.so got installed"
+else
+    echo "oops, libpryon.so did not get installed, fixing..."
+    cp "$audiopath64_dir/bin/libpryon.so" "$opt_dir/bin/libpryon.so" || exit
+fi
+
 # ----------------------------------------------------------------------------
 
 cd "$opt_dir"/lib || exit
 rm -f *.a
+
+# Workaround for CASTLE-9311: "libuuid.so missing from Riviera-HSP 2.4"
+cp "$riviera_toolchain_dir/sdk/sysroots/aarch64-oe-linux/lib/libuuid.so.1" "$opt_dir"/lib || exit
 
 PackageName=SoundTouch
 
@@ -288,6 +299,15 @@ unstripped_tar=$unstripped_dir.tar.gz
 rm -rf "$unstripped_dir" "$unstripped_tar"
 mkdir -p "$unstripped_dir" || exit
 
+# Our standard CentOS configuration has
+# LD_LIBRARY_PATH=/usr/local/lib:/usr/lib:/lib which causes
+# ${tool64_prefix}strip to segfault.  As a workaround, unset LD_LIBRARY_PATH
+# here and hope it wasn't actually needed for anything else this script does.
+if [ "$LD_LIBRARY_PATH" ]; then
+    echo "$this: unsetting LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
+    unset LD_LIBRARY_PATH
+fi
+
 for i in "$stage"/Bose/{lib,bin}/*; do
     type=$(file --brief "$i") || exit
     case "$type" in
@@ -296,13 +316,11 @@ for i in "$stage"/Bose/{lib,bin}/*; do
             ;;
         (*", ARM aarch64, "*", not stripped" | *" 64-bit "*", not stripped")
             cp "$i" "$unstripped_dir" || exit
-# TODO: figure out why `strip` sometimes segfaults on CentOS
-            echo "Not stripping $i"
-#            # `strip` fails without an error message if the file is empty
-#            if ! "${tool64_prefix}strip" "$i"; then
-#                echo >&2 "$this: Failed to strip $i"
-#                exit 1
-#            fi
+            # `strip` fails without an error message if the file is empty
+            if ! "${tool64_prefix}strip" "$i"; then
+                echo >&2 "$this: Failed to strip $i"
+                exit 1
+            fi
             ;;
         (*", not stripped")
             cp "$i" "$unstripped_dir" || exit
