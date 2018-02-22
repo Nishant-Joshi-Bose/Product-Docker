@@ -89,7 +89,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "add_eq_select@89eb0655c3a1f7cf3ba6137d8d910da476240110"
+    "selected_version": "master@6b6abee798c37ccb3d0c22a4cfd8f04d6b784b97"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -149,7 +149,7 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.0.1-11+f1fe90e"
+    "selected_version": "Release/master/0.0.1-8+9ca6495"
   },
   {
     "name": "unittest-cpp-qc8017_32",
