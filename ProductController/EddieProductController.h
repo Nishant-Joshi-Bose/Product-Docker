@@ -144,7 +144,7 @@ public:
         m_wifiProfilesCount = 0;
     }
 
-    void GetWiFiProfiles() override;
+    void PerformRequestforWiFiProfiles() override;
 
 private:
     /// Disable copies
