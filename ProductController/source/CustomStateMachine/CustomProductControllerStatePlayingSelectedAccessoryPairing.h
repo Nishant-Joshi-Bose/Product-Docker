@@ -48,11 +48,11 @@ class CustomProductControllerStatePlayingSelectedAccessoryPairing : public Produ
 public:
 
     CustomProductControllerStatePlayingSelectedAccessoryPairing(
-            ProductControllerHsm&       hsm,
-            CHsmState*                  pSuperState,
-            ProfessorProductController& productController,
-            Hsm::STATE                  stateId,
-            const std::string&          name = "PlayingSelectedAccessoryPairing" );
+        ProductControllerHsm&       hsm,
+        CHsmState*                  pSuperState,
+        ProfessorProductController& productController,
+        Hsm::STATE                  stateId,
+        const std::string&          name = "PlayingSelectedAccessoryPairing" );
 
     ~CustomProductControllerStatePlayingSelectedAccessoryPairing( ) override
     {
@@ -66,15 +66,10 @@ public:
 
 private:
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief This method will be invoked by an expired timer, which is defined above and armed on
-    ///        a successful callback saying pairing was entered
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleTimeOut( );
 
-    APTimerPtr m_timer;
+    // When switching between selected and deselcted pairing states we do not want to stop
+    // This flag is used to signal that we should not send stop event and is cleared on exit
+    bool m_stopPairingOnExit;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
