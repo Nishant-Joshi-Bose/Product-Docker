@@ -35,7 +35,7 @@ const std::string KEY_CONFIG_FILE = "/var/run/KeyConfiguration.json";
 EddieProductController::EddieProductController( std::string const& ProductName ):
     ProductController( ProductName ),
     m_ProductControllerStateTop( GetHsm(), nullptr ),
-    m_CustomProductControllerStateBooting( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING ),
+    m_ProductControllerStateBooting( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_BOOTING ),
     m_CustomProductControllerStateOn( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_ON ),
     m_ProductControllerStateLowPowerStandby( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY ),
     m_ProductControllerStateSwInstall( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL ),
@@ -92,7 +92,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     GetHsm().AddState( "", &m_ProductControllerStateTop );
     GetHsm().AddState( "", &m_ProductControllerStateLowPowerStandby );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), &m_ProductControllerStateSwInstall );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), &m_CustomProductControllerStateBooting );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), &m_ProductControllerStateBooting );
     GetHsm().AddState( "", &m_CustomProductControllerStateOn );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), &m_ProductControllerStateCriticalError );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::REBOOTING ), &m_ProductControllerStateRebooting );
