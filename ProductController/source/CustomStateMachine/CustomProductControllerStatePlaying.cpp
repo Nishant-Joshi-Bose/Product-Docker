@@ -51,10 +51,10 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStatePlaying::CustomProductControllerStatePlaying(
-        ProductControllerHsm&       hsm,
-        CHsmState*                  pSuperState,
-        Hsm::STATE                  stateId,
-        const std::string&          name )
+    ProductControllerHsm&       hsm,
+    CHsmState*                  pSuperState,
+    Hsm::STATE                  stateId,
+    const std::string&          name )
 
     : ProductControllerStatePlaying( hsm, pSuperState, stateId, name )
 {
@@ -71,8 +71,9 @@ CustomProductControllerStatePlaying::CustomProductControllerStatePlaying(
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlaying::HandleStateEnter( )
 {
-    BOSE_INFO( s_logger, "The %s state is in %s powering CEC on.", GetName( ).c_str( ), __func__ );
+    ProductControllerStatePlaying::HandleStateEnter( );
 
+    BOSE_INFO( s_logger, "The %s state is in %s powering CEC on.", GetName( ).c_str( ), __func__ );
     GetCustomProductController( ).GetCecHelper( )->PowerOn( );
 }
 
@@ -105,8 +106,9 @@ bool CustomProductControllerStatePlaying::HandleIntentMuteControl( KeyHandlerUti
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStatePlaying::HandleStateExit( )
 {
-    BOSE_INFO( s_logger, "The %s state is in %s powering CEC off.", GetName( ).c_str( ), __func__ );
+    ProductControllerStatePlaying::HandleStateExit( );
 
+    BOSE_INFO( s_logger, "The %s state is in %s powering CEC off.", GetName( ).c_str( ), __func__ );
     GetCustomProductController( ).GetCecHelper( )->PowerOff( );
 }
 

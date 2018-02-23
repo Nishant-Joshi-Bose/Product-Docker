@@ -41,6 +41,7 @@
 #include "SystemEventMessage.pb.h"
 #include "KeyManager.h"
 #include "CustomProductControllerStates.h"
+#include "SystemEventMessage.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
