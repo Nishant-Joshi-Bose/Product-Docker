@@ -856,7 +856,7 @@ std::string const& ProfessorProductController::GetProductDescription() const
 /// @return This method returns the PassportPB::ContentItem value to be used for initializing the OOB LastContentItem
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-const PassportPB::ContentItem ProfessorProductController::GetOOBDefaultLastContentItem() const
+PassportPB::ContentItem ProfessorProductController::GetOOBDefaultLastContentItem() const
 {
     PassportPB::ContentItem item;
     item.set_source( "PRODUCT" );

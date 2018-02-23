@@ -236,7 +236,7 @@ public:
 
     void PerformRequestforWiFiProfiles() override;
 
-    const PassportPB::ContentItem GetOOBDefaultLastContentItem() const override;
+    PassportPB::ContentItem GetOOBDefaultLastContentItem() const override;
 
     bool CanPersistAsLastContentItem( const SoundTouchInterface::ContentItem &ci ) const override;
 
