@@ -41,6 +41,7 @@
 #include "SystemEventMessage.pb.h"
 #include "KeyManager.h"
 #include "CustomProductControllerStates.h"
+#include "SystemEventMessage.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -268,6 +269,11 @@ public:
     }
 
     virtual bool HandleNetworkConfigurationStatus( )
+    {
+        return false;
+    }
+
+    virtual bool HandleNetworkOperationMode( NetManager::Protobuf::OperationalMode mode )
     {
         return false;
     }
