@@ -18,6 +18,8 @@ using namespace std::placeholders;
 static DPrint s_logger( "CustomProductAudioService" );
 
 constexpr char kBassEndPoint            [] = "/audio/bass";
+constexpr char kCenterEndPoint          [] = "/audio/center";
+constexpr char kModeEndPoint            [] = "/audio/mode";
 constexpr char kTrebleEndPoint          [] = "/audio/treble";
 
 namespace ProductApp
@@ -98,6 +100,61 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                                                                            m_ProductTask ) );
 
     //
+    // Endpoint /audio/center - register ProductController as handler for POST/PUT/GET requests
+    //
+    if( m_audioSettingsMgr->IsCenterLevelTestEnabled() ) // Future feature. Disabled Frontdoor by default.
+    {
+        auto getCenterAction = [this]( )
+        {
+            return m_audioSettingsMgr->GetCenter( );
+        };
+        auto setCenterAction = [this]( ProductPb::AudioCenterLevel val )
+        {
+            bool changeOccurred = m_audioSettingsMgr->SetCenter( val );
+            if( changeOccurred )
+            {
+                m_mainStreamAudioSettings.set_centerlevel( m_audioSettingsMgr->GetCenter( ).value() );
+                SendMainStreamAudioSettingsEvent();
+            }
+            return changeOccurred;
+        };
+        m_audioCenterSetting = std::unique_ptr<AudioSetting<ProductPb::AudioCenterLevel>>( new AudioSetting<ProductPb::AudioCenterLevel>
+                               ( kCenterEndPoint,
+                                 getCenterAction,
+                                 setCenterAction,
+                                 m_FrontDoorClientIF,
+                                 m_ProductTask ) );
+    }
+
+    //
+    // Endpoint /audio/mode - register ProductController as handler for POST/PUT/GET requests
+    //
+    if( m_audioSettingsMgr->IsModeTestEnabled() ) // Future feature. Disabled Frontdoor by default.
+    {
+        auto getModeAction = [ this ]( )
+        {
+            return m_audioSettingsMgr->GetMode( );
+        };
+        auto setModeAction = [ this ]( ProductPb::AudioMode val )
+        {
+            bool changeOccurred = m_audioSettingsMgr->SetMode( val );
+            if( changeOccurred )
+            {
+                bool dialogModeEnabled = m_audioSettingsMgr->GetMode( ).value() == "dialog";
+                m_mainStreamAudioSettings.set_dialogmode( dialogModeEnabled );
+                SendMainStreamAudioSettingsEvent();
+            }
+            return changeOccurred;
+        };
+        m_audioModeSetting = std::unique_ptr<AudioSetting<ProductPb::AudioMode>>( new AudioSetting<ProductPb::AudioMode>
+                                                                                  ( kModeEndPoint,
+                                                                                    getModeAction,
+                                                                                    setModeAction,
+                                                                                    m_FrontDoorClientIF,
+                                                                                    m_ProductTask ) );
+    }
+
+    //
     // Endpoint /audio/treble - register ProductController as handler for POST/PUT/GET requests
     //
     auto getTrebleAction = [ this ]( )
@@ -156,7 +213,7 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
         BOSE_ERROR( s_logger, "ContentItem string from APProduct doesn't contain \"source\" or \"sourceAccount\" field" );
     }
 
-    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_mainStreamAudioSettings, false );
+    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_mainStreamAudioSettings, true );
     // DMR Using empty "input route" (second param) since Eddie does not use this.
     cb.Send( mainStreamAudioSettings, "" );
 }
@@ -166,11 +223,11 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
 void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 {
     BOSE_DEBUG( s_logger, __func__ );
-    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_mainStreamAudioSettings, false );
+    std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_mainStreamAudioSettings, true );
     m_APPointer->SetMainStreamAudioSettings( mainStreamAudioSettings );
 
     // DMR Print out the JSON being sent to AP.
-    // BOSE_DEBUG( s_logger, "%s", mainStreamAudioSettings.c_str() );
+    BOSE_INFO( s_logger, "!!! %s", mainStreamAudioSettings.c_str() );
 }
 
 /*!
@@ -185,8 +242,21 @@ void CustomProductAudioService::FetchLatestAudioSettings( )
  */
 void CustomProductAudioService::ThermalDataReceivedCb( const IpcSystemTemperatureData_t& data )
 {
-    std::string tempDataString = ProtoToMarkup::ToJson( data, false );
-    *( m_mainStreamAudioSettings.mutable_temperaturedata() ) = data;
+    int16_t ampTemp = INT16_MAX;
+    IpcThermalType_t thermalValueType;
+
+    // DMR Data comes in as callback argument but it is easier to us the accessor
+    // since it does all the safety checks.
+    m_thermalTask.GetThermalValue( ampTemp, thermalValueType, IPC_THERMAL_LOCATION_CONSOLE_INTERNAL_AMP );
+
+    if( m_mainStreamAudioSettings.thermaldata_size() == 0 )
+    {
+        m_mainStreamAudioSettings.add_thermaldata( ampTemp );
+    }
+    else
+    {
+        m_mainStreamAudioSettings.set_thermaldata( 0, ampTemp );
+    }
 
     SendMainStreamAudioSettingsEvent();
 }

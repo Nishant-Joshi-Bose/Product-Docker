@@ -10,6 +10,7 @@
 #include "EddieProductController.h"
 #include "CustomAudioSettingsManager.h"
 #include "ThermalMonitorTask.h"
+#include "EddieAudioSettings.pb.h"
 
 namespace ProductApp
 {
@@ -64,18 +65,20 @@ private:
 
 
     //! Holds information that APProduct would like to know, including audio settings and thermal data.
-    LpmServiceMessages::AudioSettings_t             m_mainStreamAudioSettings;
+    EddieAudioSettings_t m_mainStreamAudioSettings;
 
     //! Manages and persists audio settings.
-    std::unique_ptr<CustomAudioSettingsManager>     m_audioSettingsMgr;
+    std::unique_ptr<CustomAudioSettingsManager> m_audioSettingsMgr;
 
     //! Task used for polling LPM for thermal data.
-    ThermalMonitorTask                              m_thermalTask;
+    ThermalMonitorTask m_thermalTask;
 
     //
     // Front Door handlers
     //
     std::unique_ptr<AudioSetting<ProductPb::AudioBassLevel>>        m_audioBassSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioCenterLevel>>      m_audioCenterSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioMode>>             m_audioModeSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioTrebleLevel>>      m_audioTrebleSetting;
 
 
