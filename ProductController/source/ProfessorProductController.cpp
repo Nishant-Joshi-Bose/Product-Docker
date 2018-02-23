@@ -851,6 +851,50 @@ std::string const& ProfessorProductController::GetProductDescription() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   ProfessorProductController::GetOOBDefaultLastContentItem
+///
+/// @return This method returns the PassportPB::ContentItem value to be used for initializing the OOB LastContentItem
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+const PassportPB::ContentItem ProfessorProductController::GetOOBDefaultLastContentItem() const
+{
+    PassportPB::ContentItem item;
+    item.set_source( "PRODUCT" );
+    item.set_sourceaccount( "TV" );
+    return item;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::CanPersistAsLastContentItem
+///
+/// @param  const SoundTouchInterface::ContentItem &ci
+///
+/// @brief  Determines if the content item can be persisted in m_lastContentItem
+///
+/// @return Returns true or false
+///////////////////////////////////////////////////////////////////////////////
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProfessorProductController::CanPersistAsLastContentItem( const SoundTouchInterface::ContentItem &ci ) const
+{
+    bool retVal = true;
+    if( !ProductController::CanPersistAsLastContentItem( ci ) )
+    {
+        retVal = false;
+    }
+    if( ci.source() == "PRODUCT" && ( ci.sourceaccount() == "ADAPTiQ" ) )
+    {
+        retVal = false;
+    }
+
+    BOSE_VERBOSE( s_logger, "ContentItem %s can%s persist in Professor as LastContentItem",
+                  ProtoToMarkup::ToJson( ci, false ).c_str( ), retVal ? "" : "not" );
+    return retVal;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::SetupProductSTSConntroller
 ///
 /// @brief  This method is called to perform the needed initialization of the ProductSTSController,

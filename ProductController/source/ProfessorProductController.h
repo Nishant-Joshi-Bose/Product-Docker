@@ -210,6 +210,7 @@ public:
 
     BLESetupService::ProductId GetProductId() const override
     {
+        // @TODO PGC-788
         return BLESetupService::ProductId::PROFESSOR;
     }
 
@@ -234,6 +235,10 @@ public:
     void ClearWifiProfileCount() override;
 
     void PerformRequestforWiFiProfiles() override;
+
+    const PassportPB::ContentItem GetOOBDefaultLastContentItem() const override;
+
+    bool CanPersistAsLastContentItem( const SoundTouchInterface::ContentItem &ci ) const override;
 
 private:
 
