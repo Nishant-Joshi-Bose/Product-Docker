@@ -66,7 +66,7 @@ echo ${ROTATION}           > ${FB_FILE_SYS_DIR}/send_command
 
 if is-development; then
     echo "Development mode splash screen..."
-    show_splash ../lcd/bose.jpg ${IP_ADDRESS} ${EDDIE_VERSION} ## will exit with -1 to avoid the screen to be blank by the directfb destructor
+    show_splash ../lcd/bose.jpg "${IP_ADDRESS}" "${EDDIE_VERSION}" "DEVELOPMENT"
 else
     echo "Not development mode so no splash screen"
 fi
