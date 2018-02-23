@@ -36,6 +36,7 @@
 #include "HsmState.h"
 #include "InactivityTimers.h"
 #include "ProductMessage.pb.h"
+#include "NetManager.pb.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "SystemEventMessage.pb.h"
 #include "KeyManager.h"
@@ -271,6 +272,11 @@ public:
         return false;
     }
 
+    virtual bool HandleNetworkOperationMode( NetManager::Protobuf::OperationalMode mode )
+    {
+        return false;
+    }
+
     virtual bool HandleLPMPowerStatusColdBoot( )
     {
         return false;
@@ -374,6 +380,11 @@ public:
     inline static void SetProductController( ProductController* productController )
     {
         s_productController = productController;
+    }
+
+    virtual bool HandleNetworkOperationalMode( NetManager::Protobuf::OperationalMode mode )
+    {
+        return false;
     }
 
 protected:
