@@ -1345,22 +1345,6 @@ void ProfessorProductController::Wait( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::End
-///
-/// @brief  This method is called when the Product Controller process ends. It is used to set the
-///         running member to false, which will invoke the Wait method idle loop to exit and perform
-///         any necessary clean up.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::End( )
-{
-    BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
-
-    m_Running = false;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProfessorProductController::GetDefaultProductName
 ///
 /// @brief  This method is to get the default product name by reading from mac address.
@@ -1465,16 +1449,47 @@ void ProfessorProductController::SendInitialCapsData()
         m_errorCb );
 }
 
-void ProfessorProductController::ClearWifiProfileCount()
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::ClearWifiProfileCount
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::ClearWifiProfileCount( )
 {
-    m_ProductNetworkManager->ClearWifiProfileCount();
+    if( m_ProductNetworkManager != nullptr )
+    {
+        m_ProductNetworkManager->ClearWifiProfileCount( );
+    }
 }
 
-void ProfessorProductController::PerformRequestforWiFiProfiles()
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::PerformRequestforWiFiProfiles
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::PerformRequestforWiFiProfiles( )
 {
-    m_ProductNetworkManager->PerformRequestforWiFiProfiles();
+    if( m_ProductNetworkManager != nullptr )
+    {
+        m_ProductNetworkManager->PerformRequestforWiFiProfiles( );
+    }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::End
+///
+/// @brief  This method is called when the Product Controller process ends. It is used to set the
+///         running member to false, which will invoke the Wait method idle loop to exit and perform
+///         any necessary clean up.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::End( )
+{
+    BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
+
+    m_Running = false;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
