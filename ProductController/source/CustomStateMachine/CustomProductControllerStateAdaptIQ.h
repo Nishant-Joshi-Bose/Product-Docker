@@ -65,7 +65,7 @@ public:
                                          CHsmState*                  pSuperState,
                                          ProfessorProductController& productController,
                                          Hsm::STATE                  stateId,
-                                         const std::string&          name    = "CustomProductControllerStateAdaptIQ" );
+                                         const std::string&          name    = "AdaptIQ" );
 
     ~CustomProductControllerStateAdaptIQ( ) override
     {

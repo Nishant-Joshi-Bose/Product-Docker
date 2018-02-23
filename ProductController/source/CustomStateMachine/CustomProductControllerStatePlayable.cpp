@@ -56,33 +56,22 @@ CustomProductControllerStatePlayable::CustomProductControllerStatePlayable( Prod
                                                                             const std::string&    name )
     : ProductControllerStatePlayable( hsm, pSuperState, stateId, name )
 {
-    BOSE_INFO( s_logger, "%s is being constructed.", GetName( ).c_str( ) );
+    BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStatePlayable::HandleIntentUserPower
-///
-/// @param  KeyHandlerUtil::ActionType_t action
+/// @brief  CustomProductControllerStatePlayable::HandleIntentSpeakerPairing
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the event
 ///         and no futher processing will be required by any of its superstates.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayable::HandleIntentUserPower( KeyHandlerUtil::ActionType_t action )
+bool CustomProductControllerStatePlayable::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "%s in %s is handling key action %d.", GetName( ).c_str( ), __FUNCTION__, action );
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
 
-    if( GetCustomProductController( ).GetCurrentSource( ) == SOURCE_TV )
-    {
-        unsigned int startTvPlayback = static_cast< unsigned int >( Action::ACTION_TV );
-        GetCustomProductController( ).GetIntentHandler( ).Handle( startTvPlayback );
-    }
-    else if( GetCustomProductController( ).GetCurrentSource( ) == SOURCE_SOUNDTOUCH )
-    {
-        unsigned int startSoundTouchPlayback = static_cast< unsigned int >( Action::ACTION_SOUNDTOUCH );
-        GetCustomProductController( ).GetIntentHandler( ).Handle( startSoundTouchPlayback );
-    }
+    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_ACCESSORY_PAIRING );
 
     return true;
 }

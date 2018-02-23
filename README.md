@@ -3,11 +3,19 @@ SoundTouch Professor
 
 This repo contains the source code and tools specific to the SoundTouch Professor product.
 
-##### Table of Contents  
-[Getting Started](#start)  
-[Reflash Riviera-HSP](#hsp)  
-[Update LPM via APQ using IPK](#lpm)   
-[More...](#more)  
+For updates about new releases of this software, you can subscribe [here](https://platform.bose.io/dev/svc-embedded-releases/stable-test/web-server/).
+
+For more information, see the [Professor wiki page](https://wiki.bose.com/display/A4V/Professor).
+
+![Professor](professor.png)
+
+##### Table of Contents
+[Getting Started](#start)
+[Compiling Professor](#compile)
+[Installing Professor](#install)
+[Reflash Riviera-HSP](#hsp)
+[Update LPM via APQ using IPK](#lpm)
+[More...](#more)
 
 <a name="start"/>
 
@@ -21,21 +29,57 @@ $ PATH=$PATH:/scratch/CastleTools/bin   # add this to your ~/.profile, ~/.bash_p
 $ git clone git@github.com:BoseCorp/Professor.git
 ```
 
-Build the .ipk package file containing the SoundTouch software (for 0.3 Riviera based hardware set HSP version to 2.0).
+<a name="compile">
+
+### Compiling Professor
+
+How you compile the software will depend largely on how you plan to flash it to the device. Several options are listed below.
+
+#### 'make package' for Product Flash Script
+
+Build the Professor package to install using the product_flash script.
 ```shell session
 $ cd /scratch/Professor
-$ env RIVIERA_HSP_VERSION=1.3 make
+$ make package
 ```
 
-Set Riviera version.
-For old hardware:
+
+#### 'make update-zip' for Bonjour Update
+
+Build the Professor product_update.zip to install over ethernet.
 ```shell session
-env RIVIERA_HSP_VERSION=1.3 make
+$ cd /scratch/Professor
+$ make packages-gz update-zip
 ```
-For new hardware:
+
+You can also build an update zip file that includes the Riviera HSP.
 ```shell session
-env RIVIERA_HSP_VERSION=2.0 make
+$ cd /scratch/Professor
+$ make packages-gz-with-hsp update-zip-with-hsp
 ```
+
+
+#### 'make' ipk for OPKG installation
+
+Build the Professor product.ipk to install using the putipk_ota script.
+```shell session
+$ cd /scratch/Professor
+$ make
+```
+
+<a name="compile">
+
+### Installing Professor
+
+There are a number of different ways in which you can flash the software to your device, several of which are listed below.
+Regardless of the method you used, you can verify that your update was successful by running the following command to check the version:
+
+```shell session
+adb shell LD_LIBRARY_PATH=/opt/Bose/update/opkg /opt/Bose/update/opkg/opkg -f /mnt/nv/update/opkg.conf --volatile-cache  --add-arch armv7a-vfp-neon:100  list
+```
+
+
+#### Product Flash Script
 
 Make sure your Professor unit is accessible via adb.
 ```shell session
@@ -47,26 +91,81 @@ List of devices attached
 $
 ```
 
-Install the .ipk file you built.
+Use the product_flash script to install the package you compiled above.
 ```shell session
-$ adb shell /opt/Bose/bin/stop      # generally it's okay if this fails
-$ adb shell /opt/Bose/bin/rw        # make the file systems writeable
-$ adb shell opkg remove SoundTouch  # this too may fail
-$ adb push builds/Release/product.ipk /tmp/product.ipk
-$ adb shell opkg install -d bose /tmp/product.ipk
-$ adb shell reboot
-```
-(But see `putipk` below for a simpler way.)
-
-You'll get a notification if your Riviera unit is running old Riviera software:
-```shell session
-...
-Built for Riviera-HSP: 0.5-9-geee2c72
-Installed Riviera-HSP: 0.5-7-g856bf73
-...
+$ cd builds/Release/package
+$ sudo ./product_flash product.tar fastboot [option(s)]
 ```
 
-To update the HSP, see the next section.
+There are several options available in the product_flash script, depending on what you wish to update:
+```shell
+	-h 		# Show the help message for this script
+	-u 		# Flash only the Bose Partition
+	-a 		# Flash all partitions (except usrfs, persist, bose-persist and partition table)
+	-f 		# Erase All partitions, including Partition table, and install all IPKs
+	-e 		# Erase only bose-persist partition
+	-l 		# Perform LPM update using IPK
+```
+
+
+#### Bonjour
+
+Power on the device and attach an ethernet cable. Once the device is booted, use adb to query the ip address of the eth0 network interface:
+```shell session
+$ ifconfig
+eth0      Link encap:Ethernet  HWaddr 04:B0:5E:56:76:FC
+          inet addr:10.60.5.51  Bcast:10.60.46.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:8922 errors:0 dropped:155 overruns:0 frame:20241
+          TX packets:40851 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:1617211 (1.5 MiB)  TX bytes:4253570 (4.0 MiB)
+          Interrupt:137
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:91517 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:91517 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:31124620 (29.6 MiB)  TX bytes:31124620 (29.6 MiB)
+```
+
+Connect to your device through a web browser by going to http://<inet_addr>/update.html replacing <inet_addr> with the ip address of the eth0 interface listed in `ifconfig`
+
+The following page should load:
+![Choose File](choose_file.png)
+
+Click the "Choose File" button and select an update zip file, which can be found in any Electric Commander build (e.g., \\\solid\softlib\verisoft\Professor\Release\master\0.3.2-891+2fe56de\HSP-2.1\product_update.zip) or built using the instructions above. 
+
+After the transfer is completed, you should see a page that looks like the following:
+![Update Finished](update_finished.png)
+
+Your device will reboot twice, and, after it has finished, your update should be complete.
+
+
+#### Putipk_ota Script
+
+Make sure your Professor unit is accessible via adb.
+```shell session
+$ sudo adb start-server             # must be done as root. typically once per boot of the build host
+$ adb devices
+List of devices attached
+5166240   device
+
+$
+```
+
+Use the putipk_ota script to install the .ipk package you built.
+```shell session
+$ sudo ./scripts/putipk_ota builds/Release/product.ipk
+```
+
+Alternatively, you can use the putipk_ota script without specifying a file, and it will rebuild the .ipk for you.
+```shell session
+$ sudo ./scripts/putipk_ota
+```
 
 <a name="hsp"/>
 
@@ -100,18 +199,12 @@ $ fastboot.sh                       # run the fastboot script
 To update LPM from APQ:
 ```shell session
 $ cd /scratch/Professor
-$ ./scripts/putlpm  # Install LPM ipk from the latest Continuous master build
-$ ./scripts/putlpm ./builds/Release/lpm_updater.ipk # Install LPM ipk generated by make package
-$ ./scripts/putlpm <path-to-lpm-ipk> # Install a specific LPM ipk  
+$ ./scripts/putlpm  # Makes lpm_updater.ipk based on package in components.json and installs
+$ ./scripts/putlpm ./builds/Release/lpm_updater.ipk # Install LPM ipk generated by `make package`
+$ ./scripts/putlpm <path-to-lpm-ipk> # Install a specific LPM ipk
 ```
 
 ### More...
-
-To rebuild the .ipk file and install via adb in one step:
-
-```shell session
-$ ./scripts/putipk jobs=4
-```
 
 Access the APQ console via the tap cable.
 

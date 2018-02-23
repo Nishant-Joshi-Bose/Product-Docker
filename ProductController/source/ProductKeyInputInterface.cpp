@@ -30,6 +30,7 @@
 #include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProductKeyInputInterface.h"
+#include "SystemUtils.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -43,6 +44,7 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 constexpr const char* KEY_CONFIGURATION_FILE_NAME = "/opt/Bose/etc/KeyConfiguration.json";
+constexpr const char* BLAST_CONFIGURATION_FILE_NAME = "/opt/Bose/etc/BlastConfiguration.json";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -59,8 +61,7 @@ ProductKeyInputInterface::ProductKeyInputInterface( ProfessorProductController& 
     /// Product Controller Interface
     ///
     m_ProductTask( ProductController.GetTask( ) ),
-    m_ProductNotify( ProductController.GetMessageHandler( ) ),
-    m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
+    m_ProductNotify( ProductController.GetMessageHandler( ) ), m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
     ///
     /// Instantiation of the Key Handler
     ///
@@ -73,7 +74,6 @@ ProductKeyInputInterface::ProductKeyInputInterface( ProfessorProductController& 
     m_connected( false ),
     m_running( false )
 {
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,6 +99,8 @@ void ProductKeyInputInterface::Run( )
                                           std::placeholders::_1 ) );
 
     m_ProductLpmHardwareInterface->RegisterForLpmConnection( callback );
+
+    InitializeQSS( );
 
     m_running = true;
 }
@@ -231,12 +233,44 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
         return;
     }
 
-    ///
-    /// Feed the key into the key handler.
-    ///
-    m_KeyHandler.HandleKeys( keyEvent.keyorigin( ),
-                             keyEvent.keystate( ),
-                             keyEvent.keyid( ) );
+#if 0
+// DON'T REMOVE; ONCE THE SOURCE API IS COMPLETE THIS WILL BE ENABLED AND COMPLETED
+    std::string testDev = "DEVICE_TYPE_TV";
+    std::string testCodeset = "T2778";
+    if( m_QSSClient->IsBlastedKey( keyEvent.keyid(), testDev ) )
+    {
+        ///
+        /// This key should be blasted
+        ///
+        QSSMSG::BoseKeyReqMessage_t req;
+
+        req.set_keyval( keyEvent.keyid() );
+        req.set_codeset( testCodeset );
+
+        if( keyEvent.keystate() ==  LpmServiceMessages::KEY_PRESSED )
+        {
+            req.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_CONTINUOUS_PRESS );
+        }
+        else
+        {
+            req.set_keyaction( QSSMSG::BoseKeyReqMessage_t::KEY_ACTION_END_PRESS );
+        }
+        BOSE_INFO( s_logger, "Blasting 0x%08x/%s (%s)", req.keyval(), req.codeset().c_str(),
+                   ( keyEvent.keystate() ==  LpmServiceMessages::KEY_PRESSED ) ? "PRESSED" : "RELEASED" );
+
+        m_QSSClient->SendKey( req );
+
+    }
+    else
+#endif
+    {
+        ///
+        /// Feed the key into the key handler.
+        ///
+        m_KeyHandler.HandleKeys( keyEvent.keyorigin( ),
+                                 keyEvent.keystate( ),
+                                 keyEvent.keyid( ) );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -272,6 +306,25 @@ void ProductKeyInputInterface::Stop( )
     BOSE_DEBUG( s_logger, "The user interface is stopping." );
 
     m_running = false;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductKeyInputInterface::InitializeQSS
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProductKeyInputInterface::InitializeQSS( )
+{
+    m_QSSClient = A4VQuickSetServiceClientFactory::Create( "ProductKeyInputInterface", m_ProductTask );
+    if( !m_QSSClient )
+    {
+        BOSE_DIE( "Failed loading key blaster configuration file." );
+    }
+
+    m_QSSClient->LoadFilter( BLAST_CONFIGURATION_FILE_NAME );
+    m_QSSClient->Connect( []( bool connected ) {} );
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

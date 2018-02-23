@@ -63,50 +63,46 @@ CustomProductControllerStateOn::CustomProductControllerStateOn( ProductControlle
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateOn::HandleStateExit
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateOn::HandleStateExit( )
-{
-    BOSE_INFO( s_logger, "GetName( ).c_str( ) is in %s.", __FUNCTION__ );
-
-    GetProductController( ).SendAllowSourceSelectMessage( false );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief  CustomProductControllerStateOn::HandleIntentSpeakerPairing
+/// @brief  CustomProductControllerStateOn::HandleIntentPlayProductSource
 ///
 /// @param  KeyHandlerUtil::ActionType_t intent
 ///
-/// @return This method returns a true Boolean value indicating that it has handled the action.
+/// @return This method returns a true Boolean value indicating that it has handled the intent.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateOn::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )
+bool CustomProductControllerStateOn::HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent )
 {
-    BOSE_INFO( s_logger, "The %s state in %s is handling the intent %u.", GetName( ).c_str( ), __func__, intent );
-
-    ChangeState( PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
-
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief  CustomProductControllerStateOn::HandleIntentPlayback
-///
-/// @param  KeyHandlerUtil::ActionType_t intent
-///
-/// @return This method returns a true Boolean value indicating that it has handled the action.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateOn::HandleIntentPlayback( KeyHandlerUtil::ActionType_t intent )
-{
-    BOSE_INFO( s_logger, "The %s state in %s is handling the intent %u.", GetName( ).c_str( ), __func__, intent );
+    BOSE_INFO( s_logger, "The %s state in %s is handling the intent %u", GetName( ).c_str( ), __FUNCTION__, intent );
 
     GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
 
     return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateOn::HandleAdaptIQControl
+///
+/// @param  const ProductAdaptIQControl& cmd
+///
+/// @return This method returns a true Boolean value indicating that it has handled the
+///         AdaptIQControl request.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateOn::HandleAdaptIQControl( const ProductAdaptIQControl& cmd )
+{
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+
+    if( cmd.action() == ProductAdaptIQControl::Start )
+    {
+        unsigned int startAdaptIQ = static_cast< unsigned int >( Action::ACTION_APAPTIQ_START );
+
+        GetCustomProductController( ).GetIntentHandler( ).Handle( startAdaptIQ );
+
+        return true;
+    }
+
+    return false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

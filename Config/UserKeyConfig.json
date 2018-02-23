@@ -1,4 +1,4 @@
-{   
+{
     "keyTable": [
     {
         "action": "ACTION_POWER",
@@ -137,7 +137,7 @@
         "timeOutList": [200]
     },
     {
-        "action": "ACTION_VOLUME_UP_1",
+        "action": "VOLUME_UP",
         "commment": "volume up",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_VOLUME_UP"],
@@ -145,15 +145,15 @@
         "timeOutList": [0]
     },
     {
-        "action": "ACTION_VOLUME_UP_1",
+        "action": "VOLUME_UP",
         "commment": "volume up repeat",
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_UP"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "RF"],
         "timeOutList": [300, 100]
     },
     {
-        "action": "ACTION_VOLUME_DOWN_1",
+        "action": "VOLUME_DOWN",
         "commment": "volume down",
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_VOLUME_DOWN"],
@@ -161,11 +161,11 @@
         "timeOutList": [0]
     },
     {
-        "action": "ACTION_VOLUME_DOWN_1",
+        "action": "VOLUME_DOWN",
         "commment": "volume down repeat",
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_DOWN"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "RF"],
         "timeOutList": [300, 100]
     },
     {
@@ -197,7 +197,7 @@
         "commment": "mute toggle",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_MUTE"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF", "CAPSENSE"],
         "timeOutList": []
     },
     {
@@ -265,20 +265,65 @@
         "timeOutList": []
     },
     {
-        "action": "ACTION_PAIR_SPEAKERS",
+        "action": "ACTION_START_PAIR_SPEAKERS",
         "commment": "pair speakers",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_PAIR_SPKR"],
         "origin": ["IR", "TAP", "CEC", "RF"],
         "timeOutList": []
+    }
+    ],
+    "blastTable": [
+    {
+        "zone": "ZONE1",
+        "keyList": ["BOSE_RED", "BOSE_GREEN", "BOSE_YELLOW", "BOSE_BLUE"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_CBL_SAT"]
     },
     {
-        "action": "ACTION_MUTE",
-        "commment": "mute toggle",
-        "keyEvent": "PRESS",
-        "keyList": ["BOSE_MUTE"],
-        "origin": ["CAPSENSE"],
-        "timeOutList": []
+        "zone": "ZONE2",
+        "keyList": ["BOSE_DVD_MENU", "BOSE_EPG", "KEY_VAL_AVAIL_F8", "BOSE_EXIT", "BOSE_I_TV", "BOSE_UP_ARROW", "BOSE_DOWN_ARROW", "BOSE_LEFT_ARROW", "BOSE_RIGHT_ARROW", "BOSE_ENTER"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_CBL_SAT"]
+    },
+    {
+        "zone": "ZONE3",
+        "keyList": ["BOSE_INFO", "BOSE_DVR", "BOSE_RECORD"],
+        "blastDevices": ["DEVICE_TYPE_CBL_SAT"]
+    },
+    {
+        "zone": "ZONE4",
+        "keyList": ["BOSE_FAST_REVERSE", "BOSE_FAST_FORWARD", "BOSE_PLAY"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_CBL_SAT"]
+    },
+    {
+        "zone": "ZONE5",
+        "keyList": ["BOSE_NUMBER_1", "BOSE_NUMBER_2", "BOSE_NUMBER_3", "BOSE_NUMBER_4", "BOSE_NUMBER_5", "BOSE_NUMBER_6"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_CBL_SAT"]
+    },
+    {
+        "zone": "ZONE6",
+        "keyList": ["BOSE_NUMBER_7", "BOSE_NUMBER_8", "BOSE_NUMBER_9", "BOSE_NUMBER_0"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_CBL_SAT"]
+    },
+    {
+        "zone": "ZONE7",
+        "keyList": ["BOSE_VOLUME_UP", "BOSE_VOLUME_DOWN", "BOSE_MUTE"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_CBL_SAT"]
+    },
+    {
+        "zone": "ZONE8",
+        "keyList": ["BOSE_CHANNEL_PRESET_UP", "BOSE_CHANNEL_PRESET_DOWN", "BOSE_LAST_CHANNEL"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_CBL_SAT"]
+    },
+    {
+        "zone": "ZONE9",
+        "keyList": ["BOSE_ON_OFF", "BOSE_TV_INPUT"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_CBL_SAT"]
+    },
+    {
+        "zone": "ZONE10",
+        "keyList": ["BOSE_SOURCE_POWER"],
+        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_CBL_SAT", "DEVICE_TYPE_BD_DVD"]
     }
     ]
 }
+

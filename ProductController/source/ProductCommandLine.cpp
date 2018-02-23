@@ -38,6 +38,13 @@ namespace ProductApp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// The following constants define FrontDoor endpoints used by the VolumeManager
+///
+///////////////////////////////////////////////////////////////////////////////////////////////////
+constexpr char  FRONTDOOR_AUDIO_VOLUME[ ]           = "/audio/volume";
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProductCommandLine::ProductCommandLine
 ///
 /// @param  ProfessorProductController& ProductController
@@ -224,7 +231,24 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             response +=  volumeLevelString;
             response += ". \r\n";
 
-            m_ProductLpmHardwareInterface->NotifyVolumeLevel( volumeLevelValue );
+            auto errFunc = []( const EndPointsError::Error & e )
+            {
+                BOSE_ERROR( s_logger, "Error setting FrontDoor mute" );
+            };
+            auto respFunc = [ this ]( SoundTouchInterface::volume v )
+            {
+                BOSE_INFO( s_logger, "Volume set to %d, mute set to %d", v.value(), v.muted() );
+            };
+
+            AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
+            AsyncCallback<EndPointsError::Error> errCb( errFunc, m_ProductTask );
+
+            SoundTouchInterface::volume pbVolume;
+            pbVolume.set_value( volumeLevelValue );
+
+            BOSE_VERBOSE( s_logger, "Setting FrontDoor mute to %d", pbVolume.muted() );
+            m_ProductController.GetFrontDoorClient()->SendPut<SoundTouchInterface::volume, EndPointsError::Error>(
+                ProductApp::FRONTDOOR_AUDIO_VOLUME, pbVolume, respFunc, errCb );
         }
         else
         {
@@ -238,6 +262,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     ////////////////////////////////////////////////////////////////////////////////////////////////
     else if( command.compare( "product mute" ) == 0 )
     {
+        bool muteStateValue;
         if( arguments.size( ) != 1 )
         {
             response = "Incorrect Usage: product mute [on | off] \r\n";
@@ -249,15 +274,15 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 
         if( muteState == "on" )
         {
-            response = "The mute will be turned on. \r\n";
+            muteStateValue = "The mute will be turned on. \r\n";
 
-            m_ProductLpmHardwareInterface->NotifyMuteState( true );
+            muteStateValue = true;
         }
         else if( muteState == "off" )
         {
             response = "The mute will be turned off. \r\n";
 
-            m_ProductLpmHardwareInterface->NotifyMuteState( false );
+            muteStateValue = false;
         }
         else
         {
@@ -265,6 +290,25 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 
             return -1;
         }
+
+        auto errFunc = []( const EndPointsError::Error & e )
+        {
+            BOSE_ERROR( s_logger, "Error setting FrontDoor mute" );
+        };
+        auto respFunc = [ this ]( SoundTouchInterface::volume v )
+        {
+            BOSE_INFO( s_logger, "Volume set to %d, mute set to %d", v.value(), v.muted() );
+        };
+
+        AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
+        AsyncCallback<EndPointsError::Error> errCb( errFunc, m_ProductTask );
+
+        SoundTouchInterface::volume pbVolume;
+        pbVolume.set_muted( muteStateValue );
+
+        BOSE_VERBOSE( s_logger, "Setting FrontDoor mute to %d", pbVolume.muted() );
+        m_ProductController.GetFrontDoorClient()->SendPut<SoundTouchInterface::volume, EndPointsError::Error>(
+            ProductApp::FRONTDOOR_AUDIO_VOLUME, pbVolume, respFunc, errCb );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// This command tests changing the audio source on the device.
@@ -282,18 +326,21 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 
         if( sourceString == "tv" )
         {
-            unsigned int startTvPlayback = static_cast< unsigned int >( Action::ACTION_TV );
-            m_ProductController.GetIntentHandler( ).Handle( startTvPlayback );
+            KeyHandlerUtil::ActionType_t startTvPlayback = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_TV );
+            ProductMessage msg;
+            msg.set_action( startTvPlayback );
+            m_ProductController.HandleMessage( msg );
         }
         else if( sourceString == "st" )
         {
-            unsigned int startSoundTouchPlayback = static_cast< unsigned int >( Action::ACTION_SOUNDTOUCH );
-            m_ProductController.GetIntentHandler( ).Handle( startSoundTouchPlayback );
+            KeyHandlerUtil::ActionType_t startSoundTouchPlayback = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_SOUNDTOUCH );
+            ProductMessage msg;
+            msg.set_action( startSoundTouchPlayback );
+            m_ProductController.HandleMessage( msg );
         }
         else
         {
             response  = "Incorrect Usage: product source [tv | st] \r\n";
-
             return -1;
         }
 
@@ -770,7 +817,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     else if( command.compare( "product test_pairing" ) == 0 )
     {
         ProductMessage productMessage;
-        productMessage.set_action( static_cast< uint32_t >( Action::ACTION_PAIR_SPEAKERS ) );
+        productMessage.set_action( static_cast< uint32_t >( Action::ACTION_START_PAIR_SPEAKERS ) );
 
         response  = "An attempt to pair with another speaker to this device will be made.";
 

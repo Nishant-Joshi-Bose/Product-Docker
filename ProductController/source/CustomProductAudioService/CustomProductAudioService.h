@@ -11,6 +11,7 @@
 #include "CustomProductLpmHardwareInterface.h"
 #include "CustomAudioSettingsManager.h"
 #include "ThermalMonitorTask.h"
+#include "FrontDoorClient.h"
 
 namespace ProductApp
 {
@@ -54,7 +55,7 @@ private:
     /////////////////////////////////////////////////////////////////////////////////////////////////
     void RegisterAudioPathEvents() override;
     void GetMainStreamAudioSettingsCallback( std::string contentItem,  const Callback<std::string, std::string> cb );
-    void SetStreamConfigCallback( std::string serializedAudioSettings, std::string serializedInputRoute, const Callback<bool> cb );
+    void SetStreamConfigCallback( std::vector<APProductCommon::ChannelParameters> channelParams, std::string serializedAudioSettings, std::string serializedInputRoute, const Callback<bool> cb );
     void SendMainStreamAudioSettingsEvent();
     void ThermalDataReceivedCb( const IpcSystemTemperatureData_t& data );
 

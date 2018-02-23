@@ -53,6 +53,20 @@ message ProductAdaptIQControl
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///                       CecMode (from FrontDoor) Message Structure
+////////////////////////////////////////////////////////////////////////////////////////////////////
+message ProductCecMode
+{
+        enum CecModeValue
+        {
+            Off       = 0;
+            On        = 1;
+            AltOn     = 2;
+        }
+        optional CecModeValue cecmode = 1; 
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             Product Accessory Pairing Structure                              ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 message ProductAccessoryPairing
@@ -84,6 +98,8 @@ message ProductMessage
         optional ProductLpmLowPowerStatus   lpmlowpowerstatus   = 17;
         optional bool                       audiopathselect     = 18;
         optional bool                       ampfaultdetected    = 19;
+        optional bool                       audiosilent         = 20;
+        optional ProductCecMode             cecmode             = 21;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -116,26 +116,22 @@ void IntentHandler::Initialize( )
     /// and mute key actions. Note that these actions are product specific to Professor devices,
     /// typically based on remote key actions.
     ///
-    m_IntentManagerMap[( uint16_t )Action::ACTION_MUTE ]          = muteManager;
-    m_IntentNotificationMap[( uint16_t )Action::ACTION_MUTE ]          = "mute";
+    m_IntentManagerMap[( uint16_t )Action::ACTION_MUTE ] = muteManager;
 
     ///
     /// A map is created to associate the custom speaker pairing intent manager with pair speaker key
     /// actions.
     ///
-    m_IntentManagerMap[( uint16_t )Action::ACTION_PAIR_SPEAKERS ] = speakerPairingManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_START_PAIR_SPEAKERS ] = speakerPairingManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_LPM_PAIR_SPEAKERS ] = speakerPairingManager;
     m_IntentManagerMap[( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS ] = speakerPairingManager;
-    m_IntentNotificationMap[( uint16_t )Action::ACTION_PAIR_SPEAKERS ] = "pair_speakers";
-    m_IntentNotificationMap[( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS ] = "stop_pair_speakers";
 
     ///
     /// A map is created to associate the custom playback intent manager with product specific
     /// source selection key actions, typically based on remote key actions.
     ///
-    m_IntentManagerMap[( uint16_t )Action::ACTION_TV ]         = playbackRequestManager;
-    m_IntentManagerMap[( uint16_t )Action::ACTION_SOUNDTOUCH ] = playbackRequestManager;
-    m_IntentNotificationMap[( uint16_t )Action::ACTION_TV ]         = "tv";
-    m_IntentNotificationMap[( uint16_t )Action::ACTION_SOUNDTOUCH ] = "soundtouch";
+    m_IntentManagerMap[( uint16_t )Action::ACTION_TV ]            = playbackRequestManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_APAPTIQ_START ] = playbackRequestManager;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

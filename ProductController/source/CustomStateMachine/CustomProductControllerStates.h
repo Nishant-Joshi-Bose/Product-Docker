@@ -9,25 +9,12 @@
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
-///            Bose Corporation
-///            The Mountain Road,
-///            Framingham, MA 01701-9168
-///            U.S.A.
-///
-///            This program may not be reproduced, in whole or in part, in any form by any means
-///            whatsoever without the written permission of Bose Corporation.
-///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following compiler directive prevents this header file from being included more than once,
-/// which may cause multiple declaration compiler errors.
-///
+///            Included Header Files
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma once
-
-
 #include "ProductControllerStates.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,25 +25,26 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 enum CustomProductControllerStates
 {
-
     ///
-    /// Custom product controller states that rely on common states are defined below.
+    /// Custom product controller states that rely on common states are defined below. Note that
+    /// these custom states need to have the same IDs as their base common states; this ensures that
+    /// state changes in the common code that need to transition to a derived custom state will do so
+    /// correctly.
     ///
-    PROFESSOR_PRODUCT_CONTROLLER_STATE_BOOTING                      = PRODUCT_CONTROLLER_STATE_BOOTING,
-    PROFESSOR_PRODUCT_CONTROLLER_STATE_ON                           = PRODUCT_CONTROLLER_STATE_ON,
-    PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYABLE                     = PRODUCT_CONTROLLER_STATE_PLAYABLE,
-    PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING                      = PRODUCT_CONTROLLER_STATE_PLAYING,
-    PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE               = PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE,
-    PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE             = PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE,
+    CUSTOM_PRODUCT_CONTROLLER_STATE_ON                     = PRODUCT_CONTROLLER_STATE_ON,
+    CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYABLE               = PRODUCT_CONTROLLER_STATE_PLAYABLE,
+    CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING                = PRODUCT_CONTROLLER_STATE_PLAYING,
+    CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED       = PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED,
+    CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED     = PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED,
+    CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP = PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP,
     ///
     /// Custom product controller states that are specific to Professor are defined below.
     ///
-    PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING            = PRODUCT_CONTROLLER_STATE_LAST,
-    PROFESSOR_PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_ACCESSORY_PAIRING,
-    PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING_SELECTED,
-    PROFESSOR_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING_DESELECTED,
-    PROFESSOR_PRODUCT_CONTROLLER_STATE_ADAPTIQ,
-    PROFESSOR_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING,
+    CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_ACCESSORY_PAIRING = PRODUCT_CONTROLLER_STATE_LAST,
+    CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_ACCESSORY_PAIRING,
+    CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED_ACCESSORY_PAIRING,
+    CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ,
+    CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

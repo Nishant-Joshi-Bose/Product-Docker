@@ -80,7 +80,6 @@ else:
         warn("Invalid productColor: Must be a base 10 interger between 0 and 7. Found:", pc)
         fixes.append("set productColor 1  # 1=black|2=white")
 
-
 if not fixes:
     # Validation successful.
     sys.exit()

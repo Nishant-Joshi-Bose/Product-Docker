@@ -79,9 +79,7 @@ public:
     ///        LPM hardware client.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool NotifyVolumeLevel( uint32_t volume );
-    bool NotifyMuteState( bool mute );
-    bool SendSpeakerList( IpcAccessoryList_t&        accessoryList );
+    bool NotifyVolumeMute( uint32_t volume, bool muteState );
     bool SendWiFiRadioStatus( uint32_t frequencyInKhz );
     void SetBlueToothMacAddress( const std::string&       bluetoothMacAddress );
     void SetBlueToothDeviceName( const std::string&       bluetoothDeviceName );
@@ -91,6 +89,7 @@ public:
     bool SetCecPhysicalAddress( const uint32_t cecPhyAddr );
     bool SendAdaptIQControl( ProductAdaptIQControl::AdaptIQAction action );
     bool BootDSPImage( LpmServiceMessages::IpcImage_t image );
+    bool SetCecMode( const uint8_t mode );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -106,7 +105,7 @@ public:
     /// @brief This method is for sending streamConfig to DSP for configuring inputs and gain.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    bool SendStreamConfig( std::string& serializedAudioSettings, std::string& serializedInputRoute, const Callback<bool>& cb );
+    bool SetStreamConfig( IpcDspStreamConfigReqPayload_t streamConfig, const Callback<bool>& cb );
 
 
 private:

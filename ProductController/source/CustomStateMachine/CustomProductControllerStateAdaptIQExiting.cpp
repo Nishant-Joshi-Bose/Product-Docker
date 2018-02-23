@@ -1,11 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateBooting.h
+/// @file      CustomProductControllerStateAdaptIQExiting.cpp
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product booting state.
-///
-/// @author    Stuart J. Lumby
+///            AdaptIQ state.
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -21,21 +19,14 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// The following compiler directive prevents this header file from being included more than once,
-/// which may cause multiple declaration compiler errors.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma once
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 ///            Included Header Files
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include <string>
-#include "ProductControllerStateBooting.h"
-#include "ProductControllerStates.h"
-#include "HsmState.h"
+#include "Utilities.h"
+#include "CustomProductControllerStateAdaptIQExiting.h"
+#include "ProductControllerHsm.h"
+#include "ProfessorProductController.h"
+#include "ProductMessage.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -45,42 +36,53 @@ namespace ProductApp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-///            Forward Class Declarations
+///            Constant Definitions
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class ProductControllerHsm;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class CustomProductControllerStateBooting
+/// @brief CustomProductControllerStateAdaptIQExiting::CustomProductControllerStateAdaptIQExiting
 ///
-/// @brief This class is used for executing produce specific actions when in a booting state.
+/// @param ProductControllerHsm&       hsm               This argument references the state machine.
+///
+/// @param CHsmState*                  pSuperState       This argument references the parent state.
+///
+/// @param ProfessorProductController& productController This argument references the product controller.
+///
+/// @param Hsm::STATE                  stateId           This enumeration represents the state ID.
+///
+/// @param const std::string&          name              This argument names the state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateBooting : public ProductControllerStateBooting
+CustomProductControllerStateAdaptIQExiting::CustomProductControllerStateAdaptIQExiting(
+    ProductControllerHsm& hsm,
+    CHsmState*            pSuperState,
+    Hsm::STATE            stateId,
+    const std::string&    name )
+
+    : ProductControllerState( hsm, pSuperState, stateId, name )
 {
-public:
-
-    CustomProductControllerStateBooting( ProductControllerHsm& hsm,
-                                         CHsmState*            pSuperState,
-                                         Hsm::STATE            stateId,
-                                         const std::string&    name    = "CustomProductControllerStateBooting" );
-
-    ~CustomProductControllerStateBooting( ) override
-    {
-
-    }
-
-private:
-
-    void PossiblyGoToNextState( ) override;
-};
+    BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                           End of the Product Application Namespace                           ///
+///
+/// @brief CustomProductControllerStateAdaptIQExiting::HandleStateStart
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStateAdaptIQExiting::HandleStateStart( )
+{
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+
+    GetProductController( ).SendStopPlaybackMessage( );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                             End of Product Application Namespace                             ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                         End of File                                          ///
+///                                        End of File                                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,9 +1,11 @@
 INCLUDE_DIRECTORIES(
   ${A4VVIDEOMANAGER_DIR}/source/Client
+  ${A4VQUICKSET_DIR}/source/Client
   ${CASTLECLI_DIR}/include
   ${KEYHANDLER_DIR}/include
   ${NETWORK_SERVICE_DIR}/include
   ${PRODUCTCONTROLLERCOMMON_DIR}
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ChimesController
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
   ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
@@ -26,6 +28,8 @@ INCLUDE_DIRECTORIES(
 ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/AdaptIQ.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
+  ${PROTO_CC_DEST}/BlasterConfig.pb.cc
+  ${PROTO_CC_DEST}/CecMode.pb.cc
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc
@@ -33,8 +37,8 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/SystemInfo.pb.cc
   ${PROTO_CC_DEST}/SystemSourcesProperties.pb.cc
   source/ProductAdaptIQManager.cpp
+  source/ProductCecHelper.cpp
   source/ProductCommandLine.cpp
-  source/ProductEdidInterface.cpp
   source/ProductKeyInputInterface.cpp
   source/ProductNetworkManager.cpp
   source/ProductStart.cpp
@@ -43,15 +47,18 @@ ADD_EXECUTABLE(Professor
   source/CustomProductAudioService/CustomAudioSettingsManager.cpp
   source/CustomProductAudioService/CustomProductAudioService.cpp
   source/CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
-  source/CustomStateMachine/CustomProductControllerState.cpp
-  source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQ.cpp
-  source/CustomStateMachine/CustomProductControllerStateBooting.cpp
+  source/CustomStateMachine/CustomProductControllerStateAdaptIQExiting.cpp
+  source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateOn.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayable.cpp
   source/CustomStateMachine/CustomProductControllerStatePlaying.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayingActive.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayingInactive.cpp
+  source/CustomStateMachine/CustomProductControllerStatePlayingDeselectedAccessoryPairing.cpp
+  source/CustomStateMachine/CustomProductControllerStatePlayingDeselected.cpp
+  source/CustomStateMachine/CustomProductControllerStatePlayingSelectedAccessoryPairing.cpp
+  source/CustomStateMachine/CustomProductControllerStatePlayingSelected.cpp
+  source/CustomStateMachine/CustomProductControllerStatePlayingSelectedSetup.cpp
+  source/CustomStateMachine/CustomProductControllerStatePlayingTransitionAccessoryPairing.cpp
   source/IntentHandler/IntentHandler.cpp
   source/IntentHandler/PlaybackRequestManager.cpp
   source/IntentHandler/SpeakerPairingManager.cpp
@@ -62,6 +69,7 @@ TARGET_LINK_LIBRARIES(Professor
   CastleProductControllerCommon
   LpmClient
   A4VVideoManagerClient
+  A4VQuickSetServiceClient
   FrontDoorClient
   NetworkServiceClient
   KeyHandler
@@ -72,6 +80,7 @@ TARGET_LINK_LIBRARIES(Professor
   CliClient
   ShelbyUtils
   AudioLibs
+  SystemEventService
   BoseLibs
   PassportClient
   STS
@@ -84,6 +93,7 @@ TARGET_LINK_LIBRARIES(Professor
   dl
   SoundTouch_SDK_Protobuf_static
   SoftwareUpdateAPI
+  #SASSFrontDoorServiceProto # TODO: SASS integration
 )
 
 INSTALL(TARGETS Professor DESTINATION ${OUTPUT_BIN_DIR})

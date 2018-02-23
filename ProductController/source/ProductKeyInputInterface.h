@@ -35,6 +35,7 @@
 #include "KeyHandler.h"
 #include "LpmServiceMessages.pb.h"
 #include "ProductMessage.pb.h"
+#include "A4VQuickSetServiceClientFactory.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -91,12 +92,13 @@ private:
     ///        key presses and whether the module is running are also provided.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF*                                  m_ProductTask;
-    Callback< ProductMessage >                           m_ProductNotify;
-    std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
-    KeyHandlerUtil::KeyHandler                           m_KeyHandler;
-    bool                                                 m_connected;
-    bool                                                 m_running;
+    NotifyTargetTaskIF*                                                         m_ProductTask;
+    Callback< ProductMessage >                                                  m_ProductNotify;
+    std::shared_ptr< CustomProductLpmHardwareInterface >                        m_ProductLpmHardwareInterface;
+    KeyHandlerUtil::KeyHandler                                                  m_KeyHandler;
+    bool                                                                        m_connected;
+    bool                                                                        m_running;
+    A4VQuickSetService::A4VQuickSetServiceClientIF::A4VQuickSetServiceClientPtr m_QSSClient;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -115,6 +117,13 @@ private:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     void KeyInformationCallBack( const int keyAction );
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method initializes the key blasting configuration.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    bool InitializeQSS( );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

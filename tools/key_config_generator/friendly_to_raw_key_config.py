@@ -254,7 +254,7 @@ def generate_friendly_config(clang_args, index, args):
   keymap = {'keyTable' : []}
 
   for i, e in enumerate(j['keyTable']):
-    discard = 0
+    discard = False
     # sanity-check entry
     origin_name = e['origin']
     event_name = e['keyEvent']
@@ -276,9 +276,6 @@ def generate_friendly_config(clang_args, index, args):
     origin = ORIGIN_NAMES_REV[origin_name]
     event = EVENT_NAMES_REV[event_name]
 
-    if origin == 'TAP':
-      continue
-
     oe['origin'] = [origin]
     oe['keyEvent'] = event
     oe['action'] = action_map[action_name]
@@ -292,14 +289,24 @@ def generate_friendly_config(clang_args, index, args):
       key = e['keyList'][k]
       if not key in key_map:
         print('Entry {} / {}, Unknown key {}, skipping entry ({}, {})'.format(i, k, key, origin_name, origin))
-        discard = 1
+        discard = True
         break
       else:
         print('Entry {} / {}, key {}, do ({}, {})'.format(i, k, key, origin_name, origin))
         oe['keyList'][k] = key_map[key]
-  
-    if discard == 0:
-      keymap['keyTable'].append(oe)
+
+    if discard is True:
+      continue
+
+    # collapse entries that only differ by origin
+    for e in keymap['keyTable']:
+      if (e['keyEvent'] == oe['keyEvent']) and (e['action'] == oe['action']) and (e['keyList'] == oe['keyList']):
+        e['origin'] = e['origin'] + oe['origin']
+        discard = True
+        break
+
+    if discard is not True:
+        keymap['keyTable'].append(oe)
  
   cf = CustomFormat(indent=4) 
   s = cf.pformat(keymap)
@@ -347,7 +354,7 @@ def main():
     help='Path(s) for include files')
   args = argparser.parse_args()
 
-  clang_args = ['-x', 'c++']
+  clang_args = ['-x', 'c++', '-std=c++11']
   if args.inc_dirs is not None:
     for inc in args.inc_dirs:
       clang_args.append('-I{}'.format(inc))

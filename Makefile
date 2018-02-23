@@ -56,11 +56,11 @@ endif
 USERKEYCONFIG=$(PWD)/Config/UserKeyConfig.json
 KEYCONFIG=$(PWD)/opt-bose-fs/etc/KeyConfiguration.json
 LPM_KEYS=$(RIVIERALPM_DIR)/include/RivieraLPM_KeyValues.h
-INTENT_DEFS=$(PWD)/ProductController/source/IntentHandler/Intents.h 
+INTENT_DEFS=$(PWD)/ProductController/source/IntentHandler/Intents.h
 KEYCONFIG_INCS=$(PRODUCTCONTROLLERCOMMON_DIR)/IntentHandler
 
 .PHONY: keyconfig
-keyconfig:
+keyconfig: check_tools
 	cd tools/key_config_generator && \
 	./generate_key_config \
 		$(BUILDS_DIR) \
@@ -73,6 +73,19 @@ keyconfig:
 		--rf $(LPM_KEYS) \
 		--outputcfg $(KEYCONFIG) \
 		--incdirs $(KEYCONFIG_INCS)
+
+USERBLASTCONFIG=$(PWD)/Config/UserKeyConfig.json
+BLASTCONFIG=$(PWD)/opt-bose-fs/etc/BlastConfiguration.json
+LPM_KEYS=$(RIVIERALPM_DIR)/include/RivieraLPM_KeyValues.h
+
+.PHONY: blastconfig
+blastconfig: check_tools
+	cd tools/key_config_generator && \
+	./generate_blast_config \
+		$(BUILDS_DIR) \
+		--inputcfg $(USERBLASTCONFIG) \
+		--keyfile $(LPM_KEYS) \
+		--outputcfg $(BLASTCONFIG)
 
 .PHONY: cmake_build
 cmake_build: generated_sources | $(BUILDS_DIR) astyle
@@ -95,7 +108,7 @@ PACKAGENAMES = monaco SoundTouch lpm_updater
 update-zip: monaco-ipk product-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
-#Create one more Zip file for Bonjour / Local update with HSP 
+#Create one more Zip file for Bonjour / Local update with HSP
 #- This is temporary, till DP2 boards are available.
 IPKS_HSP = hsp.ipk monaco.ipk product.ipk lpm_updater.ipk
 PACKAGENAMES_HSP = hsp monaco SoundTouch lpm_updater
@@ -137,10 +150,7 @@ all-packages: package packages-gz-with-hsp update-zip-with-hsp packages-gz updat
 
 .PHONY: deploy
 deploy: graph all-packages
-ifndef RIVIERA_HSP_VERSION
-	$(error No RIVIERA_HSP_VERSION)
-endif
-	scripts/collect-deployables builds/Release builds/deploy/HSP-${RIVIERA_HSP_VERSION}
+	scripts/collect-deployables builds/Release builds/deploy/DP2
 
 .PHONY: clean
 clean:
