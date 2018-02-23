@@ -70,6 +70,7 @@
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
 #include "ProductControllerStatePlayingSelectedSetup.h"
 #include "ProductControllerStatePlayingSelectedSetupNetwork.h"
+#include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
 #include "ProductControllerStatePlayingTransition.h"
@@ -365,6 +366,11 @@ void ProfessorProductController::Run( )
       customStatePlayingSelectedSetup,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK );
 
+    auto* statePlayingSelectedSetupNetworkTransition = new ProductControllerStatePlayingSelectedSetupNetworkTransition
+    ( GetHsm( ),
+      customStatePlayingSelectedSetup,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_TRANSITION );
+
     auto* statePlayingSelectedSetupOther = new ProductControllerStatePlayingSelectedSetupOther
     ( GetHsm( ),
       customStatePlayingSelectedSetup,
@@ -456,6 +462,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedNotSilent );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), customStatePlayingSelectedSetup );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupNetwork );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupNetworkTransition );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupOther );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupExiting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), customStatePlayingSelectedPairing );
@@ -1450,19 +1457,17 @@ void ProfessorProductController::SendInitialCapsData()
     }
     messageProperties->set_activationkeyrequired( true );
 
-#if 0 // @TODO CASTLE-6801 field deviceType missing in SoundTouchInterface::Sources
     for( uint32_t deviceType = SystemSourcesProperties::DEVICE_TYPE__MIN; deviceType <= SystemSourcesProperties::DEVICE_TYPE__MAX; ++deviceType )
     {
         messageProperties->add_supporteddevicetypes(
             SystemSourcesProperties::DEVICE_TYPE__Name( static_cast<SystemSourcesProperties::DEVICE_TYPE_>( deviceType ) ) );
     }
     messageProperties->set_devicetyperequired( true );
-#endif
 
     messageProperties->add_supportedinputroutes(
         SystemSourcesProperties::INPUT_ROUTE_HDMI__Name( SystemSourcesProperties::INPUT_ROUTE_TV ) );
 
-    messageProperties->set_inputrouterequired( true );
+    messageProperties->set_inputrouterequired( false );
 
     BOSE_VERBOSE( s_logger, "%s sending %s", __func__, ProtoToMarkup::ToJson( message ).c_str() );
 
@@ -1472,6 +1477,17 @@ void ProfessorProductController::SendInitialCapsData()
         { },
         m_errorCb );
 }
+
+void ProfessorProductController::ClearWifiProfileCount()
+{
+    m_ProductNetworkManager->ClearWifiProfileCount();
+}
+
+void ProfessorProductController::PerformRequestforWiFiProfiles()
+{
+    m_ProductNetworkManager->PerformRequestforWiFiProfiles();
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///

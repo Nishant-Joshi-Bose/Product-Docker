@@ -238,6 +238,11 @@ public:
 
     std::unique_ptr<LightBar::LightBarController> m_lightbarController;
 
+
+    void ClearWifiProfileCount() override;
+
+    void PerformRequestforWiFiProfiles() override;
+
 private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
