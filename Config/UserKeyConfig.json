@@ -265,7 +265,7 @@
         "timeOutList": []
     },
     {
-        "action": "ACTION_PAIR_SPEAKERS",
+        "action": "ACTION_START_PAIR_SPEAKERS",
         "commment": "pair speakers",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_PAIR_SPKR"],

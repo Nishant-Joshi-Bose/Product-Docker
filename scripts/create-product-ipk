@@ -181,6 +181,11 @@ else
     cp "$audiopath64_dir/bin/libpryon.so" "$opt_dir/bin/libpryon.so" || exit
 fi
 
+# Temporarily disable Vfe until HSP with TDM/I2S driver fix is available
+if [ -e "$opt_dir/etc/Shepherd-vfe.xml" ]; then
+    mv "$opt_dir/etc/Shepherd-vfe.xml" "$opt_dir/etc/Shepherd-vfe.xml.disable"
+fi
+
 # ----------------------------------------------------------------------------
 
 cd "$opt_dir"/lib || exit
