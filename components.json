@@ -9,7 +9,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.9-260+a9ea8ff"
+    "selected_version": "Release/master/0.3.9-271+2cde517"
   },
   {
     "name": "BoseOPKG-native",
@@ -113,11 +113,11 @@
   },
   {
     "name": "protobuf-native",
-    "selected_version": "branches/protobuf@2564"
+    "selected_version": "branches/protobuf@2590"
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "branches/protobuf@2564"
+    "selected_version": "branches/protobuf@2590"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -149,7 +149,7 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.0.1-12+33dbc10"
+    "selected_version": "Release/master/0.0.1-15+19b3c17"
   },
   {
     "name": "Webkit",
