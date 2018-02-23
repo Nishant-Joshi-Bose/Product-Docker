@@ -51,7 +51,7 @@
 #include "ProductControllerStatePlayableTransitionNetworkStandby.h"
 #include "ProductControllerStateSoftwareUpdateTransition.h"
 #include "ProductControllerStatePlayingTransition.h"
-#include "ProductControllerStatePlayingTransitionSelected.h"
+#include "ProductControllerStatePlayingTransitionSwitch.h"
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
@@ -333,6 +333,16 @@ public:
         return m_LpmInterface;
     }
 
+///////////////////////////////////////////////////////////////////////////////
+/// @name   GetProductAudioServiceInstance
+/// @brief  Returns reference to ProductAudioService
+/// @return CustomProductLpmHardwareInterface&
+///////////////////////////////////////////////////////////////////////////////
+    inline std::shared_ptr< CustomProductAudioService >& GetProductAudioServiceInstance( )
+    {
+        return m_ProductAudioService;
+    }
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief Interfaces to the ProductSTSController, which implements the interactions
@@ -376,29 +386,25 @@ public:
 
 private:
 
-    ProductControllerStateTop               m_ProductControllerStateTop;
-    ProductControllerStateBooting           m_ProductControllerStateBooting;
-    CustomProductControllerStateOn          m_CustomProductControllerStateOn;
-    ProductControllerStateLowPowerStandby   m_ProductControllerStateLowPowerStandby;
-    ProductControllerStateSoftwareInstall   m_ProductControllerStateSwInstall;
-    ProductControllerStateCriticalError     m_ProductControllerStateCriticalError;
-    ProductControllerStateRebooting         m_ProductControllerStateRebooting;
-
-    ProductControllerStatePlaying           m_ProductControllerStatePlaying;
-    ProductControllerStatePlayable          m_ProductControllerStatePlayable;
-    ProductControllerStateLowPowerStandbyTransition   m_ProductControllerStateLowPowerStandbyTransition;
-
-    ProductControllerStatePlayingActive     m_ProductControllerStatePlayingActive;
-    ProductControllerStatePlayingInactive   m_ProductControllerStatePlayingInactive;
-    ProductControllerStateIdle              m_ProductControllerStateIdle;
-    ProductControllerStateNetworkStandby    m_ProductControllerStateNetworkStandby;
-
-    ProductControllerStateIdleVoiceConfigured   m_ProductControllerStateVoiceConfigured;
-    ProductControllerStateIdleVoiceNotConfigured   m_ProductControllerStateVoiceNotConfigured;
-    ProductControllerStateNetworkStandbyConfigured   m_ProductControllerStateNetworkConfigured;
-    ProductControllerStateNetworkStandbyNotConfigured   m_ProductControllerStateNetworkNotConfigured;
-    ProductControllerStateFactoryDefault                    m_ProductControllerStateFactoryDefault;
-
+    ProductControllerStateTop                                       m_ProductControllerStateTop;
+    ProductControllerStateBooting                                   m_ProductControllerStateBooting;
+    CustomProductControllerStateOn                                  m_CustomProductControllerStateOn;
+    ProductControllerStateLowPowerStandby                           m_ProductControllerStateLowPowerStandby;
+    ProductControllerStateSoftwareInstall                           m_ProductControllerStateSwInstall;
+    ProductControllerStateCriticalError                             m_ProductControllerStateCriticalError;
+    ProductControllerStateRebooting                                 m_ProductControllerStateRebooting;
+    ProductControllerStatePlaying                                   m_ProductControllerStatePlaying;
+    ProductControllerStatePlayable                                  m_ProductControllerStatePlayable;
+    ProductControllerStateLowPowerStandbyTransition                 m_ProductControllerStateLowPowerStandbyTransition;
+    ProductControllerStatePlayingActive                             m_ProductControllerStatePlayingActive;
+    ProductControllerStatePlayingInactive                           m_ProductControllerStatePlayingInactive;
+    ProductControllerStateIdle                                      m_ProductControllerStateIdle;
+    ProductControllerStateNetworkStandby                            m_ProductControllerStateNetworkStandby;
+    ProductControllerStateIdleVoiceConfigured                       m_ProductControllerStateVoiceConfigured;
+    ProductControllerStateIdleVoiceNotConfigured                    m_ProductControllerStateVoiceNotConfigured;
+    ProductControllerStateNetworkStandbyConfigured                  m_ProductControllerStateNetworkConfigured;
+    ProductControllerStateNetworkStandbyNotConfigured               m_ProductControllerStateNetworkNotConfigured;
+    ProductControllerStateFactoryDefault                            m_ProductControllerStateFactoryDefault;
     ProductControllerStatePlayingDeselected                         m_ProductControllerStatePlayingDeselected;
     ProductControllerStatePlayingSelected                           m_ProductControllerStatePlayingSelected;
     ProductControllerStatePlayingSelectedSilent                     m_ProductControllerStatePlayingSelectedSilent;
@@ -415,7 +421,7 @@ private:
     ProductControllerStatePlayableTransitionNetworkStandby          m_ProductControllerStatePlayableTransitionNetworkStandby;
     ProductControllerStateSoftwareUpdateTransition                  m_ProductControllerStateSoftwareUpdateTransition;
     ProductControllerStatePlayingTransition                         m_ProductControllerStatePlayingTransition;
-    ProductControllerStatePlayingTransitionSelected                 m_ProductControllerStatePlayingTransitionSelected;
+    ProductControllerStatePlayingTransitionSwitch                   m_ProductControllerStatePlayingTransitionSwitch;
     ProductControllerStateStoppingStreamsDedicated                  m_ProductControllerStateStoppingStreamsDedicated;
     ProductControllerStateStoppingStreamsDedicatedForFactoryDefault m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault;
     ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate;
