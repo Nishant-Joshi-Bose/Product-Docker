@@ -140,8 +140,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             bool changeOccurred = m_audioSettingsMgr->SetMode( val );
             if( changeOccurred )
             {
-                bool dialogModeEnabled = m_audioSettingsMgr->GetMode( ).value() == "dialog";
-                m_mainStreamAudioSettings.set_dialogmode( dialogModeEnabled );
+                m_mainStreamAudioSettings.set_dialogmode( IsDialogModeEnabled() );
                 SendMainStreamAudioSettingsEvent();
             }
             return changeOccurred;
@@ -183,8 +182,8 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
  */
 void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string contentItem, const Callback<std::string, std::string> cb )
 {
-    BOSE_DEBUG( s_logger, __func__ );
-    BOSE_DEBUG( s_logger, "GetMainStreamAudioSettingsCallback - contentItem = %s", contentItem.c_str() );
+    //BOSE_DEBUG( s_logger, __func__ );
+    //BOSE_DEBUG( s_logger, "GetMainStreamAudioSettingsCallback - contentItem = %s", contentItem.c_str() );
 
     // Parse contentItem string received from APProduct
     bool error = false;
@@ -222,12 +221,11 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
  */
 void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 {
-    BOSE_DEBUG( s_logger, __func__ );
     std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_mainStreamAudioSettings, true );
     m_APPointer->SetMainStreamAudioSettings( mainStreamAudioSettings );
 
     // DMR Print out the JSON being sent to AP.
-    BOSE_INFO( s_logger, "!!! %s", mainStreamAudioSettings.c_str() );
+    //BOSE_INFO( s_logger, "SendMainStreamAudioSettingsEvent %s", mainStreamAudioSettings.c_str() );
 }
 
 /*!
@@ -235,7 +233,17 @@ void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 void CustomProductAudioService::FetchLatestAudioSettings( )
 {
     m_mainStreamAudioSettings.set_basslevel( m_audioSettingsMgr->GetBass( ).value() );
+    m_mainStreamAudioSettings.set_centerlevel( m_audioSettingsMgr->GetCenter( ).value() );
+    m_mainStreamAudioSettings.set_dialogmode( IsDialogModeEnabled() );
     m_mainStreamAudioSettings.set_treblelevel( m_audioSettingsMgr->GetTreble( ).value() );
+}
+
+/*!
+ */
+bool CustomProductAudioService::IsDialogModeEnabled()
+{
+    static constexpr char DIALOG_MODE_VALUE[] = "dialog";
+    return ( m_audioSettingsMgr->GetMode( ).value() == DIALOG_MODE_VALUE );
 }
 
 /*!

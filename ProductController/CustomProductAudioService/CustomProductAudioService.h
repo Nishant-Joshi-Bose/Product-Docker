@@ -63,6 +63,10 @@ private:
      */
     void ThermalDataReceivedCb( const IpcSystemTemperatureData_t& data );
 
+    /*! \brief Convenience function for reading Mode and converting to dialogMode on/off.
+     */
+    bool IsDialogModeEnabled();
+
 
     //! Holds information that APProduct would like to know, including audio settings and thermal data.
     EddieAudioSettings_t m_mainStreamAudioSettings;
