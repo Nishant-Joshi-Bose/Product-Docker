@@ -74,7 +74,7 @@
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
 #include "ProductControllerStatePlayingTransition.h"
-#include "ProductControllerStatePlayingTransitionSelected.h"
+#include "ProductControllerStatePlayingTransitionSwitch.h"
 #include "ProductControllerStateRebooting.h"
 #include "ProductControllerStateSoftwareInstall.h"
 #include "ProductControllerStateSoftwareUpdateTransition.h"
@@ -314,10 +314,10 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION );
 
-    auto* statePlayingTransitionSelected = new ProductControllerStatePlayingTransitionSelected
+    auto* statePlayingTransitionSelected = new ProductControllerStatePlayingTransitionSwitch
     ( GetHsm( ),
       statePlayingTransition,
-      PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SELECTED );
+      PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SWITCH );
 
     auto* customStatePlayingTransitionAccessoryPairing = new CustomProductControllerStatePlayingTransitionAccessoryPairing
     ( GetHsm( ),
@@ -596,6 +596,19 @@ CliClientMT& ProfessorProductController::GetCommandLineInterface( )
 std::shared_ptr< CustomProductLpmHardwareInterface >& ProfessorProductController::GetLpmHardwareInterface( )
 {
     return m_ProductLpmHardwareInterface;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetProductAudioServiceInstance
+///
+/// @return This method returns a shared pointer to the Product AudioService which interfaces with AudioPath.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::shared_ptr< CustomProductAudioService >& ProfessorProductController::GetProductAudioServiceInstance( )
+{
+    return m_ProductAudioService;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1379,22 +1392,6 @@ void ProfessorProductController::Wait( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::End
-///
-/// @brief  This method is called when the Product Controller process ends. It is used to set the
-///         running member to false, which will invoke the Wait method idle loop to exit and perform
-///         any necessary clean up.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::End( )
-{
-    BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
-
-    m_Running = false;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProfessorProductController::GetDefaultProductName
 ///
 /// @brief  This method is to get the default product name by reading from mac address.
@@ -1499,16 +1496,55 @@ void ProfessorProductController::SendInitialCapsData()
         m_errorCb );
 }
 
-void ProfessorProductController::ClearWifiProfileCount()
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::ClearWifiProfileCount
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::ClearWifiProfileCount( )
 {
-    m_ProductNetworkManager->ClearWifiProfileCount();
+    if( m_ProductNetworkManager != nullptr )
+    {
+        m_ProductNetworkManager->ClearWifiProfileCount( );
+    }
+    else
+    {
+        BOSE_DIE( "ProductNetworkManager has not been instantiated for ClearWifiProfileCount." );
+    }
 }
 
-void ProfessorProductController::PerformRequestforWiFiProfiles()
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::PerformRequestforWiFiProfiles
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::PerformRequestforWiFiProfiles( )
 {
-    m_ProductNetworkManager->PerformRequestforWiFiProfiles();
+    if( m_ProductNetworkManager != nullptr )
+    {
+        m_ProductNetworkManager->PerformRequestforWiFiProfiles( );
+    }
+    else
+    {
+        BOSE_DIE( "ProductNetworkManager has not been instantiated for PerformRequestforWiFiProfiles." );
+    }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::End
+///
+/// @brief  This method is called when the Product Controller process should be terminated. It is
+///         used to set the running member to false, which will invoke the Wait method idle loop to
+///         exit and perform any necessary clean up.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::End( )
+{
+    BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
+
+    m_Running = false;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///

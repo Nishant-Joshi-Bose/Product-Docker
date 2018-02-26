@@ -124,6 +124,14 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
+    /// @brief The following method is used to get a shared pointer to the Product AudioService
+    ///        instance from the product controller.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    std::shared_ptr< CustomProductAudioService >& GetProductAudioServiceInstance( ) override;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
     /// @brief The following method is used to get a shared pointer to the AdaptIQ instance
     ///        from the product controller.
     ///
@@ -222,7 +230,6 @@ public:
         return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );
     }
 
-
     std::vector<std::string> GetUniqueLanguages() const override
     {
         return {};
@@ -233,7 +240,6 @@ public:
     void SendInitialCapsData() override;
 
     std::unique_ptr<LightBar::LightBarController> m_lightbarController;
-
 
     void ClearWifiProfileCount() override;
 
