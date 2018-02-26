@@ -118,6 +118,11 @@ bool ProductSystemManager::Run( )
     /// HandleCapsStatus is used to process the notifications.
     ////////////////////////////////////////////////////////////////////////////////////////////////
     {
+        ///
+        /// @todo Based on the JIRA Story PGC-865, these calls will eventually be removed from
+        ///       Professor and put into the common code base in the CastleProductController
+        ///       repository.
+        ///
         AsyncCallback< SoundTouchInterface::CapsInitializationStatus >
         CallbackForNotification( std::bind( &ProductSystemManager::HandleCapsStatus,
                                             this,

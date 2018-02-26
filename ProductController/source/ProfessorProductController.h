@@ -226,7 +226,6 @@ public:
         return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );
     }
 
-
     std::vector<std::string> GetUniqueLanguages() const override
     {
         return {};
@@ -237,7 +236,6 @@ public:
     void SendInitialCapsData() override;
 
     std::unique_ptr<LightBar::LightBarController> m_lightbarController;
-
 
     void ClearWifiProfileCount() override;
 
