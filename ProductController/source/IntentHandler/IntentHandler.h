@@ -136,6 +136,13 @@ public:
     {
         return ( argument == ( uint16_t )Action::ACTION_SOUNDTOUCH );
     }
+
+    static bool IsIntentPlayCustomSource( KeyHandlerUtil::ActionType_t argument )
+    {
+        return ( argument == ( uint16_t )Action::ACTION_CUSTOM_GAME ) ||
+               ( argument == ( uint16_t )Action::ACTION_CUSTOM_DVD ) ||
+               ( argument == ( uint16_t )Action::ACTION_CUSTOM_CABLESAT );
+    }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

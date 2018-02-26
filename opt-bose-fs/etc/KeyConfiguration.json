@@ -1225,6 +1225,66 @@
             ]
         }, 
         {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select game/OTT", 
+            "action": 126, 
+            "keyList": [
+                6
+            ]
+        },
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select game/OTT", 
+            "action": 126, 
+            "keyList": [
+                6
+            ]
+        },
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select dvd", 
+            "action": 127, 
+            "keyList": [
+                83
+            ]
+        },
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select dvd", 
+            "action": 127, 
+            "keyList": [
+                83
+            ]
+        },
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select cable/sat", 
+            "action": 128, 
+            "keyList": [
+                13
+            ]
+        },
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select cable/sat", 
+            "action": 128, 
+            "keyList": [
+                13
+            ]
+        },
+        {
             "origin": 2, 
             "keyEvent": 0, 
             "timeOutList": [], 

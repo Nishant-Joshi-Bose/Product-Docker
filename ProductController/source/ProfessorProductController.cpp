@@ -1044,7 +1044,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Content Audio Playback Services (CAPS) status messages are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    if( message.has_capsstatus( ) )
+    else if( message.has_capsstatus( ) )
     {
         if( message.capsstatus( ).has_initialized( ) )
         {
@@ -1285,6 +1285,11 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         else if( GetIntentHandler( ).IsIntentPlaySoundTouchSource( message.action( ) ) )
         {
             GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentPlaySoundTouchSource );
+        }
+        else if( GetIntentHandler( ).IsIntentPlayCustomSource( message.action( ) ) )
+        {
+            GetHsm( ).Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntentPlayCustomSource,
+                                                            message.action() );
         }
         else
         {

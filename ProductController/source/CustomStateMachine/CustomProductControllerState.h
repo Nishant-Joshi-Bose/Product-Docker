@@ -333,6 +333,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentPlayCustomSource( KeyHandlerUtil::ActionType_t intent )
+    {
+        return false;
+    }
+
     virtual bool HandleAdaptIQStatus( const ProductAdaptIQStatus& status )
     {
         return false;

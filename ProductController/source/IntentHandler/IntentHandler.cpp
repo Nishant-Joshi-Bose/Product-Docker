@@ -123,15 +123,18 @@ void IntentHandler::Initialize( )
     /// actions.
     ///
     m_IntentManagerMap[( uint16_t )Action::ACTION_START_PAIR_SPEAKERS ] = speakerPairingManager;
-    m_IntentManagerMap[( uint16_t )Action::ACTION_LPM_PAIR_SPEAKERS ] = speakerPairingManager;
-    m_IntentManagerMap[( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS ] = speakerPairingManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_LPM_PAIR_SPEAKERS ]   = speakerPairingManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_STOP_PAIR_SPEAKERS ]  = speakerPairingManager;
 
     ///
     /// A map is created to associate the custom playback intent manager with product specific
     /// source selection key actions, typically based on remote key actions.
     ///
-    m_IntentManagerMap[( uint16_t )Action::ACTION_TV ]            = playbackRequestManager;
-    m_IntentManagerMap[( uint16_t )Action::ACTION_APAPTIQ_START ] = playbackRequestManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_TV ]              = playbackRequestManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_APAPTIQ_START ]   = playbackRequestManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_CUSTOM_GAME ]     = playbackRequestManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_CUSTOM_DVD ]      = playbackRequestManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_CUSTOM_CABLESAT ] = playbackRequestManager;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

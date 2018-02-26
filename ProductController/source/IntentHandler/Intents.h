@@ -132,7 +132,10 @@ enum class Action
     ACTION_LPM_PAIR_SPEAKERS   = 122,
     ACTION_STOP_PAIR_SPEAKERS  = 123,
     ACTION_APAPTIQ_START       = 124,
-    ACTION_APAPTIQ_CANCEL      = 125
+    ACTION_APAPTIQ_CANCEL      = 125,
+    ACTION_CUSTOM_GAME         = 126,
+    ACTION_CUSTOM_DVD          = 127,
+    ACTION_CUSTOM_CABLESAT     = 128
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
