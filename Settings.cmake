@@ -95,6 +95,7 @@ SET(OUTPUT_LIB_DIR lib)
 SET(CUSTOM_HSM_DIR "${CMAKE_SOURCE_DIR}/ProductController/source/CustomStateMachine")
 SET(INTENT_HANDLER_DIR "${CMAKE_SOURCE_DIR}/ProductController/source/IntentHandler")
 SET(CUSTOM_HARDWARE_DIR "${CMAKE_SOURCE_DIR}/ProductController/source/CustomProductLpmHardwareInterface")
+SET(CUSTOM_PRODUCT_AUDIOSERVICE_DIR "${CMAKE_SOURCE_DIR}/ProductController/source/CustomProductAudioService")
 
 IF(${CFG} STREQUAL "Release")
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os -g2 -DNDEBUG")

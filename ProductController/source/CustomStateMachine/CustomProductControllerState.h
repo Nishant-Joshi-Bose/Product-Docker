@@ -273,6 +273,11 @@ public:
         return false;
     }
 
+    virtual bool HandleNetworkOperationMode( NetManager::Protobuf::OperationalMode mode )
+    {
+        return false;
+    }
+
     virtual bool HandleLPMPowerStatusColdBoot( )
     {
         return false;
