@@ -1479,9 +1479,9 @@ void ProfessorProductController::PerformRequestforWiFiProfiles( )
 ///
 /// @name   ProfessorProductController::End
 ///
-/// @brief  This method is called when the Product Controller process ends. It is used to set the
-///         running member to false, which will invoke the Wait method idle loop to exit and perform
-///         any necessary clean up.
+/// @brief  This method is called when the Product Controller process should be terminated. It is
+///         used to set the running member to false, which will invoke the Wait method idle loop to
+///         exit and perform any necessary clean up.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::End( )

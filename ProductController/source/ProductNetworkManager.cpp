@@ -81,14 +81,14 @@ bool ProductNetworkManager::Run( )
     ///
     auto networkEndPointReadyCallback = [ this ]( const std::list< std::string >& endPointList )
     {
-        if( endPointList.size( ) == 0 )
+        if( endPointList.empty( ) )
         {
             BOSE_ERROR( s_logger, "No end points were specified as ready." );
 
             return;
         }
 
-        for( auto endPoint : endPointList )
+        for( const auto& endPoint : endPointList )
         {
             if( endPoint.compare( FRONTDOOR_NETWORK_STATUS ) == 0 )
             {
@@ -117,32 +117,7 @@ bool ProductNetworkManager::Run( )
 
     auto networkEndPointNotReadyCallback = [ this ]( const std::list< std::string >& endPointList )
     {
-        if( endPointList.size( ) == 0 )
-        {
-            BOSE_ERROR( s_logger, "No end points were specified as ready." );
-
-            return;
-        }
-
-        for( auto endPoint : endPointList )
-        {
-            if( endPoint.compare( FRONTDOOR_NETWORK_STATUS ) == 0 )
-            {
-                BOSE_ERROR( s_logger, "The network status end point %s is not ready.", endPoint.c_str( ) );
-            }
-            else if( endPoint.compare( FRONTDOOR_NETWORK_WIFI_STATUS ) == 0 )
-            {
-                BOSE_ERROR( s_logger, "The WiFi status end point %s is not ready.", endPoint.c_str( ) );
-            }
-            else if( endPoint.compare( FRONTDOOR_NETWORK_WIFI_PROFILE ) == 0 )
-            {
-                BOSE_ERROR( s_logger, "The WiFi profiles end point %s is not ready.", endPoint.c_str( ) );
-            }
-            else
-            {
-                BOSE_ERROR( s_logger, "An unknown end point %s was sent as not ready.", endPoint.c_str( ) );
-            }
-        }
+        BOSE_ERROR( s_logger, "One or more network end point are not yet ready." );
     };
 
     ///
