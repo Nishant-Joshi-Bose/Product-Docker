@@ -1473,6 +1473,10 @@ void ProfessorProductController::ClearWifiProfileCount( )
     {
         m_ProductNetworkManager->ClearWifiProfileCount( );
     }
+    else
+    {
+        BOSE_DIE( "ProductNetworkManager has not been instantiated for ClearWifiProfileCount." );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1485,6 +1489,10 @@ void ProfessorProductController::PerformRequestforWiFiProfiles( )
     if( m_ProductNetworkManager != nullptr )
     {
         m_ProductNetworkManager->PerformRequestforWiFiProfiles( );
+    }
+    else
+    {
+        BOSE_DIE( "ProductNetworkManager has not been instantiated for PerformRequestforWiFiProfiles." );
     }
 }
 
