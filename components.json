@@ -9,7 +9,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.9-271+2cde517"
+    "selected_version": "Release/master/0.3.9-301+0ca2db3"
   },
   {
     "name": "BoseOPKG-native",
@@ -53,15 +53,15 @@
   },
   {
     "name": "CastleLibs-native",
-    "selected_version": "branches/castle-libs@2549"
+    "selected_version": "branches/castle-libs@2593"
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2549"
+    "selected_version": "branches/castle-libs@2593"
   },
   {
     "name": "CastleLibs-x86",
-    "selected_version": "branches/castle-libs@2549"
+    "selected_version": "branches/castle-libs@2593"
   },
   {
     "name": "CastleLightBarController-qc8017_32",
@@ -149,7 +149,7 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.0.1-15+19b3c17"
+    "selected_version": "Continuous/master/0.0.1-16+4461820"
   },
   {
     "name": "Webkit",
