@@ -25,7 +25,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.9-260+a9ea8ff"
+    "selected_version": "Release/master/0.3.9-271+2cde517"
   },
   {
     "name": "BoseOPKG-native",
@@ -92,6 +92,10 @@
     "selected_version": "master@45748c28c22c5afa2ac244b63e078a0454f5966f"
   },
   {
+    "name": "CastleProductUIAssets",
+    "selected_version": "master@43394152e689030529a94750d56fe9cd196b885a"
+  },
+  {
     "name": "FrontDoor-qc8017_32",
     "selected_version": "Release/master/0.3.8-166+bdf45c8"
   },
@@ -101,7 +105,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/0.2.3-63+7790ce4"
+    "selected_version": "Release/master/0.2.3-71+1801c14"
   },
   {
     "name": "ProfessorLPM-Package",
@@ -109,11 +113,11 @@
   },
   {
     "name": "protobuf-native",
-    "selected_version": "branches/protobuf@2564"
+    "selected_version": "branches/protobuf@2590"
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "branches/protobuf@2564"
+    "selected_version": "branches/protobuf@2590"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -149,7 +153,7 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.0.1-12+33dbc10"
+    "selected_version": "Release/master/0.0.1-15+19b3c17"
   },
   {
     "name": "unittest-cpp-qc8017_32",

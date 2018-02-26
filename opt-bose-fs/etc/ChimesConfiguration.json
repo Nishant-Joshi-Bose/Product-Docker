@@ -2,58 +2,185 @@
     "supported_chimes":[
         {
             "event_id":1,
-            "tone":"T1_welcome_to_bose.flac",
-            "comment":"Welcome, event first time the device boots up or after factory default"
+            "tone":"/opt/Bose/etc/Bose_Tone_11.flac",
+            "comment":"intent is play/pause"
         },
         {
             "event_id":2,
-            "tone":"T4_ready_to_connect.flac",
-            "comment":"bluetooth discoverable"
+            "tone":"/opt/Bose/etc/Bose_Tone_11.flac",
+            "comment":"next track"
         },
         {
             "event_id":3,
-            "tone":"T4_ready_to_connect.flac",
-            "comment":"bluetooth clear pairing list"
+            "tone":"/opt/Bose/etc/Bose_Tone_11.flac",
+            "comment":"prev track"
         },
         {
             "event_id":4,
-            "tone":"T5_connected.flac",
-            "comment":"bluetooth connect notification"
+            "tone":"/opt/Bose/etc/Bose_Tone_11.flac",
+            "comment":"network standby"
         },
         {
             "event_id":5,
-            "tone":"T6_disconnected.flac",
-            "comment":"bluetooth disconnected notification"
-        },
-        {
-            "event_id":6,
-            "tone":"T7_positive_confirmation.flac",
-            "comment":"store preset "
+            "tone":"/opt/Bose/etc/Bose_Tone_4.flac",
+            "comment":"AP setup"
         },
         {
             "event_id":7,
-            "tone":"T13_not_available.flac",
-            "comment":"preset is empty"
-        },
-        {
-            "event_id":8,
-            "tone":"T7_positive_confirmation.flac",
-            "comment":"mic unmuted"
+            "tone":"/opt/Bose/etc/Bose_Tone_7.flac",
+            "comment":"disable network"
         },
         {
             "event_id":9,
-            "tone":"T8_negative_confirmation.flac",
-            "comment":"mic muted "
+            "tone":"/opt/Bose/etc/Bose_Tone_3.flac",
+            "comment":"entering low power "
         },
         {
             "event_id":10,
-            "tone":"T13_not_available.flac",
-            "comment":"source doesn't support next"
+            "tone":"/opt/Bose/etc/Bose_Tone_11.flac",
+            "comment":"volume up intent"
         },
         {
             "event_id":11,
-            "tone":"T13_not_available.flac",
-            "comment":"source doesn't support prev"
+            "tone":"/opt/Bose/etc/Bose_Tone_11.flac",
+            "comment":"volume down intent"
+        },
+        {
+            "event_id":12,
+            "tone":"/opt/Bose/etc/Bose_Tone_11.flac",
+            "comment":"aux in intent selected"
+        },
+        {
+            "event_id":13,
+            "tone":"someplace/mnt/nv/",
+            "comment":"alexa wake-up (listening), action button pressed "
+        },
+        {
+            "event_id":14,
+            "tone":"someplace/mnt/nv/",
+            "comment":"alexa wake-up (listening), action button pressed "
+        },
+        {
+            "event_id":15,
+            "tone":"someplace/mnt/nv/",
+            "comment":"alexa kill audio, action button press when TTS/alarm is in progress "
+        },
+        {
+            "event_id":16,
+            "tone":"/opt/Bose/etc/Bose_Tone_7.flac",
+            "comment":"store preset-1,TBD we may just need one event for all 6 presets "
+        },
+        {
+            "event_id":17,
+            "tone":"/opt/Bose/etc/Bose_Tone_7.flac",
+            "comment":"store preset-2 "
+        },
+        {
+            "event_id":18,
+            "tone":"/opt/Bose/etc/Bose_Tone_7.flac",
+            "tone":"someplace/mnt/nv/",
+            "comment":"store preset-3 "
+        },
+        {
+            "event_id":19,
+            "tone":"/opt/Bose/etc/Bose_Tone_7.flac",
+            "comment":"store preset-4 "
+        },
+        {
+            "event_id":20,
+            "tone":"/opt/Bose/etc/Bose_Tone_7.flac",
+            "tone":"someplace/mnt/nv/",
+            "comment":"store preset-5 "
+        },
+        {
+            "event_id":21,
+            "tone":"/opt/Bose/etc/Bose_Tone_7.flac",
+            "comment":"store preset-6 "
+        },
+        {
+            "event_id":22,
+            "tone":"/opt/Bose/etc/Bose_Tone_11.flac",
+            "comment":"play preset-1 "
+        },
+        {
+            "event_id":23,
+            "tone":"/opt/Bose/etc/Bose_Tone_11.flac",
+            "comment":"play preset-2 "
+        },
+        {
+            "event_id":24,
+            "tone":"/opt/Bose/etc/Bose_Tone_11.flac",
+            "comment":"play preset-3 "
+        },
+        {
+            "event_id":25,
+            "tone":"/opt/Bose/etc/Bose_Tone_11.flac",
+            "comment":"play preset-4 "
+        },
+        {
+            "event_id":26,
+            "tone":"/opt/Bose/etc/Bose_Tone_11.flac",
+            "comment":"play preset-5 "
+        },
+        {
+            "event_id":27,
+            "tone":"/opt/Bose/etc/Bose_Tone_11.flac",
+            "comment":"play preset-6 "
+        },
+        {
+            "event_id":28,
+            "tone":"/opt/Bose/etc/Bose_Tone_5.flac",
+            "comment":"bluetooth connect notification"
+        },
+        {
+            "event_id":29,
+            "tone":"/opt/Bose/etc/Bose_Tone_6.flac",
+            "comment":"bluetooth disconnected notification"
+        },
+        {
+            "event_id":30,
+            "tone":"/opt/Bose/etc/Bose_Tone_7.flac",
+            "comment":"bluetooth clear pairing list"
+        },
+        {
+            "event_id":31,
+            "tone":"someplace/mnt/nv/",
+            "comment":"speaker mute on "
+        },
+        {
+            "event_id":32,
+            "tone":"someplace/mnt/nv/",
+            "comment":"speaker mute off "
+        },
+        {
+            "event_id":33,
+            "tone":"/opt/Bose/etc/Bose_Tone_2.flac",
+            "comment":"when boot up complete and transitioning out of bootup state"
+        },
+        {
+            "event_id":34,
+            "tone":"/opt/Bose/etc/Bose_Tone_5a.flac",
+            "comment":"when setup is complete and transitining out of setup"
+        },
+        {
+            "event_id":35,
+            "tone":"/opt/Bose/etc/Bose_Tone_1.flac",
+            "comment":"THX event first time the device boots up"
+        },
+        {
+            "event_id":36,
+            "tone":"/opt/Bose/etc/Bose_Tone_9.flac",
+            "comment":"when preset is empty"
+        },
+        {
+            "event_id":37,
+            "tone":"/opt/Bose/etc/Bose_Tone_11.flac",
+            "comment":"mic muted"
+        },
+        {
+            "event_id":38,
+            "tone":"/opt/Bose/etc/Bose_Tone_11.flac",
+            "comment":"mic unmuted"
         }
     ]
 }
