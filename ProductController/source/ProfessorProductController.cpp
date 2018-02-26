@@ -172,6 +172,8 @@ ProfessorProductController::ProfessorProductController( ) :
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::Run( )
 {
+    CommonInitialize( );
+
     m_Running = true;
 
     BOSE_DEBUG( s_logger, "----------- Product Controller State Machine    ------------" );
@@ -618,18 +620,6 @@ std::shared_ptr< ProductAdaptIQManager >& ProfessorProductController::GetAdaptIQ
 std::shared_ptr< ProductCecHelper >& ProfessorProductController::GetCecHelper( )
 {
     return m_ProductCecHelper;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetIntentHandler
-///
-/// @return This method returns a reference to the IntentHandler instance.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-IntentHandler& ProfessorProductController::GetIntentHandler( )
-{
-    return m_IntentHandler;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
