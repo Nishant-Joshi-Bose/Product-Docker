@@ -148,11 +148,14 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following method is used to get a reference to the intent manager instance for
+    /// @brief The following method is used to get a reference to the intent handler instance for
     ///        processing actions from the product controller.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    IntentHandler& GetIntentHandler( );
+    IntentHandler& GetIntentHandler( ) override
+    {
+        return m_IntentHandler;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -218,6 +221,7 @@ public:
 
     BLESetupService::ProductId GetProductId() const override
     {
+        // @TODO PGC-788
         return BLESetupService::ProductId::PROFESSOR;
     }
 
@@ -240,6 +244,10 @@ public:
     void ClearWifiProfileCount() override;
 
     void PerformRequestforWiFiProfiles() override;
+
+    PassportPB::ContentItem GetOOBDefaultLastContentItem() const override;
+
+    bool CanPersistAsLastContentItem( const SoundTouchInterface::ContentItem &ci ) const override;
 
 private:
 
@@ -310,7 +318,7 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following declaration is used for intent management based on key actions.
+    /// @brief The following declaration is used for intent management based on actions.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     IntentHandler m_IntentHandler;

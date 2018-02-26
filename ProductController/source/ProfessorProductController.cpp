@@ -172,6 +172,8 @@ ProfessorProductController::ProfessorProductController( ) :
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::Run( )
 {
+    CommonInitialize( );
+
     m_Running = true;
 
     BOSE_DEBUG( s_logger, "----------- Product Controller State Machine    ------------" );
@@ -635,18 +637,6 @@ std::shared_ptr< ProductCecHelper >& ProfessorProductController::GetCecHelper( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::GetIntentHandler
-///
-/// @return This method returns a reference to the IntentHandler instance.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-IntentHandler& ProfessorProductController::GetIntentHandler( )
-{
-    return m_IntentHandler;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProfessorProductController::IsBooted
 ///
 /// @return This method returns a true or false value, based on a series of set member variables,
@@ -860,6 +850,50 @@ std::string const& ProfessorProductController::GetProductDescription() const
     }
 
     return productDescription;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetOOBDefaultLastContentItem
+///
+/// @return This method returns the PassportPB::ContentItem value to be used for initializing the OOB LastContentItem
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+PassportPB::ContentItem ProfessorProductController::GetOOBDefaultLastContentItem() const
+{
+    PassportPB::ContentItem item;
+    item.set_source( "PRODUCT" );
+    item.set_sourceaccount( "TV" );
+    return item;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::CanPersistAsLastContentItem
+///
+/// @param  const SoundTouchInterface::ContentItem &ci
+///
+/// @brief  Determines if the content item can be persisted in m_lastContentItem
+///
+/// @return Returns true or false
+///////////////////////////////////////////////////////////////////////////////
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProfessorProductController::CanPersistAsLastContentItem( const SoundTouchInterface::ContentItem &ci ) const
+{
+    bool retVal = true;
+    if( !ProductController::CanPersistAsLastContentItem( ci ) )
+    {
+        retVal = false;
+    }
+    if( ci.source() == "PRODUCT" && ( ci.sourceaccount() == "ADAPTiQ" ) )
+    {
+        retVal = false;
+    }
+
+    BOSE_VERBOSE( s_logger, "ContentItem %s can%s persist in Professor as LastContentItem",
+                  ProtoToMarkup::ToJson( ci, false ).c_str( ), retVal ? "" : "not" );
+    return retVal;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
