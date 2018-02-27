@@ -79,19 +79,36 @@ void ProductSourceMonitor::Run( )
 {
     m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductSourceMonitor" );
 
-    auto handleSources = [ this ] (const SoundTouchInterface::Sources& sources)
+    auto handleSources = [ this ]( const SoundTouchInterface::Sources & sources )
     {
-        UpdateSources(sources);
+        UpdateSources( sources );
     };
 
-    auto handleSourcesFail = [ this ] (const EndPointsError::Error& error)
+    auto handleSourcesFail = [ this ]( const EndPointsError::Error & error )
     {
         BOSE_ERROR( s_logger, "Error %d %d <%s> while retrieving source list",
-                error.code( ), error.subcode( ), error.message( ).c_str( ) );
+                    error.code( ), error.subcode( ), error.message( ).c_str( ) );
     };
 
-    m_FrontDoorClient->SendGet<SoundTouchInterface::Sources, EndPointsError::Error>( s_FrontDoorSources, handleSources, handleSourcesFail);
-    m_FrontDoorClient->RegisterNotification<SoundTouchInterface::Sources>( s_FrontDoorSources, handleSources);
+    auto handleSourcesReady = [ = ]( const std::list<std::string>& endPointList )
+    {
+        if( endPointList.empty( ) )
+        {
+            BOSE_ERROR( s_logger, "Endpoint not ready" );
+            return;
+        }
+
+        BOSE_INFO( s_logger, "Registering for %s",  s_FrontDoorSources.c_str() );
+        m_FrontDoorClient->SendGet<SoundTouchInterface::Sources, EndPointsError::Error>( s_FrontDoorSources, handleSources, handleSourcesFail );
+        m_FrontDoorClient->RegisterNotification<SoundTouchInterface::Sources>( s_FrontDoorSources, handleSources );
+    };
+
+    auto handleSourcesNotReady = [ this ]( const std::list<std::string>& endPointList )
+    {
+    };
+
+    std::list<std::string> endPointList = { s_FrontDoorSources };
+    m_FrontDoorClient->RegisterEndpointsOfInterest( endPointList, handleSourcesReady, handleSourcesNotReady );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,9 +125,40 @@ void ProductSourceMonitor::Stop( void )
 /// @brief ProductSourceMonitor::UpdateSources
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSourceMonitor::UpdateSources( const SoundTouchInterface::Sources& sources)
+void ProductSourceMonitor::UpdateSources( const SoundTouchInterface::Sources& sources )
 {
+    BOSE_INFO( s_logger, "%s got source update %s", __func__, ProtoToMarkup::ToJson( sources ).c_str() );
     m_sources = sources;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductSourceMonitor::UpdateSources
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+BOptional<SoundTouchInterface::Sources::SourceItem> ProductSourceMonitor::FindSource( SoundTouchInterface::ContentItem& item )
+{
+    if( ( not item.has_sourceaccount() ) or ( not item.has_source() ) )
+    {
+        return {};
+    }
+
+    for( auto i = 0 ; i < m_sources.sources_size(); i++ )
+    {
+        auto source = m_sources.sources( i );
+
+        if( ( not source.has_sourceaccountname() ) or ( not source.has_sourcename() ) )
+        {
+            continue;
+        }
+
+        if( ( source.sourceaccountname() == item.sourceaccount() ) and ( source.sourcename() == item.source() ) )
+        {
+            return source;
+        }
+    }
+
+    return {};
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

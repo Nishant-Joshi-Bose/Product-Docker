@@ -35,6 +35,7 @@
 #include "NotifyTargetTaskIF.h"
 #include "FrontDoorClient.h"
 #include "ContentSelectionService.pb.h"
+#include "BOptional.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -70,6 +71,8 @@ public:
     void Run( void );
     void Stop( void );
 
+    BOptional<SoundTouchInterface::Sources::SourceItem> FindSource( SoundTouchInterface::ContentItem& item );
+
 private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These declarations store the main task for processing LPM hardware events and requests. It
@@ -85,14 +88,9 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr<FrontDoorClientIF>      m_FrontDoorClient;
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief Latest source list received
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
     SoundTouchInterface::Sources            m_sources;
 
-    void UpdateSources(const SoundTouchInterface::Sources& sources);
+    void UpdateSources( const SoundTouchInterface::Sources& sources );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
