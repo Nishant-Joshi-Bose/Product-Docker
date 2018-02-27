@@ -309,7 +309,7 @@ public:
 /// @brief  Returns reference to IntentHandler
 /// @return IntentHandler&
 ///////////////////////////////////////////////////////////////////////////////
-    IntentHandler& GetIntentHandler()
+    IntentHandler& GetIntentHandler( ) override
     {
         return m_IntentHandler;
     }
