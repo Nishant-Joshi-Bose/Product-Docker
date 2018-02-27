@@ -651,7 +651,6 @@ std::shared_ptr< ProductDspHelper >& ProfessorProductController::GetDspHelper( )
     return m_ProductDspHelper;
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProfessorProductController::IsBooted
