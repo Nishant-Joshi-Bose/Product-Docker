@@ -79,7 +79,7 @@ bool ProductNetworkManager::Run( )
     /// become ready or not ready, respectively; subsequent methods are made then for getting
     /// and registering for the associated network data.
     ///
-    auto networkEndPointReadyCallback = [ this ]( const std::list< std::string >& endPointList )
+    auto networkEndPointReadyFunction = [ this ]( const std::list< std::string >& endPointList )
     {
         if( endPointList.empty( ) )
         {
@@ -115,10 +115,16 @@ bool ProductNetworkManager::Run( )
         }
     };
 
-    auto networkEndPointNotReadyCallback = [ this ]( const std::list< std::string >& endPointList )
+    auto networkEndPointNotReadyFunction = [ this ]( const std::list< std::string >& endPointList )
     {
         BOSE_ERROR( s_logger, "One or more network end point are not yet ready." );
     };
+
+    AsyncCallback< std::list< std::string > >
+        networkEndPointReadyCallback( networkEndPointReadyFunction, m_ProductTask );
+
+    AsyncCallback< std::list< std::string > >
+        networkEndPointNotReadyCallback( networkEndPointNotReadyFunction, m_ProductTask );
 
     ///
     /// The product now registers for all of its network end points of interest.
@@ -147,12 +153,12 @@ bool ProductNetworkManager::Run( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductNetworkManager::RegisterForNetworkStatus( )
 {
-    auto callbackForNetworkStatusSuccess = [ this ]( const NetManager::Protobuf::NetworkStatus & status )
+    auto functionForNetworkStatusSuccess = [ this ]( const NetManager::Protobuf::NetworkStatus & status )
     {
         HandleNetworkStatus( status );
     };
 
-    auto callbackForNetworkStatusFailure = [ this ]( const EndPointsError::Error & error )
+    auto functionForNetworkStatusFailure = [ this ]( const EndPointsError::Error & error )
     {
         BOSE_ERROR( s_logger, "An error code %d %d <%s> was returned from a network status request.",
                     error.code( ),
@@ -160,16 +166,22 @@ void ProductNetworkManager::RegisterForNetworkStatus( )
                     error.message( ).c_str( ) );
     };
 
-    m_FrontDoorClient->SendGet< NetManager::Protobuf::NetworkStatus, EndPointsError::Error >(
-        FRONTDOOR_NETWORK_STATUS,
-        callbackForNetworkStatusSuccess,
-        callbackForNetworkStatusFailure );
+    AsyncCallback< NetManager::Protobuf::NetworkStatus >
+        callbackForNetworkStatusSuccess( functionForNetworkStatusSuccess, m_ProductTask );
+
+    AsyncCallback< EndPointsError::Error >
+        callbackForNetworkStatusFailure( functionForNetworkStatusFailure, m_ProductTask );
 
     m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::NetworkStatus >(
         FRONTDOOR_NETWORK_STATUS,
         callbackForNetworkStatusSuccess );
 
-    BOSE_DEBUG( s_logger, "A get and notification request for network status changes has been made." );
+    m_FrontDoorClient->SendGet< NetManager::Protobuf::NetworkStatus, EndPointsError::Error >(
+        FRONTDOOR_NETWORK_STATUS,
+        callbackForNetworkStatusSuccess,
+        callbackForNetworkStatusFailure );
+
+    BOSE_DEBUG( s_logger, "A notification and get request for network status changes has been made." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -183,12 +195,12 @@ void ProductNetworkManager::RegisterForNetworkStatus( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductNetworkManager::RegisterForWiFiStatus( )
 {
-    auto callbackForWiFiStatusSuccess = [ this ]( const NetManager::Protobuf::WiFiStatus & status )
+    auto functionForWiFiStatusSuccess = [ this ]( const NetManager::Protobuf::WiFiStatus & status )
     {
         HandleWiFiStatus( status );
     };
 
-    auto callbackForWiFiStatusFailure = [ this ]( const EndPointsError::Error & error )
+    auto functionForWiFiStatusFailure = [ this ]( const EndPointsError::Error & error )
     {
         BOSE_ERROR( s_logger, "An error code %d %d <%s> was returned from a WiFi status request.",
                     error.code( ),
@@ -196,16 +208,22 @@ void ProductNetworkManager::RegisterForWiFiStatus( )
                     error.message( ).c_str( ) );
     };
 
-    m_FrontDoorClient->SendGet< NetManager::Protobuf::WiFiStatus, EndPointsError::Error >(
-        FRONTDOOR_NETWORK_WIFI_STATUS,
-        callbackForWiFiStatusSuccess,
-        callbackForWiFiStatusFailure );
+    AsyncCallback< NetManager::Protobuf::WiFiStatus >
+        callbackForWiFiStatusSuccess( functionForWiFiStatusSuccess, m_ProductTask );
+
+    AsyncCallback< EndPointsError::Error >
+        callbackForWiFiStatusFailure( functionForWiFiStatusFailure, m_ProductTask );
 
     m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::WiFiStatus >(
         FRONTDOOR_NETWORK_WIFI_STATUS,
         callbackForWiFiStatusSuccess );
 
-    BOSE_DEBUG( s_logger, "A get and notification request for wireless status changes has been made." );
+    m_FrontDoorClient->SendGet< NetManager::Protobuf::WiFiStatus, EndPointsError::Error >(
+        FRONTDOOR_NETWORK_WIFI_STATUS,
+        callbackForWiFiStatusSuccess,
+        callbackForWiFiStatusFailure );
+
+    BOSE_DEBUG( s_logger, "A notification and get request for wireless status changes has been made." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -219,12 +237,12 @@ void ProductNetworkManager::RegisterForWiFiStatus( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductNetworkManager::RegisterForWiFiProfiles( )
 {
-    auto callbackForWiFiProfilesSuccess = [ this ]( const NetManager::Protobuf::WiFiProfiles & profiles )
+    auto functionForWiFiProfilesSuccess = [ this ]( const NetManager::Protobuf::WiFiProfiles & profiles )
     {
         HandleWiFiProfiles( profiles );
     };
 
-    auto callbackForWiFiProfilesFailure = [ this ]( const EndPointsError::Error & error )
+    auto functionForWiFiProfilesFailure = [ this ]( const EndPointsError::Error & error )
     {
         BOSE_ERROR( s_logger, "An error code %d %d <%s> was returned from a WiFi profiles request.",
                     error.code( ),
@@ -232,16 +250,22 @@ void ProductNetworkManager::RegisterForWiFiProfiles( )
                     error.message( ).c_str( ) );
     };
 
-    m_FrontDoorClient->SendGet< NetManager::Protobuf::WiFiProfiles, EndPointsError::Error >(
-        FRONTDOOR_NETWORK_WIFI_PROFILE,
-        callbackForWiFiProfilesSuccess,
-        callbackForWiFiProfilesFailure );
+    AsyncCallback< NetManager::Protobuf::WiFiProfiles >
+        callbackForWiFiProfilesSuccess( functionForWiFiProfilesSuccess, m_ProductTask );
+
+    AsyncCallback< EndPointsError::Error >
+        callbackForWiFiProfilesFailure( functionForWiFiProfilesFailure, m_ProductTask );
 
     m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::WiFiProfiles >(
         FRONTDOOR_NETWORK_WIFI_PROFILE,
         callbackForWiFiProfilesSuccess );
 
-    BOSE_DEBUG( s_logger, "A get and notification request for wireless profile changes has been made." );
+    m_FrontDoorClient->SendGet< NetManager::Protobuf::WiFiProfiles, EndPointsError::Error >(
+        FRONTDOOR_NETWORK_WIFI_PROFILE,
+        callbackForWiFiProfilesSuccess,
+        callbackForWiFiProfilesFailure );
+
+    BOSE_DEBUG( s_logger, "A notification and get request for wireless profile changes has been made." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

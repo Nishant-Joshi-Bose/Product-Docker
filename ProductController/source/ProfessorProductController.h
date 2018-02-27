@@ -274,7 +274,6 @@ private:
     ///        machine states.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool m_IsCapsReady;
     bool m_IsAudioPathReady;
     bool m_IsSTSReady;
     bool m_IsNetworkConfigured;
@@ -284,7 +283,7 @@ private:
     bool m_IsMicrophoneEnabled;
     bool m_Running;
 
-    ////////////////////////////////////////////////////////////////////////////GetLastSoundTouchPlayback////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following declarations are used as interfaces to the ProductSTSController,
     ///        which implements the interactions between the Professor Product Controller and the
