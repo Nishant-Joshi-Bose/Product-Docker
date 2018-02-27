@@ -41,6 +41,7 @@ ADD_EXECUTABLE(Professor
   source/ProductCommandLine.cpp
   source/ProductKeyInputInterface.cpp
   source/ProductNetworkManager.cpp
+  source/ProductSourceMonitor.cpp
   source/ProductStart.cpp
   source/ProductSystemManager.cpp
   source/ProfessorProductController.cpp
