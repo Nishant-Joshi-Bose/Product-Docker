@@ -36,7 +36,6 @@ namespace
 const std::string s_FrontDoorAudioFormatUrl = "/audio/format";
 
 // @todo - work out better numbers here ( as of now no async on auto wake or change to my knowledge)
-constexpr uint32_t s_PollingFirstPollTime          = 0;
 constexpr uint32_t s_PollingTimeAutoWakeMs         = 200;
 constexpr uint32_t s_PollingTimeNormalOperationsMs = 1000;
 
@@ -90,8 +89,8 @@ bool ProductDspHelper::Run( )
     {
         Callback< LpmServiceMessages::IpcDspStatus_t >
         CallbackForDspState( std::bind( &ProductDspHelper::DspStatusCallback,
-                                             this,
-                                             std::placeholders::_1 ) );
+                                        this,
+                                        std::placeholders::_1 ) );
 
         m_ProductLpmHardwareInterface->RegisterForLpmEvents( IPC_DSP_STATUS, CallbackForDspState );
     }
@@ -136,6 +135,7 @@ void ProductDspHelper::Stop( )
 void ProductDspHelper::DspStatusCallback( const LpmServiceMessages::IpcDspStatus_t& status )
 {
     BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
+    // @todo
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -157,10 +157,10 @@ void ProductDspHelper::SetAutoWakeMonitor( bool enabled )
     }
     else
     {
-        m_timer->SetTimeouts( s_PollingFirstPollTime,
+        m_timer->SetTimeouts( s_PollingTimeAutoWakeMs,
                               s_PollingTimeAutoWakeMs );
 
-        auto pollDspCb = [this] ()
+        auto pollDspCb = [this]()
         {
             Callback< LpmServiceMessages::IpcDspStatus_t >
             pollDspCb( std::bind( &ProductDspHelper::DspStatusCallback,
@@ -193,10 +193,10 @@ void ProductDspHelper::SetNormalOperationsMonitor( bool enabled )
     }
     else
     {
-        m_timer->SetTimeouts( s_PollingFirstPollTime,
+        m_timer->SetTimeouts( s_PollingTimeNormalOperationsMs,
                               s_PollingTimeNormalOperationsMs );
 
-        auto pollDspCb = [this] ()
+        auto pollDspCb = [this]()
         {
             Callback< LpmServiceMessages::IpcDspStatus_t >
             pollDspCb( std::bind( &ProductDspHelper::DspStatusCallback,
@@ -221,7 +221,7 @@ void ProductDspHelper::SetNormalOperationsMonitor( bool enabled )
 //////////////////////////////////////////////////////////////////////////////////////////////
 const std::string ProductDspHelper::GetAudioFormatChannelString( uint32_t fullRangeChannels, uint32_t lfeChannels )
 {
-    return std::to_string(fullRangeChannels) + "." + std::to_string(lfeChannels);
+    return std::to_string( fullRangeChannels ) + "." + std::to_string( lfeChannels );
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -235,26 +235,26 @@ const std::string ProductDspHelper::GetAudioFormatNameFromEnum( LpmServiceMessag
 {
     switch( audioFormat )
     {
-      case LpmServiceMessages::AUDIO_FORMAT_PCM:
-          return DEF_STR_AUDIO_FORMAT_LPCM;
+    case LpmServiceMessages::AUDIO_FORMAT_PCM:
+        return DEF_STR_AUDIO_FORMAT_LPCM;
 
-      case LpmServiceMessages::AUDIO_FORMAT_AC3:
-          return DEF_STR_AUDIO_FORMAT_DOLBY_DIGITAL;
+    case LpmServiceMessages::AUDIO_FORMAT_AC3:
+        return DEF_STR_AUDIO_FORMAT_DOLBY_DIGITAL;
 
-      case LpmServiceMessages::AUDIO_FORMAT_DTS:
-          return DEF_STR_AUDIO_FORMAT_DTS;
+    case LpmServiceMessages::AUDIO_FORMAT_DTS:
+        return DEF_STR_AUDIO_FORMAT_DTS;
 
-      case LpmServiceMessages::AUDIO_FORMAT_AAC:
-          return DEF_STR_AUDIO_FORMAT_AAC;
+    case LpmServiceMessages::AUDIO_FORMAT_AAC:
+        return DEF_STR_AUDIO_FORMAT_AAC;
 
-      case LpmServiceMessages::AUDIO_FORMAT_MLP:
-          return DEF_STR_AUDIO_FORMAT_DOLBY_TRUEHD;
+    case LpmServiceMessages::AUDIO_FORMAT_MLP:
+        return DEF_STR_AUDIO_FORMAT_DOLBY_TRUEHD;
 
-      case LpmServiceMessages::AUDIO_FORMAT_EAC3:
-          return DEF_STR_AUDIO_FORMAT_DOLBY_DIGITAL_PLUS;
+    case LpmServiceMessages::AUDIO_FORMAT_EAC3:
+        return DEF_STR_AUDIO_FORMAT_DOLBY_DIGITAL_PLUS;
 
-      default:
-          return DEF_STR_AUDIO_FORMAT_UNKNOWN;
+    default:
+        return DEF_STR_AUDIO_FORMAT_UNKNOWN;
     }
 }
 
@@ -296,9 +296,9 @@ void ProductDspHelper::AudioFormatGetHandler( const Callback<ProductPb::AudioFor
     BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
     Callback< LpmServiceMessages::IpcDspStatus_t >
     audioFormatCb( std::bind( &ProductDspHelper::AudioFormatGetDspStatusCallback,
-                          this,
-                          resp,
-                          std::placeholders::_1 ) );
+                              this,
+                              resp,
+                              std::placeholders::_1 ) );
     m_ProductLpmHardwareInterface->GetDspStatus( audioFormatCb );
 }
 
