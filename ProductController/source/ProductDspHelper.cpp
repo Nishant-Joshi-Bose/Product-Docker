@@ -72,7 +72,7 @@ ProductDspHelper::ProductDspHelper( ProfessorProductController& ProductControlle
       m_timer( APTimer::Create( m_ProductTask, "DspStatusPollTimer" ) ),
       m_CustomProductController( static_cast< ProfessorProductController & >( ProductController ) )
 {
-    BOSE_DEBUG( s_logger, __PRETTY_FUNCTION__ );
+    BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,7 @@ ProductDspHelper::ProductDspHelper( ProfessorProductController& ProductControlle
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductDspHelper::Run( )
 {
-    BOSE_DEBUG( s_logger, __PRETTY_FUNCTION__ );
+    BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
 
     {
         Callback< LpmServiceMessages::IpcDspStatus_t >
@@ -121,7 +121,7 @@ bool ProductDspHelper::Run( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDspHelper::Stop( )
 {
-    BOSE_DEBUG( s_logger, __PRETTY_FUNCTION__ );
+    BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
     m_AudioFormatGetConnection.Disconnect();
     return;
 }
@@ -135,7 +135,7 @@ void ProductDspHelper::Stop( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDspHelper::DspStatusCallback( const LpmServiceMessages::IpcDspStatus_t& status )
 {
-    BOSE_DEBUG( s_logger, __PRETTY_FUNCTION__ );
+    BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -147,7 +147,7 @@ void ProductDspHelper::DspStatusCallback( const LpmServiceMessages::IpcDspStatus
 //////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDspHelper::SetAutoWakeMonitor( bool enabled )
 {
-    BOSE_DEBUG( s_logger, __PRETTY_FUNCTION__ );
+    BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
     m_MonitorAutoWake = enabled;
 
     // Start timer
@@ -183,7 +183,7 @@ void ProductDspHelper::SetAutoWakeMonitor( bool enabled )
 //////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDspHelper::SetNormalOperationsMonitor( bool enabled )
 {
-    BOSE_DEBUG( s_logger, __PRETTY_FUNCTION__ );
+    BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
     m_MonitorAutoWake = false;
 
     // Start timer
@@ -269,7 +269,7 @@ const std::string ProductDspHelper::GetAudioFormatNameFromEnum( LpmServiceMessag
 void ProductDspHelper::AudioFormatGetDspStatusCallback( const Callback<ProductPb::AudioFormat>& resp,
                                                         const LpmServiceMessages::IpcDspStatus_t status )
 {
-    BOSE_DEBUG( s_logger, __PRETTY_FUNCTION__ );
+    BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
 
     // Call the default callback
     DspStatusCallback( status );
@@ -293,7 +293,7 @@ void ProductDspHelper::AudioFormatGetDspStatusCallback( const Callback<ProductPb
 void ProductDspHelper::AudioFormatGetHandler( const Callback<ProductPb::AudioFormat>& resp,
                                               const Callback<EndPointsError::Error>& error )
 {
-    BOSE_DEBUG( s_logger, __PRETTY_FUNCTION__ );
+    BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
     Callback< LpmServiceMessages::IpcDspStatus_t >
     audioFormatCb( std::bind( &ProductDspHelper::AudioFormatGetDspStatusCallback,
                           this,
