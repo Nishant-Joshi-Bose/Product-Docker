@@ -203,6 +203,32 @@ bool CustomProductLpmHardwareInterface::SendAccessoryDisband( const Callback<Ipc
     return true;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name  CustomProductLpmHardwareInterface::GetDspStatus
+///
+/// @brief This method sends a request to get the dsp status
+///
+/// @param none
+///
+/// @return none
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductLpmHardwareInterface::GetDspStatus( const Callback<IpcDspStatus_t> &cb )
+{
+    if( isConnected( ) == false || GetLpmClient( ) == nullptr )
+    {
+        BOSE_ERROR( s_logger, "An DSP status request could not be made, as no connection is available." );
+
+        return false;
+    }
+
+    BOSE_DEBUG( s_logger, "A DSP status request will be made." );
+
+    GetLpmClient()->GetDspStatus( cb );
+
+    return true;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

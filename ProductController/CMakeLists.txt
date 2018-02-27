@@ -28,6 +28,7 @@ INCLUDE_DIRECTORIES(
 ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/AdaptIQ.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
+  ${PROTO_CC_DEST}/AudioFormat.pb.cc
   ${PROTO_CC_DEST}/BlasterConfig.pb.cc
   ${PROTO_CC_DEST}/CecMode.pb.cc
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
@@ -39,6 +40,7 @@ ADD_EXECUTABLE(Professor
   source/ProductAdaptIQManager.cpp
   source/ProductCecHelper.cpp
   source/ProductCommandLine.cpp
+  source/ProductDspHelper.cpp
   source/ProductKeyInputInterface.cpp
   source/ProductNetworkManager.cpp
   source/ProductStart.cpp
@@ -49,6 +51,7 @@ ADD_EXECUTABLE(Professor
   source/CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQ.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQExiting.cpp
+  source/CustomStateMachine/CustomProductControllerStateIdle.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateOn.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayable.cpp
