@@ -124,6 +124,14 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
+    /// @brief The following method is used to get a shared pointer to the Product AudioService
+    ///        instance from the product controller.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    std::shared_ptr< CustomProductAudioService >& GetProductAudioServiceInstance( ) override;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
     /// @brief The following method is used to get a shared pointer to the AdaptIQ instance
     ///        from the product controller.
     ///
@@ -140,11 +148,14 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following method is used to get a reference to the intent manager instance for
+    /// @brief The following method is used to get a reference to the intent handler instance for
     ///        processing actions from the product controller.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    IntentHandler& GetIntentHandler( );
+    IntentHandler& GetIntentHandler( ) override
+    {
+        return m_IntentHandler;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -210,6 +221,7 @@ public:
 
     BLESetupService::ProductId GetProductId() const override
     {
+        // @TODO PGC-788
         return BLESetupService::ProductId::PROFESSOR;
     }
 
@@ -217,7 +229,6 @@ public:
     {
         return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );
     }
-
 
     std::vector<std::string> GetUniqueLanguages() const override
     {
@@ -229,6 +240,14 @@ public:
     void SendInitialCapsData() override;
 
     std::unique_ptr<LightBar::LightBarController> m_lightbarController;
+
+    void ClearWifiProfileCount() override;
+
+    void PerformRequestforWiFiProfiles() override;
+
+    PassportPB::ContentItem GetOOBDefaultLastContentItem() const override;
+
+    bool CanPersistAsLastContentItem( const SoundTouchInterface::ContentItem &ci ) const override;
 
 private:
 
@@ -299,7 +318,7 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following declaration is used for intent management based on key actions.
+    /// @brief The following declaration is used for intent management based on actions.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     IntentHandler m_IntentHandler;

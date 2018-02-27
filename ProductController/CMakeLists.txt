@@ -93,7 +93,7 @@ TARGET_LINK_LIBRARIES(Professor
   dl
   SoundTouch_SDK_Protobuf_static
   SoftwareUpdateAPI
-  SASSFrontDoorServiceProto
+  #SASSFrontDoorServiceProto # TODO: SASS integration
 )
 
 INSTALL(TARGETS Professor DESTINATION ${OUTPUT_BIN_DIR})
