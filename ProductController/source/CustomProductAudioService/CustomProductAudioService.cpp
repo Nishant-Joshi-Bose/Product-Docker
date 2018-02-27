@@ -9,14 +9,12 @@
 #include "AsyncCallback.h"
 #include "APProductFactory.h"
 #include "LpmClientFactory.h"
+#include "Utilities.h"
 #include "ProfessorProductController.h"
 #include "CustomProductAudioService.h"
 #include "ProtoToMarkup.h"
 #include "SoundTouchInterface/ContentItem.pb.h"
 #include "AutoLpmServiceMessages.pb.h"
-
-
-static DPrint s_logger( "CustomProductAudioService" );
 
 constexpr char kBassEndPoint            [] = "/audio/bass";
 constexpr char kTrebleEndPoint          [] = "/audio/treble";
@@ -24,6 +22,7 @@ constexpr char kCenterEndPoint          [] = "/audio/center";
 constexpr char kSurroundEndPoint        [] = "/audio/surround";
 constexpr char kGainOffsetEndPoint      [] = "/audio/gainOffset";
 constexpr char kAvSyncEndPoint          [] = "/audio/avSync";
+constexpr char kSubwooferGainEndPoint   [] = "/audio/subWooferGain";
 constexpr char kModeEndPoint            [] = "/audio/mode";
 constexpr char kContentTypeEndPoint     [] = "/audio/contentType";
 constexpr char kDualMonoSelectEndPoint  [] = "/audio/dualMonoSelect";
@@ -167,6 +166,7 @@ void CustomProductAudioService::FetchLatestAudioSettings( )
     m_MainStreamAudioSettings.set_surroundlevel( m_AudioSettingsMgr->GetSurround( ).value() );
     m_MainStreamAudioSettings.set_gainoffset( m_AudioSettingsMgr->GetGainOffset( ).value() );
     m_MainStreamAudioSettings.set_targetlatencyms( m_AudioSettingsMgr->GetAvSync( ).value() );
+    m_MainStreamAudioSettings.set_subwooferlevel( m_AudioSettingsMgr->GetSubwooferGain( ).value() );
     m_MainStreamAudioSettings.set_audiomode( ModeNameToEnum( m_AudioSettingsMgr->GetMode( ).value() ) );
     m_MainStreamAudioSettings.set_contenttype( ContentTypeNameToEnum( m_AudioSettingsMgr->GetContentType( ).value() ) );
     m_MainStreamAudioSettings.set_dualmonoselect( DualMonoSelectNameToEnum( m_AudioSettingsMgr->GetDualMonoSelect( ).value() ) );
@@ -332,7 +332,7 @@ LpmServiceMessages::AudioSettingsDualMonoMode_t CustomProductAudioService::DualM
 /// @name   CustomProductAudioService::RegisterFrontDoorEvents
 ///
 /// @brief  On Professor, it register for put/post/get FrontDoor request for
-///         bass, treble, center, surround, gainOffset, avSync, mode, contentType
+///         bass, treble, center, surround, gainOffset, avSync, subwooferGain, mode, contentType
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::RegisterFrontDoorEvents()
@@ -482,6 +482,30 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                 setAvSyncAction,
                                 m_FrontDoorClientIF,
                                 m_ProductTask ) );
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// Endpoint /audio/subWooferGain - register ProductController as handler for POST/PUT/GET requests
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    auto getSubwooferGainAction = [ this ]( )
+    {
+        return m_AudioSettingsMgr->GetSubwooferGain( );
+    };
+    auto setSubwooferGainAction = [ this ]( ProductPb::AudioSubwooferGain val )
+    {
+        bool ret = m_AudioSettingsMgr->SetSubwooferGain( val );
+        if( ret )
+        {
+            m_MainStreamAudioSettings.set_subwooferlevel( m_AudioSettingsMgr->GetSubwooferGain( ).value() );
+            SendMainStreamAudioSettingsEvent();
+        }
+        return ret;
+    };
+    m_AudioSubwooferGainSetting = std::unique_ptr<AudioSetting<ProductPb::AudioSubwooferGain>>( new AudioSetting<ProductPb::AudioSubwooferGain>
+                                  ( kSubwooferGainEndPoint,
+                                    getSubwooferGainAction,
+                                    setSubwooferGainAction,
+                                    m_FrontDoorClientIF,
+                                    m_ProductTask ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/mode - register ProductController as handler for POST/PUT/GET requests
