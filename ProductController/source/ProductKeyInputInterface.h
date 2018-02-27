@@ -99,6 +99,7 @@ private:
     bool                                                                        m_connected;
     bool                                                                        m_running;
     A4VQuickSetService::A4VQuickSetServiceClientIF::A4VQuickSetServiceClientPtr m_QSSClient;
+    ProfessorProductController&                                                 m_ProductController;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

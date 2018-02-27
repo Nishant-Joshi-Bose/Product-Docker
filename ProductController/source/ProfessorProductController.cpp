@@ -36,6 +36,7 @@
 #include "ProductSystemManager.h"
 #include "ProductCommandLine.h"
 #include "ProductAdaptIQManager.h"
+#include "ProductSourceMonitor.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
 #include "SystemSourcesProperties.pb.h"
@@ -140,6 +141,7 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductCecHelper( nullptr ),
     m_ProductAdaptIQManager( nullptr ),
     m_ProductAudioService( nullptr ),
+    m_ProductSourceMonitor( nullptr ),
 
     ///
     /// Member Variable Initialization
@@ -495,6 +497,7 @@ void ProfessorProductController::Run( )
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_ProductKeyInputInterface    = std::make_shared< ProductKeyInputInterface          >( *this );
     m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
+    m_ProductSourceMonitor        = std::make_shared< ProductSourceMonitor              >( *this );
     m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this, m_FrontDoorClientIF, m_ProductLpmHardwareInterface->GetLpmClient() );
 
     if( m_ProductLpmHardwareInterface == nullptr ||
@@ -528,6 +531,7 @@ void ProfessorProductController::Run( )
     m_ProductKeyInputInterface   ->Run( );
     m_ProductCecHelper           ->Run( );
     m_ProductAdaptIQManager      ->Run( );
+    m_ProductSourceMonitor       ->Run( );
 
     ///
     /// Register FrontDoor EndPoints
@@ -622,6 +626,19 @@ std::shared_ptr< ProductAdaptIQManager >& ProfessorProductController::GetAdaptIQ
 {
     return m_ProductAdaptIQManager;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetSourceMonitor
+///
+/// @return This method returns a shared pointer to the SourceMonitor instance
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::shared_ptr< ProductSourceMonitor >& ProfessorProductController::GetSourceMonitor( )
+{
+    return m_ProductSourceMonitor;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -1380,6 +1397,7 @@ void ProfessorProductController::Wait( )
     m_ProductKeyInputInterface   ->Stop( );
     m_ProductCecHelper           ->Stop( );
     m_ProductAdaptIQManager      ->Stop( );
+    m_ProductSourceMonitor       ->Stop( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -65,6 +65,7 @@ class ProductCecHelper;
 class ProductCommandLine;
 class ProductKeyInputInterface;
 class ProductAdaptIQManager;
+class ProductSourceMonitor;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -137,6 +138,14 @@ public:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< ProductAdaptIQManager >& GetAdaptIQManager( );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method is used to get a shared pointer to the SourceMonitor instance
+    ///        from the product controller.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    std::shared_ptr< ProductSourceMonitor >& GetSourceMonitor( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -266,6 +275,7 @@ private:
     std::shared_ptr< ProductCecHelper                  > m_ProductCecHelper;
     std::shared_ptr< ProductAdaptIQManager             > m_ProductAdaptIQManager;
     std::shared_ptr< CustomProductAudioService         > m_ProductAudioService;
+    std::shared_ptr< ProductSourceMonitor              > m_ProductSourceMonitor;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

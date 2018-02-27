@@ -31,6 +31,7 @@
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProductKeyInputInterface.h"
 #include "SystemUtils.h"
+#include "ProductSourceMonitor.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -61,7 +62,8 @@ ProductKeyInputInterface::ProductKeyInputInterface( ProfessorProductController& 
     /// Product Controller Interface
     ///
     m_ProductTask( ProductController.GetTask( ) ),
-    m_ProductNotify( ProductController.GetMessageHandler( ) ), m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
+    m_ProductNotify( ProductController.GetMessageHandler( ) ),
+    m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
     ///
     /// Instantiation of the Key Handler
     ///
@@ -72,7 +74,8 @@ ProductKeyInputInterface::ProductKeyInputInterface( ProfessorProductController& 
     /// Initialization of Class Members
     ///
     m_connected( false ),
-    m_running( false )
+    m_running( false ),
+    m_ProductController( ProductController )
 {
 }
 
@@ -233,11 +236,30 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
         return;
     }
 
-#if 0
-// DON'T REMOVE; ONCE THE SOURCE API IS COMPLETE THIS WILL BE ENABLED AND COMPLETED
-    std::string testDev = "DEVICE_TYPE_TV";
-    std::string testCodeset = "T2778";
-    if( m_QSSClient->IsBlastedKey( keyEvent.keyid(), testDev ) )
+    bool isBlastedKey = false;
+    std::string cicode = "";
+    auto nowSelection = m_ProductController.GetNowSelection();
+
+    if( nowSelection.has_contentitem() )
+    {
+        auto contentItem = nowSelection.contentitem();
+        auto source = m_ProductController.GetSourceMonitor()->FindSource( contentItem );
+
+        if( source and source->has_details() )
+        {
+            if( source->details().has_devicetype() )
+            {
+                isBlastedKey = m_QSSClient->IsBlastedKey( keyEvent.keyid(), source->details().devicetype() );
+            }
+
+            if( source->details().has_cicode() )
+            {
+                cicode = source->details().cicode();
+            }
+        }
+    }
+
+    if( isBlastedKey )
     {
         ///
         /// This key should be blasted
@@ -245,7 +267,7 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
         QSSMSG::BoseKeyReqMessage_t req;
 
         req.set_keyval( keyEvent.keyid() );
-        req.set_codeset( testCodeset );
+        req.set_codeset( cicode );
 
         if( keyEvent.keystate() ==  LpmServiceMessages::KEY_PRESSED )
         {
@@ -262,7 +284,6 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
 
     }
     else
-#endif
     {
         ///
         /// Feed the key into the key handler.
