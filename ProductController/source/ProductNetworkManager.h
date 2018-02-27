@@ -74,24 +74,28 @@ public:
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief  The following public methods are used to run and stop instances of the
-    ///         ProductKeyInputInterface class, respectively, as well as to handle messages sent
-    ///         to it.
+    ///         ProductNetworkManager class, respectively.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool Run( );
     void Stop( );
-    void HandleMessage( ProductMessage& message );
-    uint32_t GetWifiProfileCount() const
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief  The following public methods handle WiFi profile functionality.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    uint32_t GetWifiProfileCount( ) const
     {
         return m_WifiProfileCount;
     }
 
-    void ClearWifiProfileCount()
+    void ClearWifiProfileCount( )
     {
         m_WifiProfileCount = 0;
     }
 
-    void PerformRequestforWiFiProfiles();
+    void PerformRequestforWiFiProfiles( );
 
 private:
 
@@ -111,10 +115,19 @@ private:
     /// @brief The following methods are used to handle the network status.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleEntireNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus );
-    void HandleWiFiStatus( const NetManager::Protobuf::WiFiStatus&     wirelessStatus );
-    void HandleWiFiProfiles( const NetManager::Protobuf::WiFiProfiles& wirelessProfiles );
+    void RegisterForNetworkStatus( );
+    void RegisterForWiFiStatus( );
+    void RegisterForWiFiProfiles( );
+    void HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus );
+    void HandleWiFiStatus( const NetManager::Protobuf::WiFiStatus&       wirelessStatus );
+    void HandleWiFiProfiles( const NetManager::Protobuf::WiFiProfiles&   wirelessProfiles );
 
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief  The following method handles the queuing and sending of status messages to the
+    ///         product controller through the product task.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
     void SendMessage( ProductMessage& message );
 };
 
