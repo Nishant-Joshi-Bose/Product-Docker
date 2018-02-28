@@ -154,7 +154,7 @@ EddieProductController::~EddieProductController()
 {
 }
 
-void EddieProductController::Initialize()
+void EddieProductController::InitializeAction()
 {
     CommonInitialize( );
     ///Instantiate and run the hardware interface.
@@ -171,13 +171,13 @@ void EddieProductController::Initialize()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   EddieProductController::InitializeEddie
+/// @name   EddieProductController::Initialize
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void EddieProductController::InitializeEddie( void )
+void EddieProductController::Initialize( void )
 {
     BOSE_INFO( s_logger, __func__ );
-    IL::BreakThread( std::bind( &EddieProductController::Initialize, this ), GetTask( ) );
+    IL::BreakThread( std::bind( &EddieProductController::InitializeAction, this ), GetTask( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
