@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      ProductSourceMonitor.h
+/// @file      ProductSourceInfo.h
 ///
 /// @brief     This file contains the source code to handle communication with A4VVideoManager service
 ///
@@ -51,19 +51,19 @@ namespace ProductApp
 class CustomProductLpmHardwareInterface;
 class ProductController;
 
-class ProductSourceMonitor
+class ProductSourceInfo
 {
 public:
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @name   ProductSourceMonitor::ProductSourceMonitor
+    /// @name   ProductSourceInfo::ProductSourceInfo
     ///
     /// @param ProductController
     ///
     /// @return This method does not return anything.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    ProductSourceMonitor( ProfessorProductController& ProductController );
+    ProductSourceInfo( ProfessorProductController& ProductController );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration is used to start and run the hardware manager.

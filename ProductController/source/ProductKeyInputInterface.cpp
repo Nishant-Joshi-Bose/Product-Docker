@@ -31,7 +31,7 @@
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProductKeyInputInterface.h"
 #include "SystemUtils.h"
-#include "ProductSourceMonitor.h"
+#include "ProductSourceInfo.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -236,6 +236,7 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
         return;
     }
 
+    /// Decide if this key should be blasted or sent to the key handler
     bool isBlastedKey = false;
     std::string cicode = "";
     auto nowSelection = m_ProductController.GetNowSelection();
@@ -243,7 +244,7 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
     if( nowSelection.has_contentitem() )
     {
         auto contentItem = nowSelection.contentitem();
-        auto source = m_ProductController.GetSourceMonitor()->FindSource( contentItem );
+        auto source = m_ProductController.GetSourceInfo()->FindSource( contentItem );
 
         if( source and source->has_details() )
         {

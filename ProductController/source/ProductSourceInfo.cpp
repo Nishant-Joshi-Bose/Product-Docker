@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      ProductSourceMonitor.cpp
+/// @file      ProductSourceInfo.cpp
 ///
 /// @brief     This file implements audio volume management.
 ///
@@ -26,7 +26,7 @@
 #include "Utilities.h"
 #include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
-#include "ProductSourceMonitor.h"
+#include "ProductSourceInfo.h"
 #include "EndPointsError.pb.h"
 
 using namespace ProductPb;
@@ -44,20 +44,20 @@ namespace ProductApp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// The following constants define FrontDoor endpoints used by the SourceMonitor
+/// The following constants define FrontDoor endpoints used by the SourceInfo
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductSourceMonitor::ProductSourceMonitor
+/// @name   ProductSourceInfo::ProductSourceInfo
 ///
 /// @param ProductController
 ///
 /// @return This method does not return anything.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-ProductSourceMonitor::ProductSourceMonitor( ProfessorProductController& ProductController ) :
+ProductSourceInfo::ProductSourceInfo( ProfessorProductController& ProductController ) :
     m_ProductTask( ProductController.GetTask( ) ),
     m_ProductNotify( ProductController.GetMessageHandler( ) )
 {
@@ -65,9 +65,9 @@ ProductSourceMonitor::ProductSourceMonitor( ProfessorProductController& ProductC
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductSourceMonitor::Run
+/// @name   ProductSourceInfo::Run
 ///
-/// @brief  This method starts the main task for the ProductSourceMonitor class.
+/// @brief  This method starts the main task for the ProductSourceInfo class.
 ///
 /// @param  void This method does not take any arguments.
 ///
@@ -75,9 +75,9 @@ ProductSourceMonitor::ProductSourceMonitor( ProfessorProductController& ProductC
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSourceMonitor::Run( )
+void ProductSourceInfo::Run( )
 {
-    m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductSourceMonitor" );
+    m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductSourceInfo" );
 
     auto handleSources = [ this ]( const SoundTouchInterface::Sources & sources )
     {
@@ -113,19 +113,19 @@ void ProductSourceMonitor::Run( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSourceMonitor::Stop
+/// @brief ProductSourceInfo::Stop
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSourceMonitor::Stop( void )
+void ProductSourceInfo::Stop( void )
 {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSourceMonitor::UpdateSources
+/// @brief ProductSourceInfo::UpdateSources
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSourceMonitor::UpdateSources( const SoundTouchInterface::Sources& sources )
+void ProductSourceInfo::UpdateSources( const SoundTouchInterface::Sources& sources )
 {
     BOSE_INFO( s_logger, "%s got source update %s", __func__, ProtoToMarkup::ToJson( sources ).c_str() );
     m_sources = sources;
@@ -133,10 +133,10 @@ void ProductSourceMonitor::UpdateSources( const SoundTouchInterface::Sources& so
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSourceMonitor::UpdateSources
+/// @brief ProductSourceInfo::UpdateSources
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-BOptional<SoundTouchInterface::Sources::SourceItem> ProductSourceMonitor::FindSource( SoundTouchInterface::ContentItem& item )
+BOptional<SoundTouchInterface::Sources::SourceItem> ProductSourceInfo::FindSource( SoundTouchInterface::ContentItem& item )
 {
     if( ( not item.has_sourceaccount() ) or ( not item.has_source() ) )
     {
