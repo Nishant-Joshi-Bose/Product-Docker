@@ -275,7 +275,6 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     bool m_IsAudioPathReady;
-    bool m_IsSTSReady;
     bool m_IsNetworkConfigured;
     bool m_IsNetworkConnected;
     bool m_IsAutoWakeEnabled;
@@ -293,7 +292,6 @@ private:
     ProductSTSController m_ProductSTSController;
 
     void SetupProductSTSConntroller( );
-    void HandleSTSInitWasComplete( );
     void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
