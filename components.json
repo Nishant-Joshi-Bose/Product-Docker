@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.10.41169.2703991"
+    "selected_version": "Release/Castle-Fork/0.3.11.41219.2713461"
   },
   {
     "name": "bose-opkg-utils",
@@ -37,11 +37,11 @@
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/0.2.3-26+8cf9ea4"
+    "selected_version": "Release/master/0.3.1-40+308cab1"
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
-    "selected_version": "Release/master/0.3.4-32+93ccc88"
+    "selected_version": "Release/master/0.3.5-38+2193e90"
   },
   {
     "name": "CastleDemoController-qc8017_32",
@@ -81,7 +81,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@51cfb360204c8828ca212cbb433e5a013aef2144"
+    "selected_version": "master@7d43abc83c0edb20e8a4b434752ab89e48dffa46"
   },
   {
     "name": "CastleProductUIAssets",
@@ -89,11 +89,11 @@
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@3c0822fb1a4d3e4b08217b621badef8a4d240eda"
+    "selected_version": "master@afda6e1710cfbe8be2aadc0168d84d067f21cdd7"
   },
   {
     "name": "EddieLPM-Package",
-    "selected_version": "Release/trunk/0.3.5.2693842/DP2"
+    "selected_version": "Release/trunk/0.3.6.2712917/DP2"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -145,7 +145,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.10.41169.2703991"
+    "selected_version": "Release/Castle-Fork/0.3.11.41219.2713461"
   },
   {
     "name": "SystemEventService-qc8017_32",
