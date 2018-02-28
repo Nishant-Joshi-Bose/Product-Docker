@@ -157,6 +157,7 @@ private:
 private:
     ///Register with LPM for events notifications
 
+    void InitializeAction( );
     void RegisterLpmEvents();
     void RegisterKeyHandler();
     void RegisterEndPoints();
