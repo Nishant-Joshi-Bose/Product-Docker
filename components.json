@@ -49,7 +49,7 @@
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.1.1-23+21b61da"
+    "selected_version": "Release/master/0.2.0-26+f813b4d"
   },
   {
     "name": "CastleLibs-native",
@@ -101,7 +101,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.1.2-72+5b22962"
+    "selected_version": "Release/master/0.2.0-78+2eebfc2"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -149,7 +149,7 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Continuous/master/0.0.1-16+4461820"
+    "selected_version": "Release/master/0.1.0-17+f17e4d1"
   },
   {
     "name": "Webkit",
