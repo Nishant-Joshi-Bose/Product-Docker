@@ -108,10 +108,6 @@ bool ProductNetworkManager::Run( )
 
                 RegisterForWiFiStatus( );
             }
-            else
-            {
-                BOSE_ERROR( s_logger, "An unknown end point %s was sent as ready.", endPoint.c_str( ) );
-            }
         }
     };
 
@@ -121,10 +117,10 @@ bool ProductNetworkManager::Run( )
     };
 
     AsyncCallback< std::list< std::string > >
-        networkEndPointReadyCallback( networkEndPointReadyFunction, m_ProductTask );
+    networkEndPointReadyCallback( networkEndPointReadyFunction, m_ProductTask );
 
     AsyncCallback< std::list< std::string > >
-        networkEndPointNotReadyCallback( networkEndPointNotReadyFunction, m_ProductTask );
+    networkEndPointNotReadyCallback( networkEndPointNotReadyFunction, m_ProductTask );
 
     ///
     /// The product now registers for all of its network end points of interest.
@@ -167,10 +163,10 @@ void ProductNetworkManager::RegisterForNetworkStatus( )
     };
 
     AsyncCallback< NetManager::Protobuf::NetworkStatus >
-        callbackForNetworkStatusSuccess( functionForNetworkStatusSuccess, m_ProductTask );
+    callbackForNetworkStatusSuccess( functionForNetworkStatusSuccess, m_ProductTask );
 
     AsyncCallback< EndPointsError::Error >
-        callbackForNetworkStatusFailure( functionForNetworkStatusFailure, m_ProductTask );
+    callbackForNetworkStatusFailure( functionForNetworkStatusFailure, m_ProductTask );
 
     m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::NetworkStatus >(
         FRONTDOOR_NETWORK_STATUS,
@@ -209,10 +205,10 @@ void ProductNetworkManager::RegisterForWiFiStatus( )
     };
 
     AsyncCallback< NetManager::Protobuf::WiFiStatus >
-        callbackForWiFiStatusSuccess( functionForWiFiStatusSuccess, m_ProductTask );
+    callbackForWiFiStatusSuccess( functionForWiFiStatusSuccess, m_ProductTask );
 
     AsyncCallback< EndPointsError::Error >
-        callbackForWiFiStatusFailure( functionForWiFiStatusFailure, m_ProductTask );
+    callbackForWiFiStatusFailure( functionForWiFiStatusFailure, m_ProductTask );
 
     m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::WiFiStatus >(
         FRONTDOOR_NETWORK_WIFI_STATUS,
@@ -251,10 +247,10 @@ void ProductNetworkManager::RegisterForWiFiProfiles( )
     };
 
     AsyncCallback< NetManager::Protobuf::WiFiProfiles >
-        callbackForWiFiProfilesSuccess( functionForWiFiProfilesSuccess, m_ProductTask );
+    callbackForWiFiProfilesSuccess( functionForWiFiProfilesSuccess, m_ProductTask );
 
     AsyncCallback< EndPointsError::Error >
-        callbackForWiFiProfilesFailure( functionForWiFiProfilesFailure, m_ProductTask );
+    callbackForWiFiProfilesFailure( functionForWiFiProfilesFailure, m_ProductTask );
 
     m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::WiFiProfiles >(
         FRONTDOOR_NETWORK_WIFI_PROFILE,

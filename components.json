@@ -60,6 +60,10 @@
     "selected_version": "Release/master/0.3.2-62+b9fcc88"
   },
   {
+    "name": "CastleHTTPProxy-qc8017_32",
+    "selected_version": "Release/master/0.2.0-26+f813b4d"
+  },
+  {
     "name": "CastleLibs-native",
     "selected_version": "branches/castle-libs@2549"
   },
@@ -89,7 +93,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "PGC890_subwooferGain@54a28e2e8628dc6f169878649685f73ea4b100e9"
+    "selected_version": "Stuart-Lumby-PGC-865-Update-CAPS-Initialization@6a073c4237872b0928b766fba1900348449e2d22"
   },
   {
     "name": "CastleProductUIAssets",
@@ -101,7 +105,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.1.2-72+5b22962"
+    "selected_version": "Release/master/0.2.0-78+2eebfc2"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -153,7 +157,7 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.0.1-15+19b3c17"
+    "selected_version": "Release/master/0.1.0-17+f17e4d1"
   },
   {
     "name": "unittest-cpp-qc8017_32",
