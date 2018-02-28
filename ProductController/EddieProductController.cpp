@@ -148,7 +148,6 @@ EddieProductController::EddieProductController( std::string const& ProductName )
 
     // Initialize and register Intents for the Product Controller
     m_IntentHandler.Initialize();
-
 }
 
 EddieProductController::~EddieProductController()
@@ -157,6 +156,7 @@ EddieProductController::~EddieProductController()
 
 void EddieProductController::Initialize()
 {
+    CommonInitialize( );
     ///Instantiate and run the hardware interface.
     m_LpmInterface->Run( );
 
@@ -169,6 +169,16 @@ void EddieProductController::Initialize()
     m_displayController ->Initialize();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   EddieProductController::InitializeEddie
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void EddieProductController::InitializeEddie( void )
+{
+    BOSE_INFO( s_logger, __func__ );
+    IL::BreakThread( std::bind( &EddieProductController::Initialize, this ), GetTask( ) );
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

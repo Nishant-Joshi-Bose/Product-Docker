@@ -85,7 +85,8 @@ public:
     EddieProductController( std::string const& ProductName = "eddie" );
     virtual ~EddieProductController();
 
-    void Initialize();
+
+    void InitializeEddie( );
 
     Callback < ProductMessage > GetMessageHandler( );
 
@@ -156,7 +157,7 @@ private:
 
 private:
     ///Register with LPM for events notifications
-
+    void Initialize();
     void RegisterLpmEvents();
     void RegisterKeyHandler();
     void RegisterEndPoints();

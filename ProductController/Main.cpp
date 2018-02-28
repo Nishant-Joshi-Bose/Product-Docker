@@ -34,7 +34,7 @@ try
     ::signal( SIGPIPE, SIG_IGN );
 
     ProductApp::EddieProductController eddieProductController;
-    eddieProductController.Initialize();
+    eddieProductController.InitializeEddie();
     while( true )
         ::pause();
 }
