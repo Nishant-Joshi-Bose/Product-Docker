@@ -7,7 +7,6 @@
 
 #pragma once
 #include "ProductAudioService.h"
-#include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "CustomAudioSettingsManager.h"
 #include "ThermalMonitorTask.h"
@@ -15,7 +14,7 @@
 
 namespace ProductApp
 {
-
+class ProfessorProductController;
 class CustomProductAudioService: public ProductAudioService
 {
 public:
