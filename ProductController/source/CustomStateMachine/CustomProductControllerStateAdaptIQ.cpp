@@ -101,9 +101,9 @@ void CustomProductControllerStateAdaptIQ::HandleTimeOut( )
     BOSE_INFO( s_logger, "A time out during AdaptIQ has occurred." );
 
     ///
-    /// Go to the exiting state to stop playback of the AdaptIQ source.
+    /// Initiate a cancellation of AdaptIQ
     ///
-    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING );
+    GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
