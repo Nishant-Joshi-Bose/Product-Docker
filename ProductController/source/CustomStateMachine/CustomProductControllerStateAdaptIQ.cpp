@@ -87,7 +87,6 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
         HandleTimeOut();
     } );
 
-// TODO: does response come back after dsp has rebooted or as an event later on?
     HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_AIQ );
 }
 
@@ -145,7 +144,6 @@ void CustomProductControllerStateAdaptIQ::HandleStateExit( )
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being exited." );
     m_timer->Stop( );
 
-    // TODO: does response come back after dsp has rebooted or as an event later on?
     HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_USER_APPLICATION );
 
 }
