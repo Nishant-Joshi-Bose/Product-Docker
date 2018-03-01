@@ -147,7 +147,6 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     m_IsCapsReady( false ),
     m_IsAudioPathReady( false ),
-    m_IsSTSReady( false ),
     m_IsNetworkConfigured( false ),
     m_IsNetworkConnected( false ),
     m_IsAutoWakeEnabled( false ),
@@ -943,7 +942,7 @@ void ProfessorProductController::SetupProductSTSConntroller( )
     sources.push_back( descriptor_SLOT_2 );
 
     Callback< void >
-    CallbackForSTSComplete( std::bind( &ProfessorProductController::HandleSTSInitWasComplete,
+    CallbackForSTSComplete( std::bind( &ProductController::HandleSTSInitWasComplete,
                                        this ) );
 
 
@@ -955,27 +954,6 @@ void ProfessorProductController::SetupProductSTSConntroller( )
     m_ProductSTSController.Initialize( sources,
                                        CallbackForSTSComplete,
                                        CallbackToHandleSelectSourceSlot );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::HandleSTSInitWasComplete
-///
-/// @brief  This method is called from the ProductSTSController when all the initially-created
-///         sources have been created with CAPS/STS.
-///
-/// @note   This method is called on the ProductSTSController task.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::HandleSTSInitWasComplete( )
-{
-    ProductMessage message;
-    message.mutable_stsinterfacestatus( )->set_initialized( true );
-
-    IL::BreakThread( std::bind( &ProfessorProductController::HandleMessage,
-                                this,
-                                message ),
-                     GetTask( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1132,18 +1110,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
 
         GetHsm( ).Handle< bool >
         ( &CustomProductControllerState::HandleAudioPathState, m_IsAudioPathReady );
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// STS interface status is handled at this point.
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_stsinterfacestatus( ) )
-    {
-        BOSE_DEBUG( s_logger, "An STS Sources Initialized message was received." );
-
-        m_IsSTSReady = true;
-
-        GetHsm( ).Handle< >
-        ( &CustomProductControllerState::HandleSTSSourcesInit );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// STS slot selected data is handled at this point.
