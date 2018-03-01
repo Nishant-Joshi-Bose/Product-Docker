@@ -52,13 +52,6 @@ $ cd /scratch/Professor
 $ make packages-gz update-zip
 ```
 
-You can also build an update zip file that includes the Riviera HSP.
-```shell session
-$ cd /scratch/Professor
-$ make packages-gz-with-hsp update-zip-with-hsp
-```
-
-
 #### 'make' ipk for OPKG installation
 
 Build the Professor product.ipk to install using the putipk_ota script.
