@@ -36,9 +36,9 @@
         "action": "VOICE_CAROUSEL",
         "commment": "Console: action release ---> Alexa",
         "keyEvent": "RELEASE",
-        "keyList": ["KEY_VAL_AVAIL_AE"],
+        "keyList": ["BOSE_AMAZON_ACTION"],
         "origin": ["CAPSENSE", "TAP"],
-        "timeOutList": []
+        "timeOutList": [4000]
     },
     {
         "action": "PRESET_STORE_1",
@@ -287,6 +287,14 @@
         "keyList": ["BOSE_PAIR_SPKR"],
         "origin": ["IR", "TAP", "CEC", "RF"],
         "timeOutList": []
+    },
+    {
+        "action": "ACTION_SETUP_BLE_REMOTE",
+        "commment": "setup and pair BLE remote",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_AMAZON_ACTION"],
+        "origin": ["CAPSENSE", "TAP"],
+        "timeOutList": [5000]
     }
     ],
     "blastTable": [
