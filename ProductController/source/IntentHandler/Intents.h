@@ -121,6 +121,7 @@ enum class Action
     /// Custom Professor Defined Actions Valued 101 and Higher
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ACTION_POWER               = 101,
+    ACTION_SETUP_BLE_REMOTE    = 102,
     ACTION_MUTE                = 114,
     ACTION_SOUNDTOUCH          = 115,
     ACTION_CONNECT             = 116,
