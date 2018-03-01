@@ -7,7 +7,6 @@
 
 #pragma once
 #include "ProductAudioService.h"
-#include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "CustomAudioSettingsManager.h"
 #include "ThermalMonitorTask.h"
@@ -15,7 +14,7 @@
 
 namespace ProductApp
 {
-
+class ProfessorProductController;
 class CustomProductAudioService: public ProductAudioService
 {
 public:
@@ -46,11 +45,10 @@ private:
     std::unique_ptr<AudioSetting<ProductPb::AudioSurroundLevel>>    m_AudioSurroundSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioGainOffset>>       m_AudioGainOffsetSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioAvSync>>           m_AudioAvSyncsetSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioSubwooferGain>>    m_AudioSubwooferGainSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioMode>>             m_AudioModeSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioContentType>>      m_AudioContentTypeSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioDualMonoSelect>>   m_DualMonoSelectSetting;
-    std::unique_ptr<AudioSetting<ProductPb::AudioEqSelect>>         m_EqSelectSetting;
-
     /////////////////////////////////////////////////////////////////////////////////////////////////
     /// APProduct handling functions
     /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,7 +65,6 @@ private:
     LpmServiceMessages::AudioSettingsAudioMode_t ModeNameToEnum( const std::string& modeName );
     LpmServiceMessages::AudioSettingsContent_t ContentTypeNameToEnum( const std::string& contentTypeName );
     LpmServiceMessages::AudioSettingsDualMonoMode_t DualMonoSelectNameToEnum( const std::string& dualMonoSelectName );
-    LpmServiceMessages::AudioSettingsDeltaEqSelect_t EqSelectNameToEnum( const std::string& modeName );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// FrontDoor handling functions

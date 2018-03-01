@@ -17,15 +17,15 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.9.41102.2693311"
+    "selected_version": "Release/Castle-Fork/0.3.10.41169.2703991"
   },
   {
     "name": "bose-opkg-utils",
-    "selected_version": "master@887d0ab5d58c2aa3b6d3c0fb0c1dc31adf81e799"
+    "selected_version": "master@964c29cc453ccd3d1b28fb40bae8df11c0dc3b3c"
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.9-260+a9ea8ff"
+    "selected_version": "Release/master/0.3.9-271+2cde517"
   },
   {
     "name": "BoseOPKG-native",
@@ -60,6 +60,10 @@
     "selected_version": "Release/master/0.3.2-62+b9fcc88"
   },
   {
+    "name": "CastleHTTPProxy-qc8017_32",
+    "selected_version": "Release/master/0.2.0-26+f813b4d"
+  },
+  {
     "name": "CastleLibs-native",
     "selected_version": "branches/castle-libs@2549"
   },
@@ -73,11 +77,11 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.5-59+eb49f00"
+    "selected_version": "Release/master/0.3.6-61+ac12234"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-173+5ea5b96"
+    "selected_version": "Release/master/0.3.1-176+32ae99f"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -89,31 +93,35 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "add_eq_select@89eb0655c3a1f7cf3ba6137d8d910da476240110"
+    "selected_version": "master@576b8fb872adecb47ed61c3047b9f708da13a1b9"
+  },
+  {
+    "name": "CastleProductUIAssets",
+    "selected_version": "master@43394152e689030529a94750d56fe9cd196b885a"
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/0.3.7-164+3aa5ee0"
+    "selected_version": "Release/master/0.3.8-166+bdf45c8"
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.1.1-56+508fe9a"
+    "selected_version": "Release/master/0.2.0-78+2eebfc2"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/0.2.3-63+7790ce4"
+    "selected_version": "Release/master/0.2.3-71+1801c14"
   },
   {
     "name": "ProfessorLPM-Package",
-    "selected_version": "Release/trunk/0.3.7.2703915/DP2"
+    "selected_version": "Release/trunk/0.3.9.2712363/DP2"
   },
   {
     "name": "protobuf-native",
-    "selected_version": "branches/protobuf@2564"
+    "selected_version": "branches/protobuf@2590"
   },
   {
     "name": "protobuf-qc8017_32",
-    "selected_version": "branches/protobuf@2564"
+    "selected_version": "branches/protobuf@2590"
   },
   {
     "name": "Riviera-HSP-Images",
@@ -129,7 +137,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.3.7-107+628da8c"
+    "selected_version": "Release/master/0.3.8-113+81aa0d0"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -141,15 +149,15 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/IP3/0.3.9-327+522f883"
+    "selected_version": "Release/IP3/0.3.11-334+5bad26a"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.9.41102.2693311"
+    "selected_version": "Release/Castle-Fork/0.3.10.41169.2703991"
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.0.1-11+f1fe90e"
+    "selected_version": "Release/master/0.1.0-17+f17e4d1"
   },
   {
     "name": "unittest-cpp-qc8017_32",

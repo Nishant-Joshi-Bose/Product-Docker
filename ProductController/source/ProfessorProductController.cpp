@@ -70,10 +70,11 @@
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
 #include "ProductControllerStatePlayingSelectedSetup.h"
 #include "ProductControllerStatePlayingSelectedSetupNetwork.h"
+#include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
 #include "ProductControllerStatePlayingTransition.h"
-#include "ProductControllerStatePlayingTransitionSelected.h"
+#include "ProductControllerStatePlayingTransitionSwitch.h"
 #include "ProductControllerStateRebooting.h"
 #include "ProductControllerStateSoftwareInstall.h"
 #include "ProductControllerStateSoftwareUpdateTransition.h"
@@ -145,7 +146,6 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     m_IsCapsReady( false ),
     m_IsAudioPathReady( false ),
-    m_IsSTSReady( false ),
     m_IsNetworkConfigured( false ),
     m_IsNetworkConnected( false ),
     m_IsAutoWakeEnabled( false ),
@@ -171,6 +171,8 @@ ProfessorProductController::ProfessorProductController( ) :
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::Run( )
 {
+    CommonInitialize( );
+
     m_Running = true;
 
     BOSE_DEBUG( s_logger, "----------- Product Controller State Machine    ------------" );
@@ -311,10 +313,10 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION );
 
-    auto* statePlayingTransitionSelected = new ProductControllerStatePlayingTransitionSelected
+    auto* statePlayingTransitionSelected = new ProductControllerStatePlayingTransitionSwitch
     ( GetHsm( ),
       statePlayingTransition,
-      PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SELECTED );
+      PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SWITCH );
 
     auto* customStatePlayingTransitionAccessoryPairing = new CustomProductControllerStatePlayingTransitionAccessoryPairing
     ( GetHsm( ),
@@ -364,6 +366,11 @@ void ProfessorProductController::Run( )
     ( GetHsm( ),
       customStatePlayingSelectedSetup,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK );
+
+    auto* statePlayingSelectedSetupNetworkTransition = new ProductControllerStatePlayingSelectedSetupNetworkTransition
+    ( GetHsm( ),
+      customStatePlayingSelectedSetup,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_TRANSITION );
 
     auto* statePlayingSelectedSetupOther = new ProductControllerStatePlayingSelectedSetupOther
     ( GetHsm( ),
@@ -456,6 +463,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedNotSilent );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), customStatePlayingSelectedSetup );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupNetwork );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupNetworkTransition );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupOther );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupExiting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), customStatePlayingSelectedPairing );
@@ -589,6 +597,19 @@ std::shared_ptr< CustomProductLpmHardwareInterface >& ProfessorProductController
     return m_ProductLpmHardwareInterface;
 }
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetProductAudioServiceInstance
+///
+/// @return This method returns a shared pointer to the Product AudioService which interfaces with AudioPath.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::shared_ptr< CustomProductAudioService >& ProfessorProductController::GetProductAudioServiceInstance( )
+{
+    return m_ProductAudioService;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProfessorProductController::GetAdaptIQManager
@@ -611,18 +632,6 @@ std::shared_ptr< ProductAdaptIQManager >& ProfessorProductController::GetAdaptIQ
 std::shared_ptr< ProductCecHelper >& ProfessorProductController::GetCecHelper( )
 {
     return m_ProductCecHelper;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetIntentHandler
-///
-/// @return This method returns a reference to the IntentHandler instance.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-IntentHandler& ProfessorProductController::GetIntentHandler( )
-{
-    return m_IntentHandler;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -844,6 +853,50 @@ std::string const& ProfessorProductController::GetProductDescription() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   ProfessorProductController::GetOOBDefaultLastContentItem
+///
+/// @return This method returns the PassportPB::ContentItem value to be used for initializing the OOB LastContentItem
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+PassportPB::ContentItem ProfessorProductController::GetOOBDefaultLastContentItem() const
+{
+    PassportPB::ContentItem item;
+    item.set_source( "PRODUCT" );
+    item.set_sourceaccount( "TV" );
+    return item;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::CanPersistAsLastContentItem
+///
+/// @param  const SoundTouchInterface::ContentItem &ci
+///
+/// @brief  Determines if the content item can be persisted in m_lastContentItem
+///
+/// @return Returns true or false
+///////////////////////////////////////////////////////////////////////////////
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProfessorProductController::CanPersistAsLastContentItem( const SoundTouchInterface::ContentItem &ci ) const
+{
+    bool retVal = true;
+    if( !ProductController::CanPersistAsLastContentItem( ci ) )
+    {
+        retVal = false;
+    }
+    if( ci.source() == "PRODUCT" && ( ci.sourceaccount() == "ADAPTiQ" ) )
+    {
+        retVal = false;
+    }
+
+    BOSE_VERBOSE( s_logger, "ContentItem %s can%s persist in Professor as LastContentItem",
+                  ProtoToMarkup::ToJson( ci, false ).c_str( ), retVal ? "" : "not" );
+    return retVal;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::SetupProductSTSConntroller
 ///
 /// @brief  This method is called to perform the needed initialization of the ProductSTSController,
@@ -873,7 +926,7 @@ void ProfessorProductController::SetupProductSTSConntroller( )
     sources.push_back( descriptor_SLOT_2 );
 
     Callback< void >
-    CallbackForSTSComplete( std::bind( &ProfessorProductController::HandleSTSInitWasComplete,
+    CallbackForSTSComplete( std::bind( &ProductController::HandleSTSInitWasComplete,
                                        this ) );
 
 
@@ -885,27 +938,6 @@ void ProfessorProductController::SetupProductSTSConntroller( )
     m_ProductSTSController.Initialize( sources,
                                        CallbackForSTSComplete,
                                        CallbackToHandleSelectSourceSlot );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::HandleSTSInitWasComplete
-///
-/// @brief  This method is called from the ProductSTSController when all the initially-created
-///         sources have been created with CAPS/STS.
-///
-/// @note   This method is called on the ProductSTSController task.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::HandleSTSInitWasComplete( )
-{
-    ProductMessage message;
-    message.mutable_stsinterfacestatus( )->set_initialized( true );
-
-    IL::BreakThread( std::bind( &ProfessorProductController::HandleMessage,
-                                this,
-                                message ),
-                     GetTask( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1062,18 +1094,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
 
         GetHsm( ).Handle< bool >
         ( &CustomProductControllerState::HandleAudioPathState, m_IsAudioPathReady );
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// STS interface status is handled at this point.
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_stsinterfacestatus( ) )
-    {
-        BOSE_DEBUG( s_logger, "An STS Sources Initialized message was received." );
-
-        m_IsSTSReady = true;
-
-        GetHsm( ).Handle< >
-        ( &CustomProductControllerState::HandleSTSSourcesInit );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// STS slot selected data is handled at this point.
@@ -1338,22 +1358,6 @@ void ProfessorProductController::Wait( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::End
-///
-/// @brief  This method is called when the Product Controller process ends. It is used to set the
-///         running member to false, which will invoke the Wait method idle loop to exit and perform
-///         any necessary clean up.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::End( )
-{
-    BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
-
-    m_Running = false;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProfessorProductController::GetDefaultProductName
 ///
 /// @brief  This method is to get the default product name by reading from mac address.
@@ -1437,19 +1441,17 @@ void ProfessorProductController::SendInitialCapsData()
     }
     messageProperties->set_activationkeyrequired( true );
 
-#if 0 // @TODO CASTLE-6801 field deviceType missing in SoundTouchInterface::Sources
     for( uint32_t deviceType = SystemSourcesProperties::DEVICE_TYPE__MIN; deviceType <= SystemSourcesProperties::DEVICE_TYPE__MAX; ++deviceType )
     {
         messageProperties->add_supporteddevicetypes(
             SystemSourcesProperties::DEVICE_TYPE__Name( static_cast<SystemSourcesProperties::DEVICE_TYPE_>( deviceType ) ) );
     }
     messageProperties->set_devicetyperequired( true );
-#endif
 
     messageProperties->add_supportedinputroutes(
         SystemSourcesProperties::INPUT_ROUTE_HDMI__Name( SystemSourcesProperties::INPUT_ROUTE_TV ) );
 
-    messageProperties->set_inputrouterequired( true );
+    messageProperties->set_inputrouterequired( false );
 
     BOSE_VERBOSE( s_logger, "%s sending %s", __func__, ProtoToMarkup::ToJson( message ).c_str() );
 
@@ -1458,6 +1460,56 @@ void ProfessorProductController::SendInitialCapsData()
         message,
         { },
         m_errorCb );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::ClearWifiProfileCount
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::ClearWifiProfileCount( )
+{
+    if( m_ProductNetworkManager != nullptr )
+    {
+        m_ProductNetworkManager->ClearWifiProfileCount( );
+    }
+    else
+    {
+        BOSE_DIE( "ProductNetworkManager has not been instantiated for ClearWifiProfileCount." );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::PerformRequestforWiFiProfiles
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::PerformRequestforWiFiProfiles( )
+{
+    if( m_ProductNetworkManager != nullptr )
+    {
+        m_ProductNetworkManager->PerformRequestforWiFiProfiles( );
+    }
+    else
+    {
+        BOSE_DIE( "ProductNetworkManager has not been instantiated for PerformRequestforWiFiProfiles." );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::End
+///
+/// @brief  This method is called when the Product Controller process should be terminated. It is
+///         used to set the running member to false, which will invoke the Wait method idle loop to
+///         exit and perform any necessary clean up.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::End( )
+{
+    BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
+
+    m_Running = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
