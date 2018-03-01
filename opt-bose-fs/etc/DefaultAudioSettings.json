@@ -14,7 +14,7 @@
 			"properties": {
 				"min": -100,
 				"max": 100,
-				"step": 20,
+				"step": 10,
 				"supportedPersistence": ["session", "global", "contentItem"]
 			}
 		},
@@ -24,7 +24,7 @@
 			"properties": {
 				"min": -100,
 				"max": 100,
-				"step": 20,
+				"step": 10,
 				"supportedPersistence": ["session", "global", "contentItem"]
 			}
 		},
@@ -34,7 +34,7 @@
 			"properties": {
 				"min": -100,
 				"max": 100,
-				"step": 20,
+				"step": 10,
 				"supportedPersistence": ["session", "global", "contentItem"]
 			}
 		},
@@ -44,7 +44,7 @@
 			"properties": {
 				"min": -100,
 				"max": 100,
-				"step": 20,
+				"step": 10,
 				"supportedPersistence": ["session", "global", "contentItem"]
 			}
 		},
@@ -54,7 +54,7 @@
 			"properties": {
 				"min": -100,
 				"max": 100,
-				"step": 20,
+				"step": 10,
 				"supportedPersistence": ["session", "global", "contentItem"]
 			}
 		},
@@ -64,7 +64,17 @@
 			"properties": {
 				"min": -100,
 				"max": 100,
-				"step": 20,
+				"step": 10,
+				"supportedPersistence": ["session", "global", "contentItem"]
+			}
+		},
+		"audioSubwooferGain": {
+			"currentPersistenceLevel": "global",
+			"persistenceSession": false,
+			"properties": {
+				"min": -100,
+				"max": 100,
+				"step": 10,
 				"supportedPersistence": ["session", "global", "contentItem"]
 			}
 		},
@@ -100,6 +110,7 @@
 			"audioSurroundLevel": 0,
 			"audioGainOffset": 0,
 			"audioAvSync": 0,
+			"audioSubwooferGain":0,
 			"audioMode": "direct",
             "audioContentType": "unspecified",
             "audioDualMonoSelect": "both"
@@ -111,6 +122,7 @@
 			"audioSurroundLevel": 0,
 			"audioGainOffset": 0,
 			"audioAvSync": 0,
+			"audioSubwooferGain":0,
 			"audioMode": "direct",
 			"audioContentType": "unspecified"
 		},
@@ -122,6 +134,7 @@
 				"audioSurroundLevel": 0,
 				"audioGainOffset": 0,
 				"audioAvSync": 0,
+				"audioSubwooferGain":0,
 				"audioMode": "direct",
 				"audioContentType": "unspecified"
 			}
@@ -134,6 +147,7 @@
 		"audioSurroundLevel": 0,
 		"audioGainOffset": 0,
 		"audioAvSync": 0,
+		"audioSubwooferGain":0,
 		"audioMode": "direct",
         "audioContentType": "unspecified",
         "audioDualMonoSelect": "both"

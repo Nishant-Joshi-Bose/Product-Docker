@@ -112,13 +112,13 @@ void ProductAdaptIQManager::Run( )
     AsyncCallback<Callback<AdaptIQStatus>, Callback<EndPointsError::Error> > getCb( getFunc, m_ProductTask );
     m_GetConnection = m_FrontDoorClient->RegisterGet( s_FrontDoorAdaptIQ, getCb );
 
-    auto putFunc = [ this ]( const AdaptIQReq req, const Callback<const AdaptIQReq>& resp, const Callback<EndPointsError::Error>& errorRsp )
+    auto putFunc = [ this ]( const AdaptIQReq req, const Callback<const AdaptIQStatus>& resp, const Callback<EndPointsError::Error>& errorRsp )
     {
-        AdaptIQReq respMsg;
+        AdaptIQStatus respMsg;
         HandlePut( req, respMsg );
         resp.Send( respMsg );
     };
-    AsyncCallback<const AdaptIQReq, Callback<AdaptIQReq>, Callback<EndPointsError::Error>> putCb( putFunc, m_ProductTask );
+    AsyncCallback<const AdaptIQReq, Callback<AdaptIQStatus>, Callback<EndPointsError::Error>> putCb( putFunc, m_ProductTask );
     m_PutConnection = m_FrontDoorClient->RegisterPut<AdaptIQReq>( s_FrontDoorAdaptIQ, putCb );
 }
 
@@ -219,7 +219,7 @@ void ProductAdaptIQManager::HandleGet( AdaptIQStatus& status )
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductAdaptIQManager::HandlePut( const AdaptIQReq req, ProductPb::AdaptIQReq& resp )
+void ProductAdaptIQManager::HandlePut( const AdaptIQReq req, ProductPb::AdaptIQStatus& resp )
 {
     ProductMessage msg;
 
@@ -254,8 +254,8 @@ void ProductAdaptIQManager::HandlePut( const AdaptIQReq req, ProductPb::AdaptIQR
         }, m_ProductTask );
     }
 
-    // TODO : there's no response defined in the LAN API right now, so just mirror back the request
-    resp = req;
+    resp = m_status;
+    SetDefaultProperties( resp );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
