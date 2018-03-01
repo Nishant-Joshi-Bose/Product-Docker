@@ -269,8 +269,6 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
     }
 }
 
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief Helper functions to convert audio setting values from string format to enumuration required from DSP
@@ -328,7 +326,6 @@ LpmServiceMessages::AudioSettingsDualMonoMode_t CustomProductAudioService::DualM
         return AUDIOSETTINGS_DUAL_MONO_BOTH;
     }
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

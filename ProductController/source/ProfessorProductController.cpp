@@ -295,7 +295,7 @@ void ProfessorProductController::Run( )
     auto* stateIdle = new CustomProductControllerStateIdle
     ( GetHsm( ),
       customStatePlayable,
-      PRODUCT_CONTROLLER_STATE_IDLE );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_IDLE );
 
     auto* stateIdleVoiceConfigured = new ProductControllerStateIdleVoiceConfigured
     ( GetHsm( ),

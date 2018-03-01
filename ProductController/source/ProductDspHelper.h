@@ -97,18 +97,6 @@ public:
     void Stop( );
 
 private:
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following declarations are used to interface with the product controller and
-    ///        the lower level LPM hardware, as well as the FrontDoor.
-    ///
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF*                                   m_ProductTask;
-    Callback< ProductMessage >                            m_ProductNotify;
-    std::shared_ptr < CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
-    std::shared_ptr< FrontDoorClientIF >                  m_FrontDoorClientIF;
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The timer to poll dsp and update local status
@@ -136,7 +124,7 @@ private:
     /// @brief The following member variable stores the custom Professor product controller instance.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    ProfessorProductController& m_CustomProductController;
+    ProfessorProductController& m_ProductController;
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -156,16 +144,21 @@ private:
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
+    /// @brief Methods to convert DSP enums to strings to send to front door
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    static std::string CreateAudioFormatChannelString( uint32_t fullRangeChannels, uint32_t lfeChannels );
+    static std::string CreateAudioFormatNameFromEnum( LpmServiceMessages::InputAudioFormat_t audioFormat );
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    ///
     /// @brief The following is to allow the front door to request audio format from dsp
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    const std::string GetAudioFormatChannelString( uint32_t fullRangeChannels, uint32_t lfeChannels );
-    const std::string GetAudioFormatNameFromEnum( LpmServiceMessages::InputAudioFormat_t audioFormat );
-
     void AudioFormatGetDspStatusCallback( const Callback<ProductPb::AudioFormat>& resp,
                                           const LpmServiceMessages::IpcDspStatus_t status );
-    void AudioFormatGetHandler( const Callback<ProductPb::AudioFormat>& resp,
-                                const Callback<EndPointsError::Error>& error );
+    void AudioFormatFrontDoorGetHandler( const Callback<ProductPb::AudioFormat>& resp,
+                                         const Callback<EndPointsError::Error>& error );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

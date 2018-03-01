@@ -46,7 +46,7 @@ const std::string DEF_STR_AUDIO_FORMAT_DTS = "DTS";
 const std::string DEF_STR_AUDIO_FORMAT_AAC = "AAC";
 const std::string DEF_STR_AUDIO_FORMAT_DOLBY_TRUEHD = "Dolby TrueHD";
 const std::string DEF_STR_AUDIO_FORMAT_DOLBY_DIGITAL_PLUS = "Dolby Digital Plus";
-const std::string DEF_STR_AUDIO_FORMAT_UNKNOWN = "Format Unkown";
+const std::string DEF_STR_AUDIO_FORMAT_UNKNOWN = "Format Unknown";
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,12 +65,8 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProductDspHelper::ProductDspHelper( ProfessorProductController& ProductController )
 
-    : m_ProductTask( ProductController.GetTask( ) ),
-      m_ProductNotify( ProductController.GetMessageHandler( ) ),
-      m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
-      m_FrontDoorClientIF( ProductController.GetFrontDoorClient() ),
-      m_timer( APTimer::Create( m_ProductTask, "DspStatusPollTimer" ) ),
-      m_CustomProductController( static_cast< ProfessorProductController & >( ProductController ) )
+    : m_timer( APTimer::Create( ProductController.GetTask( ), "DspStatusPollTimer" ) ),
+      m_ProductController( ProductController )
 {
     BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
 }
@@ -93,19 +89,19 @@ bool ProductDspHelper::Run( )
                                         this,
                                         std::placeholders::_1 ) );
 
-        m_ProductLpmHardwareInterface->RegisterForLpmEvents( IPC_DSP_STATUS, CallbackForDspState );
+        m_ProductController.GetLpmHardwareInterface( )->RegisterForLpmEvents( IPC_DSP_STATUS, CallbackForDspState );
     }
 
     {
         AsyncCallback<Callback< ProductPb::AudioFormat >, Callback<EndPointsError::Error> >
-        getAudioFormatCb( std::bind( &ProductDspHelper::AudioFormatGetHandler,
+        getAudioFormatCb( std::bind( &ProductDspHelper::AudioFormatFrontDoorGetHandler,
                                      this,
                                      std::placeholders::_1,
                                      std::placeholders::_2 ) ,
-                          m_ProductTask );
+                          m_ProductController.GetTask( ) );
 
-        m_AudioFormatGetConnection = m_FrontDoorClientIF->RegisterGet( s_FrontDoorAudioFormatUrl ,
-                                                                       getAudioFormatCb );
+        m_AudioFormatGetConnection = m_ProductController.GetFrontDoorClient()->RegisterGet( s_FrontDoorAudioFormatUrl ,
+                                     getAudioFormatCb );
     }
 
     return true;
@@ -126,6 +122,15 @@ void ProductDspHelper::Stop( )
     return;
 }
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductDspHelper::AutoWakeTriggered
+///
+/// @brief When auto wake event is triggered this function will send a playback request to CAPS
+///        in order to drive the system to TV source
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDspHelper::AutoWakeTriggered()
 {
     BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
@@ -148,7 +153,7 @@ void ProductDspHelper::AutoWakeTriggered()
     playbackRequestData.set_source( "PRODUCT" );
     playbackRequestData.set_sourceaccount( "TV" );
 
-    m_FrontDoorClientIF->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
+    m_ProductController.GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
             playbackRequestData,
             playbackRequestResponseCallback,
             playbackRequestErrorCallback );
@@ -245,7 +250,7 @@ void ProductDspHelper::StartPollTimer( )
                               this,
                               std::placeholders::_1 ) );
 
-        m_ProductLpmHardwareInterface->GetDspStatus( pollDspCb );
+        m_ProductController.GetLpmHardwareInterface( )->GetDspStatus( pollDspCb );
     };
 
     m_timer->Start( pollDspCb );
@@ -253,25 +258,25 @@ void ProductDspHelper::StartPollTimer( )
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductDspHelper::GetAudioFormatChannelString
+/// @name   ProductDspHelper::CreateAudioFormatChannelString
 ///
 /// @param  uint32_t fullRangeChannels
 /// @param  uint32_t lfeChannels
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////
-const std::string ProductDspHelper::GetAudioFormatChannelString( uint32_t fullRangeChannels, uint32_t lfeChannels )
+std::string ProductDspHelper::CreateAudioFormatChannelString( uint32_t fullRangeChannels, uint32_t lfeChannels )
 {
     return std::to_string( fullRangeChannels ) + "." + std::to_string( lfeChannels );
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductDspHelper::GetAudioFormatNameFromEnum
+/// @name   ProductDspHelper::CreateAudioFormatNameFromEnum
 ///
 /// @param  InputAudioFormat_t audioFormat
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////
-const std::string ProductDspHelper::GetAudioFormatNameFromEnum( LpmServiceMessages::InputAudioFormat_t audioFormat )
+std::string ProductDspHelper::CreateAudioFormatNameFromEnum( LpmServiceMessages::InputAudioFormat_t audioFormat )
 {
     switch( audioFormat )
     {
@@ -316,22 +321,22 @@ void ProductDspHelper::AudioFormatGetDspStatusCallback( const Callback<ProductPb
 
     // Build response
     ProductPb::AudioFormat formatResponse;
-    formatResponse.set_channels( GetAudioFormatChannelString( status.fullrangechannels(), status.lfechannels() ) );
-    formatResponse.set_format( GetAudioFormatNameFromEnum( status.audioformat() ) );
+    formatResponse.set_channels( CreateAudioFormatChannelString( status.fullrangechannels(), status.lfechannels() ) );
+    formatResponse.set_format( CreateAudioFormatNameFromEnum( status.audioformat() ) );
 
     resp( formatResponse );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductDspHelper::AudioFormatGetHandler
+/// @brief ProductDspHelper::AudioFormatFrontDoorGetHandler
 ///
 /// @param const Callback<ProductPb::AccessorySpeakerState>& resp
 /// @param const Callback<EndPointsError::Error>& error
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductDspHelper::AudioFormatGetHandler( const Callback<ProductPb::AudioFormat>& resp,
-                                              const Callback<EndPointsError::Error>& error )
+void ProductDspHelper::AudioFormatFrontDoorGetHandler( const Callback<ProductPb::AudioFormat>& resp,
+                                                       const Callback<EndPointsError::Error>& error )
 {
     BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
     Callback< LpmServiceMessages::IpcDspStatus_t >
@@ -339,7 +344,7 @@ void ProductDspHelper::AudioFormatGetHandler( const Callback<ProductPb::AudioFor
                               this,
                               resp,
                               std::placeholders::_1 ) );
-    m_ProductLpmHardwareInterface->GetDspStatus( audioFormatCb );
+    m_ProductController.GetLpmHardwareInterface( )->GetDspStatus( audioFormatCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

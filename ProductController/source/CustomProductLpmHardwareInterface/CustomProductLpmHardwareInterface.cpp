@@ -209,7 +209,7 @@ bool CustomProductLpmHardwareInterface::SendAccessoryDisband( const Callback<Ipc
 ///
 /// @brief This method sends a request to get the dsp status
 ///
-/// @param none
+/// @param const Callback<IpcDspStatus_t> &cb
 ///
 /// @return none
 ///

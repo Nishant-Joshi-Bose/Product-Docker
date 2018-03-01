@@ -23,8 +23,6 @@ public:
                                LpmClientIF::LpmClientPtr lpmClient );
     void SetThermalMonitorEnabled( bool enabled );
 
-private:
-
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// m_MainStreamAudioSettings is the structure holding information that APProduct would like to know
     ///                             including audio settings and thermal data
@@ -33,6 +31,7 @@ private:
     LpmServiceMessages::AudioSettings_t m_MainStreamAudioSettings;
     uint32_t m_InputRoute;
 
+private:
     std::shared_ptr<CustomProductLpmHardwareInterface>  m_ProductLpmHardwareInterface;
     std::unique_ptr<CustomAudioSettingsManager>         m_AudioSettingsMgr;
     std::unique_ptr<ThermalMonitorTask>                 m_ThermalTask;
