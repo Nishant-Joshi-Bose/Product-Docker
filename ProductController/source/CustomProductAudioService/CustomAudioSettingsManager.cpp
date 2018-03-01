@@ -37,10 +37,10 @@ CustomAudioSettingsManager::CustomAudioSettingsManager()
 
 /////////////////////////////////////////////////////////////////////////////////////////
 /// Bass setting setter/getter
-///     setter returns a boolean which indicates whether current bass value is changed by setter
+///     setter returns a ErrorCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current bass value
 /////////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetBass( const ProductPb::AudioBassLevel& bass )
+ErrorCode_t CustomAudioSettingsManager::SetBass( const ProductPb::AudioBassLevel& bass )
 {
     BOSE_DEBUG( s_logger, __func__ );
     return SetAudioProperties( bass, kBassName, m_currentBass );
@@ -54,10 +54,10 @@ const ProductPb::AudioBassLevel& CustomAudioSettingsManager::GetBass() const
 
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Treble setting setter/getter
-///     setter returns a boolean which indicates whether current treble value is changed by setter
+///     setter returns a ErrorCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current treble value
 ///////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetTreble( const ProductPb::AudioTrebleLevel& treble )
+ErrorCode_t CustomAudioSettingsManager::SetTreble( const ProductPb::AudioTrebleLevel& treble )
 {
     BOSE_DEBUG( s_logger, __func__ );
     return SetAudioProperties( treble, kTrebleName, m_currentTreble );
@@ -71,10 +71,10 @@ const ProductPb::AudioTrebleLevel& CustomAudioSettingsManager::GetTreble() const
 
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Center setting setter/getter
-///     setter returns a boolean which indicates whether current center value is changed by setter
+///     setter returns a ErrorCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current center value
 ///////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetCenter( const ProductPb::AudioCenterLevel& center )
+ErrorCode_t CustomAudioSettingsManager::SetCenter( const ProductPb::AudioCenterLevel& center )
 {
     BOSE_DEBUG( s_logger, __func__ );
     return SetAudioProperties( center, kCenterName, m_currentCenter );
@@ -88,10 +88,10 @@ const ProductPb::AudioCenterLevel& CustomAudioSettingsManager::GetCenter() const
 
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Surround setting setter/getter
-///     setter returns a boolean which indicates whether current surround value is changed by setter
+///     setter returns a ErrorCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current surround value
 ///////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetSurround( const ProductPb::AudioSurroundLevel& surround )
+ErrorCode_t CustomAudioSettingsManager::SetSurround( const ProductPb::AudioSurroundLevel& surround )
 {
     BOSE_DEBUG( s_logger, __func__ );
     return SetAudioProperties( surround, kSurroundName, m_currentSurround );
@@ -105,10 +105,10 @@ const ProductPb::AudioSurroundLevel& CustomAudioSettingsManager::GetSurround() c
 
 ////////////////////////////////////////////////////////////////////////////////////////
 /// GainOffset setting setter/getter
-///     setter returns a boolean which indicates whether current gainOffset value is changed by setter
+///     setter returns a ErrorCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current gainOffset value
 //////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetGainOffset( const ProductPb::AudioGainOffset& gainOffset )
+ErrorCode_t CustomAudioSettingsManager::SetGainOffset( const ProductPb::AudioGainOffset& gainOffset )
 {
     BOSE_DEBUG( s_logger, __func__ );
     return SetAudioProperties( gainOffset, kGainOffsetName, m_currentGainOffset );
@@ -122,10 +122,10 @@ const ProductPb::AudioGainOffset& CustomAudioSettingsManager::GetGainOffset() co
 
 ////////////////////////////////////////////////////////////////////////////////////////
 /// AvSync setting setter/getter
-///     setter returns a boolean which indicates whether current avSync value is changed by setter
+///     setter returns a ErrorCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current avSync value
 //////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetAvSync( const ProductPb::AudioAvSync& avSync )
+ErrorCode_t CustomAudioSettingsManager::SetAvSync( const ProductPb::AudioAvSync& avSync )
 {
     BOSE_DEBUG( s_logger, __func__ );
     return SetAudioProperties( avSync, kAvSyncName, m_currentAvSync );
@@ -139,10 +139,10 @@ const ProductPb::AudioAvSync& CustomAudioSettingsManager::GetAvSync() const
 
 ////////////////////////////////////////////////////////////////////////////////////////
 /// SubwooferGain setting setter/getter
-///     setter returns a boolean which indicates whether current subwooferGain value is changed by setter
+///     setter returns a ErrorCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current subwooferGain value
 //////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetSubwooferGain( const ProductPb::AudioSubwooferGain& subwooferGain )
+ErrorCode_t CustomAudioSettingsManager::SetSubwooferGain( const ProductPb::AudioSubwooferGain& subwooferGain )
 {
     BOSE_DEBUG( s_logger, __func__ );
     return SetAudioProperties( subwooferGain, kSubwooferGainName, m_currentSubwooferGain );
@@ -156,10 +156,10 @@ const ProductPb::AudioSubwooferGain& CustomAudioSettingsManager::GetSubwooferGai
 
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Mode setting setter/getter
-///     setter returns a boolean which indicates whether current mode value is changed by setter
+///     setter returns a ErrorCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current mode value
 //////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetMode( const ProductPb::AudioMode& mode )
+ErrorCode_t CustomAudioSettingsManager::SetMode( const ProductPb::AudioMode& mode )
 {
     BOSE_DEBUG( s_logger, __func__ );
     return SetAudioProperties( mode, kModeName, m_currentMode );
@@ -172,10 +172,10 @@ const ProductPb::AudioMode& CustomAudioSettingsManager::GetMode() const
 
 ////////////////////////////////////////////////////////////////////////////////////////
 /// ContentType setting setter/getter
-///     setter returns a boolean which indicates whether current contentType value is changed by setter
+///     setter returns a ErrorCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current contentType value
 //////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetContentType( const ProductPb::AudioContentType& contentType )
+ErrorCode_t CustomAudioSettingsManager::SetContentType( const ProductPb::AudioContentType& contentType )
 {
     BOSE_DEBUG( s_logger, __func__ );
     return SetAudioProperties( contentType, kContentTypeName, m_currentContentType );
@@ -188,25 +188,25 @@ const ProductPb::AudioContentType& CustomAudioSettingsManager::GetContentType() 
 
 ////////////////////////////////////////////////////////////////////////////////////////
 /// DualMonoSelect setting setter/getter
-///     setter returns a boolean which indicates whether current DualMonoSelect value is changed by setter
+///     setter returns a ErrorCode_t which indicates any error during applying the setting
 ///     getter returns a protobuf of current dualMonoSelect value
 //////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetDualMonoSelect( const ProductPb::AudioDualMonoSelect& dualMonoSelect )
+ErrorCode_t CustomAudioSettingsManager::SetDualMonoSelect( const ProductPb::AudioDualMonoSelect& dualMonoSelect )
 {
     BOSE_DEBUG( s_logger, __func__ );
     if( !dualMonoSelect.has_value() )
     {
         BOSE_INFO( s_logger, "DualMonoSelect doesn't contain any value" );
-        return false;
+        return MISSING_FIELDS;
     }
-    if( m_currentDualMonoSelect.value() != dualMonoSelect.value() )
+    if( m_currentDualMonoSelect.value() == dualMonoSelect.value() )
     {
-        m_audioSettings["values"][kPersistGlobal][kDualMonoSelectName] = dualMonoSelect.value();
-        m_currentDualMonoSelect.set_value( dualMonoSelect.value() );
-        PersistAudioSettings();
-        return true;
+        return VALUE_UNCHANGED;
     }
-    return false;
+    m_audioSettings["values"][kPersistGlobal][kDualMonoSelectName] = dualMonoSelect.value();
+    m_currentDualMonoSelect.set_value( dualMonoSelect.value() );
+    PersistAudioSettings();
+    return NO_ERROR;
 }
 const ProductPb::AudioDualMonoSelect& CustomAudioSettingsManager::GetDualMonoSelect() const
 {
