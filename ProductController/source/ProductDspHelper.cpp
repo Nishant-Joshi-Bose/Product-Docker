@@ -5,8 +5,6 @@
 /// @brief     This header file contains declarations for managing the parts of the product
 ///            specific interactions with the with external SHARC DSP
 ///
-/// @author    Manoranjani Malisetti
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
@@ -27,17 +25,20 @@
 #include "Utilities.h"
 #include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
+#include "SoundTouchInterface/PlayerService.pb.h"
 #include "ProductDspHelper.h"
 #include "FrontDoorClient.h"
+#include "EndPointsDefines.h"
 
 
 namespace
 {
 const std::string s_FrontDoorAudioFormatUrl = "/audio/format";
 
-// @todo - work out better numbers here ( as of now no async on auto wake or change to my knowledge)
+// Decided because CEC latency is 200ms so similar timing for autowake
 constexpr uint32_t s_PollingTimeAutoWakeMs         = 200;
-constexpr uint32_t s_PollingTimeNormalOperationsMs = 1000;
+// @todo - PGC-942 - revisit with minimumOutputLatencyMs and totalLatencyMs handling
+constexpr uint32_t s_PollingTimeNormalOperationsMs = 5000;
 
 const std::string DEF_STR_AUDIO_FORMAT_LPCM = "LPCM";
 const std::string DEF_STR_AUDIO_FORMAT_DOLBY_DIGITAL = "Dolby Digital";
@@ -125,6 +126,36 @@ void ProductDspHelper::Stop( )
     return;
 }
 
+void ProductDspHelper::AutoWakeTriggered()
+{
+    BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
+    auto playbackRequestResponseCallback = [ this ]( const SoundTouchInterface::NowPlaying & response )
+    {
+        BOSE_DEBUG( s_logger, "A response to the playback request was received: %s" ,
+                    ProtoToMarkup::ToJson( response, false ).c_str( ) );
+    };
+
+    auto playbackRequestErrorCallback = [ this ]( const EndPointsError::Error & error )
+    {
+        BOSE_ERROR( s_logger, "An error code %d subcode %d and error string <%s> was returned from a playback request.",
+                    error.code(),
+                    error.subcode(),
+                    error.message().c_str() );
+    };
+
+    SoundTouchInterface::PlaybackRequest playbackRequestData;
+
+    playbackRequestData.set_source( "PRODUCT" );
+    playbackRequestData.set_sourceaccount( "TV" );
+
+    m_FrontDoorClientIF->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
+            playbackRequestData,
+            playbackRequestResponseCallback,
+            playbackRequestErrorCallback );
+
+    m_timer->Stop( );
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief ProductDspHelper::DspStatusCallback
@@ -134,8 +165,17 @@ void ProductDspHelper::Stop( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDspHelper::DspStatusCallback( const LpmServiceMessages::IpcDspStatus_t& status )
 {
-    BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
-    // @todo
+    BOSE_INFO( s_logger, "%s { autoWakePoll %d, noramlPoll %d }", __PRETTY_FUNCTION__, m_MonitorAutoWake, m_NormalDspPoll );
+
+    BOSE_INFO( s_logger, " %s - Energy present: %d",  __PRETTY_FUNCTION__, status.energypresent() );
+    if( m_MonitorAutoWake && status.energypresent() && !m_dspStatus.energypresent() )
+    {
+        AutoWakeTriggered();
+    }
+
+    // @todo - PGC-942update presentation latency
+
+    m_dspStatus.CopyFrom( status );
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -147,10 +187,10 @@ void ProductDspHelper::DspStatusCallback( const LpmServiceMessages::IpcDspStatus
 //////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDspHelper::SetAutoWakeMonitor( bool enabled )
 {
-    BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
+    BOSE_INFO( s_logger, "%s : %d", __PRETTY_FUNCTION__, enabled );
+    m_NormalDspPoll = false;
     m_MonitorAutoWake = enabled;
 
-    // Start timer
     if( !enabled )
     {
         m_timer->Stop( );
@@ -160,17 +200,7 @@ void ProductDspHelper::SetAutoWakeMonitor( bool enabled )
         m_timer->SetTimeouts( s_PollingTimeAutoWakeMs,
                               s_PollingTimeAutoWakeMs );
 
-        auto pollDspCb = [this]()
-        {
-            Callback< LpmServiceMessages::IpcDspStatus_t >
-            pollDspCb( std::bind( &ProductDspHelper::DspStatusCallback,
-                                  this,
-                                  std::placeholders::_1 ) );
-
-            m_ProductLpmHardwareInterface->GetDspStatus( pollDspCb );
-        };
-
-        m_timer->Start( pollDspCb );
+        StartPollTimer();
     }
 }
 
@@ -183,10 +213,10 @@ void ProductDspHelper::SetAutoWakeMonitor( bool enabled )
 //////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDspHelper::SetNormalOperationsMonitor( bool enabled )
 {
-    BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
+    BOSE_INFO( s_logger, "%s : %d", __PRETTY_FUNCTION__, enabled );
     m_MonitorAutoWake = false;
+    m_NormalDspPoll = enabled;
 
-    // Start timer
     if( !enabled )
     {
         m_timer->Stop( );
@@ -196,20 +226,30 @@ void ProductDspHelper::SetNormalOperationsMonitor( bool enabled )
         m_timer->SetTimeouts( s_PollingTimeNormalOperationsMs,
                               s_PollingTimeNormalOperationsMs );
 
-        auto pollDspCb = [this]()
-        {
-            Callback< LpmServiceMessages::IpcDspStatus_t >
-            pollDspCb( std::bind( &ProductDspHelper::DspStatusCallback,
-                                  this,
-                                  std::placeholders::_1 ) );
-
-            m_ProductLpmHardwareInterface->GetDspStatus( pollDspCb );
-        };
-
-        m_timer->Start( pollDspCb );
+        StartPollTimer();
     }
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductDspHelper::StartPollTimer
+///
+//////////////////////////////////////////////////////////////////////////////////////////////
+void ProductDspHelper::StartPollTimer( )
+{
+    BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
+    auto pollDspCb = [this]()
+    {
+        Callback< LpmServiceMessages::IpcDspStatus_t >
+        pollDspCb( std::bind( &ProductDspHelper::DspStatusCallback,
+                              this,
+                              std::placeholders::_1 ) );
+
+        m_ProductLpmHardwareInterface->GetDspStatus( pollDspCb );
+    };
+
+    m_timer->Start( pollDspCb );
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 ///

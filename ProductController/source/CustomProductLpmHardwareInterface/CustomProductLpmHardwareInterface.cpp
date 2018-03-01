@@ -225,7 +225,7 @@ bool CustomProductLpmHardwareInterface::GetDspStatus( const Callback<IpcDspStatu
 
     BOSE_DEBUG( s_logger, "A DSP status request will be made." );
 
-    GetLpmClient()->GetDspStatus( cb );
+    GetLpmClient()->GetDspStatus( cb, Ipc_Device_t::IPC_DEVICE_DSP );
 
     return true;
 }
