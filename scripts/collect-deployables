@@ -21,7 +21,6 @@ files=(
     "$builds_dir/components.svgz"
     "$builds_dir/package/product.tar"
     "$builds_dir/product_update.zip"
-    "$builds_dir/product_update_with_hsp.zip"
     "$builds_dir/package/product_flash"
     "$builds_dir/package/product_flash.exe"
     "$builds_dir/package/product_flash_mac"

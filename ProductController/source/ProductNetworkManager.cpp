@@ -79,7 +79,7 @@ bool ProductNetworkManager::Run( )
     /// become ready or not ready, respectively; subsequent methods are made then for getting
     /// and registering for the associated network data.
     ///
-    auto networkEndPointReadyCallback = [ this ]( const std::list< std::string >& endPointList )
+    auto callbackForNetworkEndPointsReady = [ this ]( const std::list< std::string >& endPointList )
     {
         if( endPointList.empty( ) )
         {
@@ -108,16 +108,12 @@ bool ProductNetworkManager::Run( )
 
                 RegisterForWiFiStatus( );
             }
-            else
-            {
-                BOSE_ERROR( s_logger, "An unknown end point %s was sent as ready.", endPoint.c_str( ) );
-            }
         }
     };
 
-    auto networkEndPointNotReadyCallback = [ this ]( const std::list< std::string >& endPointList )
+    auto callbackForNetworkEndPointsNotReady = [ this ]( const std::list< std::string >& endPointList )
     {
-        BOSE_ERROR( s_logger, "One or more network end point are not yet ready." );
+        BOSE_ERROR( s_logger, "One or more network end points are not yet ready." );
     };
 
     ///
@@ -130,8 +126,8 @@ bool ProductNetworkManager::Run( )
     networkEndPointList.push_back( FRONTDOOR_NETWORK_WIFI_PROFILE );
 
     m_FrontDoorClient->RegisterEndpointsOfInterest( networkEndPointList,
-                                                    networkEndPointReadyCallback,
-                                                    networkEndPointNotReadyCallback );
+                                                    callbackForNetworkEndPointsReady,
+                                                    callbackForNetworkEndPointsNotReady );
 
     return true;
 }
@@ -160,16 +156,16 @@ void ProductNetworkManager::RegisterForNetworkStatus( )
                     error.message( ).c_str( ) );
     };
 
+    m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::NetworkStatus >(
+        FRONTDOOR_NETWORK_STATUS,
+        callbackForNetworkStatusSuccess );
+
     m_FrontDoorClient->SendGet< NetManager::Protobuf::NetworkStatus, EndPointsError::Error >(
         FRONTDOOR_NETWORK_STATUS,
         callbackForNetworkStatusSuccess,
         callbackForNetworkStatusFailure );
 
-    m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::NetworkStatus >(
-        FRONTDOOR_NETWORK_STATUS,
-        callbackForNetworkStatusSuccess );
-
-    BOSE_DEBUG( s_logger, "A get and notification request for network status changes has been made." );
+    BOSE_DEBUG( s_logger, "A notification and get request for network status changes has been made." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -196,16 +192,16 @@ void ProductNetworkManager::RegisterForWiFiStatus( )
                     error.message( ).c_str( ) );
     };
 
+    m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::WiFiStatus >(
+        FRONTDOOR_NETWORK_WIFI_STATUS,
+        callbackForWiFiStatusSuccess );
+
     m_FrontDoorClient->SendGet< NetManager::Protobuf::WiFiStatus, EndPointsError::Error >(
         FRONTDOOR_NETWORK_WIFI_STATUS,
         callbackForWiFiStatusSuccess,
         callbackForWiFiStatusFailure );
 
-    m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::WiFiStatus >(
-        FRONTDOOR_NETWORK_WIFI_STATUS,
-        callbackForWiFiStatusSuccess );
-
-    BOSE_DEBUG( s_logger, "A get and notification request for wireless status changes has been made." );
+    BOSE_DEBUG( s_logger, "A notification and get request for wireless status changes has been made." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -232,16 +228,16 @@ void ProductNetworkManager::RegisterForWiFiProfiles( )
                     error.message( ).c_str( ) );
     };
 
+    m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::WiFiProfiles >(
+        FRONTDOOR_NETWORK_WIFI_PROFILE,
+        callbackForWiFiProfilesSuccess );
+
     m_FrontDoorClient->SendGet< NetManager::Protobuf::WiFiProfiles, EndPointsError::Error >(
         FRONTDOOR_NETWORK_WIFI_PROFILE,
         callbackForWiFiProfilesSuccess,
         callbackForWiFiProfilesFailure );
 
-    m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::WiFiProfiles >(
-        FRONTDOOR_NETWORK_WIFI_PROFILE,
-        callbackForWiFiProfilesSuccess );
-
-    BOSE_DEBUG( s_logger, "A get and notification request for wireless profile changes has been made." );
+    BOSE_DEBUG( s_logger, "A notification and get request for wireless profile changes has been made." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -488,12 +484,12 @@ void ProductNetworkManager::HandleNetworkStatus( const NetManager::Protobuf::Net
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductNetworkManager::PerformRequestforWiFiProfiles()
 {
-    auto CallbackForWiFiProfilesSuccess = [ this ]( const NetManager::Protobuf::WiFiProfiles & profiles )
+    auto callbackForWiFiProfilesSuccess = [ this ]( const NetManager::Protobuf::WiFiProfiles & profiles )
     {
         HandleWiFiProfiles( profiles );
     };
 
-    auto CallbackForWiFiProfilesFailure = [ this ]( const EndPointsError::Error & error )
+    auto callbackForWiFiProfilesFailure = [ this ]( const EndPointsError::Error & error )
     {
         BOSE_ERROR( s_logger, "An error code %d %d <%s> was returned from a WiFi profiles request.",
                     error.code( ),
@@ -503,8 +499,8 @@ void ProductNetworkManager::PerformRequestforWiFiProfiles()
 
     m_FrontDoorClient->SendGet< NetManager::Protobuf::WiFiProfiles, EndPointsError::Error >(
         FRONTDOOR_NETWORK_WIFI_PROFILE,
-        CallbackForWiFiProfilesSuccess,
-        CallbackForWiFiProfilesFailure );
+        callbackForWiFiProfilesSuccess,
+        callbackForWiFiProfilesFailure );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

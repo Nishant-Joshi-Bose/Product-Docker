@@ -41,7 +41,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/develop/0.2.1-69+6b1fec0"
+    "selected_version": "Release/develop/0.3.1-91+2ac06bd"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -58,6 +58,10 @@
   {
     "name": "CastleDemoController-qc8017_32",
     "selected_version": "Release/master/0.3.2-62+b9fcc88"
+  },
+  {
+    "name": "CastleHTTPProxy-qc8017_32",
+    "selected_version": "Release/master/0.2.0-26+f813b4d"
   },
   {
     "name": "CastleLibs-native",
@@ -89,7 +93,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "PGC890_subwooferGain@54a28e2e8628dc6f169878649685f73ea4b100e9"
+    "selected_version": "master@16b41a76e941d968aec8fc7ed9bc6e095c5eb8c9"
   },
   {
     "name": "CastleProductUIAssets",
@@ -101,7 +105,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.1.2-72+5b22962"
+    "selected_version": "Release/master/0.2.0-78+2eebfc2"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -153,7 +157,7 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.0.1-15+19b3c17"
+    "selected_version": "Release/master/0.1.0-17+f17e4d1"
   },
   {
     "name": "unittest-cpp-qc8017_32",
@@ -161,7 +165,7 @@
   },
   {
     "name": "Webkit",
-    "selected_version": "Release/master/0.3.2-28+3d92062"
+    "selected_version": "Release/master/0.3.3-33+5811010"
   },
   {
     "name": "WiFi-Setup-Webpage",
