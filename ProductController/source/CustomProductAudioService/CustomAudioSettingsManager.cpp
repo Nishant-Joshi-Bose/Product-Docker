@@ -197,16 +197,16 @@ ErrorCode_t CustomAudioSettingsManager::SetDualMonoSelect( const ProductPb::Audi
     if( !dualMonoSelect.has_value() )
     {
         BOSE_INFO( s_logger, "DualMonoSelect doesn't contain any value" );
-        return MISSING_FIELDS;
+        return ErrorCode_t::MISSING_FIELDS;
     }
     if( m_currentDualMonoSelect.value() == dualMonoSelect.value() )
     {
-        return VALUE_UNCHANGED;
+        return ErrorCode_t::VALUE_UNCHANGED;
     }
     m_audioSettings["values"][kPersistGlobal][kDualMonoSelectName] = dualMonoSelect.value();
     m_currentDualMonoSelect.set_value( dualMonoSelect.value() );
     PersistAudioSettings();
-    return NO_ERROR;
+    return ErrorCode_t::NO_ERROR;
 }
 const ProductPb::AudioDualMonoSelect& CustomAudioSettingsManager::GetDualMonoSelect() const
 {
