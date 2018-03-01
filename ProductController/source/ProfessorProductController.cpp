@@ -145,7 +145,6 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     /// Member Variable Initialization
     ///
-    m_IsCapsReady( false ),
     m_IsAudioPathReady( false ),
     m_IsNetworkConfigured( false ),
     m_IsNetworkConnected( false ),
@@ -1068,27 +1067,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
                 break;
             }
         }
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Content Audio Playback Services (CAPS) status messages are handled at this point.
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    if( message.has_capsstatus( ) )
-    {
-        if( message.capsstatus( ).has_initialized( ) )
-        {
-            m_IsCapsReady = message.capsstatus( ).initialized( );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "An invalid CAPS status message was received." );
-            return;
-        }
-
-        BOSE_DEBUG( s_logger, "A CAPS Content Audio Playback Services %s message was received.",
-                    m_IsCapsReady ? "up" : "down" );
-
-        GetHsm( ).Handle< bool >
-        ( &CustomProductControllerState::HandleCapsState, m_IsCapsReady );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Audio path status messages are handled at this point.
