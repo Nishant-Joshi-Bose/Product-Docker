@@ -38,7 +38,7 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_AMAZON_ACTION"],
         "origin": ["CAPSENSE", "TAP"],
-        "timeOutList": [4000]
+        "timeOutList": [0]
     },
     {
         "action": "PRESET_STORE_1",

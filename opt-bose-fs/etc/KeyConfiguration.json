@@ -188,7 +188,7 @@
             "origin": 1, 
             "keyEvent": 1, 
             "timeOutList": [
-                4000
+                0
             ], 
             "commment": "Console: action release ---> Alexa", 
             "action": 26, 
@@ -200,7 +200,7 @@
             "origin": 6, 
             "keyEvent": 1, 
             "timeOutList": [
-                4000
+                0
             ], 
             "commment": "Console: action release ---> Alexa", 
             "action": 26, 
