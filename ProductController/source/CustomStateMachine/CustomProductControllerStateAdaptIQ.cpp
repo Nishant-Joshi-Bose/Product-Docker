@@ -87,7 +87,7 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
         HandleTimeOut();
     } );
 
-    // TODO: does response come back after dsp has rebooted or as an event later on?
+// TODO: does response come back after dsp has rebooted or as an event later on?
     HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_AIQ );
 }
 
@@ -161,6 +161,13 @@ void CustomProductControllerStateAdaptIQ::HandleStateExit( )
 bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAdaptIQControl& cmd )
 {
     BOSE_INFO( s_logger, "%s : Handle Action %d\n", __func__, cmd.action() );
+
+    m_timer->SetTimeouts( ADAPTIQ_INACTIVITY_TIMEOUT, 0 );
+    m_timer->Start( [ = ]( )
+    {
+        HandleTimeOut();
+    } );
+
 
     // for now just forward the action on the the lpm / dsp; we'll do more complex stuff later
     switch( cmd.action() )
