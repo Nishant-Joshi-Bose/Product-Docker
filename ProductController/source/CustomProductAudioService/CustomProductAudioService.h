@@ -7,7 +7,6 @@
 
 #pragma once
 #include "ProductAudioService.h"
-#include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "CustomAudioSettingsManager.h"
 #include "ThermalMonitorTask.h"
@@ -15,7 +14,7 @@
 
 namespace ProductApp
 {
-
+class ProfessorProductController;
 class CustomProductAudioService: public ProductAudioService
 {
 public:
@@ -46,10 +45,10 @@ private:
     std::unique_ptr<AudioSetting<ProductPb::AudioSurroundLevel>>    m_AudioSurroundSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioGainOffset>>       m_AudioGainOffsetSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioAvSync>>           m_AudioAvSyncsetSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioSubwooferGain>>    m_AudioSubwooferGainSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioMode>>             m_AudioModeSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioContentType>>      m_AudioContentTypeSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioDualMonoSelect>>   m_DualMonoSelectSetting;
-
     /////////////////////////////////////////////////////////////////////////////////////////////////
     /// APProduct handling functions
     /////////////////////////////////////////////////////////////////////////////////////////////////

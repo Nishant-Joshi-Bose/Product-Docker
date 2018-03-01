@@ -145,12 +145,20 @@
         "timeOutList": [0]
     },
     {
-        "action": "VOLUME_UP",
-        "commment": "volume up repeat",
+        "action": "VOLUME_RAMP_UP",
+        "commment": "volume ramp up",
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_UP"],
         "origin": ["IR", "TAP", "RF"],
         "timeOutList": [300, 100]
+    },
+    {
+        "action": "VOLUME_RAMP_UP_CANCEL",
+        "commment": "volume ramp up cancel",
+        "keyEvent": "RELEASE_ALWAYS",
+        "keyList": ["BOSE_VOLUME_UP"],
+        "origin": ["IR", "TAP", "RF"],
+        "timeOutList": []
     },
     {
         "action": "VOLUME_DOWN",
@@ -161,12 +169,20 @@
         "timeOutList": [0]
     },
     {
-        "action": "VOLUME_DOWN",
-        "commment": "volume down repeat",
+        "action": "VOLUME_RAMP_DOWN",
+        "commment": "volume ramp down",
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_DOWN"],
         "origin": ["IR", "TAP", "RF"],
         "timeOutList": [300, 100]
+    },
+    {
+        "action": "VOLUME_RAMP_DOWN_CANCEL",
+        "commment": "volume ramp down cancel",
+        "keyEvent": "RELEASE_ALWAYS",
+        "keyList": ["BOSE_VOLUME_DOWN"],
+        "origin": ["IR", "TAP", "RF"],
+        "timeOutList": []
     },
     {
         "action": "PLAY_PAUSE",
@@ -265,7 +281,7 @@
         "timeOutList": []
     },
     {
-        "action": "ACTION_PAIR_SPEAKERS",
+        "action": "ACTION_START_PAIR_SPEAKERS",
         "commment": "pair speakers",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_PAIR_SPKR"],

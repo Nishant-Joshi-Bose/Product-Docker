@@ -37,12 +37,6 @@ message AdaptIQStatus
          * "advance"
          */
         repeated string     supportedActions    = 1;
-        /*
-         * "Enabled Normal"
-         * "Enabled Retail"
-         * "Disabled"
-         */
-        repeated string     supportedModes      = 2;
     }
 
     /*
