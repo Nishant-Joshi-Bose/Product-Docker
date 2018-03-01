@@ -58,7 +58,7 @@ print """<div class="box">"""
 print html_escape(version_info["long"])
 print "</div>"
 
-print "<li>Manufacturing Data"
+print "<li>Manufacturing Data [<a href='/diag/mfg-data'>all</a>]"
 mfg_data = json.load(open("/persist/mfg_data.json"))
 print """<div class="box">"""
 print "<table>"
