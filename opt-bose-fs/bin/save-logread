@@ -4,6 +4,8 @@
 #
 cd /mnt/nv/BoseLog || exit
 
+clean_logs
+
 num=0 min=0 max=0
 shopt -s nullglob
 for i in logread-*.bz2; do
