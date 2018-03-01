@@ -8,7 +8,11 @@
 #include <limits.h>
 #include <float.h>
 #include <functional>
+#include <iostream>
+#include <fstream>
 #include <json/json.h>
+
+#include "DirUtils.h"
 #include "SystemUtils.h"
 #include "FrontDoorClient.h"
 #include "DisplayController.h"
@@ -82,7 +86,9 @@ DisplayController::DisplayController( ProductController& controller, const std::
     m_frontdoorClientPtr( fd_client ),
     m_lpmClient( clientPtr ),
     m_timeToStop( false ),
-    m_autoMode( true )
+    m_autoMode( true ),
+    m_uiHeartBeat( ULLONG_MAX ),
+    m_localHeartBeat( ULLONG_MAX )
 {
     ParseJSONData();
 }// constructor
@@ -265,6 +271,28 @@ void DisplayController::MonitorLightSensor()
 
     while( ! m_timeToStop )
     {
+        if( m_uiHeartBeat != ULLONG_MAX )
+        {
+            if( m_localHeartBeat == ULLONG_MAX )
+            {
+                m_localHeartBeat = m_uiHeartBeat;
+            }// if it's te first heart beat receive from the UI
+
+            m_localHeartBeat++;
+
+            if( abs( m_localHeartBeat - m_uiHeartBeat ) > 2 )
+            {
+                BOSE_LOG( ERROR, "Error: the UI stop" );
+                // ??????????????????????????????????????????????????????????????????????
+                // ?? Santosh call the product controller m_productController.uiHasStop()
+                // ?????????????????????????????????????????????????????????????????????
+
+                // reset the heart beat algorithm and resume on first heart beat frim the UI
+                m_localHeartBeat = m_uiHeartBeat = ULLONG_MAX;
+            }// If the UI stop updating the heart beat
+
+        }// If the UI had started
+
         m_lpmClient->GetLightSensor( [this]( IpcLightSensor_t const & rsp )
         {
             m_luxDecimal    = ( int )( be16toh( rsp.lux_decimal_value() ) );
@@ -306,7 +334,7 @@ void DisplayController::MonitorLightSensor()
 
             if( fabs( lux_diff ) >= LUX_DIFF_THRESHOLD )
             {
-                SetBackLightLevel( m_backLight , targeted_level );
+                SetBackLightLevel( m_backLight, targeted_level );
                 // dummy read of the back light, the IPC mechanism is caching a value
                 m_lpmClient->GetBackLight( [this]( IpcBackLight_t const & rsp ) {} );
                 m_backLight  = targeted_level;
@@ -343,14 +371,17 @@ void DisplayController::RegisterDisplayEndPoints()
         HandleLpmNotificationLightSensor( arg );
     };
 
-    AsyncCallback<IpcBackLight_t  > notification_cb_back_light( backLightCallBack  , m_productController.GetTask() );
+    AsyncCallback<IpcBackLight_t  > notification_cb_back_light( backLightCallBack, m_productController.GetTask() );
     AsyncCallback<IpcLightSensor_t> notification_cb_light_sensor( lightSensorCallBack, m_productController.GetTask() );
 
-    m_lpmClient->RegisterEvent<IpcBackLight_t  >( IPC_PER_GET_BACKLIGHT  , notification_cb_back_light );
+    m_lpmClient->RegisterEvent<IpcBackLight_t  >( IPC_PER_GET_BACKLIGHT, notification_cb_back_light );
     m_lpmClient->RegisterEvent<IpcLightSensor_t>( IPC_PER_GET_LIGHTSENSOR, notification_cb_light_sensor );
 
+    // ==========================
+    // HandlePutDisplayRequest
+    // ==========================
     AsyncCallback<Display, Callback<Display>, Callback<EndPointsError::Error>> putDisplayReqCb(
-                                                                                std::bind( &DisplayController::HandlePutDisplayRequest ,
+                                                                                std::bind( &DisplayController::HandlePutDisplayRequest,
                                                                                         this,
                                                                                         std::placeholders::_1,
                                                                                         std::placeholders::_2
@@ -358,6 +389,9 @@ void DisplayController::RegisterDisplayEndPoints()
                                                                                 m_productController.GetTask() );
     m_frontdoorClientPtr->RegisterPut<Display>( "/ui/display", putDisplayReqCb );
 
+    // ==========================
+    // HandleGetDisplayRequest
+    // ==========================
     AsyncCallback< Callback<Display>, Callback<EndPointsError::Error>> getDisplayReqCb(
                                                                         std::bind(
                                                                             &DisplayController::HandleGetDisplayRequest,
@@ -366,6 +400,19 @@ void DisplayController::RegisterDisplayEndPoints()
                                                                         ),
                                                                         m_productController.GetTask() );
     m_frontdoorClientPtr->RegisterGet( "/ui/Display", getDisplayReqCb );
+
+    // ==========================
+    // HandleUIAlive
+    // ==========================
+    AsyncCallback<Display, Callback<Display>, Callback<EndPointsError::Error>> uiAliveReqCb(
+                                                                                std::bind( &DisplayController::HandlePutUIAlive,
+                                                                                        this,
+                                                                                        std::placeholders::_1,
+                                                                                        std::placeholders::_2
+                                                                                         ),
+                                                                                m_productController.GetTask() );
+    m_frontdoorClientPtr->RegisterPut<Display>( "/ui/alive", uiAliveReqCb );
+
 
 }// RegisterDisplayEndPoints
 
@@ -383,6 +430,22 @@ void  DisplayController::HandleGetDisplayRequest( const Callback<Display>& resp 
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
+void DisplayController::HandlePutUIAlive( const Display &req,
+                                          const Callback<Display>& resp )
+{
+    BOSE_LOG( VERBOSE, "received heartbeat: " << req.uiheartbeat() << ", current heat beat: " << m_uiHeartBeat );
+
+    if( abs( m_uiHeartBeat - req.uiheartbeat() ) >= 2 )
+    {
+        BOSE_LOG( WARNING, "UI is skipping heart beat, received heartbeat: " << req.uiheartbeat() + ", current heat beat: " << m_uiHeartBeat );
+    }
+
+    m_uiHeartBeat = req.uiheartbeat();
+
+}// HandlePutUIAlive
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 Display DisplayController::GetDisplay()
 {
     return m_display;
@@ -394,7 +457,7 @@ bool DisplayController::HandleLpmNotificationBackLight( IpcBackLight_t lpmBackLi
 {
     m_display.set_backlightprecentage( lpmBackLight.value() );
 
-    m_frontdoorClientPtr->SendNotification( "/ui/display" , GetDisplay() );
+    m_frontdoorClientPtr->SendNotification( "/ui/display", GetDisplay() );
     return true;
 }// HandleLpmNotificationBackLight
 
@@ -404,8 +467,72 @@ bool DisplayController::HandleLpmNotificationLightSensor( IpcLightSensor_t lpmLi
 {
     m_display.set_lightsensorlux( lpmLightSensor.lux_decimal_value() );
 
-    m_frontdoorClientPtr->SendNotification( "/ui/display" , GetDisplay() );
+    m_frontdoorClientPtr->SendNotification( "/ui/display", GetDisplay() );
     return true;
 }// HandleLpmNotificationBackLight
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+bool DisplayController::TurnOnOff( bool turnOn )
+{
+    const std::string displayControllerDir = "/sys/devices/soc/7af6000.spi/spi_master/spi6/spi6.1/graphics/fb1/";
+    const std::string sendCommandFileName  = displayControllerDir + "send_command";
+    const std::string teFileName           = displayControllerDir + "te";
+    const char*       onOffCmdString       = turnOn ? "29" : "28" ;
+    const char*       teString             = turnOn ? "1"  : "0"  ;
+    bool              displayAutoMode      = turnOn ? true : false;
+
+    BOSE_LOG( VERBOSE, "turning LCD: " << ( turnOn ? "on" : "off" ) );
+
+    SetAutoMode( displayAutoMode );
+
+    if( turnOn == false )
+    {
+        SetBackLightLevel( m_backLight, 0 );
+    }
+
+    if( DirUtils::DoesFileExist( sendCommandFileName ) == false )
+    {
+        BOSE_LOG( ERROR, "error: can't find file: " + sendCommandFileName + " - " + strerror( errno ) );
+        return false;
+    }
+
+    if( DirUtils::DoesFileExist( teFileName ) == false )
+    {
+        BOSE_LOG( ERROR, "error: can't find file: " + teFileName + " - " + strerror( errno ) );
+        return false;
+    }
+
+    std::ofstream displayControllerSendCmd( sendCommandFileName );
+    std::ofstream displayControllerTe( teFileName );
+
+    if( displayControllerSendCmd.is_open() == false )
+    {
+        BOSE_LOG( ERROR,  "error: failed to open file: " + sendCommandFileName + " - " + strerror( errno ) );
+        return false;
+    }
+
+    if( displayControllerTe.is_open() == false )
+    {
+        BOSE_LOG( ERROR,  "error: failed to open file: " + teFileName + " - " + strerror( errno ) );
+        return false;
+    }
+
+    if( turnOn == false )
+    {
+        displayControllerTe << teString;
+        usleep( 25 * 1000 ); // wait a full te cycle, the slowest is 40Hz
+    }
+
+    displayControllerSendCmd << onOffCmdString; // see ST7789VI_SPEC_V1.4.pdf
+
+    if( turnOn == true )
+    {
+        displayControllerTe << teString;
+    }
+
+    BOSE_LOG( VERBOSE, "LCD is now: " << ( turnOn ? "on" : "off" ) );
+    return true;
+}// TurnOnOff
 
 } //namespace ProductApp
