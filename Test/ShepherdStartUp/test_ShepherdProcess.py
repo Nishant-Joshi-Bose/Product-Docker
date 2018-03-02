@@ -20,7 +20,7 @@ cfg.read("conf_Shepherd.ini")
 def test_ShepherdProcess(request):
     """
     This is to validate all processes running after Bonjour Update
-    We are continusly validating each process for 5 minutes
+    We are continuously validating each process for 5 minutes
     Fetching All Processes list from Eddie : cat /var/run/shepherd/Shepherd*.xml
     Validate Process is Running from Eddie : cat /var/run/shepherd/pids
     """
