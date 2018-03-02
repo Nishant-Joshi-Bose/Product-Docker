@@ -37,7 +37,7 @@ using namespace A4VRemoteCommunication;
 
 namespace
 {
-const std::string s_FrontDoorNowSelection = "/content/nowSelection";
+const std::string s_FrontDoorNowSelection = "/content/nowSelectionInfo";
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
