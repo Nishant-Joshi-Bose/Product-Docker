@@ -75,6 +75,7 @@ void CustomProductControllerStatePlaying::HandleStateEnter( )
 
     BOSE_INFO( s_logger, "The %s state is in %s powering CEC on.", GetName( ).c_str( ), __func__ );
     GetCustomProductController( ).GetCecHelper( )->PowerOn( );
+    GetCustomProductController( ).GetDspHelper()->SetNormalOperationsMonitor( true );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -110,6 +111,7 @@ void CustomProductControllerStatePlaying::HandleStateExit( )
 
     BOSE_INFO( s_logger, "The %s state is in %s powering CEC off.", GetName( ).c_str( ), __func__ );
     GetCustomProductController( ).GetCecHelper( )->PowerOff( );
+    GetCustomProductController( ).GetDspHelper()->SetNormalOperationsMonitor( false );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
