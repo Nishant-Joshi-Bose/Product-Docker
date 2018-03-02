@@ -17,8 +17,6 @@ Parent conftest.py for the Eddie repository
 import os
 import datetime
 import pytest
-import sys
-print sys.path
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
