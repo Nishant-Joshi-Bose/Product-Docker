@@ -78,10 +78,11 @@ public:
 private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These declarations store the main task for processing LPM hardware events and requests. It
-    /// is passed by the ProductController instance.
+    /// is passed by the ProductController instance.../CastleProductControllerCommon/ProductController.cpp:
     //////////////////////////////////////////////////////////////////////////////////////////////
     NotifyTargetTaskIF*             m_ProductTask       = nullptr;
     Callback< ProductMessage >      m_ProductNotify     = nullptr;
+    ProfessorProductController&     m_ProductController;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -89,10 +90,10 @@ private:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr<FrontDoorClientIF>                                      m_FrontDoorClient;
-    SoundTouchInterface::NowPlaying                                         m_nowPlaying;
+    SoundTouchInterface::NowSelectionInfo                                   m_nowSelection;
     A4VRemoteCommunication::A4VRemoteCommClientIF::A4VRemoteCommClientPtr   m_RCSClient;
 
-    void UpdateNowPlaying( const SoundTouchInterface::NowPlaying& nowPlaying );
+    void UpdateNowSelection( const SoundTouchInterface::NowSelectionInfo& nowSelection );
     void InitializeFrontDoor();
     void InitializeRCS();
 };
