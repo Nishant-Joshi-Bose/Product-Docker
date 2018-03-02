@@ -27,16 +27,17 @@ def test_ShepherdProcess(request):
     result = PerformBonjourUpdate(request)
     device = request.config.getoption("--device-id")
     assert result, "Bonjour Update Failed. Please see logs for more details"
-    obj = RivieraUtils('ADB', device=device)
-    processes = obj.getShepherdProcesses()
+    rivierapull = RivieraUtils('LOCAL')
+    processes = rivierapull.getShepherdProcesses(device=device)
     logger.info("Actual Processes : " + str(processes))
     ProcessDiedList = []
     startTime = time.time()
     elapsed = 0
     timeout = int(cfg.get('Settings', 'TIME_OUT'))
     result = True
+    riviera = RivieraUtils('ADB', device=device)
     while elapsed <= timeout:
-        runningprocess = obj.communication.executeCommand("cat pids", cwd="/var/run/shepherd")
+        runningprocess = riviera.communication.executeCommand("cat pids", cwd="/var/run/shepherd")
         logger.info("Running Processes : " + str(runningprocess))
         for process in processes:
             if process not in runningprocess:
