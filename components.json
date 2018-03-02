@@ -81,7 +81,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@2622a1268a806a24cdfd1b6ead53e802a3f9c215"
+    "selected_version": "master@4f45a805d3a1a18489f57a8b3cc32884e616c75b"
   },
   {
     "name": "CastleProductUIAssets",
@@ -89,7 +89,7 @@
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@1e236ae8c5c07dbce1fff5a8127e6a14db5a3a28"
+    "selected_version": "master@025a21ab3657fbf51fdb879cd1da7b3b7a86ef58"
   },
   {
     "name": "EddieLPM-Package",
