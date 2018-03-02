@@ -5,11 +5,11 @@
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@ab77e2216a0b358837791fd837a2c165f46f811e"
+    "selected_version": "master@65d422b17cbd1d57e9e6bd2c044bd6fb9fe88066"
   },
   {
     "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/0.15-56+g286fcdd"
+    "selected_version": "Release/master/0.16-1+g496e826"
   },
   {
     "name": "A4VVideoManagerService",
@@ -153,7 +153,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.10.41169.2703991"
+    "selected_version": "Continuous/Castle-Fork-ProductSources/2018-03-01_1728"
   },
   {
     "name": "SystemEventService-qc8017_32",

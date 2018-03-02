@@ -37,6 +37,7 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/SystemInfo.pb.cc
   ${PROTO_CC_DEST}/SystemSourcesProperties.pb.cc
   source/ProductAdaptIQManager.cpp
+  source/ProductBLERemoteManager.cpp
   source/ProductCecHelper.cpp
   source/ProductCommandLine.cpp
   source/ProductKeyInputInterface.cpp
@@ -69,6 +70,7 @@ ADD_EXECUTABLE(Professor
 TARGET_LINK_LIBRARIES(Professor
   CastleProductControllerCommon
   LpmClient
+  A4VRemoteCommClient
   A4VVideoManagerClient
   A4VQuickSetServiceClient
   FrontDoorClient
