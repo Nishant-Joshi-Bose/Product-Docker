@@ -11,18 +11,21 @@ This repo contains the source code and tools specific to the SoundTouch Eddie pr
 ![Eddie](eddie.png)
 
 ##### Table of Contents
-[Software Updates](#updates)
-[Getting Started](#start)
-[External References](#links)
+[Software Updates](#updates)   
+[Getting Started](#start)   
+[External References](#links)   
 [More...](#more)  
 
 <a name="updates"/>
 
 ### Software Updates
 
-To update the software (SoundTouch, HSP, LPM, etc) as a user, it is highly recommended to use Bonjour. Follow the instructions found on the wiki: [Bonjour Update of Eddie](https://wiki.bose.com/display/WSSW/Bonjour+Update+of+Eddie). 
+To update the software (SoundTouch, HSP, LPM, etc) as a user, it is highly recommended to use Bonjour.
+Follow the instructions found on the wiki: [Bonjour Update of Eddie](https://wiki.bose.com/display/WSSW/Bonjour+Update+of+Eddie).
+For a simpler-way; see ./pushup script
 
 Do this whenever you need to update the HSP. Thereafter you may use opkg and etc. to install newer versions of SoundTouch as described later in this document.
+
 
 <a name="start"/>
 
@@ -50,6 +53,38 @@ List of devices attached
 5166240	device
 
 $
+```
+
+To perform Bonjour-Update; use the pushup script:
+
+From the Eddie workspace:
+
+```shell session
+$ cd /scratch/Eddie
+$ make all-package
+$ cd builds/
+
+To update without HSP:
+$ ./CastleTestUtils/CastleTestUtils/scripts/pushup 
+
+To update HSP:
+$ ./CastleTestUtils/CastleTestUtils/scripts/pushup --hsp True
+
+When having multiple devices, without HSP:
+$ ./CastleTestUtils/CastleTestUtils/scripts/pushup --deviceid <deviceid>
+
+When having multiple devices, with HSP:
+$ ./CastleTestUtils/CastleTestUtils/scripts/pushup --deviceid <deviceid> --hsp True
+```
+
+In general:
+
+```shell session
+$ cd /scratch
+$ git clone git@github.com:BoseCorp/CastleTestUtils.git
+$ cd CastleTestUtils
+$ ./CastleTestUtils/scripts/pushup --deviceid <device-id> --zipfile <path-to-zipfile>
+
 ```
 
 Install the .ipk file you built.
