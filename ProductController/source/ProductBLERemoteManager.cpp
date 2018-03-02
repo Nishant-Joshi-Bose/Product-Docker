@@ -30,6 +30,7 @@
 #include "EndPointsError.pb.h"
 
 using namespace ProductPb;
+using namespace A4V_RemoteCommunicationServiceMessages;
 using namespace A4VRemoteCommunication;
 
 namespace
@@ -68,7 +69,7 @@ ProductBLERemoteManager::ProductBLERemoteManager( ProfessorProductController& Pr
 ///
 /// @name   ProductBLERemoteManager::InitializeFrontDoor
 ///
-/// @brief  
+/// @brief
 ///
 /// @param  void This method does not take any arguments.
 ///
@@ -80,7 +81,7 @@ void ProductBLERemoteManager::InitializeFrontDoor( )
 {
     m_FrontDoorClient = FrontDoor::FrontDoorClient::Create( "ProductBLERemoteManager" );
 
-    auto handleNowPlaying = [ this ]( const SoundTouchInterface::NowPlaying& nowPlaying )
+    auto handleNowPlaying = [ this ]( const SoundTouchInterface::NowPlaying & nowPlaying )
     {
         UpdateNowPlaying( nowPlaying );
     };
@@ -101,7 +102,7 @@ void ProductBLERemoteManager::InitializeFrontDoor( )
 
         BOSE_INFO( s_logger, "Registering for %s",  s_FrontDoorNowPlaying.c_str() );
         m_FrontDoorClient->SendGet<SoundTouchInterface::NowPlaying, EndPointsError::Error>( s_FrontDoorNowPlaying, handleNowPlaying, handleNowPlayingFail );
-        m_FrontDoorClient->RegisterNotification<SoundTouchInterface::NowPlaying>( s_FrontDoorNowPlaying, handleNowPlaying);
+        m_FrontDoorClient->RegisterNotification<SoundTouchInterface::NowPlaying>( s_FrontDoorNowPlaying, handleNowPlaying );
     };
 
     auto handleNowPlayingNotReady = [ this ]( const std::list<std::string>& endPointList )
@@ -116,7 +117,7 @@ void ProductBLERemoteManager::InitializeFrontDoor( )
 ///
 /// @name   ProductBLERemoteManager::InitializeRCS
 ///
-/// @brief  
+/// @brief
 ///
 /// @param  void This method does not take any arguments.
 ///
@@ -126,7 +127,7 @@ void ProductBLERemoteManager::InitializeFrontDoor( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::InitializeRCS( )
 {
-    m_RCSClient = A4VRemoteCommClient::Create( "RCSTestClient", m_ProductTask);
+    m_RCSClient = A4VRemoteCommClient::Create( "RCSTestClient", m_ProductTask );
 
     auto disconnectCb = [this]( )
     {
@@ -175,6 +176,9 @@ void ProductBLERemoteManager::Stop( void )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::UpdateNowPlaying( const SoundTouchInterface::NowPlaying& nowPlaying )
 {
+    m_nowPlaying = nowPlaying;
+
+    m_RCSClient->Led_Set( LedsSourceTypeMsg_t::SOUND_TOUCH );
 }
 
 
