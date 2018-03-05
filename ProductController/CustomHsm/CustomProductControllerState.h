@@ -315,6 +315,10 @@ public:
     {
         return false;
     }
+    virtual bool HandleNetworkWifiAPStatus( bool APStatus )
+    {
+        return false;
+    }
 
 public:
     /// The custom version of this function returns the custom ProductController
