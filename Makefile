@@ -120,8 +120,8 @@ graph: product-ipk
 
 .PHONY: lpm-bos
 lpm-bos:
-	rm ./builds/$(cfg)/professor_package*.bos
-	rm ./builds/$(cfg)/lpm_professor*.hex
+	rm -f ./builds/$(cfg)/professor_package*.bos
+	rm -f ./builds/$(cfg)/lpm_professor*.hex
 	python2.7 $(RIVIERA_LPM_TOOLS_DIR)/tools/blob/blob_utility.py --pack $(BOSE_WORKSPACE)/lpm_package.xml ./builds/$(cfg)/ --build_type Release --boseversion $(BUILDS_DIR)/BoseVersion.json
 
 .PHONY: hsp-ipk
