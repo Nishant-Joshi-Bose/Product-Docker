@@ -26,7 +26,7 @@ logger = get_logger(__name__, "ShepherdProcess.log", level=logging.INFO, fileLog
 cfg = ConfigParser.SafeConfigParser()
 cfg.read("conf_Shepherd.ini")
 
-def test_ShepherdProcess(request):
+def test_shepherd_process(request):
     """
     This is to validate all processes running after Bonjour Update
     We are continuously validating each process for 5 minutes
@@ -39,26 +39,22 @@ def test_ShepherdProcess(request):
     rivierapull = RivieraUtils('LOCAL')
     processes = rivierapull.getShepherdProcesses(device=device)
     logger.info("Actual Processes : " + str(processes))
-    ProcessDiedList = []
+    process_died_list = []
     startTime = time.time()
-    elapsed = 0
     timeout = int(cfg.get('Settings', 'TIME_OUT'))
     result = True
     riviera = RivieraUtils('ADB', device=device)
-    while elapsed <= timeout:
+    while (time.time() - startTime) <= timeout:
         runningprocess = riviera.communication.executeCommand("cat pids", cwd="/var/run/shepherd")
         logger.info("Running Processes : " + str(runningprocess))
         for process in processes:
             if process not in runningprocess:
-                logger.info("------------Process not running : " + str(process) + "---------------")
-                if process not in ProcessDiedList:
-                    ProcessDiedList.append(process)
+                logger.info("------------Process died : " + str(process) + "---------------")
+                if process not in process_died_list:
+                    process_died_list.append(process)
                     result = False
         time.sleep(2)
-        elapsed = time.time() - startTime
-    if ProcessDiedList:
-        logger.info("Failed : Process not running : " + str(ProcessDiedList))
-        assert False, "Processes " +str(ProcessDiedList)+ " is not running "
+    assert process_died_list,"The following processes died after installation: {}".format(process_died_list)
 
 def PerformBonjourUpdate(request):
     """
@@ -72,22 +68,16 @@ def PerformBonjourUpdate(request):
     try:
         deviceIP = bonjourUpdateSupport.getDeviceIP()
         logger.info("Device IP : " + deviceIP)
-        bonjour_update_obj = BonjourUpdateUtils(device=device)
+        bonjour_util = BonjourUpdateUtils(device=device)
         #Need to perform Bonjour Update twice
         BonjourCnt = 0
         while True:
-            bonjour_update_obj.upload_zipfile(zip_file, deviceIP, is_verify_uploaded_zip=is_verify_uploaded_zip)
+            bonjour_util.upload_zipfile(zip_file, deviceIP, is_verify_uploaded_zip=is_verify_uploaded_zip)
             bonjourUpdateSupport.confirmInstallationVersions()
             BonjourCnt += 1
             if BonjourCnt >= int(cfg.get('Settings', 'BONJOUR_UPDATE_LOOP')):
                 break
         return True
-
-    except KeyboardInterrupt:
-        logger.info("Shut-Down requested - Exiting ....")
-        try:
-            sys.exit()
-            return False
-        except SystemExit:
-            os._exit(0)
-            return False
+    except Exception as e:
+        logger.info("Exception in Bonjour Update .... " + str(e))
+        return False
