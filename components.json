@@ -9,7 +9,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.9-301+0ca2db3"
+    "selected_version": "Release/master/0.3.10-315+1a6c767"
   },
   {
     "name": "BoseOPKG-native",
@@ -89,7 +89,7 @@
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@025a21ab3657fbf51fdb879cd1da7b3b7a86ef58"
+    "selected_version": "master@bd8755ff92f3560e98b41001d7e22f9e5181ea3a"
   },
   {
     "name": "EddieLPM-Package",
@@ -121,11 +121,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/2.4"
+    "selected_version": "Release/master/2.5"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/2.4"
+    "selected_version": "Release/master/2.5"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -141,7 +141,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.3.13-356+5e90ccc"
+    "selected_version": "Release/IP3/0.3.13-362+0ed8b58"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
