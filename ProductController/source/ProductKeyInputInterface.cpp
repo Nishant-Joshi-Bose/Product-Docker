@@ -288,7 +288,6 @@ void ProductKeyInputInterface::SendDataCollection( const LpmServiceMessages::Ipc
 {
     BOSE_DEBUG( s_logger, __func__ );
 
-    std::string currentButtonId;
     const auto currentKeyId = keyInformation.keyid();
     const auto currentOrigin = keyInformation.keyorigin();
 
