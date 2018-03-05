@@ -238,7 +238,7 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
 
     /// Decide if this key should be blasted or sent to the key handler
     bool isBlastedKey = false;
-    std::string cicode = "";
+    std::string cicode;
     auto nowSelection = m_ProductController.GetNowSelection();
 
     if( nowSelection.has_contentitem() )
@@ -253,10 +253,7 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
                 isBlastedKey = m_QSSClient->IsBlastedKey( keyEvent.keyid(), source->details().devicetype() );
             }
 
-            if( source->details().has_cicode() )
-            {
-                cicode = source->details().cicode();
-            }
+            cicode = source->details().cicode();
         }
     }
 

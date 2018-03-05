@@ -497,7 +497,7 @@ void ProfessorProductController::Run( )
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_ProductKeyInputInterface    = std::make_shared< ProductKeyInputInterface          >( *this );
     m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
-    m_ProductSourceInfo        = std::make_shared< ProductSourceInfo                    >( *this );
+    m_ProductSourceInfo           = std::make_shared< ProductSourceInfo                 >( *this );
     m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this, m_FrontDoorClientIF, m_ProductLpmHardwareInterface->GetLpmClient() );
 
     if( m_ProductLpmHardwareInterface == nullptr ||
