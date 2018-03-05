@@ -152,15 +152,15 @@ bool CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleNowSelec
 {
     BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
 
-    if( ( GetProductController( ).GetNowSelection( ).has_contentitem( ) ) and
-        ( GetProductController( ).GetNowSelection( ).contentitem( ).source( ).compare( "PRODUCT" )      == 0 ) )
+    if( ( nowSelectionInfo.has_contentitem( ) ) and
+        ( nowSelectionInfo.contentitem( ).source( ).compare( "PRODUCT" )      == 0 ) )
     {
-        if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( "SETUP" ) == 0 )
+        if( nowSelectionInfo.contentitem( ).sourceaccount( ).compare( "SETUP" ) == 0 )
         {
             ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP );
 
         }
-        else if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( "ADAPTiQ" ) == 0 )
+        else if( nowSelectionInfo.contentitem( ).sourceaccount( ).compare( "ADAPTiQ" ) == 0 )
         {
             ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
         }
