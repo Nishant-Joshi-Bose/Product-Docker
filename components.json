@@ -132,6 +132,10 @@
     "selected_version": "Release/master/0.3.8-113+81aa0d0"
   },
   {
+    "name": "RivieraLpmTools",
+    "selected_version": "@2125"
+  },
+  {
     "name": "RivieraLpmUpdater",
     "selected_version": "Release/master/0.3.2-39+0fb03f2"
   },
