@@ -22,7 +22,10 @@
     <arg>-c/opt/Bose/etc/BoseApp.xml</arg>
   </daemon>
 
-  <daemon name="STSCertified"/>
+  <daemon name="STSCertified">
+    <!-- Workaround for CASTLE-9311: "libuuid.so missing from Riviera-HSP 2.4" -->
+    <env>LD_LIBRARY_PATH=/opt/Bose/lib</env>
+  </daemon>
 
   <daemon name="PtsServer">
     <arg>/opt/Bose/etc/pts-handler</arg>
