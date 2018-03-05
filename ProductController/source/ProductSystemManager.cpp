@@ -113,39 +113,6 @@ bool ProductSystemManager::Run( )
     BOSE_DEBUG( s_logger, "Registration for getting configuration status requests has been made." );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Registration for the Bose Content Audio Playback Services or CAPS process for getting a
-    /// notification when this process is running is made through the FrontDoorClient. The callback
-    /// HandleCapsStatus is used to process the notifications.
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    {
-        AsyncCallback< SoundTouchInterface::CapsInitializationStatus >
-        CallbackForNotification( std::bind( &ProductSystemManager::HandleCapsStatus,
-                                            this,
-                                            std::placeholders::_1 ),
-                                 m_ProductTask );
-
-        AsyncCallback< SoundTouchInterface::CapsInitializationStatus >
-        CallbackForSuccess( std::bind( &ProductSystemManager::HandleCapsStatus,
-                                       this,
-                                       std::placeholders::_1 ),
-                            m_ProductTask );
-
-        AsyncCallback< EndPointsError::Error >
-        CallbackForFailure( std::bind( &ProductSystemManager::HandleCapsStatusFailed,
-                                       this,
-                                       std::placeholders::_1 ),
-                            m_ProductTask );
-
-        m_FrontDoorClient->RegisterNotification< SoundTouchInterface::CapsInitializationStatus >
-        ( FRONTDOOR_CAPS_INITIALIZATION_UPDATE, CallbackForNotification );
-
-        m_FrontDoorClient->SendGet< SoundTouchInterface::CapsInitializationStatus, EndPointsError::Error >
-        ( FRONTDOOR_SYSTEM_CAPS_INITIALIZATION_STATUS, CallbackForSuccess, CallbackForFailure );
-    }
-
-    BOSE_DEBUG( s_logger, "A notification request for CAPS initialization messages has been made." );
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
     /// Registration for other Bose client processes for getting the system state is made
     /// through the FrontDoorClient. The callback HandleGetSystemStateRequest is used to process
     /// system state requests.
@@ -269,43 +236,6 @@ void ProductSystemManager::HandleGetConfigurationStatusRequest( const Callback< 
     BOSE_DEBUG( s_logger, "Sending the configuration status for a get request." );
 
     response.Send( m_ConfigurationStatus );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name  ProductSystemManager::HandleCapsStatus
-///
-/// @param const SoundTouchInterface::CapsInitializationStatus& status
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::HandleCapsStatus( const SoundTouchInterface::CapsInitializationStatus&
-                                             status )
-{
-    BOSE_DEBUG( s_logger, "---------------- Product CAPS Status Event -----------------" );
-    BOSE_DEBUG( s_logger, "CAPS has %s.", status.capsinitialized( ) ? "been initialized" : "not been initialized" );
-
-    ProductMessage productMessage;
-    productMessage.mutable_capsstatus( )->set_initialized( status.capsinitialized( ) );
-    SendMessage( productMessage );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name  ProductSystemManager::HandleCapsStatusFailed
-///
-/// @param const FRONT_DOOR_CLIENT_ERRORS error
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::HandleCapsStatusFailed( const EndPointsError::Error& error )
-{
-    ///
-    /// A product message indicating that CAPS is down (based on a Front Door messaging error) may
-    /// cause a race condition at this point and is not sent. Refer to the JIRA Story PGC-735 for
-    /// details.
-    ///
-    BOSE_DEBUG( s_logger, "---------------- Product CAPS Status Failed ----------------" );
-    BOSE_ERROR( s_logger, "The CAPS initialization status was not received." );
-    BOSE_WARNING( s_logger, "%s: Error = (%d-%d) %s", __func__, error.code(), error.subcode(), error.message().c_str() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -47,7 +47,6 @@
 #include "ProductControllerStateBooting.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
-#include "ProductControllerStateIdle.h"
 #include "ProductControllerStateIdleVoiceConfigured.h"
 #include "ProductControllerStateIdleVoiceNotConfigured.h"
 #include "ProductControllerStateLowPowerStandby.h"
@@ -86,6 +85,7 @@
 #include "ProductControllerStateWelcome.h"
 #include "CustomProductControllerStateAdaptIQExiting.h"
 #include "CustomProductControllerStateAdaptIQ.h"
+#include "CustomProductControllerStateIdle.h"
 #include "CustomProductControllerStateOn.h"
 #include "CustomProductControllerStatePlayable.h"
 #include "CustomProductControllerStatePlayingDeselectedAccessoryPairing.h"
@@ -138,15 +138,14 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductCommandLine( nullptr ),
     m_ProductKeyInputInterface( nullptr ),
     m_ProductCecHelper( nullptr ),
+    m_ProductDspHelper( nullptr ),
     m_ProductAdaptIQManager( nullptr ),
     m_ProductAudioService( nullptr ),
 
     ///
     /// Member Variable Initialization
     ///
-    m_IsCapsReady( false ),
     m_IsAudioPathReady( false ),
-    m_IsSTSReady( false ),
     m_IsNetworkConfigured( false ),
     m_IsNetworkConnected( false ),
     m_IsAutoWakeEnabled( false ),
@@ -172,6 +171,8 @@ ProfessorProductController::ProfessorProductController( ) :
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::Run( )
 {
+    CommonInitialize( );
+
     m_Running = true;
 
     BOSE_DEBUG( s_logger, "----------- Product Controller State Machine    ------------" );
@@ -289,10 +290,10 @@ void ProfessorProductController::Run( )
       stateNetworkStandby,
       PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_NOT_CONFIGURED );
 
-    auto* stateIdle = new ProductControllerStateIdle
+    auto* stateIdle = new CustomProductControllerStateIdle
     ( GetHsm( ),
       customStatePlayable,
-      PRODUCT_CONTROLLER_STATE_IDLE );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_IDLE );
 
     auto* stateIdleVoiceConfigured = new ProductControllerStateIdleVoiceConfigured
     ( GetHsm( ),
@@ -488,6 +489,7 @@ void ProfessorProductController::Run( )
 
     m_ProductLpmHardwareInterface = std::make_shared< CustomProductLpmHardwareInterface >( *this );
     m_ProductCecHelper            = std::make_shared< ProductCecHelper                  >( *this );
+    m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductSystemManager        = std::make_shared< ProductSystemManager              >( *this );
     m_ProductNetworkManager       = std::make_shared< ProductNetworkManager             >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
@@ -502,6 +504,7 @@ void ProfessorProductController::Run( )
         m_ProductCommandLine          == nullptr ||
         m_ProductKeyInputInterface    == nullptr ||
         m_ProductCecHelper            == nullptr ||
+        m_ProductDspHelper            == nullptr ||
         m_ProductAdaptIQManager       == nullptr )
     {
         BOSE_CRITICAL( s_logger, "-------- Product Controller Failed Initialization ----------" );
@@ -525,6 +528,7 @@ void ProfessorProductController::Run( )
     m_ProductCommandLine         ->Run( );
     m_ProductKeyInputInterface   ->Run( );
     m_ProductCecHelper           ->Run( );
+    m_ProductDspHelper           ->Run( );
     m_ProductAdaptIQManager      ->Run( );
 
     ///
@@ -635,14 +639,14 @@ std::shared_ptr< ProductCecHelper >& ProfessorProductController::GetCecHelper( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::GetIntentHandler
+/// @name   ProfessorProductController::GetDspHelper
 ///
-/// @return This method returns a reference to the IntentHandler instance.
+/// @return This method returns a shared pointer to the ProductCecHelper instance.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-IntentHandler& ProfessorProductController::GetIntentHandler( )
+std::shared_ptr< ProductDspHelper >& ProfessorProductController::GetDspHelper( )
 {
-    return m_IntentHandler;
+    return m_ProductDspHelper;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -864,6 +868,50 @@ std::string const& ProfessorProductController::GetProductDescription() const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   ProfessorProductController::GetOOBDefaultLastContentItem
+///
+/// @return This method returns the PassportPB::ContentItem value to be used for initializing the OOB LastContentItem
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+PassportPB::ContentItem ProfessorProductController::GetOOBDefaultLastContentItem() const
+{
+    PassportPB::ContentItem item;
+    item.set_source( "PRODUCT" );
+    item.set_sourceaccount( "TV" );
+    return item;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::CanPersistAsLastContentItem
+///
+/// @param  const SoundTouchInterface::ContentItem &ci
+///
+/// @brief  Determines if the content item can be persisted in m_lastContentItem
+///
+/// @return Returns true or false
+///////////////////////////////////////////////////////////////////////////////
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProfessorProductController::CanPersistAsLastContentItem( const SoundTouchInterface::ContentItem &ci ) const
+{
+    bool retVal = true;
+    if( !ProductController::CanPersistAsLastContentItem( ci ) )
+    {
+        retVal = false;
+    }
+    if( ci.source() == "PRODUCT" && ( ci.sourceaccount() == "ADAPTiQ" ) )
+    {
+        retVal = false;
+    }
+
+    BOSE_VERBOSE( s_logger, "ContentItem %s can%s persist in Professor as LastContentItem",
+                  ProtoToMarkup::ToJson( ci, false ).c_str( ), retVal ? "" : "not" );
+    return retVal;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::SetupProductSTSConntroller
 ///
 /// @brief  This method is called to perform the needed initialization of the ProductSTSController,
@@ -893,7 +941,7 @@ void ProfessorProductController::SetupProductSTSConntroller( )
     sources.push_back( descriptor_SLOT_2 );
 
     Callback< void >
-    CallbackForSTSComplete( std::bind( &ProfessorProductController::HandleSTSInitWasComplete,
+    CallbackForSTSComplete( std::bind( &ProductController::HandleSTSInitWasComplete,
                                        this ) );
 
 
@@ -905,27 +953,6 @@ void ProfessorProductController::SetupProductSTSConntroller( )
     m_ProductSTSController.Initialize( sources,
                                        CallbackForSTSComplete,
                                        CallbackToHandleSelectSourceSlot );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::HandleSTSInitWasComplete
-///
-/// @brief  This method is called from the ProductSTSController when all the initially-created
-///         sources have been created with CAPS/STS.
-///
-/// @note   This method is called on the ProductSTSController task.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::HandleSTSInitWasComplete( )
-{
-    ProductMessage message;
-    message.mutable_stsinterfacestatus( )->set_initialized( true );
-
-    IL::BreakThread( std::bind( &ProfessorProductController::HandleMessage,
-                                this,
-                                message ),
-                     GetTask( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1042,27 +1069,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         }
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Content Audio Playback Services (CAPS) status messages are handled at this point.
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_capsstatus( ) )
-    {
-        if( message.capsstatus( ).has_initialized( ) )
-        {
-            m_IsCapsReady = message.capsstatus( ).initialized( );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "An invalid CAPS status message was received." );
-            return;
-        }
-
-        BOSE_DEBUG( s_logger, "A CAPS Content Audio Playback Services %s message was received.",
-                    m_IsCapsReady ? "up" : "down" );
-
-        GetHsm( ).Handle< bool >
-        ( &CustomProductControllerState::HandleCapsState, m_IsCapsReady );
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Audio path status messages are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_audiopathstatus( ) )
@@ -1082,18 +1088,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
 
         GetHsm( ).Handle< bool >
         ( &CustomProductControllerState::HandleAudioPathState, m_IsAudioPathReady );
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// STS interface status is handled at this point.
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_stsinterfacestatus( ) )
-    {
-        BOSE_DEBUG( s_logger, "An STS Sources Initialized message was received." );
-
-        m_IsSTSReady = true;
-
-        GetHsm( ).Handle< >
-        ( &CustomProductControllerState::HandleSTSSourcesInit );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// STS slot selected data is handled at this point.
@@ -1358,23 +1352,8 @@ void ProfessorProductController::Wait( )
     m_ProductCommandLine         ->Stop( );
     m_ProductKeyInputInterface   ->Stop( );
     m_ProductCecHelper           ->Stop( );
+    m_ProductDspHelper           ->Stop( );
     m_ProductAdaptIQManager      ->Stop( );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::End
-///
-/// @brief  This method is called when the Product Controller process ends. It is used to set the
-///         running member to false, which will invoke the Wait method idle loop to exit and perform
-///         any necessary clean up.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::End( )
-{
-    BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
-
-    m_Running = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1462,17 +1441,19 @@ void ProfessorProductController::SendInitialCapsData()
     }
     messageProperties->set_activationkeyrequired( true );
 
+#if 0 // @TODO CASTLE-6801 field deviceType missing in SoundTouchInterface::Sources
     for( uint32_t deviceType = SystemSourcesProperties::DEVICE_TYPE__MIN; deviceType <= SystemSourcesProperties::DEVICE_TYPE__MAX; ++deviceType )
     {
         messageProperties->add_supporteddevicetypes(
             SystemSourcesProperties::DEVICE_TYPE__Name( static_cast<SystemSourcesProperties::DEVICE_TYPE_>( deviceType ) ) );
     }
     messageProperties->set_devicetyperequired( true );
+#endif
 
     messageProperties->add_supportedinputroutes(
         SystemSourcesProperties::INPUT_ROUTE_HDMI__Name( SystemSourcesProperties::INPUT_ROUTE_TV ) );
 
-    messageProperties->set_inputrouterequired( false );
+    messageProperties->set_inputrouterequired( true );
 
     BOSE_VERBOSE( s_logger, "%s sending %s", __func__, ProtoToMarkup::ToJson( message ).c_str() );
 
@@ -1483,16 +1464,55 @@ void ProfessorProductController::SendInitialCapsData()
         m_errorCb );
 }
 
-void ProfessorProductController::ClearWifiProfileCount()
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::ClearWifiProfileCount
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::ClearWifiProfileCount( )
 {
-    m_ProductNetworkManager->ClearWifiProfileCount();
+    if( m_ProductNetworkManager != nullptr )
+    {
+        m_ProductNetworkManager->ClearWifiProfileCount( );
+    }
+    else
+    {
+        BOSE_DIE( "ProductNetworkManager has not been instantiated for ClearWifiProfileCount." );
+    }
 }
 
-void ProfessorProductController::PerformRequestforWiFiProfiles()
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::PerformRequestforWiFiProfiles
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::PerformRequestforWiFiProfiles( )
 {
-    m_ProductNetworkManager->PerformRequestforWiFiProfiles();
+    if( m_ProductNetworkManager != nullptr )
+    {
+        m_ProductNetworkManager->PerformRequestforWiFiProfiles( );
+    }
+    else
+    {
+        BOSE_DIE( "ProductNetworkManager has not been instantiated for PerformRequestforWiFiProfiles." );
+    }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::End
+///
+/// @brief  This method is called when the Product Controller process should be terminated. It is
+///         used to set the running member to false, which will invoke the Wait method idle loop to
+///         exit and perform any necessary clean up.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::End( )
+{
+    BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
+
+    m_Running = false;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///

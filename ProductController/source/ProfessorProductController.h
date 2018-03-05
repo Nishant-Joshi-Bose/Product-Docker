@@ -37,6 +37,7 @@
 #include "Utilities.h"
 #include "IntentHandler.h"
 #include "ProductCecHelper.h"
+#include "ProductDspHelper.h"
 #include "ProductController.h"
 #include "ProductSTSController.h"
 #include "FrontDoorClientIF.h"
@@ -146,13 +147,25 @@ public:
     //////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< ProductCecHelper >& GetCecHelper( );
 
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following method is used to get a reference to the intent manager instance for
+    /// @brief The following method is used to get a shared pointer reference to the DspHelper
+    ///        instance from the product controller.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    std::shared_ptr< ProductDspHelper >& GetDspHelper( );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method is used to get a reference to the intent handler instance for
     ///        processing actions from the product controller.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    IntentHandler& GetIntentHandler( );
+    IntentHandler& GetIntentHandler( ) override
+    {
+        return m_IntentHandler;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -218,6 +231,7 @@ public:
 
     BLESetupService::ProductId GetProductId() const override
     {
+        // @TODO PGC-788
         return BLESetupService::ProductId::PROFESSOR;
     }
 
@@ -225,7 +239,6 @@ public:
     {
         return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );
     }
-
 
     std::vector<std::string> GetUniqueLanguages() const override
     {
@@ -238,10 +251,13 @@ public:
 
     std::unique_ptr<LightBar::LightBarController> m_lightbarController;
 
-
     void ClearWifiProfileCount() override;
 
     void PerformRequestforWiFiProfiles() override;
+
+    PassportPB::ContentItem GetOOBDefaultLastContentItem() const override;
+
+    bool CanPersistAsLastContentItem( const SoundTouchInterface::ContentItem &ci ) const override;
 
 private:
 
@@ -258,6 +274,7 @@ private:
     std::shared_ptr< ProductCommandLine                > m_ProductCommandLine;
     std::shared_ptr< ProductKeyInputInterface          > m_ProductKeyInputInterface;
     std::shared_ptr< ProductCecHelper                  > m_ProductCecHelper;
+    std::shared_ptr< ProductDspHelper                  > m_ProductDspHelper;
     std::shared_ptr< ProductAdaptIQManager             > m_ProductAdaptIQManager;
     std::shared_ptr< CustomProductAudioService         > m_ProductAudioService;
 
@@ -268,9 +285,7 @@ private:
     ///        machine states.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool m_IsCapsReady;
     bool m_IsAudioPathReady;
-    bool m_IsSTSReady;
     bool m_IsNetworkConfigured;
     bool m_IsNetworkConnected;
     bool m_IsAutoWakeEnabled;
@@ -278,7 +293,7 @@ private:
     bool m_IsMicrophoneEnabled;
     bool m_Running;
 
-    ////////////////////////////////////////////////////////////////////////////GetLastSoundTouchPlayback////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following declarations are used as interfaces to the ProductSTSController,
     ///        which implements the interactions between the Professor Product Controller and the
@@ -288,7 +303,6 @@ private:
     ProductSTSController m_ProductSTSController;
 
     void SetupProductSTSConntroller( );
-    void HandleSTSInitWasComplete( );
     void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -312,7 +326,7 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following declaration is used for intent management based on key actions.
+    /// @brief The following declaration is used for intent management based on actions.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     IntentHandler m_IntentHandler;
