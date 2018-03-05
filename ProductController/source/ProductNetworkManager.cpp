@@ -576,7 +576,11 @@ void ProductNetworkManager::HandleWiFiProfiles( const NetManager::Protobuf::WiFi
 /// @name  ProductNetworkManager::HandleWiFiStatus
 ///
 /// @brief This method processes the WiFi status received, and will send a ProductMessage to
-///        notify the Product Controller of a WiFi network configured state if configured.
+///        notify the product controller of the WiFi frequency.
+///
+/// @note  Since the WiFi connection may not have been previously connected, and hence added and
+///        stored in the device profile list, this connection may not be considered to be configured
+///        at this point, so no configured network message should be sent to the product controller.
 ///
 /// @param NetManager::Protobuf::WiFiProfiles& wirelessStatus This argument is a Google Protocol
 ///                                                           Buffer that contains information on
@@ -595,26 +599,25 @@ void ProductNetworkManager::HandleWiFiStatus( const NetManager::Protobuf::WiFiSt
     std::string wirlessFrequencyInKhz( "Unknown" );
     std::string wirlessSignalDbm( "Unknown" );
 
-    ProductMessage productMessage;
-    productMessage.mutable_wirelessstatus( )->set_configured( wirelessStatus.has_ssid( ) );
-
     if( wirelessStatus.has_frequencykhz( ) )
     {
         wirlessFrequencyInKhz.assign( std::to_string( wirelessStatus.frequencykhz( ) ) );
+
+        ProductMessage productMessage;
         productMessage.mutable_wirelessstatus( )->set_frequencykhz( wirelessStatus.frequencykhz( ) );
+
+        SendMessage( productMessage );
     }
 
     if( wirelessStatus.has_ssid( ) )
     {
         wirlessSsidString.assign( wirelessStatus.ssid( ) );
-        productMessage.mutable_wirelessstatus( )->set_configured( true );
     }
 
     if( wirelessStatus.has_state( ) )
     {
         wirlessStateString.assign( WiFiStationState_Name( wirelessStatus.state( ) ) );
     }
-
 
     if( wirelessStatus.has_signaldbm( ) )
     {
@@ -629,11 +632,6 @@ void ProductNetworkManager::HandleWiFiStatus( const NetManager::Protobuf::WiFiSt
     BOSE_VERBOSE( s_logger, "Frequency kHz  : %s ", wirlessFrequencyInKhz.c_str( ) );
     BOSE_VERBOSE( s_logger, "Signal DBM     : %s ", wirlessSignalDbm.c_str( ) );
     BOSE_VERBOSE( s_logger, " " );
-
-    if( productMessage.mutable_wirelessstatus( )->configured( ) )
-    {
-        SendMessage( productMessage );
-    }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
