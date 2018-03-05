@@ -292,15 +292,6 @@ void ProductKeyInputInterface::SendDataCollection( const LpmServiceMessages::Ipc
     const auto currentKeyId = keyInformation.keyid();
     const auto currentOrigin = keyInformation.keyorigin();
 
-    if( currentKeyId <= NUM_KEY_NAMES )
-    {
-        currentButtonId = KEY_NAMES[currentKeyId - 1];
-    }
-    else
-    {
-        BOSE_ERROR( s_logger, "%s, Invalid CurrentKeyID: %d", __func__, currentKeyId );
-    }
-
     auto keyPress  = std::make_shared<DataCollection::ButtonPress>();
     keyPress->set_buttonid( currentKeyId ) ;
     keyPress->set_origin( static_cast<DataCollection::Origin >( currentOrigin ) );
