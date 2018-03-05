@@ -1150,37 +1150,27 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         ( &CustomProductControllerState::HandleNetworkState, m_IsNetworkConfigured, m_IsNetworkConnected );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Wireless network status messages are handled at this point. Only send information to the
-    /// state machine if the wireless network is configured, since a wired network configuration
-    /// may be available, and is handle above.
+    /// Wireless network status messages are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_wirelessstatus( ) )
     {
-        if( message.wirelessstatus( ).has_configured( ) && message.wirelessstatus( ).configured( ) )
-        {
-            m_IsNetworkConfigured = true;
-
-            m_ProductSystemManager->SetNetworkAccoutConfigurationStatus( m_IsNetworkConfigured,
-                                                                         m_IsAccountConfigured );
-
-            GetHsm( ).Handle< bool, bool >
-            ( &CustomProductControllerState::HandleNetworkState, m_IsNetworkConfigured, m_IsNetworkConnected );
-        }
-
         ///
         /// Send the frequency information (if available) to the LPM to avoid any frequency
-        /// interruption during a speaker Adapt IQ process.
+        /// interference between the WiFi and in-room radio.
         ///
         if( message.wirelessstatus( ).has_frequencykhz( ) and
             message.wirelessstatus( ).frequencykhz( ) > 0 )
         {
             m_ProductLpmHardwareInterface->SendWiFiRadioStatus( message.wirelessstatus( ).frequencykhz( ) );
-        }
 
-        BOSE_DEBUG( s_logger, "A %s wireless network message was received with frequency %d kHz.",
-                    message.wirelessstatus( ).configured( ) ? "configured" : "unconfigured",
-                    message.wirelessstatus( ).has_frequencykhz( ) ?
-                    message.wirelessstatus( ).frequencykhz( ) : 0 );
+            BOSE_DEBUG( s_logger, "A wireless network message was received with frequency %d kHz.",
+                        message.wirelessstatus( ).has_frequencykhz( ) ?
+                        message.wirelessstatus( ).frequencykhz( ) : 0 );
+        }
+        else
+        {
+            BOSE_ERROR( s_logger, "A wireless network message was received with an unknown frequency." );
+        }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Voice messages for the Virtual Personal Assistant or VPA are handled at this point.          ///
