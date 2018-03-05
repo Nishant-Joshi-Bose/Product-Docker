@@ -74,6 +74,7 @@
 #include "ProductControllerStatePlayingSelectedSilent.h"
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSwitch.h"
+#include "ProductControllerStateRebooting.h"
 #include "ProductControllerStateSoftwareInstall.h"
 #include "ProductControllerStateSoftwareUpdateTransition.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
@@ -209,6 +210,11 @@ void ProfessorProductController::Run( )
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL );
+
+    auto* stateRebooting = new ProductControllerStateRebooting
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_REBOOTING );
 
     auto* stateCriticalError = new ProductControllerStateCriticalError
     ( GetHsm( ),
@@ -429,6 +435,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), stateWelcome );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareUpdateTransition );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareInstall );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::REBOOTING ), stateRebooting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), stateCriticalError );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FACTORY_DEFAULT ), stateFactoryDefault );
     GetHsm( ).AddState( "", stateLowPowerStandbyTransition );
@@ -1143,15 +1150,13 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         ( &CustomProductControllerState::HandleNetworkState, m_IsNetworkConfigured, m_IsNetworkConnected );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Wireless network status messages are handled at this point. Only send information to the
-    /// state machine if the wireless network is configured, since a wired network configuration
-    /// may be available, and is handle above.
+    /// Wireless network status messages are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_wirelessstatus( ) )
     {
         ///
         /// Send the frequency information (if available) to the LPM to avoid any frequency
-        /// interruption during a speaker pairing process.
+        /// interference between the WiFi and in-room radio.
         ///
         if( message.wirelessstatus( ).has_frequencykhz( ) and
             message.wirelessstatus( ).frequencykhz( ) > 0 )
@@ -1164,7 +1169,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         }
         else
         {
-            BOSE_DEBUG( s_logger, "A wireless network message was received with an unknown frequency." );
+            BOSE_ERROR( s_logger, "A wireless network message was received with an unknown frequency." );
         }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////

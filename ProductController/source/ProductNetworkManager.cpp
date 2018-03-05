@@ -590,47 +590,18 @@ void ProductNetworkManager::HandleWiFiProfiles( const NetManager::Protobuf::WiFi
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductNetworkManager::HandleWiFiStatus( const NetManager::Protobuf::WiFiStatus& wirelessStatus )
 {
-    ///
-    /// Only process the wireless network status if it has an SSID, which indicates that it is
-    /// configurable. Send the frequency to the LPM hardware if available.
-    ///
-    std::string wirlessSsidString( "Unknown" );
-    std::string wirlessStateString( "Unknown" );
-    std::string wirlessFrequencyInKhz( "Unknown" );
-    std::string wirlessSignalDbm( "Unknown" );
-
     if( wirelessStatus.has_frequencykhz( ) )
     {
-        wirlessFrequencyInKhz.assign( std::to_string( wirelessStatus.frequencykhz( ) ) );
-
         ProductMessage productMessage;
         productMessage.mutable_wirelessstatus( )->set_frequencykhz( wirelessStatus.frequencykhz( ) );
 
         SendMessage( productMessage );
     }
 
-    if( wirelessStatus.has_ssid( ) )
-    {
-        wirlessSsidString.assign( wirelessStatus.ssid( ) );
-    }
-
-    if( wirelessStatus.has_state( ) )
-    {
-        wirlessStateString.assign( WiFiStationState_Name( wirelessStatus.state( ) ) );
-    }
-
-    if( wirelessStatus.has_signaldbm( ) )
-    {
-        wirlessSignalDbm.assign( std::to_string( wirelessStatus.signaldbm( ) ) );
-    }
-
     BOSE_VERBOSE( s_logger, "----------------- Product Network Manager ------------------" );
-    BOSE_VERBOSE( s_logger, "The current wireless network has the following information:" );
+    BOSE_VERBOSE( s_logger, "The current wireless network has the following status:" );
     BOSE_VERBOSE( s_logger, " " );
-    BOSE_VERBOSE( s_logger, "Wireless SSID  : %s ", wirlessSsidString.c_str( ) );
-    BOSE_VERBOSE( s_logger, "Wireless State : %s ", wirlessStateString.c_str( ) );
-    BOSE_VERBOSE( s_logger, "Frequency kHz  : %s ", wirlessFrequencyInKhz.c_str( ) );
-    BOSE_VERBOSE( s_logger, "Signal DBM     : %s ", wirlessSignalDbm.c_str( ) );
+    BOSE_VERBOSE( s_logger, "%s", ProtoToMarkup::ToJson( wirelessStatus ).c_str( ) );
     BOSE_VERBOSE( s_logger, " " );
 }
 
