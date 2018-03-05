@@ -138,6 +138,38 @@ void CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleStateExi
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleNowSelectionInfo
+///
+/// @param  const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo
+///
+/// @return This method returns a true Boolean value indicating that it has handled the new now
+///         selection.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleNowSelectionInfo(
+    const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
+{
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+
+    if( ( GetProductController( ).GetNowSelection( ).has_contentitem( ) ) and
+        ( GetProductController( ).GetNowSelection( ).contentitem( ).source( ).compare( "PRODUCT" )      == 0 ) )
+    {
+        if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( "SETUP" ) == 0 )
+        {
+            ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP );
+
+        }
+        else if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( "ADAPTiQ" ) == 0 )
+        {
+            ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
+        }
+    }
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             End of Product Application Namespace                             ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
