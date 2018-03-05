@@ -21,7 +21,6 @@
 #include "HsmState.h"
 #include "LpmServiceMessages.pb.h"
 #include "APTimer.h"
-#include "SoundTouchInterface/PlayerService.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -64,7 +63,6 @@ public:
     void HandleStateExit( )  override;
     bool HandlePairingState( ProductAccessoryPairing pairingStatus ) override;
     bool HandleAudioPathDeselect( )                                  override;
-    bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo ) override;
 
 private:
 
