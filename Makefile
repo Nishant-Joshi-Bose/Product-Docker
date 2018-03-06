@@ -30,11 +30,12 @@ endif
 
 CMAKE_USE_CCACHE := $(USE_CCACHE)
 
-EDDIELPMPACKAGE_DIR = $(shell components get EddieLPM-Package installed_location)
+RIVIERA_LPM_TOOLS_DIR = $(shell components get RivieraLpmTools installed_location)
 PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
 TESTUTILS_DIR = $(shell components get CastleTestUtils installed_location)
+
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
@@ -70,7 +71,7 @@ PACKAGENAMES = monaco SoundTouch lpm_updater
 update-zip: monaco-ipk product-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
-#Create one more Zip file for Bonjour / Local update with HSP 
+#Create one more Zip file for Bonjour / Local update with HSP
 #- This is temporary, till DP2 boards are not available.
 IPKS_HSP = hsp.ipk monaco.ipk product.ipk lpm_updater.ipk
 PACKAGENAMES_HSP = hsp monaco SoundTouch lpm_updater
@@ -95,9 +96,16 @@ graph: product-ipk
 hsp-ipk: cmake_build
 	./scripts/create-hsp-ipk
 
+.PHONY: lpm-bos
+lpm-bos:
+	rm -f ./builds/$(cfg)/eddie_package*.bos
+	rm -f ./builds/$(cfg)/lpm_eddie*.hex
+	cp ./lpm_package.xml ./builds/$(cfg)/lpm_package.xml
+	python2.7 $(RIVIERA_LPM_TOOLS_DIR)/tools/blob/blob_utility.py --pack $(BOSE_WORKSPACE)/lpm_package.xml ./builds/$(cfg)/ --build_type Release --boseversion $(BUILDS_DIR)/BoseVersion.json
+
 .PHONY: lpmupdater-ipk
-lpmupdater-ipk:
-	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage $(EDDIELPMPACKAGE_DIR) ./builds/$(cfg)/ eddie
+lpmupdater-ipk: lpm-bos
+	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage ./builds/$(cfg)/ ./builds/$(cfg)/ eddie
 
 .PHONY: monaco-ipk
 monaco-ipk:
@@ -122,3 +130,4 @@ clean:
 .PHONY: distclean
 distclean:
 	git clean -fdX
+
