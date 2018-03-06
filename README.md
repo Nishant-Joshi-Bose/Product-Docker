@@ -52,13 +52,6 @@ $ cd /scratch/Professor
 $ make packages-gz update-zip
 ```
 
-You can also build an update zip file that includes the Riviera HSP.
-```shell session
-$ cd /scratch/Professor
-$ make packages-gz-with-hsp update-zip-with-hsp
-```
-
-
 #### 'make' ipk for OPKG installation
 
 Build the Professor product.ipk to install using the putipk_ota script.
@@ -132,7 +125,7 @@ lo        Link encap:Local Loopback
           RX bytes:31124620 (29.6 MiB)  TX bytes:31124620 (29.6 MiB)
 ```
 
-Connect to your device through a web browser by going to http://<inet_addr>/update.html replacing <inet_addr> with the ip address of the eth0 interface listed in `ifconfig`
+Connect to your device through a web browser by going to http://<inet_addr>:17008/update.html replacing <inet_addr> with the ip address of the eth0 interface listed in `ifconfig`
 
 The following page should load:
 ![Choose File](choose_file.png)

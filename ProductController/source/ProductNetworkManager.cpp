@@ -79,7 +79,7 @@ bool ProductNetworkManager::Run( )
     /// become ready or not ready, respectively; subsequent methods are made then for getting
     /// and registering for the associated network data.
     ///
-    auto networkEndPointReadyCallback = [ this ]( const std::list< std::string >& endPointList )
+    auto callbackForNetworkEndPointsReady = [ this ]( const std::list< std::string >& endPointList )
     {
         if( endPointList.empty( ) )
         {
@@ -108,16 +108,12 @@ bool ProductNetworkManager::Run( )
 
                 RegisterForWiFiStatus( );
             }
-            else
-            {
-                BOSE_ERROR( s_logger, "An unknown end point %s was sent as ready.", endPoint.c_str( ) );
-            }
         }
     };
 
-    auto networkEndPointNotReadyCallback = [ this ]( const std::list< std::string >& endPointList )
+    auto callbackForNetworkEndPointsNotReady = [ this ]( const std::list< std::string >& endPointList )
     {
-        BOSE_ERROR( s_logger, "One or more network end point are not yet ready." );
+        BOSE_ERROR( s_logger, "One or more network end points are not yet ready." );
     };
 
     ///
@@ -130,8 +126,8 @@ bool ProductNetworkManager::Run( )
     networkEndPointList.push_back( FRONTDOOR_NETWORK_WIFI_PROFILE );
 
     m_FrontDoorClient->RegisterEndpointsOfInterest( networkEndPointList,
-                                                    networkEndPointReadyCallback,
-                                                    networkEndPointNotReadyCallback );
+                                                    callbackForNetworkEndPointsReady,
+                                                    callbackForNetworkEndPointsNotReady );
 
     return true;
 }
@@ -160,16 +156,16 @@ void ProductNetworkManager::RegisterForNetworkStatus( )
                     error.message( ).c_str( ) );
     };
 
+    m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::NetworkStatus >(
+        FRONTDOOR_NETWORK_STATUS,
+        callbackForNetworkStatusSuccess );
+
     m_FrontDoorClient->SendGet< NetManager::Protobuf::NetworkStatus, EndPointsError::Error >(
         FRONTDOOR_NETWORK_STATUS,
         callbackForNetworkStatusSuccess,
         callbackForNetworkStatusFailure );
 
-    m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::NetworkStatus >(
-        FRONTDOOR_NETWORK_STATUS,
-        callbackForNetworkStatusSuccess );
-
-    BOSE_DEBUG( s_logger, "A get and notification request for network status changes has been made." );
+    BOSE_DEBUG( s_logger, "A notification and get request for network status changes has been made." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -196,16 +192,16 @@ void ProductNetworkManager::RegisterForWiFiStatus( )
                     error.message( ).c_str( ) );
     };
 
+    m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::WiFiStatus >(
+        FRONTDOOR_NETWORK_WIFI_STATUS,
+        callbackForWiFiStatusSuccess );
+
     m_FrontDoorClient->SendGet< NetManager::Protobuf::WiFiStatus, EndPointsError::Error >(
         FRONTDOOR_NETWORK_WIFI_STATUS,
         callbackForWiFiStatusSuccess,
         callbackForWiFiStatusFailure );
 
-    m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::WiFiStatus >(
-        FRONTDOOR_NETWORK_WIFI_STATUS,
-        callbackForWiFiStatusSuccess );
-
-    BOSE_DEBUG( s_logger, "A get and notification request for wireless status changes has been made." );
+    BOSE_DEBUG( s_logger, "A notification and get request for wireless status changes has been made." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -232,16 +228,16 @@ void ProductNetworkManager::RegisterForWiFiProfiles( )
                     error.message( ).c_str( ) );
     };
 
+    m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::WiFiProfiles >(
+        FRONTDOOR_NETWORK_WIFI_PROFILE,
+        callbackForWiFiProfilesSuccess );
+
     m_FrontDoorClient->SendGet< NetManager::Protobuf::WiFiProfiles, EndPointsError::Error >(
         FRONTDOOR_NETWORK_WIFI_PROFILE,
         callbackForWiFiProfilesSuccess,
         callbackForWiFiProfilesFailure );
 
-    m_FrontDoorClient->RegisterNotification< NetManager::Protobuf::WiFiProfiles >(
-        FRONTDOOR_NETWORK_WIFI_PROFILE,
-        callbackForWiFiProfilesSuccess );
-
-    BOSE_DEBUG( s_logger, "A get and notification request for wireless profile changes has been made." );
+    BOSE_DEBUG( s_logger, "A notification and get request for wireless profile changes has been made." );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -488,12 +484,12 @@ void ProductNetworkManager::HandleNetworkStatus( const NetManager::Protobuf::Net
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductNetworkManager::PerformRequestforWiFiProfiles()
 {
-    auto CallbackForWiFiProfilesSuccess = [ this ]( const NetManager::Protobuf::WiFiProfiles & profiles )
+    auto callbackForWiFiProfilesSuccess = [ this ]( const NetManager::Protobuf::WiFiProfiles & profiles )
     {
         HandleWiFiProfiles( profiles );
     };
 
-    auto CallbackForWiFiProfilesFailure = [ this ]( const EndPointsError::Error & error )
+    auto callbackForWiFiProfilesFailure = [ this ]( const EndPointsError::Error & error )
     {
         BOSE_ERROR( s_logger, "An error code %d %d <%s> was returned from a WiFi profiles request.",
                     error.code( ),
@@ -503,8 +499,8 @@ void ProductNetworkManager::PerformRequestforWiFiProfiles()
 
     m_FrontDoorClient->SendGet< NetManager::Protobuf::WiFiProfiles, EndPointsError::Error >(
         FRONTDOOR_NETWORK_WIFI_PROFILE,
-        CallbackForWiFiProfilesSuccess,
-        CallbackForWiFiProfilesFailure );
+        callbackForWiFiProfilesSuccess,
+        callbackForWiFiProfilesFailure );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -580,7 +576,11 @@ void ProductNetworkManager::HandleWiFiProfiles( const NetManager::Protobuf::WiFi
 /// @name  ProductNetworkManager::HandleWiFiStatus
 ///
 /// @brief This method processes the WiFi status received, and will send a ProductMessage to
-///        notify the Product Controller of a WiFi network configured state if configured.
+///        notify the product controller of the WiFi frequency.
+///
+/// @note  Since the WiFi connection may not have been previously connected, and hence added and
+///        stored in the device profile list, this connection may not be considered to be configured
+///        at this point, so no configured network message should be sent to the product controller.
 ///
 /// @param NetManager::Protobuf::WiFiProfiles& wirelessStatus This argument is a Google Protocol
 ///                                                           Buffer that contains information on
@@ -590,54 +590,19 @@ void ProductNetworkManager::HandleWiFiProfiles( const NetManager::Protobuf::WiFi
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductNetworkManager::HandleWiFiStatus( const NetManager::Protobuf::WiFiStatus& wirelessStatus )
 {
-    ///
-    /// Only process the wireless network status if it has an SSID, which indicates that it is
-    /// configurable. Send the frequency to the LPM hardware if available.
-    ///
-    std::string wirlessSsidString( "Unknown" );
-    std::string wirlessStateString( "Unknown" );
-    std::string wirlessFrequencyInKhz( "Unknown" );
-    std::string wirlessSignalDbm( "Unknown" );
-
-    ProductMessage productMessage;
-    productMessage.mutable_wirelessstatus( )->set_configured( wirelessStatus.has_ssid( ) );
-
     if( wirelessStatus.has_frequencykhz( ) )
     {
-        wirlessFrequencyInKhz.assign( std::to_string( wirelessStatus.frequencykhz( ) ) );
+        ProductMessage productMessage;
         productMessage.mutable_wirelessstatus( )->set_frequencykhz( wirelessStatus.frequencykhz( ) );
-    }
 
-    if( wirelessStatus.has_ssid( ) )
-    {
-        wirlessSsidString.assign( wirelessStatus.ssid( ) );
-        productMessage.mutable_wirelessstatus( )->set_configured( true );
-    }
-
-    if( wirelessStatus.has_state( ) )
-    {
-        wirlessStateString.assign( WiFiStationState_Name( wirelessStatus.state( ) ) );
-    }
-
-
-    if( wirelessStatus.has_signaldbm( ) )
-    {
-        wirlessSignalDbm.assign( std::to_string( wirelessStatus.signaldbm( ) ) );
+        SendMessage( productMessage );
     }
 
     BOSE_VERBOSE( s_logger, "----------------- Product Network Manager ------------------" );
-    BOSE_VERBOSE( s_logger, "The current wireless network has the following information:" );
+    BOSE_VERBOSE( s_logger, "The current wireless network has the following status:" );
     BOSE_VERBOSE( s_logger, " " );
-    BOSE_VERBOSE( s_logger, "Wireless SSID  : %s ", wirlessSsidString.c_str( ) );
-    BOSE_VERBOSE( s_logger, "Wireless State : %s ", wirlessStateString.c_str( ) );
-    BOSE_VERBOSE( s_logger, "Frequency kHz  : %s ", wirlessFrequencyInKhz.c_str( ) );
-    BOSE_VERBOSE( s_logger, "Signal DBM     : %s ", wirlessSignalDbm.c_str( ) );
+    BOSE_VERBOSE( s_logger, "%s", ProtoToMarkup::ToJson( wirelessStatus ).c_str( ) );
     BOSE_VERBOSE( s_logger, " " );
-
-    if( productMessage.mutable_wirelessstatus( )->configured( ) )
-    {
-        SendMessage( productMessage );
-    }
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////

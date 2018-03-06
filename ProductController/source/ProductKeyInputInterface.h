@@ -36,6 +36,7 @@
 #include "LpmServiceMessages.pb.h"
 #include "ProductMessage.pb.h"
 #include "A4VQuickSetServiceClientFactory.h"
+#include "DataCollectionClientIF.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -99,7 +100,7 @@ private:
     bool                                                                        m_connected;
     bool                                                                        m_running;
     A4VQuickSetService::A4VQuickSetServiceClientIF::A4VQuickSetServiceClientPtr m_QSSClient;
-
+    std::shared_ptr<DataCollectionClientIF>                                     m_DataCollectionClient;
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following methods are used to register for and receive key events from the LPM
@@ -109,6 +110,9 @@ private:
     void ConnectToLpm( bool connected );
     void RegisterForKeyEvents( );
     void HandleKeyEvent( LpmServiceMessages::IpcKeyInformation_t keyEvent );
+
+    //@brief Send the Raw key events to DataCollectionClient
+    void SendDataCollection( const LpmServiceMessages::IpcKeyInformation_t& keyInformation );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -124,6 +128,7 @@ private:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool InitializeQSS( );
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
