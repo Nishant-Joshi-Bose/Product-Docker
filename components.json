@@ -93,7 +93,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@16b41a76e941d968aec8fc7ed9bc6e095c5eb8c9"
+    "selected_version": "remove_LPS_keyevent@297207c55aabd6308be5bfc76afaa4b7a890e2ad"
   },
   {
     "name": "CastleProductUIAssets",
