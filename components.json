@@ -67,9 +67,9 @@
     "name": "CastleHTTPProxy-qc8017_32",
     "selected_version": "Release/master/0.2.0-26+f813b4d"
   },
-  { 
-    "name": "HTTPInterface-qc8017_32", 
-    "selected_version": "Release/master/0.3.3-53+83e0de2" 
+  {
+    "name": "HTTPInterface-qc8017_32",
+    "selected_version": "Release/master/0.3.3-53+83e0de2"
   },
   {
     "name": "CastleLibs-native",
@@ -85,7 +85,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.6-61+ac12234"
+    "selected_version": "Release/master/0.3.7-63+cf5a143"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -145,7 +145,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.3.8-113+81aa0d0"
+    "selected_version": "Release/master/0.3.9-117+7078c70"
   },
   {
     "name": "RivieraLpmUpdater",
