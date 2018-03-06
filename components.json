@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@271b20f0e8fe9990119decaa94245dbc6a14dde2"
+    "selected_version": "master@2f071fbb8499bee85b2df34aab69b6cedcaa076c"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -56,12 +56,20 @@
     "selected_version": "Release/master/0.3.1-40+308cab1"
   },
   {
+    "name": "CastleDataCollectionClient-qc8017_32",
+    "selected_version": "Continuous/master/0.3.5-42+ddbf6a7"
+  },
+  {
     "name": "CastleDemoController-qc8017_32",
     "selected_version": "Release/master/0.3.2-62+b9fcc88"
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
     "selected_version": "Release/master/0.2.0-26+f813b4d"
+  },
+  { 
+    "name": "HTTPInterface-qc8017_32", 
+    "selected_version": "Release/master/0.3.3-53+83e0de2" 
   },
   {
     "name": "CastleLibs-native",
