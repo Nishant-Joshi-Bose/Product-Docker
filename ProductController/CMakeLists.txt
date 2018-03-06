@@ -4,6 +4,7 @@ INCLUDE_DIRECTORIES(
   ${CASTLECLI_DIR}/include
   ${KEYHANDLER_DIR}/include
   ${NETWORK_SERVICE_DIR}/include
+  ${DATACOLLECTIONCLIENT_DIR}
   ${PRODUCTCONTROLLERCOMMON_DIR}
   ${PRODUCTCONTROLLERCOMMON_DIR}/ChimesController
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
@@ -78,6 +79,8 @@ TARGET_LINK_LIBRARIES(Professor
   NetworkServiceClient
   KeyHandler
   BLESetupServiceProto
+  DataCollectionClient
+  HttpInterface
   BluetoothSinkServiceProto
   LightBarController
   VoiceServiceClient

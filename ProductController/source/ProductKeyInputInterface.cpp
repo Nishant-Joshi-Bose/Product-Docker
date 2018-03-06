@@ -32,6 +32,8 @@
 #include "ProductKeyInputInterface.h"
 #include "SystemUtils.h"
 #include "ProductSourceInfo.h"
+#include "DataCollectionClientFactory.h"
+#include "ButtonPress.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -77,6 +79,8 @@ ProductKeyInputInterface::ProductKeyInputInterface( ProfessorProductController& 
     m_running( false ),
     m_ProductController( ProductController )
 {
+    //Data Collection support
+    m_DataCollectionClient =  DataCollectionClientFactory::CreateUDCService( m_ProductTask );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -289,8 +293,31 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
         m_KeyHandler.HandleKeys( keyEvent.keyorigin( ),
                                  keyEvent.keystate( ),
                                  keyEvent.keyid( ) );
+        if( keyEvent.keystate() == KEY_RELEASED )
+        {
+            SendDataCollection( keyEvent );
+        }
+
     }
 }
+
+//@Send Key Data To DataCollectionClient
+//TODO should be moving to CastleProductControllerCommon
+void ProductKeyInputInterface::SendDataCollection( const LpmServiceMessages::IpcKeyInformation_t& keyInformation )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+
+    const auto currentKeyId = keyInformation.keyid();
+    const auto currentOrigin = keyInformation.keyorigin();
+
+    auto keyPress  = std::make_shared<DataCollection::ButtonPress>();
+    keyPress->set_buttonid( currentKeyId ) ;
+    keyPress->set_origin( static_cast<DataCollection::Origin >( currentOrigin ) );
+
+    m_DataCollectionClient->SendData( keyPress, "button-pressed" );
+}
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
