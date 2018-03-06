@@ -122,7 +122,8 @@ graph: product-ipk
 lpm-bos:
 	rm -f ./builds/$(cfg)/professor_package*.bos
 	rm -f ./builds/$(cfg)/lpm_professor*.hex
-	python2.7 $(RIVIERA_LPM_TOOLS_DIR)/tools/blob/blob_utility.py --pack $(BOSE_WORKSPACE)/lpm_package.xml ./builds/$(cfg)/ --build_type Release --boseversion $(BUILDS_DIR)/BoseVersion.json
+	# Don't share version yet... TODO post IP3
+	python2.7 $(RIVIERA_LPM_TOOLS_DIR)/tools/blob/blob_utility.py --pack $(BOSE_WORKSPACE)/lpm_package.xml ./builds/$(cfg)/ --build_type Release #--boseversion $(BUILDS_DIR)/BoseVersion.json
 
 .PHONY: hsp-ipk
 hsp-ipk: cmake_build
