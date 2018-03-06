@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@271b20f0e8fe9990119decaa94245dbc6a14dde2"
+    "selected_version": "master@2f071fbb8499bee85b2df34aab69b6cedcaa076c"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -56,12 +56,20 @@
     "selected_version": "Release/master/0.3.1-40+308cab1"
   },
   {
+    "name": "CastleDataCollectionClient-qc8017_32",
+    "selected_version": "Continuous/master/0.3.5-42+ddbf6a7"
+  },
+  {
     "name": "CastleDemoController-qc8017_32",
     "selected_version": "Release/master/0.3.2-62+b9fcc88"
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
     "selected_version": "Release/master/0.2.0-26+f813b4d"
+  },
+  { 
+    "name": "HTTPInterface-qc8017_32", 
+    "selected_version": "Release/master/0.3.3-53+83e0de2" 
   },
   {
     "name": "CastleLibs-native",
@@ -93,7 +101,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@16b41a76e941d968aec8fc7ed9bc6e095c5eb8c9"
+    "selected_version": "master@e8d78f55903c4f048f9b428d9202529aaf89720a"
   },
   {
     "name": "CastleProductUIAssets",
@@ -153,7 +161,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.11.41219.2713461"
+    "selected_version": "Continuous/Castle-Fork-ProductSources/2018-03-01_1728"
   },
   {
     "name": "SystemEventService-qc8017_32",
