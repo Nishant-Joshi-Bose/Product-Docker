@@ -51,6 +51,12 @@ if cc is None or not re.match(r'^[A-Z][A-Z]$', cc):
     warn("Invalid country_code", cc)
     fixes.append("set country_code US")
 
+rc = get("regionCode")
+if rc is None or not re.match(r'^[A-Z][A-Z]$', rc):
+    warn("Invalid regionCode", rc)
+#   Eddie does not require region code to be set. 
+#   fixes.append("set regionCode US")
+
 # GUID standard canonical form is described here:
 # https://en.m.wikipedia.org/wiki/Universally_unique_identifier
 guid = get("guid")
@@ -65,9 +71,14 @@ if not sn: # allow any non-empty string
     fixes.append("set snSystem RF000000000000000")
 
 pc = get("productColor")
-if pc is None or not re.match(r'^(tripleBlack|luxGray)$', pc):
-    warn("Invalid productColor:", pc)
-    fixes.append("set productColor tripleBlack  # tripleBlack|luxGray")
+if pc:
+    warn("productColor not set:", pc)
+#   This is just color so this is not forced to be required
+
+vi = get("BMAPVariantID")
+if vi is None or not re.match(r'^\d+$', vi):
+    warn("Invalid BMAPVariantID should be a number:", vi)
+#   This is just color as defined by BMAP so this is not forced to be required
 
 if not fixes:
     # Validation successful.

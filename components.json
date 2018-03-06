@@ -81,7 +81,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@4126f267cabe2b42084da4ae11b618c7609d2f1b"
+    "selected_version": "master@1abb814413b13f5ace95dcf2be193cae59d173cf"
   },
   {
     "name": "CastleProductUIAssets",
@@ -145,11 +145,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/IP3/0.3.13-362+0ed8b58"
+    "selected_version": "Release/IP3/0.3.14-365+ec54c8a"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.11.41219.2713461"
+    "selected_version": "Continuous/Castle-Fork/2018-03-05_1626"
   },
   {
     "name": "SystemEventService-qc8017_32",
