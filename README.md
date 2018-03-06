@@ -61,20 +61,21 @@ From the Eddie workspace:
 
 ```shell session
 $ cd /scratch/Eddie
-$ make all-package
+$ pip2.7 install -r Test/requirements.txt
+$ make all-packages
 $ cd builds/
 
 To update without HSP:
 $ ./CastleTestUtils/CastleTestUtils/scripts/pushup 
 
 To update HSP:
-$ ./CastleTestUtils/CastleTestUtils/scripts/pushup --hsp True
+$ ./CastleTestUtils/CastleTestUtils/scripts/pushup --hsp 
 
 When having multiple devices, without HSP:
 $ ./CastleTestUtils/CastleTestUtils/scripts/pushup --deviceid <deviceid>
 
 When having multiple devices, with HSP:
-$ ./CastleTestUtils/CastleTestUtils/scripts/pushup --deviceid <deviceid> --hsp True
+$ ./CastleTestUtils/CastleTestUtils/scripts/pushup --deviceid <deviceid> --hsp
 ```
 
 In general:
@@ -83,6 +84,7 @@ In general:
 $ cd /scratch
 $ git clone git@github.com:BoseCorp/CastleTestUtils.git
 $ cd CastleTestUtils
+$ pip2.7 install -r requirements.txt
 $ ./CastleTestUtils/scripts/pushup --deviceid <device-id> --zipfile <path-to-zipfile>
 
 ```
@@ -118,12 +120,6 @@ Eddie [Getting Started](https://wiki.bose.com/display/WSSW/Eddie+Quick+Start+Gui
 
 Ask to be added to the SSG-Eddie mailing list to stay in the loop by clicking
 [here](mailto:Jonathan_Cooper@bose.com?subject=Add%20me%20to%20the%20SSG-Eddie%20mailing%20list).
-
-To rebuild the .ipk file and install via adb in one step:
-
-```shell session
-$ ./scripts/putipk
-```
 
 Access the APQ console via the tap cable.
 
