@@ -12,24 +12,24 @@
 
         *   *ROOT* may be used in the path attribute. It will be resolved to the root
             directory of the project, provided to the script.
-        
+
         *   *CNR* may be used in the path attribute. It will be resolved as "Continuous",
             "Nightly", or "Release", based on parameters passed to the script.
 
         *   The 'path' attribute may consist of multiple paths separated by commas.
             The first of these paths to match to a real file will be used.
-        
+
         *   The string "REGEX:" at the beginning of a path will cause the file name
             portion to be treated like a regex, and matched against files in the
             directory. If REGEX: is not used, an asterisk (*) can still be used as a
             wildcard to match characters. If either of these methods match more than one
             file, the program will exit with an error.
-            
+
             --><header master_version="0.3.15" name="eddie_package.bos" />
     <manifest_entries>
-        
-        <entry chip="lpm_eddie_dp2" combine="True" name="eddie_mfg.bin" path="/home/softlib/verisoft/EddieLPM-Diags/Release/dp2-endofline/latest/DP1/lpm_*.bin" version="filename" />
-        <entry chip="lpm_eddie_dp2" combine="True" name="eddie_bl.bin" path="/home/softlib/verisoft/EddieLPM-BL/Release/trunk/latest/DP2/lpm_bootloader*.bin" version="filename" />
+
+        <entry chip="lpm_eddie" combine="True" name="eddie_mfg.bin" path="/home/softlib/verisoft/EddieLPM-Diags/Release/dp2-endofline/latest/DP1/lpm_*.bin" version="filename" />
+        <entry chip="lpm_eddie" combine="True" name="eddie_bl.bin" path="/home/softlib/verisoft/EddieLPM-BL/Release/trunk/latest/DP2/lpm_bootloader*.bin" version="filename" />
         <entry name="eddie.bin" path="/home/softlib/verisoft/EddieLPM-App/Release/trunk/latest/EDDIE_DP2/lpm_*.bin" version="filename" />
         <entry name="eddie_lb_anim_db.bin" path="/home/softlib/verisoft/CastleLedAnimationTool/Release/master/latest/Eddie-DP1/Animations.bin" version="dynamic" />
         <entry name="psoc.cyacd" path="/home/softlib/verisoft/CastleLightBarCapSense/*CNR*/master/latest/App-Eddie-DP2*.cyacd" version="dynamic" />

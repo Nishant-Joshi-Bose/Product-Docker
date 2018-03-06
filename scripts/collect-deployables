@@ -32,6 +32,9 @@ files=(
 
 files_to_cp=(
     $builds_dir/eddie_package_*
+    $builds_dir/lpm_eddie_combined_*
+    $builds_dir/lpm_package.xml
+    $builds_dir/lpm_blob_configuration.xml
 )
 
 mv "${files[@]}" "$deploy_dir" || exit
