@@ -54,8 +54,7 @@ if cc is None or not re.match(r'^[A-Z][A-Z]$', cc):
 rc = get("regionCode")
 if rc is None or not re.match(r'^[A-Z][A-Z]$', rc):
     warn("Invalid regionCode", rc)
-#   Eddie does not require region code to be set. 
-#   fixes.append("set regionCode US")
+    fixes.append("set regionCode US")
 
 # GUID standard canonical form is described here:
 # https://en.m.wikipedia.org/wiki/Universally_unique_identifier
@@ -71,14 +70,24 @@ if not sn: # allow any non-empty string
     fixes.append("set snSystem RF000000000000000")
 
 pc = get("productColor")
-if pc:
+if not pc:
     warn("productColor not set:", pc)
-#   This is just color so this is not forced to be required
+    fixes.append("set productColor BLACK")
 
 vi = get("BMAPVariantID")
 if vi is None or not re.match(r'^\d+$', vi):
     warn("Invalid BMAPVariantID should be a number:", vi)
-#   This is just color as defined by BMAP so this is not forced to be required
+    fixes.append("set BMAPVariantID 2")
+
+pn = get("productName")
+if not pn: # allow any non-empty string
+    warn("Invalid productName:", sn)
+    fixes.append("set productName 'Bose Home Speaker 500'")
+
+pt = get("productType")
+if not pt: # allow any non-empty string
+    warn("Invalid productType:", sn)
+    fixes.append("set productType Eddie")
 
 if not fixes:
     # Validation successful.

@@ -133,11 +133,7 @@ public:
         return false;
     }
 
-    std::string GetProductType() const override;
-    std::string GetProductName() const override;
-    std::string GetProductColor() const override;
     std::string GetDefaultProductName() const override;
-    BLESetupService::VariantId GetVariantId() const override;
 
     void ClearWifiProfileCount() override
     {

@@ -195,26 +195,6 @@ Callback < ProductMessage > EddieProductController::GetMessageHandler( )
     return ProductMessageHandler;
 }
 
-std::string EddieProductController::GetProductType() const
-{
-    if( auto productType = MfgData::Get( "productType" ) )
-    {
-        return *productType;
-    }
-
-    return "eddie";
-}
-
-std::string EddieProductController::GetProductName() const
-{
-    if( auto productName = MfgData::Get( "productName" ) )
-    {
-        return *productName;
-    }
-
-    return "Bose Home Speaker 500";
-}
-
 std::string EddieProductController::GetDefaultProductName() const
 {
     static std::string productName = "Bose ";
@@ -895,27 +875,4 @@ bool EddieProductController::IsBooted( ) const
 {
     return IsAllModuleReady();
 }
-
-std::string EddieProductController::GetProductColor() const
-{
-    if( auto color = MfgData::GetColor() )
-    {
-        return *color;
-    }
-
-    return "unknown";
-}
-
-BLESetupService::VariantId EddieProductController::GetVariantId() const
-{
-    if( auto variantId = MfgData::GetAs<int>( "BMAPVariantID" ) )
-    {
-        return static_cast<BLESetupService::VariantId>( *variantId );
-    }
-
-    BOSE_ERROR( s_logger, "%s: No 'BMAPVariantID' in mfgdata", __func__ );
-
-    return BLESetupService::VariantId::NONE;
-}
-
 } /// namespace ProductApp
