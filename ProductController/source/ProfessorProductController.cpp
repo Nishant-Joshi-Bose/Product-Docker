@@ -47,7 +47,6 @@
 #include "ProductControllerStateBooting.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
-#include "ProductControllerStateIdle.h"
 #include "ProductControllerStateIdleVoiceConfigured.h"
 #include "ProductControllerStateIdleVoiceNotConfigured.h"
 #include "ProductControllerStateLowPowerStandby.h"
@@ -86,6 +85,7 @@
 #include "ProductControllerStateWelcome.h"
 #include "CustomProductControllerStateAdaptIQExiting.h"
 #include "CustomProductControllerStateAdaptIQ.h"
+#include "CustomProductControllerStateIdle.h"
 #include "CustomProductControllerStateOn.h"
 #include "CustomProductControllerStatePlayable.h"
 #include "CustomProductControllerStatePlayingDeselectedAccessoryPairing.h"
@@ -138,15 +138,14 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductCommandLine( nullptr ),
     m_ProductKeyInputInterface( nullptr ),
     m_ProductCecHelper( nullptr ),
+    m_ProductDspHelper( nullptr ),
     m_ProductAdaptIQManager( nullptr ),
     m_ProductAudioService( nullptr ),
 
     ///
     /// Member Variable Initialization
     ///
-    m_IsCapsReady( false ),
     m_IsAudioPathReady( false ),
-    m_IsSTSReady( false ),
     m_IsNetworkConfigured( false ),
     m_IsNetworkConnected( false ),
     m_IsAutoWakeEnabled( false ),
@@ -291,10 +290,10 @@ void ProfessorProductController::Run( )
       stateNetworkStandby,
       PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_NOT_CONFIGURED );
 
-    auto* stateIdle = new ProductControllerStateIdle
+    auto* stateIdle = new CustomProductControllerStateIdle
     ( GetHsm( ),
       customStatePlayable,
-      PRODUCT_CONTROLLER_STATE_IDLE );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_IDLE );
 
     auto* stateIdleVoiceConfigured = new ProductControllerStateIdleVoiceConfigured
     ( GetHsm( ),
@@ -490,6 +489,7 @@ void ProfessorProductController::Run( )
 
     m_ProductLpmHardwareInterface = std::make_shared< CustomProductLpmHardwareInterface >( *this );
     m_ProductCecHelper            = std::make_shared< ProductCecHelper                  >( *this );
+    m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductSystemManager        = std::make_shared< ProductSystemManager              >( *this );
     m_ProductNetworkManager       = std::make_shared< ProductNetworkManager             >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
@@ -504,6 +504,7 @@ void ProfessorProductController::Run( )
         m_ProductCommandLine          == nullptr ||
         m_ProductKeyInputInterface    == nullptr ||
         m_ProductCecHelper            == nullptr ||
+        m_ProductDspHelper            == nullptr ||
         m_ProductAdaptIQManager       == nullptr )
     {
         BOSE_CRITICAL( s_logger, "-------- Product Controller Failed Initialization ----------" );
@@ -527,6 +528,7 @@ void ProfessorProductController::Run( )
     m_ProductCommandLine         ->Run( );
     m_ProductKeyInputInterface   ->Run( );
     m_ProductCecHelper           ->Run( );
+    m_ProductDspHelper           ->Run( );
     m_ProductAdaptIQManager      ->Run( );
 
     ///
@@ -633,6 +635,18 @@ std::shared_ptr< ProductAdaptIQManager >& ProfessorProductController::GetAdaptIQ
 std::shared_ptr< ProductCecHelper >& ProfessorProductController::GetCecHelper( )
 {
     return m_ProductCecHelper;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetDspHelper
+///
+/// @return This method returns a shared pointer to the ProductCecHelper instance.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::shared_ptr< ProductDspHelper >& ProfessorProductController::GetDspHelper( )
+{
+    return m_ProductDspHelper;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -927,7 +941,7 @@ void ProfessorProductController::SetupProductSTSConntroller( )
     sources.push_back( descriptor_SLOT_2 );
 
     Callback< void >
-    CallbackForSTSComplete( std::bind( &ProfessorProductController::HandleSTSInitWasComplete,
+    CallbackForSTSComplete( std::bind( &ProductController::HandleSTSInitWasComplete,
                                        this ) );
 
 
@@ -939,27 +953,6 @@ void ProfessorProductController::SetupProductSTSConntroller( )
     m_ProductSTSController.Initialize( sources,
                                        CallbackForSTSComplete,
                                        CallbackToHandleSelectSourceSlot );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::HandleSTSInitWasComplete
-///
-/// @brief  This method is called from the ProductSTSController when all the initially-created
-///         sources have been created with CAPS/STS.
-///
-/// @note   This method is called on the ProductSTSController task.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::HandleSTSInitWasComplete( )
-{
-    ProductMessage message;
-    message.mutable_stsinterfacestatus( )->set_initialized( true );
-
-    IL::BreakThread( std::bind( &ProfessorProductController::HandleMessage,
-                                this,
-                                message ),
-                     GetTask( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1076,27 +1069,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         }
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Content Audio Playback Services (CAPS) status messages are handled at this point.
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    if( message.has_capsstatus( ) )
-    {
-        if( message.capsstatus( ).has_initialized( ) )
-        {
-            m_IsCapsReady = message.capsstatus( ).initialized( );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "An invalid CAPS status message was received." );
-            return;
-        }
-
-        BOSE_DEBUG( s_logger, "A CAPS Content Audio Playback Services %s message was received.",
-                    m_IsCapsReady ? "up" : "down" );
-
-        GetHsm( ).Handle< bool >
-        ( &CustomProductControllerState::HandleCapsState, m_IsCapsReady );
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Audio path status messages are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_audiopathstatus( ) )
@@ -1116,18 +1088,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
 
         GetHsm( ).Handle< bool >
         ( &CustomProductControllerState::HandleAudioPathState, m_IsAudioPathReady );
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// STS interface status is handled at this point.
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_stsinterfacestatus( ) )
-    {
-        BOSE_DEBUG( s_logger, "An STS Sources Initialized message was received." );
-
-        m_IsSTSReady = true;
-
-        GetHsm( ).Handle< >
-        ( &CustomProductControllerState::HandleSTSSourcesInit );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// STS slot selected data is handled at this point.
@@ -1190,37 +1150,27 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         ( &CustomProductControllerState::HandleNetworkState, m_IsNetworkConfigured, m_IsNetworkConnected );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Wireless network status messages are handled at this point. Only send information to the
-    /// state machine if the wireless network is configured, since a wired network configuration
-    /// may be available, and is handle above.
+    /// Wireless network status messages are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_wirelessstatus( ) )
     {
-        if( message.wirelessstatus( ).has_configured( ) && message.wirelessstatus( ).configured( ) )
-        {
-            m_IsNetworkConfigured = true;
-
-            m_ProductSystemManager->SetNetworkAccoutConfigurationStatus( m_IsNetworkConfigured,
-                                                                         m_IsAccountConfigured );
-
-            GetHsm( ).Handle< bool, bool >
-            ( &CustomProductControllerState::HandleNetworkState, m_IsNetworkConfigured, m_IsNetworkConnected );
-        }
-
         ///
         /// Send the frequency information (if available) to the LPM to avoid any frequency
-        /// interruption during a speaker Adapt IQ process.
+        /// interference between the WiFi and in-room radio.
         ///
         if( message.wirelessstatus( ).has_frequencykhz( ) and
             message.wirelessstatus( ).frequencykhz( ) > 0 )
         {
             m_ProductLpmHardwareInterface->SendWiFiRadioStatus( message.wirelessstatus( ).frequencykhz( ) );
-        }
 
-        BOSE_DEBUG( s_logger, "A %s wireless network message was received with frequency %d kHz.",
-                    message.wirelessstatus( ).configured( ) ? "configured" : "unconfigured",
-                    message.wirelessstatus( ).has_frequencykhz( ) ?
-                    message.wirelessstatus( ).frequencykhz( ) : 0 );
+            BOSE_DEBUG( s_logger, "A wireless network message was received with frequency %d kHz.",
+                        message.wirelessstatus( ).has_frequencykhz( ) ?
+                        message.wirelessstatus( ).frequencykhz( ) : 0 );
+        }
+        else
+        {
+            BOSE_ERROR( s_logger, "A wireless network message was received with an unknown frequency." );
+        }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Voice messages for the Virtual Personal Assistant or VPA are handled at this point.          ///
@@ -1387,6 +1337,7 @@ void ProfessorProductController::Wait( )
     m_ProductCommandLine         ->Stop( );
     m_ProductKeyInputInterface   ->Stop( );
     m_ProductCecHelper           ->Stop( );
+    m_ProductDspHelper           ->Stop( );
     m_ProductAdaptIQManager      ->Stop( );
 }
 
@@ -1475,17 +1426,19 @@ void ProfessorProductController::SendInitialCapsData()
     }
     messageProperties->set_activationkeyrequired( true );
 
+#if 0 // @TODO CASTLE-6801 field deviceType missing in SoundTouchInterface::Sources
     for( uint32_t deviceType = SystemSourcesProperties::DEVICE_TYPE__MIN; deviceType <= SystemSourcesProperties::DEVICE_TYPE__MAX; ++deviceType )
     {
         messageProperties->add_supporteddevicetypes(
             SystemSourcesProperties::DEVICE_TYPE__Name( static_cast<SystemSourcesProperties::DEVICE_TYPE_>( deviceType ) ) );
     }
     messageProperties->set_devicetyperequired( true );
+#endif
 
     messageProperties->add_supportedinputroutes(
         SystemSourcesProperties::INPUT_ROUTE_HDMI__Name( SystemSourcesProperties::INPUT_ROUTE_TV ) );
 
-    messageProperties->set_inputrouterequired( false );
+    messageProperties->set_inputrouterequired( true );
 
     BOSE_VERBOSE( s_logger, "%s sending %s", __func__, ProtoToMarkup::ToJson( message ).c_str() );
 

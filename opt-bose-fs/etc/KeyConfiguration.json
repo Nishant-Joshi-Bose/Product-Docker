@@ -185,6 +185,30 @@
             ]
         }, 
         {
+            "origin": 1, 
+            "keyEvent": 1, 
+            "timeOutList": [
+                0
+            ], 
+            "commment": "Console: action release ---> Alexa", 
+            "action": 26, 
+            "keyList": [
+                174
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 1, 
+            "timeOutList": [
+                0
+            ], 
+            "commment": "Console: action release ---> Alexa", 
+            "action": 26, 
+            "keyList": [
+                174
+            ]
+        }, 
+        {
             "origin": 2, 
             "keyEvent": 2, 
             "timeOutList": [
@@ -815,8 +839,8 @@
                 300, 
                 100
             ], 
-            "commment": "volume up repeat", 
-            "action": 23, 
+            "commment": "volume ramp up", 
+            "action": 39, 
             "keyList": [
                 3
             ]
@@ -828,8 +852,8 @@
                 300, 
                 100
             ], 
-            "commment": "volume up repeat", 
-            "action": 23, 
+            "commment": "volume ramp up", 
+            "action": 39, 
             "keyList": [
                 3
             ]
@@ -841,8 +865,38 @@
                 300, 
                 100
             ], 
-            "commment": "volume up repeat", 
-            "action": 23, 
+            "commment": "volume ramp up", 
+            "action": 39, 
+            "keyList": [
+                3
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 5, 
+            "timeOutList": [], 
+            "commment": "volume ramp up cancel", 
+            "action": 50, 
+            "keyList": [
+                3
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 5, 
+            "timeOutList": [], 
+            "commment": "volume ramp up cancel", 
+            "action": 50, 
+            "keyList": [
+                3
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 5, 
+            "timeOutList": [], 
+            "commment": "volume ramp up cancel", 
+            "action": 50, 
             "keyList": [
                 3
             ]
@@ -902,8 +956,8 @@
                 300, 
                 100
             ], 
-            "commment": "volume down repeat", 
-            "action": 24, 
+            "commment": "volume ramp down", 
+            "action": 40, 
             "keyList": [
                 2
             ]
@@ -915,8 +969,8 @@
                 300, 
                 100
             ], 
-            "commment": "volume down repeat", 
-            "action": 24, 
+            "commment": "volume ramp down", 
+            "action": 40, 
             "keyList": [
                 2
             ]
@@ -928,8 +982,38 @@
                 300, 
                 100
             ], 
-            "commment": "volume down repeat", 
-            "action": 24, 
+            "commment": "volume ramp down", 
+            "action": 40, 
+            "keyList": [
+                2
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 5, 
+            "timeOutList": [], 
+            "commment": "volume ramp down cancel", 
+            "action": 51, 
+            "keyList": [
+                2
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 5, 
+            "timeOutList": [], 
+            "commment": "volume ramp down cancel", 
+            "action": 51, 
+            "keyList": [
+                2
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 5, 
+            "timeOutList": [], 
+            "commment": "volume ramp down cancel", 
+            "action": 51, 
             "keyList": [
                 2
             ]
@@ -1462,6 +1546,30 @@
             "action": 121, 
             "keyList": [
                 30
+            ]
+        }, 
+        {
+            "origin": 1, 
+            "keyEvent": 2, 
+            "timeOutList": [
+                5000
+            ], 
+            "commment": "setup and pair BLE remote", 
+            "action": 102, 
+            "keyList": [
+                174
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 2, 
+            "timeOutList": [
+                5000
+            ], 
+            "commment": "setup and pair BLE remote", 
+            "action": 102, 
+            "keyList": [
+                174
             ]
         }
     ]

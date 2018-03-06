@@ -37,6 +37,7 @@
 #include "Utilities.h"
 #include "IntentHandler.h"
 #include "ProductCecHelper.h"
+#include "ProductDspHelper.h"
 #include "ProductController.h"
 #include "ProductSTSController.h"
 #include "FrontDoorClientIF.h"
@@ -145,6 +146,15 @@ public:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< ProductCecHelper >& GetCecHelper( );
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method is used to get a shared pointer reference to the DspHelper
+    ///        instance from the product controller.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    std::shared_ptr< ProductDspHelper >& GetDspHelper( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -264,6 +274,7 @@ private:
     std::shared_ptr< ProductCommandLine                > m_ProductCommandLine;
     std::shared_ptr< ProductKeyInputInterface          > m_ProductKeyInputInterface;
     std::shared_ptr< ProductCecHelper                  > m_ProductCecHelper;
+    std::shared_ptr< ProductDspHelper                  > m_ProductDspHelper;
     std::shared_ptr< ProductAdaptIQManager             > m_ProductAdaptIQManager;
     std::shared_ptr< CustomProductAudioService         > m_ProductAudioService;
 
@@ -274,9 +285,7 @@ private:
     ///        machine states.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool m_IsCapsReady;
     bool m_IsAudioPathReady;
-    bool m_IsSTSReady;
     bool m_IsNetworkConfigured;
     bool m_IsNetworkConnected;
     bool m_IsAutoWakeEnabled;
@@ -284,7 +293,7 @@ private:
     bool m_IsMicrophoneEnabled;
     bool m_Running;
 
-    ////////////////////////////////////////////////////////////////////////////GetLastSoundTouchPlayback////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following declarations are used as interfaces to the ProductSTSController,
     ///        which implements the interactions between the Professor Product Controller and the
@@ -294,7 +303,6 @@ private:
     ProductSTSController m_ProductSTSController;
 
     void SetupProductSTSConntroller( );
-    void HandleSTSInitWasComplete( );
     void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomAudioSettingsManager.h
 /// @brief  This file contains source code for setting and getting AudioSettings
-///         such as bass, treble, center, surround, gainOffset, avSync, mode, contentType
+///         such as bass, treble, center, surround, gainOffset, avSync, subwooferGain, mode, contentType, dualMonoSelect
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////
 #pragma once
@@ -30,12 +30,16 @@ public:
     const ProductPb::AudioGainOffset& GetGainOffset() const;
     bool SetAvSync( const ProductPb::AudioAvSync& avSync );
     const ProductPb::AudioAvSync& GetAvSync() const;
+    bool SetSubwooferGain( const ProductPb::AudioSubwooferGain& subwooferGain );
+    const ProductPb::AudioSubwooferGain& GetSubwooferGain() const;
     bool SetMode( const ProductPb::AudioMode& mode );
     const ProductPb::AudioMode& GetMode() const;
     bool SetContentType( const ProductPb::AudioContentType& contentType );
     const ProductPb::AudioContentType& GetContentType() const;
     bool SetDualMonoSelect( const ProductPb::AudioDualMonoSelect& DualMonoSelect );
     const ProductPb::AudioDualMonoSelect& GetDualMonoSelect() const;
+    bool SetEqSelect( const ProductPb::AudioEqSelect& EqSelect );
+    const ProductPb::AudioEqSelect& GetEqSelect() const;
 
 private:
     ////////////////////////////////////////////////////////////////////////////////////////
@@ -47,9 +51,11 @@ private:
     ProductPb::AudioSurroundLevel m_currentSurround;
     ProductPb::AudioGainOffset m_currentGainOffset;
     ProductPb::AudioAvSync m_currentAvSync;
+    ProductPb::AudioSubwooferGain m_currentSubwooferGain;
     ProductPb::AudioMode m_currentMode;
     ProductPb::AudioContentType m_currentContentType;
     ProductPb::AudioDualMonoSelect m_currentDualMonoSelect;
+    ProductPb::AudioEqSelect m_currentEqSelect;
 
     ////////////////////////////////////////////////////////////////////////////////////////
     /// Helper functions to set contentItem sensitive audio settings

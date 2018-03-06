@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@7a61c0e1f51d0e96fcd4ffeb1085ce05f7478071"
+    "selected_version": "master@2f071fbb8499bee85b2df34aab69b6cedcaa076c"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.10.41169.2703991"
+    "selected_version": "Release/Castle-Fork/0.3.11.41219.2713461"
   },
   {
     "name": "bose-opkg-utils",
@@ -25,7 +25,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.9-271+2cde517"
+    "selected_version": "Release/master/0.3.9-301+0ca2db3"
   },
   {
     "name": "BoseOPKG-native",
@@ -41,7 +41,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/develop/0.2.1-69+6b1fec0"
+    "selected_version": "Release/develop/0.3.1-91+2ac06bd"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -53,23 +53,35 @@
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/0.2.3-26+8cf9ea4"
+    "selected_version": "Release/master/0.3.1-40+308cab1"
+  },
+  {
+    "name": "CastleDataCollectionClient-qc8017_32",
+    "selected_version": "Continuous/master/0.3.5-42+ddbf6a7"
   },
   {
     "name": "CastleDemoController-qc8017_32",
     "selected_version": "Release/master/0.3.2-62+b9fcc88"
   },
   {
+    "name": "CastleHTTPProxy-qc8017_32",
+    "selected_version": "Release/master/0.2.0-26+f813b4d"
+  },
+  { 
+    "name": "HTTPInterface-qc8017_32", 
+    "selected_version": "Release/master/0.3.3-53+83e0de2" 
+  },
+  {
     "name": "CastleLibs-native",
-    "selected_version": "branches/castle-libs@2549"
+    "selected_version": "branches/castle-libs@2593"
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2549"
+    "selected_version": "branches/castle-libs@2593"
   },
   {
     "name": "CastleLibs-x86",
-    "selected_version": "branches/castle-libs@2549"
+    "selected_version": "branches/castle-libs@2593"
   },
   {
     "name": "CastleLightBarController-qc8017_32",
@@ -81,15 +93,15 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.3.8-480+1f9654a"
+    "selected_version": "Release/master/0.3.82-504+7699984"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.3.8-480+1f9654a"
+    "selected_version": "Release/master/0.3.82-504+7699984"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@f1458e8b5723b777302ac34c823bccf19c606f34"
+    "selected_version": "master@e8d78f55903c4f048f9b428d9202529aaf89720a"
   },
   {
     "name": "CastleProductUIAssets",
@@ -101,7 +113,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.1.2-72+5b22962"
+    "selected_version": "Release/master/0.2.0-78+2eebfc2"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -141,7 +153,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/0.3.1-58+fe7b095"
+    "selected_version": "Release/master/0.3.2-61+c5803e7"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -149,11 +161,11 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.10.41169.2703991"
+    "selected_version": "Continuous/Castle-Fork-ProductSources/2018-03-01_1728"
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.0.1-15+19b3c17"
+    "selected_version": "Release/master/0.3.0-21+6450a02"
   },
   {
     "name": "unittest-cpp-qc8017_32",
@@ -161,7 +173,7 @@
   },
   {
     "name": "Webkit",
-    "selected_version": "Release/master/0.3.2-28+3d92062"
+    "selected_version": "Release/master/0.3.3-33+5811010"
   },
   {
     "name": "WiFi-Setup-Webpage",
