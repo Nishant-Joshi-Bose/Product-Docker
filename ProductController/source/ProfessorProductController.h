@@ -46,6 +46,7 @@
 #include "MacAddressInfo.h"
 #include "BoseVersion.h"
 #include "LightBarController.h"
+#include "SystemPowerProduct.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -323,6 +324,21 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void  RegisterNowPlayingEndPoint( );
     void  HandleNowPlaying( const SoundTouchInterface::NowPlaying& nowPlayingStatus );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following declarations are for handling the /system/power/mode/opticalAutoWake
+    ///        frontdoor endpoint.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    void HandleGetOpticalAutoWake( const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
+                                   const Callback<EndPointsError::Error> & errorCb );
+    void HandlePutOpticalAutoWake(
+        const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req,
+        const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
+        const Callback<EndPointsError::Error> & errorCb );
+    void ApplyOpticalAutoWakeSettingFromPersistence( );
+    void StoreOpticalAutoWakeSettingToPersistence( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
