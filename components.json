@@ -9,19 +9,19 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.9-301+0ca2db3"
+    "selected_version": "Release/master/0.3.10-315+1a6c767"
   },
   {
     "name": "BoseOPKG-native",
-    "selected_version": "Release/master/0.1.0-4+31ebf8c"
+    "selected_version": "Release/master/0.2.0-12+0405785"
   },
   {
     "name": "BoseOPKG-qc8017_32",
-    "selected_version": "Release/master/0.1.0-4+31ebf8c"
+    "selected_version": "Release/master/0.2.0-12+0405785"
   },
   {
     "name": "BoseOPKG-x86",
-    "selected_version": "Release/master/0.1.0-4+31ebf8c"
+    "selected_version": "Release/master/0.2.0-12+0405785"
   },
   {
     "name": "BoseWebMonaco",
@@ -81,7 +81,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@2622a1268a806a24cdfd1b6ead53e802a3f9c215"
+    "selected_version": "master@4126f267cabe2b42084da4ae11b618c7609d2f1b"
   },
   {
     "name": "CastleProductUIAssets",
@@ -89,7 +89,7 @@
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@afda6e1710cfbe8be2aadc0168d84d067f21cdd7"
+    "selected_version": "master@bd8755ff92f3560e98b41001d7e22f9e5181ea3a"
   },
   {
     "name": "EddieLPM-Package",
@@ -121,11 +121,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/2.4"
+    "selected_version": "Release/master/2.5"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/2.4"
+    "selected_version": "Release/master/2.5"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -141,7 +141,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/IP3/0.3.11-334+5bad26a"
+    "selected_version": "Release/IP3/0.3.13-362+0ed8b58"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
