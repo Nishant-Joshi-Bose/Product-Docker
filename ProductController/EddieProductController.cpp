@@ -32,8 +32,7 @@ namespace ProductApp
 const std::string g_ProductPersistenceDir = "product-persistence/";
 const std::string KEY_CONFIG_FILE = "/var/run/KeyConfiguration.json";
 
-EddieProductController::EddieProductController( std::string const& ProductName ):
-    ProductController( ProductName ),
+EddieProductController::EddieProductController():
     m_ProductControllerStateTop( GetHsm(), nullptr ),
     m_ProductControllerStateBooting( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_BOOTING ),
     m_CustomProductControllerStateOn( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_ON ),
@@ -81,7 +80,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_wifiProfilesCount(),
     m_fdErrorCb( AsyncCallback<EndPointsError::Error> ( std::bind( &EddieProductController::CallbackError,
                                                                    this, std::placeholders::_1 ), GetTask() ) ),
-    m_voiceServiceClient( ProductName, m_FrontDoorClientIF ),
+    m_voiceServiceClient( "EddieProductController", m_FrontDoorClientIF ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
     m_dataCollectionClientInterface( m_FrontDoorClientIF )
 {
@@ -198,43 +197,27 @@ Callback < ProductMessage > EddieProductController::GetMessageHandler( )
     return ProductMessageHandler;
 }
 
-std::string const& EddieProductController::GetProductType() const
+std::string EddieProductController::GetProductType() const
 {
-    static std::string productType = "SoundTouch 05";
-    return productType;
-}
-
-std::string const& EddieProductController::GetProductModel() const
-{
-    static std::string productModel = "SoundTouch 20";
-
-    if( auto model = MfgData::Get( "model" ) )
+    if( auto productType = MfgData::Get( "productType" ) )
     {
-        productModel =  *model;
+        return *productType;
     }
 
-    return productModel;
+    return "eddie";
 }
 
-std::string const& EddieProductController::GetProductVariant() const
+std::string EddieProductController::GetProductName() const
 {
-    static std::string productVariant = "SoundTouch ECO2";
-    return productVariant;
-}
-
-std::string const& EddieProductController::GetProductDescription() const
-{
-    static std::string productDescription = "SoundTouch";
-
-    if( auto description = MfgData::Get( "description" ) )
+    if( auto productName = MfgData::Get( "productName" ) )
     {
-        productDescription = *description;
+        return *productName;
     }
 
-    return productDescription;
+    return "Bose Home Speaker 500";
 }
 
-std::string const& EddieProductController::GetDefaultProductName() const
+std::string EddieProductController::GetDefaultProductName() const
 {
     static std::string productName = "Bose ";
     std::string macAddress = MacAddressInfo::GetPrimaryMAC();
@@ -919,52 +902,22 @@ std::string EddieProductController::GetProductColor() const
 {
     if( auto color = MfgData::GetColor() )
     {
-        if( *color == "luxGray" )
-        {
-            return "SILVER";
-        }
-        else if( *color == "tripleBlack" )
-        {
-            return "BLACK";
-        }
-        else
-        {
-            BOSE_LOG( WARNING, "Unexpected color value in manufacturing data: " << *color );
-        }
-    }
-    else
-    {
-        BOSE_DIE( "No 'productColor' in mfgdata" );
+        return *color;
     }
 
-    return "UNKNOWN";
+    return "unknown";
 }
 
 BLESetupService::VariantId EddieProductController::GetVariantId() const
 {
-    BLESetupService::VariantId varintId = BLESetupService::VariantId::NONE;
-
-    if( auto color = MfgData::GetColor() )
+    if( auto variantId = MfgData::GetAs<int>( "BMAPVariantID" ) )
     {
-        if( *color == "luxGray" )
-        {
-            varintId = BLESetupService::VariantId::SILVER;
-        }
-        else if( *color == "tripleBlack" )
-        {
-            varintId = BLESetupService::VariantId::BLACK;
-        }
-        else
-        {
-            varintId = BLESetupService::VariantId::WHITE;
-        }
-    }
-    else
-    {
-        BOSE_DIE( "No 'productColor' in mfgdata" );
+        return static_cast<BLESetupService::VariantId>( *variantId );
     }
 
-    return varintId;
+    BOSE_ERROR( s_logger, "%s: No 'BMAPVariantID' in mfgdata", __func__ );
+
+    return BLESetupService::VariantId::NONE;
 }
 
 } /// namespace ProductApp

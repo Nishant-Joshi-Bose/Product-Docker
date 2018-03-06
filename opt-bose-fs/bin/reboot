@@ -6,10 +6,19 @@
 # try ResetUtil which talks directly to the LPM.  If ResetUtil fails, try
 # /sbin/reboot which will affect only the APQ.
 #
+# If any arguments are given, we assume the invoker is doing something like
+# `reboot bootloader` and we then skip PlatformReset/ResetUtil and just invoke
+# /sbin/reboot.
+#
 
 function warn {
     logger -s -t "product/reboot[$$]" -p warning "$*"
 }
+
+if (( $# > 0 )); then
+    warn "/sbin/reboot $* [$#]"
+    exec /sbin/reboot "$@"
+fi
 
 warn PlatformReset...
 if ! { killall -0 LPMService && PlatformReset; }; then

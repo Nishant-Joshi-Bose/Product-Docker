@@ -83,7 +83,7 @@ class CustomProductAudioService;
 class EddieProductController : public ProductController
 {
 public:
-    EddieProductController( std::string const& ProductName = "eddie" );
+    EddieProductController();
     virtual ~EddieProductController();
 
     void Initialize();
@@ -134,13 +134,10 @@ public:
         return false;
     }
 
-
-    std::string const& GetProductType() const override;
-    std::string const& GetProductModel() const override;
+    std::string GetProductType() const override;
+    std::string GetProductName() const override;
     std::string GetProductColor() const override;
-    std::string const& GetProductVariant() const override;
-    std::string const& GetProductDescription() const override;
-    std::string const& GetDefaultProductName() const override;
+    std::string GetDefaultProductName() const override;
     BLESetupService::VariantId GetVariantId() const override;
 
     void ClearWifiProfileCount() override
