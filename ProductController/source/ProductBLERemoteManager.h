@@ -75,6 +75,11 @@ public:
     void Run( void );
     void Stop( void );
 
+    void Pairing_Start( void );
+    void Pairing_Cancel( void );
+    void Unpairing_Start( void );
+    void Unpairing_Cancel( void );
+
 private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These declarations store the main task for processing LPM hardware events and requests. It

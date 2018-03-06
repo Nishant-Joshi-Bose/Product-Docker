@@ -167,6 +167,10 @@ void ProductBLERemoteManager::Run( )
 ///
 /// @brief ProductBLERemoteManager::Stop
 ///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::Stop( void )
 {
@@ -175,6 +179,11 @@ void ProductBLERemoteManager::Stop( void )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief ProductBLERemoteManager::UpdateNowSelection
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::NowSelectionInfo& nowSelection )
@@ -259,6 +268,69 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
 
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductBLERemoteManager::Pairing_Start
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductBLERemoteManager::Pairing_Start( void )
+{
+    // TODO: eventually when we decide what the state machine is doing with this we'll define a
+    // product message to convey status that gets sent from the callback
+    m_RCSClient->Pairing_Start( {} );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductBLERemoteManager::Pairing_Cancel
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductBLERemoteManager::Pairing_Cancel( void )
+{
+    m_RCSClient->Pairing_Cancel( );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductBLERemoteManager::Unpairing_Start
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductBLERemoteManager::Unpairing_Start( void )
+{
+    // TODO: eventually when we decide what the state machine is doing with this we'll define a
+    // product message to convey status that gets sent from the callback
+    m_RCSClient->Unpairing_Start( {} );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductBLERemoteManager::Unpairing_Cancel
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductBLERemoteManager::Unpairing_Cancel( void )
+{
+    m_RCSClient->Unpairing_Cancel( );
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                               End of ProductApp Namespace                                    ///
