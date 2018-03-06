@@ -34,9 +34,9 @@ class CustomProductControllerStateIdle : public ProductControllerStateIdle
 public:
 
     CustomProductControllerStateIdle( ProductControllerHsm& hsm,
-                                CHsmState* pSuperState,
-                                Hsm::STATE stateId,
-                                const std::string& name = "CustomIdle" );
+                                      CHsmState* pSuperState,
+                                      Hsm::STATE stateId,
+                                      const std::string& name = "CustomIdle" );
 
     ~CustomProductControllerStateIdle( ) override
     {
