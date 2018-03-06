@@ -1529,7 +1529,7 @@ void ProfessorProductController::End( )
 
 void ProfessorProductController::HandleGetOpticalAutoWake(
     const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
-    const Callback<EndPointsError::Error> & errorCb )
+    const Callback<EndPointsError::Error> & errorCb ) const
 {
     SystemPowerProductPb::SystemPowerModeOpticalAutoWake autowake;
     autowake.set_enabled( m_IsAutoWakeEnabled );

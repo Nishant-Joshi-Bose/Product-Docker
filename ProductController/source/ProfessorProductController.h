@@ -332,7 +332,7 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleGetOpticalAutoWake( const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
-                                   const Callback<EndPointsError::Error> & errorCb );
+                                   const Callback<EndPointsError::Error> & errorCb ) const;
     void HandlePutOpticalAutoWake(
         const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req,
         const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
