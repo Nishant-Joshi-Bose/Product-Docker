@@ -9,7 +9,7 @@
   },
   {
     "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/0.15-56+g286fcdd"
+    "selected_version": "Release/master/0.16-5+g2e25c0f"
   },
   {
     "name": "A4VVideoManagerService",
@@ -25,19 +25,19 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.9-301+0ca2db3"
+    "selected_version": "Release/master/0.3.10-315+1a6c767"
   },
   {
     "name": "BoseOPKG-native",
-    "selected_version": "Release/master/0.1.0-4+31ebf8c"
+    "selected_version": "Release/master/0.2.0-12+0405785"
   },
   {
     "name": "BoseOPKG-qc8017_32",
-    "selected_version": "Release/master/0.1.0-4+31ebf8c"
+    "selected_version": "Release/master/0.2.0-12+0405785"
   },
   {
     "name": "BoseOPKG-x86",
-    "selected_version": "Release/master/0.1.0-4+31ebf8c"
+    "selected_version": "Release/master/0.2.0-12+0405785"
   },
   {
     "name": "BoseWebMonaco",
@@ -57,7 +57,7 @@
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
-    "selected_version": "Continuous/master/0.3.5-42+ddbf6a7"
+    "selected_version": "Release/IP3/0.3.6-45+fe14799"
   },
   {
     "name": "CastleDemoController-qc8017_32",
@@ -101,7 +101,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@e8d78f55903c4f048f9b428d9202529aaf89720a"
+    "selected_version": "master@969c0c4a44a2e2532c65d00cf80de4d4915e11a5"
   },
   {
     "name": "CastleProductUIAssets",
@@ -157,7 +157,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/IP3/0.3.11-334+5bad26a"
+    "selected_version": "Release/IP3/0.3.13-362+0ed8b58"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",

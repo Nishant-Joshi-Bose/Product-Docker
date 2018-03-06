@@ -42,6 +42,9 @@ print """
    padding: 1em;
    margin: 1em;
  }
+ td.showimg {
+   padding: 8px;
+ }
 </style>
 </head>
 <body>
@@ -55,7 +58,7 @@ print """<div class="box">"""
 print html_escape(version_info["long"])
 print "</div>"
 
-print "<li>Manufacturing Data"
+print "<li>Manufacturing Data [<a href='/diag/mfg-data'>all</a>]"
 mfg_data = json.load(open("/persist/mfg_data.json"))
 print """<div class="box">"""
 print "<table>"
@@ -63,6 +66,20 @@ for elem in """country_code regionCode snSystem productType productName
                productColor testflagLaunchAssurance""".split():
     print "<tr><td>{}</td><td>{}</td></tr>" \
         .format(elem, html_escape(mfg_data.get(elem, "(none)")))
+print "</table>"
+print "</div>"
+
+print "<li>Display Tests"
+print """<div class="box">"""
+print "<table>"
+print "<tr>"
+for img in """left top bottom right""".split():
+    print """<td class='showimg'>\
+<img width='80' height='80' \
+onclick='fetch("/diag/display/colorbars-{img}.png?show")' \
+src='/diag/display/colorbars-{img}.png'>\
+</td>""".format(img=img)
+print "</tr>"
 print "</table>"
 print "</div>"
 
