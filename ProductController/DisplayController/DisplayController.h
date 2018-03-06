@@ -17,12 +17,12 @@ using namespace ::DisplayController::Protobuf;
 
 namespace ProductApp
 {
-class ProductController;
+class EddieProductController;
 
 class DisplayController
 {
 public:
-    DisplayController( ProductController& m_controller,
+    DisplayController( EddieProductController& m_controller,
                        const std::shared_ptr<FrontDoorClientIF>& fd_client,
                        LpmClientIF::LpmClientPtr clientPtr );
     ~DisplayController();
@@ -103,8 +103,9 @@ private:
     void SetBackLightLevel( int actualLevel, int newLevel );
     int  GetBackLightLevelFromLux( float lux, float lux_rising );
     void ParseJSONData();
+    void updateUiConnected( bool currentStatus );
 
-    ProductController&                 m_productController;
+    EddieProductController&            m_productController;
     std::shared_ptr<FrontDoorClientIF> m_frontdoorClientPtr;
     LpmClientIF::LpmClientPtr          m_lpmClient;
     Display                            m_display;
@@ -118,6 +119,7 @@ private:
     int                                m_luxFractional ;
     uint64_t                           m_uiHeartBeat   ;
     uint64_t                           m_localHeartBeat;
+    bool                               m_uiConnected = false;
 };
 } //namespace ProductApp
 

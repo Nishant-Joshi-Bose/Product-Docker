@@ -19,6 +19,8 @@
 #include "ProductController.h"
 #include "LpmClientFactory.h"
 #include "SyncCallback.h"
+#include "ProductMessage.pb.h"
+#include "EddieProductController.h"
 
 static DPrint s_logger( "DisplayController" );
 using namespace ::DisplayController::Protobuf;
@@ -81,7 +83,8 @@ static constexpr float PLEXI_LUX_FACTOR                  = 1.0f ;
 static constexpr float SILVER_LUX_FACTOR                 = 11.0f;
 static constexpr float BLACK_LUX_FACTOR                  = 16.0f;
 
-DisplayController::DisplayController( ProductController& controller, const std::shared_ptr<FrontDoorClientIF>& fd_client, LpmClientIF::LpmClientPtr clientPtr ):
+DisplayController::DisplayController( EddieProductController& controller, const std::shared_ptr<FrontDoorClientIF>& fd_client,
+                                      LpmClientIF::LpmClientPtr clientPtr ):
     m_productController( controller ),
     m_frontdoorClientPtr( fd_client ),
     m_lpmClient( clientPtr ),
@@ -197,6 +200,16 @@ void DisplayController::ParseJSONData()
 
 }// ParseJSONData
 
+void DisplayController::updateUiConnected( bool currentUiConnectedStatus )
+{
+    ProductMessage productMsg;
+
+    BOSE_LOG( WARNING, "currentUiConnectedStatus: " << currentUiConnectedStatus );
+    m_uiConnected = currentUiConnectedStatus;
+    productMsg.set_uiconnected( currentUiConnectedStatus );
+    IL::BreakThread( std::bind( m_productController.GetMessageHandler(), productMsg ), m_productController.GetTask() );
+}
+
 int DisplayController::GetBackLightLevelFromLux( float lux, float lux_rising )
 {
     std::vector <t_luxBacklightTuple> lux_threshold = ( lux_rising > 0.0f ) ? rising_lux_threshold : lowering_lux_threshold;
@@ -283,12 +296,9 @@ void DisplayController::MonitorLightSensor()
             if( abs( m_localHeartBeat - m_uiHeartBeat ) > 2 )
             {
                 BOSE_LOG( ERROR, "Error: the UI stop" );
-                // ??????????????????????????????????????????????????????????????????????
-                // ?? Santosh call the product controller m_productController.uiHasStop()
-                // ?????????????????????????????????????????????????????????????????????
-
                 // reset the heart beat algorithm and resume on first heart beat frim the UI
                 m_localHeartBeat = m_uiHeartBeat = ULLONG_MAX;
+                updateUiConnected( false );
             }// If the UI stop updating the heart beat
 
         }// If the UI had started
@@ -440,7 +450,13 @@ void DisplayController::HandlePutUIAlive( const Display &req,
         BOSE_LOG( WARNING, "UI is skipping heart beat, received heartbeat: " << req.uiheartbeat() + ", current heat beat: " << m_uiHeartBeat );
     }
 
+    if( !m_uiConnected )
+    {
+        updateUiConnected( true );
+    }
+
     m_uiHeartBeat = req.uiheartbeat();
+    resp.Send( GetDisplay() );
 
 }// HandlePutUIAlive
 

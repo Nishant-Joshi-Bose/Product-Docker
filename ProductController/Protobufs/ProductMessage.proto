@@ -185,6 +185,7 @@ message ProductMessage
         optional bool                       audiopathselect     = 15;
         optional bool                       ampfaultdetected    = 16;
         optional bool                       audiosilent         = 17;
+        optional bool                       uiconnected         = 18;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

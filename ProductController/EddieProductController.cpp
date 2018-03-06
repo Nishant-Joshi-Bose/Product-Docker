@@ -509,14 +509,15 @@ void EddieProductController::PerformRequestforWiFiProfiles()
 bool EddieProductController::IsAllModuleReady() const
 {
     BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|NetworkModuleReady=%d|m_isBluetoothReady=%d|"
-               "STSReady=%d|IsSoftwareUpdateReady=%d", __func__, IsCAPSReady() , IsLpmReady(),
-               IsNetworkModuleReady(), IsBluetoothModuleReady(), IsSTSReady(), IsSoftwareUpdateReady() );
+               "STSReady=%d|IsSoftwareUpdateReady=%d|IsUiConnected=%d", __func__, IsCAPSReady() , IsLpmReady(),
+               IsNetworkModuleReady(), IsBluetoothModuleReady(), IsSTSReady(), IsSoftwareUpdateReady(), IsUiConnected() );
 
     return ( IsCAPSReady() and
              IsLpmReady() and
              IsNetworkModuleReady() and
              IsSTSReady() and
              IsBluetoothModuleReady() and
+             IsUiConnected() and
              IsSoftwareUpdateReady() ) ;
 }
 
@@ -524,6 +525,12 @@ bool EddieProductController::IsBtLeModuleReady() const
 {
     BOSE_INFO( s_logger, "%s:|m_isBLEModuleReady[%d", __func__, m_isBLEModuleReady );
     return m_isBLEModuleReady;
+}
+
+bool EddieProductController::IsUiConnected() const
+{
+    BOSE_INFO( s_logger, "%s:m_isUiConnected-%d", __func__, m_isUiConnected );
+    return m_isUiConnected;
 }
 
 bool EddieProductController::IsCAPSReady() const
@@ -728,6 +735,12 @@ void EddieProductController::HandleRawKeyCliCmd( const std::list<std::string>& a
 void EddieProductController::HandleProductMessage( const ProductMessage& productMessage )
 {
     BOSE_INFO( s_logger, "%s", __func__ );
+
+    if( productMessage.has_uiconnected() )
+    {
+        m_isUiConnected = productMessage.uiconnected();
+        GetHsm().Handle<bool>( &ProductControllerState::HandleUiConnectedUpdateState, productMessage.uiconnected() );
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// LPM status messages has both Common handling and Professor-specific handling

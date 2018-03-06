@@ -242,6 +242,11 @@ public:
         return false;
     }
 
+    virtual bool HandleUiConnectedUpdateState( bool uiconnected )
+    {
+        return false;
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
     ///
     /// Here are the Custom event handlers. They need to be declared virtual and
