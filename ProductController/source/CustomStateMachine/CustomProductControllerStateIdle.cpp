@@ -34,9 +34,9 @@ namespace ProductApp
 /// @param const std::string&    name
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateIdle::CustomProductControllerStateIdle( ProductControllerHsm& hsm,
-                                                        CHsmState* pSuperState,
-                                                        Hsm::STATE stateId,
-                                                        const std::string& name )
+                                                                    CHsmState* pSuperState,
+                                                                    Hsm::STATE stateId,
+                                                                    const std::string& name )
     : ProductControllerStateIdle( hsm, pSuperState, stateId, name )
 {
     BOSE_INFO( s_logger, "%s is being constructed.", GetName( ).c_str( ) );
