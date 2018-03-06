@@ -90,7 +90,7 @@ void ProductSourceInfo::Run( )
                     error.code( ), error.subcode( ), error.message( ).c_str( ) );
     };
 
-    auto handleSourcesReady = [ = ]( const std::list<std::string>& endPointList )
+    auto handleSourcesReady = [ this, handleSources, handleSourcesFail ]( const std::list<std::string>& endPointList )
     {
         if( endPointList.empty( ) )
         {
@@ -103,12 +103,8 @@ void ProductSourceInfo::Run( )
         m_FrontDoorClient->RegisterNotification<SoundTouchInterface::Sources>( s_FrontDoorSources, handleSources );
     };
 
-    auto handleSourcesNotReady = [ this ]( const std::list<std::string>& endPointList )
-    {
-    };
-
     std::list<std::string> endPointList = { s_FrontDoorSources };
-    m_FrontDoorClient->RegisterEndpointsOfInterest( endPointList, handleSourcesReady, handleSourcesNotReady );
+    m_FrontDoorClient->RegisterEndpointsOfInterest( endPointList, handleSourcesReady, {} );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,6 +130,10 @@ void ProductSourceInfo::UpdateSources( const SoundTouchInterface::Sources& sourc
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief ProductSourceInfo::UpdateSources
+///
+/// @param  item Currently-selected content item
+///
+/// @return BOptional containing source information for the source specified in the supplied content item
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BOptional<SoundTouchInterface::Sources::SourceItem> ProductSourceInfo::FindSource( SoundTouchInterface::ContentItem& item )
