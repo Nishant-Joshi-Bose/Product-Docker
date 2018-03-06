@@ -54,7 +54,7 @@ def test_shepherd_process(request):
                     process_died_list.append(process)
                     result = False
         time.sleep(2)
-    assert process_died_list,"The following processes died after installation: {}".format(process_died_list)
+    assert process_died_list == [], "The following processes died after installation: {}".format(process_died_list)
 
 def PerformBonjourUpdate(request):
     """
