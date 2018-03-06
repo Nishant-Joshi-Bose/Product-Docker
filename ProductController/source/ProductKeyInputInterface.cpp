@@ -244,7 +244,7 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
 
     if( nowSelection.has_contentitem() )
     {
-        auto contentItem = nowSelection.contentitem();
+        const auto& contentItem = nowSelection.contentitem();
         auto source = m_ProductController.GetSourceInfo()->FindSource( contentItem );
 
         if( source and source->has_details() )

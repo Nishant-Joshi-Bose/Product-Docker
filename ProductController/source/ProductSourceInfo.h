@@ -71,7 +71,7 @@ public:
     void Run( void );
     void Stop( void );
 
-    BOptional<SoundTouchInterface::Sources::SourceItem> FindSource( SoundTouchInterface::ContentItem& item );
+    BOptional<SoundTouchInterface::Sources::SourceItem> FindSource( const SoundTouchInterface::ContentItem& item );
 
 private:
     //////////////////////////////////////////////////////////////////////////////////////////////

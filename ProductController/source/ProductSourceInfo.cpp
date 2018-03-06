@@ -136,7 +136,7 @@ void ProductSourceInfo::UpdateSources( const SoundTouchInterface::Sources& sourc
 /// @return BOptional containing source information for the source specified in the supplied content item
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-BOptional<SoundTouchInterface::Sources::SourceItem> ProductSourceInfo::FindSource( SoundTouchInterface::ContentItem& item )
+BOptional<SoundTouchInterface::Sources::SourceItem> ProductSourceInfo::FindSource( const SoundTouchInterface::ContentItem& item )
 {
     if( ( not item.has_sourceaccount() ) or ( not item.has_source() ) )
     {
