@@ -162,6 +162,38 @@ BOptional<SoundTouchInterface::Sources::SourceItem> ProductSourceInfo::FindSourc
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProductSourceInfo::Refresh
+///
+/// @brief  This method refreshes the source information
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductSourceInfo::Refresh( void )
+{
+    BOSE_INFO( s_logger, "Refreshing product source info" );
+
+    auto handleSources = [ this ]( const SoundTouchInterface::Sources & sources )
+    {
+        UpdateSources( sources );
+    };
+
+    auto handleSourcesFail = [ this ]( const EndPointsError::Error & error )
+    {
+        BOSE_ERROR( s_logger, "Error %d %d <%s> while retrieving source list",
+                    error.code( ), error.subcode( ), error.message( ).c_str( ) );
+    };
+
+    m_FrontDoorClient->SendGet<SoundTouchInterface::Sources, EndPointsError::Error>( s_FrontDoorSources, handleSources, handleSourcesFail );
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                               End of ProductApp Namespace                                    ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
