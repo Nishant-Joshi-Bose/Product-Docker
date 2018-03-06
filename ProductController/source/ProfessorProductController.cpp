@@ -1244,7 +1244,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         BOSE_DEBUG( s_logger, "An autowake status %s message has been received.",
                     m_IsAutoWakeEnabled ? "active" : "inactive" );
 
-        StoreOpticalAutoWakeSettingToPersistence( );
+        NotifyFrontdoorAndStoreOpticalAutoWakeSetting( );
 
         GetHsm( ).Handle< bool >
         ( &CustomProductControllerState::HandleAutowakeStatus, m_IsAutoWakeEnabled );
@@ -1547,11 +1547,7 @@ void ProfessorProductController::HandlePutOpticalAutoWake(
         message.mutable_autowakestatus( )->set_active( req.enabled( ) );
         HandleMessage( message );
     }
-    SystemPowerProductPb::SystemPowerModeOpticalAutoWake autowake;
-    autowake.set_enabled( m_IsAutoWakeEnabled );
-    respCb( autowake );
-    GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API,
-                                             autowake );
+    HandleGetOpticalAutoWake( respCb, errorCb );
 }
 
 void ProfessorProductController::ApplyOpticalAutoWakeSettingFromPersistence( )
@@ -1572,17 +1568,16 @@ void ProfessorProductController::ApplyOpticalAutoWakeSettingFromPersistence( )
         BOSE_ERROR( s_logger, "OpticalAutoWake persistence error - %s", e.what( ) );
     }
 
-    if( autowake.has_enabled( ) )
-    {
-        m_IsAutoWakeEnabled = autowake.enabled( );
-    }
+    m_IsAutoWakeEnabled = autowake.enabled( );
 }
 
-void ProfessorProductController::StoreOpticalAutoWakeSettingToPersistence( )
+void ProfessorProductController::NotifyFrontdoorAndStoreOpticalAutoWakeSetting( )
 {
     auto persistence = ProtoPersistenceFactory::Create( "OpticalAutoWake.json", GetProductPersistenceDir( ) );
     SystemPowerProductPb::SystemPowerModeOpticalAutoWake autowake;
     autowake.set_enabled( m_IsAutoWakeEnabled );
+    GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API,
+                                             autowake );
 
     try
     {

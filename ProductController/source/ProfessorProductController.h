@@ -338,7 +338,7 @@ private:
         const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
         const Callback<EndPointsError::Error> & errorCb );
     void ApplyOpticalAutoWakeSettingFromPersistence( );
-    void StoreOpticalAutoWakeSettingToPersistence( );
+    void NotifyFrontdoorAndStoreOpticalAutoWakeSetting( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
