@@ -5,7 +5,7 @@
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@ab77e2216a0b358837791fd837a2c165f46f811e"
+    "selected_version": "master@cf16a93f5f9536d04667f394bce9a91dae334d6b"
   },
   {
     "name": "BLERemoteXCVR",
@@ -13,7 +13,7 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@95b7d64abf58cc7ccee894865e78306f56313ba6"
+    "selected_version": "master@a152fef3f480881cb40ad6cc1f08dffe5faf4ad1"
   },
   {
     "name": "AVS-qc8017_32",
