@@ -64,11 +64,6 @@ if not sn: # allow any non-empty string
     warn("Invalid snSystem:", sn)
     fixes.append("set snSystem RF000000000000000")
 
-pl = get("productLanguage")
-if pl is None:
-    warn("Invalid productLanguage:", pl)
-    fixes.append("set productLanguage english")
-
 pc = get("productColor")
 if pc is None or not re.match(r'^(tripleBlack|luxGray)$', pc):
     warn("Invalid productColor:", pc)
