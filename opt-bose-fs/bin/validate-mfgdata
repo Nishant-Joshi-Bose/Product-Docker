@@ -78,7 +78,7 @@ if not pc:
 vi = get("BMAPVariantID")
 if vi is None or not re.match(r'^\d+$', vi):
     warn("Invalid BMAPVariantID: Non-integer value detected. Must be a base 10 interger between 0 and 7. Found:", vi)
-    fixes.append("set BMAPVariantID 1  # 1=black|2=silver)
+    fixes.append("set BMAPVariantID 1  # 1=black|2=silver")
 
 pn = get("productName")
 if not pn: # allow any non-empty string
