@@ -105,5 +105,7 @@ for fix in fixes:
     print "  mfgdata", fix
 print """\
   mount -oremount,ro /persist
+
+See also: https://wiki.bose.com/display/BC/Riviera+Manufacturing+Data+Information
 """
 sys.exit(1)
