@@ -38,12 +38,14 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/ProductSTS.pb.cc
   ${PROTO_CC_DEST}/SystemInfo.pb.cc
   ${PROTO_CC_DEST}/SystemSourcesProperties.pb.cc
+  ${PROTO_CC_DEST}/SystemPowerProduct.pb.cc
   source/ProductAdaptIQManager.cpp
   source/ProductCecHelper.cpp
   source/ProductCommandLine.cpp
   source/ProductDspHelper.cpp
   source/ProductKeyInputInterface.cpp
   source/ProductNetworkManager.cpp
+  source/ProductSourceInfo.cpp
   source/ProductStart.cpp
   source/ProductSystemManager.cpp
   source/ProfessorProductController.cpp
