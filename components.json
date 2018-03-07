@@ -41,15 +41,15 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/develop/0.3.1-91+2ac06bd"
+    "selected_version": "Release/develop/0.3.2-99+3f60f39"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.2.7-20452"
+    "selected_version": "Release/Castle-Fork/0.3.1-20595"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/0.2.7-20452"
+    "selected_version": "Release/Castle-Fork/0.3.1-20595"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -153,7 +153,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/0.3.2-61+c5803e7"
+    "selected_version": "Release/master/0.3.3-63+5fcbc13"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -161,7 +161,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-03-05_1626"
+    "selected_version": "Release/Castle-Fork/0.3.12.41308.2723742"
   },
   {
     "name": "SystemEventService-qc8017_32",
