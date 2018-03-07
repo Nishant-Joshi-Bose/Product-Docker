@@ -71,7 +71,7 @@ if not sn: # allow any non-empty string
     fixes.append("set snSystem RF000000000000000")
 
 pc = get("productColor")
-if pc:
+if not pc:
     warn("productColor not set:", pc)
 #   This is just color so this is not forced to be required
 
@@ -95,5 +95,7 @@ for fix in fixes:
     print "  mfgdata", fix
 print """\
   mount -oremount,ro /persist
+
+See also: https://wiki.bose.com/display/BC/Riviera+Manufacturing+Data+Information
 """
 sys.exit(1)
