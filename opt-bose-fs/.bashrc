@@ -6,7 +6,6 @@ if ! [ "${PROFILE-}" ]; then
 fi
 
 if [ "${PS1-}" ]; then # interactive shells
-    alias info="curl -s localhost:8090/info | xmllint --format -"
     alias l="less -M"
     alias g="grep -E"
     alias lf="ls -F"

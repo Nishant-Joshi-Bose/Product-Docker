@@ -39,7 +39,6 @@
 #include "Language.pb.h"
 #include "ConfigurationStatus.pb.h"
 #include "SystemInfo.pb.h"
-#include "CapsInitializationStatus.pb.h"
 #include "EndPointsError.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
