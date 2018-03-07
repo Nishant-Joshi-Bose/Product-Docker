@@ -64,7 +64,6 @@ void CustomProductAudioService::RegisterAudioPathEvents()
                                                                                 std::placeholders::_2 ) );
         m_APPointer->RegisterForMainStreamAudioSettingsRequest( callback );
     }
-
     ConnectToAudioPath();
 }
 
@@ -169,7 +168,6 @@ void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
     BOSE_DEBUG( s_logger, __func__ );
     std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_mainStreamAudioSettings, false );
     m_APPointer->SetMainStreamAudioSettings( mainStreamAudioSettings );
-
     // DMR Print out the JSON being sent to AP.
     // BOSE_DEBUG( s_logger, "%s", mainStreamAudioSettings.c_str() );
 }
