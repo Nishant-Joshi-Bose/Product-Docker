@@ -46,6 +46,7 @@
 #include "MacAddressInfo.h"
 #include "BoseVersion.h"
 #include "LightBarController.h"
+#include "SystemPowerProduct.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -66,6 +67,7 @@ class ProductCecHelper;
 class ProductCommandLine;
 class ProductKeyInputInterface;
 class ProductAdaptIQManager;
+class ProductSourceInfo;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -138,6 +140,14 @@ public:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< ProductAdaptIQManager >& GetAdaptIQManager( );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method is used to get a shared pointer to the SourceInfo instance
+    ///        from the product controller.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    std::shared_ptr< ProductSourceInfo >& GetSourceInfo( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -273,6 +283,7 @@ private:
     std::shared_ptr< ProductDspHelper                  > m_ProductDspHelper;
     std::shared_ptr< ProductAdaptIQManager             > m_ProductAdaptIQManager;
     std::shared_ptr< CustomProductAudioService         > m_ProductAudioService;
+    std::shared_ptr< ProductSourceInfo                 > m_ProductSourceInfo;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -319,6 +330,21 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void  RegisterNowPlayingEndPoint( );
     void  HandleNowPlaying( const SoundTouchInterface::NowPlaying& nowPlayingStatus );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following declarations are for handling the /system/power/mode/opticalAutoWake
+    ///        frontdoor endpoint.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    void HandleGetOpticalAutoWake( const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
+                                   const Callback<EndPointsError::Error> & errorCb ) const;
+    void HandlePutOpticalAutoWake(
+        const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req,
+        const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
+        const Callback<EndPointsError::Error> & errorCb );
+    void ApplyOpticalAutoWakeSettingFromPersistence( );
+    void NotifyFrontdoorAndStoreOpticalAutoWakeSetting( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

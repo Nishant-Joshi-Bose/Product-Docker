@@ -100,7 +100,9 @@ private:
     bool                                                                        m_connected;
     bool                                                                        m_running;
     A4VQuickSetService::A4VQuickSetServiceClientIF::A4VQuickSetServiceClientPtr m_QSSClient;
+    ProfessorProductController&                                                 m_ProductController;
     std::shared_ptr<DataCollectionClientIF>                                     m_DataCollectionClient;
+
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following methods are used to register for and receive key events from the LPM

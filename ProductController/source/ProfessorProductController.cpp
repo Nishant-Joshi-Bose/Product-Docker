@@ -36,6 +36,7 @@
 #include "ProductSystemManager.h"
 #include "ProductCommandLine.h"
 #include "ProductAdaptIQManager.h"
+#include "ProductSourceInfo.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
 #include "ProductSTSCommonStateFactory.h"
@@ -99,6 +100,8 @@
 #include "CustomProductControllerStatePlayingTransitionAccessoryPairing.h"
 #include "MfgData.h"
 #include "DeviceManager.pb.h"
+#include "ProductEndpointDefines.h"
+#include "ProtoPersistenceFactory.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -138,6 +141,7 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductDspHelper( nullptr ),
     m_ProductAdaptIQManager( nullptr ),
     m_ProductAudioService( nullptr ),
+    m_ProductSourceInfo( nullptr ),
 
     ///
     /// Member Variable Initialization
@@ -492,6 +496,7 @@ void ProfessorProductController::Run( )
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_ProductKeyInputInterface    = std::make_shared< ProductKeyInputInterface          >( *this );
     m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
+    m_ProductSourceInfo           = std::make_shared< ProductSourceInfo                 >( *this );
     m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this, m_FrontDoorClientIF, m_ProductLpmHardwareInterface->GetLpmClient() );
 
     if( m_ProductLpmHardwareInterface == nullptr ||
@@ -511,6 +516,11 @@ void ProfessorProductController::Run( )
     }
 
     ///
+    /// Apply settings from persistence
+    ///
+    ApplyOpticalAutoWakeSettingFromPersistence( );
+
+    ///
     /// Set up LightBarController
     ///
     m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_ProductLpmHardwareInterface->GetLpmClient() ) );
@@ -527,6 +537,7 @@ void ProfessorProductController::Run( )
     m_ProductCecHelper           ->Run( );
     m_ProductDspHelper           ->Run( );
     m_ProductAdaptIQManager      ->Run( );
+    m_ProductSourceInfo          ->Run( );
 
     ///
     /// Register FrontDoor EndPoints
@@ -621,6 +632,19 @@ std::shared_ptr< ProductAdaptIQManager >& ProfessorProductController::GetAdaptIQ
 {
     return m_ProductAdaptIQManager;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetSourceInfo
+///
+/// @return This method returns a shared pointer to the SourceInfo instance
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::shared_ptr< ProductSourceInfo >& ProfessorProductController::GetSourceInfo( )
+{
+    return m_ProductSourceInfo;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -964,6 +988,25 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
 {
     RegisterCommonEndPoints( );
     m_lightbarController->RegisterLightBarEndPoints();
+
+    {
+        auto l = [ = ]( Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> respCb,
+                        Callback<EndPointsError::Error> errorCb )
+        {
+            HandleGetOpticalAutoWake( respCb, errorCb );
+        };
+        GetFrontDoorClient()->RegisterGet( FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API, l );
+    }
+    {
+        auto l = [ = ]( SystemPowerProductPb::SystemPowerModeOpticalAutoWake req,
+                        Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> respCb,
+                        Callback<EndPointsError::Error> errorCb )
+        {
+            HandlePutOpticalAutoWake( req, respCb, errorCb );
+        };
+        GetFrontDoorClient( )->RegisterPut<SystemPowerProductPb::SystemPowerModeOpticalAutoWake>(
+            FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API, l );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1195,6 +1238,8 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         BOSE_DEBUG( s_logger, "An autowake status %s message has been received.",
                     m_IsAutoWakeEnabled ? "active" : "inactive" );
 
+        NotifyFrontdoorAndStoreOpticalAutoWakeSetting( );
+
         GetHsm( ).Handle< bool >
         ( &CustomProductControllerState::HandleAutowakeStatus, m_IsAutoWakeEnabled );
     }
@@ -1316,6 +1361,7 @@ void ProfessorProductController::Wait( )
     m_ProductCecHelper           ->Stop( );
     m_ProductDspHelper           ->Stop( );
     m_ProductAdaptIQManager      ->Stop( );
+    m_ProductSourceInfo          ->Stop( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1472,6 +1518,72 @@ void ProfessorProductController::End( )
     BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
 
     m_Running = false;
+}
+
+void ProfessorProductController::HandleGetOpticalAutoWake(
+    const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
+    const Callback<EndPointsError::Error> & errorCb ) const
+{
+    SystemPowerProductPb::SystemPowerModeOpticalAutoWake autowake;
+    autowake.set_enabled( m_IsAutoWakeEnabled );
+    respCb( autowake );
+}
+
+void ProfessorProductController::HandlePutOpticalAutoWake(
+    const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req,
+    const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
+    const Callback<EndPointsError::Error> & errorCb )
+{
+    if( req.has_enabled( ) )
+    {
+        ProductMessage message;
+        message.mutable_autowakestatus( )->set_active( req.enabled( ) );
+        HandleMessage( message );
+    }
+    HandleGetOpticalAutoWake( respCb, errorCb );
+}
+
+void ProfessorProductController::ApplyOpticalAutoWakeSettingFromPersistence( )
+{
+    auto persistence = ProtoPersistenceFactory::Create( "OpticalAutoWake.json", GetProductPersistenceDir( ) );
+    SystemPowerProductPb::SystemPowerModeOpticalAutoWake autowake;
+    try
+    {
+        const std::string & s = persistence->Load( );
+        ProtoToMarkup::FromJson( s, &autowake );
+    }
+    catch( const ProtoToMarkup::MarkupError & e )
+    {
+        BOSE_ERROR( s_logger, "OpticalAutoWake persistence markup error - %s", e.what( ) );
+    }
+    catch( ProtoPersistenceIF::ProtoPersistenceException & e )
+    {
+        BOSE_ERROR( s_logger, "OpticalAutoWake persistence error - %s", e.what( ) );
+    }
+
+    m_IsAutoWakeEnabled = autowake.enabled( );
+}
+
+void ProfessorProductController::NotifyFrontdoorAndStoreOpticalAutoWakeSetting( )
+{
+    auto persistence = ProtoPersistenceFactory::Create( "OpticalAutoWake.json", GetProductPersistenceDir( ) );
+    SystemPowerProductPb::SystemPowerModeOpticalAutoWake autowake;
+    autowake.set_enabled( m_IsAutoWakeEnabled );
+    GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API,
+                                             autowake );
+
+    try
+    {
+        persistence->Store( ProtoToMarkup::ToJson( autowake ) );
+    }
+    catch( const ProtoToMarkup::MarkupError & e )
+    {
+        BOSE_ERROR( s_logger, "OpticalAutoWake store persistence markup error - %s", e.what( ) );
+    }
+    catch( ProtoPersistenceIF::ProtoPersistenceException & e )
+    {
+        BOSE_ERROR( s_logger, "OpticalAutoWake store persistence error - %s", e.what( ) );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

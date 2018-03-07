@@ -1,0 +1,15 @@
+////////////////////////////////////////////////////////////////////////////////
+/// @file SystemPowerProduct.proto
+///
+/// @brief Product specific messags for /system/power endpoint.
+///
+/// Copyright 2018 Bose Corporation
+////////////////////////////////////////////////////////////////////////////////
+
+package SystemPowerProductPb;
+
+message SystemPowerModeOpticalAutoWake
+{
+    optional bool enabled = 1;
+}
+
