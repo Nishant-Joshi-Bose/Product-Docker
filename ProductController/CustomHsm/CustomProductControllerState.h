@@ -315,6 +315,15 @@ public:
     {
         return false;
     }
+    virtual bool HandleNetworkWifiAPStatus( bool APStatus )
+    {
+        return false;
+    }
+
+    virtual bool HandleSetupAPDeactivateTimerExpiry( )
+    {
+        return false;
+    }
 
 public:
     /// The custom version of this function returns the custom ProductController

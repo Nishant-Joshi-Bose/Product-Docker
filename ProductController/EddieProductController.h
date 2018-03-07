@@ -44,6 +44,7 @@
 #include "ProductControllerStatePlayingSelectedSetupNetwork.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
+#include "ProductControllerStatePlayingSelectedSetupExitingAP.h"
 #include "ProductControllerStateStoppingStreams.h"
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
@@ -82,7 +83,7 @@ class CustomProductAudioService;
 class EddieProductController : public ProductController
 {
 public:
-    EddieProductController( std::string const& ProductName = "eddie" );
+    EddieProductController();
     virtual ~EddieProductController();
 
     void Initialize();
@@ -133,13 +134,10 @@ public:
         return false;
     }
 
-
-    std::string const& GetProductType() const override;
-    std::string const& GetProductModel() const override;
+    std::string GetProductType() const override;
+    std::string GetProductName() const override;
     std::string GetProductColor() const override;
-    std::string const& GetProductVariant() const override;
-    std::string const& GetProductDescription() const override;
-    std::string const& GetDefaultProductName() const override;
+    std::string GetDefaultProductName() const override;
     BLESetupService::VariantId GetVariantId() const override;
 
     void ClearWifiProfileCount() override
@@ -415,6 +413,7 @@ private:
     ProductControllerStatePlayingSelectedSetupNetworkTransition     m_ProductControllerStatePlayingSelectedSetupNetworkTransition;
     ProductControllerStatePlayingSelectedSetupOther                 m_ProductControllerStatePlayingSelectedSetupOther;
     ProductControllerStatePlayingSelectedSetupExiting               m_ProductControllerStatePlayingSelectedSetupExiting;
+    ProductControllerStatePlayingSelectedSetupExitingAP             m_ProductControllerStatePlayingSelectedSetupExitingAP;
     ProductControllerStateStoppingStreams                           m_ProductControllerStateStoppingStreams;
     ProductControllerStatePlayableTransition                        m_ProductControllerStatePlayableTransition;
     ProductControllerStatePlayableTransitionInternal                m_ProductControllerStatePlayableTransitionInternal;
