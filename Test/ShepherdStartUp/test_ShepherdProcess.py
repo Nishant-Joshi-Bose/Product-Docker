@@ -63,7 +63,6 @@ def PerformBonjourUpdate(request):
     device = request.config.getoption("--device-id")
     zip_file = request.config.getoption("--zipfile")
     bonjourUpdateSupport = BonjourUpdateSupport(device=device, logger=logger)
-    is_verify_uploaded_zip = True
 
     try:
         deviceIP = bonjourUpdateSupport.getDeviceIP()
@@ -72,7 +71,7 @@ def PerformBonjourUpdate(request):
         #Need to perform Bonjour Update twice
         BonjourCnt = 0
         while True:
-            bonjour_util.upload_zipfile(zip_file, deviceIP, is_verify_uploaded_zip=is_verify_uploaded_zip)
+            bonjour_util.upload_zipfile(zip_file, deviceIP)
             bonjourUpdateSupport.confirmInstallationVersions()
             BonjourCnt += 1
             if BonjourCnt >= int(cfg.get('Settings', 'BONJOUR_UPDATE_LOOP')):
