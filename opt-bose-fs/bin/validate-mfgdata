@@ -71,7 +71,7 @@ if not sn: # allow any non-empty string
     fixes.append("set snSystem RF000000000000000")
 
 pc = get("productColor")
-if not pc:
+if pc is None or not re.match(r'^\d+$', pc):
     warn("productColor not set:", pc)
     fixes.append("set productColor 1  #  1=tripleBlack | 3=luxGray")
 
