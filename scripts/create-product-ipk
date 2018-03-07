@@ -68,6 +68,7 @@ swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 audiopath_dir=$(components get CastleAudioPath-qc8017_32 installed_location) || exit
 audiopath64_dir=$(components get CastleAudioPath-qc8017_64 installed_location) || exit
 castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
+castlesass_dir=$(components get SASS-qc8017_32 installed_location) || exit
 castlepassport_dir=$(components get CastlePassport-qc8017_32 installed_location) || exit
 wifi_setup_webpage_dir=$(components get WiFi-Setup-Webpage installed_location) || exit
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
@@ -164,6 +165,7 @@ cp "$audiopath_dir/bin/lisa/libDspPlayback.so" "$opt_dir/bin" || exit
 "$audiopath_dir/stage" "$opt_dir" || exit
 "$audiopath64_dir/stage" "$opt_dir" --only-vfe || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
+"$castlesass_dir/stage" "$opt_dir" || exit
 "$castlepassport_dir/stage" "$opt_dir" || exit
 "$shepherd_dir/stage" "$opt_dir" || exit
 "$wifi_setup_webpage_dir/stage" "$opt_dir" || exit
@@ -286,6 +288,7 @@ pkill BT
 pkill BTSource
 pkill BLESetup
 pkill PtsServer
+pkill SASSController
 # we are leaving telnet, avahi-daemon, SoftwareUpdateService, NetManager alive.
 # ---8<------8<------8<------8<------8<------8<------8<------8<------8<---
 
