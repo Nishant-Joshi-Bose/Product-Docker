@@ -251,6 +251,16 @@ public:
         return false;
     }
 
+    virtual bool HandleNetworkWifiAPStatus( bool APStatus )
+    {
+        return false;
+    }
+
+    virtual bool HandleSetupAPDeactivateTimerExpiry( )
+    {
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// Methods are to be added at this point to implement product specific actions. These methods
