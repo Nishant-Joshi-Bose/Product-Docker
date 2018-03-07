@@ -161,11 +161,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-<<<<<<< HEAD
-    "selected_version": "Continuous/Castle-Fork-ProductSources/2018-03-01_1728"
-=======
     "selected_version": "Continuous/Castle-Fork/2018-03-05_1626"
->>>>>>> chouston_source_monitor_branch
   },
   {
     "name": "SystemEventService-qc8017_32",

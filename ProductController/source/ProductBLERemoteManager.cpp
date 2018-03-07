@@ -333,6 +333,44 @@ void ProductBLERemoteManager::Unpairing_Cancel( void )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductBLERemoteManager::IsConnected
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProductBLERemoteManager::IsConnected( void )
+{
+    SyncCallback<RCS_PB_MSG::PairingNotify> cb;
+    m_RCSClient->Pairing_GetStatus( cb );
+    // no idea how long to wait for a response, but it seems like this operation should take almost
+    // no time; ideally we could get notifications for this instead and just maintain status internally
+    // (which would be a good reason to switch over to frontdoor, as it looks like notifications are provided
+    // on that interface)
+    auto ret = cb.WaitForReturn( 100 );
+    if( ret )
+    {
+        auto res = std::get<0>( *ret );
+        if( res.has_status() )
+        {
+            return ( res.status() == RCS_PB_MSG::PairingNotify::PSTATE_BONDED );
+        }
+        else
+        {
+            BOSE_ERROR( s_logger, "Bad response retrieving BLE remote status");
+            return false;
+        }
+    }
+
+    BOSE_ERROR( s_logger, "Timed out retrieving BLE remote status");
+    return false;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                               End of ProductApp Namespace                                    ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
