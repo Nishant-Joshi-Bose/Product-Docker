@@ -88,7 +88,7 @@ if vi is None or not re.match(r'^\d+$', vi):
 pn = get("productName")
 if not pn: # allow any non-empty string
     warn("Invalid productName:", pn)
-    fixes.append("set productName 'Bose Home Speaker 500'")
+    fixes.append("set productName 'Bose Soundbar 500'")
 
 pt = get("productType")
 if not pt: # allow any non-empty string
