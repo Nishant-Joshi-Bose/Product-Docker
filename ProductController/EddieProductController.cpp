@@ -149,7 +149,7 @@ EddieProductController::EddieProductController():
     SetupProductSTSController();
 
     //Data Collection support
-    m_DataCollectionClient =  DataCollectionClientFactory::CreateUDCService();
+    m_DataCollectionClient =  DataCollectionClientFactory::CreateUDCService( GetTask() );
 
     // Start Eddie ProductAudioService
     m_ProductAudioService = std::make_shared< CustomProductAudioService>( *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient() );
@@ -371,7 +371,7 @@ void EddieProductController::SendDataCollection( const IpcKeyInformation_t& keyI
     }
 
     auto keyPress  = std::make_shared<DataCollection::ButtonPress>();
-    keyPress->set_buttonid( static_cast<DataCollection::ButtonId >( currentKeyId ) ) ;
+    keyPress->set_buttonid( currentKeyId ) ;
     keyPress->set_origin( static_cast<DataCollection::Origin >( currentOrigin ) );
 
     m_DataCollectionClient->SendData( keyPress, "button-pressed" );
