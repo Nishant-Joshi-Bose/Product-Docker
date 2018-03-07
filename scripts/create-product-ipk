@@ -154,16 +154,14 @@ else
     cp -r "$wspace/scripts/keys/development/CACerts/" "$secure_dir" || exit
 fi
 
-cp "$audiopath_dir/bin/lisa/libDspPlayback.so" "$opt_dir/bin" || exit
-
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
 
 "$avs_dir/stage" "$opt_dir" || exit
 "$swup_dir/stage" "$opt_dir" || exit
 "$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
-"$audiopath_dir/stage" "$opt_dir" || exit
-"$audiopath64_dir/stage" "$opt_dir" --only-vfe || exit
+"$audiopath_dir/stage" "$opt_dir" --product=professor || exit
+"$audiopath64_dir/stage" "$opt_dir" --only-vfe --product=professor || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlesass_dir/stage" "$opt_dir" || exit
 "$castlepassport_dir/stage" "$opt_dir" || exit
