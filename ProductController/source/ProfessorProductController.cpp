@@ -150,8 +150,6 @@ ProfessorProductController::ProfessorProductController( ) :
     m_IsNetworkConfigured( false ),
     m_IsNetworkConnected( false ),
     m_IsAutoWakeEnabled( false ),
-    m_IsAccountConfigured( false ),
-    m_IsMicrophoneEnabled( false ),
     m_Running( false ),
 
     ///
@@ -764,18 +762,6 @@ bool ProfessorProductController::IsAutoWakeEnabled( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::IsVoiceConfigured
-///
-/// @return This method returns a true or false value, based on a set member variable.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsVoiceConfigured( ) const
-{
-    return ( m_IsMicrophoneEnabled and m_IsAccountConfigured );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   IsFirstTimeBootUp
 ///
 /// @return This method returns a true or false value, based on whether this is the first time
@@ -1177,7 +1163,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         }
 
         m_ProductSystemManager->SetNetworkAccoutConfigurationStatus( m_IsNetworkConfigured,
-                                                                     m_IsAccountConfigured );
+                                                                     m_IsVoiceAccountConfigured );
 
         GetHsm( ).Handle< bool, bool >
         ( &CustomProductControllerState::HandleNetworkState, m_IsNetworkConfigured, m_IsNetworkConnected );
@@ -1204,34 +1190,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         {
             BOSE_ERROR( s_logger, "A wireless network message was received with an unknown frequency." );
         }
-    }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Voice messages for the Virtual Personal Assistant or VPA are handled at this point.          ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_voicestatus( ) )
-    {
-        if( message.voicestatus( ).has_microphoneenabled( ) )
-        {
-            m_IsMicrophoneEnabled = message.voicestatus( ).microphoneenabled( );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "An invalid voice status message for the microphone status was received." );
-            return;
-        }
-
-        if( message.voicestatus( ).has_accountconfigured( ) )
-        {
-            m_IsAccountConfigured = message.voicestatus( ).accountconfigured( );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "An invalid voice status message for account configuration was received." );
-            return;
-        }
-
-        GetHsm( ).Handle< bool >
-        ( &CustomProductControllerState::HandleVoiceState, IsVoiceConfigured( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Autowake messages are handled at this point.
