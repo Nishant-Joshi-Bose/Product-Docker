@@ -73,12 +73,12 @@ if not sn: # allow any non-empty string
 pc = get("productColor")
 if not pc:
     warn("productColor not set:", pc)
-    fixes.append("set productColor BLACK")
+    fixes.append("set productColor BLACK  # BLACK | SILVER")
 
 vi = get("BMAPVariantID")
 if vi is None or not re.match(r'^\d+$', vi):
-    warn("Invalid BMAPVariantID should be a number:", vi)
-    fixes.append("set BMAPVariantID 2")
+    warn("Invalid BMAPVariantID: Non-integer value detected. Must be a base 10 interger between 0 and 7. Found:", vi)
+    fixes.append("set BMAPVariantID 1  # 1=black|2=silver)
 
 pn = get("productName")
 if not pn: # allow any non-empty string
