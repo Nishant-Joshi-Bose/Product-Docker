@@ -188,7 +188,6 @@ public:
     bool     IsNetworkConnected( )       const override;
     uint32_t GetWifiProfileCount( )      const override;
     bool     IsAutoWakeEnabled( )        const override;
-    bool     IsVoiceConfigured( )        const override;
     bool     IsFirstTimeBootUp( )        const;
     bool     IsOutOfBoxSetupComplete( )  const;
 
@@ -296,8 +295,6 @@ private:
     bool m_IsNetworkConfigured;
     bool m_IsNetworkConnected;
     bool m_IsAutoWakeEnabled;
-    bool m_IsAccountConfigured;
-    bool m_IsMicrophoneEnabled;
     bool m_Running;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
