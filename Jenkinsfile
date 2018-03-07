@@ -20,7 +20,7 @@ def Galapagos_Client = ["GalapagosClient/GalapagosClient-Authentication"]
 def STS_Component = ["STS-Component/Deezer_Component_d","STS-Component/Amazon_Component_d"]
 def STS_Integrated = ["STS-Integrated/Amazon_Integrated","STS-Integrated/Deezer_Integrated","STS-Integrated/Spotify_Integrated","STS-Integrated/TuneIn-Integrated"]
 def NetworkServices_Component = ["NetworkServices-Component/network-wifi-profile","NetworkServices-Component/network-wifi-profile-local","NetworkServices-Component/networkConnectivity","NetworkServices-Component/test_setupAP"]
-def E2E = ["E2E/SetupAP_eddieFlash_centOS"]
+def E2E = ["E2E/setupAP_Mac"]
 
 
 failureList = [] 
