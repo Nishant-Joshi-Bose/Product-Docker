@@ -64,7 +64,6 @@ enum class Action
     MANUAL_UPDATE      = ActionCommon_t::MANUAL_UPDATE,
     TOGGLE_WIFI_RADIO  = ActionCommon_t::TOGGLE_WIFI_RADIO,
     FACTORY_DEFAULT    = ActionCommon_t::FACTORY_DEFAULT,
-    LOW_POWER_STANDBY  = ActionCommon_t::LOW_POWER_STANDBY,
 
     ///
     /// Bluetooth Intents
