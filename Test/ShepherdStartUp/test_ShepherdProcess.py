@@ -33,9 +33,10 @@ def test_shepherd_process(request):
     Fetching All Processes list from Eddie : cat /var/run/shepherd/Shepherd*.xml
     Validate Process is Running from Eddie : cat /var/run/shepherd/pids
     """
-    result = PerformBonjourUpdate(request)
+    # Temporary Comment out this and doing from Jenkins Shell
+    #result = PerformBonjourUpdate(request)
     device = request.config.getoption("--device-id")
-    assert result, "Bonjour Update Failed. Please see logs for more details"
+    #assert result, "Bonjour Update Failed. Please see logs for more details"
     rivierapull = RivieraUtils('LOCAL')
     processes = rivierapull.getShepherdProcesses(device=device)
     logger.info("Actual Processes : " + str(processes))
