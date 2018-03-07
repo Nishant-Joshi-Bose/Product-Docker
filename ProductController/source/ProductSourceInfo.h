@@ -72,6 +72,7 @@ public:
     void Stop( void );
 
     BOptional<SoundTouchInterface::Sources::SourceItem> FindSource( const SoundTouchInterface::ContentItem& item );
+    void Refresh( void );
 
 private:
     //////////////////////////////////////////////////////////////////////////////////////////////

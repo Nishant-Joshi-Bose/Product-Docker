@@ -27,6 +27,7 @@ if [ "${PS1-}" ]; then # interactive shells
         fi
         cat /opt/Bose/etc/FS_VERSION*
     ) 2>/dev/null
+    awk '$1 == "HSP" {$1="Riviera-HSP"; print}' /etc/riviera-version
 
     validate-mfgdata
 fi

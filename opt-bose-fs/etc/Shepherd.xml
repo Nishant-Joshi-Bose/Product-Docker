@@ -4,8 +4,6 @@
   <daemon name="avahi-daemon"
           exe="start-avahi"/>
 
-  <daemon name="CLIServer"/>
-
   <daemon name="A4VVideoManagerService"/>
 
   <daemon name="A4VRemoteCommunicationService"/>
@@ -18,8 +16,6 @@
     <arg>-c/opt/Bose/etc/UpnpSource.xml</arg>
   </daemon>
 
-  <daemon name="FrontDoor"/>
-
   <daemon name="BoseApp"
           recovery="reboot">
     <arg>-c/opt/Bose/etc/BoseApp.xml</arg>
@@ -29,14 +25,6 @@
     <!-- Workaround for CASTLE-9311: "libuuid.so missing from Riviera-HSP 2.4" -->
     <env>LD_LIBRARY_PATH=/opt/Bose/lib</env>
   </daemon>
-
-  <daemon name="BluetoothManager"/>
-
-  <daemon name="BT"/>
-
-  <daemon name="BTSource"/>
-
-  <daemon name="BLESetup"/>
 
   <daemon name="PtsServer">
     <arg>/opt/Bose/etc/pts-handler</arg>
