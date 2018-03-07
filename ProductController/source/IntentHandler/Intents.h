@@ -135,7 +135,7 @@ enum class Action
     ACTION_APAPTIQ_CANCEL      = 125,
     ACTION_CUSTOM_GAME         = 126,
     ACTION_CUSTOM_DVD          = 127,
-    ACTION_CUSTOM_CABLESAT     = 128,
+    ACTION_CUSTOM_CABLESAT     = 128
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

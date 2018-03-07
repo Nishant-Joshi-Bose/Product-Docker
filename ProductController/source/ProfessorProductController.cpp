@@ -36,6 +36,7 @@
 #include "ProductSystemManager.h"
 #include "ProductCommandLine.h"
 #include "ProductAdaptIQManager.h"
+#include "ProductSourceInfo.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
 #include "SystemSourcesProperties.pb.h"
@@ -97,6 +98,8 @@
 #include "CustomProductControllerStatePlayingTransitionAccessoryPairing.h"
 #include "MfgData.h"
 #include "DeviceManager.pb.h"
+#include "ProductEndpointDefines.h"
+#include "ProtoPersistenceFactory.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -125,11 +128,6 @@ constexpr auto FRONTDOOR_SYSTEM_SOURCES_API = "/system/sources";
 ProfessorProductController::ProfessorProductController( ) :
 
     ///
-    /// Construction of the common Product Controller Class
-    ///
-    ProductController( "Professor" ),
-
-    ///
     /// Construction of the Product Controller Modules
     ///
     m_ProductLpmHardwareInterface( nullptr ),
@@ -141,6 +139,7 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductDspHelper( nullptr ),
     m_ProductAdaptIQManager( nullptr ),
     m_ProductAudioService( nullptr ),
+    m_ProductSourceInfo( nullptr ),
 
     ///
     /// Member Variable Initialization
@@ -149,8 +148,6 @@ ProfessorProductController::ProfessorProductController( ) :
     m_IsNetworkConfigured( false ),
     m_IsNetworkConnected( false ),
     m_IsAutoWakeEnabled( false ),
-    m_IsAccountConfigured( false ),
-    m_IsMicrophoneEnabled( false ),
     m_Running( false ),
 
     ///
@@ -495,6 +492,7 @@ void ProfessorProductController::Run( )
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_ProductKeyInputInterface    = std::make_shared< ProductKeyInputInterface          >( *this );
     m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
+    m_ProductSourceInfo           = std::make_shared< ProductSourceInfo                 >( *this );
     m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this, m_FrontDoorClientIF, m_ProductLpmHardwareInterface->GetLpmClient() );
 
     if( m_ProductLpmHardwareInterface == nullptr ||
@@ -514,6 +512,11 @@ void ProfessorProductController::Run( )
     }
 
     ///
+    /// Apply settings from persistence
+    ///
+    ApplyOpticalAutoWakeSettingFromPersistence( );
+
+    ///
     /// Set up LightBarController
     ///
     m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_ProductLpmHardwareInterface->GetLpmClient() ) );
@@ -530,6 +533,7 @@ void ProfessorProductController::Run( )
     m_ProductCecHelper           ->Run( );
     m_ProductDspHelper           ->Run( );
     m_ProductAdaptIQManager      ->Run( );
+    m_ProductSourceInfo          ->Run( );
 
     ///
     /// Register FrontDoor EndPoints
@@ -624,6 +628,19 @@ std::shared_ptr< ProductAdaptIQManager >& ProfessorProductController::GetAdaptIQ
 {
     return m_ProductAdaptIQManager;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetSourceInfo
+///
+/// @return This method returns a shared pointer to the SourceInfo instance
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::shared_ptr< ProductSourceInfo >& ProfessorProductController::GetSourceInfo( )
+{
+    return m_ProductSourceInfo;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -727,18 +744,6 @@ bool ProfessorProductController::IsAutoWakeEnabled( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::IsVoiceConfigured
-///
-/// @return This method returns a true or false value, based on a set member variable.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsVoiceConfigured( ) const
-{
-    return ( m_IsMicrophoneEnabled and m_IsAccountConfigured );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   IsFirstTimeBootUp
 ///
 /// @return This method returns a true or false value, based on whether this is the first time
@@ -784,86 +789,63 @@ bool ProfessorProductController::IsSystemLanguageSet( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::GetProductType
+/// @name   ProfessorProductController::GetProductName
 ///
-/// @return This method returns the std::string const& value to be used for the Product "Type" field
+/// @return This method returns the std::string value to be used for the Product "productName" field
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string const& ProfessorProductController::GetProductType( ) const
+std::string ProfessorProductController::GetProductName( ) const
 {
-    static std::string productType = "Professor Soundbar";
-    return productType;
+    // @TODO PGC-788 replace the manufacturing name with the marketing name.
+    std::string productName = "professor Soundbar";
+
+    if( auto name = MfgData::Get( "productName" ) )
+    {
+        productName =  *name;
+    }
+
+    return productName;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProfessorProductController::GetProductColor
 ///
-/// @return This method returns the std::string value to be used for the Product "color" field
+/// @return This method returns the std::string value to be used for the Product "productColor" field
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 std::string ProfessorProductController::GetProductColor() const
 {
-    // @TODO https://jirapro.bose.com/browse/PGC-630
-    return "BLACK";
+    // @TODO PGC-630
+    std::string productColor = "2";
+
+    if( auto color = MfgData::Get( "productColor" ) )
+    {
+        productColor =  *color;
+    }
+
+    return productColor;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::GetProductVariant
+/// @name   ProfessorProductController::GetProductType
 ///
-/// @return This method returns the std::string const& value to be used for the Product "Variant" field
+/// @return This method returns the std::string value to be used for the Product "productType" field
 ///
 /// @TODO - Below value may be available through HSP APIs
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string const& ProfessorProductController::GetProductVariant( ) const
+std::string ProfessorProductController::GetProductType() const
 {
-    static std::string productType = "Professor";
+    std::string productType = "professor";
+
+    if( auto type = MfgData::Get( "productType" ) )
+    {
+        productType =  *type;
+    }
+
     return productType;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetProductModel
-///
-/// @return This method returns the std::string const& value to be used for the Product "productType" field
-///
-/// @TODO - Below value may be available through HSP APIs
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string const& ProfessorProductController::GetProductModel() const
-{
-    static std::string productModel = "professor";
-
-    if( auto model = MfgData::Get( "productType" ) )
-    {
-        productModel =  *model;
-    }
-
-    // @TODO PGC-757 replace the manufacturing name with the marketing name.
-    return productModel;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetProductDescription
-///
-/// @return This method returns the std::string const& value to be used for the Product "Description" field
-///
-/// @TODO - Below value may be available through HSP APIs
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string const& ProfessorProductController::GetProductDescription() const
-{
-    static std::string productDescription = "SoundTouch";
-
-    if( auto description = MfgData::Get( "description" ) )
-    {
-        productDescription = *description;
-    }
-
-    return productDescription;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -987,6 +969,25 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
 {
     RegisterCommonEndPoints( );
     m_lightbarController->RegisterLightBarEndPoints();
+
+    {
+        auto l = [ = ]( Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> respCb,
+                        Callback<EndPointsError::Error> errorCb )
+        {
+            HandleGetOpticalAutoWake( respCb, errorCb );
+        };
+        GetFrontDoorClient()->RegisterGet( FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API, l );
+    }
+    {
+        auto l = [ = ]( SystemPowerProductPb::SystemPowerModeOpticalAutoWake req,
+                        Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> respCb,
+                        Callback<EndPointsError::Error> errorCb )
+        {
+            HandlePutOpticalAutoWake( req, respCb, errorCb );
+        };
+        GetFrontDoorClient( )->RegisterPut<SystemPowerProductPb::SystemPowerModeOpticalAutoWake>(
+            FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API, l );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1144,71 +1145,33 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         }
 
         m_ProductSystemManager->SetNetworkAccoutConfigurationStatus( m_IsNetworkConfigured,
-                                                                     m_IsAccountConfigured );
+                                                                     m_IsVoiceAccountConfigured );
 
         GetHsm( ).Handle< bool, bool >
         ( &CustomProductControllerState::HandleNetworkState, m_IsNetworkConfigured, m_IsNetworkConnected );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Wireless network status messages are handled at this point. Only send information to the
-    /// state machine if the wireless network is configured, since a wired network configuration
-    /// may be available, and is handle above.
+    /// Wireless network status messages are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_wirelessstatus( ) )
     {
-        if( message.wirelessstatus( ).has_configured( ) && message.wirelessstatus( ).configured( ) )
-        {
-            m_IsNetworkConfigured = true;
-
-            m_ProductSystemManager->SetNetworkAccoutConfigurationStatus( m_IsNetworkConfigured,
-                                                                         m_IsAccountConfigured );
-
-            GetHsm( ).Handle< bool, bool >
-            ( &CustomProductControllerState::HandleNetworkState, m_IsNetworkConfigured, m_IsNetworkConnected );
-        }
-
         ///
         /// Send the frequency information (if available) to the LPM to avoid any frequency
-        /// interruption during a speaker Adapt IQ process.
+        /// interference between the WiFi and in-room radio.
         ///
         if( message.wirelessstatus( ).has_frequencykhz( ) and
             message.wirelessstatus( ).frequencykhz( ) > 0 )
         {
             m_ProductLpmHardwareInterface->SendWiFiRadioStatus( message.wirelessstatus( ).frequencykhz( ) );
-        }
 
-        BOSE_DEBUG( s_logger, "A %s wireless network message was received with frequency %d kHz.",
-                    message.wirelessstatus( ).configured( ) ? "configured" : "unconfigured",
-                    message.wirelessstatus( ).has_frequencykhz( ) ?
-                    message.wirelessstatus( ).frequencykhz( ) : 0 );
-    }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Voice messages for the Virtual Personal Assistant or VPA are handled at this point.          ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_voicestatus( ) )
-    {
-        if( message.voicestatus( ).has_microphoneenabled( ) )
-        {
-            m_IsMicrophoneEnabled = message.voicestatus( ).microphoneenabled( );
+            BOSE_DEBUG( s_logger, "A wireless network message was received with frequency %d kHz.",
+                        message.wirelessstatus( ).has_frequencykhz( ) ?
+                        message.wirelessstatus( ).frequencykhz( ) : 0 );
         }
         else
         {
-            BOSE_ERROR( s_logger, "An invalid voice status message for the microphone status was received." );
-            return;
+            BOSE_ERROR( s_logger, "A wireless network message was received with an unknown frequency." );
         }
-
-        if( message.voicestatus( ).has_accountconfigured( ) )
-        {
-            m_IsAccountConfigured = message.voicestatus( ).accountconfigured( );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "An invalid voice status message for account configuration was received." );
-            return;
-        }
-
-        GetHsm( ).Handle< bool >
-        ( &CustomProductControllerState::HandleVoiceState, IsVoiceConfigured( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Autowake messages are handled at this point.
@@ -1227,6 +1190,8 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
 
         BOSE_DEBUG( s_logger, "An autowake status %s message has been received.",
                     m_IsAutoWakeEnabled ? "active" : "inactive" );
+
+        NotifyFrontdoorAndStoreOpticalAutoWakeSetting( );
 
         GetHsm( ).Handle< bool >
         ( &CustomProductControllerState::HandleAutowakeStatus, m_IsAutoWakeEnabled );
@@ -1354,6 +1319,7 @@ void ProfessorProductController::Wait( )
     m_ProductCecHelper           ->Stop( );
     m_ProductDspHelper           ->Stop( );
     m_ProductAdaptIQManager      ->Stop( );
+    m_ProductSourceInfo          ->Stop( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1363,9 +1329,9 @@ void ProfessorProductController::Wait( )
 /// @brief  This method is to get the default product name by reading from mac address.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string const& ProfessorProductController::GetDefaultProductName( ) const
+std::string ProfessorProductController::GetDefaultProductName( ) const
 {
-    static std::string productName = "Bose ";
+    std::string productName = "Bose ";
     std::string macAddress = MacAddressInfo::GetPrimaryMAC( );
     try
     {
@@ -1441,19 +1407,17 @@ void ProfessorProductController::SendInitialCapsData()
     }
     messageProperties->set_activationkeyrequired( true );
 
-#if 0 // @TODO CASTLE-6801 field deviceType missing in SoundTouchInterface::Sources
     for( uint32_t deviceType = SystemSourcesProperties::DEVICE_TYPE__MIN; deviceType <= SystemSourcesProperties::DEVICE_TYPE__MAX; ++deviceType )
     {
         messageProperties->add_supporteddevicetypes(
             SystemSourcesProperties::DEVICE_TYPE__Name( static_cast<SystemSourcesProperties::DEVICE_TYPE_>( deviceType ) ) );
     }
     messageProperties->set_devicetyperequired( true );
-#endif
 
     messageProperties->add_supportedinputroutes(
         SystemSourcesProperties::INPUT_ROUTE_HDMI__Name( SystemSourcesProperties::INPUT_ROUTE_TV ) );
 
-    messageProperties->set_inputrouterequired( true );
+    messageProperties->set_inputrouterequired( false );
 
     BOSE_VERBOSE( s_logger, "%s sending %s", __func__, ProtoToMarkup::ToJson( message ).c_str() );
 
@@ -1512,6 +1476,72 @@ void ProfessorProductController::End( )
     BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
 
     m_Running = false;
+}
+
+void ProfessorProductController::HandleGetOpticalAutoWake(
+    const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
+    const Callback<EndPointsError::Error> & errorCb ) const
+{
+    SystemPowerProductPb::SystemPowerModeOpticalAutoWake autowake;
+    autowake.set_enabled( m_IsAutoWakeEnabled );
+    respCb( autowake );
+}
+
+void ProfessorProductController::HandlePutOpticalAutoWake(
+    const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req,
+    const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
+    const Callback<EndPointsError::Error> & errorCb )
+{
+    if( req.has_enabled( ) )
+    {
+        ProductMessage message;
+        message.mutable_autowakestatus( )->set_active( req.enabled( ) );
+        HandleMessage( message );
+    }
+    HandleGetOpticalAutoWake( respCb, errorCb );
+}
+
+void ProfessorProductController::ApplyOpticalAutoWakeSettingFromPersistence( )
+{
+    auto persistence = ProtoPersistenceFactory::Create( "OpticalAutoWake.json", GetProductPersistenceDir( ) );
+    SystemPowerProductPb::SystemPowerModeOpticalAutoWake autowake;
+    try
+    {
+        const std::string & s = persistence->Load( );
+        ProtoToMarkup::FromJson( s, &autowake );
+    }
+    catch( const ProtoToMarkup::MarkupError & e )
+    {
+        BOSE_ERROR( s_logger, "OpticalAutoWake persistence markup error - %s", e.what( ) );
+    }
+    catch( ProtoPersistenceIF::ProtoPersistenceException & e )
+    {
+        BOSE_ERROR( s_logger, "OpticalAutoWake persistence error - %s", e.what( ) );
+    }
+
+    m_IsAutoWakeEnabled = autowake.enabled( );
+}
+
+void ProfessorProductController::NotifyFrontdoorAndStoreOpticalAutoWakeSetting( )
+{
+    auto persistence = ProtoPersistenceFactory::Create( "OpticalAutoWake.json", GetProductPersistenceDir( ) );
+    SystemPowerProductPb::SystemPowerModeOpticalAutoWake autowake;
+    autowake.set_enabled( m_IsAutoWakeEnabled );
+    GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API,
+                                             autowake );
+
+    try
+    {
+        persistence->Store( ProtoToMarkup::ToJson( autowake ) );
+    }
+    catch( const ProtoToMarkup::MarkupError & e )
+    {
+        BOSE_ERROR( s_logger, "OpticalAutoWake store persistence markup error - %s", e.what( ) );
+    }
+    catch( ProtoPersistenceIF::ProtoPersistenceException & e )
+    {
+        BOSE_ERROR( s_logger, "OpticalAutoWake store persistence error - %s", e.what( ) );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
