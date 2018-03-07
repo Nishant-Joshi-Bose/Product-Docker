@@ -240,6 +240,30 @@
         "origin": ["IR", "TAP", "CEC", "RF"],
         "timeOutList": []
     },
+     {
+        "action": "ACTION_CUSTOM_GAME",
+        "commment": "select custom source game/ott",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_GAME_SOURCE"],
+        "origin": ["IR", "TAP", "CEC", "RF"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_CUSTOM_DVD",
+        "commment": "select custom source dvd",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_BD_DVD_SOURCE"],
+        "origin": ["IR", "TAP", "CEC", "RF"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_CUSTOM_CABLESAT",
+        "commment": "select custom source cable/sat",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_CUSTOM_SOURCE_CABLESAT"],
+        "origin": ["IR", "TAP", "CEC", "RF"],
+        "timeOutList": []
+    },   
     {
         "action": "ACTION_THUMB_UP",
         "commment": "thumbs up",

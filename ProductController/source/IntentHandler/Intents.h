@@ -64,7 +64,6 @@ enum class Action
     MANUAL_UPDATE      = ActionCommon_t::MANUAL_UPDATE,
     TOGGLE_WIFI_RADIO  = ActionCommon_t::TOGGLE_WIFI_RADIO,
     FACTORY_DEFAULT    = ActionCommon_t::FACTORY_DEFAULT,
-    LOW_POWER_STANDBY  = ActionCommon_t::LOW_POWER_STANDBY,
 
     ///
     /// Bluetooth Intents
@@ -136,7 +135,7 @@ enum class Action
     ACTION_APAPTIQ_CANCEL      = 125,
     ACTION_CUSTOM_GAME         = 126,
     ACTION_CUSTOM_DVD          = 127,
-    ACTION_CUSTOM_CABLESAT     = 128
+    ACTION_CUSTOM_CABLESAT     = 128,
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
