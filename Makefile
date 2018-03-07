@@ -101,7 +101,7 @@ lpm-bos:
 	rm -f ./builds/$(cfg)/eddie_package*.bos
 	rm -f ./builds/$(cfg)/lpm_eddie*.hex
 	cp ./lpm_package.xml ./builds/$(cfg)/lpm_package.xml
-	python2.7 $(RIVIERA_LPM_TOOLS_DIR)/tools/blob/blob_utility.py --pack $(BOSE_WORKSPACE)/lpm_package.xml ./builds/$(cfg)/ --build_type Release --boseversion $(BUILDS_DIR)/BoseVersion.json
+	python2.7 $(RIVIERA_LPM_TOOLS_DIR)/tools/blob/blob_utility.py --pack $(BOSE_WORKSPACE)/lpm_package.xml ./builds/$(cfg)/ --build_type Release
 
 .PHONY: lpmupdater-ipk
 lpmupdater-ipk: lpm-bos
