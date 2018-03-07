@@ -812,67 +812,6 @@ bool ProfessorProductController::IsSystemLanguageSet( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::GetProductName
-///
-/// @return This method returns the std::string value to be used for the Product "productName" field
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string ProfessorProductController::GetProductName( ) const
-{
-    // @TODO PGC-788 replace the manufacturing name with the marketing name.
-    std::string productName = "professor Soundbar";
-
-    if( auto name = MfgData::Get( "productName" ) )
-    {
-        productName =  *name;
-    }
-
-    return productName;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetProductColor
-///
-/// @return This method returns the std::string value to be used for the Product "productColor" field
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string ProfessorProductController::GetProductColor() const
-{
-    // @TODO PGC-630
-    std::string productColor = "2";
-
-    if( auto color = MfgData::Get( "productColor" ) )
-    {
-        productColor =  *color;
-    }
-
-    return productColor;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetProductType
-///
-/// @return This method returns the std::string value to be used for the Product "productType" field
-///
-/// @TODO - Below value may be available through HSP APIs
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string ProfessorProductController::GetProductType() const
-{
-    std::string productType = "professor";
-
-    if( auto type = MfgData::Get( "productType" ) )
-    {
-        productType =  *type;
-    }
-
-    return productType;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProfessorProductController::GetOOBDefaultLastContentItem
 ///
 /// @return This method returns the PassportPB::ContentItem value to be used for initializing the OOB LastContentItem
@@ -1363,41 +1302,6 @@ std::string ProfessorProductController::GetDefaultProductName( ) const
 
     BOSE_INFO( s_logger, "%s productName=%s", __func__, productName.c_str( ) );
     return productName;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetVariantId
-///
-/// @brief  This method is to get the product variant ID, such as its colour.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-BLESetupService::VariantId ProfessorProductController::GetVariantId( ) const
-{
-    // @TODO https://jirapro.bose.com/browse/PGC-630
-    BLESetupService::VariantId varintId = BLESetupService::VariantId::NONE;
-
-    if( auto color = MfgData::GetColor() )
-    {
-        if( *color == "luxGray" )
-        {
-            varintId = BLESetupService::VariantId::SILVER;
-        }
-        else if( *color == "tripleBlack" )
-        {
-            varintId = BLESetupService::VariantId::BLACK;
-        }
-        else
-        {
-            varintId = BLESetupService::VariantId::WHITE;
-        }
-    }
-    else
-    {
-        BOSE_DIE( "No 'productColor' in mfgdata" );
-    }
-
-    return varintId;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
