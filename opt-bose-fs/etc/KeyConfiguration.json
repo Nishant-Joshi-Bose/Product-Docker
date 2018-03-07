@@ -3,7 +3,7 @@
     {"origin": 0, "keyEvent": 1, "keyList": [4], "timeOutList": [20], "action": 1, "comment": "Console: MFB release between 0-1750 ms ---> play-pause"},
     {"origin": 0, "keyEvent": 4, "keyList": [4,4], "timeOutList": [500], "action": 2, "comment": "Console: MFB repeat release twice within 500ms ---> next track"},
     {"origin": 0, "keyEvent": 4, "keyList": [4,4,4], "timeOutList": [500], "action": 3, "comment": "Console: MFB repeat release thrice within 500ms ---> prev track"},
-    {"origin": 0, "keyEvent": 2, "keyList": [4], "timeOutList": [1750], "action": 4, "comment": "Console: MFB release after 1750 ms ---> Network Standby"},
+    {"origin": 0, "keyEvent": 2, "keyList": [4], "timeOutList": [1750], "action": 4, "comment": "Console: MFB press and hold for 1750 ms ---> Network Standby"},
     {"origin": 0, "keyEvent": 2, "keyList": [2,4], "timeOutList": [5020], "action": 5, "comment": "Console: Aux+MFB press and hold for at least 5020ms ---> Manual setup Mode"},
     {"origin": 0, "keyEvent": 2, "keyList": [2,3], "timeOutList": [5020], "action": 6, "comment": "Console: AUX+VolumeUp press and hold for at least 5020ms ---> Manual Update"},
     {"origin": 0, "keyEvent": 2, "keyList": [1,4], "timeOutList": [5020], "action": 7, "comment": "Console: Bluetoot+MFB press and hold for at least 5020ms ---> Toggle WiFi Radio"},
