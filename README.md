@@ -89,25 +89,6 @@ $ ./CastleTestUtils/scripts/pushup --deviceid <device-id> --zipfile <path-to-zip
 
 ```
 
-Install the .ipk file you built.
-```shell session
-$ adb shell /opt/Bose/bin/stop      # generally it's okay if this fails
-$ adb shell /opt/Bose/bin/rw        # make the file systems writeable
-$ adb shell opkg remove SoundTouch  # this too may fail
-$ adb push builds/Release/product.ipk /tmp/product.ipk
-$ adb shell opkg install -d bose /tmp/product.ipk
-$ adb shell reboot
-```
-(But see `putipk` below for a simpler way.)
-
-You'll get a notification if your Riviera unit is running old Riviera software:
-```shell session
-...
-Built for Riviera-HSP: 0.5-9-geee2c72
-Installed Riviera-HSP: 0.5-7-g856bf73
-...
-```
-
 <a name="links"/>
 
 ### External References

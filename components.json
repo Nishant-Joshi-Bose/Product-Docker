@@ -81,7 +81,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "mfgdata@9b4a4439299c5031f018fa730998bef5670fc14e"
+    "selected_version": "master@bf57ddb62991855aee3dd360e61fe74bdc3afb87"
   },
   {
     "name": "CastleProductUIAssets",
@@ -89,7 +89,7 @@
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@bd8755ff92f3560e98b41001d7e22f9e5181ea3a"
+    "selected_version": "master@a1a2dc23bd5c6300668175f23ebf993a8a553cf9"
   },
   {
     "name": "FrontDoor-qc8017_32",
