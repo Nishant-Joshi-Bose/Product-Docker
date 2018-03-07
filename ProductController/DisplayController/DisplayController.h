@@ -17,14 +17,14 @@ using namespace ::DisplayController::Protobuf;
 
 namespace ProductApp
 {
-class EddieProductController;
+class ProductController;
 
 class DisplayController
 {
 public:
-    DisplayController( EddieProductController& m_controller,
+    DisplayController( ProductController& m_controller,
                        const std::shared_ptr<FrontDoorClientIF>& fd_client,
-                       LpmClientIF::LpmClientPtr clientPtr );
+                       LpmClientIF::LpmClientPtr clientPtr, AsyncCallback<bool> uiConnectedCb );
     ~DisplayController();
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -105,7 +105,7 @@ private:
     void ParseJSONData();
     void updateUiConnected( bool currentStatus );
 
-    EddieProductController&            m_productController;
+    ProductController&                 m_productController;
     std::shared_ptr<FrontDoorClientIF> m_frontdoorClientPtr;
     LpmClientIF::LpmClientPtr          m_lpmClient;
     Display                            m_display;
@@ -120,6 +120,7 @@ private:
     uint64_t                           m_uiHeartBeat   ;
     uint64_t                           m_localHeartBeat;
     bool                               m_uiConnected = false;
+    AsyncCallback<bool>                m_ProductControllerUiConnectedCb;
 };
 } //namespace ProductApp
 

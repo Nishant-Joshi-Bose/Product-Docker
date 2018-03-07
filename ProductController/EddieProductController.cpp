@@ -134,9 +134,11 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_ConfigurationStatusPersistence = ProtoPersistenceFactory::Create( "ConfigurationStatus", g_ProductPersistenceDir );
     m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
     ReadConfigurationStatusFromPersistence();
+    AsyncCallback<bool> uiConnectedCb( std::bind( &EddieProductController::updateUiConnectedStatus,
+                                                  this, std::placeholders::_1 ), GetTask() ) ;
 
     m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient() ) );
-    m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient() ) );
+    m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient(), uiConnectedCb ) );
     SetupProductSTSController();
 
     //Data Collection support
@@ -732,15 +734,16 @@ void EddieProductController::HandleRawKeyCliCmd( const std::list<std::string>& a
     }
 }
 
+void EddieProductController::updateUiConnectedStatus( bool status )
+{
+    BOSE_WARNING( s_logger, "%s|status:%s", __func__ , status ? "true" : "false" );
+    m_isUiConnected = status;
+    GetHsm().Handle<bool>( &ProductControllerState::HandleUiConnectedUpdateState, status );
+}
+
 void EddieProductController::HandleProductMessage( const ProductMessage& productMessage )
 {
     BOSE_INFO( s_logger, "%s", __func__ );
-
-    if( productMessage.has_uiconnected() )
-    {
-        m_isUiConnected = productMessage.uiconnected();
-        GetHsm().Handle<bool>( &ProductControllerState::HandleUiConnectedUpdateState, productMessage.uiconnected() );
-    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// LPM status messages has both Common handling and Professor-specific handling

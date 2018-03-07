@@ -331,6 +331,8 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
     void HandleProductMessage( const ProductMessage& productMessage );
 
+    void updateUiConnectedStatus( bool status );
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @name   GetLpmHardwareInterface
 /// @brief  Returns reference to LpmInterface
