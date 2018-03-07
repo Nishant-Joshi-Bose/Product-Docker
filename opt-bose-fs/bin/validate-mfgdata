@@ -54,7 +54,8 @@ if cc is None or not re.match(r'^[A-Z][A-Z]$', cc):
 rc = get("regionCode")
 if rc is None or not re.match(r'^[A-Z][A-Z]$', rc):
     warn("Invalid regionCode", rc)
-    fixes.append("set regionCode US")
+#   Eddie does not require region code to be set.
+#   fixes.append("set regionCode US")
 
 # GUID standard canonical form is described here:
 # https://en.m.wikipedia.org/wiki/Universally_unique_identifier
