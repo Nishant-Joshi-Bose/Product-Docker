@@ -92,10 +92,6 @@
     "selected_version": "master@bd8755ff92f3560e98b41001d7e22f9e5181ea3a"
   },
   {
-    "name": "EddieLPM-Package",
-    "selected_version": "Release/trunk/0.3.6.2712917/DP2"
-  },
-  {
     "name": "FrontDoor-qc8017_32",
     "selected_version": "Release/master/0.3.8-166+bdf45c8"
   },
