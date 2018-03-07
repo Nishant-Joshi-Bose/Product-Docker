@@ -12,7 +12,7 @@ def buildJob(jobName)
     build job: jobName, parameters: [string(name: 'SW_FREQUENCY', value: "${SW_FREQUENCY}"), string(name: 'SW_BRANCH', value: "${SW_BRANCH}"),string(name: 'EC_URL', value: "${EC_URL}"),[$class: 'GitParameterValue', name: 'Branch', value: "${Branch}"]]
 }
 def CAPS_Component = ["CAPS-Component/playbackRequest","CAPS-Component/volumeAPIs"]
-def Castle_SW_Update = ["CastleTestUtils-Component/frontdoorAPI"]
+def Castle_SW_Update = ["CastleSoftwareUpdate/BonjourUpdateTest_Master","CastleSoftwareUpdate/Riviera_Software_Update_Corrupt_Ipk_Fail_Install_Scenarios","CastleSoftwareUpdate/Riviera_Software_Update_Corrupt_Ipk_No_Install_Scenarios","CastleSoftwareUpdate/Riviera_Software_Update_Corrupt_Ipk_Scenarios","CastleSoftwareUpdate/Riviera_Software_Update_Corrupt_Packages_Scenarios","CastleSoftwareUpdate/Riviera_Software_Update_With_Same_IPK_TAR_Version","CastleSoftwareUpdate/Riviera_SoftwareUpdate"]
 def CastleTestUtils_Integrated = ["CastleTestUtils_Integrated/memoryConsumption"]
 def CastleTestUtils_Component = ["CastleTestUtils-Component/frontdoorAPI"]
 def Eddie_Product  = ["EddieProduct/Eddie-Bootup-Sequence-Timing","EddieProduct/Eddie-DemoController","EddieProduct/Eddie-Preset"]
