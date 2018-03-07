@@ -8,6 +8,8 @@ import "AudioCenterLevel.proto";
 import "AudioSurroundLevel.proto";
 import "AudioGainOffset.proto";
 import "AudioAvSync.proto";
+import "AudioSubwooferGain.proto";
 import "AudioMode.proto";
 import "AudioContentType.proto";
 import "AudioDualMonoSelect.proto";
+import "AudioEqSelect.proto";

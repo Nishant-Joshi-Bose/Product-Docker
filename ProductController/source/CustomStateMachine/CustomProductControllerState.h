@@ -152,7 +152,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentLowPowerStandby( KeyHandlerUtil::ActionType_t intent )
+    virtual bool HandleIntentLowPowerStandby( )
     {
         return false;
     }
@@ -247,6 +247,16 @@ public:
     }
 
     virtual bool HandleLpmSoftwareUpdateState( )
+    {
+        return false;
+    }
+
+    virtual bool HandleNetworkWifiAPStatus( bool APStatus )
+    {
+        return false;
+    }
+
+    virtual bool HandleSetupAPDeactivateTimerExpiry( )
     {
         return false;
     }

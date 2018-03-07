@@ -11,7 +11,13 @@ export HISTFILE=/mnt/nv/.bash_history
 [ "${TERM-}" = xterm-256color ] && export TERM=xterm
 
 if [ "${PS1-}" ]; then # interactive shells
+    # If the terminal size is unknown, run `resize` to detect it.
+    if ! stty -a -F /dev/tty |& grep -q '; columns '; then
+        eval $(command resize -u)
+    fi
+
     source ~/.bashrc
+
     date
     (
         name=$(xmllint --xpath '//SystemConfiguration/DeviceName/text()' \
@@ -21,6 +27,7 @@ if [ "${PS1-}" ]; then # interactive shells
         fi
         cat /opt/Bose/etc/FS_VERSION*
     ) 2>/dev/null
+    awk '$1 == "HSP" {$1="Riviera-HSP"; print}' /etc/riviera-version
 
     validate-mfgdata
 fi

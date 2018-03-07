@@ -64,7 +64,6 @@ enum class Action
     MANUAL_UPDATE      = ActionCommon_t::MANUAL_UPDATE,
     TOGGLE_WIFI_RADIO  = ActionCommon_t::TOGGLE_WIFI_RADIO,
     FACTORY_DEFAULT    = ActionCommon_t::FACTORY_DEFAULT,
-    LOW_POWER_STANDBY  = ActionCommon_t::LOW_POWER_STANDBY,
 
     ///
     /// Bluetooth Intents
@@ -121,6 +120,7 @@ enum class Action
     /// Custom Professor Defined Actions Valued 101 and Higher
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ACTION_POWER               = 101,
+    ACTION_SETUP_BLE_REMOTE    = 102,
     ACTION_MUTE                = 114,
     ACTION_SOUNDTOUCH          = 115,
     ACTION_CONNECT             = 116,

@@ -1,15 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomAudioSettingsManager.cpp
 /// @brief  This file contains source code for setting and getting AudioSettings
-///         such as bass, treble, center, surround, gainOffset, avSync, mode, contentType
+///         such as bass, treble, center, surround, gainOffset, avSync, subwooferGain, mode, contentType, dualMonoSelect
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <fstream>
 #include "DPrint.h"
 #include "SystemUtils.h"
+#include "Utilities.h"
 #include "CustomAudioSettingsManager.h"
-
-static DPrint s_logger( "CustomAudioSettingsManager" );
+#include "ProtoToMarkup.h"
 
 constexpr char  kDefaultConfigPath[] = "/opt/Bose/etc/DefaultAudioSettings.json";
 constexpr uint32_t kConfigVersionMajor = 2;
@@ -21,9 +21,11 @@ constexpr char kCenterName          [] = "audioCenterLevel";
 constexpr char kSurroundName        [] = "audioSurroundLevel";
 constexpr char kGainOffsetName      [] = "audioGainOffset";
 constexpr char kAvSyncName          [] = "audioAvSync";
+constexpr char kSubwooferGainName   [] = "audioSubwooferGain";
 constexpr char kModeName            [] = "audioMode";
 constexpr char kContentTypeName     [] = "audioContentType";
 constexpr char kDualMonoSelectName  [] = "audioDualMonoSelect";
+constexpr char kEqSelectName        [] = "audioEqSelect";
 
 namespace ProductApp
 {
@@ -138,6 +140,23 @@ const ProductPb::AudioAvSync& CustomAudioSettingsManager::GetAvSync() const
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
+/// SubwooferGain setting setter/getter
+///     setter returns a boolean which indicates whether current subwooferGain value is changed by setter
+///     getter returns a protobuf of current subwooferGain value
+//////////////////////////////////////////////////////////////////////////////////////
+bool CustomAudioSettingsManager::SetSubwooferGain( const ProductPb::AudioSubwooferGain& subwooferGain )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    return SetAudioProperties( subwooferGain, kSubwooferGainName, m_currentSubwooferGain );
+}
+
+const ProductPb::AudioSubwooferGain& CustomAudioSettingsManager::GetSubwooferGain() const
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    return m_currentSubwooferGain;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
 /// Mode setting setter/getter
 ///     setter returns a boolean which indicates whether current mode value is changed by setter
 ///     getter returns a protobuf of current mode value
@@ -197,6 +216,35 @@ const ProductPb::AudioDualMonoSelect& CustomAudioSettingsManager::GetDualMonoSel
     return m_currentDualMonoSelect;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
+/// EqSelect setting setter/getter
+///     setter returns a boolean which indicates whether current EqSelect value is changed by setter
+///     getter returns a protobuf of current EqSelect value
+//////////////////////////////////////////////////////////////////////////////////////
+bool CustomAudioSettingsManager::SetEqSelect( const ProductPb::AudioEqSelect& eqSelect )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    if( !eqSelect.has_mode() )
+    {
+        BOSE_INFO( s_logger, "EqSelect doesn't contain any value (%s)", ProtoToMarkup::ToJson( eqSelect ).c_str() );
+        return false;
+    }
+    if( m_currentEqSelect.mode() != eqSelect.mode() )
+    {
+        m_audioSettings["values"][kPersistGlobal][kEqSelectName] = eqSelect.mode();
+        m_currentEqSelect.set_mode( eqSelect.mode() );
+        PersistAudioSettings();
+        return true;
+    }
+    return false;
+}
+const ProductPb::AudioEqSelect& CustomAudioSettingsManager::GetEqSelect() const
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    return m_currentEqSelect;
+}
+
+
 void CustomAudioSettingsManager::UpdateAllProtos()
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -208,6 +256,7 @@ void CustomAudioSettingsManager::UpdateAllProtos()
     UpdateCurrentProto( kSurroundName,      m_currentSurround );
     UpdateCurrentProto( kGainOffsetName,    m_currentGainOffset );
     UpdateCurrentProto( kAvSyncName,        m_currentAvSync );
+    UpdateCurrentProto( kSubwooferGainName, m_currentSubwooferGain );
     UpdateCurrentProto( kModeName,          m_currentMode );
     UpdateCurrentProto( kContentTypeName,   m_currentContentType );
 }
@@ -274,6 +323,7 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
     initializeProto( kCenterName, m_currentCenter );
     initializeProto( kSurroundName, m_currentSurround );
     initializeProto( kGainOffsetName, m_currentGainOffset );
+    initializeProto( kSubwooferGainName, m_currentSubwooferGain );
     initializeProto( kAvSyncName, m_currentAvSync );
 
     m_audioSettings["configurations"][kModeName]["persistenceSession"] = false;
@@ -320,6 +370,12 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
     for( uint32_t i = 0; i < m_audioSettings["configurations"][kDualMonoSelectName]["properties"]["supportedValues"].size(); i++ )
     {
         m_currentDualMonoSelect.mutable_properties()->add_supportedvalues( m_audioSettings["configurations"][kDualMonoSelectName]["properties"]["supportedValues"][i].asString() );
+    }
+
+    m_currentEqSelect.set_mode( m_audioSettings["defaultValues"][kEqSelectName].asString() );
+    for( uint32_t i = 0; i < m_audioSettings["configurations"][kEqSelectName]["properties"]["supportedModes"].size(); i++ )
+    {
+        m_currentEqSelect.mutable_properties()->add_supportedmodes( m_audioSettings["configurations"][kEqSelectName]["properties"]["supportedModes"][i].asString() );
     }
 }
 

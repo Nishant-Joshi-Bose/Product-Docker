@@ -39,7 +39,6 @@
 #include "Language.pb.h"
 #include "ConfigurationStatus.pb.h"
 #include "SystemInfo.pb.h"
-#include "CapsInitializationStatus.pb.h"
 #include "EndPointsError.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -116,15 +115,6 @@ private:
 
     void ReadConfigurationStatusFromPersistentStorage( );
     void WriteConfigurationStatusToPersistentStorage( );
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following methods are used to handle the CAPS Content Audio Playback Service
-    ///        status.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleCapsStatus( const SoundTouchInterface::CapsInitializationStatus& status );
-    void HandleCapsStatusFailed( const EndPointsError::Error& error );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
