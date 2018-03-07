@@ -45,9 +45,13 @@
 #include "CustomProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "ProductControllerState.h"
+#include "ProductControllerStateBooted.h"
+#include "ProductControllerStateBootedTransition.h"
 #include "ProductControllerStateBooting.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
+#include "ProductControllerStateFirstBootGreeting.h"
+#include "ProductControllerStateFirstBootGreetingTransition.h"
 #include "ProductControllerStateIdleVoiceConfigured.h"
 #include "ProductControllerStateIdleVoiceNotConfigured.h"
 #include "ProductControllerStateLowPowerStandby.h"
@@ -83,7 +87,6 @@
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateStoppingStreams.h"
 #include "ProductControllerStateTop.h"
-#include "ProductControllerStateWelcome.h"
 #include "CustomProductControllerStateAdaptIQExiting.h"
 #include "CustomProductControllerStateAdaptIQ.h"
 #include "CustomProductControllerStateIdle.h"
@@ -148,8 +151,6 @@ ProfessorProductController::ProfessorProductController( ) :
     m_IsNetworkConfigured( false ),
     m_IsNetworkConnected( false ),
     m_IsAutoWakeEnabled( false ),
-    m_IsAccountConfigured( false ),
-    m_IsMicrophoneEnabled( false ),
     m_Running( false ),
 
     ///
@@ -195,10 +196,25 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_BOOTING );
 
-    auto* stateWelcome = new ProductControllerStateWelcome
+    auto* stateBooted = new ProductControllerStateBooted
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_WELCOME );
+      PRODUCT_CONTROLLER_STATE_BOOTED );
+
+    auto* stateBootedTransition = new ProductControllerStateBootedTransition
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_BOOTED_TRANSITION );
+
+    auto* stateFirstBootGreeting = new ProductControllerStateFirstBootGreeting
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING );
+
+    auto* stateFirstBootGreetingTransition = new ProductControllerStateFirstBootGreetingTransition
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION );
 
     auto* stateSoftwareUpdateTransition = new ProductControllerStateSoftwareUpdateTransition
     ( GetHsm( ),
@@ -431,12 +447,15 @@ void ProfessorProductController::Run( )
 
     GetHsm( ).AddState( "", stateTop );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), stateBooting );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), stateWelcome );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), stateFirstBootGreeting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareUpdateTransition );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareInstall );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::REBOOTING ), stateRebooting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), stateCriticalError );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FACTORY_DEFAULT ), stateFactoryDefault );
+    GetHsm( ).AddState( "", stateBooted );
+    GetHsm( ).AddState( "", stateBootedTransition );
+    GetHsm( ).AddState( "", stateFirstBootGreetingTransition );
     GetHsm( ).AddState( "", stateLowPowerStandbyTransition );
     GetHsm( ).AddState( "", stateLowPowerStandby );
     GetHsm( ).AddState( "", statePlayableTransition );
@@ -685,6 +704,7 @@ bool ProfessorProductController::IsBooted( ) const
     BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "STS Initialized       :  %s", ( m_IsSTSReady       ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Software Update Init  :  %s", ( m_isSoftwareUpdateReady   ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "SASS            Init  :  %s", ( IsSassReady()      ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Bluetooth Initialized :  %s", ( IsBluetoothModuleReady( ) ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
@@ -692,6 +712,7 @@ bool ProfessorProductController::IsBooted( ) const
             m_IsCapsReady           and
             m_IsAudioPathReady      and
             m_IsSTSReady            and
+            IsSassReady()           and
             m_isSoftwareUpdateReady and
             IsBluetoothModuleReady( ) );
 }
@@ -742,18 +763,6 @@ uint32_t ProfessorProductController::GetWifiProfileCount( ) const
 bool ProfessorProductController::IsAutoWakeEnabled( ) const
 {
     return m_IsAutoWakeEnabled;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::IsVoiceConfigured
-///
-/// @return This method returns a true or false value, based on a set member variable.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsVoiceConfigured( ) const
-{
-    return ( m_IsMicrophoneEnabled and m_IsAccountConfigured );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1098,7 +1107,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         }
 
         m_ProductSystemManager->SetNetworkAccoutConfigurationStatus( m_IsNetworkConfigured,
-                                                                     m_IsAccountConfigured );
+                                                                     m_IsVoiceAccountConfigured );
 
         GetHsm( ).Handle< bool, bool >
         ( &CustomProductControllerState::HandleNetworkState, m_IsNetworkConfigured, m_IsNetworkConnected );
@@ -1125,34 +1134,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         {
             BOSE_ERROR( s_logger, "A wireless network message was received with an unknown frequency." );
         }
-    }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Voice messages for the Virtual Personal Assistant or VPA are handled at this point.          ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_voicestatus( ) )
-    {
-        if( message.voicestatus( ).has_microphoneenabled( ) )
-        {
-            m_IsMicrophoneEnabled = message.voicestatus( ).microphoneenabled( );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "An invalid voice status message for the microphone status was received." );
-            return;
-        }
-
-        if( message.voicestatus( ).has_accountconfigured( ) )
-        {
-            m_IsAccountConfigured = message.voicestatus( ).accountconfigured( );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "An invalid voice status message for account configuration was received." );
-            return;
-        }
-
-        GetHsm( ).Handle< bool >
-        ( &CustomProductControllerState::HandleVoiceState, IsVoiceConfigured( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Autowake messages are handled at this point.
