@@ -56,7 +56,7 @@ TARGET_LINK_LIBRARIES(Eddie
   CliClient
   AudioLibs
   PassportClient
-  #SASSFrontDoorServiceProto # TODO: SASS integration
+  SASSFrontDoorServiceProto
   SoftwareUpdateAPI
   STS
   ShelbyUtils

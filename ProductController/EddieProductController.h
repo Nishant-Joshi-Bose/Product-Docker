@@ -28,6 +28,7 @@
 #include "ProductControllerStatePlayingActive.h"
 #include "ProductControllerStatePlayingInactive.h"
 #include "ProductControllerStateRebooting.h"
+#include "ProductControllerStateBooted.h"
 #include "ProductControllerStateBooting.h"
 #include "CustomProductControllerStateOn.h"
 #include "ProductControllerStateOn.h"
@@ -52,6 +53,9 @@
 #include "ProductControllerStatePlayableTransitionNetworkStandby.h"
 #include "ProductControllerStateSoftwareUpdateTransition.h"
 #include "ProductControllerStatePlayingTransition.h"
+#include "ProductControllerStateFirstBootGreeting.h"
+#include "ProductControllerStateFirstBootGreetingTransition.h"
+#include "ProductControllerStateBootedTransition.h"
 #include "ProductControllerStatePlayingTransitionSwitch.h"
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
@@ -387,6 +391,7 @@ private:
 
     ProductControllerStateTop                                       m_ProductControllerStateTop;
     ProductControllerStateBooting                                   m_ProductControllerStateBooting;
+    ProductControllerStateBooted                                    m_ProductControllerStateBooted;
     CustomProductControllerStateOn                                  m_CustomProductControllerStateOn;
     ProductControllerStateLowPowerStandby                           m_ProductControllerStateLowPowerStandby;
     ProductControllerStateSoftwareInstall                           m_ProductControllerStateSwInstall;
@@ -421,6 +426,9 @@ private:
     ProductControllerStatePlayableTransitionNetworkStandby          m_ProductControllerStatePlayableTransitionNetworkStandby;
     ProductControllerStateSoftwareUpdateTransition                  m_ProductControllerStateSoftwareUpdateTransition;
     ProductControllerStatePlayingTransition                         m_ProductControllerStatePlayingTransition;
+    ProductControllerStateFirstBootGreeting                         m_ProductControllerStateFirstBootGreeting;
+    ProductControllerStateFirstBootGreetingTransition               m_ProductControllerStateFirstBootGreetingTransition;
+    ProductControllerStateBootedTransition                          m_ProductControllerStateBootedTransition;
     ProductControllerStatePlayingTransitionSwitch                   m_ProductControllerStatePlayingTransitionSwitch;
     ProductControllerStateStoppingStreamsDedicated                  m_ProductControllerStateStoppingStreamsDedicated;
     ProductControllerStateStoppingStreamsDedicatedForFactoryDefault m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault;
