@@ -25,13 +25,13 @@
             wildcard to match characters. If either of these methods match more than one
             file, the program will exit with an error.
 
-            --><header master_version="0.3.15" name="eddie_package.bos" />
+            --><header master_version="0.3.6" name="eddie_package.bos" />
     <manifest_entries>
 
         <entry chip="lpm_eddie" combine="True" name="eddie_mfg.bin" path="/home/softlib/verisoft/EddieLPM-Diags/Release/dp2-endofline/latest/DP1/lpm_*.bin" version="filename" />
         <entry chip="lpm_eddie" combine="True" name="eddie_bl.bin" path="/home/softlib/verisoft/EddieLPM-BL/Release/trunk/latest/DP2/lpm_bootloader*.bin" version="filename" />
-        <entry name="eddie.bin" path="/home/softlib/verisoft/EddieLPM-App/Release/trunk/latest/EDDIE_DP2/lpm_*.bin" version="filename" />
-        <entry name="eddie_lb_anim_db.bin" path="/home/softlib/verisoft/CastleLedAnimationTool/Release/master/latest/Eddie-DP1/Animations.bin" version="dynamic" />
-        <entry name="psoc.cyacd" path="/home/softlib/verisoft/CastleLightBarCapSense/*CNR*/master/latest/App-Eddie-DP2*.cyacd" version="dynamic" />
+        <entry name="eddie.bin" path="/home/softlib/verisoft/EddieLPM-App/Release/trunk/0.3.6.2098/EDDIE_DP2/lpm_*.bin" version="filename" />
+        <entry name="eddie_lb_anim_db.bin" path="/home/softlib/verisoft/CastleLedAnimationTool/Release/master/1.8-24+903bb90/Eddie-DP1/Animations.bin" version="dynamic" />
+        <entry name="psoc.cyacd" path="/home/softlib/verisoft/CastleLightBarCapSense/*CNR*/master/3.4-113+a289711/App-Eddie-DP2*.cyacd" version="dynamic" />
     </manifest_entries>
 </blob>
