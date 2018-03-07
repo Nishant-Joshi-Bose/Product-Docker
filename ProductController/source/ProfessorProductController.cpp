@@ -45,9 +45,13 @@
 #include "CustomProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "ProductControllerState.h"
+#include "ProductControllerStateBooted.h"
+#include "ProductControllerStateBootedTransition.h"
 #include "ProductControllerStateBooting.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
+#include "ProductControllerStateFirstBootGreeting.h"
+#include "ProductControllerStateFirstBootGreetingTransition.h"
 #include "ProductControllerStateIdleVoiceConfigured.h"
 #include "ProductControllerStateIdleVoiceNotConfigured.h"
 #include "ProductControllerStateLowPowerStandby.h"
@@ -83,7 +87,6 @@
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateStoppingStreams.h"
 #include "ProductControllerStateTop.h"
-#include "ProductControllerStateWelcome.h"
 #include "CustomProductControllerStateAdaptIQExiting.h"
 #include "CustomProductControllerStateAdaptIQ.h"
 #include "CustomProductControllerStateIdle.h"
@@ -193,10 +196,25 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_BOOTING );
 
-    auto* stateWelcome = new ProductControllerStateWelcome
+    auto* stateBooted = new ProductControllerStateBooted
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_WELCOME );
+      PRODUCT_CONTROLLER_STATE_BOOTED );
+
+    auto* stateBootedTransition = new ProductControllerStateBootedTransition
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_BOOTED_TRANSITION );
+
+    auto* stateFirstBootGreeting = new ProductControllerStateFirstBootGreeting
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING );
+
+    auto* stateFirstBootGreetingTransition = new ProductControllerStateFirstBootGreetingTransition
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION );
 
     auto* stateSoftwareUpdateTransition = new ProductControllerStateSoftwareUpdateTransition
     ( GetHsm( ),
@@ -429,12 +447,15 @@ void ProfessorProductController::Run( )
 
     GetHsm( ).AddState( "", stateTop );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), stateBooting );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), stateWelcome );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), stateFirstBootGreeting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareUpdateTransition );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareInstall );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::REBOOTING ), stateRebooting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), stateCriticalError );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FACTORY_DEFAULT ), stateFactoryDefault );
+    GetHsm( ).AddState( "", stateBooted );
+    GetHsm( ).AddState( "", stateBootedTransition );
+    GetHsm( ).AddState( "", stateFirstBootGreetingTransition );
     GetHsm( ).AddState( "", stateLowPowerStandbyTransition );
     GetHsm( ).AddState( "", stateLowPowerStandby );
     GetHsm( ).AddState( "", statePlayableTransition );
@@ -683,6 +704,7 @@ bool ProfessorProductController::IsBooted( ) const
     BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "STS Initialized       :  %s", ( m_IsSTSReady       ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Software Update Init  :  %s", ( m_isSoftwareUpdateReady   ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "SASS            Init  :  %s", ( IsSassReady()      ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Bluetooth Initialized :  %s", ( IsBluetoothModuleReady( ) ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
@@ -690,6 +712,7 @@ bool ProfessorProductController::IsBooted( ) const
             m_IsCapsReady           and
             m_IsAudioPathReady      and
             m_IsSTSReady            and
+            IsSassReady()           and
             m_isSoftwareUpdateReady and
             IsBluetoothModuleReady( ) );
 }
