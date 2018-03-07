@@ -39,6 +39,7 @@
 #include "A4V_RemoteCommClientFactory.h"
 #include "A4V_RemoteCommClient.h"
 #include "A4V_RemoteCommClientIF.h"
+#include "APTimer.h"
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,6 +90,8 @@ private:
     NotifyTargetTaskIF*             m_ProductTask       = nullptr;
     Callback< ProductMessage >      m_ProductNotify     = nullptr;
     ProfessorProductController&     m_ProductController;
+    APTimerPtr                      m_statusTimer;
+    bool                            m_remoteConnected   = false;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

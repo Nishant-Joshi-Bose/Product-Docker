@@ -64,7 +64,8 @@ namespace ProductApp
 ProductBLERemoteManager::ProductBLERemoteManager( ProfessorProductController& ProductController ) :
     m_ProductTask( ProductController.GetTask( ) ),
     m_ProductNotify( ProductController.GetMessageHandler( ) ),
-    m_ProductController( ProductController )
+    m_ProductController( ProductController ),
+    m_statusTimer( APTimer::Create( ProductController.GetTask( ), "BLERemoteManager" ) )
 {
 }
 
@@ -144,7 +145,6 @@ void ProductBLERemoteManager::InitializeRCS( )
     m_RCSClient->Connect( connectCb );
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProductBLERemoteManager::Run
@@ -161,6 +161,21 @@ void ProductBLERemoteManager::Run( )
 {
     InitializeFrontDoor();
     InitializeRCS();
+
+    m_statusTimer->SetTimeouts( 1000, 1000 );
+    m_statusTimer->Start( [ = ]( )
+    {
+        auto cb = [ = ]( RCS_PB_MSG::PairingNotify n )
+        {
+            BOSE_INFO( s_logger, "*** BLE GOT STATUS  %d/%d\n", n.has_status(), n.status() );
+            m_remoteConnected = n.has_status() && ( n.status() == RCS_PB_MSG::PairingNotify::PSTATE_BONDED );
+//            BOSE_INFO( s_logger, "*** BLE GOT STATUS  %d\n", IsConnected() );
+
+        };
+        BOSE_INFO( s_logger, "*** BLE REQUST STATUS  %d\n", IsConnected() );
+        m_RCSClient->Pairing_GetStatus( cb );
+    } );
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -344,29 +359,7 @@ void ProductBLERemoteManager::Unpairing_Cancel( void )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductBLERemoteManager::IsConnected( void )
 {
-    SyncCallback<RCS_PB_MSG::PairingNotify> cb;
-    m_RCSClient->Pairing_GetStatus( cb );
-    // no idea how long to wait for a response, but it seems like this operation should take almost
-    // no time; ideally we could get notifications for this instead and just maintain status internally
-    // (which would be a good reason to switch over to frontdoor, as it looks like notifications are provided
-    // on that interface)
-    auto ret = cb.WaitForReturn( 100 );
-    if( ret )
-    {
-        auto res = std::get<0>( *ret );
-        if( res.has_status() )
-        {
-            return ( res.status() == RCS_PB_MSG::PairingNotify::PSTATE_BONDED );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "Bad response retrieving BLE remote status");
-            return false;
-        }
-    }
-
-    BOSE_ERROR( s_logger, "Timed out retrieving BLE remote status");
-    return false;
+    return m_remoteConnected;
 }
 
 
