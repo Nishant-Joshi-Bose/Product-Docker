@@ -1,0 +1,11 @@
+<ShepherdConfig>
+
+  <daemon name="BluetoothManager"/>
+
+  <daemon name="BT"/>
+
+  <daemon name="BTSource"/>
+
+  <daemon name="BLESetup"/>
+
+</ShepherdConfig>

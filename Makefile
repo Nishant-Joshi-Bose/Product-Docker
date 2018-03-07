@@ -33,11 +33,11 @@ CMAKE_USE_CCACHE := $(USE_CCACHE)
 A4VVIDEOMANAGERSERVICE_DIR = $(shell components get A4VVideoManagerService installed_location)
 A4VQUICKSETSERVICE_DIR = $(shell components get A4VQuickSetService installed_location)
 A4VREMOTECOMMUNICATIONSERVICE_DIR = $(shell components get A4VRemoteCommunicationService installed_location)
-PROFESSORLPMPACKAGE_DIR = $(shell components get ProfessorLPM-Package installed_location)
 PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
 RIVIERALPM_DIR = $(shell components get RivieraLPM installed_location)
+RIVIERA_LPM_TOOLS_DIR = $(shell components get RivieraLpmTools installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
@@ -118,13 +118,21 @@ graph: product-ipk
 	graph-components --sdk=$(sdk) Professor builds/$(cfg)/product-ipk-stage/component-info.gz >builds/$(cfg)/components.dot
 	dot -Tsvgz builds/$(cfg)/components.dot -o builds/$(cfg)/components.svgz
 
+.PHONY: lpm-bos
+lpm-bos:
+	rm -f ./builds/$(cfg)/professor_package*.bos
+	rm -f ./builds/$(cfg)/lpm_professor*.hex
+	cp ./lpm_package.xml ./builds/$(cfg)/lpm_package.xml
+	# Don't share version yet... TODO post IP3
+	python2.7 $(RIVIERA_LPM_TOOLS_DIR)/tools/blob/blob_utility.py --pack $(BOSE_WORKSPACE)/lpm_package.xml ./builds/$(cfg)/ --build_type Release #--boseversion $(BUILDS_DIR)/BoseVersion.json
+
 .PHONY: hsp-ipk
 hsp-ipk: cmake_build
 	./scripts/create-hsp-ipk
 
 .PHONY: lpmupdater-ipk
-lpmupdater-ipk:
-	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage $(PROFESSORLPMPACKAGE_DIR) ./builds/$(cfg)/ professor
+lpmupdater-ipk: lpm-bos
+	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage ./builds/$(cfg)/ ./builds/$(cfg)/ professor
 
 .PHONY: monaco-ipk
 monaco-ipk:
@@ -149,3 +157,4 @@ clean:
 .PHONY: distclean
 distclean:
 	git clean -fdX
+
