@@ -72,11 +72,6 @@
 #include "ProductControllerStatePlayingDeselected.h"
 #include "ProductControllerStatePlayingSelected.h"
 #include "ProductControllerStatePlayingSelectedNotSilent.h"
-<<<<<<< HEAD
-=======
-#include "ProductControllerStatePlayingSelectedSetupExiting.h"
-#include "ProductControllerStatePlayingSelectedSetupExitingAP.h"
->>>>>>> 2568cbe0a3a254c882f2e36116b91e6cd2660c4a
 #include "ProductControllerStatePlayingSelectedSetup.h"
 #include "ProductControllerStatePlayingSelectedSetupNetwork.h"
 #include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
@@ -202,7 +197,6 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_BOOTING );
 
-<<<<<<< HEAD
     auto* stateFirstBootGreetingTransition = new ProductControllerStateFirstBootGreetingTransition
     ( GetHsm( ),
       stateTop,
@@ -218,30 +212,10 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_BOOTED_TRANSITION );
 
-=======
->>>>>>> 2568cbe0a3a254c882f2e36116b91e6cd2660c4a
-    auto* stateBooted = new ProductControllerStateBooted
+    auto * stateBooted = new ProductControllerStateBooted
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_BOOTED );
-<<<<<<< HEAD
-=======
-
-    auto* stateBootedTransition = new ProductControllerStateBootedTransition
-    ( GetHsm( ),
-      stateTop,
-      PRODUCT_CONTROLLER_STATE_BOOTED_TRANSITION );
-
-    auto* stateFirstBootGreeting = new ProductControllerStateFirstBootGreeting
-    ( GetHsm( ),
-      stateTop,
-      PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING );
-
-    auto* stateFirstBootGreetingTransition = new ProductControllerStateFirstBootGreetingTransition
-    ( GetHsm( ),
-      stateTop,
-      PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION );
->>>>>>> 2568cbe0a3a254c882f2e36116b91e6cd2660c4a
 
     auto* stateSoftwareUpdateTransition = new ProductControllerStateSoftwareUpdateTransition
     ( GetHsm( ),
@@ -411,7 +385,7 @@ void ProfessorProductController::Run( )
 
     auto* statePlayingSelectedSetupExitingAP = new ProductControllerStatePlayingSelectedSetupExitingAP
     ( GetHsm( ),
-      statePlayingSelectedSetup,
+      customStatePlayingSelectedSetup,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING_AP );
 
     auto* statePlayingSelectedSetupOther = new ProductControllerStatePlayingSelectedSetupOther
@@ -423,11 +397,6 @@ void ProfessorProductController::Run( )
     ( GetHsm( ),
       customStatePlayingSelectedSetup,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING );
-
-    auto* statePlayingSelectedSetupExitingAP = new ProductControllerStatePlayingSelectedSetupExitingAP
-    ( GetHsm( ),
-      customStatePlayingSelectedSetup,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING_AP );
 
     auto* customStatePlayingSelectedPairing = new CustomProductControllerStatePlayingSelectedAccessoryPairing
     ( GetHsm( ),
@@ -481,8 +450,8 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), stateBooting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), stateFirstBootGreetingTransition );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), stateFirstBootGreeting );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOTING ), stateBootedTransition );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOTING ), stateBooted );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), stateBootedTransition );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), stateBooted );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareUpdateTransition );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareInstall );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), stateCriticalError );
@@ -514,12 +483,11 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSilent );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedNotSilent );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), customStatePlayingSelectedSetup );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupNetwork );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupNetworkTransition );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupNetwork );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupExitingAP );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupOther );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupExiting );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupExitingAP );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), customStatePlayingSelectedPairing );
     GetHsm( ).AddState( "", stateStoppingStreams );
     GetHsm( ).AddState( "", customStateAdaptIQ );
@@ -576,7 +544,10 @@ void ProfessorProductController::Run( )
     ///
     /// Set up LightBarController
     ///
-    m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_ProductLpmHardwareInterface->GetLpmClient() ) );
+    m_lightbarController = std::unique_ptr< LightBar::LightBarController >(
+                               new LightBar::LightBarController( GetTask( ),
+                                                                 m_FrontDoorClientIF,
+                                                                 m_ProductLpmHardwareInterface->GetLpmClient( ) ) );
 
     ///
     /// Run all the submodules.
