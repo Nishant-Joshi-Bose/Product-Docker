@@ -1,4 +1,4 @@
-# configure.py
+# common_exception.py
 #
 # :Organization:  BOSE CORPORATION
 #
@@ -10,8 +10,13 @@
 #                  Framingham, MA 01701-9168
 #
 """
-Configurable paramters for LightBar Tests.
+This Module contains the user defined exception class for the lightbar test.
 """
-CONF = {
-    "animation_filename": "lightbar_negative_testdata.csv",  # negative test file for lightbar
-    }
+class SerialPortError(Exception):
+    """ Exception for Serial Port Error """
+    pass
+
+
+class IPAddressError(Exception):
+    """ Exception for IPAddress Error """
+    pass
