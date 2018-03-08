@@ -389,6 +389,7 @@ void ProfessorProductController::Run( )
     ( GetHsm( ),
       customStatePlayingSelectedSetup,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING );
+
     auto* statePlayingSelectedSetupExitingAP = new ProductControllerStatePlayingSelectedSetupExitingAP
     ( GetHsm( ),
       customStatePlayingSelectedSetup,
