@@ -137,7 +137,6 @@ void CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleStateExi
     m_stopPairingOnExit = true;
 }
 
-  
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief  CustomProductControllerStatePlayingSelectedAccessoryPairing::HandleNowSelectionInfo
