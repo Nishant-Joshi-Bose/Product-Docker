@@ -72,14 +72,18 @@ def PerformBonjourUpdate(request):
         #Need to perform Bonjour Update twice
         BonjourCnt = 0
         while True:
-            bonjour_util.upload_zipfile(zip_file, deviceIP)
-            bonjourUpdateSupport.confirmInstallationVersions()
-            BonjourCnt += 1
-            if BonjourCnt >= int(cfg.get('Settings', 'BONJOUR_UPDATE_LOOP')):
-                break
-        return True
-    except SystemExit as e:
-        logger.info("System Exit Exception in Bonjour Update .... " + str(e))
+            try:
+                bonjour_util.upload_zipfile(zip_file, deviceIP)
+                bonjourUpdateSupport.confirmInstallationVersions()
+                BonjourCnt += 1
+                if BonjourCnt >= int(cfg.get('Settings', 'BONJOUR_UPDATE_LOOP')):
+                    break
+            except SystemExit as e:
+                logger.info("System Exit Exception in Bonjour Update .... " + str(e))
+                if BonjourCnt >= int(cfg.get('Settings', 'BONJOUR_UPDATE_LOOP')):
+                    continue
+                else:
+                    return True
         return True
     except Exception as e:
         logger.info("Exception in Bonjour Update .... " + str(e))
