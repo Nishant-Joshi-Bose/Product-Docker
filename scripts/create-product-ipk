@@ -92,7 +92,6 @@ qss_dir=$(components get A4VQuickSetService-qc8017_32 installed_location) || exi
 rcs_dir=$(components get A4VRemoteCommunicationService-qc8017_32 installed_location) || exit
 vm_dir=$(components get A4VVideoManagerService-qc8017_32 installed_location) || exit
 
-arch=arm-oemllib32-linux
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
 tool64_prefix=$sysroot/usr/bin/aarch64-oe-linux/aarch64-oe-linux-

@@ -65,10 +65,6 @@ swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 riviera_hsp_ver=$(components get Riviera-HSP-Images selected_version) || exit
 riviera_hsp_ver=${riviera_hsp_ver##*/}
 
-arch=arm-oemllib32-linux
-sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
-tool_prefix=$sysroot/usr/bin/$arch/$arch-
-
 stage=$wspace/builds/$cfg/hsp-ipk-stage
 rm -rf "$stage"
 echo "Stage directory $stage"
