@@ -45,9 +45,13 @@
 #include "CustomProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "ProductControllerState.h"
+#include "ProductControllerStateBooted.h"
+#include "ProductControllerStateBootedTransition.h"
 #include "ProductControllerStateBooting.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
+#include "ProductControllerStateFirstBootGreeting.h"
+#include "ProductControllerStateFirstBootGreetingTransition.h"
 #include "ProductControllerStateIdleVoiceConfigured.h"
 #include "ProductControllerStateIdleVoiceNotConfigured.h"
 #include "ProductControllerStateLowPowerStandby.h"
@@ -68,6 +72,7 @@
 #include "ProductControllerStatePlayingSelected.h"
 #include "ProductControllerStatePlayingSelectedNotSilent.h"
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
+#include "ProductControllerStatePlayingSelectedSetupExitingAP.h"
 #include "ProductControllerStatePlayingSelectedSetup.h"
 #include "ProductControllerStatePlayingSelectedSetupNetwork.h"
 #include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
@@ -83,7 +88,6 @@
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateStoppingStreams.h"
 #include "ProductControllerStateTop.h"
-#include "ProductControllerStateWelcome.h"
 #include "CustomProductControllerStateAdaptIQExiting.h"
 #include "CustomProductControllerStateAdaptIQ.h"
 #include "CustomProductControllerStateIdle.h"
@@ -193,10 +197,25 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_BOOTING );
 
-    auto* stateWelcome = new ProductControllerStateWelcome
+    auto* stateBooted = new ProductControllerStateBooted
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_WELCOME );
+      PRODUCT_CONTROLLER_STATE_BOOTED );
+
+    auto* stateBootedTransition = new ProductControllerStateBootedTransition
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_BOOTED_TRANSITION );
+
+    auto* stateFirstBootGreeting = new ProductControllerStateFirstBootGreeting
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING );
+
+    auto* stateFirstBootGreetingTransition = new ProductControllerStateFirstBootGreetingTransition
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION );
 
     auto* stateSoftwareUpdateTransition = new ProductControllerStateSoftwareUpdateTransition
     ( GetHsm( ),
@@ -379,6 +398,11 @@ void ProfessorProductController::Run( )
       customStatePlayingSelectedSetup,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING );
 
+    auto* statePlayingSelectedSetupExitingAP = new ProductControllerStatePlayingSelectedSetupExitingAP
+    ( GetHsm( ),
+      customStatePlayingSelectedSetup,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING_AP );
+
     auto* customStatePlayingSelectedPairing = new CustomProductControllerStatePlayingSelectedAccessoryPairing
     ( GetHsm( ),
       customStatePlayingSelected,
@@ -429,12 +453,15 @@ void ProfessorProductController::Run( )
 
     GetHsm( ).AddState( "", stateTop );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), stateBooting );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), stateWelcome );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), stateFirstBootGreeting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareUpdateTransition );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareInstall );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::REBOOTING ), stateRebooting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), stateCriticalError );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FACTORY_DEFAULT ), stateFactoryDefault );
+    GetHsm( ).AddState( "", stateBooted );
+    GetHsm( ).AddState( "", stateBootedTransition );
+    GetHsm( ).AddState( "", stateFirstBootGreetingTransition );
     GetHsm( ).AddState( "", stateLowPowerStandbyTransition );
     GetHsm( ).AddState( "", stateLowPowerStandby );
     GetHsm( ).AddState( "", statePlayableTransition );
@@ -463,6 +490,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupNetworkTransition );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupOther );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupExiting );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupExitingAP );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), customStatePlayingSelectedPairing );
     GetHsm( ).AddState( "", stateStoppingStreams );
     GetHsm( ).AddState( "", customStateAdaptIQ );
@@ -683,6 +711,7 @@ bool ProfessorProductController::IsBooted( ) const
     BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "STS Initialized       :  %s", ( m_IsSTSReady       ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Software Update Init  :  %s", ( m_isSoftwareUpdateReady   ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "SASS            Init  :  %s", ( IsSassReady()      ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Bluetooth Initialized :  %s", ( IsBluetoothModuleReady( ) ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
@@ -690,6 +719,7 @@ bool ProfessorProductController::IsBooted( ) const
             m_IsCapsReady           and
             m_IsAudioPathReady      and
             m_IsSTSReady            and
+            IsSassReady()           and
             m_isSoftwareUpdateReady and
             IsBluetoothModuleReady( ) );
 }
@@ -785,67 +815,6 @@ bool ProfessorProductController::IsOutOfBoxSetupComplete( ) const
 bool ProfessorProductController::IsSystemLanguageSet( ) const
 {
     return m_deviceManager.IsLanguageSet( );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetProductName
-///
-/// @return This method returns the std::string value to be used for the Product "productName" field
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string ProfessorProductController::GetProductName( ) const
-{
-    // @TODO PGC-788 replace the manufacturing name with the marketing name.
-    std::string productName = "professor Soundbar";
-
-    if( auto name = MfgData::Get( "productName" ) )
-    {
-        productName =  *name;
-    }
-
-    return productName;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetProductColor
-///
-/// @return This method returns the std::string value to be used for the Product "productColor" field
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string ProfessorProductController::GetProductColor() const
-{
-    // @TODO PGC-630
-    std::string productColor = "2";
-
-    if( auto color = MfgData::Get( "productColor" ) )
-    {
-        productColor =  *color;
-    }
-
-    return productColor;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetProductType
-///
-/// @return This method returns the std::string value to be used for the Product "productType" field
-///
-/// @TODO - Below value may be available through HSP APIs
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string ProfessorProductController::GetProductType() const
-{
-    std::string productType = "professor";
-
-    if( auto type = MfgData::Get( "productType" ) )
-    {
-        productType =  *type;
-    }
-
-    return productType;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1345,41 +1314,6 @@ std::string ProfessorProductController::GetDefaultProductName( ) const
 
     BOSE_INFO( s_logger, "%s productName=%s", __func__, productName.c_str( ) );
     return productName;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetVariantId
-///
-/// @brief  This method is to get the product variant ID, such as its colour.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-BLESetupService::VariantId ProfessorProductController::GetVariantId( ) const
-{
-    // @TODO https://jirapro.bose.com/browse/PGC-630
-    BLESetupService::VariantId varintId = BLESetupService::VariantId::NONE;
-
-    if( auto color = MfgData::GetColor() )
-    {
-        if( *color == "luxGray" )
-        {
-            varintId = BLESetupService::VariantId::SILVER;
-        }
-        else if( *color == "tripleBlack" )
-        {
-            varintId = BLESetupService::VariantId::BLACK;
-        }
-        else
-        {
-            varintId = BLESetupService::VariantId::WHITE;
-        }
-    }
-    else
-    {
-        BOSE_DIE( "No 'productColor' in mfgdata" );
-    }
-
-    return varintId;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
