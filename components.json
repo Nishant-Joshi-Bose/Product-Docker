@@ -41,7 +41,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/develop/0.3.1-91+2ac06bd"
+    "selected_version": "Release/develop/0.3.2-99+3f60f39"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -101,7 +101,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "PGC-965@498b2d563e322b33725b62c715847806b407c200"
+    "selected_version": "PGC-965@a9dd4ee20138c0d1750d21dd9407ffc3ba8a7d39"
   },
   {
     "name": "CastleProductUIAssets",
@@ -152,8 +152,12 @@
     "selected_version": "Release/master/0.3.2-39+0fb03f2"
   },
   {
+    "name": "SASS-qc8017_32",
+    "selected_version": "Release/IP3/0.3.1-209+faa7229"
+  },
+  {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/0.3.2-61+c5803e7"
+    "selected_version": "Release/master/0.3.3-63+5fcbc13"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",

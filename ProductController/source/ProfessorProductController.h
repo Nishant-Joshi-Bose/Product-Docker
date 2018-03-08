@@ -188,7 +188,6 @@ public:
     bool     IsNetworkConnected( )       const override;
     uint32_t GetWifiProfileCount( )      const override;
     bool     IsAutoWakeEnabled( )        const override;
-    bool     IsVoiceConfigured( )        const override;
     bool     IsFirstTimeBootUp( )        const;
     bool     IsOutOfBoxSetupComplete( )  const;
 
@@ -226,14 +225,6 @@ public:
     void HandleMessage( const ProductMessage& message );
 
     std::string GetDefaultProductName() const override;
-
-    std::string GetProductName() const override;
-
-    std::string GetProductColor() const override;
-
-    std::string GetProductType() const override;
-
-    BLESetupService::VariantId GetVariantId() const override;
 
     BLESetupService::ProductId GetProductId() const override
     {
@@ -296,8 +287,6 @@ private:
     bool m_IsNetworkConfigured;
     bool m_IsNetworkConnected;
     bool m_IsAutoWakeEnabled;
-    bool m_IsAccountConfigured;
-    bool m_IsMicrophoneEnabled;
     bool m_Running;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
