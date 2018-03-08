@@ -196,6 +196,7 @@ public:
     {
         return false;
     }
+
     virtual bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
     {
         return false;
