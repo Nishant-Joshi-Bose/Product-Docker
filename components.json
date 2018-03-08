@@ -45,11 +45,11 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.1-20595"
+    "selected_version": "Release/Castle-Fork/0.3.2-20599"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/0.3.1-20595"
+    "selected_version": "Release/Castle-Fork/0.3.2-20599"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -101,7 +101,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@bf57ddb62991855aee3dd360e61fe74bdc3afb87"
+    "selected_version": "master@15b001b190f5ba4a9b50e1c164e14bfe5cd45f55"
   },
   {
     "name": "CastleProductUIAssets",
