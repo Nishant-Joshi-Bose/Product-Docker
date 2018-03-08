@@ -91,7 +91,7 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
 
     init-lcd
 
-    set_ap.sh
+    init-audio
 
     cfg=/opt/Bose/etc/KeyConfiguration.json
     if [ -e /mnt/nv/DemoModeOn ]; then
