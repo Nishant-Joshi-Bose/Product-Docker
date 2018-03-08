@@ -36,9 +36,9 @@
         "action": "VOICE_CAROUSEL",
         "commment": "Console: action release ---> Alexa",
         "keyEvent": "RELEASE",
-        "keyList": ["KEY_VAL_AVAIL_AE"],
+        "keyList": ["BOSE_AMAZON_ACTION"],
         "origin": ["CAPSENSE", "TAP"],
-        "timeOutList": []
+        "timeOutList": [0]
     },
     {
         "action": "PRESET_STORE_1",
@@ -145,12 +145,20 @@
         "timeOutList": [0]
     },
     {
-        "action": "VOLUME_UP",
-        "commment": "volume up repeat",
+        "action": "VOLUME_RAMP_UP",
+        "commment": "volume ramp up",
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_UP"],
         "origin": ["IR", "TAP", "RF"],
         "timeOutList": [300, 100]
+    },
+    {
+        "action": "VOLUME_RAMP_UP_CANCEL",
+        "commment": "volume ramp up cancel",
+        "keyEvent": "RELEASE_ALWAYS",
+        "keyList": ["BOSE_VOLUME_UP"],
+        "origin": ["IR", "TAP", "RF"],
+        "timeOutList": []
     },
     {
         "action": "VOLUME_DOWN",
@@ -161,12 +169,20 @@
         "timeOutList": [0]
     },
     {
-        "action": "VOLUME_DOWN",
-        "commment": "volume down repeat",
+        "action": "VOLUME_RAMP_DOWN",
+        "commment": "volume ramp down",
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_DOWN"],
         "origin": ["IR", "TAP", "RF"],
         "timeOutList": [300, 100]
+    },
+    {
+        "action": "VOLUME_RAMP_DOWN_CANCEL",
+        "commment": "volume ramp down cancel",
+        "keyEvent": "RELEASE_ALWAYS",
+        "keyList": ["BOSE_VOLUME_DOWN"],
+        "origin": ["IR", "TAP", "RF"],
+        "timeOutList": []
     },
     {
         "action": "PLAY_PAUSE",
@@ -271,6 +287,14 @@
         "keyList": ["BOSE_PAIR_SPKR"],
         "origin": ["IR", "TAP", "CEC", "RF"],
         "timeOutList": []
+    },
+    {
+        "action": "ACTION_SETUP_BLE_REMOTE",
+        "commment": "setup and pair BLE remote",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_AMAZON_ACTION"],
+        "origin": ["CAPSENSE", "TAP"],
+        "timeOutList": [5000]
     }
     ],
     "blastTable": [

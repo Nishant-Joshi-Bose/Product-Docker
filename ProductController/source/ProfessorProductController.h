@@ -37,6 +37,7 @@
 #include "Utilities.h"
 #include "IntentHandler.h"
 #include "ProductCecHelper.h"
+#include "ProductDspHelper.h"
 #include "ProductController.h"
 #include "ProductSTSController.h"
 #include "FrontDoorClientIF.h"
@@ -45,6 +46,7 @@
 #include "MacAddressInfo.h"
 #include "BoseVersion.h"
 #include "LightBarController.h"
+#include "SystemPowerProduct.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -65,6 +67,7 @@ class ProductCecHelper;
 class ProductCommandLine;
 class ProductKeyInputInterface;
 class ProductAdaptIQManager;
+class ProductSourceInfo;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -140,11 +143,28 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
+    /// @brief The following method is used to get a shared pointer to the SourceInfo instance
+    ///        from the product controller.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    std::shared_ptr< ProductSourceInfo >& GetSourceInfo( );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
     /// @brief The following method is used to get a shared pointer reference to the Edid
     ///        instance from the product controller.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< ProductCecHelper >& GetCecHelper( );
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method is used to get a shared pointer reference to the DspHelper
+    ///        instance from the product controller.
+    ///
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    std::shared_ptr< ProductDspHelper >& GetDspHelper( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -168,7 +188,6 @@ public:
     bool     IsNetworkConnected( )       const override;
     uint32_t GetWifiProfileCount( )      const override;
     bool     IsAutoWakeEnabled( )        const override;
-    bool     IsVoiceConfigured( )        const override;
     bool     IsFirstTimeBootUp( )        const;
     bool     IsOutOfBoxSetupComplete( )  const;
 
@@ -205,19 +224,7 @@ public:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleMessage( const ProductMessage& message );
 
-    std::string const& GetDefaultProductName() const override;
-
-    std::string const& GetProductType() const override;
-
-    std::string GetProductColor() const override;
-
-    std::string const& GetProductVariant() const override;
-
-    std::string const& GetProductModel() const override;
-
-    std::string const& GetProductDescription() const override;
-
-    BLESetupService::VariantId GetVariantId() const override;
+    std::string GetDefaultProductName() const override;
 
     BLESetupService::ProductId GetProductId() const override
     {
@@ -264,8 +271,10 @@ private:
     std::shared_ptr< ProductCommandLine                > m_ProductCommandLine;
     std::shared_ptr< ProductKeyInputInterface          > m_ProductKeyInputInterface;
     std::shared_ptr< ProductCecHelper                  > m_ProductCecHelper;
+    std::shared_ptr< ProductDspHelper                  > m_ProductDspHelper;
     std::shared_ptr< ProductAdaptIQManager             > m_ProductAdaptIQManager;
     std::shared_ptr< CustomProductAudioService         > m_ProductAudioService;
+    std::shared_ptr< ProductSourceInfo                 > m_ProductSourceInfo;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -274,17 +283,13 @@ private:
     ///        machine states.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool m_IsCapsReady;
     bool m_IsAudioPathReady;
-    bool m_IsSTSReady;
     bool m_IsNetworkConfigured;
     bool m_IsNetworkConnected;
     bool m_IsAutoWakeEnabled;
-    bool m_IsAccountConfigured;
-    bool m_IsMicrophoneEnabled;
     bool m_Running;
 
-    ////////////////////////////////////////////////////////////////////////////GetLastSoundTouchPlayback////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following declarations are used as interfaces to the ProductSTSController,
     ///        which implements the interactions between the Professor Product Controller and the
@@ -294,7 +299,6 @@ private:
     ProductSTSController m_ProductSTSController;
 
     void SetupProductSTSConntroller( );
-    void HandleSTSInitWasComplete( );
     void HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -315,6 +319,21 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void  RegisterNowPlayingEndPoint( );
     void  HandleNowPlaying( const SoundTouchInterface::NowPlaying& nowPlayingStatus );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following declarations are for handling the /system/power/mode/opticalAutoWake
+    ///        frontdoor endpoint.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    void HandleGetOpticalAutoWake( const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
+                                   const Callback<EndPointsError::Error> & errorCb ) const;
+    void HandlePutOpticalAutoWake(
+        const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req,
+        const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
+        const Callback<EndPointsError::Error> & errorCb );
+    void ApplyOpticalAutoWakeSettingFromPersistence( );
+    void NotifyFrontdoorAndStoreOpticalAutoWakeSetting( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
