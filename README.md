@@ -10,11 +10,11 @@ For more information, see the [Professor wiki page](https://wiki.bose.com/displa
 ![Professor](professor.png)
 
 ##### Table of Contents
-[Getting Started](#start)
-[Compiling Professor](#compile)
-[Installing Professor](#install)
-[Reflash Riviera-HSP](#hsp)
-[More...](#more)
+[Getting Started](#start)  
+[Compiling Professor](#compile)  
+[Installing Professor](#install)   
+[Reflash Riviera-HSP](#hsp)   
+[More...](#more)   
 
 <a name="start"/>
 
