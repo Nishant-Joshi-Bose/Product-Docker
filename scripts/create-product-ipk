@@ -152,9 +152,6 @@ else
     cp -r "$wspace/scripts/keys/development/CACerts/" "$secure_dir" || exit
 fi
 
-cp "$audiopath_dir/eddie/bin/libDspPlayback.so" "$opt_dir/bin" || exit
-cp "$audiopath_dir/eddie/etc/APConfig.xml" "$opt_dir/etc" || exit
-
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
 
