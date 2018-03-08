@@ -34,27 +34,12 @@ $ git clone git@github.com:BoseCorp/Professor.git
 
 How you compile the software will depend largely on how you plan to flash it to the device. Several options are listed below.
 
-#### 'make package'
-
-Build the Professor package to install using the product_flash script.
-```shell session
-$ cd /scratch/Professor
-$ make package
-```
 #### 'make update-zip' for Bonjour Update
 
 Build the Professor product_update.zip to install over ethernet.
 ```shell session
 $ cd /scratch/Professor
 $ make packages-gz update-zip
-```
-
-#### 'make' ipk for OPKG installation
-
-Build the Professor product.ipk to install using the putipk_ota script.
-```shell session
-$ cd /scratch/Professor
-$ make
 ```
 
 <a name="compile">
@@ -140,36 +125,6 @@ $ cd CastleTestUtils
 $ pip2.7 install -r requirements.txt
 $ ./CastleTestUtils/scripts/pushup --deviceid <device-id> --zipfile <path-to-zipfile>
 ```
-
-#### Product Flash Script
-
-Make sure your Professor unit is accessible via adb.
-```shell session
-$ sudo adb start-server             # must be done as root. typically once per boot of the build host
-$ adb devices
-List of devices attached
-5166240	device
-
-$
-```
-
-Use the product_flash script to install the package you compiled above.
-```shell session
-$ cd builds/Release/package
-$ sudo ./product_flash product.tar fastboot [option(s)]
-```
-
-There are several options available in the product_flash script, depending on what you wish to update:
-```shell
-	-h 		# Show the help message for this script
-	-u 		# Flash only the Bose Partition
-	-a 		# Flash all partitions (except usrfs, persist, bose-persist and partition table)
-	-f 		# Erase All partitions, including Partition table, and install all IPKs
-	-e 		# Erase only bose-persist partition
-	-l 		# Perform LPM update using IPK
-```
-
-
 
 #### Putipk_ota Script
 
