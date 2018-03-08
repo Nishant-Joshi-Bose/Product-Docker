@@ -4,7 +4,7 @@ BOSELIBS_DIR                    := $(shell components get BoseLibs-$(sdk)       
 SOUNDTOUCH_SDK_DIR              := $(shell components get SoundTouch-SDK-$(sdk)         installed_location)
 PRODUCTCONTROLLERCOMMON_DIR	:= $(shell components get CastleProductControllerCommon installed_location)
 RIVIERA_LPM_PROTO_DIR 		:= $(shell components get RivieraLpmService-$(sdk)      installed_location)
-SYSTEMEVENTSERVICE_DIR := $(shell components get SystemEventService-$(sdk) installed_location)
+SYSTEMEVENTSERVICE_DIR          := $(shell components get SystemEventService-$(sdk)     installed_location)
 
 PROTO_SOURCES = ProductMessage.proto        \
                 ConfigurationStatus.proto   \
