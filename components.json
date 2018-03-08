@@ -1,11 +1,11 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@01bc26d1af73b45425eec6d8537891eb251b40cd"
+    "selected_version": "master@2f071fbb8499bee85b2df34aab69b6cedcaa076c"
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@cefcd5cdfefc1b7d77c808274d398401219b2c5d"
+    "selected_version": "master@cf16a93f5f9536d04667f394bce9a91dae334d6b"
   },
   {
     "name": "BLERemoteXCVR",
@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.13.41315.2723875"
+    "selected_version": "Release/Castle-Fork/0.3.11.41219.2713461"
   },
   {
     "name": "bose-opkg-utils",
@@ -41,15 +41,15 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/develop/0.3.2-99+3f60f39"
+    "selected_version": "Release/develop/0.3.1-91+2ac06bd"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.1-20595"
+    "selected_version": "Release/Castle-Fork/0.2.7-20452"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/0.3.1-20595"
+    "selected_version": "Release/Castle-Fork/0.2.7-20452"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -57,7 +57,7 @@
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
-    "selected_version": "Release/IP3/0.3.6-45+fe14799"
+    "selected_version": "Continuous/master/0.3.5-42+ddbf6a7"
   },
   {
     "name": "CastleDemoController-qc8017_32",
@@ -152,20 +152,16 @@
     "selected_version": "Release/master/0.3.2-39+0fb03f2"
   },
   {
-    "name": "SASS-qc8017_32",
-    "selected_version": "Release/IP3/0.3.1-209+faa7229"
-  },
-  {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/0.3.3-63+5fcbc13"
+    "selected_version": "Release/master/0.3.2-61+c5803e7"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/IP3/0.3.14-365+ec54c8a"
+    "selected_version": "Release/IP3/0.3.11-334+5bad26a"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.13.41315.2723875"
+    "selected_version": "Continuous/Castle-Fork/2018-03-05_1626"
   },
   {
     "name": "SystemEventService-qc8017_32",
