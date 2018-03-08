@@ -34,9 +34,9 @@ def test_shepherd_process(request):
     Validate Process is Running from Eddie : cat /var/run/shepherd/pids
     """
     # Temporary Comment out this and doing from Jenkins Shell
-    #result = PerformBonjourUpdate(request)
+    result = PerformBonjourUpdate(request)
     device = request.config.getoption("--device-id")
-    #assert result, "Bonjour Update Failed. Please see logs for more details"
+    assert result, "Bonjour Update Failed. Please see logs for more details"
     rivierapull = RivieraUtils('LOCAL')
     processes = rivierapull.getShepherdProcesses(device=device)
     logger.info("Actual Processes : " + str(processes))
@@ -77,6 +77,9 @@ def PerformBonjourUpdate(request):
             BonjourCnt += 1
             if BonjourCnt >= int(cfg.get('Settings', 'BONJOUR_UPDATE_LOOP')):
                 break
+        return True
+    except SystemExit as e:
+        logger.info("System Exit Exception in Bonjour Update .... " + str(e))
         return True
     except Exception as e:
         logger.info("Exception in Bonjour Update .... " + str(e))
