@@ -1,0 +1,59 @@
+{
+    "supported_chimes":[
+        {
+            "event_id":1,
+            "tone":"T1_welcome_to_bose.flac",
+            "comment":"Welcome, event first time the device boots up or after factory default"
+        },
+        {
+            "event_id":2,
+            "tone":"T4_ready_to_connect.flac",
+            "comment":"bluetooth discoverable"
+        },
+        {
+            "event_id":3,
+            "tone":"T4_ready_to_connect.flac",
+            "comment":"bluetooth clear pairing list"
+        },
+        {
+            "event_id":4,
+            "tone":"T5_connected.flac",
+            "comment":"bluetooth connect notification"
+        },
+        {
+            "event_id":5,
+            "tone":"T6_disconnected.flac",
+            "comment":"bluetooth disconnected notification"
+        },
+        {
+            "event_id":6,
+            "tone":"T7_positive_confirmation.flac",
+            "comment":"store preset "
+        },
+        {
+            "event_id":7,
+            "tone":"T13_not_available.flac",
+            "comment":"preset is empty"
+        },
+        {
+            "event_id":8,
+            "tone":"T7_positive_confirmation.flac",
+            "comment":"mic unmuted"
+        },
+        {
+            "event_id":9,
+            "tone":"T8_negative_confirmation.flac",
+            "comment":"mic muted "
+        },
+        {
+            "event_id":10,
+            "tone":"T13_not_available.flac",
+            "comment":"source doesn't support next"
+        },
+        {
+            "event_id":11,
+            "tone":"T13_not_available.flac",
+            "comment":"source doesn't support prev"
+        }
+    ]
+}

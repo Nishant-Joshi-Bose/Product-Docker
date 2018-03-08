@@ -1,5 +1,5 @@
-#### Eddie Jenkins Smoke Test Status
-<a title='Jenkins build status for Eddie' href='http://jnkwebhook.ngrok.io/job/Pipelines/job/Eddie-Pipeline/'><img src='http://jnkwebhook.ngrok.io/job/Pipelines/job/Eddie-Pipeline/badge/icon'></a>
+### Jenkins
+##### [Eddie Continuous build Testing] <a title='Jenkins build status for Eddie' href='http://jnkwebhook.ngrok.io/job/EddieProduct/job/Eddie_Continuous_Build_Testing/'><img src='http://jnkwebhook.ngrok.io/job/EddieProduct/job/Eddie_Continuous_Build_Testing/badge/icon'></a> [Eddie Nightly build testing] <a title='Jenkins build status for Eddie' href='http://jnkwebhook.ngrok.io/job/Pipelines/job/Eddie-Pipeline/'><img src='http://jnkwebhook.ngrok.io/job/Pipelines/job/Eddie-Pipeline/badge/icon'></a>
 
 <!-- ngrok is used for secure tunnel so our jenkins server behind our firewall can be accessed from GitHub. When the tests are added and a pull request is submitted an automatic jenkins build is initiated. When that build is successful or failed it will automatically get updated in the Readme. We are using a jenkins plugin that uses API's to update the status of the jenkins build.-->
 
@@ -39,12 +39,6 @@ $ PATH=$PATH:/scratch/CastleTools/bin   # add this to your ~/.profile, ~/.bash_p
 $ git clone git@github.com:BoseCorp/Eddie.git
 ```
 
-Build the .ipk package file containing the SoundTouch software.
-```shell session
-$ cd /scratch/Eddie
-$ make package
-```
-
 Make sure your Eddie unit is accessible via adb.
 ```shell session
 $ sudo adb start-server             # must be done as root. typically once per boot of the build host
@@ -61,20 +55,22 @@ From the Eddie workspace:
 
 ```shell session
 $ cd /scratch/Eddie
-$ make all-package
-$ cd builds/
+$ pip2.7 install -r Test/requirements.txt
+$ make all-packages
+```
 
+```shell session
 To update without HSP:
-$ ./CastleTestUtils/CastleTestUtils/scripts/pushup 
+$ ./scripts/pushup 
 
 To update HSP:
-$ ./CastleTestUtils/CastleTestUtils/scripts/pushup --hsp True
+$ ./scripts/pushup --hsp 
 
 When having multiple devices, without HSP:
-$ ./CastleTestUtils/CastleTestUtils/scripts/pushup --deviceid <deviceid>
+$ ./scripts/pushup --deviceid <deviceid>
 
 When having multiple devices, with HSP:
-$ ./CastleTestUtils/CastleTestUtils/scripts/pushup --deviceid <deviceid> --hsp True
+$ ./scripts/pushup --deviceid <deviceid> --hsp
 ```
 
 In general:
@@ -83,27 +79,8 @@ In general:
 $ cd /scratch
 $ git clone git@github.com:BoseCorp/CastleTestUtils.git
 $ cd CastleTestUtils
+$ pip2.7 install -r requirements.txt
 $ ./CastleTestUtils/scripts/pushup --deviceid <device-id> --zipfile <path-to-zipfile>
-
-```
-
-Install the .ipk file you built.
-```shell session
-$ adb shell /opt/Bose/bin/stop      # generally it's okay if this fails
-$ adb shell /opt/Bose/bin/rw        # make the file systems writeable
-$ adb shell opkg remove SoundTouch  # this too may fail
-$ adb push builds/Release/product.ipk /tmp/product.ipk
-$ adb shell opkg install -d bose /tmp/product.ipk
-$ adb shell reboot
-```
-(But see `putipk` below for a simpler way.)
-
-You'll get a notification if your Riviera unit is running old Riviera software:
-```shell session
-...
-Built for Riviera-HSP: 0.5-9-geee2c72
-Installed Riviera-HSP: 0.5-7-g856bf73
-...
 ```
 
 <a name="links"/>
@@ -118,12 +95,6 @@ Eddie [Getting Started](https://wiki.bose.com/display/WSSW/Eddie+Quick+Start+Gui
 
 Ask to be added to the SSG-Eddie mailing list to stay in the loop by clicking
 [here](mailto:Jonathan_Cooper@bose.com?subject=Add%20me%20to%20the%20SSG-Eddie%20mailing%20list).
-
-To rebuild the .ipk file and install via adb in one step:
-
-```shell session
-$ ./scripts/putipk
-```
 
 Access the APQ console via the tap cable.
 

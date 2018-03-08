@@ -25,9 +25,7 @@
 #include "ProductControllerStateIdleVoiceNotConfigured.h"
 #include "ProductControllerStatePlayable.h"
 #include "ProductControllerStatePlaying.h"
-#include "ProductControllerStatePlayingActive.h"
-#include "ProductControllerStatePlayingInactive.h"
-#include "ProductControllerStateRebooting.h"
+#include "ProductControllerStateBooted.h"
 #include "ProductControllerStateBooting.h"
 #include "CustomProductControllerStateOn.h"
 #include "ProductControllerStateOn.h"
@@ -44,6 +42,7 @@
 #include "ProductControllerStatePlayingSelectedSetupNetwork.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
+#include "ProductControllerStatePlayingSelectedSetupExitingAP.h"
 #include "ProductControllerStateStoppingStreams.h"
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
@@ -51,6 +50,9 @@
 #include "ProductControllerStatePlayableTransitionNetworkStandby.h"
 #include "ProductControllerStateSoftwareUpdateTransition.h"
 #include "ProductControllerStatePlayingTransition.h"
+#include "ProductControllerStateFirstBootGreeting.h"
+#include "ProductControllerStateFirstBootGreetingTransition.h"
+#include "ProductControllerStateBootedTransition.h"
 #include "ProductControllerStatePlayingTransitionSwitch.h"
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
@@ -82,7 +84,7 @@ class CustomProductAudioService;
 class EddieProductController : public ProductController
 {
 public:
-    EddieProductController( std::string const& ProductName = "eddie" );
+    EddieProductController();
     virtual ~EddieProductController();
 
     void Initialize();
@@ -133,14 +135,7 @@ public:
         return false;
     }
 
-
-    std::string const& GetProductType() const override;
-    std::string const& GetProductModel() const override;
-    std::string GetProductColor() const override;
-    std::string const& GetProductVariant() const override;
-    std::string const& GetProductDescription() const override;
-    std::string const& GetDefaultProductName() const override;
-    BLESetupService::VariantId GetVariantId() const override;
+    std::string GetDefaultProductName() const override;
 
     void ClearWifiProfileCount() override
     {
@@ -331,7 +326,7 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
     void HandleProductMessage( const ProductMessage& productMessage );
 
-    void updateUiConnectedStatus( bool status );
+    void UpdateUiConnectedStatus( bool status );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name   GetLpmHardwareInterface
@@ -398,16 +393,14 @@ private:
 
     ProductControllerStateTop                                       m_ProductControllerStateTop;
     ProductControllerStateBooting                                   m_ProductControllerStateBooting;
+    ProductControllerStateBooted                                    m_ProductControllerStateBooted;
     CustomProductControllerStateOn                                  m_CustomProductControllerStateOn;
     ProductControllerStateLowPowerStandby                           m_ProductControllerStateLowPowerStandby;
     ProductControllerStateSoftwareInstall                           m_ProductControllerStateSwInstall;
     ProductControllerStateCriticalError                             m_ProductControllerStateCriticalError;
-    ProductControllerStateRebooting                                 m_ProductControllerStateRebooting;
     ProductControllerStatePlaying                                   m_ProductControllerStatePlaying;
     ProductControllerStatePlayable                                  m_ProductControllerStatePlayable;
     ProductControllerStateLowPowerStandbyTransition                 m_ProductControllerStateLowPowerStandbyTransition;
-    ProductControllerStatePlayingActive                             m_ProductControllerStatePlayingActive;
-    ProductControllerStatePlayingInactive                           m_ProductControllerStatePlayingInactive;
     ProductControllerStateIdle                                      m_ProductControllerStateIdle;
     ProductControllerStateNetworkStandby                            m_ProductControllerStateNetworkStandby;
     ProductControllerStateIdleVoiceConfigured                       m_ProductControllerStateVoiceConfigured;
@@ -424,6 +417,7 @@ private:
     ProductControllerStatePlayingSelectedSetupNetworkTransition     m_ProductControllerStatePlayingSelectedSetupNetworkTransition;
     ProductControllerStatePlayingSelectedSetupOther                 m_ProductControllerStatePlayingSelectedSetupOther;
     ProductControllerStatePlayingSelectedSetupExiting               m_ProductControllerStatePlayingSelectedSetupExiting;
+    ProductControllerStatePlayingSelectedSetupExitingAP             m_ProductControllerStatePlayingSelectedSetupExitingAP;
     ProductControllerStateStoppingStreams                           m_ProductControllerStateStoppingStreams;
     ProductControllerStatePlayableTransition                        m_ProductControllerStatePlayableTransition;
     ProductControllerStatePlayableTransitionInternal                m_ProductControllerStatePlayableTransitionInternal;
@@ -431,6 +425,9 @@ private:
     ProductControllerStatePlayableTransitionNetworkStandby          m_ProductControllerStatePlayableTransitionNetworkStandby;
     ProductControllerStateSoftwareUpdateTransition                  m_ProductControllerStateSoftwareUpdateTransition;
     ProductControllerStatePlayingTransition                         m_ProductControllerStatePlayingTransition;
+    ProductControllerStateFirstBootGreeting                         m_ProductControllerStateFirstBootGreeting;
+    ProductControllerStateFirstBootGreetingTransition               m_ProductControllerStateFirstBootGreetingTransition;
+    ProductControllerStateBootedTransition                          m_ProductControllerStateBootedTransition;
     ProductControllerStatePlayingTransitionSwitch                   m_ProductControllerStatePlayingTransitionSwitch;
     ProductControllerStateStoppingStreamsDedicated                  m_ProductControllerStateStoppingStreamsDedicated;
     ProductControllerStateStoppingStreamsDedicatedForFactoryDefault m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault;

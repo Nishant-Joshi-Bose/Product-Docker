@@ -132,7 +132,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentLowPowerStandby( KeyHandlerUtil::ActionType_t intent )
+    virtual bool HandleIntentLowPowerStandby( )
     {
         return false;
     }
@@ -173,6 +173,11 @@ public:
     }
 
     virtual bool HandleBluetoothModuleState( bool ready )
+    {
+        return false;
+    }
+
+    virtual bool HandleSassState( bool ready )
     {
         return false;
     }
@@ -317,6 +322,25 @@ public:
     }
 
     virtual bool HandleNetworkOperationalMode( NetManager::Protobuf::OperationalMode mode )
+    {
+        return false;
+    }
+    virtual bool HandleNetworkWifiAPStatus( bool APStatus )
+    {
+        return false;
+    }
+
+    virtual bool HandleSetupAPDeactivateTimerExpiry( )
+    {
+        return false;
+    }
+
+    virtual bool HandleChimeSASSPlaybackCompleted( int32_t eventId )
+    {
+        return false;
+    }
+
+    virtual bool HandleChimeSASSPlaybackError( int32_t eventId )
     {
         return false;
     }

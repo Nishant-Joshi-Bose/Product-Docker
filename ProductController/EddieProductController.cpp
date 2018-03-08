@@ -32,20 +32,17 @@ namespace ProductApp
 const std::string g_ProductPersistenceDir = "product-persistence/";
 const std::string KEY_CONFIG_FILE = "/var/run/KeyConfiguration.json";
 
-EddieProductController::EddieProductController( std::string const& ProductName ):
-    ProductController( ProductName ),
+EddieProductController::EddieProductController():
     m_ProductControllerStateTop( GetHsm(), nullptr ),
     m_ProductControllerStateBooting( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_BOOTING ),
+    m_ProductControllerStateBooted( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_BOOTED ),
     m_CustomProductControllerStateOn( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_ON ),
     m_ProductControllerStateLowPowerStandby( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY ),
     m_ProductControllerStateSwInstall( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL ),
     m_ProductControllerStateCriticalError( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_CRITICAL_ERROR ),
-    m_ProductControllerStateRebooting( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_REBOOTING ),
     m_ProductControllerStatePlaying( GetHsm(), &m_CustomProductControllerStateOn, PRODUCT_CONTROLLER_STATE_PLAYING ),
     m_ProductControllerStatePlayable( GetHsm(), &m_CustomProductControllerStateOn, PRODUCT_CONTROLLER_STATE_PLAYABLE ),
     m_ProductControllerStateLowPowerStandbyTransition( GetHsm(), &m_ProductControllerStateLowPowerStandby, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION ),
-    m_ProductControllerStatePlayingActive( GetHsm(), &m_ProductControllerStatePlaying, PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE ),
-    m_ProductControllerStatePlayingInactive( GetHsm(), &m_ProductControllerStatePlaying, PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE ),
     m_ProductControllerStateIdle( GetHsm(), &m_ProductControllerStatePlayable, PRODUCT_CONTROLLER_STATE_IDLE ),
     m_ProductControllerStateNetworkStandby( GetHsm(), &m_ProductControllerStatePlayable, PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY ),
     m_ProductControllerStateVoiceConfigured( GetHsm(), &m_ProductControllerStateIdle, PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED ),
@@ -62,6 +59,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_ProductControllerStatePlayingSelectedSetupNetworkTransition( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_TRANSITION ),
     m_ProductControllerStatePlayingSelectedSetupOther( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_OTHER ),
     m_ProductControllerStatePlayingSelectedSetupExiting( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING ),
+    m_ProductControllerStatePlayingSelectedSetupExitingAP( m_ProductControllerHsm, &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING_AP ),
     m_ProductControllerStateStoppingStreams( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS ),
     m_ProductControllerStatePlayableTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION ),
     m_ProductControllerStatePlayableTransitionInternal( GetHsm(), &m_ProductControllerStatePlayableTransition, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_INTERNAL ),
@@ -69,6 +67,9 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_ProductControllerStatePlayableTransitionNetworkStandby( GetHsm(), &m_ProductControllerStatePlayableTransitionInternal, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_NETWORK_STANDBY ),
     m_ProductControllerStateSoftwareUpdateTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_UPDATE_TRANSITION ),
     m_ProductControllerStatePlayingTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION ),
+    m_ProductControllerStateFirstBootGreeting( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING ),
+    m_ProductControllerStateFirstBootGreetingTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION ),
+    m_ProductControllerStateBootedTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_BOOTED_TRANSITION ),
     m_ProductControllerStatePlayingTransitionSwitch( GetHsm(), &m_ProductControllerStatePlayingTransition, PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SWITCH ),
     m_ProductControllerStateStoppingStreamsDedicated( m_ProductControllerHsm, &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED ),
     m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_FACTORY_DEFAULT ),
@@ -80,7 +81,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_wifiProfilesCount(),
     m_fdErrorCb( AsyncCallback<EndPointsError::Error> ( std::bind( &EddieProductController::CallbackError,
                                                                    this, std::placeholders::_1 ), GetTask() ) ),
-    m_voiceServiceClient( ProductName, m_FrontDoorClientIF ),
+    m_voiceServiceClient( "EddieProductController", m_FrontDoorClientIF ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
     m_dataCollectionClientInterface( m_FrontDoorClientIF )
 {
@@ -93,14 +94,12 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     GetHsm().AddState( "", &m_ProductControllerStateLowPowerStandby );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), &m_ProductControllerStateSwInstall );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), &m_ProductControllerStateBooting );
+    GetHsm().AddState( "", &m_ProductControllerStateBooted );
     GetHsm().AddState( "", &m_CustomProductControllerStateOn );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), &m_ProductControllerStateCriticalError );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::REBOOTING ), &m_ProductControllerStateRebooting );
     GetHsm().AddState( "", &m_ProductControllerStatePlaying );
     GetHsm().AddState( "", &m_ProductControllerStatePlayable );
     GetHsm().AddState( "", &m_ProductControllerStateLowPowerStandbyTransition );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingActive );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::DESELECTED ), &m_ProductControllerStatePlayingInactive );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::IDLE ), &m_ProductControllerStateIdle );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ), &m_ProductControllerStateNetworkStandby );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::IDLE ), &m_ProductControllerStateVoiceConfigured );
@@ -117,6 +116,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetupNetworkTransition );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetupOther );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetupExiting );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetupExitingAP );
     GetHsm().AddState( "", &m_ProductControllerStateStoppingStreams );
     GetHsm().AddState( "", &m_ProductControllerStatePlayableTransition );
     GetHsm().AddState( "", &m_ProductControllerStatePlayableTransitionInternal );
@@ -124,6 +124,9 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     GetHsm().AddState( "", &m_ProductControllerStatePlayableTransitionNetworkStandby );
     GetHsm().AddState( "", &m_ProductControllerStateSoftwareUpdateTransition );
     GetHsm().AddState( "", &m_ProductControllerStatePlayingTransition );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), &m_ProductControllerStateFirstBootGreeting );
+    GetHsm().AddState( "", &m_ProductControllerStateFirstBootGreetingTransition );
+    GetHsm().AddState( "", &m_ProductControllerStateBootedTransition );
     GetHsm().AddState( "", &m_ProductControllerStatePlayingTransitionSwitch );
     GetHsm().AddState( "", &m_ProductControllerStateStoppingStreamsDedicated );
     GetHsm().AddState( "", &m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault );
@@ -134,7 +137,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     m_ConfigurationStatusPersistence = ProtoPersistenceFactory::Create( "ConfigurationStatus", g_ProductPersistenceDir );
     m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
     ReadConfigurationStatusFromPersistence();
-    AsyncCallback<bool> uiConnectedCb( std::bind( &EddieProductController::updateUiConnectedStatus,
+    AsyncCallback<bool> uiConnectedCb( std::bind( &EddieProductController::UpdateUiConnectedStatus,
                                                   this, std::placeholders::_1 ), GetTask() ) ;
 
     m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient() ) );
@@ -142,7 +145,7 @@ EddieProductController::EddieProductController( std::string const& ProductName )
     SetupProductSTSController();
 
     //Data Collection support
-    m_DataCollectionClient =  DataCollectionClientFactory::CreateUDCService();
+    m_DataCollectionClient =  DataCollectionClientFactory::CreateUDCService( GetTask() );
 
     // Start Eddie ProductAudioService
     m_ProductAudioService = std::make_shared< CustomProductAudioService>( *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient() );
@@ -198,43 +201,7 @@ Callback < ProductMessage > EddieProductController::GetMessageHandler( )
     return ProductMessageHandler;
 }
 
-std::string const& EddieProductController::GetProductType() const
-{
-    static std::string productType = "SoundTouch 05";
-    return productType;
-}
-
-std::string const& EddieProductController::GetProductModel() const
-{
-    static std::string productModel = "SoundTouch 20";
-
-    if( auto model = MfgData::Get( "model" ) )
-    {
-        productModel =  *model;
-    }
-
-    return productModel;
-}
-
-std::string const& EddieProductController::GetProductVariant() const
-{
-    static std::string productVariant = "SoundTouch ECO2";
-    return productVariant;
-}
-
-std::string const& EddieProductController::GetProductDescription() const
-{
-    static std::string productDescription = "SoundTouch";
-
-    if( auto description = MfgData::Get( "description" ) )
-    {
-        productDescription = *description;
-    }
-
-    return productDescription;
-}
-
-std::string const& EddieProductController::GetDefaultProductName() const
+std::string EddieProductController::GetDefaultProductName() const
 {
     static std::string productName = "Bose ";
     std::string macAddress = MacAddressInfo::GetPrimaryMAC();
@@ -400,7 +367,7 @@ void EddieProductController::SendDataCollection( const IpcKeyInformation_t& keyI
     }
 
     auto keyPress  = std::make_shared<DataCollection::ButtonPress>();
-    keyPress->set_buttonid( static_cast<DataCollection::ButtonId >( currentKeyId ) ) ;
+    keyPress->set_buttonid( currentKeyId ) ;
     keyPress->set_origin( static_cast<DataCollection::Origin >( currentOrigin ) );
 
     m_DataCollectionClient->SendData( keyPress, "button-pressed" );
@@ -520,6 +487,7 @@ bool EddieProductController::IsAllModuleReady() const
              IsSTSReady() and
              IsBluetoothModuleReady() and
              IsUiConnected() and
+             IsSassReady() and
              IsSoftwareUpdateReady() ) ;
 }
 
@@ -734,7 +702,7 @@ void EddieProductController::HandleRawKeyCliCmd( const std::list<std::string>& a
     }
 }
 
-void EddieProductController::updateUiConnectedStatus( bool status )
+void EddieProductController::UpdateUiConnectedStatus( bool status )
 {
     BOSE_WARNING( s_logger, "%s|status:%s", __func__ , status ? "true" : "false" );
     m_isUiConnected = status;
@@ -928,57 +896,4 @@ bool EddieProductController::IsBooted( ) const
 {
     return IsAllModuleReady();
 }
-
-std::string EddieProductController::GetProductColor() const
-{
-    if( auto color = MfgData::GetColor() )
-    {
-        if( *color == "luxGray" )
-        {
-            return "SILVER";
-        }
-        else if( *color == "tripleBlack" )
-        {
-            return "BLACK";
-        }
-        else
-        {
-            BOSE_LOG( WARNING, "Unexpected color value in manufacturing data: " << *color );
-        }
-    }
-    else
-    {
-        BOSE_DIE( "No 'productColor' in mfgdata" );
-    }
-
-    return "UNKNOWN";
-}
-
-BLESetupService::VariantId EddieProductController::GetVariantId() const
-{
-    BLESetupService::VariantId varintId = BLESetupService::VariantId::NONE;
-
-    if( auto color = MfgData::GetColor() )
-    {
-        if( *color == "luxGray" )
-        {
-            varintId = BLESetupService::VariantId::SILVER;
-        }
-        else if( *color == "tripleBlack" )
-        {
-            varintId = BLESetupService::VariantId::BLACK;
-        }
-        else
-        {
-            varintId = BLESetupService::VariantId::WHITE;
-        }
-    }
-    else
-    {
-        BOSE_DIE( "No 'productColor' in mfgdata" );
-    }
-
-    return varintId;
-}
-
 } /// namespace ProductApp

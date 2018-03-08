@@ -293,7 +293,7 @@ void DisplayController::MonitorLightSensor()
             if( abs( m_localHeartBeat - m_uiHeartBeat ) > 2 )
             {
                 BOSE_LOG( ERROR, "Error: the UI stop" );
-                // reset the heart beat algorithm and resume on first heart beat frim the UI
+                // reset the heart beat algorithm and resume on first heart beat from the UI
                 m_localHeartBeat = m_uiHeartBeat = ULLONG_MAX;
                 updateUiConnected( false );
             }// If the UI stop updating the heart beat
