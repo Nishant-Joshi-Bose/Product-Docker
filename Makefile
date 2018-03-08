@@ -94,7 +94,7 @@ graph: product-ipk
 
 .PHONY: hsp-ipk
 hsp-ipk: cmake_build
-	./scripts/create-hsp-ipk
+	./scripts/create-hsp-ipk $(cfg)
 
 .PHONY: lpm-bos
 lpm-bos:

@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.13.41315.2723875"
+    "selected_version": "Release/Castle-Fork/0.3.14.41323.2725199"
   },
   {
     "name": "bose-opkg-utils",
@@ -25,7 +25,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/develop/0.3.2-99+3f60f39"
+    "selected_version": "Release/develop/0.3.3-110+3a6d9d5"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -89,7 +89,7 @@
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@a1a2dc23bd5c6300668175f23ebf993a8a553cf9"
+    "selected_version": "master@fe98d2bfc05d4c9115bd3cb43a2ce5f83dfd70d6"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -149,7 +149,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.13.41315.2723875"
+    "selected_version": "Release/Castle-Fork/0.3.14.41323.2725199"
   },
   {
     "name": "SystemEventService-qc8017_32",
