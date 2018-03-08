@@ -40,12 +40,9 @@ EddieProductController::EddieProductController():
     m_ProductControllerStateLowPowerStandby( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY ),
     m_ProductControllerStateSwInstall( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL ),
     m_ProductControllerStateCriticalError( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_CRITICAL_ERROR ),
-    m_ProductControllerStateRebooting( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_REBOOTING ),
     m_ProductControllerStatePlaying( GetHsm(), &m_CustomProductControllerStateOn, PRODUCT_CONTROLLER_STATE_PLAYING ),
     m_ProductControllerStatePlayable( GetHsm(), &m_CustomProductControllerStateOn, PRODUCT_CONTROLLER_STATE_PLAYABLE ),
     m_ProductControllerStateLowPowerStandbyTransition( GetHsm(), &m_ProductControllerStateLowPowerStandby, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION ),
-    m_ProductControllerStatePlayingActive( GetHsm(), &m_ProductControllerStatePlaying, PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE ),
-    m_ProductControllerStatePlayingInactive( GetHsm(), &m_ProductControllerStatePlaying, PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE ),
     m_ProductControllerStateIdle( GetHsm(), &m_ProductControllerStatePlayable, PRODUCT_CONTROLLER_STATE_IDLE ),
     m_ProductControllerStateNetworkStandby( GetHsm(), &m_ProductControllerStatePlayable, PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY ),
     m_ProductControllerStateVoiceConfigured( GetHsm(), &m_ProductControllerStateIdle, PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED ),
@@ -100,12 +97,9 @@ EddieProductController::EddieProductController():
     GetHsm().AddState( "", &m_ProductControllerStateBooted );
     GetHsm().AddState( "", &m_CustomProductControllerStateOn );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), &m_ProductControllerStateCriticalError );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::REBOOTING ), &m_ProductControllerStateRebooting );
     GetHsm().AddState( "", &m_ProductControllerStatePlaying );
     GetHsm().AddState( "", &m_ProductControllerStatePlayable );
     GetHsm().AddState( "", &m_ProductControllerStateLowPowerStandbyTransition );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingActive );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::DESELECTED ), &m_ProductControllerStatePlayingInactive );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::IDLE ), &m_ProductControllerStateIdle );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ), &m_ProductControllerStateNetworkStandby );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::IDLE ), &m_ProductControllerStateVoiceConfigured );

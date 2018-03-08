@@ -25,9 +25,6 @@
 #include "ProductControllerStateIdleVoiceNotConfigured.h"
 #include "ProductControllerStatePlayable.h"
 #include "ProductControllerStatePlaying.h"
-#include "ProductControllerStatePlayingActive.h"
-#include "ProductControllerStatePlayingInactive.h"
-#include "ProductControllerStateRebooting.h"
 #include "ProductControllerStateBooted.h"
 #include "ProductControllerStateBooting.h"
 #include "CustomProductControllerStateOn.h"
@@ -392,12 +389,9 @@ private:
     ProductControllerStateLowPowerStandby                           m_ProductControllerStateLowPowerStandby;
     ProductControllerStateSoftwareInstall                           m_ProductControllerStateSwInstall;
     ProductControllerStateCriticalError                             m_ProductControllerStateCriticalError;
-    ProductControllerStateRebooting                                 m_ProductControllerStateRebooting;
     ProductControllerStatePlaying                                   m_ProductControllerStatePlaying;
     ProductControllerStatePlayable                                  m_ProductControllerStatePlayable;
     ProductControllerStateLowPowerStandbyTransition                 m_ProductControllerStateLowPowerStandbyTransition;
-    ProductControllerStatePlayingActive                             m_ProductControllerStatePlayingActive;
-    ProductControllerStatePlayingInactive                           m_ProductControllerStatePlayingInactive;
     ProductControllerStateIdle                                      m_ProductControllerStateIdle;
     ProductControllerStateNetworkStandby                            m_ProductControllerStateNetworkStandby;
     ProductControllerStateIdleVoiceConfigured                       m_ProductControllerStateVoiceConfigured;
