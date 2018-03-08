@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.11.41219.2713461"
+    "selected_version": "Release/Castle-Fork/0.3.13.41315.2723875"
   },
   {
     "name": "bose-opkg-utils",
@@ -41,15 +41,15 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/develop/0.3.1-91+2ac06bd"
+    "selected_version": "Release/develop/0.3.2-99+3f60f39"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.2.7-20452"
+    "selected_version": "Release/Castle-Fork/0.3.1-20595"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/0.2.7-20452"
+    "selected_version": "Release/Castle-Fork/0.3.1-20595"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -152,8 +152,12 @@
     "selected_version": "Release/master/0.3.2-39+0fb03f2"
   },
   {
+    "name": "SASS-qc8017_32",
+    "selected_version": "Release/IP3/0.3.1-209+faa7229"
+  },
+  {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/0.3.2-61+c5803e7"
+    "selected_version": "Release/master/0.3.3-63+5fcbc13"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -161,7 +165,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-03-05_1626"
+    "selected_version": "Release/Castle-Fork/0.3.13.41315.2723875"
   },
   {
     "name": "SystemEventService-qc8017_32",

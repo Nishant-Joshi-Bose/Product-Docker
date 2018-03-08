@@ -172,6 +172,11 @@ public:
         return false;
     }
 
+    virtual bool HandleSassState( bool ready )
+    {
+        return false;
+    }
+
     virtual bool HandleSTSSourcesInit( )
     {
         return false;
@@ -258,6 +263,16 @@ public:
     }
 
     virtual bool HandleSetupAPDeactivateTimerExpiry( )
+    {
+        return false;
+    }
+
+    virtual bool HandleChimeSASSPlaybackCompleted( int32_t eventId )
+    {
+        return false;
+    }
+
+    virtual bool HandleChimeSASSPlaybackError( int32_t eventId )
     {
         return false;
     }
