@@ -342,6 +342,7 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
         {
             SendDataCollection( keyInformation );
         }
+        GetHsm().Handle<> ( &CustomProductControllerState::HandleInactivityTimerResetEvent );
     }
     else
     {

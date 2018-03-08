@@ -340,6 +340,11 @@ public:
         return false;
     }
 
+    virtual bool HandleInactivityTimerResetEvent()
+    {
+        return false;
+    }
+
 public:
     /// The custom version of this function returns the custom ProductController
     static EddieProductController& GetCustomProductController();
