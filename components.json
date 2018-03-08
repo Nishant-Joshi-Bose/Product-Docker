@@ -1,11 +1,11 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@2f071fbb8499bee85b2df34aab69b6cedcaa076c"
+    "selected_version": "master@01bc26d1af73b45425eec6d8537891eb251b40cd"
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@cf16a93f5f9536d04667f394bce9a91dae334d6b"
+    "selected_version": "master@cefcd5cdfefc1b7d77c808274d398401219b2c5d"
   },
   {
     "name": "BLERemoteXCVR",
