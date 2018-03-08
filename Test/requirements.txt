@@ -5,6 +5,7 @@ pyadb>=0.1.1
 pytest>=3.3.0
 pytest-pythonpath>=0.7.1
 requests>=2.18.4
+requests-toolbelt==0.8.0
 simplejson>=3.13.2
 websocket-client>=0.44.0
 xmltodict>=0.11.0

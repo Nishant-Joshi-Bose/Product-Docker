@@ -39,12 +39,6 @@ $ PATH=$PATH:/scratch/CastleTools/bin   # add this to your ~/.profile, ~/.bash_p
 $ git clone git@github.com:BoseCorp/Eddie.git
 ```
 
-Build the .ipk package file containing the SoundTouch software.
-```shell session
-$ cd /scratch/Eddie
-$ make package
-```
-
 Make sure your Eddie unit is accessible via adb.
 ```shell session
 $ sudo adb start-server             # must be done as root. typically once per boot of the build host
@@ -63,19 +57,20 @@ From the Eddie workspace:
 $ cd /scratch/Eddie
 $ pip2.7 install -r Test/requirements.txt
 $ make all-packages
-$ cd builds/
+```
 
+```shell session
 To update without HSP:
-$ ./CastleTestUtils/CastleTestUtils/scripts/pushup 
+$ ./scripts/pushup 
 
 To update HSP:
-$ ./CastleTestUtils/CastleTestUtils/scripts/pushup --hsp 
+$ ./scripts/pushup --hsp 
 
 When having multiple devices, without HSP:
-$ ./CastleTestUtils/CastleTestUtils/scripts/pushup --deviceid <deviceid>
+$ ./scripts/pushup --deviceid <deviceid>
 
 When having multiple devices, with HSP:
-$ ./CastleTestUtils/CastleTestUtils/scripts/pushup --deviceid <deviceid> --hsp
+$ ./scripts/pushup --deviceid <deviceid> --hsp
 ```
 
 In general:
@@ -86,7 +81,6 @@ $ git clone git@github.com:BoseCorp/CastleTestUtils.git
 $ cd CastleTestUtils
 $ pip2.7 install -r requirements.txt
 $ ./CastleTestUtils/scripts/pushup --deviceid <device-id> --zipfile <path-to-zipfile>
-
 ```
 
 <a name="links"/>
