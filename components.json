@@ -57,7 +57,7 @@
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
-    "selected_version": "Continuous/master/0.3.5-42+ddbf6a7"
+    "selected_version": "Release/IP3/0.3.6-45+fe14799"
   },
   {
     "name": "CastleDemoController-qc8017_32",
@@ -85,7 +85,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.6-61+ac12234"
+    "selected_version": "Release/master/0.3.7-63+cf5a143"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -101,7 +101,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "Stuart-Lumby-PGC-875-Remove-Obsolete-States@e45fdc5a80c551d31ec16c79e7af84e26aa853b3"
+    "selected_version": "Stuart-Lumby-PGC-875-Remove-Obsolete-States@b3a6b75af9d2db10a56ec05f1059f8d012d2e05f"
   },
   {
     "name": "CastleProductUIAssets",
@@ -145,7 +145,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.3.8-113+81aa0d0"
+    "selected_version": "Release/master/0.3.9-117+7078c70"
   },
   {
     "name": "RivieraLpmUpdater",
@@ -157,7 +157,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/IP3/0.3.11-334+5bad26a"
+    "selected_version": "Release/IP3/0.3.14-365+ec54c8a"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",

@@ -36,6 +36,7 @@
 #include "ProductSystemManager.h"
 #include "ProductCommandLine.h"
 #include "ProductAdaptIQManager.h"
+#include "ProductSourceInfo.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
 #include "SystemSourcesProperties.pb.h"
@@ -45,6 +46,10 @@
 #include "ProductControllerStates.h"
 #include "ProductControllerState.h"
 #include "ProductControllerStateBooting.h"
+#include "ProductControllerStateBooted.h"
+#include "ProductControllerStateBootedTransition.h"
+#include "ProductControllerStateFirstBootGreeting.h"
+#include "ProductControllerStateFirstBootGreetingTransition.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
 #include "ProductControllerStateIdleVoiceConfigured.h"
@@ -63,11 +68,12 @@
 #include "ProductControllerStatePlayingDeselected.h"
 #include "ProductControllerStatePlayingSelected.h"
 #include "ProductControllerStatePlayingSelectedNotSilent.h"
-#include "ProductControllerStatePlayingSelectedSetupExiting.h"
 #include "ProductControllerStatePlayingSelectedSetup.h"
 #include "ProductControllerStatePlayingSelectedSetupNetwork.h"
 #include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
+#include "ProductControllerStatePlayingSelectedSetupExitingAP.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
+#include "ProductControllerStatePlayingSelectedSetupExiting.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSwitch.h"
@@ -78,7 +84,6 @@
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateStoppingStreams.h"
 #include "ProductControllerStateTop.h"
-#include "ProductControllerStateWelcome.h"
 #include "CustomProductControllerStateAdaptIQExiting.h"
 #include "CustomProductControllerStateAdaptIQ.h"
 #include "CustomProductControllerStateIdle.h"
@@ -93,6 +98,8 @@
 #include "CustomProductControllerStatePlayingTransitionAccessoryPairing.h"
 #include "MfgData.h"
 #include "DeviceManager.pb.h"
+#include "ProductEndpointDefines.h"
+#include "ProtoPersistenceFactory.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -132,6 +139,7 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductDspHelper( nullptr ),
     m_ProductAdaptIQManager( nullptr ),
     m_ProductAudioService( nullptr ),
+    m_ProductSourceInfo( nullptr ),
 
     ///
     /// Member Variable Initialization
@@ -140,8 +148,6 @@ ProfessorProductController::ProfessorProductController( ) :
     m_IsNetworkConfigured( false ),
     m_IsNetworkConnected( false ),
     m_IsAutoWakeEnabled( false ),
-    m_IsAccountConfigured( false ),
-    m_IsMicrophoneEnabled( false ),
     m_Running( false ),
 
     ///
@@ -187,10 +193,25 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_BOOTING );
 
-    auto* stateWelcome = new ProductControllerStateWelcome
+    auto* stateFirstBootGreetingTransition = new ProductControllerStateFirstBootGreetingTransition
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_WELCOME );
+      PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION );
+
+    auto* stateFirstBootGreeting = new ProductControllerStateFirstBootGreeting
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING );
+
+    auto* stateBootedTransition = new ProductControllerStateBootedTransition
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_BOOTED_TRANSITION );
+
+    auto* stateBooted = new ProductControllerStateBooted
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_BOOTED );
 
     auto* stateSoftwareUpdateTransition = new ProductControllerStateSoftwareUpdateTransition
     ( GetHsm( ),
@@ -348,15 +369,20 @@ void ProfessorProductController::Run( )
       customStatePlayingSelected,
       CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP );
 
+    auto* statePlayingSelectedSetupNetworkTransition = new ProductControllerStatePlayingSelectedSetupNetworkTransition
+    ( GetHsm( ),
+      customStatePlayingSelectedSetup,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_TRANSITION );
+
     auto* statePlayingSelectedSetupNetwork = new ProductControllerStatePlayingSelectedSetupNetwork
     ( GetHsm( ),
       customStatePlayingSelectedSetup,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK );
 
-    auto* statePlayingSelectedSetupNetworkTransition = new ProductControllerStatePlayingSelectedSetupNetworkTransition
+    auto* statePlayingSelectedSetupExitingAP = new ProductControllerStatePlayingSelectedSetupExitingAP
     ( GetHsm( ),
-      customStatePlayingSelectedSetup,
-      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_NETWORK_TRANSITION );
+      statePlayingSelectedSetup,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING_AP );
 
     auto* statePlayingSelectedSetupOther = new ProductControllerStatePlayingSelectedSetupOther
     ( GetHsm( ),
@@ -418,7 +444,10 @@ void ProfessorProductController::Run( )
 
     GetHsm( ).AddState( "", stateTop );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), stateBooting );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), stateWelcome );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), stateFirstBootGreetingTransition );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), stateFirstBootGreeting );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOTING ), stateBootedTransition );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOTING ), stateBooted );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareUpdateTransition );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareInstall );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), stateCriticalError );
@@ -449,6 +478,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), customStatePlayingSelectedSetup );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupNetwork );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupNetworkTransition );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupExitingAP );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupOther );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupExiting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), customStatePlayingSelectedPairing );
@@ -480,6 +510,7 @@ void ProfessorProductController::Run( )
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_ProductKeyInputInterface    = std::make_shared< ProductKeyInputInterface          >( *this );
     m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
+    m_ProductSourceInfo           = std::make_shared< ProductSourceInfo                 >( *this );
     m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this, m_FrontDoorClientIF, m_ProductLpmHardwareInterface->GetLpmClient() );
 
     if( m_ProductLpmHardwareInterface == nullptr ||
@@ -499,6 +530,11 @@ void ProfessorProductController::Run( )
     }
 
     ///
+    /// Apply settings from persistence
+    ///
+    ApplyOpticalAutoWakeSettingFromPersistence( );
+
+    ///
     /// Set up LightBarController
     ///
     m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_ProductLpmHardwareInterface->GetLpmClient() ) );
@@ -515,6 +551,7 @@ void ProfessorProductController::Run( )
     m_ProductCecHelper           ->Run( );
     m_ProductDspHelper           ->Run( );
     m_ProductAdaptIQManager      ->Run( );
+    m_ProductSourceInfo          ->Run( );
 
     ///
     /// Register FrontDoor EndPoints
@@ -609,6 +646,19 @@ std::shared_ptr< ProductAdaptIQManager >& ProfessorProductController::GetAdaptIQ
 {
     return m_ProductAdaptIQManager;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetSourceInfo
+///
+/// @return This method returns a shared pointer to the SourceInfo instance
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::shared_ptr< ProductSourceInfo >& ProfessorProductController::GetSourceInfo( )
+{
+    return m_ProductSourceInfo;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -708,18 +758,6 @@ uint32_t ProfessorProductController::GetWifiProfileCount( ) const
 bool ProfessorProductController::IsAutoWakeEnabled( ) const
 {
     return m_IsAutoWakeEnabled;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::IsVoiceConfigured
-///
-/// @return This method returns a true or false value, based on a set member variable.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsVoiceConfigured( ) const
-{
-    return ( m_IsMicrophoneEnabled and m_IsAccountConfigured );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -949,6 +987,25 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
 {
     RegisterCommonEndPoints( );
     m_lightbarController->RegisterLightBarEndPoints();
+
+    {
+        auto l = [ = ]( Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> respCb,
+                        Callback<EndPointsError::Error> errorCb )
+        {
+            HandleGetOpticalAutoWake( respCb, errorCb );
+        };
+        GetFrontDoorClient()->RegisterGet( FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API, l );
+    }
+    {
+        auto l = [ = ]( SystemPowerProductPb::SystemPowerModeOpticalAutoWake req,
+                        Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> respCb,
+                        Callback<EndPointsError::Error> errorCb )
+        {
+            HandlePutOpticalAutoWake( req, respCb, errorCb );
+        };
+        GetFrontDoorClient( )->RegisterPut<SystemPowerProductPb::SystemPowerModeOpticalAutoWake>(
+            FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API, l );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1106,7 +1163,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         }
 
         m_ProductSystemManager->SetNetworkAccoutConfigurationStatus( m_IsNetworkConfigured,
-                                                                     m_IsAccountConfigured );
+                                                                     m_IsVoiceAccountConfigured );
 
         GetHsm( ).Handle< bool, bool >
         ( &CustomProductControllerState::HandleNetworkState, m_IsNetworkConfigured, m_IsNetworkConnected );
@@ -1134,34 +1191,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             BOSE_ERROR( s_logger, "A wireless network message was received with an unknown frequency." );
         }
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Voice messages for the Virtual Personal Assistant or VPA are handled at this point.          ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_voicestatus( ) )
-    {
-        if( message.voicestatus( ).has_microphoneenabled( ) )
-        {
-            m_IsMicrophoneEnabled = message.voicestatus( ).microphoneenabled( );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "An invalid voice status message for the microphone status was received." );
-            return;
-        }
-
-        if( message.voicestatus( ).has_accountconfigured( ) )
-        {
-            m_IsAccountConfigured = message.voicestatus( ).accountconfigured( );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "An invalid voice status message for account configuration was received." );
-            return;
-        }
-
-        GetHsm( ).Handle< bool >
-        ( &CustomProductControllerState::HandleVoiceState, IsVoiceConfigured( ) );
-    }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Autowake messages are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -1179,6 +1208,8 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
 
         BOSE_DEBUG( s_logger, "An autowake status %s message has been received.",
                     m_IsAutoWakeEnabled ? "active" : "inactive" );
+
+        NotifyFrontdoorAndStoreOpticalAutoWakeSetting( );
 
         GetHsm( ).Handle< bool >
         ( &CustomProductControllerState::HandleAutowakeStatus, m_IsAutoWakeEnabled );
@@ -1301,6 +1332,7 @@ void ProfessorProductController::Wait( )
     m_ProductCecHelper           ->Stop( );
     m_ProductDspHelper           ->Stop( );
     m_ProductAdaptIQManager      ->Stop( );
+    m_ProductSourceInfo          ->Stop( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1457,6 +1489,72 @@ void ProfessorProductController::End( )
     BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
 
     m_Running = false;
+}
+
+void ProfessorProductController::HandleGetOpticalAutoWake(
+    const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
+    const Callback<EndPointsError::Error> & errorCb ) const
+{
+    SystemPowerProductPb::SystemPowerModeOpticalAutoWake autowake;
+    autowake.set_enabled( m_IsAutoWakeEnabled );
+    respCb( autowake );
+}
+
+void ProfessorProductController::HandlePutOpticalAutoWake(
+    const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req,
+    const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
+    const Callback<EndPointsError::Error> & errorCb )
+{
+    if( req.has_enabled( ) )
+    {
+        ProductMessage message;
+        message.mutable_autowakestatus( )->set_active( req.enabled( ) );
+        HandleMessage( message );
+    }
+    HandleGetOpticalAutoWake( respCb, errorCb );
+}
+
+void ProfessorProductController::ApplyOpticalAutoWakeSettingFromPersistence( )
+{
+    auto persistence = ProtoPersistenceFactory::Create( "OpticalAutoWake.json", GetProductPersistenceDir( ) );
+    SystemPowerProductPb::SystemPowerModeOpticalAutoWake autowake;
+    try
+    {
+        const std::string & s = persistence->Load( );
+        ProtoToMarkup::FromJson( s, &autowake );
+    }
+    catch( const ProtoToMarkup::MarkupError & e )
+    {
+        BOSE_ERROR( s_logger, "OpticalAutoWake persistence markup error - %s", e.what( ) );
+    }
+    catch( ProtoPersistenceIF::ProtoPersistenceException & e )
+    {
+        BOSE_ERROR( s_logger, "OpticalAutoWake persistence error - %s", e.what( ) );
+    }
+
+    m_IsAutoWakeEnabled = autowake.enabled( );
+}
+
+void ProfessorProductController::NotifyFrontdoorAndStoreOpticalAutoWakeSetting( )
+{
+    auto persistence = ProtoPersistenceFactory::Create( "OpticalAutoWake.json", GetProductPersistenceDir( ) );
+    SystemPowerProductPb::SystemPowerModeOpticalAutoWake autowake;
+    autowake.set_enabled( m_IsAutoWakeEnabled );
+    GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API,
+                                             autowake );
+
+    try
+    {
+        persistence->Store( ProtoToMarkup::ToJson( autowake ) );
+    }
+    catch( const ProtoToMarkup::MarkupError & e )
+    {
+        BOSE_ERROR( s_logger, "OpticalAutoWake store persistence markup error - %s", e.what( ) );
+    }
+    catch( ProtoPersistenceIF::ProtoPersistenceException & e )
+    {
+        BOSE_ERROR( s_logger, "OpticalAutoWake store persistence error - %s", e.what( ) );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
