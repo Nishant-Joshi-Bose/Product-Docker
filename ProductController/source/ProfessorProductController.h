@@ -236,14 +236,6 @@ public:
 
     std::string GetDefaultProductName() const override;
 
-    std::string GetProductName() const override;
-
-    std::string GetProductColor() const override;
-
-    std::string GetProductType() const override;
-
-    BLESetupService::VariantId GetVariantId() const override;
-
     BLESetupService::ProductId GetProductId() const override
     {
         // @TODO PGC-788
