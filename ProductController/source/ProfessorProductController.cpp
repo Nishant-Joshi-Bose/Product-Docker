@@ -174,8 +174,6 @@ ProfessorProductController::ProfessorProductController( ) :
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::Run( )
 {
-    CommonInitialize( );
-
     m_Running = true;
 
     BOSE_DEBUG( s_logger, "----------- Product Controller State Machine    ------------" );
@@ -506,6 +504,7 @@ void ProfessorProductController::Run( )
     ///
     /// Initialize entities in the Common Product Controller
     ///
+    CommonInitialize( );
     m_deviceManager.Initialize( this );
 
     ///
