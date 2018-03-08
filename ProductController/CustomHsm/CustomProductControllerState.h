@@ -72,7 +72,7 @@ public:
         return false;
     }
 
-    virtual bool HandleFactoryDefault( )
+    virtual bool HandleLpmFactoryDefault( )
     {
         return false;
     }
@@ -336,6 +336,11 @@ public:
     }
 
     virtual bool HandleChimeSASSPlaybackError( int32_t eventId )
+    {
+        return false;
+    }
+
+    virtual bool HandleSystemEventFactoryDefault( const ProductSystemEventServiceResponse& response )
     {
         return false;
     }
