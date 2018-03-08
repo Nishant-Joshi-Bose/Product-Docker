@@ -539,7 +539,10 @@ void ProfessorProductController::Run( )
     ///
     /// Set up LightBarController
     ///
-    m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_ProductLpmHardwareInterface->GetLpmClient() ) );
+    m_lightbarController = std::unique_ptr< LightBar::LightBarController >(
+                               new LightBar::LightBarController( GetTask( ),
+                                                                 m_FrontDoorClientIF,
+                                                                 m_ProductLpmHardwareInterface->GetLpmClient( ) ) );
 
     ///
     /// Run all the submodules.
