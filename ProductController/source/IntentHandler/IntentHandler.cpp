@@ -132,9 +132,9 @@ void IntentHandler::Initialize( )
     ///
     m_IntentManagerMap[( uint16_t )Action::ACTION_TV ]              = playbackRequestManager;
     m_IntentManagerMap[( uint16_t )Action::ACTION_APAPTIQ_START ]   = playbackRequestManager;
-    m_IntentManagerMap[( uint16_t )Action::ACTION_CUSTOM_GAME ]     = playbackRequestManager;
-    m_IntentManagerMap[( uint16_t )Action::ACTION_CUSTOM_DVD ]      = playbackRequestManager;
-    m_IntentManagerMap[( uint16_t )Action::ACTION_CUSTOM_CABLESAT ] = playbackRequestManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_GAME ]            = playbackRequestManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_DVD ]             = playbackRequestManager;
+    m_IntentManagerMap[( uint16_t )Action::ACTION_CABLESAT ]        = playbackRequestManager;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -241,27 +241,27 @@
         "timeOutList": []
     },
      {
-        "action": "ACTION_CUSTOM_GAME",
-        "commment": "select custom source game/ott",
+        "action": "ACTION_GAME",
+        "commment": "select user configurable source game/ott",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_GAME_SOURCE"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "RF"],
         "timeOutList": []
     },
     {
-        "action": "ACTION_CUSTOM_DVD",
-        "commment": "select custom source dvd",
+        "action": "ACTION_DVD",
+        "commment": "select user configurable source dvd",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_BD_DVD_SOURCE"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "RF"],
         "timeOutList": []
     },
     {
-        "action": "ACTION_CUSTOM_CABLESAT",
-        "commment": "select custom source cable/sat",
+        "action": "ACTION_CABLESAT",
+        "commment": "select user configurable source cable/sat",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_CUSTOM_SOURCE_CABLESAT"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
+        "origin": ["IR", "TAP", "RF"],
         "timeOutList": []
     },   
     {

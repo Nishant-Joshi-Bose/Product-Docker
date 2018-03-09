@@ -105,17 +105,17 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
 
         BOSE_INFO( s_logger, "An attempt to play the TV source has been made." );
     }
-    else if( action == ( uint16_t )Action::ACTION_CUSTOM_GAME )
+    else if( action == ( uint16_t )Action::ACTION_GAME )
     {
-        BOSE_INFO( s_logger, "An attempt to play the Custom Source GAME source has been made." );
+        BOSE_INFO( s_logger, "An attempt to play the user configurable source GAME source has been made." );
     }
-    else if( action == ( uint16_t )Action::ACTION_CUSTOM_DVD )
+    else if( action == ( uint16_t )Action::ACTION_DVD )
     {
-        BOSE_INFO( s_logger, "An attempt to play the Custom Source DVD source has been made." );
+        BOSE_INFO( s_logger, "An attempt to play the user configurable source DVD source has been made." );
     }
-    else if( action == ( uint16_t )Action::ACTION_CUSTOM_CABLESAT )
+    else if( action == ( uint16_t )Action::ACTION_CABLESAT )
     {
-        BOSE_INFO( s_logger, "An attempt to play the Custom Source Cable/Sat source has been made." );
+        BOSE_INFO( s_logger, "An attempt to play the user configurable source Cable/Sat source has been made." );
     }
     else if( action == ( uint16_t )Action::ACTION_APAPTIQ_START )
     {

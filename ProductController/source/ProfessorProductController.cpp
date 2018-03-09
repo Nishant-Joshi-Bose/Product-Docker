@@ -1230,11 +1230,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         {
             GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentPlaySoundTouchSource );
         }
-        else if( GetIntentHandler( ).IsIntentPlayCustomSource( message.action( ) ) )
-        {
-            GetHsm( ).Handle<KeyHandlerUtil::ActionType_t>( &CustomProductControllerState::HandleIntentPlayCustomSource,
-                                                            message.action() );
-        }
         else
         {
             BOSE_ERROR( s_logger, "An action key %u was received that has no associated intent.", message.action( ) );

@@ -71,9 +71,8 @@ public:
 
     }
 
-    bool HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent ) override;
-    bool HandleIntentPlayCustomSource( KeyHandlerUtil::ActionType_t intent )  override;
-    bool HandleAdaptIQControl( const ProductAdaptIQControl& cmd )             override;
+    bool HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent )       override;
+    bool HandleAdaptIQControl( const ProductAdaptIQControl& cmd )                   override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

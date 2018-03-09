@@ -81,24 +81,6 @@ bool CustomProductControllerStateOn::HandleIntentPlayProductSource( KeyHandlerUt
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStateOn::HandleIntentPlayCustomSource
-///
-/// @param  KeyHandlerUtil::ActionType_t intent
-///
-/// @return This method returns a true Boolean value indicating that it has handled the intent.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateOn::HandleIntentPlayCustomSource( KeyHandlerUtil::ActionType_t intent )
-{
-    BOSE_INFO( s_logger, "The %s state in %s is handling the intent %u", GetName( ).c_str( ), __FUNCTION__, intent );
-
-    GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
-
-    return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @brief  CustomProductControllerStateOn::HandleAdaptIQControl
 ///
 /// @param  const ProductAdaptIQControl& cmd
