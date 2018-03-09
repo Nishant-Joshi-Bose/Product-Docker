@@ -65,10 +65,8 @@
 #include "ProductControllerStatePlayableTransitionIdle.h"
 #include "ProductControllerStatePlayableTransitionInternal.h"
 #include "ProductControllerStatePlayableTransitionNetworkStandby.h"
-#include "ProductControllerStatePlayingActive.h"
 #include "ProductControllerStatePlayingDeselected.h"
 #include "ProductControllerStatePlaying.h"
-#include "ProductControllerStatePlayingInactive.h"
 #include "ProductControllerStatePlayingSelected.h"
 #include "ProductControllerStatePlayingSelectedNotSilent.h"
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
@@ -80,7 +78,6 @@
 #include "ProductControllerStatePlayingSelectedSilent.h"
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSwitch.h"
-#include "ProductControllerStateRebooting.h"
 #include "ProductControllerStateSoftwareInstall.h"
 #include "ProductControllerStateSoftwareUpdateTransition.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
@@ -172,8 +169,6 @@ ProfessorProductController::ProfessorProductController( ) :
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::Run( )
 {
-    CommonInitialize( );
-
     m_Running = true;
 
     BOSE_DEBUG( s_logger, "----------- Product Controller State Machine    ------------" );
@@ -226,11 +221,6 @@ void ProfessorProductController::Run( )
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL );
-
-    auto* stateRebooting = new ProductControllerStateRebooting
-    ( GetHsm( ),
-      stateTop,
-      PRODUCT_CONTROLLER_STATE_REBOOTING );
 
     auto* stateCriticalError = new ProductControllerStateCriticalError
     ( GetHsm( ),
@@ -456,7 +446,6 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), stateFirstBootGreeting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareUpdateTransition );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareInstall );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::REBOOTING ), stateRebooting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), stateCriticalError );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FACTORY_DEFAULT ), stateFactoryDefault );
     GetHsm( ).AddState( "", stateBooted );
@@ -504,6 +493,7 @@ void ProfessorProductController::Run( )
     ///
     /// Initialize entities in the Common Product Controller
     ///
+    CommonInitialize( );
     m_deviceManager.Initialize( this );
 
     ///
@@ -547,7 +537,10 @@ void ProfessorProductController::Run( )
     ///
     /// Set up LightBarController
     ///
-    m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_ProductLpmHardwareInterface->GetLpmClient() ) );
+    m_lightbarController = std::unique_ptr< LightBar::LightBarController >(
+                               new LightBar::LightBarController( GetTask( ),
+                                                                 m_FrontDoorClientIF,
+                                                                 m_ProductLpmHardwareInterface->GetLpmClient( ) ) );
 
     ///
     /// Run all the submodules.
