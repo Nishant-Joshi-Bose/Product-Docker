@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.13.41315.2723875"
+    "selected_version": "Release/Castle-Fork/0.3.14.41323.2725199"
   },
   {
     "name": "bose-opkg-utils",
@@ -41,7 +41,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/develop/0.3.2-99+3f60f39"
+    "selected_version": "Release/develop/0.3.3-110+3a6d9d5"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -65,11 +65,7 @@
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.2.0-26+f813b4d"
-  },
-  {
-    "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/0.3.3-53+83e0de2"
+    "selected_version": "Release/master/0.2.1-31+d7e3d00"
   },
   {
     "name": "CastleLibs-native",
@@ -89,7 +85,7 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-176+32ae99f"
+    "selected_version": "Release/master/0.3.1-181+ed72644"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -118,6 +114,10 @@
   {
     "name": "GalapagosClient-qc8017_32",
     "selected_version": "Release/master/0.2.0-78+2eebfc2"
+  },
+  {
+    "name": "HTTPInterface-qc8017_32",
+    "selected_version": "Release/master/0.3.3-53+83e0de2"
   },
   {
     "name": "KeyHandler-qc8017_32",
