@@ -105,10 +105,25 @@ bool CustomProductControllerStatePlayingDeselectedAccessoryPairing::HandleAudioP
 {
     BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
 
-    m_stopPairingOnExit = false;
+    if( ( GetProductController( ).GetNowSelection( ).has_contentitem( ) ) and
+        ( GetProductController( ).GetNowSelection( ).contentitem( ).source( ).compare( "PRODUCT" )      == 0 ) )
+    {
+        if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( "SETUP" ) == 0 )
+        {
+            ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP );
+        }
+        else if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( "ADAPTiQ" ) == 0 )
+        {
+            ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
+        }
+    }
+    else
+    {
 
-    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_ACCESSORY_PAIRING );
+        m_stopPairingOnExit = false;
 
+        ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_ACCESSORY_PAIRING );
+    }
     return true;
 }
 
