@@ -68,10 +68,6 @@
     "selected_version": "Release/master/0.2.0-26+f813b4d"
   },
   {
-    "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/0.3.3-53+83e0de2"
-  },
-  {
     "name": "CastleLibs-native",
     "selected_version": "branches/castle-libs@2593"
   },
@@ -101,7 +97,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@de3a4d24a793961baf1f09ceb54e6e76afa42ab7"
+    "selected_version": "master@bc75918b6af5d8336d7054c5c309438f4b017e54"
   },
   {
     "name": "CastleProductUIAssets",
@@ -118,6 +114,10 @@
   {
     "name": "GalapagosClient-qc8017_32",
     "selected_version": "Release/master/0.2.0-78+2eebfc2"
+  },
+  {
+    "name": "HTTPInterface-qc8017_32",
+    "selected_version": "Release/master/0.3.3-53+83e0de2"
   },
   {
     "name": "KeyHandler-qc8017_32",
