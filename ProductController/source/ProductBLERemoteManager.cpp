@@ -162,6 +162,9 @@ void ProductBLERemoteManager::Run( )
     InitializeFrontDoor();
     InitializeRCS();
 
+    // TODO this is a hack for the fact that RCS doesn't provide a status notification, and 
+    // callers of IsConnected probably want to know right away (i.e. no callback), so we poll
+    // for now; this will be replaced when a status notification is available
     m_statusTimer->SetTimeouts( 1000, 1000 );
     m_statusTimer->Start( [ = ]( )
     {
@@ -219,6 +222,7 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
         return;
     }
 
+    /// TODO the following rat's nest of code will need some more work, but the basic idea is right
     if( source->sourcename().compare( "PRODUCT" ) == 0 )
     {
         if( not source->has_sourceaccountname() )
