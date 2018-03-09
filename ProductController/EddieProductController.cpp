@@ -487,7 +487,8 @@ bool EddieProductController::IsAllModuleReady() const
              IsNetworkModuleReady() and
              IsSTSReady() and
              IsBluetoothModuleReady() and
-             IsUiConnected() and
+             // @TODO uncomment IsUiConnected line once Monaco starts sending heart beat signals.
+             //IsUiConnected() and
              IsSassReady() and
              IsSoftwareUpdateReady() ) ;
 }
