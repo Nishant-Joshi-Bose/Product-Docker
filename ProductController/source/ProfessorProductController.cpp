@@ -101,6 +101,7 @@
 #include "CustomProductControllerStatePlayingTransitionAccessoryPairing.h"
 #include "MfgData.h"
 #include "DeviceManager.pb.h"
+#include "ProductBLERemoteManager.h"
 #include "ProductEndpointDefines.h"
 #include "ProtoPersistenceFactory.h"
 
@@ -143,6 +144,7 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductAdaptIQManager( nullptr ),
     m_ProductAudioService( nullptr ),
     m_ProductSourceInfo( nullptr ),
+    m_ProductBLERemoteManager( nullptr ),
 
     ///
     /// Member Variable Initialization
@@ -513,6 +515,7 @@ void ProfessorProductController::Run( )
     m_ProductKeyInputInterface    = std::make_shared< ProductKeyInputInterface          >( *this );
     m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
     m_ProductSourceInfo           = std::make_shared< ProductSourceInfo                 >( *this );
+    m_ProductBLERemoteManager     = std::make_shared< ProductBLERemoteManager           >( *this );
     m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this, m_FrontDoorClientIF, m_ProductLpmHardwareInterface->GetLpmClient() );
 
     if( m_ProductLpmHardwareInterface == nullptr ||
@@ -557,6 +560,7 @@ void ProfessorProductController::Run( )
     m_ProductDspHelper           ->Run( );
     m_ProductAdaptIQManager      ->Run( );
     m_ProductSourceInfo          ->Run( );
+    m_ProductBLERemoteManager    ->Run( );
 
     ///
     /// Register FrontDoor EndPoints
@@ -663,6 +667,20 @@ std::shared_ptr< ProductSourceInfo >& ProfessorProductController::GetSourceInfo(
 {
     return m_ProductSourceInfo;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetBLERemoteManager
+///
+/// @return This method returns a shared pointer to the BLERemoteManager instance
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::shared_ptr< ProductBLERemoteManager>& ProfessorProductController::GetBLERemoteManager( )
+{
+    return m_ProductBLERemoteManager;
+}
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

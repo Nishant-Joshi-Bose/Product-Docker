@@ -244,6 +244,7 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
     bool isBlastedKey = false;
     std::string cicode;
     auto nowSelection = m_ProductController.GetNowSelection();
+#if 0
 
     if( nowSelection.has_contentitem() )
     {
@@ -260,6 +261,7 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
             cicode = source->details().cicode();
         }
     }
+#endif
 
     if( isBlastedKey )
     {
