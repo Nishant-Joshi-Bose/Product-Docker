@@ -233,6 +233,13 @@ public:
     ////////////////////////////////////////////////////////////////////////////////
     bool IsBtLeModuleReady() const;
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @name  IsUiConnected
+    /// @brief true if UI(monaco) is up and ready.
+    /// @return bool
+    ////////////////////////////////////////////////////////////////////////////////
+    bool IsUiConnected() const;
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  IsCAPSReady
 /// @brief true if CAPS module is ready.
@@ -318,6 +325,8 @@ public:
 /// @return void
 ///////////////////////////////////////////////////////////////////////////////
     void HandleProductMessage( const ProductMessage& productMessage );
+
+    void UpdateUiConnectedStatus( bool status );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name   GetLpmHardwareInterface
@@ -441,6 +450,7 @@ private:
     bool                                        m_isCapsReady = false;
     bool                                        m_isNetworkModuleReady  = false;
     bool                                        m_isBLEModuleReady  = false;
+    bool                                        m_isUiConnected = false;
 
     BOptional<int>                              m_wifiProfilesCount;
     AsyncCallback<EndPointsError::Error>            m_fdErrorCb;
