@@ -338,7 +338,7 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
         {
             SendDataCollection( keyInformation );
         }
-        m_InactivityTimers.RestartInActivityTimers();
+        RestartInactivityTimers();
     }
     else
     {
