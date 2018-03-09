@@ -29,6 +29,7 @@
 #include "ProductCecHelper.h"
 #include "FrontDoorClient.h"
 #include "EndPointsDefines.h"
+#include "ProductEndpointDefines.h"
 
 using namespace ProductPb;
 
@@ -38,7 +39,7 @@ const std::string s_ModeOn         = "On";
 const std::string s_ModeOff        = "Off";
 const std::string s_ModeAltOn      = "AltOn";
 
-const std::string s_FrontDoorCecMode    = "/cec";
+const std::string s_FrontDoorCecMode    = FRONTDOOR_CEC_API;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

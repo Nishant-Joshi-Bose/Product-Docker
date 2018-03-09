@@ -30,6 +30,7 @@
 #include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "SpeakerPairingManager.h"
+#include "ProductEndpointDefines.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -42,7 +43,7 @@ namespace ProductApp
 /// @brief Global Constant Expressions
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-const std::string accessoryFrontDoorURL = "/accessories";
+const std::string accessoryFrontDoorURL = FRONTDOOR_ACCESSORIES_API;
 constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_START = 4 * 60 * 1000;
 constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY = 0 ;
 
