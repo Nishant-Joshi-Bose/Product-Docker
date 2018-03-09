@@ -137,9 +137,11 @@ EddieProductController::EddieProductController():
     m_ConfigurationStatusPersistence = ProtoPersistenceFactory::Create( "ConfigurationStatus", g_ProductPersistenceDir );
     m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
     ReadConfigurationStatusFromPersistence();
+    AsyncCallback<bool> uiConnectedCb( std::bind( &EddieProductController::UpdateUiConnectedStatus,
+                                                  this, std::placeholders::_1 ), GetTask() ) ;
 
     m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient() ) );
-    m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient() ) );
+    m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient(), uiConnectedCb ) );
     SetupProductSTSController();
 
     //Data Collection support
@@ -477,14 +479,15 @@ void EddieProductController::PerformRequestforWiFiProfiles()
 bool EddieProductController::IsAllModuleReady() const
 {
     BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|NetworkModuleReady=%d|m_isBluetoothReady=%d|"
-               "STSReady=%d|IsSoftwareUpdateReady=%d", __func__, IsCAPSReady() , IsLpmReady(),
-               IsNetworkModuleReady(), IsBluetoothModuleReady(), IsSTSReady(), IsSoftwareUpdateReady() );
+               "STSReady=%d|IsSoftwareUpdateReady=%d|IsUiConnected=%d", __func__, IsCAPSReady() , IsLpmReady(),
+               IsNetworkModuleReady(), IsBluetoothModuleReady(), IsSTSReady(), IsSoftwareUpdateReady(), IsUiConnected() );
 
     return ( IsCAPSReady() and
              IsLpmReady() and
              IsNetworkModuleReady() and
              IsSTSReady() and
              IsBluetoothModuleReady() and
+             IsUiConnected() and
              IsSassReady() and
              IsSoftwareUpdateReady() ) ;
 }
@@ -493,6 +496,12 @@ bool EddieProductController::IsBtLeModuleReady() const
 {
     BOSE_INFO( s_logger, "%s:|m_isBLEModuleReady[%d", __func__, m_isBLEModuleReady );
     return m_isBLEModuleReady;
+}
+
+bool EddieProductController::IsUiConnected() const
+{
+    BOSE_INFO( s_logger, "%s:m_isUiConnected-%d", __func__, m_isUiConnected );
+    return m_isUiConnected;
 }
 
 bool EddieProductController::IsCAPSReady() const
@@ -692,6 +701,13 @@ void EddieProductController::HandleRawKeyCliCmd( const std::list<std::string>& a
     {
         response = "Invalid arguments. use help to look at the raw_key usage";
     }
+}
+
+void EddieProductController::UpdateUiConnectedStatus( bool status )
+{
+    BOSE_WARNING( s_logger, "%s|status:%s", __func__ , status ? "true" : "false" );
+    m_isUiConnected = status;
+    GetHsm().Handle<bool>( &ProductControllerState::HandleUiConnectedUpdateState, status );
 }
 
 void EddieProductController::HandleProductMessage( const ProductMessage& productMessage )
