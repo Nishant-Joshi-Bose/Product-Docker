@@ -277,6 +277,11 @@ public:
         return false;
     }
 
+    virtual bool HandleUiConnectedUpdateState( bool uiconnected )
+    {
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// Methods are to be added at this point to implement product specific actions. These methods
