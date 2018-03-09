@@ -63,6 +63,7 @@ public:
     void HandleStateExit( )  override;
     bool HandlePairingState( ProductAccessoryPairing pairingStatus ) override;
     bool HandleAudioPathDeselect( )                                  override;
+    bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo ) override;
 
 private:
 
