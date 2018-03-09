@@ -108,6 +108,10 @@
     "selected_version": "master@43394152e689030529a94750d56fe9cd196b885a"
   },
   {
+    "name": "CastleTestUtils",
+    "selected_version": "master@e19bf6fd99a700739ac372437424b2e9f19a58da"
+  },
+  {
     "name": "FrontDoor-qc8017_32",
     "selected_version": "Release/master/0.3.8-166+bdf45c8"
   },
