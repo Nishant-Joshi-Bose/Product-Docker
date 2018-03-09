@@ -38,6 +38,8 @@ RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_locat
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
 RIVIERALPM_DIR = $(shell components get RivieraLPM installed_location)
 RIVIERA_LPM_TOOLS_DIR = $(shell components get RivieraLpmTools installed_location)
+TESTUTILS_DIR = $(shell components get CastleTestUtils installed_location)
+
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
@@ -46,6 +48,8 @@ generated_sources: check_tools $(VERSION_FILES)
 	$(MAKE) -C $(A4VVIDEOMANAGERSERVICE_DIR) $@
 	$(MAKE) -C $(A4VQUICKSETSERVICE_DIR) $@
 	$(MAKE) -C $(A4VREMOTECOMMUNICATIONSERVICE_DIR) $@
+	ln -nsf $(TESTUTILS_DIR) builds/CastleTestUtils
+	touch builds/__init__.py
 
 .PHONY: astyle
 astyle:
