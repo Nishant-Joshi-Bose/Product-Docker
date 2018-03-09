@@ -29,11 +29,12 @@
 #include "ProductDspHelper.h"
 #include "FrontDoorClient.h"
 #include "EndPointsDefines.h"
+#include "ProductEndpointDefines.h"
 
 
 namespace
 {
-const std::string s_FrontDoorAudioFormatUrl = "/audio/format";
+const std::string s_FrontDoorAudioFormatUrl = FRONTDOOR_AUDIO_FORMAT_API;
 
 // Decided because CEC latency is 200ms so similar timing for autowake
 constexpr uint32_t s_PollingTimeAutoWakeMs         = 200;
