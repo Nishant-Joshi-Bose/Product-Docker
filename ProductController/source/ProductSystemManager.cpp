@@ -25,6 +25,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
+#include "EndPointsDefines.h"
 #include "FrontDoorClient.h"
 #include "ProtoPersistenceFactory.h"
 #include "ProfessorProductController.h"
@@ -53,9 +54,7 @@ const std::string g_ProductDirectory = "product-persistence/";
 /// The following constants define FrontDoor endpoints used by the SystemManager
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr char FRONTDOOR_SYSTEM_CONFIGURATION_STATUS[ ]       = "/system/configuration/status";
-constexpr char FRONTDOOR_SYSTEM_CAPS_INITIALIZATION_STATUS[ ] = "/system/capsInitializationStatus";
-constexpr char FRONTDOOR_CAPS_INITIALIZATION_UPDATE[ ]        = "CapsInitializationUpdate";
+const std::string s_FrontDoorSystemConfigurationStatus = FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -106,7 +105,7 @@ bool ProductSystemManager::Run( )
                                      std::placeholders::_2 ),
                           m_ProductTask );
 
-        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS, callback );
+        m_FrontDoorClient->RegisterGet( s_FrontDoorSystemConfigurationStatus, callback );
     }
 
     BOSE_DEBUG( s_logger, "Registration for getting configuration status requests has been made." );

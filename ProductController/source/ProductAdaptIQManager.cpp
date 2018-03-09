@@ -28,6 +28,7 @@
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProductAdaptIQManager.h"
 #include "EndPointsError.pb.h"
+#include "ProductEndpointDefines.h"
 
 using namespace ProductPb;
 
@@ -45,7 +46,7 @@ const std::string s_ModeNormal          = "Enabled Normal";
 const std::string s_ModeRetail          = "Enabled Retail";
 const std::string s_ModeDisabled        = "Enabled Disabled";
 #endif
-const std::string s_FrontDoorAdaptIQ    = "/adaptiq";
+const std::string s_FrontDoorAdaptIQ    = FRONTDOOR_ADAPTIQ_API;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
