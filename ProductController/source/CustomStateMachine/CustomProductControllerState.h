@@ -196,6 +196,7 @@ public:
     {
         return false;
     }
+
     virtual bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
     {
         return false;
@@ -216,7 +217,7 @@ public:
         return false;
     }
 
-    virtual bool HandleFactoryDefault( )
+    virtual bool HandleLpmFactoryDefault( )
     {
         return false;
     }
@@ -409,6 +410,11 @@ public:
     }
 
     virtual bool HandleNetworkOperationalMode( NetManager::Protobuf::OperationalMode mode )
+    {
+        return false;
+    }
+
+    virtual bool HandleSystemEventFactoryDefault( const ProductSystemEventServiceResponse& response )
     {
         return false;
     }
