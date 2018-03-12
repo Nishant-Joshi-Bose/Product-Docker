@@ -23,6 +23,9 @@ SOUNDTOUCH                  BOSE_SOUND_TOUCH_SOURCE
 CONNECT                     KEY_VAL_AVAIL_11
 ACTION                      KEY_VAL_AVAIL_12
 TV                          BOSE_TV_SOURCE
+CUSTOM_GAME                 BOSE_GAME_SOURCE
+CUSTOM_DVD                  BOSE_BD_DVD_SOURCE
+CUSTOM_CABLESAT             BOSE_AUX_SOURCE
 THUMB_DOWN                  BOSE_PAGE_THUMBS_DOWN
 THUMB_UP                    BOSE_PAGE_THUMBS_UP
 
