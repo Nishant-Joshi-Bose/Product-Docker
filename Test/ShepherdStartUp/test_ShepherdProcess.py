@@ -8,18 +8,15 @@ The Mountain,
 Framingham, MA 01701-9168
 
 This file is to test Shephed Processes
-    
 """
 
 import time
-import os
-import sys
 import logging
 import ConfigParser
-
 from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
 from CastleTestUtils.SoftwareUpdateUtils.BonjourUpdateScripts.bonjourUpdate import BonjourUpdateUtils
 from CastleTestUtils.SoftwareUpdateUtils.BonjourUpdate.bonjourUpdateSupport import BonjourUpdateSupport
+from CastleTestUtils.RivieraUtils.rivieraCommunication import ADBCommunication
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 
 logger = get_logger(__name__, "ShepherdProcess.log", level=logging.INFO, fileLoglevel=logging.DEBUG)
@@ -63,10 +60,12 @@ def PerformBonjourUpdate(request):
     """
     device = request.config.getoption("--device-id")
     zip_file = request.config.getoption("--zipfile")
+    adb = ADBCommunication()
+    adb.setCommunicationDetail(device)
     bonjourUpdateSupport = BonjourUpdateSupport(device=device, logger=logger)
 
     try:
-        deviceIP = bonjourUpdateSupport.getDeviceIP()
+        deviceIP = adb.getIPAddress()
         logger.info("Device IP : " + deviceIP)
         bonjour_util = BonjourUpdateUtils(device=device)
         #Need to perform Bonjour Update twice
@@ -74,7 +73,7 @@ def PerformBonjourUpdate(request):
         while True:
             try:
                 bonjour_util.upload_zipfile(zip_file, deviceIP)
-                bonjourUpdateSupport.confirmInstallationVersions()
+                bonjourUpdateSupport.confirm_installation_versions()
                 BonjourCnt += 1
                 if BonjourCnt >= int(cfg.get('Settings', 'BONJOUR_UPDATE_LOOP')):
                     break
