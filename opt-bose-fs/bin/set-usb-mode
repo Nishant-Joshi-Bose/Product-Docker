@@ -6,6 +6,8 @@
 
 export PATH=/opt/Bose/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
 
+CONF_FILE=/tmp/udhcpd_usb.conf
+
 function log {
     local pri="$1"; shift
 
@@ -13,6 +15,11 @@ function log {
     local s=-s; [ "$pri" = info ] && s=
 
     logger $s -t "$tag" -p "$pri" "$*"
+}
+
+function stop_udhcpd_usb {
+    log info "stopping dhcpd for usbnet"
+    killbyarg udhcpd "$CONF_FILE"
 }
 
 function wait_for_rndis0 {
@@ -33,7 +40,8 @@ function wait_for_rndis0 {
 
 function do_p2p {
     log info "Switching to USB p2p mode"
-    killwait dnsmasq 2> /dev/null
+
+
     # switching to usb composition 'RNDIS : ECM' to enable networking over usb
     /sbin/usb/compositions/9057
     wait_for_rndis0
@@ -42,7 +50,23 @@ function do_p2p {
     ip link set rndis0 name usb2
     ip link set usb2 up
     ip addr add 203.0.113.1/24 dev usb2
-    dnsmasq -i usb2 --no-daemon --no-resolv --no-poll --dhcp-range=203.0.113.2,203.0.113.5,12h &
+
+    cat > "$CONF_FILE" <<-"    EOF"
+    start 203.0.113.2
+    end   203.0.113.5
+    interface usb2
+    lease_file /dev/null
+    pidfile /var/run/udhcpd.usb2.pid
+    option subnet 255.255.255.0
+    option router 203.0.113.1
+    option dns 203.0.113.1
+    option lease 600
+    EOF
+
+    log info "Starting dhcpd for usbnet"
+    udhcpd  -S "$CONF_FILE"
+
+
 }
 
 function do_client {
@@ -59,6 +83,8 @@ function do_adb {
     # switching to usb composition 'DIAG + ADB' to enable adb over usb
     /sbin/usb/compositions/901D
 }
+
+stop_udhcpd_usb
 
 if (( $# == 1 )) && [ "$1" = p2p ]; then
     do_p2p
