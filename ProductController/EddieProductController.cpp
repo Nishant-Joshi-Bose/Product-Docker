@@ -40,12 +40,9 @@ EddieProductController::EddieProductController():
     m_ProductControllerStateLowPowerStandby( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY ),
     m_ProductControllerStateSwInstall( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL ),
     m_ProductControllerStateCriticalError( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_CRITICAL_ERROR ),
-    m_ProductControllerStateRebooting( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_REBOOTING ),
     m_ProductControllerStatePlaying( GetHsm(), &m_CustomProductControllerStateOn, PRODUCT_CONTROLLER_STATE_PLAYING ),
     m_ProductControllerStatePlayable( GetHsm(), &m_CustomProductControllerStateOn, PRODUCT_CONTROLLER_STATE_PLAYABLE ),
     m_ProductControllerStateLowPowerStandbyTransition( GetHsm(), &m_ProductControllerStateLowPowerStandby, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION ),
-    m_ProductControllerStatePlayingActive( GetHsm(), &m_ProductControllerStatePlaying, PRODUCT_CONTROLLER_STATE_PLAYING_ACTIVE ),
-    m_ProductControllerStatePlayingInactive( GetHsm(), &m_ProductControllerStatePlaying, PRODUCT_CONTROLLER_STATE_PLAYING_INACTIVE ),
     m_ProductControllerStateIdle( GetHsm(), &m_ProductControllerStatePlayable, PRODUCT_CONTROLLER_STATE_IDLE ),
     m_ProductControllerStateNetworkStandby( GetHsm(), &m_ProductControllerStatePlayable, PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY ),
     m_ProductControllerStateVoiceConfigured( GetHsm(), &m_ProductControllerStateIdle, PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED ),
@@ -100,12 +97,9 @@ EddieProductController::EddieProductController():
     GetHsm().AddState( "", &m_ProductControllerStateBooted );
     GetHsm().AddState( "", &m_CustomProductControllerStateOn );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), &m_ProductControllerStateCriticalError );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::REBOOTING ), &m_ProductControllerStateRebooting );
     GetHsm().AddState( "", &m_ProductControllerStatePlaying );
     GetHsm().AddState( "", &m_ProductControllerStatePlayable );
     GetHsm().AddState( "", &m_ProductControllerStateLowPowerStandbyTransition );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingActive );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::DESELECTED ), &m_ProductControllerStatePlayingInactive );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::IDLE ), &m_ProductControllerStateIdle );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ), &m_ProductControllerStateNetworkStandby );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::IDLE ), &m_ProductControllerStateVoiceConfigured );
@@ -143,9 +137,11 @@ EddieProductController::EddieProductController():
     m_ConfigurationStatusPersistence = ProtoPersistenceFactory::Create( "ConfigurationStatus", g_ProductPersistenceDir );
     m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
     ReadConfigurationStatusFromPersistence();
+    AsyncCallback<bool> uiConnectedCb( std::bind( &EddieProductController::UpdateUiConnectedStatus,
+                                                  this, std::placeholders::_1 ), GetTask() ) ;
 
     m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient() ) );
-    m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient() ) );
+    m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient(), uiConnectedCb ) );
     SetupProductSTSController();
 
     //Data Collection support
@@ -342,6 +338,7 @@ void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInf
         {
             SendDataCollection( keyInformation );
         }
+        RestartInactivityTimers();
     }
     else
     {
@@ -482,14 +479,16 @@ void EddieProductController::PerformRequestforWiFiProfiles()
 bool EddieProductController::IsAllModuleReady() const
 {
     BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|NetworkModuleReady=%d|m_isBluetoothReady=%d|"
-               "STSReady=%d|IsSoftwareUpdateReady=%d", __func__, IsCAPSReady() , IsLpmReady(),
-               IsNetworkModuleReady(), IsBluetoothModuleReady(), IsSTSReady(), IsSoftwareUpdateReady() );
+               "STSReady=%d|IsSoftwareUpdateReady=%d|IsUiConnected=%d", __func__, IsCAPSReady() , IsLpmReady(),
+               IsNetworkModuleReady(), IsBluetoothModuleReady(), IsSTSReady(), IsSoftwareUpdateReady(), IsUiConnected() );
 
     return ( IsCAPSReady() and
              IsLpmReady() and
              IsNetworkModuleReady() and
              IsSTSReady() and
              IsBluetoothModuleReady() and
+             // @TODO uncomment IsUiConnected line once Monaco starts sending heart beat signals.
+             //IsUiConnected() and
              IsSassReady() and
              IsSoftwareUpdateReady() ) ;
 }
@@ -498,6 +497,12 @@ bool EddieProductController::IsBtLeModuleReady() const
 {
     BOSE_INFO( s_logger, "%s:|m_isBLEModuleReady[%d", __func__, m_isBLEModuleReady );
     return m_isBLEModuleReady;
+}
+
+bool EddieProductController::IsUiConnected() const
+{
+    BOSE_INFO( s_logger, "%s:m_isUiConnected-%d", __func__, m_isUiConnected );
+    return m_isUiConnected;
 }
 
 bool EddieProductController::IsCAPSReady() const
@@ -697,6 +702,13 @@ void EddieProductController::HandleRawKeyCliCmd( const std::list<std::string>& a
     {
         response = "Invalid arguments. use help to look at the raw_key usage";
     }
+}
+
+void EddieProductController::UpdateUiConnectedStatus( bool status )
+{
+    BOSE_WARNING( s_logger, "%s|status:%s", __func__ , status ? "true" : "false" );
+    m_isUiConnected = status;
+    GetHsm().Handle<bool>( &ProductControllerState::HandleUiConnectedUpdateState, status );
 }
 
 void EddieProductController::HandleProductMessage( const ProductMessage& productMessage )

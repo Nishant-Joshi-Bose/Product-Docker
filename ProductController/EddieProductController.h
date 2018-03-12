@@ -25,9 +25,6 @@
 #include "ProductControllerStateIdleVoiceNotConfigured.h"
 #include "ProductControllerStatePlayable.h"
 #include "ProductControllerStatePlaying.h"
-#include "ProductControllerStatePlayingActive.h"
-#include "ProductControllerStatePlayingInactive.h"
-#include "ProductControllerStateRebooting.h"
 #include "ProductControllerStateBooted.h"
 #include "ProductControllerStateBooting.h"
 #include "CustomProductControllerStateOn.h"
@@ -236,6 +233,13 @@ public:
     ////////////////////////////////////////////////////////////////////////////////
     bool IsBtLeModuleReady() const;
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// @name  IsUiConnected
+    /// @brief true if UI(monaco) is up and ready.
+    /// @return bool
+    ////////////////////////////////////////////////////////////////////////////////
+    bool IsUiConnected() const;
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  IsCAPSReady
 /// @brief true if CAPS module is ready.
@@ -322,6 +326,8 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
     void HandleProductMessage( const ProductMessage& productMessage );
 
+    void UpdateUiConnectedStatus( bool status );
+
 ///////////////////////////////////////////////////////////////////////////////
 /// @name   GetLpmHardwareInterface
 /// @brief  Returns reference to LpmInterface
@@ -392,12 +398,9 @@ private:
     ProductControllerStateLowPowerStandby                           m_ProductControllerStateLowPowerStandby;
     ProductControllerStateSoftwareInstall                           m_ProductControllerStateSwInstall;
     ProductControllerStateCriticalError                             m_ProductControllerStateCriticalError;
-    ProductControllerStateRebooting                                 m_ProductControllerStateRebooting;
     ProductControllerStatePlaying                                   m_ProductControllerStatePlaying;
     ProductControllerStatePlayable                                  m_ProductControllerStatePlayable;
     ProductControllerStateLowPowerStandbyTransition                 m_ProductControllerStateLowPowerStandbyTransition;
-    ProductControllerStatePlayingActive                             m_ProductControllerStatePlayingActive;
-    ProductControllerStatePlayingInactive                           m_ProductControllerStatePlayingInactive;
     ProductControllerStateIdle                                      m_ProductControllerStateIdle;
     ProductControllerStateNetworkStandby                            m_ProductControllerStateNetworkStandby;
     ProductControllerStateIdleVoiceConfigured                       m_ProductControllerStateVoiceConfigured;
@@ -447,6 +450,7 @@ private:
     bool                                        m_isCapsReady = false;
     bool                                        m_isNetworkModuleReady  = false;
     bool                                        m_isBLEModuleReady  = false;
+    bool                                        m_isUiConnected = false;
 
     BOptional<int>                              m_wifiProfilesCount;
     AsyncCallback<EndPointsError::Error>            m_fdErrorCb;

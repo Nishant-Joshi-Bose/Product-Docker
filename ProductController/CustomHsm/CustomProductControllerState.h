@@ -72,7 +72,7 @@ public:
         return false;
     }
 
-    virtual bool HandleFactoryDefault( )
+    virtual bool HandleLpmFactoryDefault( )
     {
         return false;
     }
@@ -247,6 +247,11 @@ public:
         return false;
     }
 
+    virtual bool HandleUiConnectedUpdateState( bool uiconnected )
+    {
+        return false;
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
     ///
     /// Here are the Custom event handlers. They need to be declared virtual and
@@ -336,6 +341,11 @@ public:
     }
 
     virtual bool HandleChimeSASSPlaybackError( int32_t eventId )
+    {
+        return false;
+    }
+
+    virtual bool HandleSystemEventFactoryDefault( const ProductSystemEventServiceResponse& response )
     {
         return false;
     }
