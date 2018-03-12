@@ -1312,6 +1312,96 @@
             "origin": 2, 
             "keyEvent": 0, 
             "timeOutList": [], 
+            "commment": "select user configurable source game/ott", 
+            "action": 126, 
+            "keyList": [
+                6
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select user configurable source game/ott", 
+            "action": 126, 
+            "keyList": [
+                6
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select user configurable source game/ott", 
+            "action": 126, 
+            "keyList": [
+                6
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select user configurable source dvd", 
+            "action": 127, 
+            "keyList": [
+                83
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select user configurable source dvd", 
+            "action": 127, 
+            "keyList": [
+                83
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select user configurable source dvd", 
+            "action": 127, 
+            "keyList": [
+                83
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select user configurable source cable/sat", 
+            "action": 128, 
+            "keyList": [
+                13
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select user configurable source cable/sat", 
+            "action": 128, 
+            "keyList": [
+                13
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "select user configurable source cable/sat", 
+            "action": 128, 
+            "keyList": [
+                13
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
             "commment": "thumbs up", 
             "action": 119, 
             "keyList": [
