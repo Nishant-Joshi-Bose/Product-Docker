@@ -23,6 +23,13 @@ logger = get_logger(__name__, "ShepherdProcess.log", level=logging.INFO, fileLog
 cfg = ConfigParser.SafeConfigParser()
 cfg.read("conf_Shepherd.ini")
 
+def test_bonjour_update(request):
+    """
+    This to perform Bonjour update twice to validate it install continuos build
+    """
+    result = PerformBonjourUpdate(request)
+    assert result, "Bonjour Update Failed. Please see logs for more details"
+
 def test_shepherd_process(request):
     """
     This is to validate all processes running after Bonjour Update
@@ -30,10 +37,7 @@ def test_shepherd_process(request):
     Fetching All Processes list from Eddie : cat /var/run/shepherd/Shepherd*.xml
     Validate Process is Running from Eddie : cat /var/run/shepherd/pids
     """
-    # Temporary Comment out this and doing from Jenkins Shell
-    result = PerformBonjourUpdate(request)
     device = request.config.getoption("--device-id")
-    assert result, "Bonjour Update Failed. Please see logs for more details"
     rivierapull = RivieraUtils('LOCAL')
     processes = rivierapull.getShepherdProcesses(device=device)
     logger.info("Actual Processes : " + str(processes))
