@@ -126,15 +126,6 @@ private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following method is used to send information concernign the Product Controller
-    ///        state.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleGetSystemStateRequest( const Callback< ProductPb::SystemState >& response,
-                                      const Callback<EndPointsError::Error>& errorRsp ) const;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
     /// @brief The following method is used to send information to the Product Controller state
     ///        machine.
     ///
