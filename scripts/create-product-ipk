@@ -141,16 +141,11 @@ if (( \$(date +%s) < $t )); then
 fi
 EOF
 
-# Copy public keys in FS based on DEPLOY_ENV flag exported
+# Copy public keys in FS for development key. EC will take care of generation for Production 
 secure_dir=$opt_dir/etc/secure/
 mkdir -p "$secure_dir" || exit
-if [ "$DEPLOY_ENV" = prod ]; then
-    cp -r "$wspace/scripts/keys/production/publicKeys/" "$secure_dir" || exit
-    cp -r "$wspace/scripts/keys/production/CACerts/" "$secure_dir" || exit
-else
-    cp -r "$wspace/scripts/keys/development/publicKeys/" "$secure_dir" || exit
-    cp -r "$wspace/scripts/keys/development/CACerts/" "$secure_dir" || exit
-fi
+cp -r "$wspace/scripts/keys/development/publicKeys/" "$secure_dir" || exit
+cp -r "$wspace/scripts/keys/development/CACerts/" "$secure_dir" || exit
 
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
