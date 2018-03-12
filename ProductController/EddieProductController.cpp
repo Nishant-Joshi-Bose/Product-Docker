@@ -797,11 +797,11 @@ void EddieProductController::SetupProductSTSController( void )
     ProductSTSSilentStateFactory silentStateFactory;
 
     std::vector<ProductSTSController::SourceDescriptor> sources;
-    ProductSTSController::SourceDescriptor descriptor_AUX{ 0, "AUX", true, silentStateFactory }; // AUX is always available
+    ProductSTSController::SourceDescriptor descriptor_AUX{ 0, "AUX", true, commonStateFactory }; // AUX is always available
     sources.push_back( descriptor_AUX );
 
     // 'SETUP' is a "fake" source used for setup state.
-    ProductSTSController::SourceDescriptor descriptor_Setup{ 1, "SETUP", false, commonStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_Setup{ 1, "SETUP", false, silentStateFactory };
     sources.push_back( descriptor_Setup );
 
     Callback<void> cb_STSInitWasComplete( std::bind( &EddieProductController::HandleSTSInitWasComplete, this ) );
