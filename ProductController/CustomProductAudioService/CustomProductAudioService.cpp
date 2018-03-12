@@ -242,8 +242,7 @@ void CustomProductAudioService::FetchLatestAudioSettings( )
  */
 bool CustomProductAudioService::IsDialogModeEnabled()
 {
-    static constexpr char DIALOG_MODE_VALUE[] = "dialog";
-    return ( m_audioSettingsMgr->GetMode( ).value() == DIALOG_MODE_VALUE );
+    return ( ModeNameToEnum( m_audioSettingsMgr->GetMode( ).value() ) == AUDIOSETTINGS_AUDIO_MODE_DIALOG );
 }
 
 /*!
@@ -281,6 +280,18 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
     {
         m_thermalTask.Stop();
     }
+}
+
+/*!
+ */
+LpmServiceMessages::AudioSettingsAudioMode_t CustomProductAudioService::ModeNameToEnum( const std::string& modeName )
+{
+    // Eddie currently only supports one mode aside from normal.
+    if( modeName == "dialog" )
+    {
+        return AUDIOSETTINGS_AUDIO_MODE_DIALOG;
+    }
+    return AUDIOSETTINGS_AUDIO_MODE_NORMAL;
 }
 
 }// namespace ProductApp

@@ -67,6 +67,12 @@ private:
      */
     bool IsDialogModeEnabled();
 
+    /*! \brief Converts a string for "mode" into an enum value.
+     * \param modeName String to convert.
+     * \return AudioSettingsAudioMode_t value for given string.
+     */
+    LpmServiceMessages::AudioSettingsAudioMode_t ModeNameToEnum( const std::string& modeName );
+
 
     //! Holds information that APProduct would like to know, including audio settings and thermal data.
     EddieAudioSettings_t m_mainStreamAudioSettings;
