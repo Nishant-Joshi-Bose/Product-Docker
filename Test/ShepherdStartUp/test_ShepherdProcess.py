@@ -13,6 +13,8 @@ This file is to test Shephed Processes
 import time
 import logging
 import ConfigParser
+import pytest
+import pytest_dependency
 from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
 from CastleTestUtils.SoftwareUpdateUtils.BonjourUpdateScripts.bonjourUpdate import BonjourUpdateUtils
 from CastleTestUtils.SoftwareUpdateUtils.BonjourUpdate.bonjourUpdateSupport import BonjourUpdateSupport
@@ -23,6 +25,7 @@ logger = get_logger(__name__, "ShepherdProcess.log", level=logging.INFO, fileLog
 cfg = ConfigParser.SafeConfigParser()
 cfg.read("conf_Shepherd.ini")
 
+@pytest.mark.dependency()
 def test_bonjour_update(request):
     """
     This to perform Bonjour update twice to validate it install continuos build
@@ -30,6 +33,7 @@ def test_bonjour_update(request):
     result = PerformBonjourUpdate(request)
     assert result, "Bonjour Update Failed. Please see logs for more details"
 
+@pytest.mark.dependency(depends=["test_bonjour_update"])
 def test_shepherd_process(request):
     """
     This is to validate all processes running after Bonjour Update
@@ -67,10 +71,17 @@ def PerformBonjourUpdate(request):
     adb = ADBCommunication()
     adb.setCommunicationDetail(device)
     bonjourUpdateSupport = BonjourUpdateSupport(device=device, logger=logger)
-
+    starttime = time.time()
+    _timeout = 60
     try:
-        deviceIP = adb.getIPAddress()
-        logger.info("Device IP : " + deviceIP)
+        while(time.time() - starttime < _timeout):
+            try:
+                deviceIP = adb.getIPAddress()
+                logger.info("Device IP : " + deviceIP)
+                break
+            except Exception as e:
+                logger.info("Getting IP Address.... " + str(e))
+                continue
         bonjour_util = BonjourUpdateUtils(device=device)
         #Need to perform Bonjour Update twice
         BonjourCnt = 0
