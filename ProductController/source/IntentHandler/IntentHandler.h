@@ -129,7 +129,10 @@ public:
 
     static bool IsIntentPlayProductSource( KeyHandlerUtil::ActionType_t argument )
     {
-        return ( argument == ( uint16_t )Action::ACTION_TV );
+        return ( argument == ( uint16_t )Action::ACTION_TV ) ||
+               ( argument == ( uint16_t )Action::ACTION_GAME ) ||
+               ( argument == ( uint16_t )Action::ACTION_DVD ) ||
+               ( argument == ( uint16_t )Action::ACTION_CABLESAT );
     }
 
     static bool IsIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t argument )
