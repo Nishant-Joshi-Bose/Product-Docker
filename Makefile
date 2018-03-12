@@ -124,11 +124,14 @@ graph: product-ipk
 
 .PHONY: lpm-bos
 lpm-bos:
+ifneq ($(filter $(BUILD_TYPE), Release Continuous Nightly),)
+	$(info BUILD_TYPE=$(BUILD_TYPE))
+else
+	$(error BUILD_TYPE must equal Release, Nightly or Continuous. Found $(BUILD_TYPE))
+endif
 	rm -f ./builds/$(cfg)/professor_package*.bos
 	rm -f ./builds/$(cfg)/lpm_professor*.hex
-	cp ./lpm_package.xml ./builds/$(cfg)/lpm_package.xml
-	# Don't share version yet... TODO post IP3
-	python2.7 $(RIVIERA_LPM_TOOLS_DIR)/tools/blob/blob_utility.py --pack $(BOSE_WORKSPACE)/lpm_package.xml ./builds/$(cfg)/ --build_type Release #--boseversion $(BUILDS_DIR)/BoseVersion.json
+	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE)
 
 .PHONY: hsp-ipk
 hsp-ipk: cmake_build
