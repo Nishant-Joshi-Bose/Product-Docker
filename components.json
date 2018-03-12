@@ -133,11 +133,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Continuous/dev/2.5-7-gcc5e0ef"
+    "selected_version": "Release/master/3.0"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Continuous/dev/2.5-7-gcc5e0ef"
+    "selected_version": "Release/master/3.0"
   },
   {
     "name": "RivieraLPM",
