@@ -29,15 +29,15 @@
   },
   {
     "name": "BoseOPKG-native",
-    "selected_version": "Release/master/0.2.0-12+0405785"
+    "selected_version": "Release/master/0.3.0-20+324ed86"
   },
   {
     "name": "BoseOPKG-qc8017_32",
-    "selected_version": "Release/master/0.2.0-12+0405785"
+    "selected_version": "Release/master/0.3.0-20+324ed86"
   },
   {
     "name": "BoseOPKG-x86",
-    "selected_version": "Release/master/0.2.0-12+0405785"
+    "selected_version": "Release/master/0.3.0-20+324ed86"
   },
   {
     "name": "BoseWebMonaco",
@@ -57,7 +57,7 @@
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
-    "selected_version": "Release/IP3/0.3.6-45+fe14799"
+    "selected_version": "Release/IP3/0.3.7-47+c247d98"
   },
   {
     "name": "CastleDemoController-qc8017_32",
@@ -89,11 +89,11 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.3.82-504+7699984"
+    "selected_version": "Release/master/0.3.86-524+e45febf"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.3.82-504+7699984"
+    "selected_version": "Release/master/0.3.86-524+e45febf"
   },
   {
     "name": "CastleProductControllerCommon",
