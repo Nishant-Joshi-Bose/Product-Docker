@@ -51,6 +51,11 @@ if cc is None or not re.match(r'^[A-Z][A-Z]$', cc):
     warn("Invalid country_code", cc)
     fixes.append("set country_code US")
 
+rc = get("regionCode")
+if rc is None or not re.match(r'^[A-Z][A-Z]$', rc):
+    warn("Invalid regionCode", rc)
+    fixes.append("set regionCode US")
+
 # GUID standard canonical form is described here:
 # https://en.m.wikipedia.org/wiki/Universally_unique_identifier
 guid = get("guid")
@@ -63,11 +68,6 @@ sn = get("snSystem")
 if not sn: # allow any non-empty string
     warn("Invalid snSystem:", sn)
     fixes.append("set snSystem RF000000000000000")
-
-pl = get("productLanguage")
-if pl is None:
-    warn("Invalid productLanguage:", pl)
-    fixes.append("set productLanguage english")
 
 pc = get("productColor")
 try:
@@ -93,7 +93,7 @@ if not pn: # allow any non-empty string
 pt = get("productType")
 if not pt: # allow any non-empty string
     warn("Invalid productType:", pt)
-    fixes.append("set productType Professor")
+    fixes.append("set productType professor")
 
 if not fixes:
     # Validation successful.
@@ -110,5 +110,7 @@ for fix in fixes:
     print "  mfgdata", fix
 print """\
   mount -oremount,ro /persist
+
+See also: https://wiki.bose.com/display/BC/Riviera+Manufacturing+Data+Information
 """
 sys.exit(1)

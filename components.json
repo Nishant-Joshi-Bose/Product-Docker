@@ -29,15 +29,15 @@
   },
   {
     "name": "BoseOPKG-native",
-    "selected_version": "Release/master/0.2.0-12+0405785"
+    "selected_version": "Release/master/0.3.0-20+324ed86"
   },
   {
     "name": "BoseOPKG-qc8017_32",
-    "selected_version": "Release/master/0.2.0-12+0405785"
+    "selected_version": "Release/master/0.3.0-20+324ed86"
   },
   {
     "name": "BoseOPKG-x86",
-    "selected_version": "Release/master/0.2.0-12+0405785"
+    "selected_version": "Release/master/0.3.0-20+324ed86"
   },
   {
     "name": "BoseWebMonaco",
@@ -57,7 +57,7 @@
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
-    "selected_version": "Release/IP3/0.3.6-45+fe14799"
+    "selected_version": "Release/IP3/0.3.7-47+c247d98"
   },
   {
     "name": "CastleDemoController-qc8017_32",
@@ -89,15 +89,15 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.3.82-504+7699984"
+    "selected_version": "Release/master/0.3.86-524+e45febf"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.3.82-504+7699984"
+    "selected_version": "Release/master/0.3.86-524+e45febf"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@3483c5632bd90e07ad58325573d58badeeadf476"
+    "selected_version": "master@e2b92a6c3ec1c9313a16f14a9426e1034e85a90c"
   },
   {
     "name": "CastleProductUIAssets",
@@ -169,7 +169,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.13.41315.2723875"
+    "selected_version": "Continuous/Castle-Fork/2018-03-12_1139"
   },
   {
     "name": "SystemEventService-qc8017_32",
