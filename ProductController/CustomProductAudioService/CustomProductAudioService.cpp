@@ -9,6 +9,7 @@
 #include "APProductFactory.h"
 #include "DPrint.h"
 #include "FrontDoorClient.h"
+#include "EddieProductController.h"
 #include "CustomProductAudioService.h"
 #include "LpmClientFactory.h"
 #include "SoundTouchInterface/ContentItem.pb.h"
@@ -65,7 +66,6 @@ void CustomProductAudioService::RegisterAudioPathEvents()
                                                                                 std::placeholders::_2 ) );
         m_APPointer->RegisterForMainStreamAudioSettingsRequest( callback );
     }
-
     ConnectToAudioPath();
 }
 
@@ -223,7 +223,6 @@ void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 {
     std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_mainStreamAudioSettings, true );
     m_APPointer->SetMainStreamAudioSettings( mainStreamAudioSettings );
-
     // DMR Print out the JSON being sent to AP.
     //BOSE_INFO( s_logger, "SendMainStreamAudioSettingsEvent %s", mainStreamAudioSettings.c_str() );
 }

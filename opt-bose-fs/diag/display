@@ -1,0 +1,59 @@
+#!/usr/bin/python2.7
+#
+# Show an image on the display.
+#
+# For example, for the URL
+#
+#   http://203.0.113.1/diag/display/colorbars-top.png?show
+#
+# this script invokes as
+#
+#   display colorbars-top.png?show
+#
+# This shows the specified image on the display and outputs a simple HTTP
+# response, "OK".
+#
+# Without the "?show" part, the script returns the image as the HTTP
+# response.
+#
+import os
+import sys
+import subprocess
+
+if len(sys.argv) != 2:
+    raise Exception("wrong usage " + str(sys.argv))
+image = sys.argv[1]
+
+params = None
+i = image.find("?")
+if i != -1:
+    params = image[i+1:]
+    image = image[:i]
+
+# Protect against potentially malicious pathnames.
+if ".." in image or not image.endswith(".png") or not os.path.exists(image):
+    raise Exception("bad image name: " + image)
+
+if params == "show":
+    # Show the image on the unit's display and
+    # send "OK" as the HTTP response.
+    ph = subprocess.Popen(["show_splash", image],
+                          stdout=open("/dev/null", "w"),
+                          stderr=subprocess.STDOUT)
+    if ph.wait() != 0:
+        raise Exception("show_splash failed")
+
+    print """\
+HTTP/1.1 200 OK\r
+Content-Type: text/plain\r
+Cache-Control: no-cache\r
+\r
+OK\r"""
+
+else:
+    # Output the image as the HTTP response.
+    print """\
+HTTP/1.1 200 OK\r
+Content-Type: image/png\r
+\r"""
+    sys.stdout.write(open(image, "rb").read())

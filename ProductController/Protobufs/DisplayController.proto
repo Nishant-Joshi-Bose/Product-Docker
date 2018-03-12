@@ -24,15 +24,10 @@ message Display {
     }
 
     optional Mode                mode                     = 1 [default = AUTOMATIC];
-    optional uint32              transitionTimeMs         = 2;
-    optional uint32              windowTimeMs             = 3;
-    optional DisplayTransition   dimToMediumTransition    = 4;
-    optional DisplayTransition   mediumToDimTransition    = 5;
-    optional DisplayTransition   mediumToBrightTransition = 6;
-    optional DisplayTransition   brightToMediumTransition = 7;
-    optional uint32              manualIntensity          = 8;
-    optional uint32              backLightPrecentage      = 9;
-    optional uint32              lightSensorLUX           = 10;
-    optional DisplayRequestError error                    = 11;
+    optional uint32              manualIntensity          = 2;
+    optional uint32              backLightPrecentage      = 3;
+    optional uint32              lightSensorLUX           = 4;
+    optional uint64              uiHeartBeat              = 5;
+    optional DisplayRequestError error                    = 6;
 }
 

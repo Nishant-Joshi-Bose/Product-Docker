@@ -1,16 +1,17 @@
-conf = {
-        # LPMport : serial port of LPM        
-        "LPMport":None,
-
-        # transitions : supported transitions of animation patterns
-        "transitions" : ['smooth', 'immediate'],
-
-        # repeat_states : repeat status of animation patterns 
-        "repeat_states" :  ['true', 'false'],
-
-        # csv_filename : csv file of negative test for lightbar
-        "csv_filename" : "LightbarNegativeTestData.csv",
-
-        # json_filename : json file of positive test for lightbar
-        "json_filename" : "Animations_manifest.json"
-       }
+# configure.py
+#
+# :Organization:  BOSE CORPORATION
+#
+# :Copyright:  COPYRIGHT 2018 BOSE CORPORATION ALL RIGHTS RESERVED.
+#              This program may not be reproduced, in whole or in part in any
+#              form or any means whatsoever without the written permission of:
+#                  BOSE CORPORATION
+#                  The Mountain,
+#                  Framingham, MA 01701-9168
+#
+"""
+Configurable paramters for LightBar Tests.
+"""
+CONF = {
+    "animation_filename": "lightbar_negative_testdata.csv",  # negative test file for lightbar
+    }

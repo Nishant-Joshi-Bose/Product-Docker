@@ -51,6 +51,12 @@ if cc is None or not re.match(r'^[A-Z][A-Z]$', cc):
     warn("Invalid country_code", cc)
     fixes.append("set country_code US")
 
+rc = get("regionCode")
+if rc is None or not re.match(r'^[A-Z][A-Z]$', rc):
+    warn("Invalid regionCode", rc)
+#   Eddie does not require region code to be set.
+#   fixes.append("set regionCode US")
+
 # GUID standard canonical form is described here:
 # https://en.m.wikipedia.org/wiki/Universally_unique_identifier
 guid = get("guid")
@@ -64,15 +70,25 @@ if not sn: # allow any non-empty string
     warn("Invalid snSystem:", sn)
     fixes.append("set snSystem RF000000000000000")
 
-pl = get("productLanguage")
-if pl is None:
-    warn("Invalid productLanguage:", pl)
-    fixes.append("set productLanguage english")
-
 pc = get("productColor")
-if pc is None or not re.match(r'^(tripleBlack|luxGray)$', pc):
-    warn("Invalid productColor:", pc)
-    fixes.append("set productColor tripleBlack  # tripleBlack|luxGray")
+if pc is None or not re.match(r'^\d+$', pc):
+    warn("productColor not set:", pc)
+    fixes.append("set productColor 1  #  1=tripleBlack | 3=luxGray")
+
+vi = get("BMAPVariantID")
+if vi is None or not re.match(r'^\d+$', vi):
+    warn("Invalid BMAPVariantID: Non-integer value detected. Must be a base 10 interger between 0 and 7. Found:", vi)
+    fixes.append("set BMAPVariantID 1  # 0=NONE | 1=BLACK | 2=WHITE | 3=SILVER")
+
+pn = get("productName")
+if not pn: # allow any non-empty string
+    warn("Invalid productName:", pn)
+    fixes.append("set productName 'Bose Home Speaker 500'")
+
+pt = get("productType")
+if not pt: # allow any non-empty string
+    warn("Invalid productType:", pt)
+    fixes.append("set productType eddie")
 
 if not fixes:
     # Validation successful.
@@ -89,5 +105,7 @@ for fix in fixes:
     print "  mfgdata", fix
 print """\
   mount -oremount,ro /persist
+
+See also: https://wiki.bose.com/display/BC/Riviera+Manufacturing+Data+Information
 """
 sys.exit(1)
