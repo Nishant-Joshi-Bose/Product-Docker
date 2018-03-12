@@ -39,6 +39,8 @@
 #include "ProductSourceInfo.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
+#include "ProductSTSCommonStateFactory.h"
+#include "ProductSTSSilentStateFactory.h"
 #include "SystemSourcesProperties.pb.h"
 #include "ProductControllerHsm.h"
 #include "CustomProductControllerStates.h"
@@ -99,6 +101,7 @@
 #include "CustomProductControllerStatePlayingTransitionAccessoryPairing.h"
 #include "MfgData.h"
 #include "DeviceManager.pb.h"
+#include "ProductBLERemoteManager.h"
 #include "ProductEndpointDefines.h"
 #include "ProtoPersistenceFactory.h"
 
@@ -141,6 +144,7 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductAdaptIQManager( nullptr ),
     m_ProductAudioService( nullptr ),
     m_ProductSourceInfo( nullptr ),
+    m_ProductBLERemoteManager( nullptr ),
 
     ///
     /// Member Variable Initialization
@@ -511,6 +515,7 @@ void ProfessorProductController::Run( )
     m_ProductKeyInputInterface    = std::make_shared< ProductKeyInputInterface          >( *this );
     m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
     m_ProductSourceInfo           = std::make_shared< ProductSourceInfo                 >( *this );
+    m_ProductBLERemoteManager     = std::make_shared< ProductBLERemoteManager           >( *this );
     m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this, m_FrontDoorClientIF, m_ProductLpmHardwareInterface->GetLpmClient() );
 
     if( m_ProductLpmHardwareInterface == nullptr ||
@@ -555,6 +560,7 @@ void ProfessorProductController::Run( )
     m_ProductDspHelper           ->Run( );
     m_ProductAdaptIQManager      ->Run( );
     m_ProductSourceInfo          ->Run( );
+    m_ProductBLERemoteManager    ->Run( );
 
     ///
     /// Register FrontDoor EndPoints
@@ -661,6 +667,20 @@ std::shared_ptr< ProductSourceInfo >& ProfessorProductController::GetSourceInfo(
 {
     return m_ProductSourceInfo;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetBLERemoteManager
+///
+/// @return This method returns a shared pointer to the BLERemoteManager instance
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::shared_ptr< ProductBLERemoteManager>& ProfessorProductController::GetBLERemoteManager( )
+{
+    return m_ProductBLERemoteManager;
+}
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -866,16 +886,19 @@ void ProfessorProductController::SetupProductSTSConntroller( )
 {
     std::vector< ProductSTSController::SourceDescriptor > sources;
 
+    ProductSTSCommonStateFactory commonStateFactory;
+    ProductSTSSilentStateFactory silentStateFactory;
+
     ///
-    /// Adapt IQ and Setup is not available as a normal source, whereas the TV source will always
-    /// be available.
+    /// Adapt IQ and SETUP are never available as a normal source, whereas the TV source will always
+    /// be available. SLOT sources need to be set-up before they become available.
     ///
-    ProductSTSController::SourceDescriptor descriptor_AiQ    { ProductSTS::SLOT_AIQ,   "ADAPTiQ", false };
-    ProductSTSController::SourceDescriptor descriptor_Setup  { ProductSTS::SLOT_SETUP, "SETUP",   false };
-    ProductSTSController::SourceDescriptor descriptor_TV     { ProductSTS::SLOT_TV,    "TV",      true  };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_0 { ProductSTS::SLOT_0,     "SLOT_0",  false };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_1 { ProductSTS::SLOT_1,     "SLOT_1",  false };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_2 { ProductSTS::SLOT_2,     "SLOT_2",  false };
+    ProductSTSController::SourceDescriptor descriptor_AiQ    { ProductSTS::SLOT_AIQ,   "ADAPTiQ", false, commonStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_Setup  { ProductSTS::SLOT_SETUP, "SETUP",   false, silentStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_TV     { ProductSTS::SLOT_TV,    "TV",      true,  commonStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_0 { ProductSTS::SLOT_0,     "SLOT_0",  false, commonStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_1 { ProductSTS::SLOT_1,     "SLOT_1",  false, commonStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_2 { ProductSTS::SLOT_2,     "SLOT_2",  false, commonStateFactory };
 
     sources.push_back( descriptor_AiQ );
     sources.push_back( descriptor_Setup );

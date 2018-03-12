@@ -25,6 +25,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
+#include "EndPointsDefines.h"
 #include "FrontDoorClient.h"
 #include "ProtoPersistenceFactory.h"
 #include "ProfessorProductController.h"
@@ -53,10 +54,7 @@ const std::string g_ProductDirectory = "product-persistence/";
 /// The following constants define FrontDoor endpoints used by the SystemManager
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr char FRONTDOOR_SYSTEM_CONFIGURATION_STATUS[ ]       = "/system/configuration/status";
-constexpr char FRONTDOOR_SYSTEM_CAPS_INITIALIZATION_STATUS[ ] = "/system/capsInitializationStatus";
-constexpr char FRONTDOOR_CAPS_INITIALIZATION_UPDATE[ ]        = "CapsInitializationUpdate";
-constexpr char FRONTDOOR_SYSTEM_STATE[ ]                      = "/system/state";
+const std::string s_FrontDoorSystemConfigurationStatus = FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -107,28 +105,10 @@ bool ProductSystemManager::Run( )
                                      std::placeholders::_2 ),
                           m_ProductTask );
 
-        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS, callback );
+        m_FrontDoorClient->RegisterGet( s_FrontDoorSystemConfigurationStatus, callback );
     }
 
     BOSE_DEBUG( s_logger, "Registration for getting configuration status requests has been made." );
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Registration for other Bose client processes for getting the system state is made
-    /// through the FrontDoorClient. The callback HandleGetSystemStateRequest is used to process
-    /// system state requests.
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    {
-        AsyncCallback < Callback < ProductPb::SystemState >, Callback<EndPointsError::Error> >
-        callback( std::bind( &ProductSystemManager::HandleGetSystemStateRequest,
-                             this,
-                             std::placeholders::_1,
-                             std::placeholders::_2 ),
-                  m_ProductTask );
-
-        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_STATE, callback );
-    }
-
-    BOSE_DEBUG( s_logger, "Registration for getting system state requests has been made." );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// Registration is complete so return true.
@@ -236,31 +216,6 @@ void ProductSystemManager::HandleGetConfigurationStatusRequest( const Callback< 
     BOSE_DEBUG( s_logger, "Sending the configuration status for a get request." );
 
     response.Send( m_ConfigurationStatus );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief ProductSystemManager::HandleGetSystemStateRequest
-///
-/// @param const ProductPb::SystemState& systemstate
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::HandleGetSystemStateRequest( const Callback< ProductPb::SystemState >& stateResponse,
-                                                        const Callback<EndPointsError::Error>& errorRsp ) const
-{
-    Hsm::STATE  stateId   = m_ProductController.GetHsm( ).GetCurrentState( )->GetId( );
-    std::string stateName = m_ProductController.GetHsm( ).GetCurrentState( )->GetName( );
-
-    ProductPb::SystemState currentState;
-    currentState.set_id( stateId );
-    currentState.set_name( stateName );
-
-    BOSE_DEBUG( s_logger, "--------------- Product Current State Request --------------" );
-    BOSE_DEBUG( s_logger, "The current state name is %s with ID %u.",
-                stateName.c_str( ),
-                static_cast< unsigned int >( stateId ) );
-
-    stateResponse.Send( currentState );
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////

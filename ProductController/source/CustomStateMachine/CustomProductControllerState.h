@@ -217,7 +217,7 @@ public:
         return false;
     }
 
-    virtual bool HandleFactoryDefault( )
+    virtual bool HandleLpmFactoryDefault( )
     {
         return false;
     }
@@ -273,6 +273,11 @@ public:
     }
 
     virtual bool HandleChimeSASSPlaybackError( int32_t eventId )
+    {
+        return false;
+    }
+
+    virtual bool HandleUiConnectedUpdateState( bool uiconnected )
     {
         return false;
     }
@@ -410,6 +415,11 @@ public:
     }
 
     virtual bool HandleNetworkOperationalMode( NetManager::Protobuf::OperationalMode mode )
+    {
+        return false;
+    }
+
+    virtual bool HandleSystemEventFactoryDefault( const ProductSystemEventServiceResponse& response )
     {
         return false;
     }

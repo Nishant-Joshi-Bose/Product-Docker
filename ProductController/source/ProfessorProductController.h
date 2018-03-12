@@ -68,6 +68,7 @@ class ProductCommandLine;
 class ProductKeyInputInterface;
 class ProductAdaptIQManager;
 class ProductSourceInfo;
+class ProductBLERemoteManager;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -148,6 +149,15 @@ public:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< ProductSourceInfo >& GetSourceInfo( );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method is used to get a shared pointer to the BLERemoteMmanager instance
+    ///        from the product controller.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    std::shared_ptr< ProductBLERemoteManager>& GetBLERemoteManager( );
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -275,6 +285,7 @@ private:
     std::shared_ptr< ProductAdaptIQManager             > m_ProductAdaptIQManager;
     std::shared_ptr< CustomProductAudioService         > m_ProductAudioService;
     std::shared_ptr< ProductSourceInfo                 > m_ProductSourceInfo;
+    std::shared_ptr< ProductBLERemoteManager           > m_ProductBLERemoteManager;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

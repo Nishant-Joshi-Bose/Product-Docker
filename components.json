@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.13.41315.2723875"
+    "selected_version": "Release/Castle-Fork/0.3.14.41323.2725199"
   },
   {
     "name": "BLERemoteXCVR",
@@ -33,19 +33,19 @@
   },
   {
     "name": "BoseOPKG-native",
-    "selected_version": "Release/master/0.2.0-12+0405785"
+    "selected_version": "Release/master/0.3.0-20+324ed86"
   },
   {
     "name": "BoseOPKG-qc8017_32",
-    "selected_version": "Release/master/0.2.0-12+0405785"
+    "selected_version": "Release/master/0.3.0-20+324ed86"
   },
   {
     "name": "BoseOPKG-x86",
-    "selected_version": "Release/master/0.2.0-12+0405785"
+    "selected_version": "Release/master/0.3.0-20+324ed86"
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/develop/0.3.2-99+3f60f39"
+    "selected_version": "Release/develop/0.3.3-110+3a6d9d5"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -61,7 +61,7 @@
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
-    "selected_version": "Release/IP3/0.3.6-45+fe14799"
+    "selected_version": "Release/IP3/0.3.7-47+c247d98"
   },
   {
     "name": "CastleDemoController-qc8017_32",
@@ -89,23 +89,27 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-176+32ae99f"
+    "selected_version": "Release/master/0.3.1-181+ed72644"
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.3.82-504+7699984"
+    "selected_version": "Release/master/0.3.86-524+e45febf"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.3.82-504+7699984"
+    "selected_version": "Release/master/0.3.86-524+e45febf"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@15b001b190f5ba4a9b50e1c164e14bfe5cd45f55"
+    "selected_version": "master@75aab549b5b0d67d269532f96a0127c83a07c2be"
   },
   {
     "name": "CastleProductUIAssets",
     "selected_version": "master@43394152e689030529a94750d56fe9cd196b885a"
+  },
+  {
+    "name": "CastleTestUtils",
+    "selected_version": "master@e19bf6fd99a700739ac372437424b2e9f19a58da"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -169,7 +173,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.13.41315.2723875"
+    "selected_version": "Release/Castle-Fork/0.3.14.41323.2725199"
   },
   {
     "name": "SystemEventService-qc8017_32",

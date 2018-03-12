@@ -38,6 +38,8 @@ RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_locat
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
 RIVIERALPM_DIR = $(shell components get RivieraLPM installed_location)
 RIVIERA_LPM_TOOLS_DIR = $(shell components get RivieraLpmTools installed_location)
+TESTUTILS_DIR = $(shell components get CastleTestUtils installed_location)
+
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
@@ -46,6 +48,8 @@ generated_sources: check_tools $(VERSION_FILES)
 	$(MAKE) -C $(A4VVIDEOMANAGERSERVICE_DIR) $@
 	$(MAKE) -C $(A4VQUICKSETSERVICE_DIR) $@
 	$(MAKE) -C $(A4VREMOTECOMMUNICATIONSERVICE_DIR) $@
+	ln -nsf $(TESTUTILS_DIR) builds/CastleTestUtils
+	touch builds/__init__.py
 
 .PHONY: astyle
 astyle:
@@ -120,11 +124,14 @@ graph: product-ipk
 
 .PHONY: lpm-bos
 lpm-bos:
+ifneq ($(filter $(BUILD_TYPE), Release Continuous Nightly),)
+	$(info BUILD_TYPE=$(BUILD_TYPE))
+else
+	$(error BUILD_TYPE must equal Release, Nightly or Continuous. Found $(BUILD_TYPE))
+endif
 	rm -f ./builds/$(cfg)/professor_package*.bos
 	rm -f ./builds/$(cfg)/lpm_professor*.hex
-	cp ./lpm_package.xml ./builds/$(cfg)/lpm_package.xml
-	# Don't share version yet... TODO post IP3
-	python2.7 $(RIVIERA_LPM_TOOLS_DIR)/tools/blob/blob_utility.py --pack $(BOSE_WORKSPACE)/lpm_package.xml ./builds/$(cfg)/ --build_type Release #--boseversion $(BUILDS_DIR)/BoseVersion.json
+	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE)
 
 .PHONY: hsp-ipk
 hsp-ipk: cmake_build
