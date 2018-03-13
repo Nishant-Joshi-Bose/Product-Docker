@@ -118,10 +118,6 @@ package:  package-no-hsp package-with-hsp graph
 all-packages: package
 	./scripts/create-product-tar
 
-.PHONY: all-packages
-all-packages: package
-	./scripts/create-product-tar
-
 .PHONY: deploy
 deploy: all-packages
 	scripts/collect-deployables builds/Release builds/deploy
