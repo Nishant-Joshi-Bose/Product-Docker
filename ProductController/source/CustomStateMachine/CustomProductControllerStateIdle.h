@@ -44,6 +44,7 @@ public:
     }
 
     void HandleStateEnter( ) override;
+    bool HandleAutowakeStatus( bool active ) override;
     void HandleStateExit( ) override;
 };
 
