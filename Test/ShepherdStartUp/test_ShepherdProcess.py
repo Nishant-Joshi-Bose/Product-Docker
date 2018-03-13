@@ -40,8 +40,8 @@ def test_bonjour_update(request):
         result = PerformBonjourUpdate(adb, zip_file, device)
         assert result, "Bonjour Update Failed. Please see logs for more details"
         time.sleep(180)
-        bonjourUpdateSupport = BonjourUpdateSupport(device=device, logger=logger)
-        bonjourUpdateSupport.confirm_installation_versions()
+        #bonjourUpdateSupport = BonjourUpdateSupport(device=device, logger=logger)
+        #bonjourUpdateSupport.confirm_installation_versions()
         
 
 @pytest.mark.dependency(depends=["test_bonjour_update"])
