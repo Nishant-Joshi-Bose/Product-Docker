@@ -35,7 +35,7 @@ def test_bonjour_update(request):
         BonjourCnt = BonjourCnt + 1
         result = PerformBonjourUpdateTest(request)
         assert result, "Bonjour Update Failed. Please see logs for more details"
-        time.sleep(120)
+        time.sleep(180)
         #bonjourUpdateSupport = BonjourUpdateSupport(device=device, logger=logger)
         #bonjourUpdateSupport.confirm_installation_versions()
         
