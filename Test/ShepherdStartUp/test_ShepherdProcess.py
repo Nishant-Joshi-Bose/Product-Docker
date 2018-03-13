@@ -30,8 +30,15 @@ def test_bonjour_update(request):
     """
     This to perform Bonjour update twice to validate it install continuos build
     """
-    result = PerformBonjourUpdate(request)
-    assert result, "Bonjour Update Failed. Please see logs for more details"
+    BonjourCnt = 0
+    while BonjourCnt < int(cfg.get('Settings', 'BONJOUR_UPDATE_LOOP')):
+        BonjourCnt = BonjourCnt + 1
+        result = PerformBonjourUpdateTest(request)
+        assert result, "Bonjour Update Failed. Please see logs for more details"
+        time.sleep(120)
+        #bonjourUpdateSupport = BonjourUpdateSupport(device=device, logger=logger)
+        #bonjourUpdateSupport.confirm_installation_versions()
+        
 
 @pytest.mark.dependency(depends=["test_bonjour_update"])
 def test_shepherd_process(request):
@@ -90,8 +97,8 @@ def PerformBonjourUpdate(request):
                 bonjour_util.upload_zipfile(zip_file, deviceIP)
             except SystemExit as e:
                 logger.info("System Exit Exception in Bonjour Update .... " + str(e))
-                logger.info("Bonjour Update Cnt : " + str(BonjourCnt))
                 BonjourCnt += 1
+                logger.info("Bonjour Update Cnt : " + str(BonjourCnt))                
                 if BonjourCnt < int(cfg.get('Settings', 'BONJOUR_UPDATE_LOOP')):
                     time.sleep(120)
                     #bonjourUpdateSupport.confirm_installation_versions()
@@ -107,3 +114,33 @@ def PerformBonjourUpdate(request):
     except Exception as e:
         logger.info("Exception in Bonjour Update .... " + str(e))
         return False
+
+def PerformBonjourUpdateTest(request):
+    """
+    Perform Bonjour Update twice on same build to validate software update
+    """
+    device = request.config.getoption("--device-id")
+    zip_file = request.config.getoption("--zipfile")
+    adb = ADBCommunication()
+    adb.setCommunicationDetail(device)
+    starttime = time.time()
+    _timeout = 60
+    try:
+        while(time.time() - starttime < _timeout):
+            try:
+                deviceIP = adb.getIPAddress()
+                logger.info("Device IP : " + deviceIP)
+                break
+            except Exception as e:
+                logger.info("Getting IP Address.... " + str(e))
+                continue
+        bonjour_util = BonjourUpdateUtils(device=device)
+        try:
+            bonjour_util.upload_zipfile(zip_file, deviceIP)
+        except SystemExit as e:
+            logger.info("System Exit Exception in Bonjour Update .... " + str(e))
+            return True
+    except Exception as e:
+        logger.info("Exception in Bonjour Update .... " + str(e))
+        return False
+	
