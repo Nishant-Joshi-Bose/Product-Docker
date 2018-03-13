@@ -4,6 +4,10 @@ endif
 
 sdk = qc8017_32
 
+# Used to determine what type of BLOB Manifest file to use. Acceptible options
+# are Release, Continuous, or Nightly.
+BUILD_TYPE=Release
+
 ifeq ($(sdk),$(filter native x86 x86_64, $(sdk)))
   cfg = Debug
 else
