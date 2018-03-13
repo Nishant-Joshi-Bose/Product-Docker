@@ -37,7 +37,7 @@ def test_bonjour_update(request):
     BonjourCnt = 0
     while BonjourCnt < int(cfg.get('Settings', 'BONJOUR_UPDATE_LOOP')):
         BonjourCnt = BonjourCnt + 1
-        result = PerformBonjourUpdate(adb, zip_file)
+        result = PerformBonjourUpdate(adb, zip_file, device)
         assert result, "Bonjour Update Failed. Please see logs for more details"
         time.sleep(180)
         bonjourUpdateSupport = BonjourUpdateSupport(device=device, logger=logger)
@@ -73,7 +73,7 @@ def test_shepherd_process(request):
         time.sleep(2)
     assert process_died_list == [], "The following processes died after installation: {}".format(process_died_list)
 
-def PerformBonjourUpdate(adb, zip_file):
+def PerformBonjourUpdate(adb, zip_file, device):
     """
     Perform Bonjour Update twice on same build to validate software update
     """
