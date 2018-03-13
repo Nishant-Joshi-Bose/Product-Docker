@@ -91,16 +91,17 @@ def PerformBonjourUpdate(request):
             except SystemExit as e:
                 logger.info("System Exit Exception in Bonjour Update .... " + str(e))
                 logger.info("Bonjour Update Cnt : " + str(BonjourCnt))
-                bonjourUpdateSupport.confirm_installation_versions()
                 BonjourCnt += 1
                 if BonjourCnt < int(cfg.get('Settings', 'BONJOUR_UPDATE_LOOP')):
-                    logger.info("Second Iteration.....")
                     time.sleep(120)
+                    bonjourUpdateSupport.confirm_installation_versions()
+                    logger.info("Second Iteration.....")
                     continue
                 else:
                     logger.info("Iteration Completed.....")
                     logger.info("Bonjour Update Cnt : " + str(BonjourCnt))
                     time.sleep(120)
+                    bonjourUpdateSupport.confirm_installation_versions()
                     break
         return True
     except Exception as e:
