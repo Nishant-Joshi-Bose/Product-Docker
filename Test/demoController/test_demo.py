@@ -6,11 +6,12 @@ to validate responses.
 """
 import json
 import pytest
-from CastleTestUtils.LoggerUtils.log_setup import get_logger
-logger = get_logger(__name__)
+from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
+import logging
+logger = get_logger(__name__, "DemoLog.log", level=logging.INFO, fileLoglevel=logging.DEBUG)
 
 @pytest.mark.usefixtures("save_speaker_log")
-                         # "software_update")
+                         
 class TestDemo():
     """ Test Class for Demo State """
     @pytest.mark.usefixtures("demoUtils", "device_ip", "request")
