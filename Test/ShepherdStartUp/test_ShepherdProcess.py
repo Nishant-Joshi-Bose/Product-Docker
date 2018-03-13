@@ -30,14 +30,18 @@ def test_bonjour_update(request):
     """
     This to perform Bonjour update twice to validate it install continuos build
     """
+    device = request.config.getoption("--device-id")
+    zip_file = request.config.getoption("--zipfile")
+    adb = ADBCommunication()
+    adb.setCommunicationDetail(device)
     BonjourCnt = 0
     while BonjourCnt < int(cfg.get('Settings', 'BONJOUR_UPDATE_LOOP')):
         BonjourCnt = BonjourCnt + 1
-        result = PerformBonjourUpdateTest(request)
+        result = PerformBonjourUpdate(adb, zip_file)
         assert result, "Bonjour Update Failed. Please see logs for more details"
         time.sleep(180)
-        #bonjourUpdateSupport = BonjourUpdateSupport(device=device, logger=logger)
-        #bonjourUpdateSupport.confirm_installation_versions()
+        bonjourUpdateSupport = BonjourUpdateSupport(device=device, logger=logger)
+        bonjourUpdateSupport.confirm_installation_versions()
         
 
 @pytest.mark.dependency(depends=["test_bonjour_update"])
@@ -69,60 +73,10 @@ def test_shepherd_process(request):
         time.sleep(2)
     assert process_died_list == [], "The following processes died after installation: {}".format(process_died_list)
 
-def PerformBonjourUpdate(request):
+def PerformBonjourUpdate(adb, zip_file):
     """
     Perform Bonjour Update twice on same build to validate software update
     """
-    device = request.config.getoption("--device-id")
-    zip_file = request.config.getoption("--zipfile")
-    adb = ADBCommunication()
-    adb.setCommunicationDetail(device)
-    bonjourUpdateSupport = BonjourUpdateSupport(device=device, logger=logger)
-    starttime = time.time()
-    _timeout = 60
-    try:
-        while(time.time() - starttime < _timeout):
-            try:
-                deviceIP = adb.getIPAddress()
-                logger.info("Device IP : " + deviceIP)
-                break
-            except Exception as e:
-                logger.info("Getting IP Address.... " + str(e))
-                continue
-        bonjour_util = BonjourUpdateUtils(device=device)
-        #Need to perform Bonjour Update twice
-        BonjourCnt = 0
-        while True:
-            try:
-                bonjour_util.upload_zipfile(zip_file, deviceIP)
-            except SystemExit as e:
-                logger.info("System Exit Exception in Bonjour Update .... " + str(e))
-                BonjourCnt += 1
-                logger.info("Bonjour Update Cnt : " + str(BonjourCnt))                
-                if BonjourCnt < int(cfg.get('Settings', 'BONJOUR_UPDATE_LOOP')):
-                    time.sleep(120)
-                    #bonjourUpdateSupport.confirm_installation_versions()
-                    logger.info("Second Iteration.....")
-                    continue
-                else:
-                    logger.info("Iteration Completed.....")
-                    logger.info("Bonjour Update Cnt : " + str(BonjourCnt))
-                    time.sleep(120)
-                    #bonjourUpdateSupport.confirm_installation_versions()
-                    break
-        return True
-    except Exception as e:
-        logger.info("Exception in Bonjour Update .... " + str(e))
-        return False
-
-def PerformBonjourUpdateTest(request):
-    """
-    Perform Bonjour Update twice on same build to validate software update
-    """
-    device = request.config.getoption("--device-id")
-    zip_file = request.config.getoption("--zipfile")
-    adb = ADBCommunication()
-    adb.setCommunicationDetail(device)
     starttime = time.time()
     _timeout = 60
     try:
