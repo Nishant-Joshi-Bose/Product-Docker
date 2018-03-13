@@ -42,6 +42,7 @@
 #include "KeyManager.h"
 #include "CustomProductControllerStates.h"
 #include "SystemEventMessage.pb.h"
+#include "ChimeEvents.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -278,6 +279,11 @@ public:
     }
 
     virtual bool HandleUiConnectedUpdateState( bool uiconnected )
+    {
+        return false;
+    }
+
+    virtual bool HandlePlayChimeRequest( ProductApp::ChimeEvents_t chimeEvent )
     {
         return false;
     }

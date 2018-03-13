@@ -21,11 +21,6 @@
             "comment":"bluetooth connect notification"
         },
         {
-            "event_id":5,
-            "tone":"T6_disconnected.flac",
-            "comment":"bluetooth disconnected notification"
-        },
-        {
             "event_id":6,
             "tone":"T7_positive_confirmation.flac",
             "comment":"store preset "
