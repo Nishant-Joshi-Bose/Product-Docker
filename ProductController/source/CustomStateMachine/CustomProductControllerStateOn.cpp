@@ -106,6 +106,22 @@ bool CustomProductControllerStateOn::HandleAdaptIQControl( const ProductAdaptIQC
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerStateOn::HandleIntentSetupBLERemote
+///
+/// @return This method returns a true Boolean value indicating that it has handled the intent.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateOn::HandleIntentSetupBLERemote( )
+{
+    BOSE_INFO( s_logger, "The %s state is in %s", GetName( ).c_str( ), __func__ );
+
+    GetCustomProductController().PairBLERemote( true );
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }

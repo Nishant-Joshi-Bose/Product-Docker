@@ -76,7 +76,7 @@ public:
     void Run( void );
     void Stop( void );
 
-    void Pairing_Start( void );
+    void Pairing_Start( uint32_t timeout = 0 );
     void Pairing_Cancel( void );
     void Unpairing_Start( void );
     void Unpairing_Cancel( void );

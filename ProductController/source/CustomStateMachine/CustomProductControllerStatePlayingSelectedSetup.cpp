@@ -15,7 +15,7 @@
 #include "Utilities.h"
 #include "CustomProductControllerStatePlayingSelectedSetup.h"
 #include "ProductControllerStates.h"
-#include "ProductController.h"
+#include "ProfessorProductController.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -53,6 +53,34 @@ CustomProductControllerStatePlayingSelectedSetup::CustomProductControllerStatePl
     : ProductControllerStatePlayingSelectedSetup( hsm, pSuperState, stateId, name )
 {
     BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStatePlayingSelectedSetup::HandleStateEnter
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStatePlayingSelectedSetup::HandleStateEnter()
+{
+    BOSE_INFO( s_logger, __func__ );
+
+    ProductControllerStatePlayingSelectedSetup::HandleStateEnter();
+
+    GetCustomProductController().PossiblyPairBLERemote();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStatePlayingSelectedSetup::HandleStateExit
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStatePlayingSelectedSetup::HandleStateExit()
+{
+    BOSE_INFO( s_logger, __func__ );
+
+    GetCustomProductController().StopPairingBLERemote();
+
+    ProductControllerStatePlayingSelectedSetup::HandleStateExit();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

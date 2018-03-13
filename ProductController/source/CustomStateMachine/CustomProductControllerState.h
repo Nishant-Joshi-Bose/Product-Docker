@@ -257,6 +257,11 @@ public:
         return false;
     }
 
+    virtual bool HandleLPMPowerStatusNetworkStandby( )
+    {
+        return false;
+    }
+
     virtual bool HandleNetworkWifiAPStatus( bool APStatus )
     {
         return false;
@@ -273,6 +278,56 @@ public:
     }
 
     virtual bool HandleChimeSASSPlaybackError( int32_t eventId )
+    {
+        return false;
+    }
+
+    virtual bool HandleLPMPowerStatusIdle( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLPMPowerStatusFullPowerOn( )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentSystemInfoMode( KeyHandlerUtil::ActionType_t intent )
+    {
+        return false;
+    }
+
+    virtual bool HandleIntentPlaySoundTouchSource( )
+    {
+        return false;
+    }
+
+    virtual bool HandleAudioPathSelect( )
+    {
+        return false;
+    }
+
+    virtual bool HandleAudioPathDeselect( )
+    {
+        return false;
+    }
+
+    virtual bool HandleAmpFaultDetected()
+    {
+        return false;
+    }
+
+    virtual bool IsInNetworkSetupState() const
+    {
+        return false;
+    }
+
+    virtual bool HandleOOBSetupDone( )
+    {
+        return false;
+    }
+
+    virtual bool HandleNetworkOperationalMode( NetManager::Protobuf::OperationalMode mode )
     {
         return false;
     }
@@ -294,46 +349,6 @@ public:
         return false;
     }
 
-    virtual bool HandleModulesReady( )
-    {
-        return false;
-    }
-
-    virtual bool HandleNetworkConfigurationStatus( )
-    {
-        return false;
-    }
-
-    virtual bool HandleNetworkOperationMode( NetManager::Protobuf::OperationalMode mode )
-    {
-        return false;
-    }
-
-    virtual bool HandleLPMPowerStatusColdBoot( )
-    {
-        return false;
-    }
-
-    virtual bool HandleLPMPowerStatusLowPower( )
-    {
-        return false;
-    }
-
-    virtual bool HandleLPMPowerStatusNetworkStandby( )
-    {
-        return false;
-    }
-
-    virtual bool HandleLPMPowerStatusIdle( )
-    {
-        return false;
-    }
-
-    virtual bool HandleLPMPowerStatusFullPowerOn( )
-    {
-        return false;
-    }
-
     virtual bool HandleIntent( KeyHandlerUtil::ActionType_t intent )
     {
         return false;
@@ -349,17 +364,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentSystemInfoMode( KeyHandlerUtil::ActionType_t intent )
-    {
-        return false;
-    }
-
     virtual bool HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent )
-    {
-        return false;
-    }
-
-    virtual bool HandleIntentPlaySoundTouchSource( )
     {
         return false;
     }
@@ -374,35 +379,11 @@ public:
         return false;
     }
 
-    virtual bool HandleAudioPathSelect( )
+    virtual bool HandleIntentSetupBLERemote( )
     {
         return false;
     }
 
-    virtual bool HandleAudioPathDeselect( )
-    {
-        return false;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief This handler is used to respond to the LPM detecting an amp fault.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    virtual bool HandleAmpFaultDetected()
-    {
-        return false;
-    }
-
-    virtual bool IsInNetworkSetupState() const
-    {
-        return false;
-    }
-
-    virtual bool HandleOOBSetupDone( )
-    {
-        return false;
-    }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// This method returns the Professor Custom Product Controller reference of type
@@ -412,11 +393,6 @@ public:
     inline static void SetProductController( ProductController* productController )
     {
         s_productController = productController;
-    }
-
-    virtual bool HandleNetworkOperationalMode( NetManager::Protobuf::OperationalMode mode )
-    {
-        return false;
     }
 
     virtual bool HandleSystemEventFactoryDefault( const ProductSystemEventServiceResponse& response )

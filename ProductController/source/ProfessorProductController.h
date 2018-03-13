@@ -266,6 +266,12 @@ public:
 
     bool CanPersistAsLastContentItem( const SoundTouchInterface::ContentItem &ci ) const override;
 
+    void PossiblyPairBLERemote( );
+
+    void PairBLERemote( bool manualPairingRequest = false );
+
+    void StopPairingBLERemote( );
+
 private:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
