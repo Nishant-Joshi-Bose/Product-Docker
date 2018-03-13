@@ -268,7 +268,7 @@ public:
 
     void PossiblyPairBLERemote( );
 
-    void PairBLERemote( bool manualPairingRequest = false );
+    void PairBLERemote( uint32_t timeout );
 
     void StopPairingBLERemote( );
 

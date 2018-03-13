@@ -884,13 +884,12 @@ void ProfessorProductController::PossiblyPairBLERemote( )
 {
     // The rules are per PGC-697:
     // On a system without a paired BLE remote, entry into SETUP will activate BLE pairing.
-    // On a system with a paired BLE remote, entry to SETUP via the Action Button will activate BLE pairing.
+    // On a system with a paired BLE remote, pressing and holding the Action Button will activate BLE pairing.
 
-    BOSE_INFO( s_logger, "%s checking for a paired BLE remote", __func__ );
     if( !( m_ProductBLERemoteManager->IsConnected() ) )
     {
         BOSE_INFO( s_logger, "%s could not find paired BLE remote", __func__ );
-        PairBLERemote( );
+        PairBLERemote( 0 );
     }
     else
     {
@@ -907,19 +906,12 @@ void ProfessorProductController::PossiblyPairBLERemote( )
 /// @param  manualPairingRequest
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::PairBLERemote( bool manualPairingRequest )
+void ProfessorProductController::PairBLERemote( uint32_t timeout )
 {
     // Tell the remote communications module to start pairing
     BOSE_INFO( s_logger, "%s requesting that the BLE remote pairing start", __func__ );
 
-    if( manualPairingRequest )
-    {
-        m_ProductBLERemoteManager->Pairing_Start( 120 );
-    }
-    else
-    {
-        m_ProductBLERemoteManager->Pairing_Start();
-    }
+    m_ProductBLERemoteManager->Pairing_Start( timeout );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
