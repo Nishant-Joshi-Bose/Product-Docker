@@ -391,25 +391,25 @@ void DisplayController::RegisterDisplayEndPoints()
     // ==========================
     // HandlePutDisplayRequest
     // ==========================
-    AsyncCallback<Display, Callback<Display>, Callback<EndPointsError::Error>> putDisplayReqCb(
-                                                                                std::bind( &DisplayController::HandlePutDisplayRequest,
-                                                                                        this,
-                                                                                        std::placeholders::_1,
-                                                                                        std::placeholders::_2
-                                                                                         ),
-                                                                                m_productController.GetTask() );
+    AsyncCallback<Display, Callback<Display>, Callback<FrontDoor::Error>> putDisplayReqCb(
+                                                                           std::bind( &DisplayController::HandlePutDisplayRequest,
+                                                                                   this,
+                                                                                   std::placeholders::_1,
+                                                                                   std::placeholders::_2
+                                                                                    ),
+                                                                           m_productController.GetTask() );
     m_frontdoorClientPtr->RegisterPut<Display>( "/ui/display", putDisplayReqCb );
 
     // ==========================
     // HandleGetDisplayRequest
     // ==========================
-    AsyncCallback< Callback<Display>, Callback<EndPointsError::Error>> getDisplayReqCb(
-                                                                        std::bind(
-                                                                            &DisplayController::HandleGetDisplayRequest,
-                                                                            this,
-                                                                            std::placeholders::_1
-                                                                        ),
-                                                                        m_productController.GetTask() );
+    AsyncCallback< Callback<Display>, Callback<FrontDoor::Error>> getDisplayReqCb(
+                                                                   std::bind(
+                                                                       &DisplayController::HandleGetDisplayRequest,
+                                                                       this,
+                                                                       std::placeholders::_1
+                                                                   ),
+                                                                   m_productController.GetTask() );
     m_frontdoorClientPtr->RegisterGet( "/ui/Display", getDisplayReqCb );
 
     // ==========================

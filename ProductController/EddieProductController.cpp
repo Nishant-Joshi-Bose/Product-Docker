@@ -254,7 +254,7 @@ void EddieProductController::RegisterEndPoints()
     BOSE_INFO( s_logger, __func__ );
     RegisterCommonEndPoints();
 
-    AsyncCallback<Callback<ProductPb::ConfigurationStatus>, Callback<EndPointsError::Error>> getConfigurationStatusReqCb( std::bind( &EddieProductController::HandleConfigurationStatusRequest ,
+    AsyncCallback<Callback<ProductPb::ConfigurationStatus>, Callback<FrontDoor::Error>> getConfigurationStatusReqCb( std::bind( &EddieProductController::HandleConfigurationStatusRequest ,
             this, std::placeholders::_1 ) , GetTask() );
 
     AsyncCallback<SoundTouchInterface::CapsInitializationStatus> capsInitializationCb( std::bind( &EddieProductController::HandleCapsInitializationUpdate,
@@ -424,7 +424,7 @@ void EddieProductController::SendInitialRequests()
     }
 }
 
-void EddieProductController::CallbackError( const EndPointsError::Error &error )
+void EddieProductController::CallbackError( const FrontDoor::Error &error )
 {
     BOSE_WARNING( s_logger, "%s: Error = (%d-%d) %s", __func__, error.code(), error.subcode(), error.message().c_str() );
 }
@@ -462,11 +462,11 @@ void EddieProductController::HandleNetworkModuleReady( bool networkModuleReady )
     {
         AsyncCallback<NetManager::Protobuf::WiFiProfiles> networkWifiProfilesCb( std::bind( &EddieProductController::HandleWiFiProfileResponse ,
                                                                                  this, std::placeholders::_1 ), GetTask() );
-        m_FrontDoorClientIF->SendGet<NetManager::Protobuf::WiFiProfiles, EndPointsError::Error>( FRONTDOOR_NETWORK_WIFI_PROFILE_API, networkWifiProfilesCb, m_fdErrorCb );
+        m_FrontDoorClientIF->SendGet<NetManager::Protobuf::WiFiProfiles, FrontDoor::Error>( FRONTDOOR_NETWORK_WIFI_PROFILE_API, networkWifiProfilesCb, m_fdErrorCb );
 
         AsyncCallback<NetManager::Protobuf::NetworkStatus> networkStatusCb( std::bind( &EddieProductController::HandleNetworkStatus ,
                                                                                        this, std::placeholders::_1 ), GetTask() );
-        m_FrontDoorClientIF->SendGet<NetManager::Protobuf::NetworkStatus, EndPointsError::Error>( FRONTDOOR_NETWORK_STATUS_API, networkStatusCb, m_fdErrorCb );
+        m_FrontDoorClientIF->SendGet<NetManager::Protobuf::NetworkStatus, FrontDoor::Error>( FRONTDOOR_NETWORK_STATUS_API, networkStatusCb, m_fdErrorCb );
     }
 
     m_isNetworkModuleReady = networkModuleReady;
@@ -476,7 +476,7 @@ void EddieProductController::PerformRequestforWiFiProfiles()
 {
     AsyncCallback<NetManager::Protobuf::WiFiProfiles> networkWifiProfilesCb( std::bind( &EddieProductController::HandleWiFiProfileResponse ,
                                                                              this, std::placeholders::_1 ), GetTask() );
-    m_FrontDoorClientIF->SendGet<NetManager::Protobuf::WiFiProfiles, EndPointsError::Error>( FRONTDOOR_NETWORK_WIFI_PROFILE_API, networkWifiProfilesCb, m_fdErrorCb );
+    m_FrontDoorClientIF->SendGet<NetManager::Protobuf::WiFiProfiles, FrontDoor::Error>( FRONTDOOR_NETWORK_WIFI_PROFILE_API, networkWifiProfilesCb, m_fdErrorCb );
 }
 
 bool EddieProductController::IsAllModuleReady() const
