@@ -94,14 +94,14 @@ def PerformBonjourUpdate(request):
                 BonjourCnt += 1
                 if BonjourCnt < int(cfg.get('Settings', 'BONJOUR_UPDATE_LOOP')):
                     time.sleep(120)
-                    bonjourUpdateSupport.confirm_installation_versions()
+                    #bonjourUpdateSupport.confirm_installation_versions()
                     logger.info("Second Iteration.....")
                     continue
                 else:
                     logger.info("Iteration Completed.....")
                     logger.info("Bonjour Update Cnt : " + str(BonjourCnt))
                     time.sleep(120)
-                    bonjourUpdateSupport.confirm_installation_versions()
+                    #bonjourUpdateSupport.confirm_installation_versions()
                     break
         return True
     except Exception as e:
