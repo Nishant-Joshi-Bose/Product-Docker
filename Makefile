@@ -61,8 +61,8 @@ product-ipk: cmake_build
 	./scripts/create-product-ipk
 
 # The default build will always be signed using development keys
-privateKeyFilePath="$(BOSE_WORKSPACE)/scripts/keys/development/privateKey/dev.p12"
-privateKeyPasswordPath="$(BOSE_WORKSPACE)/scripts/keys/development/privateKey/dev_p12.pass"
+privateKeyFilePath="$(BOSE_WORKSPACE)/keys/development/privateKey/dev.p12"
+privateKeyPasswordPath="$(BOSE_WORKSPACE)/keys/development/privateKey/dev_p12.pass"
 
 #Create Zip file for Local update - no hsp
 IPKS = monaco.ipk product.ipk lpm_updater.ipk

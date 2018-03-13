@@ -144,8 +144,8 @@ EOF
 # Copy public keys in FS for development key. EC will take care of generation for Production 
 secure_dir=$opt_dir/etc/secure/
 mkdir -p "$secure_dir" || exit
-cp -r "$wspace/scripts/keys/development/publicKeys/" "$secure_dir" || exit
-cp -r "$wspace/scripts/keys/development/CACerts/" "$secure_dir" || exit
+cp -r "$wspace/keys/development/publicKeys/" "$secure_dir" || exit
+cp -r "$wspace/keys/development/CACerts/" "$secure_dir" || exit
 
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
