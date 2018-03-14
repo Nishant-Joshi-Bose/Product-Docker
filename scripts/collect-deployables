@@ -15,24 +15,24 @@ rm -rf "$deploy_dir"
 mkdir -p "$deploy_dir" || exit
 
 files=(
-    "$builds_dir/product.ipk"
     "$builds_dir/product-unstripped.tar.gz"
     "$builds_dir/product-ipk-stage/component-info.gz"
     "$builds_dir/components.svgz"
     "$builds_dir/package/product.tar"
     "$builds_dir/product_update.zip"
-    "$builds_dir/product_update_with_hsp.zip"
+    "$builds_dir/product_update_no_hsp.zip"
     "$builds_dir/package/product_flash"
     "$builds_dir/package/product_flash.exe"
     "$builds_dir/package/product_flash_mac"
-    "$builds_dir/lpm_updater.ipk"
-    "$builds_dir/monaco.ipk"
-    "$builds_dir/Packages.gz"
     "$builds_dir/lpm-updater-ipk-stage/lpm_updater/lpm_updater/etc/lpm_blob_configuration.xml"
 )
 
 files_to_cp=(
     "$builds_dir/../../components.json"
+    $builds_dir/professor_package_*
+    $builds_dir/lpm_professor_combined_*
+    $builds_dir/lpm_package.xml
+    $builds_dir/lpm_blob_configuration.xml
 )
 
 mv "${files[@]}" "$deploy_dir" || exit

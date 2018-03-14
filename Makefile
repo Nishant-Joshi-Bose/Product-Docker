@@ -2,7 +2,7 @@ export BOSE_WORKSPACE := $(abspath $(CURDIR))
 include Settings.mk
 
 .PHONY: default
-default: graph
+default: package
 
 .PHONY: force
 force:
@@ -33,11 +33,13 @@ CMAKE_USE_CCACHE := $(USE_CCACHE)
 A4VVIDEOMANAGERSERVICE_DIR = $(shell components get A4VVideoManagerService installed_location)
 A4VQUICKSETSERVICE_DIR = $(shell components get A4VQuickSetService installed_location)
 A4VREMOTECOMMUNICATIONSERVICE_DIR = $(shell components get A4VRemoteCommunicationService installed_location)
-PROFESSORLPMPACKAGE_DIR = $(shell components get ProfessorLPM-Package installed_location)
 PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
 RIVIERALPM_DIR = $(shell components get RivieraLPM installed_location)
+RIVIERA_LPM_TOOLS_DIR = $(shell components get RivieraLpmTools installed_location)
+TESTUTILS_DIR = $(shell components get CastleTestUtils installed_location)
+
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
@@ -46,6 +48,8 @@ generated_sources: check_tools $(VERSION_FILES)
 	$(MAKE) -C $(A4VVIDEOMANAGERSERVICE_DIR) $@
 	$(MAKE) -C $(A4VQUICKSETSERVICE_DIR) $@
 	$(MAKE) -C $(A4VREMOTECOMMUNICATIONSERVICE_DIR) $@
+	ln -nsf $(TESTUTILS_DIR) builds/CastleTestUtils
+	touch builds/__init__.py
 
 .PHONY: astyle
 astyle:
@@ -97,31 +101,32 @@ cmake_build: generated_sources | $(BUILDS_DIR) astyle
 product-ipk: cmake_build
 	./scripts/create-product-ipk
 
-#Uncomment next two line after removing next 2 lines, once HSP is integrated.
-#IPKS = monaco.ipk hsp.ipk  product.ipk lpm_updater.ipk
-#PACKAGENAMES = monaco hsp SoundTouch lpm_updater
+# The default build will always be signed using development keys
+privateKeyFilePath="$(BOSE_WORKSPACE)/scripts/keys/development/privateKey/dev.p12"
+privateKeyPasswordPath="$(BOSE_WORKSPACE)/scripts/keys/development/privateKey/dev_p12.pass"
+
+
+#Create Zip file for Local update - no hsp
 IPKS = monaco.ipk product.ipk lpm_updater.ipk
 PACKAGENAMES = monaco SoundTouch lpm_updater
 
-#Create Zip file for Bonjour / Local update
-.PHONY: update-zip
-update-zip: monaco-ipk product-ipk hsp-ipk lpmupdater-ipk
-	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
+.PHONY: package-no-hsp
+package-no-hsp: packages-gz
+	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_no_hsp.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 #Create one more Zip file for Bonjour / Local update with HSP
-#- This is temporary, till DP2 boards are available.
 IPKS_HSP = hsp.ipk monaco.ipk product.ipk lpm_updater.ipk
 PACKAGENAMES_HSP = hsp monaco SoundTouch lpm_updater
-.PHONY: update-zip-with-hsp
-update-zip-with-hsp: monaco-ipk product-ipk hsp-ipk lpmupdater-ipk
-	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_with_hsp.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
+.PHONY: package-with-hsp
+package-with-hsp: packages-gz-with-hsp
+	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 .PHONY: packages-gz
-packages-gz: monaco-ipk product-ipk hsp-ipk lpmupdater-ipk
+packages-gz: product-ipk monaco-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS)
 
 .PHONY: packages-gz-with-hsp
-packages-gz-with-hsp: monaco-ipk product-ipk hsp-ipk lpmupdater-ipk
+packages-gz-with-hsp: product-ipk monaco-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_HSP)
 
 .PHONY: graph
@@ -129,34 +134,47 @@ graph: product-ipk
 	graph-components --sdk=$(sdk) Professor builds/$(cfg)/product-ipk-stage/component-info.gz >builds/$(cfg)/components.dot
 	dot -Tsvgz builds/$(cfg)/components.dot -o builds/$(cfg)/components.svgz
 
+.PHONY: lpm-bos
+lpm-bos:
+ifneq ($(filter $(BUILD_TYPE), Release Continuous Nightly),)
+	$(info BUILD_TYPE=$(BUILD_TYPE))
+else
+	$(error BUILD_TYPE must equal Release, Nightly or Continuous. Found $(BUILD_TYPE))
+endif
+	rm -f ./builds/$(cfg)/professor_package*.bos
+	rm -f ./builds/$(cfg)/lpm_professor*.hex
+	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE)
+
 .PHONY: hsp-ipk
 hsp-ipk: cmake_build
 	./scripts/create-hsp-ipk
 
 .PHONY: lpmupdater-ipk
-lpmupdater-ipk:
-	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage $(PROFESSORLPMPACKAGE_DIR) ./builds/$(cfg)/ professor
+lpmupdater-ipk: lpm-bos
+	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage ./builds/$(cfg)/ ./builds/$(cfg)/ professor
 
 .PHONY: monaco-ipk
 monaco-ipk:
 	./scripts/create-monaco-ipk
 
+
 .PHONY: package
-package: product-ipk hsp-ipk lpmupdater-ipk monaco-ipk
-	./scripts/create-product-tar
+package:  package-no-hsp package-with-hsp graph
 
 .PHONY: all-packages
-all-packages: package packages-gz-with-hsp update-zip-with-hsp packages-gz update-zip
+all-packages: package
+	./scripts/create-product-tar
 
 .PHONY: deploy
-deploy: graph all-packages
+deploy: all-packages
 	scripts/collect-deployables builds/Release builds/deploy/DP2
 
 .PHONY: clean
 clean:
-	rm -rf $(BUILDS_DIR) builds/CastleTestUtils builds/__init__.py
+	rm -rf $(BOSE_WORKSPACE)/builds/$(cfg)/* builds/CastleTestUtils builds/__init__.py
 	find . -name \*.pyc -delete
 
 .PHONY: distclean
 distclean:
 	git clean -fdX
+

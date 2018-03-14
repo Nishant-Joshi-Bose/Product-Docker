@@ -36,9 +36,9 @@
         "action": "VOICE_CAROUSEL",
         "commment": "Console: action release ---> Alexa",
         "keyEvent": "RELEASE",
-        "keyList": ["KEY_VAL_AVAIL_AE"],
+        "keyList": ["BOSE_AMAZON_ACTION"],
         "origin": ["CAPSENSE", "TAP"],
-        "timeOutList": []
+        "timeOutList": [0]
     },
     {
         "action": "PRESET_STORE_1",
@@ -240,6 +240,30 @@
         "origin": ["IR", "TAP", "CEC", "RF"],
         "timeOutList": []
     },
+     {
+        "action": "ACTION_GAME",
+        "commment": "select user configurable source game/ott",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_GAME_SOURCE"],
+        "origin": ["IR", "TAP", "RF"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_DVD",
+        "commment": "select user configurable source dvd",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_BD_DVD_SOURCE"],
+        "origin": ["IR", "TAP", "RF"],
+        "timeOutList": []
+    },
+    {
+        "action": "ACTION_CABLESAT",
+        "commment": "select user configurable source cable/sat",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_AUX_SOURCE"],
+        "origin": ["IR", "TAP", "RF"],
+        "timeOutList": []
+    },   
     {
         "action": "ACTION_THUMB_UP",
         "commment": "thumbs up",
@@ -287,6 +311,14 @@
         "keyList": ["BOSE_PAIR_SPKR"],
         "origin": ["IR", "TAP", "CEC", "RF"],
         "timeOutList": []
+    },
+    {
+        "action": "ACTION_SETUP_BLE_REMOTE",
+        "commment": "setup and pair BLE remote",
+        "keyEvent": "PRESS_HOLD",
+        "keyList": ["BOSE_AMAZON_ACTION"],
+        "origin": ["CAPSENSE", "TAP"],
+        "timeOutList": [5000]
     }
     ],
     "blastTable": [

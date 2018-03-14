@@ -4,6 +4,7 @@ INCLUDE_DIRECTORIES(
   ${CASTLECLI_DIR}/include
   ${KEYHANDLER_DIR}/include
   ${NETWORK_SERVICE_DIR}/include
+  ${DATACOLLECTIONCLIENT_DIR}
   ${PRODUCTCONTROLLERCOMMON_DIR}
   ${PRODUCTCONTROLLERCOMMON_DIR}/ChimesController
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
@@ -28,6 +29,7 @@ INCLUDE_DIRECTORIES(
 ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/AdaptIQ.pb.cc
   ${PROTO_CC_DEST}/AudioSettings.pb.cc
+  ${PROTO_CC_DEST}/AudioFormat.pb.cc
   ${PROTO_CC_DEST}/BlasterConfig.pb.cc
   ${PROTO_CC_DEST}/CecMode.pb.cc
   ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
@@ -36,11 +38,15 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/ProductSTS.pb.cc
   ${PROTO_CC_DEST}/SystemInfo.pb.cc
   ${PROTO_CC_DEST}/SystemSourcesProperties.pb.cc
+  ${PROTO_CC_DEST}/SystemPowerProduct.pb.cc
   source/ProductAdaptIQManager.cpp
+  source/ProductBLERemoteManager.cpp
   source/ProductCecHelper.cpp
   source/ProductCommandLine.cpp
+  source/ProductDspHelper.cpp
   source/ProductKeyInputInterface.cpp
   source/ProductNetworkManager.cpp
+  source/ProductSourceInfo.cpp
   source/ProductStart.cpp
   source/ProductSystemManager.cpp
   source/ProfessorProductController.cpp
@@ -49,6 +55,7 @@ ADD_EXECUTABLE(Professor
   source/CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQ.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQExiting.cpp
+  source/CustomStateMachine/CustomProductControllerStateIdle.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateOn.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayable.cpp
@@ -68,12 +75,15 @@ ADD_EXECUTABLE(Professor
 TARGET_LINK_LIBRARIES(Professor
   CastleProductControllerCommon
   LpmClient
+  A4VRemoteCommClient
   A4VVideoManagerClient
   A4VQuickSetServiceClient
   FrontDoorClient
   NetworkServiceClient
   KeyHandler
   BLESetupServiceProto
+  DataCollectionClient
+  HttpInterface
   BluetoothSinkServiceProto
   LightBarController
   VoiceServiceClient
@@ -93,7 +103,7 @@ TARGET_LINK_LIBRARIES(Professor
   dl
   SoundTouch_SDK_Protobuf_static
   SoftwareUpdateAPI
-  #SASSFrontDoorServiceProto # TODO: SASS integration
+  SASSFrontDoorServiceProto
 )
 
 INSTALL(TARGETS Professor DESTINATION ${OUTPUT_BIN_DIR})

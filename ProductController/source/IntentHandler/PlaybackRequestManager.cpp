@@ -30,6 +30,7 @@
 #include "ProfessorProductController.h"
 #include "Intents.h"
 #include "EndPointsDefines.h"
+#include "ProductSourceInfo.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -104,6 +105,57 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
                 playbackRequestErrorCallback );
 
         BOSE_INFO( s_logger, "An attempt to play the TV source has been made." );
+    }
+    else if( action == ( uint16_t )Action::ACTION_GAME )
+    {
+        auto& playbackRequestData = m_CustomProductController.GetSourceInfo()->GetGameSourcePlaybackRq();
+
+        if( playbackRequestData.has_source() )
+        {
+            GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
+                    playbackRequestData,
+                    playbackRequestResponseCallback,
+                    playbackRequestErrorCallback );
+            BOSE_INFO( s_logger, "An attempt to play the Game source has been made." );
+        }
+        else
+        {
+            BOSE_INFO( s_logger, "Game key is not configured to play any source, ignore this playback intent." );
+        }
+    }
+    else if( action == ( uint16_t )Action::ACTION_DVD )
+    {
+        auto& playbackRequestData = m_CustomProductController.GetSourceInfo()->GetDvdSourcePlaybackRq();
+
+        if( playbackRequestData.has_source() )
+        {
+            GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
+                    playbackRequestData,
+                    playbackRequestResponseCallback,
+                    playbackRequestErrorCallback );
+            BOSE_INFO( s_logger, "An attempt to play the Dvd source has been made." );
+        }
+        else
+        {
+            BOSE_INFO( s_logger, "DVD key is not configured to play any source, ignore this playback intent." );
+        }
+    }
+    else if( action == ( uint16_t )Action::ACTION_CABLESAT )
+    {
+        auto& playbackRequestData = m_CustomProductController.GetSourceInfo()->GetCablesatSourcePlaybackRq();
+
+        if( playbackRequestData.has_source() )
+        {
+            GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
+                    playbackRequestData,
+                    playbackRequestResponseCallback,
+                    playbackRequestErrorCallback );
+            BOSE_INFO( s_logger, "An attempt to play the user configurable Cable/Sat source has been made." );
+        }
+        else
+        {
+            BOSE_INFO( s_logger, "Cable/Sat key is not configured to play any source, ignore this playback intent." );
+        }
     }
     else if( action == ( uint16_t )Action::ACTION_APAPTIQ_START )
     {

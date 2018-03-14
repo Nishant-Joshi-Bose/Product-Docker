@@ -4,5 +4,5 @@
 #
 
 set -x
-make "$@" sdk=qc8017_32 cfg=Release default all-packages || exit
+make "$@" sdk=qc8017_32 cfg=Release all-packages || exit
 : success

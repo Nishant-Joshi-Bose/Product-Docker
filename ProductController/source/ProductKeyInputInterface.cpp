@@ -31,6 +31,9 @@
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProductKeyInputInterface.h"
 #include "SystemUtils.h"
+#include "ProductSourceInfo.h"
+#include "DataCollectionClientFactory.h"
+#include "ButtonPress.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -61,7 +64,8 @@ ProductKeyInputInterface::ProductKeyInputInterface( ProfessorProductController& 
     /// Product Controller Interface
     ///
     m_ProductTask( ProductController.GetTask( ) ),
-    m_ProductNotify( ProductController.GetMessageHandler( ) ), m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
+    m_ProductNotify( ProductController.GetMessageHandler( ) ),
+    m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
     ///
     /// Instantiation of the Key Handler
     ///
@@ -72,8 +76,11 @@ ProductKeyInputInterface::ProductKeyInputInterface( ProfessorProductController& 
     /// Initialization of Class Members
     ///
     m_connected( false ),
-    m_running( false )
+    m_running( false ),
+    m_ProductController( ProductController )
 {
+    //Data Collection support
+    m_DataCollectionClient =  DataCollectionClientFactory::CreateUDCService( m_ProductTask );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -233,11 +240,30 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
         return;
     }
 
+    /// Decide if this key should be blasted or sent to the key handler
+    bool isBlastedKey = false;
+    std::string cicode;
+    auto nowSelection = m_ProductController.GetNowSelection();
 #if 0
-// DON'T REMOVE; ONCE THE SOURCE API IS COMPLETE THIS WILL BE ENABLED AND COMPLETED
-    std::string testDev = "DEVICE_TYPE_TV";
-    std::string testCodeset = "T2778";
-    if( m_QSSClient->IsBlastedKey( keyEvent.keyid(), testDev ) )
+
+    if( nowSelection.has_contentitem() )
+    {
+        const auto& contentItem = nowSelection.contentitem();
+        auto source = m_ProductController.GetSourceInfo()->FindSource( contentItem );
+
+        if( source and source->has_details() )
+        {
+            if( source->details().has_devicetype() )
+            {
+                isBlastedKey = m_QSSClient->IsBlastedKey( keyEvent.keyid(), source->details().devicetype() );
+            }
+
+            cicode = source->details().cicode();
+        }
+    }
+#endif
+
+    if( isBlastedKey )
     {
         ///
         /// This key should be blasted
@@ -245,7 +271,7 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
         QSSMSG::BoseKeyReqMessage_t req;
 
         req.set_keyval( keyEvent.keyid() );
-        req.set_codeset( testCodeset );
+        req.set_codeset( cicode );
 
         if( keyEvent.keystate() ==  LpmServiceMessages::KEY_PRESSED )
         {
@@ -262,7 +288,6 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
 
     }
     else
-#endif
     {
         ///
         /// Feed the key into the key handler.
@@ -270,8 +295,31 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
         m_KeyHandler.HandleKeys( keyEvent.keyorigin( ),
                                  keyEvent.keystate( ),
                                  keyEvent.keyid( ) );
+        if( keyEvent.keystate() == KEY_RELEASED )
+        {
+            SendDataCollection( keyEvent );
+        }
+
     }
 }
+
+//@Send Key Data To DataCollectionClient
+//TODO should be moving to CastleProductControllerCommon
+void ProductKeyInputInterface::SendDataCollection( const LpmServiceMessages::IpcKeyInformation_t& keyInformation )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+
+    const auto currentKeyId = keyInformation.keyid();
+    const auto currentOrigin = keyInformation.keyorigin();
+
+    auto keyPress  = std::make_shared<DataCollection::ButtonPress>();
+    keyPress->set_buttonid( currentKeyId ) ;
+    keyPress->set_origin( static_cast<DataCollection::Origin >( currentOrigin ) );
+
+    m_DataCollectionClient->SendData( keyPress, "button-pressed" );
+}
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

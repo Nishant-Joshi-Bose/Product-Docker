@@ -152,7 +152,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentLowPowerStandby( KeyHandlerUtil::ActionType_t intent )
+    virtual bool HandleIntentLowPowerStandby( )
     {
         return false;
     }
@@ -168,6 +168,11 @@ public:
     }
 
     virtual bool HandleBluetoothModuleState( bool ready )
+    {
+        return false;
+    }
+
+    virtual bool HandleSassState( bool ready )
     {
         return false;
     }
@@ -191,6 +196,7 @@ public:
     {
         return false;
     }
+
     virtual bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo )
     {
         return false;
@@ -211,7 +217,7 @@ public:
         return false;
     }
 
-    virtual bool HandleFactoryDefault( )
+    virtual bool HandleLpmFactoryDefault( )
     {
         return false;
     }
@@ -247,6 +253,31 @@ public:
     }
 
     virtual bool HandleLpmSoftwareUpdateState( )
+    {
+        return false;
+    }
+
+    virtual bool HandleNetworkWifiAPStatus( bool APStatus )
+    {
+        return false;
+    }
+
+    virtual bool HandleSetupAPDeactivateTimerExpiry( )
+    {
+        return false;
+    }
+
+    virtual bool HandleChimeSASSPlaybackCompleted( int32_t eventId )
+    {
+        return false;
+    }
+
+    virtual bool HandleChimeSASSPlaybackError( int32_t eventId )
+    {
+        return false;
+    }
+
+    virtual bool HandleUiConnectedUpdateState( bool uiconnected )
     {
         return false;
     }
@@ -353,6 +384,11 @@ public:
         return false;
     }
 
+    virtual bool HandleIntentSetupBLERemote( )
+    {
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief This handler is used to respond to the LPM detecting an amp fault.
@@ -384,6 +420,11 @@ public:
     }
 
     virtual bool HandleNetworkOperationalMode( NetManager::Protobuf::OperationalMode mode )
+    {
+        return false;
+    }
+
+    virtual bool HandleSystemEventFactoryDefault( const ProductSystemEventServiceResponse& response )
     {
         return false;
     }

@@ -37,18 +37,24 @@
 #include "ProductSystemManager.h"
 #include "ProductCommandLine.h"
 #include "ProductAdaptIQManager.h"
+#include "ProductSourceInfo.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
+#include "ProductSTSCommonStateFactory.h"
+#include "ProductSTSSilentStateFactory.h"
 #include "SystemSourcesProperties.pb.h"
 #include "ProductControllerHsm.h"
 #include "CustomProductControllerStates.h"
 #include "CustomProductControllerState.h"
 #include "ProductControllerStates.h"
 #include "ProductControllerState.h"
+#include "ProductControllerStateBooted.h"
+#include "ProductControllerStateBootedTransition.h"
 #include "ProductControllerStateBooting.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
-#include "ProductControllerStateIdle.h"
+#include "ProductControllerStateFirstBootGreeting.h"
+#include "ProductControllerStateFirstBootGreetingTransition.h"
 #include "ProductControllerStateIdleVoiceConfigured.h"
 #include "ProductControllerStateIdleVoiceNotConfigured.h"
 #include "ProductControllerStateLowPowerStandby.h"
@@ -62,13 +68,12 @@
 #include "ProductControllerStatePlayableTransitionIdle.h"
 #include "ProductControllerStatePlayableTransitionInternal.h"
 #include "ProductControllerStatePlayableTransitionNetworkStandby.h"
-#include "ProductControllerStatePlayingActive.h"
 #include "ProductControllerStatePlayingDeselected.h"
 #include "ProductControllerStatePlaying.h"
-#include "ProductControllerStatePlayingInactive.h"
 #include "ProductControllerStatePlayingSelected.h"
 #include "ProductControllerStatePlayingSelectedNotSilent.h"
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
+#include "ProductControllerStatePlayingSelectedSetupExitingAP.h"
 #include "ProductControllerStatePlayingSelectedSetup.h"
 #include "ProductControllerStatePlayingSelectedSetupNetwork.h"
 #include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
@@ -76,7 +81,6 @@
 #include "ProductControllerStatePlayingSelectedSilent.h"
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSwitch.h"
-#include "ProductControllerStateRebooting.h"
 #include "ProductControllerStateSoftwareInstall.h"
 #include "ProductControllerStateSoftwareUpdateTransition.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
@@ -84,9 +88,9 @@
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateStoppingStreams.h"
 #include "ProductControllerStateTop.h"
-#include "ProductControllerStateWelcome.h"
 #include "CustomProductControllerStateAdaptIQExiting.h"
 #include "CustomProductControllerStateAdaptIQ.h"
+#include "CustomProductControllerStateIdle.h"
 #include "CustomProductControllerStateOn.h"
 #include "CustomProductControllerStatePlayable.h"
 #include "CustomProductControllerStatePlayingDeselectedAccessoryPairing.h"
@@ -98,6 +102,9 @@
 #include "CustomProductControllerStatePlayingTransitionAccessoryPairing.h"
 #include "MfgData.h"
 #include "DeviceManager.pb.h"
+#include "ProductBLERemoteManager.h"
+#include "ProductEndpointDefines.h"
+#include "ProtoPersistenceFactory.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -126,11 +133,6 @@ constexpr auto FRONTDOOR_SYSTEM_SOURCES_API = "/system/sources";
 ProfessorProductController::ProfessorProductController( ) :
 
     ///
-    /// Construction of the common Product Controller Class
-    ///
-    ProductController( "Professor" ),
-
-    ///
     /// Construction of the Product Controller Modules
     ///
     m_ProductLpmHardwareInterface( nullptr ),
@@ -139,19 +141,19 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductCommandLine( nullptr ),
     m_ProductKeyInputInterface( nullptr ),
     m_ProductCecHelper( nullptr ),
+    m_ProductDspHelper( nullptr ),
     m_ProductAdaptIQManager( nullptr ),
     m_ProductAudioService( nullptr ),
+    m_ProductSourceInfo( nullptr ),
+    m_ProductBLERemoteManager( nullptr ),
 
     ///
     /// Member Variable Initialization
     ///
-    m_IsCapsReady( false ),
     m_IsAudioPathReady( false ),
     m_IsNetworkConfigured( false ),
     m_IsNetworkConnected( false ),
     m_IsAutoWakeEnabled( false ),
-    m_IsAccountConfigured( false ),
-    m_IsMicrophoneEnabled( false ),
     m_Running( false ),
 
     ///
@@ -172,8 +174,6 @@ ProfessorProductController::ProfessorProductController( ) :
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::Run( )
 {
-    CommonInitialize( );
-
     m_Running = true;
 
     BOSE_DEBUG( s_logger, "----------- Product Controller State Machine    ------------" );
@@ -197,10 +197,25 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_BOOTING );
 
-    auto* stateWelcome = new ProductControllerStateWelcome
+    auto* stateBooted = new ProductControllerStateBooted
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_WELCOME );
+      PRODUCT_CONTROLLER_STATE_BOOTED );
+
+    auto* stateBootedTransition = new ProductControllerStateBootedTransition
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_BOOTED_TRANSITION );
+
+    auto* stateFirstBootGreeting = new ProductControllerStateFirstBootGreeting
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING );
+
+    auto* stateFirstBootGreetingTransition = new ProductControllerStateFirstBootGreetingTransition
+    ( GetHsm( ),
+      stateTop,
+      PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION );
 
     auto* stateSoftwareUpdateTransition = new ProductControllerStateSoftwareUpdateTransition
     ( GetHsm( ),
@@ -211,11 +226,6 @@ void ProfessorProductController::Run( )
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL );
-
-    auto* stateRebooting = new ProductControllerStateRebooting
-    ( GetHsm( ),
-      stateTop,
-      PRODUCT_CONTROLLER_STATE_REBOOTING );
 
     auto* stateCriticalError = new ProductControllerStateCriticalError
     ( GetHsm( ),
@@ -291,10 +301,10 @@ void ProfessorProductController::Run( )
       stateNetworkStandby,
       PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_NOT_CONFIGURED );
 
-    auto* stateIdle = new ProductControllerStateIdle
+    auto* stateIdle = new CustomProductControllerStateIdle
     ( GetHsm( ),
       customStatePlayable,
-      PRODUCT_CONTROLLER_STATE_IDLE );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_IDLE );
 
     auto* stateIdleVoiceConfigured = new ProductControllerStateIdleVoiceConfigured
     ( GetHsm( ),
@@ -383,6 +393,11 @@ void ProfessorProductController::Run( )
       customStatePlayingSelectedSetup,
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING );
 
+    auto* statePlayingSelectedSetupExitingAP = new ProductControllerStatePlayingSelectedSetupExitingAP
+    ( GetHsm( ),
+      customStatePlayingSelectedSetup,
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING_AP );
+
     auto* customStatePlayingSelectedPairing = new CustomProductControllerStatePlayingSelectedAccessoryPairing
     ( GetHsm( ),
       customStatePlayingSelected,
@@ -433,12 +448,14 @@ void ProfessorProductController::Run( )
 
     GetHsm( ).AddState( "", stateTop );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), stateBooting );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), stateWelcome );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), stateFirstBootGreeting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareUpdateTransition );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), stateSoftwareInstall );
-    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::REBOOTING ), stateRebooting );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), stateCriticalError );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FACTORY_DEFAULT ), stateFactoryDefault );
+    GetHsm( ).AddState( "", stateBooted );
+    GetHsm( ).AddState( "", stateBootedTransition );
+    GetHsm( ).AddState( "", stateFirstBootGreetingTransition );
     GetHsm( ).AddState( "", stateLowPowerStandbyTransition );
     GetHsm( ).AddState( "", stateLowPowerStandby );
     GetHsm( ).AddState( "", statePlayableTransition );
@@ -467,6 +484,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupNetworkTransition );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupOther );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupExiting );
+    GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupExitingAP );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), customStatePlayingSelectedPairing );
     GetHsm( ).AddState( "", stateStoppingStreams );
     GetHsm( ).AddState( "", customStateAdaptIQ );
@@ -480,6 +498,7 @@ void ProfessorProductController::Run( )
     ///
     /// Initialize entities in the Common Product Controller
     ///
+    CommonInitialize( );
     m_deviceManager.Initialize( this );
 
     ///
@@ -490,11 +509,14 @@ void ProfessorProductController::Run( )
 
     m_ProductLpmHardwareInterface = std::make_shared< CustomProductLpmHardwareInterface >( *this );
     m_ProductCecHelper            = std::make_shared< ProductCecHelper                  >( *this );
+    m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductSystemManager        = std::make_shared< ProductSystemManager              >( *this );
     m_ProductNetworkManager       = std::make_shared< ProductNetworkManager             >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_ProductKeyInputInterface    = std::make_shared< ProductKeyInputInterface          >( *this );
     m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
+    m_ProductSourceInfo           = std::make_shared< ProductSourceInfo                 >( *this );
+    m_ProductBLERemoteManager     = std::make_shared< ProductBLERemoteManager           >( *this );
     m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this, m_FrontDoorClientIF, m_ProductLpmHardwareInterface->GetLpmClient() );
 
     if( m_ProductLpmHardwareInterface == nullptr ||
@@ -504,6 +526,7 @@ void ProfessorProductController::Run( )
         m_ProductCommandLine          == nullptr ||
         m_ProductKeyInputInterface    == nullptr ||
         m_ProductCecHelper            == nullptr ||
+        m_ProductDspHelper            == nullptr ||
         m_ProductAdaptIQManager       == nullptr )
     {
         BOSE_CRITICAL( s_logger, "-------- Product Controller Failed Initialization ----------" );
@@ -513,9 +536,17 @@ void ProfessorProductController::Run( )
     }
 
     ///
+    /// Apply settings from persistence
+    ///
+    ApplyOpticalAutoWakeSettingFromPersistence( );
+
+    ///
     /// Set up LightBarController
     ///
-    m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_ProductLpmHardwareInterface->GetLpmClient() ) );
+    m_lightbarController = std::unique_ptr< LightBar::LightBarController >(
+                               new LightBar::LightBarController( GetTask( ),
+                                                                 m_FrontDoorClientIF,
+                                                                 m_ProductLpmHardwareInterface->GetLpmClient( ) ) );
 
     ///
     /// Run all the submodules.
@@ -527,7 +558,10 @@ void ProfessorProductController::Run( )
     m_ProductCommandLine         ->Run( );
     m_ProductKeyInputInterface   ->Run( );
     m_ProductCecHelper           ->Run( );
+    m_ProductDspHelper           ->Run( );
     m_ProductAdaptIQManager      ->Run( );
+    m_ProductSourceInfo          ->Run( );
+    m_ProductBLERemoteManager    ->Run( );
 
     ///
     /// Register FrontDoor EndPoints
@@ -625,6 +659,33 @@ std::shared_ptr< ProductAdaptIQManager >& ProfessorProductController::GetAdaptIQ
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   ProfessorProductController::GetSourceInfo
+///
+/// @return This method returns a shared pointer to the SourceInfo instance
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::shared_ptr< ProductSourceInfo >& ProfessorProductController::GetSourceInfo( )
+{
+    return m_ProductSourceInfo;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetBLERemoteManager
+///
+/// @return This method returns a shared pointer to the BLERemoteManager instance
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::shared_ptr< ProductBLERemoteManager>& ProfessorProductController::GetBLERemoteManager( )
+{
+    return m_ProductBLERemoteManager;
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::GetCecHelper
 ///
 /// @return This method returns a shared pointer to the ProductCecHelper instance.
@@ -633,6 +694,18 @@ std::shared_ptr< ProductAdaptIQManager >& ProfessorProductController::GetAdaptIQ
 std::shared_ptr< ProductCecHelper >& ProfessorProductController::GetCecHelper( )
 {
     return m_ProductCecHelper;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::GetDspHelper
+///
+/// @return This method returns a shared pointer to the ProductCecHelper instance.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+std::shared_ptr< ProductDspHelper >& ProfessorProductController::GetDspHelper( )
+{
+    return m_ProductDspHelper;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -652,6 +725,7 @@ bool ProfessorProductController::IsBooted( ) const
     BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "STS Initialized       :  %s", ( m_IsSTSReady       ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Software Update Init  :  %s", ( m_isSoftwareUpdateReady   ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "SASS            Init  :  %s", ( IsSassReady()      ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Bluetooth Initialized :  %s", ( IsBluetoothModuleReady( ) ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
@@ -659,6 +733,7 @@ bool ProfessorProductController::IsBooted( ) const
             m_IsCapsReady           and
             m_IsAudioPathReady      and
             m_IsSTSReady            and
+            IsSassReady()           and
             m_isSoftwareUpdateReady and
             IsBluetoothModuleReady( ) );
 }
@@ -713,18 +788,6 @@ bool ProfessorProductController::IsAutoWakeEnabled( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::IsVoiceConfigured
-///
-/// @return This method returns a true or false value, based on a set member variable.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsVoiceConfigured( ) const
-{
-    return ( m_IsMicrophoneEnabled and m_IsAccountConfigured );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   IsFirstTimeBootUp
 ///
 /// @return This method returns a true or false value, based on whether this is the first time
@@ -770,90 +833,6 @@ bool ProfessorProductController::IsSystemLanguageSet( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::GetProductType
-///
-/// @return This method returns the std::string const& value to be used for the Product "Type" field
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string const& ProfessorProductController::GetProductType( ) const
-{
-    static std::string productType = "Professor Soundbar";
-    return productType;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetProductColor
-///
-/// @return This method returns the std::string value to be used for the Product "color" field
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string ProfessorProductController::GetProductColor() const
-{
-    // @TODO https://jirapro.bose.com/browse/PGC-630
-    return "BLACK";
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetProductVariant
-///
-/// @return This method returns the std::string const& value to be used for the Product "Variant" field
-///
-/// @TODO - Below value may be available through HSP APIs
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string const& ProfessorProductController::GetProductVariant( ) const
-{
-    static std::string productType = "Professor";
-    return productType;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetProductModel
-///
-/// @return This method returns the std::string const& value to be used for the Product "productType" field
-///
-/// @TODO - Below value may be available through HSP APIs
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string const& ProfessorProductController::GetProductModel() const
-{
-    static std::string productModel = "professor";
-
-    if( auto model = MfgData::Get( "productType" ) )
-    {
-        productModel =  *model;
-    }
-
-    // @TODO PGC-757 replace the manufacturing name with the marketing name.
-    return productModel;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetProductDescription
-///
-/// @return This method returns the std::string const& value to be used for the Product "Description" field
-///
-/// @TODO - Below value may be available through HSP APIs
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string const& ProfessorProductController::GetProductDescription() const
-{
-    static std::string productDescription = "SoundTouch";
-
-    if( auto description = MfgData::Get( "description" ) )
-    {
-        productDescription = *description;
-    }
-
-    return productDescription;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProfessorProductController::GetOOBDefaultLastContentItem
 ///
 /// @return This method returns the PassportPB::ContentItem value to be used for initializing the OOB LastContentItem
@@ -876,7 +855,6 @@ PassportPB::ContentItem ProfessorProductController::GetOOBDefaultLastContentItem
 /// @brief  Determines if the content item can be persisted in m_lastContentItem
 ///
 /// @return Returns true or false
-///////////////////////////////////////////////////////////////////////////////
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProfessorProductController::CanPersistAsLastContentItem( const SoundTouchInterface::ContentItem &ci ) const
@@ -898,6 +876,63 @@ bool ProfessorProductController::CanPersistAsLastContentItem( const SoundTouchIn
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   ProfessorProductController::PossiblyPairBLERemote
+///
+/// @brief  initiates pairing of the BLE remote if indicated
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::PossiblyPairBLERemote( )
+{
+    // The rules are per PGC-697:
+    // On a system without a paired BLE remote, entry into SETUP will activate BLE pairing.
+    // On a system with a paired BLE remote, pressing and holding the Action Button will activate BLE pairing.
+
+    if( !( m_ProductBLERemoteManager->IsConnected() ) )
+    {
+        BOSE_INFO( s_logger, "%s could not find paired BLE remote", __func__ );
+        PairBLERemote( 0 );
+    }
+    else
+    {
+        BOSE_INFO( s_logger, "%s found paired BLE remote", __func__ );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::PairBLERemote
+///
+/// @brief  initiates pairing of the BLE remote
+///
+/// @param  manualPairingRequest
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::PairBLERemote( uint32_t timeout )
+{
+    // Tell the remote communications module to start pairing
+    BOSE_INFO( s_logger, "%s requesting that the BLE remote pairing start", __func__ );
+
+    m_ProductBLERemoteManager->Pairing_Start( timeout );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::StopPairingBLERemote
+///
+/// @brief  stops pairing of the BLE remote
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::StopPairingBLERemote( )
+{
+    // No harm if pairing is not active
+    // Tell the remote communications module to stop pairing
+    BOSE_INFO( s_logger, "%s requesting that the BLE remote pairing stop", __func__ );
+
+    m_ProductBLERemoteManager->Pairing_Cancel();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::SetupProductSTSConntroller
 ///
 /// @brief  This method is called to perform the needed initialization of the ProductSTSController,
@@ -908,16 +943,19 @@ void ProfessorProductController::SetupProductSTSConntroller( )
 {
     std::vector< ProductSTSController::SourceDescriptor > sources;
 
+    ProductSTSCommonStateFactory commonStateFactory;
+    ProductSTSSilentStateFactory silentStateFactory;
+
     ///
-    /// Adapt IQ and Setup is not available as a normal source, whereas the TV source will always
-    /// be available.
+    /// Adapt IQ and SETUP are never available as a normal source, whereas the TV source will always
+    /// be available. SLOT sources need to be set-up before they become available.
     ///
-    ProductSTSController::SourceDescriptor descriptor_AiQ    { ProductSTS::SLOT_AIQ,   "ADAPTiQ", false };
-    ProductSTSController::SourceDescriptor descriptor_Setup  { ProductSTS::SLOT_SETUP, "SETUP",   false };
-    ProductSTSController::SourceDescriptor descriptor_TV     { ProductSTS::SLOT_TV,    "TV",      true  };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_0 { ProductSTS::SLOT_0,     "SLOT_0",  false };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_1 { ProductSTS::SLOT_1,     "SLOT_1",  false };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_2 { ProductSTS::SLOT_2,     "SLOT_2",  false };
+    ProductSTSController::SourceDescriptor descriptor_AiQ    { ProductSTS::SLOT_AIQ,   "ADAPTiQ", false, commonStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_Setup  { ProductSTS::SLOT_SETUP, "SETUP",   false, silentStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_TV     { ProductSTS::SLOT_TV,    "TV",      true,  commonStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_0 { ProductSTS::SLOT_0,     "SLOT_0",  false, commonStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_1 { ProductSTS::SLOT_1,     "SLOT_1",  false, commonStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_2 { ProductSTS::SLOT_2,     "SLOT_2",  false, commonStateFactory };
 
     sources.push_back( descriptor_AiQ );
     sources.push_back( descriptor_Setup );
@@ -973,6 +1011,25 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
 {
     RegisterCommonEndPoints( );
     m_lightbarController->RegisterLightBarEndPoints();
+
+    {
+        auto l = [ = ]( Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> respCb,
+                        Callback<EndPointsError::Error> errorCb )
+        {
+            HandleGetOpticalAutoWake( respCb, errorCb );
+        };
+        GetFrontDoorClient()->RegisterGet( FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API, l );
+    }
+    {
+        auto l = [ = ]( SystemPowerProductPb::SystemPowerModeOpticalAutoWake req,
+                        Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> respCb,
+                        Callback<EndPointsError::Error> errorCb )
+        {
+            HandlePutOpticalAutoWake( req, respCb, errorCb );
+        };
+        GetFrontDoorClient( )->RegisterPut<SystemPowerProductPb::SystemPowerModeOpticalAutoWake>(
+            FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API, l );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1055,27 +1112,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         }
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Content Audio Playback Services (CAPS) status messages are handled at this point.
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    if( message.has_capsstatus( ) )
-    {
-        if( message.capsstatus( ).has_initialized( ) )
-        {
-            m_IsCapsReady = message.capsstatus( ).initialized( );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "An invalid CAPS status message was received." );
-            return;
-        }
-
-        BOSE_DEBUG( s_logger, "A CAPS Content Audio Playback Services %s message was received.",
-                    m_IsCapsReady ? "up" : "down" );
-
-        GetHsm( ).Handle< bool >
-        ( &CustomProductControllerState::HandleCapsState, m_IsCapsReady );
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Audio path status messages are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_audiopathstatus( ) )
@@ -1151,71 +1187,33 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         }
 
         m_ProductSystemManager->SetNetworkAccoutConfigurationStatus( m_IsNetworkConfigured,
-                                                                     m_IsAccountConfigured );
+                                                                     m_IsVoiceAccountConfigured );
 
         GetHsm( ).Handle< bool, bool >
         ( &CustomProductControllerState::HandleNetworkState, m_IsNetworkConfigured, m_IsNetworkConnected );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Wireless network status messages are handled at this point. Only send information to the
-    /// state machine if the wireless network is configured, since a wired network configuration
-    /// may be available, and is handle above.
+    /// Wireless network status messages are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_wirelessstatus( ) )
     {
-        if( message.wirelessstatus( ).has_configured( ) && message.wirelessstatus( ).configured( ) )
-        {
-            m_IsNetworkConfigured = true;
-
-            m_ProductSystemManager->SetNetworkAccoutConfigurationStatus( m_IsNetworkConfigured,
-                                                                         m_IsAccountConfigured );
-
-            GetHsm( ).Handle< bool, bool >
-            ( &CustomProductControllerState::HandleNetworkState, m_IsNetworkConfigured, m_IsNetworkConnected );
-        }
-
         ///
         /// Send the frequency information (if available) to the LPM to avoid any frequency
-        /// interruption during a speaker Adapt IQ process.
+        /// interference between the WiFi and in-room radio.
         ///
         if( message.wirelessstatus( ).has_frequencykhz( ) and
             message.wirelessstatus( ).frequencykhz( ) > 0 )
         {
             m_ProductLpmHardwareInterface->SendWiFiRadioStatus( message.wirelessstatus( ).frequencykhz( ) );
-        }
 
-        BOSE_DEBUG( s_logger, "A %s wireless network message was received with frequency %d kHz.",
-                    message.wirelessstatus( ).configured( ) ? "configured" : "unconfigured",
-                    message.wirelessstatus( ).has_frequencykhz( ) ?
-                    message.wirelessstatus( ).frequencykhz( ) : 0 );
-    }
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Voice messages for the Virtual Personal Assistant or VPA are handled at this point.          ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_voicestatus( ) )
-    {
-        if( message.voicestatus( ).has_microphoneenabled( ) )
-        {
-            m_IsMicrophoneEnabled = message.voicestatus( ).microphoneenabled( );
+            BOSE_DEBUG( s_logger, "A wireless network message was received with frequency %d kHz.",
+                        message.wirelessstatus( ).has_frequencykhz( ) ?
+                        message.wirelessstatus( ).frequencykhz( ) : 0 );
         }
         else
         {
-            BOSE_ERROR( s_logger, "An invalid voice status message for the microphone status was received." );
-            return;
+            BOSE_ERROR( s_logger, "A wireless network message was received with an unknown frequency." );
         }
-
-        if( message.voicestatus( ).has_accountconfigured( ) )
-        {
-            m_IsAccountConfigured = message.voicestatus( ).accountconfigured( );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "An invalid voice status message for account configuration was received." );
-            return;
-        }
-
-        GetHsm( ).Handle< bool >
-        ( &CustomProductControllerState::HandleVoiceState, IsVoiceConfigured( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Autowake messages are handled at this point.
@@ -1234,6 +1232,8 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
 
         BOSE_DEBUG( s_logger, "An autowake status %s message has been received.",
                     m_IsAutoWakeEnabled ? "active" : "inactive" );
+
+        NotifyFrontdoorAndStoreOpticalAutoWakeSetting( );
 
         GetHsm( ).Handle< bool >
         ( &CustomProductControllerState::HandleAutowakeStatus, m_IsAutoWakeEnabled );
@@ -1286,6 +1286,10 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         else if( GetIntentHandler( ).IsIntentPlaySoundTouchSource( message.action( ) ) )
         {
             GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentPlaySoundTouchSource );
+        }
+        else if( GetIntentHandler( ).IsIntentSetupBLERemote( message.action( ) ) )
+        {
+            GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentSetupBLERemote );
         }
         else
         {
@@ -1354,7 +1358,9 @@ void ProfessorProductController::Wait( )
     m_ProductCommandLine         ->Stop( );
     m_ProductKeyInputInterface   ->Stop( );
     m_ProductCecHelper           ->Stop( );
+    m_ProductDspHelper           ->Stop( );
     m_ProductAdaptIQManager      ->Stop( );
+    m_ProductSourceInfo          ->Stop( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1364,9 +1370,9 @@ void ProfessorProductController::Wait( )
 /// @brief  This method is to get the default product name by reading from mac address.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-std::string const& ProfessorProductController::GetDefaultProductName( ) const
+std::string ProfessorProductController::GetDefaultProductName( ) const
 {
-    static std::string productName = "Bose ";
+    std::string productName = "Bose ";
     std::string macAddress = MacAddressInfo::GetPrimaryMAC( );
     try
     {
@@ -1380,41 +1386,6 @@ std::string const& ProfessorProductController::GetDefaultProductName( ) const
 
     BOSE_INFO( s_logger, "%s productName=%s", __func__, productName.c_str( ) );
     return productName;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetVariantId
-///
-/// @brief  This method is to get the product variant ID, such as its colour.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-BLESetupService::VariantId ProfessorProductController::GetVariantId( ) const
-{
-    // @TODO https://jirapro.bose.com/browse/PGC-630
-    BLESetupService::VariantId varintId = BLESetupService::VariantId::NONE;
-
-    if( auto color = MfgData::GetColor() )
-    {
-        if( *color == "luxGray" )
-        {
-            varintId = BLESetupService::VariantId::SILVER;
-        }
-        else if( *color == "tripleBlack" )
-        {
-            varintId = BLESetupService::VariantId::BLACK;
-        }
-        else
-        {
-            varintId = BLESetupService::VariantId::WHITE;
-        }
-    }
-    else
-    {
-        BOSE_DIE( "No 'productColor' in mfgdata" );
-    }
-
-    return varintId;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1511,6 +1482,72 @@ void ProfessorProductController::End( )
     BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
 
     m_Running = false;
+}
+
+void ProfessorProductController::HandleGetOpticalAutoWake(
+    const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
+    const Callback<EndPointsError::Error> & errorCb ) const
+{
+    SystemPowerProductPb::SystemPowerModeOpticalAutoWake autowake;
+    autowake.set_enabled( m_IsAutoWakeEnabled );
+    respCb( autowake );
+}
+
+void ProfessorProductController::HandlePutOpticalAutoWake(
+    const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req,
+    const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
+    const Callback<EndPointsError::Error> & errorCb )
+{
+    if( req.has_enabled( ) )
+    {
+        ProductMessage message;
+        message.mutable_autowakestatus( )->set_active( req.enabled( ) );
+        HandleMessage( message );
+    }
+    HandleGetOpticalAutoWake( respCb, errorCb );
+}
+
+void ProfessorProductController::ApplyOpticalAutoWakeSettingFromPersistence( )
+{
+    auto persistence = ProtoPersistenceFactory::Create( "OpticalAutoWake.json", GetProductPersistenceDir( ) );
+    SystemPowerProductPb::SystemPowerModeOpticalAutoWake autowake;
+    try
+    {
+        const std::string & s = persistence->Load( );
+        ProtoToMarkup::FromJson( s, &autowake );
+    }
+    catch( const ProtoToMarkup::MarkupError & e )
+    {
+        BOSE_ERROR( s_logger, "OpticalAutoWake persistence markup error - %s", e.what( ) );
+    }
+    catch( ProtoPersistenceIF::ProtoPersistenceException & e )
+    {
+        BOSE_ERROR( s_logger, "OpticalAutoWake persistence error - %s", e.what( ) );
+    }
+
+    m_IsAutoWakeEnabled = autowake.enabled( );
+}
+
+void ProfessorProductController::NotifyFrontdoorAndStoreOpticalAutoWakeSetting( )
+{
+    auto persistence = ProtoPersistenceFactory::Create( "OpticalAutoWake.json", GetProductPersistenceDir( ) );
+    SystemPowerProductPb::SystemPowerModeOpticalAutoWake autowake;
+    autowake.set_enabled( m_IsAutoWakeEnabled );
+    GetFrontDoorClient( )->SendNotification( FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API,
+                                             autowake );
+
+    try
+    {
+        persistence->Store( ProtoToMarkup::ToJson( autowake ) );
+    }
+    catch( const ProtoToMarkup::MarkupError & e )
+    {
+        BOSE_ERROR( s_logger, "OpticalAutoWake store persistence markup error - %s", e.what( ) );
+    }
+    catch( ProtoPersistenceIF::ProtoPersistenceException & e )
+    {
+        BOSE_ERROR( s_logger, "OpticalAutoWake store persistence error - %s", e.what( ) );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -25,6 +25,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
+#include "EndPointsDefines.h"
 #include "FrontDoorClient.h"
 #include "ProtoPersistenceFactory.h"
 #include "ProfessorProductController.h"
@@ -53,10 +54,7 @@ const std::string g_ProductDirectory = "product-persistence/";
 /// The following constants define FrontDoor endpoints used by the SystemManager
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr char FRONTDOOR_SYSTEM_CONFIGURATION_STATUS[ ]       = "/system/configuration/status";
-constexpr char FRONTDOOR_SYSTEM_CAPS_INITIALIZATION_STATUS[ ] = "/system/capsInitializationStatus";
-constexpr char FRONTDOOR_CAPS_INITIALIZATION_UPDATE[ ]        = "CapsInitializationUpdate";
-constexpr char FRONTDOOR_SYSTEM_STATE[ ]                      = "/system/state";
+const std::string s_FrontDoorSystemConfigurationStatus = FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -107,66 +105,10 @@ bool ProductSystemManager::Run( )
                                      std::placeholders::_2 ),
                           m_ProductTask );
 
-        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS, callback );
+        m_FrontDoorClient->RegisterGet( s_FrontDoorSystemConfigurationStatus, callback );
     }
 
     BOSE_DEBUG( s_logger, "Registration for getting configuration status requests has been made." );
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Registration for the Bose Content Audio Playback Services or CAPS process for getting a
-    /// notification when this process is running is made through the FrontDoorClient. The callback
-    /// HandleCapsStatus is used to process the notifications.
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    {
-        ///
-        /// @todo Based on the JIRA Story PGC-865, these calls will eventually be removed from
-        ///       Professor and put into the common code base in the CastleProductController
-        ///       repository.
-        ///
-        AsyncCallback< SoundTouchInterface::CapsInitializationStatus >
-        CallbackForNotification( std::bind( &ProductSystemManager::HandleCapsStatus,
-                                            this,
-                                            std::placeholders::_1 ),
-                                 m_ProductTask );
-
-        AsyncCallback< SoundTouchInterface::CapsInitializationStatus >
-        CallbackForSuccess( std::bind( &ProductSystemManager::HandleCapsStatus,
-                                       this,
-                                       std::placeholders::_1 ),
-                            m_ProductTask );
-
-        AsyncCallback< EndPointsError::Error >
-        CallbackForFailure( std::bind( &ProductSystemManager::HandleCapsStatusFailed,
-                                       this,
-                                       std::placeholders::_1 ),
-                            m_ProductTask );
-
-        m_FrontDoorClient->RegisterNotification< SoundTouchInterface::CapsInitializationStatus >
-        ( FRONTDOOR_CAPS_INITIALIZATION_UPDATE, CallbackForNotification );
-
-        m_FrontDoorClient->SendGet< SoundTouchInterface::CapsInitializationStatus, EndPointsError::Error >
-        ( FRONTDOOR_SYSTEM_CAPS_INITIALIZATION_STATUS, CallbackForSuccess, CallbackForFailure );
-    }
-
-    BOSE_DEBUG( s_logger, "A notification request for CAPS initialization messages has been made." );
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Registration for other Bose client processes for getting the system state is made
-    /// through the FrontDoorClient. The callback HandleGetSystemStateRequest is used to process
-    /// system state requests.
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    {
-        AsyncCallback < Callback < ProductPb::SystemState >, Callback<EndPointsError::Error> >
-        callback( std::bind( &ProductSystemManager::HandleGetSystemStateRequest,
-                             this,
-                             std::placeholders::_1,
-                             std::placeholders::_2 ),
-                  m_ProductTask );
-
-        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_STATE, callback );
-    }
-
-    BOSE_DEBUG( s_logger, "Registration for getting system state requests has been made." );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// Registration is complete so return true.
@@ -274,68 +216,6 @@ void ProductSystemManager::HandleGetConfigurationStatusRequest( const Callback< 
     BOSE_DEBUG( s_logger, "Sending the configuration status for a get request." );
 
     response.Send( m_ConfigurationStatus );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name  ProductSystemManager::HandleCapsStatus
-///
-/// @param const SoundTouchInterface::CapsInitializationStatus& status
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::HandleCapsStatus( const SoundTouchInterface::CapsInitializationStatus&
-                                             status )
-{
-    BOSE_DEBUG( s_logger, "---------------- Product CAPS Status Event -----------------" );
-    BOSE_DEBUG( s_logger, "CAPS has %s.", status.capsinitialized( ) ? "been initialized" : "not been initialized" );
-
-    ProductMessage productMessage;
-    productMessage.mutable_capsstatus( )->set_initialized( status.capsinitialized( ) );
-    SendMessage( productMessage );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name  ProductSystemManager::HandleCapsStatusFailed
-///
-/// @param const FRONT_DOOR_CLIENT_ERRORS error
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::HandleCapsStatusFailed( const EndPointsError::Error& error )
-{
-    ///
-    /// A product message indicating that CAPS is down (based on a Front Door messaging error) may
-    /// cause a race condition at this point and is not sent. Refer to the JIRA Story PGC-735 for
-    /// details.
-    ///
-    BOSE_DEBUG( s_logger, "---------------- Product CAPS Status Failed ----------------" );
-    BOSE_ERROR( s_logger, "The CAPS initialization status was not received." );
-    BOSE_WARNING( s_logger, "%s: Error = (%d-%d) %s", __func__, error.code(), error.subcode(), error.message().c_str() );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief ProductSystemManager::HandleGetSystemStateRequest
-///
-/// @param const ProductPb::SystemState& systemstate
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductSystemManager::HandleGetSystemStateRequest( const Callback< ProductPb::SystemState >& stateResponse,
-                                                        const Callback<EndPointsError::Error>& errorRsp ) const
-{
-    Hsm::STATE  stateId   = m_ProductController.GetHsm( ).GetCurrentState( )->GetId( );
-    std::string stateName = m_ProductController.GetHsm( ).GetCurrentState( )->GetName( );
-
-    ProductPb::SystemState currentState;
-    currentState.set_id( stateId );
-    currentState.set_name( stateName );
-
-    BOSE_DEBUG( s_logger, "--------------- Product Current State Request --------------" );
-    BOSE_DEBUG( s_logger, "The current state name is %s with ID %u.",
-                stateName.c_str( ),
-                static_cast< unsigned int >( stateId ) );
-
-    stateResponse.Send( currentState );
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
