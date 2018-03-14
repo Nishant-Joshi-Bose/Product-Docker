@@ -8,7 +8,6 @@
 #include "ProductSTSAuxStateFactory.h"
 #include "ProductSTSStateTopAux.h"
 
-static DPrint s_logger( "CustomProductSTS" );
 ProductSTSStateTop* ProductSTSAuxStateFactory::Create( ProductSTSHsm& hsm,
                                                        CHsmState *pSuperState,
                                                        ProductSTSAccount& account )

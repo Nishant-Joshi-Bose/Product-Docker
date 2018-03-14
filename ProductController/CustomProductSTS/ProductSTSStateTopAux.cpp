@@ -5,6 +5,7 @@
 
 #include "ProductSTSStateTopAux.h"
 
+static DPrint s_logger( "CustomProductSTS" );
 //////////////////////////////////////////////////////////////
 ProductSTSStateTopAux::ProductSTSStateTopAux( ProductSTSHsm& hsm,
                                               CHsmState *pSuperState,
@@ -15,101 +16,81 @@ ProductSTSStateTopAux::ProductSTSStateTopAux( ProductSTSHsm& hsm,
 
 bool ProductSTSStateTopAux::HandlePlay( const STS::Void & )
 {
-    BOSE_INFO( m_logger, "%s ( %s )",
+    BOSE_INFO( s_logger, "%s ( %s )",
                __FUNCTION__, m_account.GetSourceName().c_str() );
-    if (! m_active )
+    if( ! m_active )
     {
-        BOSE_ERROR( m_logger,  "%s AUX Source not active", __FUNCTION__ );
+        BOSE_ERROR( s_logger,  "%s AUX Source not active", __FUNCTION__ );
         return false;
     }
-    m_account.IPC().SendMuteControlEvent( false );
+
+    const std::string& URL = GetURL( );
+    if( !URL.empty( ) )
+    {
+        STS::AudioSetURL asu;
+        asu.set_url( URL );
+        asu.set_startoffsetms( LOW_LATENCY_DELAYED_START_MS );
+        m_account.IPC().SendAudioSetURLEvent( asu );
+    }
+    m_account.IPC().SendAudioPlayEvent();
     return true;
 }
 
 bool ProductSTSStateTopAux::HandleStop( const STS::Void & )
 {
-    BOSE_INFO( m_logger, "%s ( %s )",
+    BOSE_INFO( s_logger, "%s ( %s )",
                __FUNCTION__, m_account.GetSourceName().c_str() );
-    if (! m_active )
+    if( ! m_active )
     {
-        BOSE_ERROR( m_logger,  "%s AUX Source not active", __FUNCTION__ );
+        BOSE_ERROR( s_logger,  "%s AUX Source not active", __FUNCTION__ );
         return false;
     }
-    m_account.IPC().SendMuteControlEvent( true );
+    m_account.IPC().SendAudioStopEvent( );
     return true;
 }
 
 bool ProductSTSStateTopAux::HandlePause( const STS::Void & )
 {
-    BOSE_INFO( m_logger, "%s ( %s )",
+    BOSE_INFO( s_logger, "%s ( %s )",
                __FUNCTION__, m_account.GetSourceName().c_str() );
-    if (! m_active )
+    if( ! m_active )
     {
-        BOSE_ERROR( m_logger,  "%s AUX Source not active", __FUNCTION__ );
+        BOSE_ERROR( s_logger,  "%s AUX Source not active", __FUNCTION__ );
         return false;
     }
-    m_account.IPC().SendMuteControlEvent( true );
+    m_account.IPC().SendAudioStopEvent( );
     return true;
 }
-
-bool ProductSTSStateTopAux::HandleMuteStatus( const STS::MuteStatus& ms )
-{
-    if (! m_active )
-    {
-        BOSE_ERROR( m_logger,  "%s AUX Source not active", __FUNCTION__ );
-        return false;
-    }
-    if ( ms.muteenabled() )
-        m_np.set_playstatus( STS::PlayStatus::PAUSE );
-    else
-        m_np.set_playstatus( STS::PlayStatus::PLAY );
-
-    STS::NowPlayingChange npc;
-    *( npc.mutable_nowplaying() ) = m_np;
-    m_account.IPC().SendNowPlayingChangeEvent( npc );
-    return true;
-}
-
-#if 0
 
 bool ProductSTSStateTopAux::HandleAudioStatus( const STS::AudioStatus& audioStatus )
 {
-    std::string state = ProtoBufUtils::GetStringNameForEnumValue( audioStatus, "state" );
+    BOSE_INFO( s_logger, "%s ( %s ) ",
+               __FUNCTION__, m_account.GetSourceName().c_str() );
 
-    if ( m_active )
-    {
-        STS::AudioStatusToNowPlaying( audioStatus, m_np, true );
-        m_nowPlaying.SetNowPlaying( m_np );
-    }
-    else
-    {
-        BOSE_ERROR( m_logger,  "%s Source not active", __FUNCTION__ );
-    }
-    return true;
-}
-
-if you want to revert
-// AJAY m_account.IPC().SendAudioStopEvent( );
-    m_account.IPC().SendAudioPlayEvent( );
-Want to use SendMuteControlEvent(true/false);
-bool HandleMuteStatus( const STS::MuteStatus& ) override;
-bool ProductSTSStateTop::HandleNowPlayingRequest( const STS::Void &, uint32_t seq )
-{
-    BOSE_INFO( m_logger, "HandleNowPlayingRequest( %s ) while %sactive", m_account.GetSourceName().c_str(),
-               m_active ? "" : "in" );
     if( m_active )
     {
-        STS::NowPlayingResponse npr;
-        *( npr.mutable_nowplaying() ) = m_np;
-        m_account.IPC().SendNowPlayingResponse( npr, seq );
+        AudioStatusToNowPlaying( audioStatus, m_np );
+        STS::NowPlayingChange npc;
+        *( npc.mutable_nowplaying() ) = m_np;
+        m_account.IPC().SendNowPlayingChangeEvent( npc );
     }
     else
     {
-        STS::AsyncError e;
-        e.set_error( SoundTouchInterface::ErrorType::MUSIC_SERVICE_WRONG_STATE_NOW_PLAYING_REQUEST );
-        e.set_desc( m_account.GetSourceName() + "RcvdNowPlayingInWrongState" );
-        m_account.IPC().SendNowPlayingFailureResponse( e, seq );
+        BOSE_ERROR( s_logger,  "%s Source not active", __FUNCTION__ );
     }
     return true;
 }
-#endif
+
+void ProductSTSStateTopAux::AudioStatusToNowPlaying( const STS::AudioStatus& s, STS::NowPlaying& np )
+{
+    BOSE_INFO( s_logger, "%s (%s) PlayStatus = %d ", __FUNCTION__, m_account.GetSourceName().c_str(), s.state() );
+    if( s.state() == STS::AudioState::PLAYING )
+    {
+        np.set_playstatus( STS::PlayStatus::PLAY );
+    }
+    else
+    {
+        // For AUX, the playStatus is set to pause for appropriate animation on LCD
+        np.set_playstatus( STS::PlayStatus::STOP );
+    }
+}

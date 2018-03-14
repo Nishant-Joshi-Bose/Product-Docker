@@ -38,9 +38,13 @@ public:
     bool HandlePause( const STS::Void & ) override;
 
     ////////////////////////////////////////////////////////
-    /// @brief Act on Stop request
-    /// @param STS::MuteStatus (mute enabled - True/false)
+    /// @brief Act HandleAudioStatus by generating a nowPlayingChange to CAPS
+    /// @param STS::AudioStatus
     /// @return always true if successful
     ////////////////////////////////////////////////////////
-    bool HandleMuteStatus( const STS::MuteStatus& ms ) override;
+    bool HandleAudioStatus( const STS::AudioStatus& audioStatus ) override;
+
+private:
+    void AudioStatusToNowPlaying( const STS::AudioStatus& s, STS::NowPlaying& np );
+
 };
