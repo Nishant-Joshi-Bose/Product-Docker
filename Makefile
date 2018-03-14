@@ -61,22 +61,22 @@ product-ipk: cmake_build
 	./scripts/create-product-ipk
 
 # The default build will always be signed using development keys
-privateKeyFilePath="$(BOSE_WORKSPACE)/scripts/keys/development/privateKey/dev.p12"
-privateKeyPasswordPath="$(BOSE_WORKSPACE)/scripts/keys/development/privateKey/dev_p12.pass"
+privateKeyFilePath="$(BOSE_WORKSPACE)/keys/development/privateKey/dev.p12"
+privateKeyPasswordPath="$(BOSE_WORKSPACE)/keys/development/privateKey/dev_p12.pass"
 
 #Create Zip file for Local update - no hsp
 IPKS = monaco.ipk product.ipk lpm_updater.ipk
 PACKAGENAMES = monaco SoundTouch lpm_updater
 
 .PHONY: package-no-hsp
-package-no-hsp: packages-gz-with-hsp
+package-no-hsp: packages-gz
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_no_hsp.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 #Create one more Zip file for Bonjour / Local update with HSP
 IPKS_HSP = hsp.ipk monaco.ipk product.ipk lpm_updater.ipk
 PACKAGENAMES_HSP = hsp monaco SoundTouch lpm_updater
 .PHONY: package-with-hsp
-package-with-hsp: packages-gz
+package-with-hsp: packages-gz-with-hsp
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 .PHONY: packages-gz
@@ -98,10 +98,14 @@ hsp-ipk: cmake_build
 
 .PHONY: lpm-bos
 lpm-bos:
+ifneq ($(filter $(BUILD_TYPE), Release Continuous Nightly),)
+	$(info BUILD_TYPE=$(BUILD_TYPE))
+else
+	$(error BUILD_TYPE must equal Release, Nightly or Continuous. Found $(BUILD_TYPE))
+endif
 	rm -f ./builds/$(cfg)/eddie_package*.bos
 	rm -f ./builds/$(cfg)/lpm_eddie*.hex
-	cp ./lpm_package.xml ./builds/$(cfg)/lpm_package.xml
-	python2.7 $(RIVIERA_LPM_TOOLS_DIR)/tools/blob/blob_utility.py --pack $(BOSE_WORKSPACE)/lpm_package.xml ./builds/$(cfg)/ --build_type Release
+	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE)
 
 .PHONY: lpmupdater-ipk
 lpmupdater-ipk: lpm-bos
@@ -113,10 +117,6 @@ monaco-ipk:
 
 .PHONY: package
 package:  package-no-hsp package-with-hsp graph
-
-.PHONY: all-packages
-all-packages: package
-	./scripts/create-product-tar
 
 .PHONY: all-packages
 all-packages: package
