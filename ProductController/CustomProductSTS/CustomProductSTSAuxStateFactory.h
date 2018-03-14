@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
-/// @file     ProductSTSAuxStateFactory.h
-/// @brief    Creates objects of type ProductSTSStateTopAux
+/// @file     CustomProductSTSAuxStateFactory.h
+/// @brief    Creates objects of type CustomProductSTSStateTopAux
 ///
 /// Copyright 2018 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////
@@ -9,11 +9,11 @@
 
 #include "ProductSTSCommonStateFactory.h"
 
-class ProductSTSAuxStateFactory : public ProductSTSCommonStateFactory
+class CustomProductSTSAuxStateFactory : public ProductSTSCommonStateFactory
 {
 public:
-    ProductSTSAuxStateFactory( ) {};
-    ~ProductSTSAuxStateFactory( ) override {};
+    CustomProductSTSAuxStateFactory( ) {};
+    ~CustomProductSTSAuxStateFactory( ) override {};
     ProductSTSStateTop* Create( ProductSTSHsm& hsm,
                                 CHsmState *pSuperState,
                                 ProductSTSAccount& account ) override;

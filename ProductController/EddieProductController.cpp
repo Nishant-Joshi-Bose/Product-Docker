@@ -23,7 +23,7 @@
 #include "ButtonPress.pb.h"
 #include "DataCollectionClientFactory.h"
 #include "ProductSTSSilentStateFactory.h"
-#include "ProductSTSAuxStateFactory.h"
+#include "CustomProductSTSAuxStateFactory.h"
 
 static DPrint s_logger( "EddieProductController" );
 
@@ -793,8 +793,8 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void EddieProductController::SetupProductSTSController( void )
 {
-    ProductSTSAuxStateFactory    auxStateFactory;
-    ProductSTSSilentStateFactory silentStateFactory;
+    CustomProductSTSAuxStateFactory    auxStateFactory;
+    ProductSTSSilentStateFactory       silentStateFactory;
 
     std::vector<ProductSTSController::SourceDescriptor> sources;
     ProductSTSController::SourceDescriptor descriptor_AUX{ 0, "AUX", true, auxStateFactory };

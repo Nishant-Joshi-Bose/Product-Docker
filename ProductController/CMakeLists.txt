@@ -11,6 +11,7 @@ INCLUDE_DIRECTORIES(
   ${KEYHANDLER_DIR}/include
   IntentHandler
   CustomProductAudioService
+  CustomProductSTS
   DisplayController
   .
 )
@@ -38,8 +39,8 @@ ADD_EXECUTABLE(Eddie
   DisplayController/DisplayController.cpp
   CustomProductAudioService/CustomProductAudioService.cpp
   CustomProductAudioService/CustomAudioSettingsManager.cpp
-  CustomProductSTS/ProductSTSAuxStateFactory.cpp
-  CustomProductSTS/ProductSTSStateTopAux.cpp
+  CustomProductSTS/CustomProductSTSAuxStateFactory.cpp
+  CustomProductSTS/CustomProductSTSStateTopAux.cpp
   CustomProductLpmHardwareInterface.cpp
 )
 
