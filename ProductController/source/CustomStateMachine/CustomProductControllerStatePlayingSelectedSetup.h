@@ -42,6 +42,8 @@ public:
 
     }
 
+    void HandleStateEnter() override;
+    void HandleStateExit() override;
     bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent ) override;
 };
 

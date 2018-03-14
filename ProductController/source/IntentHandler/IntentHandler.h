@@ -139,6 +139,11 @@ public:
     {
         return ( argument == ( uint16_t )Action::ACTION_SOUNDTOUCH );
     }
+
+    static bool IsIntentSetupBLERemote( KeyHandlerUtil::ActionType_t argument )
+    {
+        return ( argument == ( uint16_t )Action::ACTION_SETUP_BLE_REMOTE );
+    }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

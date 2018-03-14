@@ -162,7 +162,7 @@ void ProductBLERemoteManager::Run( )
     InitializeFrontDoor();
     InitializeRCS();
 
-    // TODO this is a hack for the fact that RCS doesn't provide a status notification, and 
+    // TODO this is a hack for the fact that RCS doesn't provide a status notification, and
     // callers of IsConnected probably want to know right away (i.e. no callback), so we poll
     // for now; this will be replaced when a status notification is available
     m_statusTimer->SetTimeouts( 1000, 1000 );
@@ -291,17 +291,17 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
 ///
 /// @brief ProductBLERemoteManager::Pairing_Start
 ///
-/// @param  void This method does not take any arguments.
+/// @param  timeout. Pairing timeout, given in seconds, defaults to 0 for no timeout.
 ///
 /// @return This method does not return anything.
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductBLERemoteManager::Pairing_Start( void )
+void ProductBLERemoteManager::Pairing_Start( uint32_t timeout )
 {
     // TODO: eventually when we decide what the state machine is doing with this we'll define a
     // product message to convey status that gets sent from the callback
-    m_RCSClient->Pairing_Start( {} );
+    m_RCSClient->Pairing_Start( {}, timeout );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
