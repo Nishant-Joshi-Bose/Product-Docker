@@ -108,8 +108,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
     }
     else if( action == ( uint16_t )Action::ACTION_GAME )
     {
-        SoundTouchInterface::PlaybackRequest playbackRequestData;
-        playbackRequestData = m_CustomProductController.GetSourceInfo()->GetGameSourcePlaybackRq();
+        auto& playbackRequestData = m_CustomProductController.GetSourceInfo()->GetGameSourcePlaybackRq();
 
         if( playbackRequestData.has_source() )
         {
@@ -127,8 +126,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
     }
     else if( action == ( uint16_t )Action::ACTION_DVD )
     {
-        SoundTouchInterface::PlaybackRequest playbackRequestData;
-        playbackRequestData = m_CustomProductController.GetSourceInfo()->GetDvdSourcePlaybackRq();
+        auto& playbackRequestData = m_CustomProductController.GetSourceInfo()->GetDvdSourcePlaybackRq();
 
         if( playbackRequestData.has_source() )
         {
@@ -145,8 +143,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
     }
     else if( action == ( uint16_t )Action::ACTION_CABLESAT )
     {
-        SoundTouchInterface::PlaybackRequest playbackRequestData;
-        playbackRequestData = m_CustomProductController.GetSourceInfo()->GetCablesatSourcePlaybackRq();
+        auto& playbackRequestData = m_CustomProductController.GetSourceInfo()->GetCablesatSourcePlaybackRq();
 
         if( playbackRequestData.has_source() )
         {
