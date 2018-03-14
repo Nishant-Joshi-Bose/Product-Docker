@@ -58,9 +58,12 @@ bool CustomProductControllerStatePlayingDeselected::HandleIntentSpeakerPairing( 
 
 {
     BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
-    BOSE_INFO( s_logger, "The state is changing to the CustomDeselectedAccessoryPairing state." );
 
-    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED_ACCESSORY_PAIRING );
+    if( intent == ( unsigned int )Action::ACTION_START_PAIR_SPEAKERS )
+    {
+        BOSE_INFO( s_logger, "The state is changing to the CustomDeselectedAccessoryPairing state." );
+        ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED_ACCESSORY_PAIRING );
+    }
 
     return true;
 }

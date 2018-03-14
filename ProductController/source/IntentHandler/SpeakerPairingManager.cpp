@@ -313,9 +313,13 @@ void SpeakerPairingManager::AccessoriesPutHandler( const ProductPb::AccessorySpe
 void SpeakerPairingManager::DoPairingFrontDoor( bool pair,
                                                 const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB )
 {
+    KeyHandlerUtil::ActionType_t pairingAction =
+        static_cast< KeyHandlerUtil::ActionType_t >( pair ? Action::ACTION_START_PAIR_SPEAKERS : Action::ACTION_STOP_PAIR_SPEAKERS );
+
     ProductMessage productMessage;
-    productMessage.mutable_accessorypairing( )->set_active( pair );
+    productMessage.set_action( pairingAction );
     IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+
     m_accessorySpeakerState.set_pairing( pair );
     frontDoorCB( m_accessorySpeakerState );
 }
@@ -333,15 +337,12 @@ void SpeakerPairingManager::DoPairingFrontDoor( bool pair,
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::DoPairing( )
 {
-    if( !m_accessorySpeakerState.pairing( ) )
-    {
-        Callback< LpmServiceMessages::IpcSpeakerPairingMode_t >
-        doPairingCb( std::bind( &SpeakerPairingManager::PairingCallback,
-                                this,
-                                std::placeholders::_1 ) );
+    Callback< LpmServiceMessages::IpcSpeakerPairingMode_t >
+    doPairingCb( std::bind( &SpeakerPairingManager::PairingCallback,
+                            this,
+                            std::placeholders::_1 ) );
 
-        m_ProductLpmHardwareInterface->SendAccessoryPairing( true, doPairingCb );
-    }
+    m_ProductLpmHardwareInterface->SendAccessoryPairing( true, doPairingCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -351,15 +352,12 @@ void SpeakerPairingManager::DoPairing( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::StopPairing( )
 {
-    if( m_accessorySpeakerState.pairing( ) )
-    {
-        Callback< LpmServiceMessages::IpcSpeakerPairingMode_t >
-        doPairingCb( std::bind( &SpeakerPairingManager::PairingCallback,
-                                this,
-                                std::placeholders::_1 ) );
+    Callback< LpmServiceMessages::IpcSpeakerPairingMode_t >
+    doPairingCb( std::bind( &SpeakerPairingManager::PairingCallback,
+                            this,
+                            std::placeholders::_1 ) );
 
-        m_ProductLpmHardwareInterface->SendAccessoryPairing( false, doPairingCb );
-    }
+    m_ProductLpmHardwareInterface->SendAccessoryPairing( false, doPairingCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
