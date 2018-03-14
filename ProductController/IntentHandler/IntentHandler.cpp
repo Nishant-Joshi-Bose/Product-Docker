@@ -62,7 +62,7 @@ void IntentHandler::Initialize()
 #if 1 // @TODO PGC-321 move HandleNetworkStandbyIntentCb to Common
     auto func = std::bind( &EddieProductController::HandleNetworkStandbyIntentCb , static_cast<EddieProductController*>( &GetProductController() ), std::placeholders::_1 );
     auto cb = std::make_shared<AsyncCallback<KeyHandlerUtil::ActionType_t&> > ( func, &GetTask() );
-    KeyHandlerUtil::ActionType_t intent = ( KeyHandlerUtil::ActionType_t ) ActionCommon_t::NETWORK_STANDBY;
+    KeyHandlerUtil::ActionType_t intent = ( KeyHandlerUtil::ActionType_t ) ActionCommon_t::POWER_TOGGLE;
     RegisterCallBack( intent, cb );
 #endif
 
