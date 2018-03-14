@@ -99,11 +99,6 @@ public:
     /// The following static member functions are used to determine whether the key action supplied
     /// as an argument to the method belongs to a particular product specific intent.
     ///
-    static bool IsIntentUserPower( KeyHandlerUtil::ActionType_t argument )
-    {
-        return ( argument == ( uint16_t )Action::ACTION_POWER ) ;
-    }
-
     static bool IsIntentMuteControl( KeyHandlerUtil::ActionType_t argument )
     {
         return ( argument == ( uint16_t )Action::ACTION_MUTE );

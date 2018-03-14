@@ -59,7 +59,7 @@ enum class Action
     PLAY_PAUSE         = ActionCommon_t::PLAY_PAUSE,
     NEXT_TRACK         = ActionCommon_t::NEXT_TRACK,
     PREV_TRACK         = ActionCommon_t::PREV_TRACK,
-    NETWORK_STANDBY    = ActionCommon_t::NETWORK_STANDBY,
+    POWER_TOGGLE       = ActionCommon_t::POWER_TOGGLE,
     SEND_TO_AP_MODE    = ActionCommon_t::SEND_TO_AP_MODE,
     MANUAL_UPDATE      = ActionCommon_t::MANUAL_UPDATE,
     TOGGLE_WIFI_RADIO  = ActionCommon_t::TOGGLE_WIFI_RADIO,
@@ -119,7 +119,7 @@ enum class Action
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// Custom Professor Defined Actions Valued 101 and Higher
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    ACTION_POWER                = 101,
+    // unused                   = 101,
     ACTION_SETUP_BLE_REMOTE     = 102,
     ACTION_MUTE                 = 114,
     ACTION_SOUNDTOUCH           = 115,
