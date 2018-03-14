@@ -1,9 +1,5 @@
 [
   {
-    "name": "SADI-qc8017_32",
-    "selected_version": "Continuous/master/1.0.0-12+7c66405"
-  },
-  {
     "name": "A4VQuickSetService",
     "selected_version": "master@01bc26d1af73b45425eec6d8537891eb251b40cd"
   },
@@ -12,16 +8,16 @@
     "selected_version": "master@cefcd5cdfefc1b7d77c808274d398401219b2c5d"
   },
   {
+    "name": "BLERemoteXCVR",
+    "selected_version": "Release/master/0.16-5+g2e25c0f"
+  },
+  {
     "name": "A4VVideoManagerService",
     "selected_version": "master@a152fef3f480881cb40ad6cc1f08dffe5faf4ad1"
   },
   {
     "name": "AVS-qc8017_32",
     "selected_version": "Release/Castle-Fork/0.3.14.41323.2725199"
-  },
-  {
-    "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/0.16-5+g2e25c0f"
   },
   {
     "name": "bose-opkg-utils",
@@ -117,11 +113,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Continuous/master/0.2.0-84+5f99e4a"
-  },
-  {
-    "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/0.3.3-53+83e0de2"
+    "selected_version": "Release/master/0.2.0-78+2eebfc2"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -137,23 +129,23 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/3.0"
+    "selected_version": "Release/master/2.4"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/3.0"
+    "selected_version": "Release/master/2.4"
   },
   {
     "name": "RivieraLPM",
     "selected_version": "trunk@1983"
   },
   {
-    "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.3.9-117+7078c70"
-  },
-  {
     "name": "RivieraLpmTools",
     "selected_version": "@2139"
+  },
+  {
+    "name": "RivieraLpmService-qc8017_32",
+    "selected_version": "Release/master/0.3.9-117+7078c70"
   },
   {
     "name": "RivieraLpmUpdater",
