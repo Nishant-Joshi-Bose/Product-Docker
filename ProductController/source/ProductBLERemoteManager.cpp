@@ -162,7 +162,7 @@ void ProductBLERemoteManager::Run( )
     InitializeFrontDoor();
     InitializeRCS();
 
-    // TODO this is a hack for the fact that RCS doesn't provide a status notification, and 
+    // TODO this is a hack for the fact that RCS doesn't provide a status notification, and
     // callers of IsConnected probably want to know right away (i.e. no callback), so we poll
     // for now; this will be replaced when a status notification is available
     m_statusTimer->SetTimeouts( 1000, 1000 );
@@ -170,12 +170,8 @@ void ProductBLERemoteManager::Run( )
     {
         auto cb = [ = ]( RCS_PB_MSG::PairingNotify n )
         {
-            BOSE_INFO( s_logger, "*** BLE GOT STATUS  %d/%d\n", n.has_status(), n.status() );
             m_remoteConnected = n.has_status() && ( n.status() == RCS_PB_MSG::PairingNotify::PSTATE_BONDED );
-//            BOSE_INFO( s_logger, "*** BLE GOT STATUS  %d\n", IsConnected() );
-
         };
-        BOSE_INFO( s_logger, "*** BLE REQUST STATUS  %d\n", IsConnected() );
         m_RCSClient->Pairing_GetStatus( cb );
     } );
 
