@@ -5,7 +5,11 @@
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@cefcd5cdfefc1b7d77c808274d398401219b2c5d"
+    "selected_version": "master@6d63efb379b757868695d8c8362795c7d3a437ee"
+  },
+  {
+    "name": "BLERemoteXCVR",
+    "selected_version": "Release/master/0.16-5+g2e25c0f"
   },
   {
     "name": "A4VVideoManagerService",
@@ -14,10 +18,6 @@
   {
     "name": "AVS-qc8017_32",
     "selected_version": "Release/Castle-Fork/0.3.14.41351.2730918"
-  },
-  {
-    "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/0.16-5+g2e25c0f"
   },
   {
     "name": "bose-opkg-utils",
@@ -29,19 +29,19 @@
   },
   {
     "name": "BoseOPKG-native",
-    "selected_version": "Release/master/0.3.0-20+324ed86"
+    "selected_version": "Release/master/0.4.0-21+b24eca9"
   },
   {
     "name": "BoseOPKG-qc8017_32",
-    "selected_version": "Release/master/0.3.0-20+324ed86"
+    "selected_version": "Release/master/0.4.0-21+b24eca9"
   },
   {
     "name": "BoseOPKG-x86",
-    "selected_version": "Release/master/0.3.0-20+324ed86"
+    "selected_version": "Release/master/0.4.0-21+b24eca9"
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/develop/0.3.3-110+3a6d9d5"
+    "selected_version": "Release/master/0.3.4-120+3df747f"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -57,7 +57,7 @@
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
-    "selected_version": "Release/IP3/0.3.7-47+c247d98"
+    "selected_version": "Release/master/0.3.7-49+a987998"
   },
   {
     "name": "CastleDemoController-qc8017_32",
@@ -97,7 +97,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@e2b92a6c3ec1c9313a16f14a9426e1034e85a90c"
+    "selected_version": "master@b7199ac27e3f5fec67a366ce7bfb077df7b0f8b7"
   },
   {
     "name": "CastleProductUIAssets",
@@ -169,7 +169,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/IP3/0.3.15-385+4e322aa"
+    "selected_version": "Release/IP3/0.3.15-391+5afd1c8"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -189,6 +189,6 @@
   },
   {
     "name": "WiFi-Setup-Webpage",
-    "selected_version": "master@d788ac402061fcfcfe165c37b19ec9587bf3124f"
+    "selected_version": "master@19f561f91af118db5439955e4d85bc0a914964eb"
   }
 ]

@@ -125,11 +125,36 @@ void ProductSourceInfo::UpdateSources( const SoundTouchInterface::Sources& sourc
 {
     BOSE_INFO( s_logger, "%s got source update %s", __func__, ProtoToMarkup::ToJson( sources ).c_str() );
     m_sources = sources;
+
+    // Repopulate the playbackRequest info associated with user configurable Game, DVD, Cable/Sat activation key
+    m_gameSourcePlaybackRq.Clear();
+    m_dvdSourcePlaybackRq.Clear();
+    m_cablesatSourcePlaybackRq.Clear();
+    for( auto i = 0 ; i < m_sources.sources_size(); i++ )
+    {
+        auto& source = m_sources.sources( i );
+        auto& activationKey = source.details().activationkey();
+        if( activationKey ==  "ACTIVATION_KEY_GAME" )
+        {
+            m_gameSourcePlaybackRq.set_source( source.sourcename() );
+            m_gameSourcePlaybackRq.set_sourceaccount( source.sourceaccountname() );
+        }
+        else if( activationKey == "ACTIVATION_KEY_BD_DVD" )
+        {
+            m_dvdSourcePlaybackRq.set_source( source.sourcename() );
+            m_dvdSourcePlaybackRq.set_sourceaccount( source.sourceaccountname() );
+        }
+        else if( activationKey == "ACTIVATION_KEY_CBL_SAT" )
+        {
+            m_cablesatSourcePlaybackRq.set_source( source.sourcename() );
+            m_cablesatSourcePlaybackRq.set_sourceaccount( source.sourceaccountname() );
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProductSourceInfo::UpdateSources
+/// @brief ProductSourceInfo::FindSource
 ///
 /// @param  item Currently-selected content item
 ///
