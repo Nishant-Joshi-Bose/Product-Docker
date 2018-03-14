@@ -854,7 +854,6 @@ PassportPB::ContentItem ProfessorProductController::GetOOBDefaultLastContentItem
 /// @brief  Determines if the content item can be persisted in m_lastContentItem
 ///
 /// @return Returns true or false
-///////////////////////////////////////////////////////////////////////////////
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProfessorProductController::CanPersistAsLastContentItem( const SoundTouchInterface::ContentItem &ci ) const
@@ -872,6 +871,63 @@ bool ProfessorProductController::CanPersistAsLastContentItem( const SoundTouchIn
     BOSE_VERBOSE( s_logger, "ContentItem %s can%s persist in Professor as LastContentItem",
                   ProtoToMarkup::ToJson( ci, false ).c_str( ), retVal ? "" : "not" );
     return retVal;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::PossiblyPairBLERemote
+///
+/// @brief  initiates pairing of the BLE remote if indicated
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::PossiblyPairBLERemote( )
+{
+    // The rules are per PGC-697:
+    // On a system without a paired BLE remote, entry into SETUP will activate BLE pairing.
+    // On a system with a paired BLE remote, pressing and holding the Action Button will activate BLE pairing.
+
+    if( !( m_ProductBLERemoteManager->IsConnected() ) )
+    {
+        BOSE_INFO( s_logger, "%s could not find paired BLE remote", __func__ );
+        PairBLERemote( 0 );
+    }
+    else
+    {
+        BOSE_INFO( s_logger, "%s found paired BLE remote", __func__ );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::PairBLERemote
+///
+/// @brief  initiates pairing of the BLE remote
+///
+/// @param  manualPairingRequest
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::PairBLERemote( uint32_t timeout )
+{
+    // Tell the remote communications module to start pairing
+    BOSE_INFO( s_logger, "%s requesting that the BLE remote pairing start", __func__ );
+
+    m_ProductBLERemoteManager->Pairing_Start( timeout );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::StopPairingBLERemote
+///
+/// @brief  stops pairing of the BLE remote
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::StopPairingBLERemote( )
+{
+    // No harm if pairing is not active
+    // Tell the remote communications module to stop pairing
+    BOSE_INFO( s_logger, "%s requesting that the BLE remote pairing stop", __func__ );
+
+    m_ProductBLERemoteManager->Pairing_Cancel();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1229,6 +1285,10 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         else if( GetIntentHandler( ).IsIntentPlaySoundTouchSource( message.action( ) ) )
         {
             GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentPlaySoundTouchSource );
+        }
+        else if( GetIntentHandler( ).IsIntentSetupBLERemote( message.action( ) ) )
+        {
+            GetHsm( ).Handle<>( &CustomProductControllerState::HandleIntentSetupBLERemote );
         }
         else
         {
