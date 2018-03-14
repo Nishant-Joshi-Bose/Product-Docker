@@ -116,7 +116,6 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
                     playbackRequestData,
                     playbackRequestResponseCallback,
                     playbackRequestErrorCallback );
-
             BOSE_INFO( s_logger, "An attempt to play the Game source has been made." );
         }
         else
