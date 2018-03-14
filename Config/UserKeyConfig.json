@@ -260,7 +260,7 @@
         "action": "ACTION_CABLESAT",
         "commment": "select user configurable source cable/sat",
         "keyEvent": "PRESS",
-        "keyList": ["BOSE_CUSTOM_SOURCE_CABLESAT"],
+        "keyList": ["BOSE_AUX_SOURCE"],
         "origin": ["IR", "TAP", "RF"],
         "timeOutList": []
     },   
