@@ -22,8 +22,8 @@
 #include "BLESetupEndpoints.h"
 #include "ButtonPress.pb.h"
 #include "DataCollectionClientFactory.h"
-#include "ProductSTSCommonStateFactory.h"
 #include "ProductSTSSilentStateFactory.h"
+#include "ProductSTSAuxStateFactory.h"
 
 static DPrint s_logger( "EddieProductController" );
 
@@ -793,11 +793,11 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void EddieProductController::SetupProductSTSController( void )
 {
-    ProductSTSCommonStateFactory commonStateFactory;
+    ProductSTSAuxStateFactory    auxStateFactory;
     ProductSTSSilentStateFactory silentStateFactory;
 
     std::vector<ProductSTSController::SourceDescriptor> sources;
-    ProductSTSController::SourceDescriptor descriptor_AUX{ 0, "AUX", true, commonStateFactory }; // AUX is always available
+    ProductSTSController::SourceDescriptor descriptor_AUX{ 0, "AUX", true, auxStateFactory };
     sources.push_back( descriptor_AUX );
 
     // 'SETUP' is a "fake" source used for setup state.

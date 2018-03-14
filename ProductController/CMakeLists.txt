@@ -38,6 +38,8 @@ ADD_EXECUTABLE(Eddie
   DisplayController/DisplayController.cpp
   CustomProductAudioService/CustomProductAudioService.cpp
   CustomProductAudioService/CustomAudioSettingsManager.cpp
+  CustomProductSTS/ProductSTSAuxStateFactory.cpp
+  CustomProductSTS/ProductSTSStateTopAux.cpp
   CustomProductLpmHardwareInterface.cpp
 )
 
