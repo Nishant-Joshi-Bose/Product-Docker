@@ -170,12 +170,8 @@ void ProductBLERemoteManager::Run( )
     {
         auto cb = [ = ]( RCS_PB_MSG::PairingNotify n )
         {
-            BOSE_INFO( s_logger, "*** BLE GOT STATUS  %d/%d\n", n.has_status(), n.status() );
             m_remoteConnected = n.has_status() && ( n.status() == RCS_PB_MSG::PairingNotify::PSTATE_BONDED );
-//            BOSE_INFO( s_logger, "*** BLE GOT STATUS  %d\n", IsConnected() );
-
         };
-        BOSE_INFO( s_logger, "*** BLE REQUST STATUS  %d\n", IsConnected() );
         m_RCSClient->Pairing_GetStatus( cb );
     } );
 

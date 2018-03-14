@@ -59,7 +59,11 @@ bool CustomProductControllerStatePlayingSelected::HandleIntentSpeakerPairing( Ke
 {
     BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
 
-    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_ACCESSORY_PAIRING );
+    if( intent == ( unsigned int )Action::ACTION_START_PAIR_SPEAKERS )
+    {
+        BOSE_INFO( s_logger, "The state is changing to the CustomSelectedAccessoryPairing state." );
+        ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_ACCESSORY_PAIRING );
+    }
 
     return true;
 }

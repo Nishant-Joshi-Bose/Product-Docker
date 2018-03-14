@@ -62,6 +62,7 @@ public:
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
     bool HandlePairingState( ProductAccessoryPairing pairingStatus ) override;
+    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )  override;
     bool HandleAudioPathDeselect( )                                  override;
     bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo ) override;
 
