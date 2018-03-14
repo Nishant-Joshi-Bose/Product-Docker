@@ -13,15 +13,15 @@
   },
   {
     "name": "BoseOPKG-native",
-    "selected_version": "Release/master/0.3.0-20+324ed86"
+    "selected_version": "Release/master/0.4.0-21+b24eca9"
   },
   {
     "name": "BoseOPKG-qc8017_32",
-    "selected_version": "Release/master/0.3.0-20+324ed86"
+    "selected_version": "Release/master/0.4.0-21+b24eca9"
   },
   {
     "name": "BoseOPKG-x86",
-    "selected_version": "Release/master/0.3.0-20+324ed86"
+    "selected_version": "Release/master/0.4.0-21+b24eca9"
   },
   {
     "name": "BoseWebMonaco",
@@ -145,7 +145,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/IP3/0.3.15-385+4e322aa"
+    "selected_version": "Release/IP3/0.3.15-391+5afd1c8"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
