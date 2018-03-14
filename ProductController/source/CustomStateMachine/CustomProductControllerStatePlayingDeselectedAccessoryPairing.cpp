@@ -96,6 +96,27 @@ bool CustomProductControllerStatePlayingDeselectedAccessoryPairing::HandlePairin
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @brief CustomProductControllerStatePlayingDeselectedAccessoryPairing::HandleIntentSpeakerPairing
+///
+/// @return This method returns a true Boolean value indicating that it is handling the speaker
+///         pairing intent.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlayingDeselectedAccessoryPairing::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )
+
+{
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+
+    if( intent == ( unsigned int )Action::ACTION_STOP_PAIR_SPEAKERS )
+    {
+        GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
+    }
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief CustomProductControllerStatePlayingDeselectedAccessoryPairing::HandleAudioPathSelect
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the event.
