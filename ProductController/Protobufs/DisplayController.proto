@@ -27,7 +27,10 @@ message Display {
     optional uint32              manualIntensity          = 2;
     optional uint32              backLightPrecentage      = 3;
     optional uint32              lightSensorLUX           = 4;
-    optional uint64              uiHeartBeat              = 5;
-    optional DisplayRequestError error                    = 6;
+    optional DisplayRequestError error                    = 5;
 }
 
+message UiHeartBeat
+{
+    optional uint64              count              = 1;
+}
