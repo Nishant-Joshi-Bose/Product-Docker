@@ -74,6 +74,19 @@ public:
     BOptional<SoundTouchInterface::Sources::SourceItem> FindSource( const SoundTouchInterface::ContentItem& item );
     void Refresh( void );
 
+    const SoundTouchInterface::PlaybackRequest& GetGameSourcePlaybackRq()
+    {
+        return m_gameSourcePlaybackRq;
+    }
+    const SoundTouchInterface::PlaybackRequest& GetDvdSourcePlaybackRq()
+    {
+        return m_dvdSourcePlaybackRq;
+    }
+    const SoundTouchInterface::PlaybackRequest& GetCablesatSourcePlaybackRq()
+    {
+        return m_cablesatSourcePlaybackRq;
+    }
+
 private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These declarations store the main task for processing LPM hardware events and requests. It
@@ -90,6 +103,11 @@ private:
     std::shared_ptr<FrontDoorClientIF>      m_FrontDoorClient;
 
     SoundTouchInterface::Sources            m_sources;
+
+    //PlaybackRequests associated with user configurable Game, DVD, Cable/Sat activation key on BLE remote
+    SoundTouchInterface::PlaybackRequest    m_gameSourcePlaybackRq;
+    SoundTouchInterface::PlaybackRequest    m_dvdSourcePlaybackRq;
+    SoundTouchInterface::PlaybackRequest    m_cablesatSourcePlaybackRq;
 
     void UpdateSources( const SoundTouchInterface::Sources& sources );
 };
