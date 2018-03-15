@@ -8,24 +8,43 @@ The Mountain,
 Framingham, MA 01701-9168
 
 This file is to test Shephed Processes
-    
 """
 
 import time
-import os
-import sys
 import logging
 import ConfigParser
-
+import pytest
+import pytest_dependency
 from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
 from CastleTestUtils.SoftwareUpdateUtils.BonjourUpdateScripts.bonjourUpdate import BonjourUpdateUtils
 from CastleTestUtils.SoftwareUpdateUtils.BonjourUpdate.bonjourUpdateSupport import BonjourUpdateSupport
+from CastleTestUtils.RivieraUtils.rivieraCommunication import ADBCommunication
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 
 logger = get_logger(__name__, "ShepherdProcess.log", level=logging.INFO, fileLoglevel=logging.DEBUG)
 cfg = ConfigParser.SafeConfigParser()
 cfg.read("conf_Shepherd.ini")
 
+@pytest.mark.dependency()
+def test_bonjour_update(request):
+    """
+    This to perform Bonjour update twice to validate it install continuos build
+    """
+    device = request.config.getoption("--device-id")
+    zip_file = request.config.getoption("--zipfile")
+    adb = ADBCommunication()
+    adb.setCommunicationDetail(device)
+    BonjourCnt = 0
+    while BonjourCnt < int(cfg.get('Settings', 'BONJOUR_UPDATE_LOOP')):
+        BonjourCnt = BonjourCnt + 1
+        result = PerformBonjourUpdate(adb, zip_file, device)
+        assert result, "Bonjour Update Failed. Please see logs for more details"
+        time.sleep(180)
+        #bonjourUpdateSupport = BonjourUpdateSupport(device=device, logger=logger)
+        #bonjourUpdateSupport.confirm_installation_versions()
+        
+
+@pytest.mark.dependency(depends=["test_bonjour_update"])
 def test_shepherd_process(request):
     """
     This is to validate all processes running after Bonjour Update
@@ -33,9 +52,7 @@ def test_shepherd_process(request):
     Fetching All Processes list from Eddie : cat /var/run/shepherd/Shepherd*.xml
     Validate Process is Running from Eddie : cat /var/run/shepherd/pids
     """
-    result = PerformBonjourUpdate(request)
     device = request.config.getoption("--device-id")
-    assert result, "Bonjour Update Failed. Please see logs for more details"
     rivierapull = RivieraUtils('LOCAL')
     processes = rivierapull.getShepherdProcesses(device=device)
     logger.info("Actual Processes : " + str(processes))
@@ -56,28 +73,28 @@ def test_shepherd_process(request):
         time.sleep(2)
     assert process_died_list == [], "The following processes died after installation: {}".format(process_died_list)
 
-def PerformBonjourUpdate(request):
+def PerformBonjourUpdate(adb, zip_file, device):
     """
     Perform Bonjour Update twice on same build to validate software update
     """
-    device = request.config.getoption("--device-id")
-    zip_file = request.config.getoption("--zipfile")
-    bonjourUpdateSupport = BonjourUpdateSupport(device=device, logger=logger)
-    is_verify_uploaded_zip = True
-
+    starttime = time.time()
+    _timeout = 60
     try:
-        deviceIP = bonjourUpdateSupport.getDeviceIP()
-        logger.info("Device IP : " + deviceIP)
-        bonjour_util = BonjourUpdateUtils(device=device)
-        #Need to perform Bonjour Update twice
-        BonjourCnt = 0
-        while True:
-            bonjour_util.upload_zipfile(zip_file, deviceIP, is_verify_uploaded_zip=is_verify_uploaded_zip)
-            bonjourUpdateSupport.confirmInstallationVersions()
-            BonjourCnt += 1
-            if BonjourCnt >= int(cfg.get('Settings', 'BONJOUR_UPDATE_LOOP')):
+        while(time.time() - starttime < _timeout):
+            try:
+                deviceIP = adb.getIPAddress()
+                logger.info("Device IP : " + deviceIP)
                 break
-        return True
+            except Exception as e:
+                logger.info("Getting IP Address.... " + str(e))
+                continue
+        bonjour_util = BonjourUpdateUtils(device=device)
+        try:
+            bonjour_util.upload_zipfile(zip_file, deviceIP)
+        except SystemExit as e:
+            logger.info("System Exit Exception in Bonjour Update .... " + str(e))
+            return True
     except Exception as e:
         logger.info("Exception in Bonjour Update .... " + str(e))
         return False
+	
