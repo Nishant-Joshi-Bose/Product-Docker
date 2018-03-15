@@ -1227,7 +1227,12 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             }
 
 
-            m_ProductLpmHardwareInterface->SendWiFiRadioStatus( radioStatus );
+            if( radioStatus.status() != m_radioStatus.status() ||
+                radioStatus.band() != m_radioStatus.band() )
+            {
+                m_radioStatus.CopyFrom( radioStatus );
+                m_ProductLpmHardwareInterface->SendWiFiRadioStatus( m_radioStatus );
+            }
 
             BOSE_DEBUG( s_logger, "A wireless network message was received with frequency %d kHz.",
                         message.wirelessstatus( ).has_frequencykhz( ) ?
