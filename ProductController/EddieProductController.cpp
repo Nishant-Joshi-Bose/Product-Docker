@@ -288,7 +288,9 @@ void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::Ne
 
 bool EddieProductController::IsNetworkConfigured() const
 {
-    return ( GetWifiProfileCount() || m_cachedStatus.get().isprimaryup() );
+    return ( ( GetWifiProfileCount() &&
+               ( m_NetworkServiceUtil.GetNetManagerOperationMode() != NetManager::Protobuf::OperationalMode::wifiOff ) ) ||
+             ( m_cachedStatus.get().isprimaryup() ) );
 }
 
 bool EddieProductController::IsNetworkConnected() const
