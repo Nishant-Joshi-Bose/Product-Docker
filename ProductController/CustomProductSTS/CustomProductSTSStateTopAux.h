@@ -38,5 +38,6 @@ public:
     bool HandleMuteStatus( const STS::MuteStatus& ms ) override;
 
 private:
+    void ToggleMute() const;
     bool m_mute = false;
 };

@@ -10,8 +10,7 @@ static DPrint s_logger( "CustomProductSTSStateTopAux" );
 CustomProductSTSStateTopAux::CustomProductSTSStateTopAux( ProductSTSHsm& hsm,
                                                           CHsmState *pSuperState,
                                                           ProductSTSAccount& account ) :
-    ProductSTSStateTop( hsm, pSuperState, account ),
-    m_mute( false )
+    ProductSTSStateTop( hsm, pSuperState, account )
 {
 }
 
@@ -25,10 +24,7 @@ bool CustomProductSTSStateTopAux::HandleStop( const STS::Void & )
         return false;
     }
 
-    if( m_mute )
-        m_account.IPC().SendMuteControlEvent( false );
-    else
-        m_account.IPC().SendMuteControlEvent( true );
+    ToggleMute();
     return true;
 }
 
@@ -42,10 +38,7 @@ bool CustomProductSTSStateTopAux::HandlePause( const STS::Void & )
         return false;
     }
 
-    if( m_mute )
-        m_account.IPC().SendMuteControlEvent( false );
-    else
-        m_account.IPC().SendMuteControlEvent( true );
+    ToggleMute();
     return true;
 }
 
@@ -59,10 +52,11 @@ bool CustomProductSTSStateTopAux::HandleMuteStatus( const STS::MuteStatus& ms )
         BOSE_ERROR( s_logger,  "%s AUX Source not active", __FUNCTION__ );
         return false;
     }
-    if( ms.muteenabled() )
-        m_mute = true;
-    else
-        m_mute = false;
-
+    m_mute = ms.muteenabled();
     return true;
+}
+
+void CustomProductSTSStateTopAux::ToggleMute() const
+{
+    m_account.IPC().SendMuteControlEvent( !m_mute );
 }
