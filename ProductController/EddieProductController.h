@@ -73,7 +73,6 @@
 #include "DataCollectionClientInterface.h"
 #include "MacAddressInfo.h"
 #include "BOptional.h"
-#include "VoiceServiceClient.h"
 #include "BoseVersion.h"
 
 namespace ProductApp
@@ -364,17 +363,6 @@ public:
         m_displayController->SetAutoMode( autoMode );
     }
 
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name   GetVoiceServiceClient
-/// @brief  Returns reference to VoiceServiceClient
-/// @return VoiceServiceClient&
-///////////////////////////////////////////////////////////////////////////////
-    inline VoiceServiceClient& GetVoiceServiceClient()
-    {
-        return m_voiceServiceClient;
-    }
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   GetWiFiOperationalMode
@@ -459,7 +447,6 @@ private:
     bool m_IsAudioPathReady = true;
     ProductSTSController                        m_ProductSTSController;
     std::shared_ptr<DataCollectionClientIF>     m_DataCollectionClient;
-    VoiceServiceClient                          m_voiceServiceClient;
 
     /// Shared Pointer to the LPM Custom Hardware Interface
     std::shared_ptr< CustomProductLpmHardwareInterface > m_LpmInterface;
