@@ -83,7 +83,6 @@ EddieProductController::EddieProductController():
     m_wifiProfilesCount(),
     m_fdErrorCb( AsyncCallback<EndPointsError::Error> ( std::bind( &EddieProductController::CallbackError,
                                                                    this, std::placeholders::_1 ), GetTask() ) ),
-    m_voiceServiceClient( "EddieProductController", m_FrontDoorClientIF ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
     m_dataCollectionClientInterface( m_FrontDoorClientIF )
 {
@@ -491,8 +490,7 @@ bool EddieProductController::IsAllModuleReady() const
              IsNetworkModuleReady() and
              IsSTSReady() and
              IsBluetoothModuleReady() and
-             // @TODO uncomment IsUiConnected line once Monaco starts sending heart beat signals.
-             //IsUiConnected() and
+             IsUiConnected() and
              IsSassReady() and
              IsSoftwareUpdateReady() ) ;
 }
