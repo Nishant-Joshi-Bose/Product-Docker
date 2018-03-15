@@ -49,7 +49,7 @@
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.2.1-31+d7e3d00"
+    "selected_version": "Release/master/0.2.2-37+0f43d0b"
   },
   {
     "name": "CastleLibs-native",
@@ -89,7 +89,7 @@
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@3f82683063c23c9e9e65c36cf8be5e48c6e391ca"
+    "selected_version": "master@28983769246233000587a929f8c97e63d078bab5"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -97,7 +97,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Continuous/master/0.2.0-86+18bce98"
+    "selected_version": "Release/master/0.2.1-92+88cfd3d"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -117,11 +117,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/2.4"
+    "selected_version": "Release/master/3.0"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/2.4"
+    "selected_version": "Release/master/3.0"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -136,8 +136,12 @@
     "selected_version": "Release/master/0.3.2-39+0fb03f2"
   },
   {
+    "name": "SADI-qc8017_32",
+    "selected_version": "Release/master/1.1.1-23+496ef0d"
+  },
+  {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/IP3/0.3.1-209+faa7229"
+    "selected_version": "Release/IP3/0.3.2-218+f980516"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -145,7 +149,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/IP3/0.3.15-391+5afd1c8"
+    "selected_version": "Release/IP3/0.3.16-395+10cc929"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -161,6 +165,6 @@
   },
   {
     "name": "WiFi-Setup-Webpage",
-    "selected_version": "master@19f561f91af118db5439955e4d85bc0a914964eb"
+    "selected_version": "master@d788ac402061fcfcfe165c37b19ec9587bf3124f"
   }
 ]
