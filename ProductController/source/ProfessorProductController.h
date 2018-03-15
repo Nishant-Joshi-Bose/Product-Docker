@@ -236,12 +236,6 @@ public:
 
     std::string GetDefaultProductName() const override;
 
-    BLESetupService::ProductId GetProductId() const override
-    {
-        // @TODO PGC-788
-        return BLESetupService::ProductId::PROFESSOR;
-    }
-
     std::string GetProductVersionNumber() const override
     {
         return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );
@@ -265,6 +259,12 @@ public:
     PassportPB::ContentItem GetOOBDefaultLastContentItem() const override;
 
     bool CanPersistAsLastContentItem( const SoundTouchInterface::ContentItem &ci ) const override;
+
+    void PossiblyPairBLERemote( );
+
+    void PairBLERemote( uint32_t timeout );
+
+    void StopPairingBLERemote( );
 
 private:
 

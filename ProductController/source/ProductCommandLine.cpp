@@ -770,7 +770,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     else if( command.compare( "product test_power" ) == 0 )
     {
         ProductMessage productMessage;
-        productMessage.set_action( static_cast< uint32_t >( Action::ACTION_POWER ) );
+        productMessage.set_action( static_cast< uint32_t >( Action::POWER_TOGGLE ) );
 
         IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
     }

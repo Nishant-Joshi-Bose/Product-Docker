@@ -1,7 +1,7 @@
 {
     "keyTable": [
     {
-        "action": "ACTION_POWER",
+        "action": "POWER_TOGGLE",
         "commment": "power toggle",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_ON_OFF"],
@@ -260,7 +260,7 @@
         "action": "ACTION_CABLESAT",
         "commment": "select user configurable source cable/sat",
         "keyEvent": "PRESS",
-        "keyList": ["BOSE_CUSTOM_SOURCE_CABLESAT"],
+        "keyList": ["BOSE_AUX_SOURCE"],
         "origin": ["IR", "TAP", "RF"],
         "timeOutList": []
     },   

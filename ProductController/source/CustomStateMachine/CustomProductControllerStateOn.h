@@ -73,6 +73,7 @@ public:
 
     bool HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent )       override;
     bool HandleAdaptIQControl( const ProductAdaptIQControl& cmd )                   override;
+    bool HandleIntentSetupBLERemote()                                               override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
