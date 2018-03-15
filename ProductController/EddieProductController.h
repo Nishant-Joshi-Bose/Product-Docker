@@ -99,11 +99,6 @@ public:
     {
         return {};
     }
-
-    BLESetupService::ProductId GetProductId() const override
-    {
-        return BLESetupService::ProductId::EDDIE;
-    }
     std::string GetProductVersionNumber() const override
     {
         return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );

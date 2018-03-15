@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.14.41351.2730918"
+    "selected_version": "Release/Castle-Fork/0.3.15.41380.2733922"
   },
   {
     "name": "bose-opkg-utils",
@@ -65,7 +65,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.7-63+cf5a143"
+    "selected_version": "Release/master/0.3.8-71+96fe1a4"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -81,7 +81,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@e2b92a6c3ec1c9313a16f14a9426e1034e85a90c"
+    "selected_version": "master@f64b2ed72b78a831085e9dbe5f63af628ec8d4ed"
   },
   {
     "name": "CastleProductUIAssets",
@@ -125,7 +125,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.3.9-117+7078c70"
+    "selected_version": "Release/master/0.3.11-131+2b16d62"
   },
   {
     "name": "RivieraLpmTools",
@@ -149,7 +149,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.14.41351.2730918"
+    "selected_version": "Release/Castle-Fork/0.3.15.41380.2733922"
   },
   {
     "name": "SystemEventService-qc8017_32",
