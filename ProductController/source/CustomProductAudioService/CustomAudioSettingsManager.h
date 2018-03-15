@@ -39,7 +39,7 @@ public:
     const ProductPb::AudioContentType& GetContentType() const;
     ErrorCode_t SetDualMonoSelect( const ProductPb::AudioDualMonoSelect& DualMonoSelect );
     const ProductPb::AudioDualMonoSelect& GetDualMonoSelect() const;
-    bool SetEqSelect( const ProductPb::AudioEqSelect& EqSelect );
+    ErrorCode_t SetEqSelect( const ProductPb::AudioEqSelect& EqSelect );
     const ProductPb::AudioEqSelect& GetEqSelect() const;
 
 private:

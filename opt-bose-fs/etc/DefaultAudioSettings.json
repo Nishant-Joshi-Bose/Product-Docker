@@ -1,11 +1,11 @@
 {
 	"version": {
         "major": 2,
-        "minor": 1
+        "minor": 2
 	},
     "supportedAudioSettings": {
         "contentItemSensitive": ["audioBassLevel", "audioTrebleLevel", "audioCenterLevel", "audioSurroundLevel", "audioGainOffset", "audioAvSync", "audioMode", "audioContentType"],
-        "contentItemNonSensitive": ["dualMonoSelect"]
+        "contentItemNonSensitive": ["dualMonoSelect", "audioEqSelect"]
     },
 	"configurations": {
 		"audioBassLevel": {
@@ -82,7 +82,7 @@
 			"currentPersistenceLevel": "global",
 			"persistenceSession": false,
 			"properties": {
-                "supportedValues": ["night", "direct", "dialog", "normal"],
+                "supportedValues": ["dialog", "normal"],
 				"supportedPersistence": ["session", "global", "contentItem"]
 			}
 		},
@@ -105,7 +105,7 @@
             "currentPersistenceLevel": "global",
             "persistenceSession": false,
             "properties": {
-                "supportedModes": ["EQ_OFF", "EQ_AIQ_A", "EQ_AIQ_B", "EQ_RETAIL_A", "EQ_RETAIL_B", "EQ_RETAIL_C"]
+                "supportedModes": ["EQ_OFF"]
             }
         }
 	},
@@ -118,7 +118,7 @@
 			"audioGainOffset": 0,
 			"audioAvSync": 0,
 			"audioSubwooferGain":0,
-			"audioMode": "direct",
+			"audioMode": "normal",
             "audioContentType": "unspecified",
             "audioDualMonoSelect": "both",
             "audioEqSelect": "EQ_OFF"
@@ -131,7 +131,7 @@
 			"audioGainOffset": 0,
 			"audioAvSync": 0,
 			"audioSubwooferGain":0,
-			"audioMode": "direct",
+			"audioMode": "normal",
 			"audioContentType": "unspecified"
 		},
 		"contentItem": {
@@ -143,7 +143,7 @@
 				"audioGainOffset": 0,
 				"audioAvSync": 0,
 				"audioSubwooferGain":0,
-				"audioMode": "direct",
+				"audioMode": "normal",
 				"audioContentType": "unspecified"
 			}
 		}
@@ -156,7 +156,7 @@
 		"audioGainOffset": 0,
 		"audioAvSync": 0,
 		"audioSubwooferGain":0,
-		"audioMode": "direct",
+		"audioMode": "normal",
         "audioContentType": "unspecified",
         "audioDualMonoSelect": "both",
         "audioEqSelect": "EQ_OFF"
