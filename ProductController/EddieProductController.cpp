@@ -83,7 +83,6 @@ EddieProductController::EddieProductController():
     m_wifiProfilesCount(),
     m_fdErrorCb( AsyncCallback<EndPointsError::Error> ( std::bind( &EddieProductController::CallbackError,
                                                                    this, std::placeholders::_1 ), GetTask() ) ),
-    m_voiceServiceClient( "EddieProductController", m_FrontDoorClientIF ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
     m_dataCollectionClientInterface( m_FrontDoorClientIF )
 {
@@ -289,7 +288,9 @@ void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::Ne
 
 bool EddieProductController::IsNetworkConfigured() const
 {
-    return ( GetWifiProfileCount() || m_cachedStatus.get().isprimaryup() );
+    return ( ( GetWifiProfileCount() &&
+               ( m_NetworkServiceUtil.GetNetManagerOperationMode() != NetManager::Protobuf::OperationalMode::wifiOff ) ) ||
+             ( m_cachedStatus.get().isprimaryup() ) );
 }
 
 bool EddieProductController::IsNetworkConnected() const

@@ -28,10 +28,10 @@
             --><header master_version="0.3.7" name="eddie_package.bos" />
     <manifest_entries>
 
-        <entry chip="lpm_eddie" combine="True" name="eddie_mfg.bin" path="/home/softlib/verisoft/EddieLPM-Diags/Release/dp2-endofline/latest/DP1/lpm_*.bin" version="filename" />
-        <entry chip="lpm_eddie" combine="True" name="eddie_bl.bin" path="/home/softlib/verisoft/EddieLPM-BL/Release/trunk/latest/DP2/lpm_bootloader*.bin" version="filename" />
+        <entry chip="lpm_eddie" combine="True" name="eddie_mfg.bin" path="/home/softlib/verisoft/EddieLPM-Diags/Release/dp2-endofline/0.0.5.1786/DP1/lpm_*.bin" version="filename" />
+        <entry chip="lpm_eddie" combine="True" name="eddie_bl.bin" path="/home/softlib/verisoft/EddieLPM-BL/Release/trunk/0.1.0.1599/DP2/lpm_bootloader*.bin" version="filename" />
         <entry name="eddie.bin" path="/home/softlib/verisoft/EddieLPM-App/Release/trunk/0.3.7.2173/EDDIE_DP2/lpm_*.bin" version="filename" />
-        <entry name="eddie_lb_anim_db.bin" path="/home/softlib/verisoft/CastleLedAnimationTool/Release/master/1.10-31+0a91d28/Eddie-DP1/Animations.bin" version="dynamic" />
+        <entry name="eddie_lb_anim_db.bin" path="/home/softlib/verisoft/CastleLedAnimationTool/Release/master/1.8-24+903bb90/Eddie-DP1/Animations.bin" version="dynamic" />
         <entry name="psoc.cyacd" path="/home/softlib/verisoft/CastleLightBarCapSense/Release/master/3.5-118+63b94fa/App-Eddie-DP2*.cyacd" version="dynamic" />
     </manifest_entries>
 </blob>
