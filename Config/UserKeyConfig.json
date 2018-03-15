@@ -1,7 +1,7 @@
 {
     "keyTable": [
     {
-        "action": "ACTION_POWER",
+        "action": "POWER_TOGGLE",
         "commment": "power toggle",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_ON_OFF"],

@@ -9,7 +9,7 @@
   },
   {
     "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/0.16-5+g2e25c0f"
+    "selected_version": "Release/master/0.3.0-2+g40c7688"
   },
   {
     "name": "A4VVideoManagerService",
@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.14.41351.2730918"
+    "selected_version": "Release/Castle-Fork/0.3.15.41380.2733922"
   },
   {
     "name": "bose-opkg-utils",
@@ -81,7 +81,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.7-63+cf5a143"
+    "selected_version": "Release/master/0.3.8-71+96fe1a4"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -97,7 +97,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@b7199ac27e3f5fec67a366ce7bfb077df7b0f8b7"
+    "selected_version": "master@da83372da9f114b88e5d05ce62d71424e23dbf63"
   },
   {
     "name": "CastleProductUIAssets",
@@ -145,7 +145,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.3.9-117+7078c70"
+    "selected_version": "Release/master/0.3.11-131+2b16d62"
   },
   {
     "name": "RivieraLpmTools",
@@ -169,7 +169,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.14.41351.2730918"
+    "selected_version": "Release/Castle-Fork/0.3.15.41380.2733922"
   },
   {
     "name": "SystemEventService-qc8017_32",
