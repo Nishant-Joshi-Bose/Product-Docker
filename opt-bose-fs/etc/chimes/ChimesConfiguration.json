@@ -11,11 +11,6 @@
             "comment":"bluetooth discoverable"
         },
         {
-            "event_id":3,
-            "tone":"T4_ready_to_connect.flac",
-            "comment":"bluetooth clear pairing list"
-        },
-        {
             "event_id":4,
             "tone":"T5_connected.flac",
             "comment":"bluetooth connect notification"
