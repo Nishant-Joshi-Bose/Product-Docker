@@ -1287,10 +1287,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         /// The following determines whether the key action is to be handled by the custom intent
         /// manager.
         ///
-        else if( GetIntentHandler( ).IsIntentUserPower( message.action( ) ) )
-        {
-            GetHsm( ).Handle< >( &CustomProductControllerState::HandleIntentPowerToggle );
-        }
         else if( GetIntentHandler( ).IsIntentMuteControl( message.action( ) ) )
         {
             GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentMuteControl,

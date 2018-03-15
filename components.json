@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.14.41351.2730918"
+    "selected_version": "Release/Castle-Fork/0.3.15.41380.2733922"
   },
   {
     "name": "bose-opkg-utils",
@@ -97,7 +97,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@b7199ac27e3f5fec67a366ce7bfb077df7b0f8b7"
+    "selected_version": "master@da83372da9f114b88e5d05ce62d71424e23dbf63"
   },
   {
     "name": "CastleProductUIAssets",
@@ -169,7 +169,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.14.41351.2730918"
+    "selected_version": "Release/Castle-Fork/0.3.15.41380.2733922"
   },
   {
     "name": "SystemEventService-qc8017_32",

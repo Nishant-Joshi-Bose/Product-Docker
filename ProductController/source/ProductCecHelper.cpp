@@ -298,7 +298,7 @@ void ProductCecHelper::HandleSrcSwitch( const LpmServiceMessages::IPCSource_t ce
         else if( cecSource.source() == LPM_IPC_SOURCE_INTERNAL )
         {
             ProductMessage productMessage;
-            productMessage.set_action( static_cast< uint32_t >( Action::ACTION_POWER ) );
+            productMessage.set_action( static_cast< uint32_t >( Action::POWER_TOGGLE ) );
 
             IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
 
