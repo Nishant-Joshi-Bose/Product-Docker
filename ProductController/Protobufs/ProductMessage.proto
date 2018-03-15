@@ -66,6 +66,7 @@ message ProductMessage
         optional bool                       ampfaultdetected    = 16;
         optional bool                       audiosilent         = 17;
         optional ProductSystemEventServiceResponse systemeventserviceresponse = 18;
+        optional uint32                     chimetoplay         = 19;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
