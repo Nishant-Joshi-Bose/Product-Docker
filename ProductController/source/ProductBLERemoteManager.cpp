@@ -186,20 +186,20 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
         }
         else if( ( source->sourceaccountname().compare( 0, 4, "SLOT" ) == 0 ) and source->has_details() and source->details().has_devicetype() )
         {
-            if( source->details().devicetype().compare( "DEVICE_TYPE_GAME" ) )
+            if( not source->details().devicetype().compare( "DEVICE_TYPE_GAME" ) )
             {
                 m_RCSClient->Led_Set( LedsSourceTypeMsg_t::GAME );
             }
-            else if( source->details().devicetype().compare( "DEVICE_TYPE_CBL_SAT" ) )
+            else if( not source->details().devicetype().compare( "DEVICE_TYPE_CBL_SAT" ) )
             {
                 m_RCSClient->Led_Set( LedsSourceTypeMsg_t::SET_TOP_BOX );
             }
-            else if( source->details().devicetype().compare( "DEVICE_TYPE_BD_DVD" ) )
+            else if( not source->details().devicetype().compare( "DEVICE_TYPE_BD_DVD" ) )
             {
                 m_RCSClient->Led_Set( LedsSourceTypeMsg_t::DVD );
             }
-            else if( source->details().devicetype().compare( "DEVICE_TYPE_TV" ) or
-                     source->details().devicetype().compare( "DEVICE_TYPE_SMART_TV" ) )
+            else if( not source->details().devicetype().compare( "DEVICE_TYPE_TV" ) or
+                     not source->details().devicetype().compare( "DEVICE_TYPE_SMART_TV" ) )
             {
                 m_RCSClient->Led_Set( LedsSourceTypeMsg_t::TV );
             }
