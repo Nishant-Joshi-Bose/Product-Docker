@@ -93,6 +93,7 @@ TARGET_LINK_LIBRARIES(Professor
   SystemEventService
   BoseLibs
   PassportClient
+  GalapagosClient
   STS
   jsoncpp
   protobuf
