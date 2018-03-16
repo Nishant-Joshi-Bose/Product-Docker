@@ -1148,7 +1148,8 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     {
         if( message.networkstatus( ).has_configured( ) )
         {
-            m_IsNetworkConfigured = message.networkstatus( ).configured( );
+            m_IsNetworkConfigured = ( message.networkstatus( ).configured( ) &&
+                                      ( m_NetworkServiceUtil.GetNetManagerOperationMode() != NetManager::Protobuf::OperationalMode::wifiOff ) );
         }
         else
         {
