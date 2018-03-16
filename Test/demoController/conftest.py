@@ -2,7 +2,7 @@
 Conftest.py for DemoController
 """
 import pytest
-from CastleTestUtils.LoggerUtils.log_setup import get_logger
+from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.DemoUtils.demoUtils import DemoUtils
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from ..commonData import keyConfig
@@ -24,7 +24,7 @@ def demoUtils(frontDoor, adb):
     Get DemoUtils instance.
     """
     logger.info("demoUtils")
-    return DemoUtils(frontDoor, adb)
+    return DemoUtils(frontDoor, adb, logger)
 
 @pytest.fixture(scope='function', autouse=True)
 def setDemoOff(request, frontDoor, demoUtils):
