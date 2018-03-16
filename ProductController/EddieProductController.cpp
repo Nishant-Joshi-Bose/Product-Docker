@@ -22,8 +22,8 @@
 #include "BLESetupEndpoints.h"
 #include "ButtonPress.pb.h"
 #include "DataCollectionClientFactory.h"
-#include "ProductSTSCommonStateFactory.h"
 #include "ProductSTSSilentStateFactory.h"
+#include "CustomProductSTSAuxStateFactory.h"
 
 static DPrint s_logger( "EddieProductController" );
 
@@ -83,7 +83,6 @@ EddieProductController::EddieProductController():
     m_wifiProfilesCount(),
     m_fdErrorCb( AsyncCallback<EndPointsError::Error> ( std::bind( &EddieProductController::CallbackError,
                                                                    this, std::placeholders::_1 ), GetTask() ) ),
-    m_voiceServiceClient( "EddieProductController", m_FrontDoorClientIF ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
     m_dataCollectionClientInterface( m_FrontDoorClientIF )
 {
@@ -289,7 +288,9 @@ void EddieProductController::HandleNetworkStatus( const NetManager::Protobuf::Ne
 
 bool EddieProductController::IsNetworkConfigured() const
 {
-    return ( GetWifiProfileCount() || m_cachedStatus.get().isprimaryup() );
+    return ( ( GetWifiProfileCount() &&
+               ( m_NetworkServiceUtil.GetNetManagerOperationMode() != NetManager::Protobuf::OperationalMode::wifiOff ) ) ||
+             ( m_cachedStatus.get().isprimaryup() ) );
 }
 
 bool EddieProductController::IsNetworkConnected() const
@@ -792,11 +793,11 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void EddieProductController::SetupProductSTSController( void )
 {
-    ProductSTSCommonStateFactory commonStateFactory;
-    ProductSTSSilentStateFactory silentStateFactory;
+    CustomProductSTSAuxStateFactory    auxStateFactory;
+    ProductSTSSilentStateFactory       silentStateFactory;
 
     std::vector<ProductSTSController::SourceDescriptor> sources;
-    ProductSTSController::SourceDescriptor descriptor_AUX{ 0, "AUX", true, commonStateFactory }; // AUX is always available
+    ProductSTSController::SourceDescriptor descriptor_AUX{ 0, "AUX", true, auxStateFactory };
     sources.push_back( descriptor_AUX );
 
     // 'SETUP' is a "fake" source used for setup state.
