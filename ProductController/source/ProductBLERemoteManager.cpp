@@ -2,7 +2,7 @@
 ///
 /// @file      ProductBLERemoteManager.cpp
 ///
-/// @brief     This file implements audio volume management.
+/// @brief     This file implements BLE remote management.
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -22,7 +22,6 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "DPrint.h"
 #include "Utilities.h"
 #include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
@@ -30,27 +29,17 @@
 #include "EndPointsError.pb.h"
 #include "ProtoToMarkup.h"
 #include "ProductSourceInfo.h"
+#include "EndPointsDefines.h"
 
 using namespace ProductPb;
 using namespace A4V_RemoteCommunicationServiceMessages;
 using namespace A4VRemoteCommunication;
-
-namespace
-{
-const std::string s_FrontDoorNowSelection = "/content/nowSelectionInfo";
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             Start of Product Namespace                                       ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following constants define FrontDoor endpoints used by the SourceInfo
-///
-////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -90,31 +79,8 @@ void ProductBLERemoteManager::InitializeFrontDoor( )
         UpdateNowSelection( nowSelection );
     };
 
-    auto handleNowSelectionFail = [ this ]( const EndPointsError::Error & error )
-    {
-        BOSE_ERROR( s_logger, "Error %d %d <%s> while retrieving nowSelection",
-                    error.code( ), error.subcode( ), error.message( ).c_str( ) );
-    };
-
-    auto handleNowSelectionReady = [ = ]( const std::list<std::string>& endPointList )
-    {
-        if( endPointList.empty( ) )
-        {
-            BOSE_ERROR( s_logger, "Endpoint not ready" );
-            return;
-        }
-
-        BOSE_INFO( s_logger, "Registering for %s",  s_FrontDoorNowSelection.c_str() );
-        m_FrontDoorClient->SendGet<SoundTouchInterface::NowSelectionInfo, EndPointsError::Error>( s_FrontDoorNowSelection, handleNowSelection, handleNowSelectionFail );
-        m_FrontDoorClient->RegisterNotification<SoundTouchInterface::NowSelectionInfo>( s_FrontDoorNowSelection, handleNowSelection );
-    };
-
-    auto handleNowSelectionNotReady = [ this ]( const std::list<std::string>& endPointList )
-    {
-    };
-
-    std::list<std::string> endPointList = { s_FrontDoorNowSelection };
-    m_FrontDoorClient->RegisterEndpointsOfInterest( endPointList, handleNowSelectionReady, handleNowSelectionNotReady );
+    m_FrontDoorClient->RegisterNotification<SoundTouchInterface::NowSelectionInfo>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, handleNowSelection );
+    m_FrontDoorClient->SendGet<SoundTouchInterface::NowSelectionInfo, EndPointsError::Error>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, handleNowSelection, {} );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -133,16 +99,8 @@ void ProductBLERemoteManager::InitializeRCS( )
 {
     m_RCSClient = A4VRemoteCommClient::Create( "RCSTestClient", m_ProductTask );
 
-    auto disconnectCb = [this]( )
-    {
-    };
-
-    auto connectCb = [this]( bool status )
-    {
-    };
-
-    m_RCSClient->RegisterDisconnectCb( disconnectCb );
-    m_RCSClient->Connect( connectCb );
+    m_RCSClient->RegisterDisconnectCb( {} );
+    m_RCSClient->Connect( {} );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -213,7 +171,7 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
     auto ci = nowSelection.contentitem();
     auto source = m_ProductController.GetSourceInfo()->FindSource( ci );
 
-    if( ( not source ) or ( not source->has_sourcename() ) )
+    if( not source )
     {
         return;
     }
@@ -221,11 +179,7 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
     /// TODO the following rat's nest of code will need some more work, but the basic idea is right
     if( source->sourcename().compare( "PRODUCT" ) == 0 )
     {
-        if( not source->has_sourceaccountname() )
-        {
-            return;
-        }
-        else if( source->sourceaccountname().compare( "TV" ) == 0 )
+        if( source->sourceaccountname().compare( "TV" ) == 0 )
         {
             // Check for TV explicitly for now, since I don't know if Mardid will set deviceType for the TV
             m_RCSClient->Led_Set( LedsSourceTypeMsg_t::TV );
@@ -270,14 +224,9 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
         {
             m_RCSClient->Led_Set( LedsSourceTypeMsg_t::BLUETOOTH );
         }
-        // TODO verify that sourcename is "SOUNDTOUCH"
-        else if( source->sourcename().compare( "SOUNDTOUCH" ) == 0 )
-        {
-            m_RCSClient->Led_Set( LedsSourceTypeMsg_t::SOUND_TOUCH );
-        }
         else
         {
-            BOSE_ERROR( s_logger, "%s non-product source with unknown name %s", __func__, source->sourcename().c_str() );
+            m_RCSClient->Led_Set( LedsSourceTypeMsg_t::SOUND_TOUCH );
         }
     }
 
@@ -295,8 +244,6 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::Pairing_Start( uint32_t timeout )
 {
-    // TODO: eventually when we decide what the state machine is doing with this we'll define a
-    // product message to convey status that gets sent from the callback
     m_RCSClient->Pairing_Start( {}, timeout );
 }
 
@@ -327,8 +274,6 @@ void ProductBLERemoteManager::Pairing_Cancel( void )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::Unpairing_Start( void )
 {
-    // TODO: eventually when we decide what the state machine is doing with this we'll define a
-    // product message to convey status that gets sent from the callback
     m_RCSClient->Unpairing_Start( {} );
 }
 
