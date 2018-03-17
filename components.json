@@ -41,7 +41,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/0.3.4-120+3df747f"
+    "selected_version": "Release/master/0.3.5-124+fa8c675"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -65,7 +65,7 @@
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.2.1-31+d7e3d00"
+    "selected_version": "Release/master/0.2.2-37+0f43d0b"
   },
   {
     "name": "CastleLibs-native",
@@ -133,11 +133,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/2.4"
+    "selected_version": "Release/master/3.0"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/2.4"
+    "selected_version": "Release/master/3.0"
   },
   {
     "name": "RivieraLPM",
@@ -156,8 +156,12 @@
     "selected_version": "Release/master/0.3.2-39+0fb03f2"
   },
   {
+    "name": "SADI-qc8017_32",
+    "selected_version": "Release/master/1.1.1-23+496ef0d"
+  },
+  {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/IP3/0.3.1-209+faa7229"
+    "selected_version": "Release/IP3/0.3.2-218+f980516"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -165,7 +169,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/IP3/0.3.15-391+5afd1c8"
+    "selected_version": "Release/IP3/0.3.16-395+10cc929"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -185,6 +189,6 @@
   },
   {
     "name": "WiFi-Setup-Webpage",
-    "selected_version": "master@19f561f91af118db5439955e4d85bc0a914964eb"
+    "selected_version": "master@d788ac402061fcfcfe165c37b19ec9587bf3124f"
   }
 ]
