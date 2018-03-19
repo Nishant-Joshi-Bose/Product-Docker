@@ -1,8 +1,9 @@
 export BOSE_WORKSPACE := $(abspath $(CURDIR))
 include Settings.mk
 
-.PHONY: default
-default: package
+.PHONY: deploy
+deploy: all-packages
+	scripts/collect-deployables builds/Release builds/deploy
 
 .PHONY: force
 force:
@@ -36,7 +37,6 @@ RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_locat
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
 TESTUTILS_DIR = $(shell components get CastleTestUtils installed_location)
 
-
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
 	$(MAKE) -C ProductController $@
@@ -61,10 +61,9 @@ product-ipk: cmake_build
 	./scripts/create-product-ipk
 
 # The default build will always be signed using development keys
-privateKeyFilePath="$(BOSE_WORKSPACE)/keys/development/privateKey/dev.p12"
-privateKeyPasswordPath="$(BOSE_WORKSPACE)/keys/development/privateKey/dev_p12.pass"
+privateKeyFilePath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev.p12
+privateKeyPasswordPath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev_p12.pass
 
-#Create Zip file for Local update - no hsp
 IPKS = monaco.ipk product.ipk lpm_updater.ipk
 PACKAGENAMES = monaco SoundTouch lpm_updater
 
@@ -72,9 +71,9 @@ PACKAGENAMES = monaco SoundTouch lpm_updater
 package-no-hsp: packages-gz
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_no_hsp.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
-#Create one more Zip file for Bonjour / Local update with HSP
 IPKS_HSP = hsp.ipk monaco.ipk product.ipk lpm_updater.ipk
 PACKAGENAMES_HSP = hsp monaco SoundTouch lpm_updater
+
 .PHONY: package-with-hsp
 package-with-hsp: packages-gz-with-hsp
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
@@ -98,10 +97,9 @@ hsp-ipk: cmake_build
 
 .PHONY: lpm-bos
 lpm-bos:
-ifneq ($(filter $(BUILD_TYPE), Release Continuous Nightly),)
 	$(info BUILD_TYPE=$(BUILD_TYPE))
-else
-	$(error BUILD_TYPE must equal Release, Nightly or Continuous. Found $(BUILD_TYPE))
+ifeq ($(filter $(BUILD_TYPE), Release Continuous Nightly),)
+	$(error BUILD_TYPE must equal Release, Nightly or Continuous)
 endif
 	rm -f ./builds/$(cfg)/eddie_package*.bos
 	rm -f ./builds/$(cfg)/lpm_eddie*.hex
@@ -115,20 +113,13 @@ lpmupdater-ipk: lpm-bos
 monaco-ipk:
 	./scripts/create-monaco-ipk
 
-.PHONY: package
-package:  package-no-hsp package-with-hsp graph
-
 .PHONY: all-packages
-all-packages: package
+all-packages: package-no-hsp package-with-hsp graph
 	./scripts/create-product-tar
-
-.PHONY: deploy
-deploy: all-packages
-	scripts/collect-deployables builds/Release builds/deploy
 
 .PHONY: clean
 clean:
-	rm -rf $(BOSE_WORKSPACE)/builds/$(cfg)/* builds/CastleTestUtils builds/__init__.py
+	rm -rf $(BOSE_WORKSPACE)/builds/$(cfg) builds/CastleTestUtils builds/__init__.py
 	find . -name \*.pyc -delete
 
 .PHONY: distclean

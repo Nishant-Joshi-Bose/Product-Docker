@@ -141,7 +141,6 @@ To setup the usual environment:
 
 ```shell session
 $ adb shell
-/ # . ~/.profile
 Sat Sep  2 12:10:12 UTC 2017
 Device name: "Bose SoundTouch C7E3A2"
 mc1014468@hepdsw64.bose.com 2017-08-31T08:40:21 master 0.0.1-1+3e07c68

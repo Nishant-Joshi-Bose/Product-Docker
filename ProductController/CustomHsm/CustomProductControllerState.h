@@ -19,6 +19,7 @@
 #include "ProductMessage.pb.h"
 #include "SystemEventMessage.pb.h"
 #include "InactivityTimers.h"
+#include "ChimeEvents.h"
 
 namespace ProductApp
 {
@@ -248,6 +249,11 @@ public:
     }
 
     virtual bool HandleUiConnectedUpdateState( bool uiconnected )
+    {
+        return false;
+    }
+
+    virtual bool HandlePlayChimeRequest( ProductApp::ChimeEvents_t chimeEvent )
     {
         return false;
     }

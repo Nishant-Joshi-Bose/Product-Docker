@@ -289,7 +289,10 @@ void DisplayController::MonitorLightSensor()
             }// if it's te first heart beat receive from the UI
 
             m_localHeartBeat++;
-
+            // TODO - The cadence of ui heart beat and this display thread don't match.
+            // this is leading to lot of unwanted error and warning messages.
+            // So, this code has been temporarily disabled.
+#if 0
             if( abs( m_localHeartBeat - m_uiHeartBeat ) > 2 )
             {
                 BOSE_LOG( ERROR, "Error: the UI stop" );
@@ -297,6 +300,7 @@ void DisplayController::MonitorLightSensor()
                 m_localHeartBeat = m_uiHeartBeat = ULLONG_MAX;
                 updateUiConnected( false );
             }// If the UI stop updating the heart beat
+#endif
 
         }// If the UI had started
 
@@ -409,16 +413,39 @@ void DisplayController::RegisterDisplayEndPoints()
     m_frontdoorClientPtr->RegisterGet( "/ui/Display", getDisplayReqCb );
 
     // ==========================
-    // HandleUIAlive
+    // HandlePostUIHeartBeat
     // ==========================
-    AsyncCallback<Display, Callback<Display>, Callback<EndPointsError::Error>> uiAliveReqCb(
-                                                                                std::bind( &DisplayController::HandlePutUIAlive,
-                                                                                        this,
-                                                                                        std::placeholders::_1,
-                                                                                        std::placeholders::_2
-                                                                                         ),
-                                                                                m_productController.GetTask() );
-    m_frontdoorClientPtr->RegisterPut<Display>( "/ui/alive", uiAliveReqCb );
+    AsyncCallback<UiHeartBeat, Callback<UiHeartBeat>, Callback<EndPointsError::Error>> uiAlivePostCb(
+            std::bind( &DisplayController::HandlePostUiHeartBeat,
+                       this,
+                       std::placeholders::_1,
+                       std::placeholders::_2
+                     ),
+            m_productController.GetTask() );
+    m_frontdoorClientPtr->RegisterPost<UiHeartBeat>( "/ui/alive", uiAlivePostCb );
+
+    // ==========================
+    // HandlePutUIHeartBeat
+    // ==========================
+    AsyncCallback<UiHeartBeat, Callback<UiHeartBeat>, Callback<EndPointsError::Error>> uiAlivePutCb(
+            std::bind( &DisplayController::HandlePutUiHeartBeat,
+                       this,
+                       std::placeholders::_1,
+                       std::placeholders::_2
+                     ),
+            m_productController.GetTask() );
+    m_frontdoorClientPtr->RegisterPut<UiHeartBeat>( "/ui/alive", uiAlivePutCb );
+
+    // ==========================
+    // HandleGetUIHeartBeat
+    // ==========================
+    AsyncCallback< Callback<UiHeartBeat>, Callback<EndPointsError::Error> > uiAliveGetCb(
+        std::bind( &DisplayController::HandleGetUiHeartBeat,
+                   this,
+                   std::placeholders::_1
+                 ),
+        m_productController.GetTask() );
+    m_frontdoorClientPtr->RegisterGet( "/ui/alive", uiAliveGetCb );
 
 
 }// RegisterDisplayEndPoints
@@ -437,24 +464,50 @@ void  DisplayController::HandleGetDisplayRequest( const Callback<Display>& resp 
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
-void DisplayController::HandlePutUIAlive( const Display &req,
-                                          const Callback<Display>& resp )
+void DisplayController::HandlePostUiHeartBeat( const UiHeartBeat &req,
+                                               Callback<UiHeartBeat> resp )
 {
-    BOSE_LOG( VERBOSE, "received heartbeat: " << req.uiheartbeat() << ", current heat beat: " << m_uiHeartBeat );
-
-    if( abs( m_uiHeartBeat - req.uiheartbeat() ) >= 2 )
-    {
-        BOSE_LOG( WARNING, "UI is skipping heart beat, received heartbeat: " << req.uiheartbeat() + ", current heat beat: " << m_uiHeartBeat );
-    }
-
-    m_uiHeartBeat = req.uiheartbeat();
+    BOSE_LOG( INFO, "received first heartbeat: " << req.count() );
+    m_uiHeartBeat = req.count();
     if( !m_uiConnected )
     {
         updateUiConnected( true );
     }
-    resp.Send( GetDisplay() );
+    UiHeartBeat response;
+    response.set_count( m_uiHeartBeat );
+    resp.Send( response );
+}
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+void DisplayController::HandlePutUiHeartBeat( const UiHeartBeat &req,
+                                              Callback<UiHeartBeat> resp )
+{
+    BOSE_LOG( VERBOSE, "received heartbeat: " << req.count() << ", current heat beat: " << m_uiHeartBeat );
 
-}// HandlePutUIAlive
+    if( abs( m_uiHeartBeat - req.count() ) >= 2 )
+    {
+        BOSE_LOG( WARNING, "UI is skipping heart beat, received heartbeat: " << req.count() + ", current heat beat: " << m_uiHeartBeat );
+    }
+
+    m_uiHeartBeat = req.count();
+    if( !m_uiConnected )
+    {
+        updateUiConnected( true );
+    }
+    UiHeartBeat response;
+    response.set_count( m_uiHeartBeat );
+    resp.Send( response );
+}
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+void DisplayController::HandleGetUiHeartBeat( Callback<UiHeartBeat> resp )
+{
+    BOSE_LOG( VERBOSE, "received Get heartbeat: " << m_uiHeartBeat );
+    UiHeartBeat response;
+    response.set_count( m_uiHeartBeat );
+    resp.Send( response );
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
