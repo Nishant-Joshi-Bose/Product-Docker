@@ -31,6 +31,7 @@ enum CustomProductControllerStates
     /// state changes in the common code that need to transition to a derived custom state will do so
     /// correctly.
     ///
+    CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_EXIT         = PRODUCT_CONTROLLER_STATE_LOW_POWER_EXIT,
     CUSTOM_PRODUCT_CONTROLLER_STATE_ON                     = PRODUCT_CONTROLLER_STATE_ON,
     CUSTOM_PRODUCT_CONTROLLER_STATE_IDLE                   = PRODUCT_CONTROLLER_STATE_IDLE,
     CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYABLE               = PRODUCT_CONTROLLER_STATE_PLAYABLE,

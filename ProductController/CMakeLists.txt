@@ -58,6 +58,7 @@ ADD_EXECUTABLE(Professor
   source/CustomStateMachine/CustomProductControllerStateIdle.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateOn.cpp
+  source/CustomStateMachine/CustomProductControllerStateLowPowerExit.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayable.cpp
   source/CustomStateMachine/CustomProductControllerStatePlaying.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayingDeselectedAccessoryPairing.cpp

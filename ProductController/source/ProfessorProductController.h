@@ -194,6 +194,7 @@ public:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     bool     IsBooted( )                 const override;
+    bool     IsLowPowerExited()          const override;
     bool     IsNetworkConfigured( )      const override;
     bool     IsNetworkConnected( )       const override;
     uint32_t GetWifiProfileCount( )      const override;

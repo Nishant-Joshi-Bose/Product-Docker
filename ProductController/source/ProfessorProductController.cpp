@@ -87,6 +87,7 @@
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateStoppingStreams.h"
 #include "ProductControllerStateTop.h"
+#include "CustomProductControllerStateLowPowerExit.h"
 #include "CustomProductControllerStateAdaptIQExiting.h"
 #include "CustomProductControllerStateAdaptIQ.h"
 #include "CustomProductControllerStateIdle.h"
@@ -245,6 +246,11 @@ void ProfessorProductController::Run( )
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY );
+
+    auto* stateLowPowerExit = new CustomProductControllerStateLowPowerExit
+    ( GetHsm( ),
+      stateTop,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_EXIT );
 
     ///
     /// Playable Transition State and Sub-States
@@ -457,6 +463,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( "", stateFirstBootGreetingTransition );
     GetHsm( ).AddState( "", stateLowPowerStandbyTransition );
     GetHsm( ).AddState( "", stateLowPowerStandby );
+    GetHsm( ).AddState( "", stateLowPowerExit );
     GetHsm( ).AddState( "", statePlayableTransition );
     GetHsm( ).AddState( "", statePlayableTransitionInternal );
     GetHsm( ).AddState( "", statePlayableTransitionIdle );
@@ -735,6 +742,36 @@ bool ProfessorProductController::IsBooted( ) const
             IsSassReady()           and
             m_isSoftwareUpdateReady and
             IsBluetoothModuleReady( ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::IsLowPowerExited
+///
+/// @return This method returns a true or false value, based on a series of set member variables,
+///         which all must be true to indicate that the device has exited low power.
+///         NOTE: Unlike booting we do not wait for BT
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProfessorProductController::IsLowPowerExited( ) const
+{
+    BOSE_VERBOSE( s_logger, "------------ Product Controller Booted Check ---------------" );
+    BOSE_VERBOSE( s_logger, " " );
+    BOSE_VERBOSE( s_logger, "LPM Connected         :  %s", ( m_IsLpmReady       ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "CAPS Initialized      :  %s", ( m_IsCapsReady      ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "STS Initialized       :  %s", ( m_IsSTSReady       ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Software Update Init  :  %s", ( m_isSoftwareUpdateReady   ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "SASS            Init  :  %s", ( IsSassReady()      ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Bluetooth Initialized :  %s", ( IsBluetoothModuleReady( ) ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, " " );
+
+    return( m_IsLpmReady            and
+            m_IsCapsReady           and
+            m_IsAudioPathReady      and
+            m_IsSTSReady            and
+            IsSassReady()           and
+            m_isSoftwareUpdateReady );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
