@@ -336,7 +336,7 @@ def create_bose_persist_partition(is_without_lpm, development):
         extract_dir = os.path.join(stage_package_dir, "bose-persist")
         if not is_without_lpm:
             ''' lpm needs to be installed - create updateSwUpComponentStatus.dat '''
-            jsonStr = ' {"SwUpComponents":{"elements":[{"name":"lpm_updater","fileName":"lpm_updater.ipk","filePath":"/opt/Bose","status":"STATUS_START","retryCount":3,"backupIpkPath":""}]}} '
+            jsonStr = ' {"SwUpComponents":{"elements":[{"name":"lpm_updater","fileName":"lpm_updater.ipk","filePath":"/opt/Bose","status":"STATUS_START","retryCount":3,"backupIpkPath":"","isLocalUpdate":true}]}} '
             with open(os.path.join(extract_dir, 'updateSwUpComponentStatus.dat'), 'w') as outfile:  
                 outfile.write(jsonStr)
 
