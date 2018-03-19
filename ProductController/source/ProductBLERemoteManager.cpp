@@ -203,7 +203,7 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
             {
                 m_RCSClient->Led_Set( LedsSourceTypeMsg_t::TV );
             }
-            else if( source->details().devicetype().compare( "DEVICE_TYPE_STREAMING" ) )
+            else if( not source->details().devicetype().compare( "DEVICE_TYPE_STREAMING" ) )
             {
                 // TODO WHAT SHOULD THIS BE? (WHAT IS "DEVICE_TYPE_STREAMING")?
                 m_RCSClient->Led_Set( LedsSourceTypeMsg_t::SET_TOP_BOX );
