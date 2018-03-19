@@ -6,6 +6,7 @@ import "AudioBassLevel.proto";
 import "AudioTrebleLevel.proto";
 import "AudioCenterLevel.proto";
 import "AudioSurroundLevel.proto";
+import "AudioSurroundDelay.proto";
 import "AudioGainOffset.proto";
 import "AudioAvSync.proto";
 import "AudioSubwooferGain.proto";

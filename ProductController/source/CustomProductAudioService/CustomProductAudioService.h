@@ -43,6 +43,7 @@ private:
     std::unique_ptr<AudioSetting<ProductPb::AudioTrebleLevel>>      m_AudioTrebleSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioCenterLevel>>      m_AudioCenterSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioSurroundLevel>>    m_AudioSurroundSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioSurroundDelay>>    m_AudioSurroundDelaySetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioGainOffset>>       m_AudioGainOffsetSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioAvSync>>           m_AudioAvSyncsetSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioSubwooferGain>>    m_AudioSubwooferGainSetting;

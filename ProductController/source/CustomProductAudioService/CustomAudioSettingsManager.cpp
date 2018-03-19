@@ -106,6 +106,23 @@ const ProductPb::AudioSurroundLevel& CustomAudioSettingsManager::GetSurround() c
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
+/// SurroundDelay setting setter/getter
+///     setter returns a boolean which indicates whether current surroundDelay value is changed by setter
+///     getter returns a protobuf of current surroundDelay value
+///////////////////////////////////////////////////////////////////////////////////////
+bool CustomAudioSettingsManager::SetSurroundDelay( const ProductPb::AudioSurroundDelay& surroundDelay )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    return SetAudioProperties( surroundDelay, kSurroundDelayName, m_currentSurroundDelay );
+}
+
+const ProductPb::AudioSurroundDelay& CustomAudioSettingsManager::GetSurroundDelay() const
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    return m_currentSurroundDelay;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
 /// GainOffset setting setter/getter
 ///     setter returns a boolean which indicates whether current gainOffset value is changed by setter
 ///     getter returns a protobuf of current gainOffset value
@@ -254,6 +271,7 @@ void CustomAudioSettingsManager::UpdateAllProtos()
     UpdateCurrentProto( kTrebleName,        m_currentTreble );
     UpdateCurrentProto( kCenterName,        m_currentCenter );
     UpdateCurrentProto( kSurroundName,      m_currentSurround );
+    UpdateCurrentProto( kSurroundDelayName, m_currentSurroundDelay );
     UpdateCurrentProto( kGainOffsetName,    m_currentGainOffset );
     UpdateCurrentProto( kAvSyncName,        m_currentAvSync );
     UpdateCurrentProto( kSubwooferGainName, m_currentSubwooferGain );
@@ -322,6 +340,7 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
     initializeProto( kTrebleName, m_currentTreble );
     initializeProto( kCenterName, m_currentCenter );
     initializeProto( kSurroundName, m_currentSurround );
+    initializeProto( kSurroundDelayName, m_currentSurroundDelay );
     initializeProto( kGainOffsetName, m_currentGainOffset );
     initializeProto( kSubwooferGainName, m_currentSubwooferGain );
     initializeProto( kAvSyncName, m_currentAvSync );

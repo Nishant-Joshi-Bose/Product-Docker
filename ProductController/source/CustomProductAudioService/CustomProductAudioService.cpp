@@ -20,6 +20,7 @@ constexpr char kBassEndPoint            [] = "/audio/bass";
 constexpr char kTrebleEndPoint          [] = "/audio/treble";
 constexpr char kCenterEndPoint          [] = "/audio/center";
 constexpr char kSurroundEndPoint        [] = "/audio/surround";
+constexpr char kSurroundDelayEndPoint   [] = "/audio/surroundDelay";
 constexpr char kGainOffsetEndPoint      [] = "/audio/gainOffset";
 constexpr char kAvSyncEndPoint          [] = "/audio/avSync";
 constexpr char kSubwooferGainEndPoint   [] = "/audio/subWooferGain";
@@ -354,7 +355,7 @@ LpmServiceMessages::AudioSettingsDeltaEqSelect_t CustomProductAudioService::EqSe
 /// @name   CustomProductAudioService::RegisterFrontDoorEvents
 ///
 /// @brief  On Professor, it register for put/post/get FrontDoor request for
-///         bass, treble, center, surround, gainOffset, avSync, subwooferGain, mode, contentType
+///         bass, treble, center, surround, surroundDelay, gainOffset, avSync, subwooferGain, mode, contentType
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::RegisterFrontDoorEvents()
@@ -456,6 +457,30 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                setSurroundAction,
                                m_FrontDoorClientIF,
                                m_ProductTask ) );
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// Endpoint /audio/surroundDelay - register ProductController as handler for POST/PUT/GET requests
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    auto getSurroundDelayAction = [ this ]( )
+    {
+        return m_AudioSettingsMgr->GetSurroundDelay( );
+    };
+    auto setSurroundDelayAction = [ this ]( ProductPb::AudioSurroundLevel val )
+    {
+        bool ret = m_AudioSettingsMgr->SetSurroundDelay( val );
+        if( ret )
+        {
+            m_MainStreamAudioSettings.set_surrounddelay( m_AudioSettingsMgr->GetSurroundDelay( ).value() );
+            SendMainStreamAudioSettingsEvent();
+        }
+        return ret;
+    };
+    m_AudioSurroundDelaySetting = std::unique_ptr<AudioSetting<ProductPb::AudioSurroundDelay>>( new AudioSetting<ProductPb::AudioSurroundDelay>
+                                  ( kSurroundDelayEndPoint,
+                                    getSurroundDelayAction,
+                                    setSurroundDelayAction,
+                                    m_FrontDoorClientIF,
+                                    m_ProductTask ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/gainOffset - register ProductController as handler for POST/PUT/GET requests

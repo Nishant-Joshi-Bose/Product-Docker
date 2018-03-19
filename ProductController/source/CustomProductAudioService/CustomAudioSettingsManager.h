@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomAudioSettingsManager.h
 /// @brief  This file contains source code for setting and getting AudioSettings
-///         such as bass, treble, center, surround, gainOffset, avSync, subwooferGain, mode, contentType, dualMonoSelect
+///         such as bass, treble, center, surround, surroundDelay, gainOffset, avSync, subwooferGain, mode, contentType, dualMonoSelect
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////
 #pragma once
@@ -26,6 +26,8 @@ public:
     const ProductPb::AudioCenterLevel& GetCenter() const;
     bool SetSurround( const ProductPb::AudioSurroundLevel& surround );
     const ProductPb::AudioSurroundLevel& GetSurround() const;
+    bool SetSurroundDelay( const ProductPb::AudioSurroundDelay& surroundDelay );
+    const ProductPb::AudioSurroundDelay& GetSurroundDelay() const;
     bool SetGainOffset( const ProductPb::AudioGainOffset& gainOffset );
     const ProductPb::AudioGainOffset& GetGainOffset() const;
     bool SetAvSync( const ProductPb::AudioAvSync& avSync );
@@ -49,6 +51,7 @@ private:
     ProductPb::AudioTrebleLevel m_currentTreble;
     ProductPb::AudioCenterLevel m_currentCenter;
     ProductPb::AudioSurroundLevel m_currentSurround;
+    ProductPb::AudioSurroundDelay m_currentSurroundDelay;
     ProductPb::AudioGainOffset m_currentGainOffset;
     ProductPb::AudioAvSync m_currentAvSync;
     ProductPb::AudioSubwooferGain m_currentSubwooferGain;
