@@ -113,22 +113,22 @@ bool ProductCecHelper::Run( )
     m_FrontDoorClient->RegisterNotification< SoundTouchInterface::volume >
     ( FRONTDOOR_AUDIO_VOLUME, fNotify );
 
-    auto getFunc = [ this ]( const Callback<const CecModeResponse>& resp, const Callback<EndPointsError::Error>& errorRsp )
+    auto getFunc = [ this ]( const Callback<const CecModeResponse>& resp, const Callback<FrontDoor::Error>& errorRsp )
     {
         CecModeResponse cecResp;
         CecModeHandleGet( cecResp );
         resp.Send( cecResp );
     };
-    AsyncCallback<Callback<CecModeResponse>, Callback<EndPointsError::Error> > getCb( getFunc, m_ProductTask );
+    AsyncCallback<Callback<CecModeResponse>, Callback<FrontDoor::Error> > getCb( getFunc, m_ProductTask );
     m_GetConnection = m_FrontDoorClient->RegisterGet( s_FrontDoorCecMode, getCb );
 
-    auto putFunc = [ this ]( const CecUpdateRequest cecReq, const Callback<const CecModeResponse>& cecResp, const Callback<EndPointsError::Error>& errorRsp )
+    auto putFunc = [ this ]( const CecUpdateRequest cecReq, const Callback<const CecModeResponse>& cecResp, const Callback<FrontDoor::Error>& errorRsp )
     {
         CecModeResponse respMsg;
         CecModeHandlePut( cecReq, respMsg );
         cecResp.Send( respMsg );
     };
-    AsyncCallback<const CecUpdateRequest, Callback<CecModeResponse>, Callback<EndPointsError::Error>> putCb( putFunc, m_ProductTask );
+    AsyncCallback<const CecUpdateRequest, Callback<CecModeResponse>, Callback<FrontDoor::Error>> putCb( putFunc, m_ProductTask );
     m_PutConnection = m_FrontDoorClient->RegisterPut<CecUpdateRequest>( s_FrontDoorCecMode, putCb );
 
     return true;
@@ -330,7 +330,7 @@ void ProductCecHelper::HandlePlaybackRequestResponse( const SoundTouchInterface:
 /// @name   ProductCecHelper::HandlePlaybackRequestError
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductCecHelper::HandlePlaybackRequestError( const EndPointsError::Error& error )
+void ProductCecHelper::HandlePlaybackRequestError( const FrontDoor::Error& error )
 {
     BOSE_WARNING( s_logger, "%s: Error = (%d-%d) %s", __func__, error.code(), error.subcode(), error.message().c_str() );
 }

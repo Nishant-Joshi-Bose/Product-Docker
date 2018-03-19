@@ -148,7 +148,7 @@ void ProductNetworkManager::RegisterForNetworkStatus( )
         HandleNetworkStatus( status );
     };
 
-    auto callbackForNetworkStatusFailure = [ this ]( const EndPointsError::Error & error )
+    auto callbackForNetworkStatusFailure = [ this ]( const FrontDoor::Error & error )
     {
         BOSE_ERROR( s_logger, "An error code %d %d <%s> was returned from a network status request.",
                     error.code( ),
@@ -160,7 +160,7 @@ void ProductNetworkManager::RegisterForNetworkStatus( )
         FRONTDOOR_NETWORK_STATUS,
         callbackForNetworkStatusSuccess );
 
-    m_FrontDoorClient->SendGet< NetManager::Protobuf::NetworkStatus, EndPointsError::Error >(
+    m_FrontDoorClient->SendGet< NetManager::Protobuf::NetworkStatus, FrontDoor::Error >(
         FRONTDOOR_NETWORK_STATUS,
         callbackForNetworkStatusSuccess,
         callbackForNetworkStatusFailure );
@@ -184,7 +184,7 @@ void ProductNetworkManager::RegisterForWiFiStatus( )
         HandleWiFiStatus( status );
     };
 
-    auto callbackForWiFiStatusFailure = [ this ]( const EndPointsError::Error & error )
+    auto callbackForWiFiStatusFailure = [ this ]( const FrontDoor::Error & error )
     {
         BOSE_ERROR( s_logger, "An error code %d %d <%s> was returned from a WiFi status request.",
                     error.code( ),
@@ -196,7 +196,7 @@ void ProductNetworkManager::RegisterForWiFiStatus( )
         FRONTDOOR_NETWORK_WIFI_STATUS,
         callbackForWiFiStatusSuccess );
 
-    m_FrontDoorClient->SendGet< NetManager::Protobuf::WiFiStatus, EndPointsError::Error >(
+    m_FrontDoorClient->SendGet< NetManager::Protobuf::WiFiStatus, FrontDoor::Error >(
         FRONTDOOR_NETWORK_WIFI_STATUS,
         callbackForWiFiStatusSuccess,
         callbackForWiFiStatusFailure );
@@ -220,7 +220,7 @@ void ProductNetworkManager::RegisterForWiFiProfiles( )
         HandleWiFiProfiles( profiles );
     };
 
-    auto callbackForWiFiProfilesFailure = [ this ]( const EndPointsError::Error & error )
+    auto callbackForWiFiProfilesFailure = [ this ]( const FrontDoor::Error & error )
     {
         BOSE_ERROR( s_logger, "An error code %d %d <%s> was returned from a WiFi profiles request.",
                     error.code( ),
@@ -232,7 +232,7 @@ void ProductNetworkManager::RegisterForWiFiProfiles( )
         FRONTDOOR_NETWORK_WIFI_PROFILE,
         callbackForWiFiProfilesSuccess );
 
-    m_FrontDoorClient->SendGet< NetManager::Protobuf::WiFiProfiles, EndPointsError::Error >(
+    m_FrontDoorClient->SendGet< NetManager::Protobuf::WiFiProfiles, FrontDoor::Error >(
         FRONTDOOR_NETWORK_WIFI_PROFILE,
         callbackForWiFiProfilesSuccess,
         callbackForWiFiProfilesFailure );
@@ -489,7 +489,7 @@ void ProductNetworkManager::PerformRequestforWiFiProfiles()
         HandleWiFiProfiles( profiles );
     };
 
-    auto callbackForWiFiProfilesFailure = [ this ]( const EndPointsError::Error & error )
+    auto callbackForWiFiProfilesFailure = [ this ]( const FrontDoor::Error & error )
     {
         BOSE_ERROR( s_logger, "An error code %d %d <%s> was returned from a WiFi profiles request.",
                     error.code( ),
@@ -497,7 +497,7 @@ void ProductNetworkManager::PerformRequestforWiFiProfiles()
                     error.message( ).c_str( ) );
     };
 
-    m_FrontDoorClient->SendGet< NetManager::Protobuf::WiFiProfiles, EndPointsError::Error >(
+    m_FrontDoorClient->SendGet< NetManager::Protobuf::WiFiProfiles, FrontDoor::Error >(
         FRONTDOOR_NETWORK_WIFI_PROFILE,
         callbackForWiFiProfilesSuccess,
         callbackForWiFiProfilesFailure );
