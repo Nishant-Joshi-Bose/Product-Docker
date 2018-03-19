@@ -371,7 +371,6 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     auto setBassAction = [this]( ProductPb::AudioBassLevel val )
     {
         ErrorCode_t error = m_AudioSettingsMgr->SetBass( val );
-        printf( "SetBass errorCode - %d\n", error );
 
         if( error == ErrorCode_t::NO_ERROR )
         {
@@ -397,7 +396,6 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     auto setTrebleAction = [ this ]( ProductPb::AudioTrebleLevel val )
     {
         ErrorCode_t error = m_AudioSettingsMgr->SetTreble( val );
-        printf( "SetTreble errorCode - %d\n", error );
 
         if( error == ErrorCode_t::NO_ERROR )
         {
@@ -423,7 +421,6 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     auto setCenterAction = [ this ]( ProductPb::AudioCenterLevel val )
     {
         ErrorCode_t error = m_AudioSettingsMgr->SetCenter( val );
-        printf( "SetCenter errorCode - %d\n", error );
 
         if( error == ErrorCode_t::NO_ERROR )
         {
@@ -449,7 +446,6 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     auto setSurroundAction = [ this ]( ProductPb::AudioSurroundLevel val )
     {
         ErrorCode_t error = m_AudioSettingsMgr->SetSurround( val );
-        printf( "SetSurround errorCode - %d\n", error );
 
         if( error == ErrorCode_t::NO_ERROR )
         {
@@ -475,7 +471,6 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     auto setGainOffsetAction = [ this ]( ProductPb::AudioGainOffset val )
     {
         ErrorCode_t error = m_AudioSettingsMgr->SetGainOffset( val );
-        printf( "SetGainOffset errorCode - %d\n", error );
 
         if( error == ErrorCode_t::NO_ERROR )
         {
@@ -501,7 +496,6 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     auto setAvSyncAction = [ this ]( ProductPb::AudioAvSync val )
     {
         ErrorCode_t error = m_AudioSettingsMgr->SetAvSync( val );
-        printf( "SetAvSync errorCode - %d\n", error );
 
         if( error == ErrorCode_t::NO_ERROR )
         {
@@ -527,7 +521,6 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     auto setSubwooferGainAction = [ this ]( ProductPb::AudioSubwooferGain val )
     {
         ErrorCode_t error = m_AudioSettingsMgr->SetSubwooferGain( val );
-        printf( "SetSubwooferGain errorCode - %d\n", error );
 
         if( error == ErrorCode_t::NO_ERROR )
         {
@@ -553,7 +546,6 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     auto setModeAction = [ this ]( ProductPb::AudioMode val )
     {
         ErrorCode_t error = m_AudioSettingsMgr->SetMode( val );
-        printf( "SetMode errorCode - %d\n", error );
 
         if( error == ErrorCode_t::NO_ERROR )
         {
@@ -579,7 +571,6 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     auto setContentTypeAction = [ this ]( ProductPb::AudioContentType val )
     {
         ErrorCode_t error = m_AudioSettingsMgr->SetContentType( val );
-        printf( "SetContentType errorCode - %d\n", error );
 
         if( error == ErrorCode_t::NO_ERROR )
         {
@@ -605,7 +596,6 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     auto setDualMonoSelectAction = [ this ]( ProductPb::AudioDualMonoSelect val )
     {
         ErrorCode_t error = m_AudioSettingsMgr->SetDualMonoSelect( val );
-        printf( "SetDualMonoSelect errorCode - %d\n", error );
 
         if( error == ErrorCode_t::NO_ERROR )
         {
@@ -631,7 +621,6 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     auto setEqSelectAction = [ this ]( ProductPb::AudioEqSelect val )
     {
         ErrorCode_t error = m_AudioSettingsMgr->SetEqSelect( val );
-        printf( "SetEqSelect errorCode - %d\n", error );
 
         if( error == ErrorCode_t::NO_ERROR )
         {
