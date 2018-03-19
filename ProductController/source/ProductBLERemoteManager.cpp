@@ -27,7 +27,7 @@
 #include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProductBLERemoteManager.h"
-#include "EndPointsError.pb.h"
+#include "SharedProto.pb.h"
 #include "ProtoToMarkup.h"
 #include "ProductSourceInfo.h"
 
@@ -90,7 +90,7 @@ void ProductBLERemoteManager::InitializeFrontDoor( )
         UpdateNowSelection( nowSelection );
     };
 
-    auto handleNowSelectionFail = [ this ]( const EndPointsError::Error & error )
+    auto handleNowSelectionFail = [ this ]( const FrontDoor::Error & error )
     {
         BOSE_ERROR( s_logger, "Error %d %d <%s> while retrieving nowSelection",
                     error.code( ), error.subcode( ), error.message( ).c_str( ) );
@@ -105,7 +105,7 @@ void ProductBLERemoteManager::InitializeFrontDoor( )
         }
 
         BOSE_INFO( s_logger, "Registering for %s",  s_FrontDoorNowSelection.c_str() );
-        m_FrontDoorClient->SendGet<SoundTouchInterface::NowSelectionInfo, EndPointsError::Error>( s_FrontDoorNowSelection, handleNowSelection, handleNowSelectionFail );
+        m_FrontDoorClient->SendGet<SoundTouchInterface::NowSelectionInfo, FrontDoor::Error>( s_FrontDoorNowSelection, handleNowSelection, handleNowSelectionFail );
         m_FrontDoorClient->RegisterNotification<SoundTouchInterface::NowSelectionInfo>( s_FrontDoorNowSelection, handleNowSelection );
     };
 
