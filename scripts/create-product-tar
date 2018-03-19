@@ -237,7 +237,8 @@ def install_ipk(ipks_dir, ipk_name, offline_dir):
         opkg_bin = os.path.join(boseopkg_dir, "opkg/opkg")
         opkg_conf = os.path.join(boseopkg_dir, "opkg/opkg.conf")
         os.environ['LD_LIBRARY_PATH'] = opkg_config_dir
-        opkg_cmd = (' fakeroot ' + opkg_bin 
+        #opkg_cmd = (' fakeroot ' + opkg_bin
+        opkg_cmd = (opkg_bin  
                     + ' -f ' + opkg_conf 
                     + ' --offline-root ' + offline_dir 
                     + ' --volatile-cache --add-arch armv7a-vfp-neon:100 install ' +  ipk_to_install)
@@ -306,8 +307,8 @@ def create_bose_partition(is_without_lpm, development, ipks_to_install):
                                       "Status: install user installed")
         ''' Change permission for opt/Bose/etc/secure '''
         cmd = 'fakeroot chmod -R 440 ' + os.path.join(extract_dir, "etc/secure")
+        logging.info("\t\tExecuting: [%s]" %(cmd))
         execute_cmd_on_host(cmd)
-        
         if retVal != 0:
             return retVal, retStr        
         ''' remove offline installation directory '''
@@ -452,7 +453,7 @@ def create_package(name, workspace, is_without_lpm, development):
     logging.info("Output Directory [%s]" %(output_dir))
 
     ''' cleanup unnecessary files and folders '''
-    #cleanup()
+    cleanup()
     
     return retVal, retStr
     
