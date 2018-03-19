@@ -168,8 +168,8 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
         return;
     }
 
-    auto ci = nowSelection.contentitem();
-    auto source = m_ProductController.GetSourceInfo()->FindSource( ci );
+    const auto& ci = nowSelection.contentitem();
+    const auto& source = m_ProductController.GetSourceInfo()->FindSource( ci );
 
     if( not source )
     {
@@ -184,7 +184,7 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
             // Check for TV explicitly for now, since I don't know if Mardid will set deviceType for the TV
             m_RCSClient->Led_Set( LedsSourceTypeMsg_t::TV );
         }
-        else if( ( source->sourceaccountname().compare( 0, 4, "SLOT" ) == 0 ) and source->has_details() and source->details().has_devicetype() )
+        else if( ( source->sourceaccountname().compare( 0, 4, "SLOT" ) == 0 ) and source->has_details() )
         {
             if( not source->details().devicetype().compare( "DEVICE_TYPE_GAME" ) )
             {

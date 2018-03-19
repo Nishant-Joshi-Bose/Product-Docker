@@ -163,7 +163,7 @@ void ProductSourceInfo::UpdateSources( const SoundTouchInterface::Sources& sourc
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BOptional<SoundTouchInterface::Sources::SourceItem> ProductSourceInfo::FindSource( const SoundTouchInterface::ContentItem& item )
 {
-    if( ( not item.has_source() ) )
+    if( not item.has_source() )
     {
         return {};
     }
