@@ -176,7 +176,6 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
         return;
     }
 
-    /// TODO the following rat's nest of code will need some more work, but the basic idea is right
     if( source->sourcename().compare( "PRODUCT" ) == 0 )
     {
         if( source->sourceaccountname().compare( "TV" ) == 0 )
@@ -205,8 +204,9 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
             }
             else if( not source->details().devicetype().compare( "DEVICE_TYPE_STREAMING" ) )
             {
-                // TODO WHAT SHOULD THIS BE? (WHAT IS "DEVICE_TYPE_STREAMING")?
-                m_RCSClient->Led_Set( LedsSourceTypeMsg_t::SET_TOP_BOX );
+                // per Brian White, GAME is probably the most sensible choice here
+                // I'm leaving this as an independent case from GAME above in case we change our minds
+                m_RCSClient->Led_Set( LedsSourceTypeMsg_t::GAME );
             }
             else
             {
