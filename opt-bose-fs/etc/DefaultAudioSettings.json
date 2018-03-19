@@ -1,7 +1,7 @@
 {
 	"version": {
         "major": 2,
-        "minor": 2
+        "minor": 1
 	},
     "supportedAudioSettings": {
         "contentItemSensitive": ["audioBassLevel", "audioTrebleLevel", "audioCenterLevel", "audioSurroundLevel", "audioGainOffset", "audioAvSync", "audioMode", "audioContentType"],
@@ -105,7 +105,7 @@
             "currentPersistenceLevel": "global",
             "persistenceSession": false,
             "properties": {
-                "supportedModes": ["EQ_OFF"]
+                "supportedModes": ["EQ_OFF", "EQ_AIQ_A", "EQ_AIQ_B", "EQ_RETAIL_A", "EQ_RETAIL_B", "EQ_RETAIL_C"]
             }
         }
 	},
