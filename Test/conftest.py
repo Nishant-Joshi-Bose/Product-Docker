@@ -87,14 +87,14 @@ def save_speaker_log(request, device_ip):
     request.addfinalizer(teardown)
 
 @pytest.fixture(scope='class')
-def device_ip(request):
+def device_ip(request, get_deviceid):
     """
     This fixture gets the device IP
     :return: device ip
     """
     logger.info("device_ip")
     if request.config.getoption("--target").lower() == 'device':
-        networkbaseObj = NetworkBase(None)
+        networkbaseObj = NetworkBase(None, get_deviceid)
         iface = request.config.getoption("--network-iface")
         device_ip = networkbaseObj.check_inf_presence(iface)
         return device_ip
@@ -278,3 +278,11 @@ def keyConfig():
     keyConfigData = None
     keyConfigData = keyConfig["keyTable"]
     return keyConfigData
+
+@pytest.fixture(scope='session')
+def get_deviceid(request):
+    """
+    This fixture will return the device-id
+    :return: device-id
+    """
+    return request.config.getoption("--device-id")

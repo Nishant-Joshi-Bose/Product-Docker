@@ -13,8 +13,8 @@ logger = get_logger(__name__, "DemoLog.log", level=logging.INFO, fileLoglevel=lo
 @pytest.mark.usefixtures("save_speaker_log")
 class TestDemo():
     """ Test Class for Demo State """
-    @pytest.mark.usefixtures("demoUtils", "device_ip", "request")
-    def test_demoOffAfterTimeout(self, demoUtils, device_ip, request):
+    @pytest.mark.usefixtures("demoUtils", "get_deviceid", "device_ip", "request")
+    def test_demoOffAfterTimeout(self, demoUtils, device_ip, request, get_deviceid):
         """
         This test verifies demoMode is False after timeout
         Test steps:
@@ -25,14 +25,14 @@ class TestDemo():
         5. Verify device reboots the second time and demoMode is set to False within the specified time
         """
         logger.info("Start test_demoOffAfterTimeout")
-        demoUtils.setDemoMode(True, True, 3, request.config.getoption("--network-iface"), request.config.getoption("--device-id"))
+        demoUtils.setDemoMode(True, get_deviceid, True, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoMode(True)
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
         demoUtils.verifySecondReboot(responseTimeout *2)
 
-    @pytest.mark.usefixtures("demoUtils", "device_ip", "request")
-    def test_demoOnAfterTimeout(self, demoUtils, device_ip, request):
+    @pytest.mark.usefixtures("demoUtils", "get_deviceid", "device_ip", "request")
+    def test_demoOnAfterTimeout(self, demoUtils, device_ip, request, get_deviceid):
         """
         This test verifies the demoMode stays on after timeout
         Test steps:
@@ -43,15 +43,15 @@ class TestDemo():
         5. Set demoMode True before timeout and verify demoMode stays True after timeout
         """
         logger.info("Start test_demo_on_after_timeout")
-        demoUtils.setDemoMode(True, True, 3, request.config.getoption("--network-iface"), request.config.getoption("--device-id"))
+        demoUtils.setDemoMode(True, get_deviceid, True, 3, request.config.getoption("--network-iface"))
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
         demoUtils.verifyDemoModeOn(responseTimeout-40)
-        demoUtils.setDemoMode(True, False, 3, request.config.getoption("--network-iface"), request.config.getoption("--device-id"))
+        demoUtils.setDemoMode(True, get_deviceid, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(60)
 
-    @pytest.mark.usefixtures("demoUtils", "device_ip", "request")
-    def test_demoOnFor30Min(self, demoUtils, device_ip, request):
+    @pytest.mark.usefixtures("demoUtils", "get_deviceid", "device_ip", "request")
+    def test_demoOnFor30Min(self, demoUtils, device_ip, request, get_deviceid):
         """
         This test verifies demoMode stays True for 30 minutes
         Test steps:
@@ -61,15 +61,15 @@ class TestDemo():
         4. Set demoMode True and verify demoMode stays True for 30 min
         """
         logger.info("Start test_demoOnFor30Min")
-        demoUtils.setDemoMode(True, True, 3, request.config.getoption("--network-iface"), request.config.getoption("--device-id"))
+        demoUtils.setDemoMode(True, get_deviceid, True, 3, request.config.getoption("--network-iface"))
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
         demoUtils.verifyDemoModeOn(responseTimeout-40)
-        demoUtils.setDemoMode(True, False, 3, request.config.getoption("--network-iface"), request.config.getoption("--device-id"))
+        demoUtils.setDemoMode(True, get_deviceid, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(responseTimeout*10)
 
-    @pytest.mark.usefixtures("request", "demoUtils", "device_ip")
-    def test_demoPlayPauseBehaviour(self, request, demoUtils, device_ip):
+    @pytest.mark.usefixtures("request", "get_deviceid", "demoUtils", "device_ip")
+    def test_demoPlayPauseBehaviour(self, request, demoUtils, device_ip, get_deviceid):
         """
         This test verifies PlayPauseBehaviour while demoMode is True
         Test steps:
@@ -81,17 +81,17 @@ class TestDemo():
         7. Verify demoMode is True
         """
         logger.info("Start test_demoOnStartStopPlayback")
-        demoUtils.setDemoMode(True, True, 3, request.config.getoption("--network-iface"), request.config.getoption("--device-id"))
+        demoUtils.setDemoMode(True, get_deviceid, True, 3, request.config.getoption("--network-iface"))
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, "Demo timeout reported Exception {} " + responseTimeout
         demoUtils.verifyDemoModeOn(responseTimeout-40)
-        demoUtils.setDemoMode(True, False, 3, request.config.getoption("--network-iface"), request.config.getoption("--device-id"))
+        demoUtils.setDemoMode(True, get_deviceid, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(10)
         demoUtils.verifyPlayPauseBehaviour()
         demoUtils.verifyDemoModeOn(10)
 
-    @pytest.mark.usefixtures("demoUtils", "device_ip", "request", "get_config")
-    def test_demoKeyConfig(self, demoUtils, device_ip, request, get_config):
+    @pytest.mark.usefixtures("demoUtils", "get_deviceid", "device_ip", "request", "get_config")
+    def test_demoKeyConfig(self, demoUtils, device_ip, request, get_config, get_deviceid):
         """
         This test add keyConfig. Set demoMode true and finally delete the keyConfig
         Test steps:
@@ -103,18 +103,18 @@ class TestDemo():
         """
         demoUtils.verifyDemoKeyConfig("Error Reading configuration file")
         demoUtils.setKeyConfig(json.dumps(get_config))
-        demoUtils.setDemoMode(True, True, 3, request.config.getoption("--network-iface"), request.config.getoption("--device-id"))
+        demoUtils.setDemoMode(True, get_deviceid, True, 3, request.config.getoption("--network-iface"))
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
         demoUtils.verifyDemoModeOn(responseTimeout-40)
-        demoUtils.setDemoMode(True, False, 3, request.config.getoption("--network-iface"), request.config.getoption("--device-id"))
+        demoUtils.setDemoMode(True, get_deviceid, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(10)
         demoUtils.verifyDemoKeyConfig()
         demoUtils.deleteKeyConfig()
         demoUtils.verifyDemoKeyConfig("Error Reading configuration file")
 
-    @pytest.mark.usefixtures("demoUtils", "device_ip", "request")
-    def test_demoKeyCntrNotWrk(self, demoUtils, device_ip, request):
+    @pytest.mark.usefixtures("demoUtils", "get_deviceid", "device_ip", "request")
+    def test_demoKeyCntrNotWrk(self, demoUtils, device_ip, request, get_deviceid):
         """
         This test verifies keyControl(volume) does not work when the keyConfig is not set
         Test steps:
@@ -125,18 +125,18 @@ class TestDemo():
         5. StopPlayback
         """
         demoUtils.verifyDemoKeyConfig("Error Reading configuration file")
-        demoUtils.setDemoMode(True, True, 3, request.config.getoption("--network-iface"), request.config.getoption("--device-id"))
+        demoUtils.setDemoMode(True, get_deviceid, True, 3, request.config.getoption("--network-iface"))
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
         demoUtils.verifyDemoModeOn(responseTimeout-40)
-        demoUtils.setDemoMode(True, False, 3, request.config.getoption("--network-iface"), request.config.getoption("--device-id"))
+        demoUtils.setDemoMode(True, get_deviceid, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(10)
         demoUtils.playandValidateMusic()
         demoUtils.verifyVolumeKeyControl(device_ip, False)
         demoUtils.stopPlayback()
 
-    @pytest.mark.usefixtures("demoUtils", "device_ip", "request", "get_config")
-    def test_demoKeyControlWork(self, demoUtils, device_ip, request, get_config):
+    @pytest.mark.usefixtures("demoUtils", "get_deviceid", "device_ip", "request", "get_config")
+    def test_demoKeyControlWork(self, demoUtils, device_ip, request, get_config, get_deviceid):
         """
         This test verifies with demo set to True. Demo keyControl(volume) works when keyConfig is present
         Test steps:
@@ -151,11 +151,11 @@ class TestDemo():
         demoUtils.verifyDemoKeyConfig("Error Reading configuration file")
         demoUtils.setKeyConfig(json.dumps(get_config))
         demoUtils.verifyDemoKeyConfig()
-        demoUtils.setDemoMode(True, True, 3, request.config.getoption("--network-iface"), request.config.getoption("--device-id"))
+        demoUtils.setDemoMode(True, get_deviceid, True, 3, request.config.getoption("--network-iface"))
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
         demoUtils.verifyDemoModeOn(responseTimeout-40)
-        demoUtils.setDemoMode(True, False, 3, request.config.getoption("--network-iface"), request.config.getoption("--device-id"))
+        demoUtils.setDemoMode(True, get_deviceid, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(10)
         demoUtils.verifyDemoKeyConfig()
         demoUtils.playandValidateMusic()
