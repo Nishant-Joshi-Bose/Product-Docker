@@ -80,7 +80,7 @@ public:
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool NotifyVolumeMute( uint32_t volume, bool muteState );
-    bool SendWiFiRadioStatus( uint32_t frequencyInKhz );
+    bool SendWiFiRadioStatus( IpcRadioStatus_t wifiRadioStatus );
     void SetBlueToothMacAddress( const std::string&       bluetoothMacAddress );
     void SetBlueToothDeviceName( const std::string&       bluetoothDeviceName );
     bool SendBlueToothDeviceData( const std::string&       bluetoothDeviceName,

@@ -101,6 +101,7 @@ message ProductMessage
         optional bool                       audiosilent         = 20;
         optional ProductCecMode             cecmode             = 21;
         optional ProductSystemEventServiceResponse systemeventserviceresponse = 22;
+        optional uint32                     chimetoplay         = 23;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

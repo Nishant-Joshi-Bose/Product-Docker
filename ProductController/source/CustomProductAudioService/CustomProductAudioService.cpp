@@ -277,11 +277,7 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 LpmServiceMessages::AudioSettingsAudioMode_t CustomProductAudioService::ModeNameToEnum( const std::string& modeName )
 {
-    if( modeName == "direct" )
-    {
-        return AUDIOSETTINGS_AUDIO_MODE_DIRECT;
-    }
-    else if( modeName == "normal" )
+    if( modeName == "normal" )
     {
         return AUDIOSETTINGS_AUDIO_MODE_NORMAL;
     }
@@ -289,11 +285,7 @@ LpmServiceMessages::AudioSettingsAudioMode_t CustomProductAudioService::ModeName
     {
         return AUDIOSETTINGS_AUDIO_MODE_DIALOG;
     }
-    else if( modeName == "night" )
-    {
-        return AUDIOSETTINGS_AUDIO_MODE_NIGHT;
-    }
-    return AUDIOSETTINGS_AUDIO_MODE_DIRECT;
+    return AUDIOSETTINGS_AUDIO_MODE_NORMAL;
 }
 
 LpmServiceMessages::AudioSettingsContent_t CustomProductAudioService::ContentTypeNameToEnum( const std::string& contentTypeName )

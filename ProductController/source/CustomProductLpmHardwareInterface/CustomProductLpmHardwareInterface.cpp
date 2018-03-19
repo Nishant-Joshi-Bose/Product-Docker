@@ -236,16 +236,15 @@ bool CustomProductLpmHardwareInterface::GetDspStatus( const Callback<IpcDspStatu
 ///
 /// @brief This method sends the wireless radio frequency to the LPM hardware.
 ///
-/// @param uint32_t frequency
+/// @param IpcRadioStatus_t wifiRadioStatus
 ///
 /// @return This method returns a false Boolean value if the LPM is not connected. Otherwise, it
 ///         attempts the request and returns true.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductLpmHardwareInterface::SendWiFiRadioStatus( uint32_t frequencyInKhz )
+bool CustomProductLpmHardwareInterface::SendWiFiRadioStatus( IpcRadioStatus_t wifiRadioStatus )
 {
-    BOSE_DEBUG( s_logger, "An attempt to send the wireless frequency %d KHz to the LPM is being made.",
-                frequencyInKhz );
+    BOSE_DEBUG( s_logger, "An attempt to send the wireless radio status will be made" );
 
     if( isConnected( ) == false || GetLpmClient( ) == nullptr )
     {
@@ -254,7 +253,7 @@ bool CustomProductLpmHardwareInterface::SendWiFiRadioStatus( uint32_t frequencyI
         return false;
     }
 
-    BOSE_DEBUG( s_logger, "Sending the wireless radio frequency to the LPM is currently not supported." );
+    GetLpmClient()->SendRadioStatus( wifiRadioStatus );
 
     return true;
 }

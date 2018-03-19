@@ -29,6 +29,10 @@ if [ "${PS1-}" ]; then # interactive shells
     ) 2>/dev/null
     awk '$1 == "HSP" {$1="Riviera-HSP"; print}' /etc/riviera-version
 
+    echo Secure boot: \
+        $(awk '$NF == "0" {print "disabled"}
+               $NF == "1" {print "enabled"}' /sys/kernel/hsp/qfprom_secboot)
+
     validate-mfgdata
 fi
 

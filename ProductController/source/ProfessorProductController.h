@@ -236,12 +236,6 @@ public:
 
     std::string GetDefaultProductName() const override;
 
-    BLESetupService::ProductId GetProductId() const override
-    {
-        // @TODO PGC-788
-        return BLESetupService::ProductId::PROFESSOR;
-    }
-
     std::string GetProductVersionNumber() const override
     {
         return ( VERSION_STRING_SHORT + std::string( "-" ) + VERSION_BUILD_ABBREV_COMMIT );
@@ -305,6 +299,15 @@ private:
     bool m_IsNetworkConnected;
     bool m_IsAutoWakeEnabled;
     bool m_Running;
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following member variable is used to cache the radio status as to not spam
+    ///        the LPM
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    IpcRadioStatus_t m_radioStatus;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
