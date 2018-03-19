@@ -67,6 +67,7 @@ message ProductMessage
         optional bool                       audiosilent         = 17;
         optional ProductSystemEventServiceResponse systemeventserviceresponse = 18;
         optional uint32                     chimetoplay         = 19;
+        optional uint32                     action              = 20;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
