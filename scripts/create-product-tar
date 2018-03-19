@@ -304,6 +304,10 @@ def create_bose_partition(is_without_lpm, development, ipks_to_install):
         retVal, retStr = perform_sed(os.path.join(extract_dir, "update/status"), 
                                       "Status: install user unpacked", 
                                       "Status: install user installed")
+        ''' Change permission for opt/Bose/etc/secure '''
+        cmd = 'fakeroot chmod -R 440 ' + os.path.join(extract_dir, "etc/secure")
+        execute_cmd_on_host(cmd)
+        
         if retVal != 0:
             return retVal, retStr        
         ''' remove offline installation directory '''
@@ -448,7 +452,7 @@ def create_package(name, workspace, is_without_lpm, development):
     logging.info("Output Directory [%s]" %(output_dir))
 
     ''' cleanup unnecessary files and folders '''
-    cleanup()
+    #cleanup()
     
     return retVal, retStr
     
