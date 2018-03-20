@@ -123,11 +123,11 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdap
     {
         if( m_powerDownOnExit )
         {
-            ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING );
+            ChangeState( PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS );
         }
         else
         {
-            GetProductController( ).SendStopPlaybackMessage( );
+            ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING );
         }
     }
 
