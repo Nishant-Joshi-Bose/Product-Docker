@@ -42,6 +42,8 @@ public:
     const ProductPb::AudioDualMonoSelect& GetDualMonoSelect() const;
     bool SetEqSelect( const ProductPb::AudioEqSelect& EqSelect );
     const ProductPb::AudioEqSelect& GetEqSelect() const;
+    bool SetSubwooferPolarity( const ProductPb::AudioSubwooferPolarity& subwooferPolarity );
+    const ProductPb::AudioSubwooferPolarity& GetSubwooferPolarity() const;
 
 private:
     ////////////////////////////////////////////////////////////////////////////////////////
@@ -59,6 +61,7 @@ private:
     ProductPb::AudioContentType m_currentContentType;
     ProductPb::AudioDualMonoSelect m_currentDualMonoSelect;
     ProductPb::AudioEqSelect m_currentEqSelect;
+    ProductPb::AudioSubwooferPolarity m_currentSubwooferPolarity;
 
     ////////////////////////////////////////////////////////////////////////////////////////
     /// Helper functions to set contentItem sensitive audio settings

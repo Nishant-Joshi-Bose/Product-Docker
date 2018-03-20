@@ -14,3 +14,4 @@ import "AudioMode.proto";
 import "AudioContentType.proto";
 import "AudioDualMonoSelect.proto";
 import "AudioEqSelect.proto";
+import "AudioSubwooferPolarity.proto";

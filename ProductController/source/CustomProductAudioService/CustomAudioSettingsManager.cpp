@@ -13,19 +13,21 @@
 
 constexpr char  kDefaultConfigPath[] = "/opt/Bose/etc/DefaultAudioSettings.json";
 constexpr uint32_t kConfigVersionMajor = 2;
-constexpr uint32_t kConfigVersionMinor = 1;
+constexpr uint32_t kConfigVersionMinor = 2;
 
-constexpr char kBassName            [] = "audioBassLevel";
-constexpr char kTrebleName          [] = "audioTrebleLevel";
-constexpr char kCenterName          [] = "audioCenterLevel";
-constexpr char kSurroundName        [] = "audioSurroundLevel";
-constexpr char kGainOffsetName      [] = "audioGainOffset";
-constexpr char kAvSyncName          [] = "audioAvSync";
-constexpr char kSubwooferGainName   [] = "audioSubwooferGain";
-constexpr char kModeName            [] = "audioMode";
-constexpr char kContentTypeName     [] = "audioContentType";
-constexpr char kDualMonoSelectName  [] = "audioDualMonoSelect";
-constexpr char kEqSelectName        [] = "audioEqSelect";
+constexpr char kBassName                [] = "audioBassLevel";
+constexpr char kTrebleName              [] = "audioTrebleLevel";
+constexpr char kCenterName              [] = "audioCenterLevel";
+constexpr char kSurroundName            [] = "audioSurroundLevel";
+constexpr char kSurroundDelayName       [] = "audioSurroundDelay";
+constexpr char kGainOffsetName          [] = "audioGainOffset";
+constexpr char kAvSyncName              [] = "audioAvSync";
+constexpr char kSubwooferGainName       [] = "audioSubwooferGain";
+constexpr char kModeName                [] = "audioMode";
+constexpr char kContentTypeName         [] = "audioContentType";
+constexpr char kDualMonoSelectName      [] = "audioDualMonoSelect";
+constexpr char kEqSelectName            [] = "audioEqSelect";
+constexpr char kSubwooferPolarityName   [] = "audioSubwooferPolarity";
 
 namespace ProductApp
 {
@@ -261,6 +263,34 @@ const ProductPb::AudioEqSelect& CustomAudioSettingsManager::GetEqSelect() const
     return m_currentEqSelect;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////
+/// SubwooferPolarity setting setter/getter
+///     setter returns a boolean which indicates whether current subwooferPolarity value is changed by setter
+///     getter returns a protobuf of current subwooferPolarity value
+//////////////////////////////////////////////////////////////////////////////////////
+bool CustomAudioSettingsManager::SetSubwooferPolarity( const ProductPb::AudioSubwooferPolarity& subwooferPolarity )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    if( !subwooferPolarity.has_value() )
+    {
+        BOSE_INFO( s_logger, "SubwooferPolarity doesn't contain any value (%s)", ProtoToMarkup::ToJson( subwooferPolarity ).c_str() );
+        return false;
+    }
+    if( m_currentSubwooferPolarity.value() != subwooferPolarity.value() )
+    {
+        m_audioSettings["values"][kPersistGlobal][kEqSelectName] = subwooferPolarity.value();
+        m_currentSubwooferPolarity.set_value( subwooferPolarity.value() );
+        PersistAudioSettings();
+        return true;
+    }
+    return false;
+}
+const ProductPb::AudioSubwooferPolarity& CustomAudioSettingsManager::GetSubwooferPolarity() const
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    return m_currentSubwooferPolarity;
+}
+
 
 void CustomAudioSettingsManager::UpdateAllProtos()
 {
@@ -395,6 +425,12 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
     for( uint32_t i = 0; i < m_audioSettings["configurations"][kEqSelectName]["properties"]["supportedModes"].size(); i++ )
     {
         m_currentEqSelect.mutable_properties()->add_supportedmodes( m_audioSettings["configurations"][kEqSelectName]["properties"]["supportedModes"][i].asString() );
+    }
+
+    m_currentSubwooferPolarity.set_value( m_audioSettings["defaultValues"][kSubwooferPolarityName].asString() );
+    for( uint32_t i = 0; i < m_audioSettings["configurations"][kSubwooferPolarityName]["properties"]["supportedPolarity"].size(); i++ )
+    {
+        m_currentSubwooferPolarity.mutable_properties()->add_supportedpolarity( m_audioSettings["configurations"][kSubwooferPolarityName]["properties"]["supportedPolarity"][i].asString() );
     }
 }
 
