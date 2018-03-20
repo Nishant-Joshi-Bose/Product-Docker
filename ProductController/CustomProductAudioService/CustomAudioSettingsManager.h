@@ -19,9 +19,9 @@ public:
     CustomAudioSettingsManager();
     ~CustomAudioSettingsManager() override {}
 
-    bool SetBass( const ProductPb::AudioBassLevel& bass );
+    ErrorCode_t SetBass( const ProductPb::AudioBassLevel& bass );
     const ProductPb::AudioBassLevel& GetBass() const;
-    bool SetTreble( const ProductPb::AudioTrebleLevel& treble );
+    ErrorCode_t SetTreble( const ProductPb::AudioTrebleLevel& treble );
     const ProductPb::AudioTrebleLevel& GetTreble() const;
 
 private:
