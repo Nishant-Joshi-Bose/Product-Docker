@@ -149,7 +149,7 @@ private:
     void HandleFrontDoorVolume( SoundTouchInterface::volume const& volume );
     void HandleSrcSwitch( const LpmServiceMessages::IPCSource_t cecSource );
     void HandlePlaybackRequestResponse( const SoundTouchInterface::NowPlaying& response );
-    void HandlePlaybackRequestError( const EndPointsError::Error& error );
+    void HandlePlaybackRequestError( const FrontDoor::Error& error );
     std::shared_ptr< FrontDoorClientIF >    m_FrontDoorClient;
     void CecModeHandleGet( ProductPb::CecModeResponse& );
     void CecModeHandlePut( const ProductPb::CecUpdateRequest, ProductPb::CecModeResponse& );

@@ -84,7 +84,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
                     ProtoToMarkup::ToJson( response, false ).c_str( ) );
     };
 
-    auto playbackRequestErrorCallback = [ this ]( const EndPointsError::Error & error )
+    auto playbackRequestErrorCallback = [ this ]( const FrontDoor::Error & error )
     {
         BOSE_ERROR( s_logger, "An error code %d subcode %d and error string <%s> was returned from a playback request.",
                     error.code(),
@@ -99,7 +99,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
         playbackRequestData.set_source( "PRODUCT" );
         playbackRequestData.set_sourceaccount( "TV" );
 
-        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
+        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
                 playbackRequestData,
                 playbackRequestResponseCallback,
                 playbackRequestErrorCallback );
@@ -112,7 +112,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
 
         if( playbackRequestData.has_source() )
         {
-            GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
+            GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
                     playbackRequestData,
                     playbackRequestResponseCallback,
                     playbackRequestErrorCallback );
@@ -129,7 +129,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
 
         if( playbackRequestData.has_source() )
         {
-            GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
+            GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
                     playbackRequestData,
                     playbackRequestResponseCallback,
                     playbackRequestErrorCallback );
@@ -146,7 +146,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
 
         if( playbackRequestData.has_source() )
         {
-            GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
+            GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
                     playbackRequestData,
                     playbackRequestResponseCallback,
                     playbackRequestErrorCallback );
@@ -164,7 +164,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
         playbackRequestData.set_source( "PRODUCT" );
         playbackRequestData.set_sourceaccount( "ADAPTiQ" );
 
-        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
+        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
                 playbackRequestData,
                 playbackRequestResponseCallback,
                 playbackRequestErrorCallback );

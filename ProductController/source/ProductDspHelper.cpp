@@ -94,7 +94,7 @@ bool ProductDspHelper::Run( )
     }
 
     {
-        AsyncCallback<Callback< ProductPb::AudioFormat >, Callback<EndPointsError::Error> >
+        AsyncCallback<Callback< ProductPb::AudioFormat >, Callback<FrontDoor::Error> >
         getAudioFormatCb( std::bind( &ProductDspHelper::AudioFormatFrontDoorGetHandler,
                                      this,
                                      std::placeholders::_1,
@@ -141,7 +141,7 @@ void ProductDspHelper::AutoWakeTriggered()
                     ProtoToMarkup::ToJson( response, false ).c_str( ) );
     };
 
-    auto playbackRequestErrorCallback = [ this ]( const EndPointsError::Error & error )
+    auto playbackRequestErrorCallback = [ this ]( const FrontDoor::Error & error )
     {
         BOSE_ERROR( s_logger, "An error code %d subcode %d and error string <%s> was returned from a playback request.",
                     error.code(),
@@ -154,7 +154,7 @@ void ProductDspHelper::AutoWakeTriggered()
     playbackRequestData.set_source( "PRODUCT" );
     playbackRequestData.set_sourceaccount( "TV" );
 
-    m_ProductController.GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
+    m_ProductController.GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
             playbackRequestData,
             playbackRequestResponseCallback,
             playbackRequestErrorCallback );
@@ -333,11 +333,11 @@ void ProductDspHelper::AudioFormatGetDspStatusCallback( const Callback<ProductPb
 /// @brief ProductDspHelper::AudioFormatFrontDoorGetHandler
 ///
 /// @param const Callback<ProductPb::AccessorySpeakerState>& resp
-/// @param const Callback<EndPointsError::Error>& error
+/// @param const Callback<FrontDoor::Error>& error
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductDspHelper::AudioFormatFrontDoorGetHandler( const Callback<ProductPb::AudioFormat>& resp,
-                                                       const Callback<EndPointsError::Error>& error )
+                                                       const Callback<FrontDoor::Error>& error )
 {
     BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
     Callback< LpmServiceMessages::IpcDspStatus_t >

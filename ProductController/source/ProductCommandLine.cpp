@@ -231,7 +231,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             response +=  volumeLevelString;
             response += ". \r\n";
 
-            auto errFunc = []( const EndPointsError::Error & e )
+            auto errFunc = []( const FrontDoor::Error & e )
             {
                 BOSE_ERROR( s_logger, "Error setting FrontDoor mute" );
             };
@@ -241,13 +241,13 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             };
 
             AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
-            AsyncCallback<EndPointsError::Error> errCb( errFunc, m_ProductTask );
+            AsyncCallback<FrontDoor::Error> errCb( errFunc, m_ProductTask );
 
             SoundTouchInterface::volume pbVolume;
             pbVolume.set_value( volumeLevelValue );
 
             BOSE_VERBOSE( s_logger, "Setting FrontDoor mute to %d", pbVolume.muted() );
-            m_ProductController.GetFrontDoorClient()->SendPut<SoundTouchInterface::volume, EndPointsError::Error>(
+            m_ProductController.GetFrontDoorClient()->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
                 ProductApp::FRONTDOOR_AUDIO_VOLUME, pbVolume, respFunc, errCb );
         }
         else
@@ -291,7 +291,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             return -1;
         }
 
-        auto errFunc = []( const EndPointsError::Error & e )
+        auto errFunc = []( const FrontDoor::Error & e )
         {
             BOSE_ERROR( s_logger, "Error setting FrontDoor mute" );
         };
@@ -301,13 +301,13 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         };
 
         AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
-        AsyncCallback<EndPointsError::Error> errCb( errFunc, m_ProductTask );
+        AsyncCallback<FrontDoor::Error> errCb( errFunc, m_ProductTask );
 
         SoundTouchInterface::volume pbVolume;
         pbVolume.set_muted( muteStateValue );
 
         BOSE_VERBOSE( s_logger, "Setting FrontDoor mute to %d", pbVolume.muted() );
-        m_ProductController.GetFrontDoorClient()->SendPut<SoundTouchInterface::volume, EndPointsError::Error>(
+        m_ProductController.GetFrontDoorClient()->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
             ProductApp::FRONTDOOR_AUDIO_VOLUME, pbVolume, respFunc, errCb );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
