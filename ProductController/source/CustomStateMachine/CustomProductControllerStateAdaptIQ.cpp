@@ -123,7 +123,7 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdap
     {
         if( m_powerDownOnExit )
         {
-            ChangeState( PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING );
+            ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING );
         }
         else
         {
