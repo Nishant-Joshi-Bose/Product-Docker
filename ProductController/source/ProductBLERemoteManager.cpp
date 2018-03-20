@@ -226,7 +226,7 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
         {
             m_RCSClient->Led_Set( LedsSourceTypeMsg_t::BLUETOOTH );
         }
-        else if( source->sourcename().compare( "INVALID_SOURCE" ) != 0 )
+        else
         {
             m_RCSClient->Led_Set( LedsSourceTypeMsg_t::SOUND_TOUCH );
         }
