@@ -772,6 +772,9 @@ void SpeakerPairingManager::AccessoryDescriptionToAccessorySpeakerInfo( const Lp
         spkrInfo->set_wireless( false );
     }
 
+    spkrInfo->set_serialnum( accDesc.sn() );
+    spkrInfo->set_version( accDesc.version() );
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
