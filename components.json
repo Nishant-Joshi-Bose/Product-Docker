@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@01bc26d1af73b45425eec6d8537891eb251b40cd"
+    "selected_version": "master@3d918b21f34f0de023281184bf94a0435c7eb025"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -17,7 +17,7 @@
   },
   {
     "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/0.16-5+g2e25c0f"
+    "selected_version": "Release/master/0.3.0-2+g40c7688"
   },
   {
     "name": "bose-opkg-utils",
