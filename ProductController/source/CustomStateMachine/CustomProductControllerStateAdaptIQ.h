@@ -99,6 +99,7 @@ private:
 
     const uint32_t ADAPTIQ_TIMEOUT_MINUTES      = 20;
     const uint32_t ADAPTIQ_INACTIVITY_TIMEOUT   = 1 * ADAPTIQ_TIMEOUT_MINUTES * 60 * 1000;
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
