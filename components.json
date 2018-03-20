@@ -73,15 +73,15 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.3.86-524+e45febf"
+    "selected_version": "Continuous/master/0.3.88-551+355d932"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.3.86-524+e45febf"
+    "selected_version": "Continuous/master/0.3.88-551+355d932"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@9798c0cf28bb67d81c67df560c675a5ae56b8a49"
+    "selected_version": "AkPSIssue@df1fc025478adf2b5d3bdd0020801b09bc962c52"
   },
   {
     "name": "CastleProductUIAssets",
