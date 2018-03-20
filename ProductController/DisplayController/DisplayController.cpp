@@ -391,55 +391,55 @@ void DisplayController::RegisterDisplayEndPoints()
     // ==========================
     // HandlePutDisplayRequest
     // ==========================
-    AsyncCallback<Display, Callback<Display>, Callback<EndPointsError::Error>> putDisplayReqCb(
-                                                                                std::bind( &DisplayController::HandlePutDisplayRequest,
-                                                                                        this,
-                                                                                        std::placeholders::_1,
-                                                                                        std::placeholders::_2
-                                                                                         ),
-                                                                                m_productController.GetTask() );
+    AsyncCallback<Display, Callback<Display>, Callback<FrontDoor::Error>> putDisplayReqCb(
+                                                                           std::bind( &DisplayController::HandlePutDisplayRequest,
+                                                                                   this,
+                                                                                   std::placeholders::_1,
+                                                                                   std::placeholders::_2
+                                                                                    ),
+                                                                           m_productController.GetTask() );
     m_frontdoorClientPtr->RegisterPut<Display>( "/ui/display", putDisplayReqCb );
 
     // ==========================
     // HandleGetDisplayRequest
     // ==========================
-    AsyncCallback< Callback<Display>, Callback<EndPointsError::Error>> getDisplayReqCb(
-                                                                        std::bind(
-                                                                            &DisplayController::HandleGetDisplayRequest,
-                                                                            this,
-                                                                            std::placeholders::_1
-                                                                        ),
-                                                                        m_productController.GetTask() );
+    AsyncCallback< Callback<Display>, Callback<FrontDoor::Error>> getDisplayReqCb(
+                                                                   std::bind(
+                                                                       &DisplayController::HandleGetDisplayRequest,
+                                                                       this,
+                                                                       std::placeholders::_1
+                                                                   ),
+                                                                   m_productController.GetTask() );
     m_frontdoorClientPtr->RegisterGet( "/ui/Display", getDisplayReqCb );
 
     // ==========================
     // HandlePostUIHeartBeat
     // ==========================
-    AsyncCallback<UiHeartBeat, Callback<UiHeartBeat>, Callback<EndPointsError::Error>> uiAlivePostCb(
-            std::bind( &DisplayController::HandlePostUiHeartBeat,
-                       this,
-                       std::placeholders::_1,
-                       std::placeholders::_2
-                     ),
-            m_productController.GetTask() );
+    AsyncCallback<UiHeartBeat, Callback<UiHeartBeat>, Callback<FrontDoor::Error>> uiAlivePostCb(
+                                                                                   std::bind( &DisplayController::HandlePostUiHeartBeat,
+                                                                                           this,
+                                                                                           std::placeholders::_1,
+                                                                                           std::placeholders::_2
+                                                                                            ),
+                                                                                   m_productController.GetTask() );
     m_frontdoorClientPtr->RegisterPost<UiHeartBeat>( "/ui/alive", uiAlivePostCb );
 
     // ==========================
     // HandlePutUIHeartBeat
     // ==========================
-    AsyncCallback<UiHeartBeat, Callback<UiHeartBeat>, Callback<EndPointsError::Error>> uiAlivePutCb(
-            std::bind( &DisplayController::HandlePutUiHeartBeat,
-                       this,
-                       std::placeholders::_1,
-                       std::placeholders::_2
-                     ),
-            m_productController.GetTask() );
+    AsyncCallback<UiHeartBeat, Callback<UiHeartBeat>, Callback<FrontDoor::Error>> uiAlivePutCb(
+                                                                                   std::bind( &DisplayController::HandlePutUiHeartBeat,
+                                                                                           this,
+                                                                                           std::placeholders::_1,
+                                                                                           std::placeholders::_2
+                                                                                            ),
+                                                                                   m_productController.GetTask() );
     m_frontdoorClientPtr->RegisterPut<UiHeartBeat>( "/ui/alive", uiAlivePutCb );
 
     // ==========================
     // HandleGetUIHeartBeat
     // ==========================
-    AsyncCallback< Callback<UiHeartBeat>, Callback<EndPointsError::Error> > uiAliveGetCb(
+    AsyncCallback< Callback<UiHeartBeat>, Callback<FrontDoor::Error> > uiAliveGetCb(
         std::bind( &DisplayController::HandleGetUiHeartBeat,
                    this,
                    std::placeholders::_1
