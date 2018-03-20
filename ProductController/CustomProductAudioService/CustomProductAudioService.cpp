@@ -83,7 +83,6 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     auto setBassAction = [this]( ProductPb::AudioBassLevel val )
     {
         ErrorCode_t error = m_audioSettingsMgr->SetBass( val );
-        printf( "SetBass errorCode - %d\n", error );
         if( error == ErrorCode_t::NO_ERROR )
         {
             m_mainStreamAudioSettings.set_basslevel( m_audioSettingsMgr->GetBass( ).value() );
@@ -108,7 +107,6 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     auto setTrebleAction = [ this ]( ProductPb::AudioTrebleLevel val )
     {
         ErrorCode_t error = m_audioSettingsMgr->SetTreble( val );
-        printf( "SetBass errorCode - %d\n", error );
         if( error == ErrorCode_t::NO_ERROR )
         {
             m_mainStreamAudioSettings.set_treblelevel( m_audioSettingsMgr->GetTreble( ).value() );
