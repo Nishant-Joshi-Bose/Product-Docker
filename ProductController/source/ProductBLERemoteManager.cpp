@@ -176,7 +176,7 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
         return;
     }
 
-// TODO - re-enable this once the cc2640 interface has been fixed
+// TODO - re-enable this once PGC-1105 has been resolved
 #if 0
     if( source->sourcename().compare( "PRODUCT" ) == 0 )
     {
