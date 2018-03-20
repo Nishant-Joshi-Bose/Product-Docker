@@ -87,6 +87,7 @@
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateStoppingStreams.h"
 #include "ProductControllerStateTop.h"
+#include "CustomProductControllerStateAdaptIQExiting.h"
 #include "CustomProductControllerStateAdaptIQ.h"
 #include "CustomProductControllerStateIdle.h"
 #include "CustomProductControllerStateOn.h"
@@ -416,6 +417,11 @@ void ProfessorProductController::Run( )
       *this,
       CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
 
+    auto* customStateAdaptIQExiting = new CustomProductControllerStateAdaptIQExiting
+    ( GetHsm( ),
+      customStatePlayingSelected,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING );
+
     ///
     /// Stopping Dedicated Streams State and Sub-States
     ///
@@ -481,6 +487,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), customStatePlayingSelectedPairing );
     GetHsm( ).AddState( "", stateStoppingStreams );
     GetHsm( ).AddState( "", customStateAdaptIQ );
+    GetHsm( ).AddState( "", customStateAdaptIQExiting );
     GetHsm( ).AddState( "", stateStoppingStreamsDedicated );
     GetHsm( ).AddState( "", stateStoppingStreamsDedicatedForFactoryDefault );
     GetHsm( ).AddState( "", stateStoppingStreamsDedicatedForSoftwareUpdate );
