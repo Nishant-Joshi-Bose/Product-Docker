@@ -76,6 +76,7 @@ public:
     void HandleStateExit( )  override;
     bool HandleAdaptIQStatus( const ProductAdaptIQStatus& aiqStatus ) override;
     bool HandleAdaptIQControl( const ProductAdaptIQControl& cmd );
+    bool HandleIntentPowerToggle( ) override;
 
 private:
 
@@ -87,6 +88,7 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleTimeOut( );
     APTimerPtr m_timer;
+    bool m_powerDownOnExit;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -97,7 +99,6 @@ private:
 
     const uint32_t ADAPTIQ_TIMEOUT_MINUTES      = 20;
     const uint32_t ADAPTIQ_INACTIVITY_TIMEOUT   = 1 * ADAPTIQ_TIMEOUT_MINUTES * 60 * 1000;
-
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
