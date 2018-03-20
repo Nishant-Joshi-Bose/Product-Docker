@@ -176,6 +176,8 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
         return;
     }
 
+// TODO - re-enable this once the cc2640 interface has been fixed
+#if 0
     if( source->sourcename().compare( "PRODUCT" ) == 0 )
     {
         if( source->sourceaccountname().compare( "TV" ) == 0 )
@@ -229,6 +231,7 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
             m_RCSClient->Led_Set( LedsSourceTypeMsg_t::SOUND_TOUCH );
         }
     }
+#endif
 
 }
 
