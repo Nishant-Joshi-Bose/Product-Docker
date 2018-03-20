@@ -109,6 +109,24 @@ void ProductKeyInputInterface::Run( )
 
     InitializeQSS( );
 
+    auto sourceInfoCb = [ this ]( const SoundTouchInterface::Sources & sources )
+    {
+        QSSMSG::SrcCiCodeMessage_t codes;
+
+        for( auto i = 0 ; i < sources.sources_size(); i++ )
+        {
+            const auto& source = sources.sources( i );
+
+            // TODO - we need to check "visible" here as well, but it's not yet supported
+            if( source.has_details() and source.details().has_cicode() )
+            {
+                codes.add_cicode( source.details().cicode() );
+            }
+        }
+        m_QSSClient->NotifySourceCiCodes( codes );
+    };
+    m_ProductController.GetSourceInfo()->RegisterSourceListener( sourceInfoCb );
+
     m_running = true;
 }
 
@@ -127,7 +145,7 @@ void ProductKeyInputInterface::ConnectToLpm( bool connected )
 
     ///
     /// Attempt to register for key events if connected to the LPM hardware interface.
-    ///
+    /// const SoundToucInterface::Sources&
     if( m_connected )
     {
         IL::BreakThread( std::bind( &ProductKeyInputInterface::RegisterForKeyEvents,
@@ -244,7 +262,6 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
     bool isBlastedKey = false;
     std::string cicode;
     auto nowSelection = m_ProductController.GetNowSelection();
-#if 0
 
     if( nowSelection.has_contentitem() )
     {
@@ -261,7 +278,6 @@ void ProductKeyInputInterface::HandleKeyEvent( LpmServiceMessages::IpcKeyInforma
             cicode = source->details().cicode();
         }
     }
-#endif
 
     if( isBlastedKey )
     {

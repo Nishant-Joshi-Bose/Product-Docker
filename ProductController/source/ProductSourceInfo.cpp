@@ -150,6 +150,12 @@ void ProductSourceInfo::UpdateSources( const SoundTouchInterface::Sources& sourc
             m_cablesatSourcePlaybackRq.set_sourceaccount( source.sourceaccountname() );
         }
     }
+
+    // Inform listeners of potential changes
+    for( auto cb : m_SourceListeners )
+    {
+        cb( m_sources );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
