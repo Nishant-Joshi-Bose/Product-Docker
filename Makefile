@@ -114,8 +114,9 @@ package-no-hsp: packages-gz
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_no_hsp.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 #Create one more Zip file for Bonjour / Local update with HSP
-IPKS_HSP = hsp.ipk monaco.ipk product.ipk lpm_updater.ipk
-PACKAGENAMES_HSP = hsp monaco SoundTouch lpm_updater
+IPKS_HSP = recovery.ipk hsp.ipk monaco.ipk product.ipk lpm_updater.ipk
+PACKAGENAMES_HSP = SoundTouchRecovery hsp monaco SoundTouch lpm_updater
+
 .PHONY: package-with-hsp
 package-with-hsp: packages-gz-with-hsp
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
@@ -125,13 +126,17 @@ packages-gz: product-ipk monaco-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS)
 
 .PHONY: packages-gz-with-hsp
-packages-gz-with-hsp: product-ipk monaco-ipk hsp-ipk lpmupdater-ipk
+packages-gz-with-hsp: product-ipk monaco-ipk hsp-ipk lpmupdater-ipk recovery-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_HSP)
 
 .PHONY: graph
 graph: product-ipk
 	graph-components --sdk=$(sdk) Professor builds/$(cfg)/product-ipk-stage/component-info.gz >builds/$(cfg)/components.dot
 	dot -Tsvgz builds/$(cfg)/components.dot -o builds/$(cfg)/components.svgz
+
+.PHONY: recovery-ipk
+recovery-ipk: cmake_build
+	./scripts/create-recovery-ipk
 
 .PHONY: lpm-bos
 lpm-bos:
