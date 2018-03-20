@@ -38,7 +38,7 @@
 #include "LpmServiceMessages.pb.h"
 #include "ProductSpeakerManager.pb.h"
 #include "ProductMessage.pb.h"
-#include "EndPointsError.pb.h"
+#include "SharedProto.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -202,10 +202,10 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     void AccessoriesGetHandler( const Callback<ProductPb::AccessorySpeakerState> &resp,
-                                const Callback<EndPointsError::Error>& error );
+                                const Callback<FrontDoor::Error>& error );
     void AccessoriesPutHandler( const ProductPb::AccessorySpeakerState &req,
                                 const Callback<ProductPb::AccessorySpeakerState> &resp,
-                                const Callback<EndPointsError::Error>& error );
+                                const Callback<FrontDoor::Error>& error );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ///
