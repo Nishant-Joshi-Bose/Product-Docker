@@ -28,6 +28,7 @@ def main():
             "sourceAccountName" : "SLOT_0",
             "sourceName"        : "PRODUCT",
             "status"            : "ready",
+            "visible"           : "true",
         },
         {
             "details" : {
@@ -41,11 +42,12 @@ def main():
             "sourceAccountName" : "SLOT_1",
             "sourceName"        : "PRODUCT",
             "status"            : "ready",
+            "visible"           : "true",
         },
         {
             "details" : {
                 "deviceType" : "DEVICE_TYPE_GAME",
-                "ciCode"        : "T2051",
+                "ciCode"        : "T2778",
                 "activationKey"     : "ACTIVATION_KEY_GAME"
             },
             "displayName"       : "SLOT_2",
@@ -54,6 +56,7 @@ def main():
             "sourceAccountName" : "SLOT_2",
             "sourceName"        : "PRODUCT",
             "status"            : "ready",
+            "visible"           : "true",
         },
         {
             "details" : {

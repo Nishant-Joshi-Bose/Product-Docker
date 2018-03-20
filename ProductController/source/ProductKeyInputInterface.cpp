@@ -34,6 +34,7 @@
 #include "ProductSourceInfo.h"
 #include "DataCollectionClientFactory.h"
 #include "ButtonPress.pb.h"
+#include "ProtoToMarkup.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -111,7 +112,8 @@ void ProductKeyInputInterface::Run( )
 
     auto sourceInfoCb = [ this ]( const SoundTouchInterface::Sources & sources )
     {
-        QSSMSG::SrcCiCodeMessage_t codes;
+        QSSMSG::SrcCiCodeMessage_t          codes;
+        static QSSMSG::SrcCiCodeMessage_t   lastCodes;
 
         for( auto i = 0 ; i < sources.sources_size(); i++ )
         {
@@ -123,7 +125,12 @@ void ProductKeyInputInterface::Run( )
                 codes.add_cicode( source.details().cicode() );
             }
         }
-        m_QSSClient->NotifySourceCiCodes( codes );
+        if( codes.cicode_size() and ( codes.SerializeAsString() != lastCodes.SerializeAsString() ) )
+        {
+            BOSE_INFO( s_logger, "notify cicodes : %s", ProtoToMarkup::ToJson( codes ).c_str() );
+            m_QSSClient->NotifySourceCiCodes( codes );
+            lastCodes = codes;
+        }
     };
     m_ProductController.GetSourceInfo()->RegisterSourceListener( sourceInfoCb );
 
