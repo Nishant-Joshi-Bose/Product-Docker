@@ -168,7 +168,7 @@ public:
         return false;
     }
 
-    virtual bool HandleBluetoothPairedList( bool ready )
+    virtual bool HandleBluetoothPairedList( )
     {
         return false;
     }
