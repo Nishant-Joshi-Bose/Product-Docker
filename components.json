@@ -49,7 +49,7 @@
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.2.3-41+513bbab"
+    "selected_version": "Release/master/0.2.4-45+2e01a36"
   },
   {
     "name": "CastleLibs-native",
@@ -97,7 +97,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.2.1-92+88cfd3d"
+    "selected_version": "Release/master/0.2.2-100+f3a90f2"
   },
   {
     "name": "HTTPInterface-qc8017_32",
