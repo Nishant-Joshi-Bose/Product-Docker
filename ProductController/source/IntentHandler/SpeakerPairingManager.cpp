@@ -320,7 +320,6 @@ void SpeakerPairingManager::DoPairingFrontDoor( bool pair,
     productMessage.set_action( pairingAction );
     IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
 
-    m_accessorySpeakerState.set_pairing( pair );
     frontDoorCB( m_accessorySpeakerState );
 }
 
