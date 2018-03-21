@@ -1,11 +1,15 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@3d918b21f34f0de023281184bf94a0435c7eb025"
+    "selected_version": "master@f6b975591d7d172e2fd9fa76d9c9440acddfa55d"
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@cb2ce9130bc60c54b17058f92bc977bcad7710a8"
+    "selected_version": "master@73b02107db997e54eaa59dbf49c442d88a80e773"
+  },
+  {
+    "name": "BLERemoteXCVR",
+    "selected_version": "Release/master/0.3.0-2+g40c7688"
   },
   {
     "name": "A4VVideoManagerService",
@@ -14,10 +18,6 @@
   {
     "name": "AVS-qc8017_32",
     "selected_version": "Release/Castle-Fork/0.3.15.41380.2733922"
-  },
-  {
-    "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/0.3.0-2+g40c7688"
   },
   {
     "name": "bose-opkg-utils",
@@ -165,7 +165,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/0.3.3-63+5fcbc13"
+    "selected_version": "Release/master/0.3.4-68+c3828ad"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
