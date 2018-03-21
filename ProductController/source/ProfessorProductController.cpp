@@ -31,6 +31,7 @@
 #include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "CustomProductAudioService.h"
+#include "CustomAudioSettingsManager.h"
 #include "ProductKeyInputInterface.h"
 #include "ProductNetworkManager.h"
 #include "ProductSystemManager.h"

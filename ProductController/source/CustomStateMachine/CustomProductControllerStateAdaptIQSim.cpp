@@ -264,6 +264,21 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAda
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStateAdaptIQ::HandleIntentSpeakerPairing
+///
+/// @return This method returns a true Boolean value indicating that it is handling the speaker
+///         pairing intent.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateAdaptIQ::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )
+
+{
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             End of Product Application Namespace                             ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }

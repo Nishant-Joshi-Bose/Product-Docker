@@ -70,6 +70,7 @@ public:
     }
 
     void HandleStateStart( ) override;
+    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )  override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
