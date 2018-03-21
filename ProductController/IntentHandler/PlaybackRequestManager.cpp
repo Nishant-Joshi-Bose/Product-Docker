@@ -31,7 +31,7 @@ PlaybackRequestManager::PlaybackRequestManager( NotifyTargetTaskIF& task,
     m_NowPlayingRsp( std::bind( &PlaybackRequestManager::PostPlaybackRequestCbRsp, this,
                                 std::placeholders::_1 ), &task )
 {
-    m_frontDoorClientErrorCb = AsyncCallback<EndPointsError::Error>
+    m_frontDoorClientErrorCb = AsyncCallback<FrontDoor::Error>
                                ( std::bind( &PlaybackRequestManager::FrontDoorClientErrorCb,
                                             this, std::placeholders::_1 ), &task );
 }
@@ -63,7 +63,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             playbackRequestData.set_source( "PRODUCT" );
             playbackRequestData.set_sourceaccount( "AUX" );
 
-            GetFrontDoorClient()->SendPost<SoundTouchInterface::NowPlaying, EndPointsError::Error>( "/content/playbackRequest", playbackRequestData,
+            GetFrontDoorClient()->SendPost<SoundTouchInterface::NowPlaying, FrontDoor::Error>( "/content/playbackRequest", playbackRequestData,
                     m_NowPlayingRsp, m_frontDoorClientErrorCb );
         }
         else
