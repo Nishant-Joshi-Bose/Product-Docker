@@ -27,7 +27,7 @@
 #include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProductSourceInfo.h"
-#include "EndPointsError.pb.h"
+#include "SharedProto.pb.h"
 
 using namespace ProductPb;
 
@@ -84,7 +84,7 @@ void ProductSourceInfo::Run( )
         UpdateSources( sources );
     };
 
-    auto handleSourcesFail = [ this ]( const EndPointsError::Error & error )
+    auto handleSourcesFail = [ this ]( const FrontDoor::Error & error )
     {
         BOSE_ERROR( s_logger, "Error %d %d <%s> while retrieving source list",
                     error.code( ), error.subcode( ), error.message( ).c_str( ) );
@@ -99,7 +99,7 @@ void ProductSourceInfo::Run( )
         }
 
         BOSE_INFO( s_logger, "Registering for %s",  s_FrontDoorSources.c_str() );
-        m_FrontDoorClient->SendGet<SoundTouchInterface::Sources, EndPointsError::Error>( s_FrontDoorSources, handleSources, handleSourcesFail );
+        m_FrontDoorClient->SendGet<SoundTouchInterface::Sources, FrontDoor::Error>( s_FrontDoorSources, handleSources, handleSourcesFail );
         m_FrontDoorClient->RegisterNotification<SoundTouchInterface::Sources>( s_FrontDoorSources, handleSources );
     };
 
@@ -163,7 +163,7 @@ void ProductSourceInfo::UpdateSources( const SoundTouchInterface::Sources& sourc
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BOptional<SoundTouchInterface::Sources::SourceItem> ProductSourceInfo::FindSource( const SoundTouchInterface::ContentItem& item )
 {
-    if( ( not item.has_sourceaccount() ) or ( not item.has_source() ) )
+    if( not item.has_source() )
     {
         return {};
     }
@@ -171,11 +171,6 @@ BOptional<SoundTouchInterface::Sources::SourceItem> ProductSourceInfo::FindSourc
     for( auto i = 0 ; i < m_sources.sources_size(); i++ )
     {
         auto source = m_sources.sources( i );
-
-        if( ( not source.has_sourceaccountname() ) or ( not source.has_sourcename() ) )
-        {
-            continue;
-        }
 
         if( ( source.sourceaccountname() == item.sourceaccount() ) and ( source.sourcename() == item.source() ) )
         {
@@ -207,13 +202,13 @@ void ProductSourceInfo::Refresh( void )
         UpdateSources( sources );
     };
 
-    auto handleSourcesFail = [ this ]( const EndPointsError::Error & error )
+    auto handleSourcesFail = [ this ]( const FrontDoor::Error & error )
     {
         BOSE_ERROR( s_logger, "Error %d %d <%s> while retrieving source list",
                     error.code( ), error.subcode( ), error.message( ).c_str( ) );
     };
 
-    m_FrontDoorClient->SendGet<SoundTouchInterface::Sources, EndPointsError::Error>( s_FrontDoorSources, handleSources, handleSourcesFail );
+    m_FrontDoorClient->SendGet<SoundTouchInterface::Sources, FrontDoor::Error>( s_FrontDoorSources, handleSources, handleSourcesFail );
 }
 
 
