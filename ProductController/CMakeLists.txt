@@ -59,6 +59,7 @@ TARGET_LINK_LIBRARIES(Eddie
   CliClient
   AudioLibs
   PassportClient
+  GalapagosClient
   SASSFrontDoorServiceProto
   SoftwareUpdateAPI
   STS

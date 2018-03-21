@@ -49,7 +49,7 @@
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
-    "selected_version": "Continuous/master/0.2.2-38+5196d8c"
+    "selected_version": "Release/master/0.2.3-41+513bbab"
   },
   {
     "name": "CastleLibs-native",
@@ -81,7 +81,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@824bafa28925591dafe8a99c138e082dea2deff2"
+    "selected_version": "master@9798c0cf28bb67d81c67df560c675a5ae56b8a49"
   },
   {
     "name": "CastleProductUIAssets",
@@ -89,7 +89,7 @@
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@28983769246233000587a929f8c97e63d078bab5"
+    "selected_version": "master@ebfe7aab604cab846b5283bb769436f8f3b3e8e8"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -145,7 +145,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/0.3.3-63+5fcbc13"
+    "selected_version": "Release/master/0.3.4-68+c3828ad"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",

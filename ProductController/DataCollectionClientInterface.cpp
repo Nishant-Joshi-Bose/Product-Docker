@@ -21,7 +21,7 @@
 #include "Balance.pb.h"
 #include "Bass.pb.h"
 #include "SystemState.pb.h"
-#include "EndPointsError.pb.h"
+#include "SharedProto.pb.h"
 
 static DPrint s_logger( "DataCollectionClientInterface" );
 
@@ -72,7 +72,7 @@ void DataCollectionClientInterface::HandleNowPlayingRequest( const SoundTouchInt
     m_dataCollectionClient->SendData( dsPb , "system-state-changed" );
 }
 
-void DataCollectionClientInterface::GetCallbackError( const EndPointsError::Error& error )
+void DataCollectionClientInterface::GetCallbackError( const FrontDoor::Error& error )
 {
     BOSE_WARNING( s_logger, "%s: Error = (%d-%d) %s", __func__, error.code(), error.subcode(), error.message().c_str() );
 }
@@ -83,13 +83,13 @@ void DataCollectionClientInterface::ProcessSystemState( const DeviceManagerPb::D
     {
         HandleNowPlayingRequest( noPb, ds );
     };
-    auto errorfunc = [this]( const EndPointsError::Error & error )
+    auto errorfunc = [this]( const FrontDoor::Error & error )
     {
         GetCallbackError( error );
     };
     AsyncCallback<SoundTouchInterface::NowPlaying> getNowPlayingReqCb( func, m_dataCollectionClientInterfaceTask );
-    AsyncCallback<EndPointsError::Error> errorCb( errorfunc, m_dataCollectionClientInterfaceTask );
-    m_frontDoorClientIF->SendGet<SoundTouchInterface::NowPlaying, EndPointsError::Error>( FRONTDOOR_CONTENT_NOWPLAYING_API , getNowPlayingReqCb, errorCb );
+    AsyncCallback<FrontDoor::Error> errorCb( errorfunc, m_dataCollectionClientInterfaceTask );
+    m_frontDoorClientIF->SendGet<SoundTouchInterface::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_NOWPLAYING_API , getNowPlayingReqCb, errorCb );
 }
 
 void DataCollectionClientInterface::ProcessBassState( const ProductPb::AudioBassLevel& adl )
