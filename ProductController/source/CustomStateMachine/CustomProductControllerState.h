@@ -168,7 +168,7 @@ public:
         return false;
     }
 
-    virtual bool HandleBluetoothModuleState( bool ready )
+    virtual bool HandleBluetoothPairedList( )
     {
         return false;
     }
