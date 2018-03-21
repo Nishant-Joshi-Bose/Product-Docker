@@ -48,6 +48,8 @@ message AccessorySpeakerState
         optional bool available             = 2;
         optional bool wireless              = 3;
         optional string configurationStatus = 4;
+        optional string serialnum           = 5;
+        optional string version             = 6;
     }
     message SpeakerControls
     {

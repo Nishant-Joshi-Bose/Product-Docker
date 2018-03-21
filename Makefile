@@ -1,8 +1,9 @@
 export BOSE_WORKSPACE := $(abspath $(CURDIR))
 include Settings.mk
 
-.PHONY: default
-default: package
+.PHONY: deploy
+deploy: all-packages
+	scripts/collect-deployables builds/Release builds/deploy/DP2
 
 .PHONY: force
 force:
@@ -102,8 +103,8 @@ product-ipk: cmake_build
 	./scripts/create-product-ipk
 
 # The default build will always be signed using development keys
-privateKeyFilePath="$(BOSE_WORKSPACE)/keys/development/privateKey/dev.p12"
-privateKeyPasswordPath="$(BOSE_WORKSPACE)/keys/development/privateKey/dev_p12.pass"
+privateKeyFilePath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev.p12
+privateKeyPasswordPath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev_p12.pass
 
 #Create Zip file for Local update - no hsp
 IPKS = monaco.ipk product.ipk lpm_updater.ipk
@@ -133,6 +134,10 @@ graph: product-ipk
 	graph-components --sdk=$(sdk) Professor builds/$(cfg)/product-ipk-stage/component-info.gz >builds/$(cfg)/components.dot
 	dot -Tsvgz builds/$(cfg)/components.dot -o builds/$(cfg)/components.svgz
 
+.PHONY: hsp-ipk
+hsp-ipk: cmake_build
+	./scripts/create-hsp-ipk $(cfg)
+
 .PHONY: lpm-bos
 lpm-bos:
 ifneq ($(filter $(BUILD_TYPE), Release Continuous Nightly),)
@@ -144,10 +149,6 @@ endif
 	rm -f ./builds/$(cfg)/lpm_professor*.hex
 	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE)
 
-.PHONY: hsp-ipk
-hsp-ipk: cmake_build
-	./scripts/create-hsp-ipk
-
 .PHONY: lpmupdater-ipk
 lpmupdater-ipk: lpm-bos
 	$(RIVIERALPMUPDATER_DIR)/create-ipk $(RIVIERALPMUPDATER_DIR)/lpm-updater-ipk-stage ./builds/$(cfg)/ ./builds/$(cfg)/ professor
@@ -156,17 +157,12 @@ lpmupdater-ipk: lpm-bos
 monaco-ipk:
 	./scripts/create-monaco-ipk
 
-
 .PHONY: package
 package:  package-no-hsp package-with-hsp graph
 
 .PHONY: all-packages
-all-packages: package
+all-packages: package-no-hsp package-with-hsp graph
 	./scripts/create-product-tar
-
-.PHONY: deploy
-deploy: all-packages
-	scripts/collect-deployables builds/Release builds/deploy/DP2
 
 .PHONY: clean
 clean:

@@ -215,7 +215,7 @@ void SpeakerPairingManager::RegisterFrontDoorEvents( )
     BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s.", __FUNCTION__ );
 
     {
-        AsyncCallback<Callback< ProductPb::AccessorySpeakerState >, Callback<EndPointsError::Error> >
+        AsyncCallback<Callback< ProductPb::AccessorySpeakerState >, Callback<FrontDoor::Error> >
         getAccessoriesCb( std::bind( &SpeakerPairingManager::AccessoriesGetHandler,
                                      this,
                                      std::placeholders::_1,
@@ -227,7 +227,7 @@ void SpeakerPairingManager::RegisterFrontDoorEvents( )
                                               getAccessoriesCb );
     }
     {
-        AsyncCallback< ProductPb::AccessorySpeakerState, Callback< ProductPb::AccessorySpeakerState >, Callback<EndPointsError::Error> >
+        AsyncCallback< ProductPb::AccessorySpeakerState, Callback< ProductPb::AccessorySpeakerState >, Callback<FrontDoor::Error> >
         putAccessoriesCb( std::bind( &SpeakerPairingManager::AccessoriesPutHandler,
                                      this,
                                      std::placeholders::_1,
@@ -255,7 +255,7 @@ void SpeakerPairingManager::RegisterFrontDoorEvents( )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::AccessoriesGetHandler( const Callback<ProductPb::AccessorySpeakerState> &resp,
-                                                   const Callback<EndPointsError::Error>& error )
+                                                   const Callback<FrontDoor::Error>& error )
 {
     BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s.", __FUNCTION__ );
 
@@ -273,7 +273,7 @@ void SpeakerPairingManager::AccessoriesGetHandler( const Callback<ProductPb::Acc
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::AccessoriesPutHandler( const ProductPb::AccessorySpeakerState& req,
                                                    const Callback<ProductPb::AccessorySpeakerState>& resp,
-                                                   const Callback<EndPointsError::Error>& error )
+                                                   const Callback<FrontDoor::Error>& error )
 {
     BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s.", __FUNCTION__ );
 
@@ -320,7 +320,6 @@ void SpeakerPairingManager::DoPairingFrontDoor( bool pair,
     productMessage.set_action( pairingAction );
     IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
 
-    m_accessorySpeakerState.set_pairing( pair );
     frontDoorCB( m_accessorySpeakerState );
 }
 
@@ -771,6 +770,9 @@ void SpeakerPairingManager::AccessoryDescriptionToAccessorySpeakerInfo( const Lp
     {
         spkrInfo->set_wireless( false );
     }
+
+    spkrInfo->set_serialnum( accDesc.sn() );
+    spkrInfo->set_version( accDesc.version() );
 
 }
 
