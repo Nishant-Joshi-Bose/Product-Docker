@@ -11,6 +11,7 @@
 #include "CustomAudioSettingsManager.h"
 #include "ThermalMonitorTask.h"
 #include "FrontDoorClient.h"
+#include "AudioSettings.pb.h"
 
 namespace ProductApp
 {
