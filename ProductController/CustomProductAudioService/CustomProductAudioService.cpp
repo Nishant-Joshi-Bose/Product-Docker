@@ -84,13 +84,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setBassAction = [this]( ProductPb::AudioBassLevel val )
     {
-        bool changeOccurred = m_audioSettingsMgr->SetBass( val );
-        if( changeOccurred )
+        ErrorCode_t error = m_audioSettingsMgr->SetBass( val );
+        if( error == ErrorCode_t::NO_ERROR )
         {
             m_mainStreamAudioSettings.set_basslevel( m_audioSettingsMgr->GetBass( ).value() );
             SendMainStreamAudioSettingsEvent();
         }
-        return changeOccurred;
+        return error;
     };
     m_audioBassSetting = std::unique_ptr<AudioSetting<ProductPb::AudioBassLevel>>( new AudioSetting<ProductPb::AudioBassLevel>
                                                                                    ( kBassEndPoint,
@@ -110,13 +110,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         };
         auto setCenterAction = [this]( ProductPb::AudioCenterLevel val )
         {
-            bool changeOccurred = m_audioSettingsMgr->SetCenter( val );
-            if( changeOccurred )
+            ErrorCode_t error = m_audioSettingsMgr->SetCenter( val );
+            if( error == ErrorCode_t::NO_ERROR )
             {
                 m_mainStreamAudioSettings.set_centerlevel( m_audioSettingsMgr->GetCenter( ).value() );
                 SendMainStreamAudioSettingsEvent();
             }
-            return changeOccurred;
+            return error;
         };
         m_audioCenterSetting = std::unique_ptr<AudioSetting<ProductPb::AudioCenterLevel>>( new AudioSetting<ProductPb::AudioCenterLevel>
                                ( kCenterEndPoint,
@@ -137,13 +137,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         };
         auto setModeAction = [ this ]( ProductPb::AudioMode val )
         {
-            bool changeOccurred = m_audioSettingsMgr->SetMode( val );
-            if( changeOccurred )
+            ErrorCode_t error = m_audioSettingsMgr->SetMode( val );
+            if( error == ErrorCode_t::NO_ERROR )
             {
                 m_mainStreamAudioSettings.set_dialogmode( IsDialogModeEnabled() );
                 SendMainStreamAudioSettingsEvent();
             }
-            return changeOccurred;
+            return error;
         };
         m_audioModeSetting = std::unique_ptr<AudioSetting<ProductPb::AudioMode>>( new AudioSetting<ProductPb::AudioMode>
                                                                                   ( kModeEndPoint,
@@ -162,13 +162,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setTrebleAction = [ this ]( ProductPb::AudioTrebleLevel val )
     {
-        bool changeOccurred = m_audioSettingsMgr->SetTreble( val );
-        if( changeOccurred )
+        ErrorCode_t error = m_audioSettingsMgr->SetTreble( val );
+        if( error == ErrorCode_t::NO_ERROR )
         {
             m_mainStreamAudioSettings.set_treblelevel( m_audioSettingsMgr->GetTreble( ).value() );
             SendMainStreamAudioSettingsEvent();
         }
-        return changeOccurred;
+        return error;
     };
     m_audioTrebleSetting = std::unique_ptr<AudioSetting<ProductPb::AudioTrebleLevel>>( new AudioSetting<ProductPb::AudioTrebleLevel>
                            ( kTrebleEndPoint,

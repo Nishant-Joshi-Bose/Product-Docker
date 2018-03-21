@@ -80,6 +80,7 @@ productuiassets_dir=$(components get CastleProductUIAssets installed_location) |
 frontdoor_dir=$(components get FrontDoor-qc8017_32 installed_location) || exit
 boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
 datacollection_dir=$(components get CastleDataCollectionClient-qc8017_32 installed_location) || exit
+sadi_dir=$(components get SADI-qc8017_32 installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
@@ -141,16 +142,11 @@ if (( \$(date +%s) < $t )); then
 fi
 EOF
 
-# Copy public keys in FS based on DEPLOY_ENV flag exported
+# Copy public keys in FS for development key. EC will take care of generation for Production 
 secure_dir=$opt_dir/etc/secure/
 mkdir -p "$secure_dir" || exit
-if [ "$DEPLOY_ENV" = prod ]; then
-    cp -r "$wspace/scripts/keys/production/publicKeys/" "$secure_dir" || exit
-    cp -r "$wspace/scripts/keys/production/CACerts/" "$secure_dir" || exit
-else
-    cp -r "$wspace/scripts/keys/development/publicKeys/" "$secure_dir" || exit
-    cp -r "$wspace/scripts/keys/development/CACerts/" "$secure_dir" || exit
-fi
+cp -r "$wspace/keys/development/publicKeys/" "$secure_dir" || exit
+cp -r "$wspace/keys/development/CACerts/" "$secure_dir" || exit
 
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
@@ -174,14 +170,12 @@ fi
 "$galapagosclient_dir/stage" "$opt_dir" || exit
 "$httpproxy_dir/stage" "$opt_dir" || exit
 "$datacollection_dir/stage" "$opt_dir" || exit
+"$sadi_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
 
 cd "$opt_dir"/lib || exit
 rm -f *.a
-
-# Workaround for CASTLE-9311: "libuuid.so missing from Riviera-HSP 2.4"
-cp "$riviera_toolchain_dir/sdk/sysroots/aarch64-oe-linux/lib/libuuid.so.1" "$opt_dir"/lib || exit
 
 PackageName=SoundTouch
 

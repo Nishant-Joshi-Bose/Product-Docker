@@ -91,6 +91,27 @@ Eddie [Getting Started](https://wiki.bose.com/display/WSSW/Eddie+Quick+Start+Gui
 
 [Updating Individual Components on Eddie](https://wiki.bose.com/display/WSSW/Updating+Individual+Components+on+Eddie)
 
+### Building different LPM BLOBs
+
+By default the BLOB that is used to create the lpm_updater.ipk will be a Release BLOB based off of the release manifest xml located in
+the LpmManifestFiles directory. If you wish to create a BLOB based on Continuous or Nightly builds of components try building with the commands below:
+```shell session
+# Install components and run make normally
+$ make
+# After running make you can now create different types of LPM BLOBs
+
+# Create a BLOB using the LpmManifestFiles/continuous_lpm_package.xml
+$ make lpmupdater-ipk BUILD_TYPE=Continuous
+
+# Create a BLOB using the LpmManifestFiles/nightly_lpm_package.xml
+$ make lpmupdater-ipk BUILD_TYPE=Nightly
+
+# Create a BLOB using the LpmManifestFiles/release_lpm_package.xml
+# Note: By default the build process will use this method.
+$ make lpmupdater-ipk BUILD_TYPE=Release
+```
+
+
 ### More...
 
 Ask to be added to the SSG-Eddie mailing list to stay in the loop by clicking
@@ -120,7 +141,6 @@ To setup the usual environment:
 
 ```shell session
 $ adb shell
-/ # . ~/.profile
 Sat Sep  2 12:10:12 UTC 2017
 Device name: "Bose SoundTouch C7E3A2"
 mc1014468@hepdsw64.bose.com 2017-08-31T08:40:21 master 0.0.1-1+3e07c68

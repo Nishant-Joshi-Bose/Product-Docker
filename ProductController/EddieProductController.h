@@ -73,7 +73,6 @@
 #include "DataCollectionClientInterface.h"
 #include "MacAddressInfo.h"
 #include "BOptional.h"
-#include "VoiceServiceClient.h"
 #include "BoseVersion.h"
 
 namespace ProductApp
@@ -98,11 +97,6 @@ public:
     std::vector<std::string> GetUniqueLanguages() const override
     {
         return {};
-    }
-
-    BLESetupService::ProductId GetProductId() const override
-    {
-        return BLESetupService::ProductId::EDDIE;
     }
     std::string GetProductVersionNumber() const override
     {
@@ -297,7 +291,7 @@ public:
 /// @return void
 ///////////////////////////////////////////////////////////////////////////////
     void HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationStatus &status );
-    void CallbackError( const EndPointsError::Error &error );
+    void CallbackError( const FrontDoor::Error &error );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name   HandleSTSReady
@@ -367,17 +361,6 @@ public:
     void SetDisplayAutoMode( bool autoMode ) const
     {
         m_displayController->SetAutoMode( autoMode );
-    }
-
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name   GetVoiceServiceClient
-/// @brief  Returns reference to VoiceServiceClient
-/// @return VoiceServiceClient&
-///////////////////////////////////////////////////////////////////////////////
-    inline VoiceServiceClient& GetVoiceServiceClient()
-    {
-        return m_voiceServiceClient;
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -453,7 +436,7 @@ private:
     bool                                        m_isUiConnected = false;
 
     BOptional<int>                              m_wifiProfilesCount;
-    AsyncCallback<EndPointsError::Error>            m_fdErrorCb;
+    AsyncCallback<FrontDoor::Error>            m_fdErrorCb;
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief Interfaces to the ProductSTSController, which implements the interactions
@@ -464,7 +447,6 @@ private:
     bool m_IsAudioPathReady = true;
     ProductSTSController                        m_ProductSTSController;
     std::shared_ptr<DataCollectionClientIF>     m_DataCollectionClient;
-    VoiceServiceClient                          m_voiceServiceClient;
 
     /// Shared Pointer to the LPM Custom Hardware Interface
     std::shared_ptr< CustomProductLpmHardwareInterface > m_LpmInterface;

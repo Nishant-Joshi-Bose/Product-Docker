@@ -51,12 +51,6 @@ if cc is None or not re.match(r'^[A-Z][A-Z]$', cc):
     warn("Invalid country_code", cc)
     fixes.append("set country_code US")
 
-rc = get("regionCode")
-if rc is None or not re.match(r'^[A-Z][A-Z]$', rc):
-    warn("Invalid regionCode", rc)
-#   Eddie does not require region code to be set.
-#   fixes.append("set regionCode US")
-
 # GUID standard canonical form is described here:
 # https://en.m.wikipedia.org/wiki/Universally_unique_identifier
 guid = get("guid")
@@ -71,14 +65,24 @@ if not sn: # allow any non-empty string
     fixes.append("set snSystem RF000000000000000")
 
 pc = get("productColor")
-if pc is None or not re.match(r'^\d+$', pc):
-    warn("productColor not set:", pc)
-    fixes.append("set productColor 1  #  1=tripleBlack | 3=luxGray")
+if pc is None or not re.match(r'^\d+$', pc): # allow any integer
+    warn("Invalid productColor:", pc)
+    fixes.append("set productColor 1  # 1=tripleBlack | 3=luxGray")
 
 vi = get("BMAPVariantID")
-if vi is None or not re.match(r'^\d+$', vi):
-    warn("Invalid BMAPVariantID: Non-integer value detected. Must be a base 10 interger between 0 and 7. Found:", vi)
+if vi is None or not re.match(r'^\d+$', vi): # allow any integer
+    warn("Invalid BMAPVariantID: ", vi)
     fixes.append("set BMAPVariantID 1  # 0=NONE | 1=BLACK | 2=WHITE | 3=SILVER")
+
+pi = get("BMAPProductID")
+if pi is None or not re.match(r'^0[xX][0-9a-fA-F]{4}$', pi): # allow hex value (2-bytes)
+    warn("Invalid BMAPProductID:", pi)
+    fixes.append("set BMAPProductID 0x4026  # 0x4026=Eddie | 0x4027=Professor | 0x4028=Ginger-Cheevers")
+
+ai = get("BMAPBleProductID")
+if ai is None or not re.match(r'^\d+$', ai): # allow any integer
+    warn("Invalid productColor:", ai)
+    fixes.append("set BMAPBleProductID 16  # 16=Eddie | 17=Professor | 18=Ginger-Cheevers")
 
 pn = get("productName")
 if not pn: # allow any non-empty string

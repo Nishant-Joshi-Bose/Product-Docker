@@ -19,13 +19,14 @@ public:
     CustomAudioSettingsManager();
     ~CustomAudioSettingsManager() override {}
 
-    bool SetBass( const ProductPb::AudioBassLevel& bass );
+    ErrorCode_t SetBass( const ProductPb::AudioBassLevel& bass );
     const ProductPb::AudioBassLevel& GetBass() const;
-    bool SetCenter( const ProductPb::AudioCenterLevel& center );
+
+    ErrorCode_t SetCenter( const ProductPb::AudioCenterLevel& center );
     const ProductPb::AudioCenterLevel& GetCenter() const;
-    bool SetMode( const ProductPb::AudioMode& mode );
+    ErrorCode_t SetMode( const ProductPb::AudioMode& mode );
     const ProductPb::AudioMode& GetMode() const;
-    bool SetTreble( const ProductPb::AudioTrebleLevel& treble );
+    ErrorCode_t SetTreble( const ProductPb::AudioTrebleLevel& treble );
     const ProductPb::AudioTrebleLevel& GetTreble() const;
 
     /*! \brief Returns state of testing flag for "center level" feature.

@@ -17,7 +17,7 @@ enum class Action
     PLAY_PAUSE = ActionCommon_t::PLAY_PAUSE,
     NEXT_TRACK = ActionCommon_t::NEXT_TRACK,
     PREV_TRACK = ActionCommon_t::PREV_TRACK,
-    NETWORK_STANDBY = ActionCommon_t::NETWORK_STANDBY,
+    POWER_TOGGLE = ActionCommon_t::POWER_TOGGLE,
     MANUAL_SETUP_MODE = ActionCommon_t::SEND_TO_AP_MODE,
     MANUAL_UPDATE = ActionCommon_t::MANUAL_UPDATE,
     FACTORY_DEFAULT = ActionCommon_t::FACTORY_DEFAULT,

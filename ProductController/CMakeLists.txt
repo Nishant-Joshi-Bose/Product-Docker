@@ -11,6 +11,7 @@ INCLUDE_DIRECTORIES(
   ${KEYHANDLER_DIR}/include
   IntentHandler
   CustomProductAudioService
+  CustomProductSTS
   DisplayController
   .
 )
@@ -38,6 +39,8 @@ ADD_EXECUTABLE(Eddie
   DisplayController/DisplayController.cpp
   CustomProductAudioService/CustomProductAudioService.cpp
   CustomProductAudioService/CustomAudioSettingsManager.cpp
+  CustomProductSTS/CustomProductSTSAuxStateFactory.cpp
+  CustomProductSTS/CustomProductSTSStateTopAux.cpp
   CustomProductLpmHardwareInterface.cpp
 )
 
@@ -56,6 +59,7 @@ TARGET_LINK_LIBRARIES(Eddie
   CliClient
   AudioLibs
   PassportClient
+  GalapagosClient
   SASSFrontDoorServiceProto
   SoftwareUpdateAPI
   STS
