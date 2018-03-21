@@ -1,11 +1,11 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@01bc26d1af73b45425eec6d8537891eb251b40cd"
+    "selected_version": "master@3d918b21f34f0de023281184bf94a0435c7eb025"
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@6d63efb379b757868695d8c8362795c7d3a437ee"
+    "selected_version": "master@cb2ce9130bc60c54b17058f92bc977bcad7710a8"
   },
   {
     "name": "A4VVideoManagerService",
@@ -81,7 +81,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.8-71+96fe1a4"
+    "selected_version": "Release/master/0.3.9-73+b30349e"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -145,7 +145,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.3.11-131+2b16d62"
+    "selected_version": "Release/master/0.3.12-135+1fe942f"
   },
   {
     "name": "RivieraLpmTools",
@@ -153,7 +153,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/master/0.3.2-39+0fb03f2"
+    "selected_version": "Release/master/0.3.3-43+fcfb906"
   },
   {
     "name": "SADI-qc8017_32",

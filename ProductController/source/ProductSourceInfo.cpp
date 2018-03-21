@@ -163,7 +163,7 @@ void ProductSourceInfo::UpdateSources( const SoundTouchInterface::Sources& sourc
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BOptional<SoundTouchInterface::Sources::SourceItem> ProductSourceInfo::FindSource( const SoundTouchInterface::ContentItem& item )
 {
-    if( ( not item.has_sourceaccount() ) or ( not item.has_source() ) )
+    if( not item.has_source() )
     {
         return {};
     }
@@ -171,11 +171,6 @@ BOptional<SoundTouchInterface::Sources::SourceItem> ProductSourceInfo::FindSourc
     for( auto i = 0 ; i < m_sources.sources_size(); i++ )
     {
         auto source = m_sources.sources( i );
-
-        if( ( not source.has_sourceaccountname() ) or ( not source.has_sourcename() ) )
-        {
-            continue;
-        }
 
         if( ( source.sourceaccountname() == item.sourceaccount() ) and ( source.sourcename() == item.source() ) )
         {
