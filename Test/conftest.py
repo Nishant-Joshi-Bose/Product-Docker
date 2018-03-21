@@ -97,14 +97,14 @@ def save_speaker_log(request, device_ip):
 
 
 @pytest.fixture(scope='class')
-def device_ip(request, get_deviceid):
+def device_ip(request, deviceid):
     """
     This fixture gets the device IP
     :return: device ip
     """
     logger.info("device_ip")
     if request.config.getoption("--target").lower() == 'device':
-        networkbaseObj = NetworkBase(None, get_deviceid)
+        networkbaseObj = NetworkBase(None, deviceid)
         iface = request.config.getoption("--network-iface")
         device_ip = networkbaseObj.check_inf_presence(iface)
         return device_ip
@@ -294,14 +294,17 @@ def keyConfig():
     keyConfigData = keyConfig["keyTable"]
     return keyConfigData
 
-
 @pytest.fixture(scope='session')
-def get_deviceid(request):
+def deviceid(request):
     """
     This fixture will return the device-id
     :return: device-id
     """
-    return request.config.getoption("--device-id")
+    try:
+        return request.config.getoption("--device-id")
+    except Exception as e:
+        logger.info("Getting device id.... " + str(e))
+        return False
 
 @pytest.fixture(scope='module')
 def wifi_config():
@@ -314,7 +317,6 @@ def wifi_config():
     wifi_ini_file = '{}/Configs/conf_wifiProfiles.ini'.format(current_path)
     cfg.read(wifi_ini_file)
     yield cfg
-
 
 @pytest.fixture(scope="function")
 def ip_address_wlan(request, wifi_config):
