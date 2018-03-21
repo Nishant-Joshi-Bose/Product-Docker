@@ -142,8 +142,6 @@ EddieProductController::~EddieProductController()
 void EddieProductController::InitializeAction()
 {
     CommonInitialize( );
-    m_deviceManager.Initialize( this );
-    m_ProductFrontDoorUtility.Initialize( this, &m_deviceManager );
 
     m_ConfigurationStatusPersistence = ProtoPersistenceFactory::Create( "ConfigurationStatus", g_ProductPersistenceDir );
     m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
@@ -164,7 +162,6 @@ void EddieProductController::InitializeAction()
 
     // Initialize and register Intents for the Product Controller
     m_IntentHandler.Initialize();
-
 
     ///Instantiate and run the hardware interface.
     m_LpmInterface->Run( );
