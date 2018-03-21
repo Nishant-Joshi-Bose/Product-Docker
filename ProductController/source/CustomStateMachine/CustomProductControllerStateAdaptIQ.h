@@ -76,6 +76,7 @@ public:
     void HandleStateExit( )  override;
     bool HandleAdaptIQStatus( const ProductAdaptIQStatus& aiqStatus ) override;
     bool HandleAdaptIQControl( const ProductAdaptIQControl& cmd );
+    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )  override;
 
 private:
 

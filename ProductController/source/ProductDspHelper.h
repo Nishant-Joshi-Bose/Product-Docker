@@ -158,7 +158,7 @@ private:
     void AudioFormatGetDspStatusCallback( const Callback<ProductPb::AudioFormat>& resp,
                                           const LpmServiceMessages::IpcDspStatus_t status );
     void AudioFormatFrontDoorGetHandler( const Callback<ProductPb::AudioFormat>& resp,
-                                         const Callback<EndPointsError::Error>& error );
+                                         const Callback<FrontDoor::Error>& error );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

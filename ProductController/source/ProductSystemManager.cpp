@@ -98,7 +98,7 @@ bool ProductSystemManager::Run( )
     /// to process configuration requests.
     ////////////////////////////////////////////////////////////////////////////////////////////////
     {
-        AsyncCallback < Callback < ProductPb::ConfigurationStatus >, Callback<EndPointsError::Error>>
+        AsyncCallback < Callback < ProductPb::ConfigurationStatus >, Callback<FrontDoor::Error>>
                 callback( std::bind( &ProductSystemManager::HandleGetConfigurationStatusRequest,
                                      this,
                                      std::placeholders::_1,
@@ -211,7 +211,7 @@ void ProductSystemManager::WriteConfigurationStatusToPersistentStorage( )
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductSystemManager::HandleGetConfigurationStatusRequest( const Callback< ProductPb::ConfigurationStatus >& response,
-                                                                const Callback<EndPointsError::Error>& errorRsp ) const
+                                                                const Callback<FrontDoor::Error>& errorRsp ) const
 {
     BOSE_DEBUG( s_logger, "Sending the configuration status for a get request." );
 

@@ -1,11 +1,11 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@01bc26d1af73b45425eec6d8537891eb251b40cd"
+    "selected_version": "master@f6b975591d7d172e2fd9fa76d9c9440acddfa55d"
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@6d63efb379b757868695d8c8362795c7d3a437ee"
+    "selected_version": "master@73b02107db997e54eaa59dbf49c442d88a80e773"
   },
   {
     "name": "BLERemoteXCVR",
@@ -41,7 +41,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/0.3.5-124+fa8c675"
+    "selected_version": "Release/master/0.3.6-141+9d40368"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -65,7 +65,7 @@
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.2.2-37+0f43d0b"
+    "selected_version": "Release/master/0.2.3-41+513bbab"
   },
   {
     "name": "CastleLibs-native",
@@ -81,7 +81,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.8-71+96fe1a4"
+    "selected_version": "Release/master/0.3.9-73+b30349e"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -97,7 +97,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@da83372da9f114b88e5d05ce62d71424e23dbf63"
+    "selected_version": "master@9798c0cf28bb67d81c67df560c675a5ae56b8a49"
   },
   {
     "name": "CastleProductUIAssets",
@@ -145,7 +145,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.3.11-131+2b16d62"
+    "selected_version": "Release/master/0.3.12-135+1fe942f"
   },
   {
     "name": "RivieraLpmTools",
@@ -153,7 +153,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/master/0.3.2-39+0fb03f2"
+    "selected_version": "Release/master/0.3.3-43+fcfb906"
   },
   {
     "name": "SADI-qc8017_32",
@@ -165,7 +165,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/0.3.3-63+5fcbc13"
+    "selected_version": "Release/master/0.3.4-68+c3828ad"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",

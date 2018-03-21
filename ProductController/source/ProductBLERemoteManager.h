@@ -2,7 +2,7 @@
 ///
 /// @file      ProductBLERemoteManager.h
 ///
-/// @brief     This file contains the source code to handle communication with A4VVideoManager service
+/// @brief     This file contains the source code to handle communication with A4VRemoteCommunicationService service
 ///
 /// @author    Chris Houston
 ///
@@ -68,7 +68,7 @@ public:
     /// @return This method does not return anything.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    ProductBLERemoteManager( ProfessorProductController& ProductController );
+    explicit ProductBLERemoteManager( ProfessorProductController& ProductController );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// This declaration is used to start and run the hardware manager.
