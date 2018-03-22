@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.15.41380.2733922"
+    "selected_version": "Release/Castle-Fork/0.3.16.41441.2742479"
   },
   {
     "name": "bose-opkg-utils",
@@ -45,11 +45,11 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.4-20608"
+    "selected_version": "Release/Castle-Fork/0.3.6-20644"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/0.3.4-20608"
+    "selected_version": "Release/Castle-Fork/0.3.6-20644"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -61,7 +61,7 @@
   },
   {
     "name": "CastleDemoController-qc8017_32",
-    "selected_version": "Release/master/0.3.2-62+b9fcc88"
+    "selected_version": "Release/master/0.3.3-66+c3b9b9f"
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
@@ -89,11 +89,11 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.3.86-524+e45febf"
+    "selected_version": "Release/master/0.3.90-556+cb693bd"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.3.86-524+e45febf"
+    "selected_version": "Release/master/0.3.90-556+cb693bd"
   },
   {
     "name": "CastleProductControllerCommon",
@@ -173,7 +173,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.15.41380.2733922"
+    "selected_version": "Release/Castle-Fork/0.3.16.41441.2742479"
   },
   {
     "name": "SystemEventService-qc8017_32",
