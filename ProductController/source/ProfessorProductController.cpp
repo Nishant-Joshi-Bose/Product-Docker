@@ -32,7 +32,7 @@
 #include "CustomProductLpmHardwareInterface.h"
 #include "CustomProductAudioService.h"
 #include "CustomAudioSettingsManager.h"
-#include "ProductKeyInputInterface.h"
+#include "CustomProductKeyInputManager.h"
 #include "ProductNetworkManager.h"
 #include "ProductSystemManager.h"
 #include "ProductCommandLine.h"
@@ -139,7 +139,7 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductSystemManager( nullptr ),
     m_ProductNetworkManager( nullptr ),
     m_ProductCommandLine( nullptr ),
-    m_ProductKeyInputInterface( nullptr ),
+    m_ProductKeyInputManager( nullptr ),
     m_ProductCecHelper( nullptr ),
     m_ProductDspHelper( nullptr ),
     m_ProductAdaptIQManager( nullptr ),
@@ -513,7 +513,7 @@ void ProfessorProductController::Run( )
     m_ProductSystemManager        = std::make_shared< ProductSystemManager              >( *this );
     m_ProductNetworkManager       = std::make_shared< ProductNetworkManager             >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
-    m_ProductKeyInputInterface    = std::make_shared< ProductKeyInputInterface          >( *this );
+    m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
     m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
     m_ProductSourceInfo           = std::make_shared< ProductSourceInfo                 >( *this );
     m_ProductBLERemoteManager     = std::make_shared< ProductBLERemoteManager           >( *this );
@@ -524,7 +524,7 @@ void ProfessorProductController::Run( )
         m_ProductNetworkManager       == nullptr ||
         m_ProductAudioService         == nullptr ||
         m_ProductCommandLine          == nullptr ||
-        m_ProductKeyInputInterface    == nullptr ||
+        m_ProductKeyInputManager      == nullptr ||
         m_ProductCecHelper            == nullptr ||
         m_ProductDspHelper            == nullptr ||
         m_ProductAdaptIQManager       == nullptr )
@@ -556,7 +556,7 @@ void ProfessorProductController::Run( )
     m_ProductNetworkManager      ->Run( );
     m_ProductAudioService        ->Run( );
     m_ProductCommandLine         ->Run( );
-    m_ProductKeyInputInterface   ->Run( );
+    m_ProductKeyInputManager     ->Run( );
     m_ProductCecHelper           ->Run( );
     m_ProductDspHelper           ->Run( );
     m_ProductAdaptIQManager      ->Run( );
@@ -1382,7 +1382,7 @@ void ProfessorProductController::Wait( )
     m_ProductSystemManager       ->Stop( );
     m_ProductNetworkManager      ->Stop( );
     m_ProductCommandLine         ->Stop( );
-    m_ProductKeyInputInterface   ->Stop( );
+    m_ProductKeyInputManager     ->Stop( );
     m_ProductCecHelper           ->Stop( );
     m_ProductDspHelper           ->Stop( );
     m_ProductAdaptIQManager      ->Stop( );

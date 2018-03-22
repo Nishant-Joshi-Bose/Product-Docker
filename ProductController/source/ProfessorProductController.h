@@ -65,7 +65,7 @@ class ProductNetworkManager;
 class CustomProductAudioService;
 class ProductCecHelper;
 class ProductCommandLine;
-class ProductKeyInputInterface;
+class CustomProductKeyInputManager;
 class ProductAdaptIQManager;
 class ProductSourceInfo;
 class ProductBLERemoteManager;
@@ -279,7 +279,7 @@ private:
     std::shared_ptr< ProductSystemManager              > m_ProductSystemManager;
     std::shared_ptr< ProductNetworkManager             > m_ProductNetworkManager;
     std::shared_ptr< ProductCommandLine                > m_ProductCommandLine;
-    std::shared_ptr< ProductKeyInputInterface          > m_ProductKeyInputInterface;
+    std::shared_ptr< CustomProductKeyInputManager      > m_ProductKeyInputManager;
     std::shared_ptr< ProductCecHelper                  > m_ProductCecHelper;
     std::shared_ptr< ProductDspHelper                  > m_ProductDspHelper;
     std::shared_ptr< ProductAdaptIQManager             > m_ProductAdaptIQManager;
