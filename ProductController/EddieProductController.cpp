@@ -86,9 +86,14 @@ EddieProductController::EddieProductController():
     m_dataCollectionClientInterface( m_FrontDoorClientIF )
 {
     BOSE_INFO( s_logger, __func__ );
-    m_deviceManager.Initialize( this );
-    m_ProductFrontDoorUtility.Initialize( this, &m_deviceManager );
+}
 
+EddieProductController::~EddieProductController()
+{
+}
+
+void EddieProductController::InitializeHsm()
+{
     /// Add States to HSM object and initialize HSM before doing anything else.
     GetHsm().AddState( "", &m_ProductControllerStateTop );
     GetHsm().AddState( "", &m_ProductControllerStateLowPowerStandby );
@@ -133,6 +138,12 @@ EddieProductController::EddieProductController():
     GetHsm().AddState( "", &m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate );
 
     GetHsm().Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );
+}
+
+void EddieProductController::InitializeAction()
+{
+    InitializeHsm( );
+    CommonInitialize( );
 
     m_ConfigurationStatusPersistence = ProtoPersistenceFactory::Create( "ConfigurationStatus", g_ProductPersistenceDir );
     m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
@@ -157,15 +168,7 @@ EddieProductController::EddieProductController():
 
     // Initialize and register Intents for the Product Controller
     m_IntentHandler.Initialize();
-}
 
-EddieProductController::~EddieProductController()
-{
-}
-
-void EddieProductController::InitializeAction()
-{
-    CommonInitialize( );
     ///Instantiate and run the hardware interface.
     m_LpmInterface->Run( );
 
