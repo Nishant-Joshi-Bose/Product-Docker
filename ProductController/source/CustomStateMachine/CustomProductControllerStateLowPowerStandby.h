@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateLowPowerExit.h
+/// @file      CustomProductControllerStateLowPowerStandby.h
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
 ///            product on state. It is an all encompassing state that includes the playing and
@@ -34,7 +34,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerStateLowPowerExit.h"
+#include "ProductControllerStateLowPowerStandby.h"
 #include "HsmState.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,16 +57,16 @@ class ProductControllerHsm;
 /// @brief This class is used for executing produce specific actions when in an on state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateLowPowerExit : public ProductControllerStateLowPowerExit
+class CustomProductControllerStateLowPowerStandby : public ProductControllerStateLowPowerStandby
 {
 public:
 
-    CustomProductControllerStateLowPowerExit( ProductControllerHsm& hsm,
+    CustomProductControllerStateLowPowerStandby( ProductControllerHsm& hsm,
                                     CHsmState*            pSuperState,
                                     Hsm::STATE            stateId,
-                                    const std::string&    name    = "CustomProductControllerStateLowPowerExit" );
+                                    const std::string&    name    = "CustomProductControllerStateLowPowerStandby" );
 
-    ~CustomProductControllerStateLowPowerExit( ) override
+    ~CustomProductControllerStateLowPowerStandby( ) override
     {
 
     }

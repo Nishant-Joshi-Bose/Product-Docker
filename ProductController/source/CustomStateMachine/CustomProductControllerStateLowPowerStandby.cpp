@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateLowPowerExit.cpp
+/// @file      CustomProductControllerStateLowPowerStandby.cpp
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
 ///            product on state.
@@ -25,7 +25,7 @@
 #include "Utilities.h"
 #include "Intents.h"
 #include "IntentHandler.h"
-#include "CustomProductControllerStateLowPowerExit.h"
+#include "CustomProductControllerStateLowPowerStandby.h"
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
 #include "ProductControllerState.h"
@@ -35,10 +35,7 @@
 ///            Constant Definitions
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-namespace
-{
-constexpr uint32_t MANUAL_BLE_REMOTE_PAIRING_TIMEOUT_SECONDS = 120;
-}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -48,7 +45,7 @@ namespace ProductApp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateLowPowerExit::CustomProductControllerStateLowPowerExit
+/// @brief CustomProductControllerStateLowPowerStandby::CustomProductControllerStateLowPowerStandby
 ///
 /// @param ProductControllerHsm& hsm
 ///
@@ -59,26 +56,26 @@ namespace ProductApp
 /// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductControllerStateLowPowerExit::CustomProductControllerStateLowPowerExit( ProductControllerHsm& hsm,
+CustomProductControllerStateLowPowerStandby::CustomProductControllerStateLowPowerStandby( ProductControllerHsm& hsm,
                                                                 CHsmState*            pSuperState,
                                                                 Hsm::STATE            stateId,
                                                                 const std::string&    name )
 
-    : ProductControllerStateLowPowerExit( hsm, pSuperState, stateId, name )
+    : ProductControllerStateLowPowerStandby( hsm, pSuperState, stateId, name )
 {
     BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStateLowPowerExit::HandleIntentPlayProductSource
+/// @brief  CustomProductControllerStateLowPowerStandby::HandleIntentPlayProductSource
 ///
 /// @param  KeyHandlerUtil::ActionType_t intent
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the intent.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateLowPowerExit::HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent )
+bool CustomProductControllerStateLowPowerStandby::HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent )
 {
     BOSE_INFO( s_logger, "The %s state in %s is handling the intent %u", GetName( ).c_str( ), __FUNCTION__, intent );
     m_cachedAction = intent;
@@ -87,12 +84,12 @@ bool CustomProductControllerStateLowPowerExit::HandleIntentPlayProductSource( Ke
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStateLowPowerExit::HandleIntentPlaySoundTouchSource
+/// @brief  CustomProductControllerStateLowPowerStandby::HandleIntentPlaySoundTouchSource
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the intent.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateLowPowerExit::HandleIntentPlaySoundTouchSource( )
+bool CustomProductControllerStateLowPowerStandby::HandleIntentPlaySoundTouchSource( )
 {
     BOSE_INFO( s_logger, "The %s state is caching play soundtouch source", GetName( ).c_str( ) );
     m_cachedAction = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_SOUNDTOUCH );
