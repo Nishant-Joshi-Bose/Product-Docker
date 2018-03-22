@@ -31,6 +31,7 @@
 #include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "CustomProductAudioService.h"
+#include "CustomAudioSettingsManager.h"
 #include "ProductKeyInputInterface.h"
 #include "ProductNetworkManager.h"
 #include "ProductSystemManager.h"
@@ -1483,7 +1484,7 @@ void ProfessorProductController::SendInitialCapsData()
 
     BOSE_VERBOSE( s_logger, "%s sending %s", __func__, ProtoToMarkup::ToJson( message ).c_str() );
 
-    GetFrontDoorClient()->SendPut<SoundTouchInterface::NowPlaying, FrontDoor::Error>(
+    GetFrontDoorClient()->SendPut<SoundTouchInterface::Sources, FrontDoor::Error>(
         FRONTDOOR_SYSTEM_SOURCES_API,
         message,
         { },

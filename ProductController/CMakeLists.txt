@@ -2,16 +2,16 @@ INCLUDE_DIRECTORIES(
   ${A4VVIDEOMANAGER_DIR}/source/Client
   ${A4VQUICKSET_DIR}/source/Client
   ${CASTLECLI_DIR}/include
-  ${KEYHANDLER_DIR}/include
-  ${NETWORK_SERVICE_DIR}/include
-  ${DATACOLLECTIONCLIENT_DIR}
   ${PRODUCTCONTROLLERCOMMON_DIR}
   ${PRODUCTCONTROLLERCOMMON_DIR}/ChimesController
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
-  ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
-  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
+  ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
+  ${DATACOLLECTIONCLIENT_DIR}
+  ${KEYHANDLER_DIR}/include
+  ${NETWORK_SERVICE_DIR}/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/Bluetooth
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/SoundTouchInterface
   .
@@ -75,27 +75,27 @@ ADD_EXECUTABLE(Professor
 
 TARGET_LINK_LIBRARIES(Professor
   CastleProductControllerCommon
+  DataCollectionClient
   LpmClient
-  A4VRemoteCommClient
-  A4VVideoManagerClient
-  A4VQuickSetServiceClient
+  HttpInterface
   FrontDoorClient
   NetworkServiceClient
   KeyHandler
   BLESetupServiceProto
-  DataCollectionClient
-  HttpInterface
   BluetoothSinkServiceProto
   LightBarController
   VoiceServiceClient
   CliClient
-  ShelbyUtils
   AudioLibs
-  SystemEventService
-  BoseLibs
   PassportClient
   GalapagosClient
+  SASSFrontDoorServiceProto
+  SoftwareUpdateAPI
   STS
+  ShelbyUtils
+  SoundTouch_SDK_Protobuf_static
+  SystemEventService
+  BoseLibs
   jsoncpp
   protobuf
   TinyXml
@@ -103,9 +103,9 @@ TARGET_LINK_LIBRARIES(Professor
   rt
   cap
   dl
-  SoundTouch_SDK_Protobuf_static
-  SoftwareUpdateAPI
-  SASSFrontDoorServiceProto
+  A4VRemoteCommClient
+  A4VVideoManagerClient
+  A4VQuickSetServiceClient
 )
 
 INSTALL(TARGETS Professor DESTINATION ${OUTPUT_BIN_DIR})
