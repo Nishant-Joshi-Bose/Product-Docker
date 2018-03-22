@@ -499,7 +499,6 @@ void ProfessorProductController::Run( )
     /// Initialize entities in the Common Product Controller
     ///
     CommonInitialize( );
-    m_deviceManager.Initialize( this );
 
     ///
     /// Get instances of all the modules.

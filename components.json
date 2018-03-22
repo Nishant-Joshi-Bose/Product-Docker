@@ -41,7 +41,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/0.3.6-141+9d40368"
+    "selected_version": "Release/master/0.3.7-147+0056ceb"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -81,7 +81,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.9-73+b30349e"
+    "selected_version": "Release/master/0.3.8-71+96fe1a4"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -97,7 +97,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@4c348b56b9b211690169eda55b9209b9c20c00e0"
+    "selected_version": "master@62c424680ee2cabe84aa7f007c750e0e474874bf"
   },
   {
     "name": "CastleProductUIAssets",
@@ -145,7 +145,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.3.12-135+1fe942f"
+    "selected_version": "Release/master/0.3.11-131+2b16d62"
   },
   {
     "name": "RivieraLpmTools",
@@ -153,7 +153,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/master/0.3.3-43+fcfb906"
+    "selected_version": "Release/master/0.3.2-39+0fb03f2"
   },
   {
     "name": "SADI-qc8017_32",
