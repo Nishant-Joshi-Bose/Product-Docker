@@ -16,16 +16,19 @@ Parent conftest.py for the Eddie repository
 
 import os
 import datetime
+import ConfigParser
 import pytest
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.RivieraUtils import rivieraCommunication
+from CastleTestUtils.RivieraUtils import adb_utils
 from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import flash_device
 from commonData import keyConfig
 
 _log = None
 logger = get_logger(__name__)
+
 
 def pytest_addoption(parser):
     """
@@ -46,15 +49,20 @@ def pytest_addoption(parser):
                      default=30,
                      type=int,
                      help="Timeout for most of the commands")
+    parser.addoption("--router", action="store", default="testRouter",
+                     help="router: Specify which router from Configs/conf_wifiProfiles.ini is used to connect.")
+
 
 def ping(ip):
     """ Pings a given IP Address """
     return os.system("ping -q -c 5 -i 0.2 -w 2 " + ip) == 0
 
+
 @pytest.fixture(scope='session')
 def scm_ip(request):
     """ Get the IP address of Device under Test """
     return request.config.getoption("--scm-ip")
+
 
 @pytest.fixture(scope='session')
 def software_update(flash_device):
@@ -62,6 +70,7 @@ def software_update(flash_device):
     For now; this only calls the Software-Update fixture
     """
     logger.info("Finished Updating Software on the Device")
+
 
 @pytest.fixture(scope='function')
 def save_speaker_log(request, device_ip):
@@ -86,18 +95,20 @@ def save_speaker_log(request, device_ip):
 
     request.addfinalizer(teardown)
 
+
 @pytest.fixture(scope='class')
-def device_ip(request):
+def device_ip(request, deviceid):
     """
     This fixture gets the device IP
     :return: device ip
     """
     logger.info("device_ip")
     if request.config.getoption("--target").lower() == 'device':
-        networkbaseObj = NetworkBase(None)
+        networkbaseObj = NetworkBase(None, deviceid)
         iface = request.config.getoption("--network-iface")
         device_ip = networkbaseObj.check_inf_presence(iface)
         return device_ip
+
 
 @pytest.fixture(scope="class")
 def frontDoor(device_ip):
@@ -109,6 +120,7 @@ def frontDoor(device_ip):
         pytest.fail("No valid device IP")
     frontdoorObj = FrontDoorAPI(device_ip)
     return frontdoorObj
+
 
 @pytest.fixture(scope='function', autouse=True)
 def test_log_banner(request):
@@ -124,6 +136,7 @@ def test_log_banner(request):
 
     request.addfinalizer(teardown)
 
+
 def create_log_dir(foldername):
     """
     Create a directory to store logs.
@@ -135,6 +148,7 @@ def create_log_dir(foldername):
     if not os.path.exists(subfolder):
         os.makedirs(subfolder)
     return subfolder
+
 
 @pytest.fixture(scope='class')
 def adb(request):
@@ -273,8 +287,66 @@ def eddie_master_latest_directory(tmpdir):
     # Remove everything in the tmpdir
     tmpdir.remove()
 
+
 @pytest.fixture(scope="session")
 def keyConfig():
     keyConfigData = None
     keyConfigData = keyConfig["keyTable"]
     return keyConfigData
+
+@pytest.fixture(scope='session')
+def deviceid(request):
+    """
+    This fixture will return the device-id
+    :return: device-id
+    """
+    try:
+        return request.config.getoption("--device-id")
+    except Exception as e:
+        logger.info("Getting device id.... " + str(e))
+        return False
+
+@pytest.fixture(scope='module')
+def wifi_config():
+    """
+    Get config parser instance of wifi profiles.
+    """
+    logger.info("wifi_config")
+    cfg = ConfigParser.SafeConfigParser()
+    current_path = os.path.dirname(os.path.realpath(__file__))
+    wifi_ini_file = '{}/Configs/conf_wifiProfiles.ini'.format(current_path)
+    cfg.read(wifi_ini_file)
+    yield cfg
+
+@pytest.fixture(scope="function")
+def ip_address_wlan(request, wifi_config):
+    """
+    IP address of the device connected to wlan.
+    """
+    dev_id = request.config.getoption("--device-id")
+    network_obj = NetworkBase(None)
+    try:
+        ip_address = network_obj.check_inf_presence("wlan0")
+    except (AttributeError, TypeError):
+        logger.info("Clearing Wireless Profiles...")
+        wifi_clear_profile_command = ' '.join(['network', 'wifi', 'profiles', 'clear'])
+        adb_utils.adb_telnet_cmd(wifi_clear_profile_command, expect_after='Profiles Deleted', device_id=dev_id)
+
+        router = request.config.getoption("--router")
+        router_name = wifi_config.get(router, 'ssid')
+        security = wifi_config.get(router, 'security')
+        password = wifi_config.get(router, 'password')
+
+        logger.info("Adding Wireless Profile - Connecting to:{}".format(router_name))
+        wifi_add_profile_command = ' '.join(['network', 'wifi', 'profiles', 'add', '"{}"'.format(router_name),
+                                             security.upper(), '"{}"'.format(password)])
+        adb_utils.adb_telnet_cmd(wifi_add_profile_command, expect_after='->OK', expect_last='ADD_PROFILE_SUCCEEDED',
+                                 timeout=60, async_response=True, device_id=dev_id)
+
+        # Try to get new ip address assigned to wlan0 interface
+        try:
+            ip_address = network_obj.check_inf_presence("wlan0")
+        except AttributeError as attr_except:
+            assert False, 'Not able to get wlan ip_address, Exception:{}'.format(attr_except)
+    return ip_address
+

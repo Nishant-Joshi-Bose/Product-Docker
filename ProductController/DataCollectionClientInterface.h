@@ -13,7 +13,7 @@
 #include "AudioBassLevel.pb.h"
 #include "WebInterface/Balance.pb.h"
 #include "DeviceManager.pb.h"
-#include "EndPointsError.pb.h"
+#include "SharedProto.pb.h"
 
 class DataCollectionClientInterface
 {
@@ -30,7 +30,7 @@ public:
 private:
 
     void HandleNowPlayingRequest( const SoundTouchInterface::NowPlaying& nPb, const DeviceManagerPb::DeviceState& ds );
-    void GetCallbackError( const EndPointsError::Error& );
+    void GetCallbackError( const FrontDoor::Error& );
 
     std::shared_ptr<DataCollectionClientIF>      m_dataCollectionClient;
     NotifyTargetTaskIF*                          m_dataCollectionClientInterfaceTask = nullptr;
