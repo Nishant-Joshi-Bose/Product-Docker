@@ -87,7 +87,14 @@ EddieProductController::EddieProductController():
     m_dataCollectionClientInterface( m_FrontDoorClientIF )
 {
     BOSE_INFO( s_logger, __func__ );
+}
 
+EddieProductController::~EddieProductController()
+{
+}
+
+void EddieProductController::InitializeStates()
+{
     /// Add States to HSM object and initialize HSM before doing anything else.
     GetHsm().AddState( "", &m_ProductControllerStateTop );
     GetHsm().AddState( "", &m_ProductControllerStateLowPowerStandby );
@@ -132,15 +139,11 @@ EddieProductController::EddieProductController():
     GetHsm().AddState( "", &m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate );
 
     GetHsm().Init( this, PRODUCT_CONTROLLER_STATE_BOOTING );
-
-}
-
-EddieProductController::~EddieProductController()
-{
 }
 
 void EddieProductController::InitializeAction()
 {
+    InitializeStates( );
     CommonInitialize( );
 
     m_ConfigurationStatusPersistence = ProtoPersistenceFactory::Create( "ConfigurationStatus", g_ProductPersistenceDir );
