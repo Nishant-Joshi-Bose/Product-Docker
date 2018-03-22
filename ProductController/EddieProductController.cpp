@@ -93,7 +93,7 @@ EddieProductController::~EddieProductController()
 {
 }
 
-void EddieProductController::InitializeStates()
+void EddieProductController::InitializeHsm()
 {
     /// Add States to HSM object and initialize HSM before doing anything else.
     GetHsm().AddState( "", &m_ProductControllerStateTop );
@@ -143,7 +143,7 @@ void EddieProductController::InitializeStates()
 
 void EddieProductController::InitializeAction()
 {
-    InitializeStates( );
+    InitializeHsm( );
     CommonInitialize( );
 
     m_ConfigurationStatusPersistence = ProtoPersistenceFactory::Create( "ConfigurationStatus", g_ProductPersistenceDir );

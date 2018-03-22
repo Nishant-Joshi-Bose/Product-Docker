@@ -146,7 +146,7 @@ private:
 private:
     ///Register with LPM for events notifications
 
-    void InitializeStates( );
+    void InitializeHsm( );
     void InitializeAction( );
     void RegisterLpmEvents();
     void RegisterKeyHandler();
