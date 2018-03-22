@@ -26,7 +26,7 @@
 #include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProductBLERemoteManager.h"
-#include "EndPointsError.pb.h"
+#include "SharedProto.pb.h"
 #include "ProtoToMarkup.h"
 #include "ProductSourceInfo.h"
 #include "EndPointsDefines.h"
@@ -80,7 +80,7 @@ void ProductBLERemoteManager::InitializeFrontDoor( )
     };
 
     m_FrontDoorClient->RegisterNotification<SoundTouchInterface::NowSelectionInfo>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, handleNowSelection );
-    m_FrontDoorClient->SendGet<SoundTouchInterface::NowSelectionInfo, EndPointsError::Error>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, handleNowSelection, {} );
+    m_FrontDoorClient->SendGet<SoundTouchInterface::NowSelectionInfo, FrontDoor::Error>( FRONTDOOR_CONTENT_NOWSELECTIONINFO_API, handleNowSelection, {} );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -176,6 +176,8 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
         return;
     }
 
+// TODO - re-enable this once PGC-1105 has been resolved
+#if 0
     if( source->sourcename().compare( "PRODUCT" ) == 0 )
     {
         if( source->sourceaccountname().compare( "TV" ) == 0 )
@@ -229,6 +231,7 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
             m_RCSClient->Led_Set( LedsSourceTypeMsg_t::SOUND_TOUCH );
         }
     }
+#endif
 
 }
 

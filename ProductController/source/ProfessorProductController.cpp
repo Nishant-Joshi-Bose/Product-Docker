@@ -31,6 +31,7 @@
 #include "ProfessorProductController.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "CustomProductAudioService.h"
+#include "CustomAudioSettingsManager.h"
 #include "ProductKeyInputInterface.h"
 #include "ProductNetworkManager.h"
 #include "ProductSystemManager.h"
@@ -498,7 +499,6 @@ void ProfessorProductController::Run( )
     /// Initialize entities in the Common Product Controller
     ///
     CommonInitialize( );
-    m_deviceManager.Initialize( this );
 
     ///
     /// Get instances of all the modules.
@@ -1013,7 +1013,7 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
 
     {
         auto l = [ = ]( Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> respCb,
-                        Callback<EndPointsError::Error> errorCb )
+                        Callback<FrontDoor::Error> errorCb )
         {
             HandleGetOpticalAutoWake( respCb, errorCb );
         };
@@ -1022,7 +1022,7 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
     {
         auto l = [ = ]( SystemPowerProductPb::SystemPowerModeOpticalAutoWake req,
                         Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> respCb,
-                        Callback<EndPointsError::Error> errorCb )
+                        Callback<FrontDoor::Error> errorCb )
         {
             HandlePutOpticalAutoWake( req, respCb, errorCb );
         };
@@ -1452,7 +1452,7 @@ void ProfessorProductController::SendInitialCapsData()
 
     BOSE_VERBOSE( s_logger, "%s sending %s", __func__, ProtoToMarkup::ToJson( message ).c_str() );
 
-    GetFrontDoorClient()->SendPut<SoundTouchInterface::NowPlaying, EndPointsError::Error>(
+    GetFrontDoorClient()->SendPut<SoundTouchInterface::Sources, FrontDoor::Error>(
         FRONTDOOR_SYSTEM_SOURCES_API,
         message,
         { },
@@ -1511,7 +1511,7 @@ void ProfessorProductController::End( )
 
 void ProfessorProductController::HandleGetOpticalAutoWake(
     const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
-    const Callback<EndPointsError::Error> & errorCb ) const
+    const Callback<FrontDoor::Error> & errorCb ) const
 {
     SystemPowerProductPb::SystemPowerModeOpticalAutoWake autowake;
     autowake.set_enabled( m_IsAutoWakeEnabled );
@@ -1521,7 +1521,7 @@ void ProfessorProductController::HandleGetOpticalAutoWake(
 void ProfessorProductController::HandlePutOpticalAutoWake(
     const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req,
     const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
-    const Callback<EndPointsError::Error> & errorCb )
+    const Callback<FrontDoor::Error> & errorCb )
 {
     if( req.has_enabled( ) )
     {

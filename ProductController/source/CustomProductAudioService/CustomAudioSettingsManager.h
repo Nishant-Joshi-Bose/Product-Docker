@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 /// @file   CustomAudioSettingsManager.h
 /// @brief  This file contains source code for setting and getting AudioSettings
-///         such as bass, treble, center, surround, gainOffset, avSync, subwooferGain, mode, contentType, dualMonoSelect
+///         such as bass, treble, center, surround, surroundDelay, gainOffset, avSync, subwooferGain, mode, contentType, dualMonoSelect
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////
 #pragma once
@@ -12,34 +12,39 @@
 
 namespace ProductApp
 {
+
 using std::string;
 
 class CustomAudioSettingsManager: public AudioSettingsManager
 {
 public:
     CustomAudioSettingsManager();
-    bool SetBass( const ProductPb::AudioBassLevel& bass );
+    ErrorCode_t SetBass( const ProductPb::AudioBassLevel& bass );
     const ProductPb::AudioBassLevel& GetBass() const;
-    bool SetTreble( const ProductPb::AudioTrebleLevel& treble );
+    ErrorCode_t SetTreble( const ProductPb::AudioTrebleLevel& treble );
     const ProductPb::AudioTrebleLevel& GetTreble() const;
-    bool SetCenter( const ProductPb::AudioCenterLevel& center );
+    ErrorCode_t SetCenter( const ProductPb::AudioCenterLevel& center );
     const ProductPb::AudioCenterLevel& GetCenter() const;
-    bool SetSurround( const ProductPb::AudioSurroundLevel& surround );
+    ErrorCode_t SetSurround( const ProductPb::AudioSurroundLevel& surround );
     const ProductPb::AudioSurroundLevel& GetSurround() const;
-    bool SetGainOffset( const ProductPb::AudioGainOffset& gainOffset );
+    ErrorCode_t SetSurroundDelay( const ProductPb::AudioSurroundDelay& surroundDelay );
+    const ProductPb::AudioSurroundDelay& GetSurroundDelay() const;
+    ErrorCode_t SetGainOffset( const ProductPb::AudioGainOffset& gainOffset );
     const ProductPb::AudioGainOffset& GetGainOffset() const;
-    bool SetAvSync( const ProductPb::AudioAvSync& avSync );
+    ErrorCode_t SetAvSync( const ProductPb::AudioAvSync& avSync );
     const ProductPb::AudioAvSync& GetAvSync() const;
-    bool SetSubwooferGain( const ProductPb::AudioSubwooferGain& subwooferGain );
+    ErrorCode_t SetSubwooferGain( const ProductPb::AudioSubwooferGain& subwooferGain );
     const ProductPb::AudioSubwooferGain& GetSubwooferGain() const;
-    bool SetMode( const ProductPb::AudioMode& mode );
+    ErrorCode_t SetMode( const ProductPb::AudioMode& mode );
     const ProductPb::AudioMode& GetMode() const;
-    bool SetContentType( const ProductPb::AudioContentType& contentType );
+    ErrorCode_t SetContentType( const ProductPb::AudioContentType& contentType );
     const ProductPb::AudioContentType& GetContentType() const;
-    bool SetDualMonoSelect( const ProductPb::AudioDualMonoSelect& DualMonoSelect );
+    ErrorCode_t SetDualMonoSelect( const ProductPb::AudioDualMonoSelect& DualMonoSelect );
     const ProductPb::AudioDualMonoSelect& GetDualMonoSelect() const;
-    bool SetEqSelect( const ProductPb::AudioEqSelect& EqSelect );
+    ErrorCode_t SetEqSelect( const ProductPb::AudioEqSelect& EqSelect );
     const ProductPb::AudioEqSelect& GetEqSelect() const;
+    ErrorCode_t SetSubwooferPolarity( const ProductPb::AudioSubwooferPolarity& subwooferPolarity );
+    const ProductPb::AudioSubwooferPolarity& GetSubwooferPolarity() const;
 
 private:
     ////////////////////////////////////////////////////////////////////////////////////////
@@ -49,6 +54,7 @@ private:
     ProductPb::AudioTrebleLevel m_currentTreble;
     ProductPb::AudioCenterLevel m_currentCenter;
     ProductPb::AudioSurroundLevel m_currentSurround;
+    ProductPb::AudioSurroundDelay m_currentSurroundDelay;
     ProductPb::AudioGainOffset m_currentGainOffset;
     ProductPb::AudioAvSync m_currentAvSync;
     ProductPb::AudioSubwooferGain m_currentSubwooferGain;
@@ -56,6 +62,7 @@ private:
     ProductPb::AudioContentType m_currentContentType;
     ProductPb::AudioDualMonoSelect m_currentDualMonoSelect;
     ProductPb::AudioEqSelect m_currentEqSelect;
+    ProductPb::AudioSubwooferPolarity m_currentSubwooferPolarity;
 
     ////////////////////////////////////////////////////////////////////////////////////////
     /// Helper functions to set contentItem sensitive audio settings

@@ -1,11 +1,11 @@
 {
 	"version": {
         "major": 2,
-        "minor": 1
+        "minor": 2
 	},
     "supportedAudioSettings": {
-        "contentItemSensitive": ["audioBassLevel", "audioTrebleLevel", "audioCenterLevel", "audioSurroundLevel", "audioGainOffset", "audioAvSync", "audioMode", "audioContentType"],
-        "contentItemNonSensitive": ["dualMonoSelect", "audioEqSelect"]
+        "contentItemSensitive": ["audioBassLevel", "audioTrebleLevel", "audioCenterLevel", "audioSurroundLevel", "audioSurroundDelay", "audioGainOffset", "audioAvSync", "audioMode", "audioContentType"],
+        "contentItemNonSensitive": ["dualMonoSelect", "audioEqSelect", "audioSubwooferPolarity"]
     },
 	"configurations": {
 		"audioBassLevel": {
@@ -39,6 +39,16 @@
 			}
 		},
 		"audioSurroundLevel": {
+			"currentPersistenceLevel": "global",
+			"persistenceSession": false,
+			"properties": {
+				"min": -100,
+				"max": 100,
+				"step": 10,
+				"supportedPersistence": ["session", "global", "contentItem"]
+			}
+		},
+		"audioSurroundDelay": {
 			"currentPersistenceLevel": "global",
 			"persistenceSession": false,
 			"properties": {
@@ -105,7 +115,14 @@
             "currentPersistenceLevel": "global",
             "persistenceSession": false,
             "properties": {
-                "supportedModes": ["EQ_OFF", "EQ_AIQ_A", "EQ_AIQ_B", "EQ_RETAIL_A", "EQ_RETAIL_B", "EQ_RETAIL_C"]
+                "supportedModes": ["EQ_OFF"]
+            }
+        },
+        "audioSubwooferPolarity": {
+            "currentPersistenceLevel": "global",
+            "persistenceSession": false,
+            "properties": {
+                "supportedPolarity": ["POLARITY_IN_PHASE", "POLARITY_OUT_OF_PHASE"]
             }
         }
 	},
@@ -115,19 +132,22 @@
 			"audioTrebleLevel": 0,
 			"audioCenterLevel": 0,
 			"audioSurroundLevel": 0,
+			"audioSurroundDelay": 0,
 			"audioGainOffset": 0,
 			"audioAvSync": 0,
 			"audioSubwooferGain":0,
 			"audioMode": "normal",
             "audioContentType": "unspecified",
             "audioDualMonoSelect": "both",
-            "audioEqSelect": "EQ_OFF"
+            "audioEqSelect": "EQ_OFF",
+            "audioSubwooferPolarity": "POLARITY_IN_PHASE"
 		},
 		"session": {
 			"audioBassLevel": 0,
 			"audioTrebleLevel": 0,
 			"audioCenterLevel": 0,
 			"audioSurroundLevel": 0,
+			"audioSurroundDelay": 0,
 			"audioGainOffset": 0,
 			"audioAvSync": 0,
 			"audioSubwooferGain":0,
@@ -140,6 +160,7 @@
 				"audioTrebleLevel": 0,
 				"audioCenterLevel": 0,
 				"audioSurroundLevel": 0,
+				"audioSurroundDelay": 0,
 				"audioGainOffset": 0,
 				"audioAvSync": 0,
 				"audioSubwooferGain":0,
@@ -153,12 +174,14 @@
 		"audioTrebleLevel": 0,
 		"audioCenterLevel": 0,
 		"audioSurroundLevel": 0,
+		"audioSurroundDelay": 0,
 		"audioGainOffset": 0,
 		"audioAvSync": 0,
 		"audioSubwooferGain":0,
 		"audioMode": "normal",
         "audioContentType": "unspecified",
         "audioDualMonoSelect": "both",
-        "audioEqSelect": "EQ_OFF"
+        "audioEqSelect": "EQ_OFF",
+        "audioSubwooferPolarity": "POLARITY_IN_PHASE"
 	}
 }

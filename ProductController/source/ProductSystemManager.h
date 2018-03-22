@@ -39,7 +39,7 @@
 #include "Language.pb.h"
 #include "ConfigurationStatus.pb.h"
 #include "SystemInfo.pb.h"
-#include "EndPointsError.pb.h"
+#include "SharedProto.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -122,7 +122,7 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleGetConfigurationStatusRequest( const Callback< ProductPb::ConfigurationStatus >& response,
-                                              const Callback<EndPointsError::Error>& errorRsp ) const;
+                                              const Callback<FrontDoor::Error>& errorRsp ) const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
