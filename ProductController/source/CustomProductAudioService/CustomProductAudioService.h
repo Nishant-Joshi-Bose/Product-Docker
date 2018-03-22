@@ -40,17 +40,20 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// Front Door handlers
     /////////////////////////////////////////////////////////////////////////////////////////////
-    std::unique_ptr<AudioSetting<ProductPb::AudioBassLevel>>        m_AudioBassSetting;
-    std::unique_ptr<AudioSetting<ProductPb::AudioTrebleLevel>>      m_AudioTrebleSetting;
-    std::unique_ptr<AudioSetting<ProductPb::AudioCenterLevel>>      m_AudioCenterSetting;
-    std::unique_ptr<AudioSetting<ProductPb::AudioSurroundLevel>>    m_AudioSurroundSetting;
-    std::unique_ptr<AudioSetting<ProductPb::AudioGainOffset>>       m_AudioGainOffsetSetting;
-    std::unique_ptr<AudioSetting<ProductPb::AudioAvSync>>           m_AudioAvSyncsetSetting;
-    std::unique_ptr<AudioSetting<ProductPb::AudioSubwooferGain>>    m_AudioSubwooferGainSetting;
-    std::unique_ptr<AudioSetting<ProductPb::AudioMode>>             m_AudioModeSetting;
-    std::unique_ptr<AudioSetting<ProductPb::AudioContentType>>      m_AudioContentTypeSetting;
-    std::unique_ptr<AudioSetting<ProductPb::AudioDualMonoSelect>>   m_DualMonoSelectSetting;
-    std::unique_ptr<AudioSetting<ProductPb::AudioEqSelect>>         m_EqSelectSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioBassLevel>>            m_AudioBassSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioTrebleLevel>>          m_AudioTrebleSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioCenterLevel>>          m_AudioCenterSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioSurroundLevel>>        m_AudioSurroundSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioSurroundDelay>>        m_AudioSurroundDelaySetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioGainOffset>>           m_AudioGainOffsetSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioAvSync>>               m_AudioAvSyncsetSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioSubwooferGain>>        m_AudioSubwooferGainSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioMode>>                 m_AudioModeSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioContentType>>          m_AudioContentTypeSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioDualMonoSelect>>       m_DualMonoSelectSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioEqSelect>>             m_EqSelectSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioSubwooferPolarity>>    m_SubwooferPolaritySetting;
+
     /////////////////////////////////////////////////////////////////////////////////////////////////
     /// APProduct handling functions
     /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,6 +71,7 @@ private:
     LpmServiceMessages::AudioSettingsContent_t ContentTypeNameToEnum( const std::string& contentTypeName );
     LpmServiceMessages::AudioSettingsDualMonoMode_t DualMonoSelectNameToEnum( const std::string& dualMonoSelectName );
     LpmServiceMessages::AudioSettingsDeltaEqSelect_t EqSelectNameToEnum( const std::string& modeName );
+    LpmServiceMessages::AudioSettingsSubwooferPolarity_t SubwooferPolarityNameToEnum( const std::string& subwooferPolarityName );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// FrontDoor handling functions
