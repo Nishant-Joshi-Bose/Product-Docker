@@ -80,8 +80,9 @@ void CustomProductKeyInputManager::InitializeQuickSetService( )
 ///
 /// @param  const LpmServiceMessages::IpcKeyInformation_t& keyEvent
 ///
-/// @return This method returns a false value to allow further processing of the key event in the
-///         base ProductKeyInputManager class.
+/// @return This method returns a true value if the key is to be blasted so that no further
+///         processing of the key event in the base ProductKeyInputManager class takes place;
+///         otherwise, it returns false to allow further processing.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessages::IpcKeyInformation_t&
@@ -95,8 +96,9 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
     std::string cicode;
 
     ///
-    /// @todo The following check to determine the device type based on the source needs to be
-    ///       implemented.
+    /// @todo The following check to determine whether the key event should be blasted to the
+    ///       external device requires updates to be fully implemented. The JIRA Story PGC-762
+    ///       covers this.
     ///
 #if 0
 
