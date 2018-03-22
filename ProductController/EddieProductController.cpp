@@ -550,12 +550,6 @@ void EddieProductController::RegisterCliClientCmds()
     m_CliClientMT.RegisterCLIServerCommands( "setDisplayAutoMode",
                                              "command to set the display controller automatic mode", "setDisplayAutoMode auto|manual",
                                              GetTask(), cb , static_cast<int>( CLICmdKeys::SET_DISPLAY_AUTO_MODE ) );
-
-    m_CliClientMT.RegisterCLIServerCommands( "raw_key",
-                                             "command to simulate raw key events."
-                                             "Usage: raw_key origin keyId state ; where origin is 0-6, keyId is 1-7, state 0-1 (press-release).",
-                                             "raw_key origin keyId state",
-                                             GetTask(), cb , static_cast<int>( CLICmdKeys::RAW_KEY ) );
 }
 
 void EddieProductController::HandleCliCmd( uint16_t cmdKey,
@@ -573,14 +567,6 @@ void EddieProductController::HandleCliCmd( uint16_t cmdKey,
         HandleSetDisplayAutoMode( argList, response );
         break;
     }
-        ///
-        /// This case will be removed, but will be eventually put into common code.
-        ///
-        /// case CLICmdKeys::RAW_KEY:
-        /// {
-        ///     HandleRawKeyCliCmd( argList, response );
-        /// }
-    break;
     default:
         response = "Command not found";
         break;
@@ -631,7 +617,6 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
         // First do the Eddie-specific stuff, i.e., register callbacks and thermal task control
         if( productMessage.lpmstatus( ).has_connected( ) && productMessage.lpmstatus( ).connected( ) )
         {
-            /// RegisterLpmEvents
             RegisterLpmEvents();
         }
         if( productMessage.lpmstatus( ).has_systemstate( ) )
