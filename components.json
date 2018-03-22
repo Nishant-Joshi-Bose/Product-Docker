@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.15.41380.2733922"
+    "selected_version": "Release/Castle-Fork/0.3.18.41479.2744053"
   },
   {
     "name": "bose-opkg-utils",
@@ -45,11 +45,11 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.4-20608"
+    "selected_version": "Release/Castle-Fork/0.3.6-20644"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/0.3.4-20608"
+    "selected_version": "Release/Castle-Fork/0.3.6-20644"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -61,11 +61,11 @@
   },
   {
     "name": "CastleDemoController-qc8017_32",
-    "selected_version": "Release/master/0.3.2-62+b9fcc88"
+    "selected_version": "Release/master/0.3.3-66+c3b9b9f"
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.2.3-41+513bbab"
+    "selected_version": "Release/master/0.2.4-45+2e01a36"
   },
   {
     "name": "CastleLibs-native",
@@ -89,15 +89,15 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.3.86-524+e45febf"
+    "selected_version": "Release/master/0.3.90-556+cb693bd"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.3.86-524+e45febf"
+    "selected_version": "Release/master/0.3.90-556+cb693bd"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@6e5420832babc4e0e6048a3bc87c5df44f253b24"
+    "selected_version": "master@62c424680ee2cabe84aa7f007c750e0e474874bf"
   },
   {
     "name": "CastleProductUIAssets",
@@ -113,7 +113,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.2.1-92+88cfd3d"
+    "selected_version": "Release/master/0.2.2-100+f3a90f2"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -173,7 +173,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.15.41380.2733922"
+    "selected_version": "Release/Castle-Fork/0.3.18.41479.2744053"
   },
   {
     "name": "SystemEventService-qc8017_32",
