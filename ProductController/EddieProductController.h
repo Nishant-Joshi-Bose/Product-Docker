@@ -90,10 +90,6 @@ public:
 
     Callback < ProductMessage > GetMessageHandler( );
 
-    NetManager::Protobuf::NetworkStatus const& GetNetworkStatus() const
-    {
-        return m_cachedStatus.get();
-    }
     std::vector<std::string> GetUniqueLanguages() const override
     {
         return {};
@@ -110,14 +106,6 @@ public:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     bool IsBooted( ) const override;
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @name  IsNetworkConfigured
-    /// @brief true if system is conencted to ethernet or number of wifi profiles are nonzero
-    /// @return bool
-    ////////////////////////////////////////////////////////////////////////////////
-    bool IsNetworkConfigured() const override;
-    bool IsNetworkConnected( ) const override;
-    uint32_t GetWifiProfileCount() const override;
     bool IsAutoWakeEnabled( )  const override
     {
         /// TO_Do
@@ -130,13 +118,6 @@ public:
     }
 
     std::string GetDefaultProductName() const override;
-
-    void ClearWifiProfileCount() override
-    {
-        m_wifiProfilesCount = 0;
-    }
-
-    void PerformRequestforWiFiProfiles() override;
 
 private:
     /// Disable copies
@@ -158,8 +139,7 @@ private:
     void RegisterCliClientCmds();
 
     void HandleBtLeModuleReady( bool btLeModuleReady );
-    void HandleNetworkCapabilityReady( const std::list<std::string>& points );
-    void HandleNetworkCapabilityNotReady( const std::list<std::string>& points );
+
     void HandleCapsCapabilityReady( const std::list<std::string>& points );
     void HandleCapsCapabilityNotReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityReady( const std::list<std::string>& points );
@@ -241,7 +221,6 @@ public:
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
     bool IsCAPSReady() const;
-    bool IsNetworkModuleReady() const;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  IsSTSReady
@@ -421,7 +400,6 @@ private:
     KeyHandlerUtil::KeyHandler                  m_KeyHandler;
     ProtoPersistenceIF::ProtoPersistencePtr     m_ConfigurationStatusPersistence = nullptr;
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
-    BOptional<NetManager::Protobuf::NetworkStatus> m_cachedStatus;
 
     /// ProductAudioService
     std::shared_ptr< CustomProductAudioService> m_ProductAudioService;
@@ -432,12 +410,9 @@ private:
     std::unique_ptr<DisplayController>          m_displayController;
     IntentHandler                               m_IntentHandler;
     bool                                        m_isCapsReady = false;
-    bool                                        m_isNetworkModuleReady  = false;
     bool                                        m_isBLEModuleReady  = false;
     bool                                        m_isUiConnected = false;
 
-    BOptional<int>                              m_wifiProfilesCount;
-    AsyncCallback<FrontDoor::Error>            m_fdErrorCb;
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief Interfaces to the ProductSTSController, which implements the interactions
