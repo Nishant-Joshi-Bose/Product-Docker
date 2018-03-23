@@ -1,5 +1,6 @@
 SoundTouch Professor
 ====================
+<a title='Latest release in GitHub' target='_blank' href='https://github.com/BoseCorp/Professor'><img src='https://bose-prod.apigee.net/core02/svc-version-badge/prod/version-badge-core/github/latest-version/Professor/latest release/blue'></a>
 
 This repo contains the source code and tools specific to the SoundTouch Professor product.
 
