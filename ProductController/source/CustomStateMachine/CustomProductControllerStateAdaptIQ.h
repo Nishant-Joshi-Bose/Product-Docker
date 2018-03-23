@@ -76,6 +76,7 @@ public:
     void HandleStateExit( )  override;
     bool HandleAdaptIQStatus( const ProductAdaptIQStatus& aiqStatus ) override;
     bool HandleAdaptIQControl( const ProductAdaptIQControl& cmd );
+    bool HandleIntentPowerToggle( ) override;
     bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )  override;
 
 private:
@@ -88,6 +89,7 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleTimeOut( );
     APTimerPtr m_timer;
+    bool m_powerDownOnExit;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ///
