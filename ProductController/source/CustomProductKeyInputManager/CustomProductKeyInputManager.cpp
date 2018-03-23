@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
 #include "ProfessorProductController.h"
+#include "ProductSourceInfo.h"
 #include "CustomProductKeyInputManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,8 +33,8 @@ namespace ProductApp
 ///            Constant Definitions
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr const char* KEY_CONFIGURATION_FILE_NAME = "/opt/Bose/etc/KeyConfiguration.json";
-constexpr const char* BLAST_CONFIGURATION_FILE_NAME = "/opt/Bose/etc/BlastConfiguration.json";
+constexpr const char KEY_CONFIGURATION_FILE_NAME[ ] = "/opt/Bose/etc/KeyConfiguration.json";
+constexpr const char BLAST_CONFIGURATION_FILE_NAME[ ] = "/opt/Bose/etc/BlastConfiguration.json";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -92,13 +93,13 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
     /// Decide if this key should be blasted or sent to the key handler
     ///
     bool isBlastedKey = false;
-    auto nowSelection = m_ProductController.GetNowSelection( );
+    const auto& nowSelection = m_ProductController.GetNowSelection( );
     std::string cicode;
 
     if( nowSelection.has_contentitem( ) )
     {
         const auto& contentItem = nowSelection.contentitem( );
-        auto source = m_ProductController.GetSourceInfo( )->FindSource( contentItem );
+        const auto source = m_ProductController.GetSourceInfo( )->FindSource( contentItem );
 
         if( source and source->has_details( ) )
         {

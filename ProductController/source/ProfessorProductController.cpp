@@ -606,21 +606,6 @@ Callback < ProductMessage > ProfessorProductController::GetMessageHandler( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  ProfessorProductController::GetCommandLineInterface
-///
-/// @return This method returns a reference to a command line interface for adding module specific
-///         commands. Note that this interface is instantiated in the inherited ProductController
-///         class; the ProductCommandLine interface instantiated in this class is used for specific
-///         product controller commands in Professor.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-CliClientMT& ProfessorProductController::GetCommandLineInterface( )
-{
-    return m_CliClientMT;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProfessorProductController::GetLpmHardwareInterface
 ///
 /// @return This method returns a shared pointer to the LPM hardware interface.

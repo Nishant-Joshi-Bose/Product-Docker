@@ -46,7 +46,7 @@ public:
     ///
     /// CustomProductKeyInputManager Constructor
     ///
-    CustomProductKeyInputManager( ProfessorProductController& ProductController );
+    explicit CustomProductKeyInputManager( ProfessorProductController& ProductController );
 
 
     ///
