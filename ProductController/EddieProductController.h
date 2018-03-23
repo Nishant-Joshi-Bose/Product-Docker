@@ -343,16 +343,6 @@ public:
         return m_ProductAudioService;
     }
 
-///////////////////////////////////////////////////////////////////////////////
-/// @name   GGetCommandLineInterface
-/// @brief  Returns reference to the common command line interface
-/// @return CientMT&
-///////////////////////////////////////////////////////////////////////////////
-    inline CliClientMT& GetCommandLineInterface( )
-    {
-        return m_CliClientMT;
-    }
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief Interfaces to the ProductSTSController, which implements the interactions
