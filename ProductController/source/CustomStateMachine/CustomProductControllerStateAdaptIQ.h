@@ -77,6 +77,7 @@ public:
     bool HandleAdaptIQStatus( const ProductAdaptIQStatus& aiqStatus ) override;
     bool HandleAdaptIQControl( const ProductAdaptIQControl& cmd );
     bool HandleIntentPowerToggle( ) override;
+    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )  override;
 
 private:
 

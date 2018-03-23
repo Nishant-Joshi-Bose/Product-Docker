@@ -320,7 +320,6 @@ void SpeakerPairingManager::DoPairingFrontDoor( bool pair,
     productMessage.set_action( pairingAction );
     IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
 
-    m_accessorySpeakerState.set_pairing( pair );
     frontDoorCB( m_accessorySpeakerState );
 }
 
@@ -771,6 +770,9 @@ void SpeakerPairingManager::AccessoryDescriptionToAccessorySpeakerInfo( const Lp
     {
         spkrInfo->set_wireless( false );
     }
+
+    spkrInfo->set_serialnum( accDesc.sn() );
+    spkrInfo->set_version( accDesc.version() );
 
 }
 
