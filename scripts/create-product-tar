@@ -398,7 +398,7 @@ def create_output(is_without_lpm, development):
     ''' create bose partition
     '''
     retVal, retStr = create_bose_partition(is_without_lpm, development, 
-                    ['product.ipk', 'monaco.ipk', 'lpm_updater.ipk', 'hsp.ipk'])
+                    ['product.ipk', 'monaco.ipk', 'lpm_updater.ipk', 'hsp.ipk', 'recovery.ipk'])
     if retVal != 0:
         return retVal, retStr
 
