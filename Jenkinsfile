@@ -11,15 +11,39 @@ def buildJob(jobName)
 {
     build job: jobName, parameters: [string(name: 'SW_FREQUENCY', value: "${SW_FREQUENCY}"), string(name: 'SW_BRANCH', value: "${SW_BRANCH}"),string(name: 'EC_URL', value: "${EC_URL}"),[$class: 'GitParameterValue', name: 'Branch', value: "${Branch}"]]
 }
-def CAPS_Component = ["CAPS-Component/playbackRequest","CAPS-Component/volumeAPIs"]
-def Castle_SW_Update = ["CastleTestUtils-Component/frontdoorAPI"]
+
+def CAPS_Component = ["CAPS-Component/playbackRequest",
+                      "CAPS-Component/volumeAPIs"]
+
+def Castle_SW_Update = ["CastleSoftwareUpdate/BonjourUpdateTest_Master",
+                        "CastleSoftwareUpdate/Riviera_Software_Update_Corrupt_Ipk_Fail_Install_Scenarios",
+                        "CastleSoftwareUpdate/Riviera_Software_Update_Corrupt_Ipk_No_Install_Scenarios",
+                        "CastleSoftwareUpdate/Riviera_Software_Update_Corrupt_Ipk_Scenarios",
+                        "CastleSoftwareUpdate/Riviera_Software_Update_Corrupt_Packages_Scenarios",
+                        "CastleSoftwareUpdate/Riviera_Software_Update_With_Same_IPK_TAR_Version",
+                        "CastleSoftwareUpdate/Riviera_SoftwareUpdate"]
+
 def CastleTestUtils_Integrated = ["CastleTestUtils_Integrated/memoryConsumption"]
-def CastleTestUtils_Component = ["CastleTestUtils-Component/frontdoorAPI"]
-def Eddie_Product  = ["EddieProduct/Eddie-Bootup-Sequence-Timing","EddieProduct/Eddie-DemoController","EddieProduct/Eddie-Preset"]
+
+def CastleTestUtils_Component = ["CastleTestUtils-Component/CastleTestUtils-tests"]
+
+def Eddie_Product  = ["EddieProduct/Eddie-Bootup-Sequence-Timing",
+                      "EddieProduct/Eddie-DemoController",
+                      "EddieProduct/Eddie-Preset"]
+
 def Galapagos_Client = ["GalapagosClient/GalapagosClient-Authentication"]
-def STS_Component = ["STS-Component/Deezer_Component_d","STS-Component/Amazon_Component_d"]
-def STS_Integrated = ["STS-Integrated/Amazon_Integrated","STS-Integrated/Deezer_Integrated","STS-Integrated/Spotify_Integrated","STS-Integrated/TuneIn-Integrated"]
-def NetworkServices_Component = ["NetworkServices-Component/network-wifi-profile","NetworkServices-Component/network-wifi-profile-local","NetworkServices-Component/networkConnectivity","NetworkServices-Component/test_setupAP"]
+
+def STS_Component = ["STS-Component/Deezer_Component_d",
+                     "STS-Component/Amazon_Component_d"]
+
+def STS_Integrated = ["STS-Integrated/Amazon_Integrated",
+                      "STS-Integrated/Deezer_Integrated",
+                      "STS-Integrated/Spotify_Integrated",
+                      "STS-Integrated/TuneIn-Integrated"]
+
+def NetworkServices_Component = ["NetworkServices-Component/network-wifi-profile"]
+
+def E2E = ["E2E/setupAP_Mac"]
 
 
 failureList = [] 
@@ -251,6 +275,24 @@ timeout(time: 8, unit: 'HOURS')
                            continue
                          }
                     }
+               }, "stream 9 (E2E)" :{
+					
+					stage("E2E")
+                    {
+                        for (item in E2E)
+                         {
+                           try
+                           {
+                              executeBuild(item)
+							  
+                           }
+                           catch (Exception ex)
+                           {
+                              echo "Caught: ${ex}"
+                           }
+                           continue
+                         }
+                    }
                })
         }
 
@@ -267,7 +309,12 @@ timeout(time: 8, unit: 'HOURS')
             * Success or failure, always send notifications */
 			notifyBuild(currentBuild.result)
             currentBuild.description = "${failureList}"
+			println failureList
        }
 
     }
+	// To Push Data of Failed Job and Total Job on Graphite
+    println failureList.size()
+    println buildCount
+    def GraphiteSocket = new GraphiteSocket(failureList.size(),buildCount,'Eddie_Nightly')  
 }

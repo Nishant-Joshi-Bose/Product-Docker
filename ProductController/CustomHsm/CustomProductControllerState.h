@@ -17,7 +17,9 @@
 #include "NetManager.pb.h"
 #include "SoundTouchInterface/ContentSelectionService.pb.h"
 #include "ProductMessage.pb.h"
+#include "SystemEventMessage.pb.h"
 #include "InactivityTimers.h"
+#include "ChimeEvents.h"
 
 namespace ProductApp
 {
@@ -71,7 +73,7 @@ public:
         return false;
     }
 
-    virtual bool HandleFactoryDefault( )
+    virtual bool HandleLpmFactoryDefault( )
     {
         return false;
     }
@@ -106,7 +108,7 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentPlaySoundTouchSource( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentPlaySoundTouchSource()
     {
         return false;
     }
@@ -126,12 +128,12 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentFactoryDefault( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentFactoryDefault( )
     {
         return false;
     }
 
-    virtual bool HandleIntentLowPowerStandby( KeyHandlerUtil::ActionType_t intent )
+    virtual bool HandleIntentLowPowerStandby( )
     {
         return false;
     }
@@ -166,12 +168,17 @@ public:
         return false;
     }
 
-    virtual bool HandleIntentPowerToggle( KeyHandlerUtil::ActionType_t result )
+    virtual bool HandleIntentPowerToggle( )
     {
         return false;
     }
 
     virtual bool HandleBluetoothModuleState( bool ready )
+    {
+        return false;
+    }
+
+    virtual bool HandleSassState( bool ready )
     {
         return false;
     }
@@ -231,6 +238,26 @@ public:
         return false;
     }
 
+    virtual bool HandleSoftwareUpdateStatus( )
+    {
+        return false;
+    }
+
+    virtual bool HandleLpmSoftwareUpdateState( )
+    {
+        return false;
+    }
+
+    virtual bool HandleUiConnectedUpdateState( bool uiconnected )
+    {
+        return false;
+    }
+
+    virtual bool HandlePlayChimeRequest( ProductApp::ChimeEvents_t chimeEvent )
+    {
+        return false;
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
     ///
     /// Here are the Custom event handlers. They need to be declared virtual and
@@ -279,15 +306,56 @@ public:
     {
         return false;
     }
-    virtual bool HandleSoftwareUpdateStatus( )
-    {
-        return false;
-    }
 
     virtual bool HandleOOBSetupDone( )
     {
         return false;
     }
+
+    virtual bool HandleAudioPathStreamState( bool streamSilent )
+    {
+        return false;
+    }
+
+    virtual bool HandleSystemEventServiceLowPowerSuspendResponse( const SystemEventMessagePb::ClientResponse& clientResponsePb )
+    {
+        return false;
+    }
+
+    virtual bool HandleSystemEventServiceLowPowerResumeResponse( const SystemEventMessagePb::ClientResponse& clientResponsePb )
+    {
+        return false;
+    }
+
+    virtual bool HandleNetworkOperationalMode( NetManager::Protobuf::OperationalMode mode )
+    {
+        return false;
+    }
+    virtual bool HandleNetworkWifiAPStatus( bool APStatus )
+    {
+        return false;
+    }
+
+    virtual bool HandleSetupAPDeactivateTimerExpiry( )
+    {
+        return false;
+    }
+
+    virtual bool HandleChimeSASSPlaybackCompleted( int32_t eventId )
+    {
+        return false;
+    }
+
+    virtual bool HandleChimeSASSPlaybackError( int32_t eventId )
+    {
+        return false;
+    }
+
+    virtual bool HandleSystemEventFactoryDefault( const ProductSystemEventServiceResponse& response )
+    {
+        return false;
+    }
+
 public:
     /// The custom version of this function returns the custom ProductController
     static EddieProductController& GetCustomProductController();

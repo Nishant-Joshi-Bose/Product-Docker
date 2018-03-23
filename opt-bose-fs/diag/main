@@ -5,6 +5,7 @@
 import os
 import sys
 import re
+import json
 
 if len(sys.argv) != 1:
     raise Exception("wrong usage " + str(sys.argv))
@@ -13,15 +14,6 @@ def html_escape(text):
     return re.sub(r'[<&>]', lambda x: { "<": "&lt;",
                                         "&": "&amp;",
                                         ">": "&gt;" }[x.group(0)], text)
-
-def show_text_file(name):
-    print """<div class="text-file">"""
-    with open(name) as f:
-        br = ""
-        for line in f:
-            print br + html_escape(line.rstrip("\n")).replace(" ", "&nbsp;")
-            br = "<br>"
-    print "</div>"
 
 print """\
 HTTP/1.1 200 OK\r
@@ -44,11 +36,14 @@ print """
    height: 1px;
    width: 100%;
  }
- div.text-file {
+ div.box {
    background-color: lightgrey;
    border: thin dotted;
    padding: 1em;
    margin: 1em;
+ }
+ td.showimg {
+   padding: 8px;
  }
 </style>
 </head>
@@ -57,11 +52,36 @@ print """
 <hr>
 """
 
+version_info = json.load(open("/opt/Bose/etc/BoseVersion.json"))
 print "<li>Software Version"
-show_text_file("/opt/Bose/etc/BoseVersion.json")
+print """<div class="box">"""
+print html_escape(version_info["long"])
+print "</div>"
 
-print "<li>Manufacturing Data"
-show_text_file("/persist/mfg_data.json")
+print "<li>Manufacturing Data [<a href='/diag/mfg-data'>all</a>]"
+mfg_data = json.load(open("/persist/mfg_data.json"))
+print """<div class="box">"""
+print "<table>"
+for elem in """country_code regionCode snSystem productType productName
+               productColor testflagLaunchAssurance""".split():
+    print "<tr><td>{}</td><td>{}</td></tr>" \
+        .format(elem, html_escape(mfg_data.get(elem, "(none)")))
+print "</table>"
+print "</div>"
+
+print "<li>Display Tests"
+print """<div class="box">"""
+print "<table>"
+print "<tr>"
+for img in """left top bottom right""".split():
+    print """<td class='showimg'>\
+<img width='80' height='80' \
+onclick='fetch("/diag/display/colorbars-{img}.png?show")' \
+src='/diag/display/colorbars-{img}.png'>\
+</td>""".format(img=img)
+print "</tr>"
+print "</table>"
+print "</div>"
 
 print "<hr>"
 

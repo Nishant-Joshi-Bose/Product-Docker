@@ -64,15 +64,35 @@ if not sn: # allow any non-empty string
     warn("Invalid snSystem:", sn)
     fixes.append("set snSystem RF000000000000000")
 
-pl = get("productLanguage")
-if pl is None:
-    warn("Invalid productLanguage:", pl)
-    fixes.append("set productLanguage english")
-
 pc = get("productColor")
-if pc is None or not re.match(r'^(tripleBlack|luxGray)$', pc):
+if pc is None or not re.match(r'^\d+$', pc): # allow any integer
     warn("Invalid productColor:", pc)
-    fixes.append("set productColor tripleBlack  # tripleBlack|luxGray")
+    fixes.append("set productColor 1  # 1=tripleBlack | 3=luxGray")
+
+vi = get("BMAPVariantID")
+if vi is None or not re.match(r'^\d+$', vi): # allow any integer
+    warn("Invalid BMAPVariantID: ", vi)
+    fixes.append("set BMAPVariantID 1  # 0=NONE | 1=BLACK | 2=WHITE | 3=SILVER")
+
+pi = get("BMAPProductID")
+if pi is None or not re.match(r'^0[xX][0-9a-fA-F]{4}$', pi): # allow hex value (2-bytes)
+    warn("Invalid BMAPProductID:", pi)
+    fixes.append("set BMAPProductID 0x4026  # 0x4026=Eddie | 0x4027=Professor | 0x4028=Ginger-Cheevers")
+
+ai = get("BMAPBleProductID")
+if ai is None or not re.match(r'^\d+$', ai): # allow any integer
+    warn("Invalid productColor:", ai)
+    fixes.append("set BMAPBleProductID 16  # 16=Eddie | 17=Professor | 18=Ginger-Cheevers")
+
+pn = get("productName")
+if not pn: # allow any non-empty string
+    warn("Invalid productName:", pn)
+    fixes.append("set productName 'Bose Home Speaker 500'")
+
+pt = get("productType")
+if not pt: # allow any non-empty string
+    warn("Invalid productType:", pt)
+    fixes.append("set productType eddie")
 
 if not fixes:
     # Validation successful.
@@ -89,5 +109,7 @@ for fix in fixes:
     print "  mfgdata", fix
 print """\
   mount -oremount,ro /persist
+
+See also: https://wiki.bose.com/display/BC/Riviera+Manufacturing+Data+Information
 """
 sys.exit(1)

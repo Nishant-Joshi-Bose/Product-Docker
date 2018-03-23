@@ -32,9 +32,18 @@ CustomAudioSettingsManager::CustomAudioSettingsManager()
 /////////////////////////////////////////////////////////////////////////////////////////
 /// Bass setting setter/getter
 /////////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetBass( const ProductPb::AudioBassLevel& bass )
+ErrorCode_t CustomAudioSettingsManager::SetBass( const ProductPb::AudioBassLevel& bass )
 {
     BOSE_DEBUG( s_logger, __func__ );
+    if( !bass.has_value() )
+    {
+        return ErrorCode_t::MISSING_FIELDS;
+    }
+    if( bass.value() > m_audioSettings["configurations"][kBassName]["properties"]["max"].asInt()
+        || bass.value() < m_audioSettings["configurations"][kBassName]["properties"]["min"].asInt() )
+    {
+        return ErrorCode_t::INVALID_VALUE;
+    }
     return SetAudioProperties( bass, kBassName, m_currentBass );
 }
 
@@ -47,9 +56,18 @@ const ProductPb::AudioBassLevel& CustomAudioSettingsManager::GetBass() const
 ////////////////////////////////////////////////////////////////////////////////////////
 /// Treble setting setter/getter
 ///////////////////////////////////////////////////////////////////////////////////////
-bool CustomAudioSettingsManager::SetTreble( const ProductPb::AudioTrebleLevel& treble )
+ErrorCode_t CustomAudioSettingsManager::SetTreble( const ProductPb::AudioTrebleLevel& treble )
 {
     BOSE_DEBUG( s_logger, __func__ );
+    if( !treble.has_value() )
+    {
+        return ErrorCode_t::MISSING_FIELDS;
+    }
+    if( treble.value() > m_audioSettings["configurations"][kTrebleName]["properties"]["max"].asInt()
+        || treble.value() < m_audioSettings["configurations"][kTrebleName]["properties"]["min"].asInt() )
+    {
+        return ErrorCode_t::INVALID_VALUE;
+    }
     return SetAudioProperties( treble, kTrebleName, m_currentTreble );
 }
 

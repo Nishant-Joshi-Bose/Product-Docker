@@ -33,7 +33,5 @@ public:
 private:
     uint16_t                            m_countdownValue;
     BOptional<ProductApp::Action>       m_actionType;
-
-    void NotifyButtonEvent( const std::string& event, const uint16_t state, const uint16_t value );
 };
 } // namespace ProductApp

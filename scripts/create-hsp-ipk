@@ -17,9 +17,6 @@
 #
 this=${0##*/} # this script's name
 
-stripped=true
-cfg=Release
-
 tryhelp () {
     echo >&2 "Try '$this --help' for more information."
     exit 1
@@ -34,7 +31,7 @@ while :; do
     case "$arg" in
     (--help | -h)
         cat <<EOF
-Usage: $this [options]
+Usage: $this [options] <Release|Debug>
 
 Create an IPK file for installing Riviera HSP with opkg.
 
@@ -48,10 +45,11 @@ EOF
     esac
 done
 
-if (( $# != 0 )); then
-    echo >&2 "$this: unexpected argument '$1'"
+if (( $# != 1 )); then
+    echo >&2 "$this: wrong usage"
     tryhelp
 fi
+cfg=$1; shift
 
 function put_script {
     local file="$1"; shift
@@ -65,10 +63,6 @@ wspace=$(cd "$here/.." && echo "$PWD") || exit
 riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || exit
 riviera_hsp_ver=$(components get Riviera-HSP-Images selected_version) || exit
 riviera_hsp_ver=${riviera_hsp_ver##*/}
-
-arch=arm-oemllib32-linux
-sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
-tool_prefix=$sysroot/usr/bin/$arch/$arch-
 
 stage=$wspace/builds/$cfg/hsp-ipk-stage
 rm -rf "$stage"
@@ -105,7 +99,7 @@ exiterror()
 {
     # Set Progress End
     /opt/Bose/bin/ProgressReport -n $PackageName -e 1 -i 1 -r RECOVERY -b 0 -p 100
-    exit 1    
+    exit 1
 }
 
 if [ ! -f /opt/Bose/hsp/update_ext4.zip ]; then

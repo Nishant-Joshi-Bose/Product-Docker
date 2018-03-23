@@ -59,13 +59,6 @@ void IntentHandler::Initialize()
     CommonIntentHandler::Initialize();
     BOSE_DEBUG( s_logger, "%s", __func__ );
 
-#if 1 // @TODO PGC-321 move HandleNetworkStandbyIntentCb to Common
-    auto func = std::bind( &EddieProductController::HandleNetworkStandbyIntentCb , static_cast<EddieProductController*>( &GetProductController() ), std::placeholders::_1 );
-    auto cb = std::make_shared<AsyncCallback<KeyHandlerUtil::ActionType_t&> > ( func, &GetTask() );
-    KeyHandlerUtil::ActionType_t intent = ( KeyHandlerUtil::ActionType_t ) ActionCommon_t::NETWORK_STANDBY;
-    RegisterCallBack( intent, cb );
-#endif
-
     //+ AUX Control API's
     IntentManagerPtr_t playbackRequestManager =
         std::make_shared<PlaybackRequestManager>( GetTask() , GetCli(),
@@ -73,7 +66,6 @@ void IntentHandler::Initialize()
                                                   GetProductController() );
 
     m_IntentManagerMap[( uint16_t )Action::AUX_IN] = playbackRequestManager;
-    m_IntentNotificationMap[( uint16_t ) Action::AUX_IN]        = "aux_in" ;
     //- AUX Control API's
 
     //+ (Common Countdown manager for key combination)

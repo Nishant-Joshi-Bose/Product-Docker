@@ -24,7 +24,7 @@ class DisplayController
 public:
     DisplayController( ProductController& m_controller,
                        const std::shared_ptr<FrontDoorClientIF>& fd_client,
-                       LpmClientIF::LpmClientPtr clientPtr );
+                       LpmClientIF::LpmClientPtr clientPtr, AsyncCallback<bool> uiConnectedCb );
     ~DisplayController();
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -66,6 +66,30 @@ public:
                                      const Callback<Display>& resp );
 
 ///////////////////////////////////////////////////////////////////////////////
+/// @name   HandlePostUiHeartBeat
+/// @brief-
+/// @return void
+///////////////////////////////////////////////////////////////////////////////
+    void HandlePostUiHeartBeat( const UiHeartBeat &req,
+                                Callback<UiHeartBeat> resp );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name   HandlePutUiHeartBeat
+/// @brief-
+/// @return void
+///////////////////////////////////////////////////////////////////////////////
+    void HandlePutUiHeartBeat( const UiHeartBeat &req,
+                               Callback<UiHeartBeat> resp );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name   HandleGetUiHeartBeat
+/// @brief-
+/// @return void
+///////////////////////////////////////////////////////////////////////////////
+    void HandleGetUiHeartBeat( Callback<UiHeartBeat> resp );
+
+
+///////////////////////////////////////////////////////////////////////////////
 /// @name   SetAutoMode
 /// @brief-
 /// @return void
@@ -74,6 +98,13 @@ public:
     {
         m_autoMode = autoMode;
     }
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  TurnOnOff
+/// @brief-
+/// @return void
+///////////////////////////////////////////////////////////////////////////////
+    bool TurnOnOff( bool turnOn );
 
 private:
     /// Disable copies
@@ -88,6 +119,7 @@ private:
     void SetBackLightLevel( int actualLevel, int newLevel );
     int  GetBackLightLevelFromLux( float lux, float lux_rising );
     void ParseJSONData();
+    void updateUiConnected( bool currentStatus );
 
     ProductController&                 m_productController;
     std::shared_ptr<FrontDoorClientIF> m_frontdoorClientPtr;
@@ -99,8 +131,12 @@ private:
     bool                               m_autoMode  ;
     float                              m_luxFactor ;
     float                              m_luxValue  ;
-    int                                m_luxDecimal   ;
-    int                                m_luxFractional;
+    int                                m_luxDecimal    ;
+    int                                m_luxFractional ;
+    uint64_t                           m_uiHeartBeat   ;
+    uint64_t                           m_localHeartBeat;
+    bool                               m_uiConnected = false;
+    AsyncCallback<bool>                m_ProductControllerUiConnectedCb;
 };
 } //namespace ProductApp
 

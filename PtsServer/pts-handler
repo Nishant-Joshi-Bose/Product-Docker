@@ -60,7 +60,7 @@ Moved Permanently\r
         sys.exit()
 
     if path.startswith("/diag/"):
-        path = path[8:]
+        path = path[len("/diag/"):]
         if path == "":
             path = "main"
         prog = path

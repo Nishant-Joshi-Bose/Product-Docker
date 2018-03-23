@@ -9,6 +9,7 @@
 #include "APProductFactory.h"
 #include "DPrint.h"
 #include "FrontDoorClient.h"
+#include "EddieProductController.h"
 #include "CustomProductAudioService.h"
 #include "LpmClientFactory.h"
 #include "SoundTouchInterface/ContentItem.pb.h"
@@ -63,7 +64,6 @@ void CustomProductAudioService::RegisterAudioPathEvents()
                                                                                 std::placeholders::_2 ) );
         m_APPointer->RegisterForMainStreamAudioSettingsRequest( callback );
     }
-
     ConnectToAudioPath();
 }
 
@@ -82,13 +82,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setBassAction = [this]( ProductPb::AudioBassLevel val )
     {
-        bool changeOccurred = m_audioSettingsMgr->SetBass( val );
-        if( changeOccurred )
+        ErrorCode_t error = m_audioSettingsMgr->SetBass( val );
+        if( error == ErrorCode_t::NO_ERROR )
         {
             m_mainStreamAudioSettings.set_basslevel( m_audioSettingsMgr->GetBass( ).value() );
             SendMainStreamAudioSettingsEvent();
         }
-        return changeOccurred;
+        return error;
     };
     m_audioBassSetting = std::unique_ptr<AudioSetting<ProductPb::AudioBassLevel>>( new AudioSetting<ProductPb::AudioBassLevel>
                                                                                    ( kBassEndPoint,
@@ -106,13 +106,13 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setTrebleAction = [ this ]( ProductPb::AudioTrebleLevel val )
     {
-        bool changeOccurred = m_audioSettingsMgr->SetTreble( val );
-        if( changeOccurred )
+        ErrorCode_t error = m_audioSettingsMgr->SetTreble( val );
+        if( error == ErrorCode_t::NO_ERROR )
         {
             m_mainStreamAudioSettings.set_treblelevel( m_audioSettingsMgr->GetTreble( ).value() );
             SendMainStreamAudioSettingsEvent();
         }
-        return changeOccurred;
+        return error;
     };
     m_audioTrebleSetting = std::unique_ptr<AudioSetting<ProductPb::AudioTrebleLevel>>( new AudioSetting<ProductPb::AudioTrebleLevel>
                            ( kTrebleEndPoint,
@@ -168,7 +168,6 @@ void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
     BOSE_DEBUG( s_logger, __func__ );
     std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_mainStreamAudioSettings, false );
     m_APPointer->SetMainStreamAudioSettings( mainStreamAudioSettings );
-
     // DMR Print out the JSON being sent to AP.
     // BOSE_DEBUG( s_logger, "%s", mainStreamAudioSettings.c_str() );
 }
