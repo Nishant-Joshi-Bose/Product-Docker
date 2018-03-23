@@ -57,7 +57,7 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( ProfessorProductCont
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProductKeyInputInterface::InitializeQSS
+/// @name   ProductKeyInputInterface::InitializeQuickSetService
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductKeyInputManager::InitializeQuickSetService( )
@@ -95,13 +95,6 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
     auto nowSelection = m_ProductController.GetNowSelection( );
     std::string cicode;
 
-    ///
-    /// @todo The following check to determine whether the key event should be blasted to the
-    ///       external device requires updates to be fully implemented. The JIRA Story PGC-762
-    ///       covers this.
-    ///
-#if 0
-
     if( nowSelection.has_contentitem( ) )
     {
         const auto& contentItem = nowSelection.contentitem( );
@@ -117,8 +110,6 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
             cicode = source->details( ).cicode( );
         }
     }
-
-#endif
 
     if( isBlastedKey )
     {
