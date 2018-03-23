@@ -86,7 +86,7 @@ void ProductCommandLine::Run( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name  ProductCommandLine::Run
+/// @name  ProductCommandLine::Stop
 ///
 /// @brief This method is used to stop the ProductCommandLine from running.
 ///
