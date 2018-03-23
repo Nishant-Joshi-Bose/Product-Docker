@@ -16,17 +16,19 @@
 #include "SoundTouchInterface/ContentItem.pb.h"
 #include "AutoLpmServiceMessages.pb.h"
 
-constexpr char kBassEndPoint            [] = "/audio/bass";
-constexpr char kTrebleEndPoint          [] = "/audio/treble";
-constexpr char kCenterEndPoint          [] = "/audio/center";
-constexpr char kSurroundEndPoint        [] = "/audio/surround";
-constexpr char kGainOffsetEndPoint      [] = "/audio/gainOffset";
-constexpr char kAvSyncEndPoint          [] = "/audio/avSync";
-constexpr char kSubwooferGainEndPoint   [] = "/audio/subWooferGain";
-constexpr char kModeEndPoint            [] = "/audio/mode";
-constexpr char kContentTypeEndPoint     [] = "/audio/contentType";
-constexpr char kDualMonoSelectEndPoint  [] = "/audio/dualMonoSelect";
-constexpr char kEqSelectEndPoint        [] = "/audio/eqSelect";
+constexpr char kBassEndPoint                [] = "/audio/bass";
+constexpr char kTrebleEndPoint              [] = "/audio/treble";
+constexpr char kCenterEndPoint              [] = "/audio/center";
+constexpr char kSurroundEndPoint            [] = "/audio/surround";
+constexpr char kSurroundDelayEndPoint       [] = "/audio/surroundDelay";
+constexpr char kGainOffsetEndPoint          [] = "/audio/gainOffset";
+constexpr char kAvSyncEndPoint              [] = "/audio/avSync";
+constexpr char kSubwooferGainEndPoint       [] = "/audio/subWooferGain";
+constexpr char kModeEndPoint                [] = "/audio/mode";
+constexpr char kContentTypeEndPoint         [] = "/audio/contentType";
+constexpr char kDualMonoSelectEndPoint      [] = "/audio/dualMonoSelect";
+constexpr char kEqSelectEndPoint            [] = "/audio/eqSelect";
+constexpr char kSubwooferPolarityEndPoint   [] = "/audio/subwooferPolarity";
 
 namespace ProductApp
 {
@@ -298,10 +300,7 @@ LpmServiceMessages::AudioSettingsContent_t CustomProductAudioService::ContentTyp
     {
         return AUDIOSETTINGS_CONTENT_VIDEO;
     }
-    else
-    {
-        return AUDIOSETTINGS_CONTENT_UNSPECIFIED;
-    }
+    return AUDIOSETTINGS_CONTENT_UNSPECIFIED;
 }
 
 LpmServiceMessages::AudioSettingsDualMonoMode_t CustomProductAudioService::DualMonoSelectNameToEnum( const std::string& dualMonoSelectName )
@@ -314,10 +313,20 @@ LpmServiceMessages::AudioSettingsDualMonoMode_t CustomProductAudioService::DualM
     {
         return AUDIOSETTINGS_DUAL_MONO_RIGHT;
     }
-    else
+    return AUDIOSETTINGS_DUAL_MONO_BOTH;
+}
+
+LpmServiceMessages::AudioSettingsSubwooferPolarity_t CustomProductAudioService::SubwooferPolarityNameToEnum( const std::string& subwooferPolarityName )
+{
+    if( subwooferPolarityName == "AUDIOSETTINGS_SUBWOOFERPOLARITY_INPHASE" )
     {
-        return AUDIOSETTINGS_DUAL_MONO_BOTH;
+        return AUDIOSETTINGS_SUBWOOFERPOLARITY_INPHASE;
     }
+    else if( subwooferPolarityName == "AUDIOSETTINGS_SUBWOOFERPOLARITY_OUTOFPHASE" )
+    {
+        return AUDIOSETTINGS_SUBWOOFERPOLARITY_OUTOFPHASE;
+    }
+    return AUDIOSETTINGS_SUBWOOFERPOLARITY_INPHASE;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -354,7 +363,7 @@ LpmServiceMessages::AudioSettingsDeltaEqSelect_t CustomProductAudioService::EqSe
 /// @name   CustomProductAudioService::RegisterFrontDoorEvents
 ///
 /// @brief  On Professor, it register for put/post/get FrontDoor request for
-///         bass, treble, center, surround, gainOffset, avSync, subwooferGain, mode, contentType
+///         bass, treble, center, surround, surroundDelay, gainOffset, avSync, subwooferGain, mode, contentType
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::RegisterFrontDoorEvents()
@@ -460,6 +469,30 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                setSurroundAction,
                                m_FrontDoorClientIF,
                                m_ProductTask ) );
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// Endpoint /audio/surroundDelay - register ProductController as handler for POST/PUT/GET requests
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    auto getSurroundDelayAction = [ this ]( )
+    {
+        return m_AudioSettingsMgr->GetSurroundDelay( );
+    };
+    auto setSurroundDelayAction = [ this ]( ProductPb::AudioSurroundDelay val )
+    {
+        ErrorCode_t error = m_AudioSettingsMgr->SetSurroundDelay( val );
+        if( error == ErrorCode_t::NO_ERROR )
+        {
+            m_MainStreamAudioSettings.set_surrounddelay( m_AudioSettingsMgr->GetSurroundDelay( ).value() );
+            SendMainStreamAudioSettingsEvent();
+        }
+        return error;
+    };
+    m_AudioSurroundDelaySetting = std::unique_ptr<AudioSetting<ProductPb::AudioSurroundDelay>>( new AudioSetting<ProductPb::AudioSurroundDelay>
+                                  ( kSurroundDelayEndPoint,
+                                    getSurroundDelayAction,
+                                    setSurroundDelayAction,
+                                    m_FrontDoorClientIF,
+                                    m_ProductTask ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/gainOffset - register ProductController as handler for POST/PUT/GET requests
@@ -636,7 +669,29 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                                                                    m_FrontDoorClientIF,
                                                                                    m_ProductTask ) );
 
-
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// Endpoint /audio/SubwooferPolarity - register ProductController as handler for POST/PUT/GET requests
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    auto getSubwooferPolarityAction = [ this ]( )
+    {
+        return m_AudioSettingsMgr->GetSubwooferPolarity( );
+    };
+    auto setSubwooferPolarityAction = [ this ]( ProductPb::AudioSubwooferPolarity val )
+    {
+        ErrorCode_t error = m_AudioSettingsMgr->SetSubwooferPolarity( val );
+        if( error == ErrorCode_t::NO_ERROR )
+        {
+            m_MainStreamAudioSettings.set_subwooferpolarity( SubwooferPolarityNameToEnum( m_AudioSettingsMgr->GetSubwooferPolarity( ).value() ) );
+            SendMainStreamAudioSettingsEvent();
+        }
+        return error;
+    };
+    m_SubwooferPolaritySetting = std::unique_ptr<AudioSetting<ProductPb::AudioSubwooferPolarity>>( new AudioSetting<ProductPb::AudioSubwooferPolarity>
+                                 ( kSubwooferPolarityEndPoint,
+                                   getSubwooferPolarityAction,
+                                   setSubwooferPolarityAction,
+                                   m_FrontDoorClientIF,
+                                   m_ProductTask ) );
 }
 
 }// namespace ProductApp
