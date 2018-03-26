@@ -9,6 +9,7 @@
 #include "CustomProductControllerStates.h"
 #include "CustomProductControllerState.h"
 #include "CustomProductAudioService.h"
+#include "CustomProductKeyInputManager.h"
 #include "APTaskFactory.h"
 #include "AsyncCallback.h"
 #include "ProtoToMarkup.h"
@@ -32,19 +33,18 @@ using namespace DeviceManagerPb;
 namespace ProductApp
 {
 const std::string g_ProductPersistenceDir = "product-persistence/";
-const std::string KEY_CONFIG_FILE = "/var/run/KeyConfiguration.json";
 
 EddieProductController::EddieProductController():
     m_ProductControllerStateTop( GetHsm(), nullptr ),
     m_ProductControllerStateBooting( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_BOOTING ),
     m_ProductControllerStateBooted( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_BOOTED ),
     m_CustomProductControllerStateOn( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_ON ),
-    m_ProductControllerStateLowPowerStandby( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY ),
+    m_CustomProductControllerStateLowPowerStandby( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY ),
     m_ProductControllerStateSwInstall( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL ),
     m_ProductControllerStateCriticalError( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_CRITICAL_ERROR ),
     m_ProductControllerStatePlaying( GetHsm(), &m_CustomProductControllerStateOn, PRODUCT_CONTROLLER_STATE_PLAYING ),
     m_ProductControllerStatePlayable( GetHsm(), &m_CustomProductControllerStateOn, PRODUCT_CONTROLLER_STATE_PLAYABLE ),
-    m_ProductControllerStateLowPowerStandbyTransition( GetHsm(), &m_ProductControllerStateLowPowerStandby, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION ),
+    m_ProductControllerStateLowPowerStandbyTransition( GetHsm(), &m_CustomProductControllerStateLowPowerStandby, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION ),
     m_ProductControllerStateIdle( GetHsm(), &m_ProductControllerStatePlayable, PRODUCT_CONTROLLER_STATE_IDLE ),
     m_ProductControllerStateNetworkStandby( GetHsm(), &m_ProductControllerStatePlayable, PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY ),
     m_ProductControllerStateVoiceConfigured( GetHsm(), &m_ProductControllerStateIdle, PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED ),
@@ -77,7 +77,6 @@ EddieProductController::EddieProductController():
     m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_FACTORY_DEFAULT ),
     m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE ),
 
-    m_KeyHandler( *GetTask(), m_CliClientMT, KEY_CONFIG_FILE ),
     m_cachedStatus(),
     m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
     m_wifiProfilesCount(),
@@ -97,7 +96,7 @@ void EddieProductController::InitializeHsm()
 {
     /// Add States to HSM object and initialize HSM before doing anything else.
     GetHsm().AddState( "", &m_ProductControllerStateTop );
-    GetHsm().AddState( "", &m_ProductControllerStateLowPowerStandby );
+    GetHsm().AddState( "", &m_CustomProductControllerStateLowPowerStandby );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), &m_ProductControllerStateSwInstall );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), &m_ProductControllerStateBooting );
     GetHsm().AddState( "", &m_ProductControllerStateBooted );
@@ -160,8 +159,12 @@ void EddieProductController::InitializeAction()
     m_DataCollectionClient =  DataCollectionClientFactory::CreateUDCService( GetTask() );
 
     // Start Eddie ProductAudioService
-    m_ProductAudioService = std::make_shared< CustomProductAudioService>( *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient() );
+    m_ProductAudioService = std::make_shared< CustomProductAudioService >( *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient() );
     m_ProductAudioService -> Run();
+
+    // Start Eddie ProductKeyInputManager
+    m_ProductKeyInputManager = std::make_shared< CustomProductKeyInputManager >( *this );
+    m_ProductKeyInputManager -> Run();
 
     // Initialize and register Intents for the Product Controller
     m_IntentHandler.Initialize();
@@ -229,21 +232,8 @@ void EddieProductController::RegisterLpmEvents()
 {
     BOSE_INFO( s_logger, __func__ );
 
-    // Register keys coming from the LPM.
-    auto func = std::bind( &EddieProductController::HandleLpmKeyInformation, this, std::placeholders::_1 );
-    AsyncCallback<IpcKeyInformation_t>response_cb( func, GetTask() );
-    m_LpmInterface->GetLpmClient()->RegisterEvent<IpcKeyInformation_t>( IPC_KEY, response_cb );
+    // Register lightbar controller LPM events
     m_lightbarController->RegisterLpmEvents();
-}
-
-void EddieProductController::RegisterKeyHandler()
-{
-    auto func = [this]( KeyHandlerUtil::ActionType_t intent )
-    {
-        HandleIntents( intent );
-    };
-    auto cb = std::make_shared<AsyncCallback<KeyHandlerUtil::ActionType_t> > ( func, GetTask() );
-    m_KeyHandler.RegisterKeyHandler( cb );
 }
 
 void EddieProductController::RegisterEndPoints()
@@ -313,68 +303,6 @@ void EddieProductController::HandleWiFiProfileResponse( const NetManager::Protob
     BOSE_INFO( s_logger, "%s, m_wifiProfilesCount=%d", __func__, m_wifiProfilesCount.get() );
     GetHsm().Handle< bool, bool > ( &CustomProductControllerState::HandleNetworkState, IsNetworkConfigured() /*configured*/, IsNetworkConnected() /*connected*/ );
 }
-
-/// This function will handle key information coming from LPM and give it to
-/// KeyHandler for repeat Manager to handle.
-void EddieProductController::HandleLpmKeyInformation( IpcKeyInformation_t keyInformation )
-{
-    BOSE_DEBUG( s_logger, __func__ );
-
-    if( keyInformation.has_keyorigin() &&
-        keyInformation.has_keystate() &&
-        keyInformation.has_keyid() )
-    {
-        BOSE_DEBUG( s_logger, "Received key Information : keyorigin:%d,"
-                    " keystate:%d, keyid:%d",
-                    keyInformation.keyorigin(),
-                    keyInformation.keystate(), keyInformation.keyid() );
-        m_CliClientMT.SendAsyncResponse( "Received from LPM, KeySource: CONSOLE, State " + \
-                                         std::to_string( keyInformation.keystate() ) + " KeyId " + \
-                                         std::to_string( keyInformation.keyid() ) );
-        m_KeyHandler.HandleKeys( keyInformation.keyorigin(),
-                                 keyInformation.keystate(),
-                                 keyInformation.keyid() );
-        if( keyInformation.keystate() == KEY_RELEASED )
-        {
-            SendDataCollection( keyInformation );
-        }
-        RestartInactivityTimers();
-    }
-    else
-    {
-        BOSE_ERROR( s_logger, "One or more of the parameters are not present"
-                    " in the message: keyorigin_P:%d, keystate_P:%d, keyid_P:%d",
-                    keyInformation.has_keyorigin(),
-                    keyInformation.has_keystate(),
-                    keyInformation.has_keyid() );
-    }
-}
-
-void EddieProductController::SendDataCollection( const IpcKeyInformation_t& keyInformation )
-{
-    BOSE_DEBUG( s_logger, __func__ );
-
-    std::string currentButtonId;
-    const auto currentKeyId = keyInformation.keyid();
-    const auto currentOrigin = keyInformation.keyorigin();
-
-    if( currentKeyId <= NUM_KEY_NAMES )
-    {
-        currentButtonId = KEY_NAMES[currentKeyId - 1];
-    }
-    else
-    {
-        BOSE_ERROR( s_logger, "%s, Invalid CurrentKeyID: %d", __func__, currentKeyId );
-    }
-
-    auto keyPress  = std::make_shared<DataCollection::ButtonPress>();
-    keyPress->set_buttonid( currentKeyId ) ;
-    keyPress->set_origin( static_cast<DataCollection::Origin >( currentOrigin ) );
-
-    m_DataCollectionClient->SendData( keyPress, "button-pressed" );
-}
-
-
 
 void EddieProductController::SendInitialRequests()
 {
@@ -625,12 +553,6 @@ void EddieProductController::RegisterCliClientCmds()
     m_CliClientMT.RegisterCLIServerCommands( "setDisplayAutoMode",
                                              "command to set the display controller automatic mode", "setDisplayAutoMode auto|manual",
                                              GetTask(), cb , static_cast<int>( CLICmdKeys::SET_DISPLAY_AUTO_MODE ) );
-
-    m_CliClientMT.RegisterCLIServerCommands( "raw_key",
-                                             "command to simulate raw key events."
-                                             "Usage: raw_key origin keyId state ; where origin is 0-6, keyId is 1-7, state 0-1 (press-release).",
-                                             "raw_key origin keyId state",
-                                             GetTask(), cb , static_cast<int>( CLICmdKeys::RAW_KEY ) );
 }
 
 void EddieProductController::HandleCliCmd( uint16_t cmdKey,
@@ -648,11 +570,6 @@ void EddieProductController::HandleCliCmd( uint16_t cmdKey,
         HandleSetDisplayAutoMode( argList, response );
         break;
     }
-    case CLICmdKeys::RAW_KEY:
-    {
-        HandleRawKeyCliCmd( argList, response );
-    }
-    break;
     default:
         response = "Command not found";
         break;
@@ -684,25 +601,6 @@ void EddieProductController::HandleSetDisplayAutoMode( const std::list<std::stri
     }
 }// HandleSetDisplayAutoMode
 
-void EddieProductController::HandleRawKeyCliCmd( const std::list<std::string>& argList, std::string& response )
-{
-    if( argList.size() == 3 )
-    {
-        auto it = argList.begin();
-        uint8_t origin = atoi( ( *it ).c_str() ) ;
-        it++;
-        uint32_t id = atoi( ( *it ).c_str() ) ;
-        it++;
-        uint8_t state = atoi( ( *it ).c_str() ) ;
-
-        m_KeyHandler.HandleKeys( origin, state, id );
-    }
-    else
-    {
-        response = "Invalid arguments. use help to look at the raw_key usage";
-    }
-}
-
 void EddieProductController::UpdateUiConnectedStatus( bool status )
 {
     BOSE_WARNING( s_logger, "%s|status:%s", __func__ , status ? "true" : "false" );
@@ -722,9 +620,7 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
         // First do the Eddie-specific stuff, i.e., register callbacks and thermal task control
         if( productMessage.lpmstatus( ).has_connected( ) && productMessage.lpmstatus( ).connected( ) )
         {
-            /// RegisterLpmEvents and RegisterKeyHandler
             RegisterLpmEvents();
-            RegisterKeyHandler();
         }
         if( productMessage.lpmstatus( ).has_systemstate( ) )
         {
@@ -765,6 +661,15 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
 
         // Then (after registering for events above) do the common stuff
         ( void ) HandleCommonProductMessage( productMessage );
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// Key action intent messages are handled at this point, and passed to the HandleIntents
+    /// method for processing. This messages are sent through the CustomProductKeyInputManager
+    /// class that was instantiate and run when the product controller was constructed.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( productMessage.has_action( ) )
+    {
+        HandleIntents( productMessage.action( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Common ProductMessage elements are handled last, any events with overrides to

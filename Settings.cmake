@@ -84,7 +84,7 @@ SET(OUTPUT_LIB_DIR lib)
 SET(CUSTOM_HSM_DIR "${CMAKE_SOURCE_DIR}/ProductController/CustomHsm")
 SET(INTENT_HANDLER_DIR "${CMAKE_SOURCE_DIR}/ProductController/IntentHandler")
 #Custom hardware interface directory path needs to be set before building CastleProductControllerCommon library
-SET (CUSTOM_HARDWARE_DIR "${CMAKE_SOURCE_DIR}/ProductController")
+SET (CUSTOM_HARDWARE_DIR "${CMAKE_SOURCE_DIR}/ProductController/CustomProductLpmHardwareInterface")
 #Custom product audio service path needs to be set before building CastleProductControllerCommon library
 SET(CUSTOM_PRODUCT_AUDIOSERVICE_DIR "${CMAKE_SOURCE_DIR}/ProductController/CustomProductAudioService")
 
