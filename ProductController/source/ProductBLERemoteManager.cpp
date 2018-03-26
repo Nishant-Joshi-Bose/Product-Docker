@@ -177,13 +177,18 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
     }
 
 // TODO - re-enable this once PGC-1105 has been resolved
-#if 0
     if( source->sourcename().compare( "PRODUCT" ) == 0 )
     {
         if( source->sourceaccountname().compare( "TV" ) == 0 )
         {
-            // Check for TV explicitly for now, since I don't know if Mardid will set deviceType for the TV
+            BOSE_INFO( s_logger, "update nowSelection TV" );
+            // Check for TV explicitly for now, since I don't know if Madrid will set deviceType for the TV
             m_RCSClient->Led_Set( LedsSourceTypeMsg_t::TV );
+        }
+        else if( source->sourceaccountname().compare( "SETUP" ) == 0 )
+        {
+            BOSE_INFO( s_logger, "update nowSelection SETUP" );
+            m_RCSClient->Led_Set( LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE );
         }
         else if( ( source->sourceaccountname().compare( 0, 4, "SLOT" ) == 0 ) and source->has_details() )
         {
@@ -224,15 +229,14 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
     {
         if( source->sourcename().compare( "BLUETOOTH" ) == 0 )
         {
+            BOSE_INFO( s_logger, "update nowSelection BLUETOOTH" );
             m_RCSClient->Led_Set( LedsSourceTypeMsg_t::BLUETOOTH );
         }
-        else( source->sourcename().compare( "INVALID_SOURCE" ) != 0 )
+        else if( source->sourcename().compare( "INVALID_SOURCE" ) != 0 )
         {
             m_RCSClient->Led_Set( LedsSourceTypeMsg_t::SOUND_TOUCH );
         }
     }
-#endif
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
