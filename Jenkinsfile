@@ -15,13 +15,14 @@ def buildJob(jobName)
 def CAPS_Component = ["CAPS-Component/playbackRequest",
                       "CAPS-Component/volumeAPIs"]
 
-def Castle_SW_Update = ["CastleSoftwareUpdate/BonjourUpdateTest_Master",
-                        "CastleSoftwareUpdate/Riviera_Software_Update_Corrupt_Ipk_Fail_Install_Scenarios",
-                        "CastleSoftwareUpdate/Riviera_Software_Update_Corrupt_Ipk_No_Install_Scenarios",
-                        "CastleSoftwareUpdate/Riviera_Software_Update_Corrupt_Ipk_Scenarios",
-                        "CastleSoftwareUpdate/Riviera_Software_Update_Corrupt_Packages_Scenarios",
-                        "CastleSoftwareUpdate/Riviera_Software_Update_With_Same_IPK_TAR_Version",
-                        "CastleSoftwareUpdate/Riviera_SoftwareUpdate"]
+def Castle_SW_Update = ["CastleSoftwareUpdate/Riviera_BonjourUpdate",
+			"CastleSoftwareUpdate/Riviera_BonjourUpdate_Corrupt_IPK_Scenarios",
+                        "CastleSoftwareUpdate/Riviera_Software_Update_Corrupt_Signature_For_IPKs",
+                        "CastleSoftwareUpdate/Riviera_Software_Update_Corrupt_Signature_For_Package_Files",
+                        "CastleSoftwareUpdate/Riviera_Software_Update_Corrupt_Signature_For_Sequence_File",
+                        "CastleSoftwareUpdate/Riviera_Software_Update_Missing_Signature_For_Sequence_File",
+                        "CastleSoftwareUpdate/Riviera_Software_Update_Missing_Signature_For_Packages",
+                        "CastleSoftwareUpdate/Riviera_Software_Update_Missing_Signature_For_IPKs"]
 
 def CastleTestUtils_Integrated = ["CastleTestUtils_Integrated/memoryConsumption"]
 
@@ -43,7 +44,8 @@ def STS_Integrated = ["STS-Integrated/Amazon_Integrated",
 
 def NetworkServices_Component = ["NetworkServices-Component/network-wifi-profile"]
 
-def E2E = ["E2E/setupAP_Mac"]
+def E2E = ["E2E/BonjourUpdateTest_Master",
+	   "E2E/setupAP"]
 
 
 failureList = [] 
