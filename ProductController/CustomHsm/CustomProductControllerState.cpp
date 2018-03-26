@@ -40,9 +40,9 @@ EddieProductController& CustomProductControllerState::GetCustomProductController
 bool CustomProductControllerState::IsProductNeedsSetup()
 {
     s_logger.LogInfo( "%s:: lang=%d, network=%d", __func__, GetCustomProductController().IsLanguageSet(),
-                      GetCustomProductController().IsNetworkConfigured() );
+                      GetCustomProductController().GetNetworkServiceUtil().IsNetworkConfigured() );
 
-    return not( GetCustomProductController().IsNetworkConfigured() );
+    return not( GetCustomProductController().GetNetworkServiceUtil().IsNetworkConfigured() );
 }
 
 } // namespace ProductApp
