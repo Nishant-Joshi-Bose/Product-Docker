@@ -32,7 +32,9 @@ def Eddie_Product  = ["EddieProduct/Eddie-Bootup-Sequence-Timing",
                       "EddieProduct/Eddie-DemoController",
                       "EddieProduct/Eddie-Preset"]
 
-def Galapagos_Client = ["GalapagosClient/GalapagosClient-Authentication"]
+def Galapagos_Client = ["GalapagosClient/Authentication",
+                        "GalapagosClient/GalapagosClient-Activation",
+                        "GalapagosClient/GalapagosClient-ServiceDiscovery"]
 
 def STS_Component = ["STS-Component/Deezer_Component_d",
                      "STS-Component/Amazon_Component_d"]

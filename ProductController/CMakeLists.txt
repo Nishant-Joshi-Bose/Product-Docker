@@ -4,6 +4,7 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductKeyInputManager
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
   ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
   ${DATACOLLECTIONCLIENT_DIR}
@@ -11,6 +12,8 @@ INCLUDE_DIRECTORIES(
   ${KEYHANDLER_DIR}/include
   IntentHandler
   CustomProductAudioService
+  CustomProductKeyInputManager
+  CustomProductLpmHardwareInterface
   CustomProductSTS
   DisplayController
   .
@@ -22,6 +25,7 @@ INCLUDE_DIRECTORIES(
 ADD_EXECUTABLE(Eddie
   ${CUSTOM_HSM_DIR}/CustomProductControllerState.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateOn.cpp
+  ${CUSTOM_HSM_DIR}/CustomProductControllerStateLowPowerStandby.cpp
   ProductCliClient.cpp
   DataCollectionClientInterface.cpp
   EddieProductController.cpp
@@ -37,11 +41,12 @@ ADD_EXECUTABLE(Eddie
   IntentHandler/IntentHandler.cpp
   IntentHandler/PlaybackRequestManager.cpp
   DisplayController/DisplayController.cpp
-  CustomProductAudioService/CustomProductAudioService.cpp
   CustomProductAudioService/CustomAudioSettingsManager.cpp
+  CustomProductAudioService/CustomProductAudioService.cpp
+  CustomProductKeyInputManager/CustomProductKeyInputManager.cpp
+  CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
   CustomProductSTS/CustomProductSTSAuxStateFactory.cpp
   CustomProductSTS/CustomProductSTSStateTopAux.cpp
-  CustomProductLpmHardwareInterface.cpp
 )
 
 TARGET_LINK_LIBRARIES(Eddie

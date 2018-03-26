@@ -34,15 +34,6 @@ import "AutoLpmServiceMessages.proto";
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 import "CommonProductMessages.proto";
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                 Key Data Message Structure                                   ///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-message ProductKeyData
-{
-        optional KeyActionPb.KEY_ACTION action = 1;
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                Base Product Message Structure                                ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,7 +47,7 @@ message ProductMessage
         optional ProductNetworkStatus       networkstatus       =  6;
         optional ProductWirelessStatus      wirelessstatus      =  7;
         optional ProductVoiceStatus         voicestatus         =  8;
-        optional ProductKeyData             keydata             =  9;
+        optional uint32                     action              =  9;
         optional ProductLanguageData        languagedata        = 10;
         optional ProductConfigurationStatus configurationstatus = 11;
         optional ProductAutowakeStatus      autowakestatus      = 12;
