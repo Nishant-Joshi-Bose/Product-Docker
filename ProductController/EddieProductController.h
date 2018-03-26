@@ -79,6 +79,7 @@ namespace ProductApp
 {
 
 class CustomProductAudioService;
+class CustomProductKeyInputManager;
 
 class EddieProductController : public ProductController
 {
@@ -149,7 +150,6 @@ private:
     void InitializeHsm( );
     void InitializeAction( );
     void RegisterLpmEvents();
-    void RegisterKeyHandler();
     void RegisterEndPoints();
     void HandleCliCmd( uint16_t cmdKey,
                        const std::list<std::string> & argList,
@@ -427,14 +427,16 @@ private:
     ProductControllerStateStoppingStreamsDedicatedForFactoryDefault m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault;
     ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate;
 
-    /// Key Handler
-    KeyHandlerUtil::KeyHandler                  m_KeyHandler;
+    /// Persistence for the Configuration Status
     ProtoPersistenceIF::ProtoPersistencePtr     m_ConfigurationStatusPersistence = nullptr;
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
     BOptional<NetManager::Protobuf::NetworkStatus> m_cachedStatus;
 
     /// ProductAudioService
     std::shared_ptr< CustomProductAudioService> m_ProductAudioService;
+
+    /// ProductKeyInputManager
+    std::shared_ptr< CustomProductKeyInputManager> m_ProductKeyInputManager;
 
     ProductCliClient                            m_productCliClient;
 
