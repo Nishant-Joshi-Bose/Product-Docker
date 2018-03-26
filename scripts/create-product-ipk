@@ -104,6 +104,9 @@ components record "$stage" || exit
 version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
 cp "$version_json" "$opt_dir/etc" || exit
 
+components_json=$wspace/components.json
+cp "$components_json" "$opt_dir/etc" || exit
+
 cp "$wspace/builds/$cfg/qc8017_32/bin"/*[!~] "$opt_dir/bin" || exit
 
 # Historical FS_VERSION file.
