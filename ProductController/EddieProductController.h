@@ -17,7 +17,7 @@
 #include "ProtoPersistenceIF.h"
 #include "ProductControllerStateTop.h"
 #include "ProductControllerStateNetworkStandby.h"
-#include "ProductControllerStateLowPowerStandby.h"
+#include "CustomProductControllerStateLowPowerStandby.h"
 #include "ProductControllerStateLowPowerStandbyTransition.h"
 #include "ProductControllerStateNetworkStandbyConfigured.h"
 #include "ProductControllerStateNetworkStandbyNotConfigured.h"
@@ -364,6 +364,16 @@ public:
         m_displayController->SetAutoMode( autoMode );
     }
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief Turn ON/OFF LCD display
+///
+//////////////////////////////////////////////////////////////////////////////////////////////
+    void TurnDisplayOnOff( bool turnOn ) const
+    {
+        m_displayController->TurnOnOff( turnOn );
+    }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   GetWiFiOperationalMode
@@ -379,7 +389,7 @@ private:
     ProductControllerStateBooting                                   m_ProductControllerStateBooting;
     ProductControllerStateBooted                                    m_ProductControllerStateBooted;
     CustomProductControllerStateOn                                  m_CustomProductControllerStateOn;
-    ProductControllerStateLowPowerStandby                           m_ProductControllerStateLowPowerStandby;
+    CustomProductControllerStateLowPowerStandby                     m_CustomProductControllerStateLowPowerStandby;
     ProductControllerStateSoftwareInstall                           m_ProductControllerStateSwInstall;
     ProductControllerStateCriticalError                             m_ProductControllerStateCriticalError;
     ProductControllerStatePlaying                                   m_ProductControllerStatePlaying;
