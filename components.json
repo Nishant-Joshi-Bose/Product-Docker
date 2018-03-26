@@ -117,11 +117,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/3.0"
+    "selected_version": "Release/master/3.1"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/3.0"
+    "selected_version": "Release/master/3.1"
   },
   {
     "name": "RivieraLpmService-qc8017_32",

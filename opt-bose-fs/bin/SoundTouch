@@ -37,6 +37,14 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
     # We want our certificates to appear valid even when NTP hasn't yet set
     # our clock (e.g., because there's no network connectivity).
     set-default-time
+    # We want to also ensure on first boot, /opt/Bose/etc/secure 
+    # folder is set to permission 440
+    if [ -d /opt/Bose/etc/secure ]; then
+        if [ -f /mnt/nv/set-permission ]; then
+	    /mnt/nv/set-permission
+            rm /mnt/nv/set-permission
+	fi
+    fi
 
     log info "* Starting SoundTouch *"
 

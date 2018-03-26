@@ -13,7 +13,7 @@ if [ "$[/javascript myJob.Klocwork]" = "true" ]; then
 fi
 
 export DONT_UPDATE_CASTLETOOLS=1
-
+export GENERATE_HSP_SIGNATURES=1
 eval $KWINJECT make jobs=8 deploy || exit
 
 : success
