@@ -190,8 +190,6 @@ public:
     bool     IsNetworkConnected( )       const override;
     uint32_t GetWifiProfileCount( )      const override;
     bool     IsAutoWakeEnabled( )        const override;
-    bool     IsFirstTimeBootUp( )        const;
-    bool     IsOutOfBoxSetupComplete( )  const;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -316,9 +314,6 @@ private:
     ///
     /// @brief The following method is used to register for end-points used in the inherited common
     ///        ProductController class, as well as for end-points registered for in this class.
-    ///
-    /// @todo  These end-points and callbacks may be better placed in a common module, especially
-    ///        for end-points being used for playback functionality.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void RegisterFrontDoorEndPoints( );

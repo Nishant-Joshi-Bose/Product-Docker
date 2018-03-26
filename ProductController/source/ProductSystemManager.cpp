@@ -41,11 +41,6 @@ namespace ProductApp
 ///
 /// @brief Global Constants
 ///
-/// @todo  The location and name for files to store persistence data needs to coordinated with the
-///        Eddie team. It will be helpful for debugging and testing efforts to have the persistence
-///        in a single, known place. In ECO1, all persistent date was stored under the directory
-///        /mnt/nv/BosePersistence/1.
-///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 const std::string g_ProductDirectory = "product-persistence/";
 
