@@ -120,6 +120,13 @@ Cache-Control: no-cache\r
         call("ps")
         sys.exit()
 
+    # Discard any query parameters from paths like
+    # "/index.html?deeplink=com.bose.myApp&ssid=myNetwork&context=ApSetup".
+    # See https://github.com/BoseCorp/bose-web-riviera-ap-page/
+    i = path.find("?")
+    if i != -1:
+        path = path[:i]
+
     # Avoid possible security issues with paths like ../../etc/passwd
     if ".." not in path:
         if path == "/":
