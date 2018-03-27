@@ -80,6 +80,7 @@ void CustomProductControllerStateAdaptIQ::HandleStateStart( )
     /// Disable source selection while in AdaptIQ.
     ///
     GetProductController( ).SendAllowSourceSelectMessage( false );
+    m_powerDownOnExit = false;
 
     m_timer->SetTimeouts( ADAPTIQ_INACTIVITY_TIMEOUT, 0 );
     m_timer->Start( [ = ]( )
@@ -120,10 +121,14 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdap
     ProductAdaptIQStatus& status = const_cast<ProductAdaptIQStatus&>( aiqStatus );
     if( status.mutable_status()->smstate() == LpmServiceMessages::IpcAiqState_t::AIQ_STATE_NOT_RUNNING )
     {
-        ///
-        /// Go to the exiting state to stop playback of the AdaptIQ source.
-        ///
-        ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING );
+        if( m_powerDownOnExit )
+        {
+            ChangeState( PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS );
+        }
+        else
+        {
+            ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING );
+        }
     }
 
     return true;
@@ -197,6 +202,22 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAda
 
     return true;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief  CustomProductControllerAdaptIQ::HandleIntentPowerToggle
+///
+/// @return This method returns a true Boolean value indicating that it has handled the
+///         PowerToggle intent.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateAdaptIQ::HandleIntentPowerToggle( )
+{
+    GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
+    m_powerDownOnExit = true;
+    return true;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

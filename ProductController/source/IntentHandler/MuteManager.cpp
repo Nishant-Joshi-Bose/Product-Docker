@@ -7,10 +7,6 @@
 ///
 /// @author    Stuart J. Lumby
 ///
-/// @todo      This intent manager needs to incorporate changes for the ramping up or down of the
-///            volume found in the common code in the repository CastleProductControllerCommon.
-///            This requirement is logged under the JIRA Story PGC-600.
-///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation

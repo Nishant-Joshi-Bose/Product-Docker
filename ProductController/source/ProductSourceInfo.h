@@ -87,13 +87,23 @@ public:
         return m_cablesatSourcePlaybackRq;
     }
 
+    void RegisterSourceListener( const Callback< const SoundTouchInterface::Sources& >& listenerCb )
+    {
+        m_SourceListeners.push_back( listenerCb );
+    }
+
 private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// These declarations store the main task for processing LPM hardware events and requests. It
     /// is passed by the ProductController instance.
     //////////////////////////////////////////////////////////////////////////////////////////////
-    NotifyTargetTaskIF*             m_ProductTask       = nullptr;
-    Callback< ProductMessage >      m_ProductNotify     = nullptr;
+    NotifyTargetTaskIF*                         m_ProductTask       = nullptr;
+    Callback< ProductMessage >                  m_ProductNotify     = nullptr;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    /// List of callbacks to inform when we've received a notification for updated /system/sources
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    std::vector< Callback< const SoundTouchInterface::Sources& > > m_SourceListeners;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

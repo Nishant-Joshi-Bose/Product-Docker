@@ -500,7 +500,6 @@ void ProfessorProductController::Run( )
     /// Initialize entities in the Common Product Controller
     ///
     CommonInitialize( );
-    m_deviceManager.Initialize( this );
 
     ///
     /// Get instances of all the modules.
@@ -815,39 +814,6 @@ uint32_t ProfessorProductController::GetWifiProfileCount( ) const
 bool ProfessorProductController::IsAutoWakeEnabled( ) const
 {
     return m_IsAutoWakeEnabled;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   IsFirstTimeBootUp
-///
-/// @return This method returns a true or false value, based on whether this is the first time
-///         booting up after a factory default.
-///
-/// @todo   A way of determing whether the device is performing a first time boot up will need to be
-///         coded, possibly through adding a method call to the DeviceManager class in the common
-///         code base. A JIRA Story PGC-715 has been create for this purpose.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsFirstTimeBootUp( ) const
-{
-    return false;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   IsOutOfBoxSetupComplete
-///
-/// @return This method returns a true o0r false value, based on a set member variable.
-///
-/// @todo   A way of determing whether the out-of-box setup is complete will need to be coded,
-///         possibly through adding a method call to the DeviceManager class in the common code base.
-///         A JIRA Story PGC-714 has been create for this purpose.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsOutOfBoxSetupComplete( ) const
-{
-    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
