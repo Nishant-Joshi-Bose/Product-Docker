@@ -237,7 +237,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             };
             auto respFunc = [ this ]( SoundTouchInterface::volume v )
             {
-                BOSE_INFO( s_logger, "Volume set to %d, mute set to %d", v.value(), v.muted() );
+                BOSE_INFO( s_logger, "Volume set to %d, mute set to %d", v.value( ), v.muted( ) );
             };
 
             AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
@@ -246,8 +246,8 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
             SoundTouchInterface::volume pbVolume;
             pbVolume.set_value( volumeLevelValue );
 
-            BOSE_VERBOSE( s_logger, "Setting FrontDoor mute to %d", pbVolume.muted() );
-            m_ProductController.GetFrontDoorClient()->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
+            BOSE_VERBOSE( s_logger, "Setting FrontDoor mute to %d", pbVolume.muted( ) );
+            m_ProductController.GetFrontDoorClient( )->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
                 ProductApp::FRONTDOOR_AUDIO_VOLUME, pbVolume, respFunc, errCb );
         }
         else
@@ -297,7 +297,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         };
         auto respFunc = [ this ]( SoundTouchInterface::volume v )
         {
-            BOSE_INFO( s_logger, "Volume set to %d, mute set to %d", v.value(), v.muted() );
+            BOSE_INFO( s_logger, "Volume set to %d, mute set to %d", v.value( ), v.muted( ) );
         };
 
         AsyncCallback<SoundTouchInterface::volume> respCb( respFunc, m_ProductTask );
@@ -306,8 +306,8 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         SoundTouchInterface::volume pbVolume;
         pbVolume.set_muted( muteStateValue );
 
-        BOSE_VERBOSE( s_logger, "Setting FrontDoor mute to %d", pbVolume.muted() );
-        m_ProductController.GetFrontDoorClient()->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
+        BOSE_VERBOSE( s_logger, "Setting FrontDoor mute to %d", pbVolume.muted( ) );
+        m_ProductController.GetFrontDoorClient( )->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
             ProductApp::FRONTDOOR_AUDIO_VOLUME, pbVolume, respFunc, errCb );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -510,13 +510,46 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     ////////////////////////////////////////////////////////////////////////////////////////////////
     else if( command.compare( "product boot_status" ) == 0 )
     {
+        std::string LpmConnected( m_ProductController.IsLpmReady( )             ? "true" : "false" );
+        std::string CapsInitialized( m_ProductController.IsCAPSReady( )            ? "true" : "false" );
+        std::string audioPathConnected( m_ProductController.IsAudioPathReady( )       ? "true" : "false" );
+        std::string StsInitialized( m_ProductController.IsSTSReady( )             ? "true" : "false" );
+        std::string SoftwareUpdateReady( m_ProductController.IsSoftwareUpdateReady( )  ? "true" : "false" );
+        std::string SassInitialized( m_ProductController.IsSassReady( )            ? "true" : "false" );
+        std::string bluetoothInitialized( m_ProductController.IsBluetoothModuleReady( ) ? "true" : "false" );
+
+        response  = "------------- Product Controller Booting Status -------------\n";
+        response += " \n";
+        response += "LPM Connected         : ";
+        response += LpmConnected;
+        response += "\n";
+        response += "CAPS Initialized      : ";
+        response += CapsInitialized;
+        response += "\n";
+        response += "Audio Path Connected  : ";
+        response += audioPathConnected;
+        response += "\n";
+        response += "STS Initialized       : ";
+        response += StsInitialized;
+        response += "\n";
+        response += "Software Update Ready : ";
+        response += SoftwareUpdateReady;
+        response += "\n";
+        response += "SASS Initialized      : ";
+        response += SassInitialized;
+        response += "\n";
+        response += "Bluetooth Initialized : ";
+        response += bluetoothInitialized;
+        response += "\n";
+        response += " \n";
+
         if( m_ProductController.IsBooted( ) )
         {
-            response  = "The device has been successfully booted.";
+            response += "The device has been successfully booted.";
         }
         else
         {
-            response  = "The device has not yet been booted.";
+            response += "The device has not yet been booted.";
         }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
