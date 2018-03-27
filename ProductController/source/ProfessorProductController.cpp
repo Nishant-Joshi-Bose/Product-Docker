@@ -150,7 +150,6 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     /// Member Variable Initialization
     ///
-    m_IsAudioPathReady( false ),
     m_IsNetworkConfigured( false ),
     m_IsNetworkConnected( false ),
     m_IsAutoWakeEnabled( false ),
@@ -717,8 +716,8 @@ bool ProfessorProductController::IsBooted( ) const
             m_IsCapsReady           and
             m_IsAudioPathReady      and
             m_IsSTSReady            and
-            IsSassReady( )          and
             m_isSoftwareUpdateReady and
+            IsSassReady( )          and
             IsBluetoothModuleReady( ) );
 }
 
@@ -1061,27 +1060,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
                 break;
             }
         }
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Audio path status messages are handled at this point.
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_audiopathstatus( ) )
-    {
-        if( message.audiopathstatus( ).has_connected( ) )
-        {
-            m_IsAudioPathReady = message.audiopathstatus( ).connected( );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "An invalid audio path status message was received." );
-            return;
-        }
-
-        BOSE_DEBUG( s_logger, "An audio path status %s message was received.",
-                    m_IsAudioPathReady ? "connected" : "not connected" );
-
-        GetHsm( ).Handle< bool >
-        ( &CustomProductControllerState::HandleAudioPathState, m_IsAudioPathReady );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// STS slot selected data is handled at this point.
