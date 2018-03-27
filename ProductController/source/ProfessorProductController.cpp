@@ -708,8 +708,8 @@ bool ProfessorProductController::IsBooted( ) const
     BOSE_VERBOSE( s_logger, "CAPS Initialized      :  %s", ( m_IsCapsReady      ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "STS Initialized       :  %s", ( m_IsSTSReady       ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "Software Update Init  :  %s", ( m_isSoftwareUpdateReady   ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "SASS            Init  :  %s", ( IsSassReady()      ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Software Update Ready :  %s", ( m_isSoftwareUpdateReady   ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "SASS Initialized      :  %s", ( IsSassReady( )            ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Bluetooth Initialized :  %s", ( IsBluetoothModuleReady( ) ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
@@ -717,7 +717,7 @@ bool ProfessorProductController::IsBooted( ) const
             m_IsCapsReady           and
             m_IsAudioPathReady      and
             m_IsSTSReady            and
-            IsSassReady()           and
+            IsSassReady( )          and
             m_isSoftwareUpdateReady and
             IsBluetoothModuleReady( ) );
 }
@@ -1447,20 +1447,13 @@ void ProfessorProductController::PerformRequestforWiFiProfiles( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::End
+/// @brief ProfessorProductController::HandleGetOpticalAutoWake
 ///
-/// @brief  This method is called when the Product Controller process should be terminated. It is
-///         used to set the running member to false, which will invoke the Wait method idle loop to
-///         exit and perform any necessary clean up.
+/// @param const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb
+///
+/// @param const Callback<FrontDoor::Error> & errorCb
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::End( )
-{
-    BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
-
-    m_Running = false;
-}
-
 void ProfessorProductController::HandleGetOpticalAutoWake(
     const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
     const Callback<FrontDoor::Error> & errorCb ) const
@@ -1470,6 +1463,17 @@ void ProfessorProductController::HandleGetOpticalAutoWake(
     respCb( autowake );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::HandlePutOpticalAutoWake
+///
+/// @param const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req
+///
+/// @param const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb
+///
+/// @param const Callback<FrontDoor::Error> & errorCb
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::HandlePutOpticalAutoWake(
     const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req,
     const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
@@ -1484,6 +1488,11 @@ void ProfessorProductController::HandlePutOpticalAutoWake(
     HandleGetOpticalAutoWake( respCb, errorCb );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::ApplyOpticalAutoWakeSettingFromPersistence
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::ApplyOpticalAutoWakeSettingFromPersistence( )
 {
     auto persistence = ProtoPersistenceFactory::Create( "OpticalAutoWake.json", GetProductPersistenceDir( ) );
@@ -1505,6 +1514,11 @@ void ProfessorProductController::ApplyOpticalAutoWakeSettingFromPersistence( )
     m_IsAutoWakeEnabled = autowake.enabled( );
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::NotifyFrontdoorAndStoreOpticalAutoWakeSetting
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::NotifyFrontdoorAndStoreOpticalAutoWakeSetting( )
 {
     auto persistence = ProtoPersistenceFactory::Create( "OpticalAutoWake.json", GetProductPersistenceDir( ) );
@@ -1525,6 +1539,22 @@ void ProfessorProductController::NotifyFrontdoorAndStoreOpticalAutoWakeSetting( 
     {
         BOSE_ERROR( s_logger, "OpticalAutoWake store persistence error - %s", e.what( ) );
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::End
+///
+/// @brief  This method is called when the Product Controller process should be terminated. It is
+///         used to set the running member to false, which will invoke the Wait method idle loop to
+///         exit and perform any necessary clean up.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::End( )
+{
+    BOSE_DEBUG( s_logger, "The Product Controller main task is stopping." );
+
+    m_Running = false;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
