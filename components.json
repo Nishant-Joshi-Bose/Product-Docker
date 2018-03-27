@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@f6b975591d7d172e2fd9fa76d9c9440acddfa55d"
+    "selected_version": "master@f9ee29913983671a60d57409a64182c191556a4e"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -97,7 +97,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@5bfca1841bb4844659204b542c4624e9389b1c0c"
+    "selected_version": "master@86f6b86b08f08fb3ed62ebbcb0d14ecdeaf3756d"
   },
   {
     "name": "CastleProductUIAssets",
