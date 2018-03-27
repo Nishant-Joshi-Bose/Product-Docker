@@ -45,19 +45,18 @@ message ProductMessage
         optional ProductSTSInterfaceStatus  stsinterfacestatus  =  4;
         optional ProductSelectSourceSlot    selectsourceslot    =  5;
         optional ProductNetworkStatus       networkstatus       =  6;
-        optional ProductWirelessStatus      wirelessstatus      =  7;
-        optional ProductVoiceStatus         voicestatus         =  8;
-        optional uint32                     action              =  9;
-        optional ProductLanguageData        languagedata        = 10;
-        optional ProductConfigurationStatus configurationstatus = 11;
-        optional ProductAutowakeStatus      autowakestatus      = 12;
-        optional ProductNowPlayingStatus    nowplayingstatus    = 13;
-        optional ProductLpmLowPowerStatus   lpmlowpowerstatus   = 14;
-        optional bool                       audiopathselect     = 15;
-        optional bool                       ampfaultdetected    = 16;
-        optional bool                       audiosilent         = 17;
-        optional ProductSystemEventServiceResponse systemeventserviceresponse = 18;
-        optional uint32                     chimetoplay         = 19;
+        optional ProductVoiceStatus         voicestatus         =  7;
+        optional uint32                     action              =  8;
+        optional ProductLanguageData        languagedata        =  9;
+        optional ProductConfigurationStatus configurationstatus = 10;
+        optional ProductAutowakeStatus      autowakestatus      = 11;
+        optional ProductNowPlayingStatus    nowplayingstatus    = 12;
+        optional ProductLpmLowPowerStatus   lpmlowpowerstatus   = 13;
+        optional bool                       audiopathselect     = 14;
+        optional bool                       ampfaultdetected    = 15;
+        optional bool                       audiosilent         = 16;
+        optional ProductSystemEventServiceResponse systemeventserviceresponse = 17;
+        optional uint32                     chimetoplay         = 18;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
