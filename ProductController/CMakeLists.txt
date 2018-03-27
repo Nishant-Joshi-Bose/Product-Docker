@@ -63,6 +63,7 @@ TARGET_LINK_LIBRARIES(Eddie
   VoiceServiceClient
   CliClient
   AudioLibs
+  EddieAudioSettings
   PassportClient
   GalapagosClient
   SASSFrontDoorServiceProto

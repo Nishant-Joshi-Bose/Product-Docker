@@ -9,6 +9,7 @@
 #include "ProductAudioService.h"
 #include "CustomAudioSettingsManager.h"
 #include "ThermalMonitorTask.h"
+#include "EddieAudioSettings.pb.h"
 
 namespace ProductApp
 {
@@ -62,20 +63,32 @@ private:
      */
     void ThermalDataReceivedCb( const IpcSystemTemperatureData_t& data );
 
+    /*! \brief Convenience function for reading Mode and converting to dialogMode on/off.
+     */
+    bool IsDialogModeEnabled();
+
+    /*! \brief Converts a string for "mode" into an enum value.
+     * \param modeName String to convert.
+     * \return AudioSettingsAudioMode_t value for given string.
+     */
+    LpmServiceMessages::AudioSettingsAudioMode_t ModeNameToEnum( const std::string& modeName );
+
 
     //! Holds information that APProduct would like to know, including audio settings and thermal data.
-    LpmServiceMessages::AudioSettings_t             m_mainStreamAudioSettings;
+    EddieAudioSettings_t m_mainStreamAudioSettings;
 
     //! Manages and persists audio settings.
-    std::unique_ptr<CustomAudioSettingsManager>     m_audioSettingsMgr;
+    std::unique_ptr<CustomAudioSettingsManager> m_audioSettingsMgr;
 
     //! Task used for polling LPM for thermal data.
-    ThermalMonitorTask                              m_thermalTask;
+    ThermalMonitorTask m_thermalTask;
 
     //
     // Front Door handlers
     //
     std::unique_ptr<AudioSetting<ProductPb::AudioBassLevel>>        m_audioBassSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioCenterLevel>>      m_audioCenterSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioMode>>             m_audioModeSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioTrebleLevel>>      m_audioTrebleSetting;
 
 
