@@ -19,27 +19,13 @@ def main():
         {
             "details" : {
                 "deviceType" : "DEVICE_TYPE_CBL_SAT",
-                "ciCode"        : "T2051",
+                "ciCode"        : "Y0199",
                 "activationKey"     : "ACTIVATION_KEY_CBL_SAT"
             },
             "displayName"       : "SLOT_0",
             "local"             : True,
             "multiroom"         : True,
             "sourceAccountName" : "SLOT_0",
-            "sourceName"        : "PRODUCT",
-            "status"            : "ready",
-            "visible"           : "true",
-        },
-        {
-            "details" : {
-                "deviceType" : "DEVICE_TYPE_BD_DVD",
-                "ciCode"        : "T2051",
-                "activationKey"     : "ACTIVATION_KEY_BD_DVD"
-            },
-            "displayName"       : "SLOT_1",
-            "local"             : True,
-            "multiroom"         : True,
-            "sourceAccountName" : "SLOT_1",
             "sourceName"        : "PRODUCT",
             "status"            : "ready",
             "visible"           : "true",
