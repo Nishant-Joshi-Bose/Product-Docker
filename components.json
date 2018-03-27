@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-03-25_1721"
+    "selected_version": "Release/Castle-Fork/0.3.19.41545.2751268"
   },
   {
     "name": "bose-opkg-utils",
@@ -44,6 +44,10 @@
     "selected_version": "Release/master/0.3.7-49+a987998"
   },
   {
+    "name": "CastleDataCollectionService-qc8017_32",
+    "selected_version": "Release/master/0.3.1-9+a31513c"
+  },
+  {
     "name": "CastleDemoController-qc8017_32",
     "selected_version": "Release/master/0.3.3-66+c3b9b9f"
   },
@@ -69,7 +73,7 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-181+ed72644"
+    "selected_version": "Release/master/0.3.1-193+c40f0d0"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -81,11 +85,11 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@74b092dd7a55cd2676be708bd2c969c6c6f4b9d1"
+    "selected_version": "master@86f6b86b08f08fb3ed62ebbcb0d14ecdeaf3756d"
   },
   {
     "name": "CastleProductUIAssets",
-    "selected_version": "master@43394152e689030529a94750d56fe9cd196b885a"
+    "selected_version": "master@bde707144a74f923837a1dbc785717619a3ad203"
   },
   {
     "name": "CastleTestUtils",
@@ -149,15 +153,15 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/IP3/0.3.16-395+10cc929"
+    "selected_version": "Release/IP3/0.3.17-421+4a31b67"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-03-25_1721"
+    "selected_version": "Release/Castle-Fork/0.3.19.41545.2751268"
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Continuous/master/0.3.0-25+6e81b5a"
+    "selected_version": "Release/master/0.3.1-26+375d4cd"
   },
   {
     "name": "Webkit",
