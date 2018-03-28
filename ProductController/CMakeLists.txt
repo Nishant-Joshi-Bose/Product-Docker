@@ -7,6 +7,7 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductKeyInputManager
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
   ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
   ${DATACOLLECTIONCLIENT_DIR}
@@ -18,6 +19,7 @@ INCLUDE_DIRECTORIES(
   include
   source
   source/CustomProductAudioService
+  source/CustomProductKeyInputManager
   source/CustomProductLpmHardwareInterface
   source/CustomStateMachine
   source/IntentHandler
@@ -39,19 +41,9 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/SystemInfo.pb.cc
   ${PROTO_CC_DEST}/SystemSourcesProperties.pb.cc
   ${PROTO_CC_DEST}/SystemPowerProduct.pb.cc
-  source/ProductAdaptIQManager.cpp
-  source/ProductBLERemoteManager.cpp
-  source/ProductCecHelper.cpp
-  source/ProductCommandLine.cpp
-  source/ProductDspHelper.cpp
-  source/ProductKeyInputInterface.cpp
-  source/ProductNetworkManager.cpp
-  source/ProductSourceInfo.cpp
-  source/ProductStart.cpp
-  source/ProductSystemManager.cpp
-  source/ProfessorProductController.cpp
   source/CustomProductAudioService/CustomAudioSettingsManager.cpp
   source/CustomProductAudioService/CustomProductAudioService.cpp
+  source/CustomProductKeyInputManager/CustomProductKeyInputManager.cpp
   source/CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQ.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQExiting.cpp
@@ -71,6 +63,16 @@ ADD_EXECUTABLE(Professor
   source/IntentHandler/PlaybackRequestManager.cpp
   source/IntentHandler/SpeakerPairingManager.cpp
   source/IntentHandler/MuteManager.cpp
+  source/ProductAdaptIQManager.cpp
+  source/ProductBLERemoteManager.cpp
+  source/ProductCecHelper.cpp
+  source/ProductCommandLine.cpp
+  source/ProductDspHelper.cpp
+  source/ProductNetworkManager.cpp
+  source/ProductSourceInfo.cpp
+  source/ProductStart.cpp
+  source/ProductSystemManager.cpp
+  source/ProfessorProductController.cpp
 )
 
 TARGET_LINK_LIBRARIES(Professor
