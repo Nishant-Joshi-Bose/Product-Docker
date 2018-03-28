@@ -744,28 +744,21 @@ bool ProfessorProductController::IsBooted( ) const
 ///
 /// @return This method returns a true or false value, based on a series of set member variables,
 ///         which all must be true to indicate that the device has exited low power.
-///         NOTE: Unlike booting we do not wait for BT
+///         NOTE: Unlike booting we only wait for the things killed going to low power
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProfessorProductController::IsLowPowerExited( ) const
 {
-    BOSE_VERBOSE( s_logger, "------------ Product Controller Booted Check ---------------" );
+    BOSE_VERBOSE( s_logger, "------------ Product Controller Low Power Exit Check ---------------" );
     BOSE_VERBOSE( s_logger, " " );
     BOSE_VERBOSE( s_logger, "LPM Connected         :  %s", ( m_IsLpmReady       ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "CAPS Initialized      :  %s", ( m_IsCapsReady      ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "STS Initialized       :  %s", ( m_IsSTSReady       ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "Software Update Init  :  %s", ( m_isSoftwareUpdateReady   ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "SASS            Init  :  %s", ( IsSassReady()      ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "Bluetooth Initialized :  %s", ( IsBluetoothModuleReady( ) ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
     return( m_IsLpmReady            and
-            m_IsCapsReady           and
-            m_IsAudioPathReady      and
-            m_IsSTSReady            and
             IsSassReady()           and
-            m_isSoftwareUpdateReady );
+            m_IsAudioPathReady      );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

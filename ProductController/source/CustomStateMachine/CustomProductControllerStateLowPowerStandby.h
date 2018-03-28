@@ -3,10 +3,8 @@
 /// @file      CustomProductControllerStateLowPowerStandby.h
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
-///            product on state. It is an all encompassing state that includes the playing and
-///            playable substates.
-///
-/// @author    Stuart J. Lumby
+///            product low power state. In addition it has a queue of depth 1 to store the users
+///            desired action while resuming.
 ///
 /// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
 ///
@@ -62,9 +60,9 @@ class CustomProductControllerStateLowPowerStandby : public ProductControllerStat
 public:
 
     CustomProductControllerStateLowPowerStandby( ProductControllerHsm& hsm,
-                                    CHsmState*            pSuperState,
-                                    Hsm::STATE            stateId,
-                                    const std::string&    name    = "CustomProductControllerStateLowPowerStandby" );
+                                                 CHsmState*            pSuperState,
+                                                 Hsm::STATE            stateId,
+                                                 const std::string&    name    = "CustomProductControllerStateLowPowerStandby" );
 
     ~CustomProductControllerStateLowPowerStandby( ) override
     {

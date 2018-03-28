@@ -26,9 +26,6 @@
 #include "Intents.h"
 #include "IntentHandler.h"
 #include "CustomProductControllerStateLowPowerStandby.h"
-#include "ProductControllerHsm.h"
-#include "ProfessorProductController.h"
-#include "ProductControllerState.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -57,9 +54,9 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 CustomProductControllerStateLowPowerStandby::CustomProductControllerStateLowPowerStandby( ProductControllerHsm& hsm,
-                                                                CHsmState*            pSuperState,
-                                                                Hsm::STATE            stateId,
-                                                                const std::string&    name )
+        CHsmState*            pSuperState,
+        Hsm::STATE            stateId,
+        const std::string&    name )
 
     : ProductControllerStateLowPowerStandby( hsm, pSuperState, stateId, name )
 {
