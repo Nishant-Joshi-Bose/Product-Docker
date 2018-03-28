@@ -24,14 +24,10 @@ files=(
     "$builds_dir/package/product_flash"
     "$builds_dir/package/product_flash.exe"
     "$builds_dir/package/product_flash_mac"
+    "$builds_dir"/eddie_package_*.bos
+    "$builds_dir"/lpm_eddie_combined_*.hex
+    "$builds_dir/lpm_package.xml"
+    "$builds_dir/lpm_blob_configuration.xml"
 )
 
-files_to_cp=(
-    $builds_dir/eddie_package_*
-    $builds_dir/lpm_eddie_combined_*
-    $builds_dir/lpm_package.xml
-    $builds_dir/lpm_blob_configuration.xml
-)
-
-mv "${files[@]}" "$deploy_dir" || exit
-cp "${files_to_cp[@]}" "$deploy_dir" || exit
+cp "${files[@]}" "$deploy_dir" || exit
