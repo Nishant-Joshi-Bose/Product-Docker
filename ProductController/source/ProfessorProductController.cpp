@@ -702,23 +702,23 @@ std::shared_ptr< ProductDspHelper >& ProfessorProductController::GetDspHelper( )
 bool ProfessorProductController::IsBooted( ) const
 {
     BOSE_VERBOSE( s_logger, "------------ Product Controller Booted Check ---------------" );
-    BOSE_VERBOSE( s_logger, " " );
-    BOSE_VERBOSE( s_logger, "LPM Connected         :  %s", ( m_IsLpmReady       ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "CAPS Initialized      :  %s", ( m_IsCapsReady      ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "STS Initialized       :  %s", ( m_IsSTSReady       ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "Software Update Ready :  %s", ( m_isSoftwareUpdateReady   ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "" );
+    BOSE_VERBOSE( s_logger, "LPM Connected         :  %s", ( IsLpmReady( )             ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "CAPS Initialized      :  %s", ( IsCAPSReady( )            ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( IsAudioPathReady( )       ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "STS Initialized       :  %s", ( IsSTSReady( )             ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Software Update Ready :  %s", ( IsSoftwareUpdateReady( )  ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "SASS Initialized      :  %s", ( IsSassReady( )            ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Bluetooth Initialized :  %s", ( IsBluetoothModuleReady( ) ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, " " );
+    BOSE_VERBOSE( s_logger, "" );
 
-    return( m_IsLpmReady            and
-            m_IsCapsReady           and
-            m_IsAudioPathReady      and
-            m_IsSTSReady            and
-            m_isSoftwareUpdateReady and
-            IsSassReady( )          and
-            IsBluetoothModuleReady( ) );
+    return ( IsLpmReady( )             and
+             IsCAPSReady( )            and
+             IsAudioPathReady( )       and
+             IsSTSReady( )             and
+             IsSoftwareUpdateReady( )  and
+             IsSassReady( )            and
+             IsBluetoothModuleReady( )    );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
