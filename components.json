@@ -25,7 +25,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.11-322+7baef63"
+    "selected_version": "Release/master/0.3.12-338+8a91f09"
   },
   {
     "name": "BoseOPKG-native",
@@ -41,7 +41,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/0.3.8-159+cad7e7a"
+    "selected_version": "Release/master/0.3.9-167+a2767c7"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -53,7 +53,7 @@
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/0.3.2-42+d76abce"
+    "selected_version": "Release/master/0.3.3-46+d48afc4"
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
@@ -65,7 +65,7 @@
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.2.4-45+2e01a36"
+    "selected_version": "Release/master/0.3.1-48+3006958"
   },
   {
     "name": "CastleLibs-native",
@@ -85,19 +85,19 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-181+ed72644"
+    "selected_version": "Release/master/0.3.1-193+c40f0d0"
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.3.90-556+cb693bd"
+    "selected_version": "Release/master/0.3.92-575+edd8e73"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.3.90-556+cb693bd"
+    "selected_version": "Release/master/0.3.92-575+edd8e73"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@86f6b86b08f08fb3ed62ebbcb0d14ecdeaf3756d"
+    "selected_version": "master@047dc2ce3679af78c764e39f38a8610ff82fc1b3"
   },
   {
     "name": "CastleProductUIAssets",
@@ -113,7 +113,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.2.2-100+f3a90f2"
+    "selected_version": "Release/master/0.2.3-112+0311a3d"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -121,7 +121,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/0.2.3-71+1801c14"
+    "selected_version": "Release/master/0.3.1-75+af1179b"
   },
   {
     "name": "protobuf-native",
@@ -169,11 +169,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/IP3/0.3.16-395+10cc929"
+    "selected_version": "Release/IP3/0.3.18-434+82019d1"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.18.41479.2744053"
+    "selected_version": "Release/Castle-Fork/0.3.21.41591.2753749"
   },
   {
     "name": "SystemEventService-qc8017_32",
