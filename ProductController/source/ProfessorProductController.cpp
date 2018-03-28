@@ -702,7 +702,7 @@ std::shared_ptr< ProductDspHelper >& ProfessorProductController::GetDspHelper( )
 bool ProfessorProductController::IsBooted( ) const
 {
     BOSE_VERBOSE( s_logger, "------------ Product Controller Booted Check ---------------" );
-    BOSE_VERBOSE( s_logger, "" );
+    BOSE_VERBOSE( s_logger, " " );
     BOSE_VERBOSE( s_logger, "LPM Connected         :  %s", ( IsLpmReady( )             ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "CAPS Initialized      :  %s", ( IsCAPSReady( )            ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( IsAudioPathReady( )       ? "true" : "false" ) );
@@ -710,7 +710,7 @@ bool ProfessorProductController::IsBooted( ) const
     BOSE_VERBOSE( s_logger, "Software Update Ready :  %s", ( IsSoftwareUpdateReady( )  ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "SASS Initialized      :  %s", ( IsSassReady( )            ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Bluetooth Initialized :  %s", ( IsBluetoothModuleReady( ) ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "" );
+    BOSE_VERBOSE( s_logger, " " );
 
     return ( IsLpmReady( )             and
              IsCAPSReady( )            and
@@ -718,7 +718,7 @@ bool ProfessorProductController::IsBooted( ) const
              IsSTSReady( )             and
              IsSoftwareUpdateReady( )  and
              IsSassReady( )            and
-             IsBluetoothModuleReady( )    );
+             IsBluetoothModuleReady( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
