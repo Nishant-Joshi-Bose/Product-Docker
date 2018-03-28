@@ -22,7 +22,6 @@
 #include "MfgData.h"
 #include "BLESetupEndpoints.h"
 #include "ButtonPress.pb.h"
-#include "DataCollectionClientFactory.h"
 #include "ProductSTSSilentStateFactory.h"
 #include "CustomProductSTSAuxStateFactory.h"
 
@@ -83,7 +82,7 @@ EddieProductController::EddieProductController():
     m_fdErrorCb( AsyncCallback<FrontDoor::Error> ( std::bind( &EddieProductController::CallbackError,
                                                               this, std::placeholders::_1 ), GetTask() ) ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
-    m_dataCollectionClientInterface( m_FrontDoorClientIF )
+    m_dataCollectionClientInterface( m_FrontDoorClientIF, GetDataCollectionClient() )
 {
     BOSE_INFO( s_logger, __func__ );
 }
@@ -154,9 +153,6 @@ void EddieProductController::InitializeAction()
     m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient() ) );
     m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient(), uiConnectedCb ) );
     SetupProductSTSController();
-
-    //Data Collection support
-    m_DataCollectionClient =  DataCollectionClientFactory::CreateUDCService( GetTask() );
 
     // Start Eddie ProductAudioService
     m_ProductAudioService = std::make_shared< CustomProductAudioService >( *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient() );
