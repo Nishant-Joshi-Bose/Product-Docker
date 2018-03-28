@@ -1,22 +1,26 @@
 #!/bin/bash
 #
-# Install Monaco IPK from the latest EC Continuous build or 
-# from the .ipk file provided as an argument.
+# Install Monaco IPK from the .ipk file provided as an argument
+# or from a newly created .ipk if none is specified.
 #
 this=${0##*/}
 
-if (( $# == 0 )); then
-    build=/home/softlib/verisoft/Eddie/Continuous/master
-    version=$(cat "$build/latest.txt") || exit
-    set -- "$build/$version/HSP-${RIVIERA_HSP_VERSION?}/monaco.ipk"
-    echo "$0" "$1"
-fi
-
-if (( $# != 1 )); then
+if (( $# > 1 )); then
     echo >&2 "usage: $this [monaco.ipk]"
     exit 1
 fi
-ipk=$1
+
+if (( $# == 1 )) && [[ "$1" = *.ipk ]]; then
+    ipk=$1
+else
+    cd "$(dirname "$0")/.." || exit
+    ipk=$PWD/builds/Release/monaco.ipk
+    rm -f "$ipk"
+
+    make "monaco-ipk" || exit
+fi
+
+ls -sh "$ipk" || exit
 
 ar t >/dev/null "$ipk" || exit
 

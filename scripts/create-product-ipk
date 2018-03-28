@@ -104,6 +104,9 @@ components record "$stage" || exit
 version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
 cp "$version_json" "$opt_dir/etc" || exit
 
+components_json=$wspace/components.json
+cp "$components_json" "$opt_dir/etc" || exit
+
 cp "$wspace/builds/$cfg/qc8017_32/bin"/*[!~] "$opt_dir/bin" || exit
 
 # Historical FS_VERSION file.
@@ -174,7 +177,7 @@ fi
 "$cli_dir/stage" "$opt_dir" || exit
 "$democontroller_dir/stage" "$opt_dir" || exit
 "$webkit_dir/stage" "$opt_dir" || exit
-"$productuiassets_dir/stage" --chimes=alpha --type=flac "$opt_dir" || exit
+"$productuiassets_dir/stage" --chimes=beta --type=flac "$opt_dir" || exit
 "$frontdoor_dir/stage" "$opt_dir" || exit
 "$galapagosclient_dir/stage" "$opt_dir" || exit
 "$httpproxy_dir/stage" "$opt_dir" || exit
