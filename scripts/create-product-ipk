@@ -80,6 +80,7 @@ productuiassets_dir=$(components get CastleProductUIAssets installed_location) |
 frontdoor_dir=$(components get FrontDoor-qc8017_32 installed_location) || exit
 boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
 datacollection_dir=$(components get CastleDataCollectionClient-qc8017_32 installed_location) || exit
+datacollectionservice_dir=$(components get CastleDataCollectionService-qc8017_32 installed_location) || exit
 sadi_dir=$(components get SADI-qc8017_32 installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -170,6 +171,7 @@ cp -r "$wspace/keys/development/CACerts/" "$secure_dir" || exit
 "$galapagosclient_dir/stage" "$opt_dir" || exit
 "$httpproxy_dir/stage" "$opt_dir" || exit
 "$datacollection_dir/stage" "$opt_dir" || exit
+"$datacollectionservice_dir/stage" "$opt_dir" || exit
 "$sadi_dir/stage" "$opt_dir" || exit
 
 # ----------------------------------------------------------------------------
@@ -259,6 +261,7 @@ pkill BoseApp
 pkill Eddie
 pkill FrontDoor
 pkill SASSController
+pkill DataCollectionService
 # we are leaving telnet, avahi-daemon, SoftwareUpdateService, NetManager alive.
 # ---8<------8<------8<------8<------8<------8<------8<------8<------8<---
 

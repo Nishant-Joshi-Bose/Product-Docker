@@ -16,14 +16,24 @@ constexpr char  kDefaultConfigPath[] = "/opt/Bose/etc/DefaultAudioSettings.json"
 constexpr uint32_t kConfigVersionMajor = 2;
 constexpr uint32_t kConfigVersionMinor = 1;
 
-constexpr char kBassName            [] = "audioBassLevel";
-constexpr char kTrebleName          [] = "audioTrebleLevel";
+constexpr char kBassName                [] = "audioBassLevel";
+constexpr char kCenterName              [] = "audioCenterLevel";
+constexpr char kModeName                [] = "audioMode";
+constexpr char kTrebleName              [] = "audioTrebleLevel";
+
+// Some flags used to enable on configure testing features.
+constexpr char kTestOptionsName         [] = "testOptions";
+constexpr char kTestCenterEnabledName   [] = "centerEnabled";
+constexpr char kTestModeEnabledName     [] = "modeEnabled";
 
 namespace ProductApp
 {
 using std::string;
 
-CustomAudioSettingsManager::CustomAudioSettingsManager()
+CustomAudioSettingsManager::CustomAudioSettingsManager() :
+    AudioSettingsManager(),
+    m_centerLevelTestEnabled( false ),
+    m_modeTestEnabled( false )
 {
     BOSE_DEBUG( s_logger, __func__ );
     InitializeAudioSettings();
@@ -54,6 +64,54 @@ const ProductPb::AudioBassLevel& CustomAudioSettingsManager::GetBass() const
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
+/// Center setting setter/getter
+///////////////////////////////////////////////////////////////////////////////////////
+ErrorCode_t CustomAudioSettingsManager::SetCenter( const ProductPb::AudioCenterLevel& center )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    if( !center.has_value() )
+    {
+        return ErrorCode_t::MISSING_FIELDS;
+    }
+    if( center.value() > m_audioSettings["configurations"][kCenterName]["properties"]["max"].asInt()
+        || center.value() < m_audioSettings["configurations"][kCenterName]["properties"]["min"].asInt() )
+    {
+        return ErrorCode_t::INVALID_VALUE;
+    }
+    return SetAudioProperties( center, kCenterName, m_currentCenter );
+}
+
+const ProductPb::AudioCenterLevel& CustomAudioSettingsManager::GetCenter() const
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    return m_currentCenter;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+/// Mode setting setter/getter
+//////////////////////////////////////////////////////////////////////////////////////
+ErrorCode_t CustomAudioSettingsManager::SetMode( const ProductPb::AudioMode& mode )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    if( !mode.has_value() )
+    {
+        return ErrorCode_t::MISSING_FIELDS;
+    }
+    if( !isValueInArray( mode.value(),
+                         m_audioSettings["configurations"][kModeName]["properties"]["supportedValues"] ) )
+    {
+        return ErrorCode_t::INVALID_VALUE;
+    }
+    return SetAudioProperties( mode, kModeName, m_currentMode );
+}
+
+const ProductPb::AudioMode& CustomAudioSettingsManager::GetMode() const
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    return m_currentMode;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
 /// Treble setting setter/getter
 ///////////////////////////////////////////////////////////////////////////////////////
 ErrorCode_t CustomAudioSettingsManager::SetTreble( const ProductPb::AudioTrebleLevel& treble )
@@ -80,8 +138,30 @@ const ProductPb::AudioTrebleLevel& CustomAudioSettingsManager::GetTreble() const
 void CustomAudioSettingsManager::UpdateAllProtos()
 {
     BOSE_DEBUG( s_logger, __func__ );
-    UpdateCurrentProto( kBassName,          m_currentBass );
-    UpdateCurrentProto( kTrebleName,        m_currentTreble );
+
+    // Default functionality using super class functionality.
+    UpdateCurrentProto( kBassName, m_currentBass );
+    UpdateCurrentProto( kCenterName, m_currentCenter );
+    UpdateCurrentProto( kModeName, m_currentMode );
+    UpdateCurrentProto( kTrebleName, m_currentTreble );
+}
+
+/*!
+ */
+void CustomAudioSettingsManager::LoadTestOptions()
+{
+    if( m_audioSettings.isMember( kTestOptionsName ) )
+    {
+        if( m_audioSettings[kTestOptionsName].isMember( kTestCenterEnabledName ) )
+        {
+            m_centerLevelTestEnabled = m_audioSettings[kTestOptionsName][kTestCenterEnabledName].asBool();
+        }
+
+        if( m_audioSettings[kTestOptionsName].isMember( kTestModeEnabledName ) )
+        {
+            m_modeTestEnabled = m_audioSettings[kTestOptionsName][kTestModeEnabledName].asBool();
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -92,6 +172,7 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
     BOSE_DEBUG( s_logger, __func__ );
     bool success = true; //successful reading from persistence, initialized to be true
     Json::Reader reader;
+
     try
     {
         std::string s = m_audioSettingsPersistence->Load();
@@ -138,11 +219,44 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
         }
     }
 
+    LoadTestOptions();
+
     // If it gets here, it means we successfully read from either persistence or default config file
     // Initialize ProtoBufs with m_audioSettings JSON values
     BOSE_DEBUG( s_logger, "Initialize current protos with m_audioSettings" );
+
+    //
+    // Default initializations using super class functionality.
+    //
+
     initializeProto( kBassName, m_currentBass );
+    initializeProto( kCenterName, m_currentCenter );
     initializeProto( kTrebleName, m_currentTreble );
+
+    //
+    // Custom initializations for properies that do not follow default paradigm.
+    //
+
+    // Mode.
+    m_audioSettings["configurations"][kModeName]["persistenceSession"] = false;
+    std::string currPersistLvlMode = m_audioSettings["configurations"][kModeName]["currentPersistenceLevel"].asString();
+    m_currentMode.set_persistence( currPersistLvlMode );
+    if( currPersistLvlMode == kPersistContentItem )
+    {
+        m_currentMode.set_value( m_audioSettings["values"][currPersistLvlMode][m_currentContentItem][kModeName].asString() );
+    }
+    else
+    {
+        m_currentMode.set_value( m_audioSettings["values"][currPersistLvlMode][kModeName].asString() );
+    }
+    for( uint32_t i = 0; i < m_audioSettings["configurations"][kModeName]["properties"]["supportedValues"].size(); i++ )
+    {
+        m_currentMode.mutable_properties()->add_supportedvalues( m_audioSettings["configurations"][kModeName]["properties"]["supportedValues"][i].asString() );
+    }
+    for( uint32_t i = 0; i < m_audioSettings["configurations"][kModeName]["properties"]["supportedPersistence"].size(); i++ )
+    {
+        m_currentMode.mutable_properties()->add_supportedpersistence( m_audioSettings["configurations"][kModeName]["properties"]["supportedPersistence"][i].asString() );
+    }
 }
 
 }// namespace ProductApp

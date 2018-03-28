@@ -1,14 +1,13 @@
 #!/bin/bash
-# 
-# Script to get processes specified in re, and capture there Vm and Threads data 
+#
+# Script to get processes specified in re, and capture there Vm and Threads data
 # The data is passed as the payload json to the run-telemetry script
 #
 
-MACADDR=$1
-DATE=$2
+DATE=$1
 
 #Processes to search for
-re=$4
+re=$3
 
 re2="([^ ]*) +([0-9]+)"
 re3="(.+):\s+([0-9]+)( kB){0,1}"
@@ -22,14 +21,10 @@ do
      [[ $proc =~ $re3 ]]
       metric=${BASH_REMATCH[1]}
       value=${BASH_REMATCH[2]}
-      printf '    {\n'
+      printf '      {\n'
       printf '        "time": "%s",\n' $DATE
-      printf '        "type": "metric",\n'
-      printf '        "originatorID": "%s",\n' $MACADDR
-      printf '        "data": {\n'
-      printf '            "metricType": "%s/%s",\n' ${process} ${metric}
-      printf '            "metricValue": %d\n' ${value}
-      printf '        }\n'
-      printf '    },\n'
+      printf '        "metricType": "%s:%s",\n' ${process} ${metric}
+      printf '        "metricValue": %d\n' ${value}
+      printf '      },\n'
     done
 done
