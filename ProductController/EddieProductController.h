@@ -17,7 +17,7 @@
 #include "ProtoPersistenceIF.h"
 #include "ProductControllerStateTop.h"
 #include "ProductControllerStateNetworkStandby.h"
-#include "ProductControllerStateLowPowerStandby.h"
+#include "CustomProductControllerStateLowPowerStandby.h"
 #include "ProductControllerStateLowPowerStandbyTransition.h"
 #include "ProductControllerStateNetworkStandbyConfigured.h"
 #include "ProductControllerStateNetworkStandbyNotConfigured.h"
@@ -79,6 +79,7 @@ namespace ProductApp
 {
 
 class CustomProductAudioService;
+class CustomProductKeyInputManager;
 
 class EddieProductController : public ProductController
 {
@@ -147,9 +148,9 @@ private:
 private:
     ///Register with LPM for events notifications
 
+    void InitializeHsm( );
     void InitializeAction( );
     void RegisterLpmEvents();
-    void RegisterKeyHandler();
     void RegisterEndPoints();
     void HandleCliCmd( uint16_t cmdKey,
                        const std::list<std::string> & argList,
@@ -364,6 +365,16 @@ public:
         m_displayController->SetAutoMode( autoMode );
     }
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief Turn ON/OFF LCD display
+///
+//////////////////////////////////////////////////////////////////////////////////////////////
+    void TurnDisplayOnOff( bool turnOn ) const
+    {
+        m_displayController->TurnOnOff( turnOn );
+    }
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   GetWiFiOperationalMode
@@ -379,7 +390,7 @@ private:
     ProductControllerStateBooting                                   m_ProductControllerStateBooting;
     ProductControllerStateBooted                                    m_ProductControllerStateBooted;
     CustomProductControllerStateOn                                  m_CustomProductControllerStateOn;
-    ProductControllerStateLowPowerStandby                           m_ProductControllerStateLowPowerStandby;
+    CustomProductControllerStateLowPowerStandby                     m_CustomProductControllerStateLowPowerStandby;
     ProductControllerStateSoftwareInstall                           m_ProductControllerStateSwInstall;
     ProductControllerStateCriticalError                             m_ProductControllerStateCriticalError;
     ProductControllerStatePlaying                                   m_ProductControllerStatePlaying;
@@ -417,14 +428,16 @@ private:
     ProductControllerStateStoppingStreamsDedicatedForFactoryDefault m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault;
     ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate;
 
-    /// Key Handler
-    KeyHandlerUtil::KeyHandler                  m_KeyHandler;
+    /// Persistence for the Configuration Status
     ProtoPersistenceIF::ProtoPersistencePtr     m_ConfigurationStatusPersistence = nullptr;
     ProductPb::ConfigurationStatus              m_ConfigurationStatus;
     BOptional<NetManager::Protobuf::NetworkStatus> m_cachedStatus;
 
     /// ProductAudioService
     std::shared_ptr< CustomProductAudioService> m_ProductAudioService;
+
+    /// ProductKeyInputManager
+    std::shared_ptr< CustomProductKeyInputManager> m_ProductKeyInputManager;
 
     ProductCliClient                            m_productCliClient;
 

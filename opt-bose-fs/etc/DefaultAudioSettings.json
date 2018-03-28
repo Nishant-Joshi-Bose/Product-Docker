@@ -4,7 +4,7 @@
 		"minor": 1
 	},
 	"supportedAudioSettings": {
-		"contentItemSensitive": ["audioBassLevel", "audioTrebleLevel"]
+		"contentItemSensitive": ["audioBassLevel", "audioCenterLevel", "audioMode", "audioTrebleLevel"]
     },
 	"configurations": {
 		"audioBassLevel": {
@@ -14,6 +14,24 @@
 				"min": -100,
 				"max": 100,
 				"step": 20,
+				"supportedPersistence": ["session", "global", "contentItem"]
+			}
+		},
+		"audioCenterLevel": {
+			"currentPersistenceLevel": "global",
+			"persistenceSession": false,
+			"properties": {
+				"min": -100,
+				"max": 100,
+				"step": 20,
+				"supportedPersistence": ["session", "global", "contentItem"]
+			}
+		},
+		"audioMode": {
+			"currentPersistenceLevel": "global",
+			"persistenceSession": false,
+			"properties": {
+				"supportedValues": ["dialog", "normal"],
 				"supportedPersistence": ["session", "global", "contentItem"]
 			}
 		},
@@ -31,21 +49,29 @@
 	"values": {
 		"global": {
 			"audioBassLevel": 0,
+			"audioCenterLevel": 0,
+			"audioMode" : "normal",
 			"audioTrebleLevel": 0
 		},
 		"session": {
 			"audioBassLevel": 0,
+			"audioCenterLevel": 0,
+			"audioMode" : "normal",
 			"audioTrebleLevel": 0
 		},
 		"contentItem": {
 			"default": {
 				"audioBassLevel": 0,
+				"audioCenterLevel": 0,
+				"audioMode" : "normal",
 				"audioTrebleLevel": 0
 			}
 		}
 	},
 	"defaultValues": {
 		"audioBassLevel": 0,
+		"audioCenterLevel": 0,
+		"audioMode" : "normal",
 		"audioTrebleLevel": 0
 	}
 }

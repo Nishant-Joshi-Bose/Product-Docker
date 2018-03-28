@@ -11,6 +11,5 @@
 enum class CLICmdKeys
 {
     /// Always start CLI keys from COMMON_CLICMD_KEYS_LAST + 1
-    RAW_KEY = CommonCLICmdKeys::COMMON_CLICMD_KEYS_LAST + 1,
-    SET_DISPLAY_AUTO_MODE
+    SET_DISPLAY_AUTO_MODE = CommonCLICmdKeys::COMMON_CLICMD_KEYS_LAST + 1,
 };
