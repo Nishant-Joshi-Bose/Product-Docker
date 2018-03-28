@@ -17,12 +17,17 @@ def CAPS_Component = ["CAPS-Component/playbackRequest",
 
 def Castle_SW_Update = ["CastleSoftwareUpdate/Riviera_BonjourUpdate",
 			"CastleSoftwareUpdate/Riviera_BonjourUpdate_Corrupt_IPK_Scenarios",
-                        "CastleSoftwareUpdate/Riviera_Software_Update_Corrupt_Signature_For_IPKs",
-                        "CastleSoftwareUpdate/Riviera_Software_Update_Corrupt_Signature_For_Package_Files",
-                        "CastleSoftwareUpdate/Riviera_Software_Update_Corrupt_Signature_For_Sequence_File",
-                        "CastleSoftwareUpdate/Riviera_Software_Update_Missing_Signature_For_Sequence_File",
-                        "CastleSoftwareUpdate/Riviera_Software_Update_Missing_Signature_For_Packages",
-                        "CastleSoftwareUpdate/Riviera_Software_Update_Missing_Signature_For_IPKs"]
+                        "CastleSoftwareUpdate/Riviera_OTA_Corrupt_IPK_Fail_Install_Scenarios",
+                        "CastleSoftwareUpdate/Riviera_OTA_Corrupt_IPK_Scenarios",
+                        "CastleSoftwareUpdate/Riviera_OTA_Corrupt_Packages_Scenarios",
+                        "CastleSoftwareUpdate/Riviera_OTA_Corrupt_Signature_IPKs",
+                        "CastleSoftwareUpdate/Riviera_OTA_Corrupt_Signature_Package_Files",
+                        "CastleSoftwareUpdate/Riviera_OTA_Corrupt_Signature_Sequence_File",
+		       	"CastleSoftwareUpdate/Riviera_OTA_Missing_Signature_IPKs",
+		       	"CastleSoftwareUpdate/Riviera_OTA_Missing_Signature_Packages",
+		       	"CastleSoftwareUpdate/Riviera_OTA_Missing_Signature_Sequence_File",
+		        "CastleSoftwareUpdate/Riviera_OTA_Same_IPK_Version",
+		       	"CastleSoftwareUpdate/Riviera_SoftwareUpdate"]
 
 def CastleTestUtils_Integrated = ["CastleTestUtils_Integrated/memoryConsumption"]
 
