@@ -61,7 +61,6 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class CustomProductLpmHardwareInterface;
 class ProductSystemManager;
-class ProductNetworkManager;
 class CustomProductAudioService;
 class ProductCecHelper;
 class ProductCommandLine;
@@ -185,9 +184,6 @@ public:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     bool     IsBooted( )                 const override;
-    bool     IsNetworkConfigured( )      const override;
-    bool     IsNetworkConnected( )       const override;
-    uint32_t GetWifiProfileCount( )      const override;
     bool     IsAutoWakeEnabled( )        const override;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -252,10 +248,6 @@ public:
 
     std::unique_ptr<LightBar::LightBarController> m_lightbarController;
 
-    void ClearWifiProfileCount() override;
-
-    void PerformRequestforWiFiProfiles() override;
-
     PassportPB::ContentItem GetOOBDefaultLastContentItem() const override;
 
     bool CanPersistAsLastContentItem( const SoundTouchInterface::ContentItem &ci ) const override;
@@ -277,7 +269,6 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
     std::shared_ptr< ProductSystemManager              > m_ProductSystemManager;
-    std::shared_ptr< ProductNetworkManager             > m_ProductNetworkManager;
     std::shared_ptr< ProductCommandLine                > m_ProductCommandLine;
     std::shared_ptr< CustomProductKeyInputManager      > m_ProductKeyInputManager;
     std::shared_ptr< ProductCecHelper                  > m_ProductCecHelper;
@@ -295,8 +286,6 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     bool m_IsAudioPathReady;
-    bool m_IsNetworkConfigured;
-    bool m_IsNetworkConnected;
     bool m_IsAutoWakeEnabled;
     bool m_Running;
 

@@ -67,7 +67,7 @@ ADD_EXECUTABLE(Professor
   source/ProductCecHelper.cpp
   source/ProductCommandLine.cpp
   source/ProductDspHelper.cpp
-  source/ProductNetworkManager.cpp
+  #source/ProductNetworkManager.cpp
   source/ProductSourceInfo.cpp
   source/ProductStart.cpp
   source/ProductSystemManager.cpp

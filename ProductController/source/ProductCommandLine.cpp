@@ -150,17 +150,9 @@ std::vector< CommandPointer > ProductCommandLine::GetCommandsList( )
                                                                              "This command tests setting CAPS to an on or off state.",
                                                                              "\t product test_caps [on | off] \t\t" ) ) );
 
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_freq",
-                                                                             "This command tests setting the wifi frequency in kHz.",
-                                                                             "\t product test_freq [int from 0 to 10M] \t" ) ) );
-
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_lpm",
                                                                              "This command tests setting the LPM state.",
                                                                              "\t product test_lpm [on | off] \t\t" ) ) );
-
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_network",
-                                                                             "This command tests setting the network to an off, configured, or connected.",
-                                                                             "\t product test_network [off| conf| conn] " ) ) );
 
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_nowplaying",
                                                                              "This command tests sending a now playing active or inactive status.",
@@ -181,10 +173,6 @@ std::vector< CommandPointer > ProductCommandLine::GetCommandsList( )
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_voice",
                                                                              "This command tests setting the voice VPA to an on or off configured state.",
                                                                              "\t product test_voice [on | off] \t\t" ) ) );
-
-    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_wifi",
-                                                                             "This command tests setting the wifi to an on or off configured state.",
-                                                                             "\t product test_wifi [on | off] \t\t" ) ) );
 
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product volume",
                                                                              "This command sets the volume to a specified level.",
@@ -589,139 +577,6 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         }
 
         IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-    }
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// This command tests setting the network to an off, configured, or connected state and
-    /// sending it to the product controller state machine. Its actual state is not effected.
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    else if( command.compare( "product test_network" ) == 0 )
-    {
-        if( arguments.size( ) != 1 )
-        {
-            response = "Incorrect Usage: product test_network [off| conf| conn]";
-
-            return -1;
-        }
-
-        const std::string& argumentString = arguments.front( );
-
-        ProductMessage productMessage;
-
-        if( argumentString == "off" )
-        {
-            response  = "An network off state test will now be made.";
-
-            productMessage.mutable_networkstatus( )->set_configured( false );
-            productMessage.mutable_networkstatus( )->set_connected( false );
-            productMessage.mutable_networkstatus( )->set_networktype( ProductNetworkStatus_ProductNetworkType_Unknown );
-
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-        }
-        else if( argumentString == "conf" )
-        {
-            response  = "An network configured state test will now be made.";
-
-            productMessage.mutable_networkstatus( )->set_configured( true );
-            productMessage.mutable_networkstatus( )->set_connected( false );
-            productMessage.mutable_networkstatus( )->set_networktype( ProductNetworkStatus_ProductNetworkType_Wired );
-
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-        }
-        else if( argumentString == "conn" )
-        {
-            response  = "An network connected state test will now be made.";
-
-            productMessage.mutable_networkstatus( )->set_configured( true );
-            productMessage.mutable_networkstatus( )->set_connected( true );
-            productMessage.mutable_networkstatus( )->set_networktype( ProductNetworkStatus_ProductNetworkType_Wired );
-
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-        }
-        else
-        {
-            response = "Incorrect Usage: product test_network [off| conf| conn]";
-
-            return -1;
-        }
-    }
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// This command tests setting a wifi network to an off or off configured state and sending it
-    /// to the product controller state machine. Its actual state is not effected.
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    else if( command.compare( "product test_wifi" ) == 0 )
-    {
-        if( arguments.size( ) != 1 )
-        {
-            response = "Incorrect Usage: product test_wifi [on | off]";
-
-            return -1;
-        }
-
-        const std::string& argumentString = arguments.front( );
-
-        ProductMessage productMessage;
-
-        if( argumentString == "on" )
-        {
-            response  = "A wifi network configured state test will now be made.";
-
-            productMessage.mutable_wirelessstatus( )->set_configured( false );
-            productMessage.mutable_wirelessstatus( )->set_frequencykhz( 0 );
-
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-        }
-        else if( argumentString == "off" )
-        {
-            response  = "A wifi network unconfigured state test will now be made.";
-
-            productMessage.mutable_wirelessstatus( )->set_configured( true );
-            productMessage.mutable_wirelessstatus( )->set_frequencykhz( 0 );
-
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-        }
-        else
-        {
-            response = "Incorrect Usage: product test_wifi [on | off]";
-
-            return -1;
-        }
-
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-    }
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    /// This command to tests setting the Content Audio Playback Service to an on or off state and
-    /// sending it to the product controller state machine. Its actual state is not effected.
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    else if( command.compare( "product test_freq" ) == 0 )
-    {
-        if( arguments.size( ) != 1 )
-        {
-            response = "Incorrect Usage: product test_freq [int from 0 to 10M]";
-
-            return -1;
-        }
-
-        const std::string& argumentString = arguments.front( );
-        const uint32_t     frequencyValue = std::atoi( argumentString.c_str( ) );
-
-        if( 0 <= frequencyValue && frequencyValue <= 10000000 )
-        {
-            response  = "The wifi frequncy value ";
-            response +=  frequencyValue;
-            response += "kHz will be sent to the product controller state machine.\r\n";
-
-            ProductMessage productMessage;
-            productMessage.mutable_wirelessstatus( )->set_configured( true );
-            productMessage.mutable_wirelessstatus( )->set_frequencykhz( frequencyValue );
-
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-        }
-        else
-        {
-            response = "Incorrect Usage: product test_freq [int from 0 to 10M]";
-
-            return -1;
-        }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// This command tests setting the voice configuration for a Virtual Personal Assistant or VPA
