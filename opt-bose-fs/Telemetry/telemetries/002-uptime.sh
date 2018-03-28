@@ -4,8 +4,7 @@
 # The data is passed as the json payload to the run-telemetry script
 #
 
-MACADDR=$1
-DATE=$2
+DATE=$1
 
 function get_uptime {
     local re="up +(0?([0-9]+) +min|0?([0-9]{1,2}):0?([0-9]{1,2})|0?([0-9]+) days?, +0?([0-9]{1,2}):0?([0-9]{1,2})|0?([0-9]+) days?, +([0-9]{1,2}) +min)"
@@ -45,14 +44,8 @@ function get_uptime {
 }
 
 utime="$(uptime)"
-#printf "<uptime uptime=\"%d\"/>\n" $(get_uptime "$utime")
-#printf "<uptime_str>$utime</uptime_str>\n"
-printf '    {\n'
+printf '      {\n'
 printf '        "time": "%s",\n' $DATE
-printf '        "type": "metric",\n'
-printf '        "originatorID": "%s",\n' $MACADDR
-printf '        "data": {\n'
-printf '            "metricType": "device/uptime",\n'
-printf '            "metricValue": %d\n' $(get_uptime "$utime")
-printf '        }\n'
-printf '    }\n'
+printf '        "metricType": "device:uptime",\n'
+printf '        "metricValue": %d\n' $(get_uptime "$utime")
+printf '      }\n'
