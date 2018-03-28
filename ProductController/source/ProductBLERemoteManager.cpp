@@ -211,7 +211,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
     {
         const auto& source = m_sources.sources( i );
 
-        // TODO: this also needs to check "visible"
+        // TODO: this also needs to check "visible" once that flag works correctly
 
         if( source.sourceaccountname().compare( "SLOT_0" ) == 0 )
         {
@@ -257,7 +257,6 @@ bool ProductBLERemoteManager::GetSourceLED( A4VRemoteCommunication::A4VRemoteCom
         return false;
     }
 
-// TODO - re-enable this once PGC-1105 has been resolved
     if( source->sourcename().compare( "PRODUCT" ) == 0 )
     {
         if( source->sourceaccountname().compare( "TV" ) == 0 )
