@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.19.41545.2751268"
+    "selected_version": "Release/Castle-Fork/0.3.20.41588.2753484"
   },
   {
     "name": "bose-opkg-utils",
@@ -37,7 +37,7 @@
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/0.3.2-42+d76abce"
+    "selected_version": "Release/master/0.3.3-46+d48afc4"
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
@@ -53,7 +53,7 @@
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.2.4-45+2e01a36"
+    "selected_version": "Release/master/0.3.1-48+3006958"
   },
   {
     "name": "CastleLibs-native",
@@ -97,11 +97,11 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/0.4.0-187+75f389e"
+    "selected_version": "Release/master/0.4.1-197+f8fc010"
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.2.2-100+f3a90f2"
+    "selected_version": "Release/master/0.2.3-112+0311a3d"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -157,11 +157,11 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.19.41545.2751268"
+    "selected_version": "Release/Castle-Fork/0.3.20.41588.2753484"
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-26+375d4cd"
+    "selected_version": "Release/master/0.3.2-28+9c8acb3"
   },
   {
     "name": "Webkit",
