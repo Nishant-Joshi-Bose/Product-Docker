@@ -69,7 +69,6 @@
 #include "IntentHandler.h"
 #include "ProductSTSController.h"
 #include "DisplayController.h"
-#include "DataCollectionClientIF.h"
 #include "DataCollectionClientInterface.h"
 #include "MacAddressInfo.h"
 #include "BOptional.h"
@@ -164,13 +163,6 @@ private:
     void HandleCapsCapabilityNotReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityNotReady( const std::list<std::string>& points );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name DataCollectionClient
-/// @brief invokes DataCollectionClient When any key is released.
-/// @return void
-//////////////////////////////////////////////////////////////////////////////
-    void SendDataCollection( const IpcKeyInformation_t& keyInformation );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  ReadSystemLanguageFromPersistence
@@ -459,7 +451,6 @@ private:
     bool                                        m_isSTSReady = false;
     bool m_IsAudioPathReady = true;
     ProductSTSController                        m_ProductSTSController;
-    std::shared_ptr<DataCollectionClientIF>     m_DataCollectionClient;
 
     /// Shared Pointer to the LPM Custom Hardware Interface
     std::shared_ptr< CustomProductLpmHardwareInterface > m_LpmInterface;
