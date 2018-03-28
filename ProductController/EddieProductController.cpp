@@ -403,17 +403,17 @@ void EddieProductController::PerformRequestforWiFiProfiles()
 bool EddieProductController::IsAllModuleReady() const
 {
     BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|NetworkModuleReady=%d|m_isBluetoothReady=%d|"
-               "STSReady=%d|IsSoftwareUpdateReady=%d|IsUiConnected=%d", __func__, IsCAPSReady() , IsLpmReady(),
-               IsNetworkModuleReady(), IsBluetoothModuleReady(), IsSTSReady(), IsSoftwareUpdateReady(), IsUiConnected() );
+               "STSReady=%d|IsSoftwareUpdateReady=%d|IsUiConnected=%d|IsSassReady=%d", __func__, IsCAPSReady() , IsLpmReady(),
+               IsNetworkModuleReady(), IsBluetoothModuleReady(), IsSTSReady(), IsSoftwareUpdateReady(), IsUiConnected(), IsSassReady() );
 
     return ( IsCAPSReady() and
              IsLpmReady() and
              IsNetworkModuleReady() and
-             IsSTSReady() and
              IsBluetoothModuleReady() and
+             IsSTSReady() and
+             IsSoftwareUpdateReady() and
              IsUiConnected() and
-             IsSassReady() and
-             IsSoftwareUpdateReady() ) ;
+             IsSassReady() ) ;
 }
 
 bool EddieProductController::IsBtLeModuleReady() const
@@ -599,7 +599,7 @@ void EddieProductController::HandleSetDisplayAutoMode( const std::list<std::stri
 
 void EddieProductController::UpdateUiConnectedStatus( bool status )
 {
-    BOSE_WARNING( s_logger, "%s|status:%s", __func__ , status ? "true" : "false" );
+    BOSE_INFO( s_logger, "%s|status:%s", __func__ , status ? "true" : "false" );
     m_isUiConnected = status;
     GetHsm().Handle<bool>( &ProductControllerState::HandleUiConnectedUpdateState, status );
 }
