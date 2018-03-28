@@ -70,15 +70,9 @@ if not sn: # allow any non-empty string
     fixes.append("set snSystem RF000000000000000")
 
 pc = get("productColor")
-try:
-    colorEnum = int(pc)
-except ValueError:
-    warn("Invalid productColor: Non-integer value detected. Must be a base 10 interger between 0 and 7. Found:", pc)
-    fixes.append("set productColor 1  # 1=black|2=white")
-else:
-    if colorEnum not in range(0, 8):
-        warn("Invalid productColor: Must be a base 10 interger between 0 and 7. Found:", pc)
-        fixes.append("set productColor 1  # 1=black|2=white")
+if pc is None or not re.match(r'^\d+$', pc): # allow any integer
+    warn("Invalid productColor:", pc)
+    fixes.append("set productColor 1  # 1=black | 2=white")
 
 vi = get("BMAPVariantID")
 if vi is None or not re.match(r'^\d+$', vi):

@@ -65,7 +65,7 @@ class ProductNetworkManager;
 class CustomProductAudioService;
 class ProductCecHelper;
 class ProductCommandLine;
-class ProductKeyInputInterface;
+class CustomProductKeyInputManager;
 class ProductAdaptIQManager;
 class ProductSourceInfo;
 class ProductBLERemoteManager;
@@ -112,14 +112,6 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following method is used to get a reference to the command line interface
-    ///        from the common inherited product controller.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    CliClientMT& GetCommandLineInterface( );
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
     /// @brief The following method is used to get a shared pointer to the LPM hardware interface
     ///        instance from the product controller.
     ///
@@ -157,7 +149,6 @@ public:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< ProductBLERemoteManager>& GetBLERemoteManager( );
-
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -198,8 +189,17 @@ public:
     bool     IsNetworkConnected( )       const override;
     uint32_t GetWifiProfileCount( )      const override;
     bool     IsAutoWakeEnabled( )        const override;
-    bool     IsFirstTimeBootUp( )        const;
-    bool     IsOutOfBoxSetupComplete( )  const;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following declaration is used to determine if the audio path process is up and
+    ///        running.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    bool IsAudioPathReady() const
+    {
+        return m_IsAudioPathReady;
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -279,7 +279,7 @@ private:
     std::shared_ptr< ProductSystemManager              > m_ProductSystemManager;
     std::shared_ptr< ProductNetworkManager             > m_ProductNetworkManager;
     std::shared_ptr< ProductCommandLine                > m_ProductCommandLine;
-    std::shared_ptr< ProductKeyInputInterface          > m_ProductKeyInputInterface;
+    std::shared_ptr< CustomProductKeyInputManager      > m_ProductKeyInputManager;
     std::shared_ptr< ProductCecHelper                  > m_ProductCecHelper;
     std::shared_ptr< ProductDspHelper                  > m_ProductDspHelper;
     std::shared_ptr< ProductAdaptIQManager             > m_ProductAdaptIQManager;
@@ -299,7 +299,6 @@ private:
     bool m_IsNetworkConnected;
     bool m_IsAutoWakeEnabled;
     bool m_Running;
-
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -325,9 +324,6 @@ private:
     ///
     /// @brief The following method is used to register for end-points used in the inherited common
     ///        ProductController class, as well as for end-points registered for in this class.
-    ///
-    /// @todo  These end-points and callbacks may be better placed in a common module, especially
-    ///        for end-points being used for playback functionality.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void RegisterFrontDoorEndPoints( );

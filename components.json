@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@f6b975591d7d172e2fd9fa76d9c9440acddfa55d"
+    "selected_version": "master@f9ee29913983671a60d57409a64182c191556a4e"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -13,7 +13,7 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@a152fef3f480881cb40ad6cc1f08dffe5faf4ad1"
+    "selected_version": "master@ca03f527a38ec0a6dcc41d64d01b74327a5655cd"
   },
   {
     "name": "AVS-qc8017_32",
@@ -41,7 +41,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/0.3.7-147+0056ceb"
+    "selected_version": "Release/master/0.3.8-159+cad7e7a"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -97,11 +97,11 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@62c424680ee2cabe84aa7f007c750e0e474874bf"
+    "selected_version": "master@86f6b86b08f08fb3ed62ebbcb0d14ecdeaf3756d"
   },
   {
     "name": "CastleProductUIAssets",
-    "selected_version": "master@43394152e689030529a94750d56fe9cd196b885a"
+    "selected_version": "master@bde707144a74f923837a1dbc785717619a3ad203"
   },
   {
     "name": "CastleTestUtils",
