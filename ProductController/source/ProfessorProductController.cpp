@@ -105,6 +105,7 @@
 #include "ProductBLERemoteManager.h"
 #include "ProductEndpointDefines.h"
 #include "ProtoPersistenceFactory.h"
+#include "PGCErrorCodes.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -1462,8 +1463,16 @@ void ProfessorProductController::HandlePutOpticalAutoWake(
         ProductMessage message;
         message.mutable_autowakestatus( )->set_active( req.enabled( ) );
         HandleMessage( message );
+        HandleGetOpticalAutoWake( respCb, errorCb );
     }
-    HandleGetOpticalAutoWake( respCb, errorCb );
+    else
+    {
+        FrontDoor::Error error;
+        error.set_code( PGCErrorCodes::ERROR_CODE_PRODUCT_CONTROLLER_CUSTOM );
+        error.set_subcode( PGCErrorCodes::ERROR_SUBCODE_OPTICAL_AUTOWAKE );
+        error.set_message( "Optical autowake mode was not specified." );
+        errorCb.Send( error );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

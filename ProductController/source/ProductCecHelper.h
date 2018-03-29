@@ -151,8 +151,8 @@ private:
     void HandlePlaybackRequestResponse( const SoundTouchInterface::NowPlaying& response );
     void HandlePlaybackRequestError( const FrontDoor::Error& error );
     std::shared_ptr< FrontDoorClientIF >    m_FrontDoorClient;
-    void CecModeHandleGet( ProductPb::CecModeResponse& );
-    void CecModeHandlePut( const ProductPb::CecUpdateRequest, ProductPb::CecModeResponse& );
+    void CecModeHandleGet( const Callback<const ProductPb::CecModeResponse> & resp, const Callback<FrontDoor::Error> & errorRsp );
+    void CecModeHandlePut( const ProductPb::CecUpdateRequest req, const Callback<const ProductPb::CecModeResponse> & resp, const Callback<FrontDoor::Error> & errorRsp );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
