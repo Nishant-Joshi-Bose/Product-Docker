@@ -1155,6 +1155,54 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         m_ProductLpmHardwareInterface->SetCecMode( message.cecmode( ).cecmode( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// Wireless network status messages are handled at this point.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.wirelessstatus().has_frequencykhz( ) )
+    {
+        if( message.wirelessstatus( ).has_frequencykhz( ) and
+            message.wirelessstatus( ).frequencykhz( ) >= 0 )
+        {
+            IpcRadioStatus_t radioStatus;
+            radioStatus.set_status( IPC_SOC_NETWORKSTATUS_OFF );
+            radioStatus.set_band( IPC_SOC_RADIO_BAND_INVALID );
+
+            if( message.wirelessstatus( ).frequencykhz( ) > 0 and
+                message.wirelessstatus().frequencykhz( ) < 2500000 )
+            {
+                radioStatus.set_status( IPC_SOC_NETWORKSTATUS_WIFI );
+                radioStatus.set_band( IPC_SOC_RADIO_BAND_24 );
+            }
+            else if( message.wirelessstatus( ).frequencykhz( ) >= 5100000 and
+                     message.wirelessstatus( ).frequencykhz( ) >= 5200000 )
+            {
+                radioStatus.set_status( IPC_SOC_NETWORKSTATUS_WIFI );
+                radioStatus.set_band( IPC_SOC_RADIO_BAND_52 );
+            }
+            else if( message.wirelessstatus( ).frequencykhz( ) >= 5700000 and
+                     message.wirelessstatus( ).frequencykhz( ) >= 5800000 )
+            {
+                radioStatus.set_status( IPC_SOC_NETWORKSTATUS_WIFI );
+                radioStatus.set_band( IPC_SOC_RADIO_BAND_58 );
+            }
+
+
+            if( radioStatus.status() != m_radioStatus.status() ||
+                radioStatus.band() != m_radioStatus.band() )
+            {
+                m_radioStatus.CopyFrom( radioStatus );
+                m_ProductLpmHardwareInterface->SendWiFiRadioStatus( m_radioStatus );
+            }
+            BOSE_DEBUG( s_logger, "A wireless network message was received with frequency %d kHz.",
+                        message.wirelessstatus( ).has_frequencykhz( ) ?
+                        message.wirelessstatus( ).frequencykhz( ) : 0 );
+        }
+        else
+        {
+            BOSE_ERROR( s_logger, "A wireless network message was received with an unknown frequency." );
+        }
+
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Messages handled in the common code based are processed at this point, unless the message
     /// type is unknown.
     ///////////////////////////////////////////////////////////////////////////////////////////////
