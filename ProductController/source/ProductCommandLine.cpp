@@ -150,6 +150,10 @@ std::vector< CommandPointer > ProductCommandLine::GetCommandsList( )
                                                                              "This command tests setting CAPS to an on or off state.",
                                                                              "\t product test_caps [on | off] \t\t" ) ) );
 
+    commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_freq",
+                                                                             "This command tests setting the wifi frequency in kHz.",
+                                                                             "\t product test_freq [int from 0 to 10M] \t" ) ) );
+
     commands.push_back( static_cast<CommandPointer>( new CommandDescription( "product test_lpm",
                                                                              "This command tests setting the LPM state.",
                                                                              "\t product test_lpm [on | off] \t\t" ) ) );
@@ -577,6 +581,41 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         }
 
         IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /// This command to tests setting the Content Audio Playback Service to an on or off state and
+    /// sending it to the product controller state machine. Its actual state is not effected.
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    else if( command.compare( "product test_freq" ) == 0 )
+    {
+        if( arguments.size( ) != 1 )
+        {
+            response = "Incorrect Usage: product test_freq [int from 0 to 10M]";
+
+            return -1;
+        }
+
+        const std::string& argumentString = arguments.front( );
+        const uint32_t     frequencyValue = std::atoi( argumentString.c_str( ) );
+
+        if( 0 <= frequencyValue && frequencyValue <= 10000000 )
+        {
+            response  = "The wifi frequncy value ";
+            response +=  frequencyValue;
+            response += "kHz will be sent to the product controller state machine.\r\n";
+
+            ProductMessage productMessage;
+            productMessage.mutable_wirelessstatus( )->set_configured( true );
+            productMessage.mutable_wirelessstatus( )->set_frequencykhz( frequencyValue );
+
+            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+        }
+        else
+        {
+            response = "Incorrect Usage: product test_freq [int from 0 to 10M]";
+
+            return -1;
+        }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// This command tests setting the voice configuration for a Virtual Personal Assistant or VPA
