@@ -377,7 +377,7 @@ void EddieProductController::PerformRequestforWiFiProfiles()
 bool EddieProductController::IsAllModuleReady() const
 {
     BOSE_INFO( s_logger,
-               "%s:|CAPS Ready=%d|LPMReady=%d|AudioPathReady=%D|NetworkModuleReady=%d"
+               "%s:|CAPS Ready=%d|LPMReady=%d|AudioPathReady=%d|NetworkModuleReady=%d"
                "|m_isBluetoothReady=%d|STSReady=%d|IsSoftwareUpdateReady=%d|IsUiConnected=%d",
                __func__,
                IsCAPSReady() ,
@@ -528,21 +528,21 @@ void EddieProductController::RegisterCliClientCmds()
                                              "command to set the display controller automatic mode",
                                              "setDisplayAutoMode auto|manual",
                                              GetTask(),
-                                             cb ,
+                                             cb,
                                              static_cast<int>( CLICmdKeys::SET_DISPLAY_AUTO_MODE ) );
 
     m_CliClientMT.RegisterCLIServerCommands( "product state",
                                              "command to return the current product state name and ID.",
                                              "\t\t product state \t\t\t\t",
                                              GetTask(),
-                                             cb ,
+                                             cb,
                                              static_cast<int>( CLICmdKeys::GET_PRODUCT_STATE ) );
 
     m_CliClientMT.RegisterCLIServerCommands( "product boot_status",
                                              "command to output the status of the boot up state.",
-                                             "\t product boot_status \t\t\t"
+                                             "\t product boot_status \t\t\t",
                                              GetTask(),
-                                             cb ,
+                                             cb,
                                              static_cast<int>( CLICmdKeys::GET_BOOT_STATUS ) );
 }
 

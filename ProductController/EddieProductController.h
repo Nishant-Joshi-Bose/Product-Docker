@@ -159,8 +159,6 @@ private:
     void HandleBtLeModuleReady( bool btLeModuleReady );
     void HandleNetworkCapabilityReady( const std::list<std::string>& points );
     void HandleNetworkCapabilityNotReady( const std::list<std::string>& points );
-    void HandleCapsCapabilityReady( const std::list<std::string>& points );
-    void HandleCapsCapabilityNotReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityNotReady( const std::list<std::string>& points );
 
@@ -227,27 +225,26 @@ public:
 ////////////////////////////////////////////////////////////////////////////////
     bool IsAllModuleReady() const;
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @name  IsBtLeModuleReady
-    /// @brief true if IsBtLeModuleReady modules is up and ready.
-    /// Module IsBtLeModuleReady.
-    /// @return bool
-    ////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/// @name  IsBtLeModuleReady
+/// @brief true if IsBtLeModuleReady modules is up and ready.
+/// Module IsBtLeModuleReady.
+/// @return bool
+////////////////////////////////////////////////////////////////////////////////
     bool IsBtLeModuleReady() const;
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @name  IsUiConnected
-    /// @brief true if UI(monaco) is up and ready.
-    /// @return bool
-    ////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+/// @name  IsUiConnected
+/// @brief true if UI(monaco) is up and ready.
+/// @return bool
+////////////////////////////////////////////////////////////////////////////////
     bool IsUiConnected() const;
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @name  IsCAPSReady
-/// @brief true if CAPS module is ready.
+/// @name  IsNetworkModuleReady
+/// @brief true if network module is ready.
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
-    bool IsCAPSReady() const;
     bool IsNetworkModuleReady() const;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -450,7 +447,6 @@ private:
     std::unique_ptr<LightBar::LightBarController>         m_lightbarController;
     std::unique_ptr<DisplayController>          m_displayController;
     IntentHandler                               m_IntentHandler;
-    bool                                        m_isCapsReady = false;
     bool                                        m_isNetworkModuleReady  = false;
     bool                                        m_isBLEModuleReady  = false;
     bool                                        m_isUiConnected = false;
