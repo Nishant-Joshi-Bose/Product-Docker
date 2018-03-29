@@ -85,7 +85,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "network_common@4c0573a50a544fded6c78fe5241248ef98d0f7ce"
+    "selected_version": "master@0a81eff4e9bd08de2ea89b018822b6963f04f599"
   },
   {
     "name": "CastleProductUIAssets",
