@@ -361,6 +361,11 @@ public:
         return false;
     }
 
+    virtual bool HandleKeyEvent( LpmServiceMessages::IpcKeyInformation_t keyEvent )
+    {
+        return false;
+    }
+
 public:
     /// The custom version of this function returns the custom ProductController
     static EddieProductController& GetCustomProductController();

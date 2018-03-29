@@ -88,6 +88,7 @@ public:
     virtual ~EddieProductController();
 
     void Initialize();
+    void InitializeKeyIdToKeyNameMap() override;
 
     Callback < ProductMessage > GetMessageHandler( );
 
