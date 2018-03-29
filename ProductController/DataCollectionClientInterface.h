@@ -18,7 +18,7 @@
 class DataCollectionClientInterface
 {
 public:
-    DataCollectionClientInterface( const std::shared_ptr<FrontDoorClientIF> &frontDoorClientIF );
+    DataCollectionClientInterface( const std::shared_ptr<FrontDoorClientIF> &frontDoorClientIF,  const std::shared_ptr<DataCollectionClientIF>& dataCollectionPTR );
     ~DataCollectionClientInterface() { }
 
     void Subscribe();
@@ -32,7 +32,7 @@ private:
     void HandleNowPlayingRequest( const SoundTouchInterface::NowPlaying& nPb, const DeviceManagerPb::DeviceState& ds );
     void GetCallbackError( const FrontDoor::Error& );
 
-    std::shared_ptr<DataCollectionClientIF>      m_dataCollectionClient;
     NotifyTargetTaskIF*                          m_dataCollectionClientInterfaceTask = nullptr;
     std::shared_ptr<FrontDoorClientIF>           m_frontDoorClientIF;
+    std::shared_ptr<DataCollectionClientIF>      m_dataCollectionClient;
 };

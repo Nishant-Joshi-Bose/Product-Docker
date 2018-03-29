@@ -26,13 +26,13 @@
 static DPrint s_logger( "DataCollectionClientInterface" );
 
 
-DataCollectionClientInterface::DataCollectionClientInterface( const std::shared_ptr<FrontDoorClientIF> &frontDoorClientIF ):
+DataCollectionClientInterface::DataCollectionClientInterface( const std::shared_ptr<FrontDoorClientIF> &frontDoorClientIF, const std::shared_ptr<DataCollectionClientIF>& dataCollectionPTR ):
     m_dataCollectionClientInterfaceTask( IL::CreateTask( "DataCollectionClientInterfaceTask" ) ),
-    m_frontDoorClientIF( frontDoorClientIF )
+    m_frontDoorClientIF( frontDoorClientIF ),
+    m_dataCollectionClient( dataCollectionPTR )
 {
     BOSE_DEBUG( s_logger, "DataCollectionClientInterface" );
     Subscribe();
-    m_dataCollectionClient =  DataCollectionClientFactory::CreateUDCService();
 }
 
 void DataCollectionClientInterface::Subscribe()

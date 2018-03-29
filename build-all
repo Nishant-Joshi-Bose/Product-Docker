@@ -4,5 +4,5 @@
 #
 
 set -x
-make "$@" sdk=qc8017_32 cfg=Release deploy || exit
+make "$@" sdk=qc8017_32 cfg=Release || exit
 : success

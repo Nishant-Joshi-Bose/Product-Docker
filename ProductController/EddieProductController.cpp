@@ -22,7 +22,6 @@
 #include "MfgData.h"
 #include "BLESetupEndpoints.h"
 #include "ButtonPress.pb.h"
-#include "DataCollectionClientFactory.h"
 #include "ProductSTSSilentStateFactory.h"
 #include "CustomProductSTSAuxStateFactory.h"
 
@@ -78,7 +77,7 @@ EddieProductController::EddieProductController():
     m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE ),
     m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
-    m_dataCollectionClientInterface( m_FrontDoorClientIF )
+    m_dataCollectionClientInterface( m_FrontDoorClientIF, GetDataCollectionClient() )
 {
     BOSE_INFO( s_logger, __func__ );
 }
@@ -149,9 +148,6 @@ void EddieProductController::InitializeAction()
     m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient() ) );
     m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient(), uiConnectedCb ) );
     SetupProductSTSController();
-
-    //Data Collection support
-    m_DataCollectionClient =  DataCollectionClientFactory::CreateUDCService( GetTask() );
 
     // Start Eddie ProductAudioService
     m_ProductAudioService = std::make_shared< CustomProductAudioService >( *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient() );
@@ -316,17 +312,17 @@ void EddieProductController::HandleCAPSReady( bool capsReady )
 bool EddieProductController::IsAllModuleReady() const
 {
     BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|NetworkModuleReady=%d|m_isBluetoothReady=%d|"
-               "STSReady=%d|IsSoftwareUpdateReady=%d|IsUiConnected=%d", __func__, IsCAPSReady() , IsLpmReady(),
-               IsNetworkModuleReady(), IsBluetoothModuleReady(), IsSTSReady(), IsSoftwareUpdateReady(), IsUiConnected() );
+               "STSReady=%d|IsSoftwareUpdateReady=%d|IsUiConnected=%d|IsSassReady=%d", __func__, IsCAPSReady() , IsLpmReady(),
+               IsNetworkModuleReady(), IsBluetoothModuleReady(), IsSTSReady(), IsSoftwareUpdateReady(), IsUiConnected(), IsSassReady() );
 
     return ( IsCAPSReady() and
              IsLpmReady() and
              IsNetworkModuleReady() and
-             IsSTSReady() and
              IsBluetoothModuleReady() and
+             IsSTSReady() and
+             IsSoftwareUpdateReady() and
              IsUiConnected() and
-             IsSassReady() and
-             IsSoftwareUpdateReady() ) ;
+             IsSassReady() ) ;
 }
 
 bool EddieProductController::IsBtLeModuleReady() const
@@ -505,7 +501,7 @@ void EddieProductController::HandleSetDisplayAutoMode( const std::list<std::stri
 
 void EddieProductController::UpdateUiConnectedStatus( bool status )
 {
-    BOSE_WARNING( s_logger, "%s|status:%s", __func__ , status ? "true" : "false" );
+    BOSE_INFO( s_logger, "%s|status:%s", __func__ , status ? "true" : "false" );
     m_isUiConnected = status;
     GetHsm().Handle<bool>( &ProductControllerState::HandleUiConnectedUpdateState, status );
 }

@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.19.41545.2751268"
+    "selected_version": "Continuous/Castle-Fork/2018-03-29_1506"
   },
   {
     "name": "bose-opkg-utils",
@@ -25,11 +25,11 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/0.3.8-159+cad7e7a"
+    "selected_version": "Release/master/0.3.9-167+a2767c7"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.6-20644"
+    "selected_version": "Release/Castle-Fork/0.3.7-20734"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
@@ -37,7 +37,7 @@
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/0.3.2-42+d76abce"
+    "selected_version": "Release/master/0.3.3-46+d48afc4"
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
@@ -53,7 +53,7 @@
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.2.4-45+2e01a36"
+    "selected_version": "Release/master/0.3.1-48+3006958"
   },
   {
     "name": "CastleLibs-native",
@@ -69,7 +69,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.8-71+96fe1a4"
+    "selected_version": "Continuous/master/0.3.11-85+795303f"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -77,11 +77,11 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.3.90-556+cb693bd"
+    "selected_version": "Release/master/0.3.92-575+edd8e73"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.3.90-556+cb693bd"
+    "selected_version": "Release/master/0.3.92-575+edd8e73"
   },
   {
     "name": "CastleProductControllerCommon",
@@ -93,15 +93,15 @@
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@ebfe7aab604cab846b5283bb769436f8f3b3e8e8"
+    "selected_version": "master@73d0c59564e6e75ff4057711775d743b4955709d"
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/0.4.0-187+75f389e"
+    "selected_version": "Release/master/0.4.2-203+47428b8"
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.2.2-100+f3a90f2"
+    "selected_version": "Release/master/0.2.3-112+0311a3d"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -109,7 +109,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/0.2.3-71+1801c14"
+    "selected_version": "Release/master/0.3.1-75+af1179b"
   },
   {
     "name": "protobuf-native",
@@ -129,7 +129,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.3.11-131+2b16d62"
+    "selected_version": "Release/master/0.3.13-140+79674d4"
   },
   {
     "name": "RivieraLpmTools",
@@ -137,7 +137,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/master/0.3.2-39+0fb03f2"
+    "selected_version": "Release/master/0.3.4-46+3953586"
   },
   {
     "name": "SADI-qc8017_32",
@@ -145,7 +145,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/IP3/0.3.2-218+f980516"
+    "selected_version": "Release/IP3/0.3.3-226+7a2927c"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -153,15 +153,15 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/IP3/0.3.17-421+4a31b67"
+    "selected_version": "Release/IP3/0.3.18-434+82019d1"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.19.41545.2751268"
+    "selected_version": "Continuous/Castle-Fork/2018-03-29_1506"
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-26+375d4cd"
+    "selected_version": "Continuous/master/0.3.2-31+3f7b62d"
   },
   {
     "name": "Webkit",
@@ -169,6 +169,6 @@
   },
   {
     "name": "WiFi-Setup-Webpage",
-    "selected_version": "master@d788ac402061fcfcfe165c37b19ec9587bf3124f"
+    "selected_version": "master@72ae3d02d33d1bea141eed4dcc5e597bafa9d0c8"
   }
 ]
