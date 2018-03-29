@@ -1,0 +1,20 @@
+import "ProtoToMarkup/MarkupOptions.proto";
+
+package KeyNamesPB;
+
+enum keynames
+{
+    UNDEFINED   = 0;
+    BLUETOOTH   = 1;
+    AUX         = 2;
+    VOLUME_UP   = 3;
+    MFB         = 4;
+    VOLUME_DOWN = 5;
+    ACTION      = 6;
+    PRESET_1    = 8;
+    PRESET_2    = 9;
+    PRESET_3    = 10;
+    PRESET_4    = 11;
+    PRESET_5    = 12;
+    PRESET_6    = 13;
+}
