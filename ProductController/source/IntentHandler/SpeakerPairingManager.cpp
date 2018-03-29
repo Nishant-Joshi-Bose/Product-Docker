@@ -31,6 +31,7 @@
 #include "CustomProductLpmHardwareInterface.h"
 #include "SpeakerPairingManager.h"
 #include "ProductEndpointDefines.h"
+#include "PGCErrorCodes.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -285,6 +286,11 @@ void SpeakerPairingManager::AccessoriesPutHandler( const ProductPb::AccessorySpe
     else
     {
         BOSE_ERROR( s_logger, "Received invalid put request!" );
+        FrontDoor::Error errorMessage;
+        errorMessage.set_code( PGCErrorCodes::ERROR_CODE_PRODUCT_CONTROLLER_CUSTOM );
+        errorMessage.set_subcode( PGCErrorCodes::ERROR_SUBCODE_ACCESSORIES );
+        errorMessage.set_message( "Accessory message did not have valid command option." );
+        error.Send( errorMessage );
     }
 }
 
