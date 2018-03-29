@@ -134,7 +134,12 @@ timeout(time: 8, unit: 'HOURS')
 {
   node('master')
     {
-      try
+      echo "EC_URL used: ${env.EC_URL}"
+      echo "Branch Used used: ${env.SW_BRANCH}"
+      echo "freq Used used: ${env.SW_FREQUENCY}"
+      echo "VERSION used: ${env.VERSION}"
+      echo "Git Branch used: ${env.Branch}"
+     try
        {
           parallel(
                "stream 1 (CAPS_Component)" :{
