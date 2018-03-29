@@ -13,7 +13,6 @@ logger = get_logger(__name__, "DemoLog.log", level=logging.INFO, fileLoglevel=lo
 @pytest.mark.usefixtures("save_speaker_log")
 class TestDemo():
     """ Test Class for Demo State """
-    @pytest.mark.skip()
     @pytest.mark.usefixtures("demoUtils", "deviceid", "device_ip", "request")
     def test_demoOffAfterTimeout(self, demoUtils, device_ip, request, deviceid):
         """
@@ -31,7 +30,7 @@ class TestDemo():
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
         demoUtils.verifySecondReboot(responseTimeout *2,deviceid,request.config.getoption("--network-iface"))
-    @pytest.mark.skip()
+
     @pytest.mark.usefixtures("demoUtils", "deviceid", "device_ip", "request")
     def test_demoOnAfterTimeout(self, demoUtils, device_ip, request, deviceid):
         """
@@ -50,7 +49,7 @@ class TestDemo():
         demoUtils.verifyDemoMode(True)
         demoUtils.setDemoMode(True, deviceid, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(60)
-    @pytest.mark.skip()
+
     @pytest.mark.usefixtures("demoUtils", "deviceid", "device_ip", "request")
     def test_demoOnFor30Min(self, demoUtils, device_ip, request, deviceid):
         """
@@ -68,7 +67,7 @@ class TestDemo():
         demoUtils.verifyDemoMode(True)
         demoUtils.setDemoMode(True, deviceid, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(responseTimeout*10)
-    @pytest.mark.skip()
+
     @pytest.mark.usefixtures("request", "deviceid", "demoUtils", "device_ip")
     def test_demoPlayPauseBehaviour(self, request, demoUtils, device_ip, deviceid):
         """
@@ -90,7 +89,7 @@ class TestDemo():
         demoUtils.verifyDemoModeOn(10)
         demoUtils.verifyPlayPauseBehaviour()
         demoUtils.verifyDemoModeOn(10)
-    @pytest.mark.skip()
+
     @pytest.mark.usefixtures("demoUtils", "deviceid", "device_ip", "request", "get_config")
     def test_demoKeyConfig(self, demoUtils, device_ip, request, get_config, deviceid):
         """
@@ -113,7 +112,7 @@ class TestDemo():
         demoUtils.verifyDemoKeyConfig()
         demoUtils.deleteKeyConfig()
         demoUtils.verifyDemoKeyConfig("Error Reading configuration file")
-    @pytest.mark.skip()
+
     @pytest.mark.usefixtures("demoUtils", "deviceid", "device_ip", "request")
     def test_demoKeyCntrNotWrk(self, demoUtils, device_ip, request, deviceid):
         """
