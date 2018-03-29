@@ -190,10 +190,25 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  HandleSetDisplayAutoMode
-/// @brief Function to TDB
+/// @brief Function to set the display mode
 /// @return void
 ////////////////////////////////////////////////////////////////////////////////
     void HandleSetDisplayAutoMode( const std::list<std::string> & argList, std::string& response );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  HandleGetProductState
+/// @brief Function to output the product state and ID
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void HandleGetProductState( const std::list<std::string>& argList, std::string& response );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  HandleSetDisplayAutoMode
+/// @brief Function to output the current boot status
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void HandleGetBootStatus( const std::list<std::string>& argList, std::string& response );
+
     void HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus );
     void HandleWiFiProfileResponse( const NetManager::Protobuf::WiFiProfiles& profiles );
 
