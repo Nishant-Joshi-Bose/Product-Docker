@@ -54,6 +54,8 @@ public:
 
     }
 
+    void Initialize() override;
+
 protected:
 
     ///

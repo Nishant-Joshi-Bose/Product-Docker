@@ -31,6 +31,7 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 constexpr const char* KEY_CONFIGURATION_FILE_NAME = "/var/run/KeyConfiguration.json";
 
+static DPrint s_logger( "CustomProductKeyInputManager" );
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief CustomProductKeyInputManager::CustomProductKeyInputManager
@@ -44,11 +45,36 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( EddieProductControll
                               ProductController.GetMessageHandler( ),
                               ProductController.GetLpmHardwareInterface( ),
                               ProductController.GetCommandLineInterface( ),
+                              ProductController.GetFrontDoorClient( ),
                               KEY_CONFIGURATION_FILE_NAME ),
 
       m_ProductController( ProductController )
 {
 
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductKeyInputManager::Initialize
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductKeyInputManager::Initialize()
+{
+    BOSE_INFO( s_logger, "CustomProductKeyInputManager::%s:", __func__ );
+
+    m_keyIdToKeyNameMap[1]  = KeyNamesPB::keynames::BLUETOOTH;
+    m_keyIdToKeyNameMap[2]  = KeyNamesPB::keynames::AUX;
+    m_keyIdToKeyNameMap[3]  = KeyNamesPB::keynames::VOLUME_UP;
+    m_keyIdToKeyNameMap[4]  = KeyNamesPB::keynames::MFB;
+    m_keyIdToKeyNameMap[5]  = KeyNamesPB::keynames::VOLUME_DOWN;
+    m_keyIdToKeyNameMap[6]  = KeyNamesPB::keynames::ACTION;
+
+    m_keyIdToKeyNameMap[8]  = KeyNamesPB::keynames::PRESET_1;
+    m_keyIdToKeyNameMap[9]  = KeyNamesPB::keynames::PRESET_2;
+    m_keyIdToKeyNameMap[10] = KeyNamesPB::keynames::PRESET_3;
+    m_keyIdToKeyNameMap[11] = KeyNamesPB::keynames::PRESET_4;
+    m_keyIdToKeyNameMap[12] = KeyNamesPB::keynames::PRESET_5;
+    m_keyIdToKeyNameMap[13] = KeyNamesPB::keynames::PRESET_6;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
