@@ -1,0 +1,32 @@
+#!/usr/bin/python2.7
+#
+# Invoked via pts-handler to display pages related to diagnostics.
+#
+import os
+import sys
+import re
+import json
+
+with open("endpointInterface.html") as file:
+    contents=file.read()
+
+configuration = \
+"""
+{
+    "pageName": "Accessories",
+    "endpoint": "/accessories",
+    "button":
+    {
+        "enabled": false,
+        "name": "Start Pairing",
+        "putData":
+        {
+            "pairing": true
+        }
+    }
+}
+"""
+
+html_page= contents.replace("CONFIGURATION_JSON_OBJECT",configuration)
+
+sys.stdout.write(html_page)

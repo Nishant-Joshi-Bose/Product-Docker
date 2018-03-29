@@ -1,0 +1,180 @@
+<!--
+    This file is intended to serve as a template page for QA CGI scripts that require access to a frontdoor endpoint.
+
+    All of the information necessary for using the correct endpoint should be added by substituting the placeholder 
+    variable CONFIGURATION_JSON_OBJECT with an actual JSON object in the following format:
+
+    {
+        "pageName": "Accessories",
+        "endpoint": "/accessories",
+        "button":
+        {
+            "enabled": false,
+            "name": "Start Pairing",
+            "putData":
+            {
+                "pairing": true
+            }
+        }
+    }
+
+    See existing scripts for an example of proper usage and implementation.
+-->
+
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Diagnostics</title>
+        <style type="text/css">
+            body {
+                font-family: Verdana, Arial, Helvetica, sans-serif;
+            }
+            hr {
+                border: 1px solid blue;
+                color: #fff;
+                background-color: #fff;
+                height: 1px;
+                width: 100%;
+            }
+            div.box {
+                background-color: lightgrey;
+                white-space: pre-wrap;
+                border: thin dotted;
+                padding: 1em;
+                margin: 1em;
+                max-height: 40em;
+                overflow: scroll;
+            }
+            td.showimg {
+                padding: 8px;
+            }
+            input {
+                display: none;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h1 id='header'>HEADER</h1>
+        <hr>
+        <li>FrontDoor Endpoint
+        <div id='general-output-panel' class='box'></div>
+        <input id='submit-payload-button' type='submit' value='GENERIC' class='submit btn waves-effect waves-light '/>
+    </body>
+
+    <footer>
+        <script type="text/javascript">
+
+            var Configuration = CONFIGURATION_JSON_OBJECT ;
+
+            function PageConfiguration()
+            {
+                document.title = Configuration.pageName + " Diagnostics";
+                document.getElementById('header').textContent = Configuration.pageName;
+            }
+
+            function WebSocketConnection()
+            {
+                var FrontDoorHost = "ws://"+window.location.hostname+":8082";
+                var socket = new WebSocket(FrontDoorHost, "gabbo");
+
+                var generalOutputTextAreaElem = document.getElementById('general-output-panel');
+
+                if (Configuration.button.enabled)
+                {
+                    var sendButton =  document.getElementById("submit-payload-button");
+
+                    sendButton.value = Configuration.button.name;
+                    sendButton.addEventListener("click", PutData);
+                    sendButton.style.display = "block" ;
+                }
+
+
+                socket.onopen = function()
+                {
+                    // Web Socket connected, send system info message
+                    var sendObj = Message;
+                    sendObj.header.resource='/system/info';
+                    SendMessage(sendObj);
+                    GetData();
+                };
+
+                socket.onmessage = function (evt)
+                {
+                    var received_msg = evt.data;
+                    var msg = JSON.parse(received_msg);
+                    console.log("Incoming:\n"+JSON.stringify(msg));
+                    if (msg.header.resource === Configuration.endpoint)
+                    {
+                        generalOutputTextAreaElem.textContent = (new Date()).toLocaleTimeString() + ": " + "\n" + JSON.stringify(msg, null, 4)+ "\n\n" + generalOutputTextAreaElem.textContent;
+                    }
+
+                };
+
+                socket.onclose = function()
+                {
+                    // Web Socket closed
+                    alert("Connection is closed...");
+                };
+
+                window.onbeforeunload = function(event)
+                {
+                    // Close Web Socket when unloading
+                    socket.close();
+                };
+
+                function PutData()
+                {
+                    sendObj=Message;
+
+                    sendObj.header.reqID++;
+                    sendObj.header.resource=Configuration.endpoint;
+                    sendObj.header.method="PUT";
+
+                    sendObj.body = Configuration.button.putData;
+
+                    SendMessage(sendObj);                    
+                }
+
+                function GetData()
+                {
+                    sendObj=Message;
+
+                    sendObj.header.reqID++;
+                    sendObj.header.resource=Configuration.endpoint;
+                    sendObj.header.method="GET";
+                    SendMessage(sendObj);
+                }
+
+                function SendMessage(message)
+                {
+                    try{
+                        sendStr = JSON.stringify(message);
+                        console.log("Outgoing \n"+sendStr);
+                        socket.send(sendStr);
+                    }
+
+                    catch(e) {
+                        console.log("Couldn't send message: " + sendStr);
+                    }
+                }
+            }
+
+            var Message = {
+                "header":{
+                    "resource":"",
+                    "version":1,
+                    "token":"las9kdfjaslkjdbhgsdkKbldkfbvnl?adkfjnvlk",
+                    "method":"GET",
+                    "device":"",
+                    "reqID":1,
+                    "msgtype":"REQUEST"
+                }
+            }
+            PageConfiguration();
+            WebSocketConnection();
+        </script>
+    </footer>
+
+</html>
