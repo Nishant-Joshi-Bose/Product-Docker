@@ -531,13 +531,6 @@ void EddieProductController::RegisterCliClientCmds()
                                              cb,
                                              static_cast<int>( CLICmdKeys::SET_DISPLAY_AUTO_MODE ) );
 
-    m_CliClientMT.RegisterCLIServerCommands( "product state",
-                                             "command to return the current product state name and ID.",
-                                             "\t\t product state \t\t\t\t",
-                                             GetTask(),
-                                             cb,
-                                             static_cast<int>( CLICmdKeys::GET_PRODUCT_STATE ) );
-
     m_CliClientMT.RegisterCLIServerCommands( "product boot_status",
                                              "command to output the status of the boot up state.",
                                              "\t product boot_status \t\t\t",
@@ -559,11 +552,6 @@ void EddieProductController::HandleCliCmd( uint16_t cmdKey,
     case CLICmdKeys::SET_DISPLAY_AUTO_MODE:
     {
         HandleSetDisplayAutoMode( argList, response );
-        break;
-    }
-    case CLICmdKeys::GET_PRODUCT_STATE:
-    {
-        HandleGetProductState( argList, response );
         break;
     }
     case CLICmdKeys::GET_BOOT_STATUS:
@@ -601,18 +589,6 @@ void EddieProductController::HandleSetDisplayAutoMode( const std::list<std::stri
         response += "Usage: auto|manual";
     }
 }// HandleSetDisplayAutoMode
-
-void EddieProductController::HandleGetProductState( const std::list<std::string>& argList, std::string& response )
-{
-    Hsm::STATE  stateId   = GetHsm( ).GetCurrentState( )->GetId( );
-    std::string stateName = GetHsm( ).GetCurrentState( )->GetName( );
-
-    response  = "The current state name is ";
-    response += stateName;
-    response += " with ID ";
-    response += std::to_string( static_cast< unsigned int >( stateId ) );
-    response += ".";
-}
 
 void EddieProductController::HandleGetBootStatus( const std::list<std::string>& argList, std::string& response )
 {
