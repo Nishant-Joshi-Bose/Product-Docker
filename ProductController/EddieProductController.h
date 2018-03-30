@@ -104,7 +104,8 @@ public:
     ///        product controller.
     /// @return bool
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool IsBooted( ) const override;
+    bool IsBooted( )        const override;
+    bool IsLowPowerExited() const override;
 
     bool IsAutoWakeEnabled( )  const override
     {
