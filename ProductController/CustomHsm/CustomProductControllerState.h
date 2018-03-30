@@ -305,7 +305,6 @@ public:
     {
         s_productController = productController;
     }
-    bool IsProductNeedsSetup();
 
     virtual bool IsInNetworkSetupState() const
     {
