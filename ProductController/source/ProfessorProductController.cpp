@@ -90,6 +90,7 @@
 #include "CustomProductControllerStateAdaptIQExiting.h"
 #include "CustomProductControllerStateAdaptIQ.h"
 #include "CustomProductControllerStateIdle.h"
+#include "CustomProductControllerStateLowPowerStandby.h"
 #include "CustomProductControllerStateOn.h"
 #include "CustomProductControllerStatePlayable.h"
 #include "CustomProductControllerStatePlayingDeselectedAccessoryPairing.h"
@@ -184,8 +185,8 @@ void ProfessorProductController::Run( )
     /// Top State
     ///
 
-  
-  
+
+
   auto* stateTop = new ProductControllerStateTop( GetHsm( ),
                                                     nullptr );
 
@@ -242,10 +243,10 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION );
 
-    auto* stateLowPowerStandby = new ProductControllerStateLowPowerStandby
+    auto* stateLowPowerStandby = new CustomProductControllerStateLowPowerStandby
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY );
 
     ///
     /// Playable Transition State and Sub-States
@@ -717,6 +718,29 @@ bool ProfessorProductController::IsBooted( ) const
              IsSoftwareUpdateReady( )  and
              IsSassReady( )            and
              IsBluetoothModuleReady( ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   ProfessorProductController::IsLowPowerExited
+///
+/// @return This method returns a true or false value, based on a series of set member variables,
+///         which all must be true to indicate that the device has exited low power.
+///         NOTE: Unlike booting we only wait for the things killed going to low power
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProfessorProductController::IsLowPowerExited( ) const
+{
+    BOSE_VERBOSE( s_logger, "------------ Product Controller Low Power Exit Check ---------------" );
+    BOSE_VERBOSE( s_logger, " " );
+    BOSE_VERBOSE( s_logger, "LPM Connected         :  %s", ( m_IsLpmReady       ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "SASS            Init  :  %s", ( IsSassReady()      ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, " " );
+
+    return( m_IsLpmReady            and
+            IsSassReady()           and
+            m_IsAudioPathReady      );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
