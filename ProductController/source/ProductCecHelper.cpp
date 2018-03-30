@@ -30,6 +30,7 @@
 #include "FrontDoorClient.h"
 #include "EndPointsDefines.h"
 #include "ProductEndpointDefines.h"
+#include "PGCErrorCodes.h"
 
 using namespace ProductPb;
 
@@ -115,18 +116,14 @@ bool ProductCecHelper::Run( )
 
     auto getFunc = [ this ]( const Callback<const CecModeResponse>& resp, const Callback<FrontDoor::Error>& errorRsp )
     {
-        CecModeResponse cecResp;
-        CecModeHandleGet( cecResp );
-        resp.Send( cecResp );
+        CecModeHandleGet( resp, errorRsp );
     };
     AsyncCallback<Callback<CecModeResponse>, Callback<FrontDoor::Error> > getCb( getFunc, m_ProductTask );
     m_GetConnection = m_FrontDoorClient->RegisterGet( s_FrontDoorCecMode, getCb );
 
     auto putFunc = [ this ]( const CecUpdateRequest cecReq, const Callback<const CecModeResponse>& cecResp, const Callback<FrontDoor::Error>& errorRsp )
     {
-        CecModeResponse respMsg;
-        CecModeHandlePut( cecReq, respMsg );
-        cecResp.Send( respMsg );
+        CecModeHandlePut( cecReq, cecResp, errorRsp );
     };
     AsyncCallback<const CecUpdateRequest, Callback<CecModeResponse>, Callback<FrontDoor::Error>> putCb( putFunc, m_ProductTask );
     m_PutConnection = m_FrontDoorClient->RegisterPut<CecUpdateRequest>( s_FrontDoorCecMode, putCb );
@@ -146,10 +143,11 @@ bool ProductCecHelper::Run( )
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductCecHelper::CecModeHandleGet( CecModeResponse& cecResponse )
+void ProductCecHelper::CecModeHandleGet( const Callback<const CecModeResponse> & resp, const Callback<FrontDoor::Error> & errorRsp )
 {
-    cecResponse = m_cecresp;
-    SetCecModeDefaultProperties( cecResponse );
+    CecModeResponse cec = m_cecresp;
+    SetCecModeDefaultProperties( cec );
+    resp.Send( cec );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,12 +162,14 @@ void ProductCecHelper::CecModeHandleGet( CecModeResponse& cecResponse )
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductCecHelper::CecModeHandlePut( const CecUpdateRequest req, ProductPb::CecModeResponse& resp )
+void ProductCecHelper::CecModeHandlePut( const CecUpdateRequest req, const Callback<const CecModeResponse> & resp, const Callback<FrontDoor::Error> & errorRsp )
 {
     ProductMessage msg;
+    FrontDoor::Error error;
 
     if( !req.has_mode() )
     {
+        error.set_message( "Cec message has no mode." );
     }
     else if( req.mode() == s_ModeOn )
     {
@@ -185,6 +185,7 @@ void ProductCecHelper::CecModeHandlePut( const CecUpdateRequest req, ProductPb::
     }
     else
     {
+        error.set_message( "Cec message has invalid mode: " + req.mode( ) );
     }
 
     if( msg.has_cecmode() )
@@ -193,15 +194,16 @@ void ProductCecHelper::CecModeHandlePut( const CecUpdateRequest req, ProductPb::
         {
             m_ProductNotify( msg );
         }, m_ProductTask );
+
+        m_cecresp.set_mode( req.mode( ) );
+        CecModeHandleGet( resp, errorRsp );
     }
-
-    resp.set_mode( req.mode() );
-    // fill in list of supported actions
-    resp.mutable_properties()->add_supportedmodes( s_ModeOn );
-    resp.mutable_properties()->add_supportedmodes( s_ModeOff );
-    resp.mutable_properties()->add_supportedmodes( s_ModeAltOn );
-
-    m_cecresp.set_mode( req.mode() ); //update GET response . TODO
+    else if( error.has_message( ) )
+    {
+        error.set_code( PGCErrorCodes::ERROR_CODE_PRODUCT_CONTROLLER_CUSTOM );
+        error.set_subcode( PGCErrorCodes::ERROR_SUBCODE_CEC );
+        errorRsp.Send( error );
+    }
 }
 
 

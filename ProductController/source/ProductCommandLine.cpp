@@ -510,16 +510,16 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
     ////////////////////////////////////////////////////////////////////////////////////////////////
     else if( command.compare( "product boot_status" ) == 0 )
     {
-        std::string LpmConnected( m_ProductController.IsLpmReady( )             ? "true" : "false" );
-        std::string CapsInitialized( m_ProductController.IsCAPSReady( )            ? "true" : "false" );
-        std::string audioPathConnected( m_ProductController.IsAudioPathReady( )       ? "true" : "false" );
-        std::string StsInitialized( m_ProductController.IsSTSReady( )             ? "true" : "false" );
-        std::string SoftwareUpdateReady( m_ProductController.IsSoftwareUpdateReady( )  ? "true" : "false" );
-        std::string SassInitialized( m_ProductController.IsSassReady( )            ? "true" : "false" );
+        std::string LpmConnected( m_ProductController.IsLpmReady( )                     ? "true" : "false" );
+        std::string CapsInitialized( m_ProductController.IsCAPSReady( )                 ? "true" : "false" );
+        std::string audioPathConnected( m_ProductController.IsAudioPathReady( )         ? "true" : "false" );
+        std::string StsInitialized( m_ProductController.IsSTSReady( )                   ? "true" : "false" );
+        std::string SoftwareUpdateReady( m_ProductController.IsSoftwareUpdateReady( )   ? "true" : "false" );
+        std::string SassInitialized( m_ProductController.IsSassReady( )                 ? "true" : "false" );
         std::string bluetoothInitialized( m_ProductController.IsBluetoothModuleReady( ) ? "true" : "false" );
 
         response  = "------------- Product Controller Booting Status -------------\n";
-        response += " \n";
+        response += "\n";
         response += "LPM Connected         : ";
         response += LpmConnected;
         response += "\n";
@@ -541,7 +541,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         response += "Bluetooth Initialized : ";
         response += bluetoothInitialized;
         response += "\n";
-        response += " \n";
+        response += "\n";
 
         if( m_ProductController.IsBooted( ) )
         {

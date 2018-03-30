@@ -106,6 +106,7 @@
 #include "ProductBLERemoteManager.h"
 #include "ProductEndpointDefines.h"
 #include "ProtoPersistenceFactory.h"
+#include "PGCErrorCodes.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -151,7 +152,6 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     /// Member Variable Initialization
     ///
-    m_IsAudioPathReady( false ),
     m_IsNetworkConfigured( false ),
     m_IsNetworkConnected( false ),
     m_IsAutoWakeEnabled( false ),
@@ -705,22 +705,22 @@ bool ProfessorProductController::IsBooted( ) const
 {
     BOSE_VERBOSE( s_logger, "------------ Product Controller Booted Check ---------------" );
     BOSE_VERBOSE( s_logger, " " );
-    BOSE_VERBOSE( s_logger, "LPM Connected         :  %s", ( m_IsLpmReady       ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "CAPS Initialized      :  %s", ( m_IsCapsReady      ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "STS Initialized       :  %s", ( m_IsSTSReady       ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "Software Update Ready :  %s", ( m_isSoftwareUpdateReady   ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "LPM Connected         :  %s", ( IsLpmReady( )             ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "CAPS Initialized      :  %s", ( IsCAPSReady( )            ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( IsAudioPathReady( )       ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "STS Initialized       :  %s", ( IsSTSReady( )             ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Software Update Ready :  %s", ( IsSoftwareUpdateReady( )  ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "SASS Initialized      :  %s", ( IsSassReady( )            ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Bluetooth Initialized :  %s", ( IsBluetoothModuleReady( ) ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
-    return( m_IsLpmReady            and
-            m_IsCapsReady           and
-            m_IsAudioPathReady      and
-            m_IsSTSReady            and
-            IsSassReady( )          and
-            m_isSoftwareUpdateReady and
-            IsBluetoothModuleReady( ) );
+    return ( IsLpmReady( )             and
+             IsCAPSReady( )            and
+             IsAudioPathReady( )       and
+             IsSTSReady( )             and
+             IsSoftwareUpdateReady( )  and
+             IsSassReady( )            and
+             IsBluetoothModuleReady( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1085,27 +1085,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
                 break;
             }
         }
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Audio path status messages are handled at this point.
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_audiopathstatus( ) )
-    {
-        if( message.audiopathstatus( ).has_connected( ) )
-        {
-            m_IsAudioPathReady = message.audiopathstatus( ).connected( );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "An invalid audio path status message was received." );
-            return;
-        }
-
-        BOSE_DEBUG( s_logger, "An audio path status %s message was received.",
-                    m_IsAudioPathReady ? "connected" : "not connected" );
-
-        GetHsm( ).Handle< bool >
-        ( &CustomProductControllerState::HandleAudioPathState, m_IsAudioPathReady );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// STS slot selected data is handled at this point.
@@ -1508,8 +1487,16 @@ void ProfessorProductController::HandlePutOpticalAutoWake(
         ProductMessage message;
         message.mutable_autowakestatus( )->set_active( req.enabled( ) );
         HandleMessage( message );
+        HandleGetOpticalAutoWake( respCb, errorCb );
     }
-    HandleGetOpticalAutoWake( respCb, errorCb );
+    else
+    {
+        FrontDoor::Error error;
+        error.set_code( PGCErrorCodes::ERROR_CODE_PRODUCT_CONTROLLER_CUSTOM );
+        error.set_subcode( PGCErrorCodes::ERROR_SUBCODE_OPTICAL_AUTOWAKE );
+        error.set_message( "Optical autowake mode was not specified." );
+        errorCb.Send( error );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

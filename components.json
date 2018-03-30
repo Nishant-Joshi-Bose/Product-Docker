@@ -9,7 +9,7 @@
   },
   {
     "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/0.3.0-2+g40c7688"
+    "selected_version": "Release/master/.0.3.2-+"
   },
   {
     "name": "A4VVideoManagerService",
@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.18.41479.2744053"
+    "selected_version": "Release/Castle-Fork/0.3.21.41591.2753749"
   },
   {
     "name": "bose-opkg-utils",
@@ -25,7 +25,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.11-322+7baef63"
+    "selected_version": "Release/master/0.3.12-338+8a91f09"
   },
   {
     "name": "BoseOPKG-native",
@@ -45,15 +45,15 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.6-20644"
+    "selected_version": "Release/Castle-Fork/0.3.7-20734"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/0.3.6-20644"
+    "selected_version": "Release/Castle-Fork/0.3.7-20734"
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/0.3.2-42+d76abce"
+    "selected_version": "Release/master/0.3.3-46+d48afc4"
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
@@ -65,7 +65,7 @@
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.2.4-45+2e01a36"
+    "selected_version": "Release/master/0.3.1-48+3006958"
   },
   {
     "name": "CastleLibs-native",
@@ -81,23 +81,23 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.8-71+96fe1a4"
+    "selected_version": "Release/master/0.3.11-82+91acdf1"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-181+ed72644"
+    "selected_version": "Release/master/0.3.1-193+c40f0d0"
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.3.90-556+cb693bd"
+    "selected_version": "Release/master/0.3.92-575+edd8e73"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.3.90-556+cb693bd"
+    "selected_version": "Release/master/0.3.92-575+edd8e73"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "LP_Exit_Common@93a7a0a2b32a66c24fbfe322694e209a22e0bf10"
+    "selected_version": "master@b104315fabf35ee3e561f23ca8d2021da93af725"
   },
   {
     "name": "CastleProductUIAssets",
@@ -109,11 +109,11 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/0.3.8-166+bdf45c8"
+    "selected_version": "Release/master/0.4.1-197+f8fc010"
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.2.2-100+f3a90f2"
+    "selected_version": "Release/master/0.2.3-112+0311a3d"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -121,7 +121,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/0.2.3-71+1801c14"
+    "selected_version": "Release/master/0.3.1-75+af1179b"
   },
   {
     "name": "protobuf-native",
@@ -145,7 +145,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.3.11-131+2b16d62"
+    "selected_version": "Release/master/0.3.13-140+79674d4"
   },
   {
     "name": "RivieraLpmTools",
@@ -153,7 +153,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/master/0.3.2-39+0fb03f2"
+    "selected_version": "Release/master/0.3.4-46+3953586"
   },
   {
     "name": "SADI-qc8017_32",
@@ -161,7 +161,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/IP3/0.3.2-218+f980516"
+    "selected_version": "Release/IP3/0.3.3-226+7a2927c"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -169,15 +169,15 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/IP3/0.3.16-395+10cc929"
+    "selected_version": "Release/IP3/0.3.18-434+82019d1"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.18.41479.2744053"
+    "selected_version": "Release/Castle-Fork/0.3.21.41591.2753749"
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.3.0-21+6450a02"
+    "selected_version": "Release/master/0.3.2-28+9c8acb3"
   },
   {
     "name": "unittest-cpp-qc8017_32",
