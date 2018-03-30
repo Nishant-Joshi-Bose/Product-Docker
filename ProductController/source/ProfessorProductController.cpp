@@ -1528,6 +1528,14 @@ void ProfessorProductController::NotifyFrontdoorAndStoreOpticalAutoWakeSetting( 
     }
 }
 
+void ProfessorProductController::InitializeKeyIdToKeyNameMap()
+{
+    BOSE_INFO( s_logger, "ProfessorProductController::%s:", __func__ );
+
+    // Professor team need to coordinate with the UI team to know which keys are of interest to them
+    return;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProfessorProductController::End

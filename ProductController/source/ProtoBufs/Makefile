@@ -17,6 +17,7 @@ PROTO_SOURCES = ProductMessage.proto        \
                 SystemSourcesProperties.proto \
                 CecMode.proto \
                 SystemPowerProduct.proto \
+				KeyNames.proto           \
 
 #
 # The following alias is used to search for imported Protocol Buffer files.
