@@ -27,7 +27,6 @@ using namespace IntentHandler::Protobuf;
 namespace ProductApp
 {
 using KeyActionMode_t = std::pair<ProductApp::Action, uint32_t>;
-constexpr uint32_t MAX_SEED_SIZE             = 1024;
 }
 
 namespace std

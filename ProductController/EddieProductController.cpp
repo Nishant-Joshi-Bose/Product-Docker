@@ -583,6 +583,10 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
         // Then (after registering for events above) do the common stuff
         ( void ) HandleCommonProductMessage( productMessage );
     }
+    else if( productMessage.has_action() )
+    {
+        HandleIntents( productMessage.action() );
+    }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Key action intent messages are handled at this point, and passed to the HandleIntents
     /// method for processing. This messages are sent through the CustomProductKeyInputManager
@@ -711,6 +715,17 @@ void EddieProductController::HandleBtLeModuleReady( bool btLeModuleReady )
 ///         which all must be true to indicate that the device has booted.
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool EddieProductController::IsBooted( ) const
+{
+    return IsAllModuleReady();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @name   IsLowPowerExited
+/// @return This method returns a true or false value, based on a series of set member variables,
+///         which all must be true to indicate that the device has exited low power and all modules
+///         have come back
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool EddieProductController::IsLowPowerExited( ) const
 {
     return IsAllModuleReady();
 }
