@@ -88,7 +88,7 @@ public:
 
     void Initialize();
 
-    Callback < ProductMessage > GetMessageHandler( );
+    Callback < ProductMessage > GetMessageHandler( ) override;
 
     std::vector<std::string> GetUniqueLanguages() const override
     {
