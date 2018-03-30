@@ -538,20 +538,21 @@ void EddieProductController::InitializeKeyIdToKeyNameMap()
 {
     BOSE_INFO( s_logger, "EddieProductController::%s:", __func__ );
 
-    m_keyIdToKeyNameMap[1]  = KeyNamesPB::keynames::BLUETOOTH;
-    m_keyIdToKeyNameMap[2]  = KeyNamesPB::keynames::AUX;
-    m_keyIdToKeyNameMap[3]  = KeyNamesPB::keynames::VOLUME_UP;
-    m_keyIdToKeyNameMap[4]  = KeyNamesPB::keynames::MFB;
-    m_keyIdToKeyNameMap[5]  = KeyNamesPB::keynames::VOLUME_DOWN;
-    m_keyIdToKeyNameMap[6]  = KeyNamesPB::keynames::ACTION;
+    // This provides a mapping of the hardware keys to a keyName
+    // The protobuf's for Keys are not explicit in terms of name and the Product need to do the mapping.
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_CONSOLE_BUTTON, 1 )]  = KeyNamesPB::keynames::BLUETOOTH;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_CONSOLE_BUTTON, 2 )]  = KeyNamesPB::keynames::AUX;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_CONSOLE_BUTTON, 3 )]  = KeyNamesPB::keynames::VOLUME_UP;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_CONSOLE_BUTTON, 4 )]  = KeyNamesPB::keynames::MFB;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_CONSOLE_BUTTON, 5 )]  = KeyNamesPB::keynames::VOLUME_DOWN;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_CONSOLE_BUTTON, 6 )]  = KeyNamesPB::keynames::ACTION;
 
-    m_keyIdToKeyNameMap[8]  = KeyNamesPB::keynames::PRESET_1;
-    m_keyIdToKeyNameMap[9]  = KeyNamesPB::keynames::PRESET_2;
-    m_keyIdToKeyNameMap[10] = KeyNamesPB::keynames::PRESET_3;
-    m_keyIdToKeyNameMap[11] = KeyNamesPB::keynames::PRESET_4;
-    m_keyIdToKeyNameMap[12] = KeyNamesPB::keynames::PRESET_5;
-    m_keyIdToKeyNameMap[13] = KeyNamesPB::keynames::PRESET_6;
-
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_CONSOLE_BUTTON, 8 )]  = KeyNamesPB::keynames::PRESET_1;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_CONSOLE_BUTTON, 9 )]  = KeyNamesPB::keynames::PRESET_2;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_CONSOLE_BUTTON, 10 )]  = KeyNamesPB::keynames::PRESET_3;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_CONSOLE_BUTTON, 11 )]  = KeyNamesPB::keynames::PRESET_4;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_CONSOLE_BUTTON, 12 )]  = KeyNamesPB::keynames::PRESET_5;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_CONSOLE_BUTTON, 13 )]  = KeyNamesPB::keynames::PRESET_6;
     return;
 }
 

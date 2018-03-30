@@ -24,29 +24,33 @@
 static DPrint s_logger( "CountDownManager" );
 
 using namespace IntentHandler::Protobuf;
+namespace ProductApp
+{
 using KeyActionMode_t = std::pair<ProductApp::Action, uint32_t>;
+constexpr uint32_t MAX_SEED_SIZE             = 1024;
+}
 
 namespace std
 {
 template<>
-struct hash<KeyActionMode_t>
+struct hash<ProductApp::KeyActionMode_t>
 {
-    typedef KeyActionMode_t argument_type;
+    typedef ProductApp::KeyActionMode_t argument_type;
     typedef std::size_t result_type;
     result_type operator()( argument_type const& s ) const
     {
         std::size_t seed = 0;
         seed += ( ( uint32_t ) s.first * 1 );
         seed += ( s.second * 10 );
-        seed = seed % KeyHandlerUtil::MAX_SEED_SIZE;
+        seed = seed % ProductApp::MAX_SEED_SIZE;
         return seed;
     }
 };
 
 template<>
-struct equal_to<KeyActionMode_t>
+struct equal_to<ProductApp::KeyActionMode_t>
 {
-    typedef KeyActionMode_t argument_type;
+    typedef ProductApp::KeyActionMode_t argument_type;
     bool operator()( argument_type const& s1, argument_type const& s2 ) const
     {
         return( s1 == s2 );
@@ -62,7 +66,7 @@ typedef struct _CountDown
 } CountDownInfo;
 
 
-static std::unordered_map < KeyActionMode_t, CountDownInfo> m_countdownIntentInfoMap =
+static std::unordered_map < ProductApp::KeyActionMode_t, CountDownInfo> m_countdownIntentInfoMap =
 {
     {( std::make_pair( ProductApp::Action::MANUAL_UPDATE_COUNTDOWN,   0 ) ), {ButtonEventName::MANUAL_UPDATE, 5}},
     {( std::make_pair( ProductApp::Action::FACTORY_DEFAULT_COUNTDOWN, 0 ) ), {ButtonEventName::FACTORY_DEFAULT, 10}},
