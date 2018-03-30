@@ -87,9 +87,6 @@ SpeakerPairingManager::SpeakerPairingManager( NotifyTargetTaskIF&        task,
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::Initialize( )
 {
-    ///
-    /// @todo Figure out how to better platform controllability of accessories.
-    ///
     ProductPb::AccessorySpeakerState::SpeakerControls* controlable = m_accessorySpeakerState.mutable_controllable( );
     controlable->set_subs( false );
     controlable->set_rears( false );
@@ -200,10 +197,6 @@ void SpeakerPairingManager::RegisterLpmClientEvents( )
 
     BOSE_INFO( s_logger, "%s registered for accessory pairing events from the LPM hardware.",
                ( success ? "Successfully" : "Unsuccessfully" ) );
-
-    ///
-    /// @todo Functionality may be needed to recover from a failure to register.
-    ///
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -404,8 +397,8 @@ void SpeakerPairingManager::DisbandAccessoriesCallback( const Callback<ProductPb
         m_accessorySpeakerState.mutable_subs()->Clear();
         m_accessorySpeakerState.mutable_rears()->Clear();
 
-        m_accessorySpeakerState.mutable_controllable()->set_subs( false );
-        m_accessorySpeakerState.mutable_controllable()->set_rears( false );
+        m_accessorySpeakerState.mutable_controllable()->set_subs( true );
+        m_accessorySpeakerState.mutable_controllable()->set_rears( true );
     }
 
     frontDoorCB( m_accessorySpeakerState );
@@ -527,13 +520,13 @@ void SpeakerPairingManager::RecieveAccessoryListCallback( LpmServiceMessages::Ip
                 {
                     numOfRightRears++;
                 }
-                rearsEnabled |= ( accDesc.active() != 0 );
+                rearsEnabled |= ( accDesc.active() != LpmServiceMessages::ACCESSORY_DEACTIVATED );
             }
             else if( accDesc.has_type( ) && AccessoryTypeIsSub( accDesc.type( ) ) )
             {
                 const auto& spkrInfo = m_accessorySpeakerState.add_subs( );
                 AccessoryDescriptionToAccessorySpeakerInfo( accDesc, spkrInfo );
-                subsEnabled |= ( accDesc.active() != 0 );
+                subsEnabled |= ( accDesc.active() != LpmServiceMessages::ACCESSORY_DEACTIVATED );
             }
         }
     }
