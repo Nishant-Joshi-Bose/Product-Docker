@@ -160,7 +160,15 @@ ProfessorProductController::ProfessorProductController( ) :
     m_IntentHandler( *GetTask(),
                      m_CliClientMT,
                      m_FrontDoorClientIF,
-                     *this )
+                     *this ),
+
+    ///
+    /// Intitialization for the Product Message Handler Reference
+    ///
+    m_ProductMessageHandler( static_cast< Callback < ProductMessage > >
+                            ( std::bind( &ProfessorProductController::HandleMessage,
+                                         this,
+                                         std::placeholders::_1 ) ) )
 {
 
 }
@@ -177,14 +185,6 @@ void ProfessorProductController::Run( )
     BOSE_DEBUG( s_logger, "----------- Product Controller State Machine    ------------" );
     BOSE_DEBUG( s_logger, "The Professor Product Controller is setting up the state machine." );
 
-    ///
-    /// Intitialize the member m_ProductMessageHandler to reference the custom message handler
-    /// defined in this class.
-    ///
-    Callback < ProductMessage >
-    m_ProductMessageHandler( std::bind( &ProfessorProductController::HandleMessage,
-                                        this,
-                                        std::placeholders::_1 ) );
     ///
     /// Construction of the Common and Custom States
     ///
@@ -614,7 +614,6 @@ std::shared_ptr< CustomProductLpmHardwareInterface >& ProfessorProductController
     return m_ProductLpmHardwareInterface;
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProfessorProductController::GetProductAudioServiceInstance
@@ -662,9 +661,6 @@ std::shared_ptr< ProductBLERemoteManager>& ProfessorProductController::GetBLERem
 {
     return m_ProductBLERemoteManager;
 }
-
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -740,7 +736,7 @@ bool ProfessorProductController::IsLowPowerExited( ) const
 
     return( m_IsLpmReady            and
             IsSassReady()           and
-            m_IsAudioPathReady      );
+            m_IsAudioPathReady );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -324,7 +324,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 
             IL::BreakThread( std::bind( m_ProductController.GetMessageHandler( ),
                                         message ),
-                             GetTask( ) );
+                             m_ProductController.GetTask( ) );
         }
         else if( sourceString == "st" )
         {
@@ -334,7 +334,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 
             IL::BreakThread( std::bind( m_ProductController.GetMessageHandler( ),
                                         message ),
-                             GetTask( ) );
+                             m_ProductController.GetTask( ) );
         }
         else
         {
