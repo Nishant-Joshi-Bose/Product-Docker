@@ -92,6 +92,23 @@ void CustomProductAudioService::RegisterAudioPathEvents()
                 std::placeholders::_4 ) );
         m_APPointer->RegisterForSetStreamConfig( callback );
     }
+    {
+        Callback<std::vector<APProductCommon::ChannelParameters>, std::string, std::string, Callback< bool > > callback( std::bind( &CustomProductAudioService::SetStreamConfigCallback,
+                this,
+                std::placeholders::_1,
+                std::placeholders::_2,
+                std::placeholders::_3,
+                std::placeholders::_4 ) );
+        m_APPointer->RegisterForSetStreamConfig( callback );
+    }
+    {
+        Callback< bool > callback(
+            std::bind( &CustomProductAudioService::InternalMuteCallback,
+                       this,
+                       std::placeholders::_1 ) );
+
+        m_APPointer->RegisterForInternalMute( callback );
+    }
     ConnectToAudioPath();
 }
 
@@ -220,6 +237,19 @@ void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCo
         channelMix->set_intent( static_cast<LpmServiceMessages::StreamIntent_t>( itr.m_streamIntent ) );
     }
     m_ProductLpmHardwareInterface->SetStreamConfig( streamConfig, cb );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::InternalMuteCallback
+///
+/// @param  bool mute
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::InternalMuteCallback( bool mute )
+{
+    BOSE_DEBUG( s_logger, "%s, mute = %s", __func__, mute ? "true" : "false" );
+    m_ProductLpmHardwareInterface->SetInternalMute( mute );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
