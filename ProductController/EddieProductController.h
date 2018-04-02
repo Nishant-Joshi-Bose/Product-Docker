@@ -88,7 +88,7 @@ public:
 
     void Initialize();
 
-    Callback < ProductMessage > GetMessageHandler( );
+    Callback < ProductMessage > GetMessageHandler( ) override;
 
     std::vector<std::string> GetUniqueLanguages() const override
     {
@@ -139,9 +139,6 @@ private:
     void RegisterCliClientCmds();
 
     void HandleBtLeModuleReady( bool btLeModuleReady );
-
-    void HandleCapsCapabilityReady( const std::list<std::string>& points );
-    void HandleCapsCapabilityNotReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityNotReady( const std::list<std::string>& points );
 
@@ -163,10 +160,18 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  HandleSetDisplayAutoMode
-/// @brief Function to TDB
+/// @brief Function to set the display mode
 /// @return void
 ////////////////////////////////////////////////////////////////////////////////
     void HandleSetDisplayAutoMode( const std::list<std::string> & argList, std::string& response );
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  HandleGetBootStatus
+/// @brief Function to output the current boot status
+/// @return void
+////////////////////////////////////////////////////////////////////////////////
+    void HandleGetBootStatus( const std::list<std::string>& argList, std::string& response );
+
     void HandleNetworkStatus( const NetManager::Protobuf::NetworkStatus& networkStatus );
     void HandleWiFiProfileResponse( const NetManager::Protobuf::WiFiProfiles& profiles );
 
@@ -193,27 +198,20 @@ public:
 ////////////////////////////////////////////////////////////////////////////////
     bool IsAllModuleReady() const;
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @name  IsBtLeModuleReady
-    /// @brief true if IsBtLeModuleReady modules is up and ready.
-    /// Module IsBtLeModuleReady.
-    /// @return bool
-    ////////////////////////////////////////////////////////////////////////////////
-    bool IsBtLeModuleReady() const;
-
-    ///////////////////////////////////////////////////////////////////////////////
-    /// @name  IsUiConnected
-    /// @brief true if UI(monaco) is up and ready.
-    /// @return bool
-    ////////////////////////////////////////////////////////////////////////////////
-    bool IsUiConnected() const;
-
 ///////////////////////////////////////////////////////////////////////////////
-/// @name  IsCAPSReady
-/// @brief true if CAPS module is ready.
+/// @name  IsBtLeModuleReady
+/// @brief true if IsBtLeModuleReady modules is up and ready.
+/// Module IsBtLeModuleReady.
 /// @return bool
 ////////////////////////////////////////////////////////////////////////////////
-    bool IsCAPSReady() const;
+    bool IsBtLeModuleReady() const;
+
+///////////////////////////////////////////////////////////////////////////////
+/// @name  IsUiConnected
+/// @brief true if UI(monaco) is up and ready.
+/// @return bool
+////////////////////////////////////////////////////////////////////////////////
+    bool IsUiConnected() const;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  IsSTSReady
@@ -409,14 +407,13 @@ private:
     /// ProductKeyInputManager
     std::shared_ptr< CustomProductKeyInputManager> m_ProductKeyInputManager;
 
-    ProductCliClient                            m_productCliClient;
+    ProductCliClient m_productCliClient;
 
-    std::unique_ptr<LightBar::LightBarController>         m_lightbarController;
-    std::unique_ptr<DisplayController>          m_displayController;
-    IntentHandler                               m_IntentHandler;
-    bool                                        m_isCapsReady = false;
-    bool                                        m_isBLEModuleReady  = false;
-    bool                                        m_isUiConnected = false;
+    std::unique_ptr<LightBar::LightBarController>  m_lightbarController;
+    std::unique_ptr<DisplayController>             m_displayController;
+    IntentHandler                                  m_IntentHandler;
+    bool                                           m_isBLEModuleReady  = false;
+    bool                                           m_isUiConnected = false;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

@@ -235,12 +235,7 @@ void EddieProductController::RegisterEndPoints()
     AsyncCallback<Callback<ProductPb::ConfigurationStatus>, Callback<FrontDoor::Error>> getConfigurationStatusReqCb( std::bind( &EddieProductController::HandleConfigurationStatusRequest ,
             this, std::placeholders::_1 ) , GetTask() );
 
-    AsyncCallback<SoundTouchInterface::CapsInitializationStatus> capsInitializationCb( std::bind( &EddieProductController::HandleCapsInitializationUpdate,
-            this, std::placeholders::_1 ) , GetTask() );
-
     /// Registration of endpoints to the frontdoor client.
-
-    m_FrontDoorClientIF->RegisterNotification<SoundTouchInterface::CapsInitializationStatus>( "CapsInitializationUpdate", capsInitializationCb );
 
     m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API , getConfigurationStatusReqCb );
 }
@@ -250,15 +245,6 @@ void EddieProductController::SendInitialRequests()
     BOSE_INFO( s_logger, __func__ );
 
     SendCommonInitialRequests();
-
-    {
-        AsyncCallback<std::list<std::string> > poiReadyCb( std::bind( &EddieProductController::HandleCapsCapabilityReady, this, std::placeholders::_1 ), GetTask() );
-        AsyncCallback<std::list<std::string> > poiNotReadyCb( std::bind( &EddieProductController::HandleCapsCapabilityNotReady, this, std::placeholders::_1 ), GetTask() );
-        std::list<std::string> endPoints;
-
-        endPoints.push_back( FRONTDOOR_SYSTEM_CAPSINIT_STATUS_API );
-        m_FrontDoorClientIF->RegisterEndpointsOfInterest( endPoints, poiReadyCb,  poiNotReadyCb );
-    }
 
     {
         AsyncCallback<std::list<std::string> > poiReadyCb( std::bind( &EddieProductController::HandleBluetoothCapabilityReady, this, std::placeholders::_1 ), GetTask() );
@@ -284,12 +270,6 @@ void EddieProductController::CallbackError( const FrontDoor::Error &error )
     BOSE_WARNING( s_logger, "%s: Error = (%d-%d) %s", __func__, error.code(), error.subcode(), error.message().c_str() );
 }
 
-void EddieProductController::HandleCapsInitializationUpdate( const SoundTouchInterface::CapsInitializationStatus &resp )
-{
-    BOSE_DEBUG( s_logger, "%s:notification: %s", __func__, ProtoToMarkup::ToJson( resp, false ).c_str() );
-    HandleCAPSReady( resp.capsinitialized() );
-}
-
 void EddieProductController::HandleSTSReady( void )
 {
     BOSE_DEBUG( s_logger, __func__ );
@@ -303,20 +283,24 @@ void EddieProductController::HandleConfigurationStatusRequest( const Callback<Pr
     resp.Send( m_ConfigurationStatus );
 }
 
-void EddieProductController::HandleCAPSReady( bool capsReady )
-{
-    m_isCapsReady = capsReady;
-    GetHsm().Handle<bool>( &CustomProductControllerState::HandleCapsState, capsReady );
-}
-
 bool EddieProductController::IsAllModuleReady() const
 {
-    BOSE_INFO( s_logger, "%s:|CAPS Ready=%d|LPMReady=%d|NetworkModuleReady=%d|m_isBluetoothReady=%d|"
-               "STSReady=%d|IsSoftwareUpdateReady=%d|IsUiConnected=%d|IsSassReady=%d", __func__, IsCAPSReady() , IsLpmReady(),
-               IsNetworkModuleReady(), IsBluetoothModuleReady(), IsSTSReady(), IsSoftwareUpdateReady(), IsUiConnected(), IsSassReady() );
+    BOSE_INFO( s_logger,
+               "%s:|CAPS Ready=%d|LPMReady=%d|AudioPathReady=%d|NetworkModuleReady=%d"
+               "|m_isBluetoothReady=%d|STSReady=%d|IsSoftwareUpdateReady=%d|IsUiConnected=%d",
+               __func__,
+               IsCAPSReady() ,
+               IsLpmReady(),
+               IsAudioPathReady(),
+               IsNetworkModuleReady(),
+               IsBluetoothModuleReady(),
+               IsSTSReady(),
+               IsSoftwareUpdateReady(),
+               IsUiConnected() );
 
     return ( IsCAPSReady() and
              IsLpmReady() and
+             IsAudioPathReady() and
              IsNetworkModuleReady() and
              IsBluetoothModuleReady() and
              IsSTSReady() and
@@ -335,12 +319,6 @@ bool EddieProductController::IsUiConnected() const
 {
     BOSE_INFO( s_logger, "%s:m_isUiConnected-%d", __func__, m_isUiConnected );
     return m_isUiConnected;
-}
-
-bool EddieProductController::IsCAPSReady() const
-{
-    BOSE_DEBUG( s_logger, "%s:%s", __func__, m_isCapsReady ? "Yes" : "No" );
-    return m_isCapsReady;
 }
 
 bool EddieProductController::IsSTSReady() const
@@ -449,8 +427,18 @@ void EddieProductController::RegisterCliClientCmds()
     };
 
     m_CliClientMT.RegisterCLIServerCommands( "setDisplayAutoMode",
-                                             "command to set the display controller automatic mode", "setDisplayAutoMode auto|manual",
-                                             GetTask(), cb , static_cast<int>( CLICmdKeys::SET_DISPLAY_AUTO_MODE ) );
+                                             "command to set the display controller automatic mode",
+                                             "setDisplayAutoMode auto|manual",
+                                             GetTask(),
+                                             cb,
+                                             static_cast<int>( CLICmdKeys::SET_DISPLAY_AUTO_MODE ) );
+
+    m_CliClientMT.RegisterCLIServerCommands( "product boot_status",
+                                             "command to output the status of the boot up state.",
+                                             "\t product boot_status \t\t\t",
+                                             GetTask(),
+                                             cb,
+                                             static_cast<int>( CLICmdKeys::GET_BOOT_STATUS ) );
 }
 
 void EddieProductController::HandleCliCmd( uint16_t cmdKey,
@@ -466,6 +454,11 @@ void EddieProductController::HandleCliCmd( uint16_t cmdKey,
     case CLICmdKeys::SET_DISPLAY_AUTO_MODE:
     {
         HandleSetDisplayAutoMode( argList, response );
+        break;
+    }
+    case CLICmdKeys::GET_BOOT_STATUS:
+    {
+        HandleGetBootStatus( argList, response );
         break;
     }
     default:
@@ -498,6 +491,61 @@ void EddieProductController::HandleSetDisplayAutoMode( const std::list<std::stri
         response += "Usage: auto|manual";
     }
 }// HandleSetDisplayAutoMode
+
+void EddieProductController::HandleGetBootStatus( const std::list<std::string>& argList, std::string& response )
+{
+    std::string CapsInitialized( IsCAPSReady( )                 ? "true" : "false" );
+    std::string LpmConnected( IsLpmReady( )                     ? "true" : "false" );
+    std::string audioPathConnected( IsAudioPathReady( )         ? "true" : "false" );
+    std::string networkModuleReady( IsNetworkModuleReady( )     ? "true" : "false" );
+
+    std::string StsInitialized( IsSTSReady( )                   ? "true" : "false" );
+    std::string bluetoothInitialized( IsBluetoothModuleReady( ) ? "true" : "false" );
+    std::string UiConnected( IsUiConnected( )                   ? "true" : "false" );
+
+    std::string SassInitialized( IsSassReady( )                 ? "true" : "false" );
+    std::string SoftwareUpdateReady( IsSoftwareUpdateReady( )   ? "true" : "false" );
+
+    response  = "------------- Eddie Product Controller Booting Status -------------\n";
+    response += "\n";
+    response += "CAPS Initialized      : ";
+    response += CapsInitialized;
+    response += "\n";
+    response += "LPM Connected         : ";
+    response += LpmConnected;
+    response += "\n";
+    response += "Audio Path Connected  : ";
+    response += audioPathConnected;
+    response += "\n";
+    response += "Network Module Ready  : ";
+    response += networkModuleReady;
+    response += "\n";
+    response += "STS Initialized       : ";
+    response += StsInitialized;
+    response += "\n";
+    response += "Bluetooth Initialized : ";
+    response += bluetoothInitialized;
+    response += "\n";
+    response += "UI Connected          : ";
+    response += UiConnected;
+    response += "\n";
+    response += "Software Update Ready : ";
+    response += SoftwareUpdateReady;
+    response += "\n";
+    response += "SASS Initialized      : ";
+    response += SassInitialized;
+    response += "\n";
+    response += "\n";
+
+    if( IsBooted( ) )
+    {
+        response += "The device has been successfully booted.";
+    }
+    else
+    {
+        response += "The device has not yet been booted.";
+    }
+}
 
 void EddieProductController::UpdateUiConnectedStatus( bool status )
 {
@@ -652,18 +700,6 @@ void EddieProductController::HandleSTSInitWasComplete( void )
 void EddieProductController::HandleSelectSourceSlot( ProductSTSAccount::ProductSourceSlot sourceSlot )
 {
     BOSE_INFO( s_logger, "%s: slot: %d", __func__, sourceSlot );
-}
-
-void EddieProductController::HandleCapsCapabilityReady( const std::list<std::string>& points )
-{
-    BOSE_INFO( s_logger, __func__ );
-    HandleCAPSReady( true );
-}
-
-void EddieProductController::HandleCapsCapabilityNotReady( const std::list<std::string>& points )
-{
-    BOSE_INFO( s_logger, __func__ );
-    HandleCAPSReady( false );
 }
 
 void EddieProductController::HandleBtLeCapabilityReady( const std::list<std::string>& points )
