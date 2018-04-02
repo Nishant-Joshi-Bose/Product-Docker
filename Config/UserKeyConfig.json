@@ -353,11 +353,6 @@
         "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_CBL_SAT"]
     },
     {
-        "zone": "ZONE7",
-        "keyList": ["BOSE_VOLUME_UP", "BOSE_VOLUME_DOWN", "BOSE_MUTE"],
-        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_CBL_SAT"]
-    },
-    {
         "zone": "ZONE8",
         "keyList": ["BOSE_CHANNEL_PRESET_UP", "BOSE_CHANNEL_PRESET_DOWN", "BOSE_LAST_CHANNEL"],
         "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_CBL_SAT"]
