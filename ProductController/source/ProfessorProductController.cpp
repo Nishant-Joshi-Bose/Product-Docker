@@ -33,7 +33,6 @@
 #include "CustomProductAudioService.h"
 #include "CustomAudioSettingsManager.h"
 #include "CustomProductKeyInputManager.h"
-#include "ProductNetworkManager.h"
 #include "ProductSystemManager.h"
 #include "ProductCommandLine.h"
 #include "ProductAdaptIQManager.h"
@@ -91,6 +90,7 @@
 #include "CustomProductControllerStateAdaptIQExiting.h"
 #include "CustomProductControllerStateAdaptIQ.h"
 #include "CustomProductControllerStateIdle.h"
+#include "CustomProductControllerStateLowPowerStandby.h"
 #include "CustomProductControllerStateOn.h"
 #include "CustomProductControllerStatePlayable.h"
 #include "CustomProductControllerStatePlayingDeselectedAccessoryPairing.h"
@@ -138,7 +138,6 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     m_ProductLpmHardwareInterface( nullptr ),
     m_ProductSystemManager( nullptr ),
-    m_ProductNetworkManager( nullptr ),
     m_ProductCommandLine( nullptr ),
     m_ProductKeyInputManager( nullptr ),
     m_ProductCecHelper( nullptr ),
@@ -151,8 +150,7 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     /// Member Variable Initialization
     ///
-    m_IsNetworkConfigured( false ),
-    m_IsNetworkConnected( false ),
+    m_IsAudioPathReady( false ),
     m_IsAutoWakeEnabled( false ),
     m_Running( false ),
 
@@ -186,7 +184,10 @@ void ProfessorProductController::Run( )
     ///
     /// Top State
     ///
-    auto* stateTop = new ProductControllerStateTop( GetHsm( ),
+
+
+
+  auto* stateTop = new ProductControllerStateTop( GetHsm( ),
                                                     nullptr );
 
     ///
@@ -242,10 +243,10 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION );
 
-    auto* stateLowPowerStandby = new ProductControllerStateLowPowerStandby
+    auto* stateLowPowerStandby = new CustomProductControllerStateLowPowerStandby
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY );
 
     ///
     /// Playable Transition State and Sub-States
@@ -510,7 +511,6 @@ void ProfessorProductController::Run( )
     m_ProductCecHelper            = std::make_shared< ProductCecHelper                  >( *this );
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductSystemManager        = std::make_shared< ProductSystemManager              >( *this );
-    m_ProductNetworkManager       = std::make_shared< ProductNetworkManager             >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
     m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
@@ -520,7 +520,6 @@ void ProfessorProductController::Run( )
 
     if( m_ProductLpmHardwareInterface == nullptr ||
         m_ProductSystemManager        == nullptr ||
-        m_ProductNetworkManager       == nullptr ||
         m_ProductAudioService         == nullptr ||
         m_ProductCommandLine          == nullptr ||
         m_ProductKeyInputManager      == nullptr ||
@@ -552,7 +551,6 @@ void ProfessorProductController::Run( )
     ///
     m_ProductLpmHardwareInterface->Run( );
     m_ProductSystemManager       ->Run( );
-    m_ProductNetworkManager      ->Run( );
     m_ProductAudioService        ->Run( );
     m_ProductCommandLine         ->Run( );
     m_ProductKeyInputManager     ->Run( );
@@ -724,38 +722,25 @@ bool ProfessorProductController::IsBooted( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::IsNetworkConfigured
+/// @name   ProfessorProductController::IsLowPowerExited
 ///
-/// @return This method returns a true or false value, based on a set member variable.
+/// @return This method returns a true or false value, based on a series of set member variables,
+///         which all must be true to indicate that the device has exited low power.
+///         NOTE: Unlike booting we only wait for the things killed going to low power
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsNetworkConfigured( ) const
+bool ProfessorProductController::IsLowPowerExited( ) const
 {
-    return m_IsNetworkConfigured;
-}
+    BOSE_VERBOSE( s_logger, "------------ Product Controller Low Power Exit Check ---------------" );
+    BOSE_VERBOSE( s_logger, " " );
+    BOSE_VERBOSE( s_logger, "LPM Connected         :  %s", ( m_IsLpmReady       ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "SASS            Init  :  %s", ( IsSassReady()      ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, " " );
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::IsNetworkConnected
-///
-/// @return This method returns a true or false value, based on a set member variable.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::IsNetworkConnected( ) const
-{
-    return m_IsNetworkConnected;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetWifiProfileCount
-///
-/// @return This method returns the number of WiFi profiles as an unsigned integer.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-uint32_t ProfessorProductController::GetWifiProfileCount( ) const
-{
-    return m_ProductNetworkManager->GetWifiProfileCount( );
+    return( m_IsLpmReady            and
+            IsSassReady()           and
+            m_IsAudioPathReady      );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1073,57 +1058,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
                     ProductSTS::ProductSourceSlot_Name( static_cast<ProductSTS::ProductSourceSlot>( slot ) ).c_str( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// Network status messages are handled at this point.
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_networkstatus( ) )
-    {
-        if( message.networkstatus( ).has_configured( ) )
-        {
-            m_IsNetworkConfigured = ( message.networkstatus( ).configured( ) &&
-                                      ( m_NetworkServiceUtil.GetNetManagerOperationMode() != NetManager::Protobuf::OperationalMode::wifiOff ) );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "An invalid network configured status message was received." );
-            return;
-        }
-
-        if( message.networkstatus( ).has_connected( ) )
-        {
-            m_IsNetworkConnected = message.networkstatus( ).connected( );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "An invalid network connected status message was received." );
-            return;
-        }
-
-        if( message.networkstatus( ).networktype( ) == ProductNetworkStatus_ProductNetworkType_Wireless )
-        {
-            BOSE_DEBUG( s_logger, "A wireless %s %s network message was received.",
-                        m_IsNetworkConfigured ? "configured" : "unconfigured",
-                        m_IsNetworkConnected  ? "connected"  : "unconnected" );
-        }
-        else if( message.networkstatus( ).networktype( ) == ProductNetworkStatus_ProductNetworkType_Wired )
-        {
-            BOSE_DEBUG( s_logger, "A wired %s %s network message was received.",
-                        m_IsNetworkConfigured ? "configured" : "unconfigured",
-                        m_IsNetworkConnected  ? "connected"  : "unconnected" );
-        }
-        else
-        {
-            BOSE_DEBUG( s_logger, "A unknown %s %s network message was received.",
-                        m_IsNetworkConfigured ? "configured" : "unconfigured",
-                        m_IsNetworkConnected  ? "connected"  : "unconnected" );
-        }
-
-        m_ProductSystemManager->SetNetworkAccoutConfigurationStatus( m_IsNetworkConfigured,
-                                                                     m_IsVoiceAccountConfigured );
-
-        GetHsm( ).Handle< bool, bool >
-        ( &CustomProductControllerState::HandleNetworkState, m_IsNetworkConfigured, m_IsNetworkConnected );
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Wireless network status messages are handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_wirelessstatus( ) )
@@ -1310,7 +1244,6 @@ void ProfessorProductController::Wait( )
     ///
     m_ProductLpmHardwareInterface->Stop( );
     m_ProductSystemManager       ->Stop( );
-    m_ProductNetworkManager      ->Stop( );
     m_ProductCommandLine         ->Stop( );
     m_ProductKeyInputManager     ->Stop( );
     m_ProductCecHelper           ->Stop( );
@@ -1388,40 +1321,6 @@ void ProfessorProductController::SendInitialCapsData()
         message,
         { },
         m_errorCb );
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief ProfessorProductController::ClearWifiProfileCount
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::ClearWifiProfileCount( )
-{
-    if( m_ProductNetworkManager != nullptr )
-    {
-        m_ProductNetworkManager->ClearWifiProfileCount( );
-    }
-    else
-    {
-        BOSE_DIE( "ProductNetworkManager has not been instantiated for ClearWifiProfileCount." );
-    }
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief ProfessorProductController::PerformRequestforWiFiProfiles
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::PerformRequestforWiFiProfiles( )
-{
-    if( m_ProductNetworkManager != nullptr )
-    {
-        m_ProductNetworkManager->PerformRequestforWiFiProfiles( );
-    }
-    else
-    {
-        BOSE_DIE( "ProductNetworkManager has not been instantiated for PerformRequestforWiFiProfiles." );
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
