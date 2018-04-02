@@ -178,18 +178,22 @@ void ProfessorProductController::Run( )
     BOSE_DEBUG( s_logger, "The Professor Product Controller is setting up the state machine." );
 
     ///
+    /// Intitialize the member m_ProductMessageHandler to reference the custom message handler
+    /// defined in this class.
+    ///
+    Callback < ProductMessage >
+    m_ProductMessageHandler( std::bind( &ProfessorProductController::HandleMessage,
+                                        this,
+                                        std::placeholders::_1 ) );
+    ///
     /// Construction of the Common and Custom States
     ///
 
     ///
     /// Top State
     ///
-
-
-
-  auto* stateTop = new ProductControllerStateTop( GetHsm( ),
+    auto* stateTop = new ProductControllerStateTop( GetHsm( ),
                                                     nullptr );
-
     ///
     /// Booting State and Various System Level States
     ///
@@ -595,11 +599,7 @@ void ProfessorProductController::Run( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 Callback < ProductMessage > ProfessorProductController::GetMessageHandler( )
 {
-    Callback < ProductMessage >
-    ProductMessageHandler( std::bind( &ProfessorProductController::HandleMessage,
-                                      this,
-                                      std::placeholders::_1 ) );
-    return ProductMessageHandler;
+    return m_ProductMessageHandler;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -932,8 +932,7 @@ void ProfessorProductController::HandleSelectSourceSlot( ProductSTSAccount::Prod
     ProductMessage message;
     message.mutable_selectsourceslot( )->set_slot( static_cast< ProductSTS::ProductSourceSlot >( sourceSlot ) );
 
-    IL::BreakThread( std::bind( &ProfessorProductController::HandleMessage,
-                                this,
+    IL::BreakThread( std::bind( GetMessageHandler( ),
                                 message ),
                      GetTask( ) );
 }
@@ -1361,7 +1360,11 @@ void ProfessorProductController::HandlePutOpticalAutoWake(
     {
         ProductMessage message;
         message.mutable_autowakestatus( )->set_active( req.enabled( ) );
-        HandleMessage( message );
+
+        IL::BreakThread( std::bind( GetMessageHandler( ),
+                                    message ),
+                         GetTask( ) );
+
         HandleGetOpticalAutoWake( respCb, errorCb );
     }
     else

@@ -103,11 +103,12 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief The following method is used to get the product controller callback function to which
-    ///         product message events (based on ProductMessage Protocol Buffers) can be sent.
+    /// @brief The following method and member are used to get the product controller callback function
+    ///        to which product message events (based on ProductMessage Protocol Buffers) can be sent.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     Callback < ProductMessage > GetMessageHandler( ) override;
+    Callback < ProductMessage > m_ProductMessageHandler;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
