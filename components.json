@@ -69,7 +69,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Continuous/master/0.3.11-85+795303f"
+    "selected_version": "Continuous/master/0.3.11-86+e84e4b3"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -93,7 +93,7 @@
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@73d0c59564e6e75ff4057711775d743b4955709d"
+    "selected_version": "master@df32329b45183a449c9e41d8938e0049451bfce0"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -129,7 +129,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.3.13-140+79674d4"
+    "selected_version": "Continuous/master/0.3.13-148+8d1da37"
   },
   {
     "name": "RivieraLpmTools",
@@ -149,11 +149,11 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/0.3.4-68+c3828ad"
+    "selected_version": "Release/master/0.3.5-74+45c1f0c"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/IP3/0.3.18-434+82019d1"
+    "selected_version": "Release/master/0.3.19-449+bbf3dc5"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
