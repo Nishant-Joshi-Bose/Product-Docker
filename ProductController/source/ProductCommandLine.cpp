@@ -319,16 +319,22 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         if( sourceString == "tv" )
         {
             KeyHandlerUtil::ActionType_t startTvPlayback = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_TV );
-            ProductMessage msg;
-            msg.set_action( startTvPlayback );
-            m_ProductController.HandleMessage( msg );
+            ProductMessage message;
+            message.set_action( startTvPlayback );
+
+            IL::BreakThread( std::bind( m_ProductController.GetMessageHandler( ),
+                                        message ),
+                             m_ProductController.GetTask( ) );
         }
         else if( sourceString == "st" )
         {
             KeyHandlerUtil::ActionType_t startSoundTouchPlayback = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_SOUNDTOUCH );
-            ProductMessage msg;
-            msg.set_action( startSoundTouchPlayback );
-            m_ProductController.HandleMessage( msg );
+            ProductMessage message;
+            message.set_action( startSoundTouchPlayback );
+
+            IL::BreakThread( std::bind( m_ProductController.GetMessageHandler( ),
+                                        message ),
+                             m_ProductController.GetTask( ) );
         }
         else
         {

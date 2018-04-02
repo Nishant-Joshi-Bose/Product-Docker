@@ -160,7 +160,15 @@ ProfessorProductController::ProfessorProductController( ) :
     m_IntentHandler( *GetTask(),
                      m_CliClientMT,
                      m_FrontDoorClientIF,
-                     *this )
+                     *this ),
+
+    ///
+    /// Intitialization for the Product Message Handler Reference
+    ///
+    m_ProductMessageHandler( static_cast< Callback < ProductMessage > >
+                            ( std::bind( &ProfessorProductController::HandleMessage,
+                                         this,
+                                         std::placeholders::_1 ) ) )
 {
 
 }
@@ -184,12 +192,8 @@ void ProfessorProductController::Run( )
     ///
     /// Top State
     ///
-
-
-
-  auto* stateTop = new ProductControllerStateTop( GetHsm( ),
+    auto* stateTop = new ProductControllerStateTop( GetHsm( ),
                                                     nullptr );
-
     ///
     /// Booting State and Various System Level States
     ///
@@ -595,11 +599,7 @@ void ProfessorProductController::Run( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 Callback < ProductMessage > ProfessorProductController::GetMessageHandler( )
 {
-    Callback < ProductMessage >
-    ProductMessageHandler( std::bind( &ProfessorProductController::HandleMessage,
-                                      this,
-                                      std::placeholders::_1 ) );
-    return ProductMessageHandler;
+    return m_ProductMessageHandler;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -613,7 +613,6 @@ std::shared_ptr< CustomProductLpmHardwareInterface >& ProfessorProductController
 {
     return m_ProductLpmHardwareInterface;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -662,9 +661,6 @@ std::shared_ptr< ProductBLERemoteManager>& ProfessorProductController::GetBLERem
 {
     return m_ProductBLERemoteManager;
 }
-
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -740,7 +736,7 @@ bool ProfessorProductController::IsLowPowerExited( ) const
 
     return( m_IsLpmReady            and
             IsSassReady()           and
-            m_IsAudioPathReady      );
+            m_IsAudioPathReady );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -932,8 +928,7 @@ void ProfessorProductController::HandleSelectSourceSlot( ProductSTSAccount::Prod
     ProductMessage message;
     message.mutable_selectsourceslot( )->set_slot( static_cast< ProductSTS::ProductSourceSlot >( sourceSlot ) );
 
-    IL::BreakThread( std::bind( &ProfessorProductController::HandleMessage,
-                                this,
+    IL::BreakThread( std::bind( GetMessageHandler( ),
                                 message ),
                      GetTask( ) );
 }
@@ -1361,7 +1356,11 @@ void ProfessorProductController::HandlePutOpticalAutoWake(
     {
         ProductMessage message;
         message.mutable_autowakestatus( )->set_active( req.enabled( ) );
-        HandleMessage( message );
+
+        IL::BreakThread( std::bind( GetMessageHandler( ),
+                                    message ),
+                         GetTask( ) );
+
         HandleGetOpticalAutoWake( respCb, errorCb );
     }
     else
