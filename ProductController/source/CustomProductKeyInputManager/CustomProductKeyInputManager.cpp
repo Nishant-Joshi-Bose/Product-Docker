@@ -33,7 +33,7 @@ namespace ProductApp
 ///            Constant Definitions
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr const char KEY_CONFIGURATION_FILE_NAME[ ] = "/opt/Bose/etc/KeyConfiguration.json";
+constexpr const char KEY_CONFIGURATION_FILE_NAME[ ] = "/var/run/KeyConfiguration.json";
 constexpr const char BLAST_CONFIGURATION_FILE_NAME[ ] = "/opt/Bose/etc/BlastConfiguration.json";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
