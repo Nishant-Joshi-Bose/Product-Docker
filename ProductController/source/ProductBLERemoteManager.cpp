@@ -119,6 +119,11 @@ void ProductBLERemoteManager::Run( )
 {
     InitializeFrontDoor();
     InitializeRCS();
+    m_ProductController.GetSourceInfo()->RegisterSourceListener(
+        [ this ]( const SoundTouchInterface::Sources & sources )
+    {
+        UpdateAvailableSources( sources );
+    } );
 
     // TODO this is a hack for the fact that RCS doesn't provide a status notification, and
     // callers of IsConnected probably want to know right away (i.e. no callback), so we poll
@@ -150,9 +155,28 @@ void ProductBLERemoteManager::Stop( void )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   ProductBLERemoteManager::UpdateAvailableSources
+///
+/// @brief  This method updates the list of available sources
+///
+/// @param  list of available sources
+///
+/// @return This method does not return anything.
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductBLERemoteManager::UpdateAvailableSources( const SoundTouchInterface::Sources& sources )
+{
+    BOSE_INFO( s_logger, "%s update sources %s", __func__, ProtoToMarkup::ToJson( sources ).c_str() );
+    m_sources = sources;
+    UpdateBacklight();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief ProductBLERemoteManager::UpdateNowSelection
 ///
-/// @param  void This method does not take any arguments.
+/// @param  nowSelection - currently-selected
 ///
 /// @return This method does not return anything.
 ///
@@ -160,55 +184,116 @@ void ProductBLERemoteManager::Stop( void )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::NowSelectionInfo& nowSelection )
 {
-    m_nowSelection = nowSelection;
     BOSE_INFO( s_logger, "%s update nowSelection %s", __func__, ProtoToMarkup::ToJson( nowSelection ).c_str() );
+    m_nowSelection = nowSelection;
+    UpdateBacklight();
+}
 
-    if( !nowSelection.has_contentitem() )
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductBLERemoteManager::UpdateBacklight
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductBLERemoteManager::UpdateBacklight( )
+{
+    std::vector< A4VRemoteCommClientIF::ledSourceType_t > availableSources;
+
+    availableSources.push_back( LedsSourceTypeMsg_t::BLUETOOTH );
+    availableSources.push_back( LedsSourceTypeMsg_t::SOUND_TOUCH );
+    availableSources.push_back( LedsSourceTypeMsg_t::TV );
+
+    for( auto i = 0; i < m_sources.sources_size(); i++ )
     {
-        return;
+        const auto& source = m_sources.sources( i );
+
+        // TODO: this also needs to check "visible" once that flag works correctly
+
+        if( source.sourceaccountname().compare( "SLOT_0" ) == 0 )
+        {
+            availableSources.push_back( LedsSourceTypeMsg_t::GAME );
+        }
+        if( source.sourceaccountname().compare( "SLOT_1" ) == 0 )
+        {
+            availableSources.push_back( LedsSourceTypeMsg_t::DVD );
+        }
+        if( source.sourceaccountname().compare( "SLOT_2" ) == 0 )
+        {
+            availableSources.push_back( LedsSourceTypeMsg_t::SET_TOP_BOX );
+        }
     }
 
-    const auto& ci = nowSelection.contentitem();
+    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t sourceLED;
+    GetSourceLED( sourceLED );
+    m_RCSClient->Led_Set( sourceLED, availableSources );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductBLERemoteManager::GetSourceLED
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProductBLERemoteManager::GetSourceLED( A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED )
+{
+    if( !m_nowSelection.has_contentitem() )
+    {
+        return false;
+    }
+
+    const auto& ci = m_nowSelection.contentitem();
     const auto& source = m_ProductController.GetSourceInfo()->FindSource( ci );
 
     if( not source )
     {
-        return;
+        return false;
     }
 
-// TODO - re-enable this once PGC-1105 has been resolved
-#if 0
     if( source->sourcename().compare( "PRODUCT" ) == 0 )
     {
         if( source->sourceaccountname().compare( "TV" ) == 0 )
         {
-            // Check for TV explicitly for now, since I don't know if Mardid will set deviceType for the TV
-            m_RCSClient->Led_Set( LedsSourceTypeMsg_t::TV );
+            BOSE_INFO( s_logger, "update nowSelection TV" );
+            // Check for TV explicitly for now, since I don't know if Madrid will set deviceType for the TV
+            sourceLED = LedsSourceTypeMsg_t::TV;
+        }
+        else if( source->sourceaccountname().compare( "SETUP" ) == 0 )
+        {
+            BOSE_INFO( s_logger, "update nowSelection SETUP" );
+            sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
         }
         else if( ( source->sourceaccountname().compare( 0, 4, "SLOT" ) == 0 ) and source->has_details() )
         {
             if( not source->details().devicetype().compare( "DEVICE_TYPE_GAME" ) )
             {
-                m_RCSClient->Led_Set( LedsSourceTypeMsg_t::GAME );
+                sourceLED = LedsSourceTypeMsg_t::GAME;
             }
             else if( not source->details().devicetype().compare( "DEVICE_TYPE_CBL_SAT" ) )
             {
-                m_RCSClient->Led_Set( LedsSourceTypeMsg_t::SET_TOP_BOX );
+                sourceLED = LedsSourceTypeMsg_t::SET_TOP_BOX;
             }
             else if( not source->details().devicetype().compare( "DEVICE_TYPE_BD_DVD" ) )
             {
-                m_RCSClient->Led_Set( LedsSourceTypeMsg_t::DVD );
+                sourceLED = LedsSourceTypeMsg_t::DVD;
             }
             else if( not source->details().devicetype().compare( "DEVICE_TYPE_TV" ) or
                      not source->details().devicetype().compare( "DEVICE_TYPE_SMART_TV" ) )
             {
-                m_RCSClient->Led_Set( LedsSourceTypeMsg_t::TV );
+                sourceLED = LedsSourceTypeMsg_t::TV;
             }
             else if( not source->details().devicetype().compare( "DEVICE_TYPE_STREAMING" ) )
             {
                 // per Brian White, GAME is probably the most sensible choice here
                 // I'm leaving this as an independent case from GAME above in case we change our minds
-                m_RCSClient->Led_Set( LedsSourceTypeMsg_t::GAME );
+                sourceLED = LedsSourceTypeMsg_t::GAME;
             }
             else
             {
@@ -224,15 +309,16 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
     {
         if( source->sourcename().compare( "BLUETOOTH" ) == 0 )
         {
-            m_RCSClient->Led_Set( LedsSourceTypeMsg_t::BLUETOOTH );
+            BOSE_INFO( s_logger, "update nowSelection BLUETOOTH" );
+            sourceLED = LedsSourceTypeMsg_t::BLUETOOTH;
         }
-        else( source->sourcename().compare( "INVALID_SOURCE" ) != 0 )
+        else if( source->sourcename().compare( "INVALID_SOURCE" ) != 0 )
         {
-            m_RCSClient->Led_Set( LedsSourceTypeMsg_t::SOUND_TOUCH );
+            sourceLED = LedsSourceTypeMsg_t::SOUND_TOUCH;
         }
     }
-#endif
 
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
