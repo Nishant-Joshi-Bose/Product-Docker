@@ -15,6 +15,7 @@ configuration = \
 {
     "pageName": "AdaptIQ",
     "endpoint": "/adaptiq",
+    "fields": ["body.hpConnected", "body.smState",],
     "button":
     {
         "enabled": true,

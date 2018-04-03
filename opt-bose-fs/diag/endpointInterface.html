@@ -74,6 +74,21 @@
                 document.getElementById('header').textContent = Configuration.pageName;
             }
 
+            function FindField(object,fields)
+            {
+                if (typeof fields === "string") fields = fields.split('.');
+                if (fields.length>1)
+                {
+                    object = object[fields[0]];
+                    fields.shift();
+                    return FindField(object, fields);
+                }
+                else
+                {
+                    return object[fields[0]];
+                }
+            }
+
             function WebSocketConnection()
             {
                 var FrontDoorHost = "ws://"+window.location.hostname+":8082";
@@ -107,7 +122,14 @@
                     console.log("Incoming:\n"+JSON.stringify(msg));
                     if (msg.header.resource === Configuration.endpoint)
                     {
-                        generalOutputTextAreaElem.textContent = (new Date()).toLocaleTimeString() + ": " + "\n" + JSON.stringify(msg, null, 4)+ "\n\n" + generalOutputTextAreaElem.textContent;
+                        var output = (new Date().toLocaleTimeString()) + ": " + "\n";
+                        Configuration.fields.forEach(function(att){
+
+                            console.log(att);
+                            var value = FindField(msg,att);
+                            output = output + att +":"+ JSON.stringify(value, null, 4) + "\n";
+                        });
+                        generalOutputTextAreaElem.textContent = output + "\n\n" + generalOutputTextAreaElem.textContent;
                     }
 
                 };

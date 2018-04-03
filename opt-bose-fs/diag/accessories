@@ -15,6 +15,7 @@ configuration = \
 {
     "pageName": "Accessories",
     "endpoint": "/accessories",
+    "fields": ["body",],
     "button":
     {
         "enabled": false,
