@@ -18,3 +18,20 @@ enum keynames
     PRESET_5    = 12;
     PRESET_6    = 13;
 }
+
+enum keyid
+{
+    UNDEFINED_KEYID   = 0;
+    BLUETOOTH_KEYID   = 1;
+    AUX_KEYID         = 2;
+    VOLUME_UP_KEYID   = 3;
+    MFB_KEYID         = 4;
+    VOLUME_DOWN_KEYID = 5;
+    ACTION_KEYID      = 6;
+    PRESET_1_KEYID    = 8;
+    PRESET_2_KEYID    = 9;
+    PRESET_3_KEYID    = 10;
+    PRESET_4_KEYID    = 11;
+    PRESET_5_KEYID    = 12;
+    PRESET_6_KEYID    = 13;
+}
