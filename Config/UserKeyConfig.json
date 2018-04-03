@@ -149,7 +149,7 @@
         "commment": "volume ramp up",
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_UP"],
-        "origin": ["IR", "TAP", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF"],
         "timeOutList": [300, 100]
     },
     {
@@ -157,7 +157,7 @@
         "commment": "volume ramp up cancel",
         "keyEvent": "RELEASE_ALWAYS",
         "keyList": ["BOSE_VOLUME_UP"],
-        "origin": ["IR", "TAP", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF"],
         "timeOutList": []
     },
     {
@@ -173,7 +173,7 @@
         "commment": "volume ramp down",
         "keyEvent": "PRESS_HOLD_REPEAT",
         "keyList": ["BOSE_VOLUME_DOWN"],
-        "origin": ["IR", "TAP", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF"],
         "timeOutList": [300, 100]
     },
     {
@@ -181,7 +181,7 @@
         "commment": "volume ramp down cancel",
         "keyEvent": "RELEASE_ALWAYS",
         "keyList": ["BOSE_VOLUME_DOWN"],
-        "origin": ["IR", "TAP", "RF"],
+        "origin": ["IR", "TAP", "CEC", "RF"],
         "timeOutList": []
     },
     {
@@ -351,11 +351,6 @@
         "zone": "ZONE6",
         "keyList": ["BOSE_NUMBER_7", "BOSE_NUMBER_8", "BOSE_NUMBER_9", "BOSE_NUMBER_0"],
         "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_CBL_SAT"]
-    },
-    {
-        "zone": "ZONE7",
-        "keyList": ["BOSE_VOLUME_UP", "BOSE_VOLUME_DOWN", "BOSE_MUTE"],
-        "blastDevices": ["DEVICE_TYPE_TV", "DEVICE_TYPE_SMART_TV", "DEVICE_TYPE_GAME", "DEVICE_TYPE_BD_DVD", "DEVICE_TYPE_CBL_SAT"]
     },
     {
         "zone": "ZONE8",
