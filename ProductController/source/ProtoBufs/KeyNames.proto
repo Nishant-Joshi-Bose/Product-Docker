@@ -1,0 +1,8 @@
+import "ProtoToMarkup/MarkupOptions.proto";
+
+package KeyNamesPB;
+
+enum keynames
+{
+    UNDEFINED   = 0;
+}
