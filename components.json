@@ -141,11 +141,11 @@
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@2300"
+    "selected_version": "trunk@1983"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.3.14-156+db0529f"
+    "selected_version": "Release/master/0.3.13-140+79674d4"
   },
   {
     "name": "RivieraLpmTools",

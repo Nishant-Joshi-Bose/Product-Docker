@@ -93,15 +93,6 @@ void CustomProductAudioService::RegisterAudioPathEvents()
         m_APPointer->RegisterForSetStreamConfig( callback );
     }
     {
-        Callback<std::vector<APProductCommon::ChannelParameters>, std::string, std::string, Callback< bool > > callback( std::bind( &CustomProductAudioService::SetStreamConfigCallback,
-                this,
-                std::placeholders::_1,
-                std::placeholders::_2,
-                std::placeholders::_3,
-                std::placeholders::_4 ) );
-        m_APPointer->RegisterForSetStreamConfig( callback );
-    }
-    {
         Callback< bool > callback(
             std::bind( &CustomProductAudioService::InternalMuteCallback,
                        this,
