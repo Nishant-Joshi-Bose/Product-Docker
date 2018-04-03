@@ -67,7 +67,6 @@ typedef struct _CountDown
 
 static std::unordered_map < ProductApp::KeyActionMode_t, CountDownInfo> m_countdownIntentInfoMap =
 {
-    {( std::make_pair( ProductApp::Action::MANUAL_UPDATE_COUNTDOWN,   0 ) ), {ButtonEventName::MANUAL_UPDATE, 5}},
     {( std::make_pair( ProductApp::Action::FACTORY_DEFAULT_COUNTDOWN, 0 ) ), {ButtonEventName::FACTORY_DEFAULT, 10}},
     {( std::make_pair( ProductApp::Action::MANUAL_SETUP_COUNTDOWN,    0 ) ), {ButtonEventName::MANUAL_SETUP, 5}},
     {( std::make_pair( ProductApp::Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::wifiOff ) ) ) , {ButtonEventName::ENABLE_WIFI, 5}},
@@ -113,7 +112,6 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     switch( intent )
     {
     case( uint16_t ) Action::FACTORY_DEFAULT_CANCEL:
-    case( uint16_t ) Action::MANUAL_UPDATE_CANCEL:
     case( uint16_t ) Action::SYSTEM_INFO_CANCEL:
     case( uint16_t ) Action::TOGGLE_WIFI_RADIO_CANCEL:
     case( uint16_t ) Action::MANUAL_SETUP_CANCEL:
@@ -131,7 +129,6 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     break;
 
     case( uint16_t ) Action::FACTORY_DEFAULT_COUNTDOWN:
-    case( uint16_t ) Action::MANUAL_UPDATE_COUNTDOWN:
     case( uint16_t ) Action::MANUAL_SETUP_COUNTDOWN:
     case( uint16_t ) Action::TOGGLE_WIFI_RADIO_COUNTDOWN:
     case( uint16_t ) Action::SYSTEM_INFO_COUNTDOWN:
