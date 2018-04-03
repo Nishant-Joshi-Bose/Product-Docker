@@ -100,11 +100,15 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr<FrontDoorClientIF>                                      m_FrontDoorClient;
     SoundTouchInterface::NowSelectionInfo                                   m_nowSelection;
+    SoundTouchInterface::Sources                                            m_sources;
     A4VRemoteCommunication::A4VRemoteCommClientIF::A4VRemoteCommClientPtr   m_RCSClient;
 
     void UpdateNowSelection( const SoundTouchInterface::NowSelectionInfo& nowSelection );
     void InitializeFrontDoor();
     void InitializeRCS();
+    void UpdateAvailableSources( const SoundTouchInterface::Sources& sources );
+    void UpdateBacklight( );
+    bool GetSourceLED( A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
