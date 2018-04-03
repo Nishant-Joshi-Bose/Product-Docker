@@ -859,6 +859,19 @@
             ]
         }, 
         {
+            "origin": 4, 
+            "keyEvent": 3, 
+            "timeOutList": [
+                300, 
+                100
+            ], 
+            "commment": "volume ramp up", 
+            "action": 39, 
+            "keyList": [
+                3
+            ]
+        }, 
+        {
             "origin": 3, 
             "keyEvent": 3, 
             "timeOutList": [
@@ -883,6 +896,16 @@
         }, 
         {
             "origin": 6, 
+            "keyEvent": 5, 
+            "timeOutList": [], 
+            "commment": "volume ramp up cancel", 
+            "action": 50, 
+            "keyList": [
+                3
+            ]
+        }, 
+        {
+            "origin": 4, 
             "keyEvent": 5, 
             "timeOutList": [], 
             "commment": "volume ramp up cancel", 
@@ -976,6 +999,19 @@
             ]
         }, 
         {
+            "origin": 4, 
+            "keyEvent": 3, 
+            "timeOutList": [
+                300, 
+                100
+            ], 
+            "commment": "volume ramp down", 
+            "action": 40, 
+            "keyList": [
+                2
+            ]
+        }, 
+        {
             "origin": 3, 
             "keyEvent": 3, 
             "timeOutList": [
@@ -1000,6 +1036,16 @@
         }, 
         {
             "origin": 6, 
+            "keyEvent": 5, 
+            "timeOutList": [], 
+            "commment": "volume ramp down cancel", 
+            "action": 51, 
+            "keyList": [
+                2
+            ]
+        }, 
+        {
+            "origin": 4, 
             "keyEvent": 5, 
             "timeOutList": [], 
             "commment": "volume ramp down cancel", 
