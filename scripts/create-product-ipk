@@ -149,16 +149,11 @@ if (( \$(date +%s) < $t )); then
 fi
 EOF
 
-# Copy public keys in FS based on DEPLOY_ENV flag exported
+# Copy public keys in FS for development key. EC will take care of generation for Production 
 secure_dir=$opt_dir/etc/secure/
 mkdir -p "$secure_dir" || exit
-if [ "$DEPLOY_ENV" = prod ]; then
-    cp -r "$wspace/scripts/keys/production/publicKeys/" "$secure_dir" || exit
-    cp -r "$wspace/scripts/keys/production/CACerts/" "$secure_dir" || exit
-else
-    cp -r "$wspace/scripts/keys/development/publicKeys/" "$secure_dir" || exit
-    cp -r "$wspace/scripts/keys/development/CACerts/" "$secure_dir" || exit
-fi
+cp -r "$wspace/keys/development/publicKeys/" "$secure_dir" || exit
+cp -r "$wspace/keys/development/CACerts/" "$secure_dir" || exit
 
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
@@ -166,7 +161,7 @@ fi
 "$avs_dir/stage" "$opt_dir" || exit
 "$swup_dir/stage" "$opt_dir" || exit
 "$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
-"$audiopath_dir/stage" "$opt_dir" --product=professor || exit
+"$audiopath_dir/stage" --product=professor "$opt_dir" || exit
 "$audiopath64_dir/stage" "$opt_dir" --only-vfe --product=professor || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlesass_dir/stage" "$opt_dir" || exit
@@ -184,26 +179,10 @@ fi
 "$datacollection_dir/stage" "$opt_dir" || exit
 "$sadi_dir/stage" "$opt_dir" || exit
 
-# Workaround for a bug in CastleAudioPath-qc8017_64 Release/Castle-Fork/0.2.7-20452
-if [ -e "$opt_dir/bin/libpryon.so" ]; then
-    echo "libpryon.so got installed"
-else
-    echo "oops, libpryon.so did not get installed, fixing..."
-    cp "$audiopath64_dir/bin/libpryon.so" "$opt_dir/bin/libpryon.so" || exit
-fi
-
-# Temporarily disable Vfe until HSP with TDM/I2S driver fix is available
-if [ -e "$opt_dir/etc/Shepherd-vfe.xml" ]; then
-    mv "$opt_dir/etc/Shepherd-vfe.xml" "$opt_dir/etc/Shepherd-vfe.xml.disable"
-fi
-
 # ----------------------------------------------------------------------------
 
 cd "$opt_dir"/lib || exit
 rm -f *.a
-
-# Workaround for CASTLE-9311: "libuuid.so missing from Riviera-HSP 2.4"
-cp "$riviera_toolchain_dir/sdk/sysroots/aarch64-oe-linux/lib/libuuid.so.1" "$opt_dir"/lib || exit
 
 PackageName=SoundTouch
 
