@@ -97,7 +97,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@a53326b2c99831b1f3fceaac5b13ea50f0ae8b48"
+    "selected_version": "master@717c3497e2467db6ee80a332c5da66e327edb1c3"
   },
   {
     "name": "CastleProductUIAssets",
@@ -165,7 +165,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/0.3.4-68+c3828ad"
+    "selected_version": "Continuous/master/0.3.4-71+d8526d5"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
