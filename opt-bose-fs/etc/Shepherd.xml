@@ -16,9 +16,9 @@
     <arg>-c/opt/Bose/etc/UpnpSource.xml</arg>
   </daemon>
 
-  <daemon name="BoseApp"
+  <daemon name="CAPS"
           recovery="reboot">
-    <arg>-c/opt/Bose/etc/BoseApp.xml</arg>
+    <arg>-c/opt/Bose/etc/CAPS.xml</arg>
   </daemon>
 
   <daemon name="STSCertified"/>
