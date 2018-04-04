@@ -15,7 +15,7 @@ wspace=$(cd "$here/.." && echo "$PWD") || exit
 
 release_xml=$wspace/LpmManifestFiles/release_lpm_package.xml
 nightly_xml=$wspace/LpmManifestFiles/nightly_lpm_package.xml
-continuous=$wspace/LpmManifestFiles/continuous_lpm_package.xml
+continuous_xml=$wspace/LpmManifestFiles/continuous_lpm_package.xml
 
 riviera_lpm_tools_dir=$(components get RivieraLpmTools installed_location) || exit
 
@@ -44,8 +44,8 @@ elif [ "$build_type" == "Nightly" ]; then
     cp $nightly_xml $builds_dir/lpm_package.xml || exit
     python2.7 $riviera_lpm_tools_dir/tools/blob/blob_utility.py --pack $nightly_xml $builds_dir --build_type $build_type || exit
 elif [ "$build_type" == "Continuous" ]; then
-    cp $continuous $builds_dir/lpm_package.xml || exit
-    python2.7 $riviera_lpm_tools_dir/tools/blob/blob_utility.py --pack $continuous $builds_dir --build_type $build_type || exit
+    cp $continuous_xml $builds_dir/lpm_package.xml || exit
+    python2.7 $riviera_lpm_tools_dir/tools/blob/blob_utility.py --pack $continuous_xml $builds_dir --build_type $build_type || exit
 else
     echo >&2 "$0: Error: Please use a build type of Release, Continuous, or Nightly"
     exit 1
