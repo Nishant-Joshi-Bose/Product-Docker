@@ -31,7 +31,7 @@
         <entry chip="lpm_professor" combine="True" name="professor.bin" path="/home/softlib/verisoft/ProfessorLPM-App/Continuous/trunk/latest/DP2/lpm_*.bin" version="filename" />
         <entry chip="lpm_professor" combine="True" name="professor_bl.bin" path="/home/softlib/verisoft/ProfessorLPM-BL/Release/trunk/0.2.0.1674/lpm_bootloader_0.2.0.1674.bin" version="filename" />
         <entry name="f0.bin" path="/home/softlib/verisoft/A4V-F0/Release/trunk/1.7.1.12103/RIVIERA_F0_1.7.1.12103.bin" version="filename" />
-        <entry name="darr.bin" path="/home/softlib/verisoft/A4V-WirelessAudio/Release/trunk/34.000.12148/wam_34.000.12148.bin" version="34" />
+        <entry name="darr.bin"        path="/home/softlib/verisoft/A4V-WirelessAudio/Release/trunk/25.000.11510/wam_25.000.11510.bin" version="25" />
         <entry name="ERC.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Continuous/trunk/latest/Professor/upd/ERC.upd" version="dynamic" />
         <entry name="RESET_ERC.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Continuous/trunk/latest/Professor/upd/RESET_ERC.upd" version="dynamic" />
         <entry name="SMRT00.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Continuous/trunk/latest/Professor/upd/SMRT00.upd" version="dynamic" />
