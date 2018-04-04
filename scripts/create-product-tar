@@ -12,6 +12,7 @@ import subprocess
 import shutil
 import logging
 import tarfile
+import zipfile
 from platform import system 
 from shlex import split
 from glob import glob
@@ -74,8 +75,10 @@ def os_arch():
 Path values set as first step via create_stage
 '''
 riviera_hsp_images_dir = ""
+riviera_tools_dir = ""
 swupdate_dir = ""
 ipks_dir = ""
+product_update_zip = "" 
 stage = ""
 stage_package_dir = ""
 output_dir = ""
@@ -85,17 +88,26 @@ output_dir = ""
 '''
 def create_stage(name, workspace):
     global riviera_hsp_images_dir
+    global riviera_tools_dir
     global swupdate_dir
     global ipks_dir
     global stage
     global stage_package_dir
+    global product_update_zip
 
     riviera_hsp_images_dir = execute_cmd_on_host("components get Riviera-HSP-Images installed_location").rstrip()
+    riviera_tools_dir =  execute_cmd_on_host("components get Riviera-Toolchain installed_location").rstrip()
     swupdate_dir = execute_cmd_on_host("components get SoftwareUpdate-qc8017_32 installed_location").rstrip()    
     ipks_dir = os.path.join(workspace, 'builds/Release')
+    product_update_zip = os.path.join(ipks_dir, 'product_update.zip')
     logging.info("Riviera HSP [%s]" %(riviera_hsp_images_dir))
+    logging.info("Riviera Tools [%s]" %(riviera_tools_dir))
     logging.info("Softwareupdate [%s]" %(swupdate_dir))
     
+    if not os.path.exists(product_update_zip):
+        logging.error("Required [%s] does not exist. Cannot proceed" %(product_update_zip))
+        return -10, "Required product_update.zip does not exist."
+
     stage = os.path.join(workspace, 'builds/Release/product-package-stage')
     stage_package_dir = os.path.join(stage, 'product')
     logging.debug("Stage [%s]" %(stage))
@@ -221,8 +233,6 @@ def create_ext4_partition(input_ext4, partition_name, partition_size):
     if not os.path.isfile(input_ext4_full):
         return 71, "Cannot create new EXT4 partition"
         
-    ''' cleanup extracted directory '''
-    shutil.rmtree(extract_dir)
     return 0, ""
 
 def install_ipk(ipks_dir, ipk_name, offline_dir):
@@ -245,7 +255,6 @@ def install_ipk(ipks_dir, ipk_name, offline_dir):
         logging.debug("\t\tExecuting [%s]", opkg_cmd)
         args = split(opkg_cmd)
         subprocess.call(args)
-        #execute_cmd_on_host(opkg_cmd)
     except:
         logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
         return 92, "Unknown error while installing ipk"
@@ -269,6 +278,18 @@ def perform_sed(input_file, orig_str, new_str):
         return 95, "Unknown error while replacing string"
     return 0, ""
 
+def revoke_dir_permission(path):
+    cmd = "find " + path + " -type f -exec chmod 440 {} \;"
+    execute_cmd_on_host( cmd )
+    cmd = "find " + path + " -type d -exec chmod 550 {} \;"
+    execute_cmd_on_host( cmd )
+    return 0, ""
+
+def give_dir_permission(path):
+    cmd = "chmod -R 755 " + path
+    execute_cmd_on_host( cmd )
+    return 0, ""
+        
 def create_bose_partition(is_without_lpm, development, ipks_to_install):
     retVal = 0
     retStr = ""
@@ -305,10 +326,6 @@ def create_bose_partition(is_without_lpm, development, ipks_to_install):
         retVal, retStr = perform_sed(os.path.join(extract_dir, "update/status"), 
                                       "Status: install user unpacked", 
                                       "Status: install user installed")
-        ''' Change permission for opt/Bose/etc/secure '''
-        cmd = 'fakeroot chmod -R 440 ' + os.path.join(extract_dir, "etc/secure")
-        logging.info("\t\tExecuting: [%s]" %(cmd))
-        execute_cmd_on_host(cmd)
         if retVal != 0:
             return retVal, retStr        
         ''' remove offline installation directory '''
@@ -317,11 +334,38 @@ def create_bose_partition(is_without_lpm, development, ipks_to_install):
         ''' copy lpm.ipk if is_without_lpm not true '''
         if not is_without_lpm:
             logging.info("\t\tCopying LPM updater IPK")
-            shutil.copy2(os.path.join(ipks_dir, "lpm_updater.ipk"), extract_dir)            
-
+            product_update_zip = os.path.join(ipks_dir, 'product_update.zip')
+            product_update_dir = os.path.join(ipks_dir, 'product_update')
+            zip_ref = zipfile.ZipFile(product_update_zip, 'r')
+            if not os.path.exists(product_update_dir): 
+                os.makedirs(product_update_dir)            
+            zip_ref.extractall(product_update_dir)
+            zip_ref.close()
+            shutil.copy2(os.path.join(product_update_dir, "lpm_updater.ipk"), extract_dir)            
+            shutil.copy2(os.path.join(product_update_dir, "lpm_updater.ipk.sig"), extract_dir)            
+            shutil.copy2(os.path.join(product_update_dir, "SWUpdateInstallSequence.json"), extract_dir)            
+            shutil.copy2(os.path.join(product_update_dir, "SWUpdateInstallSequence.json.sig"), extract_dir)            
+            ''' remove current stage '''
+            try:
+                shutil.rmtree(product_update_dir)
+            except:
+                logging.error("\tCannot delete extracted product_update_dir")
+        ''' Set permission to 440 '''        
+        retVal, retStr = revoke_dir_permission(os.path.join(extract_dir, "etc/secure"))
+        if retVal != 0:
+            return retVal, retStr 
         ''' ------------ Make new partition ------------ '''
         logging.info("\tRecreate")
         retVal, retStr = create_ext4_partition("bose.ext4", "bose", partition_size)
+        if retVal != 0:
+            return retVal, retStr 
+
+        ''' Set permission to 755 '''
+        retVal, retStr = give_dir_permission(os.path.join(extract_dir, "etc/secure"))
+        if retVal != 0:
+            return retVal, retStr 
+        ''' cleanup extracted directory '''
+        shutil.rmtree(extract_dir)
     except:
         logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
         return 83, "Unknown error while creating Bose partition"
@@ -344,15 +388,60 @@ def create_bose_persist_partition(is_without_lpm, development):
             jsonStr = ' {"SwUpComponents":{"elements":[{"name":"lpm_updater","fileName":"lpm_updater.ipk","filePath":"/opt/Bose","status":"STATUS_START","retryCount":3,"backupIpkPath":"","isLocalUpdate":true}]}} '
             with open(os.path.join(extract_dir, 'updateSwUpComponentStatus.dat'), 'w') as outfile:  
                 outfile.write(jsonStr)
-
+        
         logging.info("\tRecreate")
         retVal, retStr = create_ext4_partition("bose-persist.ext4", "bose-persist", partition_size)
+        ''' cleanup extracted directory '''
+        shutil.rmtree(extract_dir)
     except:
         logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
         return 93, "Unknown error while creating Bose-persist partition"
     
     return retVal, retStr
     
+def sign_images():
+    retVal = 0
+    retStr = ""
+    images_path = stage_package_dir
+    os.chdir(images_path)
+    logging.info("Setting current Working dir to [%s]" %(os.getcwd()))
+    fh_loader = os.path.join(riviera_tools_dir, "sdk/fh_loader/fh_loader")
+    sectool = os.path.join(riviera_tools_dir, "sdk/sectools/sectools.py")
+    sectool_cfgfile = os.path.join(riviera_tools_dir, "sdk/sectools/config/bose/bose_secimage.xml")
+    if not os.path.isfile(fh_loader):
+        return 101, "fh_loader tool not present"
+    if not os.path.isfile(sectool):
+        return 102, "sectool not present"
+    if not os.path.isfile(sectool_cfgfile):
+        return 103, "sectool configuration file not present"
+
+    fh_loader_cmd = fh_loader + " --noreset --zlpawarehost=1 --createdigests --sendxml=rawprogram0_no_persist.xml,patch0.xml"
+    logging.info("Creating digest using [%s]" %(fh_loader_cmd))
+    logging.info("%s" %(execute_cmd_on_host(fh_loader_cmd)))
+    if not os.path.isfile(os.path.join(images_path, "ChainedTableOfDigests.bin")):
+        return 104, "File ChainedTableOfDigests.bin not created"
+    if not os.path.isfile(os.path.join(images_path, "DigestsToSign.bin.mbn")):
+        return 105, "File DigestsToSign.bin.mbn not created"
+    if not os.path.isfile(os.path.join(images_path, "DIGEST_TABLE.bin")):
+        return 106, "File DIGEST_TABLE.bin not created"
+    
+    sectool_cmd = "python " + sectool + " secimage -i DigestsToSign.bin.mbn -g vip -c "  + sectool_cfgfile + " -sat"
+    logging.info("Signing digest using [%s]" %(sectool_cmd))
+    logging.info("%s" %(execute_cmd_on_host(sectool_cmd)))
+    
+    # copy output /scratch/components-cache/Continuous/dev/3.0-6-g90b2390/Riviera-Toolchain/sdk/sectools/secimage_output/8917/vip/
+    output_file = os.path.join(riviera_tools_dir, "sdk/sectools/secimage_output/8917/vip/DigestsToSign.bin.mbn")
+    if not os.path.isfile(output_file):
+        return 107, "Output Digest was not created."
+    shutil.copy2(output_file, images_path)
+
+    os.rename(os.path.join(images_path, "ChainedTableOfDigests.bin"), 
+        os.path.join(images_path, "ChainedTableOfDigests_no_persist.bin"))
+    os.rename(os.path.join(images_path, "DigestsToSign.bin.mbn"), 
+        os.path.join(images_path, "DigestsToSign_no_persist.bin.mbn"))
+    os.chdir(workspace)
+    return 0, ""
+
 def create_tar(output_filename, input_dir, current_working_dir=None):
     try:
         if current_working_dir:
@@ -408,6 +497,15 @@ def create_output(is_without_lpm, development):
     if retVal != 0:
         return retVal, retStr
     
+    if os.environ.get("GENERATE_HSP_SIGNATURES") == "1":
+        ''' Sign the image files 
+        '''
+        retVal, retStr = sign_images()
+        if retVal != 0:
+            return retVal, retStr
+    else:
+        logging.info("Not generating signatures in non-EC environment")
+
     ''' Create Package Tar ball and copy to output
     cd "$stage" || error_exit " cd $stage "
     output_package=$output_dir/product.tar
