@@ -440,6 +440,11 @@ public:
         return false;
     }
 
+    virtual bool HandleKeyEvent( LpmServiceMessages::IpcKeyInformation_t keyEvent )
+    {
+        return false;
+    }
+
 protected:
     ///
     /// The custom version of this function returns the custom ProductController.
