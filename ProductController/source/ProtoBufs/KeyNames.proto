@@ -17,8 +17,8 @@ enum keynames
 
 enum keyid
 {
-    VOLUME_UP_KEYID   = 2;
-    VOLUME_DOWN_KEYID = 3;
+    VOLUME_DOWN_KEYID = 2;
+    VOLUME_UP_KEYID   = 3;
     PRESET_1_KEYID    = 41;
     PRESET_2_KEYID    = 42;
     PRESET_3_KEYID    = 43;
