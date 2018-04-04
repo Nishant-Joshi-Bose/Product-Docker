@@ -263,40 +263,6 @@ fi
 if [ -f /opt/Bose/bin/ProgressReport ]; then
 	/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
 fi
-# ---8<------8<------8<------8<------8<------8<------8<------8<------8<---
-# Try to kill services before installation begin to make sure
-#   minimal files are in use due to in-place installation.
-#   This is done for IP2. Needs to be removed / modified in IP3 to 
-#   use Product & Shepherd instead.
-echo "Stopping all services except SoftwareupdateService, NetManager"
-pkill Telemetry
-pkill APServer
-pkill CLIServer
-pkill LPMService
-pkill Passport
-pkill AVS
-pkill -9 Professor
-pkill avahi-daemon
-pkill A4VVideoManagerService
-pkill A4VRemoteCommunicationService
-pkill A4VQuickSetService
-pkill IoT
-pkill UpnpSource
-pkill Vfe
-pkill FrontDoor
-pkill BoseApp
-pkill CAPS
-pkill DataCollectionService
-pkill btproperty
-pkill STSCertified
-pkill BluetoothManager
-pkill BT
-pkill BTSource
-pkill BLESetup
-pkill PtsServer
-pkill SASSController
-# we are leaving telnet, avahi-daemon, SoftwareUpdateService, NetManager alive.
-# ---8<------8<------8<------8<------8<------8<------8<------8<------8<---
 
 exit 0
 EOF
