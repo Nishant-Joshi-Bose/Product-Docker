@@ -94,21 +94,6 @@
         }, 
         {
             "keyList": [
-                3, 
-                2, 
-                1
-            ], 
-            "blastDevices": [
-                "DEVICE_TYPE_TV", 
-                "DEVICE_TYPE_SMART_TV", 
-                "DEVICE_TYPE_GAME", 
-                "DEVICE_TYPE_BD_DVD", 
-                "DEVICE_TYPE_CBL_SAT"
-            ], 
-            "zone": "ZONE7"
-        }, 
-        {
-            "keyList": [
                 25, 
                 24, 
                 20
