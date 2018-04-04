@@ -266,6 +266,7 @@ pkill BLESetup
 pkill BTSource
 pkill IoT
 pkill BoseApp
+pkill CAPS
 pkill Eddie
 pkill FrontDoor
 pkill SASSController
