@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.21.41591.2753749"
+    "selected_version": "Continuous/Castle-Fork/2018-03-29_1506"
   },
   {
     "name": "bose-opkg-utils",
@@ -81,7 +81,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.11-82+91acdf1"
+    "selected_version": "Continuous/master/0.3.11-85+795303f"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -109,7 +109,7 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/0.4.1-197+f8fc010"
+    "selected_version": "Release/master/0.4.2-203+47428b8"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -165,7 +165,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/0.3.4-68+c3828ad"
+    "selected_version": "Release/master/0.3.5-74+45c1f0c"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -173,11 +173,11 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.21.41591.2753749"
+    "selected_version": "Continuous/Castle-Fork/2018-03-29_1506"
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.3.2-28+9c8acb3"
+    "selected_version": "Continuous/master/0.3.2-31+3f7b62d"
   },
   {
     "name": "unittest-cpp-qc8017_32",
@@ -189,6 +189,6 @@
   },
   {
     "name": "WiFi-Setup-Webpage",
-    "selected_version": "master@d788ac402061fcfcfe165c37b19ec9587bf3124f"
+    "selected_version": "master@72ae3d02d33d1bea141eed4dcc5e597bafa9d0c8"
   }
 ]
