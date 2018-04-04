@@ -145,16 +145,15 @@ EOF
 
 # Copy public keys in FS for development key. EC will take care of generation for Production 
 secure_dir=$opt_dir/etc/secure/
-if [ -e $secure_dir ]
-then
-    chmod -R 755 $secure_dir || exit
+if [ -e "$secure_dir" ]; then
+    chmod -R 755 "$secure_dir" || exit
 fi
 
 mkdir -p "$secure_dir" || exit
 cp -r "$wspace/keys/development/publicKeys/" "$secure_dir" || exit
 cp -r "$wspace/keys/development/CACerts/" "$secure_dir" || exit
-find $secure_dir -type d -exec chmod 550 {} \; || exit
-find $secure_dir -type f -exec chmod 440 {} \; || exit
+find "$secure_dir" -type d -exec chmod 550 {} \; || exit
+find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
@@ -347,4 +346,4 @@ ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
 echo "Created $ipk"
 
 # reverting secure directory permission, to avoid issue in "make clean" / rebuild
-chmod -R 755 $secure_dir || exit
+chmod -R 755 "$secure_dir" || exit
