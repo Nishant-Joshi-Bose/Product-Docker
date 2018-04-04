@@ -153,11 +153,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.3.21-454+708f25c"
+    "selected_version": "Release/master/0.3.22-457+7590ccd"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.22.41690.2763904"
+    "selected_version": "Continuous/Castle-Fork/2018-04-04_1319"
   },
   {
     "name": "SystemEventService-qc8017_32",
