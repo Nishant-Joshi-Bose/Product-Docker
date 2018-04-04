@@ -1,11 +1,11 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@f9ee29913983671a60d57409a64182c191556a4e"
+    "selected_version": "master@914aee003bd3d79ee545ce661a3a614528eb1baa"
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@37f40a3667d032bc477c6819ccfa9e4d154b7ca8"
+    "selected_version": "master@ff92635e305f1373310a26be927be7f6b56c368c"
   },
   {
     "name": "BLERemoteXCVR",
@@ -13,11 +13,11 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@ca03f527a38ec0a6dcc41d64d01b74327a5655cd"
+    "selected_version": "master@8fb5d171672e8703682b7ddd768874f17ecd5238"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-04-04_0856"
+    "selected_version": "Release/Castle-Fork/0.3.22.41690.2763904"
   },
   {
     "name": "bose-opkg-utils",
@@ -105,11 +105,11 @@
   },
   {
     "name": "CastleProductUIAssets",
-    "selected_version": "master@bde707144a74f923837a1dbc785717619a3ad203"
+    "selected_version": "master@a645516388a09ad39dbab7b63535e9a910fa2dff"
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@df32329b45183a449c9e41d8938e0049451bfce0"
+    "selected_version": "master@43e8c68d5b938bf21542ad0210e53be98728c537"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -173,11 +173,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.3.21-454+708f25c"
+    "selected_version": "Release/master/0.3.22-457+7590ccd"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-04-04_0856"
+    "selected_version": "Release/Castle-Fork/0.3.22.41690.2763904"
   },
   {
     "name": "SystemEventService-qc8017_32",
@@ -193,6 +193,6 @@
   },
   {
     "name": "WiFi-Setup-Webpage",
-    "selected_version": "master@e469be8fdeb0c699c1b1a311bee4aadbceec010a"
+    "selected_version": "master@90e0146833fe51e8284650c6d7f9d0af82fb6a46"
   }
 ]
