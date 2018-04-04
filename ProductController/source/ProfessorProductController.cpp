@@ -160,7 +160,15 @@ ProfessorProductController::ProfessorProductController( ) :
     m_IntentHandler( *GetTask(),
                      m_CliClientMT,
                      m_FrontDoorClientIF,
-                     *this )
+                     *this ),
+
+    ///
+    /// Intitialization for the Product Message Handler Reference
+    ///
+    m_ProductMessageHandler( static_cast< Callback < ProductMessage > >
+                             ( std::bind( &ProfessorProductController::HandleMessage,
+                                          this,
+                                          std::placeholders::_1 ) ) )
 {
 
 }
@@ -184,12 +192,8 @@ void ProfessorProductController::Run( )
     ///
     /// Top State
     ///
-
-
-
-  auto* stateTop = new ProductControllerStateTop( GetHsm( ),
+    auto* stateTop = new ProductControllerStateTop( GetHsm( ),
                                                     nullptr );
-
     ///
     /// Booting State and Various System Level States
     ///
@@ -595,11 +599,7 @@ void ProfessorProductController::Run( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 Callback < ProductMessage > ProfessorProductController::GetMessageHandler( )
 {
-    Callback < ProductMessage >
-    ProductMessageHandler( std::bind( &ProfessorProductController::HandleMessage,
-                                      this,
-                                      std::placeholders::_1 ) );
-    return ProductMessageHandler;
+    return m_ProductMessageHandler;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -613,7 +613,6 @@ std::shared_ptr< CustomProductLpmHardwareInterface >& ProfessorProductController
 {
     return m_ProductLpmHardwareInterface;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -662,9 +661,6 @@ std::shared_ptr< ProductBLERemoteManager>& ProfessorProductController::GetBLERem
 {
     return m_ProductBLERemoteManager;
 }
-
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -740,7 +736,7 @@ bool ProfessorProductController::IsLowPowerExited( ) const
 
     return( m_IsLpmReady            and
             IsSassReady()           and
-            m_IsAudioPathReady      );
+            m_IsAudioPathReady );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -932,8 +928,7 @@ void ProfessorProductController::HandleSelectSourceSlot( ProductSTSAccount::Prod
     ProductMessage message;
     message.mutable_selectsourceslot( )->set_slot( static_cast< ProductSTS::ProductSourceSlot >( sourceSlot ) );
 
-    IL::BreakThread( std::bind( &ProfessorProductController::HandleMessage,
-                                this,
+    IL::BreakThread( std::bind( GetMessageHandler( ),
                                 message ),
                      GetTask( ) );
 }
@@ -1361,7 +1356,11 @@ void ProfessorProductController::HandlePutOpticalAutoWake(
     {
         ProductMessage message;
         message.mutable_autowakestatus( )->set_active( req.enabled( ) );
-        HandleMessage( message );
+
+        IL::BreakThread( std::bind( GetMessageHandler( ),
+                                    message ),
+                         GetTask( ) );
+
         HandleGetOpticalAutoWake( respCb, errorCb );
     }
     else
@@ -1425,6 +1424,33 @@ void ProfessorProductController::NotifyFrontdoorAndStoreOpticalAutoWakeSetting( 
     {
         BOSE_ERROR( s_logger, "OpticalAutoWake store persistence error - %s", e.what( ) );
     }
+}
+
+void ProfessorProductController::InitializeKeyIdToKeyNameMap()
+{
+    BOSE_INFO( s_logger, "ProfessorProductController::%s:", __func__ );
+
+    // Professor team need to coordinate with the UI team to know which keys are of interest to them
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::VOLUME_UP_KEYID )]     = KeyNamesPB::keynames::VOLUME_UP;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::VOLUME_DOWN_KEYID )]   = KeyNamesPB::keynames::VOLUME_DOWN;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::PRESET_1_KEYID )]      = KeyNamesPB::keynames::PRESET_1;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::PRESET_2_KEYID )]      = KeyNamesPB::keynames::PRESET_2;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::PRESET_3_KEYID )]      = KeyNamesPB::keynames::PRESET_3;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::PRESET_4_KEYID )]      = KeyNamesPB::keynames::PRESET_4;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::PRESET_5_KEYID )]      = KeyNamesPB::keynames::PRESET_5;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_IR, KeyNamesPB::keyid::PRESET_6_KEYID )]      = KeyNamesPB::keynames::PRESET_6;
+
+
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::VOLUME_UP_KEYID )]     = KeyNamesPB::keynames::VOLUME_UP;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::VOLUME_DOWN_KEYID )]   = KeyNamesPB::keynames::VOLUME_DOWN;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::PRESET_1_KEYID )]      = KeyNamesPB::keynames::PRESET_1;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::PRESET_2_KEYID )]      = KeyNamesPB::keynames::PRESET_2;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::PRESET_3_KEYID )]      = KeyNamesPB::keynames::PRESET_3;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::PRESET_4_KEYID )]      = KeyNamesPB::keynames::PRESET_4;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::PRESET_5_KEYID )]      = KeyNamesPB::keynames::PRESET_5;
+    m_keyIdToKeyNameMap[std::make_pair( KeyOrigin_t::KEY_ORIGIN_RF, KeyNamesPB::keyid::PRESET_6_KEYID )]      = KeyNamesPB::keynames::PRESET_6;
+
+    return;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

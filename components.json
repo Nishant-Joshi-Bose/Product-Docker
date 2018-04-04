@@ -5,7 +5,7 @@
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@73b02107db997e54eaa59dbf49c442d88a80e773"
+    "selected_version": "master@37f40a3667d032bc477c6819ccfa9e4d154b7ca8"
   },
   {
     "name": "BLERemoteXCVR",
@@ -101,7 +101,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@b42dbffa9f59bcee1e74b59077d180b99ef41bf0"
+    "selected_version": "master@717c3497e2467db6ee80a332c5da66e327edb1c3"
   },
   {
     "name": "CastleProductUIAssets",
