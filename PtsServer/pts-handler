@@ -6,6 +6,7 @@
 #
 import os
 import sys
+import subprocess
 
 debug = False
 
@@ -118,6 +119,37 @@ Cache-Control: no-cache\r
         call("sh", "-c", "head -20 /mnt/nv/product-persistence/*")
         call("ls", "-lHt", "/mnt/nv/BoseLog")
         call("ps")
+        sys.exit()
+
+    if path == "/reflash":
+        print """\
+HTTP/1.1 200 OK\r
+Content-Type: text/html\r
+Cache-Control: no-cache\r
+\r
+<html>
+<head>
+<title>Reflash Mode</title>
+<style type="text/css">
+ body {
+   font-family: Verdana, Arial, Helvetica, sans-serif;
+ }
+</style>
+</head>
+<body>
+<h1>Entering Reflash Mode</h1>
+<p>Please wait.
+</body>
+</html>
+"""
+        sys.stdout.flush()
+
+        # Sleep to give the output a chance to get out.
+        subprocess.call("""(
+  exec >&2;
+  sleep 3;
+  PlatformResetIntoQfil
+) &""", shell=True)
         sys.exit()
 
     # Discard any query parameters from paths like
