@@ -149,16 +149,17 @@ if (( \$(date +%s) < $t )); then
 fi
 EOF
 
-# Copy public keys in FS based on DEPLOY_ENV flag exported
+# Copy public keys in FS for development key. EC will take care of generation for Production 
 secure_dir=$opt_dir/etc/secure/
-mkdir -p "$secure_dir" || exit
-if [ "$DEPLOY_ENV" = prod ]; then
-    cp -r "$wspace/scripts/keys/production/publicKeys/" "$secure_dir" || exit
-    cp -r "$wspace/scripts/keys/production/CACerts/" "$secure_dir" || exit
-else
-    cp -r "$wspace/scripts/keys/development/publicKeys/" "$secure_dir" || exit
-    cp -r "$wspace/scripts/keys/development/CACerts/" "$secure_dir" || exit
+if [ -e "$secure_dir" ]; then
+    chmod -R 755 "$secure_dir" || exit
 fi
+
+mkdir -p "$secure_dir" || exit
+cp -r "$wspace/keys/development/publicKeys/" "$secure_dir" || exit
+cp -r "$wspace/keys/development/CACerts/" "$secure_dir" || exit
+find "$secure_dir" -type d -exec chmod 550 {} \; || exit
+find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
@@ -237,7 +238,10 @@ fi
 # the UEI qsp libraries (libqsp.so, libqsp_hal.so); remove it when
 # libraries linked against our libcurl version are available
 ln -sf /usr/lib/libcurl.so.5 /opt/Bose/lib/libcurl.so.4
-chmod -R 440 /opt/Bose/etc/secure || exit
+
+# make sure the public key file has read only permission
+find /opt/Bose/etc/secure/ -type d -exec /bin/busybox chmod 550 {} \;
+find /opt/Bose/etc/secure/ -type f -exec /bin/busybox chmod 440 {} \;
 
 # Set Progress End
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 100
@@ -370,3 +374,6 @@ ipk=$output_dir/product.ipk
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
 echo "Created $ipk"
+
+# reverting secure directory permission, to avoid issue in "make clean" / rebuild
+chmod -R 755 "$secure_dir" || exit
