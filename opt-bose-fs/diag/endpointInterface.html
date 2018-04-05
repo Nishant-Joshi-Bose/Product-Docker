@@ -76,7 +76,6 @@
 
             function FindField(object,fields)
             {
-                if (typeof fields === "string") fields = fields.split('.');
                 if (fields.length>1)
                 {
                     object = object[fields[0]];
@@ -126,8 +125,9 @@
                         Configuration.fields.forEach(function(att){
 
                             console.log(att);
-                            var value = FindField(msg,att);
-                            output = output + att +":"+ JSON.stringify(value, null, 4) + "\n";
+                            att = att.split('.');
+                            var value = FindField(msg, att);
+                            output = output + att[att.length-1] +": "+ JSON.stringify(value, null, 4) + "\n";
                         });
                         generalOutputTextAreaElem.textContent = output + "\n\n" + generalOutputTextAreaElem.textContent;
                     }
