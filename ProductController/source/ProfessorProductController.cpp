@@ -150,7 +150,6 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     /// Member Variable Initialization
     ///
-    m_IsAudioPathReady( false ),
     m_IsAutoWakeEnabled( false ),
     m_Running( false ),
 
@@ -727,16 +726,16 @@ bool ProfessorProductController::IsBooted( ) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProfessorProductController::IsLowPowerExited( ) const
 {
-    BOSE_VERBOSE( s_logger, "------------ Product Controller Low Power Exit Check ---------------" );
-    BOSE_VERBOSE( s_logger, " " );
-    BOSE_VERBOSE( s_logger, "LPM Connected         :  %s", ( m_IsLpmReady       ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "SASS            Init  :  %s", ( IsSassReady()      ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, " " );
+    BOSE_INFO( s_logger, "------------ Product Controller Low Power Exit Check ---------------" );
+    BOSE_INFO( s_logger, " " );
+    BOSE_INFO( s_logger, "LPM Connected         :  %s", ( IsLpmReady()       ? "true" : "false" ) );
+    BOSE_INFO( s_logger, "Audio Path Connected  :  %s", ( IsAudioPathReady() ? "true" : "false" ) );
+    BOSE_INFO( s_logger, "SASS            Init  :  %s", ( IsSassReady()      ? "true" : "false" ) );
+    BOSE_INFO( s_logger, " " );
 
-    return( m_IsLpmReady            and
+    return( IsLpmReady()            and
             IsSassReady()           and
-            m_IsAudioPathReady );
+            IsAudioPathReady() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
