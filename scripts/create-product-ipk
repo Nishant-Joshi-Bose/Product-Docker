@@ -81,6 +81,7 @@ frontdoor_dir=$(components get FrontDoor-qc8017_32 installed_location) || exit
 qss_dir=$(components get A4VQuickSetService installed_location) || exit
 boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
 datacollection_dir=$(components get CastleDataCollectionClient-qc8017_32 installed_location) || exit
+datacollectionservice_dir=$(components get CastleDataCollectionService-qc8017_32 installed_location) || exit
 sadi_dir=$(components get SADI-qc8017_32 installed_location) || exit
 
 arch=arm-oemllib32-linux
@@ -121,7 +122,7 @@ stfs=$soundtouch_sdk/fs
 cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BLESetup "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BluetoothManager "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/BoseApp "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/CAPS "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BT "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BTSource "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
@@ -149,16 +150,17 @@ if (( \$(date +%s) < $t )); then
 fi
 EOF
 
-# Copy public keys in FS based on DEPLOY_ENV flag exported
+# Copy public keys in FS for development key. EC will take care of generation for Production 
 secure_dir=$opt_dir/etc/secure/
-mkdir -p "$secure_dir" || exit
-if [ "$DEPLOY_ENV" = prod ]; then
-    cp -r "$wspace/scripts/keys/production/publicKeys/" "$secure_dir" || exit
-    cp -r "$wspace/scripts/keys/production/CACerts/" "$secure_dir" || exit
-else
-    cp -r "$wspace/scripts/keys/development/publicKeys/" "$secure_dir" || exit
-    cp -r "$wspace/scripts/keys/development/CACerts/" "$secure_dir" || exit
+if [ -e "$secure_dir" ]; then
+    chmod -R 755 "$secure_dir" || exit
 fi
+
+mkdir -p "$secure_dir" || exit
+cp -r "$wspace/keys/development/publicKeys/" "$secure_dir" || exit
+cp -r "$wspace/keys/development/CACerts/" "$secure_dir" || exit
+find "$secure_dir" -type d -exec chmod 550 {} \; || exit
+find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
@@ -166,7 +168,7 @@ fi
 "$avs_dir/stage" "$opt_dir" || exit
 "$swup_dir/stage" "$opt_dir" || exit
 "$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
-"$audiopath_dir/stage" "$opt_dir" --product=professor || exit
+"$audiopath_dir/stage" --product=professor "$opt_dir" || exit
 "$audiopath64_dir/stage" "$opt_dir" --only-vfe --product=professor || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlesass_dir/stage" "$opt_dir" || exit
@@ -177,20 +179,13 @@ fi
 "$cli_dir/stage" "$opt_dir" || exit
 "$democontroller_dir/stage" "$opt_dir" || exit
 "$webkit_dir/stage" "$opt_dir" || exit
-"$productuiassets_dir/stage" --chimes=beta --type=flac "$opt_dir" || exit
+"$productuiassets_dir/stage" --chimes=SoundBar --type=flac "$opt_dir" || exit
 "$frontdoor_dir/stage" "$opt_dir" || exit
 "$galapagosclient_dir/stage" "$opt_dir" || exit
 "$httpproxy_dir/stage" "$opt_dir" || exit
 "$datacollection_dir/stage" "$opt_dir" || exit
+"$datacollectionservice_dir/stage" "$opt_dir" || exit
 "$sadi_dir/stage" "$opt_dir" || exit
-
-# Workaround for a bug in CastleAudioPath-qc8017_64 Release/Castle-Fork/0.2.7-20452
-if [ -e "$opt_dir/bin/libpryon.so" ]; then
-    echo "libpryon.so got installed"
-else
-    echo "oops, libpryon.so did not get installed, fixing..."
-    cp "$audiopath64_dir/bin/libpryon.so" "$opt_dir/bin/libpryon.so" || exit
-fi
 
 # Temporarily disable Vfe until HSP with TDM/I2S driver fix is available
 if [ -e "$opt_dir/etc/Shepherd-vfe.xml" ]; then
@@ -201,9 +196,6 @@ fi
 
 cd "$opt_dir"/lib || exit
 rm -f *.a
-
-# Workaround for CASTLE-9311: "libuuid.so missing from Riviera-HSP 2.4"
-cp "$riviera_toolchain_dir/sdk/sysroots/aarch64-oe-linux/lib/libuuid.so.1" "$opt_dir"/lib || exit
 
 PackageName=SoundTouch
 
@@ -239,6 +231,10 @@ fi
 ln -sf /usr/lib/libcurl.so.5 /opt/Bose/lib/libcurl.so.4
 chmod -R 440 /opt/Bose/etc/secure || exit
 
+# make sure the public key file has read only permission
+find /opt/Bose/etc/secure/ -type d -exec /bin/busybox chmod 550 {} \;
+find /opt/Bose/etc/secure/ -type f -exec /bin/busybox chmod 440 {} \;
+
 # Set Progress End
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 100
 exit 0
@@ -267,37 +263,6 @@ fi
 if [ -f /opt/Bose/bin/ProgressReport ]; then
 	/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
 fi
-# ---8<------8<------8<------8<------8<------8<------8<------8<------8<---
-# Try to kill services before installation begin to make sure
-#   minimal files are in use due to in-place installation.
-#   This is done for IP2. Needs to be removed / modified in IP3 to 
-#   use Product & Shepherd instead.
-echo "Stopping all services except SoftwareupdateService, NetManager"
-pkill Telemetry
-pkill APServer
-pkill CLIServer
-pkill LPMService
-pkill Passport
-pkill AVS
-pkill -9 Professor
-pkill avahi-daemon
-pkill A4VVideoManagerService
-pkill A4VRemoteCommunicationService
-pkill A4VQuickSetService
-pkill IoT
-pkill UpnpSource
-pkill Vfe
-pkill FrontDoor
-pkill BoseApp
-pkill STSCertified
-pkill BluetoothManager
-pkill BT
-pkill BTSource
-pkill BLESetup
-pkill PtsServer
-pkill SASSController
-# we are leaving telnet, avahi-daemon, SoftwareUpdateService, NetManager alive.
-# ---8<------8<------8<------8<------8<------8<------8<------8<------8<---
 
 exit 0
 EOF
@@ -370,3 +335,6 @@ ipk=$output_dir/product.ipk
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
 echo "Created $ipk"
+
+# reverting secure directory permission, to avoid issue in "make clean" / rebuild
+chmod -R 755 "$secure_dir" || exit

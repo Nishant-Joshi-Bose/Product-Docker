@@ -140,8 +140,8 @@ private:
     /// @brief The following methods handle interaction with the FrontDoor.
     ///
     //////////////////////////////////////////////////////////////////////////////////////////////
-    void HandleGet( ProductPb::AdaptIQStatus& );
-    void HandlePut( const ProductPb::AdaptIQReq, ProductPb::AdaptIQStatus& );
+    void HandleGet( const Callback<const ProductPb::AdaptIQStatus> & resp, const Callback<FrontDoor::Error> & errorRsp );
+    void HandlePut( const ProductPb::AdaptIQReq, const Callback<const ProductPb::AdaptIQStatus> & resp, const Callback<FrontDoor::Error> & errorRsp );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

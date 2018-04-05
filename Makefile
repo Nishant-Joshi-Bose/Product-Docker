@@ -27,20 +27,21 @@ check_tools:
 ifndef DONT_UPDATE_CASTLETOOLS
 	castletools-update
 endif
+ifndef DONT_INSTALL_COMPONENTS
 	components install
+endif
 
 CMAKE_USE_CCACHE := $(USE_CCACHE)
 
 A4VVIDEOMANAGERSERVICE_DIR = $(shell components get A4VVideoManagerService installed_location)
 A4VQUICKSETSERVICE_DIR = $(shell components get A4VQuickSetService installed_location)
 A4VREMOTECOMMUNICATIONSERVICE_DIR = $(shell components get A4VRemoteCommunicationService installed_location)
+RIVIERALPM_DIR = $(shell components get RivieraLPM installed_location)
+RIVIERA_LPM_TOOLS_DIR = $(shell components get RivieraLpmTools installed_location)
 PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
-RIVIERALPM_DIR = $(shell components get RivieraLPM installed_location)
-RIVIERA_LPM_TOOLS_DIR = $(shell components get RivieraLpmTools installed_location)
 TESTUTILS_DIR = $(shell components get CastleTestUtils installed_location)
-
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)

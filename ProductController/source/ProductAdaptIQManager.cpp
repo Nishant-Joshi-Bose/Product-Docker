@@ -29,6 +29,7 @@
 #include "ProductAdaptIQManager.h"
 #include "SharedProto.pb.h"
 #include "ProductEndpointDefines.h"
+#include "PGCErrorCodes.h"
 
 using namespace ProductPb;
 
@@ -106,18 +107,14 @@ void ProductAdaptIQManager::Run( )
 
     auto getFunc = [ this ]( const Callback<const AdaptIQStatus>& resp, const Callback<FrontDoor::Error>& errorRsp )
     {
-        AdaptIQStatus status;
-        HandleGet( status );
-        resp.Send( status );
+        HandleGet( resp, errorRsp );
     };
     AsyncCallback<Callback<AdaptIQStatus>, Callback<FrontDoor::Error> > getCb( getFunc, m_ProductTask );
     m_GetConnection = m_FrontDoorClient->RegisterGet( s_FrontDoorAdaptIQ, getCb );
 
     auto putFunc = [ this ]( const AdaptIQReq req, const Callback<const AdaptIQStatus>& resp, const Callback<FrontDoor::Error>& errorRsp )
     {
-        AdaptIQStatus respMsg;
-        HandlePut( req, respMsg );
-        resp.Send( respMsg );
+        HandlePut( req, resp, errorRsp );
     };
     AsyncCallback<const AdaptIQReq, Callback<AdaptIQStatus>, Callback<FrontDoor::Error>> putCb( putFunc, m_ProductTask );
     m_PutConnection = m_FrontDoorClient->RegisterPut<AdaptIQReq>( s_FrontDoorAdaptIQ, putCb );
@@ -202,10 +199,11 @@ void ProductAdaptIQManager::SetStatus( const ProductPb::AdaptIQStatus& status, b
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductAdaptIQManager::HandleGet( AdaptIQStatus& status )
+void ProductAdaptIQManager::HandleGet( const Callback<const AdaptIQStatus> & resp, const Callback<FrontDoor::Error> & errorRsp )
 {
-    status = m_status;
+    AdaptIQStatus status = m_status;
     SetDefaultProperties( status );
+    resp.Send( status );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -218,14 +216,16 @@ void ProductAdaptIQManager::HandleGet( AdaptIQStatus& status )
 ///
 /// @return
 ///
-///
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProductAdaptIQManager::HandlePut( const AdaptIQReq req, ProductPb::AdaptIQStatus& resp )
+void ProductAdaptIQManager::HandlePut( const AdaptIQReq req, const Callback<const AdaptIQStatus> & resp, const Callback<FrontDoor::Error> & errorRsp )
 {
     ProductMessage msg;
+    FrontDoor::Error error;
 
     if( !req.has_action() )
     {
+        error.set_message( "The AiQ request had no action." );
     }
     else if( req.action() == s_ActionEnter )
     {
@@ -245,6 +245,7 @@ void ProductAdaptIQManager::HandlePut( const AdaptIQReq req, ProductPb::AdaptIQS
     }
     else
     {
+        error.set_message( "The AiQ request had an invalid action: " + req.action() );
     }
 
     if( msg.has_aiqcontrol() )
@@ -253,10 +254,15 @@ void ProductAdaptIQManager::HandlePut( const AdaptIQReq req, ProductPb::AdaptIQS
         {
             m_ProductNotify( msg );
         }, m_ProductTask );
-    }
 
-    resp = m_status;
-    SetDefaultProperties( resp );
+        HandleGet( resp, errorRsp );
+    }
+    else if( error.has_message() )
+    {
+        error.set_code( PGCErrorCodes::ERROR_CODE_PRODUCT_CONTROLLER_CUSTOM );
+        error.set_subcode( PGCErrorCodes::ERROR_SUBCODE_AIQ );
+        errorRsp.Send( error );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

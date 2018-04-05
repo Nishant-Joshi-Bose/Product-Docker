@@ -61,7 +61,6 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class CustomProductLpmHardwareInterface;
 class ProductSystemManager;
-class ProductNetworkManager;
 class CustomProductAudioService;
 class ProductCecHelper;
 class ProductCommandLine;
@@ -108,7 +107,7 @@ public:
     ///         product message events (based on ProductMessage Protocol Buffers) can be sent.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    Callback < ProductMessage > GetMessageHandler( );
+    Callback < ProductMessage > GetMessageHandler( ) override;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -158,7 +157,6 @@ public:
     //////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< ProductCecHelper >& GetCecHelper( );
 
-
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following method is used to get a shared pointer reference to the DspHelper
@@ -184,22 +182,9 @@ public:
     ///        product controller.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool     IsBooted( )                 const override;
-    bool     IsNetworkConfigured( )      const override;
-    bool     IsNetworkConnected( )       const override;
-    uint32_t GetWifiProfileCount( )      const override;
-    bool     IsAutoWakeEnabled( )        const override;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following declaration is used to determine if the audio path process is up and
-    ///        running.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool IsAudioPathReady() const
-    {
-        return m_IsAudioPathReady;
-    }
+    bool  IsBooted( )          const override;
+    bool  IsLowPowerExited()   const override;
+    bool  IsAutoWakeEnabled( ) const override;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -225,6 +210,13 @@ public:
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     NetManager::Protobuf::OperationalMode GetWiFiOperationalMode( ) override;
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @name   InitializeKeyIdToKeyNameMap
+    //  @brief  This function is needed to create a mapping of keys to keyNames
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    void InitializeKeyIdToKeyNameMap() override;
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following method is called to handle product controller messages, which are
@@ -252,10 +244,6 @@ public:
 
     std::unique_ptr<LightBar::LightBarController> m_lightbarController;
 
-    void ClearWifiProfileCount() override;
-
-    void PerformRequestforWiFiProfiles() override;
-
     PassportPB::ContentItem GetOOBDefaultLastContentItem() const override;
 
     bool CanPersistAsLastContentItem( const SoundTouchInterface::ContentItem &ci ) const override;
@@ -277,7 +265,6 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
     std::shared_ptr< ProductSystemManager              > m_ProductSystemManager;
-    std::shared_ptr< ProductNetworkManager             > m_ProductNetworkManager;
     std::shared_ptr< ProductCommandLine                > m_ProductCommandLine;
     std::shared_ptr< CustomProductKeyInputManager      > m_ProductKeyInputManager;
     std::shared_ptr< ProductCecHelper                  > m_ProductCecHelper;
@@ -295,8 +282,6 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     bool m_IsAudioPathReady;
-    bool m_IsNetworkConfigured;
-    bool m_IsNetworkConnected;
     bool m_IsAutoWakeEnabled;
     bool m_Running;
 
@@ -357,6 +342,14 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     IntentHandler m_IntentHandler;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following member is used to store the product controller callback function to which
+    ///         product message events (based on ProductMessage Protocol Buffers) can be sent.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    Callback < ProductMessage > m_ProductMessageHandler;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
