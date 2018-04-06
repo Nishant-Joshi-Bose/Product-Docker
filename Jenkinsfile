@@ -43,7 +43,7 @@ def Galapagos_Client = ["GalapagosClient/Authentication",
 
 def STS_Component = ["STS-Component/Deezer_Component_d",
                      "STS-Component/Amazon_Component_d",
-		     "STS-Component/Spotify_Component_d"]
+                     "STS-Component/Spotify_Component_d"]
 
 def STS_Integrated = ["STS-Integrated/Amazon_Integrated",
                       "STS-Integrated/Deezer_Integrated",
