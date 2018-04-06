@@ -1,7 +1,11 @@
 [
   {
     "name": "AVS-qc8017_32",
+<<<<<<< HEAD
     "selected_version": "Release/Castle-Fork/0.4.1.41755.2767113"
+=======
+    "selected_version": "Release/Castle-Fork/0.4.1.41748.2766811"
+>>>>>>> origin
   },
   {
     "name": "bose-opkg-utils",
@@ -85,7 +89,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@a73a0369ed4bf7a8141d2686215e34085729cea9"
+    "selected_version": "master@e743b275252068c39e2cf00c2669023da674527e"
   },
   {
     "name": "CastleProductUIAssets",

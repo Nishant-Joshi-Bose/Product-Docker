@@ -130,6 +130,31 @@ def create_stage(name, workspace):
     
     return 0, ""
 
+def copy_signing_tools_to_stage():
+    logging.info("Adding HSP signing Tools to hsp-tools")
+    dest = os.path.join(os.path.abspath(os.path.join(stage_package_dir, os.pardir)), "hsp-tools")
+    if not os.path.exists(dest):
+        os.makedirs(dest)
+    src = os.path.join(riviera_tools_dir, "sdk/fh_loader/fh_loader")
+    try:
+        logging.info("Copying [%s] [%s]" %(src, dest))
+        shutil.copy2(src, dest)
+    except:
+        logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+        return -28, "Cannot copy fh_loader to hsp_tools"
+
+    src = os.path.join(riviera_tools_dir, "sdk/sectools")
+    dest = os.path.join(os.path.abspath(os.path.join(stage_package_dir, os.pardir)), "hsp-tools/sectools")
+    if not os.path.exists(dest):
+        os.makedirs(dest)
+    try:
+        logging.info("Copying [%s] [%s]" %(src, dest))
+        copytree(src, dest, symlinks=True)
+    except:
+        logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
+        return -29, "Cannot copy fh_loader to hsp_tools"
+    return 0, ""
+
 def copy_files_to_stage():
     logging.info("Adding HSP Images to stage")
     #dest = os.path.join(stage_package_dir, "")
@@ -405,32 +430,39 @@ def sign_images():
     images_path = stage_package_dir
     os.chdir(images_path)
     logging.info("Setting current Working dir to [%s]" %(os.getcwd()))
-    fh_loader = os.path.join(riviera_tools_dir, "sdk/fh_loader/fh_loader")
-    sectool = os.path.join(riviera_tools_dir, "sdk/sectools/sectools.py")
-    sectool_cfgfile = os.path.join(riviera_tools_dir, "sdk/sectools/config/bose/bose_secimage.xml")
+    tools_dir = os.path.abspath(os.path.join(stage_package_dir, "../hsp-tools"))
+    fh_loader = os.path.join(tools_dir, "fh_loader")
+    sectool = os.path.join(tools_dir, "sectools/sectools.py")
+    sectool_cfgfile = os.path.join(tools_dir, "sectools/config/bose/bose_secimage.xml")
     if not os.path.isfile(fh_loader):
+        logging.info("***** fh_loader tool not present")
         return 101, "fh_loader tool not present"
     if not os.path.isfile(sectool):
+        logging.info("***** sectool not present")
         return 102, "sectool not present"
     if not os.path.isfile(sectool_cfgfile):
+        logging.info("sectool not present")
         return 103, "sectool configuration file not present"
 
     fh_loader_cmd = fh_loader + " --noreset --zlpawarehost=1 --createdigests --sendxml=rawprogram0_no_persist.xml,patch0.xml"
     logging.info("Creating digest using [%s]" %(fh_loader_cmd))
     logging.info("%s" %(execute_cmd_on_host(fh_loader_cmd)))
     if not os.path.isfile(os.path.join(images_path, "ChainedTableOfDigests.bin")):
+        logging.info("File ChainedTableOfDigests.bin not created")
         return 104, "File ChainedTableOfDigests.bin not created"
     if not os.path.isfile(os.path.join(images_path, "DigestsToSign.bin.mbn")):
+        logging.info("File DigestsToSign.bin.mbn not created")        
         return 105, "File DigestsToSign.bin.mbn not created"
     if not os.path.isfile(os.path.join(images_path, "DIGEST_TABLE.bin")):
+        logging.info("File DIGEST_TABLE.bin not created")        
         return 106, "File DIGEST_TABLE.bin not created"
     
     sectool_cmd = "python " + sectool + " secimage -i DigestsToSign.bin.mbn -g vip -c "  + sectool_cfgfile + " -sat"
     logging.info("Signing digest using [%s]" %(sectool_cmd))
     logging.info("%s" %(execute_cmd_on_host(sectool_cmd)))
     
-    # copy output /scratch/components-cache/Continuous/dev/3.0-6-g90b2390/Riviera-Toolchain/sdk/sectools/secimage_output/8917/vip/
-    output_file = os.path.join(riviera_tools_dir, "sdk/sectools/secimage_output/8917/vip/DigestsToSign.bin.mbn")
+    # copy output /scratch/components-cache/Release/master/3.2/Riviera-Toolchain/sdk/sectools/secimage_output/8917/vip/
+    output_file = os.path.join(tools_dir, "sectools/secimage_output/8917/vip/DigestsToSign.bin.mbn")
     if not os.path.isfile(output_file):
         return 107, "Output Digest was not created."
     shutil.copy2(output_file, images_path)
@@ -545,6 +577,9 @@ def create_package(name, workspace, is_without_lpm, development):
     if retVal != 0:
         return retVal, retStr
 
+    retVal, retStr = copy_signing_tools_to_stage()
+    if retVal != 0:
+        return retVal, retStr
     retVal, retStr = create_output(name, workspace)
     if retVal != 0:
         return retVal, retStr
