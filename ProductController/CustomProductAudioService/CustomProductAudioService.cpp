@@ -140,7 +140,7 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
             ErrorCode_t error = m_audioSettingsMgr->SetMode( val );
             if( error == ErrorCode_t::NO_ERROR )
             {
-                m_mainStreamAudioSettings.set_dialogmode( IsDialogModeEnabled() );
+                m_mainStreamAudioSettings.set_audiomode( ModeNameToEnum( m_audioSettingsMgr->GetMode( ).value() ) );
                 SendMainStreamAudioSettingsEvent();
             }
             return error;
@@ -233,15 +233,8 @@ void CustomProductAudioService::FetchLatestAudioSettings( )
 {
     m_mainStreamAudioSettings.set_basslevel( m_audioSettingsMgr->GetBass( ).value() );
     m_mainStreamAudioSettings.set_centerlevel( m_audioSettingsMgr->GetCenter( ).value() );
-    m_mainStreamAudioSettings.set_dialogmode( IsDialogModeEnabled() );
+    m_mainStreamAudioSettings.set_audiomode( ModeNameToEnum( m_audioSettingsMgr->GetMode( ).value() ) );
     m_mainStreamAudioSettings.set_treblelevel( m_audioSettingsMgr->GetTreble( ).value() );
-}
-
-/*!
- */
-bool CustomProductAudioService::IsDialogModeEnabled()
-{
-    return ( ModeNameToEnum( m_audioSettingsMgr->GetMode( ).value() ) == AUDIOSETTINGS_AUDIO_MODE_DIALOG );
 }
 
 /*!
@@ -283,14 +276,24 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
 
 /*!
  */
-LpmServiceMessages::AudioSettingsAudioMode_t CustomProductAudioService::ModeNameToEnum( const std::string& modeName )
+EddieAudioSettings_t_AudioMode CustomProductAudioService::ModeNameToEnum( const std::string& modeName )
 {
-    // Eddie currently only supports one mode aside from normal.
     if( modeName == "dialog" )
     {
-        return AUDIOSETTINGS_AUDIO_MODE_DIALOG;
+        return EddieAudioSettings_t_AudioMode_AUDIOSETTINGS_AUDIO_MODE_DIALOG;
     }
-    return AUDIOSETTINGS_AUDIO_MODE_NORMAL;
+    else if( modeName == "direct" )
+    {
+        return EddieAudioSettings_t_AudioMode_AUDIOSETTINGS_AUDIO_MODE_DIRECT;
+    }
+    else if( modeName == "night" )
+    {
+        return EddieAudioSettings_t_AudioMode_AUDIOSETTINGS_AUDIO_MODE_NIGHT;
+    }
+    else
+    {
+        return EddieAudioSettings_t_AudioMode_AUDIOSETTINGS_AUDIO_MODE_NORMAL;
+    }
 }
 
 }// namespace ProductApp
