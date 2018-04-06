@@ -1,11 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-<<<<<<< HEAD
     "selected_version": "Release/Castle-Fork/0.4.1.41755.2767113"
-=======
-    "selected_version": "Release/Castle-Fork/0.4.1.41748.2766811"
->>>>>>> origin
   },
   {
     "name": "bose-opkg-utils",
