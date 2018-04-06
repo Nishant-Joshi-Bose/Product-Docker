@@ -59,6 +59,7 @@ message ProductMessage
         optional ProductSystemEventServiceResponse         systemeventserviceresponse  = 18;
         optional uint32                                    chimetoplay                 = 19;
         optional LpmServiceMessages.IpcKeyInformation_t    keyevent                    = 20;
+        optional bool                                      softwareupdatestatus        = 21;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
