@@ -90,8 +90,8 @@
 
             function WebSocketConnection()
             {
-                var FrontDoorHost = "ws://"+window.location.hostname+":8082";
-                var socket = new WebSocket(FrontDoorHost, "gabbo");
+                var FrontDoorHost = "wss://"+window.location.hostname+":8082";
+                var socket = new WebSocket(FrontDoorHost, "eco2");
 
                 var generalOutputTextAreaElem = document.getElementById('general-output-panel');
 
