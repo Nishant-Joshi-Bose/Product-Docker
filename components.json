@@ -93,15 +93,15 @@
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.3.92-575+edd8e73"
+    "selected_version": "Release/master/0.4.1-600+f1f298a"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.3.92-575+edd8e73"
+    "selected_version": "Release/master/0.4.1-600+f1f298a"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@717c3497e2467db6ee80a332c5da66e327edb1c3"
+    "selected_version": "master@a73a0369ed4bf7a8141d2686215e34085729cea9"
   },
   {
     "name": "CastleProductUIAssets",
@@ -109,7 +109,7 @@
   },
   {
     "name": "CastleTestUtils",
-    "selected_version": "master@43e8c68d5b938bf21542ad0210e53be98728c537"
+    "selected_version": "master@f0eecc991462d5a26b03c42da9701a6ff7f0b12c"
   },
   {
     "name": "FrontDoor-qc8017_32",
