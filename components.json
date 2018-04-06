@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-03-29_1506"
+    "selected_version": "Release/Castle-Fork/0.4.1.41748.2766811"
   },
   {
     "name": "bose-opkg-utils",
@@ -9,7 +9,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.3.12-338+8a91f09"
+    "selected_version": "Release/master/0.3.13-352+b593bea"
   },
   {
     "name": "BoseOPKG-native",
@@ -25,15 +25,15 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/0.3.9-167+a2767c7"
+    "selected_version": "Release/master/0.3.11-183+a9ae1a7"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.7-20734"
+    "selected_version": "Release/Castle-Fork/0.3.8-20767"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork-Classic/0.2.9-20523"
+    "selected_version": "Release/Castle-Fork/0.3.8-20767"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -41,11 +41,11 @@
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
-    "selected_version": "Release/master/0.3.7-49+a987998"
+    "selected_version": "Release/master/0.3.8-56+94d16f4"
   },
   {
     "name": "CastleDataCollectionService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-9+a31513c"
+    "selected_version": "Release/master/0.3.2-15+868353f"
   },
   {
     "name": "CastleDemoController-qc8017_32",
@@ -69,23 +69,23 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Continuous/master/0.3.11-86+e84e4b3"
+    "selected_version": "Release/master/0.3.12-88+830186f"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.3.1-193+c40f0d0"
+    "selected_version": "Release/master/0.3.2-205+d86a1bd"
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.3.92-575+edd8e73"
+    "selected_version": "Release/master/0.4.1-600+f1f298a"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.3.92-575+edd8e73"
+    "selected_version": "Release/master/0.4.1-600+f1f298a"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@b104315fabf35ee3e561f23ca8d2021da93af725"
+    "selected_version": "master@a73a0369ed4bf7a8141d2686215e34085729cea9"
   },
   {
     "name": "CastleProductUIAssets",
@@ -97,7 +97,7 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/0.4.2-203+47428b8"
+    "selected_version": "Release/master/0.4.3-212+16ca561"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -121,15 +121,15 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/3.0"
+    "selected_version": "Release/master/3.2"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/3.0"
+    "selected_version": "Release/master/3.2"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Continuous/master/0.3.13-148+8d1da37"
+    "selected_version": "Release/master/0.3.14-156+db0529f"
   },
   {
     "name": "RivieraLpmTools",
@@ -145,23 +145,23 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/IP3/0.3.3-226+7a2927c"
+    "selected_version": "Release/IP3/0.3.5-243+726b563"
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/0.3.5-74+45c1f0c"
+    "selected_version": "Release/master/0.5.1-77+986b234"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.3.19-449+bbf3dc5"
+    "selected_version": "Release/master/0.3.24-464+d7661a4"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-03-29_1506"
+    "selected_version": "Release/Castle-Fork/0.4.1.41748.2766811"
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Continuous/master/0.3.2-31+3f7b62d"
+    "selected_version": "Release/master/0.3.4-34+66c642e"
   },
   {
     "name": "Webkit",
@@ -169,6 +169,6 @@
   },
   {
     "name": "WiFi-Setup-Webpage",
-    "selected_version": "master@72ae3d02d33d1bea141eed4dcc5e597bafa9d0c8"
+    "selected_version": "master@90e0146833fe51e8284650c6d7f9d0af82fb6a46"
   }
 ]

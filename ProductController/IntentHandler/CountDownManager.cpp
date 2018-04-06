@@ -24,6 +24,39 @@
 static DPrint s_logger( "CountDownManager" );
 
 using namespace IntentHandler::Protobuf;
+namespace ProductApp
+{
+using KeyActionMode_t = std::pair<ProductApp::Action, uint32_t>;
+}
+
+namespace std
+{
+template<>
+struct hash<ProductApp::KeyActionMode_t>
+{
+    typedef ProductApp::KeyActionMode_t argument_type;
+    typedef std::size_t result_type;
+    result_type operator()( argument_type const& s ) const
+    {
+        std::size_t seed = 0;
+        seed += ( ( uint32_t ) s.first * 1 );
+        seed += ( s.second * 10 );
+        seed = seed % ProductApp::MAX_SEED_SIZE;
+        return seed;
+    }
+};
+
+template<>
+struct equal_to<ProductApp::KeyActionMode_t>
+{
+    typedef ProductApp::KeyActionMode_t argument_type;
+    bool operator()( argument_type const& s1, argument_type const& s2 ) const
+    {
+        return( s1 == s2 );
+
+    }
+};
+}
 
 typedef struct _CountDown
 {
@@ -31,13 +64,16 @@ typedef struct _CountDown
     uint16_t            countdown;
 } CountDownInfo;
 
-static std::map <ProductApp::Action, CountDownInfo> m_countdownIntentInfoMap =
+
+static std::unordered_map < ProductApp::KeyActionMode_t, CountDownInfo> m_countdownIntentInfoMap =
 {
-    {ProductApp::Action::MANUAL_UPDATE_COUNTDOWN, {ButtonEventName::MANUAL_UPDATE, 5}},
-    {ProductApp::Action::FACTORY_DEFAULT_COUNTDOWN, {ButtonEventName::FACTORY_DEFAULT, 10}},
-    {ProductApp::Action::MANUAL_SETUP_COUNTDOWN, {ButtonEventName::MANUAL_SETUP, 5}},
-    {ProductApp::Action::TOGGLE_WIFI_RADIO_COUNTDOWN, {ButtonEventName::ENABLE_WIFI, 5}},
-    {ProductApp::Action::SYSTEM_INFO_COUNTDOWN, {ButtonEventName::SYSTEM_INFO, 5}}
+    {( std::make_pair( ProductApp::Action::FACTORY_DEFAULT_COUNTDOWN, 0 ) ), {ButtonEventName::FACTORY_DEFAULT, 10}},
+    {( std::make_pair( ProductApp::Action::MANUAL_SETUP_COUNTDOWN,    0 ) ), {ButtonEventName::MANUAL_SETUP, 5}},
+    {( std::make_pair( ProductApp::Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::wifiOff ) ) ) , {ButtonEventName::ENABLE_WIFI, 5}},
+    {( std::make_pair( ProductApp::Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::statusOnly ) ) ) , {ButtonEventName::DISABLE_WIFI, 5}},
+    {( std::make_pair( ProductApp::Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::autoSwitching ) ) ) , {ButtonEventName::DISABLE_WIFI, 5}},
+    {( std::make_pair( ProductApp::Action::TOGGLE_WIFI_RADIO_COUNTDOWN, ( uint32_t )( NetManager::Protobuf::wifiSetup ) ) ) , {ButtonEventName::DISABLE_WIFI, 5}},
+    {( std::make_pair( ProductApp::Action::SYSTEM_INFO_COUNTDOWN,     0 ) ), {ButtonEventName::SYSTEM_INFO, 5}}
 };
 
 namespace ProductApp
@@ -68,17 +104,21 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
 {
     BOSE_DEBUG( s_logger, "%s - (intent=%d)(m_countdownValue=%d)", __func__, intent, m_countdownValue );
 
+    auto getMode = [this]( ProductApp::Action action )
+    {
+        return ( ( ( action == Action::TOGGLE_WIFI_RADIO_COUNTDOWN ) )  ? ( ( uint32_t ) GetProductController().GetWiFiOperationalMode() ) : 0 ) ;
+    };
+
     switch( intent )
     {
     case( uint16_t ) Action::FACTORY_DEFAULT_CANCEL:
-    case( uint16_t ) Action::MANUAL_UPDATE_CANCEL:
     case( uint16_t ) Action::SYSTEM_INFO_CANCEL:
     case( uint16_t ) Action::TOGGLE_WIFI_RADIO_CANCEL:
     case( uint16_t ) Action::MANUAL_SETUP_CANCEL:
     {
-        if( m_actionType.is_initialized() and m_countdownValue > 0 and m_countdownValue <= m_countdownIntentInfoMap[( ProductApp::Action )m_actionType.get()].countdown )
+        if( m_actionType.is_initialized() and m_countdownValue > 0 and m_countdownValue <= m_countdownIntentInfoMap[ std::make_pair( ( ProductApp::Action )m_actionType.get(), getMode( ( ProductApp::Action ) m_actionType.get() ) )].countdown )
         {
-            NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )m_actionType.get()].intentName, ButtonEventState::CANCEL, 0 );
+            NotifyButtonEvent( m_countdownIntentInfoMap[std::make_pair( ( ProductApp::Action )m_actionType.get(), getMode( ( ProductApp::Action ) m_actionType.get() ) ) ].intentName, ButtonEventState::CANCEL, 0 );
             m_actionType.reset();
         }
         else if( m_countdownValue == 0 )
@@ -89,16 +129,16 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
     break;
 
     case( uint16_t ) Action::FACTORY_DEFAULT_COUNTDOWN:
-    case( uint16_t ) Action::MANUAL_UPDATE_COUNTDOWN:
     case( uint16_t ) Action::MANUAL_SETUP_COUNTDOWN:
     case( uint16_t ) Action::TOGGLE_WIFI_RADIO_COUNTDOWN:
     case( uint16_t ) Action::SYSTEM_INFO_COUNTDOWN:
     {
         if( !m_actionType.is_initialized() )
         {
-            if( m_countdownIntentInfoMap.find( ( ProductApp::Action )intent ) != m_countdownIntentInfoMap.end() )
+            auto iter = m_countdownIntentInfoMap.find( std::make_pair( ( ProductApp::Action )intent, getMode( ( ProductApp::Action ) intent ) ) ) ;
+            if( iter != m_countdownIntentInfoMap.end() )
             {
-                m_countdownValue = m_countdownIntentInfoMap[( ProductApp::Action )intent].countdown + 1;
+                m_countdownValue = iter->second.countdown + 1;
                 m_actionType = ( ProductApp::Action )intent;
             }
             else
@@ -113,11 +153,11 @@ bool CountDownManager::Handle( KeyHandlerUtil::ActionType_t& intent )
             m_countdownValue--;
             if( m_countdownValue )
             {
-                NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )intent].intentName, ButtonEventState::COUNTDOWN, m_countdownValue );
+                NotifyButtonEvent( m_countdownIntentInfoMap[ std::make_pair( ( ProductApp::Action )intent, getMode( ( ProductApp::Action )intent ) ) ].intentName, ButtonEventState::COUNTDOWN, m_countdownValue );
             }
             else
             {
-                NotifyButtonEvent( m_countdownIntentInfoMap[( ProductApp::Action )intent].intentName, ButtonEventState::COMPLETED, 0 );
+                NotifyButtonEvent( m_countdownIntentInfoMap[ std::make_pair( ( ProductApp::Action )intent, getMode( ( ProductApp::Action )intent ) ) ].intentName, ButtonEventState::COMPLETED, 0 );
             }
         }
     }

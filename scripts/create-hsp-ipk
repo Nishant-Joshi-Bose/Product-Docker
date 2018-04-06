@@ -98,7 +98,7 @@ echo "hsp postinst"
 exiterror()
 {
     # Set Progress End
-    /opt/Bose/bin/ProgressReport -n $PackageName -e 1 -i 1 -r RECOVERY -b 0 -p 100
+    /opt/Bose/bin/ProgressReport -n $PackageName -e 1 -i 1 -r APQ -b 0 -p 100
     exit 1
 }
 
@@ -106,6 +106,12 @@ if [ ! -f /opt/Bose/hsp/update_ext4.zip ]; then
     echo "/opt/Bose/hsp/update_ext4.zip not found"
     exiterror
 fi
+
+if [ -e /etc/initscripts/recovery-updater.sh ]
+then
+    /etc/initscripts/recovery-updater.sh /opt/Bose/hsp/update_ext4.zip || exiterror
+fi
+
 if ! grep -q /cache /proc/mounts; then
     echo "Mounting Cache"
     mount /dev/mmcblk0p26 /cache || exiterror
@@ -131,6 +137,7 @@ echo "hsp preinst"
 # taken care of by Shepherd / Product / SoftwareUpdateService. 
 # Set Progress Start
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 1 -r RECOVERY -b 0 -p 1
+
 echo "Stopping LPM"
 pkill LPMService
 exit 0
