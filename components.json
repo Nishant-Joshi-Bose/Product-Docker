@@ -29,11 +29,11 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.7-20734"
+    "selected_version": "Release/Castle-Fork/0.3.8-20767"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/0.3.6-20644"
+    "selected_version": "Release/Castle-Fork/0.3.8-20767"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -145,7 +145,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/IP3/0.3.4-235+668ff41"
+    "selected_version": "Release/IP3/0.3.5-243+726b563"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -157,7 +157,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-04-04_1319"
+    "selected_version": "Release/Castle-Fork/0.4.1.41748.2766811"
   },
   {
     "name": "SystemEventService-qc8017_32",
