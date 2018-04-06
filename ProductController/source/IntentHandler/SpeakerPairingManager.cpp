@@ -32,6 +32,7 @@
 #include "SpeakerPairingManager.h"
 #include "ProductEndpointDefines.h"
 #include "PGCErrorCodes.h"
+#include "ProductDataCollectionDefines.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -553,6 +554,9 @@ void SpeakerPairingManager::RecieveAccessoryListCallback( LpmServiceMessages::Ip
     }
 
     m_FrontDoorClientIF->SendNotification( accessoryFrontDoorURL, m_accessorySpeakerState );
+
+    GetProductController().GetDataCollectionClient()->SendData( std::make_shared<ProductPb::AccessorySpeakerState>( m_accessorySpeakerState ), DATA_COLLECTION_ACCESSORIES );
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
