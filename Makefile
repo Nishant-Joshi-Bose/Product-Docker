@@ -66,26 +66,26 @@ product-ipk: cmake_build
 privateKeyFilePath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev.p12
 privateKeyPasswordPath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev_p12.pass
 
-IPKS = monaco.ipk product.ipk lpm_updater.ipk
-PACKAGENAMES = monaco SoundTouch lpm_updater
+IPKS = wpe.ipk monaco.ipk product.ipk lpm_updater.ipk
+PACKAGENAMES = wpe monaco SoundTouch lpm_updater
 
 .PHONY: package-no-hsp
 package-no-hsp: packages-gz
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_no_hsp.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
-IPKS_HSP = hsp.ipk monaco.ipk product.ipk lpm_updater.ipk
-PACKAGENAMES_HSP = hsp monaco SoundTouch lpm_updater
+IPKS_HSP = hsp.ipk wpe.ipk monaco.ipk product.ipk lpm_updater.ipk
+PACKAGENAMES_HSP = hsp wpe monaco SoundTouch lpm_updater
 
 .PHONY: package-with-hsp
 package-with-hsp: packages-gz-with-hsp
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 .PHONY: packages-gz
-packages-gz: product-ipk monaco-ipk hsp-ipk lpmupdater-ipk
+packages-gz: product-ipk wpe-ipk monaco-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS)
 
 .PHONY: packages-gz-with-hsp
-packages-gz-with-hsp: product-ipk monaco-ipk hsp-ipk lpmupdater-ipk
+packages-gz-with-hsp: product-ipk wpe-ipk monaco-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_HSP)
 
 .PHONY: graph
@@ -114,6 +114,10 @@ lpmupdater-ipk: lpm-bos
 .PHONY: monaco-ipk
 monaco-ipk:
 	./scripts/create-monaco-ipk
+
+.PHONY: wpe-ipk
+wpe-ipk:
+	./scripts/create-wpe-ipk
 
 .PHONY: all-packages
 all-packages: package-no-hsp package-with-hsp graph

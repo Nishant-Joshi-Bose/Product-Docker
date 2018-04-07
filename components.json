@@ -96,6 +96,10 @@
     "selected_version": "master@df32329b45183a449c9e41d8938e0049451bfce0"
   },
   {
+    "name": "DinghyWebBrowser-qc8017_64",
+    "selected_version": "Continuous/bose-master/1.0.0-8+ebecb5f"
+  },
+  {
     "name": "FrontDoor-qc8017_32",
     "selected_version": "Release/master/0.4.3-212+16ca561"
   },
@@ -165,7 +169,7 @@
   },
   {
     "name": "Webkit",
-    "selected_version": "Release/master/0.3.3-33+5811010"
+    "selected_version": "Continuous/master/0.3.3-44+3a6fb34"
   },
   {
     "name": "WiFi-Setup-Webpage",
