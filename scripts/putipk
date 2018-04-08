@@ -20,7 +20,7 @@ else
     ipk=$PWD/builds/Release/product.ipk
     rm -f "$ipk"
 
-    make product-ipk "$@" || exit
+    make "$@" product-ipk || exit
 fi
 
 ls -sh "$ipk" || exit
