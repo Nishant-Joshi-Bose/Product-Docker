@@ -1,9 +1,13 @@
 export BOSE_WORKSPACE := $(abspath $(CURDIR))
 include Settings.mk
 
+ifneq ($(filter $(HW_VAR), DP2 Alpha),$(HW_VAR))
+	$(error HW_VAR must equal DP2 or Alpha. Found $(HW_VAR))
+endif
+
 .PHONY: deploy
 deploy: all-packages
-	scripts/collect-deployables builds/Release builds/deploy/DP2
+	scripts/collect-deployables builds/Release builds/deploy/$(HW_VAR)
 
 .PHONY: force
 force:
@@ -148,7 +152,7 @@ else
 endif
 	rm -f ./builds/$(cfg)/professor_package*.bos
 	rm -f ./builds/$(cfg)/lpm_professor*.hex
-	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE)
+	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE) $(HW_VAR)
 
 .PHONY: lpmupdater-ipk
 lpmupdater-ipk: lpm-bos
