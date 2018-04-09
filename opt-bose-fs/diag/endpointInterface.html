@@ -46,6 +46,14 @@
                 max-height: 40em;
                 overflow: scroll;
             }
+            div.error{
+                background-color: #FFCCCC;
+                border: thin dotted;
+                padding: 1em;
+                margin: 1em;
+                display: none;
+                white-space: pre-line;
+            }
             td.showimg {
                 padding: 8px;
             }
@@ -59,6 +67,19 @@
         <h1 id='header'>HEADER</h1>
         <hr>
         <li>FrontDoor Endpoint
+        <div id='error-panel' class='error'>Unable to Connect to Device via Secured Web Sockets.
+
+            This may be caused by an issue with the certificate used by the device. 
+            To resolve this, navigate to <a id='security-host'>the websocket address</a> and add a security exception.
+
+
+            Alternatively, you can start Google Chrome with the following arguments to disable certificate verification: 
+                --ignore-certificate-errors --disable-web-security --user-data-dir
+
+            On Windows: <code>"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe” --ignore-certificate-errors --disable-web-security --user-data-dir</code>
+            On Mac OS X: <code>/Applications/Google\ Chrome/Contents/MacOS/Google\ Chrome --args --ignore-certificate-errors --disable-web-security --user-data-dir</code>
+            On Linux: <code>google-chrome --ignore-certificate-errors --disable-web-security --user-data-dir</code>
+        </div>
         <div id='general-output-panel' class='box'></div>
         <input id='submit-payload-button' type='submit' value='GENERIC' class='submit btn waves-effect waves-light '/>
     </body>
@@ -72,6 +93,8 @@
             {
                 document.title = Configuration.pageName + " Diagnostics";
                 document.getElementById('header').textContent = Configuration.pageName;
+                document.getElementById('security-host').href = "https://" + window.location.hostname + ":8082/"
+                document.getElementById('security-host').textContent = "https://" + window.location.hostname + ":8082/"
             }
 
             function FindField(object,fields)
@@ -93,6 +116,7 @@
                 var FrontDoorHost = "wss://"+window.location.hostname+":8082";
                 var socket = new WebSocket(FrontDoorHost, "eco2");
 
+                var errorPanel = document.getElementById('error-panel');
                 var generalOutputTextAreaElem = document.getElementById('general-output-panel');
 
                 if (Configuration.button.enabled)
@@ -134,10 +158,21 @@
 
                 };
 
-                socket.onclose = function()
+                socket.onclose = function(evt)
                 {
                     // Web Socket closed
-                    alert("Connection is closed...");
+
+                    console.log(evt);
+
+                    generalOutputTextAreaElem.textContent = (new Date().toLocaleTimeString()) + ": " + "\n WebSocket Connection Lost..." + "\n\n" + generalOutputTextAreaElem.textContent;
+                };
+
+                socket.onerror = function(evt)
+                {
+                    console.log(evt);
+
+                    errorPanel.style.display = "block" ;
+                    generalOutputTextAreaElem.style.display = "none";
                 };
 
                 window.onbeforeunload = function(event)
