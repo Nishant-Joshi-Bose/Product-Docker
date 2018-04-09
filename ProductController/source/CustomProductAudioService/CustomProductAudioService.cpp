@@ -15,20 +15,46 @@
 #include "ProtoToMarkup.h"
 #include "SoundTouchInterface/ContentItem.pb.h"
 #include "AutoLpmServiceMessages.pb.h"
+#include "ProductEndpointDefines.h"
 
-constexpr char kBassEndPoint                [] = "/audio/bass";
-constexpr char kTrebleEndPoint              [] = "/audio/treble";
-constexpr char kCenterEndPoint              [] = "/audio/center";
-constexpr char kSurroundEndPoint            [] = "/audio/surround";
-constexpr char kSurroundDelayEndPoint       [] = "/audio/surroundDelay";
-constexpr char kGainOffsetEndPoint          [] = "/audio/gainOffset";
-constexpr char kAvSyncEndPoint              [] = "/audio/avSync";
-constexpr char kSubwooferGainEndPoint       [] = "/audio/subWooferGain";
-constexpr char kModeEndPoint                [] = "/audio/mode";
-constexpr char kContentTypeEndPoint         [] = "/audio/contentType";
-constexpr char kDualMonoSelectEndPoint      [] = "/audio/dualMonoSelect";
-constexpr char kEqSelectEndPoint            [] = "/audio/eqSelect";
-constexpr char kSubwooferPolarityEndPoint   [] = "/audio/subwooferPolarity";
+///
+/// Audio Service End Points
+///
+constexpr char   kBassEndPoint               []   = FRONTDOOR_AUDIO_BASS_API;
+constexpr char   kTrebleEndPoint             []   = FRONTDOOR_AUDIO_TREBLE_API;
+constexpr char   kCenterEndPoint             []   = FRONTDOOR_AUDIO_CENTER_API;
+constexpr char   kSurroundEndPoint           []   = FRONTDOOR_AUDIO_SURROUND_API;
+constexpr char   kSurroundDelayEndPoint      []   = FRONTDOOR_AUDIO_SURROUNDDELAY_API;
+constexpr char   kGainOffsetEndPoint         []   = FRONTDOOR_AUDIO_GAINOFFSET_API;
+constexpr char   kAvSyncEndPoint             []   = FRONTDOOR_AUDIO_AVSYNC_API;
+constexpr char   kSubwooferGainEndPoint      []   = FRONTDOOR_AUDIO_SUBWOOFERGAIN_API;
+constexpr char   kModeEndPoint               []   = FRONTDOOR_AUDIO_MODE_API;
+constexpr char   kContentTypeEndPoint        []   = FRONTDOOR_AUDIO_CONTENTTYPE_API;
+constexpr char   kDualMonoSelectEndPoint     []   = FRONTDOOR_AUDIO_DUALMONOSELECT_API;
+constexpr char   kEqSelectEndPoint           []   = FRONTDOOR_AUDIO_EQSELECT_API;
+constexpr char   kSubwooferPolarityEndPoint  []   = FRONTDOOR_AUDIO_SUBWOOFERPOLARITY_API;
+
+///
+/// Audio Service End Point Group Name
+///
+constexpr char   kAudioGroupName []  = FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME;
+
+///
+/// Audio Service End Point Group Versions
+///
+constexpr double kBassEndPointVersion             = FRONTDOOR_AUDIO_BASS_API_VERSION;
+constexpr double kTrebleEndPointVersion           = FRONTDOOR_AUDIO_TREBLE_API_VERSION;
+constexpr double kCenterEndPointVersion           = FRONTDOOR_AUDIO_CENTER_API_VERSION;
+constexpr double kSurroundEndPointVersion         = FRONTDOOR_AUDIO_SURROUND_API_VERSION;
+constexpr double kSurroundDelayEndPointVersion    = FRONTDOOR_AUDIO_SURROUNDDELAY_API_VERSION;
+constexpr double kGainOffsetEndPointVersion       = FRONTDOOR_AUDIO_GAINOFFSET_API_VERSION;
+constexpr double kAvSyncEndPointVersion           = FRONTDOOR_AUDIO_AVSYNC_API_VERSION;
+constexpr double kSubwooferGainEndPointVersion    = FRONTDOOR_AUDIO_SUBWOOFERGAIN_API_VERSION;
+constexpr double kModeEndPointVersion             = FRONTDOOR_AUDIO_MODE_API_VERSION;
+constexpr double kContentTypeEndPointVersion      = FRONTDOOR_AUDIO_CONTENTTYPE_API_VERSION;
+constexpr double kDualMonoSelectEndPointVersion   = FRONTDOOR_AUDIO_DUALMONOSELECT_API_VERSION;
+constexpr double kEqSelectEndPointVersion         = FRONTDOOR_AUDIO_EQSELECT_API_VERSION;
+constexpr double kSubwooferPolarityEndPointVersion = FRONTDOOR_AUDIO_SUBWOOFERPOLARITY_API_VERSION;
 
 namespace ProductApp
 {
@@ -77,26 +103,32 @@ void CustomProductAudioService::RegisterAudioPathEvents()
     RegisterCommonAudioPathEvents();
 
     {
-        Callback< std::string, Callback< std::string, std::string > > callback( std::bind( &CustomProductAudioService::GetMainStreamAudioSettingsCallback,
-                                                                                this,
-                                                                                std::placeholders::_1,
-                                                                                std::placeholders::_2 ) );
+        Callback< std::string, Callback< std::string, std::string > >
+        callback( std::bind( &CustomProductAudioService::GetMainStreamAudioSettingsCallback,
+                             this,
+                             std::placeholders::_1,
+                             std::placeholders::_2 ) );
+
         m_APPointer->RegisterForMainStreamAudioSettingsRequest( callback );
     }
     {
-        Callback<std::vector<APProductCommon::ChannelParameters>, std::string, std::string, Callback< bool > > callback( std::bind( &CustomProductAudioService::SetStreamConfigCallback,
-                this,
-                std::placeholders::_1,
-                std::placeholders::_2,
-                std::placeholders::_3,
-                std::placeholders::_4 ) );
+        Callback< std::vector< APProductCommon::ChannelParameters >,
+                  std::string,
+                  std::string,
+                  Callback< bool > >
+                  callback( std::bind( &CustomProductAudioService::SetStreamConfigCallback,
+                                       this,
+                                       std::placeholders::_1,
+                                       std::placeholders::_2,
+                                       std::placeholders::_3,
+                                       std::placeholders::_4 ) );
+
         m_APPointer->RegisterForSetStreamConfig( callback );
     }
     {
-        Callback< bool > callback(
-            std::bind( &CustomProductAudioService::InternalMuteCallback,
-                       this,
-                       std::placeholders::_1 ) );
+        Callback< bool > callback( std::bind( &CustomProductAudioService::InternalMuteCallback,
+                                              this,
+                                              std::placeholders::_1 ) );
 
         m_APPointer->RegisterForInternalMute( callback );
     }
@@ -377,8 +409,6 @@ LpmServiceMessages::AudioSettingsDeltaEqSelect_t CustomProductAudioService::EqSe
     return ret->second;
 }
 
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   CustomProductAudioService::RegisterFrontDoorEvents
@@ -409,12 +439,15 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         }
         return error;
     };
-    m_AudioBassSetting = std::unique_ptr<AudioSetting<ProductPb::AudioBassLevel>>( new AudioSetting<ProductPb::AudioBassLevel>
-                                                                                   ( kBassEndPoint,
-                                                                                           getBassAction,
-                                                                                           setBassAction,
-                                                                                           m_FrontDoorClientIF,
-                                                                                           m_ProductTask ) );
+
+    m_AudioBassSetting = std::unique_ptr< AudioSetting<ProductPb::AudioBassLevel > >(
+                             new AudioSetting< ProductPb::AudioBassLevel >( kBassEndPoint,
+                                                                            getBassAction,
+                                                                            setBassAction,
+                                                                            m_FrontDoorClientIF,
+                                                                            m_ProductTask,
+                                                                            kBassEndPointVersion,
+                                                                            kAudioGroupName ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/treble - register ProductController as handler for POST/PUT/GET requests
@@ -434,12 +467,14 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         }
         return error;
     };
-    m_AudioTrebleSetting = std::unique_ptr<AudioSetting<ProductPb::AudioTrebleLevel>>( new AudioSetting<ProductPb::AudioTrebleLevel>
-                           ( kTrebleEndPoint,
-                             getTrebleAction,
-                             setTrebleAction,
-                             m_FrontDoorClientIF,
-                             m_ProductTask ) );
+    m_AudioTrebleSetting = std::unique_ptr< AudioSetting< ProductPb::AudioTrebleLevel > >(
+                               new AudioSetting<ProductPb::AudioTrebleLevel>( kTrebleEndPoint,
+                                                                              getTrebleAction,
+                                                                              setTrebleAction,
+                                                                              m_FrontDoorClientIF,
+                                                                              m_ProductTask,
+                                                                              kTrebleEndPointVersion,
+                                                                              kAudioGroupName ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/center - register ProductController as handler for POST/PUT/GET requests
@@ -459,12 +494,14 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         }
         return error;
     };
-    m_AudioCenterSetting = std::unique_ptr<AudioSetting<ProductPb::AudioCenterLevel>>( new AudioSetting<ProductPb::AudioCenterLevel>
-                           ( kCenterEndPoint,
-                             getCenterAction,
-                             setCenterAction,
-                             m_FrontDoorClientIF,
-                             m_ProductTask ) );
+    m_AudioCenterSetting = std::unique_ptr< AudioSetting< ProductPb::AudioCenterLevel > >(
+                               new AudioSetting<ProductPb::AudioCenterLevel>( kCenterEndPoint,
+                                                                              getCenterAction,
+                                                                              setCenterAction,
+                                                                              m_FrontDoorClientIF,
+                                                                              m_ProductTask,
+                                                                              kCenterEndPointVersion,
+                                                                              kAudioGroupName ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/surround - register ProductController as handler for POST/PUT/GET requests
@@ -484,12 +521,14 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         }
         return error;
     };
-    m_AudioSurroundSetting = std::unique_ptr<AudioSetting<ProductPb::AudioSurroundLevel>>( new AudioSetting<ProductPb::AudioSurroundLevel>
-                             ( kSurroundEndPoint,
-                               getSurroundAction,
-                               setSurroundAction,
-                               m_FrontDoorClientIF,
-                               m_ProductTask ) );
+    m_AudioSurroundSetting = std::unique_ptr<AudioSetting< ProductPb::AudioSurroundLevel > >(
+                                 new AudioSetting<ProductPb::AudioSurroundLevel>( kSurroundEndPoint,
+                                                                                  getSurroundAction,
+                                                                                  setSurroundAction,
+                                                                                  m_FrontDoorClientIF,
+                                                                                  m_ProductTask,
+                                                                                  kSurroundEndPointVersion,
+                                                                                  kAudioGroupName ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/surroundDelay - register ProductController as handler for POST/PUT/GET requests
@@ -508,12 +547,14 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         }
         return error;
     };
-    m_AudioSurroundDelaySetting = std::unique_ptr<AudioSetting<ProductPb::AudioSurroundDelay>>( new AudioSetting<ProductPb::AudioSurroundDelay>
-                                  ( kSurroundDelayEndPoint,
-                                    getSurroundDelayAction,
-                                    setSurroundDelayAction,
-                                    m_FrontDoorClientIF,
-                                    m_ProductTask ) );
+    m_AudioSurroundDelaySetting = std::unique_ptr< AudioSetting< ProductPb::AudioSurroundDelay > >(
+                                      new AudioSetting< ProductPb::AudioSurroundDelay >( kSurroundDelayEndPoint,
+                                              getSurroundDelayAction,
+                                              setSurroundDelayAction,
+                                              m_FrontDoorClientIF,
+                                              m_ProductTask,
+                                              kSurroundDelayEndPointVersion,
+                                              kAudioGroupName ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/gainOffset - register ProductController as handler for POST/PUT/GET requests
@@ -533,12 +574,14 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         }
         return error;
     };
-    m_AudioGainOffsetSetting =  std::unique_ptr<AudioSetting<ProductPb::AudioGainOffset>>( new AudioSetting<ProductPb::AudioGainOffset>
-                                ( kGainOffsetEndPoint,
-                                  getGainOffsetAction,
-                                  setGainOffsetAction,
-                                  m_FrontDoorClientIF,
-                                  m_ProductTask ) );
+    m_AudioGainOffsetSetting =  std::unique_ptr< AudioSetting< ProductPb::AudioGainOffset > >(
+                                    new AudioSetting<ProductPb::AudioGainOffset>( kGainOffsetEndPoint,
+                                                                                  getGainOffsetAction,
+                                                                                  setGainOffsetAction,
+                                                                                  m_FrontDoorClientIF,
+                                                                                  m_ProductTask,
+                                                                                  kGainOffsetEndPointVersion,
+                                                                                  kAudioGroupName ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/avSync - register ProductController as handler for POST/PUT/GET requests
@@ -558,12 +601,14 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         }
         return error;
     };
-    m_AudioAvSyncsetSetting = std::unique_ptr<AudioSetting<ProductPb::AudioAvSync>>( new AudioSetting<ProductPb::AudioAvSync>
-                              ( kAvSyncEndPoint,
-                                getAvSyncAction,
-                                setAvSyncAction,
-                                m_FrontDoorClientIF,
-                                m_ProductTask ) );
+    m_AudioAvSyncsetSetting = std::unique_ptr<AudioSetting<ProductPb::AudioAvSync > >(
+                                  new AudioSetting<ProductPb::AudioAvSync>( kAvSyncEndPoint,
+                                                                            getAvSyncAction,
+                                                                            setAvSyncAction,
+                                                                            m_FrontDoorClientIF,
+                                                                            m_ProductTask,
+                                                                            kAvSyncEndPointVersion,
+                                                                            kAudioGroupName ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/subWooferGain - register ProductController as handler for POST/PUT/GET requests
@@ -583,12 +628,14 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         }
         return error;
     };
-    m_AudioSubwooferGainSetting = std::unique_ptr<AudioSetting<ProductPb::AudioSubwooferGain>>( new AudioSetting<ProductPb::AudioSubwooferGain>
-                                  ( kSubwooferGainEndPoint,
-                                    getSubwooferGainAction,
-                                    setSubwooferGainAction,
-                                    m_FrontDoorClientIF,
-                                    m_ProductTask ) );
+    m_AudioSubwooferGainSetting = std::unique_ptr< AudioSetting<ProductPb::AudioSubwooferGain > >(
+                                      new AudioSetting<ProductPb::AudioSubwooferGain>( kSubwooferGainEndPoint,
+                                              getSubwooferGainAction,
+                                              setSubwooferGainAction,
+                                              m_FrontDoorClientIF,
+                                              m_ProductTask,
+                                              kSubwooferGainEndPointVersion,
+                                              kAudioGroupName ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/mode - register ProductController as handler for POST/PUT/GET requests
@@ -608,12 +655,14 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         }
         return error;
     };
-    m_AudioModeSetting = std::unique_ptr<AudioSetting<ProductPb::AudioMode>>( new AudioSetting<ProductPb::AudioMode>
-                                                                              ( kModeEndPoint,
-                                                                                getModeAction,
-                                                                                setModeAction,
-                                                                                m_FrontDoorClientIF,
-                                                                                m_ProductTask ) );
+    m_AudioModeSetting = std::unique_ptr< AudioSetting<ProductPb::AudioMode > >(
+                             new AudioSetting<ProductPb::AudioMode>( kModeEndPoint,
+                                                                     getModeAction,
+                                                                     setModeAction,
+                                                                     m_FrontDoorClientIF,
+                                                                     m_ProductTask,
+                                                                     kModeEndPointVersion,
+                                                                     kAudioGroupName ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/contentType - register ProductController as handler for POST/PUT/GET requests
@@ -633,12 +682,14 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         }
         return error;
     };
-    m_AudioContentTypeSetting = std::unique_ptr<AudioSetting<ProductPb::AudioContentType>>( new AudioSetting<ProductPb::AudioContentType>
-                                ( kContentTypeEndPoint,
-                                  getContentTypeAction,
-                                  setContentTypeAction,
-                                  m_FrontDoorClientIF,
-                                  m_ProductTask ) );
+    m_AudioContentTypeSetting = std::unique_ptr< AudioSetting<ProductPb::AudioContentType > >(
+                                    new AudioSetting<ProductPb::AudioContentType>( kContentTypeEndPoint,
+                                                                                   getContentTypeAction,
+                                                                                   setContentTypeAction,
+                                                                                   m_FrontDoorClientIF,
+                                                                                   m_ProductTask,
+                                                                                   kContentTypeEndPointVersion,
+                                                                                   kAudioGroupName ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/dualMonoSelect - register ProductController as handler for POST/PUT/GET requests
@@ -658,12 +709,14 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         }
         return error;
     };
-    m_DualMonoSelectSetting = std::unique_ptr<AudioSetting<ProductPb::AudioDualMonoSelect>>( new AudioSetting<ProductPb::AudioDualMonoSelect>
-                              ( kDualMonoSelectEndPoint,
-                                getDualMonoSelectAction,
-                                setDualMonoSelectAction,
-                                m_FrontDoorClientIF,
-                                m_ProductTask ) );
+    m_DualMonoSelectSetting = std::unique_ptr< AudioSetting<ProductPb::AudioDualMonoSelect > >(
+                                  new AudioSetting< ProductPb::AudioDualMonoSelect >( kDualMonoSelectEndPoint,
+                                          getDualMonoSelectAction,
+                                          setDualMonoSelectAction,
+                                          m_FrontDoorClientIF,
+                                          m_ProductTask,
+                                          kDualMonoSelectEndPointVersion,
+                                          kAudioGroupName ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/eqSelect - register ProductController as handler for POST/PUT/GET requests
@@ -683,12 +736,14 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         }
         return error;
     };
-    m_EqSelectSetting = std::unique_ptr<AudioSetting<ProductPb::AudioEqSelect>>( new AudioSetting<ProductPb::AudioEqSelect>
-                                                                                 ( kEqSelectEndPoint,
-                                                                                   getEqSelectAction,
-                                                                                   setEqSelectAction,
-                                                                                   m_FrontDoorClientIF,
-                                                                                   m_ProductTask ) );
+    m_EqSelectSetting = std::unique_ptr< AudioSetting< ProductPb::AudioEqSelect > >(
+                            new AudioSetting< ProductPb::AudioEqSelect >( kEqSelectEndPoint,
+                                                                          getEqSelectAction,
+                                                                          setEqSelectAction,
+                                                                          m_FrontDoorClientIF,
+                                                                          m_ProductTask,
+                                                                          kEqSelectEndPointVersion,
+                                                                          kAudioGroupName ) );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Endpoint /audio/SubwooferPolarity - register ProductController as handler for POST/PUT/GET requests
@@ -707,12 +762,14 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         }
         return error;
     };
-    m_SubwooferPolaritySetting = std::unique_ptr<AudioSetting<ProductPb::AudioSubwooferPolarity>>( new AudioSetting<ProductPb::AudioSubwooferPolarity>
-                                 ( kSubwooferPolarityEndPoint,
-                                   getSubwooferPolarityAction,
-                                   setSubwooferPolarityAction,
-                                   m_FrontDoorClientIF,
-                                   m_ProductTask ) );
+    m_SubwooferPolaritySetting = std::unique_ptr< AudioSetting< ProductPb::AudioSubwooferPolarity > >(
+                                     new AudioSetting< ProductPb::AudioSubwooferPolarity >( kSubwooferPolarityEndPoint,
+                                             getSubwooferPolarityAction,
+                                             setSubwooferPolarityAction,
+                                             m_FrontDoorClientIF,
+                                             m_ProductTask,
+                                             kSubwooferPolarityEndPointVersion,
+                                             kAudioGroupName ) );
 }
 
 }// namespace ProductApp

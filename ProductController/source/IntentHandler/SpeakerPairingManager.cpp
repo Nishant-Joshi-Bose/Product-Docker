@@ -44,7 +44,6 @@ namespace ProductApp
 /// @brief Global Constant Expressions
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-const std::string accessoryFrontDoorURL = FRONTDOOR_ACCESSORIES_API;
 constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_START = 4 * 60 * 1000;
 constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY = 0 ;
 
@@ -217,8 +216,11 @@ void SpeakerPairingManager::RegisterFrontDoorEvents( )
                           m_ProductTask );
 
         m_registerGetAccessoriesCb =
-            m_FrontDoorClientIF->RegisterGet( accessoryFrontDoorURL ,
-                                              getAccessoriesCb );
+            m_FrontDoorClientIF->RegisterGet( FRONTDOOR_ACCESSORIES_API,
+                                              getAccessoriesCb,
+                                              FrontDoor::PUBLIC,
+                                              FRONTDOOR_ACCESSORIES_API_VERSION,
+                                              FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
     {
         AsyncCallback< ProductPb::AccessorySpeakerState, Callback< ProductPb::AccessorySpeakerState >, Callback<FrontDoor::Error> >
@@ -230,8 +232,12 @@ void SpeakerPairingManager::RegisterFrontDoorEvents( )
                           m_ProductTask );
 
         m_registerPutAccessoriesCb =
-            m_FrontDoorClientIF->RegisterPut<ProductPb::AccessorySpeakerState>( accessoryFrontDoorURL ,
-                                                                                putAccessoriesCb );
+            m_FrontDoorClientIF->RegisterPut<ProductPb::AccessorySpeakerState>(
+                FRONTDOOR_ACCESSORIES_API,
+                putAccessoriesCb,
+                FrontDoor::PUBLIC,
+                FRONTDOOR_ACCESSORIES_API_VERSION,
+                FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
 }
 
@@ -552,7 +558,7 @@ void SpeakerPairingManager::RecieveAccessoryListCallback( LpmServiceMessages::Ip
         m_accessorySpeakerState.mutable_rears( i )->set_configurationstatus( rearConfig );
     }
 
-    m_FrontDoorClientIF->SendNotification( accessoryFrontDoorURL, m_accessorySpeakerState );
+    m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -603,7 +609,7 @@ void SpeakerPairingManager::PairingCallback( LpmServiceMessages::IpcSpeakerPairi
     // will notify UI with full message from RecieveAccessoryListCallback.
     if( m_accessorySpeakerState.pairing( ) )
     {
-        m_FrontDoorClientIF->SendNotification( accessoryFrontDoorURL, m_accessorySpeakerState );
+        m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
     }
 }
 

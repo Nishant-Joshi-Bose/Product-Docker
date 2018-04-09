@@ -520,7 +520,9 @@ void ProfessorProductController::Run( )
     m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
     m_ProductSourceInfo           = std::make_shared< ProductSourceInfo                 >( *this );
     m_ProductBLERemoteManager     = std::make_shared< ProductBLERemoteManager           >( *this );
-    m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this, m_FrontDoorClientIF, m_ProductLpmHardwareInterface->GetLpmClient() );
+    m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this,
+                                    m_FrontDoorClientIF,
+                                    m_ProductLpmHardwareInterface->GetLpmClient( ) );
 
     if( m_ProductLpmHardwareInterface == nullptr ||
         m_ProductSystemManager        == nullptr ||
@@ -941,25 +943,36 @@ void ProfessorProductController::HandleSelectSourceSlot( ProductSTSAccount::Prod
 void ProfessorProductController::RegisterFrontDoorEndPoints( )
 {
     RegisterCommonEndPoints( );
-    m_lightbarController->RegisterLightBarEndPoints();
+
+    m_lightbarController->RegisterLightBarEndPoints( );
 
     {
-        auto l = [ = ]( Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> respCb,
-                        Callback<FrontDoor::Error> errorCb )
+        auto callback = [ = ]( Callback< SystemPowerProductPb::SystemPowerModeOpticalAutoWake > respCb,
+                               Callback< FrontDoor::Error > errorCb )
         {
             HandleGetOpticalAutoWake( respCb, errorCb );
         };
-        GetFrontDoorClient()->RegisterGet( FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API, l );
+
+        GetFrontDoorClient()->RegisterGet( FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API,
+                                           callback,
+                                           FrontDoor::PUBLIC,
+                                           FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API_VERSION,
+                                           FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
     {
-        auto l = [ = ]( SystemPowerProductPb::SystemPowerModeOpticalAutoWake req,
-                        Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> respCb,
-                        Callback<FrontDoor::Error> errorCb )
+        auto callback = [ = ]( SystemPowerProductPb::SystemPowerModeOpticalAutoWake req,
+                               Callback< SystemPowerProductPb::SystemPowerModeOpticalAutoWake > respCb,
+                               Callback< FrontDoor::Error > errorCb )
         {
             HandlePutOpticalAutoWake( req, respCb, errorCb );
         };
+
         GetFrontDoorClient( )->RegisterPut<SystemPowerProductPb::SystemPowerModeOpticalAutoWake>(
-            FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API, l );
+            FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API,
+            callback,
+            FrontDoor::PUBLIC,
+            FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API_VERSION,
+            FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
 }
 
@@ -1426,6 +1439,11 @@ void ProfessorProductController::NotifyFrontdoorAndStoreOpticalAutoWakeSetting( 
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::InitializeKeyIdToKeyNameMap
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::InitializeKeyIdToKeyNameMap()
 {
     BOSE_INFO( s_logger, "ProfessorProductController::%s:", __func__ );
