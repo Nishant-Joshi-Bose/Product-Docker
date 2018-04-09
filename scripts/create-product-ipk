@@ -116,7 +116,7 @@ stfs=$soundtouch_sdk/fs
 cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BLESetup "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BluetoothManager "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/BoseApp "$opt_dir/bin" || exit
+cp "$stfs"/opt/Bose/CAPS "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BT "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/BTSource "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
@@ -145,9 +145,15 @@ EOF
 
 # Copy public keys in FS for development key. EC will take care of generation for Production 
 secure_dir=$opt_dir/etc/secure/
+if [ -e "$secure_dir" ]; then
+    chmod -R 755 "$secure_dir" || exit
+fi
+
 mkdir -p "$secure_dir" || exit
 cp -r "$wspace/keys/development/publicKeys/" "$secure_dir" || exit
 cp -r "$wspace/keys/development/CACerts/" "$secure_dir" || exit
+find "$secure_dir" -type d -exec chmod 550 {} \; || exit
+find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
@@ -156,7 +162,7 @@ cp -r "$wspace/keys/development/CACerts/" "$secure_dir" || exit
 "$swup_dir/stage" "$opt_dir" || exit
 "$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
 "$audiopath_dir/stage" --product=eddie "$opt_dir" || exit
-"$audiopath64_dir/stage" "$opt_dir" --only-vfe || exit
+"$audiopath64_dir/stage" --product=eddie --only-vfe "$opt_dir" || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlesass_dir/stage" "$opt_dir" || exit
 "$castlepassport_dir/stage" "$opt_dir" || exit
@@ -207,7 +213,9 @@ if [ -x /mnt/nv/postinst ]; then
     /mnt/nv/postinst
 fi
 
-chmod -R 440 /opt/Bose/etc/secure || exit
+# make sure the public key file has read only permission
+find /opt/Bose/etc/secure/ -type d -exec /bin/busybox chmod 550 {} \;
+find /opt/Bose/etc/secure/ -type f -exec /bin/busybox chmod 440 {} \;
 
 # Set Progress End
 /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 100
@@ -258,6 +266,7 @@ pkill BLESetup
 pkill BTSource
 pkill IoT
 pkill BoseApp
+pkill CAPS
 pkill Eddie
 pkill FrontDoor
 pkill SASSController
@@ -336,3 +345,6 @@ ipk=$output_dir/product.ipk
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
 echo "Created $ipk"
+
+# reverting secure directory permission, to avoid issue in "make clean" / rebuild
+chmod -R 755 "$secure_dir" || exit

@@ -32,17 +32,4 @@ EddieProductController& CustomProductControllerState::GetCustomProductController
     return *static_cast<EddieProductController*>( s_productController );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/// @name  IsProductNeedsSetup()
-/// @brief true if the Product needs setup
-/// @return bool
-///////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerState::IsProductNeedsSetup()
-{
-    s_logger.LogInfo( "%s:: lang=%d, network=%d", __func__, GetCustomProductController().IsLanguageSet(),
-                      GetCustomProductController().IsNetworkConfigured() );
-
-    return not( GetCustomProductController().IsNetworkConfigured() );
-}
-
 } // namespace ProductApp

@@ -305,7 +305,6 @@ public:
     {
         s_productController = productController;
     }
-    bool IsProductNeedsSetup();
 
     virtual bool IsInNetworkSetupState() const
     {
@@ -357,6 +356,11 @@ public:
     }
 
     virtual bool HandleSystemEventFactoryDefault( const ProductSystemEventServiceResponse& response )
+    {
+        return false;
+    }
+
+    virtual bool HandleKeyEvent( LpmServiceMessages::IpcKeyInformation_t keyEvent )
     {
         return false;
     }

@@ -1,8 +1,8 @@
 <ShepherdConfig>
   <daemon name="Eddie"/>
 
-  <daemon name="Monaco"
-          exe="/opt/Bose/webkit/run_wpe.sh">
+  <daemon name="Dinghy"
+          exe="run_dinghy">
     <arg>MONACO</arg>
     <arg>1.0</arg>
     <arg>PORTRAIT</arg>
@@ -17,9 +17,9 @@
     <arg>-c/opt/Bose/etc/UpnpSource.xml</arg>
   </daemon>
 
-  <daemon name="BoseApp"
+  <daemon name="CAPS"
           recovery="reboot">
-    <arg>-c/opt/Bose/etc/BoseApp.xml</arg>
+    <arg>-c/opt/Bose/etc/CAPS.xml</arg>
   </daemon>
 
   <daemon name="STSCertified"/>

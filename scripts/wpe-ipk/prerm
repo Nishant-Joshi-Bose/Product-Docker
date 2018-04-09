@@ -1,0 +1,29 @@
+#!/bin/sh
+echo "wpe prerm"
+set -e
+CR='
+'
+
+test -d '/opt/Bose/wpe'/share/dbus || exit 0
+
+for pkgpath in $(IFS=${CR} find '/opt/Bose/wpe'/share/dbus/ -name '*.conf')
+do
+	# If the file does not have a corresponding symlink in, skip.
+	etcpath="/etc/dbus-1/system.d/$(basename "${pkgpath}")"
+	if ! test -L "${etcpath}" ; then
+		echo "wpe: ${etcpath}: Symlink missing."
+		continue
+	fi
+
+	# If the target of the symlink at /etc/dbus-1 does not point to
+	# the file # provided by the package, skip as well.
+	target=$(readlink -fn "${etcpath}")
+	if test "${target}" = "${pkgpath}" ; then
+		echo "wpe: rm ${etcpath}"
+		rm "${etcpath}"
+	else
+		echo "wpe: ${etcpath}: Wrong target: ${target}"
+		continue
+	fi
+done
+exit 0
