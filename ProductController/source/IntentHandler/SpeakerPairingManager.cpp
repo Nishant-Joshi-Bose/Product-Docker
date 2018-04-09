@@ -602,10 +602,13 @@ void SpeakerPairingManager::PairingCallback( LpmServiceMessages::IpcSpeakerPairi
 
     IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
 
-    // Need to always notify here because we need to let brussels know for UI and to rectify
-    // our white lie made earlier in DoPairingFrontDoor when the request was made where we say it
-    // was started before it does.
-    m_FrontDoorClientIF->SendNotification( accessoryFrontDoorURL, m_accessorySpeakerState );
+
+    // Need to notify here only if pairing is being set. If pairing has finished and is set to false,
+    // will notify UI with full message from RecieveAccessoryListCallback.
+    if( m_accessorySpeakerState.pairing( ) )
+    {
+        m_FrontDoorClientIF->SendNotification( accessoryFrontDoorURL, m_accessorySpeakerState );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
