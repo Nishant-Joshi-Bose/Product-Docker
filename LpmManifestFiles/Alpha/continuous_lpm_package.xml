@@ -1,0 +1,48 @@
+<blob>
+
+    <!--
+        *   To cause an image to be compressed, provide a nonzero hs_window and/or
+            hs_lookahead. If not included, 0 (not compressed) will be assumed.
+
+        *   'version' may be a hardcoded version, 'dynamic' or 'filename'. If
+            version=filename the script will use the longest string of numbers
+            and periods in the file name as the version number. If
+            version=dynamic a properties file is searched for and parsed, and
+            if that fails it falls back to the 'filename' approach.
+
+        *   *ROOT* may be used in the path attribute. It will be resolved to the root
+            directory of the project, provided to the script.
+
+        *   *CNR* may be used in the path attribute. It will be resolved as "Continuous",
+            "Nightly", or "Release", based on parameters passed to the script.
+
+        *   The 'path' attribute may consist of multiple paths separated by commas.
+            The first of these paths to match to a real file will be used.
+
+        *   The string "REGEX:" at the beginning of a path will cause the file name
+            portion to be treated like a regex, and matched against files in the
+            directory. If REGEX: is not used, an asterisk (*) can still be used as a
+            wildcard to match characters. If either of these methods match more than one
+            file, the program will exit with an error.
+
+            --><header master_version="0.3.15" name="professor_package.bos" />
+    <manifest_entries>
+        <entry chip="lpm_professor" combine="True" name="professor_mfg.bin" path="/home/softlib/verisoft/ProfessorLPM-Diags/Release/master/0.3.2-22+5d00a87/DP2/lpm_0.3.2-22+5d00a87.bin" version="filename" />
+        <entry chip="lpm_professor" combine="True" name="professor.bin" path="/home/softlib/verisoft/ProfessorLPM-App/Continuous/trunk/latest/Alpha/lpm_*.bin" version="filename" />
+        <entry chip="lpm_professor" combine="True" name="professor_bl.bin" path="/home/softlib/verisoft/ProfessorLPM-BL/Release/trunk/0.2.0.1674/lpm_bootloader_0.2.0.1674.bin" version="filename" />
+        <entry name="f0.bin" path="/home/softlib/verisoft/A4V-F0/Release/trunk/1.7.1.12103/RIVIERA_F0_1.7.1.12103.bin" version="filename" />
+        <entry name="darr.bin"        path="/home/softlib/verisoft/A4V-WirelessAudio/Release/trunk/25.000.11510/wam_25.000.11510.bin" version="25" />
+        <entry name="ERC.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Continuous/trunk/latest/Professor/upd/ERC.upd" version="dynamic" />
+        <entry name="RESET_ERC.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Continuous/trunk/latest/Professor/upd/RESET_ERC.upd" version="dynamic" />
+        <entry name="SMRT00.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Continuous/trunk/latest/Professor/upd/SMRT00.upd" version="dynamic" />
+        <entry name="SMRT01.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Continuous/trunk/latest/Professor/upd/SMRT01.upd" version="dynamic" />
+        <entry name="SMRT02.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Continuous/trunk/latest/Professor/upd/SMRT02.upd" version="dynamic" />
+        <entry name="INSTALLER00.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Continuous/trunk/latest/Professor/upd/INSTALLER00.upd" version="dynamic" />
+        <entry name="INSTALLER01.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Continuous/trunk/latest/Professor/upd/INSTALLER01.upd" version="dynamic" />
+        <entry name="INSTALLER02.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Continuous/trunk/latest/Professor/upd/INSTALLER02.upd" version="dynamic" />
+        <entry name="psoc.cyacd" path="/home/softlib/verisoft/CastleLightBarCapSense/Release/master/3.5-118+63b94fa/App-Professor-DP2*.cyacd" version="dynamic" />
+        <entry name="prof_lb_anim_db.bin" path="/home/softlib/verisoft/CastleLedAnimationTool/Release/master/1.10-31+0a91d28/Eddie-DP1/Animations.bin" version="dynamic" />
+        <entry name="remote.hex" path="/home/softlib/verisoft/BLERemoteXCVR/Release/master/0.16-5+g2e25c0f/BLEBridge_app_*.hex" version="dynamic" />
+        <entry name="speaker.bos" path="/home/softlib/verisoft/A4V-System/Release/trunk/1.9.14.2451686/speaker_1.9.14.2451686.bos" version="1.9.14.2451686" />
+    </manifest_entries>
+</blob>
