@@ -139,12 +139,12 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductLpmHardwareInterface( nullptr ),
     m_ProductSystemManager( nullptr ),
     m_ProductCommandLine( nullptr ),
+    m_ProductSourceInfo( nullptr ),
     m_ProductKeyInputManager( nullptr ),
     m_ProductCecHelper( nullptr ),
     m_ProductDspHelper( nullptr ),
     m_ProductAdaptIQManager( nullptr ),
     m_ProductAudioService( nullptr ),
-    m_ProductSourceInfo( nullptr ),
     m_ProductBLERemoteManager( nullptr ),
 
     ///
@@ -516,9 +516,9 @@ void ProfessorProductController::Run( )
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductSystemManager        = std::make_shared< ProductSystemManager              >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
+    m_ProductSourceInfo           = std::make_shared< ProductSourceInfo                 >( *this );
     m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
     m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
-    m_ProductSourceInfo           = std::make_shared< ProductSourceInfo                 >( *this );
     m_ProductBLERemoteManager     = std::make_shared< ProductBLERemoteManager           >( *this );
     m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this,
                                     m_FrontDoorClientIF,
@@ -559,11 +559,11 @@ void ProfessorProductController::Run( )
     m_ProductSystemManager       ->Run( );
     m_ProductAudioService        ->Run( );
     m_ProductCommandLine         ->Run( );
+    m_ProductSourceInfo          ->Run( );
     m_ProductKeyInputManager     ->Run( );
     m_ProductCecHelper           ->Run( );
     m_ProductDspHelper           ->Run( );
     m_ProductAdaptIQManager      ->Run( );
-    m_ProductSourceInfo          ->Run( );
     m_ProductBLERemoteManager    ->Run( );
 
     ///
@@ -1253,11 +1253,11 @@ void ProfessorProductController::Wait( )
     m_ProductLpmHardwareInterface->Stop( );
     m_ProductSystemManager       ->Stop( );
     m_ProductCommandLine         ->Stop( );
+    m_ProductSourceInfo          ->Stop( );
     m_ProductKeyInputManager     ->Stop( );
     m_ProductCecHelper           ->Stop( );
     m_ProductDspHelper           ->Stop( );
     m_ProductAdaptIQManager      ->Stop( );
-    m_ProductSourceInfo          ->Stop( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

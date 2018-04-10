@@ -113,7 +113,7 @@ bool ProductCecHelper::Run( )
     m_FrontDoorClient->RegisterNotification< SoundTouchInterface::volume >
     ( FRONTDOOR_AUDIO_VOLUME, fNotify );
 
-    auto getFunc = [ this ]( const Callback< const CecModeResponse>&           resp,
+    auto getFunc = [ this ]( const Callback< const CecModeResponse>& resp,
                              const Callback<FrontDoor::Error>& errorRsp )
     {
         CecModeHandleGet( resp, errorRsp );
@@ -135,10 +135,10 @@ bool ProductCecHelper::Run( )
         CecModeHandlePut( cecReq, cecResp, errorRsp );
     };
 
-    AsyncCallback<const CecUpdateRequest,
-                  Callback< CecModeResponse >,
-                  Callback< FrontDoor::Error > >
-                  putCb( putFunc, m_ProductTask );
+    AsyncCallback< const CecUpdateRequest,
+                   Callback< CecModeResponse >,
+                   Callback< FrontDoor::Error > >
+                   putCb( putFunc, m_ProductTask );
 
     m_PutConnection = m_FrontDoorClient->RegisterPut<CecUpdateRequest>(
                           FRONTDOOR_CEC_API,
