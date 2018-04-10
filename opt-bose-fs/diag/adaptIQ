@@ -1,6 +1,6 @@
 #!/usr/bin/python2.7
 #
-# Invoked via pts-handler to display pages related to diagnostics.
+# Invoked via pts-handler to display pages related to AdaptIQ diagnostics.
 #
 import os
 import sys

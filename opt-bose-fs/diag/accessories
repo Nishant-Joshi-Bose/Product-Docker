@@ -1,6 +1,6 @@
 #!/usr/bin/python2.7
 #
-# Invoked via pts-handler to display pages related to diagnostics.
+# Invoked via pts-handler to display pages related to accessories diagnostics.
 #
 import os
 import sys

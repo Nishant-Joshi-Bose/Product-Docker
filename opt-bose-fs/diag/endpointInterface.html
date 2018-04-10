@@ -83,13 +83,16 @@
         </div>
         <div id='general-output-panel' class='box'></div>
         <input id='submit-payload-button' type='submit' value='GENERIC' class='submit btn waves-effect waves-light '/>
+        <hr>
     </body>
 
     <footer>
         <script type="text/javascript">
 
+            //Configuration placeholder for JSON object. See header comment. 
             var Configuration = CONFIGURATION_JSON_OBJECT ;
 
+            //Fill in parts of the HTML with information from JavaScript
             function PageConfiguration()
             {
                 document.title = Configuration.pageName + " Diagnostics";
@@ -98,28 +101,30 @@
                 document.getElementById('security-host').textContent = "https://" + window.location.hostname + ":8082/"
             }
 
-            function FindField(object,fields)
+            //Helper function to go through the JSON object and return just the requested field
+            function FindField(object,field)
             {
-                if (fields.length>1)
+                field = field.split('.');
+                while (field.length>1)
                 {
-                    object = object[fields[0]];
-                    fields.shift();
-                    return FindField(object, fields);
+                    object = object[field[0]];
+                    field.shift();
                 }
-                else
-                {
-                    return object[fields[0]];
-                }
+                return object[field[0]];
             }
 
+            //WebSocketConnection to FrontDoor on the device
             function WebSocketConnection()
             {
+                //Define websocket address based on page host, and connect with eco2 protocol
                 var FrontDoorHost = "wss://"+window.location.hostname+":8082";
                 var socket = new WebSocket(FrontDoorHost, "eco2");
 
+                //Create variables for oft accessed HTML elements
                 var errorPanel = document.getElementById('error-panel');
                 var generalOutputTextAreaElem = document.getElementById('general-output-panel');
 
+                //If button enabled in configuration, setup variable and unhide HTML element
                 if (Configuration.button.enabled)
                 {
                     var sendButton =  document.getElementById("submit-payload-button");
@@ -129,45 +134,46 @@
                     sendButton.style.display = "block" ;
                 }
 
-
+                //On Connection to WebSocket, request system info to establish frontdoor communication
                 socket.onopen = function()
                 {
-                    // Web Socket connected, send system info message
                     var sendObj = Message;
                     sendObj.header.resource='/system/info';
                     SendMessage(sendObj);
                     GetData();
                 };
 
+                //On receiving data back from FrontDoor
                 socket.onmessage = function (evt)
                 {
+                    //Parse and log message
                     var received_msg = evt.data;
                     var msg = JSON.parse(received_msg);
                     console.log("Incoming:\n"+JSON.stringify(msg));
+
+                    //If message is from endpoint of interest, add a timestamp to the message and output the needed fields to the HTML text area
                     if (msg.header.resource === Configuration.endpoint)
                     {
                         var output = (new Date().toLocaleTimeString()) + ": " + "\n";
                         Configuration.fields.forEach(function(att){
 
-                            console.log(att);
-                            att = att.split('.');
                             var value = FindField(msg, att);
-                            output = output + att[att.length-1] +": "+ JSON.stringify(value, null, 4) + "\n";
+                            output = output + att.split('.').pop() +": "+ JSON.stringify(value, null, 4) + "\n";  
                         });
                         generalOutputTextAreaElem.textContent = output + "\n\n" + generalOutputTextAreaElem.textContent;
                     }
 
                 };
 
+                //On Connection to WebSocket lost, log disconnection data and display a message to the user.
                 socket.onclose = function(evt)
                 {
-                    // Web Socket closed
-
-                    console.log(evt);
+                    console.log(evt);   
 
                     generalOutputTextAreaElem.textContent = (new Date().toLocaleTimeString()) + ": " + "\n WebSocket Connection Lost..." + "\n\n" + generalOutputTextAreaElem.textContent;
                 };
 
+                //On WebSocket connection error, log data and display an error message to the user
                 socket.onerror = function(evt)
                 {
                     console.log(evt);
@@ -176,12 +182,13 @@
                     generalOutputTextAreaElem.style.display = "none";
                 };
 
+                //before unloading the page, disconnect websocket.
                 window.onbeforeunload = function(event)
                 {
-                    // Close Web Socket when unloading
                     socket.close();
                 };
 
+                //Helper function for sending PUT frontdoor messages based on button configuration
                 function PutData()
                 {
                     sendObj=Message;
@@ -189,12 +196,12 @@
                     sendObj.header.reqID++;
                     sendObj.header.resource=Configuration.endpoint;
                     sendObj.header.method="PUT";
-
                     sendObj.body = Configuration.button.putData;
 
                     SendMessage(sendObj);
                 }
 
+                //Helper function for sending GET frontdoor messages
                 function GetData()
                 {
                     sendObj=Message;
@@ -202,28 +209,33 @@
                     sendObj.header.reqID++;
                     sendObj.header.resource=Configuration.endpoint;
                     sendObj.header.method="GET";
+
                     SendMessage(sendObj);
                 }
 
+                //Helper function for sending messages over the WebSocket Connection
                 function SendMessage(message)
                 {
                     try{
+                        //Convert message to JSON, log to console, and send over WebSocket
                         sendStr = JSON.stringify(message);
                         console.log("Outgoing \n"+sendStr);
                         socket.send(sendStr);
                     }
 
                     catch(e) {
+                        //Log error to if message couldn't be sent. 
                         console.log("Couldn't send message: " + sendStr);
                     }
                 }
             }
 
+            //FrontDoor Message template
             var Message = {
                 "header":{
                     "resource":"",
                     "version":1,
-                    "token":"las9kdfjaslkjdbhgsdkKbldkfbvnl?adkfjnvlk",
+                    "token":"",
                     "method":"GET",
                     "device":"",
                     "reqID":1,
