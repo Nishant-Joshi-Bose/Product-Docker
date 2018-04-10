@@ -15,14 +15,14 @@ Parent conftest.py for the Eddie repository
 """
 
 import os
+import time
 import datetime
 import ConfigParser
 import pytest
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
-from CastleTestUtils.RivieraUtils import rivieraCommunication
-from CastleTestUtils.RivieraUtils import adb_utils
+from CastleTestUtils.RivieraUtils import rivieraCommunication, rivieraUtils
 from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import flash_device
 from commonData import keyConfig
 
@@ -51,6 +51,12 @@ def pytest_addoption(parser):
                      help="Timeout for most of the commands")
     parser.addoption("--router", action="store", default="testRouter",
                      help="router: Specify which router from Configs/conf_wifiProfiles.ini is used to connect.")
+    parser.addoption('--passport-base-url',
+                     default='https://test.users.api.bose.io/latest/passport-core/',
+                     help='Passport base URL')
+    parser.addoption('--api-key',
+                     default='9zf6kcZgF5IEsXbrKU6fvG8vFGWzF1Ih',
+                     help='Passport API KEY')
 
 
 def ping(ip):
@@ -294,6 +300,7 @@ def keyConfig():
     keyConfigData = keyConfig["keyTable"]
     return keyConfigData
 
+
 @pytest.fixture(scope='session')
 def deviceid(request):
     """
@@ -305,6 +312,7 @@ def deviceid(request):
     except Exception as e:
         logger.info("Getting device id.... " + str(e))
         return False
+
 
 @pytest.fixture(scope='module')
 def wifi_config():
@@ -318,35 +326,49 @@ def wifi_config():
     cfg.read(wifi_ini_file)
     yield cfg
 
-@pytest.fixture(scope="function")
-def ip_address_wlan(request, wifi_config):
-    """
-    IP address of the device connected to wlan.
-    """
-    dev_id = request.config.getoption("--device-id")
-    network_obj = NetworkBase(None)
-    try:
-        ip_address = network_obj.check_inf_presence("wlan0")
-    except (AttributeError, TypeError):
-        logger.info("Clearing Wireless Profiles...")
-        wifi_clear_profile_command = ' '.join(['network', 'wifi', 'profiles', 'clear'])
-        adb_utils.adb_telnet_cmd(wifi_clear_profile_command, expect_after='Profiles Deleted', device_id=dev_id)
 
+@pytest.fixture(scope="function")
+def ip_address_wlan(request, deviceid, wifi_config):
+    """
+    IP address of the device connected to WLAN.
+    Removes any configuration on the Device if not connected.
+    :param request: PyTest command line request option
+    :param wifi_config: ConfigParser object of Wireless configs
+    :return: The IP Address of the attached Riviera Device
+    """
+    riviera_device = rivieraUtils.RivieraUtils('ADB', device=deviceid, logger=logger)
+    network_base = NetworkBase(None, device=deviceid, logger=logger)
+
+    interface = 'wlan0'
+    device_ip = None
+    try:
+        device_ip = network_base.check_inf_presence(interface, timeout=5)
+        logger.info("Found Device IP: {}".format(device_ip))
+    except UnboundLocalError as exception:
+        logger.warning("Not able to acquire IP Address: {}".format(exception))
+    if not device_ip:
+        # Clear any WiFi profiles on the device
+        clear_profiles = ' '.join(['network', 'wifi', 'profiles', 'clear'])
+        clear_profiles = "echo {} | nc 0 17000".format(clear_profiles)
+        logger.info("Clearing Network Profiles: {}".format(clear_profiles))
+        riviera_device.communication.executeCommand(clear_profiles)
+
+        # Acquire the Router information
         router = request.config.getoption("--router")
         router_name = wifi_config.get(router, 'ssid')
         security = wifi_config.get(router, 'security')
         password = wifi_config.get(router, 'password')
 
-        logger.info("Adding Wireless Profile - Connecting to:{}".format(router_name))
-        wifi_add_profile_command = ' '.join(['network', 'wifi', 'profiles', 'add', '"{}"'.format(router_name),
-                                             security.upper(), '"{}"'.format(password)])
-        adb_utils.adb_telnet_cmd(wifi_add_profile_command, expect_after='->OK', expect_last='ADD_PROFILE_SUCCEEDED',
-                                 timeout=60, async_response=True, device_id=dev_id)
+        # Add Router information to the Device
+        add_profile = ' '.join(['network', 'wifi', 'profiles', 'add',
+                                router_name, security.upper(), password])
+        add_profile = "echo {} | nc 0 17000".format(add_profile)
+        logger.info("Adding Network Profile: {}".format(add_profile))
+        riviera_device.communication.executeCommand(add_profile)
+        time.sleep(2)
 
-        # Try to get new ip address assigned to wlan0 interface
-        try:
-            ip_address = network_obj.check_inf_presence("wlan0")
-        except AttributeError as attr_except:
-            assert False, 'Not able to get wlan ip_address, Exception:{}'.format(attr_except)
-    return ip_address
+    device_ip = network_base.check_inf_presence(interface, timeout=20)
+    if not device_ip:
+        raise SystemError("Failed to acquire network connection through {}: {}".format(interface, device_ip))
 
+    return device_ip

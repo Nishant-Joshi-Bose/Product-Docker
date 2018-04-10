@@ -6,17 +6,24 @@ CR='
 test -d '/opt/Bose/wpe'/share/dbus || exit 0
 
 ok=true
+ 
+# NOTICE NOTICE: Mounting HSP as read-write to create link in /etc
+#   This should be removed and /etc/... links be part of HSP itself
+mount -oremount,rw /
 for pkgpath in $(IFS=${CR} find '/opt/Bose/wpe'/share/dbus/ -name '*.conf')
 do
 	etcpath="/etc/dbus-1/system.d/$(basename "${pkgpath}")"
 	if test -r "${etcpath}" ; then
 		echo "wpe: ${etcpath}: Already exists."
-		ok=false
-	else
-		echo "wpe: ${etcpath} -> ${pkgpath}"
-		ln -s "${pkgpath}" "${etcpath}"
+		# NOTICE NOTICE: This line causes unnecessary failure to avoid overwriting the link.
+		# Instead just warn user remove file and create link again
+		#ok=false
+		rm -f ${etcpath}
 	fi
+	echo "wpe: ${etcpath} -> ${pkgpath}"
+	ln -s "${pkgpath}" "${etcpath}"	
 done
+mount -oremount,ro /
 
 if ! ${ok} ; then
 	echo "wpe: Setup may not be complete."
