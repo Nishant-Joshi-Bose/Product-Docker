@@ -28,6 +28,6 @@ configuration = \
 }
 """
 
-html_page= contents.replace("CONFIGURATION_JSON_OBJECT",configuration)
+html_page= contents.replace("$CONFIGURATION_JSON_OBJECT$",configuration)
 
 sys.stdout.write(html_page)
