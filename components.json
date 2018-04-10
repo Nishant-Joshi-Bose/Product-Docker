@@ -101,11 +101,11 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "CASTLE-11979@177d7ea559b5c0e8e9beca402f55b2917497755d"
+    "selected_version": "master@99c3b37f4f53a0a71b38cf6efec80caae3dc0b18"
   },
   {
     "name": "CastleProductUIAssets",
-    "selected_version": "master@a645516388a09ad39dbab7b63535e9a910fa2dff"
+    "selected_version": "master@f5025558c6d13bc8fe9e67ff7248a89a6441b0c2"
   },
   {
     "name": "CastleTestUtils",
