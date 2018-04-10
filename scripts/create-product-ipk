@@ -229,7 +229,10 @@ fi
 # the UEI qsp libraries (libqsp.so, libqsp_hal.so); remove it when
 # libraries linked against our libcurl version are available
 ln -sf /usr/lib/libcurl.so.5 /opt/Bose/lib/libcurl.so.4
-chmod -R 440 /opt/Bose/etc/secure || exit
+
+# make sure the public key file has read only permission
+find /opt/Bose/etc/secure/ -type d -exec /bin/busybox chmod 550 {} \;
+find /opt/Bose/etc/secure/ -type f -exec /bin/busybox chmod 440 {} \;
 
 # make sure the public key file has read only permission
 find /opt/Bose/etc/secure/ -type d -exec /bin/busybox chmod 550 {} \;
