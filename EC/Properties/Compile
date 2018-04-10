@@ -15,5 +15,6 @@ fi
 export DONT_UPDATE_CASTLETOOLS=1
 
 eval $KWINJECT make jobs=8 deploy || exit
+eval $KWINJECT make jobs=8 hw_var=Alpha deploy || exit
 
 : success
