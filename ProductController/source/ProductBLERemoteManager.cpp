@@ -228,8 +228,10 @@ void ProductBLERemoteManager::UpdateBacklight( )
     }
 
     A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t sourceLED;
-    GetSourceLED( sourceLED );
-    m_RCSClient->Led_Set( sourceLED, availableSources );
+    if ( GetSourceLED( sourceLED ) ) 
+    {
+        m_RCSClient->Led_Set( sourceLED, availableSources );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
