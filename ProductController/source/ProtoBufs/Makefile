@@ -16,6 +16,7 @@ PROTO_SOURCES = ProductMessage.proto        \
                 AudioFormat.proto           \
                 SystemSourcesProperties.proto \
                 CecMode.proto \
+                HdmiEdid.proto \
                 SystemPowerProduct.proto \
                 KeyNames.proto \
 
