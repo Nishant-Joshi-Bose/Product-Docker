@@ -69,6 +69,12 @@ for elem in """country_code regionCode snSystem productType productName
 print "</table>"
 print "</div>"
 
+print "<li>Tests"
+print """<div class="box">"""
+print "<a href='/diag/accessories'>Accessory Pairing</a> <br>"
+print "<a href='/diag/adaptIQ'>AdaptIQ</a>"
+print "</div>"
+
 print "<hr>"
 
 print "Remote:", os.environ.get("REMOTE_ADDRESS", "(oops)")
