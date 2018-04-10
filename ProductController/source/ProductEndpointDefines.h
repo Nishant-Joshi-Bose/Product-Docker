@@ -24,6 +24,15 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// The following definitions are alphabetically listed end point resource strings, and are used by
+/// the custom product controller (specific to Professor) as a client or consumer to receive data
+/// from other processes or to send data to other processes to drive product functionality.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define FRONTDOOR_SYSTEM_SOURCES_API "/system/sources"
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// The following definitions are alphabetically listed end point resource strings, and are used by
 /// the custom product controller (specific to Professor) as a server or producer to send data
 /// requested by other processes or to receive data from other processes to drive functionality.
 ///
