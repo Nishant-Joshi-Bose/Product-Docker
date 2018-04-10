@@ -79,30 +79,31 @@ message ProductAccessoryPairing
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 message ProductMessage
 {
-        optional ProductLpmStatus           lpmstatus           =  1;
-        optional ProductCapsStatus          capsstatus          =  2;
-        optional ProductAudioPathStatus     audiopathstatus     =  3;
-        optional ProductSTSInterfaceStatus  stsinterfacestatus  =  4;
-        optional ProductSelectSourceSlot    selectsourceslot    =  5;
-        optional ProductNetworkStatus       networkstatus       =  6;
-        optional ProductWirelessStatus      wirelessstatus      =  7;
-        optional ProductVoiceStatus         voicestatus         =  8;
-        optional uint32                     action              =  9;
-        optional ProductLanguageData        languagedata        = 10;
-        optional ProductConfigurationStatus configurationstatus = 11;
-        optional ProductAutowakeStatus      autowakestatus      = 12;
-        optional ProductNowPlayingStatus    nowplayingstatus    = 13;
-        optional ProductAccessoryPairing    accessorypairing    = 14;
-        optional ProductAdaptIQStatus       aiqstatus           = 15;
-        optional ProductAdaptIQControl      aiqcontrol          = 16;
-        optional ProductLpmLowPowerStatus   lpmlowpowerstatus   = 17;
-        optional bool                       audiopathselect     = 18;
-        optional bool                       ampfaultdetected    = 19;
-        optional bool                       audiosilent         = 20;
-        optional ProductCecMode             cecmode             = 21;
-        optional ProductSystemEventServiceResponse systemeventserviceresponse = 22;
-        optional uint32                     chimetoplay         = 23;
-        optional LpmServiceMessages.IpcKeyInformation_t    keyevent = 24;
+        optional ProductLpmStatus                           lpmstatus                   =  1;
+        optional ProductCapsStatus                          capsstatus                  =  2;
+        optional ProductAudioPathStatus                     audiopathstatus             =  3;
+        optional ProductSTSInterfaceStatus                  stsinterfacestatus          =  4;
+        optional ProductSelectSourceSlot                    selectsourceslot            =  5;
+        optional ProductNetworkStatus                       networkstatus               =  6;
+        optional ProductWirelessStatus                      wirelessstatus              =  7;
+        optional ProductVoiceStatus                         voicestatus                 =  8;
+        optional uint32                                     action                      =  9;
+        optional ProductLanguageData                        languagedata                = 10;
+        optional ProductConfigurationStatus                 configurationstatus         = 11;
+        optional ProductAutowakeStatus                      autowakestatus              = 12;
+        optional ProductNowPlayingStatus                    nowplayingstatus            = 13;
+        optional ProductAccessoryPairing                    accessorypairing            = 14;
+        optional ProductAdaptIQStatus                       aiqstatus                   = 15;
+        optional ProductAdaptIQControl                      aiqcontrol                  = 16;
+        optional ProductLpmLowPowerStatus                   lpmlowpowerstatus           = 17;
+        optional bool                                       audiopathselect             = 18;
+        optional bool                                       ampfaultdetected            = 19;
+        optional bool                                       audiosilent                 = 20;
+        optional ProductCecMode                             cecmode                     = 21;
+        optional ProductSystemEventServiceResponse          systemeventserviceresponse  = 22;
+        optional uint32                                     chimetoplay                 = 23;
+        optional LpmServiceMessages.IpcKeyInformation_t     keyevent                    = 24;
+        optional bool                                       softwareupdatestatus        = 25;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
