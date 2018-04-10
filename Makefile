@@ -1,9 +1,13 @@
 export BOSE_WORKSPACE := $(abspath $(CURDIR))
 include Settings.mk
 
+ifneq ($(filter $(HW_VAR), DP2 Alpha),$(HW_VAR))
+	$(error HW_VAR must equal DP2 or Alpha. Found $(HW_VAR))
+endif
+
 .PHONY: deploy
 deploy: all-packages
-	scripts/collect-deployables builds/Release builds/deploy/DP2
+	scripts/collect-deployables builds/Release builds/deploy/$(HW_VAR)
 
 .PHONY: force
 force:
@@ -27,20 +31,21 @@ check_tools:
 ifndef DONT_UPDATE_CASTLETOOLS
 	castletools-update
 endif
+ifndef DONT_INSTALL_COMPONENTS
 	components install
+endif
 
 CMAKE_USE_CCACHE := $(USE_CCACHE)
 
 A4VVIDEOMANAGERSERVICE_DIR = $(shell components get A4VVideoManagerService installed_location)
 A4VQUICKSETSERVICE_DIR = $(shell components get A4VQuickSetService installed_location)
 A4VREMOTECOMMUNICATIONSERVICE_DIR = $(shell components get A4VRemoteCommunicationService installed_location)
+RIVIERALPM_DIR = $(shell components get RivieraLPM installed_location)
+RIVIERA_LPM_TOOLS_DIR = $(shell components get RivieraLpmTools installed_location)
 PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
-RIVIERALPM_DIR = $(shell components get RivieraLPM installed_location)
-RIVIERA_LPM_TOOLS_DIR = $(shell components get RivieraLpmTools installed_location)
 TESTUTILS_DIR = $(shell components get CastleTestUtils installed_location)
-
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
@@ -147,7 +152,7 @@ else
 endif
 	rm -f ./builds/$(cfg)/professor_package*.bos
 	rm -f ./builds/$(cfg)/lpm_professor*.hex
-	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE)
+	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE) $(HW_VAR)
 
 .PHONY: lpmupdater-ipk
 lpmupdater-ipk: lpm-bos

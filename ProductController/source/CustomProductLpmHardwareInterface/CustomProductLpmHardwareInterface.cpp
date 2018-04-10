@@ -540,6 +540,31 @@ bool CustomProductLpmHardwareInterface::SetStreamConfig( LpmServiceMessages::Ipc
     return true;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name  CustomProductHardwareLpmInterface::SetInternalMute
+///
+/// @brief This method send internalMute to DSP
+///
+/// @param bool mute
+///
+/// @return bool The method returns true when the setInternalMute request is successfully sent.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductLpmHardwareInterface::SetInternalMute( bool mute )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    if( isConnected( ) == false || GetLpmClient( ) == nullptr )
+    {
+        BOSE_ERROR( s_logger, "%s failed, as no connection is available.", __func__ );
+        return false;
+    }
+    IpcAudioMute_t msg;
+    msg.set_internalmute( mute );
+    GetLpmClient( )->SetMute( msg, Ipc_Device_t::IPC_DEVICE_DSP );
+    return true;
+}
+
 /// @name  CustomProductHardwareLpmInterface::BootDSPImage
 ///
 /// @brief This method loads the specified DSP image

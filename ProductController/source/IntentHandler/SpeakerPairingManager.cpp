@@ -31,6 +31,7 @@
 #include "CustomProductLpmHardwareInterface.h"
 #include "SpeakerPairingManager.h"
 #include "ProductEndpointDefines.h"
+#include "PGCErrorCodes.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -86,9 +87,6 @@ SpeakerPairingManager::SpeakerPairingManager( NotifyTargetTaskIF&        task,
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::Initialize( )
 {
-    ///
-    /// @todo Figure out how to better platform controllability of accessories.
-    ///
     ProductPb::AccessorySpeakerState::SpeakerControls* controlable = m_accessorySpeakerState.mutable_controllable( );
     controlable->set_subs( false );
     controlable->set_rears( false );
@@ -199,10 +197,6 @@ void SpeakerPairingManager::RegisterLpmClientEvents( )
 
     BOSE_INFO( s_logger, "%s registered for accessory pairing events from the LPM hardware.",
                ( success ? "Successfully" : "Unsuccessfully" ) );
-
-    ///
-    /// @todo Functionality may be needed to recover from a failure to register.
-    ///
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -292,6 +286,11 @@ void SpeakerPairingManager::AccessoriesPutHandler( const ProductPb::AccessorySpe
     else
     {
         BOSE_ERROR( s_logger, "Received invalid put request!" );
+        FrontDoor::Error errorMessage;
+        errorMessage.set_code( PGCErrorCodes::ERROR_CODE_PRODUCT_CONTROLLER_CUSTOM );
+        errorMessage.set_subcode( PGCErrorCodes::ERROR_SUBCODE_ACCESSORIES );
+        errorMessage.set_message( "Accessory message did not have valid command option." );
+        error.Send( errorMessage );
     }
 }
 
@@ -398,8 +397,8 @@ void SpeakerPairingManager::DisbandAccessoriesCallback( const Callback<ProductPb
         m_accessorySpeakerState.mutable_subs()->Clear();
         m_accessorySpeakerState.mutable_rears()->Clear();
 
-        m_accessorySpeakerState.mutable_controllable()->set_subs( false );
-        m_accessorySpeakerState.mutable_controllable()->set_rears( false );
+        m_accessorySpeakerState.mutable_controllable()->set_subs( true );
+        m_accessorySpeakerState.mutable_controllable()->set_rears( true );
     }
 
     frontDoorCB( m_accessorySpeakerState );
@@ -521,13 +520,13 @@ void SpeakerPairingManager::RecieveAccessoryListCallback( LpmServiceMessages::Ip
                 {
                     numOfRightRears++;
                 }
-                rearsEnabled |= ( accDesc.active() != 0 );
+                rearsEnabled |= ( accDesc.active() != LpmServiceMessages::ACCESSORY_DEACTIVATED );
             }
             else if( accDesc.has_type( ) && AccessoryTypeIsSub( accDesc.type( ) ) )
             {
                 const auto& spkrInfo = m_accessorySpeakerState.add_subs( );
                 AccessoryDescriptionToAccessorySpeakerInfo( accDesc, spkrInfo );
-                subsEnabled |= ( accDesc.active() != 0 );
+                subsEnabled |= ( accDesc.active() != LpmServiceMessages::ACCESSORY_DEACTIVATED );
             }
         }
     }
@@ -599,10 +598,13 @@ void SpeakerPairingManager::PairingCallback( LpmServiceMessages::IpcSpeakerPairi
 
     IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
 
-    // Need to always notify here because we need to let brussels know for UI and to rectify
-    // our white lie made earlier in DoPairingFrontDoor when the request was made where we say it
-    // was started before it does.
-    m_FrontDoorClientIF->SendNotification( accessoryFrontDoorURL, m_accessorySpeakerState );
+
+    // Need to notify here only if pairing is being set. If pairing has finished and is set to false,
+    // will notify UI with full message from RecieveAccessoryListCallback.
+    if( m_accessorySpeakerState.pairing( ) )
+    {
+        m_FrontDoorClientIF->SendNotification( accessoryFrontDoorURL, m_accessorySpeakerState );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
