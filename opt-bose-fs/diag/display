@@ -35,6 +35,7 @@ if ".." in image or not image.endswith(".png") or not os.path.exists(image):
     raise Exception("bad image name: " + image)
 
 if params == "show":
+    subprocess.call(["logger", "display-test", image])
     # Show the image on the unit's display and
     # send "OK" as the HTTP response.
     ph = subprocess.Popen(["show_splash", image],
