@@ -101,7 +101,7 @@
                 document.getElementById('security-host').textContent = "https://" + window.location.hostname + ":8082/"
             }
 
-            //Helper function to go through the JSON object and return just the requested field
+            //Helper function to go through the nested JSON object(s) and return just the requested field
             function FindField(object,field)
             {
                 field = field.split('.');
