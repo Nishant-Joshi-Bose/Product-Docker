@@ -29,15 +29,15 @@
   },
   {
     "name": "BoseOPKG-native",
-    "selected_version": "Release/master/0.4.0-21+b24eca9"
+    "selected_version": "Release/master/0.4.1-23+3391857"
   },
   {
     "name": "BoseOPKG-qc8017_32",
-    "selected_version": "Release/master/0.4.0-21+b24eca9"
+    "selected_version": "Release/master/0.4.1-23+3391857"
   },
   {
     "name": "BoseOPKG-x86",
-    "selected_version": "Release/master/0.4.0-21+b24eca9"
+    "selected_version": "Release/master/0.4.1-23+3391857"
   },
   {
     "name": "BoseWebMonaco",

@@ -3,7 +3,7 @@ import json
 import pytest
 import argparse
 import copy
-from FrontDoorAPI import FrontDoorAPI
+from common import FrontDoorAPI
 
 def main():
     argparser = argparse.ArgumentParser('FrontDoor test client')

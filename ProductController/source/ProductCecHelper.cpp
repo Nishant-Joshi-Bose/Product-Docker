@@ -31,6 +31,8 @@
 #include "EndPointsDefines.h"
 #include "ProductEndpointDefines.h"
 #include "PGCErrorCodes.h"
+#include "DataCollectionClientFactory.h"
+#include "HdmiEdid.pb.h"
 
 using namespace ProductPb;
 
@@ -66,7 +68,8 @@ ProductCecHelper::ProductCecHelper( ProfessorProductController& ProductControlle
       m_ProductNotify( ProductController.GetMessageHandler( ) ),
       m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
       m_connected( false ),
-      m_CustomProductController( static_cast< ProfessorProductController & >( ProductController ) )
+      m_CustomProductController( static_cast< ProfessorProductController & >( ProductController ) ),
+      m_DataCollectionClient( DataCollectionClientFactory::CreateUDCService( m_ProductTask ) )
 {
     m_cecresp.set_mode( "On" );
 }
@@ -401,7 +404,13 @@ void ProductCecHelper::HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMI
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCecHelper::HandleRawEDIDResponse( const A4VVideoManagerServiceMessages::EDIDRawMsg_t rawEdid )
 {
-    //TBD - Mano
+    BOSE_DEBUG( s_logger, "ProductCecHelper::SendEdidDataCollection" );
+
+    auto edidData = std::make_shared< DataCollection::HdmiEdid >( );
+
+    edidData->set_eedid( rawEdid.edid().c_str() );
+
+    m_DataCollectionClient->SendData( edidData, "eedid-changed" );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
