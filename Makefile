@@ -38,12 +38,14 @@ PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerComm
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
 TESTUTILS_DIR = $(shell components get CastleTestUtils installed_location)
+RIVIERA_LPM_SERVICE_DIR = $(shell components get RivieraLpmService-qc8017_32 installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
 	$(MAKE) -C ProductController $@
 	$(MAKE) -C $(PRODUCTCONTROLLERCOMMON_DIR) $@
 	ln -nsf $(TESTUTILS_DIR) builds/CastleTestUtils
+	ln -nsf $(RIVIERA_LPM_SERVICE_DIR) builds/RivieraLpmService
 	touch builds/__init__.py
 
 .PHONY: astyle
@@ -125,7 +127,7 @@ all-packages: package-no-hsp package-with-hsp graph
 
 .PHONY: clean
 clean:
-	rm -rf $(BOSE_WORKSPACE)/builds/$(cfg) builds/CastleTestUtils builds/__init__.py
+	rm -rf $(BOSE_WORKSPACE)/builds/$(cfg) builds/CastleTestUtils builds/__init__.py builds/RivieraLpmService
 	find . -name \*.pyc -delete
 
 .PHONY: distclean
