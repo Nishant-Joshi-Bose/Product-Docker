@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateLowPowerStandby.cpp
+/// @file      CustomProductControllerStateLowPowerResume.cpp
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
 ///            product on state.
@@ -25,7 +25,7 @@
 #include "Utilities.h"
 #include "Intents.h"
 #include "IntentHandler.h"
-#include "CustomProductControllerStateLowPowerStandby.h"
+#include "CustomProductControllerStateLowPowerResume.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -42,7 +42,7 @@ namespace ProductApp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateLowPowerStandby::CustomProductControllerStateLowPowerStandby
+/// @brief CustomProductControllerStateLowPowerResume::CustomProductControllerStateLowPowerResume
 ///
 /// @param ProductControllerHsm& hsm
 ///
@@ -53,26 +53,26 @@ namespace ProductApp
 /// @param const std::string&    name
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductControllerStateLowPowerStandby::CustomProductControllerStateLowPowerStandby( ProductControllerHsm& hsm,
+CustomProductControllerStateLowPowerResume::CustomProductControllerStateLowPowerResume( ProductControllerHsm& hsm,
         CHsmState*            pSuperState,
         Hsm::STATE            stateId,
         const std::string&    name )
 
-    : ProductControllerStateLowPowerStandby( hsm, pSuperState, stateId, name )
+    : ProductControllerStateLowPowerResume( hsm, pSuperState, stateId, name )
 {
     BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStateLowPowerStandby::HandleIntentPlayProductSource
+/// @brief  CustomProductControllerStateLowPowerResume::HandleIntentPlayProductSource
 ///
 /// @param  KeyHandlerUtil::ActionType_t intent
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the intent.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateLowPowerStandby::HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent )
+bool CustomProductControllerStateLowPowerResume::HandleIntentPlayProductSource( KeyHandlerUtil::ActionType_t intent )
 {
     BOSE_INFO( s_logger, "The %s state in %s is handling the intent %u", GetName( ).c_str( ), __FUNCTION__, intent );
     m_cachedAction = intent;
@@ -81,12 +81,12 @@ bool CustomProductControllerStateLowPowerStandby::HandleIntentPlayProductSource(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStateLowPowerStandby::HandleIntentPlaySoundTouchSource
+/// @brief  CustomProductControllerStateLowPowerResume::HandleIntentPlaySoundTouchSource
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the intent.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateLowPowerStandby::HandleIntentPlaySoundTouchSource( )
+bool CustomProductControllerStateLowPowerResume::HandleIntentPlaySoundTouchSource( )
 {
     BOSE_INFO( s_logger, "The %s state is caching play soundtouch source", GetName( ).c_str( ) );
     m_cachedAction = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_SOUNDTOUCH );

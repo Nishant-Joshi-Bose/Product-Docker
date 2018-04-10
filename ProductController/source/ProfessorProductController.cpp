@@ -90,7 +90,7 @@
 #include "CustomProductControllerStateAdaptIQExiting.h"
 #include "CustomProductControllerStateAdaptIQ.h"
 #include "CustomProductControllerStateIdle.h"
-#include "CustomProductControllerStateLowPowerStandby.h"
+#include "CustomProductControllerStateLowPowerResume.h"
 #include "CustomProductControllerStateOn.h"
 #include "CustomProductControllerStatePlayable.h"
 #include "CustomProductControllerStatePlayingDeselectedAccessoryPairing.h"
@@ -246,10 +246,15 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION );
 
-    auto* stateLowPowerStandby = new CustomProductControllerStateLowPowerStandby
+    auto* stateLowPowerStandby = new ProductControllerStateLowPowerStandby
     ( GetHsm( ),
       stateTop,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY );
+      PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY );
+
+    auto* stateLowPowerResume = new CustomProductControllerStateLowPowerResume
+    ( GetHsm( ),
+      stateTop,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_RESUME );
 
     ///
     /// Playable Transition State and Sub-States
@@ -462,6 +467,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( "", stateFirstBootGreetingTransition );
     GetHsm( ).AddState( "", stateLowPowerStandbyTransition );
     GetHsm( ).AddState( "", stateLowPowerStandby );
+    GetHsm( ).AddState( "", stateLowPowerResume );
     GetHsm( ).AddState( "", statePlayableTransition );
     GetHsm( ).AddState( "", statePlayableTransitionInternal );
     GetHsm( ).AddState( "", statePlayableTransitionIdle );
