@@ -30,6 +30,15 @@ def get(name):
         return None
     return out.rstrip("\n")
 
+# GUID standard canonical form is described here:
+# https://en.m.wikipedia.org/wiki/Universally_unique_identifier
+guid = get("guid")
+if guid is None or not re.match(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', guid):
+    warn("Invalid guid:", guid)
+    warn("You must run the sadi command to give this unit a device identity")
+    warn("See: https://wiki.bose.com/pages/viewpage.action?pageId=42202819")
+    sys.exit(1)
+
 fixes = []
 
 # "modified" is always present ordinarily.  If missing, means there's no
@@ -55,14 +64,6 @@ rc = get("regionCode")
 if rc is None or not re.match(r'^[A-Z][A-Z]$', rc):
     warn("Invalid regionCode", rc)
     fixes.append("set regionCode US")
-
-# GUID standard canonical form is described here:
-# https://en.m.wikipedia.org/wiki/Universally_unique_identifier
-guid = get("guid")
-if guid is None or not re.match(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', guid):
-    warn("Invalid guid:", guid)
-    guid = open("/proc/sys/kernel/random/uuid").read().rstrip("\n")
-    fixes.append("set guid " + guid)
 
 sn = get("snSystem")
 if not sn: # allow any non-empty string
