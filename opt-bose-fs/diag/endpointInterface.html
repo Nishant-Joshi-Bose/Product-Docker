@@ -7,6 +7,7 @@
     {
         "pageName": "Accessories",
         "endpoint": "/accessories",
+        "fields": ["body.enabled","body.pairing",],
         "button":
         {
             "enabled": false,
@@ -191,7 +192,7 @@
 
                     sendObj.body = Configuration.button.putData;
 
-                    SendMessage(sendObj);                    
+                    SendMessage(sendObj);
                 }
 
                 function GetData()
