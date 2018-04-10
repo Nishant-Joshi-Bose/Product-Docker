@@ -225,7 +225,9 @@ if [ -x /mnt/nv/postinst ]; then
     /mnt/nv/postinst
 fi
 
-chmod -R 440 /opt/Bose/etc/secure || exit
+# make sure the public key file has read only permission
+find /opt/Bose/etc/secure/ -type d -exec /bin/busybox chmod 550 {} \;
+find /opt/Bose/etc/secure/ -type f -exec /bin/busybox chmod 440 {} \;
 
 # make sure the public key file has read only permission
 find /opt/Bose/etc/secure/ -type d -exec /bin/busybox chmod 550 {} \;
