@@ -20,4 +20,6 @@ exit=0
 for fs in / /persist /opt/Bose; do
     mount -oremount,$rw "$@" "$fs" || exit=1
 done
+# This mount point is always read-write
+mount -oremount,rw /opt/Bose/.swUpdateCache
 exit $exit

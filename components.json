@@ -137,11 +137,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/3.0"
+    "selected_version": "Release/master/3.3"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/3.0"
+    "selected_version": "Release/master/3.3"
   },
   {
     "name": "RivieraLPM",
@@ -169,11 +169,11 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/0.3.5-74+45c1f0c"
+    "selected_version": "Release/master/0.5.1-77+986b234"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.3.25-468+6059b6d"
+    "selected_version": "Release/master/0.3.26-478+97713ef"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
