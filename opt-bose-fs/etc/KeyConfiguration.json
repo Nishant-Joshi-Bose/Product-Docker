@@ -1645,37 +1645,7 @@
             ]
         }, 
         {
-            "origin": 2, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "pair speakers", 
-            "action": 121, 
-            "keyList": [
-                30
-            ]
-        }, 
-        {
             "origin": 6, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "pair speakers", 
-            "action": 121, 
-            "keyList": [
-                30
-            ]
-        }, 
-        {
-            "origin": 4, 
-            "keyEvent": 0, 
-            "timeOutList": [], 
-            "commment": "pair speakers", 
-            "action": 121, 
-            "keyList": [
-                30
-            ]
-        }, 
-        {
-            "origin": 3, 
             "keyEvent": 0, 
             "timeOutList": [], 
             "commment": "pair speakers", 
