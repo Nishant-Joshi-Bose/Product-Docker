@@ -305,14 +305,6 @@
         "timeOutList": []
     },
     {
-        "action": "ACTION_START_PAIR_SPEAKERS",
-        "commment": "pair speakers",
-        "keyEvent": "PRESS",
-        "keyList": ["BOSE_PAIR_SPKR"],
-        "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": []
-    },
-    {
         "action": "ACTION_SETUP_BLE_REMOTE",
         "commment": "setup and pair BLE remote",
         "keyEvent": "PRESS_HOLD",
