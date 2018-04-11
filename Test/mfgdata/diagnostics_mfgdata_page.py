@@ -45,18 +45,18 @@ class DiagnosticsPage(SeleniumWrapper):
     diagnostics_header = CONFIG["locator"]["diagnostics_header"]
     left_display_test = CONFIG["locator"]["left_display_test"]
 
-    def __init__(self, driver, logger, device):
+    def __init__(self, driver, logger, deviceid):
         """
         driver: Selenium Webdriver
         logger: Logger
-        device: Device information from command line
+        deviceid: Device information from command line
         """
         SeleniumWrapper.__init__(driver)
         self.driver = driver
         self.logger = logger = get_logger(__name__, "DiagnosticsPage.log", level=logging.INFO, fileLoglevel=logging.DEBUG)
         self.adb = ADBCommunication()
-        self.adb.setCommunicationDetail(device)
-        self.dev_logger = LogreadAdb(device)
+        self.adb.setCommunicationDetail(deviceid)
+        self.dev_logger = LogreadAdb(deviceid)
         self.dir_name = 'adb_logger'
         self.file_name = 'adb_logs'
 
@@ -64,7 +64,7 @@ class DiagnosticsPage(SeleniumWrapper):
     def navigate_diagnostics_page(self, device_ip):
         """
         This function will navigate to the Diagnostics Page URL page
-        param: device_ip
+        param: device_ip - Fixture to get device ip from device id
         return: None
         """
         self.logger.info("------ Executing get_title function------")
@@ -87,10 +87,10 @@ class DiagnosticsPage(SeleniumWrapper):
         return website_title
 
 
-    def get_diagnostics_header(self, device):
+    def get_diagnostics_header(self, deviceid):
         """
         This function will check the Diagnostics Page Header on the page
-        param: device - Fixture to get device id from command line
+        param: deviceid - Fixture to get device id from command line
         return: diagnostics_header on the page
         """
         self.logger.info("-------------- Executing get_diagnostics_header function -------------- ")
@@ -101,11 +101,11 @@ class DiagnosticsPage(SeleniumWrapper):
         return diagnostics_header
 
 
-    def get_sofware_version(self, device):
+    def get_sofware_version(self, deviceid):
         """
         This function will check the software version on the diagnostics page
         compares /opt/Bose/etc/BoserVersion.json of the Device under test for the same
-        param: device - Fixture to get device id from command line
+        param: deviceid - Fixture to get device id from command line
         return: software_version_header, software_version_build on the page
         """
         self.logger.info("-------------- Executing get_sofware_version function -------------- ")
@@ -121,11 +121,11 @@ class DiagnosticsPage(SeleniumWrapper):
         return software_version_header, software_version_build
 
 
-    def get_display_tests(self, device):
+    def get_display_tests(self, deviceid):
         """
         This function will check the Display Tests on the diagnostics page
         work as intended by checking the display on Device under Test
-        param: device - Fixture to get device id from command line
+        param: deviceid - Fixture to get device id from command line
         return: None
         """
         self.logger.info("-------------- Executing get_display_tests function -------------- ")
@@ -147,11 +147,11 @@ class DiagnosticsPage(SeleniumWrapper):
                 assert "colorbars-left.png" in output, "colorbars-left.png string did not match"
 
 
-    def get_manufacturing_data(self, device):
+    def get_manufacturing_data(self, deviceid):
         """
         This function will check the Manufacturing data on the diagnostics page
         compares with persist/mfg_data.json of the Device under test (dut)
-        param: device - Fixture to get device id from command line
+        param: deviceid - Fixture to get device id from command line
         return: manufacturing_data_diag on the page
         """
         self.logger.info("-------------- Executing get_manufacturing_data function -------------- ")

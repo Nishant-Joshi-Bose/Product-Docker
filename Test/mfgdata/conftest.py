@@ -35,21 +35,3 @@ def chrome_options(chrome_options):
     chrome_options.add_argument('headless')
     return chrome_options
 
-@pytest.fixture(scope='session')
-def device(request):
-    """
-    Use request object to get device id from command line
-    """
-    device = request.config.getoption("--device-id")
-    if device is None:
-        pytest.fail("Provide valid Device Id")
-    return device
-
-@pytest.fixture(scope='session')
-def device_ip(device):
-    """
-    Use device id to get device ip
-    """
-    adb = ADBCommunication(logger=logger)
-    adb.setCommunicationDetail(device)
-    return adb.getIPAddress()
