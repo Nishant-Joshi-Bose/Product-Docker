@@ -1,7 +1,6 @@
 
-
-SoundTouch Eddie 
-================
+Eddie 
+=====
 <a title='Latest release in GitHub' target='_blank' href='https://github.com/BoseCorp/Eddie'><img src='https://bose-prod.apigee.net/core02/svc-version-badge/prod/version-badge-core/github/latest-version/Eddie/latest release/blue'></a>
 [Eddie Continuous build Testing] <a title='Jenkins build status for Eddie' href='http://jnkwebhook.ngrok.io/job/EddieProduct/job/Eddie_Continuous_Build_Testing/'><img src='http://jnkwebhook.ngrok.io/job/EddieProduct/job/Eddie_Continuous_Build_Testing/badge/icon'></a> [Eddie Nightly build testing] <a title='Jenkins build status for Eddie' href='http://jnkwebhook.ngrok.io/job/Pipelines/job/Eddie-Pipeline/'><img src='http://jnkwebhook.ngrok.io/job/Pipelines/job/Eddie-Pipeline/badge/icon'></a>
 
