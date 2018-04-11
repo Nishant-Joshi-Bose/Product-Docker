@@ -25,7 +25,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/0.3.12-191+0e869ca"
+    "selected_version": "Release/master/0.3.13-194+e96ade8"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -161,7 +161,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/0.5.1-77+986b234"
+    "selected_version": "Release/master/1.0.0-80+40ad705"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
