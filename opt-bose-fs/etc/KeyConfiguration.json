@@ -1645,6 +1645,16 @@
             ]
         }, 
         {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "pair speakers", 
+            "action": 121, 
+            "keyList": [
+                30
+            ]
+        }, 
+        {
             "origin": 1, 
             "keyEvent": 2, 
             "timeOutList": [
