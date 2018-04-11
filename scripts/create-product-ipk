@@ -172,7 +172,7 @@ find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 "$cli_dir/stage" "$opt_dir" || exit
 "$democontroller_dir/stage" "$opt_dir" || exit
 "$webkit_dir/stage" "$opt_dir" || exit
-"$productuiassets_dir/stage" --chimes=alpha --type=flac "$opt_dir" || exit
+"$productuiassets_dir/stage" --chimes=HomeSpeaker --type=flac "$opt_dir" || exit
 "$frontdoor_dir/stage" "$opt_dir" || exit
 "$galapagosclient_dir/stage" "$opt_dir" || exit
 "$httpproxy_dir/stage" "$opt_dir" || exit
