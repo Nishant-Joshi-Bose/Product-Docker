@@ -53,7 +53,7 @@ class DiagnosticsPage(SeleniumWrapper):
         """
         SeleniumWrapper.__init__(driver)
         self.driver = driver
-        self.logger = logger = get_logger(__name__, "DiagnosticsPage.log", level=logging.INFO, fileLoglevel=logging.DEBUG)
+        self.logger = logger or get_logger(__name__, "DiagnosticsPage.log", level=logging.INFO, fileLoglevel=logging.DEBUG)
         self.adb = ADBCommunication()
         self.adb.setCommunicationDetail(deviceid)
         self.dev_logger = LogreadAdb(deviceid)
@@ -134,6 +134,7 @@ class DiagnosticsPage(SeleniumWrapper):
         elements = self.getElements(self.left_display_test, locatorType="css")
         for element in elements:
             element.click()
+            time.sleep(0.1)
         self.dev_logger.stop_log_collection(saveLog=True, zip=False)
         for f in os.listdir(self.dir_name):
             filename = os.path.join(self.dir_name, f)

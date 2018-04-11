@@ -13,12 +13,14 @@
 test_audit_mfgdata.py file checks the Eddie diagnostics on the webpage and compares them with the Device under test (dut)
 """
 import logging
+import pytest
 
 from diagnostics_mfgdata_page import DiagnosticsPage
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 
 logger = get_logger(__name__, "DiagnosticsPage.log", level=logging.DEBUG, fileLoglevel=logging.DEBUG)
 
+@pytest.mark.usefixtures('driver', 'deviceid', 'device_ip')
 def test_diagnostics_mfgdata(driver, deviceid, device_ip):
     """
     Test will naviagate to Device's diagnostics page and verfies
