@@ -13,7 +13,7 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@8fb5d171672e8703682b7ddd768874f17ecd5238"
+    "selected_version": "master@352be825c7f7f6eafa83e7e96312ca5957c62251"
   },
   {
     "name": "AVS-qc8017_32",
@@ -137,11 +137,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/3.0"
+    "selected_version": "Release/master/3.3"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/3.0"
+    "selected_version": "Release/master/3.3"
   },
   {
     "name": "RivieraLPM",
@@ -173,7 +173,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.3.25-468+6059b6d"
+    "selected_version": "Release/master/0.3.26-478+97713ef"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
