@@ -954,7 +954,7 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
         GetFrontDoorClient()->RegisterGet( FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API,
                                            callback,
                                            FrontDoor::PUBLIC,
-                                           FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API_VERSION,
+                                           FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                            FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
     {
@@ -969,7 +969,7 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
             FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API,
             callback,
             FrontDoor::PUBLIC,
-            FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API_VERSION,
+            FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
             FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
 }

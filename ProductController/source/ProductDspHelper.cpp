@@ -103,7 +103,7 @@ bool ProductDspHelper::Run( )
             = m_ProductController.GetFrontDoorClient()->RegisterGet( FRONTDOOR_AUDIO_FORMAT_API,
                                                                      getAudioFormatCb,
                                                                      FrontDoor::PUBLIC,
-                                                                     FRONTDOOR_CEC_API_VERSION,
+                                                                     FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                                                      FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
 

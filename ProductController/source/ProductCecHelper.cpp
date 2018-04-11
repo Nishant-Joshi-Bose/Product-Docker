@@ -128,7 +128,7 @@ bool ProductCecHelper::Run( )
     m_GetConnection = m_FrontDoorClient->RegisterGet( FRONTDOOR_CEC_API,
                                                       getCb,
                                                       FrontDoor::PUBLIC,
-                                                      FRONTDOOR_CEC_API_VERSION,
+                                                      FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                                       FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
 
     auto putFunc = [ this ]( const CecUpdateRequest                   cecReq,
@@ -147,7 +147,7 @@ bool ProductCecHelper::Run( )
                           FRONTDOOR_CEC_API,
                           putCb,
                           FrontDoor::PUBLIC,
-                          FRONTDOOR_CEC_API_VERSION,
+                          FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                           FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
 
     return true;

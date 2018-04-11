@@ -220,7 +220,7 @@ void SpeakerPairingManager::RegisterFrontDoorEvents( )
             m_FrontDoorClientIF->RegisterGet( FRONTDOOR_ACCESSORIES_API,
                                               getAccessoriesCb,
                                               FrontDoor::PUBLIC,
-                                              FRONTDOOR_ACCESSORIES_API_VERSION,
+                                              FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                               FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
     {
@@ -237,7 +237,7 @@ void SpeakerPairingManager::RegisterFrontDoorEvents( )
                 FRONTDOOR_ACCESSORIES_API,
                 putAccessoriesCb,
                 FrontDoor::PUBLIC,
-                FRONTDOOR_ACCESSORIES_API_VERSION,
+                FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                 FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
 }

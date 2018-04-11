@@ -118,7 +118,7 @@ void ProductAdaptIQManager::Run( )
     m_GetConnection = m_FrontDoorClient->RegisterGet( FRONTDOOR_ADAPTIQ_API,
                                                       getCb,
                                                       FrontDoor::PUBLIC,
-                                                      FRONTDOOR_ADAPTIQ_API_VERSION,
+                                                      FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                                       FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
 
     auto putFunc = [ this ]( const AdaptIQReq                       req,
@@ -135,7 +135,7 @@ void ProductAdaptIQManager::Run( )
                           FRONTDOOR_ADAPTIQ_API,
                           putCb,
                           FrontDoor::PUBLIC,
-                          FRONTDOOR_ADAPTIQ_API_VERSION,
+                          FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                           FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
 }
 

@@ -96,7 +96,7 @@ bool ProductSystemManager::Run( )
         m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API,
                                         callback,
                                         FrontDoor::PUBLIC,
-                                        FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API_VERSION,
+                                        FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                         FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
 
