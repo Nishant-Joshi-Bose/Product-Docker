@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@914aee003bd3d79ee545ce661a3a614528eb1baa"
+    "selected_version": "master@2ca9b866dd172dd6c20ed22a88dc8a9532c83136"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -13,7 +13,7 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@8fb5d171672e8703682b7ddd768874f17ecd5238"
+    "selected_version": "master@352be825c7f7f6eafa83e7e96312ca5957c62251"
   },
   {
     "name": "AVS-qc8017_32",
@@ -29,15 +29,15 @@
   },
   {
     "name": "BoseOPKG-native",
-    "selected_version": "Release/master/0.4.0-21+b24eca9"
+    "selected_version": "Release/master/0.4.1-23+3391857"
   },
   {
     "name": "BoseOPKG-qc8017_32",
-    "selected_version": "Release/master/0.4.0-21+b24eca9"
+    "selected_version": "Release/master/0.4.1-23+3391857"
   },
   {
     "name": "BoseOPKG-x86",
-    "selected_version": "Release/master/0.4.0-21+b24eca9"
+    "selected_version": "Release/master/0.4.1-23+3391857"
   },
   {
     "name": "BoseWebMonaco",

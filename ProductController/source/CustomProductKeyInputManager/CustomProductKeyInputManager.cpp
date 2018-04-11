@@ -54,6 +54,31 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( ProfessorProductCont
       m_ProductController( ProductController )
 {
     InitializeQuickSetService( );
+
+    auto sourceInfoCb = [ this ]( const SoundTouchInterface::Sources & sources )
+    {
+        QSSMSG::SrcCiCodeMessage_t          codes;
+        static QSSMSG::SrcCiCodeMessage_t   lastCodes;
+
+        for( auto i = 0 ; i < sources.sources_size(); i++ )
+        {
+            const auto& source = sources.sources( i );
+
+            // TODO - we need to check "visible" here as well, but it's not yet supported
+            if( source.has_details() and source.details().has_cicode() )
+            {
+                codes.add_cicode( source.details().cicode() );
+            }
+        }
+        if( codes.cicode_size() and ( codes.SerializeAsString() != lastCodes.SerializeAsString() ) )
+        {
+            BOSE_INFO( s_logger, "notify cicodes : %s", ProtoToMarkup::ToJson( codes ).c_str() );
+            m_QSSClient->NotifySourceCiCodes( codes );
+            lastCodes = codes;
+        }
+    };
+    m_ProductController.GetSourceInfo()->RegisterSourceListener( sourceInfoCb );
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
