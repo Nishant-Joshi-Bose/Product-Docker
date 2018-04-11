@@ -13,12 +13,6 @@
 Conftest.py for Diagnostics
 """
 import pytest
-import logging
-
-from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
-from CastleTestUtils.RivieraUtils.rivieraCommunication import ADBCommunication
-
-logger = get_logger(__name__, "DiagnosticsPage.log", level=logging.INFO, fileLoglevel=logging.DEBUG)
 
 @pytest.fixture
 def chrome_options(chrome_options):
