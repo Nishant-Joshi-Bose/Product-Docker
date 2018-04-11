@@ -117,12 +117,15 @@ void DisplayController::ParseJSONData()
         return;
     }
 
-    Json::Reader json_reader;
+    static Json::CharReaderBuilder readerBuilder;
+    std::unique_ptr<Json::CharReader> json_reader( readerBuilder.newCharReader() );
+    std::string errors;
     Json::Value  json_root;
+    std::string s = *f;
 
-    if( ! json_reader.parse( *f, json_root ) )
+    if( ! json_reader->parse( s.c_str(), s.c_str() + s.size(), &json_root, &errors ) )
     {
-        BOSE_LOG( ERROR, "Error: failed to parse JSON File: " << DISPLAY_CONTROLLER_FILE_NAME << " " << json_reader.getFormattedErrorMessages() );
+        BOSE_LOG( ERROR, "Error: failed to parse JSON File: " << DISPLAY_CONTROLLER_FILE_NAME << " " << errors.c_str() );
         return;
     }
 
