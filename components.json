@@ -105,7 +105,7 @@
   },
   {
     "name": "CastleProductUIAssets",
-    "selected_version": "master@a645516388a09ad39dbab7b63535e9a910fa2dff"
+    "selected_version": "master@f5025558c6d13bc8fe9e67ff7248a89a6441b0c2"
   },
   {
     "name": "CastleTestUtils",
@@ -197,7 +197,7 @@
   },
   {
     "name": "Webkit",
-    "selected_version": "Release/master/0.4.1-47+32d5404"
+    "selected_version": "Release/master/0.3.3-33+5811010"
   },
   {
     "name": "WiFi-Setup-Webpage",

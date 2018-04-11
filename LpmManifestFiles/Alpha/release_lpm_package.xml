@@ -42,7 +42,7 @@
         <entry name="INSTALLER02.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Release/Alpha_User/0.3.10.483/Professor/upd/INSTALLER02.upd" version="dynamic" />
         <entry name="psoc.cyacd" path="/home/softlib/verisoft/CastleLightBarCapSense/Release/master/3.5-118+63b94fa/App-Professor-DP2*.cyacd" version="dynamic" />
         <entry name="psoc_gc.cyacd" path="/home/softlib/verisoft/CastleLightBarCapSense/Release/master/3.5-118+63b94fa/App-GingerCheevers-DP2*.cyacd" version="dynamic" />
-        <entry name="prof_lb_anim_db.bin" path="/home/softlib/verisoft/CastleLedAnimationTool/Release/master/1.10-31+0a91d28/Eddie-DP1/Animations.bin" version="dynamic" />
+        <entry name="prof_lb_anim_db.bin" path="/home/softlib/verisoft/CastleLedAnimationTool/Release/master/1.13-43+a3d640e/SoundBar/Animations.bin" version="dynamic" />
         <entry name="remote.hex" path="/home/softlib/verisoft/BLERemoteXCVR/Release/master/.0.3.2-+/BLEBridge_app_*.hex" version="dynamic" />
         <entry name="speaker.bos" path="/home/softlib/verisoft/A4V-System/Release/trunk/1.9.14.2451686/speaker_1.9.14.2451686.bos" version="1.9.14.2451686" />
     </manifest_entries>

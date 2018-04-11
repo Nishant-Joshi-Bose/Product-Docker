@@ -1426,6 +1426,31 @@ void ProfessorProductController::NotifyFrontdoorAndStoreOpticalAutoWakeSetting( 
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::GetChimesConfigurationLocation
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+string ProfessorProductController::GetChimesConfigurationLocation( ) const
+{
+    string retVal{ g_ChimesConfigurationPath };
+    retVal += GetProductType( );
+    retVal += '/';
+    return retVal + g_ChimesConfigurationFile;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::GetChimesFilesLocation
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+string ProfessorProductController::GetChimesFilesLocation( ) const
+{
+    string retVal{ g_ChimesPath };
+    retVal += GetProductType( );
+    return retVal + '/';
+}
+
 void ProfessorProductController::InitializeKeyIdToKeyNameMap()
 {
     BOSE_INFO( s_logger, "ProfessorProductController::%s:", __func__ );
