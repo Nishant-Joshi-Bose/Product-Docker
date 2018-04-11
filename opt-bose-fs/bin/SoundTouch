@@ -5,10 +5,29 @@
 export PATH=/opt/Bose/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
 tag="${0##*/}[$$]"              # for log messages
 
+localtime_symlink=/mnt/nv/localtime
+default_timezone=/usr/share/zoneinfo/UTC
+
+
 function log {
     local pri="$1"; shift
     logger -s -t "$tag" -p "$pri" "$*"
 }
+
+
+function reset_timezone_to_default {
+    # if localtime symlink does not exist,
+    # create it, and default to UTC
+    if ! [ -L "$localtime_symlink" ]; then
+        log info "Selecting default time zone ${default_timezone##*/}"
+        ln -s "$default_timezone" "$localtime_symlink"
+    # if force flag is used, reset to default forcefully
+    elif [ "$1" == "force" ]; then
+        log info "reseting time zone to ${default_timezone##*/}"
+        ln -sfn "$default_timezone" "$localtime_symlink"
+    fi
+}
+
 
 cd /opt/Bose/bin || exit
 
@@ -71,6 +90,8 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
     fi
     clean_logs
     mkdir -p /mnt/nv/IoTCerts /mnt/nv/product-persistence
+
+    reset_timezone_to_default
 
     init-audio
 
@@ -152,6 +173,7 @@ if (( $# == 1 )) && [ "$1" = factory_default ]; then
 
     log info "Clearing product persistence"
     rm -rfv /mnt/nv/product-persistence/*
+    reset_timezone_to_default force
     sync
 
     log info "Rebooting"
