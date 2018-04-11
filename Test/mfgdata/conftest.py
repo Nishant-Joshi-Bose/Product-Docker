@@ -20,13 +20,6 @@ from CastleTestUtils.RivieraUtils.rivieraCommunication import ADBCommunication
 
 logger = get_logger(__name__, "DiagnosticsPage.log", level=logging.INFO, fileLoglevel=logging.DEBUG)
 
-def pytest_addoption(parser):
-    """ Command Line Parameters """ 
-    parser.addoption("--network-iface", action="store", default="wlan0",
-                     help="network interface to choose")
-
-    parser.addoption("--device-id", default=None, help="Run the test scenario on passed device")
-
 @pytest.fixture
 def chrome_options(chrome_options):
     """
