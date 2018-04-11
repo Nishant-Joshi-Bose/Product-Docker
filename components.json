@@ -69,7 +69,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.3.13-95+392713a"
+    "selected_version": "Release/master/0.4.0-97+5b77799"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -141,7 +141,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.3.15-163+2271356"
+    "selected_version": "Release/master/0.4.1-168+b22639a"
   },
   {
     "name": "RivieraLpmTools",
@@ -149,7 +149,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Continuous/master/0.3.4-48+22a29e5"
+    "selected_version": "Release/master/0.4.0-52+45cf1b2"
   },
   {
     "name": "SADI-qc8017_32",
