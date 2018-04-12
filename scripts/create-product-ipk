@@ -83,6 +83,7 @@ boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
 datacollection_dir=$(components get CastleDataCollectionClient-qc8017_32 installed_location) || exit
 datacollectionservice_dir=$(components get CastleDataCollectionService-qc8017_32 installed_location) || exit
 sadi_dir=$(components get SADI-qc8017_32 installed_location) || exit
+vm_dir=$(components get A4VVideoManagerService installed_location) || exit
 
 arch=arm-oemllib32-linux
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -99,6 +100,7 @@ mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" || exit
 
 rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 rsync -a --exclude='*~' --exclude='*-README.txt' "$qss_dir/opt-bose-fs/." "$opt_dir/." || exit
+rsync -a --exclude='*~' --exclude='*-README.txt' "$vm_dir/opt-bose-fs/." "$opt_dir/." || exit
 
 components record "$stage" || exit
 
