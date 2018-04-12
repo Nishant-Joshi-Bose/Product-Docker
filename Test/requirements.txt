@@ -1,7 +1,9 @@
 paramiko>=2.4.0
 pexpect>=4.3.0
+protobuf==2.6.1
 psutil>=5.4.1
 pyadb>=0.1.1
+pyserial>=3.4
 pytest>=3.3.0
 pytest-pythonpath>=0.7.1
 requests>=2.18.4

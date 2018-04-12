@@ -14,24 +14,29 @@ They invoke commands over LPM tap, APQ tap, LPM Service IPC messaging, or a comb
 "RivieraLpmService".
 
 Tests that use LPM tap require the command line argument `--lpm-port` (e.g., /dev/ttyUSB0).
-Tests that use APQ tap or LPM IPC require the command line argument `--ip-address` (IP of test system).
+Tests that use APQ tap or LPM IPC require the command line argument `--router <router id>`.
+
 
 # Test Descriptions
 
-##### test_apq_tap_examples.py
+### test_apq_tap_examples.py
 Miscellaneous examples of tests that work over APQ tap alone.
+```bash
+pytest -s --target device --device-id xxxxxxx --lpm-port /dev/ttyUSB0 --router fakessid lpm/test_apq_tap_examples.py 
+```
 
-##### test_lightbar_ipc.py
+### test_lightbar_ipc.py
 Fully test lightbar functionality by issuing IPC commands to the LPM.
 
-##### test_lowopower_integration.py
+### test_lowopower_integration.py
 Use APQ tap to put the device in lop power standby, then simulate a key press to wake the device.
 
-##### test_lowpower_lpm_unit.py
+### test_lowpower_lpm_unit.py
 LPM unit test for low power standby. Invokes low power state using IPC messsaging, then LPM tap to simulate a key press. Does not involse the APQ.
 
-##### test_lpm_tap_examples.py
+### test_lpm_tap_examples.py
 Miscellaneous examples of tests that work over LPM tap including: key input simulation and amp fault.
 
-##### test_thermal.py
+### test_thermal.py
 Acquire thermal data over IPC and verify that it is reasonable.
+

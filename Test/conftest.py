@@ -14,19 +14,22 @@
 Parent conftest.py for the Eddie repository
 """
 
+import datetime
 import os
 import time
-import datetime
 import ConfigParser
+
 import pytest
-from CastleTestUtils.NetworkUtils.network_base import NetworkBase
-from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
+
+
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
+from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
+from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 from CastleTestUtils.RivieraUtils import rivieraCommunication, rivieraUtils
 from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import flash_device
+
 from commonData import keyConfig
 
-_log = None
 logger = get_logger(__name__)
 
 
@@ -37,13 +40,20 @@ def pytest_addoption(parser):
     :param parser: Parser used for method.
     :return: None
     """
-    parser.addoption("--device-id", action="store", default=None, help="device-id: Device Id")
-    parser.addoption("--target", action="store", default="native", help="target: [native/device], Specify whether the tests need to be executed on native or on device")
-    parser.addoption("--log-dir", action="store", default="SCMLogs", help="Where to store logs.")
-    parser.addoption("--log-type", action="store", default="useSerial", help="logging : [useSerial / ipBased ]")
-    parser.addoption("--network-iface", action="store", default="wlan0", help="network interface to choose")
-    parser.addoption("--ip-address", action="store", default=None, help="IP Address of Target under test")
-    parser.addoption("--lpm-port", action="store", default=None, help="serial port of the device")
+    parser.addoption("--device-id", action="store", default=None,
+                     help="device-id: Device Id")
+    parser.addoption("--target", action="store", default="native",
+                     help="target: [native/device], Specify whether the tests need to be executed on native or on device")
+    parser.addoption("--log-dir", action="store", default="SCMLogs",
+                     help="Where to store logs.")
+    parser.addoption("--log-type", action="store", default="useSerial",
+                     help="logging : [useSerial / ipBased ]")
+    parser.addoption("--network-iface", action="store", default="wlan0",
+                     help="network interface to choose")
+    parser.addoption("--ip-address", action="store", default=None,
+                     help="IP Address of Target under test")
+    parser.addoption("--lpm-port", action="store", default=None,
+                     help="serial port of the device")
     parser.addoption("--timeout",
                      action="store",
                      default=30,
@@ -87,7 +97,8 @@ def save_speaker_log(request, device_ip):
     from CastleTestUtils.LoggerUtils.logreadLogger import LogreadLogger
     logreadlogger = LogreadLogger(device_ip)
     try:
-        logreadlogger.start_log_collection(testName=request.function.__name__, path="./SpeakerLogs", saveperiodically=True)
+        logreadlogger.start_log_collection(testName=request.function.__name__, path="./SpeakerLogs",
+                                           saveperiodically=True)
     except:
         logger.info("Error while start: The log from the speaker will not be saved.")
 
@@ -110,9 +121,9 @@ def device_ip(request, deviceid):
     """
     logger.info("device_ip")
     if request.config.getoption("--target").lower() == 'device':
-        networkbaseObj = NetworkBase(None, deviceid)
-        iface = request.config.getoption("--network-iface")
-        device_ip = networkbaseObj.check_inf_presence(iface)
+        network_base = NetworkBase(None, deviceid)
+        interface = request.config.getoption("--network-iface")
+        device_ip = network_base.check_inf_presence(interface)
         return device_ip
 
 
@@ -124,11 +135,11 @@ def frontDoor(device_ip):
     logger.info("frontDoor")
     if device_ip is None:
         pytest.fail("No valid device IP")
-    frontdoorObj = FrontDoorAPI(device_ip)
-    return frontdoorObj
+    front_door = FrontDoorAPI(device_ip)
+    return front_door
 
 
-@pytest.fixture(scope='function', autouse=True)
+@pytest.fixture(scope='function', autouse=False)
 def test_log_banner(request):
     """
     Log start and completed test banner in console output.
@@ -174,7 +185,6 @@ def rebooted_device():
 
     :return: None
     """
-    import time
     from pyadb import ADB
 
     adb = ADB('/usr/bin/adb')
@@ -263,7 +273,6 @@ def eddie_master_latest_directory(tmpdir):
     :yield: The location of the Eddie Tar and Flash
     """
     import glob
-    import os
     import shutil
 
     # The IP2 Release latest directory
@@ -309,8 +318,8 @@ def deviceid(request):
     """
     try:
         return request.config.getoption("--device-id")
-    except Exception as e:
-        logger.info("Getting device id.... " + str(e))
+    except Exception as exception:
+        logger.info("Getting device id.... " + str(exception))
         return False
 
 
@@ -332,6 +341,7 @@ def ip_address_wlan(request, deviceid, wifi_config):
     """
     IP address of the device connected to WLAN.
     Removes any configuration on the Device if not connected.
+
     :param request: PyTest command line request option
     :param wifi_config: ConfigParser object of Wireless configs
     :return: The IP Address of the attached Riviera Device
@@ -339,18 +349,19 @@ def ip_address_wlan(request, deviceid, wifi_config):
     riviera_device = rivieraUtils.RivieraUtils('ADB', device=deviceid, logger=logger)
     network_base = NetworkBase(None, device=deviceid, logger=logger)
 
+
     interface = 'wlan0'
-    device_ip = None
+    device_ip_address = None
     try:
-        device_ip = network_base.check_inf_presence(interface, timeout=5)
-        logger.info("Found Device IP: {}".format(device_ip))
+        device_ip_address = network_base.check_inf_presence(interface, timeout=5)
+        logger.info("Found Device IP: %s", device_ip_address)
     except UnboundLocalError as exception:
-        logger.warning("Not able to acquire IP Address: {}".format(exception))
-    if not device_ip:
+        logger.warning("Not able to acquire IP Address: %s", exception)
+    if not device_ip_address:
         # Clear any WiFi profiles on the device
         clear_profiles = ' '.join(['network', 'wifi', 'profiles', 'clear'])
         clear_profiles = "echo {} | nc 0 17000".format(clear_profiles)
-        logger.info("Clearing Network Profiles: {}".format(clear_profiles))
+        logger.info("Clearing Network Profiles: %s", clear_profiles)
         riviera_device.communication.executeCommand(clear_profiles)
 
         # Acquire the Router information
@@ -363,12 +374,12 @@ def ip_address_wlan(request, deviceid, wifi_config):
         add_profile = ' '.join(['network', 'wifi', 'profiles', 'add',
                                 router_name, security.upper(), password])
         add_profile = "echo {} | nc 0 17000".format(add_profile)
-        logger.info("Adding Network Profile: {}".format(add_profile))
+        logger.info("Adding Network Profile: %s", add_profile)
         riviera_device.communication.executeCommand(add_profile)
         time.sleep(2)
 
-    device_ip = network_base.check_inf_presence(interface, timeout=20)
-    if not device_ip:
+    device_ip_address = network_base.check_inf_presence(interface, timeout=20)
+    if not device_ip_address:
         raise SystemError("Failed to acquire network connection through {}: {}".format(interface, device_ip))
 
-    return device_ip
+    return device_ip_address
