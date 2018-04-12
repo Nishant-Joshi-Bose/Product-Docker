@@ -19,6 +19,7 @@
 #include "ProductController.h"
 #include "LpmClientFactory.h"
 #include "SyncCallback.h"
+#include "EndPointsDefines.h"
 
 static DPrint s_logger( "DisplayController" );
 using namespace ::DisplayController::Protobuf;
@@ -401,7 +402,11 @@ void DisplayController::RegisterDisplayEndPoints()
                                                                                    std::placeholders::_2
                                                                                     ),
                                                                            m_productController.GetTask() );
-    m_frontdoorClientPtr->RegisterPut<Display>( "/ui/display", putDisplayReqCb );
+    m_frontdoorClientPtr->RegisterPut<Display>( "/ui/display",
+                                                putDisplayReqCb,
+                                                FrontDoor::PUBLIC,
+                                                FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                                FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
 
     // ==========================
     // HandleGetDisplayRequest
@@ -413,7 +418,11 @@ void DisplayController::RegisterDisplayEndPoints()
                                                                        std::placeholders::_1
                                                                    ),
                                                                    m_productController.GetTask() );
-    m_frontdoorClientPtr->RegisterGet( "/ui/Display", getDisplayReqCb );
+    m_frontdoorClientPtr->RegisterGet( "/ui/Display",
+                                       getDisplayReqCb,
+                                       FrontDoor::PUBLIC,
+                                       FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                       FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
 
     // ==========================
     // HandlePostUIHeartBeat
@@ -425,7 +434,11 @@ void DisplayController::RegisterDisplayEndPoints()
                                                                                            std::placeholders::_2
                                                                                             ),
                                                                                    m_productController.GetTask() );
-    m_frontdoorClientPtr->RegisterPost<UiHeartBeat>( "/ui/alive", uiAlivePostCb );
+    m_frontdoorClientPtr->RegisterPost<UiHeartBeat>( "/ui/alive",
+                                                     uiAlivePostCb,
+                                                     FrontDoor::PUBLIC,
+                                                     FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                                     FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
 
     // ==========================
     // HandlePutUIHeartBeat
@@ -437,7 +450,11 @@ void DisplayController::RegisterDisplayEndPoints()
                                                                                            std::placeholders::_2
                                                                                             ),
                                                                                    m_productController.GetTask() );
-    m_frontdoorClientPtr->RegisterPut<UiHeartBeat>( "/ui/alive", uiAlivePutCb );
+    m_frontdoorClientPtr->RegisterPut<UiHeartBeat>( "/ui/alive",
+                                                    uiAlivePutCb,
+                                                    FrontDoor::PUBLIC,
+                                                    FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                                    FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
 
     // ==========================
     // HandleGetUIHeartBeat
@@ -448,7 +465,11 @@ void DisplayController::RegisterDisplayEndPoints()
                    std::placeholders::_1
                  ),
         m_productController.GetTask() );
-    m_frontdoorClientPtr->RegisterGet( "/ui/alive", uiAliveGetCb );
+    m_frontdoorClientPtr->RegisterGet( "/ui/alive",
+                                       uiAliveGetCb,
+                                       FrontDoor::PUBLIC,
+                                       FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                       FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
 
 
 }// RegisterDisplayEndPoints
