@@ -69,7 +69,7 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.4.0-99+5b77799"
+    "selected_version": "Release/master/0.4.0-100+2b15610"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
@@ -85,7 +85,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@120f8be081b59940c08ea8c93e24d5b0d199a161"
+    "selected_version": "master@f5a1d06cea6f8a5b8362860b804decd7faec2c21"
   },
   {
     "name": "CastleProductUIAssets",
@@ -169,7 +169,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.5.0.41819.2773388"
+    "selected_version": "Continuous/Castle-Fork/2018-04-11_1617"
   },
   {
     "name": "SystemEventService-qc8017_32",
