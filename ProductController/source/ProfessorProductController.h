@@ -246,8 +246,6 @@ public:
 
     PassportPB::ContentItem GetOOBDefaultLastContentItem() const override;
 
-    bool CanPersistAsLastContentItem( const SoundTouchInterface::ContentItem &ci ) const override;
-
     void PossiblyPairBLERemote( );
 
     void PairBLERemote( uint32_t timeout );
