@@ -1,8 +1,8 @@
 <ShepherdConfig>
   <daemon name="Eddie"/>
 
-  <daemon name="Dinghy"
-          exe="run_dinghy">
+  <daemon name="Monaco"
+          exe="/opt/Bose/webkit/run_wpe.sh">
     <arg>MONACO</arg>
     <arg>1.0</arg>
     <arg>PORTRAIT</arg>
