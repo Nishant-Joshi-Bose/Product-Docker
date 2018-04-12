@@ -41,8 +41,6 @@ namespace
 const std::string s_ModeOn         = "On";
 const std::string s_ModeOff        = "Off";
 const std::string s_ModeAltOn      = "AltOn";
-
-const std::string s_FrontDoorCecMode    = FRONTDOOR_CEC_API;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -105,8 +103,9 @@ bool ProductCecHelper::Run( )
                          this, std::placeholders::_1 ),
               m_ProductTask );
 
-    m_FrontDoorClient->RegisterNotification< SoundTouchInterface::NowPlaying >
-    ( "/content/nowPlaying", callback );
+    m_FrontDoorClient->RegisterNotification< SoundTouchInterface::NowPlaying >(
+        FRONTDOOR_CONTENT_NOWPLAYING_API,
+        callback );
 
 
     auto fNotify = [ this ]( SoundTouchInterface::volume v )
@@ -117,19 +116,39 @@ bool ProductCecHelper::Run( )
     m_FrontDoorClient->RegisterNotification< SoundTouchInterface::volume >
     ( FRONTDOOR_AUDIO_VOLUME, fNotify );
 
-    auto getFunc = [ this ]( const Callback<const CecModeResponse>& resp, const Callback<FrontDoor::Error>& errorRsp )
+    auto getFunc = [ this ]( const Callback< const CecModeResponse>& resp,
+                             const Callback<FrontDoor::Error>& errorRsp )
     {
         CecModeHandleGet( resp, errorRsp );
     };
-    AsyncCallback<Callback<CecModeResponse>, Callback<FrontDoor::Error> > getCb( getFunc, m_ProductTask );
-    m_GetConnection = m_FrontDoorClient->RegisterGet( s_FrontDoorCecMode, getCb );
 
-    auto putFunc = [ this ]( const CecUpdateRequest cecReq, const Callback<const CecModeResponse>& cecResp, const Callback<FrontDoor::Error>& errorRsp )
+    AsyncCallback<Callback< CecModeResponse >, Callback< FrontDoor::Error > >getCb( getFunc,
+                                                                                    m_ProductTask );
+
+    m_GetConnection = m_FrontDoorClient->RegisterGet( FRONTDOOR_CEC_API,
+                                                      getCb,
+                                                      FrontDoor::PUBLIC,
+                                                      FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                                      FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
+
+    auto putFunc = [ this ]( const CecUpdateRequest                   cecReq,
+                             const Callback< const CecModeResponse >& cecResp,
+                             const Callback< FrontDoor::Error >&      errorRsp )
     {
         CecModeHandlePut( cecReq, cecResp, errorRsp );
     };
-    AsyncCallback<const CecUpdateRequest, Callback<CecModeResponse>, Callback<FrontDoor::Error>> putCb( putFunc, m_ProductTask );
-    m_PutConnection = m_FrontDoorClient->RegisterPut<CecUpdateRequest>( s_FrontDoorCecMode, putCb );
+
+    AsyncCallback< const CecUpdateRequest,
+                   Callback< CecModeResponse >,
+                   Callback< FrontDoor::Error > >
+                   putCb( putFunc, m_ProductTask );
+
+    m_PutConnection = m_FrontDoorClient->RegisterPut<CecUpdateRequest>(
+                          FRONTDOOR_CEC_API,
+                          putCb,
+                          FrontDoor::PUBLIC,
+                          FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                          FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
 
     return true;
 }

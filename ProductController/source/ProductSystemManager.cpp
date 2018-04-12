@@ -25,7 +25,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
-#include "EndPointsDefines.h"
+#include "ProductEndpointDefines.h"
 #include "FrontDoorClient.h"
 #include "ProtoPersistenceFactory.h"
 #include "ProfessorProductController.h"
@@ -43,13 +43,6 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 const std::string g_ProductDirectory = "product-persistence/";
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following constants define FrontDoor endpoints used by the SystemManager
-///
-////////////////////////////////////////////////////////////////////////////////////////////////
-const std::string s_FrontDoorSystemConfigurationStatus = FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -100,7 +93,11 @@ bool ProductSystemManager::Run( )
                                      std::placeholders::_2 ),
                           m_ProductTask );
 
-        m_FrontDoorClient->RegisterGet( s_FrontDoorSystemConfigurationStatus, callback );
+        m_FrontDoorClient->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API,
+                                        callback,
+                                        FrontDoor::PUBLIC,
+                                        FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                        FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
 
     BOSE_DEBUG( s_logger, "Registration for getting configuration status requests has been made." );
