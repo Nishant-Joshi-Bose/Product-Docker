@@ -26,6 +26,7 @@ from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 from CastleTestUtils.RivieraUtils import rivieraCommunication, rivieraUtils
+from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
 from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import flash_device
 
 from commonData import keyConfig
@@ -138,6 +139,23 @@ def frontDoor(device_ip):
     front_door = FrontDoorAPI(device_ip)
     return front_door
 
+@pytest.fixture(scope='class')
+def riviera(deviceid):
+    """
+    Get RivieraUtil instance.
+    """
+    return RivieraUtils('ADB', device = deviceid)
+
+@pytest.fixture(scope='class')
+def device_guid(frontDoor):
+    """
+    Use front door API to obtain device GUID
+    """
+    logger.info("Getting the GUID")
+    device_guid = frontDoor.getInfo()["body"]["guid"]
+    assert device_guid != None
+    logger.debug("GUID is: %s", device_guid)
+    return device_guid
 
 @pytest.fixture(scope='function', autouse=False)
 def test_log_banner(request):
