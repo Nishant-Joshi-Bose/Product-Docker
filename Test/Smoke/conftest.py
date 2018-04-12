@@ -110,7 +110,7 @@ def passport_user(request, common_behavior_handler):
     apikey = request.config.getoption('--api-key')
 
     # Create passport account
-    bosepersonID = create_passport_account(passport_base_url, "Eddie_MultiRoom", "Bose", apikey)
+    bosepersonID = create_passport_account(passport_base_url, "Eddie_Smoke", "Bose", apikey)
     passportUser = PassportAPIUsers(bosepersonID, apikey, passport_base_url)
 
     def delete_passport_user():
