@@ -134,7 +134,8 @@ class DiagnosticsPage(SeleniumWrapper):
         elements = self.getElements(self.left_display_test, locatorType="css")
         for element in elements:
             element.click()
-            time.sleep(0.1)
+            # Giving enough to click the display-test images
+            time.sleep(5)
         self.dev_logger.stop_log_collection(saveLog=True, zip=False)
         for f in os.listdir(self.dir_name):
             filename = os.path.join(self.dir_name, f)
@@ -146,7 +147,10 @@ class DiagnosticsPage(SeleniumWrapper):
                 assert "colorbars-bottom.png" in output, "colorbars-bottom.png string did not match"
                 assert "colorbars-right.png" in output, "colorbars-right.png string did not match"
                 assert "colorbars-left.png" in output, "colorbars-left.png string did not match"
-
+        # Delete the files once done checking for the string
+        for item in os.listdir(self.dir_name):
+            if item.endswith(".txt"):
+                os.remove(os.path.join(self.dir_name, item))
 
     def get_manufacturing_data(self, deviceid):
         """
