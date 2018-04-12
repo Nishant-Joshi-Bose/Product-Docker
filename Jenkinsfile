@@ -35,7 +35,14 @@ def CastleTestUtils_Component = ["CastleTestUtils-Component/CastleTestUtils-test
 
 def Eddie_Product  = ["EddieProduct/Eddie-Bootup-Sequence-Timing",
                       "EddieProduct/Eddie-DemoController",
-                      "EddieProduct/Eddie-Preset"]
+		      "EddieProduct/Eddie-Factory-Default",
+		      "EddieProduct/Eddie-Key-Functionality",
+		      "EddieProduct/Eddie-Lightbar",
+		      "EddieProduct/Eddie-LPM",
+		      "EddieProduct/Eddie-ProductController",
+                      "EddieProduct/Eddie-Preset",
+		      "EddieProduct/Eddie-EEC",
+		      "EddieProduct/AUX"]
 
 def Galapagos_Client = ["GalapagosClient/Authentication",
                         "GalapagosClient/GalapagosClient-Activation",
@@ -51,8 +58,11 @@ def STS_Integrated = ["STS-Integrated/Amazon_Integrated",
 
 def NetworkServices_Component = ["NetworkServices-Component/network-wifi-profile"]
 
-def E2E = ["E2E/BonjourUpdateTest_Master",
-	   "E2E/setupAP"]
+def E2E = ["E2E/E2E_BonjourUpdate",
+	   "E2E/E2E_Eddie_Monaco",
+	   "E2E/E2E_setupAP",
+	   "E2E/E2E_MadridApp_SOP",
+	   "E2E/E2E_Eddie_Diagnostics_mfgdata"]
 
 
 failureList = [] 
