@@ -9,7 +9,7 @@
   },
   {
     "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/.0.3.2-+"
+    "selected_version": "Release/master/0.3.3-+"
   },
   {
     "name": "A4VVideoManagerService",
@@ -61,11 +61,11 @@
   },
   {
     "name": "CastleDataCollectionService-qc8017_32",
-    "selected_version": "Release/master/0.4.1-23+1113e41"
+    "selected_version": "Release/master/0.4.2-25+abbeb2c"
   },
   {
     "name": "CastleDemoController-qc8017_32",
-    "selected_version": "Release/master/0.3.3-66+c3b9b9f"
+    "selected_version": "Release/master/0.4.1-72+8c1f9ea"
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
@@ -201,6 +201,6 @@
   },
   {
     "name": "WiFi-Setup-Webpage",
-    "selected_version": "master@1a33c2506912c9df4c562838dc15f059040c27b7"
+    "selected_version": "master@25f3b4af35031d320b7befd774962fef003ed414"
   }
 ]
