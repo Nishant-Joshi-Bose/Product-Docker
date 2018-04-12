@@ -11,7 +11,16 @@ def buildJob(jobName)
 {
     build job: jobName, parameters: [string(name: 'SW_FREQUENCY', value: "${SW_FREQUENCY}"), string(name: 'SW_BRANCH', value: "${SW_BRANCH}"),string(name: 'EC_URL', value: "${EC_URL}"),[$class: 'GitParameterValue', name: 'Branch', value: "${Branch}"]]
 }
-def Eddie_Product  = ["EddieProduct/Eddie-Bootup-Sequence-Timing","EddieProduct/Eddie-DemoController","EddieProduct/Eddie-Factory-Default","EddieProduct/Eddie-Key-Functionality","EddieProduct/Eddie-LightBar","EddieProduct/Eddie-LPM","EddieProduct/Eddie-Network-Disabled","EddieProduct/Eddie-Preset","EddieProduct/Eddie-ProductController"]
+
+def Eddie_Product  = ["EddieProduct/Eddie-Bootup-Sequence-Timing",
+					  "EddieProduct/Eddie-DemoController",
+					  "EddieProduct/Eddie-Factory-Default",
+					  "EddieProduct/Eddie-Key-Functionality",
+					  "EddieProduct/Eddie-LightBar",
+					  "EddieProduct/Eddie-LPM",
+					  "EddieProduct/Eddie-Network-Disabled",
+					  "EddieProduct/Eddie-Preset",
+					  "EddieProduct/Eddie-ProductController"]
 
 
 failureList = [] 
