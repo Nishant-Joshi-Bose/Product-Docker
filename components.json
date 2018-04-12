@@ -69,11 +69,11 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.4.0-99+5b77799"
+    "selected_version": "Release/master/0.4.0-100+2b15610"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.3.3-227+7d6c2e7"
+    "selected_version": "Release/master/0.3.4-232+a2a80bd"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -85,7 +85,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@120f8be081b59940c08ea8c93e24d5b0d199a161"
+    "selected_version": "master@80451a6ceee8d8aa7dc7c3986a8518455a85c3e9"
   },
   {
     "name": "CastleProductUIAssets",
@@ -94,10 +94,6 @@
   {
     "name": "CastleTestUtils",
     "selected_version": "master@61115c22bb239db7d1c8fa9b81f628646d9d21b6"
-  },
-  {
-    "name": "DinghyWebBrowser-qc8017_64",
-    "selected_version": "Release/bose-master/1.0.0-8+ebecb5f"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -169,7 +165,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.5.0.41819.2773388"
+    "selected_version": "Continuous/Castle-Fork/2018-04-11_1617"
   },
   {
     "name": "SystemEventService-qc8017_32",
@@ -181,6 +177,6 @@
   },
   {
     "name": "WiFi-Setup-Webpage",
-    "selected_version": "master@1a33c2506912c9df4c562838dc15f059040c27b7"
+    "selected_version": "master@25f3b4af35031d320b7befd774962fef003ed414"
   }
 ]

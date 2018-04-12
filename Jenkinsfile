@@ -35,7 +35,15 @@ def CastleTestUtils_Component = ["CastleTestUtils-Component/CastleTestUtils-test
 
 def Eddie_Product  = ["EddieProduct/Eddie-Bootup-Sequence-Timing",
                       "EddieProduct/Eddie-DemoController",
-                      "EddieProduct/Eddie-Preset"]
+		      "EddieProduct/Eddie-Factory-Default",
+		      "EddieProduct/Eddie-Key-Functionality",
+		      "EddieProduct/Eddie-LightBar",
+		      "EddieProduct/Eddie-LPM",
+		      "EddieProduct/Eddie-ProductController",
+                      "EddieProduct/Eddie-Preset",
+		      "EddieProduct/Eddie-LowPowerStandby",
+		      "EddieProduct/Eddie-Network-Disabled",
+		      "EddieProduct/Eddie-AUX"]
 
 def Galapagos_Client = ["GalapagosClient/Authentication",
                         "GalapagosClient/GalapagosClient-Activation",
@@ -49,10 +57,18 @@ def STS_Integrated = ["STS-Integrated/Amazon_Integrated",
                       "STS-Integrated/Spotify_Integrated",
                       "STS-Integrated/TuneIn-Integrated"]
 
-def NetworkServices_Component = ["NetworkServices-Component/network-wifi-profile"]
+def NetworkServices_Component = ["NetworkServices-Component/network-usb-client",
+				 "NetworkServices-Component/network-wifi-apmode",
+				 "NetworkServices-Component/network-wifi-profile",
+				 "NetworkServices-Component/network-wifi-sitescan",
+				 "NetworkServices-Component/network-wifi-status",
+				 "NetworkServices-Component/networkConnectivity"]
 
-def E2E = ["E2E/BonjourUpdateTest_Master",
-	   "E2E/setupAP"]
+def E2E = ["E2E/E2E_BonjourUpdate",
+	   "E2E/E2E_Eddie_Monaco",
+	   "E2E/E2E_setupAP",
+	   "E2E/E2E_MadridApp",
+	   "E2E/E2E_Eddie_Diagnostics_mfgdata"]
 
 
 failureList = [] 
