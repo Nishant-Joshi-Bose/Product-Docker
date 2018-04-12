@@ -29,7 +29,7 @@ class TestDemo():
         demoUtils.verifyDemoMode(True)
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
-        demoUtils.verifySecondReboot(responseTimeout *2,deviceid,request.config.getoption("--network-iface"))
+        demoUtils.verifySecondReboot(responseTimeout *2, deviceid, request.config.getoption("--network-iface"))
 
     @pytest.mark.usefixtures("demoUtils", "deviceid", "device_ip", "request")
     def test_demoOnAfterTimeout(self, demoUtils, device_ip, request, deviceid):
