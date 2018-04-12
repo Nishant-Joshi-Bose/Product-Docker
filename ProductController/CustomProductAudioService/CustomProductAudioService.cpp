@@ -97,7 +97,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                                                                            getBassAction,
                                                                                            setBassAction,
                                                                                            m_FrontDoorClientIF,
-                                                                                           m_ProductTask ) );
+                                                                                           m_ProductTask,
+                                                                                           FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                                                                           FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
 
     //
     // Endpoint /audio/center - register ProductController as handler for POST/PUT/GET requests
@@ -123,7 +125,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                  getCenterAction,
                                  setCenterAction,
                                  m_FrontDoorClientIF,
-                                 m_ProductTask ) );
+                                 m_ProductTask,
+                                 FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                 FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
     }
 
     //
@@ -150,7 +154,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                                                                                     getModeAction,
                                                                                     setModeAction,
                                                                                     m_FrontDoorClientIF,
-                                                                                    m_ProductTask ) );
+                                                                                    m_ProductTask,
+                                                                                    FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                                                                    FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
     }
 
     //
@@ -175,7 +181,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
                              getTrebleAction,
                              setTrebleAction,
                              m_FrontDoorClientIF,
-                             m_ProductTask ) );
+                             m_ProductTask,
+                             FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                             FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME ) );
 }
 
 /*!
