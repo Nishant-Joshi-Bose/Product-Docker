@@ -237,7 +237,11 @@ void EddieProductController::RegisterEndPoints()
 
     /// Registration of endpoints to the frontdoor client.
 
-    m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API , getConfigurationStatusReqCb );
+    m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API,
+                                      getConfigurationStatusReqCb,
+                                      FrontDoor::PUBLIC,
+                                      FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                      FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
 }
 
 void EddieProductController::SendInitialRequests()
