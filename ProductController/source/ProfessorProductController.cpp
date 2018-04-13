@@ -992,60 +992,9 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     BOSE_DEBUG( s_logger, "----------- Product Controller Message Handler -------------" );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// LPM status messages has both Common handling and Professor-specific handling
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    if( message.has_lpmstatus( ) )
-    {
-        ///
-        /// First do the common stuff.
-        ///
-        ( void ) HandleCommonProductMessage( message );
-
-        ///
-        /// Then do the Professor specific stuff.
-        ///
-        if( message.lpmstatus( ).has_systemstate( ) )
-        {
-            switch( message.lpmstatus( ).systemstate( ) )
-            {
-            case SYSTEM_STATE_ON:
-                BOSE_DEBUG( s_logger, "Calling HandleLPMPowerStatusFullPower( )" );
-                m_ProductAudioService->SetThermalMonitorEnabled( true );
-                break;
-            case SYSTEM_STATE_OFF:
-                m_ProductAudioService->SetThermalMonitorEnabled( false );
-                break;
-            case SYSTEM_STATE_BOOTING:
-                break;
-            case SYSTEM_STATE_STANDBY:
-                m_ProductAudioService->SetThermalMonitorEnabled( false );
-                break;
-            case SYSTEM_STATE_RECOVERY:
-                break;
-            case SYSTEM_STATE_LOW_POWER:
-                m_ProductAudioService->SetThermalMonitorEnabled( false );
-                break;
-            case SYSTEM_STATE_UPDATE:
-                break;
-            case SYSTEM_STATE_SHUTDOWN:
-                m_ProductAudioService->SetThermalMonitorEnabled( false );
-                break;
-            case SYSTEM_STATE_FACTORY_DEFAULT:
-                break;
-            case SYSTEM_STATE_IDLE:
-                m_ProductAudioService->SetThermalMonitorEnabled( false );
-                break;
-            case SYSTEM_STATE_NUM_OF:
-                break;
-            case SYSTEM_STATE_ERROR:
-                break;
-            }
-        }
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
     /// STS slot selected data is handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_selectsourceslot( ) )
+    if( message.has_selectsourceslot( ) )
     {
         const auto& slot = message.selectsourceslot( ).slot( );
 

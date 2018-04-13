@@ -95,7 +95,7 @@ public:
     /// @brief  The following public methods are used to start the ProfessorProductController
     ///         instance task, wait in a separate task until the product task ends, and stop the
     ///         product task, respectively.
-    ///ProductLpmHardwareInterface
+    ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void Run( );
     void Wait( );
@@ -322,10 +322,9 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleGetOpticalAutoWake( const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
                                    const Callback<FrontDoor::Error> & errorCb ) const;
-    void HandlePutOpticalAutoWake(
-        const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req,
-        const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
-        const Callback<FrontDoor::Error> & errorCb );
+    void HandlePutOpticalAutoWake( const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req,
+                                   const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
+                                   const Callback<FrontDoor::Error> & errorCb );
     void ApplyOpticalAutoWakeSettingFromPersistence( );
     void NotifyFrontdoorAndStoreOpticalAutoWakeSetting( );
 
