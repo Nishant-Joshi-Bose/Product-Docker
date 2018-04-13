@@ -94,7 +94,7 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_1"],
         "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": [200]
+        "timeOutList": []
     },
     {
         "action": "PRESET_SELECT_2",
@@ -102,7 +102,7 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_2"],
         "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": [200]
+        "timeOutList": []
     },
     {
         "action": "PRESET_SELECT_3",
@@ -110,7 +110,7 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_3"],
         "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": [200]
+        "timeOutList": []
     },
     {
         "action": "PRESET_SELECT_4",
@@ -118,7 +118,7 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_4"],
         "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": [200]
+        "timeOutList": []
     },
     {
         "action": "PRESET_SELECT_5",
@@ -126,7 +126,7 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_5"],
         "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": [200]
+        "timeOutList": []
     },
     {
         "action": "PRESET_SELECT_6",
@@ -134,7 +134,7 @@
         "keyEvent": "RELEASE",
         "keyList": ["BOSE_NUMBER_6"],
         "origin": ["IR", "TAP", "CEC", "RF"],
-        "timeOutList": [200]
+        "timeOutList": []
     },
     {
         "action": "VOLUME_UP",
