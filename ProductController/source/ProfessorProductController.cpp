@@ -120,8 +120,6 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 constexpr uint32_t PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
 
-constexpr auto FRONTDOOR_SYSTEM_SOURCES_API = "/system/sources";
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProfessorProductController::ProfessorProductController
@@ -139,12 +137,12 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductLpmHardwareInterface( nullptr ),
     m_ProductSystemManager( nullptr ),
     m_ProductCommandLine( nullptr ),
+    m_ProductSourceInfo( nullptr ),
     m_ProductKeyInputManager( nullptr ),
     m_ProductCecHelper( nullptr ),
     m_ProductDspHelper( nullptr ),
     m_ProductAdaptIQManager( nullptr ),
     m_ProductAudioService( nullptr ),
-    m_ProductSourceInfo( nullptr ),
     m_ProductBLERemoteManager( nullptr ),
 
     ///
@@ -516,11 +514,13 @@ void ProfessorProductController::Run( )
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductSystemManager        = std::make_shared< ProductSystemManager              >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
+    m_ProductSourceInfo           = std::make_shared< ProductSourceInfo                 >( *this );
     m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
     m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
-    m_ProductSourceInfo           = std::make_shared< ProductSourceInfo                 >( *this );
     m_ProductBLERemoteManager     = std::make_shared< ProductBLERemoteManager           >( *this );
-    m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this, m_FrontDoorClientIF, m_ProductLpmHardwareInterface->GetLpmClient() );
+    m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this,
+                                    m_FrontDoorClientIF,
+                                    m_ProductLpmHardwareInterface->GetLpmClient( ) );
 
     if( m_ProductLpmHardwareInterface == nullptr ||
         m_ProductSystemManager        == nullptr ||
@@ -557,11 +557,11 @@ void ProfessorProductController::Run( )
     m_ProductSystemManager       ->Run( );
     m_ProductAudioService        ->Run( );
     m_ProductCommandLine         ->Run( );
+    m_ProductSourceInfo          ->Run( );
     m_ProductKeyInputManager     ->Run( );
     m_ProductCecHelper           ->Run( );
     m_ProductDspHelper           ->Run( );
     m_ProductAdaptIQManager      ->Run( );
-    m_ProductSourceInfo          ->Run( );
     m_ProductBLERemoteManager    ->Run( );
 
     ///
@@ -941,25 +941,36 @@ void ProfessorProductController::HandleSelectSourceSlot( ProductSTSAccount::Prod
 void ProfessorProductController::RegisterFrontDoorEndPoints( )
 {
     RegisterCommonEndPoints( );
-    m_lightbarController->RegisterLightBarEndPoints();
+
+    m_lightbarController->RegisterLightBarEndPoints( );
 
     {
-        auto l = [ = ]( Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> respCb,
-                        Callback<FrontDoor::Error> errorCb )
+        auto callback = [ = ]( Callback< SystemPowerProductPb::SystemPowerModeOpticalAutoWake > respCb,
+                               Callback< FrontDoor::Error > errorCb )
         {
             HandleGetOpticalAutoWake( respCb, errorCb );
         };
-        GetFrontDoorClient()->RegisterGet( FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API, l );
+
+        GetFrontDoorClient()->RegisterGet( FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API,
+                                           callback,
+                                           FrontDoor::PUBLIC,
+                                           FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                           FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
     {
-        auto l = [ = ]( SystemPowerProductPb::SystemPowerModeOpticalAutoWake req,
-                        Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> respCb,
-                        Callback<FrontDoor::Error> errorCb )
+        auto callback = [ = ]( SystemPowerProductPb::SystemPowerModeOpticalAutoWake req,
+                               Callback< SystemPowerProductPb::SystemPowerModeOpticalAutoWake > respCb,
+                               Callback< FrontDoor::Error > errorCb )
         {
             HandlePutOpticalAutoWake( req, respCb, errorCb );
         };
+
         GetFrontDoorClient( )->RegisterPut<SystemPowerProductPb::SystemPowerModeOpticalAutoWake>(
-            FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API, l );
+            FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API,
+            callback,
+            FrontDoor::PUBLIC,
+            FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+            FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
 }
 
@@ -1240,11 +1251,11 @@ void ProfessorProductController::Wait( )
     m_ProductLpmHardwareInterface->Stop( );
     m_ProductSystemManager       ->Stop( );
     m_ProductCommandLine         ->Stop( );
+    m_ProductSourceInfo          ->Stop( );
     m_ProductKeyInputManager     ->Stop( );
     m_ProductCecHelper           ->Stop( );
     m_ProductDspHelper           ->Stop( );
     m_ProductAdaptIQManager      ->Stop( );
-    m_ProductSourceInfo          ->Stop( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1426,6 +1437,36 @@ void ProfessorProductController::NotifyFrontdoorAndStoreOpticalAutoWakeSetting( 
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::GetChimesConfigurationLocation
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+string ProfessorProductController::GetChimesConfigurationLocation( ) const
+{
+    string retVal{ g_ChimesConfigurationPath };
+    retVal += GetProductType( );
+    retVal += '/';
+    return retVal + g_ChimesConfigurationFile;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::GetChimesFilesLocation
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+string ProfessorProductController::GetChimesFilesLocation( ) const
+{
+    string retVal{ g_ChimesPath };
+    retVal += GetProductType( );
+    return retVal + '/';
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::InitializeKeyIdToKeyNameMap
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::InitializeKeyIdToKeyNameMap()
 {
     BOSE_INFO( s_logger, "ProfessorProductController::%s:", __func__ );

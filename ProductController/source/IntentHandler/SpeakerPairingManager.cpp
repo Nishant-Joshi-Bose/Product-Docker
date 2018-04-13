@@ -32,6 +32,7 @@
 #include "SpeakerPairingManager.h"
 #include "ProductEndpointDefines.h"
 #include "PGCErrorCodes.h"
+#include "ProductDataCollectionDefines.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -44,7 +45,6 @@ namespace ProductApp
 /// @brief Global Constant Expressions
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-const std::string accessoryFrontDoorURL = FRONTDOOR_ACCESSORIES_API;
 constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_START = 4 * 60 * 1000;
 constexpr uint32_t PAIRING_MAX_TIME_MILLISECOND_TIMEOUT_RETRY = 0 ;
 
@@ -217,8 +217,11 @@ void SpeakerPairingManager::RegisterFrontDoorEvents( )
                           m_ProductTask );
 
         m_registerGetAccessoriesCb =
-            m_FrontDoorClientIF->RegisterGet( accessoryFrontDoorURL ,
-                                              getAccessoriesCb );
+            m_FrontDoorClientIF->RegisterGet( FRONTDOOR_ACCESSORIES_API,
+                                              getAccessoriesCb,
+                                              FrontDoor::PUBLIC,
+                                              FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                              FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
     {
         AsyncCallback< ProductPb::AccessorySpeakerState, Callback< ProductPb::AccessorySpeakerState >, Callback<FrontDoor::Error> >
@@ -230,8 +233,12 @@ void SpeakerPairingManager::RegisterFrontDoorEvents( )
                           m_ProductTask );
 
         m_registerPutAccessoriesCb =
-            m_FrontDoorClientIF->RegisterPut<ProductPb::AccessorySpeakerState>( accessoryFrontDoorURL ,
-                                                                                putAccessoriesCb );
+            m_FrontDoorClientIF->RegisterPut<ProductPb::AccessorySpeakerState>(
+                FRONTDOOR_ACCESSORIES_API,
+                putAccessoriesCb,
+                FrontDoor::PUBLIC,
+                FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
 }
 
@@ -552,7 +559,11 @@ void SpeakerPairingManager::RecieveAccessoryListCallback( LpmServiceMessages::Ip
         m_accessorySpeakerState.mutable_rears( i )->set_configurationstatus( rearConfig );
     }
 
-    m_FrontDoorClientIF->SendNotification( accessoryFrontDoorURL, m_accessorySpeakerState );
+    m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
+
+    GetProductController().GetDataCollectionClient()->SendData(
+        std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ),
+        DATA_COLLECTION_ACCESSORIES );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -598,10 +609,13 @@ void SpeakerPairingManager::PairingCallback( LpmServiceMessages::IpcSpeakerPairi
 
     IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
 
-    // Need to always notify here because we need to let brussels know for UI and to rectify
-    // our white lie made earlier in DoPairingFrontDoor when the request was made where we say it
-    // was started before it does.
-    m_FrontDoorClientIF->SendNotification( accessoryFrontDoorURL, m_accessorySpeakerState );
+
+    // Need to notify here only if pairing is being set. If pairing has finished and is set to false,
+    // will notify UI with full message from RecieveAccessoryListCallback.
+    if( m_accessorySpeakerState.pairing( ) )
+    {
+        m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

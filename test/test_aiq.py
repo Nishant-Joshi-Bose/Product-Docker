@@ -2,7 +2,7 @@
 import json
 import pytest
 import argparse
-from FrontDoorAPI import FrontDoorAPI
+from common import FrontDoorAPI
 
 """
   Send a GET request
