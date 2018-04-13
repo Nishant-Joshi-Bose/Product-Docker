@@ -79,10 +79,10 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
         log info "Production mode (core files disabled, recovery enabled)"
         set -- "$@" --recovery
         ulimit -c 0
-        killwait adbd # TODO: delete this after Riviera-HSP no longer starts adbd automatically
     else
         log info "Development mode (core files enabled, recovery disabled)"
-        systemctl start adbd
+        systemctl start adbd.service
+        systemctl start sshd.socket
         ulimit -c unlimited
         echo "|/opt/Bose/etc/store-core %e-%u-%g-%p-%t-%s" > \
             /proc/sys/kernel/core_pattern
