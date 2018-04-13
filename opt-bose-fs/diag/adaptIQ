@@ -1,0 +1,33 @@
+#!/usr/bin/python2.7
+#
+# Invoked via pts-handler to display pages related to AdaptIQ diagnostics.
+#
+import os
+import sys
+import re
+import json
+
+with open("endpointInterface.html") as file:
+    contents=file.read()
+
+configuration = \
+"""
+{
+    "pageName": "AdaptIQ",
+    "endpoint": "/adaptiq",
+    "fields": ["body.hpConnected", "body.smState",],
+    "button":
+    {
+        "enabled": true,
+        "name": "Action Enter",
+        "putData":
+        {
+            "action": "ACTION_ENTER"
+        }
+    }
+}
+"""
+
+html_page= contents.replace("$CONFIGURATION_JSON_OBJECT$",configuration)
+
+sys.stdout.write(html_page)

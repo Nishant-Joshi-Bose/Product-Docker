@@ -273,6 +273,11 @@ public:
         return false;
     }
 
+    virtual bool HandleScheduledSwUpdateDeferralTimerExpiry( )
+    {
+        return false;
+    }
+
     virtual bool HandleChimeSASSPlaybackCompleted( int32_t eventId )
     {
         return false;
@@ -436,6 +441,11 @@ public:
     }
 
     virtual bool HandleSystemEventFactoryDefault( const ProductSystemEventServiceResponse& response )
+    {
+        return false;
+    }
+
+    virtual bool HandleKeyEvent( LpmServiceMessages::IpcKeyInformation_t keyEvent )
     {
         return false;
     }

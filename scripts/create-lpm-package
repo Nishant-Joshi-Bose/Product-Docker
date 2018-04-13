@@ -3,30 +3,31 @@
 # Create a BLOB to be used to update the LPM and its peripherals.
 #
 #
-if (( $# != 2 )); then
-    echo >&2 "usage: $0 builds-dir build-type"
+if (( $# != 3 )); then
+    echo >&2 "usage: $0 builds-dir build-type hw-var"
     exit 1
 fi
 builds_dir=$1; shift
 build_type=$1; shift
+hw_var=$1; shift
 
 here=$(cd "$(dirname $0)" && echo "$PWD") || exit
 wspace=$(cd "$here/.." && echo "$PWD") || exit
 
-release_xml=$wspace/LpmManifestFiles/release_lpm_package.xml
-nightly_xml=$wspace/LpmManifestFiles/nightly_lpm_package.xml
-continuous=$wspace/LpmManifestFiles/continuous_lpm_package.xml
+release_xml=$wspace/LpmManifestFiles/$hw_var/release_lpm_package.xml
+nightly_xml=$wspace/LpmManifestFiles/$hw_var/nightly_lpm_package.xml
+continuous_xml=$wspace/LpmManifestFiles/$hw_var/continuous_lpm_package.xml
 
 riviera_lpm_tools_dir=$(components get RivieraLpmTools installed_location) || exit
 
 
 
-# For release builds, we want to the timestamp of the BLOB to reflect that last time the manifest XML file was modified in git. This 
+# For release builds, we want to the timestamp of the BLOB to reflect that last time the manifest XML file was modified in git. This
 # allows for the BLOB version (which includes a timestamp) to stay static across builds where the contents of the BLOB does not change.
-# The main draw back is the case where someone changes the the release manifest XML locally and re-builds. In this case, since the changes 
-# to the manifest file have not been committed in git the timestamp will remain the same instead of changing. To work around this, 
+# The main draw back is the case where someone changes the the release manifest XML locally and re-builds. In this case, since the changes
+# to the manifest file have not been committed in git the timestamp will remain the same instead of changing. To work around this,
 # developers will need to remember to bump the version of the BLOB (minor or major revision) in order to generate a BLOB with a different version.
-# 
+#
 #
 # Nightly builds and continuous builds will use the current time during as the timestamp.
 #
@@ -44,8 +45,8 @@ elif [ "$build_type" == "Nightly" ]; then
     cp $nightly_xml $builds_dir/lpm_package.xml || exit
     python2.7 $riviera_lpm_tools_dir/tools/blob/blob_utility.py --pack $nightly_xml $builds_dir --build_type $build_type || exit
 elif [ "$build_type" == "Continuous" ]; then
-    cp $continuous $builds_dir/lpm_package.xml || exit
-    python2.7 $riviera_lpm_tools_dir/tools/blob/blob_utility.py --pack $continuous $builds_dir --build_type $build_type || exit
+    cp $continuous_xml $builds_dir/lpm_package.xml || exit
+    python2.7 $riviera_lpm_tools_dir/tools/blob/blob_utility.py --pack $continuous_xml $builds_dir --build_type $build_type || exit
 else
     echo >&2 "$0: Error: Please use a build type of Release, Continuous, or Nightly"
     exit 1

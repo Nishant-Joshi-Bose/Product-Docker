@@ -210,6 +210,13 @@ public:
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     NetManager::Protobuf::OperationalMode GetWiFiOperationalMode( ) override;
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @name   InitializeKeyIdToKeyNameMap
+    //  @brief  This function is needed to create a mapping of keys to keyNames
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    void InitializeKeyIdToKeyNameMap() override;
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following method is called to handle product controller messages, which are
@@ -259,12 +266,12 @@ private:
     std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
     std::shared_ptr< ProductSystemManager              > m_ProductSystemManager;
     std::shared_ptr< ProductCommandLine                > m_ProductCommandLine;
+    std::shared_ptr< ProductSourceInfo                 > m_ProductSourceInfo;
     std::shared_ptr< CustomProductKeyInputManager      > m_ProductKeyInputManager;
     std::shared_ptr< ProductCecHelper                  > m_ProductCecHelper;
     std::shared_ptr< ProductDspHelper                  > m_ProductDspHelper;
     std::shared_ptr< ProductAdaptIQManager             > m_ProductAdaptIQManager;
     std::shared_ptr< CustomProductAudioService         > m_ProductAudioService;
-    std::shared_ptr< ProductSourceInfo                 > m_ProductSourceInfo;
     std::shared_ptr< ProductBLERemoteManager           > m_ProductBLERemoteManager;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -327,6 +334,15 @@ private:
                                    const Callback<FrontDoor::Error> & errorCb );
     void ApplyOpticalAutoWakeSettingFromPersistence( );
     void NotifyFrontdoorAndStoreOpticalAutoWakeSetting( );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following declarations are for overriding the chime file locations so we can support
+    ///        Professor and Ginger-Cheevers out of a single file system.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    std::string GetChimesConfigurationLocation( ) const override;
+    std::string GetChimesFilesLocation( ) const override;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
