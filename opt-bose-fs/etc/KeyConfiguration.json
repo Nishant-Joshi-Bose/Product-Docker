@@ -11,7 +11,7 @@
 
     {"origin": 0, "keyEvent": 1, "keyList": [1], "timeOutList": [20], "action": 20, "comment": "Console: Bluetooth release ---> CarouselList-Discoverable-ConnectToLast"},
     {"origin": 0, "keyEvent": 2, "keyList": [1], "timeOutList": [750], "action": 21, "comment": "Console: Bluetooth Press and Hold ---> SendToDiscoverable"},
-    {"origin": 0, "keyEvent": 2, "keyList": [1], "timeOutList": [10000], "action": 22, "comment": "Console: Bluetooth Press and Hold ---> Clear Pairing List"},
+    {"origin": 0, "keyEvent": 2, "keyList": [1], "timeOutList": [10020], "action": 22, "comment": "Console: Bluetooth Press and Hold ---> Clear Pairing List"},
 
     {"origin": 0, "keyEvent": 1, "keyList": [3], "timeOutList": [20], "action": 23, "comment": "Console: VolumeUp(+) release ---> VolumeUp"},
     {"origin": 0, "keyEvent": 3, "keyList": [3], "timeOutList": [300,100], "action": 39, "comment": "Console: VolumeUp(+) Press and Hold ---> VolumeRampUp"},
@@ -58,7 +58,9 @@
     {"origin": 0, "keyEvent": 5, "keyList": [4], "timeOutList": [], "action": 124, "comment": "Console: Release of MFB will generate ---> Toggle WiFi Radio Cancel"},
 
     {"origin": 0, "keyEvent": 3, "keyList": [3,5], "timeOutList": [5,1000], "action": 115, "comment": "Console: VolumeUp+VolumeDown press and hold will generate first event at 5ms and repeat every 1000ms ---> System Info Count down"},
+    {"origin": 0, "keyEvent": 3, "keyList": [1], "timeOutList": [5000,1000], "action": 116, "comment": "Console: Bluetooth press and hold will generate first event at 5ms and repeat every 1000ms ---> Bluetooth clear pairing list down"},
     {"origin": 0, "keyEvent": 5, "keyList": [3], "timeOutList": [], "action": 125, "comment": "Console: Release of VolumeUP will generate ---> System Info Cancel"},
-    {"origin": 0, "keyEvent": 5, "keyList": [5], "timeOutList": [], "action": 125, "comment": "Console: Release of VolumeDown will generate ---> System Info Cancel"}
+    {"origin": 0, "keyEvent": 5, "keyList": [5], "timeOutList": [], "action": 125, "comment": "Console: Release of VolumeDown will generate ---> System Info Cancel"},
+    {"origin": 0, "keyEvent": 5, "keyList": [1], "timeOutList": [], "action": 126, "comment": "Console: Release of Bluetooth will generate ---> Bluetooth clear pairing Cancel"}
 ]
 }
