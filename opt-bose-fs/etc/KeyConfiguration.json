@@ -58,7 +58,7 @@
     {"origin": 0, "keyEvent": 5, "keyList": [4], "timeOutList": [], "action": 124, "comment": "Console: Release of MFB will generate ---> Toggle WiFi Radio Cancel"},
 
     {"origin": 0, "keyEvent": 3, "keyList": [3,5], "timeOutList": [5,1000], "action": 115, "comment": "Console: VolumeUp+VolumeDown press and hold will generate first event at 5ms and repeat every 1000ms ---> System Info Count down"},
-    {"origin": 0, "keyEvent": 3, "keyList": [1], "timeOutList": [5000,1000], "action": 116, "comment": "Console: Bluetooth press and hold will generate first event at 5ms and repeat every 1000ms ---> Bluetooth clear pairing list down"},
+    {"origin": 0, "keyEvent": 3, "keyList": [1], "timeOutList": [5000,1000], "action": 116, "comment": "Console: Bluetooth press and hold will generate first event at 5000ms and repeat every 1000ms ---> Bluetooth clear pairing list down"},
     {"origin": 0, "keyEvent": 5, "keyList": [3], "timeOutList": [], "action": 125, "comment": "Console: Release of VolumeUP will generate ---> System Info Cancel"},
     {"origin": 0, "keyEvent": 5, "keyList": [5], "timeOutList": [], "action": 125, "comment": "Console: Release of VolumeDown will generate ---> System Info Cancel"},
     {"origin": 0, "keyEvent": 5, "keyList": [1], "timeOutList": [], "action": 126, "comment": "Console: Release of Bluetooth will generate ---> Bluetooth clear pairing Cancel"}
