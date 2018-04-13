@@ -28,7 +28,7 @@
             --><header master_version="0.3.17" name="professor_package.bos" />
     <manifest_entries>
         <entry chip="lpm_professor" combine="True" name="professor_mfg.bin" path="/home/softlib/verisoft/ProfessorLPM-Diags/Release/master/0.3.2-22+5d00a87/DP2/lpm_0.3.2-22+5d00a87.bin" version="filename" />
-        <entry chip="lpm_professor" combine="True" name="professor.bin" path="/home/softlib/verisoft/ProfessorLPM-App/Release/trunk/0.3.17.2348/DP2/lpm_0.3.17.2348.bin" version="filename" />
+        <entry chip="lpm_professor" combine="True" name="professor.bin" path="/home/softlib/verisoft/ProfessorLPM-App/Release/trunk/0.3.18.2357/DP2/lpm_0.3.18.2357.bin" version="filename" />
         <entry chip="lpm_professor" combine="True" name="professor_bl.bin" path="/home/softlib/verisoft/ProfessorLPM-BL/Release/trunk/0.2.0.1674/lpm_bootloader_0.2.0.1674.bin" version="filename" />
         <entry name="f0.bin" path="/home/softlib/verisoft/A4V-F0/Release/trunk/1.7.1.12103/RIVIERA_F0_1.7.1.12103.bin" version="filename" />
         <entry name="darr.bin"        path="/home/softlib/verisoft/A4V-WirelessAudio/Release/trunk/25.000.11510/wam_25.000.11510.bin" version="25" />
@@ -43,7 +43,7 @@
         <entry name="psoc.cyacd" path="/home/softlib/verisoft/CastleLightBarCapSense/Release/master/3.5-118+63b94fa/App-Professor-DP2*.cyacd" version="dynamic" />
         <entry name="psoc_gc.cyacd" path="/home/softlib/verisoft/CastleLightBarCapSense/Release/master/3.5-118+63b94fa/App-GingerCheevers-DP2*.cyacd" version="dynamic" />
         <entry name="prof_lb_anim_db.bin" path="/home/softlib/verisoft/CastleLedAnimationTool/Release/master/1.13-43+a3d640e/SoundBar/Animations.bin" version="dynamic" />
-        <entry name="remote.hex" path="/home/softlib/verisoft/BLERemoteXCVR/Release/master/.0.3.2-+/BLEBridge_app_*.hex" version="dynamic" />
+        <entry name="remote.hex" path="/home/softlib/verisoft/BLERemoteXCVR/Release/master/0.3.3-+/BLEBridge_app_*.hex" version="dynamic" />
         <entry name="speaker.bos" path="/home/softlib/verisoft/A4V-System/Release/trunk/1.9.14.2451686/speaker_1.9.14.2451686.bos" version="1.9.14.2451686" />
     </manifest_entries>
 </blob>
