@@ -30,7 +30,7 @@
 #include "FrontDoorClient.h"
 #include "EndPointsDefines.h"
 #include "ProductEndpointDefines.h"
-
+#include "ProductDataCollectionDefines.h"
 
 namespace
 {
@@ -90,6 +90,15 @@ bool ProductDspHelper::Run( )
 
         m_ProductController.GetLpmHardwareInterface( )->RegisterForLpmEvents( IPC_DSP_STATUS,
                                                                               CallbackForDspState );
+    }
+    {
+        Callback< LpmServiceMessages::DspDataCollection >
+        CallbackForDspDataCollection( std::bind( &ProductDspHelper::ReceiveDspDataCollection,
+                                                 this,
+                                                 std::placeholders::_1 ) );
+
+        m_ProductController.GetLpmHardwareInterface( )->RegisterForLpmEvents( ( IpcOpcodes_t ) DSP_DATA_COLLECTION,
+                                                                              CallbackForDspDataCollection );
     }
     {
         AsyncCallback<Callback< ProductPb::AudioFormat >, Callback<FrontDoor::Error> >
@@ -348,6 +357,20 @@ void ProductDspHelper::AudioFormatFrontDoorGetHandler( const Callback<ProductPb:
                               resp,
                               std::placeholders::_1 ) );
     m_ProductController.GetLpmHardwareInterface( )->GetDspStatus( audioFormatCb );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductDspHelper::ReceiveDspDataCollection
+///
+/// @param const LpmServiceMessages::DspDataCollection& data - blob of data from dsp to be collected
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductDspHelper::ReceiveDspDataCollection( const LpmServiceMessages::DspDataCollection& data )
+{
+    m_ProductController.GetDataCollectionClient()->SendData(
+        std::make_shared< LpmServiceMessages::DspDataCollection >( data ),
+        DATA_COLLECTION_DSP_AIQ );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
