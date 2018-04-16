@@ -27,8 +27,7 @@ productID=$(mfgdata get guid)
 productType=$(mfgdata get productType)
 productName=$(mfgdata get productName)
 productSerialNumber=$(mfgdata get snSystem)
-buildVersion=`cat /opt/Bose/etc/FS_VERSION`
-softwareversion=$(echo $buildVersion | cut -d" " -f4) 
+softwareversion=$(jq -r '"\(.short)-\(.build_number)+\(.abbrev_commit)"' /opt/Bose/etc/BoseVersion.json)
 # Leaving bosepersonid as a place holder for now, will be added later
 bosepersonid="00000000-0000-0000-0000-000000000000"
 
