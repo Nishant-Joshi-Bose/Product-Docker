@@ -20,35 +20,29 @@ from CastleTestUtils.CAPSUtils.TransportUtils.messageCreator import MessageCreat
 from CastleTestUtils.CAPSUtils.TransportUtils.responseHandler import ResponseHandler
 from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
 from CastleTestUtils.PassportUtils.passport_api import PassportAPIUsers
-from CastleTestUtils.PassportUtils.passport_utils import *
+from CastleTestUtils.PassportUtils.passport_utils import create_passport_account
 from CastleTestUtils.RivieraUtils import adb_utils
 from CastleTestUtils.RivieraUtils.hardware.keys import keypress
 from CastleTestUtils.RivieraUtils.hardware.keys.keys import Keys
 from CastleTestUtils.scripts.config_madrid import RESOURCES
+from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
+import eddie_helper
 
 LOGGER = get_logger(__name__)
 
 
 @pytest.fixture(scope="function")
-def frontdoor(request, ip_address_wlan):
+def front_door_queue(request, ip_address_wlan):
     """
     Get FrontDoorQueue instance.
     """
     LOGGER.info("frontDoorQueue")
     if ip_address_wlan is None:
         pytest.fail("No valid device IP")
-    _frontdoor = None
-    for _count in range(30):
-        try:
-            _frontdoor = FrontDoorQueue(ip_address_wlan)
-            break
-        except Exception as e:
-            LOGGER.debug("While creating object of FrontDoorQueue, Got error : {} on try {}".format(e.message, _count))
-            time.sleep(1)
-            pass
+    _frontdoor = FrontDoorQueue(ip_address_wlan)
 
     if _frontdoor is None:
-        pytest.fail("Not able to create socket connection to frontdoor")
+        pytest.fail("Not able to create socket connection to front_door_queue")
 
     def teardown():
         if _frontdoor:
@@ -60,7 +54,7 @@ def frontdoor(request, ip_address_wlan):
 
 
 @pytest.fixture(scope='function')
-def device_in_aux(deviceid, frontdoor):
+def device_in_aux(deviceid, front_door_queue):
     """
     This fixture is used to change playing source to AUX and verifies the device state.
     Test steps:
@@ -70,22 +64,24 @@ def device_in_aux(deviceid, frontdoor):
     # Change state to AUX play by pressing AUX button.
     tap = adb_utils.adb_telnet_tap(deviceid)
     keypress.press_key(tap, Keys.AUX.value, 500)
+    tap.close()
     time.sleep(2)
 
     # Verify device state which should be "SELECTED".
-    state = frontdoor.getState()
-    assert state == "SELECTED", 'Device should be in "SELECTED" state. Current state : {}'.format(state)
+    state = front_door_queue.getState()
+    assert state == eddie_helper.SELECTED, \
+        'Device should be in {} state. Current state : {}'.format(eddie_helper.SELECTED, state)
 
 
 @pytest.fixture(scope='function')
-def device_playing_from_amazon(request, frontdoor):
+def device_playing_from_amazon(request, front_door_queue):
     """
     This fixture will send playback request to device and verifies the right station or track is playing.
     Test steps:
     1. Play a station or a track by sending playback request to the device
     2. Verify the right station or track is playing by verifying 'nowPlaying' response
     """
-    sys_info = frontdoor.getInfo()["body"]
+    sys_info = front_door_queue.getInfo()["body"]
     device_guid = sys_info["guid"]
     assert device_guid is not None
     LOGGER.debug("GUID is: %s", device_guid)
@@ -106,7 +102,7 @@ def device_playing_from_amazon(request, frontdoor):
 
     message_creator = MessageCreator(service_name)
     response_handler = ResponseHandler(service_name, get_config['name'])
-    common_behavior_handler = CommonBehaviorHandler(frontdoor, response_handler, message_creator)
+    common_behavior_handler = CommonBehaviorHandler(front_door_queue, response_handler, message_creator)
 
     LOGGER.info("Create passport account")
     passport_base_url = request.config.getoption('--passport-base-url')
@@ -155,10 +151,11 @@ def device_playing_from_amazon(request, frontdoor):
     LOGGER.debug("Now Playing : " + str(now_playing))
 
     # Verify device state which should be "SELECTED".
-    state = frontdoor.getState()
-    assert state == "SELECTED", 'Device should be in "SELECTED" state. Current state : {}'.format(state)
+    state = front_door_queue.getState()
+    assert state == eddie_helper.SELECTED, \
+        'Device should be in {} state. Current state : {}'.format(eddie_helper.SELECTED, state)
 
-    yield frontdoor, common_behavior_handler, service_name, get_config
+    yield front_door_queue, common_behavior_handler, service_name, get_config
 
 
 @pytest.fixture(scope="function")
@@ -170,7 +167,7 @@ def rebooted_and_out_of_booting_state_device(deviceid, adb):
 
     # Wait for CLI-Server to start and listens on 17000 port.
     status = None
-    for count in range(30):
+    for _ in range(30):
         status = adb.executeCommand("(netstat -tnl | grep -q 17000) && echo OK")
         if status and status.strip() == 'OK':
             break
@@ -181,18 +178,18 @@ def rebooted_and_out_of_booting_state_device(deviceid, adb):
 
     time.sleep(2)
 
-    for count in range(10):
+    for _ in range(10):
         if adb.executeCommand("echo '?' | nc 0 17000 | grep 'getproductstate'"):
             break
         time.sleep(1)
     LOGGER.debug("getproductstate command is registered to CLI-Server.")
 
     # Wait until product state come out from 'Booting' state.
-    for count in range(30):
+    for _ in range(30):
         device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
-        if device_state != 'Booting':
+        if device_state != eddie_helper.BOOTING:
             break
-        LOGGER.debug("Current device state : {}".format(device_state))
+        LOGGER.debug("Current device state : %s", device_state)
         time.sleep(1)
 
 
@@ -222,3 +219,28 @@ def set_no_audio_timeout(deviceid, adb):
     adb.executeCommand('sync')
     # 4. Reboot and wait for CLI-Server to start and device state get out of Booting.
     rebooted_and_out_of_booting_state_device(deviceid, adb)
+
+
+@pytest.fixture(scope="function")
+def remove_oob_setup_state_and_reboot_device(deviceid, adb):
+    """
+    This fixture is used to remove "/mnt/nv/product-persistence/SetupState.json" file and reboot the device.
+    """
+    oob_setup_file = '/mnt/nv/product-persistence/SetupState.json'
+    # 1. Remove "/mnt/nv/product-persistence/SetupState.json" file.
+    adb.executeCommand("/opt/Bose/bin/rw")
+    adb.executeCommand("rm {}".format(oob_setup_file))
+    adb.executeCommand('sync')
+    rebooted_and_out_of_booting_state_device(deviceid, adb)
+
+    # Wait until product state set to 'SetupOther' or 'SetupNetwork' state.
+    for _ in range(30):
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+        if device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK]:
+            break
+        time.sleep(1)
+
+    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+    assert device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK], \
+        'Device should be in {} or {} state. Current state : {}'.format(eddie_helper.SETUPOTHER,
+                                                                        eddie_helper.SETUPNETWORK, device_state)
