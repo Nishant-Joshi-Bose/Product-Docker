@@ -367,7 +367,6 @@ def ip_address_wlan(request, deviceid, wifi_config):
     riviera_device = rivieraUtils.RivieraUtils('ADB', device=deviceid, logger=logger)
     network_base = NetworkBase(None, device=deviceid, logger=logger)
 
-
     interface = 'wlan0'
     device_ip_address = None
     try:

@@ -21,8 +21,8 @@ import eddie_helper
 logger = get_logger(os.path.basename(__file__))
 
 
-@pytest.mark.usefixtures('rebooted_and_out_of_booting_state_device', 'frontdoor')
-def test_system_info_setup_state(frontdoor):
+@pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'front_door_queue')
+def test_system_info_setup_state(front_door_queue):
     """
     Test for GET method of system info api after rebooting the device
     Test Steps:
@@ -30,11 +30,11 @@ def test_system_info_setup_state(frontdoor):
     2. Get system info and verify response.
     """
     # 1. Check that endpoint is returned in capabilities.
-    eddie_helper.check_if_end_point_exists(frontdoor, eddie_helper.SYSTEM_INFO_API)
+    eddie_helper.check_if_end_point_exists(front_door_queue, eddie_helper.SYSTEM_INFO_API)
 
     # 2. Get system info and verify response.
     logger.info("Testing get system info")
-    response = eddie_helper.get_system_info(frontdoor)
+    response = eddie_helper.get_system_info(front_door_queue)
 
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_INFO_API, eddie_helper.METHOD_GET,
                                                  eddie_helper.STATUS_OK)
@@ -51,8 +51,8 @@ def test_system_info_setup_state(frontdoor):
         'Not all information returned. Got response : {}'.format(response["body"])
 
 
-@pytest.mark.usefixtures('frontdoor', 'device_playing_from_amazon')
-def test_system_info_playing_from_amazon(frontdoor):
+@pytest.mark.usefixtures('front_door_queue', 'device_playing_from_amazon')
+def test_system_info_playing_from_amazon(front_door_queue):
     """
     Test for GET method of system info api while playing from Amazon MSP
     Test Steps:
@@ -63,7 +63,7 @@ def test_system_info_playing_from_amazon(frontdoor):
 
     # 2. Get system info and verify response.
     logger.info("Testing get system info")
-    response = eddie_helper.get_system_info(frontdoor)
+    response = eddie_helper.get_system_info(front_door_queue)
 
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_INFO_API, eddie_helper.METHOD_GET,
                                                  eddie_helper.STATUS_OK)
@@ -80,8 +80,8 @@ def test_system_info_playing_from_amazon(frontdoor):
         'Not all information returned. Got response : {}'.format(response["body"])
 
 
-@pytest.mark.usefixtures('frontdoor', 'device_in_aux')
-def test_system_info_playing_from_aux(frontdoor):
+@pytest.mark.usefixtures('front_door_queue', 'device_in_aux')
+def test_system_info_playing_from_aux(front_door_queue):
     """
     Test for GET method of system info api while playing from AUX
     Test Steps:
@@ -92,7 +92,7 @@ def test_system_info_playing_from_aux(frontdoor):
 
     # 2. Get system info and verify response.
     logger.info("Testing get system info")
-    response = eddie_helper.get_system_info(frontdoor)
+    response = eddie_helper.get_system_info(front_door_queue)
 
     eddie_helper.check_error_and_response_header(response, eddie_helper.SYSTEM_INFO_API, eddie_helper.METHOD_GET,
                                                  eddie_helper.STATUS_OK)

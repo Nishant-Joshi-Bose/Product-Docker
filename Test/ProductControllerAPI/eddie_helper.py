@@ -18,22 +18,22 @@ import os
 import pytest
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 
-""" Subcode """
+# Subcode
 SUBCODE_INVALID_KEY = 2005
 SUBCODE_INVALID_ARGS = 1
 
-""" Status code """
+# Status code
 STATUS_OK = 200
 STATUS_ERROR = 500
 
-""" API Methods """
+# API Methods
 METHOD_GET = "GET"
 METHOD_SET = "SET"
 METHOD_PUT = "PUT"
 METHOD_POST = "POST"
 METHOD_DELETE = "DELETE"
 
-""" Product Controller APIs """
+# Product Controller APIs
 ACCESSORIES_API = "/accessories"
 ADAPTIQ_API = "/adaptiq"
 AUDIO_AVSYNC_API = "/audio/avSync"
@@ -73,7 +73,23 @@ SYSTEM_SETUP_API = "/system/setup"
 SYSTEM_STATE_API = "/system/state"
 SYSTEM_UPDATE_START_API = "/system/update/start"
 
-logger = get_logger(os.path.basename(__file__))
+# Device states
+BOOTING = "Booting"
+SETUPOTHER = "SetupOther"
+FIRSTBOOTGREETING = "FirstBootGreeting"
+SETUPNETWORK = "SetupNetwork"
+SELECTED = "SELECTED"
+DESELECTED = "DESELECTED"
+IDLE = "IDLE"
+NETWORK_STANDBY = "NETWORK_STANDBY"
+FACTORY_DEFAULT = "FACTORY_DEFAULT"
+
+# System Power options
+POWER_ON = "ON"
+POWER_OFF = "OFF"
+POWER_TOGGLE = "TOGGLE"
+
+LOGGER = get_logger(os.path.basename(__file__))
 
 
 def get_notification_in_list(fdq, notif_id):
@@ -81,7 +97,7 @@ def get_notification_in_list(fdq, notif_id):
     function to get specific notification list.
 
     :param fdq: FrontDoorQueue instance connected to device
-    :param notif_id: Notification is reseived as resource in header
+    :param notif_id: Notification is received as resource in header
     :return notif_list: list of received notifications of notif_id
     """
     # Giving the option to just enter one id or a list
@@ -102,12 +118,12 @@ def get_last_notification(fdq, notif_id, retry=5):
     function to get last system state notification and return.
 
     :param fdq: FrontDoorQueue instance connected to device
-    :param notif_id: Notification is reseived as resource in header
+    :param notif_id: Notification is received as resource in header
     :param retry: No of retry to get Notifications
     :return sys_state: system state received in notification
     """
     notif_list = get_notification_in_list(fdq, notif_id)
-    for count in range(retry):
+    for _ in range(retry):
         if len(notif_list):
             notification = notif_list.pop()
             return notification["body"]
@@ -139,7 +155,7 @@ def check_if_end_point_exists(frontdoor, endpoint):
     """
     function to check if API exists or not
     """
-    logger.info("Checking endpoint: " + endpoint)
+    LOGGER.info("Checking endpoint: " + endpoint)
     capabilities = frontdoor.getCapabilities()
 
     group_name = capabilities["body"]["group"]
@@ -156,97 +172,111 @@ def check_if_end_point_exists(frontdoor, endpoint):
 
 def get_system_info(frontdoor):
     """ Get System info """
-    logger.info("Getting system info status")
+    LOGGER.info("Getting system info status")
     result = frontdoor.send(METHOD_GET, SYSTEM_INFO_API)
     return json.loads(result)
 
 
 def get_system_power_control(frontdoor):
     """ Get System Power state """
-    logger.info("Getting system power state")
+    LOGGER.info("Getting system power state")
     result = frontdoor.send(METHOD_GET, SYSTEM_POWER_CONTROL_API)
     return json.loads(result)
 
 
 def set_system_power_control(frontdoor, data):
     """ Get System Power state """
-    logger.info("Getting system power state")
+    LOGGER.info("Getting system power state")
     result = frontdoor.send(METHOD_POST, SYSTEM_POWER_CONTROL_API, data)
     return json.loads(result)
 
 
 def get_audio_bass(frontdoor):
     """ Get Audio Bass """
-    logger.info("Getting Audio Bass")
+    LOGGER.info("Getting Audio Bass")
     result = frontdoor.send(METHOD_GET, AUDIO_BASS_API)
     return json.loads(result)
 
 
 def set_audio_bass(frontdoor, data):
     """ Set Audio Bass """
-    logger.info("Setting Audio Bass")
+    LOGGER.info("Setting Audio Bass")
     result = frontdoor.send(METHOD_PUT, AUDIO_BASS_API, data)
     return json.loads(result)
 
 
 def get_audio_treble(frontdoor):
     """ Get Audio Treble """
-    logger.info("Getting Audio Treble")
+    LOGGER.info("Getting Audio Treble")
     result = frontdoor.send(METHOD_GET, AUDIO_TREBLE_API)
     return json.loads(result)
 
 
 def set_audio_treble(frontdoor, data):
     """ Set Audio Treble """
-    logger.info("Setting Audio Treble")
+    LOGGER.info("Setting Audio Treble")
     result = frontdoor.send(METHOD_PUT, AUDIO_TREBLE_API, data)
     return json.loads(result)
 
 
 def get_product_settings(frontdoor):
     """ Get Product Settings """
-    logger.info("Getting Product Settings")
+    LOGGER.info("Getting Product Settings")
     result = frontdoor.send(METHOD_GET, SYSTEM_PRODUCTSETTINGS_API)
     return json.loads(result)
 
 
 def system_reset(frontdoor):
     """ System Reset API """
-    logger.info("System Reset")
+    LOGGER.info("System Reset")
     result = frontdoor.send(METHOD_GET, SYSTEM_RESET_API)
     return json.loads(result)
 
 
 def get_setup_state(frontdoor):
     """ Get Setup State """
-    logger.info("Getting Setup State")
+    LOGGER.info("Getting Setup State")
     result = frontdoor.send(METHOD_GET, SYSTEM_SETUP_API)
     return json.loads(result)
 
 
 def set_setup_state(frontdoor, data):
     """ Set Setup State """
-    logger.info("Setting Setup State")
+    LOGGER.info("Setting Setup State")
     result = frontdoor.send(METHOD_PUT, SYSTEM_SETUP_API, data)
     return json.loads(result)
 
 
 def get_system_state(frontdoor):
     """ Get System State """
-    logger.info("Getting System State")
+    LOGGER.info("Getting System State")
     result = frontdoor.send(METHOD_GET, SYSTEM_STATE_API)
     return json.loads(result)
 
 
 def set_system_state(frontdoor, data):
     """ Set System State """
-    logger.info("Setting System State")
+    LOGGER.info("Setting System State")
     result = frontdoor.send(METHOD_PUT, SYSTEM_STATE_API, data)
     return json.loads(result)
 
 
 def system_update_start(frontdoor, data):
     """ System Update Start """
-    logger.info("System update start")
+    LOGGER.info("System update start")
     result = frontdoor.send(METHOD_PUT, SYSTEM_UPDATE_START_API, data)
+    return json.loads(result)
+
+
+def get_system_setup(frontdoor):
+    """ Get System Setup """
+    LOGGER.info("Getting System Setup information")
+    result = frontdoor.send(METHOD_GET, SYSTEM_SETUP_API)
+    return json.loads(result)
+
+
+def set_system_setup(frontdoor, data):
+    """ Set System Setup """
+    LOGGER.info("Setting System Setup information")
+    result = frontdoor.send(METHOD_PUT, SYSTEM_SETUP_API, data)
     return json.loads(result)
