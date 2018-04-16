@@ -216,7 +216,7 @@ void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCo
 
     streamConfig.mutable_audiosettings()->CopyFrom( audioSettingsProto );
 
-    if( serializedInputRoute == "" )
+    if( serializedInputRoute.empty() )
     {
         streamConfig.set_inputroute( m_InputRoute );
     }
