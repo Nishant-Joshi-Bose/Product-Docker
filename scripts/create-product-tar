@@ -516,27 +516,28 @@ def create_output(is_without_lpm, development):
         logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
         return -33, "Cannot add product_flash tools to output"
 
-    ''' create bose partition
-    '''
-    retVal, retStr = create_bose_partition(is_without_lpm, development, 
-                    ['product.ipk', 'monaco.ipk', 'lpm_updater.ipk', 'hsp.ipk'])
-    if retVal != 0:
-        return retVal, retStr
-
-    ''' create bose-persist partition
-    '''
-    retVal, retStr = create_bose_persist_partition(is_without_lpm, development)
-    if retVal != 0:
-        return retVal, retStr
-    
-    if os.environ.get("GENERATE_HSP_SIGNATURES") == "1":
-        ''' Sign the image files 
+    if os_arch() == '64': 
+        ''' create bose partition
         '''
-        retVal, retStr = sign_images()
+        retVal, retStr = create_bose_partition(is_without_lpm, development, 
+                        ['product.ipk', 'wpe.ipk', 'monaco.ipk', 'lpm_updater.ipk', 'hsp.ipk'])
         if retVal != 0:
             return retVal, retStr
-    else:
-        logging.info("Not generating signatures in non-EC environment")
+
+        ''' create bose-persist partition
+        '''
+        retVal, retStr = create_bose_persist_partition(is_without_lpm, development)
+        if retVal != 0:
+            return retVal, retStr
+    
+        if os.environ.get("GENERATE_HSP_SIGNATURES") == "1":
+            ''' Sign the image files 
+            '''
+            retVal, retStr = sign_images()
+            if retVal != 0:
+                return retVal, retStr
+        else:
+            logging.info("Not generating signatures in non-EC environment")
 
     ''' Create Package Tar ball and copy to output
     cd "$stage" || error_exit " cd $stage "
