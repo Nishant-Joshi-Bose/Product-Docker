@@ -1063,6 +1063,46 @@
             "commment": "skip forward", 
             "action": 2, 
             "keyList": [
+                88
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "skip forward", 
+            "action": 2, 
+            "keyList": [
+                88
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "skip forward", 
+            "action": 2, 
+            "keyList": [
+                88
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "skip forward", 
+            "action": 2, 
+            "keyList": [
+                88
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "skip forward", 
+            "action": 2, 
+            "keyList": [
                 90
             ]
         }, 
@@ -1094,6 +1134,46 @@
             "action": 2, 
             "keyList": [
                 90
+            ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "skip back", 
+            "action": 3, 
+            "keyList": [
+                87
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "skip back", 
+            "action": 3, 
+            "keyList": [
+                87
+            ]
+        }, 
+        {
+            "origin": 4, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "skip back", 
+            "action": 3, 
+            "keyList": [
+                87
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "skip back", 
+            "action": 3, 
+            "keyList": [
+                87
             ]
         }, 
         {
