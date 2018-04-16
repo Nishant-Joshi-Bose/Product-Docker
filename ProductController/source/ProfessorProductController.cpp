@@ -36,7 +36,6 @@
 #include "ProductSystemManager.h"
 #include "ProductCommandLine.h"
 #include "ProductAdaptIQManager.h"
-#include "ProductSourceInfo.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
 #include "ProductSTSCommonStateFactory.h"
@@ -137,7 +136,6 @@ ProfessorProductController::ProfessorProductController( ) :
     m_ProductLpmHardwareInterface( nullptr ),
     m_ProductSystemManager( nullptr ),
     m_ProductCommandLine( nullptr ),
-    m_ProductSourceInfo( nullptr ),
     m_ProductKeyInputManager( nullptr ),
     m_ProductCecHelper( nullptr ),
     m_ProductDspHelper( nullptr ),
@@ -514,7 +512,6 @@ void ProfessorProductController::Run( )
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductSystemManager        = std::make_shared< ProductSystemManager              >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
-    m_ProductSourceInfo           = std::make_shared< ProductSourceInfo                 >( *this );
     m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
     m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
     m_ProductBLERemoteManager     = std::make_shared< ProductBLERemoteManager           >( *this );
@@ -557,7 +554,6 @@ void ProfessorProductController::Run( )
     m_ProductSystemManager       ->Run( );
     m_ProductAudioService        ->Run( );
     m_ProductCommandLine         ->Run( );
-    m_ProductSourceInfo          ->Run( );
     m_ProductKeyInputManager     ->Run( );
     m_ProductCecHelper           ->Run( );
     m_ProductDspHelper           ->Run( );
@@ -636,18 +632,6 @@ std::shared_ptr< CustomProductAudioService >& ProfessorProductController::GetPro
 std::shared_ptr< ProductAdaptIQManager >& ProfessorProductController::GetAdaptIQManager( )
 {
     return m_ProductAdaptIQManager;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetSourceInfo
-///
-/// @return This method returns a shared pointer to the SourceInfo instance
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::shared_ptr< ProductSourceInfo >& ProfessorProductController::GetSourceInfo( )
-{
-    return m_ProductSourceInfo;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1251,7 +1235,6 @@ void ProfessorProductController::Wait( )
     m_ProductLpmHardwareInterface->Stop( );
     m_ProductSystemManager       ->Stop( );
     m_ProductCommandLine         ->Stop( );
-    m_ProductSourceInfo          ->Stop( );
     m_ProductKeyInputManager     ->Stop( );
     m_ProductCecHelper           ->Stop( );
     m_ProductDspHelper           ->Stop( );

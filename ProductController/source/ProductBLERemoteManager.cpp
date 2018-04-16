@@ -28,7 +28,6 @@
 #include "ProductBLERemoteManager.h"
 #include "SharedProto.pb.h"
 #include "ProtoToMarkup.h"
-#include "ProductSourceInfo.h"
 #include "EndPointsDefines.h"
 
 using namespace ProductPb;
@@ -119,7 +118,7 @@ void ProductBLERemoteManager::Run( )
 {
     InitializeFrontDoor();
     InitializeRCS();
-    m_ProductController.GetSourceInfo()->RegisterSourceListener(
+    m_ProductController.GetSourceInfo().RegisterSourceListener(
         [ this ]( const SoundTouchInterface::Sources & sources )
     {
         UpdateAvailableSources( sources );
@@ -211,7 +210,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
     {
         const auto& source = m_sources.sources( i );
 
-        // TODO: this also needs to check "visible" once that flag works correctly
+        // @TODO: this also needs to check "visible" once that flag works correctly; PGC-1169
 
         if( source.sourceaccountname().compare( "SLOT_0" ) == 0 )
         {
@@ -251,47 +250,50 @@ bool ProductBLERemoteManager::GetSourceLED( A4VRemoteCommunication::A4VRemoteCom
         return false;
     }
 
-    const auto& ci = m_nowSelection.contentitem();
-    const auto& source = m_ProductController.GetSourceInfo()->FindSource( ci );
-
-    if( not source )
+    auto sourceItem = m_ProductController.GetSourceInfo().FindSource( m_nowSelection.contentitem() );
+    if( !sourceItem )
     {
         return false;
     }
 
-    if( source->sourcename().compare( "PRODUCT" ) == 0 )
+    const auto& sourceName = sourceItem->sourcename();
+    const auto& sourceAccountName = sourceItem->sourceaccountname();
+
+    if( sourceName.compare( "PRODUCT" ) == 0 )
     {
-        if( source->sourceaccountname().compare( "TV" ) == 0 )
+        if( sourceAccountName.compare( "TV" ) == 0 )
         {
             BOSE_INFO( s_logger, "update nowSelection TV" );
             // Check for TV explicitly for now, since I don't know if Madrid will set deviceType for the TV
             sourceLED = LedsSourceTypeMsg_t::TV;
         }
-        else if( source->sourceaccountname().compare( "SETUP" ) == 0 )
+        else if( sourceAccountName.compare( "SETUP" ) == 0 )
         {
             BOSE_INFO( s_logger, "update nowSelection SETUP" );
             sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
         }
-        else if( ( source->sourceaccountname().compare( 0, 4, "SLOT" ) == 0 ) and source->has_details() )
+        else if( ( sourceAccountName.compare( 0, 4, "SLOT" ) == 0 ) and sourceItem->has_details() )
         {
-            if( not source->details().devicetype().compare( "DEVICE_TYPE_GAME" ) )
+            const auto& sourceDetailsDevicetype = sourceItem->details().devicetype();
+
+            if( sourceDetailsDevicetype.compare( "DEVICE_TYPE_GAME" ) == 0 )
             {
                 sourceLED = LedsSourceTypeMsg_t::GAME;
             }
-            else if( not source->details().devicetype().compare( "DEVICE_TYPE_CBL_SAT" ) )
+            else if( sourceDetailsDevicetype.compare( "DEVICE_TYPE_CBL_SAT" ) == 0 )
             {
                 sourceLED = LedsSourceTypeMsg_t::SET_TOP_BOX;
             }
-            else if( not source->details().devicetype().compare( "DEVICE_TYPE_BD_DVD" ) )
+            else if( sourceDetailsDevicetype.compare( "DEVICE_TYPE_BD_DVD" ) == 0 )
             {
                 sourceLED = LedsSourceTypeMsg_t::DVD;
             }
-            else if( not source->details().devicetype().compare( "DEVICE_TYPE_TV" ) or
-                     not source->details().devicetype().compare( "DEVICE_TYPE_SMART_TV" ) )
+            else if( ( sourceDetailsDevicetype.compare( "DEVICE_TYPE_TV" ) == 0 ) or
+                     ( sourceDetailsDevicetype.compare( "DEVICE_TYPE_SMART_TV" ) == 0 ) )
             {
                 sourceLED = LedsSourceTypeMsg_t::TV;
             }
-            else if( not source->details().devicetype().compare( "DEVICE_TYPE_STREAMING" ) )
+            else if( sourceDetailsDevicetype.compare( "DEVICE_TYPE_STREAMING" ) == 0 )
             {
                 // per Brian White, GAME is probably the most sensible choice here
                 // I'm leaving this as an independent case from GAME above in case we change our minds
@@ -299,7 +301,7 @@ bool ProductBLERemoteManager::GetSourceLED( A4VRemoteCommunication::A4VRemoteCom
             }
             else
             {
-                BOSE_ERROR( s_logger, "%s product source with unknown device type %s", __func__, source->details().devicetype().c_str() );
+                BOSE_ERROR( s_logger, "%s product source with unknown device type %s", __func__, sourceDetailsDevicetype.c_str() );
             }
         }
         else
@@ -309,12 +311,12 @@ bool ProductBLERemoteManager::GetSourceLED( A4VRemoteCommunication::A4VRemoteCom
     }
     else
     {
-        if( source->sourcename().compare( "BLUETOOTH" ) == 0 )
+        if( sourceName.compare( "BLUETOOTH" ) == 0 )
         {
             BOSE_INFO( s_logger, "update nowSelection BLUETOOTH" );
             sourceLED = LedsSourceTypeMsg_t::BLUETOOTH;
         }
-        else if( source->sourcename().compare( "INVALID_SOURCE" ) != 0 )
+        else if( sourceName.compare( "INVALID_SOURCE" ) != 0 )
         {
             sourceLED = LedsSourceTypeMsg_t::SOUND_TOUCH;
         }

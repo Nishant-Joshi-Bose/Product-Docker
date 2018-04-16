@@ -77,7 +77,7 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( ProfessorProductCont
             lastCodes = codes;
         }
     };
-    m_ProductController.GetSourceInfo()->RegisterSourceListener( sourceInfoCb );
+    m_ProductController.GetSourceInfo().RegisterSourceListener( sourceInfoCb );
 
 }
 
@@ -123,17 +123,17 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
 
     if( nowSelection.has_contentitem( ) )
     {
-        const auto& contentItem = nowSelection.contentitem( );
-        const auto source = m_ProductController.GetSourceInfo( )->FindSource( contentItem );
+        auto sourceItem = m_ProductController.GetSourceInfo( ).FindSource( nowSelection.contentitem( ) );
 
-        if( source and source->has_details( ) )
+        if( sourceItem and sourceItem->has_details( ) )
         {
-            if( source->details( ).has_devicetype( ) )
+            const auto& sourceDetailes = sourceItem->details( );
+            if( sourceDetailes.has_devicetype( ) )
             {
-                isBlastedKey = m_QSSClient->IsBlastedKey( keyEvent.keyid( ), source->details( ).devicetype( ) );
+                isBlastedKey = m_QSSClient->IsBlastedKey( keyEvent.keyid( ), sourceDetailes.devicetype( ) );
             }
 
-            cicode = source->details( ).cicode( );
+            cicode = sourceDetailes.cicode( );
         }
     }
 
