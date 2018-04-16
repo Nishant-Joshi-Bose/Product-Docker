@@ -21,7 +21,7 @@ import ConfigParser
 
 import pytest
 
-
+from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
@@ -144,7 +144,7 @@ def riviera(deviceid):
     """
     Get RivieraUtil instance.
     """
-    return RivieraUtils('ADB', device = deviceid)
+    return RivieraUtils('ADB', device=deviceid)
 
 @pytest.fixture(scope='class')
 def device_guid(frontDoor):
@@ -400,3 +400,22 @@ def ip_address_wlan(request, deviceid, wifi_config):
         raise SystemError("Failed to acquire network connection through {}: {}".format(interface, device_ip))
 
     return device_ip_address
+
+@pytest.fixture(scope="function")
+def frontdoor_wlan(request, ip_address_wlan):
+    """
+    Frontdoor instance of the device connected to wlan.
+    """
+    logger.info("frontDoorQueue")
+    if ip_address_wlan is None:
+        pytest.fail("No valid device IP")
+    frontdoor_obj = FrontDoorQueue(ip_address_wlan)
+
+    def teardown():
+        if frontdoor_obj:
+            frontdoor_obj.close()
+
+    request.addfinalizer(teardown)
+
+    return frontdoor_obj
+

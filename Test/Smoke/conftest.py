@@ -1,3 +1,15 @@
+"""
+Organization: BOSE CORPORATION
+Copyright: COPYRIGHT 2018 BOSE CORPORATION ALL RIGHTS RESERVED.
+This program may not be reproduced, in whole or in part in any
+form or any means whatsoever without the written permission of:
+BOSE CORPORATION
+The Mountain,
+Framingham, MA 01701-9168
+
+Common conftest file for Eddie Test
+"""
+
 import pytest
 from CastleTestUtils.CAPSUtils.TransportUtils.commonBehaviorHandler import CommonBehaviorHandler
 from CastleTestUtils.CAPSUtils.TransportUtils.messageCreator import MessageCreator
@@ -16,7 +28,6 @@ def pytest_addoption(parser):
     :param parser: Parser used for method.
     :return: None
     """
-
     parser.addoption("--config", action="store", dest="conf", default='config.py',
                      help="Test configuration file")
 
@@ -26,9 +37,9 @@ def get_config(request):
     This fixture will return the global resource data with specific to single resource to create object of handler
     """
     conf = {}
-    execfile(request.config.option.conf, conf)
+    exec(open(request.config.option.conf).read(), conf)
     CONFIG = conf['CONFIG']
-    for sourceName, params in CONFIG['music'].iteritems():
+    for source_name, params in CONFIG['music'].iteritems():
         if params['active']:
             resource = RESOURCES[(params['resourcename'])]
             break
@@ -40,12 +51,12 @@ def music_sources(request):
     This fixture will return the music sources name to play on Eddie
     """
     conf = {}
-    execfile(request.config.option.conf, conf)
+    exec(open(request.config.option.conf).read(), conf)
     CONFIG = conf['CONFIG']
-    sources = []
-    for sourceName, params in CONFIG['music'].iteritems():
+    sources = {}
+    for source_name, params in CONFIG['music'].iteritems():
         if params['active']:
-            sources.append(sourceName)
+            sources[source_name] = params['resourcename']
     return sources
 
 @pytest.fixture(scope='class')
@@ -54,8 +65,8 @@ def device_type(frontDoor):
     Use front door API to obtain device type.
     """
     logger.info("device_type")
-    sysInfo = frontDoor.getInfo()
-    device_type = sysInfo["body"]["productType"]
+    sys_info = frontDoor.getInfo()
+    device_type = sys_info["body"]["productType"]
     logger.debug("Device type: %s", device_type)
     return device_type
 
@@ -66,9 +77,9 @@ def service_name(request):
     """
     logger.info("service_name")
     conf = {}
-    execfile(request.config.option.conf, conf)
+    exec(open(request.config.option.conf).read(), conf)
     CONFIG = conf['CONFIG']
-    for sourceName, params in CONFIG['music'].iteritems():
+    for source_name, params in CONFIG['music'].iteritems():
         if params['active'] and params['resourcename'] != '':
             resource = RESOURCES[(params['resourcename'])]
             break
@@ -134,24 +145,24 @@ def multiple_music_service_account(request, passport_user, get_config):
     """
     logger.info("multiple_music_service_account")
     conf = {}
-    execfile(request.config.option.conf, conf)
+    exec(open(request.config.option.conf).read(), conf)
     CONFIG = conf['CONFIG']
     multiple_account_Id = []
-    for sourceName, params in CONFIG['music'].iteritems():
-        if params['active'] and params['resourcename'] != '' and sourceName != 'TUNEIN':
+    for source_name, params in CONFIG['music'].iteritems():
+        if params['active'] and params['resourcename'] != '' and source_name != 'TUNEIN':
             resource = RESOURCES[(params['resourcename'])]
-            accountId = passport_user.add_service_account(service=sourceName, accountID=resource['name'], account_name=resource['provider_account_id'], refresh_token=resource['secret'])
-            assert accountId and accountId != "", "Fail to add music service account."
-            multiple_account_Id.append(accountId)
+            account_id = passport_user.add_service_account(service=source_name, accountID=resource['name'], account_name=resource['provider_account_id'], refresh_token=resource['secret'])
+            assert account_id and account_id != "", "Fail to add music service account."
+            multiple_account_Id.append(account_id)
 
     def multiple_remove_music_service():
         """
         Multiple Remove music service account
         """
         logger.info("multiple_remove_music_service")
-        for index, accountId in enumerate(multiple_account_Id):
+        for index, account_id in enumerate(multiple_account_Id):
             # get account id for music service
-            assert passport_user.remove_service_account(accountId), "Fail to remove music account from passport account."
+            assert passport_user.remove_service_account(account_id), "Fail to remove music account from passport account."
 
     request.addfinalizer(multiple_remove_music_service)
 
@@ -177,9 +188,9 @@ def verify_device_source(request, common_behavior_handler):
     """
     logger.info("service_name")
     conf = {}
-    execfile(request.config.option.conf, conf)
+    exec(open(request.config.option.conf).read(), conf)
     CONFIG = conf['CONFIG']
-    for sourceName, params in CONFIG['music'].iteritems():
+    for source_name, params in CONFIG['music'].iteritems():
         if params['active'] and params['resourcename'] != '':
             resource = RESOURCES[(params['resourcename'])]
-            common_behavior_handler.checkSourceStatus(sourceName, resource['name'])
+            common_behavior_handler.checkSourceStatus(source_name, resource['name'])
