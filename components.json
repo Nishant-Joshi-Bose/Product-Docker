@@ -100,6 +100,10 @@
     "selected_version": "Release/master/0.4.4-235+e949fec"
   },
   {
+    "name": "FrontDoorService-qc8017_32",
+    "selected_version": "Release/master/0.4.5-255+b400f78"
+  },
+  {
     "name": "GalapagosClient-qc8017_32",
     "selected_version": "Release/master/0.2.4-141+047d6e0"
   },
