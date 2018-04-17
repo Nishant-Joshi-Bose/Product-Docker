@@ -83,6 +83,7 @@ boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
 datacollection_dir=$(components get CastleDataCollectionClient-qc8017_32 installed_location) || exit
 datacollectionservice_dir=$(components get CastleDataCollectionService-qc8017_32 installed_location) || exit
 sadi_dir=$(components get SADI-qc8017_32 installed_location) || exit
+vm_dir=$(components get A4VVideoManagerService installed_location) || exit
 
 arch=arm-oemllib32-linux
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -95,10 +96,11 @@ echo "Stage directory $stage"
 
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
-mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/etc/chimes" || exit
+mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" || exit
 
 rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 rsync -a --exclude='*~' --exclude='*-README.txt' "$qss_dir/opt-bose-fs/." "$opt_dir/." || exit
+rsync -a --exclude='*~' --exclude='*-README.txt' "$vm_dir/opt-bose-fs/." "$opt_dir/." || exit
 
 components record "$stage" || exit
 
@@ -179,7 +181,8 @@ find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 "$cli_dir/stage" "$opt_dir" || exit
 "$democontroller_dir/stage" "$opt_dir" || exit
 "$webkit_dir/stage" "$opt_dir" || exit
-"$productuiassets_dir/stage" --chimes=SoundBar --type=flac "$opt_dir" || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/professor --type=flac "$opt_dir" professor || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/ginger-cheevers --type=flac "$opt_dir" ginger-cheevers || exit
 "$frontdoor_dir/stage" "$opt_dir" || exit
 "$galapagosclient_dir/stage" "$opt_dir" || exit
 "$httpproxy_dir/stage" "$opt_dir" || exit
@@ -225,11 +228,9 @@ if [ -x /mnt/nv/postinst ]; then
     /mnt/nv/postinst
 fi
 
-# the following link is to satisfy the libcurl dependency in
-# the UEI qsp libraries (libqsp.so, libqsp_hal.so); remove it when
-# libraries linked against our libcurl version are available
-ln -sf /usr/lib/libcurl.so.5 /opt/Bose/lib/libcurl.so.4
-chmod -R 440 /opt/Bose/etc/secure || exit
+# make sure the public key file has read only permission
+find /opt/Bose/etc/secure/ -type d -exec /bin/busybox chmod 550 {} \;
+find /opt/Bose/etc/secure/ -type f -exec /bin/busybox chmod 440 {} \;
 
 # make sure the public key file has read only permission
 find /opt/Bose/etc/secure/ -type d -exec /bin/busybox chmod 550 {} \;
