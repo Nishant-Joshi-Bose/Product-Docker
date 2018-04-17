@@ -14,6 +14,10 @@ Utility class for working with Eddie factory default.
 """
 SYSTEM_STATE_NOTIF = "/system/state"
 SYSTEM_BUTTON_NOTIF = "/system/buttonEvent"
+EVENT_FACTORY = "FACTORY_DEFAULT"
+EVENT_STATE_CANCEL = "CANCEL"
+EVENT_STATE_OK = "COMPLETED"
+EVENT_STATE_COUNTDOWN = "COUNTDOWN"
 
 
 def get_notification_in_list(fdq, notif_id):
@@ -56,7 +60,7 @@ def get_factory_default_event_notification(fdq):
     notif_list = get_notification_in_list(fdq, SYSTEM_BUTTON_NOTIF)
     while len(notif_list):
         notification = notif_list.pop()
-        if notification["body"]["event"] == 'FACTORY_DEFAULT':
+        if notification["body"]["event"] == EVENT_FACTORY:
             return notification["body"]["state"]
 
     return None
@@ -79,7 +83,7 @@ def get_event_notification_after_countdown(fdq, event, counts):
         if notification["header"]["resource"] != SYSTEM_BUTTON_NOTIF:
             continue
         if notification["body"]["event"] == event:
-            if notification["body"]["state"] == 'COUNTDOWN' and notification["body"]["value"] == counts:
+            if notification["body"]["state"] == EVENT_STATE_COUNTDOWN and notification["body"]["value"] == counts:
                 counts = counts - 1
             else:
                 return counts, notification["body"]["state"]

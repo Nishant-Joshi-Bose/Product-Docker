@@ -59,6 +59,20 @@ def tap(ip_address_wlan):
     client.close()
 
 
+@pytest.fixture(scope='module')
+def router(request, wifi_config):
+    """
+    Get config parser instance of wifi profiles.
+    """
+    LOGGER.info("Router Information")
+    router_name = request.config.getoption("--router")
+
+    router.ssid = wifi_config.get(router_name, 'ssid')
+    router.security = wifi_config.get(router_name, 'security')
+    router.password = wifi_config.get(router_name, 'password')
+    yield router
+
+
 @pytest.fixture(scope='function')
 def device_playing_from_amazon(request, frontdoor_wlan):
     """

@@ -18,7 +18,8 @@ from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.RivieraUtils.hardware.keys.keys import Keys
 from CastleTestUtils.RivieraUtils.hardware.keys import keypress
 from CastleTestUtils.RivieraUtils import adb_utils
-from . import factory_utils
+import factory_utils
+from ..ProductControllerAPI import eddie_helper
 
 LOGGER = get_logger(__file__)
 
@@ -63,7 +64,7 @@ def test_factory_default_cancel_event(frontdoor_wlan, tap, cancel_duration):
     # 3. Capture factoryDefault event notification.
     state = factory_utils.get_factory_default_event_notification(frontdoor_wlan)
     # 4. Verify factoryDefault event notification which should be 'CANCEL'.
-    assert (state == 'CANCEL'), 'Got Invalid FactoryDefault event state : {}'.format(state)
+    assert state == factory_utils.EVENT_STATE_CANCEL, 'Got Invalid FactoryDefault event state : {}'.format(state)
 
 
 @pytest.mark.usefixtures('frontdoor_wlan', 'tap', 'cancel_duration', 'cancel_button')
@@ -94,11 +95,11 @@ def test_factory_default_cancel_with_button_event(frontdoor_wlan, tap, cancel_du
     # 5. Release factoryDefault keys to complete action.
     keypress.key_release_only(tap, FACTORY_DEFAULT_KEYS, async_response=True)
     # 6. Verify factoryDefault event notification which should be 'CANCEL'.
-    assert (state == 'CANCEL'), 'Got Invalid FactoryDefault event state : {}'.format(state)
+    assert state == factory_utils.EVENT_STATE_CANCEL, 'Got Invalid FactoryDefault event state : {}'.format(state)
 
 
-@pytest.mark.usefixtures('request', 'adb', 'frontdoor_wlan', 'tap')
-def test_factory_default_success(request, adb, frontdoor_wlan, tap):
+@pytest.mark.usefixtures('deviceid', 'adb', 'frontdoor_wlan', 'tap', 'router')
+def test_factory_default_success(deviceid, adb, frontdoor_wlan, tap, router):
     """
     Test to determine that factory default performs and reboots the device.
     Test Steps:
@@ -113,10 +114,12 @@ def test_factory_default_success(request, adb, frontdoor_wlan, tap):
     9. Check for product state which should be 'SetupNetwork'.
     10. Check for NetworkProfiles.xml in product-persistence to verify success scenario.
     11. Check for FirstBootGreetingDone in product-persistence to verify success scenario.
+    12. Configure device WiFi network.
+    13. Check for product state which should be 'SetupOther'.
+    14. Check for FirstBootGreetingDone in product-persistence to verify success scenario.
     """
     # 1. Connect device to wlan using frontdoor_wlan fixture.
 
-    dev_id = request.config.getoption("--device-id")
     # Press the Multi buttons [AUX & VolDown] for FactoryDefault for minimum duration of 1,0020ms.
     # 2. Generate factoryDefault action using CLI Command.
     keypress.key_press_only(tap, FACTORY_DEFAULT_KEYS, async_response=True)
@@ -124,18 +127,20 @@ def test_factory_default_success(request, adb, frontdoor_wlan, tap):
     time.sleep(11)
     # 4. Verify COUNTDOWN events and COMPLETED state of event.
     counts, state = factory_utils.get_event_notification_after_countdown(frontdoor_wlan,
-                                                                         event='FACTORY_DEFAULT', counts=10)
+                                                                         event=factory_utils.EVENT_FACTORY, counts=10)
     # Assert if COUNTDOWN buttonEvents are not received properly
-    assert (counts == 0), 'Got Invalid COUNTDOWN events, last count:{} and state:{}'.format(counts, state)
+    assert counts == 0, 'Got Invalid COUNTDOWN events, last count:{} and state:{}'.format(counts, state)
     # Assert if "COMPLETED" buttonEvent state is not received
-    assert (state == 'COMPLETED'), 'Button event state should be "COMPLETED", received state : {}'.format(state)
+    assert state == factory_utils.EVENT_STATE_OK, \
+        'Button event state should be {}, received state : {}'.format(factory_utils.EVENT_STATE_OK, state)
 
     # Wait for device to generate notification for state change
     time.sleep(2)
     # 5. Capture last system state which should be 'FACTORY_DEFAULT'.
     state = factory_utils.get_last_system_state_notification(frontdoor_wlan)
     # Assert if "FACTORY_DEFAULT" system state is not received
-    assert (state == 'FACTORY_DEFAULT'), 'Device should be in "FACTORY_DEFAULT" state. Current state : {}'.format(state)
+    assert state == eddie_helper.FACTORY_DEFAULT, \
+        'Device should be in {} state. Current state : {}'.format(eddie_helper.FACTORY_DEFAULT, state)
 
     # 6. Wait for factoryDefault action to complete.
     time.sleep(10)
@@ -144,40 +149,64 @@ def test_factory_default_success(request, adb, frontdoor_wlan, tap):
 
     # 8. Wait for CLI-Server to start and listens on 17000 port.
     status = None
-    for count in range(30):
+    for _ in range(30):
         status = adb.executeCommand("(netstat -tnl | grep -q 17000) && echo OK")
         if status and status.strip() == 'OK':
             break
         time.sleep(1)
     assert status, "CLIServer not started within 30s."
-    assert (status.strip() == 'OK'), 'CLIServer is not stated even after 30 seconds'
+    assert status.strip() == 'OK', 'CLIServer is not stated even after 30 seconds'
     time.sleep(2)
 
     # 9. Check for product state which should be 'SetupNetwork'.
     device_state = None
-    for count in range(30):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=dev_id)
-        if device_state == 'SetupNetwork':
+    for _ in range(30):
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+        if device_state == eddie_helper.SETUPNETWORK:
             break
-        LOGGER.debug('Got state: {}'.format(device_state))
+        LOGGER.debug('Got state: %s', device_state)
         time.sleep(1)
-    assert (device_state == 'SetupNetwork'), \
-        'Device not in "SetupNetwork" state. Current state: {}.'.format(device_state)
+    assert device_state == eddie_helper.SETUPNETWORK, \
+        'Device not in {} state. Current state: {}.'.format(eddie_helper.SETUPNETWORK, device_state)
 
     # 10. Check for NetworkProfiles.xml in product-persistence to verify success scenario.
     nw_file_status = adb.executeCommand("test -f /mnt/nv/product-persistence/NetworkProfiles.xml && echo FOUND")
-    assert (not nw_file_status), \
+    assert not nw_file_status, \
         '/mnt/nv/product-persistence/NetworkProfiles.xml should be removed after factory default.'
 
     # 11. Check for FirstBootGreetingDone in product-persistence to verify success scenario.
     file_status = adb.executeCommand("test -f /mnt/nv/product-persistence/FirstBootGreetingDone && echo FOUND")
+    assert not file_status, \
+        '/mnt/nv/product-persistence/FirstBootGreetingDone should be removed after factory default.'
+
+    # 12. Configure device WiFi network.
+    wifi_add_profiles_command = ' '.join(['network', 'wifi', 'profiles', 'add',
+                                          router.ssid, router.security.upper(), router.password])
+    LOGGER.debug("Sending telnet command to add wifi profile %s", wifi_add_profiles_command)
+
+    adb_utils.adb_telnet_cmd(wifi_add_profiles_command, expect_after='->OK', expect_last='ADD_PROFILE_SUCCEEDED',
+                             async_response=True, device_id=deviceid)
+
+    # 13. Check for product state which should be 'SetupOther'.
+    device_state = None
+    for _ in range(10):
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+        if device_state == eddie_helper.SETUPOTHER:
+            break
+        LOGGER.debug('Got state: %s', device_state)
+        time.sleep(1)
+    assert device_state == eddie_helper.SETUPOTHER, \
+        'Device not in {} state. Current state: {}.'.format(eddie_helper.SETUPOTHER, device_state)
+
+    # 14. Check for FirstBootGreetingDone in product-persistence to verify success scenario.
+    file_status = adb.executeCommand("test -f /mnt/nv/product-persistence/FirstBootGreetingDone && echo FOUND")
     assert file_status, \
-        '/mnt/nv/product-persistence/FirstBootGreetingDone should be created after factory default.'
+        '/mnt/nv/product-persistence/FirstBootGreetingDone should be created in SetupOther.'
 
 
-@pytest.mark.usefixtures('request', 'adb', 'frontdoor_wlan', 'tap')
+@pytest.mark.usefixtures('deviceid', 'adb', 'frontdoor_wlan', 'tap', 'router')
 @pytest.mark.parametrize("selected_source", [Keys.BLUETOOTH.value, Keys.AUX.value])
-def test_factory_default_selected_state(request, adb, frontdoor_wlan, tap, selected_source):
+def test_factory_default_selected_state(deviceid, adb, frontdoor_wlan, tap, selected_source, router):
     """
     Test to determine that factory default performs from SELECTED state and reboots the device.
     Test Steps:
@@ -193,6 +222,10 @@ def test_factory_default_selected_state(request, adb, frontdoor_wlan, tap, selec
     10. Check for product state which should be 'SetupNetwork'.
     11. Check for NetworkProfiles.xml in product-persistence to verify success scenario.
     12. Check for FirstBootGreetingDone in product-persistence to verify success scenario.
+    13. Configure device WiFi network.
+    14. Check for product state which should be 'SetupOther'.
+    15. Check for FirstBootGreetingDone in product-persistence to verify success scenario.
+
     """
     # 1. Connect device to wlan using frontdoor_wlan fixture.
 
@@ -201,14 +234,15 @@ def test_factory_default_selected_state(request, adb, frontdoor_wlan, tap, selec
     time.sleep(2)
     state = frontdoor_wlan.getState()
     # Assert if "SELECTED" system state is not received
-    assert (state == 'SELECTED'), 'Device should be in "SELECTED" state. Current state : {}'.format(state)
+    assert state == eddie_helper.SELECTED, \
+        'Device should be in {} state. Current state : {}'.format(eddie_helper.SELECTED, state)
 
     # [3-11]. call test_factory_default_success
-    test_factory_default_success(request, adb, frontdoor_wlan, tap)
+    test_factory_default_success(deviceid, adb, frontdoor_wlan, tap, router)
 
 
-@pytest.mark.usefixtures('request', 'adb', 'frontdoor_wlan', 'tap')
-def test_factory_default_idle_state(request, adb, frontdoor_wlan, tap):
+@pytest.mark.usefixtures('deviceid', 'adb', 'frontdoor_wlan', 'tap', 'router')
+def test_factory_default_idle_state(deviceid, adb, frontdoor_wlan, tap, router):
     """
     Test to determine that factory default performs from IDLE state and reboots the device.
     Test Steps:
@@ -224,6 +258,10 @@ def test_factory_default_idle_state(request, adb, frontdoor_wlan, tap):
     10. Check for product state which should be 'SetupNetwork'.
     11. Check for NetworkProfiles.xml in product-persistence to verify success scenario.
     12. Check for FirstBootGreetingDone in product-persistence to verify success scenario.
+    13. Configure device WiFi network.
+    14. Check for product state which should be 'SetupOther'.
+    15. Check for FirstBootGreetingDone in product-persistence to verify success scenario.
+
     """
     # 1. Connect device to wlan using frontdoor_wlan fixture.
 
@@ -232,14 +270,15 @@ def test_factory_default_idle_state(request, adb, frontdoor_wlan, tap):
     time.sleep(2)
     state = frontdoor_wlan.getState()
     # Assert if "IDLE" system state is not received
-    assert (state == 'IDLE'), 'Device should be in "IDLE" state. Current state : {}'.format(state)
+    assert state == eddie_helper.IDLE, \
+        'Device should be in {} state. Current state : {}'.format(eddie_helper.IDLE, state)
 
     # [3-11]. call test_factory_default_success
-    test_factory_default_success(request, adb, frontdoor_wlan, tap)
+    test_factory_default_success(deviceid, adb, frontdoor_wlan, tap, router)
 
 
-@pytest.mark.usefixtures('request', 'adb', 'frontdoor_wlan', 'tap', 'device_playing_from_amazon')
-def test_factory_default_sts_play_state(request, adb, frontdoor_wlan, tap):
+@pytest.mark.usefixtures('deviceid', 'adb', 'frontdoor_wlan', 'tap', 'device_playing_from_amazon', 'router')
+def test_factory_default_sts_play_state(deviceid, adb, frontdoor_wlan, tap, router):
     """
     Test to determine that factory default performs from SELECTED(play from amazon) state and reboots the device.
     Test Steps:
@@ -255,12 +294,16 @@ def test_factory_default_sts_play_state(request, adb, frontdoor_wlan, tap):
     10. Check for product state which should be 'SetupNetwork'.
     11. Check for NetworkProfiles.xml in product-persistence to verify success scenario.
     12. Check for FirstBootGreetingDone in product-persistence to verify success scenario.
+    13. Configure device WiFi network.
+    14. Check for product state which should be 'SetupOther'.
+    15. Check for FirstBootGreetingDone in product-persistence to verify success scenario.
     """
     # 1. Connect device to wlan using frontdoor_wlan fixture.
     # 2. Change state to SELECTED using fixture device_playing_from_amazon.
     state = frontdoor_wlan.getState()
     # Assert if "SELECTED" system state is not received
-    assert (state == 'SELECTED'), 'Device should be in "IDLE" state. Current state : {}'.format(state)
+    assert state == eddie_helper.SELECTED, \
+        'Device should be in {} state. Current state : {}'.format(eddie_helper.SELECTED, state)
 
     # [3-11]. call test_factory_default_success
-    test_factory_default_success(request, adb, frontdoor_wlan, tap)
+    test_factory_default_success(deviceid, adb, frontdoor_wlan, tap, router)
