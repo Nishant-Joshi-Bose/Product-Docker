@@ -142,6 +142,24 @@ def frontDoor(device_ip):
 
     return front_door
 
+@pytest.fixture(scope='class')
+def riviera(deviceid):
+    """
+    Get RivieraUtil instance.
+    """
+    return RivieraUtils('ADB', device=deviceid)
+
+@pytest.fixture(scope='class')
+def device_guid(frontDoor):
+    """
+    Use front door API to obtain device GUID
+    """
+    logger.info("Getting the GUID")
+    device_guid = frontDoor.getInfo()["body"]["guid"]
+    assert device_guid != None
+    logger.debug("GUID is: %s", device_guid)
+    return device_guid
+
 @pytest.fixture(scope='function', autouse=False)
 def test_log_banner(request):
     """
