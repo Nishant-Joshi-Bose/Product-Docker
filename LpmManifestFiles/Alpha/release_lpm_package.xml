@@ -32,14 +32,14 @@
         <entry chip="lpm_professor" combine="True" name="professor_bl.bin" path="/home/softlib/verisoft/ProfessorLPM-BL/Release/trunk/0.2.0.1674/lpm_bootloader_0.2.0.1674.bin" version="filename" />
         <entry name="f0.bin" path="/home/softlib/verisoft/A4V-F0/Release/trunk/1.7.1.12103/RIVIERA_F0_1.7.1.12103.bin" version="filename" />
         <entry name="darr.bin"        path="/home/softlib/verisoft/A4V-WirelessAudio/Release/trunk/25.000.11510/wam_25.000.11510.bin" version="25" />
-        <entry name="ERC.UPD"         path="/home/softlib/verisoft/ProfessorSHARC/Release/Alpha_User/0.3.10.483/Professor/upd/ERC.upd" version="dynamic" />
-        <entry name="RESET_ERC.UPD"   path="/home/softlib/verisoft/ProfessorSHARC/Release/Alpha_User/0.3.10.483/Professor/upd/RESET_ERC.upd" version="dynamic" />
-        <entry name="SMRT00.UPD"      path="/home/softlib/verisoft/ProfessorSHARC/Release/Alpha_User/0.3.10.483/Professor/upd/SMRT00.upd" version="dynamic" />
-        <entry name="SMRT01.UPD"      path="/home/softlib/verisoft/ProfessorSHARC/Release/Alpha_User/0.3.10.483/Professor/upd/SMRT01.upd" version="dynamic" />
-        <entry name="SMRT02.UPD"      path="/home/softlib/verisoft/ProfessorSHARC/Release/Alpha_User/0.3.10.483/Professor/upd/SMRT02.upd" version="dynamic" />
-        <entry name="INSTALLER00.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Release/Alpha_User/0.3.10.483/Professor/upd/INSTALLER00.upd" version="dynamic" />
-        <entry name="INSTALLER01.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Release/Alpha_User/0.3.10.483/Professor/upd/INSTALLER01.upd" version="dynamic" />
-        <entry name="INSTALLER02.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Release/Alpha_User/0.3.10.483/Professor/upd/INSTALLER02.upd" version="dynamic" />
+        <entry name="ERC.UPD"         path="/home/softlib/verisoft/ProfessorSHARC/Release/Alpha_User/0.4.0.511/Professor/upd/ERC.upd" version="dynamic" />
+        <entry name="RESET_ERC.UPD"   path="/home/softlib/verisoft/ProfessorSHARC/Release/Alpha_User/0.4.0.511/Professor/upd/RESET_ERC.upd" version="dynamic" />
+        <entry name="SMRT00.UPD"      path="/home/softlib/verisoft/ProfessorSHARC/Release/Alpha_User/0.4.0.511/Professor/upd/SMRT00.upd" version="dynamic" />
+        <entry name="SMRT01.UPD"      path="/home/softlib/verisoft/ProfessorSHARC/Release/Alpha_User/0.4.0.511/Professor/upd/SMRT01.upd" version="dynamic" />
+        <entry name="SMRT02.UPD"      path="/home/softlib/verisoft/ProfessorSHARC/Release/Alpha_User/0.4.0.511/Professor/upd/SMRT02.upd" version="dynamic" />
+        <entry name="INSTALLER00.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Release/Alpha_User/0.4.0.511/Professor/upd/INSTALLER00.upd" version="dynamic" />
+        <entry name="INSTALLER01.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Release/Alpha_User/0.4.0.511/Professor/upd/INSTALLER01.upd" version="dynamic" />
+        <entry name="INSTALLER02.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Release/Alpha_User/0.4.0.511/Professor/upd/INSTALLER02.upd" version="dynamic" />
         <entry name="psoc.cyacd" path="/home/softlib/verisoft/CastleLightBarCapSense/Release/master/3.5-118+63b94fa/App-Professor-DP2*.cyacd" version="dynamic" />
         <entry name="psoc_gc.cyacd" path="/home/softlib/verisoft/CastleLightBarCapSense/Release/master/3.5-118+63b94fa/App-GingerCheevers-DP2*.cyacd" version="dynamic" />
         <entry name="prof_lb_anim_db.bin" path="/home/softlib/verisoft/CastleLedAnimationTool/Release/master/1.13-43+a3d640e/SoundBar/Animations.bin" version="dynamic" />
