@@ -201,20 +201,25 @@ Callback < ProductMessage > EddieProductController::GetMessageHandler( )
 
 std::string EddieProductController::GetDefaultProductName() const
 {
-    static std::string productName = "Bose ";
-    std::string macAddress = MacAddressInfo::GetPrimaryMAC();
-
-    productName = "Bose ";
-    try
+    std::string productName;
+    if ( !IsDevelopmentMode() )
     {
-        productName += ( macAddress.substr( macAddress.length() - 6 ) );
+        productName = "Bose Home Speaker 500";
     }
-    catch( const std::out_of_range& error )
+    else
     {
-        productName += macAddress;
-        BOSE_WARNING( s_logger, "errorType = %s", error.what() );
+        std::string macAddress = MacAddressInfo::GetPrimaryMAC();
+        try
+        {
+            productName += ( macAddress.substr( macAddress.length() - 6 ) );
+        }
+        catch( const std::out_of_range& error )
+        {
+            productName += macAddress;
+            BOSE_WARNING( s_logger, "errorType = %s", error.what() );
+        }
+        productName += " HS 500";
     }
-
     BOSE_INFO( s_logger, "%s productName=%s", __func__, productName.c_str() );
     return productName;
 }
