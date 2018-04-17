@@ -30,7 +30,7 @@ public:
     /// m_InputRoute is the current physical DSP input that should be used, based on current source info from contentItem
     /////////////////////////////////////////////////////////////////////////////////////////////
     LpmServiceMessages::AudioSettings_t m_MainStreamAudioSettings;
-    uint32_t m_InputRoute;
+    uint32_t m_InputRoute = 0;
 
 private:
     std::shared_ptr<CustomProductLpmHardwareInterface>  m_ProductLpmHardwareInterface;
