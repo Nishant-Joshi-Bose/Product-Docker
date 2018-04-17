@@ -73,7 +73,8 @@ bool CustomProductControllerStatePlayable::HandleIntentSpeakerPairing( KeyHandle
 
     if( intent == ( unsigned int )Action::ACTION_START_PAIR_SPEAKERS )
     {
-        ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_ACCESSORY_PAIRING );
+        BOSE_INFO( s_logger, "Handling intent ACTION_START_PAIR_SPEAKERS." );
+        GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
     }
     return true;
 }

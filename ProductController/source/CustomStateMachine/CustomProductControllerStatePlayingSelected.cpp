@@ -15,6 +15,7 @@
 #include "ProductControllerStates.h"
 #include "ProductControllerStatePlayingSelected.h"
 #include "CustomProductControllerStatePlayingSelected.h"
+#include "ProfessorProductController.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -61,8 +62,8 @@ bool CustomProductControllerStatePlayingSelected::HandleIntentSpeakerPairing( Ke
 
     if( intent == ( unsigned int )Action::ACTION_START_PAIR_SPEAKERS )
     {
-        BOSE_INFO( s_logger, "The state is changing to the CustomSelectedAccessoryPairing state." );
-        ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_ACCESSORY_PAIRING );
+        BOSE_INFO( s_logger, "Handling intent ACTION_START_PAIR_SPEAKERS." );
+        GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
     }
 
     return true;
