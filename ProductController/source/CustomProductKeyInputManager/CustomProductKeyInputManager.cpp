@@ -179,7 +179,7 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
 ///
 /// @param  const LpmServiceMessages::IpcKeyInformation_t& keyEvent
 ///
-/// @return This method returns a true value if the key is to be ignored becuase of incomplete
+/// @return This method returns a true value if the key is to be ignored because of incomplete
 ///         chord processing. That would be when keys A and B are PnH so they produce a special
 ///         value S, then A is released while B is still held. In this case, both the press and the
 ///         release for B needs to be ignored. This condition is detected by the arrival of
