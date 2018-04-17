@@ -20,7 +20,7 @@ from CastleTestUtils.RivieraUtils.hardware.keys import keypress
 from CastleTestUtils.RivieraUtils import adb_utils
 from . import factory_utils
 
-logger = get_logger(__file__)
+LOGGER = get_logger(__file__)
 
 FACTORY_DEFAULT_KEYS = [Keys.AUX.value, Keys.VOLUME_DOWN.value]
 
@@ -159,7 +159,7 @@ def test_factory_default_success(request, adb, frontdoor_wlan, tap):
         device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=dev_id)
         if device_state == 'SetupNetwork':
             break
-        logger.debug('Got state: {}'.format(device_state))
+        LOGGER.debug('Got state: {}'.format(device_state))
         time.sleep(1)
     assert (device_state == 'SetupNetwork'), \
         'Device not in "SetupNetwork" state. Current state: {}.'.format(device_state)

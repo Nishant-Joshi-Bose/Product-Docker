@@ -20,21 +20,11 @@ from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.CAPSUtils.TransportUtils.commonBehaviorHandler import CommonBehaviorHandler
 from CastleTestUtils.CAPSUtils.TransportUtils.messageCreator import MessageCreator
 from CastleTestUtils.CAPSUtils.TransportUtils.responseHandler import ResponseHandler
-from CastleTestUtils.PassportUtils.passport_utils import *
+from CastleTestUtils.PassportUtils.passport_utils import create_passport_account
 from CastleTestUtils.PassportUtils.passport_api import PassportAPIUsers
 from CastleTestUtils.scripts.config_madrid import RESOURCES
 
 LOGGER = get_logger(__name__)
-
-
-def pytest_addoption(parser):
-    """ Command Line Parameters """
-    parser.addoption('--passport-base-url',
-                     default='https://platform.bose.io/dev/svc-passport-core/latest/passport-core/',
-                     help='Passport base URL')
-    parser.addoption('--api-key',
-                     default='FITj7BYxfotTOHuJGSktJJNdukyUIYJy',
-                     help='Passport API KEY')
 
 
 @pytest.fixture(scope="function")
@@ -45,15 +35,15 @@ def frontdoor_wlan(request, ip_address_wlan):
     LOGGER.info("frontDoorQueue")
     if ip_address_wlan is None:
         pytest.fail("No valid device IP")
-    frontdoor_obj = FrontDoorQueue(ip_address_wlan)
+    _frontdoor = FrontDoorQueue(ip_address_wlan)
 
     def teardown():
-        if frontdoor_obj:
-            frontdoor_obj.close()
+        if _frontdoor:
+            _frontdoor.close()
 
     request.addfinalizer(teardown)
 
-    return frontdoor_obj
+    return _frontdoor
 
 
 @pytest.fixture(scope="function")
@@ -82,14 +72,13 @@ def device_playing_from_amazon(request, frontdoor_wlan):
     6. Register device to passport and verify device source
     7. Send playback request to device Verify the right station or track is playing by verifying 'nowPlaying' response
     """
-    device_guid = frontdoor_wlan.getInfo()[0]
+    sys_info = frontdoor_wlan.getInfo()["body"]
+    device_guid = sys_info["guid"]
     assert device_guid is not None
     LOGGER.debug("GUID is: %s", device_guid)
 
-    sys_info = frontdoor_wlan.getInfo()
-    device_type = sys_info[5]
+    device_type = sys_info["productType"]
     LOGGER.debug("Device type: %s", device_type)
-
     service_name = 'AMAZON'
     current_resource = 'STS_AMAZON_ACCOUNT'
     location = '/v1/playback/type/playable/url/cHJpbWUvc3RhdGlvbnMvQTEwMlVLQzcxSTVEVTgvI3BsYXlhYmxl/trackIndex/0'
@@ -146,5 +135,5 @@ def device_playing_from_amazon(request, frontdoor_wlan):
     LOGGER.debug("-- Start to play " + str(content['container_name']))
     playback_msg = message_creator.playback_msg(get_config['name'], content['container_location'],
                                                 content['container_name'], content['track_location'])
-    now_playing = common_behavior_handler.playContentItemAndVerifyPlayStatus(playback_msg, time_to_play=30)
+    now_playing = common_behavior_handler.playContentItemAndVerifyPlayStatus(playback_msg)
     LOGGER.debug("Now Playing : " + str(now_playing))

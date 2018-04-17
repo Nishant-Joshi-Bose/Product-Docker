@@ -79,7 +79,7 @@ def get_event_notification_after_countdown(fdq, event, counts):
         if notification["header"]["resource"] != SYSTEM_BUTTON_NOTIF:
             continue
         if notification["body"]["event"] == event:
-            if notification["body"]["state"] == 'COUNTDOWN' and notification["body"]["value"] == str(counts):
+            if notification["body"]["state"] == 'COUNTDOWN' and notification["body"]["value"] == counts:
                 counts = counts - 1
             else:
                 return counts, notification["body"]["state"]
