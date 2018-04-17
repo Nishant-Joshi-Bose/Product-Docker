@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-04-13_1431"
+    "selected_version": "Continuous/Castle-Fork/2018-04-16_1846"
   },
   {
     "name": "bose-opkg-utils",
@@ -113,11 +113,11 @@
   },
   {
     "name": "opensource-jsoncpp-native",
-    "selected_version": "Release/bose-master/1.8.3-10-gc417893"
+    "selected_version": "Release/bose-master/1.8.3-11-gb142130"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
-    "selected_version": "Release/bose-master/1.8.3-10-gc417893"
+    "selected_version": "Release/bose-master/1.8.3-11-gb142130"
   },
   {
     "name": "protobuf-native",
@@ -165,7 +165,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-04-13_1431"
+    "selected_version": "Continuous/Castle-Fork/2018-04-16_1846"
   },
   {
     "name": "SystemEventService-qc8017_32",
