@@ -9,7 +9,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.5.1-364+4d0114e"
+    "selected_version": "Release/master/0.5.2-371+871a65b"
   },
   {
     "name": "BoseOPKG-native",
@@ -29,11 +29,11 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.10-20804"
+    "selected_version": "Release/Castle-Fork/0.3.11-20822"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/0.3.10-20804"
+    "selected_version": "Release/Castle-Fork/0.3.11-20822"
   },
   {
     "name": "CastleCli-qc8017_32",
