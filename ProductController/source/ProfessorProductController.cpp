@@ -577,7 +577,7 @@ void ProfessorProductController::Run( )
     ///
     /// Set up the STSProductController
     ///
-    SetupProductSTSConntroller( );
+    SetupProductSTSController( );
 
     ///
     /// Initialize and register intents for key actions for the Product Controller.
@@ -865,13 +865,13 @@ void ProfessorProductController::StopPairingBLERemote( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::SetupProductSTSConntroller
+/// @name   ProfessorProductController::SetupProductSTSController
 ///
 /// @brief  This method is called to perform the needed initialization of the ProductSTSController,
 ///         specifically, provide the set of sources to be created initially.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void ProfessorProductController::SetupProductSTSConntroller( )
+void ProfessorProductController::SetupProductSTSController( )
 {
     std::vector< ProductSTSController::SourceDescriptor > sources;
 
@@ -882,15 +882,17 @@ void ProfessorProductController::SetupProductSTSConntroller( )
     /// Adapt IQ and SETUP are never available as a normal source, whereas the TV source will always
     /// be available. SLOT sources need to be set-up before they become available.
     ///
-    ProductSTSController::SourceDescriptor descriptor_AiQ    { ProductSTS::SLOT_AIQ,   "ADAPTiQ", false, commonStateFactory };
-    ProductSTSController::SourceDescriptor descriptor_Setup  { ProductSTS::SLOT_SETUP, "SETUP",   false, silentStateFactory };
-    ProductSTSController::SourceDescriptor descriptor_TV     { ProductSTS::SLOT_TV,    "TV",      true,  commonStateFactory };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_0 { ProductSTS::SLOT_0,     "SLOT_0",  false, commonStateFactory };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_1 { ProductSTS::SLOT_1,     "SLOT_1",  false, commonStateFactory };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_2 { ProductSTS::SLOT_2,     "SLOT_2",  false, commonStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_AiQ       { ProductSTS::SLOT_AIQ,     "ADAPTiQ",  false, commonStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_Setup     { ProductSTS::SLOT_SETUP,   "SETUP",    false, silentStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_Pairing   { ProductSTS::SLOT_PAIRING, "PAIRING",  false, silentStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_TV        { ProductSTS::SLOT_TV,      "TV",       true,  commonStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_0    { ProductSTS::SLOT_0,       "SLOT_0",   false, commonStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_1    { ProductSTS::SLOT_1,       "SLOT_1",   false, commonStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_2    { ProductSTS::SLOT_2,       "SLOT_2",   false, commonStateFactory };
 
     sources.push_back( descriptor_AiQ );
     sources.push_back( descriptor_Setup );
+    sources.push_back( descriptor_Pairing );
     sources.push_back( descriptor_TV );
     sources.push_back( descriptor_SLOT_0 );
     sources.push_back( descriptor_SLOT_1 );
