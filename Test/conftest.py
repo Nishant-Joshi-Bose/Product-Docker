@@ -127,7 +127,7 @@ def device_ip(request, deviceid):
 
 
 @pytest.fixture(scope="class")
-def frontDoor(device_ip):
+def frontDoor(device_ip, request):
     """
     Get FrontDoorAPI instance.
     """

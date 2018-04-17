@@ -91,7 +91,7 @@ def message_creator(request, service_name):
     Get MessageCreator instance.
     """
     logger.info("message_creator")
-    return MessageCreator(service_name)
+    return MessageCreator(service_name, logger)
 
 @pytest.fixture(scope='class')
 def response_handler(request, service_name, get_config):
@@ -99,7 +99,7 @@ def response_handler(request, service_name, get_config):
     Get ResponseHandler instance.
     """
     logger.info("response_handler")
-    return ResponseHandler(service_name, get_config['name'])
+    return ResponseHandler(service_name, get_config['name'], logger)
 
 @pytest.fixture(scope='class')
 def common_behavior_handler(response_handler, frontDoor, message_creator):
@@ -108,35 +108,20 @@ def common_behavior_handler(response_handler, frontDoor, message_creator):
     """
     logger.info("common_behavior_handler")
 
-    return CommonBehaviorHandler(frontDoor, response_handler, message_creator)
+    return CommonBehaviorHandler(frontDoor, response_handler, message_creator, logger)
 
 @pytest.fixture(scope='class')
-def passport_user(request, common_behavior_handler):
-    """
-    Add new passport user
-    :param request: pytest request fixture
-    """
+def passport_user(request, frontDoor):
+
     logger.info("passport_user")
     passport_base_url = request.config.getoption('--passport-base-url')
     apikey = request.config.getoption('--api-key')
-
-    # Create passport account
-    bosepersonID = create_passport_account(passport_base_url, "Eddie_Smoke", "Bose", apikey)
-    passportUser = PassportAPIUsers(bosepersonID, apikey, passport_base_url)
-
-    def delete_passport_user():
-        """
-        Delete Passport User Account once test completed
-        """
-        logger.info("delete_passport_user")
-        assert passportUser.delete_users(), "Fail to delete person id: %s" % bosepersonID
-        common_behavior_handler.performCloudSync()
-
-    request.addfinalizer(delete_passport_user)
+    logger.info("Bose Person ID : %s ", frontDoor._bosepersonID)
+    passportUser = PassportAPIUsers(frontDoor._bosepersonID, apikey, frontDoor._access_token, passport_base_url, logger)
     return passportUser
 
 @pytest.fixture(scope='class')
-def multiple_music_service_account(request, passport_user, get_config):
+def multiple_music_service_account(request, passport_user, get_config, common_behavior_handler):
     """
     Add multiple music service account
     :param request: pytest request fixture
@@ -155,6 +140,8 @@ def multiple_music_service_account(request, passport_user, get_config):
             assert account_id and account_id != "", "Fail to add music service account."
             multiple_account_Id.append(account_id)
 
+    common_behavior_handler.performCloudSync()
+
     def multiple_remove_music_service():
         """
         Multiple Remove music service account
@@ -165,7 +152,6 @@ def multiple_music_service_account(request, passport_user, get_config):
             assert passport_user.remove_service_account(account_id), "Fail to remove music account from passport account."
 
     request.addfinalizer(multiple_remove_music_service)
-
 
 @pytest.fixture(scope='class')
 def add_device_to_passport(passport_user, device_guid, device_type, common_behavior_handler):

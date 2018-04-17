@@ -33,11 +33,11 @@ logger = get_logger(__name__, "EddieSmokeTest.log", level=logging.DEBUG, fileLog
 logger.info("Starting Eddie Smoke Tests...")
 
 
-@pytest.mark.usefixtures("multiple_music_service_account", "add_device_to_passport")
 class TestEddieSmoke:
     """
     Eddie Smoke Test Class
     """
+
     @pytest.mark.usefixtures("deviceid", "riviera", "adb")
     def test_factory_default(self, deviceid, riviera, adb):
         """
@@ -58,6 +58,7 @@ class TestEddieSmoke:
         logger.debug("Eddie Product State : %s", product_state)
         if 'Booting' in product_state:
             assert False, "Eddie is in Booting State"
+
 
     @pytest.mark.usefixtures("ip_address_wlan")
     def test_wifi_profiles(self, ip_address_wlan):
@@ -105,20 +106,23 @@ class TestEddieSmoke:
                     assert False, "Eddie server.crt file don't have read access"
                 break
 
-    @pytest.mark.usefixtures("music_sources", "adb", "frontdoor_wlan", "ip_address_wlan")
-    def test_play_music(self, music_sources, adb, frontdoor_wlan, ip_address_wlan):
+    @pytest.mark.usefixtures("multiple_music_service_account", "music_sources", "adb", "frontDoor")
+    def test_play_music(self, multiple_music_service_account, music_sources, adb, frontDoor):
         """
         :param adb: Fixture to return ADBCommunication object
 
         - Play and Validate Music Sources
         """
-        for source_name in music_sources:
-            validate_sources(source_name, adb)
-            play_music(source_name, music_sources[source_name], frontdoor_wlan)
-            stop_music(ip_address_wlan, frontdoor_wlan)
+        logger.info("Bose Person ID : %s ", frontDoor._bosepersonID)
 
-    @pytest.mark.usefixtures("music_sources", "frontdoor_wlan", "ip_address_wlan")
-    def test_switch_sources(self, music_sources, frontdoor_wlan, ip_address_wlan):
+        for source_name in music_sources:
+            logger.info("Music Sources : %s, ", source_name)
+            validate_sources(source_name, adb)
+            play_music(source_name, music_sources[source_name], frontDoor)
+            stop_music(frontDoor._ip_address, frontDoor)
+
+    @pytest.mark.usefixtures("music_sources", "frontDoor")
+    def test_switch_sources(self, music_sources, frontDoor):
         """
         :param music_sources: Fixture to return Sources List
 
@@ -127,12 +131,12 @@ class TestEddieSmoke:
         # Below code will switch sources two times and play diffrent music sources
         for repeatcnt in range(0, 2):
             for source_name in music_sources:
-                play_music(source_name, music_sources[source_name], frontdoor_wlan)
+                play_music(source_name, music_sources[source_name], frontDoor)
 
-        stop_music(ip_address_wlan, frontdoor_wlan)
+        stop_music(frontDoor._ip_address, frontDoor)
 
-    @pytest.mark.usefixtures("adb", "music_sources", "frontdoor_wlan", "ip_address_wlan")
-    def test_store_preset(self, adb, music_sources, frontdoor_wlan, ip_address_wlan):
+    @pytest.mark.usefixtures("adb", "music_sources", "frontDoor")
+    def test_store_preset(self, adb, music_sources, frontDoor):
         """
         :param adb: Fixture to return ADBCommunication object
         :param music_sources: Fixture to return Sources List
@@ -144,15 +148,15 @@ class TestEddieSmoke:
         index = 0
         for source_name in music_sources:
             preset_key = preset_key_start + index
-            play_music(source_name, music_sources[source_name], frontdoor_wlan)
-            press_key(ip_address_wlan, preset_key, 5000)
+            play_music(source_name, music_sources[source_name], frontDoor)
+            press_key(frontDoor._ip_address, preset_key, 5000)
             validate_preset(adb, (index+1), source_name)
             index += 1
 
-        stop_music(ip_address_wlan, frontdoor_wlan)
+        stop_music(frontDoor._ip_address, frontDoor)
 
-    @pytest.mark.usefixtures("music_sources", "frontdoor_wlan", "ip_address_wlan")
-    def test_play_preset(self, music_sources, frontdoor_wlan, ip_address_wlan):
+    @pytest.mark.usefixtures("music_sources", "frontDoor")
+    def test_play_preset(self, music_sources, frontDoor):
         """
         :param music_sources: Fixture to return Sources List
 
@@ -163,40 +167,40 @@ class TestEddieSmoke:
         index = 0
         for source_name in music_sources:
             preset_key = preset_key_start + index
-            press_key(ip_address_wlan, preset_key, 750)
-            validate_music_play(source_name, music_sources[source_name], frontdoor_wlan)
+            press_key(frontDoor._ip_address, preset_key, 750)
+            validate_music_play(source_name, music_sources[source_name], frontDoor)
             index += 1
 
-        stop_music(ip_address_wlan, frontdoor_wlan)
+        stop_music(frontDoor._ip_address, frontDoor)
 
-    @pytest.mark.usefixtures("adb", "ip_address_wlan")
-    def test_bluetooth_key(self, adb, ip_address_wlan):
+    @pytest.mark.usefixtures("adb", "frontDoor")
+    def test_bluetooth_key(self, adb, frontDoor):
         """
         :param adb: Fixture to return ADBCommunication object
 
         - Press Bluetooth Key and Validate
         """
-        press_key(ip_address_wlan, Keys.BLUETOOTH.value, 750)
+        press_key(frontDoor._ip_address, Keys.BLUETOOTH.value, 750)
         bluetooth_response = adb.executeCommand('echo getpdo system | nc 0 17000')
         result = re.search('BLUETOOTH()', bluetooth_response)
         if not result:
             assert False, "Bluetooth Key is not press"
 
-    @pytest.mark.usefixtures("adb", "ip_address_wlan")
-    def test_aux_key(self, adb, ip_address_wlan):
+    @pytest.mark.usefixtures("adb", "frontDoor")
+    def test_aux_key(self, adb, frontDoor):
         """
         :param adb: Fixture to return ADBCommunication object
 
         - Press AUX Key and Validate
         """
-        press_key(ip_address_wlan, Keys.AUX.value, 750)
+        press_key(frontDoor._ip_address, Keys.AUX.value, 750)
         aux_response = adb.executeCommand('echo getpdo system | nc 0 17000')
         result = re.search('AUX()', aux_response)
         if not result:
             assert False, "AUX Key is not press"
 
-    @pytest.mark.usefixtures("frontdoor_wlan", "ip_address_wlan")
-    def test_volume_updown_key(self, frontdoor_wlan, ip_address_wlan):
+    @pytest.mark.usefixtures("frontDoor")
+    def test_volume_updown_key(self, frontDoor):
         """
         :param frontDoor: Fixture to return frontDoor object
 
@@ -205,35 +209,35 @@ class TestEddieSmoke:
         volume_min = 100
         volume_max = 0
         
-        volume_actual = get_volume(frontdoor_wlan)
+        volume_actual = get_volume(frontDoor)
         logger.debug("Actual Volume : %s ", volume_actual)
         # Volume already set to MAX then need to do volume down before volume up key press
         if volume_actual == volume_max:
-            press_key(ip_address_wlan, Keys.VOLUME_DOWN.value, 30)
-            volume_actual = get_volume(frontdoor_wlan)
+            press_key(frontDoor._ip_address, Keys.VOLUME_DOWN.value, 30)
+            volume_actual = get_volume(frontDoor)
             logger.debug("Actual Volume : %s ", volume_actual)
         
-        press_key(ip_address_wlan, Keys.VOLUME_UP.value, 20)
-        volume_up = get_volume(frontdoor_wlan)
+        press_key(frontDoor._ip_address, Keys.VOLUME_UP.value, 20)
+        volume_up = get_volume(frontDoor)
         logger.debug("Volume Up : %s ", volume_up)
         assert volume_up > volume_actual, "Volume Up Key Press not happened"
 
-        volume_actual = get_volume(frontdoor_wlan)
+        volume_actual = get_volume(frontDoor)
         logger.debug("Actual Volume : %s ", volume_actual)
 
         # Volume already set to MIN then need to do volume up before volume down key press
         if volume_actual == volume_min:
-            press_key(ip_address_wlan, Keys.VOLUME_UP.value, 30)
-            volume_actual = get_volume(frontdoor_wlan)
+            press_key(frontDoor._ip_address, Keys.VOLUME_UP.value, 30)
+            volume_actual = get_volume(frontDoor)
             logger.debug("Actual Volume : %s ", volume_actual)
         
-        press_key(ip_address_wlan, Keys.VOLUME_DOWN.value, 20)
-        volume_down = get_volume(frontdoor_wlan)
+        press_key(frontDoor._ip_address, Keys.VOLUME_DOWN.value, 20)
+        volume_down = get_volume(frontDoor)
         logger.debug("Volume Down : %s ", volume_down)
         assert volume_down < volume_actual, "Volume Down Key Press not happened"
 
-    @pytest.mark.usefixtures("frontdoor_wlan", "ip_address_wlan")
-    def test_volume_updown_ramp_key(self, frontdoor_wlan, ip_address_wlan):
+    @pytest.mark.usefixtures("frontDoor")
+    def test_volume_updown_ramp_key(self, frontDoor):
         """
         :param frontDoor: Fixture to return frontDoor object
 
@@ -242,31 +246,31 @@ class TestEddieSmoke:
         volume_min = 100
         volume_max = 0
         
-        volume_actual = get_volume(frontdoor_wlan)
+        volume_actual = get_volume(frontDoor)
         logger.debug("Actual Volume : %s ", volume_actual)
         
         # Volume already set to MAX then need to do volume down before volume up key press
         if volume_actual == volume_max:
-            press_key(ip_address_wlan, Keys.VOLUME_DOWN.value, 400)
-            volume_actual = get_volume(frontdoor_wlan)
+            press_key(frontDoor._ip_address, Keys.VOLUME_DOWN.value, 400)
+            volume_actual = get_volume(frontDoor)
             logger.debug("Actual Volume : %s ", volume_actual)
 
-        press_key(ip_address_wlan, Keys.VOLUME_UP.value, 350)
-        volume_up = get_volume(frontdoor_wlan)
+        press_key(frontDoor._ip_address, Keys.VOLUME_UP.value, 350)
+        volume_up = get_volume(frontDoor)
         logger.debug("Volume Up : %s ", volume_up)
         assert volume_up > volume_actual, "Volume Up Key Press not happened"
 
-        volume_actual = get_volume(frontdoor_wlan)
+        volume_actual = get_volume(frontDoor)
         logger.debug("Actual Volume : %s ", volume_actual)
         
         # Volume already set to MIN then need to do volume up before volume down key press
         if volume_actual == volume_min:
-            press_key(ip_address_wlan, Keys.VOLUME_UP.value, 400)
-            volume_actual = get_volume(frontdoor_wlan)
+            press_key(frontDoor._ip_address, Keys.VOLUME_UP.value, 400)
+            volume_actual = get_volume(frontDoor)
             logger.debug("Actual Volume : %s ", volume_actual)
         
-        press_key(ip_address_wlan, Keys.VOLUME_DOWN.value, 350)
-        volume_down = get_volume(frontdoor_wlan)
+        press_key(frontDoor._ip_address, Keys.VOLUME_DOWN.value, 350)
+        volume_down = get_volume(frontDoor)
         logger.debug("Volume Down : %s ", volume_down)
         assert volume_down < volume_actual, "Volume Down Key Press not happened"
 
@@ -321,6 +325,7 @@ def validate_sources(source, adb, timeout=120):
     start_time = time.time()
 
     while time.time() < timeout + start_time:
+        time.sleep(5)
         sources_xml = adb.executeCommand('cat /mnt/nv/product-persistence/Sources.xml')
         if "No such file or directory" in sources_xml:
             logger.debug("Sources.xml file is not available... Verifying again...")
@@ -329,6 +334,7 @@ def validate_sources(source, adb, timeout=120):
             break
 
     sourceList = []
+    logger.info("Soruces : %s ", str(sources_xml))
     root = ET.fromstring(str(sources_xml))
     for sources in root.findall("source"):
         for sourcekey in sources.findall("sourceKey"):
