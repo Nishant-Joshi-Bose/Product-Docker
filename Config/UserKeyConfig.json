@@ -196,7 +196,23 @@
         "action": "NEXT_TRACK",
         "commment": "skip forward",
         "keyEvent": "PRESS",
+        "keyList": ["BOSE_FAST_FORWARD"],
+        "origin": ["IR", "TAP", "CEC", "RF"],
+        "timeOutList": []
+    },
+    {
+        "action": "NEXT_TRACK",
+        "commment": "skip forward",
+        "keyEvent": "PRESS",
         "keyList": ["BOSE_QUICK_SKIP"],
+        "origin": ["IR", "TAP", "CEC", "RF"],
+        "timeOutList": []
+    },
+    {
+        "action": "PREV_TRACK",
+        "commment": "skip back",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_FAST_REVERSE"],
         "origin": ["IR", "TAP", "CEC", "RF"],
         "timeOutList": []
     },
