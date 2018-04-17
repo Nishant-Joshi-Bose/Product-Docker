@@ -12,7 +12,7 @@ export HISTFILE=/mnt/nv/.bash_history
 
 if [ "${PS1-}" ]; then # interactive shells
     # If the terminal size is unknown, run `resize` to detect it.
-    if ! stty -a -F /dev/tty |& grep -q '; columns '; then
+    if ! [ "$(stty -F /dev/tty size 2>/dev/null)" ]; then
         eval $(command resize -u)
     fi
 
