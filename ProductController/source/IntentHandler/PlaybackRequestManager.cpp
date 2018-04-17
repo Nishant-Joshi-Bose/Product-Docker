@@ -80,7 +80,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
 
     auto playbackRequestResponseCallback = [ this ]( const SoundTouchInterface::NowPlaying & response )
     {
-        BOSE_DEBUG( s_logger, "A response to the playback request was received: %s" ,
+        BOSE_DEBUG( s_logger, "A response to the playback request was received: %s",
                     ProtoToMarkup::ToJson( response, false ).c_str( ) );
     };
 
@@ -170,6 +170,20 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
                 playbackRequestErrorCallback );
 
         BOSE_INFO( s_logger, "An attempt to start AdaptIQ has been made." );
+    }
+    else if( action == ( uint16_t )Action::ACTION_START_PAIR_SPEAKERS )
+    {
+        SoundTouchInterface::PlaybackRequest playbackRequestData;
+
+        playbackRequestData.set_source( "PRODUCT" );
+        playbackRequestData.set_sourceaccount( "PAIRING" );
+
+        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
+                playbackRequestData,
+                playbackRequestResponseCallback,
+                playbackRequestErrorCallback );
+
+        BOSE_INFO( s_logger, "An attempt to start Accessory Pairing has been made." );
     }
     else
     {

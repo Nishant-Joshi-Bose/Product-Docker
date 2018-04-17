@@ -1064,6 +1064,12 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
 
         BOSE_DEBUG( s_logger, "An STS Select message was received for slot %s.",
                     ProductSTS::ProductSourceSlot_Name( static_cast<ProductSTS::ProductSourceSlot>( slot ) ).c_str( ) );
+
+        if( slot == ProductSTS::ProductSourceSlot::SLOT_PAIRING )
+        {
+            auto startPairingAction = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_LPM_PAIR_SPEAKERS );
+            GetIntentHandler( ).Handle( startPairingAction );
+        }
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Wireless network status messages are handled at this point.
@@ -1145,8 +1151,11 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_accessorypairing( ) )
     {
-        GetHsm( ).Handle< ProductAccessoryPairing >
-        ( &CustomProductControllerState::HandlePairingState, message.accessorypairing( ) );
+        if( not message.accessorypairing().active() )
+        {
+            auto stopPairingAction = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_STOP_PAIR_SPEAKERS );
+            GetIntentHandler( ).Handle( stopPairingAction );
+        }
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Key action messages are handled at this point, and passed to the state machine based on
@@ -1173,8 +1182,10 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         }
         else if( GetIntentHandler( ).IsIntentSpeakerPairing( message.action( ) ) )
         {
-            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentSpeakerPairing,
-                                                              message.action( ) );
+            auto pairingAction = static_cast<KeyHandlerUtil::ActionType_t>( message.action() ) ;
+            GetIntentHandler( ).Handle( pairingAction );
+//            GetHsm( ).Handle< KeyHandlerUtil::ActionType_t >( &CustomProductControllerState::HandleIntentSpeakerPairing,
+//                                                              message.action( ) );
         }
         else if( GetIntentHandler( ).IsIntentPlayProductSource( message.action( ) ) )
         {
