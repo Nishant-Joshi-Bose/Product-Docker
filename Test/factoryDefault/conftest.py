@@ -20,7 +20,6 @@ from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.CAPSUtils.TransportUtils.commonBehaviorHandler import CommonBehaviorHandler
 from CastleTestUtils.CAPSUtils.TransportUtils.messageCreator import MessageCreator
 from CastleTestUtils.CAPSUtils.TransportUtils.responseHandler import ResponseHandler
-from CastleTestUtils.PassportUtils.passport_utils import create_passport_account
 from CastleTestUtils.PassportUtils.passport_api import PassportAPIUsers
 from CastleTestUtils.scripts.config_madrid import RESOURCES
 
@@ -112,8 +111,8 @@ def device_playing_from_amazon(request, frontdoor_wlan):
     LOGGER.info("Create passport account")
     passport_base_url = request.config.getoption('--passport-base-url')
     apikey = request.config.getoption('--api-key')
-    boseperson_id = create_passport_account(passport_base_url, "Eddie", "FactoryTest", apikey)
-    passport_user = PassportAPIUsers(boseperson_id, apikey, passport_base_url)
+    LOGGER.info("Bose Person ID : %s ", frontdoor_wlan._bosepersonID)
+    passport_user = PassportAPIUsers(frontdoor_wlan._bosepersonID, apikey, frontdoor_wlan._access_token, passport_base_url, logger=LOGGER)
 
     def delete_passport_user():
         """
