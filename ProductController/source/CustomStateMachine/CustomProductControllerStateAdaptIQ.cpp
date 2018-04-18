@@ -123,7 +123,7 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdap
     {
         if( m_powerDownOnExit )
         {
-            ChangeState( PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS );
+            ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS );
         }
         else
         {
