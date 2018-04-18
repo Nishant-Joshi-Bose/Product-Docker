@@ -136,8 +136,12 @@ def frontDoor(device_ip):
     if device_ip is None:
         pytest.fail("No valid device IP")
     front_door = FrontDoorAPI(device_ip)
-    return front_door
 
+    def tear():
+        front_door.close()
+    request.addfinalizer(tear)
+
+    return front_door
 
 @pytest.fixture(scope='function', autouse=False)
 def test_log_banner(request):
