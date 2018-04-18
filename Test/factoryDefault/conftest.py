@@ -119,7 +119,7 @@ def device_playing_from_amazon(request, frontdoor_wlan):
         This function will delete passport user.
         """
         LOGGER.info("delete_passport_user")
-        assert passport_user.delete_users(), "Fail to delete person id: %s" % boseperson_id
+        assert passport_user.delete_users(), "Fail to delete person id: {}".format(passport_user.bosePersonID)
     request.addfinalizer(delete_passport_user)
 
     LOGGER.info("music_service_account")
