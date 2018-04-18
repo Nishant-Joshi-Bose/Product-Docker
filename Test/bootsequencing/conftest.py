@@ -14,11 +14,20 @@
 PyTest configuration and fixtures used by the Boot Sequencing Tests.
 
 """
+import time
+from multiprocessing import Process, Manager
 
 import pytest
+from pyadb import ADB
+
+from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.MemoryUtils.graphite import Graphite
 
 from conf_bootsequencing import CONFIG
+from stateutils import network_checker, UNKNOWN
+
+
+logger = get_logger(__file__)
 
 
 @pytest.fixture(scope='session')
@@ -46,9 +55,6 @@ def rebooted_device(device_id):
     :param device_id: Command Line Android Device ID
     :return: None
     """
-    import time
-    from pyadb import ADB
-
     adb = ADB('/usr/bin/adb')
     # Version 0.1.1 has a problem with iterating of None list,
     # thus the `get_devices()` first.
@@ -62,11 +68,14 @@ def rebooted_device(device_id):
 
     end_time = time.time()
 
+    duration = end_time - start_time
+    logger.debug("Reboot took %.2f", duration)
+
     yield {'reboot': {'start': start_time, 'end': end_time,
                       'duration': end_time - start_time}}
 
 
-@pytest.mark.usesfixtures('rebooted_device', 'device_id')
+@pytest.mark.usesfixtures('rebooted_device', 'device_id', 'ip_address_wlan')
 @pytest.fixture(scope='function')
 def rebooted_and_networked_device(rebooted_device, device_id, request):
     """
@@ -76,17 +85,14 @@ def rebooted_and_networked_device(rebooted_device, device_id, request):
     :param request: PyTest command line request options
     :return: None
     """
-    from multiprocessing import Process, Manager
-
-    from stateutils import network_checker, UNKNOWN
-
     reboot_information = rebooted_device
 
     manager = Manager()
     collection_dict = manager.dict()
     maximum_time = 30
     network_connection = request.config.getoption("--network-iface") \
-        if request.config.getoption("--network-iface") else 'eth0'
+        if request.config.getoption("--network-iface") else 'wlan0'
+    logger.debug("Looking for IP Address on %s", network_connection)
 
     # Network
     network_process = Process(target=network_checker,

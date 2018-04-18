@@ -29,38 +29,30 @@ from stateutils import state_checker, UNKNOWN
 logger = get_logger(__name__, level=logging.DEBUG)
 
 
-@pytestrail.case('C658166')
-@pytest.mark.usefixtures('rebooted_and_networked_device', 'adb_versions', 'graphite')
-def test_boot_state_time(rebooted_and_networked_device, adb_versions, graphite, delay=0, maximum_time=30):
+@pytestrail.case('C658164')
+@pytest.mark.usefixtures('rebooted_device', 'adb_versions', 'graphite')
+def test_base_reboot_time(rebooted_device, adb_versions, graphite):
     """
-    Acquires the time to get to states through the FrontDoorAPI, then posts them to the
-    Graphite Server.
+    This test will determine the time from issuing a reboot command to when it
+    is ready using the rebooted_device fixture.
 
-    :param rebooted_and_networked_device: Fixture that sets up the ADB device to be rebooted
+    Resulting data will be posted to the Graphite DB based upon the module configuration.
+
+    :param rebooted_device: Fixture that sets up the ADB device to be rebooted
         and networked. Will return the time associated to do these tasks.
     :param adb_versions: Fixture that returns the version information of the device  that is
         used.
-    :param delay: The delay before starting the FrontDoorApi
-    :param maximum_time: The maximum time to collect data.
-
     :return: None
     """
     logger.debug('ADB Device Version Information: %s', adb_versions)
-    data = rebooted_and_networked_device
-    logger.debug('Initial Reboot and Network Information: %s', data)
+    data = rebooted_device
 
-    # Check Reboot information
+    # Check Reboot Time information
     reboot_time = data['reboot']['duration']
     assert reboot_time > 0, \
         'Reboot time is not less than specification. Actual: {0:.2f}s.'.format(reboot_time)
 
-    # Check IP Address information
-    ip_address = rebooted_and_networked_device['ip']['address']
-    assert ip_address != UNKNOWN, 'IP Address never acquired ({}).'.format(ip_address)
-
-    state_data = state_checker(ip_address, maximum_time, dict(), delay)
-
-    rows = generate_time_message(dict(data.items() + state_data.items()), CONFIG['Grafana']['table_name'],
+    rows = generate_time_message(data, CONFIG['Grafana']['table_name'],
                                  CONFIG['Grafana']['sub_table_name'])
 
     logger.debug('Posting the following information: %s', rows)
@@ -104,30 +96,39 @@ def test_network_connection_time(rebooted_and_networked_device, adb_versions, gr
     graphite.send_message('\n'.join(rows) + '\n')
 
 
-@pytestrail.case('C658164')
-@pytest.mark.usefixtures('rebooted_device', 'adb_versions', 'graphite')
-def test_base_reboot_time(rebooted_device, adb_versions, graphite):
+@pytestrail.case('C658166')
+@pytest.mark.usefixtures('rebooted_and_networked_device', 'adb_versions', 'graphite')
+def test_boot_state_time(rebooted_and_networked_device, adb_versions, graphite, delay=0, maximum_time=30):
     """
-    This test will determine the time from issuing a reboot command to when it
-    is ready using the rebooted_device fixture.
+    Acquires the time to get to states through the FrontDoorAPI, then posts them to the
+    Graphite Server.
 
-    Resulting data will be posted to the Graphite DB based upon the module configuration.
-
-    :param rebooted_device: Fixture that sets up the ADB device to be rebooted
+    :param rebooted_and_networked_device: Fixture that sets up the ADB device to be rebooted
         and networked. Will return the time associated to do these tasks.
     :param adb_versions: Fixture that returns the version information of the device  that is
         used.
+    :param delay: The delay before starting the FrontDoorApi
+    :param maximum_time: The maximum time to collect data.
+
     :return: None
     """
     logger.debug('ADB Device Version Information: %s', adb_versions)
-    data = rebooted_device
+    data = rebooted_and_networked_device
+    logger.debug('Initial Reboot and Network Information: %s', data)
 
-    # Check Reboot Time information
+    # Check Reboot information
     reboot_time = data['reboot']['duration']
     assert reboot_time > 0, \
         'Reboot time is not less than specification. Actual: {0:.2f}s.'.format(reboot_time)
 
-    rows = generate_time_message(data, CONFIG['Grafana']['table_name'],
+    # Check IP Address information
+    ip_address = rebooted_and_networked_device['ip']['address']
+    logger.debug("State Checking will be done with IP: %s", ip_address)
+    assert ip_address != UNKNOWN, 'IP Address never acquired ({}).'.format(ip_address)
+
+    state_data = state_checker(ip_address, maximum_time, dict(), delay)
+
+    rows = generate_time_message(dict(data.items() + state_data.items()), CONFIG['Grafana']['table_name'],
                                  CONFIG['Grafana']['sub_table_name'])
 
     logger.debug('Posting the following information: %s', rows)

@@ -13,27 +13,24 @@
 """
 Parent conftest.py for the Eddie repository
 """
-
-import os
-import time
+import datetime
 import glob
 import json
+import os
 import shutil
-import datetime
+import time
 import ConfigParser
 from multiprocessing import process, Manager
 
 import pytest
 from pyadb import ADB
 
-
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.LoggerUtils.logreadLogger import LogreadLogger
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
-from CastleTestUtils.RivieraUtils import adb_utils, rivieraCommunication, rivieraUtils
+from CastleTestUtils.RivieraUtils import rivieraCommunication, rivieraUtils
 from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import flash_device
-
 
 from commonData import keyConfig
 from bootsequencing.stateutils import network_checker, UNKNOWN
