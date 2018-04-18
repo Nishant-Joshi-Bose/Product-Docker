@@ -109,11 +109,11 @@
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/0.3.3-53+83e0de2"
+    "selected_version": "Release/master/0.4.1-63+79b5cd1"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/1.0.0-80+5fa3c29"
+    "selected_version": "Release/master/1.0.1-82+a1eff37"
   },
   {
     "name": "opensource-jsoncpp-native",
