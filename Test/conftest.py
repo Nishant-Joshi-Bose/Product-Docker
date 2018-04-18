@@ -26,6 +26,7 @@ from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 from CastleTestUtils.RivieraUtils import rivieraCommunication, rivieraUtils
+from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
 from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import flash_device
 
 from commonData import keyConfig

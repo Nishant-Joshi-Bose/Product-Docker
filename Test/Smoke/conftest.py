@@ -11,6 +11,7 @@ Common conftest file for Eddie Test
 """
 
 import pytest
+import time
 from CastleTestUtils.CAPSUtils.TransportUtils.commonBehaviorHandler import CommonBehaviorHandler
 from CastleTestUtils.CAPSUtils.TransportUtils.messageCreator import MessageCreator
 from CastleTestUtils.CAPSUtils.TransportUtils.responseHandler import ResponseHandler
@@ -139,7 +140,6 @@ def multiple_music_service_account(request, passport_user, get_config, common_be
             account_id = passport_user.add_service_account(service=source_name, accountID=resource['name'], account_name=resource['provider_account_id'], refresh_token=resource['secret'])
             assert account_id and account_id != "", "Fail to add music service account."
             multiple_account_Id.append(account_id)
-
     common_behavior_handler.performCloudSync()
 
     def multiple_remove_music_service():
@@ -153,17 +153,7 @@ def multiple_music_service_account(request, passport_user, get_config, common_be
 
     request.addfinalizer(multiple_remove_music_service)
 
-@pytest.fixture(scope='class')
-def add_device_to_passport(passport_user, device_guid, device_type, common_behavior_handler):
-    """
-    Add device to passport account
-    :param passport_user: fixture returns reference to current PassportAPIUsers
-    :param device_id: fixture returns device_id
-    :param device_type: fixture returns device_type
-    """
-    logger.info("add_device_to_passport")
-    assert passport_user.add_product(device_guid, device_type), "Failed to add device to passport account."
-    common_behavior_handler.performCloudSync()
+
 
 @pytest.fixture(scope='class')
 def verify_device_source(request, common_behavior_handler):
