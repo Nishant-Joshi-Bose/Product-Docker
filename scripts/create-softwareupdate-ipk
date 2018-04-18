@@ -1,0 +1,135 @@
+#!/bin/bash
+#
+# Create an IPK file for installing Riviera HSP with opkg.
+#
+# To install:
+#   opkg install -d bose softwareupdate.ipk
+#
+# The file /etc/opkg/opkg.conf should contain this line:
+#   dest bose /opt/Bose
+#
+# To uninstall:
+#   opkg remove softwareupdate
+#
+this=${0##*/} # this script's name
+
+cfg=Release
+
+tryhelp () {
+    echo >&2 "Try '$this --help' for more information."
+    exit 1
+}
+opts=$(getopt --name "$this" --shell sh \
+    -o uh \
+    -l "help" \
+    -- "$@") || tryhelp
+eval set -- "$opts"
+while :; do
+    arg="$1"; shift
+    case "$arg" in
+	(--help | -h)
+	    cat <<EOF
+Usage: $this [options]
+
+Create an IPK file for installing Software Update with opkg.
+
+Options:
+EOF
+	    exit 0
+	    ;;
+
+	(--) break ;;
+	(*)  echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
+    esac
+done
+
+if (( $# != 0 )); then
+    echo >&2 "$this: unexpected argument '$1'"
+    tryhelp
+fi
+
+function put_script {
+    local file="$1"; shift
+    cat "$@" >"$file" || exit
+    chmod 755 "$file" || exit
+}
+
+here=$(cd "$(dirname $0)" && echo "$PWD") || exit
+wspace=$(cd "$here/.." && echo "$PWD") || exit
+
+boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
+swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
+swup_ver=$(components get SoftwareUpdate-qc8017_32 selected_version) || exit
+swup_ver=${swup_ver##*/}
+
+stage=$wspace/builds/$cfg/softwareupdate-ipk-stage
+rm -rf "$stage"
+echo "Stage directory $stage"
+
+opt_dir=$stage/Bose
+mkdir -p "$opt_dir/bin" || exit
+mkdir -p "$opt_dir/etc" || exit
+mkdir -p "$opt_dir/.swUpdateCache" || exit
+"$swup_dir/stage" "$opt_dir" || exit
+"$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
+
+echo "$swup_ver" > "$opt_dir"/.swUpdateCache/SOFTWAREUPDATE_VERSION || exit
+echo "Package version \"$swup_ver\""
+PackageName=softwareupdate
+
+cat >"$stage/control" <<EOF || exit
+Package: $PackageName
+Version: $swup_ver
+Description: Sortware Update Package version $swup_ver
+ Riviera Software Update Services
+Section: soundtouch
+Priority: required
+License: Commercial
+Architecture: armv7a-vfp-neon
+OE: soundtouch
+Homepage: http://www.bose.com/
+#Depends: libc6 (>= 2.21)
+Source: None
+EOF
+
+# Installer scripts
+put_script "$stage/postinst" <<EOF
+#!/bin/sh
+echo "softwareupdate postinst"
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 100
+exit 0
+EOF
+
+put_script "$stage/postrm" <<EOF
+#!/bin/sh
+echo "softwareupdate postrm"
+EOF
+
+put_script "$stage/preinst" <<EOF
+#!/bin/sh
+echo "softwareupdate preinst"
+# Set Progress Start
+/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
+exit 0
+
+EOF
+
+put_script "$stage/prerm" <<EOF
+#!/bin/sh
+echo "softwareupdate prerm"
+EOF
+
+# -----------------------------------------------------------------------------
+# Stage area is complete.  Package it into a *.ipk file.
+
+cd "$stage" || exit
+tar --owner=0 --group=0 -czf control.tar.gz control pre* post* || exit
+tar --owner=0 --group=0 -czf data.tar.gz -C "$opt_dir" . || exit
+echo "2.0" > debian-binary || exit
+
+ipk_dir=$wspace/builds/$cfg
+ipk=$ipk_dir/softwareupdate.ipk
+mkdir -p "$ipk_dir" || exit
+rm -f "$ipk"
+ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
+echo "Created $ipk"

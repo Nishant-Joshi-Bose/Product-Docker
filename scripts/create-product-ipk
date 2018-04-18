@@ -65,7 +65,6 @@ shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
 avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
-swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 audiopath_dir=$(components get CastleAudioPath-qc8017_32 installed_location) || exit
 audiopath64_dir=$(components get CastleAudioPath-qc8017_64 installed_location) || exit
 castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
@@ -78,7 +77,6 @@ democontroller_dir=$(components get CastleDemoController-qc8017_32 installed_loc
 webkit_dir=$(components get Webkit installed_location) || exit
 productuiassets_dir=$(components get CastleProductUIAssets installed_location) || exit
 frontdoor_dir=$(components get FrontDoorService-qc8017_32 installed_location) || exit
-boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
 datacollection_dir=$(components get CastleDataCollectionClient-qc8017_32 installed_location) || exit
 datacollectionservice_dir=$(components get CastleDataCollectionService-qc8017_32 installed_location) || exit
 sadi_dir=$(components get SADI-qc8017_32 installed_location) || exit
@@ -159,8 +157,6 @@ find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 # Allow components to add to the staging area.
 
 "$avs_dir/stage" "$opt_dir" || exit
-"$swup_dir/stage" "$opt_dir" || exit
-"$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
 "$audiopath_dir/stage" --product=eddie "$opt_dir" || exit
 "$audiopath64_dir/stage" --product=eddie --only-vfe "$opt_dir" || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
