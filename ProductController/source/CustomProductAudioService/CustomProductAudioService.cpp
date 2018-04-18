@@ -55,8 +55,6 @@ void CustomProductAudioService::RegisterAudioPathEvents()
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Initialize member variables related to AudioPath
     /////////////////////////////////////////////////////////////////////////////////////////////////
-    // Initialize m_InputRoute
-    m_InputRoute = 1 << AUDIO_INPUT_BIT_POSITION_NETWORK;
     // Initialize m_MainStreamAudioSettings with current audio settings value from AudioSettingsManager
     // thermalData will be updated by thermal task periodically in a separate route
     FetchLatestAudioSettings();
@@ -217,7 +215,16 @@ void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCo
     }
 
     streamConfig.mutable_audiosettings()->CopyFrom( audioSettingsProto );
-    streamConfig.set_inputroute( std::stoi( serializedInputRoute ) );
+
+    if( serializedInputRoute.empty() )
+    {
+        streamConfig.set_inputroute( m_InputRoute );
+    }
+    else
+    {
+        streamConfig.set_inputroute( std::stoi( serializedInputRoute ) );
+    }
+
     for( auto& itr : channelParams )
     {
         LpmServiceMessages::ChannelMix_t* channelMix;
