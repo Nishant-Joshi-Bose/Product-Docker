@@ -13,7 +13,7 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@52efd2fe93725445272c1f7a248e36b2b869fbe9"
+    "selected_version": "master@101a3363631f11a246b79858d155a86e35968bb8"
   },
   {
     "name": "AVS-qc8017_32",
@@ -41,19 +41,19 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/0.3.13-194+e96ade8"
+    "selected_version": "Release/master/0.4.0-206+5075413"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.9-20778"
+    "selected_version": "Release/Castle-Fork/0.3.11-20822"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/0.3.9-20778"
+    "selected_version": "Release/Castle-Fork/0.3.11-20822"
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/0.4.1-50+2436aab"
+    "selected_version": "Release/master/1.0.0-53+5fd0921"
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
@@ -89,7 +89,7 @@
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.3.3-227+7d6c2e7"
+    "selected_version": "Release/master/0.4.1-243+f7017dd"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -125,15 +125,15 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/0.3.2-79+a5bbe84"
+    "selected_version": "Release/master/1.0.0-80+5fa3c29"
   },
   {
     "name": "opensource-jsoncpp-native",
-    "selected_version": "Release/bose-master/1.8.3-10-gc417893"
+    "selected_version": "Release/bose-master/1.8.3-11-gb142130"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
-    "selected_version": "Release/bose-master/1.8.3-10-gc417893"
+    "selected_version": "Release/bose-master/1.8.3-11-gb142130"
   },
   {
     "name": "protobuf-native",
@@ -145,11 +145,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/3.3"
+    "selected_version": "Release/master/3.4"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/3.3"
+    "selected_version": "Release/master/3.4"
   },
   {
     "name": "RivieraLPM",
@@ -181,7 +181,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.3.27-484+12a45ce"
+    "selected_version": "Release/master/0.4.0-501+78a5c5c"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -201,6 +201,6 @@
   },
   {
     "name": "WiFi-Setup-Webpage",
-    "selected_version": "master@25f3b4af35031d320b7befd774962fef003ed414"
+    "selected_version": "master@1071af998b4e2e1d4edf6ffbc742cf1641293786"
   }
 ]

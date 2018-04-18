@@ -21,6 +21,8 @@
 #include "ProfessorProductController.h"
 #include "ProductSourceInfo.h"
 #include "CustomProductKeyInputManager.h"
+#include "MonotonicClock.h"
+#include "AutoLpmServiceMessages.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -51,7 +53,9 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( ProfessorProductCont
                               ProductController.GetCommandLineInterface( ),
                               KEY_CONFIGURATION_FILE_NAME ),
 
-      m_ProductController( ProductController )
+      m_ProductController( ProductController ),
+      m_TimeOfChordRelease( 0 ),
+      m_KeyIdOfIncompleteChordRelease( BOSE_INVALID_KEY )
 {
     InitializeQuickSetService( );
 
@@ -114,6 +118,10 @@ void CustomProductKeyInputManager::InitializeQuickSetService( )
 bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessages::IpcKeyInformation_t&
                                                           keyEvent )
 {
+    if( FilterIncompleteChord( keyEvent ) )
+    {
+        return true;
+    }
     ///
     /// Decide if this key should be blasted or sent to the key handler
     ///
@@ -163,6 +171,67 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
     }
 
     return( isBlastedKey );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductKeyInputManager::FilterIncompleteChord
+///
+/// @param  const LpmServiceMessages::IpcKeyInformation_t& keyEvent
+///
+/// @return This method returns a true value if the key is to be ignored because of incomplete
+///         chord processing. That would be when keys A and B are PnH so they produce a special
+///         value S, then A is released while B is still held. In this case, both the press and the
+///         release for B needs to be ignored. This condition is detected by the arrival of
+///         the release for S followed by the press of B within a short amount of time.
+///         otherwise, it returns false to allow further processing.
+///
+///         This is driven by the remote defects described in PGC-1427.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductKeyInputManager::FilterIncompleteChord( const LpmServiceMessages::IpcKeyInformation_t&
+                                                          keyEvent )
+{
+    constexpr int64_t CHORD_RECOVERY_TIME_MS = 20;
+    const int64_t timeNow = MonotonicClock::NowMs( );
+    bool retVal = false;
+
+    if( keyEvent.keystate( ) == KEY_PRESSED )
+    {
+        if( ( timeNow - m_TimeOfChordRelease ) > CHORD_RECOVERY_TIME_MS )
+        {
+            // This key was pressed long enough after the chord key release, so we are out of danger
+            m_KeyIdOfIncompleteChordRelease = BOSE_INVALID_KEY;
+        }
+        else
+        {
+            // This key was pressed within the danger zone, record it so we can wait for its release
+            m_KeyIdOfIncompleteChordRelease = keyEvent.keyid( );
+            retVal = true;
+        }
+    }
+    else
+    {
+        if( keyEvent.keyid( ) >= BOSE_FD && keyEvent.keyid( ) <= BOSE_USB_NET_SVR )
+        {
+            // This is a chord key release event - record the time
+            m_TimeOfChordRelease = timeNow;
+        }
+        else
+        {
+            // This is a release of a non-chord key
+            if( keyEvent.keyid( ) == m_KeyIdOfIncompleteChordRelease )
+            {
+                // This is the key that was pressed within the danger zone
+                m_KeyIdOfIncompleteChordRelease = BOSE_INVALID_KEY;
+                retVal = true;
+            }
+        }
+    }
+
+    BOSE_VERBOSE( s_logger, "%s( %s ) @ %lld returning %s", __func__, keyEvent.ShortDebugString().c_str( ), timeNow, retVal ? "true" : "false" );
+
+    return retVal;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
