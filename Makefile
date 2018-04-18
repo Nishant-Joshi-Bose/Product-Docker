@@ -68,36 +68,32 @@ product-ipk: cmake_build
 privateKeyFilePath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev.p12
 privateKeyPasswordPath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev_p12.pass
 
-IPKS = softwareupdate.ipk monaco.ipk product.ipk lpm_updater.ipk
-PACKAGENAMES = softwareupdate monaco SoundTouch lpm_updater
+IPKS = monaco.ipk product.ipk lpm_updater.ipk
+PACKAGENAMES = monaco SoundTouch lpm_updater
 
 .PHONY: package-no-hsp
 package-no-hsp: packages-gz
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_no_hsp.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
-IPKS_HSP = softwareupdate.ipk hsp.ipk monaco.ipk product.ipk lpm_updater.ipk
-PACKAGENAMES_HSP = softwareupdate hsp monaco SoundTouch lpm_updater
+IPKS_HSP = hsp.ipk monaco.ipk product.ipk lpm_updater.ipk
+PACKAGENAMES_HSP = hsp monaco SoundTouch lpm_updater
 
 .PHONY: package-with-hsp
 package-with-hsp: packages-gz-with-hsp
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 .PHONY: packages-gz
-packages-gz: product-ipk softwareupdate-ipk monaco-ipk hsp-ipk lpmupdater-ipk
+packages-gz: product-ipk monaco-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS)
 
 .PHONY: packages-gz-with-hsp
-packages-gz-with-hsp: product-ipk softwareupdate-ipk monaco-ipk hsp-ipk lpmupdater-ipk
+packages-gz-with-hsp: product-ipk monaco-ipk hsp-ipk lpmupdater-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_HSP)
 
 .PHONY: graph
 graph: product-ipk
 	graph-components --sdk=$(sdk) --exclude='CastleTools|CastleTestUtils' Eddie builds/$(cfg)/product-ipk-stage/component-info.gz >builds/$(cfg)/components.dot
 	dot -Tsvgz builds/$(cfg)/components.dot -o builds/$(cfg)/components.svgz
-
-.PHONY: softwareupdate-ipk
-softwareupdate-ipk:
-	./scripts/create-softwareupdate-ipk
 
 .PHONY: hsp-ipk
 hsp-ipk: cmake_build
