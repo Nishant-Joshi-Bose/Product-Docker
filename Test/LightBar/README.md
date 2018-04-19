@@ -1,19 +1,38 @@
-Install Python modules
-----------------------
+# Eddie LightBar Tests
 
-virtualenv -p /usr/bin/python <virtual dir>
+## Setting Up Test Environment
 
-<virtual dir>/bin/activate
+Clone the Eddie Repository:
+```bash
+# Clone the respository
+git clone git@github.com:BoseCorp/Eddie.git
+cd Eddie
+```
+All steps assume your are in the directory of your Eddie repository (`$EDDIE_DIR`).
 
-pip install -r requirements.txt
+Generate a Virtual Environment and install used packages.
+```bash
+cd $EDDIE_DIR/Test
 
-### Commands to perform the lightbar animation
+# Setup your virtual environment
+virutalenv -p /usr/bin/python2.7 .venv
+source $EDDIE_DIR/Test/.venv/bin/activate
 
-```shell session
-$ pytest -vs test_lightbar_scenario.py --target=device --network-iface eth0 --lpm-port <lpm port of device>
+# Install current Python requirements
+pip install --requirement requirements.txt
 ```
 
-#### Input information of Lightbar Animation
+# Running Tests
+## Commands to perform the lightbar animation
+
+```shell session
+$ pytest -vs test_lightbar_scenario.py \
+             --target=device \
+             --network-iface eth0 \
+             --lpm-port <lpm port of device>
+```
+
+## Input information of Lightbar Animation
 ```shell session
 nextValue: Animation pattern names
 transition: transition value of animation pattern
