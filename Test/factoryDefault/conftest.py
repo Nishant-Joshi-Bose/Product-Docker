@@ -77,21 +77,12 @@ def device_playing_from_amazon(request, frontdoor_wlan):
     """
     This fixture will send playback request to device and verifies the right station or track is playing.
     Steps:
-    1. Get device_guid and device_type.
-    2. Get Passport account config from CastleTestUtils.scripts.config_madrid.RESOURCES.
-    3. Create objects of MessageCreator, ResponseHandler, CommonBehaviorHandler.
-    4. Create passport account.
-    5. Add music service account
-    6. Register device to passport and verify device source
-    7. Send playback request to device Verify the right station or track is playing by verifying 'nowPlaying' response
+    1. Get Passport account config from CastleTestUtils.scripts.config_madrid.RESOURCES.
+    2. Create objects of MessageCreator, ResponseHandler, CommonBehaviorHandler.
+    3. Add music service account
+    4. Register device to passport and verify device source
+    5. Send playback request to device Verify the right station or track is playing by verifying 'nowPlaying' response
     """
-    sys_info = frontdoor_wlan.getInfo()["body"]
-    device_guid = sys_info["guid"]
-    assert device_guid is not None
-    LOGGER.debug("GUID is: %s", device_guid)
-
-    device_type = sys_info["productType"]
-    LOGGER.debug("Device type: %s", device_type)
     service_name = 'AMAZON'
     current_resource = 'STS_AMAZON_ACCOUNT'
     location = '/v1/playback/type/playable/url/cHJpbWUvc3RhdGlvbnMvQTEwMlVLQzcxSTVEVTgvI3BsYXlhYmxl/trackIndex/0'

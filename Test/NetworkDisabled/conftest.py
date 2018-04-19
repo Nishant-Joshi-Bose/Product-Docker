@@ -69,14 +69,6 @@ def device_playing_from_amazon(request, frontdoor_wlan):
     1. Play a station or a track by sending playback request to the device
     2. Verify the right station or track is playing by verifying 'nowPlaying' response
     """
-    sys_info = frontdoor_wlan.getInfo()["body"]
-    device_guid = sys_info["guid"]
-    assert device_guid is not None
-    LOGGER.debug("GUID is: %s", device_guid)
-
-    device_type = sys_info["productType"]
-    LOGGER.debug("Device type: %s", device_type)
-
     service_name = 'AMAZON'
     current_resource = 'STS_AMAZON_ACCOUNT'
     location = '/v1/playback/type/playable/url/cHJpbWUvc3RhdGlvbnMvQTEwMlVLQzcxSTVEVTgvI3BsYXlhYmxl/trackIndex/0'
