@@ -90,6 +90,7 @@ public:
     bool SendAdaptIQControl( ProductAdaptIQControl::AdaptIQAction action );
     bool BootDSPImage( LpmServiceMessages::IpcImage_t image );
     bool SetCecMode( const uint8_t mode );
+    bool SendAutowakeStatus( bool enabled );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

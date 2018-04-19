@@ -584,6 +584,35 @@ bool CustomProductLpmHardwareInterface::BootDSPImage( LpmServiceMessages::IpcIma
     return true;
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name CustomProductHanrdwareLpmInterface:SendAutowakeStatus
+///
+/// @brief This method send autowake status
+///
+/// @param bool enabled This argument indicates whether autowake is enabled
+///
+/// @return bool This method returns false Boolean value if LPM is not connected. Otherwise, it
+///              attepmts to send the status and returns true
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductLpmHardwareInterface::SendAutowakeStatus( bool enabled )
+{
+    if( isConnected( ) == false || GetLpmClient( ) == nullptr )
+    {
+        BOSE_ERROR( s_logger, "LPM not connected, cannot send autowake status" );
+        return false;
+    }
+
+    BOSE_DEBUG( s_logger, "Attemp to send autowake status" );
+
+    IpcAutowakeStatus_t autowakeStatus;
+    autowakeStatus.set_status( enabled );
+    GetLpmClient()->SendAutowakeStatus( autowakeStatus );
+
+    return true;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
