@@ -105,9 +105,15 @@ class TestEddieSmoke:
                 if '0444' not in result.group(1):
                     assert False, "Eddie server.crt file don't have read access"
                 break
+        product_status = adb.executeCommand('echo getproductstate | nc 0 17000')
+        logger.debug("Eddie Product Status : %s ", product_status)
+        if 'SetupOther' in product_status:
+            oob_status = adb.executeCommand('echo setoobsetupcompleted | nc 0 17000')
+            if 'SetOOBSetupCompleted is set' not in oob_status:
+                assert False, "OOB status - Error in exit OOB"
 
-    @pytest.mark.usefixtures("multiple_music_service_account", "music_sources", "adb", "frontDoor")
-    def test_play_music(self, multiple_music_service_account, music_sources, adb, frontDoor):
+    @pytest.mark.usefixtures("multiple_music_service_account", "verify_device_source", "music_sources", "adb", "frontDoor")
+    def test_play_music(self, multiple_music_service_account, verify_device_source, music_sources, adb, frontDoor):
         """
         :param adb: Fixture to return ADBCommunication object
 
@@ -325,7 +331,6 @@ def validate_sources(source, adb, timeout=120):
     start_time = time.time()
 
     while time.time() < timeout + start_time:
-        time.sleep(5)
         sources_xml = adb.executeCommand('cat /mnt/nv/product-persistence/Sources.xml')
         if "No such file or directory" in sources_xml:
             logger.debug("Sources.xml file is not available... Verifying again...")
