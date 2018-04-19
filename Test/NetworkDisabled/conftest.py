@@ -124,8 +124,6 @@ def device_playing_from_amazon(request, frontdoor_wlan):
             "Fail to remove music account from passport account."
     request.addfinalizer(remove_music_service)
 
-    LOGGER.info("add_device_to_passport")
-    assert passport_user.add_product(device_guid, device_type), "Failed to add device to passport account."
     common_behavior_handler.performCloudSync()
 
     LOGGER.info("verify_device_source")
