@@ -202,7 +202,7 @@ Callback < ProductMessage > EddieProductController::GetMessageHandler( )
 std::string EddieProductController::GetDefaultProductName() const
 {
     std::string productName;
-    if ( !IsDevelopmentMode() )
+    if( !IsDevelopmentMode() )
     {
         productName = "Bose Home Speaker 500";
     }
@@ -591,7 +591,7 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
     BOSE_INFO( s_logger, "%s", __func__ );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// LPM status messages has both Common handling and Professor-specific handling
+    /// LPM status messages has both common handling and custom specific handling
     ///////////////////////////////////////////////////////////////////////////////////////////////
     if( productMessage.has_lpmstatus( ) )
     {
@@ -604,37 +604,6 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
         {
             BOSE_DEBUG( s_logger, "%s-The LPM system state was set to %s", __func__,
                         IpcLpmSystemState_t_Name( productMessage.lpmstatus( ).systemstate( ) ).c_str( ) );
-
-            switch( productMessage.lpmstatus( ).systemstate( ) )
-            {
-            case SYSTEM_STATE_ON:
-                m_ProductAudioService->SetThermalMonitorEnabled( true );
-                break;
-            case SYSTEM_STATE_OFF:
-                m_ProductAudioService->SetThermalMonitorEnabled( false );
-                break;
-            case SYSTEM_STATE_BOOTING:
-                break;
-            case SYSTEM_STATE_STANDBY:
-                m_ProductAudioService->SetThermalMonitorEnabled( false );
-                break;
-            case SYSTEM_STATE_RECOVERY:
-                break;
-            case SYSTEM_STATE_LOW_POWER:
-                break;
-            case SYSTEM_STATE_UPDATE:
-                break;
-            case SYSTEM_STATE_SHUTDOWN:
-                break;
-            case SYSTEM_STATE_FACTORY_DEFAULT:
-                break;
-            case SYSTEM_STATE_IDLE:
-                break;
-            case SYSTEM_STATE_NUM_OF:
-                break;
-            case SYSTEM_STATE_ERROR:
-                break;
-            }
         }
 
         // Then (after registering for events above) do the common stuff
