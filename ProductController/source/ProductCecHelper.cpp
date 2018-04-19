@@ -33,6 +33,7 @@
 #include "PGCErrorCodes.h"
 #include "DataCollectionClientFactory.h"
 #include "HdmiEdid.pb.h"
+#include "ProductDataCollectionDefines.h"
 
 using namespace ProductPb;
 
@@ -410,7 +411,7 @@ void ProductCecHelper::HandleRawEDIDResponse( const A4VVideoManagerServiceMessag
 
     edidData->set_eedid( rawEdid.edid().c_str() );
 
-    m_DataCollectionClient->SendData( edidData, "eedid-changed" );
+    m_DataCollectionClient->SendData( edidData, DATA_COLLECTION_EEDID );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -4,7 +4,7 @@
         "minor": 2
 	},
     "supportedAudioSettings": {
-        "contentItemSensitive": ["audioBassLevel", "audioTrebleLevel", "audioCenterLevel", "audioSurroundLevel", "audioSurroundDelay", "audioGainOffset", "audioAvSync", "audioMode", "audioContentType"],
+        "contentItemSensitive": ["audioBassLevel", "audioTrebleLevel", "audioCenterLevel", "audioSurroundLevel", "audioSurroundDelay", "audioGainOffset", "audioAvSync", "audioSubwooferGain" "audioMode", "audioContentType"],
         "contentItemNonSensitive": ["dualMonoSelect", "audioEqSelect", "audioSubwooferPolarity"]
     },
 	"configurations": {
