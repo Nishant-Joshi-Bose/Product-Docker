@@ -97,6 +97,18 @@ bool CustomProductControllerStatePlaying::HandleIntentMuteControl( KeyHandlerUti
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief  CustomProductControllerStatePlaying::HandleIntentVolumeControl
+/// @param  KeyHandlerUtil::ActionType_t intent
+/// @return This method returns true, indicating that it has handled the event.
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStatePlaying::HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )
+{
+    BOSE_INFO( s_logger, "The %s state in %s is handling the intent %u.", GetName( ).c_str( ), __func__, intent );
+    GetProductController( ).GetIntentHandler( ).Handle( intent );
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name  CustomProductControllerStatePlaying::HandleStateExit
 ///
