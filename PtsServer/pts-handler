@@ -6,6 +6,7 @@
 #
 import os
 import sys
+import subprocess
 
 debug = False
 
@@ -45,6 +46,18 @@ while True:
     if debug:
         log("header '{}'".format(line))
 
+def only_for_usb():
+    iface = os.environ.get("IFACE", "")
+    if iface.startswith("usb") or iface.startswith("rndis"):
+        return
+    log("Attempt to access {} via interface {}".format(path, iface))
+    print """\
+HTTP/1.1 404 Not Found\r
+Content-Type: text/plain\r
+\r
+404 Not Found\r"""
+    sys.exit()
+
 if method == "GET":
 
 # ----------------------------------------------------------------------------
@@ -60,6 +73,8 @@ Moved Permanently\r
         sys.exit()
 
     if path.startswith("/diag/"):
+        only_for_usb()
+
         path = path[len("/diag/"):]
         if path == "":
             path = "main"
@@ -77,6 +92,8 @@ Moved Permanently\r
 # ----------------------------------------------------------------------------
 
     if path == "/logread.txt":
+        only_for_usb()
+
         print """\
 HTTP/1.1 200 OK\r
 Content-Type: text/plain\r
@@ -86,6 +103,8 @@ Cache-Control: no-cache\r
         os.execl("/sbin/logread", "logread")
 
     if path == "/logread.txt.gz":
+        only_for_usb()
+
         print """\
 HTTP/1.1 200 OK\r
 Content-Type: application/x-gzip\r
@@ -95,7 +114,7 @@ Cache-Control: no-cache\r
         os.execl("/bin/sh", "sh", "-c", "logread | gzip")
 
     if path == "/pts.txt":
-        import subprocess
+        only_for_usb()
 
         def call(*args):
             print ">", " ".join(args)
