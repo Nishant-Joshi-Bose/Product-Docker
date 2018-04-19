@@ -11,7 +11,6 @@ Common conftest file for Eddie Test
 """
 
 import pytest
-import time
 from CastleTestUtils.CAPSUtils.TransportUtils.commonBehaviorHandler import CommonBehaviorHandler
 from CastleTestUtils.CAPSUtils.TransportUtils.messageCreator import MessageCreator
 from CastleTestUtils.CAPSUtils.TransportUtils.responseHandler import ResponseHandler

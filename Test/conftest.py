@@ -18,10 +18,7 @@ import datetime
 import os
 import time
 import ConfigParser
-
 import pytest
-
-
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
