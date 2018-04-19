@@ -22,80 +22,47 @@ function stop_udhcpd_usb {
     killbyarg udhcpd "$CONF_FILE"
 }
 
-function wait_for_rndis0 {
-    # wait for composition script to execute
-    local try=10
-    while :; do
-        sleep 0.5
-        if [ -d "/sys/class/net/rndis0" ]; then
-            break
-        fi
-        if (( (try -= 1) == 0 )); then
-            log error "usb composition failed, giving up"
-            break
-        fi
-        log warning "usb composition failed, will retry ($try)"
-    done
+function device_toggle {
+    ip link set $1 down
+    ip link set $1 name $2
+    ip link set $2 up
 }
 
 function do_p2p {
     log info "Switching to USB p2p mode"
 
+    device_toggle rndis0 usb2
+    ip addr add 203.0.113.1/30 dev usb2
 
-    # switching to usb composition 'RNDIS : ECM' to enable networking over usb
-    /sbin/usb/compositions/9057
-    wait_for_rndis0
-
-    ip link set rndis0 down
-    ip link set rndis0 name usb2
-    ip link set usb2 up
-    ip addr add 203.0.113.1/24 dev usb2
-
-    cat > "$CONF_FILE" <<-"    EOF"
-    start 203.0.113.2
-    end   203.0.113.5
-    interface usb2
-    lease_file /dev/null
-    pidfile /var/run/udhcpd.usb2.pid
-    option subnet 255.255.255.0
-    option router 203.0.113.1
-    option dns 203.0.113.1
-    option lease 600
-    EOF
+    cat > "$CONF_FILE" <<-EOF
+	start 203.0.113.2
+	end   203.0.113.2
+	interface usb2
+	lease_file /dev/null
+	pidfile /var/run/udhcpd.usb2.pid
+	option subnet 255.255.255.0
+	option router 203.0.113.1
+	option dns 203.0.113.1
+	option lease 600
+	EOF
 
     log info "Starting dhcpd for usbnet"
     udhcpd  -S "$CONF_FILE"
-
-
 }
 
 function do_client {
     log info "Switching to USB client mode"
     killwait dnsmasq 2> /dev/null
-    # switching to usb composition 'RNDIS : ECM' to enable networking over usb
-    /sbin/usb/compositions/9057
-    wait_for_rndis0
-}
 
-function do_adb {
-    log info "Switching to adb mode"
-    killwait dnsmasq 2> /dev/null
-    # switching to usb composition 'DIAG + ADB' to enable adb over usb
-    /sbin/usb/compositions/901D
+    device_toggle usb2 rndis0
 }
 
 stop_udhcpd_usb
 
 if (( $# == 1 )) && [ "$1" = p2p ]; then
     do_p2p
-elif (( $# == 1 )) && [ "$1" = client ]; then
+elif (($# == 0)) || ( (( $# == 1 )) && [ "$1" = client ] ); then
     do_client
-elif (( $# == 0 )); then
-    if is-development; then
-        do_adb
-    else
-        do_client
-    fi
 else
     echo >&2 "usage: ${0##*/} [p2p|client]"
     exit 1

@@ -96,7 +96,7 @@ echo "Stage directory $stage"
 
 output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
-mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" || exit
+mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/etc/chimes/professor" "$opt_dir/etc/chimes/ginger-cheevers" || exit
 
 rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 rsync -a --exclude='*~' --exclude='*-README.txt' "$qss_dir/opt-bose-fs/." "$opt_dir/." || exit
@@ -171,7 +171,7 @@ find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 "$swup_dir/stage" "$opt_dir" || exit
 "$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
 "$audiopath_dir/stage" --product=professor "$opt_dir" || exit
-"$audiopath64_dir/stage" "$opt_dir" --only-vfe --product=professor || exit
+"$audiopath64_dir/stage" --product=professor  --only-vfe "$opt_dir" || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlesass_dir/stage" "$opt_dir" || exit
 "$castlepassport_dir/stage" "$opt_dir" || exit

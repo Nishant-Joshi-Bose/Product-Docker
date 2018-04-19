@@ -10,7 +10,7 @@
 
   <daemon name="A4VQuickSetService"/>
 
-  <daemon name="IoT"/>
+  <!--<daemon name="IoT"/>-->
 
   <daemon name="UpnpSource">
     <arg>-c/opt/Bose/etc/UpnpSource.xml</arg>

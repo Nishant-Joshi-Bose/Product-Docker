@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork-2018-SOP/0.4.2.41836.2774409"
+    "selected_version": "Release/Castle-Fork-2018-SOP/0.4.4.41937.2785485"
   },
   {
     "name": "bose-opkg-utils",
@@ -25,7 +25,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.5.1-364+4d0114e"
+    "selected_version": "Release/master/0.5.2-371+871a65b"
   },
   {
     "name": "BoseOPKG-native",
@@ -41,19 +41,19 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/0.4.0-206+5075413"
+    "selected_version": "Release/master/0.4.1-213+e9e36aa"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.3.11-20822"
+    "selected_version": "Release/Castle-Fork/0.4.1-20850"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/0.3.11-20822"
+    "selected_version": "Release/Castle-Fork/0.4.1-20850"
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/1.0.0-53+5fd0921"
+    "selected_version": "Release/master/1.0.1-55+0c7cd73"
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
@@ -116,6 +116,10 @@
     "selected_version": "Release/master/0.4.4-235+e949fec"
   },
   {
+    "name": "FrontDoorService-qc8017_32",
+    "selected_version": "Release/master/0.4.5-255+b400f78"
+  },
+  {
     "name": "GalapagosClient-qc8017_32",
     "selected_version": "Release/master/0.2.4-141+047d6e0"
   },
@@ -165,7 +169,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/master/0.4.0-52+45cf1b2"
+    "selected_version": "Release/master/0.4.1-55+6e2ecfe"
   },
   {
     "name": "SADI-qc8017_32",
@@ -185,7 +189,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-2018-SOP/0.4.2.41836.2774409"
+    "selected_version": "Release/Castle-Fork-2018-SOP/0.4.4.41937.2785485"
   },
   {
     "name": "SystemEventService-qc8017_32",
@@ -201,6 +205,6 @@
   },
   {
     "name": "WiFi-Setup-Webpage",
-    "selected_version": "master@1071af998b4e2e1d4edf6ffbc742cf1641293786"
+    "selected_version": "master@e9ce352ab8459c79d3ee5cb3e4ca70c47d57b59b"
   }
 ]
