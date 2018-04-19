@@ -410,9 +410,11 @@ def create_bose_persist_partition(is_without_lpm, development):
         extract_dir = os.path.join(stage_package_dir, "bose-persist")
         if not is_without_lpm:
             ''' lpm needs to be installed - create updateSwUpComponentStatus.dat '''
-            jsonStr = ' {"SwUpComponents":{"elements":[{"name":"lpm_updater","fileName":"lpm_updater.ipk","filePath":"/opt/Bose","status":"STATUS_START","retryCount":3,"backupIpkPath":"","isLocalUpdate":true}]}} '
+            jsonStr = ' {"SwUpComponents":{"elements":[{"name":"lpm_updater","fileName":"lpm_updater.ipk","filePath":"/opt/Bose","status":"STATUS_INPROGRESS","retryCount":3,"backupIpkPath":"","isLocalUpdate":true}]}} '
             with open(os.path.join(extract_dir, 'updateSwUpComponentStatus.dat'), 'w') as outfile:  
-                outfile.write(jsonStr)
+                outfile.write(jsonStr)       
+            with open(os.path.join(extract_dir, "local_force_update"), 'w') as outfile:
+                outfile.write("yes")
         
         logging.info("\tRecreate")
         retVal, retStr = create_ext4_partition("bose-persist.ext4", "bose-persist", partition_size)
@@ -516,27 +518,28 @@ def create_output(is_without_lpm, development):
         logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
         return -33, "Cannot add product_flash tools to output"
 
-    ''' create bose partition
-    '''
-    retVal, retStr = create_bose_partition(is_without_lpm, development, 
-                    ['product.ipk', 'wpe.ipk', 'monaco.ipk', 'lpm_updater.ipk', 'hsp.ipk'])
-    if retVal != 0:
-        return retVal, retStr
-
-    ''' create bose-persist partition
-    '''
-    retVal, retStr = create_bose_persist_partition(is_without_lpm, development)
-    if retVal != 0:
-        return retVal, retStr
-    
-    if os.environ.get("GENERATE_HSP_SIGNATURES") == "1":
-        ''' Sign the image files 
+    if os_arch() == '64': 
+        ''' create bose partition
         '''
-        retVal, retStr = sign_images()
+        retVal, retStr = create_bose_partition(is_without_lpm, development, 
+                        ['product.ipk', 'wpe.ipk', 'monaco.ipk', 'lpm_updater.ipk', 'hsp.ipk'])
         if retVal != 0:
             return retVal, retStr
-    else:
-        logging.info("Not generating signatures in non-EC environment")
+
+        ''' create bose-persist partition
+        '''
+        retVal, retStr = create_bose_persist_partition(is_without_lpm, development)
+        if retVal != 0:
+            return retVal, retStr
+    
+        if os.environ.get("GENERATE_HSP_SIGNATURES") == "1":
+            ''' Sign the image files 
+            '''
+            retVal, retStr = sign_images()
+            if retVal != 0:
+                return retVal, retStr
+        else:
+            logging.info("Not generating signatures in non-EC environment")
 
     ''' Create Package Tar ball and copy to output
     cd "$stage" || error_exit " cd $stage "
