@@ -85,7 +85,7 @@ print "</div>"
 
 print "<hr>"
 
-print "Remote:", os.environ.get("REMOTE_ADDRESS", "(oops)")
+print "Remote:", os.environ.get("REMOTE_ADDRESS", "(oops)"), "via", os.environ.get("IFACE", "(oops)")
 
 print """
 </body>
