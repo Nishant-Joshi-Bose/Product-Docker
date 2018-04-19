@@ -39,9 +39,8 @@
 #include "ProductSourceInfo.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
-#include "ProductSTSStateFactory.h"
-#include "ProductSTSStateTop.h"
-#include "ProductSTSStateTopSilent.h"
+#include "ProductSTSCommonStateFactory.h"
+#include "ProductSTSSilentStateFactory.h"
 #include "SystemSourcesProperties.pb.h"
 #include "ProductControllerHsm.h"
 #include "CustomProductControllerStates.h"
@@ -876,8 +875,8 @@ void ProfessorProductController::SetupProductSTSConntroller( )
 {
     std::vector< ProductSTSController::SourceDescriptor > sources;
 
-    ProductSTSStateFactory<ProductSTSStateTop>          commonStateFactory;
-    ProductSTSStateFactory<ProductSTSStateTopSilent>    silentStateFactory;
+    ProductSTSCommonStateFactory commonStateFactory;
+    ProductSTSSilentStateFactory silentStateFactory;
 
     ///
     /// Adapt IQ and SETUP are never available as a normal source, whereas the TV source will always
