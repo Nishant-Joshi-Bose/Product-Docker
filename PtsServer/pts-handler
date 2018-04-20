@@ -51,8 +51,6 @@ def only_for_usb():
     if iface.startswith("usb") or iface.startswith("rndis"):
         return
     log("Attempt to access {} via interface {}".format(path, iface))
-    if os.path.exists("/mnt/nv/product-persistence/anyiface"):
-        return
     print """\
 HTTP/1.1 404 Not Found\r
 Content-Type: text/plain\r
@@ -104,6 +102,8 @@ Cache-Control: no-cache\r
         sys.stdout.flush()
         os.execl("/sbin/logread", "logread")
 
+# ----------------------------------------------------------------------------
+
     if path == "/logread.txt.gz":
         only_for_usb()
 
@@ -114,6 +114,8 @@ Cache-Control: no-cache\r
 \r"""
         sys.stdout.flush()
         os.execl("/bin/sh", "sh", "-c", "logread | gzip")
+
+# ----------------------------------------------------------------------------
 
     if path == "/pts.txt":
         only_for_usb()
@@ -140,6 +142,8 @@ Cache-Control: no-cache\r
         call("ls", "-lHt", "/mnt/nv/BoseLog")
         call("ps")
         sys.exit()
+
+# ----------------------------------------------------------------------------
 
     if path == "/reflash":
         only_for_usb()
@@ -173,6 +177,55 @@ Cache-Control: no-cache\r
   PlatformResetIntoQfil
 ) &""", shell=True)
         sys.exit()
+
+# ----------------------------------------------------------------------------
+    # For manufacturing: Get Bose version
+    if path == "/bose-version":
+        only_for_usb()
+
+        print """\
+HTTP/1.1 200 OK\r
+Content-Type: text/plain\r
+Cache-Control: no-cache\r
+\r"""
+        sys.stdout.write(open("/opt/Bose/etc/BoseVersion.json").read())
+        sys.exit()
+
+# ----------------------------------------------------------------------------
+    # For manufacturing: Get Riviera version
+    if path == "/kernel-version":
+        only_for_usb()
+
+        print """\
+HTTP/1.1 200 OK\r
+Content-Type: text/plain\r
+Cache-Control: no-cache\r
+\r"""        
+        sys.stdout.write(open("/etc/riviera-version").read())
+        sys.exit()
+
+    # For manufacturing: validate manufacturing data
+    if path == "/validate-mfgdata":
+        only_for_usb()
+
+        print """\
+HTTP/1.1 200 OK\r
+Content-Type: text/plain\r
+Cache-Control: no-cache\r
+\r"""
+        os.dup2(sys.stdout.fileno(), sys.stderr.fileno()) # redirect stderr to stdout
+        sys.stdout.flush()
+        # Note: Not sure if we want to show output of validate-mfgdata. 
+        # It is up to manufacturing, but for now, showing output.
+        retVal = subprocess.call("/opt/Bose/bin/validate-mfgdata", 
+                                shell=True)
+        if retVal == 0:
+            print "Valid Manufacturing Data."
+        else:
+            print "Invalid Manufacturing Data."
+        sys.exit()
+
+# ----------------------------------------------------------------------------
 
     # Discard any query parameters from paths like
     # "/index.html?deeplink=com.bose.myApp&ssid=myNetwork&context=ApSetup".

@@ -200,11 +200,16 @@ def copy_files_to_stage():
         logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
         return -23, "Cannot add version file to stage"
     
-    logging.info("Adding version to stage")
+    logging.info("Adding versions to stage")
     try:        
         version_json = os.path.join(workspace, 'builds/Release/qc8017_32/BoseVersion.json')
         dest = os.path.join(stage_package_dir, "")
         shutil.copy2(version_json, dest)
+        
+        lpm_version = os.path.join(workspace, 'builds/Release/lpm_blob_configuration.xml')
+        shutil.copy2(lpm_version, dest)
+        lpm_version = os.path.join(workspace, 'builds/Release/lpm_package.xml')
+        shutil.copy2(lpm_version, dest)
     except:
         logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
         return -24, "Cannot add version file to stage"
