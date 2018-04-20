@@ -4,11 +4,11 @@
 #
 # For example, for the URL
 #
-#   http://203.0.113.1/diag/display/colorbars-top.png?show
+#   http://203.0.113.1/diag/display/black.png?show
 #
 # this script invokes as
 #
-#   display colorbars-top.png?show
+#   display black.png?show
 #
 # This shows the specified image on the display and outputs a simple HTTP
 # response, "OK".

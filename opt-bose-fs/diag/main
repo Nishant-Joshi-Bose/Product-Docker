@@ -83,11 +83,11 @@ print "<li>Display Tests"
 print """<div class="box">"""
 print "<table>"
 print "<tr>"
-for img in """left top bottom right""".split():
+for img in "red green blue black white horizontal vertical".split():
     print """<td class='showimg'>\
 <img width='80' height='80' \
-onclick='fetch("/diag/display/colorbars-{img}.png?show")' \
-src='/diag/display/colorbars-{img}.png'>\
+onclick='fetch("/diag/display/{img}.png?show")' \
+src='/diag/display/{img}.png'>\
 </td>""".format(img=img)
 print "</tr>"
 print "</table>"
