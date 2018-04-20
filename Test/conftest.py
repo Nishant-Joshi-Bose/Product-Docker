@@ -392,6 +392,6 @@ def ip_address_wlan(request, deviceid, wifi_config):
 
     device_ip_address = network_base.check_inf_presence(interface, timeout=20)
     if not device_ip_address:
-        raise SystemError("Failed to acquire network connection through {}: {}".format(interface, device_ip))
+        raise SystemError("Failed to acquire network connection through: {}".format(interface))
 
     return device_ip_address
