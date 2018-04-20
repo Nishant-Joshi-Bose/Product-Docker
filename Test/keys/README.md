@@ -1,17 +1,37 @@
-Install Python modules
-----------------------
+# Eddie Key Event Tests
 
+## Setting Up Test Environment
+
+Clone the Eddie Repository:
+```bash
+# Clone the respository
+git clone git@github.com:BoseCorp/Eddie.git
+cd Eddie
 ```
-$ sudo pip install -r requirements.txt
+All steps assume your are in the directory of your Eddie repository (`$EDDIE_DIR`).
+
+Generate a Virtual Environment and install used packages.
+```bash
+cd $EDDIE_DIR/Test
+
+# Setup your virtual environment
+virutalenv -p /usr/bin/python2.7 .venv
+source $EDDIE_DIR/Test/.venv/bin/activate
+
+# Install current Python requirements
+pip install --requirement requirements.txt
 ```
 
-### Commands to perform the execution for CLI key events
+## Execution of Key Event Tests
 
-```shell session
-$ pytest -vs test_clikey.py  --apq-port <apq_port of target device> --junitxml=output.xml
+```bash
+pytest -vs \
+       --apq-port <apq_port of target device> \
+       --junitxml=output.xml \
+       test_clikey.py
 ```
 
-### List of Files under Test/utils :
+## List of Files under Test/utils :
 
 
 configure.py       = Configurable parameters used in CLI test scripts (test_clikey.py,keyEvent.py)
@@ -26,7 +46,7 @@ requirements.txt   = List of required python modules
 
 
 
-### Details of various KeyEvent value used in  Test/utils/KeyEvent.py :
+## Details of various KeyEvent value used in `Test/utils/KeyEvent.py`:
 
 KEY_PRESS = 0: Actions for immediate key presses.
 
