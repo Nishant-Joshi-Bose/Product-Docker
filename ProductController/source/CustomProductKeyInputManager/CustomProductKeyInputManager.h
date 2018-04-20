@@ -76,7 +76,14 @@ private:
     ///
     A4VQuickSetService::A4VQuickSetServiceClientIF::A4VQuickSetServiceClientPtr m_QSSClient;
 
+    ///
+    /// Data used by FilterIncompleteChord() to track history
+    ///
+    int64_t m_TimeOfChordRelease;
+    ::google::protobuf::uint32 m_KeyIdOfIncompleteChordRelease;
+
     void InitializeQuickSetService( );
+    bool FilterIncompleteChord( const LpmServiceMessages::IpcKeyInformation_t& keyEvent );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

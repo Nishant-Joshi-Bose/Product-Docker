@@ -171,7 +171,7 @@ find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 "$swup_dir/stage" "$opt_dir" || exit
 "$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
 "$audiopath_dir/stage" --product=professor "$opt_dir" || exit
-"$audiopath64_dir/stage" "$opt_dir" --only-vfe --product=professor || exit
+"$audiopath64_dir/stage" --product=professor  --only-vfe "$opt_dir" || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlesass_dir/stage" "$opt_dir" || exit
 "$castlepassport_dir/stage" "$opt_dir" || exit

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateLowPowerStandby.h
+/// @file      CustomProductControllerStateLowPowerResume.h
 ///
 /// @brief     This source code file contains functionality to process events that occur during the
 ///            product low power state. In addition it has a queue of depth 1 to store the users
@@ -32,7 +32,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <string>
-#include "ProductControllerStateLowPowerStandby.h"
+#include "ProductControllerStateLowPowerResume.h"
 #include "HsmState.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,16 +55,16 @@ class ProductControllerHsm;
 /// @brief This class is used for executing produce specific actions when in an on state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateLowPowerStandby : public ProductControllerStateLowPowerStandby
+class CustomProductControllerStateLowPowerResume : public ProductControllerStateLowPowerResume
 {
 public:
 
-    CustomProductControllerStateLowPowerStandby( ProductControllerHsm& hsm,
+    CustomProductControllerStateLowPowerResume( ProductControllerHsm& hsm,
                                                  CHsmState*            pSuperState,
                                                  Hsm::STATE            stateId,
-                                                 const std::string&    name    = "CustomProductControllerStateLowPowerStandby" );
+                                                 const std::string&    name    = "CustomProductControllerStateLowPowerResume" );
 
-    ~CustomProductControllerStateLowPowerStandby( ) override
+    ~CustomProductControllerStateLowPowerResume( ) override
     {
 
     }
