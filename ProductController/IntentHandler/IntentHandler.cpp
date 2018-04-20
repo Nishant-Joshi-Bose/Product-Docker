@@ -98,6 +98,10 @@ void IntentHandler::Initialize()
     m_IntentManagerMap[( uint16_t )Action::SYSTEM_INFO_COUNTDOWN] = countDownManager;
     m_IntentManagerMap[( uint16_t )Action::SYSTEM_INFO_CANCEL] = countDownManager;
     //- (PTS Update countdown and cancel)
+    //+ (BT clear pairing countdown and cancel)
+    m_IntentManagerMap[( uint16_t )Action::BLUETOOTH_CLEAR_PAIRING_COUNTDOWN] = countDownManager;
+    m_IntentManagerMap[( uint16_t )Action::BLUETOOTH_CLEAR_PAIRING_CANCEL] = countDownManager;
+    //- (PTS Update countdown and cancel)
     //- (Common Countdown manager for key combination)
 }
 

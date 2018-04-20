@@ -1,3 +1,14 @@
+# test_lowpower_lpm_unit.py
+#
+# :Organization:  BOSE CORPORATION
+#
+# :Copyright:  COPYRIGHT 2018 BOSE CORPORATION ALL RIGHTS RESERVED.
+#              This program may not be reproduced, in whole or in part in any
+#              form or any means whatsoever without the written permission of:
+#                  BOSE CORPORATION
+#                  The Mountain,
+#                  Framingham, MA 01701-9168
+
 """
 Entering and exiting low power standby LPM unit test.
 This puts the just the LPM into low power standby and then simulates a wake-up.
@@ -6,144 +17,119 @@ LPM tap is only used to verify entered state and simulate wake-up key press.
 
 Note: This requires the RivieraLpmService's Python folder to be in the path.
 
-Note: In order to use IPC communications you must follow the setup instructions 
+Note: In order to use IPC communications you must follow the setup instructions
 in the README from the Python folder in RivieraLpmService.
 """
 
-import pexpect
-import pytest
 import threading
 import time
 
-import lpmtestutils
+import pytest
 
-import RivieraLpmService.lpm_client as LpmClient
-import RivieraLpmService.AutoLpmServiceMessages_pb2 as AutoIPCMessages
-import RivieraLpmService.LpmServiceMessages_pb2 as IPCMessages
-
-from CastleTestUtils.LoggerUtils.log_setup import get_logger
+import AutoLpmServiceMessages_pb2 as AutoIPCMessages
+import lpm_client as LpmClient
+from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.LpmUtils.Lpm import Lpm
 
-_logger = get_logger(__file__)
+import lpmtestutils
 
-_lpm_tap_port = pytest.config.getoption('--lpm-port')
-if _lpm_tap_port is None:
-    pytest.fail("LPM port is required: pytest -sv <test.py> --lpm_port </dev/tty.usb-foo>")
+logger = get_logger(__file__)
 
-# Required parameter: ip address of IPC server.
-_ip_address = pytest.config.getoption('--ip-address')
-if _ip_address is None:
-    pytest.fail("IP address is required: pytest -sv <test.py> --ip-address <0.0.0.0>")
 
-# Used to wait for asynchronus requests to come back.
-_thread_lock = threading.Event()
+@pytest.mark.usefixtures('riviera_enabled_ipc', 'lpm_serial_client', 'lpm_ipc_client', 'ip_address_wlan')
+def test_low_power_standby(lpm_ipc_client, lpm_serial_client, ip_address_wlan):
+    """
+    Enter standby state using IPC message, wait for key press, then resume.
 
-# LPM tap client.
-_lpm_tap = Lpm(_lpm_tap_port)
+    :param lpm_ipc_client: An Inter-Process Communication through IP connection
+    :param lpm_serial_client: A serial connection to the LPM
+    :param ip_address_wlan: The IP Address of the Device over Wireless
+    :return: None
+    """
 
-# The remote LPM Service with which we will communicate.
-_ipc_client = LpmClient.LpmClient(_ip_address)
-assert _ipc_client, "Failed to open LPM IPC interface at ip address %s" % _ip_address
+    # Used to wait for asynchronus requests to come back.
+    _thread_lock = threading.Event()
 
-# Used to verify that the state requested to enter.
-_verifySystemStateId = None
+    # Used to verify that the state requested to enter.
+    global verify_system_state_id
+    verify_system_state_id = None
 
-# Waiting for key press to resume
-_waitingForKeyPress = True
+    # Waiting for key press to resume
+    global waiting_for_key_press
+    waiting_for_key_press = True
 
-#
-# Callbacks.
-#
+    # Reboot to put LPM in a good state, if necessary
+    if not lpmtestutils.is_in_good_state_for_testing(lpm_serial_client):
+        logger.info("LPM in incompatible state. Rebooting.")
+        lpmtestutils.reboot_and_wait(lpm_serial_client)
+        time.sleep(5)
 
-def set_system_state_cb(resp):
-	"""
-	Callback for SetSystemState IPC transaction.
-	:param: resp Response from service in form of IpcLpmStateResponse_t.
-	"""
+    assert (lpm_serial_client.get_system_state() != Lpm.SystemState.LowPower), \
+        "LPM already in LowPower state. Test aborted"
 
-	if _verifySystemStateId != None:
-		assert (_verifySystemStateId == resp.sysState), \
-		"System state %i does not match expected state %i" % (resp.sysState, _verifySystemStateId)
+    ipc_client = LpmClient.LpmClient(ip_address_wlan)
 
-	_thread_lock.set()
+    def wake_on_key_event_cb(resp):
+        """
+        Return to standby state. Normally the APQ would tell the LPM to change
+        out of low power state. We play that role here.
 
-def wake_on_key_event_cb(resp):
-	"""
-	Return to standby state. Normally the APQ would tell the LPM to change
-	out of low power state. We play that role here.
-	"""
-	global _verifySystemStateId
-	global _waitingForKeyPress
+        :param resp: Response from service in form of IpcLpmStateResponse_t.
+        """
+        global verify_system_state_id
+        global waiting_for_key_press
 
-	if _waitingForKeyPress:
+        if waiting_for_key_press:
+            waiting_for_key_press = False
+            logger.info(resp)
 
-		_waitingForKeyPress = False
-		_logger.info(resp)
+            systemStateMsg = AutoIPCMessages.IpcLpmSystemStateSet_t()
+            systemStateMsg.state = AutoIPCMessages.SYSTEM_STATE_STANDBY
 
-		systemStateMsg = AutoIPCMessages.IpcLpmSystemStateSet_t()
-		systemStateMsg.state = AutoIPCMessages.SYSTEM_STATE_STANDBY # SYSTEM_STATE_STANDBY
+            verify_system_state_id = systemStateMsg.state
+            ipc_client.SetSystemState(systemStateMsg, set_system_state_cb)
 
-		_verifySystemStateId = systemStateMsg.state
-		_ipc_client.SetSystemState(systemStateMsg, set_system_state_cb)
+    def set_system_state_cb(resp):
+        """
+        Callback for SetSystemState IPC transaction.
 
-#
-# Test entry points.
-#
+        :param resp: Response from service in form of IpcLpmStateResponse_t.
+        """
+        global verify_system_state_id
+        logger.info("System State: {}".format(verify_system_state_id))
+        if verify_system_state_id is not None:
+            assert (verify_system_state_id == resp.sysState), \
+                "System state {} does not match expected state {}".format(resp.sysState, verify_system_state_id)
 
-def test_low_power_standby():
-	"""
-	Enter standby state using IPC message, wait for key press, then resume.
-	"""
-	global _verifySystemStateId
+        _thread_lock.set()
 
-	currentState = _lpm_tap.get_system_state()
+    # Pretend we are the
+    lpm_ipc_client.RegisterEvent(AutoIPCMessages.IPC_KEY,
+        AutoIPCMessages.IpcKeyInformation_t, wake_on_key_event_cb)
 
-	#
-	# Reboot to put LPM in a good state, if necessary
+    # Enter low power system state.
+    logger.info("Putting LPM in low power state.")
+    systemStateMsg = AutoIPCMessages.IpcLpmSystemStateSet_t()
+    systemStateMsg.state = AutoIPCMessages.SYSTEM_STATE_LOW_POWER
 
-	if not lpmtestutils.is_in_good_state_for_testing(_lpm_tap):
-		_logger.info("LPM in incompatible state. Rebooting.")
-		lpmtestutils.reboot_and_wait(_lpm_tap)
-		time.sleep(5)
+    _thread_lock.clear()
+    # _verifySystemStateId = systemStateMsg.state
+    verify_system_state_id = systemStateMsg.state
 
-	assert (_lpm_tap.get_system_state() != Lpm.SystemState.LowPower), \
-		"LPM alread in LowPower state. Test aborted"
+    lpm_ipc_client.SetSystemState(systemStateMsg, set_system_state_cb)
+    _thread_lock.wait(10)
 
-	# Pretend we are the 
-	_ipc_client.RegisterEvent(AutoIPCMessages.IPC_KEY, 
-		AutoIPCMessages.IpcKeyInformation_t, wake_on_key_event_cb)
+    # Give some time just in case.
+    time.sleep(3)
 
-	#
-	# Enter low power system state.
+    # Verify low power system state.
+    assert (lpm_serial_client.wait_for_system_state([Lpm.SystemState.LowPower], 10)), \
+        "Failed to enter LowPower system state."
 
-	_logger.info("Putting LPM in low power state.")
+    # Generate a fake key press. This will come in to us via IPC as if we are the APQ.
+    logger.info("Waking LPM")
+    lpm_serial_client.button_tap(5, 100)
 
-	systemStateMsg = AutoIPCMessages.IpcLpmSystemStateSet_t()
-	systemStateMsg.state = AutoIPCMessages.SYSTEM_STATE_LOW_POWER # SYSTEM_STATE_LOW_POWER
-
-	_thread_lock.clear()
-	_verifySystemStateId = systemStateMsg.state
-	_ipc_client.SetSystemState(systemStateMsg, set_system_state_cb)
-	_thread_lock.wait(10)
-
-	time.sleep(3)	# Give some time just in case.
-
-	#
-	# Verify low power system state.
-
-	assert (_lpm_tap.wait_for_system_state([Lpm.SystemState.LowPower], 10)), \
-		"Failed to enter LowPower system state."
-
-	_logger.info("Waking LPM")
-
-	#
-	# Wake up.
-
-	# Generate a fake key press. This will come in to us via IPC as if we are the APQ.
-	_lpm_tap.button_tap(5, 100)
-
-	#
-	# Wait for and verify standby system state.
-
-	assert(_lpm_tap.wait_for_system_state([Lpm.SystemState.Standby], 10)), \
-		"Failed to resume into Standby system state."
+    # Wait for and verify standby system state.
+    assert(lpm_serial_client.wait_for_system_state([Lpm.SystemState.Standby], 10)), \
+        "Failed to resume into Standby system state."

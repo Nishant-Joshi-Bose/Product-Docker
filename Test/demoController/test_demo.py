@@ -29,7 +29,7 @@ class TestDemo():
         demoUtils.verifyDemoMode(True)
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
-        demoUtils.verifySecondReboot(responseTimeout *2)
+        demoUtils.verifySecondReboot(responseTimeout *2, deviceid, request.config.getoption("--network-iface"))
 
     @pytest.mark.usefixtures("demoUtils", "deviceid", "device_ip", "request")
     def test_demoOnAfterTimeout(self, demoUtils, device_ip, request, deviceid):
@@ -39,14 +39,14 @@ class TestDemo():
         1. Set demoMode True
         2. Wait for device to reboot
         3. Verify file 'demoModeOn' exists under /mnt/nv
-        4. Verify demoMode is True until timeout-40
+        4. Verify demoMode is True
         5. Set demoMode True before timeout and verify demoMode stays True after timeout
         """
         logger.info("Start test_demo_on_after_timeout")
         demoUtils.setDemoMode(True, deviceid, True, 3, request.config.getoption("--network-iface"))
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
-        demoUtils.verifyDemoModeOn(responseTimeout-40)
+        demoUtils.verifyDemoMode(True)
         demoUtils.setDemoMode(True, deviceid, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(60)
 
@@ -64,7 +64,7 @@ class TestDemo():
         demoUtils.setDemoMode(True, deviceid, True, 3, request.config.getoption("--network-iface"))
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
-        demoUtils.verifyDemoModeOn(responseTimeout-40)
+        demoUtils.verifyDemoMode(True)
         demoUtils.setDemoMode(True, deviceid, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(responseTimeout*10)
 
@@ -84,7 +84,7 @@ class TestDemo():
         demoUtils.setDemoMode(True, deviceid, True, 3, request.config.getoption("--network-iface"))
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, "Demo timeout reported Exception {} " + responseTimeout
-        demoUtils.verifyDemoModeOn(responseTimeout-40)
+        demoUtils.verifyDemoMode(True)
         demoUtils.setDemoMode(True, deviceid, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(10)
         demoUtils.verifyPlayPauseBehaviour()
@@ -106,7 +106,7 @@ class TestDemo():
         demoUtils.setDemoMode(True, deviceid, True, 3, request.config.getoption("--network-iface"))
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
-        demoUtils.verifyDemoModeOn(responseTimeout-40)
+        demoUtils.verifyDemoMode(True)
         demoUtils.setDemoMode(True, deviceid, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(10)
         demoUtils.verifyDemoKeyConfig()
@@ -128,7 +128,7 @@ class TestDemo():
         demoUtils.setDemoMode(True, deviceid, True, 3, request.config.getoption("--network-iface"))
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
-        demoUtils.verifyDemoModeOn(responseTimeout-40)
+        demoUtils.verifyDemoMode(True)
         demoUtils.setDemoMode(True, deviceid, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(10)
         demoUtils.playandValidateMusic()
@@ -154,7 +154,7 @@ class TestDemo():
         demoUtils.setDemoMode(True, deviceid, True, 3, request.config.getoption("--network-iface"))
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, responseTimeout
-        demoUtils.verifyDemoModeOn(responseTimeout-40)
+        demoUtils.verifyDemoMode(True)
         demoUtils.setDemoMode(True, deviceid, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(10)
         demoUtils.verifyDemoKeyConfig()

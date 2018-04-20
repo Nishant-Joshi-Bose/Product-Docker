@@ -171,15 +171,17 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
 {
     BOSE_DEBUG( s_logger, __func__ );
     bool success = true; //successful reading from persistence, initialized to be true
-    Json::Reader reader;
+    static Json::CharReaderBuilder readerBuilder;
+    std::unique_ptr<Json::CharReader> reader( readerBuilder.newCharReader() );
+    std::string errors;
 
     try
     {
         std::string s = m_audioSettingsPersistence->Load();
-        success = reader.parse( s, m_audioSettings );
+        success = reader->parse( s.c_str(), s.c_str() + s.size(), &m_audioSettings, &errors );
         if( !success )
         {
-            BOSE_DEBUG( s_logger, reader.getFormattedErrorMessages().c_str() );
+            BOSE_DEBUG( s_logger, errors.c_str() );
         }
         else if( m_audioSettings.empty()
                  || ( !m_audioSettings.isMember( "configurations" ) )
@@ -201,10 +203,11 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
         BOSE_DEBUG( s_logger, "Reading audio settings from persistence failed, let's read from default config file" );
         std::ifstream in( kDefaultConfigPath );
         auto const& defaultAudioSettings = SystemUtils::ReadFile( kDefaultConfigPath );
-        if( !reader.parse( *defaultAudioSettings, m_audioSettings ) )
+
+        if( !reader->parse( defaultAudioSettings->c_str(), defaultAudioSettings->c_str() + defaultAudioSettings->size(), &m_audioSettings, &errors ) )
         {
             // If reading from default configuration file failed, there's something majorly wrong, have to return
-            BOSE_ERROR( s_logger, "Reading from default config file also failed with error %s", reader.getFormattedErrorMessages().c_str() );
+            BOSE_ERROR( s_logger, "Reading from default config file also failed with error %s", errors.c_str() );
             return;
         }
         else if( m_audioSettings["version"]["major"].asInt() != kConfigVersionMajor )

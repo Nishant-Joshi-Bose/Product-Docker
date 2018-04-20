@@ -1,0 +1,60 @@
+#!/usr/bin/python2.7
+#
+# Python script called by the WiFiManager during boot and during pts key combo press
+# to capture router information for NDC(Network Data Collection)
+#
+import sys
+import os
+import subprocess
+import re
+
+this_script = os.path.basename(sys.argv.pop(0))
+
+if len(sys.argv) != 1:
+    raise Exception("wrong usage, include country as argument")
+
+bssidRe = re.compile(r"^BSS\s(?P<BSSID>.+)\s+\(on wlan0\).*$")
+regexps = [
+    re.compile(r"^SSID:\s+(?P<SSID>.*)$"),
+    re.compile(r"^\*\s+UUID:\s+(?P<UUID>.+)$"),
+    re.compile(r"^\*\s+Manufacturer:\s+(?P<Manufacturer>.+)$"),
+    re.compile(r"^\*\s+Model:\s+(?P<Model>.+)$"),
+    re.compile(r"^\*\s+Model\s+Number:\s+(?P<ModelNumber>.+)$"),
+    re.compile(r"^\*\s+Device\s+name:\s+(?P<DeviceName>.+)$"),
+]
+
+# Perform a site scan and save the results in a file.  This information
+# can can be uploaded later to the data collection server via
+# NetworkDataCollection.
+# Runs the comnmand to scan the list of networks.
+def scan():
+    cmd = ["iw", "wlan0", "scan"]
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    result = proc.stdout.read()
+    return result
+
+# Parses the response from the command "iw wlan0 scan"
+def parse(content):
+    cells = []
+    lines = content.split('\n')
+    for line in lines:
+        line = line.strip()
+        bssid = bssidRe.search(line)
+        if bssid is not None:
+            cells.append(bssid.groupdict())
+            continue
+        for expression in regexps:
+            result = expression.search(line)
+            if result is not None:
+                cells[-1].update(result.groupdict())
+                continue
+    return cells
+
+subprocess.call(["ifconfig", "wlan0", "up"])
+country = sys.argv[0]
+subprocess.call(["iw", "reg", "set", country])
+
+output=scan()
+cells = parse(output)
+with open("/tmp/wifi-mgr-ndc.json", "w") as f:
+    f.write(str(cells))
