@@ -101,7 +101,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@3cf6db53a6461dc4ace853638edd370d019b83b6"
+    "selected_version": "master@8be3fbe93e7821608f3493ae224623e658dbf1c5"
   },
   {
     "name": "CastleProductUIAssets",
@@ -193,7 +193,7 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.3.5-38+22e9526"
+    "selected_version": "Release/SOP/0.4.1-44+a81e0b9"
   },
   {
     "name": "unittest-cpp-qc8017_32",
