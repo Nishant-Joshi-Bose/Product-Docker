@@ -27,19 +27,19 @@ eval set -- "$opts"
 while :; do
     arg="$1"; shift
     case "$arg" in
-	(--help | -h)
-	    cat <<EOF
+    (--help | -h)
+        cat <<EOF
 Usage: $this [options]
 
 Create an IPK file for installing SoundTouch with opkg.
 
 Options:
 EOF
-	    exit 0
-	    ;;
+        exit 0
+        ;;
 
-	(--) break ;;
-	(*)  echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
+    (--) break ;;
+    (*)  echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
     esac
 done
 
@@ -152,7 +152,7 @@ if (( \$(date +%s) < $t )); then
 fi
 EOF
 
-# Copy public keys in FS for development key. EC will take care of generation for Production 
+# Copy public keys in FS for development key. EC will take care of generation for Production
 secure_dir=$opt_dir/etc/secure/
 if [ -e "$secure_dir" ]; then
     chmod -R 755 "$secure_dir" || exit
@@ -171,7 +171,18 @@ find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 "$swup_dir/stage" "$opt_dir" || exit
 "$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
 "$audiopath_dir/stage" --product=professor "$opt_dir" || exit
-"$audiopath64_dir/stage" --product=professor  --only-vfe "$opt_dir" || exit
+
+#copy Vfe binary only
+"$audiopath64_dir/stage" "$opt_dir" --only-vfe-binary --product=professor || exit
+
+mkdir "$opt_dir/bin/professor" || exit
+mkdir "$opt_dir/etc/professor" || exit
+"$audiopath64_dir/stage" "$opt_dir" --stage-vfe --product=professor || exit
+
+mkdir "$opt_dir/bin/gingerc" || exit
+mkdir "$opt_dir/etc/gingerc" || exit
+"$audiopath64_dir/stage" "$opt_dir" --stage-vfe --product=gingerc || exit
+
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlesass_dir/stage" "$opt_dir" || exit
 "$castlepassport_dir/stage" "$opt_dir" || exit
@@ -262,7 +273,7 @@ else
 fi
 # Start Progress
 if [ -f /opt/Bose/bin/ProgressReport ]; then
-	/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
+    /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
 fi
 
 exit 0

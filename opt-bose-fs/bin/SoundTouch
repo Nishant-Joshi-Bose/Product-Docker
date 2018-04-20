@@ -31,6 +31,20 @@ function reset_timezone_to_default {
 
 cd /opt/Bose/bin || exit
 
+# get product variant for vfe linking on the fly
+product_variant="$(mfgdata get productType)"
+echo "${product_variant}"
+
+# set where vfe should get libs from
+if [ "$product_variant" = "professor" ]; then
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/Bose/bin/professor
+elif [ "$product_variant" = "ginger-cheevers" ]; then
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/Bose/bin/gingerc
+else
+    exit
+fi
+
+
 rundir=/var/run/shepherd
 pidfile=$rundir/pid
 override=false
@@ -119,6 +133,15 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
             ln -s /opt/Bose/etc/Shepherd-CLIServer.xml "$rundir" || exit
         else
             ln -s /opt/Bose/etc/Shepherd*.xml "$rundir" || exit
+
+            # vfe only launching
+            if [ "$product_variant" = "professor" ]; then
+                ln -s /opt/Bose/etc/professor/Shepherd-vfe.xml "$rundir" || exit
+            elif [ "$product_variant" = "ginger-cheevers" ]; then
+                ln -s /opt/Bose/etc/gingerc/Shepherd-vfe.xml "$rundir" || exit
+            else
+                exit
+            fi
         fi
 
         if is-development; then
@@ -190,6 +213,10 @@ if (( $# == 1 )) && [ "$1" = enterlowpower ]; then
     log info "Disabling services to enter low power mode"
     cd "$rundir" || exit
     rm -f "${lowpower[@]}"
+
+    # also kill vfe
+    rm -f Shepherd-vfe.xml
+
     shepherd-wait "$rundir" "$pidfile"
     exit
 fi
@@ -200,6 +227,16 @@ if (( $# == 1 )) && [ "$1" = exitlowpower ]; then
     for i in "${lowpower[@]}"; do
         ln -sf "/opt/Bose/etc/$i"
     done
+
+    # also restart vfe
+    if [ "$product_variant" = "professor" ]; then
+        ln -s /opt/Bose/etc/professor/Shepherd-vfe.xml "$rundir" || exit
+    elif [ "$product_variant" = "ginger-cheevers" ]; then
+        ln -s /opt/Bose/etc/gingerc/Shepherd-vfe.xml "$rundir" || exit
+    else
+        exit
+    fi
+
     shepherd-wait "$rundir" "$pidfile"
     exit
 fi
