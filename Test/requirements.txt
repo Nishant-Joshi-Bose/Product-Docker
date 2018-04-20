@@ -1,13 +1,8 @@
-paramiko>=2.4.0
-pexpect>=4.3.0
-protobuf==2.6.1
-psutil>=5.4.1
-pyadb>=0.1.1
-pyserial>=3.4
-pytest>=3.3.0
-pytest-pythonpath>=0.7.1
-requests>=2.18.4
-requests-toolbelt==0.8.0
-simplejson>=3.13.2
-websocket-client>=0.44.0
-xmltodict>=0.11.0
+--trusted-host ingress-platform.live-aws-useast1.bose.io
+--extra-index-url https://ingress-platform.live-aws-useast1.bose.io/dev/svc-core-devops-nexus/prod/core-devops-nexus-core/repository/pypi-all/simple
+CastleTestUtils==0.1.6
+
+# Virtual Environment in Ubuntu is installing 10.0.3b, which is causing problems with CastleTestUtils.
+# See: https://jirapro.bose.com/browse/WSCI-837
+pip==9.0.3
+recordclass==0.5

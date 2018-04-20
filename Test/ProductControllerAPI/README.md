@@ -1,37 +1,42 @@
-# Eddie ProductControllerAPIs
+# Eddie Product Controller API Tests
 
 ## Synopsis
 This test module will cover all ProductController APIs to ensure that API works correctly on the Eddie product. 
 
 
-### Installation
+## Setting Up Test Environment
 
-Initial setup for the repository is as follows:
+Clone the Eddie Repository:
 ```bash
 # Clone the respository
 git clone git@github.com:BoseCorp/Eddie.git
 cd Eddie
-# Get the correct components
-make generated_components
 ```
-All steps assume your are in the directory of your Eddie repository (`$EDDIE_DIR`). 
+All steps assume your are in the directory of your Eddie repository (`$EDDIE_DIR`).
 
-Next, we need to setup the Python environment to use.
+Generate a Virtual Environment and install used packages.
 ```bash
 cd $EDDIE_DIR/Test
+
 # Setup your virtual environment
-virutalenv -p /usr/bin/python2 .venv
-$EDDIE_DIR/Test/.venv/bin/activate
+virutalenv -p /usr/bin/python2.7 .venv
+source $EDDIE_DIR/Test/.venv/bin/activate
+
 # Install current Python requirements
-pip install requirements.txt
+pip install --requirement requirements.txt
 ```
 
+## Execution of Tests
 Running the tests requires configuration information that should be known prior to startup. We should know the 
 communication type to the product (`ADB` and `wlan0`).
 
 ```bash
 cd $EDDIE_DIR/Test/ProductControllerAPI
-pytest --junit=product_controller_apis.xml --target=device --device-id=<adb-device-id> --network-iface=wlan0 --router=<router-id from Test/Configs/conf_wifiProfiles.ini>
+pytest --junit=product_controller_apis.xml \
+       --target=device \
+       --device-id=<adb-device-id> \
+       --network-iface=wlan0 \
+       --router=<router-id from Test/Configs/conf_wifiProfiles.ini>
 ```
 This will run all `test_*` inside the `ProductControllerAPI` folder and generate JUnit style output to 
 `product_controller_apis.xml`. 
