@@ -22,7 +22,6 @@ from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
 from CastleTestUtils.CAPSUtils.TransportUtils.commonBehaviorHandler import CommonBehaviorHandler
 from CastleTestUtils.CAPSUtils.TransportUtils.messageCreator import MessageCreator
 from CastleTestUtils.CAPSUtils.TransportUtils.responseHandler import ResponseHandler
-from CastleTestUtils.PassportUtils.passport_utils import *
 from CastleTestUtils.PassportUtils.passport_api import PassportAPIUsers
 from CastleTestUtils.scripts.config_madrid import RESOURCES
 
@@ -70,14 +69,6 @@ def device_playing_from_amazon(request, frontdoor_wlan):
     1. Play a station or a track by sending playback request to the device
     2. Verify the right station or track is playing by verifying 'nowPlaying' response
     """
-    sys_info = frontdoor_wlan.getInfo()["body"]
-    device_guid = sys_info["guid"]
-    assert device_guid is not None
-    LOGGER.debug("GUID is: %s", device_guid)
-
-    device_type = sys_info["productType"]
-    LOGGER.debug("Device type: %s", device_type)
-
     service_name = 'AMAZON'
     current_resource = 'STS_AMAZON_ACCOUNT'
     location = '/v1/playback/type/playable/url/cHJpbWUvc3RhdGlvbnMvQTEwMlVLQzcxSTVEVTgvI3BsYXlhYmxl/trackIndex/0'
@@ -97,8 +88,8 @@ def device_playing_from_amazon(request, frontdoor_wlan):
     LOGGER.info("Create passport account")
     passport_base_url = request.config.getoption('--passport-base-url')
     apikey = request.config.getoption('--api-key')
-    boseperson_id = create_passport_account(passport_base_url, "Eddie", "FactoryTest", apikey)
-    passport_user = PassportAPIUsers(boseperson_id, apikey, passport_base_url)
+    LOGGER.info("Bose Person ID : %s ", frontdoor_wlan._bosepersonID)
+    passport_user = PassportAPIUsers(frontdoor_wlan._bosepersonID, apikey, frontdoor_wlan._access_token, passport_base_url, logger=LOGGER)
 
     def delete_passport_user():
         """
@@ -125,8 +116,6 @@ def device_playing_from_amazon(request, frontdoor_wlan):
             "Fail to remove music account from passport account."
     request.addfinalizer(remove_music_service)
 
-    LOGGER.info("add_device_to_passport")
-    assert passport_user.add_product(device_guid, device_type), "Failed to add device to passport account."
     common_behavior_handler.performCloudSync()
 
     LOGGER.info("verify_device_source")
@@ -135,7 +124,7 @@ def device_playing_from_amazon(request, frontdoor_wlan):
     LOGGER.debug("-- Start to play " + str(content['container_name']))
     playback_msg = message_creator.playback_msg(get_config['name'], content['container_location'],
                                                 content['container_name'], content['track_location'])
-    now_playing = common_behavior_handler.playContentItemAndVerifyPlayStatus(playback_msg, time_to_play=30)
+    now_playing = common_behavior_handler.playContentItemAndVerifyPlayStatus(playback_msg)
     LOGGER.debug("Now Playing : " + str(now_playing))
 
 
