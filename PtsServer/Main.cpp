@@ -13,6 +13,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <memory>
 #include <string.h>
 #include <errno.h>
 #include <arpa/inet.h>
@@ -20,6 +21,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <signal.h>
+#include <ifaddrs.h>
 
 namespace
 {
@@ -72,6 +74,28 @@ int open_listenfd()
     return listenfd;
 }
 
+std::string to_string( sockaddr_in const& addr )
+{
+    char buf[INET_ADDRSTRLEN];
+    if( inet_ntop( AF_INET, &addr.sin_addr, buf, sizeof( buf ) ) == nullptr )
+    {
+        LOG( "inet_ntop: " << err() );
+        return {};
+    }
+    return buf;
+}
+
+std::string to_string( sockaddr_in6 const& addr )
+{
+    char buf[INET6_ADDRSTRLEN];
+    if( inet_ntop( AF_INET6, &addr.sin6_addr, buf, sizeof( buf ) ) == nullptr )
+    {
+        LOG( "inet_ntop: " << err() );
+        return {};
+    }
+    return buf;
+}
+
 std::string to_string( sockaddr_storage const& addr, socklen_t len )
 {
     switch( addr.ss_family )
@@ -81,32 +105,20 @@ std::string to_string( sockaddr_storage const& addr, socklen_t len )
         auto& a = reinterpret_cast<sockaddr_in const&>( addr );
         if( len < sizeof( a ) )
         {
-            LOG( "Invalid sockaddr length: "  << len );
+            LOG( "Invalid sockaddr length: " << len );
             return {};
         }
-        char buf[INET_ADDRSTRLEN];
-        if( inet_ntop( AF_INET, &a.sin_addr, buf, sizeof( buf ) ) == nullptr )
-        {
-            LOG( "inet_ntop: " << err() );
-            return {};
-        }
-        return buf;
+        return to_string( a );
     }
     case AF_INET6:
     {
         auto& a = reinterpret_cast<sockaddr_in6 const&>( addr );
         if( len < sizeof( a ) )
         {
-            LOG( "Invalid sockaddr length: "  << len );
+            LOG( "Invalid sockaddr length: " << len );
             return {};
         }
-        char buf[INET6_ADDRSTRLEN];
-        if( inet_ntop( AF_INET6, &a.sin6_addr, buf, sizeof( buf ) ) == nullptr )
-        {
-            LOG( "inet_ntop: " << err() );
-            return {};
-        }
-        return buf;
+        return to_string( a );
     }
     default:
     {
@@ -116,7 +128,111 @@ std::string to_string( sockaddr_storage const& addr, socklen_t len )
     }
 }
 
-void handle_connection( int sockfd, std::string const& clientaddrstr )
+std::string get_iface_name( sockaddr_in const& addr )
+{
+    ifaddrs *ifa = nullptr;
+    if( getifaddrs( &ifa ) == -1 )
+    {
+        LOG( "getifaddrs: " << err() );
+        return {};
+    }
+    std::unique_ptr<ifaddrs, void( * )( ifaddrs* )>
+    finally{ ifa, freeifaddrs };
+
+    for( ; ifa; ifa = ifa->ifa_next )
+    {
+        if( !ifa->ifa_addr )
+            continue;
+        if( !ifa->ifa_name )
+            continue;
+        if( ifa->ifa_addr->sa_family != AF_INET )
+            continue;
+        auto& a = reinterpret_cast<sockaddr_in&>( *ifa->ifa_addr );
+        if( a.sin_addr.s_addr == addr.sin_addr.s_addr )
+            return ifa->ifa_name;
+    }
+
+    LOG( "No interface found for IPv4 address " << to_string( addr ) );
+    return {};
+}
+
+std::string get_iface_name( sockaddr_in6 const& addr )
+{
+    ifaddrs *ifa = nullptr;
+    if( getifaddrs( &ifa ) == -1 )
+    {
+        LOG( "getifaddrs: " << err() );
+        return {};
+    }
+    std::unique_ptr<ifaddrs, void( * )( ifaddrs* )>
+    finally{ ifa, freeifaddrs };
+
+    for( ; ifa; ifa = ifa->ifa_next )
+    {
+        if( !ifa->ifa_addr )
+            continue;
+        if( !ifa->ifa_name )
+            continue;
+        if( ifa->ifa_addr->sa_family != AF_INET6 )
+            continue;
+        auto& a = reinterpret_cast<sockaddr_in6&>( *ifa->ifa_addr );
+        if( memcmp( a.sin6_addr.s6_addr,
+                    addr.sin6_addr.s6_addr,
+                    sizeof( a.sin6_addr.s6_addr ) ) == 0 )
+            return ifa->ifa_name;
+    }
+
+    LOG( "No interface found for IPv6 address " << to_string( addr ) );
+    return {};
+}
+
+std::string get_iface_name( sockaddr_storage const& addr, socklen_t len )
+{
+    switch( addr.ss_family )
+    {
+    case AF_INET:
+    {
+        auto& a = reinterpret_cast<sockaddr_in const&>( addr );
+        if( len < sizeof( a ) )
+        {
+            LOG( "Invalid sockaddr length: " << len );
+            return {};
+        }
+        return get_iface_name( a );
+    }
+    case AF_INET6:
+    {
+        auto& a = reinterpret_cast<sockaddr_in6 const&>( addr );
+        if( len < sizeof( a ) )
+        {
+            LOG( "Invalid sockaddr length: " << len );
+            return {};
+        }
+        return get_iface_name( a );
+    }
+    default:
+    {
+        LOG( "Invalid sockaddr family: " << addr.ss_family );
+        return {};
+    }
+    }
+}
+
+std::string get_iface_name( int sockfd )
+{
+    sockaddr_storage addr;
+    socklen_t len = sizeof( addr );
+    if( getsockname( sockfd, ( sockaddr* )&addr, &len ) == -1 )
+    {
+        LOG( "getsockname: " << err() );
+        return {};
+    }
+    //LOG( "getsockname '" << to_string( addr, len ) << '\'' );
+    return get_iface_name( addr, len );
+}
+
+void handle_connection( int sockfd, std::string const& clientaddrstr,
+                        std::string const& iface )
 {
     auto kid = fork();
     if( kid == -1 )
@@ -138,8 +254,16 @@ void handle_connection( int sockfd, std::string const& clientaddrstr )
 
         signal( SIGCHLD, SIG_DFL );
 
-        auto env = "REMOTE_ADDRESS=" + clientaddrstr;
-        if( putenv( const_cast< char* >( env.c_str() ) ) != 0 )
+        /* putenv keeps a pointer to these temporary std::string objects.
+           This code assumes we execl and the temporary objects never actually
+           get destroyed. */
+
+        auto env1 = "REMOTE_ADDRESS=" + clientaddrstr;
+        if( putenv( const_cast< char* >( env1.c_str() ) ) != 0 )
+            LOG( "putenv: " << err() );
+
+        auto env2 = "IFACE=" + iface;
+        if( putenv( const_cast< char* >( env2.c_str() ) ) != 0 )
             LOG( "putenv: " << err() );
 
         execl( handler_program, handler_program, nullptr );
@@ -161,10 +285,11 @@ void listener( int listenfd )
             break;
         }
         auto clientaddrstr = to_string( clientaddr, clientlen );
+        auto iface = get_iface_name( connfd );
 
-        LOG( "accept " << clientaddrstr );
+        LOG( "accept " << clientaddrstr << " on " << iface );
 
-        handle_connection( connfd, clientaddrstr );
+        handle_connection( connfd, clientaddrstr, iface );
         close( connfd );
     }
 }
