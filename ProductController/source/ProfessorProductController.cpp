@@ -90,7 +90,7 @@
 #include "CustomProductControllerStateAdaptIQExiting.h"
 #include "CustomProductControllerStateAdaptIQ.h"
 #include "CustomProductControllerStateIdle.h"
-#include "CustomProductControllerStateLowPowerStandby.h"
+#include "CustomProductControllerStateLowPowerResume.h"
 #include "CustomProductControllerStateOn.h"
 #include "CustomProductControllerStatePlayable.h"
 #include "CustomProductControllerStatePlayingDeselectedAccessoryPairing.h"
@@ -148,7 +148,6 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     /// Member Variable Initialization
     ///
-    m_IsAudioPathReady( false ),
     m_IsAutoWakeEnabled( false ),
     m_Running( false ),
 
@@ -245,10 +244,15 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION );
 
-    auto* stateLowPowerStandby = new CustomProductControllerStateLowPowerStandby
+    auto* stateLowPowerStandby = new ProductControllerStateLowPowerStandby
     ( GetHsm( ),
       stateTop,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY );
+      PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY );
+
+    auto* stateLowPowerResume = new CustomProductControllerStateLowPowerResume
+    ( GetHsm( ),
+      stateTop,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_RESUME );
 
     ///
     /// Playable Transition State and Sub-States
@@ -461,6 +465,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( "", stateFirstBootGreetingTransition );
     GetHsm( ).AddState( "", stateLowPowerStandbyTransition );
     GetHsm( ).AddState( "", stateLowPowerStandby );
+    GetHsm( ).AddState( "", stateLowPowerResume );
     GetHsm( ).AddState( "", statePlayableTransition );
     GetHsm( ).AddState( "", statePlayableTransitionInternal );
     GetHsm( ).AddState( "", statePlayableTransitionIdle );
@@ -727,16 +732,16 @@ bool ProfessorProductController::IsBooted( ) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProfessorProductController::IsLowPowerExited( ) const
 {
-    BOSE_VERBOSE( s_logger, "------------ Product Controller Low Power Exit Check ---------------" );
-    BOSE_VERBOSE( s_logger, " " );
-    BOSE_VERBOSE( s_logger, "LPM Connected         :  %s", ( m_IsLpmReady       ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "SASS            Init  :  %s", ( IsSassReady()      ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, " " );
+    BOSE_INFO( s_logger, "------------ Product Controller Low Power Exit Check ---------------" );
+    BOSE_INFO( s_logger, " " );
+    BOSE_INFO( s_logger, "LPM Connected         :  %s", ( IsLpmReady()       ? "true" : "false" ) );
+    BOSE_INFO( s_logger, "Audio Path Connected  :  %s", ( IsAudioPathReady() ? "true" : "false" ) );
+    BOSE_INFO( s_logger, "SASS            Init  :  %s", ( IsSassReady()      ? "true" : "false" ) );
+    BOSE_INFO( s_logger, " " );
 
-    return( m_IsLpmReady            and
+    return( IsLpmReady()            and
             IsSassReady()           and
-            m_IsAudioPathReady );
+            IsAudioPathReady() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
