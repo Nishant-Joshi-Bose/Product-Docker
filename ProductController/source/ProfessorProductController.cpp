@@ -1267,19 +1267,68 @@ void ProfessorProductController::Wait( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 std::string ProfessorProductController::GetDefaultProductName( ) const
 {
-    std::string productName = "Bose ";
-    std::string macAddress = MacAddressInfo::GetPrimaryMAC( );
-    try
+    std::string productName;
+    std::string productType;
+
+    ///
+    /// Ensure that the device has a valid product type, or throw a critical error.
+    ///
+    if( auto productTypeValue = MfgData::Get( "productType" ) )
     {
-        productName += ( macAddress.substr( macAddress.length( ) - 6 ) );
+        productType = *productTypeValue;
+
+        if( not( productType.compare( "professor" )       == 0 ) and
+            not( productType.compare( "ginger-cheevers" ) == 0 ) )
+        {
+            BOSE_DIE( "GetDefaultProductName Fatal Error: Invalid Product Type " <<  productType );
+        }
     }
-    catch( const std::out_of_range& error )
+    else
     {
-        productName += macAddress;
-        BOSE_WARNING( s_logger, "errorType = %s", error.what( ) );
+        BOSE_DIE( "GetDefaultProductName Fatal Error: No Product Type " );
     }
 
-    BOSE_INFO( s_logger, "%s productName=%s", __func__, productName.c_str( ) );
+    ///
+    /// Assign the product name based on whether it is a development device and its product type.
+    ///
+    if( not IsDevelopmentMode( ) )
+    {
+        if( productType.compare( "professor" ) == 0 )
+        {
+            productName = "Bose Soundbar 500";
+        }
+        else if( productType.compare( "ginger-cheevers" ) == 0 )
+        {
+            productName = "Bose Soundbar 700";
+        }
+    }
+    else
+    {
+        std::string macAddress = MacAddressInfo::GetPrimaryMAC( );
+
+        try
+        {
+            productName += ( macAddress.substr( macAddress.length() - 6 ) );
+        }
+        catch( const std::out_of_range& error )
+        {
+            productName += macAddress;
+
+            BOSE_WARNING( s_logger, "%s Warning %s: Incomplete MAC Address %s", __func__, error.what( ), macAddress.c_str( ) );
+        }
+
+        if( productType.compare( "professor" ) == 0 )
+        {
+            productName += " SB 500";
+        }
+        else if( productType.compare( "ginger-cheevers" ) == 0 )
+        {
+            productName += " SB 700";
+        }
+    }
+
+    BOSE_INFO( s_logger, "%s: The default product name is %s.", __func__, productName.c_str( ) );
+
     return productName;
 }
 
