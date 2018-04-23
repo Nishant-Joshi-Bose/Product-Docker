@@ -179,9 +179,9 @@ mkdir "$opt_dir/bin/professor" || exit
 mkdir "$opt_dir/etc/professor" || exit
 "$audiopath64_dir/stage" "$opt_dir" --stage-vfe --product=professor || exit
 
-mkdir "$opt_dir/bin/gingerc" || exit
-mkdir "$opt_dir/etc/gingerc" || exit
-"$audiopath64_dir/stage" "$opt_dir" --stage-vfe --product=gingerc || exit
+mkdir "$opt_dir/bin/ginger-cheevers" || exit
+mkdir "$opt_dir/etc/ginger-cheevers" || exit
+"$audiopath64_dir/stage" "$opt_dir" --stage-vfe --product=ginger-cheevers || exit
 
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlesass_dir/stage" "$opt_dir" || exit

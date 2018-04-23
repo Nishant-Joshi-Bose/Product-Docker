@@ -32,18 +32,22 @@ function reset_timezone_to_default {
 cd /opt/Bose/bin || exit
 
 # get product variant for vfe linking on the fly
-product_variant="$(mfgdata get productType)"
-echo "${product_variant}"
+productType="$(mfgdata get productType)"
+echo "Product type is : ${productType}"
 
 # set where vfe should get libs from
-if [ "$product_variant" = "professor" ]; then
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/Bose/bin/professor
-elif [ "$product_variant" = "ginger-cheevers" ]; then
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/Bose/bin/gingerc
+if [ "$productType" = "professor" ] || [ "$productType" = "ginger-cheevers" ]; then
+    export "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/Bose/bin/$productType"
+    echo "LD_LIBRARY_PATH set to $LD_LIBRARY_PATH"
 else
+    echo "Incorrect mfgdata value for productType, failed to load Vfe"
+    echo "Valid values for this repo are:"
+    echo "professor"
+    echo "ginger-cheevers"
     exit
 fi
 
+echo "$LD_LIBRARY_PATH"
 
 rundir=/var/run/shepherd
 pidfile=$rundir/pid
@@ -52,6 +56,7 @@ override=false
 # The list of daemons to stop while in low power mode.  These daemons are
 # typically the ones that don't know how to handle the low power events
 # properly.
+# NOTE : Vfe can not be added here due to dir structure needed to run prof and GC
 lowpower=(
     Shepherd-AudioPath.xml
     Shepherd-NetManager.xml
@@ -135,13 +140,8 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
             ln -s /opt/Bose/etc/Shepherd*.xml "$rundir" || exit
 
             # vfe only launching
-            if [ "$product_variant" = "professor" ]; then
-                ln -s /opt/Bose/etc/professor/Shepherd-vfe.xml "$rundir" || exit
-            elif [ "$product_variant" = "ginger-cheevers" ]; then
-                ln -s /opt/Bose/etc/gingerc/Shepherd-vfe.xml "$rundir" || exit
-            else
-                exit
-            fi
+            ln -s "/opt/Bose/etc/$productType/Shepherd-vfe.xml" "$rundir" || exit
+
         fi
 
         if is-development; then
@@ -229,13 +229,7 @@ if (( $# == 1 )) && [ "$1" = exitlowpower ]; then
     done
 
     # also restart vfe
-    if [ "$product_variant" = "professor" ]; then
-        ln -s /opt/Bose/etc/professor/Shepherd-vfe.xml "$rundir" || exit
-    elif [ "$product_variant" = "ginger-cheevers" ]; then
-        ln -s /opt/Bose/etc/gingerc/Shepherd-vfe.xml "$rundir" || exit
-    else
-        exit
-    fi
+    ln -s "/opt/Bose/etc/$productType/Shepherd-vfe.xml" "$rundir" || exit
 
     shepherd-wait "$rundir" "$pidfile"
     exit
