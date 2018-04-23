@@ -10,14 +10,14 @@ import datetime
 import subprocess
 
 #if "get" or "put" argument specified, perform corresponding action on FrontDoor
-if (len(sys.argv) > 1):
+if len(sys.argv) > 1:
 
     #if "get" argument, perform get request and output as text, using "Refresh" option to continously poll
-    if (sys.argv[1]== "get"):
+    if sys.argv[1]== "get":
 
-        message = subprocess.Popen(["/opt/Bose/bin/FrontDoorUtility","/accessories"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0]
+        message = subprocess.Popen(["FrontDoorUtility","/accessories"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0]
 
-        print """\HTTP/1.1 200 OK\nContent-Type: text/plain\nCache-Control: no-cache\nRefresh: 1\n"""
+        print """\HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nCache-Control: no-cache\r\nRefresh: 1\r\n"""
 
         try:
             data = json.loads(message)
@@ -27,12 +27,9 @@ if (len(sys.argv) > 1):
         except ValueError:
             print message+"\n"
 
-
-
     #if "put" argument, perform put request with utility. Result will be reflected in next "get"
-    elif (sys.argv[1]=="put"):
-        print "Putting data"
-        subprocess.Popen(["/opt/Bose/bin/FrontDoorUtility","/accessories","\"pairing\": true"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+    elif sys.argv[1]=="put":
+        subprocess.Popen(["FrontDoorUtility","/accessories","\"pairing\": true"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
       
 ##Print out main page  
 else:
