@@ -101,7 +101,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "PGC-1496@9a7e766f64cad800460f7c7ee4abe5ac979de1d3"
+    "selected_version": "master@3cf6db53a6461dc4ace853638edd370d019b83b6"
   },
   {
     "name": "CastleProductUIAssets",
@@ -117,6 +117,10 @@
   },
   {
     "name": "FrontDoorService-qc8017_32",
+    "selected_version": "Release/master/0.4.5-255+b400f78"
+  },
+  {
+    "name": "FrontDoorUtility-qc8017_32",
     "selected_version": "Release/master/0.4.5-255+b400f78"
   },
   {
@@ -138,14 +142,6 @@
   {
     "name": "opensource-jsoncpp-qc8017_32",
     "selected_version": "Release/bose-master/1.8.3-11-gb142130"
-  },
-  {
-    "name": "opensource-libwebsockets-native",
-    "selected_version": "Release/bose-v2.4-stable/2.4.1-23+gf4e6eca"
-  },
-  {
-    "name": "opensource-libwebsockets-qc8017_32",
-    "selected_version": "Release/bose-v2.4-stable/2.4.1-23+gf4e6eca"
   },
   {
     "name": "protobuf-native",
