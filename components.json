@@ -5,7 +5,7 @@
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@ff92635e305f1373310a26be927be7f6b56c368c"
+    "selected_version": "master@6df31a350515273e38beb6ec8935d6ee2afd6c55"
   },
   {
     "name": "BLERemoteXCVR",
@@ -13,7 +13,7 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@101a3363631f11a246b79858d155a86e35968bb8"
+    "selected_version": "master@5b2fed73d2e6137cc514622bb43729883f4f8b7a"
   },
   {
     "name": "AVS-qc8017_32",
@@ -101,7 +101,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@16506c5dde78fca8f1015c94cf5b94c5b5e16854"
+    "selected_version": "master@3cf6db53a6461dc4ace853638edd370d019b83b6"
   },
   {
     "name": "CastleProductUIAssets",
@@ -193,7 +193,7 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.3.5-38+22e9526"
+    "selected_version": "Release/SOP/0.4.1-44+a81e0b9"
   },
   {
     "name": "unittest-cpp-qc8017_32",
