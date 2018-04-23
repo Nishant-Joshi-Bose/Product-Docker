@@ -38,7 +38,6 @@ echo "Product type is : ${productType}"
 # set where vfe should get libs from
 if [ "$productType" = "professor" ] || [ "$productType" = "ginger-cheevers" ]; then
     export "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/Bose/bin/$productType"
-    echo "LD_LIBRARY_PATH set to $LD_LIBRARY_PATH"
 else
     echo "Incorrect mfgdata value for productType, failed to load Vfe"
     echo "Valid values for this repo are:"
@@ -47,7 +46,7 @@ else
     exit
 fi
 
-echo "$LD_LIBRARY_PATH"
+echo "LD_LIBRARY_PATH set to $LD_LIBRARY_PATH"
 
 rundir=/var/run/shepherd
 pidfile=$rundir/pid
