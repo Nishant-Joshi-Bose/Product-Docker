@@ -16,11 +16,16 @@ if (len(sys.argv) > 1):
     if (sys.argv[1]== "get"):
 
         message = subprocess.Popen(["/opt/Bose/bin/FrontDoorUtility","/adaptiq"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0]
-        data = json.loads(message)
 
         print """\HTTP/1.1 200 OK\nContent-Type: text/plain\nCache-Control: no-cache\nRefresh: 1\n"""
-        print "hpConnected:"+json.dumps(data['body']['hpConnected'],indent=4);
-        print "smState: "+json.dumps(data['body']['smState'],indent=4);
+
+        try:
+            data = json.loads(message)
+            print "hpConnected:"+json.dumps(data['body']['hpConnected'],indent=4);
+            print "smState: "+json.dumps(data['body']['smState'],indent=4);
+
+        except ValueError:
+            print message+"\n"
 
 
 
@@ -54,7 +59,7 @@ else:
                 white-space: pre-wrap;
                 border: thin dotted;
                 position:relative;
-                height: 20em;
+                height: 10em;
                 width: 98%;
                 margin: 1%;
                 padding 1em;
