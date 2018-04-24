@@ -222,6 +222,20 @@ Moved Permanently\r
         sys.exit()
 
 # ----------------------------------------------------------------------------
+# Open source license documents.
+# The customer end-user documentation references this URL path.
+
+    path_lower = path.lower()
+    if path_lower == "/opensource" or path_lower == "/opensource/":
+        print """\
+HTTP/1.1 301 Moved Permanently\r
+Location: /licenses.txt\r
+\r
+Moved Permanently\r
+"""
+        sys.exit()
+
+# ----------------------------------------------------------------------------
 # Serve static content.
 
     # Discard any query parameters from paths like
