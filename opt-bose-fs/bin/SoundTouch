@@ -31,7 +31,7 @@ function reset_timezone_to_default {
 
 cd /opt/Bose/bin || exit
 
-# get product variant for vfe linking on the fly
+# get productType for vfe linking on the fly
 productType="$(mfgdata get productType)"
 echo "Product type is : ${productType}"
 
@@ -43,6 +43,7 @@ else
     echo "Valid values for this repo are:"
     echo "professor"
     echo "ginger-cheevers"
+    echo "Got $productType"
     exit
 fi
 
