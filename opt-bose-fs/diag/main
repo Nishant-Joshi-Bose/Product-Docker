@@ -45,6 +45,9 @@ print """
  td.showimg {
    padding: 8px;
  }
+ .hilite {
+   background-color: yellow;
+ }
 </style>
 </head>
 <body>
@@ -62,6 +65,13 @@ print "<li>Manufacturing Data [<a href='/diag/mfg-data'>all</a>]"
 mfg_data = json.load(open("/persist/mfg_data.json"))
 print """<div class="box">"""
 print "<table>"
+
+elem = "development"
+dev = mfg_data.get(elem)
+if dev is not None:
+    print """<tr class="hilite"><td>{}</td><td>{}</td></tr>""" \
+        .format(elem, html_escape(dev))
+
 for elem in """country_code regionCode snSystem productType productName
                productColor testflagLaunchAssurance""".split():
     print "<tr><td>{}</td><td>{}</td></tr>" \

@@ -16,6 +16,8 @@ def log(*args):
 if len(sys.argv) != 1:
     raise Exception("wrong usage " + str(sys.argv))
 
+# ----------------------------------------------------------------------------
+
 line = sys.stdin.readline()
 if not line:
     if debug:
@@ -33,6 +35,8 @@ method, path, version = fields
 if debug:
     log("method '{}', path '{}', version '{}'".format(method, path, version))
 
+# ----------------------------------------------------------------------------
+
 # Read the HTTP headers
 while True:
     line = sys.stdin.readline()
@@ -46,16 +50,34 @@ while True:
     if debug:
         log("header '{}'".format(line))
 
-def only_for_usb():
-    iface = os.environ.get("IFACE", "")
-    if iface.startswith("usb") or iface.startswith("rndis"):
-        return
-    log("Attempt to access {} via interface {}".format(path, iface))
+# ----------------------------------------------------------------------------
+
+def http_ok(content_type="text/plain"):
     print """\
-HTTP/1.1 404 Not Found\r
+HTTP/1.1 200 OK\r
+Content-Type: {}\r
+Cache-Control: no-cache\r
+\r""".format(content_type)
+
+def http_err(code="404 Not Found"):
+    print """\
+HTTP/1.1 {code}\r
 Content-Type: text/plain\r
 \r
-404 Not Found\r"""
+{code}\r""".format(code=code)
+
+def only_for_usb():
+    iface = os.environ.get("IFACE", "")
+    if iface.startswith("usb"):
+        return
+    if iface.startswith("rndis"):
+        return
+    if iface == "lo":           # for testing; see `adb forward`
+        return
+    log("Attempt to access {} via interface {}".format(path, iface))
+    if os.path.exists("/mnt/nv/product-persistence/anyiface"):
+        return
+    http_err()
     sys.exit()
 
 if method == "GET":
@@ -94,24 +116,20 @@ Moved Permanently\r
     if path == "/logread.txt":
         only_for_usb()
 
-        print """\
-HTTP/1.1 200 OK\r
-Content-Type: text/plain\r
-Cache-Control: no-cache\r
-\r"""
+        http_ok()
         sys.stdout.flush()
         os.execl("/sbin/logread", "logread")
+
+# ----------------------------------------------------------------------------
 
     if path == "/logread.txt.gz":
         only_for_usb()
 
-        print """\
-HTTP/1.1 200 OK\r
-Content-Type: application/x-gzip\r
-Cache-Control: no-cache\r
-\r"""
+        http_ok("application/x-gzip")
         sys.stdout.flush()
         os.execl("/bin/sh", "sh", "-c", "logread | gzip")
+
+# ----------------------------------------------------------------------------
 
     if path == "/pts.txt":
         only_for_usb()
@@ -119,13 +137,9 @@ Cache-Control: no-cache\r
         def call(*args):
             print ">", " ".join(args)
             sys.stdout.flush()
-            subprocess.call(args, stderr=subprocess.STDOUT)
+            subprocess.call(args)
 
-        print """\
-HTTP/1.1 200 OK\r
-Content-Type: text/plain\r
-Cache-Control: no-cache\r
-\r"""
+        http_ok()
         os.dup2(sys.stdout.fileno(), sys.stderr.fileno()) # redirect stderr to stdout
         call("date")
         call("cat", "/opt/Bose/etc/BoseVersion.json")
@@ -139,6 +153,91 @@ Cache-Control: no-cache\r
         call("ps")
         sys.exit()
 
+# ----------------------------------------------------------------------------
+# Force the system into reflash mode (QFIL).
+
+    if path == "/reflash":
+        only_for_usb()
+
+        http_ok("text/html")
+        print """\
+<html>
+<head>
+<title>Reflash Mode</title>
+<style type="text/css">
+ body {
+   font-family: Verdana, Arial, Helvetica, sans-serif;
+ }
+</style>
+</head>
+<body>
+<h1>Entering Reflash Mode</h1>
+<p>Please wait.
+</body>
+</html>
+"""
+        sys.stdout.flush()
+
+        # Sleep to give the output a chance to get out.
+        subprocess.call("""(
+  exec >&2;
+  sleep 3;
+  PlatformResetIntoQfil
+) &""", shell=True)
+        sys.exit()
+
+# ----------------------------------------------------------------------------
+# Get Bose version.
+
+    if path == "/bose-version":
+        only_for_usb()
+
+        http_ok()
+        sys.stdout.write(open("/opt/Bose/etc/BoseVersion.json").read())
+        sys.exit()
+
+# ----------------------------------------------------------------------------
+# Get Riviera version.
+
+    if path == "/kernel-version":
+        only_for_usb()
+
+        http_ok()
+        sys.stdout.write(open("/etc/riviera-version").read())
+        sys.exit()
+
+# ----------------------------------------------------------------------------
+# Validate manufacturing data.
+
+    if path == "/validate-mfgdata":
+        only_for_usb()
+
+        http_ok()
+        os.dup2(sys.stdout.fileno(), sys.stderr.fileno()) # redirect stderr to stdout
+        sys.stdout.flush()
+        if subprocess.call(["/opt/Bose/bin/validate-mfgdata"]) == 0:
+            print "Valid Manufacturing Data."
+        else:
+            print "Invalid Manufacturing Data."
+        sys.exit()
+
+# ----------------------------------------------------------------------------
+# Open source license documents.
+# The customer end-user documentation references this URL path.
+
+    path_lower = path.lower()
+    if path_lower == "/opensource" or path_lower == "/opensource/":
+        print """\
+HTTP/1.1 301 Moved Permanently\r
+Location: /licenses.txt\r
+\r
+Moved Permanently\r
+"""
+        sys.exit()
+
+# ----------------------------------------------------------------------------
+# Serve static content.
+
     # Discard any query parameters from paths like
     # "/index.html?deeplink=com.bose.myApp&ssid=myNetwork&context=ApSetup".
     # See https://github.com/BoseCorp/bose-web-riviera-ap-page/
@@ -146,45 +245,44 @@ Cache-Control: no-cache\r
     if i != -1:
         path = path[:i]
 
-    # Avoid possible security issues with paths like ../../etc/passwd
-    if ".." not in path:
-        if path == "/":
-            path = "/index.html"
-        file_name = "/opt/Bose/html" + path
+    if path == "/":
+        path = "/index.html"
+    file_name = "/opt/Bose/html" + path
 
-        content_types = {
-            ".html": "text/html",
-            ".jpg": "image/jpeg",
-            ".js": "text/plain",
-            ".pdf": "application/pdf",
-            ".svg": "image/svg+xml",
-            ".txt": "text/plain",
-        }
-        content_type = None
-        for ext, ctype in content_types.iteritems():
-            if file_name.endswith(ext):
-                content_type = ctype
-                break
+    # Avoid possible security issues with paths like ../../etc/passwd and symlinks.
+    if file_name != os.path.realpath(file_name):
+        http_err()
+        sys.exit()
 
-        try:
-            with open(file_name) as fh:
-                print "HTTP/1.1 200 OK\r"
-                if content_type:
-                    print "Content-Type: " + content_type + "\r"
-                print "\r"
+    content_types = {
+        ".html": "text/html",
+        ".jpg": "image/jpeg",
+        ".js": "text/plain",
+        ".pdf": "application/pdf",
+        ".svg": "image/svg+xml",
+        ".txt": "text/plain",
+    }
+    content_type = "text/plain"
+    for ext, ctype in content_types.iteritems():
+        if file_name.endswith(ext):
+            content_type = ctype
+            break
 
-                while True:
-                    buf = fh.read(4096)
-                    if not buf:
-                        break
-                    sys.stdout.write(buf)
-            log("Sent {} ({})".format(file_name, content_type))
-            sys.exit()
-        except IOError, exc:
-            log("open " + file_name + ": " + exc.strerror)
+    try:
+        with open(file_name) as fh:
+            http_ok(content_type)
 
-print """\
-HTTP/1.1 404 Not Found\r
-Content-Type: text/plain\r
-\r
-404 Not Found\r"""
+            while True:
+                buf = fh.read(4096)
+                if not buf:
+                    break
+                sys.stdout.write(buf)
+        log("Sent {} ({})".format(file_name, content_type))
+    except IOError, exc:
+        log("open " + file_name + ": " + exc.strerror)
+        http_err()
+    sys.exit()
+
+# ----------------------------------------------------------------------------
+
+http_err()
