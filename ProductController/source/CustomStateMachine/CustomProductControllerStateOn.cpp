@@ -126,7 +126,11 @@ bool CustomProductControllerStateOn::HandleIntentSetupBLERemote( )
 {
     BOSE_INFO( s_logger, "The %s state is in %s", GetName( ).c_str( ), __func__ );
 
-    GetCustomProductController().PairBLERemote( MANUAL_BLE_REMOTE_PAIRING_TIMEOUT_SECONDS );
+
+    if( !GetCustomProductController().GetNetworkServiceUtil().IsNetworkConnected() )
+    {
+        GetCustomProductController().PairBLERemote( MANUAL_BLE_REMOTE_PAIRING_TIMEOUT_SECONDS );
+    }
 
     return true;
 }
