@@ -175,7 +175,6 @@ find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 
 #copy Vfe binary only
 "$audiopath64_dir/stage" "$opt_dir" --only-vfe-binary --only-vfe --product=professor || exit
-exit
 
 mkdir "$opt_dir/bin/professor" || exit
 mkdir "$opt_dir/etc/professor" || exit
