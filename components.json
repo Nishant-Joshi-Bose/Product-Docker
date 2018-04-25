@@ -9,7 +9,7 @@
   },
   {
     "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/0.3.3-+"
+    "selected_version": "Release/master/0.3.4-+"
   },
   {
     "name": "A4VVideoManagerService",
@@ -41,7 +41,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/0.4.1-213+e9e36aa"
+    "selected_version": "Release/master/0.4.2-231+db0fce6"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -53,7 +53,7 @@
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/1.0.0-53+5fd0921"
+    "selected_version": "Release/master/1.0.2-60+55c3afd"
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
@@ -129,7 +129,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/1.0.0-80+5fa3c29"
+    "selected_version": "Release/master/1.0.2-84+739b806"
   },
   {
     "name": "opensource-jsoncpp-native",
