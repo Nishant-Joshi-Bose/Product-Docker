@@ -394,6 +394,12 @@ void ProductCecHelper::HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMI
         }
 
     }
+    else
+    {
+        //disable physical address
+        BOSE_DEBUG( s_logger, "CEC Physical address 0x%x is being set.", 0xffff );
+        m_ProductLpmHardwareInterface->SetCecPhysicalAddress( 0xffff );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

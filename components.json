@@ -101,7 +101,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@3cf6db53a6461dc4ace853638edd370d019b83b6"
+    "selected_version": "CASTLE-13014@71947f7b946cf79bdf969d333d2047db545f7c1b"
   },
   {
     "name": "CastleProductUIAssets",
@@ -117,7 +117,7 @@
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Release/master/0.4.5-255+b400f78"
+    "selected_version": "Release/master/0.4.6-281+118f14d"
   },
   {
     "name": "GalapagosClient-qc8017_32",
