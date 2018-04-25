@@ -255,12 +255,9 @@ Moved Permanently\r
         sys.exit()
 
     content_types = {
-        ".html": "text/html",
         ".jpg": "image/jpeg",
-        ".js": "text/plain",
         ".pdf": "application/pdf",
         ".svg": "image/svg+xml",
-        ".txt": "text/plain",
     }
     content_type = "text/plain"
     for ext, ctype in content_types.iteritems():
