@@ -37,7 +37,7 @@
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/1.0.1-55+0c7cd73"
+    "selected_version": "Release/master/1.0.2-60+55c3afd"
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
@@ -113,7 +113,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/1.0.1-82+a1eff37"
+    "selected_version": "Release/master/1.0.2-84+739b806"
   },
   {
     "name": "opensource-jsoncpp-native",
@@ -133,11 +133,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/3.4"
+    "selected_version": "Release/master/3.5"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/3.4"
+    "selected_version": "Release/master/3.5"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
