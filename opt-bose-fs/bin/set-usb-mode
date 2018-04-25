@@ -23,6 +23,7 @@ function stop_udhcpd_usb {
 }
 
 function device_toggle {
+    ip addr flush dev $1
     ip link set $1 down
     ip link set $1 name $2
     ip link set $2 up
