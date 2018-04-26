@@ -78,6 +78,7 @@ democontroller_dir=$(components get CastleDemoController-qc8017_32 installed_loc
 webkit_dir=$(components get Webkit installed_location) || exit
 productuiassets_dir=$(components get CastleProductUIAssets installed_location) || exit
 frontdoor_dir=$(components get FrontDoorService-qc8017_32 installed_location) || exit
+frontdoorutility_dir=$(components get FrontDoorUtility-qc8017_32 installed_location) || exit
 qss_dir=$(components get A4VQuickSetService installed_location) || exit
 boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
 datacollection_dir=$(components get CastleDataCollectionClient-qc8017_32 installed_location) || exit
@@ -184,6 +185,7 @@ find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 "$productuiassets_dir/stage" --chimes=SoundBar/professor --type=flac "$opt_dir" professor || exit
 "$productuiassets_dir/stage" --chimes=SoundBar/ginger-cheevers --type=flac "$opt_dir" ginger-cheevers || exit
 "$frontdoor_dir/stage" "$opt_dir" || exit
+"$frontdoorutility_dir/stage" "$opt_dir" || exit
 "$galapagosclient_dir/stage" "$opt_dir" || exit
 "$httpproxy_dir/stage" "$opt_dir" || exit
 "$datacollection_dir/stage" "$opt_dir" || exit
