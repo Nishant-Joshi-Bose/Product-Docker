@@ -202,9 +202,9 @@ mkdir "$opt_dir/etc/ginger-cheevers" || exit
 "$datacollectionservice_dir/stage" "$opt_dir" || exit
 "$sadi_dir/stage" "$opt_dir" || exit
 
-# Temporarily disable Vfe until HSP with TDM/I2S driver fix is available
+# remove Shepherd-vfe.xml
 if [ -e "$opt_dir/etc/Shepherd-vfe.xml" ]; then
-    mv "$opt_dir/etc/Shepherd-vfe.xml" "$opt_dir/etc/Shepherd-vfe.xml.disable"
+    rm "$opt_dir/etc/Shepherd-vfe.xml"
 fi
 
 cp "$wspace/Shepherd-avs.xml" "$opt_dir/etc/Shepherd-avs.xml"
