@@ -17,7 +17,7 @@ if len(sys.argv) > 1:
 
         output = subprocess.Popen(["frontdoorutil","/accessories"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 
-        print """\HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nCache-Control: no-cache\r\nRefresh: 1\r\n"""
+        print """HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nCache-Control: no-cache\r\nRefresh: 1\r\n\r"""
         
         print datetime.datetime.now()
 
