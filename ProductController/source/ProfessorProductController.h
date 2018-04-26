@@ -281,7 +281,6 @@ private:
     ///        machine states.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool m_IsAudioPathReady;
     bool m_IsAutoWakeEnabled;
     bool m_Running;
 
