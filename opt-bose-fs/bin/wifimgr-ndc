@@ -60,4 +60,4 @@ subprocess.call(["iw", "reg", "set", country])
 output=scan()
 cells = parse(output)
 with open("/tmp/wifi-mgr-ndc.json", "w") as f:
-    f.write(str(cells))
+    f.write("{ \"apInfo\":\n"+str(cells)+"\n}")
