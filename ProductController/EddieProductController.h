@@ -52,7 +52,6 @@
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStateFirstBootGreeting.h"
 #include "ProductControllerStateFirstBootGreetingTransition.h"
-#include "ProductControllerStateBootedTransition.h"
 #include "ProductControllerStatePlayingTransitionSwitch.h"
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
@@ -383,7 +382,6 @@ private:
     ProductControllerStatePlayingTransition                         m_ProductControllerStatePlayingTransition;
     ProductControllerStateFirstBootGreeting                         m_ProductControllerStateFirstBootGreeting;
     ProductControllerStateFirstBootGreetingTransition               m_ProductControllerStateFirstBootGreetingTransition;
-    ProductControllerStateBootedTransition                          m_ProductControllerStateBootedTransition;
     ProductControllerStatePlayingTransitionSwitch                   m_ProductControllerStatePlayingTransitionSwitch;
     ProductControllerStateStoppingStreamsDedicated                  m_ProductControllerStateStoppingStreamsDedicated;
     ProductControllerStateStoppingStreamsDedicatedForFactoryDefault m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault;
