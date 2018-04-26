@@ -1267,7 +1267,7 @@ void ProfessorProductController::Wait( )
 ///
 /// @name   ProfessorProductController::GetDefaultProductName
 ///
-/// @brief  This method is to get the default product name by reading from mac address.
+/// @brief  This method is used to get the default product name.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 std::string ProfessorProductController::GetDefaultProductName( ) const
@@ -1285,39 +1285,43 @@ std::string ProfessorProductController::GetDefaultProductName( ) const
         if( not( productType.compare( "professor" )       == 0 ) and
             not( productType.compare( "ginger-cheevers" ) == 0 ) )
         {
-            BOSE_DIE( "GetDefaultProductName Fatal Error: Invalid Product Type " <<  productType );
+            BOSE_DIE( __func__ << " Fatal Error: Invalid Product Type " <<  productType );
         }
     }
     else
     {
-        BOSE_DIE( "GetDefaultProductName Fatal Error: No Product Type " );
+        BOSE_DIE( __func__ << " Fatal Error: No Product Type " );
     }
 
     ///
-    /// Assign the product name based on whether it is a development device and its product type.
+    /// Ensure that the device has a valid marketing product name, based on the manufacturing data;
+    /// and assign this value to the default product name initially.
     ///
-    if( not IsDevelopmentMode( ) )
+    if( auto productNameValue = MfgData::Get( "productName" ) )
     {
-        if( productType.compare( "professor" ) == 0 )
-        {
-            productName = "Bose Soundbar 500";
-        }
-        else if( productType.compare( "ginger-cheevers" ) == 0 )
-        {
-            productName = "Bose Soundbar 700";
-        }
+        productName = *productNameValue;
     }
     else
+    {
+        BOSE_DIE( __func__ << " Fatal Error: No Product Name " );
+    }
+
+    ///
+    /// Leave the default product name assigned to the marketing product name in the manufacturing
+    /// data for production non-development devices; otherwise, assign the default product name
+    /// based on its product type and MAC address.
+    ///
+    if( IsDevelopmentMode( ) )
     {
         std::string macAddress = MacAddressInfo::GetPrimaryMAC( );
 
         try
         {
-            productName += ( macAddress.substr( macAddress.length() - 6 ) );
+            productName = ( macAddress.substr( macAddress.length() - 6 ) );
         }
         catch( const std::out_of_range& error )
         {
-            productName += macAddress;
+            productName = macAddress;
 
             BOSE_WARNING( s_logger, "%s Warning %s: Incomplete MAC Address %s", __func__, error.what( ), macAddress.c_str( ) );
         }
