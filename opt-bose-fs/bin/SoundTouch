@@ -3,6 +3,8 @@
 # Start/stop shepherdd, the SoundTouch meta-daemon.
 #
 export PATH=/opt/Bose/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
+export AVS_WUW=1
+
 tag="${0##*/}[$$]"              # for log messages
 
 localtime_symlink=/mnt/nv/localtime
