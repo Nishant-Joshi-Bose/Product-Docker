@@ -1273,25 +1273,6 @@ void ProfessorProductController::Wait( )
 std::string ProfessorProductController::GetDefaultProductName( ) const
 {
     std::string productName;
-    std::string productType;
-
-    ///
-    /// Ensure that the device has a valid product type, or throw a critical error.
-    ///
-    if( auto productTypeValue = MfgData::Get( "productType" ) )
-    {
-        productType = *productTypeValue;
-
-        if( not( productType.compare( "professor" )       == 0 ) and
-            not( productType.compare( "ginger-cheevers" ) == 0 ) )
-        {
-            BOSE_DIE( __func__ << " Fatal Error: Invalid Product Type " <<  productType );
-        }
-    }
-    else
-    {
-        BOSE_DIE( __func__ << " Fatal Error: No Product Type " );
-    }
 
     ///
     /// Ensure that the device has a valid marketing product name, based on the manufacturing data;
@@ -1309,7 +1290,7 @@ std::string ProfessorProductController::GetDefaultProductName( ) const
     ///
     /// Leave the default product name assigned to the marketing product name in the manufacturing
     /// data for production non-development devices; otherwise, assign the default product name
-    /// based on its product type and MAC address.
+    /// based on its MAC address and product type.
     ///
     if( IsDevelopmentMode( ) )
     {
@@ -1323,16 +1304,27 @@ std::string ProfessorProductController::GetDefaultProductName( ) const
         {
             productName = macAddress;
 
-            BOSE_WARNING( s_logger, "%s Warning %s: Incomplete MAC Address %s", __func__, error.what( ), macAddress.c_str( ) );
+            BOSE_WARNING( s_logger, "%s Warning: Incomplete MAC Address %s", __func__, macAddress.c_str( ) );
         }
 
-        if( productType.compare( "professor" ) == 0 )
+        std::string productType;
+
+        if( auto productTypeValue = MfgData::Get( "productType" ) )
         {
-            productName += " SB 500";
-        }
-        else if( productType.compare( "ginger-cheevers" ) == 0 )
-        {
-            productName += " SB 700";
+            productType = *productTypeValue;
+
+            if( productType.compare( "professor" ) == 0 )
+            {
+                productName += " SB 500";
+            }
+            else if( productType.compare( "ginger-cheevers" ) == 0 )
+            {
+                productName += " SB 700";
+            }
+            else
+            {
+                BOSE_DIE( __func__ << " Fatal Error: Invalid Product Type " <<  productType );
+            }
         }
     }
 
