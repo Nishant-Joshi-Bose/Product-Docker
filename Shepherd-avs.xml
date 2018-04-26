@@ -1,0 +1,8 @@
+<ShepherdConfig>
+
+  <daemon name="AVS">
+  <arg>-c</arg>
+  <arg>/opt/Bose/etc/Voice.xml</arg>
+  </daemon>
+
+</ShepherdConfig>

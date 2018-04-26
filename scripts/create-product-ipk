@@ -207,6 +207,8 @@ if [ -e "$opt_dir/etc/Shepherd-vfe.xml" ]; then
     mv "$opt_dir/etc/Shepherd-vfe.xml" "$opt_dir/etc/Shepherd-vfe.xml.disable"
 fi
 
+cp "$wspace/Shepherd-avs.xml" "$opt_dir/etc/Shepherd-avs.xml"
+
 # ----------------------------------------------------------------------------
 
 cd "$opt_dir"/lib || exit
