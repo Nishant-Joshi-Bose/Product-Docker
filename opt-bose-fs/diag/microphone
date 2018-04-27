@@ -24,6 +24,9 @@ def outputTable( values, selected = None ):
     table, th, td {
         border: 1px solid black;
     }
+    td {
+        width: 8em;
+    }
 </style>
 </head>
 <body>
