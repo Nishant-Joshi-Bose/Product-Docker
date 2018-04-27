@@ -6,16 +6,27 @@
 #include "APTaskFactory.h"
 #include "SystemUtils.h"
 
-static DPrint s_logger{ "ReadLpmVersion" };
+namespace
+{
+
+DPrint s_logger{ "ReadLpmVersion" };
+
+void TrimNulls( std::string& s )
+{
+    while( !s.empty() && s.back() == '\0' )
+        s.pop_back();
+}
+
+}
 
 int main()
 {
     int retVal = 1;
-    std::string blobVersion = "";
-    std::string psocVersion = "";
-    std::string bootloaderVersion = "";
-    std::string userappVersion = "";
-    std::string lightbarVersion = "";
+    std::string blobVersion;
+    std::string psocVersion;
+    std::string bootloaderVersion;
+    std::string userappVersion;
+    std::string lightbarVersion;
     int timeout = 30;
 
     auto task = IL::CreateTask( "ReadLpmVersionTask" );
@@ -87,7 +98,14 @@ int main()
         sleep( 1 );
         timeout--;
     }
-    std::cout << "Blob Version: " <<  blobVersion << "\r\n";
+
+    TrimNulls( blobVersion );
+    TrimNulls( userappVersion );
+    TrimNulls( bootloaderVersion );
+    TrimNulls( psocVersion );
+    TrimNulls( lightbarVersion );
+
+    std::cout << "Blob Version: " << blobVersion << "\r\n";
     std::cout << "User App Version: " << userappVersion << "\r\n";
     std::cout << "Bootloader Version: " << bootloaderVersion << "\r\n";
     std::cout << "PSOC Version: " << psocVersion << "\r\n";

@@ -151,6 +151,7 @@ Moved Permanently\r
         call("sh", "-c", "head -20 /mnt/nv/product-persistence/*")
         call("ls", "-lHt", "/mnt/nv/BoseLog")
         call("ps")
+        call("ReadLpmVersion")
         sys.exit()
 
 # ----------------------------------------------------------------------------
