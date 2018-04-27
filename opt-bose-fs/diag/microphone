@@ -9,49 +9,7 @@ import json
 import datetime
 import subprocess
 
-
-exampleOutput = """
-{
-    "header": {
-        "device": "",
-        "resource": "/vfe/meters",
-        "method": "GET",
-        "msgtype": "RESPONSE",
-        "reqID": 0,
-        "version": 1,
-        "status": 200,
-        "token": ""
-    },
-    "body": {
-        "beamLevels": [
-            -79.989845,
-            -73.184128,
-            -79.49144,
-            -73.848434,
-            -77.387215,
-            -77.544029,
-            -79.140587,
-            -74.768105,
-            -79.796616,
-            -76.077446,
-            -78.849442,
-            -73.069771
-        ],
-        "micLevels": [
-            -59.535366,
-            -59.617481,
-            -62.769974,
-            -58.16785,
-            -61.096382,
-            -64.150459,
-            -60.835705,
-            -63.896069
-        ]
-    }
-}
-"""
-
-
+#output the html table of microphone values, with the "selected" mic highlighted and used for offsets
 def outputTable( values, selected = None ):
     print """HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nCache-Control: no-cache\r\nRefresh: 1\r\n\r"""
     print datetime.datetime.now()
@@ -101,7 +59,7 @@ def outputTable( values, selected = None ):
 
 #if "get" or "put" argument specified, perform corresponding action on FrontDoor
 if len(sys.argv) > 1:
-    message = exampleOutput #subprocess.Popen(["frontdoorutil","/vfe"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0] 
+    message = subprocess.Popen(["frontdoorutil","/vfe/meters"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0] 
 
     try:
         data = json.loads(message)
@@ -118,11 +76,11 @@ if len(sys.argv) > 1:
         print """HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nCache-Control: no-cache\r\n\r"""
         print raw
 
-
-    #if "get" argument, perform get request and output as text, using "Refresh" option to continously poll
+    #if given a number, select that microphone as focus for offset
     elif sys.argv[1].isdigit():
         outputTable(mics, int(sys.argv[1]))
 
+    #if anything else, output values without offset
     else:
         outputTable(mics)
 
