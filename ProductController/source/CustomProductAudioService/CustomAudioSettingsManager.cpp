@@ -52,10 +52,12 @@ ErrorCode_t CustomAudioSettingsManager::SetBass( const ProductPb::AudioBassLevel
         BOSE_INFO( s_logger, "Bass doesn't contain any value (%s)", bass.DebugString().c_str() );
         return ErrorCode_t::MISSING_FIELDS;
     }
-    if( bass.value() > m_audioSettings["configurations"][kBassName]["properties"]["max"].asInt()
-        || bass.value() < m_audioSettings["configurations"][kBassName]["properties"]["min"].asInt() )
+    if( !isStepValueValid( bass.value(),
+                           m_audioSettings["configurations"][kBassName]["properties"]["min"].asInt(),
+                           m_audioSettings["configurations"][kBassName]["properties"]["max"].asInt(),
+                           m_audioSettings["configurations"][kBassName]["properties"]["step"].asInt() ) )
     {
-        BOSE_INFO( s_logger, "Bass value out of range (%s)", bass.DebugString().c_str() );
+        BOSE_INFO( s_logger, "Bass value is not valid (%s)", bass.DebugString().c_str() );
         return ErrorCode_t::INVALID_VALUE;
     }
     return SetAudioProperties( bass, kBassName, m_currentBass );
@@ -80,10 +82,12 @@ ErrorCode_t CustomAudioSettingsManager::SetTreble( const ProductPb::AudioTrebleL
         BOSE_INFO( s_logger, "Treble doesn't contain any value (%s)", treble.DebugString().c_str() );
         return ErrorCode_t::MISSING_FIELDS;
     }
-    if( treble.value() > m_audioSettings["configurations"][kTrebleName]["properties"]["max"].asInt()
-        || treble.value() < m_audioSettings["configurations"][kTrebleName]["properties"]["min"].asInt() )
+    if( !isStepValueValid( treble.value(),
+                           m_audioSettings["configurations"][kTrebleName]["properties"]["min"].asInt(),
+                           m_audioSettings["configurations"][kTrebleName]["properties"]["max"].asInt(),
+                           m_audioSettings["configurations"][kTrebleName]["properties"]["step"].asInt() ) )
     {
-        BOSE_INFO( s_logger, "Treble value out of range (%s)", treble.DebugString().c_str() );
+        BOSE_INFO( s_logger, "Treble value is not valild (%s)", treble.DebugString().c_str() );
         return ErrorCode_t::INVALID_VALUE;
     }
     return SetAudioProperties( treble, kTrebleName, m_currentTreble );
@@ -108,10 +112,12 @@ ErrorCode_t CustomAudioSettingsManager::SetCenter( const ProductPb::AudioCenterL
         BOSE_INFO( s_logger, "Center doesn't contain any value (%s)", center.DebugString().c_str() );
         return ErrorCode_t::MISSING_FIELDS;
     }
-    if( center.value() > m_audioSettings["configurations"][kCenterName]["properties"]["max"].asInt()
-        || center.value() < m_audioSettings["configurations"][kCenterName]["properties"]["min"].asInt() )
+    if( !isStepValueValid( center.value(),
+                           m_audioSettings["configurations"][kCenterName]["properties"]["min"].asInt(),
+                           m_audioSettings["configurations"][kCenterName]["properties"]["max"].asInt(),
+                           m_audioSettings["configurations"][kCenterName]["properties"]["step"].asInt() ) )
     {
-        BOSE_INFO( s_logger, "Center value out of range (%s)", center.DebugString().c_str() );
+        BOSE_INFO( s_logger, "Center value is not valid (%s)", center.DebugString().c_str() );
         return ErrorCode_t::INVALID_VALUE;
     }
     return SetAudioProperties( center, kCenterName, m_currentCenter );
@@ -136,8 +142,10 @@ ErrorCode_t CustomAudioSettingsManager::SetSurround( const ProductPb::AudioSurro
         BOSE_INFO( s_logger, "Surround doesn't contain any value (%s)", surround.DebugString().c_str() );
         return ErrorCode_t::MISSING_FIELDS;
     }
-    if( surround.value() > m_audioSettings["configurations"][kSurroundName]["properties"]["max"].asInt()
-        || surround.value() < m_audioSettings["configurations"][kSurroundName]["properties"]["min"].asInt() )
+    if( !isStepValueValid( surround.value(),
+                           m_audioSettings["configurations"][kSurroundName]["properties"]["min"].asInt(),
+                           m_audioSettings["configurations"][kSurroundName]["properties"]["max"].asInt(),
+                           m_audioSettings["configurations"][kSurroundName]["properties"]["step"].asInt() ) )
     {
         BOSE_INFO( s_logger, "Surround value out of range (%s)", surround.DebugString().c_str() );
         return ErrorCode_t::INVALID_VALUE;
@@ -163,8 +171,10 @@ ErrorCode_t CustomAudioSettingsManager::SetSurroundDelay( const ProductPb::Audio
         BOSE_INFO( s_logger, "SurroundDelay doesn't contain any value (%s)", surroundDelay.DebugString().c_str() );
         return ErrorCode_t::MISSING_FIELDS;
     }
-    if( surroundDelay.value() > m_audioSettings["configurations"][kSurroundDelayName]["properties"]["max"].asInt()
-        || surroundDelay.value() < m_audioSettings["configurations"][kSurroundDelayName]["properties"]["min"].asInt() )
+    if( !isStepValueValid( surroundDelay.value(),
+                           m_audioSettings["configurations"][kSurroundDelayName]["properties"]["min"].asInt(),
+                           m_audioSettings["configurations"][kSurroundDelayName]["properties"]["max"].asInt(),
+                           m_audioSettings["configurations"][kSurroundDelayName]["properties"]["step"].asInt() ) )
     {
         BOSE_INFO( s_logger, "SurroundDelay value out of range (%s)", surroundDelay.DebugString().c_str() );
         return ErrorCode_t::INVALID_VALUE;
@@ -191,8 +201,10 @@ ErrorCode_t CustomAudioSettingsManager::SetGainOffset( const ProductPb::AudioGai
         BOSE_INFO( s_logger, "GainOffset doesn't contain any value (%s)", gainOffset.DebugString().c_str() );
         return ErrorCode_t::MISSING_FIELDS;
     }
-    if( gainOffset.value() > m_audioSettings["configurations"][kGainOffsetName]["properties"]["max"].asInt()
-        || gainOffset.value() < m_audioSettings["configurations"][kGainOffsetName]["properties"]["min"].asInt() )
+    if( !isStepValueValid( gainOffset.value(),
+                           m_audioSettings["configurations"][kGainOffsetName]["properties"]["min"].asInt(),
+                           m_audioSettings["configurations"][kGainOffsetName]["properties"]["max"].asInt(),
+                           m_audioSettings["configurations"][kGainOffsetName]["properties"]["step"].asInt() ) )
     {
         BOSE_INFO( s_logger, "GainOffset value out of range (%s)", gainOffset.DebugString().c_str() );
         return ErrorCode_t::INVALID_VALUE;
@@ -219,8 +231,10 @@ ErrorCode_t CustomAudioSettingsManager::SetAvSync( const ProductPb::AudioAvSync&
         BOSE_INFO( s_logger, "AvSync doesn't contain any value (%s)", avSync.DebugString().c_str() );
         return ErrorCode_t::MISSING_FIELDS;
     }
-    if( avSync.value() > m_audioSettings["configurations"][kAvSyncName]["properties"]["max"].asInt()
-        || avSync.value() < m_audioSettings["configurations"][kAvSyncName]["properties"]["min"].asInt() )
+    if( !isStepValueValid( avSync.value(),
+                           m_audioSettings["configurations"][kAvSyncName]["properties"]["min"].asInt(),
+                           m_audioSettings["configurations"][kAvSyncName]["properties"]["max"].asInt(),
+                           m_audioSettings["configurations"][kAvSyncName]["properties"]["step"].asInt() ) )
     {
         BOSE_INFO( s_logger, "AvSync value out of range (%s)", avSync.DebugString().c_str() );
         return ErrorCode_t::INVALID_VALUE;
@@ -247,8 +261,10 @@ ErrorCode_t CustomAudioSettingsManager::SetSubwooferGain( const ProductPb::Audio
         BOSE_INFO( s_logger, "SubwooferGain doesn't contain any value (%s)", subwooferGain.DebugString().c_str() );
         return ErrorCode_t::MISSING_FIELDS;
     }
-    if( subwooferGain.value() > m_audioSettings["configurations"][kSubwooferGainName]["properties"]["max"].asInt()
-        || subwooferGain.value() < m_audioSettings["configurations"][kSubwooferGainName]["properties"]["min"].asInt() )
+    if( !isStepValueValid( subwooferGain.value(),
+                           m_audioSettings["configurations"][kSubwooferGainName]["properties"]["min"].asInt(),
+                           m_audioSettings["configurations"][kSubwooferGainName]["properties"]["max"].asInt(),
+                           m_audioSettings["configurations"][kSubwooferGainName]["properties"]["step"].asInt() ) )
     {
         BOSE_INFO( s_logger, "SubwooferGain value out of range (%s)", subwooferGain.DebugString().c_str() );
         return ErrorCode_t::INVALID_VALUE;
