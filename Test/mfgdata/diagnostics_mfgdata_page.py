@@ -90,7 +90,7 @@ class DiagnosticsPage(SeleniumWrapper):
         self.logger.info("usb_ip_address")
         if request.config.getoption("--target").lower() == 'device':
             network_base = NetworkBase(None, deviceid)
-            usb_interface = request.config.getoption("--usb2-iface")
+            usb_interface = request.config.getoption("--usb-iface")
             usb_device_ip = network_base.check_inf_presence(usb_interface)
         return usb_device_ip
     
@@ -116,7 +116,7 @@ class DiagnosticsPage(SeleniumWrapper):
         self.pts_mode_keypress(device_ip)
         time.sleep(5)
         network_base = NetworkBase(None, deviceid)
-        usb_interface = request.config.getoption("--usb2-iface")
+        usb_interface = request.config.getoption("--usb-iface")
         usb_ip_address = network_base.check_inf_presence(usb_interface)
         assert usb_ip_address == self.expected_usb_ip, \
                      'USB IP did not match. Found {}, expected {}'.format(usb_ip_address, self.expected_usb_ip)
