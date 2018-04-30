@@ -50,7 +50,7 @@ ErrorCode_t CustomAudioSettingsManager::SetBass( const ProductPb::AudioBassLevel
     if( !bass.has_value() )
     {
         BOSE_INFO( s_logger, "Bass doesn't contain any value (%s)", bass.DebugString().c_str() );
-        return ErrorCode_t::MISSING_FIELDS;
+        return ErrorCode_t::MISSING_VALUE;
     }
     if( !isStepValueValid( bass.value(),
                            m_audioSettings["configurations"][kBassName]["properties"]["min"].asInt(),
@@ -80,7 +80,7 @@ ErrorCode_t CustomAudioSettingsManager::SetTreble( const ProductPb::AudioTrebleL
     if( !treble.has_value() )
     {
         BOSE_INFO( s_logger, "Treble doesn't contain any value (%s)", treble.DebugString().c_str() );
-        return ErrorCode_t::MISSING_FIELDS;
+        return ErrorCode_t::MISSING_VALUE;
     }
     if( !isStepValueValid( treble.value(),
                            m_audioSettings["configurations"][kTrebleName]["properties"]["min"].asInt(),
@@ -110,7 +110,7 @@ ErrorCode_t CustomAudioSettingsManager::SetCenter( const ProductPb::AudioCenterL
     if( !center.has_value() )
     {
         BOSE_INFO( s_logger, "Center doesn't contain any value (%s)", center.DebugString().c_str() );
-        return ErrorCode_t::MISSING_FIELDS;
+        return ErrorCode_t::MISSING_VALUE;
     }
     if( !isStepValueValid( center.value(),
                            m_audioSettings["configurations"][kCenterName]["properties"]["min"].asInt(),
@@ -140,7 +140,7 @@ ErrorCode_t CustomAudioSettingsManager::SetSurround( const ProductPb::AudioSurro
     if( !surround.has_value() )
     {
         BOSE_INFO( s_logger, "Surround doesn't contain any value (%s)", surround.DebugString().c_str() );
-        return ErrorCode_t::MISSING_FIELDS;
+        return ErrorCode_t::MISSING_VALUE;
     }
     if( !isStepValueValid( surround.value(),
                            m_audioSettings["configurations"][kSurroundName]["properties"]["min"].asInt(),
@@ -169,7 +169,7 @@ ErrorCode_t CustomAudioSettingsManager::SetSurroundDelay( const ProductPb::Audio
     if( !surroundDelay.has_value() )
     {
         BOSE_INFO( s_logger, "SurroundDelay doesn't contain any value (%s)", surroundDelay.DebugString().c_str() );
-        return ErrorCode_t::MISSING_FIELDS;
+        return ErrorCode_t::MISSING_VALUE;
     }
     if( !isStepValueValid( surroundDelay.value(),
                            m_audioSettings["configurations"][kSurroundDelayName]["properties"]["min"].asInt(),
@@ -199,7 +199,7 @@ ErrorCode_t CustomAudioSettingsManager::SetGainOffset( const ProductPb::AudioGai
     if( !gainOffset.has_value() )
     {
         BOSE_INFO( s_logger, "GainOffset doesn't contain any value (%s)", gainOffset.DebugString().c_str() );
-        return ErrorCode_t::MISSING_FIELDS;
+        return ErrorCode_t::MISSING_VALUE;
     }
     if( !isStepValueValid( gainOffset.value(),
                            m_audioSettings["configurations"][kGainOffsetName]["properties"]["min"].asInt(),
@@ -229,7 +229,7 @@ ErrorCode_t CustomAudioSettingsManager::SetAvSync( const ProductPb::AudioAvSync&
     if( !avSync.has_value() )
     {
         BOSE_INFO( s_logger, "AvSync doesn't contain any value (%s)", avSync.DebugString().c_str() );
-        return ErrorCode_t::MISSING_FIELDS;
+        return ErrorCode_t::MISSING_VALUE;
     }
     if( !isStepValueValid( avSync.value(),
                            m_audioSettings["configurations"][kAvSyncName]["properties"]["min"].asInt(),
@@ -259,7 +259,7 @@ ErrorCode_t CustomAudioSettingsManager::SetSubwooferGain( const ProductPb::Audio
     if( !subwooferGain.has_value() )
     {
         BOSE_INFO( s_logger, "SubwooferGain doesn't contain any value (%s)", subwooferGain.DebugString().c_str() );
-        return ErrorCode_t::MISSING_FIELDS;
+        return ErrorCode_t::MISSING_VALUE;
     }
     if( !isStepValueValid( subwooferGain.value(),
                            m_audioSettings["configurations"][kSubwooferGainName]["properties"]["min"].asInt(),
@@ -289,7 +289,7 @@ ErrorCode_t CustomAudioSettingsManager::SetMode( const ProductPb::AudioMode& mod
     if( !mode.has_value() )
     {
         BOSE_INFO( s_logger, "Mode doesn't contain any value (%s)", mode.DebugString().c_str() );
-        return ErrorCode_t::MISSING_FIELDS;
+        return ErrorCode_t::MISSING_VALUE;
     }
     if( !isValueInArray( mode.value(),
                          m_audioSettings["configurations"][kModeName]["properties"]["supportedValues"] ) )
@@ -316,7 +316,7 @@ ErrorCode_t CustomAudioSettingsManager::SetContentType( const ProductPb::AudioCo
     if( !contentType.has_value() )
     {
         BOSE_INFO( s_logger, "ContentType doesn't contain any value (%s)", contentType.DebugString().c_str() );
-        return ErrorCode_t::MISSING_FIELDS;
+        return ErrorCode_t::MISSING_VALUE;
     }
     if( !isValueInArray( contentType.value(),
                          m_audioSettings["configurations"][kContentTypeName]["properties"]["supportedValues"] ) )
@@ -343,7 +343,7 @@ ErrorCode_t CustomAudioSettingsManager::SetDualMonoSelect( const ProductPb::Audi
     if( !dualMonoSelect.has_value() )
     {
         BOSE_INFO( s_logger, "DualMonoSelect doesn't contain any value (%s)", dualMonoSelect.DebugString().c_str() );
-        return ErrorCode_t::MISSING_FIELDS;
+        return ErrorCode_t::MISSING_VALUE;
     }
 
     // Check if new value is valid in supportedValue list
@@ -382,7 +382,7 @@ ErrorCode_t CustomAudioSettingsManager::SetEqSelect( const ProductPb::AudioEqSel
     if( !eqSelect.has_mode() )
     {
         BOSE_INFO( s_logger, "EqSelect doesn't contain any mode (%s)", eqSelect.DebugString().c_str() );
-        return ErrorCode_t::MISSING_FIELDS;
+        return ErrorCode_t::MISSING_VALUE;
     }
 
     // Check if new value is valid in supportedValue list
@@ -421,7 +421,7 @@ ErrorCode_t CustomAudioSettingsManager::SetSubwooferPolarity( const ProductPb::A
     if( !subwooferPolarity.has_value() )
     {
         BOSE_INFO( s_logger, "SubwooferPolarity doesn't contain any value (%s)", subwooferPolarity.DebugString().c_str() );
-        return ErrorCode_t::MISSING_FIELDS;
+        return ErrorCode_t::MISSING_VALUE;
     }
     // Check if new value is valid in supportedValue list
     if( !isValueInArray( subwooferPolarity.value(),

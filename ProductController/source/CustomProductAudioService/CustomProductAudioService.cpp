@@ -276,7 +276,7 @@ void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::ThermalDataReceivedCb( const IpcSystemTemperatureData_t& data )
 {
-    BOSE_DEBUG( s_logger, __func__ );
+    BOSE_VERBOSE( s_logger, __func__ );
     m_MainStreamAudioSettings.mutable_temperaturedata()->CopyFrom( data );
     SendMainStreamAudioSettingsEvent();
 }
