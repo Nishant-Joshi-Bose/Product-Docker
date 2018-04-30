@@ -144,5 +144,6 @@ timeout(time: 8, unit: 'HOURS')
     }
 	// To Push Data of Failed Job and Total Job on Graphite
     println failureList.size()
-    println buildCount 
+    println buildCount
+    def GraphiteSocket = new GraphiteSocket(failureList.size(),buildCount,'Eddie-Product-Pipeline') 
 }

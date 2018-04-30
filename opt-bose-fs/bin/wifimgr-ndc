@@ -7,20 +7,22 @@ import sys
 import os
 import subprocess
 import re
+import json
 
 this_script = os.path.basename(sys.argv.pop(0))
 
 if len(sys.argv) != 1:
     raise Exception("wrong usage, include country as argument")
 
-bssidRe = re.compile(r"^BSS\s(?P<BSSID>.+)\s+\(on wlan0\).*$")
+bssidRe = re.compile(r"^BSS\s(?P<oui>.+):..:..:..\s+\(on wlan0\).*$")
 regexps = [
-    re.compile(r"^SSID:\s+(?P<SSID>.*)$"),
-    re.compile(r"^\*\s+UUID:\s+(?P<UUID>.+)$"),
-    re.compile(r"^\*\s+Manufacturer:\s+(?P<Manufacturer>.+)$"),
-    re.compile(r"^\*\s+Model:\s+(?P<Model>.+)$"),
-    re.compile(r"^\*\s+Model\s+Number:\s+(?P<ModelNumber>.+)$"),
-    re.compile(r"^\*\s+Device\s+name:\s+(?P<DeviceName>.+)$"),
+    re.compile(r"^freq:\s+(?P<frequency>.+)$"),
+    re.compile(r"^SSID:\s+(?P<ssid>.*)$"),
+    re.compile(r"^\*\s+UUID:\s+(?P<uuid>.+)$"),
+    re.compile(r"^\*\s+Manufacturer:\s+(?P<manufacturer>.+)$"),
+    re.compile(r"^\*\s+Model:\s+(?P<model>.+)$"),
+    re.compile(r"^\*\s+Model\s+Number:\s+(?P<modelNumber>.+)$"),
+    re.compile(r"^\*\s+Device\s+name:\s+(?P<deviceName>.+)$"),
 ]
 
 # Perform a site scan and save the results in a file.  This information
@@ -48,6 +50,7 @@ def parse(content):
             if result is not None:
                 cells[-1].update(result.groupdict())
                 continue
+    cells = json.dumps(cells, indent=4)
     return cells
 
 subprocess.call(["ifconfig", "wlan0", "up"])
@@ -57,4 +60,4 @@ subprocess.call(["iw", "reg", "set", country])
 output=scan()
 cells = parse(output)
 with open("/tmp/wifi-mgr-ndc.json", "w") as f:
-    f.write(str(cells))
+    f.write("{ \"apInfo\":\n"+str(cells)+"\n}")
