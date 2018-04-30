@@ -1260,24 +1260,69 @@ void ProfessorProductController::Wait( )
 ///
 /// @name   ProfessorProductController::GetDefaultProductName
 ///
-/// @brief  This method is to get the default product name by reading from mac address.
+/// @brief  This method is used to get the default product name.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 std::string ProfessorProductController::GetDefaultProductName( ) const
 {
-    std::string productName = "Bose ";
-    std::string macAddress = MacAddressInfo::GetPrimaryMAC( );
-    try
+    std::string productName;
+
+    ///
+    /// Ensure that the device has a valid marketing product name, based on the manufacturing data;
+    /// and assign this value to the default product name initially.
+    ///
+    if( auto productNameValue = MfgData::Get( "productName" ) )
     {
-        productName += ( macAddress.substr( macAddress.length( ) - 6 ) );
+        productName = *productNameValue;
     }
-    catch( const std::out_of_range& error )
+    else
     {
-        productName += macAddress;
-        BOSE_WARNING( s_logger, "errorType = %s", error.what( ) );
+        BOSE_DIE( __func__ << " Fatal Error: No Product Name " );
     }
 
-    BOSE_INFO( s_logger, "%s productName=%s", __func__, productName.c_str( ) );
+    ///
+    /// Leave the default product name assigned to the marketing product name in the manufacturing
+    /// data for production non-development devices; otherwise, assign the default product name
+    /// based on its MAC address and product type.
+    ///
+    if( IsDevelopmentMode( ) )
+    {
+        std::string macAddress = MacAddressInfo::GetPrimaryMAC( );
+
+        try
+        {
+            productName = ( macAddress.substr( macAddress.length() - 6 ) );
+        }
+        catch( const std::out_of_range& error )
+        {
+            productName = macAddress;
+
+            BOSE_WARNING( s_logger, "%s Warning: Incomplete MAC Address %s", __func__, macAddress.c_str( ) );
+        }
+
+        std::string productType;
+
+        if( auto productTypeValue = MfgData::Get( "productType" ) )
+        {
+            productType = *productTypeValue;
+
+            if( productType.compare( "professor" ) == 0 )
+            {
+                productName += " SB 500";
+            }
+            else if( productType.compare( "ginger-cheevers" ) == 0 )
+            {
+                productName += " SB 700";
+            }
+            else
+            {
+                BOSE_DIE( __func__ << " Fatal Error: Invalid Product Type " <<  productType );
+            }
+        }
+    }
+
+    BOSE_INFO( s_logger, "%s: The default product name is %s.", __func__, productName.c_str( ) );
+
     return productName;
 }
 
