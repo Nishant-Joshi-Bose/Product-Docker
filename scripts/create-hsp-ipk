@@ -107,10 +107,10 @@ if [ ! -f /opt/Bose/hsp/update_ext4.zip ]; then
     exiterror
 fi
 
-if [ -e /etc/initscripts/recovery-updater.sh ]
-then
-    /etc/initscripts/recovery-updater.sh /opt/Bose/hsp/update_ext4.zip || exiterror
-fi
+#if [ -e /etc/initscripts/recovery-updater.sh ]
+#then
+#    /etc/initscripts/recovery-updater.sh /opt/Bose/hsp/update_ext4.zip || exiterror
+#fi
 
 if ! grep -q /cache /proc/mounts; then
     echo "Mounting Cache"
