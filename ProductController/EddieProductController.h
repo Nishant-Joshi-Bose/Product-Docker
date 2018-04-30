@@ -17,6 +17,7 @@
 #include "ProtoPersistenceIF.h"
 #include "ProductControllerStateTop.h"
 #include "CustomProductControllerStateNetworkStandby.h"
+#include "CustomProductControllerStateLowPowerResume.h"
 #include "CustomProductControllerStateLowPowerStandby.h"
 #include "CustomProductControllerStateLowPowerStandbyTransition.h"
 #include "ProductControllerStateNetworkStandbyConfigured.h"
@@ -351,6 +352,7 @@ private:
     ProductControllerStateBooting                                   m_ProductControllerStateBooting;
     ProductControllerStateBooted                                    m_ProductControllerStateBooted;
     CustomProductControllerStateOn                                  m_CustomProductControllerStateOn;
+    CustomProductControllerStateLowPowerResume                      m_CustomProductControllerStateLowPowerResume;
     CustomProductControllerStateLowPowerStandby                     m_CustomProductControllerStateLowPowerStandby;
     ProductControllerStateSoftwareInstall                           m_ProductControllerStateSwInstall;
     ProductControllerStateCriticalError                             m_ProductControllerStateCriticalError;
