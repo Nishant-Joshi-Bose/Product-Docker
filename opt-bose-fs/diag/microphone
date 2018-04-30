@@ -62,19 +62,24 @@ def outputTable( values, selected = None ):
 
 #if argument given, return mic data
 if len(sys.argv) > 1:
-    message = subprocess.Popen(["frontdoorutil","/vfe/meters"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0]
+
+    output = subprocess.Popen(["frontdoorutil","/vfe/meters"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 
     try:
-        data = json.loads(message)
+        data = json.loads(output[0])
         mics = data['body']['micLevels']
         beams = data['body']['beamLevels']
         raw = json.dumps(data['body'],indent=4)
 
     except ValueError:
-        print message+"\n"
+        print output[1]+"\n"
         sys.exit()
 
-    #if "raw" argument, being asked for raw data. 
+    except KeyError:
+        print output[0]+"\n"
+        sys.exit()
+
+    #if "raw" argument, being asked for raw JSON data. 
     if sys.argv[1]=="raw":
         print """HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nCache-Control: no-cache\r\n\r"""
         print raw
@@ -87,6 +92,7 @@ if len(sys.argv) > 1:
     else:
         outputTable(mics)
 
+#else, output main page
 else:
     print """
 <!DOCTYPE HTML>
@@ -119,19 +125,12 @@ else:
                 overflow: scroll;
             }
         </style>
-        <script>
-            if urlParams.has('selected')
-            {
-                document.getElementById('values').setAttribute('src','/diag/microphone/'+urlParams.get('selected'));
-            }
-        </script>
     </head>
-
     <body>
         <h1 id='header'>Microphones</h1>
         <hr>
         <li>Microphone Values
-        <iframe id="values" src="/diag/microphone/all"></iframe>   <!-- inline frame pulls from "get" portion of CGI script, while button fetches "pull" request -->
+        <iframe id="values" src="/diag/microphone/all"></iframe>   <!-- inline frame loads the microphone data, mic selection changes src of iframe -->
         <hr>
     </body>
 </html>

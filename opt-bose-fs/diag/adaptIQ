@@ -15,19 +15,23 @@ if len(sys.argv) > 1:
     #if "get" argument, perform get request and output as text, using "Refresh" option to continously poll
     if sys.argv[1]== "get":
 
-        message = subprocess.Popen(["frontdoorutil","/adaptiq"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0]
+        output = subprocess.Popen(["frontdoorutil","/adaptiq"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 
         print """HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nCache-Control: no-cache\r\nRefresh: 1\r\n\r"""
 
         print datetime.datetime.now()
 
         try:
-            data = json.loads(message)
+            data = json.loads(output[0])
             print "hpConnected: "+json.dumps(data['body']['hpConnected'],indent=4);
             print "smState: "+json.dumps(data['body']['smState'],indent=4);
 
         except ValueError:
-            print message+"\n"
+            print output[1]+"\n"
+            sys.exit()
+        except KeyError:
+            print output[0]+"\n"
+            sys.exit()
 
     #if "put" argument, perform put request with utility. Result will be reflected in next "get"
     elif (sys.argv[1]=="put"):
