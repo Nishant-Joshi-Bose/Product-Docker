@@ -108,6 +108,7 @@ if [ ! -f /opt/Bose/hsp/update_ext4.zip ]; then
 fi
 
 # Commented temporarily to workaround CASTLE-13393
+# Once root-cause is found, same / different way to update recoveryFS should be added back.
 #if [ -e /etc/initscripts/recovery-updater.sh ]
 #then
 #    /etc/initscripts/recovery-updater.sh /opt/Bose/hsp/update_ext4.zip || exiterror
