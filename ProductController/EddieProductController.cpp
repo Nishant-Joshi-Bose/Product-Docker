@@ -202,7 +202,7 @@ Callback < ProductMessage > EddieProductController::GetMessageHandler( )
 std::string EddieProductController::GetDefaultProductName() const
 {
     std::string productName;
-    if( !IsDevelopmentMode() )
+    if ( !IsDevelopmentMode() )
     {
         productName = "Bose Home Speaker 500";
     }
@@ -591,11 +591,11 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
     BOSE_INFO( s_logger, "%s", __func__ );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// LPM status messages has both common handling and custom specific handling
+    /// LPM status messages has handle at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     if( productMessage.has_lpmstatus( ) )
     {
-        // First do the Eddie-specific stuff, i.e., register callbacks and thermal task control
+        // First do the product specific stuff, registering for LPM events.
         if( productMessage.lpmstatus( ).has_connected( ) && productMessage.lpmstatus( ).connected( ) )
         {
             RegisterLpmEvents();
@@ -606,7 +606,6 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
                         IpcLpmSystemState_t_Name( productMessage.lpmstatus( ).systemstate( ) ).c_str( ) );
         }
 
-        // Then (after registering for events above) do the common stuff
         ( void ) HandleCommonProductMessage( productMessage );
     }
     else if( productMessage.has_action() )
