@@ -13,7 +13,7 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@5b2fed73d2e6137cc514622bb43729883f4f8b7a"
+    "selected_version": "master@d8bd048cc178fc4911e94e564f71c21e866825e8"
   },
   {
     "name": "AVS-qc8017_32",
@@ -45,11 +45,11 @@
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.4.1-20850"
+    "selected_version": "Release/Castle-Fork/0.4.2-20897"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/0.4.1-20850"
+    "selected_version": "Release/Castle-Fork/0.4.2-20897"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -101,7 +101,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@cc6e35663ee5fcf6b8ff3f788dcf558078a60fd0"
+    "selected_version": "master@5eec227994a5e0ad190de38351fdc31f74b98fef"
   },
   {
     "name": "CastleProductUIAssets",
@@ -189,7 +189,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/SOP/0.4.4-524+b9b7710"
+    "selected_version": "Release/SOP/0.4.5-547+53b62ca"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
