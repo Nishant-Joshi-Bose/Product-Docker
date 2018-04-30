@@ -47,6 +47,8 @@ def pytest_addoption(parser):
                      help="logging : [useSerial / ipBased ]")
     parser.addoption("--network-iface", action="store", default="wlan0",
                      help="network interface to choose")
+    parser.addoption("--usb-iface", action="store", default="usb2",
+                     help="USB interface to choose")
     parser.addoption("--ip-address", action="store", default=None,
                      help="IP Address of Target under test")
     parser.addoption("--lpm-port", action="store", default=None,
