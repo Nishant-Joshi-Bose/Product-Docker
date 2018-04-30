@@ -72,6 +72,7 @@ ADD_EXECUTABLE(Professor
   source/ProductDspHelper.cpp
   source/ProductSourceInfo.cpp
   source/ProductStart.cpp
+  source/ProductSTSStateTopAiQ.cpp
   source/ProductSystemManager.cpp
   source/ProfessorProductController.cpp
 )
