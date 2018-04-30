@@ -107,6 +107,7 @@ if [ ! -f /opt/Bose/hsp/update_ext4.zip ]; then
     exiterror
 fi
 
+# Commented temporarily to workaround CASTLE-13393
 #if [ -e /etc/initscripts/recovery-updater.sh ]
 #then
 #    /etc/initscripts/recovery-updater.sh /opt/Bose/hsp/update_ext4.zip || exiterror
