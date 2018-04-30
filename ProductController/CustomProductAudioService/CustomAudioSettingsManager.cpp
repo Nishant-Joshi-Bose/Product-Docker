@@ -47,7 +47,7 @@ ErrorCode_t CustomAudioSettingsManager::SetBass( const ProductPb::AudioBassLevel
     BOSE_DEBUG( s_logger, __func__ );
     if( !bass.has_value() )
     {
-        return ErrorCode_t::MISSING_FIELDS;
+        return ErrorCode_t::MISSING_VALUE;
     }
     if( bass.value() > m_audioSettings["configurations"][kBassName]["properties"]["max"].asInt()
         || bass.value() < m_audioSettings["configurations"][kBassName]["properties"]["min"].asInt() )
@@ -71,7 +71,7 @@ ErrorCode_t CustomAudioSettingsManager::SetCenter( const ProductPb::AudioCenterL
     BOSE_DEBUG( s_logger, __func__ );
     if( !center.has_value() )
     {
-        return ErrorCode_t::MISSING_FIELDS;
+        return ErrorCode_t::MISSING_VALUE;
     }
     if( center.value() > m_audioSettings["configurations"][kCenterName]["properties"]["max"].asInt()
         || center.value() < m_audioSettings["configurations"][kCenterName]["properties"]["min"].asInt() )
@@ -95,7 +95,7 @@ ErrorCode_t CustomAudioSettingsManager::SetMode( const ProductPb::AudioMode& mod
     BOSE_DEBUG( s_logger, __func__ );
     if( !mode.has_value() )
     {
-        return ErrorCode_t::MISSING_FIELDS;
+        return ErrorCode_t::MISSING_VALUE;
     }
     if( !isValueInArray( mode.value(),
                          m_audioSettings["configurations"][kModeName]["properties"]["supportedValues"] ) )
@@ -119,7 +119,7 @@ ErrorCode_t CustomAudioSettingsManager::SetTreble( const ProductPb::AudioTrebleL
     BOSE_DEBUG( s_logger, __func__ );
     if( !treble.has_value() )
     {
-        return ErrorCode_t::MISSING_FIELDS;
+        return ErrorCode_t::MISSING_VALUE;
     }
     if( treble.value() > m_audioSettings["configurations"][kTrebleName]["properties"]["max"].asInt()
         || treble.value() < m_audioSettings["configurations"][kTrebleName]["properties"]["min"].asInt() )
