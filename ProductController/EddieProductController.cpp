@@ -40,7 +40,7 @@ EddieProductController::EddieProductController():
     m_CustomProductControllerStateOn( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_ON ),
     m_CustomProductControllerStateLowPowerResume( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_RESUME ),
     m_CustomProductControllerStateLowPowerStandby( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY ),
-    m_ProductControllerStateSwInstall( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL ),
+    m_CustomProductControllerStateSwInstall( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL ),
     m_ProductControllerStateCriticalError( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_CRITICAL_ERROR ),
     m_ProductControllerStatePlaying( GetHsm(), &m_CustomProductControllerStateOn, PRODUCT_CONTROLLER_STATE_PLAYING ),
     m_ProductControllerStatePlayable( GetHsm(), &m_CustomProductControllerStateOn, PRODUCT_CONTROLLER_STATE_PLAYABLE ),
@@ -93,7 +93,7 @@ void EddieProductController::InitializeHsm()
     GetHsm().AddState( "", &m_ProductControllerStateTop );
     GetHsm().AddState( "", &m_CustomProductControllerStateLowPowerResume );
     GetHsm().AddState( "", &m_CustomProductControllerStateLowPowerStandby );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), &m_ProductControllerStateSwInstall );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), &m_CustomProductControllerStateSwInstall );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), &m_ProductControllerStateBooting );
     GetHsm().AddState( "", &m_ProductControllerStateBooted );
     GetHsm().AddState( "", &m_CustomProductControllerStateOn );
