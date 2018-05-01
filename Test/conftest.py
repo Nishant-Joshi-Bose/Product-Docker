@@ -137,7 +137,8 @@ def frontDoor(device_ip, request):
     front_door = FrontDoorAPI(device_ip)
 
     def tear():
-        front_door.close()
+        if front_door:
+            front_door.close()
     request.addfinalizer(tear)
 
     return front_door

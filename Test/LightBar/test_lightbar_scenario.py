@@ -56,6 +56,8 @@ def pytest_generate_tests(metafunc):
                 IPAddressError("No valid device IP")
             frontdoor = FrontDoorAPI(device_ip)
             lightbar_response = frontdoor.getActiveAnimation()
+            if frontdoor:
+                frontdoor.close()
             LOGGER.debug("Lightbar response is %s", lightbar_response)
             animation_values = lightbar_response["properties"]["supportedValues"]
             metafunc.parametrize("animation_value", animation_values)
