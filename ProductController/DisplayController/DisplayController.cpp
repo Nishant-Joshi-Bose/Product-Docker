@@ -19,7 +19,9 @@
 #include "ProductController.h"
 #include "LpmClientFactory.h"
 #include "SyncCallback.h"
+#include "StringUtils.h"
 #include "EndPointsDefines.h"
+#include "MonotonicClock.h"
 
 static DPrint s_logger( "DisplayController" );
 using namespace ::DisplayController::Protobuf;
@@ -27,95 +29,132 @@ using namespace ::DisplayController::Protobuf;
 namespace ProductApp
 {
 
-typedef enum
+/*! \brief Levels of intensity for the backlight.
+ * These are triggered based off the lux values from the lowering and rising tables.
+ */
+static std::vector<uint8_t> s_backLightLevels =
 {
-    BACK_LIGHT_LEVEL_DIM           =   2,
-    BACK_LIGHT_LEVEL_DIM_HIGH      =  10,
-    BACK_LIGHT_LEVEL_MEDIUM_LOW    =  20,
-    BACK_LIGHT_LEVEL_MEDIUM        =  25,
-    BACK_LIGHT_LEVEL_MEDIUM_HIGH   =  40,
-    BACK_LIGHT_LEVEL_BRIGHT        =  60,
-    BACK_LIGHT_LEVEL_BRIGHT_HIGH   = 100
-} e_backLightLevel;
-
-typedef struct
-{
-    float            lux ;
-    e_backLightLevel level;
-} t_luxBacklightTuple;
-
-// The LUX values are in real lux, without the light reading device attenuation
-static std::vector<t_luxBacklightTuple> lowering_lux_threshold =
-{
-    {387.00, BACK_LIGHT_LEVEL_BRIGHT_HIGH},// BRIGHT HIGH
-    {195.50, BACK_LIGHT_LEVEL_BRIGHT     },
-    { 90.00, BACK_LIGHT_LEVEL_MEDIUM_HIGH},
-    { 45.00, BACK_LIGHT_LEVEL_MEDIUM     },
-    { 15.30, BACK_LIGHT_LEVEL_MEDIUM_LOW },
-    {  4.50, BACK_LIGHT_LEVEL_DIM_HIGH   },
-    {  0.00, BACK_LIGHT_LEVEL_DIM        } // DIM LOW
+    100,
+    60,
+    40,
+    25,
+    20,
+    10,
+    2
 };
 
-static std::vector<t_luxBacklightTuple> rising_lux_threshold =
+/*! \brief Lower thresholds for setting backlight level from lux.
+ * The LUX values are in real lux, without the light reading device attenuation
+ */
+static std::vector<float> s_loweringLuxThreshold =
 {
-    {430.00, BACK_LIGHT_LEVEL_BRIGHT_HIGH},// BRIGHT HIGH
-    {215.00, BACK_LIGHT_LEVEL_BRIGHT     },
-    {100.00, BACK_LIGHT_LEVEL_MEDIUM_HIGH},
-    { 50.00, BACK_LIGHT_LEVEL_MEDIUM     },
-    { 17.00, BACK_LIGHT_LEVEL_MEDIUM_LOW },
-    {  5.00, BACK_LIGHT_LEVEL_DIM_HIGH   },
-    {  0.00, BACK_LIGHT_LEVEL_DIM        } // DIM LOW
+    387.00,
+    195.50,
+    90.00,
+    45.00,
+    15.30,
+    4.50,
+    0.00
 };
 
-static constexpr char  DISPLAY_CONTROLLER_FILE_NAME   [] = "/opt/Bose/etc/display_controller.json";
-static constexpr char  JSON_TOKEN_DISPLAY_CONTROLLER  [] = "DisplayController"                    ;
-static constexpr char  JSON_TOKEN_DEVICE_MODE         [] = "Mode"                                 ;
-static constexpr char  JSON_TOKEN_DEVICE_ABSORTION_LUX[] = "DeviceAbsortionLux"                   ;
-static constexpr char  JSON_TOKEN_BACK_LIGHT_LEVELS   [] = "BackLightLevelsPercent"               ;
-static constexpr char  JSON_TOKEN_LOWERING_THRESHOLDS [] = "LoweringThresholdLux"                 ;
-static constexpr char  JSON_TOKEN_RISING_THRESHOLDS   [] = "RisingThresholdLux"                   ;
-static constexpr int   MONITOR_SENSOR_SLEEP_MS           = 1000 ;
-static constexpr int   CHANGING_LEVEL_SLEEP_MS           = 30   ; //TODO: change this to 10 ms, once this implementation is moved to the LPM.
-static constexpr int   CHANGING_LEVEL_STEP_SIZE          = 1   ;
-static constexpr float LUX_DIFF_THRESHOLD                = 2.0f ;
-static constexpr float PLEXI_LUX_FACTOR                  = 1.0f ;
-static constexpr float SILVER_LUX_FACTOR                 = 11.0f;
-static constexpr float BLACK_LUX_FACTOR                  = 16.0f;
+/*! \brief Upper thresholds for setting backlight level from lux.
+ * The LUX values are in real lux, without the light reading device attenuation
+ */
+static std::vector<float> s_risingLuxThreshold =
+{
+    430.00,
+    215.00,
+    100.00,
+    50.00,
+    17.00,
+    5.00,
+    0.00
+};
 
+static constexpr char DISPLAY_CONTROLLER_FILE_NAME   [] = "/opt/Bose/etc/display_controller.json";
+static constexpr char JSON_TOKEN_DISPLAY_CONTROLLER  [] = "DisplayController";
+static constexpr char JSON_TOKEN_BACK_LIGHT_LEVELS   [] = "BackLightLevelsPercent";
+static constexpr char JSON_TOKEN_LOWERING_THRESHOLDS [] = "LoweringThresholdLux";
+static constexpr char JSON_TOKEN_RISING_THRESHOLDS   [] = "RisingThresholdLux";
+
+static constexpr char UIBRIGHTNESS_MODE_NAME_AUTO[]     = "automatic";
+static constexpr char UIBRIGHTNESS_MODE_NAME_DEFAULT[]  = "default";
+static constexpr char UIBRIGHTNESS_MODE_NAME_MANUAL[]   = "manual";
+
+static constexpr char FRONTDOOR_ENDPOINT_ALIVE[]        = "/ui/alive";
+static constexpr char FRONTDOOR_ENDPOINT_BRIGHTNESS[]   = "/ui/lcd/brightness";
+
+static constexpr int   UPDATE_SLEEP_MS                  = 1000;
+static constexpr int   SEND_DEFAULTS_TO_LPM_RETRY_MS    = 2000;
+static constexpr float SILVER_LUX_FACTOR                = 11.0f;
+static constexpr uint8_t BRIGHTNESS_MAX                 = 100;
+static constexpr uint8_t BRIGHTNESS_MIN                 = 0;
+
+/*!
+ */
 DisplayController::DisplayController( ProductController& controller, const std::shared_ptr<FrontDoorClientIF>& fd_client,
                                       LpmClientIF::LpmClientPtr clientPtr, AsyncCallback<bool> uiConnectedCb ):
     m_productController( controller ),
     m_frontdoorClientPtr( fd_client ),
     m_lpmClient( clientPtr ),
+    m_defaultsSentToLpm( false ),
+    m_defaultsSentTime( 0 ),
+    m_lcdStandbyBrightnessCap( 50 ), // Sensible default. Real default loaded from JSON.
+    m_lcdBrightnessCapSystem( BRIGHTNESS_MAX ),
+    m_lcdBrightnessCapFrontdoor( BRIGHTNESS_MAX ),
     m_timeToStop( false ),
-    m_autoMode( true ),
     m_uiHeartBeat( ULLONG_MAX ),
     m_localHeartBeat( ULLONG_MAX ),
     m_ProductControllerUiConnectedCb( uiConnectedCb )
 {
-    ParseJSONData();
-}// constructor
 
+}
+
+/*!
+ */
 DisplayController::~DisplayController()
 {
     m_timeToStop = true;
 
-    if( m_threadMonitorLightSensor )
+    if( m_threadUpdateLoop )
     {
-        m_threadMonitorLightSensor->join();
+        m_threadUpdateLoop->join();
     }
-}// destructor
+}
 
-void DisplayController::ParseJSONData()
+/*!
+ */
+void DisplayController::Initialize()
 {
+    bool jsonReadSuccess = ParseJSONData();
+
+    //ui/display end point registration with front door
+    RegisterFrontdoorEndPoints();
+
+    m_threadUpdateLoop = std::unique_ptr<std::thread>( new std::thread( [this] { UpdateLoop(); } ) );
+
+    if( ! jsonReadSuccess )
+    {
+        m_defaultsSentToLpm = true; // Update loop will never send the defaults if this is true.
+
+        BOSE_WARNING( s_logger, "JSON load from '%s' failed. Not sending settings to LPM.", DISPLAY_CONTROLLER_FILE_NAME );
+    }
+}
+
+/*!
+ */
+bool DisplayController::ParseJSONData()
+{
+    BOSE_DEBUG( s_logger, "%s", __FUNCTION__ );
+
     auto f = SystemUtils::ReadFile( DISPLAY_CONTROLLER_FILE_NAME );
 
     m_luxFactor = SILVER_LUX_FACTOR;
 
     if( ! f )
     {
-        BOSE_LOG( WARNING, "Warning: can't find file: " << DISPLAY_CONTROLLER_FILE_NAME );
-        return;
+        BOSE_LOG( WARNING, "Can't find file: " << DISPLAY_CONTROLLER_FILE_NAME );
+        return false;
     }
 
     static Json::CharReaderBuilder readerBuilder;
@@ -126,38 +165,26 @@ void DisplayController::ParseJSONData()
 
     if( ! json_reader->parse( s.c_str(), s.c_str() + s.size(), &json_root, &errors ) )
     {
-        BOSE_LOG( ERROR, "Error: failed to parse JSON File: " << DISPLAY_CONTROLLER_FILE_NAME << " " << errors.c_str() );
-        return;
-    }
-
-    if( ! json_root[JSON_TOKEN_DISPLAY_CONTROLLER].isMember( JSON_TOKEN_DEVICE_ABSORTION_LUX ) )
-    {
-        BOSE_LOG( ERROR, "Error: " << JSON_TOKEN_DEVICE_ABSORTION_LUX << " is not a member of: " << JSON_TOKEN_DISPLAY_CONTROLLER );
-        return;
-    }
-
-    if( ! json_root[JSON_TOKEN_DISPLAY_CONTROLLER].isMember( JSON_TOKEN_DEVICE_MODE ) )
-    {
-        BOSE_LOG( ERROR, "Error: " << JSON_TOKEN_DEVICE_MODE << " is not a member of: " << JSON_TOKEN_DISPLAY_CONTROLLER );
-        return;
+        BOSE_LOG( WARNING, "Error: failed to parse JSON File: " << DISPLAY_CONTROLLER_FILE_NAME << " " << errors.c_str() );
+        return false;
     }
 
     if( ! json_root[JSON_TOKEN_DISPLAY_CONTROLLER].isMember( JSON_TOKEN_BACK_LIGHT_LEVELS ) )
     {
-        BOSE_LOG( ERROR, "Error: " << JSON_TOKEN_BACK_LIGHT_LEVELS << " is not a member of: " << JSON_TOKEN_DISPLAY_CONTROLLER );
-        return;
+        BOSE_LOG( WARNING, "Error: " << JSON_TOKEN_BACK_LIGHT_LEVELS << " is not a member of: " << JSON_TOKEN_DISPLAY_CONTROLLER );
+        return false;
     }
 
     if( ! json_root[JSON_TOKEN_DISPLAY_CONTROLLER].isMember( JSON_TOKEN_LOWERING_THRESHOLDS ) )
     {
-        BOSE_LOG( ERROR, "Error: " << JSON_TOKEN_LOWERING_THRESHOLDS << " is not a member of: " << JSON_TOKEN_DISPLAY_CONTROLLER );
-        return;
+        BOSE_LOG( WARNING, "Error: " << JSON_TOKEN_LOWERING_THRESHOLDS << " is not a member of: " << JSON_TOKEN_DISPLAY_CONTROLLER );
+        return false;
     }
 
     if( ! json_root[JSON_TOKEN_DISPLAY_CONTROLLER].isMember( JSON_TOKEN_RISING_THRESHOLDS ) )
     {
-        BOSE_LOG( ERROR, "Error: " << JSON_TOKEN_RISING_THRESHOLDS << " is not a member of: " << JSON_TOKEN_DISPLAY_CONTROLLER );
-        return;
+        BOSE_LOG( WARNING, "Error: " << JSON_TOKEN_RISING_THRESHOLDS << " is not a member of: " << JSON_TOKEN_DISPLAY_CONTROLLER );
+        return false;
     }
 
     Json::Value  json_back_light_level   = json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_BACK_LIGHT_LEVELS  ];
@@ -165,124 +192,206 @@ void DisplayController::ParseJSONData()
     Json::Value  json_rising_threadhold  = json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_RISING_THRESHOLDS  ];
     unsigned int nb_threshold_levels     = json_back_light_level.size();
 
-    if( json_lowering_threshold.size() != nb_threshold_levels )
+    if( json_lowering_threshold.size() != nb_threshold_levels
+        || json_lowering_threshold.size() > IPC_MAX_LIGHT_SENSOR_THRESHOLD )
     {
-        BOSE_LOG( ERROR, "Error: not right # of elements in " << JSON_TOKEN_LOWERING_THRESHOLDS << " expected: " << nb_threshold_levels << " found: " << json_lowering_threshold.size() );
-        return;
+        BOSE_LOG( WARNING, "Error: wrong # of elements in " << JSON_TOKEN_LOWERING_THRESHOLDS
+                  << " expected: " << nb_threshold_levels
+                  << " found: " << json_lowering_threshold.size()
+                  << " max: " << IPC_MAX_LIGHT_SENSOR_THRESHOLD );
+        return false;
     }
 
-    if( json_rising_threadhold.size() != nb_threshold_levels )
+    if( json_rising_threadhold.size() != nb_threshold_levels
+        || json_rising_threadhold.size() > IPC_MAX_LIGHT_SENSOR_THRESHOLD )
     {
-        BOSE_LOG( ERROR, "Error: not right # of elements in " << JSON_TOKEN_RISING_THRESHOLDS << " expected: " << nb_threshold_levels << " found: " << json_rising_threadhold.size() );
-        return;
+        BOSE_LOG( WARNING, "Error: wrong # of elements in " << JSON_TOKEN_RISING_THRESHOLDS
+                  << " expected: " << nb_threshold_levels
+                  << " found: " << json_rising_threadhold.size()
+                  << " max: " << IPC_MAX_LIGHT_SENSOR_THRESHOLD );
+        return false;
     }
 
     for( unsigned int i = 0; i < nb_threshold_levels; i++ )
     {
-        lowering_lux_threshold[i] = t_luxBacklightTuple{json_lowering_threshold[i].asFloat(), ( e_backLightLevel )json_back_light_level[i].asUInt()};
-        rising_lux_threshold  [i] = t_luxBacklightTuple{json_rising_threadhold [i].asFloat(), ( e_backLightLevel )json_back_light_level[i].asUInt()};
+        s_backLightLevels[i]        = json_back_light_level[i].asUInt();
+        s_loweringLuxThreshold[i]   = json_lowering_threshold[i].asFloat();
+        s_risingLuxThreshold[i]     = json_rising_threadhold[i].asFloat();
     }
 
-    m_luxFactor = json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_DEVICE_ABSORTION_LUX].asFloat();
-    m_autoMode  = strcasecmp( json_root[JSON_TOKEN_DISPLAY_CONTROLLER][JSON_TOKEN_DEVICE_MODE].asString().c_str(), "Auto" ) == 0 ? true : false;
+    //
+    // LCD and lightbar Brightness defaults.
+    //
 
-    std::stringstream lowering_ss;
-    std::stringstream rising_ss;
+    if( json_root.isMember( "lcdStandbyBrightnessCap" ) )
+    {
+        m_lcdStandbyBrightnessCap = json_root["lcdStandbyBrightnessCap"].asUInt();
+    }
+
+    if( ! ParseBrightnessData( &m_lcdBrightness, json_root, "lcdBrightness" ) )
+    {
+        return false;
+    }
+
+    if( ! ParseBrightnessData( &m_lightbarBrightness, json_root, "lightbarBrightness" ) )
+    {
+        return false;
+    }
+
+    //
+    // Print the levels for debugging.
+    //
 
     for( unsigned int i = 0; i < nb_threshold_levels; i++ )
     {
-        lowering_ss << "{" << lowering_lux_threshold[i].lux << ", " <<  lowering_lux_threshold[i].level << "} ";
-        rising_ss   << "{" << rising_lux_threshold  [i].lux << ", " <<  rising_lux_threshold  [i].level << "} ";
+        BOSE_DEBUG( s_logger, "%s level %i: backlight %d, lowering %f rising %f",
+                    __FUNCTION__, i, s_backLightLevels[i], s_loweringLuxThreshold[i], s_risingLuxThreshold[i] );
     }
 
-    BOSE_LOG( VERBOSE,
-              "Device absortion factor: " << m_luxFactor                        <<
-              " mode: "                   << ( m_autoMode ? "Auto" : "Manual" ) <<
-              " lowering threshold: "     << lowering_ss.str()                  <<
-              " rising threshold: "       << rising_ss.str() );
-
-}// ParseJSONData
-
-void DisplayController::updateUiConnected( bool currentUiConnectedStatus )
-{
-    BOSE_LOG( WARNING, "currentUiConnectedStatus: " << currentUiConnectedStatus );
-    m_uiConnected = currentUiConnectedStatus;
-    m_ProductControllerUiConnectedCb( currentUiConnectedStatus );
-
+    return true;
 }
 
-int DisplayController::GetBackLightLevelFromLux( float lux, float lux_rising )
+/*!
+ */
+bool DisplayController::ParseBrightnessData( Brightness* output, const Json::Value& rootNode, std::string nodeName )
 {
-    std::vector <t_luxBacklightTuple> lux_threshold = ( lux_rising > 0.0f ) ? rising_lux_threshold : lowering_lux_threshold;
-    int                               nb_threshold  = lux_threshold.size();
+    Json::Value brightnessRoot = rootNode[nodeName];
 
-    for( int i = 0; i < nb_threshold; i++ )
+    if( brightnessRoot.isNull() )
     {
-        if( lux >= lux_threshold[i].lux )
+        BOSE_ERROR( s_logger, "No '%s' settings block found in '%s'.",
+                    nodeName.c_str(), DISPLAY_CONTROLLER_FILE_NAME );
+        return false;
+    }
+
+    try
+    {
+        Json::StreamWriterBuilder builder;
+        builder.settings_["indentation"] = "";
+        std::string nodeStr = Json::writeString( builder, brightnessRoot );
+        ProtoToMarkup::FromJson( nodeStr, output, "Brightness" );
+    }
+    catch( const ProtoToMarkup::MarkupError &e )
+    {
+        BOSE_WARNING( s_logger, "Failed to read %s node from '%s'. Error: %s",
+                      nodeName.c_str(), DISPLAY_CONTROLLER_FILE_NAME, e.what() );
+        return false;
+    }
+
+    return true;
+}
+
+/*!
+ */
+void DisplayController::PushDefaultsToLPM()
+{
+    static constexpr float FRACTIONAL_PRECISION = 1000.0f;
+
+    IpcLightSensorParams_t defaults;
+    IpcUIBrightness_t* lcdBrightness;
+    IpcUIBrightness_t* lightbarBrightness;
+    size_t entryCount = MIN( s_backLightLevels.size(), ( size_t ) IPC_MAX_LIGHT_SENSOR_THRESHOLD );
+
+    // Lux to level tables.
+    for( size_t i = 0; i < entryCount; ++i )
+    {
+        IpcLightSensorParamsValue_t* aValue;
+
+        defaults.add_vec();
+        aValue = defaults.mutable_vec( i );
+
+        aValue->set_backlightlevel( s_backLightLevels[i] );
+        aValue->set_loweringthresholddecimal( ( uint16_t ) s_loweringLuxThreshold[i] );
+        aValue->set_loweringthresholdfractional( FRACTIONAL_PRECISION * ( s_loweringLuxThreshold[i] - aValue->loweringthresholddecimal() ) );
+        aValue->set_risingthresholddecimal( ( uint16_t ) s_risingLuxThreshold[i] );
+        aValue->set_risingthresholdfractional( FRACTIONAL_PRECISION * ( s_risingLuxThreshold[i] - aValue->risingthresholddecimal() ) );
+    }
+
+    // Human detection values.
+    defaults.set_fastrisingluxdelta( 0 );
+    defaults.set_fastfaillingluxdelta( 0 );
+    defaults.set_slowrisinghysteresis( 0 );
+    defaults.set_fastrisinghysteresis( 0 );
+    defaults.set_slowfaillinghysteresis( 0 );
+    defaults.set_fastfaillinghysteresis( 0 );
+
+    // LCD UI Brightness.
+    defaults.add_uibrightness();
+    lcdBrightness = defaults.mutable_uibrightness( 0 );
+    BuildLpmUIBrightnessStruct( lcdBrightness, UI_BRIGTHNESS_DEVICE_LCD );
+
+    // Lightbar UI Brightness.
+    defaults.add_uibrightness();
+    lightbarBrightness = defaults.mutable_uibrightness( 1 );
+    BuildLpmUIBrightnessStruct( lightbarBrightness, UI_BRIGTHNESS_DEVICE_LIGHTBAR );
+
+    // Uncomment to print JSON string to log.
+    //std::string defaultsString = ProtoToMarkup::ToJson( defaults, false );
+    //BOSE_INFO( s_logger, "%s: %s", __FUNCTION__, defaultsString.c_str() );
+
+    //
+    // Send to LPM.
+    //
+
+    m_lpmClient->SetLightSensorParams( defaults, [this]( const IpcLpmGenericResponse_t& response )
+    {
+        if( response.code() == IPC_TRANSITION_COMPLETE )
         {
-            return ( lux_threshold[i].level );
+            m_defaultsSentToLpm = true;
+
+            BOSE_DEBUG( s_logger, "IPC_PER_SET_LIGHTSENSOR_PARAMS success!" );
         }
-    }
+    } );
+}
 
-    return  lux_threshold.back().level;
-}// GetBackLightLevelFromLux
-
-void DisplayController::SetBackLightLevel( int actualLevel, int newLevel )
+/*!
+ */
+void DisplayController::UpdateUiConnected( bool currentUiConnectedStatus )
 {
-    int            steps          = ( abs( actualLevel - newLevel ) / CHANGING_LEVEL_STEP_SIZE );
-    int            levelIncrement = ( ( actualLevel > newLevel ) ? -CHANGING_LEVEL_STEP_SIZE : CHANGING_LEVEL_STEP_SIZE );
-    IpcBackLight_t backlight;
-
-    BOSE_LOG( VERBOSE, "set actual level: " << actualLevel << " new level: " << newLevel );
-
-    if( ( actualLevel < 0 ) || ( actualLevel > 100 ) )
+    if( m_uiConnected != currentUiConnectedStatus )
     {
-        BOSE_LOG( ERROR, "invalid actual back light level: "  << actualLevel );
-        return;
+        BOSE_LOG( WARNING, "currentUiConnectedStatus: " << currentUiConnectedStatus );
+        m_uiConnected = currentUiConnectedStatus;
+        m_ProductControllerUiConnectedCb( currentUiConnectedStatus );
+
+        // LPM boots with the cap at 0 to turn off the LCD until the display controller
+        // on the APQ (us) is fully initialized. Remove that cap at this time.
+        SetDisplayBrightnessCap( BRIGHTNESS_MAX );
+
+        PullUIBrightnessFromLpm( UI_BRIGTHNESS_DEVICE_LCD );
     }
+}
 
-    if( ( newLevel < 0 ) || ( newLevel > 100 ) )
-    {
-        BOSE_LOG( ERROR, "invalid new back light level: "  << newLevel );
-        return;
-    }
-
-    for( int i = 0; i < steps; i++ )
-    {
-        actualLevel += levelIncrement;
-
-        //BOSE_LOG( VERBOSE, " level: " << actualLevel );
-
-        backlight.set_value( actualLevel );
-        m_lpmClient->SetBackLight( backlight );
-        usleep( CHANGING_LEVEL_SLEEP_MS * 1000 );
-    }// for all the level steps
-
-    if( actualLevel != newLevel )
-    {
-        backlight.set_value( newLevel );
-        m_lpmClient->SetBackLight( backlight );
-    }
-}// SetBackLightLevel
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-void DisplayController::MonitorLightSensor()
+/*!
+ */
+void DisplayController::SetDisplayBrightnessCap( uint8_t capPercent, bool immediate )
 {
-    float previous_lux   = FLT_MAX;
-    float lux_diff       = FLT_MAX;
-    int   targeted_level = 0;
+    IpcUIBrightness_t lpmBrightness;
 
-    m_luxValue      = 0.0f;
-    m_luxDecimal    = 0;
-    m_luxFractional = 0;
-    m_backLight     = 0;
+    lpmBrightness.set_device( UI_BRIGTHNESS_DEVICE_LCD );
+    lpmBrightness.set_value( capPercent );
+    lpmBrightness.set_mode( UI_BRIGTHNESS_MODE_CAP_MAXIMUM );
+    lpmBrightness.set_immediate( immediate );
 
-    // This will activate the light sensor peripheral, the first reading
-    // is always zero until the peripheral is activated in continuous
-    // reading
-    m_lpmClient->GetLightSensor( [this]( IpcLightSensor_t const & rsp ) {} );
+    m_lpmClient->SetUIBrightness( lpmBrightness );
+}
 
+/*!
+ * Any value set through this function is meant to be authoritavite over a something
+ * we get from Frontdoor. This is to ensure that if the embedded system needs to
+ * conserve power (for regulation) the brightness will stay capped.
+ */
+void DisplayController::SetStandbyLcdBrightnessCapEnabled( bool enabled )
+{
+    m_lcdBrightnessCapSystem = ( enabled ) ? m_lcdStandbyBrightnessCap : BRIGHTNESS_MAX;
+    // Actual cap sent to LPM is min of system and frontdoor caps.
+    SetDisplayBrightnessCap( MIN( m_lcdBrightnessCapSystem, m_lcdBrightnessCapFrontdoor ) );
+}
+
+/*!
+ */
+void DisplayController::UpdateLoop()
+{
     while( ! m_timeToStop )
     {
         if( m_uiHeartBeat != ULLONG_MAX )
@@ -293,136 +402,46 @@ void DisplayController::MonitorLightSensor()
             }// if it's te first heart beat receive from the UI
 
             m_localHeartBeat++;
-            // TODO - The cadence of ui heart beat and this display thread don't match.
-            // this is leading to lot of unwanted error and warning messages.
-            // So, this code has been temporarily disabled.
-#if 0
-            if( abs( m_localHeartBeat - m_uiHeartBeat ) > 2 )
-            {
-                BOSE_LOG( ERROR, "Error: the UI stop" );
-                // reset the heart beat algorithm and resume on first heart beat from the UI
-                m_localHeartBeat = m_uiHeartBeat = ULLONG_MAX;
-                updateUiConnected( false );
-            }// If the UI stop updating the heart beat
-#endif
-
-        }// If the UI had started
-
-        m_lpmClient->GetLightSensor( [this]( IpcLightSensor_t const & rsp )
-        {
-            m_luxDecimal    = ( int )( be16toh( rsp.lux_decimal_value() ) );
-            m_luxFractional = ( int )( be16toh( rsp.lux_fractional_value() ) );
-        } );
-
-        m_luxValue = ( ( ( float ) m_luxDecimal ) + ( ( ( float )m_luxFractional ) * 0.001f ) ) * m_luxFactor;
-
-        if( ( m_luxValue != 0.0 ) && ( previous_lux == FLT_MAX ) )
-        {
-            previous_lux = m_luxValue;
         }
 
-        m_lpmClient->GetBackLight( [this]( IpcBackLight_t const & rsp )
+        if( ! m_defaultsSentToLpm
+            // Transfer and processing on LPM can take time. Throttle this.
+            && MonotonicClock::NowMs() - m_defaultsSentTime > SEND_DEFAULTS_TO_LPM_RETRY_MS )
         {
-            m_backLight = rsp.value();
-        } );
+            m_defaultsSentTime = MonotonicClock::NowMs();
 
-        if( ( m_backLight < 0 )  || ( m_backLight > 100 ) )
-        {
-            BOSE_LOG( WARNING, "invalid back light level read: " << m_backLight );
-            SetBackLightLevel( 50, 49 );
+            PushDefaultsToLPM();
         }
 
-        lux_diff = m_luxValue - previous_lux;
+        usleep( UPDATE_SLEEP_MS * 1000 );
+    }
+}
 
-        BOSE_LOG( VERBOSE,  "lux(raw, adj, prev): ("
-                  << m_luxDecimal    << "."
-                  << m_luxFractional << ", "
-                  << m_luxValue      << ", "
-                  << previous_lux    << ") bl: "
-                  << m_backLight     << ( ( lux_diff == 0.0f ) ? " level" : ( lux_diff  < 0.0f ?  " lowering" : " rising" ) ) );
-
-        if( m_autoMode )
-        {
-            targeted_level = GetBackLightLevelFromLux( m_luxValue, lux_diff );
-
-            BOSE_LOG( VERBOSE, "target level: " << targeted_level << ", actual level: " << m_backLight << " lux diff: " << lux_diff );
-
-            if( fabs( lux_diff ) >= LUX_DIFF_THRESHOLD )
-            {
-                SetBackLightLevel( m_backLight, targeted_level );
-                // dummy read of the back light, the IPC mechanism is caching a value
-                m_lpmClient->GetBackLight( [this]( IpcBackLight_t const & rsp ) {} );
-                m_backLight  = targeted_level;
-                previous_lux = m_luxValue;
-            }
-
-        }// If we are in automatic mode
-
-        usleep( MONITOR_SENSOR_SLEEP_MS * 1000 );
-    }// while it's not time to stop
-}// MonitorLightSensor
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-void DisplayController::Initialize()
+/*!
+ */
+void DisplayController::RegisterLpmEvents()
 {
-    //ui/display end point registration with front door
-    RegisterDisplayEndPoints();
-
-    m_threadMonitorLightSensor = std::unique_ptr<std::thread>( new std::thread( [this] { MonitorLightSensor(); } ) );
-}// Initialize
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-void DisplayController::RegisterDisplayEndPoints()
-{
+    // Register to receive IPC_PER_GET_BACKLIGHT messages from LPM.
     auto backLightCallBack = [this]( IpcBackLight_t arg )
     {
         HandleLpmNotificationBackLight( arg );
     };
+    AsyncCallback<IpcBackLight_t> notificationCbBackLight( backLightCallBack, m_productController.GetTask() );
+    m_lpmClient->RegisterEvent<IpcBackLight_t>( IPC_PER_GET_BACKLIGHT, notificationCbBackLight );
 
-    auto lightSensorCallBack = [this]( IpcLightSensor_t arg )
+    // Register to receive IPC_PER_GET_UI_BRIGHTNESS messages from LPM.
+    auto uiBrightnessCallBack = [this]( IpcUIBrightness_t arg )
     {
-        HandleLpmNotificationLightSensor( arg );
+        HandleLpmNotificationUIBrightness( arg );
     };
+    AsyncCallback<IpcUIBrightness_t> notificationCbUIBrightness( uiBrightnessCallBack, m_productController.GetTask() );
+    m_lpmClient->RegisterEvent<IpcUIBrightness_t>( IPC_PER_GET_UI_BRIGHTNESS, notificationCbUIBrightness );
+}
 
-    AsyncCallback<IpcBackLight_t  > notification_cb_back_light( backLightCallBack, m_productController.GetTask() );
-    AsyncCallback<IpcLightSensor_t> notification_cb_light_sensor( lightSensorCallBack, m_productController.GetTask() );
-
-    m_lpmClient->RegisterEvent<IpcBackLight_t  >( IPC_PER_GET_BACKLIGHT, notification_cb_back_light );
-    m_lpmClient->RegisterEvent<IpcLightSensor_t>( IPC_PER_GET_LIGHTSENSOR, notification_cb_light_sensor );
-
-    // ==========================
-    // HandlePutDisplayRequest
-    // ==========================
-    AsyncCallback<Display, Callback<Display>, Callback<FrontDoor::Error>> putDisplayReqCb(
-                                                                           std::bind( &DisplayController::HandlePutDisplayRequest,
-                                                                                   this,
-                                                                                   std::placeholders::_1,
-                                                                                   std::placeholders::_2
-                                                                                    ),
-                                                                           m_productController.GetTask() );
-    m_frontdoorClientPtr->RegisterPut<Display>( "/ui/display",
-                                                putDisplayReqCb,
-                                                FrontDoor::PUBLIC,
-                                                FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                                                FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
-
-    // ==========================
-    // HandleGetDisplayRequest
-    // ==========================
-    AsyncCallback< Callback<Display>, Callback<FrontDoor::Error>> getDisplayReqCb(
-                                                                   std::bind(
-                                                                       &DisplayController::HandleGetDisplayRequest,
-                                                                       this,
-                                                                       std::placeholders::_1
-                                                                   ),
-                                                                   m_productController.GetTask() );
-    m_frontdoorClientPtr->RegisterGet( "/ui/Display",
-                                       getDisplayReqCb,
-                                       FrontDoor::PUBLIC,
-                                       FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                                       FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
+/*!
+ */
+void DisplayController::RegisterFrontdoorEndPoints()
+{
 
     // ==========================
     // HandlePostUIHeartBeat
@@ -434,8 +453,7 @@ void DisplayController::RegisterDisplayEndPoints()
                                                                                            std::placeholders::_2
                                                                                             ),
                                                                                    m_productController.GetTask() );
-    m_frontdoorClientPtr->RegisterPost<UiHeartBeat>( "/ui/alive",
-                                                     uiAlivePostCb,
+    m_frontdoorClientPtr->RegisterPost<UiHeartBeat>( FRONTDOOR_ENDPOINT_ALIVE, uiAlivePostCb,
                                                      FrontDoor::PUBLIC,
                                                      FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                                      FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
@@ -450,8 +468,7 @@ void DisplayController::RegisterDisplayEndPoints()
                                                                                            std::placeholders::_2
                                                                                             ),
                                                                                    m_productController.GetTask() );
-    m_frontdoorClientPtr->RegisterPut<UiHeartBeat>( "/ui/alive",
-                                                    uiAlivePutCb,
+    m_frontdoorClientPtr->RegisterPut<UiHeartBeat>( FRONTDOOR_ENDPOINT_ALIVE, uiAlivePutCb,
                                                     FrontDoor::PUBLIC,
                                                     FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                                     FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
@@ -465,29 +482,101 @@ void DisplayController::RegisterDisplayEndPoints()
                    std::placeholders::_1
                  ),
         m_productController.GetTask() );
-    m_frontdoorClientPtr->RegisterGet( "/ui/alive",
-                                       uiAliveGetCb,
+
+    m_frontdoorClientPtr->RegisterGet( FRONTDOOR_ENDPOINT_ALIVE, uiAliveGetCb,
                                        FrontDoor::PUBLIC,
                                        FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
                                        FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
 
+    //
+    // Frontdoor /ui/lcd/brightness
+    //
 
-}// RegisterDisplayEndPoints
+    // POST
+    AsyncCallback<Brightness, Callback<Brightness>, Callback<FrontDoor::Error>> putLcdBrightnessCb(
+                                                                                 std::bind( &DisplayController::HandlePutLcdBrightnessRequest, this, std::placeholders::_1, std::placeholders::_2 ),
+                                                                                 m_productController.GetTask() );
+    m_frontdoorClientPtr->RegisterPut<Brightness>( FRONTDOOR_ENDPOINT_BRIGHTNESS, putLcdBrightnessCb,
+                                                   FrontDoor::PUBLIC,
+                                                   FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                                   FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+    // GET
+    AsyncCallback< Callback<Brightness>, Callback<FrontDoor::Error>> getLcdBrightnessCb(
+                                                                      std::bind( &DisplayController::HandleGetLcdBrightnessRequest, this, std::placeholders::_1 ),
+                                                                      m_productController.GetTask() );
+    m_frontdoorClientPtr->RegisterGet( FRONTDOOR_ENDPOINT_BRIGHTNESS, getLcdBrightnessCb,
+                                       FrontDoor::PUBLIC,
+                                       FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                       FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
+
+}
+
+/*!
+ */
 void DisplayController::HandlePutDisplayRequest( const Display &req,
                                                  const Callback<Display>& resp )
 {
-}// HandlePutDisplayRequest
+}
 
-void  DisplayController::HandleGetDisplayRequest( const Callback<Display>& resp )
+/*!
+ */
+void DisplayController::HandleGetDisplayRequest( const Callback<Display>& resp )
 {
     resp.Send( GetDisplay() );
-}// HandleGetDisplayRequest
+}
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+/*!
+ */
+void DisplayController::PullUIBrightnessFromLpm( IpcUIBrightnessDevice_t deviceType )
+{
+    IpcGetUIBrightnessParams_t params;
+    params.set_device( deviceType );
+
+    m_lpmClient->GetUIBrightness( params, [this]( const IpcUIBrightness_t& response )
+    {
+        m_lcdBrightness.set_mode( BrightnessIpcEnumToProtoEnum( ( IpcUIBrightnessMode_t ) response.mode() ) );
+        m_lcdBrightness.set_value( response.value() );
+    } );
+}
+
+/*!
+ */
+bool DisplayController::HandleLpmNotificationBackLight( IpcBackLight_t lpmBackLight )
+{
+    m_display.set_backlightprecentage( lpmBackLight.value() );
+
+    return true;
+}
+
+/*! \brief Parse data from incoming IPC_PER_GET_UI_BRIGHTNESS.
+ * \param lpmBackLight Data of type IpcUIBrightness_t frm RivieraLPM_IpcProtocol.h.
+ */
+bool DisplayController::HandleLpmNotificationUIBrightness( IpcUIBrightness_t lpmBrightness )
+{
+    switch( lpmBrightness.device() )
+    {
+    case UI_BRIGTHNESS_DEVICE_LCD:
+    {
+        m_lcdBrightness.set_value( lpmBrightness.value() );
+        m_lcdBrightness.set_mode( BrightnessIpcEnumToProtoEnum( ( IpcUIBrightnessMode_t ) lpmBrightness.mode() ) );
+        m_frontdoorClientPtr->SendNotification( FRONTDOOR_ENDPOINT_BRIGHTNESS, m_lcdBrightness );
+        break;
+    }
+
+    case UI_BRIGTHNESS_DEVICE_LIGHTBAR:
+    {
+        // Not currently supported.
+        BOSE_INFO( s_logger, "Received IPC_PER_GET_UI_BRIGHTNESS from LPM which is not currently supported." );
+        break;
+    }
+    }
+
+    return true;
+}
+
+/*!
+ */
 void DisplayController::HandlePostUiHeartBeat( const UiHeartBeat &req,
                                                Callback<UiHeartBeat> resp )
 {
@@ -495,14 +584,15 @@ void DisplayController::HandlePostUiHeartBeat( const UiHeartBeat &req,
     m_uiHeartBeat = req.count();
     if( !m_uiConnected )
     {
-        updateUiConnected( true );
+        UpdateUiConnected( true );
     }
     UiHeartBeat response;
     response.set_count( m_uiHeartBeat );
     resp.Send( response );
 }
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+
+/*!
+ */
 void DisplayController::HandlePutUiHeartBeat( const UiHeartBeat &req,
                                               Callback<UiHeartBeat> resp )
 {
@@ -516,15 +606,15 @@ void DisplayController::HandlePutUiHeartBeat( const UiHeartBeat &req,
     m_uiHeartBeat = req.count();
     if( !m_uiConnected )
     {
-        updateUiConnected( true );
+        UpdateUiConnected( true );
     }
     UiHeartBeat response;
     response.set_count( m_uiHeartBeat );
     resp.Send( response );
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+/*!
+ */
 void DisplayController::HandleGetUiHeartBeat( Callback<UiHeartBeat> resp )
 {
     BOSE_LOG( VERBOSE, "received Get heartbeat: " << m_uiHeartBeat );
@@ -533,51 +623,180 @@ void DisplayController::HandleGetUiHeartBeat( Callback<UiHeartBeat> resp )
     resp.Send( response );
 }
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+/*!
+ */
 Display DisplayController::GetDisplay()
 {
     return m_display;
-}// GetDisplay
+}
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-bool DisplayController::HandleLpmNotificationBackLight( IpcBackLight_t lpmBackLight )
+/*!
+ */
+void DisplayController::HandleGetLcdBrightnessRequest( const Callback<Brightness>& resp )
 {
-    m_display.set_backlightprecentage( lpmBackLight.value() );
+    BOSE_DEBUG( s_logger, "%s", __FUNCTION__ );
 
-    m_frontdoorClientPtr->SendNotification( "/ui/display", GetDisplay() );
-    return true;
-}// HandleLpmNotificationBackLight
+    resp.Send( m_lcdBrightness );
+}
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-bool DisplayController::HandleLpmNotificationLightSensor( IpcLightSensor_t lpmLightSensor )
+/*!
+ */
+bool DisplayController::IsFrontdoorBrightnessDataValid( const Brightness& incoming,
+                                                        const Brightness& spec, const char* endPoint )
 {
-    m_display.set_lightsensorlux( lpmLightSensor.lux_decimal_value() );
+    bool modeFound = false;
 
-    m_frontdoorClientPtr->SendNotification( "/ui/display", GetDisplay() );
+    if( incoming.value() < spec.properties().min()
+        || incoming.value() > spec.properties().max() )
+    {
+        BOSE_WARNING( s_logger, "%s %s request 'value' (%d) is out of range [%d, %d].",
+                      __FUNCTION__, endPoint, incoming.value(),
+                      spec.properties().min(), spec.properties().max() );
+
+        return false;
+    }
+
+    for( int i = 0; i < spec.properties().supportedmodes_size(); ++i )
+    {
+        if( incoming.mode() == spec.properties().supportedmodes( i ) )
+        {
+            modeFound = true;
+            break;
+        }
+    }
+
+    if( ! modeFound )
+    {
+        BOSE_WARNING( s_logger, "%s %s request 'mode' (%s) is not supported.",
+                      __FUNCTION__, endPoint, Brightness_BrightnessMode_Name( incoming.mode() ).c_str() );
+
+        return false;
+    }
+
     return true;
-}// HandleLpmNotificationBackLight
+}
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-bool DisplayController::TurnOnOff( bool turnOn )
+/*! \brief Frontdoor POST request handler for /ui/lcd/brightness.
+ */
+void DisplayController::HandlePutLcdBrightnessRequest( const Brightness& req, const Callback<Brightness>& resp )
+{
+    BOSE_DEBUG( s_logger, "%s", __FUNCTION__ );
+
+    bool incomingIsValid = IsFrontdoorBrightnessDataValid( req, m_lcdBrightness, FRONTDOOR_ENDPOINT_BRIGHTNESS );
+
+    if( incomingIsValid )
+    {
+        IpcUIBrightness_t lpmBrightness;
+        // User changes from Frontdoor will be persisted all modes except UI_BRIGTHNESS_MODE_CAP_MAXIMUM.
+
+        // Persist locally.
+        m_lcdBrightness.set_mode( req.mode() );
+        m_lcdBrightness.set_value( req.value() );
+
+        // Send to LPM.
+        BuildLpmUIBrightnessStruct( &lpmBrightness, UI_BRIGTHNESS_DEVICE_LCD );
+        m_lpmClient->SetUIBrightness( lpmBrightness );
+    }
+
+    resp.Send( m_lcdBrightness );
+}
+
+/*!
+ */
+IpcUIBrightnessMode_t DisplayController::BrightnessProtoEnumToIpcEnum( Brightness_BrightnessMode mode )
+{
+    switch( mode )
+    {
+    case Brightness_BrightnessMode_MANUAL:
+        return UI_BRIGTHNESS_MODE_MANUAL;
+
+    case Brightness_BrightnessMode_AUTOMATIC:
+        return UI_BRIGTHNESS_MODE_AUTOMATIC;
+
+    case Brightness_BrightnessMode_DEFAULT:
+        return UI_BRIGTHNESS_MODE_DEFAULT;
+
+    default:
+        BOSE_WARNING( s_logger, "%s: No defined mapping from Brightness_BrightnessMode %d to IpcUIBrightnessMode_t",
+                      __FUNCTION__, mode );
+        return UI_BRIGTHNESS_MODE_DEFAULT;
+    }
+}
+
+/*!
+*/
+Brightness_BrightnessMode DisplayController::BrightnessIpcEnumToProtoEnum( IpcUIBrightnessMode_t mode )
+{
+    switch( mode )
+    {
+    case UI_BRIGTHNESS_MODE_MANUAL:
+        return Brightness_BrightnessMode_MANUAL;
+
+    case UI_BRIGTHNESS_MODE_AUTOMATIC:
+        return Brightness_BrightnessMode_AUTOMATIC;
+
+    case UI_BRIGTHNESS_MODE_DEFAULT:
+        return Brightness_BrightnessMode_DEFAULT;
+
+    default:
+        BOSE_WARNING( s_logger, "%s: No defined mapping from IpcUIBrightnessMode_t %d to Brightness_BrightnessMode",
+                      __FUNCTION__, mode );
+        return Brightness_BrightnessMode_DEFAULT;
+    }
+}
+
+/*!
+ */
+void DisplayController::BuildLpmUIBrightnessStruct( IpcUIBrightness_t* out, IpcUIBrightnessDevice_t deviceType )
+{
+    out->set_device( deviceType );
+
+    switch( deviceType )
+    {
+    case UI_BRIGTHNESS_DEVICE_LCD:
+        out->set_mode( BrightnessProtoEnumToIpcEnum( m_lcdBrightness.mode() ) );
+        out->set_value( m_lcdBrightness.value() );
+        break;
+
+    case UI_BRIGTHNESS_DEVICE_LIGHTBAR:
+        out->set_mode( BrightnessProtoEnumToIpcEnum( m_lightbarBrightness.mode() ) );
+        out->set_value( m_lightbarBrightness.value() );
+        break;
+
+    default:
+        // UI_BRIGTHNESS_DEVICE_LIGHTBAR is not supported at this time. Set all values to 0/default.
+        out->set_mode( UI_BRIGTHNESS_MODE_DEFAULT );
+        out->set_value( 0 );
+        break;
+    }
+}
+
+/*!
+ */
+bool DisplayController::TurnDisplayOnOff( bool turnOn )
 {
     const std::string displayControllerDir = "/sys/devices/soc/7af6000.spi/spi_master/spi6/spi6.1/graphics/fb1/";
     const std::string sendCommandFileName  = displayControllerDir + "send_command";
     const std::string teFileName           = displayControllerDir + "te";
     const char*       onOffCmdString       = turnOn ? "29" : "28" ;
     const char*       teString             = turnOn ? "1"  : "0"  ;
-    bool              displayAutoMode      = turnOn ? true : false;
 
     BOSE_LOG( VERBOSE, "turning LCD: " << ( turnOn ? "on" : "off" ) );
 
-    SetAutoMode( displayAutoMode );
-
-    if( turnOn == false )
+    if( turnOn )
     {
-        SetBackLightLevel( m_backLight, 0 );
+        // dr1037486 When turning on the display, use a ramp. In addition to being more
+        // pleasing, this will hide any pop that might result from multiple "brightness cap"
+        // commands in quick succession. For example, right now Eddie resumes from low power
+        // supmend into network standby. The latter has a brightness cap which will be
+        // applied only after we resume into the previous brightness.
+        SetDisplayBrightnessCap( BRIGHTNESS_MAX, false );
+    }
+    else
+    {
+        // Turn the display off instantly because the LPM may be driving into a low
+        // power state.
+        SetDisplayBrightnessCap( BRIGHTNESS_MIN, true );
     }
 
     if( DirUtils::DoesFileExist( sendCommandFileName ) == false )
@@ -622,6 +841,6 @@ bool DisplayController::TurnOnOff( bool turnOn )
 
     BOSE_LOG( VERBOSE, "LCD is now: " << ( turnOn ? "on" : "off" ) );
     return true;
-}// TurnOnOff
+}
 
 } //namespace ProductApp
