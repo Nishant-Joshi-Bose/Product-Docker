@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@2ca9b866dd172dd6c20ed22a88dc8a9532c83136"
+    "selected_version": "master@1b02c781e0e5dc054c9dd370b71e5eef11ac5155"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -13,7 +13,7 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@5b2fed73d2e6137cc514622bb43729883f4f8b7a"
+    "selected_version": "master@d8bd048cc178fc4911e94e564f71c21e866825e8"
   },
   {
     "name": "AVS-qc8017_32",
@@ -101,7 +101,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@cc6e35663ee5fcf6b8ff3f788dcf558078a60fd0"
+    "selected_version": "2018_SOP@0241b4479126731740c44f97c2da4b1955c9fe98"
   },
   {
     "name": "CastleProductUIAssets",
@@ -189,7 +189,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/SOP/0.4.4-524+b9b7710"
+    "selected_version": "Release/SOP/0.4.5-547+53b62ca"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
