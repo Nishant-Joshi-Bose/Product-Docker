@@ -42,6 +42,7 @@ lowpower=(
     Shepherd-AudioPath.xml
     Shepherd-NetManager.xml
     Shepherd-avs.xml
+    Shepherd-Bluetooth.xml
 )
 
 # For testing, make it easy to override what shepherd config files we use.

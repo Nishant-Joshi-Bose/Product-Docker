@@ -77,7 +77,8 @@ cli_dir=$(components get CastleCli-qc8017_32 installed_location) || exit
 democontroller_dir=$(components get CastleDemoController-qc8017_32 installed_location) || exit
 webkit_dir=$(components get Webkit installed_location) || exit
 productuiassets_dir=$(components get CastleProductUIAssets installed_location) || exit
-frontdoor_dir=$(components get FrontDoor-qc8017_32 installed_location) || exit
+frontdoor_dir=$(components get FrontDoorService-qc8017_32 installed_location) || exit
+frontdoorutility_dir=$(components get FrontDoorUtility-qc8017_32 installed_location) || exit
 qss_dir=$(components get A4VQuickSetService installed_location) || exit
 boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
 datacollection_dir=$(components get CastleDataCollectionClient-qc8017_32 installed_location) || exit
@@ -184,6 +185,7 @@ find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 "$productuiassets_dir/stage" --chimes=SoundBar/professor --type=flac "$opt_dir" professor || exit
 "$productuiassets_dir/stage" --chimes=SoundBar/ginger-cheevers --type=flac "$opt_dir" ginger-cheevers || exit
 "$frontdoor_dir/stage" "$opt_dir" || exit
+"$frontdoorutility_dir/stage" "$opt_dir" || exit
 "$galapagosclient_dir/stage" "$opt_dir" || exit
 "$httpproxy_dir/stage" "$opt_dir" || exit
 "$datacollection_dir/stage" "$opt_dir" || exit
@@ -228,9 +230,13 @@ if [ -x /mnt/nv/postinst ]; then
     /mnt/nv/postinst
 fi
 
-# make sure the public key file has read only permission
-find /opt/Bose/etc/secure/ -type d -exec /bin/busybox chmod 550 {} \;
-find /opt/Bose/etc/secure/ -type f -exec /bin/busybox chmod 440 {} \;
+# Not failing product-ipk for this copy failure
+if ! grep -q /cache /proc/mounts; then
+    echo "Mounting Cache"
+    mount /dev/mmcblk0p26 /cache
+fi
+cp -f /opt/Bose/etc/RecoveryMgr /cache/
+cp -f /opt/Bose/bin/RecoveryMain /cache/
 
 # make sure the public key file has read only permission
 find /opt/Bose/etc/secure/ -type d -exec /bin/busybox chmod 550 {} \;
