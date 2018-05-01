@@ -153,11 +153,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/3.4"
+    "selected_version": "Release/master/3.7"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/3.4"
+    "selected_version": "Release/master/3.7"
   },
   {
     "name": "RivieraLPM",

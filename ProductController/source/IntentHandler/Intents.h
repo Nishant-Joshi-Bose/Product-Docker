@@ -112,6 +112,11 @@ enum class Action
     VOLUME_RAMP_DOWN_CANCEL = ActionCommon_t::VOLUME_RAMP_DOWN_CANCEL,
 
     ///
+    /// Pts mode
+    ///
+    SYSTEM_INFO_MODE        = ActionCommon_t::SYSTEM_INFO_MODE,
+
+    ///
     /// Last Common Action
     ///
     ACTION_COMMON_LAST = 100,
