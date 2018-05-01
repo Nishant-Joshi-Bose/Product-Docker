@@ -80,6 +80,7 @@ productuiassets_dir=$(components get CastleProductUIAssets installed_location) |
 frontdoor_dir=$(components get FrontDoorService-qc8017_32 installed_location) || exit
 frontdoorutility_dir=$(components get FrontDoorUtility-qc8017_32 installed_location) || exit
 qss_dir=$(components get A4VQuickSetService installed_location) || exit
+rcs_dir=$(components get A4VRemoteCommunicationService installed_location) || exit
 boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
 datacollection_dir=$(components get CastleDataCollectionClient-qc8017_32 installed_location) || exit
 datacollectionservice_dir=$(components get CastleDataCollectionService-qc8017_32 installed_location) || exit
@@ -101,6 +102,7 @@ mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" || exit
 
 rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 rsync -a --exclude='*~' --exclude='*-README.txt' "$qss_dir/opt-bose-fs/." "$opt_dir/." || exit
+rsync -a --exclude='*~' --exclude='*-README.txt' "$rcs_dir/opt-bose-fs/." "$opt_dir/." || exit
 rsync -a --exclude='*~' --exclude='*-README.txt' "$vm_dir/opt-bose-fs/." "$opt_dir/." || exit
 
 components record "$stage" || exit
