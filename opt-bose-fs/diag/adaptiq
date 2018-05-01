@@ -9,14 +9,15 @@ import json
 import datetime
 import subprocess
 
-#if "get" or "put" argument specified, perform corresponding action on FrontDoor
+# If "get" or "put" argument specified, perform corresponding action on FrontDoor
 if len(sys.argv) > 1:
 
-    #if "get" argument, perform get request and output as text, using "Refresh" option to continously poll
+    # If "get" argument, perform get request and output as text, using "Refresh" option to continously poll.
     if sys.argv[1]== "get":
 
         output = subprocess.Popen(["frontdoorutil","/adaptiq"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 
+        # HTTP Refresh header used to continuously poll data from the endpoint. Ensure users see up-to-date info.
         print """HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nCache-Control: no-cache\r\nRefresh: 1\r\n\r"""
 
         print datetime.datetime.now()
@@ -26,19 +27,21 @@ if len(sys.argv) > 1:
             print "hpConnected: "+json.dumps(data['body']['hpConnected'],indent=4);
             print "smState: "+json.dumps(data['body']['smState'],indent=4);
 
+        # Catch error Parsing JSON, output error messages from utility.
         except ValueError:
-            print output[1]+"\n"
-            sys.exit()
-        except KeyError:
-            print output[0]+"\n"
+            print output[1]
             sys.exit()
 
-    #if "put" argument, perform put request with utility. Result will be reflected in next "get"
-    elif (sys.argv[1]=="put"):
-        print "Putting data"
+        # Catch Error finding specific fields, output whatever message we did receive.
+        except KeyError:
+            print output[0]
+            sys.exit()
+
+    # If "put" argument, perform put request with utility. Result will be reflected in next "get".
+    elif sys.argv[1]=="put":
         subprocess.Popen(["frontdoorutil","/adaptiq","{\"action\": \"ACTION_ENTER\"}"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
       
-##Print out main page  
+# Else, print out main page  
 else:
     print """
 <!DOCTYPE HTML>

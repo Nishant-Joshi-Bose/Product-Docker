@@ -82,7 +82,7 @@ print "</div>"
 print "<li>Tests"
 print """<div class="box">"""
 print "<a href='/diag/accessories'>Accessory Pairing</a> <br>"
-print "<a href='/diag/adaptIQ'>AdaptIQ</a> <br>"
+print "<a href='/diag/adaptiq'>AdaptIQ</a> <br>"
 print "<a href='/diag/microphone'>Microphones</a>"
 print "</div>"
 

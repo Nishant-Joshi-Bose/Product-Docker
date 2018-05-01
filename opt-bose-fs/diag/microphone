@@ -1,6 +1,6 @@
 #!/usr/bin/python2.7
 #
-# Invoked via pts-handler to display pages related to AdaptIQ diagnostics.
+# Invoked via pts-handler to display pages related to Microphone diagnostics.
 #
 import os
 import sys
@@ -9,8 +9,10 @@ import json
 import datetime
 import subprocess
 
-#output the html table of microphone values, with the "selected" mic highlighted and used for offsets
+# Output the table of microphone values, with the optional selected microphone highlighted and used to calculate offset values.
 def outputTable( values, selected = None ):
+
+    # HTTP Refresh header used to continuously poll data from the endpoint. Ensure users see up-to-date info.
     print """HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nCache-Control: no-cache\r\nRefresh: 1\r\n\r"""
     print datetime.datetime.now()
     print """
@@ -60,7 +62,7 @@ def outputTable( values, selected = None ):
 </html>"""
 
 
-#if argument given, return mic data
+# If argument given, return mic data.
 if len(sys.argv) > 1:
 
     output = subprocess.Popen(["frontdoorutil","/vfe/meters"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
@@ -71,28 +73,30 @@ if len(sys.argv) > 1:
         beams = data['body']['beamLevels']
         raw = json.dumps(data['body'],indent=4)
 
+    # Catch error Parsing JSON, output error messages from utility.
     except ValueError:
-        print output[1]+"\n"
+        print output[1]
         sys.exit()
 
+    # Catch Error finding specific fields, output message indicating that VFE is not enabled.
     except KeyError:
-        print output[0]+"\n"
+        print "The current software version does not support Microphone testing."
         sys.exit()
 
-    #if "raw" argument, being asked for raw JSON data. 
+    # If "raw" argument, being asked for raw JSON data. 
     if sys.argv[1]=="raw":
         print """HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nCache-Control: no-cache\r\n\r"""
         print raw
 
-    #if given a number, select that microphone as focus for offset
+    # If given a number, select that microphone as focus for offset.
     elif sys.argv[1].isdigit():
         outputTable(mics, int(sys.argv[1]))
 
-    #if anything else, output values without offset
+    # If given anything else, output values without offset.
     else:
         outputTable(mics)
 
-#else, output main page
+# Else, output main page.
 else:
     print """
 <!DOCTYPE HTML>
