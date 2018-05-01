@@ -62,6 +62,7 @@ wspace=$(cd "$here/.." && echo "$PWD") || exit
 
 riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || exit
 riviera_hsp_ver=$(components get Riviera-HSP-Images selected_version) || exit
+swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 riviera_hsp_ver=${riviera_hsp_ver##*/}
 
 stage=$wspace/builds/$cfg/hsp-ipk-stage
@@ -74,6 +75,12 @@ mkdir -p "$opt_dir/hsp" || exit
 echo "$riviera_hsp_ver" > "$opt_dir"/hsp/HSP_VERSION || exit
 echo "Package version \"$riviera_hsp_ver\""
 cp "$riviera_hsp_images_dir"/update_ext4.zip "$opt_dir/hsp/" || exit
+
+# Fix for issue CASTLE-13393, We need Recovery related binaries and scripts in cache partition from HSP 3.6 onwards
+# If we decide to separate and create recovery.ipk, then these files should go there.
+cp "$swup_dir"/bin/RecoveryMain "$opt_dir"/hsp/ || exit
+cp "$swup_dir"/etc/RecoveryMgr "$opt_dir"/hsp/ || exit
+
 PackageName=hsp
 
 cat >"$stage/control" <<EOF || exit
@@ -102,17 +109,37 @@ exiterror()
     exit 1
 }
 
+if ! grep -q /opt/Bose /proc/mounts; then
+    echo "Bose partition not mounted"
+    exiterror
+fi
+
 if [ ! -f /opt/Bose/hsp/update_ext4.zip ]; then
     echo "/opt/Bose/hsp/update_ext4.zip not found"
     exiterror
 fi
 
-# Commented temporarily to workaround CASTLE-13393
-# Once root-cause is found, same / different way to update recoveryFS should be added back.
-#if [ -e /etc/initscripts/recovery-updater.sh ]
-#then
-#    /etc/initscripts/recovery-updater.sh /opt/Bose/hsp/update_ext4.zip || exiterror
-#fi
+# Fix for issue CASTLE-13393, We need Recovery related binaries and scripts in cache partition from HSP 3.6 onwards
+# Make sure that cache partition is mounted, if not then mount it
+if ! grep -q /cache /proc/mounts; then
+    echo "Mounting Cache"
+    mount /dev/mmcblk0p26 /cache || exiterror
+fi
+
+if [ -e /opt/Bose/hsp/RecoveryMain ]; then
+    mv /opt/Bose/hsp/RecoveryMain /cache/ || exiterror
+    chmod +x /cache/RecoveryMain || exit error
+fi
+
+if [ -e /opt/Bose/hsp/RecoveryMgr ]; then
+    mv /opt/Bose/hsp/RecoveryMgr /cache/ || exiterror
+    chmod +x /cache/RecoveryMgr || exiterror
+fi
+
+if [ -e /etc/initscripts/recovery-updater.sh ]; then
+    echo "Updating RecoveryFS"
+    /etc/initscripts/recovery-updater.sh /opt/Bose/hsp/update_ext4.zip || exiterror
+fi
 
 if ! grep -q /cache /proc/mounts; then
     echo "Mounting Cache"
