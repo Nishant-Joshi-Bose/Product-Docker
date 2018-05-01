@@ -235,7 +235,7 @@ if ! grep -q /cache /proc/mounts; then
     echo "Mounting Cache"
     mount /dev/mmcblk0p26 /cache
 fi
-cp -f /opt/Bose/bin/RecoveryMgr /cache/
+cp -f /opt/Bose/etc/RecoveryMgr /cache/
 cp -f /opt/Bose/bin/RecoveryMain /cache/
 
 # make sure the public key file has read only permission
