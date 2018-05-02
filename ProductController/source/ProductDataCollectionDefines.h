@@ -1,4 +1,5 @@
 #pragma once
+#define DATA_COLLECTION_DSP_AIQ             "adaptiq-coefficients-changed"
 #define DATA_COLLECTION_ACCESSORIES         "accessories-changed"
 #define DATA_COLLECTION_EEDID               "eedid-changed"
 #define DATA_COLLECTION_BASS                "bass-audio-parameters-changed"
