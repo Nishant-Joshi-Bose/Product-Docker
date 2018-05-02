@@ -1,11 +1,11 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@2ca9b866dd172dd6c20ed22a88dc8a9532c83136"
+    "selected_version": "master@1b02c781e0e5dc054c9dd370b71e5eef11ac5155"
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@b3c94af97a1f1a84dc2b52cf96fafefde155c7ff"
+    "selected_version": "master@d95989551c93eb790a93f91cf55a7191f6f80ecd"
   },
   {
     "name": "BLERemoteXCVR",
@@ -13,7 +13,7 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@5b2fed73d2e6137cc514622bb43729883f4f8b7a"
+    "selected_version": "master@d8bd048cc178fc4911e94e564f71c21e866825e8"
   },
   {
     "name": "AVS-qc8017_32",
@@ -41,15 +41,15 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/0.4.2-231+db0fce6"
+    "selected_version": "Release/master/0.4.3-248+bebc914"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.4.1-20850"
+    "selected_version": "Release/Castle-Fork/0.4.2-20897"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/0.4.1-20850"
+    "selected_version": "Release/Castle-Fork/0.4.2-20897"
   },
   {
     "name": "CastleCli-qc8017_32",
@@ -101,7 +101,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "master@cc6e35663ee5fcf6b8ff3f788dcf558078a60fd0"
+    "selected_version": "2018_SOP@0241b4479126731740c44f97c2da4b1955c9fe98"
   },
   {
     "name": "CastleProductUIAssets",
@@ -118,6 +118,10 @@
   {
     "name": "FrontDoorService-qc8017_32",
     "selected_version": "Release/master/0.4.6-281+118f14d"
+  },
+  {
+    "name": "FrontDoorUtility-qc8017_32",
+    "selected_version": "Release/master/0.4.6-6+0cb5ac4"
   },
   {
     "name": "GalapagosClient-qc8017_32",
@@ -149,11 +153,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/3.4"
+    "selected_version": "Release/master/3.8"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/3.4"
+    "selected_version": "Release/master/3.8"
   },
   {
     "name": "RivieraLPM",
@@ -173,7 +177,7 @@
   },
   {
     "name": "SADI-qc8017_32",
-    "selected_version": "Release/master/1.1.1-23+496ef0d"
+    "selected_version": "Release/master/1.1.2-27+86a615f"
   },
   {
     "name": "SASS-qc8017_32",
@@ -185,7 +189,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/SOP/0.4.4-524+b9b7710"
+    "selected_version": "Release/SOP/0.4.6-562+5e97556"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -205,6 +209,6 @@
   },
   {
     "name": "WiFi-Setup-Webpage",
-    "selected_version": "master@eeda67a48b18a5c6d5b2cd156eadf2070b9a6b5f"
+    "selected_version": "master@0f997b1a0bf2ea393cd367279c037a282aff181e"
   }
 ]

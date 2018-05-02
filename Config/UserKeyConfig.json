@@ -335,6 +335,14 @@
         "keyList": ["BOSE_AMAZON_ACTION"],
         "origin": ["CAPSENSE", "TAP"],
         "timeOutList": [5000]
+    },
+    {
+        "action": "SYSTEM_INFO_MODE",
+        "commment": "pts mode",
+        "keyEvent": "PRESS",
+        "keyList": ["BOSE_USB_NET_SVR"],
+        "origin": ["IR", "TAP", "RF"],
+        "timeOutList": []
     }
     ],
     "blastTable": [
