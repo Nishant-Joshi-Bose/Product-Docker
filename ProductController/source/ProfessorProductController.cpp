@@ -823,16 +823,7 @@ void ProfessorProductController::PossiblyPairBLERemote( )
     // The rules are per PGC-697:
     // On a system without a paired BLE remote, entry into SETUP will activate BLE pairing.
     // On a system with a paired BLE remote, pressing and holding the Action Button will activate BLE pairing.
-
-    if( !( m_ProductBLERemoteManager->IsConnected() ) )
-    {
-        BOSE_INFO( s_logger, "%s could not find paired BLE remote", __func__ );
-        PairBLERemote( 0 );
-    }
-    else
-    {
-        BOSE_INFO( s_logger, "%s found paired BLE remote", __func__ );
-    }
+    m_ProductBLERemoteManager->PossiblyPair();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
