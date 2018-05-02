@@ -36,18 +36,23 @@ else:
     sys.exit("usage: set-rndis [on|off]")
 
 if new in script:
-    print "unchanged"
+    #print "unchanged"
     sys.exit()
 
 i = script.find(old)
 if i == -1:
     sys.exit("set-rndis: not enabled and not disabled?")
 
+remount = False
 if not os.access(script_name, os.W_OK):
+    remount = True
     subprocess.call(["mount", "-oremount,rw", "/"])
 
 with open(script_name, "w") as fh:
     fh.write(script[:i] + new + script[i+len(old):])
-
 print "wrote", script_name
+
+if remount:
+    subprocess.call(["mount", "-oremount,ro", "/"])
+
 sys.exit()
