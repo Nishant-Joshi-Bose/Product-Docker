@@ -356,6 +356,7 @@ void ProductBLERemoteManager::Pairing_Start( uint32_t timeout )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::Pairing_Cancel( void )
 {
+    m_pairingPending = false;
     m_RCSClient->Pairing_Cancel( );
 }
 
