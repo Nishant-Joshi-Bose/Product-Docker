@@ -1,23 +1,23 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@2ca9b866dd172dd6c20ed22a88dc8a9532c83136"
+    "selected_version": "master@1b02c781e0e5dc054c9dd370b71e5eef11ac5155"
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@6df31a350515273e38beb6ec8935d6ee2afd6c55"
+    "selected_version": "master@d95989551c93eb790a93f91cf55a7191f6f80ecd"
   },
   {
     "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/0.3.3-+"
+    "selected_version": "Release/master/0.3.4-+"
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@5b2fed73d2e6137cc514622bb43729883f4f8b7a"
+    "selected_version": "master@d8bd048cc178fc4911e94e564f71c21e866825e8"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork-2018-SOP/0.4.4.41937.2785485"
+    "selected_version": "Release/Castle-Fork-2018-SOP/0.4.5.41993.2793246"
   },
   {
     "name": "bose-opkg-utils",
@@ -41,19 +41,19 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/0.4.1-213+e9e36aa"
+    "selected_version": "Release/master/0.4.3-248+bebc914"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.4.1-20850"
+    "selected_version": "Release/Castle-Fork/0.4.2-20897"
   },
   {
     "name": "CastleAudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/0.4.1-20850"
+    "selected_version": "Release/Castle-Fork/0.4.2-20897"
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/1.0.1-55+0c7cd73"
+    "selected_version": "Release/master/1.0.2-60+55c3afd"
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
@@ -85,11 +85,11 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.4.0-100+2b15610"
+    "selected_version": "Release/SOP/0.4.0-106+0e51351"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.4.1-243+f7017dd"
+    "selected_version": "Release/Eddie-SOP/0.4.3-256+cdfd26b"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -101,7 +101,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "CASTLE-13014@71947f7b946cf79bdf969d333d2047db545f7c1b"
+    "selected_version": "2018_SOP@0241b4479126731740c44f97c2da4b1955c9fe98"
   },
   {
     "name": "CastleProductUIAssets",
@@ -120,6 +120,10 @@
     "selected_version": "Release/master/0.4.6-281+118f14d"
   },
   {
+    "name": "FrontDoorUtility-qc8017_32",
+    "selected_version": "Release/master/0.4.6-6+0cb5ac4"
+  },
+  {
     "name": "GalapagosClient-qc8017_32",
     "selected_version": "Release/master/0.2.4-141+047d6e0"
   },
@@ -129,7 +133,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/1.0.0-80+5fa3c29"
+    "selected_version": "Release/master/1.0.2-84+739b806"
   },
   {
     "name": "opensource-jsoncpp-native",
@@ -149,11 +153,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/3.4"
+    "selected_version": "Release/master/3.8"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/3.4"
+    "selected_version": "Release/master/3.8"
   },
   {
     "name": "RivieraLPM",
@@ -161,7 +165,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.4.1-168+b22639a"
+    "selected_version": "Release/master/0.4.3-176+b75969e"
   },
   {
     "name": "RivieraLpmTools",
@@ -173,7 +177,7 @@
   },
   {
     "name": "SADI-qc8017_32",
-    "selected_version": "Release/master/1.1.1-23+496ef0d"
+    "selected_version": "Release/master/1.1.2-27+86a615f"
   },
   {
     "name": "SASS-qc8017_32",
@@ -185,11 +189,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.4.0-501+78a5c5c"
+    "selected_version": "Release/SOP/0.4.6-562+5e97556"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-2018-SOP/0.4.4.41937.2785485"
+    "selected_version": "Release/Castle-Fork-2018-SOP/0.4.5.41993.2793246"
   },
   {
     "name": "SystemEventService-qc8017_32",
@@ -205,6 +209,6 @@
   },
   {
     "name": "WiFi-Setup-Webpage",
-    "selected_version": "master@e9ce352ab8459c79d3ee5cb3e4ca70c47d57b59b"
+    "selected_version": "master@0f997b1a0bf2ea393cd367279c037a282aff181e"
   }
 ]
