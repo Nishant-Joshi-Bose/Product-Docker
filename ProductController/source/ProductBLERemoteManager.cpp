@@ -444,7 +444,9 @@ void ProductBLERemoteManager::CheckPairing( void )
         break;
 
     // In these states, any pairing pending request isn't necessary (we're already paired)
-    // !!! Assumption - if we're SCANNING or OUT_OF_RANGE, we must be paired
+    // !!! Assumption - if we're OUT_OF_RANGE, we must be paired
+    // Apparently SCANNING is the state we're in when we're trying to pair, so it's safe to clear
+    // the flag here too (pairing has already been initiated)
     case RemoteStatus::PSTATE_SCANNING:
     case RemoteStatus::PSTATE_BONDED:
     case RemoteStatus::PSTATE_OUT_OF_RANGE:
