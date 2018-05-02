@@ -456,7 +456,7 @@ void ProductBLERemoteManager::CheckPairing( void )
         if( m_pairingPending )
         {
             m_pairingPending = false;
-            Pairing_Start( 0 );
+            Pairing_Start( m_PairingTimeout );
         }
         break;
     }

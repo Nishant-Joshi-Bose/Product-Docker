@@ -96,6 +96,7 @@ private:
     bool                            m_remoteConnected   = false;
     bool                            m_pairingPending    = false;
     RemoteStatus::PairingStatus     m_remoteStatus      = RemoteStatus::PSTATE_UNKOWN;
+    const int                       m_PairingTimeout    = 7200;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
