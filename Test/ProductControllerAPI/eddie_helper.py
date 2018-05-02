@@ -280,3 +280,17 @@ def set_system_setup(frontdoor, data):
     LOGGER.info("Setting System Setup information")
     result = frontdoor.send(METHOD_PUT, SYSTEM_SETUP_API, data)
     return json.loads(result)
+
+
+def get_system_power_timeouts(frontdoor):
+    """ Get System Power Timeouts """
+    LOGGER.info("Getting System Power Timeouts ")
+    result = frontdoor.send(METHOD_GET, SYSTEM_POWER_TIMEOUTS_API)
+    return json.loads(result)
+
+
+def set_system_power_timeouts(frontdoor, data):
+    """ Set System Power Timeouts """
+    LOGGER.info("Setting System Power Timeouts ")
+    result = frontdoor.send(METHOD_PUT, SYSTEM_POWER_TIMEOUTS_API, data)
+    return json.loads(result)
