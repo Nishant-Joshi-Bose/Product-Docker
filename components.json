@@ -8,6 +8,10 @@
     "selected_version": "master@964c29cc453ccd3d1b28fb40bae8df11c0dc3b3c"
   },
   {
+    "name": "bose-web-riviera-ap-page",
+    "selected_version": "master@0f997b1a0bf2ea393cd367279c037a282aff181e"
+  },
+  {
     "name": "BoseLibs-qc8017_32",
     "selected_version": "Release/master/0.5.3-382+e629ca4"
   },
@@ -37,7 +41,7 @@
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Continuous/master/1.0.2-62+1ca1b63"
+    "selected_version": "Release/master/1.0.3-63+fb3e550"
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
@@ -117,7 +121,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/1.0.2-86+69d6913"
+    "selected_version": "Release/master/1.0.3-91+dd30f98"
   },
   {
     "name": "opensource-jsoncpp-native",
@@ -177,14 +181,10 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Continuous/master/0.4.1-45+1b8eb90"
+    "selected_version": "Release/master/0.4.2-46+c373ed2"
   },
   {
     "name": "Webkit",
     "selected_version": "Release/master/0.3.3-33+5811010"
-  },
-  {
-    "name": "bose-web-riviera-ap-page",
-    "selected_version": "master@0f997b1a0bf2ea393cd367279c037a282aff181e"
   }
 ]
