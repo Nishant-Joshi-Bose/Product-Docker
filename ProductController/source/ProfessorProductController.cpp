@@ -35,7 +35,6 @@
 #include "CustomProductKeyInputManager.h"
 #include "ProductCommandLine.h"
 #include "ProductAdaptIQManager.h"
-#include "ProductSourceInfo.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
 #include "ProductSTSCommonStateFactory.h"
@@ -47,7 +46,6 @@
 #include "ProductControllerStates.h"
 #include "ProductControllerState.h"
 #include "ProductControllerStateBooted.h"
-#include "ProductControllerStateBootedTransition.h"
 #include "ProductControllerStateBooting.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
@@ -135,7 +133,6 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     m_ProductLpmHardwareInterface( nullptr ),
     m_ProductCommandLine( nullptr ),
-    m_ProductSourceInfo( nullptr ),
     m_ProductKeyInputManager( nullptr ),
     m_ProductCecHelper( nullptr ),
     m_ProductDspHelper( nullptr ),
@@ -201,11 +198,6 @@ void ProfessorProductController::Run( )
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_BOOTED );
-
-    auto* stateBootedTransition = new ProductControllerStateBootedTransition
-    ( GetHsm( ),
-      stateTop,
-      PRODUCT_CONTROLLER_STATE_BOOTED_TRANSITION );
 
     auto* stateFirstBootGreeting = new ProductControllerStateFirstBootGreeting
     ( GetHsm( ),
@@ -459,7 +451,6 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), stateCriticalError );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FACTORY_DEFAULT ), stateFactoryDefault );
     GetHsm( ).AddState( "", stateBooted );
-    GetHsm( ).AddState( "", stateBootedTransition );
     GetHsm( ).AddState( "", stateFirstBootGreetingTransition );
     GetHsm( ).AddState( "", stateLowPowerStandbyTransition );
     GetHsm( ).AddState( "", stateLowPowerStandby );
@@ -516,7 +507,6 @@ void ProfessorProductController::Run( )
     m_ProductCecHelper            = std::make_shared< ProductCecHelper                  >( *this );
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
-    m_ProductSourceInfo           = std::make_shared< ProductSourceInfo                 >( *this );
     m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
     m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
     m_ProductBLERemoteManager     = std::make_shared< ProductBLERemoteManager           >( *this );
@@ -557,7 +547,6 @@ void ProfessorProductController::Run( )
     m_ProductLpmHardwareInterface->Run( );
     m_ProductAudioService        ->Run( );
     m_ProductCommandLine         ->Run( );
-    m_ProductSourceInfo          ->Run( );
     m_ProductKeyInputManager     ->Run( );
     m_ProductCecHelper           ->Run( );
     m_ProductDspHelper           ->Run( );
@@ -636,18 +625,6 @@ std::shared_ptr< CustomProductAudioService >& ProfessorProductController::GetPro
 std::shared_ptr< ProductAdaptIQManager >& ProfessorProductController::GetAdaptIQManager( )
 {
     return m_ProductAdaptIQManager;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @name   ProfessorProductController::GetSourceInfo
-///
-/// @return This method returns a shared pointer to the SourceInfo instance
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-std::shared_ptr< ProductSourceInfo >& ProfessorProductController::GetSourceInfo( )
-{
-    return m_ProductSourceInfo;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -975,60 +952,9 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     BOSE_DEBUG( s_logger, "----------- Product Controller Message Handler -------------" );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// LPM status messages has both Common handling and Professor-specific handling
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    if( message.has_lpmstatus( ) )
-    {
-        ///
-        /// First do the common stuff.
-        ///
-        ( void ) HandleCommonProductMessage( message );
-
-        ///
-        /// Then do the Professor specific stuff.
-        ///
-        if( message.lpmstatus( ).has_systemstate( ) )
-        {
-            switch( message.lpmstatus( ).systemstate( ) )
-            {
-            case SYSTEM_STATE_ON:
-                BOSE_DEBUG( s_logger, "Calling HandleLPMPowerStatusFullPower( )" );
-                m_ProductAudioService->SetThermalMonitorEnabled( true );
-                break;
-            case SYSTEM_STATE_OFF:
-                m_ProductAudioService->SetThermalMonitorEnabled( false );
-                break;
-            case SYSTEM_STATE_BOOTING:
-                break;
-            case SYSTEM_STATE_STANDBY:
-                m_ProductAudioService->SetThermalMonitorEnabled( false );
-                break;
-            case SYSTEM_STATE_RECOVERY:
-                break;
-            case SYSTEM_STATE_LOW_POWER:
-                m_ProductAudioService->SetThermalMonitorEnabled( false );
-                break;
-            case SYSTEM_STATE_UPDATE:
-                break;
-            case SYSTEM_STATE_SHUTDOWN:
-                m_ProductAudioService->SetThermalMonitorEnabled( false );
-                break;
-            case SYSTEM_STATE_FACTORY_DEFAULT:
-                break;
-            case SYSTEM_STATE_IDLE:
-                m_ProductAudioService->SetThermalMonitorEnabled( false );
-                break;
-            case SYSTEM_STATE_NUM_OF:
-                break;
-            case SYSTEM_STATE_ERROR:
-                break;
-            }
-        }
-    }
-    ///////////////////////////////////////////////////////////////////////////////////////////////
     /// STS slot selected data is handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.has_selectsourceslot( ) )
+    if( message.has_selectsourceslot( ) )
     {
         const auto& slot = message.selectsourceslot( ).slot( );
 
@@ -1222,7 +1148,6 @@ void ProfessorProductController::Wait( )
     ///
     m_ProductLpmHardwareInterface->Stop( );
     m_ProductCommandLine         ->Stop( );
-    m_ProductSourceInfo          ->Stop( );
     m_ProductKeyInputManager     ->Stop( );
     m_ProductCecHelper           ->Stop( );
     m_ProductDspHelper           ->Stop( );
