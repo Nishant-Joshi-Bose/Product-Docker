@@ -20,7 +20,7 @@ import time
 from pyadb import ADB
 
 from CastleTestUtils.FrontDoorAPI import FrontDoorAPI
-from CastleTestUtils.LoggerUtils.log_setup import get_logger
+from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.RivieraUtils.commonException import ADBCommandFailure
 from CastleTestUtils.RivieraUtils.rivieraCommunication import ADBCommunication
 

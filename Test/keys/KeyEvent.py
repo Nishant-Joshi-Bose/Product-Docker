@@ -15,7 +15,7 @@ Different CLI key events and the method to execute them.
 from time import sleep
 from pyadb import ADB
 from configure import conf
-from CastleTestUtils.LoggerUtils.log_setup import get_logger
+from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.LoggerUtils.BSerialLogger import getdatabuf, startdatacapture, stopdatacapture
 from CastleTestUtils.RivieraUtils.hardware.keys.keypress import press_key
 

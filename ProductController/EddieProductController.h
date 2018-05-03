@@ -17,6 +17,7 @@
 #include "ProtoPersistenceIF.h"
 #include "ProductControllerStateTop.h"
 #include "CustomProductControllerStateNetworkStandby.h"
+#include "CustomProductControllerStateLowPowerResume.h"
 #include "CustomProductControllerStateLowPowerStandby.h"
 #include "CustomProductControllerStateLowPowerStandbyTransition.h"
 #include "ProductControllerStateNetworkStandbyConfigured.h"
@@ -31,6 +32,7 @@
 #include "ProductControllerStateOn.h"
 #include "ProductControllerStateIdle.h"
 #include "ProductControllerStateSoftwareInstall.h"
+#include "CustomProductControllerStateSoftwareInstall.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
 #include "ProductControllerStatePlayingDeselected.h"
@@ -43,7 +45,7 @@
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
 #include "ProductControllerStatePlayingSelectedSetupExitingAP.h"
-#include "ProductControllerStateStoppingStreams.h"
+#include "ProductControllerStatePlayingSelectedStoppingStreams.h"
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
 #include "ProductControllerStatePlayableTransitionInternal.h"
@@ -351,8 +353,9 @@ private:
     ProductControllerStateBooting                                   m_ProductControllerStateBooting;
     ProductControllerStateBooted                                    m_ProductControllerStateBooted;
     CustomProductControllerStateOn                                  m_CustomProductControllerStateOn;
+    CustomProductControllerStateLowPowerResume                      m_CustomProductControllerStateLowPowerResume;
     CustomProductControllerStateLowPowerStandby                     m_CustomProductControllerStateLowPowerStandby;
-    ProductControllerStateSoftwareInstall                           m_ProductControllerStateSwInstall;
+    CustomProductControllerStateSoftwareInstall                     m_CustomProductControllerStateSwInstall;
     ProductControllerStateCriticalError                             m_ProductControllerStateCriticalError;
     ProductControllerStatePlaying                                   m_ProductControllerStatePlaying;
     ProductControllerStatePlayable                                  m_ProductControllerStatePlayable;
@@ -374,7 +377,7 @@ private:
     ProductControllerStatePlayingSelectedSetupOther                 m_ProductControllerStatePlayingSelectedSetupOther;
     ProductControllerStatePlayingSelectedSetupExiting               m_ProductControllerStatePlayingSelectedSetupExiting;
     ProductControllerStatePlayingSelectedSetupExitingAP             m_ProductControllerStatePlayingSelectedSetupExitingAP;
-    ProductControllerStateStoppingStreams                           m_ProductControllerStateStoppingStreams;
+    ProductControllerStatePlayingSelectedStoppingStreams            m_ProductControllerStatePlayingSelectedStoppingStreams;
     ProductControllerStatePlayableTransition                        m_ProductControllerStatePlayableTransition;
     ProductControllerStatePlayableTransitionInternal                m_ProductControllerStatePlayableTransitionInternal;
     ProductControllerStatePlayableTransitionIdle                    m_ProductControllerStatePlayableTransitionIdle;

@@ -1,0 +1,58 @@
+#!/usr/bin/python2.7
+#
+# Enable or disable RNDIS mode.
+#
+# usage:
+# set-rndis           -- tell whether dual RNDIS/ADB mode is enabled
+# set-rndis off       -- disable RNDIS mode, enable ADB
+# set-rndis on        -- enable simultaneous RNDIS and ADB
+#
+import os
+import sys
+import subprocess
+
+script_name = "/etc/launch_adbd"
+script = open(script_name).read()
+
+enabled = "/sbin/usb/compositions/9059 n 2"
+disabled = "/sbin/usb/compositions/901D n"
+
+sys.argv.pop(0)
+
+if len(sys.argv) == 0:
+    if disabled in script:
+        print "disabled"
+    elif enabled in script:
+        print "enabled"
+    else:
+        print "unknown"
+    sys.exit()
+
+if len(sys.argv) == 1 and sys.argv[0] == "on":
+    old, new = disabled, enabled
+elif len(sys.argv) == 1 and sys.argv[0] == "off":
+    old, new = enabled, disabled
+else:
+    sys.exit("usage: set-rndis [on|off]")
+
+if new in script:
+    #print "unchanged"
+    sys.exit()
+
+i = script.find(old)
+if i == -1:
+    sys.exit("set-rndis: not enabled and not disabled?")
+
+remount = False
+if not os.access(script_name, os.W_OK):
+    remount = True
+    subprocess.call(["mount", "-oremount,rw", "/"])
+
+with open(script_name, "w") as fh:
+    fh.write(script[:i] + new + script[i+len(old):])
+print "wrote", script_name
+
+if remount:
+    subprocess.call(["mount", "-oremount,ro", "/"])
+
+sys.exit()
