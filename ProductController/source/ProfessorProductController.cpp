@@ -33,7 +33,6 @@
 #include "CustomProductAudioService.h"
 #include "CustomAudioSettingsManager.h"
 #include "CustomProductKeyInputManager.h"
-#include "ProductSystemManager.h"
 #include "ProductCommandLine.h"
 #include "ProductAdaptIQManager.h"
 #include "ProductSourceInfo.h"
@@ -78,6 +77,7 @@
 #include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
+#include "ProductControllerStatePlayingSelectedStoppingStreams.h"
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSwitch.h"
 #include "ProductControllerStateSoftwareInstall.h"
@@ -85,12 +85,11 @@
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
 #include "ProductControllerStateStoppingStreamsDedicated.h"
-#include "ProductControllerStateStoppingStreams.h"
 #include "ProductControllerStateTop.h"
 #include "CustomProductControllerStateAdaptIQExiting.h"
 #include "CustomProductControllerStateAdaptIQ.h"
 #include "CustomProductControllerStateIdle.h"
-#include "CustomProductControllerStateLowPowerStandby.h"
+#include "CustomProductControllerStateLowPowerResume.h"
 #include "CustomProductControllerStateOn.h"
 #include "CustomProductControllerStatePlayable.h"
 #include "CustomProductControllerStatePlayingDeselectedAccessoryPairing.h"
@@ -120,8 +119,6 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 constexpr uint32_t PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
 
-constexpr auto FRONTDOOR_SYSTEM_SOURCES_API = "/system/sources";
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProfessorProductController::ProfessorProductController
@@ -137,7 +134,6 @@ ProfessorProductController::ProfessorProductController( ) :
     /// Construction of the Product Controller Modules
     ///
     m_ProductLpmHardwareInterface( nullptr ),
-    m_ProductSystemManager( nullptr ),
     m_ProductCommandLine( nullptr ),
     m_ProductSourceInfo( nullptr ),
     m_ProductKeyInputManager( nullptr ),
@@ -150,7 +146,6 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     /// Member Variable Initialization
     ///
-    m_IsAudioPathReady( false ),
     m_IsAutoWakeEnabled( false ),
     m_Running( false ),
 
@@ -247,10 +242,15 @@ void ProfessorProductController::Run( )
       stateTop,
       PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION );
 
-    auto* stateLowPowerStandby = new CustomProductControllerStateLowPowerStandby
+    auto* stateLowPowerStandby = new ProductControllerStateLowPowerStandby
     ( GetHsm( ),
       stateTop,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY );
+      PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY );
+
+    auto* stateLowPowerResume = new CustomProductControllerStateLowPowerResume
+    ( GetHsm( ),
+      stateTop,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_RESUME );
 
     ///
     /// Playable Transition State and Sub-States
@@ -409,10 +409,10 @@ void ProfessorProductController::Run( )
       *this,
       CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_ACCESSORY_PAIRING );
 
-    auto* stateStoppingStreams = new ProductControllerStateStoppingStreams
+    auto* stateStoppingStreams = new ProductControllerStatePlayingSelectedStoppingStreams
     ( GetHsm( ),
       customStatePlayingSelected,
-      PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS );
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS );
 
     ///
     /// AdaptIQ States
@@ -463,6 +463,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( "", stateFirstBootGreetingTransition );
     GetHsm( ).AddState( "", stateLowPowerStandbyTransition );
     GetHsm( ).AddState( "", stateLowPowerStandby );
+    GetHsm( ).AddState( "", stateLowPowerResume );
     GetHsm( ).AddState( "", statePlayableTransition );
     GetHsm( ).AddState( "", statePlayableTransitionInternal );
     GetHsm( ).AddState( "", statePlayableTransitionIdle );
@@ -514,16 +515,16 @@ void ProfessorProductController::Run( )
     m_ProductLpmHardwareInterface = std::make_shared< CustomProductLpmHardwareInterface >( *this );
     m_ProductCecHelper            = std::make_shared< ProductCecHelper                  >( *this );
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
-    m_ProductSystemManager        = std::make_shared< ProductSystemManager              >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_ProductSourceInfo           = std::make_shared< ProductSourceInfo                 >( *this );
     m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
     m_ProductAdaptIQManager       = std::make_shared< ProductAdaptIQManager             >( *this );
     m_ProductBLERemoteManager     = std::make_shared< ProductBLERemoteManager           >( *this );
-    m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this, m_FrontDoorClientIF, m_ProductLpmHardwareInterface->GetLpmClient() );
+    m_ProductAudioService         = std::make_shared< CustomProductAudioService         >( *this,
+                                    m_FrontDoorClientIF,
+                                    m_ProductLpmHardwareInterface->GetLpmClient( ) );
 
     if( m_ProductLpmHardwareInterface == nullptr ||
-        m_ProductSystemManager        == nullptr ||
         m_ProductAudioService         == nullptr ||
         m_ProductCommandLine          == nullptr ||
         m_ProductKeyInputManager      == nullptr ||
@@ -554,7 +555,6 @@ void ProfessorProductController::Run( )
     /// Run all the submodules.
     ///
     m_ProductLpmHardwareInterface->Run( );
-    m_ProductSystemManager       ->Run( );
     m_ProductAudioService        ->Run( );
     m_ProductCommandLine         ->Run( );
     m_ProductSourceInfo          ->Run( );
@@ -727,16 +727,16 @@ bool ProfessorProductController::IsBooted( ) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProfessorProductController::IsLowPowerExited( ) const
 {
-    BOSE_VERBOSE( s_logger, "------------ Product Controller Low Power Exit Check ---------------" );
-    BOSE_VERBOSE( s_logger, " " );
-    BOSE_VERBOSE( s_logger, "LPM Connected         :  %s", ( m_IsLpmReady       ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "Audio Path Connected  :  %s", ( m_IsAudioPathReady ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, "SASS            Init  :  %s", ( IsSassReady()      ? "true" : "false" ) );
-    BOSE_VERBOSE( s_logger, " " );
+    BOSE_INFO( s_logger, "------------ Product Controller Low Power Exit Check ---------------" );
+    BOSE_INFO( s_logger, " " );
+    BOSE_INFO( s_logger, "LPM Connected         :  %s", ( IsLpmReady()       ? "true" : "false" ) );
+    BOSE_INFO( s_logger, "Audio Path Connected  :  %s", ( IsAudioPathReady() ? "true" : "false" ) );
+    BOSE_INFO( s_logger, "SASS            Init  :  %s", ( IsSassReady()      ? "true" : "false" ) );
+    BOSE_INFO( s_logger, " " );
 
-    return( m_IsLpmReady            and
+    return( IsLpmReady()            and
             IsSassReady()           and
-            m_IsAudioPathReady );
+            IsAudioPathReady() );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -913,25 +913,36 @@ void ProfessorProductController::HandleSelectSourceSlot( ProductSTSAccount::Prod
 void ProfessorProductController::RegisterFrontDoorEndPoints( )
 {
     RegisterCommonEndPoints( );
-    m_lightbarController->RegisterLightBarEndPoints();
+
+    m_lightbarController->RegisterLightBarEndPoints( );
 
     {
-        auto l = [ = ]( Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> respCb,
-                        Callback<FrontDoor::Error> errorCb )
+        auto callback = [ = ]( Callback< SystemPowerProductPb::SystemPowerModeOpticalAutoWake > respCb,
+                               Callback< FrontDoor::Error > errorCb )
         {
             HandleGetOpticalAutoWake( respCb, errorCb );
         };
-        GetFrontDoorClient()->RegisterGet( FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API, l );
+
+        GetFrontDoorClient()->RegisterGet( FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API,
+                                           callback,
+                                           FrontDoor::PUBLIC,
+                                           FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                           FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
     {
-        auto l = [ = ]( SystemPowerProductPb::SystemPowerModeOpticalAutoWake req,
-                        Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> respCb,
-                        Callback<FrontDoor::Error> errorCb )
+        auto callback = [ = ]( SystemPowerProductPb::SystemPowerModeOpticalAutoWake req,
+                               Callback< SystemPowerProductPb::SystemPowerModeOpticalAutoWake > respCb,
+                               Callback< FrontDoor::Error > errorCb )
         {
             HandlePutOpticalAutoWake( req, respCb, errorCb );
         };
+
         GetFrontDoorClient( )->RegisterPut<SystemPowerProductPb::SystemPowerModeOpticalAutoWake>(
-            FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API, l );
+            FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API,
+            callback,
+            FrontDoor::PUBLIC,
+            FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+            FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
 }
 
@@ -1210,7 +1221,6 @@ void ProfessorProductController::Wait( )
     /// Stop all the submodules.
     ///
     m_ProductLpmHardwareInterface->Stop( );
-    m_ProductSystemManager       ->Stop( );
     m_ProductCommandLine         ->Stop( );
     m_ProductSourceInfo          ->Stop( );
     m_ProductKeyInputManager     ->Stop( );
@@ -1223,24 +1233,69 @@ void ProfessorProductController::Wait( )
 ///
 /// @name   ProfessorProductController::GetDefaultProductName
 ///
-/// @brief  This method is to get the default product name by reading from mac address.
+/// @brief  This method is used to get the default product name.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 std::string ProfessorProductController::GetDefaultProductName( ) const
 {
-    std::string productName = "Bose ";
-    std::string macAddress = MacAddressInfo::GetPrimaryMAC( );
-    try
+    std::string productName;
+
+    ///
+    /// Ensure that the device has a valid marketing product name, based on the manufacturing data;
+    /// and assign this value to the default product name initially.
+    ///
+    if( auto productNameValue = MfgData::Get( "productName" ) )
     {
-        productName += ( macAddress.substr( macAddress.length( ) - 6 ) );
+        productName = *productNameValue;
     }
-    catch( const std::out_of_range& error )
+    else
     {
-        productName += macAddress;
-        BOSE_WARNING( s_logger, "errorType = %s", error.what( ) );
+        BOSE_DIE( __func__ << " Fatal Error: No Product Name " );
     }
 
-    BOSE_INFO( s_logger, "%s productName=%s", __func__, productName.c_str( ) );
+    ///
+    /// Leave the default product name assigned to the marketing product name in the manufacturing
+    /// data for production non-development devices; otherwise, assign the default product name
+    /// based on its MAC address and product type.
+    ///
+    if( IsDevelopmentMode( ) )
+    {
+        std::string macAddress = MacAddressInfo::GetPrimaryMAC( );
+
+        try
+        {
+            productName = ( macAddress.substr( macAddress.length() - 6 ) );
+        }
+        catch( const std::out_of_range& error )
+        {
+            productName = macAddress;
+
+            BOSE_WARNING( s_logger, "%s Warning: Incomplete MAC Address %s", __func__, macAddress.c_str( ) );
+        }
+
+        std::string productType;
+
+        if( auto productTypeValue = MfgData::Get( "productType" ) )
+        {
+            productType = *productTypeValue;
+
+            if( productType.compare( "professor" ) == 0 )
+            {
+                productName += " SB 500";
+            }
+            else if( productType.compare( "ginger-cheevers" ) == 0 )
+            {
+                productName += " SB 700";
+            }
+            else
+            {
+                BOSE_DIE( __func__ << " Fatal Error: Invalid Product Type " <<  productType );
+            }
+        }
+    }
+
+    BOSE_INFO( s_logger, "%s: The default product name is %s.", __func__, productName.c_str( ) );
+
     return productName;
 }
 
@@ -1423,6 +1478,11 @@ string ProfessorProductController::GetChimesFilesLocation( ) const
     return retVal + '/';
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProfessorProductController::InitializeKeyIdToKeyNameMap
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::InitializeKeyIdToKeyNameMap()
 {
     BOSE_INFO( s_logger, "ProfessorProductController::%s:", __func__ );

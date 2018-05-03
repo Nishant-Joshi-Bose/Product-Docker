@@ -47,7 +47,7 @@ const std::string s_ModeNormal          = "Enabled Normal";
 const std::string s_ModeRetail          = "Enabled Retail";
 const std::string s_ModeDisabled        = "Enabled Disabled";
 #endif
-const std::string s_FrontDoorAdaptIQ    = FRONTDOOR_ADAPTIQ_API;
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,21 +103,40 @@ void ProductAdaptIQManager::Run( )
     {
         SetLpmConnectionState( connected );
     };
+
     m_ProductLpmHardwareInterface->RegisterForLpmConnection( Callback<bool>( lpmFunc ) );
 
-    auto getFunc = [ this ]( const Callback<const AdaptIQStatus>& resp, const Callback<FrontDoor::Error>& errorRsp )
+    auto getFunc = [ this ]( const Callback< const AdaptIQStatus >& resp,
+                             const Callback< FrontDoor::Error >&    errorRsp )
     {
         HandleGet( resp, errorRsp );
     };
-    AsyncCallback<Callback<AdaptIQStatus>, Callback<FrontDoor::Error> > getCb( getFunc, m_ProductTask );
-    m_GetConnection = m_FrontDoorClient->RegisterGet( s_FrontDoorAdaptIQ, getCb );
 
-    auto putFunc = [ this ]( const AdaptIQReq req, const Callback<const AdaptIQStatus>& resp, const Callback<FrontDoor::Error>& errorRsp )
+    AsyncCallback< Callback< AdaptIQStatus >, Callback< FrontDoor::Error > >
+    getCb( getFunc, m_ProductTask );
+
+    m_GetConnection = m_FrontDoorClient->RegisterGet( FRONTDOOR_ADAPTIQ_API,
+                                                      getCb,
+                                                      FrontDoor::PUBLIC,
+                                                      FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                                      FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
+
+    auto putFunc = [ this ]( const AdaptIQReq                       req,
+                             const Callback< const AdaptIQStatus >& resp,
+                             const Callback< FrontDoor::Error >&    errorRsp )
     {
         HandlePut( req, resp, errorRsp );
     };
-    AsyncCallback<const AdaptIQReq, Callback<AdaptIQStatus>, Callback<FrontDoor::Error>> putCb( putFunc, m_ProductTask );
-    m_PutConnection = m_FrontDoorClient->RegisterPut<AdaptIQReq>( s_FrontDoorAdaptIQ, putCb );
+
+    AsyncCallback< const AdaptIQReq, Callback< AdaptIQStatus >, Callback< FrontDoor::Error > >
+    putCb( putFunc, m_ProductTask );
+
+    m_PutConnection = m_FrontDoorClient->RegisterPut< AdaptIQReq >(
+                          FRONTDOOR_ADAPTIQ_API,
+                          putCb,
+                          FrontDoor::PUBLIC,
+                          FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                          FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -181,11 +200,9 @@ void ProductAdaptIQManager::SetStatus( const ProductPb::AdaptIQStatus& status, b
         // make a copy and add fixed properties to it
         ProductPb::AdaptIQStatus msg = status;
         SetDefaultProperties( msg );
-        m_FrontDoorClient->SendNotification( s_FrontDoorAdaptIQ, msg );
+        m_FrontDoorClient->SendNotification( FRONTDOOR_ADAPTIQ_API, msg );
     }
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///

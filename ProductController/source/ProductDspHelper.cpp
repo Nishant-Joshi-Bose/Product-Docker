@@ -30,12 +30,10 @@
 #include "FrontDoorClient.h"
 #include "EndPointsDefines.h"
 #include "ProductEndpointDefines.h"
-
+#include "ProductDataCollectionDefines.h"
 
 namespace
 {
-const std::string s_FrontDoorAudioFormatUrl = FRONTDOOR_AUDIO_FORMAT_API;
-
 // Decided because CEC latency is 200ms so similar timing for autowake
 constexpr uint32_t s_PollingTimeAutoWakeMs         = 200;
 // @todo - PGC-942 - revisit with minimumOutputLatencyMs and totalLatencyMs handling
@@ -90,9 +88,18 @@ bool ProductDspHelper::Run( )
                                         this,
                                         std::placeholders::_1 ) );
 
-        m_ProductController.GetLpmHardwareInterface( )->RegisterForLpmEvents( IPC_DSP_STATUS, CallbackForDspState );
+        m_ProductController.GetLpmHardwareInterface( )->RegisterForLpmEvents( IPC_DSP_STATUS,
+                                                                              CallbackForDspState );
     }
+    {
+        Callback< LpmServiceMessages::DspDataCollection >
+        CallbackForDspDataCollection( std::bind( &ProductDspHelper::ReceiveDspDataCollection,
+                                                 this,
+                                                 std::placeholders::_1 ) );
 
+        m_ProductController.GetLpmHardwareInterface( )->RegisterForLpmEvents( ( IpcOpcodes_t ) DSP_DATA_COLLECTION,
+                                                                              CallbackForDspDataCollection );
+    }
     {
         AsyncCallback<Callback< ProductPb::AudioFormat >, Callback<FrontDoor::Error> >
         getAudioFormatCb( std::bind( &ProductDspHelper::AudioFormatFrontDoorGetHandler,
@@ -101,8 +108,12 @@ bool ProductDspHelper::Run( )
                                      std::placeholders::_2 ) ,
                           m_ProductController.GetTask( ) );
 
-        m_AudioFormatGetConnection = m_ProductController.GetFrontDoorClient()->RegisterGet( s_FrontDoorAudioFormatUrl ,
-                                     getAudioFormatCb );
+        m_AudioFormatGetConnection
+            = m_ProductController.GetFrontDoorClient()->RegisterGet( FRONTDOOR_AUDIO_FORMAT_API,
+                                                                     getAudioFormatCb,
+                                                                     FrontDoor::PUBLIC,
+                                                                     FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+                                                                     FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
     }
 
     return true;
@@ -346,6 +357,20 @@ void ProductDspHelper::AudioFormatFrontDoorGetHandler( const Callback<ProductPb:
                               resp,
                               std::placeholders::_1 ) );
     m_ProductController.GetLpmHardwareInterface( )->GetDspStatus( audioFormatCb );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductDspHelper::ReceiveDspDataCollection
+///
+/// @param const LpmServiceMessages::DspDataCollection& data - blob of data from dsp to be collected
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductDspHelper::ReceiveDspDataCollection( const LpmServiceMessages::DspDataCollection& data )
+{
+    m_ProductController.GetDataCollectionClient()->SendData(
+        std::make_shared< LpmServiceMessages::DspDataCollection >( data ),
+        DATA_COLLECTION_DSP_AIQ );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

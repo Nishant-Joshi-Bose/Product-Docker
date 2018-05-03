@@ -273,6 +273,11 @@ public:
         return false;
     }
 
+    virtual bool HandleScheduledSwUpdateDeferralTimerExpiry( )
+    {
+        return false;
+    }
+
     virtual bool HandleChimeSASSPlaybackCompleted( int32_t eventId )
     {
         return false;

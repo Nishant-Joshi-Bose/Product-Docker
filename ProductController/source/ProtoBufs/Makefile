@@ -6,19 +6,18 @@ PRODUCTCONTROLLERCOMMON_DIR	:= $(shell components get CastleProductControllerCom
 RIVIERA_LPM_PROTO_DIR 		:= $(shell components get RivieraLpmService-$(sdk)      installed_location)
 SYSTEMEVENTSERVICE_DIR          := $(shell components get SystemEventService-$(sdk)     installed_location)
 
-PROTO_SOURCES = ProductMessage.proto        \
-                ConfigurationStatus.proto   \
-                ProductSTS.proto            \
-                SystemInfo.proto            \
-                ProductSpeakerManager.proto \
-                AdaptIQ.proto               \
-                AudioSettings.proto         \
-                AudioFormat.proto           \
+PROTO_SOURCES = ProductMessage.proto          \
+                ProductSTS.proto              \
+                SystemInfo.proto              \
+                ProductSpeakerManager.proto   \
+                AdaptIQ.proto                 \
+                AudioSettings.proto           \
+                AudioFormat.proto             \
                 SystemSourcesProperties.proto \
-                CecMode.proto \
-                HdmiEdid.proto \
-                SystemPowerProduct.proto \
-                KeyNames.proto \
+                CecMode.proto                 \
+                HdmiEdid.proto                \
+                SystemPowerProduct.proto      \
+                KeyNames.proto                \
 
 #
 # The following alias is used to search for imported Protocol Buffer files.
