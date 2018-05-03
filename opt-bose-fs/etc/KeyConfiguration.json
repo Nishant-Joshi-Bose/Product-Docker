@@ -1709,6 +1709,36 @@
             "keyList": [
                 174
             ]
+        }, 
+        {
+            "origin": 2, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "pts mode", 
+            "action": 52, 
+            "keyList": [
+                31
+            ]
+        }, 
+        {
+            "origin": 6, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "pts mode", 
+            "action": 52, 
+            "keyList": [
+                31
+            ]
+        }, 
+        {
+            "origin": 3, 
+            "keyEvent": 0, 
+            "timeOutList": [], 
+            "commment": "pts mode", 
+            "action": 52, 
+            "keyList": [
+                31
+            ]
         }
     ]
 }
