@@ -60,7 +60,6 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class CustomProductLpmHardwareInterface;
-class ProductSystemManager;
 class CustomProductAudioService;
 class ProductCecHelper;
 class ProductCommandLine;
@@ -264,7 +263,6 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
-    std::shared_ptr< ProductSystemManager              > m_ProductSystemManager;
     std::shared_ptr< ProductCommandLine                > m_ProductCommandLine;
     std::shared_ptr< ProductSourceInfo                 > m_ProductSourceInfo;
     std::shared_ptr< CustomProductKeyInputManager      > m_ProductKeyInputManager;
