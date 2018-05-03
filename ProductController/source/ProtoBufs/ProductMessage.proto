@@ -49,7 +49,7 @@ message ProductAdaptIQControl
             Advance     = 3;
             Previous    = 4;
         }
-        optional AdaptIQAction action = 1; 
+        optional AdaptIQAction action = 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ message ProductCecMode
             On        = 1;
             AltOn     = 2;
         }
-        optional CecModeValue cecmode = 1; 
+        optional CecModeValue cecmode = 1;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -89,21 +89,20 @@ message ProductMessage
         optional ProductVoiceStatus                         voicestatus                 =  8;
         optional uint32                                     action                      =  9;
         optional ProductLanguageData                        languagedata                = 10;
-        optional ProductConfigurationStatus                 configurationstatus         = 11;
-        optional ProductAutowakeStatus                      autowakestatus              = 12;
-        optional ProductNowPlayingStatus                    nowplayingstatus            = 13;
-        optional ProductAccessoryPairing                    accessorypairing            = 14;
-        optional ProductAdaptIQStatus                       aiqstatus                   = 15;
-        optional ProductAdaptIQControl                      aiqcontrol                  = 16;
-        optional ProductLpmLowPowerStatus                   lpmlowpowerstatus           = 17;
-        optional bool                                       audiopathselect             = 18;
-        optional bool                                       ampfaultdetected            = 19;
-        optional bool                                       audiosilent                 = 20;
-        optional ProductCecMode                             cecmode                     = 21;
-        optional ProductSystemEventServiceResponse          systemeventserviceresponse  = 22;
-        optional uint32                                     chimetoplay                 = 23;
-        optional LpmServiceMessages.IpcKeyInformation_t     keyevent                    = 24;
-        optional bool                                       softwareupdatestatus        = 25;
+        optional ProductAutowakeStatus                      autowakestatus              = 11;
+        optional ProductNowPlayingStatus                    nowplayingstatus            = 12;
+        optional ProductAccessoryPairing                    accessorypairing            = 13;
+        optional ProductAdaptIQStatus                       aiqstatus                   = 14;
+        optional ProductAdaptIQControl                      aiqcontrol                  = 15;
+        optional ProductLpmLowPowerStatus                   lpmlowpowerstatus           = 16;
+        optional bool                                       audiopathselect             = 17;
+        optional bool                                       ampfaultdetected            = 18;
+        optional bool                                       audiosilent                 = 19;
+        optional ProductCecMode                             cecmode                     = 20;
+        optional ProductSystemEventServiceResponse          systemeventserviceresponse  = 21;
+        optional uint32                                     chimetoplay                 = 22;
+        optional LpmServiceMessages.IpcKeyInformation_t     keyevent                    = 23;
+        optional bool                                       softwareupdatestatus        = 24;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

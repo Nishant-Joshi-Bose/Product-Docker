@@ -71,9 +71,10 @@ public:
 
     }
 
-    void HandleStateEnter( )                                            override;
-    void HandleStateExit( )                                             override;
-    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action ) override;
+    void HandleStateEnter( )                                              override;
+    void HandleStateExit( )                                               override;
+    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t action )   override;
+    bool HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent ) override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

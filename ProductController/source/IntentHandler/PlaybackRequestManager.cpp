@@ -92,91 +92,91 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
                     error.message().c_str() );
     };
 
+    SoundTouchInterface::PlaybackRequest playbackRequestData;
+
     if( action == ( uint16_t )Action::ACTION_TV )
     {
-        SoundTouchInterface::PlaybackRequest playbackRequestData;
-
-        playbackRequestData.set_source( "PRODUCT" );
         playbackRequestData.set_sourceaccount( "TV" );
-
-        GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
-                playbackRequestData,
-                playbackRequestResponseCallback,
-                playbackRequestErrorCallback );
-
-        BOSE_INFO( s_logger, "An attempt to play the TV source has been made." );
     }
     else if( action == ( uint16_t )Action::ACTION_GAME )
     {
-        auto& playbackRequestData = m_CustomProductController.GetSourceInfo()->GetGameSourcePlaybackRq();
+        auto& gameSourcePlaybackRequestData = m_CustomProductController.GetSourceInfo()->GetGameSourcePlaybackRq();
 
-        if( playbackRequestData.has_source() )
+        if( gameSourcePlaybackRequestData.has_sourceaccount() )
         {
-            GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
-                    playbackRequestData,
-                    playbackRequestResponseCallback,
-                    playbackRequestErrorCallback );
-            BOSE_INFO( s_logger, "An attempt to play the Game source has been made." );
+            playbackRequestData.set_sourceaccount( gameSourcePlaybackRequestData.sourceaccount( ) );
         }
         else
         {
             BOSE_INFO( s_logger, "Game key is not configured to play any source, ignore this playback intent." );
+            return false;
         }
     }
     else if( action == ( uint16_t )Action::ACTION_DVD )
     {
-        auto& playbackRequestData = m_CustomProductController.GetSourceInfo()->GetDvdSourcePlaybackRq();
+        auto& dvdSourcePlaybackRequestData = m_CustomProductController.GetSourceInfo()->GetDvdSourcePlaybackRq();
 
-        if( playbackRequestData.has_source() )
+        if( dvdSourcePlaybackRequestData.has_sourceaccount() )
         {
-            GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
-                    playbackRequestData,
-                    playbackRequestResponseCallback,
-                    playbackRequestErrorCallback );
-            BOSE_INFO( s_logger, "An attempt to play the Dvd source has been made." );
+            playbackRequestData.set_sourceaccount( dvdSourcePlaybackRequestData.sourceaccount( ) );
         }
         else
         {
             BOSE_INFO( s_logger, "DVD key is not configured to play any source, ignore this playback intent." );
+            return false;
         }
     }
     else if( action == ( uint16_t )Action::ACTION_CABLESAT )
     {
-        auto& playbackRequestData = m_CustomProductController.GetSourceInfo()->GetCablesatSourcePlaybackRq();
+        auto& cablesatSourcePlaybackRequestData = m_CustomProductController.GetSourceInfo()->GetCablesatSourcePlaybackRq();
 
-        if( playbackRequestData.has_source() )
+        if( cablesatSourcePlaybackRequestData.has_sourceaccount() )
         {
-            GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
-                    playbackRequestData,
-                    playbackRequestResponseCallback,
-                    playbackRequestErrorCallback );
-            BOSE_INFO( s_logger, "An attempt to play the user configurable Cable/Sat source has been made." );
+            playbackRequestData.set_sourceaccount( cablesatSourcePlaybackRequestData.sourceaccount( ) );
         }
         else
         {
             BOSE_INFO( s_logger, "Cable/Sat key is not configured to play any source, ignore this playback intent." );
+            return false;
         }
     }
     else if( action == ( uint16_t )Action::ACTION_APAPTIQ_START )
     {
-        SoundTouchInterface::PlaybackRequest playbackRequestData;
-
-        playbackRequestData.set_source( "PRODUCT" );
         playbackRequestData.set_sourceaccount( "ADAPTiQ" );
+    }
+    else
+    {
+        BOSE_ERROR( s_logger, "An invalid intent %d has been supplied.", action );
+        return false;
+    }
 
+    string activeSource;
+    string activeAccount;
+    if( m_CustomProductController.GetNowSelection( ).has_contentitem( ) )
+    {
+        const auto& nowSelectingContentItem = m_CustomProductController.GetNowSelection( ).contentitem( );
+        activeSource = nowSelectingContentItem.source( );
+        activeAccount = nowSelectingContentItem.sourceaccount( );
+    }
+    playbackRequestData.set_source( "PRODUCT" );
+    if( activeSource != playbackRequestData.source()  ||
+        activeAccount != playbackRequestData.sourceaccount( ) )
+    {
         GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
                 playbackRequestData,
                 playbackRequestResponseCallback,
                 playbackRequestErrorCallback );
 
-        BOSE_INFO( s_logger, "An attempt to start AdaptIQ has been made." );
+        BOSE_INFO( s_logger, "An attempt to play the %s source has been made.", playbackRequestData.sourceaccount( ).c_str( ) );
+
+        return true;
     }
     else
     {
-        BOSE_ERROR( s_logger, "An invalid intent action has been supplied." );
-    }
+        BOSE_INFO( s_logger, "Already playing the %s source, ignore this playback intent.", playbackRequestData.sourceaccount( ).c_str( ) );
 
-    return true;
+        return false;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
