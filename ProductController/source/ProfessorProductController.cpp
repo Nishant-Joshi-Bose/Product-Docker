@@ -77,6 +77,7 @@
 #include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
+#include "ProductControllerStatePlayingSelectedStoppingStreams.h"
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSwitch.h"
 #include "ProductControllerStateSoftwareInstall.h"
@@ -84,7 +85,6 @@
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
 #include "ProductControllerStateStoppingStreamsDedicated.h"
-#include "ProductControllerStateStoppingStreams.h"
 #include "ProductControllerStateTop.h"
 #include "CustomProductControllerStateAdaptIQExiting.h"
 #include "CustomProductControllerStateAdaptIQ.h"
@@ -409,10 +409,10 @@ void ProfessorProductController::Run( )
       *this,
       CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_ACCESSORY_PAIRING );
 
-    auto* stateStoppingStreams = new ProductControllerStateStoppingStreams
+    auto* stateStoppingStreams = new ProductControllerStatePlayingSelectedStoppingStreams
     ( GetHsm( ),
       customStatePlayingSelected,
-      PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS );
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS );
 
     ///
     /// AdaptIQ States
