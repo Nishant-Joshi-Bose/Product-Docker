@@ -25,7 +25,7 @@ from CastleTestUtils.RivieraUtils.commonException import ADBCommandFailure
 from CastleTestUtils.RivieraUtils.rivieraCommunication import ADBCommunication
 
 android_device = ADB('/usr/bin/adb')
-logger = get_logger(__name__, logLevel=logging.DEBUG)
+logger = get_logger(__name__)
 
 UNKNOWN = 'UNKNOWN'
 
