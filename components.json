@@ -9,7 +9,7 @@
   },
   {
     "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/0.3.4-+"
+    "selected_version": "Release/master/0.3.6-1+gd458c3d"
   },
   {
     "name": "A4VVideoManagerService",
@@ -41,7 +41,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/0.4.2-231+db0fce6"
+    "selected_version": "Release/master/0.4.3-248+bebc914"
   },
   {
     "name": "CastleAudioPath-qc8017_32",
@@ -101,7 +101,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "2018_SOP@0241b4479126731740c44f97c2da4b1955c9fe98"
+    "selected_version": "2018_SOP@a3b427d6f054865ceb52855c7a80527baea1287b"
   },
   {
     "name": "CastleProductUIAssets",
@@ -153,11 +153,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/3.4"
+    "selected_version": "Release/master/3.8"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/3.4"
+    "selected_version": "Release/master/3.8"
   },
   {
     "name": "RivieraLPM",
@@ -177,7 +177,7 @@
   },
   {
     "name": "SADI-qc8017_32",
-    "selected_version": "Release/master/1.1.1-23+496ef0d"
+    "selected_version": "Release/master/1.1.2-27+86a615f"
   },
   {
     "name": "SASS-qc8017_32",
@@ -189,7 +189,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/SOP/0.4.5-547+53b62ca"
+    "selected_version": "Release/SOP/0.4.6-562+5e97556"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -209,6 +209,6 @@
   },
   {
     "name": "WiFi-Setup-Webpage",
-    "selected_version": "master@eeda67a48b18a5c6d5b2cd156eadf2070b9a6b5f"
+    "selected_version": "master@0f997b1a0bf2ea393cd367279c037a282aff181e"
   }
 ]
