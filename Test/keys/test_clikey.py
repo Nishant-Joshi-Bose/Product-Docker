@@ -17,7 +17,7 @@ import KeyEvent
 
 from configure import conf
 from clikey_data import positive_scenarios, negative_scenarios
-from CastleTestUtils.LoggerUtils.log_setup import get_logger
+from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from pyadb import ADB
 
 adb = ADB(conf["adb_path"])

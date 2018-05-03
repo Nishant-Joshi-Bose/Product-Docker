@@ -20,7 +20,6 @@ from CastleTestUtils.CAPSUtils.TransportUtils.messageCreator import MessageCreat
 from CastleTestUtils.CAPSUtils.TransportUtils.responseHandler import ResponseHandler
 from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
 from CastleTestUtils.PassportUtils.passport_api import PassportAPIUsers
-from CastleTestUtils.PassportUtils.passport_utils import create_passport_account
 from CastleTestUtils.RivieraUtils import adb_utils
 from CastleTestUtils.RivieraUtils.hardware.keys import keypress
 from CastleTestUtils.RivieraUtils.hardware.keys.keys import Keys
@@ -81,13 +80,6 @@ def device_playing_from_amazon(request, front_door_queue):
     1. Play a station or a track by sending playback request to the device
     2. Verify the right station or track is playing by verifying 'nowPlaying' response
     """
-    sys_info = front_door_queue.getInfo()["body"]
-    device_guid = sys_info["guid"]
-    assert device_guid is not None
-    LOGGER.debug("GUID is: %s", device_guid)
-
-    device_type = sys_info["productType"]
-    LOGGER.debug("Device type: %s", device_type)
     service_name = 'AMAZON'
     current_resource = 'STS_AMAZON_ACCOUNT'
     location = '/v1/playback/type/playable/url/cHJpbWUvc3RhdGlvbnMvQTEwMlVLQzcxSTVEVTgvI3BsYXlhYmxl/trackIndex/0'
@@ -107,15 +99,16 @@ def device_playing_from_amazon(request, front_door_queue):
     LOGGER.info("Create passport account")
     passport_base_url = request.config.getoption('--passport-base-url')
     apikey = request.config.getoption('--api-key')
-    boseperson_id = create_passport_account(passport_base_url, "Eddie", "APITest", apikey)
-    passport_user = PassportAPIUsers(boseperson_id, apikey, passport_base_url)
+    LOGGER.info("Bose Person ID : %s ", front_door_queue._bosepersonID)
+    passport_user = PassportAPIUsers(front_door_queue._bosepersonID, apikey, front_door_queue._access_token,
+                                     passport_base_url, logger=LOGGER)
 
     def delete_passport_user():
         """
         This function will delete passport user.
         """
         LOGGER.info("delete_passport_user")
-        assert passport_user.delete_users(), "Fail to delete person id: %s" % boseperson_id
+        assert passport_user.delete_users(), "Fail to delete person id: {}".format(passport_user.bosePersonID)
         common_behavior_handler.performCloudSync()
 
     request.addfinalizer(delete_passport_user)
@@ -137,8 +130,6 @@ def device_playing_from_amazon(request, front_door_queue):
 
     request.addfinalizer(remove_music_service)
 
-    LOGGER.info("add_device_to_passport")
-    assert passport_user.add_product(device_guid, device_type), "Failed to add device to passport account."
     common_behavior_handler.performCloudSync()
 
     LOGGER.info("verify_device_source")
@@ -200,8 +191,9 @@ def set_no_audio_timeout(deviceid, adb):
     Test steps:
     1. Change "NoAudioTimeout" to 1 minute.
     2. Reboot and wait for CLI-Server to start and device state get out of Booting.
-    3. At the end of test case revert "NoAudioTimeout" to 20 minutes.
-    4. Reboot and wait for CLI-Server to start and device state get out of Booting.
+    3. Wait until product state set to 'SetupOther' or 'SetupNetwork' state.
+    4. At the end of test case revert "NoAudioTimeout" to 20 minutes.
+    5. Reboot and wait for CLI-Server to start and device state get out of Booting.
     """
     timer_file = '/opt/Bose/etc/InActivityTimer.json'
     # 1. Change "NoAudioTimeout" to 1 minute.
@@ -211,23 +203,34 @@ def set_no_audio_timeout(deviceid, adb):
     # 2. Reboot and wait for CLI-Server to start and device state get out of Booting.
     rebooted_and_out_of_booting_state_device(deviceid, adb)
 
+    # 3. Wait until product state set to 'SetupOther' or 'SetupNetwork' state.
+    for _ in range(30):
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+        if device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK]:
+            break
+        time.sleep(1)
+
+    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+    assert device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK], \
+        'Device should be in {} or {} state. Current state : {}'.format(eddie_helper.SETUPOTHER,
+                                                                        eddie_helper.SETUPNETWORK, device_state)
     yield
 
-    # 3. At the end of test case revert "NoAudioTimeout" to 20 minutes.
+    # 4. At the end of test case revert "NoAudioTimeout" to 20 minutes.
     adb.executeCommand("/opt/Bose/bin/rw")
     adb.executeCommand("sed 's/\\\"NoAudioTimeout\\\": 1,/\\\"NoAudioTimeout\\\": 20,/' -i {}".format(timer_file))
     adb.executeCommand('sync')
-    # 4. Reboot and wait for CLI-Server to start and device state get out of Booting.
+    # 5. Reboot and wait for CLI-Server to start and device state get out of Booting.
     rebooted_and_out_of_booting_state_device(deviceid, adb)
 
 
 @pytest.fixture(scope="function")
 def remove_oob_setup_state_and_reboot_device(deviceid, adb):
     """
-    This fixture is used to remove "/mnt/nv/product-persistence/SetupState.json" file and reboot the device.
+    This fixture is used to remove "/mnt/nv/product-persistence/SystemSetupDone" file and reboot the device.
     """
-    oob_setup_file = '/mnt/nv/product-persistence/SetupState.json'
-    # 1. Remove "/mnt/nv/product-persistence/SetupState.json" file.
+    oob_setup_file = '/mnt/nv/product-persistence/SystemSetupDone'
+    # 1. Remove "/mnt/nv/product-persistence/SystemSetupDone" file.
     adb.executeCommand("/opt/Bose/bin/rw")
     adb.executeCommand("rm {}".format(oob_setup_file))
     adb.executeCommand('sync')
