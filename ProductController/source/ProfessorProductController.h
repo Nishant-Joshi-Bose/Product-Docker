@@ -65,7 +65,6 @@ class ProductCecHelper;
 class ProductCommandLine;
 class CustomProductKeyInputManager;
 class ProductAdaptIQManager;
-class ProductSourceInfo;
 class ProductBLERemoteManager;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -131,14 +130,6 @@ public:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< ProductAdaptIQManager >& GetAdaptIQManager( );
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following method is used to get a shared pointer to the SourceInfo instance
-    ///        from the product controller.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    std::shared_ptr< ProductSourceInfo >& GetSourceInfo( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -262,7 +253,6 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
     std::shared_ptr< ProductCommandLine                > m_ProductCommandLine;
-    std::shared_ptr< ProductSourceInfo                 > m_ProductSourceInfo;
     std::shared_ptr< CustomProductKeyInputManager      > m_ProductKeyInputManager;
     std::shared_ptr< ProductCecHelper                  > m_ProductCecHelper;
     std::shared_ptr< ProductDspHelper                  > m_ProductDspHelper;
