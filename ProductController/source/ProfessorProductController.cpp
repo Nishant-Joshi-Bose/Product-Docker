@@ -46,7 +46,6 @@
 #include "ProductControllerStates.h"
 #include "ProductControllerState.h"
 #include "ProductControllerStateBooted.h"
-#include "ProductControllerStateBootedTransition.h"
 #include "ProductControllerStateBooting.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
@@ -199,11 +198,6 @@ void ProfessorProductController::Run( )
     ( GetHsm( ),
       stateTop,
       PRODUCT_CONTROLLER_STATE_BOOTED );
-
-    auto* stateBootedTransition = new ProductControllerStateBootedTransition
-    ( GetHsm( ),
-      stateTop,
-      PRODUCT_CONTROLLER_STATE_BOOTED_TRANSITION );
 
     auto* stateFirstBootGreeting = new ProductControllerStateFirstBootGreeting
     ( GetHsm( ),
@@ -457,7 +451,6 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), stateCriticalError );
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::FACTORY_DEFAULT ), stateFactoryDefault );
     GetHsm( ).AddState( "", stateBooted );
-    GetHsm( ).AddState( "", stateBootedTransition );
     GetHsm( ).AddState( "", stateFirstBootGreetingTransition );
     GetHsm( ).AddState( "", stateLowPowerStandbyTransition );
     GetHsm( ).AddState( "", stateLowPowerStandby );
