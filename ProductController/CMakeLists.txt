@@ -35,7 +35,6 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/BlasterConfig.pb.cc
   ${PROTO_CC_DEST}/CecMode.pb.cc
   ${PROTO_CC_DEST}/HdmiEdid.pb.cc
-  ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
   ${PROTO_CC_DEST}/KeyNames.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc
@@ -52,7 +51,7 @@ ADD_EXECUTABLE(Professor
   source/CustomStateMachine/CustomProductControllerStateIdle.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateOn.cpp
-  source/CustomStateMachine/CustomProductControllerStateLowPowerStandby.cpp
+  source/CustomStateMachine/CustomProductControllerStateLowPowerResume.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayable.cpp
   source/CustomStateMachine/CustomProductControllerStatePlaying.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayingDeselectedAccessoryPairing.cpp
@@ -72,7 +71,6 @@ ADD_EXECUTABLE(Professor
   source/ProductDspHelper.cpp
   source/ProductSourceInfo.cpp
   source/ProductStart.cpp
-  source/ProductSystemManager.cpp
   source/ProfessorProductController.cpp
 )
 
