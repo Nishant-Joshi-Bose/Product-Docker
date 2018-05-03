@@ -60,7 +60,6 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class CustomProductLpmHardwareInterface;
-class ProductSystemManager;
 class CustomProductAudioService;
 class ProductCecHelper;
 class ProductCommandLine;
@@ -237,8 +236,6 @@ public:
 
     PassportPB::ContentItem GetOOBDefaultLastContentItem() const override;
 
-    bool CanPersistAsLastContentItem( const SoundTouchInterface::ContentItem &ci ) const override;
-
     void PossiblyPairBLERemote( );
 
     void PairBLERemote( uint32_t timeout );
@@ -255,7 +252,6 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
-    std::shared_ptr< ProductSystemManager              > m_ProductSystemManager;
     std::shared_ptr< ProductCommandLine                > m_ProductCommandLine;
     std::shared_ptr< CustomProductKeyInputManager      > m_ProductKeyInputManager;
     std::shared_ptr< ProductCecHelper                  > m_ProductCecHelper;
@@ -271,7 +267,6 @@ private:
     ///        machine states.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool m_IsAudioPathReady;
     bool m_IsAutoWakeEnabled;
     bool m_Running;
 

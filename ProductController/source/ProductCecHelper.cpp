@@ -33,6 +33,7 @@
 #include "PGCErrorCodes.h"
 #include "DataCollectionClientFactory.h"
 #include "HdmiEdid.pb.h"
+#include "ProductDataCollectionDefines.h"
 
 using namespace ProductPb;
 
@@ -393,6 +394,12 @@ void ProductCecHelper::HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMI
         }
 
     }
+    else
+    {
+        //disable physical address
+        BOSE_DEBUG( s_logger, "CEC Physical address 0x%x is being set.", 0xffff );
+        m_ProductLpmHardwareInterface->SetCecPhysicalAddress( 0xffff );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -410,7 +417,7 @@ void ProductCecHelper::HandleRawEDIDResponse( const A4VVideoManagerServiceMessag
 
     edidData->set_eedid( rawEdid.edid().c_str() );
 
-    m_DataCollectionClient->SendData( edidData, "eedid-changed" );
+    m_DataCollectionClient->SendData( edidData, DATA_COLLECTION_EEDID );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

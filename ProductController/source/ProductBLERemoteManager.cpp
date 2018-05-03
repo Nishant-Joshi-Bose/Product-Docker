@@ -337,6 +337,7 @@ bool ProductBLERemoteManager::GetSourceLED( A4VRemoteCommunication::A4VRemoteCom
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::Pairing_Start( uint32_t timeout )
 {
+    Unpairing_Start();
     m_RCSClient->Pairing_Start( {}, timeout );
 }
 

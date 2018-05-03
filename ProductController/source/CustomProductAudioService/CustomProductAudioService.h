@@ -12,6 +12,7 @@
 #include "ThermalMonitorTask.h"
 #include "FrontDoorClient.h"
 #include "AudioSettings.pb.h"
+#include "DataCollectionClientIF.h"
 
 namespace ProductApp
 {
@@ -30,12 +31,13 @@ public:
     /// m_InputRoute is the current physical DSP input that should be used, based on current source info from contentItem
     /////////////////////////////////////////////////////////////////////////////////////////////
     LpmServiceMessages::AudioSettings_t m_MainStreamAudioSettings;
-    uint32_t m_InputRoute;
+    uint32_t m_InputRoute = 0;
 
 private:
     std::shared_ptr<CustomProductLpmHardwareInterface>  m_ProductLpmHardwareInterface;
     std::unique_ptr<CustomAudioSettingsManager>         m_AudioSettingsMgr;
     std::unique_ptr<ThermalMonitorTask>                 m_ThermalTask;
+    std::shared_ptr< DataCollectionClientIF >           m_DataCollectionClient;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// Front Door handlers
@@ -46,7 +48,7 @@ private:
     std::unique_ptr<AudioSetting<ProductPb::AudioSurroundLevel>>        m_AudioSurroundSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioSurroundDelay>>        m_AudioSurroundDelaySetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioGainOffset>>           m_AudioGainOffsetSetting;
-    std::unique_ptr<AudioSetting<ProductPb::AudioAvSync>>               m_AudioAvSyncsetSetting;
+    std::unique_ptr<AudioSetting<ProductPb::AudioAvSync>>               m_AudioAvSyncSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioSubwooferGain>>        m_AudioSubwooferGainSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioMode>>                 m_AudioModeSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioContentType>>          m_AudioContentTypeSetting;
