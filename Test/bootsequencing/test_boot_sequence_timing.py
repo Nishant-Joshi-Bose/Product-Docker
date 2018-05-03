@@ -22,7 +22,7 @@ import pytest
 from conf_bootsequencing import CONFIG
 from stateutils import state_checker, UNKNOWN
 
-from CastleTestUtils.LoggerUtils.log_setup import get_logger
+from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.MemoryUtils.graphite import generate_time_message, Graphite
 
 
