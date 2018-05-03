@@ -133,7 +133,12 @@ void ProductBLERemoteManager::Run( )
     {
         auto cb = [ = ]( RCS_PB_MSG::PairingNotify n )
         {
-            m_remoteConnected = n.has_status() && ( n.status() == RCS_PB_MSG::PairingNotify::PSTATE_BONDED );
+            m_remoteConnected = n.has_status() && ( n.status() == RemoteStatus::PSTATE_BONDED );
+            if( n.has_status() )
+            {
+                m_remoteStatus = n.status();
+                CheckPairing( );
+            }
         };
         m_RCSClient->Pairing_GetStatus( cb );
     } );
@@ -351,6 +356,7 @@ void ProductBLERemoteManager::Pairing_Start( uint32_t timeout )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::Pairing_Cancel( void )
 {
+    m_pairingPending = false;
     m_RCSClient->Pairing_Cancel( );
 }
 
@@ -399,6 +405,64 @@ bool ProductBLERemoteManager::IsConnected( void )
     return m_remoteConnected;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductBLERemoteManager::PossiblyPair
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductBLERemoteManager::PossiblyPair( void )
+{
+    m_pairingPending = true;
+    CheckPairing();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductBLERemoteManager::CheckPairing
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductBLERemoteManager::CheckPairing( void )
+{
+    // Some of these cases might not do anything; don't remove them, they're here for
+    // documentation
+    switch( m_remoteStatus )
+    {
+    // Indeterminate states
+    case RemoteStatus::PSTATE_INIT:
+    case RemoteStatus::PSTATE_UNPAIRING:
+    case RemoteStatus::PSTATE_UNKOWN:
+        break;
+
+    // In these states, any pairing pending request isn't necessary (we're already paired)
+    // !!! Assumption - if we're OUT_OF_RANGE, we must be paired
+    // Apparently SCANNING is the state we're in when we're trying to pair, so it's safe to clear
+    // the flag here too (pairing has already been initiated)
+    case RemoteStatus::PSTATE_SCANNING:
+    case RemoteStatus::PSTATE_BONDED:
+    case RemoteStatus::PSTATE_OUT_OF_RANGE:
+        m_pairingPending = false;
+        break;
+
+    // Initiate pairing if we're unpaired and there's a pending request
+    case RemoteStatus::PSTATE_UNPAIRED:
+        if( m_pairingPending )
+        {
+            m_pairingPending = false;
+            Pairing_Start( m_PairingTimeout );
+        }
+        break;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                               End of ProductApp Namespace                                    ///

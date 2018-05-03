@@ -9,7 +9,7 @@
   },
   {
     "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/0.3.4-+"
+    "selected_version": "Release/master/0.3.6-1+gd458c3d"
   },
   {
     "name": "A4VVideoManagerService",
@@ -101,7 +101,7 @@
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "2018_SOP@0241b4479126731740c44f97c2da4b1955c9fe98"
+    "selected_version": "2018_SOP@a3b427d6f054865ceb52855c7a80527baea1287b"
   },
   {
     "name": "CastleProductUIAssets",

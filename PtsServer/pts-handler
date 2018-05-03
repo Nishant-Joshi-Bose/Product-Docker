@@ -66,14 +66,22 @@ Content-Type: text/plain\r
 \r
 {code}\r""".format(code=code)
 
+usb_ifaces = ["usb*", "rndis*"]
+
 def only_for_usb():
+    only_for_ifaces(usb_ifaces)
+
+def only_for_ifaces(allowed_ifaces):
     iface = os.environ.get("IFACE", "")
-    if iface.startswith("usb"):
+    if iface == "lo": # loopback is always considered safe
         return
-    if iface.startswith("rndis"):
-        return
-    if iface == "lo":           # for testing; see `adb forward`
-        return
+    for allowed_iface in allowed_ifaces:
+        if allowed_iface.endswith("*"):
+            if iface.startswith(allowed_iface[:-1]):
+                return
+        else:
+            if iface == allowed_iface:
+                return
     log("Attempt to access {} via interface {}".format(path, iface))
     if os.path.exists("/mnt/nv/product-persistence/anyiface"):
         return
@@ -268,6 +276,11 @@ Moved Permanently\r
 
     if path == "/":
         path = "/index.html"
+
+    if path == "/index.html":
+        # Wi-Fi setup page access is restricted to certain interfaces
+        only_for_ifaces(["wlan1"] + usb_ifaces)
+
     file_name = "/opt/Bose/html" + path
 
     # Avoid possible security issues with paths like ../../etc/passwd and symlinks.
@@ -276,6 +289,7 @@ Moved Permanently\r
         sys.exit()
 
     content_types = {
+        ".html": "text/html",
         ".jpg": "image/jpeg",
         ".pdf": "application/pdf",
         ".svg": "image/svg+xml",
