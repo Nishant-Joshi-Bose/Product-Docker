@@ -780,34 +780,6 @@ PassportPB::ContentItem ProfessorProductController::GetOOBDefaultLastContentItem
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name   ProfessorProductController::CanPersistAsLastContentItem
-///
-/// @param  const SoundTouchInterface::ContentItem &ci
-///
-/// @brief  Determines if the content item can be persisted in m_lastContentItem
-///
-/// @return Returns true or false
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProfessorProductController::CanPersistAsLastContentItem( const SoundTouchInterface::ContentItem &ci ) const
-{
-    bool retVal = true;
-    if( !ProductController::CanPersistAsLastContentItem( ci ) )
-    {
-        retVal = false;
-    }
-    if( ci.source() == "PRODUCT" && ( ci.sourceaccount() == "ADAPTiQ" ) )
-    {
-        retVal = false;
-    }
-
-    BOSE_VERBOSE( s_logger, "ContentItem %s can%s persist in Professor as LastContentItem",
-                  ProtoToMarkup::ToJson( ci, false ).c_str( ), retVal ? "" : "not" );
-    return retVal;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @name   ProfessorProductController::PossiblyPairBLERemote
 ///
 /// @brief  initiates pairing of the BLE remote if indicated
@@ -885,9 +857,9 @@ void ProfessorProductController::SetupProductSTSConntroller( )
     ProductSTSController::SourceDescriptor descriptor_AiQ    { ProductSTS::SLOT_AIQ,   "ADAPTiQ", false, commonStateFactory };
     ProductSTSController::SourceDescriptor descriptor_Setup  { ProductSTS::SLOT_SETUP, "SETUP",   false, silentStateFactory };
     ProductSTSController::SourceDescriptor descriptor_TV     { ProductSTS::SLOT_TV,    "TV",      true,  commonStateFactory };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_0 { ProductSTS::SLOT_0,     "SLOT_0",  false, commonStateFactory };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_1 { ProductSTS::SLOT_1,     "SLOT_1",  false, commonStateFactory };
-    ProductSTSController::SourceDescriptor descriptor_SLOT_2 { ProductSTS::SLOT_2,     "SLOT_2",  false, commonStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_0 { ProductSTS::SLOT_0,     "SLOT_0",  false, commonStateFactory, true };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_1 { ProductSTS::SLOT_1,     "SLOT_1",  false, commonStateFactory, true };
+    ProductSTSController::SourceDescriptor descriptor_SLOT_2 { ProductSTS::SLOT_2,     "SLOT_2",  false, commonStateFactory, true };
 
     sources.push_back( descriptor_AiQ );
     sources.push_back( descriptor_Setup );
