@@ -35,7 +35,6 @@ ADD_EXECUTABLE(Professor
   ${PROTO_CC_DEST}/BlasterConfig.pb.cc
   ${PROTO_CC_DEST}/CecMode.pb.cc
   ${PROTO_CC_DEST}/HdmiEdid.pb.cc
-  ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
   ${PROTO_CC_DEST}/KeyNames.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/ProductSpeakerManager.pb.cc
@@ -72,7 +71,6 @@ ADD_EXECUTABLE(Professor
   source/ProductDspHelper.cpp
   source/ProductSourceInfo.cpp
   source/ProductStart.cpp
-  source/ProductSystemManager.cpp
   source/ProfessorProductController.cpp
 )
 

@@ -33,7 +33,6 @@
 #include "CustomProductAudioService.h"
 #include "CustomAudioSettingsManager.h"
 #include "CustomProductKeyInputManager.h"
-#include "ProductSystemManager.h"
 #include "ProductCommandLine.h"
 #include "ProductAdaptIQManager.h"
 #include "ProductSourceInfo.h"
@@ -78,6 +77,7 @@
 #include "ProductControllerStatePlayingSelectedSetupNetworkTransition.h"
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSilent.h"
+#include "ProductControllerStatePlayingSelectedStoppingStreams.h"
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStatePlayingTransitionSwitch.h"
 #include "ProductControllerStateSoftwareInstall.h"
@@ -85,7 +85,6 @@
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
 #include "ProductControllerStateStoppingStreamsDedicated.h"
-#include "ProductControllerStateStoppingStreams.h"
 #include "ProductControllerStateTop.h"
 #include "CustomProductControllerStateAdaptIQExiting.h"
 #include "CustomProductControllerStateAdaptIQ.h"
@@ -135,7 +134,6 @@ ProfessorProductController::ProfessorProductController( ) :
     /// Construction of the Product Controller Modules
     ///
     m_ProductLpmHardwareInterface( nullptr ),
-    m_ProductSystemManager( nullptr ),
     m_ProductCommandLine( nullptr ),
     m_ProductSourceInfo( nullptr ),
     m_ProductKeyInputManager( nullptr ),
@@ -411,10 +409,10 @@ void ProfessorProductController::Run( )
       *this,
       CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_ACCESSORY_PAIRING );
 
-    auto* stateStoppingStreams = new ProductControllerStateStoppingStreams
+    auto* stateStoppingStreams = new ProductControllerStatePlayingSelectedStoppingStreams
     ( GetHsm( ),
       customStatePlayingSelected,
-      PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS );
+      PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS );
 
     ///
     /// AdaptIQ States
@@ -517,7 +515,6 @@ void ProfessorProductController::Run( )
     m_ProductLpmHardwareInterface = std::make_shared< CustomProductLpmHardwareInterface >( *this );
     m_ProductCecHelper            = std::make_shared< ProductCecHelper                  >( *this );
     m_ProductDspHelper            = std::make_shared< ProductDspHelper                  >( *this );
-    m_ProductSystemManager        = std::make_shared< ProductSystemManager              >( *this );
     m_ProductCommandLine          = std::make_shared< ProductCommandLine                >( *this );
     m_ProductSourceInfo           = std::make_shared< ProductSourceInfo                 >( *this );
     m_ProductKeyInputManager      = std::make_shared< CustomProductKeyInputManager      >( *this );
@@ -528,7 +525,6 @@ void ProfessorProductController::Run( )
                                     m_ProductLpmHardwareInterface->GetLpmClient( ) );
 
     if( m_ProductLpmHardwareInterface == nullptr ||
-        m_ProductSystemManager        == nullptr ||
         m_ProductAudioService         == nullptr ||
         m_ProductCommandLine          == nullptr ||
         m_ProductKeyInputManager      == nullptr ||
@@ -559,7 +555,6 @@ void ProfessorProductController::Run( )
     /// Run all the submodules.
     ///
     m_ProductLpmHardwareInterface->Run( );
-    m_ProductSystemManager       ->Run( );
     m_ProductAudioService        ->Run( );
     m_ProductCommandLine         ->Run( );
     m_ProductSourceInfo          ->Run( );
@@ -1254,7 +1249,6 @@ void ProfessorProductController::Wait( )
     /// Stop all the submodules.
     ///
     m_ProductLpmHardwareInterface->Stop( );
-    m_ProductSystemManager       ->Stop( );
     m_ProductCommandLine         ->Stop( );
     m_ProductSourceInfo          ->Stop( );
     m_ProductKeyInputManager     ->Stop( );
