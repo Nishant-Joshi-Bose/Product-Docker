@@ -25,7 +25,11 @@ INCLUDE_DIRECTORIES(
 ADD_EXECUTABLE(Eddie
   ${CUSTOM_HSM_DIR}/CustomProductControllerState.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateOn.cpp
+  ${CUSTOM_HSM_DIR}/CustomProductControllerStateSoftwareInstall.cpp
+  ${CUSTOM_HSM_DIR}/CustomProductControllerStateLowPowerResume.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateLowPowerStandby.cpp
+  ${CUSTOM_HSM_DIR}/CustomProductControllerStateLowPowerStandbyTransition.cpp
+  ${CUSTOM_HSM_DIR}/CustomProductControllerStateNetworkStandby.cpp
   ProductCliClient.cpp
   DataCollectionClientInterface.cpp
   EddieProductController.cpp

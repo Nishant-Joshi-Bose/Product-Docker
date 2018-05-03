@@ -18,14 +18,12 @@ import datetime
 import os
 import time
 import ConfigParser
-
 import pytest
-
-
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 from CastleTestUtils.RivieraUtils import rivieraCommunication, rivieraUtils
+from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
 from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import flash_device
 
 from commonData import keyConfig
@@ -36,7 +34,6 @@ logger = get_logger(__name__)
 def pytest_addoption(parser):
     """
     Command line options for the pytest tests in this module.
-
     :param parser: Parser used for method.
     :return: None
     """
@@ -50,6 +47,8 @@ def pytest_addoption(parser):
                      help="logging : [useSerial / ipBased ]")
     parser.addoption("--network-iface", action="store", default="wlan0",
                      help="network interface to choose")
+    parser.addoption("--usb-iface", action="store", default="usb2",
+                     help="USB interface to choose")
     parser.addoption("--ip-address", action="store", default=None,
                      help="IP Address of Target under test")
     parser.addoption("--lpm-port", action="store", default=None,
@@ -128,7 +127,7 @@ def device_ip(request, deviceid):
 
 
 @pytest.fixture(scope="class")
-def frontDoor(device_ip):
+def frontDoor(device_ip, request):
     """
     Get FrontDoorAPI instance.
     """
@@ -138,10 +137,29 @@ def frontDoor(device_ip):
     front_door = FrontDoorAPI(device_ip)
 
     def tear():
-        front_door.close()
+        if front_door:
+            front_door.close()
     request.addfinalizer(tear)
 
     return front_door
+
+@pytest.fixture(scope='class')
+def riviera(deviceid):
+    """
+    Get RivieraUtil instance.
+    """
+    return RivieraUtils('ADB', device=deviceid)
+
+@pytest.fixture(scope='class')
+def device_guid(frontDoor):
+    """
+    Use front door API to obtain device GUID
+    """
+    logger.info("Getting the GUID")
+    device_guid = frontDoor.getInfo()["body"]["guid"]
+    assert device_guid != None
+    logger.debug("GUID is: %s", device_guid)
+    return device_guid
 
 @pytest.fixture(scope='function', autouse=False)
 def test_log_banner(request):
@@ -186,7 +204,6 @@ def rebooted_device():
     """
     This will put the device into a rebooted state and yield information about
         how long it took.
-
     :return: None
     """
     from pyadb import ADB
@@ -207,7 +224,6 @@ def rebooted_and_networked_device(rebooted_device, request):
     """
     This will put the device into a rebooted state with network up and yield
         information about how long it took.
-
     :return: None
     """
     from multiprocessing import Process, Manager
@@ -248,7 +264,6 @@ def adb_versions():
     """
     This fixture will return information regarding version information on the
         ADB system
-
     :return:
     """
     import json
@@ -271,9 +286,7 @@ def adb_versions():
 def eddie_master_latest_directory(tmpdir):
     """
     Fixture to download the latest Continuous Master Eddie build locally.
-
     :param tmpdir: Pytest temporary directory fixture
-
     :yield: The location of the Eddie Tar and Flash
     """
     import glob
@@ -345,7 +358,6 @@ def ip_address_wlan(request, deviceid, wifi_config):
     """
     IP address of the device connected to WLAN.
     Removes any configuration on the Device if not connected.
-
     :param request: PyTest command line request option
     :param wifi_config: ConfigParser object of Wireless configs
     :return: The IP Address of the attached Riviera Device
@@ -383,6 +395,6 @@ def ip_address_wlan(request, deviceid, wifi_config):
 
     device_ip_address = network_base.check_inf_presence(interface, timeout=20)
     if not device_ip_address:
-        raise SystemError("Failed to acquire network connection through {}: {}".format(interface, device_ip))
+        raise SystemError("Failed to acquire network connection through: {}".format(interface))
 
     return device_ip_address
