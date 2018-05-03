@@ -135,13 +135,13 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
 
         if( sourceItem and sourceItem->has_details( ) )
         {
-            const auto& sourceDetailes = sourceItem->details( );
-            if( sourceDetailes.has_devicetype( ) )
+            const auto& sourceDetails = sourceItem->details( );
+            if( sourceDetails.has_devicetype( ) )
             {
-                isBlastedKey = m_QSSClient->IsBlastedKey( keyEvent.keyid( ), sourceDetailes.devicetype( ) );
+                isBlastedKey = m_QSSClient->IsBlastedKey( keyEvent.keyid( ), sourceDetails.devicetype( ) );
             }
 
-            cicode = sourceDetailes.cicode( );
+            cicode = sourceDetails.cicode( );
         }
     }
 
