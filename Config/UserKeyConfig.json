@@ -325,7 +325,7 @@
         "commment": "pair speakers",
         "keyEvent": "PRESS",
         "keyList": ["BOSE_PAIR_SPKR"],
-        "origin": ["TAP"],
+        "origin": ["IR", "TAP", "CEC", "RF"],
         "timeOutList": []
     },
     {
