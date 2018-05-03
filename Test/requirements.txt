@@ -1,6 +1,6 @@
 --trusted-host ingress-platform.live-aws-useast1.bose.io
 --extra-index-url https://ingress-platform.live-aws-useast1.bose.io/dev/svc-core-devops-nexus/prod/core-devops-nexus-core/repository/pypi-all/simple
-CastleTestUtils==0.1.6
+CastleTestUtils==0.1.7
 
 # Virtual Environment in Ubuntu is installing 10.0.3b, which is causing problems with CastleTestUtils.
 # See: https://jirapro.bose.com/browse/WSCI-837

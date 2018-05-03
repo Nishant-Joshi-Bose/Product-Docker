@@ -17,6 +17,7 @@
 #include "ProtoPersistenceIF.h"
 #include "ProductControllerStateTop.h"
 #include "CustomProductControllerStateNetworkStandby.h"
+#include "CustomProductControllerStateLowPowerResume.h"
 #include "CustomProductControllerStateLowPowerStandby.h"
 #include "CustomProductControllerStateLowPowerStandbyTransition.h"
 #include "ProductControllerStateNetworkStandbyConfigured.h"
@@ -31,6 +32,7 @@
 #include "ProductControllerStateOn.h"
 #include "ProductControllerStateIdle.h"
 #include "ProductControllerStateSoftwareInstall.h"
+#include "CustomProductControllerStateSoftwareInstall.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
 #include "ProductControllerStatePlayingDeselected.h"
@@ -350,8 +352,9 @@ private:
     ProductControllerStateBooting                                   m_ProductControllerStateBooting;
     ProductControllerStateBooted                                    m_ProductControllerStateBooted;
     CustomProductControllerStateOn                                  m_CustomProductControllerStateOn;
+    CustomProductControllerStateLowPowerResume                      m_CustomProductControllerStateLowPowerResume;
     CustomProductControllerStateLowPowerStandby                     m_CustomProductControllerStateLowPowerStandby;
-    ProductControllerStateSoftwareInstall                           m_ProductControllerStateSwInstall;
+    CustomProductControllerStateSoftwareInstall                     m_CustomProductControllerStateSwInstall;
     ProductControllerStateCriticalError                             m_ProductControllerStateCriticalError;
     ProductControllerStatePlaying                                   m_ProductControllerStatePlaying;
     ProductControllerStatePlayable                                  m_ProductControllerStatePlayable;
