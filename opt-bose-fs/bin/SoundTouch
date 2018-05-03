@@ -3,6 +3,8 @@
 # Start/stop shepherdd, the SoundTouch meta-daemon.
 #
 export PATH=/opt/Bose/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
+export AVS_WUW=1
+
 tag="${0##*/}[$$]"              # for log messages
 
 localtime_symlink=/mnt/nv/localtime
@@ -31,6 +33,24 @@ function reset_timezone_to_default {
 
 cd /opt/Bose/bin || exit
 
+# get productType for vfe linking on the fly
+productType="$(mfgdata get productType)"
+echo "Product type is : ${productType}"
+
+# set where vfe should get libs from
+if [ "$productType" = "professor" ] || [ "$productType" = "ginger-cheevers" ]; then
+    export "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/Bose/bin/$productType"
+else
+    echo "Incorrect mfgdata value for productType, failed to load Vfe"
+    echo "Valid values for this repo are:"
+    echo "professor"
+    echo "ginger-cheevers"
+    echo "Got $productType"
+    exit
+fi
+
+echo "LD_LIBRARY_PATH set to $LD_LIBRARY_PATH"
+
 rundir=/var/run/shepherd
 pidfile=$rundir/pid
 override=false
@@ -38,6 +58,7 @@ override=false
 # The list of daemons to stop while in low power mode.  These daemons are
 # typically the ones that don't know how to handle the low power events
 # properly.
+# NOTE : Vfe can not be added here due to dir structure needed to run prof and GC
 lowpower=(
     Shepherd-AudioPath.xml
     Shepherd-NetManager.xml
@@ -120,6 +141,10 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
             ln -s /opt/Bose/etc/Shepherd-CLIServer.xml "$rundir" || exit
         else
             ln -s /opt/Bose/etc/Shepherd*.xml "$rundir" || exit
+
+            # vfe only launching
+            ln -s "/opt/Bose/etc/$productType/Shepherd-vfe.xml" "$rundir" || exit
+
         fi
 
         if is-development; then
@@ -191,6 +216,10 @@ if (( $# == 1 )) && [ "$1" = enterlowpower ]; then
     log info "Disabling services to enter low power mode"
     cd "$rundir" || exit
     rm -f "${lowpower[@]}"
+
+    # also kill vfe
+    rm -f Shepherd-vfe.xml
+
     shepherd-wait "$rundir" "$pidfile"
     exit
 fi
@@ -201,6 +230,10 @@ if (( $# == 1 )) && [ "$1" = exitlowpower ]; then
     for i in "${lowpower[@]}"; do
         ln -sf "/opt/Bose/etc/$i"
     done
+
+    # also restart vfe
+    ln -s "/opt/Bose/etc/$productType/Shepherd-vfe.xml" "$rundir" || exit
+
     shepherd-wait "$rundir" "$pidfile"
     exit
 fi
