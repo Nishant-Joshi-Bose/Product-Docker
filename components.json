@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@1b02c781e0e5dc054c9dd370b71e5eef11ac5155"
+    "selected_version": "master@b73f672372e4355900733c979247a5cd9aada82f"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -17,7 +17,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork-2018-SOP/0.4.5.41993.2793246"
+    "selected_version": "Release/Castle-Fork/0.5.4.42158.2804520"
   },
   {
     "name": "bose-opkg-utils",
@@ -57,19 +57,19 @@
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
-    "selected_version": "Release/master/0.4.1-63+185c7b0"
+    "selected_version": "Release/master/0.4.2-65+50b6964"
   },
   {
     "name": "CastleDataCollectionService-qc8017_32",
-    "selected_version": "Release/master/0.4.2-25+abbeb2c"
+    "selected_version": "Release/master/0.4.3-27+805dd44"
   },
   {
     "name": "CastleDemoController-qc8017_32",
-    "selected_version": "Release/master/0.4.1-72+8c1f9ea"
+    "selected_version": "Release/master/0.4.2-73+1fc0115"
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.3.2-63+b6fa2d6"
+    "selected_version": "Release/master/0.4.0-76+d62cd41"
   },
   {
     "name": "CastleLibs-native",
@@ -85,23 +85,23 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/SOP/0.4.0-106+0e51351"
+    "selected_version": "Release/master/0.4.3-108+3b7cbfe"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/Eddie-SOP/0.4.3-256+cdfd26b"
+    "selected_version": "Release/master/0.4.4-263+9c1c64b"
   },
   {
     "name": "CastlePassport-qc8017_32",
-    "selected_version": "Release/master/0.4.2-608+4626553"
+    "selected_version": "Release/master/0.4.76-673+8201c19"
   },
   {
     "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.4.2-608+4626553"
+    "selected_version": "Release/master/0.4.76-673+8201c19"
   },
   {
     "name": "CastleProductControllerCommon",
-    "selected_version": "2018_SOP@0241b4479126731740c44f97c2da4b1955c9fe98"
+    "selected_version": "master@3bb86f759ac6b0100102076a38283ab7f8ad6fb5"
   },
   {
     "name": "CastleProductUIAssets",
@@ -113,7 +113,7 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/0.4.4-235+e949fec"
+    "selected_version": "Release/master/0.4.5-255+b400f78"
   },
   {
     "name": "FrontDoorService-qc8017_32",
@@ -125,7 +125,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.2.4-141+047d6e0"
+    "selected_version": "Release/master/0.4.0-147+7384633"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -181,7 +181,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/master/0.4.1-248+cc15af7"
+    "selected_version": "Release/master/0.5.1-271+47dd621"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -193,11 +193,11 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork-2018-SOP/0.4.5.41993.2793246"
+    "selected_version": "Release/Castle-Fork/0.5.4.42158.2804520"
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/SOP/0.4.1-44+a81e0b9"
+    "selected_version": "Release/master/0.4.1-41+d91468f"
   },
   {
     "name": "unittest-cpp-qc8017_32",
