@@ -9,7 +9,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.5.2-371+871a65b"
+    "selected_version": "Release/master/0.5.3-382+e629ca4"
   },
   {
     "name": "BoseOPKG-native",
@@ -37,7 +37,7 @@
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Release/master/1.0.2-60+55c3afd"
+    "selected_version": "Continuous/master/1.0.2-62+1ca1b63"
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
@@ -117,7 +117,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/1.0.2-84+739b806"
+    "selected_version": "Continuous/master/1.0.2-85+739b806"
   },
   {
     "name": "opensource-jsoncpp-native",
