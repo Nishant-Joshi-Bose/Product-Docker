@@ -37,7 +37,7 @@
   },
   {
     "name": "CastleCli-qc8017_32",
-    "selected_version": "Continuous/master/1.0.2-62+1ca1b63"
+    "selected_version": "Release/master/1.0.3-63+fb3e550"
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
@@ -117,7 +117,7 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Continuous/master/1.0.2-86+69d6913"
+    "selected_version": "Release/master/1.0.3-91+dd30f98"
   },
   {
     "name": "opensource-jsoncpp-native",
@@ -177,7 +177,7 @@
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Continuous/master/0.4.1-45+1b8eb90"
+    "selected_version": "Release/master/0.4.2-46+c373ed2"
   },
   {
     "name": "Webkit",
