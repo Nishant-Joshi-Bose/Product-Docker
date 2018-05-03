@@ -12,6 +12,10 @@
     "selected_version": "master@0f997b1a0bf2ea393cd367279c037a282aff181e"
   },
   {
+    "name": "bose-web-update-page",
+    "selected_version": "master@c0a7c8225da44d5d3ae6effd08a07dd2fc3049e0"
+  },
+  {
     "name": "BoseLibs-qc8017_32",
     "selected_version": "Release/master/0.5.3-382+e629ca4"
   },
@@ -173,7 +177,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.5.1-551+1515672"
+    "selected_version": "Release/master/0.5.2-570+adb44e8"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",

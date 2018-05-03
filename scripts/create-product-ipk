@@ -65,13 +65,14 @@ shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
 avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
-swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
+softwareupdate_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 audiopath_dir=$(components get CastleAudioPath-qc8017_32 installed_location) || exit
 audiopath64_dir=$(components get CastleAudioPath-qc8017_64 installed_location) || exit
 castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
 castlesass_dir=$(components get SASS-qc8017_32 installed_location) || exit
 castlepassport_dir=$(components get CastlePassport-qc8017_32 installed_location) || exit
 wifi_setup_webpage_dir=$(components get bose-web-riviera-ap-page installed_location) || exit
+web_update_page_dir=$(components get bose-web-update-page installed_location) || exit
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
 cli_dir=$(components get CastleCli-qc8017_32 installed_location) || exit
 democontroller_dir=$(components get CastleDemoController-qc8017_32 installed_location) || exit
@@ -156,12 +157,16 @@ cp -r "$wspace/keys/development/CACerts/" "$secure_dir" || exit
 find "$secure_dir" -type d -exec chmod 550 {} \; || exit
 find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 
+# On exit, make this dir writeable again to avoid spurious error messages
+# from `make clean` and such.
+trap 'chmod -R +w "$secure_dir"' EXIT
+
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
 
 "$avs_dir/stage" "$opt_dir" || exit
-"$swup_dir/stage" "$opt_dir" || exit
-"$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
+"$softwareupdate_dir/stage" "$opt_dir" || exit
+"$boseopkg_dir/stage" "$opt_dir/update/opkg" || exit
 "$audiopath_dir/stage" --product=eddie "$opt_dir" || exit
 "$audiopath64_dir/stage" --product=eddie --only-vfe "$opt_dir" || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
@@ -181,6 +186,8 @@ find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 "$datacollection_dir/stage" "$opt_dir" || exit
 "$datacollectionservice_dir/stage" "$opt_dir" || exit
 "$sadi_dir/stage" "$opt_dir" || exit
+rm -rfv "$opt_dir/update/html" # TODO: remove this when SoftwareUpdate has been modified not to include the update pages.
+"$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 
 # ----------------------------------------------------------------------------
 
@@ -347,6 +354,3 @@ ipk=$output_dir/product.ipk
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
 echo "Created $ipk"
-
-# reverting secure directory permission, to avoid issue in "make clean" / rebuild
-chmod -R 755 "$secure_dir" || exit
