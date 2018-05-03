@@ -84,8 +84,8 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setBassAction = [this]( ProductPb::AudioBassLevel val )
     {
-        ErrorCode_t error = m_audioSettingsMgr->SetBass( val );
-        if( error == ErrorCode_t::NO_ERROR )
+        ResultCode_t error = m_audioSettingsMgr->SetBass( val );
+        if( error == ResultCode_t::NO_ERROR )
         {
             m_mainStreamAudioSettings.set_basslevel( m_audioSettingsMgr->GetBass( ).value() );
             SendMainStreamAudioSettingsEvent();
@@ -112,8 +112,8 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         };
         auto setCenterAction = [this]( ProductPb::AudioCenterLevel val )
         {
-            ErrorCode_t error = m_audioSettingsMgr->SetCenter( val );
-            if( error == ErrorCode_t::NO_ERROR )
+            ResultCode_t error = m_audioSettingsMgr->SetCenter( val );
+            if( error == ResultCode_t::NO_ERROR )
             {
                 m_mainStreamAudioSettings.set_centerlevel( m_audioSettingsMgr->GetCenter( ).value() );
                 SendMainStreamAudioSettingsEvent();
@@ -141,8 +141,8 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         };
         auto setModeAction = [ this ]( ProductPb::AudioMode val )
         {
-            ErrorCode_t error = m_audioSettingsMgr->SetMode( val );
-            if( error == ErrorCode_t::NO_ERROR )
+            ResultCode_t error = m_audioSettingsMgr->SetMode( val );
+            if( error == ResultCode_t::NO_ERROR )
             {
                 m_mainStreamAudioSettings.set_audiomode( ModeNameToEnum( m_audioSettingsMgr->GetMode( ).value() ) );
                 SendMainStreamAudioSettingsEvent();
@@ -168,8 +168,8 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
     };
     auto setTrebleAction = [ this ]( ProductPb::AudioTrebleLevel val )
     {
-        ErrorCode_t error = m_audioSettingsMgr->SetTreble( val );
-        if( error == ErrorCode_t::NO_ERROR )
+        ResultCode_t error = m_audioSettingsMgr->SetTreble( val );
+        if( error == ResultCode_t::NO_ERROR )
         {
             m_mainStreamAudioSettings.set_treblelevel( m_audioSettingsMgr->GetTreble( ).value() );
             SendMainStreamAudioSettingsEvent();
