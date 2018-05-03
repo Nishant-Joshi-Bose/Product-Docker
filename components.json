@@ -1,7 +1,7 @@
 [
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.5.4.42158.2804520"
+    "selected_version": "Continuous/Castle-Fork/2018-05-03_1121"
   },
   {
     "name": "bose-opkg-utils",
@@ -41,19 +41,19 @@
   },
   {
     "name": "CastleDataCollectionClient-qc8017_32",
-    "selected_version": "Release/master/0.4.2-65+50b6964"
+    "selected_version": "Continuous/master/0.4.3-69+b9e766f"
   },
   {
     "name": "CastleDataCollectionService-qc8017_32",
-    "selected_version": "Release/master/0.4.3-27+805dd44"
+    "selected_version": "Continuous/master/0.4.4-32+ec7e4f2"
   },
   {
     "name": "CastleDemoController-qc8017_32",
-    "selected_version": "Release/master/0.4.2-73+1fc0115"
+    "selected_version": "Continuous/up53/0.4.2-79+e8ec4f3"
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.4.0-76+d62cd41"
+    "selected_version": "Continuous/up53/0.4.0-89+f3a6658"
   },
   {
     "name": "CastleLibs-native",
@@ -69,11 +69,11 @@
   },
   {
     "name": "CastleLightBarController-qc8017_32",
-    "selected_version": "Release/master/0.4.3-108+3b7cbfe"
+    "selected_version": "Continuous/master/0.4.3-112+ae061ad"
   },
   {
     "name": "CastleNetworkService-qc8017_32",
-    "selected_version": "Release/master/0.4.4-263+9c1c64b"
+    "selected_version": "Continuous/master/0.4.4-277+58094ac"
   },
   {
     "name": "CastlePassport-qc8017_32",
@@ -97,7 +97,7 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/0.4.5-255+b400f78"
+    "selected_version": "Release/master/0.4.6-295+0cb5ac4"
   },
   {
     "name": "FrontDoorService-qc8017_32",
@@ -109,7 +109,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.4.0-147+7384633"
+    "selected_version": "Continuous/master/0.4.0-160+860d416"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -161,7 +161,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/master/0.5.1-271+47dd621"
+    "selected_version": "Continuous/master/0.5.1-279+1e4bf1a"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -173,11 +173,11 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.5.4.42158.2804520"
+    "selected_version": "Continuous/Castle-Fork/2018-05-03_1121"
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.4.1-41+d91468f"
+    "selected_version": "Continuous/master/0.4.1-45+1b8eb90"
   },
   {
     "name": "Webkit",
