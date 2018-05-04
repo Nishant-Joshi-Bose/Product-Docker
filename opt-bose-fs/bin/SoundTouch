@@ -43,6 +43,7 @@ lowpower=(
     Shepherd-NetManager.xml
     Shepherd-avs.xml
     Shepherd-vfe.xml
+    Shepherd-Bluetooth.xml
 )
 
 # For testing, make it easy to override what shepherd config files we use.
@@ -81,6 +82,7 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
         ulimit -c 0
     else
         log info "Development mode (core files enabled, recovery disabled)"
+        [ -e /mnt/nv/force-rndis ] && set-rndis on
         systemctl start adbd.service
         systemctl start sshd.socket
         ulimit -c unlimited
