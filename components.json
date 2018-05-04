@@ -57,11 +57,11 @@
   },
   {
     "name": "CastleDemoController-qc8017_32",
-    "selected_version": "Continuous/up53/0.4.2-79+e8ec4f3"
+    "selected_version": "Continuous/master/0.4.2-80+afb910b"
   },
   {
     "name": "CastleHTTPProxy-qc8017_32",
-    "selected_version": "Continuous/up53/0.4.0-89+f3a6658"
+    "selected_version": "Continuous/master/0.4.0-90+47d64e7"
   },
   {
     "name": "CastleLibs-native",
