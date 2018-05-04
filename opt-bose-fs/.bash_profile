@@ -12,7 +12,7 @@ export HISTFILE=/mnt/nv/.bash_history
 
 if [ "${PS1-}" ]; then # interactive shells
     # If the terminal size is unknown, run `resize` to detect it.
-    if ! stty -a -F /dev/tty |& grep -q '; columns '; then
+    if ! [ "$(stty -F /dev/tty size 2>/dev/null)" ]; then
         eval $(command resize -u)
     fi
 
@@ -25,9 +25,9 @@ if [ "${PS1-}" ]; then # interactive shells
         if [ "$name" ]; then
             echo "Device name: \"$name\""
         fi
-        cat /opt/Bose/etc/FS_VERSION*
+        jq -r '"Product version: \(.long)"' /opt/Bose/etc/BoseVersion.json
     ) 2>/dev/null
-    awk '$1 == "HSP" {$1="Riviera-HSP"; print}' /etc/riviera-version
+    awk '$1 == "HSP" {$1="Riviera-HSP:"; print}' /etc/riviera-version
 
     echo Secure boot: \
         $(awk '$NF == "0" {print "disabled"}

@@ -42,10 +42,10 @@ A4VQUICKSETSERVICE_DIR = $(shell components get A4VQuickSetService installed_loc
 A4VREMOTECOMMUNICATIONSERVICE_DIR = $(shell components get A4VRemoteCommunicationService installed_location)
 RIVIERALPM_DIR = $(shell components get RivieraLPM installed_location)
 RIVIERA_LPM_TOOLS_DIR = $(shell components get RivieraLpmTools installed_location)
-PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
+PRODUCTCONTROLLERCOMMON_DIR = $(shell components get ProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
-TESTUTILS_DIR = $(shell components get CastleTestUtils installed_location)
+TESTUTILS_DIR = $(shell components get TestUtils installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
@@ -122,6 +122,7 @@ package-no-hsp: packages-gz
 #Create one more Zip file for Bonjour / Local update with HSP
 IPKS_HSP = hsp.ipk monaco.ipk product.ipk lpm_updater.ipk
 PACKAGENAMES_HSP = hsp monaco SoundTouch lpm_updater
+
 .PHONY: package-with-hsp
 package-with-hsp: packages-gz-with-hsp
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
@@ -136,7 +137,7 @@ packages-gz-with-hsp: product-ipk monaco-ipk hsp-ipk lpmupdater-ipk
 
 .PHONY: graph
 graph: product-ipk
-	graph-components --sdk=$(sdk) Professor builds/$(cfg)/product-ipk-stage/component-info.gz >builds/$(cfg)/components.dot
+	graph-components --sdk=$(sdk) --exclude='CastleTools|CastleTestUtils' Professor builds/$(cfg)/product-ipk-stage/component-info.gz >builds/$(cfg)/components.dot
 	dot -Tsvgz builds/$(cfg)/components.dot -o builds/$(cfg)/components.svgz
 
 .PHONY: hsp-ipk
