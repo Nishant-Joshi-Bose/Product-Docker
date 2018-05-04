@@ -13,8 +13,10 @@ This file is to test Shephed Processes
 import time
 import logging
 import ConfigParser
+
 import pytest
 import pytest_dependency
+
 from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
 from CastleTestUtils.SoftwareUpdateUtils.BonjourUpdateScripts.bonjourUpdate import BonjourUpdateUtils
 from CastleTestUtils.SoftwareUpdateUtils.BonjourUpdate.bonjourUpdateSupport import BonjourUpdateSupport
@@ -34,15 +36,14 @@ def test_bonjour_update(request):
     zip_file = request.config.getoption("--zipfile")
     adb = ADBCommunication()
     adb.setCommunicationDetail(device)
-    BonjourCnt = 0
-    while BonjourCnt < int(cfg.get('Settings', 'BONJOUR_UPDATE_LOOP')):
-        BonjourCnt = BonjourCnt + 1
+    bonjour_count = 0
+    while bonjour_count < int(cfg.get('Settings', 'BONJOUR_UPDATE_LOOP')):
+        bonjour_count = bonjour_count + 1
         result = PerformBonjourUpdate(adb, zip_file, device)
         assert result, "Bonjour Update Failed. Please see logs for more details"
         time.sleep(180)
         #bonjourUpdateSupport = BonjourUpdateSupport(device=device, logger=logger)
         #bonjourUpdateSupport.confirm_installation_versions()
-        
 
 @pytest.mark.dependency(depends=["test_bonjour_update"])
 def test_shepherd_process(request):
@@ -80,21 +81,20 @@ def PerformBonjourUpdate(adb, zip_file, device):
     starttime = time.time()
     _timeout = 60
     try:
-        while(time.time() - starttime < _timeout):
+        while time.time() - starttime < _timeout:
             try:
-                deviceIP = adb.getIPAddress()
-                logger.info("Device IP : " + deviceIP)
+                device_ip_address = adb.getIPAddress()
+                logger.info("Device IP : " + device_ip_address)
                 break
-            except Exception as e:
-                logger.info("Getting IP Address.... " + str(e))
+            except Exception as error:
+                logger.info("Getting IP Address.... " + str(error))
                 continue
         bonjour_util = BonjourUpdateUtils(device=device)
         try:
-            bonjour_util.upload_zipfile(zip_file, deviceIP)
-        except SystemExit as e:
-            logger.info("System Exit Exception in Bonjour Update .... " + str(e))
+            bonjour_util.upload_zipfile(zip_file, device_ip_address)
+        except SystemExit as error:
+            logger.info("System Exit Exception in Bonjour Update .... " + str(error))
             return True
-    except Exception as e:
-        logger.info("Exception in Bonjour Update .... " + str(e))
+    except Exception as error:
+        logger.info("Exception in Bonjour Update .... " + str(error))
         return False
-	

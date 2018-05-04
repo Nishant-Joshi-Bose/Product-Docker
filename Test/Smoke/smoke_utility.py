@@ -11,9 +11,11 @@ Eddie Smoke Test Utility
 """
 
 import time
-import pexpect
 import json
 import xml.etree.ElementTree as ET
+
+import pexpect
+
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.CAPSUtils.TransportUtils.commonBehaviorHandler import CommonBehaviorHandler
@@ -23,11 +25,10 @@ from CastleTestUtils.RivieraUtils.hardware.keys import KeyUtils
 from CastleTestUtils.RivieraUtils.hardware.keys import keypress
 from global_resources_data import RESOURCES
 
-class SmokeUtils:
+class SmokeUtils(object):
     """
     :Abstract: Common Helper class for Smoke Test
     """
-
     def __init__(self, logger=None):
         """
         init method to set Logger object
@@ -124,7 +125,7 @@ class SmokeUtils:
 
         return (common_behavior_handler, response_handler, playback_msg)
 
-    def play_music(self, source_name, source_account_name, frontDoor, timeout = 10):
+    def play_music(self, source_name, source_account_name, frontDoor, timeout=10):
         """
         :param source_name: Music Source Name For ex. TUNEIN, AMAZON etc.
         :param frontDoor: FrontDoor object
@@ -135,7 +136,6 @@ class SmokeUtils:
         common_behavior_handler = common_obj[0]
         playback_msg = common_obj[2]
         common_behavior_handler.playContentItemAndVerifyPlayStatus(playback_msg)
-    
         # Below loop to play music for few seconds
         start_time = time.time()
         while time.time() < timeout + start_time:

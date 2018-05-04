@@ -93,6 +93,11 @@ print "</tr>"
 print "</table>"
 print "</div>"
 
+print "<li>Other Tests"
+print """<div class="box">"""
+print "<a href='/diag/microphone'>Microphones</a>"
+print "</div>"
+
 print "<hr>"
 
 print "Remote:", os.environ.get("REMOTE_ADDRESS", "(oops)"), "via", os.environ.get("IFACE", "(oops)")
