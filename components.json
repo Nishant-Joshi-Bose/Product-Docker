@@ -60,10 +60,6 @@
     "selected_version": "Release/master/0.4.3-248+bebc914"
   },
   {
-    "name": "CastleHTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.4.0-76+d62cd41"
-  },
-  {
     "name": "CastleLibs-native",
     "selected_version": "branches/castle-libs@2606"
   },
