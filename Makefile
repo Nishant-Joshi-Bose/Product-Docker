@@ -34,10 +34,10 @@ endif
 CMAKE_USE_CCACHE := $(USE_CCACHE)
 
 RIVIERA_LPM_TOOLS_DIR = $(shell components get RivieraLpmTools installed_location)
-PRODUCTCONTROLLERCOMMON_DIR = $(shell components get CastleProductControllerCommon installed_location)
+PRODUCTCONTROLLERCOMMON_DIR = $(shell components get ProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
-TESTUTILS_DIR = $(shell components get CastleTestUtils installed_location)
+TESTUTILS_DIR = $(shell components get TestUtils installed_location)
 RIVIERA_LPM_SERVICE_DIR = $(shell components get RivieraLpmService-qc8017_32 installed_location)
 
 .PHONY: generated_sources
@@ -92,7 +92,7 @@ packages-gz-with-hsp: product-ipk monaco-ipk hsp-ipk lpmupdater-ipk
 
 .PHONY: graph
 graph: product-ipk
-	graph-components --sdk=$(sdk) --exclude='CastleTools|CastleTestUtils' Eddie builds/$(cfg)/product-ipk-stage/component-info.gz >builds/$(cfg)/components.dot
+	graph-components --sdk=$(sdk) --exclude='CastleTools|TestUtils' Eddie builds/$(cfg)/product-ipk-stage/component-info.gz >builds/$(cfg)/components.dot
 	dot -Tsvgz builds/$(cfg)/components.dot -o builds/$(cfg)/components.svgz
 
 .PHONY: hsp-ipk
