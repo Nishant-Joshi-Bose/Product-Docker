@@ -7,7 +7,6 @@ SOUNDTOUCH_SDK_DIR          := $(shell components get SoundTouch-SDK-$(sdk)     
 SYSTEMEVENTSERVICE_DIR      := $(shell components get SystemEventService-$(sdk) installed_location)
 
 PROTO_SOURCES = \
-  ConfigurationStatus.proto \
   LightBarController.proto  \
   ProductMessage.proto      \
   KeyActions.proto          \
