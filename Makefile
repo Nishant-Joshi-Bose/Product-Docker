@@ -137,7 +137,7 @@ packages-gz-with-hsp: product-ipk monaco-ipk hsp-ipk lpmupdater-ipk
 
 .PHONY: graph
 graph: product-ipk
-	graph-components --sdk=$(sdk) --exclude='CastleTools|CastleTestUtils' Professor builds/$(cfg)/product-ipk-stage/component-info.gz >builds/$(cfg)/components.dot
+	graph-components --sdk=$(sdk) --exclude='CastleTools|TestUtils' Professor builds/$(cfg)/product-ipk-stage/component-info.gz >builds/$(cfg)/components.dot
 	dot -Tsvgz builds/$(cfg)/components.dot -o builds/$(cfg)/components.svgz
 
 .PHONY: hsp-ipk

@@ -26,6 +26,7 @@ if [ "${PS1-}" ]; then # interactive shells
             echo "Device name: \"$name\""
         fi
         jq -r '"Product version: \(.long)"' /opt/Bose/etc/BoseVersion.json
+        jq -r '"Branch: \(.branch)"' /opt/Bose/etc/BoseVersion.json
     ) 2>/dev/null
     awk '$1 == "HSP" {$1="Riviera-HSP:"; print}' /etc/riviera-version
 
