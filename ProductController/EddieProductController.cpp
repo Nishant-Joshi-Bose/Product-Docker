@@ -39,18 +39,19 @@ EddieProductController::EddieProductController():
     m_ProductControllerStateBooting( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_BOOTING ),
     m_ProductControllerStateBooted( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_BOOTED ),
     m_CustomProductControllerStateOn( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_ON ),
+    m_CustomProductControllerStateLowPowerResume( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_RESUME ),
     m_CustomProductControllerStateLowPowerStandby( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY ),
-    m_ProductControllerStateSwInstall( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL ),
+    m_CustomProductControllerStateSwInstall( GetHsm(), &m_ProductControllerStateTop, CUSTOM_PRODUCT_CONTROLLER_STATE_SOFTWARE_INSTALL ),
     m_ProductControllerStateCriticalError( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_CRITICAL_ERROR ),
     m_ProductControllerStatePlaying( GetHsm(), &m_CustomProductControllerStateOn, PRODUCT_CONTROLLER_STATE_PLAYING ),
     m_ProductControllerStatePlayable( GetHsm(), &m_CustomProductControllerStateOn, PRODUCT_CONTROLLER_STATE_PLAYABLE ),
-    m_ProductControllerStateLowPowerStandbyTransition( GetHsm(), &m_CustomProductControllerStateLowPowerStandby, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION ),
+    m_CustomProductControllerStateLowPowerStandbyTransition( GetHsm(), &m_CustomProductControllerStateLowPowerStandby, PRODUCT_CONTROLLER_STATE_LOW_POWER_STANDBY_TRANSITION ),
     m_ProductControllerStateIdle( GetHsm(), &m_ProductControllerStatePlayable, PRODUCT_CONTROLLER_STATE_IDLE ),
-    m_ProductControllerStateNetworkStandby( GetHsm(), &m_ProductControllerStatePlayable, PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY ),
+    m_CustomProductControllerStateNetworkStandby( GetHsm(), &m_ProductControllerStatePlayable, PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY ),
     m_ProductControllerStateVoiceConfigured( GetHsm(), &m_ProductControllerStateIdle, PRODUCT_CONTROLLER_STATE_IDLE_VOICE_CONFIGURED ),
     m_ProductControllerStateVoiceNotConfigured( GetHsm(), &m_ProductControllerStateIdle, PRODUCT_CONTROLLER_STATE_IDLE_VOICE_NOT_CONFIGURED ),
-    m_ProductControllerStateNetworkConfigured( GetHsm(), &m_ProductControllerStateNetworkStandby, PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED ),
-    m_ProductControllerStateNetworkNotConfigured( GetHsm(), &m_ProductControllerStateNetworkStandby, PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_NOT_CONFIGURED ),
+    m_ProductControllerStateNetworkConfigured( GetHsm(), &m_CustomProductControllerStateNetworkStandby, PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_CONFIGURED ),
+    m_ProductControllerStateNetworkNotConfigured( GetHsm(), &m_CustomProductControllerStateNetworkStandby, PRODUCT_CONTROLLER_STATE_NETWORK_STANDBY_NOT_CONFIGURED ),
     m_ProductControllerStateFactoryDefault( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_FACTORY_DEFAULT ),
     m_ProductControllerStatePlayingDeselected( GetHsm(), &m_ProductControllerStatePlaying, PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED ),
     m_ProductControllerStatePlayingSelected( GetHsm(), &m_ProductControllerStatePlaying, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED ),
@@ -62,7 +63,7 @@ EddieProductController::EddieProductController():
     m_ProductControllerStatePlayingSelectedSetupOther( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_OTHER ),
     m_ProductControllerStatePlayingSelectedSetupExiting( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING ),
     m_ProductControllerStatePlayingSelectedSetupExitingAP( m_ProductControllerHsm, &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING_AP ),
-    m_ProductControllerStateStoppingStreams( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS ),
+    m_ProductControllerStatePlayingSelectedStoppingStreams( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS ),
     m_ProductControllerStatePlayableTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION ),
     m_ProductControllerStatePlayableTransitionInternal( GetHsm(), &m_ProductControllerStatePlayableTransition, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_INTERNAL ),
     m_ProductControllerStatePlayableTransitionIdle( GetHsm(), &m_ProductControllerStatePlayableTransitionInternal, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE ),
@@ -91,17 +92,18 @@ void EddieProductController::InitializeHsm()
 {
     /// Add States to HSM object and initialize HSM before doing anything else.
     GetHsm().AddState( "", &m_ProductControllerStateTop );
+    GetHsm().AddState( "", &m_CustomProductControllerStateLowPowerResume );
     GetHsm().AddState( "", &m_CustomProductControllerStateLowPowerStandby );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), &m_ProductControllerStateSwInstall );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::UPDATING ), &m_CustomProductControllerStateSwInstall );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::BOOTING ), &m_ProductControllerStateBooting );
     GetHsm().AddState( "", &m_ProductControllerStateBooted );
     GetHsm().AddState( "", &m_CustomProductControllerStateOn );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::CRITICAL_ERROR ), &m_ProductControllerStateCriticalError );
     GetHsm().AddState( "", &m_ProductControllerStatePlaying );
     GetHsm().AddState( "", &m_ProductControllerStatePlayable );
-    GetHsm().AddState( "", &m_ProductControllerStateLowPowerStandbyTransition );
+    GetHsm().AddState( "", &m_CustomProductControllerStateLowPowerStandbyTransition );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::IDLE ), &m_ProductControllerStateIdle );
-    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ), &m_ProductControllerStateNetworkStandby );
+    GetHsm().AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ), &m_CustomProductControllerStateNetworkStandby );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::IDLE ), &m_ProductControllerStateVoiceConfigured );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::IDLE ), &m_ProductControllerStateVoiceNotConfigured );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::NETWORK_STANDBY ), &m_ProductControllerStateNetworkConfigured );
@@ -117,7 +119,7 @@ void EddieProductController::InitializeHsm()
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetupOther );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetupExiting );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), &m_ProductControllerStatePlayingSelectedSetupExitingAP );
-    GetHsm().AddState( "", &m_ProductControllerStateStoppingStreams );
+    GetHsm().AddState( "", &m_ProductControllerStatePlayingSelectedStoppingStreams );
     GetHsm().AddState( "", &m_ProductControllerStatePlayableTransition );
     GetHsm().AddState( "", &m_ProductControllerStatePlayableTransitionInternal );
     GetHsm().AddState( "", &m_ProductControllerStatePlayableTransitionIdle );
@@ -170,7 +172,7 @@ void EddieProductController::InitializeAction()
     SendInitialRequests();
     ///Register lpm events that lightbar will handle
     m_lightbarController->RegisterLightBarEndPoints();
-    m_displayController ->Initialize();
+    m_displayController->Initialize();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -231,6 +233,7 @@ void EddieProductController::RegisterLpmEvents()
 
     // Register lightbar controller LPM events
     m_lightbarController->RegisterLpmEvents();
+    m_displayController->RegisterLpmEvents();
 }
 
 void EddieProductController::RegisterEndPoints()
@@ -459,13 +462,6 @@ void EddieProductController::RegisterCliClientCmds()
         HandleCliCmd( cmdKey, argList, respCb, transact_id );
     };
 
-    m_CliClientMT.RegisterCLIServerCommands( "setDisplayAutoMode",
-                                             "command to set the display controller automatic mode",
-                                             "setDisplayAutoMode auto|manual",
-                                             GetTask(),
-                                             cb,
-                                             static_cast<int>( CLICmdKeys::SET_DISPLAY_AUTO_MODE ) );
-
     m_CliClientMT.RegisterCLIServerCommands( "product boot_status",
                                              "command to output the status of the boot up state.",
                                              "\t product boot_status \t\t\t",
@@ -484,11 +480,6 @@ void EddieProductController::HandleCliCmd( uint16_t cmdKey,
     BOSE_INFO( s_logger, "%s - cmd: %d", __func__, cmdKey );
     switch( static_cast<CLICmdKeys>( cmdKey ) )
     {
-    case CLICmdKeys::SET_DISPLAY_AUTO_MODE:
-    {
-        HandleSetDisplayAutoMode( argList, response );
-        break;
-    }
     case CLICmdKeys::GET_BOOT_STATUS:
     {
         HandleGetBootStatus( argList, response );
@@ -500,30 +491,6 @@ void EddieProductController::HandleCliCmd( uint16_t cmdKey,
     }
     respCb( response, transact_id );
 }
-
-void EddieProductController::HandleSetDisplayAutoMode( const std::list<std::string>& argList, std::string& response )
-{
-    if( argList.size() != 1 )
-    {
-        response  = "command requires one argument\n" ;
-        response += "Usage: SetDisplayAutoMode";
-        return;
-    }
-    std::string arg = argList.front();
-    if( arg == "auto" )
-    {
-        m_displayController->SetAutoMode( true );
-    }
-    else if( arg == "manual" )
-    {
-        m_displayController->SetAutoMode( false );
-    }
-    else
-    {
-        response = "Unknown argument.\n";
-        response += "Usage: auto|manual";
-    }
-}// HandleSetDisplayAutoMode
 
 void EddieProductController::HandleGetBootStatus( const std::list<std::string>& argList, std::string& response )
 {

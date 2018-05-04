@@ -16,9 +16,10 @@
 #include "NotifyTargetTaskIF.h"
 #include "ProtoPersistenceIF.h"
 #include "ProductControllerStateTop.h"
-#include "ProductControllerStateNetworkStandby.h"
+#include "CustomProductControllerStateNetworkStandby.h"
+#include "CustomProductControllerStateLowPowerResume.h"
 #include "CustomProductControllerStateLowPowerStandby.h"
-#include "ProductControllerStateLowPowerStandbyTransition.h"
+#include "CustomProductControllerStateLowPowerStandbyTransition.h"
 #include "ProductControllerStateNetworkStandbyConfigured.h"
 #include "ProductControllerStateNetworkStandbyNotConfigured.h"
 #include "ProductControllerStateIdleVoiceConfigured.h"
@@ -31,6 +32,7 @@
 #include "ProductControllerStateOn.h"
 #include "ProductControllerStateIdle.h"
 #include "ProductControllerStateSoftwareInstall.h"
+#include "CustomProductControllerStateSoftwareInstall.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
 #include "ProductControllerStatePlayingDeselected.h"
@@ -43,7 +45,7 @@
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
 #include "ProductControllerStatePlayingSelectedSetupExitingAP.h"
-#include "ProductControllerStateStoppingStreams.h"
+#include "ProductControllerStatePlayingSelectedStoppingStreams.h"
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
 #include "ProductControllerStatePlayableTransitionInternal.h"
@@ -158,13 +160,6 @@ private:
 ////////////////////////////////////////////////////////////////////////////////
     void PersistSystemLanguageCode();
     void PersistSystemConfigurationStatus();
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name  HandleSetDisplayAutoMode
-/// @brief Function to set the display mode
-/// @return void
-////////////////////////////////////////////////////////////////////////////////
-    void HandleSetDisplayAutoMode( const std::list<std::string> & argList, std::string& response );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  HandleGetBootStatus
@@ -327,22 +322,20 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief set the display controllee automatic mode  to true or false (manual)
-///
-//////////////////////////////////////////////////////////////////////////////////////////////
-    void SetDisplayAutoMode( bool autoMode ) const
-    {
-        m_displayController->SetAutoMode( autoMode );
-    }
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @brief Turn ON/OFF LCD display
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////
     void TurnDisplayOnOff( bool turnOn ) const
     {
-        m_displayController->TurnOnOff( turnOn );
+        m_displayController->TurnDisplayOnOff( turnOn );
+    }
+
+    /*! \brief Enables/disables brightness cap for LCD during a standby state (not low power).
+     * \param enabled True to impose the cap and false to disable it.
+     */
+    void SetDisplayStandbyBrightnessCapEnabled( bool enabled )
+    {
+        m_displayController->SetStandbyLcdBrightnessCapEnabled( enabled );
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -360,14 +353,15 @@ private:
     ProductControllerStateBooting                                   m_ProductControllerStateBooting;
     ProductControllerStateBooted                                    m_ProductControllerStateBooted;
     CustomProductControllerStateOn                                  m_CustomProductControllerStateOn;
+    CustomProductControllerStateLowPowerResume                      m_CustomProductControllerStateLowPowerResume;
     CustomProductControllerStateLowPowerStandby                     m_CustomProductControllerStateLowPowerStandby;
-    ProductControllerStateSoftwareInstall                           m_ProductControllerStateSwInstall;
+    CustomProductControllerStateSoftwareInstall                     m_CustomProductControllerStateSwInstall;
     ProductControllerStateCriticalError                             m_ProductControllerStateCriticalError;
     ProductControllerStatePlaying                                   m_ProductControllerStatePlaying;
     ProductControllerStatePlayable                                  m_ProductControllerStatePlayable;
-    ProductControllerStateLowPowerStandbyTransition                 m_ProductControllerStateLowPowerStandbyTransition;
+    CustomProductControllerStateLowPowerStandbyTransition           m_CustomProductControllerStateLowPowerStandbyTransition;
     ProductControllerStateIdle                                      m_ProductControllerStateIdle;
-    ProductControllerStateNetworkStandby                            m_ProductControllerStateNetworkStandby;
+    CustomProductControllerStateNetworkStandby                      m_CustomProductControllerStateNetworkStandby;
     ProductControllerStateIdleVoiceConfigured                       m_ProductControllerStateVoiceConfigured;
     ProductControllerStateIdleVoiceNotConfigured                    m_ProductControllerStateVoiceNotConfigured;
     ProductControllerStateNetworkStandbyConfigured                  m_ProductControllerStateNetworkConfigured;
@@ -383,7 +377,7 @@ private:
     ProductControllerStatePlayingSelectedSetupOther                 m_ProductControllerStatePlayingSelectedSetupOther;
     ProductControllerStatePlayingSelectedSetupExiting               m_ProductControllerStatePlayingSelectedSetupExiting;
     ProductControllerStatePlayingSelectedSetupExitingAP             m_ProductControllerStatePlayingSelectedSetupExitingAP;
-    ProductControllerStateStoppingStreams                           m_ProductControllerStateStoppingStreams;
+    ProductControllerStatePlayingSelectedStoppingStreams            m_ProductControllerStatePlayingSelectedStoppingStreams;
     ProductControllerStatePlayableTransition                        m_ProductControllerStatePlayableTransition;
     ProductControllerStatePlayableTransitionInternal                m_ProductControllerStatePlayableTransitionInternal;
     ProductControllerStatePlayableTransitionIdle                    m_ProductControllerStatePlayableTransitionIdle;

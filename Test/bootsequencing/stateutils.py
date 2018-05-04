@@ -20,12 +20,12 @@ import time
 from pyadb import ADB
 
 from CastleTestUtils.FrontDoorAPI import FrontDoorAPI
-from CastleTestUtils.LoggerUtils.log_setup import get_logger
+from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.RivieraUtils.commonException import ADBCommandFailure
 from CastleTestUtils.RivieraUtils.rivieraCommunication import ADBCommunication
 
 android_device = ADB('/usr/bin/adb')
-logger = get_logger(__name__, logLevel=logging.DEBUG)
+logger = get_logger(__name__)
 
 UNKNOWN = 'UNKNOWN'
 

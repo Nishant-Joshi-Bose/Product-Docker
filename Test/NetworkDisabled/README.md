@@ -1,31 +1,32 @@
-# Eddie NetworkDisabled feature
+# Eddie Network Disabled Tests
 
 ## Synopsis
 This test module will test network disabled feature and ensure that it works correctly on the Eddie product.
 
 
-### Installation
+## Setting Up Test Environment
 
-Initial setup for the repository is as follows:
+Clone the Eddie Repository:
 ```bash
 # Clone the respository
 git clone git@github.com:BoseCorp/Eddie.git
 cd Eddie
-# Get the correct components
-make generated_components
 ```
 All steps assume your are in the directory of your Eddie repository (`$EDDIE_DIR`).
 
-Next, we need to setup the Python environment to use.
+Generate a Virtual Environment and install used packages.
 ```bash
 cd $EDDIE_DIR/Test
+
 # Setup your virtual environment
-virutalenv -p /usr/bin/python2 .venv
-$EDDIE_DIR/Test/.venv/bin/activate
+virutalenv -p /usr/bin/python2.7 .venv
+source $EDDIE_DIR/Test/.venv/bin/activate
+
 # Install current Python requirements
-pip install requirements.txt
+pip install --requirement requirements.txt
 ```
 
+## Execution of Tests
 Running the tests requires configuration information that should be known prior to startup. We should know below params,
 - Communication type to the product (`ADB`)
 - LPM debug port path (`/dev/ttyUSB?`).
@@ -33,12 +34,16 @@ Running the tests requires configuration information that should be known prior 
 
 ```bash
 cd $EDDIE_DIR/Test/NetworkDisabled
-pytest --junit=network_disabled.xml --target=device --device-id=<ADB device id> --lpm-port=<lpm device port> --router=bproduct
+pytest --junit=network_disabled.xml \
+       --target=device \
+       --device-id=<ADB device id> \
+       --lpm-port=<lpm device port> \
+       --router=bproduct
 ```
 This will run all `test_network_disabled.py` inside the `NetworkDisabled` folder and generate JUnit style output to
 `network_disabled.xml`.
 
-### Test Descriptions
+## Test Descriptions
 Test suite "test_network_disabled" can be found in the `NetworkDisabled` test module:
 - `test_network_disabled_success`
 - `test_network_disabled_playing_state`
@@ -47,8 +52,7 @@ Test suite "test_network_disabled" can be found in the `NetworkDisabled` test mo
 - `test_network_disabled_lps_from_setup_state`
 
 
-### List of Files under Test/NetworkDisabled :
-
+## List of Files under Test/NetworkDisabled :
 
 conftest.py                     = Contains fixtures used in network disabled test script (test_network_disabled.py)
 

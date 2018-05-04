@@ -21,9 +21,6 @@ files=(
     "$builds_dir/package/product.tar"
     "$builds_dir/product_update.zip"
     "$builds_dir/product_update_no_hsp.zip"
-    "$builds_dir/package/product_flash"
-    "$builds_dir/package/product_flash.exe"
-    "$builds_dir/package/product_flash_mac"
     "$builds_dir"/eddie_package_*.bos
     "$builds_dir"/lpm_eddie_combined_*.hex
     "$builds_dir/lpm_package.xml"

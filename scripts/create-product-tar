@@ -82,6 +82,7 @@ product_update_zip = ""
 stage = ""
 stage_package_dir = ""
 output_dir = ""
+riviera_version = ""
 ''' Note: All paths are defined here, change then if needed.
     For this simple script, relative path variables are not taken as input 
     e.g. $workspace/builds/Release has builds/Release hardcoded 
@@ -89,6 +90,7 @@ output_dir = ""
 def create_stage(name, workspace):
     global riviera_hsp_images_dir
     global riviera_tools_dir
+    global riviera_version
     global swupdate_dir
     global ipks_dir
     global stage
@@ -97,6 +99,7 @@ def create_stage(name, workspace):
 
     riviera_hsp_images_dir = execute_cmd_on_host("components get Riviera-HSP-Images installed_location").rstrip()
     riviera_tools_dir =  execute_cmd_on_host("components get Riviera-Toolchain installed_location").rstrip()
+    riviera_version = execute_cmd_on_host("components get Riviera-HSP-Images selected_version").rstrip()
     swupdate_dir = execute_cmd_on_host("components get SoftwareUpdate-qc8017_32 installed_location").rstrip()    
     ipks_dir = os.path.join(workspace, 'builds/Release')
     product_update_zip = os.path.join(ipks_dir, 'product_update.zip')
@@ -200,11 +203,16 @@ def copy_files_to_stage():
         logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
         return -23, "Cannot add version file to stage"
     
-    logging.info("Adding version to stage")
+    logging.info("Adding versions to stage")
     try:        
         version_json = os.path.join(workspace, 'builds/Release/qc8017_32/BoseVersion.json')
         dest = os.path.join(stage_package_dir, "")
         shutil.copy2(version_json, dest)
+        lpm_ver = os.path.join(workspace, 'builds/Release/lpm_blob_configuration.xml')
+        shutil.copy2(lpm_ver, dest)
+        dest = os.path.join(stage_package_dir, "riviera_version.txt")
+        with open(dest, 'w') as outF: 
+            outF.write(riviera_version)
     except:
         logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
         return -24, "Cannot add version file to stage"

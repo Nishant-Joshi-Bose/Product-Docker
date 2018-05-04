@@ -1,20 +1,33 @@
+# Eddie Demo Controller Tests
 
-# To run demoController tests
+## Setting Up Test Environment
 
-### Git Checkout
-```
-git clone git@github.com:BoseCorp/CastleTools.git
-PATH=$PATH:/scratch/CastleTools/bin
+Clone the Eddie Repository:
+```bash
+# Clone the respository
 git clone git@github.com:BoseCorp/Eddie.git
 cd Eddie
 ```
+All steps assume your are in the directory of your Eddie repository (`$EDDIE_DIR`).
 
-### Install python modules
-```
-sudo pip install -r Test/requirements.txt
-```
-### Run tests
+Generate a Virtual Environment and install used packages.
+```bash
+cd $EDDIE_DIR/Test
 
+# Setup your virtual environment
+virutalenv -p /usr/bin/python2.7 .venv
+source $EDDIE_DIR/Test/.venv/bin/activate
+
+# Install current Python requirements
+pip install --requirement requirements.txt
 ```
-pytest Test/demoController/test_demo.py -vs --target=device --network-iface='eth0' --device-id=61b5457
+
+## Execution of Tests
+
+```bash
+cd demoController
+pytest test_demo.py -vs \
+                    --target=device \
+                    --network-iface='eth0' \
+                    --device-id=61b5457
 ```
