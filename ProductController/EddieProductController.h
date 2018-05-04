@@ -60,7 +60,6 @@
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
 #include "LightBarController.h"
-#include "ConfigurationStatus.pb.h"
 #include "SoundTouchInterface/AllowSourceSelect.pb.h"
 #include "NetManager.pb.h"
 #include "SoundTouchInterface/CapsInitializationStatus.pb.h"
@@ -134,7 +133,6 @@ private:
     void InitializeHsm( );
     void InitializeAction( );
     void RegisterLpmEvents();
-    void RegisterEndPoints();
     void HandleCliCmd( uint16_t cmdKey,
                        const std::list<std::string> & argList,
                        AsyncCallback<std::string, int32_t> rspAndRspCmplt,
@@ -144,22 +142,6 @@ private:
     void HandleBtLeModuleReady( bool btLeModuleReady );
     void HandleBtLeCapabilityReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityNotReady( const std::list<std::string>& points );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name  ReadSystemLanguageFromPersistence
-/// @brief Function to read persisted language code from /mnt/nv/product-persistence.
-/// @return void
-////////////////////////////////////////////////////////////////////////////////
-    void ReadSystemLanguageFromPersistence();
-    void ReadConfigurationStatusFromPersistence();
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name  PersistSystemLanguageCode
-/// @brief Function to persist language code in /mnt/nv/product-persistence.
-/// @return void
-////////////////////////////////////////////////////////////////////////////////
-    void PersistSystemLanguageCode();
-    void PersistSystemConfigurationStatus();
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  HandleGetBootStatus
@@ -238,13 +220,6 @@ public:
     bool IsLanguageSet();
     void SendActivateAccessPointCmd();
     void SendDeActivateAccessPointCmd();
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name  HandleConfigurationStatusRequest
-/// @brief "/system/configuration/status" endpoint request handler.
-/// @return void
-////////////////////////////////////////////////////////////////////////////////
-    void HandleConfigurationStatusRequest( const Callback<ProductPb::ConfigurationStatus> &resp );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  SendInitialRequests
@@ -391,10 +366,6 @@ private:
     ProductControllerStateStoppingStreamsDedicated                  m_ProductControllerStateStoppingStreamsDedicated;
     ProductControllerStateStoppingStreamsDedicatedForFactoryDefault m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault;
     ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate;
-
-    /// Persistence for the Configuration Status
-    ProtoPersistenceIF::ProtoPersistencePtr     m_ConfigurationStatusPersistence = nullptr;
-    ProductPb::ConfigurationStatus              m_ConfigurationStatus;
 
     /// ProductAudioService
     std::shared_ptr< CustomProductAudioService> m_ProductAudioService;
