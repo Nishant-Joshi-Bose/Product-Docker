@@ -142,9 +142,6 @@ void EddieProductController::InitializeAction()
     InitializeHsm( );
     CommonInitialize( );
 
-    m_ConfigurationStatusPersistence = ProtoPersistenceFactory::Create( "ConfigurationStatus", g_ProductPersistenceDir );
-    m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
-    ReadConfigurationStatusFromPersistence();
     AsyncCallback<bool> uiConnectedCb( std::bind( &EddieProductController::UpdateUiConnectedStatus,
                                                   this, std::placeholders::_1 ), GetTask() ) ;
 
@@ -168,8 +165,9 @@ void EddieProductController::InitializeAction()
 
     m_productCliClient.Initialize( GetTask() );
     RegisterCliClientCmds();
-    RegisterEndPoints();
+    RegisterCommonEndPoints();
     SendInitialRequests();
+
     ///Register lpm events that lightbar will handle
     m_lightbarController->RegisterLightBarEndPoints();
     m_displayController->Initialize();
@@ -236,23 +234,6 @@ void EddieProductController::RegisterLpmEvents()
     m_displayController->RegisterLpmEvents();
 }
 
-void EddieProductController::RegisterEndPoints()
-{
-    BOSE_INFO( s_logger, __func__ );
-    RegisterCommonEndPoints();
-
-    AsyncCallback<Callback<ProductPb::ConfigurationStatus>, Callback<FrontDoor::Error>> getConfigurationStatusReqCb( std::bind( &EddieProductController::HandleConfigurationStatusRequest ,
-            this, std::placeholders::_1 ) , GetTask() );
-
-    /// Registration of endpoints to the frontdoor client.
-
-    m_FrontDoorClientIF->RegisterGet( FRONTDOOR_SYSTEM_CONFIGURATION_STATUS_API,
-                                      getConfigurationStatusReqCb,
-                                      FrontDoor::PUBLIC,
-                                      FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
-                                      FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
-}
-
 void EddieProductController::SendInitialRequests()
 {
     BOSE_INFO( s_logger, __func__ );
@@ -288,12 +269,6 @@ void EddieProductController::HandleSTSReady( void )
     BOSE_DEBUG( s_logger, __func__ );
     m_isSTSReady = true;
     GetHsm().Handle<>( &CustomProductControllerState::HandleSTSSourcesInit );
-}
-
-void EddieProductController::HandleConfigurationStatusRequest( const Callback<ProductPb::ConfigurationStatus> &resp )
-{
-    BOSE_INFO( s_logger, "%s:Response: %s", __func__, ProtoToMarkup::ToJson( m_ConfigurationStatus, false ).c_str() );
-    resp.Send( m_ConfigurationStatus );
 }
 
 bool EddieProductController::IsAllModuleReady() const
@@ -343,48 +318,6 @@ bool EddieProductController::IsSTSReady() const
 bool EddieProductController::IsLanguageSet()
 {
     return m_deviceManager.IsLanguageSet();
-}
-
-void EddieProductController::ReadConfigurationStatusFromPersistence()
-{
-    try
-    {
-        std::string s = m_ConfigurationStatusPersistence->Load();
-        ProtoToMarkup::FromJson( s, &m_ConfigurationStatus );
-    }
-    catch( const ProtoToMarkup::MarkupError &e )
-    {
-        BOSE_LOG( ERROR, "Configuration status from persistence failed markup error - " << e.what() );
-    }
-    catch( ProtoPersistenceIF::ProtoPersistenceException& e )
-    {
-        BOSE_LOG( ERROR, "Loading configuration status from persistence failed - " << e.what() );
-    }
-    BOSE_INFO( s_logger, "%s: %s", __func__, ProtoToMarkup::ToJson( m_ConfigurationStatus ).c_str() );
-}
-
-void EddieProductController::PersistSystemConfigurationStatus()
-{
-    BOSE_INFO( s_logger, __func__ );
-    ///Persist configuration status only if it changes.
-    if( m_ConfigurationStatus.status().language() not_eq IsLanguageSet() )
-        ///To_Do- add condition to Check for network and Account too
-    {
-        m_ConfigurationStatus.mutable_status()->set_language( IsLanguageSet() );
-
-        try
-        {
-            m_ConfigurationStatusPersistence->Store( ProtoToMarkup::ToJson( m_ConfigurationStatus ) );
-        }
-        catch( const ProtoToMarkup::MarkupError &e )
-        {
-            BOSE_LOG( ERROR, "Configuration status from persistence failed markup error - " << e.what() );
-        }
-        catch( ProtoPersistenceIF::ProtoPersistenceException& e )
-        {
-            BOSE_LOG( ERROR, "Loading configuration status from persistence failed - " << e.what() );
-        }
-    }
 }
 
 void EddieProductController::SendActivateAccessPointCmd()
