@@ -28,7 +28,6 @@
 #include "ProductBLERemoteManager.h"
 #include "SharedProto.pb.h"
 #include "ProtoToMarkup.h"
-#include "ProductSourceInfo.h"
 #include "EndPointsDefines.h"
 
 using namespace ProductPb;
@@ -119,7 +118,7 @@ void ProductBLERemoteManager::Run( )
 {
     InitializeFrontDoor();
     InitializeRCS();
-    m_ProductController.GetSourceInfo()->RegisterSourceListener(
+    m_ProductController.GetSourceInfo().RegisterSourceListener(
         [ this ]( const SoundTouchInterface::Sources & sources )
     {
         UpdateAvailableSources( sources );
@@ -133,7 +132,12 @@ void ProductBLERemoteManager::Run( )
     {
         auto cb = [ = ]( RCS_PB_MSG::PairingNotify n )
         {
-            m_remoteConnected = n.has_status() && ( n.status() == RCS_PB_MSG::PairingNotify::PSTATE_BONDED );
+            m_remoteConnected = n.has_status() && ( n.status() == RemoteStatus::PSTATE_BONDED );
+            if( n.has_status() )
+            {
+                m_remoteStatus = n.status();
+                CheckPairing( );
+            }
         };
         m_RCSClient->Pairing_GetStatus( cb );
     } );
@@ -211,7 +215,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
     {
         const auto& source = m_sources.sources( i );
 
-        // TODO: this also needs to check "visible" once that flag works correctly
+        // @TODO: this also needs to check "visible" once that flag works correctly; PGC-1169
 
         if( source.sourceaccountname().compare( "SLOT_0" ) == 0 )
         {
@@ -251,47 +255,50 @@ bool ProductBLERemoteManager::GetSourceLED( A4VRemoteCommunication::A4VRemoteCom
         return false;
     }
 
-    const auto& ci = m_nowSelection.contentitem();
-    const auto& source = m_ProductController.GetSourceInfo()->FindSource( ci );
-
-    if( not source )
+    auto sourceItem = m_ProductController.GetSourceInfo().FindSource( m_nowSelection.contentitem() );
+    if( !sourceItem )
     {
         return false;
     }
 
-    if( source->sourcename().compare( "PRODUCT" ) == 0 )
+    const auto& sourceName = sourceItem->sourcename();
+    const auto& sourceAccountName = sourceItem->sourceaccountname();
+
+    if( sourceName.compare( "PRODUCT" ) == 0 )
     {
-        if( source->sourceaccountname().compare( "TV" ) == 0 )
+        if( sourceAccountName.compare( "TV" ) == 0 )
         {
             BOSE_INFO( s_logger, "update nowSelection TV" );
             // Check for TV explicitly for now, since I don't know if Madrid will set deviceType for the TV
             sourceLED = LedsSourceTypeMsg_t::TV;
         }
-        else if( source->sourceaccountname().compare( "SETUP" ) == 0 )
+        else if( sourceAccountName.compare( "SETUP" ) == 0 )
         {
             BOSE_INFO( s_logger, "update nowSelection SETUP" );
             sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
         }
-        else if( ( source->sourceaccountname().compare( 0, 4, "SLOT" ) == 0 ) and source->has_details() )
+        else if( ( sourceAccountName.compare( 0, 4, "SLOT" ) == 0 ) and sourceItem->has_details() )
         {
-            if( not source->details().devicetype().compare( "DEVICE_TYPE_GAME" ) )
+            const auto& sourceDetailsDevicetype = sourceItem->details().devicetype();
+
+            if( sourceDetailsDevicetype.compare( "DEVICE_TYPE_GAME" ) == 0 )
             {
                 sourceLED = LedsSourceTypeMsg_t::GAME;
             }
-            else if( not source->details().devicetype().compare( "DEVICE_TYPE_CBL_SAT" ) )
+            else if( sourceDetailsDevicetype.compare( "DEVICE_TYPE_CBL_SAT" ) == 0 )
             {
                 sourceLED = LedsSourceTypeMsg_t::SET_TOP_BOX;
             }
-            else if( not source->details().devicetype().compare( "DEVICE_TYPE_BD_DVD" ) )
+            else if( sourceDetailsDevicetype.compare( "DEVICE_TYPE_BD_DVD" ) == 0 )
             {
                 sourceLED = LedsSourceTypeMsg_t::DVD;
             }
-            else if( not source->details().devicetype().compare( "DEVICE_TYPE_TV" ) or
-                     not source->details().devicetype().compare( "DEVICE_TYPE_SMART_TV" ) )
+            else if( ( sourceDetailsDevicetype.compare( "DEVICE_TYPE_TV" ) == 0 ) or
+                     ( sourceDetailsDevicetype.compare( "DEVICE_TYPE_SMART_TV" ) == 0 ) )
             {
                 sourceLED = LedsSourceTypeMsg_t::TV;
             }
-            else if( not source->details().devicetype().compare( "DEVICE_TYPE_STREAMING" ) )
+            else if( sourceDetailsDevicetype.compare( "DEVICE_TYPE_STREAMING" ) == 0 )
             {
                 // per Brian White, GAME is probably the most sensible choice here
                 // I'm leaving this as an independent case from GAME above in case we change our minds
@@ -299,7 +306,7 @@ bool ProductBLERemoteManager::GetSourceLED( A4VRemoteCommunication::A4VRemoteCom
             }
             else
             {
-                BOSE_ERROR( s_logger, "%s product source with unknown device type %s", __func__, source->details().devicetype().c_str() );
+                BOSE_ERROR( s_logger, "%s product source with unknown device type %s", __func__, sourceDetailsDevicetype.c_str() );
             }
         }
         else
@@ -309,12 +316,12 @@ bool ProductBLERemoteManager::GetSourceLED( A4VRemoteCommunication::A4VRemoteCom
     }
     else
     {
-        if( source->sourcename().compare( "BLUETOOTH" ) == 0 )
+        if( sourceName.compare( "BLUETOOTH" ) == 0 )
         {
             BOSE_INFO( s_logger, "update nowSelection BLUETOOTH" );
             sourceLED = LedsSourceTypeMsg_t::BLUETOOTH;
         }
-        else if( source->sourcename().compare( "INVALID_SOURCE" ) != 0 )
+        else if( sourceName.compare( "INVALID_SOURCE" ) != 0 )
         {
             sourceLED = LedsSourceTypeMsg_t::SOUND_TOUCH;
         }
@@ -335,6 +342,7 @@ bool ProductBLERemoteManager::GetSourceLED( A4VRemoteCommunication::A4VRemoteCom
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::Pairing_Start( uint32_t timeout )
 {
+    Unpairing_Start();
     m_RCSClient->Pairing_Start( {}, timeout );
 }
 
@@ -350,6 +358,7 @@ void ProductBLERemoteManager::Pairing_Start( uint32_t timeout )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::Pairing_Cancel( void )
 {
+    m_pairingPending = false;
     m_RCSClient->Pairing_Cancel( );
 }
 
@@ -398,6 +407,64 @@ bool ProductBLERemoteManager::IsConnected( void )
     return m_remoteConnected;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductBLERemoteManager::PossiblyPair
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductBLERemoteManager::PossiblyPair( void )
+{
+    m_pairingPending = true;
+    CheckPairing();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief ProductBLERemoteManager::CheckPairing
+///
+/// @param  void This method does not take any arguments.
+///
+/// @return This method does not return anything.
+///
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductBLERemoteManager::CheckPairing( void )
+{
+    // Some of these cases might not do anything; don't remove them, they're here for
+    // documentation
+    switch( m_remoteStatus )
+    {
+    // Indeterminate states
+    case RemoteStatus::PSTATE_INIT:
+    case RemoteStatus::PSTATE_UNPAIRING:
+    case RemoteStatus::PSTATE_UNKOWN:
+        break;
+
+    // In these states, any pairing pending request isn't necessary (we're already paired)
+    // !!! Assumption - if we're OUT_OF_RANGE, we must be paired
+    // Apparently SCANNING is the state we're in when we're trying to pair, so it's safe to clear
+    // the flag here too (pairing has already been initiated)
+    case RemoteStatus::PSTATE_SCANNING:
+    case RemoteStatus::PSTATE_BONDED:
+    case RemoteStatus::PSTATE_OUT_OF_RANGE:
+        m_pairingPending = false;
+        break;
+
+    // Initiate pairing if we're unpaired and there's a pending request
+    case RemoteStatus::PSTATE_UNPAIRED:
+        if( m_pairingPending )
+        {
+            m_pairingPending = false;
+            Pairing_Start( m_PairingTimeout );
+        }
+        break;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                               End of ProductApp Namespace                                    ///

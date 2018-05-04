@@ -44,3 +44,4 @@ echo Remount...
 adb shell mount -oremount,ro /opt/Bose || exit
 
 echo Done
+

@@ -19,31 +19,31 @@ class CustomAudioSettingsManager: public AudioSettingsManager
 {
 public:
     CustomAudioSettingsManager();
-    ErrorCode_t SetBass( const ProductPb::AudioBassLevel& bass );
+    ResultCode_t SetBass( const ProductPb::AudioBassLevel& bass );
     const ProductPb::AudioBassLevel& GetBass() const;
-    ErrorCode_t SetTreble( const ProductPb::AudioTrebleLevel& treble );
+    ResultCode_t SetTreble( const ProductPb::AudioTrebleLevel& treble );
     const ProductPb::AudioTrebleLevel& GetTreble() const;
-    ErrorCode_t SetCenter( const ProductPb::AudioCenterLevel& center );
+    ResultCode_t SetCenter( const ProductPb::AudioCenterLevel& center );
     const ProductPb::AudioCenterLevel& GetCenter() const;
-    ErrorCode_t SetSurround( const ProductPb::AudioSurroundLevel& surround );
+    ResultCode_t SetSurround( const ProductPb::AudioSurroundLevel& surround );
     const ProductPb::AudioSurroundLevel& GetSurround() const;
-    ErrorCode_t SetSurroundDelay( const ProductPb::AudioSurroundDelay& surroundDelay );
+    ResultCode_t SetSurroundDelay( const ProductPb::AudioSurroundDelay& surroundDelay );
     const ProductPb::AudioSurroundDelay& GetSurroundDelay() const;
-    ErrorCode_t SetGainOffset( const ProductPb::AudioGainOffset& gainOffset );
+    ResultCode_t SetGainOffset( const ProductPb::AudioGainOffset& gainOffset );
     const ProductPb::AudioGainOffset& GetGainOffset() const;
-    ErrorCode_t SetAvSync( const ProductPb::AudioAvSync& avSync );
+    ResultCode_t SetAvSync( const ProductPb::AudioAvSync& avSync );
     const ProductPb::AudioAvSync& GetAvSync() const;
-    ErrorCode_t SetSubwooferGain( const ProductPb::AudioSubwooferGain& subwooferGain );
+    ResultCode_t SetSubwooferGain( const ProductPb::AudioSubwooferGain& subwooferGain );
     const ProductPb::AudioSubwooferGain& GetSubwooferGain() const;
-    ErrorCode_t SetMode( const ProductPb::AudioMode& mode );
+    ResultCode_t SetMode( const ProductPb::AudioMode& mode );
     const ProductPb::AudioMode& GetMode() const;
-    ErrorCode_t SetContentType( const ProductPb::AudioContentType& contentType );
+    ResultCode_t SetContentType( const ProductPb::AudioContentType& contentType );
     const ProductPb::AudioContentType& GetContentType() const;
-    ErrorCode_t SetDualMonoSelect( const ProductPb::AudioDualMonoSelect& DualMonoSelect );
+    ResultCode_t SetDualMonoSelect( const ProductPb::AudioDualMonoSelect& DualMonoSelect );
     const ProductPb::AudioDualMonoSelect& GetDualMonoSelect() const;
-    ErrorCode_t SetEqSelect( const ProductPb::AudioEqSelect& EqSelect );
+    ResultCode_t SetEqSelect( const ProductPb::AudioEqSelect& EqSelect );
     const ProductPb::AudioEqSelect& GetEqSelect() const;
-    ErrorCode_t SetSubwooferPolarity( const ProductPb::AudioSubwooferPolarity& subwooferPolarity );
+    ResultCode_t SetSubwooferPolarity( const ProductPb::AudioSubwooferPolarity& subwooferPolarity );
     const ProductPb::AudioSubwooferPolarity& GetSubwooferPolarity() const;
 
 private:

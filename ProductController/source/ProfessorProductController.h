@@ -60,13 +60,11 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class CustomProductLpmHardwareInterface;
-class ProductSystemManager;
 class CustomProductAudioService;
 class ProductCecHelper;
 class ProductCommandLine;
 class CustomProductKeyInputManager;
 class ProductAdaptIQManager;
-class ProductSourceInfo;
 class ProductBLERemoteManager;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,7 +93,7 @@ public:
     /// @brief  The following public methods are used to start the ProfessorProductController
     ///         instance task, wait in a separate task until the product task ends, and stop the
     ///         product task, respectively.
-    ///ProductLpmHardwareInterface
+    ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void Run( );
     void Wait( );
@@ -132,14 +130,6 @@ public:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< ProductAdaptIQManager >& GetAdaptIQManager( );
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief The following method is used to get a shared pointer to the SourceInfo instance
-    ///        from the product controller.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    std::shared_ptr< ProductSourceInfo >& GetSourceInfo( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -246,8 +236,6 @@ public:
 
     PassportPB::ContentItem GetOOBDefaultLastContentItem() const override;
 
-    bool CanPersistAsLastContentItem( const SoundTouchInterface::ContentItem &ci ) const override;
-
     void PossiblyPairBLERemote( );
 
     void PairBLERemote( uint32_t timeout );
@@ -264,9 +252,7 @@ private:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
-    std::shared_ptr< ProductSystemManager              > m_ProductSystemManager;
     std::shared_ptr< ProductCommandLine                > m_ProductCommandLine;
-    std::shared_ptr< ProductSourceInfo                 > m_ProductSourceInfo;
     std::shared_ptr< CustomProductKeyInputManager      > m_ProductKeyInputManager;
     std::shared_ptr< ProductCecHelper                  > m_ProductCecHelper;
     std::shared_ptr< ProductDspHelper                  > m_ProductDspHelper;
@@ -281,7 +267,6 @@ private:
     ///        machine states.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    bool m_IsAudioPathReady;
     bool m_IsAutoWakeEnabled;
     bool m_Running;
 
@@ -329,10 +314,9 @@ private:
     ////////////////////////////////////////////////////////////////////////////////////////////////
     void HandleGetOpticalAutoWake( const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
                                    const Callback<FrontDoor::Error> & errorCb ) const;
-    void HandlePutOpticalAutoWake(
-        const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req,
-        const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
-        const Callback<FrontDoor::Error> & errorCb );
+    void HandlePutOpticalAutoWake( const SystemPowerProductPb::SystemPowerModeOpticalAutoWake & req,
+                                   const Callback<SystemPowerProductPb::SystemPowerModeOpticalAutoWake> & respCb,
+                                   const Callback<FrontDoor::Error> & errorCb );
     void ApplyOpticalAutoWakeSettingFromPersistence( );
     void NotifyFrontdoorAndStoreOpticalAutoWakeSetting( );
 
