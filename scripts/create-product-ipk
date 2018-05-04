@@ -27,19 +27,19 @@ eval set -- "$opts"
 while :; do
     arg="$1"; shift
     case "$arg" in
-    (--help | -h)
-        cat <<EOF
+	(--help | -h)
+	    cat <<EOF
 Usage: $this [options]
 
 Create an IPK file for installing SoundTouch with opkg.
 
 Options:
 EOF
-        exit 0
-        ;;
+	    exit 0
+	    ;;
 
-    (--) break ;;
-    (*)  echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
+	(--) break ;;
+	(*)  echo >&2 "$this: internal error at '$arg'"; exit 1 ;;
     esac
 done
 
@@ -60,31 +60,31 @@ wspace=$(cd "$here/.." && echo "$PWD") || exit
 riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || exit
 riviera_toolchain_dir=$(components get Riviera-Toolchain installed_location) || exit
 galapagosclient_dir=$(components get GalapagosClient-qc8017_32 installed_location) || exit
-httpproxy_dir=$(components get CastleHTTPProxy-qc8017_32 installed_location) || exit
+httpproxy_dir=$(components get HTTPProxy-qc8017_32 installed_location) || exit
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
 avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
 softwareupdate_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
-audiopath_dir=$(components get CastleAudioPath-qc8017_32 installed_location) || exit
-audiopath64_dir=$(components get CastleAudioPath-qc8017_64 installed_location) || exit
-castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
+audiopath_dir=$(components get AudioPath-qc8017_32 installed_location) || exit
+audiopath64_dir=$(components get AudioPath-qc8017_64 installed_location) || exit
+castlenetworkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
 castlesass_dir=$(components get SASS-qc8017_32 installed_location) || exit
-castlepassport_dir=$(components get CastlePassport-qc8017_32 installed_location) || exit
+castlepassport_dir=$(components get Passport-qc8017_32 installed_location) || exit
 wifi_setup_webpage_dir=$(components get bose-web-riviera-ap-page installed_location) || exit
 web_update_page_dir=$(components get bose-web-update-page installed_location) || exit
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
-cli_dir=$(components get CastleCli-qc8017_32 installed_location) || exit
-democontroller_dir=$(components get CastleDemoController-qc8017_32 installed_location) || exit
+cli_dir=$(components get Cli-qc8017_32 installed_location) || exit
+democontroller_dir=$(components get DemoController-qc8017_32 installed_location) || exit
 webkit_dir=$(components get Webkit installed_location) || exit
-productuiassets_dir=$(components get CastleProductUIAssets installed_location) || exit
+productuiassets_dir=$(components get ProductUIAssets installed_location) || exit
 frontdoor_dir=$(components get FrontDoorService-qc8017_32 installed_location) || exit
 frontdoorutility_dir=$(components get FrontDoorUtility-qc8017_32 installed_location) || exit
 qss_dir=$(components get A4VQuickSetService installed_location) || exit
 rcs_dir=$(components get A4VRemoteCommunicationService installed_location) || exit
 boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
-datacollection_dir=$(components get CastleDataCollectionClient-qc8017_32 installed_location) || exit
-datacollectionservice_dir=$(components get CastleDataCollectionService-qc8017_32 installed_location) || exit
+datacollection_dir=$(components get DataCollectionClient-qc8017_32 installed_location) || exit
+datacollectionservice_dir=$(components get DataCollectionService-qc8017_32 installed_location) || exit
 sadi_dir=$(components get SADI-qc8017_32 installed_location) || exit
 vm_dir=$(components get A4VVideoManagerService installed_location) || exit
 
@@ -156,7 +156,7 @@ if (( \$(date +%s) < $t )); then
 fi
 EOF
 
-# Copy public keys in FS for development key. EC will take care of generation for Production
+# Copy public keys in FS for development key. EC will take care of generation for Production 
 secure_dir=$opt_dir/etc/secure/
 if [ -e "$secure_dir" ]; then
     chmod -R 755 "$secure_dir" || exit
