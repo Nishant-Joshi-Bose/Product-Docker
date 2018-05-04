@@ -558,11 +558,15 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
     BOSE_INFO( s_logger, "%s", __func__ );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// LPM status messages has handle at this point.
+    /// LPM status messages require both product-specific and common handling.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     if( productMessage.has_lpmstatus( ) )
     {
-        // First do the product specific stuff, registering for LPM events.
+        ///
+        /// First register for product-specific LPM events if connected, and output the LPM system
+        /// state if available for debugging purposes. Common handling of the product message is
+        /// then done.
+        ///
         if( productMessage.lpmstatus( ).has_connected( ) && productMessage.lpmstatus( ).connected( ) )
         {
             RegisterLpmEvents();
