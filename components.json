@@ -36,31 +36,31 @@
     "selected_version": "Release/master/0.4.3-248+bebc914"
   },
   {
-    "name": "CastleAudioPath-qc8017_32",
+    "name": "AudioPath-qc8017_32",
     "selected_version": "Release/Castle-Fork/0.4.2-20897"
   },
   {
-    "name": "CastleAudioPath-qc8017_64",
+    "name": "AudioPath-qc8017_64",
     "selected_version": "Release/Castle-Fork/0.4.2-20897"
   },
   {
-    "name": "CastleCli-qc8017_32",
+    "name": "Cli-qc8017_32",
     "selected_version": "Release/master/1.0.3-63+fb3e550"
   },
   {
-    "name": "CastleDataCollectionClient-qc8017_32",
+    "name": "DataCollectionClient-qc8017_32",
     "selected_version": "Continuous/master/0.4.3-69+b9e766f"
   },
   {
-    "name": "CastleDataCollectionService-qc8017_32",
+    "name": "DataCollectionService-qc8017_32",
     "selected_version": "Continuous/master/0.4.4-32+ec7e4f2"
   },
   {
-    "name": "CastleDemoController-qc8017_32",
+    "name": "DemoController-qc8017_32",
     "selected_version": "Continuous/master/0.4.2-80+afb910b"
   },
   {
-    "name": "CastleHTTPProxy-qc8017_32",
+    "name": "HTTPProxy-qc8017_32",
     "selected_version": "Continuous/master/0.4.0-90+47d64e7"
   },
   {
@@ -76,15 +76,15 @@
     "selected_version": "branches/castle-libs@2606"
   },
   {
-    "name": "CastleLightBarController-qc8017_32",
+    "name": "LightBarController-qc8017_32",
     "selected_version": "Continuous/master/0.4.3-112+ae061ad"
   },
   {
-    "name": "CastleNetworkService-qc8017_32",
+    "name": "NetworkService-qc8017_32",
     "selected_version": "Continuous/master/0.4.4-277+58094ac"
   },
   {
-    "name": "CastlePassport-qc8017_32",
+    "name": "Passport-qc8017_32",
     "selected_version": "Release/master/0.4.76-673+8201c19"
   },
   {
@@ -92,15 +92,15 @@
     "selected_version": "Release/master/0.4.76-673+8201c19"
   },
   {
-    "name": "CastleProductControllerCommon",
+    "name": "ProductControllerCommon",
     "selected_version": "master@55a623ef1604c3cf98600484c0f278d6a0a8b939"
   },
   {
-    "name": "CastleProductUIAssets",
+    "name": "ProductUIAssets",
     "selected_version": "master@f5025558c6d13bc8fe9e67ff7248a89a6441b0c2"
   },
   {
-    "name": "CastleTestUtils",
+    "name": "TestUtils",
     "selected_version": "master@8fff4bf2d1dce8a60d9dd00f248070c7127a85d3"
   },
   {
