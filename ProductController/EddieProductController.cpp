@@ -575,10 +575,6 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
 
         ( void ) HandleCommonProductMessage( productMessage );
     }
-    else if( productMessage.has_action() )
-    {
-        HandleIntents( productMessage.action() );
-    }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Key action intent messages are handled at this point, and passed to the HandleIntents
     /// method for processing. This messages are sent through the CustomProductKeyInputManager
