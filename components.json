@@ -64,10 +64,6 @@
     "selected_version": "Release/master/1.0.3-63+fb3e550"
   },
   {
-    "name": "CastleProductControllerCommon",
-    "selected_version": "master@3d9359d2b4a69841d6b6b1909d46132ed34cf73e"
-  },
-  {
     "name": "DataCollectionClient-qc8017_32",
     "selected_version": "Continuous/master/0.4.3-69+b9e766f"
   },
