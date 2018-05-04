@@ -223,60 +223,6 @@ def adb(request):
     return adb
 
 
-@pytest.fixture(scope='function')
-def rebooted_device():
-    """
-    This will put the device into a rebooted state and yield information about
-        how long it took.
-    :return: None
-    """
-    adb = ADB('/usr/bin/adb')
-    start_time = time.time()
-    adb.run_cmd('reboot')
-    adb.wait_for_device()
-    end_time = time.time()
-
-    yield {'reboot': {'start': start_time, 'end': end_time,
-                      'duration': end_time - start_time}}
-
-
-@pytest.mark.usesfixtures("rebooted_device")
-@pytest.fixture(scope='function')
-def rebooted_and_networked_device(rebooted_device, request):
-    """
-    This will put the device into a rebooted state with network up and yield
-        information about how long it took.
-    :return: None
-    """
-    reboot_information = rebooted_device
-
-    manager = Manager()
-    collection_dict = manager.dict()
-    maximum_time = 30
-    network_connection = request.config.getoption("--network-iface") \
-        if request.config.getoption("--network-iface") else 'eth0'
-
-    # Network
-    network_process = process.Process(target=network_checker,
-                                      args=(network_connection, maximum_time, collection_dict))
-    network_process.daemon = True
-    network_process.start()
-
-    ip_address = None
-    while ip_address is None:
-        try:
-            ip_address = collection_dict['ip']['address']
-        except KeyError:
-            pass
-    assert ip_address is not UNKNOWN, \
-        'Could not locate find network connection after {:.2f}'.format(maximum_time)
-
-    # Added the Thread-safe dictionary information to the reboot dictionary.
-    reboot_information.update(collection_dict.copy())
-
-    yield reboot_information
-
-
 @pytest.fixture(scope='session')
 def device_id(request):
     """
