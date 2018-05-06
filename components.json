@@ -89,11 +89,11 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Continuous/master/0.4.0-160+860d416"
+    "selected_version": "Continuous/master/0.4.0-161+6008b13"
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/0.4.1-63+79b5cd1"
+    "selected_version": "Release/master/0.4.2-68+06a626d"
   },
   {
     "name": "HTTPProxy-qc8017_32",
@@ -185,7 +185,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@8fff4bf2d1dce8a60d9dd00f248070c7127a85d3"
+    "selected_version": "master@97ba5623c1c212c2e8978b6d122fd65e00613812"
   },
   {
     "name": "Webkit",
