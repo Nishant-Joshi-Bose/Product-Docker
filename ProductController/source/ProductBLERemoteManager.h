@@ -58,6 +58,7 @@ class ProductController;
 
 class ProductBLERemoteManager
 {
+    using RemoteStatus = RCS_PB_MSG::PairingNotify;
 public:
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -81,6 +82,7 @@ public:
     void Unpairing_Start( void );
     void Unpairing_Cancel( void );
     bool IsConnected( void );
+    void PossiblyPair( void );
 
 private:
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -92,6 +94,9 @@ private:
     ProfessorProductController&     m_ProductController;
     APTimerPtr                      m_statusTimer;
     bool                            m_remoteConnected   = false;
+    bool                            m_pairingPending    = false;
+    RemoteStatus::PairingStatus     m_remoteStatus      = RemoteStatus::PSTATE_UNKOWN;
+    const int                       m_PairingTimeout    = 7200;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -109,6 +114,7 @@ private:
     void UpdateAvailableSources( const SoundTouchInterface::Sources& sources );
     void UpdateBacklight( );
     bool GetSourceLED( A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED );
+    void CheckPairing( void );
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

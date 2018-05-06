@@ -27,10 +27,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
 #include "PlaybackRequestManager.h"
-#include "ProfessorProductController.h"
+#include "ProductController.h"
 #include "Intents.h"
 #include "EndPointsDefines.h"
 #include "ProductSourceInfo.h"
+
+using namespace ProductPb;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -57,9 +59,15 @@ PlaybackRequestManager::PlaybackRequestManager( NotifyTargetTaskIF&         task
                                                 ProductController&          productController )
 
     : IntentManager( task, commandLineClient, frontDoorClient, productController ),
-      m_CustomProductController( static_cast< ProfessorProductController & >( productController ) )
+      m_ProductController( productController )
 {
-    BOSE_INFO( s_logger, "%s is being constructed.", "PlaybackRequestManager" );
+    BOSE_INFO( s_logger, "%s is being constructed.", __func__ );
+
+    auto handleSources = [ this ]( const SoundTouchInterface::Sources & sources )
+    {
+        UpdateSources( sources );
+    };
+    m_ProductController.GetSourceInfo().RegisterSourceListener( handleSources );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -100,11 +108,9 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
     }
     else if( action == ( uint16_t )Action::ACTION_GAME )
     {
-        auto& gameSourcePlaybackRequestData = m_CustomProductController.GetSourceInfo()->GetGameSourcePlaybackRq();
-
-        if( gameSourcePlaybackRequestData.has_sourceaccount() )
+        if( m_gameSourcePlaybackRq.has_sourceaccount() )
         {
-            playbackRequestData.set_sourceaccount( gameSourcePlaybackRequestData.sourceaccount( ) );
+            playbackRequestData.set_sourceaccount( m_gameSourcePlaybackRq.sourceaccount( ) );
         }
         else
         {
@@ -114,11 +120,9 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
     }
     else if( action == ( uint16_t )Action::ACTION_DVD )
     {
-        auto& dvdSourcePlaybackRequestData = m_CustomProductController.GetSourceInfo()->GetDvdSourcePlaybackRq();
-
-        if( dvdSourcePlaybackRequestData.has_sourceaccount() )
+        if( m_dvdSourcePlaybackRq.has_sourceaccount() )
         {
-            playbackRequestData.set_sourceaccount( dvdSourcePlaybackRequestData.sourceaccount( ) );
+            playbackRequestData.set_sourceaccount( m_dvdSourcePlaybackRq.sourceaccount( ) );
         }
         else
         {
@@ -128,11 +132,9 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
     }
     else if( action == ( uint16_t )Action::ACTION_CABLESAT )
     {
-        auto& cablesatSourcePlaybackRequestData = m_CustomProductController.GetSourceInfo()->GetCablesatSourcePlaybackRq();
-
-        if( cablesatSourcePlaybackRequestData.has_sourceaccount() )
+        if( m_cablesatSourcePlaybackRq.has_sourceaccount() )
         {
-            playbackRequestData.set_sourceaccount( cablesatSourcePlaybackRequestData.sourceaccount( ) );
+            playbackRequestData.set_sourceaccount( m_cablesatSourcePlaybackRq.sourceaccount( ) );
         }
         else
         {
@@ -152,9 +154,9 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
 
     string activeSource;
     string activeAccount;
-    if( m_CustomProductController.GetNowSelection( ).has_contentitem( ) )
+    if( m_ProductController.GetNowSelection( ).has_contentitem( ) )
     {
-        const auto& nowSelectingContentItem = m_CustomProductController.GetNowSelection( ).contentitem( );
+        const auto& nowSelectingContentItem = m_ProductController.GetNowSelection( ).contentitem( );
         activeSource = nowSelectingContentItem.source( );
         activeAccount = nowSelectingContentItem.sourceaccount( );
     }
@@ -176,6 +178,44 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
         BOSE_INFO( s_logger, "Already playing the %s source, ignore this playback intent.", playbackRequestData.sourceaccount( ).c_str( ) );
 
         return false;
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief PlaybackRequestManager::UpdateSources
+///
+/// @param  const SoundTouchInterface::Sources&
+///
+/// @return This method returns true base on its handling of a playback request.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void PlaybackRequestManager::UpdateSources( const SoundTouchInterface::Sources& sources )
+{
+    BOSE_INFO( s_logger, "%s got source update %s", __func__, ProtoToMarkup::ToJson( sources ).c_str() );
+    // Repopulate the playbackRequest info associated with user configurable Game, DVD, Cable/Sat activation key
+    m_gameSourcePlaybackRq.Clear();
+    m_dvdSourcePlaybackRq.Clear();
+    m_cablesatSourcePlaybackRq.Clear();
+    for( auto i = 0 ; i < sources.sources_size(); i++ )
+    {
+        const auto& source = sources.sources( i );
+        const auto& activationKey = source.details().activationkey();
+        if( activationKey ==  "ACTIVATION_KEY_GAME" )
+        {
+            m_gameSourcePlaybackRq.set_source( source.sourcename() );
+            m_gameSourcePlaybackRq.set_sourceaccount( source.sourceaccountname() );
+        }
+        else if( activationKey == "ACTIVATION_KEY_BD_DVD" )
+        {
+            m_dvdSourcePlaybackRq.set_source( source.sourcename() );
+            m_dvdSourcePlaybackRq.set_sourceaccount( source.sourceaccountname() );
+        }
+        else if( activationKey == "ACTIVATION_KEY_CBL_SAT" )
+        {
+            m_cablesatSourcePlaybackRq.set_source( source.sourcename() );
+            m_cablesatSourcePlaybackRq.set_sourceaccount( source.sourceaccountname() );
+        }
     }
 }
 

@@ -102,6 +102,7 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
         ulimit -c 0
     else
         log info "Development mode (core files enabled, recovery disabled)"
+        [ -e /mnt/nv/force-rndis ] && set-rndis on
         systemctl start adbd.service
         systemctl start sshd.socket
         ulimit -c unlimited
@@ -143,7 +144,7 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
             ln -s /opt/Bose/etc/Shepherd*.xml "$rundir" || exit
 
             # vfe only launching
-            # ln -s "/opt/Bose/etc/$productType/Shepherd-vfe.xml" "$rundir" || exit
+            ln -s "/opt/Bose/etc/$productType/Shepherd-vfe.xml" "$rundir" || exit
 
         fi
 
@@ -218,7 +219,7 @@ if (( $# == 1 )) && [ "$1" = enterlowpower ]; then
     rm -f "${lowpower[@]}"
 
     # also kill vfe
-    # rm -f Shepherd-vfe.xml
+    rm -f Shepherd-vfe.xml
 
     shepherd-wait "$rundir" "$pidfile"
     exit
@@ -232,7 +233,7 @@ if (( $# == 1 )) && [ "$1" = exitlowpower ]; then
     done
 
     # also restart vfe
-    # ln -s "/opt/Bose/etc/$productType/Shepherd-vfe.xml" "$rundir" || exit
+    ln -s "/opt/Bose/etc/$productType/Shepherd-vfe.xml" "$rundir" || exit
 
     shepherd-wait "$rundir" "$pidfile"
     exit
@@ -276,7 +277,7 @@ if (( $# == 1 )) && [ "$1" = enterswup ]; then
         Shepherd-NetManager.xml
         Shepherd-Passport.xml
         Shepherd-SASSController.xml
-        # Shepherd-vfe.xml
+        Shepherd-vfe.xml
         Shepherd.xml
     )
     cd "$rundir" || exit
