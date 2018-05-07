@@ -177,7 +177,7 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 
 "$avs_dir/stage" "$opt_dir" || exit
 "$softwareupdate_dir/stage" "$opt_dir" || exit
-"$boseopkg_dir/stage" "$opt_dir/update/opkg" || exit
+"$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
 "$audiopath_dir/stage" --product=professor "$opt_dir" || exit
 
 
@@ -363,6 +363,3 @@ ipk=$output_dir/product.ipk
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
 echo "Created $ipk"
-
-# reverting secure directory permission, to avoid issue in "make clean" / rebuild
-chmod -R 755 "$secure_dir" || exit
