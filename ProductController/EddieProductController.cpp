@@ -492,11 +492,15 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
     BOSE_INFO( s_logger, "%s", __func__ );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    /// LPM status messages has both Common handling and Professor-specific handling
+    /// LPM status messages require both product-specific and common handling.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     if( productMessage.has_lpmstatus( ) )
     {
-        // First do the Eddie-specific stuff, i.e., register callbacks and thermal task control
+        ///
+        /// First register for product-specific LPM events if connected, and output the LPM system
+        /// state if available for debugging purposes. Common handling of the product message is
+        /// then done.
+        ///
         if( productMessage.lpmstatus( ).has_connected( ) && productMessage.lpmstatus( ).connected( ) )
         {
             RegisterLpmEvents();
@@ -505,45 +509,9 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
         {
             BOSE_DEBUG( s_logger, "%s-The LPM system state was set to %s", __func__,
                         IpcLpmSystemState_t_Name( productMessage.lpmstatus( ).systemstate( ) ).c_str( ) );
-
-            switch( productMessage.lpmstatus( ).systemstate( ) )
-            {
-            case SYSTEM_STATE_ON:
-                m_ProductAudioService->SetThermalMonitorEnabled( true );
-                break;
-            case SYSTEM_STATE_OFF:
-                m_ProductAudioService->SetThermalMonitorEnabled( false );
-                break;
-            case SYSTEM_STATE_BOOTING:
-                break;
-            case SYSTEM_STATE_STANDBY:
-                m_ProductAudioService->SetThermalMonitorEnabled( false );
-                break;
-            case SYSTEM_STATE_RECOVERY:
-                break;
-            case SYSTEM_STATE_LOW_POWER:
-                break;
-            case SYSTEM_STATE_UPDATE:
-                break;
-            case SYSTEM_STATE_SHUTDOWN:
-                break;
-            case SYSTEM_STATE_FACTORY_DEFAULT:
-                break;
-            case SYSTEM_STATE_IDLE:
-                break;
-            case SYSTEM_STATE_NUM_OF:
-                break;
-            case SYSTEM_STATE_ERROR:
-                break;
-            }
         }
 
-        // Then (after registering for events above) do the common stuff
         ( void ) HandleCommonProductMessage( productMessage );
-    }
-    else if( productMessage.has_action() )
-    {
-        HandleIntents( productMessage.action() );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Key action intent messages are handled at this point, and passed to the HandleIntents
