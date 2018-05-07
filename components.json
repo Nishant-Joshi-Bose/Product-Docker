@@ -89,7 +89,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Continuous/master/0.4.0-161+6008b13"
+    "selected_version": "Continuous/master/0.4.0-162+071a736"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -109,7 +109,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.4.4-277+58094ac"
+    "selected_version": "Continuous/master/0.4.4-280+ef2b581"
   },
   {
     "name": "opensource-jsoncpp-native",
