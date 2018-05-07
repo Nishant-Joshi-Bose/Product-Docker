@@ -49,6 +49,15 @@ print """
    background-color: yellow;
  }
 </style>
+<script>
+function showimg(which) {
+  var f = document.getElementById("ok");
+  f.contentWindow.document.open();
+  //f.contentWindow.document.write("Wait");
+  f.contentWindow.document.close();
+  f.src = "/diag/display/" + which + ".png?show";
+}
+</script>
 </head>
 <body>
 <h1>Diagnostics</h1>
@@ -85,10 +94,11 @@ print "<table>"
 print "<tr>"
 for img in "red green blue black white horizontal vertical".split():
     print """<td class='showimg'>\
-<img width='80' height='80' \
-onclick='fetch("/diag/display/{img}.png?show")' \
+<img width='60' height='80' \
+onclick='showimg("{img}")' \
 src='/diag/display/{img}.png'>\
 </td>""".format(img=img)
+print "<td><iframe id='ok' width='60' height='80' frameborder='0'/></td>"
 print "</tr>"
 print "</table>"
 print "</div>"

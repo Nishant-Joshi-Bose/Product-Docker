@@ -34,7 +34,6 @@ ADD_EXECUTABLE(Eddie
   DataCollectionClientInterface.cpp
   EddieProductController.cpp
   Main.cpp
-  ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/KeyActions.pb.cc
   ${PROTO_CC_DEST}/DisplayController.pb.cc
