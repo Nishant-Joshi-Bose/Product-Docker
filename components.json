@@ -9,7 +9,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-05-06_1016"
+    "selected_version": "Continuous/Castle-Fork/2018-05-07_0841"
   },
   {
     "name": "bose-opkg-utils",
@@ -65,7 +65,7 @@
   },
   {
     "name": "DataCollectionClient-qc8017_32",
-    "selected_version": "Continuous/master/0.4.3-69+b9e766f"
+    "selected_version": "Release/master/0.4.4-71+865d253"
   },
   {
     "name": "DataCollectionService-qc8017_32",
@@ -89,7 +89,7 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Continuous/master/0.4.0-162+071a736"
+    "selected_version": "Release/master/0.4.1-165+91500d8"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -109,7 +109,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Continuous/master/0.4.4-280+ef2b581"
+    "selected_version": "Release/master/0.4.5-282+dd44421"
   },
   {
     "name": "opensource-jsoncpp-native",
@@ -177,7 +177,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-05-06_1016"
+    "selected_version": "Continuous/Castle-Fork/2018-05-07_0841"
   },
   {
     "name": "SystemEventService-qc8017_32",
