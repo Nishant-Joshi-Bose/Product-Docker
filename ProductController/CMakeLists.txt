@@ -52,7 +52,6 @@ ADD_EXECUTABLE(Eddie
   CustomProductAudioService/CustomProductAudioService.cpp
   CustomProductKeyInputManager/CustomProductKeyInputManager.cpp
   CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
-  CustomProductSTS/CustomProductSTSAuxStateFactory.cpp
   CustomProductSTS/CustomProductSTSStateTopAux.cpp
 )
 

@@ -123,6 +123,7 @@ INCLUDE_DIRECTORIES(
   ${PASSPORTCLIENT_DIR}/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/Bluetooth
+  ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/SoundTouchInterface
   ${AVSLIBS_DIR}/include
   ${FRONTDOOR_DIR}/include
   ${FRONTDOOR_DIR}/include/FrontDoor

@@ -22,8 +22,9 @@
 #include "MfgData.h"
 #include "BLESetupEndpoints.h"
 #include "ButtonPress.pb.h"
-#include "ProductSTSSilentStateFactory.h"
-#include "CustomProductSTSAuxStateFactory.h"
+#include "ProductSTSStateFactory.h"
+#include "ProductSTSStateTopSilent.h"
+#include "CustomProductSTSStateTopAux.h"
 
 static DPrint s_logger( "EddieProductController" );
 
@@ -543,8 +544,8 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void EddieProductController::SetupProductSTSController( void )
 {
-    CustomProductSTSAuxStateFactory    auxStateFactory;
-    ProductSTSSilentStateFactory       silentStateFactory;
+    ProductSTSStateFactory<CustomProductSTSStateTopAux> auxStateFactory;
+    ProductSTSStateFactory<ProductSTSStateTopSilent>    silentStateFactory;
 
     std::vector<ProductSTSController::SourceDescriptor> sources;
     ProductSTSController::SourceDescriptor descriptor_AUX{ 0, "AUX", true, auxStateFactory };
