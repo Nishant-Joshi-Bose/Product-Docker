@@ -98,7 +98,7 @@ for img in "red green blue black white horizontal vertical".split():
 onclick='showimg("{img}")' \
 src='/diag/display/{img}.png'>\
 </td>""".format(img=img)
-print "<td><iframe id='ok' width='60' height='80' frameborder='0'/></td>"
+print "<td><iframe id='ok' width='60' height='80' frameborder='0'></iframe></td>"
 print "</tr>"
 print "</table>"
 print "</div>"
