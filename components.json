@@ -1,15 +1,15 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.4.2-20897"
+    "selected_version": "Release/Castle-Fork/0.4.4-20932"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/0.4.2-20897"
+    "selected_version": "Release/Castle-Fork/0.4.4-20932"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-05-07_0841"
+    "selected_version": "Continuous/Castle-Fork/2018-05-08_1413"
   },
   {
     "name": "bose-opkg-utils",
@@ -73,7 +73,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Continuous/master/0.4.2-80+afb910b"
+    "selected_version": "Release/master/0.4.3-86+d96cc15"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -105,7 +105,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/master/0.4.4-117+6ee7aea"
+    "selected_version": "Release/master/0.5.0-123+bae44b8"
   },
   {
     "name": "NetworkService-qc8017_32",
@@ -165,7 +165,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Continuous/master/0.5.1-283+cde0e7d"
+    "selected_version": "Release/master/0.5.2-296+6cc58ed"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -177,15 +177,15 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-05-07_0841"
+    "selected_version": "Continuous/Castle-Fork/2018-05-08_1413"
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.4.2-46+c373ed2"
+    "selected_version": "Release/master/0.4.2-48+c373ed2"
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@97ba5623c1c212c2e8978b6d122fd65e00613812"
+    "selected_version": "master@fb3ff2dc72544a90e4fbd13edf2ca47f954c04d2"
   },
   {
     "name": "Webkit",
