@@ -22,8 +22,9 @@
 #include "MfgData.h"
 #include "BLESetupEndpoints.h"
 #include "ButtonPress.pb.h"
-#include "ProductSTSSilentStateFactory.h"
-#include "CustomProductSTSAuxStateFactory.h"
+#include "ProductSTSStateFactory.h"
+#include "ProductSTSStateTopSilent.h"
+#include "CustomProductSTSStateTopAux.h"
 
 static DPrint s_logger( "EddieProductController" );
 
@@ -71,7 +72,6 @@ EddieProductController::EddieProductController():
     m_ProductControllerStatePlayingTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION ),
     m_ProductControllerStateFirstBootGreeting( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING ),
     m_ProductControllerStateFirstBootGreetingTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_FIRST_BOOT_GREETING_TRANSITION ),
-    m_ProductControllerStateBootedTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_BOOTED_TRANSITION ),
     m_ProductControllerStatePlayingTransitionSwitch( GetHsm(), &m_ProductControllerStatePlayingTransition, PRODUCT_CONTROLLER_STATE_PLAYING_TRANSITION_SWITCH ),
     m_ProductControllerStateStoppingStreamsDedicated( m_ProductControllerHsm, &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED ),
     m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_FACTORY_DEFAULT ),
@@ -127,7 +127,6 @@ void EddieProductController::InitializeHsm()
     GetHsm().AddState( "", &m_ProductControllerStatePlayingTransition );
     GetHsm().AddState( NotifiedNames_Name( NotifiedNames::FIRST_BOOT_GREETING ), &m_ProductControllerStateFirstBootGreeting );
     GetHsm().AddState( "", &m_ProductControllerStateFirstBootGreetingTransition );
-    GetHsm().AddState( "", &m_ProductControllerStateBootedTransition );
     GetHsm().AddState( "", &m_ProductControllerStatePlayingTransitionSwitch );
     GetHsm().AddState( "", &m_ProductControllerStateStoppingStreamsDedicated );
     GetHsm().AddState( "", &m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault );
@@ -545,8 +544,8 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void EddieProductController::SetupProductSTSController( void )
 {
-    CustomProductSTSAuxStateFactory    auxStateFactory;
-    ProductSTSSilentStateFactory       silentStateFactory;
+    ProductSTSStateFactory<CustomProductSTSStateTopAux> auxStateFactory;
+    ProductSTSStateFactory<ProductSTSStateTopSilent>    silentStateFactory;
 
     std::vector<ProductSTSController::SourceDescriptor> sources;
     ProductSTSController::SourceDescriptor descriptor_AUX{ 0, "AUX", true, auxStateFactory };

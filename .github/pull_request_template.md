@@ -1,4 +1,4 @@
-<!--Please add a short summary here of the changes you have made as part of the PR-->
+<!--PLEASE DO NOT DELETE THIS DURING YOUR PULL REQUEST AND FILL THE CHECKLIST-->
 -----------------
 ### PULL REQUEST CHECKLIST:
 <!--Please fill out the checklist below as part of the PR-->
