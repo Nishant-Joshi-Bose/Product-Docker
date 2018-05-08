@@ -743,11 +743,11 @@ const char* SpeakerPairingManager::AccessoryTypeToString( unsigned int type )
     switch( static_cast< LpmServiceMessages::AccessoryType_t >( type ) )
     {
     case LpmServiceMessages::ACCESSORY_LOVEY:
-        return "Acoustimass 150";
+        return "BOSE_BASS_MODULE_300";
     case LpmServiceMessages::ACCESSORY_SKIPPER:
-        return "Acoustimass 300";
+        return "BOSE_BASS_MODULE_700";
     case LpmServiceMessages::ACCESSORY_MAXWELL:
-        return "Virtually Invisible 300";
+        return "BOSE_SURROUND_SPEAKER";
     default:
         BOSE_ERROR( s_logger, "Received invalid accessory to convert to string" );
         return "Invalid";
