@@ -6,6 +6,7 @@ import os
 import sys
 import re
 import json
+import subprocess
 
 if len(sys.argv) != 1:
     raise Exception("wrong usage " + str(sys.argv))
@@ -106,6 +107,16 @@ print "</div>"
 print "<li>Other Tests"
 print """<div class="box">"""
 print "<a href='/diag/microphone'>Microphones</a>"
+print "</div>"
+
+print "<li>LPM Versions"
+print """<div class="box">"""
+ph = subprocess.Popen(["ReadLpmVersion"],
+                      stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+print "<table>"
+for line in ph.stdout:
+    print "<tr><td>", html_escape(line), "</td></tr>"
+print "</table>"
 print "</div>"
 
 print "<hr>"
