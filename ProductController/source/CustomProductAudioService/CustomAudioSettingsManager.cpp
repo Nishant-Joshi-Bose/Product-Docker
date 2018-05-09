@@ -10,6 +10,7 @@
 #include "Utilities.h"
 #include "CustomAudioSettingsManager.h"
 #include "ProtoToMarkup.h"
+#include <iostream>
 
 constexpr char  kDefaultConfigPath[] = "/opt/Bose/etc/DefaultAudioSettings.json";
 constexpr uint32_t kConfigVersionMajor = 3;
@@ -468,16 +469,14 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
     if( !reader->parse( defaultAudioSettings->c_str(), defaultAudioSettings->c_str() + defaultAudioSettings->size(), &m_audioSettings, &errors ) )
     {
         // If reading from default configuration file failed, there's something majorly wrong
-//TODO: BOSE_DIE
-        BOSE_ERROR( s_logger, "Reading and parsing default config file failed with error" );
+        BOSE_DIE( "Reading and parsing default config file failed with error" );
     }
     else if( m_audioSettings["version"]["major"].asInt() != kConfigVersionMajor )
     {
         // major version means major format or structure change in audio settings JSON
         // If the major version doesn't match between configuration file and code, there's mismatch during build procedure
         // force loading it will cause unknown error
-//TODO: BOSE_DIE
-        BOSE_ERROR( s_logger, "DefaultAudioSettings.json is not compatible with ProductController software" );
+        BOSE_DIE( "DefaultAudioSettings.json is not compatible with ProductController software" );
     }
 
     // If there's persisted AudioSettings.json, overwrite m_AudioSettings with persisted data
