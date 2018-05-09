@@ -131,6 +131,7 @@ bool CustomProductControllerStateOn::HandleIntentSetupBLERemote( )
 
     // Conditions for initiating pairing:
     // This feature shall be disabled when: active bonded remote is connected || (active network connection && product associated with a My Bose account)
+    // @TODO IsProductSettingsReceived() is used as a proxy for "product associated with a My Bose account", see CASTLE-13960
     if( !( GetCustomProductController().IsBLERemoteConnected() ||
            ( GetCustomProductController().GetNetworkServiceUtil().IsNetworkConnected() &&
              GetCustomProductController().IsProductSettingsReceived() ) ) )
