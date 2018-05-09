@@ -33,7 +33,7 @@
   },
   {
     "name": "bose-web-riviera-ap-page",
-    "selected_version": "master@39461dc309061130bc7be0c51fd1c1050c764400"
+    "selected_version": "master@db9d7e3bce6edb3306f736e98a13d60376e5b0fa"
   },
   {
     "name": "bose-web-update-page",
@@ -97,7 +97,7 @@
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Release/master/0.4.5-255+b400f78"
+    "selected_version": "Release/master/0.4.7-21+32f89da"
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
