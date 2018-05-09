@@ -515,7 +515,7 @@ bool CustomProductLpmHardwareInterface::SendAdaptIQControl( ProductAdaptIQContro
 ///
 /// @name  CustomProductHardwareLpmInterface::SetStreamConfig
 ///
-/// @brief This method send setStreamConfig request to DSP,
+/// @brief This method sends setStreamConfig request to DSP,
 ///
 /// @param LpmServiceMessages::IpcDspStreamConfigReqPayload_t streamConfig
 /// @param Callback<IpcDspStreamConfigRespPayload_t> cb
@@ -544,7 +544,7 @@ bool CustomProductLpmHardwareInterface::SetStreamConfig( LpmServiceMessages::Ipc
 ///
 /// @name  CustomProductHardwareLpmInterface::SetInternalMute
 ///
-/// @brief This method send internalMute to DSP
+/// @brief This method sends internalMute to DSP
 ///
 /// @param bool mute
 ///
@@ -588,7 +588,7 @@ bool CustomProductLpmHardwareInterface::BootDSPImage( LpmServiceMessages::IpcIma
 ///
 /// @name CustomProductHanrdwareLpmInterface::SendAutowakeStatus
 ///
-/// @brief This method send autowake status to LPM
+/// @brief This method sends autowake status to LPM
 ///
 /// @param bool enabled This argument indicates whether autowake is enabled
 ///
