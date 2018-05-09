@@ -586,13 +586,13 @@ bool CustomProductLpmHardwareInterface::BootDSPImage( LpmServiceMessages::IpcIma
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name CustomProductHanrdwareLpmInterface:SendAutowakeStatus
+/// @name CustomProductHanrdwareLpmInterface::SendAutowakeStatus
 ///
-/// @brief This method send autowake status
+/// @brief This method send autowake status to LPM
 ///
 /// @param bool enabled This argument indicates whether autowake is enabled
 ///
-/// @return bool This method returns false Boolean value if LPM is not connected. Otherwise, it
+/// @return bool This method returns false if LPM is not connected. Otherwise, it
 ///              attepmts to send the status and returns true
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
