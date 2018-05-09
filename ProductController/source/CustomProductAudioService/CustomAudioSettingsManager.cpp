@@ -5,12 +5,12 @@
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <fstream>
+#include <iostream>
 #include "DPrint.h"
 #include "SystemUtils.h"
 #include "Utilities.h"
 #include "CustomAudioSettingsManager.h"
 #include "ProtoToMarkup.h"
-#include <iostream>
 
 constexpr char  kDefaultConfigPath[] = "/opt/Bose/etc/DefaultAudioSettings.json";
 constexpr uint32_t kConfigVersionMajor = 3;
@@ -464,7 +464,6 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
     std::string errors;
 
     // Load m_AudioSettings with DefaultAudioSettings.json first
-    std::ifstream in( kDefaultConfigPath );
     auto const& defaultAudioSettings = SystemUtils::ReadFile( kDefaultConfigPath );
     if( !reader->parse( defaultAudioSettings->c_str(), defaultAudioSettings->c_str() + defaultAudioSettings->size(), &m_audioSettings, &errors ) )
     {
@@ -486,7 +485,7 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
         std::string persistedValue = m_audioSettingsPersistence->Load();
         if( !reader->parse( persistedValue.c_str(), persistedValue.c_str() + persistedValue.size(), &persistedAudioSettings, &errors ) )
         {
-            BOSE_ERROR( s_logger, errors.c_str() );
+            BOSE_ERROR( s_logger, "Parsing persisted AudioSettings.json failed with error %s", errors.c_str() );
         }
         else if( persistedAudioSettings.empty() ||
                  !persistedAudioSettings.isMember( "version" ) ||
@@ -498,7 +497,7 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
         else if( persistedAudioSettings["version"].isMember( "major" ) &&
                  persistedAudioSettings["version"]["major"].asInt() != kConfigVersionMajor )
         {
-            BOSE_ERROR( s_logger, "Persisted AudioSettings.json is not compatiable with ProductController software: "
+            BOSE_ERROR( s_logger, "Persisted AudioSettings.json is not compatible with ProductController software: "
                         "AudioSettings.json has version %d.%d, and ProductController expects version %d.%d",
                         persistedAudioSettings["version"]["major"].asInt(),
                         persistedAudioSettings["version"]["minor"].asInt(),
@@ -523,7 +522,7 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
     }
     catch( ProtoPersistenceIF::ProtoPersistenceException& e )
     {
-        BOSE_ERROR( s_logger, "Loading audioSettings from persistence failed - %s ", e.what() );
+        BOSE_WARNING( s_logger, "Loading audioSettings from persistence failed - %s ", e.what() );
     }
 
     // Initialize ProtoBufs with m_audioSettings JSON values
