@@ -37,8 +37,10 @@
 #include "ProductAdaptIQManager.h"
 #include "IntentHandler.h"
 #include "ProductSTS.pb.h"
-#include "ProductSTSCommonStateFactory.h"
-#include "ProductSTSSilentStateFactory.h"
+#include "ProductSTSStateFactory.h"
+#include "ProductSTSStateTop.h"
+#include "ProductSTSStateTopSilent.h"
+#include "ProductSTSStateTopAiQ.h"
 #include "SystemSourcesProperties.pb.h"
 #include "ProductControllerHsm.h"
 #include "CustomProductControllerStates.h"
@@ -815,14 +817,15 @@ void ProfessorProductController::SetupProductSTSConntroller( )
 {
     std::vector< ProductSTSController::SourceDescriptor > sources;
 
-    ProductSTSCommonStateFactory commonStateFactory;
-    ProductSTSSilentStateFactory silentStateFactory;
+    ProductSTSStateFactory<ProductSTSStateTop>          commonStateFactory;
+    ProductSTSStateFactory<ProductSTSStateTopSilent>    silentStateFactory;
+    ProductSTSStateFactory<ProductSTSStateTopAiQ>       aiqStateFactory;
 
     ///
     /// Adapt IQ and SETUP are never available as a normal source, whereas the TV source will always
     /// be available. SLOT sources need to be set-up before they become available.
     ///
-    ProductSTSController::SourceDescriptor descriptor_AiQ    { ProductSTS::SLOT_AIQ,   "ADAPTiQ", false, commonStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_AiQ    { ProductSTS::SLOT_AIQ,   "ADAPTiQ", false, aiqStateFactory    };
     ProductSTSController::SourceDescriptor descriptor_Setup  { ProductSTS::SLOT_SETUP, "SETUP",   false, silentStateFactory };
     ProductSTSController::SourceDescriptor descriptor_TV     { ProductSTS::SLOT_TV,    "TV",      true,  commonStateFactory };
     ProductSTSController::SourceDescriptor descriptor_SLOT_0 { ProductSTS::SLOT_0,     "SLOT_0",  false, commonStateFactory, true };
