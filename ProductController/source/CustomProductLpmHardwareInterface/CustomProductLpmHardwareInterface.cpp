@@ -586,7 +586,7 @@ bool CustomProductLpmHardwareInterface::BootDSPImage( LpmServiceMessages::IpcIma
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @name CustomProductHanrdwareLpmInterface::SendAutowakeStatus
+/// @name CustomProductLpmHardwareInterface::SendAutowakeStatus
 ///
 /// @brief This method sends autowake status to LPM
 ///
