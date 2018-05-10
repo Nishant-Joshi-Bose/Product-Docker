@@ -468,7 +468,8 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
     if( !reader->parse( defaultAudioSettings->c_str(), defaultAudioSettings->c_str() + defaultAudioSettings->size(), &m_audioSettings, &errors ) )
     {
         // If reading from default configuration file failed, there's something majorly wrong
-        BOSE_DIE( "Reading and parsing default config file failed with error" );
+        string errorString = "Reading and parsing default config file failed with error (" + errors + ")";
+        BOSE_DIE( errorString );
     }
     else if( m_audioSettings["version"]["major"].asInt() != kConfigVersionMajor )
     {
