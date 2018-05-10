@@ -64,14 +64,24 @@ def set_ADB_device(deviceID = None):
 
     devices = devices.partition('\n')[2].replace('device', '').split()
 
+    if not devices:
+        print "ERROR : No devices found on ADB"
+        sys.exit(1)
+
     if deviceID:
         if deviceID in devices:
             target_device = deviceID
             return
+        else:
+            print "ERROR : Specified device ID did not match with available ADB devices"
+            sys.exit(1)
     else:
         if len(devices) == 1:
             target_device = devices[0]
             return
+        else:
+            print "ERROR : Multiple devices found on ADB"
+            sys.exit(1)
 
 
 def ADB_push_file(src, dst):
