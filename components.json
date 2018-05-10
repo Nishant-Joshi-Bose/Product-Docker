@@ -88,8 +88,8 @@
     "selected_version": "Release/master/0.4.6-39+d87444d"
   },
   {
-    "name": "CastleProductControllerCommon",
-    "selected_version": "PGC-1741@493413e5a0cd9feb8df7d0e8cb71f0649ed8cae1"
+    "name": "DemoController-qc8017_32",
+    "selected_version": "Release/master/0.4.3-86+d96cc15"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -141,7 +141,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "PGC-1741@8df4a51bbec5d36dd7bf28b004b733734a5f9c0c"
+    "selected_version": "PGC-1741@69152b4a627fe8137f462171a763bdc93cdf7a53"
   },
   {
     "name": "ProductUIAssets",
