@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@b73f672372e4355900733c979247a5cd9aada82f"
+    "selected_version": "master@e9776f0081d585eba3d3006dda531cf99f249b2d"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -17,15 +17,15 @@
   },
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.4.2-20897"
+    "selected_version": "Release/Castle-Fork/0.4.3-20926"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/0.4.2-20897"
+    "selected_version": "Release/Castle-Fork/0.4.3-20926"
   },
   {
     "name": "AVS-qc8017_32",
-     "selected_version": "Release/Castle-Fork/0.5.4.42158.2804520"
+    "selected_version": "Release/Castle-Fork/0.5.4.42158.2804520"
   },
   {
     "name": "bose-opkg-utils",
