@@ -47,34 +47,13 @@ CustomProductControllerStatePlayingSelected::CustomProductControllerStatePlaying
     BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief  CustomProductControllerStatePlayingSelected::HandleIntentSpeakerPairing
-///
-/// @return This method returns a true Boolean value indicating that it has handled the event
-///         and no futher processing will be required by any of its superstates.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayingSelected::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )
-{
-    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
-
-    if( intent == ( unsigned int )Action::ACTION_START_PAIR_SPEAKERS )
-    {
-        BOSE_INFO( s_logger, "The state is changing to the CustomSelectedAccessoryPairing state." );
-        ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_ACCESSORY_PAIRING );
-    }
-
-    return true;
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @brief  CustomProductControllerStatePlayingSelected::PossiblyGoToCustomState
 ///
 /// @return This is used for product specific conditional checks and potential state changes to
 ///         custom states based on the product. It returns a true Boolean value if a custom
-///         state change is to take place; otherwise, it returns false and lets the derive
+///         state change is to take place; otherwise, it returns false and lets the derived
 ///         common state handle any required state transitions.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,12 +63,20 @@ bool CustomProductControllerStatePlayingSelected::PossiblyGoToCustomState( )
 
     if( GetProductController( ).GetNowSelection( ).has_contentitem( ) )
     {
-        if( GetProductController( ).GetNowSelection( ).contentitem( ).source( ).compare( "PRODUCT" )        == 0 and
-            GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( "ADAPTiQ" ) == 0 )
+        if( GetProductController( ).GetNowSelection( ).contentitem( ).source( ).compare( "PRODUCT" ) == 0 )
         {
-            ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
+            if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( "ADAPTiQ" ) == 0 )
+            {
+                ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
 
-            return true;
+                return true;
+            }
+            else if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( "PAIRING" ) == 0 )
+            {
+                ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
+
+                return true;
+            }
         }
     }
 

@@ -21,11 +21,12 @@ package ProductSTS;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 enum ProductSourceSlot
 {
-    SLOT_AIQ = 0;
-    SLOT_TV = 1;
-    SLOT_0 = 2;
-    SLOT_1 = 3;
-    SLOT_2 = 4;
-    SLOT_SETUP = 5;
+    SLOT_AIQ     = 0;
+    SLOT_TV      = 1;
+    SLOT_0       = 2;
+    SLOT_1       = 3;
+    SLOT_2       = 4;
+    SLOT_SETUP   = 5;
+    SLOT_PAIRING = 6;
     SLOT_INVALID = 255;
 }
