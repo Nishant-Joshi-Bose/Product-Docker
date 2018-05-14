@@ -5,11 +5,11 @@
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@1c3aa1da00166b6396ee8d1e56728acd331688ef"
+    "selected_version": "master@4a94cfb9b647f133180a20d3aa591c0ecf35d94b"
   },
   {
     "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/0.3.7-1+gb23c5a5"
+    "selected_version": "Release/master/v0.4.0-0+b23c5a5"
   },
   {
     "name": "A4VVideoManagerService",
@@ -57,7 +57,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/0.4.4-275+8abd19e"
+    "selected_version": "Release/develop/0.4.4-281+5a39793"
   },
   {
     "name": "CastleLibs-native",
@@ -141,7 +141,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@8cbe79305c0f23eb0d4675a16c0dc7b9937ad8db"
+    "selected_version": "master@e11c0a99a89eea5f306a0e89ac1523ae3ff0c22c"
   },
   {
     "name": "ProductUIAssets",
