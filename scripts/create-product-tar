@@ -645,4 +645,3 @@ if __name__ == '__main__':
     else:
         logging.error("Failure: [%d-%s]" %(retVal, retStr))
         sys.exit(-1) 
-
