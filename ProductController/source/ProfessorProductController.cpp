@@ -87,6 +87,7 @@
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateTop.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
+#include "CustomProductControllerStateAccessoryPairingExiting.h"
 #include "CustomProductControllerStateAdaptIQExiting.h"
 #include "CustomProductControllerStateAdaptIQ.h"
 #include "CustomProductControllerStateIdle.h"
@@ -388,13 +389,19 @@ void ProfessorProductController::Run( )
       PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS );
 
     ///
-    /// Accessory Pairing State
+    /// Accessory Pairing States
     ///
     auto* customStateAccessoryPairing = new CustomProductControllerStateAccessoryPairing
     ( GetHsm( ),
       customStatePlayingSelected,
       *this,
       CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
+
+    auto* customStateAccessoryPairingExiting = new CustomProductControllerStateAccessoryPairingExiting
+    ( GetHsm( ),
+      customStatePlayingSelected,
+      *this,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING_EXITING );
 
     ///
     /// AdaptIQ States
@@ -472,6 +479,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( NotifiedNames_Name( NotifiedNames::SELECTED ), statePlayingSelectedSetupExitingAP );
     GetHsm( ).AddState( "", stateStoppingStreams );
     GetHsm( ).AddState( "", customStateAccessoryPairing );
+    GetHsm( ).AddState( "", customStateAccessoryPairingExiting );
     GetHsm( ).AddState( "", customStateAdaptIQ );
     GetHsm( ).AddState( "", customStateAdaptIQExiting );
     GetHsm( ).AddState( "", stateStoppingStreamsDedicated );

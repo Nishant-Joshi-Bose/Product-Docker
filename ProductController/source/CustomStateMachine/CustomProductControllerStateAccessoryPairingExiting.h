@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateAccessoryPairing.h
+/// @file      CustomProductControllerStateAccessoryPairingExiting.h
 ///
-/// @brief     This source code file contains functionality to process events that occur during the
-///            product accessory pairing state.
+/// @brief     This source code file contains functionality to process events that occur when
+///            exiting the product accessory pairing state.
 ///
 /// @author    Derek Richardson
 ///
@@ -38,33 +38,33 @@ class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class CustomProductControllerStateAccessoryPairing
+/// @class CustomProductControllerStateAccessoryPairingExiting
 ///
-/// @brief This class is used for executing accessory pairing.
+/// @brief This class is used when exiting accessory pairing.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateAccessoryPairing : public ProductControllerState
+class CustomProductControllerStateAccessoryPairingExiting : public ProductControllerState
 {
 public:
 
-    CustomProductControllerStateAccessoryPairing(
+    CustomProductControllerStateAccessoryPairingExiting(
         ProductControllerHsm&       hsm,
         CHsmState*                  pSuperState,
         ProfessorProductController& productController,
         Hsm::STATE                  stateId,
         const std::string&          name = "AccessoryPairing" );
 
-    ~CustomProductControllerStateAccessoryPairing( ) override
+    ~CustomProductControllerStateAccessoryPairingExiting( ) override
     {
 
     }
 
     void HandleStateStart( ) override;
-    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent ) override;
+    void HandleStateExit( )  override;
+    bool HandlePairingState( ProductAccessoryPairing pairingStatus )       override;
     bool HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )  override;
     bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )    override;
     bool HandleIntentPowerToggle( )                                        override;
-    bool HandlePairingState( ProductAccessoryPairing pairingStatus )       override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

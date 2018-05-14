@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStateAccessoryPairing.cpp
+/// @file      CustomProductControllerStateAccessoryPairingExiting.cpp
 ///
-/// @brief     This source code file contains functionality to process events that occur during the
-///            product accessory pairing state.
+/// @brief     This source code file contains functionality to process events that occur when
+///            exiting the product accessory pairing state.
 ///
 /// @author    Derek Richardson
 ///
@@ -19,7 +19,7 @@
 #include "Utilities.h"
 #include "Intents.h"
 #include "IntentHandler.h"
-#include "CustomProductControllerStateAccessoryPairing.h"
+#include "CustomProductControllerStateAccessoryPairingExiting.h"
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
 #include "SpeakerPairingManager.h"
@@ -33,8 +33,8 @@ namespace ProductApp
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateAccessoryPairing::
-///        CustomProductControllerStateAccessoryPairing
+/// @brief CustomProductControllerStateAccessoryPairingExiting::
+///        CustomProductControllerStateAccessoryPairingExiting
 ///
 /// @param ProductControllerHsm&       hsm               This argument references the state machine.
 ///
@@ -47,12 +47,12 @@ namespace ProductApp
 /// @param const std::string&          name              This argument names the state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductControllerStateAccessoryPairing::
-CustomProductControllerStateAccessoryPairing( ProductControllerHsm&       hsm,
-                                              CHsmState*                  pSuperState,
-                                              ProfessorProductController& productController,
-                                              Hsm::STATE                  stateId,
-                                              const std::string&          name )
+CustomProductControllerStateAccessoryPairingExiting::
+CustomProductControllerStateAccessoryPairingExiting( ProductControllerHsm&       hsm,
+                                                     CHsmState*                  pSuperState,
+                                                     ProfessorProductController& productController,
+                                                     Hsm::STATE                  stateId,
+                                                     const std::string&          name )
 
     : ProductControllerState( hsm, pSuperState, stateId, name )
 {
@@ -61,37 +61,32 @@ CustomProductControllerStateAccessoryPairing( ProductControllerHsm&       hsm,
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateAccessoryPairing::HandleStateStart
+/// @brief CustomProductControllerStateAccessoryPairingExiting::HandleStateStart
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateAccessoryPairing::HandleStateStart( )
+void CustomProductControllerStateAccessoryPairingExiting::HandleStateStart( )
 {
     BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
 
-    ///
-    /// Disable source selection while in accessory pairing, and start the pairing process.
-    ///
-    auto startPairingAction = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_LPM_PAIR_SPEAKERS );
+    auto stopPairingAction = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_STOP_PAIR_SPEAKERS );
 
-    GetCustomProductController( ).SendAllowSourceSelectMessage( false );
-    GetCustomProductController( ).GetIntentHandler( ).Handle( startPairingAction );
+    GetCustomProductController( ).GetIntentHandler( ).Handle( stopPairingAction );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateAccessoryPairing::HandleIntentSpeakerPairing
-///
-/// @return This method returns a true Boolean value indicating that it is handling the speaker
-///         pairing intent.
+/// @brief CustomProductControllerStateAccessoryPairingExiting::HandlePairingState
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateAccessoryPairing::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )
+bool CustomProductControllerStateAccessoryPairingExiting::HandlePairingState( ProductAccessoryPairing pairingStatus )
 {
-    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+    BOSE_INFO( s_logger, "The %s state is handling a pairing %s.",
+               GetName( ).c_str( ),
+               pairingStatus.active( ) ? "activation" : "deactivation" );
 
-    if( intent == ( unsigned int )Action::ACTION_STOP_PAIR_SPEAKERS )
+    if( not pairingStatus.active( ) )
     {
-        GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
+        ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS );
     }
 
     return true;
@@ -99,15 +94,15 @@ bool CustomProductControllerStateAccessoryPairing::HandleIntentSpeakerPairing( K
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStateAccessoryPairing::HandleIntentVolumeControl
+/// @brief  CustomProductControllerStateAccessoryPairingExiting::HandleIntentVolumeControl
 ///
 /// @param  KeyHandlerUtil::ActionType_t intent
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the volume
-///         control intent. It is ignored during acessory pairing.
+///         control intent. It is ignored when exiting acessory pairing.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateAccessoryPairing::HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )
+bool CustomProductControllerStateAccessoryPairingExiting::HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )
 {
     BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %u.", GetName( ).c_str( ), __func__, intent );
 
@@ -119,15 +114,15 @@ bool CustomProductControllerStateAccessoryPairing::HandleIntentVolumeControl( Ke
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStateAccessoryPairing::HandleIntentMuteControl
+/// @brief  CustomProductControllerStateAccessoryPairingExiting::HandleIntentMuteControl
 ///
 /// @param  KeyHandlerUtil::ActionType_t intent
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the muting
-///         intent. It is ignored during acessory pairing.
+///         intent. It is ignored when exiting acessory pairing.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateAccessoryPairing::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )
+bool CustomProductControllerStateAccessoryPairingExiting::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )
 {
     BOSE_INFO( s_logger, "The %s state is in %s ignored the intent %u.", GetName( ).c_str( ), __func__, intent );
 
@@ -139,44 +134,35 @@ bool CustomProductControllerStateAccessoryPairing::HandleIntentMuteControl( KeyH
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief  CustomProductControllerStateAccessoryPairing::HandleIntentPowerToggle
+/// @brief  CustomProductControllerStateAccessoryPairingExiting::HandleIntentPowerToggle
 ///
-/// @return This method returns a true Boolean value indicating that it handles the PowerToggle
-///         intent. The stop pairing action intent will be processed, which will in turn invoke the
-///         HandlePairingState method with a deactive status to transition from the accessory
-///         pairing state.
+/// @return This method returns a true Boolean value indicating that it has handled the power
+///         toggling intent. It is ignored when exiting acessory pairing.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateAccessoryPairing::HandleIntentPowerToggle( )
+bool CustomProductControllerStateAccessoryPairingExiting::HandleIntentPowerToggle( )
 {
-    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+    BOSE_INFO( s_logger, "The %s state in %s is ignoring the power toggle.", GetName( ).c_str( ), __func__ );
 
-    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING_EXITING );
-
+    ///
+    /// The intent is ignored in this custom state.
+    ///
     return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief CustomProductControllerStateAccessoryPairing::HandlePairingState
+/// @brief CustomProductControllerStateAccessoryPairingExiting::HandleStateExit
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateAccessoryPairing::HandlePairingState( ProductAccessoryPairing pairingStatus )
+void CustomProductControllerStateAccessoryPairingExiting::HandleStateExit( )
 {
-    BOSE_INFO( s_logger, "The %s state is handling a pairing %s.",
-               GetName( ).c_str( ),
-               pairingStatus.active( ) ? "activation" : "deactivation" );
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
 
-    if( not pairingStatus.active( ) )
-    {
-        BOSE_INFO( s_logger, "The %s state is stopping the pairing playback.", GetName( ).c_str( ) );
-
-        GetProductController( ).SendAllowSourceSelectMessage( true );
-        GetProductController( ).SendStopPlaybackMessage( );
-        GetProductController( ).SendSassStopAllMessage( );
-    }
-
-    return true;
+    ///
+    /// Re-enable source selection.
+    ///
+    GetCustomProductController( ).SendAllowSourceSelectMessage( true );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

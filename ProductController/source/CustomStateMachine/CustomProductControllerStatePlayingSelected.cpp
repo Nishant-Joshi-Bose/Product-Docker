@@ -53,8 +53,9 @@ CustomProductControllerStatePlayingSelected::CustomProductControllerStatePlaying
 ///
 /// @return This is used for product specific conditional checks and potential state changes to
 ///         custom states based on the product. It returns a true Boolean value if a custom
-///         state change is to take place; otherwise, it returns false and lets the derived
-///         common state handle any required state transitions.
+///         state change is to take place; otherwise, it returns false and lets the method
+///         in the base common state that calls this function handle any required state
+///         transitions.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStatePlayingSelected::PossiblyGoToCustomState( )
