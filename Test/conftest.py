@@ -20,10 +20,8 @@ import os
 import shutil
 import time
 import ConfigParser
-from multiprocessing import process, Manager
 
 import pytest
-from pyadb import ADB
 
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
@@ -33,7 +31,6 @@ from CastleTestUtils.RivieraUtils import rivieraCommunication, rivieraUtils
 from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import flash_device
 
 from commonData import keyConfig
-from bootsequencing.stateutils import network_checker, UNKNOWN
 
 
 LOGGER = get_logger(__name__)
@@ -215,13 +212,14 @@ def create_log_dir(foldername):
     return subfolder
 
 
+@pytest.mark.usefixture('device_id')
 @pytest.fixture(scope='class')
-def adb(request):
+def adb(device_id):
     """
     Get adb instance
     """
     adb = rivieraCommunication.getCommunicationType('ADB')
-    adb.setCommunicationDetail(request.config.getoption("--device-id"))
+    adb.setCommunicationDetail(device_id)
     return adb
 
 
@@ -236,18 +234,16 @@ def device_id(request):
     return request.config.getoption('--device-id')
 
 
-@pytest.mark.usefixture('device_id')
+@pytest.mark.usefixture('riviera')
 @pytest.fixture(scope='function')
-def adb_versions(device_id):
+def adb_versions(riviera):
     """
     This fixture will return information regarding version information on the
         ADB system
 
-    :param device_id: Command Line Android Device ID
+    :param riviera: Riviera connection throught ADB
     :return: Dictionary of Version information of the device
     """
-    riviera = rivieraUtils.RivieraUtils(communicationType='ADB', device=device_id)
-
     versions = {}
 
     # Get Product information
@@ -324,6 +320,7 @@ def wifi_config():
     yield cfg
 
 
+@pytest.mark.usefixture('request', 'device_id', 'wifi_config')
 @pytest.fixture(scope="function")
 def ip_address_wlan(request, device_id, wifi_config):
     """
@@ -344,6 +341,8 @@ def ip_address_wlan(request, device_id, wifi_config):
         LOGGER.info("Found Device IP: %s", device_ip_address)
     except UnboundLocalError as exception:
         LOGGER.warning("Not able to acquire IP Address: %s", exception)
+
+    LOGGER.info("Device IP Address: %s", repr(device_ip_address))
     if not device_ip_address:
         # Clear any WiFi profiles on the device
         clear_profiles = ' '.join(['network', 'wifi', 'profiles', 'clear'])
@@ -353,6 +352,7 @@ def ip_address_wlan(request, device_id, wifi_config):
 
         # Acquire the Router information
         router = request.config.getoption("--router")
+        LOGGER.debug("Router Connection Name: %s", router)
         router_name = wifi_config.get(router, 'ssid')
         security = wifi_config.get(router, 'security')
         password = wifi_config.get(router, 'password')
@@ -373,3 +373,87 @@ def ip_address_wlan(request, device_id, wifi_config):
         raise SystemError("Failed to acquire network connection through: {}".format(interface))
 
     return device_ip_address
+
+
+@pytest.mark.usefixtures('adb')
+@pytest.fixture(scope='function')
+def rebooted_device(adb):
+    """
+    This will put the device into a rebooted state and yield information about
+        how long it took.
+
+    :param adb: ADB Communication Object
+    :return: None
+    """
+    start_time = time.time()
+    adb.executeCommand('/opt/Bose/bin/PlatformReset')
+    adb.waitforDevice()
+    end_time = time.time()
+
+    duration = end_time - start_time
+    LOGGER.debug("Reboot took %.2f", duration)
+
+    yield {'reboot': {'start': start_time, 'end': end_time,
+                      'duration': end_time - start_time}}
+
+    LOGGER.debug("Factory Defaulting Unit.")
+    adb.executeCommand('/opt/Bose/bin/factory_default')
+    adb.waitforDevice()
+    # TODO: Remove this section as there are better ways to see if up
+    time.sleep(10)
+    nw_file_status = adb.executeCommand("test -f /mnt/nv/product-persistence/NetworkProfiles.xml && echo FOUND")
+    assert not nw_file_status, \
+               '/mnt/nv/product-persistence/NetworkProfiles.xml should be removed after factory default.'
+
+
+@pytest.mark.usesfixtures('request', 'adb', 'device_id', 'ip_address_wlan')
+@pytest.fixture(scope='function')
+def rebooted_and_networked_device(request, adb, device_id, ip_address_wlan):
+    """
+    This will put the device into a rebooted state with network up and yield
+        information about how long it took.
+
+    :param request: PyTest command line request options
+    :return: Rebooted Information
+    """
+    LOGGER.debug("Have an IP Address of %s.", ip_address_wlan)
+
+    LOGGER.info("Rebooting Device %s.", device_id)
+    reboot_information = {}
+    start_time = time.time()
+    adb.executeCommand('/opt/Bose/bin/PlatformReset')
+    adb.waitforDevice()
+    end_time = time.time()
+
+    duration = end_time - start_time
+    LOGGER.debug("Reboot took %.2f", duration)
+
+    reboot_information = {'reboot': {'start': start_time, 'end': end_time,
+                          'duration': end_time - start_time}}
+
+    manager = Manager()
+    collection_dict = manager.dict()
+    maximum_time = 30
+    network_connection = request.config.getoption("--network-iface") \
+        if request.config.getoption("--network-iface") else 'wlan0'
+    LOGGER.debug("Looking for IP Address on %s", network_connection)
+
+    # Network
+    network_process = Process(target=network_checker,
+                              args=(network_connection, maximum_time, collection_dict, device_id))
+    network_process.daemon = True
+    network_process.start()
+
+    ip_address = None
+    while ip_address is None:
+        try:
+            ip_address = collection_dict['ip']['address']
+        except KeyError:
+            pass
+    assert ip_address is not UNKNOWN, \
+        'Could not locate find network connection after {:.2f}'.format(maximum_time)
+
+    # Added the Thread-safe dictionary information to the reboot dictionary.
+    reboot_information.update(collection_dict.copy())
+
+    yield reboot_information
