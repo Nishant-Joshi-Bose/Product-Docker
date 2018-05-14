@@ -18,6 +18,7 @@ PROTO_SOURCES = ProductMessage.proto          \
                 HdmiEdid.proto                \
                 SystemPowerProduct.proto      \
                 KeyNames.proto                \
+                DisplayController.proto       \
 
 #
 # The following alias is used to search for imported Protocol Buffer files.

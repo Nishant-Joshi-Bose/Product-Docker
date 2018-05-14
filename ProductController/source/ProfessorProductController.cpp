@@ -866,6 +866,32 @@ void ProfessorProductController::HandleSelectSourceSlot( ProductSTSAccount::Prod
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @brief ProfessorProductController::HandleUiHeartBeat
+///
+/// @param const DisplayControllerPb::UiHeartBeat & req
+///
+/// @param const Callback<DisplayControllerPb::UiHeartBeat> & respCb
+///
+/// @param const Callback<FrontDoor::Error> & errorCb
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::HandleUiHeartBeat(
+    const DisplayControllerPb::UiHeartBeat & req,
+    const Callback<DisplayControllerPb::UiHeartBeat> & respCb,
+    const Callback<FrontDoor::Error> & errorCb )
+{
+    BOSE_INFO( s_logger, "%s received UI heartbeat: %lld", __func__, req.count() );
+
+    auto heartbeat = req.count();
+
+    DisplayControllerPb::UiHeartBeat response;
+    response.set_count( heartbeat );
+    respCb( response );
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::RegisterFrontDoorEndPoints
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -898,6 +924,29 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
 
         GetFrontDoorClient( )->RegisterPut<SystemPowerProductPb::SystemPowerModeOpticalAutoWake>(
             FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API,
+            callback,
+            FrontDoor::PUBLIC,
+            FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+            FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
+    }
+    {
+        auto callback = [ = ]( DisplayControllerPb::UiHeartBeat req,
+                               Callback< DisplayControllerPb::UiHeartBeat > respCb,
+                               Callback< FrontDoor::Error > errorCb )
+        {
+            HandleUiHeartBeat( req, respCb, errorCb );
+        };
+
+
+        GetFrontDoorClient( )->RegisterPut<DisplayControllerPb::UiHeartBeat>(
+            FRONTDOOR_UI_ALIVE,
+            callback,
+            FrontDoor::PUBLIC,
+            FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
+            FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
+
+        GetFrontDoorClient( )->RegisterPost<DisplayControllerPb::UiHeartBeat>(
+            FRONTDOOR_UI_ALIVE,
             callback,
             FrontDoor::PUBLIC,
             FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
