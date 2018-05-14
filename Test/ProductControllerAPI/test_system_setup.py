@@ -170,8 +170,8 @@ def test_system_setup_from_idle_state(front_door_queue):
         'Device should be in {} state. Current state : {}'.format(eddie_helper.IDLE, state)
 
 
-@pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'deviceid', 'front_door_queue')
-def test_system_setup_cli_command(deviceid, front_door_queue):
+@pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'device_id', 'front_door_queue')
+def test_system_setup_cli_command(device_id, front_door_queue):
     """
     Test for GET method of system setup api after rebooting the device and from SetupOther state
     Test Steps:
@@ -180,7 +180,7 @@ def test_system_setup_cli_command(deviceid, front_door_queue):
     3. Verify device state which should be "DESELECTED".
     """
     # 1. Set OOB Setup completed using CLI command.
-    adb_utils.adb_telnet_cmd('setoobsetupcompleted', device_id=deviceid)
+    adb_utils.adb_telnet_cmd('setoobsetupcompleted', device_id=device_id)
     time.sleep(2)
 
     # 2. Verify notification of system setup information.

@@ -138,14 +138,14 @@ def save_speaker_log(request, device_ip):
     request.addfinalizer(teardown)
 
 @pytest.fixture(scope='class')
-def device_ip(request, deviceid):
+def device_ip(request, device_id):
     """
     This fixture gets the device IP
     :return: device ip
     """
     LOGGER.info("Trying to retrieve the IP-Address of the device")
     if request.config.getoption("--target").lower() == 'device':
-        network_base = NetworkBase(None, deviceid)
+        network_base = NetworkBase(None, device_id)
         interface = request.config.getoption("--network-iface")
         device_ip = network_base.check_inf_presence(interface)
         return device_ip
@@ -167,12 +167,14 @@ def frontDoor(device_ip, request):
 
     return front_door
 
+
 @pytest.fixture(scope='class')
-def riviera(deviceid):
+def riviera(device_id):
     """
     Get RivieraUtil instance.
     """
-    return rivieraUtils.RivieraUtils('ADB', device=deviceid)
+    return rivieraUtils.RivieraUtils('ADB', device=device_id)
+
 
 @pytest.fixture(scope='class')
 def device_guid(frontDoor):
@@ -307,7 +309,7 @@ def deviceid(request):
         return request.config.getoption("--device-id")
     except Exception as exception:
         LOGGER.info("Getting device id.... " + str(exception))
-        return False
+    return False
 
 @pytest.fixture(scope='module')
 def wifi_config():
@@ -323,16 +325,17 @@ def wifi_config():
 
 
 @pytest.fixture(scope="function")
-def ip_address_wlan(request, deviceid, wifi_config):
+def ip_address_wlan(request, device_id, wifi_config):
     """
     IP address of the device connected to WLAN.
     Removes any configuration on the Device if not connected.
     :param request: PyTest command line request option
+    :param device_id: The ADB Device ID of the device under test
     :param wifi_config: ConfigParser object of Wireless configs
     :return: The IP Address of the attached Riviera Device
     """
-    riviera_device = rivieraUtils.RivieraUtils('ADB', device=deviceid, logger=LOGGER)
-    network_base = NetworkBase(None, device=deviceid, logger=LOGGER)
+    riviera_device = rivieraUtils.RivieraUtils('ADB', device=device_id, logger=LOGGER)
+    network_base = NetworkBase(None, device=device_id, logger=LOGGER)
 
     interface = 'wlan0'
     device_ip_address = None
@@ -360,7 +363,10 @@ def ip_address_wlan(request, deviceid, wifi_config):
         add_profile = "echo {} | nc 0 17000".format(add_profile)
         LOGGER.info("Adding Network Profile: %s", add_profile)
         riviera_device.communication.executeCommand(add_profile)
-        time.sleep(2)
+        time.sleep(5)
+        LOGGER.debug("Rebooting device to ensure added profile retains.")
+        riviera_device.communication.executeCommand('/opt/Bose/bin/PlatformReset')
+        time.sleep(20)
 
     device_ip_address = network_base.check_inf_presence(interface, timeout=20)
     if not device_ip_address:
