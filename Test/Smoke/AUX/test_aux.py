@@ -31,8 +31,8 @@ class TestAUX(object):
     Eddie Smoke Test Class
     """
 
-    @pytest.mark.usefixtures("adb", "frontDoor", "deviceid")
-    def test_aux_key(self, adb, frontDoor, deviceid):
+    @pytest.mark.usefixtures("adb", "frontDoor", "device_id")
+    def test_aux_key(self, adb, frontDoor, device_id):
         """
         :param adb: Fixture to return ADBCommunication object
         :param frontDoor: Fixture to return FrontDoor object
@@ -41,25 +41,25 @@ class TestAUX(object):
         - Press Bluetooth Key to switch source
         - Press AUX Key again and Validate
         """
-        riviera = RivieraUtils('ADB', device=deviceid)
-        device_utils.set_device_source('AUX', deviceid)
-        current_source, current_status = riviera.current_source_name_and_status(deviceid)
+        riviera = RivieraUtils('ADB', device=device_id)
+        device_utils.set_device_source('AUX', device_id)
+        current_source, current_status = riviera.current_source_name_and_status(device_id)
         if 'AUX' not in current_source:
             assert False, "AUX Key is not press"
         
-        device_utils.set_device_source('BLUETOOTH', deviceid)
-        current_source, current_status = riviera.current_source_name_and_status(deviceid)
+        device_utils.set_device_source('BLUETOOTH', device_id)
+        current_source, current_status = riviera.current_source_name_and_status(device_id)
         if 'BLUETOOTH' not in current_source:
             assert False, "Bluetooth Key is not press"
         
-        device_utils.set_device_source('AUX', deviceid)
-        current_source, current_status = riviera.current_source_name_and_status(deviceid)
+        device_utils.set_device_source('AUX', device_id)
+        current_source, current_status = riviera.current_source_name_and_status(device_id)
         if 'AUX' not in current_source:
             assert False, "AUX Key is not press"
 
     
-    @pytest.mark.usefixtures("adb", "frontDoor", "deviceid")
-    def test_aux_volume(self, adb, frontDoor, deviceid):
+    @pytest.mark.usefixtures("adb", "frontDoor", "device_id")
+    def test_aux_volume(self, adb, frontDoor, device_id):
         """
         :param adb: Fixture to return ADBCommunication object
         :param frontDoor: Fixture to return FrontDoor object
@@ -67,9 +67,9 @@ class TestAUX(object):
         - Press AUX Key and Validate
         - Press Volume Up and Down Key and validate volume
         """
-        riviera = RivieraUtils('ADB', device=deviceid)
-        device_utils.set_device_source('AUX', deviceid)
-        current_source, current_status = riviera.current_source_name_and_status(deviceid)
+        riviera = RivieraUtils('ADB', device=device_id)
+        device_utils.set_device_source('AUX', device_id)
+        current_source, current_status = riviera.current_source_name_and_status(device_id)
         if 'AUX' not in current_source:
             assert False, "AUX Key is not press"
 
@@ -103,12 +103,12 @@ class TestAUX(object):
         logger.debug("Volume Down : %s ", volume_down)
         assert volume_down < volume_actual, "Volume Down Key Press not happened"
 
-        current_source,current_state = riviera.current_source_name_and_status(deviceid)
+        current_source,current_state = riviera.current_source_name_and_status(device_id)
         if 'AUX' not in current_source:
             assert False, "AUX Key is not press"
 
-    @pytest.mark.usefixtures("adb", "frontDoor", "deviceid")
-    def test_aux_power_key(self, adb, frontDoor, deviceid):
+    @pytest.mark.usefixtures("adb", "frontDoor", "device_id")
+    def test_aux_power_key(self, adb, frontDoor, device_id):
         """
         :param adb: Fixture to return ADBCommunication object
         :param frontDoor: Fixture to return FrontDoor object
@@ -117,9 +117,9 @@ class TestAUX(object):
         - Press Power Key to put Eddie on Stand by
         - Press Power Key again to wake up Eddie and it should be on AUX mode
         """
-        riviera = RivieraUtils('ADB', device=deviceid)
-        device_utils.set_device_source('AUX', deviceid)
-        current_source, current_status = riviera.current_source_name_and_status(deviceid)
+        riviera = RivieraUtils('ADB', device=device_id)
+        device_utils.set_device_source('AUX', device_id)
+        current_source, current_status = riviera.current_source_name_and_status(device_id)
         if 'AUX' not in current_source:
             assert False, "AUX Key is not press"
 
@@ -132,13 +132,13 @@ class TestAUX(object):
         tap = pexpect.spawn("telnet %s 17000" % frontDoor._ip_address)
         KeyUtils.power_key_press(tap, 3000)
 
-        riviera = RivieraUtils('ADB', device=deviceid)
-        current_source,current_state = riviera.current_source_name_and_status(deviceid)
+        riviera = RivieraUtils('ADB', device=device_id)
+        current_source,current_state = riviera.current_source_name_and_status(device_id)
         if 'AUX' not in current_source:
             assert False, "AUX Key is not press"
 
-    @pytest.mark.usefixtures("adb", "frontDoor", "deviceid")
-    def test_aux_mute_key(self, adb, frontDoor, deviceid):
+    @pytest.mark.usefixtures("adb", "frontDoor", "device_id")
+    def test_aux_mute_key(self, adb, frontDoor, device_id):
         """
         :param adb: Fixture to return ADBCommunication object
         :param frontDoor: Fixture to return FrontDoor object
@@ -150,9 +150,9 @@ class TestAUX(object):
         - Press Bluetooth Key and Eddie Should automatically unmute
         - Press AUX Key and Eddie should unmuted
         """
-        riviera = RivieraUtils('ADB', device=deviceid)
-        device_utils.set_device_source('AUX', deviceid)
-        current_source, current_status = riviera.current_source_name_and_status(deviceid)
+        riviera = RivieraUtils('ADB', device=device_id)
+        device_utils.set_device_source('AUX', device_id)
+        current_source, current_status = riviera.current_source_name_and_status(device_id)
         if 'AUX' not in current_source:
             assert False, "AUX Key is not press"
         
@@ -183,13 +183,13 @@ class TestAUX(object):
         if not muted:
             assert False, "AUX mode not Muted"
 
-        device_utils.set_device_source('BLUETOOTH', deviceid)
-        current_source, current_status = riviera.current_source_name_and_status(deviceid)
+        device_utils.set_device_source('BLUETOOTH', device_id)
+        current_source, current_status = riviera.current_source_name_and_status(device_id)
         if 'BLUETOOTH' not in current_source:
             assert False, "Bluetooth Key is not press"
 
-        device_utils.set_device_source('AUX', deviceid)
-        current_source, current_status = riviera.current_source_name_and_status(deviceid)
+        device_utils.set_device_source('AUX', device_id)
+        current_source, current_status = riviera.current_source_name_and_status(device_id)
         if 'AUX' not in current_source:
             assert False, "AUX Key is not press"
 
