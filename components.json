@@ -9,7 +9,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-05-14_1431"
+    "selected_version": "Continuous/Castle-Fork/2018-05-15_1208"
   },
   {
     "name": "bose-opkg-utils",
@@ -125,7 +125,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@2cc2929faf927a552dc77838cbc6237a63a9f36e"
+    "selected_version": "master@317a8dbed8df21f83a1d897318339f0afc96b877"
   },
   {
     "name": "ProductUIAssets",
@@ -177,7 +177,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-05-14_1431"
+    "selected_version": "Continuous/Castle-Fork/2018-05-15_1208"
   },
   {
     "name": "SystemEventService-qc8017_32",
@@ -185,7 +185,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@fb3ff2dc72544a90e4fbd13edf2ca47f954c04d2"
+    "selected_version": "master@6aa83ecadcf08180091f4c11771993b07d9e4eeb"
   },
   {
     "name": "Webkit",
