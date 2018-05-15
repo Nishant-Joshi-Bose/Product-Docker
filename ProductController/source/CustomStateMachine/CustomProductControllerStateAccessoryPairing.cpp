@@ -142,9 +142,7 @@ bool CustomProductControllerStateAccessoryPairing::HandleIntentMuteControl( KeyH
 /// @brief  CustomProductControllerStateAccessoryPairing::HandleIntentPowerToggle
 ///
 /// @return This method returns a true Boolean value indicating that it handles the PowerToggle
-///         intent. The stop pairing action intent will be processed, which will in turn invoke the
-///         HandlePairingState method with a deactive status to transition from the accessory
-///         pairing state.
+///         intent by changing to an accessory pairing exiting state.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAccessoryPairing::HandleIntentPowerToggle( )
@@ -173,7 +171,6 @@ bool CustomProductControllerStateAccessoryPairing::HandlePairingState( ProductAc
 
         GetProductController( ).SendAllowSourceSelectMessage( true );
         GetProductController( ).SendStopPlaybackMessage( );
-        GetProductController( ).SendSassStopAllMessage( );
     }
 
     return true;

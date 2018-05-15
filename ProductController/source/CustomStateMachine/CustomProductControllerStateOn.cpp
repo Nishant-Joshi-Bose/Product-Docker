@@ -144,9 +144,22 @@ bool CustomProductControllerStateOn::HandleIntentSpeakerPairing( KeyHandlerUtil:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateOn::HandleIntentSetupBLERemote( )
 {
-    BOSE_INFO( s_logger, "The %s state is in %s", GetName( ).c_str( ), __func__ );
+    BOSE_INFO( s_logger, "The %s state is in %s: remote is %sconnected, network is %sconnected, ProductSettings %sreceived",
+               GetName( ).c_str( ), __func__ , GetCustomProductController().IsBLERemoteConnected() ? "" : "not ",
+               GetCustomProductController().GetNetworkServiceUtil().IsNetworkConnected() ? "" : "not ",
+               GetCustomProductController().IsProductSettingsReceived() ? "" : "not " );
 
-    if( !GetCustomProductController().GetNetworkServiceUtil().IsNetworkConnected() )
+    ///
+    /// @note Conditions for initiating pairing: this feature shall be disabled when: active bonded
+    ///       remote is connected or (active network connection and product associated with a My Bose
+    ///        account received)
+    ///
+    /// @todo IsProductSettingsReceived() is used as a proxy for "product associated with a My Bose account",
+    ///       see CASTLE-13960
+    ///
+    if( !( GetCustomProductController().IsBLERemoteConnected() ||
+           ( GetCustomProductController().GetNetworkServiceUtil().IsNetworkConnected() &&
+             GetCustomProductController().IsProductSettingsReceived() ) ) )
     {
         GetCustomProductController().PairBLERemote( MANUAL_BLE_REMOTE_PAIRING_TIMEOUT_SECONDS );
     }
