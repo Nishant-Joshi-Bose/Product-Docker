@@ -807,6 +807,18 @@ void ProfessorProductController::StopPairingBLERemote( )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   ProfessorProductController::IsBLERemoteConnected
+///
+/// @return true if the BLE remote is actively connected
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool ProfessorProductController::IsBLERemoteConnected( ) const
+{
+    return m_ProductBLERemoteManager->IsConnected();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::SetupProductSTSConntroller
 ///
 /// @brief  This method is called to perform the needed initialization of the ProductSTSController,
