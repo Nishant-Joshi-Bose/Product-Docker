@@ -129,6 +129,8 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
     const auto& nowSelection = m_ProductController.GetNowSelection( );
     std::string cicode;
 
+    bool ignoreCECKey = ( keyEvent.keyorigin( ) == LpmServiceMessages::KEY_ORIGIN_CEC );
+
     if( nowSelection.has_contentitem( ) )
     {
         auto sourceItem = m_ProductController.GetSourceInfo( ).FindSource( nowSelection.contentitem( ) );
@@ -142,6 +144,17 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
             }
 
             cicode = sourceDetails.cicode( );
+        }
+
+        // ignore CEC keys if we're not in TV or SLOT_* sources
+        if( source and ( source->sourcename().compare( "PRODUCT" ) == 0 ) and (
+                ( source->sourceaccountname().compare( "SLOT_0" ) == 0 ) or
+                ( source->sourceaccountname().compare( "SLOT_1" ) == 0 ) or
+                ( source->sourceaccountname().compare( "SLOT_2" ) == 0 ) or
+                ( source->sourceaccountname().compare( "TV" ) == 0 )
+            ) )
+        {
+            ignoreCECKey = false;
         }
     }
 
@@ -170,7 +183,8 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
         m_QSSClient->SendKey( request );
     }
 
-    return( isBlastedKey );
+
+    return( isBlastedKey || ignoreCECKey );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
