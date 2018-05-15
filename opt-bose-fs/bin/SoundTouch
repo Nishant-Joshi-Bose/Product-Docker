@@ -103,9 +103,9 @@ if (( $# >= 1 )) && [ "$1" = start ]; then
     init-audio
 
     cfg=/opt/Bose/etc/KeyConfiguration.json
-    if [ -e /mnt/nv/DemoModeOn ]; then
+    if [ -e /mnt/nv/product-persistence/DemoModeOn ]; then
         log info "--DEMO MODE--"
-        cfg=/mnt/nv/KeyConfiguration-demo.json
+        cfg=/mnt/nv/product-persistence/KeyConfiguration-demo.json
         if ! [ -e "$cfg" ]; then
             cfg=/opt/Bose/etc/KeyConfiguration-demo.json
         fi
@@ -244,6 +244,7 @@ if (( $# == 1 )) && [ "$1" = enterswup ]; then
         Shepherd-GalapagosClient.xml
         Shepherd-HTTPProxy.xml
         Shepherd-LPMService.xml
+        Shepherd-Monaco.xml
         Shepherd-NetManager.xml
         Shepherd-Passport.xml
         Shepherd-SASSController.xml
@@ -255,6 +256,7 @@ if (( $# == 1 )) && [ "$1" = enterswup ]; then
     shepherd-wait "$rundir" "$pidfile"
 
     # Special handling for dyz-shm started by run_wpe.sh (yuck).
+    # Delete this when we switch to Dinghy.
     killwait dyz-shm
 
     exit

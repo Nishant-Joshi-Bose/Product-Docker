@@ -9,13 +9,13 @@ from ..commonData import keyConfig
 logger = get_logger(__name__)
 
 @pytest.fixture(scope='class', autouse=True)
-def resetDemo(request, frontDoor, demoUtils, deviceid):
+def resetDemo(request, frontDoor, demoUtils, device_id):
     """
     reset demoMode False if True
     """
     def teardown():
         logger.info("set demoMode False towards the end of all the tests")
-        setDemo(request, frontDoor, demoUtils, deviceid)
+        setDemo(request, frontDoor, demoUtils, device_id)
     request.addfinalizer(teardown)
 
 @pytest.fixture(scope='class')
@@ -27,23 +27,23 @@ def demoUtils(frontDoor, adb):
     return DemoUtils(frontDoor, adb, logger)
 
 @pytest.fixture(scope='function', autouse=True)
-def setDemoOff(request, frontDoor, demoUtils, deviceid):
+def setDemoOff(request, frontDoor, demoUtils, device_id):
     """
     Set demoMode off and delete keyConfig
     """
     logger.info("setDemoOff")
-    setDemo(request, frontDoor, demoUtils, deviceid)
+    setDemo(request, frontDoor, demoUtils, device_id)
     demoUtils.deleteKeyConfig()
     demoUtils.verifyDemoKeyConfig("Error Reading configuration file")
 
-def setDemo(request, frontDoor, demoUtils, deviceid):
+def setDemo(request, frontDoor, demoUtils, device_id):
     """
     Set demoMode False if True
     """
     demoResponse = frontDoor.getDemoMode()
     logger.info("demoResponse " + str(demoResponse))
     if demoResponse == True:
-        demoUtils.setDemoMode(False, deviceid, True, 3, request.config.getoption("--network-iface"))
+        demoUtils.setDemoMode(False, device_id, True, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoMode(False)
 
 @pytest.fixture(scope='session')

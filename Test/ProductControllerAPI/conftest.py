@@ -53,7 +53,7 @@ def front_door_queue(request, ip_address_wlan):
 
 
 @pytest.fixture(scope='function')
-def device_in_aux(deviceid, front_door_queue):
+def device_in_aux(device_id, front_door_queue):
     """
     This fixture is used to change playing source to AUX and verifies the device state.
     Test steps:
@@ -61,7 +61,7 @@ def device_in_aux(deviceid, front_door_queue):
     2. Verify device state which should be "SELECTED".
     """
     # Change state to AUX play by pressing AUX button.
-    tap = adb_utils.adb_telnet_tap(deviceid)
+    tap = adb_utils.adb_telnet_tap(device_id)
     keypress.press_key(tap, Keys.AUX.value, 500)
     tap.close()
     time.sleep(2)
@@ -150,7 +150,7 @@ def device_playing_from_amazon(request, front_door_queue):
 
 
 @pytest.fixture(scope="function")
-def rebooted_and_out_of_booting_state_device(deviceid, adb):
+def rebooted_and_out_of_booting_state_device(device_id, adb):
     """
     This fixture is used to reboot the device and wait until device come out of 'Booting' state.
     """
@@ -177,7 +177,7 @@ def rebooted_and_out_of_booting_state_device(deviceid, adb):
 
     # Wait until product state come out from 'Booting' state.
     for _ in range(30):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
         if device_state != eddie_helper.BOOTING:
             break
         LOGGER.debug("Current device state : %s", device_state)
@@ -185,7 +185,7 @@ def rebooted_and_out_of_booting_state_device(deviceid, adb):
 
 
 @pytest.fixture(scope="class")
-def set_no_audio_timeout(deviceid, adb):
+def set_no_audio_timeout(device_id, adb):
     """
     This fixture changes "NoAudioTimeout" param to test NetworkStandby state transition.
     Test steps:
@@ -201,16 +201,16 @@ def set_no_audio_timeout(deviceid, adb):
     adb.executeCommand("sed 's/\\\"NoAudioTimeout\\\": 20,/\\\"NoAudioTimeout\\\": 1,/' -i {}".format(timer_file))
     adb.executeCommand('sync')
     # 2. Reboot and wait for CLI-Server to start and device state get out of Booting.
-    rebooted_and_out_of_booting_state_device(deviceid, adb)
+    rebooted_and_out_of_booting_state_device(device_id, adb)
 
     # 3. Wait until product state set to 'SetupOther' or 'SetupNetwork' state.
     for _ in range(30):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
         if device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK]:
             break
         time.sleep(1)
 
-    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
     assert device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK], \
         'Device should be in {} or {} state. Current state : {}'.format(eddie_helper.SETUPOTHER,
                                                                         eddie_helper.SETUPNETWORK, device_state)
@@ -221,11 +221,11 @@ def set_no_audio_timeout(deviceid, adb):
     adb.executeCommand("sed 's/\\\"NoAudioTimeout\\\": 1,/\\\"NoAudioTimeout\\\": 20,/' -i {}".format(timer_file))
     adb.executeCommand('sync')
     # 5. Reboot and wait for CLI-Server to start and device state get out of Booting.
-    rebooted_and_out_of_booting_state_device(deviceid, adb)
+    rebooted_and_out_of_booting_state_device(device_id, adb)
 
 
 @pytest.fixture(scope="function")
-def remove_oob_setup_state_and_reboot_device(deviceid, adb):
+def remove_oob_setup_state_and_reboot_device(device_id, adb):
     """
     This fixture is used to remove "/mnt/nv/product-persistence/SystemSetupDone" file and reboot the device.
     """
@@ -234,16 +234,16 @@ def remove_oob_setup_state_and_reboot_device(deviceid, adb):
     adb.executeCommand("/opt/Bose/bin/rw")
     adb.executeCommand("rm {}".format(oob_setup_file))
     adb.executeCommand('sync')
-    rebooted_and_out_of_booting_state_device(deviceid, adb)
+    rebooted_and_out_of_booting_state_device(device_id, adb)
 
     # Wait until product state set to 'SetupOther' or 'SetupNetwork' state.
     for _ in range(30):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
         if device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK]:
             break
         time.sleep(1)
 
-    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
     assert device_state in [eddie_helper.SETUPOTHER, eddie_helper.SETUPNETWORK], \
         'Device should be in {} or {} state. Current state : {}'.format(eddie_helper.SETUPOTHER,
                                                                         eddie_helper.SETUPNETWORK, device_state)

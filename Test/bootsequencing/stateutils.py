@@ -21,12 +21,8 @@ from CastleTestUtils.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.RivieraUtils.commonException import ADBCommandFailure
 from CastleTestUtils.RivieraUtils.rivieraCommunication import ADBCommunication
-from pyadb import ADB
 
-adb = ADB('/usr/bin/adb')
-logger = get_logger(__name__)
-
-
+LOGGER = get_logger(__name__)
 UNKNOWN = 'UNKNOWN'
 
 
@@ -83,7 +79,7 @@ def network_checker(network_connection, maximum_time, data, device_id):
     if not ip_address or not is_ip_address(ip_address):
         ip_address = UNKNOWN
 
-    logger.info('Acquired IP {} in {:.2f}s.'.format(ip_address, run_time))
+    LOGGER.info('Acquired IP {} in {:.2f}s.'.format(ip_address, run_time))
 
     data['ip'] = {'address': ip_address, 'start': start_time, 'end': end_time,
                   'duration': run_time}
@@ -116,7 +112,11 @@ def state_checker(ip_address, run_time, data, delay=5):
     # Iterate while we are still less than the run-time
     while (time.time() - start_time) < run_time:
         current_time = time.time()
-        state = str(api.getState())
+        try:
+            state = str(api.getState())
+        except KeyError:
+            LOGGER.warn("API did not return its state properly.")
+            continue
 
         # Put all information regarding the state into the thread safe dictionary
         if state in data['state'].keys():
@@ -131,37 +131,11 @@ def state_checker(ip_address, run_time, data, delay=5):
 
     data['state']['end'] = time.time()
     number_states = len([key for key in data['state'].keys() if key not in ['start', 'end']])
-    logger.info('State collection ran for {0:.2f}s and collected {1} state(s).'
+    LOGGER.info('State collection ran for {0:.2f}s and collected {1} state(s).'
                 .format(data['state']['end'] - data['state']['start'], number_states))
 
     # We need to close the WebSocket correctly
     if api:
         api.close()
-
-    return data
-
-
-def reboot_checker(data, device_id):
-    """
-    Will attempt to reboot the system and acquire the time taken to do it.
-    Reboot is only based upon the ADB being able to see the device.
-
-    :param data: A dictionary that is shared for Multiprocessing
-    :param device_id: String Android Device ID
-    :return: The updated data dictionary
-    """
-    adb.set_target_device(device=device_id)
-
-    reboot_start = time.time()
-
-    adb.run_cmd('reboot')
-    adb.wait_for_device()
-
-    reboot_end = time.time()
-    reboot_time = reboot_end - reboot_start
-
-    data['reboot'] = {'start': reboot_start, 'end': reboot_end, 'duration': reboot_time}
-
-    logger.info('Reboot of target completed and took {:.2f}s'.format(reboot_time))
 
     return data

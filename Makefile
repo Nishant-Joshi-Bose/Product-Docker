@@ -60,6 +60,10 @@ cmake_build: generated_sources | $(BUILDS_DIR) astyle
 	cd $(BUILDS_DIR) && cmake -DCFG=$(cfg) -DSDK=$(sdk) $(CURDIR) -DUSE_CCACHE=$(CMAKE_USE_CCACHE)
 	$(MAKE) -C $(BUILDS_DIR) -j $(jobs) install
 
+.PHONY: minimal-product-tar
+minimal-product-tar: cmake_build
+	./scripts/create-minimal-product-tar
+
 .PHONY: product-ipk
 product-ipk: cmake_build
 	./scripts/create-product-ipk
@@ -68,26 +72,28 @@ product-ipk: cmake_build
 privateKeyFilePath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev.p12
 privateKeyPasswordPath = $(BOSE_WORKSPACE)/keys/development/privateKey/dev_p12.pass
 
-IPKS = monaco.ipk product.ipk lpm_updater.ipk
-PACKAGENAMES = monaco SoundTouch lpm_updater
+IPKS = recovery.ipk monaco.ipk product.ipk lpm_updater.ipk
+PACKAGENAMES = SoundTouchRecovery monaco SoundTouch lpm_updater
 
 .PHONY: package-no-hsp
 package-no-hsp: packages-gz
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES) -i $(IPKS) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update_no_hsp.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
-IPKS_HSP = hsp.ipk monaco.ipk product.ipk lpm_updater.ipk
-PACKAGENAMES_HSP = hsp monaco SoundTouch lpm_updater
+#Create one more Zip file for Bonjour / Local update with HSP 
+#- This is temporary, till DP2 boards are not available.
+IPKS_HSP = recovery.ipk hsp.ipk monaco.ipk product.ipk lpm_updater.ipk
+PACKAGENAMES_HSP = SoundTouchRecovery hsp monaco SoundTouch lpm_updater
 
 .PHONY: package-with-hsp
 package-with-hsp: packages-gz-with-hsp
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && python2.7 $(SOFTWARE_UPDATE_DIR)/make-update-zip.py -n $(PACKAGENAMES_HSP) -i $(IPKS_HSP) -s $(BOSE_WORKSPACE)/builds/$(cfg) -d $(BOSE_WORKSPACE)/builds/$(cfg) -o product_update.zip -k $(privateKeyFilePath) -p $(privateKeyPasswordPath)
 
 .PHONY: packages-gz
-packages-gz: product-ipk monaco-ipk hsp-ipk lpmupdater-ipk
+packages-gz: product-ipk monaco-ipk hsp-ipk lpmupdater-ipk recovery-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS)
 
 .PHONY: packages-gz-with-hsp
-packages-gz-with-hsp: product-ipk monaco-ipk hsp-ipk lpmupdater-ipk
+packages-gz-with-hsp: monaco-ipk product-ipk hsp-ipk lpmupdater-ipk recovery-ipk
 	cd $(BOSE_WORKSPACE)/builds/$(cfg) && $(SOFTWARE_UPDATE_DIR)/make-packages-gz.sh Packages.gz $(IPKS_HSP)
 
 .PHONY: graph
@@ -108,6 +114,10 @@ endif
 	rm -f ./builds/$(cfg)/eddie_package*.bos
 	rm -f ./builds/$(cfg)/lpm_eddie*.hex
 	scripts/create-lpm-package ./builds/$(cfg)/ $(BUILD_TYPE)
+
+.PHONY: recovery-ipk
+recovery-ipk: cmake_build minimal-product-tar
+	./scripts/create-recovery-ipk
 
 .PHONY: lpmupdater-ipk
 lpmupdater-ipk: lpm-bos

@@ -25,7 +25,7 @@ import eddie_helper
 logger = get_logger(os.path.basename(__file__))
 
 
-def get_and_verify_system_state(deviceid, front_door_queue):
+def get_and_verify_system_state(device_id, front_door_queue):
     """
     Common function to get system state and verify response.
     Test Steps:
@@ -51,7 +51,7 @@ def get_and_verify_system_state(deviceid, front_door_queue):
 
     # 3. Change state to Idle by pressing Play/Pause button for 2 seconds.
     logger.info("Testing notification of system state for IDLE")
-    tap = adb_utils.adb_telnet_tap(deviceid)
+    tap = adb_utils.adb_telnet_tap(device_id)
     keypress.press_key(tap, Keys.MULTIFUNCTION.value, 2000)
     time.sleep(2)
 
@@ -71,8 +71,8 @@ def get_and_verify_system_state(deviceid, front_door_queue):
         'Device should be in {} state. Current state : {}'.format(eddie_helper.SELECTED, notif_resp["state"])
 
 
-@pytest.mark.usefixtures('deviceid', 'device_playing_from_amazon')
-def test_system_state_playing_from_amazon(deviceid, device_playing_from_amazon):
+@pytest.mark.usefixtures('device_id', 'device_playing_from_amazon')
+def test_system_state_playing_from_amazon(device_id, device_playing_from_amazon):
     """
     Test for GET method of system state api while playing from Amazon MSP
     Test Steps:
@@ -85,7 +85,7 @@ def test_system_state_playing_from_amazon(deviceid, device_playing_from_amazon):
     time.sleep(5)
 
     # 2. Get system info and verify response.
-    get_and_verify_system_state(deviceid, front_door_queue)
+    get_and_verify_system_state(device_id, front_door_queue)
 
     # 3. Verify MSP source is available and wait for music to play.
     logger.info("verify_device_source")
@@ -96,8 +96,8 @@ def test_system_state_playing_from_amazon(deviceid, device_playing_from_amazon):
     logger.debug("Now Playing : " + str(now_playing))
 
 
-@pytest.mark.usefixtures('deviceid', 'front_door_queue', 'device_in_aux')
-def test_system_state_playing_from_aux(deviceid, front_door_queue):
+@pytest.mark.usefixtures('device_id', 'front_door_queue', 'device_in_aux')
+def test_system_state_playing_from_aux(device_id, front_door_queue):
     """
     Test for GET method of system state api while playing from AUX
     Test Steps:
@@ -107,11 +107,11 @@ def test_system_state_playing_from_aux(deviceid, front_door_queue):
     # 1. Change playing source to AUX and verifies the device state from fixture.
 
     # 2. Get system state and verify response.
-    get_and_verify_system_state(deviceid, front_door_queue)
+    get_and_verify_system_state(device_id, front_door_queue)
 
 
-@pytest.mark.usefixtures('set_no_audio_timeout', 'deviceid', 'front_door_queue')
-def test_system_state_network_standby(deviceid, front_door_queue):
+@pytest.mark.usefixtures('set_no_audio_timeout', 'device_id', 'front_door_queue')
+def test_system_state_network_standby(device_id, front_door_queue):
     """
     Test for GET method of system state api while in network standby
     Test Steps:
@@ -139,7 +139,7 @@ def test_system_state_network_standby(deviceid, front_door_queue):
 
     # 3. Change state to Idle by pressing Play/Pause button for 2 seconds.
     logger.info("Testing notification of system state for IDLE")
-    tap = adb_utils.adb_telnet_tap(deviceid)
+    tap = adb_utils.adb_telnet_tap(device_id)
     keypress.press_key(tap, Keys.MULTIFUNCTION.value, 2000)
     time.sleep(2)
 
@@ -176,8 +176,8 @@ def test_system_state_network_standby(deviceid, front_door_queue):
                                                                   response["body"]["state"])
 
 
-@pytest.mark.usefixtures('deviceid', 'adb', 'front_door_queue')
-def test_system_state_factory_default(deviceid, adb, front_door_queue):
+@pytest.mark.usefixtures('device_id', 'adb', 'front_door_queue')
+def test_system_state_factory_default(device_id, adb, front_door_queue):
     """
     Test for system state notification for factory default state
     Test Steps:
@@ -203,7 +203,7 @@ def test_system_state_factory_default(deviceid, adb, front_door_queue):
         'Device should be in {} state. Current state : {}'.format(eddie_helper.SELECTED, response["body"]["state"])
 
     # 3. Generate factoryDefault action using CLI Command.
-    tap = adb_utils.adb_telnet_tap(deviceid)
+    tap = adb_utils.adb_telnet_tap(device_id)
     keypress.key_press_only(tap, [Keys.AUX.value, Keys.VOLUME_DOWN.value], async_response=True)
 
     # 4. Wait for minimum 10 seconds to launch factoryDefault action.
@@ -236,18 +236,18 @@ def test_system_state_factory_default(deviceid, adb, front_door_queue):
         time.sleep(1)
 
     for _ in range(30):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
         if device_state == eddie_helper.SETUPNETWORK:
             break
         time.sleep(1)
 
-    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
     assert device_state == eddie_helper.SETUPNETWORK, \
         'Device should be in {} state. Current state : {}'.format(eddie_helper.SETUPNETWORK, device_state)
 
 
-@pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'deviceid', 'front_door_queue')
-def test_system_state_setup_state(deviceid, front_door_queue):
+@pytest.mark.usefixtures('remove_oob_setup_state_and_reboot_device', 'device_id', 'front_door_queue')
+def test_system_state_setup_state(device_id, front_door_queue):
     """
     Test for GET method of system state api after rebooting the device and from SetupOther state
     Test Steps:
@@ -258,4 +258,4 @@ def test_system_state_setup_state(deviceid, front_door_queue):
     eddie_helper.check_if_end_point_exists(front_door_queue, eddie_helper.SYSTEM_STATE_API)
 
     # 2. Get system state and verify response.
-    get_and_verify_system_state(deviceid, front_door_queue)
+    get_and_verify_system_state(device_id, front_door_queue)

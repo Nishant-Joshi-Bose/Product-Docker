@@ -314,8 +314,8 @@ def test_system_power_control_sts_playing(device_playing_from_amazon):
     logger.debug("Now Playing : " + str(now_playing))
 
 
-@pytest.mark.usefixtures('deviceid', 'front_door_queue', 'device_in_aux')
-def test_system_power_control_notification_in_aux(deviceid, front_door_queue):
+@pytest.mark.usefixtures('device_id', 'front_door_queue', 'device_in_aux')
+def test_system_power_control_notification_in_aux(device_id, front_door_queue):
     """
     Test for system power control api notification while playing from AUX and change state using keys.
     Test Steps:
@@ -338,7 +338,7 @@ def test_system_power_control_notification_in_aux(deviceid, front_door_queue):
 
     # 2. Change state to Idle by pressing Play/Pause button for 2 seconds.
     logger.info("Testing notification of system power state for value OFF")
-    tap = adb_utils.adb_telnet_tap(deviceid)
+    tap = adb_utils.adb_telnet_tap(device_id)
     keypress.press_key(tap, Keys.MULTIFUNCTION.value, 2000)
     time.sleep(2)
 
@@ -366,8 +366,8 @@ def test_system_power_control_notification_in_aux(deviceid, front_door_queue):
         'Device should be in {} state. Current state : {}'.format(eddie_helper.SELECTED, state)
 
 
-@pytest.mark.usefixtures('deviceid', 'device_playing_from_amazon')
-def test_system_power_control_notification_in_sts(deviceid, device_playing_from_amazon):
+@pytest.mark.usefixtures('device_id', 'device_playing_from_amazon')
+def test_system_power_control_notification_in_sts(device_id, device_playing_from_amazon):
     """
     Test for system power control api notification while playing playing from Amazon MSP and change state using keys.
     Test Steps:
@@ -396,7 +396,7 @@ def test_system_power_control_notification_in_sts(deviceid, device_playing_from_
 
     # 3. Change state to Idle by pressing Play/Pause button for 2 seconds.
     logger.info("Testing notification of system power state for value OFF")
-    tap = adb_utils.adb_telnet_tap(deviceid)
+    tap = adb_utils.adb_telnet_tap(device_id)
     keypress.press_key(tap, Keys.MULTIFUNCTION.value, 2000)
     time.sleep(2)
 

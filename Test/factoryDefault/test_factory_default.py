@@ -98,8 +98,8 @@ def test_factory_default_cancel_with_button_event(frontdoor_wlan, tap, cancel_du
     assert state == factory_utils.EVENT_STATE_CANCEL, 'Got Invalid FactoryDefault event state : {}'.format(state)
 
 
-@pytest.mark.usefixtures('deviceid', 'adb', 'frontdoor_wlan', 'tap', 'router')
-def test_factory_default_success(deviceid, adb, frontdoor_wlan, tap, router):
+@pytest.mark.usefixtures('device_id', 'adb', 'frontdoor_wlan', 'tap', 'router')
+def test_factory_default_success(device_id, adb, frontdoor_wlan, tap, router):
     """
     Test to determine that factory default performs and reboots the device.
     Test Steps:
@@ -161,7 +161,7 @@ def test_factory_default_success(deviceid, adb, frontdoor_wlan, tap, router):
     # 9. Check for product state which should be 'SetupNetwork'.
     device_state = None
     for _ in range(30):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
         if device_state == eddie_helper.SETUPNETWORK:
             break
         LOGGER.debug('Got state: %s', device_state)
@@ -185,12 +185,12 @@ def test_factory_default_success(deviceid, adb, frontdoor_wlan, tap, router):
     LOGGER.debug("Sending telnet command to add wifi profile %s", wifi_add_profiles_command)
 
     adb_utils.adb_telnet_cmd(wifi_add_profiles_command, expect_after='->OK', expect_last='ADD_PROFILE_SUCCEEDED',
-                             async_response=True, device_id=deviceid)
+                             async_response=True, device_id=device_id)
 
     # 13. Check for product state which should be 'SetupOther'.
     device_state = None
     for _ in range(10):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
         if device_state == eddie_helper.SETUPOTHER:
             break
         LOGGER.debug('Got state: %s', device_state)
@@ -204,9 +204,9 @@ def test_factory_default_success(deviceid, adb, frontdoor_wlan, tap, router):
         '/mnt/nv/product-persistence/FirstBootGreetingDone should be created in SetupOther.'
 
 
-@pytest.mark.usefixtures('deviceid', 'adb', 'frontdoor_wlan', 'tap', 'router')
+@pytest.mark.usefixtures('device_id', 'adb', 'frontdoor_wlan', 'tap', 'router')
 @pytest.mark.parametrize("selected_source", [Keys.BLUETOOTH.value, Keys.AUX.value])
-def test_factory_default_selected_state(deviceid, adb, frontdoor_wlan, tap, selected_source, router):
+def test_factory_default_selected_state(device_id, adb, frontdoor_wlan, tap, selected_source, router):
     """
     Test to determine that factory default performs from SELECTED state and reboots the device.
     Test Steps:
@@ -238,11 +238,11 @@ def test_factory_default_selected_state(deviceid, adb, frontdoor_wlan, tap, sele
         'Device should be in {} state. Current state : {}'.format(eddie_helper.SELECTED, state)
 
     # [3-11]. call test_factory_default_success
-    test_factory_default_success(deviceid, adb, frontdoor_wlan, tap, router)
+    test_factory_default_success(device_id, adb, frontdoor_wlan, tap, router)
 
 
-@pytest.mark.usefixtures('deviceid', 'adb', 'frontdoor_wlan', 'tap', 'router')
-def test_factory_default_idle_state(deviceid, adb, frontdoor_wlan, tap, router):
+@pytest.mark.usefixtures('device_id', 'adb', 'frontdoor_wlan', 'tap', 'router')
+def test_factory_default_idle_state(device_id, adb, frontdoor_wlan, tap, router):
     """
     Test to determine that factory default performs from IDLE state and reboots the device.
     Test Steps:
@@ -274,11 +274,11 @@ def test_factory_default_idle_state(deviceid, adb, frontdoor_wlan, tap, router):
         'Device should be in {} state. Current state : {}'.format(eddie_helper.IDLE, state)
 
     # [3-11]. call test_factory_default_success
-    test_factory_default_success(deviceid, adb, frontdoor_wlan, tap, router)
+    test_factory_default_success(device_id, adb, frontdoor_wlan, tap, router)
 
 
-@pytest.mark.usefixtures('deviceid', 'adb', 'frontdoor_wlan', 'tap', 'device_playing_from_amazon', 'router')
-def test_factory_default_sts_play_state(deviceid, adb, frontdoor_wlan, tap, router):
+@pytest.mark.usefixtures('device_id', 'adb', 'frontdoor_wlan', 'tap', 'device_playing_from_amazon', 'router')
+def test_factory_default_sts_play_state(device_id, adb, frontdoor_wlan, tap, router):
     """
     Test to determine that factory default performs from SELECTED(play from amazon) state and reboots the device.
     Test Steps:
@@ -306,4 +306,4 @@ def test_factory_default_sts_play_state(deviceid, adb, frontdoor_wlan, tap, rout
         'Device should be in {} state. Current state : {}'.format(eddie_helper.SELECTED, state)
 
     # [3-11]. call test_factory_default_success
-    test_factory_default_success(deviceid, adb, frontdoor_wlan, tap, router)
+    test_factory_default_success(device_id, adb, frontdoor_wlan, tap, router)
