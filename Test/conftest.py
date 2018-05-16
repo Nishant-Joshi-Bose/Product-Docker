@@ -457,3 +457,31 @@ def rebooted_and_networked_device(request, adb, device_id, ip_address_wlan):
     reboot_information.update(collection_dict.copy())
 
     yield reboot_information
+
+@pytest.fixture(scope='function')
+def force_rndis(adb, device_id, request):
+    """
+    This fixture enables ADB in PTS mode by creating /mnt/nv/force-rndis
+    Reboots the system and checks for rndis0 in the "ifconfig" list
+    param: adb - ADB instance
+    param: device_id - This fixture will return the device id
+    """
+    LOGGER.info("force_rndis")
+    command = "touch /mnt/nv/force-rndis"
+    adb.executeCommand(command)
+    adb.rebootDevice()
+    adb.waitforDevice()
+    network_base = NetworkBase(None, device=device_id, logger=LOGGER)
+    interface = request.config.getoption("--network-iface")
+    device_ip_address = None
+    try:
+        device_ip_address = network_base.check_inf_presence(interface, timeout=300)
+        LOGGER.info("Found Device IP: %s", device_ip_address)
+    except UnboundLocalError as exception:
+        LOGGER.warning("Not able to acquire IP Address: %s", exception)
+    network_interface_list_command = "ifconfig | sed 's/[ \t].*//;/^$/d'"
+    output = adb.executeCommand(network_interface_list_command)
+    network_list = output.strip().replace('\r', '').split('\n')
+    LOGGER.info(network_list)
+    if 'rndis0' not in network_list:
+        raise Exception('rndis0 interface not in the list')

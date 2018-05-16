@@ -17,7 +17,7 @@ import pytest
 @pytest.fixture
 def chrome_options(chrome_options):
     """
-    This fixture would enable headless for all Chrome instances
+    This fixture would enable GUI mode for all Chrome instances
     """
-    chrome_options.add_argument('headless')
+    chrome_options.add_argument('--start-maximized')
     return chrome_options
