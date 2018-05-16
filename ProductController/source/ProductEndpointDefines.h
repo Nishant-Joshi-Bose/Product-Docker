@@ -53,6 +53,7 @@
 #define FRONTDOOR_AUDIO_SURROUND_API                    "/audio/surround"
 #define FRONTDOOR_AUDIO_SURROUNDDELAY_API               "/audio/surroundDelay"
 #define FRONTDOOR_AUDIO_TREBLE_API                      "/audio/treble"
+#define FRONTDOOR_AUDIO_VOLUME                          "/audio/volume"
 #define FRONTDOOR_CEC_API                               "/cec"
 #define FRONTDOOR_SYSTEM_POWER_MODE_OPTICALAUTOWAKE_API "/system/power/mode/opticalAutoWake"
 #define FRONTDOOR_UI_ALIVE                              "/ui/alive"

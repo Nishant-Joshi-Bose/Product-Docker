@@ -30,6 +30,7 @@
 #include "ProductControllerHsm.h"
 #include "ProfessorProductController.h"
 #include "ProductControllerState.h"
+#include "ProductEndpointDefines.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -57,6 +58,26 @@ CustomProductControllerStatePlayable::CustomProductControllerStatePlayable( Prod
     : ProductControllerStatePlayable( hsm, pSuperState, stateId, name )
 {
     BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name CustomProductControllerStatePlayable::HandleStateEnter
+///
+/// @brief The volume level expected upon exit into PLAYING is set, so that API queries would report
+///        the value that would be enforced
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStatePlayable::HandleStateEnter( )
+{
+    ProductControllerStatePlayable::HandleStateEnter( );
+
+    BOSE_INFO( s_logger, "The %s state is in %s", GetName( ).c_str( ), __func__ );
+
+    SoundTouchInterface::volume v;
+    v.set_value( GetCustomProductController( ).GetDesiredPlayingVolume( ) );
+    GetCustomProductController( ).GetFrontDoorClient( )->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
+        FRONTDOOR_AUDIO_VOLUME, v, {}, FrontDoorErrorCallback );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -819,6 +819,49 @@ bool ProfessorProductController::IsBLERemoteConnected( ) const
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   ProfessorProductController::GetDesiredPlayingVolume
+///
+/// @return int32_t the desired volume level
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+int32_t ProfessorProductController::GetDesiredPlayingVolume( )
+{
+    constexpr int32_t VOLUME_MIN_THRESHOLD = 10;
+    constexpr int32_t VOLUME_MAX_THRESHOLD = 70;
+    constexpr int32_t VOLUME_ON_BOOT_VALUE = 26;
+
+    int32_t desiredVolume = VOLUME_ON_BOOT_VALUE; // assume this is the initial after-boot query
+    static bool doOnce = true;
+    if( doOnce )
+    {
+        doOnce = false;
+    }
+    else
+    {
+        if( m_cachedVolume.has_value() )
+        {
+            // vet against the threshold values
+            if( m_cachedVolume.value( ) < VOLUME_MIN_THRESHOLD )
+            {
+                desiredVolume = VOLUME_MIN_THRESHOLD;
+            }
+            else if( m_cachedVolume.value( ) > VOLUME_MAX_THRESHOLD )
+            {
+                desiredVolume = VOLUME_MAX_THRESHOLD;
+            }
+            else
+            {
+                desiredVolume = m_cachedVolume.value( );
+            }
+        }
+    }
+
+    BOSE_DEBUG( s_logger, "%s returning %d", __func__, desiredVolume );
+    return desiredVolume;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::SetupProductSTSConntroller
 ///
 /// @brief  This method is called to perform the needed initialization of the ProductSTSController,
@@ -916,6 +959,22 @@ void ProfessorProductController::HandleUiHeartBeat(
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @brief ProfessorProductController::HandleAudioVolumeNotification
+///
+/// @param const SoundTouchInterface::volume& volume
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::HandleAudioVolumeNotification( const SoundTouchInterface::volume& volume )
+{
+    BOSE_INFO( s_logger, "%s received %s: %s", __func__, FRONTDOOR_AUDIO_VOLUME, ProtoToMarkup::ToJson( volume ).c_str() );
+
+    m_cachedVolume = volume;
+    m_ProductCecHelper->HandleFrontDoorVolume( volume );
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name   ProfessorProductController::RegisterFrontDoorEndPoints
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -975,6 +1034,19 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
             FrontDoor::PUBLIC,
             FRONTDOOR_PRODUCT_CONTROLLER_VERSION,
             FRONTDOOR_PRODUCT_CONTROLLER_GROUP_NAME );
+    }
+    {
+        //Audio volume callback for notifications
+        AsyncCallback< SoundTouchInterface::volume >
+        audioVolumeCb( std::bind( &ProfessorProductController::HandleAudioVolumeNotification,
+                                  this,
+                                  std::placeholders::_1 ),
+                       GetTask( ) );
+
+        //Audio volume notification registration
+        m_FrontDoorClientIF->RegisterNotification< SoundTouchInterface::volume >(
+            FRONTDOOR_AUDIO_VOLUME,
+            audioVolumeCb );
     }
 }
 

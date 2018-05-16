@@ -55,6 +55,7 @@ public:
 
     }
 
+    void HandleStateEnter( )                                                        override;
     bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )  override;
 };
 

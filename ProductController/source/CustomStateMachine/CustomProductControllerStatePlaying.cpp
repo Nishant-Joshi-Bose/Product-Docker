@@ -30,6 +30,7 @@
 #include "ProductControllerState.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProfessorProductController.h"
+#include "ProductEndpointDefines.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -75,7 +76,12 @@ void CustomProductControllerStatePlaying::HandleStateEnter( )
 
     BOSE_INFO( s_logger, "The %s state is in %s powering CEC on.", GetName( ).c_str( ), __func__ );
     GetCustomProductController( ).GetCecHelper( )->PowerOn( );
-    GetCustomProductController( ).GetDspHelper()->SetNormalOperationsMonitor( true );
+    GetCustomProductController( ).GetDspHelper( )->SetNormalOperationsMonitor( true );
+
+    SoundTouchInterface::volume v;
+    v.set_value( GetCustomProductController( ).GetDesiredPlayingVolume( ) );
+    GetCustomProductController( ).GetFrontDoorClient( )->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
+        FRONTDOOR_AUDIO_VOLUME, v, {}, FrontDoorErrorCallback );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

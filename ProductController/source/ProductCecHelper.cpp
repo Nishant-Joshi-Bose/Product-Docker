@@ -49,12 +49,6 @@ const std::string s_ModeAltOn      = "AltOn";
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 namespace ProductApp
 {
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// The following constants define FrontDoor endpoints used by the VolumeManager
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr char  FRONTDOOR_AUDIO_VOLUME[ ]           = "/audio/volume";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -108,14 +102,6 @@ bool ProductCecHelper::Run( )
         FRONTDOOR_CONTENT_NOWPLAYING_API,
         callback );
 
-
-    auto fNotify = [ this ]( SoundTouchInterface::volume v )
-    {
-        HandleFrontDoorVolume( v );
-    };
-
-    m_FrontDoorClient->RegisterNotification< SoundTouchInterface::volume >
-    ( FRONTDOOR_AUDIO_VOLUME, fNotify );
 
     auto getFunc = [ this ]( const Callback< const CecModeResponse>& resp,
                              const Callback<FrontDoor::Error>& errorRsp )
