@@ -9,7 +9,7 @@
   },
   {
     "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/0.3.7-1+gb23c5a5"
+    "selected_version": "Release/master/v0.4.0-0+b23c5a5"
   },
   {
     "name": "A4VVideoManagerService",
@@ -57,7 +57,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/0.4.4-275+8abd19e"
+    "selected_version": "Release/develop/0.4.4-281+5a39793"
   },
   {
     "name": "CastleLibs-native",
@@ -97,7 +97,7 @@
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Release/master/0.4.7-21+32f89da"
+    "selected_version": "Release/master/0.4.8-38+b667f0a"
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
@@ -141,7 +141,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@8cbe79305c0f23eb0d4675a16c0dc7b9937ad8db"
+    "selected_version": "master@143babf25b80b569011c65e3116300024e9575cd"
   },
   {
     "name": "ProductUIAssets",
@@ -165,7 +165,7 @@
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@1983"
+    "selected_version": "trunk@2542"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
