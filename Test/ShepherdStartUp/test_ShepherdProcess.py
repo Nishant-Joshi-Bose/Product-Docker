@@ -13,8 +13,10 @@ This file is to test Shephed Processes
 import time
 import logging
 import ConfigParser
+
 import pytest
 import pytest_dependency
+
 from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
 from CastleTestUtils.SoftwareUpdateUtils.BonjourUpdateScripts.bonjourUpdate import BonjourUpdateUtils
 from CastleTestUtils.RivieraUtils.rivieraCommunication import ADBCommunication
@@ -80,18 +82,18 @@ def PerformBonjourUpdate(adb, zip_file, device):
     try:
         while(time.time() - starttime) < _timeout:
             try:
-                deviceIP = adb.getIPAddress()
-                logger.info("Device IP : " + deviceIP)
+                device_ip_address = adb.getIPAddress()
+                logger.info("Device IP : " + device_ip_address)
                 break
-            except Exception as e:
-                logger.info("Getting IP Address.... " + str(e))
+            except Exception as error:
+                logger.info("Getting IP Address.... " + str(error))
                 continue
         bonjour_util = BonjourUpdateUtils(device=device)
         try:
-            bonjour_util.upload_zipfile(zip_file, deviceIP)
-        except SystemExit as e:
-            logger.info("System Exit Exception in Bonjour Update .... " + str(e))
+            bonjour_util.upload_zipfile(zip_file, device_ip_address)
+        except SystemExit as error:
+            logger.info("System Exit Exception in Bonjour Update .... " + str(error))
             return True
-    except Exception as e:
-        logger.info("Exception in Bonjour Update .... " + str(e))
+    except Exception as error:
+        logger.info("Exception in Bonjour Update .... " + str(error))
         return False

@@ -1,36 +1,60 @@
-Install Python modules
-----------------------
+# Eddie Factory Default Tests
 
+## Setting Up Test Environment
+
+Clone the Eddie Repository:
+```bash
+# Clone the respository
+git clone git@github.com:BoseCorp/Eddie.git
+cd Eddie
 ```
-$ sudo pip install -r ../requirements.txt
+All steps assume your are in the directory of your Eddie repository (`$EDDIE_DIR`).
+
+Generate a Virtual Environment and install used packages.
+```bash
+cd $EDDIE_DIR/Test
+
+# Setup your virtual environment
+virutalenv -p /usr/bin/python2.7 .venv
+source $EDDIE_DIR/Test/.venv/bin/activate
+
+# Install current Python requirements
+pip install --requirement requirements.txt
 ```
 
-### Commands to perform the factory default test cases
+## Individual Factory Default Test Cases
 
-##### To test success scenario of factory default:
-```shell session
-$ pytest -vs test_factory_default.py::test_factory_default_success --target=device --device-id=<ADB device id> --router <router in conf_wifiProifles.ini>
+### To test success scenario of factory default:
+```bash
+pytest -vs \
+       --target=device \
+       --device-id=<ADB device id> \
+       --router <router in conf_wifiProifles.ini> \
+       test_factory_default.py::test_factory_default_success
 ```
 
-##### To test cancellation of factory default by releasing factory-key-combination:
-```shell session
-$ pytest -vs test_factory_default.py::test_factory_default_cancel_event --target=device --device-id=<ADB device id>
+### Cancellation of factory default by releasing factory-key-combination:
+```bash
+pytest -vs \
+       --target=device \
+       --device-id=<ADB device id> \
+       test_factory_default.py::test_factory_default_cancel_event
 ```
 
-##### To test cancellation of factory default by pressing of another key(BT or VolUp or MFB):
-```shell session
-$ pytest -vs test_factory_default.py::test_factory_default_cancel_with_button_event --target=device --device-id=<ADB device id>
+### Cancellation of factory default by key press (e.g. BT, VolUp, MFB):
+```bash
+pytest -vs \
+         --target=device \
+         --device-id=<ADB device id> \
+         test_factory_default.py::test_factory_default_cancel_with_button_event
 ```
 
-### List of Files under Test/factoryDefault :
+## List of Files under Test/factoryDefault :
 
+`conftest.py` = Contains fixtures used in factory default test script (test_factory_default.py)
 
-conftest.py                     = Contains fixtures used in factory default test script (test_factory_default.py)
+`Configs/conf_wifiProfiles.ini` = Contains routers information with ssid, security-type, password
 
-Configs/conf_wifiProfiles.ini   = Contains routers information with ssid, security-type, password
+`factory_utils.py` = Contains general functions used in test script(test_factory_default.py)
 
-factory_utils.py                = Contains general functions used in test script(test_factory_default.py)
-
-test_factory_default.py         = Automated script for factory default feature
-
-
+`test_factory_default.py` = Automated script for factory default feature

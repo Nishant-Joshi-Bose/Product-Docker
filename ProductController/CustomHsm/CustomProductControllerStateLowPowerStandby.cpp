@@ -23,19 +23,13 @@ CustomProductControllerStateLowPowerStandby::CustomProductControllerStateLowPowe
     BOSE_INFO( s_logger, __func__ );
 }
 
-void CustomProductControllerStateLowPowerStandby::HandleStateStart()
+void CustomProductControllerStateLowPowerStandby::HandleStateExit()
 {
-    BOSE_INFO( s_logger, __func__ );
-
-    ///Turn OFF LCD display controller
-    BOSE_INFO( s_logger, "Turn LCD display OFF in %s.", __func__ );
-    GetCustomProductController().TurnDisplayOnOff( false );
-
-    ProductControllerStateLowPowerStandby::HandleStateStart();
-
-    ///Turn ON LCD display controller
-    BOSE_INFO( s_logger, "Turn LCD display ON in %s.", __func__ );
+    // Turn ON LCD display controller.
+    BOSE_DEBUG( s_logger, "Turn LCD display ON in %s.", __func__ );
     GetCustomProductController().TurnDisplayOnOff( true );
+
+    ProductControllerStateLowPowerStandby::HandleStateExit();
 }
 
 } /// namespace ProductApp

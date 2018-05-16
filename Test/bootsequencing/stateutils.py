@@ -17,16 +17,12 @@ import logging
 import socket
 import time
 
-from pyadb import ADB
-
 from CastleTestUtils.FrontDoorAPI import FrontDoorAPI
-from CastleTestUtils.LoggerUtils.log_setup import get_logger
+from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.RivieraUtils.commonException import ADBCommandFailure
 from CastleTestUtils.RivieraUtils.rivieraCommunication import ADBCommunication
 
-android_device = ADB('/usr/bin/adb')
-logger = get_logger(__name__, logLevel=logging.DEBUG)
-
+LOGGER = get_logger(__name__)
 UNKNOWN = 'UNKNOWN'
 
 
@@ -50,7 +46,7 @@ def is_ip_address(address):
         return False
 
 
-def network_checker(network_connection, maximum_time, data):
+def network_checker(network_connection, maximum_time, data, device_id):
     """
     Determines how long it takes from execution start to acquiring an
     IP address on the connection type given. Data for this is stored
@@ -59,24 +55,31 @@ def network_checker(network_connection, maximum_time, data):
     :param network_connection: The network connection type (*nix style)
     :param maximum_time: The timeout for trying to acquire an IP Address
     :param data: The thread-safe shared dictionary
+    :param device_id: The string device id of the Android connection
     :return: The updated dictionary with times
     """
     adbc = ADBCommunication()
+    adbc.setCommunicationDetail(device=device_id)
+
     ip_address = None
     start_time = time.time()
     elapsed_time = 0
+
+    # Continuously tries to get a properly formatted IP Address from the device, until a timeout
     while not ip_address and elapsed_time < maximum_time and not is_ip_address(ip_address):
         try:
-            ip_address = adbc.getIPAddress(interfaceName=network_connection)
+            adb_ip = adbc.getIPAddress(interfaceName=network_connection)
+            if is_ip_address(adb_ip):
+                ip_address = adb_ip
         except ADBCommandFailure:
             elapsed_time = time.time() - start_time
     end_time = time.time()
     run_time = end_time - start_time
 
-    if not ip_address:
+    if not ip_address or not is_ip_address(ip_address):
         ip_address = UNKNOWN
 
-    logger.info('Acquired IP {} in {:.2f}s.'.format(ip_address, run_time))
+    LOGGER.info('Acquired IP {} in {:.2f}s.'.format(ip_address, run_time))
 
     data['ip'] = {'address': ip_address, 'start': start_time, 'end': end_time,
                   'duration': run_time}
@@ -109,7 +112,11 @@ def state_checker(ip_address, run_time, data, delay=5):
     # Iterate while we are still less than the run-time
     while (time.time() - start_time) < run_time:
         current_time = time.time()
-        state = str(api.getState())
+        try:
+            state = str(api.getState())
+        except KeyError:
+            LOGGER.warn("API did not return its state properly.")
+            continue
 
         # Put all information regarding the state into the thread safe dictionary
         if state in data['state'].keys():
@@ -124,30 +131,11 @@ def state_checker(ip_address, run_time, data, delay=5):
 
     data['state']['end'] = time.time()
     number_states = len([key for key in data['state'].keys() if key not in ['start', 'end']])
-    logger.info('State collection ran for {0:.2f}s and collected {1} state(s).'
+    LOGGER.info('State collection ran for {0:.2f}s and collected {1} state(s).'
                 .format(data['state']['end'] - data['state']['start'], number_states))
 
-    # We need to close the Websocket correctly
+    # We need to close the WebSocket correctly
     if api:
         api.close()
-
-    return data
-
-
-def reboot_checker(data):
-    """
-    Will attempt to reboot the system and acquire the time taken to do it.
-    Reboot is only based upon the ADB being able to see the device.
-
-    :param data: A dictionary that is shared for Multiprocessing
-    :return:  None
-    """
-    reboot_start = time.time()
-    android_device.run_cmd('reboot')
-    android_device.wait_for_device()
-    reboot_end = time.time()
-    reboot_time = reboot_end - reboot_start
-    data['reboot'] = {'start': reboot_start, 'end': reboot_end, 'duration': reboot_time}
-    logger.info('Reboot of target completed and took {:.2f}s'.format(reboot_time))
 
     return data

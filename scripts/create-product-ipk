@@ -60,27 +60,29 @@ wspace=$(cd "$here/.." && echo "$PWD") || exit
 riviera_hsp_images_dir=$(components get Riviera-HSP-Images installed_location) || exit
 riviera_toolchain_dir=$(components get Riviera-Toolchain installed_location) || exit
 galapagosclient_dir=$(components get GalapagosClient-qc8017_32 installed_location) || exit
-httpproxy_dir=$(components get CastleHTTPProxy-qc8017_32 installed_location) || exit
+httpproxy_dir=$(components get HTTPProxy-qc8017_32 installed_location) || exit
 shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
 avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
-swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
-audiopath_dir=$(components get CastleAudioPath-qc8017_32 installed_location) || exit
-audiopath64_dir=$(components get CastleAudioPath-qc8017_64 installed_location) || exit
-castlenetworkservice_dir=$(components get CastleNetworkService-qc8017_32 installed_location) || exit
+softwareupdate_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
+audiopath_dir=$(components get AudioPath-qc8017_32 installed_location) || exit
+audiopath64_dir=$(components get AudioPath-qc8017_64 installed_location) || exit
+castlenetworkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
 castlesass_dir=$(components get SASS-qc8017_32 installed_location) || exit
-castlepassport_dir=$(components get CastlePassport-qc8017_32 installed_location) || exit
-wifi_setup_webpage_dir=$(components get WiFi-Setup-Webpage installed_location) || exit
+castlepassport_dir=$(components get Passport-qc8017_32 installed_location) || exit
+wifi_setup_webpage_dir=$(components get bose-web-riviera-ap-page installed_location) || exit
+web_update_page_dir=$(components get bose-web-update-page installed_location) || exit
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
-cli_dir=$(components get CastleCli-qc8017_32 installed_location) || exit
-democontroller_dir=$(components get CastleDemoController-qc8017_32 installed_location) || exit
+cli_dir=$(components get Cli-qc8017_32 installed_location) || exit
+democontroller_dir=$(components get DemoController-qc8017_32 installed_location) || exit
 webkit_dir=$(components get Webkit installed_location) || exit
-productuiassets_dir=$(components get CastleProductUIAssets installed_location) || exit
-frontdoor_dir=$(components get FrontDoor-qc8017_32 installed_location) || exit
+productuiassets_dir=$(components get ProductUIAssets installed_location) || exit
+frontdoor_dir=$(components get FrontDoorService-qc8017_32 installed_location) || exit
+frontdoorutility_dir=$(components get FrontDoorUtility-qc8017_32 installed_location) || exit
 boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
-datacollection_dir=$(components get CastleDataCollectionClient-qc8017_32 installed_location) || exit
-datacollectionservice_dir=$(components get CastleDataCollectionService-qc8017_32 installed_location) || exit
+datacollection_dir=$(components get DataCollectionClient-qc8017_32 installed_location) || exit
+datacollectionservice_dir=$(components get DataCollectionService-qc8017_32 installed_location) || exit
 sadi_dir=$(components get SADI-qc8017_32 installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
@@ -95,7 +97,7 @@ output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
 mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/etc/chimes" || exit
 
-rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
+rsync -a --exclude='*~' --exclude='*-README.txt' --exclude='isNetworkConfigured' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 
 components record "$stage" || exit
 
@@ -103,11 +105,6 @@ version_json=$wspace/builds/$cfg/qc8017_32/BoseVersion.json
 cp "$version_json" "$opt_dir/etc" || exit
 
 cp "$wspace/builds/$cfg/qc8017_32/bin"/*[!~] "$opt_dir/bin" || exit
-
-# Historical FS_VERSION file.
-v=$(make-version-string "$version_json" "{user}@{host} {localtime} {branch} {major}.{minor}.{patch}-{build_number}+{abbrev_commit}") || exit
-echo "$v" > "$opt_dir/etc/FS_VERSION" || exit
-echo "FS_VERSION \"$v\""
 
 # ----------------------------------------------------------------------------
 # Legacy SoundTouch-SDK stuff.  This will all go away soon.
@@ -155,12 +152,16 @@ cp -r "$wspace/keys/development/CACerts/" "$secure_dir" || exit
 find "$secure_dir" -type d -exec chmod 550 {} \; || exit
 find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 
+# On exit, make this dir writeable again to avoid spurious error messages
+# from `make clean` and such.
+trap 'chmod -R +w "$secure_dir"' EXIT
+
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
 
 "$avs_dir/stage" "$opt_dir" || exit
-"$swup_dir/stage" "$opt_dir" || exit
-"$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
+"$softwareupdate_dir/stage" "$opt_dir" || exit
+"$boseopkg_dir/stage" "$opt_dir/update/opkg" || exit
 "$audiopath_dir/stage" --product=eddie "$opt_dir" || exit
 "$audiopath64_dir/stage" --product=eddie --only-vfe "$opt_dir" || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
@@ -172,18 +173,24 @@ find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 "$cli_dir/stage" "$opt_dir" || exit
 "$democontroller_dir/stage" "$opt_dir" || exit
 "$webkit_dir/stage" "$opt_dir" || exit
-"$productuiassets_dir/stage" --chimes=alpha --type=flac "$opt_dir" || exit
+"$productuiassets_dir/stage" --chimes=HomeSpeaker --type=flac "$opt_dir" || exit
 "$frontdoor_dir/stage" "$opt_dir" || exit
+"$frontdoorutility_dir/stage" "$opt_dir" || exit
 "$galapagosclient_dir/stage" "$opt_dir" || exit
 "$httpproxy_dir/stage" "$opt_dir" || exit
 "$datacollection_dir/stage" "$opt_dir" || exit
 "$datacollectionservice_dir/stage" "$opt_dir" || exit
 "$sadi_dir/stage" "$opt_dir" || exit
+rm -rfv "$opt_dir/update/html" # TODO: remove this when SoftwareUpdate has been modified not to include the update pages.
+"$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 
 # ----------------------------------------------------------------------------
 
 cd "$opt_dir"/lib || exit
 rm -f *.a
+
+# Hack to enable logging for Monaco.  Delete this when we move to Dinghy.
+sed -i '/WPE_DYZSHM_CONSOLE_LOG/s/^\#//' "$opt_dir/webkit/run_wpe.sh" || exit
 
 PackageName=SoundTouch
 
@@ -245,34 +252,6 @@ fi
 if [ -f /opt/Bose/bin/ProgressReport ]; then
 	/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
 fi
-# ---8<------8<------8<------8<------8<------8<------8<------8<------8<---
-# Try to kill services before installation begin to make sure
-#   minimal files are in use due to in-place installation.
-#   This is done for IP2. Needs to be removed / modified in IP3 to 
-#   use Product & Shepherd instead.
-echo "Stopping all services except SoftwareupdateService, NetManager"
-pkill LPMService
-pkill APServer
-pkill PtsServer
-pkill Passport
-pkill AVS
-pkill UpnpSource
-pkill Vfe
-pkill btproperty
-pkill STSCertified
-pkill BluetoothManager
-pkill BT
-pkill BLESetup
-pkill BTSource
-pkill IoT
-pkill BoseApp
-pkill CAPS
-pkill Eddie
-pkill FrontDoor
-pkill SASSController
-pkill DataCollectionService
-# we are leaving telnet, avahi-daemon, SoftwareUpdateService, NetManager alive.
-# ---8<------8<------8<------8<------8<------8<------8<------8<------8<---
 
 exit 0
 EOF
@@ -345,6 +324,3 @@ ipk=$output_dir/product.ipk
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
 echo "Created $ipk"
-
-# reverting secure directory permission, to avoid issue in "make clean" / rebuild
-chmod -R 755 "$secure_dir" || exit

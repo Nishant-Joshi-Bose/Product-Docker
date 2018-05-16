@@ -16,9 +16,10 @@
 #include "NotifyTargetTaskIF.h"
 #include "ProtoPersistenceIF.h"
 #include "ProductControllerStateTop.h"
-#include "ProductControllerStateNetworkStandby.h"
+#include "CustomProductControllerStateNetworkStandby.h"
+#include "ProductControllerStateLowPowerResume.h"
 #include "CustomProductControllerStateLowPowerStandby.h"
-#include "ProductControllerStateLowPowerStandbyTransition.h"
+#include "CustomProductControllerStateLowPowerStandbyTransition.h"
 #include "ProductControllerStateNetworkStandbyConfigured.h"
 #include "ProductControllerStateNetworkStandbyNotConfigured.h"
 #include "ProductControllerStateIdleVoiceConfigured.h"
@@ -31,6 +32,7 @@
 #include "ProductControllerStateOn.h"
 #include "ProductControllerStateIdle.h"
 #include "ProductControllerStateSoftwareInstall.h"
+#include "CustomProductControllerStateSoftwareInstall.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
 #include "ProductControllerStatePlayingDeselected.h"
@@ -43,7 +45,7 @@
 #include "ProductControllerStatePlayingSelectedSetupOther.h"
 #include "ProductControllerStatePlayingSelectedSetupExiting.h"
 #include "ProductControllerStatePlayingSelectedSetupExitingAP.h"
-#include "ProductControllerStateStoppingStreams.h"
+#include "ProductControllerStatePlayingSelectedStoppingStreams.h"
 #include "ProductControllerStatePlayableTransition.h"
 #include "ProductControllerStatePlayableTransitionIdle.h"
 #include "ProductControllerStatePlayableTransitionInternal.h"
@@ -52,13 +54,11 @@
 #include "ProductControllerStatePlayingTransition.h"
 #include "ProductControllerStateFirstBootGreeting.h"
 #include "ProductControllerStateFirstBootGreetingTransition.h"
-#include "ProductControllerStateBootedTransition.h"
 #include "ProductControllerStatePlayingTransitionSwitch.h"
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForFactoryDefault.h"
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
 #include "LightBarController.h"
-#include "ConfigurationStatus.pb.h"
 #include "SoundTouchInterface/AllowSourceSelect.pb.h"
 #include "NetManager.pb.h"
 #include "SoundTouchInterface/CapsInitializationStatus.pb.h"
@@ -132,7 +132,6 @@ private:
     void InitializeHsm( );
     void InitializeAction( );
     void RegisterLpmEvents();
-    void RegisterEndPoints();
     void HandleCliCmd( uint16_t cmdKey,
                        const std::list<std::string> & argList,
                        AsyncCallback<std::string, int32_t> rspAndRspCmplt,
@@ -142,29 +141,6 @@ private:
     void HandleBtLeModuleReady( bool btLeModuleReady );
     void HandleBtLeCapabilityReady( const std::list<std::string>& points );
     void HandleBtLeCapabilityNotReady( const std::list<std::string>& points );
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name  ReadSystemLanguageFromPersistence
-/// @brief Function to read persisted language code from /mnt/nv/product-persistence.
-/// @return void
-////////////////////////////////////////////////////////////////////////////////
-    void ReadSystemLanguageFromPersistence();
-    void ReadConfigurationStatusFromPersistence();
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name  PersistSystemLanguageCode
-/// @brief Function to persist language code in /mnt/nv/product-persistence.
-/// @return void
-////////////////////////////////////////////////////////////////////////////////
-    void PersistSystemLanguageCode();
-    void PersistSystemConfigurationStatus();
-
-///////////////////////////////////////////////////////////////////////////////
-/// @name  HandleSetDisplayAutoMode
-/// @brief Function to set the display mode
-/// @return void
-////////////////////////////////////////////////////////////////////////////////
-    void HandleSetDisplayAutoMode( const std::list<std::string> & argList, std::string& response );
 
 ///////////////////////////////////////////////////////////////////////////////
 /// @name  HandleGetBootStatus
@@ -245,13 +221,6 @@ public:
     void SendDeActivateAccessPointCmd();
 
 ///////////////////////////////////////////////////////////////////////////////
-/// @name  HandleConfigurationStatusRequest
-/// @brief "/system/configuration/status" endpoint request handler.
-/// @return void
-////////////////////////////////////////////////////////////////////////////////
-    void HandleConfigurationStatusRequest( const Callback<ProductPb::ConfigurationStatus> &resp );
-
-///////////////////////////////////////////////////////////////////////////////
 /// @name  SendInitialRequests
 /// @brief Function to send initial endpoint request to the front door like "/system/capsInitializationStatus".
 /// @return void
@@ -327,22 +296,20 @@ public:
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief set the display controllee automatic mode  to true or false (manual)
-///
-//////////////////////////////////////////////////////////////////////////////////////////////
-    void SetDisplayAutoMode( bool autoMode ) const
-    {
-        m_displayController->SetAutoMode( autoMode );
-    }
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-///
 /// @brief Turn ON/OFF LCD display
 ///
 //////////////////////////////////////////////////////////////////////////////////////////////
     void TurnDisplayOnOff( bool turnOn ) const
     {
-        m_displayController->TurnOnOff( turnOn );
+        m_displayController->TurnDisplayOnOff( turnOn );
+    }
+
+    /*! \brief Enables/disables brightness cap for LCD during a standby state (not low power).
+     * \param enabled True to impose the cap and false to disable it.
+     */
+    void SetDisplayStandbyBrightnessCapEnabled( bool enabled )
+    {
+        m_displayController->SetStandbyLcdBrightnessCapEnabled( enabled );
     }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -360,14 +327,15 @@ private:
     ProductControllerStateBooting                                   m_ProductControllerStateBooting;
     ProductControllerStateBooted                                    m_ProductControllerStateBooted;
     CustomProductControllerStateOn                                  m_CustomProductControllerStateOn;
+    ProductControllerStateLowPowerResume                            m_ProductControllerStateLowPowerResume;
     CustomProductControllerStateLowPowerStandby                     m_CustomProductControllerStateLowPowerStandby;
-    ProductControllerStateSoftwareInstall                           m_ProductControllerStateSwInstall;
+    CustomProductControllerStateSoftwareInstall                     m_CustomProductControllerStateSwInstall;
     ProductControllerStateCriticalError                             m_ProductControllerStateCriticalError;
     ProductControllerStatePlaying                                   m_ProductControllerStatePlaying;
     ProductControllerStatePlayable                                  m_ProductControllerStatePlayable;
-    ProductControllerStateLowPowerStandbyTransition                 m_ProductControllerStateLowPowerStandbyTransition;
+    CustomProductControllerStateLowPowerStandbyTransition           m_CustomProductControllerStateLowPowerStandbyTransition;
     ProductControllerStateIdle                                      m_ProductControllerStateIdle;
-    ProductControllerStateNetworkStandby                            m_ProductControllerStateNetworkStandby;
+    CustomProductControllerStateNetworkStandby                      m_CustomProductControllerStateNetworkStandby;
     ProductControllerStateIdleVoiceConfigured                       m_ProductControllerStateVoiceConfigured;
     ProductControllerStateIdleVoiceNotConfigured                    m_ProductControllerStateVoiceNotConfigured;
     ProductControllerStateNetworkStandbyConfigured                  m_ProductControllerStateNetworkConfigured;
@@ -383,7 +351,7 @@ private:
     ProductControllerStatePlayingSelectedSetupOther                 m_ProductControllerStatePlayingSelectedSetupOther;
     ProductControllerStatePlayingSelectedSetupExiting               m_ProductControllerStatePlayingSelectedSetupExiting;
     ProductControllerStatePlayingSelectedSetupExitingAP             m_ProductControllerStatePlayingSelectedSetupExitingAP;
-    ProductControllerStateStoppingStreams                           m_ProductControllerStateStoppingStreams;
+    ProductControllerStatePlayingSelectedStoppingStreams            m_ProductControllerStatePlayingSelectedStoppingStreams;
     ProductControllerStatePlayableTransition                        m_ProductControllerStatePlayableTransition;
     ProductControllerStatePlayableTransitionInternal                m_ProductControllerStatePlayableTransitionInternal;
     ProductControllerStatePlayableTransitionIdle                    m_ProductControllerStatePlayableTransitionIdle;
@@ -392,15 +360,10 @@ private:
     ProductControllerStatePlayingTransition                         m_ProductControllerStatePlayingTransition;
     ProductControllerStateFirstBootGreeting                         m_ProductControllerStateFirstBootGreeting;
     ProductControllerStateFirstBootGreetingTransition               m_ProductControllerStateFirstBootGreetingTransition;
-    ProductControllerStateBootedTransition                          m_ProductControllerStateBootedTransition;
     ProductControllerStatePlayingTransitionSwitch                   m_ProductControllerStatePlayingTransitionSwitch;
     ProductControllerStateStoppingStreamsDedicated                  m_ProductControllerStateStoppingStreamsDedicated;
     ProductControllerStateStoppingStreamsDedicatedForFactoryDefault m_ProductControllerStateStoppingStreamsDedicatedForFactoryDefault;
     ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate;
-
-    /// Persistence for the Configuration Status
-    ProtoPersistenceIF::ProtoPersistencePtr     m_ConfigurationStatusPersistence = nullptr;
-    ProductPb::ConfigurationStatus              m_ConfigurationStatus;
 
     /// ProductAudioService
     std::shared_ptr< CustomProductAudioService> m_ProductAudioService;

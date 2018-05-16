@@ -13,7 +13,7 @@
 import pexpect
 import pytest
 from configure import conf
-from CastleTestUtils.LoggerUtils.log_setup import get_logger
+from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.LoggerUtils.BSerialLogger import SerialLoggingUtil, myThread, stopseriallog, TestRecoveryTest
 from pyadb import ADB
 adb = ADB(conf["adb_path"])

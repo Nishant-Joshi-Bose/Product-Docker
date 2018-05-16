@@ -4,11 +4,11 @@
 #
 # For example, for the URL
 #
-#   http://203.0.113.1/diag/display/colorbars-top.png?show
+#   http://203.0.113.1/diag/display/black.png?show
 #
 # this script invokes as
 #
-#   display colorbars-top.png?show
+#   display black.png?show
 #
 # This shows the specified image on the display and outputs a simple HTTP
 # response, "OK".
@@ -31,17 +31,34 @@ if i != -1:
     image = image[:i]
 
 # Protect against potentially malicious pathnames.
-if ".." in image or not image.endswith(".png") or not os.path.exists(image):
+if "/" in image or not image.endswith(".png") or not os.path.exists(image) or \
+   os.path.islink(image):
     raise Exception("bad image name: " + image)
 
 if params == "show":
+    # Used by Test/mfgdata/diagnostics_mfgdata_page.py
+    subprocess.call(["logger", "display-test", image])
+
+    devnull = open("/dev/null", "w")
+
+    try:
+        os.remove("/var/run/shepherd/Shepherd-Monaco.xml")
+        removed = True
+    except:
+        removed = False
+    if removed:
+        # Stop Monaco from managing the display.
+        subprocess.call(["shepherd-wait", "/var/run/shepherd", "/var/run/shepherd/pid"],
+                        stdout=devnull, stderr=subprocess.STDOUT)
+        # Special handling for dyz-shm started by run_wpe.sh (yuck).
+        # Delete this when we switch to Dinghy.
+        subprocess.call(["killwait", "dyz-shm"],
+                        stdout=devnull, stderr=subprocess.STDOUT)
+
     # Show the image on the unit's display and
     # send "OK" as the HTTP response.
-    ph = subprocess.Popen(["show_splash", image],
-                          stdout=open("/dev/null", "w"),
-                          stderr=subprocess.STDOUT)
-    if ph.wait() != 0:
-        raise Exception("show_splash failed")
+    subprocess.call(["show_splash", image],
+                    stdout=devnull, stderr=subprocess.STDOUT)
 
     print """\
 HTTP/1.1 200 OK\r

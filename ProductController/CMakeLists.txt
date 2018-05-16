@@ -1,21 +1,24 @@
 INCLUDE_DIRECTORIES(
-  ${PRODUCTCONTROLLERCOMMON_DIR}
-  ${PRODUCTCONTROLLERCOMMON_DIR}/ChimesController
-  ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
-  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
-  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
-  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductKeyInputManager
-  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
-  ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
-  ${DATACOLLECTIONCLIENT_DIR}
-  ${CUSTOM_HSM_DIR}
-  ${KEYHANDLER_DIR}/include
-  IntentHandler
   CustomProductAudioService
   CustomProductKeyInputManager
   CustomProductLpmHardwareInterface
   CustomProductSTS
   DisplayController
+  IntentHandler
+  ${CUSTOM_HSM_DIR}
+  ${DATACOLLECTIONCLIENT_DIR}
+  ${KEYHANDLER_DIR}/include
+  ${PRODUCTCONTROLLERCOMMON_DIR}
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ChimesController
+  ${PRODUCTCONTROLLERCOMMON_DIR}/Hsm
+  ${PRODUCTCONTROLLERCOMMON_DIR}/IntentHandler
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductKeyInputManager
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductNetworkService
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSourceInfo
+  ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
+  {PROTO_CC_DEST}
   .
 )
 
@@ -25,12 +28,14 @@ INCLUDE_DIRECTORIES(
 ADD_EXECUTABLE(Eddie
   ${CUSTOM_HSM_DIR}/CustomProductControllerState.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateOn.cpp
+  ${CUSTOM_HSM_DIR}/CustomProductControllerStateSoftwareInstall.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateLowPowerStandby.cpp
+  ${CUSTOM_HSM_DIR}/CustomProductControllerStateLowPowerStandbyTransition.cpp
+  ${CUSTOM_HSM_DIR}/CustomProductControllerStateNetworkStandby.cpp
   ProductCliClient.cpp
   DataCollectionClientInterface.cpp
   EddieProductController.cpp
   Main.cpp
-  ${PROTO_CC_DEST}/ConfigurationStatus.pb.cc
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
   ${PROTO_CC_DEST}/KeyActions.pb.cc
   ${PROTO_CC_DEST}/DisplayController.pb.cc
@@ -46,7 +51,6 @@ ADD_EXECUTABLE(Eddie
   CustomProductAudioService/CustomProductAudioService.cpp
   CustomProductKeyInputManager/CustomProductKeyInputManager.cpp
   CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
-  CustomProductSTS/CustomProductSTSAuxStateFactory.cpp
   CustomProductSTS/CustomProductSTSStateTopAux.cpp
 )
 
