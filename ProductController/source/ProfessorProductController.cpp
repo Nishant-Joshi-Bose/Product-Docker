@@ -88,6 +88,7 @@
 #include "ProductControllerStateTop.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "CustomProductControllerStateAccessoryPairingExiting.h"
+#include "CustomProductControllerStateAccessoryPairingCancelling.h"
 #include "CustomProductControllerStateAdaptIQExiting.h"
 #include "CustomProductControllerStateAdaptIQ.h"
 #include "CustomProductControllerStateIdle.h"
@@ -403,6 +404,12 @@ void ProfessorProductController::Run( )
       *this,
       CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING_EXITING );
 
+    auto* stateAccessoryPairingCancelling = new CustomProductControllerStateAccessoryPairingCancelling
+    ( GetHsm( ),
+      statePlayingSelected,
+      *this,
+      CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING_CANCELLING );
+
     ///
     /// AdaptIQ States
     ///
@@ -480,6 +487,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( "", stateStoppingStreams );
     GetHsm( ).AddState( "", stateAccessoryPairing );
     GetHsm( ).AddState( "", stateAccessoryPairingExiting );
+    GetHsm( ).AddState( "", stateAccessoryPairingCancelling );
     GetHsm( ).AddState( "", stateAdaptIQ );
     GetHsm( ).AddState( "", stateAdaptIQExiting );
     GetHsm( ).AddState( "", stateStoppingStreamsDedicated );
@@ -1093,7 +1101,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     else if( message.has_accessorypairing( ) )
     {
         GetHsm( ).Handle< ProductAccessoryPairing >
-        ( &CustomProductControllerState::HandlePairingState, message.accessorypairing( ) );
+        ( &CustomProductControllerState::HandlePairingStatus, message.accessorypairing( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Key action messages are handled at this point, and passed to the state machine based on
