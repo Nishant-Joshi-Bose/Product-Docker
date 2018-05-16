@@ -9,7 +9,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-05-15_2126"
+    "selected_version": "Release/Castle-Fork/0.5.6.42384.2824845"
   },
   {
     "name": "bose-opkg-utils",
@@ -141,11 +141,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/3.8"
+    "selected_version": "Release/master/3.9"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/3.8"
+    "selected_version": "Release/master/3.9"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -165,7 +165,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/master/0.5.2-296+6cc58ed"
+    "selected_version": "Release/master/0.5.3-315+e4934d1"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -177,7 +177,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-05-15_2126"
+    "selected_version": "Release/Castle-Fork/0.5.6.42384.2824845"
   },
   {
     "name": "SystemEventService-qc8017_32",
@@ -185,7 +185,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@2df19e23ff2436a66b678c2584406482600d8056"
+    "selected_version": "master@cb3c448353bd602821beb9d33aeceb592abaadfc"
   },
   {
     "name": "Webkit",
