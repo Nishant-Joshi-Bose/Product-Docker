@@ -17,11 +17,11 @@
   },
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.4.5-20940"
+    "selected_version": "Release/Castle-Fork-SOP/1.0.1-20981"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/0.4.5-20940"
+    "selected_version": "Release/Castle-Fork-SOP/1.0.1-20981"
   },
   {
     "name": "AVS-qc8017_32",
@@ -121,7 +121,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/master/0.5.0-123+bae44b8"
+    "selected_version": "Release/master/0.5.1-125+230305a"
   },
   {
     "name": "NetworkService-qc8017_32",
@@ -169,7 +169,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.4.3-176+b75969e"
+    "selected_version": "Release/master/0.4.4-180+db319c7"
   },
   {
     "name": "RivieraLpmTools",
