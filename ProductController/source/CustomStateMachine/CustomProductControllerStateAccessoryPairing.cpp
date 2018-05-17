@@ -17,7 +17,7 @@
 #include "Utilities.h"
 #include "Intents.h"
 #include "IntentHandler.h"
-#include "ProfessorProductController.h"
+#include "ProductController.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "ProductControllerHsm.h"
 #include "SpeakerPairingManager.h"
@@ -68,8 +68,8 @@ void CustomProductControllerStateAccessoryPairing::HandleStateStart( )
     ///
     auto startPairingAction = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_LPM_PAIR_SPEAKERS );
 
-    GetCustomProductController( ).SendAllowSourceSelectMessage( false );
-    GetCustomProductController( ).GetIntentHandler( ).Handle( startPairingAction );
+    GetProductController( ).SendAllowSourceSelectMessage( false );
+    GetProductController( ).GetIntentHandler( ).Handle( startPairingAction );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -86,7 +86,7 @@ bool CustomProductControllerStateAccessoryPairing::HandleIntentSpeakerPairing( K
 
     if( intent == static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_STOP_PAIR_SPEAKERS ) )
     {
-        GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
+        GetProductController( ).GetIntentHandler( ).Handle( intent );
     }
 
     return true;
@@ -159,16 +159,16 @@ bool CustomProductControllerStateAccessoryPairing::HandleIntentPowerToggle( )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAccessoryPairing::HandlePairingStatus( ProductAccessoryPairing pairingStatus )
 {
-    BOSE_INFO( s_logger, "The %s state has received a pairing %s.",
+    BOSE_INFO( s_logger, "The %s state has received an %s pairing status.",
                GetName( ).c_str( ),
-               pairingStatus.active( ) ? "activation" : "deactivation" );
+               pairingStatus.active( ) ? "active" : "inactive" );
 
     if( not pairingStatus.active( ) )
     {
-        BOSE_INFO( s_logger, "The %s state is stopping and exiting the pairing playback.", GetName( ).c_str( ) );
+        BOSE_INFO( s_logger, "The %s state is exiting the pairing playback.", GetName( ).c_str( ) );
 
-        GetCustomProductController( ).SendAllowSourceSelectMessage( true );
-        GetCustomProductController( ).SendStopPlaybackMessage( );
+        GetProductController( ).SendAllowSourceSelectMessage( true );
+        GetProductController( ).SendStopPlaybackMessage( );
 
         ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
     }
@@ -188,7 +188,7 @@ void CustomProductControllerStateAccessoryPairing::HandleStateExit( )
     ///
     /// Re-enable source selection.
     ///
-    GetCustomProductController( ).SendAllowSourceSelectMessage( true );
+    GetProductController( ).SendAllowSourceSelectMessage( true );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

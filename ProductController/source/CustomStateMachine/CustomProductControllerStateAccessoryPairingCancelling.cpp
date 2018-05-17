@@ -18,7 +18,7 @@
 #include "Utilities.h"
 #include "Intents.h"
 #include "IntentHandler.h"
-#include "ProfessorProductController.h"
+#include "ProductController.h"
 #include "CustomProductControllerStateAccessoryPairingCancelling.h"
 #include "ProductControllerHsm.h"
 #include "SpeakerPairingManager.h"
@@ -66,7 +66,7 @@ void CustomProductControllerStateAccessoryPairingCancelling::HandleStateStart( )
 
     auto stopPairingAction = static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_STOP_PAIR_SPEAKERS );
 
-    GetCustomProductController( ).GetIntentHandler( ).Handle( stopPairingAction );
+    GetProductController( ).GetIntentHandler( ).Handle( stopPairingAction );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,7 +95,7 @@ bool CustomProductControllerStateAccessoryPairingCancelling::HandlePairingStatus
 /// @param  KeyHandlerUtil::ActionType_t intent
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the volume
-///         control intent. It is ignored when cancelling acessory pairing.
+///         control intent. It is ignored when cancelling accessory pairing.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAccessoryPairingCancelling::HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )
@@ -115,7 +115,7 @@ bool CustomProductControllerStateAccessoryPairingCancelling::HandleIntentVolumeC
 /// @param  KeyHandlerUtil::ActionType_t intent
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the muting
-///         intent. It is ignored when cancelling acessory pairing.
+///         intent. It is ignored when cancelling accessory pairing.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAccessoryPairingCancelling::HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )
@@ -133,7 +133,7 @@ bool CustomProductControllerStateAccessoryPairingCancelling::HandleIntentMuteCon
 /// @brief  CustomProductControllerStateAccessoryPairingCancelling::HandleIntentPowerToggle
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the power
-///         toggling intent. It is ignored when cancelling acessory pairing.
+///         toggling intent. It is ignored when cancelling accessory pairing.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAccessoryPairingCancelling::HandleIntentPowerToggle( )
