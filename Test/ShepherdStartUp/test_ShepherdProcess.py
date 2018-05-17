@@ -19,7 +19,6 @@ import pytest_dependency
 
 from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
 from CastleTestUtils.SoftwareUpdateUtils.BonjourUpdateScripts.bonjourUpdate import BonjourUpdateUtils
-from CastleTestUtils.SoftwareUpdateUtils.BonjourUpdate.bonjourUpdateSupport import BonjourUpdateSupport
 from CastleTestUtils.RivieraUtils.rivieraCommunication import ADBCommunication
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 
@@ -34,16 +33,18 @@ def test_bonjour_update(request):
     """
     device = request.config.getoption("--device-id")
     zip_file = request.config.getoption("--zipfile")
+    bonjour_update_loop = request.config.getoption("--updatecnt")
     adb = ADBCommunication()
     adb.setCommunicationDetail(device)
-    bonjour_count = 0
-    while bonjour_count < int(cfg.get('Settings', 'BONJOUR_UPDATE_LOOP')):
-        bonjour_count = bonjour_count + 1
+    adb.rebootDevice_adb()
+    #Need to put sleep to up all services after reboot
+    time.sleep(30)
+    BonjourCnt = 0
+    while BonjourCnt < int(bonjour_update_loop):
+        BonjourCnt = BonjourCnt + 1
         result = PerformBonjourUpdate(adb, zip_file, device)
         assert result, "Bonjour Update Failed. Please see logs for more details"
-        time.sleep(180)
-        #bonjourUpdateSupport = BonjourUpdateSupport(device=device, logger=logger)
-        #bonjourUpdateSupport.confirm_installation_versions()
+        time.sleep(60)
 
 @pytest.mark.dependency(depends=["test_bonjour_update"])
 def test_shepherd_process(request):
@@ -60,7 +61,6 @@ def test_shepherd_process(request):
     process_died_list = []
     startTime = time.time()
     timeout = int(cfg.get('Settings', 'TIME_OUT'))
-    result = True
     riviera = RivieraUtils('ADB', device=device)
     while (time.time() - startTime) <= timeout:
         runningprocess = riviera.communication.executeCommand("cat pids", cwd="/var/run/shepherd")
@@ -70,7 +70,6 @@ def test_shepherd_process(request):
                 logger.info("------------Process died : " + str(process) + "---------------")
                 if process not in process_died_list:
                     process_died_list.append(process)
-                    result = False
         time.sleep(2)
     assert process_died_list == [], "The following processes died after installation: {}".format(process_died_list)
 
@@ -81,7 +80,7 @@ def PerformBonjourUpdate(adb, zip_file, device):
     starttime = time.time()
     _timeout = 60
     try:
-        while time.time() - starttime < _timeout:
+        while(time.time() - starttime) < _timeout:
             try:
                 device_ip_address = adb.getIPAddress()
                 logger.info("Device IP : " + device_ip_address)
