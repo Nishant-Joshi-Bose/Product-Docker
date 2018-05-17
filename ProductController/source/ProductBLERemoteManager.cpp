@@ -408,6 +408,10 @@ bool ProductBLERemoteManager::GetSourceLED(
             BOSE_INFO( s_logger, "update nowSelection SETUP" );
             sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
         }
+        else if( sourceAccountName.compare( "PAIRING" ) == 0 )
+        {
+            BOSE_INFO( s_logger, "update nowSelection PAIRING No LED Available" );
+        }
         else if( ( sourceAccountName.compare( 0, 4, "SLOT" ) == 0 ) and sourceItem->has_details() )
         {
             const auto& sourceDetailsDevicetype = sourceItem->details().devicetype();
