@@ -49,7 +49,6 @@ ADD_EXECUTABLE(Professor
   source/CustomProductKeyInputManager/CustomProductKeyInputManager.cpp
   source/CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
   source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
-  source/CustomStateMachine/CustomProductControllerStateAccessoryPairingExiting.cpp
   source/CustomStateMachine/CustomProductControllerStateAccessoryPairingCancelling.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQ.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQExiting.cpp

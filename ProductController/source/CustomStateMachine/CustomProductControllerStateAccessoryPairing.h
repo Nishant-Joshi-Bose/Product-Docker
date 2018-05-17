@@ -32,7 +32,6 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductControllerHsm;
-class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -48,7 +47,6 @@ public:
     CustomProductControllerStateAccessoryPairing(
         ProductControllerHsm&       hsm,
         CHsmState*                  pSuperState,
-        ProfessorProductController& productController,
         Hsm::STATE                  stateId,
         const std::string&          name = "AccessoryPairing" );
 

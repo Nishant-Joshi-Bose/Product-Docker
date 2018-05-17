@@ -17,9 +17,9 @@
 #include "Utilities.h"
 #include "Intents.h"
 #include "IntentHandler.h"
+#include "ProfessorProductController.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "ProductControllerHsm.h"
-#include "ProfessorProductController.h"
 #include "SpeakerPairingManager.h"
 #include "ProductMessage.pb.h"
 
@@ -38,8 +38,6 @@ namespace ProductApp
 ///
 /// @param CHsmState*                  pSuperState       This argument references the parent state.
 ///
-/// @param ProfessorProductController& productController This argument references the product controller.
-///
 /// @param Hsm::STATE                  stateId           This enumeration represents the state ID.
 ///
 /// @param const std::string&          name              This argument names the state.
@@ -48,7 +46,6 @@ namespace ProductApp
 CustomProductControllerStateAccessoryPairing::
 CustomProductControllerStateAccessoryPairing( ProductControllerHsm&       hsm,
                                               CHsmState*                  pSuperState,
-                                              ProfessorProductController& productController,
                                               Hsm::STATE                  stateId,
                                               const std::string&          name )
 
@@ -145,8 +142,7 @@ bool CustomProductControllerStateAccessoryPairing::HandleIntentMuteControl( KeyH
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAccessoryPairing::HandleIntentPowerToggle( )
 {
-    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
-    BOSE_INFO( s_logger, "The %s state is cancelling the pairing playback.", GetName( ).c_str( ) );
+    BOSE_INFO( s_logger, "The %s state in %s cancelling the pairing playback.", GetName( ).c_str( ), __func__ );
 
     ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING_CANCELLING );
 
@@ -158,13 +154,12 @@ bool CustomProductControllerStateAccessoryPairing::HandleIntentPowerToggle( )
 /// @brief CustomProductControllerStateAccessoryPairing::HandlePairingStatus
 ///
 /// @return This method returns a true Boolean value indicating that it handles the accessory
-///         pairing status
-///         intent by changing to an accessory pairing cancelling state.
+///         pairing status.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAccessoryPairing::HandlePairingStatus( ProductAccessoryPairing pairingStatus )
 {
-    BOSE_INFO( s_logger, "The %s state is handling a pairing %s.",
+    BOSE_INFO( s_logger, "The %s state has received a pairing %s.",
                GetName( ).c_str( ),
                pairingStatus.active( ) ? "activation" : "deactivation" );
 
@@ -172,7 +167,10 @@ bool CustomProductControllerStateAccessoryPairing::HandlePairingStatus( ProductA
     {
         BOSE_INFO( s_logger, "The %s state is stopping and exiting the pairing playback.", GetName( ).c_str( ) );
 
-        ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING_EXITING );
+        GetCustomProductController( ).SendAllowSourceSelectMessage( true );
+        GetCustomProductController( ).SendStopPlaybackMessage( );
+
+        ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
     }
 
     return true;

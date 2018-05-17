@@ -3,7 +3,8 @@
 /// @file      CustomProductControllerStateAccessoryPairingCancelling.cpp
 ///
 /// @brief     This source code file contains functionality to process events that occur when
-///            cancelling the product accessory pairing state.
+///            cancelling the product accessory pairing state leading to a power down to the
+///            playable state.
 ///
 /// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
 ///
@@ -17,9 +18,9 @@
 #include "Utilities.h"
 #include "Intents.h"
 #include "IntentHandler.h"
+#include "ProfessorProductController.h"
 #include "CustomProductControllerStateAccessoryPairingCancelling.h"
 #include "ProductControllerHsm.h"
-#include "ProfessorProductController.h"
 #include "SpeakerPairingManager.h"
 #include "ProductMessage.pb.h"
 
@@ -38,8 +39,6 @@ namespace ProductApp
 ///
 /// @param CHsmState*                  pSuperState       This argument references the parent state.
 ///
-/// @param ProfessorProductController& productController This argument references the product controller.
-///
 /// @param Hsm::STATE                  stateId           This enumeration represents the state ID.
 ///
 /// @param const std::string&          name              This argument names the state.
@@ -48,7 +47,6 @@ namespace ProductApp
 CustomProductControllerStateAccessoryPairingCancelling::
 CustomProductControllerStateAccessoryPairingCancelling( ProductControllerHsm&       hsm,
                                                         CHsmState*                  pSuperState,
-                                                        ProfessorProductController& productController,
                                                         Hsm::STATE                  stateId,
                                                         const std::string&          name )
 
