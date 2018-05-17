@@ -8,12 +8,8 @@
     "selected_version": "master@e172441a954a2c6813f3b322907d2d27e78dbd76"
   },
   {
-    "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/v0.4.0-0+b23c5a5"
-  },
-  {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@d8bd048cc178fc4911e94e564f71c21e866825e8"
+    "selected_version": "master@f3527b809c6a37b7e6aecb862f75d3d3c858e485"
   },
   {
     "name": "AudioPath-qc8017_32",
@@ -26,6 +22,10 @@
   {
     "name": "AVS-qc8017_32",
     "selected_version": "Release/Castle-Fork/0.5.5.42254.2814398"
+  },
+  {
+    "name": "BLERemoteXCVR",
+    "selected_version": "Release/master/v0.4.0-0+b23c5a5"
   },
   {
     "name": "bose-opkg-utils",
@@ -70,10 +70,6 @@
   {
     "name": "CastleLibs-x86",
     "selected_version": "branches/castle-libs@2606"
-  },
-  {
-    "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.4.76-673+8201c19"
   },
   {
     "name": "Cli-qc8017_32",
@@ -140,8 +136,12 @@
     "selected_version": "Release/master/0.4.76-673+8201c19"
   },
   {
+    "name": "PassportClient-qc8017_32",
+    "selected_version": "Release/master/0.4.76-673+8201c19"
+  },
+  {
     "name": "ProductControllerCommon",
-    "selected_version": "master@3505d7b4fd08d679cfc375ffd360f84d62227865"
+    "selected_version": "master@fda6b047164d124b04f667bd4fbad7b92e2983f3"
   },
   {
     "name": "ProductUIAssets",

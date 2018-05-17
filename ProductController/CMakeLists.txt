@@ -48,20 +48,17 @@ ADD_EXECUTABLE(Professor
   source/CustomProductAudioService/CustomProductAudioService.cpp
   source/CustomProductKeyInputManager/CustomProductKeyInputManager.cpp
   source/CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
+  source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
+  source/CustomStateMachine/CustomProductControllerStateAccessoryPairingCancelling.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQ.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQExiting.cpp
   source/CustomStateMachine/CustomProductControllerStateIdle.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateOn.cpp
   source/CustomStateMachine/CustomProductControllerStateLowPowerResume.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayable.cpp
   source/CustomStateMachine/CustomProductControllerStatePlaying.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayingDeselectedAccessoryPairing.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayingDeselected.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayingSelectedAccessoryPairing.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayingSelected.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayingSelectedSetup.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayingTransitionAccessoryPairing.cpp
   source/IntentHandler/IntentHandler.cpp
   source/IntentHandler/PlaybackRequestManager.cpp
   source/IntentHandler/SpeakerPairingManager.cpp
