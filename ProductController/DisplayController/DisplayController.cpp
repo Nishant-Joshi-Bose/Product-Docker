@@ -93,7 +93,7 @@ static constexpr int   SEND_DEFAULTS_TO_LPM_RETRY_MS    = 2000;
 static constexpr float SILVER_LUX_FACTOR                = 11.0f;
 static constexpr uint8_t BRIGHTNESS_MAX                 = 100;
 static constexpr uint8_t BRIGHTNESS_MIN                 = 0;
-static constexpr int     UI_HEART_BEAT_RATE_SEC         = 30; // every 30 seconds
+static constexpr int     UI_HEART_BEAT_RATE_SEC         = 30; // heart beat frequency in seconds of the Monaco's ui/alive front-end message
 
 /*!
  */
@@ -431,17 +431,17 @@ void DisplayController::UpdateLoop()
 
         if( actual_is_screen_black != previous_is_screen_black )
         {
-            BOSE_LOG( VERBOSE, "screen content transitioned from: "         <<
-                      ( previous_is_screen_black ? "black" : "none-black" ) <<
-                      " to: "                                               <<
-                      ( actual_is_screen_black   ? "black" : "none-black" ) );
+            BOSE_LOG( VERBOSE, "screen content transitioned from: "        <<
+                      ( previous_is_screen_black ? "black" : "non-black" ) <<
+                      " to: "                                              <<
+                      ( actual_is_screen_black   ? "black" : "non-black" ) );
 
             // ???????????????????????????????????????????????????????????????????????
             // TODO: call HSM with new state
             // ???????????????????????????????????????????????????????????????????????
 
             previous_is_screen_black = actual_is_screen_black;
-        }// Else, the screen passed from black-to-none_black or passed form none-black to black
+        }// Else, the screen passed from black-to-none_black or passed form non-black to black
 
         if( ! m_defaultsSentToLpm
             // Transfer and processing on LPM can take time. Throttle this.
@@ -884,14 +884,14 @@ bool DisplayController::IsFrameBufferBlackScreen()
 
     if( fp == NULL )
     {
-        BOSE_LOG( ERROR, "error: failed to open file: " + blackScreenFileName );
+        BOSE_LOG( WARNING, "warning: failed to open file: " + blackScreenFileName );
         return false;
     }
 
     if( fscanf( fp, "%c", &buf ) != 1 )
     {
         fclose( fp );
-        BOSE_LOG( ERROR, "error: failed to read file: " + blackScreenFileName );
+        BOSE_LOG( WARNING, "warning: failed to read file: " + blackScreenFileName );
         return false;
     }
 
