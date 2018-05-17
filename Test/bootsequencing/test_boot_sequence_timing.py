@@ -98,7 +98,7 @@ def test_network_connection_time(rebooted_and_networked_device, adb_versions, gr
 
 @pytestrail.case('C658166')
 @pytest.mark.usefixtures('rebooted_and_networked_device', 'adb_versions', 'graphite')
-def test_boot_state_time(rebooted_and_networked_device, adb_versions, graphite, delay=0, maximum_time=30):
+def test_boot_state_time(rebooted_and_networked_device, adb_versions, graphite, maximum_time=30):
     """
     Acquires the time to get to states through the FrontDoorAPI, then posts them to the
     Graphite Server.
@@ -126,7 +126,7 @@ def test_boot_state_time(rebooted_and_networked_device, adb_versions, graphite, 
     LOGGER.debug("State Checking will be done with IP: %s", ip_address)
     assert ip_address != UNKNOWN, 'IP Address never acquired ({}).'.format(ip_address)
 
-    state_data = state_checker(ip_address, maximum_time, dict(), delay)
+    state_data = state_checker(ip_address, maximum_time, dict())
 
     rows = generate_time_message(dict(data.items() + state_data.items()), CONFIG['Grafana']['table_name'],
                                  CONFIG['Grafana']['sub_table_name'])

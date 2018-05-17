@@ -20,6 +20,7 @@ import os
 import shutil
 import time
 import ConfigParser
+from multiprocessing import Process, Manager
 
 import pytest
 
@@ -31,7 +32,7 @@ from CastleTestUtils.RivieraUtils import adb_utils, rivieraCommunication, rivier
 from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import flash_device
 
 from commonData import keyConfig
-
+from bootsequencing.stateutils import network_checker, UNKNOWN
 
 LOGGER = get_logger(__name__)
 
@@ -401,15 +402,6 @@ def rebooted_device(adb):
 
     yield {'reboot': {'start': start_time, 'end': end_time,
                       'duration': end_time - start_time}}
-
-    LOGGER.debug("Factory Defaulting Unit.")
-    adb.executeCommand('/opt/Bose/bin/factory_default')
-    adb.waitforDevice()
-    # TODO: Remove this section as there are better ways to see if up
-    time.sleep(10)
-    nw_file_status = adb.executeCommand("test -f /mnt/nv/product-persistence/NetworkProfiles.xml && echo FOUND")
-    assert not nw_file_status, \
-               '/mnt/nv/product-persistence/NetworkProfiles.xml should be removed after factory default.'
 
 
 @pytest.mark.usesfixtures('request', 'adb', 'device_id', 'ip_address_wlan')
