@@ -43,8 +43,6 @@ public:
 
     }
 
-    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )  override;
-
 protected:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
