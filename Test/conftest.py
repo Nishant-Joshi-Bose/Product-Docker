@@ -27,7 +27,7 @@ from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.LoggerUtils.logreadLogger import LogreadLogger
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
-from CastleTestUtils.RivieraUtils import rivieraCommunication, rivieraUtils
+from CastleTestUtils.RivieraUtils import adb_utils, rivieraCommunication, rivieraUtils
 from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import flash_device
 
 from commonData import keyConfig
@@ -360,18 +360,24 @@ def ip_address_wlan(request, device_id, wifi_config):
         # Add Router information to the Device
         add_profile = ' '.join(['network', 'wifi', 'profiles', 'add',
                                 router_name, security.upper(), password])
-        add_profile = "echo {} | nc 0 17000".format(add_profile)
         LOGGER.info("Adding Network Profile: %s", add_profile)
-        riviera_device.communication.executeCommand(add_profile)
-        time.sleep(5)
+
+        adb_utils.adb_telnet_cmd(add_profile, expect_after='->OK', expect_last='ADD_PROFILE_SUCCEEDED',
+                                 async_response=True, device_id=device_id)
+
+        device_ip_address = network_base.check_inf_presence(interface, timeout=20)
+        if device_ip_address:
+            LOGGER.debug("Found IP Address (%s) for Device (%s).", device_ip_address, device_id)
+            return device_ip_address
+
         LOGGER.debug("Rebooting device to ensure added profile retains.")
         riviera_device.communication.executeCommand('/opt/Bose/bin/PlatformReset')
-        time.sleep(20)
 
-    device_ip_address = network_base.check_inf_presence(interface, timeout=20)
+    device_ip_address = network_base.check_inf_presence(interface, timeout=60)
     if not device_ip_address:
-        raise SystemError("Failed to acquire network connection through: {}".format(interface))
+        pytest.fail("Failed to acquire network connection through: {}".format(interface))
 
+    LOGGER.debug("Found IP Address (%s) for Device (%s).", device_ip_address, device_id)
     return device_ip_address
 
 
