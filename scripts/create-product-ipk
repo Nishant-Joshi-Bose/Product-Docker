@@ -83,7 +83,6 @@ frontdoorutility_dir=$(components get FrontDoorUtility-qc8017_32 installed_locat
 boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
 datacollection_dir=$(components get DataCollectionClient-qc8017_32 installed_location) || exit
 datacollectionservice_dir=$(components get DataCollectionService-qc8017_32 installed_location) || exit
-sadi_dir=$(components get SADI-qc8017_32 installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
@@ -180,7 +179,6 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$httpproxy_dir/stage" "$opt_dir" || exit
 "$datacollection_dir/stage" "$opt_dir" || exit
 "$datacollectionservice_dir/stage" "$opt_dir" || exit
-"$sadi_dir/stage" "$opt_dir" || exit
 rm -rfv "$opt_dir/update/html" # TODO: remove this when SoftwareUpdate has been modified not to include the update pages.
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 
