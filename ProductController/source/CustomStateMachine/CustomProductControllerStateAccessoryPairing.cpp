@@ -84,7 +84,7 @@ bool CustomProductControllerStateAccessoryPairing::HandleIntentSpeakerPairing( K
 {
     BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
 
-    if( intent == ( unsigned int )Action::ACTION_STOP_PAIR_SPEAKERS )
+    if( intent == static_cast< KeyHandlerUtil::ActionType_t >( Action::ACTION_STOP_PAIR_SPEAKERS ) )
     {
         GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
     }
