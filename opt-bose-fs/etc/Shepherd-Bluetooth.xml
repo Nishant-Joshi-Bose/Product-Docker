@@ -1,8 +1,10 @@
 <ShepherdConfig>
 
-  <daemon name="BluetoothManager"/>
+  <daemon name="BluetoothManager"
+          nice="-19"/>
 
-  <daemon name="BT"/>
+  <daemon name="BT"
+          nice="-19"/>
 
   <daemon name="BTSource"/>
 

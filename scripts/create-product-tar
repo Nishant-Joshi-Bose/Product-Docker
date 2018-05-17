@@ -203,7 +203,7 @@ def copy_files_to_stage():
         logging.error("Unexpected error: [%s]" %(sys.exc_info()[0]))
         return -23, "Cannot add version file to stage"
     
-    logging.info("Adding version to stage")
+    logging.info("Adding versions to stage")
     try:        
         version_json = os.path.join(workspace, 'builds/Release/qc8017_32/BoseVersion.json')
         dest = os.path.join(stage_package_dir, "")
@@ -355,8 +355,8 @@ def create_bose_partition(is_without_lpm, development, ipks_to_install):
             os.remove(os.path.join(temp_dir, "opt/Bose/hsp/update_ext4.zip"))
         ''' move installed files to EXT4 directory '''
         movetree(os.path.join(temp_dir, "opt/Bose/"), extract_dir)
-        ''' sed -i -- 's/Status: install user unpacked/Status: install user installed/g' $bose_partition"/update/status '''        
-        retVal, retStr = perform_sed(os.path.join(extract_dir, "update/status"), 
+        ''' sed -i -- 's/Status: install user unpacked/Status: install user installed/g' $bose_partition"/.swUpdateCache/status '''        
+        retVal, retStr = perform_sed(os.path.join(extract_dir, ".swUpdateCache/status"), 
                                       "Status: install user unpacked", 
                                       "Status: install user installed")
         if retVal != 0:
@@ -530,7 +530,7 @@ def create_output(is_without_lpm, development):
         ''' create bose partition
         '''
         retVal, retStr = create_bose_partition(is_without_lpm, development, 
-                        ['product.ipk', 'monaco.ipk', 'lpm_updater.ipk', 'hsp.ipk'])
+                        ['product.ipk', 'monaco.ipk', 'lpm_updater.ipk', 'hsp.ipk', 'recovery.ipk'])
         if retVal != 0:
             return retVal, retStr
 
