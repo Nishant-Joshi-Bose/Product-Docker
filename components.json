@@ -5,11 +5,7 @@
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@4a94cfb9b647f133180a20d3aa591c0ecf35d94b"
-  },
-  {
-    "name": "BLERemoteXCVR",
-    "selected_version": "Release/master/v0.4.0-0+b23c5a5"
+    "selected_version": "master@e172441a954a2c6813f3b322907d2d27e78dbd76"
   },
   {
     "name": "A4VVideoManagerService",
@@ -17,15 +13,19 @@
   },
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.4.5-20940"
+    "selected_version": "Release/Castle-Fork-SOP/1.0.1-20981"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/0.4.5-20940"
+    "selected_version": "Release/Castle-Fork-SOP/1.0.1-20981"
   },
   {
     "name": "AVS-qc8017_32",
     "selected_version": "Release/Castle-Fork/0.5.5.42254.2814398"
+  },
+  {
+    "name": "BLERemoteXCVR",
+    "selected_version": "Release/master/v0.4.0-0+b23c5a5"
   },
   {
     "name": "bose-opkg-utils",
@@ -72,10 +72,6 @@
     "selected_version": "branches/castle-libs@2606"
   },
   {
-    "name": "CastlePassportClient-qc8017_32",
-    "selected_version": "Release/master/0.4.76-673+8201c19"
-  },
-  {
     "name": "Cli-qc8017_32",
     "selected_version": "Release/master/1.0.3-63+fb3e550"
   },
@@ -89,7 +85,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Release/master/0.4.3-86+d96cc15"
+    "selected_version": "Release/master/0.5.1-96+04eed26"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -121,7 +117,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/master/0.5.0-123+bae44b8"
+    "selected_version": "Release/master/0.5.1-125+230305a"
   },
   {
     "name": "NetworkService-qc8017_32",
@@ -140,8 +136,12 @@
     "selected_version": "Release/master/0.4.76-673+8201c19"
   },
   {
+    "name": "PassportClient-qc8017_32",
+    "selected_version": "Release/master/0.4.76-673+8201c19"
+  },
+  {
     "name": "ProductControllerCommon",
-    "selected_version": "master@143babf25b80b569011c65e3116300024e9575cd"
+    "selected_version": "master@fda6b047164d124b04f667bd4fbad7b92e2983f3"
   },
   {
     "name": "ProductUIAssets",
@@ -165,11 +165,11 @@
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@2542"
+    "selected_version": "trunk@2516"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.4.3-176+b75969e"
+    "selected_version": "Release/master/0.4.4-180+db319c7"
   },
   {
     "name": "RivieraLpmTools",
