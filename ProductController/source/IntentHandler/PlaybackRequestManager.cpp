@@ -88,7 +88,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
 
     auto playbackRequestResponseCallback = [ this ]( const SoundTouchInterface::NowPlaying & response )
     {
-        BOSE_DEBUG( s_logger, "A response to the playback request was received: %s" ,
+        BOSE_DEBUG( s_logger, "A response to the playback request was received: %s",
                     ProtoToMarkup::ToJson( response, false ).c_str( ) );
     };
 
@@ -146,6 +146,10 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
     {
         playbackRequestData.set_sourceaccount( "ADAPTiQ" );
     }
+    else if( action == ( uint16_t )Action::ACTION_START_PAIR_SPEAKERS )
+    {
+        playbackRequestData.set_sourceaccount( "PAIRING" );
+    }
     else
     {
         BOSE_ERROR( s_logger, "An invalid intent %d has been supplied.", action );
@@ -154,13 +158,17 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
 
     string activeSource;
     string activeAccount;
+
     if( m_ProductController.GetNowSelection( ).has_contentitem( ) )
     {
         const auto& nowSelectingContentItem = m_ProductController.GetNowSelection( ).contentitem( );
-        activeSource = nowSelectingContentItem.source( );
+
+        activeSource  = nowSelectingContentItem.source( );
         activeAccount = nowSelectingContentItem.sourceaccount( );
     }
+
     playbackRequestData.set_source( "PRODUCT" );
+
     if( activeSource != playbackRequestData.source()  ||
         activeAccount != playbackRequestData.sourceaccount( ) )
     {
