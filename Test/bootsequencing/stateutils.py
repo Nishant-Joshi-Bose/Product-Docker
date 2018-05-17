@@ -105,7 +105,7 @@ def state_checker(ip_address, run_time, data, delay=5):
         data['state'] = {}
     time.sleep(delay)
 
-    api = FrontDoorAPI.FrontDoorAPI(ip_address)
+    api = FrontDoorAPI.FrontDoorAPI(ip_address, logger=LOGGER)
     start_time = time.time()
     data['state']['start'] = start_time
 
@@ -114,6 +114,7 @@ def state_checker(ip_address, run_time, data, delay=5):
         current_time = time.time()
         try:
             state = str(api.getState())
+            LOGGER.debug("Found state: %s", state)
         except KeyError:
             LOGGER.warn("API did not return its state properly.")
             continue
@@ -127,7 +128,7 @@ def state_checker(ip_address, run_time, data, delay=5):
                                     'last_seen': current_time}
 
         # I don't want to hit the API too hard. This might be slowing things down.
-        time.sleep(0.1)
+        time.sleep(0.25)
 
     data['state']['end'] = time.time()
     number_states = len([key for key in data['state'].keys() if key not in ['start', 'end']])
