@@ -25,6 +25,7 @@
 #include "ProductSTSStateFactory.h"
 #include "ProductSTSStateTopSilent.h"
 #include "CustomProductSTSStateTopAux.h"
+#include "ProductSTS.pb.h"
 
 static DPrint s_logger( "EddieProductController" );
 
@@ -544,15 +545,18 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void EddieProductController::SetupProductSTSController( void )
 {
+    using namespace ProductSTS;
+
     ProductSTSStateFactory<CustomProductSTSStateTopAux> auxStateFactory;
     ProductSTSStateFactory<ProductSTSStateTopSilent>    silentStateFactory;
 
+    // 'AUX' is a product defined source used for the auxilary port.
     std::vector<ProductSTSController::SourceDescriptor> sources;
-    ProductSTSController::SourceDescriptor descriptor_AUX{ 0, "AUX", true, auxStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_AUX{ AUX, ProductSourceSlot_Name( AUX ), true, auxStateFactory };
     sources.push_back( descriptor_AUX );
 
     // 'SETUP' is a "fake" source used for setup state.
-    ProductSTSController::SourceDescriptor descriptor_Setup{ 1, "SETUP", false, silentStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_Setup{ SETUP, ProductSourceSlot_Name( SETUP ), false, silentStateFactory };
     sources.push_back( descriptor_Setup );
 
     Callback<void> cb_STSInitWasComplete( std::bind( &EddieProductController::HandleSTSInitWasComplete, this ) );
