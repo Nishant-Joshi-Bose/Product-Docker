@@ -32,6 +32,10 @@ function device_toggle {
 function do_p2p {
     log info "Switching to USB p2p mode"
 
+    mkdir /run/udev/rules.d
+    cp /opt/Bose/etc/udev/rules.d/unlock-rndis1.rules /run/udev/rules.d
+    udevadm control --reload
+
     device_toggle rndis0 rndis1
     ip addr add 203.0.113.1/30 dev rndis1
 
