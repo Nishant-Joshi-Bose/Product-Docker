@@ -232,7 +232,7 @@ void CustomProductAudioService::SendMainStreamAudioSettingsEvent()
     std::string mainStreamAudioSettings = ProtoToMarkup::ToJson( m_mainStreamAudioSettings, true );
     m_APPointer->SetMainStreamAudioSettings( mainStreamAudioSettings );
     // DMR Print out the JSON being sent to AP.
-    //BOSE_INFO( s_logger, "SendMainStreamAudioSettingsEvent %s", mainStreamAudioSettings.c_str() );
+    BOSE_INSANE( s_logger, "SendMainStreamAudioSettingsEvent %s", mainStreamAudioSettings.c_str() );
 }
 
 /*!
@@ -256,16 +256,25 @@ void CustomProductAudioService::ThermalDataReceivedCb( const IpcSystemTemperatur
     // since it does all the safety checks.
     m_thermalTask.GetThermalValue( ampTemp, thermalValueType, IPC_THERMAL_LOCATION_CONSOLE_INTERNAL_AMP );
 
-    if( m_mainStreamAudioSettings.thermaldata_size() == 0 )
+    // The DSP explictly only wants temperature values in valid ranges.
+    // If we detect an invalid (non-existant) thermal reading, do not add it to the stream config.
+    if( ampTemp == INT16_MAX )
     {
-        m_mainStreamAudioSettings.add_thermaldata( ampTemp );
+        m_mainStreamAudioSettings.clear_thermaldata();
     }
     else
     {
-        m_mainStreamAudioSettings.set_thermaldata( 0, ampTemp );
-    }
+        if( m_mainStreamAudioSettings.thermaldata_size() == 0 )
+        {
+            m_mainStreamAudioSettings.add_thermaldata( ampTemp );
+        }
+        else
+        {
+            m_mainStreamAudioSettings.set_thermaldata( 0, ampTemp );
+        }
 
-    SendMainStreamAudioSettingsEvent();
+        SendMainStreamAudioSettingsEvent();
+    }
 }
 
 /*!
