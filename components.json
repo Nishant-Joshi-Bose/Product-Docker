@@ -109,7 +109,7 @@
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.4.2-97+1e39dda"
+    "selected_version": "Release/master/0.4.3-99+35dd976"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -169,7 +169,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/0.4.4-180+db319c7"
+    "selected_version": "Release/master/1.0.0-183+6de2ea1"
   },
   {
     "name": "RivieraLpmTools",
