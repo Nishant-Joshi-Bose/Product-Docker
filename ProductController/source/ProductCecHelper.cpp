@@ -473,42 +473,36 @@ void ProductCecHelper::Stop( )
 void ProductCecHelper::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
                                          nowPlayingStatus )
 {
-    BOSE_DEBUG( s_logger, "CEC CAPS now playing status has been received." );
-
     using namespace ProductSTS;
 
-    if( nowPlayingStatus.has_state( ) )
+    BOSE_DEBUG( s_logger, "CEC CAPS now playing status has been received." );
+
+    if( nowPlayingStatus.state( ).status( ) == SoundTouchInterface::Status::play )
     {
-        if( nowPlayingStatus.state( ).status( ) == SoundTouchInterface::Status::play )
+        if( nowPlayingStatus.has_container( )                          and
+            nowPlayingStatus.container( ).has_contentitem( )           and
+            nowPlayingStatus.container( ).contentitem( ).has_source( ) and
+            nowPlayingStatus.container( ).contentitem( ).has_sourceaccount( ) )
         {
-            if( nowPlayingStatus.has_container( )                          and
-                nowPlayingStatus.container( ).has_contentitem( )           and
-                nowPlayingStatus.container( ).contentitem( ).has_source( ) and
-                nowPlayingStatus.container( ).contentitem( ).has_sourceaccount( ) )
+            if( nowPlayingStatus.container( ).contentitem( ).source( ).compare( ProductSourceSlot_Name( PRODUCT ) ) == 0   and
+                ( nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( TV     ) ) == 0 or
+                  nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( SLOT_0 ) ) == 0 or
+                  nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( SLOT_1 ) ) == 0 or
+                  nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( SLOT_2 ) ) == 0 ) )
             {
-                if( nowPlayingStatus.container( ).contentitem( ).source( ).compare( ProductSourceSlot_Name( PRODUCT ) ) == 0   and
-                    nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( TV ) ) == 0 )
-                {
-                    BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to SOURCE_TV." );
+                BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to SOURCE_TV." );
 
-                    m_ProductLpmHardwareInterface->SendSourceSelection( LPM_IPC_SOURCE_TV );
-                }
-                else
-                {
-                    BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to LPM_IPC_SOURCE_INTERNAL." );
-
-                    m_ProductLpmHardwareInterface->SendSourceSelection( LPM_IPC_SOURCE_INTERNAL );
-                }
-
+                m_ProductLpmHardwareInterface->SendSourceSelection( LPM_IPC_SOURCE_TV );
             }
+            else
+            {
+                BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to LPM_IPC_SOURCE_INTERNAL." );
+
+                m_ProductLpmHardwareInterface->SendSourceSelection( LPM_IPC_SOURCE_INTERNAL );
+            }
+
         }
     }
-    else
-    {
-        BOSE_DEBUG( s_logger, "CEC CAPS now playing status is unknown. CEC STANDBY  %d",  LPM_IPC_SOURCE_STANDBY );
-        m_ProductLpmHardwareInterface->SendSourceSelection( LPM_IPC_SOURCE_STANDBY );
-    }
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -536,6 +530,7 @@ void ProductCecHelper::PowerOff( )
 
     msg.set_state( A4VVideoManagerServiceMessages::PowerState_t::PS_Low );
     m_CecHelper->SetPowerState( msg );
+    m_ProductLpmHardwareInterface->SendSourceSelection( LPM_IPC_SOURCE_STANDBY );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

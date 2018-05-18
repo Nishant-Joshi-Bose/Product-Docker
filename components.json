@@ -9,7 +9,7 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@d8bd048cc178fc4911e94e564f71c21e866825e8"
+    "selected_version": "master@f3527b809c6a37b7e6aecb862f75d3d3c858e485"
   },
   {
     "name": "AudioPath-qc8017_32",
@@ -21,7 +21,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.5.5.42254.2814398"
+    "selected_version": "Release/Castle-Fork/0.5.6.42384.2824845"
   },
   {
     "name": "BLERemoteXCVR",
@@ -33,7 +33,7 @@
   },
   {
     "name": "bose-web-riviera-ap-page",
-    "selected_version": "master@db9d7e3bce6edb3306f736e98a13d60376e5b0fa"
+    "selected_version": "master@1d02023bcca657413bae8005d5c9cbf446bfb510"
   },
   {
     "name": "bose-web-update-page",
@@ -45,19 +45,19 @@
   },
   {
     "name": "BoseOPKG-native",
-    "selected_version": "Release/master/0.4.1-23+3391857"
+    "selected_version": "Release/master/0.5.0-27+f246d45"
   },
   {
     "name": "BoseOPKG-qc8017_32",
-    "selected_version": "Release/master/0.4.1-23+3391857"
+    "selected_version": "Release/master/0.5.0-27+f246d45"
   },
   {
     "name": "BoseOPKG-x86",
-    "selected_version": "Release/master/0.4.1-23+3391857"
+    "selected_version": "Release/master/0.5.0-27+f246d45"
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/develop/0.4.4-281+5a39793"
+    "selected_version": "Release/master/0.4.7-308+71498fe"
   },
   {
     "name": "CastleLibs-native",
@@ -81,7 +81,7 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Release/master/0.4.6-39+d87444d"
+    "selected_version": "Release/master/0.5.0-41+71f4cdb"
   },
   {
     "name": "DemoController-qc8017_32",
@@ -109,7 +109,7 @@
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.4.2-97+1e39dda"
+    "selected_version": "Release/master/0.4.3-99+35dd976"
   },
   {
     "name": "KeyHandler-qc8017_32",
@@ -121,7 +121,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/master/0.4.5-282+dd44421"
+    "selected_version": "Release/master/0.4.7-305+12fcba0"
   },
   {
     "name": "opensource-jsoncpp-native",
@@ -133,11 +133,11 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/master/0.4.76-673+8201c19"
+    "selected_version": "Release/master/0.5.0-709+9fc7306"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/master/0.4.76-673+8201c19"
+    "selected_version": "Release/master/0.5.0-709+9fc7306"
   },
   {
     "name": "ProductControllerCommon",
@@ -157,11 +157,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/3.8"
+    "selected_version": "Release/master/3.9"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/3.8"
+    "selected_version": "Release/master/3.9"
   },
   {
     "name": "RivieraLPM",
@@ -180,12 +180,8 @@
     "selected_version": "Release/master/0.4.1-55+6e2ecfe"
   },
   {
-    "name": "SADI-qc8017_32",
-    "selected_version": "Release/master/1.1.2-27+86a615f"
-  },
-  {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/master/0.5.2-296+6cc58ed"
+    "selected_version": "Release/master/0.5.3-315+e4934d1"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -193,11 +189,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.5.2-570+adb44e8"
+    "selected_version": "Release/master/0.5.3-593+49a4d24"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.5.5.42254.2814398"
+    "selected_version": "Release/Castle-Fork/0.5.6.42384.2824845"
   },
   {
     "name": "SystemEventService-qc8017_32",
