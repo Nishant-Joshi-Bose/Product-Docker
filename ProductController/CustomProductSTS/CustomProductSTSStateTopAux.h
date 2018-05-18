@@ -37,6 +37,14 @@ public:
     ////////////////////////////////////////////////////////
     bool HandleMuteStatus( const STS::MuteStatus& ms ) override;
 
+    ////////////////////////////////////////////////////////
+    /// @brief Act HandleDeactivateRequest by generating a un-mute to CAPS and remembering it
+    /// and then executing HandleDeactivateRequest from base.
+    /// @param STS::const STS::DeactivateRequest &req, uint32_t seq
+    /// @return true if successful
+    ////////////////////////////////////////////////////////
+    bool HandleDeactivateRequest( const STS::DeactivateRequest &req, uint32_t seq ) override;
+
 private:
     void ToggleMute() const;
     bool m_mute = false;

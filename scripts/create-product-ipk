@@ -83,7 +83,10 @@ frontdoorutility_dir=$(components get FrontDoorUtility-qc8017_32 installed_locat
 boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
 datacollection_dir=$(components get DataCollectionClient-qc8017_32 installed_location) || exit
 datacollectionservice_dir=$(components get DataCollectionService-qc8017_32 installed_location) || exit
-sadi_dir=$(components get SADI-qc8017_32 installed_location) || exit
+btstackadapter_dir=$(components get BTStackAdapter-qc8017_32 installed_location) || exit
+btsource_dir=$(components get BTSource-qc8017_32 installed_location) || exit
+blesetup_dir=$(components get BLESetup-qc8017_32 installed_location) || exit
+btstssink_dir=$(components get BTSTSSink-qc8017_32 installed_location) || exit
 
 sysroot=$riviera_toolchain_dir/sdk/sysroots/$(uname -m)-oesdk-linux
 tool_prefix=$sysroot/usr/bin/arm-oemllib32-linux/arm-oemllib32-linux-
@@ -111,11 +114,7 @@ cp "$wspace/builds/$cfg/qc8017_32/bin"/*[!~] "$opt_dir/bin" || exit
 soundtouch_sdk=$(components get SoundTouch-SDK-qc8017_32 installed_location) || exit
 stfs=$soundtouch_sdk/fs
 cp "$stfs"/opt/Bose/*Strings.txt "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/BLESetup "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/BluetoothManager "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/CAPS "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/BT "$opt_dir/bin" || exit
-cp "$stfs"/opt/Bose/BTSource "$opt_dir/bin" || exit
 cp "$stfs"/opt/Bose/etc/bonjour.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/etc/SoundTouchSdkPrivateCfg.xml "$opt_dir/etc" || exit
 cp "$stfs"/opt/Bose/IoT "$opt_dir/bin" || exit
@@ -180,7 +179,10 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$httpproxy_dir/stage" "$opt_dir" || exit
 "$datacollection_dir/stage" "$opt_dir" || exit
 "$datacollectionservice_dir/stage" "$opt_dir" || exit
-"$sadi_dir/stage" "$opt_dir" || exit
+"$btstackadapter_dir/stage" "$opt_dir" || exit
+"$btsource_dir/stage" "$opt_dir" || exit
+"$blesetup_dir/stage" "$opt_dir" || exit
+"$btstssink_dir/stage" "$opt_dir" || exit
 rm -rfv "$opt_dir/update/html" # TODO: remove this when SoftwareUpdate has been modified not to include the update pages.
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 
