@@ -42,9 +42,9 @@ function do_p2p {
     cat > "$CONF_FILE" <<-EOF
 	start 203.0.113.2
 	end   203.0.113.2
-        interface rndis1
+	interface rndis1
 	lease_file /dev/null
-        pidfile /var/run/udhcpd.rndis1.pid
+	pidfile /var/run/udhcpd.rndis1.pid
 	option subnet 255.255.255.0
 	option router 203.0.113.1
 	option dns 203.0.113.1
