@@ -15,6 +15,7 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductKeyInputManager
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
+  ${AUDIOSOURCE_DIR}/include
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductNetworkService
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSourceInfo
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
@@ -74,7 +75,10 @@ TARGET_LINK_LIBRARIES(Eddie
   SASSFrontDoorServiceProto
   SoftwareUpdateAPI
   STS
+  STSClient
   ShelbyUtils
+  CommonTypes
+  STSProtoBufs
   SoundTouch_SDK_Protobuf_static
   SystemEventService
   BoseLibs

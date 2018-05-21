@@ -43,7 +43,10 @@ lowpower=(
     Shepherd-NetManager.xml
     Shepherd-avs.xml
     Shepherd-vfe.xml
-    Shepherd-Bluetooth.xml
+    Shepherd-BTStackAdapter.xml
+    Shepherd-BTSTSSink.xml
+    Shepherd-BTSource.xml
+    Shepherd-BLESetup.xml
 )
 
 # For testing, make it easy to override what shepherd config files we use.
@@ -236,7 +239,10 @@ if (( $# == 1 )) && [ "$1" = enterswup ]; then
     disable=(
         Shepherd-AudioPath.xml
         Shepherd-avs.xml
-        Shepherd-Bluetooth.xml
+        Shepherd-BTStackAdapter.xml
+        Shepherd-BTSource.xml
+        Shepherd-BLESetup.xml
+        Shepherd-BTSTSSink.xml
         Shepherd-CLIServer.xml
         Shepherd-DataCollectionService.xml
         Shepherd-DemoController.xml
