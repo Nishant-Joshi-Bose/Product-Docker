@@ -13,31 +13,21 @@
 Automated Tests for LightBar Animations for Eddie
 """
 import json
+import os
 import random
-import re
+import ConfigParser
 from time import sleep
+
 import pytest
-from configure import CONF
-from common_exception import IPAddressError
+
+import lightbar_helper
+
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
-from CastleTestUtils.SupportUtils.FileUtils.CsvFileSupport import read_rows_as_dictionary_list_from_csv_file
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
-from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
+from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
+from CastleTestUtils.RivieraUtils.rivieraUtils import RivieraUtils
 
 LOGGER = get_logger(__file__)
-INVALID_ANIMATION = "animation not supported"
-ANIMATION_TIMEOUT = 10
-
-
-def negative_animation_data():
-    """
-    This function will return the list of dictionary of data
-    from the csv file.
-    :return lightbar_data : List of negative animation data
-    """
-    LOGGER.info("Get the negative lightbar data")
-    lightbar_data = read_rows_as_dictionary_list_from_csv_file(CONF['animation_filename'])[1]
-    return lightbar_data
 
 
 def pytest_generate_tests(metafunc):
@@ -46,168 +36,202 @@ def pytest_generate_tests(metafunc):
     :param metafunc: Object that help to inspect a test function
     :return: None
     """
-    if str(metafunc.function.__name__) == "test_play_valid_animation":
+    if str(metafunc.function.__name__) == 'test_play_valid_animation':
+        device_id = metafunc.config.getoption("--device-id")
 
-        if metafunc.config.getoption("--target").lower() == 'device':
-            network_base = NetworkBase(None)
-            iface = metafunc.config.getoption("--network-iface")
-            device_ip = network_base.check_inf_presence(iface)
-            if not device_ip:
-                IPAddressError("No valid device IP")
-            frontdoor = FrontDoorAPI(device_ip)
-            lightbar_response = frontdoor.getActiveAnimation()
-            if frontdoor:
-                frontdoor.close()
-            LOGGER.debug("Lightbar response is %s", lightbar_response)
-            animation_values = lightbar_response["properties"]["supportedValues"]
-            metafunc.parametrize("animation_value", animation_values)
+        network_base = NetworkBase(None, device_id)
+
+        interface = metafunc.config.getoption("--network-iface")
+        device_ip_address = network_base.check_inf_presence(interface, timeout=10)
+
+        if not device_ip_address:
+            riviera_utils = RivieraUtils('ADB', device=device_id, logger=LOGGER)
+
+            # Read Wifi Configurations
+            wifi_config = ConfigParser.SafeConfigParser()
+            parent_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+            wifi_ini_file = '{}/Configs/conf_wifiProfiles.ini'.format(parent_path)
+            wifi_config.read(wifi_ini_file)
+
+            router = metafunc.config.getoption("--router")
+            riviera_utils.add_wifi_profile(wifi_config.get(router, 'ssid'),
+                                           wifi_config.get(router, 'password'),
+                                           wifi_config.get(router, 'security'),
+                                           device=device_id)
+
+            device_ip_address = network_base.check_inf_presence(interface)
+
+            if not device_ip_address:
+                pytest.fail("Not able to gather IP Address on {}".format(device_id))
+
+        front_door = FrontDoorQueue(device_ip_address)
+        lightbar_response = front_door.getActiveAnimation()
+        if front_door:
+            front_door.close()
+
+        LOGGER.debug("Lightbar response is %s", lightbar_response)
+        animation_values = lightbar_response["properties"]["supportedValues"]
+
+        metafunc.parametrize("animation_value", animation_values)
 
 
-@pytest.mark.usefixtures("save_speaker_log")
-class TestLightBarScenario(object):
+
+@pytest.mark.usefixtures('frontdoor_wlan', 'animation_list', 'serial_handler')
+def test_current_active_animation(frontdoor_wlan, animation_list, serial_handler):
     """
-    Class that handles Lightbar Animation patterns
+    Verify the active animation pattern on lightbar.
+
+    Test Steps:
+    1 Play some animation pattern on device
+    2 Verify the current animation value from getActiveAnimation() API
+
+    :param frontdoor_wlan : fixture returning frontDoorQueue instance
+    :param animation_list : fixture returning supported animation values
+    :param serial_handler : fixture to start and stop serial logs
     """
-    @pytest.mark.usefixtures('frontDoor', 'animation_list')
-    def test_current_active_animation(self, frontDoor, animation_list):
-        """
-        Verify the active animation pattern on lightbar.
+    expected_animation = random.choice(animation_list)
+    LOGGER.debug("Expected animation value is %s", expected_animation)
 
-        Test Steps:
-        1 Play some animation pattern over device
-        2 Verify the current animation value from getActiveAnimation()
+    # play the animation value
+    animation_data = json.dumps({"nextValue": {"value": expected_animation,
+                                               "transition": "SMOOTH", "repeat": "true"}})
+    lightbar_play_response = frontdoor_wlan.playLightBarAnimation(
+        animation_data)
+    LOGGER.debug("lightbar play response is %s", lightbar_play_response)
 
-        :param frontDoor : fixture returning frontDoor instance
-        :param animation_list : fixture returning supported animation values
-        """
-        expected_animation = random.choice(animation_list)
-        LOGGER.debug("Expected animation value is %s", expected_animation)
+    # get animation value from LPM serial logs
+    current_animation = lightbar_helper.get_animation_from_lpm(
+        serial_handler, expected_animation)
 
-        # play the animation value
-        animation_data = json.dumps({"nextValue": {"value": expected_animation,
-                                                   "transition": "SMOOTH", "repeat": "true"}})
-        lightbar_play_response = frontDoor.playLightBarAnimation(animation_data)
-        LOGGER.debug("lightbar play response is %s", lightbar_play_response)
-        sleep(ANIMATION_TIMEOUT)
+    assert current_animation == expected_animation, \
+        "Expected Animation ({}) not equal to API Animation ({}).".format(
+            expected_animation, current_animation)
 
-        # get the animation details
-        lightbar_response = frontDoor.getActiveAnimation()
-        LOGGER.debug("lightbar get response is %s", lightbar_response)
-        current_animation = lightbar_response["currentValue"]["value"]
-        assert current_animation == expected_animation, "Expected animation value as %s"\
-            " mismatch with current animation value as %s" % (expected_animation, current_animation)
+    # verify animation value from Lightbar API Notifications
+    lb_notification_value = lightbar_helper.animation_in_notification(
+        frontdoor_wlan, expected_animation)
+    assert lb_notification_value == expected_animation, \
+        "Expected Animation ({}) not equal to API Animation ({}).".format(
+            expected_animation, lb_notification_value)
 
-    @pytest.mark.usefixtures('frontDoor', 'animation_list')
-    def test_stop_active_animation(self, frontDoor, animation_list):
-        """
-        Verify whether animation pattern on lightbar is stopped or not
-        using 'frontDoor.stopActiveAnimation' api
 
-        Test Steps:
-        1 Play some animation pattern over device
-        2 Stop the animation from stopActiveAnimation()
-        3 Verify the current animation value from getActiveAnimation()
+@pytest.mark.usefixtures('frontdoor_wlan', 'animation_list', 'serial_handler')
+def test_stop_active_animation(frontdoor_wlan, animation_list, serial_handler):
+    """
+    Verify whether animation pattern on lightbar is stopped or not
+    using 'frontDoor.stopActiveAnimation' api
 
-        :param frontDoor : fixture returning frontDoor instance
-        :param animation_list : fixture returning supported animation values
-        """
-        expected_animation = random.choice(animation_list)
-        LOGGER.debug("Expected animation value is %s", expected_animation)
+    Test Steps:
+    1 Play some animation pattern over device
+    2 Stop the animation from stopActiveAnimation()
+    3 Verify the current animation value from getActiveAnimation()
 
-        # play the animation value
-        animation_data = json.dumps({"nextValue": {"value": expected_animation,
-                                                   "transition": "SMOOTH", "repeat": "true"}})
-        lightbar_play_response = frontDoor.playLightBarAnimation(animation_data)
-        LOGGER.debug("lightbar play response is %s", lightbar_play_response)
-        sleep(ANIMATION_TIMEOUT)
-        # stop the active animation
-        lightbar_stop_response = frontDoor.stopActiveAnimation(animation_data)
-        LOGGER.debug("lightbar stop response is %s", lightbar_stop_response)
+    :param frontdoor_wlan: fixture returning frontDoorQueue instance
+    :param animation_list: fixture returning supported animation values
+    :param serial_handler: fixture to start and stop serial logs
+    """
+    expected_animation = random.choice(animation_list)
+    LOGGER.debug("Expected animation value: %s", expected_animation)
 
-        # wait till the animation name delete from getActiveAnimation()
-        sleep(ANIMATION_TIMEOUT)
-        # get the animation details after stop the current animation
-        lightbar_response = frontDoor.getActiveAnimation()
-        current_animation = lightbar_response["currentValue"].get("value")
-        assert not current_animation, "Expected animation value as %s"\
-                                      " should be stopped" % (expected_animation)
+    # play the animation value
+    animation_data = json.dumps({"nextValue": {"value": expected_animation,
+                                               "transition": "SMOOTH", "repeat": "true"}})
+    lightbar_play_response = frontdoor_wlan.playLightBarAnimation(
+        animation_data)
+    LOGGER.debug("lightbar play response: %s", lightbar_play_response)
 
-    @pytest.mark.usefixtures('frontDoor', 'animation_list')
-    @pytest.mark.parametrize("transition_value", ["SMOOTH", "IMMEDIATE"])
-    def test_play_valid_animation(self, animation_value, frontDoor,
-                                  transition_value, serial_handler):
-        """
-        Verify supported animation pattern on devices and lightbar status
+    # get animation value from LPM serial logs
+    current_animation = lightbar_helper.get_animation_from_lpm(
+        serial_handler, expected_animation)
 
-        Test Steps:
-        1 Play animation pattern over device
-        2 Verify the current animation value from getActiveAnimation() with the animation value
+    # stop the active animation
+    lightbar_stop_response = frontdoor_wlan.stopActiveAnimation(animation_data)
+    LOGGER.debug("lightbar stop response: %s", lightbar_stop_response)
 
-        :param frontDoor : fixture returning frontDoor instance
-        :param serial_handler: fixture returning serial com port instance
-        :param animation_value: parameterize animation_value of supported animations
-        :param transition_value: parameterize transition_value
-        """
+    # get the animation details after stopping the current animation
+    for _ in range(lightbar_helper.PLAY_STOP_ANIMATION_TIMEOUT):
+        lightbar_response = frontdoor_wlan.getActiveAnimation()
+        current_animation = lightbar_response.get("currentValue")
+        if current_animation is None:
+            break
+        sleep(1)
+    assert not current_animation, "Animation ({}) should be stopped".format(
+        current_animation)
 
-        LOGGER.debug("Playing animation value %s and transition %s",
-                     (animation_value, transition_value))
-        animation_data = json.dumps({"nextValue": {"value": animation_value,
-                                                   "transition": transition_value,
-                                                   "repeat": "true"}})
 
-        # play the animation on device
-        lightbar_play_response = frontDoor.playLightBarAnimation(animation_data)
-        LOGGER.debug("lightbar play response is %s", lightbar_play_response)
-        sleep(ANIMATION_TIMEOUT)
+@pytest.mark.usefixtures("frontdoor_wlan", "animation_list", "serial_handler")
+@pytest.mark.parametrize("transition_value", ["SMOOTH", "IMMEDIATE"])
+def test_play_valid_animation(frontdoor_wlan, animation_value, transition_value, serial_handler):
+    """
+    Verify supported animation pattern on devices and lightbar status
 
-        # get the animation details after playing the current animation
-        lightbar_response = frontDoor.getActiveAnimation()
-        current_animation = lightbar_response["currentValue"].get("value")
-        current_transition = lightbar_response["currentValue"].get("transition")
-        assert current_animation == animation_value, "Expected animation value as '{0}' "\
-            "mismatch with current animation value as '{1}'".format(animation_value,
-                                                                    current_animation)
-        assert current_transition == transition_value, "Expected transition value as '{0}' "\
-            " mismatch with current transition value as '{1}'".format(transition_value,
-                                                                      current_transition)
+    Test Steps:
+    1 Play animation pattern over device
+    2 Verify the current animation value from getActiveAnimation()
+        with the animation value
 
-        # verify the animation value from LPM serial logs
-        LOGGER.debug("Verifying from LPM serial logs")
-        serial_outputs = serial_handler.execute_command('lb history')
-        LOGGER.debug("Lightbar logs from LPM are: %s", serial_outputs)
-        serial_animations = [serial_output for serial_output in serial_outputs
-                             if 'Animation Name' in serial_output]
-        serial_last_animation = re.search('Animation Name: (.+?), S',
-                                          serial_animations[-1]).group(1)
-        assert serial_last_animation == animation_value, "Expected animation value as '{0}' "\
-            "mismatch with current animation value as '{1}'".format(animation_value,
-                                                                    serial_last_animation)
+    :param animation_value: parameterize animation_value of supported animations
+    :param frontdoor_wlan: fixture returning frontDoor instance
+    :param transition_value: parameterize transition_value
+    :param serial_handler: fixture to start and stop serial logs
+    """
 
-    @pytest.mark.usefixtures('frontDoor')
-    @pytest.mark.parametrize("animation_data", negative_animation_data())
-    def test_play_invalid_animation(self, animation_data, frontDoor):
-        """
-        Verify invalid animation pattern on devices and lightbar status
+    LOGGER.debug("Playing animation value %s and transition %s",
+                 animation_value, transition_value)
+    animation_data = json.dumps({"nextValue": {"value": animation_value,
+                                               "transition": transition_value,
+                                               "repeat": "true"}})
 
-        Test Steps:
-        1 Play invalid animation pattern over device
-        2 Verify the current animation value from getActiveAnimation() with the animation value
+    # play the animation on device
+    lightbar_play_response = frontdoor_wlan.playLightBarAnimation(
+        animation_data)
+    LOGGER.debug("lightbar play response is %s", lightbar_play_response)
 
-        :param frontDoor : fixture returning frontDoor instance
-        :param animation_data : parameterize negative animation data
-        """
-        transition = animation_data["transition"]
-        animation_value = animation_data["value"]
-        LOGGER.debug("Playing invalid animation value %s and transition %s",
-                     animation_value, transition)
-        animation_data = json.dumps({"nextValue": {"value": animation_value,
-                                                   "transition": transition, "repeat": "true"}})
+    # verify the animation value from LPM serial logs
+    serial_last_animation = lightbar_helper.get_animation_from_lpm(
+        serial_handler, animation_value)
 
-        sleep(ANIMATION_TIMEOUT)
-        # play the animation with invalid value on device
-        lightbar_play_response = frontDoor.playLightBarAnimation(animation_data)
-        LOGGER.debug("lightbar play response is %s", lightbar_play_response)
+    assert serial_last_animation == animation_value, "Expected animation value as '{0}' "\
+        "mismatch with current animation value as '{1}'".format(animation_value,
+                                                                serial_last_animation)
 
-        current_animation_status = lightbar_play_response["error"].get("description")
-        assert current_animation_status == INVALID_ANIMATION, "Invalid Animation "\
-            "scenario played on device as %s" % animation_data
+    # verify animation value from API Notifications
+    lb_notification_value = lightbar_helper.animation_in_notification(
+        frontdoor_wlan, animation_value)
+    assert lb_notification_value == animation_value, "Expected animation value {}\
+        mismatched with {} animation from \
+        API notifications".format(animation_value, lb_notification_value)
+
+    frontdoor_wlan.stopActiveAnimation(animation_data)
+
+
+@pytest.mark.usefixtures('frontdoor_wlan')
+@pytest.mark.parametrize("animation_data", lightbar_helper.negative_animation_data())
+def test_play_invalid_animation(animation_data, frontdoor_wlan):
+    """
+    Verify invalid animation pattern on devices and lightbar status
+
+    Test Steps:
+    1 Play invalid animation pattern over device
+    2 Verify the current animation value from getActiveAnimation() with the animation value
+
+    :param frontdoor_wlan: fixture returning frontDoor instance
+    :param animation_data: parameterize negative animation data
+    """
+    transition = animation_data["transition"]
+    animation_value = animation_data["value"]
+    LOGGER.debug("Playing invalid animation value %s and transition %s", animation_value, transition)
+    animation_data = json.dumps({"nextValue": {"value": animation_value,
+                                               "transition": transition, "repeat": "true"}})
+
+    # play the animation with invalid value on device
+    lightbar_play_response = lightbar_helper.play_invalid_lightbar_animation(
+        frontdoor_wlan, animation_data)
+
+    LOGGER.debug("lightbar play response is %s", lightbar_play_response)
+    for _ in range(lightbar_helper.PLAY_STOP_ANIMATION_TIMEOUT):
+        current_animation_status = lightbar_play_response["error"].get("message")
+        LOGGER.debug("Play response in invalid animations value is %s", current_animation_status)
+        if current_animation_status:
+            break
+    assert current_animation_status, "Invalid Animation scenario played on device as {}".format(animation_data)

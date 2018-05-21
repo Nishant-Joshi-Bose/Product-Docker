@@ -1,115 +1,67 @@
-#include <stdlib.h>
 #include <iostream>
-#include <unistd.h>
 #include "DPrint.h"
 #include "LpmClientFactory.h"
 #include "APTaskFactory.h"
-#include "SystemUtils.h"
+#include <semaphore.h>
 
-namespace
-{
+static DPrint s_logger{ "ReadLpmVersion" };
 
-DPrint s_logger{ "ReadLpmVersion" };
-
-void TrimNulls( std::string& s )
-{
-    while( !s.empty() && s.back() == '\0' )
-        s.pop_back();
-}
-
-}
+#define OK( X ) do {                                                    \
+        if( ( X ) == -1 )                                               \
+            BOSE_DIE( "Failed at " << __LINE__ << ": " << strerror( errno ) ); \
+    } while( 0 )
 
 int main()
 {
-    int retVal = 1;
-    std::string blobVersion;
-    std::string psocVersion;
-    std::string bootloaderVersion;
-    std::string userappVersion;
-    std::string lightbarVersion;
-    int timeout = 30;
-
     auto task = IL::CreateTask( "ReadLpmVersionTask" );
+    auto c = LpmClientFactory::Create( "ReadLpmVersionLpmClient", task );
 
-    /* connect */
-    auto lpmClient = LpmClientFactory::Create( "ReadLpmVersionLpmClient", task );
+    sem_t count;
+    OK( sem_init( &count, 0, 0 ) );
 
-    lpmClient->Connect( [&retVal, lpmClient]( bool connected ) mutable
+    c->Connect( [&count, c]( bool connected )
     {
         if( !connected )
+            BOSE_DIE( "LPM client connect failed" );
+
+        /* The glibc implementation of printf is thread safe,
+           which we assume here. */
+        c->GetBlobVersion( [&count]( IpcBlobVersion_t const & rsp )
         {
-            retVal = -1;
-            return;
-        }
-        retVal = 0;
+            printf( "Blob Version: %s\n", rsp.version().c_str() );
+            OK( sem_post( &count ) );
+        } );
+        IpcLpmComponentVerReq_t req{};
+        req.set_lpmcomponenttype( LPM_USER_APP );
+        c->GetLpmComponentVersion( req, [&count]( IpcLpmComponentVerRsp_t const & rsp )
+        {
+            printf( "User App Version: %s\n", rsp.componentversion().c_str() );
+            OK( sem_post( &count ) );
+        } );
+        req.set_lpmcomponenttype( LPM_BOOTLOADER );
+        c->GetLpmComponentVersion( req, [&count]( IpcLpmComponentVerRsp_t const & rsp )
+        {
+            printf( "Bootloader Version: %s\n", rsp.componentversion().c_str() );
+            OK( sem_post( &count ) );
+        } );
+        req.set_lpmcomponenttype( PSOC_USER_APP );
+        c->GetLpmComponentVersion( req, [&count]( IpcLpmComponentVerRsp_t const & rsp )
+        {
+            printf( "PSOC Version: %s\n", rsp.componentversion().c_str() );
+            OK( sem_post( &count ) );
+        } );
+        req.set_lpmcomponenttype( LIGHTBAR_ANIMATION_DB );
+        c->GetLpmComponentVersion( req, [&count]( IpcLpmComponentVerRsp_t const & rsp )
+        {
+            printf( "Lightbar Version: %s\n", rsp.componentversion().c_str() );
+            OK( sem_post( &count ) );
+        } );
     } );
-    while( retVal != 0 && timeout > 0 )
-    {
-        sleep( 1 );
-        timeout--;
-    }
-    if( 0 != retVal )
-    {
-        BOSE_CRITICAL( s_logger, "LPMClient Cannot be connected" );
-        return retVal;
-    }
-    BOSE_INFO( s_logger, "Requesting Version information" );
 
-    /* Blob */
-    lpmClient->GetBlobVersion( [&blobVersion]( IpcBlobVersion_t const & rsp ) mutable
-    {
-        /* Using cout to print the output intentionally */
-        blobVersion = rsp.version();
-    } );
-    /* user app */
-    IpcLpmComponentVerReq_t req{};
-    req.set_lpmcomponenttype( LPM_USER_APP );
-    lpmClient->GetLpmComponentVersion( req, [&userappVersion]( IpcLpmComponentVerRsp_t const & rsp ) mutable
-    {
-        userappVersion = rsp.componentversion();
-    } );
-    /* bootloader */
-    req.set_lpmcomponenttype( LPM_BOOTLOADER );
-    lpmClient->GetLpmComponentVersion( req, [&bootloaderVersion]( IpcLpmComponentVerRsp_t const & rsp ) mutable
-    {
-        bootloaderVersion = rsp.componentversion();
-    } );
-    /* psoc */
-    req.set_lpmcomponenttype( PSOC_USER_APP );
-    lpmClient->GetLpmComponentVersion( req, [&psocVersion]( IpcLpmComponentVerRsp_t const & rsp ) mutable
-    {
-        psocVersion = rsp.componentversion();
-    } );
-    /* lightbar */
-    req.set_lpmcomponenttype( LIGHTBAR_ANIMATION_DB );
-    lpmClient->GetLpmComponentVersion( req, [&lightbarVersion]( IpcLpmComponentVerRsp_t const & rsp ) mutable
-    {
-        lightbarVersion = rsp.componentversion();
-    } );
-    /* Wait for all */
-    timeout = 30;
-    while( ( blobVersion.length() == 0
-             || userappVersion.length() == 0
-             || bootloaderVersion.length() == 0
-             || psocVersion.length() == 0
-             || lightbarVersion.length() == 0
-           ) && timeout > 0 )
-    {
-        sleep( 1 );
-        timeout--;
-    }
+    timespec timeout;
+    OK( clock_gettime( CLOCK_REALTIME, &timeout ) );
+    timeout.tv_sec += 30;
 
-    TrimNulls( blobVersion );
-    TrimNulls( userappVersion );
-    TrimNulls( bootloaderVersion );
-    TrimNulls( psocVersion );
-    TrimNulls( lightbarVersion );
-
-    std::cout << "Blob Version: " << blobVersion << "\r\n";
-    std::cout << "User App Version: " << userappVersion << "\r\n";
-    std::cout << "Bootloader Version: " << bootloaderVersion << "\r\n";
-    std::cout << "PSOC Version: " << psocVersion << "\r\n";
-    std::cout << "Lightbar Version: " << lightbarVersion << "\r\n";
-
-    return retVal;
+    for( int i = 0; i < 5; ++i )
+        OK( sem_timedwait( &count, &timeout ) );
 }

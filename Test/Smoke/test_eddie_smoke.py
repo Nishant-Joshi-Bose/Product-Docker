@@ -28,10 +28,10 @@ class TestEddieSmoke(object):
     """
     Eddie Smoke Test Class
     """
-    @pytest.mark.usefixtures("deviceid", "riviera", "adb")
-    def test_factory_default(self, deviceid, riviera, adb):
+    @pytest.mark.usefixtures("device_id", "riviera", "adb")
+    def test_factory_default(self, device_id, riviera, adb):
         """
-        :param deviceid: adb deviceid of Eddie
+        :param device_id: adb device_id of Eddie
         :param riviera: Fixture to return RivieraUtils object
         :param adb: Fixture to return ADBCommunication object
 
@@ -40,7 +40,7 @@ class TestEddieSmoke(object):
         - Validate Product state should not be booting
         """
         riviera.perform_factory_default()
-        ipaddress = smoke_util.get_deviceip(deviceid, 'wlan1')
+        ipaddress = smoke_util.get_deviceip(device_id, 'wlan1')
         logger.debug("Device IP Address after factory default : %s ", ipaddress)
         assert ipaddress == '192.0.2.1', "Setup AP mode not up after factory default."
 

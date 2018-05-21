@@ -20,21 +20,20 @@ import os
 import shutil
 import time
 import ConfigParser
-from multiprocessing import process, Manager
+from multiprocessing import Process, Manager
 
 import pytest
-from pyadb import ADB
 
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
+from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.LoggerUtils.logreadLogger import LogreadLogger
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
-from CastleTestUtils.RivieraUtils import rivieraCommunication, rivieraUtils
+from CastleTestUtils.RivieraUtils import adb_utils, rivieraCommunication, rivieraUtils
 from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import flash_device
 
 from commonData import keyConfig
 from bootsequencing.stateutils import network_checker, UNKNOWN
-
 
 LOGGER = get_logger(__name__)
 
@@ -105,14 +104,17 @@ def pytest_addoption(parser):
                      default='9zf6kcZgF5IEsXbrKU6fvG8vFGWzF1Ih',
                      help='Passport API KEY')
 
+
 def ping(ip):
     """ Pings a given IP Address """
     return os.system("ping -q -c 5 -i 0.2 -w 2 " + ip) == 0
+
 
 @pytest.fixture(scope='session')
 def scm_ip(request):
     """ Get the IP address of Device under Test """
     return request.config.getoption("--scm-ip")
+
 
 @pytest.fixture(scope='function')
 def save_speaker_log(request, device_ip):
@@ -137,18 +139,20 @@ def save_speaker_log(request, device_ip):
 
     request.addfinalizer(teardown)
 
+
 @pytest.fixture(scope='class')
-def device_ip(request, deviceid):
+def device_ip(request, device_id):
     """
     This fixture gets the device IP
     :return: device ip
     """
     LOGGER.info("Trying to retrieve the IP-Address of the device")
     if request.config.getoption("--target").lower() == 'device':
-        network_base = NetworkBase(None, deviceid)
+        network_base = NetworkBase(None, device_id)
         interface = request.config.getoption("--network-iface")
         device_ip = network_base.check_inf_presence(interface)
         return device_ip
+
 
 @pytest.fixture(scope="class")
 def frontDoor(device_ip, request):
@@ -167,12 +171,14 @@ def frontDoor(device_ip, request):
 
     return front_door
 
+
 @pytest.fixture(scope='class')
-def riviera(deviceid):
+def riviera(device_id):
     """
     Get RivieraUtil instance.
     """
-    return rivieraUtils.RivieraUtils('ADB', device=deviceid)
+    return rivieraUtils.RivieraUtils('ADB', device=device_id)
+
 
 @pytest.fixture(scope='class')
 def device_guid(frontDoor):
@@ -184,6 +190,7 @@ def device_guid(frontDoor):
     assert device_guid != None
     LOGGER.debug("GUID is: %s", device_guid)
     return device_guid
+
 
 @pytest.fixture(scope='function', autouse=False)
 def test_log_banner(request):
@@ -213,13 +220,14 @@ def create_log_dir(foldername):
     return subfolder
 
 
+@pytest.mark.usefixture('device_id')
 @pytest.fixture(scope='class')
-def adb(request):
+def adb(device_id):
     """
     Get adb instance
     """
     adb = rivieraCommunication.getCommunicationType('ADB')
-    adb.setCommunicationDetail(request.config.getoption("--device-id"))
+    adb.setCommunicationDetail(device_id)
     return adb
 
 
@@ -234,18 +242,16 @@ def device_id(request):
     return request.config.getoption('--device-id')
 
 
-@pytest.mark.usefixture('device_id')
+@pytest.mark.usefixture('riviera')
 @pytest.fixture(scope='function')
-def adb_versions(device_id):
+def adb_versions(riviera):
     """
     This fixture will return information regarding version information on the
         ADB system
 
-    :param device_id: Command Line Android Device ID
+    :param riviera: Riviera connection throught ADB
     :return: Dictionary of Version information of the device
     """
-    riviera = rivieraUtils.RivieraUtils(communicationType='ADB', device=device_id)
-
     versions = {}
 
     # Get Product information
@@ -307,7 +313,7 @@ def deviceid(request):
         return request.config.getoption("--device-id")
     except Exception as exception:
         LOGGER.info("Getting device id.... " + str(exception))
-        return False
+    return False
 
 @pytest.fixture(scope='module')
 def wifi_config():
@@ -322,25 +328,29 @@ def wifi_config():
     yield cfg
 
 
+@pytest.mark.usefixture('request', 'device_id', 'wifi_config')
 @pytest.fixture(scope="function")
-def ip_address_wlan(request, deviceid, wifi_config):
+def ip_address_wlan(request, device_id, wifi_config):
     """
     IP address of the device connected to WLAN.
     Removes any configuration on the Device if not connected.
     :param request: PyTest command line request option
+    :param device_id: The ADB Device ID of the device under test
     :param wifi_config: ConfigParser object of Wireless configs
     :return: The IP Address of the attached Riviera Device
     """
-    riviera_device = rivieraUtils.RivieraUtils('ADB', device=deviceid, logger=LOGGER)
-    network_base = NetworkBase(None, device=deviceid, logger=LOGGER)
+    riviera_device = rivieraUtils.RivieraUtils('ADB', device=device_id, logger=LOGGER)
+    network_base = NetworkBase(None, device=device_id, logger=LOGGER)
 
-    interface = 'wlan0'
+    interface = request.config.getoption("--network-iface")
     device_ip_address = None
     try:
         device_ip_address = network_base.check_inf_presence(interface, timeout=5)
         LOGGER.info("Found Device IP: %s", device_ip_address)
     except UnboundLocalError as exception:
         LOGGER.warning("Not able to acquire IP Address: %s", exception)
+
+    LOGGER.info("Device IP Address: %s", repr(device_ip_address))
     if not device_ip_address:
         # Clear any WiFi profiles on the device
         clear_profiles = ' '.join(['network', 'wifi', 'profiles', 'clear'])
@@ -350,6 +360,7 @@ def ip_address_wlan(request, deviceid, wifi_config):
 
         # Acquire the Router information
         router = request.config.getoption("--router")
+        LOGGER.debug("Router Connection Name: %s", router)
         router_name = wifi_config.get(router, 'ssid')
         security = wifi_config.get(router, 'security')
         password = wifi_config.get(router, 'password')
@@ -357,13 +368,142 @@ def ip_address_wlan(request, deviceid, wifi_config):
         # Add Router information to the Device
         add_profile = ' '.join(['network', 'wifi', 'profiles', 'add',
                                 router_name, security.upper(), password])
-        add_profile = "echo {} | nc 0 17000".format(add_profile)
         LOGGER.info("Adding Network Profile: %s", add_profile)
-        riviera_device.communication.executeCommand(add_profile)
-        time.sleep(2)
 
-    device_ip_address = network_base.check_inf_presence(interface, timeout=20)
+        adb_utils.adb_telnet_cmd(add_profile, expect_after='->OK', expect_last='ADD_PROFILE_SUCCEEDED',
+                                 async_response=True, device_id=device_id)
+
+        device_ip_address = network_base.check_inf_presence(interface, timeout=20)
+        if device_ip_address:
+            LOGGER.debug("Found IP Address (%s) for Device (%s).", device_ip_address, device_id)
+            return device_ip_address
+
+        LOGGER.debug("Rebooting device to ensure added profile retains.")
+        riviera_device.communication.executeCommand('/opt/Bose/bin/PlatformReset')
+
+    device_ip_address = network_base.check_inf_presence(interface, timeout=60)
     if not device_ip_address:
-        raise SystemError("Failed to acquire network connection through: {}".format(interface))
+        pytest.fail("Failed to acquire network connection through: {}".format(interface))
 
+    LOGGER.debug("Found IP Address (%s) for Device (%s).", device_ip_address, device_id)
     return device_ip_address
+
+
+@pytest.mark.usefixtures('adb')
+@pytest.fixture(scope='function')
+def rebooted_device(adb):
+    """
+    This will put the device into a rebooted state and yield information about
+        how long it took.
+
+    :param adb: ADB Communication Object
+    :return: None
+    """
+    start_time = time.time()
+    adb.executeCommand('/opt/Bose/bin/PlatformReset')
+    adb.waitforDevice()
+    end_time = time.time()
+
+    duration = end_time - start_time
+    LOGGER.debug("Reboot took %.2f", duration)
+
+    yield {'reboot': {'start': start_time, 'end': end_time,
+                      'duration': end_time - start_time}}
+
+
+@pytest.mark.usesfixtures('request', 'adb', 'device_id', 'ip_address_wlan')
+@pytest.fixture(scope='function')
+def rebooted_and_networked_device(request, adb, device_id, ip_address_wlan):
+    """
+    This will put the device into a rebooted state with network up and yield
+        information about how long it took.
+
+    :param request: PyTest command line request options
+    :return: Rebooted Information
+    """
+    LOGGER.debug("Have an IP Address of %s.", ip_address_wlan)
+
+    LOGGER.info("Rebooting Device %s.", device_id)
+    reboot_information = {}
+    start_time = time.time()
+    adb.executeCommand('/opt/Bose/bin/PlatformReset')
+    adb.waitforDevice()
+    end_time = time.time()
+
+    duration = end_time - start_time
+    LOGGER.debug("Reboot took %.2f", duration)
+
+    reboot_information = {'reboot': {'start': start_time, 'end': end_time,
+                                     'duration': end_time - start_time}}
+
+    manager = Manager()
+    collection_dict = manager.dict()
+    maximum_time = 30
+    network_connection = request.config.getoption("--network-iface") \
+        if request.config.getoption("--network-iface") else 'wlan0'
+    LOGGER.debug("Looking for IP Address on %s", network_connection)
+
+    # Network
+    network_process = Process(target=network_checker,
+                              args=(network_connection, maximum_time, collection_dict, device_id))
+    network_process.daemon = True
+    network_process.start()
+
+    ip_address = None
+    while ip_address is None:
+        try:
+            ip_address = collection_dict['ip']['address']
+        except KeyError:
+            pass
+    assert ip_address is not UNKNOWN, \
+        'Could not locate find network connection after {:.2f}'.format(maximum_time)
+
+    # Added the Thread-safe dictionary information to the reboot dictionary.
+    reboot_information.update(collection_dict.copy())
+
+    yield reboot_information
+
+
+@pytest.fixture(scope='function')
+def force_rndis(adb, device_id, request):
+    """
+    This fixture enables ADB in PTS mode by creating /mnt/nv/force-rndis
+    Reboots the system and checks for rndis0 in the "ifconfig" list
+    param: adb - ADB instance
+    param: device_id - This fixture will return the device id
+    """
+    LOGGER.info("force_rndis")
+    command = "touch /mnt/nv/force-rndis"
+    adb.executeCommand(command)
+    adb.rebootDevice()
+    adb.waitforDevice()
+    network_base = NetworkBase(None, device=device_id, logger=LOGGER)
+    interface = request.config.getoption("--network-iface")
+    device_ip_address = None
+    try:
+        device_ip_address = network_base.check_inf_presence(interface, timeout=300)
+        LOGGER.info("Found Device IP: %s", device_ip_address)
+    except UnboundLocalError as exception:
+        LOGGER.warning("Not able to acquire IP Address: %s", exception)
+    network_interface_list_command = "ifconfig | sed 's/[ \t].*//;/^$/d'"
+    output = adb.executeCommand(network_interface_list_command)
+    network_list = output.strip().replace('\r', '').split('\n')
+    LOGGER.info(network_list)
+    if 'rndis0' not in network_list:
+        raise Exception('rndis0 interface not in the list')
+
+
+@pytest.fixture(scope="function")
+def frontdoor_wlan(request, ip_address_wlan):
+    """
+    Frontdoor instance of the device connected to wlan.
+    """
+    LOGGER.info("frontDoorQueue")
+    if ip_address_wlan is None:
+        pytest.fail("No valid device IP")
+    _frontdoor = FrontDoorQueue(ip_address_wlan)
+
+    yield _frontdoor
+
+    if _frontdoor:
+        _frontdoor.close()

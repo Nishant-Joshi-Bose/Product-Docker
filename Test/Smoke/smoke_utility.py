@@ -35,13 +35,13 @@ class SmokeUtils(object):
         """
         self.logger = logger or get_logger(__name__)
 
-    def get_deviceip(self, deviceid, inf):
+    def get_deviceip(self, device_id, inf):
         """
-        :param deviceid: adb deviceid of Eddie
+        :param device_id: adb device_id of Eddie
         :param inf: Network Interface For ex. wlan0 or eth0
-        - Get Device IP based on deviceid
+        - Get Device IP based on device_id
         """
-        netbase = NetworkBase(None, deviceid)
+        netbase = NetworkBase(None, device_id)
         ipaddress = netbase.check_inf_presence(inf, timeout=120)
         return ipaddress
 

@@ -41,8 +41,8 @@ STATE_SETUP_OTHER = 'SetupOther'
 STATE_SETUP_NW = 'SetupNetwork'
 
 
-@pytest.mark.usefixtures('deviceid', 'ip_address_wlan')
-def test_network_disabled_success(deviceid, ip_address_wlan):
+@pytest.mark.usefixtures('device_id', 'ip_address_wlan')
+def test_network_disabled_success(device_id, ip_address_wlan):
     """
     Test to determine that network disabled feature works correctly.
     Test Steps:
@@ -55,15 +55,17 @@ def test_network_disabled_success(deviceid, ip_address_wlan):
     7. Generate network disabled action using CLI Command.
     8. Get current 'WiFiStatus' for 10 times and stop once get WIFI_STATE_CONNECTED.
     9. IP Address should be allocated to “wlan0” network interface.
+
+    :param device_id: ADB Device ID of the device under test
     """
     # 1. Device should be connected to wlan.
     LOGGER.debug('Device ip-address is %s', ip_address_wlan)
 
-    tap = adb_utils.adb_telnet_tap(deviceid)
-    network_base = NetworkBase(None, device=deviceid, logger=LOGGER)
+    tap = adb_utils.adb_telnet_tap(device_id)
+    network_base = NetworkBase(None, device=device_id, logger=LOGGER)
 
     # 2. Get current 'WiFiStatus' which should be WIFI_STATE_CONNECTED.
-    resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=deviceid)
+    resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=device_id)
     resp_dict = xmltodict.parse(resp_xml)
     assert resp_dict['WiFiStatus'], 'Response should contain state information.'
 
@@ -78,7 +80,7 @@ def test_network_disabled_success(deviceid, ip_address_wlan):
     keypress.press_key(tap, NETWORK_DISABLED_KEYS, duration=5500, async_response=False)
 
     # 5. Get current 'WiFiStatus' which should be WIFI_STATE_DISCONNECTED.
-    resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=deviceid)
+    resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=device_id)
     resp_dict = xmltodict.parse(resp_xml)
     assert resp_dict['WiFiStatus'], 'Response should contain state information.'
     assert (resp_dict['WiFiStatus']['@state'] == WIFI_STATE_DISCONNECTED),\
@@ -94,7 +96,7 @@ def test_network_disabled_success(deviceid, ip_address_wlan):
 
     # 8. Get current 'WiFiStatus' for 10 times and stop once get WIFI_STATE_CONNECTED.
     for _ in range(10):
-        resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=deviceid)
+        resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=device_id)
         resp_dict = xmltodict.parse(resp_xml)
         assert resp_dict['WiFiStatus'], 'Response should contain state information.'
         if resp_dict['WiFiStatus']['@state'] == WIFI_STATE_CONNECTED:
@@ -110,8 +112,8 @@ def test_network_disabled_success(deviceid, ip_address_wlan):
     assert ip_address, 'IP Address should be allocated to wlan0'
 
 
-@pytest.mark.usefixtures('deviceid', 'ip_address_wlan', 'device_playing_from_amazon')
-def test_network_disabled_playing_state(deviceid, ip_address_wlan):
+@pytest.mark.usefixtures('device_id', 'ip_address_wlan', 'device_playing_from_amazon')
+def test_network_disabled_playing_state(device_id, ip_address_wlan):
     """
     Test to determine that network disabled feature works correctly while playing from AMAZON MSP.
     Test Steps:
@@ -131,16 +133,16 @@ def test_network_disabled_playing_state(deviceid, ip_address_wlan):
     # 1. Device should be connected to wlan.
     LOGGER.debug('Device ip-address is %s', ip_address_wlan)
 
-    tap = adb_utils.adb_telnet_tap(deviceid)
-    network_base = NetworkBase(None, device=deviceid, logger=LOGGER)
+    tap = adb_utils.adb_telnet_tap(device_id)
+    network_base = NetworkBase(None, device=device_id, logger=LOGGER)
 
     # 2. Check for product state which should be STATE_NOT_SILENT.
-    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
     assert (device_state == STATE_NOT_SILENT), \
         'Device not in "{}" state. Current state: {}.'.format(STATE_NOT_SILENT, device_state)
 
     # 3. Get current 'WiFiStatus' which should be WIFI_STATE_CONNECTED.
-    resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=deviceid)
+    resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=device_id)
     resp_dict = xmltodict.parse(resp_xml)
     assert resp_dict['WiFiStatus'], 'Response should contain state information.'
 
@@ -155,7 +157,7 @@ def test_network_disabled_playing_state(deviceid, ip_address_wlan):
     keypress.press_key(tap, NETWORK_DISABLED_KEYS, duration=5500, async_response=False)
 
     # 6. Get current 'WiFiStatus' which should be WIFI_STATE_DISCONNECTED.
-    resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=deviceid)
+    resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=device_id)
     resp_dict = xmltodict.parse(resp_xml)
     assert resp_dict['WiFiStatus'], 'Response should contain state information.'
     assert (resp_dict['WiFiStatus']['@state'] == WIFI_STATE_DISCONNECTED), \
@@ -170,7 +172,7 @@ def test_network_disabled_playing_state(deviceid, ip_address_wlan):
 
     # 8. Check for product state which should be STATE_SILENT.
     for _ in range(30):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
         if device_state == STATE_SILENT:
             break
         LOGGER.debug('Current device state : %s', device_state)
@@ -184,7 +186,7 @@ def test_network_disabled_playing_state(deviceid, ip_address_wlan):
 
     # 10. Get current 'WiFiStatus' for 10 times and stop once get WIFI_STATE_CONNECTED.
     for _ in range(10):
-        resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=deviceid)
+        resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=device_id)
         resp_dict = xmltodict.parse(resp_xml)
         assert resp_dict['WiFiStatus'], 'Response should contain state information.'
         if resp_dict['WiFiStatus']['@state'] == WIFI_STATE_CONNECTED:
@@ -200,14 +202,14 @@ def test_network_disabled_playing_state(deviceid, ip_address_wlan):
     assert ip_address, 'IP Address should be allocated to wlan0'
 
     # 12. Check for product state which should be STATE_SILENT.
-    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
     assert (device_state == STATE_SILENT), \
         'Device not in "{}" state. Current state: {}.'.format(STATE_SILENT, device_state)
 
 
-@pytest.mark.usefixtures('deviceid', 'lpm_tap', 'set_lps_timeout', 'ip_address_wlan')
+@pytest.mark.usefixtures('device_id', 'lpm_tap', 'set_lps_timeout', 'ip_address_wlan')
 @pytest.mark.parametrize("playable_state", ['Idle', 'NetworkStandby'])
-def test_network_disabled_lps_from_playable_state(deviceid, lpm_tap, ip_address_wlan, playable_state):
+def test_network_disabled_lps_from_playable_state(device_id, lpm_tap, ip_address_wlan, playable_state):
     """
     Test to determine that network disabled feature works correctly from 'Idle' and 'NetworkStandby' state.
     Test Steps:
@@ -236,11 +238,11 @@ def test_network_disabled_lps_from_playable_state(deviceid, lpm_tap, ip_address_
     # 1. Set NoNetworkConfiguredTimeout & NoAudioTimeout, reboot the device and configure Wlan using fixture.
     LOGGER.debug('Device ip-address is %s', ip_address_wlan)
 
-    tap = adb_utils.adb_telnet_tap(deviceid)
-    network_base = NetworkBase(None, device=deviceid, logger=LOGGER)
+    tap = adb_utils.adb_telnet_tap(device_id)
+    network_base = NetworkBase(None, device=device_id, logger=LOGGER)
 
     # 2. Get current 'WiFiStatus' which should be WIFI_STATE_CONNECTED.
-    resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=deviceid)
+    resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=device_id)
     resp_dict = xmltodict.parse(resp_xml)
     assert resp_dict['WiFiStatus'], 'Response should contain state information.'
 
@@ -257,7 +259,7 @@ def test_network_disabled_lps_from_playable_state(deviceid, lpm_tap, ip_address_
     time.sleep(2)
 
     # 5. Verify product state which should be STATE_VC_NOT_CONFIGURED or STATE_VC_CONFIGURED.
-    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
     assert (device_state == STATE_VC_NOT_CONFIGURED or device_state == STATE_VC_CONFIGURED), \
         'Device not in "IDLE" state. Current state: {}.'.format(device_state)
 
@@ -268,7 +270,7 @@ def test_network_disabled_lps_from_playable_state(deviceid, lpm_tap, ip_address_
     time.sleep(60)
 
     # After 60 seconds, verify product state should be NetworkStandby(STATE_NW_CONFIGURED or STATE_NW_NOT_CONFIGURED).
-    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
     assert (device_state == STATE_NW_NOT_CONFIGURED or device_state == STATE_NW_CONFIGURED), \
         'Device not in "Network Standby" state. Current state: {}.'.format(device_state)
 
@@ -297,12 +299,12 @@ def test_network_disabled_lps_from_playable_state(deviceid, lpm_tap, ip_address_
     time.sleep(5)
 
     # 12. Check for product state which should be in STATE_SETUP_OTHER state.
-    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
     assert (device_state == STATE_SETUP_OTHER), \
         'Device not in "{}" state. Current state: {}.'.format(STATE_SETUP_OTHER, device_state)
 
     # 13. Get current 'WiFiStatus' which should be WIFI_STATE_CONNECTED.
-    resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=deviceid)
+    resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=device_id)
     resp_dict = xmltodict.parse(resp_xml)
     assert resp_dict['WiFiStatus'], 'Response should contain state information.'
 
@@ -317,7 +319,7 @@ def test_network_disabled_lps_from_playable_state(deviceid, lpm_tap, ip_address_
     keypress.press_key(tap, NETWORK_DISABLED_KEYS, duration=5500, async_response=False)
 
     # 16. Get current 'WiFiStatus' which should be WIFI_STATE_DISCONNECTED.
-    resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=deviceid)
+    resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=device_id)
     resp_dict = xmltodict.parse(resp_xml)
     assert resp_dict['WiFiStatus'], 'Response should contain state information.'
     assert (resp_dict['WiFiStatus']['@state'] == WIFI_STATE_DISCONNECTED),\
@@ -333,7 +335,7 @@ def test_network_disabled_lps_from_playable_state(deviceid, lpm_tap, ip_address_
 
     # 19. Get current 'WiFiStatus' for 10 times and stop once get WIFI_STATE_CONNECTED.
     for _ in range(10):
-        resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=deviceid)
+        resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=device_id)
         resp_dict = xmltodict.parse(resp_xml)
         assert resp_dict['WiFiStatus'], 'Response should contain state information.'
         if resp_dict['WiFiStatus']['@state'] == WIFI_STATE_CONNECTED:
@@ -349,8 +351,8 @@ def test_network_disabled_lps_from_playable_state(deviceid, lpm_tap, ip_address_
     assert ip_address, 'IP Address should be allocated to wlan0'
 
 
-@pytest.mark.usefixtures('deviceid', 'lpm_tap', 'clear_wifi_profiles', 'set_lps_timeout')
-def test_network_disabled_lps_from_setup_state(deviceid, lpm_tap):
+@pytest.mark.usefixtures('device_id', 'lpm_tap', 'clear_wifi_profiles', 'set_lps_timeout')
+def test_network_disabled_lps_from_setup_state(device_id, lpm_tap):
     """
     Test to determine that network disabled feature works correctly from 'Setup' state.
     Test Steps:
@@ -371,7 +373,7 @@ def test_network_disabled_lps_from_setup_state(deviceid, lpm_tap):
     # 2. Check for product state which should be STATE_SETUP_NW.
     device_state = None
     for _ in range(30):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
         if device_state == STATE_SETUP_NW:
             break
         LOGGER.debug('Got state : %s', device_state)
@@ -379,10 +381,10 @@ def test_network_disabled_lps_from_setup_state(deviceid, lpm_tap):
     assert (device_state == STATE_SETUP_NW), \
         'Device not in "{}" state. Current state: {}.'.format(STATE_SETUP_NW, device_state)
 
-    tap = adb_utils.adb_telnet_tap(deviceid)
+    tap = adb_utils.adb_telnet_tap(device_id)
 
     # 3. Get current 'WiFiStatus' All profiles should be cleared.
-    resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=deviceid)
+    resp_xml = adb_utils.adb_telnet_cmd('network wifi status', expect_after='\?>', device_id=device_id)
     resp_dict = xmltodict.parse(resp_xml)
     assert not resp_dict['WiFiStatus'], 'WiFi profiles should be deleted.'
 
@@ -390,7 +392,7 @@ def test_network_disabled_lps_from_setup_state(deviceid, lpm_tap):
     keypress.press_key(tap, NETWORK_DISABLED_KEYS, duration=5500, async_response=False)
 
     # 5. Check for product state which should be in any Setup state.
-    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+    device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
     assert ('Setup' in device_state), \
         'Device not in "Setup" state. Current state: {}.'.format(device_state)
 
@@ -416,7 +418,7 @@ def test_network_disabled_lps_from_setup_state(deviceid, lpm_tap):
     # 10. Check for product state which should be in any STATE_NW_NOT_CONFIGURED(NetworkStandby) state.
     device_state = None
     for _ in range(20):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
         if device_state == STATE_NW_NOT_CONFIGURED:
             break
         LOGGER.debug('Got state: %s', device_state)

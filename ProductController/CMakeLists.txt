@@ -15,6 +15,7 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductKeyInputManager
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
+  ${AUDIOSOURCE_DIR}/include
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductNetworkService
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSourceInfo
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
@@ -29,7 +30,6 @@ ADD_EXECUTABLE(Eddie
   ${CUSTOM_HSM_DIR}/CustomProductControllerState.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateOn.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateSoftwareInstall.cpp
-  ${CUSTOM_HSM_DIR}/CustomProductControllerStateLowPowerResume.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateLowPowerStandby.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateLowPowerStandbyTransition.cpp
   ${CUSTOM_HSM_DIR}/CustomProductControllerStateNetworkStandby.cpp
@@ -75,7 +75,10 @@ TARGET_LINK_LIBRARIES(Eddie
   SASSFrontDoorServiceProto
   SoftwareUpdateAPI
   STS
+  STSClient
   ShelbyUtils
+  CommonTypes
+  STSProtoBufs
   SoundTouch_SDK_Protobuf_static
   SystemEventService
   BoseLibs

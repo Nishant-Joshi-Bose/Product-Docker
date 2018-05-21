@@ -6,6 +6,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <json/reader.h>
 #include <fstream>
+#include <iostream>
 #include "DPrint.h"
 #include "SystemUtils.h"
 #include "CustomAudioSettingsManager.h"
@@ -13,8 +14,8 @@
 static DPrint s_logger( "CustomAudioSettingsManager" );
 
 constexpr char  kDefaultConfigPath[] = "/opt/Bose/etc/DefaultAudioSettings.json";
-constexpr uint32_t kConfigVersionMajor = 2;
-constexpr uint32_t kConfigVersionMinor = 1;
+constexpr uint32_t kConfigVersionMajor = 3;
+constexpr uint32_t kConfigVersionMinor = 0;
 
 constexpr char kBassName                [] = "audioBassLevel";
 constexpr char kCenterName              [] = "audioCenterLevel";
@@ -50,9 +51,9 @@ ResultCode_t CustomAudioSettingsManager::SetBass( const ProductPb::AudioBassLeve
         return ResultCode_t::MISSING_VALUE;
     }
     if( !isStepValueValid( bass.value(),
-                           m_audioSettings["configurations"][kBassName]["properties"]["min"].asInt(),
-                           m_audioSettings["configurations"][kBassName]["properties"]["max"].asInt(),
-                           m_audioSettings["configurations"][kBassName]["properties"]["step"].asInt() ) )
+                           m_audioSettings["audioSettingValues"][kBassName]["properties"]["min"].asInt(),
+                           m_audioSettings["audioSettingValues"][kBassName]["properties"]["max"].asInt(),
+                           m_audioSettings["audioSettingValues"][kBassName]["properties"]["step"].asInt() ) )
     {
         return ResultCode_t::INVALID_VALUE;
     }
@@ -76,9 +77,9 @@ ResultCode_t CustomAudioSettingsManager::SetCenter( const ProductPb::AudioCenter
         return ResultCode_t::MISSING_VALUE;
     }
     if( !isStepValueValid( center.value(),
-                           m_audioSettings["configurations"][kCenterName]["properties"]["min"].asInt(),
-                           m_audioSettings["configurations"][kCenterName]["properties"]["max"].asInt(),
-                           m_audioSettings["configurations"][kCenterName]["properties"]["step"].asInt() ) )
+                           m_audioSettings["audioSettingValues"][kCenterName]["properties"]["min"].asInt(),
+                           m_audioSettings["audioSettingValues"][kCenterName]["properties"]["max"].asInt(),
+                           m_audioSettings["audioSettingValues"][kCenterName]["properties"]["step"].asInt() ) )
     {
         return ResultCode_t::INVALID_VALUE;
     }
@@ -102,7 +103,7 @@ ResultCode_t CustomAudioSettingsManager::SetMode( const ProductPb::AudioMode& mo
         return ResultCode_t::MISSING_VALUE;
     }
     if( !isValueInArray( mode.value(),
-                         m_audioSettings["configurations"][kModeName]["properties"]["supportedValues"] ) )
+                         m_audioSettings["audioSettingValues"][kModeName]["properties"]["supportedValues"] ) )
     {
         return ResultCode_t::INVALID_VALUE;
     }
@@ -126,9 +127,9 @@ ResultCode_t CustomAudioSettingsManager::SetTreble( const ProductPb::AudioTreble
         return ResultCode_t::MISSING_VALUE;
     }
     if( !isStepValueValid( treble.value(),
-                           m_audioSettings["configurations"][kTrebleName]["properties"]["min"].asInt(),
-                           m_audioSettings["configurations"][kTrebleName]["properties"]["max"].asInt(),
-                           m_audioSettings["configurations"][kTrebleName]["properties"]["step"].asInt() ) )
+                           m_audioSettings["audioSettingValues"][kTrebleName]["properties"]["min"].asInt(),
+                           m_audioSettings["audioSettingValues"][kTrebleName]["properties"]["max"].asInt(),
+                           m_audioSettings["audioSettingValues"][kTrebleName]["properties"]["step"].asInt() ) )
     {
         return ResultCode_t::INVALID_VALUE;
     }
@@ -176,56 +177,71 @@ void CustomAudioSettingsManager::LoadTestOptions()
 void CustomAudioSettingsManager::InitializeAudioSettings()
 {
     BOSE_DEBUG( s_logger, __func__ );
-    bool success = true; //successful reading from persistence, initialized to be true
     static Json::CharReaderBuilder readerBuilder;
     std::unique_ptr<Json::CharReader> reader( readerBuilder.newCharReader() );
     std::string errors;
 
+    // Load m_AudioSettings with DefaultAudioSettings.json first
+    auto const& defaultAudioSettings = SystemUtils::ReadFile( kDefaultConfigPath );
+    if( !reader->parse( defaultAudioSettings->c_str(), defaultAudioSettings->c_str() + defaultAudioSettings->size(), &m_audioSettings, &errors ) )
+    {
+        // If reading from default configuration file failed, there's something majorly wrong
+        string errorString = "Reading and parsing default config file failed with error (" + errors + ")";
+        BOSE_DIE( errorString );
+    }
+    else if( m_audioSettings["version"]["major"].asInt() != kConfigVersionMajor )
+    {
+        // major version means major format or structure change in audio settings JSON
+        // If the major version doesn't match between configuration file and code, there's mismatch during build procedure
+        // force loading it will cause unknown error
+        BOSE_DIE( "DefaultAudioSettings.json is not compatible with ProductController software" );
+    }
+
+    // If there's persisted AudioSettings.json, overwrite m_AudioSettings with persisted data
     try
     {
-        std::string s = m_audioSettingsPersistence->Load();
-        success = reader->parse( s.c_str(), s.c_str() + s.size(), &m_audioSettings, &errors );
-        if( !success )
+        Json::Value persistedAudioSettings;
+        std::string persistedValue = m_audioSettingsPersistence->Load();
+        if( !reader->parse( persistedValue.c_str(), persistedValue.c_str() + persistedValue.size(), &persistedAudioSettings, &errors ) )
         {
-            BOSE_DEBUG( s_logger, errors.c_str() );
+            BOSE_ERROR( s_logger, "Parsing persisted AudioSettings.json failed with error %s", errors.c_str() );
         }
-        else if( m_audioSettings.empty()
-                 || ( !m_audioSettings.isMember( "configurations" ) )
-                 || ( !m_audioSettings.isMember( "values" ) ) )
+        else if( persistedAudioSettings.empty() ||
+                 !persistedAudioSettings.isMember( "version" ) ||
+                 !persistedAudioSettings.isMember( "supportedAudioSettings" ) ||
+                 !persistedAudioSettings.isMember( "audioSettingValues" ) )
         {
-            success = false;
             BOSE_ERROR( s_logger, "Persisted m_audioSettings doesn't contain valid data" );
+        }
+        else if( persistedAudioSettings["version"].isMember( "major" ) &&
+                 persistedAudioSettings["version"]["major"].asInt() != kConfigVersionMajor )
+        {
+            BOSE_ERROR( s_logger, "Persisted AudioSettings.json is not compatible with ProductController software: "
+                        "AudioSettings.json has version %d.%d, and ProductController expects version %d.%d",
+                        persistedAudioSettings["version"]["major"].asInt(),
+                        persistedAudioSettings["version"]["minor"].asInt(),
+                        kConfigVersionMajor, kConfigVersionMinor );
+        }
+        else
+        {
+            // Copy persisted data to m_AudioSettings,
+            //      without overwriting those fields which exist in DefaultAudioSettings
+            //      but not in persisted AudioSettings
+            for( uint32_t i = 0; i < persistedAudioSettings["supportedAudioSettings"]["contentItemSensitive"].size(); i++ )
+            {
+                string propName = persistedAudioSettings["supportedAudioSettings"]["contentItemSensitive"][i].asString();
+                m_audioSettings["audioSettingValues"][propName] = persistedAudioSettings["audioSettingValues"][propName];
+            }
+            for( uint32_t i = 0; i < persistedAudioSettings["supportedAudioSettings"]["contentItemNonSensitive"].size(); i++ )
+            {
+                string propName = persistedAudioSettings["supportedAudioSettings"]["contentItemNonSensitive"][i].asString();
+                m_audioSettings["audioSettingValues"][propName] = persistedAudioSettings["audioSettingValues"][propName];
+            }
         }
     }
     catch( ProtoPersistenceIF::ProtoPersistenceException& e )
     {
-        success = false;
-        BOSE_ERROR( s_logger, "Loading audioSettings from persistence failed - %s ", e.what() );
-    }
-
-    // If reading from persistence failed, read from default configuration file
-    if( !success )
-    {
-        BOSE_DEBUG( s_logger, "Reading audio settings from persistence failed, let's read from default config file" );
-        std::ifstream in( kDefaultConfigPath );
-        auto const& defaultAudioSettings = SystemUtils::ReadFile( kDefaultConfigPath );
-
-        if( !reader->parse( defaultAudioSettings->c_str(), defaultAudioSettings->c_str() + defaultAudioSettings->size(), &m_audioSettings, &errors ) )
-        {
-            // If reading from default configuration file failed, there's something majorly wrong, have to return
-            BOSE_ERROR( s_logger, "Reading from default config file also failed with error %s", errors.c_str() );
-            return;
-        }
-        else if( m_audioSettings["version"]["major"].asInt() != kConfigVersionMajor )
-        {
-            // major version means major format or structure change in audio settings JSON
-            // If the major version doesn't match between configuration file and code, there's mismatch during build procedure
-            // force loading it will cause unknown error, should report error and stop
-            BOSE_ERROR( s_logger, "Reading from default config file also failed. DefaultAudioSettings.json has version %d.%d, and Professor expects version %d.%d, check your build system",
-                        m_audioSettings["version"]["major"].asInt(), m_audioSettings["version"]["minor"].asInt(),
-                        kConfigVersionMajor, kConfigVersionMinor );
-            return;
-        }
+        BOSE_WARNING( s_logger, "Loading audioSettings from persistence failed - %s ", e.what() );
     }
 
     LoadTestOptions();
@@ -246,25 +262,28 @@ void CustomAudioSettingsManager::InitializeAudioSettings()
     // Custom initializations for properies that do not follow default paradigm.
     //
 
-    // Mode.
-    m_audioSettings["configurations"][kModeName]["persistenceSession"] = false;
-    std::string currPersistLvlMode = m_audioSettings["configurations"][kModeName]["currentPersistenceLevel"].asString();
+    ///
+    /// initialize mode proto
+    ///
+    m_audioSettings["audioSettingValues"][kModeName]["persistenceLevel"]["persistenceSession"] = false;
+    //Fill out protobuf
+    std::string currPersistLvlMode = m_audioSettings["audioSettingValues"][kModeName]["persistenceLevel"]["currentPersistenceLevel"].asString();
     m_currentMode.set_persistence( currPersistLvlMode );
     if( currPersistLvlMode == kPersistContentItem )
     {
-        m_currentMode.set_value( m_audioSettings["values"][currPersistLvlMode][m_currentContentItem][kModeName].asString() );
+        m_currentMode.set_value( JsonToProtoField( m_currentMode.value(), m_audioSettings["audioSettingValues"][kModeName]["values"][kPersistContentItem][m_currentContentItem] ) );
     }
     else
     {
-        m_currentMode.set_value( m_audioSettings["values"][currPersistLvlMode][kModeName].asString() );
+        m_currentMode.set_value( JsonToProtoField( m_currentMode.value(), m_audioSettings["audioSettingValues"][kModeName]["values"][currPersistLvlMode] ) );
     }
-    for( uint32_t i = 0; i < m_audioSettings["configurations"][kModeName]["properties"]["supportedValues"].size(); i++ )
+    for( uint32_t i = 0; i < m_audioSettings["audioSettingValues"][kModeName]["properties"]["supportedValues"].size(); i++ )
     {
-        m_currentMode.mutable_properties()->add_supportedvalues( m_audioSettings["configurations"][kModeName]["properties"]["supportedValues"][i].asString() );
+        m_currentMode.mutable_properties()->add_supportedvalues( m_audioSettings["audioSettingValues"][kModeName]["properties"]["supportedValues"][i].asString() );
     }
-    for( uint32_t i = 0; i < m_audioSettings["configurations"][kModeName]["properties"]["supportedPersistence"].size(); i++ )
+    for( uint32_t i = 0; i < m_audioSettings["audioSettingValues"][kModeName]["properties"]["supportedPersistence"].size(); i++ )
     {
-        m_currentMode.mutable_properties()->add_supportedpersistence( m_audioSettings["configurations"][kModeName]["properties"]["supportedPersistence"][i].asString() );
+        m_currentMode.mutable_properties()->add_supportedpersistence( m_audioSettings["audioSettingValues"][kModeName]["properties"]["supportedPersistence"][i].asString() );
     }
 }
 
