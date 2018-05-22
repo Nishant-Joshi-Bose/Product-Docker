@@ -312,7 +312,7 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
 ///
 /// @param  bool installed
 ///
-/// @brief  Info from DSP about whether AdaptIQ has installed on DSP
+/// @brief  Info from DSP about whether AdaptIQ EQ is available on DSP
 ///
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductAudioService::SetAiqInstalled( bool installed )
