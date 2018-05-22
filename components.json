@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@e9776f0081d585eba3d3006dda531cf99f249b2d"
+    "selected_version": "master@ad19b8cf545204edbb343f5771b70acd1f43cb3f"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -13,15 +13,15 @@
   },
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork-SOP/1.0.1-20981"
+    "selected_version": "Release/Castle-Fork/1.1.1-21001"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork-SOP/1.0.1-20981"
+    "selected_version": "Release/Castle-Fork-vfe-time-drift-fix/1.0.2-21002"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.5.6.42384.2824845"
+    "selected_version": "Release/Amazon-ESPCert/0.5.9.42423.2827658"
   },
   {
     "name": "BLERemoteXCVR",
@@ -193,7 +193,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.5.6.42384.2824845"
+    "selected_version": "Release/Amazon-ESPCert/0.5.9.42423.2827658"
   },
   {
     "name": "SystemEventService-qc8017_32",
