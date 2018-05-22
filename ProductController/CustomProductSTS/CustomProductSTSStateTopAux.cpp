@@ -47,16 +47,23 @@ bool CustomProductSTSStateTopAux::HandleMuteStatus( const STS::MuteStatus& ms )
     BOSE_INFO( s_logger, "%s ( %s ) MuteStatus :%d ",
                __FUNCTION__, m_account.GetSourceName().c_str(), ms.muteenabled() );
 
-    if( ! m_active )
-    {
-        BOSE_ERROR( s_logger,  "%s AUX Source not active", __FUNCTION__ );
-        return false;
-    }
     m_mute = ms.muteenabled();
     return true;
 }
 
+// @TODO: https://jirapro.bose.com/browse/CASTLE-14043: Mute will be removed with this Jira fix
 void CustomProductSTSStateTopAux::ToggleMute() const
 {
     m_account.IPC().SendMuteControlEvent( !m_mute );
+}
+
+bool CustomProductSTSStateTopAux::HandleDeactivateRequest( const STS::DeactivateRequest &req, uint32_t seq )
+{
+    BOSE_INFO( m_logger, "Custom-HandleDeactivateRequest( %s )", m_account.GetSourceName().c_str() );
+    if( m_mute )
+    {
+        ToggleMute();
+    }
+    ProductSTSStateTop::HandleDeactivateRequest( req, seq );
+    return true;
 }
