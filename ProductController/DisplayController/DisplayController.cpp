@@ -75,6 +75,7 @@ static std::vector<float> s_risingLuxThreshold =
 };
 
 static constexpr char DISPLAY_CONTROLLER_FILE_NAME   [] = "/opt/Bose/etc/display_controller.json";
+static constexpr char FRAME_BUFFER_BLACK_SCREEN      [] = "black_screen";
 static constexpr char EDDIE_LCD_FRAME_BUFFER_DIR     [] = "/sys/devices/soc/7af6000.spi/spi_master/spi6/spi6.1/graphics/fb1/";
 static constexpr char JSON_TOKEN_DISPLAY_CONTROLLER  [] = "DisplayController";
 static constexpr char JSON_TOKEN_BACK_LIGHT_LEVELS   [] = "BackLightLevelsPercent";
@@ -397,9 +398,15 @@ void DisplayController::SetStandbyLcdBrightnessCapEnabled( bool enabled )
  */
 void DisplayController::UpdateLoop()
 {
-    bool     previous_is_screen_black = IsFrameBufferBlackScreen();
-    bool     actual_is_screen_black   = previous_is_screen_black  ;
+    bool     previous_is_screen_black        = IsFrameBufferBlackScreen();
+    bool     actual_is_screen_black          = previous_is_screen_black  ;
+    const    std::string blackScreenFileName = std::string( EDDIE_LCD_FRAME_BUFFER_DIR ) + FRAME_BUFFER_BLACK_SCREEN;
     uint64_t tick_count               = 0;
+
+    if( DirUtils::DoesFileExist( blackScreenFileName ) == false )
+    {
+        BOSE_LOG( WARNING, "warning: can't find file: " + blackScreenFileName + ", update your kernel for black screen detection");
+    }
 
     while( ! m_timeToStop )
     {
@@ -431,9 +438,9 @@ void DisplayController::UpdateLoop()
 
         if( actual_is_screen_black != previous_is_screen_black )
         {
-            BOSE_LOG( VERBOSE, "screen content transitioned from: "        <<
+            BOSE_LOG( VERBOSE, "screen content transitioned from "         <<
                       ( previous_is_screen_black ? "black" : "non-black" ) <<
-                      " to: "                                              <<
+                      " to "                                               <<
                       ( actual_is_screen_black   ? "black" : "non-black" ) );
 
             // ???????????????????????????????????????????????????????????????????????
@@ -878,7 +885,7 @@ bool DisplayController::TurnDisplayOnOff( bool turnOn )
 
 bool DisplayController::IsFrameBufferBlackScreen()
 {
-    const std::string blackScreenFileName = std::string( EDDIE_LCD_FRAME_BUFFER_DIR ) + "black_screen";
+    const std::string blackScreenFileName = std::string( EDDIE_LCD_FRAME_BUFFER_DIR ) + FRAME_BUFFER_BLACK_SCREEN;
     FILE *fp                              = fopen( blackScreenFileName.c_str(), "r" );
     char  buf                             = '9';
 
