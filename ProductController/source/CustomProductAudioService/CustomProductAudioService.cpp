@@ -308,6 +308,20 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name   CustomProductAudioService::SetAiqInstalled
+///
+/// @param  bool installed
+///
+/// @brief  Info from DSP about whether AdaptIQ has installed on DSP
+///
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::SetAiqInstalled( bool installed )
+{
+    m_AudioSettingsMgr->UpdateEqSelectSupportedMode( "EQ_AIQ_A", installed );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief Helper functions to convert audio setting values from string format to enumuration
 ///        required from DSP
 ///
