@@ -405,7 +405,7 @@ void DisplayController::UpdateLoop()
 
     if( DirUtils::DoesFileExist( blackScreenFileName ) == false )
     {
-        BOSE_LOG( WARNING, "warning: can't find file: " + blackScreenFileName + ", update your kernel for black screen detection");
+        BOSE_LOG( WARNING, "warning: can't find file: " + blackScreenFileName + ", update your kernel for black screen detection" );
     }
 
     while( ! m_timeToStop )
@@ -891,7 +891,6 @@ bool DisplayController::IsFrameBufferBlackScreen()
 
     if( fp == NULL )
     {
-        BOSE_LOG( WARNING, "warning: failed to open file: " + blackScreenFileName );
         return false;
     }
 
