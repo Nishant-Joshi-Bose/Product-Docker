@@ -100,7 +100,7 @@ output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
 mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/etc/chimes" || exit
 
-rsync -a --exclude='*~' --exclude='*-README.txt' --exclude='isNetworkConfigured' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
+rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 
 components record "$stage" || exit
 

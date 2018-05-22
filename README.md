@@ -9,7 +9,7 @@ Eddie
 
 This repo contains the source code and tools specific to the Eddie product.
 
-![Eddie](eddie.png)
+![Eddie](product.png)
 
 ##### Table of Contents
 [Software Updates](#updates)   
