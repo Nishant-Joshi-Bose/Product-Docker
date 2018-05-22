@@ -113,11 +113,6 @@ public:
         /// TO_Do
         return false;
     }
-    bool IsVoiceConfigured( )  const override
-    {
-        /// TO_Do
-        return false;
-    }
 
     std::string GetDefaultProductName() const override;
 

@@ -25,6 +25,7 @@ from multiprocessing import Process, Manager
 import pytest
 
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
+from CastleTestUtils.FrontDoorAPI.FrontDoorQueue import FrontDoorQueue
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.LoggerUtils.logreadLogger import LogreadLogger
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
@@ -103,14 +104,17 @@ def pytest_addoption(parser):
                      default='9zf6kcZgF5IEsXbrKU6fvG8vFGWzF1Ih',
                      help='Passport API KEY')
 
+
 def ping(ip):
     """ Pings a given IP Address """
     return os.system("ping -q -c 5 -i 0.2 -w 2 " + ip) == 0
+
 
 @pytest.fixture(scope='session')
 def scm_ip(request):
     """ Get the IP address of Device under Test """
     return request.config.getoption("--scm-ip")
+
 
 @pytest.fixture(scope='function')
 def save_speaker_log(request, device_ip):
@@ -135,6 +139,7 @@ def save_speaker_log(request, device_ip):
 
     request.addfinalizer(teardown)
 
+
 @pytest.fixture(scope='class')
 def device_ip(request, device_id):
     """
@@ -147,6 +152,7 @@ def device_ip(request, device_id):
         interface = request.config.getoption("--network-iface")
         device_ip = network_base.check_inf_presence(interface)
         return device_ip
+
 
 @pytest.fixture(scope="class")
 def frontDoor(device_ip, request):
@@ -184,6 +190,7 @@ def device_guid(frontDoor):
     assert device_guid != None
     LOGGER.debug("GUID is: %s", device_guid)
     return device_guid
+
 
 @pytest.fixture(scope='function', autouse=False)
 def test_log_banner(request):
@@ -335,7 +342,7 @@ def ip_address_wlan(request, device_id, wifi_config):
     riviera_device = rivieraUtils.RivieraUtils('ADB', device=device_id, logger=LOGGER)
     network_base = NetworkBase(None, device=device_id, logger=LOGGER)
 
-    interface = 'wlan0'
+    interface = request.config.getoption("--network-iface")
     device_ip_address = None
     try:
         device_ip_address = network_base.check_inf_presence(interface, timeout=5)
@@ -427,7 +434,7 @@ def rebooted_and_networked_device(request, adb, device_id, ip_address_wlan):
     LOGGER.debug("Reboot took %.2f", duration)
 
     reboot_information = {'reboot': {'start': start_time, 'end': end_time,
-                          'duration': end_time - start_time}}
+                                     'duration': end_time - start_time}}
 
     manager = Manager()
     collection_dict = manager.dict()
@@ -456,6 +463,7 @@ def rebooted_and_networked_device(request, adb, device_id, ip_address_wlan):
 
     yield reboot_information
 
+
 @pytest.fixture(scope='function')
 def force_rndis(adb, device_id, request):
     """
@@ -483,3 +491,19 @@ def force_rndis(adb, device_id, request):
     LOGGER.info(network_list)
     if 'rndis0' not in network_list:
         raise Exception('rndis0 interface not in the list')
+
+
+@pytest.fixture(scope="function")
+def frontdoor_wlan(request, ip_address_wlan):
+    """
+    Frontdoor instance of the device connected to wlan.
+    """
+    LOGGER.info("frontDoorQueue")
+    if ip_address_wlan is None:
+        pytest.fail("No valid device IP")
+    _frontdoor = FrontDoorQueue(ip_address_wlan)
+
+    yield _frontdoor
+
+    if _frontdoor:
+        _frontdoor.close()

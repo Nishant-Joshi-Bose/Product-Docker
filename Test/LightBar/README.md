@@ -1,4 +1,5 @@
 # Eddie LightBar Tests
+This module contains all tests related to the LightBar on the Eddie.
 
 ## Setting Up Test Environment
 
@@ -23,14 +24,24 @@ pip install --requirement requirements.txt
 ```
 
 # Running Tests
-## Commands to perform the lightbar animation
+## To execute all Lightbar tests
 
 ```shell session
-$ pytest -vs test_lightbar_scenario.py \
-             --target=device \
-             --network-iface eth0 \
-             --lpm-port <lpm port of device>
+# Enter into the Lightbar Directory
+cd $EDDIE_DIR/Test/LightBar
+
+# Execute the following command with your:
+#    ADB Device ID
+#    LPM Port
+#    Router Identifier
+pytest --verbose \
+         --device-id <ADB Device> \
+         --router <Router ID>
+         --lpm-port <Device LPM Port>
+         test_*.py
 ```
+This will execute all tests in the LightBar test module.
+
 
 ## Input information of Lightbar Animation
 ```shell session

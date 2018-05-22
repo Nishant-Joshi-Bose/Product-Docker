@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-05-18_1132"
+    "selected_version": "Continuous/Castle-Fork/2018-05-21_1641"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -33,7 +33,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.5.3-382+e629ca4"
+    "selected_version": "Release/master/1.0.0-391+bae14ce"
   },
   {
     "name": "BoseOPKG-native",
@@ -77,7 +77,7 @@
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Release/master/1.0.3-63+fb3e550"
+    "selected_version": "Release/master/1.0.4-69+fd42338"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -117,11 +117,11 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/1.0.3-95+bb71f4f"
+    "selected_version": "Release/master/1.0.4-98+d070cb4"
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Continuous/master/1.0.0-128+e49aaed"
+    "selected_version": "Continuous/master/1.0.0-129+4dd097a"
   },
   {
     "name": "NetworkService-qc8017_32",
@@ -145,7 +145,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@4bd42ab30ad5649f1948e879e0398169c6a52e02"
+    "selected_version": "master@abd8ab21a76908a7aca1f74af4b45d40c5940def"
   },
   {
     "name": "ProductUIAssets",
@@ -193,7 +193,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-05-18_1132"
+    "selected_version": "Continuous/Castle-Fork/2018-05-21_1641"
   },
   {
     "name": "SystemEventService-qc8017_32",
@@ -201,7 +201,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@cb3c448353bd602821beb9d33aeceb592abaadfc"
+    "selected_version": "master@8ddad820ba9624c2c6d17010f5137ddda2964974"
   },
   {
     "name": "Webkit",

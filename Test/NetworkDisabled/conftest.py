@@ -42,25 +42,6 @@ def lpm_tap(request):
     yield _lpm_tap
 
 
-@pytest.fixture(scope="function")
-def frontdoor_wlan(request, ip_address_wlan):
-    """
-    Frontdoor instance of the device connected to wlan.
-    """
-    LOGGER.info("frontDoorQueue")
-    if ip_address_wlan is None:
-        pytest.fail("No valid device IP")
-    _frontdoor = FrontDoorQueue(ip_address_wlan)
-
-    def teardown():
-        if _frontdoor:
-            _frontdoor.close()
-
-    request.addfinalizer(teardown)
-
-    return _frontdoor
-
-
 @pytest.fixture(scope='function')
 def device_playing_from_amazon(request, frontdoor_wlan):
     """
