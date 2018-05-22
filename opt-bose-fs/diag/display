@@ -51,6 +51,7 @@ Cache-Control: no-cache\r
    margin: 1em;
  }
  td.showimg {
+   background-color: lightgrey;
    padding: 8px;
    border-style: dotted;
    border-width: 1px;
