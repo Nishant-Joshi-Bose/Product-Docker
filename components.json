@@ -85,7 +85,7 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Release/master/0.5.0-41+71f4cdb"
+    "selected_version": "Release/master/0.5.1-45+ae16bc3"
   },
   {
     "name": "DemoController-qc8017_32",
@@ -201,7 +201,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@8ddad820ba9624c2c6d17010f5137ddda2964974"
+    "selected_version": "master@426e52f81d129cd257dd626b1a207937bfaca541"
   },
   {
     "name": "Webkit",
