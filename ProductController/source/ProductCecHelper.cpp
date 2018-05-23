@@ -473,7 +473,7 @@ void ProductCecHelper::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
                                          nowPlayingStatus )
 {
     BOSE_DEBUG( s_logger, "CEC CAPS now playing status has been received." );
-    if( nowPlayingStatus.state( ).status( ) == SoundTouchInterface::Status::play )
+    if( nowPlayingStatus.state( ).status( ) == SoundTouchInterface::Status::PLAY )
     {
         if( nowPlayingStatus.has_container( )                          and
             nowPlayingStatus.container( ).has_contentitem( )           and
