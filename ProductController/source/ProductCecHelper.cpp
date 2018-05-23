@@ -25,7 +25,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
 #include "ProfessorProductController.h"
-#include "CustomProductLpmHardwareInterface.h"
 #include "ProductCecHelper.h"
 #include "FrontDoorClient.h"
 #include "EndPointsDefines.h"
@@ -232,6 +231,49 @@ void ProductCecHelper::CecModeHandlePut( const CecUpdateRequest req, const Callb
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name ProductCecHelper::PerhapsSetCecSource
+///
+/// @brief Send the CEC source to the LPM, following the rules in PGC-1920
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductCecHelper::PerhapsSetCecSource( )
+{
+    if( !m_LpmPowerIsOn )
+    {
+        return;
+    }
+
+    if( !m_HavePhysicalAddress )
+    {
+        return;
+    }
+
+    if( m_LpmSourceID != LPM_IPC_SOURCE_STANDBY && // STANDBY is sent directly from PowerOff()
+        m_LpmSourceID != LPM_IPC_INVALID_SOURCE )  // only send sensible value
+    {
+        SendCecSourceSelection( m_LpmSourceID );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name ProductCecHelper::SendCecSourceSelection
+///
+/// @brief Send the CEC source to the LPM while maintaining hysteresis to avoid redundancy
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProductCecHelper::SendCecSourceSelection( LPM_IPC_SOURCE_ID source )
+{
+    static LPM_IPC_SOURCE_ID lastSentSource = LPM_IPC_INVALID_SOURCE;
+    if( source != lastSentSource )
+    {
+        lastSentSource = source;
+        m_ProductLpmHardwareInterface->SendSourceSelection( source );
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief ProductCecHelper::SetCecModeDefaultProperties
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -263,29 +305,25 @@ void ProductCecHelper::Connected( bool connected )
 
         return;
     }
-    else
-    {
-        BOSE_DEBUG( s_logger, "A hardware connection to A4VVideoManager has been established." );
-        BOSE_DEBUG( s_logger, "An attempt to register for HPD will now be made." );
 
-        m_connected = true;
+    BOSE_DEBUG( s_logger, "A hardware connection to A4VVideoManager has been established." );
+    BOSE_DEBUG( s_logger, "An attempt to register for HPD will now be made." );
 
-        Callback< A4VVideoManagerServiceMessages::EventHDMIMsg_t >
-        CallbackForKeyEvents( std::bind( &ProductCecHelper::HandleHpdEvent,
-                                         this,
-                                         std::placeholders::_1 ) );
+    m_connected = true;
 
-        m_CecHelper->RegisterForHotplugEvent( CallbackForKeyEvents );
+    Callback< A4VVideoManagerServiceMessages::EventHDMIMsg_t >
+    CallbackForKeyEvents( std::bind( &ProductCecHelper::HandleHpdEvent,
+                                     this,
+                                     std::placeholders::_1 ) );
 
-        Callback< LpmServiceMessages::IPCSource_t >
-        CallbackForCecSource( std::bind( &ProductCecHelper::HandleSrcSwitch,
-                                         this,
-                                         std::placeholders::_1 ) );
+    m_CecHelper->RegisterForHotplugEvent( CallbackForKeyEvents );
 
-        m_ProductLpmHardwareInterface->RegisterForLpmEvents( IPC_ST_SOURCE, CallbackForCecSource );
+    Callback< LpmServiceMessages::IPCSource_t >
+    CallbackForCecSource( std::bind( &ProductCecHelper::HandleSrcSwitch,
+                                     this,
+                                     std::placeholders::_1 ) );
 
-        return;
-    }
+    m_ProductLpmHardwareInterface->RegisterForLpmEvents( IPC_ST_SOURCE, CallbackForCecSource );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -299,42 +337,28 @@ void ProductCecHelper::Connected( bool connected )
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductCecHelper::HandleSrcSwitch( const LpmServiceMessages::IPCSource_t cecSource )
 {
-    BOSE_DEBUG( s_logger, "Received CEC Source Switch message from LPM" );
-
-    if( m_ProductLpmHardwareInterface == nullptr )
+    BOSE_DEBUG( s_logger, "CEC Source Switch Message received from LPM  %d",  cecSource.source() );
+    if( cecSource.source() == LPM_IPC_SOURCE_TV )
     {
-        BOSE_ERROR( s_logger, "CEC Message could not be received, as no connection is available." );
+        ProductMessage productMessage;
+        productMessage.set_action( static_cast< uint32_t >( Action::ACTION_TV ) );
 
-        return;
+        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+
+        BOSE_INFO( s_logger, "An attempt to play the TV source has been made from CEC." );
+    }
+    else if( cecSource.source() == LPM_IPC_SOURCE_INTERNAL )
+    {
+        ProductMessage productMessage;
+        productMessage.set_action( static_cast< uint32_t >( Action::POWER_TOGGLE ) );
+
+        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
+
+        BOSE_INFO( s_logger, "An attempt to play the last SoundTouch source has been made from CEC." );
     }
     else
     {
-
-        BOSE_DEBUG( s_logger, "CEC Source Switch Message received from LPM  %d",  cecSource.source() );
-        if( cecSource.source() == LPM_IPC_SOURCE_TV )
-        {
-            ProductMessage productMessage;
-            productMessage.set_action( static_cast< uint32_t >( Action::ACTION_TV ) );
-
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-
-            BOSE_INFO( s_logger, "An attempt to play the TV source has been made from CEC." );
-        }
-        else if( cecSource.source() == LPM_IPC_SOURCE_INTERNAL )
-        {
-            ProductMessage productMessage;
-            productMessage.set_action( static_cast< uint32_t >( Action::POWER_TOGGLE ) );
-
-            IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-
-            BOSE_INFO( s_logger, "An attempt to play the last SoundTouch source has been made from CEC." );
-        }
-        else
-        {
-            BOSE_ERROR( s_logger, "An invalid intent action has been supplied." );
-        }
-
-        return;
+        BOSE_ERROR( s_logger, "An invalid intent action has been supplied." );
     }
 }
 
@@ -399,6 +423,9 @@ void ProductCecHelper::HandleHpdEvent( A4VVideoManagerServiceMessages::EventHDMI
         //disable physical address
         BOSE_DEBUG( s_logger, "CEC Physical address 0x%x is being set.", 0xffff );
         m_ProductLpmHardwareInterface->SetCecPhysicalAddress( 0xffff );
+
+        m_HavePhysicalAddress = false;
+        // Per PGC-1920, no CEC source sent to LPM when physical address is lost
     }
 }
 
@@ -437,14 +464,13 @@ void ProductCecHelper::HandlePhyAddrResponse( const A4VVideoManagerServiceMessag
 
         return;
     }
-    else
-    {
-        BOSE_DEBUG( s_logger, "A send CEC PA request will be made." );
 
-        m_ProductLpmHardwareInterface->SetCecPhysicalAddress( cecPhysicalAddress.addr() );
+    BOSE_DEBUG( s_logger, "A send CEC PA request will be made." );
 
-        return;
-    }
+    m_ProductLpmHardwareInterface->SetCecPhysicalAddress( cecPhysicalAddress.addr() );
+
+    m_HavePhysicalAddress = true;
+    PerhapsSetCecSource( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -459,7 +485,6 @@ void ProductCecHelper::Stop( )
 {
     m_PutConnection.Disconnect();
     m_GetConnection.Disconnect();
-    return;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -488,15 +513,15 @@ void ProductCecHelper::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
             {
                 BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to SOURCE_TV." );
 
-                m_ProductLpmHardwareInterface->SendSourceSelection( LPM_IPC_SOURCE_TV );
+                m_LpmSourceID = LPM_IPC_SOURCE_TV;
             }
             else
             {
                 BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to LPM_IPC_SOURCE_INTERNAL." );
 
-                m_ProductLpmHardwareInterface->SendSourceSelection( LPM_IPC_SOURCE_INTERNAL );
+                m_LpmSourceID = LPM_IPC_SOURCE_INTERNAL;
             }
-
+            PerhapsSetCecSource( );
         }
     }
 }
@@ -526,7 +551,11 @@ void ProductCecHelper::PowerOff( )
 
     msg.set_state( A4VVideoManagerServiceMessages::PowerState_t::PS_Low );
     m_CecHelper->SetPowerState( msg );
-    m_ProductLpmHardwareInterface->SendSourceSelection( LPM_IPC_SOURCE_STANDBY );
+    m_LpmSourceID = LPM_IPC_SOURCE_STANDBY;
+    m_LpmPowerIsOn = false;
+
+    // No need to defer to PerhapsSetCecSource(), we know we should be in STANDBY
+    SendCecSourceSelection( LPM_IPC_SOURCE_STANDBY );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -540,6 +569,9 @@ void ProductCecHelper::PowerOn( )
 
     msg.set_state( A4VVideoManagerServiceMessages::PowerState_t::PS_Full );
     m_CecHelper->SetPowerState( msg );
+    m_LpmPowerIsOn = true;
+
+    PerhapsSetCecSource( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
