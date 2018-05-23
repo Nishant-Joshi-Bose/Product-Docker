@@ -400,29 +400,15 @@ const ProductPb::AudioEqSelect& CustomAudioSettingsManager::GetEqSelect() const
 }
 void CustomAudioSettingsManager::UpdateEqSelectSupportedMode( string mode, bool supported )
 {
+    BOSE_DEBUG( s_logger, __func__ );
     bool currSupported = isValueInArray( mode, m_audioSettings["audioSettingValues"]["audioEqSelect"]["properties"]["supportedModes"] );
+    // if new mode is supported, add it to the list
+    // note: currently we don't have use case of dynamically removing modes (modes can only be reset by factory default).
+    //       if use case does come up, rules have to be defined, and handling has to be added here
     if( supported && !currSupported )
     {
         m_audioSettings["audioSettingValues"]["audioEqSelect"]["properties"]["supportedModes"].append( mode );
         m_currentEqSelect.mutable_properties()->add_supportedmodes( mode );
-        PersistAudioSettings();
-    }
-    else if( !supported && currSupported )
-    {
-        //there's not a good way to remove Json array member
-        //so we will just rebuild supportModes array
-        Json::Value newSupportedModes;
-        m_currentEqSelect.mutable_properties()->clear_supportedmodes();
-        for( uint32_t i = 0; i < m_audioSettings["audioSettingValues"]["audioEqSelect"]["properties"]["supportedModes"].size(); i++ )
-        {
-            string supportedModeToAdd = m_audioSettings["audioSettingValues"]["audioEqSelect"]["properties"]["supportedModes"][i].asString();
-            if( supportedModeToAdd != mode )
-            {
-                newSupportedModes.append( supportedModeToAdd );
-                m_currentEqSelect.mutable_properties()->add_supportedmodes( supportedModeToAdd );
-            }
-        }
-        m_audioSettings["audioSettingValues"]["audioEqSelect"]["properties"]["supportedModes"] = newSupportedModes;
         PersistAudioSettings();
     }
 }

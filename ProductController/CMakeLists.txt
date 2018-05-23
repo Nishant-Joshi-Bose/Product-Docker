@@ -16,6 +16,7 @@ INCLUDE_DIRECTORIES(
   ${NETWORK_SERVICE_DIR}/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/Bluetooth
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/SoundTouchInterface
+  ${AUDIOSOURCE_DIR}/include
   .
   include
   source
@@ -93,7 +94,10 @@ TARGET_LINK_LIBRARIES(Professor
   SASSFrontDoorServiceProto
   SoftwareUpdateAPI
   STS
+  STSClient
   ShelbyUtils
+  CommonTypes
+  STSProtoBufs
   SoundTouch_SDK_Protobuf_static
   SystemEventService
   BoseLibs
