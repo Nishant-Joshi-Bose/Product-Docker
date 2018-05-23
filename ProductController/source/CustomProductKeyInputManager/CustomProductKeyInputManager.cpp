@@ -147,11 +147,11 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
         }
 
         // ignore CEC keys if we're not in TV or SLOT_* sources
-        if( source and ( source->sourcename().compare( "PRODUCT" ) == 0 ) and (
-                ( source->sourceaccountname().compare( "SLOT_0" ) == 0 ) or
-                ( source->sourceaccountname().compare( "SLOT_1" ) == 0 ) or
-                ( source->sourceaccountname().compare( "SLOT_2" ) == 0 ) or
-                ( source->sourceaccountname().compare( "TV" ) == 0 )
+        if( sourceItem and ( sourceItem->sourcename().compare( "PRODUCT" ) == 0 ) and (
+                ( sourceItem->sourceaccountname().compare( "SLOT_0" ) == 0 ) or
+                ( sourceItem->sourceaccountname().compare( "SLOT_1" ) == 0 ) or
+                ( sourceItem->sourceaccountname().compare( "SLOT_2" ) == 0 ) or
+                ( sourceItem->sourceaccountname().compare( "TV" ) == 0 )
             ) )
         {
             ignoreCECKey = false;
