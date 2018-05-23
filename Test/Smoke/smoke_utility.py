@@ -52,12 +52,12 @@ class SmokeUtils(object):
         data = '{"source":"TUNEIN",\
                         "sourceAccount":"",\
                         "preset":{"type":"stationurl",\
-                                    "location":"/v1/playback/station/s28589",\
+                                    "location":"/playback/station/s28589",\
                                     "name":"100.7 WZLX",\
                                     "presetable":"true",\
                                     "containerArt":"http://cdn-radiotime-logos.tunein.com/s28589q.png"},\
                         "playbackLocation":{"type":"stationurl",\
-                                    "location":"/v1/playback/station/s28589",\
+                                    "location":"/playback/station/s28589",\
                                     "name":"100.7 WZLX",\
                                     "presetable":"true",\
                                     "containerArt":"http://cdn-radiotime-logos.tunein.com/s28589q.png"}}'
