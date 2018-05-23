@@ -69,8 +69,6 @@ output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
 mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" || exit
 
-#rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
-
 components record "$stage" || exit
 
 # copy minimal image tar to /opt/Bose
@@ -78,7 +76,7 @@ minimal_image="Bose_minimal.tar.gz"
 cp "$wspace/builds/$cfg/$minimal_image"  "$opt_dir/" || exit
 
 # copy network configured script which will be required in restore operation
-cp "$wspace/opt-bose-fs/bin/isNetworkConfigured" "$opt_dir/bin/" || exit
+cp "$wspace/misc/isNetworkConfigured" "$opt_dir/bin/" || exit
 
 # copy recovery images from Software Update
 "$swup_dir/stage_recovery" "$opt_dir" || exit
