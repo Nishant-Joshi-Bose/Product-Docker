@@ -130,6 +130,10 @@ if ! grep -q /cache /proc/mounts; then
     mount /dev/mmcblk0p26 /cache || exiterror
 fi
 
+# Remove old logs
+rm -f /cache/recovery/last_log.*
+rm -f /cache/recovery/last_kmsg.*
+
 if [ -e /opt/Bose/hsp/RecoveryMain ]; then
     mv /opt/Bose/hsp/RecoveryMain /cache/ || exiterror
     chmod +x /cache/RecoveryMain || exit error
