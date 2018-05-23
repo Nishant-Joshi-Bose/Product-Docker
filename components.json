@@ -17,15 +17,15 @@
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork-vfe-time-drift-fix/1.0.2-21002"
+    "selected_version": "Release/Castle-Fork-vfe-time-drift-fix/1.0.3-21017"
   },
   {
     "name": "AudioSource-qc8017_32",
-    "selected_version": "Release/master/0.0.1-90+4835f7c"
+    "selected_version": "Release/master/0.1.4-115+f0b7d9d"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-05-18_1132"
+    "selected_version": "Release/Castle-Fork/1.5.0.42480.2834440"
   },
   {
     "name": "BLERemoteXCVR",
@@ -49,19 +49,19 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/0.5.3-382+e629ca4"
+    "selected_version": "Release/master/1.0.0-391+bae14ce"
   },
   {
     "name": "BoseOPKG-native",
-    "selected_version": "Release/master/0.5.0-27+f246d45"
+    "selected_version": "Release/master/1.0.0-30+960ca94"
   },
   {
     "name": "BoseOPKG-qc8017_32",
-    "selected_version": "Release/master/0.5.0-27+f246d45"
+    "selected_version": "Release/master/1.0.0-30+960ca94"
   },
   {
     "name": "BoseOPKG-x86",
-    "selected_version": "Release/master/0.5.0-27+f246d45"
+    "selected_version": "Release/master/1.0.0-30+960ca94"
   },
   {
     "name": "BoseWebMonaco",
@@ -93,7 +93,7 @@
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Release/master/1.0.3-63+fb3e550"
+    "selected_version": "Release/master/1.0.4-69+fd42338"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -101,7 +101,7 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Release/master/0.5.0-41+71f4cdb"
+    "selected_version": "Release/master/0.5.1-45+ae16bc3"
   },
   {
     "name": "DemoController-qc8017_32",
@@ -133,11 +133,11 @@
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/1.0.3-95+bb71f4f"
+    "selected_version": "Release/master/1.0.4-98+d070cb4"
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/master/0.5.1-125+230305a"
+    "selected_version": "Release/master/1.0.1-130+2fa59c5"
   },
   {
     "name": "NetworkService-qc8017_32",
@@ -153,15 +153,15 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/master/0.5.0-709+9fc7306"
+    "selected_version": "Release/master/0.5.0-742+34be654"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/master/0.5.0-709+9fc7306"
+    "selected_version": "Release/master/0.5.0-742+34be654"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@4bd42ab30ad5649f1948e879e0398169c6a52e02"
+    "selected_version": "master@ad9dc5ddfa913d11e4659c6556264c760e97b5e6"
   },
   {
     "name": "ProductUIAssets",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-05-18_1132"
+    "selected_version": "Release/Castle-Fork/1.5.0.42480.2834440"
   },
   {
     "name": "SystemEventService-qc8017_32",
