@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@e9776f0081d585eba3d3006dda531cf99f249b2d"
+    "selected_version": "master@ad19b8cf545204edbb343f5771b70acd1f43cb3f"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -13,19 +13,27 @@
   },
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork-SOP/1.0.1-20981"
+    "selected_version": "Release/Castle-Fork/1.1.1-21001"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork-SOP/1.0.1-20981"
+    "selected_version": "Release/Castle-Fork-vfe-time-drift-fix/1.0.2-21002"
+  },
+  {
+    "name": "AudioSource-qc8017_32",
+    "selected_version": "Release/master/0.0.1-90+4835f7c"
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.5.6.42384.2824845"
+    "selected_version": "Continuous/Castle-Fork/2018-05-18_1132"
   },
   {
     "name": "BLERemoteXCVR",
     "selected_version": "Release/master/v0.4.0-0+b23c5a5"
+  },
+  {
+    "name": "BLESetup-qc8017_32",
+    "selected_version": "Release/master/0.1.0-24+bf2fd6f"
   },
   {
     "name": "bose-opkg-utils",
@@ -37,7 +45,7 @@
   },
   {
     "name": "bose-web-update-page",
-    "selected_version": "master@c0a7c8225da44d5d3ae6effd08a07dd2fc3049e0"
+    "selected_version": "master@a49b3edc3490b1208e7388c7712e0881310041c1"
   },
   {
     "name": "BoseLibs-qc8017_32",
@@ -58,6 +66,18 @@
   {
     "name": "BoseWebMonaco",
     "selected_version": "Release/master/0.4.7-308+71498fe"
+  },
+  {
+    "name": "BTSource-qc8017_32",
+    "selected_version": "Release/master/0.0.1-12+f5597c1"
+  },
+  {
+    "name": "BTStackAdapter-qc8017_32",
+    "selected_version": "Release/master/0.0.1-54+9df22f1"
+  },
+  {
+    "name": "BTSTSSink-qc8017_32",
+    "selected_version": "Release/master/0.0.1-15+cbc94ca"
   },
   {
     "name": "CastleLibs-native",
@@ -193,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/0.5.6.42384.2824845"
+    "selected_version": "Continuous/Castle-Fork/2018-05-18_1132"
   },
   {
     "name": "SystemEventService-qc8017_32",
