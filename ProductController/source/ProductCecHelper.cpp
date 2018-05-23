@@ -477,7 +477,7 @@ void ProductCecHelper::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
 
     BOSE_DEBUG( s_logger, "CEC CAPS now playing status has been received." );
 
-    if( nowPlayingStatus.state( ).status( ) == SoundTouchInterface::Status::play )
+    if( nowPlayingStatus.state( ).status( ) == SoundTouchInterface::Status::PLAY )
     {
         if( nowPlayingStatus.has_container( )                          and
             nowPlayingStatus.container( ).has_contentitem( )           and
@@ -485,7 +485,7 @@ void ProductCecHelper::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
             nowPlayingStatus.container( ).contentitem( ).has_sourceaccount( ) )
         {
             if( nowPlayingStatus.container( ).contentitem( ).source( ).compare( ProductSourceSlot_Name( PRODUCT ) ) == 0   and
-                ( nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( TV     ) ) == 0 or
+                ( nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( TV ) ) == 0 or
                   nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( SLOT_0 ) ) == 0 or
                   nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( SLOT_1 ) ) == 0 or
                   nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( SLOT_2 ) ) == 0 ) )

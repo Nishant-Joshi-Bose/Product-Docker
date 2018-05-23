@@ -27,6 +27,10 @@ int main()
     std::string bootloaderVersion;
     std::string userappVersion;
     std::string lightbarVersion;
+    std::string dspVersion;
+    std::string darrVersion;
+    std::string f0Version;
+    std::string cc2640Version;
     int timeout = 30;
 
     auto task = IL::CreateTask( "ReadLpmVersionTask" );
@@ -86,6 +90,30 @@ int main()
     {
         lightbarVersion = rsp.componentversion();
     } );
+
+    req.set_lpmcomponenttype( DSP );
+    lpmClient->GetLpmComponentVersion( req, [&dspVersion]( IpcLpmComponentVerRsp_t const & rsp ) mutable
+    {
+        dspVersion = rsp.componentversion();
+    } );
+
+    req.set_lpmcomponenttype( DARR );
+    lpmClient->GetLpmComponentVersion( req, [&darrVersion]( IpcLpmComponentVerRsp_t const & rsp ) mutable
+    {
+        darrVersion = rsp.componentversion();
+    } );
+
+    req.set_lpmcomponenttype( F0 );
+    lpmClient->GetLpmComponentVersion( req, [&f0Version]( IpcLpmComponentVerRsp_t const & rsp ) mutable
+    {
+        f0Version = rsp.componentversion();
+    } );
+
+    req.set_lpmcomponenttype( CC2640 );
+    lpmClient->GetLpmComponentVersion( req, [&cc2640Version]( IpcLpmComponentVerRsp_t const & rsp ) mutable
+    {
+        cc2640Version = rsp.componentversion();
+    } );
     /* Wait for all */
     timeout = 30;
     while( ( blobVersion.length() == 0
@@ -93,6 +121,10 @@ int main()
              || bootloaderVersion.length() == 0
              || psocVersion.length() == 0
              || lightbarVersion.length() == 0
+             || dspVersion.length() == 0
+             || darrVersion.length() == 0
+             || f0Version.length() == 0
+             || cc2640Version.length() == 0
            ) && timeout > 0 )
     {
         sleep( 1 );
@@ -104,12 +136,20 @@ int main()
     TrimNulls( bootloaderVersion );
     TrimNulls( psocVersion );
     TrimNulls( lightbarVersion );
+    TrimNulls( dspVersion );
+    TrimNulls( darrVersion );
+    TrimNulls( f0Version );
+    TrimNulls( cc2640Version );
 
     std::cout << "Blob Version: " << blobVersion << "\r\n";
     std::cout << "User App Version: " << userappVersion << "\r\n";
     std::cout << "Bootloader Version: " << bootloaderVersion << "\r\n";
     std::cout << "PSOC Version: " << psocVersion << "\r\n";
     std::cout << "Lightbar Version: " << lightbarVersion << "\r\n";
+    std::cout << "DSP Version: " << dspVersion << "\r\n";
+    std::cout << "DARR Version: " << darrVersion << "\r\n";
+    std::cout << "F0 Version: " << f0Version << "\r\n";
+    std::cout << "CC2640 Version: " << cc2640Version << "\r\n";
 
     return retVal;
 }
