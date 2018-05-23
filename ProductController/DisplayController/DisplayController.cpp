@@ -5,6 +5,9 @@
 ///// @attention Copyright 2017 Bose Corporation, Framingham, MA
 //////////////////////////////////////////////////////////////////////////////////
 
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #include <limits.h>
 #include <float.h>
 #include <functional>
@@ -72,6 +75,8 @@ static std::vector<float> s_risingLuxThreshold =
 };
 
 static constexpr char DISPLAY_CONTROLLER_FILE_NAME   [] = "/opt/Bose/etc/display_controller.json";
+static constexpr char FRAME_BUFFER_BLACK_SCREEN      [] = "black_screen";
+static constexpr char EDDIE_LCD_FRAME_BUFFER_DIR     [] = "/sys/devices/soc/7af6000.spi/spi_master/spi6/spi6.1/graphics/fb1/";
 static constexpr char JSON_TOKEN_DISPLAY_CONTROLLER  [] = "DisplayController";
 static constexpr char JSON_TOKEN_BACK_LIGHT_LEVELS   [] = "BackLightLevelsPercent";
 static constexpr char JSON_TOKEN_LOWERING_THRESHOLDS [] = "LoweringThresholdLux";
@@ -89,6 +94,7 @@ static constexpr int   SEND_DEFAULTS_TO_LPM_RETRY_MS    = 2000;
 static constexpr float SILVER_LUX_FACTOR                = 11.0f;
 static constexpr uint8_t BRIGHTNESS_MAX                 = 100;
 static constexpr uint8_t BRIGHTNESS_MIN                 = 0;
+static constexpr int     UI_HEART_BEAT_RATE_SEC         = 30; // heart beat frequency in seconds of the Monaco's ui/alive front-end message
 
 /*!
  */
@@ -392,17 +398,57 @@ void DisplayController::SetStandbyLcdBrightnessCapEnabled( bool enabled )
  */
 void DisplayController::UpdateLoop()
 {
+    bool     previous_is_screen_black        = IsFrameBufferBlackScreen();
+    bool     actual_is_screen_black          = previous_is_screen_black  ;
+    const    std::string blackScreenFileName = std::string( EDDIE_LCD_FRAME_BUFFER_DIR ) + FRAME_BUFFER_BLACK_SCREEN;
+    uint64_t tick_count               = 0;
+
+    if( DirUtils::DoesFileExist( blackScreenFileName ) == false )
+    {
+        BOSE_LOG( WARNING, "warning: can't find file: " + blackScreenFileName + ", update your kernel for black screen detection" );
+    }
+
     while( ! m_timeToStop )
     {
+        tick_count++;
+
         if( m_uiHeartBeat != ULLONG_MAX )
         {
             if( m_localHeartBeat == ULLONG_MAX )
             {
                 m_localHeartBeat = m_uiHeartBeat;
+                tick_count       = 1; // reset tick count
+                UpdateUiConnected( true );
             }// if it's te first heart beat receive from the UI
+            else if( !( tick_count % UI_HEART_BEAT_RATE_SEC ) )
+            {
+                m_localHeartBeat++;
+            }
 
-            m_localHeartBeat++;
-        }
+            if( abs( m_localHeartBeat - m_uiHeartBeat ) > 1 )
+            {
+                BOSE_LOG( ERROR, "Error: the UI stop, local HB: " << m_localHeartBeat << " HB: " << m_uiHeartBeat );
+                // reset the heart beat algorithm and resume on first heart beat from the UI
+                m_localHeartBeat = m_uiHeartBeat = ULLONG_MAX;
+                UpdateUiConnected( false );
+            }// If the UI stop updating the heart beat
+        }// If the UI had started
+
+        actual_is_screen_black = IsFrameBufferBlackScreen();
+
+        if( actual_is_screen_black != previous_is_screen_black )
+        {
+            BOSE_LOG( VERBOSE, "screen content transitioned from "         <<
+                      ( previous_is_screen_black ? "black" : "non-black" ) <<
+                      " to "                                               <<
+                      ( actual_is_screen_black   ? "black" : "non-black" ) );
+
+            // ???????????????????????????????????????????????????????????????????????
+            // TODO: call HSM with new state
+            // ???????????????????????????????????????????????????????????????????????
+
+            previous_is_screen_black = actual_is_screen_black;
+        }// Else, the screen passed from black-to-none_black or passed form non-black to black
 
         if( ! m_defaultsSentToLpm
             // Transfer and processing on LPM can take time. Throttle this.
@@ -415,7 +461,8 @@ void DisplayController::UpdateLoop()
 
         usleep( UPDATE_SLEEP_MS * 1000 );
     }
-}
+
+}// UpdateLoop
 
 /*!
  */
@@ -582,36 +629,30 @@ void DisplayController::HandlePostUiHeartBeat( const UiHeartBeat &req,
 {
     BOSE_LOG( INFO, "received first heartbeat: " << req.count() );
     m_uiHeartBeat = req.count();
-    if( !m_uiConnected )
-    {
-        UpdateUiConnected( true );
-    }
+
     UiHeartBeat response;
     response.set_count( m_uiHeartBeat );
     resp.Send( response );
-}
+}// HandlePostUiHeartBeat
 
 /*!
  */
 void DisplayController::HandlePutUiHeartBeat( const UiHeartBeat &req,
                                               Callback<UiHeartBeat> resp )
 {
-    BOSE_LOG( VERBOSE, "received heartbeat: " << req.count() << ", current heat beat: " << m_uiHeartBeat );
+    BOSE_LOG( VERBOSE, "received heartbeat: " << req.count() << ", current heart beat: " << m_uiHeartBeat );
 
-    if( abs( m_uiHeartBeat - req.count() ) >= 2 )
+    if( ( m_uiHeartBeat != ULLONG_MAX ) && ( abs( m_uiHeartBeat - req.count() ) >= 2 ) )
     {
-        BOSE_LOG( WARNING, "UI is skipping heart beat, received heartbeat: " << req.count() + ", current heat beat: " << m_uiHeartBeat );
+        BOSE_LOG( WARNING, "UI is skipping heart beat, received heartbeat: " << req.count() + ", current heart beat: " << m_uiHeartBeat );
     }
 
     m_uiHeartBeat = req.count();
-    if( !m_uiConnected )
-    {
-        UpdateUiConnected( true );
-    }
+
     UiHeartBeat response;
     response.set_count( m_uiHeartBeat );
     resp.Send( response );
-}
+}// HandlePutUiHeartBeat
 
 /*!
  */
@@ -775,11 +816,10 @@ void DisplayController::BuildLpmUIBrightnessStruct( IpcUIBrightness_t* out, IpcU
  */
 bool DisplayController::TurnDisplayOnOff( bool turnOn )
 {
-    const std::string displayControllerDir = "/sys/devices/soc/7af6000.spi/spi_master/spi6/spi6.1/graphics/fb1/";
-    const std::string sendCommandFileName  = displayControllerDir + "send_command";
-    const std::string teFileName           = displayControllerDir + "te";
-    const char*       onOffCmdString       = turnOn ? "29" : "28" ;
-    const char*       teString             = turnOn ? "1"  : "0"  ;
+    const std::string sendCommandFileName = std::string( EDDIE_LCD_FRAME_BUFFER_DIR ) + "send_command";
+    const std::string teFileName          = std::string( EDDIE_LCD_FRAME_BUFFER_DIR ) + "te";
+    const char*       onOffCmdString      = turnOn ? "29" : "28" ;
+    const char*       teString            = turnOn ? "1"  : "0"  ;
 
     BOSE_LOG( VERBOSE, "turning LCD: " << ( turnOn ? "on" : "off" ) );
 
@@ -842,5 +882,27 @@ bool DisplayController::TurnDisplayOnOff( bool turnOn )
     BOSE_LOG( VERBOSE, "LCD is now: " << ( turnOn ? "on" : "off" ) );
     return true;
 }
+
+bool DisplayController::IsFrameBufferBlackScreen()
+{
+    const std::string blackScreenFileName = std::string( EDDIE_LCD_FRAME_BUFFER_DIR ) + FRAME_BUFFER_BLACK_SCREEN;
+    FILE *fp                              = fopen( blackScreenFileName.c_str(), "r" );
+    char  buf                             = '9';
+
+    if( fp == NULL )
+    {
+        return false;
+    }
+
+    if( fscanf( fp, "%c", &buf ) != 1 )
+    {
+        fclose( fp );
+        BOSE_LOG( WARNING, "warning: failed to read file: " + blackScreenFileName );
+        return false;
+    }
+
+    fclose( fp );
+    return buf == '1' ? true : false;
+}// IsFrameBufferBlackScreen
 
 } //namespace ProductApp

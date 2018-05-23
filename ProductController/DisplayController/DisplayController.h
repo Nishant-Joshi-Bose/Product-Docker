@@ -121,6 +121,7 @@ private:
      */
     void RegisterFrontdoorEndPoints();
 
+    bool IsFrameBufferBlackScreen();
     void HandleLpmResponse( LBCSResponse_t response, const Callback<Display>& resp );
     bool HandleLpmNotificationBackLight( IpcBackLight_t   lpmBackLight );
     bool HandleLpmNotificationUIBrightness( IpcUIBrightness_t lpmBrightness );
