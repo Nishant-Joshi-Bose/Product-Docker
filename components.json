@@ -13,11 +13,11 @@
   },
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork-SOP/1.0.1-20981"
+    "selected_version": "Release/Castle-Fork/1.1.1-21001"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork-SOP/1.0.1-20981"
+    "selected_version": "Release/Castle-Fork-vfe-time-drift-fix/1.0.3-21017"
   },
   {
     "name": "AudioSource-qc8017_32",
