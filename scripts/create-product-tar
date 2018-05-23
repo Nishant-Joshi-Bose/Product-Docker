@@ -355,8 +355,8 @@ def create_bose_partition(is_without_lpm, development, ipks_to_install):
             os.remove(os.path.join(temp_dir, "opt/Bose/hsp/update_ext4.zip"))
         ''' move installed files to EXT4 directory '''
         movetree(os.path.join(temp_dir, "opt/Bose/"), extract_dir)
-        ''' sed -i -- 's/Status: install user unpacked/Status: install user installed/g' $bose_partition"/update/status '''        
-        retVal, retStr = perform_sed(os.path.join(extract_dir, "update/status"), 
+        ''' sed -i -- 's/Status: install user unpacked/Status: install user installed/g' $bose_partition"/.swUpdateCache/status '''        
+        retVal, retStr = perform_sed(os.path.join(extract_dir, ".swUpdateCache/status"), 
                                       "Status: install user unpacked", 
                                       "Status: install user installed")
         if retVal != 0:

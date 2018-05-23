@@ -15,7 +15,6 @@ PyTest configuration and fixtures used by the Boot Sequencing Tests.
 
 """
 import time
-from multiprocessing import Process, Manager
 
 import pytest
 
@@ -23,8 +22,6 @@ from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.MemoryUtils.graphite import Graphite
 
 from conf_bootsequencing import CONFIG
-from stateutils import network_checker, UNKNOWN
-
 
 LOGGER = get_logger(__file__)
 
