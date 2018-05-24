@@ -33,6 +33,7 @@
 #include "DataCollectionClientFactory.h"
 #include "HdmiEdid.pb.h"
 #include "ProductDataCollectionDefines.h"
+#include "ProductSTS.pb.h"
 
 using namespace ProductPb;
 
@@ -497,7 +498,10 @@ void ProductCecHelper::Stop( )
 void ProductCecHelper::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
                                          nowPlayingStatus )
 {
+    using namespace ProductSTS;
+
     BOSE_DEBUG( s_logger, "CEC CAPS now playing status has been received." );
+
     if( nowPlayingStatus.state( ).status( ) == SoundTouchInterface::Status::PLAY )
     {
         if( nowPlayingStatus.has_container( )                          and
@@ -505,11 +509,11 @@ void ProductCecHelper::HandleNowPlaying( const SoundTouchInterface::NowPlaying&
             nowPlayingStatus.container( ).contentitem( ).has_source( ) and
             nowPlayingStatus.container( ).contentitem( ).has_sourceaccount( ) )
         {
-            if( nowPlayingStatus.container( ).contentitem( ).source( ).compare( "PRODUCT" ) == 0   and
-                ( nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( "TV" ) == 0 or
-                  nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( "SLOT_0" ) == 0 or
-                  nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( "SLOT_1" ) == 0 or
-                  nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( "SLOT_2" ) == 0 ) )
+            if( nowPlayingStatus.container( ).contentitem( ).source( ).compare( ProductSourceSlot_Name( PRODUCT ) ) == 0   and
+                ( nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( TV ) ) == 0 or
+                  nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( SLOT_0 ) ) == 0 or
+                  nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( SLOT_1 ) ) == 0 or
+                  nowPlayingStatus.container( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( SLOT_2 ) ) == 0 ) )
             {
                 BOSE_DEBUG( s_logger, "CEC CAPS now playing source is set to SOURCE_TV." );
 
