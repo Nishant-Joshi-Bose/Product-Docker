@@ -60,7 +60,6 @@ swup_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 audiopath_dir=$(components get AudioPath-qc8017_32 installed_location) || exit
 castlenetworkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
 castlepassport_dir=$(components get Passport-qc8017_32 installed_location) || exit
-wifi_setup_webpage_dir=$(components get bose-web-riviera-ap-page installed_location) || exit
 web_update_page_dir=$(components get bose-web-update-page installed_location) || exit
 lpmservice_dir=$(components get RivieraLpmService-qc8017_32 installed_location) || exit
 cli_dir=$(components get Cli-qc8017_32 installed_location) || exit
@@ -142,7 +141,6 @@ fi
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlepassport_dir/stage" "$opt_dir" || exit
 "$shepherd_dir/stage" "$opt_dir" || exit
-"$wifi_setup_webpage_dir/stage" "$opt_dir" || exit
 "$lpmservice_dir/stage" "$opt_dir" || exit
 "$cli_dir/stage" "$opt_dir" || exit
 "$frontdoor_dir/stage" "$opt_dir" || exit
