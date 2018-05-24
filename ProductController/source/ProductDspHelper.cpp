@@ -193,6 +193,9 @@ void ProductDspHelper::DspStatusCallback( const LpmServiceMessages::IpcDspStatus
     // @todo - PGC-942update presentation latency
 
     m_dspStatus.CopyFrom( status );
+
+    // Update /audio/eqSelect supported EQs based on AiqInstalled info
+    m_ProductController.GetProductAudioServiceInstance()->SetAiqInstalled( ( status.aiqinstalled() > 0 ) ? true : false );
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////

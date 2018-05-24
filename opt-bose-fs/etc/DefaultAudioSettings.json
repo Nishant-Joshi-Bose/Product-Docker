@@ -227,7 +227,7 @@
 			},
 			"defaultValue":"EQ_OFF",
 			"properties": {
-                "supportedModes": ["EQ_OFF"]
+                "supportedModes": ["EQ_OFF", "EQ_RETAIL_A"]
             }
 		},
 		"audioSubwooferPolarity": {		
