@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.0.42480.2834440"
+    "selected_version": "Continuous/Castle-Fork/2018-05-23_1541"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -37,15 +37,15 @@
   },
   {
     "name": "BoseOPKG-native",
-    "selected_version": "Release/master/0.5.0-27+f246d45"
+    "selected_version": "Release/master/1.0.0-30+960ca94"
   },
   {
     "name": "BoseOPKG-qc8017_32",
-    "selected_version": "Release/master/0.5.0-27+f246d45"
+    "selected_version": "Release/master/1.0.0-30+960ca94"
   },
   {
     "name": "BoseOPKG-x86",
-    "selected_version": "Release/master/0.5.0-27+f246d45"
+    "selected_version": "Release/master/1.0.0-30+960ca94"
   },
   {
     "name": "BoseWebMonaco",
@@ -189,11 +189,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.5.3-593+49a4d24"
+    "selected_version": "Release/master/1.5.0-621+e9b8b17"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.0.42480.2834440"
+    "selected_version": "Continuous/Castle-Fork/2018-05-23_1541"
   },
   {
     "name": "SystemEventService-qc8017_32",
