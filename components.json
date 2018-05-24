@@ -137,7 +137,7 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/master/1.0.1-130+2fa59c5"
+    "selected_version": "Continuous/sdong-PGC1179/1.0.1-133+0a85e76"
   },
   {
     "name": "NetworkService-qc8017_32",
@@ -189,7 +189,7 @@
   },
   {
     "name": "RivieraLpmService-qc8017_32",
-    "selected_version": "Release/master/1.0.0-183+6de2ea1"
+    "selected_version": "Continuous/master/1.0.0-186+43e3949"
   },
   {
     "name": "RivieraLpmTools",
