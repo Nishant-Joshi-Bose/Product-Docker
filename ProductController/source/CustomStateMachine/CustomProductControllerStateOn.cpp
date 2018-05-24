@@ -144,10 +144,10 @@ bool CustomProductControllerStateOn::HandleIntentSpeakerPairing( KeyHandlerUtil:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateOn::HandleIntentSetupBLERemote( )
 {
-    BOSE_INFO( s_logger, "The %s state is in %s: remote is %sconnected, network is %sconnected, ProductSettings %sreceived",
+    BOSE_INFO( s_logger, "The %s state is in %s: remote is %sconnected, network is %sconnected, PassportAccount %s",
                GetName( ).c_str( ), __func__ , GetCustomProductController().IsBLERemoteConnected() ? "" : "not ",
                GetCustomProductController().GetNetworkServiceUtil().IsNetworkConnected() ? "" : "not ",
-               GetCustomProductController().IsProductSettingsReceived() ? "" : "not " );
+               PassportPB::AssociateStatus_Name( GetCustomProductController().GetPassportAccountAssociationStatus() ).c_str() );
 
     ///
     /// @note Conditions for initiating pairing: this feature shall be disabled when: active bonded
@@ -159,7 +159,7 @@ bool CustomProductControllerStateOn::HandleIntentSetupBLERemote( )
     ///
     if( !( GetCustomProductController().IsBLERemoteConnected() ||
            ( GetCustomProductController().GetNetworkServiceUtil().IsNetworkConnected() &&
-             GetCustomProductController().IsProductSettingsReceived() ) ) )
+             ( GetCustomProductController().GetPassportAccountAssociationStatus() == PassportPB::ASSOCIATED ) ) ) )
     {
         GetCustomProductController().PairBLERemote( MANUAL_BLE_REMOTE_PAIRING_TIMEOUT_SECONDS );
     }
