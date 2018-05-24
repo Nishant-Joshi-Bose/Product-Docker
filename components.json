@@ -9,7 +9,7 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@f3527b809c6a37b7e6aecb862f75d3d3c858e485"
+    "selected_version": "master@86b818629aeb5dc6ee978ecc014e3f2b63f08c91"
   },
   {
     "name": "AudioPath-qc8017_32",
@@ -209,7 +209,7 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/0.5.3-593+49a4d24"
+    "selected_version": "Release/master/1.5.0-621+e9b8b17"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
