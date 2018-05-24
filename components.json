@@ -9,7 +9,7 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@f3527b809c6a37b7e6aecb862f75d3d3c858e485"
+    "selected_version": "master@86b818629aeb5dc6ee978ecc014e3f2b63f08c91"
   },
   {
     "name": "AudioPath-qc8017_32",
@@ -161,7 +161,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@ad9dc5ddfa913d11e4659c6556264c760e97b5e6"
+    "selected_version": "master@cec46f8ea0294418546dfd5e90f975e96d056c83"
   },
   {
     "name": "ProductUIAssets",

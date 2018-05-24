@@ -31,6 +31,7 @@
 #include "Intents.h"
 #include "EndPointsDefines.h"
 #include "ProductSourceInfo.h"
+#include "ProductSTS.pb.h"
 
 using namespace ProductPb;
 
@@ -86,6 +87,8 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
 {
     BOSE_INFO( s_logger, "%s in %s", "PlaybackRequestManager", __FUNCTION__ );
 
+    using namespace ProductSTS;
+
     auto playbackRequestResponseCallback = [ this ]( const SoundTouchInterface::NowPlaying & response )
     {
         BOSE_DEBUG( s_logger, "A response to the playback request was received: %s",
@@ -104,7 +107,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
 
     if( action == ( uint16_t )Action::ACTION_TV )
     {
-        playbackRequestData.set_sourceaccount( "TV" );
+        playbackRequestData.set_sourceaccount( ProductSourceSlot_Name( TV ) );
     }
     else if( action == ( uint16_t )Action::ACTION_GAME )
     {
@@ -144,11 +147,11 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
     }
     else if( action == ( uint16_t )Action::ACTION_APAPTIQ_START )
     {
-        playbackRequestData.set_sourceaccount( "ADAPTiQ" );
+        playbackRequestData.set_sourceaccount( ProductSourceSlot_Name( ADAPTIQ ) );
     }
     else if( action == ( uint16_t )Action::ACTION_START_PAIR_SPEAKERS )
     {
-        playbackRequestData.set_sourceaccount( "PAIRING" );
+        playbackRequestData.set_sourceaccount( ProductSourceSlot_Name( PAIRING ) );
     }
     else
     {
@@ -167,7 +170,7 @@ bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& action )
         activeAccount = nowSelectingContentItem.sourceaccount( );
     }
 
-    playbackRequestData.set_source( "PRODUCT" );
+    playbackRequestData.set_source( ProductSourceSlot_Name( PRODUCT ) );
 
     if( activeSource != playbackRequestData.source()  ||
         activeAccount != playbackRequestData.sourceaccount( ) )
