@@ -398,6 +398,20 @@ const ProductPb::AudioEqSelect& CustomAudioSettingsManager::GetEqSelect() const
     BOSE_DEBUG( s_logger, __func__ );
     return m_currentEqSelect;
 }
+void CustomAudioSettingsManager::UpdateEqSelectSupportedMode( string mode, bool supported )
+{
+    BOSE_DEBUG( s_logger, __func__ );
+    bool currSupported = isValueInArray( mode, m_audioSettings["audioSettingValues"]["audioEqSelect"]["properties"]["supportedModes"] );
+    // if new mode is supported, add it to the list
+    // note: currently we don't have use case of dynamically removing modes (modes can only be reset by factory default).
+    //       if use case does come up, rules have to be defined, and handling has to be added here
+    if( supported && !currSupported )
+    {
+        m_audioSettings["audioSettingValues"]["audioEqSelect"]["properties"]["supportedModes"].append( mode );
+        m_currentEqSelect.mutable_properties()->add_supportedmodes( mode );
+        PersistAudioSettings();
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 /// SubwooferPolarity setting setter/getter
