@@ -107,6 +107,16 @@ put_script "$stage/postinst" <<EOF
 #!/bin/sh
 echo "SoundTouch recovery postinst"
 
+# Make sure that cache partition is mounted, if not then mount it
+if ! [ "$(awk '$2 == "/cache"' /proc/mounts)" ]; then
+    echo "Mounting Cache"
+    mount /dev/mmcblk0p26 /cache || exiterror
+fi
+
+# Remove old logs
+rm -f /cache/recovery/last_log.*
+rm -f /cache/recovery/last_kmsg.*
+
 # move minimal rpoduct image to cache partition
 mv /opt/Bose/Bose_minimal.tar.gz /cache/
 
@@ -178,3 +188,13 @@ ipk=$output_dir/recovery.ipk
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
 echo "Created $ipk"
+# /cache partition used to put contents of this IPK is limited in size.
+# Check if IPK is so big that /cache will become 100% and eventually cause
+# softwareupdate failure. This prevents issues from happening in field
+if [ $(stat -c "%s" $ipk) -ge 31457280 ]; then
+    echo "Created $ipk > 30 MB limit. Build failure"
+    exit 1
+else
+    echo "Created $ipk"
+fi
+exit 0
