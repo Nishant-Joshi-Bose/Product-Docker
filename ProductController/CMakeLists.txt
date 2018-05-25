@@ -38,6 +38,7 @@ ADD_EXECUTABLE(Eddie
   EddieProductController.cpp
   Main.cpp
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
+  ${PROTO_CC_DEST}/ProductSTS.pb.cc
   ${PROTO_CC_DEST}/KeyActions.pb.cc
   ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/IntentHandler.pb.cc
