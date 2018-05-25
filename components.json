@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-05-23_1541"
+    "selected_version": "Continuous/Castle-Fork/2018-05-24_1701"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -33,7 +33,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/1.0.0-391+bae14ce"
+    "selected_version": "Release/master/1.0.1-399+b85ad0f"
   },
   {
     "name": "BoseOPKG-native",
@@ -65,19 +65,19 @@
   },
   {
     "name": "CastleLibs-native",
-    "selected_version": "branches/castle-libs@2606"
+    "selected_version": "branches/castle-libs@2636"
   },
   {
     "name": "CastleLibs-qc8017_32",
-    "selected_version": "branches/castle-libs@2606"
+    "selected_version": "branches/castle-libs@2636"
   },
   {
     "name": "CastleLibs-x86",
-    "selected_version": "branches/castle-libs@2606"
+    "selected_version": "branches/castle-libs@2636"
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Release/master/1.0.4-69+fd42338"
+    "selected_version": "Release/master/1.0.4-71+9783e08"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -89,7 +89,7 @@
   },
   {
     "name": "DemoController-qc8017_32",
-    "selected_version": "Release/master/0.5.1-96+04eed26"
+    "selected_version": "Release/master/1.5.0-103+bbc874c"
   },
   {
     "name": "FrontDoor-qc8017_32",
@@ -129,11 +129,11 @@
   },
   {
     "name": "opensource-jsoncpp-native",
-    "selected_version": "Release/bose-master/1.8.3-11-gb142130"
+    "selected_version": "Release/bose-master/1.8.3-13-gd0529a5"
   },
   {
     "name": "opensource-jsoncpp-qc8017_32",
-    "selected_version": "Release/bose-master/1.8.3-11-gb142130"
+    "selected_version": "Release/bose-master/1.8.3-13-gd0529a5"
   },
   {
     "name": "Passport-qc8017_32",
@@ -161,11 +161,11 @@
   },
   {
     "name": "Riviera-HSP-Images",
-    "selected_version": "Release/master/3.9"
+    "selected_version": "Release/master/3.10"
   },
   {
     "name": "Riviera-Toolchain",
-    "selected_version": "Release/master/3.9"
+    "selected_version": "Release/master/3.10"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -177,7 +177,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/master/0.4.1-55+6e2ecfe"
+    "selected_version": "Release/master/1.0.0-58+75a9930"
   },
   {
     "name": "SASS-qc8017_32",
@@ -185,7 +185,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/1.0.1-82+1e6be97"
+    "selected_version": "Release/master/1.0.1-86+7eae239"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -193,7 +193,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-05-23_1541"
+    "selected_version": "Continuous/Castle-Fork/2018-05-24_1701"
   },
   {
     "name": "SystemEventService-qc8017_32",
@@ -201,7 +201,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@426e52f81d129cd257dd626b1a207937bfaca541"
+    "selected_version": "master@26e9140be052043f254c3d6c78ad3d59f2ffb16a"
   },
   {
     "name": "Webkit",
