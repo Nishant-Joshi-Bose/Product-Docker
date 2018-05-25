@@ -15,6 +15,7 @@
 #include "ProductControllerStates.h"
 #include "ProductControllerStatePlayingSelected.h"
 #include "CustomProductControllerStatePlayingSelected.h"
+#include "ProductSTS.pb.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -61,18 +62,20 @@ bool CustomProductControllerStatePlayingSelected::PossiblyGoToCustomState( )
 {
     BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
 
+    using namespace ProductSTS;
+
     if( GetProductController( ).GetNowSelection( ).has_contentitem( ) )
     {
-        if( GetProductController( ).GetNowSelection( ).contentitem( ).source( ).compare( "PRODUCT" ) == 0 )
+        if( GetProductController( ).GetNowSelection( ).contentitem( ).source( ).compare( ProductSourceSlot_Name( PRODUCT ) ) == 0 )
         {
-            if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( "ADAPTiQ" ) == 0 )
+            if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( ADAPTIQ ) ) == 0 )
             {
                 ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
 
                 return true;
             }
 
-            if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( "PAIRING" ) == 0 )
+            if( GetProductController( ).GetNowSelection( ).contentitem( ).sourceaccount( ).compare( ProductSourceSlot_Name( PAIRING ) ) == 0 )
             {
                 ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ACCESSORY_PAIRING );
 

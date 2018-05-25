@@ -31,6 +31,7 @@
 #include "EndPointsDefines.h"
 #include "ProductEndpointDefines.h"
 #include "ProductDataCollectionDefines.h"
+#include "ProductSTS.pb.h"
 
 namespace
 {
@@ -146,6 +147,9 @@ void ProductDspHelper::Stop( )
 void ProductDspHelper::AutoWakeTriggered()
 {
     BOSE_INFO( s_logger, __PRETTY_FUNCTION__ );
+
+    using namespace ProductSTS;
+
     auto playbackRequestResponseCallback = [ this ]( const SoundTouchInterface::NowPlaying & response )
     {
         BOSE_DEBUG( s_logger, "A response to the playback request was received: %s" ,
@@ -162,8 +166,8 @@ void ProductDspHelper::AutoWakeTriggered()
 
     SoundTouchInterface::PlaybackRequest playbackRequestData;
 
-    playbackRequestData.set_source( "PRODUCT" );
-    playbackRequestData.set_sourceaccount( "TV" );
+    playbackRequestData.set_source( ProductSourceSlot_Name( PRODUCT ) );
+    playbackRequestData.set_sourceaccount( ProductSourceSlot_Name( TV ) );
 
     m_ProductController.GetFrontDoorClient( )->SendPost<SoundTouchInterface::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_PLAYBACKREQUEST_API,
             playbackRequestData,
