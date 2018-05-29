@@ -7,7 +7,7 @@ endif
 
 .PHONY: deploy
 deploy: all-packages
-	scripts/collect-deployables builds/Release builds/deploy/$(HW_VAR)
+	scripts/collect-deployables . builds/Release builds/deploy/$(HW_VAR)
 
 .PHONY: force
 force:
