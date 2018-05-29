@@ -236,7 +236,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
     leds.set_backlight_enable( true );
     leds.set_demo_mode( false );
 
-    if( m_ProductController.IsProductSettingsReceived() )
+    if( m_ProductController.GetPassportAccountAssociationStatus() == PassportPB::ASSOCIATED )
     {
         leds.set_sound_touch( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
     }
