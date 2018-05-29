@@ -69,8 +69,6 @@ output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
 mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" || exit
 
-#rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
-
 components record "$stage" || exit
 
 # copy minimal image tar to /opt/Bose
@@ -78,7 +76,7 @@ minimal_image="Bose_minimal.tar.gz"
 cp "$wspace/builds/$cfg/$minimal_image"  "$opt_dir/" || exit
 
 # copy network configured script which will be required in restore operation
-cp "$wspace/opt-bose-fs/bin/isNetworkConfigured" "$opt_dir/bin/" || exit
+cp "$wspace/misc/isNetworkConfigured" "$opt_dir/bin/" || exit
 
 # copy recovery images from Software Update
 "$swup_dir/stage_recovery" "$opt_dir" || exit
@@ -108,6 +106,16 @@ EOF
 put_script "$stage/postinst" <<EOF
 #!/bin/sh
 echo "SoundTouch recovery postinst"
+
+# Make sure that cache partition is mounted, if not then mount it
+if ! grep -q /cache /proc/mounts; then
+    echo "Mounting Cache"
+    mount /dev/mmcblk0p26 /cache || exiterror
+fi
+
+# Remove old logs
+rm -f /cache/recovery/last_log.*
+rm -f /cache/recovery/last_kmsg.*
 
 # move minimal rpoduct image to cache partition
 mv /opt/Bose/Bose_minimal.tar.gz /cache/
@@ -179,4 +187,13 @@ echo "2.0" > debian-binary || exit
 ipk=$output_dir/recovery.ipk
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
-echo "Created $ipk"
+# /cache partition used to put contents of this IPK is limited in size.
+# Check if IPK is so big that /cache will become 100% and eventually cause
+# softwareupdate failure. This prevents issues from happening in field
+if [ $(stat -c "%s" $ipk) -ge 33554432 ]; then
+    echo "Created $ipk > 32 MB limit. Build failure"
+    exit 1
+else
+    echo "Created $ipk"
+fi
+exit 0
