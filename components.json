@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-05-29_1356"
+    "selected_version": "Continuous/Castle-Fork/2018-05-29_1431"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -33,7 +33,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/1.0.1-399+b85ad0f"
+    "selected_version": "Release/master/1.0.2-404+7846d4e"
   },
   {
     "name": "BoseOPKG-native",
@@ -57,11 +57,11 @@
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Release/master/0.0.1-54+9df22f1"
+    "selected_version": "Release/master/1.0.0-68+0ed9e2f"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/master/0.0.1-15+cbc94ca"
+    "selected_version": "Release/master/1.0.0-24+9c275d5"
   },
   {
     "name": "CastleLibs-native",
@@ -193,7 +193,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-05-29_1356"
+    "selected_version": "Continuous/Castle-Fork/2018-05-29_1431"
   },
   {
     "name": "SystemEventService-qc8017_32",
@@ -201,7 +201,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@26e9140be052043f254c3d6c78ad3d59f2ffb16a"
+    "selected_version": "master@41ac38dddde483c9ea3843d8f532fed3888a23bc"
   },
   {
     "name": "Webkit",
