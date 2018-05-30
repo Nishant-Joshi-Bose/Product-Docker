@@ -73,7 +73,7 @@ if dev is not None:
         .format(elem, html_escape(dev))
 
 for elem in """country_code regionCode snSystem productType productName
-               productColor testflagLaunchAssurance""".split():
+               productColor testflagLaunchAssurance guid""".split():
     print "<tr><td>{}</td><td>{}</td></tr>" \
         .format(elem, html_escape(mfg_data.get(elem, "(none)")))
 print "</table>"
