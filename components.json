@@ -201,7 +201,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/master/0.5.3-315+e4934d1"
+    "selected_version": "Release/master/1.0.0-336+e4d6d3f"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.0.42480.2834440"
+    "selected_version": "Release/Castle-Fork/1.5.1.42555.2844402"
   },
   {
     "name": "SystemEventService-qc8017_32",
