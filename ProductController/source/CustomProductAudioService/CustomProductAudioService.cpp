@@ -21,6 +21,7 @@
 #include "AutoLpmServiceMessages.pb.h"
 #include "ProductEndpointDefines.h"
 #include "ProductDataCollectionDefines.h"
+#include "ProductSTS.pb.h"
 
 namespace ProductApp
 {
@@ -117,6 +118,8 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
     BOSE_DEBUG( s_logger, __func__ );
     BOSE_DEBUG( s_logger, "GetMainStreamAudioSettingsCallback - contentItem = %s", contentItem.c_str() );
 
+    using namespace ProductSTS;
+
     // Parse contentItem string received from APProduct
     bool error = false;
     SoundTouchInterface::ContentItem contentItemProto;
@@ -138,7 +141,7 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
         m_AudioSettingsMgr->UpdateContentItem( contentItemProto );
         FetchLatestAudioSettings();
         // Update input route
-        if( contentItemProto.source() == "PRODUCT" )
+        if( contentItemProto.source() == ProductSourceSlot_Name( PRODUCT ) )
         {
             m_InputRoute = ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_OPTICAL ) |
                            ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_ARC ) |
@@ -304,6 +307,20 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
     {
         m_ThermalTask->Stop();
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::SetAiqInstalled
+///
+/// @param  bool installed
+///
+/// @brief  Info from DSP about whether AdaptIQ EQ is available on DSP
+///
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::SetAiqInstalled( bool installed )
+{
+    m_AudioSettingsMgr->UpdateEqSelectSupportedMode( "EQ_AIQ_A", installed );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

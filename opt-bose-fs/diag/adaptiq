@@ -81,7 +81,7 @@ else:
         <hr>
         <li>FrontDoor Endpoint
         <iframe src="/diag/adaptiq/get"></iframe>   <!-- inline frame pulls from "get" portion of CGI script, while button fetches "pull" request -->
-        <input id='submit-payload-button' type='submit' value='Action Enter' class='submit btn waves-effect waves-light' onclick='fetch("/diag/adaptiq/put")'/>
+        <input id='submit-payload-button' type='submit' value='AdaptIQ Start' class='submit btn waves-effect waves-light' onclick='fetch("/diag/adaptiq/put")'/>
         <hr>
     </body>
 </html>

@@ -29,6 +29,8 @@
 #include "SharedProto.pb.h"
 #include "ProtoToMarkup.h"
 #include "EndPointsDefines.h"
+#include "ProductSTS.pb.h"
+#include "SystemSourcesProperties.pb.h"
 
 using namespace ProductPb;
 using namespace A4V_RemoteCommunicationServiceMessages;
@@ -205,6 +207,8 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::UpdateBacklight( )
 {
+    using namespace ProductSTS;
+
     RCS_PB_MSG::LedsRawMsg_t leds;
 
     // BlueTooth and TV are always available for now
@@ -232,7 +236,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
     leds.set_backlight_enable( true );
     leds.set_demo_mode( false );
 
-    if( m_ProductController.IsProductSettingsReceived() )
+    if( m_ProductController.GetPassportAccountAssociationStatus() == PassportPB::ASSOCIATED )
     {
         leds.set_sound_touch( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
     }
@@ -247,15 +251,15 @@ void ProductBLERemoteManager::UpdateBacklight( )
             continue;
         }
 
-        if( source.sourceaccountname().compare( "SLOT_0" ) == 0 )
+        if( source.sourceaccountname().compare( ProductSourceSlot_Name( SLOT_0 ) ) == 0 )
         {
             leds.set_game( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
         }
-        if( source.sourceaccountname().compare( "SLOT_1" ) == 0 )
+        if( source.sourceaccountname().compare( ProductSourceSlot_Name( SLOT_1 ) ) == 0 )
         {
             leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
         }
-        if( source.sourceaccountname().compare( "SLOT_2" ) == 0 )
+        if( source.sourceaccountname().compare( ProductSourceSlot_Name( SLOT_2 ) ) == 0 )
         {
             leds.set_set_top_box( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
         }
@@ -372,6 +376,9 @@ void ProductBLERemoteManager::UpdateBacklight( )
 bool ProductBLERemoteManager::GetSourceLED(
     A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& visible )
 {
+    using namespace ProductSTS;
+    using namespace SystemSourcesProperties;
+
     visible = false;
 
     if( !m_ProductController.ProductHasBeenSetUp() )
@@ -395,41 +402,45 @@ bool ProductBLERemoteManager::GetSourceLED(
     const auto& sourceAccountName = sourceItem->sourceaccountname();
 
     visible = sourceItem->visible();
-    if( sourceName.compare( "PRODUCT" ) == 0 )
+    if( sourceName.compare( ProductSourceSlot_Name( PRODUCT ) ) == 0 )
     {
-        if( sourceAccountName.compare( "TV" ) == 0 )
+        if( sourceAccountName.compare( ProductSourceSlot_Name( TV ) ) == 0 )
         {
             BOSE_INFO( s_logger, "update nowSelection TV" );
             // Check for TV explicitly for now, since I don't know if Madrid will set deviceType for the TV
             sourceLED = LedsSourceTypeMsg_t::TV;
         }
-        else if( sourceAccountName.compare( "SETUP" ) == 0 )
+        else if( sourceAccountName.compare( ProductSourceSlot_Name( SETUP ) ) == 0 )
         {
             BOSE_INFO( s_logger, "update nowSelection SETUP" );
             sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
         }
-        else if( ( sourceAccountName.compare( 0, 4, "SLOT" ) == 0 ) and sourceItem->has_details() )
+        else if( sourceAccountName.compare( ProductSourceSlot_Name( PAIRING ) ) == 0 )
+        {
+            BOSE_INFO( s_logger, "update nowSelection PAIRING No LED Available" );
+        }
+        else if( ( sourceAccountName.compare( 0, 4, ProductSourceSlot_Name( SLOT_0 ) ) == 0 ) and sourceItem->has_details() )
         {
             const auto& sourceDetailsDevicetype = sourceItem->details().devicetype();
 
-            if( sourceDetailsDevicetype.compare( "DEVICE_TYPE_GAME" ) == 0 )
+            if( sourceDetailsDevicetype.compare( DEVICE_TYPE__Name( DEVICE_TYPE_GAME ) ) == 0 )
             {
                 sourceLED = LedsSourceTypeMsg_t::GAME;
             }
-            else if( sourceDetailsDevicetype.compare( "DEVICE_TYPE_CBL_SAT" ) == 0 )
+            else if( sourceDetailsDevicetype.compare( DEVICE_TYPE__Name( DEVICE_TYPE_CBL_SAT ) ) == 0 )
             {
                 sourceLED = LedsSourceTypeMsg_t::SET_TOP_BOX;
             }
-            else if( sourceDetailsDevicetype.compare( "DEVICE_TYPE_BD_DVD" ) == 0 )
+            else if( sourceDetailsDevicetype.compare( DEVICE_TYPE__Name( DEVICE_TYPE_BD_DVD ) ) == 0 )
             {
                 sourceLED = LedsSourceTypeMsg_t::DVD;
             }
-            else if( ( sourceDetailsDevicetype.compare( "DEVICE_TYPE_TV" ) == 0 ) or
-                     ( sourceDetailsDevicetype.compare( "DEVICE_TYPE_SMART_TV" ) == 0 ) )
+            else if( ( sourceDetailsDevicetype.compare( DEVICE_TYPE__Name( DEVICE_TYPE_TV ) ) == 0 ) or
+                     ( sourceDetailsDevicetype.compare( DEVICE_TYPE__Name( DEVICE_TYPE_SMART_TV ) ) == 0 ) )
             {
                 sourceLED = LedsSourceTypeMsg_t::TV;
             }
-            else if( sourceDetailsDevicetype.compare( "DEVICE_TYPE_STREAMING" ) == 0 )
+            else if( sourceDetailsDevicetype.compare( DEVICE_TYPE__Name( DEVICE_TYPE_STREAMING ) ) == 0 )
             {
                 // per Brian White, GAME is probably the most sensible choice here
                 // I'm leaving this as an independent case from GAME above in case we change our minds
