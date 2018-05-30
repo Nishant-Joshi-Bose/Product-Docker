@@ -5,7 +5,7 @@
   },
   {
     "name": "A4VRemoteCommunicationService",
-    "selected_version": "master@e172441a954a2c6813f3b322907d2d27e78dbd76"
+    "selected_version": "master@33cf677f5f84b1f3328740530f275f2abafafbde"
   },
   {
     "name": "A4VVideoManagerService",
@@ -197,7 +197,7 @@
   },
   {
     "name": "RivieraLpmUpdater",
-    "selected_version": "Release/master/1.0.0-58+75a9930"
+    "selected_version": "Release/SOP_Professor_DSP_Clocks/1.0.1-64+bb45dc0"
   },
   {
     "name": "SASS-qc8017_32",
