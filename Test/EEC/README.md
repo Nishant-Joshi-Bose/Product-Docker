@@ -1,5 +1,5 @@
 ## Eddie Energy Efficiency Compliance Timer Tests
-This Folder contains integrated Energy Efficiency Compliance Timer tests(Low Power and Network Standby functionality)
+This Folder contains integrated Energy Efficiency Compliance Timer tests (Low Power and Network Standby functionality)
 
 ## Setting Up Test Environment
 
@@ -31,4 +31,3 @@ pip install --requirement requirements.txt
 cd Test/EEC
 pytest -sv test_eec_timer.py --device-id=${DEVICE_ID} --lpm-port=${LPM_PORT} --network-iface=${inf} --target="device" --router=${ROUTER}
 ```
-
