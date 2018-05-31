@@ -48,7 +48,6 @@
 #include "ProductControllerStates.h"
 #include "ProductControllerState.h"
 #include "ProductControllerStateBooted.h"
-#include "ProductControllerStateBooting.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
 #include "ProductControllerStateFirstBootGreeting.h"
@@ -86,6 +85,7 @@
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateTop.h"
+#include "CustomProductControllerStateBooting.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "CustomProductControllerStateAccessoryPairingCancelling.h"
 #include "CustomProductControllerStateAdaptIQExiting.h"
@@ -188,10 +188,10 @@ void ProfessorProductController::Run( )
     ///
     /// Booting State and Various System Level States
     ///
-    auto* stateBooting = new ProductControllerStateBooting
+    auto* stateBooting = new CustomProductControllerStateBooting
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_BOOTING );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING );
 
     auto* stateBooted = new ProductControllerStateBooted
     ( GetHsm( ),
