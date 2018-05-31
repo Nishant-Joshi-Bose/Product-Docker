@@ -135,7 +135,17 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
     {
         auto sourceItem = m_ProductController.GetSourceInfo( ).FindSource( nowSelection.contentitem( ) );
 
-        if( sourceItem and sourceItem->has_details( ) )
+        // TV_INPUT key should always be sent to tv source
+        if( keyEvent.keyid( ) == BOSE_TV_INPUT )
+        {
+            const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( "PRODUCT",  "TV" );
+            if( tvSource and tvSource->has_details( ) and tvSource->visible( ) )
+            {
+                cicode = tvSource->details( ).cicode( );
+                isBlastedKey = true;
+            }
+        }
+        else if( sourceItem and sourceItem->has_details( ) and sourceItem->visible( ) )
         {
             const auto& sourceDetails = sourceItem->details( );
             if( sourceDetails.has_devicetype( ) )
