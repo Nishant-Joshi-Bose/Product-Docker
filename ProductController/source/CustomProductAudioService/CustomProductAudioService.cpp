@@ -223,6 +223,7 @@ void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCo
     }
 
     streamConfig.mutable_audiosettings()->CopyFrom( audioSettingsProto );
+    BOSE_DEBUG( s_logger, "streamConfig.audioSettings = %s", streamConfig.audiosettings().DebugString().c_str() );
 
     if( serializedInputRoute.empty() )
     {
@@ -232,7 +233,9 @@ void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCo
     {
         streamConfig.set_inputroute( std::stoi( serializedInputRoute ) );
     }
+    BOSE_DEBUG( s_logger, "streamConfig.inputRoute = %d", streamConfig.inputroute() );
 
+    uint32_t channel = 0;
     for( auto& itr : channelParams )
     {
         LpmServiceMessages::ChannelMix_t* channelMix;
@@ -241,7 +244,10 @@ void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCo
         channelMix->set_usermute( itr.m_userMuted );
         channelMix->set_location( static_cast<LpmServiceMessages::PresentationLocation_t>( itr.m_presentationLocation ) );
         channelMix->set_intent( static_cast<LpmServiceMessages::StreamIntent_t>( itr.m_streamIntent ) );
+        BOSE_DEBUG( s_logger, "streamConfig.channelMix[%d] = %s", channel, channelMix->DebugString().c_str() );
+        channel++;
     }
+
     m_ProductLpmHardwareInterface->SetStreamConfig( streamConfig, cb );
 }
 
