@@ -105,7 +105,6 @@ opt_dir=$stage/Bose
 mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" || exit
 
 rsync -a --exclude='*~' --exclude='*-README.txt' --exclude='isNetworkConfigured' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
-#rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 rsync -a --exclude='*~' --exclude='*-README.txt' "$qss_dir/opt-bose-fs/." "$opt_dir/." || exit
 rsync -a --exclude='*~' --exclude='*-README.txt' "$rcs_dir/opt-bose-fs/." "$opt_dir/." || exit
 rsync -a --exclude='*~' --exclude='*-README.txt' "$vm_dir/opt-bose-fs/." "$opt_dir/." || exit
@@ -175,16 +174,12 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
 
 # below is temporary due to stage issue in 1.0.1 Audiopath release that expects these folders ( although empty )
-mkdir "$audiopath_dir/professor/lib"
-mkdir "$audiopath_dir/ginger-cheevers/lib"
 "$audiopath_dir/stage" --product=professor "$opt_dir" || exit
 
 
 #copy Vfe binary only
 "$audiopath64_dir/stage" "$opt_dir" --only-vfe-binary --only-vfe --product=professor || exit
 
-mkdir "$opt_dir/bin/professor" || exit
-mkdir "$opt_dir/etc/professor" || exit
 "$audiopath64_dir/stage" "$opt_dir" --stage-vfe --only-vfe --product=professor || exit
 
 mkdir "$opt_dir/bin/ginger-cheevers" || exit
@@ -294,7 +289,7 @@ else
 fi
 # Start Progress
 if [ -f /opt/Bose/bin/ProgressReport ]; then
-    /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
+	/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
 fi
 
 exit 0
