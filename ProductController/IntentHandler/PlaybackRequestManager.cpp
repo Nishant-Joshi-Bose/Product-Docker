@@ -18,6 +18,7 @@
 #include "PlaybackRequestManager.h"
 #include "ProductController.h"
 #include "Intents.h"
+#include "ProductSTS.pb.h"
 
 static DPrint s_logger( "PlaybackRequestManager" );
 
@@ -49,19 +50,21 @@ PlaybackRequestManager::PlaybackRequestManager( NotifyTargetTaskIF& task,
 
 bool PlaybackRequestManager::Handle( KeyHandlerUtil::ActionType_t& intent )
 {
+    using namespace ProductSTS;
+
     if( intent == ( uint16_t ) Action::AUX_IN )
     {
         //If AUX source is already active, ignore the intent.
         if( not( ( GetProductController().GetNowPlaying().has_state() ) &&
                  ( GetProductController().GetNowPlaying().has_container() ) &&
                  ( GetProductController().GetNowPlaying().container().has_contentitem() ) &&
-                 ( GetProductController().GetNowPlaying().container().contentitem().source() == "PRODUCT" ) &&
-                 ( GetProductController().GetNowPlaying().container().contentitem().sourceaccount() == "AUX" ) )
-          )
+                 ( GetProductController().GetNowPlaying().container().contentitem().source() == ProductSourceSlot_Name( PRODUCT ).c_str( ) ) &&
+                 ( GetProductController().GetNowPlaying().container().contentitem().sourceaccount() == ProductSourceSlot_Name( AUX ).c_str( ) )
+               ) )
         {
             SoundTouchInterface::PlaybackRequest playbackRequestData;
-            playbackRequestData.set_source( "PRODUCT" );
-            playbackRequestData.set_sourceaccount( "AUX" );
+            playbackRequestData.set_source( ProductSourceSlot_Name( PRODUCT ) );
+            playbackRequestData.set_sourceaccount( ProductSourceSlot_Name( AUX ) );
 
             GetFrontDoorClient()->SendPost<SoundTouchInterface::NowPlaying, FrontDoor::Error>( "/content/playbackRequest", playbackRequestData,
                     m_NowPlayingRsp, m_frontDoorClientErrorCb );
