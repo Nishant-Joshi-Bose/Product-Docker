@@ -79,7 +79,8 @@ EddieProductController::EddieProductController():
     m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE ),
     m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
-    m_dataCollectionClientInterface( m_FrontDoorClientIF, GetDataCollectionClient() )
+    m_dataCollectionClientInterface( m_FrontDoorClientIF, GetDataCollectionClient() ),
+    m_ProductSTSController( *this )
 {
     BOSE_INFO( s_logger, __func__ );
 }
@@ -146,7 +147,6 @@ void EddieProductController::InitializeAction()
 
     m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient() ) );
     m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient(), uiConnectedCb ) );
-    SetupProductSTSController();
 
     // Start Eddie ProductAudioService
     m_ProductAudioService = std::make_shared< CustomProductAudioService >( *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient() );
@@ -231,6 +231,15 @@ void EddieProductController::RegisterLpmEvents()
     // Register lightbar controller LPM events
     m_lightbarController->RegisterLpmEvents();
     m_displayController->RegisterLpmEvents();
+}
+
+void EddieProductController::RegisterAuxEvents( AsyncCallback<LpmServiceMessages::IpcAuxState_t> &cb )
+{
+    BOSE_INFO( s_logger, __func__ );
+
+    GetLpmHardwareInterface()->GetLpmClient()->IpcGetAuxState( cb );
+
+    GetLpmHardwareInterface()->RegisterForLpmEvents<LpmServiceMessages::IpcAuxState_t>( IPC_AUX_STATE_EVENT, cb );
 }
 
 void EddieProductController::SendInitialRequests()
@@ -503,6 +512,7 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
         if( productMessage.lpmstatus( ).has_connected( ) && productMessage.lpmstatus( ).connected( ) )
         {
             RegisterLpmEvents();
+            SetupProductSTSController();
         }
         if( productMessage.lpmstatus( ).has_systemstate( ) )
         {
