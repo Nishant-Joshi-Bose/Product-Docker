@@ -150,7 +150,7 @@ if (( \$(date +%s) < $t )); then
 fi
 EOF
 
-# Copy public keys in FS for development key. EC will take care of generation for Production 
+# Copy public keys in FS for development key. EC will take care of generation for Production
 secure_dir=$opt_dir/etc/secure/
 if [ -e "$secure_dir" ]; then
     chmod -R 755 "$secure_dir" || exit
@@ -174,8 +174,8 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
 
 # below is temporary due to stage issue in 1.0.1 Audiopath release that expects these folders ( although empty )
-mkdir -p "$audiopath_dir/professor/lib" || exit
-mkdir -p "$audiopath_dir/ginger-cheevers/lib" || exit
+mkdir -p "$audiopath_dir/professor/lib"
+mkdir -p "$audiopath_dir/ginger-cheevers/lib"
 "$audiopath_dir/stage" --product=professor "$opt_dir" || exit
 
 
