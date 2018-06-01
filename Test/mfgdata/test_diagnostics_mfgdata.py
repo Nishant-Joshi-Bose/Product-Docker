@@ -37,6 +37,8 @@ def test_diagnostics_mfgdata(driver, device_id, device_ip, request):
         diagnostics_page.get_diagnostics_header()
         # Check for the Software Version on Diagnostics Page
         diagnostics_page.get_sofware_version()
+        # Check for the LPM Version on Diagnostics Page
+        diagnostics_page.get_lpm_data()
         # Check for the webpage title
         diagnostics_page.get_title()
         # Check for the Display Tests Link on Diagnostics Page

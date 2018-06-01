@@ -70,10 +70,10 @@ def pytest_addoption(parser):
                      default="wlan0",
                      help="network interface to choose")
 
-    parser.addoption("--usb-iface",
+    parser.addoption("--rndis-iface",
                      action="store",
-                     default="usb2",
-                     help="USB interface to choose")
+                     default="rndis1",
+                     help="rndis interface to choose")
 
     parser.addoption("--ip-address",
                      action="store",

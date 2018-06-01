@@ -28,7 +28,7 @@ pip install -q git+ssh://git@github.com/BoseCorp/CastleTestUtils.git@master
 
 #Running the Test
 cd Test/mfgdata
-pytest -sv test_diagnostics_mfgdata.py --driver chrome --target=device --network-iface=wlan0 --device-id=${DEVICE_ID} --usb-iface=usb2 --junitxml=output.xml
+pytest -sv test_diagnostics_mfgdata.py --driver chrome --target=device --network-iface=wlan0 --device-id=${DEVICE_ID} --rndis-iface=rndis1 --junitxml=output.xml
 
 #Teardown virtual-environment
 deactivate
