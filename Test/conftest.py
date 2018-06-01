@@ -14,6 +14,7 @@
 Parent conftest.py for the Eddie repository
 """
 import datetime
+import pexpect
 import glob
 import json
 import os
@@ -31,6 +32,8 @@ from CastleTestUtils.LoggerUtils.logreadLogger import LogreadLogger
 from CastleTestUtils.NetworkUtils.network_base import NetworkBase
 from CastleTestUtils.RivieraUtils import adb_utils, rivieraCommunication, rivieraUtils
 from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import flash_device
+from CastleTestUtils.RivieraUtils import adb_utils, rivieraCommunication
+from CastleTestUtils.LpmUtils.Lpm import Lpm
 
 from commonData import keyConfig
 from bootsequencing.stateutils import network_checker, UNKNOWN
@@ -388,6 +391,24 @@ def ip_address_wlan(request, device_id, wifi_config):
     LOGGER.debug("Found IP Address (%s) for Device (%s).", device_ip_address, device_id)
     return device_ip_address
 
+@pytest.fixture(scope='module')
+def add_wifi_at_end(request, device_id, wifi_config):
+    LOGGER.debug("add_wifi_at_end")
+    yield
+    LOGGER.info("Executing after yield")
+    adb = rivieraCommunication.getCommunicationType('ADB')
+    adb.setCommunicationDetail(device_id)
+    status = None
+    for count in range(90):
+        status = adb.executeCommand("(netstat -tnl | grep -q 17000) && echo OK")
+        if status and status.strip() == 'OK':
+            break
+        time.sleep(1)
+    assert status, "CLIServer not started within 90s."
+    assert (status.strip() == 'OK'), 'CLIServer is not stated even after 90 seconds'
+    time.sleep(2)
+    LOGGER.info("Executing ip_address_wlan")
+    ip_address_wlan(request, device_id, wifi_config)
 
 @pytest.mark.usefixtures('adb')
 @pytest.fixture(scope='function')
@@ -507,3 +528,104 @@ def frontdoor_wlan(request, ip_address_wlan):
 
     if _frontdoor:
         _frontdoor.close()
+
+@pytest.fixture(scope="function")
+def set_lps_timeout(deviceid):
+    """
+    This fixture changes "NoAudioTimeout" and "NoNetworkConfiguredTimeout" params to test Low power state transition.
+    Test steps:
+    1. Change "NoAudioTimeout" to 1 minute and "NoNetworkConfiguredTimeout" to 2 minutes.
+    2. Reboot and wait for CLI-Server to start and device state get out of Booting.
+    3. At the end of test case revert "NoAudioTimeout" to 20 minutes and "NoNetworkConfiguredTimeout" to 120 minutes.
+    4. Reboot and wait for CLI-Server to start and device state get out of Booting.
+    """
+    adb = rivieraCommunication.getCommunicationType('ADB')
+    adb.setCommunicationDetail(deviceid)
+    timer_file = '/opt/Bose/etc/InActivityTimer.json'
+    # 1. Change "NoAudioTimeout" to 1 minute and "NoNetworkConfiguredTimeout" to 2 minutes.
+    adb.executeCommand("/opt/Bose/bin/rw")
+    adb.executeCommand("sed 's/\\\"NoNetworkConfiguredTimeout\\\": 120,/\\\"NoNetworkConfiguredTimeout\\\": 2,/;"
+                       "s/\\\"NoAudioTimeout\\\": 20,/\\\"NoAudioTimeout\\\": 1,/' -i {}".format(timer_file))
+    adb.executeCommand('sync')
+    LOGGER.info(adb.executeCommand("cat {}".format(timer_file)))
+    adb.executeCommand("/opt/Bose/bin/PlatformReset")
+    LOGGER.info(adb.executeCommand("cat {}".format(timer_file)))
+    # 2. Reboot and wait for CLI-Server to start and device state get out of Booting.
+    rebooted_and_out_of_booting_state_device(deviceid, adb)
+    LOGGER.info(adb.executeCommand("cat {}".format(timer_file)))
+
+    yield
+
+    # 3. At the end of test case revert "NoAudioTimeout" to 20 minutes and "NoNetworkConfiguredTimeout" to 120 minutes.
+    adb.executeCommand("/opt/Bose/bin/rw")
+    adb.executeCommand("sed 's/\\\"NoNetworkConfiguredTimeout\\\": 2,/\\\"NoNetworkConfiguredTimeout\\\": 120,/;"
+                       "s/\\\"NoAudioTimeout\\\": 1,/\\\"NoAudioTimeout\\\": 20,/' -i {}".format(timer_file))
+    adb.executeCommand('sync')
+    LOGGER.info(adb.executeCommand("cat {}".format(timer_file)))
+
+    # 4. Reboot and wait for CLI-Server to start and device state get out of Booting.
+    rebooted_and_out_of_booting_state_device(deviceid, adb)
+
+@pytest.fixture(scope="function")
+def rebooted_and_out_of_booting_state_device(deviceid, adb):
+    """
+    This fixture is used to reboot the device and wait until device come out of 'Booting' state.
+    """
+    adb.rebootDevice_adb()
+
+    # Wait for CLI-Server to start and listens on 17000 port.
+    status = None
+    for _ in range(30):
+        status = adb.executeCommand("(netstat -tnl | grep -q 17000) && echo OK")
+        if status and status.strip() == 'OK':
+            break
+        time.sleep(1)
+    assert status, "CLIServer not started within 30s."
+    assert (status.strip() == 'OK'), 'CLIServer is not stated even after 30 seconds'
+    LOGGER.debug("CLIServer started within 30s.")
+
+    time.sleep(2)
+
+    for _ in range(10):
+        if adb.executeCommand("echo '?' | nc 0 17000 | grep 'getproductstate'"):
+            break
+        time.sleep(1)
+    LOGGER.debug("getproductstate command is registered to CLI-Server.")
+
+    # Wait until product state come out from 'Booting' state.
+    for _ in range(30):
+        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
+        if device_state != 'Booting':
+            break
+        LOGGER.debug("Current device state : %s", device_state)
+        time.sleep(1)
+
+@pytest.fixture(scope='session')
+def lpm_serial_client(request):
+    """
+    Generates an LPM Serial Client using the supplied port.
+
+    :param request: PyTest command line request object
+    :yield: LPM Serial Client connection
+    """
+    lpm_serial_path = request.config.getoption('--lpm-port')
+
+    # LPM tap client.
+    lpm_serial = Lpm(lpm_serial_path)
+
+    yield lpm_serial
+
+    # Close the client
+    del lpm_serial
+
+@pytest.fixture(scope="function")
+def tap(device_ip):
+    """
+    This fixture is used to get the pexpect client for performing tap commands of CLI keys.
+    """
+    LOGGER.info("tap - pexpect telnet client")
+    if device_ip is None:
+        pytest.fail("No valid device IP")
+    client = pexpect.spawn('telnet %s 17000' % device_ip)
+    yield client
+    client.close()

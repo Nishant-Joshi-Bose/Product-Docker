@@ -7,6 +7,8 @@
 
 #include "ProductSTSAccount.h"
 #include "ProductSTSStateTop.h"
+#include "LpmClientIF.h"
+#include "ProductSTSController.h"
 
 class CustomProductSTSStateTopAux : public ProductSTSStateTop
 {
@@ -38,6 +40,13 @@ public:
     bool HandleMuteStatus( const STS::MuteStatus& ms ) override;
 
     ////////////////////////////////////////////////////////
+    /// @brief Act HandleAudioStatus only if the AUX cable is not inserted by doing SendAudioStopEvent
+    /// @param STS::AudioStatus
+    /// @return true if successful
+    ////////////////////////////////////////////////////////
+    bool HandleAudioStatus( const STS::AudioStatus &audioStatus ) override;
+
+    ////////////////////////////////////////////////////////
     /// @brief Act HandleDeactivateRequest by generating a un-mute to CAPS and remembering it
     /// and then executing HandleDeactivateRequest from base.
     /// @param STS::const STS::DeactivateRequest &req, uint32_t seq
@@ -47,5 +56,10 @@ public:
 
 private:
     void ToggleMute() const;
-    bool m_mute = false;
+    void ProcessAUXCableState( );
+    void HandleAUXCableDetect( LpmServiceMessages::IpcAuxState_t IpcAuxState );
+    void RegisterAuxPlugStatusCallbacks();
+
+    bool m_mute         = false;
+    bool m_auxInserted = false;
 };
