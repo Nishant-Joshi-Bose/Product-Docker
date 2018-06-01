@@ -45,7 +45,7 @@ class DiagnosticsPage(SeleniumWrapper):
     mfg_data_command = CONFIG["mfg_data_command"]
     fs_version_command = CONFIG["fs_version_command"]
     lpm_version_command = CONFIG["lpm_version_command"]
-    expected_usb_ip = CONFIG["expected_text"]["rndis1_ip_address"]
+    expected_rndis_ip = CONFIG["expected_text"]["rndis1_ip_address"]
     # locators
     manufacturing_data_locator = CONFIG["locator"]["manufacturing_data_locator"]
     partial_link_locator = CONFIG["locator"]["partial_link_locator"]
@@ -92,13 +92,13 @@ class DiagnosticsPage(SeleniumWrapper):
         param: device_id - Fixture to get device id from command line
         :return: device rndis1 ip
         """
-        usb_device_ip = None
+        rndis_interface_ip = None
         self.logger.info("rndis1_ip_address")
         if request.config.getoption("--target").lower() == 'device':
             network_base = NetworkBase(None, device_id)
-            rndis_interface = request.config.getoption("--rndis-iface")
-            rndis_interface = network_base.check_inf_presence(rndis_interface)
-        return rndis_interface
+            rndis_interface = request.config.getoption("--pts-iface")
+            rndis_interface_ip = network_base.check_inf_presence(rndis_interface)
+        return rndis_interface_ip
 
     def system_reboot(self, device_ip):
         """
@@ -127,10 +127,10 @@ class DiagnosticsPage(SeleniumWrapper):
         self.pts_mode_keypress(device_ip)
         time.sleep(5)
         network_base = NetworkBase(None, device_id)
-        rndis_interface = request.config.getoption("--rndis-iface")
+        rndis_interface = request.config.getoption("--pts-iface")
         rndis1_ip_address = network_base.check_inf_presence(rndis_interface)
-        assert rndis1_ip_address == self.expected_usb_ip, \
-                     'USB IP did not match. Found {}, expected {}'.format(rndis1_ip_address, self.expected_usb_ip)
+        assert rndis1_ip_address == self.expected_rndis_ip, \
+                     'rndis IP did not match. Found {}, expected {}'.format(rndis1_ip_address, self.expected_rndis_ip)
         self.logger.info(rndis1_ip_address)
 
         # Navigate to the URL
@@ -192,33 +192,16 @@ class DiagnosticsPage(SeleniumWrapper):
         lpm_version_raw = self.getElement(self.lpm_version_header, locatorType="css")
         lpm_version_data = lpm_version_raw.text.splitlines()
         result = dict()
-        for componets in lpm_version_data:
-            if ':' not in repr(componets):
-                lpm_version_data.remove(componets)
+        for components in lpm_version_data:
+            if ':' not in repr(components):
+                lpm_version_data.remove(components)
         for elements in range(len(lpm_version_data)):
-            lpm_version_header = lpm_version_data[elements].split(':')[0]
-            lpm_version = lpm_version_data[elements].split(':')[1]
+            value = lpm_version_data[elements]
+            index = value.find(":")
+            lpm_version_header = value[:index].strip()
+            lpm_version = value[index+1:].strip()
             result[lpm_version_header] = lpm_version
         return result
-
-    def get_lpm_data(self):
-        """
-        This function will check the LPM version on the diagnostics page
-        compares 'lmp pt vr' outout of the Device under test for the same
-        """
-        self.logger.info("get_lpm_version")
-        lpm_version_dut = self.riviera_utils.get_lpm_version()
-        diagnostics_lpm_versions = self.diagnostics_lpm_versions()
-        assert lpm_version_dut["BLOB Version"].lstrip() == diagnostics_lpm_versions["Blob Version"].lstrip(), \
-                    'Blob Version did not match. Found {}, expected {}'.format(diagnostics_lpm_versions["Blob Version"].lstrip(), lpm_version_dut["BLOB Version"].lstrip())
-        assert lpm_version_dut["LPM Bootloader"].lstrip() == diagnostics_lpm_versions["Bootloader Version"].lstrip(), \
-                    'LPM Bootloader did not match. Found {}, expected {}'.format(diagnostics_lpm_versions["Bootloader Version"].lstrip(), lpm_version_dut["LPM Bootloader"].lstrip())
-        assert lpm_version_dut["LPM"].split(" ")[1] == diagnostics_lpm_versions["User App Version"].lstrip(), \
-                    'LPM did not match. Found {}, expected {}'.format(diagnostics_lpm_versions["User App Version"].lstrip(), lpm_version_dut["LPM"].split(" ")[1])
-        assert lpm_version_dut["PSoC"].lstrip() == diagnostics_lpm_versions["PSOC Version"].lstrip(), \
-                    'PSoC did not match. Found {}, expected {}'.format(diagnostics_lpm_versions["PSOC Version"].lstrip(), lpm_version_dut["PSoC"].lstrip())
-        assert lpm_version_dut["Lightbar Animation DB"].lstrip() == diagnostics_lpm_versions["Lightbar Version"].lstrip(), \
-                    'Lightbar Animation DB did not match. Found {}, expected {}'.format(diagnostics_lpm_versions["Lightbar Version"].lstrip(), lpm_version_dut["Lightbar Animation DB"].lstrip())
 
 
     def get_display_tests(self):
@@ -257,7 +240,6 @@ class DiagnosticsPage(SeleniumWrapper):
                 os.remove(os.path.join(self.dir_name, item))
         # Click the Done button
         self.driver.find_element_by_tag_name("button").click()
-        time.sleep(5)
 
 
     def get_manufacturing_data(self):

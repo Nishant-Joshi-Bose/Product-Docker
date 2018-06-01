@@ -70,7 +70,7 @@ def pytest_addoption(parser):
                      default="wlan0",
                      help="network interface to choose")
 
-    parser.addoption("--rndis-iface",
+    parser.addoption("--pts-iface",
                      action="store",
                      default="rndis1",
                      help="rndis interface to choose")
