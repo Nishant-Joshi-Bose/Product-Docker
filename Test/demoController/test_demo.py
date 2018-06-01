@@ -11,10 +11,9 @@ import logging
 logger = get_logger(__name__, "DemoLog.log", level=logging.INFO, fileLoglevel=logging.DEBUG)
 import time
 
-#@pytest.mark.usefixtures("save_speaker_log")
+@pytest.mark.usefixtures("save_speaker_log")
 class TestDemo():
     """ Test Class for Demo State """
-    #@pytest.mark.skip("")
     @pytest.mark.usefixtures("demoUtils", "deviceid", "device_ip", "request", "frontDoor_reboot")
     def test_demoOnAfterTimeout(self, demoUtils, device_ip, request, deviceid, frontDoor_reboot):
         """
@@ -32,7 +31,7 @@ class TestDemo():
         time.sleep(5)
         demoUtils.setDemoMode(True, deviceid, frontDoor_reboot, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(60, frontDoor_reboot)
-    #@pytest.mark.skip("")
+
     @pytest.mark.usefixtures("demoUtils", "deviceid", "device_ip", "request", "frontDoor_reboot")
     def test_demoOnFor30Min(self, demoUtils, device_ip, request, deviceid, frontDoor_reboot):
         """
@@ -52,7 +51,7 @@ class TestDemo():
         assert status, "Demo timeout reported Exception {} " + responseTimeout
         demoUtils.setDemoMode(True, deviceid, frontDoor_reboot, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(responseTimeout*30, frontDoor_reboot)
-    @pytest.mark.skip("")
+
     @pytest.mark.usefixtures("request", "deviceid", "demoUtils", "device_ip", "frontDoor_reboot")
     def test_demoPlayPauseBehaviour(self, request, demoUtils, device_ip, deviceid, frontDoor_reboot):
         """
@@ -75,7 +74,7 @@ class TestDemo():
         demoUtils.verifyDemoModeOn(20, frontDoor_reboot)
         demoUtils.verifyPlayPauseBehaviour(frontDoor_reboot)
         demoUtils.verifyDemoModeOn(20, frontDoor_reboot)
-    @pytest.mark.skip("")
+
     @pytest.mark.usefixtures("demoUtils", "deviceid", "device_ip", "request", "get_config", "frontDoor_reboot")
     def test_demoKeyConfig(self, demoUtils, device_ip, request, get_config, deviceid, frontDoor_reboot):
         """
@@ -97,31 +96,7 @@ class TestDemo():
         demoUtils.verifyDemoKeyConfig(frontDoor_reboot)
         demoUtils.deleteKeyConfig(frontDoor_reboot)
         demoUtils.verifyDemoKeyConfig(frontDoor_reboot, "Error Reading configuration file")
-    """    
-    @pytest.mark.skip("")
-    @pytest.mark.usefixtures("demoUtils", "deviceid", "device_ip", "request")
-    def test_demoKeyCntrNotWrk(self, demoUtils, device_ip, request, deviceid):
-        
-        This test verifies keyControl(volume) does not work when the keyConfig is not set
-        Test steps:
-        1. With demoMode off verify no keyConfig exists
-        2. Set demoMode on and verify
-        3. Play audio, verify
-        4. Set, change volume and verify volume does not change
-        5. StopPlayback
-        
-        demoUtils.verifyDemoKeyConfig("Error Reading configuration file")
-        demoUtils.setDemoMode(True, deviceid, True, 3, request.config.getoption("--network-iface"))
-        status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
-        assert status, responseTimeout
-        demoUtils.verifyDemoMode(True)
-        demoUtils.setDemoMode(True, deviceid, False, 3, request.config.getoption("--network-iface"))
-        demoUtils.verifyDemoModeOn(20)
-        demoUtils.playandValidateMusic()
-        demoUtils.verifyVolumeKeyControl(device_ip, False)
-        demoUtils.stopPlayback()
-    """
-    #@pytest.mark.skip("")
+
     @pytest.mark.usefixtures("demoUtils", "deviceid", "device_ip", "request", "get_config", "frontDoor_reboot")
     def test_demoKeyControlWork(self, demoUtils, device_ip, request, get_config, deviceid, frontDoor_reboot):
         """
