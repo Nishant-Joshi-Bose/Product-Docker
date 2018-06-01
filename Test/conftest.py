@@ -24,7 +24,8 @@ from multiprocessing import process, Manager
 
 import pytest
 from pyadb import ADB
-
+import sys
+print sys.path
 from CastleTestUtils.FrontDoorAPI.FrontDoorAPI import FrontDoorAPI
 from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 from CastleTestUtils.LoggerUtils.logreadLogger import LogreadLogger
@@ -34,7 +35,6 @@ from CastleTestUtils.SoftwareUpdateUtils.FastbootFixture.riviera_flash import fl
 
 from commonData import keyConfig
 from bootsequencing.stateutils import network_checker, UNKNOWN
-
 
 LOGGER = get_logger(__name__)
 
@@ -104,6 +104,16 @@ def pytest_addoption(parser):
     parser.addoption('--api-key',
                      default='9zf6kcZgF5IEsXbrKU6fvG8vFGWzF1Ih',
                      help='Passport API KEY')
+
+    parser.addoption("--email",
+                     action="store",
+                     default="Testing_Madrid@bose.com",
+                     help='gigya email')
+
+    parser.addoption("--password",
+                     action="store",
+                     default='testing_madrid',
+                     help='gigya password')
 
 def ping(ip):
     """ Pings a given IP Address """
