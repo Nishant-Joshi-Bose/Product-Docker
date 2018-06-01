@@ -98,8 +98,7 @@ packages-gz-with-hsp: monaco-ipk product-ipk hsp-ipk lpmupdater-ipk recovery-ipk
 
 .PHONY: graph
 graph: product-ipk
-	graph-components --sdk=$(sdk) --exclude='CastleTools|TestUtils' Eddie builds/$(cfg)/product-ipk-stage/component-info.gz >builds/$(cfg)/components.dot
-	dot -Tsvgz builds/$(cfg)/components.dot -o builds/$(cfg)/components.svgz
+	graph-components --sdk=$(sdk) --exclude='CastleTools|TestUtils' Eddie builds/$(cfg)/product-ipk-stage/component-info.gz -obuilds/$(cfg)/components
 
 .PHONY: hsp-ipk
 hsp-ipk: cmake_build
