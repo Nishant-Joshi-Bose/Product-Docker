@@ -381,7 +381,7 @@ bool ProductBLERemoteManager::GetSourceLED(
 
     visible = false;
 
-    if( !m_ProductController.ProductHasBeenSetUp() )
+    if( m_inSetup )
     {
         sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
         return true;
@@ -419,9 +419,10 @@ bool ProductBLERemoteManager::GetSourceLED(
         {
             BOSE_INFO( s_logger, "update nowSelection PAIRING No LED Available" );
         }
-        else if( ( sourceAccountName.compare( 0, 4, ProductSourceSlot_Name( SLOT_0 ) ) == 0 ) and sourceItem->has_details() )
+        else if( ( sourceAccountName.compare( 0, 4, ProductSourceSlot_Name( SLOT_0 ), 0, 4 ) == 0 ) and sourceItem->has_details() )
         {
             const auto& sourceDetailsDevicetype = sourceItem->details().devicetype();
+            BOSE_INFO( s_logger, "update nowSelection %s", sourceDetailsDevicetype.c_str() );
 
             if( sourceDetailsDevicetype.compare( DEVICE_TYPE__Name( DEVICE_TYPE_GAME ) ) == 0 )
             {

@@ -93,6 +93,17 @@ public:
         m_poweredOn = false;
         UpdateBacklight( );
     }
+    void EnterSetup( )
+    {
+        m_inSetup = true;
+        UpdateBacklight( );
+    }
+    void ExitSetup( )
+    {
+        m_inSetup = false;
+        UpdateBacklight( );
+    }
+
 
 private:
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -108,6 +119,7 @@ private:
     RemoteStatus::PairingStatus     m_remoteStatus      = RemoteStatus::PSTATE_UNKOWN;
     const int                       m_PairingTimeout    = 7200;
     bool                            m_poweredOn         = false;
+    bool                            m_inSetup           = false;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
