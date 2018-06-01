@@ -14,6 +14,7 @@ PROTO_SOURCES = \
   DisplayController.proto   \
   AudioSettings.proto       \
   KeyNames.proto            \
+  ProductSTS.proto
 
 # Where to search for imported *.proto files.
 PROTO_IMPORT_DIRS := \

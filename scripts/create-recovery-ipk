@@ -72,8 +72,9 @@ mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" || exit
 components record "$stage" || exit
 
 # copy minimal image tar to /opt/Bose
+# Todo: CASTLE-15220: This is removed for now - to reduce size of overall package
 minimal_image="Bose_minimal.tar.gz"
-cp "$wspace/builds/$cfg/$minimal_image"  "$opt_dir/" || exit
+#cp "$wspace/builds/$cfg/$minimal_image"  "$opt_dir/" || exit
 
 # copy network configured script which will be required in restore operation
 cp "$wspace/misc/isNetworkConfigured" "$opt_dir/bin/" || exit
@@ -107,8 +108,37 @@ put_script "$stage/postinst" <<EOF
 #!/bin/sh
 echo "SoundTouch recovery postinst"
 
+if ! [ "\$(awk '\$2 == "/cache"' /proc/mounts)" ]; then
+    echo "Mounting Cache"
+    mount /dev/block/bootdevice/by-name/cache /cache || exit
+fi
+
+# To increase the cache partition size, reflash it
+# Todo: Remove this block of code as soon as new HSP with 
+#   proper /cache partition size is released
+##########################################################
+
+if [ "\$(df | awk '\$6 == "/cache" {print \$2}')" -le 58888 ]; then
+
+    # unmount /cache partition
+    umount /cache || exit
+
+    # reflash it
+    mkfs.ext4 /dev/block/bootdevice/by-name/cache || exit
+
+    echo "Mounting Cache after reflash"
+    mount /dev/block/bootdevice/by-name/cache /cache || exit
+fi
+
+##########################################################
+
+# Remove old logs
+rm -f /cache/recovery/last_log.*
+rm -f /cache/recovery/last_kmsg.*
+
 # move minimal rpoduct image to cache partition
-mv /opt/Bose/Bose_minimal.tar.gz /cache/
+# Todo: CASTLE-15220: This is removed for now - to reduce size of overall package
+#mv /opt/Bose/Bose_minimal.tar.gz /cache/
 
 # move RecoveryMain binary to /cache partition
 mv /opt/Bose/bin/RecoveryMain /cache/
@@ -178,3 +208,13 @@ ipk=$output_dir/recovery.ipk
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
 echo "Created $ipk"
+# /cache partition used to put contents of this IPK is limited in size.
+# Check if IPK is so big that /cache will become 100% and eventually cause
+# softwareupdate failure. This prevents issues from happening in field
+if [ $(stat -c "%s" $ipk) -ge 31457280 ]; then
+    echo "Created $ipk > 30 MB limit. Build failure"
+    exit 1
+else
+    echo "Created $ipk"
+fi
+exit 0

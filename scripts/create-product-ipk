@@ -184,7 +184,6 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 "$btsource_dir/stage" "$opt_dir" || exit
 "$blesetup_dir/stage" "$opt_dir" || exit
 "$btstssink_dir/stage" "$opt_dir" || exit
-rm -rfv "$opt_dir/update/html" # TODO: remove this when SoftwareUpdate has been modified not to include the update pages.
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 
 # ----------------------------------------------------------------------------
