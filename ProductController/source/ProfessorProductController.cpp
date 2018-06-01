@@ -146,6 +146,11 @@ ProfessorProductController::ProfessorProductController( ) :
     m_Running( false ),
 
     ///
+    /// Initialization of STS contorller.
+    ///
+    m_ProductSTSController( *this ),
+
+    ///
     /// Intent Handler Initialization
     ///
     m_IntentHandler( *GetTask(),
