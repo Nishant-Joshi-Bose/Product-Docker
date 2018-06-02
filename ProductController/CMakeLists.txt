@@ -15,6 +15,7 @@ INCLUDE_DIRECTORIES(
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductAudioService
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductKeyInputManager
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductLpmHardwareInterface
+  ${AUDIOSOURCE_DIR}/include
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductNetworkService
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSourceInfo
   ${PRODUCTCONTROLLERCOMMON_DIR}/ProductSTSController
@@ -37,6 +38,7 @@ ADD_EXECUTABLE(Eddie
   EddieProductController.cpp
   Main.cpp
   ${PROTO_CC_DEST}/ProductMessage.pb.cc
+  ${PROTO_CC_DEST}/ProductSTS.pb.cc
   ${PROTO_CC_DEST}/KeyActions.pb.cc
   ${PROTO_CC_DEST}/DisplayController.pb.cc
   ${PROTO_CC_DEST}/IntentHandler.pb.cc
@@ -74,7 +76,10 @@ TARGET_LINK_LIBRARIES(Eddie
   SASSFrontDoorServiceProto
   SoftwareUpdateAPI
   STS
+  STSClient
   ShelbyUtils
+  CommonTypes
+  STSProtoBufs
   SoundTouch_SDK_Protobuf_static
   SystemEventService
   BoseLibs

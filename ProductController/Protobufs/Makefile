@@ -5,6 +5,7 @@ PRODUCTCONTROLLERCOMMON_DIR := $(shell components get ProductControllerCommon in
 RIVIERA_LPM_PROTO_DIR       := $(shell components get RivieraLpmService-$(sdk) installed_location)
 SOUNDTOUCH_SDK_DIR          := $(shell components get SoundTouch-SDK-$(sdk)         installed_location)
 SYSTEMEVENTSERVICE_DIR      := $(shell components get SystemEventService-$(sdk) installed_location)
+AUDIOSOURCE_DIR             := $(shell components get AudioSource-$(sdk) installed_location)
 
 PROTO_SOURCES = \
   LightBarController.proto  \
@@ -13,6 +14,7 @@ PROTO_SOURCES = \
   DisplayController.proto   \
   AudioSettings.proto       \
   KeyNames.proto            \
+  ProductSTS.proto
 
 # Where to search for imported *.proto files.
 PROTO_IMPORT_DIRS := \
@@ -24,5 +26,6 @@ PROTO_IMPORT_DIRS := \
  $(SOUNDTOUCH_SDK_DIR)/protobufs \
  $(SOUNDTOUCH_SDK_DIR)/prebuilt/include \
  $(SYSTEMEVENTSERVICE_DIR)/protobufs \
+ $(AUDIOSOURCE_DIR)/proto \
 
 include $(BOSELIBS_DIR)/protobuf.mk

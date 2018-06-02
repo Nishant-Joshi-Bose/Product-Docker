@@ -42,25 +42,6 @@ def lpm_tap(request):
     yield _lpm_tap
 
 
-@pytest.fixture(scope="function")
-def frontdoor_wlan(request, ip_address_wlan):
-    """
-    Frontdoor instance of the device connected to wlan.
-    """
-    LOGGER.info("frontDoorQueue")
-    if ip_address_wlan is None:
-        pytest.fail("No valid device IP")
-    _frontdoor = FrontDoorQueue(ip_address_wlan)
-
-    def teardown():
-        if _frontdoor:
-            _frontdoor.close()
-
-    request.addfinalizer(teardown)
-
-    return _frontdoor
-
-
 @pytest.fixture(scope='function')
 def device_playing_from_amazon(request, frontdoor_wlan):
     """
@@ -129,78 +110,13 @@ def device_playing_from_amazon(request, frontdoor_wlan):
 
 
 @pytest.fixture(scope="function")
-def rebooted_and_out_of_booting_state_device(deviceid, adb):
-    """
-    This fixture is used to reboot the device and wait until device come out of 'Booting' state.
-    """
-    adb.rebootDevice_adb()
-
-    # Wait for CLI-Server to start and listens on 17000 port.
-    status = None
-    for _ in range(30):
-        status = adb.executeCommand("(netstat -tnl | grep -q 17000) && echo OK")
-        if status and status.strip() == 'OK':
-            break
-        time.sleep(1)
-    assert status, "CLIServer not started within 30s."
-    assert (status.strip() == 'OK'), 'CLIServer is not stated even after 30 seconds'
-    LOGGER.debug("CLIServer started within 30s.")
-
-    time.sleep(2)
-
-    for _ in range(10):
-        if adb.executeCommand("echo '?' | nc 0 17000 | grep 'getproductstate'"):
-            break
-        time.sleep(1)
-    LOGGER.debug("getproductstate command is registered to CLI-Server.")
-
-    # Wait until product state come out from 'Booting' state.
-    for _ in range(30):
-        device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=deviceid)
-        if device_state != 'Booting':
-            break
-        LOGGER.debug("Current device state : %s", device_state)
-        time.sleep(1)
-
-
-@pytest.fixture(scope="function")
-def clear_wifi_profiles(deviceid):
+def clear_wifi_profiles(device_id):
     """
     This fixture is used to clear the WiFi profiles.
+
+    :param device_id: ADB Device ID of the device under test
     """
     LOGGER.info("Clearing Wireless Profiles...")
     wifi_clear_profile_command = ' '.join(['network', 'wifi', 'profiles', 'clear'])
     adb_utils.adb_telnet_cmd(wifi_clear_profile_command, expect_after='Profiles Deleted',
-                             device_id=deviceid)
-
-
-@pytest.fixture(scope="function")
-def set_lps_timeout(deviceid):
-    """
-    This fixture changes "NoAudioTimeout" and "NoNetworkConfiguredTimeout" params to test Low power state transition.
-    Test steps:
-    1. Change "NoAudioTimeout" to 1 minute and "NoNetworkConfiguredTimeout" to 2 minutes.
-    2. Reboot and wait for CLI-Server to start and device state get out of Booting.
-    3. At the end of test case revert "NoAudioTimeout" to 20 minutes and "NoNetworkConfiguredTimeout" to 120 minutes.
-    4. Reboot and wait for CLI-Server to start and device state get out of Booting.
-    """
-    adb = rivieraCommunication.getCommunicationType('ADB')
-    adb.setCommunicationDetail(deviceid)
-    timer_file = '/opt/Bose/etc/InActivityTimer.json'
-    # 1. Change "NoAudioTimeout" to 1 minute and "NoNetworkConfiguredTimeout" to 2 minutes.
-    adb.executeCommand("/opt/Bose/bin/rw")
-    adb.executeCommand("sed 's/\\\"NoNetworkConfiguredTimeout\\\": 120,/\\\"NoNetworkConfiguredTimeout\\\": 2,/;"
-                       "s/\\\"NoAudioTimeout\\\": 20,/\\\"NoAudioTimeout\\\": 1,/' -i {}".format(timer_file))
-    adb.executeCommand('sync')
-    # 2. Reboot and wait for CLI-Server to start and device state get out of Booting.
-    rebooted_and_out_of_booting_state_device(deviceid, adb)
-
-    yield
-
-    # 3. At the end of test case revert "NoAudioTimeout" to 20 minutes and "NoNetworkConfiguredTimeout" to 120 minutes.
-    adb.executeCommand("/opt/Bose/bin/rw")
-    adb.executeCommand("sed 's/\\\"NoNetworkConfiguredTimeout\\\": 2,/\\\"NoNetworkConfiguredTimeout\\\": 120,/;"
-                       "s/\\\"NoAudioTimeout\\\": 1,/\\\"NoAudioTimeout\\\": 20,/' -i {}".format(timer_file))
-    adb.executeCommand('sync')
-    # 4. Reboot and wait for CLI-Server to start and device state get out of Booting.
-    rebooted_and_out_of_booting_state_device(deviceid, adb)
+                             device_id=device_id)

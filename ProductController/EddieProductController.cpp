@@ -25,6 +25,7 @@
 #include "ProductSTSStateFactory.h"
 #include "ProductSTSStateTopSilent.h"
 #include "CustomProductSTSStateTopAux.h"
+#include "ProductSTS.pb.h"
 
 static DPrint s_logger( "EddieProductController" );
 
@@ -63,7 +64,7 @@ EddieProductController::EddieProductController():
     m_ProductControllerStatePlayingSelectedSetupOther( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_OTHER ),
     m_ProductControllerStatePlayingSelectedSetupExiting( GetHsm(), &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING ),
     m_ProductControllerStatePlayingSelectedSetupExitingAP( m_ProductControllerHsm, &m_ProductControllerStatePlayingSelectedSetup, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SETUP_EXITING_AP ),
-    m_ProductControllerStatePlayingSelectedStoppingStreams( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS ),
+    m_ProductControllerStatePlayingSelectedStoppingStreams( GetHsm(), &m_ProductControllerStatePlayingSelected, PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS ),
     m_ProductControllerStatePlayableTransition( GetHsm(), &m_ProductControllerStateTop, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION ),
     m_ProductControllerStatePlayableTransitionInternal( GetHsm(), &m_ProductControllerStatePlayableTransition, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_INTERNAL ),
     m_ProductControllerStatePlayableTransitionIdle( GetHsm(), &m_ProductControllerStatePlayableTransitionInternal, PRODUCT_CONTROLLER_STATE_PLAYABLE_TRANSITION_IDLE ),
@@ -78,7 +79,8 @@ EddieProductController::EddieProductController():
     m_ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate( m_ProductControllerHsm, &m_ProductControllerStateStoppingStreamsDedicated, PRODUCT_CONTROLLER_STATE_STOPPING_STREAMS_DEDICATED_FOR_SOFTWARE_UPDATE ),
     m_IntentHandler( *GetTask(), m_CliClientMT, m_FrontDoorClientIF, *this ),
     m_LpmInterface( std::make_shared< CustomProductLpmHardwareInterface >( *this ) ),
-    m_dataCollectionClientInterface( m_FrontDoorClientIF, GetDataCollectionClient() )
+    m_dataCollectionClientInterface( m_FrontDoorClientIF, GetDataCollectionClient() ),
+    m_ProductSTSController( *this )
 {
     BOSE_INFO( s_logger, __func__ );
 }
@@ -145,7 +147,6 @@ void EddieProductController::InitializeAction()
 
     m_lightbarController = std::unique_ptr<LightBar::LightBarController>( new LightBar::LightBarController( GetTask(), m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient() ) );
     m_displayController  = std::unique_ptr<DisplayController           >( new DisplayController( *this    , m_FrontDoorClientIF,  m_LpmInterface->GetLpmClient(), uiConnectedCb ) );
-    SetupProductSTSController();
 
     // Start Eddie ProductAudioService
     m_ProductAudioService = std::make_shared< CustomProductAudioService >( *this, m_FrontDoorClientIF, m_LpmInterface->GetLpmClient() );
@@ -230,6 +231,15 @@ void EddieProductController::RegisterLpmEvents()
     // Register lightbar controller LPM events
     m_lightbarController->RegisterLpmEvents();
     m_displayController->RegisterLpmEvents();
+}
+
+void EddieProductController::RegisterAuxEvents( AsyncCallback<LpmServiceMessages::IpcAuxState_t> &cb )
+{
+    BOSE_INFO( s_logger, __func__ );
+
+    GetLpmHardwareInterface()->GetLpmClient()->IpcGetAuxState( cb );
+
+    GetLpmHardwareInterface()->RegisterForLpmEvents<LpmServiceMessages::IpcAuxState_t>( IPC_AUX_STATE_EVENT, cb );
 }
 
 void EddieProductController::SendInitialRequests()
@@ -502,6 +512,7 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
         if( productMessage.lpmstatus( ).has_connected( ) && productMessage.lpmstatus( ).connected( ) )
         {
             RegisterLpmEvents();
+            SetupProductSTSController();
         }
         if( productMessage.lpmstatus( ).has_systemstate( ) )
         {
@@ -544,15 +555,18 @@ void EddieProductController::HandleProductMessage( const ProductMessage& product
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void EddieProductController::SetupProductSTSController( void )
 {
+    using namespace ProductSTS;
+
     ProductSTSStateFactory<CustomProductSTSStateTopAux> auxStateFactory;
     ProductSTSStateFactory<ProductSTSStateTopSilent>    silentStateFactory;
 
+    // 'AUX' is a product defined source used for the auxilary port.
     std::vector<ProductSTSController::SourceDescriptor> sources;
-    ProductSTSController::SourceDescriptor descriptor_AUX{ 0, "AUX", true, auxStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_AUX{ AUX, ProductSourceSlot_Name( AUX ), true, auxStateFactory };
     sources.push_back( descriptor_AUX );
 
     // 'SETUP' is a "fake" source used for setup state.
-    ProductSTSController::SourceDescriptor descriptor_Setup{ 1, "SETUP", false, silentStateFactory };
+    ProductSTSController::SourceDescriptor descriptor_Setup{ SETUP, ProductSourceSlot_Name( SETUP ), false, silentStateFactory };
     sources.push_back( descriptor_Setup );
 
     Callback<void> cb_STSInitWasComplete( std::bind( &EddieProductController::HandleSTSInitWasComplete, this ) );

@@ -64,7 +64,7 @@ class TestDemo():
         6. verifyPlayPauseBehaviour
         7. Verify demoMode is True
         """
-        logger.info("Start test_demoOnStartStopPlayback")
+        logger.info("Start test_demoPlayPauseBehaviour")
         demoUtils.setDemoMode(True, deviceid, frontDoor_reboot, True, 3, request.config.getoption("--network-iface"))
         status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
         assert status, "Demo timeout reported Exception {} " + responseTimeout

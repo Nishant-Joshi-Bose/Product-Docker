@@ -43,22 +43,10 @@ print """
    padding: 1em;
    margin: 1em;
  }
- td.showimg {
-   padding: 8px;
- }
  .hilite {
    background-color: yellow;
  }
 </style>
-<script>
-function showimg(which) {
-  var f = document.getElementById("ok");
-  f.contentWindow.document.open();
-  //f.contentWindow.document.write("Wait");
-  f.contentWindow.document.close();
-  f.src = "/diag/display/" + which + ".png?show";
-}
-</script>
 </head>
 <body>
 <h1>Diagnostics</h1>
@@ -69,6 +57,16 @@ version_info = json.load(open("/opt/Bose/etc/BoseVersion.json"))
 print "<li>Software Version"
 print """<div class="box">"""
 print html_escape(version_info["long"])
+print "</div>"
+
+print "<li>LPM Versions"
+print "<div class='box'>"
+ph = subprocess.Popen(["ReadLpmVersion"],
+                      stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+print "<table>"
+for line in ph.stdout:
+    print "<tr><td>", html_escape(line), "</td></tr>"
+print "</table>"
 print "</div>"
 
 print "<li>Manufacturing Data [<a href='/diag/mfg-data'>all</a>]"
@@ -83,41 +81,19 @@ if dev is not None:
         .format(elem, html_escape(dev))
 
 for elem in """country_code regionCode snSystem productType productName
-               productColor testflagLaunchAssurance""".split():
+               productColor testflagLaunchAssurance guid""".split():
     print "<tr><td>{}</td><td>{}</td></tr>" \
         .format(elem, html_escape(mfg_data.get(elem, "(none)")))
 print "</table>"
 print "</div>"
 
-print "<li>Display Tests"
-print """<div class="box">"""
-print "<table>"
-print "<tr>"
-for img in "red green blue black white horizontal vertical".split():
-    print """<td class='showimg'>\
-<img width='60' height='80' \
-onclick='showimg("{img}")' \
-src='/diag/display/{img}.png'>\
-</td>""".format(img=img)
-print "<td><iframe id='ok' width='60' height='80' frameborder='0'></iframe></td>"
-print "</tr>"
-print "</table>"
-print "</div>"
-
-print "<li>Other Tests"
-print """<div class="box">"""
-print "<a href='/diag/microphone'>Microphones</a>"
-print "</div>"
-
-print "<li>LPM Versions"
-print """<div class="box">"""
-ph = subprocess.Popen(["ReadLpmVersion"],
-                      stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-print "<table>"
-for line in ph.stdout:
-    print "<tr><td>", html_escape(line), "</td></tr>"
-print "</table>"
-print "</div>"
+print """
+<li>Tests
+<div class="box">
+<a href="/diag/display">Display</a><br>
+<a href="/diag/microphone">Microphones</a>
+</div>
+"""
 
 print "<hr>"
 

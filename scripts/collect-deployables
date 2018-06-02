@@ -18,6 +18,7 @@ files=(
     "$builds_dir/product-unstripped.tar.gz"
     "$builds_dir/product-ipk-stage/component-info.gz"
     "$builds_dir/components.svgz"
+    "$builds_dir/components.txt"
     "$builds_dir/package/product.tar"
     "$builds_dir/product_update.zip"
     "$builds_dir/product_update_no_hsp.zip"

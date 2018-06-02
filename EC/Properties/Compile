@@ -16,4 +16,9 @@ export DONT_UPDATE_CASTLETOOLS=1
 export GENERATE_HSP_SIGNATURES=1
 eval $KWINJECT make jobs=8 deploy || exit
 
+if [ "$[BuildType]" = "Release" ]; then
+    python2.7 scripts/update_product_profile --p eddie --v $[Version] --e latest
+    python2.7 scripts/update_product_profile --p eddie --v $[Version] --e integration
+fi
+
 : success

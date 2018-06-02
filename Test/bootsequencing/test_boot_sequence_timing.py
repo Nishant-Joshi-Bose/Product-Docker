@@ -26,7 +26,7 @@ from conf_bootsequencing import CONFIG
 from stateutils import state_checker, UNKNOWN
 
 
-logger = get_logger(__name__, level=logging.DEBUG)
+LOGGER = get_logger(__name__, level=logging.DEBUG)
 
 
 @pytestrail.case('C658164')
@@ -44,7 +44,7 @@ def test_base_reboot_time(rebooted_device, adb_versions, graphite):
         used.
     :return: None
     """
-    logger.debug('ADB Device Version Information: %s', adb_versions)
+    LOGGER.debug('ADB Device Version Information: %s', adb_versions)
     data = rebooted_device
 
     # Check Reboot Time information
@@ -55,7 +55,7 @@ def test_base_reboot_time(rebooted_device, adb_versions, graphite):
     rows = generate_time_message(data, CONFIG['Grafana']['table_name'],
                                  CONFIG['Grafana']['sub_table_name'])
 
-    logger.debug('Posting the following information: %s', rows)
+    LOGGER.debug('Posting the following information: %s', rows)
     graphite.send_message('\n'.join(rows) + '\n')
 
 
@@ -77,7 +77,7 @@ def test_network_connection_time(rebooted_and_networked_device, adb_versions, gr
 
     :return: None
     """
-    logger.debug('ADB Device Version Information: %s', adb_versions)
+    LOGGER.debug('ADB Device Version Information: %s', adb_versions)
     data = rebooted_and_networked_device
 
     # Check Reboot information
@@ -92,13 +92,13 @@ def test_network_connection_time(rebooted_and_networked_device, adb_versions, gr
     rows = generate_time_message(data, CONFIG['Grafana']['table_name'],
                                  CONFIG['Grafana']['sub_table_name'])
 
-    logger.debug('Posting the following information: %s', rows)
+    LOGGER.debug('Posting the following information: %s', rows)
     graphite.send_message('\n'.join(rows) + '\n')
 
 
 @pytestrail.case('C658166')
 @pytest.mark.usefixtures('rebooted_and_networked_device', 'adb_versions', 'graphite')
-def test_boot_state_time(rebooted_and_networked_device, adb_versions, graphite, delay=0, maximum_time=30):
+def test_boot_state_time(rebooted_and_networked_device, adb_versions, graphite, maximum_time=30):
     """
     Acquires the time to get to states through the FrontDoorAPI, then posts them to the
     Graphite Server.
@@ -112,9 +112,9 @@ def test_boot_state_time(rebooted_and_networked_device, adb_versions, graphite, 
 
     :return: None
     """
-    logger.debug('ADB Device Version Information: %s', adb_versions)
+    LOGGER.debug('ADB Device Version Information: %s', adb_versions)
     data = rebooted_and_networked_device
-    logger.debug('Initial Reboot and Network Information: %s', data)
+    LOGGER.debug('Initial Reboot and Network Information: %s', data)
 
     # Check Reboot information
     reboot_time = data['reboot']['duration']
@@ -123,13 +123,13 @@ def test_boot_state_time(rebooted_and_networked_device, adb_versions, graphite, 
 
     # Check IP Address information
     ip_address = rebooted_and_networked_device['ip']['address']
-    logger.debug("State Checking will be done with IP: %s", ip_address)
+    LOGGER.debug("State Checking will be done with IP: %s", ip_address)
     assert ip_address != UNKNOWN, 'IP Address never acquired ({}).'.format(ip_address)
 
-    state_data = state_checker(ip_address, maximum_time, dict(), delay)
+    state_data = state_checker(ip_address, maximum_time, dict())
 
     rows = generate_time_message(dict(data.items() + state_data.items()), CONFIG['Grafana']['table_name'],
                                  CONFIG['Grafana']['sub_table_name'])
 
-    logger.debug('Posting the following information: %s', rows)
+    LOGGER.debug('Posting the following information: %s', rows)
     graphite.send_message('\n'.join(rows) + '\n')

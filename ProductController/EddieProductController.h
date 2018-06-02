@@ -113,13 +113,9 @@ public:
         /// TO_Do
         return false;
     }
-    bool IsVoiceConfigured( )  const override
-    {
-        /// TO_Do
-        return false;
-    }
 
     std::string GetDefaultProductName() const override;
+    void RegisterAuxEvents( AsyncCallback<LpmServiceMessages::IpcAuxState_t> &cb );
 
 private:
     /// Disable copies
@@ -387,13 +383,13 @@ private:
     //////////////////////////////////////////////////////////////////////////////////////////////
     bool                                        m_isSTSReady = false;
     bool m_IsAudioPathReady = true;
-    ProductSTSController                        m_ProductSTSController;
 
     /// Shared Pointer to the LPM Custom Hardware Interface
     std::shared_ptr< CustomProductLpmHardwareInterface > m_LpmInterface;
 
     //DataCollectionClientInterface
-    DataCollectionClientInterface                m_dataCollectionClientInterface;
+    DataCollectionClientInterface                        m_dataCollectionClientInterface;
+    ProductSTSController                                 m_ProductSTSController;
 };
 static const char* const KEY_NAMES[] __attribute__( ( unused ) ) =
 {

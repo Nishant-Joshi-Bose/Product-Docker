@@ -55,5 +55,3 @@ def frontDoor_reboot(request, device_ip):
             frontDoorAPI.close()
     request.addfinalizer(tear)
     return frontDoorAPI
-
-
