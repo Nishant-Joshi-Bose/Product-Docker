@@ -8,7 +8,7 @@
 ///
 /// @author    Derek Richardson
 ///
-/// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
+/// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
 ///
 ///            Bose Corporation
 ///            The Mountain Road,
@@ -119,15 +119,7 @@ bool SpeakerPairingManager::Handle( KeyHandlerUtil::ActionType_t& action )
                __FUNCTION__,
                action );
 
-    if( action == ( uint16_t )Action::ACTION_START_PAIR_SPEAKERS )
-    {
-        // This kicks off the state change to pairing
-        BOSE_INFO( s_logger, "Speaker pairing is to be started." );
-        ProductMessage productMessage;
-        productMessage.mutable_accessorypairing( )->set_active( true );
-        IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-    }
-    else if( action == ( uint16_t )Action::ACTION_LPM_PAIR_SPEAKERS )
+    if( action == ( uint16_t )Action::ACTION_LPM_PAIR_SPEAKERS )
     {
         BOSE_INFO( s_logger, "Speaker pairing is to be engaged." );
         // This initiates the actual pairing on entry to the state
@@ -568,7 +560,7 @@ void SpeakerPairingManager::RecieveAccessoryListCallback( LpmServiceMessages::Ip
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief SpeakerPairingManager::PairingCallback
+/// @brief SpeakerPairingManager::HandleTimeOut
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::HandleTimeOut()
@@ -606,9 +598,7 @@ void SpeakerPairingManager::PairingCallback( LpmServiceMessages::IpcSpeakerPairi
     ProductMessage productMessage;
     productMessage.mutable_accessorypairing( )->set_active( m_accessorySpeakerState.pairing( ) );
 
-
     IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
-
 
     // Need to notify here only if pairing is being set. If pairing has finished and is set to false,
     // will notify UI with full message from RecieveAccessoryListCallback.
@@ -743,11 +733,11 @@ const char* SpeakerPairingManager::AccessoryTypeToString( unsigned int type )
     switch( static_cast< LpmServiceMessages::AccessoryType_t >( type ) )
     {
     case LpmServiceMessages::ACCESSORY_LOVEY:
-        return "Acoustimass 150";
+        return "BOSE_BASS_MODULE_300";
     case LpmServiceMessages::ACCESSORY_SKIPPER:
-        return "Acoustimass 300";
+        return "BOSE_BASS_MODULE_700";
     case LpmServiceMessages::ACCESSORY_MAXWELL:
-        return "Virtually Invisible 300";
+        return "BOSE_SURROUND_SPEAKER";
     default:
         BOSE_ERROR( s_logger, "Received invalid accessory to convert to string" );
         return "Invalid";

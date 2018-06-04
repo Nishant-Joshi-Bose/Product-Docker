@@ -27,7 +27,7 @@ def main():
             "multiroom"         : True,
             "sourceAccountName" : "SLOT_0",
             "sourceName"        : "PRODUCT",
-            "status"            : "ready",
+            "status"            : "available",
             "visible"           : "true",
         },
         {
@@ -41,7 +41,7 @@ def main():
             "multiroom"         : True,
             "sourceAccountName" : "SLOT_1",
             "sourceName"        : "PRODUCT",
-            "status"            : "ready",
+            "status"            : "available",
             "visible"           : "true",
         },
         {
@@ -55,7 +55,7 @@ def main():
             "multiroom"         : True,
             "sourceAccountName" : "SLOT_2",
             "sourceName"        : "PRODUCT",
-            "status"            : "ready",
+            "status"            : "available",
             "visible"           : "true",
         },
         {
@@ -68,7 +68,7 @@ def main():
             "multiroom"         : True, 
             "sourceAccountName" : "TV", 
             "sourceName"        : "PRODUCT", 
-            "status"            : "ready"
+            "status"            : "available"
         }
     ]
 

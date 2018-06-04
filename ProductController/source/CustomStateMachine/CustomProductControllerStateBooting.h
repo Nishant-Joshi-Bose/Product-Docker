@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @file      CustomProductControllerStatePlayingDeselected.cpp
+/// @file      CustomProductControllerStateBooting.h
 ///
-/// @brief     This source code file contains functionality to process events that occur during the
-///            product deselected state.
+/// @brief     This header file declares functionality to process events that occur during the
+///            product booting state.
 ///
 /// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -10,11 +10,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///            Included Header Files
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#include "Utilities.h"
-#include "ProductController.h"
-#include "ProductControllerStates.h"
-#include "ProductControllerStatePlayingDeselected.h"
-#include "CustomProductControllerStatePlayingDeselected.h"
+#pragma once
+#include "ProductControllerStateBooting.h"
+#include "HsmState.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -23,50 +21,34 @@ namespace ProductApp
 {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStatePlayingDeselected::CustomProductControllerStatePlayingDeselected
-///
-/// @param ProductControllerHsm& hsm
-///
-/// @param CHsmState*            pSuperState
-///
-/// @param Hsm::STATE            stateId
-///
-/// @param const std::string&    name
-///
+///            Forward Class Declarations
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-CustomProductControllerStatePlayingDeselected::CustomProductControllerStatePlayingDeselected(
-    ProductControllerHsm& hsm,
-    CHsmState*            pSuperState,
-    Hsm::STATE            stateId,
-    const std::string&    name )
+class ProductControllerHsm;
 
-    : ProductControllerStatePlayingDeselected( hsm, pSuperState, stateId, name )
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief The CustomProductControllerStateBooting Class
+////////////////////////////////////////////////////////////////////////////////////////////////////
+class CustomProductControllerStateBooting : public ProductControllerStateBooting
 {
-    BOSE_INFO( s_logger, "The %s state is being constructed.", GetName( ).c_str( ) );
-}
+public:
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStatePlayingDeselected::HandleIntentSpeakerPairing
-///
-/// @return This method returns a true Boolean value indicating that it is handling the speaker
-///         pairing intent.
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStatePlayingDeselected::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )
+    CustomProductControllerStateBooting( ProductControllerHsm& hsm,
+                                   CHsmState* pSuperState,
+                                   Hsm::STATE stateId,
+                                   const std::string& name = "Booting" );
 
-{
-    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
-
-    if( intent == ( unsigned int )Action::ACTION_START_PAIR_SPEAKERS )
+    ~CustomProductControllerStateBooting( ) override
     {
-        BOSE_INFO( s_logger, "The state is changing to the CustomDeselectedAccessoryPairing state." );
-        ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_PLAYING_DESELECTED_ACCESSORY_PAIRING );
+
     }
 
-    return true;
-}
+protected:
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /// @brief This virtual method override the implementation in the common class implementation.
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    void PossiblyGoToNextState( ) override;
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                           End of the Product Application Namespace                           ///

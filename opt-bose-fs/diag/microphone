@@ -51,7 +51,7 @@ def outputTable( values, selected = None ):
         print "</tr>"
 
     print "<tr>"
-    print "<td>Real Values</td>"
+    print "<td>Real Values in dBF</td>"
     for i in range(0, len(values)):
         print """<td>{}</td>""".format(values[i])
     print "</tr>"
@@ -62,29 +62,51 @@ def outputTable( values, selected = None ):
 </html>"""
 
 
-# If argument given, return mic data.
+# If argument given, get data.
 if len(sys.argv) > 1:
 
     output = subprocess.Popen(["frontdoorutil","/vfe/meters"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 
-    try:
-        data = json.loads(output[0])
-        mics = data['body']['micLevels']
-        beams = data['body']['beamLevels']
-        raw = json.dumps(data['body'],indent=4)
+    # Make up to 10 attempts to retrieve the data. This accounts for the retry needed after VFE is brought up, as well as any potential waiting while shepherd brings it up
+    for attempt in range(10):
+        try:
 
-    # Catch error Parsing JSON, output error messages from utility.
-    except ValueError:
-        print output[1]
-        sys.exit()
+            data = json.loads(output[0])
+            mics = data['body']['micLevels']
+            beams = data['body']['beamLevels']
+            raw = json.dumps(data['body'],indent=4)
 
-    # Catch Error finding specific fields, output message indicating that VFE is not enabled.
-    except KeyError:
-        print "The current software version does not support Microphone testing."
+        # Catch error Parsing JSON, output error messages from utility; if this occurs, something else is very wrong, regardless of VFE. 
+        except ValueError:
+            print output[1]
+            sys.exit()
+
+        # Catch Error finding specific fields, probably means VFE not enabled, so make sure that's up
+        except KeyError:
+
+            # If link for vfe hasn't been made yet, make it and wait for shepherd to respond. 
+            if not os.path.isfile("/var/run/shepherd/*vfe.xml"):
+
+                # Check product specific directory for Professor/GC
+                out = subprocess.Popen(["mfgdata","get","productType"],stdout=subprocess.PIPE,stderr=subprocess.PIPE).communicate()
+                path = "/opt/Bose/etc/"+out[0].strip()+"/Shepherd-vfe.xml"
+
+                out = subprocess.Popen(["ln","-nsf",path,"/var/run/shepherd"], stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+                out = subprocess.Popen(["shepherd-wait","/var/run/shepherd","/var/run/shepherd/pid"], stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+
+            # After vfe link is made (or known to exist), re-collect the data from FrontDoor
+            output = subprocess.Popen(["frontdoorutil","/vfe/meters"],stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+
+        # If no exceptions, break from loop
+        else: break
+
+    # If no usable results after 10 attempts, output whatever message we got from the utility and end the program.
+    else:
+        print output[0]
         sys.exit()
 
     # If "raw" argument, being asked for raw JSON data. 
-    if sys.argv[1]=="raw":
+    if sys.argv[1]=="raw" or sys.argv[1]=="raw/":
         print """HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nCache-Control: no-cache\r\n\r"""
         print raw
 
@@ -133,7 +155,7 @@ else:
     <body>
         <h1 id='header'>Microphones</h1>
         <hr>
-        <li>Microphone Values
+        <li>Microphone Values [dBF]
         <iframe id="values" src="/diag/microphone/all"></iframe>   <!-- inline frame loads the microphone data, mic selection changes src of iframe -->
         <hr>
     </body>

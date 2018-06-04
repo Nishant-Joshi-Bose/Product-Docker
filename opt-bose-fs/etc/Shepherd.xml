@@ -1,5 +1,7 @@
 <ShepherdConfig>
-  <daemon name="Professor"/>
+  <daemon name="Professor"
+          recovery="reboot">
+  </daemon>
 
   <daemon name="avahi-daemon"
           exe="start-avahi"/>

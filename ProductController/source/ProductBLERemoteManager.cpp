@@ -29,6 +29,8 @@
 #include "SharedProto.pb.h"
 #include "ProtoToMarkup.h"
 #include "EndPointsDefines.h"
+#include "ProductSTS.pb.h"
+#include "SystemSourcesProperties.pb.h"
 
 using namespace ProductPb;
 using namespace A4V_RemoteCommunicationServiceMessages;
@@ -205,36 +207,158 @@ void ProductBLERemoteManager::UpdateNowSelection( const SoundTouchInterface::Now
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProductBLERemoteManager::UpdateBacklight( )
 {
-    std::vector< A4VRemoteCommClientIF::ledSourceType_t > availableSources;
+    using namespace ProductSTS;
 
-    availableSources.push_back( LedsSourceTypeMsg_t::BLUETOOTH );
-    availableSources.push_back( LedsSourceTypeMsg_t::SOUND_TOUCH );
-    availableSources.push_back( LedsSourceTypeMsg_t::TV );
+    RCS_PB_MSG::LedsRawMsg_t leds;
+
+    // BlueTooth and TV are always available for now
+    leds.set_tv( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
+    leds.set_bluetooth( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
+
+    // default the others to off
+    leds.set_game( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+    leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+    leds.set_set_top_box( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+    leds.set_sound_touch( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_OFF );
+
+    // default all zones to off
+    leds.set_zone_01( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_02( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_03( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_05( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_06( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_08( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+    leds.set_zone_10( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_OFF );
+
+    leds.set_backlight_enable( true );
+    leds.set_demo_mode( false );
+
+    if( m_ProductController.GetPassportAccountAssociationStatus() == PassportPB::ASSOCIATED )
+    {
+        leds.set_sound_touch( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
+    }
 
     for( auto i = 0; i < m_sources.sources_size(); i++ )
     {
         const auto& source = m_sources.sources( i );
 
-        // @TODO: this also needs to check "visible" once that flag works correctly; PGC-1169
+        if( not source.visible() )
+        {
+            // source isn't configured, don't light it
+            continue;
+        }
 
-        if( source.sourceaccountname().compare( "SLOT_0" ) == 0 )
+        if( source.sourceaccountname().compare( ProductSourceSlot_Name( SLOT_0 ) ) == 0 )
         {
-            availableSources.push_back( LedsSourceTypeMsg_t::GAME );
+            leds.set_game( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
         }
-        if( source.sourceaccountname().compare( "SLOT_1" ) == 0 )
+        if( source.sourceaccountname().compare( ProductSourceSlot_Name( SLOT_1 ) ) == 0 )
         {
-            availableSources.push_back( LedsSourceTypeMsg_t::DVD );
+            leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
         }
-        if( source.sourceaccountname().compare( "SLOT_2" ) == 0 )
+        if( source.sourceaccountname().compare( ProductSourceSlot_Name( SLOT_2 ) ) == 0 )
         {
-            availableSources.push_back( LedsSourceTypeMsg_t::SET_TOP_BOX );
+            leds.set_set_top_box( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ON );
         }
     }
 
-    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t sourceLED;
-    if( GetSourceLED( sourceLED ) )
+    if( !m_poweredOn )
     {
-        m_RCSClient->Led_Set( sourceLED, availableSources );
+        leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        leds.set_zone_10( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+        m_RCSClient->Led_Set(
+            leds.sound_touch(), leds.tv(), leds.bluetooth(), leds.game(), leds.clapboard(), leds.set_top_box(),
+            leds.zone_01(), leds.zone_02(), leds.zone_03(), leds.zone_04(), leds.zone_05(),
+            leds.zone_06(), leds.zone_07(), leds.zone_08(), leds.zone_09(), leds.zone_10(),
+            leds.backlight_enable(), leds.demo_mode()
+        );
+        return;
+    }
+
+    // set the active source and associated zones
+    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t sourceLED;
+    bool visible;
+    bool valid = GetSourceLED( sourceLED, visible );
+    if( valid )
+    {
+        // zone selection here is from section 6.5.4 ("Zone Assignments per Device")
+        // "Bose Kepler (Ginger-Cheevers) BLE Remote Product Specification" (v1.3)
+        switch( sourceLED )
+        {
+        case LedsSourceTypeMsg_t::SOUND_TOUCH:
+            leds.set_sound_touch( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ACTIVE );
+            leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_05( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_10( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case LedsSourceTypeMsg_t::TV:
+            leds.set_tv( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ACTIVE );
+            leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            if( visible )
+            {
+                leds.set_zone_01( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                leds.set_zone_02( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                leds.set_zone_05( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                leds.set_zone_06( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                leds.set_zone_08( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+                leds.set_zone_10( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            }
+            break;
+        case LedsSourceTypeMsg_t::BLUETOOTH:
+            leds.set_bluetooth( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ACTIVE );
+            leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_10( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case LedsSourceTypeMsg_t::GAME:
+            leds.set_game( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ACTIVE );
+            leds.set_zone_02( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_10( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case LedsSourceTypeMsg_t::DVD:
+            leds.set_clapboard( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ACTIVE );
+            leds.set_zone_02( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_10( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case LedsSourceTypeMsg_t::SET_TOP_BOX:
+            leds.set_set_top_box( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ACTIVE );
+            leds.set_zone_01( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_02( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_03( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_05( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_06( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_08( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_10( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        case LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE:
+            leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            break;
+        }
+        m_RCSClient->Led_Set(
+            leds.sound_touch(), leds.tv(), leds.bluetooth(), leds.game(), leds.clapboard(), leds.set_top_box(),
+            leds.zone_01(), leds.zone_02(), leds.zone_03(), leds.zone_04(), leds.zone_05(),
+            leds.zone_06(), leds.zone_07(), leds.zone_08(), leds.zone_09(), leds.zone_10(),
+            leds.backlight_enable(), leds.demo_mode()
+        );
     }
 }
 
@@ -242,14 +366,27 @@ void ProductBLERemoteManager::UpdateBacklight( )
 ///
 /// @brief ProductBLERemoteManager::GetSourceLED
 ///
-/// @param  void This method does not take any arguments.
+/// @param  sourceLED - reference to sourceLED to illuminate
+///         visible - reference to flag indicating whether source is configured
 ///
 /// @return This method does not return anything.
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool ProductBLERemoteManager::GetSourceLED( A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED )
+bool ProductBLERemoteManager::GetSourceLED(
+    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& visible )
 {
+    using namespace ProductSTS;
+    using namespace SystemSourcesProperties;
+
+    visible = false;
+
+    if( m_inSetup )
+    {
+        sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
+        return true;
+    }
+
     if( !m_nowSelection.has_contentitem() )
     {
         return false;
@@ -264,41 +401,47 @@ bool ProductBLERemoteManager::GetSourceLED( A4VRemoteCommunication::A4VRemoteCom
     const auto& sourceName = sourceItem->sourcename();
     const auto& sourceAccountName = sourceItem->sourceaccountname();
 
-    if( sourceName.compare( "PRODUCT" ) == 0 )
+    visible = sourceItem->visible();
+    if( sourceName.compare( ProductSourceSlot_Name( PRODUCT ) ) == 0 )
     {
-        if( sourceAccountName.compare( "TV" ) == 0 )
+        if( sourceAccountName.compare( ProductSourceSlot_Name( TV ) ) == 0 )
         {
             BOSE_INFO( s_logger, "update nowSelection TV" );
             // Check for TV explicitly for now, since I don't know if Madrid will set deviceType for the TV
             sourceLED = LedsSourceTypeMsg_t::TV;
         }
-        else if( sourceAccountName.compare( "SETUP" ) == 0 )
+        else if( sourceAccountName.compare( ProductSourceSlot_Name( SETUP ) ) == 0 )
         {
             BOSE_INFO( s_logger, "update nowSelection SETUP" );
             sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
         }
-        else if( ( sourceAccountName.compare( 0, 4, "SLOT" ) == 0 ) and sourceItem->has_details() )
+        else if( sourceAccountName.compare( ProductSourceSlot_Name( PAIRING ) ) == 0 )
+        {
+            BOSE_INFO( s_logger, "update nowSelection PAIRING No LED Available" );
+        }
+        else if( ( sourceAccountName.compare( 0, 4, ProductSourceSlot_Name( SLOT_0 ), 0, 4 ) == 0 ) and sourceItem->has_details() )
         {
             const auto& sourceDetailsDevicetype = sourceItem->details().devicetype();
+            BOSE_INFO( s_logger, "update nowSelection %s", sourceDetailsDevicetype.c_str() );
 
-            if( sourceDetailsDevicetype.compare( "DEVICE_TYPE_GAME" ) == 0 )
+            if( sourceDetailsDevicetype.compare( DEVICE_TYPE__Name( DEVICE_TYPE_GAME ) ) == 0 )
             {
                 sourceLED = LedsSourceTypeMsg_t::GAME;
             }
-            else if( sourceDetailsDevicetype.compare( "DEVICE_TYPE_CBL_SAT" ) == 0 )
+            else if( sourceDetailsDevicetype.compare( DEVICE_TYPE__Name( DEVICE_TYPE_CBL_SAT ) ) == 0 )
             {
                 sourceLED = LedsSourceTypeMsg_t::SET_TOP_BOX;
             }
-            else if( sourceDetailsDevicetype.compare( "DEVICE_TYPE_BD_DVD" ) == 0 )
+            else if( sourceDetailsDevicetype.compare( DEVICE_TYPE__Name( DEVICE_TYPE_BD_DVD ) ) == 0 )
             {
                 sourceLED = LedsSourceTypeMsg_t::DVD;
             }
-            else if( ( sourceDetailsDevicetype.compare( "DEVICE_TYPE_TV" ) == 0 ) or
-                     ( sourceDetailsDevicetype.compare( "DEVICE_TYPE_SMART_TV" ) == 0 ) )
+            else if( ( sourceDetailsDevicetype.compare( DEVICE_TYPE__Name( DEVICE_TYPE_TV ) ) == 0 ) or
+                     ( sourceDetailsDevicetype.compare( DEVICE_TYPE__Name( DEVICE_TYPE_SMART_TV ) ) == 0 ) )
             {
                 sourceLED = LedsSourceTypeMsg_t::TV;
             }
-            else if( sourceDetailsDevicetype.compare( "DEVICE_TYPE_STREAMING" ) == 0 )
+            else if( sourceDetailsDevicetype.compare( DEVICE_TYPE__Name( DEVICE_TYPE_STREAMING ) ) == 0 )
             {
                 // per Brian White, GAME is probably the most sensible choice here
                 // I'm leaving this as an independent case from GAME above in case we change our minds

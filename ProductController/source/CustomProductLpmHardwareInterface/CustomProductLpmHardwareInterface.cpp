@@ -535,7 +535,6 @@ bool CustomProductLpmHardwareInterface::SetStreamConfig( LpmServiceMessages::Ipc
     {
         cb.Send( ( resp.success() > 0 ) ? true : false );
     };
-    BOSE_VERBOSE( s_logger, "CustomProductLpmHardwareInterface::SetStreamConfig streamConfig = %s", streamConfig.DebugString().c_str() );
     GetLpmClient( )->SetStreamConfigRequest( streamConfig, respCb, Ipc_Device_t::IPC_DEVICE_DSP );
     return true;
 }

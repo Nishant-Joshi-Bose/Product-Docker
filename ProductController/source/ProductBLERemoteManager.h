@@ -83,6 +83,27 @@ public:
     void Unpairing_Cancel( void );
     bool IsConnected( void );
     void PossiblyPair( void );
+    void PowerOn( )
+    {
+        m_poweredOn = true;
+        UpdateBacklight( );
+    }
+    void PowerOff( )
+    {
+        m_poweredOn = false;
+        UpdateBacklight( );
+    }
+    void EnterSetup( )
+    {
+        m_inSetup = true;
+        UpdateBacklight( );
+    }
+    void ExitSetup( )
+    {
+        m_inSetup = false;
+        UpdateBacklight( );
+    }
+
 
 private:
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -97,6 +118,8 @@ private:
     bool                            m_pairingPending    = false;
     RemoteStatus::PairingStatus     m_remoteStatus      = RemoteStatus::PSTATE_UNKOWN;
     const int                       m_PairingTimeout    = 7200;
+    bool                            m_poweredOn         = false;
+    bool                            m_inSetup           = false;
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -113,7 +136,7 @@ private:
     void InitializeRCS();
     void UpdateAvailableSources( const SoundTouchInterface::Sources& sources );
     void UpdateBacklight( );
-    bool GetSourceLED( A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED );
+    bool GetSourceLED( A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& visible );
     void CheckPairing( void );
 };
 
