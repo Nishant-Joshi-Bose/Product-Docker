@@ -30,6 +30,7 @@
 #include "ProductControllerState.h"
 #include "CustomProductLpmHardwareInterface.h"
 #include "ProfessorProductController.h"
+#include "ProductBLERemoteManager.h"
 #include "ProductEndpointDefines.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,6 +78,7 @@ void CustomProductControllerStatePlaying::HandleStateEnter( )
     BOSE_INFO( s_logger, "The %s state is in %s powering CEC on.", GetName( ).c_str( ), __func__ );
     GetCustomProductController( ).GetCecHelper( )->PowerOn( );
     GetCustomProductController( ).GetDspHelper( )->SetNormalOperationsMonitor( true );
+    GetCustomProductController( ).GetBLERemoteManager( )->PowerOn( );
 
     SoundTouchInterface::volume v;
     v.set_value( GetCustomProductController( ).GetDesiredPlayingVolume( ) );
@@ -129,6 +131,7 @@ void CustomProductControllerStatePlaying::HandleStateExit( )
 
     BOSE_INFO( s_logger, "The %s state is in %s powering CEC off.", GetName( ).c_str( ), __func__ );
     GetCustomProductController( ).GetCecHelper( )->PowerOff( );
+    GetCustomProductController( ).GetBLERemoteManager( )->PowerOff( );
     GetCustomProductController( ).GetDspHelper()->SetNormalOperationsMonitor( false );
 }
 

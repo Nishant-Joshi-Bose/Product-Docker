@@ -117,6 +117,26 @@ bool CustomProductControllerStateOn::HandleAdaptIQControl( const ProductAdaptIQC
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @brief  CustomProductControllerStateOn::HandleIntentSpeakerPairing
+///
+/// @return This method returns a true Boolean value indicating that it has handled the event
+///         and no futher processing will be required by any of its superstates.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+bool CustomProductControllerStateOn::HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )
+{
+    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+
+    if( intent == ( unsigned int )Action::ACTION_START_PAIR_SPEAKERS )
+    {
+        GetCustomProductController( ).GetIntentHandler( ).Handle( intent );
+    }
+
+    return true;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief  CustomProductControllerStateOn::HandleIntentSetupBLERemote
 ///
 /// @return This method returns a true Boolean value indicating that it has handled the intent.
@@ -124,17 +144,22 @@ bool CustomProductControllerStateOn::HandleAdaptIQControl( const ProductAdaptIQC
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateOn::HandleIntentSetupBLERemote( )
 {
-    BOSE_INFO( s_logger, "The %s state is in %s: remote is %sconnected, network is %sconnected, ProductSettings %sreceived",
+    BOSE_INFO( s_logger, "The %s state is in %s: remote is %sconnected, network is %sconnected, PassportAccount %s",
                GetName( ).c_str( ), __func__ , GetCustomProductController().IsBLERemoteConnected() ? "" : "not ",
                GetCustomProductController().GetNetworkServiceUtil().IsNetworkConnected() ? "" : "not ",
-               GetCustomProductController().IsProductSettingsReceived() ? "" : "not " );
+               PassportPB::AssociateStatus_Name( GetCustomProductController().GetPassportAccountAssociationStatus() ).c_str() );
 
-    // Conditions for initiating pairing:
-    // This feature shall be disabled when: active bonded remote is connected || (active network connection && product associated with a My Bose account)
-    // @TODO IsProductSettingsReceived() is used as a proxy for "product associated with a My Bose account", see CASTLE-13960
+    ///
+    /// @note Conditions for initiating pairing: this feature shall be disabled when: active bonded
+    ///       remote is connected or (active network connection and product associated with a My Bose
+    ///        account received)
+    ///
+    /// @todo IsProductSettingsReceived() is used as a proxy for "product associated with a My Bose account",
+    ///       see CASTLE-13960
+    ///
     if( !( GetCustomProductController().IsBLERemoteConnected() ||
            ( GetCustomProductController().GetNetworkServiceUtil().IsNetworkConnected() &&
-             GetCustomProductController().IsProductSettingsReceived() ) ) )
+             ( GetCustomProductController().GetPassportAccountAssociationStatus() == PassportPB::ASSOCIATED ) ) ) )
     {
         GetCustomProductController().PairBLERemote( MANUAL_BLE_REMOTE_PAIRING_TIMEOUT_SECONDS );
     }
@@ -143,14 +168,19 @@ bool CustomProductControllerStateOn::HandleIntentSetupBLERemote( )
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @brief  CustomProductControllerStateOn::HandleIntentVolumeControl
+///
 /// @param  KeyHandlerUtil::ActionType_t intent
+///
 /// @return This method returns true, indicating that it has handled the event.
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateOn::HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )
 {
     BOSE_INFO( s_logger, "The %s state in %s is ignoring the intent %u.", GetName( ).c_str( ), __func__, intent );
-    // intent ignored in the custome state
+    ///
+    /// The intent is ignored in the custom state.
+    ///
     return true;
 }
 

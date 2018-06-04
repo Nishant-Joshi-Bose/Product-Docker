@@ -39,6 +39,7 @@
 #include "ProductMessage.pb.h"
 #include "CecMode.pb.h"
 #include "DataCollectionClientIF.h"
+#include "CustomProductLpmHardwareInterface.h"
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,6 +107,10 @@ public:
 
 private:
 
+    bool                    m_LpmPowerIsOn              = false;
+    LPM_IPC_SOURCE_ID       m_LpmSourceID               = LPM_IPC_INVALID_SOURCE;
+    bool                    m_HavePhysicalAddress       = false;
+
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following declarations are used to interface with the product controller and
@@ -167,6 +172,8 @@ private:
     std::shared_ptr< FrontDoorClientIF >    m_FrontDoorClient;
     void CecModeHandleGet( const Callback<const ProductPb::CecModeResponse> & resp, const Callback<FrontDoor::Error> & errorRsp );
     void CecModeHandlePut( const ProductPb::CecUpdateRequest req, const Callback<const ProductPb::CecModeResponse> & resp, const Callback<FrontDoor::Error> & errorRsp );
+    void PerhapsSetCecSource( );
+    void SendCecSourceSelection( LPM_IPC_SOURCE_ID source );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     ///

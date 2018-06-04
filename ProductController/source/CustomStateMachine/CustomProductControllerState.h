@@ -305,7 +305,7 @@ public:
     /// product specific action.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    virtual bool HandlePairingState( ProductAccessoryPairing pairingStatus )
+    virtual bool HandlePairingStatus( ProductAccessoryPairing pairingStatus )
     {
         return false;
     }

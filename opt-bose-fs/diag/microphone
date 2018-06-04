@@ -51,7 +51,7 @@ def outputTable( values, selected = None ):
         print "</tr>"
 
     print "<tr>"
-    print "<td>Real Values</td>"
+    print "<td>Real Values in dBF</td>"
     for i in range(0, len(values)):
         print """<td>{}</td>""".format(values[i])
     print "</tr>"
@@ -106,7 +106,7 @@ if len(sys.argv) > 1:
         sys.exit()
 
     # If "raw" argument, being asked for raw JSON data. 
-    if sys.argv[1]=="raw":
+    if sys.argv[1]=="raw" or sys.argv[1]=="raw/":
         print """HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nCache-Control: no-cache\r\n\r"""
         print raw
 
@@ -155,7 +155,7 @@ else:
     <body>
         <h1 id='header'>Microphones</h1>
         <hr>
-        <li>Microphone Values
+        <li>Microphone Values [dBF]
         <iframe id="values" src="/diag/microphone/all"></iframe>   <!-- inline frame loads the microphone data, mic selection changes src of iframe -->
         <hr>
     </body>

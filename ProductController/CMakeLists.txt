@@ -16,6 +16,7 @@ INCLUDE_DIRECTORIES(
   ${NETWORK_SERVICE_DIR}/include
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/Bluetooth
   ${SOUNDTOUCH_SDK_DIR}/prebuilt/include/SoundTouchInterface
+  ${AUDIOSOURCE_DIR}/include
   .
   include
   source
@@ -48,20 +49,18 @@ ADD_EXECUTABLE(Professor
   source/CustomProductAudioService/CustomProductAudioService.cpp
   source/CustomProductKeyInputManager/CustomProductKeyInputManager.cpp
   source/CustomProductLpmHardwareInterface/CustomProductLpmHardwareInterface.cpp
+  source/CustomStateMachine/CustomProductControllerStateAccessoryPairing.cpp
+  source/CustomStateMachine/CustomProductControllerStateAccessoryPairingCancelling.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQ.cpp
   source/CustomStateMachine/CustomProductControllerStateAdaptIQExiting.cpp
+  source/CustomStateMachine/CustomProductControllerStateBooting.cpp
   source/CustomStateMachine/CustomProductControllerStateIdle.cpp
   source/CustomStateMachine/CustomProductControllerState.cpp
   source/CustomStateMachine/CustomProductControllerStateOn.cpp
   source/CustomStateMachine/CustomProductControllerStateLowPowerResume.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayable.cpp
   source/CustomStateMachine/CustomProductControllerStatePlaying.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayingDeselectedAccessoryPairing.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayingDeselected.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayingSelectedAccessoryPairing.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayingSelected.cpp
   source/CustomStateMachine/CustomProductControllerStatePlayingSelectedSetup.cpp
-  source/CustomStateMachine/CustomProductControllerStatePlayingTransitionAccessoryPairing.cpp
   source/IntentHandler/IntentHandler.cpp
   source/IntentHandler/PlaybackRequestManager.cpp
   source/IntentHandler/SpeakerPairingManager.cpp
@@ -96,7 +95,10 @@ TARGET_LINK_LIBRARIES(Professor
   SASSFrontDoorServiceProto
   SoftwareUpdateAPI
   STS
+  STSClient
   ShelbyUtils
+  CommonTypes
+  STSProtoBufs
   SoundTouch_SDK_Protobuf_static
   SystemEventService
   BoseLibs

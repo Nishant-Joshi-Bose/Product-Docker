@@ -1,13 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file      CustomProductControllerStatePlayingSelectedAccessoryPairing.h
+/// @file      CustomProductControllerStateAccessoryPairingCancelling.h
 ///
-/// @brief     This source code file contains functionality to process events that occur during the
-///            product accessory pairing state when in a playing deselected superstate.
+/// @brief     This source code file contains functionality to process events that occur when
+///            cancelling the product accessory pairing state leading to a power down to the
+///            playable state.
 ///
-/// @author    Derek Richardson
-///
-/// @attention Copyright (C) 2017 Bose Corporation All Rights Reserved
+/// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -34,44 +33,34 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductControllerHsm;
-class ProfessorProductController;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @class CustomProductControllerStatePlayingSelectedAccessoryPairing
+/// @class CustomProductControllerStateAccessoryPairingCancelling
 ///
-/// @brief This class is used for executing produce specific actions when in an idle state.
+/// @brief This class is used when exiting accessory pairing.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStatePlayingSelectedAccessoryPairing : public ProductControllerState
+class CustomProductControllerStateAccessoryPairingCancelling : public ProductControllerState
 {
 public:
 
-    CustomProductControllerStatePlayingSelectedAccessoryPairing(
+    CustomProductControllerStateAccessoryPairingCancelling(
         ProductControllerHsm&       hsm,
         CHsmState*                  pSuperState,
-        ProfessorProductController& productController,
         Hsm::STATE                  stateId,
-        const std::string&          name = "PlayingSelectedAccessoryPairing" );
+        const std::string&          name = "AccessoryPairing" );
 
-    ~CustomProductControllerStatePlayingSelectedAccessoryPairing( ) override
+    ~CustomProductControllerStateAccessoryPairingCancelling( ) override
     {
 
     }
 
     void HandleStateStart( ) override;
-    void HandleStateExit( )  override;
-    bool HandlePairingState( ProductAccessoryPairing pairingStatus ) override;
-    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )  override;
-    bool HandleAudioPathDeselect( )                                  override;
-    bool HandleNowSelectionInfo( const SoundTouchInterface::NowSelectionInfo& nowSelectionInfo ) override;
-
-private:
-
-
-    // When switching between selected and deselcted pairing states we do not want to stop
-    // This flag is used to signal that we should not send stop event and is cleared on exit
-    bool m_stopPairingOnExit;
+    bool HandlePairingStatus( ProductAccessoryPairing pairingStatus )      override;
+    bool HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )  override;
+    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )    override;
+    bool HandleIntentPowerToggle( )                                        override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
