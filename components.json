@@ -137,15 +137,15 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/master/0.5.0-742+34be654"
+    "selected_version": "Release/master/0.5.0-753+9c2bc0b"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/master/0.5.0-742+34be654"
+    "selected_version": "Release/master/0.5.0-753+9c2bc0b"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@914b614c5ec674c7e7c2652383e9ca24e0d47645"
+    "selected_version": "master@8d3b84516b2c7e635392e4e5f81f6c3d464d0f61"
   },
   {
     "name": "ProductUIAssets",
