@@ -4,3 +4,4 @@ CastleTestUtils>=0.1.7
 
 pytest-testrail>=1.1.3
 recordclass==0.5
+pytz==2018.4
