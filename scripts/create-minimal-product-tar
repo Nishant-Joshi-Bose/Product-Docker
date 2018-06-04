@@ -80,7 +80,6 @@ output_dir=$wspace/builds/$cfg
 opt_dir=$stage/Bose
 mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" "$opt_dir/etc/chimes" || exit
 
-
 rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 
 components record "$stage" || exit
@@ -92,10 +91,7 @@ echo "0.1.0" > $version_files_dir/version.txt
 gen-version-files $version_files_dir/version.txt $opt_dir/etc
 rm $version_files_dir/version.txt
 
-
 cp "$wspace/builds/$cfg/qc8017_32/bin"/*[!~] "$opt_dir/bin" || exit
-#todo Eddie and PlatformReset
-#cp "$wspace/builds/$cfg/qc8017_32/bin"/PtsServer "$opt_dir/bin" || exit
 
 # ----------------------------------------------------------------------------
 # Legacy SoundTouch-SDK stuff.  This will all go away soon.
@@ -123,8 +119,9 @@ if (( \$(date +%s) < $t )); then
 fi
 EOF
 
-# Copy public keys in FS for development key. EC will take care of generation for Production 
-secure_dir=$opt_dir/etc/secure/
+# Copy public keys in FS for development key.
+# EC will take care of generation for production.
+secure_dir=$opt_dir/etc/secure
 if [ -e "$secure_dir" ]; then
     chmod -R 755 "$secure_dir" || exit
 fi
@@ -138,9 +135,6 @@ find "$secure_dir" -type f -exec chmod 440 {} \; || exit
 # On exit, make this dir writeable again to avoid spurious error messages
 # from `make clean` and such.
 trap 'chmod -R +w "$secure_dir"' EXIT
-
-
-#cp "$audiopath_dir/bin/eddie/libDspPlayback.so" "$opt_dir/bin" || exit
 
 # ----------------------------------------------------------------------------
 # Allow components to add to the staging area.
@@ -196,8 +190,5 @@ cd  || exit
 minimal_tar=$destination/"Bose_minimal.tar.gz"
 cd "$stage" || exit
 tar --owner=0 --group=0 -czf $minimal_tar Bose/ || exit
-
-# Removing minimal stage directory
-rm -rf "$stage"
 
 echo "Created $minimal_tar"
