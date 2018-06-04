@@ -180,15 +180,15 @@ mkdir -p "$audiopath_dir/ginger-cheevers/lib"
 
 
 #copy Vfe binary only
-"$audiopath64_dir/stage" "$opt_dir" --only-vfe-binary --only-vfe --product=professor || exit
+"$audiopath64_dir/stage" "$opt_dir" --only-vfe-binary --product=professor || exit
 
 mkdir -p "$opt_dir/bin/professor" || exit
 mkdir -p "$opt_dir/etc/professor" || exit
-"$audiopath64_dir/stage" "$opt_dir" --stage-vfe --only-vfe --product=professor || exit
+"$audiopath64_dir/stage" "$opt_dir" --stage-vfe --product=professor || exit
 
 mkdir -p "$opt_dir/bin/ginger-cheevers" || exit
 mkdir -p "$opt_dir/etc/ginger-cheevers" || exit
-"$audiopath64_dir/stage" "$opt_dir" --stage-vfe --only-vfe --product=ginger-cheevers || exit
+"$audiopath64_dir/stage" "$opt_dir" --stage-vfe --product=ginger-cheevers || exit
 
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlesass_dir/stage" "$opt_dir" || exit
