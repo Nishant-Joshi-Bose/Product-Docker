@@ -21,6 +21,7 @@
 #include "AutoLpmServiceMessages.pb.h"
 #include "ProductEndpointDefines.h"
 #include "ProductDataCollectionDefines.h"
+#include "ProductSTS.pb.h"
 
 namespace ProductApp
 {
@@ -117,6 +118,8 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
     BOSE_DEBUG( s_logger, __func__ );
     BOSE_DEBUG( s_logger, "GetMainStreamAudioSettingsCallback - contentItem = %s", contentItem.c_str() );
 
+    using namespace ProductSTS;
+
     // Parse contentItem string received from APProduct
     bool error = false;
     SoundTouchInterface::ContentItem contentItemProto;
@@ -138,7 +141,7 @@ void CustomProductAudioService::GetMainStreamAudioSettingsCallback( std::string 
         m_AudioSettingsMgr->UpdateContentItem( contentItemProto );
         FetchLatestAudioSettings();
         // Update input route
-        if( contentItemProto.source() == "PRODUCT" )
+        if( contentItemProto.source() == ProductSourceSlot_Name( PRODUCT ) )
         {
             m_InputRoute = ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_OPTICAL ) |
                            ( 1 << AUDIO_INPUT_BIT_POSITION_SPDIF_ARC ) |
@@ -220,6 +223,7 @@ void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCo
     }
 
     streamConfig.mutable_audiosettings()->CopyFrom( audioSettingsProto );
+    BOSE_DEBUG( s_logger, "streamConfig.audioSettings = %s", streamConfig.audiosettings().DebugString().c_str() );
 
     if( serializedInputRoute.empty() )
     {
@@ -229,7 +233,9 @@ void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCo
     {
         streamConfig.set_inputroute( std::stoi( serializedInputRoute ) );
     }
+    BOSE_DEBUG( s_logger, "streamConfig.inputRoute = %d", streamConfig.inputroute() );
 
+    uint32_t channel = 0;
     for( auto& itr : channelParams )
     {
         LpmServiceMessages::ChannelMix_t* channelMix;
@@ -238,7 +244,10 @@ void CustomProductAudioService::SetStreamConfigCallback( std::vector<APProductCo
         channelMix->set_usermute( itr.m_userMuted );
         channelMix->set_location( static_cast<LpmServiceMessages::PresentationLocation_t>( itr.m_presentationLocation ) );
         channelMix->set_intent( static_cast<LpmServiceMessages::StreamIntent_t>( itr.m_streamIntent ) );
+        BOSE_DEBUG( s_logger, "streamConfig.channelMix[%d] = %s", channel, channelMix->DebugString().c_str() );
+        channel++;
     }
+
     m_ProductLpmHardwareInterface->SetStreamConfig( streamConfig, cb );
 }
 
@@ -304,6 +313,20 @@ void CustomProductAudioService::SetThermalMonitorEnabled( bool enabled )
     {
         m_ThermalTask->Stop();
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name   CustomProductAudioService::SetAiqInstalled
+///
+/// @param  bool installed
+///
+/// @brief  Info from DSP about whether AdaptIQ EQ is available on DSP
+///
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductAudioService::SetAiqInstalled( bool installed )
+{
+    m_AudioSettingsMgr->UpdateEqSelectSupportedMode( "EQ_AIQ_A", installed );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

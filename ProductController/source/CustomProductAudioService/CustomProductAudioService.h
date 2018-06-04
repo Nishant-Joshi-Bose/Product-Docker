@@ -24,6 +24,7 @@ public:
                                const FrontDoorClientIF_t& frontDoorClient,
                                LpmClientIF::LpmClientPtr lpmClient );
     void SetThermalMonitorEnabled( bool enabled );
+    void SetAiqInstalled( bool installed );
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     /// m_MainStreamAudioSettings is the structure holding information that APProduct would like to know

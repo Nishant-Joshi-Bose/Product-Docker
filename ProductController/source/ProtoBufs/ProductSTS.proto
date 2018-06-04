@@ -1,12 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @file ProductSTS.proto
+/// @file      ProductSTS.proto
 ///
-/// @brief Data types used by the Product STS controller
+/// @brief     Data types used by the Product STS controller
 ///
-/// @author Yishai Sered
+/// @author    Yishai Sered
 ///
-/// Copyright 2017 Bose Corporation
+/// @attention Copyright 2018 Bose Corporation
 ///
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -16,16 +16,23 @@ package ProductSTS;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// This is the identifier used to uniquely designate a PRODUCT source
+/// This is the identifier used to uniquely designate a product source slot for STS, as well as a
+/// source and source account name for Castle content items, based on the associated enumeration
+/// string.
 ///
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 enum ProductSourceSlot
 {
-    SLOT_AIQ = 0;
-    SLOT_TV = 1;
-    SLOT_0 = 2;
-    SLOT_1 = 3;
-    SLOT_2 = 4;
-    SLOT_SETUP = 5;
-    SLOT_INVALID = 255;
+    PRODUCT = 0;
+    SETUP   = 1;
+    TV      = 2;
+    ADAPTIQ = 3;
+    PAIRING = 4;
+    SLOT_0  = 5;
+    SLOT_1  = 6;
+    SLOT_2  = 7;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                        End of File                                           ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
