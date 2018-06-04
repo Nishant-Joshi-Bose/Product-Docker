@@ -3,9 +3,6 @@
 //@brief   Interface between Eddie and DataCollection
 ///////////////////////////////////////////////////////////////////////////////
 
-///****************************************************************//
-//This Code IS TEMPORARY, Will be moving into DataCollectionService//
-//*****************************************************************//
 
 #include "DataCollectionClientInterface.h"
 #include "DataCollectionClientFactory.h"
@@ -47,16 +44,12 @@ void DataCollectionClientInterface::Subscribe()
     AsyncCallback<WebInterface::balance> DataCollectionBalanceCb( std::bind( &DataCollectionClientInterface::ProcessBalanceState,
                                                                              this, std::placeholders::_1 ) , m_dataCollectionClientInterfaceTask );
 
-    //AsyncCallback<DeviceManagerPb::ProductSettings> DataCollectionLanguageCb( std::bind( &DataCollectionClientInterface::ProcessLanguage,
-    //                                                                          this, std::placeholders::_1 ) , m_dataCollectionClientInterfaceTask );
 
     m_frontDoorClientIF->RegisterNotification<DeviceManagerPb::DeviceState>( FRONTDOOR_SYSTEM_STATE_API, DataCollectionStateCb );
 
     m_frontDoorClientIF->RegisterNotification<ProductPb::AudioBassLevel>( "/audio/bass", DataCollectionbassCb );
 
     m_frontDoorClientIF->RegisterNotification<WebInterface::balance>( "/audio/balance", DataCollectionBalanceCb );
-
-    //m_frontDoorClientIF->RegisterNotification<DeviceManagerPb::ProductSettings>( "/system/productSettings", DataCollectionLanguageCb );
 }
 
 void DataCollectionClientInterface::HandleNowPlayingRequest( const SoundTouchInterface::NowPlaying& nPb, const DeviceManagerPb::DeviceState& ds )
@@ -65,9 +58,6 @@ void DataCollectionClientInterface::HandleNowPlayingRequest( const SoundTouchInt
     auto dsPb = std::make_shared<DataCollection::SystemState>();
     SoundTouchInterface::NowPlaying* pnowPlaying = dsPb->mutable_nowplaying();
     *pnowPlaying = nPb;
-    std::string j = ProtoToMarkup::ToXML( nPb.container().contentitem(), false );
-    std::string contentItemValue = Base64Encoder::Encode( j );
-    dsPb->set_contentitem( contentItemValue );
     dsPb->set_systemstate( ds.state() );
     m_dataCollectionClient->SendData( dsPb , "system-state-changed" );
 }
@@ -107,12 +97,3 @@ void DataCollectionClientInterface::ProcessBalanceState( const WebInterface::bal
     dbalPb->set_balance( b.targetbalance().text() );
     m_dataCollectionClient->SendData( dbalPb, "balance-changed" );
 }
-#if 0 //Will remove once Language protobuf is defined in DataCollection
-void DataCollectionClientInterface::ProcessLanguage( const DeviceManagerPb::ProductSettings& psPb )
-{
-    BOSE_DEBUG( s_logger, "Language Changed Process" );
-    auto dlPb = std::make_shared<DataCollection::Language>();
-    dlPb->set_language( b.language() );
-    m_dataCollectionClient->SendData( dlPb, "language-changed" );
-}
-#endif
