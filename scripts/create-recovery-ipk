@@ -72,8 +72,9 @@ mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" || exit
 components record "$stage" || exit
 
 # copy minimal image tar to /opt/Bose
+# Todo: CASTLE-15220: This is removed for now - to reduce size of overall package
 minimal_image="Bose_minimal.tar.gz"
-cp "$wspace/builds/$cfg/$minimal_image"  "$opt_dir/" || exit
+#cp "$wspace/builds/$cfg/$minimal_image"  "$opt_dir/" || exit
 
 # copy network configured script which will be required in restore operation
 cp "$wspace/misc/isNetworkConfigured" "$opt_dir/bin/" || exit
