@@ -8,17 +8,10 @@
 #include "DataCollectionClientFactory.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
 #include "DeviceManager.pb.h"
-#include "AudioBassLevel.pb.h"
-#include "WebInterface/Balance.pb.h"
-#include "Base64Encoder.h"
 #include "DPrint.h"
 #include "APTaskFactory.h"
 #include "AsyncCallback.h"
-#include "ProtoToMarkup.h"
-#include "Balance.pb.h"
-#include "Bass.pb.h"
 #include "SystemState.pb.h"
-#include "SharedProto.pb.h"
 
 static DPrint s_logger( "DataCollectionClientInterface" );
 
@@ -38,18 +31,9 @@ void DataCollectionClientInterface::Subscribe()
     AsyncCallback<DeviceManagerPb::DeviceState> DataCollectionStateCb( std::bind( &DataCollectionClientInterface::ProcessSystemState,
                                                                                   this, std::placeholders::_1 ), m_dataCollectionClientInterfaceTask );
 
-    AsyncCallback<ProductPb::AudioBassLevel> DataCollectionbassCb( std::bind( &DataCollectionClientInterface::ProcessBassState,
-                                                                              this, std::placeholders::_1 ) , m_dataCollectionClientInterfaceTask );
-
-    AsyncCallback<WebInterface::balance> DataCollectionBalanceCb( std::bind( &DataCollectionClientInterface::ProcessBalanceState,
-                                                                             this, std::placeholders::_1 ) , m_dataCollectionClientInterfaceTask );
-
 
     m_frontDoorClientIF->RegisterNotification<DeviceManagerPb::DeviceState>( FRONTDOOR_SYSTEM_STATE_API, DataCollectionStateCb );
 
-    m_frontDoorClientIF->RegisterNotification<ProductPb::AudioBassLevel>( "/audio/bass", DataCollectionbassCb );
-
-    m_frontDoorClientIF->RegisterNotification<WebInterface::balance>( "/audio/balance", DataCollectionBalanceCb );
 }
 
 void DataCollectionClientInterface::HandleNowPlayingRequest( const SoundTouchInterface::NowPlaying& nPb, const DeviceManagerPb::DeviceState& ds )
@@ -80,20 +64,4 @@ void DataCollectionClientInterface::ProcessSystemState( const DeviceManagerPb::D
     AsyncCallback<SoundTouchInterface::NowPlaying> getNowPlayingReqCb( func, m_dataCollectionClientInterfaceTask );
     AsyncCallback<FrontDoor::Error> errorCb( errorfunc, m_dataCollectionClientInterfaceTask );
     m_frontDoorClientIF->SendGet<SoundTouchInterface::NowPlaying, FrontDoor::Error>( FRONTDOOR_CONTENT_NOWPLAYING_API , getNowPlayingReqCb, errorCb );
-}
-
-void DataCollectionClientInterface::ProcessBassState( const ProductPb::AudioBassLevel& adl )
-{
-    BOSE_DEBUG( s_logger, "Bass Changed Process" );
-    auto dbPb = std::make_shared<DataCollection::Bass>();
-    dbPb->set_bass( adl.value() );
-    m_dataCollectionClient->SendData( dbPb , "bass-changed" );
-}
-
-void DataCollectionClientInterface::ProcessBalanceState( const WebInterface::balance& b )
-{
-    BOSE_DEBUG( s_logger, "Balance Changed Process" );
-    auto dbalPb = std::make_shared<DataCollection::Balance>();
-    dbalPb->set_balance( b.targetbalance().text() );
-    m_dataCollectionClient->SendData( dbalPb, "balance-changed" );
 }
