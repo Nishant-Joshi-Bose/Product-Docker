@@ -102,6 +102,7 @@
 #include "ProductEndpointDefines.h"
 #include "ProtoPersistenceFactory.h"
 #include "PGCErrorCodes.h"
+#include "SystemUtils.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -109,12 +110,19 @@
 namespace ProductApp
 {
 
+namespace
+{
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 ///            Constant Definitions
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-constexpr uint32_t PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
+constexpr uint32_t  PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
+constexpr int32_t   VOLUME_MIN_THRESHOLD = 10;
+constexpr int32_t   VOLUME_MAX_THRESHOLD = 70;
+constexpr int32_t   VOLUME_ON_BOOT_VALUE = 26;
+constexpr auto      g_DefaultVolumeThresholdsStateFile  = "DefaultVolumeThresholdsDone";
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -815,43 +823,34 @@ bool ProfessorProductController::IsBLERemoteConnected( ) const
 ///
 /// @name   ProfessorProductController::GetDesiredPlayingVolume
 ///
-/// @return int32_t the desired volume level
+/// @return std::pair<bool, int32_t> whether a volume change is desired, and the desired volume level
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-int32_t ProfessorProductController::GetDesiredPlayingVolume( )
+std::pair<bool, int32_t> ProfessorProductController::GetDesiredPlayingVolume( ) const
 {
-    constexpr int32_t VOLUME_MIN_THRESHOLD = 10;
-    constexpr int32_t VOLUME_MAX_THRESHOLD = 70;
-    constexpr int32_t VOLUME_ON_BOOT_VALUE = 26;
+    BOSE_INFO( s_logger, "%s m_cachedVolume = {%s}", __func__, m_cachedVolume.DebugString( ).c_str( ) );
 
     int32_t desiredVolume = VOLUME_ON_BOOT_VALUE; // assume this is the initial after-boot query
-    static bool doOnce = true;
-    if( doOnce )
+    bool changeDesired = true;
+
+    if( m_cachedVolume.has_value() )
     {
-        doOnce = false;
-    }
-    else
-    {
-        if( m_cachedVolume.has_value() )
+        // vet against the threshold values
+        if( m_cachedVolume.value( ) < m_cachedVolume.min( ) )
         {
-            // vet against the threshold values
-            if( m_cachedVolume.value( ) < VOLUME_MIN_THRESHOLD )
-            {
-                desiredVolume = VOLUME_MIN_THRESHOLD;
-            }
-            else if( m_cachedVolume.value( ) > VOLUME_MAX_THRESHOLD )
-            {
-                desiredVolume = VOLUME_MAX_THRESHOLD;
-            }
-            else
-            {
-                desiredVolume = m_cachedVolume.value( );
-            }
+            desiredVolume = m_cachedVolume.min( );
+        }
+        else if( m_cachedVolume.value( ) > m_cachedVolume.max( ) )
+        {
+            desiredVolume = m_cachedVolume.max( );
+        }
+        else
+        {
+            changeDesired = false;
         }
     }
 
-    BOSE_DEBUG( s_logger, "%s returning %d", __func__, desiredVolume );
-    return desiredVolume;
+    return { changeDesired, desiredVolume };
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -964,7 +963,7 @@ void ProfessorProductController::HandleUiHeartBeat(
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::HandleAudioVolumeNotification( const SoundTouchInterface::volume& volume )
 {
-    BOSE_INFO( s_logger, "%s received %s: %s", __func__, FRONTDOOR_AUDIO_VOLUME, ProtoToMarkup::ToJson( volume ).c_str() );
+    BOSE_INFO( s_logger, "%s received: %s", __func__, ProtoToMarkup::ToJson( volume ).c_str() );
 
     m_cachedVolume = volume;
     m_ProductCecHelper->HandleFrontDoorVolume( volume );
@@ -1043,7 +1042,7 @@ void ProfessorProductController::RegisterFrontDoorEndPoints( )
 
         //Audio volume notification registration
         m_FrontDoorClientIF->RegisterNotification< SoundTouchInterface::volume >(
-            FRONTDOOR_AUDIO_VOLUME,
+            FRONTDOOR_AUDIO_VOLUME_API,
             audioVolumeCb );
     }
 }
@@ -1385,6 +1384,31 @@ void ProfessorProductController::SendInitialCapsData()
         message,
         { },
         m_errorCb );
+
+    SoundTouchInterface::volume desiredVolume;
+    desiredVolume.set_value( VOLUME_ON_BOOT_VALUE );
+
+    std::string DefaultVolumeThresholdsDoneFile{ g_PersistenceRootDir };
+    DefaultVolumeThresholdsDoneFile += g_ProductPersistenceDir;
+    DefaultVolumeThresholdsDoneFile += g_DefaultVolumeThresholdsStateFile;
+    const bool defaultVolumeThresholdsDone = SystemUtils::Exists( DefaultVolumeThresholdsDoneFile );
+    if( !defaultVolumeThresholdsDone )
+    {
+        // Set the thresholds only once, after factory default
+        if( ! SystemUtils::WriteFile( "", DefaultVolumeThresholdsDoneFile ) )
+        {
+            BOSE_CRITICAL( s_logger, "File write to %s Failed", DefaultVolumeThresholdsDoneFile.c_str( ) );
+        }
+        desiredVolume.set_min( VOLUME_MIN_THRESHOLD );
+        desiredVolume.set_max( VOLUME_MAX_THRESHOLD );
+    }
+    GetFrontDoorClient()->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
+        FRONTDOOR_AUDIO_VOLUME_API,
+        desiredVolume,
+        { },
+        m_errorCb );
+    BOSE_INFO( s_logger, "DefaultVolumeThresholdsDoneFile did %sexist, sent %s",
+               defaultVolumeThresholdsDone ? "" : "not ", desiredVolume.DebugString( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

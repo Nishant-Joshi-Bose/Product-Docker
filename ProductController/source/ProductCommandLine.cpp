@@ -237,7 +237,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 
             BOSE_VERBOSE( s_logger, "Setting FrontDoor volume to %d", pbVolume.value( ) );
             m_ProductController.GetFrontDoorClient( )->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
-                FRONTDOOR_AUDIO_VOLUME, pbVolume, respFunc, errCb );
+                FRONTDOOR_AUDIO_VOLUME_API, pbVolume, respFunc, errCb );
         }
         else
         {
@@ -300,7 +300,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
 
         BOSE_VERBOSE( s_logger, "Setting FrontDoor mute to %d", pbVolume.muted( ) );
         m_ProductController.GetFrontDoorClient( )->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
-            FRONTDOOR_AUDIO_VOLUME, pbVolume, respFunc, errCb );
+            FRONTDOOR_AUDIO_VOLUME_API, pbVolume, respFunc, errCb );
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /// This command tests changing the audio source on the device.

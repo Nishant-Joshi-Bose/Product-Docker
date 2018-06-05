@@ -80,10 +80,14 @@ void CustomProductControllerStatePlaying::HandleStateEnter( )
     GetCustomProductController( ).GetDspHelper( )->SetNormalOperationsMonitor( true );
     GetCustomProductController( ).GetBLERemoteManager( )->PowerOn( );
 
-    SoundTouchInterface::volume v;
-    v.set_value( GetCustomProductController( ).GetDesiredPlayingVolume( ) );
-    GetCustomProductController( ).GetFrontDoorClient( )->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
-        FRONTDOOR_AUDIO_VOLUME, v, {}, FrontDoorErrorCallback );
+    auto desiredPlayingVolumePair = GetCustomProductController( ).GetDesiredPlayingVolume( );
+    if( desiredPlayingVolumePair.first )
+    {
+        SoundTouchInterface::volume v;
+        v.set_value( desiredPlayingVolumePair.second );
+        GetCustomProductController( ).GetFrontDoorClient( )->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
+            FRONTDOOR_AUDIO_VOLUME_API, v, {}, FrontDoorErrorCallback );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

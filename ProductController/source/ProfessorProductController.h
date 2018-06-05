@@ -252,7 +252,7 @@ public:
     ///        when entering the PLAYING state
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    int32_t GetDesiredPlayingVolume( );
+    std::pair<bool, int32_t> GetDesiredPlayingVolume( ) const;
 
 private:
 

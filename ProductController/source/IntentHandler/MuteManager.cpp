@@ -81,7 +81,7 @@ void MuteManager::Initialize( )
     };
 
     m_NotifierCallback = m_FrontDoorClient->RegisterNotification< SoundTouchInterface::volume >
-                         ( FRONTDOOR_AUDIO_VOLUME, fNotify );
+                         ( FRONTDOOR_AUDIO_VOLUME_API, fNotify );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -179,7 +179,7 @@ void MuteManager::ToggleMute( )
 
     BOSE_VERBOSE( s_logger, "Toggling FrontDoor mute" );
     m_FrontDoorClient->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
-        FRONTDOOR_AUDIO_VOLUME, pbVolume, respFunc, errCb );
+        FRONTDOOR_AUDIO_VOLUME_API, pbVolume, respFunc, errCb );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
