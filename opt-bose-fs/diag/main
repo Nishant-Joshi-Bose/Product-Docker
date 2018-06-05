@@ -91,7 +91,8 @@ print """
 <li>Tests
 <div class="box">
 <a href="/diag/display">Display</a><br>
-<a href="/diag/microphone">Microphones</a>
+<a href="/diag/microphone">Microphones</a><br>
+<a href="/diag/wifi">Wi-Fi</a>
 </div>
 """
 
