@@ -146,6 +146,11 @@ ProfessorProductController::ProfessorProductController( ) :
     m_Running( false ),
 
     ///
+    /// Initialization of STS contorller.
+    ///
+    m_ProductSTSController( *this ),
+
+    ///
     /// Intent Handler Initialization
     ///
     m_IntentHandler( *GetTask(),
@@ -1005,7 +1010,7 @@ NetManager::Protobuf::OperationalMode ProfessorProductController::GetWiFiOperati
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::HandleMessage( const ProductMessage& message )
 {
-    BOSE_DEBUG( s_logger, "----------- Product Controller Message Handler -------------" );
+    BOSE_INFO( s_logger, "%s received %s", __func__, message.DebugString().c_str() );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// STS slot selected data is handled at this point.
@@ -1059,10 +1064,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
                 m_radioStatus.CopyFrom( radioStatus );
                 m_ProductLpmHardwareInterface->SendWiFiRadioStatus( m_radioStatus );
             }
-
-            BOSE_DEBUG( s_logger, "A wireless network message was received with frequency %d kHz.",
-                        message.wirelessstatus( ).has_frequencykhz( ) ?
-                        message.wirelessstatus( ).frequencykhz( ) : 0 );
         }
         else
         {
@@ -1083,9 +1084,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             BOSE_ERROR( s_logger, "An invalid autowake status message was received." );
             return;
         }
-
-        BOSE_DEBUG( s_logger, "An autowake status %s message has been received.",
-                    m_IsAutoWakeEnabled ? "active" : "inactive" );
 
         NotifyFrontdoorAndStoreOpticalAutoWakeSetting( );
 
@@ -1172,7 +1170,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_cecmode( ) )
     {
-        BOSE_DEBUG( s_logger, "CECMODE set to %d",  message.cecmode( ).cecmode( ) );
         m_ProductLpmHardwareInterface->SetCecMode( message.cecmode( ).cecmode( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////

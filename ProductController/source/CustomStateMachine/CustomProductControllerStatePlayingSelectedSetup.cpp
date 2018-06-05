@@ -16,6 +16,7 @@
 #include "CustomProductControllerStatePlayingSelectedSetup.h"
 #include "ProductControllerStates.h"
 #include "ProfessorProductController.h"
+#include "ProductBLERemoteManager.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -67,6 +68,7 @@ void CustomProductControllerStatePlayingSelectedSetup::HandleStateEnter()
     ProductControllerStatePlayingSelectedSetup::HandleStateEnter();
 
     GetCustomProductController().PossiblyPairBLERemote();
+    GetCustomProductController( ).GetBLERemoteManager( )->EnterSetup( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,6 +83,7 @@ void CustomProductControllerStatePlayingSelectedSetup::HandleStateExit()
     GetCustomProductController().StopPairingBLERemote();
 
     ProductControllerStatePlayingSelectedSetup::HandleStateExit();
+    GetCustomProductController( ).GetBLERemoteManager( )->ExitSetup( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@afa6cc75346d26e4ee37806ee312469001eebfdb"
+    "selected_version": "master@0e8072f247db7ec5584ed1b9a3c6bf9623e7c725"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -25,7 +25,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.1.42555.2844402"
+    "selected_version": "Release/Castle-Fork/1.5.2.42564.2844889"
   },
   {
     "name": "BLERemoteXCVR",
@@ -141,7 +141,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/master/0.4.7-305+12fcba0"
+    "selected_version": "Release/master/0.4.8-321+3578582"
   },
   {
     "name": "opensource-jsoncpp-native",
@@ -161,7 +161,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@a4ebda26d4fe367dd33d31a2f9f156a12096019c"
+    "selected_version": "master@914b614c5ec674c7e7c2652383e9ca24e0d47645"
   },
   {
     "name": "ProductUIAssets",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.1.42555.2844402"
+    "selected_version": "Release/Castle-Fork/1.5.2.42564.2844889"
   },
   {
     "name": "SystemEventService-qc8017_32",

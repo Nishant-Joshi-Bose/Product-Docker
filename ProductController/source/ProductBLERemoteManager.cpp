@@ -381,7 +381,7 @@ bool ProductBLERemoteManager::GetSourceLED(
 
     visible = false;
 
-    if( !m_ProductController.ProductHasBeenSetUp() )
+    if( m_inSetup )
     {
         sourceLED = LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE;
         return true;

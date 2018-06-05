@@ -39,9 +39,9 @@ using namespace ProductPb;
 
 namespace
 {
-const std::string s_ModeOn         = "On";
-const std::string s_ModeOff        = "Off";
-const std::string s_ModeAltOn      = "AltOn";
+const std::string s_ModeOn         = "ON";
+const std::string s_ModeOff        = "OFF";
+const std::string s_ModeAltOn      = "ALTERNATE_ON";
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
