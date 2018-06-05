@@ -1,11 +1,11 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-01_0911"
+    "selected_version": "Release/Castle-Fork/1.5.3-21109"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Continuous/Castle-Fork/2018-06-01_0911"
+    "selected_version": "Release/Castle-Fork/1.5.3-21109"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-04_1226"
+    "selected_version": "Continuous/Castle-Fork/2018-06-05_1057"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -33,7 +33,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/1.0.2-404+7846d4e"
+    "selected_version": "Release/master/1.0.3-432+fa73fce"
   },
   {
     "name": "BoseOPKG-native",
@@ -181,7 +181,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/master/1.0.0-336+e4d6d3f"
+    "selected_version": "Release/master/1.0.1-355+b863730"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -193,7 +193,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-04_1226"
+    "selected_version": "Continuous/Castle-Fork/2018-06-05_1057"
   },
   {
     "name": "SystemEventService-qc8017_32",
