@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-05_1057"
+    "selected_version": "Continuous/Castle-Fork/2018-06-05_1146"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -77,7 +77,7 @@
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Release/master/1.0.4-71+9783e08"
+    "selected_version": "Release/master/1.0.4-74+dc900ef"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -105,27 +105,27 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.4.2-170+96e2cba"
+    "selected_version": "Release/master/1.5.1-181+226eef5"
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/0.4.2-68+06a626d"
+    "selected_version": "Release/master/1.5.0-79+12cb55b"
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.4.3-99+35dd976"
+    "selected_version": "Release/master/1.5.1-104+11170b1"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/1.0.4-98+d070cb4"
+    "selected_version": "Release/master/1.0.5-102+88e4a41"
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/master/1.0.1-130+2fa59c5"
+    "selected_version": "Release/master/1.5.0-136+ef227b4"
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/master/0.4.8-321+3578582"
+    "selected_version": "Release/master/1.5.1-324+3533270"
   },
   {
     "name": "opensource-jsoncpp-native",
@@ -185,7 +185,7 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/1.0.1-86+7eae239"
+    "selected_version": "Release/master/1.5.1-90+2e7a604"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
@@ -193,11 +193,11 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-05_1057"
+    "selected_version": "Continuous/Castle-Fork/2018-06-05_1146"
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.4.2-48+c373ed2"
+    "selected_version": "Release/master/0.5.1-54+5a0a54e"
   },
   {
     "name": "TestUtils",
