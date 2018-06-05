@@ -32,15 +32,19 @@ function device_toggle {
 function do_p2p {
     log info "Switching to USB p2p mode"
 
-    device_toggle rndis0 usb2
-    ip addr add 203.0.113.1/30 dev usb2
+    mkdir /run/udev/rules.d
+    cp /opt/Bose/etc/udev/rules.d/unlock-rndis1.rules /run/udev/rules.d
+    udevadm control --reload
+
+    device_toggle rndis0 rndis1
+    ip addr add 203.0.113.1/30 dev rndis1
 
     cat > "$CONF_FILE" <<-EOF
 	start 203.0.113.2
 	end   203.0.113.2
-	interface usb2
+	interface rndis1
 	lease_file /dev/null
-	pidfile /var/run/udhcpd.usb2.pid
+	pidfile /var/run/udhcpd.rndis1.pid
 	option subnet 255.255.255.0
 	option router 203.0.113.1
 	option dns 203.0.113.1
@@ -55,7 +59,7 @@ function do_client {
     log info "Switching to USB client mode"
     killwait dnsmasq 2> /dev/null
 
-    device_toggle usb2 rndis0
+    device_toggle rndis1 rndis0
 }
 
 stop_udhcpd_usb
