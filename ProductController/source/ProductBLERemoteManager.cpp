@@ -421,35 +421,24 @@ bool ProductBLERemoteManager::GetSourceLED(
         }
         else if( ( sourceAccountName.compare( 0, 4, ProductSourceSlot_Name( SLOT_0 ), 0, 4 ) == 0 ) and sourceItem->has_details() )
         {
-            const auto& sourceDetailsDevicetype = sourceItem->details().devicetype();
-            BOSE_INFO( s_logger, "update nowSelection %s", sourceDetailsDevicetype.c_str() );
+            const auto& sourceDetailsActivationKey = sourceItem->details().activationkey();
+            BOSE_INFO( s_logger, "update nowSelection %s", sourceDetailsActivationKey.c_str() );
 
-            if( sourceDetailsDevicetype.compare( DEVICE_TYPE__Name( DEVICE_TYPE_GAME ) ) == 0 )
+            if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_GAME ) ) == 0 )
             {
                 sourceLED = LedsSourceTypeMsg_t::GAME;
             }
-            else if( sourceDetailsDevicetype.compare( DEVICE_TYPE__Name( DEVICE_TYPE_CBL_SAT ) ) == 0 )
+            else if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_CBL_SAT ) ) == 0 )
             {
                 sourceLED = LedsSourceTypeMsg_t::SET_TOP_BOX;
             }
-            else if( sourceDetailsDevicetype.compare( DEVICE_TYPE__Name( DEVICE_TYPE_BD_DVD ) ) == 0 )
+            else if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_BD_DVD ) ) == 0 )
             {
                 sourceLED = LedsSourceTypeMsg_t::DVD;
             }
-            else if( ( sourceDetailsDevicetype.compare( DEVICE_TYPE__Name( DEVICE_TYPE_TV ) ) == 0 ) or
-                     ( sourceDetailsDevicetype.compare( DEVICE_TYPE__Name( DEVICE_TYPE_SMART_TV ) ) == 0 ) )
-            {
-                sourceLED = LedsSourceTypeMsg_t::TV;
-            }
-            else if( sourceDetailsDevicetype.compare( DEVICE_TYPE__Name( DEVICE_TYPE_STREAMING ) ) == 0 )
-            {
-                // per Brian White, GAME is probably the most sensible choice here
-                // I'm leaving this as an independent case from GAME above in case we change our minds
-                sourceLED = LedsSourceTypeMsg_t::GAME;
-            }
             else
             {
-                BOSE_ERROR( s_logger, "%s product source with unknown device type %s", __func__, sourceDetailsDevicetype.c_str() );
+                BOSE_ERROR( s_logger, "%s product source with unknown activation key %s", __func__, sourceDetailsActivationKey.c_str() );
             }
         }
         else
