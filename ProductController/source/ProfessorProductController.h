@@ -273,6 +273,8 @@ private:
     bool m_IsAutoWakeEnabled;
     bool m_Running;
 
+    NetManager::Protobuf::OperationalMode m_networkOperationalMode;
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following member variable is used to cache the radio status as to not spam

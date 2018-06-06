@@ -144,6 +144,7 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     m_IsAutoWakeEnabled( false ),
     m_Running( false ),
+    m_networkOperationalMode( NetManager::Protobuf::wifiOff ),
 
     ///
     /// Initialization of STS contorller.
@@ -1069,6 +1070,30 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
         {
             BOSE_ERROR( s_logger, "A wireless network message was received with an unknown frequency." );
         }
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// Handle network operationalmode at this point
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.networkstatus().has_operationalmode() )
+    {
+        if( m_networkOperationalMode != message.networkstatus().operationalmode() )
+        {
+            // If we are currently in wifi setup and are exiting to another mode
+            // unmute the amp
+            //   - SetAmp( bool on, bool muted )
+            if( m_networkOperationalMode == NetManager::Protobuf::wifiSetup )
+            {
+                GetLpmHardwareInterface()->SetAmp( true, false );
+            }
+            // Entering ap setup we need to mute due to electrical interference with audio clocks
+            else if( message.networkstatus().operationalmode() == NetManager::Protobuf::wifiSetup )
+            {
+                GetLpmHardwareInterface()->SetAmp( true, true );
+            }
+
+            m_networkOperationalMode = static_cast<NetManager::Protobuf::OperationalMode>( message.networkstatus().operationalmode() );
+        }
+        ( void ) HandleCommonProductMessage( message );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Autowake messages are handled at this point.
