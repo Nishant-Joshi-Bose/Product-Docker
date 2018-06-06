@@ -39,18 +39,24 @@ class DiagnosticsPage(SeleniumWrapper):
     """
     expected_page_header = CONFIG["expected_text"]["main_header"]
     expected_software_header = CONFIG["expected_text"]["software_version_text"]
+    expected_lpm_header = CONFIG["expected_text"]["lpm_version_text"]
     expected_page_title = CONFIG["expected_text"]["diagnostics_page_title"]
     diagnostics_diag = CONFIG["diagnostics_diag"]
     mfg_data_command = CONFIG["mfg_data_command"]
     fs_version_command = CONFIG["fs_version_command"]
-    expected_usb_ip = CONFIG["expected_text"]["usb_ip_address"]
+    lpm_version_command = CONFIG["lpm_version_command"]
+    expected_rndis_ip = CONFIG["expected_text"]["rndis1_ip_address"]
     # locators
     manufacturing_data_locator = CONFIG["locator"]["manufacturing_data_locator"]
     partial_link_locator = CONFIG["locator"]["partial_link_locator"]
     mfg_data_all = CONFIG["locator"]["manufacturing_data_all"]
     software_version_header = CONFIG["locator"]["software_version_header"]
-    table_locator = CONFIG["locator"]["table_locator"]
+    lpm_version_header = CONFIG["locator"]["lpm_version_header"]
+    mfg_data_locator = CONFIG["locator"]["mfg_data_locator"]
+    lpm_versions_locator = CONFIG["locator"]["lpm_versions_locator"]
     diagnostics_header = CONFIG["locator"]["diagnostics_header"]
+    display_link_element = CONFIG["locator"]["display_link_element"]
+    done_button = CONFIG["locator"]["done_button"]
     left_display_test = CONFIG["locator"]["left_display_test"]
     network_interface_list_command = CONFIG["network_interfaces_list_cmd"]
 
@@ -80,19 +86,19 @@ class DiagnosticsPage(SeleniumWrapper):
         keypress.key_press_only(tap, pts_combo_keys, async_response=True)
 
 
-    def usb_ip_address(self, device_id, request):
+    def rndis1_ip_address(self, device_id, request):
         """
-        This fixture gets the device USB IP
+        This fixture gets the device rndis1 IP
         param: device_id - Fixture to get device id from command line
-        :return: device usb ip
+        :return: device rndis1 ip
         """
-        usb_device_ip = None
-        self.logger.info("usb_ip_address")
+        rndis_interface_ip = None
+        self.logger.info("rndis1_ip_address")
         if request.config.getoption("--target").lower() == 'device':
             network_base = NetworkBase(None, device_id)
-            usb_interface = request.config.getoption("--usb-iface")
-            usb_device_ip = network_base.check_inf_presence(usb_interface)
-        return usb_device_ip
+            rndis_interface = request.config.getoption("--pts-iface")
+            rndis_interface_ip = network_base.check_inf_presence(rndis_interface)
+        return rndis_interface_ip
 
     def system_reboot(self, device_ip):
         """
@@ -107,8 +113,8 @@ class DiagnosticsPage(SeleniumWrapper):
 
     def navigate_diagnostics_page(self, device_ip, device_id, request):
         """
-        This function will reboots system and puts Eddie into PTS mode and fetches usb2 IP address
-        Navigate to the Diagnostics Page URL page using usb2 IP address
+        This function will reboots system and puts Eddie into PTS mode and fetches rndis1 IP address
+        Navigate to the Diagnostics Page URL page using rndis1 IP address
         param: device_ip - Fixture to get device ip from device id
         param: device_id - Fixture to get device id from command line
         return: None
@@ -121,14 +127,14 @@ class DiagnosticsPage(SeleniumWrapper):
         self.pts_mode_keypress(device_ip)
         time.sleep(5)
         network_base = NetworkBase(None, device_id)
-        usb_interface = request.config.getoption("--usb-iface")
-        usb_ip_address = network_base.check_inf_presence(usb_interface)
-        assert usb_ip_address == self.expected_usb_ip, \
-                     'USB IP did not match. Found {}, expected {}'.format(usb_ip_address, self.expected_usb_ip)
-        self.logger.info(usb_ip_address)
+        rndis_interface = request.config.getoption("--pts-iface")
+        rndis1_ip_address = network_base.check_inf_presence(rndis_interface)
+        assert rndis1_ip_address == self.expected_rndis_ip, \
+                     'rndis IP did not match. Found {}, expected {}'.format(rndis1_ip_address, self.expected_rndis_ip)
+        self.logger.info(rndis1_ip_address)
 
         # Navigate to the URL
-        base_url = "http://" + usb_ip_address + ":" + "/" + str(self.diagnostics_diag)
+        base_url = "http://" + rndis1_ip_address + ":" + "/" + str(self.diagnostics_diag)
         driver.get(base_url)
 
 
@@ -178,6 +184,25 @@ class DiagnosticsPage(SeleniumWrapper):
         self.logger.info("Software version Build matches as expected - %s / %s", software_version_build, software_version_dut["long"])
         return software_version_header, software_version_build
 
+    def diagnostics_lpm_versions(self):
+        """
+        Will attempt to get the LPM version information from the page and return a
+        dictionary with its values.
+        """
+        lpm_version_raw = self.getElement(self.lpm_version_header, locatorType="css")
+        lpm_version_data = lpm_version_raw.text.splitlines()
+        result = dict()
+        for components in lpm_version_data:
+            if ':' not in repr(components):
+                lpm_version_data.remove(components)
+        for elements in range(len(lpm_version_data)):
+            value = lpm_version_data[elements]
+            index = value.find(":")
+            lpm_version_header = value[:index].strip()
+            lpm_version = value[index+1:].strip()
+            result[lpm_version_header] = lpm_version
+        return result
+
 
     def get_display_tests(self):
         """
@@ -186,6 +211,8 @@ class DiagnosticsPage(SeleniumWrapper):
         return: None
         """
         self.logger.info("get_display_tests")
+        # Get the display link element
+        self.getElement(self.display_link_element, locatorType="linktext").click()
         self.dev_logger.start_log_collection(self.file_name, path=self.dir_name)
         time.sleep(5)
         elements = self.getElements(self.left_display_test, locatorType="css")
@@ -211,6 +238,8 @@ class DiagnosticsPage(SeleniumWrapper):
         for item in os.listdir(self.dir_name):
             if item.endswith(".txt"):
                 os.remove(os.path.join(self.dir_name, item))
+        # Click the Done button
+        self.driver.find_element_by_tag_name("button").click()
 
 
     def get_manufacturing_data(self):
@@ -221,7 +250,7 @@ class DiagnosticsPage(SeleniumWrapper):
         """
         self.logger.info("get_manufacturing_data")
         mfg_data_dut = json.loads(self.adb.executeCommand(self.mfg_data_command))
-        html_data = self.getElement(self.table_locator, locatorType="css").get_attribute('innerHTML')
+        html_data = self.getElement(self.mfg_data_locator, locatorType="css").get_attribute('innerHTML')
         # Partial Manufacturing data displayed on the page
         mfg_partial_data = dict([[cell.text for cell in row("td")] for row in BeautifulSoup(html_data)("tr")])
         self.logger.info("Manufacturing Partial Data on the page are %s / %s", mfg_partial_data["productType"], mfg_data_dut["productType"])
@@ -241,7 +270,7 @@ class DiagnosticsPage(SeleniumWrapper):
     def reboot_check_interface(self, device_ip):
         """
         This function will reboot DUT and resets PTS mode.
-        Confirms usb2 interface in network interface list
+        Confirms rndis1 interface in network interface list
         param: device_ip - Fixture to get device ip from device id
         return: none
         """
@@ -250,4 +279,4 @@ class DiagnosticsPage(SeleniumWrapper):
         output = self.adb.executeCommand(self.network_interface_list_command)
         network_list = output.strip().replace('\r', '').split('\n')
         self.logger.info(network_list)
-        assert 'usb2' not in network_list, "usb2 interface in the list"
+        assert 'rndis1' not in network_list, "rndis1 interface in the list"

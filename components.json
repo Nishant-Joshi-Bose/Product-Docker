@@ -1,11 +1,11 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork-SOP/1.0.2-21048"
+    "selected_version": "Release/Castle-Fork/1.5.3-21109"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork-SOP/1.0.2-21048"
+    "selected_version": "Release/Castle-Fork/1.5.3-21109"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-05-29_1811"
+    "selected_version": "Continuous/Castle-Fork/2018-06-05_1146"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -33,7 +33,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/1.0.2-404+7846d4e"
+    "selected_version": "Release/master/1.0.3-432+fa73fce"
   },
   {
     "name": "BoseOPKG-native",
@@ -49,11 +49,11 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/1.5.0-320+04a5b22"
+    "selected_version": "Release/master/1.5.1-335+dbb307c"
   },
   {
     "name": "BTSource-qc8017_32",
-    "selected_version": "Release/master/0.0.1-12+f5597c1"
+    "selected_version": "Release/master/1.0.0-24+b963a7c"
   },
   {
     "name": "BTStackAdapter-qc8017_32",
@@ -77,7 +77,7 @@
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Release/master/1.0.4-71+9783e08"
+    "selected_version": "Release/master/1.0.4-74+dc900ef"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -105,27 +105,27 @@
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/0.4.2-170+96e2cba"
+    "selected_version": "Release/master/1.5.1-181+226eef5"
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/0.4.2-68+06a626d"
+    "selected_version": "Release/master/1.5.0-79+12cb55b"
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.4.3-99+35dd976"
+    "selected_version": "Release/master/1.5.1-104+11170b1"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/1.0.4-98+d070cb4"
+    "selected_version": "Release/master/1.0.5-102+88e4a41"
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/master/1.0.1-130+2fa59c5"
+    "selected_version": "Release/master/1.5.0-136+ef227b4"
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/master/0.4.7-305+12fcba0"
+    "selected_version": "Release/master/1.5.1-324+3533270"
   },
   {
     "name": "opensource-jsoncpp-native",
@@ -137,15 +137,15 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/master/0.5.0-742+34be654"
+    "selected_version": "Release/master/0.5.0-753+9c2bc0b"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/master/0.5.0-742+34be654"
+    "selected_version": "Release/master/0.5.0-753+9c2bc0b"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@a4ebda26d4fe367dd33d31a2f9f156a12096019c"
+    "selected_version": "master@8d3b84516b2c7e635392e4e5f81f6c3d464d0f61"
   },
   {
     "name": "ProductUIAssets",
@@ -181,27 +181,27 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/master/1.0.0-336+e4d6d3f"
+    "selected_version": "Release/master/1.0.1-355+b863730"
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/1.0.1-86+7eae239"
+    "selected_version": "Release/master/1.5.1-90+2e7a604"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/1.5.0-621+e9b8b17"
+    "selected_version": "Release/master/1.5.1-646+a69f37b"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-05-29_1811"
+    "selected_version": "Continuous/Castle-Fork/2018-06-05_1146"
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.4.2-48+c373ed2"
+    "selected_version": "Release/master/0.5.1-54+5a0a54e"
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@41ac38dddde483c9ea3843d8f532fed3888a23bc"
+    "selected_version": "master@d868e4ad7bc9dcedaf2893ccef7ca6f954be5e2a"
   },
   {
     "name": "Webkit",

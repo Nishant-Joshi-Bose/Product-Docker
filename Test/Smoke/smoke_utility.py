@@ -152,7 +152,7 @@ class SmokeUtils(object):
         common_behavior_handler = common_obj[0]
         response_handler = common_obj[1]
         playback_msg = common_obj[2]
-        playresponse = common_behavior_handler.checkPlayStatus('play')
+        playresponse = common_behavior_handler.checkPlayStatus('PLAY')
         response_handler.verify_device_now_playing_response(nowplaying_response=playresponse, playback_msg=playback_msg)
 
     def stop_music(self, deviceip, frontDoor):
@@ -176,10 +176,11 @@ class SmokeUtils(object):
         """
         response = adb.executeCommand('cat /mnt/nv/product-persistence/ProductSettings.json')
         presets_json = json.loads(response)
-        presets_details = presets_json['ProductSettings']['presets']['preset']
-        presets_source = [preset for preset in presets_details if preset['id'] == presetid]
+        presets_details = presets_json['ProductSettings']['presets']['presets']
+        presets_id = [preset for preset in presets_details if int(preset) == int(presetid)]
+        presets_source = presets_json['ProductSettings']['presets']['presets'][presets_id[0]]
         self.logger.debug("Preset Details : %s", presets_source)
-        assert presets_source[0]['ContentItem']['source'] == source_name, "Preset is not stored, Please verify"
+        assert presets_source['actions'][0]['payload']['contentItem']['source'] == source_name, "Preset is not stored, Please verify"
 
     def press_key(self, deviceip, keyid, presstime):
         """
