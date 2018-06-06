@@ -6,7 +6,6 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include <fstream>
 #include <iostream>
-#include <json/reader.h>
 #include "DPrint.h"
 #include "SystemUtils.h"
 #include "Utilities.h"

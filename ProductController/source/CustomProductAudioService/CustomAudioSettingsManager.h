@@ -5,6 +5,7 @@
 /// Copyright 2017 Bose Corporation
 ////////////////////////////////////////////////////////////////////////////////
 #pragma once
+#include <json/value.h>
 #include <json/reader.h>
 #include "AudioSettingsManager.h"
 #include "AudioSettings.pb.h"

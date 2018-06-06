@@ -98,10 +98,6 @@ public:
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
     bool Handle( KeyHandlerUtil::ActionType_t& action ) override;
-    ProductPb::AccessorySpeakerState GetAccessorySpeakerState()
-    {
-        return m_accessorySpeakerState;
-    }
 
 private:
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -131,6 +127,7 @@ private:
     std::shared_ptr< CustomProductLpmHardwareInterface > m_ProductLpmHardwareInterface;
     std::shared_ptr<FrontDoorClientIF>                   m_FrontDoorClientIF;
     ProductPb::AccessorySpeakerState                     m_accessorySpeakerState;
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// @brief The following method performs needed initialization before running.
@@ -191,7 +188,11 @@ private:
 
     void RecieveAccessoryListCallback( LpmServiceMessages::IpcAccessoryList_t accList );
 
-
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method sends accessory pairing state ProductMessage to ProductController
+    ///
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     void SendAccessoryPairingStateToProduct( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////

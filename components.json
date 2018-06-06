@@ -161,11 +161,11 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@8d3b84516b2c7e635392e4e5f81f6c3d464d0f61"
+    "selected_version": "PGC_685@6db5373f3c375b5981c19802d8b06dbde72a9abd"
   },
   {
     "name": "ProductUIAssets",
-    "selected_version": "PGC_685@e1e71cbe7aec821f39416947a8e65889872cc144"
+    "selected_version": "master@3abdcec9611e25ba45c7c0df9e856885ba891285"
   },
   {
     "name": "protobuf-native",

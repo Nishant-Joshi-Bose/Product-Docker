@@ -178,10 +178,8 @@ bool CustomProductControllerStateAccessoryPairing::HandlePairingStatus( ProductP
             m_pairingCompleteChimeToPlay.push_back( ACCESSORY_PAIRING_COMPLETE_REAR_SPEAKER );
         }
 
-
         if( m_pairingCompleteChimeToPlay.size() == 0 )
         {
-            BOSE_INFO( s_logger, "The %s state is exiting the pairing playback.", GetName( ).c_str( ) );
             GetProductController( ).SendStopPlaybackMessage( );
             ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
         }
@@ -194,9 +192,16 @@ bool CustomProductControllerStateAccessoryPairing::HandlePairingStatus( ProductP
     return true;
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStateAccessoryPairing::PlayPairingCompletedChime
+///
+///         This method start playing the pairing completed chime from the chime queue
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 void CustomProductControllerStateAccessoryPairing::PlayPairingCompletedChime()
 {
-    BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+    BOSE_INFO( s_logger, "The %s state is in %s. %d chimes in the queue to be played", GetName( ).c_str( ), __func__, m_pairingCompleteChimeToPlay.size() );
 
     if( m_pairingCompleteChimeToPlay.size() > 0 )
     {
@@ -204,6 +209,14 @@ void CustomProductControllerStateAccessoryPairing::PlayPairingCompletedChime()
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @brief CustomProductControllerStateAccessoryPairing::HandleChimeSASSPlaybackCompleted
+///
+///         This method removes finished chime from chime queue, and start playing next chime
+///         if chimes are completed, exit pairing state
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
 bool CustomProductControllerStateAccessoryPairing::HandleChimeSASSPlaybackCompleted( int32_t eventId )
 {
     BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
@@ -234,6 +247,7 @@ bool CustomProductControllerStateAccessoryPairing::HandleChimeSASSPlaybackComple
 void CustomProductControllerStateAccessoryPairing::HandleStateExit( )
 {
     BOSE_INFO( s_logger, "The %s state is in %s.", GetName( ).c_str( ), __func__ );
+
     ///
     /// Re-enable source selection.
     ///
