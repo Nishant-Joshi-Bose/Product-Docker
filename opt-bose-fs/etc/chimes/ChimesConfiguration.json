@@ -59,6 +59,12 @@
             "tone":"T13_not_available.flac",
             "volume":38,
             "comment":"VPA (Voice Personal Assistant) not configured"
+        },
+        {
+            "event_id":13,
+            "tone":"T15_success.flac",
+            "volume":38,
+            "comment":"OOB Setup Completed"
         }
     ]
 }
