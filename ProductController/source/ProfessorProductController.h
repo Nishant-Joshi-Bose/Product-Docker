@@ -235,7 +235,7 @@ public:
 
     std::unique_ptr<LightBar::LightBarController> m_lightbarController;
 
-    PassportPB::ContentItem GetOOBDefaultLastContentItem() const override;
+    PassportPB::contentItem GetOOBDefaultLastContentItem() const override;
 
     void PossiblyPairBLERemote( );
 

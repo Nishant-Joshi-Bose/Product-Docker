@@ -57,11 +57,17 @@ public:
 
     void HandleStateStart( ) override;
     void HandleStateExit( )  override;
-    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent ) override;
-    bool HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )  override;
-    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )    override;
-    bool HandleIntentPowerToggle( )                                        override;
-    bool HandlePairingStatus( ProductAccessoryPairing pairingStatus )      override;
+    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )      override;
+    bool HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )       override;
+    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )         override;
+    bool HandleIntentPowerToggle( )                                             override;
+    bool HandlePairingStatus( ProductPb::AccessorySpeakerState pairingStatus )  override;
+    bool HandleChimeSASSPlaybackCompleted( int32_t eventId )                    override;
+
+private:
+    std::deque<int32_t> m_pairingCompleteChimeToPlay;
+    void PlayPairingCompletedChime();
+
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

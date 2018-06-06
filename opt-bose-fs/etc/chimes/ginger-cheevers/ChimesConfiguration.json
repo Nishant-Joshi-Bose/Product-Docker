@@ -65,6 +65,20 @@
             "tone":"T15_success.flac",
             "comment":"Setup complete",
             "volume":37
+        },
+        {
+            "event_id":20,
+            "tone":"T16_bass_box_pairing_complete.flac",
+            "comment":"Bass Box pairing complete",
+            "volume":45,
+            "presentation_location":["SUBWOOFER_SPEAKER"]
+        },
+        {
+            "event_id":21,
+            "tone":"T17_rear_surround_pairing_complete.flac",
+            "comment":"Rear Surround Speaker(s) pairing complete",
+            "volume":45,
+            "presentation_location":["LEFT_SURROUND_SPEAKER", "RIGHT_SURROUND_SPEAKER"]
         }
     ]
 }

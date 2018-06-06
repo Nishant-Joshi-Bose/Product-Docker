@@ -9,11 +9,11 @@
   },
   {
     "name": "A4VVideoManagerService",
-    "selected_version": "master@86b818629aeb5dc6ee978ecc014e3f2b63f08c91"
+    "selected_version": "master@1a8fcf638dfeb3f095edbf73773a3abedcd917a1"
   },
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.1.2-21040"
+    "selected_version": "Release/Castle-Fork/1.5.3-21109"
   },
   {
     "name": "AudioPath-qc8017_64",
@@ -49,7 +49,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/1.0.2-404+7846d4e"
+    "selected_version": "Release/master/1.0.3-432+fa73fce"
   },
   {
     "name": "BoseOPKG-native",
@@ -101,7 +101,7 @@
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Release/master/0.5.1-45+ae16bc3"
+    "selected_version": "Release/master/1.0.0-50+72d1bca"
   },
   {
     "name": "DemoController-qc8017_32",
@@ -153,19 +153,19 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/master/0.5.0-742+34be654"
+    "selected_version": "Release/master/0.5.0-753+9c2bc0b"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/master/0.5.0-742+34be654"
+    "selected_version": "Release/master/0.5.0-753+9c2bc0b"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@914b614c5ec674c7e7c2652383e9ca24e0d47645"
+    "selected_version": "master@8d3b84516b2c7e635392e4e5f81f6c3d464d0f61"
   },
   {
     "name": "ProductUIAssets",
-    "selected_version": "master@f5025558c6d13bc8fe9e67ff7248a89a6441b0c2"
+    "selected_version": "PGC_685@e1e71cbe7aec821f39416947a8e65889872cc144"
   },
   {
     "name": "protobuf-native",
@@ -185,7 +185,7 @@
   },
   {
     "name": "RivieraLPM",
-    "selected_version": "trunk@2516"
+    "selected_version": "trunk@2629"
   },
   {
     "name": "RivieraLpmService-qc8017_32",
@@ -221,11 +221,11 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@8fff4bf2d1dce8a60d9dd00f248070c7127a85d3"
+    "selected_version": "master@d868e4ad7bc9dcedaf2893ccef7ca6f954be5e2a"
   },
   {
     "name": "unittest-cpp-qc8017_32",
-    "selected_version": "Release/bose-master/2.0.0-10+d5e90cf"
+    "selected_version": "Release/bose-master/2.0.0-12+a5d41d5"
   },
   {
     "name": "Webkit",
