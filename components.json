@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.3.42632.2854623"
+    "selected_version": "Release/Castle-Fork/1.5.5.42643.2854816"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -81,11 +81,11 @@
   },
   {
     "name": "DataCollectionClient-qc8017_32",
-    "selected_version": "Release/master/1.0.0-84+d5d7e49"
+    "selected_version": "Release/master/1.0.1-85+d110988"
   },
   {
     "name": "DataCollectionService-qc8017_32",
-    "selected_version": "Release/master/1.0.0-50+72d1bca"
+    "selected_version": "Release/master/1.0.1-55+6478504"
   },
   {
     "name": "DemoController-qc8017_32",
@@ -93,19 +93,19 @@
   },
   {
     "name": "FrontDoor-qc8017_32",
-    "selected_version": "Release/master/0.4.6-295+0cb5ac4"
+    "selected_version": "Release/master/1.5.0-354+9819980"
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Release/master/0.4.8-38+b667f0a"
+    "selected_version": "Release/master/1.5.0-84+2e6cf2d"
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
-    "selected_version": "Release/master/0.4.6-6+0cb5ac4"
+    "selected_version": "Release/master/1.5.0-26+1d9d2be"
   },
   {
     "name": "GalapagosClient-qc8017_32",
-    "selected_version": "Release/master/1.5.1-181+226eef5"
+    "selected_version": "Release/master/1.5.2-183+76faca6"
   },
   {
     "name": "HTTPInterface-qc8017_32",
@@ -121,11 +121,11 @@
   },
   {
     "name": "LightBarController-qc8017_32",
-    "selected_version": "Release/master/1.5.0-136+ef227b4"
+    "selected_version": "Release/master/1.5.1-138+ba62d58"
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/master/1.5.1-324+3533270"
+    "selected_version": "Release/master/1.5.2-330+f45d010"
   },
   {
     "name": "opensource-jsoncpp-native",
@@ -181,7 +181,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/master/1.0.1-355+b863730"
+    "selected_version": "Release/master/1.5.1-360+b35cc3c"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -193,15 +193,15 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.3.42632.2854623"
+    "selected_version": "Release/Castle-Fork/1.5.5.42643.2854816"
   },
   {
     "name": "SystemEventService-qc8017_32",
-    "selected_version": "Release/master/0.5.1-54+5a0a54e"
+    "selected_version": "Release/master/0.5.2-57+4e76ab1"
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@d868e4ad7bc9dcedaf2893ccef7ca6f954be5e2a"
+    "selected_version": "master@d24fe460b1d13b0c13baf0316708b4cc33868dd3"
   },
   {
     "name": "Webkit",
