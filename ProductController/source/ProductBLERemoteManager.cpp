@@ -422,7 +422,7 @@ bool ProductBLERemoteManager::GetSourceLED(
         else if( ( sourceAccountName.compare( 0, 4, ProductSourceSlot_Name( SLOT_0 ), 0, 4 ) == 0 ) and sourceItem->has_details() )
         {
             const auto& sourceDetailsActivationKey = sourceItem->details().activationkey();
-            BOSE_INFO( s_logger, "update nowSelection %s", sourceDetailsActivationKey.c_str() );
+            BOSE_INFO( s_logger, "(%s) update nowSelection with activationKey %s", __func__, sourceDetailsActivationKey.c_str() );
 
             if( sourceDetailsActivationKey.compare( ACTIVATION_KEY__Name( ACTIVATION_KEY_GAME ) ) == 0 )
             {
