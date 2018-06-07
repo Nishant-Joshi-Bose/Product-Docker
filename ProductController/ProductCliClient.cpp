@@ -11,7 +11,6 @@
 #include "DirUtils.h"
 #include "SystemUtils.h"
 #include "LpmClientFactory.h"
-#include "RivieraLPM_IpcProtocol.h"
 #include "EddieProductController.h"
 
 namespace
@@ -57,11 +56,6 @@ void ProductCliClient::Initialize( NotifyTargetTaskIF* task )
     using Cmd = CLIClient::CLICmdDescriptor;
 
     m_task = task;
-
-    cmds.emplace_back( std::make_shared<Cmd>
-                       ( "lpm echo",
-                         "Send an echo request to the LPM",
-                         "lpm echo [count]" ) );
 
     cmds.emplace_back( std::make_shared<Cmd>
                        ( "mfgdata",
@@ -111,12 +105,6 @@ bool ProductCliClient::HandleCommand( std::string const& cmd,
 {
     BOSE_INFO( s_logger, "HandleCommand '%s'", cmd.c_str() );
 
-    if( cmd == "lpm echo" )
-    {
-        CliCmdLpmEcho( argList, response );
-        return true;
-    }
-
     if( cmd == "mfgdata" )
     {
         CliCmdMfgData( argList, response );
@@ -149,37 +137,6 @@ bool ProductCliClient::HandleCommand( std::string const& cmd,
 
     response = "Internal error: " + cmd;
     return false;
-}
-
-void ProductCliClient::CliCmdLpmEcho( CLIClient::StringListType& argList,
-                                      std::string& response )
-{
-    decltype( IpcProtocol::IpcEcho_t::count ) count {};
-    if( argList.size() == 1 )
-    {
-        auto& arg = argList.front();
-        if( !ToInteger( arg, count ) )
-        {
-            response = "Malformed integer: " + arg;
-            return;
-        }
-    }
-    else if( !argList.empty() )
-    {
-        response = "Wrong usage";
-        return;
-    }
-    BOSE_LOG( INFO, "Send lpm echo request count=" << count );
-    IpcEcho_t param;
-    param.set_count( count );
-    m_lpmClient->RequestEcho( param, [this]( IpcEcho_t const & rsp )
-    {
-        std::ostringstream ss;
-        ss << "Got lpm echo response count=" << rsp.count();
-        BOSE_LOG( INFO, ss.str() );
-        m_cliClient.SendAsyncResponse( ss.str() );
-    } );
-    response = "echo sent";
 }
 
 void ProductCliClient::CliCmdMfgData( CLIClient::StringListType& argList,
