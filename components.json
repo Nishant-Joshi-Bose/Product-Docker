@@ -13,11 +13,11 @@
   },
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.1.2-21040"
+    "selected_version": "Release/Castle-Fork/1.5.5-21114"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork-vfe-time-drift-fix/1.0.7-21069"
+    "selected_version": "Release/Castle-Fork/1.5.5-21114"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -49,7 +49,7 @@
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/1.0.2-404+7846d4e"
+    "selected_version": "Release/master/1.0.3-432+fa73fce"
   },
   {
     "name": "BoseOPKG-native",
@@ -65,7 +65,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/1.5.0-320+04a5b22"
+    "selected_version": "Release/master/1.5.1-335+dbb307c"
   },
   {
     "name": "BTSource-qc8017_32",
@@ -93,7 +93,7 @@
   },
   {
     "name": "Cli-qc8017_32",
-    "selected_version": "Release/master/1.0.4-71+9783e08"
+    "selected_version": "Release/master/1.0.4-74+dc900ef"
   },
   {
     "name": "DataCollectionClient-qc8017_32",
@@ -125,15 +125,15 @@
   },
   {
     "name": "HTTPInterface-qc8017_32",
-    "selected_version": "Release/master/0.4.2-68+06a626d"
+    "selected_version": "Release/master/1.5.0-79+12cb55b"
   },
   {
     "name": "HTTPProxy-qc8017_32",
-    "selected_version": "Release/master/0.4.3-99+35dd976"
+    "selected_version": "Release/master/1.5.1-104+11170b1"
   },
   {
     "name": "KeyHandler-qc8017_32",
-    "selected_version": "Release/master/1.0.4-98+d070cb4"
+    "selected_version": "Release/master/1.0.5-102+88e4a41"
   },
   {
     "name": "LightBarController-qc8017_32",
@@ -153,15 +153,15 @@
   },
   {
     "name": "Passport-qc8017_32",
-    "selected_version": "Release/master/0.5.0-742+34be654"
+    "selected_version": "Release/master/0.5.0-753+9c2bc0b"
   },
   {
     "name": "PassportClient-qc8017_32",
-    "selected_version": "Release/master/0.5.0-742+34be654"
+    "selected_version": "Release/master/0.5.0-753+9c2bc0b"
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@914b614c5ec674c7e7c2652383e9ca24e0d47645"
+    "selected_version": "master@49a02776e1c9932de6698e453a2161db904bf613"
   },
   {
     "name": "ProductUIAssets",
@@ -205,11 +205,11 @@
   },
   {
     "name": "Shepherd-qc8017_32",
-    "selected_version": "Release/master/1.0.1-86+7eae239"
+    "selected_version": "Release/master/1.5.1-90+2e7a604"
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/1.5.0-621+e9b8b17"
+    "selected_version": "Release/master/1.5.1-646+a69f37b"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
@@ -221,7 +221,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@8fff4bf2d1dce8a60d9dd00f248070c7127a85d3"
+    "selected_version": "master@d868e4ad7bc9dcedaf2893ccef7ca6f954be5e2a"
   },
   {
     "name": "unittest-cpp-qc8017_32",
