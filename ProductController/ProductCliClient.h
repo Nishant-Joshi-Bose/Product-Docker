@@ -29,7 +29,6 @@ private:
     bool HandleCommand( std::string const&, CLIClient::StringListType&,
                         std::string& );
 
-    void CliCmdLpmEcho( CLIClient::StringListType&, std::string& );
     void CliCmdMfgData( CLIClient::StringListType&, std::string& );
     void CliCmdBackLight( CLIClient::StringListType&, std::string& );
     void CliCmdLightSensor( CLIClient::StringListType&, std::string& );
