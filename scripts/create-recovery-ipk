@@ -72,8 +72,9 @@ mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" || exit
 components record "$stage" || exit
 
 # copy minimal image tar to /opt/Bose
+# Todo: CASTLE-15220: This is removed for now - to reduce size of overall package
 minimal_image="Bose_minimal.tar.gz"
-cp "$wspace/builds/$cfg/$minimal_image"  "$opt_dir/" || exit
+#cp "$wspace/builds/$cfg/$minimal_image"  "$opt_dir/" || exit
 
 # copy network configured script which will be required in restore operation
 cp "$wspace/misc/isNetworkConfigured" "$opt_dir/bin/" || exit
@@ -136,7 +137,8 @@ rm -f /cache/recovery/last_log.*
 rm -f /cache/recovery/last_kmsg.*
 
 # move minimal rpoduct image to cache partition
-mv /opt/Bose/Bose_minimal.tar.gz /cache/
+# Todo: CASTLE-15220: This is removed for now - to reduce size of overall package
+#mv /opt/Bose/Bose_minimal.tar.gz /cache/
 
 # move RecoveryMain binary to /cache partition
 mv /opt/Bose/bin/RecoveryMain /cache/
@@ -205,13 +207,14 @@ echo "2.0" > debian-binary || exit
 ipk=$output_dir/recovery.ipk
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
+echo "Created $ipk"
+
 # /cache partition used to put contents of this IPK is limited in size.
 # Check if IPK is so big that /cache will become 100% and eventually cause
 # softwareupdate failure. This prevents issues from happening in field
-if [ $(stat -c "%s" $ipk) -ge 33554432 ]; then
-    echo "Created $ipk > 32 MB limit. Build failure"
+if [ $(stat -c "%s" "$ipk") -ge 104857600 ]; then
+    echo >&2 "$this: IPK $ipk >= 100MB"
     exit 1
-else
-    echo "Created $ipk"
 fi
+
 exit 0
