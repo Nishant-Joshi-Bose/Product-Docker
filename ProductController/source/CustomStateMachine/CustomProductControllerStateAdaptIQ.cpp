@@ -214,7 +214,7 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAda
 bool CustomProductControllerStateAdaptIQ::HandleIntentPowerToggle( )
 {
     GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
-    m_powerDownOnExit = true;
+    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING );
     return true;
 }
 
