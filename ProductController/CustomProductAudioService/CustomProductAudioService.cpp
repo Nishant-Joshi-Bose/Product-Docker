@@ -13,6 +13,7 @@
 #include "CustomProductAudioService.h"
 #include "LpmClientFactory.h"
 #include "SoundTouchInterface/ContentItem.pb.h"
+#include "Bass.pb.h"
 
 using namespace std::placeholders;
 
@@ -90,7 +91,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         {
             m_mainStreamAudioSettings.set_basslevel( m_audioSettingsMgr->GetBass( ).value() );
             SendMainStreamAudioSettingsEvent();
-            m_dataCollectionClient->SendData( std::make_shared< ProductPb::AudioBassLevel >( m_audioSettingsMgr->GetBass( ) ), "bass-changed" );
+            auto dbaPb = std::make_shared<DataCollection::Bass>();
+            dbaPb->set_bass( m_audioSettingsMgr->GetBass( ).value() );
+            m_dataCollectionClient->SendData( dbaPb, "bass-changed" );
         }
         return error;
     };
