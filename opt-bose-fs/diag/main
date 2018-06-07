@@ -6,6 +6,7 @@ import os
 import sys
 import re
 import json
+import hashlib
 
 if len(sys.argv) != 1:
     raise Exception("wrong usage " + str(sys.argv))
@@ -95,8 +96,8 @@ print "<li>Tests"
 print """<div class="box">"""
 print "<a href='/diag/accessories'>Accessory Pairing</a> <br>"
 print "<a href='/diag/adaptiq'>AdaptIQ</a> <br>"
-print "<a href='/diag/wifi'>Wi-Fi</a> <br>"
-print "<a href='/diag/microphone'>Microphones</a>
+print "<a href='/diag/microphone'>Microphones</a> <br>"
+print "<a href='/diag/wifi'>Wi-Fi</a>"
 print "</div>"
 
 print "<hr>"
