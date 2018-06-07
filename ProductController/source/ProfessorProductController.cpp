@@ -120,7 +120,6 @@ namespace
 constexpr uint32_t  PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
 constexpr int32_t   VOLUME_MIN_THRESHOLD = 10;
 constexpr int32_t   VOLUME_MAX_THRESHOLD = 70;
-constexpr int32_t   VOLUME_ON_BOOT_VALUE = 26;
 constexpr auto      g_DefaultVolumeThresholdsStateFile  = "DefaultVolumeThresholdsDone";
 }
 
@@ -836,8 +835,8 @@ std::pair<bool, int32_t> ProfessorProductController::GetDesiredPlayingVolume( ) 
 {
     BOSE_INFO( s_logger, "%s m_cachedVolume = {%s}", __func__, m_cachedVolume.DebugString( ).c_str( ) );
 
-    int32_t desiredVolume = VOLUME_ON_BOOT_VALUE; // assume this is the initial after-boot query
-    bool changeDesired = true;
+    int32_t desiredVolume = 0; // 0 will never be returned with changeDesired == true
+    bool changeDesired = false;
 
     if( m_cachedVolume.has_value() )
     {
@@ -845,14 +844,12 @@ std::pair<bool, int32_t> ProfessorProductController::GetDesiredPlayingVolume( ) 
         if( m_cachedVolume.value( ) < m_cachedVolume.min( ) )
         {
             desiredVolume = m_cachedVolume.min( );
+            changeDesired = true;
         }
         else if( m_cachedVolume.value( ) > m_cachedVolume.max( ) )
         {
             desiredVolume = m_cachedVolume.max( );
-        }
-        else
-        {
-            changeDesired = false;
+            changeDesired = true;
         }
     }
 
@@ -1415,9 +1412,6 @@ void ProfessorProductController::SendInitialCapsData()
         { },
         m_errorCb );
 
-    SoundTouchInterface::volume desiredVolume;
-    desiredVolume.set_value( VOLUME_ON_BOOT_VALUE );
-
     std::string DefaultVolumeThresholdsDoneFile{ g_PersistenceRootDir };
     DefaultVolumeThresholdsDoneFile += g_ProductPersistenceDir;
     DefaultVolumeThresholdsDoneFile += g_DefaultVolumeThresholdsStateFile;
@@ -1429,16 +1423,16 @@ void ProfessorProductController::SendInitialCapsData()
         {
             BOSE_CRITICAL( s_logger, "File write to %s Failed", DefaultVolumeThresholdsDoneFile.c_str( ) );
         }
+        SoundTouchInterface::volume desiredVolume;
         desiredVolume.set_min( VOLUME_MIN_THRESHOLD );
         desiredVolume.set_max( VOLUME_MAX_THRESHOLD );
+        GetFrontDoorClient()->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
+            FRONTDOOR_AUDIO_VOLUME_API,
+            desiredVolume,
+            { },
+            m_errorCb );
+        BOSE_INFO( s_logger, "DefaultVolumeThresholdsDoneFile didn't exist, sent %s", desiredVolume.DebugString( ).c_str( ) );
     }
-    GetFrontDoorClient()->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
-        FRONTDOOR_AUDIO_VOLUME_API,
-        desiredVolume,
-        { },
-        m_errorCb );
-    BOSE_INFO( s_logger, "DefaultVolumeThresholdsDoneFile did %sexist, sent %s",
-               defaultVolumeThresholdsDone ? "" : "not ", desiredVolume.DebugString( ).c_str( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
