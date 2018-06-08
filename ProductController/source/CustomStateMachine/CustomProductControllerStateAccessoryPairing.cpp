@@ -169,44 +169,51 @@ bool CustomProductControllerStateAccessoryPairing::HandlePairingStatus( ProductP
         // When accessory pairing is done, play the pairing complete chime
         // Order has to be followed here: subwoofer chime first, then rear surround speakers
         m_pairingCompleteChimeToPlay.clear();
+        // Add subwoofer pairing complete chime to queue, if all subs are valid
         if( pairingStatus.subs_size() > 0 )
         {
-            m_pairingCompleteChimeToPlay.push_back( ACCESSORY_PAIRING_COMPLETE_SUB );
+            bool isSubValid = true;
+            for( int i = 0; i < pairingStatus.subs_size(); i++ )
+            {
+                if( pairingStatus.subs( i ).configurationstatus( ) != "VALID" )
+                {
+                    isSubValid = false;
+                }
+            }
+            if( isSubValid )
+            {
+                m_pairingCompleteChimeToPlay.push_back( CHIME_ACCESSORY_PAIRING_COMPLETE_SUB );
+            }
         }
+        // Add rear surround speakers pairing complete chime to queue, if all rears are valid
         if( pairingStatus.rears_size() > 0 )
         {
-            m_pairingCompleteChimeToPlay.push_back( ACCESSORY_PAIRING_COMPLETE_REAR_SPEAKER );
+            bool isRearValid = true;
+            for( int i = 0; i < pairingStatus.rears_size(); i++ )
+            {
+                if( pairingStatus.rears( i ).configurationstatus( ) != "VALID" )
+                {
+                    isRearValid = false;
+                }
+            }
+            if( isRearValid )
+            {
+                m_pairingCompleteChimeToPlay.push_back( CHIME_ACCESSORY_PAIRING_COMPLETE_REAR_SPEAKER );
+            }
         }
 
-        if( m_pairingCompleteChimeToPlay.size() == 0 )
+        // Start playing pairing completed chime if there's any chime in queue; otherwise exit pairing state
+        if( m_pairingCompleteChimeToPlay.empty( ) )
         {
-            GetProductController( ).SendStopPlaybackMessage( );
             ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
         }
         else
         {
-            PlayPairingCompletedChime();
+            GetProductController( ).HandleChimePlayRequest( m_pairingCompleteChimeToPlay.front() );
         }
     }
 
     return true;
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @brief CustomProductControllerStateAccessoryPairing::PlayPairingCompletedChime
-///
-///         This method start playing the pairing completed chime from the chime queue
-///
-////////////////////////////////////////////////////////////////////////////////////////////////////
-void CustomProductControllerStateAccessoryPairing::PlayPairingCompletedChime()
-{
-    BOSE_INFO( s_logger, "The %s state is in %s. %d chimes in the queue to be played", GetName( ).c_str( ), __func__, m_pairingCompleteChimeToPlay.size() );
-
-    if( m_pairingCompleteChimeToPlay.size() > 0 )
-    {
-        GetProductController( ).HandleChimePlayRequest( m_pairingCompleteChimeToPlay.front() );
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -225,10 +232,9 @@ bool CustomProductControllerStateAccessoryPairing::HandleChimeSASSPlaybackComple
     {
         m_pairingCompleteChimeToPlay.pop_front();
         // Play next accessory pairing completed chime if there's one
-        if( m_pairingCompleteChimeToPlay.size() == 0 )
+        if( m_pairingCompleteChimeToPlay.empty( ) )
         {
             BOSE_INFO( s_logger, "The %s state is exiting the pairing playback.", GetName( ).c_str( ) );
-            GetProductController( ).SendStopPlaybackMessage( );
             ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
         }
         else
@@ -252,6 +258,7 @@ void CustomProductControllerStateAccessoryPairing::HandleStateExit( )
     /// Re-enable source selection.
     ///
     GetProductController( ).SendAllowSourceSelectMessage( true );
+    GetProductController( ).SendStopPlaybackMessage( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

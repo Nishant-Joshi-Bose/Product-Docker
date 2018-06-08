@@ -66,7 +66,6 @@ public:
 
 private:
     std::deque<int32_t> m_pairingCompleteChimeToPlay;
-    void PlayPairingCompletedChime();
 
 };
 

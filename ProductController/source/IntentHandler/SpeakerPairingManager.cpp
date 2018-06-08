@@ -166,7 +166,7 @@ void SpeakerPairingManager::RegisterLpmClientEvents( )
     /// Get ASYNC accessory list change events
     ///
     Callback< LpmServiceMessages::IpcAccessoryList_t >
-    listCB( std::bind( &SpeakerPairingManager::RecieveAccessoryListCallback,
+    listCB( std::bind( &SpeakerPairingManager::ReceiveAccessoryListCallback,
                        this,
                        std::placeholders::_1 ) );
 
@@ -485,12 +485,12 @@ void SpeakerPairingManager::SetSpeakersEnabled( const ProductPb::AccessorySpeake
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief SpeakerPairingManager::RecieveAccessoryListCallback
+/// @brief SpeakerPairingManager::ReceiveAccessoryListCallback
 ///
 /// @param LpmServiceMessages::IpcAccessoryList_t accList
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-void SpeakerPairingManager::RecieveAccessoryListCallback( LpmServiceMessages::IpcAccessoryList_t accList )
+void SpeakerPairingManager::ReceiveAccessoryListCallback( LpmServiceMessages::IpcAccessoryList_t accList )
 {
     BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s. Accessory list = %s", __FUNCTION__, accList.DebugString().c_str() );
 
@@ -600,7 +600,7 @@ void SpeakerPairingManager::PairingCallback( LpmServiceMessages::IpcSpeakerPairi
     m_accessorySpeakerState.set_pairing( pair.pairingenabled( ) );
     SendAccessoryPairingStateToProduct();
     // Need to notify here only if pairing is being set. If pairing has finished and is set to false,
-    // will notify UI with full message from RecieveAccessoryListCallback.
+    // will notify UI with full message from ReceiveAccessoryListCallback.
     if( m_accessorySpeakerState.pairing( ) )
     {
         m_FrontDoorClientIF->SendNotification( FRONTDOOR_ACCESSORIES_API, m_accessorySpeakerState );
@@ -615,8 +615,7 @@ void SpeakerPairingManager::PairingCallback( LpmServiceMessages::IpcSpeakerPairi
 void SpeakerPairingManager::SendAccessoryPairingStateToProduct( )
 {
     BOSE_INFO( s_logger, __func__ );
-    if( m_accessorySpeakerState.pairing()
-        || ( !m_accessorySpeakerState.pairing() && m_accessoryListReceived ) )
+    if( m_accessorySpeakerState.pairing() || m_accessoryListReceived )
     {
         ProductMessage productMessage;
         productMessage.mutable_accessorypairing( )->CopyFrom( m_accessorySpeakerState );
