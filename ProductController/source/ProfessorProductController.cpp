@@ -750,11 +750,11 @@ bool ProfessorProductController::IsSystemLanguageSet( ) const
 /// @return This method returns the PassportPB::ContentItem value to be used for initializing the OOB LastContentItem
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-PassportPB::ContentItem ProfessorProductController::GetOOBDefaultLastContentItem() const
+PassportPB::contentItem ProfessorProductController::GetOOBDefaultLastContentItem() const
 {
     using namespace ProductSTS;
 
-    PassportPB::ContentItem item;
+    PassportPB::contentItem item;
     item.set_source( ProductSourceSlot_Name( PRODUCT ) );
     item.set_sourceaccount( ProductSourceSlot_Name( TV ) );
     return item;
