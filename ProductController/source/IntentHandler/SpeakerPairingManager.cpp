@@ -492,7 +492,7 @@ void SpeakerPairingManager::SetSpeakersEnabled( const ProductPb::AccessorySpeake
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void SpeakerPairingManager::RecieveAccessoryListCallback( LpmServiceMessages::IpcAccessoryList_t accList )
 {
-    BOSE_INFO( s_logger, "SpeakerPairingManager entering method %s.", __FUNCTION__ );
+    BOSE_INFO( s_logger, "SpeakerPairingManager::%s received %s", __FUNCTION__, accList.DebugString().c_str( ) );
 
     m_accessorySpeakerState.clear_rears( );
     m_accessorySpeakerState.clear_subs( );
@@ -556,6 +556,10 @@ void SpeakerPairingManager::RecieveAccessoryListCallback( LpmServiceMessages::Ip
     GetProductController().GetDataCollectionClient()->SendData(
         std::make_shared< ProductPb::AccessorySpeakerState >( m_accessorySpeakerState ),
         DATA_COLLECTION_ACCESSORIES );
+
+    ProductMessage productMessage;
+    productMessage.set_accessoriesareknown( true );
+    IL::BreakThread( std::bind( m_ProductNotify, productMessage ), m_ProductTask );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

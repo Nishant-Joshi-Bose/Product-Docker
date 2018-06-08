@@ -405,11 +405,6 @@ public:
         return false;
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    ///
-    /// @brief This handler is used to respond to the LPM detecting an amp fault.
-    ///
-    ////////////////////////////////////////////////////////////////////////////////////////////////
     virtual bool HandleAmpFaultDetected()
     {
         return false;
@@ -424,6 +419,12 @@ public:
     {
         return false;
     }
+
+    virtual bool HandleAccessoriesAreKnown( )
+    {
+        return false;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
     /// This method returns the Professor Custom Product Controller reference of type

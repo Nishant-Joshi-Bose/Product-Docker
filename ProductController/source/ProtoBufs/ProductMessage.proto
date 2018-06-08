@@ -103,6 +103,7 @@ message ProductMessage
         optional uint32                                     chimetoplay                 = 22;
         optional LpmServiceMessages.IpcKeyInformation_t     keyevent                    = 23;
         optional bool                                       softwareupdatestatus        = 24;
+        optional bool                                       accessoriesareknown         = 25;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
