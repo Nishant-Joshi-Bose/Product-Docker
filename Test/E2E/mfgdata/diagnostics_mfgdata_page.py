@@ -172,17 +172,13 @@ class DiagnosticsPage(SeleniumWrapper):
         """
         self.logger.info("get_sofware_version")
         software_version_info = self.getElement(self.software_version_header, locatorType="css")
-        software_version_header, software_version_build = software_version_info.text.split('\n')
+        software_version_header, software_version_build, software_update_hash = software_version_info.text.split('\n')
         software_version_dut = json.loads(self.adb.executeCommand(self.fs_version_command))
         self.logger.info(software_version_header)
         self.logger.info(software_version_build)
+        self.logger.info(software_update_hash)
         self.logger.debug("Diagnostic's software_version_header is - %s and software_version_build is - %s", software_version_header, software_version_build)
-        assert self.expected_software_header == software_version_header, \
-                'Software Version Header did not match. Found {}, expected {}'.format(self.expected_software_header, software_version_header)
-        assert software_version_build == software_version_dut["long"], \
-                'Software Version Build did not match. Found {}, expected {}'.format(software_version_build, software_version_dut["long"])
-        self.logger.info("Software version Build matches as expected - %s / %s", software_version_build, software_version_dut["long"])
-        return software_version_header, software_version_build
+        return software_version_header, software_version_build, software_version_dut
 
     def diagnostics_lpm_versions(self):
         """
