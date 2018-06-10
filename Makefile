@@ -39,10 +39,12 @@ RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_locat
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
 TESTUTILS_DIR = $(shell components get TestUtils installed_location)
 RIVIERA_LPM_SERVICE_DIR = $(shell components get RivieraLpmService-qc8017_32 installed_location)
+PRODUCTCONTROLLERCOMMONPROTO = $(shell components get ProductControllerCommonProto installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
 	$(MAKE) -C ProductController $@
+	$(MAKE) -C ${PRODUCTCONTROLLERCOMMONPROTO}/Protobufs/public
 	$(MAKE) -C $(PRODUCTCONTROLLERCOMMON_DIR) $@
 	ln -nsf $(TESTUTILS_DIR) builds/CastleTestUtils
 	ln -nsf $(RIVIERA_LPM_SERVICE_DIR) builds/RivieraLpmService

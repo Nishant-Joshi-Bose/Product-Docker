@@ -6,6 +6,7 @@ RIVIERA_LPM_PROTO_DIR       := $(shell components get RivieraLpmService-$(sdk) i
 SOUNDTOUCH_SDK_DIR          := $(shell components get SoundTouch-SDK-$(sdk)         installed_location)
 SYSTEMEVENTSERVICE_DIR      := $(shell components get SystemEventService-$(sdk) installed_location)
 AUDIOSOURCE_DIR             := $(shell components get AudioSource-$(sdk) installed_location)
+PRODUCTCONTROLLERCOMMONPROTO := $(shell components get ProductControllerCommonProto installed_location)
 
 PROTO_SOURCES = \
   LightBarController.proto  \
@@ -21,7 +22,8 @@ PROTO_IMPORT_DIRS := \
  . \
  $(PROTO_CC_DEST) \
  $(BOSELIBS_DIR)/protobufs \
- $(PRODUCTCONTROLLERCOMMON_DIR)/Protobufs \
+ $(PRODUCTCONTROLLERCOMMONPROTO)/Protobufs/public \
+ $(PRODUCTCONTROLLERCOMMON_DIR)/Protobufs/private \
  $(RIVIERA_LPM_PROTO_DIR)/proto \
  $(SOUNDTOUCH_SDK_DIR)/protobufs \
  $(SOUNDTOUCH_SDK_DIR)/prebuilt/include \
