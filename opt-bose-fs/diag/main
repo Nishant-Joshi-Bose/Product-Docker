@@ -60,10 +60,12 @@ version_info = json.load(open("/opt/Bose/etc/BoseVersion.json"))
 print "<li>Software Version"
 print """<div class="box">"""
 print html_escape(version_info["long"])
+
+# ---------------------------------------------------------------------------
 swupfile = "/opt/Bose/etc/secure/publicKeys/bose_public_key_swupdate.pem"
 hash_md5 = hashlib.md5()
 with open(swupfile, "rb") as f:
-   for chunk in  iter(lambda: f.read(4096), b""):
+   for chunk in iter(lambda: f.read(4096), b""):
        hash_md5.update(chunk)
 env = "unknown"
 hash = hash_md5.hexdigest()
@@ -71,7 +73,9 @@ if hash == "470b921c5ba60befba45130ec75c6ff4":
    env = "development"
 if hash == "720c7c5384a2fe6b9c322d07d7e56906":
    env = "production"
-print "</br>Software Update Hash: ", hash ,"( ", env, ")"
+print "</br>Software Update Hash: {} ({})".format(hash, env)
+# ---------------------------------------------------------------------------
+
 print "</div>"
 
 print "<li>Manufacturing Data [<a href='/diag/mfg-data'>all</a>]"
@@ -80,8 +84,8 @@ print """<div class="box">"""
 print "<table>"
 
 elem = "development"
-dev = mfg_data.get(elem)
-if dev is not None:
+dev = mfg_data.get(elem, "false")
+if dev != "false":
     print """<tr class="hilite"><td>{}</td><td>{}</td></tr>""" \
         .format(elem, html_escape(dev))
 

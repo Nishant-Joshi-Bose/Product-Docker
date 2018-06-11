@@ -147,12 +147,12 @@ int main( int argumentCount, char** argumentValue )
         BOSE_DEBUG( ProductApp::s_logger, "The Product Controller is starting up from the main function." );
 
         ////////////////////////////////////////////////////////////////////////////////////////////
-        /// @brief A Professor Product Controller is constructed and ran, and then the main task is
-        ///        suspended until the task associated with the Product Controller is ended.
+        /// @brief A Professor Product Controller is constructed and started, and then the main task
+        ///        is suspended until the task associated with the Product Controller is ended.
         ////////////////////////////////////////////////////////////////////////////////////////////
         ProductApp::ProfessorProductController ProfessorProductControllerInstance;
 
-        ProfessorProductControllerInstance.Run( );
+        ProfessorProductControllerInstance.Start( );
         ProfessorProductControllerInstance.Wait( );
 
         return( EXIT_SUCCESS );
