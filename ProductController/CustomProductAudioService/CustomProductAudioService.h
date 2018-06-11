@@ -10,6 +10,8 @@
 #include "CustomAudioSettingsManager.h"
 #include "ThermalMonitorTask.h"
 #include "EddieAudioSettings.pb.h"
+#include "DataCollectionClientIF.h"
+
 
 namespace ProductApp
 {
@@ -86,7 +88,7 @@ private:
     std::unique_ptr<AudioSetting<ProductPb::AudioCenterLevel>>      m_audioCenterSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioMode>>             m_audioModeSetting;
     std::unique_ptr<AudioSetting<ProductPb::AudioTrebleLevel>>      m_audioTrebleSetting;
-
+    std::shared_ptr< DataCollectionClientIF >                       m_dataCollectionClient;
 
 };
 
