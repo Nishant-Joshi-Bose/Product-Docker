@@ -242,6 +242,11 @@ bool CustomProductControllerStateAccessoryPairing::HandleChimeSASSPlaybackComple
             GetProductController( ).HandleChimePlayRequest( m_pairingCompleteChimeToPlay.front() );
         }
     }
+    else
+    {
+        BOSE_INFO( s_logger, "%s - eventId(%d) is not what we expect(%d), ignore it.",
+                   __func__, eventId, m_pairingCompleteChimeToPlay.front() );
+    }
     return true;
 }
 
