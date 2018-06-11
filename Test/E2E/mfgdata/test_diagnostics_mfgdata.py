@@ -21,6 +21,7 @@ from conf_diagnostics import CONFIG
 
 logger = get_logger(__name__, "DiagnosticsPage.log", level=logging.DEBUG, fileLoglevel=logging.DEBUG)
 expected_software_header = CONFIG["expected_text"]["software_version_text"]
+expected_hash_text = CONFIG["expected_text"]["expected_hash_text"]
 
 @pytest.mark.usefixtures('driver', 'device_id', 'device_ip', 'force_rndis')
 def test_diagnostics_mfgdata(driver, device_id, device_ip, riviera, request):
@@ -38,11 +39,14 @@ def test_diagnostics_mfgdata(driver, device_id, device_ip, riviera, request):
         # Check for Page Header
         diagnostics_page.get_diagnostics_header()
         # Check for the Software Version on Diagnostics Page
-        software_version_header, software_version_build, software_version_dut = diagnostics_page.get_sofware_version()
+        software_version_header, software_version_build, software_update_hash, software_version_dut = diagnostics_page.get_sofware_version()
         assert expected_software_header == software_version_header, \
                 'Software Version Header did not match. Found {}, expected {}'.format(expected_software_header, software_version_header)
         assert software_version_build == software_version_dut["long"], \
                 'Software Version Build did not match. Found {}, expected {}'.format(software_version_build, software_version_dut["long"])
+        assert "unknown" not in software_update_hash, \
+                'Software Version Text did not match. Found {}, expected {}'.format(software_update_hash.split()[6], expected_hash_text)
+        # "Software Version string contains either 'production' or 'development'"
         logger.info("Software version Build matches as expected - %s / %s", software_version_build, software_version_dut["long"])
         # Check for the LPM Version on Diagnostics Page and compare with DUT
         lpm_version_dut = riviera.get_lpm_version()

@@ -174,11 +174,9 @@ class DiagnosticsPage(SeleniumWrapper):
         software_version_info = self.getElement(self.software_version_header, locatorType="css")
         software_version_header, software_version_build, software_update_hash = software_version_info.text.split('\n')
         software_version_dut = json.loads(self.adb.executeCommand(self.fs_version_command))
-        self.logger.info(software_version_header)
-        self.logger.info(software_version_build)
-        self.logger.info(software_update_hash)
-        self.logger.debug("Diagnostic's software_version_header is - %s and software_version_build is - %s", software_version_header, software_version_build)
-        return software_version_header, software_version_build, software_version_dut
+        self.logger.debug("Diagnostic's software_version_header is - %s , software_version_build is - %s, and software_version_hash is - %s", software_version_header, software_version_build, software_update_hash)
+        return software_version_header, software_version_build, software_update_hash, software_version_dut
+
 
     def diagnostics_lpm_versions(self):
         """
