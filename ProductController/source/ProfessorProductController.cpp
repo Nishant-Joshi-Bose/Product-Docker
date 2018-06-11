@@ -1139,25 +1139,17 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Handle network operationalmode at this point
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.networkstatus().has_operationalmode() )
+    else if( message.networkstatus().has_wifiapstate() )
     {
-        if( m_networkOperationalMode != message.networkstatus().operationalmode() )
+        if( message.networkstatus().wifiapstate() )
         {
-            // If we are currently in wifi setup and are exiting to another mode
-            // unmute the amp
-            //   - SetAmp( bool on, bool muted )
-            if( m_networkOperationalMode == NetManager::Protobuf::wifiSetup )
-            {
-                GetLpmHardwareInterface()->SetAmp( true, false );
-            }
-            // Entering ap setup we need to mute due to electrical interference with audio clocks
-            else if( message.networkstatus().operationalmode() == NetManager::Protobuf::wifiSetup )
-            {
-                GetLpmHardwareInterface()->SetAmp( true, true );
-            }
-
-            m_networkOperationalMode = static_cast<NetManager::Protobuf::OperationalMode>( message.networkstatus().operationalmode() );
+            GetLpmHardwareInterface()->SetAmp( true, true );
         }
+        else
+        {
+            GetLpmHardwareInterface()->SetAmp( true, false );
+        }
+
         ( void ) HandleCommonProductMessage( message );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
