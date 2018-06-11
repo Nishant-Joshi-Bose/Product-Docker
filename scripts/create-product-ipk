@@ -168,9 +168,6 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 # Allow components to add to the staging area.
 
 "$avs_dir/stage" "$opt_dir" || exit
-<<<<<<< HEAD
-"$softwareupdate_dir/stage" "$opt_dir" || exit
-"$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
 
 # below is temporary due to stage issue in 1.0.1 Audiopath release that expects these folders ( although empty )
 mkdir -p "$audiopath_dir/professor/lib"
