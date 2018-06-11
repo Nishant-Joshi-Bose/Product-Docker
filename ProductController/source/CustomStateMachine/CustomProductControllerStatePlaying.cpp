@@ -80,14 +80,8 @@ void CustomProductControllerStatePlaying::HandleStateEnter( )
     GetCustomProductController( ).GetDspHelper( )->SetNormalOperationsMonitor( true );
     GetCustomProductController( ).GetBLERemoteManager( )->PowerOn( );
 
-    auto desiredPlayingVolumePair = GetCustomProductController( ).GetDesiredPlayingVolume( );
-    if( desiredPlayingVolumePair.first )
-    {
-        SoundTouchInterface::volume v;
-        v.set_value( desiredPlayingVolumePair.second );
-        GetCustomProductController( ).GetFrontDoorClient( )->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
-            FRONTDOOR_AUDIO_VOLUME_API, v, {}, FrontDoorErrorCallback );
-    }
+    // Limit the volume to threshold when entering PLAYING, perhaps volume was changed while system was in another state
+    SetVolumeToThresholdLimit( );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,6 +131,28 @@ void CustomProductControllerStatePlaying::HandleStateExit( )
     GetCustomProductController( ).GetCecHelper( )->PowerOff( );
     GetCustomProductController( ).GetBLERemoteManager( )->PowerOff( );
     GetCustomProductController( ).GetDspHelper()->SetNormalOperationsMonitor( false );
+
+    // Limit the volume to threshold when exiting PLAYING, so UI can show the value expected when we resume playing
+    SetVolumeToThresholdLimit( );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name  CustomProductControllerStatePlaying::SetVolumeToThresholdLimit
+///
+/// @brief Consult ProductController and set volume to the limited value if desired
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void CustomProductControllerStatePlaying::SetVolumeToThresholdLimit( )
+{
+    auto desiredPlayingVolumePair = GetCustomProductController( ).GetDesiredPlayingVolume( );
+    if( desiredPlayingVolumePair.first )
+    {
+        SoundTouchInterface::volume v;
+        v.set_value( desiredPlayingVolumePair.second );
+        GetCustomProductController( ).GetFrontDoorClient( )->SendPut<SoundTouchInterface::volume, FrontDoor::Error>(
+            FRONTDOOR_AUDIO_VOLUME_API, v, {}, FrontDoorErrorCallback );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
