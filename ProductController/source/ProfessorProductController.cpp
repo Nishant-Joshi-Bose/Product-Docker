@@ -120,9 +120,8 @@ constexpr uint32_t PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
 ///
 /// @name   ProfessorProductController::ProfessorProductController
 ///
-/// @brief  This method is the ProfessorProductController constructor, which is declared as being
-///         private to ensure that only one instance of this class can be created through the class
-///         GetInstance method.
+/// @brief  This method is the ProfessorProductController constructor, which is used to initialize
+///         its corresponding module classes and member variables.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProfessorProductController::ProfessorProductController( ) :
@@ -172,14 +171,32 @@ ProfessorProductController::ProfessorProductController( ) :
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name ProfessorProductController::Start
+///
+/// @brief This method starts the product controller by dispatching its Run method inside the
+///        product task. The Run method initializes the product controller state machine and all
+///        of its associated modules, including the registration of callbacks for internal and state
+///        machine messaging, IPC, Frontdoor end-points, and so forth. Since these initializations
+///        take place first inside the product task, and all callbacks are processed inside the same
+///        product task after the initialization, no callback can be invoked from a non-existent
+///        state or module. This method was put in place based on the JIRA Story PGC-2052.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::Start( )
+{
+    m_Running = true;
+
+    IL::BreakThread( std::bind( &ProfessorProductController::Run, this ), GetTask( ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name ProfessorProductController::Run
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::Run( )
 {
-    m_Running = true;
-
-    BOSE_DEBUG( s_logger, "----------- Product Controller State Machine    ------------" );
+    BOSE_DEBUG( s_logger, "----------- Product Controller Initialization Start ------------" );
     BOSE_DEBUG( s_logger, "The Professor Product Controller is setting up the state machine." );
 
     ///
@@ -577,6 +594,8 @@ void ProfessorProductController::Run( )
     /// Register LPM events for LightBar
     ///
     m_lightbarController->RegisterLpmEvents();
+
+    BOSE_DEBUG( s_logger, "------------ Product Controller Initialization End -------------" );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
