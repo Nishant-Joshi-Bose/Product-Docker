@@ -13,6 +13,7 @@
 #include "CustomProductAudioService.h"
 #include "LpmClientFactory.h"
 #include "SoundTouchInterface/ContentItem.pb.h"
+#include "Bass.pb.h"
 
 using namespace std::placeholders;
 
@@ -34,7 +35,8 @@ CustomProductAudioService::CustomProductAudioService( EddieProductController& pr
                          productController.GetMessageHandler() ,
                          frontDoorClient ),
     m_audioSettingsMgr( std::unique_ptr<CustomAudioSettingsManager>( new CustomAudioSettingsManager() ) ),
-    m_thermalTask( lpmClient, std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ) )
+    m_thermalTask( lpmClient, std::bind( &CustomProductAudioService::ThermalDataReceivedCb, this, _1 ) ),
+    m_dataCollectionClient( productController.GetDataCollectionClient() )
 {
     BOSE_DEBUG( s_logger, __func__ );
 }
@@ -89,6 +91,9 @@ void CustomProductAudioService::RegisterFrontDoorEvents()
         {
             m_mainStreamAudioSettings.set_basslevel( m_audioSettingsMgr->GetBass( ).value() );
             SendMainStreamAudioSettingsEvent();
+            auto dbaPb = std::make_shared<DataCollection::Bass>();
+            dbaPb->set_bass( m_audioSettingsMgr->GetBass( ).value() );
+            m_dataCollectionClient->SendData( dbaPb, "bass-changed" );
         }
         return error;
     };
