@@ -245,7 +245,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
     {
         const auto& source = m_sources.sources( i );
 
-        if( not source.visible() )
+        if( source.status() != SoundTouchInterface::SourceStatus::available )
         {
             // source isn't configured, don't light it
             continue;
@@ -280,8 +280,8 @@ void ProductBLERemoteManager::UpdateBacklight( )
 
     // set the active source and associated zones
     A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t sourceLED;
-    bool visible;
-    bool valid = GetSourceLED( sourceLED, visible );
+    bool configured;
+    bool valid = GetSourceLED( sourceLED, configured );
     if( valid )
     {
         // zone selection here is from section 6.5.4 ("Zone Assignments per Device")
@@ -299,7 +299,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
         case LedsSourceTypeMsg_t::TV:
             leds.set_tv( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ACTIVE );
             leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            if( visible )
+            if( configured )
             {
                 leds.set_zone_01( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
                 leds.set_zone_02( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
@@ -367,19 +367,19 @@ void ProductBLERemoteManager::UpdateBacklight( )
 /// @brief ProductBLERemoteManager::GetSourceLED
 ///
 /// @param  sourceLED - reference to sourceLED to illuminate
-///         visible - reference to flag indicating whether source is configured
+///         configured - reference to flag indicating whether source is configured
 ///
 /// @return This method does not return anything.
 ///
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProductBLERemoteManager::GetSourceLED(
-    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& visible )
+    A4VRemoteCommunication::A4VRemoteCommClientIF::ledSourceType_t& sourceLED, bool& configured )
 {
     using namespace ProductSTS;
     using namespace SystemSourcesProperties;
 
-    visible = false;
+    configured = false;
 
     if( m_inSetup )
     {
@@ -401,7 +401,7 @@ bool ProductBLERemoteManager::GetSourceLED(
     const auto& sourceName = sourceItem->sourcename();
     const auto& sourceAccountName = sourceItem->sourceaccountname();
 
-    visible = sourceItem->visible();
+    configured = sourceItem->status() == SoundTouchInterface::SourceStatus::available;
     if( sourceName.compare( ProductSourceSlot_Name( PRODUCT ) ) == 0 )
     {
         if( sourceAccountName.compare( ProductSourceSlot_Name( TV ) ) == 0 )

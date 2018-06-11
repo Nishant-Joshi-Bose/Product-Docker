@@ -28,7 +28,7 @@ def main():
             "sourceAccountName" : "SLOT_0",
             "sourceName"        : "PRODUCT",
             "status"            : "available",
-            "visible"           : "true",
+            "visible"           : "false",
         },
         {
             "details" : {
@@ -46,29 +46,16 @@ def main():
         },
         {
             "details" : {
-                "deviceType" : "DEVICE_TYPE_GAME",
-                "ciCode"        : "T2778",
-                "activationKey"     : "ACTIVATION_KEY_GAME"
-            },
-            "displayName"       : "SLOT_2",
-            "local"             : True,
-            "multiroom"         : True,
-            "sourceAccountName" : "SLOT_2",
-            "sourceName"        : "PRODUCT",
-            "status"            : "available",
-            "visible"           : "true",
-        },
-        {
-            "details" : {
                 "deviceType"    : "DEVICE_TYPE_TV",
-                "ciCode"        : "T2778",
+                "ciCode"        : "",
             },
             "displayName": "TV", 
             "local"             : True, 
             "multiroom"         : True, 
             "sourceAccountName" : "TV", 
             "sourceName"        : "PRODUCT", 
-            "status"            : "available"
+            "status"            : "notconfigured",
+            "visible"           : "true",
         }
     ]
 
