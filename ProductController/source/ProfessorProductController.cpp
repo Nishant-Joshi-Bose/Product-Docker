@@ -763,7 +763,7 @@ bool ProfessorProductController::IsSystemLanguageSet( ) const
 ///
 /// @name   ProfessorProductController::GetOOBDefaultLastContentItem
 ///
-/// @return This method returns the PassportPB::ContentItem value to be used for initializing the OOB LastContentItem
+/// @return This method returns the PassportPB::contentItem value to be used for initializing the OOB LastContentItem
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 PassportPB::contentItem ProfessorProductController::GetOOBDefaultLastContentItem() const
@@ -1128,7 +1128,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_accessorypairing( ) )
     {
-        GetHsm( ).Handle< ProductAccessoryPairing >
+        GetHsm( ).Handle< ProductPb::AccessorySpeakerState >
         ( &CustomProductControllerState::HandlePairingStatus, message.accessorypairing( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
