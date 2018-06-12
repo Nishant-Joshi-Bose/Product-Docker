@@ -119,7 +119,7 @@ class TestDemo():
         demoUtils.verifyDemoModeOn(20, frontDoor_reboot)
         demoUtils.verifyDemoKeyConfig(frontDoor_reboot)
         demoUtils.playandValidateMusic(frontDoor_reboot)
-        demoUtils.verifyVolumeKeyControl(device_ip, True, frontDoor_reboot)
+        demoUtils.verifyVolumeKeyControl(device_ip, frontDoor_reboot)
         demoUtils.deleteKeyConfig(frontDoor_reboot)
         demoUtils.verifyDemoKeyConfig(frontDoor_reboot, "Error Reading configuration file")
         demoUtils.stopPlayback(frontDoor_reboot)
