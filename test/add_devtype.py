@@ -61,7 +61,7 @@ def main():
         {
             "details" : {
                 "deviceType"    : "DEVICE_TYPE_TV",
-                "ciCode"        : "T2778",
+                "ciCode"        : "",
             },
             "displayName": "TV", 
             "local"             : True, 
