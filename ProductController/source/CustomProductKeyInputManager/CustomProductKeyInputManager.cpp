@@ -139,13 +139,13 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
         if( keyEvent.keyid( ) == BOSE_TV_INPUT )
         {
             const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( "PRODUCT",  "TV" );
-            if( tvSource and tvSource->has_details( ) and tvSource->visible( ) )
+            if( tvSource and tvSource->has_details( ) )
             {
                 cicode = tvSource->details( ).cicode( );
                 isBlastedKey = true;
             }
         }
-        else if( sourceItem and sourceItem->has_details( ) and sourceItem->visible( ) )
+        else if( sourceItem and sourceItem->has_details( ) )
         {
             const auto& sourceDetails = sourceItem->details( );
             if( sourceDetails.has_devicetype( ) )
@@ -154,6 +154,14 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
             }
 
             cicode = sourceDetails.cicode( );
+        }
+
+        // if it's a key that normally would have been blasted but the source isn't configured,
+        // just consume it
+        if( isBlastedKey && sourceItem and ( not sourceItem->visible() ) )
+        {
+            BOSE_INFO( s_logger, "%s consuming key", __func__ );
+            return true;
         }
 
         // ignore CEC keys if we're not in TV or SLOT_* sources
