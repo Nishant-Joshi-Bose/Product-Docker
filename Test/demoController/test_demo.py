@@ -66,8 +66,6 @@ class TestDemo():
         """
         logger.info("Start test_demoPlayPauseBehaviour")
         demoUtils.setDemoMode(True, deviceid, frontDoor_reboot, True, 3, request.config.getoption("--network-iface"))
-        status, responseTimeout = demoUtils.getDemoTimeout(device_ip)
-        assert status, "Demo timeout reported Exception {} " + responseTimeout
         demoUtils.verifyDemoMode(True, frontDoor_reboot)
         time.sleep(5)
         demoUtils.setDemoMode(True, deviceid, frontDoor_reboot, False, 3, request.config.getoption("--network-iface"))
@@ -92,7 +90,7 @@ class TestDemo():
         demoUtils.verifyDemoMode(True, frontDoor_reboot)
         time.sleep(5)
         demoUtils.setDemoMode(True, deviceid, frontDoor_reboot, False, 3, request.config.getoption("--network-iface"))
-        demoUtils.verifyDemoModeOn(10, frontDoor_reboot)
+        demoUtils.verifyDemoModeOn(20, frontDoor_reboot)
         demoUtils.verifyDemoKeyConfig(frontDoor_reboot)
         demoUtils.deleteKeyConfig(frontDoor_reboot)
         demoUtils.verifyDemoKeyConfig(frontDoor_reboot, "Error Reading configuration file")
@@ -115,6 +113,7 @@ class TestDemo():
         demoUtils.verifyDemoKeyConfig(frontDoor_reboot)
         demoUtils.setDemoMode(True, deviceid, frontDoor_reboot, True, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoMode(True, frontDoor_reboot)
+        time.sleep(5)
         demoUtils.setDemoMode(True, deviceid, frontDoor_reboot, False, 3, request.config.getoption("--network-iface"))
         demoUtils.verifyDemoModeOn(20, frontDoor_reboot)
         demoUtils.verifyDemoKeyConfig(frontDoor_reboot)
