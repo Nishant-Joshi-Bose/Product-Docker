@@ -107,6 +107,17 @@ def pytest_addoption(parser):
                      default='9zf6kcZgF5IEsXbrKU6fvG8vFGWzF1Ih',
                      help='Passport API KEY')
 
+    parser.addoption("--email",
+                     action="store",
+                     type="string",
+                     default="Testing_Madrid@bose.com",
+                     help="gigya email")
+
+    parser.addoption("--password",
+                     action="store",
+                     type="string",
+                     default="testing_madrid",
+                     help="gigya password")
 
 def ping(ip):
     """ Pings a given IP Address """
