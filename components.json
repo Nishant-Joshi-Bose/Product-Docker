@@ -13,11 +13,11 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-11_1957"
+    "selected_version": "Release/Castle-Fork/1.5.7.42710.2863294"
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/master/1.0.0-42+8b51847"
+    "selected_version": "Release/master/1.5.0-46+d64c839"
   },
   {
     "name": "bose-opkg-utils",
@@ -53,15 +53,15 @@
   },
   {
     "name": "BTSource-qc8017_32",
-    "selected_version": "Release/master/1.0.0-24+b963a7c"
+    "selected_version": "Release/master/1.5.0-26+a759501"
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Release/master/1.0.0-68+0ed9e2f"
+    "selected_version": "Release/master/1.5.0-71+dfcce78"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/master/1.0.0-24+9c275d5"
+    "selected_version": "Release/master/1.5.0-26+dbc6906"
   },
   {
     "name": "CastleLibs-native",
@@ -149,7 +149,7 @@
   },
   {
     "name": "ProductUIAssets",
-    "selected_version": "master@f5025558c6d13bc8fe9e67ff7248a89a6441b0c2"
+    "selected_version": "master@3abdcec9611e25ba45c7c0df9e856885ba891285"
   },
   {
     "name": "protobuf-native",
@@ -193,7 +193,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Continuous/Castle-Fork/2018-06-11_1957"
+    "selected_version": "Release/Castle-Fork/1.5.7.42710.2863294"
   },
   {
     "name": "SystemEventService-qc8017_32",
@@ -201,7 +201,7 @@
   },
   {
     "name": "TestUtils",
-    "selected_version": "master@d24fe460b1d13b0c13baf0316708b4cc33868dd3"
+    "selected_version": "master@d002a1d11d1d7ffb2a60d35400b5bf54c7948326"
   },
   {
     "name": "Webkit",
