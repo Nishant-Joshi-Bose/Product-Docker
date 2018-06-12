@@ -200,7 +200,12 @@ mkdir -p "$opt_dir/etc/ginger-cheevers" || exit
 "$democontroller_dir/stage" "$opt_dir" || exit
 "$webkit_dir/stage" "$opt_dir" || exit
 "$productuiassets_dir/stage" --chimes=SoundBar/professor --type=flac "$opt_dir" professor || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/bass-box --type=flac "$opt_dir" professor || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/rear-surrounds --type=flac "$opt_dir" professor || exit
 "$productuiassets_dir/stage" --chimes=SoundBar/ginger-cheevers --type=flac "$opt_dir" ginger-cheevers || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/bass-box --type=flac "$opt_dir" ginger-cheevers || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/rear-surrounds --type=flac "$opt_dir" ginger-cheevers || exit
+
 "$frontdoor_dir/stage" "$opt_dir" || exit
 "$frontdoorutility_dir/stage" "$opt_dir" || exit
 "$galapagosclient_dir/stage" "$opt_dir" || exit

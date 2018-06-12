@@ -186,7 +186,14 @@ private:
     void SetSpeakersEnabled( const ProductPb::AccessorySpeakerState::SpeakerControls req,
                              const Callback<ProductPb::AccessorySpeakerState> &frontDoorCB );
 
-    void RecieveAccessoryListCallback( LpmServiceMessages::IpcAccessoryList_t accList );
+    void ReceiveAccessoryListCallback( LpmServiceMessages::IpcAccessoryList_t accList );
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following method sends accessory pairing state ProductMessage to ProductController
+    ///
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    void SendAccessoryPairingStateToProduct( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     ///
@@ -222,6 +229,7 @@ private:
                                                             accDesc,
                                                             ProductPb::AccessorySpeakerState::AccessorySpeakerInfo*
                                                             spkrInfo );
+    bool m_accessoryListReceived = false;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
