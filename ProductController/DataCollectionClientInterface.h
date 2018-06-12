@@ -10,10 +10,7 @@
 #include "NotifyTargetTaskIF.h"
 #include "FrontDoorClient.h"
 #include "SoundTouchInterface/PlayerService.pb.h"
-#include "AudioBassLevel.pb.h"
-#include "WebInterface/Balance.pb.h"
 #include "DeviceManager.pb.h"
-#include "SharedProto.pb.h"
 
 class DataCollectionClientInterface
 {
@@ -23,9 +20,6 @@ public:
 
     void Subscribe();
     void ProcessSystemState( const DeviceManagerPb::DeviceState& ds );
-    void ProcessBassState( const  ProductPb::AudioBassLevel& abl );
-    void ProcessBalanceState( const  WebInterface::balance& b );
-    //void ProcessLanguage( const DeviceManagerPb::ProductSettings& psPb );
 
 private:
 

@@ -1,7 +1,6 @@
-WIRELESS SPEAKERS AND SOUNDBAR  SYSTEMS SOFTWARE LICENSE LISTINGS
+SOUNDTOUCH AND SOUNDBAR  SYSTEMS SOFTWARE LICENSE LISTINGS
 
-
-LICENSE DISCLOSURES APPLICABLE TO BOTH WIRELESS SPEAKERS AND SOUNDBAR SYSTEMS
+LICENSE DISCLOSURES APPLICABLE TO BOTH SOUNDTOUCH AND SOUNDBAR SYSTEMS
 
 **********INDEX**********
 
@@ -9,50 +8,63 @@ LICENSE DISCLOSURES APPLICABLE TO BOTH WIRELESS SPEAKERS AND SOUNDBAR SYSTEMS
 
 The following modules are covered under GPLv2 without the inclusion of specific copyright attribution.
 
--  Advanced Bose Link (ABL) Kernel Module
--  alsa-utils
--  base-files
+-  Advanced Bose Link (ABL) Kernel Module - Copyright 1996© by Lauri Tischler  
+-  alsa-utils - 
+-  base-files - 
 -  base-passwd
--  busybox
--  dbus
+-  busybox - Copyright © 1999-2008 Erik Andersen  
 -  devmem2
--  dosfstools
--  ethtool
--  externsoft.ch
--  fbset
--  fbshot
--  i2c-tools
--  Initiscripts
--  iproute2
--  iptables
--  kernel-3.2.0
--  libacl1
--  libattr1
+-  dosfstools - 
+-  ethtool - 
+-  externsoft.ch - 
+-  fbset - Copyright (C) 1999 by Randolph Chung <tausq@debian.org>
+-  fbshot - Copyleft (C) 2002 Dariusz Swiderski
+
+-  i2c-tools- Copyright (C) 1995-1997 Simon G. Vogl
+  	Copyright (C) 1998-2004 Frodo Looijaard 
+  	Copyright (C) 1998, 1999 Philip Edelbrock
+	Copyright (C) 1998-2004 Mark D. Studebaker 
+	Copyright (C) 2002 James Simmons
+	Copyright (C) 2002-2013 Jean Delvare 
+	Copyright (c) 2003 Stefano Barbato
+	Copyright (C) 2005-2007 Mark M. Hoffman 
+	Copyright (C) 2009 Mike Frysinger 
+	Copyright (C) 2013 Jaromir Capik
+	Copyright (C) 2015-17 Renesas Electronics Corporation
+  	Copyright (C) 2015-17 Wolfram Sang 
+
+-  Initiscripts - 
+-  iproute2 - 
+-  iptables - Copyright © 2004 Harald Welte
+-  kernel-3.2.0 - 
+-  libacl1 Copyright (C) 2001 Andreas Gruenbacher. Copyright (C) 2001-2002    Silicon Graphics, Inc
+
+-  libattr1 Copyright (C) 2001 Andreas Gruenbacher. Copyright (C) 2001-2002 Silicon Graphics, Inc. 
 -  libpam-base-files
--  module-init-tools
--  opkg
+-  module-init-tools  
 -  update-modules
--  update-rc.d
--  usbutils
--  util-linux-ng
--  Vorbistools
+-  update-rc.d - Copyright (c) 2003, 2004 Phil Blundell <pb@handhelds.org>
+-  usbutils - 
+-  util-linux-ng - 
+-  Vorbistools - COPYRIGHT 1994-2000 by Monty and The XIPHOPHORUS Company
 
 2.  GPLv3 WITH GCC RULE
 
 The following modules are covered under GPLv3 with GCC Rule without the inclusion of specific copyright attribution.  
 
--  libgcc1
--  libstdc++6
+-  libgcc1 - GCC is Copyright (C) 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014 Free Software Foundation, Inc
+
+-  libstdc++6 - 
 
 3.  GPLv2+
 
 The following modules are covered under GPLv2 or later without the inclusion of specific copyright attribution.  Bose has chosen to adopt GPLv2 for its implementation of these codes.  Please refer to Section 1 of this file where GPLv2 has been published.
 
 -  base-files
--  nfs-utils-client
--  psplash-support
--  udev
--  update-rc.d
+-  nfs-utils-client 
+-  psplash-support - Copyright (c) 2006 Matthew Allum
+-  udev - Copyright (c) 2013, Sam Truzjan
+-  update-rc.d – Copyright (c) 2003, 2004 Phil Blundell
 
 4.  LGPLv2.1
 
@@ -66,7 +78,7 @@ The following modules are covered under LGPLv2.1 without the inclusion of specif
 The following modules are covered under LGPLv2.1 or later without the inclusion of specific copyright attribution.  Bose has chosen to adopt LGPLv2.1 for its implementation of these codes.  Please refer to Section 4 of this file where LGPLv2.1 has been published.
 
 -  libc6
--  libglib-2.0-0
+-  libglib-2.0-0 - Copyright © 1995-2011 Red Hat, Inc., Copyright © 2008-2010 Novell, Inc., Copyright © 2008-2010 Codethink Limited., Copyright © 2008-2010 Collabora, Ltd.
 
 6.  MIT LICENSE
 
@@ -76,127 +88,153 @@ The following modules are covered under the MIT License without the inclusion of
 -  task-arago-base-tisdk
 -  task-arago-base- console
 
-7.  AES FROM GLADMAN LICENSE
+7.  AES FROM GLADMAN LICENSE - Copyright (c) 2002, Dr Brian Gladman           Worcester, UK. All rights reserved.
 
-8.  ALSA-SERVER LICENSE
+8.  ALSA-SERVER LICENSE - ALSA server. Copyright (c) by Abramo Bagnara <abramo@alsa-project.org>
 
-9.  BITSTREAM FONTS LICENSE
+9.  BITSTREAM FONTS LICENSE – Copyright The Bitstream Product and the accompanying materials are copyrighted and contain proprietary information and trade secrets of Bitstream. Unauthorized copying of the Bitstream product even if modified, merged, or included with other software, or of the written materials, is expressly forbidden. You may be held legally responsible for any infringement of Bitstream's intellectual property rights that is caused or encouraged by your failure to abide by the terms of this Agreement, unless you have a Multi-Workstation License Agreement. You may make one (1) copy of the Bitstream Product solely for backup purposes provided the copyright and trademark notices are reproduced in their entirety on the backup copy.
+ 
 
-10. BZIP2 LICENSE
+10. BZIP2 LICENSE -BZIP2 Copyright © 1996-2007 Julian Seward
 
 11. CURL/LIBCURL LICENSE
 
--   LibCurl version 7.46.0
+-   LibCurl version 7.46.0 Copyright (c) 1996 - 2015, Daniel Stenberg, <daniel@haxx.se>.
 
-12. DARWIN SOURCE REPOSITORY/MDNSRESPONDER LICENSE
 
-13. DBUS LICENSE
+12. DARWIN SOURCE REPOSITORY/MDNSRESPONDER LICENSE - Portions Copyright (c) 1999-2007 Apple Inc.  All Rights Reserved.
+
+
+13. DBUS LICENSE - Copyright (c) 2013, Georg Reinke
+
 
 14. DES- ECYRPT/DECRYPT USING FAST IMPLEMENTATION OF NBS DES LICENSE
+	- DES.java - Copyright (C) 2002, 2003, 2006 Free Software Foundation, Inc.
 
-15. DEVMEM LICENSE
+15. DEVMEM LICENSE - devmem2.c: Simple program to read/write from/to any location in memory. Copyright (C) 2000, Jan-Derk Bakker (jdb@lartmaker.nl)
+ 
 
-16. DIRECT FB LICENSE
+16. DIRECT FB LICENSE -(c) Copyright 2001-2007 The DirectFB Organization (directfb.org (c) Copyright 2000-2004 Convergence (integrated media) GmbH
 
-17. DOSFSTOOLS LICENSE
 
-18. E2FSPROGS LICENSE
+17. DOSFSTOOLS LICENSE - dosfsck – (c) Copyrighted by
+Werner Almesberger <almesber@lrc.di.epfl.ch> and Roman Hodek
+<Roman.Hodek@informatik.uni-erlangen.de>.
 
-19. EXPAT XML PARSER/EXPAT LICENSE
 
-20. FLAC DECODER LICENSE
+
+
+18. E2FSPROGS LICENSE - EXT2 filesystem utilities
+ 
+19. EXPAT XML PARSER/EXPAT LICENSE - PARSER- EXPAT - Copyright (c) 1998, 1999, 2000 Thai Open Source Software Center Ltd and Clark Cooper
+Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006 Expat maintainers
+
+20. FLAC DECODER LICENSE - Copyright (C) 2000-2009 Josh Coalson
+Copyright (C) 2011-2013Xiph.Org Foundation
 
 21. FLAC-SRC LICENSE
 
-22. FREETYPE/LIBFREETYPE LICENSE
+22. FREETYPE/LIBFREETYPE LICENSE - FreeType 2 font engine -                     Copyright 1996-2002, 2006 by David Turner, Robert Wilhelm, and Werner Lemberg
 
-23. GOAHEAD WEBSERVER LICENSE
 
-24. HMAC MD5 LICENSE
+23. GOAHEAD WEBSERVER LICENSE - Copyright (c) 20xx Embedthis Software, Inc. All Rights Reserved
 
-25. INITSCRIPT-TELNETD LICENSE
+24. HMAC MD5 LICENSE - Copyright (C) 1999, 2001, 2007, 2008, 2009 Free Software Foundation, Inc.
 
-26. IPERF LICENSE
 
-27. JPEG/LIBJEG LICENSE
+25. INITSCRIPT-TELNETD LICENSE - (C) Copyright 2000, Axis Communications AB, LUND, SWEDEN
 
-28. JSON-CPP LICENSE
 
-29. LIBACL LICENSE
+26. IPERF LICENSE - Copyright (c) 1999-2007, The Board of Trustees of the University of Illinois. All Rights Reserved.
 
-30. LIBATTR LICENSE
+27. JPEG/LIBJEG LICENSE - jpeglib.h - Copyright (C) 1991-1998, Thomas G. Lane. Modified 2002-2009 by Guido Vollbeding.
+
+28. JSON-CPP LICENSE - Copyright (c) 2007-2010 by Baptiste Lepilleur
+
+29. LIBACL LICENSE - Copyright (c) 2000-2001 Silicon Graphics, Inc.  
+
+30. LIBATTR LICENSE - Copyright (c) 2000-2001 Silicon Graphics, Inc.
 
 31. LIBPCAP LICENSE
 
-32. LIBCRE0 LICENSE
+32. LIBCRE0 LICENSE - Copyright (c) 1997-2008 University of Cambridge
+All rights reserved.
 
-33. LIBEXPAT LICENSE
+33. LIBEXPAT LICENSE - Copyright (c) 1998, 1999, 2000 Thai Open Source Software Center Ltd and Clark Cooper
+Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006 Expat maintainers.
 
-34. LIBJPEG LICENSE
+34. LIBJPEG LICENSE - Copyright (C) 1991-1998, Thomas G. Lane.
 
-35. LIBMMS LICENSE
+35. LIBMMS LICENSE - Copyright (C) 1994, 1995,
+1996, 1999, 2000, 2001, 2002, 2004, 2005,
+2006, 2007, 2008, 2009 Free Software Foundation, Inc.
+
 
 36. LIBPAM LICENSE
 
-37. LIBPNG LICENSE
+37. LIBPNG LICENSE - Copyright (c) 2004, 2006-2012 Glenn Randers-Pehrson Copyright (c) 2000-2002 Glenn Randers-Pehrson Copyright (c) 1998, 1999 Glenn Randers-Pehrson Copyright (c) 1996, 1997 Andreas Dilger Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.
 
-38. LIBTS-1.0-0 LICENSE
+38. LIBTS-1.0-0 LICENSE - Copyright (C) 1994, 1995, 1996, 1999, 2000, 2001, 2002, 2004, 2005,2006 Free Software Foundation, Inc.
 
-39. LIBUSB LICENSE
+39. LIBUSB LICENSE - LIBUSB -Copyright (c) 2000-2003 Johannes Erdfelt
+johannes@erdfelt.com All rights reserved.
 
-40. LIBXML LICENSE
+40. LIBXML LICENSE - Copyright (C) 1998-2003 Daniel Veillard.  All Rights Reserved.
 
-41. ZLIB/LIBZ LICENSE
+41. ZLIB/LIBZ LICENSE - ZLIB DATA COMPRESSION LIBRARY -Copyright(C) 1995-2004 Jean-loup Gailly and Mark Adler
 
-42. MTD-UTILS LICENSE
+42. MTD-UTILS LICENSE - Copyright (c) Artem Bityutskiy, 2007, 2008
 
-43. NCURSES LICENSE
+43. NCURSES LICENSE - Copyright (c) 1998-2004,2006 Free Software Foundation, Inc.               
 
-44. NETBASE LICENSE
+44. NETBASE LICENSE - Copyright (C) 1995, 1996 Peter Tobias tobias@et-inf.fho-emden.de Ian Jackson <iwj10@cus.cam.ac.uk>
 
-45. NTP LICENSE
+45. NTP LICENSE - Copyright (c) University of Delaware 1992-2011                      
 
-46. OPENSSH LICENSE
+46. OPENSSH LICENSE - Copyright (c) 1995 Tatu Ylonen <ylo@cs.hut.fi>, Espoo, Finland. All rights reserved
 
 47. PNGLIB LICENSE
 
-48. PROTOBUFF LICENSE
+48. PROTOBUFF LICENSE - Copyright 2008, Google Inc. All rights reserved.
 
-49. RSA- MD5 LICENSE
+49. RSA- MD5 LICENSE - Copyright (C) 1991-2, RSA Data Security, Inc. Created 1991. All rights reserved.
 
-50. SMALL JPEG DECODER LIBRARY LICENSE
+50. SMALL JPEG DECODER LIBRARY LICENSE - Copyright (C) 1994-2000 Rich Geldreich
 
-51. SYSVINIT LICENSE
+51. SYSVINIT LICENSE - Sysvinit is Copyright (C) 1991-2004 Miquel van Smoorenburg
 
 52. TCPDUMP LICENSE
 
-53. TINYLOGIN LICENSE
+53. TINYLOGIN LICENSE – TinyLogin - Copyright (C) 1999 by Lineo, inc. and Erik Andersen Copyright (C) 1999-2003 Erik Andersen <andersen@codepoet.org>
 
-54. TINYXML LICENSE
+54. TINYXML LICENSE - TinyXML
 
-55. U-BOOT LICENSE
-
-56. UNZIP LICENSE
+55. U-BOOT LICENSE - U-Boot - copyrighted by Wolfgang Denk and many others who contributed code (see the actual source code and the git commit messages for details). 
+56. UNZIP LICENSE - Copyright (c) 2012 - 2013 Near Infinity Corporation
 
 57. UTIL-LINUX-NG LICENSE
 
-58. WPA_SUPPLICANT-IEEE 802.1X, WPA, WPA2, RSN, IEEE 802.11I LICENSE
+58. WPA_SUPPLICANT-IEEE 802.1X, WPA, WPA2, RSN, IEEE 802.11I LICENSE – 
+-wpa_supplicant for Windows - Copyright (c) 2003-2009, Jouni Malinen <j@w1.fi> and contributors. All Rights Reserved.
 
-59. WMA DECODER LICENSE
+59. WMA DECODER LICENSE - This product is protected by certain intellectual property rights of Microsoft. Use or distribution of this technology outside of this product is prohibited without a license from Microsoft
 
 60. MP3 DECODER LICENSE
 
-61. APPLE LOSSLESS DECODER LICENSE
+61. APPLE LOSSLESS DECODER LICENSE - Copyright 2011 Apple Inc.
 
-62. LIBOGG/LIBVORBIS/OGG VORBIS DECODER LICENSE
+62. LIBOGG/LIBVORBIS/OGG VORBIS DECODER LICENSE - Copyright (c) 2002, Xiph.org Foundation
 
-63. TREMOR LICENSE
+63. TREMOR LICENSE - Copyright (c) 2002, Xiph.org Foundation
 
 64. SPOTIFY LICENSE
 
-65.  MONOTYPE LICENSE
+65.  MONOTYPE LICENSE - Copyright (C) 2001-2012 Monotype Imaging Inc. All rights reserved.
 
-66. PUBLIC DOMAIN
+66.  BSD LIKE LICENSE
+	dbus- Copyright (c) 2013, Georg Reinke
+
+67.	PUBLIC DOMAIN
 
 The following modules in the public domain.
 
@@ -204,7 +242,7 @@ The following modules in the public domain.
 -   Blowfish Encryption Algorithm
 -   Makedevs
 
-67. OPENSSL LICENSE
+68. OPENSSL LICENSE
 
 **********LICENSES**********
 
@@ -213,7 +251,7 @@ The following modules in the public domain.
                Version 2, June 1991
 
  Copyright (C) 1989, 1991 Free Software Foundation, Inc.
-     59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+     59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
  Everyone is permitted to copy and distribute verbatim copies
  of this license document, but changing it is not allowed.
 
@@ -4657,7 +4695,7 @@ without warranty of any kind.
 
 Unless otherwise *explicitly* stated the following text describes the
 licensed conditions under which the contents of this Linux-PAM release
-may be  distributed:
+may be distributed:
 
 -------------------------------------------------------------------------
 Redistribution and use in source and binary forms of Linux-PAM, with or
@@ -4668,59 +4706,49 @@ are met:
    notice, and this entire permission notice in its entirety, including the
    disclaimer of warranties.
 
-2. Redistributions in binary form must reproduce  all prior and current
-   copyright notices, this list of conditions, and the  following
+2. Redistributions in binary form must reproduce all prior and current
+   copyright notices, this list of conditions, and the following
    disclaimer in the documentation and/or other materials provided
    with the distribution.
 
-3. The name of any author may not be used to endorse  or promote
-   products derived from this software without their specific  prior
+3. The name of any author may not be used to endorse or promote
+   products derived from this software without their specific prior
    written permission.
 
-ALTERNATIVELY, this product may be distributed  under the terms of the
-GNU General Public License, in which case the  provisions of the GNU
+ALTERNATIVELY, this product may be distributed under the terms of the
+GNU General Public License, in which case the provisions of the GNU
 GPL are required INSTEAD OF the above restrictions.   (This clause is
-necessary due to a potential conflict between the GNU GPL and  the
+necessary due to a potential conflict between the GNU GPL and the
 restrictions contained in a BSD-style copyright.)
 
-THIS SOFTWARE IS  PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
-WARRANTIES, INCLUDING, BUT NOT  LIMITED TO, THE IMPLIED WARRANTIES OF
-MERCHANTABILITY AND FITNESS FOR A  PARTICULAR PURPOSE ARE DISCLAIMED.
-IN NO EVENT SHALL THE AUTHOR(S) BE LIABLE  FOR ANY DIRECT, INDIRECT,
-INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL  DAMAGES (INCLUDING,
-BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR  SERVICES; LOSS
-OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER  CAUSED AND
-ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,  OR
+THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
+WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE AUTHOR(S) BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
-USE  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 DAMAGE.
 -------------------------------------------------------------------------
 
-***  Bose has chosen to adopt the above BSD- style license for its implementation of this module.  ***
+*** Bose has chosen to adopt the above BSD- style license for its implementation of this module.  ***
 
 
 37. LIBPNG
 
-This copy of the libpng notices is provided for your convenience.  In case of
-any discrepancy between this copy and the notices in the file png.h that is
-included in the libpng distribution, the latter shall prevail.
+This copy of the libpng notices is provided for your convenience.  In case of any discrepancy between this copy and the notices in the file png.h that is included in the libpng distribution, the latter shall prevail.
 
 COPYRIGHT NOTICE, DISCLAIMER, and LICENSE:
 
-If you modify libpng you may insert additional notices immediately following
-this sentence.
+If you modify libpng you may insert additional notices immediately following this sentence.This code is released under the libpng license.
 
-This code is released under the libpng license.
-
-libpng versions 1.2.6, August 15, 2004, through 1.6.2, April 25, 2013, are
-Copyright (c) 2004, 2006-2012 Glenn Randers-Pehrson, and are
+libpng versions 1.2.6, August 15, 2004, through 1.6.2, April 25, 2013, are Copyright (c) 2004, 2006-2012 Glenn Randers-Pehrson, and are
 distributed according to the same disclaimer and license as libpng-1.2.5
 with the following individual added to the list of Contributing Authors
-
-   Cosmin Truta
-
-libpng versions 1.0.7, July 1, 2000, through 1.2.5 - October 3, 2002, are
-Copyright (c) 2000-2002 Glenn Randers-Pehrson, and are
+Cosmin Truta libpng versions 1.0.7, July 1, 2000, through 1.2.5 - October 3, 2002, are Copyright (c) 2000-2002 Glenn Randers-Pehrson, and are
 distributed according to the same disclaimer and license as libpng-1.0.6
 with the following individuals added to the list of Contributing Authors
 
@@ -4734,8 +4762,7 @@ and with the following additions to the disclaimer:
    library or against infringement.  There is no warranty that our
    efforts or the library will fulfill any of your particular purposes
    or needs.  This library is provided with all faults, and the entire
-   risk of satisfactory quality, performance, accuracy, and effort is with
-   the user.
+   risk of satisfactory quality, performance, accuracy, and effort is with the user.
 
 libpng versions 0.97, January 1998, through 1.0.6, March 20, 2000, are
 Copyright (c) 1998, 1999 Glenn Randers-Pehrson, and are
@@ -4816,19 +4843,19 @@ April 25, 2013
 38. LIBTS-1.0-0 LICENSE
 
 Copyright (C) 1994, 1995, 1996, 1999, 2000, 2001, 2002, 2004, 2005,
-2006 Free  Software Foundation, Inc.
+2006 Free Software Foundation, Inc.
 
-This file is free documentation; the Free Software  Foundation gives
+This file is free documentation; the Free Software Foundation gives
 unlimited permission to copy, distribute and modify it.
 
-***  Please refer to Section 1 of this file where GPLv2 has been published. ***
+*** Please refer to Section 1 of this file where GPLv2 has been published. ***
 
 
 39. LIBUSB LICENSE
 
 libusb is covered by the LGPL:
 
-This library is free software; you can  redistribute it and/or
+This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General
 Public
 License as published by the Free Software Foundation; either
@@ -4900,7 +4927,7 @@ THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-***  Bose has chosen to adopt LGPLv2.1 for its implementation of this module.  Please refer to Section 4 of this file where LGPLv2.1 has been published. ***
+*** Bose has chosen to adopt LGPLv2.1 for its implementation of this module.  Please refer to Section 4 of this file where LGPLv2.1 has been published. ***
 
 
 40. LIBXML LICENSE
@@ -7200,11 +7227,32 @@ This product incorporates Spotify software which is subject to 3rd party license
 Copyright (C) 2001-2012 Monotype Imaging Inc. All rights reserved.
   
 
-66. PUBLIC DOMAIN
+66. BSD LIKE LICENSE
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+  1. Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
+  2. Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in
+     the documentation and/or other materials provided with the
+     distribution.
+  3. The names of the authors may not be used to endorse or promote
+     products derived from this software without specific prior
+     written permission.
+
+THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+
+67. PUBLIC DOMAIN
 
 Please refer to the Index for the modules which are in the public domain.
 
-67. OPENSSL LICENSE, BSD-Style License for version 1.0.2d
+68. OPENSSL LICENSE, BSD-Style License for version 1.0.2d
 
   LICENSE ISSUES
   ==============

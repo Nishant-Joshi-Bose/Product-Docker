@@ -21,7 +21,7 @@ from CastleTestUtils.LoggerUtils.CastleLogger import get_logger
 logger = get_logger(__name__, "DiagnosticsPage.log", level=logging.DEBUG, fileLoglevel=logging.DEBUG)
 
 @pytest.mark.usefixtures('driver', 'device_id', 'device_ip', 'force_rndis')
-def test_diagnostics_mfgdata(driver, device_id, device_ip, request):
+def test_diagnostics_mfgdata(driver, device_id, device_ip, riviera, request):
     """
     Navigates to DUT's diagnostics page and verfies the
     Device's information (e.g. Software Version, Manufacturing Data, Display Tests)
@@ -37,6 +37,19 @@ def test_diagnostics_mfgdata(driver, device_id, device_ip, request):
         diagnostics_page.get_diagnostics_header()
         # Check for the Software Version on Diagnostics Page
         diagnostics_page.get_sofware_version()
+        # Check for the LPM Version on Diagnostics Page and compare with DUT
+        lpm_version_dut = riviera.get_lpm_version()
+        diagnostics_lpm_data = diagnostics_page.diagnostics_lpm_versions()
+        assert lpm_version_dut["BLOB Version"].lstrip() == diagnostics_lpm_data["Blob Version"], \
+                    'Blob Version did not match. Found {}, expected {}'.format(diagnostics_lpm_data["Blob Version"], lpm_version_dut["BLOB Version"].lstrip())
+        assert lpm_version_dut["LPM Bootloader"].lstrip() == diagnostics_lpm_data["Bootloader Version"], \
+                    'LPM Bootloader did not match. Found {}, expected {}'.format(diagnostics_lpm_data["Bootloader Version"], lpm_version_dut["LPM Bootloader"].lstrip())
+        assert lpm_version_dut["LPM"].split(" ")[1] == diagnostics_lpm_data["User App Version"], \
+                    'LPM did not match. Found {}, expected {}'.format(diagnostics_lpm_data["User App Version"], lpm_version_dut["LPM"].split(" ")[1])
+        assert lpm_version_dut["PSoC"].lstrip() == diagnostics_lpm_data["PSOC Version"], \
+                    'PSoC did not match. Found {}, expected {}'.format(diagnostics_lpm_data["PSOC Version"], lpm_version_dut["PSoC"].lstrip())
+        assert lpm_version_dut["Lightbar Animation DB"].lstrip() == diagnostics_lpm_data["Lightbar Version"], \
+                    'Lightbar Animation DB did not match. Found {}, expected {}'.format(diagnostics_lpm_data["Lightbar Version"], lpm_version_dut["Lightbar Animation DB"].lstrip())
         # Check for the webpage title
         diagnostics_page.get_title()
         # Check for the Display Tests Link on Diagnostics Page

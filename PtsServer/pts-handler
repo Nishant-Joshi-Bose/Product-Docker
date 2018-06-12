@@ -160,6 +160,7 @@ Moved Permanently\r
         http_ok()
         redirect_stderr()
         call("date")
+        call("uptime")
         call("cat", "/opt/Bose/etc/BoseVersion.json")
         call("cat", "/persist/mfg_data.json")
         call("free", "-m")
