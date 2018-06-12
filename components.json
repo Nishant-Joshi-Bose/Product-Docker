@@ -1,7 +1,7 @@
 [
   {
     "name": "A4VQuickSetService",
-    "selected_version": "master@0e8072f247db7ec5584ed1b9a3c6bf9623e7c725"
+    "selected_version": "master@586d3b066a4cc3b12abf26d54afc4ad0ebfa6221"
   },
   {
     "name": "A4VRemoteCommunicationService",
@@ -25,7 +25,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.5.42643.2854816"
+    "selected_version": "Release/Castle-Fork/1.5.7.42710.2863294"
   },
   {
     "name": "BLERemoteXCVR",
@@ -33,7 +33,7 @@
   },
   {
     "name": "BLESetup-qc8017_32",
-    "selected_version": "Release/master/1.0.0-42+8b51847"
+    "selected_version": "Release/master/1.5.0-46+d64c839"
   },
   {
     "name": "bose-opkg-utils",
@@ -41,15 +41,15 @@
   },
   {
     "name": "bose-web-riviera-ap-page",
-    "selected_version": "master@1d02023bcca657413bae8005d5c9cbf446bfb510"
+    "selected_version": "master@d5e18020b3c7fbdb654756a9976ae10acb6f54c1"
   },
   {
     "name": "bose-web-update-page",
-    "selected_version": "master@a49b3edc3490b1208e7388c7712e0881310041c1"
+    "selected_version": "master@0117055987ebb22729bdeed0155fb10c2558d001"
   },
   {
     "name": "BoseLibs-qc8017_32",
-    "selected_version": "Release/master/1.0.3-432+fa73fce"
+    "selected_version": "Release/master/1.5.1-459+5f45fdb"
   },
   {
     "name": "BoseOPKG-native",
@@ -69,15 +69,15 @@
   },
   {
     "name": "BTSource-qc8017_32",
-    "selected_version": "Release/master/1.0.0-24+b963a7c"
+    "selected_version": "Release/master/1.5.0-26+a759501"
   },
   {
     "name": "BTStackAdapter-qc8017_32",
-    "selected_version": "Release/master/1.0.0-68+0ed9e2f"
+    "selected_version": "Release/master/1.5.0-71+dfcce78"
   },
   {
     "name": "BTSTSSink-qc8017_32",
-    "selected_version": "Release/master/1.0.0-24+9c275d5"
+    "selected_version": "Release/master/1.5.0-26+dbc6906"
   },
   {
     "name": "CastleLibs-native",
@@ -113,7 +113,7 @@
   },
   {
     "name": "FrontDoorService-qc8017_32",
-    "selected_version": "Release/100KLimit/1.5.0-87+fe3e7a6"
+    "selected_version": "Release/master/1.5.0-84+2e6cf2d"
   },
   {
     "name": "FrontDoorUtility-qc8017_32",
@@ -165,7 +165,7 @@
   },
   {
     "name": "ProductUIAssets",
-    "selected_version": "master@3abdcec9611e25ba45c7c0df9e856885ba891285"
+    "selected_version": "master@f5025558c6d13bc8fe9e67ff7248a89a6441b0c2"
   },
   {
     "name": "protobuf-native",
@@ -209,11 +209,11 @@
   },
   {
     "name": "SoftwareUpdate-qc8017_32",
-    "selected_version": "Release/master/1.5.1-646+a69f37b"
+    "selected_version": "Release/master/1.5.3-654+20f0ec9"
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.5.42643.2854816"
+    "selected_version": "Release/Castle-Fork/1.5.7.42710.2863294"
   },
   {
     "name": "SystemEventService-qc8017_32",
