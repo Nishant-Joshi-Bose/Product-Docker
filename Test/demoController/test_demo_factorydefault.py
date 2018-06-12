@@ -21,7 +21,7 @@ class TestDemoFactoryDefault():
         2. Wait for device to reboot
         3. Verify file 'demoModeOn' exists under /mnt/nv/product-persistance
         4. Verify device stays in demoMode True
-        5. Verify device factory defaults and demoMode is set to False within the specified time
+        5. Verify device factory defaults within the specified time and demoMode is set to False
         """
         logger.info("Start test_demoOffAfterTimeout")
         demoUtils.setDemoMode(True, deviceid, frontDoor_reboot, True, 3,
