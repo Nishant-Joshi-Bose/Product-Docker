@@ -88,7 +88,7 @@
 #include "CustomProductControllerStateBooting.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "CustomProductControllerStateAccessoryPairingCancelling.h"
-#include "CustomProductControllerStateAdaptIQExiting.h"
+#include "CustomProductControllerStateAdaptIQCancelling.h"
 #include "CustomProductControllerStateAdaptIQ.h"
 #include "CustomProductControllerStateIdle.h"
 #include "CustomProductControllerStateLowPowerResume.h"
@@ -416,10 +416,10 @@ void ProfessorProductController::Run( )
       *this,
       CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ );
 
-    auto* stateAdaptIQExiting = new CustomProductControllerStateAdaptIQExiting
+    auto* stateAdaptIQCancelling = new CustomProductControllerStateAdaptIQCancelling
     ( GetHsm( ),
       statePlayingSelected,
-      CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_CANCELLING );
 
     ///
     /// Stopping Dedicated Streams State and Sub-States
@@ -485,7 +485,7 @@ void ProfessorProductController::Run( )
     GetHsm( ).AddState( "", stateAccessoryPairing );
     GetHsm( ).AddState( "", stateAccessoryPairingCancelling );
     GetHsm( ).AddState( "", stateAdaptIQ );
-    GetHsm( ).AddState( "", stateAdaptIQExiting );
+    GetHsm( ).AddState( "", stateAdaptIQCancelling );
     GetHsm( ).AddState( "", stateStoppingStreamsDedicated );
     GetHsm( ).AddState( "", stateStoppingStreamsDedicatedForFactoryDefault );
     GetHsm( ).AddState( "", stateStoppingStreamsDedicatedForSoftwareUpdate );

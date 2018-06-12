@@ -101,9 +101,11 @@ void CustomProductControllerStateAdaptIQ::HandleTimeOut( )
     BOSE_INFO( s_logger, "A time out during AdaptIQ has occurred." );
 
     ///
-    /// Initiate a cancellation of AdaptIQ
+    /// Initiate cancellation of AdaptIQ, and proceed to Cancelling state
     ///
     GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
+    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_CANCELLING );
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,14 +123,12 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQStatus( const ProductAdap
     ProductAdaptIQStatus& status = const_cast<ProductAdaptIQStatus&>( aiqStatus );
     if( status.mutable_status()->smstate() == LpmServiceMessages::IpcAiqState_t::AIQ_STATE_NOT_RUNNING )
     {
-        if( m_powerDownOnExit )
-        {
-            ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS );
-        }
-        else
-        {
-            ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING );
-        }
+
+        HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_USER_APPLICATION );
+
+        GetProductController( ).SendAllowSourceSelectMessage( true );
+        
+        ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_SILENT );
     }
 
     return true;
@@ -144,12 +144,10 @@ void CustomProductControllerStateAdaptIQ::HandleStateExit( )
     ///
     /// Re-enable source selection when exiting AdaptIQ.
     ///
-    GetProductController( ).SendAllowSourceSelectMessage( true );
+    ///GetProductController( ).SendAllowSourceSelectMessage( true );
 
     BOSE_INFO( s_logger, "CustomProductControllerStateAdaptIQ is being exited." );
     m_timer->Stop( );
-
-    HardwareIface( )->BootDSPImage( LpmServiceMessages::IpcImage_t::IMAGE_USER_APPLICATION );
 
 }
 
@@ -214,7 +212,7 @@ bool CustomProductControllerStateAdaptIQ::HandleAdaptIQControl( const ProductAda
 bool CustomProductControllerStateAdaptIQ::HandleIntentPowerToggle( )
 {
     GetCustomProductController( ).GetAdaptIQManager( )->SendAdaptIQControl( ProductAdaptIQControl::Cancel );
-    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_EXITING );
+    ChangeState( CUSTOM_PRODUCT_CONTROLLER_STATE_ADAPTIQ_CANCELLING );
     return true;
 }
 
