@@ -68,7 +68,8 @@ CustomProductKeyInputManager::CustomProductKeyInputManager( ProfessorProductCont
         {
             const auto& source = sources.sources( i );
 
-            if( source.has_details() and source.details().has_cicode() and ( source.status() == SoundTouchInterface::SourceStatus::available ) )
+            // TODO - we need to check "visible" here as well, but it's not yet supported
+            if( source.has_details() and source.details().has_cicode() )
             {
                 codes.add_cicode( source.details().cicode() );
             }
@@ -157,7 +158,7 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
 
         // if it's a key that normally would have been blasted but the source isn't configured,
         // just consume it
-        if( isBlastedKey && sourceItem and ( sourceItem->status() == SoundTouchInterface::SourceStatus::available ) )
+        if( isBlastedKey && sourceItem and ( not sourceItem->visible() ) )
         {
             BOSE_INFO( s_logger, "%s consuming key", __func__ );
             return true;
