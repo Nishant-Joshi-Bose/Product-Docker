@@ -35,6 +35,7 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Utilities.h"
+#include "APTimer.h"
 #include "IntentHandler.h"
 #include "ProductCecHelper.h"
 #include "ProductDspHelper.h"
@@ -235,6 +236,8 @@ public:
 
     std::unique_ptr<LightBar::LightBarController> m_lightbarController;
 
+    APTimerPtr m_uiAliveTimer;
+
     PassportPB::contentItem GetOOBDefaultLastContentItem() const override;
 
     void PossiblyPairBLERemote( );
@@ -321,6 +324,21 @@ private:
         const DisplayControllerPb::UiHeartBeat & req,
         const Callback<DisplayControllerPb::UiHeartBeat> & respCb,
         const Callback<FrontDoor::Error> & errorCb );
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following declaration is for killing the Monaco process if no /ui/alive messages
+    ///        received by ProductController.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    void KillUiProcess();
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief The following declaration is for initializing the UI recovery timer
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    void StartUiTimer();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
