@@ -2,6 +2,13 @@ import sys
 import os
 import ConfigParser
 import subprocess
+import atexit
+
+def cleanup():
+    global g_transport
+    print('exiting...')
+    if g_transport == 'adb':
+        subprocess.call('adb forward --remove tcp:8082', shell=True)
 
 cfg = ConfigParser.ConfigParser()
 cfg.read('config.ini')
@@ -32,10 +39,6 @@ if g_transport == 'adb':
     subprocess.call('adb forward tcp:8082 tcp:8084', shell=True)
     g_username = None
     g_password = None
+    atexit.register(cleanup)
 
-def cleanup():
-    global g_transport
-    print('exiting...')
-    if g_transport == 'adb':
-        subprocess.call('adb forward --remove tcp:8084', shell=True)
 
