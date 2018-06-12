@@ -313,7 +313,10 @@ void ProductBLERemoteManager::UpdateBacklight( )
             break;
         case LedsSourceTypeMsg_t::BLUETOOTH:
             leds.set_bluetooth( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ACTIVE );
-            GetZoneLEDs( leds );
+            leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            leds.set_zone_10( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
             break;
         case LedsSourceTypeMsg_t::GAME:
             leds.set_game( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ACTIVE );
@@ -325,16 +328,7 @@ void ProductBLERemoteManager::UpdateBacklight( )
             break;
         case LedsSourceTypeMsg_t::SET_TOP_BOX:
             leds.set_set_top_box( RCS_PB_MSG::LedsRawMsg_t::SOURCE_LED_ACTIVE );
-            leds.set_zone_01( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            leds.set_zone_02( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            leds.set_zone_03( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            leds.set_zone_05( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            leds.set_zone_06( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            leds.set_zone_07( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            leds.set_zone_08( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            leds.set_zone_09( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
-            leds.set_zone_10( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
+            GetZoneLEDs( leds );
             break;
         case LedsSourceTypeMsg_t::NOT_SETUP_COMPLETE:
             leds.set_zone_04( RCS_PB_MSG::LedsRawMsg_t::ZONE_BACKLIGHT_ON );
