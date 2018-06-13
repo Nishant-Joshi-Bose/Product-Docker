@@ -1,24 +1,18 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @file      CustomProductControllerStateBooting.h
 ///
-/// @file      CustomProductControllerStateAccessoryPairing.h
-///
-/// @brief     This source code file contains functionality to process events that occur during the
-///            product accessory pairing state.
+/// @brief     This header file declares functionality to process events that occur during the
+///            product booting state.
 ///
 /// @attention Copyright (C) 2018 Bose Corporation All Rights Reserved
-///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 ///            Included Header Files
-///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "ProductControllerState.h"
+#include "ProductControllerStateBooting.h"
 #include "HsmState.h"
-#include "LpmServiceMessages.pb.h"
-#include "APTimer.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                            Start of Product Application Namespace                            ///
@@ -27,53 +21,40 @@ namespace ProductApp
 {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///
 ///            Forward Class Declarations
-///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProductControllerHsm;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///
-/// @class CustomProductControllerStateAccessoryPairing
-///
-/// @brief This class is used for executing accessory pairing.
-///
+/// @brief The CustomProductControllerStateBooting Class
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-class CustomProductControllerStateAccessoryPairing : public ProductControllerState
+class CustomProductControllerStateBooting : public ProductControllerStateBooting
 {
 public:
 
-    CustomProductControllerStateAccessoryPairing(
-        ProductControllerHsm&       hsm,
-        CHsmState*                  pSuperState,
-        Hsm::STATE                  stateId,
-        const std::string&          name = "AccessoryPairing" );
+    CustomProductControllerStateBooting( ProductControllerHsm& hsm,
+                                   CHsmState* pSuperState,
+                                   Hsm::STATE stateId,
+                                   const std::string& name = "Booting" );
 
-    ~CustomProductControllerStateAccessoryPairing( ) override
+    ~CustomProductControllerStateBooting( ) override
     {
 
     }
 
-    void HandleStateStart( ) override;
-    void HandleStateExit( )  override;
-    bool HandleIntentSpeakerPairing( KeyHandlerUtil::ActionType_t intent )      override;
-    bool HandleIntentVolumeControl( KeyHandlerUtil::ActionType_t intent )       override;
-    bool HandleIntentMuteControl( KeyHandlerUtil::ActionType_t intent )         override;
-    bool HandleIntentPowerToggle( )                                             override;
-    bool HandlePairingStatus( ProductPb::AccessorySpeakerState pairingStatus )  override;
-    bool HandleChimeSASSPlaybackCompleted( int32_t eventId )                    override;
+protected:
 
-private:
-    std::deque<int32_t> m_pairingCompleteChimeToPlay;
-
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    /// @brief This virtual method override the implementation in the common class implementation.
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    void PossiblyGoToNextState( ) override;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                             End of Product Application Namespace                             ///
+///                           End of the Product Application Namespace                           ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-///                                        End of File                                           ///
+///                                         End of File                                          ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////

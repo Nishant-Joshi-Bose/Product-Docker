@@ -65,7 +65,6 @@ shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
 avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
-softwareupdate_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 audiopath_dir=$(components get AudioPath-qc8017_32 installed_location) || exit
 audiopath64_dir=$(components get AudioPath-qc8017_64 installed_location) || exit
 castlenetworkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
@@ -82,7 +81,6 @@ frontdoor_dir=$(components get FrontDoorService-qc8017_32 installed_location) ||
 frontdoorutility_dir=$(components get FrontDoorUtility-qc8017_32 installed_location) || exit
 qss_dir=$(components get A4VQuickSetService installed_location) || exit
 rcs_dir=$(components get A4VRemoteCommunicationService installed_location) || exit
-boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
 datacollection_dir=$(components get DataCollectionClient-qc8017_32 installed_location) || exit
 datacollectionservice_dir=$(components get DataCollectionService-qc8017_32 installed_location) || exit
 vm_dir=$(components get A4VVideoManagerService installed_location) || exit
@@ -105,7 +103,6 @@ opt_dir=$stage/Bose
 mkdir -p "$output_dir" "$opt_dir/etc" "$opt_dir/bin" "$opt_dir/lib" || exit
 
 rsync -a --exclude='*~' --exclude='*-README.txt' --exclude='isNetworkConfigured' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
-#rsync -a --exclude='*~' --exclude='*-README.txt' "$wspace/opt-bose-fs/." "$opt_dir/." || exit
 rsync -a --exclude='*~' --exclude='*-README.txt' "$qss_dir/opt-bose-fs/." "$opt_dir/." || exit
 rsync -a --exclude='*~' --exclude='*-README.txt' "$rcs_dir/opt-bose-fs/." "$opt_dir/." || exit
 rsync -a --exclude='*~' --exclude='*-README.txt' "$vm_dir/opt-bose-fs/." "$opt_dir/." || exit
@@ -151,7 +148,7 @@ if (( \$(date +%s) < $t )); then
 fi
 EOF
 
-# Copy public keys in FS for development key. EC will take care of generation for Production 
+# Copy public keys in FS for development key. EC will take care of generation for Production
 secure_dir=$opt_dir/etc/secure/
 if [ -e "$secure_dir" ]; then
     chmod -R 755 "$secure_dir" || exit
@@ -171,25 +168,23 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 # Allow components to add to the staging area.
 
 "$avs_dir/stage" "$opt_dir" || exit
-"$softwareupdate_dir/stage" "$opt_dir" || exit
-"$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
 
 # below is temporary due to stage issue in 1.0.1 Audiopath release that expects these folders ( although empty )
-mkdir "$audiopath_dir/professor/lib"
-mkdir "$audiopath_dir/ginger-cheevers/lib"
+mkdir -p "$audiopath_dir/professor/lib"
+mkdir -p "$audiopath_dir/ginger-cheevers/lib"
 "$audiopath_dir/stage" --product=professor "$opt_dir" || exit
 
 
 #copy Vfe binary only
-"$audiopath64_dir/stage" "$opt_dir" --only-vfe-binary --only-vfe --product=professor || exit
+"$audiopath64_dir/stage" "$opt_dir" --only-vfe-binary --product=professor || exit
 
-mkdir "$opt_dir/bin/professor" || exit
-mkdir "$opt_dir/etc/professor" || exit
-"$audiopath64_dir/stage" "$opt_dir" --stage-vfe --only-vfe --product=professor || exit
+mkdir -p "$opt_dir/bin/professor" || exit
+mkdir -p "$opt_dir/etc/professor" || exit
+"$audiopath64_dir/stage" "$opt_dir" --stage-vfe --product=professor || exit
 
-mkdir "$opt_dir/bin/ginger-cheevers" || exit
-mkdir "$opt_dir/etc/ginger-cheevers" || exit
-"$audiopath64_dir/stage" "$opt_dir" --stage-vfe --only-vfe --product=ginger-cheevers || exit
+mkdir -p "$opt_dir/bin/ginger-cheevers" || exit
+mkdir -p "$opt_dir/etc/ginger-cheevers" || exit
+"$audiopath64_dir/stage" "$opt_dir" --stage-vfe --product=ginger-cheevers || exit
 
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlesass_dir/stage" "$opt_dir" || exit
@@ -201,7 +196,12 @@ mkdir "$opt_dir/etc/ginger-cheevers" || exit
 "$democontroller_dir/stage" "$opt_dir" || exit
 "$webkit_dir/stage" "$opt_dir" || exit
 "$productuiassets_dir/stage" --chimes=SoundBar/professor --type=flac "$opt_dir" professor || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/bass-box --type=flac "$opt_dir" professor || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/rear-surrounds --type=flac "$opt_dir" professor || exit
 "$productuiassets_dir/stage" --chimes=SoundBar/ginger-cheevers --type=flac "$opt_dir" ginger-cheevers || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/bass-box --type=flac "$opt_dir" ginger-cheevers || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/rear-surrounds --type=flac "$opt_dir" ginger-cheevers || exit
+
 "$frontdoor_dir/stage" "$opt_dir" || exit
 "$frontdoorutility_dir/stage" "$opt_dir" || exit
 "$galapagosclient_dir/stage" "$opt_dir" || exit
@@ -212,7 +212,6 @@ mkdir "$opt_dir/etc/ginger-cheevers" || exit
 "$btsource_dir/stage" "$opt_dir" || exit
 "$blesetup_dir/stage" "$opt_dir" || exit
 "$btstssink_dir/stage" "$opt_dir" || exit
-rm -rfv "$opt_dir/update/html" # TODO: remove this when SoftwareUpdate has been modified not to include the update pages.
 "$web_update_page_dir/stage" "$opt_dir/update/html" || exit
 
 # remove Shepherd-vfe.xml
@@ -294,7 +293,7 @@ else
 fi
 # Start Progress
 if [ -f /opt/Bose/bin/ProgressReport ]; then
-    /opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
+	/opt/Bose/bin/ProgressReport -n $PackageName -e 0 -i 0 -r APQ -b 0 -p 1
 fi
 
 exit 0

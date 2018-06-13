@@ -15,7 +15,7 @@ else
 endif
 
 ifeq ($(hw_var),$(filter DP2 Alpha, $(hw_var)))
-  hw_var = DP2
+  hw_var = Alpha
 endif
 
 jobs := $(shell grep -c ^processor /proc/cpuinfo)

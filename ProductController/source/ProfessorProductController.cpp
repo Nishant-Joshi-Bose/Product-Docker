@@ -48,7 +48,6 @@
 #include "ProductControllerStates.h"
 #include "ProductControllerState.h"
 #include "ProductControllerStateBooted.h"
-#include "ProductControllerStateBooting.h"
 #include "ProductControllerStateCriticalError.h"
 #include "ProductControllerStateFactoryDefault.h"
 #include "ProductControllerStateFirstBootGreeting.h"
@@ -86,6 +85,7 @@
 #include "ProductControllerStateStoppingStreamsDedicatedForSoftwareUpdate.h"
 #include "ProductControllerStateStoppingStreamsDedicated.h"
 #include "ProductControllerStateTop.h"
+#include "CustomProductControllerStateBooting.h"
 #include "CustomProductControllerStateAccessoryPairing.h"
 #include "CustomProductControllerStateAccessoryPairingCancelling.h"
 #include "CustomProductControllerStateAdaptIQExiting.h"
@@ -120,9 +120,8 @@ constexpr uint32_t PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
 ///
 /// @name   ProfessorProductController::ProfessorProductController
 ///
-/// @brief  This method is the ProfessorProductController constructor, which is declared as being
-///         private to ensure that only one instance of this class can be created through the class
-///         GetInstance method.
+/// @brief  This method is the ProfessorProductController constructor, which is used to initialize
+///         its corresponding module classes and member variables.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProfessorProductController::ProfessorProductController( ) :
@@ -144,6 +143,12 @@ ProfessorProductController::ProfessorProductController( ) :
     ///
     m_IsAutoWakeEnabled( false ),
     m_Running( false ),
+    m_networkOperationalMode( NetManager::Protobuf::wifiOff ),
+
+    ///
+    /// Initialization of STS contorller.
+    ///
+    m_ProductSTSController( *this ),
 
     ///
     /// Intent Handler Initialization
@@ -166,14 +171,32 @@ ProfessorProductController::ProfessorProductController( ) :
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name ProfessorProductController::Start
+///
+/// @brief This method starts the product controller by dispatching its Run method inside the
+///        product task. The Run method initializes the product controller state machine and all
+///        of its associated modules, including the registration of callbacks for internal and state
+///        machine messaging, IPC, Frontdoor end-points, and so forth. Since these initializations
+///        take place first inside the product task, and all callbacks are processed inside the same
+///        product task after the initialization, no callback can be invoked from a non-existent
+///        state or module. This method was put in place based on the JIRA Story PGC-2052.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::Start( )
+{
+    m_Running = true;
+
+    IL::BreakThread( std::bind( &ProfessorProductController::Run, this ), GetTask( ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name ProfessorProductController::Run
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::Run( )
 {
-    m_Running = true;
-
-    BOSE_DEBUG( s_logger, "----------- Product Controller State Machine    ------------" );
+    BOSE_DEBUG( s_logger, "----------- Product Controller Initialization Start ------------" );
     BOSE_DEBUG( s_logger, "The Professor Product Controller is setting up the state machine." );
 
     ///
@@ -188,10 +211,10 @@ void ProfessorProductController::Run( )
     ///
     /// Booting State and Various System Level States
     ///
-    auto* stateBooting = new ProductControllerStateBooting
+    auto* stateBooting = new CustomProductControllerStateBooting
     ( GetHsm( ),
       stateTop,
-      PRODUCT_CONTROLLER_STATE_BOOTING );
+      CUSTOM_PRODUCT_CONTROLLER_STATE_BOOTING );
 
     auto* stateBooted = new ProductControllerStateBooted
     ( GetHsm( ),
@@ -571,6 +594,8 @@ void ProfessorProductController::Run( )
     /// Register LPM events for LightBar
     ///
     m_lightbarController->RegisterLpmEvents();
+
+    BOSE_DEBUG( s_logger, "------------ Product Controller Initialization End -------------" );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -664,6 +689,9 @@ std::shared_ptr< ProductDspHelper >& ProfessorProductController::GetDspHelper( )
 /// @return This method returns a true or false value, based on a series of set member variables,
 ///         which all must be true to indicate that the device has booted.
 ///
+/// @note   The CLI command "product boot_status" returns the status of all factors used here. If ever
+///         a factor is added, the CLI command needs changing as well. See ProductCommandLine::HandleCommand().
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProfessorProductController::IsBooted( ) const
 {
@@ -676,6 +704,7 @@ bool ProfessorProductController::IsBooted( ) const
     BOSE_VERBOSE( s_logger, "Software Update Ready :  %s", ( IsSoftwareUpdateReady( )  ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "SASS Initialized      :  %s", ( IsSassReady( )            ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Bluetooth Initialized :  %s", ( IsBluetoothModuleReady( ) ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Network Ready         :  %s", ( IsNetworkModuleReady( ) ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
     return ( IsLpmReady( )             and
@@ -684,7 +713,8 @@ bool ProfessorProductController::IsBooted( ) const
              IsSTSReady( )             and
              IsSoftwareUpdateReady( )  and
              IsSassReady( )            and
-             IsBluetoothModuleReady( ) );
+             IsBluetoothModuleReady( ) and
+             IsNetworkModuleReady( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -738,14 +768,14 @@ bool ProfessorProductController::IsSystemLanguageSet( ) const
 ///
 /// @name   ProfessorProductController::GetOOBDefaultLastContentItem
 ///
-/// @return This method returns the PassportPB::ContentItem value to be used for initializing the OOB LastContentItem
+/// @return This method returns the PassportPB::contentItem value to be used for initializing the OOB LastContentItem
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-PassportPB::ContentItem ProfessorProductController::GetOOBDefaultLastContentItem() const
+PassportPB::contentItem ProfessorProductController::GetOOBDefaultLastContentItem() const
 {
     using namespace ProductSTS;
 
-    PassportPB::ContentItem item;
+    PassportPB::contentItem item;
     item.set_source( ProductSourceSlot_Name( PRODUCT ) );
     item.set_sourceaccount( ProductSourceSlot_Name( TV ) );
     return item;
@@ -1002,7 +1032,7 @@ NetManager::Protobuf::OperationalMode ProfessorProductController::GetWiFiOperati
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::HandleMessage( const ProductMessage& message )
 {
-    BOSE_DEBUG( s_logger, "----------- Product Controller Message Handler -------------" );
+    BOSE_INFO( s_logger, "%s received %s", __func__, message.DebugString().c_str() );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// STS slot selected data is handled at this point.
@@ -1056,15 +1086,27 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
                 m_radioStatus.CopyFrom( radioStatus );
                 m_ProductLpmHardwareInterface->SendWiFiRadioStatus( m_radioStatus );
             }
-
-            BOSE_DEBUG( s_logger, "A wireless network message was received with frequency %d kHz.",
-                        message.wirelessstatus( ).has_frequencykhz( ) ?
-                        message.wirelessstatus( ).frequencykhz( ) : 0 );
         }
         else
         {
             BOSE_ERROR( s_logger, "A wireless network message was received with an unknown frequency." );
         }
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// Handle network operationalmode at this point
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    else if( message.networkstatus().has_wifiapstate() )
+    {
+        if( message.networkstatus().wifiapstate() )
+        {
+            GetLpmHardwareInterface()->SetAmp( true, true );
+        }
+        else
+        {
+            GetLpmHardwareInterface()->SetAmp( true, false );
+        }
+
+        ( void ) HandleCommonProductMessage( message );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Autowake messages are handled at this point.
@@ -1081,9 +1123,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
             return;
         }
 
-        BOSE_DEBUG( s_logger, "An autowake status %s message has been received.",
-                    m_IsAutoWakeEnabled ? "active" : "inactive" );
-
         NotifyFrontdoorAndStoreOpticalAutoWakeSetting( );
 
         GetHsm( ).Handle< bool >
@@ -1094,7 +1133,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_accessorypairing( ) )
     {
-        GetHsm( ).Handle< ProductAccessoryPairing >
+        GetHsm( ).Handle< ProductPb::AccessorySpeakerState >
         ( &CustomProductControllerState::HandlePairingStatus, message.accessorypairing( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -1167,7 +1206,6 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_cecmode( ) )
     {
-        BOSE_DEBUG( s_logger, "CECMODE set to %d",  message.cecmode( ).cecmode( ) );
         m_ProductLpmHardwareInterface->SetCecMode( message.cecmode( ).cecmode( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////

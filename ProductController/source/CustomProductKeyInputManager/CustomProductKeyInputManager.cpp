@@ -129,11 +129,23 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
     const auto& nowSelection = m_ProductController.GetNowSelection( );
     std::string cicode;
 
+    bool ignoreCECKey = ( keyEvent.keyorigin( ) == LpmServiceMessages::KEY_ORIGIN_CEC );
+
     if( nowSelection.has_contentitem( ) )
     {
         auto sourceItem = m_ProductController.GetSourceInfo( ).FindSource( nowSelection.contentitem( ) );
 
-        if( sourceItem and sourceItem->has_details( ) )
+        // TV_INPUT key should always be sent to tv source
+        if( keyEvent.keyid( ) == BOSE_TV_INPUT )
+        {
+            const auto tvSource = m_ProductController.GetSourceInfo( ).FindSource( "PRODUCT",  "TV" );
+            if( tvSource and tvSource->has_details( ) )
+            {
+                cicode = tvSource->details( ).cicode( );
+                isBlastedKey = true;
+            }
+        }
+        else if( sourceItem and sourceItem->has_details( ) )
         {
             const auto& sourceDetails = sourceItem->details( );
             if( sourceDetails.has_devicetype( ) )
@@ -142,6 +154,25 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
             }
 
             cicode = sourceDetails.cicode( );
+        }
+
+        // if it's a key that normally would have been blasted but the source isn't configured,
+        // just consume it
+        if( isBlastedKey && sourceItem and ( not sourceItem->visible() ) )
+        {
+            BOSE_INFO( s_logger, "%s consuming key", __func__ );
+            return true;
+        }
+
+        // ignore CEC keys if we're not in TV or SLOT_* sources
+        if( sourceItem and ( sourceItem->sourcename().compare( "PRODUCT" ) == 0 ) and (
+                ( sourceItem->sourceaccountname().compare( "SLOT_0" ) == 0 ) or
+                ( sourceItem->sourceaccountname().compare( "SLOT_1" ) == 0 ) or
+                ( sourceItem->sourceaccountname().compare( "SLOT_2" ) == 0 ) or
+                ( sourceItem->sourceaccountname().compare( "TV" ) == 0 )
+            ) )
+        {
+            ignoreCECKey = false;
         }
     }
 
@@ -170,7 +201,8 @@ bool CustomProductKeyInputManager::CustomProcessKeyEvent( const LpmServiceMessag
         m_QSSClient->SendKey( request );
     }
 
-    return( isBlastedKey );
+
+    return( isBlastedKey || ignoreCECKey );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
