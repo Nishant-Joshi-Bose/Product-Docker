@@ -24,6 +24,7 @@ public:
     /// @return true if successful
     ////////////////////////////////////////////////////////
     bool HandleStop( const STS::Void & ) override;
+    bool HandlePlay( const STS::Void & ) override;
 
     ////////////////////////////////////////////////////////
     /// @brief Act on Stop request by translating a mute/unmute to CAPS based on internal state
@@ -59,6 +60,8 @@ private:
     void ProcessAUXCableState( );
     void HandleAUXCableDetect( LpmServiceMessages::IpcAuxState_t IpcAuxState );
     void RegisterAuxPlugStatusCallbacks();
+    void AuxPlay();
+    void AuxStop();
 
     bool m_mute         = false;
     bool m_auxInserted = false;

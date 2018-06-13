@@ -19,15 +19,27 @@ CustomProductSTSStateTopAux::CustomProductSTSStateTopAux( ProductSTSHsm& hsm,
 
 bool CustomProductSTSStateTopAux::HandleStop( const STS::Void & )
 {
-    BOSE_INFO( s_logger, "%s ( %s ) Mute status = %d",
-               __FUNCTION__, m_account.GetSourceName().c_str(), m_mute );
+    BOSE_INFO( s_logger, "%s ( %s ) is %sactive ",
+               __FUNCTION__, m_account.GetSourceName().c_str(), m_active ? "" : "not " );
     if( ! m_active )
     {
         BOSE_ERROR( s_logger,  "%s AUX Source not active", __FUNCTION__ );
         return false;
     }
+    AuxStop();
+    return true;
+}
 
-    ToggleMute();
+bool CustomProductSTSStateTopAux::HandlePlay( const STS::Void & )
+{
+    BOSE_INFO( s_logger, "%s ( %s ) is %sactive ",
+               __FUNCTION__, m_account.GetSourceName().c_str(), m_active ? "" : "not " );
+    if( ! m_active )
+    {
+        BOSE_ERROR( s_logger,  "%s AUX Source not active", __FUNCTION__ );
+        return false;
+    }
+    AuxPlay();
     return true;
 }
 
@@ -108,37 +120,11 @@ void CustomProductSTSStateTopAux::ProcessAUXCableState( )
 {
     if( m_auxInserted == false )
     {
-        if( m_np.playstatus( ) ==  STS::PlayStatus::PLAY )
-        {
-            m_account.IPC().SendAudioStopEvent();
-            m_np.set_playstatus( STS::PlayStatus::STOP );
-
-            STS::NowPlayingChange npc;
-            *( npc.mutable_nowplaying() ) = m_np;
-            m_account.IPC().SendNowPlayingChangeEvent( npc );
-        }
+        AuxPlay();
     }
     else
     {
-        if( m_np.playstatus( ) != STS::PlayStatus::PLAY )
-        {
-            //@TODO: Make this a function StartPlayback so it can be re-used.: Jira: CASTLE-14043
-            const std::string& URL = GetURL( );
-            if( !URL.empty( ) )
-            {
-                STS::AudioSetURL asu;
-                asu.set_url( URL );
-                asu.set_startoffsetms( LOW_LATENCY_DELAYED_START_MS );
-                m_account.IPC().SendAudioSetURLEvent( asu );
-            }
-
-            m_account.IPC().SendAudioPlayEvent();
-            m_np.set_playstatus( STS::PlayStatus::PLAY );
-
-            STS::NowPlayingChange npc;
-            *( npc.mutable_nowplaying() ) = m_np;
-            m_account.IPC().SendNowPlayingChangeEvent( npc );
-        }
+        AuxPlay();
     }
     return;
 }
@@ -155,3 +141,50 @@ void CustomProductSTSStateTopAux::RegisterAuxPlugStatusCallbacks()
     ( static_cast<ProductApp::EddieProductController*>( &( m_account.s_ProductSTSController->GetProductController() ) ) )->RegisterAuxEvents( cb );
     return;
 }
+void CustomProductSTSStateTopAux::AuxPlay()
+{
+    if( m_np.playstatus( ) != STS::PlayStatus::PLAY )
+    {
+        const std::string& URL = GetURL( );
+        BOSE_DEBUG( s_logger, "%s:Playing AUX stream", __func__ );
+        if( !URL.empty( ) )
+        {
+            STS::AudioSetURL asu;
+            asu.set_url( URL );
+            asu.set_startoffsetms( LOW_LATENCY_DELAYED_START_MS );
+            m_account.IPC().SendAudioSetURLEvent( asu );
+        }
+
+        m_account.IPC().SendAudioPlayEvent();
+        m_np.set_playstatus( STS::PlayStatus::PLAY );
+
+        STS::NowPlayingChange npc;
+        *( npc.mutable_nowplaying() ) = m_np;
+        m_account.IPC().SendNowPlayingChangeEvent( npc );
+    }
+    else
+    {
+        //something went wrong. Do not expect PLAY when it is already PLAY. log it
+        BOSE_WARNING( m_logger, "%s: PLAY called when current status is already PLAY", __FUNCTION__ );
+    }
+}
+
+void CustomProductSTSStateTopAux::AuxStop()
+{
+    if( m_np.playstatus( ) ==  STS::PlayStatus::PLAY )
+    {
+        BOSE_DEBUG( s_logger, "%s: Stopping AUX stream", __func__ );
+        m_account.IPC().SendAudioStopEvent();
+        m_np.set_playstatus( STS::PlayStatus::STOP );
+
+        STS::NowPlayingChange npc;
+        *( npc.mutable_nowplaying() ) = m_np;
+        m_account.IPC().SendNowPlayingChangeEvent( npc );
+    }
+    else
+    {
+        //something went wrong. Do not expect stop while is not PLAY. log it
+        BOSE_WARNING( m_logger, "%s: STOP called when current status is not PLAY", __FUNCTION__ );
+    }
+}
+
