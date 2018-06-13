@@ -600,11 +600,6 @@ void ProfessorProductController::Run( )
     ///
     m_IntentHandler.Initialize( );
 
-    ///
-    /// Register LPM events for LightBar
-    ///
-    m_lightbarController->RegisterLpmEvents();
-
     BOSE_DEBUG( s_logger, "------------ Product Controller Initialization End -------------" );
 }
 
@@ -1098,6 +1093,23 @@ NetManager::Protobuf::OperationalMode ProfessorProductController::GetWiFiOperati
 void ProfessorProductController::HandleMessage( const ProductMessage& message )
 {
     BOSE_INFO( s_logger, "%s received %s", __func__, message.DebugString().c_str() );
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// LPM status messages require both product-specific and common handling.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    if( message.has_lpmstatus( ) )
+    {
+        ///
+        /// Register for product-specific LPM events if connected. Common handling of the product 
+        /// message is then done.
+        ///
+        if( message.lpmstatus( ).has_connected( ) && message.lpmstatus( ).connected( ) )
+        {
+            m_lightbarController->RegisterLpmEvents();
+        }
+
+        ( void ) HandleCommonProductMessage( message );
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// STS slot selected data is handled at this point.
