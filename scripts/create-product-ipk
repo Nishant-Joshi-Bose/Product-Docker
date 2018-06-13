@@ -186,8 +186,6 @@ mkdir -p "$opt_dir/bin/ginger-cheevers" || exit
 mkdir -p "$opt_dir/etc/ginger-cheevers" || exit
 "$audiopath64_dir/stage" "$opt_dir" --stage-vfe --product=ginger-cheevers || exit
 
-"$audiopath_dir/stage" --product=eddie "$opt_dir" || exit
-"$audiopath64_dir/stage" --product=eddie --only-vfe "$opt_dir" || exit
 "$castlenetworkservice_dir/stage" "$opt_dir" || exit
 "$castlesass_dir/stage" "$opt_dir" || exit
 "$castlepassport_dir/stage" "$opt_dir" || exit
