@@ -74,9 +74,9 @@ class ProductBLERemoteManager;
 /// @class ProfessorProductController
 ///
 /// @brief This class acts as a container to handle all the main functionality related to this
-///        program, including controlling the product states, as well as to instantiating subclasses
-///        to manage the device and lower level hardware, and to interface with the user and higher
-///        level applications.
+///        program, including controlling the product states, as well as to instantiating module
+///        classes to manage the device and lower level hardware, and to interface with the user and
+///        higher level applications.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 class ProfessorProductController : public ProductController
@@ -92,12 +92,12 @@ public:
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///
-    /// @brief  The following public methods are used to start the ProfessorProductController
-    ///         instance task, wait in a separate task until the product task ends, and stop the
-    ///         product task, respectively.
+    /// @brief  The following public methods are used to start and run the Professor product
+    ///         controller in a single-threaded task, wait in a separate task until the product task
+    ///         ends, and end product controller processing, respectively.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    void Run( );
+    void Start( );
     void Wait( );
     void End( );
 
@@ -255,6 +255,15 @@ public:
     std::pair<bool, int32_t> GetDesiredPlayingVolume( ) const;
 
 private:
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    ///
+    /// @brief  The following private method is used to run the Professor product controller. It is
+    ///         dispatched from the public product controller Start method, which ensures that it
+    ///         runs in the single-threaded product task.
+    ///
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    void Run( );
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ///

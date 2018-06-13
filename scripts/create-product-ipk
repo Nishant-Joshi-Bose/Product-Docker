@@ -65,7 +65,6 @@ shepherd_dir=$(components get Shepherd-qc8017_32 installed_location) || exit
 boselibs_dir=$(components get BoseLibs-qc8017_32 installed_location) || exit
 protobuf_dir=$(components get protobuf-qc8017_32 installed_location) || exit
 avs_dir=$(components get AVS-qc8017_32 installed_location) || exit
-softwareupdate_dir=$(components get SoftwareUpdate-qc8017_32 installed_location) || exit
 audiopath_dir=$(components get AudioPath-qc8017_32 installed_location) || exit
 audiopath64_dir=$(components get AudioPath-qc8017_64 installed_location) || exit
 castlenetworkservice_dir=$(components get NetworkService-qc8017_32 installed_location) || exit
@@ -82,7 +81,6 @@ frontdoor_dir=$(components get FrontDoorService-qc8017_32 installed_location) ||
 frontdoorutility_dir=$(components get FrontDoorUtility-qc8017_32 installed_location) || exit
 qss_dir=$(components get A4VQuickSetService installed_location) || exit
 rcs_dir=$(components get A4VRemoteCommunicationService installed_location) || exit
-boseopkg_dir=$(components get BoseOPKG-qc8017_32 installed_location) || exit
 datacollection_dir=$(components get DataCollectionClient-qc8017_32 installed_location) || exit
 datacollectionservice_dir=$(components get DataCollectionService-qc8017_32 installed_location) || exit
 vm_dir=$(components get A4VVideoManagerService installed_location) || exit
@@ -170,8 +168,6 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 # Allow components to add to the staging area.
 
 "$avs_dir/stage" "$opt_dir" || exit
-"$softwareupdate_dir/stage" "$opt_dir" || exit
-"$boseopkg_dir/stage" "$opt_dir"/update/opkg/ || exit
 
 # below is temporary due to stage issue in 1.0.1 Audiopath release that expects these folders ( although empty )
 mkdir -p "$audiopath_dir/professor/lib"
@@ -200,7 +196,12 @@ mkdir -p "$opt_dir/etc/ginger-cheevers" || exit
 "$democontroller_dir/stage" "$opt_dir" || exit
 "$webkit_dir/stage" "$opt_dir" || exit
 "$productuiassets_dir/stage" --chimes=SoundBar/professor --type=flac "$opt_dir" professor || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/bass-box --type=flac "$opt_dir" professor || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/rear-surrounds --type=flac "$opt_dir" professor || exit
 "$productuiassets_dir/stage" --chimes=SoundBar/ginger-cheevers --type=flac "$opt_dir" ginger-cheevers || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/bass-box --type=flac "$opt_dir" ginger-cheevers || exit
+"$productuiassets_dir/stage" --chimes=SoundBar/rear-surrounds --type=flac "$opt_dir" ginger-cheevers || exit
+
 "$frontdoor_dir/stage" "$opt_dir" || exit
 "$frontdoorutility_dir/stage" "$opt_dir" || exit
 "$galapagosclient_dir/stage" "$opt_dir" || exit
