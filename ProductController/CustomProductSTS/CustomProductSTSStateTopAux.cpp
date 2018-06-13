@@ -19,50 +19,54 @@ CustomProductSTSStateTopAux::CustomProductSTSStateTopAux( ProductSTSHsm& hsm,
 
 bool CustomProductSTSStateTopAux::HandleStop( const STS::Void & )
 {
-    BOSE_INFO( s_logger, "%s ( %s ) is %sactive ",
-               __FUNCTION__, m_account.GetSourceName().c_str(), m_active ? "" : "not " );
+    BOSE_INFO( s_logger, "%s ( %s ) is %sactive, Aux Cable is %sinserted",
+               __FUNCTION__, m_account.GetSourceName().c_str(),
+               m_active ? "" : "not ", m_auxInserted ? "" : "NOT " );
     if( ! m_active )
     {
         BOSE_ERROR( s_logger,  "%s AUX Source not active", __FUNCTION__ );
         return false;
     }
-    AuxStop();
+    m_userPlayStatus = false;
+    if( m_auxInserted )
+    {
+        AuxStop();
+    }
     return true;
 }
 
 bool CustomProductSTSStateTopAux::HandlePlay( const STS::Void & )
 {
-    BOSE_INFO( s_logger, "%s ( %s ) is %sactive ",
-               __FUNCTION__, m_account.GetSourceName().c_str(), m_active ? "" : "not " );
+    BOSE_INFO( s_logger, "%s ( %s ) is %sactive, Aux Cable is %sinserted",
+               __FUNCTION__, m_account.GetSourceName().c_str(),
+               m_active ? "" : "not ", m_auxInserted ? "" : "NOT " );
     if( ! m_active )
     {
         BOSE_ERROR( s_logger,  "%s AUX Source not active", __FUNCTION__ );
         return false;
     }
-    AuxPlay();
+    m_userPlayStatus = true;//save the user selection as PLAY.
+    //In case, aux cable was not inserted now, the next it is inserted
+    //it shall PLAY
+    if( m_auxInserted )
+    {
+        AuxPlay();
+    }
     return true;
 }
 
-bool CustomProductSTSStateTopAux::HandlePause( const STS::Void & )
+bool CustomProductSTSStateTopAux::HandlePause( const STS::Void & arg )
 {
-    BOSE_INFO( s_logger, "%s ( %s ) Mute status = %d",
-               __FUNCTION__, m_account.GetSourceName().c_str(), m_mute );
-    if( ! m_active )
-    {
-        BOSE_ERROR( s_logger,  "%s AUX Source not active", __FUNCTION__ );
-        return false;
-    }
-
-    ToggleMute();
-    return true;
+    BOSE_INFO( s_logger, "%s ( %s ) is %sactive, Aux Cable is %sinserted",
+               __FUNCTION__, m_account.GetSourceName().c_str(),
+               m_active ? "" : "not ", m_auxInserted ? "" : "NOT " );
+    return ( HandleStop( arg ) );
 }
 
 bool CustomProductSTSStateTopAux::HandleMuteStatus( const STS::MuteStatus& ms )
 {
-    BOSE_INFO( s_logger, "%s ( %s ) MuteStatus :%d ",
+    BOSE_INFO( s_logger, "%s: No Action on MUTE ( %s ) MuteStatus :%d ",
                __FUNCTION__, m_account.GetSourceName().c_str(), ms.muteenabled() );
-
-    m_mute = ms.muteenabled();
     return true;
 }
 
@@ -84,21 +88,19 @@ bool CustomProductSTSStateTopAux::HandleAudioStatus( const STS::AudioStatus &aud
     return true;
 }
 
-
-// @TODO: https://jirapro.bose.com/browse/CASTLE-14043: Mute will be removed with this Jira fix
-void CustomProductSTSStateTopAux::ToggleMute() const
-{
-    m_account.IPC().SendMuteControlEvent( !m_mute );
-}
-
 bool CustomProductSTSStateTopAux::HandleDeactivateRequest( const STS::DeactivateRequest &req, uint32_t seq )
 {
     BOSE_INFO( m_logger, "Custom-HandleDeactivateRequest( %s )", m_account.GetSourceName().c_str() );
-    if( m_mute )
-    {
-        ToggleMute();
-    }
+    m_userPlayStatus = false;
     ProductSTSStateTop::HandleDeactivateRequest( req, seq );
+    return true;
+}
+
+bool CustomProductSTSStateTopAux::HandleActivateRequest( const STS::Void &req, uint32_t seq )
+{
+    BOSE_INFO( m_logger, "Custom-HandleActivateRequest( %s )", m_account.GetSourceName().c_str() );
+    m_userPlayStatus = true;
+    ProductSTSStateTop::HandleActivateRequest( req, seq );
     return true;
 }
 
@@ -120,9 +122,9 @@ void CustomProductSTSStateTopAux::ProcessAUXCableState( )
 {
     if( m_auxInserted == false )
     {
-        AuxPlay();
+        AuxStop();
     }
-    else
+    else if( m_userPlayStatus )
     {
         AuxPlay();
     }
@@ -164,8 +166,8 @@ void CustomProductSTSStateTopAux::AuxPlay()
     }
     else
     {
-        //something went wrong. Do not expect PLAY when it is already PLAY. log it
-        BOSE_WARNING( m_logger, "%s: PLAY called when current status is already PLAY", __FUNCTION__ );
+        BOSE_INFO( m_logger, "%s: No Action Current State:%s",
+                   __FUNCTION__, STS::PlayStatus::Enum_Name( m_np.playstatus( ) ).c_str() );
     }
 }
 
@@ -183,8 +185,8 @@ void CustomProductSTSStateTopAux::AuxStop()
     }
     else
     {
-        //something went wrong. Do not expect stop while is not PLAY. log it
-        BOSE_WARNING( m_logger, "%s: STOP called when current status is not PLAY", __FUNCTION__ );
+        BOSE_INFO( m_logger, "%s: No Action ,Current State:%s",
+                   __FUNCTION__, STS::PlayStatus::Enum_Name( m_np.playstatus( ) ).c_str() );
     }
 }
 

@@ -48,21 +48,27 @@ public:
     bool HandleAudioStatus( const STS::AudioStatus &audioStatus ) override;
 
     ////////////////////////////////////////////////////////
-    /// @brief Act HandleDeactivateRequest by generating a un-mute to CAPS and remembering it
+    /// @brief Act HandleDeactivateRequest by generating a stop to CAPS and remembering it
     /// and then executing HandleDeactivateRequest from base.
     /// @param STS::const STS::DeactivateRequest &req, uint32_t seq
     /// @return true if successful
     ////////////////////////////////////////////////////////
     bool HandleDeactivateRequest( const STS::DeactivateRequest &req, uint32_t seq ) override;
 
+    ////////////////////////////////////////////////////////
+    /// @brief Act on Activate request - send error response for wrong state
+    /// @param ActivateRequest - Proto buf of Activate message (unused)
+    /// @param seq - transaction sequence number
+    /// @return always true
+    ////////////////////////////////////////////////////////
+    bool HandleActivateRequest( const STS::Void &, uint32_t ) override;
 private:
-    void ToggleMute() const;
     void ProcessAUXCableState( );
     void HandleAUXCableDetect( LpmServiceMessages::IpcAuxState_t IpcAuxState );
     void RegisterAuxPlugStatusCallbacks();
     void AuxPlay();
     void AuxStop();
 
-    bool m_mute         = false;
-    bool m_auxInserted = false;
+    bool m_userPlayStatus = false;//to save user's choice to PLAY or PAUSE
+    bool m_auxInserted    = false;
 };
