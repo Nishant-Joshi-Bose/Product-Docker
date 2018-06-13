@@ -13,11 +13,11 @@
   },
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.5-21114"
+    "selected_version": "Release/Castle-Fork/1.5.6-21167"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/1.5.5-21114"
+    "selected_version": "Release/Castle-Fork/1.5.6-21167"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -25,7 +25,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.7.42710.2863294"
+    "selected_version": "Release/Castle-Fork/1.5.10.42747.2864797"
   },
   {
     "name": "BLERemoteXCVR",
@@ -65,7 +65,7 @@
   },
   {
     "name": "BoseWebMonaco",
-    "selected_version": "Release/master/1.5.1-335+dbb307c"
+    "selected_version": "Release/master/1.5.2-359+129cf39"
   },
   {
     "name": "BTSource-qc8017_32",
@@ -141,7 +141,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/master/1.5.2-330+f45d010"
+    "selected_version": "Release/master/1.5.3-345+7d23d2a"
   },
   {
     "name": "opensource-jsoncpp-native",
@@ -213,7 +213,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.7.42710.2863294"
+    "selected_version": "Release/Castle-Fork/1.5.10.42747.2864797"
   },
   {
     "name": "SystemEventService-qc8017_32",
