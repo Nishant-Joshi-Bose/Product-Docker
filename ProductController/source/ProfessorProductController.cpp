@@ -694,6 +694,9 @@ std::shared_ptr< ProductDspHelper >& ProfessorProductController::GetDspHelper( )
 /// @return This method returns a true or false value, based on a series of set member variables,
 ///         which all must be true to indicate that the device has booted.
 ///
+/// @note   The CLI command "product boot_status" returns the status of all factors used here. If ever
+///         a factor is added, the CLI command needs changing as well. See ProductCommandLine::HandleCommand().
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProfessorProductController::IsBooted( ) const
 {
@@ -706,6 +709,7 @@ bool ProfessorProductController::IsBooted( ) const
     BOSE_VERBOSE( s_logger, "Software Update Ready :  %s", ( IsSoftwareUpdateReady( )  ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "SASS Initialized      :  %s", ( IsSassReady( )            ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Bluetooth Initialized :  %s", ( IsBluetoothModuleReady( ) ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Network Ready         :  %s", ( IsNetworkModuleReady( ) ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
     return ( IsLpmReady( )             and
@@ -714,7 +718,8 @@ bool ProfessorProductController::IsBooted( ) const
              IsSTSReady( )             and
              IsSoftwareUpdateReady( )  and
              IsSassReady( )            and
-             IsBluetoothModuleReady( ) );
+             IsBluetoothModuleReady( ) and
+             IsNetworkModuleReady( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
