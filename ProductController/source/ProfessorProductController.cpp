@@ -102,6 +102,7 @@
 #include "ProductEndpointDefines.h"
 #include "ProtoPersistenceFactory.h"
 #include "PGCErrorCodes.h"
+#include "SystemUtils.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -115,6 +116,9 @@ namespace ProductApp
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 constexpr uint32_t PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
+
+constexpr char     UI_KILL_PID_FILE[] = "/var/run/monaco.pid";
+constexpr uint32_t UI_ALIVE_TIMEOUT = 60 * 1000;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
@@ -558,6 +562,12 @@ void ProfessorProductController::Run( )
                                                                  m_FrontDoorClientIF,
                                                                  m_ProductLpmHardwareInterface->GetLpmClient( ) ) );
 
+    //
+    // Setup UI recovery timer
+    //
+    m_uiAliveTimer = APTimer::Create( GetTask( ), "UIAliveTimer" );
+    StartUiTimer();
+
     ///
     /// Run all the submodules.
     ///
@@ -589,11 +599,6 @@ void ProfessorProductController::Run( )
     /// Initialize and register intents for key actions for the Product Controller.
     ///
     m_IntentHandler.Initialize( );
-
-    ///
-    /// Register LPM events for LightBar
-    ///
-    m_lightbarController->RegisterLpmEvents();
 
     BOSE_DEBUG( s_logger, "------------ Product Controller Initialization End -------------" );
 }
@@ -918,13 +923,15 @@ void ProfessorProductController::HandleSelectSourceSlot( ProductSTSAccount::Prod
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProfessorProductController::HandleUiHeartBeat
+/// @name  ProfessorProductController::HandleUiHeartBeat
 ///
-/// @param const DisplayControllerPb::UiHeartBeat & req
+/// @brief  Handler for /ui/alive FrontDoor messages
 ///
-/// @param const Callback<DisplayControllerPb::UiHeartBeat> & respCb
+/// @param  const DisplayControllerPb::UiHeartBeat & req
 ///
-/// @param const Callback<FrontDoor::Error> & errorCb
+/// @param  const Callback<DisplayControllerPb::UiHeartBeat> & respCb
+///
+/// @param  const Callback<FrontDoor::Error> & errorCb
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::HandleUiHeartBeat(
@@ -932,13 +939,71 @@ void ProfessorProductController::HandleUiHeartBeat(
     const Callback<DisplayControllerPb::UiHeartBeat> & respCb,
     const Callback<FrontDoor::Error> & errorCb )
 {
-    BOSE_INFO( s_logger, "%s received UI heartbeat: %lld", __func__, req.count() );
+    BOSE_INFO( s_logger, "%s received UI process heartbeat: %lld", __func__, req.count() );
+
+    // Restart UI Timer
+    m_uiAliveTimer->Stop();
+    StartUiTimer();
 
     auto heartbeat = req.count();
 
     DisplayControllerPb::UiHeartBeat response;
     response.set_count( heartbeat );
     respCb( response );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name ProfessorProductController::StartUiTimer
+///
+/// @brief Initialize the UI recovery timer
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::StartUiTimer()
+{
+    m_uiAliveTimer->SetTimeouts( UI_ALIVE_TIMEOUT, 0 );
+
+    m_uiAliveTimer->Start( [ this ]( )
+    {
+        KillUiProcess();
+    } );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name ProfessorProductController::KillUiProcess
+///
+/// @brief Kill the UI process, prompting Shepherd to restart it
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::KillUiProcess()
+{
+    BOSE_ERROR( s_logger, "UI process has stopped. No heartbeat in %u MS.", UI_ALIVE_TIMEOUT );
+
+    pid_t pid = 0;
+
+    if( auto fileData = SystemUtils::ReadFile( UI_KILL_PID_FILE ) )
+    {
+        pid = strtol( fileData->c_str(), nullptr, 10 );
+    }
+
+    if( pid != 0 )
+    {
+        BOSE_ERROR( s_logger, "Killing UI process at pid %i", pid );
+
+        // The nature of the WPE failure is still in question, so SIGKILL is used to ensure termination
+        if( kill( pid, SIGKILL ) == -1 )
+        {
+            BOSE_ERROR( s_logger, "Couldn't kill UI process at pid %d: %s", pid, strerror( errno ) );
+        }
+    }
+    else
+    {
+        BOSE_DIE( "Failed to recover UI process, pid not found" );
+    }
+
+    // Reset Timer
+    StartUiTimer();
 }
 
 
@@ -1033,6 +1098,23 @@ NetManager::Protobuf::OperationalMode ProfessorProductController::GetWiFiOperati
 void ProfessorProductController::HandleMessage( const ProductMessage& message )
 {
     BOSE_INFO( s_logger, "%s received %s", __func__, message.DebugString().c_str() );
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// LPM status messages require both product-specific and common handling.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    if( message.has_lpmstatus( ) )
+    {
+        ///
+        /// Register for product-specific LPM events if connected. Common handling of the product 
+        /// message is then done.
+        ///
+        if( message.lpmstatus( ).has_connected( ) && message.lpmstatus( ).connected( ) )
+        {
+            m_lightbarController->RegisterLpmEvents();
+        }
+
+        ( void ) HandleCommonProductMessage( message );
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// STS slot selected data is handled at this point.
