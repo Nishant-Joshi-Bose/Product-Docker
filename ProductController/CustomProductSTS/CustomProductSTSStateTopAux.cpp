@@ -100,6 +100,8 @@ bool CustomProductSTSStateTopAux::HandleActivateRequest( const STS::Void &req, u
 {
     BOSE_INFO( m_logger, "Custom-HandleActivateRequest( %s )", m_account.GetSourceName().c_str() );
     m_userPlayStatus = true;
+    //update the canStop field
+    m_np.set_canstop( true );
     ProductSTSStateTop::HandleActivateRequest( req, seq );
     return true;
 }
