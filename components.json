@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.10.42747.2864797"
+    "selected_version": "Continuous/Castle-Fork/2018-06-13_1911"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -181,7 +181,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/master/1.5.1-360+b35cc3c"
+    "selected_version": "Release/master/1.5.2-385+4887537"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -193,7 +193,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.10.42747.2864797"
+    "selected_version": "Continuous/Castle-Fork/2018-06-13_1911"
   },
   {
     "name": "SystemEventService-qc8017_32",
