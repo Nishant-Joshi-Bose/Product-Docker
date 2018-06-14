@@ -123,7 +123,7 @@ def test_factory_default_low_power(device_id, adb, tap, lpm_serial_client):
     time.sleep(30)
     # Simulate a key press to wake it up.
     logger.info("Simulating a MFB key press.")
-    lpm_serial_client.button_tap(4, 250)
+    lpm_serial_client.button_tap(4, 15)
 
     # Verify we are back in standby state.
     logger.debug("Waiting 60s for power state to be {} or {}"
@@ -134,7 +134,7 @@ def test_factory_default_low_power(device_id, adb, tap, lpm_serial_client):
 
     # Check for SetupNetwork' state
     device_state = None
-    for _ in range(10):
+    for _ in range(20):
         device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
         logger.debug('Got state: %s', device_state)
         if device_state == eddie_helper.SETUPNETWORK:
@@ -311,7 +311,7 @@ def test_aux_network_standby_low_power(device_id, lpm_serial_client, adb):
     time.sleep(30)
     # Simulate a key press to wake it up.
     logger.info("Simulating a MFB key press.")
-    lpm_serial_client.button_tap(4, 250)
+    lpm_serial_client.button_tap(4, 15)
 
     # Verify we are back in standby state.
     logger.debug("Waiting 60s for power state to be {} or {}"
@@ -322,7 +322,7 @@ def test_aux_network_standby_low_power(device_id, lpm_serial_client, adb):
 
     # Check for NetworkNotConfigured' state
     device_state = None
-    for _ in range(10):
+    for _ in range(20):
         device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
         logger.debug('Got state: %s', device_state)
         if device_state == eddie_helper.STATE_NW_NOT_CONFIGURED:
@@ -391,7 +391,7 @@ def test_bluetooth_network_standby_low_power(device_id, lpm_serial_client, adb):
     time.sleep(30)
     # Simulate a key press to wake it up.
     logger.info("Simulating a MFB key press.")
-    lpm_serial_client.button_tap(4, 250)
+    lpm_serial_client.button_tap(4, 15)
 
     # Verify we are back in standby state.
     logger.debug("Waiting 60s for power state to be {} or {}" \
@@ -402,7 +402,7 @@ def test_bluetooth_network_standby_low_power(device_id, lpm_serial_client, adb):
 
     # Check for NetworkNotConfigured' state
     device_state = None
-    for _ in range(10):
+    for _ in range(20):
         device_state = adb_utils.adb_telnet_cmd('getproductstate', expect_after='Current State: ', device_id=device_id)
         logger.debug('Got state: %s', device_state)
         if device_state == eddie_helper.STATE_NW_NOT_CONFIGURED:
