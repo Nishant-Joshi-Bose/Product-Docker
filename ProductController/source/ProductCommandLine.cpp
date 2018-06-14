@@ -515,6 +515,7 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         std::string SoftwareUpdateReady( m_ProductController.IsSoftwareUpdateReady( )   ? "true" : "false" );
         std::string SassInitialized( m_ProductController.IsSassReady( )                 ? "true" : "false" );
         std::string bluetoothInitialized( m_ProductController.IsBluetoothModuleReady( ) ? "true" : "false" );
+        std::string networkModuleReady( m_ProductController.IsNetworkModuleReady( )     ? "true" : "false" );
 
         response  = "------------- Product Controller Booting Status -------------\n";
         response += "\n";
@@ -538,6 +539,9 @@ int ProductCommandLine::HandleCommand( const std::string&              command,
         response += "\n";
         response += "Bluetooth Initialized : ";
         response += bluetoothInitialized;
+        response += "\n";
+        response += "Network Module Ready  : ";
+        response += networkModuleReady;
         response += "\n";
         response += "\n";
 
