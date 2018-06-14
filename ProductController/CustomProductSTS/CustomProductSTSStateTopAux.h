@@ -24,14 +24,13 @@ public:
     /// @return true if successful
     ////////////////////////////////////////////////////////
     bool HandleStop( const STS::Void & ) override;
-    bool HandlePlay( const STS::Void & ) override;
 
     ////////////////////////////////////////////////////////
-    /// @brief Act on Stop request by translating a mute/unmute to CAPS based on internal state
+    /// @brief Act on play request
     /// @param Void
     /// @return true if successful
     ////////////////////////////////////////////////////////
-    bool HandlePause( const STS::Void & ) override;
+    bool HandlePlay( const STS::Void & ) override;
 
     ////////////////////////////////////////////////////////
     /// @brief Act HandleMuteStatus by generating a mute to CAPS and remembering it.

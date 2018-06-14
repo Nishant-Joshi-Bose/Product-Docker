@@ -46,21 +46,11 @@ bool CustomProductSTSStateTopAux::HandlePlay( const STS::Void & )
         return false;
     }
     m_userPlayStatus = true;//save the user selection as PLAY.
-    //In case, aux cable was not inserted now, the next it is inserted
-    //it shall PLAY
     if( m_auxInserted )
     {
         AuxPlay();
     }
     return true;
-}
-
-bool CustomProductSTSStateTopAux::HandlePause( const STS::Void & arg )
-{
-    BOSE_INFO( s_logger, "%s ( %s ) is %sactive, Aux Cable is %sinserted",
-               __FUNCTION__, m_account.GetSourceName().c_str(),
-               m_active ? "" : "not ", m_auxInserted ? "" : "NOT " );
-    return ( HandleStop( arg ) );
 }
 
 bool CustomProductSTSStateTopAux::HandleMuteStatus( const STS::MuteStatus& ms )
