@@ -7,4 +7,35 @@
 # If you're thinking about having this script do something more, you're almost
 # certainly wrong.
 #
-exec /opt/Bose/bin/SoundTouch "$@"
+
+# Todo: Change egrep to jq query
+# Status is Pending install Only if Status is ERROR / INPROGRESS Or 
+# Atleast one status is In START when atleast one is COMPLETE   
+installPending=false
+jq .SwUpComponents.elements[].status /mnt/nv/updateSwUpComponentStatus.dat > /tmp/status.txt
+if egrep -q "STATUS_ERROR|STATUS_INPROGRESS" /tmp/status.txt; then
+    echo "Install is pending - error / inprogress"
+    installPending=true
+else 
+    if egrep -q "STATUS_START" /tmp/status.txt && egrep -q "STATUS_COMPLETE" /tmp/status.txt; then
+        echo "Install is pending - one or more complete"
+        installPending=true        
+    fi
+fi
+if $installPending; then
+    if [ -e /opt/Bose/.swUpdateCache/backup/install ]; then
+        echo "Executing install from backup location"
+        exec /opt/Bose/.swUpdateCache/backup/install "$@"
+    fi
+    if [ -e /opt/Bose/bin/install ]; then
+    	echo "Executing install from normal location"
+        exec /opt/Bose/bin/install "$@"
+    fi
+    echo "Install is pending but running SoundTouch"
+    exec /opt/Bose/bin/SoundTouch "$@"
+else
+    echo "Install is not pending"
+    /opt/Bose/bin/SoundTouch "$@" &
+    exec /opt/Bose/bin/install "$@" 
+fi
+
