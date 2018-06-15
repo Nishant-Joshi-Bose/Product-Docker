@@ -52,7 +52,6 @@ fields = """
   BMAPVariantID
   productColor
   country_code
-  deviceAbsorptionLux
   mic_gain
   snSystem
 """.split()
@@ -61,7 +60,6 @@ field_notes = {
   "BMAPVariantID":	"1 (black), 2 (white), 3 (silver)",
   "productColor":	"Same as BMAPVariantID",
   "country_code":	"US, JP, CN, NZ, ...",
-  "deviceAbsorptionLux": "1.00 to 100.00",
   "mic_gain":		"8 microphone gain values",
   "snSystem":		"17-character serial number",
 }
