@@ -1,11 +1,11 @@
 [
   {
     "name": "AudioPath-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.5-21114"
+    "selected_version": "Release/Castle-Fork/1.5.6-21167"
   },
   {
     "name": "AudioPath-qc8017_64",
-    "selected_version": "Release/Castle-Fork/1.5.5-21114"
+    "selected_version": "Release/Castle-Fork/1.5.6-21167"
   },
   {
     "name": "AudioSource-qc8017_32",
@@ -13,7 +13,7 @@
   },
   {
     "name": "AVS-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.9.42740.2864280"
+    "selected_version": "Continuous/Castle-Fork/2018-06-13_1911"
   },
   {
     "name": "BLESetup-qc8017_32",
@@ -125,7 +125,7 @@
   },
   {
     "name": "NetworkService-qc8017_32",
-    "selected_version": "Release/master/1.5.2-330+f45d010"
+    "selected_version": "Release/master/1.5.3-345+7d23d2a"
   },
   {
     "name": "opensource-jsoncpp-native",
@@ -145,7 +145,7 @@
   },
   {
     "name": "ProductControllerCommon",
-    "selected_version": "master@8d3b84516b2c7e635392e4e5f81f6c3d464d0f61"
+    "selected_version": "master@3c95bd4bb4f9a16111b85fa8e7d9e07e504382ae"
   },
   {
     "name": "ProductUIAssets",
@@ -181,7 +181,7 @@
   },
   {
     "name": "SASS-qc8017_32",
-    "selected_version": "Release/master/1.5.1-360+b35cc3c"
+    "selected_version": "Release/master/1.5.2-385+4887537"
   },
   {
     "name": "Shepherd-qc8017_32",
@@ -193,7 +193,7 @@
   },
   {
     "name": "SoundTouch-SDK-qc8017_32",
-    "selected_version": "Release/Castle-Fork/1.5.9.42740.2864280"
+    "selected_version": "Continuous/Castle-Fork/2018-06-13_1911"
   },
   {
     "name": "SystemEventService-qc8017_32",
