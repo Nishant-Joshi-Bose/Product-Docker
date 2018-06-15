@@ -228,7 +228,7 @@ void ProductCecHelper::CecModeHandlePut( const CecUpdateRequest req, const Callb
         errorRsp.Send( error );
     }
 
-    m_FrontDoorClient->SendNotification( FRONTDOOR_NOTIFY_CEC, m_cecresp );
+    m_FrontDoorClient->SendNotification( FRONTDOOR_CEC_API, m_cecresp );
 }
 
 
