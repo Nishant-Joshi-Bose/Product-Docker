@@ -74,7 +74,8 @@ namespace ProductApp
 ProductAdaptIQManager::ProductAdaptIQManager( ProfessorProductController& ProductController ) :
     m_ProductTask( ProductController.GetTask( ) ),
     m_ProductNotify( ProductController.GetMessageHandler( ) ),
-    m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) )
+    m_ProductLpmHardwareInterface( ProductController.GetLpmHardwareInterface( ) ),
+    m_ProductAudioService( ProductController.GetProductAudioServiceInstance( ) )
 {
     m_status.set_smstate( "AIQ_STATE_NOT_RUNNING" );
     m_status.set_currentlocation( ADAPTIQ_LOCATION_FIRST );
@@ -323,8 +324,25 @@ void ProductAdaptIQManager::RegisterLpmClientEvents( )
     bool success =  m_ProductLpmHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcAiqSetupStatus_t >
                     ( LpmServiceMessages::IPC_DSP_AIQ_SETUP_STATUS, Callback<LpmServiceMessages::IpcAiqSetupStatus_t >( aiqFunc ) );
 
-    BOSE_INFO( s_logger, "%s registered for AdaptIQ status from the LPM hardware.",
-               ( success ? "Successfully" : "Unsuccessfully" ) );
+    if( not success )
+    {
+        BOSE_ERROR( s_logger, "%s error registering for AiQ setup status", __func__ );
+        return;
+    }
+
+    auto bootedFunc = [ this ]( LpmServiceMessages::IpcDeviceBoot_t image )
+    {
+        BOSE_ERROR( s_logger, "%s", __func__ );
+        LpmServiceMessages::IpcDspStreamConfigReqPayload_t config;
+        m_ProductAudioService->GetDspStreamConfig( config );
+        m_ProductLpmHardwareInterface->SetStreamConfig( config, {} );
+    };
+    success =  m_ProductLpmHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcDeviceBoot_t >
+               ( LpmServiceMessages::IPC_DSP_BOOTED_EVENT, Callback<LpmServiceMessages::IpcDeviceBoot_t>( bootedFunc ) );
+    if( not success )
+    {
+        BOSE_ERROR( s_logger, "%s error registering for DSP boot status", __func__ );
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
