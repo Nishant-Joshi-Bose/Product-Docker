@@ -28,7 +28,7 @@
         --><header master_version="1.5.2" name="professor_package.bos" />
     <manifest_entries>
         <entry chip="lpm_professor" combine="True" name="professor_mfg.bin" path="/home/softlib/verisoft/ProfessorLPM-Diags/Release/master/0.3.18-151+2a7d046/DP2/lpm_0.3.18-151+2a7d046.bin" version="filename" />
-        <entry chip="lpm_professor" combine="True" name="professor.bin" path="/home/softlib/verisoft/ProfessorLPM-App/Release/trunk/1.5.2.2679/Alpha/lpm_1.5.2.2679.bin" version="filename" />
+        <entry chip="lpm_professor" combine="True" name="professor.bin" path="/home/softlib/verisoft/ProfessorLPM-App/Release/trunk/1.5.3.2700/Alpha/lpm_1.5.3.2700.bin" version="filename" />
         <entry chip="lpm_professor" combine="True" name="professor_bl.bin" path="/home/softlib/verisoft/ProfessorLPM-BL/Release/trunk/0.2.0.1674/lpm_bootloader_0.2.0.1674.bin" version="filename" />
         <entry name="f0.bin" path="/home/softlib/verisoft/A4V-F0/Release/trunk/1.7.1.12103/RIVIERA_F0_1.7.1.12103.bin" version="filename" />
         <entry name="darr.bin"        path="/home/softlib/verisoft/A4V-WirelessAudio/Release/trunk/40.000.12236/wam_40.000.12236.bin" version="40" />
@@ -40,7 +40,7 @@
         <entry name="INSTALLER00.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Release/trunk/1.5.1.665/Professor/upd/INSTALLER00.upd" version="dynamic" />
         <entry name="INSTALLER01.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Release/trunk/1.5.1.665/Professor/upd/INSTALLER01.upd" version="dynamic" />
         <entry name="INSTALLER02.UPD" path="/home/softlib/verisoft/ProfessorSHARC/Release/trunk/1.5.1.665/Professor/upd/INSTALLER02.upd" version="dynamic" />
-        <entry name="psoc.cyacd" path="/home/softlib/verisoft/CastleLightBarCapSense/Release/master/4.1-196+82a69cb/App-Professor-DP2*.cyacd" version="dynamic" />
+        <entry name="psoc.cyacd" path="/home/softlib/verisoft/CastleLightBarCapSense/Release/master/4.1-196+82a69cb/App-GingerCheevers-Alpha*.cyacd" version="dynamic" />
         <entry name="psoc_gc.cyacd" path="/home/softlib/verisoft/CastleLightBarCapSense/Release/master/4.1-196+82a69cb/App-GingerCheevers-Alpha*.cyacd" version="dynamic" />
         <entry name="prof_lb_anim_db.bin" path="/home/softlib/verisoft/CastleLedAnimationTool/Release/master/1.19-76+4b77d7e/SoundBar/Animations.bin" version="dynamic" />
         <entry name="remote.hex" path="/home/softlib/verisoft/BLERemoteXCVR/Release/master/v1.0.0-0+3929310/BLEBridge_app_*.hex" version="dynamic" />

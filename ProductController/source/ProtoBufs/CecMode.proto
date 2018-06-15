@@ -40,9 +40,9 @@ message CecModeResponse
     }
 
     /*
-     * "On"
-     * "Off"
-     * "AltOn"
+     * "ON"
+     * "OFF"
+     * "ALTERNATE_ON"
      */
     optional string             mode                = 1;
     optional CecModeProperties  properties          = 2;
@@ -52,9 +52,9 @@ message CecModeResponse
 message CecUpdateRequest
 {
     /*
-     * "On"
-     * "Off"
-     * "AltOn"
+     * "ON"
+     * "OFF"
+     * "ALTERNATE_ON"
      */
     optional string             mode                = 1;
 }
