@@ -494,7 +494,7 @@ def rebooted_and_networked_device(request, adb, device_id, ip_address_wlan):
 
     manager = Manager()
     collection_dict = manager.dict()
-    maximum_time = 30
+    maximum_time = 60
     network_connection = request.config.getoption("--network-iface") \
         if request.config.getoption("--network-iface") else 'wlan0'
     LOGGER.debug("Looking for IP Address on %s", network_connection)
