@@ -19,7 +19,7 @@ CustomProductSTSStateTopAux::CustomProductSTSStateTopAux( ProductSTSHsm& hsm,
 
 bool CustomProductSTSStateTopAux::HandleStop( const STS::Void & )
 {
-    BOSE_INFO( s_logger, "%s ( %s ) is %sactive, Aux Cable is %sinserted",
+    BOSE_DEBUG( s_logger, "%s ( %s ) is %sactive, Aux Cable is %sinserted",
                __FUNCTION__, m_account.GetSourceName().c_str(),
                m_active ? "" : "not ", m_auxInserted ? "" : "NOT " );
     if( ! m_active )
@@ -27,9 +27,9 @@ bool CustomProductSTSStateTopAux::HandleStop( const STS::Void & )
         BOSE_ERROR( s_logger,  "%s AUX Source not active", __FUNCTION__ );
         return false;
     }
-    m_userPlayStatus = false;
     if( m_auxInserted )
     {
+        m_userPlayStatus = false;
         AuxStop();
     }
     return true;
@@ -37,7 +37,7 @@ bool CustomProductSTSStateTopAux::HandleStop( const STS::Void & )
 
 bool CustomProductSTSStateTopAux::HandlePlay( const STS::Void & )
 {
-    BOSE_INFO( s_logger, "%s ( %s ) is %sactive, Aux Cable is %sinserted",
+    BOSE_DEBUG( s_logger, "%s ( %s ) is %sactive, Aux Cable is %sinserted",
                __FUNCTION__, m_account.GetSourceName().c_str(),
                m_active ? "" : "not ", m_auxInserted ? "" : "NOT " );
     if( ! m_active )
@@ -45,18 +45,11 @@ bool CustomProductSTSStateTopAux::HandlePlay( const STS::Void & )
         BOSE_ERROR( s_logger,  "%s AUX Source not active", __FUNCTION__ );
         return false;
     }
-    m_userPlayStatus = true;//save the user selection as PLAY.
     if( m_auxInserted )
     {
+        m_userPlayStatus = true;//save the user selection as PLAY.
         AuxPlay();
     }
-    return true;
-}
-
-bool CustomProductSTSStateTopAux::HandleMuteStatus( const STS::MuteStatus& ms )
-{
-    BOSE_INFO( s_logger, "%s: No Action on MUTE ( %s ) MuteStatus :%d ",
-               __FUNCTION__, m_account.GetSourceName().c_str(), ms.muteenabled() );
     return true;
 }
 
@@ -112,6 +105,8 @@ void CustomProductSTSStateTopAux::HandleAUXCableDetect( LpmServiceMessages::IpcA
 
 void CustomProductSTSStateTopAux::ProcessAUXCableState( )
 {
+    BOSE_INFO( m_logger, "%s: Aux Cable is %sinserted, User Selection is %s",
+               __func__, m_auxInserted ? "" : "NOT ", m_userPlayStatus ? "PLAY" : "STOP" );
     if( m_auxInserted == false )
     {
         AuxStop();

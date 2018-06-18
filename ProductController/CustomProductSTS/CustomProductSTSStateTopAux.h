@@ -33,13 +33,6 @@ public:
     bool HandlePlay( const STS::Void & ) override;
 
     ////////////////////////////////////////////////////////
-    /// @brief Act HandleMuteStatus by generating a mute to CAPS and remembering it.
-    /// @param STS::MuteStatus
-    /// @return true if successful
-    ////////////////////////////////////////////////////////
-    bool HandleMuteStatus( const STS::MuteStatus& ms ) override;
-
-    ////////////////////////////////////////////////////////
     /// @brief Act HandleAudioStatus only if the AUX cable is not inserted by doing SendAudioStopEvent
     /// @param STS::AudioStatus
     /// @return true if successful
