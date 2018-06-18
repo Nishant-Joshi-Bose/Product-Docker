@@ -107,6 +107,10 @@ def pytest_addoption(parser):
                      default='9zf6kcZgF5IEsXbrKU6fvG8vFGWzF1Ih',
                      help='Passport API KEY')
 
+    parser.addoption("--galapagos-env",
+                     default="latest",
+                     help="Pass the Galapagos environment for frontdoor api object")
+
 
 def ping(ip):
     """ Pings a given IP Address """
