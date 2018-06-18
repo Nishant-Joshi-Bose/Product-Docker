@@ -300,11 +300,13 @@ def eddie_master_latest_directory(tmpdir):
     # Remove everything in the tmpdir
     tmpdir.remove()
 
+
 @pytest.fixture(scope="session")
 def keyConfig():
     keyConfigData = None
     keyConfigData = keyConfig["keyTable"]
     return keyConfigData
+
 
 @pytest.fixture(scope='session')
 def deviceid(request):
@@ -317,6 +319,7 @@ def deviceid(request):
     except Exception as exception:
         LOGGER.info("Getting device id.... " + str(exception))
     return False
+
 
 @pytest.fixture(scope='module')
 def wifi_config():
@@ -354,12 +357,42 @@ def ip_address_wlan(request, device_id, wifi_config):
         LOGGER.warning("Not able to acquire IP Address: %s", exception)
 
     LOGGER.info("Device IP Address: %s", repr(device_ip_address))
+
+    # Wait until LPM connection is available
+    status = None
+    query = '(netstat -tnl | grep -q 17000) && echo OK'
+    for _ in range(90):
+        status = riviera_device.communication.executeCommand(query)
+        if status and status.strip() == 'OK':
+            break
+        time.sleep(1)
+    assert status and (status.strip() == 'OK'), "CLIServer not started within 90s."
+
+    # Check whether the LPM and CLI services are running or not over ADB connection
+    retries = 25
+    lpm_state = None
+    cli_state = None
+    while retries > 0:
+        lpm_state = False
+        cli_state = False
+        out = riviera_device.communication.executeCommand("\"ps -a | grep LPM\"")
+        if "LPMService" in out:
+            lpm_state = True
+        out = riviera_device.communication.executeCommand("\"ps -a | grep CLI\"")
+        if "CLIServer" in out:
+            cli_state = True
+        if lpm_state and cli_state:
+            break
+        retries -= 1
+        time.sleep(1)
+    assert lpm_state and cli_state, "LPM ({}) and CLI ({}) not activated.".format(lpm_state, cli_state)
+
     if not device_ip_address:
         # Clear any WiFi profiles on the device
         clear_profiles = ' '.join(['network', 'wifi', 'profiles', 'clear'])
-        clear_profiles = "echo {} | nc 0 17000".format(clear_profiles)
         LOGGER.info("Clearing Network Profiles: %s", clear_profiles)
-        riviera_device.communication.executeCommand(clear_profiles)
+        adb_utils.adb_telnet_cmd(clear_profiles, expect_after='Profiles Deleted',
+                                 device_id=device_id)
 
         # Acquire the Router information
         router = request.config.getoption("--router")
@@ -391,6 +424,7 @@ def ip_address_wlan(request, device_id, wifi_config):
     LOGGER.debug("Found IP Address (%s) for Device (%s).", device_ip_address, device_id)
     return device_ip_address
 
+
 @pytest.fixture(scope='module')
 def add_wifi_at_end(request, device_id, wifi_config):
     LOGGER.debug("add_wifi_at_end")
@@ -409,6 +443,7 @@ def add_wifi_at_end(request, device_id, wifi_config):
     time.sleep(2)
     LOGGER.info("Executing ip_address_wlan")
     ip_address_wlan(request, device_id, wifi_config)
+
 
 @pytest.mark.usefixtures('adb')
 @pytest.fixture(scope='function')
@@ -459,7 +494,7 @@ def rebooted_and_networked_device(request, adb, device_id, ip_address_wlan):
 
     manager = Manager()
     collection_dict = manager.dict()
-    maximum_time = 30
+    maximum_time = 60
     network_connection = request.config.getoption("--network-iface") \
         if request.config.getoption("--network-iface") else 'wlan0'
     LOGGER.debug("Looking for IP Address on %s", network_connection)
@@ -529,6 +564,7 @@ def frontdoor_wlan(request, ip_address_wlan):
     if _frontdoor:
         _frontdoor.close()
 
+
 @pytest.fixture(scope="function")
 def set_lps_timeout(deviceid):
     """
@@ -566,6 +602,7 @@ def set_lps_timeout(deviceid):
     # 4. Reboot and wait for CLI-Server to start and device state get out of Booting.
     rebooted_and_out_of_booting_state_device(deviceid, adb)
 
+
 @pytest.fixture(scope="function")
 def rebooted_and_out_of_booting_state_device(deviceid, adb):
     """
@@ -600,6 +637,7 @@ def rebooted_and_out_of_booting_state_device(deviceid, adb):
         LOGGER.debug("Current device state : %s", device_state)
         time.sleep(1)
 
+
 @pytest.fixture(scope='session')
 def lpm_serial_client(request):
     """
@@ -617,6 +655,7 @@ def lpm_serial_client(request):
 
     # Close the client
     del lpm_serial
+
 
 @pytest.fixture(scope="function")
 def tap(device_ip):

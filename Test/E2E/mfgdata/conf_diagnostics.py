@@ -12,6 +12,7 @@ CONFIG = {
         'main_header'             : "Diagnostics",
         'software_version_text'   : "Software Version",
         'lpm_version_text'        : "LPM Versions",
+        'expected_hash_text'      : "development or production",
         'diagnostics_page_title'  : "Diagnostics",},
     'locator'                  : {
         'manufacturing_data_locator'             : "//li[contains(text(), 'Manufacturing Data')]",
