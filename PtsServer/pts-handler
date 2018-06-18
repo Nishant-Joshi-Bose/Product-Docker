@@ -68,6 +68,16 @@ Content-Type: text/plain\r
 
 usb_ifaces = ["usb*", "rndis*"]
 
+def http_redirect(actual_path, from_path, to_path):
+    if actual_path == from_path:
+        print """\
+HTTP/1.1 301 Moved Permanently\r
+Location: {}\r
+\r
+Moved Permanently\r
+""".format(to_path)
+        sys.exit()
+
 def only_for_usb():
     only_for_ifaces(usb_ifaces)
 
@@ -95,92 +105,87 @@ def redirect_stderr():
 
 # ----------------------------------------------------------------------------
 
-if method == "GET":
+if method != "GET":
+    http_err()
 
 # ----------------------------------------------------------------------------
 # Diagnostics pages.
 
-    if path == "/diag":
-        print """\
-HTTP/1.1 301 Moved Permanently\r
-Location: /diag/\r
-\r
-Moved Permanently\r
-"""
-        sys.exit()
+http_redirect(path, "/diag", "/diag/")
 
-    if path.startswith("/diag/"):
-        only_for_usb()
+if path.startswith("/diag/"):
+    only_for_usb()
 
-        path = path[len("/diag/"):]
-        if path == "":
-            path = "main"
-        prog = path
-        args = []
-        i = path.find("/")
-        if i != -1:
-            args.append(path[i+1:])
-            prog = path[:i]
-        log("diag", prog, args)
-        os.chdir("/opt/Bose/diag")
-        sys.stdout.flush()
-        os.execv(prog, [prog] + args)
+    path = path[len("/diag/"):]
+    if path == "":
+        path = "main"
+    prog = path
+    args = []
+    i = path.find("/")
+    if i != -1:
+        args.append(path[i+1:])
+        prog = path[:i]
+    log("diag", prog, args)
+    os.chdir("/opt/Bose/diag")
+    sys.stdout.flush()
+    os.execv(prog, [prog] + args)
 
 # ----------------------------------------------------------------------------
 # View the log message buffer.
 
-    if path == "/logread.txt":
-        only_for_usb()
+if path == "/logread.txt":
+    only_for_usb()
 
-        http_ok()
-        sys.stdout.flush()
-        os.execl("/sbin/logread", "logread")
+    http_ok()
+    sys.stdout.flush()
+    os.execl("/sbin/logread", "logread")
 
 # ----------------------------------------------------------------------------
 # View the log message buffer (compressed).
 
-    if path == "/logread.txt.gz":
-        only_for_usb()
+if path == "/logread.txt.gz":
+    only_for_usb()
 
-        http_ok("application/x-gzip")
-        sys.stdout.flush()
-        os.execl("/bin/sh", "sh", "-c", "logread | gzip")
+    http_ok("application/x-gzip")
+    sys.stdout.flush()
+    os.execl("/bin/sh", "sh", "-c", "logread | gzip")
 
 # ----------------------------------------------------------------------------
 # View miscellaneous system status information.
 
-    if path == "/pts.txt":
-        only_for_usb()
+if path == "/pts.txt":
+    only_for_usb()
 
-        def call(*args):
-            print ">", " ".join(args)
-            sys.stdout.flush()
-            subprocess.call(args)
+    def call(*args):
+        print ">", " ".join(args)
+        sys.stdout.flush()
+        subprocess.call(args)
 
-        http_ok()
-        redirect_stderr()
-        call("date")
-        call("cat", "/opt/Bose/etc/BoseVersion.json")
-        call("cat", "/persist/mfg_data.json")
-        call("free", "-m")
-        call("ifconfig", "-a")
-        call("ip", "route", "list")
-        call("wpa_cli", "status")
-        call("wpa_cli", "scan_results")
-        call("sh", "-c", "head -20 /mnt/nv/product-persistence/*")
-        call("ls", "-lHt", "/mnt/nv/BoseLog")
-        call("ps")
-        call("ReadLpmVersion")
-        sys.exit()
+    http_ok()
+    redirect_stderr()
+    call("date")
+    call("uptime")
+    call("cat", "/opt/Bose/etc/BoseVersion.json")
+    call("cat", "/persist/mfg_data.json")
+    call("free", "-m")
+    call("ifconfig", "-a")
+    call("ip", "route", "list")
+    call("wpa_cli", "status")
+    call("wpa_cli", "scan_results")
+    call("sh", "-c", "head -20 /mnt/nv/product-persistence/*")
+    call("ls", "-lHt", "/mnt/nv/BoseLog")
+    call("ps")
+    call("ReadLpmVersion")
+    sys.exit()
 
 # ----------------------------------------------------------------------------
 # Force the system into reflash mode (QFIL).
 
-    if path == "/reflash":
-        only_for_usb()
+if path == "/reflash":
+    only_for_usb()
 
-        http_ok("text/html")
-        print """\
+    http_ok("text/html")
+    print """\
 <html>
 <head>
 <title>Reflash Mode</title>
@@ -196,126 +201,124 @@ Moved Permanently\r
 </body>
 </html>
 """
-        sys.stdout.flush()
+    sys.stdout.flush()
 
-        # Sleep to give the output a chance to get out.
-        subprocess.call("""(
+    # Sleep to give the output a chance to get out.
+    subprocess.call("""(
   exec >&2;
   sleep 3;
   PlatformResetIntoQfil
 ) &""", shell=True)
-        sys.exit()
+    sys.exit()
 
 # ----------------------------------------------------------------------------
 # Get Bose version
 
-    if path == "/bose-version":
-        only_for_usb()
+if path == "/bose-version":
+    only_for_usb()
 
-        http_ok()
-        sys.stdout.write(open("/opt/Bose/etc/BoseVersion.json").read())
-        sys.exit()
+    http_ok()
+    sys.stdout.write(open("/opt/Bose/etc/BoseVersion.json").read())
+    sys.exit()
 
 # ----------------------------------------------------------------------------
 # Get Riviera version
 
-    if path == "/kernel-version":
-        only_for_usb()
+if path == "/kernel-version":
+    only_for_usb()
 
-        http_ok()
-        sys.stdout.write(open("/etc/riviera-version").read())
-        sys.exit()
+    http_ok()
+    sys.stdout.write(open("/etc/riviera-version").read())
+    sys.exit()
 
 # ----------------------------------------------------------------------------
 # Validate manufacturing data
 
-    if path == "/validate-mfgdata":
-        only_for_usb()
+if path == "/validate-mfgdata":
+    only_for_usb()
 
-        http_ok()
-        redirect_stderr()
-        if subprocess.call(["validate-mfgdata"]) == 0:
-            print "Valid Manufacturing Data."
-        else:
-            print "Invalid Manufacturing Data."
-        sys.exit()
+    http_ok()
+    redirect_stderr()
+    if subprocess.call(["validate-mfgdata"]) == 0:
+        print "Valid Manufacturing Data."
+    else:
+        print "Invalid Manufacturing Data."
+    sys.exit()
 
 # ----------------------------------------------------------------------------
 # Get LPM controller version
 
-    if path == "/controller-version":
-        only_for_usb()
+if path == "/controller-version":
+    only_for_usb()
 
-        http_ok()
-        redirect_stderr()
-        subprocess.call(["ReadLpmVersion"])
-        sys.exit()
+    http_ok()
+    redirect_stderr()
+    subprocess.call(["ReadLpmVersion"])
+    sys.exit()
 
 # ----------------------------------------------------------------------------
 # Open source license documents.
 # The customer end-user documentation references this URL path.
 
-    path_lower = path.lower()
-    if path_lower == "/opensource" or path_lower == "/opensource/":
-        print """\
-HTTP/1.1 301 Moved Permanently\r
-Location: /licenses.txt\r
-\r
-Moved Permanently\r
-"""
-        sys.exit()
+http_redirect(path.lower(), "/opensource", "/licenses.txt")
+http_redirect(path.lower(), "/opensource/", "/licenses.txt")
+
+# ----------------------------------------------------------------------------
+# Remanufacturing.
+
+if path == "/service" or path.startswith("/service?"):
+    prog = "/opt/Bose/etc/service"
+    os.execv(prog, [prog, path[len("/service?"):]])
 
 # ----------------------------------------------------------------------------
 # Serve static content.
 
-    # Discard any query parameters from paths like
-    # "/index.html?deeplink=com.bose.myApp&ssid=myNetwork&context=ApSetup".
-    # See https://github.com/BoseCorp/bose-web-riviera-ap-page/
-    i = path.find("?")
-    if i != -1:
-        path = path[:i]
+# Discard any query parameters from paths like
+# "/index.html?deeplink=com.bose.myApp&ssid=myNetwork&context=ApSetup".
+# See https://github.com/BoseCorp/bose-web-riviera-ap-page/
+i = path.find("?")
+if i != -1:
+    path = path[:i]
 
-    if path == "/":
-        path = "/index.html"
+if path == "/":
+    path = "/index.html"
 
-    if path == "/index.html":
-        # Wi-Fi setup page access is restricted to certain interfaces
-        only_for_ifaces(["wlan1"] + usb_ifaces)
+if path == "/index.html":
+    # Wi-Fi setup page access is restricted to certain interfaces
+    only_for_ifaces(["wlan1"] + usb_ifaces)
 
-    file_name = "/opt/Bose/html" + path
+file_name = "/opt/Bose/html" + path
 
-    # Avoid possible security issues with paths like ../../etc/passwd and symlinks.
-    if file_name != os.path.realpath(file_name):
-        http_err()
-        sys.exit()
-
-    content_types = {
-        ".html": "text/html",
-        ".jpg": "image/jpeg",
-        ".pdf": "application/pdf",
-        ".svg": "image/svg+xml",
-    }
-    content_type = "text/plain"
-    for ext, ctype in content_types.iteritems():
-        if file_name.endswith(ext):
-            content_type = ctype
-            break
-
-    try:
-        with open(file_name) as fh:
-            http_ok(content_type)
-
-            while True:
-                buf = fh.read(4096)
-                if not buf:
-                    break
-                sys.stdout.write(buf)
-        log("Sent {} ({})".format(file_name, content_type))
-    except IOError, exc:
-        log("open " + file_name + ": " + exc.strerror)
-        http_err()
+# Avoid possible security issues with paths like ../../etc/passwd and symlinks.
+if file_name != os.path.realpath(file_name):
+    http_err()
     sys.exit()
 
-# ----------------------------------------------------------------------------
+content_types = {
+    ".html": "text/html",
+    ".jpg": "image/jpeg",
+    ".pdf": "application/pdf",
+    ".svg": "image/svg+xml",
+}
+content_type = "text/plain"
+for ext, ctype in content_types.iteritems():
+    if file_name.endswith(ext):
+        content_type = ctype
+        break
 
-http_err()
+try:
+    with open(file_name) as fh:
+        http_ok(content_type)
+
+        while True:
+            buf = fh.read(4096)
+            if not buf:
+                break
+            sys.stdout.write(buf)
+    log("Sent {} ({})".format(file_name, content_type))
+except IOError, exc:
+    log("open " + file_name + ": " + exc.strerror)
+    http_err()
+sys.exit()
+
+# ----------------------------------------------------------------------------

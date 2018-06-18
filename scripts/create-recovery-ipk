@@ -137,7 +137,8 @@ rm -f /cache/recovery/last_log.*
 rm -f /cache/recovery/last_kmsg.*
 
 # move minimal rpoduct image to cache partition
-mv /opt/Bose/Bose_minimal.tar.gz /cache/
+# Todo: CASTLE-15220: This is removed for now - to reduce size of overall package
+#mv /opt/Bose/Bose_minimal.tar.gz /cache/
 
 # move RecoveryMain binary to /cache partition
 mv /opt/Bose/bin/RecoveryMain /cache/
@@ -206,13 +207,14 @@ echo "2.0" > debian-binary || exit
 ipk=$output_dir/recovery.ipk
 rm -f "$ipk"
 ar -crf "$ipk" control.tar.gz data.tar.gz debian-binary || exit
+echo "Created $ipk"
+
 # /cache partition used to put contents of this IPK is limited in size.
 # Check if IPK is so big that /cache will become 100% and eventually cause
 # softwareupdate failure. This prevents issues from happening in field
-if [ $(stat -c "%s" $ipk) -ge 33554432 ]; then
-    echo "Created $ipk > 32 MB limit. Build failure"
+if [ $(stat -c "%s" $ipk) -ge 104857600 ]; then
+    echo "Created $ipk > 100 MB limit. Build failure"
     exit 1
-else
-    echo "Created $ipk"
 fi
+
 exit 0

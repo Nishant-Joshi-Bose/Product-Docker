@@ -14,14 +14,13 @@ fi
 
 export DONT_UPDATE_CASTLETOOLS=1
 export GENERATE_HSP_SIGNATURES=1
-eval $KWINJECT make jobs=8 deploy || exit
 eval $KWINJECT make jobs=8 hw_var=Alpha deploy || exit
 
 if [ "$[BuildType]" = "Release" ]; then
-    python2.7 scripts/update_product_profile --p professor --v $[Version] --e latest
-    python2.7 scripts/update_product_profile --p professor --v $[Version] --e integration
-    python2.7 scripts/update_product_profile --p ginger-cheevers --v $[Version] --e latest
-    python2.7 scripts/update_product_profile --p ginger-cheevers --v $[Version] --e integration
+    for env in alpha latest integration; do
+        python2.7 scripts/update_product_profile --p professor       --v $[Version] --e $env
+        python2.7 scripts/update_product_profile --p ginger-cheevers --v $[Version] --e $env
+    done
 fi
 
 : success

@@ -305,7 +305,7 @@ public:
     /// product specific action.
     ///
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    virtual bool HandlePairingStatus( ProductAccessoryPairing pairingStatus )
+    virtual bool HandlePairingStatus( ProductPb::AccessorySpeakerState pairingStatus )
     {
         return false;
     }
@@ -316,11 +316,6 @@ public:
     }
 
     virtual bool HandleNetworkConfigurationStatus( )
-    {
-        return false;
-    }
-
-    virtual bool HandleNetworkOperationMode( NetManager::Protobuf::OperationalMode mode )
     {
         return false;
     }

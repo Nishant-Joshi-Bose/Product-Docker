@@ -74,13 +74,13 @@ void CustomProductControllerStateAccessoryPairingCancelling::HandleStateStart( )
 /// @brief CustomProductControllerStateAccessoryPairingCancelling::HandlePairingStatus
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-bool CustomProductControllerStateAccessoryPairingCancelling::HandlePairingStatus( ProductAccessoryPairing pairingStatus )
+bool CustomProductControllerStateAccessoryPairingCancelling::HandlePairingStatus( ProductPb::AccessorySpeakerState pairingStatus )
 {
     BOSE_INFO( s_logger, "The %s state is handling a pairing %s.",
                GetName( ).c_str( ),
-               pairingStatus.active( ) ? "activation" : "deactivation" );
+               pairingStatus.pairing( ) ? "activation" : "deactivation" );
 
-    if( not pairingStatus.active( ) )
+    if( not pairingStatus.pairing( ) )
     {
         ChangeState( PRODUCT_CONTROLLER_STATE_PLAYING_SELECTED_STOPPING_STREAMS );
     }

@@ -102,6 +102,7 @@
 #include "ProductEndpointDefines.h"
 #include "ProtoPersistenceFactory.h"
 #include "PGCErrorCodes.h"
+#include "SystemUtils.h"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                          Start of the Product Application Namespace                          ///
@@ -116,13 +117,15 @@ namespace ProductApp
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 constexpr uint32_t PRODUCT_CONTROLLER_RUNNING_CHECK_IN_SECONDS = 4;
 
+constexpr char     UI_KILL_PID_FILE[] = "/var/run/monaco.pid";
+constexpr uint32_t UI_ALIVE_TIMEOUT = 60 * 1000;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
 /// @name   ProfessorProductController::ProfessorProductController
 ///
-/// @brief  This method is the ProfessorProductController constructor, which is declared as being
-///         private to ensure that only one instance of this class can be created through the class
-///         GetInstance method.
+/// @brief  This method is the ProfessorProductController constructor, which is used to initialize
+///         its corresponding module classes and member variables.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ProfessorProductController::ProfessorProductController( ) :
@@ -172,14 +175,32 @@ ProfessorProductController::ProfessorProductController( ) :
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
+/// @name ProfessorProductController::Start
+///
+/// @brief This method starts the product controller by dispatching its Run method inside the
+///        product task. The Run method initializes the product controller state machine and all
+///        of its associated modules, including the registration of callbacks for internal and state
+///        machine messaging, IPC, Frontdoor end-points, and so forth. Since these initializations
+///        take place first inside the product task, and all callbacks are processed inside the same
+///        product task after the initialization, no callback can be invoked from a non-existent
+///        state or module. This method was put in place based on the JIRA Story PGC-2052.
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::Start( )
+{
+    m_Running = true;
+
+    IL::BreakThread( std::bind( &ProfessorProductController::Run, this ), GetTask( ) );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
 /// @name ProfessorProductController::Run
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::Run( )
 {
-    m_Running = true;
-
-    BOSE_DEBUG( s_logger, "----------- Product Controller State Machine    ------------" );
+    BOSE_DEBUG( s_logger, "----------- Product Controller Initialization Start ------------" );
     BOSE_DEBUG( s_logger, "The Professor Product Controller is setting up the state machine." );
 
     ///
@@ -541,6 +562,12 @@ void ProfessorProductController::Run( )
                                                                  m_FrontDoorClientIF,
                                                                  m_ProductLpmHardwareInterface->GetLpmClient( ) ) );
 
+    //
+    // Setup UI recovery timer
+    //
+    m_uiAliveTimer = APTimer::Create( GetTask( ), "UIAliveTimer" );
+    StartUiTimer();
+
     ///
     /// Run all the submodules.
     ///
@@ -573,10 +600,7 @@ void ProfessorProductController::Run( )
     ///
     m_IntentHandler.Initialize( );
 
-    ///
-    /// Register LPM events for LightBar
-    ///
-    m_lightbarController->RegisterLpmEvents();
+    BOSE_DEBUG( s_logger, "------------ Product Controller Initialization End -------------" );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -670,6 +694,9 @@ std::shared_ptr< ProductDspHelper >& ProfessorProductController::GetDspHelper( )
 /// @return This method returns a true or false value, based on a series of set member variables,
 ///         which all must be true to indicate that the device has booted.
 ///
+/// @note   The CLI command "product boot_status" returns the status of all factors used here. If ever
+///         a factor is added, the CLI command needs changing as well. See ProductCommandLine::HandleCommand().
+///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 bool ProfessorProductController::IsBooted( ) const
 {
@@ -682,6 +709,7 @@ bool ProfessorProductController::IsBooted( ) const
     BOSE_VERBOSE( s_logger, "Software Update Ready :  %s", ( IsSoftwareUpdateReady( )  ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "SASS Initialized      :  %s", ( IsSassReady( )            ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, "Bluetooth Initialized :  %s", ( IsBluetoothModuleReady( ) ? "true" : "false" ) );
+    BOSE_VERBOSE( s_logger, "Network Ready         :  %s", ( IsNetworkModuleReady( ) ? "true" : "false" ) );
     BOSE_VERBOSE( s_logger, " " );
 
     return ( IsLpmReady( )             and
@@ -690,7 +718,8 @@ bool ProfessorProductController::IsBooted( ) const
              IsSTSReady( )             and
              IsSoftwareUpdateReady( )  and
              IsSassReady( )            and
-             IsBluetoothModuleReady( ) );
+             IsBluetoothModuleReady( ) and
+             IsNetworkModuleReady( ) );
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -744,14 +773,14 @@ bool ProfessorProductController::IsSystemLanguageSet( ) const
 ///
 /// @name   ProfessorProductController::GetOOBDefaultLastContentItem
 ///
-/// @return This method returns the PassportPB::ContentItem value to be used for initializing the OOB LastContentItem
+/// @return This method returns the PassportPB::contentItem value to be used for initializing the OOB LastContentItem
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-PassportPB::ContentItem ProfessorProductController::GetOOBDefaultLastContentItem() const
+PassportPB::contentItem ProfessorProductController::GetOOBDefaultLastContentItem() const
 {
     using namespace ProductSTS;
 
-    PassportPB::ContentItem item;
+    PassportPB::contentItem item;
     item.set_source( ProductSourceSlot_Name( PRODUCT ) );
     item.set_sourceaccount( ProductSourceSlot_Name( TV ) );
     return item;
@@ -894,13 +923,15 @@ void ProfessorProductController::HandleSelectSourceSlot( ProductSTSAccount::Prod
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///
-/// @brief ProfessorProductController::HandleUiHeartBeat
+/// @name  ProfessorProductController::HandleUiHeartBeat
 ///
-/// @param const DisplayControllerPb::UiHeartBeat & req
+/// @brief  Handler for /ui/alive FrontDoor messages
 ///
-/// @param const Callback<DisplayControllerPb::UiHeartBeat> & respCb
+/// @param  const DisplayControllerPb::UiHeartBeat & req
 ///
-/// @param const Callback<FrontDoor::Error> & errorCb
+/// @param  const Callback<DisplayControllerPb::UiHeartBeat> & respCb
+///
+/// @param  const Callback<FrontDoor::Error> & errorCb
 ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 void ProfessorProductController::HandleUiHeartBeat(
@@ -908,13 +939,71 @@ void ProfessorProductController::HandleUiHeartBeat(
     const Callback<DisplayControllerPb::UiHeartBeat> & respCb,
     const Callback<FrontDoor::Error> & errorCb )
 {
-    BOSE_INFO( s_logger, "%s received UI heartbeat: %lld", __func__, req.count() );
+    BOSE_INFO( s_logger, "%s received UI process heartbeat: %lld", __func__, req.count() );
+
+    // Restart UI Timer
+    m_uiAliveTimer->Stop();
+    StartUiTimer();
 
     auto heartbeat = req.count();
 
     DisplayControllerPb::UiHeartBeat response;
     response.set_count( heartbeat );
     respCb( response );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name ProfessorProductController::StartUiTimer
+///
+/// @brief Initialize the UI recovery timer
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::StartUiTimer()
+{
+    m_uiAliveTimer->SetTimeouts( UI_ALIVE_TIMEOUT, 0 );
+
+    m_uiAliveTimer->Start( [ this ]( )
+    {
+        KillUiProcess();
+    } );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+///
+/// @name ProfessorProductController::KillUiProcess
+///
+/// @brief Kill the UI process, prompting Shepherd to restart it
+///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+void ProfessorProductController::KillUiProcess()
+{
+    BOSE_ERROR( s_logger, "UI process has stopped. No heartbeat in %u MS.", UI_ALIVE_TIMEOUT );
+
+    pid_t pid = 0;
+
+    if( auto fileData = SystemUtils::ReadFile( UI_KILL_PID_FILE ) )
+    {
+        pid = strtol( fileData->c_str(), nullptr, 10 );
+    }
+
+    if( pid != 0 )
+    {
+        BOSE_ERROR( s_logger, "Killing UI process at pid %i", pid );
+
+        // The nature of the WPE failure is still in question, so SIGKILL is used to ensure termination
+        if( kill( pid, SIGKILL ) == -1 )
+        {
+            BOSE_ERROR( s_logger, "Couldn't kill UI process at pid %d: %s", pid, strerror( errno ) );
+        }
+    }
+    else
+    {
+        BOSE_DIE( "Failed to recover UI process, pid not found" );
+    }
+
+    // Reset Timer
+    StartUiTimer();
 }
 
 
@@ -1011,6 +1100,23 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     BOSE_INFO( s_logger, "%s received %s", __func__, message.DebugString().c_str() );
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
+    /// LPM status messages require both product-specific and common handling.
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    if( message.has_lpmstatus( ) )
+    {
+        ///
+        /// Register for product-specific LPM events if connected. Common handling of the product 
+        /// message is then done.
+        ///
+        if( message.lpmstatus( ).has_connected( ) && message.lpmstatus( ).connected( ) )
+        {
+            m_lightbarController->RegisterLpmEvents();
+        }
+
+        ( void ) HandleCommonProductMessage( message );
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     /// STS slot selected data is handled at this point.
     ///////////////////////////////////////////////////////////////////////////////////////////////
     if( message.has_selectsourceslot( ) )
@@ -1071,25 +1177,17 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     /// Handle network operationalmode at this point
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    else if( message.networkstatus().has_operationalmode() )
+    else if( message.networkstatus().has_wifiapstate() )
     {
-        if( m_networkOperationalMode != message.networkstatus().operationalmode() )
+        if( message.networkstatus().wifiapstate() )
         {
-            // If we are currently in wifi setup and are exiting to another mode
-            // unmute the amp
-            //   - SetAmp( bool on, bool muted )
-            if( m_networkOperationalMode == NetManager::Protobuf::wifiSetup )
-            {
-                GetLpmHardwareInterface()->SetAmp( true, false );
-            }
-            // Entering ap setup we need to mute due to electrical interference with audio clocks
-            else if( message.networkstatus().operationalmode() == NetManager::Protobuf::wifiSetup )
-            {
-                GetLpmHardwareInterface()->SetAmp( true, true );
-            }
-
-            m_networkOperationalMode = static_cast<NetManager::Protobuf::OperationalMode>( message.networkstatus().operationalmode() );
+            GetLpmHardwareInterface()->SetAmp( true, true );
         }
+        else
+        {
+            GetLpmHardwareInterface()->SetAmp( true, false );
+        }
+
         ( void ) HandleCommonProductMessage( message );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -1117,7 +1215,7 @@ void ProfessorProductController::HandleMessage( const ProductMessage& message )
     ///////////////////////////////////////////////////////////////////////////////////////////////
     else if( message.has_accessorypairing( ) )
     {
-        GetHsm( ).Handle< ProductAccessoryPairing >
+        GetHsm( ).Handle< ProductPb::AccessorySpeakerState >
         ( &CustomProductControllerState::HandlePairingStatus, message.accessorypairing( ) );
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////

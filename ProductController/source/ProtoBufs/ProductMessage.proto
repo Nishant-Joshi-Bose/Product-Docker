@@ -30,6 +30,11 @@ import "CommonProductMessages.proto";
 import "AutoLpmServiceMessages.proto";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+///                                Speaker Manager Accessory Paring Protocol Buffer Include      ///
+////////////////////////////////////////////////////////////////////////////////////////////////////
+import "ProductSpeakerManager.proto";
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                       AdaptIQ Status (from DSP) Message Structure
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 message ProductAdaptIQStatus
@@ -59,9 +64,9 @@ message ProductCecMode
 {
         enum CecModeValue
         {
-            Off       = 0;
-            On        = 1;
-            AltOn     = 2;
+            OFF       = 0;
+            ON        = 1;
+            ALTERNATE_ON = 2;
         }
         optional CecModeValue cecmode = 1;
 }
@@ -69,10 +74,6 @@ message ProductCecMode
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                             Product Accessory Pairing Structure                              ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-message ProductAccessoryPairing
-{
-        optional bool active = 1;
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ///                                Base Product Message Structure                                ///
@@ -91,7 +92,7 @@ message ProductMessage
         optional ProductLanguageData                        languagedata                = 10;
         optional ProductAutowakeStatus                      autowakestatus              = 11;
         optional ProductNowPlayingStatus                    nowplayingstatus            = 12;
-        optional ProductAccessoryPairing                    accessorypairing            = 13;
+        optional ProductPb.AccessorySpeakerState            accessorypairing            = 13;
         optional ProductAdaptIQStatus                       aiqstatus                   = 14;
         optional ProductAdaptIQControl                      aiqcontrol                  = 15;
         optional ProductLpmLowPowerStatus                   lpmlowpowerstatus           = 16;
