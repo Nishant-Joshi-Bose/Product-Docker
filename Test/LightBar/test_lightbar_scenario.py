@@ -75,7 +75,6 @@ def pytest_generate_tests(metafunc):
         metafunc.parametrize("animation_value", animation_values)
 
 
-
 @pytest.mark.usefixtures('frontdoor_wlan', 'animation_list', 'serial_handler')
 def test_current_active_animation(frontdoor_wlan, animation_list, serial_handler):
     """
@@ -95,24 +94,20 @@ def test_current_active_animation(frontdoor_wlan, animation_list, serial_handler
     # play the animation value
     animation_data = json.dumps({"nextValue": {"value": expected_animation,
                                                "transition": "SMOOTH", "repeat": "true"}})
-    lightbar_play_response = frontdoor_wlan.playLightBarAnimation(
-        animation_data)
+
+    lightbar_play_response = frontdoor_wlan.playLightBarAnimation(animation_data)
     LOGGER.debug("lightbar play response is %s", lightbar_play_response)
 
     # get animation value from LPM serial logs
-    current_animation = lightbar_helper.get_animation_from_lpm(
-        serial_handler, expected_animation)
+    current_animation = lightbar_helper.get_animation_from_lpm(serial_handler, expected_animation)
 
     assert current_animation == expected_animation, \
-        "Expected Animation ({}) not equal to API Animation ({}).".format(
-            expected_animation, current_animation)
+        "Expected Animation ({}) not equal to API Animation ({}).".format(expected_animation, current_animation)
 
     # verify animation value from Lightbar API Notifications
-    lb_notification_value = lightbar_helper.animation_in_notification(
-        frontdoor_wlan, expected_animation)
+    lb_notification_value = lightbar_helper.animation_in_notification(frontdoor_wlan, expected_animation)
     assert lb_notification_value == expected_animation, \
-        "Expected Animation ({}) not equal to API Animation ({}).".format(
-            expected_animation, lb_notification_value)
+        "Expected Animation ({}) not equal to API Animation ({}).".format(expected_animation, lb_notification_value)
 
 
 @pytest.mark.usefixtures('frontdoor_wlan', 'animation_list', 'serial_handler')
@@ -136,13 +131,11 @@ def test_stop_active_animation(frontdoor_wlan, animation_list, serial_handler):
     # play the animation value
     animation_data = json.dumps({"nextValue": {"value": expected_animation,
                                                "transition": "SMOOTH", "repeat": "true"}})
-    lightbar_play_response = frontdoor_wlan.playLightBarAnimation(
-        animation_data)
+    lightbar_play_response = frontdoor_wlan.playLightBarAnimation(animation_data)
     LOGGER.debug("lightbar play response: %s", lightbar_play_response)
 
     # get animation value from LPM serial logs
-    current_animation = lightbar_helper.get_animation_from_lpm(
-        serial_handler, expected_animation)
+    current_animation = lightbar_helper.get_animation_from_lpm(serial_handler, expected_animation)
 
     # stop the active animation
     lightbar_stop_response = frontdoor_wlan.stopActiveAnimation(animation_data)
@@ -155,8 +148,8 @@ def test_stop_active_animation(frontdoor_wlan, animation_list, serial_handler):
         if current_animation is None:
             break
         sleep(1)
-    assert not current_animation, "Animation ({}) should be stopped".format(
-        current_animation)
+
+    assert not current_animation, "Animation ({}) should be stopped".format(current_animation)
 
 
 @pytest.mark.usefixtures("frontdoor_wlan", "animation_list", "serial_handler")
@@ -176,31 +169,25 @@ def test_play_valid_animation(frontdoor_wlan, animation_value, transition_value,
     :param serial_handler: fixture to start and stop serial logs
     """
 
-    LOGGER.debug("Playing animation value %s and transition %s",
-                 animation_value, transition_value)
+    LOGGER.debug("Playing animation value %s and transition %s", animation_value, transition_value)
     animation_data = json.dumps({"nextValue": {"value": animation_value,
                                                "transition": transition_value,
                                                "repeat": "true"}})
 
     # play the animation on device
-    lightbar_play_response = frontdoor_wlan.playLightBarAnimation(
-        animation_data)
+    lightbar_play_response = frontdoor_wlan.playLightBarAnimation(animation_data)
     LOGGER.debug("lightbar play response is %s", lightbar_play_response)
 
     # verify the animation value from LPM serial logs
-    serial_last_animation = lightbar_helper.get_animation_from_lpm(
-        serial_handler, animation_value)
+    serial_last_animation = lightbar_helper.get_animation_from_lpm(serial_handler, animation_value)
 
-    assert serial_last_animation == animation_value, "Expected animation value as '{0}' "\
-        "mismatch with current animation value as '{1}'".format(animation_value,
-                                                                serial_last_animation)
+    assert serial_last_animation == animation_value, \
+        "Expected animation value '{0}'; Current animation value '{1}'".format(animation_value, serial_last_animation)
 
     # verify animation value from API Notifications
-    lb_notification_value = lightbar_helper.animation_in_notification(
-        frontdoor_wlan, animation_value)
-    assert lb_notification_value == animation_value, "Expected animation value {}\
-        mismatched with {} animation from \
-        API notifications".format(animation_value, lb_notification_value)
+    lb_notification_value = lightbar_helper.animation_in_notification(frontdoor_wlan, animation_value)
+    assert lb_notification_value == animation_value, \
+        "Expected Animation: {}; API Notification Animation: {}".format(animation_value, lb_notification_value)
 
     frontdoor_wlan.stopActiveAnimation(animation_data)
 
@@ -220,18 +207,22 @@ def test_play_invalid_animation(animation_data, frontdoor_wlan):
     """
     transition = animation_data["transition"]
     animation_value = animation_data["value"]
-    LOGGER.debug("Playing invalid animation value %s and transition %s", animation_value, transition)
+    LOGGER.debug("Playing invalid animation value %s and \
+                 transition %s", animation_value, transition)
     animation_data = json.dumps({"nextValue": {"value": animation_value,
                                                "transition": transition, "repeat": "true"}})
 
     # play the animation with invalid value on device
-    lightbar_play_response = lightbar_helper.play_invalid_lightbar_animation(
-        frontdoor_wlan, animation_data)
-
+    lightbar_play_response = frontdoor_wlan.playLightBarAnimation(animation_data)
+    if "body" in lightbar_play_response:
+        lightbar_play_response = lightbar_play_response["body"]
     LOGGER.debug("lightbar play response is %s", lightbar_play_response)
+
     for _ in range(lightbar_helper.PLAY_STOP_ANIMATION_TIMEOUT):
         current_animation_status = lightbar_play_response["error"].get("message")
         LOGGER.debug("Play response in invalid animations value is %s", current_animation_status)
         if current_animation_status:
             break
-    assert current_animation_status, "Invalid Animation scenario played on device as {}".format(animation_data)
+
+    assert current_animation_status, \
+        "Invalid Animation scenario played on device as {}".format(animation_data)

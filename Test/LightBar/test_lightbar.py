@@ -40,7 +40,8 @@ def test_get_active_animation(frontdoor_wlan):
         "We do not have multiple Lightbar animation transitions in {}. {} found.".format(transitions, len(transitions))
 
     supported_animations = lightbar_state["properties"]["supportedValues"]
-    assert len(supported_animations) > 1, "Not able to find multiple animations in {}".format(supported_animations)
+    assert len(supported_animations) > 1, "Not able to find \
+                                           multiple animations in {}".format(supported_animations)
 
 
 @pytest.mark.usefixtures('frontdoor_wlan')
@@ -54,6 +55,7 @@ def test_play_animation_in_loop(frontdoor_wlan):
     lightbar_state = frontdoor_wlan.getActiveAnimation()
     LOGGER.debug("LightBar state: %s", lightbar_state)
     animations = lightbar_state["properties"]["supportedValues"]
+
     # Cycle through Supported Lightbar Animations
     for animation in animations:
         time.sleep(3)
@@ -61,11 +63,13 @@ def test_play_animation_in_loop(frontdoor_wlan):
 
         # create request to play animation in loop
         data = {"nextValue":
-                    {"value": animation,
-                     "transition": "SMOOTH",
-                     "repeat": True}}
+                {"value": animation,
+                 "transition": "SMOOTH",
+                 "repeat": True}}
+
         lightbar_state = frontdoor_wlan.playLightBarAnimation(json.dumps(data))
         LOGGER.debug("LightBar State: %s", lightbar_state)
+
         next_animation_response = lightbar_state.get("nextValue")
         if next_animation_response:
             next_animation = next_animation_response.get("value")
@@ -98,17 +102,17 @@ def test_stop_active_animation(frontdoor_wlan):
     LOGGER.debug("Play animation - %s", animation_to_play)
 
     data = {"nextValue":
-                {"value": animation_to_play,
-                 "transition": "SMOOTH",
-                 "repeat": True}}
+            {"value": animation_to_play,
+             "transition": "SMOOTH",
+             "repeat": True}}
     lightbar_state = frontdoor_wlan.playLightBarAnimation(json.dumps(data))
 
     time.sleep(2)
 
     data = {"nextValue":
-                {"value": animation_to_play,
-                 "transition": "SMOOTH",
-                 "repeat": True}}
+            {"value": animation_to_play,
+             "transition": "SMOOTH",
+             "repeat": True}}
     lightbar_state = frontdoor_wlan.stopActiveAnimation(json.dumps(data))
 
     # Ensure we have the correct LightBar state
@@ -138,13 +142,12 @@ def test_invalid_animation_value(frontdoor_wlan):
     """
     value = "SOME_ANIMATION"
     data = {"nextValue":
-                {"value": value,
-                 "transition": "SMOOTH",
-                 "repeat": True}}
+            {"value": value,
+             "transition": "SMOOTH",
+             "repeat": True}}
 
-    data = json.dumps(data)
-    lightbar_state = frontdoor_wlan.playLightBarAnimation(data)
+    lightbar_state = frontdoor_wlan.playLightBarAnimation(json.dumps(data))
 
     error_anticipation = "animation not supported"
-    error = lightbar_state["error"]["description"]
+    error = lightbar_state["body"]["error"]["description"]
     assert error == error_anticipation, "Anticipated: '{}'; Received: {}".format(error_anticipation, error)
