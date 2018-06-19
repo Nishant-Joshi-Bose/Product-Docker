@@ -25,7 +25,7 @@ public:
                                LpmClientIF::LpmClientPtr lpmClient );
     void SetThermalMonitorEnabled( bool enabled );
     void SetAiqInstalled( bool installed );
-    void GetDspStreamConfig( LpmServiceMessages::IpcDspStreamConfigReqPayload_t& config )
+    void GetDspStreamConfig( LpmServiceMessages::IpcDspStreamConfigReqPayload_t& config ) const
     {
         config = m_DspStreamConfig;
     };
