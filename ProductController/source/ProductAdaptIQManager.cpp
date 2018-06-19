@@ -39,15 +39,6 @@ const std::string s_ActionEnter         = "ACTION_ENTER";
 const std::string s_ActionCancel        = "ACTION_CANCEL";
 const std::string s_ActionAdvance       = "ACTION_ADVANCE";
 const std::string s_ActionPrevious      = "ACTION_PREVIOUS";
-
-#if 0
-// these have moved to a new endpoint, not sure if they will be implemented here
-// or elsewhere
-const std::string s_ModeNormal          = "Enabled Normal";
-const std::string s_ModeRetail          = "Enabled Retail";
-const std::string s_ModeDisabled        = "Enabled Disabled";
-#endif
-
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -330,6 +321,7 @@ void ProductAdaptIQManager::RegisterLpmClientEvents( )
         return;
     }
 
+#if 0
     auto bootedFunc = [ this ]( LpmServiceMessages::IpcDeviceBoot_t image )
     {
         BOSE_ERROR( s_logger, "%s", __func__ );
@@ -343,6 +335,7 @@ void ProductAdaptIQManager::RegisterLpmClientEvents( )
     {
         BOSE_ERROR( s_logger, "%s error registering for DSP boot status", __func__ );
     }
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
