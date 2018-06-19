@@ -187,9 +187,6 @@ trap 'chmod -R +w "$secure_dir"' EXIT
 cd "$opt_dir"/lib || exit
 rm -f *.a
 
-# Hack to enable logging for Monaco.  Delete this when we move to Dinghy.
-sed -i '/WPE_DYZSHM_CONSOLE_LOG/s/^\#//' "$opt_dir/webkit/run_wpe.sh" || exit
-
 PackageName=SoundTouch
 
 package_version=$(make-version-string "$version_json" "{major}.{minor}.{patch}.{build_number}+{abbrev_commit}") || exit

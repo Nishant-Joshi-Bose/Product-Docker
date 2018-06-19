@@ -138,10 +138,6 @@ if params == "show":
         # Stop Monaco from managing the display.
         subprocess.call(["shepherd-wait", "/var/run/shepherd", "/var/run/shepherd/pid"],
                         stdout=devnull, stderr=subprocess.STDOUT)
-        # Special handling for dyz-shm started by run_wpe.sh (yuck).
-        # Delete this when we switch to Dinghy.
-        subprocess.call(["killwait", "dyz-shm"],
-                        stdout=devnull, stderr=subprocess.STDOUT)
 
     # Show the image on the unit's display and
     # send "OK" as the HTTP response.
