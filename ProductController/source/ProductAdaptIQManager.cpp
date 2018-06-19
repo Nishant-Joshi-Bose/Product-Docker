@@ -321,13 +321,15 @@ void ProductAdaptIQManager::RegisterLpmClientEvents( )
         return;
     }
 
-#if 0
     auto bootedFunc = [ this ]( LpmServiceMessages::IpcDeviceBoot_t image )
     {
-        BOSE_ERROR( s_logger, "%s", __func__ );
         LpmServiceMessages::IpcDspStreamConfigReqPayload_t config;
         m_ProductAudioService->GetDspStreamConfig( config );
-        m_ProductLpmHardwareInterface->SetStreamConfig( config, {} );
+        if( config.has_audiosettings() )
+        {
+            BOSE_INFO( s_logger, "DSP booted, send stream config (%s)", ProtoToMarkup::ToJson( config ).c_str() );
+            m_ProductLpmHardwareInterface->SetStreamConfig( config, {} );
+        }
     };
     success =  m_ProductLpmHardwareInterface->RegisterForLpmEvents< LpmServiceMessages::IpcDeviceBoot_t >
                ( LpmServiceMessages::IPC_DSP_BOOTED_EVENT, Callback<LpmServiceMessages::IpcDeviceBoot_t>( bootedFunc ) );
@@ -335,7 +337,6 @@ void ProductAdaptIQManager::RegisterLpmClientEvents( )
     {
         BOSE_ERROR( s_logger, "%s error registering for DSP boot status", __func__ );
     }
-#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
