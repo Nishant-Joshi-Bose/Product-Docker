@@ -45,7 +45,7 @@ RIVIERA_LPM_TOOLS_DIR = $(shell components get RivieraLpmTools installed_locatio
 PRODUCTCONTROLLERCOMMON_DIR = $(shell components get ProductControllerCommon installed_location)
 RIVIERALPMUPDATER_DIR = $(shell components get RivieraLpmUpdater installed_location)
 SOFTWARE_UPDATE_DIR = $(shell components get SoftwareUpdate-qc8017_32 installed_location)
-TESTUTILS_DIR = $(shell components get CastleTestUtils installed_location)
+TESTUTILS_DIR = $(shell components get TestUtils installed_location)
 
 .PHONY: generated_sources
 generated_sources: check_tools $(VERSION_FILES)
